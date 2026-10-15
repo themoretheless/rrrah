@@ -1,0 +1,33 @@
+PASS flat256
+PASS identical
+PASS bad_image
+PASS publish_failure
+PASS lost_update
+  0% (0 of 2) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+100% (2 of 2) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+PASS repeated_root_deletes_only_file
+  0% (0 of 2) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+ 50% (1 of 2) |#############             | Elapsed Time: 0:00:00 ETA:   0:00:00
+100% (2 of 2) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+PASS minmax_ignored
+  0% (0 of 2) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+ 50% (1 of 2) |#############             | Elapsed Time: 0:00:00 ETA:   0:00:00
+100% (2 of 2) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+PASS different_pixels_deleted
+  0% (0 of 1) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+100% (1 of 1) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+  0% (0 of 2) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+100% (2 of 2) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+PASS recursion_mutates_input_paths
+  0% (0 of 2) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+ 50% (1 of 2) |#############             | Elapsed Time: 0:00:00 ETA:   0:00:00
+100% (2 of 2) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+PASS stale_deletion
+PASS animated_tail_ignored
+PASS alpha_ignored
+PASS cli
+  0% (0 of 2) |                          | Elapsed Time: 0:00:00 ETA:  --:--:--
+100% (2 of 2) |##########################| Elapsed Time: 0:00:00 Time:  0:00:00
+PASS literal_prompt
+PASS missing_root
+{"status": "passed15_native_original_module_controls", "cases": 15, "case_names": ["flat256", "identical", "bad_image", "publish_failure", "lost_update", "repeated_root_deletes_only_file", "minmax_ignored", "different_pixels_deleted", "recursion_mutates_input_paths", "stale_deletion", "animated_tail_ignored", "alpha_ignored", "cli", "literal_prompt", "missing_root"], "observations": {"flat256": {"distinct_gray_pixels": 256, "hashes": 1}, "lost_update": [{"processes": 2, "read_snapshot_lengths": [0, 0], "published_lengths": [1, 1], "final_members": 1}, {"processes": 2, "read_snapshot_lengths": [0, 0], "published_lengths": [1, 1], "final_members": 1}, {"processes": 2, "read_snapshot_lengths": [0, 0], "published_lengths": [1, 1], "final_members": 1}], "repeated_root": {"input_files": 1, "remaining_files": 0}, "stale_deletion": {"new_distinct_hash": "0f0f0f0f0f0f0f0f", "changed_file_deleted": true}}, "python": "3.12.14", "Pillow": "12.3.0", "numpy": "2.3.5", "imagehash": "4.3.2", "progressbar": "4.5.0", "wheel_sha256": {"/private/tmp/rrrah-image53-wheels-20261015/ImageHash-4.3.2-py2.py3-none-any.whl": "02b0f965f8c77cd813f61d7d39031ea27d4780e7ebcad56c6cd6a709acc06e5f", "/private/tmp/rrrah-image53-wheels-20261015/progressbar2-4.5.0-py3-none-any.whl": "625c94a54e63915b3959355e6d4aacd63a00219e5f3e2b12181b76867bf6f628", "/private/tmp/rrrah-image53-wheels-20261015/python_utils-3.9.1-py2.py3-none-any.whl": "0273d7363c7ad4b70999b2791d5ba6b55333d6f7a4e4c8b6b39fb82b5fab4613"}, "source_sha256": "52d93fe4ebdd8080c1c687622da1797a6b8ca1d602aeb5e6c0390304709c6cad", "scope": "RealImageHash/Pillow/NumPy/Progressbar and spawnProcesses/Manager/Lock, ownedFS/delete/CLI. Explicit read-barrier scheduler for3two-process lost-update schedules; CPUcount1resourceadapter forwholedupes; explicit writer/getsize/stdin controls. No corpus/platform/scale/performance/foreignproductionadoption proof."}

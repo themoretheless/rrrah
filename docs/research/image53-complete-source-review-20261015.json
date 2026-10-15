@@ -1,0 +1,137 @@
+{
+  "repository": "chinalu/imagedups",
+  "commit": "4cbc8fad4343fec9a89ac4f2efab166cc3f02863",
+  "tree": "588182906b221308d4cd8b9958f2dae4bd158e31",
+  "status": "complete_source_read_native_image_backend_IPC_counterexamples_twice",
+  "whole_repository_complete": true,
+  "license": "GPLv3 asrootLICENSE/setup metadata; fulllicense read, no foreignproductioncodeadopted",
+  "scope": "All8tracked textblobs read/pinned: fullimagedups decode/hash/IPC/discovery/prompt/delete/CLI, setup/install/upload, bothChinese/EnglishREADME, completeGPL3license,requirements/gitignore/emptyinit;2canonicaltrees. No tracked orREADMEcontentmedia. Externalreadme/selflinks notseparate externalrevision review; dependencies source outside8trackedblobs notfullaudited.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "b6e47617de110dea7ca47e087ff1347cc2646eda",
+      "bytes": 1799,
+      "sha256": "79b6f8054f8ef5e9e78c18174bf57caf29b11410166b9268d6923e87520eb88f"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "0b5d3901c49b62ff06352188770d9c158988013f",
+      "bytes": 996,
+      "sha256": "0596b623011306a8750fbc2890a7cd8f5720a9312fd6cc436c0bf7366a41a8e8"
+    },
+    {
+      "path": "README_EN.md",
+      "mode": "100644",
+      "git_blob": "dd1d1efd78d7f2d9bd23acf058e88724965de2e7",
+      "bytes": 666,
+      "sha256": "9da7ba2777ea3990893f094738f467e803caf0e5d710f1106cb4e56b3e17e511"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "git_blob": "70733d98b4f4bb39b4995a64696d6331585dd103",
+      "bytes": 22,
+      "sha256": "7b008ea64174bcf3b109a2022f240fd73e1b2fc81260e5a137bfa55d0de01e95"
+    },
+    {
+      "path": "setup.py",
+      "mode": "100644",
+      "git_blob": "476063dacc5a978f542d5cf94d7070480962b016",
+      "bytes": 3912,
+      "sha256": "433705a20e0050fa744a026a1d791d6860ea09b76346a769d1c060ef8939e5b7"
+    },
+    {
+      "path": "src/__init__.py",
+      "mode": "100644",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/imagedups.py",
+      "mode": "100644",
+      "git_blob": "6849cef041745e3b3bc353ede9906d5c6fdc31a1",
+      "bytes": 3834,
+      "sha256": "52d93fe4ebdd8080c1c687622da1797a6b8ca1d602aeb5e6c0390304709c6cad"
+    }
+  ],
+  "tree_objects_verified": 2,
+  "pin_sha256": "d1da6f50ea7d47e3fb46f974c4d143c36ce2dc677ed60fe887eea8620ed66bb6",
+  "controls": "docs/research/image53-native-controls-20261015/result.json",
+  "controls_sha256": "05661e8813d136fe4928fa4c962952adf251f13fa2c4bfccec32b91517b66969",
+  "root_crosswalk": "docs/research/image53-current-root-bounded-contract-crosswalk-20261015.json",
+  "root_crosswalk_sha256": "8d6a6cfaee44338876f7ce449a8e59d4085f074684a536aa0f90621dd55e2986",
+  "findings": [
+    {
+      "kind": "native_unchanged_original_function_real_backend_IPC_scheduled",
+      "finding": "Three controlled schedules eachrun, six total: two realspawnworkers/nativePillow+ImageHash reademptycopiedManagerlist beforebarrier, bothcommitlen1 underactualManagerLock, finalgroup1. Lockprotectsonlywrite andread-modify-write losesmember. Schedulerproxy explicit, no decoder/hashbackendmock orsourcepatch. No defaultfullPoolconcurrency frequency/performance claim."
+    },
+    {
+      "kind": "native_unchanged_module_CPUcount1_resource_adapter_ownedFS",
+      "finding": "Repeatedrootenumerates samephysicalfiletwice anddelete+noPrompt removesonlyfile evenwhilefirstentrylabelledsurvivor."
+    },
+    {
+      "kind": "native_unchanged_module_CPUcount1_resource_adapter_ownedFS",
+      "finding": "All256distinctflatgrayPNGimages shareaveragehashzero; actualblack/white unequalpixels/files groupedandone deleted. No lowinformation/exactpixel/byteconfirmation beforedestruction."
+    },
+    {
+      "kind": "native_unchanged_module_CPUcount1_resource_adapter_ownedFS",
+      "finding": "minsize/maxsizeparsedbutignored; contradictory1GiBminimum/1bytemaximum stillpublishpair."
+    },
+    {
+      "kind": "native_unchanged_module_CPUcount1_resource_adapter_ownedFS",
+      "finding": "Recursive discovery mutatescallerpaths list; secondcall duplicateschildrootandproducesfalsepair forsolephysicalfile."
+    },
+    {
+      "kind": "native_unchanged_module_CPUcount1_resource_adapter_ownedFS",
+      "finding": "Explicitparentgetsize mutation checkpoint rewritespreviouslyhashedfile tonew0f0fpattern; originalpipeline thenunlinksnewnonduplicateimage. No predeletefreshnesscheck."
+    },
+    {
+      "kind": "native_unchanged_module_CPUcount1_resource_adapter_ownedFS",
+      "finding": "RealCLI/subprocess withdeclaredCPUcount1adapter returns0/read-onlydefault; actualpromptprints literalDelete%s andownedstdin yesdeletesone. MissingrootraisesFileNotFoundError."
+    },
+    {
+      "kind": "native_unchanged_original_async_hash",
+      "finding": "Two realGIFs haveequalfirstframesbutdifferentsecondframes; originalaveragehash groupssame. Fullanimation/fileequivalence notestablishedbyfirstframe."
+    },
+    {
+      "kind": "native_unchanged_original_async_hash",
+      "finding": "NonflatRGBApatterns withalpha0/255butidenticalRGB maptosamehash; alpha/visiblepixel equivalence notchecked."
+    },
+    {
+      "kind": "native_unchanged_original_async_hash",
+      "finding": "Invalidimage/PILfailure andexplicitresult-dictwritefailure silentlycaught, returnNone andnodistinctissue. Sequentialidenticalimagepositive retainsbothmembers."
+    },
+    {
+      "kind": "source_only",
+      "finding": "AllfilesandAsyncResults materialized; cpu_countworkershardcoded,ManagerRPCperimage,listcopypermember; no cancellation/deadline/globalmemory/file/framebudget. No throughput/RSS/concurrencyqualification."
+    },
+    {
+      "kind": "source_only",
+      "finding": "No explicitPoolclose/join/Manager shutdown; lifecycle notqualified. Image.opennotexplicitcontextmanaged; no descriptorleakclaim. Survivor followsworkercompletion/nondeterministicfslisting; no stablepolicy."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Symlink/hardlink/pathalias androot-input dedup notvalidated; os.listdir errorsabortall ratherthanpartialissue. Quietflag doesnotguardProgressBarconstruction sourcewise."
+    },
+    {
+      "kind": "source_only",
+      "finding": "SetupUploadCommand removesdist, builds, uploadsPyPI andpushestags viauncheckedos.system; notexecuted. Unpinneddependenciesandno tests/CI; no package/releasequalification."
+    }
+  ],
+  "limits": [
+    "All15 authoredcontrols passedtwice inMacARM diagnosticcohort. Nativebackend usesrealPillow/ImageHash/NumPy/progressbar, multiprocessing/Manager IPC; wholedupes CPUdiscovery explicitlyboundedto1, raceexplicitlyscheduled2spawnworkers, writer/getsize/stdin controlsdeclared.",
+    "AllFS/deletions limitedtoharness-ownedtemporarypublicsyntheticimages, no user/privatefileinput/deletion/realprompt/remote publishing or foreignproductionadoption.",
+    "Source/archivecomplete notallformats/platforms/corpus/quality/scale/resource/performancequalification. ActualfullRootCargo/frozencandidategate stillpending.",
+    "Crosswalkrevalidatesexistingboundedcurrentexact/pixel source/binary/dependency/log hashes, notnewRootruntime/fullparallelcollection/frame ordestructivepipeline proof."
+  ]
+}

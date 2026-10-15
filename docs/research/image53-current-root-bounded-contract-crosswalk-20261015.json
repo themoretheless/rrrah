@@ -1,0 +1,115 @@
+{
+  "status": "bounded_existing_evidence_crosswalk_not_new_runtime_gate",
+  "current_source_matches_all": true,
+  "current_source_pins": [
+    {
+      "path": "crates/rrrah-dedup/src/exact.rs",
+      "qualified_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+      "current_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+      "matches": true
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/exact_files.rs",
+      "qualified_sha256": "23a8274ee225a1a9955907f03b061ce90ddf3d6b1fedb2f589ad8bf50be2c79e",
+      "current_sha256": "23a8274ee225a1a9955907f03b061ce90ddf3d6b1fedb2f589ad8bf50be2c79e",
+      "matches": true
+    },
+    {
+      "path": "crates/rrrah-dedup/src/pixels.rs",
+      "qualified_sha256": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+      "current_sha256": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+      "matches": true
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/pixels.rs",
+      "qualified_sha256": "463d56af46a7a3eadc4bd1e19986c47f18804e93f4ecf7ea189e3e0a2dc773ec",
+      "current_sha256": "463d56af46a7a3eadc4bd1e19986c47f18804e93f4ecf7ea189e3e0a2dc773ec",
+      "matches": true
+    }
+  ],
+  "qualified_evidence": [
+    {
+      "path": "docs/research/dedup-exact-read-offsets-prepared-20261015.json",
+      "sha256": "01fb5a027591444318f8fe0ab86d0a15f7c59574d5d0ea31f69b9ec5dcd7d520"
+    },
+    {
+      "path": "docs/research/dedup-exact-read-offsets-audit-20261015.json",
+      "sha256": "dc6d0a497f5b3af79fd5f59f96481cf9165e3177bd9bb3fc644f881e4c076372"
+    },
+    {
+      "path": "docs/research/dedup-flat256-pixel-controls-20261015.json",
+      "sha256": "d5680b0b07285ba9b6acf79b6f27c8dfca71056373f017e7868bc1d54e87e535"
+    }
+  ],
+  "rows": [
+    {
+      "foreign_failure": "repeated_or_overlapping_roots_and_physical_aliases",
+      "qualified_tests": [
+        "integration_controls::nested_overlapping_roots_match_the_full_authored_partition",
+        "integration_controls::physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files",
+        "integration_controls::duplicate_root_admission_retains_boundary_and_fresh_retry"
+      ],
+      "status": "existing_bounded_exact_controls_source_matches"
+    },
+    {
+      "foreign_failure": "source_changed_before_exact_publication",
+      "qualified_tests": [
+        "integration_controls::ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member",
+        "integration_controls::verified_scan_final_callback_cannot_publish_a_changed_earlier_member"
+      ],
+      "status": "existing_bounded_exact_controls_source_matches"
+    },
+    {
+      "foreign_failure": "read_failures_remain_typed_visible",
+      "qualified_tests": [
+        "exact::interrupted_read_tests::every_partial_read_failure_preserves_typed_error_and_unread_tail",
+        "integration_controls::unreadable_file_is_explicit_and_does_not_hide_healthy_copies"
+      ],
+      "status": "existing_bounded_exact_controls_source_matches"
+    },
+    {
+      "foreign_failure": "size_depth_entry_limits_visible",
+      "qualified_tests": [
+        "integration_controls::size_depth_and_entry_limits_are_visible"
+      ],
+      "status": "existing_bounded_exact_controls_source_matches"
+    },
+    {
+      "foreign_failure": "flat_aHash_collision_does_not_imply_exact_pixels",
+      "qualified_tests": [
+        "all_opaque_gray_levels_collide_only_as_uninformative_candidates"
+      ],
+      "status": "existing_bounded_pixel_controls_source_matches"
+    },
+    {
+      "foreign_failure": "alpha_visibility_exact_pixel_semantics",
+      "qualified_tests": [
+        "invisible_rgb_is_canonical_but_visible_pixels_are_exact",
+        "transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection"
+      ],
+      "status": "existing_bounded_pixel_controls_source_matches"
+    },
+    {
+      "foreign_failure": "Manager_read_modify_write_lost_update",
+      "status": "open_current_full_parallel_collection_qualification",
+      "qualified_tests": [],
+      "scope": "No direct wholelibrary/nativecollection-concurrency equivalence inferred from exact/pixel tests."
+    },
+    {
+      "foreign_failure": "GIF_later_frames_ignored",
+      "status": "open_complete_frame_and_format_policy_matrix",
+      "qualified_tests": [],
+      "scope": "Pixel primitive tests do not prove complete decoded frame/filecollection policy."
+    },
+    {
+      "foreign_failure": "destructive_unlink_after_source_change",
+      "status": "no_destructive_API_adoption_or_qualification",
+      "qualified_tests": [],
+      "scope": "Exact snapshot/publication guards are relevant but do not qualify destructivedeletion pipeline; no foreign deletecode adopted."
+    }
+  ],
+  "limits": [
+    "Existing qualification revalidated by source/binary/log/dependency hashes, not a fresh runtime/Cargo/fulllibrary/decode/nativecorpus/platform/scale/performance gate.",
+    "All-source-review and fullobjective remain incomplete. No unsafe foreign architecture copied or imported."
+  ]
+}
