@@ -1,0 +1,45 @@
+{
+  "status": "ten_authored_native_controls_and_owned_public_sample_full_cli_pass_twice",
+  "tests": 10,
+  "original_tests_run": 0,
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "platform": "macOS-26.7.2-arm64-arm-64bit",
+  "source": "docs/research/dedup-500/evidence/ratticon--flipper-signal-deduplicator/full-source/signal_dedup.py",
+  "source_sha256": "5ba907b7159e1e0ffaeb1d97c409d7afdbf8749a7b9d23f6ea46f40a0977c564",
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/flipper155-native-controls-20261015/review_test.py"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/research/flipper155-native-controls-20261015/failed-v1.py",
+      "sha256": "d8a06eb8c2124592f9db712dfc386400684a17ec520bccd5165f95fe6d76f3b7"
+    },
+    {
+      "path": "docs/research/flipper155-native-controls-20261015/native-directory-unlink-control.json",
+      "sha256": "a40943d4f2177f0fbf26de5b2455c95c5e9d7c1f6448ddc15ad9d930871a3ba3"
+    },
+    {
+      "path": "docs/research/flipper155-native-controls-20261015/replay-v2.log",
+      "sha256": "bf3c6d53d68e486eb57ccbbc268004f7e5a227238b65b01e63ddbc7ce9a2be12"
+    },
+    {
+      "path": "docs/research/flipper155-native-controls-20261015/review_test.py",
+      "sha256": "9505093ad0afe0e14662d6b0db480f8490523bc89e4b3e3b558ffaa3dbeffc9f"
+    },
+    {
+      "path": "docs/research/flipper155-native-controls-20261015/run-v2.log",
+      "sha256": "605abc021a21dfd2ecd976ba99305f5c3ee6aaa30f38304455bf02fc40891a09"
+    },
+    {
+      "path": "docs/research/flipper155-native-controls-20261015/run.log",
+      "sha256": "ac8ee2c13becef2418a60e526d1c908e4fdd0cfc1fbb868880c623a6d8821ba6"
+    }
+  ],
+  "limits": [
+    "Originalstdlib-only module imported withoutmodifications; actualfulloriginalCLI executed onownedcopyofpublic7samplefiles withnewemptyownedoutput. Originalsource/publicfixtures unchanged. No RFhardware/emission/configuration, privatecaptures, externalservices, imagesmatching or userpurge.",
+    "Syntheticerror/collision/publication cases onlyinsideownedtemporarydirectories; actualcopy/deletefilesystem helpers, no hash/backendstub. No realMD5collision created; changedsource aftervalidhash andsamebasename collision exercisepublication defects.",
+    "V1expectedLinuxIsADirectoryError; nativeMacOSfileunlinkondirectory returnsPermissionErrorEPERM. Independentowned/writabledirectoryprobe retained; v2originalfailureoutcome unchanged, oracle accepts onlyEPERM/EISDIR. Native signal/file semantics, not sandboxapprovalrejection or userfilepermission claim.",
+    "CurrentMacARM/Python only, no Windows/LinuxCI, hugefiles, physicalIO/hardRSS, adversarialmutationrace, RFsemantics or performance proof."
+  ]
+}
