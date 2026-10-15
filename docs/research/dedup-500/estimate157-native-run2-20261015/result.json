@@ -1,0 +1,98 @@
+{
+  "status": "verified_native_controls_with_expected_diagnostics",
+  "controls": 12,
+  "rows": [
+    {
+      "case": "help",
+      "returncode": 1,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/help.log",
+      "sha256": "ec8fbae1ca67c1468497320d7b318c4aaf2229842d2d620bccf7ca3e0d72a12d"
+    },
+    {
+      "case": "missing-file-success",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/missing-file-success.log",
+      "sha256": "4e5a8f2cc8ea4c8022ccf9ec25fe315e1db70f2cc42739e057c89f059c9e6e99"
+    },
+    {
+      "case": "tensor-flag-without-files",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/tensor-flag-without-files.log",
+      "sha256": "2cf7c1cf21627c082d62b98f01af39b3fecedbcd5f30a3ad4b533ac6544c7429"
+    },
+    {
+      "case": "single-short-file",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/single-short-file.log",
+      "sha256": "9ca29d96f5bc1a97c88add93866622eafa0dd060638b65bdc14d93bd55dfbf3e"
+    },
+    {
+      "case": "same-short-files",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/same-short-files.log",
+      "sha256": "ce1b878f31d4e10859281a475e44b02c47f17eb4276829a0bccd6e4628314ab0"
+    },
+    {
+      "case": "overwrite-existing-sidecar",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/overwrite-existing-sidecar.log",
+      "sha256": "ce1b878f31d4e10859281a475e44b02c47f17eb4276829a0bccd6e4628314ab0"
+    },
+    {
+      "case": "final-compressed-uninitialized-pattern",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/final-compressed-uninitialized-pattern.log",
+      "sha256": "d50bbeb15a92772e721895c9e9a14e54454098ee695a5ba2ebf4c36b636a2e25"
+    },
+    {
+      "case": "seeded-hash-collision-no-byte-check",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/seeded-hash-collision-no-byte-check.log",
+      "sha256": "6380a7eb949aa0f613a77bab9485c739cde131cc53cb2908a299eab52ad29f61"
+    },
+    {
+      "case": "lz4-33-roundtrip-split-oracles",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/lz4-33-roundtrip-split-oracles.log",
+      "sha256": "1f696867c15458d5a5357d5464924e516815c3c7287324c45ab12303d749e163"
+    },
+    {
+      "case": "high-byte-signed-index-sanitizer",
+      "returncode": -6,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/high-byte-signed-index-sanitizer.log",
+      "sha256": "21136f324e00c6901df70f19e299f4a6156f4806d2a7fea16da994476986f46b"
+    },
+    {
+      "case": "seventeenth-file-color-index-sanitizer",
+      "returncode": -6,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/seventeenth-file-color-index-sanitizer.log",
+      "sha256": "7af9bef2e49db4f49eb53ff4b2ea5fa8a3182f3ab599b4745c8901464d41c915"
+    },
+    {
+      "case": "empty-file",
+      "returncode": 0,
+      "log": "docs/research/dedup-500/estimate157-native-run2-20261015/empty-file.log",
+      "sha256": "ae95230cb212118e50705a8d7802e04f509e1d35d12b5e5aaa63872a37528b21"
+    }
+  ],
+  "binaries": [
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/estimate157-20261015/estimator",
+      "sha256": "a88aa97e18e384eed93f5cca65207fef3c92cde492db293032edb939c8fedd68"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/estimate157-20261015/estimator-sanitize",
+      "sha256": "71e99ade11a7200e0612b35046ee84dd6444afe29a7f59c9148c9edb5b10a7b1"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/estimate157-20261015/estimator-pattern",
+      "sha256": "f00cbe6db87455b0ec4e0b1044e84307ce62ccedcd651e1828e10fd599879a56"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/estimate157-20261015/helper-pattern",
+      "sha256": "f9d6b4a2bd89e815d9d1071c37075d73082f3354e4d6cd1fc360a86e3f79c390"
+    }
+  ],
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "scope": "Unchanged entire estimator and vendored LZ4 compiled onMacARM, actualCLI plus whole-source include helper. Pattern-init compiler diagnostic explicitly distinguishes missing final compressed_len assignment. Seeded map collision is injected, not found naturalhash collision. UBSan/ASan expected failures retained.33LZ4roundtrip/split oracles, tinyownedfiles, no speed/storage/precision/platform claim."
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "sha": "1709bffbfcbe19634577ac594e846e4311d06b7e",
+    "content": "# Prerequisites\n*.d\n\n# Compiled Object files\n*.slo\n*.lo\n*.o\n*.obj\n\n# Precompiled Headers\n*.gch\n*.pch\n\n# Compiled Dynamic libraries\n*.so\n*.dylib\n*.dll\n\n# Fortran module files\n*.mod\n*.smod\n\n# Compiled Static libraries\n*.lai\n*.la\n*.a\n*.lib\n\n# Executables\n*.exe\n*.out\n*.app\n\ndedupe_estimator\n"
+  },
+  {
+    "sha": "1274da0dcabc085bf25e4697acf956e12642d437",
+    "content": "# Compiler flags\nCXXFLAGS = -O3\n\nall: dedupe_estimator\n\n# Build the executable\ndedupe_estimator: dedupe_estimator.cpp lz4.cpp Makefile\n\t$(CXX) $(CXXFLAGS) -o dedupe_estimator dedupe_estimator.cpp lz4.cpp\n\nclean:\n\trm -f dedupe_estimator\n\n.PHONY: all clean\n"
+  }
+]

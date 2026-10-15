@@ -1,0 +1,68 @@
+{
+  "index": 157,
+  "repository": "huggingface/dedupe_estimator",
+  "commit": "c192007a540703f8afcb6310b1373a520362c375",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "GEAR chunking estimator with LZ4; storage chunk reuse, not image similarity.",
+  "available_source_evidence": [
+    {
+      "path": "dedupe_estimator.cpp",
+      "local": "02-dedupe_estimator.cpp",
+      "url": "https://github.com/huggingface/dedupe_estimator/blob/c192007a540703f8afcb6310b1373a520362c375/dedupe_estimator.cpp",
+      "sha256": "5154974b418ebbac600f5cd1ff5b8e36f3fa62c4fafbea3c9b49bf27859e7ac6",
+      "truncated": false,
+      "lines": 553,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lz4.cpp",
+      "local": "03-lz4.cpp",
+      "url": "https://github.com/huggingface/dedupe_estimator/blob/c192007a540703f8afcb6310b1373a520362c375/lz4.cpp",
+      "sha256": "9396f7de527bc8435de9c7569fb7998e56545a84b4f3c2d808c0235c01774539",
+      "truncated": false,
+      "lines": 2829,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lz4.h",
+      "local": "04-lz4.h",
+      "url": "https://github.com/huggingface/dedupe_estimator/blob/c192007a540703f8afcb6310b1373a520362c375/lz4.h",
+      "sha256": "26b82efc53d1570f3b54eef02e9c4764c1ad374ff03cac04e2ced5ea4d4c552f",
+      "truncated": false,
+      "lines": 884,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "BSD-3-Clause",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/huggingface/dedupe_estimator/blob/c192007a540703f8afcb6310b1373a520362c375/README.md",
+      "sha256": "c841fe65f64100f295b9730fbaff938d96077564bf7b1a0cc21999c2dd4513e4",
+      "truncated": false,
+      "lines": 27,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/huggingface/dedupe_estimator/blob/c192007a540703f8afcb6310b1373a520362c375/LICENSE",
+      "sha256": "82631172f16343324cb7c4befe4d88ecb8b30526b468de8e9b42b647355bf4be",
+      "truncated": false,
+      "lines": 28,
+      "source": false,
+      "test": false
+    }
+  ]
+}

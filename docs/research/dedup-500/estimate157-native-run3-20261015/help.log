@@ -1,0 +1,14 @@
+Usage: dedupe_estimator [-t] FILE1 [FILE2 ...]
+
+Estimates the amount of chunk level dedupe available in a
+collection of files. All files will be chunked together
+so if there are multiple versions of the file, all versions
+should be provided together to see how much can be saved.
+using Hugging Face's dedupped storage architecture.
+
+The chunking algorithm used here is **not** the same
+as the one being deployed, but it should provide a
+reasonable estimate.
+
+The -t flag will enable an experimental tensor compression modefor any neural network file
+

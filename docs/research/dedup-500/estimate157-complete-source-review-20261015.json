@@ -1,0 +1,79 @@
+{
+  "repository": "huggingface/dedupe_estimator",
+  "commit": "c192007a540703f8afcb6310b1373a520362c375",
+  "tree": "9a9b4cdce9b8436fca5c81f31194797c6b00f7f1",
+  "status": "complete_source_read_native_estimator_and_lz4_controls",
+  "whole_repository_complete": true,
+  "license": "Root BSD3Clause fully read; embedded lz4.cpp/lz4.h BSD2Clause notices fully read. No production source adopted.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "git_blob": "1709bffbfcbe19634577ac594e846e4311d06b7e",
+      "sha256": "c554752f55de300d56e4f4253ff8d94820beaf2e2a1e862f1a6eac872621c09f",
+      "bytes": 288
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "e23b5887865c7b9abe1b3e96de65331ecc9c8259",
+      "sha256": "82631172f16343324cb7c4befe4d88ecb8b30526b468de8e9b42b647355bf4be",
+      "bytes": 1499
+    },
+    {
+      "path": "Makefile",
+      "git_blob": "1274da0dcabc085bf25e4697acf956e12642d437",
+      "sha256": "5994c4c41ceff6717e4ac74a8ece05844da289dc2b275bd6644e4e8b6ff16139",
+      "bytes": 255
+    },
+    {
+      "path": "README.md",
+      "git_blob": "4363c9482460e46341edbab6babea5860497908d",
+      "sha256": "c841fe65f64100f295b9730fbaff938d96077564bf7b1a0cc21999c2dd4513e4",
+      "bytes": 860
+    },
+    {
+      "path": "dedupe_estimator.cpp",
+      "git_blob": "d31fc0f0406639a30346d7d32203b3bb5e00c5cd",
+      "sha256": "5154974b418ebbac600f5cd1ff5b8e36f3fa62c4fafbea3c9b49bf27859e7ac6",
+      "bytes": 15706
+    },
+    {
+      "path": "lz4.cpp",
+      "git_blob": "a2f7abee19fb9a5c768f2a6c266acf5b571f0855",
+      "sha256": "9396f7de527bc8435de9c7569fb7998e56545a84b4f3c2d808c0235c01774539",
+      "bytes": 118145
+    },
+    {
+      "path": "lz4.h",
+      "git_blob": "80e3e5ca04d22db9ec4980dfc43672a13984aa15",
+      "sha256": "26b82efc53d1570f3b54eef02e9c4764c1ad374ff03cac04e2ced5ea4d4c552f",
+      "bytes": 46014
+    }
+  ],
+  "scope": "All7trackedblobs/root tree fully read and independently Gitblob/tree verified:553line estimator,2829line complete LZ4implementation and884line header, README/LICENSE/Makefile/ignore. No trackedtests/images. Fullcodec static read is not exhaustive codec conformance/platform/fuzz validation.",
+  "runtime": {
+    "runs": [
+      {
+        "path": "docs/research/dedup-500/estimate157-native-run2-20261015/result.json",
+        "sha256": "56ca6ffda4159237d912d9e80aa36eeed84c7f7622158783e12c8704e938c37a"
+      },
+      {
+        "path": "docs/research/dedup-500/estimate157-native-run3-20261015/result.json",
+        "sha256": "0b7ef72218ca7e99d72a3c0b7c5d26a9c9fc36d10b9b101ce5f84c9fc430af04"
+      }
+    ],
+    "controls_per_run": 12,
+    "lz4_roundtrip_split_oracles_per_run": 33,
+    "scope": "Original entire estimator+vendoredLZ4 native clang++ MacARM O3 CLI, O1UBSan/ASan expected failures, unchanged-source main-renamed helper with explicitpattern-auto-init. Helper seededmapcollision injected, not natural collision discovery. Tinyownedfiles only; no storage/throughput/corpus/platform/hardRSS guarantee.",
+    "initial_harness_failures": "Helperv1 used mutable string.data under defaultC++14, rawcompilefailure retained; helperv2 uses mutable &string[0], upstream untouched. Initialpalette oracle expected UBSan index16, actual ASan reports read immediately after192byte COLORS; rawrun1 and correction retained."
+  },
+  "findings": [
+    "WholeCLI 0xFF yields UBSan signed-char GEAR_TABLE index-1 out of256 bounds.",
+    "WholeCLI17distinct one-byte ASCII files yields ASan global-buffer-overflow immediately after192byte16color COLORS.",
+    "Final chunk_info.compressed_len never assigned; pattern-auto-init helper reads aaaaaaaaaaaaaaaa for final3byte chunk. NormalO3 estimate can misleadingly print0, not a valid compressed-size qualification.",
+    "Seeded std::hash entry trusted without retained length/content collision verification; author explicitly documents estimate/nonsecurehash limitations.",
+    "Missing input logs error yet exits0; -t withoutfiles exits0.",
+    "Existing owned filename.dedupe_image.ppm overwritten by processing secondfile; unchecked sidecar writes not read-only estimation.",
+    "33finite actualLZ4 compression/decompression and tensor-four-lane split length oracles pass; helper compress wrappers valid on those cases, estimator final-accounting remains broken."
+  ],
+  "optimization_decision": "Content-defined chunk reuse is a storage estimator technique, not full-file or visual identity. Do not trade exactverification/mutation/resource contracts for hash-only estimated sharing. No newproduction source/performance claim."
+}

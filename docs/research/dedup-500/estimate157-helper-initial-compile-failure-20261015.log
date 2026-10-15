@@ -1,0 +1,13 @@
+docs/research/dedup-500/estimate157-native-helper-20261015.cpp:21:68: error: no matching function for call to 'LZ4_compress_default'
+   21 |    std::string compressed(LZ4_compressBound(n),0),out(n+1,0);int c=LZ4_compress_default(s.data(),compressed.data(),n,compressed.size());int r=LZ4_decompress_safe(compressed.data(),out.data(),c,n);
+      |                                                                    ^~~~~~~~~~~~~~~~~~~~
+.dedup-work/estimate157-20261015/source/lz4.h:191:16: note: candidate function not viable: 2nd argument ('const value_type *' (aka 'const char *')) would lose const qualifier
+  191 | LZ4LIB_API int LZ4_compress_default(const char* src, char* dst, int srcSize, int dstCapacity);
+      |                ^                                     ~~~~~~~~~
+docs/research/dedup-500/estimate157-native-helper-20261015.cpp:21:143: error: no matching function for call to 'LZ4_decompress_safe'
+   21 |    std::string compressed(LZ4_compressBound(n),0),out(n+1,0);int c=LZ4_compress_default(s.data(),compressed.data(),n,compressed.size());int r=LZ4_decompress_safe(compressed.data(),out.data(),c,n);
+      |                                                                                                                                               ^~~~~~~~~~~~~~~~~~~
+.dedup-work/estimate157-20261015/source/lz4.h:208:16: note: candidate function not viable: 2nd argument ('const value_type *' (aka 'const char *')) would lose const qualifier
+  208 | LZ4LIB_API int LZ4_decompress_safe (const char* src, char* dst, int compressedSize, int dstCapacity);
+      |                ^                                     ~~~~~~~~~
+2 errors generated.
