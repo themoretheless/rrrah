@@ -1,0 +1,78 @@
+{
+  "index": 211,
+  "repository": "PierreCrette/VideoDedup",
+  "commit": "b7a6c897939dd22a9940134c74afec1a027ff4fc",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Periodic video extraction and image analysis; sampling cannot certify complete animation equivalence.",
+  "available_source_evidence": [
+    {
+      "path": "1k_parse.py",
+      "local": "02-1k_parse.py",
+      "url": "https://github.com/PierreCrette/VideoDedup/blob/b7a6c897939dd22a9940134c74afec1a027ff4fc/1k_parse.py",
+      "sha256": "28e711782f981573c47eb4bccb5d3ef149c9fabbcb0222f1c69f96f9bb6e4f5c",
+      "truncated": false,
+      "lines": 640,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "3n_analyse.py",
+      "local": "03-3n_analyse.py",
+      "url": "https://github.com/PierreCrette/VideoDedup/blob/b7a6c897939dd22a9940134c74afec1a027ff4fc/3n_analyse.py",
+      "sha256": "421a96c7752b0b5d7fa2dd76ea8841b0afb82152416c8975eeafe99982fe251e",
+      "truncated": false,
+      "lines": 1429,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "preanalysegit.sh",
+      "local": "04-preanalysegit.sh",
+      "url": "https://github.com/PierreCrette/VideoDedup/blob/b7a6c897939dd22a9940134c74afec1a027ff4fc/preanalysegit.sh",
+      "sha256": "2ca8160a6fa6b924316bb8452443f2ec9e55502b32459fae980b75e4bb5336f1",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "CompareV2",
+      "local": "05-CompareV2",
+      "url": "https://github.com/PierreCrette/VideoDedup/blob/b7a6c897939dd22a9940134c74afec1a027ff4fc/CompareV2",
+      "sha256": "e10e14a733c68d695e2a97fec129a8f5a8b874365277f10b0d328ce423073d66",
+      "truncated": true,
+      "lines": 2648,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/PierreCrette/VideoDedup/blob/b7a6c897939dd22a9940134c74afec1a027ff4fc/README.md",
+      "sha256": "1fe4756e41e27d327898bb6179baf4ef2b707e679d77ffe45ba86af9eb669e99",
+      "truncated": false,
+      "lines": 213,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "licence.txt",
+      "local": "01-licence.txt",
+      "url": "https://github.com/PierreCrette/VideoDedup/blob/b7a6c897939dd22a9940134c74afec1a027ff4fc/licence.txt",
+      "sha256": "605e9047a563c5c8396ffb18232aa4304ec56586aee537c45064c6fb425e44ad",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

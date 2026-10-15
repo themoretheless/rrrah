@@ -2,9 +2,9 @@
   "index": 211,
   "repository": "PierreCrette/VideoDedup",
   "commit": "b7a6c897939dd22a9940134c74afec1a027ff4fc",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All6textblobs fully read including1364linePascal,2x14selectedunchangedPythoncontrols. SeventhELFblob35sections andfullbytesverified, binarysemantic/correspondencepartial; notcountedfull.",
   "decision": "reference",
-  "finding": "Periodic video extraction and image analysis; sampling cannot certify complete animation equivalence.",
+  "finding": "Originalbatching duplicates5000records at>=5000boundaries; basename/tempname collisions, stale namecache, temporalorderignored, perbatchreferenceisolation; no wholepipeline/nativebinary/performance proof.",
   "available_source_evidence": [
     {
       "path": "1k_parse.py",
@@ -43,8 +43,9 @@
       "sha256": "e10e14a733c68d695e2a97fec129a8f5a8b874365277f10b0d328ce423073d66",
       "truncated": true,
       "lines": 2648,
-      "source": true,
-      "test": false
+      "source": false,
+      "test": false,
+      "artifact_kind": "compiled_ELF_text_excerpt_not_source"
     }
   ],
   "license_metadata": "GPL-3.0",
@@ -73,6 +74,14 @@
       "lines": 674,
       "source": false,
       "test": false
+    }
+  ],
+  "full_repository_read": false,
+  "whole_repository_complete": false,
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/video211-text-source-controls-review-20261015.json",
+      "whole_repo_complete": false
     }
   ]
 }

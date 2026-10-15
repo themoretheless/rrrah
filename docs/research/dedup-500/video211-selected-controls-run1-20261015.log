@@ -1,0 +1,24 @@
+PASS empty ShortName raises IndexError
+PASS single-component absolute ShortName retains slash
+PASS PathName without separator raises IndexError
+PASS TempName truncates parent and collides distinct directories
+PASS empty image lookup map raises IndexError
+PASS existing name-only HD cache skips changed source bytes
+PASS withinbatch reference policy greedily suppresses second valid pair
+PASS independently serialized batches do not share prior reference exclusion
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/video211-selected-controls-20261015.py", line 45, in <module>
+    check('reversed fingerprint frame order still admitted with two zero-distance matches',reversed_frames)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/video211-selected-controls-20261015.py", line 11, in check
+    with tempfile.TemporaryDirectory(dir=W) as temp:fn(Path(temp))
+                                                    ~~^^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/video211-selected-controls-20261015.py", line 44, in reversed_frames
+    a=hd_fixture([0,1,0,1],2);b=hd_fixture([0,1,1,0],2);assert a[0] and b[0] and all(row[0]==0 for row in b[0][1])
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/video211-selected-controls-20261015.py", line 42, in hd_fixture
+    return m.mp5_HD_DistanceControl([0])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/PierreCrette--VideoDedup/03-3n_analyse.py", line 777, in mp5_HD_DistanceControl
+    log(duration(time.perf_counter() - perf) + ' - Resultset keep after HD control. Best distances = ' + s, 2)
+        ^^^^^^^^
+NameError: name 'duration' is not defined
