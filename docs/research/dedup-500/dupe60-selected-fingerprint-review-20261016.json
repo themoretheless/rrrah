@@ -1,0 +1,38 @@
+{
+  "status": "verified_selected_module_native_controls",
+  "whole_repo_complete": false,
+  "repository": "Rafaelpta/dupehound",
+  "commit": "35ea7c3743a8fb2205aaef973e67b1c6c5e41474",
+  "fully_read_files": [
+    "src/fingerprint.rs",
+    "src/config.rs",
+    "src/score.rs"
+  ],
+  "original_module_tests": 5,
+  "additional_controls": 3,
+  "runs": 2,
+  "oracle_queries_per_run": 246025,
+  "observations": [
+    "All finite base3 tokenstreams length0..8,k1..5,w1..5 match direct polynomial recomputation and independent minimum-set window oracle. Same splitmix constants, not independent hash primitive.",
+    "Public module winnow k=0 and w=0 panic under checked strict directrustc; config constants10/8 are valid, public CLI reachability not demonstrated, no wholeproduct failure claim.",
+    "Winnowing implementation scans all w hashes perwindow; time O(n*w), stores O(n) hashes then sorts/deduplicates. Static complexity, no end-to-end performance measurement.",
+    "Jaccard documents sorted deduplicated precondition; empty/empty returns0.0 policy. No invalidprecondition bug claim."
+  ],
+  "scope": "Whole unchanged fingerprint.rs includingfiveoriginaltests; crate config namespace exposesonlytwoexactoriginalconstants10and8. No othermodules/dependencies orwholeCargo execution; score/config read only.",
+  "evidence_pins": {
+    ".dedup-work/dupe60-20261016/source/src/fingerprint.rs": "e4f1545281d810b7b04eaff02dc43622052a42b2c0f29dff4cabc6ed98d0944b",
+    ".dedup-work/dupe60-20261016/source/src/config.rs": "acdcb7fa4d12ea37a3036351b0860dadbb599e3673c87218e3fbb5ad7dca20dc",
+    ".dedup-work/dupe60-20261016/source/src/score.rs": "315c80cea2dca3c90c6b1c4b23ba49706c58f85aff85753b26ad28b326a21e66",
+    ".dedup-work/dupe60-20261016/fingerprint-harness.rs": "2649f36a587c79d0d22da2893c3b6b5e27c74f51038521686fafad212183211f",
+    ".dedup-work/dupe60-20261016/fingerprint-tests": "dc3cfa9fba019ef61d643600b491af99ea2ee0d1bdf4ce0b981175e121b5d14a",
+    ".dedup-work/dupe60-20261016/fingerprint-inventory.log": "7248d03046edf2f8b38b1e3f0b821705d81014bbdcf3dbf07547e19786bbc661",
+    ".dedup-work/dupe60-20261016/fingerprint-run1.log": "ce819ff573c5c5c0aaeed13f890407273e6c2e1dacea221c64d8d372e82400a9",
+    ".dedup-work/dupe60-20261016/fingerprint-run2.log": "85efdecf59e59d6620961ef0387e97e320a01d0ba3ebbede2364c3e309adf0ba",
+    "docs/research/dedup-500/dupe60-fetched-source-pins-20261016.json": "bf8f8e8112f77bf754addd57fa23a9a076d4c9fde279a55a24a8b0ac692fc5b4"
+  },
+  "limits": [
+    "Only3of97filesread; remaining87UTF8files and7binaryassets stillrequire review. No fullrepositorycount increase.",
+    "Original suite five tests in selectedmodule only; repositoryintegration andothermodule tests notrun.",
+    "No wholelibrary/currentRoot/gate/platform/millionfile/quality/performance/adoption claim."
+  ]
+}
