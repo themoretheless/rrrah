@@ -1,0 +1,41 @@
+test_check_file_type_valid (test_base_parser.TestBaseParser.test_check_file_type_valid) ... ok
+test_organize_file (test_base_parser.TestBaseParser.test_organize_file) ... ok
+test_get_destination_path_different_destinations (test_movie_parser.TestMovieParser.test_get_destination_path_different_destinations)
+Test get_destination_path with different destination directories. ... ok
+test_get_destination_path_invalid (test_movie_parser.TestMovieParser.test_get_destination_path_invalid)
+Test get_destination_path with invalid movie file (should return None). ... ok
+test_get_destination_path_valid (test_movie_parser.TestMovieParser.test_get_destination_path_valid)
+Test get_destination_path with valid movie file. ... ok
+test_parse_info_space_delimited (test_movie_parser.TestMovieParser.test_parse_info_space_delimited)
+Test parse_info with space-delimited movie filename. ... ok
+test_parse_info_valid_format_extended (test_movie_parser.TestMovieParser.test_parse_info_valid_format_extended)
+Test parse_info with valid movie filename (title.year.extension.res.details). ... ok
+test_parse_info_valid_format_simple (test_movie_parser.TestMovieParser.test_parse_info_valid_format_simple)
+Test parse_info with valid movie filename (title.year.extension). ... ok
+test_parse_info_with_special_characters (test_movie_parser.TestMovieParser.test_parse_info_with_special_characters)
+Test parse_info with special characters in title. ... ok
+test_get_destination_path_different_destinations (test_tv_parser.TestTVParser.test_get_destination_path_different_destinations)
+Test get_destination_path with different destination directories. ... ok
+test_get_destination_path_invalid (test_tv_parser.TestTVParser.test_get_destination_path_invalid)
+Test get_destination_path with invalid TV show (should return None). ... ok
+test_get_destination_path_valid (test_tv_parser.TestTVParser.test_get_destination_path_valid)
+Test get_destination_path with valid TV show. ... ok
+test_parse_info_invalid_format_no_season_episode (test_tv_parser.TestTVParser.test_parse_info_invalid_format_no_season_episode)
+Test parse_info with filename missing season/episode (should fail). ... ok
+test_parse_info_space_delimited (test_tv_parser.TestTVParser.test_parse_info_space_delimited)
+Test parse_info with space-delimited TV show filename. ... ok
+test_parse_info_space_delimited_with_year (test_tv_parser.TestTVParser.test_parse_info_space_delimited_with_year)
+Test parse_info with year before season/episode and space delimiter. ... ok
+test_parse_info_valid_format_lowercase (test_tv_parser.TestTVParser.test_parse_info_valid_format_lowercase)
+Test parse_info with valid TV show filename (s01e02 format). ... ok
+test_parse_info_valid_format_uppercase (test_tv_parser.TestTVParser.test_parse_info_valid_format_uppercase)
+Test parse_info with valid TV show filename (S01E02 format). ... ok
+test_parse_info_with_special_characters (test_tv_parser.TestTVParser.test_parse_info_with_special_characters)
+Test parse_info with special characters in show name. ... ok
+test_parse_info_with_year (test_tv_parser.TestTVParser.test_parse_info_with_year)
+Test parse_info with year before season/episode (year should be ignored). ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.001s
+
+OK

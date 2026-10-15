@@ -1,0 +1,101 @@
+{
+  "status": "complete_pinned_source_and_logo_read_scoped_native_controls",
+  "index": 54,
+  "repository": "itsmejoeeey/linkarr",
+  "commit": "27e73cfc2a4564202c600f9551f390d51304267d",
+  "root_tree": "8deb8bddd9f6f7f0ce684d9f6e12679aa88b9fab",
+  "whole_repo_complete": true,
+  "full_repository_read": true,
+  "blobs": 25,
+  "trees": 8,
+  "all_git_objects_verified": true,
+  "fully_read_text": [
+    ".github/workflows/build-and-deploy.yml",
+    ".gitignore",
+    "Dockerfile",
+    "LICENSE.md",
+    "README.md",
+    "config.example.json",
+    "docs/developing.md",
+    "docs/todo.md",
+    "requirements.dev.txt",
+    "requirements.txt",
+    "src/linkarr/__init__.py",
+    "src/linkarr/config.py",
+    "src/linkarr/config.schema.json",
+    "src/linkarr/helpers.py",
+    "src/linkarr/main.py",
+    "src/linkarr/models.py",
+    "src/linkarr/parsers/__init__.py",
+    "src/linkarr/parsers/base.py",
+    "src/linkarr/parsers/movie.py",
+    "src/linkarr/parsers/tv.py",
+    "src/linkarr/watch.py",
+    "test/test_base_parser.py",
+    "test/test_movie_parser.py",
+    "test/test_tv_parser.py"
+  ],
+  "license_scope": {
+    "license": "GPL3",
+    "reuse": "Exact same35149byte/674line GPLblob fully read for source437; bothGitblob andSHA256 matched, not inferred from license name.",
+    "prior_full_read": "docs/research/dedup-500/discord437-complete-source-review-20261015.json",
+    "prior_sha256": "62a865187e19a123cd5fd0c02966e710c625490e8945f7e58ebc251e36c0ab92"
+  },
+  "visual_assets": [
+    {
+      "path": "docs/logo.png",
+      "archived": "docs/research/dedup-500/link54-logo-20261015.png",
+      "sha256": "5e88f24f45c957e50c3fd965572ddc7ae0b854bed68f45e6dc65cdcb46840454",
+      "viewed": true,
+      "observation": "256x256 whitebackground green and darkgray interlocking rounded linkshapes; no algorithm or performance information."
+    }
+  ],
+  "decision": "reject-domain",
+  "native": {
+    "original_test_bodies": 19,
+    "fixture_adapter": "Only baseparser IO fixture destination setUp and DummyParser path getter redirected from /dummy/dest to owned tempdir.19originaltestbodies unchanged;18puretests/1realIOtest.",
+    "authored_controls": 12,
+    "runs": 2,
+    "cases": [
+      "real_relative_symlink_points_to_owned_source",
+      "broken_link_exists_check_misses_directory_entry_and_create_raises",
+      "different_content_same_basename_silently_keeps_existing_target",
+      "cleanup_removes_dead_link_and_empty_subdirectory_retains_root",
+      "remove_broken_symlink_also_unlinks_live_link_if_called_directly",
+      "finder_case_insensitive_but_parser_case_sensitive",
+      "disabled_job_still_processed_by_actual_process_jobs",
+      "same_source_two_jobs_change_callback_only_processes_first",
+      "empty_directory_root_guard_compares_lexical_strings",
+      "invalid_regex_surfaces_native_error",
+      "broken_source_link_discovered_and_mirrored_as_new_broken_link",
+      "existing_regular_destination_skipped_without_content_comparison"
+    ],
+    "logs": {
+      "docs/research/dedup-500/link54-native-run1-20261015.log": "b260ef7973b96e70f366d8ea03ab6441f487c8622416197ba5164c7f3e3fe4a6",
+      "docs/research/dedup-500/link54-native-run1-20261015.stderr.log": "7db12f36907b7e56d94dd02927f37a1aab40e597748a017ffe42105cef54c379",
+      "docs/research/dedup-500/link54-native-run2-20261015.log": "b260ef7973b96e70f366d8ea03ab6441f487c8622416197ba5164c7f3e3fe4a6",
+      "docs/research/dedup-500/link54-native-run2-20261015.stderr.log": "7db12f36907b7e56d94dd02927f37a1aab40e597748a017ffe42105cef54c379"
+    },
+    "script": "scripts/qualify-link54-native-controls-20261015.py",
+    "script_sha256": "07d9e6adfc1f0abf65fff86aca982b7a9e591f5d47e4c0c8d8a1031dcbc0691a"
+  },
+  "findings": [
+    "Filename-regex metadata parser and symboliclink organizer, no visual or exactcontent duplicate detector.",
+    "Nativehelper checks exists instead of lexists; existingbrokenlink makes create_symlink raiseFileExistsError. Samebasename differenttarget andexistingregularfile skipped without byte comparison.",
+    "Actualprocess_jobs ignores enabled=False; same source twojobs change dispatch onlyprocessesfirst.",
+    "Finder case-insensitive andparsercase-sensitive regex disagree; brokensource symlink canbe mirroredasnewbrokenlink.",
+    "Standalone remove_broken_symlink removeslive links too; remove_empty_directory rootguard stringcomparison treats trailingseparator differently. Caller ordinarilychecksbroken first; not a claim of unconditionally deletinglive links in normalcleaner.",
+    "Watcher handlescreated/deleted/moved, notmodified; no debounce/batch/cancellation checkpoints visible. Schema allows enabledthrough additionalproperties but doesnot typevalidate it; original runtimeconfig/watchdog unexecuted."
+  ],
+  "limits": [
+    "All24trackedtext read, GPLsameblob priorfullread reused, singletrackedlogo viewed. No externalDockerbadge/nativewatcher/Docker/mainCLI/jsonschema/originaldependency/platform execution.",
+    "19unchangedtestbodies run twice withfixture-onlypathredirection for1IOtest. Cannot claim untouchedoriginalenvironment/fullCLI suite.",
+    "Localunchangedmodels/helpers/parsers/3mainfunctions controls only, allwritesnewlyownedfixtures. No realmedia/source deletion or productionadoption/speedup."
+  ],
+  "evidence_pins": {
+    "docs/research/dedup-500/link54-full-text-pins-20261015.json": "74f4dc73c9cd56003f4ec584aad5920091121cb8cee6ded3d676606560d5be3b",
+    "docs/research/dedup-500/link54-upstream-tree-20261015.json": "ea40d7316204f98755189366adf1a56fbdc5ed0dd4b65eaf5f6ec92be1e520ad",
+    "docs/research/dedup-500/link54-logo-20261015.png": "5e88f24f45c957e50c3fd965572ddc7ae0b854bed68f45e6dc65cdcb46840454",
+    "scripts/audit-link54-complete-source-20261015.py": "73d40cf5cfbaec7e693b068e04c57a55749d78bf3370c563567e482b2d36b9da"
+  }
+}
