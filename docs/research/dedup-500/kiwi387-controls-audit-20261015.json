@@ -1,0 +1,45 @@
+{
+  "status": "verified34_original_objcxx_wrapper_controls_with_real_foundation",
+  "auditor_sha256": "f61367ec8d593e29e4a792b12f9cf66f149617b6b1684016319446ed64712bf5",
+  "source_manifest_sha256": "1683d82f1762ab6654cfe378bedfbc0a610d3714ec48bbad2cd1c0749684f35f",
+  "executable": "/private/tmp/rrrah-kiwi387-controls-20261015/probe",
+  "executable_sha256": "47775c6309004a9c473607e34d672d2cee2fe354d7e7ec65c31a31e22c3516bb",
+  "source_adapters": {
+    "docs/research/dedup-500/kiwi387-controls-20261015.mm": "634b31f17aefd75b8ffaa05977561f77ec01dee805a4d08dfcd00ffd4cdeffa2",
+    "docs/research/dedup-500/kiwi387-KWMatcher-adapter-20261015.h": "c110ac910589a6db5ed4bac978a0a639d5c85ee7a780782eb0880f602aa4e029",
+    "docs/research/dedup-500/kiwi387-pHash-adapter-20261015.h": "7987d5b144eb783a77de71153eb2b68dc456b182bd40da446dc7ac10c49c1e81"
+  },
+  "logs": {
+    "/private/tmp/rrrah-kiwi387-controls-20261015/run.log": "01347a1c381a71ac692bf0f7aa1903808a279a712f90077a082e87d87270ea99",
+    "/private/tmp/rrrah-kiwi387-controls-20261015/build.log": "23a351fb10876a385b8f63860e1c9ee0a702b69ac892c771ed962c6101f0c6ab"
+  },
+  "checks": 34,
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "compiler_warnings": "10 existing original-source semicolon-before-method-body warnings retained; no -Werror or warning suppression used",
+  "syntax_only_checks": {
+    "installer": {
+      "command": [
+        "/bin/sh",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Fingertips--FTpHashKiwiMatcher/06-install-dependencies"
+      ],
+      "returncode": 0
+    },
+    "podspec": {
+      "command": [
+        "/usr/bin/ruby",
+        "-c",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Fingertips--FTpHashKiwiMatcher/04-matcher.podspec"
+      ],
+      "returncode": 0
+    }
+  },
+  "observations": [
+    "Actual default forwarded threshold0.999 differs from header0.999999",
+    "Negative score0.25 retained in ccp property after later positive backend result1.0, so shouldNot diagnostic prints stale score",
+    "Real Foundation class validation/exceptions and both digest-error checkpoints exercised",
+    "Invalid -1/2/NaN/infinite thresholds delegated unchanged to scripted backend",
+    "Nil path forwarded as null C pointer, mutable NSString path remains aliased, non-file NSURL wrapper forwards path component"
+  ],
+  "scope": "Both pinned Objective-C++ implementation and header compiled unchanged with actual Apple Foundation/ARC and explicit authored KWMatcher base/pHash API scripted adapters. No actual Kiwi registration, pHash ABI/hash algorithm, image decode, memory ownership, complete package/install/Homebrew/platform or perceptual quality qualification. Synthetic path strings only; no image files, downloads, deletion or source adoption. Fresh replay confirms same34checks."
+}
