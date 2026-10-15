@@ -1,0 +1,88 @@
+{
+  "index": 177,
+  "repository": "Living-with-machines/deduplify",
+  "commit": "152f9c3a3e12c942aafb436519416470fa84b9c0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Dataset file MD5/hash database and unique-hash comparison; no full byte-confirm behavior proved by excerpts.",
+  "available_source_evidence": [
+    {
+      "path": "deduplify/compare_files.py",
+      "local": "02-compare_files.py",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/deduplify/compare_files.py",
+      "sha256": "c64ef99fed27752db28f725daa223185db815e72710deeab32f5705943ed5b88",
+      "truncated": false,
+      "lines": 133,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplify/hash_files.py",
+      "local": "03-hash_files.py",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/deduplify/hash_files.py",
+      "sha256": "364ad84ad3134a4ba5a70961cb9d1809ae117333c5140bb62a3d51cd64ae08b3",
+      "truncated": false,
+      "lines": 131,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplify/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/deduplify/__init__.py",
+      "sha256": "95e99aaffe78cc031d912ef54238971dee2ece1ab2d0f45f34bbe044ae58a281",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_compare.py",
+      "local": "05-test_compare.py",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/tests/test_compare.py",
+      "sha256": "3fbf436ebbdc1b87113227b68e9fcf63b9bc6470ac948717fe47c107c9ca430e",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "deduplify/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/deduplify/cli.py",
+      "sha256": "c6123fcf9445cbd02b03413a21bbd5ef485de895724d3b2ca28de4474e8f7b2a",
+      "truncated": false,
+      "lines": 162,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/README.md",
+      "sha256": "41d450bc05ff01a9224cd2a449dea949d2c0fd3edceee9a7423a5fe9b4c02362",
+      "truncated": false,
+      "lines": 172,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Living-with-machines/deduplify/blob/152f9c3a3e12c942aafb436519416470fa84b9c0/LICENSE",
+      "sha256": "e7df63d23ba6bea99621747a84f97bb78c7b3299a463458f684d1289a6c01bc5",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

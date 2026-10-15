@@ -1,0 +1,143 @@
+{
+  "status": "actual_owned_frozen_baseline_test_live_profile_retained",
+  "plan": {
+    "pid": 33603,
+    "producer_pid": 90688,
+    "target_index": 64,
+    "binary": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-64-five_collection-503e5d3ec7cb33e0",
+    "binary_sha256": "0a81646959ca00f424f503c6ac7555be5ea794d929f9850186fbecefb732bbf9",
+    "source": "/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/baseline",
+    "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-common-worker-fixed-collection-pair-v2-prepared-20261015.json",
+    "manifest_sha256": "60e3adc6c4b7fc109ccb9edf83fec8797f8eb812f14214b8c723737e43ac6115",
+    "preflight_correction": "Initial preflight expected binarynamefive_search_collection, but actualtestfive_search_collection_matches_direct_and_source_lifecycle iswithin binaryfive_collection. Wrongname assertion preserved in toolhistory; psandfreshpins verifyactualownedbinary."
+  },
+  "sampler_command": [
+    "sample",
+    "33603",
+    "2",
+    "1",
+    "-file",
+    "/private/tmp/rrrah-five-search64-live-sample-20261015.txt"
+  ],
+  "duration_seconds": 2,
+  "interval_ms": 1,
+  "per_thread_header_samples": 1477,
+  "active_test_thread_walked_root_samples": 1471,
+  "flat_leaf_observations": [
+    {
+      "symbol": "semaphore_wait_trap  (in libsystem_kernel.dylib)",
+      "leaf_sample_count": 1477
+    },
+    {
+      "symbol": "pow  (in libsystem_m.dylib)",
+      "leaf_sample_count": 440
+    },
+    {
+      "symbol": "_RNvNtCs2pxFtPvxuyU_11rrrah_dedup4warp22premultiplied_in_space  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 197
+    },
+    {
+      "symbol": "_RNvXs0_NtNtCs8Mbv00yxnRz_4core5array5drainQINtB5_5DrainmNCINvMNtNtB9_3ops9try_traitINtBY_17NeverShortCircuitdE10wrap_mut_1mNCNvNtCs2pxFtPvxuyU_11rrrah_dedup4warp22premultiplied_in_space0E0EINtNtB10_8function5FnMutTjEE8call_mutB23_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 171
+    },
+    {
+      "symbol": "_RNvNtCs2pxFtPvxuyU_11rrrah_dedup4warp20interpolate_in_space  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 152
+    },
+    {
+      "symbol": "_RNvXs0_NtNtCs8Mbv00yxnRz_4core5array5drainQINtB5_5DrainfNCINvMNtNtB9_3ops9try_traitINtBY_17NeverShortCircuitmE10wrap_mut_1fNCNvNtCs2pxFtPvxuyU_11rrrah_dedup6linear9canonical0E0EINtNtB10_8function5FnMutTjEE8call_mutB23_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 133
+    },
+    {
+      "symbol": "_RNvMNtCs2pxFtPvxuyU_11rrrah_dedup6linearNtB2_14LinearRgbaView5pixel  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 70
+    },
+    {
+      "symbol": "_RINvMsm_NtCs8Mbv00yxnRz_4core5arrayAfj4_7try_mapINtNtNtB8_3ops9try_trait17NeverShortCircuitmENCINvMBN_BK_10wrap_mut_1fNCNvNtCs2pxFtPvxuyU_11rrrah_dedup6linear9canonical0E0EB1Y_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 53
+    },
+    {
+      "symbol": "_RINvMsm_NtCs8Mbv00yxnRz_4core5arrayAmj4_7try_mapINtNtNtB8_3ops9try_trait17NeverShortCircuitdENCINvMBN_BK_10wrap_mut_1mNCNvNtCs2pxFtPvxuyU_11rrrah_dedup4warp22premultiplied_in_space0E0EB1Y_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 36
+    },
+    {
+      "symbol": "_RINvNtCs8Mbv00yxnRz_4core3ptr9drop_glueINtNtNtB4_5array5drain5DrainmNCINvMNtNtB4_3ops9try_traitINtB1a_17NeverShortCircuitdE10wrap_mut_1mNCNvNtCs2pxFtPvxuyU_11rrrah_dedup4warp22premultiplied_in_space0E0EEB2g_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 36
+    },
+    {
+      "symbol": "_RINvNtCs2pxFtPvxuyU_11rrrah_dedup4warp18sample_pair_mappedNCNCINvB2_33refine_projective_pixels_selectedNCINvB2_35refine_projective_pixels_candidatesRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_00B1D_EB4_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 29
+    },
+    {
+      "symbol": "_RNvXs0_NtNtCs8Mbv00yxnRz_4core5array5drainQINtB5_5DrainAdj3_NCINvMNtNtB9_3ops9try_traitINtB12_17NeverShortCircuitdE10wrap_mut_1BR_NCNvMs_NtCs2pxFtPvxuyU_11rrrah_dedup8geometryNtB2b_19ProjectiveTransform5apply0E0EINtNtB14_8function5FnMutTjEE8call_mutB2d_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 24
+    },
+    {
+      "symbol": "_RINvNtCs8Mbv00yxnRz_4core3ptr9drop_glueINtNtNtB4_5array5drain5DrainfNCINvMNtNtB4_3ops9try_traitINtB1a_17NeverShortCircuitmE10wrap_mut_1fNCNvNtCs2pxFtPvxuyU_11rrrah_dedup6linear9canonical0E0EEB2g_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 21
+    },
+    {
+      "symbol": "_RINvNtCs2pxFtPvxuyU_11rrrah_dedup4warp18sample_pair_mappedNCNCINvB2_33refine_projective_pixels_selectedNCINvB2_35refine_projective_pixels_candidatesRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0s_0B1D_EB4_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 18
+    },
+    {
+      "symbol": "_RNvMs_NtCs2pxFtPvxuyU_11rrrah_dedup8geometryNtB4_19ProjectiveTransform5apply  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 17
+    },
+    {
+      "symbol": "_RNCINvNtCs2pxFtPvxuyU_11rrrah_dedup16local_collection36scan_collection_with_typed_extractorNtB4_27ProjectiveSixRegionEvidenceNtB4_16PortfolioFeatureINtNtCshxvaOLs88l5_5alloc3vec3VecTyNtCskzZ9knrGFzA_12rrrah_decode13DecodeRequestEENCNvCsd8AqooC5KKE_15five_collections_58five_search_collection_matches_direct_and_source_lifecyclesy_0NCINvB4_44scan_five_searches_with_spatial_confirmationB1r_B2m_B3G_NCINvB4_44scan_projective_local_collection_six_regionsB2m_B3G_Es0_0Es5_0NCB5l_s6_0B6n_NCB5l_s7_0Es0_0B3K_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 16
+    },
+    {
+      "symbol": "_RINvNtCs8Mbv00yxnRz_4core3ptr9drop_glueINtNtNtNtB4_4iter8adapters3zip3ZipINtNtNtB4_5slice4iter7IterMutdEINtNtNtB4_5array4iter8IntoIterdKj4_EEECs2pxFtPvxuyU_11rrrah_dedup  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 12
+    },
+    {
+      "symbol": "_RNvXNtNtNtCs8Mbv00yxnRz_4core3ops8function5implsRDINtB4_2FnuEp6OutputbEL_IBN_uE4callCs2pxFtPvxuyU_11rrrah_dedup  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 11
+    },
+    {
+      "symbol": "_RNCINvNtCs2pxFtPvxuyU_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherTNtB4_46ProjectiveComplementaryFilterPortfolioEvidenceINtNtCs8Mbv00yxnRz_4core6option6OptionNtB4_33ProjectivePhotometricFileEvidenceEB2e_ENtNtB6_5local7FeatureRDINtNtNtB2j_3ops8function2FnuEp6OutputbEL_NCINvB4_69compare_local_files_projective_complementary_gradient_portfolio_innerB3V_E0NCINvB4_39compare_local_file_views_with_extractorB1m_B3V_B4C_NCB4E_s_0E0B6Y_E0Csd8AqooC5KKE_15five_collection  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 9
+    },
+    {
+      "symbol": "DYLD-STUB$$pow  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 6
+    },
+    {
+      "symbol": "_RINvNtCs8Mbv00yxnRz_4core3ptr9drop_glueINtNtNtB4_5array5drain5DrainAdj3_NCINvMNtNtB4_3ops9try_traitINtB1e_17NeverShortCircuitdE10wrap_mut_1B13_NCNvMs_NtCs2pxFtPvxuyU_11rrrah_dedup8geometryNtB2o_19ProjectiveTransform5apply0E0EEB2q_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 6
+    },
+    {
+      "symbol": "_RNCINvNtCs2pxFtPvxuyU_11rrrah_dedup4warp33refine_projective_pixels_selectedNCINvB4_35refine_projective_pixels_candidatesRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0B6_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 6
+    },
+    {
+      "symbol": "_RINvMsm_NtCs8Mbv00yxnRz_4core5arrayAAdj3_BA_7try_mapINtNtNtB8_3ops9try_trait17NeverShortCircuitdENCINvMBR_BO_10wrap_mut_1By_NCNvMs_NtCs2pxFtPvxuyU_11rrrah_dedup8geometryNtB25_19ProjectiveTransform5apply0E0EB27_  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 5
+    },
+    {
+      "symbol": "_RNvMNtCs2pxFtPvxuyU_11rrrah_dedup6linearNtB2_14LinearRgbaView10dimensions  (in binary-64-five_collection-503e5d3ec7cb33e0)",
+      "leaf_sample_count": 5
+    }
+  ],
+  "source_pins": {
+    "Cargo.toml": "5ca0ce3b36b9132a7198b38dff612ee2889c1e341117359299dd2c6d6c9ea96c",
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/src/local_collection.rs": "84f9a32e1ceb67e12a16bc6dc43292ffd8dd39a5c5e5eb2c500fb7ba2fa25e65",
+    "crates/rrrah-dedup/tests/five_collection.rs": "73fdc6c0df37c448bf08325a44dded580d33e969e07f92a0b01ea0fb201770a1"
+  },
+  "sample_sha256": "035b6f98e6a5d9b01318facf1b6458149c48897fca27785fe0e9885e2473d85b",
+  "plan_sha256": "96b7d5dc8b04e4128cac7457a8ae71c41d60e4fadce82e3aee55ed28f52cca18",
+  "observed_path": "scan_projective_local_collection_six_regions -> local_scan::verify_projective_portfolio_views -> warp::refine_projective_pixels_candidates -> sample_pair_mapped/interpolate_in_space/premultiplied_in_space, extended encoded-sRGB pow",
+  "configured_profile_scope": "Frozen full Cargo test gate. Cargo profile.dev opt-level1/package*3; original test profile and debug0/noLTO gate retained. Not opt3release benchmark.",
+  "limits": [
+    "Diagnostic two-second sample under concurrentowned work, not before/after speedup, fullruntime distribution or publication/quality proof.",
+    "Flatleafcount440pow and197premultiplied,152interpolate shown separately. Never addinclusive/multiple overlapping stackcounts or main-thread1477semaphorewait to inferCPUpercentages.",
+    "Rawphysicalfootprint6816K/peak17.7M is observation, not hardRSS or managed-memory bound.",
+    "Retainedbinary+manifest+sourcepins verified, PID/parent/path identifyactualownedprocess. Initial plan wronglyexpectedbinarynamefive_search_collection, corrected against actualfive_collection binary whiletestfunctionnamefive_search_collection matches.",
+    "Earlier rejected channelreuse andzero-weight interpolation remain rejected. Reprofile atopt3 and require completecorrectness+controlledwholeworkflow measurements before adopting further warp optimizations.",
+    "Latest mutableRoot/Core/crate-extraction/corpus/platformcode notqualified by thisfrozenoldsource snapshot."
+  ]
+}

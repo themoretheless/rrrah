@@ -1,0 +1,94 @@
+{
+  "status": "all_seven_original_tests_and_nine_authored_native_controls_pass_twice",
+  "tests": 16,
+  "original_tests": 7,
+  "authored_tests": 9,
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "platform": "macOS-26.7.2-arm64-arm-64bit",
+  "pytest": "7.1.2",
+  "tinydb": "4.7.0",
+  "jmespath": "1.0.1",
+  "rich": "12.5.1",
+  "incremental": "22.10.0",
+  "source": "/private/tmp/rrrah-deduplify177-native-20261015",
+  "source_files_pinned": 30,
+  "dependency_pins": "docs/research/deduplify177-native-controls-20261015/dependency-pins.json",
+  "dependency_pins_sha256": "2ae6d30f25e00f4a8c805cfc2ae5f287b6a414f5a017924491c77fa2e969744c",
+  "commands": [
+    [
+      "python",
+      "-m",
+      "pytest",
+      "--collect-only",
+      "-q",
+      "tests",
+      "-p",
+      "no:cacheprovider"
+    ],
+    [
+      "python",
+      "-m",
+      "pytest",
+      "-vv",
+      "tests",
+      "-p",
+      "no:cacheprovider"
+    ],
+    [
+      "python",
+      "/Users/themoretheless/Documents/Sources/rrrah/docs/research/deduplify177-native-controls-20261015/review_test.py"
+    ]
+  ],
+  "environment": {
+    "PYTHONPATH": "/private/tmp/rrrah-deduplify177-modules-20261015:/private/tmp/rrrah-deduplify177-native-20261015",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/authored-replay-v2.log",
+      "sha256": "ede557317d70d3cb9e88bc769130eebf957f0f90769745c38f2410472688666a"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/authored-run-v2.log",
+      "sha256": "534777016f4313335c289dba4dc63bfdd55c475f501e2fef24aa80177aaa709a"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/authored-run.log",
+      "sha256": "141595c72b2e95ff7ed9ffa2b31f1db490dbfb8ed2bb3964cf4763fe9260cc2f"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/dependency-pins.json",
+      "sha256": "2ae6d30f25e00f4a8c805cfc2ae5f287b6a414f5a017924491c77fa2e969744c"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/failed-authored-v1.py",
+      "sha256": "7f256ff3d8ebab90948ab7f8ed2defdcaaef78c71829f1c04edc157131fdcaf8"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/original-inventory.log",
+      "sha256": "50d133d907467954c319c97c56a66ea8cd6dabb47550efd6793dd925f6c07751"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/original-replay.log",
+      "sha256": "91079e0ff0a6fc30d761efb9247fe85fd0d834e39d7a53849a3c6b51e6b29ba7"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/original-run.log",
+      "sha256": "f596210d3ba30a70a775689db75668a0ddfb4a7803b690e23f7b774628e8c5ca"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/review_test.py",
+      "sha256": "1aab6fb668fe85bf3a1e48708978603a85b321fb08f9b730ec2c5188bad1ccda"
+    },
+    {
+      "path": "docs/research/deduplify177-native-controls-20261015/source-pins.json",
+      "sha256": "c4878cbb8cbff62cb19ab20943f35343651fa9be709862116d202244c1b883b6"
+    }
+  ],
+  "limits": [
+    "Actual unmodified completepackage/source/test bodies with actual pinnedTinyDB4.7/JMESPath1.0.1/Rich12.5.1/Pytest7.1.2, originalsource30files unchanged afterruns. NativeMacARM/Python3.12, not upstreamCI3.7..3.10/platformmatrix or completeprojectsetup/release proof.",
+    "Originalpurge tests mockremoval. Authoreddeletionfailure explicitlyinjected, and stale-catalog candidate onlyreturned, notdeleted. Actualcatalogremoval andemptydirectory removal touchonlyowned syntheticfixtures; no userdataset/private media or realpurgeCLI execution.",
+    "V1 extensionfilter pathoracle confused /var withcanonical/private/var; failure/source retained. V2 onlyexpectedpath.resolve updated; originalsource and unwantedtxt inclusion oracle unchanged. Upstreampytest ASTdeprecations and originalResourceWarnings retained, not strictwarningspass."
+  ]
+}

@@ -2,7 +2,7 @@
   "index": 177,
   "repository": "Living-with-machines/deduplify",
   "commit": "152f9c3a3e12c942aafb436519416470fa84b9c0",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All30tracked textblobs read; canonicalGitblob/treeverification. All7originaltests+9authorednativecontrols pass twice underactualcoredependencies. No realuserpurge, fullsetup/CIplatformmatrix, imagequality/race/scale/performance claim.",
   "decision": "reference",
   "finding": "Dataset file MD5/hash database and unique-hash comparison; no full byte-confirm behavior proved by excerpts.",
   "available_source_evidence": [
@@ -84,5 +84,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/deduplify177-complete-source-review-20261015.json"
 }

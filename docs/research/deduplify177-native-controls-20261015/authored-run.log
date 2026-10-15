@@ -1,0 +1,38 @@
+test_accepted_global_extension_option_does_not_filter_hashing (__main__.Review.test_accepted_global_extension_option_does_not_filter_hashing) ... /Users/themoretheless/Documents/Sources/rrrah/docs/research/deduplify177-native-controls-20261015/review_test.py:47: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-2ejqh0sr/catalog.json' mode='r+' encoding='UTF-8'>
+  with redirect_stdout(io.StringIO()):args.func(**vars(args))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+FAIL
+test_empty_directory_cleanup_leaves_newly_emptied_parent (__main__.Review.test_empty_directory_cleanup_leaves_newly_emptied_parent) ... ok
+test_full_md5_stream_boundaries (__main__.Review.test_full_md5_stream_boundaries) ... ok
+test_invalid_worker_count_deletes_existing_owned_catalog_first (__main__.Review.test_invalid_worker_count_deletes_existing_owned_catalog_first) ... /private/tmp/rrrah-deduplify177-native-20261015/deduplify/cli.py:142: DeprecationWarning: The 'warn' function is deprecated, use 'warning' instead
+  logging.warn("Starting a new run, deleting old database: %s" % args.dbfile)
+WARNING:root:Starting a new run, deleting old database: /private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-y4z2ns68/owned-catalog.json
+ok
+test_parse_args_ignores_supplied_argument_list (__main__.Review.test_parse_args_ignores_supplied_argument_list) ... ok
+test_restart_skips_different_file_with_same_basename (__main__.Review.test_restart_skips_different_file_with_same_basename) ... /Users/themoretheless/Documents/Sources/rrrah/docs/research/deduplify177-native-controls-20261015/review_test.py:23: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-jg8pq2lp/catalog.json' mode='r+' encoding='UTF-8'>
+  with redirect_stdout(io.StringIO()):hashes.run_hash(str(b.parent),1,str(dbpath),restart=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_stale_catalog_returns_changed_file_as_delete_candidate (__main__.Review.test_stale_catalog_returns_changed_file_as_delete_candidate) ... ok
+test_worker_deletion_failure_is_not_reported (__main__.Review.test_worker_deletion_failure_is_not_reported) ...   0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 2169.84it/s]
+ok
+test_zero_block_size_hashes_nonempty_file_as_empty (__main__.Review.test_zero_block_size_hashes_nonempty_file_as_empty) ... ok
+
+======================================================================
+FAIL: test_accepted_global_extension_option_does_not_filter_hashing (__main__.Review.test_accepted_global_extension_option_does_not_filter_hashing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/deduplify177-native-controls-20261015/review_test.py", line 48, in test_accepted_global_extension_option_does_not_filter_hashing
+    with TinyDB(str(dbpath)) as db:self.assertEqual({row['filepath'] for row in db.all()},{str(a),str(b)})
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Items in the first set but not the second:
+'/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-2ejqh0sr/input/b.txt'
+'/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-2ejqh0sr/input/a.xml'
+Items in the second set but not the first:
+'/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-2ejqh0sr/input/a.xml'
+'/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-deduplify177-owned-2ejqh0sr/input/b.txt'
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.089s
+
+FAILED (failures=1)

@@ -1,0 +1,48 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-7.1.2, pluggy-1.7.0 -- /Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
+rootdir: /private/tmp/rrrah-deduplify177-native-20261015
+collecting ... collected 7 items
+
+tests/test_compare.py::test_compare_filenames PASSED                     [ 14%]
+tests/test_compare.py::test_compare_filenames_same_length PASSED         [ 28%]
+tests/test_compare.py::test_delete_files PASSED                          [ 42%]
+tests/test_compare.py::test_run_compare_and_purge PASSED                 [ 57%]
+tests/test_delete.py::test_del_empty_dirs PASSED                         [ 71%]
+tests/test_hash.py::test_hashfile PASSED                                 [ 85%]
+tests/test_hash.py::test_restart_run PASSED                              [100%]
+
+=============================== warnings summary ===============================
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:962: 17 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:962: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    inlocs = ast.Compare(ast.Str(name.id), [ast.In()], [locs])
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:965: 16 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:965: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expr = ast.IfExp(test, self.display(name), ast.Str(name.id))
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:1075: 10 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:1075: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    syms.append(ast.Str(sym))
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:1077: 10 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:1077: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expls.append(ast.Str(expl))
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:826: 39 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:826: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    keys = [ast.Str(key) for key in current.keys()]
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:936: 10 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:936: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    assertmsg = ast.Str("")
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:938: 10 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:938: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    template = ast.BinOp(assertmsg, ast.Add(), ast.Str(explanation))
+
+../rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:950: 11 warnings
+  /private/tmp/rrrah-deduplify177-modules-20261015/_pytest/assertion/rewrite.py:950: DeprecationWarning: ast.NameConstant is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    clear = ast.Assign(variables, ast.NameConstant(None))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 7 passed, 123 warnings in 0.38s ========================

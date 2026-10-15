@@ -1,0 +1,38 @@
+name: Publish deduplify to PyPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-pypi:
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install twine and wheel
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install twine wheel
+
+      - name: Build distribution
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Test distribution
+        run: |
+          twine check dist/*
+
+      - name: Publish to PyPI
+        run: |
+          twine upload \
+          -u __token__ \
+          -p ${{ secrets.PYPI_PASSWORD }} \
+          dist/*
