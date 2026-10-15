@@ -1,0 +1,102 @@
+{
+  "status": "verified_whole_cli_controls_with_partial_repository_review",
+  "whole_repo_complete": false,
+  "repository": "Rafaelpta/dupehound",
+  "commit": "35ea7c3743a8fb2205aaef973e67b1c6c5e41474",
+  "controls": [
+    {
+      "control": "whole_cli_100_identical_functions",
+      "functions": 100,
+      "clusters": 1,
+      "score": 99.0
+    },
+    {
+      "control": "whole_cli_101_identical_functions",
+      "functions": 101,
+      "clusters": 0,
+      "score": 0.0
+    },
+    {
+      "control": "whole_cli_nan_threshold",
+      "functions": 100,
+      "clusters": 0
+    },
+    {
+      "control": "rust-clean",
+      "test_only": false,
+      "score": 50.0
+    },
+    {
+      "control": "rust-comment",
+      "test_only": true,
+      "score": 0.0
+    },
+    {
+      "control": "history_cache_missing_language_key",
+      "history_functions": [
+        1,
+        1
+      ],
+      "fresh_latest_functions": 0
+    },
+    {
+      "control": "history_max_snapshots_one_panics",
+      "returncode": 101
+    },
+    {
+      "control": "history_custom_exclude_ignored",
+      "first_snapshot_functions": 1
+    }
+  ],
+  "control_runs": 2,
+  "producer_sha256": "959a57e12f8baab32f1edda2939eaa51a68c2edb5a7094188a87f411cedb4c0b",
+  "evidence_pins": {
+    ".dedup-work/dupe60-20261016/cargo-target/debug/dupehound": "eb695adf5bd28ac15b4a68f59a9f9ce064dd3bac53e91f3d523d4f92e6e141f8",
+    ".dedup-work/dupe60-20261016/cargo-build.log": "23b4d06af7b877fd30c74055776f66f569e60304a39bdf23cd834ac3f1ddff0a",
+    ".dedup-work/dupe60-20261016/cargo-upstream-run1.log": "8e685fec16901f567f8481b1ba244701cfae976e197bac71a13a026bad0da990",
+    ".dedup-work/dupe60-20261016/cargo-upstream-run2.log": "a84285c75e158b0b2c5c9d47f9f8cd53008edc1299320f1b86d78294fbf12b0c",
+    "docs/research/dedup-500/dupe60-fetched-source-pins-20261016.json": "bf8f8e8112f77bf754addd57fa23a9a076d4c9fde279a55a24a8b0ac692fc5b4",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/duplicates100.stdout.log": "8400f498ff4d6e300939f0b2632f416487d90e8e75663a261a1e1460846064dc",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/duplicates100.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/duplicates101.stdout.log": "d68aea1087dfe7a8fdfd81492ad06349812998f5b2264e21e076a8ec22df249a",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/duplicates101.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/nan-threshold.stdout.log": "482a0630f4d2b0bf37cb248bc5a000c7f25378a491a4f251e88c7f55df4e2dbc",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/nan-threshold.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/rust-clean.stdout.log": "b25c3adc481ed1616f319276df1cf089f8b15efe7d596a4626bd83145ca7296f",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/rust-clean.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/rust-comment.stdout.log": "0b46f9b84c3f74954775a5f893ea07241c600173f2ab53430ec0f14c0351015a",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/rust-comment.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/history-rename.stdout.log": "347f431de2d590f0753021c83728e606b88e1aed0d4a9bb42d02234533076547",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/history-rename.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/fresh-python.stdout.log": "b49d1ab36b1b6b2d50e69f724ef188e64dc45e5fd1f8f364e92693f2c424d9e3",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/fresh-python.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/history-one-snapshot.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/history-one-snapshot.stderr.log": "392f563edd190afd8d26240fd56288bb39a0b6828cba89e4bfe1b331202bc167",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/history-exclude.stdout.log": "347f431de2d590f0753021c83728e606b88e1aed0d4a9bb42d02234533076547",
+    ".dedup-work/dupe60-20261016/cli-controls-run1/history-exclude.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/duplicates100.stdout.log": "609a1c889e21a03722bbdad06e264c0fc9ad089ea55ed14691bf52631b7a4fac",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/duplicates100.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/duplicates101.stdout.log": "2ec3eabaf8182c35f2ef92f813bb294a619318ad30064e69bcb735945c08f313",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/duplicates101.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/nan-threshold.stdout.log": "42a84b48599d1d748eecbf7ed3b35bc72142e764d149d2c9ef8658b1fd9e4a83",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/nan-threshold.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/rust-clean.stdout.log": "b9e3576ac6a693724b724c5f24818c9b84286af9be84f233b16a2fe6d13c5aad",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/rust-clean.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/rust-comment.stdout.log": "5fe838760a9d9dd627cb2292e4de14d7261470735d1aac0193b6b3b54835d81a",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/rust-comment.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/history-rename.stdout.log": "347f431de2d590f0753021c83728e606b88e1aed0d4a9bb42d02234533076547",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/history-rename.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/fresh-python.stdout.log": "7175be2946726d72791d91bed15b7bbd99fe53bcaa3d91431d957aec2276c2af",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/fresh-python.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/history-one-snapshot.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/history-one-snapshot.stderr.log": "a7e791af94c7f7d5d65bdf8cbd7a92e21d3b4613b853542ec3c6cbb16b9c2db4",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/history-exclude.stdout.log": "347f431de2d590f0753021c83728e606b88e1aed0d4a9bb42d02234533076547",
+    ".dedup-work/dupe60-20261016/cli-controls-run2/history-exclude.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Actual complete default-card-feature Cargo binary withlocked original dependencies/source; only buildcopyCargo.toml appendedworkspaceboundary. Ownedfiles/repos only; no productionedits/deletes/networkservices. Alloriginaltests runseparatelytwice.",
+  "limits": [
+    "No fullrepositoryflag: benchmark/docs/remainingmedia notyetreviewed.",
+    "No performance/speedup/quality/platform/currentRoot/adoption claim.",
+    "Historyprojection counts compared tofreshsamebinaryscan; doesnotclaimgeneralall-languagecachefailure."
+  ]
+}
