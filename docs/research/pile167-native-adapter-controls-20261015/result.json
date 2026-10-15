@@ -1,0 +1,42 @@
+{
+  "status": "eleven_authored_original_body_native_adapter_controls_pass_twice",
+  "tests": 11,
+  "original_tests_run": 0,
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "platform": "macOS-26.7.2-arm64-arm-64bit",
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/pile167-native-adapter-controls-20261015/review_test.py"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/research/pile167-native-adapter-controls-20261015/failed-v1.py",
+      "sha256": "ef46d8375d059ab09e4cbafc8e57190facfce994360aae1a1e6cd566ce0782b3"
+    },
+    {
+      "path": "docs/research/pile167-native-adapter-controls-20261015/mock-stream-lifetime-control.json",
+      "sha256": "5b559e086c5f04c7522674687800fcc56207d37abbd05898cc1089252b1c3a82"
+    },
+    {
+      "path": "docs/research/pile167-native-adapter-controls-20261015/replay-v2.log",
+      "sha256": "56010d733e9902bd0bccc2e2377632078f5a8bb7d496688d28ad4cf69b8accbd"
+    },
+    {
+      "path": "docs/research/pile167-native-adapter-controls-20261015/review_test.py",
+      "sha256": "eefbee799932b26a061da8efe24fbc201ab7cce81e87b26ebf685e90225885a3"
+    },
+    {
+      "path": "docs/research/pile167-native-adapter-controls-20261015/run-v2.log",
+      "sha256": "9f07478cc16c61f300908fb371e75b07c09fc61e7425fc8b72c783344d7b1aee"
+    },
+    {
+      "path": "docs/research/pile167-native-adapter-controls-20261015/run.log",
+      "sha256": "5e23109ca9fdeafa8552c8e6e71f3a4df91411bdde6962a4e220bacb31fce286"
+    }
+  ],
+  "limits": [
+    "Original selected functions/classes extracted unchanged via AST. Real owned file/pickle/mmap/signal operations. Reader/progress/pool explicit adapters; no compressed Reader/NLTK/tokenizer/datasketchLSH/MinHash/tqdm-multiprocess/network/fullCLI/Pilecorpus/quality/scale execution.",
+    "Only owned simple pickles loaded. No foreign pickle objects, compressed corpus, shellzstd/rsync, dataset download or NLTK import/download. SIGINT changes confined to owned test process and restored byfinally.",
+    "V1 failed because Mock call-history retained file handle/buffer, independently reproduced and retained. V2 direct namespace fault adapter eliminates artificial retention; original source and expected failure outcome unchanged. ResourceWarnings from original unclosed file idioms retained; no warnings-as-errors pass."
+  ]
+}

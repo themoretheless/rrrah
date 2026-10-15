@@ -1,0 +1,31 @@
+test_advertised_generator_fails_on_missing_stats_argument (__main__.Review) ... ok
+test_crlf_mmap_and_text_mode_readers_disagree (__main__.Review) ... ok
+test_empty_mmap_reader_refuses_but_slow_reader_is_empty (__main__.Review) ... ok
+test_minhash_files_numeric_order_and_bad_name (__main__.Review) ... working_with_minhashes.py:42: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-79dp6dq2/minhashes_3.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+working_with_minhashes.py:42: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-79dp6dq2/minhashes_20.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_old_lsh_pickle_ignores_requested_threshold_and_source (__main__.Review) ... dedupe.py:48: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-biaphsa7/lsh.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_pile_character_stats_count_meta_tuple_length (__main__.Review) ... ok
+test_second_duplicate_write_failure_leaves_inconsistent_pair (__main__.Review) ... ERROR
+test_smol_parent_directory_filters_full_duplicate_files (__main__.Review) ... working_with_duplicates.py:50: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-sp7n3lni/normal/duplicates_0000.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_transaction_failure_leaves_sigint_ignored_and_lock (__main__.Review) ... ok
+test_unterminated_utf8_line_loses_last_character_in_all_readers (__main__.Review) ... ok
+
+======================================================================
+ERROR: test_second_duplicate_write_failure_leaves_inconsistent_pair (__main__.Review)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/pile167-native-adapter-controls-20261015/review_test.py", line 64, in test_second_duplicate_write_failure_leaves_inconsistent_pair
+    self.assertEqual(pickle.loads((self.root/'duplicates_0000.pkl').read_bytes()),[(3,[3,5])]);self.assertEqual((self.root/'duplicates_smol_0000.pkl').read_bytes(),b'')
+EOFError: Ran out of input
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.092s
+
+FAILED (errors=1)

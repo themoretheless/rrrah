@@ -1,0 +1,33 @@
+test_advertised_generator_fails_on_missing_stats_argument (__main__.Review) ... ok
+test_crlf_mmap_and_text_mode_readers_disagree (__main__.Review) ... ok
+test_empty_mmap_reader_refuses_but_slow_reader_is_empty (__main__.Review) ... ok
+test_minhash_files_numeric_order_and_bad_name (__main__.Review) ... working_with_minhashes.py:42: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-d554qbfh/minhashes_3.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+working_with_minhashes.py:42: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-d554qbfh/minhashes_20.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_native_complete_batch_preserves_full_and_compact_ids (__main__.Review) ... dedupe.py:67: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-v6ya3u26/duplicates_0000.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+dedupe.py:71: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-v6ya3u26/duplicates_smol_0000.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_old_lsh_pickle_ignores_requested_threshold_and_source (__main__.Review) ... dedupe.py:48: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-9o8_8vc0/lsh.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_pile_character_stats_count_meta_tuple_length (__main__.Review) ... ok
+test_second_duplicate_write_failure_leaves_inconsistent_pair (__main__.Review) ... dedupe.py:67: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-njz7kh_p/duplicates_0000.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/traceback.py:220: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-njz7kh_p/duplicates_smol_0000.pkl'>
+  tb.tb_frame.clear()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_smol_parent_directory_filters_full_duplicate_files (__main__.Review) ... working_with_duplicates.py:50: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-pile167-owned-ov56e7pb/normal/duplicates_0000.pkl'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_transaction_failure_leaves_sigint_ignored_and_lock (__main__.Review) ... ok
+test_unterminated_utf8_line_loses_last_character_in_all_readers (__main__.Review) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.180s
+
+OK

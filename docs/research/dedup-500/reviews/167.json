@@ -2,7 +2,7 @@
   "index": 167,
   "repository": "EleutherAI/pile_dedupe",
   "commit": "206789c942106de614a00c8ee57426f76afaf5f3",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All13tracked text blobs read and Gitblob/treepins verified. Eleven bounded original-body native/adapted controls pass twice; no NLTK/datasketch/decompression/multiprocessing/Pilecorpus/fullCLI/quality/scale proof.",
   "decision": "reference",
   "finding": "Text MinHash/LSH dataset pipeline and disk-space handling; indexing concepts only.",
   "available_source_evidence": [
@@ -64,5 +64,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/pile167-complete-source-review-20261015.json"
 }
