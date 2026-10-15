@@ -1,0 +1,150 @@
+{
+  "status": "verified_whole_original_finisher_8controls_twice",
+  "producer_sha256": "8d66ea1bb56273f2fe2a9c61bd7bfc78419501a94004e65ec203bbec99688adc",
+  "source": ".dedup-work/text85-20261016/source/scripts/finish_single_file.py",
+  "source_sha256": "9e81b0b027188327dbb8b6633e39bcf4021d092c89455e5d38eb86953f7258dc",
+  "runs": [
+    [
+      {
+        "case": "valid_single",
+        "result_hex": "3031343536373839",
+        "exit_code": 0
+      },
+      {
+        "case": "valid_two",
+        "result_hex": "303134353839",
+        "exit_code": 0
+      },
+      {
+        "case": "no_ranges",
+        "result_hex": "30313233343536373839",
+        "exit_code": 0
+      },
+      {
+        "case": "no_marker",
+        "result_hex": "30313233343536373839",
+        "exit_code": 0
+      },
+      {
+        "case": "unsorted_ranges",
+        "result_hex": "303132333435",
+        "exit_code": 1
+      },
+      {
+        "case": "overlapping_ranges",
+        "result_hex": "3031",
+        "exit_code": 1
+      },
+      {
+        "case": "past_end_range",
+        "result_hex": "3031",
+        "exit_code": 0
+      },
+      {
+        "case": "same_input_output_truncates",
+        "result_hex": "",
+        "exit_code": 0
+      }
+    ],
+    [
+      {
+        "case": "valid_single",
+        "result_hex": "3031343536373839",
+        "exit_code": 0
+      },
+      {
+        "case": "valid_two",
+        "result_hex": "303134353839",
+        "exit_code": 0
+      },
+      {
+        "case": "no_ranges",
+        "result_hex": "30313233343536373839",
+        "exit_code": 0
+      },
+      {
+        "case": "no_marker",
+        "result_hex": "30313233343536373839",
+        "exit_code": 0
+      },
+      {
+        "case": "unsorted_ranges",
+        "result_hex": "303132333435",
+        "exit_code": 1
+      },
+      {
+        "case": "overlapping_ranges",
+        "result_hex": "3031",
+        "exit_code": 1
+      },
+      {
+        "case": "past_end_range",
+        "result_hex": "3031",
+        "exit_code": 0
+      },
+      {
+        "case": "same_input_output_truncates",
+        "result_hex": "",
+        "exit_code": 0
+      }
+    ]
+  ],
+  "artifact_pins": {
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case6/ranges.txt": "8dcd796510661891b39121a33d1714ba182ee698e2fee825d909345a37ede4ce",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case6/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case6/output.bin": "938db8c9f82c8cb58d3f3ef4fd250036a48d26a712753d2fde5abd03a85cabf4",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case1/ranges.txt": "9b701bb64962a5b9b00f7237b44c320b4a74b26b2a55b6a510e416cd5583e603",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case1/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case1/output.bin": "a2a7cb1d7fc8f79e33b716b328e19bb381c3ec96a2dca02a3d1183e7231413bb",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case0/ranges.txt": "5f6df9ad2a48731dbc426341b0cad30a232f07b3002c0e7f79fe193985beb125",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case0/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case0/output.bin": "f290a434aa0a1e6a8064eb6f6af75b3ac15bf1fc9faf3b7a0ff6ff73a15e6ec1",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case7/ranges.txt": "5f6df9ad2a48731dbc426341b0cad30a232f07b3002c0e7f79fe193985beb125",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case7/input.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case7/ranges.txt": "5f6df9ad2a48731dbc426341b0cad30a232f07b3002c0e7f79fe193985beb125",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case7/input.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case0/ranges.txt": "5f6df9ad2a48731dbc426341b0cad30a232f07b3002c0e7f79fe193985beb125",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case0/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case0/output.bin": "f290a434aa0a1e6a8064eb6f6af75b3ac15bf1fc9faf3b7a0ff6ff73a15e6ec1",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case1/ranges.txt": "9b701bb64962a5b9b00f7237b44c320b4a74b26b2a55b6a510e416cd5583e603",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case1/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case1/output.bin": "a2a7cb1d7fc8f79e33b716b328e19bb381c3ec96a2dca02a3d1183e7231413bb",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case6/ranges.txt": "8dcd796510661891b39121a33d1714ba182ee698e2fee825d909345a37ede4ce",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case6/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case6/output.bin": "938db8c9f82c8cb58d3f3ef4fd250036a48d26a712753d2fde5abd03a85cabf4",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case2/ranges.txt": "54034ac5c6e9ea95734ec2b729fd6d62abf64af34a9f9ce5d466cb788191a73d",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case2/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case2/output.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case5/ranges.txt": "b264a34bcdec83d8638dd23951992aedfdb38d3a91787a4a159bf99f68b2efc7",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case5/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case5/output.bin": "938db8c9f82c8cb58d3f3ef4fd250036a48d26a712753d2fde5abd03a85cabf4",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case4/ranges.txt": "9c5cd70b45f8e398c5e8391b6989d1416904fa2b073953fd364153e9ee8ca27f",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case4/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case4/output.bin": "2224512ef44a62e580bb1c0dcb33aff688f4e7da8a488aeb4e7ca402c5cacf45",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case3/ranges.txt": "0b6693b0fa788f42f92edb0721ac4da7e1b22ea0c796913a2c5e83b6271cfaf5",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case3/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run1-case3/output.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case3/ranges.txt": "0b6693b0fa788f42f92edb0721ac4da7e1b22ea0c796913a2c5e83b6271cfaf5",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case3/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case3/output.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case4/ranges.txt": "9c5cd70b45f8e398c5e8391b6989d1416904fa2b073953fd364153e9ee8ca27f",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case4/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case4/output.bin": "2224512ef44a62e580bb1c0dcb33aff688f4e7da8a488aeb4e7ca402c5cacf45",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case5/ranges.txt": "b264a34bcdec83d8638dd23951992aedfdb38d3a91787a4a159bf99f68b2efc7",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case5/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case5/output.bin": "938db8c9f82c8cb58d3f3ef4fd250036a48d26a712753d2fde5abd03a85cabf4",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case2/ranges.txt": "54034ac5c6e9ea95734ec2b729fd6d62abf64af34a9f9ce5d466cb788191a73d",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case2/input.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882",
+    ".dedup-work/text85-20261016/finish-controls-v2/run0-case2/output.bin": "84d89877f0d4041efb6bf91a16f0248f2fd573e6af05c19f96bedb9f882f7882"
+  },
+  "scope": "Complete unchanged originalPythonfinisher in16freshnativeprocesses onowned10bytefixtures. No adapters/extraction/dependencyservices. Sameinput/output case onlyownedfile deliberately overwritten.",
+  "findings": [
+    "Valid sorted nonoverlap ranges produceexpectedbytes. Missing outmarker silently leavesdata unchanged.",
+    "Unsorted/overlapping ranges fail onnegative read size after destinationalready partiallywritten; past-end range silently truncates tail.",
+    "Sameinput/output opensdestination wb andtruncates original before copying. No own source/destination identity check."
+  ],
+  "limits": [
+    "No TensorFlow/HF/tokenizer/fullshellpipeline/upstreamsuite/corpus/hugefile/platform/performance oradoption qualification.",
+    "No userfiles accessed/overwritten; outputranges aretest inputs, not claimedreachable via everyRustproducer."
+  ]
+}

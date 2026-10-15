@@ -1,0 +1,74 @@
+{
+  "status": "verified_complete_pinned_source_and_native_suffix_cli_finisher_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "google-research/deduplicate-text-datasets",
+  "commit": "4e9888ac3f95dc4f6169867a04c4c19df02dafe3",
+  "blobs": 15,
+  "canonical_trees": 3,
+  "acquisition": "docs/research/dedup-500/text85-complete-source-pins-20261016.json",
+  "acquisition_sha256": "bafaaaf05727712098ba92befb7181e24df9ebebb2798abe8661773db90b1ce9",
+  "auditor_sha256": "a3ea514be89cf4c42c6691930a8b72f19e96c4dc2b28c4e9ca8a67ca3d1485ca",
+  "selected_native_reports": [
+    {
+      "path": "docs/research/dedup-500/text85-whole-cli-controls-20261016.json",
+      "sha256": "7e86fe57cde478aea2b28a024eca49df322189bec1cd8c5ffa6473b828b374cb",
+      "scope": "Full unchanged originalCargo.toml/main/table andall15sourceblobs copiedbyteidentical toowned/private/tmp checkout toavoidparentworkspace. ActualCargo1.98.1 devprofileopt3/overflowchecksfalse build, resolvedunlockeddependencies recorded.14wholeCLI nativeprocesses twice, actualfilebuffer/Crossbeam/fileIO and6byteownedfixtures; no API/bodyadapters.",
+      "findings": [
+        "Onebyte make writeszero-widthtable; countpanics. Emptyfile countpanics; truncatedmultiqueryheaderpanics.",
+        "Selfsimilar banana/threshold2 finds4matches with1thread but0with8threads becauseincrement0; default8threadssmallinput false-negative nativecontrol.",
+        "Acrosssimilar identicalbanana/differentbasenames1thread panicsReachedEOFbadly interminalmatchinggroup.",
+        "Countmemory/mappedana2 andmake suffixbytes correct;1threadcollectranges1..6;onepiece mergesource/table parity correct."
+      ],
+      "limits": [
+        "Small ownedfixtures only; no complete dataset/paperresults/hugefile/multipartlongrepeat/HACKSIZE/platform/hardRSS/throughput/adoption proof.",
+        "Originaltree hasnoCargo.lock; resolveddependencyversions areobservedbuild, nothistoricaloriginaldependency-source qualification.",
+        "No userfiles orTensorFlow/HF/tokenizer/downloadedcorpus, no productioncodecopy."
+      ]
+    },
+    {
+      "path": "docs/research/dedup-500/text85-finish-controls-20261016.json",
+      "sha256": "d4c8e0c67ec5f540469d138d1862569df4790d7f45a4bb70ba6bf043814225d9",
+      "scope": "Complete unchanged originalPythonfinisher in16freshnativeprocesses onowned10bytefixtures. No adapters/extraction/dependencyservices. Sameinput/output case onlyownedfile deliberately overwritten.",
+      "findings": [
+        "Valid sorted nonoverlap ranges produceexpectedbytes. Missing outmarker silently leavesdata unchanged.",
+        "Unsorted/overlapping ranges fail onnegative read size after destinationalready partiallywritten; past-end range silently truncates tail.",
+        "Sameinput/output opensdestination wb andtruncates original before copying. No own source/destination identity check."
+      ],
+      "limits": [
+        "No TensorFlow/HF/tokenizer/fullshellpipeline/upstreamsuite/corpus/hugefile/platform/performance oradoption qualification.",
+        "No userfiles accessed/overwritten; outputranges aretest inputs, not claimedreachable via everyRustproducer."
+      ]
+    },
+    {
+      "path": "docs/research/dedup-500/text85-suffix-controls-audit-20261016.json",
+      "sha256": "f069589ce56e22ed55849745ae7b31994a129bac0fd8c133cc0ddd046de182b8",
+      "scope": "Whole940line src/table.rs andCargo.toml; main.rs1..260 only. No trackedbinaryassets intree, externalREADME/media notyetreviewed.",
+      "total_queries": 1613760
+    }
+  ],
+  "original_cargo_build_passed": true,
+  "upstream_tests_run": false,
+  "upstream_test_scope": "No upstreamtest files in pinnedtree. Wholeunchangedsuffixmodule oracleharness andwholeCLI/Pythonfinisher ownedfixtures, notpaperdataset/upstreamsuite.",
+  "media_scope": "No trackedbinarymedia orREADMEembeddedimages/videos. Externalpapers/datasets notdownloaded orclaimedreviewed.",
+  "license": "Apache2 LICENSEfullyread. table.rs notes originalMITcode but leavesTODOattribution; READMEidentifiesBurntSushi/suffix origin. No productioncodecopied.",
+  "findings": [
+    "Onebyte make writeszero-widthtable; countpanics. Emptyfile countpanics; truncatedmultiqueryheaderpanics.",
+    "Selfsimilar banana/threshold2 finds4matches with1thread but0with8threads becauseincrement0; default8threadssmallinput false-negative nativecontrol.",
+    "Acrosssimilar identicalbanana/differentbasenames1thread panicsReachedEOFbadly interminalmatchinggroup.",
+    "Countmemory/mappedana2 andmake suffixbytes correct;1threadcollectranges1..6;onepiece mergesource/table parity correct.",
+    "Valid sorted nonoverlap ranges produceexpectedbytes. Missing outmarker silently leavesdata unchanged.",
+    "Unsorted/overlapping ranges fail onnegative read size after destinationalready partiallywritten; past-end range silently truncates tail.",
+    "Sameinput/output opensdestination wb andtruncates original before copying. No own source/destination identity check.",
+    "Static main: is_present_memory rejectsfinalsuffixindex andfind_index_memory computeslow-1 atfirstindex; notseparatelyruntimequalified here.",
+    "Static merge: HACKSIZE100000 overlap assumption andone sharedwidth fromfirstpart; noalllength-longrepeats/exactorderingguarantee. Threadpartition andshort-part bounds needstrongerqualification.",
+    "Static wrappers: shared/tmp/fin/cache/drop paths, shellinterpolatedunquotedpaths, fixedtmp/out cleanup/retrywithoutbound. Notexecuted as shellpipeline, nocommandinjection proof.",
+    "Static TF/HF exporters cast tokenIDs touint16; Wiki40B finisher metadata rewritten/byte offsets adjusted. No actualTensorFlow/tokenizer/originalpaperdataset qualification."
+  ],
+  "decision": "Reference byte-oriented suffixarray indexing andstreaming candidate scan, requireboundedresources/completepartitions/validatedwidths/sourceidentity/atomicoutput before anyadoption. Exactsubstrdatasetdedup differsfromfile/pixel identity. No adoption/speedclaim.",
+  "limits": [
+    "WholeoriginalCargo build withresolvedunlockeddeps,MacARMsmallfixtures; notdependency-source/historicalenv/allplatform/currentroot/fullformat/hugefile/hardRSS/performance qualification.",
+    "Bounded3280text403440query oracles4runs remainqualifiedsuffixmodule only; fullCLIhasnativefalse-negative/crash findings anddoesnotinherit modulecorrectness.",
+    "No TensorFlow/HF/tokenizer/livecorpus/networkdatasets/userfiles orproductioncodecopy."
+  ]
+}
