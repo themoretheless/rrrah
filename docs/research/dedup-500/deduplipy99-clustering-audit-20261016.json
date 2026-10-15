@@ -1,0 +1,38 @@
+{
+  "status": "verified_partial_source_original_clustering_tests_and_native_boundaries",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "fritshermans/deduplipy",
+  "commit": "3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3",
+  "acquisition": "docs/research/dedup-500/deduplipy99-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "0af15856b46f38156a98ec5018760b99617ccbadcf56c0c214f45ce62128301d",
+  "auditor_sha256": "1f71b1b2188bd111f43eb01b6d9e28703720d47307f447582a9201c59132fbbb",
+  "upstream_tests": "docs/research/dedup-500/deduplipy99-clustering-upstream-tests-20261016.json",
+  "upstream_tests_sha256": "e269aacc8fa6f9a096a84aa814f3143c68189bc30475f04ff6b6328952d72b7b",
+  "controls": "docs/research/dedup-500/deduplipy99-clustering-controls-20261016.json",
+  "controls_sha256": "ed93c0e56c723f22f232d96d120911eaccb155b2021f19f76decf4678d3c0080",
+  "source_blobs_fully_read": 9,
+  "source_blobs_total": 62,
+  "selected_original_tests_passed": 10,
+  "additional_native_controls": 18,
+  "dependency_versions": {
+    "numpy": "2.5.4",
+    "pandas": "2.2.3",
+    "scipy": "1.16.3",
+    "networkx": "3.5",
+    "fancyimpute": "0.7.0"
+  },
+  "scope": "Wholeunchanged clustering.py/fill_missing_edges.py/config/init modules, actualNumPy/Pandas/SciPy/NetworkX/FancyImpute SoftImpute.9synthetic scoredpair/matrix controls twice, no adapters/extraction/modelnetwork. Dependencyversions resolvedunlocked andrecorded.",
+  "findings": [
+    "Explicit score0 and absentedge both convertedNaN; realSoftImpute raisesA-C scoreabove.85, defaultclusteringmerges all3 whereasfill_missingFalse yields2groups. Cannotpreserveknownnegativepair constraints.",
+    "Centroidlinkage groupsall3 evenwhenone suppliedpairscore.49 below.5threshold. Intendedcentroidpolicy isnotall-pairthresholdguarantee.",
+    "No-missing branch returnsinputalias andkeepsasymmetry; duplicateedges overwritelastscore leadingorderdependence; nonfinitescore raises."
+  ],
+  "limits": [
+    "Selectedwholeclusteringmodules only; otherlibrary/modules/data/notebooks/docs/media notyetread; no whole-source countincrease.",
+    "Entitylinkage scores/imputation are not exact/image/pixel identity; no precision/recall/fullupstreamsuite/performance/hardRSS/platform/currentlibrary/adoption proof.",
+    "No realuserdata/network/externalmessages or productioncodecopy.",
+    "Fiveoriginalclusteringtests twice passed inclseed1234original500x500case; notallupstreamtests orwholelibrary/nativeformat/platform/quality campaign.",
+    "Other53blobs/media/notebooks/data/LICENSE notyetreviewed; no fullsource countincrease or codeadoption."
+  ]
+}

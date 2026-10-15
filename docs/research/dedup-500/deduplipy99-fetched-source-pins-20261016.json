@@ -1,0 +1,659 @@
+{
+  "repository": "fritshermans/deduplipy",
+  "commit": "3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3",
+  "canonical_trees": {
+    "": "a7feb4ea65519941aede2e468ed07350edb2f225",
+    "deduplipy": "a15a62fe3ae7dcce43fa4b50a1ec69989dd9d641",
+    "deduplipy/active_learning": "69a6dc79567ea316dc69804f95e3bec50c32b99b",
+    "deduplipy/blocking": "e508bd52a827dae032dc6ed1c3432d16758789cf",
+    "deduplipy/classifier_pipeline": "e46d8de413f3df23d3aef4ec2bd93f46a7ab3fb1",
+    "deduplipy/clustering": "c288f26cb71860aa05b2b2f0d9469a22af6ffb83",
+    "deduplipy/data": "5fde0f53c6763f100bbc2c875bc64b0aefa7f933",
+    "deduplipy/deduplicator": "81e9314dcb2d2e93c2cd4b4bf630b6ebe5e36474",
+    "deduplipy/sampling": "88c0f1bac01ec9b2b78c1e93130c63c505d6e889",
+    "deduplipy/string_metrics": "22873c6d3c9cf0e14f5c8497fc3c2f601224e751",
+    "docs": "7b3fd7ba689f4c602392834f6428c5157ac3502c",
+    "docs/source": "e02d9dabd904e3ab1237852bcf305607c0cd67f1",
+    "docs/source/_static": "d400624b5b7803c78472f3c45a9261e9dc9d6130",
+    "docs/source/api": "98f701f615cd19a523aa9167a83cf391e4092912",
+    "notebooks": "675dbd8373cee1d8bd5a86464c9cdf10da5ac571",
+    "tests": "b12ea5180302e3891112d48026db3f084f774096",
+    "tests/test_blocking": "f7ba1509c7d8bfe0d1c4a6d1a570e8de65d95002",
+    "tests/test_classifier_pipeline": "84416e5e2835ec35185a402135a8b03cdd35eaae",
+    "tests/test_clustering": "d8a90b668aad09180a9ae4c2e431f6719ae8f2d2",
+    "tests/test_sampling": "e721eb438c97b9f485422ff9aac2fb0f40b0015b",
+    "tests/test_string_metrics": "40e604958b0fa187ee5d78f5c3317d7e4c843cf9"
+  },
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "100d93fc31486ead53e57fdb1185735f16d4008d",
+      "size": 2338,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/100d93fc31486ead53e57fdb1185735f16d4008d",
+      "sha256": "7d9bb52e77706b77114f30dadcb0ff120b7297d78b8b626c0e565c094794f3a7",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": ".readthedocs.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28d773c66bd6f4279dbcaea0cc52cdd255b1ea34",
+      "size": 563,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/28d773c66bd6f4279dbcaea0cc52cdd255b1ea34",
+      "sha256": "6f43caeea63ad84d955ff4f43e14e9bee628e1876aaa4426f911412d424136f0",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "CITATION.cff",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f1b91a6f6d061035d89d30261557b6bc6612e58",
+      "size": 587,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/4f1b91a6f6d061035d89d30261557b6bc6612e58",
+      "sha256": "9d535454b4aba08c2b56f37a82d3cbc9abf528e77bb3ed34e460e40c0f4cd93c",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ec88c6d84ac59bb199e59558c2d6ecae3ed886d",
+      "size": 1070,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/2ec88c6d84ac59bb199e59558c2d6ecae3ed886d",
+      "sha256": "e4e23554cbbcd057c5d43c8d12b2421a47bb2dc4054345705e3df9d5fd5b232f",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "Makefile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61d21725daf4880480aacce80835007f0914a6be",
+      "size": 107,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/61d21725daf4880480aacce80835007f0914a6be",
+      "sha256": "34b569bd639f9a2a94d0184a7e4a565dbcf3be807b2799af6b6038adc4cff6cf",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "897a6437cccf4e78a207e60ad33d6cf988dfefb4",
+      "size": 2969,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/897a6437cccf4e78a207e60ad33d6cf988dfefb4",
+      "sha256": "c4f3b29d0bfd39f48b3c829240fbf291b0fc41b4f9ffe72549dbb3c670189210",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26421e12a3c21cc7e44bed747527763a04fc35d7",
+      "size": 20,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/26421e12a3c21cc7e44bed747527763a04fc35d7",
+      "sha256": "598f476e4828c4995409f11a300488028df01538772b75171edcba2ec8e894c8",
+      "fully_read_this_turn": true,
+      "text_content": "__version__ = \"0.8\"\n"
+    },
+    {
+      "path": "deduplipy/active_learning/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe864c535a838ee4e5c7d263c19d872b98b33e85",
+      "size": 94,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/fe864c535a838ee4e5c7d263c19d872b98b33e85",
+      "sha256": "6ffe910240daf0ba07a7aac5209fb03c18ce94762dc1ddf6dc938f5e00a4e1c9",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/active_learning/active_learning.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f093a7525ef14ac6fc1dfd1e264f2a633121ba16",
+      "size": 9441,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/f093a7525ef14ac6fc1dfd1e264f2a633121ba16",
+      "sha256": "449bb3861a4e550120bec399b009ae1703da3579f4c3ebcb82bf923690e3aeab",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/active_learning/utils_active_learning.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6acdd6874f2f49ee30748915d2d989178e3c5171",
+      "size": 596,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/6acdd6874f2f49ee30748915d2d989178e3c5171",
+      "sha256": "546a5885113a3b104fa1891f23dc5d23faac1783dab6ff11e67709bf936caec0",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/blocking/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ad8f486d7cd4822462bcb7a21a93ab1777b8992",
+      "size": 196,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/9ad8f486d7cd4822462bcb7a21a93ab1777b8992",
+      "sha256": "467c1844527f834a2bed72545cbab0652300b214e194aaa3f1e18083dfcec79a",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/blocking/blocking.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d46bd7ced2d0e5bd2e7824dea717878c74f0049",
+      "size": 5257,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/1d46bd7ced2d0e5bd2e7824dea717878c74f0049",
+      "sha256": "2390d80a1bf5b7036518a064cf39729039e7493b7f9f81e1054ecf518152c27f",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/blocking/blocking_rules.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08fb8954857911b6d8821ddb442dbc6a0a762d9f",
+      "size": 4000,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/08fb8954857911b6d8821ddb442dbc6a0a762d9f",
+      "sha256": "ed92738db0aeaba09c8e63a39185cc8b854ff729fef9b3745bf5cd20329e540f",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/blocking/set_cover.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ca4321d8dfba7232c8f8bfac0213108088d118a",
+      "size": 2523,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/3ca4321d8dfba7232c8f8bfac0213108088d118a",
+      "sha256": "fafc8c2c4cef463790ffb126ecd82fe79fad5cc6358b57ad7e5a8888c9c0e211",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/classifier_pipeline/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f96e28d24b3cf1b0f81ea223ee579a67b48bef06",
+      "size": 86,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/f96e28d24b3cf1b0f81ea223ee579a67b48bef06",
+      "sha256": "638cb70fdabcaf6adf7831522b871bebfecc7a28cc19f8ed75eccbd030a1299c",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/classifier_pipeline/classifier_pipeline.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1134510eba4ff58c822727aa03e7bd352839117",
+      "size": 2342,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/a1134510eba4ff58c822727aa03e7bd352839117",
+      "sha256": "d7d51922b0636942c48ee4fca12a4db0cc59022237ada1e6169bb87decf2e02a",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/clustering/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f09c41313f88ab01da65de18df5ad189764a141c",
+      "size": 160,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/f09c41313f88ab01da65de18df5ad189764a141c",
+      "sha256": "60910fca609f7fc35ea824f002beaf9ce0bd50f46a7bab556ab73abd13dc9e11",
+      "fully_read_this_turn": true,
+      "text_content": "__all__ = ['hierarchical_clustering', 'fill_missing_links']\n\nfrom .clustering import hierarchical_clustering\nfrom .fill_missing_edges import fill_missing_links\n"
+    },
+    {
+      "path": "deduplipy/clustering/clustering.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "908f05d2ada374ca4c5fa7e3163d672a34108a0f",
+      "size": 2538,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/908f05d2ada374ca4c5fa7e3163d672a34108a0f",
+      "sha256": "6451aeaea242162e4a7d04a571fba74056205ca706c38c0490d6ea0b3d03611b",
+      "fully_read_this_turn": true,
+      "text_content": "from typing import List\n\nimport pandas as pd\nimport numpy as np\nimport networkx as nx\nfrom scipy.cluster import hierarchy\nimport scipy.spatial.distance as ssd\n\nfrom deduplipy.config import DEDUPLICATION_ID_NAME, ROW_ID\nfrom deduplipy.clustering.fill_missing_edges import fill_missing_links\n\n\ndef hierarchical_clustering(scored_pairs_table: pd.DataFrame, col_names: List,\n                            cluster_threshold: float = 0.5, fill_missing=True) -> pd.DataFrame:\n    \"\"\"\n    Apply hierarchical clustering to scored_pairs_table and perform the actual deduplication by adding a cluster id to\n    each record\n\n    Args:\n        scored_pairs_table: Pandas dataframe containg all pairs and the similarity probability score\n        col_names: name to use for deduplication\n        cluster_threshold: threshold to apply in hierarchical clustering\n        fill_missing: whether to impute missing values in the adjacency matrix using softimpute, otherwise missing\n            values in the adjacency matrix are filled with zeros\n\n    Returns:\n        Pandas dataframe containing records with cluster id\n\n    \"\"\"\n    graph = nx.Graph()\n    for j, row in scored_pairs_table.iterrows():\n        graph.add_node(row[f'{ROW_ID}_1'], **{col: row[f'{col}_1'] for col in col_names})\n        graph.add_node(row[f'{ROW_ID}_2'], **{col: row[f'{col}_2'] for col in col_names})\n        graph.add_edge(row[f'{ROW_ID}_1'], row[f'{ROW_ID}_2'], score=row['score'])\n\n    components = nx.connected_components(graph)\n\n    clustering = {}\n    cluster_counter = 0\n    for component in components:\n        subgraph = graph.subgraph(component)\n        if len(subgraph.nodes) > 1:\n            adjacency = nx.to_numpy_array(subgraph, weight='score')\n            if fill_missing:\n                adjacency = fill_missing_links(adjacency)\n            distances = (np.ones_like(adjacency) - np.eye(len(adjacency))) - adjacency\n            condensed_distance = ssd.squareform(distances)\n            linkage = hierarchy.linkage(condensed_distance, method='centroid')\n            clusters = hierarchy.fcluster(linkage, t=1 - cluster_threshold, criterion='distance')\n        else:\n            clusters = np.array([1])\n        clustering.update(dict(zip(subgraph.nodes(), clusters + cluster_counter)))\n        cluster_counter += len(component)\n    df_clusters = pd.DataFrame.from_dict(clustering, orient='index', columns=[DEDUPLICATION_ID_NAME])\n    df_clusters.sort_values(DEDUPLICATION_ID_NAME, inplace=True)\n    df_clusters[ROW_ID] = df_clusters.index\n    return df_clusters\n"
+    },
+    {
+      "path": "deduplipy/clustering/fill_missing_edges.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c98ddf9dd932f5a37aea97567bc64abe05766d9",
+      "size": 1216,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/0c98ddf9dd932f5a37aea97567bc64abe05766d9",
+      "sha256": "e0b32c17f319bd059c2627c07215a4687d47862bd9d3551f5550a6cfc9e468b7",
+      "fully_read_this_turn": true,
+      "text_content": "import numpy as np\n\nfrom fancyimpute import SoftImpute\n\nfrom deduplipy.config import CONVERGENCE_THRESHOLD\n\n\ndef fill_missing_links(matrix, convergence_threshold=CONVERGENCE_THRESHOLD):\n    \"\"\"\n    Fill missing values in adjacency matrix using SoftImpute. Missing values are considered to be zero,\n    as this is the default of the `nx.to_numpy_matrix` function when there is no edge between two nodes.\n\n    Args:\n        matrix: adjacency matrix\n        convergence_threshold: convergence threshold for SoftImpute algorithm\n\n    Returns:\n        Numpy adjacency matrix with imputed missing values\n\n    \"\"\"\n    matrix_ = matrix.copy()\n    np.fill_diagonal(matrix_, 1)\n    matrix_[matrix_ == 0] = np.nan\n    if not np.isnan(matrix_).any():\n        return matrix\n\n    imputer = SoftImpute(min_value=0, max_value=1, verbose=False, convergence_threshold=convergence_threshold,\n                         init_fill_method='mean')  # init_fill_method='mean' significantly improves speed\n    matrix_ = imputer.fit_transform(matrix_)\n    # the adjacency matrix needs to have zeros on the diagonal\n    np.fill_diagonal(matrix_, 0)\n\n    # force symmetry\n    matrix_ = np.tril(matrix_) + np.triu(matrix_.T, 1)\n    return matrix_\n"
+    },
+    {
+      "path": "deduplipy/config.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1266882d1071f2aa4c4d3f4e7b06af3dcebf751a",
+      "size": 228,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/1266882d1071f2aa4c4d3f4e7b06af3dcebf751a",
+      "sha256": "e193fbc6ab15a3810b343772781916cb806070b1cf25950f04fda2081ebf3e2d",
+      "fully_read_this_turn": true,
+      "text_content": "DEDUPLICATION_ID_NAME = 'deduplication_id'\nROW_ID = 'row_number'\nN_QUERIES = 999\nCONVERGENCE_THRESHOLD = 0.01\n\nN_PERFECT_MATCHES_TRAIN = 3\nMIN_NR_ENTRIES = 10\nUNCERTAINTY_IMPROVEMENT_THRESHOLD = 0.01\nUNCERTAINTY_THRESHOLD = 0.1\n"
+    },
+    {
+      "path": "deduplipy/data/stoxx50_extended_with_id.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fcb0891b8be8ff951eb38d7329eb9a0660db5c08",
+      "size": 13367,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/fcb0891b8be8ff951eb38d7329eb9a0660db5c08",
+      "sha256": "6a914b85e3cc2b0540441af52beac0c1d4c5fbb49fdfad143b78ed3881f22735",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/data/voter_names.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc7ecc31bd3035a5de5f534177b612018d0bcaba",
+      "size": 52700,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/bc7ecc31bd3035a5de5f534177b612018d0bcaba",
+      "sha256": "13e2ad1b92eb6de44b626e71e07b83ddd2cad54c9b65627803aa1fa492116e5c",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/datasets.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "103e485f5416be2f5086136f105db18c500a450f",
+      "size": 1204,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/103e485f5416be2f5086136f105db18c500a450f",
+      "sha256": "87ca864e0eb732b591d70ef1276010a5cc4fbd79f30e9b9483d01e24eda685e1",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/deduplicator/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bfefed900bd8c7f0558af8cf864cddde8ae3b1c8",
+      "size": 67,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/bfefed900bd8c7f0558af8cf864cddde8ae3b1c8",
+      "sha256": "77d46d2d4c3562f37006715edd6675b97397bd7f2183a4f1d9f0d202fd23fa2f",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/deduplicator/deduplicator.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "219635a91bb5f1d1147d3c2bd6249bbcc92bb5bd",
+      "size": 10059,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/219635a91bb5f1d1147d3c2bd6249bbcc92bb5bd",
+      "sha256": "d8c67edb09bffbc70cc7bd4294e1752b1af03da621d518a0112f104e53546f99",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/sampling/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2e3bee7d1423f33f051f962736d87c6edea6827",
+      "size": 132,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/e2e3bee7d1423f33f051f962736d87c6edea6827",
+      "sha256": "caadb6422f5b4b3ca70bdce12e72d5dd1a86b523dfa7a1de6f3cea19640e746c",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/sampling/minhash_sampling.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3281ef185407382fcd7e71ca68f6565763d02edb",
+      "size": 5961,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/3281ef185407382fcd7e71ca68f6565763d02edb",
+      "sha256": "77c002dfe1b446d39abed3cb059f57a0fec0321721cf1ba1816a1c3b5dcb1079",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/sampling/naive_sampling.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "220248cde1b99073cd88211ee791396975aaf3a9",
+      "size": 2495,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/220248cde1b99073cd88211ee791396975aaf3a9",
+      "sha256": "412a386d29165e10e28ac1d540511c9a51a0058eb7f9a73e2b3c9bc717bdc149",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/sampling/sampler.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57b17a982174e585b6af2bf0aec6b3e905ac82c2",
+      "size": 1051,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/57b17a982174e585b6af2bf0aec6b3e905ac82c2",
+      "sha256": "10347955688f11c149e56f09e79d2044eed7b5e88f0a78a267799265d8bf7c6b",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/string_metrics/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1806cf6fb4388672fe5f30deb9b641e6a4edd610",
+      "size": 233,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/1806cf6fb4388672fe5f30deb9b641e6a4edd610",
+      "sha256": "3ecb13b5fa49d20057eee912df6acce9b1b71041ed5b15f96112315609228020",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "deduplipy/string_metrics/string_metrics.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9b824e7bef3167d4877f922532a77c7572113bc4",
+      "size": 2060,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/9b824e7bef3167d4877f922532a77c7572113bc4",
+      "sha256": "d2a642cc6c59c8fdb6d1f5dd51f461af6bca24f9a619b9616215d04cfdebcdd0",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/Makefile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0c3cbf1020d5c292abdedf27627c6abe25e2293",
+      "size": 638,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/d0c3cbf1020d5c292abdedf27627c6abe25e2293",
+      "sha256": "e33bf74d59130029ba24168a813112dd923d7044d780ce942db6645d93f56acf",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/docs-requirements.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90778a0ea914ee31763e44e49f853f86eeaff717",
+      "size": 50,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/90778a0ea914ee31763e44e49f853f86eeaff717",
+      "sha256": "cedefea9132cb5c4ec6ba2f15995a5267c3dfbc27e5e1d0827061c06695045cf",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/make.bat",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9534b018135ed7d5caed6298980c55e8b1d2ec82",
+      "size": 764,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/9534b018135ed7d5caed6298980c55e8b1d2ec82",
+      "sha256": "ff4d4325683c25fc398f3dfb3546edf2a4c3b7c01122b534d690e5d9f8510348",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/Tutorial.ipynb",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f398495c0a83161436df9ac8a7b8c0320d2e988d",
+      "size": 21174,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/f398495c0a83161436df9ac8a7b8c0320d2e988d",
+      "sha256": "3388129175c496dad8d478a50a393e68d87eb233f5b0199b99895a63fe39fbfd",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/_static/logo.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff6eda1d7d58b037cd6c16b7c246586d2aa859f7",
+      "size": 21881,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/ff6eda1d7d58b037cd6c16b7c246586d2aa859f7",
+      "sha256": "10861950c7709b46a8c22e679d1a3a97d406750740c5d2dc33f4f10215256483",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/active_learning.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ffbecca26a530d74082d1c318a265bddcf99396",
+      "size": 186,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/2ffbecca26a530d74082d1c318a265bddcf99396",
+      "sha256": "738bb85fc0ef38c53ecb094762c86cf4bc40044b49e0ff8c49d0d17ec3ba1f5d",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/blocking.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "89dc668b2e7b280c846fd115a63503d0ccb62369",
+      "size": 172,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/89dc668b2e7b280c846fd115a63503d0ccb62369",
+      "sha256": "cd0649b4aa83098317182effc7a41a832522dc5f476eb180870940fd6ae1601f",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/classifier_pipeline.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9c0619d385092e7fdbabcb82995248d838c2c0b",
+      "size": 198,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/c9c0619d385092e7fdbabcb82995248d838c2c0b",
+      "sha256": "2618e461e132d4eb02addccf28c99490f92c06c0ec75250485aba742b5b15de5",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/clustering.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "44f583c26b1b4b99bf1ca1b993b7118cb51120fc",
+      "size": 176,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/44f583c26b1b4b99bf1ca1b993b7118cb51120fc",
+      "sha256": "cdfa0609d27ad76a42e521778bc1869e38996d4da0d8ee16ba29e203a5895b05",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/deduplicator.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a273d70a6dc556de99ef7a38ea1410548829ddee",
+      "size": 180,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/a273d70a6dc556de99ef7a38ea1410548829ddee",
+      "sha256": "a29cfb3625691be17898cefb4d9a95b3c2fe138dcf0a301e97d60f354b21891f",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/load_data.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "905adde6eefa7e3eb853c35f7037e50194dea093",
+      "size": 183,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/905adde6eefa7e3eb853c35f7037e50194dea093",
+      "sha256": "a48b04caf2b0dba71c12351fed81734515258085b61a5c277e41ba95ca84615e",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/modules.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e5bb4f4732ed369957920aed91e2b5f3653d9ae",
+      "size": 186,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/2e5bb4f4732ed369957920aed91e2b5f3653d9ae",
+      "sha256": "f29e7dcaf8b0f3f6a56df504dfc57f6fb5117ff840f45e8a56c044daf1e77615",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/sampling.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0341e253a1a2655447361039db35462cb7956eaf",
+      "size": 172,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/0341e253a1a2655447361039db35462cb7956eaf",
+      "sha256": "b8b0020bd03cfa801633a3e8bd2d3c1cc41ef10ca52bc4eb4f3c798349251b16",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/api/string_metrics.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13c1b974a2cda4acc2a14f7de65a4cabfdc174b8",
+      "size": 184,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/13c1b974a2cda4acc2a14f7de65a4cabfdc174b8",
+      "sha256": "eb428cf7fc36f842eacabcaaff39dbe99b491f6811bf59adcc25506978822903",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/conf.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66469a5601e68aaca1f203835a5abea765f9efad",
+      "size": 1989,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/66469a5601e68aaca1f203835a5abea765f9efad",
+      "sha256": "df6cc7484a814a0adcb013e963402a0f57cdd95b359776f32b40a6874b5c3a00",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/index.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43850f8fc7aa1b5f5a6050b7d1baa93f40a3a8a8",
+      "size": 1161,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/43850f8fc7aa1b5f5a6050b7d1baa93f40a3a8a8",
+      "sha256": "3ba481381c41cf0434591f97cf5cf9e744a1f6f99fd4e249de76c3e8bfd8e641",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "docs/source/installation.rst",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29a8caa13742f36d440d5991b0abad7916b1d410",
+      "size": 213,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/29a8caa13742f36d440d5991b0abad7916b1d410",
+      "sha256": "aecc1833acfd22556cbd501b8f7bc902785d7395c7105733da6d46f8c9073d65",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "notebooks/advanced_example.ipynb",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f73942314a511b3591927b22b811a27c8c3858f",
+      "size": 10302,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/7f73942314a511b3591927b22b811a27c8c3858f",
+      "sha256": "bef5cceec12ad99cd938d8123ba4acd81eba0637a7e16822cdefd715d66e045e",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "notebooks/simple_example.ipynb",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5994391d71061f9f56a383885b9164b12a556a7c",
+      "size": 13280,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/5994391d71061f9f56a383885b9164b12a556a7c",
+      "sha256": "802feb58efa992ca3b0fe4c1ce0937744f1591283e2302292dc6f21df7df4e75",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "pyproject.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5a3c468d9e85e7fa7469c3a90d47b48ab93e54a",
+      "size": 103,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/b5a3c468d9e85e7fa7469c3a90d47b48ab93e54a",
+      "sha256": "4b5f4916dfc7c0e05e65ad70950e2d236857767ee01e21d82ef8e0783cd7315a",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "setup.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b7c0ec2295f10eb50492f0393aed12581c142f3",
+      "size": 1338,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/4b7c0ec2295f10eb50492f0393aed12581c142f3",
+      "sha256": "69e5d65d58f474546a363ce19de0ba1f13b8fe47be7cd90c59c5a0251a1df8e2",
+      "fully_read_this_turn": true,
+      "text_content": "from setuptools import setup, find_packages\n\nbase_packages = [\n    'pandas',\n    'numpy',\n    'scipy',\n    'scikit-learn',\n    'networkx',\n    'python-Levenshtein',\n    'thefuzz',\n    'modAL-python',\n    'openpyxl',\n    'pytest',\n    'fancyimpute',\n    'pyminhash'\n]\n\nutil_packages = [\n    \"matplotlib\",\n    \"jupyterlab\",\n]\n\ndocs_packages = [\n    \"sphinx==3.5.4\",\n    \"nbsphinx\",\n    'sphinx_rtd_theme'\n]\n\ndev_packages = base_packages + util_packages + docs_packages\n\nwith open(\"README.md\", \"r\", encoding=\"utf-8\") as fh:\n    long_description = fh.read()\n\nsetup(name='DedupliPy',\n      version='0.8',\n      author=\"Frits Hermans\",\n      description=\"End-to-end deduplication solution\",\n      long_description=long_description,\n      long_description_content_type=\"text/markdown\",\n      url=\"https://github.com/fritshermans/deduplipy\",\n      classifiers=[\n          \"Programming Language :: Python :: 3\",\n          \"License :: OSI Approved :: MIT License\",\n          \"Operating System :: OS Independent\",\n      ],\n      packages=find_packages(exclude=['notebooks']),\n      package_data={\"deduplipy\": [\"data/*.xlsx\", \"data/*.csv\"]},\n      install_requires=base_packages,\n      extras_require={\n          \"base\": base_packages,\n          \"dev\": dev_packages,\n          \"docs\": docs_packages,\n      },\n      python_requires=\">=3.6.9\",\n      )\n"
+    },
+    {
+      "path": "tests/test_blocking/test_blocking.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e2a6e3dd79c88162c0602a57171862a2e0be46d",
+      "size": 1728,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/6e2a6e3dd79c88162c0602a57171862a2e0be46d",
+      "sha256": "b2dd0f95d64d7d48faed1d3162c2733acf641217a6fd284321b25395c760d36e",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "tests/test_blocking/test_blocking_rules.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c7b65f4e013269e6f0e1feea75491ac5d482f13",
+      "size": 7549,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/5c7b65f4e013269e6f0e1feea75491ac5d482f13",
+      "sha256": "96bdde8f49e0e6e7957256f641af46fc196fac5e01c560f9654b4048ec4b6ebd",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "tests/test_blocking/test_set_cover.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61cd1b88b89c3e78e4b4e3dcb4007ee546e27157",
+      "size": 487,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/61cd1b88b89c3e78e4b4e3dcb4007ee546e27157",
+      "sha256": "1c298930eac6bb7d4880728e2cc718dc9118bea187f0ab6b61101c25e572922b",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "tests/test_classifier_pipeline/test_classifier_pipeline.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "764c8c506d7948b53e5f0525567304cb56787743",
+      "size": 704,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/764c8c506d7948b53e5f0525567304cb56787743",
+      "sha256": "3841d8c5770f020a0d285c2b50539a02bf570eebab81fba21bf13454e0d5e672",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "tests/test_clustering/clustering_fixture.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6e9b16ecd53522302d8c7ad8444ab97cc833cf3",
+      "size": 260,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/d6e9b16ecd53522302d8c7ad8444ab97cc833cf3",
+      "sha256": "0b3ba8c3a1eba4f9656dbded60a5891fc8370af562fea8dc5cc9f62cf03612b5",
+      "fully_read_this_turn": true,
+      "text_content": "name_1,row_number_1,name_2,row_number_2,score\nfrits,0,frits h,1,0.90\nfrits,0,stan,2,0.10\nfrits,0,stein,3,0.10\nfrits,0,ahmet,4,0.10\nfrits h,1,stan,2,0.10\nfrits h,1,stein,3,0.10\nfrits h,1,ahmet,4,0.10\nstan,2,stein,3,0.40\nstan,2,ahmet,4,0.10\nstein,3,ahmet,4,0.10\n"
+    },
+    {
+      "path": "tests/test_clustering/test_clustering.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c11bd124963b33527e1f79dd5edfafbe25a60867",
+      "size": 1034,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/c11bd124963b33527e1f79dd5edfafbe25a60867",
+      "sha256": "36d0a0ff39aba648d11dbea54995e18ed8440989c94fcc5e7a1dc3128cd4f2a7",
+      "fully_read_this_turn": true,
+      "text_content": "import os\n\nimport pandas as pd\n\nfrom deduplipy.clustering.clustering import hierarchical_clustering\n\n\ndef test_hierarchical_clustering_base():\n    col_names = ['name']\n    scored_pairs_table = pd.read_csv(os.path.join('tests', 'test_clustering', 'clustering_fixture.csv'))\n    res = hierarchical_clustering(scored_pairs_table, col_names)\n    expected = pd.DataFrame({'deduplication_id': [1, 1, 2, 3, 4],\n                             'row_number': [0, 1, 2, 3, 4]})\n    pd.testing.assert_frame_equal(res, expected, check_dtype=False)\n    assert True\n\n\ndef test_hierarchical_clustering_cluster_threshold():\n    col_names = ['name']\n    scored_pairs_table = pd.read_csv(os.path.join('tests', 'test_clustering', 'clustering_fixture.csv'))\n    res = hierarchical_clustering(scored_pairs_table, col_names, cluster_threshold=0.4)\n    expected = pd.DataFrame({'deduplication_id': [1, 1, 2, 2, 3],\n                             'row_number': [0, 1, 2, 3, 4]})\n    pd.testing.assert_frame_equal(res, expected, check_dtype=False)\n    assert True\n"
+    },
+    {
+      "path": "tests/test_clustering/test_fill_missing_edges.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23f82f379f0842989a943b2d07b72ca138c466f6",
+      "size": 1760,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/23f82f379f0842989a943b2d07b72ca138c466f6",
+      "sha256": "8b46fe14d6af0d4c3736b2f36c2a268da71914b012e308a345a78ed4342a5ecb",
+      "fully_read_this_turn": true,
+      "text_content": "import numpy as np\n\nfrom deduplipy.clustering.fill_missing_edges import fill_missing_links\nfrom scipy.stats import random_correlation\n\n\ndef get_random_matrix_missing_values(size, fraction):\n    eigenvalues = np.arange(1, 1 + size)\n    eigenvalues = eigenvalues / sum(eigenvalues)\n    eigenvalues = eigenvalues * len(eigenvalues)\n    matrix = random_correlation.rvs(eigenvalues)\n\n    matrix_missing = matrix.copy()\n    mask = np.random.randint(0, 100, size=(size, size)) > 100 * (1 - fraction)\n    matrix_missing[mask] = 0\n    matrix_missing = np.triu(matrix_missing) + np.triu(matrix_missing).T\n    np.fill_diagonal(matrix_missing, 1)\n    np.fill_diagonal(matrix, 0)\n    return matrix, matrix_missing\n\n\ndef test_fill_missing_links_base():\n    matrix = np.asarray([[0, 0.8, 0],\n                         [0.8, 0, 0.8],\n                         [0, 0.8, 0]])\n    res = fill_missing_links(matrix, convergence_threshold=0.01)\n    expected = np.array([[0., 0.8, 0.9],\n                         [0.8, 0., 0.8],\n                         [0.9, 0.8, 0.]])\n    np.testing.assert_almost_equal(res, expected, decimal=2)\n\n\ndef test_fill_missing_links_no_missing():\n    matrix = np.asarray([[0, 0.8, 0.8],\n                         [0.8, 0, 0.8],\n                         [0.8, 0.8, 0]])\n    res = fill_missing_links(matrix, convergence_threshold=0.01)\n    expected = np.array([[0, 0.8, 0.8],\n                         [0.8, 0, 0.8],\n                         [0.8, 0.8, 0]])\n    np.testing.assert_almost_equal(res, expected, decimal=2)\n\n\ndef test_fill_missing_links_large_matrix():\n    matrix, matrix_missing = get_random_matrix_missing_values(500, 0.5)\n    res = fill_missing_links(matrix, convergence_threshold=0.01)\n    np.testing.assert_almost_equal(res, matrix, decimal=2)\n"
+    },
+    {
+      "path": "tests/test_sampling/test_minhash_sampling.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29eca08c2b20079b0a4b849832e2fe80c3db27a5",
+      "size": 783,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/29eca08c2b20079b0a4b849832e2fe80c3db27a5",
+      "sha256": "820879e8c8c7025cba215ad4e93d26a631c782d45bf5601b04af726e0f2f4c1c",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "tests/test_sampling/test_naive_sampling.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "899664612f72ca2439ba07c2417da9fe15d33bad",
+      "size": 1097,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/899664612f72ca2439ba07c2417da9fe15d33bad",
+      "sha256": "3ac885b177dbdaeec8833cdf3c4b8ff0acc39a4bd4afd2b522c4c8cdc05324ca",
+      "fully_read_this_turn": false
+    },
+    {
+      "path": "tests/test_string_metrics/test_string_metrics.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02dbe664a4fd2f1432a552d2ca8e196c24a20a00",
+      "size": 1180,
+      "url": "https://api.github.com/repos/fritshermans/deduplipy/git/blobs/02dbe664a4fd2f1432a552d2ca8e196c24a20a00",
+      "sha256": "5231f9dcbb05640e316df342a2c3e8d1d99f5f2bfa3188e5a853602555741252",
+      "fully_read_this_turn": false
+    }
+  ],
+  "scope": "62blobs acquired andbyteverified;9selectedsource/test/config/setup blobs fullyread. Othermodules/docs/LICENSE/notebooks/CSV/XLSX/logo notyetreviewed. Acquisition isnotfull-source ormedia review."
+}

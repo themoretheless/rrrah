@@ -1,0 +1,98 @@
+{
+  "status": "recorded_all5_original_clustering_tests_twice",
+  "producer_sha256": "ce07bfedd03c83877594f3c2c9b89f01ec3688f41354abbf64cba92bad38c37a",
+  "runs": [
+    {
+      "exit_code": 0,
+      "cases": [
+        {
+          "class": "tests.test_clustering.test_clustering",
+          "name": "test_hierarchical_clustering_base",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_clustering",
+          "name": "test_hierarchical_clustering_cluster_threshold",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_fill_missing_edges",
+          "name": "test_fill_missing_links_base",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_fill_missing_edges",
+          "name": "test_fill_missing_links_no_missing",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_fill_missing_edges",
+          "name": "test_fill_missing_links_large_matrix",
+          "failed": false,
+          "error": false
+        }
+      ],
+      "log": ".dedup-work/deduplipy99-20261016/upstream-clustering-tests-v2/run0.log",
+      "log_sha256": "f2ebaf7f9e6171bad1e75c885dd8f10d829661d7547025e545249ba7f11f2c01",
+      "junit": ".dedup-work/deduplipy99-20261016/upstream-clustering-tests-v2/run0.xml",
+      "junit_sha256": "e6e145f3c1196aaf806a419c303a9727c83c69525af4d9671ff12c41cd4ca9c1"
+    },
+    {
+      "exit_code": 0,
+      "cases": [
+        {
+          "class": "tests.test_clustering.test_clustering",
+          "name": "test_hierarchical_clustering_base",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_clustering",
+          "name": "test_hierarchical_clustering_cluster_threshold",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_fill_missing_edges",
+          "name": "test_fill_missing_links_base",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_fill_missing_edges",
+          "name": "test_fill_missing_links_no_missing",
+          "failed": false,
+          "error": false
+        },
+        {
+          "class": "tests.test_clustering.test_fill_missing_edges",
+          "name": "test_fill_missing_links_large_matrix",
+          "failed": false,
+          "error": false
+        }
+      ],
+      "log": ".dedup-work/deduplipy99-20261016/upstream-clustering-tests-v2/run1.log",
+      "log_sha256": "6329fc9349a4ffb0c1d3a139922f833f3806b87caeb8e94f4f416dc6ebd3c649",
+      "junit": ".dedup-work/deduplipy99-20261016/upstream-clustering-tests-v2/run1.xml",
+      "junit_sha256": "a4f24e5841362a518deef934af7c1f34428000aec8a273ab8d31204b03af742d"
+    }
+  ],
+  "source_pins": {
+    ".dedup-work/deduplipy99-20261016/source/deduplipy/clustering/clustering.py": "6451aeaea242162e4a7d04a571fba74056205ca706c38c0490d6ea0b3d03611b",
+    ".dedup-work/deduplipy99-20261016/source/deduplipy/clustering/__init__.py": "60910fca609f7fc35ea824f002beaf9ce0bd50f46a7bab556ab73abd13dc9e11",
+    ".dedup-work/deduplipy99-20261016/source/deduplipy/clustering/fill_missing_edges.py": "e0b32c17f319bd059c2627c07215a4687d47862bd9d3551f5550a6cfc9e468b7",
+    ".dedup-work/deduplipy99-20261016/source/deduplipy/config.py": "e193fbc6ab15a3810b343772781916cb806070b1cf25950f04fda2081ebf3e2d",
+    ".dedup-work/deduplipy99-20261016/source/tests/test_clustering/clustering_fixture.csv": "0b3ba8c3a1eba4f9656dbded60a5891fc8370af562fea8dc5cc9f62cf03612b5",
+    ".dedup-work/deduplipy99-20261016/source/tests/test_clustering/test_fill_missing_edges.py": "8b46fe14d6af0d4c3736b2f36c2a268da71914b012e308a345a78ed4342a5ecb",
+    ".dedup-work/deduplipy99-20261016/source/tests/test_clustering/test_clustering.py": "36d0a0ff39aba648d11dbea54995e18ed8440989c94fcc5e7a1dc3128cd4f2a7"
+  },
+  "scope": "Fivecompleteoriginalclustering/imputationPytest tests twice, realNumPy/SciPy/NetworkX/FancyImpute/Pandas, no API/bodyadapters. Originalrandom500x500case seed1234 fixedexternally forrepeatability. Actualdependencyversions resolvedunlocked, nothistoricalenv.",
+  "limits": [
+    "Selectedclusteringtests only, notwholeupstreamsuite/fullsource review; othermodules/data/notebooks/media remainunreviewed.",
+    "No performance/hardRSS/platform/currentlibrary/adoption qualification."
+  ]
+}
