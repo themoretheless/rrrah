@@ -11,7 +11,11 @@
     clippy::cast_precision_loss,
     clippy::manual_is_multiple_of,
     clippy::manual_checked_ops,
-    clippy::too_many_arguments
+    clippy::too_many_arguments,
+    clippy::precedence,
+    clippy::manual_contains,
+    clippy::needless_range_loop,
+    clippy::manual_range_patterns
 )]
 
 pub mod bounded_io;
@@ -50,6 +54,16 @@ mod native_backend;
 mod native_router;
 pub mod sniff;
 pub mod vc5;
+pub mod x3f;
+pub use x3f::{
+    X3fCamf, X3fCamfEntry, X3fCamfMatrix, X3fColorTransform, X3fEntry, X3fError, X3fImageInfo, X3fInventory,
+    X3fLegacyChannels, X3fLegacyHuffman, X3fNoiseCurve, X3fProperties, crop_x3f_channels, decode_x3f_legacy,
+    decode_x3f_legacy_auto, inspect_x3f, linearize_x3f_highlights, linearize_x3f_highlights_from_camf,
+    repair_x3f_bad_pixels, repair_x3f_bad_pixels_from_camf, rotate_x3f_linear, sharpen_x3f_red,
+    smooth_x3f_black_rows, smooth_x3f_chroma, smooth_x3f_hues, smooth_x3f_hues_wide, transform_x3f_pixels,
+    visit_x3f_camf, x3f_block_enabled, x3f_chroma_guide, x3f_color_transform_auto, x3f_illuminant_matrix,
+    x3f_linear_output, x3f_linear_raster, x3f_neutral_response, x3f_noise_curves_auto, x3f_wb_correction,
+};
 
 pub mod raster {
     /// Maximum single raster / VC-5 scratch allocation when no explicit budget is supplied (512 MiB).

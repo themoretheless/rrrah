@@ -3840,6 +3840,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrrah-animation"
+version = "0.1.0"
+dependencies = [
+ "flate2",
+ "image",
+ "moxcms",
+ "rrrah-core",
+ "rrrah-raw",
+ "rrrah-vector",
+ "thiserror 2.0.19",
+]
+
+[[package]]
 name = "rrrah-bench"
 version = "0.1.0"
 dependencies = [
@@ -3896,8 +3909,6 @@ dependencies = [
 name = "rrrah-decode"
 version = "0.1.0"
 dependencies = [
- "astcenc-sys",
- "basis-universal",
  "blake3",
  "charls",
  "criterion",
@@ -3908,13 +3919,17 @@ dependencies = [
  "jxl-oxide",
  "libheif-rs",
  "moxcms",
+ "rrrah-animation",
  "rrrah-core",
+ "rrrah-layered",
  "rrrah-mesh",
  "rrrah-raw",
+ "rrrah-scientific",
  "rrrah-swap",
+ "rrrah-texture",
  "rrrah-vector",
+ "rrrah-vfx",
  "serde_json",
- "texture2ddecoder",
  "thiserror 2.0.19",
  "zip 6.0.0",
  "zune-core 0.5.3",
@@ -3974,6 +3989,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrrah-layered"
+version = "0.1.0"
+dependencies = [
+ "flate2",
+ "rrrah-core",
+ "rrrah-raw",
+ "rrrah-scientific",
+ "thiserror 2.0.19",
+]
+
+[[package]]
 name = "rrrah-memory"
 version = "0.1.0"
 
@@ -3999,6 +4025,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrrah-scientific"
+version = "0.1.0"
+dependencies = [
+ "flate2",
+ "rrrah-core",
+ "rrrah-raw",
+ "thiserror 2.0.19",
+]
+
+[[package]]
 name = "rrrah-swap"
 version = "0.1.0"
 dependencies = [
@@ -4006,6 +4042,20 @@ dependencies = [
  "rayon",
  "rrrah-memory",
  "tempfile",
+ "thiserror 2.0.19",
+]
+
+[[package]]
+name = "rrrah-texture"
+version = "0.1.0"
+dependencies = [
+ "astcenc-sys",
+ "basis-universal",
+ "flate2",
+ "rrrah-core",
+ "rrrah-raw",
+ "rrrah-scientific",
+ "texture2ddecoder",
  "thiserror 2.0.19",
 ]
 
@@ -4022,6 +4072,18 @@ dependencies = [
  "resvg",
  "rrrah-core",
  "rrrah-raw",
+ "serde_json",
+ "thiserror 2.0.19",
+]
+
+[[package]]
+name = "rrrah-vfx"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "rrrah-core",
+ "rrrah-raw",
+ "rrrah-swap",
  "serde_json",
  "thiserror 2.0.19",
 ]

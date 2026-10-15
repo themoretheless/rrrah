@@ -9,10 +9,8 @@ repository.workspace = true
 [dependencies]
 zune-jpeg = "=0.5.15"
 zune-core = "=0.5.3"
-basis-universal = "=0.3.1"
 jpegxr = "=0.3.1"
 charls = { version = "=0.4.2", features = ["static"] }
-texture2ddecoder = "=0.1.2"
 flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"] }
 jpeg2k = { version = "=0.10.1", default-features = false, features = ["openjpeg-sys", "strict-mode"] }
 jxl-oxide = { version = "=0.12.6", default-features = false, features = ["image"] }
@@ -24,11 +22,14 @@ rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
 rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
 rrrah-mesh = { path = "../rrrah-mesh", version = "0.1.0" }
 rrrah-vector = { path = "../rrrah-vector", version = "0.1.0" }
+rrrah-scientific = { path = "../rrrah-scientific", version = "0.1.0" }
+rrrah-vfx = { path = "../rrrah-vfx", version = "0.1.0" }
+rrrah-layered = { path = "../rrrah-layered", version = "0.1.0" }
+rrrah-texture = { path = "../rrrah-texture", version = "0.1.0" }
+rrrah-animation = { path = "../rrrah-animation", version = "0.1.0" }
 thiserror.workspace = true
 
 libheif-rs = { version = "=3.0.0", default-features = false, features = ["v1_17"] }
-
-astcenc-sys = "=0.2.0"
 
 [dev-dependencies]
 rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }

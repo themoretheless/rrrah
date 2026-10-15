@@ -59,7 +59,7 @@ pub(super) fn selected_pointer(
             .ok_or_else(|| bad("directory size overflow"))?;
         // Validate the complete table and next pointer even at the selected page.
         let following = number(next, pointer)?;
-        if page == request.image_index as usize {
+        if page == request.image_index {
             let encoded = if little {
                 offset.to_le_bytes()
             } else {

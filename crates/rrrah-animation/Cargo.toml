@@ -1,0 +1,22 @@
+[package]
+name = "rrrah-animation"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"] }
+image = { version = "0.25.9", default-features = false, features = ["gif", "jpeg", "png", "webp"] }
+moxcms = { version = "=0.8.1", default-features = false, features = ["extended_range"] }
+rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
+rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
+rrrah-vector = { path = "../rrrah-vector", version = "0.1.0" }
+thiserror.workspace = true
+
+[dev-dependencies]
+moxcms = { version = "=0.8.1", default-features = false, features = ["options", "extended_range"] }
+
+[lints]
+workspace = true

@@ -201,6 +201,103 @@ impl From<rrrah_vector::VectorDecodeError> for RasterDecodeError {
     }
 }
 
+impl From<rrrah_scientific::ScientificDecodeError> for RasterDecodeError {
+    fn from(error: rrrah_scientific::ScientificDecodeError) -> Self {
+        match error {
+            rrrah_scientific::ScientificDecodeError::Source(e) => Self::Source(e),
+            rrrah_scientific::ScientificDecodeError::Frame(e) => Self::Frame(e),
+            rrrah_scientific::ScientificDecodeError::OutputTooLarge => Self::OutputTooLarge,
+            rrrah_scientific::ScientificDecodeError::InvalidNrrd(e) => Self::InvalidNrrd(e),
+            rrrah_scientific::ScientificDecodeError::InvalidMrc(e) => Self::InvalidMrc(e),
+            rrrah_scientific::ScientificDecodeError::InvalidFits(e) => Self::InvalidFits(e),
+            rrrah_scientific::ScientificDecodeError::InvalidDicom(e) => Self::InvalidDicom(e),
+            rrrah_scientific::ScientificDecodeError::InvalidScalarWindow => {
+                Self::InvalidScalarWindow
+            }
+            rrrah_scientific::ScientificDecodeError::ScalarWindowRequiresScientificArray => {
+                Self::ScalarWindowRequiresScientificArray
+            }
+        }
+    }
+}
+
+impl From<rrrah_vfx::VfxDecodeError> for RasterDecodeError {
+    fn from(error: rrrah_vfx::VfxDecodeError) -> Self {
+        match error {
+            rrrah_vfx::VfxDecodeError::Source(e) => Self::Source(e),
+            rrrah_vfx::VfxDecodeError::Frame(e) => Self::Frame(e),
+            rrrah_vfx::VfxDecodeError::OutputTooLarge => Self::OutputTooLarge,
+            rrrah_vfx::VfxDecodeError::RlaInterpretationRequired => Self::RlaInterpretationRequired,
+            rrrah_vfx::VfxDecodeError::InvalidRla(e) => Self::InvalidRla(e),
+            rrrah_vfx::VfxDecodeError::InvalidSoftimage(e) => Self::InvalidSoftimage(e),
+            rrrah_vfx::VfxDecodeError::InvalidCineon(e) => Self::InvalidCineon(e),
+            rrrah_vfx::VfxDecodeError::InvalidDpx(e) => Self::InvalidDpx(e),
+            rrrah_vfx::VfxDecodeError::InvalidPix(e) => Self::InvalidPix(e),
+            rrrah_vfx::VfxDecodeError::InvalidSgi(e) => Self::InvalidSgi(e),
+            rrrah_vfx::VfxDecodeError::RpfInterpretationRequired => Self::RpfInterpretationRequired,
+            rrrah_vfx::VfxDecodeError::Rpf(e) => Self::Rpf(e),
+        }
+    }
+}
+
+impl From<rrrah_layered::LayeredDecodeError> for RasterDecodeError {
+    fn from(error: rrrah_layered::LayeredDecodeError) -> Self {
+        match error {
+            rrrah_layered::LayeredDecodeError::Source(e) => Self::Source(e),
+            rrrah_layered::LayeredDecodeError::Frame(e) => Self::Frame(e),
+            rrrah_layered::LayeredDecodeError::OutputTooLarge => Self::OutputTooLarge,
+            rrrah_layered::LayeredDecodeError::InvalidXcf(e) => Self::InvalidXcf(e),
+            rrrah_layered::LayeredDecodeError::InvalidAseprite(e) => Self::InvalidAseprite(e),
+            rrrah_layered::LayeredDecodeError::InvalidPsd(e) => Self::InvalidPsd(e),
+        }
+    }
+}
+
+impl From<rrrah_texture::TextureDecodeError> for RasterDecodeError {
+    fn from(error: rrrah_texture::TextureDecodeError) -> Self {
+        match error {
+            rrrah_texture::TextureDecodeError::Source(e) => Self::Source(e),
+            rrrah_texture::TextureDecodeError::Frame(e) => Self::Frame(e),
+            rrrah_texture::TextureDecodeError::OutputTooLarge => Self::OutputTooLarge,
+            rrrah_texture::TextureDecodeError::InvalidBasis(e) => Self::InvalidBasis(e),
+            rrrah_texture::TextureDecodeError::InvalidSti(e) => Self::InvalidSti(e),
+            rrrah_texture::TextureDecodeError::InvalidDcx(e) => Self::InvalidDcx(e),
+            rrrah_texture::TextureDecodeError::WalPaletteRequired => Self::WalPaletteRequired,
+            rrrah_texture::TextureDecodeError::InvalidWal(e) => Self::InvalidWal(e),
+            rrrah_texture::TextureDecodeError::InvalidPvr(e) => Self::InvalidPvr(e),
+            rrrah_texture::TextureDecodeError::InvalidWad(e) => Self::InvalidWad(e),
+            rrrah_texture::TextureDecodeError::InvalidPkm(e) => Self::InvalidPkm(e),
+            rrrah_texture::TextureDecodeError::InvalidAstc(e) => Self::InvalidAstc(e),
+            rrrah_texture::TextureDecodeError::InvalidKtx2(e) => Self::InvalidKtx2(e),
+            rrrah_texture::TextureDecodeError::InvalidKtx(e) => Self::InvalidKtx(e),
+            rrrah_texture::TextureDecodeError::InvalidDds(e) => Self::InvalidDds(e),
+            rrrah_texture::TextureDecodeError::InvalidPcx(e) => Self::InvalidPcx(e),
+        }
+    }
+}
+
+impl From<rrrah_animation::AnimationDecodeError> for RasterDecodeError {
+    fn from(error: rrrah_animation::AnimationDecodeError) -> Self {
+        match error {
+            rrrah_animation::AnimationDecodeError::Source(e) => Self::Source(e),
+            rrrah_animation::AnimationDecodeError::Codec(e) => Self::Codec(e),
+            rrrah_animation::AnimationDecodeError::Frame(e) => Self::Frame(e),
+            rrrah_animation::AnimationDecodeError::Color(e) => Self::Color(e),
+            rrrah_animation::AnimationDecodeError::OutputTooLarge => Self::OutputTooLarge,
+            rrrah_animation::AnimationDecodeError::InvalidJng(e) => Self::InvalidJng(e),
+            rrrah_animation::AnimationDecodeError::InvalidWebpAnimation(e) => {
+                Self::InvalidWebpAnimation(e)
+            }
+            rrrah_animation::AnimationDecodeError::InvalidGif(e) => Self::InvalidGif(e),
+            rrrah_animation::AnimationDecodeError::InvalidApng(e) => Self::InvalidApng(e),
+            rrrah_animation::AnimationDecodeError::InvalidPngColor(e) => Self::InvalidPngColor(e),
+            rrrah_animation::AnimationDecodeError::InvalidPngPhysicalDimensions => {
+                Self::InvalidPngPhysicalDimensions
+            }
+        }
+    }
+}
+
 /// Decode the first raster image, retaining sample precision and straight
 /// alpha. ICC samples remain in their embedded color space. No tone mapping
 /// or color conversion is performed here.
@@ -481,59 +578,59 @@ fn decode_raster_bytes_inner(
         return decode_farbfeld(&bytes, request);
     }
     if crate::xcf::has_magic(&bytes) {
-        return crate::xcf::decode_raster(&bytes, request);
+        return Ok(crate::xcf::decode_raster(&bytes, request)?);
     }
     if crate::dicom::has_magic(&bytes) {
-        return crate::dicom::decode(&bytes, request, None);
+        return Ok(crate::dicom::decode(&bytes, request, None)?);
     }
 
     if crate::aseprite::has_magic(&bytes) {
-        return crate::aseprite::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::aseprite::decode(&bytes, request)?.raster);
     }
     if crate::pvr::has_magic(&bytes) {
-        return crate::pvr::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::pvr::decode(&bytes, request)?.raster);
     }
     if crate::fits::has_magic(&bytes) {
-        return crate::fits::decode_raster(&bytes, request);
+        return Ok(crate::fits::decode_raster(&bytes, request)?);
     }
     if crate::mrc::has_magic(&bytes) {
-        return crate::mrc::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::mrc::decode(&bytes, request)?.raster);
     }
     if crate::nrrd::has_magic(&bytes) {
-        return crate::nrrd::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::nrrd::decode(&bytes, request)?.raster);
     }
     if crate::wad::has_magic(&bytes) {
-        return crate::wad::decode(&bytes, request);
+        return Ok(crate::wad::decode(&bytes, request)?);
     }
     if crate::dcx::has_magic(&bytes) {
-        return crate::dcx::decode(&bytes, request);
+        return Ok(crate::dcx::decode(&bytes, request)?);
     }
     if bytes.starts_with(b"DDS ") {
-        return crate::dds::decode(&bytes, request);
+        return Ok(crate::dds::decode(&bytes, request)?);
     }
     if crate::ktx::has_magic(&bytes) {
-        return crate::ktx::decode(&bytes, request);
+        return Ok(crate::ktx::decode(&bytes, request)?);
     }
     if crate::pdf::has_magic(&bytes) {
         return Ok(crate::pdf::decode(&bytes, request)?);
     }
     if crate::basis::has_magic(&bytes) {
-        return crate::basis::decode(&bytes, request);
+        return Ok(crate::basis::decode(&bytes, request)?);
     }
     if crate::ktx2::has_magic(&bytes) {
-        return crate::ktx2::decode(&bytes, request);
+        return Ok(crate::ktx2::decode(&bytes, request)?);
     }
     if crate::webp_animation::has_animation(&bytes) {
-        return crate::webp_animation::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::webp_animation::decode(&bytes, request)?.raster);
     }
     if crate::gif_animation::has_magic(&bytes) {
-        return crate::gif_animation::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::gif_animation::decode(&bytes, request)?.raster);
     }
     if crate::mng::has_magic(&bytes) {
         return crate::mng::decode(&bytes, request).map(|image| image.raster);
     }
     if crate::sti::has_magic(&bytes) {
-        return crate::sti::decode(&bytes, request);
+        return Ok(crate::sti::decode(&bytes, request)?);
     }
     if crate::emf::has_magic(&bytes) {
         return Ok(crate::emf::decode(&bytes, request)?);
@@ -564,7 +661,7 @@ fn decode_raster_bytes_inner(
         return Ok(crate::wmf::decode(&bytes, request)?);
     }
     if crate::apng::has_animation(&bytes) {
-        return crate::apng::decode(&bytes, request).map(|image| image.raster);
+        return Ok(crate::apng::decode(&bytes, request)?.raster);
     }
     if request.image_index != 0 {
         return Err(DecodeError::UnsupportedImageIndex {
@@ -579,31 +676,31 @@ fn decode_raster_bytes_inner(
         return crate::jpegls::decode(&bytes, request).map(|image| image.raster);
     }
     if crate::jng::has_magic(&bytes) {
-        return crate::jng::decode(&bytes, request);
+        return Ok(crate::jng::decode(&bytes, request)?);
     }
     if crate::softimage::has_magic(&bytes) {
-        return crate::softimage::decode(&bytes, request);
+        return Ok(crate::softimage::decode(&bytes, request)?);
     }
     if crate::cineon::has_magic(&bytes) {
-        return crate::cineon::decode(&bytes, request);
+        return Ok(crate::cineon::decode(&bytes, request)?);
     }
     if crate::dpx::has_magic(&bytes) {
-        return crate::dpx::decode(&bytes, request);
+        return Ok(crate::dpx::decode(&bytes, request)?);
     }
     if crate::astc::has_magic(&bytes) {
-        return crate::astc::decode(&bytes, request);
+        return Ok(crate::astc::decode(&bytes, request)?);
     }
     if crate::heif::has_magic(&bytes) {
         return crate::heif::decode(&bytes, request);
     }
     if crate::pkm::has_magic(&bytes) {
-        return crate::pkm::decode(&bytes, request);
+        return Ok(crate::pkm::decode(&bytes, request)?);
     }
     if crate::iff::has_magic(&bytes) {
         return crate::iff::decode(&bytes, request);
     }
     if crate::psd::has_magic(&bytes) {
-        return crate::psd::decode(&bytes, request);
+        return Ok(crate::psd::decode(&bytes, request)?);
     }
     if crate::jp2::has_magic(&bytes) {
         return crate::jp2::decode(&bytes, request);
@@ -667,13 +764,13 @@ fn decode_raster_bytes_inner(
         return crate::qoi_bounds::decode(&bytes, request);
     }
     if bytes.starts_with(b"DDS ") {
-        return crate::dds::decode(&bytes, request);
+        return Ok(crate::dds::decode(&bytes, request)?);
     }
     if bytes.starts_with(&[0x59, 0xa6, 0x6a, 0x95]) {
         return crate::sun::decode(&bytes, request);
     }
     if bytes.starts_with(&[1, 218]) {
-        return crate::sgi::decode(&bytes, request);
+        return Ok(crate::sgi::decode(&bytes, request)?);
     }
     if bytes.starts_with(b"PF\n")
         || bytes.starts_with(b"Pf\n")
@@ -693,7 +790,7 @@ fn decode_raster_bytes_inner(
         .is_some_and(|e| e.eq_ignore_ascii_case("rla"))
         && image::guess_format(&bytes).is_err()
     {
-        return crate::rla::decode(&bytes, request);
+        return Ok(crate::rla::decode(&bytes, request)?);
     }
     if request
         .path
@@ -701,7 +798,7 @@ fn decode_raster_bytes_inner(
         .is_some_and(|e| e.eq_ignore_ascii_case("wal"))
         && image::guess_format(&bytes).is_err()
     {
-        return crate::wal::decode_using_game_palette(&bytes, request);
+        return Ok(crate::wal::decode_using_game_palette(&bytes, request)?);
     }
     if request
         .path
@@ -709,10 +806,10 @@ fn decode_raster_bytes_inner(
         .is_some_and(|e| e.eq_ignore_ascii_case("pix"))
         && image::guess_format(&bytes).is_err()
     {
-        return crate::pix::decode(&bytes, request);
+        return Ok(crate::pix::decode(&bytes, request)?);
     }
     if bytes.first() == Some(&0x0a) {
-        return crate::pcx::decode(&bytes, request);
+        return Ok(crate::pcx::decode(&bytes, request)?);
     }
     if image::guess_format(&bytes).is_err()
         && request

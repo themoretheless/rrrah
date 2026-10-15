@@ -1,0 +1,20 @@
+[package]
+name = "rrrah-texture"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+astcenc-sys = "=0.2.0"
+basis-universal = "=0.3.1"
+flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"] }
+rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
+rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
+rrrah-scientific = { path = "../rrrah-scientific", version = "0.1.0" }
+texture2ddecoder = "=0.1.2"
+thiserror.workspace = true
+
+[lints]
+workspace = true

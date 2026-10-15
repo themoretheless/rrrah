@@ -59,7 +59,7 @@ fn data_fork(b: &[u8]) -> Result<&[u8], RasterDecodeError> {
     let data_len = u32::from_be_bytes(h[83..87].try_into().unwrap()) as usize;
     let resource_len = u32::from_be_bytes(h[87..91].try_into().unwrap()) as usize;
     let comment_len = usize::from(u16::from_be_bytes(h[99..101].try_into().unwrap()));
-    if data_len < 512 || data_len > 1024 * 1024 || resource_len > 1024 * 1024 {
+    if !(512..=1024 * 1024).contains(&data_len) || resource_len > 1024 * 1024 {
         return Err(bad("MacBinary fork size"));
     }
     let padded = |n: usize| n.div_ceil(128) * 128;
