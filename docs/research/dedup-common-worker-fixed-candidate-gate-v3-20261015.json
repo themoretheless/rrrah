@@ -1,0 +1,43 @@
+{
+  "status": "running",
+  "variant": "candidate",
+  "producer_pid": 96607,
+  "producer_sha256": "d44fd0404429d41f510a93773adf554ab5cd75797575150fa61ace87b436651f",
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-common-worker-fixed-collection-pair-v2-prepared-20261015.json",
+  "manifest_sha256": "60e3adc6c4b7fc109ccb9edf83fec8797f8eb812f14214b8c723737e43ac6115",
+  "original_terminal_audit_sha256": "96f34ddbbb2004a962e75fd8a1bb95f1f34bebc84ad04f4a3e88a4b36b81a1c3",
+  "source": "/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-decode",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "rrrah-dedup/decode",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--config",
+    "profile.test.package.rrrah-dedup.debug=0",
+    "--config",
+    "profile.test.package.rrrah-decode.debug=0",
+    "--target-dir",
+    "/private/tmp/rrrah-consensus-collection-target-20261014"
+  ],
+  "environment_overrides": {
+    "TMPDIR": "/private/tmp/rrrah-common-worker-fixed-candidate-gate-v3-20261015/tmp",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "baseline_replay_audit_sha256": "662c548bba4504269f9566b73b31afbe61b7b1aa534ec8b04fbbda000b3c4fec",
+  "scope": "Candidate incremental codegen disabled only to bound rebuildable compiler disk use after ENOSPC; correctness gate, not matched-compiler timing. Complete lib/integration targets of both frozen packages, decode enabled, no filters or pruning. Shared test-only worker overlay. Original optlevels/assertions retained; only these two packages omit debug symbols equally, noLTO diagnostic MacARM. Not latest mutable Root/allformats/platform proof.",
+  "child_pid": 96610
+}

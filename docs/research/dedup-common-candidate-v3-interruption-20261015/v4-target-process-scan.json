@@ -1,0 +1,25 @@
+{
+  "status": "verified_current_target_source_processes_owned_by_v4",
+  "observed_at_utc": "2026-10-15T14:33:55.066128+00:00",
+  "producer_pid": 12162,
+  "matched_processes": [
+    {
+      "pid": 12175,
+      "parent": 12162,
+      "in_new_producer_tree": true
+    },
+    {
+      "pid": 12371,
+      "parent": 12175,
+      "in_new_producer_tree": true
+    },
+    {
+      "pid": 25621,
+      "parent": 12175,
+      "in_new_producer_tree": true
+    }
+  ],
+  "unmatched_target_processes": 0,
+  "observer_sha256": "18265b08a3d260de5e3a049a2112abfdf4511563c7379ae0e24fc33b10410a7b",
+  "scope": "Freshpostlaunch completeprocess-command scan filteredtoownedtarget/source only; no unmatchedcurrent target/sourcewriter observed. Oldprelaunch ps checkedmissingproducer/Cargo andtheircurrentPPIDtree, not proofaboutallpossiblepreviouslyorphaneddescendants. No retroactiveprelaunchorphanabsence/terminationcause assertion."
+}

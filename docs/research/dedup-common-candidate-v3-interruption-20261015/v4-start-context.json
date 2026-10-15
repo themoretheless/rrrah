@@ -1,0 +1,63 @@
+{
+  "status": "observed_live_v4_same_complete_command_not_qualified",
+  "observed_at_utc": "2026-10-15T14:27:28.411137+00:00",
+  "producer_pid": 12162,
+  "cargo_pid": 12175,
+  "processes": [
+    {
+      "pid": 12162,
+      "parent": 1,
+      "elapsed": "04:51",
+      "matches_expected_command": true
+    },
+    {
+      "pid": 12175,
+      "parent": 12162,
+      "elapsed": "04:50",
+      "matches_expected_command": true
+    }
+  ],
+  "same_v3_v4_command": true,
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-decode",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "rrrah-dedup/decode",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--config",
+    "profile.test.package.rrrah-dedup.debug=0",
+    "--config",
+    "profile.test.package.rrrah-decode.debug=0",
+    "--target-dir",
+    "/private/tmp/rrrah-consensus-collection-target-20261014"
+  ],
+  "manifest_sha256": "60e3adc6c4b7fc109ccb9edf83fec8797f8eb812f14214b8c723737e43ac6115",
+  "producer_sha256": "aa12c6a4f74b4de189019c75cf69628e469e865be3397d5914e4d150cdf3ecd5",
+  "observer_sha256": "a8439dc0923b95b0c7b67aa48a6402beaeb6f5f8014222f88d53cf390eb746c5",
+  "python_controller": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n",
+  "selected_environment_hashes": {
+    "RUSTFLAGS": null,
+    "CARGO_ENCODED_RUSTFLAGS": null,
+    "RUSTDOCFLAGS": null,
+    "CARGO_BUILD_TARGET": null,
+    "CARGO_PROFILE_TEST_OPT_LEVEL": null,
+    "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": null
+  },
+  "preflight": "Restricted-tool signal0 returnedPermissionError, no processstatusinferred. Thisapprovedreadonlyps verifiesbothlive matchingcommands/parent; no signal sent.",
+  "scope": "Currentcontroller/compiler/environment observationonly; no assertionofmatchedhistoricalcompiler or timing. PIDs liveatobservation; futurestate mustrevalidate. Fullsourcepair unchanged, all162targets stillrequired."
+}

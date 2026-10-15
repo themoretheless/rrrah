@@ -1,0 +1,35 @@
+{
+  "status": "verified_pending_incomplete_gate_refusals",
+  "controls": [
+    {
+      "script": "scripts/audit-dedup-common-worker-fixed-candidate-v3-20261015.py",
+      "returncode": 1,
+      "log": "docs/research/dedup-common-candidate-v3-interruption-20261015/old-auditor-refuses-incomplete.log",
+      "log_sha256": "093cbd2b382bf32c70be9e2480f8bac8367e6d45b89fc8e55a645cef8b040c06"
+    },
+    {
+      "script": "scripts/check-dedup-actual-collection-benchmark-admission-v3-20261015.py",
+      "returncode": 1,
+      "log": "docs/research/dedup-common-candidate-v3-interruption-20261015/admission-refuses-pending-v4.log",
+      "log_sha256": "1d69f385c83cebbdab0357de4fd884d0028672cdd3fcd4da32b37e500b0b8ce6"
+    }
+  ],
+  "scripts": [
+    {
+      "path": "scripts/qualify-dedup-common-worker-fixed-candidate-v4-20261015.py",
+      "sha256": "aa12c6a4f74b4de189019c75cf69628e469e865be3397d5914e4d150cdf3ecd5"
+    },
+    {
+      "path": "scripts/audit-dedup-common-worker-fixed-candidate-v4-20261015.py",
+      "sha256": "7cf9868c107062a052ea057a1d3545600b0aa7c8f9be56935340f6b011556807"
+    },
+    {
+      "path": "scripts/check-dedup-actual-collection-benchmark-admission-v3-20261015.py",
+      "sha256": "cc3d010a9043a5f7896645a2eac98e0e0ea8dacb613e36246f4fc888cff10749"
+    },
+    {
+      "path": "scripts/launch-dedup-common-candidate-v4-detached-20261015.py",
+      "sha256": "363b116b4b4773119b7a43d8e03f172a23034e1b18dcc5bd3e8a099e506d6959"
+    }
+  ]
+}

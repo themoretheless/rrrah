@@ -1,0 +1,217 @@
+   Compiling moxcms v0.8.1 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/vendor/moxcms)
+   Compiling rrrah-memory v0.1.0 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/crates/rrrah-memory)
+   Compiling rrrah-core v0.1.0 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/crates/rrrah-core)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/vendor/hayro-interpret)
+   Compiling hayro v0.7.1 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/vendor/hayro)
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-decode v0.1.0 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/crates/rrrah-dedup)
+   Compiling rrrah-swap v0.1.0 (/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/candidate/crates/rrrah-swap)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused variable: `a`
+   --> crates/rrrah-dedup/tests/anchor_geometry_collection_preflight.rs:120:9
+    |
+120 |     let a = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    |         ^ help: if this is intentional, prefix it with an underscore: `_a`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `LocalFileError`
+  --> crates/rrrah-dedup/tests/five_region_admission.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `cell::Cell` and `io::Write`
+  --> crates/rrrah-dedup/tests/five_region_admission.rs:58:15
+   |
+58 |     use std::{cell::Cell, io::Write};
+   |               ^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `scan_projective_local_collection_five_searches`
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:190:51
+    |
+190 |             ProjectiveFiveSearchCollectionPolicy, scan_projective_local_collection_five_searches,
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:194:9
+    |
+194 |     let mut files = vec![
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `budget`
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:145:9
+    |
+145 |     let budget = MemoryBudget::new(64 * 1024 * 1024);
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_budget`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `files`
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:194:9
+    |
+194 |     let mut files = vec![
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_files`
+
+warning: `rrrah-dedup` (test "anchor_geometry_collection_preflight") generated 1 warning (run `cargo fix --test "anchor_geometry_collection_preflight" -p rrrah-dedup` to apply 1 suggestion)
+warning: `rrrah-dedup` (test "five_region_admission") generated 6 warnings (run `cargo fix --test "five_region_admission" -p rrrah-dedup` to apply 6 suggestions)
+warning: unused import: `compare_local_files_projective`
+ --> crates/rrrah-dedup/tests/region_grid_files.rs:8:35
+  |
+8 |     local_scan::{LocalFilePolicy, compare_local_files_projective},
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `compare_local_files_projective_pyramid_photometric`
+  --> crates/rrrah-dedup/tests/region_grid_files.rs:50:13
+   |
+50 |             compare_local_files_projective_pyramid_photometric,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (test "region_grid_files") generated 2 warnings (run `cargo fix --test "region_grid_files" -p rrrah-dedup` to apply 2 suggestions)
+warning: unused import: `LocalFileError`
+  --> crates/rrrah-dedup/tests/five_region_lifecycle.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "five_region_lifecycle") generated 1 warning (run `cargo fix --test "five_region_lifecycle" -p rrrah-dedup` to apply 1 suggestion)
+warning: unused import: `compare_local_files_projective`
+ --> crates/rrrah-dedup/tests/region_transform.rs:8:35
+  |
+8 |     local_scan::{LocalFilePolicy, compare_local_files_projective},
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `compare_local_files_projective_pyramid_photometric`
+  --> crates/rrrah-dedup/tests/region_transform.rs:50:13
+   |
+50 |             compare_local_files_projective_pyramid_photometric,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/region_transform.rs:227:5
+    |
+227 |     drop(unrelated_view);
+    |     ^^^^^--------------^
+    |          |
+    |          argument has type `LinearRgbaView<'_>`
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+227 -     drop(unrelated_view);
+227 +     let _ = unrelated_view;
+    |
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/region_transform.rs:229:5
+    |
+229 |     drop(view);
+    |     ^^^^^----^
+    |          |
+    |          argument has type `LinearRgbaView<'_>`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+229 -     drop(view);
+229 +     let _ = view;
+    |
+
+warning: `rrrah-dedup` (test "region_transform") generated 4 warnings (run `cargo fix --test "region_transform" -p rrrah-dedup` to apply 2 suggestions)
+warning: unused variable: `a`
+   --> crates/rrrah-dedup/tests/anchor_collection_preflight.rs:120:9
+    |
+120 |     let a = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    |         ^ help: if this is intentional, prefix it with an underscore: `_a`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "anchor_collection_preflight") generated 1 warning (run `cargo fix --test "anchor_collection_preflight" -p rrrah-dedup` to apply 1 suggestion)
+warning: constant `LEGACY_TRANSFORM` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs:215:7
+    |
+215 | const LEGACY_TRANSFORM: [[u64; 3]; 3] = [
+    |       ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `LEGACY_INLIERS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs:220:7
+    |
+220 | const LEGACY_INLIERS: &[usize] = &[2, 3, 6, 8, 9, 12, 15, 16, 17, 21, 23, 25, 26, 29, 34, 35, 39, 44, 47, 50, 54, 56, 57, 58, 61, 6...
+    |       ^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_ERROR_BITS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs:221:7
+    |
+221 | const LEGACY_ERROR_BITS: u64 = 4638228804479654434;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_TRANSFORM` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs:117:7
+    |
+117 | const LEGACY_TRANSFORM: [[u64; 3]; 3] = [
+    |       ^^^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_INLIERS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs:122:7
+    |
+122 | const LEGACY_INLIERS: &[usize] = &[0, 1, 3, 4, 5, 6, 7, 8, 12, 13, 14, 16, 17, 20, 21, 22, 24, 26, 27, 30, 32, 33, 34, 36, 38, 39, ...
+    |       ^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_ERROR_BITS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs:123:7
+    |
+123 | const LEGACY_ERROR_BITS: u64 = 4634837829742471289;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (test "projective_pruning") generated 6 warnings
+warning: unused imports: `LocalFileError`, `ProjectiveComplementaryFilePolicy`, `ProjectivePortfolioFilePolicy`, `ProjectiveRegistrationPolicy`, `ProjectiveRegistrationPortfolioPolicy`, and `ProjectiveRegistrationTrustPolicy`
+  --> crates/rrrah-dedup/tests/gradient_collection.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+54 |             ProjectiveRegistrationPolicy, ProjectiveRegistrationPortfolioPolicy,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+55 |             ProjectiveRegistrationTrustPolicy,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "gradient_collection") generated 1 warning (run `cargo fix --test "gradient_collection" -p rrrah-dedup` to apply 1 suggestion)
+warning: variable `H` should have a snake case name
+   --> crates/rrrah-dedup/tests/candidate_reflected_geometry.rs:135:9
+    |
+135 |     let H = geometry.transform.matrix;
+    |         ^ help: convert the identifier to snake case: `h`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `rrrah-dedup` (test "candidate_reflected_geometry") generated 1 warning
