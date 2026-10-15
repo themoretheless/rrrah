@@ -1,0 +1,15 @@
+"""Independently enumerate retained54-test binary and verify current source/fullscope artifacts."""
+from pathlib import Path
+import hashlib,json,re,subprocess
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();p=D/'dedup-durable-root-exact-v2-20261015.json';a=json.loads(p.read_text());assert a['passed']==54 and a['failed']==a['ignored']==a['filtered']==0
+for file,sha in a['sources'].items():assert h(R/file)==sha
+for file,sha in a['dependencies'].items():assert h(file)==sha
+for file,sha in a['logs'].items():assert h(file)==sha
+assert h(a['binary'])==a['binary_sha256'] and h(R/a['producer'])==a['producer_sha256'];W=Path(a['binary']).parent
+for local,original in [('exact.rs','crates/rrrah-dedup/src/exact.rs'),('integration.rs','crates/rrrah-dedup/tests/exact_files.rs'),('large.rs','crates/rrrah-dedup/tests/exact_large_files.rs'),('repeated.rs','crates/rrrah-dedup/tests/exact_repeated_metadata.rs')]:assert (W/local).read_bytes()==(R/original).read_bytes()
+assert (W/'harness.rs').read_text()=='extern crate self as rrrah_dedup;\n#[path="exact.rs"]pub mod exact;\n#[path="integration.rs"]mod integration_controls;\n#[path="large.rs"]mod large_controls;\n#[path="repeated.rs"]mod repeated_metadata_controls;\n'
+listed=subprocess.check_output([a['binary'],'--list'],text=True);assert listed==(W/'inventory.log').read_text();names=re.findall(r'^(.*): test$',listed,re.M);assert len(names)==len(set(names))==54 and sorted(names)==sorted(a['inventory'])
+old=D/'dedup-durable-root-exact-v1-20261015.json';prior=json.loads(old.read_text());new='repeated_metadata_controls::repeated_comparisons_reread_content_when_size_and_modified_time_are_restored';assert set(names)==set(prior['inventory'])|{new}
+for original,sha in prior['sources'].items():assert a['sources'][original]==sha
+text=(W/'tests.log').read_text();results=re.findall(r'^test (\S+) \.\.\. (ok|FAILED|ignored)$',text,re.M);assert sorted(results)==sorted((n,'ok') for n in names);assert '54 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out' in text;assert h(a['binary'])==a['binary_sha256']
+out=D/'dedup-durable-root-exact-v2-audit-20261015.json';assert not out.exists();out.write_text(json.dumps({'status':'verified_fresh_complete_current_exact_scope','producer_report':str(p.relative_to(R)),'producer_report_sha256':h(p),'auditor':str(Path(__file__).relative_to(R)),'auditor_sha256':h(Path(__file__)),'passed':54,'failed':0,'ignored':0,'filtered':0,'prior_complete53_inventory_retained':True,'prior_three_sources_byte_unchanged':True,'new_regression':new,'new_regression_scope':'Sizes4/261/4096/65537, repeatedpubliccompare_files bothdirections plus scan/scan_verified, sameinode/size/restoredmtime rewrite andhealthycopyretained. No hash/mtimecachedpositive reused.','binary_available_hash_verified':True,'all_source_copies_dependencies_and_logs_verified':True,'scope':a['scope']},indent=2)+'\n');print('Independent54test inventory/source/binary/log audit passed')

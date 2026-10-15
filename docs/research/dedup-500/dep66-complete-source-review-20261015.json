@@ -1,0 +1,156 @@
+{
+  "status": "complete_pinned_source_and_visual_review_scoped_native_controls",
+  "index": 66,
+  "repository": "vuolter/deplicate",
+  "commit": "9975502571d1d024a990f5cb304d01b63c0d7717",
+  "root_tree": "b24f97840fca2e23763badac15c1748c02489805",
+  "whole_repo_complete": true,
+  "full_repository_read": true,
+  "blobs": 25,
+  "trees": 5,
+  "fully_read_text": [
+    ".gitignore",
+    ".scrutinizer.yml",
+    ".travis.yml",
+    "CHANGELOG",
+    "LICENSE",
+    "MANIFEST.in",
+    "README.md",
+    "README.rst",
+    "VERSION",
+    "duplicate/__init__.py",
+    "duplicate/core.py",
+    "duplicate/deplicate.py",
+    "duplicate/structs.py",
+    "duplicate/utils/__init__.py",
+    "duplicate/utils/fs/__init__.py",
+    "duplicate/utils/fs/common.py",
+    "duplicate/utils/fs/nt.py",
+    "duplicate/utils/fs/osx.py",
+    "duplicate/utils/fs/posix.py",
+    "duplicate/utils/init.py",
+    "setup.cfg",
+    "setup.py",
+    "tox.ini"
+  ],
+  "all_git_objects_verified": true,
+  "assets": [
+    {
+      "upstream_path": "media/banner.png",
+      "archived": "docs/research/dedup-500/dep66-banner-20261015.png",
+      "sha256": "4b1cc5981b578268c83e7926194619d4ed65a7b6fbdd7e3dcd7d3f90468f350b",
+      "viewed": true,
+      "observation": "888x173blackbanner, glowingwhite ASCIIstyle deplicatewordmark"
+    },
+    {
+      "upstream_path": "media/logo.png",
+      "archived": "docs/research/dedup-500/dep66-logo-20261015.png",
+      "sha256": "a40f43c32c19b41c55d725b01372b08ed39c591bb7f95752c902940940a6b482",
+      "viewed": true,
+      "observation": "111x111blacktile, matchingwhite ASCIIletterd"
+    }
+  ],
+  "license": "EntireMIT LICENSE read; no source copiedinto production",
+  "readme_encoding": "README.rst exact16918byteGitblob containsCP1252 punctuation andfailsconnectorUTF8decode. Rawpublicfilefetched, Gitblob/sizeverified, CP1252contentroundtripchecked; no replacementoromission.",
+  "native": {
+    "controls": 19,
+    "runs": 2,
+    "cases": [
+      "actual_Mac_package_import_fails_missing_blksize_export",
+      "actual_DupInfo_initializer_rejects_namedtuple_init_arguments",
+      "actual_filter_mutates_live_dict_view",
+      "zero_parent_key_suppresses_parent_attachment",
+      "binary_stage_skips_three_member_bucket",
+      "native_complete_checksum_matches_real_xxhash",
+      "checksum_zero_buffer_returns_empty_digest",
+      "chunk_hash_nondivisible_size_hashes_to_EOF",
+      "chunk_hash_shortread_decrements_requested_instead_of_actual_bytes",
+      "261byte_signature_ignores_later_difference",
+      "binary_compare_uses_stale_stdlib_cache_under_same_metadata_rewrite",
+      "before_delete_callback_rewrite_is_not_revalidated",
+      "documented_skip_exception_preserves_victim",
+      "splitpaths_followlinks_does_not_classify_file_symlink_as_link",
+      "native_DirEntry_is_dir_rejects_positional_follow_symlinks",
+      "walk_error_callback_then_None_unpack_error",
+      "Cache_clear_calls_RLock_locked_missing_on_Python312",
+      "actual_psutil_partition_field_mountpoin_typo",
+      "absolute_hidden_basename_not_recognized_by_POSIX_fallback"
+    ],
+    "observations": {
+      "actual_Mac_package_import_fails_missing_blksize_export": {
+        "returncode": 1,
+        "exception": "ImportError: cannot import name 'blksize' from 'duplicate.utils.fs' (/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dep66-20261015/source/duplicate/utils/fs/__init__.py)"
+      },
+      "actual_DupInfo_initializer_rejects_namedtuple_init_arguments": "TypeError: object.__init__() takes exactly one argument (the instance to initialize)",
+      "actual_filter_mutates_live_dict_view": "RuntimeError: dictionary changed size during iteration",
+      "zero_parent_key_suppresses_parent_attachment": "Falsy parentkey0 notattached; constructor __new__ only",
+      "binary_stage_skips_three_member_bucket": "Explicit3-entry collisionbucket fixture; no naturalxxhashcollision claim, BINARYstage skipped",
+      "native_complete_checksum_matches_real_xxhash": "All64actualbytes hashedwithbuffer7",
+      "checksum_zero_buffer_returns_empty_digest": "Directhelper bufsize0; actualcaller normallyusespositivebuffer",
+      "chunk_hash_nondivisible_size_hashes_to_EOF": {
+        "requested": 10,
+        "actual_hashed": 64
+      },
+      "chunk_hash_shortread_decrements_requested_instead_of_actual_bytes": {
+        "requested": 8,
+        "actual_hashed": 4,
+        "adapter": "Explicitlegal2byte shortreads overactualos.read"
+      },
+      "261byte_signature_ignores_later_difference": "Prefix candidate only, no final duplicate claim",
+      "binary_compare_uses_stale_stdlib_cache_under_same_metadata_rewrite": "Actualstdlib filecmp shallowFalse cache, explicitsamemetadatarewrite; clearscache aftercontrol",
+      "before_delete_callback_rewrite_is_not_revalidated": "Explicitbeforedelete callbackrewrite; newlyownedvictimonly, no realuserdata",
+      "documented_skip_exception_preserves_victim": "DocumentedSkipException skipworks",
+      "splitpaths_followlinks_does_not_classify_file_symlink_as_link": "Actuallstat symlinkmode classifiedasothernode evenfollowlinksTrue",
+      "native_DirEntry_is_dir_rejects_positional_follow_symlinks": "TypeError: is_dir() takes no positional arguments",
+      "walk_error_callback_then_None_unpack_error": "TypeError: cannot unpack non-iterable NoneType object",
+      "Cache_clear_calls_RLock_locked_missing_on_Python312": "AttributeError: '_thread.RLock' object has no attribute 'locked'",
+      "actual_psutil_partition_field_mountpoin_typo": "AttributeError: 'sdiskpart' object has no attribute 'mountpoin'",
+      "absolute_hidden_basename_not_recognized_by_POSIX_fallback": "ActualPOSIX fallback onMac checksfullpathprefix, UF_HIDDENunset"
+    },
+    "logs": {
+      "docs/research/dedup-500/dep66-native-run1-20261015.log": "6fa8498e48706e4517ddba3fc1cc191f011bb80f75a63ee54e7d51f21f259f2e",
+      "docs/research/dedup-500/dep66-native-run1-20261015.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "docs/research/dedup-500/dep66-native-run2-20261015.log": "6fa8498e48706e4517ddba3fc1cc191f011bb80f75a63ee54e7d51f21f259f2e",
+      "docs/research/dedup-500/dep66-native-run2-20261015.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "adapters": [
+      "EntireASTmodules unchangedexceptrelative-import statements omitted andbound explicitly toactualselectedoriginalnames. Common/POSIX/init/structs/core, actualnativePython andrealxxhash/psutil/send2trash; send2trashneverinvoked.",
+      "FullMacpackageimport executedunchangedandfailsmissingblksize. Remainingcontrols notwholepackageexecution.",
+      "Tuple.__new__ suppliesexplicitDupInfofixtures bypassingbroken__init__ solelyfor _filter,parentattachment,binaryskip controls; no algorithm or classfix.",
+      "Two-byte readwrapper and beforedelete rewrite areexplicitfault schedules. No naturalhashcollision claim."
+    ],
+    "script": "scripts/qualify-dep66-native-controls-20261015.py",
+    "script_sha256": "6cb3663616cc64f8a899afea8965f7abff10a9b1cb29241e96316cdf75de5eb4",
+    "dependency_pins": "docs/research/dedup-500/dep66-installed-dependency-pins-20261015.json",
+    "dependency_pins_sha256": "04e34f10d79063beed2de8f7eb02c68a3ea4fe1b22e1264527c5ca625dccc317",
+    "versions": {
+      "xxhash": "3.6.0",
+      "psutil": "7.1.0",
+      "Send2Trash": "1.8.3"
+    }
+  },
+  "upstream_tests_run": false,
+  "original_test_inventory": "No original runtime tests tracked; toxdefault runscompileall, otherjobs lint/packaging/READMEchecks.",
+  "findings": [
+    "Multi-stage type/size/signature/sides/hash/binarypipeline. Twofilegroups usebinarycomparison; threeormore groups skipBINARYstage. Explicitbucketfixture demonstratedskip, notnaturalxxhashcollision orfullpackagefalsegroup.",
+    "_chunksum subtraction usesrequestedbufferlength: nondivisiblesize10/buffer4 hashes64actualbytes toEOF; explicit2byteshortread schedule forsize8/buffer4 hashesonly4bytes. No performanceclaim fromcounts.",
+    "Actual_binarycmp usesstdlibfilecmp shallowFalse cache: sameinode/size/restoredmtime rewrite yieldsstaleequaluntilclear_cache, despiteunequalactualbytes.",
+    "Actual_purge beforedeletecallback canrewritenewlyownedvictim touniquecontent, stilldeletedwithoutrevalidation. DocumentedSkipException preservesvictim.",
+    "ModernMacfullpackageimport failsmissingblksize export. Selectednativeclasses exposeDupInfo objectinitTypeError, dictmutationiteration error, zero-parentkeylostattachment, Python312RLocklockedmissing andpsutilmountpoin typo. These are scopedmodernenvironment observations, not alloriginalPythonversions.",
+    "Actualsplitpaths symlink classifiedasothernode evenfollowlinksTrue; nativeDirEntry is_dir positionalargument fails, missingwalkroot triggerscallbackthenNoneunpack error. POSIXfallback absolute.hidden basename notrecognizedwithoutUF_HIDDEN.",
+    "is_os64 importedfunction usedastruthyconditionin common/core ratherthancalled; static32bitselectionconcern, no32bitexecution. Package setup only listsduplicate, nestedsubpackage inclusionunqualified."
+  ],
+  "limits": [
+    "Nooriginaltests tracked: toxdefaultcompileall only. No original2017Python/dependency/platform/directIO/pyobjc/Windows/nativeLinux/fullpipeline/CLI orperformancequalification.",
+    "Allwrites/removes newlyownedfixtures; no trash, realmedia,sourceproject,userfiles orproductionadoption.",
+    "All23trackedtext read includingbothREADMEforms andallplatformmodules,2trackedimages viewed; Windows/Linux/PyObjC/directIO/fullpackageoriginalenvironment notexecuted.",
+    "Tuplefixtures bypassbrokenDupInfoinit solelytoreach selectedfunctions, not an upstreamfix orendtoendqualification.",
+    "No Rootproduction change ormeasuredspeedup. ExistingRootshortread/mutation/snapshot guards requireowncurrentevidence."
+  ],
+  "evidence_pins": {
+    "docs/research/dedup-500/dep66-full-text-pins-20261015.json": "6d55f6a702d9a94a01c620245c9d52bc9cc49d0e72f10c40c4b29a225d617f16",
+    "docs/research/dedup-500/dep66-upstream-tree-20261015.json": "9bb4efcf3ed44ab9a5b155ddb5fb62438a86f38f332486cdd38d377aeca20c48",
+    "scripts/audit-dep66-complete-source-20261015.py": "137d01ba34e022c6fb40c8425c0dc650d66a9eb405334839d1839ca02a7549c5",
+    "docs/research/dedup-500/dep66-installed-dependency-pins-20261015.json": "04e34f10d79063beed2de8f7eb02c68a3ea4fe1b22e1264527c5ca625dccc317"
+  }
+}
