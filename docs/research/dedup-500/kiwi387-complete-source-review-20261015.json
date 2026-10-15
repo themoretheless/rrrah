@@ -1,0 +1,28 @@
+{
+  "status": "complete_source_review_with34_scoped_wrapper_controls",
+  "repository": "Fingertips/FTpHashKiwiMatcher",
+  "commit": "44d58132e857cf619ba9a029a3bf37cc229870a6",
+  "whole_repo_complete": true,
+  "scope": "All seven pinned text blobs fully read; original Objective-C++ wrapper compiled unchanged with real Apple Foundation/ARC and explicit scripted Kiwi-base/pHash adapters. 34 controls and installer/podspec syntax checks passed. No actual pHash algorithm, image decoder, Kiwi registration, dependency installation, ABI/ownership, image quality, package or platform qualification; no production adoption.",
+  "source_manifest": "docs/research/dedup-500/kiwi387-complete-source-20261015.json",
+  "runtime_audit": "docs/research/dedup-500/kiwi387-controls-audit-20261015.json",
+  "observations": [
+    "Actual default forwarded threshold0.999 differs from header0.999999",
+    "Negative score0.25 retained in ccp property after later positive backend result1.0, so shouldNot diagnostic prints stale score",
+    "Real Foundation class validation/exceptions and both digest-error checkpoints exercised",
+    "Invalid -1/2/NaN/infinite thresholds delegated unchanged to scripted backend",
+    "Nil path forwarded as null C pointer, mutable NSString path remains aliased, non-file NSURL wrapper forwards path component"
+  ],
+  "static_findings": [
+    "README documents JPEG-only support; PNG/audio/video/iOS remain unimplemented TODOs.",
+    "Installer uses unpinned Homebrew dependencies; podspec invokes brew and lacks a source commit/tag pin.",
+    "MIT wrapper declaration does not resolve licensing of required pHash/CImg dependencies."
+  ],
+  "transfer": [
+    "Validate finite thresholds against an explicit score contract.",
+    "Refresh score diagnostics on every outcome.",
+    "Own immutable input paths and define file-URL admission.",
+    "Keep perceptual candidates separate from exact identity and verify backend errors."
+  ],
+  "adoption": "Reference only; no foreign implementation copied into production."
+}

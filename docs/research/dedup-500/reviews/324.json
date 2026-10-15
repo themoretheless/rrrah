@@ -2,9 +2,9 @@
   "index": 324,
   "repository": "DragonOfMath/dupe-images",
   "commit": "0c9b14a02ccd639760240e2a3b20defc3a697036",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All18regular text blobs fully read and Gitblob SHA1/size/SHA256 verified with fresh immutable commit/tree binding. Twelve unchanged originalJS controls, two fresh Node22 process replays, explicit synthetic Jimp/File/filesystem/FilePromise adapters and module case aliases. Original destructive demo not executed; no real Jimp/image/hash/deletion/package/platform/resource or production adoption qualification.",
   "decision": "reference",
-  "finding": "Jimp duplicate-image checker/remover with test entrypoint; inspect pixel tolerance and mutation safeguards before reuse.",
+  "finding": "All18blobs read;12original-JS controls reproduce ignored exact option, order-dependent groups, stale-cache pruning, basename loss and empty/singleton defects. Scripted image adapters only; no adoption.",
   "available_source_evidence": [
     {
       "path": "dupe-image-checker.js",
@@ -45,6 +45,126 @@
       "lines": 24,
       "source": true,
       "test": true
+    },
+    {
+      "path": ".gitattributes",
+      "local": "06-gitattributes",
+      "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/.gitattributes",
+      "truncated": false,
+      "lines": 2,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "07-gitignore",
+      "sha256": "31c83cbb99f23a650bb8417a6f128cf80d2c6e9b510c78eaeb80705a177fffbd",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/.gitignore",
+      "truncated": false,
+      "lines": 3,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "package.json",
+      "local": "08-package.json",
+      "sha256": "96b098f52eb7868a42026a52fce71f752baa67708c7b60f8fd2b5f9de0e46f1f",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/package.json",
+      "truncated": false,
+      "lines": 9,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "utils/FileCache.js",
+      "local": "09-utils--FileCache.js",
+      "sha256": "1513cb4e158f994b8375f8e034f9556b3bafdc707871faf346b1aaf2a77160bf",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/FileCache.js",
+      "truncated": false,
+      "lines": 38,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/FileExplorer.js",
+      "local": "10-utils--FileExplorer.js",
+      "sha256": "00e3a768c67f7526d61ca5cad36d289a2c569d944c60f2127e133f8728457174",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/FileExplorer.js",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/FilePromise.js",
+      "local": "11-utils--FilePromise.js",
+      "sha256": "20c9a8910f2a21887c71c5e06a35eb8721ac02891e085a2000031955249f0d84",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/FilePromise.js",
+      "truncated": false,
+      "lines": 293,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/Logger.js",
+      "local": "12-utils--Logger.js",
+      "sha256": "c331d44a87abb912ae1de7474be618395a1670de1d2e7d4cf3c3cb198dfd6a29",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/Logger.js",
+      "truncated": false,
+      "lines": 91,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/array.js",
+      "local": "13-utils--array.js",
+      "sha256": "60fc7dcaa01c59f591d4703436919f6099031220862875354054c4289b9b3e65",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/array.js",
+      "truncated": false,
+      "lines": 42,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/file.js",
+      "local": "14-utils--file.js",
+      "sha256": "469f2da1aaba146bf1559733b32bad00eb070529cd68cf22a097b4c8a95d6c4e",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/file.js",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/formatting.js",
+      "local": "15-utils--formatting.js",
+      "sha256": "a3edc52c86a78cb6a52a19660559c97de0659bf568449e5227a8c4cb95117f5f",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/formatting.js",
+      "truncated": false,
+      "lines": 101,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/hex.js",
+      "local": "16-utils--hex.js",
+      "sha256": "12e6555c602ed52217ab688f1bf5b5ec0709ea3a929068981907c0ebe1648667",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/hex.js",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/read-all.js",
+      "local": "17-utils--read-all.js",
+      "sha256": "a8b4343bab41f4a4a889f2ef10231c1b824101261d935d0976514319246493b0",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/utils/read-all.js",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
@@ -74,5 +194,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/dragon324-complete-source-review-20261015.json"
 }

@@ -1251,6 +1251,63 @@ fn exact_collection_policy(order: SearchOrder) -> ExactPortfolioCollectionPolicy
     }
 }
 #[test]
+fn exact_collection_missing_sources_never_publish_partial_duplicates() {
+    for order in [SearchOrder::NativeFirst, SearchOrder::ModelFirst] {
+        for missing in 0..3 {
+            let dir = tempfile::tempdir().unwrap();
+            let (files, weights) = collection_fixture(dir.path());
+            for (_, request) in &files {
+                std::fs::write(&request.path, b"same opaque bytes").unwrap();
+            }
+            std::fs::remove_file(&weights).unwrap();
+            std::fs::remove_file(&files[missing].1.path).unwrap();
+            let budget = MemoryBudget::new(8 * 1024 * 1024);
+            for reverse in [false, true] {
+                let mut input = files.clone();
+                if reverse {
+                    input.reverse();
+                }
+                let result = scan_exact_projected_portfolio_collection_with(
+                    input,
+                    &weights,
+                    exact_collection_policy(order),
+                    &[1.],
+                    &budget,
+                    |_, _, _, _, _| panic!("missing source must not invoke inference"),
+                    || false,
+                );
+                assert!(
+                    matches!(result, Err(ExactPortfolioCollectionError::Source { id, .. })
+                        if id == files[missing].0),
+                    "{order:?} missing={missing} reverse={reverse}: {result:?}"
+                );
+                assert_eq!(budget.used(), 0);
+            }
+            std::fs::write(&files[missing].1.path, b"same opaque bytes").unwrap();
+            let report = scan_exact_projected_portfolio_collection_with(
+                files,
+                &weights,
+                exact_collection_policy(order),
+                &[1.],
+                &budget,
+                |_, _, _, _, _| panic!("recovered exact copies must skip inference"),
+                || false,
+            )
+            .unwrap();
+            assert_eq!(report.pairs().len(), 3);
+            assert!(
+                report
+                    .pairs()
+                    .iter()
+                    .all(|pair| matches!(pair.evidence, ExactPortfolioPairOutcome::ExactBytes))
+            );
+            drop(report);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+}
+
+#[test]
 fn exact_collections_empty_singleton_and_copies_need_no_decoder_weights_or_provider() {
     for n in 0..=3 {
         let dir = tempfile::tempdir().unwrap();

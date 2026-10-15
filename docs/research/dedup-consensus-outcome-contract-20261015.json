@@ -1,0 +1,19 @@
+{
+  "status": "passed_exact_source_consensus_contract_36_combinations",
+  "source_sha256": "52508852209d876dc728fe56e4de37ceaef5b0ff99e0ac5d5f36d6a0dba4746b",
+  "test_sha256": "294dffccf43d95a6c6ad633d10eebd979e6a68c5b3073358d754be6a09574295",
+  "harness": "/private/tmp/rrrah-consensus-outcome-contract-20261015/contract.rs",
+  "harness_sha256": "2169be4d6ab1b3424c1d86abccea078a46c45d6819a63610eac13598a84127ff",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "-Dwarnings",
+    "/private/tmp/rrrah-consensus-outcome-contract-20261015/contract.rs",
+    "-o",
+    "/private/tmp/rrrah-consensus-outcome-contract-20261015/contract"
+  ],
+  "stdout": "\nrunning 1 test\ntest consensus_all_directional_outcomes_preserve_unknown ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+  "scope": "Unchanged current production summary types/method and unchanged newly added integration test body, extracted into standalone Rust module; 9 directional outcomes x4 model-attempt flags. No decoder/provider/whole integration binary/native corpus execution. Full combined current Root gate remains required."
+}

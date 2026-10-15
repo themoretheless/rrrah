@@ -2,9 +2,9 @@
   "index": 339,
   "repository": "Genbox/FindDupes",
   "commit": "639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All19text blobs fully read and verified against Gitblob SHA1/size/SHA256 with fresh immutablecommit/tree binding. All original production C# files compiled byte unchanged under installed.NET8.0.426 with compile-only CommandLine adapter,17controls passed. Six upstream hash vectors reproduced, not original xUnit runner/netcore2.2/wholeCLI/deletion/platform/resource qualification. No source adoption.",
   "decision": "reference",
-  "finding": "C# file details comparer truncates SHA1 to UInt64; needs byte confirmation and collision fixtures.",
+  "finding": "All19blobs reviewed;17actual.NET controls reproduce unreadable same-size records grouped via default hash0; no byte confirmation. Size pregrouping useful, unsafe publication not adopted.",
   "available_source_evidence": [
     {
       "path": "src/FindDupes/FileDetailsComparer.cs",
@@ -55,6 +55,126 @@
       "lines": 30,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitattributes",
+      "local": "07-gitattributes",
+      "sha256": "dcc4e04a9952ff446b9d78c624d80379b0f20f5817a89b9b2b1ab8b55b82fd52",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/.gitattributes",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "08-gitignore",
+      "sha256": "8ad082f13d3ce1811c74fb217082ee9356677e3a1f269128da872f254f82cc3b",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/.gitignore",
+      "truncated": false,
+      "lines": 157,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "Properties.targets",
+      "local": "09-Properties.targets",
+      "sha256": "4683d3ee3c347a54fc14c350e6606ac69b5bdbacc70a024f8ec0625299733857",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/Properties.targets",
+      "truncated": false,
+      "lines": 16,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes.Tests/FindDupes.Tests.csproj",
+      "local": "10-src--FindDupes.Tests--FindDupes.Tests.csproj",
+      "sha256": "3ac81490a8b9ed969ff551a19938a553ecb592c74275565b48ece6a4d4e791ee",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes.Tests/FindDupes.Tests.csproj",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": true
+    },
+    {
+      "path": "src/FindDupes.sln",
+      "local": "11-src--FindDupes.sln",
+      "sha256": "78818002ec08a2107241d249a1899600c544b11d09fbe32bc2c0397aff826585",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes.sln",
+      "truncated": false,
+      "lines": 36,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/FileDetails.cs",
+      "local": "12-src--FindDupes--FileDetails.cs",
+      "sha256": "f83832d811d81ce6ab25dc82187d900fbfd64b10bb6d9471eb381b23d6d95af4",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/FileDetails.cs",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/FileFilter.cs",
+      "local": "13-src--FindDupes--FileFilter.cs",
+      "sha256": "967c0ebf10ecd6c77c7118e63b70df0caacd5f17714e763b4547dbdb56ec38fa",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/FileFilter.cs",
+      "truncated": false,
+      "lines": 37,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/FindDupes.csproj",
+      "local": "14-src--FindDupes--FindDupes.csproj",
+      "sha256": "259ee45ec151fcbaac9ca6e2dd5bb1cfff7622a26d30ca7b89b2de18db45bb54",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/FindDupes.csproj",
+      "truncated": false,
+      "lines": 18,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/Hash/xxHash.cs",
+      "local": "15-src--FindDupes--Hash--xxHash.cs",
+      "sha256": "cd8f3973ad53e5f4e59067392a10c1b5216681685b87d3a10e609a5e038631b0",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/Hash/xxHash.cs",
+      "truncated": false,
+      "lines": 158,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/Options.cs",
+      "local": "16-src--FindDupes--Options.cs",
+      "sha256": "e16667e14fc23f5f143cb57c91e97270f66b640aa17da0e2747d7278239bea93",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/Options.cs",
+      "truncated": false,
+      "lines": 56,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/Program.cs",
+      "local": "17-src--FindDupes--Program.cs",
+      "sha256": "398a9556bfd1f16e556cb32a123037b4557f08fbb4037dfb0efd250294abec3b",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/Program.cs",
+      "truncated": false,
+      "lines": 238,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/FindDupes/QueueStatus.cs",
+      "local": "18-src--FindDupes--QueueStatus.cs",
+      "sha256": "45e13bade811f992282d456085f9481f15f78b53ec8578e0eaac8a5433e611b5",
+      "url": "https://github.com/Genbox/FindDupes/blob/639673bdeb37d70dd5dd8b8a2d3c4aea13ff57a6/src/FindDupes/QueueStatus.cs",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
@@ -84,5 +204,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/genbox339-complete-source-review-20261015.json"
 }

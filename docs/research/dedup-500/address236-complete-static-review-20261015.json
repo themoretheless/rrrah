@@ -1,0 +1,85 @@
+{
+  "status": "complete11blob_static_review_domain_excluded",
+  "repository": "openvenues/address_deduper",
+  "commit": "9b503bc979a6f6c809f3ea812879fba465ef6d76",
+  "whole_repo_complete": true,
+  "scope": "All11regular text blobs fully read and size/GitblobSHA1/SHA256 verified, immutable commit/tree binding checked. Static review only; Python2-era Flask/storage/address_normalizer dependencies not installed or executed. No HTTP/database/deletion/network server/real address matching or production adoption qualification.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "git_blob_sha1": "db4561eaa1d4f3ed01af114a315a0053776ffed0",
+      "bytes": 675,
+      "sha256": "2032b00213f205aaafd47614716a5bfa0ee4134e05bf40280f0dfbe5780deeec"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob_sha1": "7f3618e208395897a518f8af879c55db5e0f4258",
+      "bytes": 1078,
+      "sha256": "c6879a69cfa7cff794c237bf09f89895a0c21e89c03637b620584f5d50190443"
+    },
+    {
+      "path": "README.md",
+      "git_blob_sha1": "db8101f79f7a43762751f9bb46acb764889486ae",
+      "bytes": 294,
+      "sha256": "d4a5d4eb4699e30c039d55291c9c5893e7e152f348fb0a72b3fea47884141e47"
+    },
+    {
+      "path": "address_deduper/__init__.py",
+      "git_blob_sha1": "ef8ff8375c6411bf42bb232089bdcceaf38ab276",
+      "bytes": 765,
+      "sha256": "260f1179c54cfea1526d3a1578cf97791769f70e4d09448e8e5554e75296a860"
+    },
+    {
+      "path": "address_deduper/config.py",
+      "git_blob_sha1": "8a7ba4ca677f7429cac8567c426467d60dc69cb3",
+      "bytes": 2352,
+      "sha256": "d9dd3724d11260b12908ac55097ec07c773eea952200b094f3fecdbb1b051b91"
+    },
+    {
+      "path": "address_deduper/db.py",
+      "git_blob_sha1": "04fdf3e87407780e2bc6d02492af81620734019d",
+      "bytes": 1219,
+      "sha256": "21923313b253dc6a73e7f49a549b860c30ed7c9b5525b5e8c51ca17d5f8188bc"
+    },
+    {
+      "path": "address_deduper/views/__init__.py",
+      "git_blob_sha1": "f5d30aee0438b6818bc118647a6d8ef1f3c732bd",
+      "bytes": 339,
+      "sha256": "546bf16d6ebf1a35121ddafac84075a2bfd44a93f2456a0a5ae3be2a78918aa4"
+    },
+    {
+      "path": "address_deduper/views/address.py",
+      "git_blob_sha1": "a56f6178e63ba1f0e0e66a912bf6b41cba983746",
+      "bytes": 3930,
+      "sha256": "fbcc3795224b53d6da2f2a6937b25622a14071ef739ee44146ad196b01a313ac"
+    },
+    {
+      "path": "address_deduper/views/base.py",
+      "git_blob_sha1": "bafedf65122a49f1881485795138817492cd9936",
+      "bytes": 2485,
+      "sha256": "e40559f152e8d838e720b5d35584648b6bb65cb085637169089e772aed3a9d8f"
+    },
+    {
+      "path": "app.py",
+      "git_blob_sha1": "0511d3b6707c0dca6fb468c909abf2078591b832",
+      "bytes": 2008,
+      "sha256": "6b9ee4b3e921110e7d16fd51dc617fce60530460adf77c954215865a82410381"
+    },
+    {
+      "path": "requirements.txt",
+      "git_blob_sha1": "a696d5df02607c05248d35192f27dd2b0107d5ab",
+      "bytes": 117,
+      "sha256": "95cba9ada855904c7c091745ab27bce4543e21489157417a93866f917f20828b"
+    }
+  ],
+  "findings": [
+    "Address matching and normalization delegated to external unpinned address_normalizer Git dependency; no image/file deduplication algorithm in this repository.",
+    "Latitude or longitude zero fails truthiness-based required-coordinate validation in both query and JSON routes.",
+    "Default CLEAN_DB_ON_START=True routes storage initialization through shutil.rmtree; otherwise a LOCK file may be unlinked without checking an active owner. Static finding only; no deletion executed.",
+    "JSON null/nonobject reaches data.get outside the request.json exception handler; malformed batch shapes delegated to external Address constructor.",
+    "Production server ignores requested host and binds an empty host string; signal handler references manager outside its local main scope and misspells sys.stederr in one branch.",
+    "Python2 metaclasses/iteritems and legacy Flask extensions require historical dependency/runtime qualification; no tests are present in the pinned tree."
+  ],
+  "decision": "reject-domain",
+  "transfer": "Coordinate boundary admission and storage ownership require explicit contracts. External entity-resolution dependency offers no verified image/file optimization to adopt."
+}

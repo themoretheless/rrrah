@@ -9,7 +9,7 @@ for row in m['source_files']:assert sha(Path(d['source'])/row['path'])==expected
 assert sha(d['cargo_log'])==d['cargo_log_sha256'];body=Path(d['cargo_log']).read_text();headers=list(re.finditer(r'^\s*Running .+ \((/[^\n]+)\)$',body,re.M));assert headers
 retained={r['original']:r for r in d['retained_binaries']};assert set(retained)=={h[1]for h in headers};out=[]
 for i,h in enumerate(headers):
- row=retained[h[1]];assert sha(row['copy'])==expected[row['path']]and sha(row['inventory'])==row['inventory_sha256']and row['inventory_returncode']==0
+ row=retained[h[1]];assert sha(row['copy'])==row['sha256']and sha(row['inventory'])==row['inventory_sha256']and row['inventory_returncode']==0
  inv=Path(row['inventory']).read_text();names=set(re.findall(r'^(.+): test$',inv,re.M));assert not re.findall(r'^(.+): benchmark$',inv,re.M)
  fresh=subprocess.run([row['copy'],'--list'],capture_output=True,text=True);assert fresh.returncode==0 and set(re.findall(r'^(.+): test$',fresh.stdout,re.M))==names
  section=body[h.end():headers[i+1].start()if i+1<len(headers)else len(body)];results=dict(re.findall(r'^test (.+) \.\.\. (ok|FAILED|ignored[^\n]*)$',section,re.M));assert set(results)==names,(h[1],names-set(results),set(results)-names)

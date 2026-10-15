@@ -2363,6 +2363,34 @@ fn consensus_native_support_and_final_mutation_cancel_are_guarded() -> TestResul
     Ok(())
 }
 #[test]
+fn consensus_all_directional_outcomes_preserve_unknown() {
+    use rrrah_dedup::search_portfolio::{NativeBankConsensusEvidence, NativeBankDirectionSummary};
+    for forward in [None, Some(false), Some(true)] {
+        for reverse in [None, Some(false), Some(true)] {
+            for forward_model in [false, true] {
+                for reverse_model in [false, true] {
+                    let evidence = NativeBankConsensusEvidence {
+                        forward: NativeBankDirectionSummary {
+                            support: forward,
+                            model_attempted: forward_model,
+                        },
+                        reverse: NativeBankDirectionSummary {
+                            support: reverse,
+                            model_attempted: reverse_model,
+                        },
+                    };
+                    let expected = match (forward, reverse) {
+                        (Some(true), Some(true)) => Some(true),
+                        _ => None,
+                    };
+                    assert_eq!(evidence.supported(), expected);
+                }
+            }
+        }
+    }
+}
+
+#[test]
 fn consensus_unknown_runs_reverse_and_provider_failure_stays_error() -> TestResult {
     let dir = tempfile::tempdir()?;
     let (r, w) = model_fixture::fixture(dir.path());

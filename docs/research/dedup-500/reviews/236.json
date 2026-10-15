@@ -2,9 +2,9 @@
   "index": 236,
   "repository": "openvenues/address_deduper",
   "commit": "9b503bc979a6f6c809f3ea812879fba465ef6d76",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All11regular text blobs fully read and size/GitblobSHA1/SHA256 verified, immutable commit/tree binding checked. Static review only; Python2-era Flask/storage/address_normalizer dependencies not installed or executed. No HTTP/database/deletion/network server/real address matching or production adoption qualification.",
   "decision": "reject-domain",
-  "finding": "Address-normalizer ingestion app; entity-resolution domain.",
+  "finding": "All11blobs read: external address entity-resolution service, no image/file dedup core; zero-coordinate admission and storage cleanup ownership gaps found statically. No runtime or adoption.",
   "available_source_evidence": [
     {
       "path": "address_deduper/__init__.py",
@@ -55,6 +55,46 @@
       "lines": 91,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "07-gitignore",
+      "url": "https://github.com/openvenues/address_deduper/blob/9b503bc979a6f6c809f3ea812879fba465ef6d76/.gitignore",
+      "sha256": "2032b00213f205aaafd47614716a5bfa0ee4134e05bf40280f0dfbe5780deeec",
+      "truncated": false,
+      "lines": 54,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "address_deduper/views/__init__.py",
+      "local": "08-views-init.py",
+      "url": "https://github.com/openvenues/address_deduper/blob/9b503bc979a6f6c809f3ea812879fba465ef6d76/address_deduper/views/__init__.py",
+      "sha256": "546bf16d6ebf1a35121ddafac84075a2bfd44a93f2456a0a5ae3be2a78918aa4",
+      "truncated": false,
+      "lines": 11,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app.py",
+      "local": "09-app.py",
+      "url": "https://github.com/openvenues/address_deduper/blob/9b503bc979a6f6c809f3ea812879fba465ef6d76/app.py",
+      "sha256": "6b9ee4b3e921110e7d16fd51dc617fce60530460adf77c954215865a82410381",
+      "truncated": false,
+      "lines": 70,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "requirements.txt",
+      "local": "10-requirements.txt",
+      "url": "https://github.com/openvenues/address_deduper/blob/9b503bc979a6f6c809f3ea812879fba465ef6d76/requirements.txt",
+      "sha256": "95cba9ada855904c7c091745ab27bce4543e21489157417a93866f917f20828b",
+      "truncated": false,
+      "lines": 5,
+      "source": false,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
@@ -84,5 +124,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/address236-complete-static-review-20261015.json"
 }

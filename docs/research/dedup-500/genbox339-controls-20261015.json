@@ -1,0 +1,32 @@
+{
+  "status": "failed_restore",
+  "producer_sha256": "619942b5f8dc6d3e2cb5c955542e050fb4cab52ba54371bea10c2df6358211f8",
+  "source_pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/02-FileDetailsComparer.cs": "08261b1994c62ebf9e52a45cb0d679c008bf4cd421dd12f1aaabbf4b14853b29",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/03-IFileHash.cs": "64a75454fe2b496c794dc84151132b5a5ddabad43f705a84c4d65f2ab52f52ac",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/04-SHA1Hash.cs": "ffdd4e5e1166939f01bf6b0e73d183fdd151ca27de9503eb415931c261f2bc7f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/12-src--FindDupes--FileDetails.cs": "f83832d811d81ce6ab25dc82187d900fbfd64b10bb6d9471eb381b23d6d95af4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/13-src--FindDupes--FileFilter.cs": "967c0ebf10ecd6c77c7118e63b70df0caacd5f17714e763b4547dbdb56ec38fa",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/15-src--FindDupes--Hash--xxHash.cs": "cd8f3973ad53e5f4e59067392a10c1b5216681685b87d3a10e609a5e038631b0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/16-src--FindDupes--Options.cs": "e16667e14fc23f5f143cb57c91e97270f66b640aa17da0e2747d7278239bea93",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/17-src--FindDupes--Program.cs": "398a9556bfd1f16e556cb32a123037b4557f08fbb4037dfb0efd250294abec3b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Genbox--FindDupes/18-src--FindDupes--QueueStatus.cs": "45e13bade811f992282d456085f9481f15f78b53ec8578e0eaac8a5433e611b5"
+  },
+  "harness_sha256": "fbb3cf3407b3af07b24e1a5620ca6f2d3dd0c250c42cac3e0f63382b7efba0cf",
+  "commands": [
+    {
+      "name": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Controls.csproj",
+        "--configfile",
+        "/private/tmp/rrrah-genbox339-controls-20261015/NuGet.Config"
+      ],
+      "returncode": 155,
+      "log": "/private/tmp/rrrah-genbox339-controls-20261015/restore.log",
+      "log_sha256": "9589ded88d112ddc878992b744b7d8fd70588d7ee7dd8e18cf328d1b530a81ea"
+    }
+  ],
+  "scope": "All original production C# files copied byte unchanged; real installed .NET8 SHA1/xxHash/LINQ/FileStream/reflection, explicit compile-only CommandLine adapter. Original CLI entrypoint, parser, deletion and UI are never called. Six upstream hash vectors reproduced manually; original xUnit runner not executed. Synthetic absent paths and metadata records only, no real digest collision claim, fullnetcore2.2/package/platform/resource/quality or production adoption qualification."
+}

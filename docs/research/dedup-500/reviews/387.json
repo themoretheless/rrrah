@@ -2,9 +2,9 @@
   "index": 387,
   "repository": "Fingertips/FTpHashKiwiMatcher",
   "commit": "44d58132e857cf619ba9a029a3bf37cc229870a6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All seven pinned text blobs fully read; original Objective-C++ wrapper compiled unchanged with real Apple Foundation/ARC and explicit scripted Kiwi-base/pHash adapters. 34 controls and installer/podspec syntax checks passed. No actual pHash algorithm, image decoder, Kiwi registration, dependency installation, ABI/ownership, image quality, package or platform qualification; no production adoption.",
   "decision": "reference",
-  "finding": "Objective-C/Objective-C++ Kiwi perceptual matcher; source was acquired, but backend normalization and thresholds still require deeper qualification.",
+  "finding": "All7blobs reviewed; 34 original-wrapper controls confirm default-threshold mismatch and stale score diagnostics. Scripted backend only; no pHash quality or production adoption.",
   "available_source_evidence": [
     {
       "path": "FTpHashKiwiMatcher.h",
@@ -24,6 +24,36 @@
       "truncated": false,
       "lines": 110,
       "source": true,
+      "test": false
+    },
+    {
+      "path": "FTpHashKiwiMatcher.podspec",
+      "local": "04-matcher.podspec",
+      "url": "https://github.com/Fingertips/FTpHashKiwiMatcher/blob/44d58132e857cf619ba9a029a3bf37cc229870a6/FTpHashKiwiMatcher.podspec",
+      "sha256": "f7cb1666a3dec87b6a1543f38e4e613f858871a57be124b40a02564df7b98d56",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "TODO",
+      "local": "05-TODO",
+      "url": "https://github.com/Fingertips/FTpHashKiwiMatcher/blob/44d58132e857cf619ba9a029a3bf37cc229870a6/TODO",
+      "sha256": "5016b9c03f3d30559d28d58bcfd690b4c2e0c5c068d62d5c2460550f765d4a85",
+      "truncated": false,
+      "lines": 10,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "install-dependencies",
+      "local": "06-install-dependencies",
+      "url": "https://github.com/Fingertips/FTpHashKiwiMatcher/blob/44d58132e857cf619ba9a029a3bf37cc229870a6/install-dependencies",
+      "sha256": "7ff0a241b0c3b6bfe7ae44dc71f240747c0baf6d34d49d7b8444aef8bf8cdbf8",
+      "truncated": false,
+      "lines": 23,
+      "source": false,
       "test": false
     }
   ],
@@ -54,5 +84,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/kiwi387-complete-source-review-20261015.json"
 }
