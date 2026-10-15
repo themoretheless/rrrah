@@ -1,0 +1,140 @@
+{
+  "status": "partial_source_read_native_metric_radius_graph_controls",
+  "repository": "umbertogriffo/fast-near-duplicate-image-search",
+  "index": 41,
+  "commit": "bba6f78954180611a236dc1fc26042072e44961d",
+  "root_tree": "5dcc93a1890f19d70d47098366aa9e71d31ab4ff",
+  "whole_repo_complete": false,
+  "full_repository_read": false,
+  "tracked_blobs": 594,
+  "tracked_trees": 17,
+  "all_object_hashes_verified": true,
+  "text_blobs": 49,
+  "fully_read_text": [
+    ".gitattributes",
+    ".gitignore",
+    "MANIFEST.in",
+    "Makefile",
+    "README.md",
+    "delete.sh",
+    "docs/INSTALL.md",
+    "docs/PublishingOnTestPyPI.md",
+    "docs/Tests.md",
+    "docs/Todo.md",
+    "install.sh",
+    "installdev.sh",
+    "requirements.txt",
+    "search.sh",
+    "setup.cfg",
+    "setup.py",
+    "src/deduplication/__main__.py",
+    "src/deduplication/commands/__init__.py",
+    "src/deduplication/commands/delete.py",
+    "src/deduplication/commands/helpers.py",
+    "src/deduplication/commands/search.py",
+    "src/deduplication/commands/show.py",
+    "src/deduplication/dataset/ImageToHash.py",
+    "src/deduplication/dataset/__init__.py",
+    "src/deduplication/duplicatefinder/KDTreeFinder.py",
+    "src/deduplication/duplicatefinder/NearDuplicateImageFinder.py",
+    "src/deduplication/duplicatefinder/__init__.py",
+    "src/deduplication/duplicatefinder/cKDTreeFinder.py",
+    "src/deduplication/experiments/__init__.py",
+    "src/deduplication/experiments/compare.py",
+    "src/deduplication/experiments/gather.py",
+    "src/deduplication/experiments/index.py",
+    "src/deduplication/experiments/search.py",
+    "src/deduplication/tests/__init__.py",
+    "src/deduplication/tests/conftest.py",
+    "src/deduplication/tests/test_delete.py",
+    "src/deduplication/tests/test_search.py",
+    "src/deduplication/utils/CommandLine.py",
+    "src/deduplication/utils/FileSystem.py",
+    "src/deduplication/utils/ImgUtils.py",
+    "src/deduplication/utils/PlotUtils.py",
+    "src/deduplication/utils/__init__.py",
+    "src/deduplication/utils/dict_function.py",
+    "uninstall.sh"
+  ],
+  "text_read_remaining": [
+    "LICENSE",
+    "versioneer.py",
+    "src/deduplication/_version.py",
+    "src/deduplication/__init__.py",
+    "datasets/caltech_101_rand_resize/out.csv"
+  ],
+  "binary_images": 545,
+  "viewed_images": [
+    "docs/images/delete.png",
+    "docs/images/phase.png",
+    "docs/images/phash.png",
+    "docs/images/resized_cluster.png",
+    "docs/images/search.png"
+  ],
+  "unviewed_dataset_images": 540,
+  "source_archive_substitution": "GitHubexport-subst changed _version.py18466->18514bytes; extractedcopyrejectedbeforecompletemanifest. ExactoriginalGitblob fetched/verified andstored separately; all594blobs nowmatchtree.",
+  "native_controls": 12,
+  "runs": 2,
+  "logs": {
+    "docs/research/dedup-500/near41-native-controls-run1-20261015.log": "49c12cb2126f1efb61ffd822e8ffd69ccb003464d63c40c7557fd6863a9049f9",
+    "docs/research/dedup-500/near41-native-controls-run1-20261015.stderr.log": "efe80dd26ff22a070940110f1aaf73649bef9a7daa94e8d284fac9f576ae42df",
+    "docs/research/dedup-500/near41-native-controls-run2-20261015.log": "75ffc04513a31e3facc15e72d454210a74be24af538018d6718a215a562a408f",
+    "docs/research/dedup-500/near41-native-controls-run2-20261015.stderr.log": "72d26cd105c84d32ce827d500b48a4292ec42d7c27bbd56677220abcd4f83700"
+  },
+  "observations": {
+    "equal_ties": {
+      "keep": [
+        "image-0"
+      ],
+      "remove": [
+        "image-1"
+      ],
+      "represented": 2,
+      "rows": 4
+    },
+    "modern_pandas_error": "'DataFrame' object has no attribute 'append'",
+    "modern_scipy_error": "Unexpected keyword argument {'n_jobs': 1}",
+    "nibble_numeric_vs_bit_hamming": {
+      "comparison_scope": "Hamming oracle versus documented numeric nibble Manhattan metric, not visual groundtruth",
+      "false_positive_directed_edges": 14,
+      "missing_directed_edges": 48,
+      "pairs": 256,
+      "threshold": 1
+    },
+    "top_k_radius": {
+      "k": 2,
+      "radius_neighbors": 5,
+      "returned": 1
+    }
+  },
+  "dependency_pins": "docs/research/dedup-500/near41-installed-dependency-pins-20261015.json",
+  "dependency_pins_sha256": "fd816000028ab6fae81133bfd43676a094b0513d2f2c3956beea5887f7ca0a32",
+  "script": "scripts/qualify-near41-native-controls-20261015.py",
+  "script_sha256": "948511cccecde1c1d3d13e2e89ac2acbc911277198e13be57bbde7f0661e0165",
+  "adapters": [
+    "Original selected whole classes/functions; top-level bootstrap/imports bypassed",
+    "Two cKDTree compatibility controls rename n_jobs to workers only; actual native SciPy metric/query unchanged",
+    "One explicit shutil.copy IOError, all other helper fileIO actualownedfixtures"
+  ],
+  "scope": "Selected unchangedwholeclasses/functions with actualsklearn/scipy/Pandas/Pillow/ImageHash/nativeownedFS. Syntheticnumeric hashvectors, notvisualgroundtruth. All5READMEtrackeddiagrams/images viewed: pHash/index/search/deleteflow, fivepotatoesresult andtSNEcluster. Dataset540images notviewed, remaining5textblobs notread: cannotclaimcomplete repository or incrementfullcounter.",
+  "findings": [
+    "Topk includes selfandcanmissotherradiusmatches; equalhashfirstneighboranchor loses2of4rows withk2.",
+    "Greedy chain removesrowwithoutretainedneighborwithindistance threshold.",
+    "NumerichexManhattan differsfrombitHamming:256directednibblepairs/14extra48missingedgesatthreshold1; nativeKDTreecorrectforitsownnumericmetric.",
+    "OriginalcKDTree n_jobs incompatiblewithmodernSciPy; explicitkeyword-onlyshim reveals _find p1 vs _find_all p2 mismatchforEuclidean andk1squeezedshapeerror.",
+    "OriginalPandasappendcallfails modernPandas; realdhashflatdifferentpixelscanagree, noidentity proof.",
+    "ExplicitcopyIOfailure swallowedbyoriginalbackuphelper, thennewlyownedoriginaldeleted; no externaldata actions."
+  ],
+  "limits": [
+    "Modern dependencies differ from original2019requirements; incompatibilities reported rather than upstreamsuite pass",
+    "Synthetic hash vectors compare radius/metric/graph contracts, not calibrated visual quality",
+    "No multiprocessing/CLI/upstreamtestdataset campaign/bootstrap/fullrepository review or performance claim",
+    "No production adoption"
+  ],
+  "remaining": [
+    "Readremaining5textblobs including Versioneer andlicense",
+    "Visuallyreview all540datasetimages; retainperfilepins andcoverage",
+    "Original2019dependency/upstreamsuite/fullCLI/multiprocessing/platform/corpusquality/performance unqualified",
+    "No Rootproductionadoption ornewlibraryspeedup"
+  ]
+}
