@@ -1,0 +1,39 @@
+{
+  "status": "verified_fresh_complete_current_cache_integration_scope",
+  "passed": 10,
+  "failed": 0,
+  "ignored": 0,
+  "filtered": 0,
+  "inventory": [
+    "atomic_replacement_and_cancel_preserve_previous_cache",
+    "cache_preserves_every_bit_of_all_transform_hash_channels",
+    "cache_publication_child",
+    "concurrent_process_writers_publish_only_complete_single_writer_caches",
+    "disk_persistence_is_deterministic_and_rejects_invalid_values",
+    "every_serialized_bit_corruption_is_rejected",
+    "process_exit_during_temp_write_preserves_previous_publication_and_retry",
+    "roundtrip_requires_content_recipe_and_frame_identity",
+    "unwritable_parent_refuses_before_publication_and_preserves_retry",
+    "zero_budget_and_owned_values_preserve_previous_entry"
+  ],
+  "corruption_bit_cases": 3264,
+  "wire_bit_cases": 2048,
+  "producer_report": "docs/research/dedup-durable-cache-v2-20261016.json",
+  "producer_report_sha256": "29a2a30d8a371061e8790f6ed484612917e0a2c597b92eb09b085fed98075328",
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/tests",
+  "binary_sha256": "3eb0712e5f586a8a75da14d31dde21fa33890ba0b876c6d67159ffe5166262b9",
+  "library": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/librrrah_dedup.rlib",
+  "library_sha256": "3be93c994baef459928948345906189a4b80931d7d39e16371fb6659244c519b",
+  "source_pins": {
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/tests/cache.rs": "277ca6e0603b4d3bb0bea0c49921b196efcde92655084fec1f9b3ce49fa85339",
+    "crates/rrrah-dedup/src/local.rs": "c89c2b0841078177077704e4ab89123215f815dc2bfe8d1e435999ed1ea4ad3c"
+  },
+  "auditor_sha256": "76ba85815e8cd8c0b89aa2d8ce8f94606485835cd82f69d47616fd56580e90cb",
+  "scope": "Freshsame10unchangedfullcacheintegrationtests, wholecurrentcache/pixels modules, exactselectedLocalError/reserve_slot helpers, realcacheddependencies/directrustcMacARM. Originalroot-leveltestnames preserved forselfspawnedpublication controls. Strict-Dwarnings build;dead_code allowance appliesonlyisolatedselectedlocalhelpermodule. Recipe/content/framekey, ownedvalues,budget,allbitscorruption,atomic/concurrentprocess/cancellation/crashpublication controls; durableownedrawbinary/logs/sources retained. No fullCargo/wholecrate/decode/platform/powerloss/hardRSS/performance or speedup proof.",
+  "limits": [
+    "Nativefull10integrationtesttarget only, selectedcache/pixels library; notfullCargo/decoder/wholecrate/currentworkspace/platform/physicalpowerloss/hardRSS/performanceproof.",
+    "Bitcasecounts derive fromunchangedtestbodyloopbounds andactualcompleteexecutedtestinventory, not independentformatqualitycases."
+  ]
+}

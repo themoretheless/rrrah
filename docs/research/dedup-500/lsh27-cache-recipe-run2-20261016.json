@@ -1,0 +1,42 @@
+{
+  "controls": [
+    {
+      "control": "changed_public_ngram_reuses_stale_cached_recipe",
+      "stale_same_object": true,
+      "different_from_fresh_recipe": true
+    },
+    {
+      "control": "changed_public_hashbytes_returns_old_dtype",
+      "cached_dtype": "uint64",
+      "fresh_dtype": "uint32"
+    },
+    {
+      "control": "clear_one_cache_invalidates_other_hasher_cache",
+      "same_values": true,
+      "new_object": true
+    },
+    {
+      "control": "direct_native_outputs_independent_input_unmodified",
+      "arrays_disjoint": true,
+      "seeds_unchanged": true
+    },
+    {
+      "control": "direct_native_returned_arrays_own_storage",
+      "owndata": true
+    },
+    {
+      "control": "output_survives_input_release_and_gc",
+      "same_values": true
+    }
+  ],
+  "scope": "WholeunchangedPython cache/minhash classes and previouslybuiltCython3.3regeneratedunchanged.pyx nativeextension, syntheticownedbuffers only. Publicrecipe mutation stale-cache and crossinstancecache-clear behavior; no oldCython0.24.1binaryparity/generalGC/RSS/platform/performance/productionadoption proof.",
+  "source_pins": {
+    "lsh/cache.py": "5a3785361a37929a97071512759c0fa9213ca3150644d190b428239b37197232",
+    "lsh/minhash.py": "bbabcd32818ed1e8e8db96d44f03bec8a9ece43eefcd81f7dccab8ba724ae4a1",
+    "lsh/cMinhash.pyx": "948f34abeaf16e874ef984dc2c3b6363994dc66a197c2bc57e260fd44447ebc0"
+  },
+  "producer_sha256": "27b546ecd02a53c631047d337ee2b33bf2fcf8a9cf2fd250c9742d1e774c6622",
+  "native_extensions": {
+    ".dedup-work/lsh27-20261016/modern-build/lsh/cMinhash.cpython-312-darwin.so": "6afa0b5031bdfb2b368c1a3873c445bc4ee2cec810fa3ff7765517e38eb98580"
+  }
+}

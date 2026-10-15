@@ -1,0 +1,105 @@
+{
+  "status": "fresh_passed_complete_current_cache_integration_scope",
+  "passed": 10,
+  "failed": 0,
+  "ignored": 0,
+  "filtered": 0,
+  "inventory": [
+    "atomic_replacement_and_cancel_preserve_previous_cache",
+    "cache_preserves_every_bit_of_all_transform_hash_channels",
+    "cache_publication_child",
+    "concurrent_process_writers_publish_only_complete_single_writer_caches",
+    "disk_persistence_is_deterministic_and_rejects_invalid_values",
+    "every_serialized_bit_corruption_is_rejected",
+    "process_exit_during_temp_write_preserves_previous_publication_and_retry",
+    "roundtrip_requires_content_recipe_and_frame_identity",
+    "unwritable_parent_refuses_before_publication_and_preserves_retry",
+    "zero_budget_and_owned_values_preserve_previous_entry"
+  ],
+  "corruption_bit_cases": 3264,
+  "wire_bit_cases": 2048,
+  "source_pins": {
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/tests/cache.rs": "277ca6e0603b4d3bb0bea0c49921b196efcde92655084fec1f9b3ce49fa85339",
+    "crates/rrrah-dedup/src/local.rs": "c89c2b0841078177077704e4ab89123215f815dc2bfe8d1e435999ed1ea4ad3c"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31"
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "commands": {
+    "library-build": [
+      "rustc",
+      "+stable",
+      "--edition=2024",
+      "--crate-name",
+      "rrrah_dedup",
+      "--crate-type",
+      "rlib",
+      "-Dwarnings",
+      "-C",
+      "opt-level=1",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/harness.rs",
+      "-L",
+      "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+      "--extern",
+      "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+      "--extern",
+      "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+      "--extern",
+      "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+      "-o",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/librrrah_dedup.rlib"
+    ],
+    "integration-build": [
+      "rustc",
+      "+stable",
+      "--edition=2024",
+      "--test",
+      "-Dwarnings",
+      "-C",
+      "opt-level=1",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/integration.rs",
+      "-L",
+      "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+      "--extern",
+      "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+      "--extern",
+      "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+      "--extern",
+      "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+      "--extern",
+      "rrrah_dedup=/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/librrrah_dedup.rlib",
+      "-o",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/tests"
+    ],
+    "inventory": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/tests",
+      "--list"
+    ],
+    "tests": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/tests",
+      "--test-threads=2"
+    ]
+  },
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/tests",
+  "binary_sha256": "3eb0712e5f586a8a75da14d31dde21fa33890ba0b876c6d67159ffe5166262b9",
+  "library": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/librrrah_dedup.rlib",
+  "library_sha256": "3be93c994baef459928948345906189a4b80931d7d39e16371fb6659244c519b",
+  "harness": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/harness.rs",
+  "harness_sha256": "4e40dc140ad37555e03cd4ae993b6a342f74c3dda31caa5cce57f23dfc032b5d",
+  "logs": {
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/library-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/integration-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/inventory.log": "888cbf3b6e25f7c1c762774a968102c936684d5c9cd23f91188d7cc0e1aa8470",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-cache-v2-20261016/tests.log": "af6ce432709881d35d4b0828081d2f2b81c2de1ab7aa66204ecb5d5064c28cc5"
+  },
+  "producer_sha256": "0098fdbc74385b8ddfce6f3ec0e24fb36627225a957d59528679ac9ad4b1f3c7",
+  "prior_audit": "docs/research/dedup-cache-corruption-all-bits-audit-20261015.json",
+  "prior_audit_sha256": "e9608c6e92b5ac32bbfb4e38e7c08b046552bf3a64e6865db0a8371d50701480",
+  "prior_raw_binary_available": false,
+  "scope": "Freshsame10unchangedfullcacheintegrationtests, wholecurrentcache/pixels modules, exactselectedLocalError/reserve_slot helpers, realcacheddependencies/directrustcMacARM. Originalroot-leveltestnames preserved forselfspawnedpublication controls. Strict-Dwarnings build;dead_code allowance appliesonlyisolatedselectedlocalhelpermodule. Recipe/content/framekey, ownedvalues,budget,allbitscorruption,atomic/concurrentprocess/cancellation/crashpublication controls; durableownedrawbinary/logs/sources retained. No fullCargo/wholecrate/decode/platform/powerloss/hardRSS/performance or speedup proof."
+}
