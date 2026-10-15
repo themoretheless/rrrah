@@ -1,0 +1,32 @@
+{
+  "status": "verified_complete_current2test_visual_publication_target_against_pinned_cached_library",
+  "source": "crates/rrrah-dedup/tests/visual_publication.rs",
+  "source_sha256": "7b0723c536e8a6fcb3624ca592b610bf3873157eb1b4c6014c3dd01d1dcaf7fd",
+  "complete_test_inventory": [
+    "final_visual_callback_mutation_refuses_cold_and_warm_reports",
+    "flat_hash_collisions_remain_candidates_and_exact_pixel_groups_stay_separate"
+  ],
+  "pins": {
+    "/private/tmp/rrrah-flat-file-publication-20261015/visual_publication-v2.rs": "7b0723c536e8a6fcb3624ca592b610bf3873157eb1b4c6014c3dd01d1dcaf7fd",
+    "/private/tmp/rrrah-flat-file-publication-20261015/tests-v2": "9d4b2d3c069ac27e6e78f069915f448dcc619e8953feb1e58c4bb6edfe3d2710",
+    "/private/tmp/rrrah-flat-file-publication-20261015/run-v2.log": "043751b8177a32f8ee45824222d8ee5da750f8b7c9ea777c83e70a25e1c48b1d",
+    "/private/tmp/rrrah-flat-file-publication-20261015/run.log": "82f23c02d44971ece0ceed697544d10f9875bfa4bc0f9511c7477e60eba48761",
+    "/private/tmp/rrrah-flat-file-publication-20261015/tests": "833900be9fecf07b25bdb0b22462094f05542593796e8399b6dc7b3f268ab585",
+    "/private/tmp/rrrah-flat-file-publication-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-flat-file-publication-20261015/visual_publication.rs": "8444608d2fda59fc4de85da6e4490610535a7be3c4ab0cfe40484b2cadc1f135",
+    "/private/tmp/rrrah-flat-file-publication-20261015/command.json": "802712b676d3c0acc61e39f4836e8800f34543ee50b4724346c5bffd2ebe7770",
+    "/private/tmp/rrrah-flat-file-publication-20261015/compile-v2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "library": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-004a9eeaafb57be4.rlib",
+  "library_sha256": "0df58a3d72b4e3f4212923153aaadb10e8e04ec28cc647712c0d3a5692dc6852",
+  "controls": [
+    "Four independently encoded1x1BMPs, two black/two white, actualdecoder",
+    "Cold2andwarm4contentcachehits",
+    "All6visualpairs retained as lowinformationcandidates wheninformationoptional",
+    "Requiringinformationpublishes0visualpairs",
+    "Exactpixelpath publishesonly(1,2),(3,4), other4pairsdifferent",
+    "Managedbudgetused0 aftereachstage"
+  ],
+  "preserved_first_failure": "Authored cold-cache assertion expected0but2samecontentcopies alreadyhitcache withinonescan. Corrected authoredexpectation; originalfailedsource/binary/log retained.",
+  "scope": "Whole current integrationfile andexistingmutationtest pass with actualcachedold dedup/core/decode rlibs; this is not freshly rebuilt currentRootlibrary/fullCargo/allformats/platform or defaultprecisionproof. Newtestmustbe included innextfullcurrent gate."
+}

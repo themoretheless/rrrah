@@ -1,0 +1,71 @@
+{
+  "status": "all7tracked_text_blobs_read_eight_native_controls_passed",
+  "repository": "0xPugal/dedupe",
+  "commit": "ba01e0458be073647dcbc16720e2863fb3766c16",
+  "tree": "0cafa8df9e3201ed5d28b5a993c35db756ae25e4",
+  "fresh_commit_tree_binding_verified": true,
+  "source_files": [
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/01-LICENSE",
+      "sha256": "5a2e475985a936d648abd5168e869f58269aef05453204524615049150c19a4d",
+      "git_blob": "8917d5f007d8d2c12e5d116bcd5fbe78e82ef682"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/00-README.md",
+      "sha256": "199d49e2c4c657f088593f1e954d9dc5d791c5eeb9bb3e4f6702d1a6b5aa9c7f",
+      "git_blob": "e4a503fe955dd797681842663b6e50f9d6bab1bd"
+    },
+    {
+      "path": "VERSION",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/03-VERSION",
+      "sha256": "aba0efd9b430058e6e76f9bf5ed303e15832db679647c85c11986e49c1171c8f",
+      "git_blob": "e2cfc99c40b9b6f34c5920a7064a2beb09319460"
+    },
+    {
+      "path": "dedupe.go",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/02-dedupe.go",
+      "sha256": "434592a8fe8e2914c6364871e8bc2985f7f591d778b875e35276f8f581a76820",
+      "git_blob": "ee90dc7da72c5044d3e6c9264d4613001c5f8144"
+    },
+    {
+      "path": "go.mod",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/04-go.mod",
+      "sha256": "b39484e7378f495113a1dd0319fdd49cdc530eafdf02d3198dd1113ab098f35f",
+      "git_blob": "8dac6c2cc1e688d5f9a1ad3bc6f8b38d0837b502"
+    },
+    {
+      "path": "go.sum",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/05-go.sum",
+      "sha256": "e42794fa9b56301ad073de55cac1dea683b320ed951454d8709ffc7156088dd2",
+      "git_blob": "a62c313c5b0c799f83215509f742b13aebbe38e4"
+    },
+    {
+      "path": "test.txt",
+      "local": "docs/research/dedup-500/evidence/0xPugal--dedupe/06-test.txt",
+      "sha256": "42a699b9db67a85fcb3bd50abc217f7d7b682dc0ae9972d2ca0ce51b4de54013",
+      "git_blob": "9884d002ed6e4bc8a0880e3ee712f9a872be5e52"
+    }
+  ],
+  "license": "MIT",
+  "upstream_tests": 0,
+  "authored_native_tests": 8,
+  "actual_dependency": "gopkg.in/yaml.v3 v3.0.1 fetched with original go.sum verification; original go.mod/go.sum unchanged",
+  "log": "/private/tmp/rrrah-dedupe209-native-20261015/controls.log",
+  "log_sha256": "3a37844434a01c4905b46c15ee23d6a83db5145b90aaf6b1aeb5b4d678023152",
+  "authored_tests": "docs/research/dedupe209-controls-20261015.go",
+  "authored_tests_sha256": "ecb492efc290e19e1c8d7207a90dc2c9b1050b0a4e6a7a17fee419aa0d8b3352",
+  "findings": [
+    "Query values intentionally ignored; keeps first URL representation only.",
+    "Ports80and443 removed regardless of scheme.",
+    "Decoded path discards RawPath distinction such as escaped slash.",
+    "Userinfo and fragments excluded from key; host case retained.",
+    "Buffered final Flush error ignored; helper returns nil after failed underlying write.",
+    "Scanner error detected for over1MiB token, but earlier output already published.",
+    "Seen-map unbounded, no cancellation/source generation; optional config ignores open failures as absent.",
+    "Self-update performs unbounded HTTP plus go install; not executed."
+  ],
+  "decision": "Reject domain-specific lossy key for exact byte/pixel equality. Preserve checked streaming-read errors as design reference, with atomic publication and checked final flush in library. No code adopted.",
+  "scope": "Complete tracked7textblob source review and original public example.com URL fixture inspected as text. External README promotional image/link targets not inspected. Eight authored tests execute whole unchanged original module with actual YAML dependency on MacARM; no upstream tests exist. No HTTP/update/install execution, realURLrequests, account input, broadperformance, platform or YAML parser comprehensive qualification."
+}

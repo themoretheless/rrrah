@@ -1,0 +1,13 @@
+{
+  "status": "serializer_gain_only_no_consistent_atomic_save_gain",
+  "evidence": "docs/research/dedup-cache-stack-full-save-benchmark-20261015.json",
+  "evidence_sha256": "043a45119c5f053725b407e996911e6ca005396c210aa1a1aff8ac093a2749bb",
+  "full_save_ratios": {
+    "1": 0.9593470490427978,
+    "128": 1.0850750507985318,
+    "8192": 0.9957770072269334
+  },
+  "root_change": "612a103a removes perrecordheap allocation; semantic and resource improvement retained, no claim of faster fullsave/search.",
+  "conclusion": "Full save is dominated by filesystem sync and concurrent workload; timings mixed. Large8192recordmedian0.996does not prove benefit. No controlled pairedconfidence or globalperformance claim.",
+  "next_performance_requirement": "Measure full file/collection pipeline on immutable baseline/candidate after complete correctness gates and with competing owned work stopped."
+}

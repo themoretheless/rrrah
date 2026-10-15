@@ -1,0 +1,38 @@
+{
+  "status": "one_original_test_plus_five_authored_tests_actual_pinned_dependencies_passed",
+  "source_review": "docs/research/imgsum389-complete-source-review-20261015.json",
+  "source_review_sha256": "4ffb882fd34d41952005da5d084ef44114dc31fd29ee933f035fe382f3cd9bb7",
+  "original_source_mod_sum_unchanged": true,
+  "actual_dependencies": [
+    "ish bbdc45bcf55d",
+    "rez29f4463c688b",
+    "cr24699471a17ed",
+    "hamming003c143a81c2",
+    "testify1.4.0"
+  ],
+  "executed_original_packages": [
+    "github.com/teran/imgsum",
+    "github.com/teran/imgsum/image"
+  ],
+  "upstream_tests": 1,
+  "authored_tests": 5,
+  "logs": {
+    "/private/tmp/rrrah-imgsum389-native-20261015/upstream.log": "72f3b078004f24cdf6072f8a4fa2d769c3f145ac3d38284dda4b146f1a783aae",
+    "/private/tmp/rrrah-imgsum389-native-20261015/original-packages-and-controls.log": "8726fda57882f150285da857706c38851e8091fbf33e1725b0ea058f82ac92df",
+    "/private/tmp/rrrah-imgsum389-native-20261015/original-packages-and-controls-v2.log": "31dbed09a408efadbdfd61c49393cabfcf548d497d61bd0ba804b249f093d87c"
+  },
+  "authored_source": "docs/research/imgsum389-image-controls-20261015.go",
+  "authored_source_sha256": "0a9cccd7d2e424a52dced186013c28f29ef1f9b6bd71ce4859b058659ab75deb",
+  "confirmed": [
+    "Unknown hash kind panics due ignored constructorerror.",
+    "Synthetic32x32 black and white images collide afterSHA256wrapper for both avg/diff.",
+    "Resolution1returns actualrez error, not panic.",
+    "Missing/corrupt files return errors.",
+    "Unescaped filename regex matches imageXcr2."
+  ],
+  "preserved_failed_attempts": [
+    "Initial ./... also scanned downloaded dependencycache insideworkdir and failed dependencytest/vet/missingsum gates; not counted as originalrepo green.",
+    "First authored1x1panic expectation was incorrect; originaldependencyreturns error. Authoredassertion corrected, no upstreamsourcechange."
+  ],
+  "scope": "Actual whole original two packages with originalGo1.13module and pinned dependency graph; originalTestAll+5authoredimagehelpertests onMacARM. Main compiled but not executed; no realCR2/image corpus/CLI/release/platform/quality completeness. Synthetic flatimagehashcollision does not imply allphotos collide; no production source adoption."
+}

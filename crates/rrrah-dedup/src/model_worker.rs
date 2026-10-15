@@ -507,6 +507,92 @@ mod tests {
         output
     }
     #[test]
+    fn response_write_and_flush_failures_release_all_worker_credit() {
+        #[derive(Debug)]
+        struct Writer {
+            bytes: Vec<u8>,
+            limit: usize,
+            zero: bool,
+            fail_flush: bool,
+        }
+        impl Write for Writer {
+            fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+                if self.bytes.len() == self.limit {
+                    return if self.zero {
+                        Ok(0)
+                    } else {
+                        Err(io::ErrorKind::BrokenPipe.into())
+                    };
+                }
+                let count = bytes.len().min(3).min(self.limit - self.bytes.len());
+                self.bytes.extend_from_slice(&bytes[..count]);
+                Ok(count)
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                if self.fail_flush {
+                    Err(io::ErrorKind::PermissionDenied.into())
+                } else {
+                    Ok(())
+                }
+            }
+        }
+        let budget = MemoryBudget::new(8192);
+        let input = inputs(&budget);
+        let request = encode_request(&input[0], &input[1], policy(), &budget, &|| false).unwrap();
+        let before = budget.used();
+        let proposal = ScoredProposal {
+            source: [1., 2.],
+            target: [3., 4.],
+            confidence: 0.5,
+        };
+        let expected = framed(&[proposal]);
+        let scenarios = [false, true]
+            .into_iter()
+            .flat_map(|zero| {
+                (0..expected.len()).map(move |limit| {
+                    (
+                        limit,
+                        zero,
+                        false,
+                        Some(if zero {
+                            io::ErrorKind::WriteZero
+                        } else {
+                            io::ErrorKind::BrokenPipe
+                        }),
+                    )
+                })
+            })
+            .chain([
+                (expected.len(), false, true, Some(io::ErrorKind::PermissionDenied)),
+                (usize::MAX, false, false, None),
+            ]);
+        for (limit, zero, fail_flush, kind) in scenarios {
+            let mut output = Writer {
+                bytes: Vec::new(),
+                limit,
+                zero,
+                fail_flush,
+            };
+            let result = serve_model_worker_once(
+                &mut Cursor::new(request.as_ref()),
+                &mut output,
+                Path::new("weights"),
+                64,
+                2,
+                &budget,
+                &|| false,
+                |_, _, _, budget, _| Ok(budget.try_buffer(1, proposal)?.freeze()),
+            );
+            if let Some(kind) = kind {
+                assert!(matches!(result, Err(ModelWorkerError::Io(error)) if error.kind() == kind));
+            } else {
+                result.unwrap();
+            }
+            assert_eq!(output.bytes, expected[..expected.len().min(limit)]);
+            assert_eq!(budget.used(), before);
+        }
+    }
+    #[test]
     fn binary_roundtrip_preserves_pixels_crop_domains_and_proposal_bits() {
         let budget = MemoryBudget::new(8192);
         {

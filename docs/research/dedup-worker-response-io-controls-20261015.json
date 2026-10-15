@@ -1,0 +1,37 @@
+{
+  "status": "verified_complete15worker_tests_with114response_io_scenarios",
+  "source": "crates/rrrah-dedup/src/model_worker.rs",
+  "source_sha256": "dafa933e797d89a60390714bd84805f7c9b7568d34702ad39c98cded5d5e86c9",
+  "production_prefix_unchanged": true,
+  "complete_test_inventory": [
+    "model_worker::tests::bad_provider_results_never_write_a_response_header",
+    "model_worker::tests::binary_roundtrip_preserves_pixels_crop_domains_and_proposal_bits",
+    "model_worker::tests::empty_provider_is_a_valid_empty_bank_not_an_execution_failure",
+    "model_worker::tests::invalid_input_policy_and_low_credit_refuse_before_worker_io",
+    "model_worker::tests::linux_stat_parser_preserves_command_parentheses_and_rejects_missing_state",
+    "model_worker::tests::malformed_requests_never_invoke_provider_and_release_credit",
+    "model_worker::tests::malformed_response_count_truncation_and_trailing_bytes_are_not_empty_banks",
+    "model_worker::tests::native_owned_pid_observation_detects_live_and_reaped_worker",
+    "model_worker::tests::nonfinite_coordinates_and_invalid_confidence_discard_partial_response",
+    "model_worker::tests::response_budget_refusal_and_cancellation_release_all_credit",
+    "model_worker::tests::response_write_and_flush_failures_release_all_worker_credit",
+    "model_worker::tests::retained_failed_child_diagnostics_keep_capture_credit_until_dropped",
+    "model_worker::tests::successful_child_with_no_protocol_is_an_error_not_an_empty_bank",
+    "model_worker::tests::successful_worker_response_does_not_leave_background_process",
+    "worker::group_quiescence_tests::quiescence_refuses_live_leader_and_live_descendant_after_leader_exit"
+  ],
+  "response_bytes": 56,
+  "write_failures": 112,
+  "flush_failures": 1,
+  "successful_short_write_scenarios": 1,
+  "pins": {
+    "/private/tmp/rrrah-worker-response-io-20261015/run.log": "beba13851b686fa2a2821bc09abd79842f4057e98b08c3c9cbbe92556a4a0fdd",
+    "/private/tmp/rrrah-worker-response-io-20261015/worker.rs": "78a29255712c99272fd53e7468299fc0770ad48f68fc3f0165e0a74e6847cc51",
+    "/private/tmp/rrrah-worker-response-io-20261015/model_worker.rs": "dafa933e797d89a60390714bd84805f7c9b7568d34702ad39c98cded5d5e86c9",
+    "/private/tmp/rrrah-worker-response-io-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-worker-response-io-20261015/command.json": "efaaabbee071c18c26ebd03ff98cdeeb4d1bb7b2989000d34e3aa3adc74158e8",
+    "/private/tmp/rrrah-worker-response-io-20261015/probe.rs": "5a78817d89d091f3d96f22eee107027f77e641cc791aecc8daf8cd6c15db80a6",
+    "/private/tmp/rrrah-worker-response-io-20261015/probe": "52de204b2785e3deb880b62a294b38e6b966ae2c422de40a45e6b32633f07fc9"
+  },
+  "scope": "Whole current model_worker/worker modules with real cached core/types/deps; selectedmodulecomposition MacARM strictwarnings. Every response byte offset injectedBrokenPipe/WriteZero, finalflushPermissionDenied and3byteshortwrites. Exact writtenprefix and all temporarymanagedcredit release verified. No realmodelinference, fullfreshCargo/library/decoder/platform or descendant scheduling proof beyond includednativeobserver tests."
+}

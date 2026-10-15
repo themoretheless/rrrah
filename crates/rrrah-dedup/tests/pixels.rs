@@ -63,6 +63,32 @@ fn uniform_hash_collision_is_not_informative() {
 }
 
 #[test]
+fn all_opaque_gray_levels_collide_only_as_uninformative_candidates() {
+    let pixels: Vec<_> = (0..=255_u8).map(|shade| [shade, shade, shade, 255]).collect();
+    let views: Vec<_> = pixels
+        .iter()
+        .map(|rgba| Rgba8View::new(1, 1, rgba, 1).unwrap())
+        .collect();
+    let fingerprints: Vec<_> = views
+        .iter()
+        .map(|view| view.fingerprint(|| false).unwrap())
+        .collect();
+    let digests: std::collections::BTreeSet<_> = views
+        .iter()
+        .map(|view| view.pixel_digest(|| false).unwrap())
+        .collect();
+    assert_eq!(digests.len(), 256);
+    for (left, first) in views.iter().enumerate() {
+        for (right, second) in views.iter().enumerate() {
+            let comparison = fingerprints[left].compare(&fingerprints[right], true);
+            assert_eq!(comparison.distance, 0);
+            assert!(!comparison.informative);
+            assert_eq!(first.same_pixels(second, || false).unwrap(), left == right);
+        }
+    }
+}
+
+#[test]
 fn identical_and_transparent_pixel_equality_observe_late_cancellation() {
     use std::cell::Cell;
     for count in [1_u32, 4096, 4097, 8193] {

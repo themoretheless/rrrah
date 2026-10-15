@@ -1,0 +1,46 @@
+{
+  "status": "complete_reader_writer_and_format_read_four_native_selected_controls_passed_not_full_repository",
+  "repository": "klauspost/dedup",
+  "commit": "ebb83049c16285be6f30dd296301e32324b4eeab",
+  "read_complete": [
+    "FORMAT.md",
+    "reader.go",
+    "writer.go",
+    "dedup.go"
+  ],
+  "source_pins": {
+    "docs/research/dedup-500/evidence/klauspost--dedup/08-FORMAT.md": "01c0dd00a782f6d1d0918f2e23a66076021b80274d66a9496ef931676a694dc5",
+    "docs/research/dedup-500/evidence/klauspost--dedup/09-reader.go": "25d3aaa09aec5e4784bb4649adf54ee4b9ee3e172d506f6a78d3edeb53a06ff2",
+    "docs/research/dedup-500/evidence/klauspost--dedup/10-writer.go": "5926cbe3ac11f857aa2b52879283cf31aec319b6017ae59980383b5b8e630062",
+    "docs/research/dedup-500/evidence/klauspost--dedup/02-dedup.go": "8c63031d38dabccb1f185d2998b71780ff7155aeef5251d9a978f8282ce6177b"
+  },
+  "runtime": "Whole original5productionfiles copied unchanged; generated module selects local originalsort package only, no externaldependencies. Four authored tests, originalupstreamtests not yetexecuted.",
+  "controls": 4,
+  "confirmed": [
+    "Reader WriteTo loses remainder on shortsuccessfulwriter and endsioEOF instead of io.ErrShortWrite.",
+    "Read10bytes thenWriteTo skips502remainingbytes from first512byte block.",
+    "Streamwriter ignores failed header and empty finalterminator writes; constructor andClose returnnil.",
+    "ZeroMaxBlockSize panics dividebyzero before policyerror."
+  ],
+  "source_only": [
+    "Blockdedupe trustsSHA1 with no byteconfirmation; no collisioninjection performed.",
+    "Reader constructors may spawn readers after malformed index error; resource/panic risk unexecuted.",
+    "Streamreader header can drive largeallocations with no externalbudget, MaxMem conversion mayoverflow; nohugeallocationexecuted."
+  ],
+  "pins": {
+    "/private/tmp/rrrah-klauspost93-selected-20261015/go.mod": "d98d0264321f459ab962448887a1223568543de85d29b6f726ecbbb26e8e31d8",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/selected-controls.log": "104c09971287eb82679994911e7b2a313cf7702548c94ca02f6c26dfb50f23af",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/controls_test.go": "0f34a437a90f75a1be5fcac71b3c4bc8325cb4e46086879e31e2c905159b8c9e",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/filesplitter.go": "162a637ac4e2ebbc4c15231b3735fb647e21e97052953c97164f5038d009284e",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/writer.go": "5926cbe3ac11f857aa2b52879283cf31aec319b6017ae59980383b5b8e630062",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/dedup.go": "8c63031d38dabccb1f185d2998b71780ff7155aeef5251d9a978f8282ce6177b",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/reader.go": "25d3aaa09aec5e4784bb4649adf54ee4b9ee3e172d506f6a78d3edeb53a06ff2",
+    "/private/tmp/rrrah-klauspost93-selected-20261015/sort/hashsort.go": "c5a80a2aee43bd8211489a127ad8ad58524bdd9cea329259d3e4a021b51ee01e"
+  },
+  "remaining": [
+    "Full read of splitter/sort/upstreamtests/readme/license/config and binaryZIP fixture inspection",
+    "Original complete test/example execution and independent replay",
+    "Format/lifecycle/error/resource/platform qualification"
+  ],
+  "scope": "Selected original production reader/writer code review and4smallsynthetic controls onMacARM. Notfulloriginalrepositoryread, whole500completion, securecodec or globalperformance proof; noadoption."
+}

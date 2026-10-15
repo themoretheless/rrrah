@@ -1,0 +1,171 @@
+{
+  "status": "all13tracked_blobs_reviewed_25upstream_and4authored_checks_passed",
+  "repository": "klauspost/dedup",
+  "commit": "ebb83049c16285be6f30dd296301e32324b4eeab",
+  "tree": "f0a407f6266591df97ed4facdb7ce1b838caa571",
+  "fresh_commit_tree_binding_verified": true,
+  "source_files": [
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/06-gitignore",
+      "sha256": "09d2e914d31f277d32fd978ec242e9ed89bd75134c9fbea37ebe8a0328182947",
+      "git_blob": "ea7a4da5244259e17f9912f42e26099328f7f0b3"
+    },
+    {
+      "path": ".travis.yml",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/07-travis.yml",
+      "sha256": "5d753fa0fd9d83013d079426f7800a12c3aa158388d141c1610e3f5a24304170",
+      "git_blob": "a9761de8de0424576a4760aa39201a8c95450d21"
+    },
+    {
+      "path": "FORMAT.md",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/08-FORMAT.md",
+      "sha256": "01c0dd00a782f6d1d0918f2e23a66076021b80274d66a9496ef931676a694dc5",
+      "git_blob": "d33f366af28a07050269b6a286e3b2d2afa5eba9"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/01-LICENSE",
+      "sha256": "5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212",
+      "git_blob": "5cec7ee949b1041ec1c2fc416f60c998a9abb40c"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/00-README.md",
+      "sha256": "9f77aa69b626e43013ad32d2128baba25619e04242713f804909b66b35286064",
+      "git_blob": "89b0c51ed4222b5aaa335ede4137d14e09164457"
+    },
+    {
+      "path": "dedup.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/02-dedup.go",
+      "sha256": "8c63031d38dabccb1f185d2998b71780ff7155aeef5251d9a978f8282ce6177b",
+      "git_blob": "5ceff7c30d12fbfe440e653f56764b91ab2ca741"
+    },
+    {
+      "path": "filesplitter.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/04-filesplitter.go",
+      "sha256": "162a637ac4e2ebbc4c15231b3735fb647e21e97052953c97164f5038d009284e",
+      "git_blob": "19b99cf36e72cf374142827e1fa197ce6a836eef"
+    },
+    {
+      "path": "reader.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/09-reader.go",
+      "sha256": "25d3aaa09aec5e4784bb4649adf54ee4b9ee3e172d506f6a78d3edeb53a06ff2",
+      "git_blob": "b570e8c1b15f477cd9b7979b09cdc4ee2995a6c6"
+    },
+    {
+      "path": "reader_test.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/05-reader_test.go",
+      "sha256": "b201e69210a408cf265a00b831e8c6336c73e432ece2ebe10cccb98abaacb2c3",
+      "git_blob": "df5ac584f26b0ea3b2f1cdf5ebb8f96590a089f3"
+    },
+    {
+      "path": "sort/hashsort.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/03-hashsort.go",
+      "sha256": "c5a80a2aee43bd8211489a127ad8ad58524bdd9cea329259d3e4a021b51ee01e",
+      "git_blob": "7cce1621b78ad14dfe345fc8af68a7cffd1a3a42"
+    },
+    {
+      "path": "testdata/sampledata.zip",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/12-sampledata.zip",
+      "sha256": "133c01524208ad34df03a93fa4fdc1bc90de43986a8e3a5cbe182887ca7b9536",
+      "git_blob": "7cfaf7f8f42749ae5f3f326c9464b501e0694fae"
+    },
+    {
+      "path": "writer.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/10-writer.go",
+      "sha256": "5926cbe3ac11f857aa2b52879283cf31aec319b6017ae59980383b5b8e630062",
+      "git_blob": "0ab11ccda51899be929afe9f959520735b3bb59e"
+    },
+    {
+      "path": "writer_test.go",
+      "local": "docs/research/dedup-500/evidence/klauspost--dedup/11-writer_test.go",
+      "sha256": "909b4726419b70c8e3dc26f4c06627d732bca52f4f5b674a3336aa09f324d44a",
+      "git_blob": "81a903845c33862e0621d719f549b5e032fb237f"
+    }
+  ],
+  "text_blobs_fully_read": 12,
+  "binary_fixture": "sampledata.zip contains two byteidentical copies of fullyread filesplitter.go, no media",
+  "license": "RootMIT; nested sort/hashsort.go explicitly reports adapted code with noLICENSE upstream. No adoption.",
+  "original_source_blobs_unchanged": true,
+  "generated_module": "No originalgo.mod; temporary github.com/klauspost/dedup module go1.27 resolves unchanged local sort. No external dependencies.",
+  "upstream_tests": 15,
+  "upstream_examples": 10,
+  "authored_tests": 4,
+  "print_only_original_test": "TestBirthdayProblem prints estimates rather than asserting memorybound or probability",
+  "complete_upstream_inventory": [
+    "ExampleBirthdayProblem",
+    "ExampleNewReader",
+    "ExampleNewSplitter",
+    "ExampleNewSplitter_entropy",
+    "ExampleNewSplitter_file",
+    "ExampleNewStreamReader",
+    "ExampleNewStreamWriter",
+    "ExampleNewStreamWriter_file",
+    "ExampleNewWriter",
+    "ExampleNewWriter_file",
+    "TestBirthdayProblem",
+    "TestDynamicEntropySplitter",
+    "TestDynamicEntropyWriter",
+    "TestDynamicFragmentSplitter",
+    "TestDynamicRoundtrip",
+    "TestDynamicStreamWriter",
+    "TestDynamicWriter",
+    "TestFixedFragmentSplitter",
+    "TestFixedStreamWriter",
+    "TestFixedWriter",
+    "TestFixedWriterLimit",
+    "TestReader",
+    "TestReaderStream",
+    "TestReaderWriteTo",
+    "TestSeekReader"
+  ],
+  "complete_executed_inventory": [
+    "ExampleBirthdayProblem",
+    "ExampleNewReader",
+    "ExampleNewSplitter",
+    "ExampleNewSplitter_entropy",
+    "ExampleNewSplitter_file",
+    "ExampleNewStreamReader",
+    "ExampleNewStreamWriter",
+    "ExampleNewStreamWriter_file",
+    "ExampleNewWriter",
+    "ExampleNewWriter_file",
+    "TestBirthdayProblem",
+    "TestDynamicEntropySplitter",
+    "TestDynamicEntropyWriter",
+    "TestDynamicFragmentSplitter",
+    "TestDynamicRoundtrip",
+    "TestDynamicStreamWriter",
+    "TestDynamicWriter",
+    "TestFixedFragmentSplitter",
+    "TestFixedStreamWriter",
+    "TestFixedWriter",
+    "TestFixedWriterLimit",
+    "TestHeaderAndEmptyTerminatorErrorsAreLost",
+    "TestReadThenWriteToDropsBufferedRemainder",
+    "TestReader",
+    "TestReaderStream",
+    "TestReaderWriteTo",
+    "TestSeekReader",
+    "TestWriteToDropsShortWriterRemainder",
+    "TestZeroBlockSizePanicsBeforePolicyError"
+  ],
+  "pins": {
+    "/private/tmp/rrrah-klauspost93-full-20261015/go.mod": "d98d0264321f459ab962448887a1223568543de85d29b6f726ecbbb26e8e31d8",
+    "/private/tmp/rrrah-klauspost93-full-20261015/upstream.log": "edbb0f0192fe43dd01d76b006843d50ff3e76e3e0d11cccf5a830eed54cbc6bb",
+    "/private/tmp/rrrah-klauspost93-full-20261015/all-controls.log": "c2671bbc27ee726069e2770054a8f45dbc02ea872fdfcaf9924e9fe585e53601",
+    "/private/tmp/rrrah-klauspost93-full-20261015/upstream.test": "25ff6d93f8d85ee0e677683db5875f1cf7407aafdd9a9e21a84823698db136c6",
+    "/private/tmp/rrrah-klauspost93-full-20261015/all-controls.test": "3e86dea89cbc107eb6aac7b654c0d834533030a95a393ec482c8485af25dd901",
+    "/private/tmp/rrrah-klauspost93-full-20261015/controls_test.go": "0f34a437a90f75a1be5fcac71b3c4bc8325cb4e46086879e31e2c905159b8c9e"
+  },
+  "confirmed_limits": [
+    "Selected4IO/constructor defects remain reproduced under complete originalproduction source and originaltests.",
+    "Fixed/dynamic/entropy splitting and indexed/stream/seek roundtrips are references, not file/pixel identity.",
+    "HashesSHA1 only, no finalbyteconfirmation; no adversarialcollision or corruptionresilience proof.",
+    "Memory estimates exclude channelbuffers, map overhead and eager streambackreference allocation; no externalbudget/cancellation/finalsource guards.",
+    "Disabledsignature splitter fullyread but excluded by originalignore buildtag, not runtimequalification."
+  ],
+  "decision": "No foreigncode adopted. Reference content-defined boundary splitting and last-use eviction only after our own collisionproof/source-observed/budgeted implementation and pairedwholeoperation measurements.",
+  "scope": "Complete original13trackedblob review and all15tests/10examples nativeGo1.27.2 MacARM execution atGOMAXPROCS2, includes fourauthored syntheticIO controls. No benchmarktiming, race detector, malformedstreamfuzz/hardRSS, otherplatform/Go1.7runtime, archiveproduction/security/globalquality proof. OriginalsampleZIP only, noprivatefiles."
+}

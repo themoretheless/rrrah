@@ -1,0 +1,39 @@
+{
+  "status": "verified_fourteen_retained_native_test_replays",
+  "auditor_sha256": "a2233bc82ff8201c2109b7b3c6513c0e7453a417a8e504352e8d55405549aee2",
+  "results": [
+    {
+      "repository": "0xPugal/dedupe",
+      "source_report_sha256": "3dae40a5e24679ccc530e9825a4dd7ca4e98d9c7af029be48a7763b3d3440a0c",
+      "binary": "/private/tmp/rrrah-dedupe209-native-20261015/controls.test",
+      "binary_sha256": "0910b4a9a2fc6e4fa0d939bdd94bcd844467a19f933ce981b6559b0e12ef477d",
+      "complete_test_inventory": [
+        "TestDecodedPathCollapsesEscapedSlash",
+        "TestFinalFlushErrorLost",
+        "TestFirstRepresentationRetained",
+        "TestQueryValuesAreIgnored",
+        "TestScannerErrorReturnsAfterPartialOutput",
+        "TestSchemeHostCaseNotCanonicalized",
+        "TestSchemeMismatchedPortsAreRemoved",
+        "TestUserInfoAndFragmentsIgnored"
+      ],
+      "log": "=== RUN   TestQueryValuesAreIgnored\n--- PASS: TestQueryValuesAreIgnored (0.00s)\n=== RUN   TestSchemeMismatchedPortsAreRemoved\n--- PASS: TestSchemeMismatchedPortsAreRemoved (0.00s)\n=== RUN   TestDecodedPathCollapsesEscapedSlash\n--- PASS: TestDecodedPathCollapsesEscapedSlash (0.00s)\n=== RUN   TestUserInfoAndFragmentsIgnored\n--- PASS: TestUserInfoAndFragmentsIgnored (0.00s)\n=== RUN   TestFinalFlushErrorLost\n--- PASS: TestFinalFlushErrorLost (0.00s)\n=== RUN   TestScannerErrorReturnsAfterPartialOutput\n--- PASS: TestScannerErrorReturnsAfterPartialOutput (0.00s)\n=== RUN   TestFirstRepresentationRetained\n--- PASS: TestFirstRepresentationRetained (0.00s)\n=== RUN   TestSchemeHostCaseNotCanonicalized\n--- PASS: TestSchemeHostCaseNotCanonicalized (0.00s)\nPASS\n"
+    },
+    {
+      "repository": "teran/imgsum",
+      "source_report_sha256": "4ffb882fd34d41952005da5d084ef44114dc31fd29ee933f035fe382f3cd9bb7",
+      "binary": "/private/tmp/rrrah-imgsum389-native-20261015/image.test",
+      "binary_sha256": "f28efa1984ebff15ffa59ce401e54f011537adcb50ac4d87bfc30e188e87e28d",
+      "complete_test_inventory": [
+        "TestAll",
+        "TestCR2FilenamePatternAcceptsMissingDot",
+        "TestFlatBlackWhiteHashesEqual",
+        "TestMissingAndCorruptImageReturnErrors",
+        "TestOnePixelHashResolutionReturnsDependencyError",
+        "TestUnknownHasherPanicsRatherThanReturnsError"
+      ],
+      "log": "=== RUN   TestUnknownHasherPanicsRatherThanReturnsError\n--- PASS: TestUnknownHasherPanicsRatherThanReturnsError (0.00s)\n=== RUN   TestFlatBlackWhiteHashesEqual\n--- PASS: TestFlatBlackWhiteHashesEqual (0.00s)\n=== RUN   TestOnePixelHashResolutionReturnsDependencyError\n    controls_test.go:6: output size too small 1x1\n--- PASS: TestOnePixelHashResolutionReturnsDependencyError (0.00s)\n=== RUN   TestMissingAndCorruptImageReturnErrors\n--- PASS: TestMissingAndCorruptImageReturnErrors (0.00s)\n=== RUN   TestCR2FilenamePatternAcceptsMissingDot\n--- PASS: TestCR2FilenamePatternAcceptsMissingDot (0.00s)\n=== RUN   TestAll\n--- PASS: TestAll (0.00s)\nPASS\n"
+    }
+  ],
+  "scope": "Original source blobs and copied authored controls verified; actual pinned dependency binaries. Eight209tests and original389TestAll plus five389controls. No wholeCLI/RAW corpus/network/platform or globalquality proof."
+}

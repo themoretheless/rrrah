@@ -2,9 +2,9 @@
   "index": 209,
   "repository": "0xPugal/dedupe",
   "commit": "ba01e0458be073647dcbc16720e2863fb3766c16",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All7tracked text blobs read; eight authored native whole-module controls with actual pinnedyaml.v3 pass. External README promotional image uninspected; runtime/platform limits retained.",
   "decision": "reject-domain",
-  "finding": "URL set deduplication; no byte/pixel comparison.",
+  "finding": "Lossy URL domain normalization, unchecked final flush and partial output on scanner error confirmed. No file/image identity or adoption.",
   "available_source_evidence": [
     {
       "path": "dedupe.go",
@@ -44,5 +44,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedupe209-complete-source-review-20261015.json",
+  "complete_runtime_audit": "docs/research/dedupe209-imgsum389-native-independent-audit-20261015.json"
 }

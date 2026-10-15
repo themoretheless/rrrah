@@ -2,9 +2,9 @@
   "index": 389,
   "repository": "teran/imgsum",
   "commit": "c4926a0bb095a98d7cb0215e3c8af5c437019255",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All13trackedtextblobs read;4originalgroupinghelpercontrols plusactualpinnedhashermodule originalTestAll and5authoredtests. FullCLI/realRAW/corpus/platform unqualified.",
   "decision": "reference",
-  "finding": "Go image hasher/Lightroom-compatible CLI and tests; GPL and decoder policy need qualification.",
+  "finding": "Finalnewline recordloss, arbitrary/emptyhash grouping and duplicate repeatedpaths reproduced; ignoredhashererror and resource/decoder risks observed in source.",
   "available_source_evidence": [
     {
       "path": "image/hasher.go",
@@ -74,5 +74,11 @@
       "source": false,
       "test": false
     }
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/imgsum389-complete-source-review-20261015.json",
+  "complete_runtime_audit": "docs/research/dedupe209-imgsum389-native-independent-audit-20261015.json",
+  "incremental_reviews": [
+    "docs/research/imgsum389-actual-hasher-runtime-20261015.json"
   ]
 }

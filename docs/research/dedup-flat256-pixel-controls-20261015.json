@@ -1,0 +1,29 @@
+{
+  "status": "verified_complete8pixel_tests_including65536flatgray_pair_oracles",
+  "integration_source": "crates/rrrah-dedup/tests/pixels.rs",
+  "integration_source_sha256": "463d56af46a7a3eadc4bd1e19986c47f18804e93f4ecf7ea189e3e0a2dc773ec",
+  "production_pixels_sha256": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+  "complete_test_inventory": [
+    "all_opaque_gray_levels_collide_only_as_uninformative_candidates",
+    "gradient_has_independently_known_difference_bits",
+    "identical_and_transparent_pixel_equality_observe_late_cancellation",
+    "identical_pixels_honor_each_block_and_final_cancellation_checkpoint",
+    "invisible_rgb_is_canonical_but_visible_pixels_are_exact",
+    "transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection",
+    "uniform_hash_collision_is_not_informative",
+    "validates_layout_budget_and_cancellation"
+  ],
+  "flat_levels": 256,
+  "ordered_pairs": 65536,
+  "distinct_canonical_digests": 256,
+  "pins": {
+    "/private/tmp/rrrah-pixels-flat256-20261015/run.log": "871e5d83fe91e0d6e1b322e535d4a4caa0cac3c6f38937ca42c0819be40d88d6",
+    "/private/tmp/rrrah-pixels-flat256-20261015/tests": "8a6512cbb408dd577e78dde8eee24ca2ac8499915552899f5301f0838e0d3130",
+    "/private/tmp/rrrah-pixels-flat256-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-pixels-flat256-20261015/command.json": "1ea941b2b71621e80300daefb8f1c1f69d7edc1e0a3ea32c559ab4f913148071",
+    "/private/tmp/rrrah-pixels-flat256-20261015/pixels-integration.rs": "463d56af46a7a3eadc4bd1e19986c47f18804e93f4ecf7ea189e3e0a2dc773ec"
+  },
+  "production_library": "/private/tmp/rrrah-cache-stack-record-20261015/librrrah_dedup.rlib",
+  "production_library_sha256": "f10b3be9e8fb146936a70602e5874fd49f1018887bf27ef27def1933fc389ee5",
+  "scope": "Complete current pixels integration target against actual pinned four-cache/pixels module library with source pixels byte-identical to Root. All opaque1x1gray levels have hashdistance0 and informativefalse; exact same_pixels true only samegraylevel and all256digests distinct. No decoding/filecollection/publication/default-policy/platform proof; no wholelibraryCargo/runtime claim."
+}
