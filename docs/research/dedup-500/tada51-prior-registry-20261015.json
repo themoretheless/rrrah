@@ -1,0 +1,78 @@
+{
+  "index": 51,
+  "repository": "fallroot/tada",
+  "commit": "db20e314b32fdc29227ed18d649afa68e3ce5c4f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "DOM lazy-image loading and IntersectionObserver de-duplicates elements, not image content.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/index.js",
+      "local": "02-index.js",
+      "url": "https://github.com/fallroot/tada/blob/db20e314b32fdc29227ed18d649afa68e3ce5c4f/src/index.js",
+      "sha256": "8e6672a0bdbecd60223430dfc28b4f8d50bdb2f6c14a351466b9e181ce71462a",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/webpack.config.js",
+      "local": "03-webpack.config.js",
+      "url": "https://github.com/fallroot/tada/blob/db20e314b32fdc29227ed18d649afa68e3ce5c4f/src/webpack.config.js",
+      "sha256": "d98588a328619db4af78105be836138377fd2f3226881d0ef6c9792d92ac5377",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/intersection-observer/index.js",
+      "local": "04-index.js",
+      "url": "https://github.com/fallroot/tada/blob/db20e314b32fdc29227ed18d649afa68e3ce5c4f/src/intersection-observer/index.js",
+      "sha256": "5a9d6c852d717b9d861358f3153c2ec624f3da28a369df6fc40a7acf58c5956d",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/legacy/index.js",
+      "local": "05-index.js",
+      "url": "https://github.com/fallroot/tada/blob/db20e314b32fdc29227ed18d649afa68e3ce5c4f/src/legacy/index.js",
+      "sha256": "b4165f1156dd7731d294723f3ab0a1c20fe744d077f6bd842afd8d53a6475bc0",
+      "truncated": false,
+      "lines": 179,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/fallroot/tada/blob/db20e314b32fdc29227ed18d649afa68e3ce5c4f/README.md",
+      "sha256": "ab117c351be84ff1e645e70f65c0e4f23774856d2af28ed3e780ef165fcd3849",
+      "truncated": false,
+      "lines": 72,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/fallroot/tada/blob/db20e314b32fdc29227ed18d649afa68e3ce5c4f/LICENSE",
+      "sha256": "9853a5815dfaa88d5f7e1cd054041fed3233af4922c1b4976fc6c223c59e53ae",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}
