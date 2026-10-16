@@ -56,6 +56,49 @@ fn complete_coverage_is_required() {
 }
 
 #[test]
+fn ordered_subsets_do_not_establish_complete_sequence_or_timeline_identity() {
+    let black = [0.0, 0.0, 0.0, 1.0];
+    let red = [1.0, 0.0, 0.0, 1.0];
+    let white = [1.0, 1.0, 1.0, 1.0];
+    let samples = [&black, &red, &black, &white, &red];
+    for playback in [Playback::Pages, Playback::Animation { repetitions: Some(1) }] {
+        let make = |mask: usize| {
+            let selected: Vec<_> = samples
+                .iter()
+                .enumerate()
+                .filter_map(|(i, pixels)| (mask & (1 << i) != 0).then_some(*pixels))
+                .collect();
+            Sequence::new(
+                selected.len(),
+                playback,
+                selected.into_iter().enumerate().map(|(ordinal, pixels)| {
+                    let duration = match playback {
+                        Playback::Pages => None,
+                        Playback::Animation { .. } => Some(Duration::new(1, 10).unwrap()),
+                    };
+                    (ordinal, frame(pixels, duration))
+                }),
+                samples.len(),
+                || false,
+            )
+        };
+        assert_eq!(make(0).unwrap_err(), SequenceError::Coverage);
+        let full_mask = (1 << samples.len()) - 1;
+        let complete = make(full_mask).unwrap();
+        let identical = make(full_mask).unwrap();
+        assert!(complete.same_sequence(&identical, || false).unwrap());
+        assert!(complete.same_timeline(&identical, || false).unwrap());
+        for mask in 1..full_mask {
+            let subset = make(mask).unwrap();
+            assert!(!complete.same_sequence(&subset, || false).unwrap());
+            assert!(!subset.same_sequence(&complete, || false).unwrap());
+            assert!(!complete.same_timeline(&subset, || false).unwrap());
+            assert!(!subset.same_timeline(&complete, || false).unwrap());
+        }
+    }
+}
+
+#[test]
 fn admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds() {
     let samples = [0.25, 0.5, 0.75, 1.0];
     for checkpoint in 1..=5 {

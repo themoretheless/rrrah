@@ -1,0 +1,36 @@
+{
+  "status": "verified_selected_native_video_algorithm_and_current_root_sequence_boundaries",
+  "repository": "dries007/pHashPy",
+  "commit": "3fefabf71a64bed151e44d2d045cd27f68a5d698",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "auditor_sha256": "c712d3177f86a38537b7d03f5f95a59607859bbebca09fb41394e920f9c12a7c",
+  "previous_cpp_audit": "docs/research/dedup-500/phash434-wrapper-and-native-cpp-audit-20261016.json",
+  "previous_cpp_audit_sha256": "65af909fcb323105b389e7c0089306d14c391e1630f866fab40a54e4f2c0242d",
+  "native_video_proof": "docs/research/dedup-500/phash434-native-video-distance-20261016.json",
+  "native_video_proof_sha256": "9fc37983445e18de255f57f1530814573a48623381172e59be3c6cb31fe9b7dc",
+  "native_comparisons": 86400,
+  "expected_asan_stack_overflows": 2,
+  "current_root_proof": "docs/research/dedup-current-pixel-sequence-v3-20261016.json",
+  "current_root_proof_sha256": "6759d2f0406418ed14a9d9e330351a6f7360249143718f0f756f320fb330338e",
+  "current_root_tests_per_run": 22,
+  "current_root_runs": 2,
+  "source_review_scope": "All15wrapperfiles previousstage; additionalcompletecimgffmpeg.h/cpp read/pinned, cumulative6nativecore/header/buildfiles read. Other183entrysubmodule/CImg/media/bindings remainspartial. OriginalvideoIO syntaxcheck failsinstalledFFmpegremovedAPIs; comparatorcompiledfromwholeoriginalpHash.cpp withdeadstripunusedIO,no stubs/extractedbodies.",
+  "findings": [
+    "Nativecomparisonreturns1forproperorderedsubset anditsreversebecauseLCSnormalizedbyminlength. Intendedpartialmatchsimilarity, cannotprovecompletevideoidentity.",
+    "Empty/one-empty inputsreturnNaN; no nonemptyadmission. Threshold64makesarbitraryequal-lengthhashesmatch1; negative thresholdrejectsidentity0; parameterboundsnotadmitted.",
+    "StackVLA(N1+1)*(N2+1) overflows8MiBstackon4096hashes/side(~64MiBtable),2ASANprocesses confirm. This isboundedownedinputtest, notsystemwideRSSmeasurement.",
+    "Originalwholecimgffmpeg.cpp cannotcompile againstinstalledmodernFFmpeg:removedavcodec_close/AVStream.codec/avpicture APIs. No realvideodecode/hash/Pythonbindingqualification."
+  ],
+  "current_root_conclusion": "NewpublicAPIregression coversall30propernonemptyorderedsubsets of5frames atPages/Animation, bothdirections/same_sequence+same_timeline,240negativecomparisons.4identitypositivesand2emptyrefusals retainintendedcontracts. Allprior21tests retained plusnewtest:22twice44passes. RealfocusedCargo/BLAKE3/thiserror withrootconstraints, separatelyresolvedlock; no originalrrrah-dedup/default+decode/fullcrate/platform gate claim.",
+  "decision": "LCSsubsetscoreisoverlap evidence only, notcompletevideoidentity. Ourcomplete-sequence/timelinecoverage behavior confirmedandlockedbyregression. Keepresource/empty/erroradmission separate; no foreigncodeadopted. Continue fullsubmodule andcurrentlibraryquality/decoder/platform/resource coverage.",
+  "limits": [
+    "OriginalC++algorithm-onlyvideo comparison, no videoIOadaptation/fakes andno actualvideo/media decode/test/qualityproof",
+    "All183entrysubmodule stillpartiallyread; CImgcompiledbutnotfullyread; no wholepHashPy/fullbuild/platform/performance/adoptionclaim",
+    "8MiBstacklimitappliedonlyownedchildprocesses; no otherprocesses interrupted/globalsettingsmodified",
+    "Finitehashsequenceoracle confirmsalgorithmsemantics, notsemanticvideoidentityorcalibratedquality",
+    "Priorv2standaloneattemptstoppedbeforecompilebecauseoldtemporaryrlibsremoved; preserved, no passingoldbinaryinferred",
+    "StandalonefocusedCargo/project, no complete rrrah-dedup/default+decode/fullworkspace/platform/decoder/imagevideoquality/performance/currentallcases qualification",
+    "Oldv1source/runtimeproof remains historical; thisfreshgate validateslatestsource/testpins only"
+  ]
+}

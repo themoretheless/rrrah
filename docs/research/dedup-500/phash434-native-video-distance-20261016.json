@@ -1,0 +1,129 @@
+{
+  "status": "verified_whole_cpp_video_distance_with_explicit_decode_build_blocker",
+  "producer_sha256": "c594aa6ca23c1462b0dd078b58ea980ca4bbd6e8686da5b60b72f23b945cead0",
+  "probe": "scripts/phash434-video-distance-controls-20261016.cpp",
+  "probe_sha256": "62819a13b96260ade8619ae88a8546fa4fbeac86886e1482619250ced9beff07",
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-video-distance",
+  "binary_sha256": "77c5c76a4e1c5a2777767ba33350eecfc26216f34dd7ed771aa9af753771f5b1",
+  "rows": [
+    {
+      "repeat": 1,
+      "mode": "oracle",
+      "returncode": 0,
+      "result": {
+        "mode": "oracle",
+        "sequences": 120,
+        "comparisons": 43200
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-video-fixtures-v2/1-oracle/stdout.log",
+      "stdout_sha256": "deca3f48eb5c363691b7eb94ec6fd763c4fea58328d90e193c2799d6885dbb29",
+      "stderr": ".dedup-work/phash434-20261016/native-video-fixtures-v2/1-oracle/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "repeat": 1,
+      "mode": "boundaries",
+      "returncode": 0,
+      "result": {
+        "mode": "boundaries",
+        "subset_score": 1,
+        "reverse_subset_score": 1,
+        "threshold64_score": 1,
+        "negative_threshold_score": 0,
+        "empty_is_nan": true,
+        "one_empty_is_nan": true
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-video-fixtures-v2/1-boundaries/stdout.log",
+      "stdout_sha256": "27d9eb5880d7ed746b8549dbf014dd08da6e2b85482a046a90ff558506431f82",
+      "stderr": ".dedup-work/phash434-20261016/native-video-fixtures-v2/1-boundaries/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "repeat": 1,
+      "mode": "stack-limit",
+      "returncode": 1,
+      "result": {
+        "expected_asan_stack_overflow": true,
+        "child_stack_limit_bytes": 8388608,
+        "input_hashes_per_side": 4096
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-video-fixtures-v2/1-stack-limit/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ".dedup-work/phash434-20261016/native-video-fixtures-v2/1-stack-limit/stderr.log",
+      "stderr_sha256": "395c2c5a5bbd7f2988abd013d2e15887e99db9e8b83a9d90bc733fb6fe81a536"
+    },
+    {
+      "repeat": 2,
+      "mode": "oracle",
+      "returncode": 0,
+      "result": {
+        "mode": "oracle",
+        "sequences": 120,
+        "comparisons": 43200
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-video-fixtures-v2/2-oracle/stdout.log",
+      "stdout_sha256": "deca3f48eb5c363691b7eb94ec6fd763c4fea58328d90e193c2799d6885dbb29",
+      "stderr": ".dedup-work/phash434-20261016/native-video-fixtures-v2/2-oracle/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "repeat": 2,
+      "mode": "boundaries",
+      "returncode": 0,
+      "result": {
+        "mode": "boundaries",
+        "subset_score": 1,
+        "reverse_subset_score": 1,
+        "threshold64_score": 1,
+        "negative_threshold_score": 0,
+        "empty_is_nan": true,
+        "one_empty_is_nan": true
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-video-fixtures-v2/2-boundaries/stdout.log",
+      "stdout_sha256": "27d9eb5880d7ed746b8549dbf014dd08da6e2b85482a046a90ff558506431f82",
+      "stderr": ".dedup-work/phash434-20261016/native-video-fixtures-v2/2-boundaries/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "repeat": 2,
+      "mode": "stack-limit",
+      "returncode": 1,
+      "result": {
+        "expected_asan_stack_overflow": true,
+        "child_stack_limit_bytes": 8388608,
+        "input_hashes_per_side": 4096
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-video-fixtures-v2/2-stack-limit/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ".dedup-work/phash434-20261016/native-video-fixtures-v2/2-stack-limit/stderr.log",
+      "stderr_sha256": "b40af1d40e97a05b2ac98c5df7892a5ddb494e459aa66ef6669f458280fe5bd5"
+    }
+  ],
+  "source_pins": {
+    ".dedup-work/phash434-20261016/submodule/src/pHash.cpp": "b46d4f51a371c3538051d67155e942e71fbfc5ccd77bf5c7a0f9fd5eccd4cebb",
+    ".dedup-work/phash434-20261016/submodule/src/pHash.h.cmake": "90a7c94962bf54e9dc2eb4ddaceae6a058345ca6d05adeadeafbe007ae30dfb2",
+    ".dedup-work/phash434-20261016/submodule/src/cimgffmpeg.h": "12b066054e884b1c6ec6ffc8a9f68f89689a7fa2ebc9c89b01884238d3146ccb",
+    ".dedup-work/phash434-20261016/submodule/src/cimgffmpeg.cpp": "450369eda9235e3581ec1b9187740032f66cebbd2025fb0ba630e251822fa79b",
+    ".dedup-work/phash434-20261016/submodule/third-party/CImg/CImg.h": "abdc3e469923fa6a4ade7a7bde1f553c3310a441ed2323d8cbaa720e9793cadb",
+    ".dedup-work/phash434-20261016/generated-video/pHash.h": "ec27d53a80f18681a393d908ab2c419f6a536a7470b303a81d4070943dc35d5c"
+  },
+  "logs": {
+    ".dedup-work/phash434-20261016/native-video-distance-build.log": "476c2a08551507da0e7ad3fd59d8f29798f2d87d9714c90df61472e0b0aaad2f",
+    ".dedup-work/phash434-20261016/original-video-io-compile.log": "c5f99adb978d32dcd1f1c99b2c7154c28a46d44f92e0cf61d40803298d798b98",
+    ".dedup-work/phash434-20261016/native-video-symbols.log": "32443e7f14ef6e417969b63efe6e775a46886138b6f342f2fc30e257d2b65f63",
+    ".dedup-work/phash434-20261016/native-video-undefined-symbols.log": "9093d1007e6a86f8411defd1c9aa8bac195f554e2631b35c04ea5b4ca9ac42a8"
+  },
+  "scope": "Whole unchanged pHash.cpp compiled withvideo/image-enabledoriginalheader config andoriginalCImg/FFmpegdeclarations. Clanggnu14/O1/ASAN andlinker-dead_strip retainactualph_dct_videohash_dist withcompiler-inlinedoriginalHamming, discardunreferencedvideoIO. No fakebackend/bodyextraction/sourcechanges. Independentbrutesubsequenceoracle:120hashsequences lengths1..4 on{0,1,3},all14400orderedpairs atthresholds0/1/64 twice86400comparisons. Sixfreshprocesses incl2expectedASANstackoverflows at8MiBchild-onlystacklimit.",
+  "findings": [
+    "Nativecomparisonreturns1forproperorderedsubset anditsreversebecauseLCSnormalizedbyminlength. Intendedpartialmatchsimilarity, cannotprovecompletevideoidentity.",
+    "Empty/one-empty inputsreturnNaN; no nonemptyadmission. Threshold64makesarbitraryequal-lengthhashesmatch1; negative thresholdrejectsidentity0; parameterboundsnotadmitted.",
+    "StackVLA(N1+1)*(N2+1) overflows8MiBstackon4096hashes/side(~64MiBtable),2ASANprocesses confirm. This isboundedownedinputtest, notsystemwideRSSmeasurement.",
+    "Originalwholecimgffmpeg.cpp cannotcompile againstinstalledmodernFFmpeg:removedavcodec_close/AVStream.codec/avpicture APIs. No realvideodecode/hash/Pythonbindingqualification."
+  ],
+  "limits": [
+    "OriginalC++algorithm-onlyvideo comparison, no videoIOadaptation/fakes andno actualvideo/media decode/test/qualityproof",
+    "All183entrysubmodule stillpartiallyread; CImgcompiledbutnotfullyread; no wholepHashPy/fullbuild/platform/performance/adoptionclaim",
+    "8MiBstacklimitappliedonlyownedchildprocesses; no otherprocesses interrupted/globalsettingsmodified",
+    "Finitehashsequenceoracle confirmsalgorithmsemantics, notsemanticvideoidentityorcalibratedquality"
+  ]
+}
