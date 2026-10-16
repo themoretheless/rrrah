@@ -1,0 +1,987 @@
+{
+  "status": "verified_native_helper_contract_counterexamples",
+  "producer_sha256": "7680cacd01b1bee7892f3938872bdc9c27635ad37d8e11bf4541f81276fa418f",
+  "source": ".dedup-work/phash434-20261016/source/pHashPy/helpers.py",
+  "source_sha256": "a37b4b4810bfae71678fedacc89e60cf254106abf00e38cf81ef081ac6aa63bc",
+  "runtime": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "byteorder": "little",
+  "runs": [
+    {
+      "one_byte_pairs": 65536,
+      "fixed_width_mismatches": 32512,
+      "fixed_width_correct": 33024,
+      "mismatch_bit_length_histogram": {
+        "1": 256,
+        "2": 512,
+        "3": 1024,
+        "4": 2048,
+        "5": 4096,
+        "6": 8192,
+        "7": 16384
+      },
+      "first_mismatches": [
+        {
+          "a": 0,
+          "b": 1,
+          "observed": 1.0,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "observed": 0.5,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 3,
+          "observed": 1.0,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 4,
+          "observed": 0.3333333333333333,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 5,
+          "observed": 0.6666666666666666,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 6,
+          "observed": 0.6666666666666666,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 7,
+          "observed": 1.0,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 8,
+          "observed": 0.25,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 9,
+          "observed": 0.5,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 10,
+          "observed": 0.5,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 11,
+          "observed": 0.75,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 12,
+          "observed": 0.5,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 13,
+          "observed": 0.75,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 14,
+          "observed": 0.75,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 15,
+          "observed": 1.0,
+          "fixed_width_distance": 0.5
+        },
+        {
+          "a": 0,
+          "b": 16,
+          "observed": 0.2,
+          "fixed_width_distance": 0.125
+        }
+      ],
+      "controls": [
+        {
+          "name": "identity",
+          "a_hex": "12",
+          "b_hex": "12",
+          "observed": 0.0,
+          "expected": 0.0
+        },
+        {
+          "name": "low_bit",
+          "a_hex": "00",
+          "b_hex": "01",
+          "observed": 1.0,
+          "expected": 1.0
+        },
+        {
+          "name": "high_bit",
+          "a_hex": "00",
+          "b_hex": "80",
+          "observed": 0.125,
+          "expected": 0.125
+        },
+        {
+          "name": "all_bits",
+          "a_hex": "00",
+          "b_hex": "ff",
+          "observed": 1.0,
+          "expected": 1.0
+        },
+        {
+          "name": "empty_arrays",
+          "a_hex": "",
+          "b_hex": "",
+          "observed": 0.0,
+          "expected": 0.0
+        },
+        {
+          "name": "unequal_length_zero",
+          "a_hex": "",
+          "b_hex": "00",
+          "observed": 0.0,
+          "expected": 0.0
+        },
+        {
+          "name": "two_byte_low_bit",
+          "a_hex": "0000",
+          "b_hex": "0100",
+          "observed": 1.0,
+          "expected": 1.0
+        }
+      ],
+      "eight_byte_single_bit_positions": [
+        {
+          "bit": 0,
+          "observed": 1.0,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 1,
+          "observed": 0.5,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 2,
+          "observed": 0.3333333333333333,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 3,
+          "observed": 0.25,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 4,
+          "observed": 0.2,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 5,
+          "observed": 0.16666666666666666,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 6,
+          "observed": 0.14285714285714285,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 7,
+          "observed": 0.125,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 8,
+          "observed": 0.1111111111111111,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 9,
+          "observed": 0.1,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 10,
+          "observed": 0.09090909090909091,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 11,
+          "observed": 0.08333333333333333,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 12,
+          "observed": 0.07692307692307693,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 13,
+          "observed": 0.07142857142857142,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 14,
+          "observed": 0.06666666666666667,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 15,
+          "observed": 0.0625,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 16,
+          "observed": 0.058823529411764705,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 17,
+          "observed": 0.05555555555555555,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 18,
+          "observed": 0.05263157894736842,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 19,
+          "observed": 0.05,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 20,
+          "observed": 0.047619047619047616,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 21,
+          "observed": 0.045454545454545456,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 22,
+          "observed": 0.043478260869565216,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 23,
+          "observed": 0.041666666666666664,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 24,
+          "observed": 0.04,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 25,
+          "observed": 0.038461538461538464,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 26,
+          "observed": 0.037037037037037035,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 27,
+          "observed": 0.03571428571428571,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 28,
+          "observed": 0.034482758620689655,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 29,
+          "observed": 0.03333333333333333,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 30,
+          "observed": 0.03225806451612903,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 31,
+          "observed": 0.03125,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 32,
+          "observed": 0.030303030303030304,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 33,
+          "observed": 0.029411764705882353,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 34,
+          "observed": 0.02857142857142857,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 35,
+          "observed": 0.027777777777777776,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 36,
+          "observed": 0.02702702702702703,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 37,
+          "observed": 0.02631578947368421,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 38,
+          "observed": 0.02564102564102564,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 39,
+          "observed": 0.025,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 40,
+          "observed": 0.024390243902439025,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 41,
+          "observed": 0.023809523809523808,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 42,
+          "observed": 0.023255813953488372,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 43,
+          "observed": 0.022727272727272728,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 44,
+          "observed": 0.022222222222222223,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 45,
+          "observed": 0.021739130434782608,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 46,
+          "observed": 0.02127659574468085,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 47,
+          "observed": 0.020833333333333332,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 48,
+          "observed": 0.02040816326530612,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 49,
+          "observed": 0.02,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 50,
+          "observed": 0.0196078431372549,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 51,
+          "observed": 0.019230769230769232,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 52,
+          "observed": 0.018867924528301886,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 53,
+          "observed": 0.018518518518518517,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 54,
+          "observed": 0.01818181818181818,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 55,
+          "observed": 0.017857142857142856,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 56,
+          "observed": 0.017543859649122806,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 57,
+          "observed": 0.017241379310344827,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 58,
+          "observed": 0.01694915254237288,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 59,
+          "observed": 0.016666666666666666,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 60,
+          "observed": 0.01639344262295082,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 61,
+          "observed": 0.016129032258064516,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 62,
+          "observed": 0.015873015873015872,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 63,
+          "observed": 0.015625,
+          "fixed_width_distance": 0.015625
+        }
+      ]
+    },
+    {
+      "one_byte_pairs": 65536,
+      "fixed_width_mismatches": 32512,
+      "fixed_width_correct": 33024,
+      "mismatch_bit_length_histogram": {
+        "1": 256,
+        "2": 512,
+        "3": 1024,
+        "4": 2048,
+        "5": 4096,
+        "6": 8192,
+        "7": 16384
+      },
+      "first_mismatches": [
+        {
+          "a": 0,
+          "b": 1,
+          "observed": 1.0,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "observed": 0.5,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 3,
+          "observed": 1.0,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 4,
+          "observed": 0.3333333333333333,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 5,
+          "observed": 0.6666666666666666,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 6,
+          "observed": 0.6666666666666666,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 7,
+          "observed": 1.0,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 8,
+          "observed": 0.25,
+          "fixed_width_distance": 0.125
+        },
+        {
+          "a": 0,
+          "b": 9,
+          "observed": 0.5,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 10,
+          "observed": 0.5,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 11,
+          "observed": 0.75,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 12,
+          "observed": 0.5,
+          "fixed_width_distance": 0.25
+        },
+        {
+          "a": 0,
+          "b": 13,
+          "observed": 0.75,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 14,
+          "observed": 0.75,
+          "fixed_width_distance": 0.375
+        },
+        {
+          "a": 0,
+          "b": 15,
+          "observed": 1.0,
+          "fixed_width_distance": 0.5
+        },
+        {
+          "a": 0,
+          "b": 16,
+          "observed": 0.2,
+          "fixed_width_distance": 0.125
+        }
+      ],
+      "controls": [
+        {
+          "name": "identity",
+          "a_hex": "12",
+          "b_hex": "12",
+          "observed": 0.0,
+          "expected": 0.0
+        },
+        {
+          "name": "low_bit",
+          "a_hex": "00",
+          "b_hex": "01",
+          "observed": 1.0,
+          "expected": 1.0
+        },
+        {
+          "name": "high_bit",
+          "a_hex": "00",
+          "b_hex": "80",
+          "observed": 0.125,
+          "expected": 0.125
+        },
+        {
+          "name": "all_bits",
+          "a_hex": "00",
+          "b_hex": "ff",
+          "observed": 1.0,
+          "expected": 1.0
+        },
+        {
+          "name": "empty_arrays",
+          "a_hex": "",
+          "b_hex": "",
+          "observed": 0.0,
+          "expected": 0.0
+        },
+        {
+          "name": "unequal_length_zero",
+          "a_hex": "",
+          "b_hex": "00",
+          "observed": 0.0,
+          "expected": 0.0
+        },
+        {
+          "name": "two_byte_low_bit",
+          "a_hex": "0000",
+          "b_hex": "0100",
+          "observed": 1.0,
+          "expected": 1.0
+        }
+      ],
+      "eight_byte_single_bit_positions": [
+        {
+          "bit": 0,
+          "observed": 1.0,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 1,
+          "observed": 0.5,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 2,
+          "observed": 0.3333333333333333,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 3,
+          "observed": 0.25,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 4,
+          "observed": 0.2,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 5,
+          "observed": 0.16666666666666666,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 6,
+          "observed": 0.14285714285714285,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 7,
+          "observed": 0.125,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 8,
+          "observed": 0.1111111111111111,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 9,
+          "observed": 0.1,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 10,
+          "observed": 0.09090909090909091,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 11,
+          "observed": 0.08333333333333333,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 12,
+          "observed": 0.07692307692307693,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 13,
+          "observed": 0.07142857142857142,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 14,
+          "observed": 0.06666666666666667,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 15,
+          "observed": 0.0625,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 16,
+          "observed": 0.058823529411764705,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 17,
+          "observed": 0.05555555555555555,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 18,
+          "observed": 0.05263157894736842,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 19,
+          "observed": 0.05,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 20,
+          "observed": 0.047619047619047616,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 21,
+          "observed": 0.045454545454545456,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 22,
+          "observed": 0.043478260869565216,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 23,
+          "observed": 0.041666666666666664,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 24,
+          "observed": 0.04,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 25,
+          "observed": 0.038461538461538464,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 26,
+          "observed": 0.037037037037037035,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 27,
+          "observed": 0.03571428571428571,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 28,
+          "observed": 0.034482758620689655,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 29,
+          "observed": 0.03333333333333333,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 30,
+          "observed": 0.03225806451612903,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 31,
+          "observed": 0.03125,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 32,
+          "observed": 0.030303030303030304,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 33,
+          "observed": 0.029411764705882353,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 34,
+          "observed": 0.02857142857142857,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 35,
+          "observed": 0.027777777777777776,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 36,
+          "observed": 0.02702702702702703,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 37,
+          "observed": 0.02631578947368421,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 38,
+          "observed": 0.02564102564102564,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 39,
+          "observed": 0.025,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 40,
+          "observed": 0.024390243902439025,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 41,
+          "observed": 0.023809523809523808,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 42,
+          "observed": 0.023255813953488372,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 43,
+          "observed": 0.022727272727272728,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 44,
+          "observed": 0.022222222222222223,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 45,
+          "observed": 0.021739130434782608,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 46,
+          "observed": 0.02127659574468085,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 47,
+          "observed": 0.020833333333333332,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 48,
+          "observed": 0.02040816326530612,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 49,
+          "observed": 0.02,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 50,
+          "observed": 0.0196078431372549,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 51,
+          "observed": 0.019230769230769232,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 52,
+          "observed": 0.018867924528301886,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 53,
+          "observed": 0.018518518518518517,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 54,
+          "observed": 0.01818181818181818,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 55,
+          "observed": 0.017857142857142856,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 56,
+          "observed": 0.017543859649122806,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 57,
+          "observed": 0.017241379310344827,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 58,
+          "observed": 0.01694915254237288,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 59,
+          "observed": 0.016666666666666666,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 60,
+          "observed": 0.01639344262295082,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 61,
+          "observed": 0.016129032258064516,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 62,
+          "observed": 0.015873015873015872,
+          "fixed_width_distance": 0.015625
+        },
+        {
+          "bit": 63,
+          "observed": 0.015625,
+          "fixed_width_distance": 0.015625
+        }
+      ]
+    }
+  ],
+  "scope": "Completeunchangedhelpers.py loadedviaimportlib exactfilepath, actualstdlibint/bin. No functionextraction/dependencyfakes/C++calls/packageinitializer/initexecution.131072singlebytepaircomparisons plus128bitpositionchecks and14explicitboundarychecks across2rounds inoneprocess.",
+  "findings": [
+    "Helperdividespopcountxor bysignificantbitlength, notdeclaredhashwidth: one-bitdistancevaries1..1/64 bybitposition.32512of65536onebytepairs differfromnormalizedfixed-widthHammingdistance.",
+    "Functiondocdescribesmatchfractionbutidenticalhashreturns0, alloppositebitsreturns1: actualnormalizeddistance-like behaviornotmatchsimilarity.",
+    "Emptyandunequal-lengthzerobytehashes acceptedwith0, no equal-length/nonemptyadmission.",
+    "No timing/quality/runtimebinding orwholepHashPy/nativepHashqualification."
+  ]
+}
