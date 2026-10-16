@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "exit_code": 0,
+  "binary_sha256": "3839e72016497119ad9e26242a4b5c8a62cdf362cc12f6660f6e116fa81b21b1",
+  "probe_source_sha256": "430ac09926cb582f9d2d325b92d54f6751c84d4209c31ce9ecc3aba20ea8fb38",
+  "log_sha256": "2c1798160474baee784cb090a81ab5db263d98a9fee50639272db61cd3e53dad",
+  "backend_env": "metal",
+  "raster_cache_count": 1,
+  "raster_swap_mb": 16,
+  "raster_swap_count": 4,
+  "raster_swap_restore_mb": 8,
+  "prefetch_previous": 1,
+  "prefetch_next": 1,
+  "events": [
+    {
+      "phase": "5",
+      "path": "/tmp/rrrah-live-raster-navigation-20261016/02-gray-alpha.psd",
+      "generation": "3",
+      "previous_generation": "2",
+      "frames": "4"
+    },
+    {
+      "phase": "6",
+      "path": "/tmp/rrrah-live-raster-navigation-20261016/01-hdr.exr",
+      "generation": "4",
+      "previous_generation": "3",
+      "frames": "5"
+    }
+  ],
+  "scope": "actual App window navigation/ready/presented generations and GPU completion after simulated loss; not exact framebuffer oracle, cache-hit/decode count proof, full user input or latency, calibrated HDR",
+  "sources": [
+    {
+      "name": "float-shifted-window-negative.exr",
+      "sha256": "70fe9844ea7ea6e32020b79f9cae433bde4644c023b99809ab902507489b990b"
+    },
+    {
+      "name": "psd-tools-gray0.psd",
+      "sha256": "f7160dd9dea521cb05e586dd62cff3f7a2429b070b2aba38cdc71b5522e9217c"
+    }
+  ]
+}

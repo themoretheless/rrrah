@@ -1,0 +1,50 @@
+{
+  "status": "bounded_cyclic_animation_prefetch_wired_into_foreground_worker",
+  "changes": [
+    "Selected raster metadata reports image count and whether total plays is0 or greater than1",
+    "Repeating animations use lazy cyclic index order; pages/mips and one-play animations keep linear order",
+    "Configured ahead/behind direction bias and primary-side ordering retained",
+    "Opposite range clipped algebraically to avoid duplicates/current frame without a visited set",
+    "Direction inference uses circular distances for repeating animations: last->first forward, first->last backward",
+    "All offset arithmetic avoids selected+offset overflow; invalid/empty/single selections produce empty plans"
+  ],
+  "checks": {
+    "independent_modulo_model_cases": 4992,
+    "virtual_usize_max_prefix_scenarios": 36,
+    "virtual_prefix_length": 16,
+    "overflow_duplicate_current_index_controls": true,
+    "real_sources": [
+      "gif-animation-disposal-3.gif",
+      "apng-compose-0-0.apng",
+      "webp-animation-0.webp"
+    ],
+    "real_wrapped_plan": [
+      0,
+      1,
+      2
+    ],
+    "window": {
+      "ahead": 2,
+      "behind": 1
+    },
+    "selected": 3,
+    "real_prefetched_neighbours": 9,
+    "next_cycle_first_frame_ram_hits_under_full_root_pressure": 3,
+    "decoded_again_on_wrapped_hit": false,
+    "final_memory_credit": 0,
+    "viewer_passed": 270,
+    "viewer_failed": 0,
+    "viewer_ignored": 72
+  },
+  "limits": [
+    "Finite repeats use global source play count; speculative wrapping may warm an unused first frame during the final pass",
+    "Circular shortest-distance inference for nonadjacent seeks is a policy heuristic; equal distances choose forward",
+    "Real cache control uses4-entry RAM capacity; smaller configured limits may refuse speculative admission as intended",
+    "Lazy usizeMAX tests inspect bounded prefixes, not impossible full-collection allocation",
+    "No wall-clock speed/FPS, new GPU/physical HDR/NVIDIA or complete100-format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-app/src/gallery.rs": "9c94600f0ada8955549a523b1ab3509d9410f752f2ae5921511e7259a9dae5a9",
+    "crates/rrrah-app/src/main.rs": "af513885cd9bbe272855e03027c7ba7f67cd1644f41c2180f5ba0bb9fc361774"
+  }
+}

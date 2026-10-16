@@ -1,0 +1,7 @@
+Replaced singlewholeinput XCFzlibdecompress call with private boundedinflate helper: max64KiBinput/output perstep, explicitprogress/stall/length checks, preservedconsumedsourcebytes allowingfollowingobjectdata/padding. Managedlevelpasses cancellationchecks intoinflate and mapsstop totypedXcfPixelError::Cancelled beforepublishingprivateoutput. Decoderstatecredit remainsownedaroundinflate. LegacyunbudgetedtileAPI uses samehelperwithno cancellationcallback and preservesitsreturn/errorcontract.
+
+IndependentRFC1950/1951stored-block test:100000emptyblocks then4bytepixel,500015byteinput. Everyreportedinput/outputdelta<=65536,exactpixel/consumption,tail16bytesunconsumed,6truncatedprefixesrefused. Managedcancelafterfirstboundedstep(check4)withoutput4+tile4+state65536peak65544 releasesallcredit;retryexact/final0. Layered77passed/2ignored,includingearlierzlibtile raw/RLE/tailtests. Publicregressionpending. Not a physicaldisk/cancellationlatencybenchmark or neworiginalGIMP/GPUqualification.
+
+Follow-up gates complete: fullpublicdecode197passed/5ignored,ordinaryviewer282passed/79ignored. No newGPU/liveGIMP claim inferred from these CPU gates.
+
+Expansion/rollback follow-up (test-only): validdeflatestreams expanding0/3/5/65540bytes for a4bytetile each returntypedstructurerefusal, no outputpublished/root0,peak65544. Validretry matches4pixelsbytes;checksumcorruptionreturnsinvalidzlibandroot0. FullLayered78passed/2ignored. No furtherproductionchange; previouspublic197/viewer282gates coverunchangedimplementation. expansion-rollback.log/hashretained.

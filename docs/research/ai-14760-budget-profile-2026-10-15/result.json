@@ -1,0 +1,80 @@
+{
+  "pixel": [
+    147,
+    60
+  ],
+  "ordinary_limits": {
+    "source": 4000000,
+    "geometry": 40000000,
+    "memory_bytes": 268435456
+  },
+  "ordinary_grid4": {
+    "completed": false,
+    "source_spent": 4000000,
+    "geometry_remaining_at_refusal": 553106,
+    "fragments_processed": 640780,
+    "final_credit": 0,
+    "deadline": false,
+    "log": "/tmp/ai-14760-source-budget4m.log"
+  },
+  "existing_variants": [
+    {
+      "grid": 8,
+      "owner_word_occupancy": false,
+      "completed": false,
+      "source_spent": 3581659,
+      "final_credit": 0,
+      "deadline": false,
+      "refusal_cause": "Confirmed geometry work exhausted with traced baseline; source allowance remains.",
+      "log": "/tmp/ai-14760-grid8-source4m.log",
+      "geometry_remaining": 0,
+      "traced_log": "/tmp/ai-14760-grid8-traced-baseline.log"
+    },
+    {
+      "grid": 4,
+      "owner_word_occupancy": true,
+      "completed": false,
+      "source_spent": 3293120,
+      "final_credit": 0,
+      "deadline": false,
+      "refusal_cause": "Confirmed geometry work exhausted with traced baseline; source allowance remains.",
+      "log": "/tmp/ai-14760-occupancy-source4m.log",
+      "geometry_remaining": 0,
+      "traced_log": "/tmp/ai-14760-occupancy-traced-baseline.log"
+    }
+  ],
+  "direct_original_diagnostic": {
+    "source_limit": 16000000,
+    "ordinary_source_qualification": false,
+    "completed": true,
+    "source_spent": 10063934,
+    "geometry_spent": 33349280,
+    "geometry_limit": 40000000,
+    "fragments": 900970,
+    "white_rgb": [
+      212.58851238180955,
+      166.9801103668213,
+      146.2529650952822
+    ],
+    "rgb8": [
+      213,
+      167,
+      146
+    ],
+    "alpha": 0.5770124599523326,
+    "native_components": [
+      0.1957395447949678,
+      0.6516873837976049,
+      0.7808840527972956,
+      0.12729011925856604
+    ],
+    "final_credit": 0,
+    "deadline": false,
+    "log": "/tmp/ai-14760-original-diagnostic16m.log"
+  },
+  "finding": "Ordinary metadata traversal still exhausts source allowance. Existing grid/occupancy variants do not complete. Original diagnostic establishes reference output and900970 fragments; optimize traversal/owner bookkeeping rather than raising ordinary limits.",
+  "limitations": [
+    "No complete fullpage or strict72dpi qualification.",
+    "16M is an explicit diagnostic override for original comparison only."
+  ]
+}

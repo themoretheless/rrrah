@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "production_module": "crates/rrrah-core/src/bayer.rs",
+  "behavior": [
+    "borrow sensor metadata without copying black repeat grid",
+    "native Bayer CFA and joint odd-grid/parity validation",
+    "phase white levels and distinct first/second green gains",
+    "retain resolved WB scale and HDR values above white",
+    "clamp only samples below sensor black",
+    "validate camera-to-linear-sRGB matrix for later GPU color transform",
+    "budgeted normalized f32 sensor buffer with cooperative cancellation"
+  ],
+  "qualification": {
+    "authored_dimensions": [
+      17,
+      13
+    ],
+    "cfa_layouts": 4,
+    "black_grid": [
+      3,
+      5
+    ],
+    "white_levels": [
+      100,
+      200,
+      300,
+      400
+    ],
+    "wb_gains": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "analytic_normalized_hdr_values": [
+      4,
+      6,
+      8,
+      10
+    ],
+    "tests": [
+      "all sites exact across odd-repeat parity",
+      "identity camera transform tolerance1e-5",
+      "below-black clamp and invalid coordinate",
+      "one-byte-short budget refuses",
+      "post-allocation cancel releases output",
+      "retry and shared buffer lifetime",
+      "invalid level intersection/matrix/sample count refuse"
+    ],
+    "core_library_passed": 142,
+    "failed": 0,
+    "ignored": 2
+  },
+  "limitations": [
+    "authored controls, not camera corpus",
+    "normalization and camera matrix API not yet connected to viewer compute path",
+    "GPU camera color conversion and typed resident raster upload still pending"
+  ],
+  "source_sha256": {
+    "crates/rrrah-core/src/bayer.rs": "1b2843f44f73d7329569f13d3675b71c7110d9585aa8fb3d452ab91653105838",
+    "crates/rrrah-core/src/lib.rs": "a2d3c65c852c213da4d646ce0f25482549e3ac4d1edd04269845cf4852ad621b"
+  }
+}

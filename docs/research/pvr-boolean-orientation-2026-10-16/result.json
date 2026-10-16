@@ -1,0 +1,31 @@
+{
+  "status": "all_boolean_orientation_byte_values_verified",
+  "specification": "https://docs.imgtec.com/specifications/pvr-file-format-specification/html/topics/pvr-metadata.html",
+  "contract": "Each axis byte is Boolean; zero forward, any nonzero reverse. Z logical orientation retained without changing a2D plane.",
+  "matrix": {
+    "codecs": [
+      "ETC1",
+      "BC1",
+      "BC3",
+      "linear DXT2 float32"
+    ],
+    "axes": 3,
+    "byte_values_per_axis": 256,
+    "cases": 3072,
+    "pixels_compared_per_case": 45,
+    "reference": "Independent Android/Pillow-derived unflipped fixture oracles; test independently maps logical x/y to reference pixels"
+  },
+  "checks": [
+    "All pixel/sample bits match expected orientation",
+    "All original three metadata bytes retained exactly including noncanonical nonzero values",
+    "Exact retained metadata-plus-output budget; every case releases credit to zero",
+    "84 texture tests pass;2 manual profiles ignored"
+  ],
+  "source_sha256": "c3fc22e835bc76c717cffd2b6897b3d1470c2ecaec2912f4095f470a80ed1b78",
+  "limits": [
+    "Test/source audit only; production orientation behavior was already correct",
+    "Individual axis values exhaustive, not all16,777,216 three-byte combinations",
+    "Z pixels tested for2D depth1 only; no3D volume qualification",
+    "No new Metal, physical HDR, NVIDIA or throughput claim"
+  ]
+}

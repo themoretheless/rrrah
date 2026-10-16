@@ -1,0 +1,97 @@
+{
+  "status": "native finite DICOM float32/float64 scalar decode and actual Metal cache/swap validation passed",
+  "specification": "https://dicom.nema.org/Medical/dicom/2025b/output/chtml/part05/chapter_8.html",
+  "implementation": {
+    "runtime": "owned Rust; pydicom/NumPy used only to generate independent test encodings and pixel oracles",
+    "syntaxes": [
+      "Implicit VR Little Endian",
+      "Explicit VR Little Endian",
+      "Explicit VR Big Endian"
+    ],
+    "float32": "(7FE0,0008) OF, BitsAllocated32",
+    "float64": "(7FE0,0009) OD, BitsAllocated64",
+    "layout": "BitsStored/HighBit/PixelRepresentation prohibited for OF/OD; MONOCHROME2 only; conflicting pixel elements refuse",
+    "precision": "f64 retained through scalar window; 2^-30 input increment maps to 1/128 with [1,1+f32::EPSILON] in every encoding",
+    "range": "finite float64 outside f32 range may map through explicit window; raw f32 output refuses overflow",
+    "missing_values": "NaN/infinity and declared integer/float/double padding refuse until an explicit missing-value policy exists",
+    "output": "managed RGBA32Float; source budget retained during decode, released before return; output owner retains its reservation"
+  },
+  "fixtures": {
+    "generator": "scripts/generate-dicom-fixtures.py",
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "new_containers": 6,
+    "new_frames": 12,
+    "all_containers": 19,
+    "all_frames": 32,
+    "source_sha256": {
+      "dicom-big-endian-float32.dcm": "34be2d3daa3611fff9091e117a0a70e3e3771e2ba5eb2ac4e8b3c3e63ec32402",
+      "dicom-big-endian-float64.dcm": "f4b2822de28d961c8ba6571a99bd5051f83f391bd60e2b2659b3393e6f19df53",
+      "dicom-explicit-float32.dcm": "c9a448aee4710efd5bb7aac2e820f5234ae136b325ec43fd086b8feab3e4850a",
+      "dicom-explicit-float64.dcm": "1ad2e72256100e4851f00f22981cf942def5bd4e6d80275325876b16918f366f",
+      "dicom-implicit-float32.dcm": "fdfcf956e4826e8801c28b3e199a3edf02ed81a5240ccdc7d68414f103c9b9b9",
+      "dicom-implicit-float64.dcm": "f80be3fbd93f488a18f2cf7910decc8380d15e193ee1f31b3a5ffd7a17c09463"
+    },
+    "previous_implicit_sources_and_primary_alternate_oracles_byte_unchanged": true,
+    "scope": "authored CC0 pixel-encoding containers; not complete clinical IODs"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 23,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-float-scientific-final-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-float-facade-final-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-float-pipeline-cpu-final-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-float-pipeline-metal-20261016.log"
+    }
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_gpu_skip": false,
+    "cases": 54,
+    "windows_per_frame": 2,
+    "ram_pressure_hits": 54,
+    "swap_writes": 54,
+    "swap_reads": 54,
+    "swap_errors": 0,
+    "sdr_hdr_readbacks": 324,
+    "comparison": "independent pydicom window pixels rendered by the same renderer versus native warm/restored inputs, full SDR RGBA8 and HDR half-float buffers bit exact",
+    "nonzero_ttl_visible_protection": true,
+    "real_foreground_pin_transition": true,
+    "decoder_blocked_reverse_prefetch": true,
+    "stale_generation_refusal": true,
+    "managed_root_peak": 65536,
+    "managed_root_final": 0,
+    "root_peak_scope": "includes artificial pressure reservation, not process RSS",
+    "metal_duration_seconds": 46.77
+  },
+  "scope_remaining": [
+    "compressed DICOM, sequences/LUT/color and clinical presentation are not qualified",
+    "missing-value display policy remains explicit refusal",
+    "float64 raw output is limited by public RGBA32Float representation",
+    "physical HDR calibration and arbitrary 100-format fidelity are not proved",
+    "NVIDIA deferred by user"
+  ],
+  "failed_attempts": [
+    {
+      "log": "/tmp/dicom-float-pipeline-cpu-20261016.log",
+      "reason": "incorrect cargo package selector rrrah-app; no test ran; corrected to rrrah"
+    }
+  ]
+}

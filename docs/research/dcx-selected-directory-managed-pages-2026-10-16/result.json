@@ -1,0 +1,31 @@
+{
+  "status": "DCX selected page directory parsed without heap offsets vector; managed PCX admission and page metadata verified",
+  "change": "Single bounded1024entry directory walk tracks previous offset, selected start/next boundary and page count. All entries/order/terminator validated before selected PCX decode. No offset vector or page payload copies.",
+  "regressions": {
+    "pillow_pages": 2,
+    "exact": "Selected RGBA output plus PCX planar row peak; one-byte-short refuses and releases all managed credit",
+    "metadata": "Selected0/1 and image_count2 preserved against independent page bytes",
+    "directory": "Duplicate/out-of-file later offsets, nonzero entry after terminator and early hole refused even when selected page0, with0output budget",
+    "index": "usize::MAX returns InvalidDcx page index out of range without overflow"
+  },
+  "tests": {
+    "texture_lib": {
+      "passed": 60,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "clippy_texture_lib_tests_no_deps_warnings_denied": "passed"
+  },
+  "limits": [
+    "Only selected PCX page payload decoded; unselected payload contents not validated",
+    "Source file still fully read in common router; no file-streaming claim",
+    "No new Metal/viewer navigation test in this turn",
+    "Full DCX/100format qualification remains open"
+  ],
+  "source_sha256": "488107fca6dcfd358e979e639482a933497fa4e138685717a383598af4e90356"
+}

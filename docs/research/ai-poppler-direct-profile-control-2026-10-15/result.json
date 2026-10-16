@@ -1,0 +1,139 @@
+{
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+  "default_control_matches_entire_cli_page": true,
+  "renders": [
+    {
+      "profile": "default",
+      "vector_aa": 0,
+      "pixel14759": [
+        188,
+        82,
+        64
+      ],
+      "ppm_sha256": "abb15c9e2456b35af54cdf158462bda3c2b8f3f71547b0c9b31455215aec6adb",
+      "stderr": "",
+      "command": [
+        "/tmp/rrrah-ai-poppler-profile-oracle-20261015",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-profile-direct-20261015-v2/default-aa0.ppm",
+        "-",
+        "0"
+      ]
+    },
+    {
+      "profile": "default",
+      "vector_aa": 1,
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30",
+      "stderr": "",
+      "command": [
+        "/tmp/rrrah-ai-poppler-profile-oracle-20261015",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-profile-direct-20261015-v2/default-aa1.ppm",
+        "-",
+        "1"
+      ]
+    },
+    {
+      "profile": "aligned",
+      "vector_aa": 0,
+      "pixel14759": [
+        188,
+        100,
+        76
+      ],
+      "ppm_sha256": "7a515eb19815a9a1a1510e3c9c72f208d2f9a46e8449fd6c5d8bdb9df1fc2c19",
+      "stderr": "ORACLE_PROFILE perceptual_input_supported=1 profile_payload_unmodified=1\n",
+      "command": [
+        "/tmp/rrrah-ai-poppler-profile-oracle-20261015",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-profile-direct-20261015-v2/aligned-aa0.ppm",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "0"
+      ]
+    },
+    {
+      "profile": "aligned",
+      "vector_aa": 1,
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "8e524275d04386895c04522d926535647f504e06f1b7aafd9718809dfef796f8",
+      "stderr": "ORACLE_PROFILE perceptual_input_supported=1 profile_payload_unmodified=1\n",
+      "command": [
+        "/tmp/rrrah-ai-poppler-profile-oracle-20261015",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-profile-direct-20261015-v2/aligned-aa1.ppm",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "1"
+      ]
+    }
+  ],
+  "harness_sha256": "3f1dd309acdb8427f436eeb3eb603ace8e48cc526f575b736ca44f5b89879db6",
+  "constant_control": {
+    "input_cmyk": [
+      0.22675490379333496,
+      0.6583090424537659,
+      0.818958580493927,
+      0.10230232775211334
+    ],
+    "native_point_rgb": [
+      180.41906118392944,
+      103.0829206109047,
+      63.532701060175896
+    ],
+    "renders": [
+      {
+        "profile": "default",
+        "rgb8": [
+          178,
+          88,
+          54
+        ],
+        "all_pixels_same": true,
+        "ppm_sha256": "04f57d7f191a16010160156bc863de1436e18882fc81527c4ebb18d453540d9c"
+      },
+      {
+        "profile": "aligned",
+        "rgb8": [
+          180,
+          103,
+          63
+        ],
+        "all_pixels_same": true,
+        "ppm_sha256": "985a88fcbfcae3bea7f80c28cfedcc46c8cc3f4edaa36d41e1eaf108613e37f4"
+      }
+    ],
+    "lcms_stdout": "180.3974 103.0845 63.5384 \n",
+    "lcms_stderr": "LittleCMS ColorSpace conversion calculator - 5.1 [LittleCMS 2.19]\nCopyright (c) 1998-2026 Marti Maria Saguer. See COPYING file for details.\n",
+    "synthetic_pdf_sha256": "9612774853700ee781c9a75b97c8a7f91366eb5b0117cb58b4ba10b55c35afec",
+    "native_nearest_rgb8": [
+      180,
+      103,
+      64
+    ],
+    "aligned_poppler_difference_from_native_nearest": [
+      0,
+      0,
+      -1
+    ]
+  },
+  "harness": "scripts/research/ai-poppler-profile-oracle.cpp",
+  "build": "c++ -std=c++20 scripts/research/ai-poppler-profile-oracle.cpp $(pkg-config --cflags --libs poppler lcms2) -o /tmp/rrrah-ai-poppler-profile-oracle-20261015",
+  "scope": "Test-only external oracle harness; installed Poppler26.10.0 library. Direct default CMYK profile installation with correct perceptual-input support validation, no ICC payload/class edits, no production dependency or renderer modifications. Original-document strict oracle remains separate.",
+  "conclusion": "Whole-page default controls match CLI exactly in both AA modes, validating harness geometry/dimensions. Profile-aligned Poppler changes original mesh pixel to188,100,76 with AA off, still different from native center180.419,103.083,63.533. A constant CMYK rectangle using precisely the native center components instead gives aligned Poppler180,103,63 and independent LCMS180.3974,103.0845,63.5384. Thus ICC policy explains part of the difference, but original mesh sampling/rasterization still differs; one blue quantization level also remains on the constant control.",
+  "limitations": [
+    "No native full-page completed image and no strict-fidelity qualification.",
+    "Matching ICC payload does not certify identical interpolation stage, intent handling or quantization on every mesh.",
+    "Flat control is one CMYK sample, not a whole-profile transform qualification.",
+    "Harness deliberately supports only unrotated first page,72dpi and bounded4096dimensions.",
+    "Initial direct displayPage attempt produced300x246; corrected to the CLI ceil-sized displayPageSlice301x246 before validated controls."
+  ]
+}

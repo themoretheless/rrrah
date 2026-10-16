@@ -1,0 +1,76 @@
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.58s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_texture-f0210ba8205432b9)
+
+running 67 tests
+test dcx::tests::directory_validation_rejects_bad_offsets ... ok
+test dds::tests::bc1_transparency ... ok
+test dcx::tests::all_directory_entries_are_validated_even_after_selected_page ... ok
+test dds::tests::bc2_explicit_alpha ... ok
+test dds::tests::dx10_color_and_opaque_alpha ... ok
+test dds::tests::bc3_alpha_endpoints ... ok
+test dcx::tests::public_api_selects_each_page_against_pillow_oracle ... ok
+test dds::tests::invalid_mip_count_trailing_storage_and_ambiguous_pitch_are_rejected ... ok
+test dds::tests::malformed_and_unsupported_dx10_are_typed_errors ... ok
+test dds::tests::uncompressed_dx10_transfer_and_bgrx_alpha ... ok
+test dds::tests::uncompressed_masks_pitch_and_bounds ... ok
+test ktx2::tests::corrupt_deflate_releases_admitted_scratch ... ok
+test ktx2::tests::implicit_base_level_is_valid_for_uncompressed_storage ... ok
+test ktx2::tests::descriptor_mismatch_overlap_and_corrupt_deflate_are_rejected ... ok
+test ktx2::tests::float_hdr_survives_plain_and_deflate ... ok
+test ktx2::tests::linear_assumption_only_qualifies_absent_dfd_primaries ... ok
+KTX2_INFLATE_BACKEND requested=47497 admitted=65536
+test ktx2::tests::only_selected_deflate_payload_is_inflated_but_all_ranges_are_checked ... ok
+test ktx2::tests::metadata_scratch_is_admitted_and_released_on_success_and_duplicate ... ok
+test ktx2::tests::pinned_inflate_allocation_fits_reserved_credit ... ok
+test ktx2::tests::sixteen_bit_samples_survive_plain_and_deflate ... ok
+test ktx2::tests::srgb_alpha_reaches_linear_display ... ok
+test ktx2::tests::selected_mip_keeps_pixels_transfer_and_selection ... ok
+test ktx::tests::malformed_mip_size_array_and_trailing_data_are_rejected ... ok
+test ktx::tests::sixteen_bit_and_float_samples_survive_both_byte_orders ... ok
+test ktx2::tests::largest_permitted_level_directory_fits_fixed_tables ... ok
+test ktx::tests::metadata_offsets_are_admitted_released_and_duplicates_refused ... ok
+test ktx::tests::srgb_and_linear_transfers_remain_distinct ... ok
+test pcx::tests::independently_encoded_pillow_corpus_matches_pixel_oracle ... ok
+test pcx::tests::indexed_rle_uses_trailing_palette_and_allows_cross_plane_runs ... ok
+test pcx::tests::invalid_packets_and_trailing_data_precede_output_admission ... ok
+test pcx::tests::malformed_runs_and_header_shapes_fail ... ok
+test pcx::tests::pcx_import_convention_reaches_linear_display ... ok
+test pcx::tests::managed_pillow_rgb_and_indexed_exact_short_and_shared_ownership ... ok
+test astc::tests::hdr_values_above_one_are_preserved ... ok
+test pcx::tests::planar_bits_are_msb_first_and_plane_zero_is_least_significant ... ok
+test astc::tests::malformed_blocks_payloads_and_volumes_are_rejected ... ok
+test pcx::tests::raw_encoding_does_not_interpret_rle_markers ... ok
+test pcx::tests::rgb_planes_keep_padding_out_of_pixels_and_decode_escaped_literals ... ok
+test pcx::tests::windows_version_four_uses_header_palette ... ok
+test pkm::tests::constant_alpha_reaches_linear_display ... ok
+test pkm::tests::invalid_etc1_differential_and_excessive_output_are_rejected ... ok
+test pkm::tests::malformed_etc1_precedes_zero_budget_admission ... ok
+test pkm::tests::rejects_invalid_dimensions_and_payload ... ok
+test pvr::tests::associated_linear_hdr_is_unassociated_and_invalid_alpha_is_rejected ... ok
+test pvr::tests::bounds_mips_flags_channels_and_metadata_fail_explicitly ... ok
+test pvr::tests::cancellation_precedes_io_and_header_validation ... ok
+test pvr::tests::compressed_variable_types_do_not_bypass_codec_interpretation ... ok
+test sti::tests::indexed_and_etrle_selection_budget_and_last_owner ... ok
+test sti::tests::rgb24_zlib_preserves_samples_and_bounds_application_data ... ok
+test sti::tests::rgb_masks_preserve_normalized_precision_alpha_and_budget ... ok
+test sti::tests::zlib_matches_indexed_samples_and_rejects_checksum_length_and_pressure ... ok
+test wad::tests::malformed_directory_mips_and_palette_fail ... ok
+test wal::tests::malformed_mip_directory_and_sizes_are_rejected ... ok
+test astc::tests::ldr_constant_crop_preserves_straight_alpha ... ok
+test astc::tests::compressed_hdr_matches_reference_float_oracle ... ok
+test pkm::tests::managed_oracle_pixels_exact_short_and_shared_ownership ... ok
+test ktx::tests::every_chain_prefix_is_rejected_even_for_a_complete_first_mip ... ok
+test pvr::tests::every_fixture_prefix_is_rejected_before_partial_mip_output ... ok
+test astc::tests::explicit_linear_primaries_qualify_hdr_without_changing_samples_or_ldr ... ok
+test dds::tests::selected_mips_match_standalone_pillow_oracles ... ok
+test ktx::tests::selected_mips_preserve_native_precision_orientation_and_transfer ... ok
+test pvr::tests::native_sample_and_powervr_pvrtc_oracles_match ... ok
+test ktx2::tests::all_stored_mips_match_native_sample_contracts ... ok
+test basis::tests::colored_alpha_blocks_preserve_channels_and_non_aligned_dimensions ... ok
+test basis::tests::corruption_truncation_and_unrecognized_enums_refuse ... ok
+test basis::tests::multiple_images_flatten_mips_without_aliasing ... ok
+test basis::tests::codecs_mips_color_and_managed_output ... ok
+
+test result: ok. 67 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

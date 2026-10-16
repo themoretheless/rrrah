@@ -38,6 +38,10 @@ use std::sync::Arc;
 pub trait TransformExecutor<V: Copy + Default> {
     /// Count of samples always must match.
     /// If there is N samples of *Cmyk* source then N samples of *Rgb* is expected as an output.
+    /// Optional closed interval enclosure of normalized f32 CMYK to RGB.
+    /// Unsupported transforms refuse. Work is shared by all stages; this does
+    /// not include alpha, display quantization, or source uncertainty itself.
+    fn bound_float_cmyk_to_rgb(&self,_input:[[f32;2];4],_work:&mut usize,_cancelled:&dyn Fn()->bool)->Option<[[f32;2];3]> {None}
     fn transform(&self, src: &[V], dst: &mut [V]) -> Result<(), CmsError>;
 }
 

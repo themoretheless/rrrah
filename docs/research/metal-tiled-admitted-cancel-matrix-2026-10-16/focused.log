@@ -1,0 +1,18 @@
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 11.94s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-0da309b8fc91efb4)
+
+running 1 test
+tiled raster adapter: Metal Apple M4 Max; negotiated extent64
+TILED_UPLOAD_CANCEL dimensions=130x5 hdr=false admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=130x5 hdr=true admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=5x130 hdr=false admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=5x130 hdr=true admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=130x130 hdr=false admitted_cutoffs=11 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=130x130 hdr=true admitted_cutoffs=11 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+test tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; finished in 1.89s
+

@@ -1,0 +1,747 @@
+    Checking rrrah-demosaic v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-demosaic)
+    Checking moxcms v0.8.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms)
+    Checking image v0.25.10 (/Users/themoretheless/Documents/Sources/rrrah/vendor/image)
+    Checking hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+    Checking rrrah-develop v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop)
+    Checking rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+    Checking rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+    Checking rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+error: calling `PipelineCompilationOptions::default()` is more clear than this expression
+  --> crates/rrrah-gpu/src/rgbe_compute.rs:32:34
+   |
+32 |             compilation_options: Default::default(),
+   |                                  ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+   = note: `-D clippy::default-trait-access` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::default_trait_access)]`
+
+error: this function has too many arguments (8/7)
+  --> crates/rrrah-gpu/src/rgbe_compute.rs:64:5
+   |
+64 | /     pub fn execute_managed_with_cancel(
+65 | |         &self,
+66 | |         queue: &wgpu::Queue,
+67 | |         source_values: &[f32],
+...  |
+72 | |         mut cancelled: impl FnMut() -> bool,
+73 | |     ) -> Result<rrrah_core::PixelBuffer<[f32; 4]>, RgbeComputeError> {
+   | |____________________________________________________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+   = note: `-D clippy::too-many-arguments` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::too_many_arguments)]`
+
+error: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/rgbe_compute.rs:115:63
+    |
+115 |         let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                               ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `ComputePassDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/rgbe_compute.rs:165:56
+    |
+165 |             let mut pass = encoder.begin_compute_pass(&Default::default());
+    |                                                        ^^^^^^^^^^^^^^^^^^ help: try: `ComputePassDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: adding items after statements is confusing, since items exist from the start of the scope
+  --> crates/rrrah-gpu/src/rgbe_plan.rs:67:9
+   |
+67 | /         fn gcd(mut a: u64, mut b: u64) -> u64 {
+68 | |             while b != 0 {
+69 | |                 let r = a % b;
+70 | |                 a = b;
+...  |
+73 | |             a
+74 | |         }
+   | |_________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+   = note: `-D clippy::items-after-statements` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::items_after_statements)]`
+
+error: useless conversion to the same type: `u64`
+  --> crates/rrrah-gpu/src/rgbe_plan.rs:62:23
+   |
+62 |         let binding = u64::from(limits.max_storage_buffer_binding_size);
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+   = note: `-D clippy::useless-conversion` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::useless_conversion)]`
+
+error: item in documentation is missing backticks
+ --> crates/rrrah-gpu/src/backend.rs:1:67
+  |
+1 | //! Explicit backend selection; device availability is checked by request_adapter.
+  |                                                                   ^^^^^^^^^^^^^^^
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+  = note: `-D clippy::doc-markdown` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(clippy::doc_markdown)]`
+help: try
+  |
+1 - //! Explicit backend selection; device availability is checked by request_adapter.
+1 + //! Explicit backend selection; device availability is checked by `request_adapter`.
+  |
+
+error: item in documentation is missing backticks
+  --> crates/rrrah-gpu/src/compute.rs:24:30
+   |
+24 |     /// Retain this owner or resource_lease through completion of downstream work.
+   |                              ^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+24 -     /// Retain this owner or resource_lease through completion of downstream work.
+24 +     /// Retain this owner or `resource_lease` through completion of downstream work.
+   |
+
+error: used underscore-prefixed binding
+  --> crates/rrrah-gpu/src/compute.rs:29:54
+   |
+29 |         crate::GpuResourceLease::new(std::iter::once(self._reservation.clone()))
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+note: binding is defined here
+  --> crates/rrrah-gpu/src/compute.rs:21:5
+   |
+21 |     _reservation: std::sync::Arc<rrrah_core::Reservation>,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+   = note: `-D clippy::used-underscore-binding` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::used_underscore_binding)]`
+
+error: useless conversion to the same type: `u64`
+  --> crates/rrrah-gpu/src/compute.rs:81:24
+   |
+81 |         let maximum = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/compute.rs:104:63
+    |
+104 |         let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                               ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: item in documentation is missing backticks
+   --> crates/rrrah-gpu/src/compute.rs:159:46
+    |
+159 |     /// Direct flat RGBA32F input/output for DecodedRaster storage. No temporary
+    |                                              ^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+    |
+159 -     /// Direct flat RGBA32F input/output for DecodedRaster storage. No temporary
+159 +     /// Direct flat RGBA32F input/output for `DecodedRaster` storage. No temporary
+    |
+
+error: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/compute.rs:224:24
+    |
+224 |         let maximum = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/compute.rs:260:63
+    |
+260 |         let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                               ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/compute.rs:321:34
+    |
+321 |             compilation_options: Default::default(),
+    |                                  ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/compute.rs:355:27
+    |
+355 |         let max_pixels = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: item in documentation is missing backticks
+ --> crates/rrrah-gpu/src/demosaic_compute.rs:1:70
+  |
+1 | //! Managed GPU compute demosaicing for 2×2 Bayer sensors (Bilinear, SmoothHue, Malvar–He–Cutler 5×5,
+  |                                                                      ^^^^^^^^^
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+  |
+1 - //! Managed GPU compute demosaicing for 2×2 Bayer sensors (Bilinear, SmoothHue, Malvar–He–Cutler 5×5,
+1 + //! Managed GPU compute demosaicing for 2×2 Bayer sensors (Bilinear, `SmoothHue`, Malvar–He–Cutler 5×5,
+  |
+
+error: item in documentation is missing backticks
+  --> crates/rrrah-gpu/src/demosaic_compute.rs:46:52
+   |
+46 |     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+   |                                                    ^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+46 -     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+46 +     /// Shader uniform code (`0` = Bilinear, `1` = `MalvarHeCutler`, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+   |
+
+error: item in documentation is missing backticks
+  --> crates/rrrah-gpu/src/demosaic_compute.rs:46:93
+   |
+46 |     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+   |                                                                                             ^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+46 -     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+46 +     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = `SmoothHue`, `4` = Vng, `5` = Rcd).
+   |
+
+error: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:104:54
+    |
+104 |         crate::GpuResourceLease::new(std::iter::once(self._reservation.clone()))
+    |                                                      ^^^^^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:88:5
+    |
+ 88 |     _reservation: std::sync::Arc<rrrah_core::Reservation>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: adding items after statements is confusing, since items exist from the start of the scope
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:140:9
+    |
+140 |         const MAX_REFLECTED_AXIS: u32 = (i32::MAX as u32) / 2 + 1;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+
+error: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:158:34
+    |
+158 |             compilation_options: Default::default(),
+    |                                  ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: this function has too many arguments (8/7)
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:180:5
+    |
+180 | /     pub fn execute_resident<F: FnMut() -> bool>(
+181 | |         &self,
+182 | |         queue: &wgpu::Queue,
+183 | |         source_values: &[f32],
+...   |
+188 | |         cancelled: F,
+189 | |     ) -> Result<ResidentBayerDemosaic, BayerDemosaicError> {
+    | |__________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+error: this function has too many arguments (9/7)
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:239:5
+    |
+239 | /     fn execute_resident_with_color<F: FnMut() -> bool>(
+240 | |         &self,
+241 | |         queue: &wgpu::Queue,
+242 | |         source_values: &[f32],
+...   |
+248 | |         mut cancelled: F,
+249 | |     ) -> Result<ResidentBayerDemosaic, BayerDemosaicError> {
+    | |__________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+error: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:282:29
+    |
+282 |         let binding_limit = u64::from(limits.max_storage_buffer_binding_size).min(limits.max_buffer_size);
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:402:67
+    |
+402 |             let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                                   ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `ComputePassDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:404:60
+    |
+404 |                 let mut pass = encoder.begin_compute_pass(&Default::default());
+    |                                                            ^^^^^^^^^^^^^^^^^^ help: try: `ComputePassDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: this function has too many arguments (8/7)
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:433:5
+    |
+433 | /     pub fn execute_managed(
+434 | |         &self,
+435 | |         queue: &wgpu::Queue,
+436 | |         source_values: &[f32],
+...   |
+441 | |         cpu_budget: &rrrah_core::MemoryBudget,
+442 | |     ) -> Result<rrrah_core::PixelBuffer<[f32; 4]>, BayerDemosaicError> {
+    | |______________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+error: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:486:29
+    |
+486 |         let binding_limit = u64::from(limits.max_storage_buffer_binding_size).min(limits.max_buffer_size);
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:595:67
+    |
+595 |             let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                                   ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `ComputePassDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:597:60
+    |
+597 |                 let mut pass = encoder.begin_compute_pass(&Default::default());
+    |                                                            ^^^^^^^^^^^^^^^^^^ help: try: `ComputePassDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: docs for function which may panic missing `# Panics` section
+  --> crates/rrrah-gpu/src/model.rs:87:5
+   |
+87 |     pub fn new(device: &wgpu::Device, target: wgpu::TextureFormat) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> crates/rrrah-gpu/src/model.rs:88:9
+   |
+88 | /         assert!(
+89 | |             target.is_srgb() || target == wgpu::TextureFormat::Rgba16Float,
+90 | |             "model target must be sRGB or linear RGBA16Float"
+91 | |         );
+   | |_________^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+   = note: `-D clippy::missing-panics-doc` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::missing_panics_doc)]`
+
+error: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:129:38
+    |
+129 |                 compilation_options: Default::default(),
+    |                                      ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `StencilState::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:139:26
+    |
+139 |                 stencil: Default::default(),
+    |                          ^^^^^^^^^^^^^^^^^^ help: try: `StencilState::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `DepthBiasState::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:140:23
+    |
+140 |                 bias: Default::default(),
+    |                       ^^^^^^^^^^^^^^^^^^ help: try: `DepthBiasState::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `MultisampleState::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:142:26
+    |
+142 |             multisample: Default::default(),
+    |                          ^^^^^^^^^^^^^^^^^^ help: try: `MultisampleState::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:151:38
+    |
+151 |                 compilation_options: Default::default(),
+    |                                      ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: item in documentation is missing backticks
+   --> crates/rrrah-gpu/src/model.rs:185:31
+    |
+185 |     /// Caps owned vertex and Depth32F attachment footprints, including replacement overlap.
+    |                               ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+    |
+185 -     /// Caps owned vertex and Depth32F attachment footprints, including replacement overlap.
+185 +     /// Caps owned vertex and `Depth32F` attachment footprints, including replacement overlap.
+    |
+
+error: useless conversion to the same type: `f64`
+   --> crates/rrrah-gpu/src/model.rs:258:59
+    |
+258 |                     bounds[0][axis] = bounds[0][axis].min(f64::from(vertex[axis]));
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `f64::from()`: `vertex[axis]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: useless conversion to the same type: `f64`
+   --> crates/rrrah-gpu/src/model.rs:259:59
+    |
+259 |                     bounds[1][axis] = bounds[1][axis].max(f64::from(vertex[axis]));
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `f64::from()`: `vertex[axis]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+error: calling `TextureViewDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:430:41
+    |
+430 |         let view = texture.create_view(&Default::default());
+    |                                         ^^^^^^^^^^^^^^^^^^ help: try: `TextureViewDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/filmstrip.rs:409:36
+    |
+409 |                 .filter_map(|slot| slot._reservation.clone()),
+    |                                    ^^^^^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/filmstrip.rs:126:5
+    |
+126 |     _reservation: Option<std::sync::Arc<rrrah_core::Reservation>>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/filmstrip.rs:417:35
+    |
+417 |             .map(|slot| u64::from(slot._texture.width()) * u64::from(slot._texture.height()) * 4)
+    |                                   ^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/filmstrip.rs:124:5
+    |
+124 |     _texture: wgpu::Texture,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/filmstrip.rs:417:70
+    |
+417 |             .map(|slot| u64::from(slot._texture.width()) * u64::from(slot._texture.height()) * 4)
+    |                                                                      ^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/filmstrip.rs:124:5
+    |
+124 |     _texture: wgpu::Texture,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-gpu/src/filmstrip.rs:423:5
+    |
+423 | /     pub fn with_texture_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+424 | |         self.texture_budget = Some(budget);
+425 | |         self
+426 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+    = note: `-D clippy::return-self-not-must-use` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::return_self_not_must_use)]`
+
+error: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-gpu/src/filmstrip.rs:429:5
+    |
+429 | /     pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+430 | |         self.upload_queue_budget = Some(budget);
+431 | |         self
+432 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-gpu/src/filmstrip.rs:445:5
+    |
+445 | /     pub fn upload_tile(
+446 | |         &mut self,
+447 | |         device: &wgpu::Device,
+448 | |         queue: &wgpu::Queue,
+...   |
+451 | |         rgba8: &[u8],
+452 | |     ) -> FilmstripTileId {
+    | |________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-gpu/src/filmstrip.rs:453:9
+    |
+453 | /         self.try_upload_tile(device, queue, width, height, rgba8)
+454 | |             .expect("thumbnail upload refused; use try_upload_tile for budgeted uploads")
+    | |_________________________________________________________________________________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-gpu/src/raster.rs:109:5
+    |
+109 | /     pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+110 | |         self.upload_queue_budget = Some(budget);
+111 | |         self
+112 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+error: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-gpu/src/raster.rs:416:28
+    |
+416 |             origin[axis] = (low.floor() - halo).clamp(0.0, f64::from(dimensions[axis])) as u32;
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+    = note: `-D clippy::cast-sign-loss` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::cast_sign_loss)]`
+
+error: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-gpu/src/raster.rs:417:23
+    |
+417 |             let end = (high.ceil() + halo).clamp(0.0, f64::from(dimensions[axis])) as u32;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+error: this function has too many arguments (10/7)
+   --> crates/rrrah-gpu/src/raster.rs:710:5
+    |
+710 | /     fn upload_resident_buffer<F: FnMut() -> bool>(
+711 | |         &mut self,
+712 | |         device: &wgpu::Device,
+713 | |         queue: &wgpu::Queue,
+...   |
+720 | |         mut cancelled: F,
+721 | |     ) -> Result<(), RasterUploadError> {
+    | |______________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+error: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/raster.rs:767:58
+    |
+767 |         let mut encoder = device.create_command_encoder(&Default::default());
+    |                                                          ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+error: strict comparison of `f32` or `f64` arrays
+   --> crates/rrrah-gpu/src/raster.rs:909:12
+    |
+909 |         if self.parameters.comparison != comparison {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-D clippy::float-cmp` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::float_cmp)]`
+
+error: item in documentation is missing backticks
+   --> crates/rrrah-gpu/src/raster.rs:942:69
+    |
+942 |     /// Optional render-pass GPU timestamps. The caller must enable TIMESTAMP_QUERY
+    |                                                                     ^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+    |
+942 -     /// Optional render-pass GPU timestamps. The caller must enable TIMESTAMP_QUERY
+942 +     /// Optional render-pass GPU timestamps. The caller must enable `TIMESTAMP_QUERY`
+    |
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-gpu/src/raster.rs:944:5
+    |
+944 | /     pub fn encode_with_timestamps(
+945 | |         &self,
+946 | |         encoder: &mut wgpu::CommandEncoder,
+947 | |         target: &wgpu::TextureView,
+948 | |         timestamps: Option<wgpu::RenderPassTimestampWrites<'_>>,
+949 | |     ) {
+    | |_____^
+    |
+note: first possible panic found here
+   --> crates/rrrah-gpu/src/raster.rs:986:33
+    |
+986 |                   (true, true) => self
+    |  _________________________________^
+987 | |                     .single_layer_region_pipeline
+988 | |                     .as_ref()
+989 | |                     .expect("region pipeline installed"),
+    | |________________________________________________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: item in documentation is missing backticks
+    --> crates/rrrah-gpu/src/lib.rs:1400:22
+     |
+1400 |     /// Admits owned R16Uint atlas footprint, including halos and replacement overlap.
+     |                      ^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+     |
+1400 -     /// Admits owned R16Uint atlas footprint, including halos and replacement overlap.
+1400 +     /// Admits owned `R16Uint` atlas footprint, including halos and replacement overlap.
+     |
+
+error: missing `#[must_use]` attribute on a method returning `Self`
+    --> crates/rrrah-gpu/src/lib.rs:1413:5
+     |
+1413 | /     pub fn with_upload_memory_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+1414 | |         self.upload_memory_budget = Some(budget);
+1415 | |         self
+1416 | |     }
+     | |_____^
+     |
+     = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+error: missing `#[must_use]` attribute on a method returning `Self`
+    --> crates/rrrah-gpu/src/lib.rs:1421:5
+     |
+1421 | /     pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+1422 | |         self.upload_queue_budget = Some(budget);
+1423 | |         self
+1424 | |     }
+     | |_____^
+     |
+     = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+error: docs for function which may panic missing `# Panics` section
+    --> crates/rrrah-gpu/src/lib.rs:1476:5
+     |
+1476 | /     pub fn upload_mosaic_with_tiling_and_cancel(
+1477 | |         &mut self,
+1478 | |         device: &wgpu::Device,
+1479 | |         queue: &wgpu::Queue,
+...    |
+1482 | |         cancelled: impl Fn() -> bool,
+1483 | |     ) -> Result<GpuUploadTimings, GpuError> {
+     | |___________________________________________^
+     |
+note: first possible panic found here
+    --> crates/rrrah-gpu/src/lib.rs:1562:29
+     |
+1562 |                 let level = grid.at(row, column, 0).unwrap();
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1671:9
+     |
+1671 |         parameters._padding[0] = u32::from(rgbe.is_some());
+     |         ^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1182:5
+     |
+1182 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1672:9
+     |
+1672 |         parameters._padding[2] = if quad.is_none() { u32::from(grid.width) } else { 0 };
+     |         ^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1182:5
+     |
+1182 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1673:9
+     |
+1673 |         parameters._padding[3] = u32::from(grid.height);
+     |         ^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1182:5
+     |
+1182 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1842:9
+     |
+1842 |         self.parameters._padding[1] = match mode {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1182:5
+     |
+1182 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+error: strict comparison of `f32` or `f64` arrays
+    --> crates/rrrah-gpu/src/lib.rs:1883:12
+     |
+1883 |         if self.parameters.comparison != comparison {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: this function has too many arguments (9/7)
+    --> crates/rrrah-gpu/src/lib.rs:1992:1
+     |
+1992 | / fn tile_with_halo_into(
+1993 | |     output: &mut Vec<u16>,
+1994 | |     pixels: &[u16],
+1995 | |     width: u32,
+...    |
+2001 | |     cancelled: &dyn Fn() -> bool,
+2002 | | ) -> Result<(), GpuError> {
+     | |_________________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+error: could not compile `rrrah-gpu` (lib) due to 65 previous errors
+warning: build failed, waiting for other jobs to finish...

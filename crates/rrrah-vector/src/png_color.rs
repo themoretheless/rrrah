@@ -32,28 +32,12 @@ fn gamma_chroma_color(
     if !(1. / 65536. ..=32767.).contains(&exponent) {
         return Err(invalid("gAMA exponent outside supported ICC representation"));
     }
-    use moxcms::{Chromaticity, ColorPrimaries, ColorProfile, ToneReprCurve, XyY};
+    use moxcms::{ColorProfile, ToneReprCurve};
     let mut profile = ColorProfile::new_srgb();
     profile.description = None;
     profile.copyright = None;
-    profile.media_white_point = Some(XyY::new(xy[6], xy[7], 1.).to_xyzd());
-    profile.update_rgb_colorimetry(
-        XyY::new(xy[6], xy[7], 1.),
-        ColorPrimaries {
-            red: Chromaticity {
-                x: xy[0] as f32,
-                y: xy[1] as f32,
-            },
-            green: Chromaticity {
-                x: xy[2] as f32,
-                y: xy[3] as f32,
-            },
-            blue: Chromaticity {
-                x: xy[4] as f32,
-                y: xy[5] as f32,
-            },
-        },
-    );
+    crate::icc_colorimetry::set_rgb_colorimetry(&mut profile, xy)
+        .ok_or_else(|| invalid("invalid or singular cHRM coordinates"))?;
     let curve = ToneReprCurve::Parametric(vec![exponent as f32]);
     profile.red_trc = Some(curve.clone());
     profile.green_trc = Some(curve.clone());

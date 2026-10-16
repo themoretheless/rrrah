@@ -1,0 +1,76 @@
+{
+  "status": "current_viewer_paths_revalidated_on_actual_metal",
+  "gpu": {
+    "backend": "Metal",
+    "adapter": "Apple M4 Max",
+    "optional": false
+  },
+  "gallery": {
+    "paths": 100000,
+    "fixture_files": 4,
+    "formats": [
+      "PNG with ICC",
+      "GIF animation",
+      "EXR linear HDR",
+      "Radiance HDR"
+    ],
+    "source_setup": "temporary hardlinks to four repository fixtures; unique paths, not100000 independent source images",
+    "navigation_steps": 512,
+    "prefetch": {
+      "behind": 1,
+      "ahead": 2,
+      "direction": "alternating forward/backward"
+    },
+    "ram_limits": {
+      "bytes": 65536,
+      "count": 2
+    },
+    "managed_root_bytes": 1048576,
+    "peak_bytes": 1048576,
+    "checks": [
+      "Every visible decoded sample matches fixture reference",
+      "SDR8 and RGBA16F render exact vs matching fixture render",
+      "Nearest neighbour lease survives farther neighbour pressure",
+      "Full-root RAM hit shares pixel allocation without decode",
+      "Stale generation preloads refuse without changing budget or membership"
+    ],
+    "final_credit": 0,
+    "navigation_and_scan_seconds": 7.119875083,
+    "whole_test_seconds_including_temp_links_cleanup": 52.74
+  },
+  "ttl": {
+    "source_formats": [
+      "EXR",
+      "HDR"
+    ],
+    "ttl": "zero immediate expiry",
+    "ram_limits": {
+      "bytes": 4096,
+      "count": 1
+    },
+    "restores_without_decoder_fallback": 128,
+    "preloads_while_decoder_gate_blocked": 2,
+    "hdr_frames": 130,
+    "checks": [
+      "Wire payload bit-exact after repeated spill/restore",
+      "Metal SDR8 and RGBA16F exact vs original render",
+      "RGBA16F finite with positive above-one RGB preserved",
+      "RAM root returns zero between expired restores and at end"
+    ],
+    "final_credit": 0
+  },
+  "resident_cache_checks": {
+    "passed": 4,
+    "failed": 0
+  },
+  "source_observation": "load_cached_raster_with mode performs cancellation check then mark_visible on RAM hits; no code change needed",
+  "source_sha256": "f7eae04351b93f7dc729a788bea0624e7cc08efa2061bcdbf02f243280b7b0db",
+  "binary_sha256": "689a02b0265b489741789d531237a95f30238b92d7661e86cd56fd2134230335",
+  "limits": [
+    "GPU reference comparison proves preservation through navigation/cache/swap, not independent physical display color calibration",
+    "Offscreen RGBA16F is not physical HDR display qualification",
+    "Warm local synthetic gallery; no slow physical-disk or hours-long endurance claim",
+    "No NVIDIA qualification in this Mac run; user deferred NVIDIA",
+    "No full100-format qualification claim"
+  ]
+}

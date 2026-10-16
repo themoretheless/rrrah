@@ -1,0 +1,36 @@
+{
+  "status": "Public NRRD/MRC window load consumes unique decoded float plane in place; no second float output allocation",
+  "implementation": "Clone pixel owner transiently, drop consumed raw raster, obtain exclusive samples when available, apply same scalar window math and rebuild LinearSrgb metadata around same buffer. Shared allocation falls back to separate admitted output; borrowed image methods still preserve native data. Source released before window as prior change.",
+  "invariant": "Private consuming helper receives raster freshly decoded with the same request/budget; explicit public display-request APIs remain separate admitted outputs and do not migrate existing reservations.",
+  "regressions": {
+    "exclusive": "48byte root fully occupied by3float RGBA pixels; window succeeds with identical data address and peak48bytes; frame index/count/aspect retained; final0",
+    "shared": "At same full budget, shared native frame refuses extra output instead of mutating external owner; original sample stays-1",
+    "public_file": "32x32NRRD/MRC files decode/window successfully under source+metadata+one16384bytefloat plane, cap<32768; two float planes cannot fit; all output pixels match0.7gray",
+    "large": "256MiBgzipNRRD first/middle/last windows retain exact full-pixel oracles and peak10366768bytes; source/native scratch dominate, so no additional peak reduction claimed for that specific fixture"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 49,
+      "failed": 0,
+      "ignored": 9
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "large_manual": {
+      "passed": 1,
+      "failed": 0
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed"
+  },
+  "limits": [
+    "FITS retains native integer/f64 samples and separately allocates output; no FITS in-place conversion",
+    "No new Metal runtime or speed comparison in this turn",
+    "Gzip source still read in full; not file streaming",
+    "Managed credit is not total process RSS",
+    "Full100format objective remains incomplete"
+  ],
+  "source_sha256": "570f3d0af327ced25a42a19e1703286ce8c165718ce5808818aeb54b94bca9a3"
+}

@@ -1,0 +1,22 @@
+{
+  "change": "Admitted bounded geometry-only owner moment storage keyed by immutable command namespace and original owner index. Dense u16 binding lookup, duplicate binding coalescing, positive area/local first moments and recovered area/centroid intervals; no source colors stored/read.",
+  "unit_tests": {
+    "passed": 282,
+    "failed": 0,
+    "ignored": 12
+  },
+  "controls": [
+    "1024 independent dyadic strips recover exact area1/centroid(0.5,0.5)",
+    "Same owner index in different commands stays separate; duplicate binding shares one slot",
+    "Negative pixel crossing zero includes local subtraction rounding in centroid enclosure",
+    "Invalid, unbound, short-work, cancelled and refused-validator updates preserve prior moment bits",
+    "Callback work enlargement refuses and restores its known ceiling",
+    "Every setup short budget/cancellation checkpoint and both admission failures release all credit",
+    "Highest admitted owner index1,048,575 supported; larger indices/fractional origins refuse",
+    "Setup, two prepaid geometry callbacks and group export share one allowance; exact budget passes and one short refuses",
+    "Tiny underflow mass without positive lower bound refuses group export"
+  ],
+  "source_sha256": "62ff7d1b7f33224611731d222f7b29b9930160a82ea6ebf76565a3a42368c1a4",
+  "integration_status": "Compiled into test compositor module, exercised with prepaid polygon traversal; live color-sampling deferral and source/route proof binding not connected yet",
+  "limitations": "Bounds refer to reported fragment coordinates/areas and arithmetic. Source ownership, range, opacity/blend lifecycle, original clipping, profile/display and full AI/100-format qualification remain separate."
+}

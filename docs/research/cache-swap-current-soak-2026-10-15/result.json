@@ -1,0 +1,98 @@
+{
+  "ordinary": {
+    "passed": 5,
+    "failed": 0,
+    "ignored": 5,
+    "seconds": 19,
+    "coverage": [
+      "delayed writer burst rejects excess queue work and permits retry",
+      "cancelled partial restore releases pixels",
+      "idle TTL removes physical files",
+      "stale reads and cancelled lock waiters release credits",
+      "TTL prune during restore preserves active reader"
+    ]
+  },
+  "sustained": {
+    "status": "four sustained cases passed; final CPU/queue credits zero",
+    "session_id": 61753,
+    "output": "/tmp/rrrah-cache-soak-current-20261015",
+    "seconds_per_case": "requested minimum 60; HDR ran 97.18 seconds to complete at least 3 cycles",
+    "cases": [
+      "mixed delayed swap pressure",
+      "independent byte cap",
+      "independent count cap",
+      "64MiB float HDR cancellation/pressure/retry"
+    ],
+    "completed": [
+      {
+        "test": "sustained_large_keyspace_delayed_swap_pressure_and_retry",
+        "exit_code": 0,
+        "seconds": 60.662221708,
+        "observed_summary": "test sustained_large_keyspace_delayed_swap_pressure_and_retry ... sustained swap: seconds=60.079122666 cycles=444 pressure_refusals=444 root_peak=2097152 queue_peak=262144 disk_peak_bytes=4195328 disk_peak_objects=16 final=0"
+      },
+      {
+        "test": "sustained_byte_cap_evicts_without_count_or_ttl_pressure",
+        "exit_code": 0,
+        "seconds": 60.112822292,
+        "observed_summary": "test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... sustained swap: seconds=60.102673334 cycles=440 pressure_refusals=440 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0"
+      },
+      {
+        "test": "sustained_count_cap_evicts_without_byte_or_ttl_pressure",
+        "exit_code": 0,
+        "seconds": 60.020900624999996,
+        "observed_summary": "test sustained_count_cap_evicts_without_byte_or_ttl_pressure ... sustained swap: seconds=60.013293958 cycles=441 pressure_refusals=441 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0"
+      },
+      {
+        "test": "sustained_float_hdr_delayed_swap_pressure_cancel_and_retry",
+        "exit_code": 0,
+        "seconds": 97.17811270799999,
+        "observed_summary": "test sustained_float_hdr_delayed_swap_pressure_cancel_and_retry ... large float delayed swap: cycles=3; seconds=97.170;2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0"
+      }
+    ]
+  },
+  "limitations": [
+    "artificial per-I/O delay on local real files, not measured physical slow disk",
+    "60 seconds per case does not prove long multi-hour stability"
+  ],
+  "memory": {
+    "unit_passed": 40,
+    "ttl_ownership_passed": 1,
+    "doctest_passed": 1,
+    "failed": 0
+  },
+  "preload": {
+    "model_priority_count_bytes_failed_neighbor": "passed",
+    "raster_priority_count_bytes_failed_neighbor": "passed",
+    "raster_pressure_preserves_warmed_neighbor": "passed",
+    "native_CR3_RAM_disk_cancel_visible_pin": "passed explicitly, local source read in place; temporary decoded cache cleaned by test",
+    "native_CR3_seconds": 2.21
+  },
+  "preload_window_controls": {
+    "passed": 7,
+    "failed": 0,
+    "coverage": [
+      "CLI default/aliases/disabled sides",
+      "source change preserves explicit window",
+      "known paths avoid scans and preserve priority",
+      "unknown paths scan once and preserve backwards order",
+      "asymmetric and disabled windows",
+      "rapid page reversal",
+      "mixed format reversal releases memory"
+    ]
+  },
+  "mixed_metal": {
+    "passed": 1,
+    "steps": 120,
+    "files": 8,
+    "formats": 7,
+    "surfaces": [
+      "SDR",
+      "HDR"
+    ],
+    "comparison": "exact against independent fresh-cache rendering of same decoded sources",
+    "stale_requests": "refused",
+    "managed_final_bytes": 0,
+    "seconds": 2.25,
+    "limitation": "rendering consistency and cache ownership; not independent codec/color fidelity oracle"
+  }
+}

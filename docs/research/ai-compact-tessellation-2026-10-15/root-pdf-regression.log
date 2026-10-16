@@ -1,0 +1,66 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 41.03s
+     Running unittests src/lib.rs (target/avif-prem-validation-20261014/debug/deps/rrrah_decode-a28a6741d7279165)
+
+running 55 tests
+test pdf::precise_fill_tests::curve_cancellation_at_every_checkpoint_releases_shared_credit ... ok
+test pdf::tensor_triangle_geometry_tests::inflated_patch_triangles_have_consistent_bounds_and_vertex_colors ... ok
+test pdf::tests::corrupt_embedded_image_refuses_incomplete_render_and_releases_credit ... ok
+test pdf::precise_fill_tests::excessive_fill_precision_refuses_without_retaining_managed_credit ... ok
+test pdf::soft_mask_isolation_tests::luminosity_soft_mask_bands_preserve_alpha_and_managed_ownership ... ok
+test pdf::tensor_center_tests::planar_tensor_samples_pixel_centers_with_bounded_color_error ... ok
+test pdf::overlap_patch_tests::later_coincident_tensor_patch_covers_earlier_color ... ok
+test pdf::precise_fill_tests::shading_texture_obeys_exact_shared_budget_and_releases_credit ... ok
+test pdf::precise_fill_tests::precise_curve_storage_obeys_exact_shared_budget ... ok
+test pdf::tensor_background_coverage_tests::fractional_tensor_edges_mix_with_declared_background ... ok
+test pdf::tensor_fractional_coverage_tests::fractional_tensor_edges_match_exact_rectangle_area ... ok
+test pdf::tests::independent_image_transfer_channels_match_public_decode ... ok
+test pdf::tests::malformed_source_and_source_admission_release_credit ... ok
+test pdf::tests::invalid_and_excessive_user_units_refuse_without_retained_credit ... ok
+test pdf::tests::half_alpha_red_is_straight_and_matches_poppler_white_composite ... ok
+test pdf::tests::malformed_invoked_form_geometry_refuses_without_output_reservation ... ok
+test pdf::tests::nonlinear_image_transfer_preserves_all_byte_values_through_public_decode ... ok
+test pdf::direct_shading_background_tests::direct_sh_ignores_background_and_preserves_fractional_alpha ... ok
+test pdf::tests::missing_invoked_object_refuses_in_page_and_inherited_form ... ok
+test pdf::tests::page_rotation_preserves_extent_and_matches_poppler ... ok
+test pdf::tests::renderer_overflow_extents_are_rejected_before_output_allocation ... ok
+test pdf::tests::page_user_unit_scales_geometry_and_pixels ... ok
+test pdf::tests::unsupported_selected_font_refuses_before_render_allocation ... ok
+test pdf::tests::unsupported_invoked_object_kind_refuses_without_rendering ... ok
+test pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization ... ok
+test pdf::tests::selected_pages_match_authored_samples_and_release_budget ... ok
+test pdf_device_default_tests::alpha_soft_mask_without_group_color_space_preserves_coverage ... ok
+test pdf_device_default_tests::equal_stream_headers_have_content_sensitive_cache_keys ... ok
+test pdf_device_default_tests::device_rgb_soft_mask_luminosity_matches_independent_primary_bands ... ok
+test pdf_device_default_tests::implicit_initial_gray_remains_black_with_default_gray_resource ... ok
+test pdf::precise_fill_tests::cubic_fill_matches_independent_parabola_pixel_integral ... ok
+test pdf_device_default_tests::shared_soft_mask_group_preserves_mask_kind_and_transfer ... ok
+test image_router::tests::pdf_compatible_ai_candidate_routes_selected_pages_but_refuses_postscript ... ok
+test pdf_device_default_tests::identical_shading_dictionaries_keep_distinct_stream_payloads ... ok
+test pdf_device_default_tests::shared_soft_mask_group_isolates_inherited_color_resources ... ok
+test pdf::tests::nested_form_fonts_inherit_resources_and_cycles_refuse ... ok
+test pdf_patch_tests::tests::coons_conversion_preserves_source_boundary_bits ... ok
+test pdf_patch_tests::tests::errors_and_cancellation_roll_back_only_new_triangles ... ok
+test pdf::tensor_patch_alignment_tests::two_bit_flags_preserve_shared_edge_like_eight_bit_flags ... ok
+test pdf::shading_context_cache_tests::shared_shading_keeps_background_context_in_both_draw_orders ... ok
+test pdf_patch_tests::tests::coons_control_conversion_matches_tensor_geometry_and_colors ... ok
+test pdf_device_default_tests::default_gray_and_rgb_isolate_device_fills_and_shared_images ... ok
+test pdf::tests::device_cmyk_hybrid_matches_full_domain_independent_oracle ... ok
+test pdf::tests::device_cmyk_float_fills_match_independent_littlecms ... ok
+test pdf::tests::embedded_ycck_jpeg_app14_matches_independent_oracle ... ok
+test pdf::tests::fractional_page_extents_keep_partial_edge_pixels ... ok
+test pdf::tests::embedded_cmyk_jpeg_app14_decode_inversion_matches_independent_oracle ... ok
+test pdf::tests::embedded_cmyk8_image_matches_full_domain_littlecms ... ok
+test pdf_patch_tests::tests::mesh_does_not_weld_near_curves_and_validates_empty_requests ... ok
+test pdf_device_default_tests::default_cmyk_nested_scopes_cover_devices_meshes_images_and_alternates ... ok
+test pdf_patch_tests::tests::mixed_mesh_ranges_preserve_patch_ownership_and_roll_back_together ... ok
+test pdf_patch_tests::tests::affine_patch_is_two_triangles_and_transform_controls_error ... ok
+test pdf_patch_tests::tests::dense_curved_geometry_and_bilinear_color_stay_within_reported_bounds ... ok
+test pdf_patch_tests::tests::mesh_stitches_unequal_depths_and_reversed_edges_without_blending_colors ... ok
+test pdf_patch_tests::tests::adaptive_cells_share_complete_edges_without_t_junctions ... ok
+
+test result: ok. 55 passed; 0 failed; 0 ignored; 0 measured; 1070 filtered out; finished in 0.17s
+

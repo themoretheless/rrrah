@@ -1,0 +1,12 @@
+{
+  "status": "completed-in-still-running-workspace",
+  "scope": "debug synthetic6000x4000 mosaics; informational only; local filesystem and OS cache",
+  "output": [
+    "fixture_ready frames=8 mosaic_mib=45.78 populate_s=1.82",
+    "ram_route ops_per_sample=16 samples=30 p50_ns_op=348.94 p95_ns_op=513.06 best_ns_op=341.12",
+    "disk_route ops_per_sample=8 samples=30 p50_ms_op=36.450 p95_ms_op=37.362 best_ms_op=35.869",
+    "navigation steps=200 frames=8 ram_p50_us_step=0.33 ram_p95_us_step=0.34 disk_only_p50_ms_step=37.365 disk_only_p95_ms_step=40.054 speedup_p50=112093x",
+    "eviction samples_config=30 (single deterministic run)",
+    "swap_route samples=30 bytes=48000000 write_complete_p50_ms=32.794 restore_p50_ms=30.607 managed_peak_bytes=48000000 queue_peak_bytes=48000000 final_used=0 exact_samples=true"
+  ]
+}

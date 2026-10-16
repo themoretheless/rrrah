@@ -1,0 +1,25 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 35s
+     Running tests/real_bayer_compute.rs (target/debug/deps/real_bayer_compute-a157b9d47f2b79f2)
+
+running 1 test
+real Bayer oracle adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+real CR3 sampled oracle: Bilinear points=336 max_abs_error=0.000000030936066486297875 credits=0
+real CR3 sampled oracle: SmoothHue points=336 max_abs_error=0.000000040322531591474586 credits=0
+real CR3 sampled oracle: MalvarHeCutler points=336 max_abs_error=0.000000041521667049071453 credits=0
+real CR3 sampled oracle: Directional points=336 max_abs_error=0.00000005049570495074818 credits=0
+real CR3 sampled oracle: Vng points=336 max_abs_error=0.00000003172440382614994 credits=0
+real CR3 sampled oracle: Rcd points=336 max_abs_error=0.00000004071639023162099 credits=0
+test original_cr3_all_compute_algorithms_match_sampled_f64_reference ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.69s
+

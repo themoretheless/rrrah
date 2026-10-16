@@ -1,0 +1,94 @@
+{
+  "status": "owned_pkm2_eac_r11_rg11_signed_unsigned_implemented",
+  "references": [
+    "https://registry.khronos.org/DataFormat/specs/1.4/dataformat.1.4.pdf",
+    "https://github.com/Ericsson/ETCPACK/blob/master/source/etcpack.cxx"
+  ],
+  "pkm_format_codes": {
+    "5": "R11 unsigned",
+    "6": "RG11 unsigned",
+    "7": "R11 signed",
+    "8": "RG11 signed"
+  },
+  "changes": [
+    "Own11-bit signed/unsigned block reconstruction with all16 modifier tables, multiplier0 rule, signed-128 treated as-127 and clamping",
+    "PKM2 kinds5..8 decode directly to managed float32 output, no8-bit truncation",
+    "Normalize unsigned by2047 and signed by1023; R/G component order preserved, missing G/B0 and alpha1",
+    "Enforce float output byte cap, exact payload length and per-block cancellation",
+    "Native color declaration LinearRgbUnspecified; explicit assume_untagged_linear_srgb qualifies display, no automatic sRGB interpretation"
+  ],
+  "independent_oracle": {
+    "provider": "Pinned Ericsson original decoder temporary test-only",
+    "blocks_per_sign": 4096,
+    "signed_samples": 65536,
+    "unsigned_samples": 65536,
+    "comparison": "native11-bit integer samples exact; no C++ linked into production"
+  },
+  "container_fixtures": {
+    "files": 16,
+    "formats": 4,
+    "sizes": [
+      [
+        4,
+        4
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        9,
+        2
+      ]
+    ],
+    "oracle": "independent11-bit samples, Python crop/channel assembly and float32 normalization"
+  },
+  "checks": {
+    "native_container": "all float32 bytes exact; color qualification explicit; exact/short quotas and clone owners; truncated payload and PKM10 wrong storage refuse before zero-budget output",
+    "texture_lib": {
+      "passed": 86,
+      "failed": 0,
+      "ignored": 2
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "app_cpu": {
+      "states": 500,
+      "swap_writes": 500,
+      "swap_reads": 500,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 500,
+      "readbacks": 3000,
+      "swap_writes": 500,
+      "swap_reads": 500,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "PKM-only EAC hookup; PVR/KTX EAC support not added",
+    "PKM lacks RGB primaries; EAC data display requires explicit qualification policy",
+    "16 base controls out of256, all16 tables/multipliers/all selectors covered; not all possible compressed blocks or producer corpus",
+    "ETC2 color block paths remain external and full ETC2 qualification remains open",
+    "No throughput, physical HDR, NVIDIA or full100-format qualification claim"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/eac.rs": "166f958a6332a72b5dfd98e1c6ac53c537a6907849cd099dd5c918b6cda5bb0a",
+    "crates/rrrah-texture/src/pkm.rs": "4f034c1d5e77b0210b303518f158bf4fca6e31e0823125005ce62c57e4af8ddc",
+    "crates/rrrah-texture/src/lib.rs": "919cb221c3332da8c847510bfd013931e969051372f33f6dc8ec02ac51c8e5b3",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "29a87c0656692aa01eed3332dcc90a09dd5f54fdbb901dc698a708f1b5349efd",
+    "scripts/generate-pkm-eac-fixtures.py": "eec41f8bd41a01e6668065532b70df0a5e43cea60cac77315a5e6bc89c05caa3",
+    "tests/fixtures/raster/pkm-eac-manifest.tsv": "caadbacfdf4d2ebfb87cc5ef6cab62a1e9729354ee554ce5627db0ead70967d8"
+  },
+  "ericsson_writer_source_sha256": "5b785a2e398a96344a345e43c537400d0c12f180200a36932017ecbffbd460df"
+}

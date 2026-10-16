@@ -1,0 +1,25 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.18s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+test edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive ... FAILED
+
+failures:
+
+---- edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive stdout ----
+
+thread 'edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive' (4845416) panicked at crates/rrrah-app/src/edit_store.rs:574:39:
+completed transaction must release lock independently of duplicated descriptors: edit writer is busy; no overwrite performed
+
+Caused by:
+    lock acquisition failed because the operation would block
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 344 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

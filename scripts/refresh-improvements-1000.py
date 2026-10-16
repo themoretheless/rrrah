@@ -40,7 +40,7 @@ for sub in dict.fromkeys(t['subsystem'] for t in d['tasks']):
         e = t['evidence']
         md += [f'<a id="{t["id"].lower()}"></a>', f"### {t['id']} — {t['title']}", '', f"**{t['type']} · {t['priority']} · {t['size']} · {t['evidence_status']}**", '', f"Основание: [{e['path']}:{e['line']}](../{e['path']}#L{e['line']}), `{e['symbol']}`. {e['observation']}", '', 'Участок: `'+e['excerpt'].replace('`','')+'`', '']
         if 'execution' in t:
-            x=t['execution'];md += [f"**Выполнение: {x['status']} ({x['updated_at']}).** {x['result']}", '', f"Осталось/границы: {x['remaining']} [Отчёт](research/first30-2026-10-14/REPORT.md).", '']
+            x=t['execution'];md += [f"**Выполнение: {x['status']} ({x['updated_at']}).** {x['result']}", '', f"Осталось/границы: {x['remaining']} [Отчёт]({Path(x['report']).relative_to('docs').as_posix()}).", '']
         md += [f"Изменение: {t['proposed_change']}", '', f"Приёмка: {t['acceptance']}", '', f"API/совместимость: {t['public_api']}", '', f"Зависимости: {', '.join(t['dependencies']) or 'нет установленных'}. Условия: {' '.join(t['verification_conditions'])}", '']
 (ROOT / 'docs/IMPROVEMENTS_1000.md').write_text('\n'.join(md)+'\n')
 print('Refreshed 1000 existing tasks; preserved acceptance and execution results.')

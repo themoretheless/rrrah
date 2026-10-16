@@ -1,0 +1,37 @@
+{
+  "status": "Viewer regression and required actual Metal pipeline pass after early source release and consuming NRRD/MRC window conversion",
+  "viewer": {
+    "command": "cargo +stable test -p rrrah --bin rrrah --offline",
+    "passed": 247,
+    "failed": 0,
+    "ignored": 68,
+    "seconds": 3.63,
+    "environment": "Unix socket fixture permission granted; unchanged suite, no skips added"
+  },
+  "metal": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "passed": 1,
+    "failed": 0,
+    "seconds": 8.96,
+    "states": 492,
+    "readbacks": 3688,
+    "square_pixel_negative_controls": 736,
+    "ram_pressure_hits": 492,
+    "swap_writes": 492,
+    "swap_reads": 492,
+    "decoder_blocked_on_prefetch": true,
+    "final_managed_bytes": 0
+  },
+  "meaning": "Current buffer ownership transfer preserves exact reference pixels, section/frame and aspect metadata, visible pin lifetime, swap restoration and SDR/RGBA16F rendering.",
+  "limits": [
+    "Ignored viewer/manual tests not passes",
+    "Not physical HDR calibration or NVIDIA hardware qualification",
+    "Small scientific reference planes, large256MiBvolume has separate CPU memory evidence",
+    "Not complete100format qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-scientific/src/scientific.rs": "570f3d0af327ced25a42a19e1703286ce8c165718ce5808818aeb54b94bca9a3",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "6e2e6f332ae578d37c721bb4256b7aafe6939448b161516f2de15828ba6a8b61"
+  }
+}

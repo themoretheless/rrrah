@@ -26,7 +26,7 @@ pub use rrrah_demosaic::{
 
 pub use rrrah_develop::{
     self as develop, DecodedMosaic, DecodedRaster, LevelGrid, ManifestError, MosaicRecipeManifest,
-    Orientation, Photometric, RasterColorSpace, RasterError, RasterPixels, RawMetadata, Rect, ThumbnailError,
+    Orientation, Photometric, RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels, RawMetadata, Rect, ThumbnailError,
     WhiteLevel, bayer, edit, histogram, rgbe, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW,
     DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, KNOWN_MOSAIC_DECODE_FLAGS,
     MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,

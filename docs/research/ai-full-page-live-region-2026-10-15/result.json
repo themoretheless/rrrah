@@ -1,0 +1,62 @@
+{
+  "full_page_before": {
+    "status": "terminal",
+    "directory": "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-ai-compact-fullpage-20261015-0f510zni",
+    "work_limit": 4000000,
+    "deadline_seconds": 180,
+    "binary_sha256": "b04fa4472195b69f534fa117d1e179098db5df1ac991f1153b77e9ca38cc4de4",
+    "source_sha256": {
+      "vendor/hayro-interpret/src/shading/adaptive.rs": "9feff9f20fb617472d41e9b06d4f10b7ce526e96e0515da2241a0bf7ad2c8732",
+      "vendor/hayro-interpret/src/encode/native_source.rs": "a4dcf2df6263fece53a4a7deaf993d97dccb53eab2f3f636febf1b2c5e8579f5",
+      "vendor/hayro/src/knockout_interpreter.rs": "5f5569845c4ac83709de8755c58ac7765711d6abeb7d747f58bd54337331e36b"
+    },
+    "exit_code": 101,
+    "seconds": 58.710312124999994,
+    "output_exists": false
+  },
+  "full_page_result": {
+    "completed_pixels": 10974,
+    "total": 74046,
+    "refusal_pixel": [
+      138,
+      36
+    ],
+    "deadline_expired": false,
+    "max_work_observed": 2835138,
+    "work_limit": 4000000,
+    "final_credit": 0,
+    "native_output_published": false,
+    "poppler_full_comparison": "not performed, native page incomplete"
+  },
+  "fix": "match pre-count NativeColor/shading/mesh geometry with existing conservative pixel control-box filter; event4096/region4095 caps unchanged; full reserved storage still admitted",
+  "regression": {
+    "source_events": "under4096",
+    "off_pixel_fills": 2100,
+    "raw_regions_with_clips": "over4095",
+    "before": "region_budget refusal reproduced",
+    "after": "exact native pixel matches scene without far geometry"
+  },
+  "ordinary_hayro_tests": {
+    "passed": 264,
+    "failed": 0,
+    "ignored": 12,
+    "seconds": 5.8
+  },
+  "original_pixel_after": {
+    "constructed_regions": 1912,
+    "deduplicated_regions": 1891,
+    "passed_region_budget": true,
+    "next_refusal": "spatial polygon fragments/composition",
+    "completed": false,
+    "global_work_spent": 3579153,
+    "global_work_remaining": 420847,
+    "final_credit": 0
+  },
+  "limitations": [
+    "still no completed full native page, AI Pending",
+    "initial4200-event test accidentally hit event cap; corrected to2100 fills under cap, both logs preserved",
+    "polygon-stage refusal still requires typed cause/work inspection",
+    "no tolerance or resource-cap relaxation"
+  ],
+  "source_sha256": "8c2dfe323d9c1b279b51f0e48423d0862feadeaa12a44748c802125a30fbec64"
+}

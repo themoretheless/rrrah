@@ -1,0 +1,36 @@
+{
+  "retained_fix": {
+    "behavior": "validated opaque source at full shape in Normal mode exactly replaces previous native pixel",
+    "before_failure": "RGB source0.10000000149011612, backdropalpha0.23: storage perturbed by weighted arithmetic",
+    "regression_cases": 90,
+    "models": [
+      "Gray",
+      "Rgb",
+      "Cmyk"
+    ],
+    "checks": "exact storage, no tolerance; original input/model/shape validity gates retained"
+  },
+  "rejected_owner_state_trial": {
+    "status": "fully reverted",
+    "shared_budget": "preparation/transitions/sampling all debited same4M allowance, including early refusal",
+    "result": "real pixel exhausts budget atY36.648 instead of baselineY36.986; more work spent on state transitions/lookup",
+    "ordinary_tests": 265,
+    "reason": "correctness tests passed, workload progress regressed; no source-counter refresh or cap increase retained"
+  },
+  "current_tests": {
+    "passed": 266,
+    "failed": 0,
+    "ignored": 12,
+    "seconds": 5.21
+  },
+  "next": "use proven opaque replacement to avoid work on hidden earlier layers, retaining exact source coordinates/model and mask/group constraints",
+  "limitations": [
+    "native test compositor, not full production AI support",
+    "real pixel/page4M budget bottleneck remains",
+    "no runtime speedup or whole-page equality claim"
+  ],
+  "source_sha256": {
+    "vendor/hayro/src/native_blend.rs": "797602a719903f200ffad34f1f79331dba4a0b23cdba2d3bd1c866ce2dde04de",
+    "vendor/hayro/src/native_spatial.rs": "5e827bed0b27ed3b6ffb64db1b630750114f2663ea4f8fcf1c8184171d40df6e"
+  }
+}

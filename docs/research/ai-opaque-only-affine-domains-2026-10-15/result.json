@@ -1,0 +1,42 @@
+{
+  "change": "Geometry proof prepares NativeAffineDomain only for OpaqueAffineOwner commands. Non-affine sources retain ordinary sampling and do not require an affine certificate.",
+  "tests": {
+    "passed": 295,
+    "failed": 0,
+    "ignored": 12
+  },
+  "real": {
+    "previous_refused_pixel": [
+      149,
+      13
+    ],
+    "native_completed": true,
+    "white_rgb": [
+      255,
+      255,
+      255
+    ],
+    "source_work": 1236,
+    "source_allowance": 4000000,
+    "matches_default_poppler": true,
+    "problem_pixel": [
+      147,
+      59
+    ],
+    "typed_white_rgb8": [
+      205,
+      151,
+      128
+    ],
+    "problem_source_work": 3831146,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "source_sha256": {
+    "vendor/hayro/src/knockout_interpreter.rs": "118c1691a2cea05bf59c5f78c7b24e053bb1e2d9d48b105a5feed2165f55961e"
+  },
+  "limitations": [
+    "Full page still running; no production qualification.",
+    "Same-sampler white RGB8 proof does not settle independent rasterization or color-policy differences."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "status": "Sun Raster RLE expands through one managed row directly into final RGBA output",
+  "change": "Keep allocation-free packet/palette validation; second shared packet walk splits runs at row boundaries, fills one stride-sized scratch row, converts completed rows directly to output. Raw storage uses same row converter without scratch. No whole decoded source image retained.",
+  "memory": "RLE decode peak=finalRGBAbytes+one16bit-alignedrawrowstride for borrowed source, independent of height for scratch; source file ownership separate",
+  "regressions": {
+    "independent_sources": 8,
+    "exact_admission": "Update each independent source peak to output+stride forRLE or output-only forraw; one-byte-short refuses and finalcredit0",
+    "many_padded_rows": "3x1298bit image;256byte RLE runs cross64paddedrows each; all387RGBA pixels exact77gray. FinalRGBA1548bytes, scratch4bytes, exactpeak1552, short1551refused. Previous full expansion would require516byte scratch, based on old allocation formula.",
+    "palette": "Corrupt visible indices before admission; padding ignored; cross-row invalid run still refused"
+  },
+  "tests": {
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 2
+    },
+    "production_lib_clippy_no_deps_warnings_denied": "passed"
+  },
+  "limits": [
+    "Encoded source still whole-file through common reader; this is decoded-row streaming, not streaming file IO",
+    "Packet validation remains separate first walk; no measured throughput speedup claimed",
+    "No new Metal runtime test this turn",
+    "Not full Sun/100format qualification"
+  ],
+  "source_sha256": "1bfa16148185a0b7a5c596cbbae97216aead3b7caa0914a3160b0b1bf86c4365"
+}

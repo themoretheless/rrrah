@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "change": "calibrated resident Bayer carries effective crop and orientation; raster shader maps display integer taps back into cropped sensor coordinates; source tile layout remains sensor-sized; ordinary install resets geometry",
+  "qualification": {
+    "adapter": "Apple M4 Max Metal",
+    "raster_passed": 20,
+    "raster_failed": 0,
+    "raster_ignored": 8,
+    "gpu_lib_passed": 61,
+    "gpu_lib_failed": 0,
+    "gpu_lib_ignored": 2,
+    "source": [
+      17,
+      13
+    ],
+    "crop": [
+      3,
+      2,
+      11,
+      7
+    ],
+    "orientations": 8,
+    "attachments": [
+      "SDR RGBA8",
+      "HDR RGBA16Float"
+    ],
+    "oracle": "materialized crop/orientation of same GPU-computed sensor pixels using canonical CPU map_display_uv_f64",
+    "whole_frame_comparisons": 16,
+    "view": "nondefault zoom/pan/exposure",
+    "ordinary_replacement": "all16 cases reset geometry and match ordinary raster",
+    "final_credits": 0
+  },
+  "limitations": [
+    "orientation qualification uses single-layer Bayer source; ordinary tiled path regression passes but tiled Bayer orientation not specifically qualified",
+    "source and crop fixture authored; not camera metadata corpus",
+    "viewer compute wiring pending"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "1bbfdf2fe5d9d7a958bca657ab8c4af19497a83ac850b4475c2508a19c9306a1",
+    "crates/rrrah-gpu/src/raster.rs": "bd3f176dfefb85c5f3d058e35cea1004dde124c0a6e070504c501055cc024e80",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "04dd5a0a0a68b45cd7c6b7a371896e963c29277716a4bd119fb4f0c709a8d23f",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "90e4346035ea1de90f84e6f4e08341121528daad4eaa68017455dba748f810f5"
+  }
+}

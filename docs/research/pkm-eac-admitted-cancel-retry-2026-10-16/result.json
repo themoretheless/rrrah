@@ -1,0 +1,47 @@
+{
+  "status": "all_pkm_eac_types_cancel_after_observed_admission_and_retry_exactly",
+  "setup": {
+    "types": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "semantics": [
+      "R11 unsigned",
+      "RG11 unsigned",
+      "R11 signed",
+      "RG11 signed"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "output_credit_bytes": 16777216,
+    "unrelated_credit_bytes": 4096,
+    "root_limit_and_peak_bytes": 16781312,
+    "runs": 6,
+    "cancellations": 24,
+    "retries": 24
+  },
+  "checks": [
+    "Observer is ready before decode, waits until full16MiB output credit appears, invalidates GenerationToken with3s watchdog",
+    "Decode returns typed Cancelled; root retains only independent4096 credit",
+    "Retry without cancellation compares every float32 component against repeated independent Ericsson-derived4x4 fixture oracle",
+    "All1,048,576 pixels per retry exact;25,165,824 retry pixels checked across final runs",
+    "After retry drops only independent owner remains; final owner drops return root to0"
+  ],
+  "texture_lib": {
+    "passed": 86,
+    "failed": 0,
+    "ignored": 3
+  },
+  "changes": "Manual cancellation/lifetime regression only; production EAC decoder unchanged",
+  "limits": [
+    "Scheduling-dependent observation of managed reservation; not arbitrary mid-pixel cancellation proof",
+    "Large sources repeat one oracle block; full codec variation stays in separate4096-block sample tests",
+    "Resident source/fixture host data outside root output budget; unrelated owner holds reservation credit",
+    "No new GPU/physical HDR/NVIDIA or throughput qualification"
+  ],
+  "source_sha256": "06861dc677c9e784abde11b32d3b8b72714a2560fe52e0b0cf958901648e4b43"
+}

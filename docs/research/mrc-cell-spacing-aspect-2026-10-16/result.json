@@ -1,0 +1,60 @@
+{
+  "status": "MRC orthogonal storage-plane aspect derived from cell metric and physical-axis mapping, preserved through scientific windows",
+  "specification": "https://www.ccpem.ac.uk/mrc-format/mrc2014/",
+  "derivation": "Physical step(axis)=CELLA(axis)/M(axis). Display ratio=step(MAPC)/step(MAPR). Alpha corresponds Y/Z, beta X/Z, gamma X/Y; displayed-plane angle chosen using omitted axis.",
+  "validation": "CELLA finite nonnegative, CELLB finite0<=angle<180, sampling counts nonnegative signed range; ratio finite positive f32. Missing0cell or sampling, or displayed angle not exactly90degrees, leaves ratio unspecified.",
+  "regressions": {
+    "orders": [
+      "LE",
+      "BE"
+    ],
+    "axis_permutations": 6,
+    "grid_xyz": [
+      4,
+      5,
+      6
+    ],
+    "cell_xyz": [
+      8,
+      20,
+      48
+    ],
+    "steps_xyz": [
+      2,
+      4,
+      8
+    ],
+    "expected_aspects": [
+      0.5,
+      0.25,
+      2,
+      0.5,
+      4,
+      2
+    ],
+    "window": "All12metriccases preserve aspect through windowing",
+    "oblique": "Alpha80 with final Z/Y mapping remains unspecified",
+    "malformed": "NaN,infinite,negativecell lengths refused"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 47,
+      "failed": 0,
+      "ignored": 8
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed"
+  },
+  "limits": [
+    "No world-axis reorientation, handedness choice, physical origin positioning or oblique rectification implemented",
+    "Exact90degree check intentionally avoids claiming rectangular metric for approximate/unknown angles",
+    "No independent calibrated producer geometry corpus or Metal runtime check in this turn",
+    "Existing fixtures have unspecified0cell dimensions and retain their former None aspect",
+    "Full MRC and100format qualification remains open"
+  ],
+  "source_sha256": "f4c0a54124d4be8a30e72d3049db0db463462c15742098d17bd69a3a23c3ff1e"
+}

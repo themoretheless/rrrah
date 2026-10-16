@@ -1,0 +1,38 @@
+{
+  "scope": "Native AI test compositor single-point mask replay; not completed production AI support",
+  "change": "Validate descending owner list as before; single-point replay scans until the first covered owner instead of constructing a multi-sample word plan. Pixel-area mode retains existing word plans.",
+  "tests": {
+    "passed": 268,
+    "failed": 0,
+    "ignored": 12,
+    "new_regression": "Independent maximum covered owner, duplicates, absent coverage, cancellation at every observed checkpoint"
+  },
+  "pixel_108_58": {
+    "grid": 4,
+    "completed": false,
+    "deadline": false,
+    "color_spent": 3999967,
+    "remaining": 33,
+    "admission_requests": 783279,
+    "final_credit": 0
+  },
+  "limitations": [
+    "Pixel still exceeds the ordinary 4M work allowance; no completion claimed",
+    "Earlier traced run timing and current untraced timing are not comparable",
+    "Paired old/new complete reference with the same binary is pending"
+  ],
+  "source_sha256": "c99759dca04933c1a007e2149def3d6afe5c04c4e185030206f4105c207f8d4b",
+  "paired_complete_reference": {
+    "same_binary": true,
+    "diagnostic_color_allowance": 16000000,
+    "old_work": 6095110,
+    "new_work": 4916116,
+    "saved_work": 1178994,
+    "fraction_saved": 0.19343276823551994,
+    "native_result_exact": true,
+    "completed_both": true,
+    "deadline_both": false,
+    "final_credit_both": 0,
+    "timing": "Not a paired sequential timing benchmark; only work counts and output identity qualified"
+  }
+}

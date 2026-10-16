@@ -18,6 +18,9 @@ pub mod astc;
 pub mod basis;
 pub mod dcx;
 pub mod dds;
+pub(crate) mod deflate;
+mod eac;
+mod etc1;
 pub mod ktx;
 pub mod ktx2;
 pub mod pcx;
@@ -72,3 +75,46 @@ pub enum TextureDecodeError {
 }
 
 pub type RasterDecodeError = TextureDecodeError;
+pub(crate) fn check_single_image(request: &DecodeRequest) -> Result<(), TextureDecodeError> {
+    request.check_cancelled()?;
+    if request.image_index != 0 {
+        return Err(DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        }
+        .into());
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod single_image_tests {
+    use super::*;
+    #[test]
+    fn direct_single_image_decoders_reject_selection_and_cancel_before_admission() {
+        type Decoder = fn(&[u8], &DecodeRequest) -> Result<rrrah_core::DecodedRaster, TextureDecodeError>;
+        let decoders: [Decoder; 3] = [pcx::decode, pkm::decode, astc::decode];
+        let budget = rrrah_core::MemoryBudget::new(0);
+        let mut request = DecodeRequest::new("unused");
+        request.memory_budget = Some(budget.clone());
+        for decode in decoders {
+            for index in [1, 4, usize::MAX] {
+                request.image_index = index;
+                assert!(
+                    matches!(decode(&[], &request), Err(TextureDecodeError::Source(DecodeError::UnsupportedImageIndex { index: actual })) if actual == index)
+                );
+                assert_eq!((budget.used(), budget.peak()), (0, 0));
+            }
+        }
+        request.cancellation = Some(GenerationToken::new(
+            std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
+            1,
+        ));
+        for decode in decoders {
+            assert!(matches!(
+                decode(&[], &request),
+                Err(TextureDecodeError::Source(DecodeError::Cancelled))
+            ));
+        }
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
+    }
+}

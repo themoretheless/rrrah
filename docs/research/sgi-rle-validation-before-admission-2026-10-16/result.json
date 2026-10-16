@@ -1,0 +1,41 @@
+{
+  "status": "SGI encoded row bounds and RLE structure validated without managed allocation before output/row-buffer admission",
+  "change": "One shared const-specialized row parser validates or emits; validation skips literal byte ranges after checking length, validates repeats/count/terminator. Shared encoded_row resolver checks table/header overlap and file bounds in both phases. Raw row validation checks sizes without reading sample values.",
+  "regressions": {
+    "precisions": [
+      8,
+      16
+    ],
+    "standing_pressure_bytes": 4096,
+    "free_credit": 0,
+    "all_truncations": 1065,
+    "malformed_packets": "overrun, missing terminator, short row, truncated literal, trailing bytes",
+    "bad_offsets": [
+      511,
+      4294967295
+    ],
+    "expected_bad": "InvalidSgi, no decoder allocation, standing pressure unchanged",
+    "valid_control": "Same valid shared-row RLE input returns typed Memory at output admission",
+    "final_after_owner_drop_bytes": 0
+  },
+  "tests": {
+    "vfx": {
+      "passed": 51,
+      "failed": 0,
+      "ignored": 0
+    },
+    "facade": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "clippy_vfx_lib_tests_no_deps_warnings_denied": "passed"
+  },
+  "limits": [
+    "Direct borrowed-source decoder precedence; file source itself still needs separate admission first",
+    "Extra RLE packet validation pass, no throughput speedup claim",
+    "No new GPU rendering run in this turn; native pixel oracle tests remain exact",
+    "Not full SGI/100format qualification"
+  ],
+  "source_sha256": "f7fbc97fb1ebb0e8846c56fe1412878cf76c83ce27097972a1cb95916c673a91"
+}

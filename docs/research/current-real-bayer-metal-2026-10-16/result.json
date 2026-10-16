@@ -1,0 +1,81 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "algorithms": [
+    {
+      "algorithm": "Bilinear",
+      "points": 336,
+      "max_absolute_error": 3.0936066486297875e-08,
+      "final_credits": 0
+    },
+    {
+      "algorithm": "SmoothHue",
+      "points": 336,
+      "max_absolute_error": 4.0322531591474586e-08,
+      "final_credits": 0
+    },
+    {
+      "algorithm": "MalvarHeCutler",
+      "points": 336,
+      "max_absolute_error": 4.1521667049071453e-08,
+      "final_credits": 0
+    },
+    {
+      "algorithm": "Directional",
+      "points": 336,
+      "max_absolute_error": 5.049570495074818e-08,
+      "final_credits": 0
+    },
+    {
+      "algorithm": "Vng",
+      "points": 336,
+      "max_absolute_error": 3.172440382614994e-08,
+      "final_credits": 0
+    },
+    {
+      "algorithm": "Rcd",
+      "points": 336,
+      "max_absolute_error": 4.071639023162099e-08,
+      "final_credits": 0
+    }
+  ],
+  "comparison": "sampled independent f64 reconstruction; 336 points per full-sensor GPU execution",
+  "bound": "32*f32::EPSILON*max(abs(reference),1)",
+  "source_media_exported": false,
+  "full_small_sensors": {
+    "dimensions": [
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        17,
+        19
+      ]
+    ],
+    "bayer_phases": 4,
+    "algorithms": 6,
+    "cases": 192,
+    "pixels": 19104,
+    "max_absolute_error": 1.0963906176275628e-06,
+    "final_cpu_gpu_credits": 0,
+    "calibration_modes": 2,
+    "black_grid": [
+      3,
+      2
+    ],
+    "phase_white_levels": [
+      3071,
+      3583,
+      4095,
+      4607
+    ]
+  }
+}

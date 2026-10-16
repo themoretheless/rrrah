@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "binary_sha256": "d0ae1498d91d60e833386de826a6358e3ed93b7e19bce045f57094900c3a3c1c",
+  "backend_env": "metal",
+  "cases": [
+    {
+      "name": "next-only",
+      "previous": 0,
+      "next": 2,
+      "exit_code": 0,
+      "retained_by_generation": {
+        "2": [
+          "04-target.psd",
+          "05-right.psb"
+        ],
+        "3": [
+          "05-right.psb",
+          "06-far.psd"
+        ],
+        "4": [
+          "02-left.psb",
+          "01-left.psd"
+        ]
+      },
+      "log_sha256": "063e34ada1923bad41bf6092305de868d2e4134e808bad2ecc01b6c2ec163859"
+    },
+    {
+      "name": "previous-only",
+      "previous": 2,
+      "next": 0,
+      "exit_code": 0,
+      "retained_by_generation": {
+        "2": [
+          "02-left.psb",
+          "01-left.psd"
+        ],
+        "3": [
+          "03-selected.exr",
+          "02-left.psb"
+        ],
+        "4": [
+          "04-target.psd",
+          "05-right.psb"
+        ]
+      },
+      "log_sha256": "e25db07cd8cce9fc4c294a12b27e6e87231c5a10be104495580d5debe04c25ca"
+    }
+  ],
+  "scope": "native App arrow navigation and retained neighbours with one side disabled; direction-relative window; not physical HDR or latency"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "experiment rejected and reverted: original source fails existing admission",
+  "production_change": "none; original pixel_error/16 boundary tolerance and original analytic test restored",
+  "analytic_regression": {
+    "exact_area": 64.4,
+    "before_area": 64.3984375,
+    "required_absolute_error": 0.0002,
+    "after": "passed unchanged strict bound"
+  },
+  "interpreter_suite": {
+    "passed": 125,
+    "failed": 0,
+    "ignored": 1
+  },
+  "live_original_diagnostic": {
+    "status": "terminal failure preserved",
+    "exit_code": 101,
+    "reason": "NATIVE_TENSOR_CAPTURE patches=1455 refusal=Admission"
+  },
+  "source_sha256": "b778785246170f7efaeddbc52c3c1cfc031c87f077758aa9f08efb099b20dc12",
+  "limitations": [
+    "must still verify real source completes within original256MiB admission",
+    "single-pixel geometry evidence does not establish full AI fidelity"
+  ],
+  "experiment": {
+    "tolerance": "pixel_error/128",
+    "analytic_strict_absolute_error": 0.0002,
+    "analytic_and_library_tests": "125 passed/1 ignored",
+    "actual_original_source": "failed capture:1455-patch native tensor shading Admission refusal under existing256MiB budget"
+  },
+  "restored_source_sha256": "f628ae36e2045ca12a38619f650ed6f6d483a00b211e128811a84f429b3a748c",
+  "next_action": "reduce tessellation peak allocation/retained capacity before tighter geometry; do not raise resource cap or mark AI qualified"
+}

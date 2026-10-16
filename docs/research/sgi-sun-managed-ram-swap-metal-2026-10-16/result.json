@@ -1,0 +1,70 @@
+{
+  "status": "Managed SGI/Sun decoding verified through display color preparation, RAM, swap and actual Metal full-image SDR/HDR",
+  "sources": {
+    "sgi": 2,
+    "sun_raster": 8,
+    "reference": "Independent Pillow/FFmpeg RGBA8 oracle files; explicit assumed-sRGB preparation using shared color module",
+    "covered": "SGI RGB/RGBA8; Sun mono,palette,RGB/BGR,XRGB/XBGR,RLE"
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "cases": 10,
+    "readbacks": 60,
+    "ram_pressure_hits": 10,
+    "swap_writes": 10,
+    "swap_reads": 10,
+    "swap_errors": 0,
+    "swap_dropped": 0,
+    "blocked_decoder_prefetch": true,
+    "visible_frame_preserved": true,
+    "final_managed_bytes": 0,
+    "seconds": 3.23,
+    "render_coverage": "Viewport equals8x source dimensions, ensuring whole image coverage"
+  },
+  "policy": {
+    "root_bytes": 131072,
+    "ram_bytes": 8192,
+    "ram_count": 1,
+    "ttl": null,
+    "swap_bytes": 1048576,
+    "swap_count": 32,
+    "queue_bytes": 65536,
+    "restore_bytes": 65536
+  },
+  "tests": {
+    "cpu_targeted": {
+      "passed": 1,
+      "failed": 0
+    },
+    "cpu_pipeline_group": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 4
+    },
+    "full_viewer": {
+      "passed": 248,
+      "failed": 0,
+      "ignored": 69,
+      "seconds": 3.7,
+      "environment": "Local Unix-socket test fixtures permitted"
+    },
+    "metal": {
+      "passed": 1,
+      "failed": 0
+    },
+    "focused_rustfmt": "passed"
+  },
+  "limits": [
+    "SGI16bit/RLE decoding has unit admission/precision evidence, but new independent Metal sources here are8bit verbatim RGB/RGBA",
+    "New matrix has no TTL; nonzero TTL verified separately for cache/DICOM",
+    "RGBA16F target readback is not physical HDR photometry or above1 source-range proof",
+    "No NVIDIA/CUDA hardware execution",
+    "Not full SGI/Sun or100format qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-vfx/src/sgi.rs": "bdc31bd9b9afb1669c2a3154756ac02abe31c64c5b9cfd72831ad5020bc997d0",
+    "crates/rrrah-decode/src/sun.rs": "2de784b9def2221c0f7a59439603976d0f34c4624a6a83baf11cad383ad46b16",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "10ac124aa0d1e8fb4303327963b916474ccd0a550b11836b10e6b667a8cae8b1"
+  }
+}

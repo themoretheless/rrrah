@@ -8,6 +8,8 @@ use raster_transitions::RasterTransitions;
 #[path="native_owner_transitions.rs"]
 mod owner_transitions;
 use owner_transitions::OwnerTransitions;
+#[path="native_opaque_moments.rs"]
+mod opaque_moments;
 use super::native_blend::Pixel;
 use super::polygon_coverage::admitted_selected_polygon_pixel_row_budget;
 use hayro_interpret::BlendMode;
@@ -39,7 +41,7 @@ pub(super) fn compose_polygon_pixel(
             || paint.regions.iter().any(|&i|i>=regions.len()) {return None;}
     }
     let mut paint_remaining=paint_work;
-    compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,None,None,None,None,None,None,&mut |winding,_point,_coverage,_occupied_words| {
+    compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,None,None,None,None,None,None,None,None,&mut |winding,_point,_coverage,_occupied_words| {
         let mut pixel=backdrop;
         for paint in paints {
             paint_remaining=paint_remaining.checked_sub(paint.regions.len().checked_add(1)?)?;
@@ -59,24 +61,153 @@ fn opaque_error_route(commands:&[SpatialCommand<'_>],route:&[usize])->OpaqueErro
     if !affine_native_route(commands,route) {return OpaqueErrorRoute::Unsupported;}
     let last=route.last().copied();let mut variable=None;
     for &index in route {
-        if matches!(commands[index],SpatialCommand::NativeSampledPaint {field:NativeField::AffineOwner,..}) {
+        if matches!(commands[index],SpatialCommand::NativeSampledPaint {field:NativeField::AffineOwner|NativeField::OpaqueAffineOwner,..}) {
             if variable.is_some() {return OpaqueErrorRoute::Unsupported;}variable=Some(index);
         }
     }
     match variable {None=>OpaqueErrorRoute::Constant,Some(index) if Some(index)==last=>OpaqueErrorRoute::Pending(index),_=>OpaqueErrorRoute::Unsupported}
 }
 
-fn compose_cells(
+struct OwnerWord {word:usize,mask:u64,indices:[usize;64]}
+struct OwnerPlan {words:Vec<OwnerWord>,positions:[usize;64],word_mask:u64,monotonic:bool,_credit:Box<dyn std::any::Any+Send+Sync>}
+// Geometry only. Direct point owner lists are already ordered descending by
+// source index; planned traversal returns the maximal covered source owner.
+// No color sampler, source lookup or fresh work allowance is created here.
+fn covered_native_owner(owners:&[(usize,usize)],direct:bool,plan:Option<&OwnerPlan>,coverage:&[u64;64],occupied_words:u64,
+    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Option<usize>> {
+    if cancelled() {return None;}let mut owner=None;
+    if direct {
+        for &(region,index) in owners {
+            if cancelled() {return None;}*work=work.checked_sub(1)?;
+            if coverage.get(region/64)?&(1u64<<(region%64))!=0 {return Some(Some(index));}
+        }
+    } else if let Some(plan)=plan {
+        let mut needed=plan.word_mask&occupied_words;
+        while needed!=0 {
+            if cancelled() {return None;}*work=work.checked_sub(1)?;
+            let slot=if plan.monotonic {63-needed.leading_zeros() as usize} else {needed.trailing_zeros() as usize};
+            needed&=!(1u64<<slot);
+            let word=plan.words.get(plan.positions[slot])?;
+            let mut covered=word.mask&coverage.get(word.word)?;
+            if plan.monotonic && covered!=0 {
+                *work=work.checked_sub(1)?;let bit=63-covered.leading_zeros() as usize;
+                return Some(Some(word.indices[bit]));
+            }
+            while covered!=0 {
+                if cancelled() {return None;}*work=work.checked_sub(1)?;
+                let bit=covered.trailing_zeros() as usize;covered&=covered-1;
+                let index=word.indices[bit];owner=Some(owner.map_or(index,|old:usize|old.max(index)));
+            }
+        }
+    }
+    if cancelled() {return None;}Some(owner)
+}
+
+pub(super) enum NativeGeometryQuery {Prepare,Observe(kurbo::Point),Finish(kurbo::Point)}
+pub(super) struct NativeGeometryResult {pub(super) bound:f64,pub(super) pixel:Option<Pixel>,pub(super) gradient:[f64;2]}
+pub(super) type NativeGeometryValidator<'a>=dyn Fn(usize,usize,usize,NativeGeometryQuery,&mut usize)->Option<NativeGeometryResult>+'a;
+struct OwnerMomentObservation<'a> {
+    white_quantization_unstable:std::cell::Cell<bool>,
+    certified_white_rgb8:std::cell::Cell<Option<[u8;3]>>,
+    source_space:Option<&'a hayro_interpret::color::ColorSpace>,
+    validator:Option<&'a NativeGeometryValidator<'a>>,
+    fallback:std::cell::Cell<(usize,f64,[f64;4])>,
+    field:std::cell::Cell<Option<(usize,usize)>>,
+    moments:std::cell::RefCell<opaque_moments::OwnerMoments>,
+}
+fn prepare_owner_moment_observation<'a>(commands:&[SpatialCommand<'_>],origin:kurbo::Point,
+    work:&mut usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,validator:Option<&'a NativeGeometryValidator<'a>>,source_space:Option<&'a hayro_interpret::color::ColorSpace>)->Option<OwnerMomentObservation<'a>> {
+    if cancelled() {return None;}*work=work.checked_sub(commands.len().checked_mul(2)?)?;
+    let count=commands.iter().try_fold(0usize,|sum,command|match command {
+        SpatialCommand::NativeSampledPaint {field:NativeField::OpaqueAffineOwner,owners,..}=>sum.checked_add(owners.len()),
+        _=>Some(sum),
+    })?;
+    if count>4095 {return None;}
+    let _credit=admit(count.checked_mul(size_of::<(usize,usize)>())?)?;
+    let mut bindings=Vec::new();bindings.try_reserve_exact(count).ok()?;
+    if bindings.capacity()>count {return None;}
+    for (index,command) in commands.iter().enumerate() {
+        if cancelled() {return None;}
+        if let SpatialCommand::NativeSampledPaint {field:NativeField::OpaqueAffineOwner,owners,..}=command {
+            for &(_,owner) in *owners {
+                if cancelled() {return None;}*work=work.checked_sub(1)?;bindings.push((index,owner));
+            }
+        }
+    }
+    let moments=opaque_moments::OwnerMoments::admitted(commands.len(),&bindings,origin,work,cancelled,admit)?;
+    if let Some(validate)=validator {
+        moments.visit_bindings(work,cancelled,&mut |binding,work| {
+            let value=validate(binding.command,binding.owner,binding.slot,NativeGeometryQuery::Prepare,work)?;
+            if value.bound!=0. || value.pixel.is_some() {return None;}Some(())
+        })?;
+    }
+    Some(OwnerMomentObservation {certified_white_rgb8:std::cell::Cell::new(None),white_quantization_unstable:std::cell::Cell::new(false),source_space,validator,fallback:std::cell::Cell::new((0,0.,[0.;4])),field:std::cell::Cell::new(None),moments:std::cell::RefCell::new(moments)})
+}
+
+// A balanced, unmasked root tail can replace all earlier native pixel values.
+// Qualify structure once per immutable route; opacity/model are checked at sampling.
+fn opaque_root_tail(commands:&[SpatialCommand<'_>],route:&[usize],work:&mut usize,
+    cancelled:&dyn Fn()->bool)->Option<Option<usize>> {
+    let mut depth=0usize;let mut masked=false;
+    for &index in route {
+        if cancelled() {return None;}*work=work.checked_sub(1)?;
+        match commands.get(index)? {
+            SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}=>depth=depth.checked_add(1)?,
+            SpatialCommand::End=>depth=depth.checked_sub(1)?,
+            SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}=>masked=true,
+            _=>{},
+        }
+    }
+    if depth!=0 {return None;}
+    if masked {return Some(None);}
+    Some(route.last().copied().filter(|&index|matches!(commands[index],
+        SpatialCommand::NativeSampledPaint {field:NativeField::OpaqueAffineOwner,mode:BlendMode::Normal,alpha_is_shape:false,..})))
+}
+// A deferred owner is geometry metadata, never an observed color or Pixel.
+// Until the bound-only integral path is available, composition refuses it.
+enum EvaluatedCell {
+    Sampled(Pixel),
+    Deferred { command:usize, owner:usize },
+}
+impl From<Pixel> for EvaluatedCell {
+    fn from(pixel:Pixel)->Self {Self::Sampled(pixel)}
+}
+impl EvaluatedCell {
+    fn sampled(self)->Option<Pixel> {
+        match self {Self::Sampled(pixel)=>Some(pixel),Self::Deferred {command,owner}=>{let _=(command,owner);None}}
+    }
+}
+fn compose_cells<T:Into<EvaluatedCell>>(
     regions:&[(&BezPath,Fill)],backdrop:Pixel,x:i32,y:i32,polygon_work:usize,
     cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
     affine:Option<&std::cell::Cell<bool>>,
     source_key:Option<&FieldObservation>,
     transitions:Option<&std::cell::RefCell<RasterTransitions<'_>>>,
     owner_transitions:Option<&std::cell::RefCell<OwnerTransitions>>,
+    owner_region_masks:Option<&[u64;64]>,
+    owner_observation:Option<&OwnerMomentObservation<'_>>,
     error_route:Option<&std::cell::Cell<OpaqueErrorRoute>>,
     candidate_out:Option<&std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>,
-    evaluate:&mut dyn FnMut(&[i32],kurbo::Point,&[u64;64],u64)->Option<Pixel>,
+    evaluate:&mut dyn FnMut(&[i32],kurbo::Point,&[u64;64],u64)->Option<T>,
 )->Option<Pixel> {
+    compose_cells_budget(regions,backdrop,x,y,&mut {polygon_work},cancelled,admit,affine,source_key,transitions,owner_transitions,owner_region_masks,owner_observation,error_route,candidate_out,evaluate)
+}
+
+fn compose_cells_budget<T:Into<EvaluatedCell>>(
+    regions:&[(&BezPath,Fill)],backdrop:Pixel,x:i32,y:i32,polygon_allowance:&mut usize,
+    cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    affine:Option<&std::cell::Cell<bool>>,
+    source_key:Option<&FieldObservation>,
+    transitions:Option<&std::cell::RefCell<RasterTransitions<'_>>>,
+    owner_transitions:Option<&std::cell::RefCell<OwnerTransitions>>,
+    owner_region_masks:Option<&[u64;64]>,
+    owner_observation:Option<&OwnerMomentObservation<'_>>,
+    error_route:Option<&std::cell::Cell<OpaqueErrorRoute>>,
+    candidate_out:Option<&std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>,
+    evaluate:&mut dyn FnMut(&[i32],kurbo::Point,&[u64;64],u64)->Option<T>,
+)->Option<Pixel> {
+    if let Some(observation)=owner_observation {observation.certified_white_rgb8.set(None);observation.white_quantization_unstable.set(false);}
     let bytes=(regions.len()+1).checked_mul(size_of::<(&BezPath,Fill)>())?
         .checked_add(5*size_of::<kurbo::PathEl>())?
         .checked_add(regions.len().checked_mul(size_of::<i32>())?)?;
@@ -84,7 +215,8 @@ fn compose_cells(
     let unit=kurbo::Rect::new(f64::from(x),f64::from(y),f64::from(x)+1.,f64::from(y)+1.).to_path(0.1);
     let mut all=Vec::new();all.try_reserve_exact(regions.len()+1).ok()?;
     all.push((&unit,Fill::NonZero));all.extend_from_slice(regions);
-    let mut remaining=polygon_work;
+    let polygon_work=*polygon_allowance;
+    let mut remaining=polygon_allowance;
     let row=admitted_selected_polygon_pixel_row_budget(&all,x,y,&mut remaining,cancelled,admit).or_else(|| {
         if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_POLYGON_PREPARE_REFUSAL regions={} remaining={remaining}",all.len());}None
     })?;
@@ -113,6 +245,12 @@ fn compose_cells(
     let _replacement_credit=if replacement_rounding {admit(2*size_of::<super::native_moments::IntegralEnvelope<4>>())} else {None};
     let mut fallback_envelope=if _replacement_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
     let mut original_integral_bounds=None;
+    let unit_stream_enabled=observe_moments
+        && std::env::var_os("RRRAH_AI_UNIT_STREAM_ARITHMETIC").is_some();
+    let _unit_stream_credit=if unit_stream_enabled {
+        admit(size_of::<(usize,[f64;2],bool)>())
+    } else {None};
+    let mut unit_stream=if _unit_stream_credit.is_some() {Some((0usize,[0f64;2],true))} else {None};
     let mut original_variable_area=0f64;let mut original_variable_points=0usize;let mut unsupported_error_routes=0usize;
     let mut total_area_error=0f64;let mut weighted_centroid_error=[0f64;2];let mut geometry_complete=false;
     // Credit precedes the vector so storage is dropped before credit release.
@@ -131,7 +269,8 @@ fn compose_cells(
     let mut moment_fragments=0usize;let mut fallback_fragments=0usize;
     let mut fallback_alpha=0.;let mut fallback_integral=[0.;4];
     let mut alpha=0.;let mut integral=[0.;4];
-    row.pixel_incremental_selected_fragments_budget(&all,x,y,&mut remaining,cancelled,admit,6,&mut |winding,changed| {
+    let mut deferred_fragments=0usize;let mut evaluated_fragments=0usize;
+    let mut select_fragment=|winding:&[i32],changed:Option<usize>,subset:Option<&[usize]>| {
         if cancelled() {return None;}
         let mut values=saved.borrow_mut();
         let mut bits=coverage.borrow_mut();
@@ -163,21 +302,64 @@ fn compose_cells(
             }
             if inside {bits[i/64]|=mask;} else {bits[i/64]&=!mask;}
             let word_mask=1u64<<(i/64);
-            occupied_words.set(if bits[i/64]!=0 {occupied_words.get()|word_mask}
+            occupied_words.set(if bits[i/64]&owner_region_masks.map_or(u64::MAX,|masks|masks[i/64])!=0 {occupied_words.get()|word_mask}
                 else {occupied_words.get()&!word_mask});
             Some(())
         };
         if let Some(region)=changed {
             if region>0 {update(region-1)?;}
+        } else if let Some(subset)=subset {
+            for &region in subset {if region>0 {update(region-1)?;}}
         } else {
             for i in 0..regions.len() {update(i)?;}
         }
         Some(Some(0))
-    },&mut |fragment| {
-        let pixel=evaluate(&saved.borrow(),fragment.centroid,&coverage.borrow(),occupied_words.get()).or_else(|| {
+    };
+    let mut visit_fragment=|fragment:super::polygon_coverage::PixelFragment,callback_work:&mut usize| {
+        if owner_observation.is_some() {*callback_work=callback_work.checked_sub(2)?;}
+        let cell:EvaluatedCell=evaluate(&saved.borrow(),fragment.centroid,&coverage.borrow(),occupied_words.get())?.into();
+        evaluated_fragments=evaluated_fragments.checked_add(1)?;
+        if let EvaluatedCell::Deferred {command,owner}=cell {
+            let observation=owner_observation?;
+            if observation.validator.is_none() || observation.source_space.is_none()
+                || observe_moments || integral_rounding || unit_stream_enabled || candidate_out.is_some() {return None;}
+            let mut validate=|binding:opaque_moments::Binding,point,work:&mut usize| {
+                let ceiling=*work;
+                let proof=observation.validator?(binding.command,binding.owner,binding.slot,NativeGeometryQuery::Observe(point),work)?;
+                if *work>ceiling {*work=ceiling;return None;}
+                if !proof.bound.is_finite() || proof.bound<0. || proof.pixel.is_some() {return None;}Some(())
+            };
+            observation.moments.borrow_mut().add(command,owner,fragment.area,fragment.centroid,
+                callback_work,cancelled,Some(&mut validate))?;
+            // Original opaque alpha arithmetic; no component sum is invented.
+            let weight=fragment.area*1.;alpha+=weight;
+            deferred_fragments=deferred_fragments.checked_add(1)?;
+            return Some(());
+        }
+        let pixel=cell.sampled().or_else(|| {
             if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_CELL_EVALUATION_REFUSAL point={:?}",fragment.centroid);}None
         })?;
         if pixel.model()!=backdrop.model() || !pixel.valid() {return None;}
+        if let Some(observation)=owner_observation {
+            if let Some((command,owner))=observation.field.get() {
+                let mut validate=|binding:opaque_moments::Binding,point,work:&mut usize| {
+                    let ceiling=*work;
+                    let deficit=observation.validator?(binding.command,binding.owner,binding.slot,NativeGeometryQuery::Observe(point),work)?;
+                    if *work>ceiling {*work=ceiling;return None;}
+                    if !deficit.bound.is_finite() || deficit.bound<0. || deficit.pixel.is_some() {return None;}
+                    Some(())
+                };
+                observation.moments.borrow_mut().add(command,owner,fragment.area,fragment.centroid,
+                    callback_work,cancelled,if observation.validator.is_some() {Some(&mut validate)} else {None})?;
+            } else if observation.validator.is_some() {
+                *callback_work=callback_work.checked_sub(14)?;
+                let components=pixel.native_components()?;
+                if components.iter().any(|v|!(0. ..=1.).contains(v)) {return None;}
+                let (count,mut alpha,mut integral)=observation.fallback.get();let weight=fragment.area*pixel.alpha();alpha+=weight;
+                for (sum,value) in integral.iter_mut().zip(pixel.native_components()?) {*sum+=weight*value;}
+                observation.fallback.set((count.checked_add(1)?,alpha,integral));
+            }
+        }
         if observe_moments && !affine?.get() {
             if let Some(envelope)=fallback_envelope {fallback_envelope=envelope.added(fragment.area,pixel.alpha(),pixel.native_components()?,&mut moment_work,cancelled);}
             fallback_fragments+=1;fallback_alpha+=fragment.area*pixel.alpha();
@@ -212,17 +394,193 @@ fn compose_cells(
             if result.is_none() {moment_complete=false;}
         }
         let components=pixel.native_components()?;
+        if unit_stream_enabled {
+            // Only mass/count enter the arithmetic estimate. Source-range proof
+            // is checked independently here; no estimate authorizes live skipping.
+            unit_stream=unit_stream.and_then(|(count,mass,unit)| {
+                if cancelled() {return None;}moment_work=moment_work.checked_sub(28)?;
+                if !(0. ..=1.).contains(&fragment.area) || !(0. ..=1.).contains(&pixel.alpha()) {return None;}
+                let product=fragment.area*pixel.alpha();
+                let mass=[(mass[0]+product.next_down().max(0.)).next_down().max(0.),
+                    (mass[1]+product.next_up()).next_up()];
+                if mass.iter().any(|v|!v.is_finite()) || cancelled() {return None;}
+                Some((count.checked_add(1)?,mass,unit && components.iter().all(|v|v.is_finite() && (0. ..=1.).contains(v))))
+            });
+        }
         if let Some(envelope)=integral_envelope {
             integral_envelope=envelope.added(fragment.area,pixel.alpha(),components,&mut moment_work,cancelled);
         }
         let weight=fragment.area*pixel.alpha();alpha+=weight;
         for (sum,value) in integral.iter_mut().zip(components) {*sum+=weight*value;}
         Some(())
-    }).or_else(|| {
-        if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_POLYGON_FRAGMENTS_REFUSAL regions={}",all.len());}None
+    };
+    // Explicit diagnostic only: measure spatially bounded traversal before
+    // considering a production policy or changing numerical subdivision.
+    let grid=std::env::var("RRRAH_AI_DIAGNOSTIC_TILE_GRID").ok()
+        .and_then(|v|v.parse::<usize>().ok()).unwrap_or(1);
+    // Explicit observer extension only: retain every original source sample
+    // and the separate diagnostic allowance; never enables live replacement.
+    if !(1..=8).contains(&grid) || (grid>1 && observe_moments
+        && std::env::var_os("RRRAH_AI_ALLOW_TILED_MOMENT_OBSERVATION").is_none()) {return None;}
+    let traversed=(|| {
+        if owner_observation.is_some() {
+            for ty in 0..grid {for tx in 0..grid {
+                let rect=kurbo::Rect::new(f64::from(x)+tx as f64/grid as f64,
+                    f64::from(y)+ty as f64/grid as f64,
+                    f64::from(x)+(tx+1) as f64/grid as f64,
+                    f64::from(y)+(ty+1) as f64/grid as f64);
+                if std::env::var_os("RRRAH_AI_TILE_REGION_SUBSET").is_some() {
+                    row.pixel_rect_fragments_with_subset_callback_budget(&all,x,y,rect,&mut remaining,cancelled,admit,
+                        if owner_region_masks.is_some() {7} else {6},if owner_observation?.validator.is_some() {21} else {18},&mut select_fragment,&mut visit_fragment)?;
+                } else {
+                    row.pixel_rect_fragments_with_callback_budget(&all,x,y,rect,&mut remaining,cancelled,admit,
+                        if owner_region_masks.is_some() {7} else {6},if owner_observation?.validator.is_some() {21} else {18},&mut |w,c|select_fragment(w,c,None),&mut visit_fragment)?;
+                }
+            }}
+        } else if grid==1 {
+            row.pixel_incremental_selected_fragments_budget(&all,x,y,&mut remaining,cancelled,admit,if owner_region_masks.is_some() {7} else {6},&mut |w,c|select_fragment(w,c,None),&mut |f|visit_fragment(f,&mut 0))?;
+        } else {
+            for ty in 0..grid {for tx in 0..grid {
+                let rect=kurbo::Rect::new(f64::from(x)+tx as f64/grid as f64,
+                    f64::from(y)+ty as f64/grid as f64,
+                    f64::from(x)+(tx+1) as f64/grid as f64,
+                    f64::from(y)+(ty+1) as f64/grid as f64);
+                row.pixel_incremental_selected_rect_fragments_budget(&all,x,y,rect,&mut remaining,cancelled,admit,if owner_region_masks.is_some() {7} else {6},&mut |w,c|select_fragment(w,c,None),&mut |f|visit_fragment(f,&mut 0))?;
+            }}
+        }
+        Some(())
+    })();
+    traversed.or_else(|| {
+        if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_POLYGON_FRAGMENTS_REFUSAL regions={} remaining={remaining} limit={polygon_work}",all.len());}None
     })?;
+    if let Some(observation)=owner_observation {
+        let mut groups=0usize;let mut fragments=0usize;let mut area=0f64;
+        let mut area_error=0f64;let mut centroid_error=0f64;let mut source_error=0f64;
+        let (fallback_count,fallback_alpha,mut candidate_integral)=observation.fallback.get();let mut candidate_alpha=fallback_alpha;
+        let mut gradient=[0f64;2];let mut area_upper=0f64;let mut area_error_sum=0f64;let mut centroid_error_sum=[0f64;2];
+        let result=observation.moments.borrow().visit_groups(&mut remaining,cancelled,&mut |g,work| {
+            *work=work.checked_sub(4)?;groups+=1;fragments=fragments.checked_add(g.count)?;area+=g.area;
+            if let Some(validate)=observation.validator {
+                let bound=validate(g.binding.command,g.binding.owner,g.binding.slot,NativeGeometryQuery::Finish(g.centroid),work)?;
+                if !bound.bound.is_finite() || bound.bound<0. {return None;}source_error=source_error.max(bound.bound);
+                *work=work.checked_sub(14)?;
+                if bound.gradient.iter().any(|v|!v.is_finite() || *v<0.) {return None;}
+                area_upper=(area_upper+g.area_bounds[1]).next_up();
+                let error=(g.area-g.area_bounds[0]).abs().max((g.area-g.area_bounds[1]).abs()).next_up();
+                area_error_sum=(area_error_sum+error).next_up();
+                for (axis,(value,bounds)) in [g.centroid.x,g.centroid.y].into_iter().zip(g.centroid_bounds).enumerate() {
+                    gradient[axis]=gradient[axis].max(bound.gradient[axis]);
+                    let error=(value-bounds[0]).abs().max((value-bounds[1]).abs()).next_up();
+                    centroid_error_sum[axis]=(centroid_error_sum[axis]+(g.area_bounds[1]*error).next_up()).next_up();
+                }
+                let pixel=bound.pixel?;
+                if !pixel.valid() || pixel.model()!=backdrop.model() || pixel.alpha()!=1. || g.area>1. {return None;}
+                *work=work.checked_sub(4)?;
+                if pixel.native_components()?.iter().any(|v|!(0. ..=1.).contains(v)) {return None;}
+                *work=work.checked_sub(9)?;candidate_alpha+=g.area;
+                for (sum,value) in candidate_integral.iter_mut().zip(pixel.native_components()?) {*sum+=g.area*value;}
+            }
+            area_error=area_error.max((g.area-g.area_bounds[0]).abs().max((g.area-g.area_bounds[1]).abs()));
+            for (value,bounds) in [g.centroid.x,g.centroid.y].into_iter().zip(g.centroid_bounds) {
+                centroid_error=centroid_error.max((value-bounds[0]).abs().max((value-bounds[1]).abs()));
+            }Some(())
+        });
+        eprintln!("SPATIAL_OWNER_GEOMETRY_PROOF active={} exported_points={fragments} source_error={source_error:?}",observation.validator.is_some());
+        eprintln!("SPATIAL_OWNER_MOMENT_STORAGE complete={} groups={groups} fragments={fragments} area={area:?} max_area_error={area_error:?} max_centroid_error={centroid_error:?} geometry_remaining={remaining}",result.is_some());
+        result?;
+        if deferred_fragments>0 {
+            eprintln!("SPATIAL_DEFERRED_TRAVERSAL complete=true deferred={deferred_fragments} evaluated={evaluated_fragments} groups={groups} original_alpha={alpha:?} candidate_alpha={candidate_alpha:?} geometry_remaining={remaining} native_output_refused=true");
+            use super::native_moments::{positive_unit_stream_mass_bounds,positive_unit_stream_rounding_bound,
+                native_quotient_error_bound,OpaqueReplacementBounds,opaque_replacement_native_error};
+            if alpha<=0. || candidate_alpha<=0. || !alpha.is_finite() || !candidate_alpha.is_finite() {return None;}
+            let fallback_mass=positive_unit_stream_mass_bounds(fallback_count,1,fallback_alpha,&mut remaining,cancelled)?;
+            let original_mass_upper=(area_upper+fallback_mass[1]).next_up();
+            let candidate_mass=positive_unit_stream_mass_bounds(groups,0,area,&mut remaining,cancelled)?;
+            let candidate_mass_upper=(candidate_mass[1]+fallback_mass[1]).next_up();
+            let original_alpha_error=positive_unit_stream_rounding_bound(evaluated_fragments,1,original_mass_upper,&mut remaining,cancelled)?;
+            let original_component_error=positive_unit_stream_rounding_bound(evaluated_fragments,2,original_mass_upper,&mut remaining,cancelled)?;
+            let candidate_count=groups.checked_add(fallback_count)?;
+            let candidate_alpha_error=positive_unit_stream_rounding_bound(candidate_count,1,candidate_mass_upper,&mut remaining,cancelled)?;
+            let candidate_component_error=positive_unit_stream_rounding_bound(candidate_count,2,candidate_mass_upper,&mut remaining,cancelled)?;
+            let original_alpha=[(alpha-original_alpha_error).next_down().max(0.),(alpha+original_alpha_error).next_up()];
+            let candidate_alpha_bounds=[(candidate_alpha-candidate_alpha_error).next_down().max(0.),(candidate_alpha+candidate_alpha_error).next_up()];
+            let lower=original_alpha[0].min(candidate_alpha_bounds[0]).next_down();
+            let a=native_quotient_error_bound([original_component_error;4],original_alpha_error,lower,[1.;4],&mut remaining,cancelled)?;
+            let b=native_quotient_error_bound([candidate_component_error;4],candidate_alpha_error,lower,[1.;4],&mut remaining,cancelled)?;
+            let inputs=OpaqueReplacementBounds {original_alpha,candidate_alpha:candidate_alpha_bounds,
+                original_component_abs:[1.;4],candidate_component_abs:[1.;4],arithmetic_native:std::array::from_fn(|i|(a[i]+b[i]).next_up()),
+                variable_area_original:area_upper,variable_area_candidate:candidate_mass[1],
+                weighted_centroid_error:centroid_error_sum,total_area_error:area_error_sum};
+            let error=opaque_replacement_native_error(&inputs,source_error,gradient,&mut remaining,cancelled)?;
+            let components=candidate_integral.map(|v|v/candidate_alpha);let model=backdrop.model();
+            let candidate=Pixel::from_native(model,&components[..model.channels()],candidate_alpha.min(1.))?;
+            let a=super::native_blend::native_storage_error_bound(model,alpha.min(1.),&mut remaining,cancelled)?;
+            let b=super::native_blend::native_storage_error_bound(model,candidate_alpha.min(1.),&mut remaining,cancelled)?;
+            *remaining=remaining.checked_sub(16)?;
+            let mut errors=[0.;4];
+            for i in 0..model.channels() {errors[i]=(error[i]+(a[i]+b[i]).next_up()).next_up();}
+            let alpha_error=((2.*area_error_sum).next_up()+(original_alpha_error+candidate_alpha_error).next_up()).next_up();
+            let display=super::native_frame::certify_white_rgb8(observation.source_space?,candidate,errors,alpha_error,&mut remaining,cancelled)?;
+            observation.certified_white_rgb8.set(display.bytes);
+            observation.white_quantization_unstable.set(display.bytes.is_none());
+            eprintln!("SPATIAL_DEFERRED_WHITE_RGB8_GATE bytes={:?} bounds={:?} geometry_remaining={remaining} original_colors_retained=false native_output_refused=true",display.bytes,display.rgb);
+            // A certified white RGB8 result is not a certified native/HDR Pixel.
+            // The partial observed integral is deliberately never finalized.
+            return None;
+        }
+        if observation.validator.is_some() && groups>0 {
+            let mut delta=0f64;
+            if alpha<=0. || candidate_alpha<=0. {return None;}
+            for (candidate,original) in candidate_integral.into_iter().zip(integral) {delta=delta.max((candidate/candidate_alpha-original/alpha).abs());}
+            eprintln!("SPATIAL_OWNER_CENTROID_CANDIDATE groups={groups} alpha_delta={:?} component_delta={delta:?} original_colors_retained=true",(candidate_alpha-alpha).abs());
+            use super::native_moments::{positive_unit_stream_mass_bounds,positive_unit_stream_rounding_bound,native_quotient_error_bound,IntegralRoundingBounds,OpaqueCandidateInputs};
+            let fallback_mass=positive_unit_stream_mass_bounds(fallback_count,1,fallback_alpha,&mut remaining,cancelled)?;
+            let original_mass_upper=(area_upper+fallback_mass[1]).next_up();
+            let candidate_owned_mass=positive_unit_stream_mass_bounds(groups,0,area,&mut remaining,cancelled)?;
+            let candidate_mass_upper=(candidate_owned_mass[1]+fallback_mass[1]).next_up();
+            let mut rounding=|count:usize,mass:f64,alpha:f64,integral:[f64;4]| {
+                let alpha_error=positive_unit_stream_rounding_bound(count,1,mass,&mut remaining,cancelled)?;
+                let component_error=positive_unit_stream_rounding_bound(count,2,mass,&mut remaining,cancelled)?;
+                Some(IntegralRoundingBounds {alpha:[(alpha-alpha_error).next_down().max(0.),(alpha+alpha_error).next_up()],
+                    components:integral.map(|v|[(v-component_error).next_down(),(v+component_error).next_up()]),
+                    alpha_error,component_error:[component_error;4],max_component_abs:[1.;4]})
+            };
+            let original=rounding(fragments.checked_add(fallback_count)?,original_mass_upper,alpha,integral)?;
+            let candidate=rounding(groups.checked_add(fallback_count)?,candidate_mass_upper,candidate_alpha,candidate_integral)?;
+            let lower=original.alpha[0].min(candidate.alpha[0]).next_down();
+            let a=native_quotient_error_bound(original.component_error,original.alpha_error,lower,[1.;4],&mut remaining,cancelled)?;
+            let b=native_quotient_error_bound(candidate.component_error,candidate.alpha_error,lower,[1.;4],&mut remaining,cancelled)?;
+            let inputs=OpaqueCandidateInputs {original,candidate,arithmetic_native:std::array::from_fn(|i|(a[i]+b[i]).next_up()),
+                variable_area_original:area_upper,variable_area_candidate:candidate_owned_mass[1],weighted_centroid_error:centroid_error_sum,total_area_error:area_error_sum,
+                original_variable_points:fragments,candidate_variable_points:groups};
+            let bound=super::native_moments::opaque_replacement_native_error(&super::native_moments::OpaqueReplacementBounds::from(&inputs),source_error,gradient,&mut remaining,cancelled)?.into_iter().fold(0.,f64::max);
+            if !delta.is_finite() || delta>bound {return None;}
+            eprintln!("SPATIAL_OWNER_REPLACEMENT_BOUND bound={bound:?} measured={delta:?} geometry_remaining={remaining} conditional=true");
+            let original_components=integral.map(|v|v/alpha);let candidate_components=candidate_integral.map(|v|v/candidate_alpha);
+            let model=backdrop.model();let channels=model.channels();
+            let original_pixel=Pixel::from_native(model,&original_components[..channels],alpha.min(1.))?;
+            let candidate_pixel=Pixel::from_native(model,&candidate_components[..channels],candidate_alpha.min(1.))?;
+            let a=super::native_blend::native_storage_error_bound(model,alpha.min(1.),&mut remaining,cancelled)?;
+            let b=super::native_blend::native_storage_error_bound(model,candidate_alpha.min(1.),&mut remaining,cancelled)?;
+            *remaining=remaining.checked_sub(12)?;
+            let storage=(a.into_iter().fold(0.,f64::max)+b.into_iter().fold(0.,f64::max)).next_up();
+            let stored_bound=(bound+storage).next_up();
+            let stored_delta=original_pixel.native_components()?.into_iter().zip(candidate_pixel.native_components()?).map(|(a,b)|(a-b).abs()).fold(0.,f64::max);
+            if !stored_delta.is_finite() || stored_delta>stored_bound {return None;}
+            eprintln!("SPATIAL_OWNER_STORED_REPLACEMENT_BOUND bound={stored_bound:?} storage_error={storage:?} measured={stored_delta:?} geometry_remaining={remaining} conditional=true");
+            let mut errors=[0.;4];errors[..channels].fill(stored_bound);
+            let profile_input=super::native_frame::stable_native_f32_input(candidate_pixel,errors,&mut remaining,cancelled)?;
+            eprintln!("SPATIAL_OWNER_PROFILE_INPUT_GATE identical_f32={profile_input} alpha_certified=false display_certified=false geometry_remaining={remaining}");
+            if let Some(space)=observation.source_space {
+                *remaining=remaining.checked_sub(4)?;
+                let alpha_error=((2.*area_error_sum).next_up()+(original.alpha_error+candidate.alpha_error).next_up()).next_up();
+                let display=super::native_frame::certify_white_rgb8(space,candidate_pixel,errors,alpha_error,&mut remaining,cancelled)?;
+                eprintln!("SPATIAL_OWNER_WHITE_RGB8_GATE bytes={:?} bounds={:?} alpha_error={alpha_error:?} geometry_remaining={remaining} original_colors_retained=true",display.bytes,display.rgb);
+            }
+        }
+    }
     if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {
-        eprintln!("SPATIAL_POLYGON_WORK spent={} remaining={remaining} limit={polygon_work}",polygon_work-remaining);
+        eprintln!("SPATIAL_POLYGON_WORK spent={} remaining={remaining} limit={polygon_work}",polygon_work-*remaining);
     }
     if integral_rounding {
         if let Some(bounds)=integral_envelope.and_then(|envelope|envelope.finish(alpha,integral,&mut moment_work,cancelled)) {
@@ -231,6 +589,26 @@ fn compose_cells(
             let quotient=super::native_moments::native_quotient_error_bound(bounds.component_error,bounds.alpha_error,lower,bounds.max_component_abs,&mut moment_work,cancelled);
             eprintln!("SPATIAL_INTEGRAL_ROUNDING complete=true alpha_error={:?} max_integral_error={:?} quotient_available={} max_quotient_error={:?} diagnostic_work={}",bounds.alpha_error,bounds.component_error.into_iter().fold(0.,f64::max),quotient.is_some(),quotient.map(|v|v.into_iter().fold(0.,f64::max)),256_000_000-moment_work);
         } else {eprintln!("SPATIAL_INTEGRAL_ROUNDING complete=false diagnostic_work={}",256_000_000-moment_work);}
+    }
+    if unit_stream_enabled {
+        let recovered_mass=unit_stream.and_then(|(count,_,unit)| {
+            if !unit {return None;}
+            super::native_moments::positive_unit_stream_mass_bounds(count,1,alpha,&mut moment_work,cancelled)
+        });
+        let estimate=unit_stream.and_then(|(count,_,unit)| {
+            if !unit {return None;}let mass=recovered_mass?;
+            let alpha_error=super::native_moments::positive_unit_stream_rounding_bound(count,1,mass[1],&mut moment_work,cancelled)?;
+            let component_error=super::native_moments::positive_unit_stream_rounding_bound(count,2,mass[1],&mut moment_work,cancelled)?;
+            let lower=(mass[0]-alpha_error).next_down();
+            let quotient=super::native_moments::native_quotient_error_bound([component_error;4],alpha_error,
+                lower,[1.;4],&mut moment_work,cancelled)?;
+            Some((alpha_error,component_error,quotient))
+        });
+        eprintln!("SPATIAL_RECOVERED_STREAM_MASS complete={} mass={recovered_mass:?} encloses_reference={:?}",
+            recovered_mass.is_some(),recovered_mass.zip(unit_stream).map(|(a,s)|a[0]<=s.1[0] && a[1]>=s.1[1]));
+        eprintln!("SPATIAL_UNIT_STREAM_ARITHMETIC complete={} count={:?} unit_sources={:?} alpha_mass={:?} alpha_error={:?} component_error={:?} quotient_error={:?} diagnostic_work={}",
+            estimate.is_some(),unit_stream.map(|s|s.0),unit_stream.map(|s|s.2),unit_stream.map(|s|s.1),
+            estimate.map(|s|s.0),estimate.map(|s|s.1),estimate.map(|s|s.2.into_iter().fold(0.,f64::max)),256_000_000-moment_work);
     }
     if field_moments {
         if let Some(left)=moment_work.checked_sub(source_key?.work.replace(0)) {moment_work=left;}
@@ -286,7 +664,7 @@ fn compose_cells(
                     owners.borrow_mut().rebuild(&key,&mut budget,cancelled)?;
                     source_key?.work.set(source_key?.work.get().saturating_add(4_000_000-budget));
                 }
-                let Some(pixel)=evaluate(&winding,centroid,&key,occupied) else {break;};
+                let Some(pixel)=evaluate(&winding,centroid,&key,occupied).and_then(|cell|cell.into().sampled()) else {break;};
                 if !affine?.get() || pixel.model()!=backdrop.model() || !pixel.valid() {break;}
                 if field_moments {
                     let cost=source_key?.work.replace(0).checked_add(identity_words.checked_add(5)?)?;
@@ -425,7 +803,7 @@ fn geometry_qualified_route_field_key_into(commands:&[SpatialCommand<'_>],route:
             let identity=match field {
                 NativeField::Unknown=>return None,
                 NativeField::ConstantCells=>SourceFieldIdentity::RasterCells(rasters?.key(index,work,cancelled)?),
-                NativeField::AffineOwner=>SourceFieldIdentity::AffineOwner(owners?.owner(index,coverage,work,cancelled)??),
+                NativeField::AffineOwner|NativeField::OpaqueAffineOwner=>SourceFieldIdentity::AffineOwner(owners?.owner(index,coverage,work,cancelled)??),
             };
             *work=work.checked_sub(4)?;key.append(index,identity)?;
         }
@@ -491,19 +869,19 @@ pub(super) type BudgetedMaskSampler<'a>=dyn Fn(kurbo::Point,&dyn Fn()->bool,&mut
 
 /// Source capability only; route lifecycle and integration error still need proof.
 #[derive(Clone,Copy,PartialEq,Eq)]
-pub(super) enum NativeField {Unknown,ConstantCells,AffineOwner}
+pub(super) enum NativeField {Unknown,ConstantCells,AffineOwner,OpaqueAffineOwner}
 impl NativeField {
     fn identity(self,owner:Option<usize>,sample:Option<&NativeSpatialSample<'_>>)->Option<SourceFieldIdentity> {
         let sample=sample?;
         match self {
             Self::Unknown=>None,
             Self::ConstantCells=>Some(SourceFieldIdentity::RasterCells(sample.cell_key?)),
-            Self::AffineOwner=>Some(SourceFieldIdentity::AffineOwner(owner?)),
+            Self::AffineOwner|Self::OpaqueAffineOwner=>Some(SourceFieldIdentity::AffineOwner(owner?)),
         }
     }
 
     fn qualified_owner(self,owner:Option<usize>)->bool {
-        match self {Self::Unknown=>false,Self::ConstantCells=>true,Self::AffineOwner=>owner.is_some()}
+        match self {Self::Unknown=>false,Self::ConstantCells=>true,Self::AffineOwner|Self::OpaqueAffineOwner=>owner.is_some()}
     }
 }
 #[test]
@@ -613,7 +991,7 @@ fn affine_native_route(commands:&[SpatialCommand<'_>],route:&[usize])->bool {
             SpatialCommand::End=>{let Some(value)=depth.checked_sub(1) else {return false;};depth=value;},
             SpatialCommand::NativeSampledPaint {field,owners,alpha_is_shape,mode,..}=>match field {
                 NativeField::ConstantCells=>affine=true,
-                NativeField::AffineOwner if depth==0 && !*alpha_is_shape && *mode==BlendMode::Normal && !owners.is_empty()=>{affine=true;variable_seen=true;},
+                NativeField::AffineOwner|NativeField::OpaqueAffineOwner if depth==0 && !*alpha_is_shape && *mode==BlendMode::Normal && !owners.is_empty()=>{affine=true;variable_seen=true;},
                 _=>return false,
             },
             SpatialCommand::BeginInSpace {..}|SpatialCommand::SetMask {..}|
@@ -655,7 +1033,7 @@ pub(super) fn compose_grouped_polygon_impl(
     polygon_work:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool,
     admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
 )->Option<Pixel> {
-    compose_grouped_polygon_with_candidate_inputs(regions,commands,space,backdrop,x,y,point_override,polygon_work,remaining,cancelled,admit,None)
+    compose_grouped_polygon_with_candidate_inputs(regions,commands,space,backdrop,x,y,point_override,polygon_work,remaining,cancelled,admit,None,None)
 }
 
 pub(super) fn compose_grouped_polygon_with_candidate_inputs(
@@ -664,9 +1042,40 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
     polygon_work:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool,
     admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
     candidate_out:Option<&std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>,
+    geometry_validator:Option<(&NativeGeometryValidator<'_>,usize)>,
 )->Option<Pixel> {
+    compose_grouped_polygon_with_white_output(regions,commands,space,backdrop,x,y,point_override,polygon_work,remaining,cancelled,admit,candidate_out,geometry_validator,None)
+}
+
+/// Bytes for the exact DeviceRGB-on-white nearest-byte output intent.
+/// This is deliberately not convertible into a native/HDR Pixel.
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+pub(super) struct WhiteRgb8Pixel([u8;3]);
+impl WhiteRgb8Pixel {
+    pub(super) fn bytes(self)->[u8;3] {self.0}
+    pub(super) fn from_complete_native(pixel:Pixel,space:&hayro_interpret::color::ColorSpace)->Option<Self> {
+        static RGB:std::sync::LazyLock<hayro_interpret::color::Color>=std::sync::LazyLock::new(||
+            hayro_interpret::color::Color::from_rgba(hayro_interpret::color::AlphaColor::new([0.,0.,0.,1.])));
+        let pixel=super::native_frame::convert_group_pixel(pixel,space,RGB.color_space())?;
+        let c=pixel.native_components()?;
+        let values=[0,1,2].map(|i|255.*(c[i]*pixel.alpha()+1.-pixel.alpha()));
+        if values.iter().any(|v|!v.is_finite()) {return None;}
+        Some(Self(values.map(|v|v.round().clamp(0.,255.) as u8)))
+    }
+}
+
+pub(super) fn compose_grouped_polygon_with_white_output(
+    regions:&[(&BezPath,Fill)],commands:&[SpatialCommand<'_>],
+    space:&hayro_interpret::color::ColorSpace,backdrop:Pixel,x:i32,y:i32,point_override:Option<kurbo::Point>,
+    polygon_work:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    candidate_out:Option<&std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>,
+    geometry_validator:Option<(&NativeGeometryValidator<'_>,usize)>,
+    white_output:Option<&std::cell::Cell<Option<WhiteRgb8Pixel>>>,
+)->Option<Pixel> {
+    if let Some(output)=white_output {output.set(None);}
     use super::native_frame::PaintFrame;
-    struct WorkTrace {enabled:bool,counts:[std::cell::Cell<usize>;13],dispatch:[std::cell::Cell<usize>;8],spent:[std::cell::Cell<usize>;8]}
+    struct WorkTrace {enabled:bool,last_deferred:std::cell::Cell<Option<(usize,usize)>>,counts:[std::cell::Cell<usize>;15],dispatch:[std::cell::Cell<usize>;8],spent:[std::cell::Cell<usize>;8]}
     impl WorkTrace {
         fn measure<T>(&self,index:usize,remaining:&mut usize,run:impl FnOnce(&mut usize)->Option<T>)->Option<T> {
             if !self.enabled {return run(remaining);}
@@ -697,10 +1106,11 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
                 let d=self.dispatch.each_ref().map(|v|v.get());
                 eprintln!("SPATIAL_DISPATCH_KINDS retained={} paint={} native={} sampled={} begin={} end={} clear_mask={} set_mask={}",d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7]);
                 eprintln!("SPATIAL_WORK_COUNTS fragments={} route_hits={} route_misses={} dispatch={} groups={} native_samples={} fixed_samples={} mask_samples={} constant_hits={} group_hits={} paint_run_hits={} hidden_commands={} local_signature_hits={}",c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12]);
+                eprintln!("SPATIAL_DEFERRED_OWNER_RUNS repeats={} starts={}",c[13],c[14]);
             }
         }
     }
-    let work_trace=WorkTrace {enabled:std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some(),
+    let work_trace=WorkTrace {enabled:std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some(),last_deferred:std::cell::Cell::new(None),
         counts:std::array::from_fn(|_|std::cell::Cell::new(0)),dispatch:std::array::from_fn(|_|std::cell::Cell::new(0)),spent:std::array::from_fn(|_|std::cell::Cell::new(0))};
     if work_trace.enabled {
         let mut kinds=[0usize;8];
@@ -752,9 +1162,21 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             },
         }
     }
-    struct OwnerWord {word:usize,mask:u64,indices:[usize;64]}
-    struct OwnerPlan {words:Vec<OwnerWord>,positions:[usize;64],word_mask:u64,monotonic:bool,_credit:Box<dyn std::any::Any+Send+Sync>}
-    let _owner_plan_credit=admit(commands.len().checked_mul(size_of::<Option<OwnerPlan>>())?)?;
+    // A point evaluation invokes this evaluator once, so its route can neither
+    // hit a cache entry nor require eviction. Retain only its one execution route.
+    let single_point_route=point_override.is_some()
+        && std::env::var_os("RRRAH_AI_DISABLE_POINT_ROUTE_SPECIALIZATION").is_none();
+    // Explicit old-path control for paired source-work/numerical diagnostics.
+    let direct_point_owner=point_override.is_some()
+        && std::env::var_os("RRRAH_AI_DISABLE_DIRECT_POINT_OWNER").is_none();
+    let _owner_plan_credit=admit(commands.len().checked_mul(size_of::<Option<OwnerPlan>>())?
+        .checked_add(size_of::<[u64;64]>())?)?;
+    // Experimental only: lower source work currently costs more geometry work;
+    // neither ordinary-budget completion nor a throughput gain is qualified.
+    let filter_owner_words=point_override.is_none()
+        && std::env::var_os("RRRAH_AI_OWNER_WORD_OCCUPANCY").is_some()
+        && std::env::var_os("RRRAH_AI_DISABLE_OWNER_WORD_OCCUPANCY").is_none();
+    let mut owner_region_masks=[0u64;64];let mut has_owner_words=false;
     let mut owner_plans=Vec::new();owner_plans.try_reserve_exact(commands.len()).ok()?;
     owner_plans.resize_with(commands.len(),||None);
     for (command_index,command) in commands.iter().enumerate() {
@@ -765,7 +1187,10 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
                 if region>=regions.len() || previous.is_some_and(|old|old<index) {return None;}
                 previous=Some(index);masks[region/64]|=1u64<<(region%64);
             }
-            if owners.is_empty() {continue;}
+            // A point replay performs exactly one owner lookup. The validated
+            // descending list already gives the maximum covered source index;
+            // building word tables here costs repeated allocations and walks.
+            if owners.is_empty() || direct_point_owner {continue;}
             let owner_words=(regions.len()+63)/64;
             *remaining=remaining.checked_sub(owner_words)?;
             let count=masks[..owner_words].iter().filter(|&&v|v!=0).count();
@@ -785,6 +1210,10 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             for word in &words {
                 if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
                 word_mask|=1u64<<word.word;
+                if filter_owner_words {
+                    *remaining=remaining.checked_sub(1)?;
+                    owner_region_masks[word.word]|=word.mask;has_owner_words=true;
+                }
             }
             let mut previous=None;let mut monotonic=true;
             for word in &words {
@@ -838,16 +1267,16 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
         eprintln!("SPATIAL_ROUTING_REGIONS total={} used={}",regions.len(),routing_bits.iter().map(|v|v.count_ones() as usize).sum::<usize>());
     }
     let mut routing_word_mask=0u64;
-    for word in 0..words {
+    if !single_point_route {for word in 0..words {
         if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
         if routing_bits[word]!=0 {routing_word_mask|=1u64<<word;}
-    }
+    }}
     type State=super::native_frame::SinglePixelState;
     type Credit=Box<dyn std::any::Any+Send+Sync>;
     struct Transition {input:State,output:State,_credit:Credit}
     struct GroupSlot {end:Option<usize>,frame:Option<Box<PaintFrame>>,
         run_end:Option<usize>,transition:Option<Box<Transition>>}
-    struct Route {affine:bool,error:OpaqueErrorRoute,generation:u64,key:[u64;64],commands:Vec<usize>,groups:Vec<GroupSlot>,constant:bool,result:Option<Pixel>,hash:u64,reuse_bits:Vec<u64>,reuse_word_mask:u64}
+    struct Route {opaque_tail:Option<usize>,affine:bool,error:OpaqueErrorRoute,generation:u64,key:[u64;64],commands:Vec<usize>,groups:Vec<GroupSlot>,constant:bool,result:Option<Pixel>,hash:u64,reuse_bits:Vec<u64>,reuse_word_mask:u64}
     const ROUTE_INDEX_SIZE:usize=128;
     type Index=[Option<(u64,usize)>;ROUTE_INDEX_SIZE];
     fn insert_index(table:&mut Index,hash:u64,index:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
@@ -860,13 +1289,13 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
         None
     }
     let _index_credit=admit(size_of::<Index>())?;let mut route_lookup:Index=[None;ROUTE_INDEX_SIZE];
-    const ROUTE_LIMIT:usize=64;
-    let route_bytes=ROUTE_LIMIT.checked_mul(size_of::<Route>().checked_add(commands.len().checked_mul(size_of::<usize>().checked_add(size_of::<GroupSlot>())?)?)?.checked_add(words.checked_mul(size_of::<u64>())?)?)?
+    let route_limit:usize=if single_point_route {1} else {64};
+    let route_bytes=route_limit.checked_mul(size_of::<Route>().checked_add(commands.len().checked_mul(size_of::<usize>().checked_add(size_of::<GroupSlot>())?)?)?.checked_add(words.checked_mul(size_of::<u64>())?)?)?
         .checked_add(commands.len().checked_mul(2)?)?;
     let _route_credit=admit(route_bytes)?;
     let mut generations=RouteGenerations::default();
     let mut identity_traces=0usize;
-    let mut routes=Vec::<Route>::new();routes.try_reserve_exact(ROUTE_LIMIT).ok()?;
+    let mut routes=Vec::<Route>::new();routes.try_reserve_exact(route_limit).ok()?;
     let mut keep=Vec::new();keep.try_reserve_exact(commands.len()).ok()?;keep.resize(commands.len(),true);
     let mut ignored=Vec::new();ignored.try_reserve_exact(commands.len()).ok()?;ignored.resize(commands.len(),false);
     type Entry=(Box<PaintFrame>,Option<(f64,bool,BlendMode,Option<usize>,usize)>);
@@ -879,9 +1308,12 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
     let _paint_cache_credit=admit(commands.len().checked_mul(size_of::<Option<super::native_frame::PreparedPaint>>())?)?;
     let mut paint_cache=Vec::new();paint_cache.try_reserve_exact(commands.len()).ok()?;
     paint_cache.resize_with(commands.len(),||None);
-    // Point mode builds the coverage bits once below. Cell mode charges each
-    // incremental update through the polygon selector's declared work cost.
-    if point_override.is_some() {*remaining=remaining.checked_sub(regions.len())?;}
+    // Point coverage can stop at the highest covered owner. Charge the actual
+    // distinct path tests at evaluation, while geometry remains separately bounded.
+    let lazy_point_coverage=direct_point_owner
+        && std::env::var_os("RRRAH_AI_DISABLE_LAZY_POINT_COVERAGE").is_none();
+    let point_region_checks=std::cell::Cell::new(0usize);
+    if point_override.is_some() && !lazy_point_coverage {*remaining=remaining.checked_sub(regions.len())?;}
     let mut execution_stack:Option<(Vec<Entry>,Credit)>=None;
     let mut root_frame:Option<Box<PaintFrame>>=None;
     let mut reusable_child:Option<Box<PaintFrame>>=None;
@@ -905,7 +1337,22 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
     let mut precolor_scratch=FieldKey::route(0);
     if precolor_enabled {source_field_key.work.set(source_field_key.work.get().saturating_add(16));}
     let geometry_trace=GeometryKeyTrace {enabled:geometry_field_keys,checks:std::cell::Cell::new(0),misses:std::cell::Cell::new(0),owner_enabled:owner_keys,owner_checks:std::cell::Cell::new(0),owner_misses:std::cell::Cell::new(0),precolor_enabled,precolor_ready:std::cell::Cell::new(0),precolor_unavailable:std::cell::Cell::new(0),precolor_checks:std::cell::Cell::new(0),precolor_misses:std::cell::Cell::new(0)};
+    let defer_owner_colors=std::cell::Cell::new(white_output.is_some() && point_override.is_none() && std::env::var_os("RRRAH_AI_OWNER_DEFERRED_COLORS").is_some());
+    let observe_owner_storage=point_override.is_none()
+        && std::env::var_os("RRRAH_AI_OWNER_MOMENT_STORAGE").is_some();
+    if observe_owner_storage && (observe_moments || candidate_out.is_some()) {return None;}
+    let mut geometry_allowance=polygon_work.checked_sub(geometry_validator.map_or(0,|(_,work)|work))?;
+    if geometry_validator.is_some() && !observe_owner_storage {return None;}
+    if defer_owner_colors.get() && (geometry_validator.is_none() || !observe_owner_storage) {return None;}
+    let _owner_observation_credit=if observe_owner_storage {Some(admit(size_of::<OwnerMomentObservation<'_>>())?)} else {None};
+    let owner_observation=if observe_owner_storage {
+        Some(prepare_owner_moment_observation(commands,kurbo::Point::new(f64::from(x),f64::from(y)),
+            &mut geometry_allowance,cancelled,admit,geometry_validator.map(|(validator,_)|validator),Some(space))?)
+    } else {None};
+    if observe_owner_storage {eprintln!("SPATIAL_OWNER_MOMENT_SETUP work={} remaining={geometry_allowance} limit={polygon_work}",polygon_work-geometry_allowance);}
     let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+        if let Some(observation)=&owner_observation {observation.field.set(None);}
+        *remaining=remaining.checked_sub(point_region_checks.replace(0))?;
         work_trace.hit(0);
         let local=work_trace.measure(0,remaining,|remaining| {
             let Some(index)=last_route else {return Some(None);};
@@ -921,7 +1368,9 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             Some(Some(index))
         })?;
         let route_index=if let Some(index)=local {work_trace.hit(1);work_trace.hit(12);index} else {
-        let key=work_trace.measure(0,remaining,|remaining| {
+        // Point mode consumes coverage once, directly. A masked cache key and
+        // its word index are only needed for reuse across spatial fragments.
+        let key=if single_point_route {*coverage} else {work_trace.measure(0,remaining,|remaining| {
         let mut key=constant_key;
         let mut needed_words=routing_word_mask;
         while needed_words!=0 {
@@ -930,8 +1379,8 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             key[word]|=coverage[word]&routing_bits[word];
         }
             Some(key)
-        })?;
-        let (hash,route_index)=work_trace.measure(1,remaining,|remaining| {
+        })?};
+        let (hash,route_index)=if single_point_route {(0,None)} else {work_trace.measure(1,remaining,|remaining| {
         let mut hash=0xcbf29ce484222325u64;
         for &word in &key[..words] {
             if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
@@ -954,11 +1403,11 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             slot=(slot+1)%ROUTE_INDEX_SIZE;
         }
             Some((hash,route_index))
-        })?;
+        })?};
         let route_index=if let Some(index)=route_index {work_trace.hit(1);index} else {
             work_trace.hit(2);
             work_trace.measure(2,remaining,|remaining| {
-            if routes.len()==ROUTE_LIMIT {
+            if routes.len()==route_limit {
                 routes.remove(0);
                 *remaining=remaining.checked_sub(ROUTE_INDEX_SIZE)?;route_lookup.fill(None);
                 for (index,route) in routes.iter().enumerate() {
@@ -1039,12 +1488,14 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             let signature=if point_override.is_none() {
                 route_membership_signature(commands,&keep,&ignored,&key,remaining,cancelled)?
             } else {[0u64;64]};
-            let mut reuse_bits=Vec::new();reuse_bits.try_reserve_exact(words).ok()?;
-            reuse_bits.extend_from_slice(&signature[..words]);
-            let mut reuse_word_mask=0u64;
-            for word in 0..words {
-                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
-                if signature[word]&routing_bits[word]!=0 {reuse_word_mask|=1u64<<word;}
+            let mut reuse_bits=Vec::new();let mut reuse_word_mask=0u64;
+            if !single_point_route {
+                reuse_bits.try_reserve_exact(words).ok()?;
+                reuse_bits.extend_from_slice(&signature[..words]);
+                for word in 0..words {
+                    if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                    if signature[word]&routing_bits[word]!=0 {reuse_word_mask|=1u64<<word;}
+                }
             }
             if work_trace.enabled && work_trace.counts[2].get()<=2 {
                 let mut depth=0usize;
@@ -1068,11 +1519,17 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             if work_trace.enabled {
                 eprintln!("SPATIAL_ACTIVE_AFFINE_ROUTE eligible={} commands={}",affine,route.len());
             }
-            *remaining=remaining.checked_sub(1)?;
-            let generation=generations.next()?;
+            // Point mode has exactly one route generation, always the same
+            // first identity; no mutable generation counter needs advancing.
+            let generation=if single_point_route {1} else {
+                *remaining=remaining.checked_sub(1)?;generations.next()?
+            };
             let error=if candidate_out.is_some() {opaque_error_route(commands,&route)} else {OpaqueErrorRoute::Unsupported};
-            let index=routes.len();routes.push(Route {affine,error,generation,key,commands:route,groups:slots,constant,result:None,hash,reuse_bits,reuse_word_mask});
-            insert_index(&mut route_lookup,hash,index,remaining,cancelled)?;Some(index)
+            let opaque_tail=if !observe_moments && candidate_out.is_none() && point_override.is_none() {
+                opaque_root_tail(commands,&route,remaining,cancelled)?
+            } else {None};
+            let index=routes.len();routes.push(Route {opaque_tail,affine,error,generation,key,commands:route,groups:slots,constant,result:None,hash,reuse_bits,reuse_word_mask});
+            if !single_point_route {insert_index(&mut route_lookup,hash,index,remaining,cancelled)?;}Some(index)
             })?
         };
             route_index
@@ -1095,7 +1552,7 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
         if let Some(pixel)=routes[route_index].result {
             if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
             if !geometry_trace.verify_precolor(precolor_key,&source_field_key) {route_is_affine.set(false);}
-            work_trace.hit(8);return Some(pixel);
+            work_trace.hit(8);return Some(EvaluatedCell::Sampled(pixel));
         }
         mask_cache.fill(None);
         let mut resolve_mask=|handle:Option<usize>,remaining:&mut usize|->Option<f64> {
@@ -1121,35 +1578,20 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
             mask_cache[index]=Some(value);Some(value)
         };
         let route_generation=routes[route_index].generation;
+        let prefetched_native=std::cell::RefCell::new(None::<(usize,Option<NativeSpatialSample<'_>>)>);
+        let observed_owner=std::cell::Cell::new(None);
         let mut resolve_native=|command_index:usize,remaining:&mut usize| {
-            let SpatialCommand::NativeSampledPaint {sample,field,cells,..}=&commands[command_index] else {return None;};
+            let cached={let mut slot=prefetched_native.borrow_mut();
+                if slot.as_ref().is_some_and(|(index,_)|*index==command_index) {slot.take()} else {None}};
+            if let Some((_,sample))=cached {return Some(sample);}
+
+            let SpatialCommand::NativeSampledPaint {sample,field,cells,owners,..}=&commands[command_index] else {return None;};
                 work_trace.measure(3,remaining,|remaining| {
                         let before=*remaining;
                         let owner=work_trace.measure(5,remaining,|remaining| {
-                        let mut owner:Option<usize>=None;
-                        if let Some(plan)=&owner_plans[command_index] {
-                            let mut needed=plan.word_mask&occupied_words;
-                            while needed!=0 {
-                                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
-                                let slot=if plan.monotonic {63-needed.leading_zeros() as usize} else {needed.trailing_zeros() as usize};
-                                needed&=!(1u64<<slot);
-                                let word=&plan.words[plan.positions[slot]];
-                                let mut covered=word.mask&coverage[word.word];
-                                if plan.monotonic && covered!=0 {
-                                    *remaining=remaining.checked_sub(1)?;
-                                    let bit=63-covered.leading_zeros() as usize;
-                                    owner=Some(word.indices[bit]);break;
-                                }
-                                while covered!=0 {
-                                    *remaining=remaining.checked_sub(1)?;
-                                    let bit=covered.trailing_zeros() as usize;covered&=covered-1;
-                                    let index=word.indices[bit];
-                                    owner=Some(owner.map_or(index,|old|old.max(index)));
-                                }
-                            }
-                        }
-                        Some(owner)
+                        covered_native_owner(owners,direct_point_owner,owner_plans[command_index].as_ref(),coverage,occupied_words,remaining,cancelled)
                         })?;
+                        if owner_observation.is_some() {observed_owner.set(owner);}
                         if let Some(owners)=&owner_transitions {
                             if owner_plans[command_index].is_some() {
                                 let mut budget=4_000_000;
@@ -1195,6 +1637,41 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
                             Some(source)
                         })
         };
+        if defer_owner_colors.get() {
+            if let Some(command)=routes[route_index].opaque_tail {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                let SpatialCommand::NativeSampledPaint {owners,..}=&commands[command] else {return None;};
+                let owner=work_trace.measure(5,remaining,|remaining|covered_native_owner(owners,direct_point_owner,
+                    owner_plans[command].as_ref(),coverage,occupied_words,remaining,cancelled))?;
+                if let Some(owner)=owner {
+                    // Preparation certified this immutable source and native space.
+                    // Per-fragment observation below still validates its geometry.
+                    if work_trace.enabled {
+                        let same=work_trace.last_deferred.replace(Some((command,owner)))==Some((command,owner));
+                        work_trace.hit(if same {13} else {14});
+                    }
+                    return Some(EvaluatedCell::Deferred {command,owner});
+                }
+            }
+        }
+        if work_trace.enabled {work_trace.last_deferred.set(None);}
+        if let Some(command)=routes[route_index].opaque_tail {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            let source=resolve_native(command,remaining)?;
+            if let Some(source)=source.as_ref() {
+                if source.pixel.valid() && source.pixel.alpha()==1. && source.pixel.model()==backdrop.model()
+                    && source.space.shares_blending_coordinates(space) {
+                    if let (Some(observation),Some(owner))=(&owner_observation,observed_owner.get()) {
+                        observation.field.set(Some((command,owner)));
+                    }
+                    work_trace.hit(11);
+                    return Some(EvaluatedCell::Sampled(source.pixel));
+                }
+            }
+            // The full lifecycle still executes for transparent/converted sources.
+            // Reuse this exact sample rather than debiting/evaluating it twice.
+            *prefetched_native.borrow_mut()=Some((command,source));
+        }
         if execution_stack.is_none() {
             // Debit the actual stack allocation once, retaining its admission
             // with empty storage between fragments instead of reallocating.
@@ -1415,28 +1892,69 @@ pub(super) fn compose_grouped_polygon_with_candidate_inputs(
         root_frame=Some(root);
         if !geometry_trace.verify_precolor(precolor_key,&source_field_key) {route_is_affine.set(false);}
         if routes[route_index].constant {routes[route_index].result=Some(pixel);}
-        Some(pixel)
+        Some(EvaluatedCell::Sampled(pixel))
     };
     if let Some(point)=point_override {
         if !point.x.is_finite() || !point.y.is_finite() || point.x.abs()>1_048_576. || point.y.abs()>1_048_576. {return None;}
-        let _credit=admit(regions.len().checked_mul(size_of::<i32>())?)?;
+        let _credit=admit(regions.len().checked_mul(size_of::<i32>())?.checked_add(size_of::<[u64;64]>())?)?;
         let mut winding=Vec::new();winding.try_reserve_exact(regions.len()).ok()?;
         let mut work=polygon_work;
-        for (path,_) in regions {
-            if cancelled() {return None;}
-            work=work.checked_sub(path.elements().len().checked_add(1)?)?;
-            winding.push(path.winding(point));
-            if cancelled() {return None;}
-        }
+        winding.resize(regions.len(),0);
         let mut coverage=[0u64;64];
-        let mut occupied_words=0u64;
-        for (i,value) in winding.iter().enumerate() {
-            if match regions[i].1 {Fill::NonZero=>*value!=0,Fill::EvenOdd=>*value%2!=0} {
-                coverage[i/64]|=1u64<<(i%64);occupied_words|=1u64<<(i/64);
+        let mut visited=[0u64;64];
+        let mut resolve_region=|i:usize|->Option<bool> {
+            if cancelled() {return None;}work=work.checked_sub(1)?;
+            let bit=1u64<<(i%64);
+            if visited[i/64]&bit!=0 {return Some(coverage[i/64]&bit!=0);}
+            let (path,fill)=regions[i];
+            work=work.checked_sub(path.elements().len().checked_add(1)?)?;
+            winding[i]=path.winding(point);
+            if cancelled() {return None;}
+            let covered=match fill {Fill::NonZero=>winding[i]!=0,Fill::EvenOdd=>winding[i]%2!=0};
+            visited[i/64]|=bit;
+            if covered {coverage[i/64]|=bit;}
+            if lazy_point_coverage {point_region_checks.set(point_region_checks.get().checked_add(1)?);}
+            Some(covered)
+        };
+        if lazy_point_coverage {
+            for word in 0..words {
+                let mut needed=routing_bits[word];
+                while needed!=0 {
+                    let bit=needed.trailing_zeros() as usize;needed&=needed-1;
+                    resolve_region(word*64+bit)?;
+                }
             }
+            for command in commands {
+                if let SpatialCommand::NativeSampledPaint {regions:required,owners,..}=command {
+                    let mut visible=true;
+                    for &i in *required {if !resolve_region(i)? {visible=false;break;}}
+                    if !visible {continue;}
+                    for &(i,_) in *owners {if resolve_region(i)? {break;}}
+                }
+            }
+        } else {for i in 0..regions.len() {resolve_region(i)?;}}
+        drop(resolve_region);
+        let mut occupied_words=0u64;
+        for (i,&word) in coverage.iter().enumerate() {
+            if word!=0 {occupied_words|=1u64<<i;}
         }
-        evaluate(&winding,point,&coverage,occupied_words)
-    } else {compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,Some(&route_is_affine),Some(&source_field_key),transitions.as_ref(),owner_transitions.as_ref(),Some(&error_route),candidate_out,&mut evaluate)}
+        evaluate(&winding,point,&coverage,occupied_words).and_then(EvaluatedCell::sampled)
+    } else {
+        let mut result=compose_cells_budget(regions,backdrop,x,y,&mut geometry_allowance,cancelled,admit,Some(&route_is_affine),Some(&source_field_key),transitions.as_ref(),owner_transitions.as_ref(),has_owner_words.then_some(&owner_region_masks),owner_observation.as_ref(),Some(&error_route),candidate_out,&mut evaluate);
+        if result.is_none() && defer_owner_colors.get() && owner_observation.as_ref().is_some_and(|o|o.white_quantization_unstable.get()) {
+            if cancelled() {return None;}
+            defer_owner_colors.set(false);
+            // Only a completed but quantization-ambiguous proof retries. Both
+            // source and polygon work continue from the first attempt's remainder.
+            result=compose_cells_budget(regions,backdrop,x,y,&mut geometry_allowance,cancelled,admit,Some(&route_is_affine),Some(&source_field_key),transitions.as_ref(),owner_transitions.as_ref(),has_owner_words.then_some(&owner_region_masks),None,Some(&error_route),candidate_out,&mut evaluate);
+            eprintln!("SPATIAL_WHITE_RGB8_ORIGINAL_FALLBACK complete={} geometry_remaining={geometry_allowance}",result.is_some());
+        }
+        if let (Some(output),Some(observation))=(white_output,owner_observation.as_ref()) {
+            if cancelled() {return None;}
+            output.set(observation.certified_white_rgb8.get().map(WhiteRgb8Pixel));
+        }
+        result
+    }
 }
 
 #[test]
@@ -3358,7 +3876,7 @@ fn reused_general_child_matches_fresh_point_frames_across_nested_variable_groups
             let actual_frames=frames.get();assert_eq!(used.load(Ordering::Relaxed),0);frames.set(0);
             // Each reference point owns a new stack and drops it before the
             // next fragment; no inter-fragment child state can survive.
-            let expected=compose_cells(&regions,backdrop,0,0,1_000_000,&||false,&admit,None,None,None,None,None,None,
+            let expected=compose_cells(&regions,backdrop,0,0,1_000_000,&||false,&admit,None,None,None,None,None,None,None,None,
                 &mut |_,point,_,_|compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),backdrop,point,1_000_000,1_000_000,&||false,&admit)).unwrap();
             assert!(actual.same_storage(expected),"isolated={isolated} knockout={knockout} masked={masked} mode={mode:?}");
             assert_eq!(used.load(Ordering::Relaxed),0);
@@ -3458,4 +3976,376 @@ fn general_child_hard_memory_limits_preserve_pixels_and_release_every_credit() {
         }
         println!("GENERAL_CHILD_MEMORY_BOUNDARY count={count} nested={nested} unlimited_peak={peak} observed_success={high} observed_refusal={low}");
     }}
+}
+
+#[test]
+fn opaque_root_tail_skips_hidden_prefix_and_preserves_masked_or_transparent_lifecycles() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let unit=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=[(&unit,Fill::NonZero)];
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    for (alpha,masked,mode,absent,hidden) in [(1.,false,BlendMode::Normal,false,true),
+        (0.5,false,BlendMode::Normal,false,false),(1.,true,BlendMode::Normal,false,false),
+        (1.,false,BlendMode::Multiply,false,false),(1.,false,BlendMode::Normal,true,false)] {
+        let prefix_calls=std::cell::Cell::new(0);
+        let final_calls=std::cell::Cell::new(0);
+        let prefix=|_:kurbo::Point,cancelled:&dyn Fn()->bool,left:&mut usize,_:Option<usize>| {
+            if cancelled() {return None;}*left=left.checked_sub(1)?;prefix_calls.set(prefix_calls.get()+1);
+            Some(Some(NativeSpatialSample {pixel:Pixel::from_native(Model::Rgb,&[0.8,0.1,0.3],0.75)?,space:rgb.color_space(),cell_key:Some([1,2])}))
+        };
+        let source=Pixel::from_native(Model::Rgb,&[f64::from(0.1f32),0.2,0.7],alpha).unwrap();
+        let final_sample=|_:kurbo::Point,cancelled:&dyn Fn()->bool,left:&mut usize,owner:Option<usize>| {
+            if cancelled() {return None;}*left=left.checked_sub(1)?;assert_eq!(owner,Some(7));final_calls.set(final_calls.get()+1);
+            if absent {return Some(None);}
+            Some(Some(NativeSpatialSample {pixel:source,space:rgb.color_space(),cell_key:None}))
+        };
+        let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.5);
+        let mut commands=Vec::new();
+        if masked {commands.push(SpatialCommand::SetMask {sample:&mask,sample_cost:1});}
+        commands.extend([
+            SpatialCommand::Begin {isolated:false,knockout:false,opacity:0.5,alpha_is_shape:false,mode:BlendMode::HardLight},
+            SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::ConstantCells,regions:&[0],sample:&prefix,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal},
+            SpatialCommand::End,
+            SpatialCommand::NativeSampledPaint {cells:None,field:if alpha==1. {NativeField::OpaqueAffineOwner} else {NativeField::AffineOwner},regions:&[0],sample:&final_sample,owners:&[(0,7)],alpha_is_shape:false,mode},
+        ]);
+        // Point evaluation retains the complete lifecycle and provides an independent route.
+        let expected=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+            kurbo::Point::new(0.5,0.5),1_000_000,1_000_000,&||false,&admit).unwrap();
+        prefix_calls.set(0);final_calls.set(0);
+        let actual=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+            0,0,1_000_000,1_000_000,&||false,&admit).unwrap();
+        assert_eq!(actual.alpha(),expected.alpha());
+        for (a,b) in actual.native_components().unwrap().into_iter().zip(expected.native_components().unwrap()) {
+            assert!((a-b).abs()<1e-12);
+        }
+        let grid=std::env::var("RRRAH_AI_DIAGNOSTIC_TILE_GRID").ok()
+            .and_then(|v|v.parse::<usize>().ok()).unwrap_or(1);
+        assert_eq!(final_calls.get(),grid*grid,"one sample per fragment, no duplicate after prefetch");
+        assert_eq!(prefix_calls.get()==0,hidden);
+        if hidden {
+            assert!(actual.same_storage(source));
+            let polls=std::cell::Cell::new(0usize);
+            let counted=||{polls.set(polls.get()+1);false};
+            assert!(compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+                0,0,1_000_000,1_000_000,&counted,&admit).is_some());
+            for stop in 1..=polls.get() {
+                let current=std::cell::Cell::new(0usize);
+                let cancelled=||{current.set(current.get()+1);current.get()>=stop};
+                assert!(compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+                    0,0,1_000_000,1_000_000,&cancelled,&admit).is_none(),"cancellation checkpoint {stop}");
+            }
+            assert!(compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+                0,0,1_000_000,0,&||false,&admit).is_none());
+        }
+    }
+}
+
+#[test]
+fn single_point_owner_lookup_matches_maximum_covered_priority_with_absent_owners() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let paths=[kurbo::Rect::new(0.,0.,2.,1.).to_path(0.1),
+        kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1),
+        kurbo::Rect::new(0.5,0.,1.,1.).to_path(0.1),
+        kurbo::Rect::new(3.,0.,4.,1.).to_path(0.1)];
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let owners=[(3,9),(1,7),(2,5),(1,1)];
+    let sample=|point:kurbo::Point,_:&dyn Fn()->bool,work:&mut usize,owner:Option<usize>| {
+        *work=work.checked_sub(1)?;
+        let expected=owners.iter().filter(|(region,_)|paths[*region].winding(point)!=0)
+            .map(|(_,index)|*index).max();
+        assert_eq!(owner,expected);
+        Some(owner.map(|index|NativeSpatialSample {cell_key:None,
+            pixel:Pixel::from_native(Model::Rgb,&[index as f64/16.,0.,0.],1.).unwrap(),space:rgb.color_space()}))
+    };
+    let commands=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::AffineOwner,
+        regions:&[0],sample:&sample,owners:&owners,alpha_is_shape:false,mode:BlendMode::Normal}];
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    for (x,expected) in [(0.25,Some(7)),(0.75,Some(5)),(1.5,None)] {
+        let point=kurbo::Point::new(x,0.5);
+        let actual=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+            point,100_000,100_000,&||false,&admit).unwrap();
+        assert_eq!(actual.alpha(),if expected.is_some() {1.} else {0.});
+        if let Some(index)=expected {assert_eq!(actual.native_components().unwrap()[0],index as f64/16.);}
+        let polls=std::cell::Cell::new(0usize);
+        assert!(compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+            point,100_000,100_000,&||{polls.set(polls.get()+1);false},&admit).is_some());
+        for stop in 1..=polls.get() {
+            let current=std::cell::Cell::new(0usize);
+            assert!(compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+                point,100_000,100_000,&||{current.set(current.get()+1);current.get()>=stop},&admit).is_none());
+        }
+    }
+}
+
+#[test]
+fn lazy_point_coverage_preserves_shared_owner_regions_and_even_odd_holes() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let full=kurbo::Rect::new(-1.,-1.,2.,2.).to_path(0.1);
+    let left=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);
+    let mut doubled=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let copy=doubled.clone();doubled.extend(copy.elements().iter().copied());
+    let mut hole=kurbo::Rect::new(0.5,0.,1.,1.).to_path(0.1);
+    hole.extend(kurbo::Rect::new(0.625,0.25,0.875,0.75).to_path(0.1).elements().iter().copied());
+    let outside=kurbo::Rect::new(3.,3.,4.,4.).to_path(0.1);
+    let regions=[(&full,Fill::NonZero),(&left,Fill::NonZero),(&doubled,Fill::EvenOdd),
+        (&hole,Fill::EvenOdd),(&outside,Fill::NonZero)];
+    let a=[(4,20),(2,12),(1,8),(3,2)];let b=[(1,19),(4,17),(3,11),(2,5)];
+    let owner_at=|owners:&[(usize,usize)],point:kurbo::Point| {
+        owners.iter().filter(|(i,_)| {let w=regions[*i].0.winding(point);
+            match regions[*i].1 {Fill::NonZero=>w!=0,Fill::EvenOdd=>w%2!=0}})
+            .map(|(_,index)|*index).max()
+    };
+    let value=|owner:Option<usize>,channel:usize|owner.map(|index| {
+        let mut components=[0.;3];components[channel]=index as f64/32.;
+        Pixel::from_native(Model::Rgb,&components,0.5).unwrap()
+    });
+    let sample_a=|point:kurbo::Point,_:&dyn Fn()->bool,work:&mut usize,owner:Option<usize>| {
+        *work=work.checked_sub(1)?;assert_eq!(owner,owner_at(&a,point));
+        Some(value(owner,0).map(|pixel|NativeSpatialSample {cell_key:None,pixel,space:rgb.color_space()}))
+    };
+    let sample_b=|point:kurbo::Point,_:&dyn Fn()->bool,work:&mut usize,owner:Option<usize>| {
+        *work=work.checked_sub(1)?;assert_eq!(owner,owner_at(&b,point));
+        Some(value(owner,2).map(|pixel|NativeSpatialSample {cell_key:None,pixel,space:rgb.color_space()}))
+    };
+    let commands=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::AffineOwner,
+        regions:&[0],sample:&sample_a,owners:&a,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::AffineOwner,
+        regions:&[0],sample:&sample_b,owners:&b,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for y in [-0.1,0.,0.25,0.5,0.75,1.,1.1] {for x in [-0.1,0.,0.25,0.5,0.625,0.75,0.875,1.,1.1] {
+        let point=kurbo::Point::new(x,y);let mut expected=clear;
+        for source in [value(owner_at(&a,point),0),value(owner_at(&b,point),2)].into_iter().flatten() {
+            expected=Pixel::composite(expected,expected,source,1.,BlendMode::Normal).unwrap();
+        }
+        let actual=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+            point,100_000,100_000,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert!(actual.same_storage(expected),"point {point:?}");
+    }}
+}
+
+
+#[test]
+fn tiled_moment_observer_preserves_known_affine_pixel_and_requires_explicit_opt_in() {
+    use super::native_blend::Model;
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=vec![(&path,Fill::NonZero);501];
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let affine=std::cell::Cell::new(true);
+    let result=compose_cells(&regions,clear,0,0,10_000_000,&||false,
+        &|_|Some(Box::new(())),Some(&affine),None,None,None,None,None,None,None,
+        &mut |_,point,_,_|Pixel::from_native(Model::Rgb,&[point.x,point.y,0.5],1.));
+    let grid=std::env::var("RRRAH_AI_DIAGNOSTIC_TILE_GRID").ok()
+        .and_then(|v|v.parse::<usize>().ok()).unwrap_or(1);
+    if grid>1 && std::env::var_os("RRRAH_AI_FRAGMENT_MOMENTS").is_some()
+        && std::env::var_os("RRRAH_AI_ALLOW_TILED_MOMENT_OBSERVATION").is_none() {
+        assert!(result.is_none());return;
+    }
+    let pixel=result.unwrap();assert_eq!(pixel.alpha(),1.);
+    for component in pixel.native_components().unwrap().into_iter().take(3) {
+        assert!((component-0.5).abs()<1e-12);
+    }
+}
+
+#[test]
+fn owner_geometry_validator_preserves_pixels_and_refuses_invalid_callbacks() {
+    use super::native_blend::Model;
+    let unit=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=[(&unit,Fill::NonZero)];
+    let source=Pixel::from_native(Model::Rgb,&[0.25,0.5,0.75],1.).unwrap();
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let run=|kind:usize| {
+        let cancelled=std::cell::Cell::new(false);let checks=std::cell::Cell::new(0usize);
+        let validator=|command,owner,slot,query:NativeGeometryQuery,work:&mut usize| {
+            assert_eq!(slot,0);let point=match query {
+                NativeGeometryQuery::Prepare=>return Some(NativeGeometryResult {bound:0.,pixel:None,gradient:[0.;2]}),
+                NativeGeometryQuery::Finish(_)=>return Some(NativeGeometryResult {bound:0.,pixel:Some(source),gradient:[0.;2]}),
+                NativeGeometryQuery::Observe(p)=>p,
+            };
+            assert_eq!((command,owner),(0,7));assert!((0. ..=1.).contains(&point.x));
+            checks.set(checks.get()+1);
+            match kind {
+                1=>return None,2=>return Some(NativeGeometryResult {bound:f64::NAN,pixel:None,gradient:[0.;2]}),3=>return Some(NativeGeometryResult {bound:-1.,pixel:None,gradient:[0.;2]}),
+                4=>{*work+=1;return Some(NativeGeometryResult {bound:0.,pixel:None,gradient:[0.;2]});},
+                5=>{cancelled.set(true);return Some(NativeGeometryResult {bound:0.,pixel:None,gradient:[0.;2]});},
+                6=>{*work=work.checked_sub(4)?;return Some(NativeGeometryResult {bound:0.,pixel:None,gradient:[0.;2]});},_=>{},
+            }
+            *work=work.checked_sub(3)?;Some(NativeGeometryResult {bound:0.125,pixel:None,gradient:[0.;2]})
+        };
+        let observation=OwnerMomentObservation {certified_white_rgb8:std::cell::Cell::new(None),white_quantization_unstable:std::cell::Cell::new(false),source_space:None,validator:Some(&validator),fallback:std::cell::Cell::new((0,0.,[0.;4])),field:std::cell::Cell::new(None),
+            moments:std::cell::RefCell::new(opaque_moments::OwnerMoments::admitted(1,&[(0,7)],kurbo::Point::ZERO,&mut 1000,&||false,&admit).unwrap())};
+        let result=compose_cells(&regions,source,0,0,1_000_000,&||cancelled.get(),&admit,
+            None,None,None,None,None,Some(&observation),None,None,&mut |_,_,_,_| {
+                observation.field.set(Some((0,7)));Some(source)
+            });
+        assert!(checks.get()>0);
+        if kind==0 {let result=result.unwrap();assert_eq!(result.native_components(),source.native_components());assert_eq!(result.alpha(),1.);}
+        else {assert!(result.is_none());}
+    };
+    for kind in 0..=6 {run(kind);}
+}
+
+#[test]
+fn owner_centroid_candidate_keeps_unowned_fallback_separate() {
+    use super::native_blend::Model;
+    let half=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);let regions=[(&half,Fill::NonZero)];
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let red=Pixel::from_native(Model::Rgb,&[1.,0.,0.],1.).unwrap();
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let validator=|_,_,_,query,work:&mut usize| {
+        *work=work.checked_sub(3)?;
+        Some(NativeGeometryResult {bound:0.,pixel:match query {NativeGeometryQuery::Finish(_)=>Some(green),_=>None},gradient:[0.;2]})
+    };
+    let observation=OwnerMomentObservation {certified_white_rgb8:std::cell::Cell::new(None),white_quantization_unstable:std::cell::Cell::new(false),source_space:None,validator:Some(&validator),fallback:std::cell::Cell::new((0,0.,[0.;4])),field:std::cell::Cell::new(None),
+        moments:std::cell::RefCell::new(opaque_moments::OwnerMoments::admitted(1,&[(0,7)],kurbo::Point::ZERO,&mut 1000,&||false,&admit).unwrap())};
+    let pixel=compose_cells(&regions,red,0,0,1_000_000,&||false,&admit,None,None,None,None,None,Some(&observation),None,None,
+        &mut |winding,_,_,_| {
+            if winding[0]!=0 {observation.field.set(Some((0,7)));Some(green)}
+            else {observation.field.set(None);Some(red)}
+        }).unwrap();
+    assert_eq!(pixel.alpha(),1.);assert_eq!(pixel.native_components().unwrap(),[0.5,0.5,0.,0.]);
+    assert_eq!(observation.fallback.get(),(1,0.5,[0.5,0.,0.,0.]));
+}
+
+#[test]
+fn geometry_owner_selection_matches_independent_maximum_and_direct_priority() {
+    fn plan(pairs:&[(usize,usize)],monotonic:bool)->OwnerPlan {
+        let mut words=Vec::new();let mut positions=[usize::MAX;64];let mut word_mask=0;
+        for &(region,index) in pairs {
+            let word=region/64;
+            if positions[word]==usize::MAX {positions[word]=words.len();words.push(OwnerWord {word,mask:0,indices:[0;64]});word_mask|=1u64<<word;}
+            let entry=&mut words[positions[word]];entry.mask|=1u64<<(region%64);entry.indices[region%64]=index;
+        }
+        OwnerPlan {words,positions,word_mask,monotonic,_credit:Box::new(())}
+    }
+    for pairs in [[(0,31),(63,7),(64,91),(4094,11)],[(0,7),(63,11),(64,31),(4094,91)]] {
+        let monotonic=pairs.windows(2).all(|v|v[0].1<=v[1].1);let prepared=plan(&pairs,monotonic);
+        let mut descending=pairs;descending.sort_by_key(|v|std::cmp::Reverse(v.1));
+        for mask in 0..16 {
+            let mut coverage=[0u64;64];let mut occupied=0;
+            for (slot,&(region,_)) in pairs.iter().enumerate() {if mask&(1<<slot)!=0 {coverage[region/64]|=1u64<<(region%64);occupied|=1u64<<(region/64);}}
+            let expected=pairs.iter().filter(|&&(region,_)|coverage[region/64]&(1u64<<(region%64))!=0).map(|v|v.1).max();
+            for direct in [false,true] {
+                let mut work=100;let polls=std::cell::Cell::new(0);
+                let result=covered_native_owner(&descending,direct,Some(&prepared),&coverage,occupied,&mut work,&||{polls.set(polls.get()+1);false});
+                assert_eq!(result,Some(expected));let used=100-work;
+                assert_eq!(covered_native_owner(&descending,direct,Some(&prepared),&coverage,occupied,&mut {used},&||false),Some(expected));
+                for budget in 0..used {assert!(covered_native_owner(&descending,direct,Some(&prepared),&coverage,occupied,&mut {budget},&||false).is_none());}
+                for stop in 1..=polls.get() {let n=std::cell::Cell::new(0);assert!(covered_native_owner(&descending,direct,Some(&prepared),&coverage,occupied,&mut 100,&||{n.set(n.get()+1);n.get()>=stop}).is_none());}
+            }
+        }
+    }
+    assert!(covered_native_owner(&[(4096,1)],true,None,&[u64::MAX;64],u64::MAX,&mut 1,&||false).is_none());
+    assert_eq!(covered_native_owner(&[],false,None,&[0;64],0,&mut 0,&||false),Some(None));
+}
+
+#[test]
+fn deferred_cell_never_becomes_an_observed_pixel() {
+    use super::native_blend::Model;
+    let unit=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=[(&unit,Fill::NonZero)];
+    let source=Pixel::from_native(Model::Rgb,&[0.25,0.5,0.75],1.).unwrap();
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let sampled=compose_cells(&regions,source,0,0,1_000_000,&||false,&admit,None,None,None,None,None,None,None,None,
+        &mut |_,_,_,_|Some(EvaluatedCell::Sampled(source))).unwrap();
+    assert_eq!(sampled.native_components(),source.native_components());
+    let candidates=std::cell::RefCell::new(None);
+    let deferred=compose_cells(&regions,source,0,0,1_000_000,&||false,&admit,None,None,None,None,None,None,None,Some(&candidates),
+        &mut |_,_,_,_|Some(EvaluatedCell::Deferred {command:0,owner:7}));
+    assert!(deferred.is_none());assert!(candidates.borrow().is_none());
+}
+
+#[test]
+fn deferred_geometry_certifies_white_bytes_without_native_output_or_color_reads() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let source=Pixel::from_native(Model::Rgb,&[0.2,0.4,0.6],1.).unwrap();
+    let unit=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&unit,Fill::NonZero)];
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let observed=std::cell::Cell::new(0usize);let sampled=std::cell::Cell::new(0usize);
+    let validator=|command,owner,slot,query,work:&mut usize| {
+        assert_eq!((command,owner,slot),(0,7,0));*work=work.checked_sub(3)?;
+        match query {
+            NativeGeometryQuery::Observe(_)=>{observed.set(observed.get()+1);Some(NativeGeometryResult {bound:0.,pixel:None,gradient:[0.;2]})},
+            NativeGeometryQuery::Finish(_)=>{sampled.set(sampled.get()+1);Some(NativeGeometryResult {bound:0.,pixel:Some(source),gradient:[0.;2]})},
+            NativeGeometryQuery::Prepare=>None,
+        }
+    };
+    let observation=OwnerMomentObservation {certified_white_rgb8:std::cell::Cell::new(None),white_quantization_unstable:std::cell::Cell::new(false),source_space:Some(rgb.color_space()),validator:Some(&validator),
+        fallback:std::cell::Cell::new((0,0.,[0.;4])),field:std::cell::Cell::new(None),
+        moments:std::cell::RefCell::new(opaque_moments::OwnerMoments::admitted(1,&[(0,7)],kurbo::Point::ZERO,&mut 1000,&||false,&admit).unwrap())};
+    let pixel=compose_cells(&regions,source,0,0,1_000_000,&||false,&admit,None,None,None,None,None,Some(&observation),None,None,
+        &mut |_,_,_,_|Some(EvaluatedCell::Deferred {command:0,owner:7}));
+    assert!(pixel.is_none());assert_eq!(observation.certified_white_rgb8.get(),Some([51,102,153]));
+    assert!(observed.get()>0);assert_eq!(sampled.get(),1);
+    let refused=compose_cells(&regions,source,0,0,1_000_000,&||true,&admit,None,None,None,None,None,Some(&observation),None,None,
+        &mut |_,_,_,_|Some(EvaluatedCell::Deferred {command:0,owner:7}));
+    assert!(refused.is_none());assert_eq!(observation.certified_white_rgb8.get(),None);
+}
+
+#[test]
+fn typed_white_rgb8_preserves_native_storage_and_byte_boundary_rules() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    for (components,alpha,expected) in [([0.2,0.4,0.6],1.,[51,102,153]),([0.,0.,0.],0.5,[128;3]),([0.,0.,0.],0.,[255;3])] {
+        let native=Pixel::from_native(Model::Rgb,&components,alpha).unwrap();let before=native;
+        let output=WhiteRgb8Pixel::from_complete_native(native,rgb.color_space()).unwrap();
+        assert_eq!(output.bytes(),expected);assert!(native.same_storage(before));
+    }
+}
+
+#[test]
+fn empty_transparent_owner_observation_preserves_white_output() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let validator=|_,_,_,_,_:&mut usize|->Option<NativeGeometryResult> {panic!("empty scene has no owner")};
+    let observation=OwnerMomentObservation {certified_white_rgb8:std::cell::Cell::new(None),white_quantization_unstable:std::cell::Cell::new(false),source_space:Some(rgb.color_space()),validator:Some(&validator),
+        fallback:std::cell::Cell::new((0,0.,[0.;4])),field:std::cell::Cell::new(None),
+        moments:std::cell::RefCell::new(opaque_moments::OwnerMoments::admitted(0,&[],kurbo::Point::ZERO,&mut 1000,&||false,&admit).unwrap())};
+    let native=compose_cells(&[],clear,0,0,1_000_000,&||false,&admit,None,None,None,None,None,Some(&observation),None,None,
+        &mut |_,_,_,_|Some(clear)).unwrap();
+    assert!(native.same_storage(clear));assert_eq!(observation.certified_white_rgb8.get(),None);
+    assert_eq!(WhiteRgb8Pixel::from_complete_native(native,rgb.color_space()).unwrap().bytes(),[255;3]);
+}
+
+#[test]
+fn quantization_ambiguous_proof_keeps_remaining_geometry_for_original_fallback() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let black=Pixel::from_native(Model::Rgb,&[0.;3],1.).unwrap();
+    let half=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);let regions=[(&half,Fill::NonZero)];
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let validator=|_,_,_,query,work:&mut usize| {
+        *work=work.checked_sub(3)?;
+        Some(NativeGeometryResult {bound:0.,pixel:match query {NativeGeometryQuery::Finish(_)=>Some(black),_=>None},gradient:[0.;2]})
+    };
+    let observation=OwnerMomentObservation {certified_white_rgb8:std::cell::Cell::new(None),white_quantization_unstable:std::cell::Cell::new(false),
+        source_space:Some(rgb.color_space()),validator:Some(&validator),fallback:std::cell::Cell::new((0,0.,[0.;4])),field:std::cell::Cell::new(None),
+        moments:std::cell::RefCell::new(opaque_moments::OwnerMoments::admitted(1,&[(0,7)],kurbo::Point::ZERO,&mut 1000,&||false,&admit).unwrap())};
+    let mut geometry=1_000_000;
+    let proof=compose_cells_budget(&regions,clear,0,0,&mut geometry,&||false,&admit,None,None,None,None,None,Some(&observation),None,None,
+        &mut |winding,_,_,_|Some(if winding[0]!=0 {EvaluatedCell::Deferred {command:0,owner:7}} else {EvaluatedCell::Sampled(clear)}));
+    assert!(proof.is_none());assert!(observation.white_quantization_unstable.get());assert!(observation.certified_white_rgb8.get().is_none());
+    let after_proof=geometry;assert!(after_proof<1_000_000);
+    let mut original=|winding:&[i32],_,_:&[u64;64],_|Some(if winding[0]!=0 {black} else {clear});
+    let native=compose_cells_budget(&regions,clear,0,0,&mut geometry,&||false,&admit,None,None,None,None,None,None,None,None,&mut original).unwrap();
+    assert!(geometry<after_proof);assert_eq!(native.alpha(),0.5);
+    assert_eq!(WhiteRgb8Pixel::from_complete_native(native,rgb.color_space()).unwrap().bytes(),[128;3]);
+    let mut exhausted=0;
+    assert!(compose_cells_budget(&regions,clear,0,0,&mut exhausted,&||false,&admit,None,None,None,None,None,None,None,None,&mut original).is_none());
+    assert_eq!(exhausted,0);
 }

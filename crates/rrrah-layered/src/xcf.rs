@@ -855,14 +855,26 @@ pub fn decode_xcf_level(
         let end = offsets.peek().copied().unwrap_or(bytes.len() as u64);
         let end = usize::try_from(end).map_err(|_| XcfHeaderError("tile offset"))?;
         let input = bytes.get(offset..end).ok_or(XcfHeaderError("tile offset"))?;
-        decode_xcf_tile(
-            compression,
-            input,
-            tile_width as u8,
-            tile_height as u8,
-            level.bytes_per_pixel,
-            &mut tile[..tile_length],
-        )?;
+        let decoder_credit = if compression == 2 {
+            Some(budget.try_reserve(rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES)?)
+        } else { None };
+        if compression == 2 {
+            let mut stopped = false;
+            let result = inflate_xcf_tile(input, &mut tile[..tile_length], |_, _| {
+                if cancelled() {
+                    stopped = true;
+                    Err(XcfHeaderError("cancelled zlib tile"))
+                } else { Ok(()) }
+            });
+            if stopped { return Err(XcfPixelError::Cancelled); }
+            result?;
+        } else {
+            decode_xcf_tile(
+                compression, input, tile_width as u8, tile_height as u8,
+                level.bytes_per_pixel, &mut tile[..tile_length],
+            )?;
+        }
+        drop(decoder_credit);
         for row in 0..tile_height {
             let target = ((y + row) * width + x) * stride;
             let source = row * tile_width * stride;
@@ -1058,17 +1070,45 @@ pub fn decode_xcf_tile(
             }
             Ok(position)
         }
-        2 => {
-            let mut decoder = flate2::Decompress::new(true);
-            let status = decoder
-                .decompress(input, output, flate2::FlushDecompress::Finish)
-                .map_err(|_| XcfHeaderError("invalid zlib tile"))?;
-            if status != flate2::Status::StreamEnd || decoder.total_out() != output.len() as u64 {
+        2 => inflate_xcf_tile(input, output, |_, _| Ok(())),
+        _ => Err(XcfHeaderError("tile compression")),
+    }
+}
+
+fn inflate_xcf_tile(
+    input: &[u8],
+    output: &mut [u8],
+    mut check: impl FnMut(u64, u64) -> Result<(), XcfHeaderError>,
+) -> Result<usize, XcfHeaderError> {
+    check(0, 0)?;
+    let mut decoder = flate2::Decompress::new(true);
+    let mut extra = [0u8; 1];
+    loop {
+        let before = (decoder.total_in(), decoder.total_out());
+        let source_at = usize::try_from(before.0).map_err(|_| XcfHeaderError("tile input length"))?;
+        let target_at = usize::try_from(before.1).map_err(|_| XcfHeaderError("zlib tile length"))?;
+        let end = input.len().min(source_at.saturating_add(65536));
+        let source = input.get(source_at..end).ok_or(XcfHeaderError("tile input length"))?;
+        let target = if target_at < output.len() {
+            let end = output.len().min(target_at + 65536);
+            &mut output[target_at..end]
+        } else { &mut extra[..] };
+        let status = decoder.decompress(source, target, flate2::FlushDecompress::None)
+            .map_err(|_| XcfHeaderError("invalid zlib tile"))?;
+        check(decoder.total_in(), decoder.total_out())?;
+        if decoder.total_out() > output.len() as u64 {
+            return Err(XcfHeaderError("zlib tile length"));
+        }
+        if status == flate2::Status::StreamEnd {
+            if decoder.total_out() != output.len() as u64 {
                 return Err(XcfHeaderError("zlib tile length"));
             }
-            usize::try_from(decoder.total_in()).map_err(|_| XcfHeaderError("tile input length"))
+            // XCF tile offsets can contain padding or following object data.
+            return usize::try_from(decoder.total_in()).map_err(|_| XcfHeaderError("tile input length"));
         }
-        _ => Err(XcfHeaderError("tile compression")),
+        if before == (decoder.total_in(), decoder.total_out()) {
+            return Err(XcfHeaderError("zlib tile length"));
+        }
     }
 }
 
@@ -1776,6 +1816,134 @@ mod tests {
             bytes.extend_from_slice(&precision.to_be_bytes());
         }
         bytes
+    }
+
+    #[test]
+    fn managed_zlib_level_reserves_state_and_releases_on_success_error_and_cancel() {
+        use std::io::Write;
+        let expected = [10u8, 20, 30, 255, 11, 21, 31, 255];
+        let mut encoder = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::default());
+        encoder.write_all(&expected).unwrap();
+        let compressed = encoder.finish().unwrap();
+        let mut bytes = header(0, 150, 0, 2, 1);
+        let hierarchy = bytes.len() as u64;
+        let level_offset = bytes.len() + 20;
+        let payload = level_offset + 16;
+        for word in [2u32, 1, 4, level_offset as u32, 0, 2, 1, payload as u32, 0] {
+            bytes.extend_from_slice(&word.to_be_bytes());
+        }
+        bytes.extend_from_slice(&compressed);
+        let level = parse_xcf_hierarchy(&bytes, hierarchy, 2, 1, 4).unwrap();
+        let peak = 16 + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES;
+        let short = rrrah_core::MemoryBudget::new(peak - 1);
+        assert!(matches!(decode_xcf_level(&bytes, &level, 2, &short, || false),
+            Err(XcfPixelError::Memory(rrrah_core::BufferError::Capacity { .. }))));
+        assert_eq!((short.used(), short.peak()), (0, 16));
+        let exact = rrrah_core::MemoryBudget::new(peak);
+        let output = decode_xcf_level(&bytes, &level, 2, &exact, || false).unwrap();
+        assert_eq!(&output[..], &expected);
+        assert_eq!((exact.used(), exact.peak()), (8, peak));
+        let clone = output.clone();
+        drop(output);
+        assert_eq!(exact.used(), 8);
+        drop(clone);
+        assert_eq!(exact.used(), 0);
+        let mut broken = bytes.clone();
+        *broken.last_mut().unwrap() ^= 255;
+        assert!(decode_xcf_level(&broken, &level, 2, &exact, || false).is_err());
+        assert_eq!(exact.used(), 0);
+        let mut checks = 0;
+        assert!(matches!(decode_xcf_level(&bytes, &level, 2, &exact, || {
+            checks += 1; checks == 3
+        }), Err(XcfPixelError::Cancelled)));
+        assert_eq!(exact.used(), 0);
+    }
+
+    #[test]
+    fn low_output_zlib_tiles_bound_input_and_cancel_before_publication() {
+        let pixel = [7u8, 11, 13, 255];
+        let mut stream = vec![0x78, 0x01];
+        for _ in 0..100_000 { stream.extend_from_slice(&[0, 0, 0, 255, 255]); }
+        stream.extend_from_slice(&[1, 4, 0, 251, 255]);
+        stream.extend_from_slice(&pixel);
+        let (mut a, mut b) = (1u32, 0u32);
+        for value in pixel { a = (a + u32::from(value)) % 65521; b = (b + a) % 65521; }
+        stream.extend_from_slice(&((b << 16) | a).to_be_bytes());
+        let mut output = [0u8; 4];
+        let (mut input, mut decoded, mut steps) = (0, 0, 0);
+        let consumed = inflate_xcf_tile(&stream, &mut output, |i, o| {
+            assert!(i - input <= 65536 && o - decoded <= 65536);
+            input = i; decoded = o; steps += 1; Ok(())
+        }).unwrap();
+        assert_eq!((consumed, input), (stream.len(), stream.len() as u64));
+        assert!(steps >= 9);
+        assert_eq!(output, pixel);
+        let mut with_tail = stream.clone();
+        with_tail.extend_from_slice(&[42; 16]);
+        assert_eq!(decode_xcf_tile(2, &with_tail, 1, 1, 4, &mut output).unwrap(), stream.len());
+        for prefix in [0, 1, 65535, 65536, 65537, stream.len() - 1] {
+            assert!(decode_xcf_tile(2, &stream[..prefix], 1, 1, 4, &mut output).is_err());
+        }
+        let mut bytes = header(0, 150, 0, 1, 1);
+        let hierarchy = bytes.len() as u64;
+        let level_offset = bytes.len() + 20;
+        let payload = level_offset + 16;
+        for word in [1u32, 1, 4, level_offset as u32, 0, 1, 1, payload as u32, 0] {
+            bytes.extend_from_slice(&word.to_be_bytes());
+        }
+        bytes.extend_from_slice(&stream);
+        let level = parse_xcf_hierarchy(&bytes, hierarchy, 1, 1, 4).unwrap();
+        let peak = 8 + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES;
+        let root = rrrah_core::MemoryBudget::new(peak);
+        let mut checks = 0;
+        assert!(matches!(decode_xcf_level(&bytes, &level, 2, &root, || {
+            checks += 1;
+            if checks >= 3 { assert_eq!(root.used(), peak); }
+            checks == 4
+        }), Err(XcfPixelError::Cancelled)));
+        assert_eq!((checks, root.used(), root.peak()), (4, 0, peak));
+        let retry = decode_xcf_level(&bytes, &level, 2, &root, || false).unwrap();
+        assert_eq!(&retry[..], &pixel);
+        drop(retry);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn managed_zlib_tile_rejects_underflow_and_expansion_without_retained_output() {
+        use std::io::Write;
+        fn source(data: &[u8]) -> (Vec<u8>, u64) {
+            let mut encoder = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::default());
+            encoder.write_all(data).unwrap();
+            let compressed = encoder.finish().unwrap();
+            let mut bytes = header(0, 150, 0, 1, 1);
+            let hierarchy = bytes.len() as u64;
+            let level_offset = bytes.len() + 20;
+            let payload = level_offset + 16;
+            for word in [1u32, 1, 4, level_offset as u32, 0, 1, 1, payload as u32, 0] {
+                bytes.extend_from_slice(&word.to_be_bytes());
+            }
+            bytes.extend_from_slice(&compressed);
+            (bytes, hierarchy)
+        }
+        let peak = 8 + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES;
+        let root = rrrah_core::MemoryBudget::new(peak);
+        for length in [0usize, 3, 5, 65540] {
+            let (bytes, hierarchy) = source(&vec![7u8; length]);
+            let level = parse_xcf_hierarchy(&bytes, hierarchy, 1, 1, 4).unwrap();
+            assert!(matches!(decode_xcf_level(&bytes, &level, 2, &root, || false),
+                Err(XcfPixelError::Structure(XcfHeaderError("zlib tile length")))), "length={length}");
+            assert_eq!((root.used(), root.peak()), (0, peak));
+        }
+        let (mut bytes, hierarchy) = source(&[7, 11, 13, 255]);
+        let level = parse_xcf_hierarchy(&bytes, hierarchy, 1, 1, 4).unwrap();
+        let good = decode_xcf_level(&bytes, &level, 2, &root, || false).unwrap();
+        assert_eq!(&good[..], &[7, 11, 13, 255]);
+        drop(good);
+        *bytes.last_mut().unwrap() ^= 255;
+        let level = parse_xcf_hierarchy(&bytes, hierarchy, 1, 1, 4).unwrap();
+        assert!(matches!(decode_xcf_level(&bytes, &level, 2, &root, || false),
+            Err(XcfPixelError::Structure(XcfHeaderError("invalid zlib tile")))));
+        assert_eq!(root.used(), 0);
     }
 
     #[test]

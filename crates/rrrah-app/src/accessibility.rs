@@ -4,7 +4,7 @@ pub const ROOT: NodeId = NodeId(1);
 pub const IMAGE: NodeId = NodeId(2);
 pub const STATUS: NodeId = NodeId(3);
 pub const FIRST_COMMAND: u64 = 10;
-pub const COMMANDS: [&str; 8] = [
+pub const COMMANDS: [&str; 11] = [
     "Previous image",
     "Next image",
     "Decrease exposure",
@@ -13,6 +13,9 @@ pub const COMMANDS: [&str; 8] = [
     "Redo edit",
     "Save XMP edits",
     "Compare before and after",
+    "Resolve edit conflict using recovery",
+    "Resolve edit conflict using saved XMP",
+    "Start clean edits and retain refused recovery in a backup",
 ];
 pub fn next_focus(focus: NodeId, backwards: bool) -> NodeId {
     let index = focus
@@ -76,8 +79,8 @@ mod tests {
         );
         assert_eq!(update.focus, NodeId(10));
         assert_eq!(update.nodes.len(), COMMANDS.len() + 4);
-        assert_eq!(next_focus(NodeId(10), true), NodeId(17));
-        assert_eq!(next_focus(NodeId(17), false), NodeId(10));
+        assert_eq!(next_focus(NodeId(10), true), NodeId(20));
+        assert_eq!(next_focus(NodeId(20), false), NodeId(10));
         assert!(
             update
                 .nodes

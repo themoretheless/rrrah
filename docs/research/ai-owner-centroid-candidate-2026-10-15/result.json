@@ -1,0 +1,48 @@
+{
+  "change": "Typed Prepare/Observe/Finish geometry callbacks replace ambiguous optional point. Finish samples each original owner at its stored geometry centroid and observes that point in source evidence. Converts through original source color space. Collector retains unowned fallback integral, computes candidate owned integral, compares normalized components using original alpha, and returns original pixel. No original colors skipped.",
+  "tests": {
+    "interpret_passed": 128,
+    "interpret_ignored": 1,
+    "hayro_passed": 286,
+    "hayro_ignored": 12,
+    "new_controls": [
+      "sample_observed exact7 source/geometry work, every shorter budget refuses without changing evidence count, source components equal original sampler bits",
+      "Half-pixel owner plus unowned red fallback preserves original mixed pixel and exact separate fallback integral",
+      "Invalid callback, mint, cancellation and overrun controls remain passing"
+    ]
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "owned_fragments": 632522,
+    "centroid_samples": 666,
+    "candidate_alpha_delta": 8.659739592076221e-14,
+    "candidate_normalized_component_delta_using_original_alpha": 7.97335197866289e-10,
+    "geometry_setup": 80708,
+    "geometry_traversal_export": 39318727,
+    "geometry_total": 39399435,
+    "geometry_remaining": 600565,
+    "geometry_limit": 40000000,
+    "source_component_error_bound": 1.1933653437754575e-07,
+    "returned_original_native_exact": true,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "original_source_work": 6993741,
+    "original_source_allowance": 16000000
+  },
+  "sources": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "50771bc0c1bb69f28e24b332559b230536fd6a9da2b63bb195b1ef03baf13221",
+    "vendor/hayro/src/native_spatial.rs": "4f370ec9a2548cf317c5c5a2d1cea8480a8a221c4d226c2e35334b83521c5d64",
+    "vendor/hayro/src/knockout_interpreter.rs": "b899b927a59eecfa9eee7f373ad20a4488d5fcd6d4e151a59a6384d87f9e37a0"
+  },
+  "limitations": [
+    "Candidate comparison is measured evidence on one pixel, not an acceptance bound.",
+    "All original color evaluations retained; no ordinary4M speedup or acceptance.",
+    "Live deferral must propagate geometry centroid/area, source, integration, normalization and native-coordinate rounding bounds.",
+    "Absolute clipping/ownership/profile/display/full AI page and100-format qualification remain unresolved."
+  ]
+}

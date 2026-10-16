@@ -10,11 +10,16 @@ repository.workspace = true
 astcenc-sys = "=0.2.0"
 basis-universal = "=0.3.1"
 flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"] }
+# Pin the backend whose state allocation is covered by admission credit.
+zlib-rs = { version = "=0.6.8", default-features = false, features = ["rust-allocator"] }
 rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
 rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
 rrrah-scientific = { path = "../rrrah-scientific", version = "0.1.0" }
 texture2ddecoder = "=0.1.2"
 thiserror.workspace = true
+
+[dev-dependencies]
+zlib-rs = { version = "=0.6.8", default-features = false, features = ["rust-allocator", "__internal-api"] }
 
 [lints]
 workspace = true

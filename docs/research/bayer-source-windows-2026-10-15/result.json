@@ -1,0 +1,59 @@
+{
+  "status": "gpu_library_full_sensor_and_raw_hdr_passed",
+  "change": "managed Bayer uploads bounded source strips plus algorithm-specific neighbor halo; output/readback strips reused; global coordinates retained",
+  "halo_samples": {
+    "Bilinear": 1,
+    "MalvarHeCutler": 2,
+    "SmoothHue": 2,
+    "Directional": 3,
+    "Vng": 3,
+    "Rcd": 4
+  },
+  "actual_metal": {
+    "adapter": "Apple M4 Max",
+    "gpu_library_passed": 62,
+    "failed": 0,
+    "ignored": 0,
+    "source_and_output_window_cases": 24,
+    "cfa_layouts": 4,
+    "algorithms": 6,
+    "dimensions": [
+      129,
+      257
+    ],
+    "forced_binding_limit_bytes": 65536,
+    "strips_each": 9,
+    "comparison": "every pixel exactly equals whole-frame reference; second-strip cancellation and retry exact"
+  },
+  "full_sensor_bilinear": {
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "every_pixel_independent_cpu_exact": true,
+    "gpu_peak_bytes": 301900208,
+    "final_cpu_gpu_used": [
+      0,
+      0
+    ]
+  },
+  "found_defects": [
+    "Directional and VNG nested green interpolation reaches radius3 rather than declared2",
+    "RCD nested diagonal green interpolation reaches radius4 rather than declared3"
+  ],
+  "limitations": [
+    "resident output still single binding",
+    "independent full-sensor oracle is Bilinear only",
+    "logical budgets exclude driver and queue staging memory"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "d17fe313d7a8278c9edd72cb0a148680f5038bd214d899c56ce93222c642af6d",
+    "crates/rrrah-gpu/src/lib.rs": "427697348204fa898575e1573198efd97330deb14e4b964ab988910af1be234e",
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "f569e5350769353c4cebb3dafc0d57a1616a37244ebb1cc412744079e98ee5ee"
+  },
+  "raw_hdr_integration": {
+    "passed": 7,
+    "failed": 0,
+    "seconds": 130.69
+  }
+}

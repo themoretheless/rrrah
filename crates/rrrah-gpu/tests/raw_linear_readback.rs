@@ -260,10 +260,12 @@ fn raw_linear_float_target_preserves_hdr_and_negative_rgbe_color() {
                     components: 1,
                     values: levels,
                 };
-                let pressure = budget.try_reserve(4 * 1024 * 1024).unwrap();
+                // Exhaust the remaining budget independently of atlas geometry.
+                let pressure_bytes = 8 * 1024 * 1024 - retained;
+                let pressure = budget.try_reserve(pressure_bytes).unwrap();
                 assert!(renderer.upload_mosaic(&device, &queue, &repeated).is_err());
                 assert_eq!(read_center(&device, &queue, &renderer, format), actual);
-                assert_eq!(budget.used(), retained + 4 * 1024 * 1024);
+                assert_eq!(budget.used(), retained + pressure_bytes);
                 drop(pressure);
                 renderer.upload_mosaic(&device, &queue, &repeated).unwrap();
                 assert_eq!(budget.used(), retained + 15 * 4);
@@ -702,11 +704,7 @@ fn raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_li
         [inverse[0], inverse[1], inverse[2], [0.; 3]],
         |_, _| 3000,
     );
-    for alg in [
-        rrrah_gpu::GpuDemosaicAlgorithm::Bilinear,
-        rrrah_gpu::GpuDemosaicAlgorithm::MalvarHeCutler,
-        rrrah_gpu::GpuDemosaicAlgorithm::Directional,
-    ] {
+    for alg in rrrah_gpu::GpuDemosaicAlgorithm::ALL {
         let mut renderer = RawRenderer::new(&device, wgpu::TextureFormat::Rgba32Float);
         renderer
             .set_output_mode(&queue, RawOutputMode::SceneLinear)
@@ -714,7 +712,7 @@ fn raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_li
         renderer.set_demosaic_algorithm(&queue, alg);
         assert_eq!(renderer.demosaic_algorithm(), alg);
         // Use small 32x32 tiles so the center of the 64x64 frame sits right on a 4-tile boundary,
-        // exercising the automatic tile_halo >= 2 elevation for 5x5 GPU demosaic shaders.
+        // exercising the automatic halo elevation for every selected GPU demosaic algorithm.
         renderer
             .upload_mosaic_with_tiling(
                 &device,

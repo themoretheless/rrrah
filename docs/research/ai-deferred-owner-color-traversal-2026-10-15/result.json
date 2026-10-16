@@ -1,0 +1,63 @@
+{
+  "change": "Explicit opt-in RRRAH_AI_OWNER_DEFERRED_COLORS traverses certified opaque tail owner geometry without reading each fragment color. Prepared immutable source proof, owner membership and per-fragment Observe remain mandatory. Original alpha arithmetic retained; partial observed color integral never finalized. Candidate is sampled once per occupied group and separate bound-only white RGB8 gate evaluated.",
+  "tests": {
+    "focused_passed": 2,
+    "full_passed": 293,
+    "full_ignored": 12,
+    "failed": 0,
+    "regression": "Deferred cells never become native Pixel; geometry-only synthetic stream certifies expected RGB8 with one centroid sample; cancellation clears stale certificate.",
+    "fixed_during_test": "RGB unused fourth component error incorrectly nonzero caused conservative refusal; unused channels now exactly zero."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "geometry_traversal_completed": true,
+    "native_output_completed": false,
+    "native_output_refusal": "Intentional: white RGB8 equivalence does not authorize native/HDR Pixel replacement.",
+    "deferred_fragments": 632522,
+    "evaluated_fragments": 633426,
+    "occupied_groups": 666,
+    "rgb8_certified": [
+      205,
+      151,
+      128
+    ],
+    "white_rgb_bounds": [
+      [
+        205.39596588002092,
+        205.4320220448932
+      ],
+      [
+        151.13551568000597,
+        151.16585774444215
+      ],
+      [
+        127.69766477647309,
+        127.73536448685165
+      ]
+    ],
+    "original_alpha": 0.6737398252860969,
+    "candidate_alpha": 0.6737398252861835,
+    "source_work": 3831146,
+    "source_allowance": 4000000,
+    "baseline_all_colors_source_work": 6993741,
+    "saved_source_work": 3162595,
+    "geometry_total": 39413071,
+    "geometry_limit": 40000000,
+    "geometry_remaining": 586929,
+    "peak_admitted_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "source_sha256": {
+    "vendor/hayro/src/native_spatial.rs": "b4b8cf946084bb78db05580b1e45559e5b8df3f9a5998a5e0dab158a39e9b607"
+  },
+  "next": "Expose typed certified white RGB8 output through the caller and actual intended output route; retain native/HDR refusal. Then full-page replay and independent oracle comparison.",
+  "limitations": [
+    "No rendered native pixel returned for deferred path; diagnostic completed=false is deliberate and not a completed AI qualification.",
+    "Only observed original sampler geometry is covered; absolute clipping/ownership correctness versus oracle remains open.",
+    "No production/fullpage/HDR/NVIDIA qualification or speed timing claim."
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "status": "selected_animation_timing_preserved_through_common_raster_and_swap",
+  "changes": [
+    "RasterAnimationTiming stores rational millisecond delay and total plays (zero infinite), with nonzero denominator and ceil-to-nanosecond accessor",
+    "DecodedRaster retains optional timing through clone/managed pixels, HDR/sRGB/ICC conversion and CPU/segmented LOD",
+    "GIF repeats normalized: absent1 play,0 infinite,n positive ->n+1 total; APNG/WebP keep total-play semantics",
+    "Native GIF/APNG/WebP attach timing before common router extracts raster",
+    "RRRAST5 stores legacy base version1..4 in byte19 and12 timing bytes after profile/chromaticity metadata, before pixels",
+    "Ordinary wire records unchanged; RRRAST1..4 remain readable",
+    "Segmented prefix/crop/aspect/LOD and cached LOD preserve timing"
+  ],
+  "checks": {
+    "common_native_display_manifest_cases": 40,
+    "wire_color_aspect_timing_cases": 36,
+    "rational_delay_controls": 4,
+    "wire_invalid_denominator_and_base_version_refusal": true,
+    "exact_short_clone_ownership": true,
+    "segmented_region_and_cached_lod": true,
+    "srgb_icc_conversion_metadata_with_quota_retry": true,
+    "develop_passed": 98,
+    "develop_ignored": 2,
+    "animation_passed": 28,
+    "animation_ignored": 1,
+    "cache_passed": 146,
+    "cache_ignored": 3,
+    "decode_passed": 191,
+    "decode_ignored": 3,
+    "viewer_passed": 253,
+    "viewer_ignored": 72,
+    "actual_metal_apng_ttl_prefetch": {
+      "adapter": "Metal Apple M4 Max",
+      "frames": 4,
+      "blocked_decoder": true,
+      "sdr_hdr_exact": true,
+      "final_credit": 0
+    },
+    "viewer_ram_swap_timing_preservation": true
+  },
+  "remaining": [
+    "Automatic viewer playback scheduler not yet implemented",
+    "Need finite/infinite loop scheduling, zero-duration policy, ready-aware deadlines and stale-generation reset",
+    "Full timeline/live physical presentation and broader animation families remain unqualified",
+    "New V5 full corruption matrix/interop gates should be expanded beyond semantic controls",
+    "Global fmt/strict Clippy, complete100-format, physical HDR and NVIDIA remain open"
+  ],
+  "limits": [
+    "Metadata foundation does not establish automatic/live playback",
+    "Existing Metal test checks pixel transport under TTL/swap, not wall-clock frame pacing",
+    "Duration0 remains exact metadata; future scheduler must apply explicit bounded pacing policy",
+    "Memory capacity credits do not measure total RSS"
+  ],
+  "files_sha256": {
+    "crates/rrrah-develop/src/raster.rs": "69b0afeaef6862f9f71dc64ca4bcad091a80a878337cfb5cd5ca97e9b982ac12",
+    "crates/rrrah-develop/src/raster_lod.rs": "da9a1c0727a36c302f9afcbf407fa39583ef9098b699b39dc6afe14e4a23619e",
+    "crates/rrrah-develop/src/lib.rs": "d5362a9ca31fa50c6a136f56d4d0607f4970a002d726f24531992db3a0eea4ef",
+    "crates/rrrah-core/src/lib.rs": "2caa5501ebc69bcc7ee064e53ec55600f80c81315fae0d4c0b080f2980d3caa5",
+    "crates/rrrah-animation/src/gif_animation.rs": "34c9dabd4f9b758381307569e1a58f4031f461cff19d5551756c1884945ebb3b",
+    "crates/rrrah-animation/src/apng.rs": "fba9bea6778a1c16250833a21b7adcdf1d1b9fe2a0178a12db1061ae9c8c3497",
+    "crates/rrrah-animation/src/webp_animation.rs": "7c65fa966f5061b7273597c51660676058b5b8af18f0f046afa1195a75e91a36",
+    "crates/rrrah-animation/src/raster_color.rs": "e4c60cff0a1a3bb881ac322a9d494716f89dc1c73ff187bbc7e10ae15f0da9b8",
+    "crates/rrrah-cache/src/raster_payload.rs": "a724c344d102f4701996f040729f33b04a260a782903a5a24ba476f5ee1a59f1",
+    "crates/rrrah-cache/src/raster_regions.rs": "b6f4e435af47f4d7349a28e0a4bf8a4fd6092f6f80843cfb9ce08b173a427a4d",
+    "crates/rrrah-decode/src/image_router.rs": "6c579a34c66f13fb4cb285f4fdef469f509130643f42499c26ccced816f39a4c",
+    "crates/rrrah-app/src/main.rs": "2f5f8491332052a687cf4340635ba495bf8e26d249242d068607522efe9c3574"
+  },
+  "follow_up": {
+    "report": "../animation-viewer-playback-clock-2026-10-16/result.json",
+    "scope": "Automatic viewer scheduler now wired and deterministic/cache tests pass; live physical event-loop pacing remains unqualified"
+  },
+  "corruption_follow_up": "../animation-v5-swap-corruption-2026-10-16/result.json"
+}

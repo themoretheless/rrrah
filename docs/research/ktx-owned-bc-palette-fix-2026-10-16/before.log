@@ -1,0 +1,24 @@
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.65s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_texture-b569d94efbf3a955)
+
+running 1 test
+test ktx::tests::bc2_bc3_reversed_endpoints_keep_four_color_palette ... FAILED
+
+failures:
+
+---- ktx::tests::bc2_bc3_reversed_endpoints_keep_four_color_palette stdout ----
+
+thread 'ktx::tests::bc2_bc3_reversed_endpoints_keep_four_color_palette' (3610085) panicked at crates/rrrah-texture/src/ktx.rs:411:17:
+assertion `left == right` failed
+  left: [127, 127, 127, 255]
+ right: [85, 85, 85, 255]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    ktx::tests::bc2_bc3_reversed_endpoints_keep_four_color_palette
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 79 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-texture --lib`

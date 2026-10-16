@@ -1,0 +1,50 @@
+{
+  "status": "bounded existing 3D path passed",
+  "native_formats": [
+    "STL",
+    "OBJ",
+    "PLY",
+    "OFF"
+  ],
+  "metal": {
+    "passed": 11,
+    "failed": 0,
+    "ignored": 0,
+    "adapter": "Apple M4 Max",
+    "coverage": [
+      "orbit/coverage/extreme coordinates",
+      "depth independent of submission order",
+      "float64 source translation and scale",
+      "transactional vertex/depth budget",
+      "shared raster/model parent memory",
+      "analytic neutral HDR material",
+      "cancelled upload/replacement preserves SDR/HDR",
+      "submitted resources hold credits until completion",
+      "refused resize preserves frames and retries",
+      "depth device ownership"
+    ]
+  },
+  "model_swap_application": {
+    "passed": 6,
+    "failed": 0,
+    "coverage": [
+      "malformed payload refusal",
+      "TTL spill/restore without decode",
+      "consumer leases preserve geometry",
+      "ten native fixtures restore before decoder, bytes exact",
+      "impossible restore admission preserves cached geometry",
+      "independent CLI limits/no-cache"
+    ]
+  },
+  "limitations": [
+    "neutral opaque geometry only; source materials/textures/transparency not rendered",
+    "native loaders cover four model formats only",
+    "bounded fixture suite, not broad production asset corpus",
+    "live interactive window latency and physical HDR not established"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/model.rs": "d1709118186aa33590e3b007ca3d698051c8a12b41bdfea2cb46fd6f03fcfd7f",
+    "crates/rrrah-gpu/tests/model_readback.rs": "210f4930dfe0b1ce1db90e77edc686c22366205b832b252f2be90272a31990f9",
+    "crates/rrrah-decode/src/model.rs": "d22f6f6b747046ccbdc2f29936754554e960dbf658e760f9d140f6eb86f2db1e"
+  }
+}

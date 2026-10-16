@@ -1,0 +1,18 @@
+{
+  "status": "reproduced then fixed",
+  "before": "valid3x5 black grid returned empty CPU Bayer thumbnail",
+  "fix": "validate joint black-grid/CFA period with cancellation and select black by reflected sensor coordinate, without intermediate normalized image",
+  "regression": "four Bayer phases, separate green WB,3x5 black grid; exact thumbnail bytes equal independently constructed equivalent flat-black sensor for edges5/17/64; invalid final grid cell refused",
+  "core_suite": {
+    "passed": 143,
+    "failed": 0,
+    "ignored": 2,
+    "seconds": 4.67
+  },
+  "limitations": [
+    "authored calibration equivalence control, not real-camera grid corpus",
+    "CPU preview change; GPU shader unchanged",
+    "broader decoder suite from previous turn predates this new grid fix"
+  ],
+  "source_sha256": "b8146028545ffb3dc158446e46fa7dcd1d1d5edb127802e386f527ea5e2a0c7f"
+}

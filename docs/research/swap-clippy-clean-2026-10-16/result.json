@@ -1,0 +1,16 @@
+{
+  "clippy_command": "cargo +stable clippy -p rrrah-swap --all-targets --locked --offline -- -D warnings",
+  "clippy_exit": 0,
+  "test_command": "cargo +stable test -p rrrah-swap --locked --offline",
+  "test_exit": 0,
+  "passed": 24,
+  "failed": 0,
+  "ignored": 1,
+  "source_sha256": {
+    "crates/rrrah-swap/src/lib.rs": "33ec025d20e7300f6f1b7ce5da07db34162009b7a9c6dbfde04557c308a25608",
+    "crates/rrrah-swap/src/segmented.rs": "aa2703eae763d023543d9994a2e0b1f1ee0139ebd62279ff4e8c472496a7a87a",
+    "crates/rrrah-swap/tests/cancelled_restore.rs": "7259985e2b066dcd57c3c43477789b4d568344bbe6f9d9aa21627bf402f430aa",
+    "crates/rrrah-swap/tests/parallel_restore.rs": "1fa657890aa01aa1b14b0934052a742d1351a9501ee95a42639aef45d6807193",
+    "crates/rrrah-swap/tests/expired_cache_spill.rs": "829ccd364eb435a01da712a8585204dc03294a4bfa90449d915b2f458a15efcd"
+  }
+}

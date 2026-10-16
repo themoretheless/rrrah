@@ -1,0 +1,32 @@
+{
+  "psd_tools_version": "1.25.0",
+  "attrs_version": "25.3.0",
+  "operation": "topil(apply_icc=False).convert(RGBA)",
+  "cases": [
+    {
+      "fixture": "psd-tools-gray0.psd",
+      "source_sha256": "f7160dd9dea521cb05e586dd62cff3f7a2429b070b2aba38cdc71b5522e9217c",
+      "rgba_sha256": "6cc39c10d706f846c96f382752fdf260d3f2c9874a142726b73d077655e7a53e",
+      "pixels": 143600,
+      "different_channels": 0,
+      "icc_bytes": 432,
+      "alpha_zero": 123854,
+      "alpha_opaque": 2244,
+      "alpha_partial": 17502,
+      "distinct_alpha_codes": 254
+    },
+    {
+      "fixture": "psd-tools-gray0.psb",
+      "source_sha256": "99e7b4652b50e4b518e9f071bd630b3e73f3c874b5b0348db44fa911793ed1db",
+      "rgba_sha256": "6cc39c10d706f846c96f382752fdf260d3f2c9874a142726b73d077655e7a53e",
+      "pixels": 143600,
+      "different_channels": 0,
+      "icc_bytes": 432,
+      "alpha_zero": 123854,
+      "alpha_opaque": 2244,
+      "alpha_partial": 17502,
+      "distinct_alpha_codes": 254
+    }
+  ],
+  "scope": "independent original/native-reference qualification; does not execute Rust or Metal"
+}

@@ -1,0 +1,77 @@
+{
+  "status": "independent_full_precision_eac_oracle_prepared_not_production_support",
+  "references": {
+    "specification": "https://registry.khronos.org/DataFormat/specs/1.4/dataformat.1.4.pdf",
+    "ericsson": "https://github.com/Ericsson/ETCPACK/blob/master/source/etcdec.cxx",
+    "swiftshader": "https://swiftshader.googlesource.com/SwiftShader/+/HEAD/src/Device/ETC_Decoder.cpp"
+  },
+  "source_hashes": {
+    "ericsson_etcdec.cxx": "54f11eabcbd9d9fe6508e9b5bccac621fb6d43d7f1fab9db53dfa54748cfbb55",
+    "swiftshader_ETC_Decoder.cpp": "153750da61fa71d4eac2d58349512b7b01bd0cefc9d28b89c600d4194db0edb0",
+    "swiftshader_ETC_Decoder.hpp": "461b16246933d843476c1803f8bd0106b227df10ee45df8cc3d85bf02623e00d"
+  },
+  "qualification_controls": {
+    "unsigned_controls": 2,
+    "signed_controls": 3,
+    "ericsson": "all5 match specification",
+    "swiftshader": "unsigned2 pass; signed3 disagree due unsigned+4 bias and missing signed-128 adjustment",
+    "signed_expected_observed": [
+      {
+        "base_byte": 0,
+        "expected": 0,
+        "swiftshader": 4,
+        "ericsson": 0
+      },
+      {
+        "base_byte": 65,
+        "expected": 520,
+        "swiftshader": 524,
+        "ericsson": 520
+      },
+      {
+        "base_byte": 128,
+        "expected": -1016,
+        "swiftshader": -1020,
+        "ericsson": -1016
+      }
+    ]
+  },
+  "fixtures": {
+    "blocks": 4096,
+    "base_controls": 16,
+    "modifier_tables": 16,
+    "multipliers": 16,
+    "all_selectors_per_block": 8,
+    "output": "native11-bit integer values stored losslessly in little-endian i16 slots; unsigned and signed files separate",
+    "coverage": {
+      "u11le": {
+        "samples": 65536,
+        "minimum": 0,
+        "maximum": 2047,
+        "distinct_values": 494,
+        "nonzero_low_three_bits": 52508
+      },
+      "i11le": {
+        "samples": 65536,
+        "minimum": -1023,
+        "maximum": 1023,
+        "distinct_values": 493,
+        "nonzero_low_three_bits": 13722
+      }
+    }
+  },
+  "generator": "scripts/generate-eac-r11-oracles.py downloads pinned-hash Ericsson source into temporary directory, compiles reference only there, reverses specified16-bit reference expansion",
+  "limits": [
+    "No PKM/PVR/KTX EAC production path added yet",
+    "No claims from8-bit truncating decoder; signed SwiftShader source above excluded as correctness oracle",
+    "No GPU, load throughput or full-format qualification",
+    "Third-party reference code not linked or copied into production; only own generator/wrappers and authored fixture outputs retained"
+  ],
+  "files_sha256": {
+    "tests/fixtures/raster/eac-r11-block-oracles.bin": "49a9176dc00ddb322967724640d34eda41e79212e26733daebd7280cac45e678",
+    "tests/fixtures/raster/eac-r11-block-oracles.u11le": "c1e7b3c92e5aa3749fe74d39e63b693c876fccb4574b8e10c6ae74d3ae92edd4",
+    "tests/fixtures/raster/eac-r11-block-oracles.i11le": "94531b830aa82fe5ad511fb5ee4c863a2fb0a667b21c053503ff66a26bc20ec6",
+    "scripts/generate-eac-r11-oracles.py": "54b88048daccd9b20bc0ef62c75f7d190d31b24047b5524945c7ccc23d547709"
+  },
+  "follow_up": "../pkm-owned-eac11-2026-10-16/result.json implements native Rust EAC and PKM2 container hookup"
+}

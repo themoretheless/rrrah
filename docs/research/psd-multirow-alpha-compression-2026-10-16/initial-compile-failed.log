@@ -1,0 +1,13 @@
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+error: character constant must be escaped: `\t`
+   --> crates/rrrah-layered/src/psd.rs:571:40
+    |
+571 |             let f: Vec<_> = row.split('    ').collect();
+    |                                        ^^^^
+    |
+help: escape the character
+    |
+571 |             let f: Vec<_> = row.split('\t').collect();
+    |                                        ++
+
+error: could not compile `rrrah-layered` (lib test) due to 1 previous error

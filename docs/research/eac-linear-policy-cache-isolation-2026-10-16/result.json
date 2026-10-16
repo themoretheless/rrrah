@@ -1,0 +1,58 @@
+{
+  "status": "eac_explicit_linear_policy_isolated_in_ram_and_swap_keys",
+  "source_observation": "RasterDisplayKey already includes assume_untagged_srgb and assume_untagged_linear_srgb; production behavior unchanged",
+  "changes": [
+    "Extend resident policy-isolation regression from TIFF/PFM to all four PKM EAC kinds",
+    "Add expiration/spill/restore policy boundary regression for kinds5,6,7,8"
+  ],
+  "ram": {
+    "cases": 6,
+    "formats": [
+      "TIFF",
+      "PFM",
+      "EAC R unsigned",
+      "EAC RG unsigned",
+      "EAC R signed",
+      "EAC RG signed"
+    ],
+    "checks": [
+      "Strict request misses explicitly-qualified cache entry and validates through decoder",
+      "Failed strict request preserves original resident pixel allocation",
+      "Original qualified request shares cached pixel allocation without repeat decode",
+      "Final memory credit0"
+    ]
+  },
+  "swap": {
+    "eac_kinds": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "ram_limits": {
+      "count": 1,
+      "ttl": "zero"
+    },
+    "checks": [
+      "Fixture explicitly unpins selected resident then expires/spills to immutable swap",
+      "Unqualified request and encoded-sRGB-only request each validate and refuse, not reuse qualified swap pixels",
+      "Qualified swap disk quota remains unchanged; refused requests perform0 successful swap reads",
+      "Original linear-qualified request restores bit-identical float32 output without decoder fallback",
+      "One successful swap read per kind; final memory credit0; explicit shutdown/cache drop removes temporary directory"
+    ],
+    "policy_refusals": 8,
+    "successful_qualified_restores": 4
+  },
+  "viewer_tests": {
+    "passed": 252,
+    "failed": 0,
+    "ignored": 71
+  },
+  "limits": [
+    "Test/source audit only; existing cache key was correct",
+    "EAC primaries still require explicit policy; test does not provide native producer color calibration",
+    "Artificial unpin used only to exercise TTL swap state, not a claim that failed foreground loads unpin visible images",
+    "No new GPU/physical HDR/NVIDIA or speed qualification"
+  ],
+  "source_sha256": "0e389fe05d73120cc61b476780197f795dc9752a18778ef06f6921e62715ca56"
+}

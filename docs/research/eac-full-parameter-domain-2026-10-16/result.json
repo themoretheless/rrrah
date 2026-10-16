@@ -1,0 +1,70 @@
+{
+  "status": "full_eac_header_parameter_domain_and_pkm_float_transport_verified",
+  "oracle": "Pinned original Ericsson decoder, test-only, generated with scripts/generate-eac-r11-oracles.py --full-bases",
+  "block_domain": {
+    "bases": 256,
+    "tables": 16,
+    "multipliers": 16,
+    "unique_header_combinations": 65536,
+    "all_eight_selectors_present_per_block": true,
+    "sign_modes": 2,
+    "native_samples_compared": 2097152,
+    "coverage": {
+      "u11le": {
+        "samples": 1048576,
+        "distinct": 2048,
+        "minimum": 0,
+        "maximum": 2047
+      },
+      "i11le": {
+        "samples": 1048576,
+        "distinct": 2047,
+        "minimum": -1023,
+        "maximum": 1023
+      }
+    }
+  },
+  "container_domain": {
+    "pkm_kinds": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "size_per_kind": [
+      1024,
+      1024
+    ],
+    "source_blocks_per_kind": 65536,
+    "red_stream": "full header corpus",
+    "green_stream": "next-block cyclic shift of same corpus",
+    "decoded_pixels_checked": 4194304,
+    "independent_R_G_sample_comparisons": 6291456,
+    "total_rgba_components_checked": 16777216,
+    "normalization_reference": "independent integer oracle normalized in f64 then rounded to f32; exact bits compared",
+    "defaults": "missing G/B positive0 and alpha1 bits checked",
+    "output_credit_per_kind": 16777216,
+    "final_credit_per_kind": 0
+  },
+  "texture_lib": {
+    "passed": 88,
+    "failed": 0,
+    "ignored": 3
+  },
+  "compressed_fixture_bytes": 2651120,
+  "changes": "Full-domain fixture option and regressions only; production EAC decoder unchanged",
+  "limits": [
+    "Every base/table/multiplier combination and selector value covered; not all48-bit selector arrangements for every header",
+    "Synthetic oracle corpus, not independent producer-file corpus or full PKM format qualification",
+    "Source/reference buffers and fixture inflation outside output-only budget",
+    "No new Metal/NVIDIA/physical HDR or throughput claim"
+  ],
+  "files_sha256": {
+    "tests/fixtures/raster/eac-r11-full-oracles.bin.zlib": "6bc6583b10d49b6b8dd14ce63a3f61f2f9893f14bcf057b4311959bacd670b3d",
+    "tests/fixtures/raster/eac-r11-full-oracles.u11le.zlib": "824b7e9ce2ea1efcce41e00272f5c325bfd58c46c20fbf0b317bbdced1de2041",
+    "tests/fixtures/raster/eac-r11-full-oracles.i11le.zlib": "a8de393679bb562c80d30156c1c7e4736a9ed1a1b169bcdffc4a2daa334996de",
+    "scripts/generate-eac-r11-oracles.py": "89b4b5cd1692391da56a9226a596e5061a4d11602f22064fa8e157c04e231d76",
+    "crates/rrrah-texture/src/eac.rs": "dc763ad809c49ffeab1385cee212bd31b047f0c9536c4513897c72356613dcfa",
+    "crates/rrrah-texture/src/pkm.rs": "23bf116e7d7cab9068388368242ea39d0a322e00be697e7d0570ecb65231295b"
+  }
+}

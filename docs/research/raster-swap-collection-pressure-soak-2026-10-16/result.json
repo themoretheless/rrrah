@@ -1,0 +1,70 @@
+{
+  "status": "two_minute_scale_pressure_runs_passed",
+  "setup": {
+    "objects": 256,
+    "pixels_per_object": 16384,
+    "pixel_bytes_per_object": 65536,
+    "managed_root_bytes": 131072,
+    "permanent_pressure_bytes": 65536,
+    "disk_payload_bytes": 16793600,
+    "disk_count_limit": 256,
+    "queue_bytes": 65536,
+    "queue_count": 1,
+    "duration_per_run_seconds": 60
+  },
+  "runs": [
+    {
+      "run": "final",
+      "seconds": 60.013219209,
+      "objects": 256,
+      "cycles": 276499,
+      "verified_pixel_bytes": 36241276928,
+      "pressure_refusals": 276499,
+      "retries": 276499,
+      "peak": 131072,
+      "final": 0
+    },
+    {
+      "run": "first-pass",
+      "seconds": 60.013940167,
+      "objects": 256,
+      "cycles": 353138,
+      "verified_pixel_bytes": 46286503936,
+      "pressure_refusals": 353138,
+      "retries": 353138,
+      "peak": 131072,
+      "final": 0
+    }
+  ],
+  "invariants": [
+    "Every restored pixel checked against source key and pixel ordinal",
+    "Shared external owner keeps full budget after original frame drops",
+    "Next restore returns typed capacity refusal without removing disk entry",
+    "Pre-cancelled restore does not publish",
+    "After clone release next restore succeeds with exact pixels",
+    "Disk usage unchanged at every cycle; no errors; queue credit zero",
+    "Final root used zero and peak exactly131072",
+    "Explicit shutdown joins worker; cache drop removes temporary directory"
+  ],
+  "checks": {
+    "cache_lib": {
+      "passed": 142,
+      "failed": 0,
+      "ignored": 3
+    },
+    "swap_lib": {
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    },
+    "strict_cache_clippy": "90 diagnostics outside added soak test; three new chunk traversal diagnostics fixed"
+  },
+  "test_correction": "Initial run completed pressure loop but incorrectly assumed Drop synchronously joins worker; use existing shutdown API before asserting directory removal. Initial log retained. First pass precedes equivalent as_chunks iterator cleanup; final pass uses current source.",
+  "limits": [
+    "Warm macOS filesystem cache; verified payload bytes are not physical disk throughput",
+    "256 synthetic raster objects, not end-to-end huge format collection or slow physical disk",
+    "One-minute runs test repeated pressure/refusal/retry and ownership, not hours-long stability",
+    "No throughput optimization, new GPU/HDR, or complete goal claim"
+  ],
+  "source_sha256": "6e350776c93ef2c898bf1878c7d10704e3a5a28711af67a21f917c1708415639"
+}

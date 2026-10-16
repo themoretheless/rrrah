@@ -1,0 +1,30 @@
+{
+  "status": "current_default_features_all_targets_check_passed",
+  "command": "cargo +stable check --workspace --all-targets --offline",
+  "exit_code": 0,
+  "scope": "Current dirty-tree compilation/type checking of all workspace targets eligible under resolved default features",
+  "declared_target_inventory": {
+    "lib": 20,
+    "bin": 2,
+    "example": 120,
+    "test": 235,
+    "custom-build": 1,
+    "bench": 5
+  },
+  "declared_feature_gated_targets": 71,
+  "inventory": "declared-targets.json",
+  "limits": [
+    "Inventory is declared targets, not a claim that every feature-gated target was checked",
+    "Cargo check does not execute tests or fully link/release binaries",
+    "No all-features check, hardware/CUDA/NVIDIA runtime or physical HDR qualification",
+    "Formatting and Clippy are independent known open gates"
+  ],
+  "files_sha256": {
+    "Cargo.toml": "98699e390c0096657c250bde17478d3a146bf2f9bfd47643dd1a04cf3248667b",
+    "Cargo.lock": "e5c7c46052e0fa86cc9bf71e780b647363ac2a2d63370ada0b31e5a74a1dd783",
+    "rust-toolchain.toml": "0c9b811689c2817b6404b2858b3e8f7aebf513af379da94774521025b7008863",
+    "crates/rrrah-texture/src/pvr.rs": "c3fc22e835bc76c717cffd2b6897b3d1470c2ecaec2912f4095f470a80ed1b78",
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "146db129385c8faceb57b480a5cfc0d97085051e12609f2ca9092789836264b5",
+    "crates/rrrah-scientific/src/fits.rs": "fdfb46905533a492e652c2009e5a312a764307c7db6a32c7ac6b9791f300a5f4"
+  }
+}

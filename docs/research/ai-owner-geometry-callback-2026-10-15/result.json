@@ -1,0 +1,43 @@
+{
+  "change": "Explicit RRRAH_AI_OWNER_GEOMETRY_PROOF adds source-bound geometry-only validator to owner storage. Command-to-source map admitted once; lookup and selected triangle projection consume prepaid21-unit callbacks; mapping setup and export share ordinary40M. Original samples retained.",
+  "tests": {
+    "passed": 285,
+    "ignored": 12,
+    "failed": 0,
+    "controls": [
+      "Successful callback preserves pixel",
+      "Refusal, NaN, negative deficit, minted work, cancellation inside callback and consumed quota refuse entire pixel"
+    ]
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "validated_owned_fragments": 632522,
+    "groups": 666,
+    "max_computed_projection_deficit": 2.7558559112020865e-10,
+    "geometry_setup": 15619,
+    "geometry_traversal_export": 39240805,
+    "geometry_total": 39256424,
+    "geometry_remaining": 743576,
+    "limit": 40000000,
+    "original_native_exact": true,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "source_work": 6993741,
+    "source_allowance": 16000000
+  },
+  "sources": {
+    "vendor/hayro/src/native_spatial.rs": "033b3869dde85c7b61e82483f3befca56e49fae9e72aaf5ff5573419ea9460ff",
+    "vendor/hayro/src/knockout_interpreter.rs": "d6c598287b02e69a245d9671f3464c84e510eb612d0e1ef865dbda35a6a973a1"
+  },
+  "limitations": [
+    "Geometry callbacks run independently of color evaluation but current route tags are still obtained after successful original sampling.",
+    "Computed maximum is a diagnostic raw deficit, not an outward mathematical error bound.",
+    "All source color samples retained; ordinary4M and complete AI page remain unresolved.",
+    "No ownership/clipping/color-range/profile/display acceptance implied."
+  ]
+}

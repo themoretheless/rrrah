@@ -1,0 +1,57 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "KTX1 selected compressed RGBA8 and native RGBA8/RGBA16/RGBA32F outputs use admitted PixelBuffer",
+    "Unbudgeted compatibility output allocation is fallible",
+    "All 60 selected mip native-byte comparisons run at exact output budget; one-byte-short admission refuses; shared frame clone retains credit until last owner drops",
+    "Every truncated chain prefix refuses InvalidKtx before pixel admission with zero output budget"
+  ],
+  "checks": {
+    "texture": {
+      "passed": 62,
+      "failed": 0
+    },
+    "texture_clippy": "lib/tests --no-deps -D warnings passed",
+    "decode": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "viewer": {
+      "passed": 248,
+      "failed": 0,
+      "ignored": 69
+    },
+    "pipeline": {
+      "states": 80,
+      "ktx_states": 60,
+      "ram_full_budget_hits": 80,
+      "swap_writes": 80,
+      "swap_reads": 80,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_and_rgba16f_readbacks": 480,
+      "duration_seconds": 2.33
+    }
+  },
+  "scope_limits": [
+    "KTX native sample fixtures are authored; BC samples use independent DDS block oracles; this is not full independent KTX loader qualification",
+    "Output budget covers selected pixel storage; metadata HashSet allocation remains outside shared admission, bounded by 4 MiB metadata limit",
+    "Readbacks do not qualify physical HDR display luminance",
+    "Cube/array/volume, other storage, full live window behavior remain pending",
+    "NVIDIA deferred by user",
+    "No performance speedup claim"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log",
+    "viewer-tests": "viewer-tests.log"
+  },
+  "follow_up": "Metadata admission limitation addressed by ../ktx-managed-metadata-2026-10-16/result.json; original check results remain historical."
+}

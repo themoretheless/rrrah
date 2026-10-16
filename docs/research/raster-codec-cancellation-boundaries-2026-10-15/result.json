@@ -1,0 +1,53 @@
+{
+  "status": "native1050_metal24_eight_cases_passed",
+  "change": "check generation after metadata routing, immediately before codec construction, immediately after construction before output reservation/conversion",
+  "native_session": 50850,
+  "source_sha256": "69c8414f53412f473a10c88674c282d7010482bbad5ab1d9ff904dd38101bd10",
+  "audit_finding": "image0.25.10 AvifDecoder::new invokes dav1d send_data and reads decoded primary/alpha before decoder.dimensions and our output reservation",
+  "next_requirement": "native selected-primary ispe preflight with AV1 dimension cross-check and pre-constructor memory admission; metadata declared dimensions alone cannot bound untrusted coded stream",
+  "limitations": [
+    "no interrupt inside third-party constructor",
+    "does not establish deadline/latency or whole-codec memory bound",
+    "current AVIF output reservation is after actual codec decode"
+  ],
+  "backend_limit_audit": {
+    "dav1d": "0.11.1",
+    "api": "Settings::set_frame_size_limit(u32)",
+    "image_wrapper": "image0.25.10 AvifDecoder::new uses dav1d::Decoder::new() without caller supplied settings",
+    "source_of_truth": "installed Cargo.lock-backed registry source",
+    "implication": "a strict pre-decode pixel cap requires an adapter exposing dav1d settings or equivalent backend limit; trusting ispe alone is insufficient",
+    "next_checks": [
+      "encoded dimensions larger than declared ispe must refuse before oversized picture allocation",
+      "independent 8/10-bit straight and prem integer/prepared oracles remain exact",
+      "cancellation and credit release across primary and alpha decode",
+      "account coded data copy, ICC and conversion overlap; avoid treating frame_size_limit as whole decoder byte limit"
+    ]
+  },
+  "native": {
+    "passed": 1050,
+    "failed": 0,
+    "ignored": 73,
+    "exit_code": 0
+  },
+  "metal": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "exit_code": 0,
+    "cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ]
+  },
+  "source_drift": false,
+  "subsequent_source_change": {
+    "report": "../avif-backend-pixel-limit-2026-10-15/result.json",
+    "scope": "local image dependency patch enforces AV1 primary and alpha pixel area cap before picture allocation; previous results frozen"
+  }
+}

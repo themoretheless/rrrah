@@ -1,0 +1,44 @@
+{
+  "status": "animation_pause_resume_wired_into_viewer",
+  "shortcut": "P without Control/Super/Alt, nonrepeating key press",
+  "changes": [
+    "Pause removes deadline and stores remaining displayed-frame delay",
+    "Resume schedules only remaining delay, excluding paused wall-clock time",
+    "Pause before presentation waits and preserves full selected-frame delay",
+    "Pause during pending next-frame load survives ready/presentation without further advancement",
+    "Finite/infinite play counters preserved; stale generation cannot toggle another request",
+    "Viewer status reports paused state even when a pending frame completes",
+    "README documents autoplay/pause and10ms floor"
+  ],
+  "checks": {
+    "clock_tests_passed": 4,
+    "original_clock_scenarios": 48,
+    "new_controls": [
+      "30ms elapsed of100ms ->70ms remaining after10-second pause",
+      "stale generation toggle inert",
+      "pause before first presentation retains rational1000over60 delay",
+      "pause while next frame pending survives ready/presentation",
+      "finite-loop count survives pause and stops correctly",
+      "reset/invalid/static/single-frame inputs retain existing behavior"
+    ],
+    "viewer_passed": 258,
+    "viewer_failed": 0,
+    "viewer_ignored": 72
+  },
+  "limits": [
+    "Native keyboard event-loop and physical display interaction remain unqualified",
+    "A frame request already in flight may complete and present once while paused; subsequent advancement remains stopped",
+    "Manual frame/gallery navigation resets playback, including pause state",
+    "Finished finite animation is restarted by navigation, not by toggling pause",
+    "No wall-clock FPS, physical HDR/NVIDIA or complete100-format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-app/src/raster_playback.rs": "9af68a7a81d4d139617bcde2d4e558fbcd17758bc484dbf4287ecbd94f5d9dcd",
+    "crates/rrrah-app/src/main.rs": "217b09f75a8bc71f2ed93c760feb56f78b667dc60cf79a8855a4b28576d04963",
+    "README.md": "ec8e3b65268facf6ae5b8a8cba94620649837a19fa59b16b5c3aa9141ec76a44"
+  },
+  "follow_up": {
+    "report": "../animation-manual-navigation-recovery-2026-10-16/result.json",
+    "scope": "Manual same-source frame navigation now preserves pause and resets repeat count; invalid-boundary navigation leaves playback unchanged"
+  }
+}

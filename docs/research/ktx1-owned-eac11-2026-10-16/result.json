@@ -1,0 +1,64 @@
+{
+  "status": "ktx1_owned_eac_r11_rg11_implemented",
+  "references": [
+    "https://registry.khronos.org/KTX/specs/1.0/ktxspec.v1.html",
+    "https://github.khronos.org/KTX-Software/pyktx/_modules/pyktx/gl_internalformat.html"
+  ],
+  "changes": [
+    "Native compressed EAC internal formats0x9270..0x9273 with matching RED/RG base",
+    "Owned EAC11 reconstruction to direct managed float32 R/G, B0 alpha1; intrinsic signed/unsigned normalization",
+    "Both endian headers preserve byte-oriented compressed blocks",
+    "Color remains LinearRgbUnspecified unless explicit assume_untagged_linear_srgb policy; encoded sRGB assumption alone has no effect",
+    "Float output cap uses16 bytes/pixel, not compressed typeSize1"
+  ],
+  "fixtures": {
+    "files": 32,
+    "cases": 128,
+    "formats": 4,
+    "byte_orders": 2,
+    "orientations": 4,
+    "mips": 4,
+    "oracle": "Independent pinned Ericsson-derived11-bit samples reused from PVR wrappers; KTX-specific endian header and mip lengths assembled by Python; no production decoding used to generate expected pixels"
+  },
+  "checks": {
+    "native_matrix": 220,
+    "exact_short_clone_ownership": true,
+    "all_prefixes_rejected_before_output_admission": true,
+    "invalid_base_refuses_at_zero_budget": true,
+    "texture_passed": 90,
+    "texture_ignored": 3,
+    "decode_passed": 190,
+    "decode_ignored": 3,
+    "viewer_passed": 252,
+    "viewer_ignored": 71,
+    "cpu_states": 1300,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_states": 1300,
+    "metal_readbacks": 7800,
+    "ram_pressure_hits": 1300,
+    "swap_writes": 1300,
+    "swap_reads": 1300,
+    "swap_errors": 0,
+    "swap_dropped": 0,
+    "blocked_decoder_prefetch": true,
+    "final_memory_credit": 0
+  },
+  "limits": [
+    "Authored wrappers, not independent producer files",
+    "RED/RG support introduced only for compressed EAC; ordinary R/RG storage still unsupported",
+    "Array/cube/volume/swizzle/associated alpha/other KTX codecs remain pending",
+    "Explicit linear-sRGB interpretation of data channels is caller policy, not inferred physical color",
+    "Offscreen readback preservation is not physical HDR calibration, NVIDIA or full100-format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/ktx.rs": "7904dc5d84d10f29fbdc8430de828ed367ed7c2d4a817b90ac0d4f56183124e4",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "88d93aca5cc869d1fe5965cd10bc84263a5819797b5d3299ac9370c6c3b9791f",
+    "scripts/generate-ktx-eac-fixtures.py": "3668183a4521a7470abc7d54009ef0cecd3c3eeb20dd1485e09d262f8a4cc0bd",
+    "tests/fixtures/raster/ktx-eac-manifest.tsv": "ee82e97e78d7ed711ef3f68eb13a4e9f2961f2f5094d0025b0af503634acb397"
+  },
+  "follow_up": {
+    "report": "../ktx-pkm-eac-policy-isolation-2026-10-16/result.json",
+    "scope": "All128 selected KTX mip states verified against color-policy cache contamination in foreground/prefetch after zero-TTL spill"
+  },
+  "native_rg_follow_up": "../ktx1-native-r-rg-2026-10-16/result.json"
+}

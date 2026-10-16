@@ -1,0 +1,56 @@
+{
+  "status": "FITS added to native scientific array RAM/swap/Metal SDR/HDR verification",
+  "states": {
+    "nrrd": 64,
+    "mrc": 40,
+    "fits": 20,
+    "total": 124,
+    "fits_negative": 2
+  },
+  "reference": "FITS window values from independent Astropy .window-rgba32f oracle files; other arrays retain pynrrd/mrcfile sample oracle plus explicit window reference",
+  "fits_coverage": [
+    "native int64/float64 retention until f64 window math",
+    "BSCALE/BZERO scaled and unsigned conventions",
+    "global section selection across multiple HDUs",
+    "BLANK and nonfinite planes explicitly refused, managed memory unchanged"
+  ],
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "readbacks": 744,
+    "ram_pressure_hits": 124,
+    "swap_writes": 124,
+    "swap_reads": 124,
+    "swap_errors": 0,
+    "swap_dropped": 0,
+    "decoder_blocked_on_prefetch": true,
+    "final_managed_bytes": 0,
+    "seconds": 5.2
+  },
+  "tests": {
+    "cpu_targeted": {
+      "passed": 1,
+      "failed": 0
+    },
+    "cpu_group": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 3
+    },
+    "metal": {
+      "passed": 1,
+      "failed": 0
+    },
+    "focused_rustfmt": "passed"
+  },
+  "limitations": [
+    "Small authored independent sources, not large-volume throughput or clinical presentation proof",
+    "Windowed pixels0..1; no new above1 HDR or physical luminance claim",
+    "No new nonzero TTL matrix; separate DICOM/cache tests retain that evidence",
+    "Full FITS WCS/compressed and100format qualification remains incomplete"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "8f973c6efb15803e96d25f38516991a4145acc65417243f65301a57a107fc586",
+    "crates/rrrah-scientific/src/fits.rs": "2a3308f184f5fd33b2e803ea84b0d2915795d0b2f0107f5c741ab62f43af7c63"
+  }
+}

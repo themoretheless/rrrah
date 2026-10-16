@@ -1,0 +1,102 @@
+{
+  "status": "experimental retained opt-in:299 tests pass default/enabled; exact real controls; bounded geometry progress and one positive timing pair",
+  "flag": "RRRAH_AI_TILE_Y_EDGES",
+  "implementation": "Only explicit bounded tile traversal. Stable original edge order; inclusive Y overlap retains boundary touches. Two counted/cancellable passes, admitted exact vector capacity, no crossing-index remap because crossings are coordinate pairs. Existing work and memory limits unchanged.",
+  "source_sha256": "14d145ecd6925dddd6e1778d7ab57d9f7c1f4450650f9e2360cd3430d2fc7f37",
+  "test_log": "/tmp/ai-tile-y-edges-all.log",
+  "tests": {
+    "default": {
+      "passed": 299,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-tile-y-edges-all.log"
+    },
+    "enabled": {
+      "passed": 299,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-tile-y-edges-enabled-all.log"
+    }
+  },
+  "limitations": "Disabled by default. One pixel timing control only;147,60 still fails ordinary4M and diagnostic geometry40M. Full-page fidelity, production/viewer and broad performance remain unqualified.",
+  "real4m": {
+    "log": "/tmp/ai-tile-y-edges-real4m.log",
+    "typed_rgb8": {
+      "147,59": [
+        205,
+        151,
+        128
+      ],
+      "147,57": [
+        187,
+        108,
+        78
+      ],
+      "138,34": [
+        219,
+        185,
+        167
+      ]
+    },
+    "source_spent": [
+      3831159,
+      1848735,
+      254999,
+      4000000
+    ],
+    "147,60": "source budget exhausted; geometry2503579 remaining; output refused",
+    "final_credit": 0
+  },
+  "geometry_profile": {
+    "log": "/tmp/ai-tile-y-edges-geometry16m.log",
+    "terminal": true,
+    "source_spent": 4289844,
+    "source_limit": 16000000,
+    "geometry_remaining": 0,
+    "geometry_limit": 40000000,
+    "fragments": 688123,
+    "baseline_fragments": 661243,
+    "additional_fragments": 26880,
+    "final_credit": 0,
+    "output_complete": false,
+    "scope": "Diagnostic16M source; still no ordinary4M or fullpage acceptance"
+  },
+  "timing": {
+    "rows": [
+      {
+        "log": "/tmp/ai-tile-y-edges-abba/1-baseline.log",
+        "elapsed_ns": 171464000
+      },
+      {
+        "log": "/tmp/ai-tile-y-edges-abba/2-filtered.log",
+        "elapsed_ns": 165325875
+      },
+      {
+        "log": "/tmp/ai-tile-y-edges-abba/3-filtered.log",
+        "elapsed_ns": 129184792
+      },
+      {
+        "log": "/tmp/ai-tile-y-edges-abba/4-baseline.log",
+        "elapsed_ns": 144211167
+      }
+    ],
+    "ratios": [
+      0.9642016691550412,
+      0.8958029720402998
+    ],
+    "outputs_exact": true,
+    "scope": "One sequential same-binary flag-off/on/on/off control147,59; not broad speed qualification"
+  },
+  "grid8_control": {
+    "log": "/tmp/ai-tile-y-edges-grid8-real4m.log",
+    "terminal": true,
+    "source_limit": 4000000,
+    "source_spent": 4000000,
+    "geometry_remaining": 26989,
+    "fragments": 643597,
+    "output_complete": false,
+    "final_credit": 0,
+    "decision": "Grid8 plus Y filtering still fails both-budget acceptance; do not promote grid or limits."
+  },
+  "next": "Evaluate exact owner-coverage change tracking to avoid repeated owner resolution for unchanged geometric identity. Must retain original max-owner priority, observe every fragment and debit actual transition work; no source colors cached by owner alone."
+}

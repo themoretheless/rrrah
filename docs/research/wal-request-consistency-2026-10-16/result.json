@@ -1,0 +1,44 @@
+{
+  "status": "validated_bug_fix",
+  "problem": "Direct decode_using_game_palette did not reject nonzero image_index; unlike explicit palette API and common router, it could decode base mip for unsupported selection. It also lacked an early cancellation guard before palette I/O.",
+  "changes": [
+    "Shared request check for explicit palette, game palette and internal index conversion paths",
+    "Unsupported image_index and cancelled request refuse before palette I/O or pixel admission"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 74,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "unsupported_indices": [
+      1,
+      3,
+      4,
+      "usize::MAX"
+    ],
+    "paths_tested": 3,
+    "zero_budget_used_and_peak": 0,
+    "cancelled_empty_source_missing_palette": "Cancelled, zero budget used/peak",
+    "decode_filter_wal": {
+      "passed": 3,
+      "failed": 0,
+      "test_names": [
+        "avif_color::tests::block_and_reference_walks_cancel_midstream_and_retry",
+        "raster_corpus::wal_with_explicit_palette_matches_pillow_and_preserves_transparent_rgb",
+        "raster_corpus::wal_game_tree_resolves_palette_through_public_router"
+      ]
+    }
+  },
+  "scope_limits": [
+    "Common viewer router already rejected nonzero WAL indices; bug affected direct game-palette API",
+    "WAL still supports base mip only",
+    "No new Metal run for request-guard-only change; prior pixel pipeline evidence remains ../sti-inflate-admission-2026-10-16/result.json",
+    "No full 100-format qualification claim"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-filtered-tests": "decode-filtered-tests.log"
+  }
+}

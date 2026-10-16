@@ -1,0 +1,86 @@
+{
+  "status": "pvr3_bc1_bc2_bc3_implemented",
+  "specification": "https://docs.imgtec.com/specifications/pvr-file-format-specification/html/topics/pvr-header-format.html",
+  "changes": [
+    "Accept PVR v3 pixel formats7,9,11 with unsigned normalized byte channel type and little-endian header",
+    "Use owned DDS BC1/BC2/BC3 reconstruction directly into managed output",
+    "Generalize shared independent-block crop/orientation loop with existing owned ETC1",
+    "Keep DXT2/DXT4 formats8/10 refused; no implicit premultiplied-alpha reinterpretation"
+  ],
+  "fixtures": {
+    "files": 24,
+    "selected_mips": 96,
+    "codecs": [
+      "BC1",
+      "BC2",
+      "BC3"
+    ],
+    "colors": [
+      "linear",
+      "srgb"
+    ],
+    "orientations": 4,
+    "dimensions": [
+      [
+        9,
+        5
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "oracle": "Independent Pillow12.3.0 RGBA block oracles; Python wraps compressed blocks and applies crop/orientation"
+  },
+  "checks": {
+    "pvr_native_mip_cases": 186,
+    "exact_short_shared_ownership": "all cases include retained metadata; all-prefix truncation checks cover new files",
+    "associated_storage": "DXT2/DXT4 reject before zero-budget pixel allocation",
+    "texture_lib": {
+      "passed": 81,
+      "failed": 0,
+      "ignored": 1
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "app_cpu": {
+      "states": 452,
+      "swap_writes": 452,
+      "swap_reads": 452,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 452,
+      "readbacks": 2712,
+      "swap_writes": 452,
+      "swap_reads": 452,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "Compressed big-endian PVR unsupported",
+    "Legacy/cube/array/volume and other compressed codecs remain open",
+    "Premultiplied DXT2/DXT4 intentionally refuse pending correct supported semantics",
+    "No end-to-end speedup, physical HDR, NVIDIA or full100-format claim"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/pvr.rs": "20fb281a770646392a2e6b7c3cc52509d24e2962925fbd92ca753e58189f70c9",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "0faa722201a114e0bb32b3c11d740a9903c5f458d2f75e718cd1dbb8e31d15ce",
+    "scripts/generate-pvr-bc-fixtures.py": "4a6cbc2dd1dacb3f83604ce033ee1dcb540d5e31464e2c865c3e4fed0af039c1",
+    "tests/fixtures/raster/pvr-bc-manifest.tsv": "aa781d6105709234b9e873a2b45642b742efb690960a64ed0ada297dac700023"
+  },
+  "follow_up": "../pvr3-linear-associated-bc-2026-10-16/result.json adds linear DXT2/DXT4; original report records earlier refusal boundary"
+}

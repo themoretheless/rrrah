@@ -1,0 +1,41 @@
+{
+  "scope": "Native AI test compositor; production AI route and whole-page color acceptance remain unqualified",
+  "sources": {
+    "vendor/hayro/src/native_spatial.rs": "b933777b0b5e1d441994ca683cf225a993408b8d239f310c6982e1ea33a63da1",
+    "vendor/hayro/src/native_blend.rs": "797602a719903f200ffad34f1f79331dba4a0b23cdba2d3bd1c866ce2dde04de",
+    "vendor/hayro/src/knockout_interpreter.rs": "544170f1882a11ec45cf1c9549d54d901b1aa732fb617e4897dd67c3ca93230b",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "e65fcd2fece6897fe3bce7172e18cf8a50020113438744aa719dc6889e37b1a3"
+  },
+  "unit_tests": {
+    "passed": 267,
+    "failed": 0,
+    "ignored": 12
+  },
+  "pixel": {
+    "x": 138,
+    "y": 36,
+    "completed": true,
+    "deadline": false,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "geometry_work": 29114591,
+    "geometry_limit": 40000000,
+    "color_limit": 4000000,
+    "hidden_fragments": 262210
+  },
+  "policy": "Only qualified opaque root tail, Normal blend, no masks, matching native blending coordinates; otherwise preserve full lifecycle",
+  "full_page": {
+    "completed_pixels": 13688,
+    "total_pixels": 74046,
+    "refusal_pixel": [
+      143,
+      45
+    ],
+    "deadline": false,
+    "max_color_work": 4000000,
+    "color_limit": 4000000,
+    "elapsed_seconds": 100.33,
+    "final_credit": 0,
+    "published": false
+  }
+}

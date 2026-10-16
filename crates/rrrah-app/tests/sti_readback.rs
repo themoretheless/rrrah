@@ -65,10 +65,29 @@ fn sti_images_preserve_native_and_prepared_samples_ram_swap_and_metal() {
         ("rgb32-zlib.sti", 1, 16),
     ] {
         for index in 0..count {
-            let budget = rrrah_core::MemoryBudget::new(4096);
+            let compressed = name.contains("-zlib");
+            // The pinned zlib backend admits 64 KiB of state/history in
+            // addition to the source and decoded planes.
+            let budget = rrrah_core::MemoryBudget::new(if compressed {
+                4096 + 64 * 1024
+            } else {
+                4096
+            });
             let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
-            request.memory_budget = Some(budget.clone());
             request.image_index = index;
+            if compressed {
+                let short = rrrah_core::MemoryBudget::new(4096);
+                request.memory_budget = Some(short.clone());
+                let error = rrrah_decode::decode_raster(&request).unwrap_err();
+                assert!(matches!(
+                    error,
+                    rrrah_decode::RasterDecodeError::Source(rrrah_decode::DecodeError::Memory(
+                        rrrah_core::BufferError::Capacity { .. }
+                    ))
+                ));
+                assert_eq!(short.used(), 0);
+            }
+            request.memory_budget = Some(budget.clone());
             let native = rrrah_decode::decode_raster(&request).unwrap();
             let raw = std::fs::read(fixtures.join(format!("{name}-image-{index}.rgba"))).unwrap();
             let pixels = if bits == 8 {

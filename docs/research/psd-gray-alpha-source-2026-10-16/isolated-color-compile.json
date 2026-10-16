@@ -1,0 +1,32 @@
+{
+  "command": [
+    "rustc",
+    "+stable",
+    "--test",
+    "--edition=2024",
+    "/tmp/rrrah-color-current-harness.rs",
+    "-L",
+    "dependency=/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps",
+    "-o",
+    "/tmp/rrrah-color-current-tests",
+    "--extern",
+    "image=/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/libimage-e3c8cdd7047705ad.rlib",
+    "--extern",
+    "rrrah_core=/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/librrrah_core-ee1a6c239ef50b53.rlib",
+    "--extern",
+    "rrrah_vector=/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/librrrah_vector-7de428b5621f8e1b.rlib",
+    "--extern",
+    "moxcms=/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/libmoxcms-80b8d80a5121bcfe.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/libthiserror-3f0040e8cbcd5e5c.rlib",
+    "-L",
+    "native=/opt/homebrew/Cellar/dav1d/1.5.4/lib"
+  ],
+  "artifacts": {
+    "image": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/libimage-e3c8cdd7047705ad.rlib",
+    "rrrah_core": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/librrrah_core-ee1a6c239ef50b53.rlib",
+    "rrrah_vector": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/librrrah_vector-7de428b5621f8e1b.rlib",
+    "moxcms": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/libmoxcms-80b8d80a5121bcfe.rlib",
+    "thiserror": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/libthiserror-3f0040e8cbcd5e5c.rlib"
+  }
+}

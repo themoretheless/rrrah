@@ -782,3 +782,8 @@ Current normalviewer offlinebuildpassed. TemporarymacOSbundle wraps samebinary s
 ### Paired STL CPU load measurements (2026-10-13)
 
 Current whole-file low-level API plus output management versus shared streaming model API, warm filesystem, ABBA order, 20 measured samples per path: 250k facets median 6.235 / 6.138 ms, p95 7.416 / 6.805 ms; 1M facets median 22.326 / 21.565 ms, p95 24.765 / 31.280 ms. No robust speedup established; streaming has a worse tail in the million-facet run. Geometry bits/bounds hashes match on all loads and managed credit returns to zero. The separate streaming admission test proves removal of the whole-file heap buffer. This is not a historical before/after or GPU/display/cold-disk/RSS benchmark. [Evidence](research/stl-load-paired-summary-2026-10-13.json).
+
+
+## Current mixed-window navigation and prefetch (2026-10-16)
+
+Four native Metal App EXR→STL/OBJ/PLY/OFF→EXR roundtrips passed on authored subset fixtures. Actual arrow navigation preserves configured previous2/next1 plans, three retained neighbours per generation including model leases, and activates model rendering before returning to the raster renderer. Cached EXR return succeeds while fallback decode is forbidden. Eight distinct presentations,36retained-neighbour attempts and source/binary/log hashes are retained in research/live-mixed-model-prefetch-2026-10-16/result.json. This does not qualify materials, textures, transparency, broader model formats, exact framebuffer output, physical HDR or interaction latency.

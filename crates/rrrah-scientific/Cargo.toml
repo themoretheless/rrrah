@@ -8,9 +8,13 @@ repository.workspace = true
 
 [dependencies]
 flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"] }
+zlib-rs = { version = "=0.6.8", default-features = false, features = ["rust-allocator"] }
 rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
 rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
 thiserror.workspace = true
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

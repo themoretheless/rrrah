@@ -1,0 +1,48 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Masked RGB16/24/32 and BC1/2/3 selected mip output uses shared admitted PixelBuffer",
+    "Masked output is written directly into final RGBA storage",
+    "Unmanaged fallback remains fallible",
+    "36 Pillow-oracle selected mip cases check exact output budget, one-byte-short refusal, shared clone lifetime and truncated storage refusal at zero budget"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 63,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pipeline": {
+      "states": 117,
+      "dds_states": 36,
+      "ram_pressure_hits": 117,
+      "swap_writes": 117,
+      "swap_reads": 117,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 702,
+      "seconds": 3.08
+    }
+  },
+  "limits": [
+    "Selected supported 2D mips only; cube/array/volume and wider sample/other codec support remain pending",
+    "No speedup claim",
+    "RGBA16F readback is not physical HDR display qualification",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

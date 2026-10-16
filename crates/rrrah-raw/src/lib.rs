@@ -359,3 +359,141 @@ pub fn raw_development_opcodes(
     let data = bounded_io::read_managed(request)?;
     dng::opcode_lists(&data).map_err(DecodeError::NativeDng)
 }
+
+#[cfg(test)]
+mod api_contract_regressions {
+    use super::*;
+
+    #[test]
+    fn generation_token_cancels_stale_work() {
+        let owner = Arc::new(AtomicU64::new(7));
+        let token = GenerationToken::new(owner.clone(), 7);
+        assert!(!token.is_cancelled());
+        owner.store(8, Ordering::Release);
+        assert!(token.is_cancelled());
+        assert!(!GenerationToken::new(owner, 8).is_cancelled());
+    }
+
+    #[test]
+    fn combined_generation_tokens_cancel_from_either_owner_and_deduplicate() {
+        for cancelled_owner in 0..2 {
+            let owners = [Arc::new(AtomicU64::new(4)), Arc::new(AtomicU64::new(9))];
+            let first = GenerationToken::new(owners[0].clone(), 4);
+            let second = GenerationToken::new(owners[1].clone(), 9);
+            let combined = first.combine(&second).combine(&first).combine(&second);
+            assert_eq!(combined.additional.len(), 1);
+            assert!(!combined.is_cancelled());
+            owners[cancelled_owner].fetch_add(1, Ordering::AcqRel);
+            assert!(combined.is_cancelled());
+        }
+        let owner = Arc::new(AtomicU64::new(4));
+        let token = GenerationToken::new(owner.clone(), 4);
+        assert!(
+            token
+                .combine(&GenerationToken::new(owner, 5))
+                .is_cancelled()
+        );
+    }
+
+    #[test]
+    fn stale_request_is_rejected_without_io() {
+        let mut request = DecodeRequest::new(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("Cargo.toml/absent.cr3"),
+        );
+        request.cancellation = Some(GenerationToken::new(Arc::new(AtomicU64::new(2)), 1));
+        let budget = rrrah_core::MemoryBudget::new(1024);
+        request.memory_budget = Some(budget.clone());
+        assert!(matches!(
+            NativeRawDecoder.decode(&request),
+            Err(DecodeError::Cancelled)
+        ));
+        assert!(matches!(
+            NativeRawDecoder.mosaic_recipe(&request),
+            Err(DecodeError::Cancelled)
+        ));
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
+    }
+
+    #[test]
+    fn explicit_linear_assumption_only_qualifies_unspecified_linear_primaries() {
+        use rrrah_core::RasterColorSpace as Color;
+        let mut request = DecodeRequest::new("unused.pfm");
+        assert_eq!(
+            request.qualify_linear_color(Color::LinearRgbUnspecified),
+            Color::LinearRgbUnspecified
+        );
+        request.assume_untagged_srgb = true;
+        assert_eq!(
+            request.qualify_linear_color(Color::LinearRgbUnspecified),
+            Color::LinearRgbUnspecified
+        );
+        request.assume_untagged_linear_srgb = true;
+        assert_eq!(
+            request.qualify_linear_color(Color::LinearRgbUnspecified),
+            Color::LinearSrgb
+        );
+        for color in [Color::Srgb, Color::LinearSrgb] {
+            assert_eq!(request.qualify_linear_color(color.clone()), color);
+        }
+    }
+}
+
+#[cfg(test)]
+mod opcode_geometry_serde_compatibility_tests {
+    #[test]
+    fn old_lists_remain_square_and_new_aspect_roundtrips() {
+        use rrrah_core::develop::OpcodeLists;
+        let old = r#"{"list1":[],"list2":[],"list3":[]}"#;
+        let lists: OpcodeLists = serde_json::from_str(old).unwrap();
+        assert_eq!(lists.pixel_aspect, None);
+        assert_eq!(
+            serde_json::to_value(&lists).unwrap(),
+            serde_json::from_str::<serde_json::Value>(old).unwrap()
+        );
+        for aspect in [0.5, 1.0, 2.0] {
+            let mut current = lists.clone();
+            current.pixel_aspect = Some(aspect);
+            let encoded = serde_json::to_string(&current).unwrap();
+            assert_eq!(
+                serde_json::from_str::<OpcodeLists>(&encoded).unwrap(),
+                current
+            );
+        }
+    }
+}
+
+#[cfg(test)]
+mod gpr_opcode_tests {
+    use super::*;
+
+    #[test]
+    #[ignore = "requires pinned official GoPro sample corpus via RRRAH_GPR_CORPUS"]
+    fn official_gpr_corrections_are_not_silently_omitted() {
+        use rrrah_core::develop::Opcode;
+        let root = std::path::PathBuf::from(
+            std::env::var_os("RRRAH_GPR_CORPUS").expect("official corpus directory"),
+        );
+        for name in ["HERO9", "Fusion-back", "Fusion-front"] {
+            let budget = rrrah_core::MemoryBudget::new(32 * 1024 * 1024);
+            let mut request = DecodeRequest::new(root.join(format!("{name}.GPR")));
+            request.memory_budget = Some(budget.clone());
+            let lists = raw_development_opcodes(&request).unwrap();
+            assert!(lists.list1.is_empty());
+            if name == "HERO9" {
+                assert_eq!(lists.list2.len(), 4);
+                assert!(
+                    lists
+                        .list2
+                        .iter()
+                        .all(|op| matches!(op, Opcode::GainMap { .. }))
+                );
+                assert!(lists.list3.is_empty());
+            } else {
+                assert!(lists.list2.is_empty());
+                assert_eq!(lists.list3.len(), 1);
+                assert!(matches!(lists.list3[0], Opcode::WarpRectilinear { .. }));
+            }
+            assert_eq!(budget.used(), 0);
+        }
+    }
+}

@@ -1,0 +1,70 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Native RGBA8/RGBA16/RGBA32F outputs admitted via PixelBuffer",
+    "PVRTC padded decoded-u32 scratch and cropped RGBA output admitted",
+    "Associated-alpha conversion float output admitted while native buffer remains live",
+    "Unbudgeted compatibility allocation fallible"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 68,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "viewer": {
+      "passed": 248,
+      "failed": 0,
+      "ignored": 69
+    },
+    "native_oracles": {
+      "mip_states": 58,
+      "exact_budget": true,
+      "one_byte_short_refuses": true,
+      "shared_clone_credit": true,
+      "final_bytes": 0
+    },
+    "associated_float": {
+      "native_bytes": 240,
+      "straight_bytes": 240,
+      "peak": 480,
+      "short_refused": 479
+    },
+    "pipeline": {
+      "states": 272,
+      "pvr_states": 58,
+      "ram_pressure_hits": 272,
+      "swap_writes": 272,
+      "swap_reads": 272,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1632,
+      "seconds": 14.89
+    }
+  },
+  "limits": [
+    "Retained metadata Vec/Arc storage still outside shared admission",
+    "texture2ddecoder internal PVRTCTexelInfo Vec still outside shared admission",
+    "Native ordinary oracles are authored; PowerVR SDK independently validates raw PVRTC blocks, not every container producer",
+    "No speedup claim",
+    "Physical HDR display and full PVR format qualification remain open",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log",
+    "viewer-tests": "viewer-tests.log"
+  },
+  "follow_up": "Retained metadata admission addressed by ../pvr-managed-metadata-2026-10-16/result.json; backend PVRTC table remains open."
+}

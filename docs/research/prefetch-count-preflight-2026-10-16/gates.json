@@ -1,0 +1,36 @@
+{
+  "status": "failed",
+  "stages": [
+    {
+      "stage": "memory-cache",
+      "command": [
+        "cargo",
+        "+stable",
+        "test",
+        "-p",
+        "rrrah-memory",
+        "-p",
+        "rrrah-cache",
+        "--lib",
+        "--locked",
+        "--offline"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "viewer",
+      "command": [
+        "cargo",
+        "+stable",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "--locked",
+        "--offline"
+      ],
+      "exit_code": 101
+    }
+  ]
+}

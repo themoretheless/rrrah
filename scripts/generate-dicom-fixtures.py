@@ -7,32 +7,58 @@ import numpy as np
 import pydicom
 from pydicom.dataset import FileDataset, FileMetaDataset
 from pydicom.pixels import apply_modality_lut
-from pydicom.uid import ExplicitVRLittleEndian, CTImageStorage
+from pydicom.uid import ExplicitVRLittleEndian, ExplicitVRBigEndian, ImplicitVRLittleEndian, CTImageStorage
 root=Path(__file__).resolve().parents[1]/'tests/fixtures/raster'
 cases=[
  ('dicom-signed12-rescale.dcm',16,12,1,'MONOCHROME2',2,[-2048,-1,0,1,1024,2047,2047,1024,1,0,-1,-2048],2,-1000,-5096,3094),
  ('dicom-unsigned16.dcm',16,16,0,'MONOCHROME2',1,[0,1,32767,32768,65534,65535],None,None,0,65535),
  ('dicom-unsigned16-tiff-preamble.dcm',16,16,0,'MONOCHROME2',1,[0,1,32767,32768,65534,65535],None,None,0,65535),
  ('dicom-mono1-odd8.dcm',8,8,0,'MONOCHROME1',1,[0,127,255],None,None,0,255),
+ ('dicom-big-endian-unsigned16.dcm',16,16,0,'MONOCHROME2',1,[0,1,32767,32768,65534,65535],None,None,0,65535),
+ ('dicom-big-endian-signed12-rescale.dcm',16,12,1,'MONOCHROME2',2,[-2048,-1,0,1,1024,2047,2047,1024,1,0,-1,-2048],2,-1000,-5096,3094),
+ ('dicom-big-endian-mono1-odd8-ob.dcm',8,8,0,'MONOCHROME1',1,[0,127,255],None,None,0,255),
+ ('dicom-big-endian-mono1-odd8-ow.dcm',8,8,0,'MONOCHROME1',1,[0,127,255],None,None,0,255),
+ ('dicom-big-endian-odd8-ow-multiframe.dcm',8,8,0,'MONOCHROME2',3,[0,1,2,127,128,129,253,254,255],None,None,0,255),
+ ('dicom-implicit-signed12-rescale.dcm',16,12,1,'MONOCHROME2',2,[-2048,-1,0,1,1024,2047,2047,1024,1,0,-1,-2048],2,-1000,-5096,3094),
+ ('dicom-implicit-unsigned16.dcm',16,16,0,'MONOCHROME2',1,[0,1,32767,32768,65534,65535],None,None,0,65535),
+ ('dicom-implicit-mono1-odd8.dcm',8,8,0,'MONOCHROME1',1,[0,127,255],None,None,0,255),
+ ('dicom-implicit-odd8-multiframe.dcm',8,8,0,'MONOCHROME2',3,[0,1,2,127,128,129,253,254,255],None,None,0,255),
 ]
+for encoding in ('explicit','big-endian','implicit'):
+ for bits in (32,64):
+  cases.append((f'dicom-{encoding}-float{bits}.dcm',bits,None,None,'MONOCHROME2',2,
+   [-32.5,-0.0,0.125,1.5,256.25,65504.,65504.,256.25,1.5,0.125,-0.0,-32.5],None,None,-64,65536))
 manifest=['file\twidth\theight\tframes\tminimum\tmaximum']
 for index,(name,bits,stored,signed,photo,frames,values,slope,intercept,lo,hi) in enumerate(cases):
  meta=FileMetaDataset();meta.FileMetaInformationVersion=b'\0\1'
  meta.MediaStorageSOPClassUID=CTImageStorage
  meta.MediaStorageSOPInstanceUID=f'1.2.826.0.1.3680043.10.543.900{index}'
- meta.TransferSyntaxUID=ExplicitVRLittleEndian;meta.ImplementationClassUID='1.2.826.0.1.3680043.10.543.999'
+ big='big-endian' in name;implicit=name.startswith('dicom-implicit-')
+ meta.TransferSyntaxUID=ImplicitVRLittleEndian if implicit else ExplicitVRBigEndian if big else ExplicitVRLittleEndian;meta.ImplementationClassUID='1.2.826.0.1.3680043.10.543.999'
  ds=FileDataset(str(root/name),{},file_meta=meta,preamble=(b'II*\0'+bytes(124)) if 'tiff-preamble' in name else bytes(128))
  ds.SOPClassUID=meta.MediaStorageSOPClassUID;ds.SOPInstanceUID=meta.MediaStorageSOPInstanceUID
  ds.PatientName='RRRAH^SYNTHETIC';ds.PatientID='SYNTHETIC';ds.Modality='CT'
  ds.Rows=1 if bits==8 else 2;ds.Columns=3;ds.SamplesPerPixel=1;ds.PhotometricInterpretation=photo
- ds.NumberOfFrames=str(frames);ds.BitsAllocated=bits;ds.BitsStored=stored;ds.HighBit=stored-1;ds.PixelRepresentation=signed
+ ds.NumberOfFrames=str(frames);ds.BitsAllocated=bits
+ if stored is not None:ds.BitsStored=stored;ds.HighBit=stored-1;ds.PixelRepresentation=signed
  if slope is not None:ds.RescaleSlope=str(slope);ds.RescaleIntercept=str(intercept)
- if bits==16:
-  words=np.array([v & ((1<<stored)-1) for v in values],dtype='<u2')
+ if bits>16:
+  data=np.array(values,dtype=('>' if big else '<')+('f4' if bits==32 else 'f8')).tobytes()
+  if bits==32:ds.FloatPixelData=data
+  else:ds.DoubleFloatPixelData=data
+ elif bits==16:
+  words=np.array([v & ((1<<stored)-1) for v in values],dtype='>u2' if big else '<u2')
   if stored<16:words|=0xa000 # exercise unused high bits, not presumed zero
   ds.PixelData=words.tobytes()
  else:ds.PixelData=bytes(values)
- ds.save_as(root/name,enforce_file_format=True)
+ if big and bits<=16:
+  ds['PixelData'].VR='OW' if bits==16 or '-ow' in name else 'OB'
+  if bits==8 and ds['PixelData'].VR=='OW':
+   payload=ds.PixelData+bytes(len(ds.PixelData)%2)
+   ds.PixelData=b''.join(payload[i:i+2][::-1] for i in range(0,len(payload),2))
+ if big:pydicom.dcmwrite(root/name,ds,little_endian=False,implicit_vr=False,enforce_file_format=True)
+ elif implicit:pydicom.dcmwrite(root/name,ds,little_endian=True,implicit_vr=True,enforce_file_format=True)
+ else:ds.save_as(root/name,enforce_file_format=True)
  decoded=pydicom.dcmread(root/name)
  raw=decoded.pixel_array.reshape(frames,ds.Rows,ds.Columns)
  assert raw.reshape(-1).tolist()==values
@@ -44,6 +70,11 @@ for index,(name,bits,stored,signed,photo,frames,values,slope,intercept,lo,hi) in
   window=np.clip((gray-lo)/(hi-lo),0,1)
   if photo=='MONOCHROME1':window=1-window
   (root/f'{name}.{frame}.window-f32').write_bytes(np.stack([window,window,window,np.ones_like(window)],axis=1).astype('<f4').tobytes())
+  if big or implicit or bits>16:
+   alt_lo=lo+(hi-lo)/4;alt_hi=lo+3*(hi-lo)/4
+   alternate=np.clip((gray-alt_lo)/(alt_hi-alt_lo),0,1)
+   if photo=='MONOCHROME1':alternate=1-alternate
+   (root/f'{name}.{frame}.alternate-window-f32').write_bytes(np.stack([alternate,alternate,alternate,np.ones_like(alternate)],axis=1).astype('<f4').tobytes())
  manifest.append(f'{name}\t{ds.Columns}\t{ds.Rows}\t{frames}\t{lo}\t{hi}')
 (root/'dicom-manifest.tsv').write_text('\n'.join(manifest)+'\n')
-print('wrote 4 scalar containers and pydicom raw/rescale oracles',pydicom.__version__)
+print('wrote',len(cases),'scalar containers and pydicom raw/rescale oracles',pydicom.__version__)

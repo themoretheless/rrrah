@@ -1,0 +1,54 @@
+{
+  "status": "Explicit display requests permit reuse of decoded scientific image after original generation cancellation, with output budget enforced",
+  "api": [
+    "NrrdImage::windowed_with_request",
+    "MrcImage::windowed_with_request",
+    "FitsImage::windowed_with_request",
+    "FitsImage::to_raster_with_request"
+  ],
+  "semantics": "New request overrides display output budget/cancellation only. Native sample/metadata allocation remains with original root; selected plane metadata remains from decoded image. Existing convenience methods still inherit original context.",
+  "regression": {
+    "paths": 4,
+    "source_selection": [
+      1,
+      2
+    ],
+    "fresh_request_selection": 0,
+    "fresh_path": "nonexistent already-decoded; no file IO",
+    "assertions": [
+      "Old cancelled context still refused by convenience method",
+      "239byte child budget refuses240byte display without losing native ownership",
+      "240byte child budget succeeds despite cancelled old generation",
+      "Output float pixel bits match original display",
+      "Selected source frame1of2 preserved even when new request defaults to image0",
+      "Cancelling new generation returns typed Cancelled before another allocation",
+      "Dropping native image releases old native/metadata reservation while output remains live",
+      "Dropping output returns both root and output child tozero"
+    ]
+  },
+  "tests": {
+    "scientific": {
+      "passed": 45,
+      "failed": 0,
+      "ignored": 8
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed"
+  },
+  "limits": [
+    "Library API only; no new viewer control or raw-image caching backend claimed",
+    "No file reread/decode speed benchmark or Metal runtime run in this turn",
+    "Native allocations stay in original budget; explicit request does not migrate existing reservations",
+    "Full100format and hardware qualification remains open"
+  ],
+  "source_sha256": {
+    "crates/rrrah-scientific/src/nrrd.rs": "fed8584a094d8bbc53407357e0e85c2635e4595d8cded816ea2fd935e7fa3751",
+    "crates/rrrah-scientific/src/mrc.rs": "1ce78979365cd5ff46bfd36f41cfbd24cc4569eeefc0e98810b030af3acd88eb",
+    "crates/rrrah-scientific/src/fits.rs": "a972d86f8105d12ada8c23a22abdb37cc5321d105f1e5533e9b73bbc8abc2857",
+    "crates/rrrah-scientific/src/scientific_cancel_stress.rs": "c758c659860b9ae8e33bedbc7d7a7eeae57a9fc805a6033341005e094d5d14d8"
+  }
+}

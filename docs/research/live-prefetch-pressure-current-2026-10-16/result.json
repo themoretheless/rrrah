@@ -1,0 +1,154 @@
+{
+  "status": "passed",
+  "backend_env": "metal",
+  "binary_sha256": "be1a8e5aa5f4319ed9a6c0522233a5e3f6ff339215c0816d8a3e25b2ba4355af",
+  "previous": 2,
+  "next": 1,
+  "swap_enabled": false,
+  "cases": [
+    {
+      "name": "count",
+      "exit_code": 0,
+      "cache_mb": 32,
+      "cache_count": 2,
+      "attempts_per_generation": 3,
+      "retained_per_generation": 1,
+      "events": {
+        "2": [
+          {
+            "path": "04-target.psd",
+            "retained": true,
+            "attempt": 1,
+            "retained_count": 1
+          },
+          {
+            "path": "02-left.psb",
+            "retained": false,
+            "attempt": 2,
+            "retained_count": 1
+          },
+          {
+            "path": "01-left.psd",
+            "retained": false,
+            "attempt": 3,
+            "retained_count": 1
+          }
+        ],
+        "3": [
+          {
+            "path": "05-right.psb",
+            "retained": true,
+            "attempt": 1,
+            "retained_count": 1
+          },
+          {
+            "path": "03-selected.exr",
+            "retained": false,
+            "attempt": 2,
+            "retained_count": 1
+          },
+          {
+            "path": "02-left.psb",
+            "retained": false,
+            "attempt": 3,
+            "retained_count": 1
+          }
+        ],
+        "4": [
+          {
+            "path": "02-left.psb",
+            "retained": true,
+            "attempt": 1,
+            "retained_count": 1
+          },
+          {
+            "path": "04-target.psd",
+            "retained": false,
+            "attempt": 2,
+            "retained_count": 1
+          },
+          {
+            "path": "05-right.psb",
+            "retained": false,
+            "attempt": 3,
+            "retained_count": 1
+          }
+        ]
+      },
+      "log_sha256": "dbeb0114c211f18be944cad1a79451eed8b5214f3e98fab53cdab1864811cf78"
+    },
+    {
+      "name": "bytes",
+      "exit_code": 0,
+      "cache_mb": 5,
+      "cache_count": 8,
+      "attempts_per_generation": 3,
+      "retained_per_generation": 2,
+      "events": {
+        "2": [
+          {
+            "path": "02-left.psb",
+            "retained": true,
+            "attempt": 1,
+            "retained_count": 1
+          },
+          {
+            "path": "01-left.psd",
+            "retained": true,
+            "attempt": 2,
+            "retained_count": 2
+          },
+          {
+            "path": "04-target.psd",
+            "retained": false,
+            "attempt": 3,
+            "retained_count": 2
+          }
+        ],
+        "3": [
+          {
+            "path": "05-right.psb",
+            "retained": true,
+            "attempt": 1,
+            "retained_count": 1
+          },
+          {
+            "path": "03-selected.exr",
+            "retained": true,
+            "attempt": 2,
+            "retained_count": 2
+          },
+          {
+            "path": "02-left.psb",
+            "retained": false,
+            "attempt": 3,
+            "retained_count": 2
+          }
+        ],
+        "4": [
+          {
+            "path": "02-left.psb",
+            "retained": true,
+            "attempt": 1,
+            "retained_count": 1
+          },
+          {
+            "path": "04-target.psd",
+            "retained": true,
+            "attempt": 2,
+            "retained_count": 2
+          },
+          {
+            "path": "05-right.psb",
+            "retained": false,
+            "attempt": 3,
+            "retained_count": 2
+          }
+        ]
+      },
+      "log_sha256": "fedd2584f7e534256072e97e8024d81c126aed4311382866ad6712cc30eb52da"
+    }
+  ],
+  "verification_note": "First checker incorrectly assumed startup generation2 always uses Forward order. It can use initial None order when UI folder plan wins; no travel direction is claimed for startup. Actual arrow generations3/4 require exact Forward/Backward paths.",
+  "scope": "native App full-prefetch-attempt completion and first-priority retained leases under configured count/byte caps; not physical memory, throughput, exact framebuffer or no-redecode proof"
+}

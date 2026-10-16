@@ -1,0 +1,24 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 43.27s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+real AI cache: pages=3; independent_keys=3; root=0; appearance_unqualified
+test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 366 filtered out; finished in 0.52s
+
+     Running tests/pdf_readback.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/pdf_readback-37cc23edfbe1bf8a)
+
+running 1 test
+PDF adapter: Metal Apple M4 Max
+PDF native decode: VectorApple.ai page=0 managed_peak=5173610
+PDF RAM/swap/GPU case passed: VectorApple.ai page=0 managed_peak=67108864 managed_final=0
+PDF native decode: one.ai page=0 managed_peak=8842074
+PDF RAM/swap/GPU case passed: one.ai page=0 managed_peak=67108864 managed_final=0
+PDF native decode: one.ai page=1 managed_peak=655898
+PDF RAM/swap/GPU case passed: one.ai page=1 managed_peak=67108864 managed_final=0
+test real_ai_pages_swap_preserves_pixels_and_metal_frame ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 3.08s
+

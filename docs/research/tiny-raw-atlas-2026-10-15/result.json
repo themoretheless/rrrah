@@ -1,0 +1,179 @@
+{
+  "status": "metal_pixels36_gpu58_app231_live_corrected_algorithms6_nondebug_check_passed",
+  "baseline": "authored16x16 native RAW refused GPU1MiB because default atlas requested2097152 bytes",
+  "change": "default single-tile candidate clamps tiny image edge to existing MIN_TILE_SIZE32 instead of rejecting it and falling back to full1024 atlas; explicit override minima and larger-image plans unchanged",
+  "expected_bilinear_atlas_bytes": 2312,
+  "expected_halo1_extent": 34,
+  "source_sha256": {
+    "crates/rrrah-gpu/src/lib.rs": "c2535f6d9dd9f92a4429ef5aba1a0468db9f5b42b9b23591ac5fafc3fcb15637",
+    "crates/rrrah-app/src/main.rs": "affbb54b754af87c62c087ae1f2c51588642b7bfc19e66fca9357f7b719a0327",
+    "crates/rrrah-app/src/gpu_recovery_probe.rs": "d2506c166d0484f5e37f6bedc17699e51c2684f50de223771721d505bbea8807"
+  },
+  "limitations": [
+    "owned atlas logical bytes exclude staging/driver memory",
+    "tiny authored controls do not qualify camera corpus",
+    "live recovery injects a notification, not a hardware failure",
+    "HDR surface presentation does not establish physical display calibration"
+  ],
+  "gpu_lib": {
+    "exit_code": 0,
+    "passed": 58,
+    "failed": 0,
+    "ignored": 1,
+    "scope": "after algorithm getter fix"
+  },
+  "first_pixel_failure": {
+    "exit_code": 101,
+    "algorithm": "SmoothHue",
+    "different_sdr_channels": 2464,
+    "max_rgb8_delta": 5,
+    "cause": "getter reports Bilinear for shader codes3/4/5, default halo1 causes shader fallback; explicit reference halo2 activates selected algorithm"
+  },
+  "algorithm_fix": "map codes3 SmoothHue,4 Vng,5 Rcd in getter; default halo follows actual requested algorithm",
+  "live_budget_cases": [
+    {
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 2.8899285000000003
+    },
+    {
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.8343792089999997
+    }
+  ],
+  "app_ordinary": {
+    "exit_code": 0,
+    "passed": 231,
+    "failed": 0,
+    "ignored": 64
+  },
+  "metal_pixels": {
+    "exit_code": 0,
+    "adapter": "Apple M4 Max Metal",
+    "shapes": [
+      [
+        16,
+        16
+      ],
+      [
+        7,
+        31
+      ],
+      [
+        31,
+        4
+      ]
+    ],
+    "algorithms": [
+      "Bilinear",
+      "SmoothHue",
+      "MalvarHeCutler",
+      "Directional",
+      "Vng",
+      "Rcd"
+    ],
+    "exact_attachment_comparisons": 36,
+    "formats": [
+      "Rgba8UnormSrgb",
+      "Rgba16Float SceneLinear"
+    ],
+    "reference": "explicit 1024 texture extent with correct algorithm halo",
+    "managed_atlas_bytes_max_exclusive": 4096,
+    "budget_after_drop": 0
+  },
+  "live_corrected_algorithms": [
+    {
+      "algorithm": "smooth-hue",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 2.810841583,
+      "markers": [
+        "LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
+        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3",
+        "LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2592 raw_peak=2592 raw_limit=1048576 same_device=true"
+      ],
+      "log": "algorithm-smooth-hue-hdr-0.log"
+    },
+    {
+      "algorithm": "smooth-hue",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 1.0166016670000002,
+      "markers": [
+        "LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
+        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3",
+        "LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2592 raw_peak=2592 raw_limit=1048576 same_device=true"
+      ],
+      "log": "algorithm-smooth-hue-hdr-1.log"
+    },
+    {
+      "algorithm": "vng",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 0.9248014169999998,
+      "markers": [
+        "LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
+        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3",
+        "LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2592 raw_peak=2592 raw_limit=1048576 same_device=true"
+      ],
+      "log": "algorithm-vng-hdr-0.log"
+    },
+    {
+      "algorithm": "vng",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.9112672909999997,
+      "markers": [
+        "LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
+        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3",
+        "LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2592 raw_peak=2592 raw_limit=1048576 same_device=true"
+      ],
+      "log": "algorithm-vng-hdr-1.log"
+    },
+    {
+      "algorithm": "rcd",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 0.9306313749999999,
+      "markers": [
+        "LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
+        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3",
+        "LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2888 raw_peak=2888 raw_limit=1048576 same_device=true"
+      ],
+      "log": "algorithm-rcd-hdr-0.log"
+    },
+    {
+      "algorithm": "rcd",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.9227146660000001,
+      "markers": [
+        "LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
+        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3",
+        "LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2888 raw_peak=2888 raw_limit=1048576 same_device=true"
+      ],
+      "log": "algorithm-rcd-hdr-1.log"
+    }
+  ],
+  "nondebug_cfg_check": {
+    "exit_code": 0,
+    "debug_assertions": false
+  },
+  "live_binary_sha256": "7227bed4f8fe3e6cb8fe505463dfa63eed01697aabd6588f5f606c6a1f88b5b9",
+  "expanded_metal": {
+    "raw_linear_integration": {
+      "passed": 7,
+      "failed": 0,
+      "all_six_algorithms_at_four_tile_boundary": true
+    },
+    "exposure_compute_integration": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 2,
+      "full_sensor_ignored_not_rerun": true
+    },
+    "first_failure": "pressure test assumed 4MiB filled remaining space; tiny atlas reduction invalidated assumption; now reserves full 8MiB minus retained credit and preserves prior HDR frame on refusal",
+    "source_sha256": "ba7fbcf1cc749ba9f11399f8312ab471a7b06b3bb2ce1f0e4953c0417fc5b460"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "status": "Native DICOM RLE subset implemented and verified; full DICOM and 100-format qualification remain incomplete",
+  "implementation": {
+    "codec": "Owned Rust PackBits, row boundaries, 8/16-bit scalar and RGB byte planes, MSB-first reconstruction into LE output; no production pydicom or LibRaw",
+    "container": "Transfer syntax 1.2.840.10008.1.2.5; one fragment per frame; bounded exact BOT/fragment/delimiter parsing; selected-frame allocation only",
+    "compatibility": "Standard requires encapsulated OB; accepts legacy OW seen in packaged 16-bit sources as opaque bytes without swapping",
+    "memory": "Managed source, selected raw scratch, palette scratch/profile and output; exact peak and short-budget tests, cancellation and malformed-input checks"
+  },
+  "fixtures": {
+    "authored_full_containers_added": 12,
+    "authored_frame_window_states_added": 31,
+    "independent_raw_frame_cases": 28,
+    "packaged_raw_frames": 7,
+    "packaged_rle_color_frames": 6,
+    "packaged_mr_rle_frames": 1
+  },
+  "tests": {
+    "scientific": {
+      "passed": 42,
+      "ignored": 7,
+      "failed": 0,
+      "log": "docs/research/dicom-rle-native-2026-10-16/corruption-scientific.log"
+    },
+    "external": {
+      "passed": 7,
+      "failed": 0,
+      "log": "/tmp/dicom-rle-recheck-all-external.log"
+    },
+    "facade": {
+      "passed": 185,
+      "ignored": 2,
+      "failed": 0,
+      "log": "/tmp/dicom-rle-recheck-facade.log"
+    },
+    "cpu_pipeline": {
+      "passed": 2,
+      "ignored": 1,
+      "failed": 0,
+      "log": "/tmp/dicom-rle-recheck-cpu3.log"
+    },
+    "metal": {
+      "passed": 1,
+      "failed": 0,
+      "optional_skip": false,
+      "seconds": 13.38,
+      "adapter": "Metal Apple M4 Max",
+      "log": "/tmp/dicom-rle-recheck-metal.log"
+    },
+    "legacy_rgb_ybr": {
+      "passed": 1,
+      "failed": 0,
+      "log": "docs/research/dicom-rle-native-2026-10-16/legacy-rgb.log"
+    }
+  },
+  "pipeline": {
+    "states": 352,
+    "rle_states": 31,
+    "ram_pressure_hits": 352,
+    "swap_writes": 352,
+    "swap_reads": 352,
+    "shape_negative_controls": 120,
+    "sdr_hdr_readbacks": 2232,
+    "managed_root_cap_and_peak_bytes": 8388608,
+    "final_managed_bytes": 0,
+    "prefetch": "Decoder blocked; reverse requests restore swap, stale generation refused; per-call watchdog excludes GPU readback time",
+    "ttl": "50ms insertion TTL, pinned expired visible frame preserved; oversized pinned frame rejects smaller byte policy; future insertion TTL switched to60s before prefetch phase"
+  },
+  "initial_failures": {
+    "legacy_OW": "Initial decoder rejected packaged 16-bit OW; fixed and external comparison passes",
+    "ram_hit": "Waiting for disk before warm hit could consume50ms TTL; warm-hit assertion now precedes unrelated disk wait",
+    "policy": "Full1MiB pinned frame cannot accept4KiB policy; regression now asserts refusal before foreground transition",
+    "external_setup": "Initial broad ignored filter lacked unrelated oracle environment variables; rerun with all required variables passed7"
+  },
+  "limits": [
+    "Other compressed transfer syntaxes remain unsupported",
+    "No clinical presentation or full DICOM qualification claimed",
+    "NVIDIA/CUDA deferred per user; this run verifies Metal only",
+    "RAM admission accounting is not process RSS; this is not physical slow-disk benchmarking"
+  ],
+  "specification": "https://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_A.4.html",
+  "source_sha256": {
+    "crates/rrrah-scientific/src/dicom.rs": "a094a0dd537ad71e3d79604ba82ed03be1efb2988c3c7f768266785ec7c04832",
+    "crates/rrrah-scientific/src/dicom_rle.rs": "a58e0f7087394866b09e4cde686347a92e3decbe353477846f5b0ff4b50c897a",
+    "crates/rrrah-scientific/src/dicom_encapsulation.rs": "d6b274b7155d5be9bbcb63509f9fea66a00b4340ffbc6525b5ca3b7ee67e1e40",
+    "crates/rrrah-scientific/src/dicom_rgb.rs": "6f2b2be0d82c05a21c23c338867df26af106f14e815bdde5da5650e3a5d5cc67",
+    "crates/rrrah-scientific/src/dicom_palette.rs": "500f8df0bf62cfc09bf9f279c648fa592df919bc2dbc11d0e0683df0f32072be",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "918beb89c65246cd6f175da5816726a08ffe69b6f0890735e27419052d45bfdb"
+  },
+  "checks": {
+    "scientific_lib_clippy_warnings_denied": "passed",
+    "focused_rustfmt": "passed",
+    "scope": "No claim of full workspace lint/build/test after these changes"
+  },
+  "saved_logs": [
+    "docs/research/dicom-rle-native-2026-10-16/clippy.log",
+    "docs/research/dicom-rle-native-2026-10-16/corruption-clippy.log",
+    "docs/research/dicom-rle-native-2026-10-16/corruption-scientific.log",
+    "docs/research/dicom-rle-native-2026-10-16/cpu.log",
+    "docs/research/dicom-rle-native-2026-10-16/external.log",
+    "docs/research/dicom-rle-native-2026-10-16/facade.log",
+    "docs/research/dicom-rle-native-2026-10-16/legacy-rgb.log",
+    "docs/research/dicom-rle-native-2026-10-16/metal.log",
+    "docs/research/dicom-rle-native-2026-10-16/scientific.log"
+  ],
+  "corruption_regression": {
+    "scope": "Full public DICOM decoder, both selected frames, borrowed source and zero managed output budget",
+    "truncations_per_frame": 778,
+    "structural_mutations_per_frame": 6,
+    "mutations": [
+      "BOT offset into payload",
+      "BOT reused frame offset",
+      "undefined fragment length",
+      "odd fragment length",
+      "nonzero delimiter length",
+      "zero selected-frame segment count"
+    ],
+    "valid_control": "Unmodified input reaches typed Memory error with zero budget",
+    "damaged_control": "Every truncated or mutated input returns InvalidDicom rather than retryable Memory",
+    "managed_peak_bytes": 0,
+    "limit": "Checks selected-frame codec data and all container headers; does not validate compressed packet contents of unselected frames or claim zero process heap allocation"
+  }
+}

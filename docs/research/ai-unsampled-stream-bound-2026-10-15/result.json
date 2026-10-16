@@ -1,0 +1,30 @@
+{
+  "scope": "CPU arithmetic prerequisite for bounding an original accumulation without reading its individual colors; not live renderer integration",
+  "contract": {
+    "factors": "Independently certified finite factors in0..1",
+    "product_operations": [
+      0,
+      1,
+      2
+    ],
+    "sum_upper": "Independently certified exact nonnegative product-sum upper bound",
+    "underflow": "Gradual underflow required; flush-to-zero outside contract"
+  },
+  "unit_tests": {
+    "passed": 274,
+    "failed": 0,
+    "ignored": 12
+  },
+  "new_controls": [
+    "One plus4096copies2^-54: naive order loses all small terms, independent exact sum1+2^-42 enclosed",
+    "Zero/one/two product operations and reversed accumulation",
+    "Two half-subnormal products with exact total one subnormal",
+    "Every smaller work budget and all cancellation checkpoints",
+    "NaN/infinite/negative upper bounds, unsupported product count and excessive stage counts refuse"
+  ],
+  "source_sha256": "b8a76f429b2966a05038288fdaf1f73c5018fd46c2ed10600f16d9286c156717",
+  "limitations": [
+    "Does not prove source range, geometry, ownership, affine sampling, composition, profile conversion or display quantization",
+    "Original AI still fails ordinary4M on147,59; no source sampling skipped or full format qualification"
+  ]
+}

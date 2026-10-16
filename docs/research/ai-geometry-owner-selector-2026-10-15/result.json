@@ -1,0 +1,41 @@
+{
+  "change": "Extract covered_native_owner as geometry-only query shared with existing native sampler. Direct point lists retain descending source priority; planned monotonic and general paths retain same word/bit charges and maximal covered owner. Uses continuing caller work, cancellation and checked coverage/plan accesses. No fresh budget or color reads inside query.",
+  "tests": {
+    "passed": 290,
+    "ignored": 12,
+    "failed": 0,
+    "new_controls": "Independent maximal covered source over16 coverage subsets for monotonic/nonmonotonic plans across words0/1/63; direct descending priority agrees; exact/short budgets and every cancellation checkpoint; invalid region refuses and empty plan returns absent owner."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "source_work": 6993741,
+    "source_allowance": 16000000,
+    "source_work_unchanged": true,
+    "native_pixel_exact": true,
+    "rgb8_certified": [
+      205,
+      151,
+      128
+    ],
+    "geometry_total": 39412281,
+    "geometry_limit": 40000000,
+    "geometry_remaining": 587719,
+    "peak_admitted_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "source_sha256": "b05486a9e2c9a4d58ef37e3045aa011836650cd173ce5539e60829d552a0cfff",
+  "next_requirements": [
+    "Typed evaluated cell distinguishing sampled Pixel from deferred owner geometry; never publish dummy pixels.",
+    "Opaque source preparation must explicitly certify opacity/model/native coordinates before using metadata-only tail.",
+    "Unobserved original color integral must remain a bound-only reference, not fabricated observed sums; return replacement only after actual output-intent gate accepts."
+  ],
+  "limitations": [
+    "Source selection separated but still called from ordinary color evaluation.",
+    "All original source samples retained; no ordinary4M/fullpage/production AI or HDR claim."
+  ]
+}

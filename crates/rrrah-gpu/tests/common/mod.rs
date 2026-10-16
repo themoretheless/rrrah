@@ -171,7 +171,6 @@ impl GpuReadback {
         self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
-
     pub fn render_with_tiling(
         &self,
         mosaic: &DecodedMosaic,
@@ -408,6 +407,78 @@ impl GpuReadback {
                 row[..size[0] as usize * 8]
                     .chunks_exact(2)
                     .map(|v| u16::from_le_bytes([v[0], v[1]]))
+            })
+            .collect();
+        drop(mapped);
+        readback.unmap();
+        result
+    }
+
+    pub(crate) fn read_float_frame(
+        &self,
+        size: [u32; 2],
+        encode: impl FnOnce(&mut wgpu::CommandEncoder, &wgpu::TextureView),
+    ) -> Vec<f32> {
+        let extent = wgpu::Extent3d {
+            width: size[0],
+            height: size[1],
+            depth_or_array_layers: 1,
+        };
+        let target = self.device.create_texture(&wgpu::TextureDescriptor {
+            label: Some("collection linear HDR readback"),
+            size: extent,
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba32Float,
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+            view_formats: &[],
+        });
+        let row_bytes = (size[0] * 16).div_ceil(256) * 256;
+        let readback = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("collection HDR mapped buffer"),
+            size: u64::from(row_bytes) * u64::from(size[1]),
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = self.device.create_command_encoder(&Default::default());
+        encode(&mut encoder, &target.create_view(&Default::default()));
+        encoder.copy_texture_to_buffer(
+            wgpu::TexelCopyTextureInfo {
+                texture: &target,
+                mip_level: 0,
+                origin: wgpu::Origin3d::ZERO,
+                aspect: wgpu::TextureAspect::All,
+            },
+            wgpu::TexelCopyBufferInfo {
+                buffer: &readback,
+                layout: wgpu::TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(row_bytes),
+                    rows_per_image: Some(size[1]),
+                },
+            },
+            extent,
+        );
+        let submission = self.queue.submit([encoder.finish()]);
+        let (tx, rx) = mpsc::channel();
+        readback
+            .slice(..)
+            .map_async(wgpu::MapMode::Read, move |result| tx.send(result).unwrap());
+        self.device
+            .poll(wgpu::PollType::Wait {
+                submission_index: Some(submission),
+                timeout: None,
+            })
+            .unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = readback.slice(..).get_mapped_range().unwrap();
+        let result = mapped
+            .chunks_exact(row_bytes as usize)
+            .flat_map(|row| {
+                row[..size[0] as usize * 16]
+                    .chunks_exact(4)
+                    .map(|v| f32::from_le_bytes([v[0], v[1], v[2], v[3]]))
             })
             .collect();
         drop(mapped);

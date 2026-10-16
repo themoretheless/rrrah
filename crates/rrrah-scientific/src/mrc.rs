@@ -15,18 +15,30 @@ pub fn has_magic(b: &[u8]) -> bool {
 }
 #[derive(Debug, Clone)]
 pub struct MrcImage {
+    request: DecodeRequest,
     pub raster: DecodedRaster,
     /// Complete original header, including geometry, statistics and labels.
     pub header: [u8; 1024],
     /// Original extended metadata; exporter-specific interpretation is caller-owned.
-    pub extended_header: Arc<Vec<u8>>,
+    pub extended_header: rrrah_core::PixelBuffer<u8>,
     pub big_endian: bool,
     /// Physical axes corresponding to storage columns, rows and sections (1=X,2=Y,3=Z).
     pub axes: [u32; 3],
 }
 impl MrcImage {
+    /// Reuse decoded samples with an explicit display budget and cancellation.
+    /// This overrides the original decode request for the new output only.
+    pub fn windowed_with_request(
+        &self,
+        minimum: f32,
+        maximum: f32,
+        request: &DecodeRequest,
+    ) -> Result<DecodedRaster, RasterDecodeError> {
+        crate::scientific::windowed_with_request(&self.raster, minimum, maximum, bad, Some(request))
+    }
+
     pub fn windowed(&self, minimum: f32, maximum: f32) -> Result<DecodedRaster, RasterDecodeError> {
-        crate::scientific::windowed(&self.raster, minimum, maximum, bad)
+        crate::scientific::windowed_with_request(&self.raster, minimum, maximum, bad, Some(&self.request))
     }
 }
 pub fn decode_mrc(request: &DecodeRequest) -> Result<MrcImage, RasterDecodeError> {
@@ -63,6 +75,44 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<MrcImage, RasterDecod
     if sorted != [1, 2, 3] {
         return Err(bad("invalid physical-axis permutation"));
     }
+    let cell = [
+        f32::from_bits(word(40)),
+        f32::from_bits(word(44)),
+        f32::from_bits(word(48)),
+    ];
+    let grid = [word(28), word(32), word(36)];
+    let angles = [
+        f32::from_bits(word(52)),
+        f32::from_bits(word(56)),
+        f32::from_bits(word(60)),
+    ];
+    if cell.iter().any(|v| !v.is_finite() || *v < 0.)
+        || angles.iter().any(|v| !v.is_finite() || *v < 0. || *v >= 180.)
+        || grid.iter().any(|v| *v > i32::MAX as u32)
+    {
+        return Err(bad("invalid cell geometry"));
+    }
+    let horizontal = axes[0] as usize - 1;
+    let vertical = axes[1] as usize - 1;
+    // Alpha is Y/Z, beta X/Z, gamma X/Y. The omitted physical axis
+    // therefore indexes the angle between the displayed axes.
+    let angle = angles[3 - horizontal - vertical];
+    let pixel_aspect = if cell[horizontal] > 0.
+        && cell[vertical] > 0.
+        && grid[horizontal] > 0
+        && grid[vertical] > 0
+        && angle == 90.
+    {
+        let x = f64::from(cell[horizontal]) / f64::from(grid[horizontal]);
+        let y = f64::from(cell[vertical]) / f64::from(grid[vertical]);
+        let ratio = (x / y) as f32;
+        if !ratio.is_finite() || ratio <= 0. {
+            return Err(bad("unrepresentable cell spacing ratio"));
+        }
+        Some(ratio)
+    } else {
+        None
+    };
     if word(220) > 10 {
         return Err(bad("invalid label count"));
     }
@@ -85,6 +135,9 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<MrcImage, RasterDecod
         return Err(RasterDecodeError::OutputTooLarge);
     }
     let extended = word(92) as usize;
+    if extended as u64 > MAX_RASTER_BYTES {
+        return Err(RasterDecodeError::OutputTooLarge);
+    }
     let start = 1024usize
         .checked_add(extended)
         .ok_or(RasterDecodeError::OutputTooLarge)?;
@@ -98,7 +151,32 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<MrcImage, RasterDecod
         .into());
     }
     let first = start + request.image_index * plane * bytes;
-    let mut values = Vec::with_capacity(plane * 4);
+    let mut extended_header: rrrah_core::PixelBuffer<u8> = match &request.memory_budget {
+        Some(budget) => budget
+            .try_buffer(extended, 0u8)
+            .map_err(crate::DecodeError::Memory)?
+            .freeze()
+            .into(),
+        None => Arc::new(vec![0u8; extended]).into(),
+    };
+    for (dest, source) in extended_header
+        .get_mut()
+        .unwrap()
+        .chunks_mut(65536)
+        .zip(b[1024..start].chunks(65536))
+    {
+        request.check_cancelled()?;
+        dest.copy_from_slice(source);
+    }
+    let mut values: rrrah_core::PixelBuffer<f32> = match &request.memory_budget {
+        Some(budget) => budget
+            .try_buffer(plane * 4, 0f32)
+            .map_err(crate::DecodeError::Memory)?
+            .freeze()
+            .into(),
+        None => Arc::new(vec![0f32; plane * 4]).into(),
+    };
+    let output = values.get_mut().unwrap();
     for (i, sample) in b[first..first + plane * bytes].chunks_exact(bytes).enumerate() {
         if i % 4096 == 0 {
             request.check_cancelled()?;
@@ -131,20 +209,22 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<MrcImage, RasterDecod
                 }
             }
         };
-        values.extend([value, value, value, 1.]);
+        output[i * 4..i * 4 + 4].copy_from_slice(&[value, value, value, 1.]);
     }
     request.check_cancelled()?;
     let raster = DecodedRaster::new(
         dimensions[0],
         dimensions[1],
-        RasterPixels::Rgba32Float(Arc::new(values).into()),
+        RasterPixels::Rgba32Float(values),
         RasterColorSpace::Unspecified,
     )?
-    .with_image_selection(request.image_index, dimensions[2] as usize)?;
+    .with_image_selection(request.image_index, dimensions[2] as usize)?
+    .with_pixel_aspect(pixel_aspect)?;
     Ok(MrcImage {
+        request: request.clone(),
         raster,
         header: b[..1024].try_into().unwrap(),
-        extended_header: Arc::new(b[1024..start].to_vec()),
+        extended_header,
         big_endian: be,
         axes,
     })
@@ -153,6 +233,63 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<MrcImage, RasterDecod
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn cell_spacing_uses_physical_axis_mapping_in_both_endians() {
+        fn set(b: &mut [u8], at: usize, value: u32, be: bool) {
+            b[at..at + 4].copy_from_slice(&if be {
+                value.to_be_bytes()
+            } else {
+                value.to_le_bytes()
+            });
+        }
+        for (be, original) in [
+            (
+                false,
+                include_bytes!("../../../tests/fixtures/raster/mrc-i8-little.mrc").as_slice(),
+            ),
+            (
+                true,
+                include_bytes!("../../../tests/fixtures/raster/mrc-i8-big.mrc").as_slice(),
+            ),
+        ] {
+            let mut bytes = original.to_vec();
+            for (axis, (grid, cell)) in [(4u32, 8f32), (5, 20.), (6, 48.)].into_iter().enumerate() {
+                set(&mut bytes, 28 + axis * 4, grid, be);
+                set(&mut bytes, 40 + axis * 4, cell.to_bits(), be);
+            }
+            let request = DecodeRequest::new("metric.mrc");
+            for (axes, expected) in [
+                ([1u32, 2, 3], 0.5),
+                ([1, 3, 2], 0.25),
+                ([2, 1, 3], 2.),
+                ([2, 3, 1], 0.5),
+                ([3, 1, 2], 4.),
+                ([3, 2, 1], 2.),
+            ] {
+                for (i, axis) in axes.into_iter().enumerate() {
+                    set(&mut bytes, 64 + i * 4, axis, be);
+                }
+                let image = decode(&bytes, &request).unwrap();
+                assert_eq!(image.raster.pixel_aspect(), Some(expected));
+                assert_eq!(
+                    image.windowed(-100., 100.).unwrap().pixel_aspect(),
+                    Some(expected)
+                );
+            }
+            let mut oblique = bytes.clone();
+            // Final mapping Z/Y: alpha controls the displayed plane.
+            set(&mut oblique, 52, 80f32.to_bits(), be);
+            assert_eq!(decode(&oblique, &request).unwrap().raster.pixel_aspect(), None);
+            for value in [f32::NAN, f32::INFINITY, -1.] {
+                let mut invalid = bytes.clone();
+                set(&mut invalid, 40, value.to_bits(), be);
+                assert!(matches!(
+                    decode(&invalid, &request),
+                    Err(RasterDecodeError::InvalidMrc(_))
+                ));
+            }
+        }
+    }
     #[test]
     fn independent_native_sample_oracles_and_metadata() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
@@ -164,6 +301,41 @@ mod tests {
             let mut request = DecodeRequest::new(root.join(columns[0]));
             request.image_index = columns[1].parse().unwrap();
             let image = decode_mrc(&request).unwrap();
+            let source_bytes = std::fs::metadata(&request.path).unwrap().len();
+            let budget = rrrah_core::MemoryBudget::new(source_bytes + 272);
+            request.memory_budget = Some(budget.clone());
+            let admitted = decode_mrc(&request).unwrap();
+            assert_eq!(budget.peak(), source_bytes + 272);
+            assert_eq!(budget.used(), 272);
+            let metadata_owner = admitted.extended_header.clone();
+            drop(admitted);
+            assert_eq!(budget.used(), 32, "cloned metadata retains its credit");
+            assert_eq!(&metadata_owner[..], &(0u8..32).collect::<Vec<_>>()[..]);
+            drop(metadata_owner);
+            assert_eq!(budget.used(), 0);
+            let short = rrrah_core::MemoryBudget::new(source_bytes + 271);
+            request.memory_budget = Some(short.clone());
+            assert!(matches!(
+                decode_mrc(&request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
+            assert_eq!(short.used(), 0);
+            let window_peak = (source_bytes + 272).max(480);
+            let window_budget = rrrah_core::MemoryBudget::new(window_peak);
+            request.memory_budget = Some(window_budget.clone());
+            let window = crate::ScalarWindow::new(-100., 100.).unwrap();
+            let displayed = crate::decode_raster_with_window(&request, window).unwrap();
+            assert_eq!((window_budget.used(), window_budget.peak()), (240, window_peak));
+            assert_eq!(displayed.image_index(), request.image_index);
+            drop(displayed);
+            assert_eq!(window_budget.used(), 0);
+            let short_window = rrrah_core::MemoryBudget::new(window_peak - 1);
+            request.memory_budget = Some(short_window.clone());
+            assert!(matches!(
+                crate::decode_raster_with_window(&request, window),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
+            assert_eq!(short_window.used(), 0);
             assert_eq!((image.raster.width(), image.raster.height()), (5, 3));
             assert_eq!(image.raster.image_index(), request.image_index);
             assert_eq!(image.raster.image_count(), 2);

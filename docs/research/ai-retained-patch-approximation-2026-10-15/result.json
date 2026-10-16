@@ -1,0 +1,90 @@
+{
+  "status": "retained approximation provenance and clarified affine evidence scope",
+  "changes": [
+    "NativeShadingSource retains AdaptivePatchStats for captured tensor sources; original triangle and axial/radial sources returnNone.",
+    "Both source constructors initialize provenance; tensor capture attaches actual stats before dropping intermediate mesh.",
+    "NativeShadingSource admission uses size_ofSelf, including metadata; no unadmitted retained allocation added.",
+    "component_error_bound docs explicitly exclude original tensor tessellation and decoding error.",
+    "Opt-in diagnostics emit separate patch approximation information; no quota/tolerance changes."
+  ],
+  "tests": {
+    "interpret": {
+      "passed": 131,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/ai-retained-patch-stats-interpret.log"
+    },
+    "hayro": {
+      "passed": 312,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-retained-patch-stats-hayro-fixed.log"
+    },
+    "contracts": "Existing native tensor test verifies stats retained, triangle count matches stored mesh, limits respected, ordinary axial provenance absent; every admission refusal/cancellation still releases all credit."
+  },
+  "real_control_log": "/tmp/ai-retained-patch-stats-real2.log",
+  "real_sources": [
+    {
+      "event": 9,
+      "triangles": 607802,
+      "pixel_bound": 0.01562433634695382,
+      "component_bound": 0.0009496351704001427,
+      "interval_certified": false
+    },
+    {
+      "event": 2670,
+      "triangles": 54822,
+      "pixel_bound": 0.015624431138975936,
+      "component_bound": 0.0009496351704001427,
+      "interval_certified": false
+    },
+    {
+      "event": 2676,
+      "triangles": 134489,
+      "pixel_bound": 0.015624991177228034,
+      "component_bound": 0.0009496351704001427,
+      "interval_certified": false
+    }
+  ],
+  "controls": [
+    {
+      "pixel": [
+        147,
+        59
+      ],
+      "bytes_unchanged": [
+        205,
+        151,
+        128
+      ],
+      "source_work_unchanged": 2291055
+    },
+    {
+      "pixel": [
+        147,
+        60
+      ],
+      "bytes_unchanged": [
+        213,
+        167,
+        146
+      ],
+      "source_work_unchanged": 3366844
+    }
+  ],
+  "final_credit": 0,
+  "peak_bytes": [
+    266079240,
+    266079240
+  ],
+  "source_sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "809b5dd79c84d9d6cddfca2fd24d71573779028b698513b148c137446f1e24e6",
+    "vendor/hayro/src/knockout_interpreter.rs": "33824099bc9211caa39898d1c434ee4bc5f9dcdbc112c89d5ab1add00b510179"
+  },
+  "limitations": [
+    "Reported adaptive bounds use floating safety margins, not interval certificates.",
+    "No attempt to combine parametric component error with geometric displacement or ICC transform into a certified whole-output bound.",
+    "Typed-white experimental output certifies only retained tessellated field contracts, not original bicubic shading or independent oracle.",
+    "Full-page ordinary-budget completion, clipping/source geometry proof and independent fidelity remain open."
+  ]
+}

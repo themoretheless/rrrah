@@ -1,0 +1,7 @@
+Root cause: run_viewer passed a zero prefetch window into App when RAW RAM caching was enabled to suppress its duplicate independent disk warmer. App also used that field for explicit file-neighbour plans. The initial loader scan used the correct configured window; subsequent arrow navigation passed Some(empty), disabling raster/model neighbour warming.
+
+Fix: App receives separate configured gallery and RAW-disk-warmer windows. Actual App submission regression requires paths[4,2,1]forward and[1,3,4]backward from a six-file gallery under behind2/ahead1 while diskwarmer0/0. Full viewer279passed/78ignored/0failed.
+
+Current native Metal window: six files, EXRselectedthird→PSDfourth→EXRthird using actual navigate_gallery(+1/-1), RAM32MiB/count8,swapdisabled,previous2/next1. Each generation waits for actual retained prefetch leases (no fixed sleep). Gen2:[04,02,01];gen3:[05,03,02];gen4:[02,04,05]. Both navigation generations actually presented on same device, GPUwaitpassed, returntierRAM with fallbackdecode forbidden. Independent check-live-log.py passed exact paths/order/count and counts only two unique navigation transitions even when exit callback repeats.
+
+Initial and diagnostic timeout logs retained. New readiness instrumentation/probe is debug-only and opted in via RRRAH_QUALIFY_PREFETCH_COUNT. Not a pixel/color/latency/physicaldisk or allformat qualification; RAWloss notification remains simulated.

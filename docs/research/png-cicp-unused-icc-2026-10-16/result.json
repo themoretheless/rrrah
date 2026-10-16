@@ -1,0 +1,33 @@
+{
+  "allocations": [
+    {
+      "skip_unused_icc": false,
+      "ok": true,
+      "peak": 4372728,
+      "live": 0,
+      "alloc_calls": 23
+    },
+    {
+      "skip_unused_icc": true,
+      "ok": true,
+      "peak": 27768,
+      "live": 0,
+      "alloc_calls": 6
+    }
+  ],
+  "icc_bytes": 4194304,
+  "output_bytes_excluded": 1024,
+  "public_passed": 202,
+  "public_ignored": 5,
+  "source_sha256": {
+    "vendor/image/src/codecs/png.rs": "e7a5db8ef11bae7e84927c2b38c47d083c281b82ca162ed80d68894b7e5eb11e",
+    "crates/rrrah-decode/src/raster.rs": "ced6d4aff26378b4128c4d43aba2844f07e9c847414064bd195d7fd476ef50fc",
+    "crates/rrrah-vector/src/png_color.rs": "93a85c33963e6981a274af114c50de723cd63716b4b916cae55a44be534e8903",
+    "docs/research/png-cicp-unused-icc-2026-10-16/probe.rs": "d1fcca9a7818f4c008f2913ee79001bc06903cf8bcdca29cde7571207edd558c",
+    "docs/research/png-cicp-unused-icc-2026-10-16/generate.py": "4830c7bd2d17180528f26602d75d471d86b27db506fd1dc98c8904b7b0c22ba6"
+  },
+  "viewer_passed": 285,
+  "viewer_ignored": 80,
+  "failures": 0,
+  "normal_icc_bytes": 588
+}

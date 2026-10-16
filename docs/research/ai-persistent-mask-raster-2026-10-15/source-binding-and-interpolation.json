@@ -1,0 +1,20 @@
+{
+  "full_suite_before_extended_test_cases": {
+    "passed": 271,
+    "failed": 0,
+    "ignored": 12
+  },
+  "extended_raster_suite": {
+    "passed": 18,
+    "failed": 0,
+    "ignored": 1
+  },
+  "controls": [
+    "Inherited source identity mismatch refuses before sampling",
+    "Matching nearest cell survives point replay and consumes fewer source-work units",
+    "Changing nearest cell produces blue instead of cached red and evaluates its own source",
+    "Interpolated samples through admitted shared cache equal fresh reference and leave nearest-cell cache empty"
+  ],
+  "source_sha256": "7808ce3805b884f1b623a7382332bcac94447c4f154379b9e37f6fbc33682bb7",
+  "scope": "Synthetic raster cache routing regressions; full AI and 100-format qualification remain open"
+}

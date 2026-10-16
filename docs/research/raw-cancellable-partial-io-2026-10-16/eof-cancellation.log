@@ -1,0 +1,13 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+    Finished `test` profile [optimized + debuginfo] target(s) in 19.16s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_raw-4953d6146c93232a)
+
+running 5 tests
+test bounded_io::interrupted_read_tests::exact_read_handles_short_input_and_partial_success ... ok
+test bounded_io::interrupted_read_tests::cancelled_eof_never_publishes_legacy_source ... ok
+test bounded_io::interrupted_read_tests::cancellation_interrupts_retry_and_partial_exact_reads ... ok
+test bounded_io::interrupted_read_tests::legacy_stream_cancels_partial_reads_and_bounds_actual_growth ... ok
+test bounded_io::interrupted_read_tests::already_cancelled_public_source_read_skips_file_open_in_both_modes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 493 filtered out; finished in 0.00s
+

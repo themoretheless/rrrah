@@ -1,0 +1,70 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Precount metadata records with bounded nonallocating length scan",
+    "Admit metadata table capacity before allocation; admit actual capacity before filling",
+    "Metadata table and block bytes retained in shared PixelBuffer with reservation ownership",
+    "Generalize Reservation::try_adopt from Copy to arbitrary owned elements; allocation/layout semantics unchanged"
+  ],
+  "api_changes": [
+    "PvrImage.metadata: Vec<PvrMetadata> -> PixelBuffer<PvrMetadata>",
+    "PvrMetadata.data: Arc<Vec<u8>> -> PixelBuffer<u8>"
+  ],
+  "checks": {
+    "memory_lib": {
+      "passed": 41,
+      "failed": 0
+    },
+    "texture_lib": {
+      "passed": 69,
+      "failed": 0
+    },
+    "texture_and_memory_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "ownership": [
+      "Last shared owner of adopted non-Copy elements drops values exactly once",
+      "Failed adoption releases reservation and elements",
+      "Metadata list clone survives image drop with metadata credit",
+      "Separate metadata block clone survives list drop with block-only credit",
+      "Final owner release returns budget to zero"
+    ],
+    "native_mips": {
+      "cases": 58,
+      "metadata_included_in_exact_and_short_limits": true
+    },
+    "pipeline": {
+      "states": 272,
+      "ram_pressure_hits": 272,
+      "swap_writes": 272,
+      "swap_reads": 272,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1632,
+      "seconds": 8.2
+    }
+  },
+  "limits": [
+    "PVRTC backend texel-info table remains outside shared admission",
+    "Small Arc/credit control structures and allocator overhead are outside payload-capacity accounting",
+    "Native ordinary oracles are authored, PowerVR SDK validates raw PVRTC only",
+    "No speedup or full format/HDR-display qualification claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "memory-tests": "memory-tests.log",
+    "memory-clippy": "memory-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  },
+  "follow_up": "PVRTC backend-table admission addressed by ../pvrtc-backend-admission-2026-10-16/result.json using conservative per-block credit."
+}

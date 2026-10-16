@@ -1,0 +1,215 @@
+{
+  "status": "native uncompressed Explicit VR Big Endian scalar DICOM implemented and independently tested",
+  "date": "2026-10-16",
+  "primary_specification": "https://dicom.nema.org/MEDICAL/dicom/2016a/output/chtml/part05/sect_A.3.html",
+  "transfer_syntaxes": [
+    "1.2.840.10008.1.2.1",
+    "1.2.840.10008.1.2.2"
+  ],
+  "changes": [
+    "Meta header remains explicitLE; checked group-length boundary selects dataset endian before first dataset tag.",
+    "Dataset tags, short/long value lengths and US attributes use dataset byte order.",
+    "16-bit native scalar PixelData requiresOW and reads declared endian.",
+    "8-bitOB is byte ordered; BE8-bitOW swaps pairs globally across odd frame boundaries/padding.",
+    "Signed stored-bit extraction, rescale, explicit scalar window, managed output and cancellation are shared with existing path."
+  ],
+  "independent_oracle": {
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "generator": "scripts/generate-dicom-fixtures.py",
+    "generation_log": "/tmp/dicom-be-fixture-generation-20261016.log",
+    "scope": "Authored CC0 encoding fixtures, not complete clinical IOD conformance. pydicom pixel_array and apply_modality_lut produce raw/physical/window float-bit oracles.",
+    "original_fixtures_and_oracles_byte_unchanged": true,
+    "files": [
+      {
+        "file": "dicom-signed12-rescale.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 2,
+        "window": [
+          -5096.0,
+          3094.0
+        ],
+        "sha256": {
+          "dicom-signed12-rescale.dcm": "9fbba0c8b4846f506c24be661c3fe5bec407d27f621b28bcd10b8f28f2e50324",
+          "dicom-signed12-rescale.dcm.0.raw-f32": "b9357067704491bdeb882e15e5f28780d90e52d805256760f04ff12034a23f4a",
+          "dicom-signed12-rescale.dcm.0.window-f32": "0b25619bf88720c507bb5e1a26b6abb7870ec8f6a345d78fa2ad6d2ec1a8cfcc",
+          "dicom-signed12-rescale.dcm.1.raw-f32": "b0c1b3b49fdf3aeadbbe6ae69de53a177e26e4e9b238a0b0440b3123f33a9c2f",
+          "dicom-signed12-rescale.dcm.1.window-f32": "e71db0a53a26453f2b2244d7716ebbe5aeae0c62bf9caaccd79a22bd4babceaf"
+        }
+      },
+      {
+        "file": "dicom-unsigned16.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          65535.0
+        ],
+        "sha256": {
+          "dicom-unsigned16.dcm": "9dc8c6a4be6041805f3671164942df8d77f95ef6a886ff76045222031ad8b611",
+          "dicom-unsigned16.dcm.0.raw-f32": "5f41e32a20866728d317559c23ad6c9135418c3fff52af6fac5ccfcf67b382e5",
+          "dicom-unsigned16.dcm.0.window-f32": "9f41c68eba77875c95f274ef818f43f0a2ae2e0c6939be2bf18261eae2ea5edc"
+        }
+      },
+      {
+        "file": "dicom-unsigned16-tiff-preamble.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          65535.0
+        ],
+        "sha256": {
+          "dicom-unsigned16-tiff-preamble.dcm": "a26f98989657df2a11367cbcf22abf8403b80575a039608456fdb924bf57cd5f",
+          "dicom-unsigned16-tiff-preamble.dcm.0.raw-f32": "5f41e32a20866728d317559c23ad6c9135418c3fff52af6fac5ccfcf67b382e5",
+          "dicom-unsigned16-tiff-preamble.dcm.0.window-f32": "9f41c68eba77875c95f274ef818f43f0a2ae2e0c6939be2bf18261eae2ea5edc"
+        }
+      },
+      {
+        "file": "dicom-mono1-odd8.dcm",
+        "dimensions": [
+          3,
+          1
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          255.0
+        ],
+        "sha256": {
+          "dicom-mono1-odd8.dcm": "4982ca70d48c2c6a66e385126a66fd50d82220a4947acc3700d8283e9217c10f",
+          "dicom-mono1-odd8.dcm.0.raw-f32": "189ef46239cc16b238aea93b260070e88f98d8c946a8f6c59ececf9f4ce128e3",
+          "dicom-mono1-odd8.dcm.0.window-f32": "e765a5d901d4728d237297024e38cd4cd2b388aa59b152760fc100b91e458ff3"
+        }
+      },
+      {
+        "file": "dicom-big-endian-unsigned16.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          65535.0
+        ],
+        "sha256": {
+          "dicom-big-endian-unsigned16.dcm": "a01bf327bc5600c9521878e0492b02bbe6987e5e3579eaaf790c714d3a2a9327",
+          "dicom-big-endian-unsigned16.dcm.0.raw-f32": "5f41e32a20866728d317559c23ad6c9135418c3fff52af6fac5ccfcf67b382e5",
+          "dicom-big-endian-unsigned16.dcm.0.window-f32": "9f41c68eba77875c95f274ef818f43f0a2ae2e0c6939be2bf18261eae2ea5edc"
+        }
+      },
+      {
+        "file": "dicom-big-endian-signed12-rescale.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 2,
+        "window": [
+          -5096.0,
+          3094.0
+        ],
+        "sha256": {
+          "dicom-big-endian-signed12-rescale.dcm": "6a003e3bcb31beb0d0c321712ee48291833a26b0494d49aeffc80b11618bf2f7",
+          "dicom-big-endian-signed12-rescale.dcm.0.raw-f32": "b9357067704491bdeb882e15e5f28780d90e52d805256760f04ff12034a23f4a",
+          "dicom-big-endian-signed12-rescale.dcm.0.window-f32": "0b25619bf88720c507bb5e1a26b6abb7870ec8f6a345d78fa2ad6d2ec1a8cfcc",
+          "dicom-big-endian-signed12-rescale.dcm.1.raw-f32": "b0c1b3b49fdf3aeadbbe6ae69de53a177e26e4e9b238a0b0440b3123f33a9c2f",
+          "dicom-big-endian-signed12-rescale.dcm.1.window-f32": "e71db0a53a26453f2b2244d7716ebbe5aeae0c62bf9caaccd79a22bd4babceaf"
+        }
+      },
+      {
+        "file": "dicom-big-endian-mono1-odd8-ob.dcm",
+        "dimensions": [
+          3,
+          1
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          255.0
+        ],
+        "sha256": {
+          "dicom-big-endian-mono1-odd8-ob.dcm": "2e7a7b26584d8aed544509320c27d45e0dd4219c60cf70262461a2e9d3345850",
+          "dicom-big-endian-mono1-odd8-ob.dcm.0.raw-f32": "189ef46239cc16b238aea93b260070e88f98d8c946a8f6c59ececf9f4ce128e3",
+          "dicom-big-endian-mono1-odd8-ob.dcm.0.window-f32": "e765a5d901d4728d237297024e38cd4cd2b388aa59b152760fc100b91e458ff3"
+        }
+      },
+      {
+        "file": "dicom-big-endian-mono1-odd8-ow.dcm",
+        "dimensions": [
+          3,
+          1
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          255.0
+        ],
+        "sha256": {
+          "dicom-big-endian-mono1-odd8-ow.dcm": "d246f8b45e23e01550b5a287ecf67f6d548bba5f4cab5b102c5b356460fa1ebf",
+          "dicom-big-endian-mono1-odd8-ow.dcm.0.raw-f32": "189ef46239cc16b238aea93b260070e88f98d8c946a8f6c59ececf9f4ce128e3",
+          "dicom-big-endian-mono1-odd8-ow.dcm.0.window-f32": "e765a5d901d4728d237297024e38cd4cd2b388aa59b152760fc100b91e458ff3"
+        }
+      },
+      {
+        "file": "dicom-big-endian-odd8-ow-multiframe.dcm",
+        "dimensions": [
+          3,
+          1
+        ],
+        "frames": 3,
+        "window": [
+          0.0,
+          255.0
+        ],
+        "sha256": {
+          "dicom-big-endian-odd8-ow-multiframe.dcm": "58e02c51ad0ba400786582c74537eea55bc4d9c26bdf8fbacde32d5dbe2d414e",
+          "dicom-big-endian-odd8-ow-multiframe.dcm.0.raw-f32": "77013792108e2226ed15966ae30f279b3d247b54bc4da86da6b8a04e9c8543de",
+          "dicom-big-endian-odd8-ow-multiframe.dcm.0.window-f32": "55eaba57f8234071bdbdef66c761e305228113c60d2ff41cac42ea3a20e1419a",
+          "dicom-big-endian-odd8-ow-multiframe.dcm.1.raw-f32": "418589b74b17ad1d58d7b5b192d4daa13933a2079e05f0cc9fe1c3431f3f71f5",
+          "dicom-big-endian-odd8-ow-multiframe.dcm.1.window-f32": "fcec4fca4c73560c5a9d8c3213691eb387a79a060652e036a2d794fe44855952",
+          "dicom-big-endian-odd8-ow-multiframe.dcm.2.raw-f32": "4f47aeb46e9663129d92fb2069336793e32685e5bf52b98311105c6528b00585",
+          "dicom-big-endian-odd8-ow-multiframe.dcm.2.window-f32": "cb4392ae7693547005cefd5b237084d93c0a0de801741056c6e9be0af04bc8a7"
+        }
+      }
+    ]
+  },
+  "tests": {
+    "scientific": {
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-big-endian-all-20261016.log"
+    },
+    "decode_facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-big-endian-common-route-20261016.log"
+    },
+    "negative": "Every truncation of all5BEfiles; inconsistent meta length, wrong declared endian, invalidreservedbytes/undefinedlength and16bitOBrefuse with managed credit0.",
+    "managed": "Every frame exact source+output peak, output-only retained credit, last drop0, one-byte-short admission refusal and invalid frame refusal.",
+    "routing": "BE8bitOW3-frame file opened underCR3suffix selects raster, selected frame matches independentraw/window bits; Unspecified source refuses display until explicitwindow; zero-budget peak0."
+  },
+  "source_sha256": {
+    "crates/rrrah-scientific/src/dicom.rs": "aaa922e5a57e6b5fb5733fc19336882dff709926573181a3e370ad20149810c7",
+    "crates/rrrah-decode/src/image_router.rs": "f174689718e9be005fc540582041c38c898fef90d5ecfd7a35ee22edafc4ec16",
+    "scripts/generate-dicom-fixtures.py": "ba403b1d531ba551159ca380522426002e07b28db395d717b91d519990176c30",
+    "tests/fixtures/raster/dicom-manifest.tsv": "98e38967fbf82e39b04dd763fa01c7448532389f80f0a82e2935ec672143fb77"
+  },
+  "limitations": [
+    "Implicit/compressed syntax, sequences/LUT/color, missing-value policy and clinical presentation remain unsupported.",
+    "No new DICOM cache/swap/liveMetal transport qualification in this turn.",
+    "Catalogue94implementedsubsets/6pending/0fullyqualified unchanged; extends an existing DICOM subset."
+  ]
+}

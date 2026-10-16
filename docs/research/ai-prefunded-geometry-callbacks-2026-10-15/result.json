@@ -1,0 +1,19 @@
+{
+  "change": "New bounded polygon traversal prepays a fixed callback allowance from the same geometry counter before each visited fragment. Each local allowance is fully reserved even if unused, cannot be enlarged, and never refreshes the outer limit. Existing traversal uses a separate false const specialization with no callback reservation.",
+  "unit_tests": {
+    "passed": 278,
+    "failed": 0,
+    "ignored": 12
+  },
+  "new_controls": [
+    "Two subrectangles: identical fragment vertices/centroid/area/owner bits versus original traversal",
+    "Global used work increases by exactly2*19 for two callback visits",
+    "Unused local allowance is not refunded",
+    "Exact global allowance passes with zero remaining; one unit short refuses",
+    "Overspend/enlarged quota/cancellation/scratch-admission refusal return no completed result",
+    "Temporary memory returns to retained-row level after each refusal; final row drop returns credit zero"
+  ],
+  "source_sha256": "0429d78924ef3d4467e8f75d998f0b564e41830e1da8eaf773a6ce0715fdfa8f",
+  "integration_status": "Infrastructure for admitted geometry/owner checks and deferred moment accumulation; no source sampling skipped or ordinary4M/fullpage acceleration enabled",
+  "limits": "Caller must admit callback storage and obey its prepaid local work contract; geometry/source/profile/display certification remains separate"
+}

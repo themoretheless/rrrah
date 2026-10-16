@@ -20,6 +20,7 @@ struct Probe {
     resize_probe: bool,
     resize_confirmed: bool,
     frames_after_resize: u32,
+    finished: bool,
 }
 struct Gpu {
     surface: wgpu::Surface<'static>,
@@ -47,6 +48,9 @@ impl ProbeRenderer {
 
 impl ApplicationHandler for Probe {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+        if self.finished {
+            return;
+        }
         let window = Arc::new(
             event_loop
                 .create_window(
@@ -62,6 +66,9 @@ impl ApplicationHandler for Probe {
         self.window = Some(window);
     }
     fn window_event(&mut self, event_loop: &ActiveEventLoop, _: WindowId, event: WindowEvent) {
+        if self.finished {
+            return;
+        }
         if matches!(event, WindowEvent::CloseRequested) {
             self.error = Some("HDR surface probe closed before qualification completed".into());
             if let Some(gpu) = self.gpu.take() {
@@ -72,6 +79,7 @@ impl ApplicationHandler for Probe {
                     self.error = Some(error.to_string());
                 }
             }
+            self.finished = true;
             event_loop.exit();
             return;
         }
@@ -93,6 +101,7 @@ impl ApplicationHandler for Probe {
                         ProbeRenderer::Model(renderer) => {
                             if let Err(error) = renderer.resize(&gpu.device, [size.width, size.height]) {
                                 self.error = Some(error.to_string());
+                                self.finished = true;
                                 event_loop.exit();
                                 return;
                             }
@@ -183,6 +192,7 @@ impl ApplicationHandler for Probe {
                     } else {
                         println!("presented: RGBA16Float / ExtendedSrgbLinear; no validation errors");
                     }
+                    self.finished = true;
                     event_loop.exit();
                 }
                 other => {
@@ -203,6 +213,7 @@ impl ApplicationHandler for Probe {
                             "configuration validation: {validation:?}; frames presented={}",
                             self.presented
                         );
+                        self.finished = true;
                         event_loop.exit();
                     } else {
                         self.next_redraw =
@@ -326,6 +337,18 @@ impl ApplicationHandler for Probe {
                     let mut request = rrrah_decode::DecodeRequest::new(std::path::PathBuf::from(path));
                     let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
                     request.memory_budget = Some(budget.clone());
+                    let policy = match std::env::var("RRRAH_HDR_UNTAGGED_COLOR") {
+                        Ok(policy) => policy,
+                        Err(std::env::VarError::NotPresent) => "strict".to_owned(),
+                        Err(error) => return Err(error.into()),
+                    };
+                    match policy.as_str() {
+                        "strict" => {},
+                        "srgb" => request.assume_untagged_srgb = true,
+                        "linear-srgb" => request.assume_untagged_linear_srgb = true,
+                        _ => anyhow::bail!("HDR untagged color must be strict, srgb or linear-srgb"),
+                    }
+                    println!("native raster untagged color policy: {policy}");
                     let decoded = rrrah_decode::decode_raster(&request)?;
                     let raster =
                         rrrah_decode::prepare_raster_for_display_with_budget(&decoded, Some(&budget))?;
@@ -395,11 +418,15 @@ impl ApplicationHandler for Probe {
             }
             Err(error) => {
                 self.error = Some(format!("{error:#}"));
+                self.finished = true;
                 event_loop.exit();
             }
         }
     }
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
+        if self.finished {
+            return;
+        }
         if self
             .next_redraw
             .is_none_or(|deadline| std::time::Instant::now() >= deadline)
@@ -444,5 +471,9 @@ fn main() -> anyhow::Result<()> {
     if let Some(error) = probe.error {
         anyhow::bail!(error);
     }
+    anyhow::ensure!(
+        probe.finished && probe.presented > 0,
+        "HDR surface probe exited before presentation and validation completed"
+    );
     Ok(())
 }

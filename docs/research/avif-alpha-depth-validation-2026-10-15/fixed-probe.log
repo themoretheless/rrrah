@@ -1,0 +1,124 @@
+     Locking 54 packages to latest Rust 1.98.1 compatible versions
+   Compiling autocfg v1.5.1
+   Compiling target-lexicon v0.13.5
+   Compiling proc-macro2 v1.0.107
+   Compiling winnow v1.0.4
+   Compiling toml_datetime v1.1.2+spec-1.1.0
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling smallvec v1.16.3
+   Compiling serde_spanned v1.1.1
+   Compiling version_check v0.9.5
+   Compiling zerocopy v0.8.62
+   Compiling cfg-if v1.0.5
+   Compiling version-compare v0.2.1
+   Compiling pkg-config v0.3.34
+   Compiling heck v0.5.0
+   Compiling once_cell v1.21.4
+   Compiling libc v0.2.190
+   Compiling bytes v1.12.1
+   Compiling static_assertions v1.1.0
+   Compiling byte-slice-cast v1.2.3
+   Compiling bitreader v0.3.11
+   Compiling byteorder v1.5.0
+   Compiling pxfm v0.1.30
+   Compiling bitflags v2.13.2
+   Compiling log v0.4.34
+   Compiling bytemuck v1.25.2
+   Compiling byteorder-lite v0.1.0
+   Compiling ahash v0.8.12
+   Compiling num-traits v0.2.19
+   Compiling toml_parser v1.1.5+spec-1.1.0
+   Compiling toml v1.1.6+spec-1.1.0
+   Compiling syn v2.0.119
+   Compiling cfg-expr v0.20.10
+   Compiling system-deps v7.0.8
+   Compiling num-integer v0.1.47
+   Compiling num-bigint v0.4.8
+   Compiling dav1d-sys v0.8.3
+   Compiling moxcms v0.8.1
+   Compiling num-derive v0.4.2
+   Compiling num-rational v0.4.2
+   Compiling av-data v0.4.4
+   Compiling dav1d v0.11.1
+   Compiling hashbrown v0.13.2
+   Compiling fallible_collections v0.4.9
+   Compiling mp4parse v0.17.0
+   Compiling image v0.25.10 (/Users/themoretheless/Documents/Sources/rrrah/vendor/image)
+warning: unused import: `codecs::*`
+ --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io/free_functions.rs:7:13
+  |
+7 | use crate::{codecs::*, ExtendedColorType, ImageReader};
+  |             ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable call
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io/free_functions.rs:64:5
+    |
+ 64 |       Ok(match format {
+    |  _____^^_-
+    | |     |
+    | |     unreachable call
+ 65 | |         #[cfg(feature = "png")]
+ 66 | |         ImageFormat::Png => Box::new(png::PngEncoder::new(buffered_write)),
+ 67 | |         #[cfg(feature = "jpeg")]
+...   |
+101 | |     })
+    | |_____- any code following this `match` expression is unreachable, as all arms diverge
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `buffered_write`
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io/free_functions.rs:62:5
+   |
+62 |     buffered_write: &'a mut W,
+   |     ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_buffered_write`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `limits_for_png`
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io/image_reader_type.rs:154:9
+    |
+154 |         limits_for_png: Limits,
+    |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_limits_for_png`
+
+warning: method `buffer_size` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/color.rs:284:19
+    |
+168 | impl ExtendedColorType {
+    | ---------------------- method in this implementation
+...
+284 |     pub(crate) fn buffer_size(self, width: u32, height: u32) -> u64 {
+    |                   ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 8 warnings (run `cargo fix --lib -p image` to apply 3 suggestions)
+   Compiling avif-alpha-depth-validation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/docs/research/avif-alpha-depth-validation-2026-10-15)
+    Finished `dev` profile [unoptimized] target(s) in 1m 11s
+     Running `/tmp/rrrah-avif-alpha-depth-target/debug/avif-alpha-depth-validation`
+primary8-alpha10.avif: limit0 refused before conversion: Format error decoding Avif: AVIF alpha bit depth differs from primary image
+primary8-alpha10.avif: limit256 refused before conversion: Format error decoding Avif: AVIF alpha bit depth differs from primary image
+primary10-alpha8.avif: limit0 refused before conversion: Format error decoding Avif: AVIF alpha bit depth differs from primary image
+primary10-alpha8.avif: limit256 refused before conversion: Format error decoding Avif: AVIF alpha bit depth differs from primary image
+ravif-8bit-prem.avif: same-depth retry accepted
+ravif-10bit-prem.avif: same-depth retry accepted

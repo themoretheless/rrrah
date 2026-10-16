@@ -1,0 +1,18 @@
+[2026-10-14T23:02:34Z DEBUG rrrah] foreground generation=0 RAW policy=cache-first
+[2026-10-14T23:02:34Z DEBUG rrrah] raster prefetch plan generation=0 path=/tmp/rrrah-live-recovery-cases-20261015/tiff-page1-sdr/sample.tif selected=1 count=3 direction=Forward ahead=0 behind=0 indices=[]
+[2026-10-14T23:02:34Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-14T23:02:34Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-10-14T23:02:34Z DEBUG rrrah] viewer surface acquisition deferred: occluded
+[2026-10-14T23:02:34Z INFO  rrrah] Raster ready: generation=0 path=/tmp/rrrah-live-recovery-cases-20261015/tiff-page1-sdr/sample.tif index=1 dimensions=2x1 elapsed=3.36675ms
+[2026-10-14T23:02:34Z DEBUG rrrah] GPU upload consumer lease released; pending=1
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-live-recovery-cases-20261015/tiff-page1-sdr/sample.tif page=1 devices=[1, 2] simulated_notification=true
+[2026-10-14T23:02:34Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-10-14T23:02:34Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-14T23:02:34Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-10-14T23:02:34Z DEBUG rrrah] foreground generation=2 RAW policy=cache-first
+[2026-10-14T23:02:34Z DEBUG rrrah] raster prefetch plan generation=2 path=/tmp/rrrah-live-recovery-cases-20261015/tiff-page1-sdr/sample.tif selected=1 count=3 direction=Forward ahead=0 behind=0 indices=[]
+[2026-10-14T23:02:34Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+[2026-10-14T23:02:34Z INFO  rrrah] Raster ready: generation=2 path=/tmp/rrrah-live-recovery-cases-20261015/tiff-page1-sdr/sample.tif index=1 dimensions=2x1 elapsed=2.391583ms
+[2026-10-14T23:02:34Z DEBUG rrrah] GPU upload consumer lease released; pending=0
+LIVE_RECOVERY_PASS path=/tmp/rrrah-live-recovery-cases-20261015/tiff-page1-sdr/sample.tif page=1 devices=[3, 4] main_frames=1 telemetry_frames=1 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+[2026-10-14T23:02:34Z INFO  rrrah] Viewer transient storage shutdown complete

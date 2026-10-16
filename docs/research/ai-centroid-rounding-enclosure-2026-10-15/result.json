@@ -1,0 +1,69 @@
+{
+  "status": "301 tests pass; real control completes with clamped-width centroid enclosure",
+  "source": "vendor/hayro/src/polygon_coverage.rs",
+  "source_sha256": "427fc9c036d833c22763d4556a336d35728932e2beed39cc44b2079ad4f1223d",
+  "helper_tests": {
+    "passed": 301,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-centroid-enclosure-all.log",
+    "independent_rational_cases": 6048,
+    "comparison": "i128 cross products with exact binary f64 endpoint decomposition; rational not rounded to f64 before comparison"
+  },
+  "integrated_tests": {
+    "log": "/tmp/ai-centroid-enclosure-integrated-all.log",
+    "status": "terminal",
+    "passed": 301,
+    "failed": 0,
+    "ignored": 12
+  },
+  "trace_flag": "RRRAH_AI_TRACE_CENTROID_ENCLOSURE",
+  "scope": "Outward interval enclosure of exact centroid of reported finite trapezoid, including existing kernel evaluation; no heap, bounded continuing work and cancellation. Diagnostic trace checks actual emitted centroid and charges same geometry allowance. Not original edge/intersection/clipping error or owner-hull membership certification. No fragments or source observations skipped.",
+  "real_control": {
+    "log": "/tmp/ai-centroid-enclosure-real13834.log",
+    "pixel": [
+      138,
+      34
+    ],
+    "completed": false,
+    "source_spent": 5990,
+    "source_remaining": 3994010,
+    "deadline": false,
+    "final_credit": 0,
+    "decision": "New optional enclosure trace refuses early; ordinary baseline remains complete. Do not enable as acceptance/optimization gate. Need identify exact rejected trapezoid/coordinate condition."
+  },
+  "clamped_width_tests": {
+    "passed": 301,
+    "failed": 0,
+    "ignored": 12,
+    "independent_rational_cases": 8736,
+    "log": "/tmp/ai-centroid-clamped-enclosure-all.log"
+  },
+  "refusal_cause": {
+    "log": "/tmp/ai-centroid-enclosure-refusal-real13834.log",
+    "bottom_width": -2.842170943040401e-14,
+    "meaning": "Original kernel clamps negative endpoint width to zero. Correct enclosure models exact centroid of that repaired shape, not unrepaired reported quadrilateral. Repair displacement stays a separate geometry-error term."
+  },
+  "corrected_real_control": {
+    "log": "/tmp/ai-centroid-clamped-enclosure-real13834.log",
+    "pixel": [
+      138,
+      34
+    ],
+    "fragment_checks": 34296,
+    "max_rounding": [
+      5.684341886080803e-14,
+      1.4210854715202007e-14
+    ],
+    "max_endpoint_repair": 5.968558980384843e-13,
+    "typed_rgb8": [
+      219,
+      185,
+      167
+    ],
+    "source_work": 254999,
+    "final_credit": 0,
+    "deadline": false,
+    "scope": "Extra enclosure work charged to continuing geometry40M; source4M unchanged. No performance or original-edge/owner-membership claim; every original geometry observation retained."
+  }
+}

@@ -1,0 +1,22 @@
+   Compiling rrrah-first30-harness v0.1.0 (/tmp/rrrah-first30-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.33s
+     Running unittests src/lib.rs (/tmp/rrrah-first30-harness/target/debug/deps/rrrah_first30_harness-933d5dee599c4492)
+
+running 1 test
+test editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget ... FAILED
+
+failures:
+
+---- editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget stdout ----
+
+thread 'editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget' (32438863) panicked at /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:865:9:
+assertion failed: editor.is_ready()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `--lib`

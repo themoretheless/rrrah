@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "passed": 3,
+  "failed": 0,
+  "adapter": "Apple M4 Max Metal",
+  "required_gpu_mode": "RRRAH_GPU_OPTIONAL=0 now fails if no device; RRRAH_GPU_BACKEND=metal explicitly restricts instance",
+  "coverage": [
+    "six algorithms preserve constant HDR on interior pixels",
+    "directional/RCD stripe MSE improves on bilinear; MHC does not degrade",
+    "invalid Bayer CFA refuses",
+    "immediate cancellation releases credits",
+    "WGSL Naga validation"
+  ],
+  "limitations": [
+    "authored small fields, not full-sensor Bayer or camera corpus",
+    "repeat equality proves cancellation recovery, not independent demosaic fidelity",
+    "ordinary optional GPU mode can still skip intentionally"
+  ],
+  "source_sha256": "6b5ad75fda0b5b749711619a70182f150b673c8eff3a087eeeaac68018ae7414",
+  "admitted_cancellation": {
+    "passed": 4,
+    "failed": 0,
+    "dimensions": [
+      129,
+      65
+    ],
+    "algorithms": 6,
+    "admitted_checkpoints_each": 6,
+    "cancel_retry_pairs": 36,
+    "checkpoints": [
+      "reservation",
+      "before submission",
+      "readback chunk 1",
+      "readback chunk 2",
+      "readback chunk 3",
+      "before successful return"
+    ],
+    "retry_comparison": "every output pixel exactly equals no-cancellation baseline",
+    "cpu_gpu_final_used": [
+      0,
+      0
+    ]
+  }
+}

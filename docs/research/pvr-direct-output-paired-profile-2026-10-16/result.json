@@ -1,0 +1,143 @@
+{
+  "status": "direct_output_memory_change_has_measured_decode_win",
+  "setup": {
+    "platform": "Apple M4 Max macOS",
+    "toolchain": "stable optimized test profile",
+    "source": "already-resident1024x1024 synthetic linear DXT2; repeated blocks",
+    "pairs_per_run": 12,
+    "runs": 2,
+    "decodes_per_sample": 8,
+    "ordering": "alternating staged/direct and direct/staged with warmups",
+    "scope": "header parse, owned BC decoding, managed allocation, normalization, unassociation and returned raster destruction"
+  },
+  "control": "Reconstruct former staged operation via current owned BC2 decode with same bytes declared as straight BC2, then same admitted float normalization/unassociation; not an independently rebuilt old commit",
+  "correctness": "All float32 output bits match before timing;83 texture tests pass,2 manual profiles ignored",
+  "runs": [
+    {
+      "log": "pvr-associated-direct-paired.log",
+      "pairs": [
+        {
+          "staged_ns": 87955583,
+          "direct_ns": 68323666
+        },
+        {
+          "staged_ns": 86154500,
+          "direct_ns": 67881500
+        },
+        {
+          "staged_ns": 86247667,
+          "direct_ns": 68820542
+        },
+        {
+          "staged_ns": 86156125,
+          "direct_ns": 67210708
+        },
+        {
+          "staged_ns": 86654792,
+          "direct_ns": 67665792
+        },
+        {
+          "staged_ns": 85503166,
+          "direct_ns": 69198292
+        },
+        {
+          "staged_ns": 86511833,
+          "direct_ns": 68218916
+        },
+        {
+          "staged_ns": 86199250,
+          "direct_ns": 68677291
+        },
+        {
+          "staged_ns": 85742250,
+          "direct_ns": 67909542
+        },
+        {
+          "staged_ns": 87729708,
+          "direct_ns": 68605458
+        },
+        {
+          "staged_ns": 86436875,
+          "direct_ns": 68815625
+        },
+        {
+          "staged_ns": 86859750,
+          "direct_ns": 68217042
+        }
+      ],
+      "wins": 12,
+      "median_pair_time_reduction_percent": 21.177279758351208,
+      "staged_median_ms_per_decode": 10.792783875,
+      "direct_median_ms_per_decode": 8.533911375
+    },
+    {
+      "log": "pvr-associated-direct-paired-repeat.log",
+      "pairs": [
+        {
+          "staged_ns": 150595625,
+          "direct_ns": 103470959
+        },
+        {
+          "staged_ns": 100989917,
+          "direct_ns": 109530125
+        },
+        {
+          "staged_ns": 143300834,
+          "direct_ns": 79030917
+        },
+        {
+          "staged_ns": 104136583,
+          "direct_ns": 85192167
+        },
+        {
+          "staged_ns": 111131084,
+          "direct_ns": 83916834
+        },
+        {
+          "staged_ns": 87037709,
+          "direct_ns": 75548541
+        },
+        {
+          "staged_ns": 90054959,
+          "direct_ns": 67569042
+        },
+        {
+          "staged_ns": 87518333,
+          "direct_ns": 67614750
+        },
+        {
+          "staged_ns": 88496875,
+          "direct_ns": 66541958
+        },
+        {
+          "staged_ns": 85245292,
+          "direct_ns": 66436083
+        },
+        {
+          "staged_ns": 87495292,
+          "direct_ns": 67450083
+        },
+        {
+          "staged_ns": 85440209,
+          "direct_ns": 67099209
+        }
+      ],
+      "wins": 11,
+      "median_pair_time_reduction_percent": 22.8261150169544,
+      "staged_median_ms_per_decode": 11.159489625,
+      "direct_median_ms_per_decode": 8.9477056875
+    }
+  ],
+  "summary": {
+    "direct_wins": 23,
+    "pairs": 24,
+    "memory_plane_capacity_reduction_percent": 20
+  },
+  "limits": [
+    "One slower direct pair in second run retained; no outliers excluded",
+    "Repeat has visible transient timing variation; report raw pairs and medians, not latency guarantees",
+    "Synthetic warm in-memory DXT2 only; no disk/source-read/real-image corpus/GPU or end-to-end gallery speedup claim",
+    "PVR production code unchanged in profiling turn; only reusable test construction and manual profile added"
+  ],
+  "source_sha256": "ffc39bb6797552d69cc30018f9de323046f39242c103df5b313b2f05a3d8c1b7"
+}

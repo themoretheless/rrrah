@@ -1,0 +1,29 @@
+    Checking rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: unused import: `super::*`
+    --> crates/rrrah-app/benches/../src/gallery.rs:3324:9
+     |
+3324 |     use super::*;
+     |         ^^^^^^^^
+     |
+help: if this is a test module, consider adding a `#[cfg(test)]` to the containing module
+    --> crates/rrrah-app/benches/../src/gallery.rs:3323:1
+     |
+3323 | mod cyclic_prefetch_tests {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+    --> crates/rrrah-app/benches/../src/gallery.rs:3441:9
+     |
+3441 |     use super::*;
+     |         ^^^^^^^^
+     |
+help: if this is a test module, consider adding a `#[cfg(test)]` to the containing module
+    --> crates/rrrah-app/benches/../src/gallery.rs:3440:1
+     |
+3440 | mod repeat_phase_prefetch_tests {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bench "folder_scan") generated 2 warnings (1 duplicate) (run `cargo fix --bench "folder_scan" -p rrrah` to apply 1 suggestion)
+warning: `rrrah` (bench "prefetch_scheduler") generated 2 warnings (1 duplicate) (run `cargo fix --bench "prefetch_scheduler" -p rrrah` to apply 1 suggestion)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 24.85s

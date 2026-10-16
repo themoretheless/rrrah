@@ -1,0 +1,66 @@
+{
+  "status": "Diagnostic trial only; default grid remains one",
+  "source_sha256": "7f52cb3ef0783868d42bce1a043044dbb45749eb83f894dc22de4bfe73e3a671",
+  "unit_tests": {
+    "passed": 267,
+    "failed": 0,
+    "ignored": 12
+  },
+  "budgets": {
+    "tiled_color": 4000000,
+    "geometry": 40000000,
+    "memory_bytes": 268435456,
+    "reference_color_override": 16000000,
+    "reference_override_purpose": "Untiled numerical control only; not a qualification budget"
+  },
+  "comparisons": [
+    {
+      "pixel": [
+        138,
+        36
+      ],
+      "alpha_abs_error": 1.801891968966629e-13,
+      "max_native_component_abs_error": 1.4877066245588821e-10
+    },
+    {
+      "pixel": [
+        143,
+        45
+      ],
+      "alpha_abs_error": 1.3877787807814457e-13,
+      "max_native_component_abs_error": 9.194400796275204e-11
+    },
+    {
+      "pixel": [
+        149,
+        56
+      ],
+      "alpha_abs_error": 5.551115123125783e-17,
+      "max_native_component_abs_error": 5.981581896463695e-11
+    }
+  ],
+  "full_page": {
+    "completed": 15798,
+    "total": 74046,
+    "refusal_pixel": [
+      146,
+      52
+    ],
+    "deadline": false,
+    "elapsed_seconds": 106.22,
+    "max_color_work": 3999997,
+    "final_credit": 0,
+    "published": false
+  },
+  "grid2_full_suite": {
+    "passed": 264,
+    "failed": 3,
+    "ignored": 12,
+    "failures": [
+      "authored_native_cmyk_mesh_samples_on_spatial_cell_centroids",
+      "authored_pdf_mesh_luminosity_mask_routes_original_gray_before_area_average",
+      "reused_fused_child_discards_prior_paint_when_next_source_is_absent"
+    ],
+    "interpretation": "Two strict numerical centroid-rounding assertions and one sample-count assertion fail. Do not promote diagnostic tiling to default or weaken acceptance tolerances."
+  }
+}

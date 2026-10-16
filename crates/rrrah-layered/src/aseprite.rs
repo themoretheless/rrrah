@@ -87,6 +87,8 @@ enum CelData<'a> {
         data: &'a [u8],
     },
     Link(usize),
+    // Temporary reverse edge while resolving a linked-cel chain in place.
+    Resolving(Option<usize>),
 }
 #[derive(Clone, Copy)]
 struct Cel<'a> {
@@ -100,6 +102,7 @@ struct Inventory<'a> {
     w: usize,
     h: usize,
     depth: usize,
+    pixel_aspect: Option<f32>,
     transparent: u8,
     isolate_groups: bool,
     layers: Vec<Layer>,
@@ -107,8 +110,11 @@ struct Inventory<'a> {
     delays: Vec<u32>,
     palette: [Option<[u8; 4]>; 256],
     color: RasterColorSpace,
+    color_credit: Option<rrrah_core::Reservation>,
     tags: Vec<AsepriteTag>,
     max_cel_bytes: usize,
+    // Declared last so frame tables are freed before their budget credit.
+    _frame_index_credit: Option<rrrah_core::Reservation>,
 }
 fn palette_chunk(
     data: &[u8],
@@ -166,7 +172,11 @@ fn palette_chunk(
     }
     s.finish()
 }
-fn color_chunk(b: &[u8]) -> Result<RasterColorSpace, RasterDecodeError> {
+fn color_chunk(
+    b: &[u8],
+    request: &DecodeRequest,
+    credit: &mut Option<rrrah_core::Reservation>,
+) -> Result<RasterColorSpace, RasterDecodeError> {
     if b.len() < 16 {
         return Err(bad("color profile header"));
     }
@@ -189,10 +199,15 @@ fn color_chunk(b: &[u8]) -> Result<RasterColorSpace, RasterDecodeError> {
             if n == 0 || n > 16 * 1024 * 1024 || b.len() != 20 + n {
                 return Err(bad("ICC bounds"));
             }
+            *credit = reserve_pixels(request, n)?;
             Ok(RasterColorSpace::Icc(b[20..].to_vec()))
         }
         _ => Err(bad("color profile type/length")),
     }
+}
+// ASE header bytes 34/35; either zero declares square pixels.
+fn pixel_aspect(width: u8, height: u8) -> Option<f32> {
+    (width != 0 && height != 0 && width != height).then(|| f32::from(width) / f32::from(height))
 }
 fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, RasterDecodeError> {
     request.check_cancelled()?;
@@ -212,19 +227,24 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
     if !matches!(depth, 8 | 16 | 32) || flags & !7 != 0 {
         return Err(bad("unsupported depth/header flags"));
     }
-    if b[34] != 0 && b[35] != 0 && b[34] != b[35] {
-        return Err(bad("non-square pixels unsupported"));
-    }
+    let pixel_aspect = pixel_aspect(b[34], b[35]);
     if w as u64 * h as u64 * 16 > MAX_RASTER_BYTES {
         return Err(RasterDecodeError::OutputTooLarge);
     }
     if request.image_index >= frames {
         return Err(bad("frame index out of range"));
     }
+    if frames > (b.len() - 128) / 16 {
+        return Err(bad("frame count exceeds source bounds"));
+    }
+    let frame_index_bytes =
+        frames * (std::mem::size_of::<BTreeMap<usize, Cel<'_>>>() + std::mem::size_of::<u32>());
+    let frame_index_credit = reserve_pixels(request, frame_index_bytes)?;
     let mut result = Inventory {
         w,
         h,
         depth: depth / 8,
+        pixel_aspect,
         transparent: b[28],
         isolate_groups: flags & 2 != 0,
         layers: Vec::new(),
@@ -232,8 +252,10 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
         delays: Vec::with_capacity(frames),
         palette: [None; 256],
         color: RasterColorSpace::AssumedSrgb,
+        color_credit: None,
         tags: Vec::new(),
         max_cel_bytes: 0,
+        _frame_index_credit: frame_index_credit,
     };
     let mut outer = Scan { b, at: 128 };
     let mut groups: Vec<usize> = Vec::new();
@@ -258,11 +280,14 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
         result
             .delays
             .push(u32::from(if delay == 0 { word(&b[18..20]) } else { delay }));
+        let frame_bytes = outer.take(size - 16)?;
+        // First borrowed pass validates framing and finds palette precedence;
+        // the second parses in source order without a chunk descriptor table.
         let mut s = Scan {
-            b: outer.take(size - 16)?,
+            b: frame_bytes,
             at: 0,
         };
-        let mut chunks = Vec::with_capacity(count.min(65536));
+        let mut new_palette = false;
         for _ in 0..count {
             request.check_cancelled()?;
             let h = s.take(6)?;
@@ -270,13 +295,20 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
             if n < 6 {
                 return Err(bad("chunk size"));
             }
-            chunks.push((word(&h[4..6]), s.take(n - 6)?));
+            new_palette |= word(&h[4..6]) == 0x2019;
+            s.take(n - 6)?;
         }
         s.finish()?;
-        let new_palette = chunks.iter().any(|&(kind, _)| kind == 0x2019);
+        let mut s = Scan {
+            b: frame_bytes,
+            at: 0,
+        };
         let mut frame_cels = BTreeMap::new();
-        for (kind, data) in chunks {
+        for _ in 0..count {
             request.check_cancelled()?;
+            let h = s.take(6)?;
+            let kind = word(&h[4..6]);
+            let data = s.take(dword(&h[..4]) as usize - 6)?;
             match kind {
                 0x2004 => {
                     if frame != 0 || result.layers.len() >= 4096 {
@@ -391,7 +423,7 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
                     if profile_seen || frame != 0 {
                         return Err(bad("duplicate/noninitial color profile"));
                     }
-                    result.color = color_chunk(data)?;
+                    result.color = color_chunk(data, request, &mut result.color_credit)?;
                     profile_seen = true;
                 }
                 0x2006 => {
@@ -432,36 +464,7 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
         result.cels.push(frame_cels);
     }
     outer.finish()?;
-    // Resolve the graph in place once. Forward references are legal; a link
-    // copies only image storage, retaining the current cel's position/opacity/z.
-    for frame in 0..frames {
-        let keys: Vec<_> = result.cels[frame].keys().copied().collect();
-        for layer in keys {
-            request.check_cancelled()?;
-            let mut path = Vec::new();
-            let mut visited = std::collections::HashSet::new();
-            let mut target = frame;
-            let image = loop {
-                request.check_cancelled()?;
-                let cel = result.cels[target]
-                    .get(&layer)
-                    .ok_or_else(|| bad("missing linked cel"))?;
-                match cel.data {
-                    data @ CelData::Image { .. } => break data,
-                    CelData::Link(next) => {
-                        if !visited.insert(target) {
-                            return Err(bad("cyclic linked cels"));
-                        }
-                        path.push(target);
-                        target = next;
-                    }
-                }
-            };
-            for target in path {
-                result.cels[target].get_mut(&layer).unwrap().data = image;
-            }
-        }
-    }
+    resolve_links(&mut result.cels, request)?;
     if result.layers.is_empty() {
         return Err(bad("missing layer layout"));
     }
@@ -488,7 +491,61 @@ fn inventory<'a>(b: &'a [u8], request: &DecodeRequest) -> Result<Inventory<'a>, 
     }
     Ok(result)
 }
+// Reverse unresolved edges in place, then unwind with the resolved payload.
+// Every link is visited at most twice, without path/key/hash allocations.
+fn resolve_links(
+    cels: &mut [BTreeMap<usize, Cel<'_>>],
+    request: &DecodeRequest,
+) -> Result<(), RasterDecodeError> {
+    for frame in 0..cels.len() {
+        let mut key = cels[frame].keys().next().copied();
+        while let Some(layer) = key {
+            request.check_cancelled()?;
+            let mut previous = None;
+            let mut target = frame;
+            let image = loop {
+                request.check_cancelled()?;
+                let cel = cels
+                    .get_mut(target)
+                    .and_then(|frame| frame.get_mut(&layer))
+                    .ok_or_else(|| bad("missing linked cel"))?;
+                match cel.data {
+                    image @ CelData::Image { .. } => break image,
+                    CelData::Link(next) => {
+                        cel.data = CelData::Resolving(previous);
+                        previous = Some(target);
+                        target = next;
+                    }
+                    CelData::Resolving(_) => return Err(bad("cyclic linked cels")),
+                }
+            };
+            while let Some(target) = previous {
+                request.check_cancelled()?;
+                let cel = cels[target].get_mut(&layer).unwrap();
+                let CelData::Resolving(next) = cel.data else {
+                    unreachable!()
+                };
+                cel.data = image;
+                previous = next;
+            }
+            key = cels[frame]
+                .range((std::ops::Bound::Excluded(layer), std::ops::Bound::Unbounded))
+                .next()
+                .map(|(&key, _)| key);
+        }
+    }
+    Ok(())
+}
 fn inflate_into(data: &[u8], out: &mut [u8], request: &DecodeRequest) -> Result<(), RasterDecodeError> {
+    inflate_with_progress(data, out, request, |_, _| {})
+}
+fn inflate_with_progress(
+    data: &[u8],
+    out: &mut [u8],
+    request: &DecodeRequest,
+    mut progress: impl FnMut(u64, u64),
+) -> Result<(), RasterDecodeError> {
+    let _decoder_credit = reserve_pixels(request, rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES as usize)?;
     let mut decoder = flate2::Decompress::new(true);
     let mut extra = [0u8; 1];
     loop {
@@ -505,6 +562,7 @@ fn inflate_into(data: &[u8], out: &mut [u8], request: &DecodeRequest) -> Result<
         let status = decoder
             .decompress(source, target, flate2::FlushDecompress::None)
             .map_err(|_| bad("invalid cel zlib stream"))?;
+        progress(decoder.total_in(), decoder.total_out());
         if decoder.total_out() > out.len() as u64 {
             return Err(bad("cel expands beyond dimensions"));
         }
@@ -519,18 +577,32 @@ fn inflate_into(data: &[u8], out: &mut [u8], request: &DecodeRequest) -> Result<
         }
     }
 }
+fn reserve_pixels(
+    request: &DecodeRequest,
+    bytes: usize,
+) -> Result<Option<rrrah_core::Reservation>, RasterDecodeError> {
+    request.check_cancelled()?;
+    request
+        .memory_budget
+        .as_ref()
+        .map(|budget| budget.try_reserve(bytes as u64))
+        .transpose()
+        .map_err(crate::DecodeError::from)
+        .map_err(Into::into)
+}
 fn unpack<'a>(
     data: &'a [u8],
     expected: usize,
     compressed: bool,
     request: &DecodeRequest,
-) -> Result<std::borrow::Cow<'a, [u8]>, RasterDecodeError> {
+) -> Result<(std::borrow::Cow<'a, [u8]>, Option<rrrah_core::Reservation>), RasterDecodeError> {
     if !compressed {
-        return Ok(std::borrow::Cow::Borrowed(data));
+        return Ok((std::borrow::Cow::Borrowed(data), None));
     }
+    let reservation = reserve_pixels(request, expected)?;
     let mut out = vec![0; expected];
     inflate_into(data, &mut out, request)?;
-    Ok(std::borrow::Cow::Owned(out))
+    Ok((std::borrow::Cow::Owned(out), reservation))
 }
 fn multiply(a: u8, b: u8) -> u8 {
     let t = u32::from(a) * u32::from(b) + 128;
@@ -600,7 +672,9 @@ fn render_cel(
         request.check_cancelled()?;
         return Ok(true);
     }
-    let decoded = unpack(data, w * h * inv.depth, compressed, request)?;
+    // Keep the tuple intact: fields drop in order, pixels before their credit.
+    let storage = unpack(data, w * h * inv.depth, compressed, request)?;
+    let decoded = storage.0.as_ref();
     for y in top..bottom {
         request.check_cancelled()?;
         for x in left..right {
@@ -660,6 +734,7 @@ fn render_group(
         }
         if l.group {
             if inv.isolate_groups {
+                let _reservation = reserve_pixels(request, out.len())?;
                 let mut group = vec![0; out.len()];
                 render_group(&mut group, Some(index), inv, request, &mut true)?;
                 for (n, (dst, src)) in out.chunks_exact_mut(4).zip(group.chunks_exact(4)).enumerate() {
@@ -686,16 +761,28 @@ pub fn decode_aseprite(request: &DecodeRequest) -> Result<AsepriteImage, RasterD
 }
 pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<AsepriteImage, RasterDecodeError> {
     let inv = inventory(b, request)?;
+    let reservation = reserve_pixels(request, inv.w * inv.h * 4)?;
     let mut rgba = vec![0; inv.w * inv.h * 4];
     render_group(&mut rgba, None, &inv, request, &mut true)?;
+    request.check_cancelled()?;
+    let pixels = match reservation {
+        Some(reservation) => reservation
+            .try_adopt(rgba)
+            .map_err(crate::DecodeError::from)?
+            .into(),
+        None => Arc::new(rgba).into(),
+    };
+    let raster = DecodedRaster::new(inv.w as u32, inv.h as u32, RasterPixels::Rgba8(pixels), inv.color)?
+        .with_pixel_aspect(inv.pixel_aspect)?
+        .with_image_selection(request.image_index, inv.cels.len())?;
+    let raster = match inv.color_credit {
+        Some(credit) => raster
+            .with_color_profile_reservation(credit)
+            .map_err(crate::DecodeError::from)?,
+        None => raster,
+    };
     Ok(AsepriteImage {
-        raster: DecodedRaster::new(
-            inv.w as u32,
-            inv.h as u32,
-            RasterPixels::Rgba8(Arc::new(rgba).into()),
-            inv.color,
-        )?
-        .with_image_selection(request.image_index, inv.cels.len())?,
+        raster,
         delay_ms: inv.delays[request.image_index],
         tags: inv.tags,
         layer_names: inv.layers.into_iter().map(|l| l.name).collect(),
@@ -705,6 +792,700 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<AsepriteImage, Raster
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn selected_frame_buffers_obey_peak_budget_and_keep_output_credit_until_last_owner() {
+        let manifest = include_str!("../../../tests/fixtures/raster/aseprite-manifest.tsv");
+        let mut cases = 0;
+        let mut scratch_cases = 0;
+        for row in manifest
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.is_empty())
+        {
+            let fields: Vec<_> = row.split('\t').collect();
+            let bytes = std::fs::read(root().join(fields[0])).unwrap();
+            let mut request = DecodeRequest::new(fields[0]);
+            request.image_index = fields[1].parse().unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            request.memory_budget = Some(budget.clone());
+            let image = decode(&bytes, &request).unwrap();
+            let output = image.raster.capacity_bytes();
+            let peak = budget.peak();
+            assert_eq!(budget.used(), output);
+            assert!(peak >= output);
+            scratch_cases += usize::from(peak > output);
+            let RasterPixels::Rgba8(values) = image.raster.pixels() else {
+                panic!()
+            };
+            assert!(values.is_managed());
+            let expected = values.as_slice().to_vec();
+            let clone = image.raster.clone();
+            drop(image);
+            assert_eq!(budget.used(), output);
+            drop(clone);
+            assert_eq!(budget.used(), 0);
+            for limit in [0, output - 1, peak - 1] {
+                let budget = rrrah_core::MemoryBudget::new(limit);
+                request.memory_budget = Some(budget.clone());
+                assert!(
+                    matches!(
+                        decode(&bytes, &request),
+                        Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+                    ),
+                    "{} index={} limit={limit}",
+                    fields[0],
+                    request.image_index
+                );
+                assert_eq!(budget.used(), 0);
+                assert!(budget.peak() <= limit);
+            }
+            let exact = rrrah_core::MemoryBudget::new(peak);
+            request.memory_budget = Some(exact.clone());
+            let image = decode(&bytes, &request).unwrap();
+            let RasterPixels::Rgba8(values) = image.raster.pixels() else {
+                panic!()
+            };
+            assert_eq!(values.as_slice(), expected);
+            assert_eq!(exact.peak(), peak);
+            drop(image);
+            assert_eq!(exact.used(), 0);
+            cases += 1;
+        }
+        assert!(scratch_cases > 0, "fixtures must exercise scratch admission");
+        assert_eq!(cases, 63);
+        eprintln!(
+            "ASE_BUDGET cases={cases} scratch_cases={scratch_cases} refusals={} final=0",
+            cases * 3
+        );
+    }
+
+    #[test]
+    fn corrupt_compressed_cels_release_admitted_buffers_and_allow_retry() {
+        let manifest = include_str!("../../../tests/fixtures/raster/aseprite-manifest.tsv");
+        let mut cases = 0;
+        for row in manifest
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.is_empty())
+        {
+            let fields: Vec<_> = row.split('\t').collect();
+            let original = std::fs::read(root().join(fields[0])).unwrap();
+            let compressed: Vec<_> = chunks(&original)
+                .into_iter()
+                .filter(|&(at, _, kind)| kind == 0x2005 && word(&original[at + 13..at + 15]) == 2)
+                .map(|(at, _, _)| at)
+                .collect();
+            if compressed.is_empty() {
+                continue;
+            }
+            let mut request = DecodeRequest::new(fields[0]);
+            request.image_index = fields[1].parse().unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            request.memory_budget = Some(budget.clone());
+            for checksum in [false, true] {
+                let mut broken = original.clone();
+                for &at in &compressed {
+                    if checksum {
+                        let end = at + dword(&original[at..at + 4]) as usize;
+                        broken[end - 1] ^= 0xff;
+                    } else {
+                        broken[at + 26] = 0;
+                    }
+                }
+                let error = decode(&broken, &request).unwrap_err();
+                assert!(
+                    matches!(
+                        error,
+                        RasterDecodeError::InvalidAseprite("invalid cel zlib stream")
+                    ),
+                    "{error}"
+                );
+                assert_eq!(budget.used(), 0);
+                assert!(budget.peak() > 0, "failure must occur after pixel admission");
+                let retry = decode(&original, &request).unwrap();
+                let RasterPixels::Rgba8(values) = retry.raster.pixels() else {
+                    panic!()
+                };
+                assert_eq!(values.as_slice(), std::fs::read(root().join(fields[7])).unwrap());
+                drop(retry);
+                assert_eq!(budget.used(), 0);
+                cases += 1;
+            }
+        }
+        assert!(cases > 0);
+        eprintln!("ASE_CORRUPT cases={cases} retries={cases} final=0");
+    }
+
+    #[test]
+    fn large_metadata_chunk_count_does_not_allocate_descriptor_table() {
+        let original = std::fs::read(root().join("ase-32-0-2019-1.aseprite")).unwrap();
+        let mut request = DecodeRequest::new("many-chunks.aseprite");
+        let baseline_budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        request.memory_budget = Some(baseline_budget.clone());
+        let baseline = decode(&original, &request).unwrap();
+        let peak = baseline_budget.peak();
+        let RasterPixels::Rgba8(values) = baseline.raster.pixels() else {
+            panic!()
+        };
+        let expected = values.as_slice().to_vec();
+        drop(baseline);
+        let size = dword(&original[128..132]) as usize;
+        let count = if dword(&original[140..144]) == 0 {
+            u32::from(word(&original[134..136]))
+        } else {
+            dword(&original[140..144])
+        };
+        let extra = 100_000u32;
+        let mut bytes = original.clone();
+        let chunks: Vec<_> = (0..extra).flat_map(|_| [6, 0, 0, 0, 0x16, 0x20]).collect();
+        bytes.splice(128 + size..128 + size, chunks);
+        bytes[128..132].copy_from_slice(&(size as u32 + extra * 6).to_le_bytes());
+        bytes[140..144].copy_from_slice(&(count + extra).to_le_bytes());
+        let length = bytes.len() as u32;
+        bytes[..4].copy_from_slice(&length.to_le_bytes());
+        let exact = rrrah_core::MemoryBudget::new(peak);
+        request.memory_budget = Some(exact.clone());
+        let image = decode(&bytes, &request).unwrap();
+        let RasterPixels::Rgba8(values) = image.raster.pixels() else {
+            panic!()
+        };
+        assert_eq!(values.as_slice(), expected);
+        assert_eq!(exact.peak(), peak);
+        drop(image);
+        assert_eq!(exact.used(), 0);
+        let denied = rrrah_core::MemoryBudget::new(0);
+        request.memory_budget = Some(denied.clone());
+        assert!(matches!(
+            decode(&original, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!(denied.peak(), 0);
+        assert_eq!(denied.used(), 0);
+        eprintln!("ASE_CHUNK_TABLE extra={extra} peak={peak} final=0");
+    }
+
+    #[test]
+    fn linked_cel_graph_resolves_long_chains_and_rejects_cycles_without_scratch() {
+        let samples = [7, 19, 31, 255];
+        let image = CelData::Image {
+            w: 1,
+            h: 1,
+            compressed: false,
+            data: &samples,
+        };
+        let cel = |data| Cel {
+            x: -3,
+            y: 5,
+            opacity: 173,
+            z: -7,
+            data,
+        };
+        let budget = rrrah_core::MemoryBudget::new(0);
+        let mut request = DecodeRequest::new("linked.aseprite");
+        request.memory_budget = Some(budget.clone());
+        for forward in [false, true] {
+            let count = 50_000;
+            let mut frames: Vec<BTreeMap<usize, Cel<'_>>> = (0..count)
+                .map(|index| {
+                    let data = if (forward && index == count - 1) || (!forward && index == 0) {
+                        image
+                    } else {
+                        CelData::Link(if forward { index + 1 } else { index - 1 })
+                    };
+                    [(2, cel(data)), (9, cel(image))].into_iter().collect()
+                })
+                .collect();
+            resolve_links(&mut frames, &request).unwrap();
+            for frame in frames {
+                for value in frame.values() {
+                    assert_eq!((value.x, value.y, value.opacity, value.z), (-3, 5, 173, -7));
+                    let CelData::Image {
+                        data,
+                        w,
+                        h,
+                        compressed,
+                    } = value.data
+                    else {
+                        panic!()
+                    };
+                    assert_eq!((w, h, compressed), (1, 1, false));
+                    assert_eq!(data, samples);
+                }
+            }
+        }
+        for links in [vec![0], vec![1, 0], vec![1, 2, 1]] {
+            let mut frames: Vec<_> = links
+                .into_iter()
+                .map(|next| [(2, cel(CelData::Link(next)))].into_iter().collect())
+                .collect();
+            assert!(matches!(
+                resolve_links(&mut frames, &request),
+                Err(RasterDecodeError::InvalidAseprite("cyclic linked cels"))
+            ));
+        }
+        let mut missing: Vec<_> = vec![
+            [(2, cel(CelData::Link(1)))].into_iter().collect(),
+            BTreeMap::new(),
+        ];
+        assert!(matches!(
+            resolve_links(&mut missing, &request),
+            Err(RasterDecodeError::InvalidAseprite("missing linked cel"))
+        ));
+        request.cancellation = Some(crate::GenerationToken::new(
+            Arc::new(std::sync::atomic::AtomicU64::new(1)),
+            0,
+        ));
+        let mut cancelled = vec![[(2, cel(image))].into_iter().collect()];
+        assert!(matches!(
+            resolve_links(&mut cancelled, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+        ));
+        assert_eq!(budget.peak(), 0);
+        assert_eq!(budget.used(), 0);
+        eprintln!("ASE_LINK_GRAPH states=200000 cycles=3 missing=1 cancellation=1 scratch=0");
+    }
+
+    #[test]
+    fn linked_cel_graph_matches_independent_exhaustive_walk_oracle() {
+        let samples = [
+            [1, 3, 5, 255],
+            [7, 11, 13, 127],
+            [17, 19, 23, 91],
+            [29, 31, 37, 43],
+        ];
+        let request = DecodeRequest::new("graph.aseprite");
+        let mut cases = 0;
+        for count in 1..=5usize {
+            let radix = count + 3; // links, two images, one missing target
+            for encoded in 0..radix.pow(count as u32) {
+                let mut remaining = encoded;
+                let edges: Vec<_> = (0..count)
+                    .map(|_| {
+                        let edge = remaining % radix;
+                        remaining /= radix;
+                        edge
+                    })
+                    .collect();
+                let expected: Vec<_> = (0..count)
+                    .map(|start| {
+                        let mut seen = vec![false; count];
+                        let mut at = start;
+                        loop {
+                            if at >= count {
+                                break None;
+                            }
+                            if seen[at] {
+                                break None;
+                            }
+                            seen[at] = true;
+                            match edges[at] {
+                                edge if edge < count => at = edge,
+                                edge if edge < count + 2 => break Some(edge - count),
+                                _ => break None,
+                            }
+                        }
+                    })
+                    .collect();
+                let mut frames: Vec<BTreeMap<usize, Cel<'_>>> = edges
+                    .iter()
+                    .enumerate()
+                    .map(|(index, &edge)| {
+                        [2usize, 9]
+                            .into_iter()
+                            .enumerate()
+                            .map(|(channel, layer)| {
+                                let data = if edge < count {
+                                    CelData::Link(edge)
+                                } else if edge < count + 2 {
+                                    CelData::Image {
+                                        w: 1,
+                                        h: 1,
+                                        compressed: false,
+                                        data: &samples[channel * 2 + edge - count],
+                                    }
+                                } else {
+                                    CelData::Link(count)
+                                };
+                                (
+                                    layer,
+                                    Cel {
+                                        x: index as i32,
+                                        y: -2,
+                                        opacity: 173,
+                                        z: -7,
+                                        data,
+                                    },
+                                )
+                            })
+                            .collect()
+                    })
+                    .collect();
+                let result = resolve_links(&mut frames, &request);
+                assert_eq!(
+                    result.is_ok(),
+                    expected.iter().all(Option::is_some),
+                    "count={count} graph={encoded}"
+                );
+                if result.is_ok() {
+                    for (index, frame) in frames.iter().enumerate() {
+                        for (channel, layer) in [2, 9].into_iter().enumerate() {
+                            let cel = frame.get(&layer).unwrap();
+                            let CelData::Image { data, .. } = cel.data else {
+                                panic!()
+                            };
+                            assert_eq!(data, samples[channel * 2 + expected[index].unwrap()]);
+                            assert_eq!((cel.x, cel.y, cel.opacity, cel.z), (index as i32, -2, 173, -7));
+                        }
+                    }
+                }
+                cases += 1;
+            }
+        }
+        eprintln!("ASE_LINK_EXHAUSTIVE graphs={cases} max_frames=5 layers=2");
+    }
+
+    #[test]
+    #[ignore = "manual paired linked-cel resolver microbenchmark"]
+    fn linked_cel_resolver_paired_benchmark() {
+        fn previous(cels: &mut [BTreeMap<usize, Cel<'_>>], request: &DecodeRequest) {
+            for frame in 0..cels.len() {
+                let keys: Vec<_> = cels[frame].keys().copied().collect();
+                for layer in keys {
+                    request.check_cancelled().unwrap();
+                    let mut path = Vec::new();
+                    let mut visited = std::collections::HashSet::new();
+                    let mut target = frame;
+                    let image = loop {
+                        request.check_cancelled().unwrap();
+                        match cels[target][&layer].data {
+                            image @ CelData::Image { .. } => break image,
+                            CelData::Link(next) => {
+                                assert!(visited.insert(target));
+                                path.push(target);
+                                target = next;
+                            }
+                            CelData::Resolving(_) => unreachable!(),
+                        }
+                    };
+                    for target in path {
+                        cels[target].get_mut(&layer).unwrap().data = image;
+                    }
+                }
+            }
+        }
+        let samples = [7, 19, 31, 255];
+        let request = DecodeRequest::new("benchmark.aseprite");
+        for forward in [false, true] {
+            let count = 50_000;
+            let input: Vec<BTreeMap<usize, Cel<'_>>> = (0..count)
+                .map(|index| {
+                    let data = if (forward && index == count - 1) || (!forward && index == 0) {
+                        CelData::Image {
+                            w: 1,
+                            h: 1,
+                            compressed: false,
+                            data: &samples,
+                        }
+                    } else {
+                        CelData::Link(if forward { index + 1 } else { index - 1 })
+                    };
+                    [(
+                        2,
+                        Cel {
+                            x: 0,
+                            y: 0,
+                            opacity: 255,
+                            z: 0,
+                            data,
+                        },
+                    )]
+                    .into_iter()
+                    .collect()
+                })
+                .collect();
+            for pair in 0..8 {
+                let mut old = input.clone();
+                let mut new = input.clone();
+                let (old_ns, new_ns);
+                if pair % 2 == 0 {
+                    let start = std::time::Instant::now();
+                    previous(&mut old, &request);
+                    old_ns = start.elapsed().as_nanos();
+                    let start = std::time::Instant::now();
+                    resolve_links(&mut new, &request).unwrap();
+                    new_ns = start.elapsed().as_nanos();
+                } else {
+                    let start = std::time::Instant::now();
+                    resolve_links(&mut new, &request).unwrap();
+                    new_ns = start.elapsed().as_nanos();
+                    let start = std::time::Instant::now();
+                    previous(&mut old, &request);
+                    old_ns = start.elapsed().as_nanos();
+                }
+                for (old, new) in old.iter().zip(&new) {
+                    let (CelData::Image { data: a, .. }, CelData::Image { data: b, .. }) =
+                        (old[&2].data, new[&2].data)
+                    else {
+                        panic!()
+                    };
+                    assert_eq!(a, b);
+                }
+                eprintln!(
+                    "ASE_LINK_PAIR forward={forward} count={count} pair={pair} old_ns={old_ns} new_ns={new_ns}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn file_source_and_decode_peak_share_budget_and_release_source_before_return() {
+        let manifest = include_str!("../../../tests/fixtures/raster/aseprite-manifest.tsv");
+        let mut cases = 0;
+        for row in manifest
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.is_empty())
+        {
+            let fields: Vec<_> = row.split('\t').collect();
+            let path = root().join(fields[0]);
+            let bytes = std::fs::read(&path).unwrap();
+            let mut request = DecodeRequest::new(path);
+            request.image_index = fields[1].parse().unwrap();
+            let borrowed_budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            request.memory_budget = Some(borrowed_budget.clone());
+            drop(decode(&bytes, &request).unwrap());
+            let needed = bytes.len() as u64 + borrowed_budget.peak();
+            let exact = rrrah_core::MemoryBudget::new(needed);
+            request.memory_budget = Some(exact.clone());
+            let image = decode_aseprite(&request).unwrap();
+            let output = image.raster.capacity_bytes();
+            assert_eq!(exact.peak(), needed);
+            assert_eq!(
+                exact.used(),
+                output,
+                "source and parser tables must be released on return"
+            );
+            let RasterPixels::Rgba8(values) = image.raster.pixels() else {
+                panic!()
+            };
+            assert_eq!(values.as_slice(), std::fs::read(root().join(fields[7])).unwrap());
+            let clone = image.raster.clone();
+            drop(image);
+            assert_eq!(exact.used(), output);
+            drop(clone);
+            assert_eq!(exact.used(), 0);
+            for limit in [bytes.len() as u64 - 1, needed - 1] {
+                let denied = rrrah_core::MemoryBudget::new(limit);
+                request.memory_budget = Some(denied.clone());
+                assert!(
+                    matches!(
+                        decode_aseprite(&request),
+                        Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+                    ),
+                    "{} index={} limit={limit}",
+                    fields[0],
+                    request.image_index
+                );
+                assert_eq!(denied.used(), 0);
+                assert!(denied.peak() <= limit);
+            }
+            cases += 1;
+        }
+        assert_eq!(cases, 63);
+        eprintln!("ASE_FILE_BUDGET cases={cases} refusals={} final=0", cases * 2);
+    }
+
+    #[test]
+    fn cel_decoder_state_is_admitted_before_output_writes_and_released() {
+        use std::io::Write;
+        let pixel = [7u8, 11, 13, 255];
+        let mut encoder = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::default());
+        encoder.write_all(&pixel).unwrap();
+        let compressed = encoder.finish().unwrap();
+        let bytes = rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES;
+        let mut request = DecodeRequest::new("cel.aseprite");
+        let short = rrrah_core::MemoryBudget::new(bytes - 1);
+        request.memory_budget = Some(short.clone());
+        let mut output = [99u8; 4];
+        assert!(matches!(inflate_into(&compressed, &mut output, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(
+                rrrah_core::BufferError::Capacity { requested, .. }
+            ))) if requested == bytes));
+        assert_eq!(output, [99; 4]);
+        assert_eq!((short.used(), short.peak()), (0, 0));
+        let exact = rrrah_core::MemoryBudget::new(bytes);
+        request.memory_budget = Some(exact.clone());
+        inflate_into(&compressed, &mut output, &request).unwrap();
+        assert_eq!(output, pixel);
+        assert_eq!((exact.used(), exact.peak()), (0, bytes));
+        let mut broken = compressed;
+        *broken.last_mut().unwrap() ^= 255;
+        assert!(inflate_into(&broken, &mut output, &request).is_err());
+        assert_eq!(exact.used(), 0);
+    }
+
+    #[test]
+    fn low_output_zlib_stream_checks_cancellation_between_bounded_input_chunks() {
+        // Independently authored RFC1950/1951 stream: empty stored blocks,
+        // then one final stored block with a four-byte pixel and Adler32.
+        let pixel = [7u8, 11, 13, 255];
+        let mut stream = vec![0x78, 0x01];
+        for _ in 0..100_000 {
+            stream.extend_from_slice(&[0, 0, 0, 255, 255]);
+        }
+        stream.extend_from_slice(&[1, 4, 0, 251, 255]);
+        stream.extend_from_slice(&pixel);
+        let (mut a, mut b) = (1u32, 0u32);
+        for value in pixel {
+            a = (a + u32::from(value)) % 65521;
+            b = (b + a) % 65521;
+        }
+        stream.extend_from_slice(&((b << 16) | a).to_be_bytes());
+        let mut output = [0u8; 4];
+        let mut request = DecodeRequest::new("empty-blocks.aseprite");
+        let (mut previous_in, mut previous_out, mut chunks) = (0, 0, 0);
+        inflate_with_progress(&stream, &mut output, &request, |input, output| {
+            assert!(input - previous_in <= 65536);
+            assert!(output - previous_out <= 65536);
+            assert!(input > previous_in || output > previous_out);
+            previous_in = input;
+            previous_out = output;
+            chunks += 1;
+        })
+        .unwrap();
+        assert_eq!(output, pixel);
+        assert_eq!(previous_in, stream.len() as u64);
+        assert!(chunks >= 8);
+        let generation = Arc::new(std::sync::atomic::AtomicU64::new(0));
+        let decoder_bytes = rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES;
+        let decoder_budget = rrrah_core::MemoryBudget::new(decoder_bytes);
+        request.memory_budget = Some(decoder_budget.clone());
+        request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 0));
+        let mut callbacks = 0;
+        output = [0; 4];
+        let error = inflate_with_progress(&stream, &mut output, &request, |input, output| {
+            assert!(input > 0 && input <= 65536);
+            assert_eq!(output, 0);
+            assert_eq!(decoder_budget.used(), decoder_bytes);
+            callbacks += 1;
+            generation.store(1, std::sync::atomic::Ordering::Release);
+        })
+        .unwrap_err();
+        assert!(matches!(
+            error,
+            RasterDecodeError::Source(crate::DecodeError::Cancelled)
+        ));
+        assert_eq!(callbacks, 1);
+        assert_eq!(decoder_budget.used(), 0);
+        assert_eq!(output, [0; 4]);
+        request.cancellation = None;
+        for prefix in [0, 1, 65535, 65536, 65537, stream.len() - 1] {
+            assert!(inflate_into(&stream[..prefix], &mut output, &request).is_err());
+        }
+        inflate_into(&stream, &mut output, &request).unwrap();
+        assert_eq!(output, pixel);
+        eprintln!(
+            "ASE_INFLATE_BOUNDED source_bytes={} chunks={chunks} cancelled_after_chunks=1 truncations=6 retry=1",
+            stream.len()
+        );
+    }
+
+    #[test]
+    fn icc_chunk_admission_and_raster_metadata_clones_share_credit() {
+        let bytes = std::fs::read(root().join("ase-profile-icc.aseprite")).unwrap();
+        let at = chunks(&bytes)
+            .into_iter()
+            .find(|&(_, _, kind)| kind == 0x2007)
+            .unwrap()
+            .0;
+        let end = at + dword(&bytes[at..at + 4]) as usize;
+        let chunk = &bytes[at + 6..end];
+        let profile = &chunk[20..];
+        let mut request = DecodeRequest::new("profile.aseprite");
+        let denied = rrrah_core::MemoryBudget::new(profile.len() as u64 - 1);
+        request.memory_budget = Some(denied.clone());
+        let mut credit = None;
+        assert!(matches!(
+            color_chunk(chunk, &request, &mut credit),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!(denied.peak(), 0);
+        assert!(credit.is_none());
+        let exact = rrrah_core::MemoryBudget::new(profile.len() as u64);
+        request.memory_budget = Some(exact.clone());
+        let color = color_chunk(chunk, &request, &mut credit).unwrap();
+        assert_eq!(color, RasterColorSpace::Icc(profile.to_vec()));
+        assert_eq!(exact.used(), profile.len() as u64);
+        drop(color);
+        drop(credit);
+        assert_eq!(exact.used(), 0);
+        for index in 0..3 {
+            request.image_index = index;
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            request.memory_budget = Some(budget.clone());
+            let image = decode(&bytes, &request).unwrap();
+            assert_eq!(
+                image.raster.color_space(),
+                &RasterColorSpace::Icc(profile.to_vec())
+            );
+            let retained = image.raster.capacity_bytes();
+            assert_eq!(retained, 5 * 3 * 4 + profile.len() as u64);
+            let clone = image.raster.clone().try_manage_pixels(&budget).unwrap();
+            assert_eq!(budget.used(), retained, "ICC must not be admitted twice");
+            assert!(std::ptr::eq(image.raster.color_space(), clone.color_space()));
+            drop(image);
+            assert_eq!(budget.used(), retained);
+            drop(clone);
+            assert_eq!(budget.used(), 0);
+        }
+        eprintln!(
+            "ASE_ICC_CREDIT frames=3 profile_bytes={} shared_credit=true final=0",
+            profile.len()
+        );
+    }
+
+    #[test]
+    fn pixel_aspect_header_domain_and_selected_frames() {
+        for width in 0..=255u8 {
+            for height in 0..=255u8 {
+                let aspect = pixel_aspect(width, height).unwrap_or(1.0);
+                let expected = if width == 0 || height == 0 {
+                    1.0
+                } else {
+                    (f64::from(width) / f64::from(height)) as f32
+                };
+                assert_eq!(aspect, expected);
+            }
+        }
+        let original = std::fs::read(root().join("ase-32-0-2019-1.aseprite")).unwrap();
+        let mut request = DecodeRequest::new("aspect.aseprite");
+        for index in 0..3 {
+            request.image_index = index;
+            let baseline = decode(&original, &request).unwrap();
+            for (width, height) in [
+                (2, 1),
+                (1, 2),
+                (255, 1),
+                (1, 255),
+                (7, 3),
+                (0, 255),
+                (255, 0),
+                (0, 0),
+                (3, 3),
+            ] {
+                let mut bytes = original.clone();
+                bytes[34] = width;
+                bytes[35] = height;
+                let actual = decode(&bytes, &request).unwrap();
+                assert_eq!(actual.raster.pixel_aspect(), pixel_aspect(width, height));
+                assert_eq!(actual.delay_ms, baseline.delay_ms);
+                assert_eq!(actual.raster.image_index(), index);
+                let (RasterPixels::Rgba8(a), RasterPixels::Rgba8(b)) =
+                    (actual.raster.pixels(), baseline.raster.pixels())
+                else {
+                    panic!()
+                };
+                assert_eq!(a.as_slice(), b.as_slice());
+            }
+        }
+    }
     fn root() -> std::path::PathBuf {
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster")
     }
@@ -852,9 +1633,6 @@ mod tests {
             b[at..at + 2].copy_from_slice(&v.to_le_bytes());
             assert!(decode(&b, &request).is_err());
         }
-        let mut b = source.clone();
-        b[34] = 2;
-        assert!(decode(&b, &request).is_err());
         let at = chunks(&source)
             .into_iter()
             .find(|&(_, frame, kind)| frame > 128 && kind == 0x2005)

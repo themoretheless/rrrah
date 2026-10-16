@@ -1,0 +1,16 @@
+test_timeout_stops_child_tree_and_preserves_output (timeout_tests.SuiteTimeoutTests.test_timeout_stops_child_tree_and_preserves_output) ... FAIL
+
+======================================================================
+FAIL: test_timeout_stops_child_tree_and_preserves_output (timeout_tests.SuiteTimeoutTests.test_timeout_stops_child_tree_and_preserves_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-viewer-suite-timeout.py", line 73, in test_timeout_stops_child_tree_and_preserves_output
+    self.assertLess(time.monotonic(), deadline, f'child still executing: {state}')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 60201.61458125 not less than 60201.574209541 : child still executing: S
+
+----------------------------------------------------------------------
+Ran 1 test in 4.547s
+
+FAILED (failures=1)
+Mutation correctly rejected: without group SIGKILL, SIGTERM-resistant child remains executing.

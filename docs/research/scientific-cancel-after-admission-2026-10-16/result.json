@@ -1,0 +1,131 @@
+{
+  "status": "Manual concurrent cancellation after observed managed output admission passes for NRRD/MRC/FITS",
+  "production_changes": false,
+  "test": "scientific_cancel_stress::cancellation_after_large_output_admission_preserves_other_owners",
+  "synthetic_input": "1024x1024 scalar planes; NRRD raw uint8, MRC int8 and FITS uint8; headers derived from current native fixtures; input bytes borrowed outside managed budget",
+  "method": "Two threads synchronize at barrier. Observer waits for root used to reach16MiB output admission then changes generation. Decoder must return typed Cancelled and release its output/native samples. Watcher3second timeout converts missing observation to explicit failure, not success.",
+  "budget": {
+    "root_bytes": 20971520,
+    "standing_unrelated_reservation_bytes": 4096,
+    "output_bytes": 16777216,
+    "final_after_decoder_bytes": 4096,
+    "final_after_owner_drop_bytes": 0
+  },
+  "runs": [
+    {
+      "run": 1,
+      "states": [
+        {
+          "format": "NRRD",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "MRC",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "FITS",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 17829888
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "states": [
+        {
+          "format": "NRRD",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "MRC",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "FITS",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 17829888
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "states": [
+        {
+          "format": "NRRD",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "MRC",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "FITS",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 17829888
+        }
+      ]
+    },
+    {
+      "run": 4,
+      "states": [
+        {
+          "format": "NRRD",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "MRC",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "FITS",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 17829888
+        }
+      ]
+    },
+    {
+      "run": 5,
+      "states": [
+        {
+          "format": "NRRD",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "MRC",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 16781312
+        },
+        {
+          "format": "FITS",
+          "output_bytes": 16777216,
+          "managed_peak_bytes": 17829888
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed",
+    "focused_rustfmt": "passed"
+  },
+  "limitations": [
+    "Scheduling-dependent manual ignored test, explicitly executed5times; not enabled as mandatory CI timing test",
+    "Observes allocation admission; cancellation may happen during zero initialization or at first sample checkpoint, not proof of arbitrary mid-plane progress",
+    "Standing unrelated reserve models retained owner, not actual cache frame in this probe",
+    "No file IO source reservation, GPU or cancellation latency bound measured",
+    "No claim of all cancellation interleavings or complete100format qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-scientific/src/scientific_cancel_stress.rs": "2f970727d315feb3d13fd19157ebba986cb0196cb33922614772f9bc257ede39",
+    "crates/rrrah-scientific/src/lib.rs": "5f18dae93fc0a6b952ba7197fdf85e649191761d9bf95316cc62152c46ff557f"
+  }
+}

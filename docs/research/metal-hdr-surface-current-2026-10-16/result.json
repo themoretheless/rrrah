@@ -1,0 +1,93 @@
+{
+  "status": "offscreen_validated_live_presentation_blocked",
+  "surface": {
+    "backend": "Metal",
+    "adapter": "Apple M4 Max",
+    "configuration": "RGBA16Float / ExtendedSrgbLinear",
+    "configuration_validation_error": null,
+    "frames_presented": 0,
+    "terminal_error": "Occluded after 10 seconds",
+    "exit_code": 1,
+    "current_headroom": 1.0,
+    "potential_headroom": 16.0,
+    "coarse_high_dynamic_range": false,
+    "luminance_metadata": null,
+    "requested_hold_seconds": 5,
+    "requested_resize_probe": true,
+    "resize_validated": false
+  },
+  "session": {
+    "CGSSessionScreenIsLocked": true,
+    "kCGSSessionOnConsoleKey": true,
+    "diagnostic": "ioreg IOConsoleUsers filtered flags only"
+  },
+  "offscreen": {
+    "command": "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo +stable test -p rrrah-gpu --test raster_readback --offline -- --nocapture --test-threads=1",
+    "passed": 28,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.86,
+    "scope": [
+      "linear HDR/negative/exposed RGBA16F",
+      "straight alpha and transparent interpolation",
+      "tile seams and partial cancellation",
+      "resident source geometry and transactional admission",
+      "area-filtered HDR LOD",
+      "fragment/compute weighted f64 comparisons"
+    ],
+    "test_names_in_log": [
+      "area_filtered_hdr_lod_matches_independent_alpha_reference_on_metal",
+      "area_large_signed_hdr_cancellation_preserves_small_other_channels",
+      "area_minification_matches_independent_sixteen_cell_linear_average",
+      "area_source_region_missing_footprint_stays_unexposed_background",
+      "bayer_resident_crop_and_all_orientations_match_materialized_sdr_hdr",
+      "calibrated_bayer_compute_and_fragment_respect_shader_precision_at_sensor_pixel_scale",
+      "calibrated_bayer_hdr_exposure_has_explicit_signed_half_range",
+      "calibrated_bayer_resident_upload_preserves_frames_budgets_sdr_hdr",
+      "cancelled_upload_validation_and_admission_preserve_visible_texture",
+      "developed_raw_exposure_precedes_tone_and_monotone_curve",
+      "fractional_area_alpha_matches_independent_f64_and_ignores_invisible_rgb",
+      "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+      "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+      "gpu_resident_compute_rows_match_cpu_exposure_reference",
+      "hdr_exposure_saturates_to_finite_binary16_range",
+      "hdr_opposite_extreme_samples_interpolate_without_nan",
+      "hero9_full_frame_developed_raw_matches_metal_display_transport",
+      "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+      "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+      "linear_gray_and_straight_alpha_composite_match_display_reference",
+      "linear_hdr_attachment_preserves_bright_negative_and_exposed_channels",
+      "nonfinite_raster_controls_produce_exact_finite_sdr_hdr_frames",
+      "pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry",
+      "planned_visible_regions_match_whole_image_during_pan_zoom_and_pixel_aspect",
+      "qualified_sd10_linear_raster_full_frame_display_readback",
+      "raster_queue_admission_accounts_alignment_and_completion_ownership",
+      "resident_compute_tiles_match_cpu_sdr_hdr_across_aligned_and_packed_rows",
+      "resident_source_regions_preserve_full_geometry_hdr_and_transactional_admission",
+      "small_resident_region_renders_source_above_eager_atlas_limit",
+      "split_comparison_reuses_resident_pixels_and_matches_both_reference_exposures",
+      "texture_budget_preserves_loaded_image_on_refusal_and_releases_owners",
+      "tiled_bayer_resident_crop_and_all_orientations_match_materialized_sdr_hdr",
+      "tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr",
+      "transparent_rgb_is_removed_before_bilinear_interpolation",
+      "uploaded_rows_and_rgb_channels_keep_their_positions",
+      "weighted_fragment_compute_float32_accuracy_against_independent_f64"
+    ]
+  },
+  "source_sha256": {
+    "crates/rrrah-app/examples/hdr_surface_probe.rs": "a158875ab8d3986a13b17b38664e2e5f577d28613c3a7cf780a0ae3e6759a319",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "1850d773c47f08c5363c8eebd220124deab4716e95042e5758942f019259f691",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "095e0be26f7312d56af2b5d5f04e86dad4c2d894fa180ea52e01b8e00ec3fd66"
+  },
+  "scope_limits": [
+    "No current live HDR/EDR frame or resize was shown; session unlock required for that check",
+    "Potential headroom is capability metadata, not proof of active HDR output",
+    "Offscreen HDR GPU buffers do not qualify physical display luminance/color accuracy",
+    "Ignored/manual empirical edge/camera/full-resolution tests not run by this command",
+    "NVIDIA remains deferred by user"
+  ],
+  "logs": [
+    "surface.log",
+    "raster-readback.log"
+  ]
+}

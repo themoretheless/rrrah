@@ -1,0 +1,138 @@
+{
+  "status": "owned_block_decoder_no_regression_and_measured_win",
+  "setup": {
+    "platform": "Apple M4 Max macOS",
+    "toolchain": "project stable; optimized test profile",
+    "blocks_per_sample": 524288,
+    "distinct_valid_blocks": 4096,
+    "pairs_per_run": 12,
+    "runs": 2,
+    "order": "alternating A/B then B/A with initial warmups",
+    "dispatch": "black_box function pointer for both; input and full output black_box",
+    "comparison": "owned ETC1 vs texture2ddecoder0.1.2 ETC1, without validation/container overhead"
+  },
+  "runs": [
+    {
+      "log": "owned-etc1-paired-profile.log",
+      "pairs": [
+        {
+          "previous_ns": 16908083,
+          "owned_ns": 15476375
+        },
+        {
+          "previous_ns": 16913167,
+          "owned_ns": 15629875
+        },
+        {
+          "previous_ns": 16909333,
+          "owned_ns": 15512458
+        },
+        {
+          "previous_ns": 16850500,
+          "owned_ns": 15607000
+        },
+        {
+          "previous_ns": 16851500,
+          "owned_ns": 15624500
+        },
+        {
+          "previous_ns": 17017709,
+          "owned_ns": 15622459
+        },
+        {
+          "previous_ns": 16752041,
+          "owned_ns": 15545708
+        },
+        {
+          "previous_ns": 16833625,
+          "owned_ns": 15613208
+        },
+        {
+          "previous_ns": 16911208,
+          "owned_ns": 15626667
+        },
+        {
+          "previous_ns": 16841958,
+          "owned_ns": 15352334
+        },
+        {
+          "previous_ns": 16833167,
+          "owned_ns": 15552541
+        },
+        {
+          "previous_ns": 16914291,
+          "owned_ns": 15625667
+        }
+      ],
+      "owned_wins": 12,
+      "median_pair_time_reduction_percent": 7.6017756023015135,
+      "previous_median_ns": 16879791.5,
+      "owned_median_ns": 15610104.0
+    },
+    {
+      "log": "owned-etc1-paired-profile-repeat.log",
+      "pairs": [
+        {
+          "previous_ns": 16705875,
+          "owned_ns": 15390750
+        },
+        {
+          "previous_ns": 16659250,
+          "owned_ns": 15418667
+        },
+        {
+          "previous_ns": 16632833,
+          "owned_ns": 15423000
+        },
+        {
+          "previous_ns": 16607750,
+          "owned_ns": 15411709
+        },
+        {
+          "previous_ns": 16577792,
+          "owned_ns": 15353000
+        },
+        {
+          "previous_ns": 16584292,
+          "owned_ns": 15387416
+        },
+        {
+          "previous_ns": 16648584,
+          "owned_ns": 15392333
+        },
+        {
+          "previous_ns": 16627917,
+          "owned_ns": 15396208
+        },
+        {
+          "previous_ns": 16595500,
+          "owned_ns": 15379708
+        },
+        {
+          "previous_ns": 16570875,
+          "owned_ns": 15378750
+        },
+        {
+          "previous_ns": 16597041,
+          "owned_ns": 15383166
+        },
+        {
+          "previous_ns": 16925875,
+          "owned_ns": 15406250
+        }
+      ],
+      "owned_wins": 12,
+      "median_pair_time_reduction_percent": 7.357091661754184,
+      "previous_median_ns": 16617833.5,
+      "owned_median_ns": 15391541.5
+    }
+  ],
+  "correctness": "77 texture tests pass;1 ignored manual profile;4096-block Android pixel oracle remains exact",
+  "source_sha256": "ed025f1957c53378bbdce7e036d62654ee8bdef4e72cb8c6806a0bd37690f8d5",
+  "limits": [
+    "Synthetic warm block microbenchmark; no file loading, managed memory, disk, application, or GPU throughput claim",
+    "Both decoders get identical valid inputs; malformed differential validation excluded",
+    "No additional algorithm optimization retained on timing evidence; production owned decoder unchanged",
+    "End-to-end format qualification remains separate"
+  ]
+}

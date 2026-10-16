@@ -1,0 +1,23 @@
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.92s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_scientific-8124b89985c00c5f)
+
+running 1 test
+test fits::tests::end_card_must_fit_entirely_inside_header_limit ... FAILED
+
+failures:
+
+---- fits::tests::end_card_must_fit_entirely_inside_header_limit stdout ----
+
+thread 'fits::tests::end_card_must_fit_entirely_inside_header_limit' (3397926) panicked at crates/rrrah-scientific/src/fits.rs:653:9:
+assertion failed: matches!(decode(&oversized, &request),
+    Err(RasterDecodeError::InvalidFits("oversized header")))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    fits::tests::end_card_must_fit_entirely_inside_header_limit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 61 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-scientific --lib`

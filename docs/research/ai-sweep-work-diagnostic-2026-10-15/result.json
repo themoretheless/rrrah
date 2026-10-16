@@ -1,0 +1,52 @@
+{
+  "status": "diagnostic complete; pixel still refuses geometry budget",
+  "pixel": [
+    147,
+    61
+  ],
+  "completed_subrectangle_records": 149430,
+  "completed_subrectangle_totals": {
+    "slabs": 194435,
+    "initial_region_slots": 7227039,
+    "active_edge_visits": 6828891,
+    "grouped_hits": 562250,
+    "winding_updates": 1072788
+  },
+  "scope": "Totals exclude unfinished subrectangle; counters do not alter continuing work or skip geometry. Default off.",
+  "source_work": 3221861,
+  "source_remaining": 778139,
+  "final_credit": 0,
+  "deadline": false,
+  "tests": {
+    "passed": 308,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-sweep-work-tests-20261015.log"
+  },
+  "log": "/tmp/ai-sweep-work-real14761-20261015.log",
+  "source_sha256": "9accd739974d59336df250b0642cd5038aa4043632041f30f5810acc8d4f4c6e",
+  "phases": {
+    "mask_capture": {
+      "completed_records": 149400,
+      "totals": {
+        "slabs": 188196,
+        "initial_region_slots": 582504,
+        "active_edge_visits": 4449908,
+        "grouped_hits": 39302,
+        "winding_updates": 39302
+      }
+    },
+    "owner_sweep": {
+      "completed_records": 30,
+      "totals": {
+        "slabs": 6239,
+        "initial_region_slots": 6644535,
+        "active_edge_visits": 2378983,
+        "grouped_hits": 522948,
+        "winding_updates": 1033486
+      }
+    }
+  },
+  "interpretation": "Initial aggregate combined mask capture and owner traversal; do not attribute capture counts to the 40M owner geometry allowance. Owner sweep totals cover 30 completed subrectangles only, excluding the refusing subrectangle.",
+  "next_candidate": "Precompute relevant region IDs once per tile and initialize selectors from that immutable subset; avoid per-slab dirty tracking rejected earlier. Must preserve original owner priority, cancellation, admitted storage and bit-exact fragments; measure real controls before retention."
+}

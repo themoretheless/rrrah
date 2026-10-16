@@ -1,0 +1,85 @@
+{
+  "status": "pvr3_etc1_selected_mips_implemented",
+  "format_specification": "https://docs.imgtec.com/specifications/pvr-file-format-specification/html/topics/pvr-header-format.html",
+  "changes": [
+    "PVR v3 pixel format6 accepted with unsigned normalized byte channel declaration and little-endian header",
+    "ETC1 blocks decoded by shared owned Rust implementation directly into managed cropped RGBA output",
+    "Keep PVRTC power-of-two/storage behavior separate; ETC1 supports cropped non-power-of-two source sizes",
+    "Retain orientation, linear/sRGB, original metadata and selected mip semantics"
+  ],
+  "fixtures": {
+    "files": 8,
+    "selected_mips": 32,
+    "dimensions": [
+      [
+        9,
+        5
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "orientations": [
+      "rd",
+      "ru",
+      "ld",
+      "lu"
+    ],
+    "color_spaces": [
+      "linear",
+      "srgb"
+    ],
+    "oracle": "Independent Android ETC1 block RGB assembled through prior separate Python KTX crop/orientation oracle; PVR wraps same compressed bytes"
+  },
+  "checks": {
+    "texture_lib": {
+      "passed": 78,
+      "failed": 0,
+      "ignored": 1
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pvr_native_mip_cases": 90,
+    "managed_quota": "exact/one-byte-short includes retained metadata; cloned owners retain credit until final drop",
+    "corruption": "six invalid differential endpoints reject at zero pixel budget without allocation; new fixtures included in all-prefix truncation checks",
+    "app_cpu": {
+      "states": 354,
+      "swap_writes": 354,
+      "swap_reads": 354,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 354,
+      "readbacks": 2124,
+      "swap_writes": 354,
+      "swap_reads": 354,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "Compressed PVR big-endian remains explicitly unsupported",
+    "Other PVR codecs, legacy/cube/array/volume variants and full qualification remain open",
+    "PVRTC remains external Rust backend; only ETC1 shared block path owned",
+    "No end-to-end speedup, physical HDR or NVIDIA qualification claim"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/pvr.rs": "81f8aba86d8d3bdd289cdde162c570c01d5f32acbb88a838dc05bc8cd176bd39",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "d0795ed7fe19811d5e11f8a158d64256a42c2c7c6015c5c0f5644514e47abbb1",
+    "scripts/generate-pvr-etc1-fixtures.py": "c9f4a2012628a511e1457eccd05c76f5d1e87d4f2f192402ddff27bee8d63c1b",
+    "tests/fixtures/raster/pvr-etc1-manifest.tsv": "0e833cbc80db3876bfe7c3ffe667093f97b71cf4cc09ca1d5f8f19daa471e732"
+  }
+}

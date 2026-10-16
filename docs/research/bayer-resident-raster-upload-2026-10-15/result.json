@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "api": "RasterRenderer::upload_bayer_resident",
+  "behavior": "typed calibrated Bayer RGBA32F source copies directly GPU buffer to tiled raster texture; shares existing resident exposure upload implementation and lease/admission checks",
+  "qualification": {
+    "adapter": "Apple M4 Max Metal",
+    "raster_suite_passed": 19,
+    "failed": 0,
+    "ignored": 8,
+    "algorithms": 6,
+    "dimensions": [
+      17,
+      13
+    ],
+    "attachments": [
+      "SDR RGBA8 sRGB",
+      "HDR RGBA16Float"
+    ],
+    "comparisons": "whole64x64 exact vs CPU-uploaded copies of same computed pixels",
+    "pressure_and_cancel": "exhausted texture budget and post-reservation cancellation preserve previous frame",
+    "producer_lifetime": "drop producer immediately after queued texture upload, compute credit retained until copy/render completion, then zero",
+    "final_compute_cpu_texture_queue_credits": 0
+  },
+  "limitations": [
+    "upload equivalence uses readback of computed pixels; does not establish independent demosaic or camera color fidelity",
+    "crop/orientation and display tone mapping remain caller responsibilities",
+    "viewer compute wiring still pending",
+    "eight manual raster tests not rerun"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "9c6a66784281cfc07e2741d71c023d2117879ec1a245da9406a65e1a4b8bbe02",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "3d4f6da0bdc5e71d84c991e121369b1c703e314372dddc68283f126650c2bc17"
+  }
+}

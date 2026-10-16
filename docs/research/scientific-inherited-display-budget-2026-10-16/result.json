@@ -1,0 +1,50 @@
+{
+  "status": "NRRD/MRC/FITS convenience display now inherits decode request budget and cancellation, including cloned images",
+  "before": "Public image.windowed() and FITS.to_raster() called request-free helpers and could allocate outside original managed root",
+  "implementation": "Image retains cloned DecodeRequest privately. Convenience methods pass it to request-aware display code; FITS internal explicit request overrides inherited context. Cancellation checked before output allocation. Native pixel representation and window math unchanged.",
+  "regression": {
+    "paths": [
+      "NRRD.windowed",
+      "MRC.windowed",
+      "FITS.windowed",
+      "FITS.to_raster"
+    ],
+    "successful_output_bytes": 240,
+    "live_native_or_metadata_bytes": [
+      240,
+      272,
+      15,
+      15
+    ],
+    "exact_budget": "live image +240byte output succeeds; adding1byte unrelated pressure makes next display return typed Memory",
+    "clone_cancel": "Clone image, drop original, cancel shared generation; display returns typed Cancelled without changing live reservation",
+    "final_managed_bytes": 0
+  },
+  "tests": {
+    "scientific": {
+      "passed": 45,
+      "failed": 0,
+      "ignored": 8
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed"
+  },
+  "api_change": "FitsImage/NrrdImage/MrcImage contain private request context and can no longer be constructed by external struct literals. Current workspace has no such consumers outside defining modules; public decoder constructors remain supported.",
+  "limits": [
+    "Request-free source decodes still produce unbudgeted convenience display, as no caller budget exists",
+    "Methods now observe cancellation of original generation, even when image is cloned",
+    "No new all-workspace runtime or Metal run in this turn; pixel math unchanged and focused oracle/facade tests pass",
+    "Header/retained DecodeRequest metadata is not managed pixel budget or total RSS"
+  ],
+  "source_sha256": {
+    "crates/rrrah-scientific/src/nrrd.rs": "68009e2447debb9e4f03a80400224a6bb5adbaa1386ba8b6e82000e26d5de0d3",
+    "crates/rrrah-scientific/src/mrc.rs": "e7dce78b9110fae359f9269a9d4ee6a4b09c00483555d1bc17b2551c981a0c8a",
+    "crates/rrrah-scientific/src/fits.rs": "e9904d4ba125eec21e1c0a73595e53c793898831c44b70d561e9da0360fdc365",
+    "crates/rrrah-scientific/src/scientific.rs": "a54c3e6fb21ca8f6e02554421f35c194653d84bc8907afcf1411f348510881db",
+    "crates/rrrah-scientific/src/scientific_cancel_stress.rs": "59da1fef46b43c2609e2b49c08d89cfedce25ba5d63d131ab362b1f4704087f2"
+  }
+}

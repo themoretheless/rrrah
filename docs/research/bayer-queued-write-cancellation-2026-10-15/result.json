@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "change": "managed and resident Bayer source/uniform writes retain GPU budget leases using existing queued-upload guard until explicit submission; early cancellation flushes queue and retains leases through completion",
+  "coverage": {
+    "adapter": "Apple M4 Max Metal",
+    "gpu_library_passed": 60,
+    "failed": 0,
+    "ignored": 2,
+    "resident_cancel_cases": 48,
+    "algorithms": 6,
+    "cfa_layouts": 4,
+    "cancel_points": [
+      "source/uniform written before first compute submission",
+      "source/uniform written before second compute submission"
+    ],
+    "invariant": "GPU credit remains positive immediately after cancel, then zero after queue poll completion",
+    "other_regressions": "24 resident and managed full-output window comparisons plus36 admitted managed cancellation/retry pairs remain exact"
+  },
+  "integration_audit": {
+    "viewer": "fragment RAW path",
+    "compute_missing_prerequisites": [
+      "native Bayer normalization preserving black repeat-grid, white-level layout and distinct G1/G2 WB",
+      "camera RGB to scene-linear sRGB transform",
+      "resident raster upload interface accepting typed calibrated Bayer output"
+    ]
+  },
+  "limitations": [
+    "queue staging actual allocations excluded from logical credits",
+    "full-sensor not rerun for this lease-only change",
+    "viewer compute integration not implemented in this turn"
+  ],
+  "source_sha256": "ad31b6038a0af1b01a53734cda9bbcc8a02d253d99152b78f79d8900915aec3f"
+}

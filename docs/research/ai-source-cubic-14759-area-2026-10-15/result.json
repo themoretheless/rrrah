@@ -1,0 +1,49 @@
+{
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "inventory_sha256": "ff76a51ccaedb8ba39c2ec8c4e356867cb8f88f11f714009a4ed4dd5f4499aa9",
+  "pixel": [
+    147,
+    59
+  ],
+  "operator_index": 1181,
+  "source_cubic": [
+    [
+      144.897,
+      49.72999999999999
+    ],
+    [
+      148.316,
+      58.382000000000005
+    ],
+    [
+      147.68,
+      66.33000000000001
+    ],
+    [
+      147.377,
+      70.219
+    ]
+  ],
+  "method": "Original cubic polynomial x(t),y(t); bisect y=59/60 then integrate(148-x(t))*y_prime(t) analytically.",
+  "rows": [
+    {
+      "bisection_iterations": 40,
+      "left_x_at_y59": 147.26542411327333,
+      "left_x_at_y60": 147.38303542900647,
+      "area": 0.6737577505326162
+    },
+    {
+      "bisection_iterations": 52,
+      "left_x_at_y59": 147.26542411327247,
+      "left_x_at_y60": 147.38303542900707,
+      "area": 0.6737577505409027
+    }
+  ],
+  "native_reported_alpha": 0.6737398252860969,
+  "absolute_difference_from_fine_area": 1.7925254805817303e-05,
+  "limitations": [
+    "One original clipping boundary; numerical convergence, not interval proof.",
+    "Shading patch support, additional visibility and color are not independently adjudicated.",
+    "Does not replace strict72dpi whole-page comparison."
+  ]
+}

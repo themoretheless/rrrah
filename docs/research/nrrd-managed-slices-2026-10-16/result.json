@@ -1,0 +1,40 @@
+{
+  "status": "NRRD selected-slice and request-aware scientific window pixel buffers now obey managed budget; gzip volume no longer retained in full",
+  "problem": "Previous NRRD inflated whole volume into unmanaged Vec and allocated output outside request budget; scientific window output also unmanaged",
+  "implementation": {
+    "gzip": "Scan/decompress entire single gzip member to validate count, CRC/trailer and no trailing data; retain only selected plane bytes; cancellation per64KiB read",
+    "buffers": "Selected gzip slice and float RGBA output use MemoryBudget buffers; raw/ascii output managed; request-aware shared NRRD/MRC window output managed",
+    "unchanged": "Native sample values, endian handling, selected image metadata, explicit nonfinite window refusal",
+    "scratch_limit": "Bounded64KiB stack read buffer plus flate2 internal decoder state; those and header strings are not pixel-budget accounting, not total process RSS"
+  },
+  "regressions": {
+    "independent_pynrrd_containers": 16,
+    "selected_plane_oracles": 32,
+    "exact_budget": "For every manifest state: source bytes + selected raw scratch for gzip +240-byte output; output alone retained after decode; one-byte-short admission fails and releases all credit",
+    "window_budget": "Source +240-byte raw output +240-byte window output exact peak; one-byte-short window failure releases all",
+    "volume": "128 slices,3x2 ushort pixels; full uncompressed1536bytes; selected scratch12bytes plus output96bytes fits108byte budget for slices0,63,127; damaged CRC after selection refused, final0"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 43,
+      "failed": 0,
+      "ignored": 7
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_warnings_denied": "passed"
+  },
+  "limitations": [
+    "Not full NRRD qualification: detached files, higher dimensions/types/spatial interpretation remain pending",
+    "Sequential gzip scan still visits entire volume for a late slice; no random-access speedup claimed",
+    "No new Metal runtime verification in this change",
+    "Unbudgeted public windowed() convenience API has no request and remains unbudgeted; app decode_raster_with_window request path is budgeted"
+  ],
+  "source_sha256": {
+    "crates/rrrah-scientific/src/nrrd.rs": "686159c55a276cb87821dee8e57fd8df878ee4f3ee0ca0738178a80dd5a9be7f",
+    "crates/rrrah-scientific/src/scientific.rs": "8affbc438c711ecd8b157ff1e2e0ff058024ee210349bbf156b21da8b7e14b55"
+  }
+}

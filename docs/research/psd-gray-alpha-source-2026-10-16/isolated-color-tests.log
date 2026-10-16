@@ -1,0 +1,26 @@
+
+running 15 tests
+GRAY_LINEAR_HDR_LCMS max_abs_error=0.0000019073486328125 bound=0.00002 alpha_exact=true
+GRAY_ICC_LCMS pixels=4 max_rgb_error=test raster_color::tests::invalid_float_icc_input_is_refused_before_output_memory_admission ... ok
+0.000000119209 bound=0.00002 alpha_exact=true adjacent_u16_distinct=true
+test raster_color::budget_tests::managed_linear_hdr_reuses_pixels_without_another_reservation ... ok
+GRAY_LINEAR_HDR_LCMS max_abs_error=0.0000019073486328125 bound=0.00002 alpha_exact=true
+test raster_color::tests::wide_gamut_red_is_not_clipped_and_invalid_profiles_fail ... ok
+test raster_color::tests::adjacent_sixteen_bit_samples_remain_distinct_after_icc_conversion ... ok
+test raster_color::tests::independent_littlecms_profile_matches_srgb_reference_across_the_pattern ... ok
+test raster_color::budget_tests::srgb_and_icc_output_admission_preserve_samples_and_last_owner ... ok
+test raster_color::tests::srgb_icc_converts_gray_without_gamma_correcting_alpha ... ok
+test raster_color::tests::gray_icc_uses_gray_curve_and_refuses_nonreplicated_samples ... ok
+test raster_color::tests::linear_matrix_icc_preserves_positive_hdr_and_still_refuses_negative_input ... ok
+test raster_color::tests::gray_icc_png_alpha16_and_tiff16_reach_display_with_native_precision ... ok
+test raster_color::tests::gray_icc_matches_pinned_independent_littlecms_double_reference ... ok
+test raster_color::tests::linear_gray_icc_positive_hdr_matches_independent_littlecms ... ok
+GRAY_ICC_FULL_U16 pixels=65536 max_rgb_error=0.000000178814 bound=0.00002 alpha_exact=true monotonic=true retained=1573056
+test raster_color::tests::gray_icc_full_u16_range_matches_independent_littlecms ... ok
+GRAY_ALPHA_LCMS pixels=143600 max_abs_error=0.00000011920928955078125 alpha_exact=true
+test raster_color::tests::original_gray_alpha_display_matches_independent_littlecms_all_pixels ... ok
+GRAY_ICC_CANCEL points=68 pixels=65536 retry_bit_exact=true peak=3670208
+test raster_color::tests::gray_icc_full_u16_cancellation_releases_rows_and_allows_retry ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+

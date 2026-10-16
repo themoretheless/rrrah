@@ -1,0 +1,85 @@
+{
+  "status": "current_backend_error_latch_and120_step_metal_passed_original_hang_and_live_recovery_open",
+  "upstream": "wgpu-hal30.0.0 local Cargo registry copy; licenses retained",
+  "change": "native command Error sets sticky fence failure; track all submitted buffers; wake waiters on errors; submit/poll/wait report DeviceError::Lost instead of successful completion",
+  "production_rust_unsafe_policy": "rrrah-gpu/app unsafe-free policy preserved; rejected HAL encoder observation helper removed; native handling lives inside existing upstream Metal FFI backend",
+  "source_sha256": {
+    "vendor/wgpu-hal/src/metal/mod.rs": "af5d935d93dea87885e6dfd63b06b7f646817f8a80eed25fb58ae899dff763a2",
+    "vendor/wgpu-hal/src/metal/device.rs": "e1741d5402fdabf8e2226bab2cee9e9e1029a718f61269cf55f6781d80d818b5",
+    "vendor/wgpu-hal/Cargo.toml": "50b12303fdf1773a2382a4796f727fd8d4219f6b628fcfe4eabb63413bab0d86",
+    "Cargo.toml": "b00d164551799a3116a5080f5303a5ff495262624934557166eb470a44b2fb06",
+    "Cargo.lock": "082a209116d603a1fc3292eba7bc9d23fd380082420d5f234f2d69fd36789d8e"
+  },
+  "cargo_check": {
+    "exit_code": 0
+  },
+  "unit_session": 18979,
+  "unit_log": "/tmp/metal-backend-error-latch-online.log",
+  "viewer_build_session": 58467,
+  "viewer_build_log": "/tmp/metal-backend-error-viewer-build.log",
+  "limitations": [
+    "does not resolve original GPU hang trigger",
+    "no deliberate hardware hang/error injection",
+    "live viewer device recreation/recovery flow not yet verified"
+  ],
+  "failed_attempts": [
+    "direct encoder observer rejected by wgpu encoding API, removed",
+    "root-package vendor unit command unavailable; separate vendor workspace test needs registry dev dependencies"
+  ],
+  "unit": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "scope": "sticky failure remains DeviceError::Lost after fence maintenance; synthetic error latch, no GPU hang injection"
+  },
+  "initial_metal": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "steps": 120,
+    "files": 8,
+    "formats": 7,
+    "scope": "before final error-buffer retention race guard"
+  },
+  "ordinary_prefetch": {
+    "exit_code": 0,
+    "passed": 35,
+    "failed": 0,
+    "ignored": 17,
+    "scope": "before final native-error retention guard"
+  },
+  "final_build_session": 12850,
+  "final_unit_session": 14522,
+  "prune_race_guard": "only successful Completed native buffers are pruned; Error is retained until lost-device teardown, so an error transition before callback cannot disappear",
+  "final_source_sha256": {
+    "vendor/wgpu-hal/src/metal/mod.rs": "f6a016ae273f7c3ecb0ddb29712061309aa3a1cfe925766f89488db21a854d8e",
+    "vendor/wgpu-hal/src/metal/device.rs": "e1741d5402fdabf8e2226bab2cee9e9e1029a718f61269cf55f6781d80d818b5",
+    "vendor/wgpu-hal/Cargo.toml": "50b12303fdf1773a2382a4796f727fd8d4219f6b628fcfe4eabb63413bab0d86",
+    "Cargo.toml": "b00d164551799a3116a5080f5303a5ff495262624934557166eb470a44b2fb06",
+    "Cargo.lock": "082a209116d603a1fc3292eba7bc9d23fd380082420d5f234f2d69fd36789d8e"
+  },
+  "final_binary_sha256": "1a3d25f25fb8c6dabd5d8463247847fd3855326d1685f8918cde3e7e2b97a739",
+  "final_unit": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0
+  },
+  "final_build": {
+    "exit_code": 0
+  },
+  "final_metal": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "steps": 120,
+    "files": 8,
+    "formats": 7,
+    "exact_visible_sdr_hdr_comparisons": 240
+  },
+  "source_drift": false,
+  "upstream_files_changed": [
+    "Cargo.toml",
+    "src/metal/device.rs",
+    "src/metal/mod.rs"
+  ]
+}

@@ -1,0 +1,16 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+error[E0433]: cannot find `SwapStore` in `rrrah_cache`
+  --> crates/rrrah-app/src/large_psd_pipeline_tests.rs:81:30
+   |
+81 |     let store = rrrah_cache::SwapStore::new(
+   |                              ^^^^^^^^^ could not find `SwapStore` in `rrrah_cache`
+
+error[E0422]: cannot find struct, variant or union type `SwapLimits` in crate `rrrah_cache`
+  --> crates/rrrah-app/src/large_psd_pipeline_tests.rs:83:22
+   |
+83 |         rrrah_cache::SwapLimits {
+   |                      ^^^^^^^^^^ not found in `rrrah_cache`
+
+Some errors have detailed explanations: E0422, E0433.
+For more information about an error, try `rustc --explain E0422`.
+error: could not compile `rrrah` (bin "rrrah" test) due to 2 previous errors

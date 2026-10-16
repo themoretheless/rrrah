@@ -47,6 +47,9 @@ pub struct SegmentedSwapReader {
 impl SegmentedSwapReader {
     /// Copy a verified range into caller-owned storage. On failure the destination
     /// may be partially written; callers must not publish it until success.
+    ///
+    /// # Errors
+    /// Rejects invalid ranges, cancellation, corrupt blocks and file I/O failures.
     pub fn read_into(
         &mut self,
         offset: u64,
@@ -65,7 +68,8 @@ impl SegmentedSwapReader {
             }
             let index = usize::try_from(position / BLOCK as u64).map_err(|_| SwapError::Length)?;
             let block_offset = position / BLOCK as u64 * BLOCK as u64;
-            let length = (self.handle.byte_len() - block_offset).min(BLOCK as u64) as usize;
+            let length = usize::try_from((self.handle.byte_len() - block_offset).min(BLOCK as u64))
+                .map_err(|_| SwapError::Length)?;
             if self.cached_index != Some(index) {
                 // Invalidate before overwriting: a failed read must never leave a
                 // formerly verified index attached to partially replaced bytes.
@@ -86,8 +90,9 @@ impl SegmentedSwapReader {
                 }
                 self.cached_index = Some(index);
             }
-            let start = (position - block_offset) as usize;
-            let count = (end - position).min((length - start) as u64) as usize;
+            let start = usize::try_from(position - block_offset).map_err(|_| SwapError::Length)?;
+            let count = usize::try_from((end - position).min((length - start) as u64))
+                .map_err(|_| SwapError::Length)?;
             output[target..target + count].copy_from_slice(&self.scratch[start..start + count]);
             target += count;
             position += count as u64;
@@ -101,6 +106,9 @@ impl SegmentedSwapReader {
 
 impl SwapStore {
     /// Open once and retain a bounded verified block across range reads.
+    ///
+    /// # Errors
+    /// Rejects foreign handles, cancellation, insufficient scratch credit and invalid files.
     pub fn segmented_reader(
         &self,
         handle: &SegmentedSwapHandle,
@@ -113,7 +121,8 @@ impl SwapStore {
         if cancelled() {
             return Err(SwapError::Cancelled);
         }
-        let scratch = scratch_budget.try_buffer(handle.byte_len().min(BLOCK as u64) as usize, 0_u8)?;
+        let scratch_len = usize::try_from(handle.byte_len().min(BLOCK as u64)).map_err(|_| SwapError::Length)?;
+        let scratch = scratch_budget.try_buffer(scratch_len, 0_u8)?;
         let file = handle.0.blob.0.file.reopen()?;
         if file.metadata()?.len() != handle.byte_len() {
             return Err(SwapError::Length);
@@ -129,6 +138,9 @@ impl SwapStore {
 
     /// Encode directly into one indexed swap object. Only the digest index is
     /// retained in managed RAM; no complete serialized staging copy is required.
+    ///
+    /// # Errors
+    /// Rejects index admission, disk quota, cancellation, length and encoder/I/O failures.
     pub fn write_segmented_stream(
         &self,
         bytes: u64,
@@ -168,6 +180,9 @@ impl SwapStore {
     /// Index and one scratch block are admitted before allocation. Failure rolls
     /// back the entire object quota; no complete serialized blob is kept in RAM.
     /// Entry/Arc bookkeeping follows the existing store metadata contract.
+    ///
+    /// # Errors
+    /// Rejects memory/disk admission, cancellation, source length and I/O failures.
     pub fn write_segmented(
         &self,
         reader: &mut dyn Read,
@@ -187,11 +202,13 @@ impl SwapStore {
             return Err(SwapError::Quota);
         }
         let mut digests = index_budget.try_buffer(count, [0_u8; 32])?;
-        let mut scratch = scratch_budget.try_buffer(bytes.min(BLOCK as u64) as usize, 0_u8)?;
+        let scratch_len = usize::try_from(bytes.min(BLOCK as u64)).map_err(|_| SwapError::Length)?;
+        let mut scratch = scratch_budget.try_buffer(scratch_len, 0_u8)?;
         let blob = self.write_stream(bytes, &mut cancelled, |writer| {
             let mut remaining = bytes;
             for digest in digests.iter_mut() {
-                let length = remaining.min(BLOCK as u64) as usize;
+                let length = usize::try_from(remaining.min(BLOCK as u64))
+                    .map_err(|_| std::io::Error::other(SwapError::Length))?;
                 reader.read_exact(&mut scratch[..length])?;
                 writer.write_all(&scratch[..length])?;
                 *digest = *blake3::hash(&scratch[..length]).as_bytes();
@@ -216,6 +233,9 @@ impl SwapStore {
     /// Publishes only after all needed blocks pass integrity/cancellation. Managed
     /// RAM is result bytes plus at most one64KiB block, with index credit retained
     /// separately by the handle. Does not decode images or imply viewer streaming.
+    ///
+    /// # Errors
+    /// Rejects foreign handles, invalid ranges, memory admission, cancellation and corrupt/I/O data.
     pub fn restore_range(
         &self,
         handle: &SegmentedSwapHandle,
@@ -243,6 +263,9 @@ impl SwapStore {
     /// last verified block across adjacent rows, without reading gaps. Rows must
     /// not overlap. Only requested blocks are verified. Output is published after
     /// all rows succeed; allocation/overflow/cancellation errors release buffers.
+    ///
+    /// # Errors
+    /// Rejects foreign handles, invalid/overflowing layouts, memory admission, cancellation and corrupt/I/O data.
     pub fn restore_rows(
         &self,
         handle: &SegmentedSwapHandle,
@@ -339,7 +362,7 @@ mod tests {
     #[ignore = "manual warm-filesystem scoped reader timing comparison"]
     fn scoped_reader_row_timing_comparison() {
         let directory = tempfile::tempdir().unwrap();
-        let bytes: Vec<u8> = (0..8 * 1024 * 1024).map(|i| (i * 73) as u8).collect();
+        let bytes: Vec<u8> = (0_u32..8 * 1024 * 1024).map(|i| (i * 73).to_le_bytes()[0]).collect();
         let store = SwapStore::new(
             directory.path(),
             SwapLimits {
@@ -369,14 +392,14 @@ mod tests {
                 if scoped {
                     let mut reader = store.segmented_reader(&handle, &scratch, || false).unwrap();
                     let mut row = output.try_buffer(2048, 0_u8).unwrap();
-                    for (offset, destination) in restored.chunks_exact_mut(2048).enumerate() {
+                    for (offset, destination) in restored.as_chunks_mut::<2048>().0.iter_mut().enumerate() {
                         reader
                             .read_into((offset * 2048) as u64, &mut row, || false)
                             .unwrap();
                         destination.copy_from_slice(&row);
                     }
                 } else {
-                    for (offset, destination) in restored.chunks_exact_mut(2048).enumerate() {
+                    for (offset, destination) in restored.as_chunks_mut::<2048>().0.iter_mut().enumerate() {
                         let row = store
                             .restore_range(&handle, (offset * 2048) as u64, 2048, &output, &scratch, || false)
                             .unwrap();
@@ -409,7 +432,7 @@ mod tests {
     #[test]
     fn scoped_reader_reuses_verified_bytes_and_invalidates_failed_block() {
         let directory = tempfile::tempdir().unwrap();
-        let bytes: Vec<u8> = (0..BLOCK * 2).map(|i| (i * 73) as u8).collect();
+        let bytes: Vec<u8> = (0..BLOCK * 2).map(|i| (i * 73).to_le_bytes()[0]).collect();
         let store = SwapStore::new(
             directory.path(),
             SwapLimits {
@@ -448,7 +471,7 @@ mod tests {
             Err(SwapError::Corrupt)
         ));
         file.seek(SeekFrom::Start(0)).unwrap();
-        file.write_all(&bytes[..BLOCK + 1]).unwrap();
+        file.write_all(&bytes[..=BLOCK]).unwrap();
         reader.read_into((BLOCK - 8) as u64, &mut out, || false).unwrap();
         assert_eq!(out, bytes[BLOCK - 8..BLOCK + 8]);
         assert!(matches!(
@@ -500,7 +523,7 @@ mod tests {
     fn packed_rows_match_independent_source_slices_and_skip_unrequested_blocks() {
         let directory = tempfile::tempdir().unwrap();
         let bytes: Vec<u8> = (0..BLOCK * 5 + 37)
-            .map(|i| (i.wrapping_mul(73) ^ (i >> 9)) as u8)
+            .map(|i| (i.wrapping_mul(73) ^ (i >> 9)).to_le_bytes()[0])
             .collect();
         let store = SwapStore::new(
             directory.path(),
@@ -653,7 +676,7 @@ mod tests {
         let bytes: Vec<u8> = (0..BLOCK * 5 + 36)
             .map(|i| {
                 // Includes negative zero, HDR, signed values and a NaN payload verbatim.
-                [0x80000000_u32, 8_f32.to_bits(), (-2_f32).to_bits(), 0x7fc01234][(i / 4) % 4].to_le_bytes()
+                [0x8000_0000_u32, 8_f32.to_bits(), (-2_f32).to_bits(), 0x7fc0_1234][(i / 4) % 4].to_le_bytes()
                     [i % 4]
             })
             .collect();
@@ -692,7 +715,7 @@ mod tests {
                 || false,
             )
             .unwrap();
-        assert_eq!(&*result, &bytes[offset as usize..offset as usize + BLOCK + 19]);
+        assert_eq!(&*result, &bytes[usize::try_from(offset).unwrap()..usize::try_from(offset).unwrap() + BLOCK + 19]);
         assert_eq!(scratch.used(), 0);
         drop(result);
         assert_eq!(output_budget.used(), 0);
@@ -706,7 +729,7 @@ mod tests {
         let good = store
             .restore_range(&handle, offset, 19, &output_budget, &scratch, || false)
             .unwrap();
-        assert_eq!(&*good, &bytes[offset as usize..offset as usize + 19]);
+        assert_eq!(&*good, &bytes[usize::try_from(offset).unwrap()..usize::try_from(offset).unwrap() + 19]);
         drop(good);
         assert!(matches!(
             store.restore_range(&handle, BLOCK as u64 * 5, 36, &output_budget, &scratch, || false),
@@ -799,12 +822,16 @@ mod tests {
             Err(SwapError::Cancelled)
         ));
         assert_eq!((budget.used(), store.usage().unwrap().bytes), (0, 0));
+        assert_range_rejections(&store, &bytes, &budget, directory.path());
+    }
+
+    fn assert_range_rejections(store: &SwapStore, bytes: &[u8], budget: &MemoryBudget, directory: &std::path::Path) {
         let handle = store
             .write_segmented(
                 &mut Cursor::new(&bytes),
                 bytes.len() as u64,
-                &budget,
-                &budget,
+                budget,
+                budget,
                 || false,
             )
             .unwrap();
@@ -830,11 +857,11 @@ mod tests {
             Err(SwapError::Memory(_))
         ));
         assert!(matches!(
-            store.restore_range(&handle, u64::MAX, 1, &output, &budget, || false),
+            store.restore_range(&handle, u64::MAX, 1, &output, budget, || false),
             Err(SwapError::Length)
         ));
         let foreign = SwapStore::new(
-            directory.path(),
+            directory,
             SwapLimits {
                 max_bytes: 100,
                 max_objects: None,
@@ -842,12 +869,12 @@ mod tests {
         )
         .unwrap();
         assert!(matches!(
-            foreign.restore_range(&handle, 0, 1, &output, &budget, || false),
+            foreign.restore_range(&handle, 0, 1, &output, budget, || false),
             Err(SwapError::ForeignHandle)
         ));
         let mut checks = 0;
         assert!(matches!(
-            store.restore_range(&handle, 0, 32, &output, &budget, || {
+            store.restore_range(&handle, 0, 32, &output, budget, || {
                 checks += 1;
                 checks == 4
             }),
@@ -859,7 +886,7 @@ mod tests {
         );
         assert_eq!(
             &*store
-                .restore_range(&handle, 0, 32, &output, &budget, || false)
+                .restore_range(&handle, 0, 32, &output, budget, || false)
                 .unwrap(),
             &[42; 32]
         );

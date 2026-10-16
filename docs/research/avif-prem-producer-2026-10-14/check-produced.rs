@@ -1,6 +1,7 @@
+#[derive(Debug)] enum DecodeError { Memory(rrrah_core::BufferError) }
 // Diagnostic integration of current AVIF metadata/conversion with the independent
 // image/dav1d backend. This does not replace the public decode/cache/Metal gates.
-mod raster { #[derive(Debug)] pub enum RasterDecodeError { InvalidAvif(&'static str) } }
+mod raster { #[derive(Debug)] pub enum RasterDecodeError { InvalidAvif(&'static str), Source(crate::DecodeError) } }
 struct DecodeRequest;
 impl DecodeRequest { fn check_cancelled(&self)->Result<(),raster::RasterDecodeError>{Ok(())} }
 #[path="/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/avif_color.rs"]
@@ -14,7 +15,7 @@ fn main() {
             let data=std::fs::read(root.join(&name)).unwrap();
             let ctx=mp4parse::read_avif(&mut std::io::Cursor::new(&data),mp4parse::ParseStrictness::Normal).unwrap();
             assert_eq!(ctx.premultiplied_alpha,prem);
-            let metadata=avif_color::properties(&data).unwrap();
+            let metadata=avif_color::properties_with_budget(&data,&||Ok(()),None).unwrap();
             assert_eq!(metadata.premultiplied_alpha,prem);
             assert_eq!(metadata.bit_depth,Some(depth));
             let decoded=image::load_from_memory_with_format(&data,image::ImageFormat::Avif).unwrap();

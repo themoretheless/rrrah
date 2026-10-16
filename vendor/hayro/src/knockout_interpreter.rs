@@ -5197,9 +5197,9 @@ fn dense_native_mesh_pixel_subdivides_without_losing_area_or_color() {
     }).unwrap();
     let output=replay_native_page_scene(&scene,32,16,&space,&||false,&|_|Some(Box::new(()))).unwrap();
     let pixel=output.pixels[0];
-    // PDF mesh decoding stores coordinate values as f32 before Point conversion.
-    // Integrate the two decoded triangles analytically, retaining strict tolerance.
-    let expected_area=0.375*0.5*(f64::from(127f32/255.)+1.-f64::from(128f32/255.));
+    // Two source triangles each have width3/8 and height127/255.
+    // Their exact rational total area is127/680; keep the strict tolerance.
+    let expected_area=127./680.;
     assert!((pixel.alpha()-expected_area).abs()<1e-12,
         "quarter areas add in global units: actual={:?} expected={expected_area:?}",pixel.alpha());
     for (a,b) in pixel.native_components().unwrap().into_iter().zip([64.,128.,192.,0.]) {
@@ -6180,12 +6180,12 @@ fn interpolated_raster_bypasses_last_sample_cache() {
     let scene=record_into(authored_pdf_with_paths(false,1.,"/form Do","",content),32,16,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
     let image=scene.native_rasters[0].1.as_ref().unwrap();assert!(image.interpolate());
     assert!(nearest_raster_cell_key(image,kurbo::Point::new(0.6,0.7)).is_none());
-    let cache=RasterLastSample::new(None);
+    let cache=SpatialRasterSamples::admitted(image,&|_|Some(Box::new(()))).unwrap();
     for point in [kurbo::Point::new(0.6,0.7),kurbo::Point::new(0.9,0.8)] {
         let expected=sample_native_raster(image,point,&||false).unwrap();
-        let actual=sample_native_raster_cached(image,point,&cache,&||false,&mut 1000).unwrap();
+        let actual=sample_native_raster_cached(cache.image,point,&cache.sample,&||false,&mut 1000).unwrap();
         assert_eq!(actual.components,expected.components);assert_eq!(actual.alpha,expected.alpha);
-        assert!(cache.borrow().is_none());
+        assert!(cache.sample.borrow().is_none());
     }
 }
 
@@ -6672,6 +6672,7 @@ fn authored_native_cmyk_mesh_samples_on_spatial_cell_centroids() {
     assert_eq!(routed.alpha(),pixel.alpha());assert_eq!(routed.native_components(),pixel.native_components());
     assert!((pixel.alpha()-0.5).abs()<1e-12);
     let expected=[f64::from(1f32/3.),f64::from(1f32/3.),0.,0.];
+    println!("SPATIAL_CMYK_CENTROID_ROUNDING actual={:?} expected={expected:?}",pixel.native_components().unwrap());
     for (a,b) in pixel.native_components().unwrap().into_iter().zip(expected) {assert!((a-b).abs()<1e-12);}
     let gray_pdf=record_into(authored_pdf_with_paths(false,1.,"/form Do","","BI /W 1 /H 1 /BPC 8 /CS /G /F /AHx ID 80> EI"),
         1,1,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
@@ -6935,13 +6936,54 @@ impl Drop for SpatialRouteTrace {
         let (stage,event)=self.stage.get();eprintln!("SPATIAL_ROUTE_REFUSAL stage={stage} event={event}");
     }}
 }
+struct SpatialRasterSamples<'a> {
+    image:&'a hayro_interpret::NativeRasterComponents,
+    sample:RasterLastSample<'a>,
+    pixel:RasterLastPixel,
+    _credit:Box<dyn std::any::Any+Send+Sync>,
+}
+impl<'a> SpatialRasterSamples<'a> {
+    fn admitted(image:&'a hayro_interpret::NativeRasterComponents,
+        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>)->Option<std::rc::Rc<Self>> {
+        let credit=admit(size_of::<Self>().checked_add(2*size_of::<usize>())?)?;
+        Some(std::rc::Rc::new(Self {image,sample:RasterLastSample::new(None),
+            pixel:RasterLastPixel::new(None),_credit:credit}))
+    }
+}
 type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
-    Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+    Option<std::sync::Arc<super::native_spatial::RasterCells>>,std::rc::Rc<SpatialRasterSamples<'a>>);
 struct SpatialMeshGeometry {
     paths:Vec<BezPath>,
     owners:Vec<usize>,
     _credit:Box<dyn std::any::Any+Send+Sync>,
 }
+// Per-command owner keys are compact; source sampling always uses the original
+// triangle index. Canonical ascending ranks preserve maximum-owner precedence.
+struct AdmittedOwnerIds {values:Vec<usize>,_credit:Box<dyn std::any::Any+Send+Sync>}
+#[derive(Default)]
+struct CompactOwnerIds {ids:std::cell::OnceCell<AdmittedOwnerIds>}
+impl CompactOwnerIds {
+    fn prepare(&self,descending:&mut [(usize,usize)],work:&mut usize,cancelled:&dyn Fn()->bool,
+        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>)->Option<()> {
+        if cancelled() {return None;}*work=work.checked_sub(1)?;
+        if self.ids.get().is_some() {return None;}
+        let credit=admit(descending.len().checked_mul(size_of::<usize>())?)?;
+        let mut values=Vec::new();values.try_reserve_exact(descending.len()).ok()?;
+        if values.capacity()>descending.len() {return None;}
+        let mut previous=None;
+        for (_,owner) in descending.iter_mut().rev() {
+            if cancelled() {return None;}*work=work.checked_sub(3)?;
+            let original=*owner;
+            if previous.is_some_and(|p|original<p) {return None;}
+            if previous!=Some(original) {values.push(original);previous=Some(original);}
+            *owner=values.len().checked_sub(1)?;
+        }
+        if cancelled() {return None;}
+        self.ids.set(AdmittedOwnerIds {values,_credit:credit}).ok()?;Some(())
+    }
+    fn original(&self,owner:usize)->Option<usize> {self.ids.get()?.values.get(owner).copied()}
+}
+
 type SpatialMeshCache<'a>=(&'a Recorder,usize,std::sync::Arc<SpatialMeshGeometry>);
 // Native layouts already use blending coordinates. Pixel::from_native performs
 // the finite/range validation once; special spaces retain bounded conversion.
@@ -6996,11 +7038,32 @@ fn spatial_native_sample_matches_bounded_reference_and_rejects_invalid_values() 
     }
 }
 
-fn replay_spatial_scene_impl(
-    scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
-    x:i32,y:i32,point:Option<kurbo::Point>,raster_cache:&[SpatialRasterCache<'_>],mesh_cache:&[SpatialMeshCache<'_>],remaining:&mut usize,cancelled:&dyn Fn()->bool,
+fn replay_spatial_scene_impl<'a>(
+    scene:&'a Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+    x:i32,y:i32,point:Option<kurbo::Point>,raster_cache:&[SpatialRasterCache<'a>],mesh_cache:&[SpatialMeshCache<'_>],remaining:&mut usize,cancelled:&dyn Fn()->bool,
     admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
 )->Option<super::native_blend::Pixel> {
+    replay_spatial_scene_with_white_output(scene,space,backdrop,x,y,point,raster_cache,mesh_cache,remaining,cancelled,admit,None)
+}
+
+fn replay_spatial_scene_white_rgb8<'a>(
+    scene:&'a Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+    x:i32,y:i32,remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<super::native_spatial::WhiteRgb8Pixel> {
+    let output=std::cell::Cell::new(None);
+    let native=replay_spatial_scene_with_white_output(scene,space,backdrop,x,y,None,&[],&[],remaining,cancelled,admit,Some(&output));
+    if cancelled() {return None;}
+    output.get().or_else(||native.and_then(|pixel|super::native_spatial::WhiteRgb8Pixel::from_complete_native(pixel,space)))
+}
+
+fn replay_spatial_scene_with_white_output<'a>(
+    scene:&'a Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+    x:i32,y:i32,point:Option<kurbo::Point>,raster_cache:&[SpatialRasterCache<'a>],mesh_cache:&[SpatialMeshCache<'_>],remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    white_output:Option<&std::cell::Cell<Option<super::native_spatial::WhiteRgb8Pixel>>>,
+)->Option<super::native_blend::Pixel> {
+    if let Some(output)=white_output {output.set(None);}
     use super::native_spatial::{SpatialCommand,NativeSpatialSample};
     let trace=SpatialRouteTrace {stage:std::cell::Cell::new(("preflight",0)),completed:std::cell::Cell::new(false),
         enabled:std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some()};
@@ -7050,7 +7113,7 @@ fn replay_spatial_scene_impl(
                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
                     w,h,mw,mh,*transform,rect,100_000,cancelled,admit)?;(color,Some(mask))
             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
-            mask_raster_cells.push((*child,index,std::sync::Arc::new(pair.0),pair.1.map(std::sync::Arc::new)));
+            mask_raster_cells.push((*child,index,std::sync::Arc::new(pair.0),pair.1.map(std::sync::Arc::new),SpatialRasterSamples::admitted(data,admit)?));
         }
     }}
     trace.stage.set(("mask_mesh_geometry",0));
@@ -7089,7 +7152,7 @@ fn replay_spatial_scene_impl(
             let data=data.as_ref()?;
             if data.interpolate() || data.alpha().is_some_and(|a|a.interpolate()) {return None;}
             let (w,h)=data.dimensions();
-            if let Some((_,_,color,mask))=raster_cache.iter().find(|(owner,event,_,_)|
+            if let Some((_,_,color,mask,_))=raster_cache.iter().find(|(owner,event,_,_,_)|
                 std::ptr::eq(*owner,scene) && *event==index) {
                 rasters.push((index,data,transform.inverse(),color.clone(),mask.clone()));continue;
             }
@@ -7122,16 +7185,19 @@ fn replay_spatial_scene_impl(
             source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
             pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
         if trace.enabled {eprintln!("SPATIAL_RASTER_SOURCE event={} dimensions={:?} interpolate={} alpha={:?}",event,data.dimensions(),data.interpolate(),data.alpha().map(|a|(a.dimensions(),a.interpolate())));}
-        let cache=RasterLastSample::new(None);
-        let pixel_cache=RasterLastPixel::new(None);
+        let shared=raster_cache.iter().find(|(owner,index,_,_,_)|
+            std::ptr::eq(*owner,scene) && index==event).map(|entry|entry.4.clone());
+        let cache=if let Some(cache)=shared {
+            if !std::ptr::eq(cache.image,*data) {return None;}cache
+        } else {SpatialRasterSamples::admitted(data,admit)?};
         samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,_owner:Option<usize>| {
         let before=*remaining;
-        let result=sample_native_raster_cached(data,*inverse*point,&cache,cancelled,remaining);
+        let result=sample_native_raster_cached(cache.image,*inverse*point,&cache.sample,cancelled,remaining);
         if cost.enabled {cost.calls.set(cost.calls.get()+1);cost.source.set(cost.source.get()+before.saturating_sub(*remaining));}
         let sample=result?;
-        let cell_key=cache.borrow().as_ref().map(|(key,_)|*key);
-        let pixel_hit=cost.enabled && cell_key.is_some_and(|key|pixel_cache.get().is_some_and(|(old,_)|key==old));
-        let native=native_raster_pixel_cached(sample,cell_key,&pixel_cache,cancelled)?;
+        let cell_key=cache.sample.borrow().as_ref().map(|(key,_)|*key);
+        let pixel_hit=cost.enabled && cell_key.is_some_and(|key|cache.pixel.get().is_some_and(|(old,_)|key==old));
+        let native=native_raster_pixel_cached(sample,cell_key,&cache.pixel,cancelled)?;
         if cost.enabled {let counter=if pixel_hit {&cost.pixel_hits} else {&cost.pixel_builds};counter.set(counter.get()+1);}
         Some(Some(NativeSpatialSample {cell_key,pixel:native,space:sample.space}))
     });
@@ -7209,13 +7275,7 @@ fn replay_spatial_scene_impl(
             let mut sorted=Vec::new();sorted.try_reserve_exact(owners.len()).ok()?;
             if sorted.capacity()>owners.len() {return None;}
             work=work.checked_sub(owners.len())?;sorted.extend_from_slice(owners);
-            // Bounded insertion sort of small indices; every comparison and
-            // three-word swap is charged before modifying local preparation.
-            for index in 1..sorted.len() {let mut index=index;while index>0 {
-                if cancelled() {return None;}work=work.checked_sub(1)?;
-                if sorted[index-1]<=sorted[index] {break;}
-                work=work.checked_sub(3)?;sorted.swap(index-1,index);index-=1;
-            }}
+            bounded_owner_sort(&mut sorted,cancelled,&mut work)?;
             let mut entries=Vec::new();entries.try_reserve_exact(owners.len()).ok()?;
             if entries.capacity()>owners.len() {return None;}
             for (index,&owner) in sorted.iter().enumerate() {
@@ -7268,9 +7328,21 @@ fn replay_spatial_scene_impl(
     let _projection_credit=if projection_enabled {Some(admit(size_of::<ProjectionTrace>())?)} else {None};
     let projection=projection_enabled.then(||ProjectionTrace {checks:std::cell::Cell::new(0),projected:std::cell::Cell::new(0),max_deficit:std::cell::Cell::new(0.),refused:std::cell::Cell::new(0),work:std::cell::Cell::new(16_000_000)});
     let result = {
+    // Only the owner-moment path needs dense local keys. Ordinary native replay
+    // keeps its original owner IDs, allocation pattern and sample work charges.
+    let compact_owner_ids=point.is_none() && std::env::var_os("RRRAH_AI_OWNER_MOMENT_STORAGE").is_some();
+    let _owner_context_credit=if compact_owner_ids {Some(admit(mesh_count.checked_mul(size_of::<CompactOwnerIds>())?)?)} else {None};
+    let mut owner_contexts=Vec::new();
+    if compact_owner_ids {
+        *remaining=remaining.checked_sub(mesh_count)?;
+        owner_contexts.try_reserve_exact(mesh_count).ok()?;
+        if owner_contexts.capacity()>mesh_count {return None;}
+        owner_contexts.resize_with(mesh_count,CompactOwnerIds::default);
+    }
     let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
-    for (event,source,geometry) in &meshes {
+    for (mesh_index,(event,source,geometry)) in meshes.iter().enumerate() {
+        let context=owner_contexts.get(mesh_index);
         let component_error=std::env::var_os("RRRAH_AI_MESH_COMPONENT_ERROR").is_some();
         let gradient_bounds=combined_enabled || std::env::var_os("RRRAH_AI_MESH_GRADIENT_BOUNDS").is_some();
         if component_error || gradient_bounds || std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
@@ -7349,6 +7421,10 @@ fn replay_spatial_scene_impl(
         } else {None};
         let projection=projection.as_ref();
         mesh_samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,owner:Option<usize>| {
+        let owner=if let (Some(context),Some(owner))=(context,owner) {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            Some(context.original(owner)?)
+        } else {owner};
         if let Some(evidence)=&point_evidence {evidence.observe(owner,point);}
         if let (Some(trace),Some(owner))=(projection,owner) {
             let mut work=trace.work.get();
@@ -7396,20 +7472,32 @@ fn replay_spatial_scene_impl(
         let value=if let Some(transfer)=transfer {f64::from(transfer.apply_bounded(value as f32,cancelled)?)} else {value};
         if cancelled() {None} else {Some(value)}
     });}
+    let path_may_touch=|path:&BezPath| {
+        let bounds=path.control_box();
+        !(bounds.x1<rect.x0 || bounds.x0>rect.x1 || bounds.y1<rect.y0 || bounds.y0>rect.y1)
+    };
     trace.stage.set(("region_budget",0));
     let mut count=0usize;let mut paints=0usize;
     for event in &scene.events {
         if cancelled() {return None;}
         match event {
-            Event::Path(_,transform,RecordedPaint::NativeColor(_),clips,PathDrawMode::Fill(_))=>{
+            Event::Path(path,transform,RecordedPaint::NativeColor(_),clips,PathDrawMode::Fill(_))=>{
                 if *transform!=Affine::IDENTITY {return None;}
-                count=count.checked_add(1)?.checked_add(clips.len())?;paints+=1;
+                // Match the existing emission filter before enforcing the region cap.
+                if path_may_touch(path) && clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                    count=count.checked_add(1)?.checked_add(clips.len())?;
+                }
+                paints+=1;
             },
             Event::Raster(_,_,_,clips,_)=>{
                 count=count.checked_add(clips.len())?;paints+=1;
             },
-            Event::Path(_,_,RecordedPaint::Shading(_),clips,PathDrawMode::Fill(_))=>{
-                count=count.checked_add(1)?.checked_add(clips.len())?;paints+=1;
+            Event::Path(path,_,RecordedPaint::Shading(_),clips,PathDrawMode::Fill(_))=>{
+                // Match the existing emission filter before enforcing the region cap.
+                if path_may_touch(path) && clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                    count=count.checked_add(1)?.checked_add(clips.len())?;
+                }
+                paints+=1;
             },
             Event::Blend(_)|Event::AlphaSource(_)|Event::Push(..)|Event::Pop|Event::Mask(_)=>{},
             _=>return None,
@@ -7418,12 +7506,17 @@ fn replay_spatial_scene_impl(
     for (_,_,_,color,mask) in &rasters {
         count=count.checked_add(color.paths.len())?.checked_add(mask.as_ref().map_or(0,|m|m.paths.len()))?;
     }
-    for (_,_,geometry) in &meshes {count=count.checked_add(geometry.paths.len())?;}
+    for (event,_,geometry) in &meshes {
+        let Event::Path(path,_,_,clips,_) = &scene.events[*event] else {return None;};
+        if path_may_touch(path) && clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+            count=count.checked_add(geometry.paths.len())?;
+        }
+    }
     for (child,_,_,_,_,_) in &masks {for event in &child.events {
         match event {Event::Path(_,_,_,clips,_)=>count=count.checked_add(1)?.checked_add(clips.len())?,
             Event::Raster(_,_,_,clips,_)=>count=count.checked_add(clips.len())?,_=>{}}
     }}
-    for (_,_,color,mask) in &mask_raster_cells {
+    for (_,_,color,mask,_) in &mask_raster_cells {
         count=count.checked_add(color.paths.len())?.checked_add(mask.as_ref().map_or(0,|m|m.paths.len()))?;
     }
     for (_,_,geometry) in &mask_mesh_paths {count=count.checked_add(geometry.paths.len())?;}
@@ -7443,10 +7536,6 @@ fn replay_spatial_scene_impl(
     let mut sources=Vec::new();sources.try_reserve_exact(paints).ok()?;
     let fill=|rule|match rule {hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
         hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd};
-    let path_may_touch=|path:&BezPath| {
-        let bounds=path.control_box();
-        !(bounds.x1<rect.x0 || bounds.x0>rect.x1 || bounds.y1<rect.y0 || bounds.y0>rect.y1)
-    };
     let mut excluded_mesh_regions=0usize;
     for (index,event) in scene.events.iter().enumerate() {
         if cancelled() {return None;}
@@ -7536,7 +7625,7 @@ fn replay_spatial_scene_impl(
             for clip in clips {regions.push((clip.path.as_ref(),fill(clip.fill)));}
         }
     }}
-    for (owner,_,color,mask) in &mask_raster_cells {
+    for (owner,_,color,mask,_) in &mask_raster_cells {
         if !mask_is_live(owner) {continue;}
         for path in color.paths.iter().chain(mask.iter().flat_map(|m|m.paths.iter())) {regions.push((path,vello_cpu::peniko::Fill::NonZero));}
     }
@@ -7559,7 +7648,7 @@ fn replay_spatial_scene_impl(
         .checked_add(meshes.len().checked_mul(size_of::<Vec<(usize,usize)>>())?)?)?;
     let mut owner_routes=Vec::new();owner_routes.try_reserve_exact(meshes.len()).ok()?;
     let mut owner_work=4_000_000usize;
-    for (_,_,geometry) in &meshes {
+    for (mesh_index,(_,_,geometry)) in meshes.iter().enumerate() {
         let mut route=Vec::new();route.try_reserve_exact(geometry.owners.len()).ok()?;
         for (path,&owner) in geometry.paths.iter().zip(&geometry.owners) {
             let mut region=None;
@@ -7575,6 +7664,7 @@ fn replay_spatial_scene_impl(
         owner_work=owner_work.checked_sub(route.len().checked_mul(sort_levels as usize+1)?)?;
         if cancelled() {return None;}
         route.sort_unstable_by(|a,b|b.1.cmp(&a.1));
+        if let Some(context)=owner_contexts.get(mesh_index) {context.prepare(&mut route,&mut owner_work,cancelled,admit)?;}
         owner_routes.push(route);
     }
     trace.stage.set(("group_commands",0));
@@ -7625,7 +7715,8 @@ fn replay_spatial_scene_impl(
                 if ais {return None;}
                 if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {cells:None,regions:&requirements[cursor],
                     sample:&mesh_samples[mesh_cursor],owners:&owner_routes[mesh_cursor],
-                    field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+                    field:if meshes[mesh_cursor].1.mesh_has_opaque_native_field(space) {super::native_spatial::NativeField::OpaqueAffineOwner}
+                        else if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
             },
             Event::Path(_,_,RecordedPaint::NativeColor(paint),_,_)=>{
                 if ais {return None;}
@@ -7677,8 +7768,80 @@ fn replay_spatial_scene_impl(
         eprintln!("SPATIAL_AFFINE_ROUTE_CANDIDATE eligible={eligible} affine_meshes={affine_meshes} constant_rasters={constant_rasters}");
     }
     trace.stage.set(("spatial_composition",0));
-    let result=super::native_spatial::compose_grouped_polygon_with_candidate_inputs(&regions,&commands,space,backdrop,x,y,point,
-        40_000_000,remaining,cancelled,admit,if combined_enabled {Some(&candidate_inputs)} else {None});
+    let geometry_proof=point.is_none() && std::env::var_os("RRRAH_AI_OWNER_GEOMETRY_PROOF").is_some();
+    let _geometry_credit=if geometry_proof {Some(admit(commands.len().checked_mul(size_of::<Option<(usize,hayro_interpret::encode::NativeAffineDomain<'_>)>>())?.checked_add(size_of::<std::cell::Cell<[f64;2]>>())?)?)} else {None};
+    let mut geometry_sources=Vec::new();let mut geometry_setup=0usize;
+    if geometry_proof {
+        if std::env::var_os("RRRAH_AI_TRACE_PATCH_APPROXIMATION").is_some() {
+            for (event,source,_) in &meshes {
+                if let Some(stats)=source.patch_tessellation_stats() {
+                    eprintln!("SPATIAL_SOURCE_PATCH_APPROXIMATION event={event} triangles={} pixel_bound={} component_bound={} interval_certified=false affine_sampler_error_excludes_patch=true",stats.triangles,stats.max_pixel_bound,stats.max_component_bound);
+                }
+            }
+        }
+        geometry_sources.try_reserve_exact(commands.len()).ok()?;
+        if geometry_sources.capacity()>commands.len() {return None;}
+        for command in &commands {
+            if cancelled() {return None;}geometry_setup=geometry_setup.checked_add(1)?;
+            let mut found=None;
+            if let SpatialCommand::NativeSampledPaint {sample,field:super::native_spatial::NativeField::OpaqueAffineOwner,..}=command {
+                for (index,candidate) in mesh_samples.iter().enumerate() {
+                    if cancelled() {return None;}geometry_setup=geometry_setup.checked_add(1)?;
+                    let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+                    if std::ptr::addr_eq(*sample as *const _,candidate as *const _) {found=Some((index,meshes[index].1));break;}
+                }
+            }
+            let mut work=40_000_000usize.checked_sub(geometry_setup)?;
+            let domain=if let Some((index,source))=found {Some((index,source.prepare_native_affine_domain(rect.inflate(1e-6,1e-6),space,cancelled,&mut work).ok()?))} else {None};
+            geometry_setup=40_000_000-work;geometry_sources.push(domain);
+        }
+    }
+    let geometry_binding_count=if geometry_proof {commands.iter().try_fold(0usize,|n,command| {
+        if let SpatialCommand::NativeSampledPaint {field:super::native_spatial::NativeField::OpaqueAffineOwner,owners,..}=command {n.checked_add(owners.len())} else {Some(n)}
+    })?} else {0};
+    if geometry_binding_count>4095 {return None;}
+    let _evidence_credit=if geometry_proof {Some(admit(geometry_binding_count.checked_mul(size_of::<Option<(usize,usize,hayro_interpret::encode::NativeOpaqueAffinePointEvidence<'_>)>>())?)?)} else {None};
+    let mut evidence:Vec<Option<(usize,usize,hayro_interpret::encode::NativeOpaqueAffinePointEvidence<'_>)>>=Vec::new();evidence.try_reserve_exact(geometry_binding_count).ok()?;
+    if evidence.capacity()>geometry_binding_count {return None;}evidence.resize_with(geometry_binding_count,||None);
+    geometry_setup=geometry_setup.checked_add(geometry_binding_count)?;
+    let evidence=std::cell::RefCell::new(evidence);
+    let geometry_gradient=std::cell::Cell::new([0f64;2]);
+    let validate_geometry=|command:usize,owner:usize,slot:usize,query:super::native_spatial::NativeGeometryQuery,work:&mut usize| {
+        use super::native_spatial::{NativeGeometryQuery,NativeGeometryResult};
+        if cancelled() {return None;}*work=work.checked_sub(1)?;
+        let mut entries=evidence.borrow_mut();let entry=entries.get_mut(slot)?;
+        match query {
+            NativeGeometryQuery::Observe(point)=>{
+                let (registered,registered_owner,entry)=entry.as_mut()?;
+                if *registered!=command || *registered_owner!=owner {return None;}
+                entry.observe(point,cancelled,work).ok()?;
+                Some(NativeGeometryResult {bound:entry.max_projection_deficit_upper(),pixel:None,gradient:[0.;2]})
+            },
+            NativeGeometryQuery::Finish(point)=>{
+                let (registered,registered_owner,evidence)=entry.as_mut()?;
+                if *registered!=command || *registered_owner!=owner {return None;}
+                let sample=evidence.sample_observed(point,cancelled,work).ok()?;
+                let native=spatial_native_sample(evidence.source_color_space(),&sample.components[..sample.count],sample.opacity,cancelled,work)?;
+                let bound=evidence.component_error_bound(cancelled,work).ok()?.into_iter().fold(0.,f64::max);
+                let gradients=evidence.gradient_bounds(cancelled,work).ok()?;
+                *work=work.checked_sub(8)?;let mut max=geometry_gradient.get();
+                for gradient in gradients {for axis in 0..2 {max[axis]=max[axis].max(gradient[axis]);}}
+                geometry_gradient.set(max);Some(NativeGeometryResult {bound,pixel:Some(native.pixel),gradient:max})
+            },
+            NativeGeometryQuery::Prepare=>{
+                if entry.is_some() {return None;}
+                let (mesh_index,domain)=geometry_sources.get(command)?.as_ref()?;
+                *work=work.checked_sub(2)?;
+                let original=owner_contexts.get(*mesh_index)?.original(owner)?;
+                *entry=Some((command,owner,domain.prepare_opaque_owner(original,cancelled,work).ok()?));
+                Some(NativeGeometryResult {bound:0.,pixel:None,gradient:[0.;2]})
+            },
+        }
+    };
+    let result=super::native_spatial::compose_grouped_polygon_with_white_output(&regions,&commands,space,backdrop,x,y,point,
+        40_000_000,remaining,cancelled,admit,if combined_enabled {Some(&candidate_inputs)} else {None},
+        if geometry_proof {Some((&validate_geometry,geometry_setup))} else {None},white_output);
+    if geometry_proof {eprintln!("SPATIAL_OWNER_SOURCE_GRADIENT complete={} bounds={:?}",result.is_some() || white_output.is_some_and(|out|out.get().is_some()),geometry_gradient.get());}
     result
     };
     if combined_enabled {
@@ -7692,10 +7855,10 @@ fn replay_spatial_scene_impl(
         });
         eprintln!("SPATIAL_COMBINED_NATIVE_BOUND complete={} max_error={:?} source_complete={} required_points={:?} observed_points={}",bound.is_some(),bound.map(|v|v.into_iter().fold(0.,f64::max)),!source.failed,inputs.map(|i|i.original_variable_points+i.candidate_variable_points),source.points);
     }
-    if trace.enabled && result.is_none() {
+    if trace.enabled && result.is_none() && !white_output.is_some_and(|out|out.get().is_some()) {
         eprintln!("SPATIAL_COMPOSITION_REFUSAL remaining_work={} cancelled={}", *remaining, cancelled());
     }
-    trace.completed.set(result.is_some());result
+    trace.completed.set(result.is_some() || white_output.is_some_and(|out|out.get().is_some()));result
 }
 
 /// Diagnostic wall-clock deadline with cheap, independently observable polls.
@@ -7831,7 +7994,8 @@ fn real_ai_spatial_scene_problem_pixel_diagnostic() {
         let admission_overflow=std::cell::Cell::new(0usize);
         let mut diagnostic_remaining=diagnostic_work;
         let pixel_started=std::time::Instant::now();
-        let result=replay_spatial_scene_impl(&scene,&space,Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),
+        let typed_white=std::cell::Cell::new(None);
+        let result=replay_spatial_scene_with_white_output(&scene,&space,Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),
             x,y,None,&[],&[],&mut diagnostic_remaining,&||cancelled(),&|bytes|{
                 route_admissions.set(route_admissions.get()+1);
                 if profile_sizes {
@@ -7841,7 +8005,8 @@ fn real_ai_spatial_scene_problem_pixel_diagnostic() {
                     else {admission_overflow.set(admission_overflow.get()+1);}
                 }
                 admission(bytes)
-            });
+            },if std::env::var_os("RRRAH_AI_OWNER_DEFERRED_COLORS").is_some() {Some(&typed_white)} else {None});
+        println!("REAL_AI_TYPED_WHITE_RGB8 pixel=({x},{y}) completed={} bytes={:?}",typed_white.get().is_some(),typed_white.get().map(|out|out.bytes()));
         let pixel_elapsed=pixel_started.elapsed();
         if std::env::var_os("RRRAH_AI_TRACE_PIXEL_TIMING").is_some() {
             println!("REAL_AI_SPATIAL_PIXEL_TIMING pixel=({x},{y}) elapsed_ns={}",pixel_elapsed.as_nanos());
@@ -7881,22 +8046,17 @@ fn real_ai_spatial_scene_problem_pixel_diagnostic() {
         'rows: for y in 0..height {
             for x in 0..width {
                 let mut remaining=page_work;
-                let native = replay_spatial_scene_impl(&scene, &space,
-                    Pixel::from_native(Model::Cmyk, &[0.;4], 0.).unwrap(),
-                    x as i32, y as i32,None,&[],&[],&mut remaining, &||cancelled(), admission.as_ref());
+                let output=replay_spatial_scene_white_rgb8(&scene,&space,
+                    Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),x as i32,y as i32,
+                    &mut remaining,&||cancelled(),admission.as_ref());
                 let spent=page_work-remaining;
                 if spent>maximum_work.0 {maximum_work=(spent,x,y);}
-                let converted = native.and_then(|p|
-                    super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
-                    .and_then(|p|p.native_components().map(|c|
-                        [0,1,2].map(|i|255.*(c[i]*p.alpha()+1.-p.alpha()))));
-                let Some(values) = converted else {
-                    full_page_complete = false;
-                    println!("REAL_AI_SPATIAL_PAGE_REFUSAL pixel=({x},{y}) deadline={}", cancelled());
+                let Some(output)=output else {
+                    full_page_complete=false;
+                    println!("REAL_AI_SPATIAL_PAGE_REFUSAL pixel=({x},{y}) deadline={}",cancelled());
                     break 'rows;
                 };
-                assert!(values.iter().all(|v|v.is_finite()));
-                pixels.extend(values.map(|v|v.round().clamp(0.,255.) as u8));
+                pixels.extend(output.bytes());
                 completed += 1;
             }
             if y % 8 == 0 {
@@ -7948,6 +8108,30 @@ fn real_ai_spatial_scene_problem_pixel_diagnostic() {
 
 
 #[test]
+fn spatial_region_budget_ignores_far_geometry_before_count_admission() {
+    use super::native_blend::{Model,Pixel};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let red="1 0 0 rg 0 0 1 1 re f";
+    let far=format!("{red} {}", "20 5 1 1 re f ".repeat(2100));
+    let render=|content:&str| {
+        let scene=record_into(authored_pdf_with_paths(false,1.,"/form Do",content,""),32,16,Affine::IDENTITY,
+            Recorder {global_contour:true,native_polygon:true,..Recorder::default()});
+        assert!(!scene.failed);
+        assert!(scene.events.len()<=4096,"fixture must respect existing event cap");
+        let paths:usize=scene.events.iter().map(|event|match event {Event::Path(_,_,_,clips,_)=>1+clips.len(),_=>0}).sum();
+        let pixel=replay_spatial_scene_pixel(&scene,rgb.color_space(),Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),
+            0,0,&||false,&|_|Some(Box::new(()))).expect("off-pixel geometry must not exhaust live region limit");
+        (paths,pixel)
+    };
+    let (_,expected)=render(red);
+    let (paths,actual)=render(&far);
+    assert!(paths>4095,"fixture must exercise pre-filter region overflow");
+    assert_eq!(actual.alpha(),expected.alpha());
+    assert_eq!(actual.native_components(),expected.native_components());
+}
+
+#[test]
 fn spatial_scene_preflight_refuses_mask_before_geometry_admission() {
     use super::native_blend::{Model,Pixel};
     use hayro_interpret::color::{AlphaColor,Color};
@@ -7981,6 +8165,7 @@ fn authored_pdf_mesh_luminosity_mask_routes_original_gray_before_area_average() 
     let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
     let pixel=replay_spatial_scene_pixel(&scene,rgb.color_space(),Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),
         0,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    println!("SPATIAL_GRAY_MASK_CENTROID_ROUNDING actual={} expected={}",pixel.alpha(),0.5*f64::from(1f32/3.));
     assert!((pixel.alpha()-0.5*f64::from(1f32/3.)).abs()<1e-12);
     assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
 }
@@ -8040,4 +8225,161 @@ fn prepared_normal_batch_preserves_native_gray_and_cmyk_coordinates() {
         let image=scene.native_rasters[0].1.as_ref().unwrap();
         super::native_frame::assert_normal_batch_equivalence(image.color_space(),model);
     }
+}
+
+#[test]
+fn persistent_raster_samples_retain_admission_across_point_owners_and_release_once() {
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let scene=record_into(authored_native_soft_image_fixture(false),32,16,Affine::IDENTITY,
+        Recorder {capture_native_rasters:true,..Recorder::default()});
+    let image=scene.native_rasters[0].1.as_ref().unwrap();
+    let used=Arc::new(AtomicUsize::new(0));
+    let admit=|bytes| {used.fetch_add(bytes,Ordering::Relaxed);
+        Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    assert!(SpatialRasterSamples::admitted(image,&|_|None).is_none());
+    let cache=SpatialRasterSamples::admitted(image,&admit).unwrap();
+    let bytes=used.load(Ordering::Relaxed);assert!(bytes>=size_of::<SpatialRasterSamples<'_>>());
+    let point=kurbo::Point::new(0.1,0.1);
+    let mut first_work=1000;
+    let first=sample_native_raster_cached(cache.image,point,&cache.sample,&||false,&mut first_work).unwrap();
+    assert!(1000-first_work>1);
+    let next_owner=cache.clone();drop(cache);
+    assert_eq!(used.load(Ordering::Relaxed),bytes);
+    let mut second_work=1;
+    let second=sample_native_raster_cached(next_owner.image,point,&next_owner.sample,&||false,&mut second_work).unwrap();
+    assert_eq!(second_work,0);assert_eq!(first.components,second.components);assert_eq!(first.alpha,second.alpha);
+    assert!(sample_native_raster_cached(next_owner.image,point,&next_owner.sample,&||true,&mut 1).is_none());
+    assert!(sample_native_raster_cached(next_owner.image,point,&next_owner.sample,&||false,&mut 0).is_none());
+    drop(next_owner);assert_eq!(used.load(Ordering::Relaxed),0);
+}
+
+#[test]
+fn inherited_mask_raster_cache_rejects_a_different_image_and_reuses_matching_cells() {
+    use super::native_blend::{Model,Pixel};
+    let capture=|bytes:&str| {
+        let content=format!("q 1 0 0 1 0 0 cm BI /W 2 /H 1 /BPC 8 /CS /RGB /F /AHx ID {bytes}> EI Q");
+        record_into(authored_pdf_with_paths(false,1.,"/form Do","",&content),32,16,Affine::IDENTITY,
+            Recorder {capture_native_rasters:true,global_contour:true,native_polygon:true,..Recorder::default()})
+    };
+    let scene=capture("FF00000000FF");let other=capture("00FF000000FF");
+    let (index,data,_)=&scene.native_rasters[0];let image=data.as_ref().unwrap();
+    let other_image=other.native_rasters[0].1.as_ref().unwrap();
+    let Event::Raster(_,_,transform,_,_)=&scene.events[*index] else {panic!("raster event")};
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let (w,h)=image.dimensions();
+    let cells=std::sync::Arc::new(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,
+        kurbo::Rect::new(0.,0.,1.,1.),100_000,&||false,&admit).unwrap());
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let wrong=[(&scene,*index,cells.clone(),None,SpatialRasterSamples::admitted(other_image,&admit).unwrap())];
+    assert!(replay_spatial_scene_impl(&scene,image.color_space(),clear,0,0,
+        Some(kurbo::Point::new(0.25,0.5)),&wrong,&[],&mut 100_000,&||false,&admit).is_none());
+    let shared=SpatialRasterSamples::admitted(image,&admit).unwrap();
+    let matching=[(&scene,*index,cells,None,shared.clone())];
+    let mut first_work=100_000;
+    let first=replay_spatial_scene_impl(&scene,image.color_space(),clear,0,0,
+        Some(kurbo::Point::new(0.125,0.5)),&matching,&[],&mut first_work,&||false,&admit).unwrap();
+    assert!(shared.sample.borrow().is_some());
+    let mut next_work=100_000;
+    let next=replay_spatial_scene_impl(&scene,image.color_space(),clear,0,0,
+        Some(kurbo::Point::new(0.375,0.5)),&matching,&[],&mut next_work,&||false,&admit).unwrap();
+    assert!(first.same_storage(next));assert!(next_work>first_work,"matching nearest cell must reuse original sample");
+    assert_eq!(next.native_components().unwrap()[..3],[1.,0.,0.]);
+    let mut changed_work=100_000;
+    let changed=replay_spatial_scene_impl(&scene,image.color_space(),clear,0,0,
+        Some(kurbo::Point::new(0.75,0.5)),&matching,&[],&mut changed_work,&||false,&admit).unwrap();
+    assert_eq!(changed.native_components().unwrap()[..3],[0.,0.,1.]);
+    assert!(changed_work<next_work,"a changed nearest cell must evaluate its own source");
+}
+
+
+/// In-place owner ordering with charged comparisons/swaps and bounded O(n log n)
+/// work. On refusal the caller must discard the partially sorted scratch array.
+fn bounded_owner_sort(values:&mut [usize],cancelled:&dyn Fn()->bool,work:&mut usize)->Option<()> {
+    fn sift(values:&mut [usize],mut root:usize,end:usize,cancelled:&dyn Fn()->bool,work:&mut usize)->Option<()> {
+        loop {
+            if cancelled() {return None;}
+            let child=root.checked_mul(2)?.checked_add(1)?;
+            if child>=end {return Some(());}
+            let mut larger=child;
+            if child+1<end {
+                *work=work.checked_sub(1)?;
+                if values[child]<values[child+1] {larger=child+1;}
+            }
+            *work=work.checked_sub(1)?;
+            if values[root]>=values[larger] {return Some(());}
+            *work=work.checked_sub(3)?;values.swap(root,larger);root=larger;
+        }
+    }
+    if cancelled() {return None;}
+    for root in (0..values.len()/2).rev() {sift(values,root,values.len(),cancelled,work)?;}
+    for end in (1..values.len()).rev() {
+        if cancelled() {return None;}
+        *work=work.checked_sub(3)?;values.swap(0,end);
+        sift(values,0,end,cancelled,work)?;
+    }
+    if cancelled() {return None;}Some(())
+}
+
+#[cfg(test)]
+mod bounded_owner_sort_tests {
+    use super::bounded_owner_sort;
+    #[test]
+    fn ordering_preserves_duplicates_and_bounds_work() {
+        for count in [0,1,2,3,17,823,4095] {
+            let input:Vec<_>=(0..count).map(|i|(i*811+17)%997).collect();
+            let mut expected=input.clone();expected.sort_unstable();
+            let mut actual=input.clone();let mut work=300_000;
+            bounded_owner_sort(&mut actual,&||false,&mut work).unwrap();assert_eq!(actual,expected);
+            let used=300_000-work;
+            let mut exact=input.clone();bounded_owner_sort(&mut exact,&||false,&mut {used}).unwrap();assert_eq!(exact,expected);
+            if used>0 {assert!(bounded_owner_sort(&mut input.clone(),&||false,&mut {used-1}).is_none());}
+        }
+    }
+    #[test]
+    fn every_cancellation_and_short_budget_refuses() {
+        let input=[9,1,8,2,7,3,6,4,5,0];
+        let polls=std::cell::Cell::new(0);let mut work=1000;
+        bounded_owner_sort(&mut input.clone(),&||{polls.set(polls.get()+1);false},&mut work).unwrap();
+        for stop in 1..=polls.get() {let n=std::cell::Cell::new(0);assert!(bounded_owner_sort(&mut input.clone(),&||{n.set(n.get()+1);n.get()>=stop},&mut 1000).is_none());}
+        for budget in 0..1000-work {assert!(bounded_owner_sort(&mut input.clone(),&||false,&mut {budget}).is_none());}
+    }
+}
+
+#[test]
+fn compact_owner_ids_preserve_priority_aliases_and_release_failed_preparation() {
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));
+    let admit=|bytes| {used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    let original=vec![(0,1_000_000),(1,100),(2,100),(3,7)];
+    let ids=CompactOwnerIds::default();assert!(ids.original(0).is_none());
+    let mut route=original.clone();let mut work=100;
+    ids.prepare(&mut route,&mut work,&||false,&admit).unwrap();let spent=100-work;
+    assert_eq!(route,vec![(0,2),(1,1),(2,1),(3,0)]);
+    assert_eq!(used.load(Ordering::Relaxed),4*size_of::<usize>());
+    for mask in 0..16 {
+        let expected=original.iter().filter(|(region,_)|mask&(1<<region)!=0).map(|(_,owner)|*owner).max();
+        let actual=route.iter().filter(|(region,_)|mask&(1<<region)!=0).map(|(_,owner)|*owner).max().and_then(|owner|ids.original(owner));
+        assert_eq!(actual,expected);
+    }
+    assert!(ids.original(3).is_none());let saved=route.clone();
+    assert!(ids.prepare(&mut route,&mut 100,&||false,&admit).is_none());assert_eq!(route,saved);
+    drop(ids);assert_eq!(used.load(Ordering::Relaxed),0);
+    for allowance in 0..spent {
+        let ids=CompactOwnerIds::default();let mut route=original.clone();
+        assert!(ids.prepare(&mut route,&mut {allowance},&||false,&admit).is_none());
+        assert!(ids.original(0).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    let ids=CompactOwnerIds::default();let polls=std::cell::Cell::new(0);
+    ids.prepare(&mut original.clone(),&mut 100,&||{polls.set(polls.get()+1);false},&admit).unwrap();drop(ids);
+    for stop in 1..=polls.get() {
+        let ids=CompactOwnerIds::default();let n=std::cell::Cell::new(0);
+        assert!(ids.prepare(&mut original.clone(),&mut 100,&||{n.set(n.get()+1);n.get()>=stop},&admit).is_none());
+        assert!(ids.original(0).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    let ids=CompactOwnerIds::default();assert!(ids.prepare(&mut [(0,7),(1,100)],&mut 100,&||false,&admit).is_none());
+    assert!(ids.original(0).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
 }

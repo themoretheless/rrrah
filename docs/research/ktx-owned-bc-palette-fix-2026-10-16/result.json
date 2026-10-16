@@ -1,0 +1,73 @@
+{
+  "status": "ktx_bc2_bc3_palette_defect_fixed_using_owned_code",
+  "problem": "Previous KTX texture2ddecoder BC2/BC3 path reused conditional BC1 palette; BC2/BC3 require four-color interpolation regardless endpoint ordering",
+  "before": "Focused BC2 regression produced127 instead of85 RGB; log retained",
+  "changes": [
+    "Reuse owned DDS BC1/BC2/BC3 block reconstruction in KTX",
+    "BC1 RGB makes alpha opaque; BC1 RGBA preserves transparent selector",
+    "BC2/BC3 use unconditional four-color palette and explicit/interpolated alpha",
+    "ETC1 path remains owned; KTX compressed supported blocks no longer use texture2ddecoder"
+  ],
+  "references": [
+    "https://learn.microsoft.com/en-us/windows/win32/direct3d10/d3d10-graphics-programming-guide-resources-block-compression",
+    "https://registry.khronos.org/DataFormat/specs/1.4/dataformat.1.4.pdf"
+  ],
+  "independent_oracle": {
+    "tool": "Pillow12.3.0 DDS decoder",
+    "blocks_per_codec": 4096,
+    "codecs": [
+      "BC1",
+      "BC2",
+      "BC3"
+    ],
+    "total_blocks": 12288,
+    "pixels": 196608,
+    "comparison": "all RGBA bytes exact; endpoint order/equality, primary/max/min/seeded endpoints, selectors, explicit alpha and both interpolated-alpha modes"
+  },
+  "checks": {
+    "texture_lib": {
+      "passed": 80,
+      "failed": 0,
+      "ignored": 1
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "app_cpu": {
+      "states": 356,
+      "swap_writes": 356,
+      "swap_reads": 356,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 356,
+      "readbacks": 2136,
+      "swap_writes": 356,
+      "swap_reads": 356,
+      "final_credit": 0,
+      "new_reversed_endpoint_cases": 2
+    }
+  },
+  "limits": [
+    "Owned implementation was already used by DDS; this adds independent block coverage and correct KTX reuse",
+    "No throughput optimization claim; endpoint defect correction changes previously wrong colors",
+    "Other texture code paths may still use external decoders",
+    "Full format/physical HDR/NVIDIA qualification remains open"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/dds.rs": "477a48f1f4afab40b186689593fba7bdb4ed8c944cd4f08255bc82b43b87d0e2",
+    "crates/rrrah-texture/src/ktx.rs": "e049742853fea1b4ac0dc1f210ef6a60e1726954ad2302b21a2ddbaaa1e83212",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "a376b384a5c12656c2011493f243c0d4aeb480825f13a77e289fe646eddedb00",
+    "scripts/generate-bc-block-oracles.py": "d3834e8429bccd6e67d0db692fe67637dff990fa0b7d4081de6b10dac9436148",
+    "tests/fixtures/raster/bc1-block-oracles.bin": "713039a5bbe3b2e78c8db861c74b27bd9370f544138c304a8fcfdfadb1a4ec5f",
+    "tests/fixtures/raster/bc1-block-oracles.rgba": "4c89134f0f311ffc456f2be298ef10b86e2de68e2aabcaeb8c70ac08e2b2ee0a",
+    "tests/fixtures/raster/bc2-block-oracles.bin": "1dbc3f2d5cb794541d050b137d5191fbdb0a146e323b7440d08e3f4c4bf2734d",
+    "tests/fixtures/raster/bc2-block-oracles.rgba": "a6090e41ebca0427a2f9f157e182791fcba505170c209f1344764b1ec66dedef",
+    "tests/fixtures/raster/bc3-block-oracles.bin": "3c1f87ced2ab6fc2df86d6d80a6e83e8c7c9136521363330ed5f2bea2a08e27f",
+    "tests/fixtures/raster/bc3-block-oracles.rgba": "d3e9ac8304ed253e676205d43bdc787da88181218aad4f4cfefd76f58d5b59a5"
+  }
+}

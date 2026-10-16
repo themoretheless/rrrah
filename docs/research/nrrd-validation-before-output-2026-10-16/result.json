@@ -1,0 +1,46 @@
+{
+  "status": "NRRD raw sample lengths and complete ASCII grammar/count validated before output admission",
+  "problem": "Memory-full request could report retryable Memory before discovering invalid raw length/ASCII data, allowing unnecessary cache release and retry",
+  "change": "Raw checks exact volume payload length first. ASCII nonallocating validation scans all tokens, including unselected planes, using shared scalar parser. Output allocated only after validation; emission reparses only selected values, with cancellation checks while skipping earlier planes.",
+  "regression": {
+    "root_bytes": 128,
+    "artificial_pressure_bytes": 128,
+    "selected_planes": [
+      0,
+      1
+    ],
+    "bad_raw": [
+      "one sample missing",
+      "one extra sample"
+    ],
+    "bad_ascii": [
+      "missing samples",
+      "excess samples",
+      "malformed token in second plane",
+      "uint8 overflow",
+      "negative uint8"
+    ],
+    "expected_bad": "InvalidNrrd, pressure reservation unchanged",
+    "valid_control": "Same valid ASCII data returns typed Memory under pressure, proving allocator still enforced",
+    "final_managed_bytes": 0
+  },
+  "tests": {
+    "scientific": {
+      "passed": 44,
+      "failed": 0,
+      "ignored": 7
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "scientific_lib_clippy_warnings_denied": "passed"
+  },
+  "limits": [
+    "Gzip still must admit selected-slice scratch before reading packet/CRC validity; no malformed-before-memory claim for gzip",
+    "ASCII performs full validation then selected-plane emission; no speedup claimed",
+    "This turn does not rerun Metal; prior104state rendering evidence predates this validation-order change"
+  ],
+  "source_sha256": "c6309a48f35d9ba950665162449062adb9e22d9fcbd91dbff15568018bf31468"
+}

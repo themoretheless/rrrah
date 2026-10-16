@@ -1,0 +1,104 @@
+{
+  "status": "historical_bit_failures_preserved_current_independent_precision_gate_passed",
+  "fixture": {
+    "dimensions": [
+      64,
+      64
+    ],
+    "white_level": 1024,
+    "wb": [
+      2,
+      1,
+      0.5,
+      1
+    ],
+    "camera_transform": "authored near-identity sRGB camera",
+    "samples": "100+(x*43+y*29)%2000",
+    "view_scale": "one sensor sample per output pixel"
+  },
+  "first_failure": {
+    "algorithm": "Bilinear",
+    "reason": "fragment clamped coordinate/phase at sensor edge, compute/native CPU reflect preserving CFA parity"
+  },
+  "production_change": "Bayer sensor reads reflect into physical sensor before normalization and phase lookup; RGBE lattice clamping retained",
+  "after_fix": {
+    "whole_hdr_exact": [
+      "Bilinear",
+      "SmoothHue",
+      "MalvarHeCutler"
+    ],
+    "first_remaining_algorithm": "Directional",
+    "observed_first_mismatches": "eight reported half-bit differences each1 step; full error bound not yet established",
+    "test_exit_code": 101,
+    "no_tolerance_changed": true,
+    "later_algorithms_not_reached": true
+  },
+  "additional_change": "viewer compute routing falls back to fragment for dimensions below2, preserving tiny image support",
+  "pending": [
+    "broader fragment edge regressions",
+    "area-filtered minified Bayer compute presentation",
+    "camera corpus/NVIDIA numerical qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "1558fd36982e52d404c3e7caf5edd91cdd716f7c3c770f98880e3baaa0d9a41c",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "96210e50048da00b87545b8dc39682746bcec626c319fde2c15d5333b05aa2cb",
+    "crates/rrrah-app/src/main.rs": "d5971dbc8c755631d10de3696b03fab522e1dd40b2e633a0ad544fc4e66ea8dd",
+    "crates/rrrah-gpu/tests/common/mod.rs": "825f1a4904da0acffa91efba25d913bd71b53448c189ccec420d641ffd99a687",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "7bc62998df659bbe0fe447ecb210f82a69497aeffd25e139ef51ed2446c9e427"
+  },
+  "all_algorithms_half_diagnostics": [
+    {
+      "algorithm": "Bilinear",
+      "mismatched_channels": 0,
+      "max_half_steps": 0
+    },
+    {
+      "algorithm": "SmoothHue",
+      "mismatched_channels": 0,
+      "max_half_steps": 0
+    },
+    {
+      "algorithm": "MalvarHeCutler",
+      "mismatched_channels": 0,
+      "max_half_steps": 0
+    },
+    {
+      "algorithm": "Directional",
+      "mismatched_channels": 374,
+      "max_half_steps": 1
+    },
+    {
+      "algorithm": "Vng",
+      "mismatched_channels": 274,
+      "max_half_steps": 1
+    },
+    {
+      "algorithm": "Rcd",
+      "mismatched_channels": 258,
+      "max_half_steps": 1
+    }
+  ],
+  "directional_f64": {
+    "scope": "authored64x64 dyadic normalized field at1:1; f64 barycentric inverse-gradient oracle and source camera matrix",
+    "max_abs_fragment_error": 5.339379818281031e-07,
+    "max_abs_compute_error": 5.336090245222636e-07,
+    "max_abs_cross_stage": 4.76837158203125e-07,
+    "probe_exit_code": 0,
+    "gate": "finite f32 results and zero final credits; numerical errors measured, not generalized bounds"
+  },
+  "first_f64_probe_failure": "test attempted unsupported RasterRenderer sRGB constructor with RGBA32Float; corrected to direct compute buffer readback",
+  "standard_context": {
+    "source": "https://www.w3.org/TR/WGSL/#floating-point-evaluation",
+    "observed_rules": "WGSL permits reassociation and fusion; f32 division allows2.5ULP within normal divisor range; this does not alone certify these algorithms"
+  },
+  "optimized_build": {
+    "first_exit_code": 0,
+    "first_seconds": 527,
+    "edge_fix_exit_code": 0,
+    "edge_fix_seconds": 263,
+    "target": "target/viewer-optimized-20261015/release/rrrah",
+    "profile": "release optimization plus debug assertions for existing live probe"
+  },
+  "optimized_bilinear_benchmark": "../viewer-paired-optimized-2026-10-15/result.json",
+  "precision_followup": "../bayer-weighted-f64-precision-2026-10-15/result.json"
+}

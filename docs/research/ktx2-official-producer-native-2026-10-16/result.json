@@ -1,0 +1,49 @@
+{
+  "status": "official_ktx2_producer_native_and_public_path_verified",
+  "upstream_revision": "e3c91805e874bcab9447e8689afa5bc39266bada",
+  "upstream_url": "https://github.com/KhronosGroup/KTX-Software/tree/e3c91805e874bcab9447e8689afa5bc39266bada/tests/resources/ktx2",
+  "license": {
+    "identifier": "Apache-2.0",
+    "copyright": "2015-2022 The Khronos Group Inc.",
+    "authority": "Pinned upstream REUSE.toml **/**.ktx2 aggregate annotation; full license and attribution stored with fixtures"
+  },
+  "files": 2,
+  "selected_mips": 8,
+  "source_bytes": 82588,
+  "formats": [
+    "VK_FORMAT_R8G8B8A8_SRGB",
+    "VK_FORMAT_R8G8B8_SRGB"
+  ],
+  "producer_metadata": "ktx create/libktx v5.0.__default__",
+  "checks": [
+    "LFS SHA256 and exact source sizes verified on initial download and repeat fetch",
+    "All8 native mip pixels/dimensions/selection/frame counts match independent fixed-format Python byte extraction",
+    "All8 public decode_raster path example outputs match same byte-exact oracle and selection metadata",
+    "Exact/one-byte-short output budgets, clone last-owner lifetime and zero final credit",
+    "Every82588 truncated prefix of two source containers refuses before zero-budget output allocation"
+  ],
+  "texture_lib": {
+    "passed": 94,
+    "failed": 0,
+    "ignored": 3
+  },
+  "changes": "Imported licensed producer fixtures, independent sample-extraction fetch script and regression tests; production unchanged",
+  "limits": [
+    "Reference is independent container sample extraction, not a second lossy decoder or physical color measurement",
+    "These are ordinary RGB/RGBA producers; independent binary16 producer file remains missing",
+    "New imported files have not yet been qualified through RAM/swap/Metal; earlier authored corpus evidence stays separate",
+    "Full producers/variants/physical HDR/NVIDIA and100-format qualification remain open"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/ktx2.rs": "4a04eaba1475eb449635406fee101c44102294c44788758c2574e046bde0d014",
+    "scripts/fetch-ktx2-khronos-producers.py": "a2a28309a63576d41e735ca81b4afe3ed76152f3ce3e8d4ca312b0b459fc2b4e",
+    "tests/fixtures/raster/ktx2-khronos-producer-manifest.tsv": "5fa7059be80d49aa95ad2f5e62fb848377714dfb469d9efa5fc6edcb9a55439a",
+    "tests/fixtures/raster/khronos-r8g8b8a8_srgb.ktx2": "e49f639e1af5e557e03b630ae07b8090c830924fabba3e0ee13c083cf552eeaf",
+    "tests/fixtures/raster/khronos-r8g8b8_srgb_mip.ktx2": "da5c0dd90920620dc3634ff0842c775c36e86c4477ffde29607c9e3fa536bd91",
+    "tests/fixtures/raster/khronos-ktx2-LICENSE.txt": "1717cf52bc04908712e90c40242083ad07d3d175ff609971837ad064b14f9a37"
+  },
+  "follow_up": {
+    "report": "../ktx2-official-producer-cache-metal-2026-10-16/result.json",
+    "scope": "All8 official ordinary producer mips now pass RAM pressure, swap/blocked prefetch and Metal SDR/HDR transport; independent float16 producer remains missing"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "status": "official_ktx2_producers_cache_swap_metal_verified",
+  "upstream_reference": "../ktx2-official-producer-native-2026-10-16/result.json",
+  "files": 2,
+  "selected_mips": 8,
+  "checks": {
+    "cpu_states": 8,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_states": 8,
+    "metal_readbacks": 48,
+    "ram_pressure_hits": 8,
+    "swap_writes": 8,
+    "swap_reads": 8,
+    "swap_errors": 0,
+    "swap_dropped": 0,
+    "blocked_decoder_prefetch": true,
+    "pixel_preservation": "Float32 display pixels exact at initial load/RAM hit/reverse swap restore; SDR and binary16 output frames equal independent sample-frame transport",
+    "final_memory_credit": 0,
+    "viewer_passed": 253,
+    "viewer_failed": 0,
+    "viewer_ignored": 72,
+    "original_legacy_cpu_states": 1748
+  },
+  "dedicated_test_limits": {
+    "root_bytes": 2097152,
+    "ram_bytes": 524288,
+    "ram_count": 1,
+    "queue_bytes": 1048576,
+    "queue_count": 4,
+    "restore_bytes": 1048576,
+    "swap_bytes": 1048576,
+    "swap_count": 16
+  },
+  "original_test_limits": "Unchanged; original1748-case low-budget collection revalidated after helper parameterization",
+  "changes": "Separate CPU and ignored actual-Metal producer tests reuse full-image cache/swap/prefetch harness; no product default or renderer changes",
+  "limits": [
+    "Imported sources are ordinary RGB/RGBA sRGB, not independent float16 producer files",
+    "Linear expected frame uses shared production color preparation of independent native sample oracle; no independent physical color calibration claim",
+    "Separate larger test limits are required for128x128 producer output; earlier small corpus limits unchanged",
+    "Offscreen Metal readback does not qualify physical HDR or NVIDIA",
+    "Full producer/variant and100-format qualification remain open"
+  ],
+  "source_sha256": "30b582b7573c0f8fd2fc650c1bd21dd5669c9e8b75d3acd93e062f163230c990"
+}

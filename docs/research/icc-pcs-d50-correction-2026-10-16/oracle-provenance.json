@@ -1,0 +1,40 @@
+{
+  "engine": "LittleCMS",
+  "encoded_version": 2190,
+  "source_type": "RGB_DBL from independent u16 planes /65535",
+  "target_type": "RGB_DBL linear sRGB",
+  "rendering_intent": "relative colorimetric",
+  "flags": "NOOPTIMIZE",
+  "target_white_xy": [
+    0.3127,
+    0.329
+  ],
+  "pcs_white_xyz": [
+    0.9642,
+    1,
+    0.8249
+  ],
+  "declared_rgb_absolute_bound": 2e-05,
+  "before_max_rgb_error_first_fixture": 0.0003815293312072754,
+  "after_max_rgb_error_both_fixtures": 7.56979e-06,
+  "references": [
+    {
+      "source": "psd-tools-16bit5x5.psd",
+      "oracle": "tests/fixtures/raster/psd-tools-16bit5x5.psd.linear-rgba64le",
+      "bytes": 800,
+      "sha256": "5b49a8efefa2dd9f5652c59f6d192f31f92419b043a267a5cbf1eae247bfbb1b"
+    },
+    {
+      "source": "psd-tools-16bit5x5.psb",
+      "oracle": "tests/fixtures/raster/psd-tools-16bit5x5.psb.linear-rgba64le",
+      "bytes": 800,
+      "sha256": "5b49a8efefa2dd9f5652c59f6d192f31f92419b043a267a5cbf1eae247bfbb1b"
+    }
+  ],
+  "workspace": {
+    "binaries": 20,
+    "passed": 1630,
+    "failed": 0,
+    "ignored": 100
+  }
+}

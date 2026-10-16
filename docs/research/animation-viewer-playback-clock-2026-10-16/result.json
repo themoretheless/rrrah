@@ -1,0 +1,57 @@
+{
+  "status": "presentation_driven_animation_scheduler_wired_into_viewer",
+  "changes": [
+    "Viewer consumes optional raster timing after successful raster upload",
+    "Deadline starts on successful renderer presentation submission, rather than decode completion",
+    "about_to_wait selects minimum animation/retry deadline and submits bounded next-frame request through existing foreground loader",
+    "Finite total plays stop at final frame; zero total plays loop indefinitely",
+    "Zero or sub10ms delay uses explicit10ms minimum pacing; rational delay otherwise rounded to nanosecond",
+    "Only one frame request pending; no catch-up decode burst while waiting for ready/presentation",
+    "Manual image navigation and gallery change reset play state; generation checks prevent stale deadlines advancing another request",
+    "Nonanimated page/mip and single-frame sources never auto-advance"
+  ],
+  "checks": {
+    "clock_scenarios": 48,
+    "clock_scope": [
+      "2..5 frames",
+      "0..3 total plays",
+      "zero/30ms/rational1000over60 delays",
+      "not-before-deadline",
+      "ready-before-presentation has no deadline",
+      "stale generation refuses advancement",
+      "slow load/presentation waits without catch-up",
+      "new source/manual reset and invalid/single/static inputs"
+    ],
+    "real_cache_sources": [
+      "gif-animation-disposal-3.gif",
+      "apng-compose-0-0.apng",
+      "webp-animation-0.webp"
+    ],
+    "real_cache_states": 36,
+    "unique_decodes": 12,
+    "swap_restores": 24,
+    "gif_total_plays": 3,
+    "apng_webp_infinite_test_cycles": 3,
+    "final_memory_credit": 0,
+    "viewer_passed": 256,
+    "viewer_failed": 0,
+    "viewer_ignored": 72
+  },
+  "limits": [
+    "Live App event-loop/physical screen presentation pacing not yet qualified; current screen lock was established in earlier hardware audit",
+    "Presentation submission is not measured physical scan-out time",
+    "Controlled clock tests and real cache integration use explicit synthetic monotonic instants; they are not wall-clock FPS benchmarks",
+    "Under slow loading playback intentionally waits and presents each frame instead of skipping/catching up",
+    "Pause/resume UI, loop-boundary prefetch optimization and wider animation-family coverage remain open",
+    "No full100-format, physical HDR or NVIDIA qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-app/src/raster_playback.rs": "bc488a008a0313594617486edbaabbd6e71c00276783bb7b36c8d195828066af",
+    "crates/rrrah-app/src/main.rs": "c13dc9a96ef1dc6574b125776f21f8adfce177df5342f8fe4c652257354bafc6"
+  },
+  "follow_up": {
+    "report": "../animation-viewer-pause-resume-2026-10-16/result.json",
+    "scope": "P pause/resume now wired and clock tests pass; physical event-loop qualification remains open"
+  },
+  "cyclic_prefetch_follow_up": "../animation-cyclic-prefetch-2026-10-16/result.json"
+}

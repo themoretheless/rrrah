@@ -1,0 +1,38 @@
+{
+  "status": "All ordinary viewer binary unit tests pass after scientific managed-buffer changes",
+  "command": "cargo +stable test -p rrrah --bin rrrah --offline",
+  "passed": 247,
+  "failed": 0,
+  "ignored": 68,
+  "seconds": 3.6,
+  "sandbox_attempt": {
+    "passed": 245,
+    "failed": 2,
+    "ignored": 68,
+    "failures": [
+      "drop_inspection::tests::symlinks_broken_links_and_special_files_are_rejected",
+      "gallery::tests::required_source_stamp_rejects_non_files_and_preserves_identity"
+    ],
+    "reason": "Both UnixListener::bind fixture setup operations denied with EPERM",
+    "resolution": "Reran identical full suite with permission to create local Unix sockets; unchanged code, all ordinary tests passed"
+  },
+  "scope": [
+    "Viewer state/navigation and cancellation unit tests",
+    "Raster frame/page cache keys and swap restoration",
+    "Scientific124state explicit-window RAM/swap test",
+    "DICOM352state TTL/pressure/swap and120directional-window scenarios",
+    "Editor store and source-inspection tests"
+  ],
+  "limitations": [
+    "68ignored tests not passes; hardware/liveUI/manual tests require their own evidence",
+    "No interactive GUI session or physical HDR calibration performed in this command",
+    "No new NVIDIA/CUDA hardware run",
+    "Not full100format qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "f7eae04351b93f7dc729a788bea0624e7cc08efa2061bcdbf02f243280b7b0db",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "8f973c6efb15803e96d25f38516991a4145acc65417243f65301a57a107fc586",
+    "crates/rrrah-app/src/gallery.rs": "815430b323b22827c59fdb036fa1f6c2296ecfcb08004974e596a60af0c3fc74",
+    "crates/rrrah-app/src/drop_inspection.rs": "acf57758f2c8a3f0caef7ccf8c5a9775546c220198e634f2d4306da2ae269064"
+  }
+}

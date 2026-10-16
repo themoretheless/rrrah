@@ -1,0 +1,27 @@
+{
+  "implementation": "native16/32bit RGB/gray merged-alpha white-unmatting",
+  "verification": "current psd.rs compiled directly as isolated rustc test harness against fingerprint-matched cached rrrah-layered/core/flate2 dependencies",
+  "psd_module_tests_passed": 19,
+  "independent_high_precision_controls": 8,
+  "precision_bound": "u16 RGB within one normalized code; float32 and alpha <=2e-6",
+  "hdr_above_one_preserved": true,
+  "exact_budget_and_one_byte_short_and_last_owner_checked": true,
+  "source_sha256": "433894c5179b0c71bc33dfc3d67e3b67135e335e089474abfc9734e0646887c2",
+  "hdrt_observed_lengths": [
+    74,
+    112
+  ],
+  "cargo_workspace_and_public_pipeline": "Cargo layered/animation, original-gray public peak and both original-gray/authored-high-precision App-loader RAM/swap/blocked-prefetch/Metal passed; full workspace/live GUI and original high-precision corpus remain separate",
+  "production_full_qualification": false,
+  "white_unmatting_cancellation_pixel_interval": 4096,
+  "white_unmatting_precisions_checked": [
+    8,
+    16,
+    32
+  ],
+  "new_finite_to_infinite_unmatting_refused": true,
+  "representable_signed_hdr_and_zero_alpha_preserved": true,
+  "opaque_float_identity_bits_preserved": true,
+  "cargo_followup": "passed in separate target after confirmed shared-target contention",
+  "cargo_stage_log": "cargo-stages.json"
+}

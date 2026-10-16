@@ -1,0 +1,34 @@
+{
+  "pixels": 65536,
+  "rgb_samples": 196608,
+  "max_rgb_absolute_error": 1.78814e-07,
+  "bound": 2e-05,
+  "alpha_exact": true,
+  "all_adjacent_rgb_strictly_monotonic": true,
+  "retained_bytes": 1573056,
+  "final_budget_used": 0,
+  "animation_suite": {
+    "passed": 31,
+    "ignored": 1
+  },
+  "oracle": "LittleCMS 2190; relative colorimetric; NOOPTIMIZE; Gray_DBL to linear sRGB RGB_DBL",
+  "oracle_regeneration_byte_identical": true,
+  "sha256": {
+    "tests/fixtures/raster/gray-gamma2-lcms.icc": "ead4c629aaf90e430020520e97f6d2b56abd6a2b6e35b04c62198ee7893b6dae",
+    "tests/fixtures/raster/gray-gamma2-lcms-ramp.rgb64le": "780dd017186ac492ae162bd052c633e057a0c780ec8f9509095e36e29a391889",
+    "docs/research/icc-pcs-d50-correction-2026-10-16/gray-ramp-oracle.c": "c54c4d88515e7de2a005bcb442eb7baff1e04ff551ff4847161b6f3e0ea5a0a4"
+  },
+  "exact_managed_peak_bytes": 3670208,
+  "one_byte_pressure_refusal": true,
+  "refusal_preserves_all_native_codes": true,
+  "retry_after_pressure_release": true,
+  "cancellation": {
+    "points": 68,
+    "all_return_typed_cancelled": true,
+    "all_release_temporary_credit": true,
+    "all_preserve_native_samples": true,
+    "retry_after_each_bit_exact": true,
+    "peak_bytes": 3670208,
+    "final_bytes": 0
+  }
+}

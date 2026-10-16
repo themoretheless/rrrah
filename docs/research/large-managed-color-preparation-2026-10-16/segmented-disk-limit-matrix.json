@@ -1,0 +1,40 @@
+{
+  "source_record_bytes": 576000064,
+  "refusals": [
+    {
+      "case": "disk-zero",
+      "disk_bytes": 0,
+      "count": 1,
+      "index_bytes": 300000
+    },
+    {
+      "case": "disk-short",
+      "disk_bytes": 576000063,
+      "count": 1,
+      "index_bytes": 300000
+    },
+    {
+      "case": "count-zero",
+      "disk_bytes": 576000064,
+      "count": 0,
+      "index_bytes": 300000
+    },
+    {
+      "case": "index-zero",
+      "disk_bytes": 576000064,
+      "count": 1,
+      "index_bytes": 0
+    },
+    {
+      "case": "index-short",
+      "disk_bytes": 576000064,
+      "count": 1,
+      "index_bytes": 281279
+    }
+  ],
+  "all_ram_hits_under_pressure": true,
+  "all_store_usage_zero_after_refusal": true,
+  "all_files_unchanged_after_refusal": true,
+  "gpu_readbacks_after_recovery": 32,
+  "final_used_bytes": 0
+}

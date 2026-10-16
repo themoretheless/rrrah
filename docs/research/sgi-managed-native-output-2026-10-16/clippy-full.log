@@ -1,0 +1,208 @@
+    Checking rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+    Checking rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+error: docs for function returning `Result` missing `# Errors` section
+  --> crates/rrrah-swap/src/segmented.rs:50:5
+   |
+50 | /     pub fn read_into(
+51 | |         &mut self,
+52 | |         offset: u64,
+53 | |         output: &mut [u8],
+54 | |         mut cancelled: impl FnMut() -> bool,
+55 | |     ) -> Result<()> {
+   | |___________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+   = note: `-D clippy::missing-errors-doc` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::missing_errors_doc)]`
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-swap/src/segmented.rs:68:26
+   |
+68 |             let length = (self.handle.byte_len() - block_offset).min(BLOCK as u64) as usize;
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+   = note: `-D clippy::cast-possible-truncation` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+   |
+68 -             let length = (self.handle.byte_len() - block_offset).min(BLOCK as u64) as usize;
+68 +             let length = usize::try_from((self.handle.byte_len() - block_offset).min(BLOCK as u64));
+   |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-swap/src/segmented.rs:89:25
+   |
+89 |             let start = (position - block_offset) as usize;
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+89 -             let start = (position - block_offset) as usize;
+89 +             let start = usize::try_from(position - block_offset);
+   |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-swap/src/segmented.rs:90:25
+   |
+90 |             let count = (end - position).min((length - start) as u64) as usize;
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+90 -             let count = (end - position).min((length - start) as u64) as usize;
+90 +             let count = usize::try_from((end - position).min((length - start) as u64));
+   |
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-swap/src/segmented.rs:104:5
+    |
+104 | /     pub fn segmented_reader(
+105 | |         &self,
+106 | |         handle: &SegmentedSwapHandle,
+107 | |         scratch_budget: &MemoryBudget,
+108 | |         mut cancelled: impl FnMut() -> bool,
+109 | |     ) -> Result<SegmentedSwapReader> {
+    | |____________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:116:49
+    |
+116 |         let scratch = scratch_budget.try_buffer(handle.byte_len().min(BLOCK as u64) as usize, 0_u8)?;
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+116 -         let scratch = scratch_budget.try_buffer(handle.byte_len().min(BLOCK as u64) as usize, 0_u8)?;
+116 +         let scratch = scratch_budget.try_buffer(usize::try_from(handle.byte_len().min(BLOCK as u64)), 0_u8)?;
+    |
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-swap/src/segmented.rs:132:5
+    |
+132 | /     pub fn write_segmented_stream(
+133 | |         &self,
+134 | |         bytes: u64,
+135 | |         index_budget: &MemoryBudget,
+136 | |         mut cancelled: impl FnMut() -> bool,
+137 | |         encode: impl FnOnce(&mut dyn Write) -> std::io::Result<()>,
+138 | |     ) -> Result<SegmentedSwapHandle> {
+    | |____________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-swap/src/segmented.rs:171:5
+    |
+171 | /     pub fn write_segmented(
+172 | |         &self,
+173 | |         reader: &mut dyn Read,
+174 | |         bytes: u64,
+...   |
+177 | |         mut cancelled: impl FnMut() -> bool,
+178 | |     ) -> Result<SegmentedSwapHandle> {
+    | |____________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:190:53
+    |
+190 |         let mut scratch = scratch_budget.try_buffer(bytes.min(BLOCK as u64) as usize, 0_u8)?;
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+190 -         let mut scratch = scratch_budget.try_buffer(bytes.min(BLOCK as u64) as usize, 0_u8)?;
+190 +         let mut scratch = scratch_budget.try_buffer(usize::try_from(bytes.min(BLOCK as u64)), 0_u8)?;
+    |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:194:30
+    |
+194 |                 let length = remaining.min(BLOCK as u64) as usize;
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+194 -                 let length = remaining.min(BLOCK as u64) as usize;
+194 +                 let length = usize::try_from(remaining.min(BLOCK as u64));
+    |
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-swap/src/segmented.rs:219:5
+    |
+219 | /     pub fn restore_range(
+220 | |         &self,
+221 | |         handle: &SegmentedSwapHandle,
+222 | |         offset: u64,
+...   |
+226 | |         cancelled: impl FnMut() -> bool,
+227 | |     ) -> Result<SharedBuffer<u8>> {
+    | |_________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-swap/src/segmented.rs:246:5
+    |
+246 | /     pub fn restore_rows(
+247 | |         &self,
+248 | |         handle: &SegmentedSwapHandle,
+249 | |         layout: SwapRows,
+...   |
+252 | |         mut cancelled: impl FnMut() -> bool,
+253 | |     ) -> Result<SharedBuffer<u8>> {
+    | |_________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: allocating a local array larger than 16384 bytes
+   --> crates/rrrah-swap/src/lib.rs:319:25
+    |
+319 |                 buffer: [0; BLOCK],
+    |                         ^^^^^^^^^^
+    |
+    = help: consider allocating on the heap with `vec![0; BLOCK].into_boxed_slice()`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_stack_arrays
+    = note: `-D clippy::large-stack-arrays` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::large_stack_arrays)]`
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-swap/src/lib.rs:367:5
+    |
+367 | /     pub fn read_stream_with_scratch<T>(
+368 | |         &self,
+369 | |         handle: &SwapHandle,
+370 | |         cancelled: impl FnMut() -> bool,
+371 | |         decode: impl FnOnce(&mut dyn Read) -> std::io::Result<T>,
+372 | |         scratch_budget: &MemoryBudget,
+373 | |     ) -> Result<T> {
+    | |__________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: allocating a local array larger than 16384 bytes
+   --> crates/rrrah-swap/src/lib.rs:401:25
+    |
+401 |                 buffer: [0; BLOCK],
+    |                         ^^^^^^^^^^
+    |
+    = help: consider allocating on the heap with `vec![0; BLOCK].into_boxed_slice()`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_stack_arrays
+
+error: could not compile `rrrah-swap` (lib) due to 15 previous errors
+warning: build failed, waiting for other jobs to finish...

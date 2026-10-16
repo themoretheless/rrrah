@@ -1,0 +1,34 @@
+{
+  "status": "PCX row-planar scratch and RGBA output use managed admission; packet structure validated before allocation",
+  "change": "Shared const-specialized scanline parser validates or emits. Raw encoding uses bounded slice validation/bulk copy. RLE preserves cross-plane runs within scanline, refuses row overrun/zero counts/truncation; whole raster must end exactly before palette/trailer boundary. Output preallocated and written directly. Initial and loop cancellation checks included.",
+  "memory": "Borrowed source decode needs exact width*height*4 + bytesPerLine*planes peak; only RGBA output remains on return. Source ownership separate.",
+  "regressions": {
+    "independent_sources": 2,
+    "producer": "Pillow RGB and indexed3x2, every24RGBA byte matched",
+    "exact": "Output24 plus actual header stride*planes; one-byte-short refuses and releases",
+    "shared": "Cloned decoded frame retains24byte credit after original dropped; final0",
+    "malformed": "Zero run, row overrun, missing run value, short raster, extra trailing data return InvalidPcx with0output budget; valid6bytecross-planeRLE instead reaches Memory",
+    "existing": "Packed bits/plane order, legacy mono policy, V4 palette, raw marker bytes, padding and cross-plane runs remain passing"
+  },
+  "tests": {
+    "texture_lib": {
+      "passed": 59,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "clippy_texture_lib_tests_no_deps_warnings_denied": "passed"
+  },
+  "limits": [
+    "Extra RLE packet validation walk; no speedup benchmark claimed",
+    "Not full PCX/DCX format qualification; no new actual Metal in this turn",
+    "File source still fully read separately through common router",
+    "Managed budget is not total RSS accounting",
+    "Full100format objective remains active"
+  ],
+  "source_sha256": "ae4bd9a7fdf1480af447c63b7d44f7c5d23b9decdaa98e92703d2810fcc462c3"
+}

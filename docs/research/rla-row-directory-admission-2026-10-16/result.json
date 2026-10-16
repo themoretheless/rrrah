@@ -1,0 +1,57 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "RLA integer and float row-overlap catalog uses admitted mutable buffer",
+    "Fill and sort exact row range count; release scratch before native output conversion/alpha processing",
+    "Byte-plane scratch remains covered by existing per-plane reservation"
+  ],
+  "checks": {
+    "vfx_lib": {
+      "passed": 52,
+      "failed": 0
+    },
+    "vfx_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "exact_short_ownership": [
+      "16-bit RGB+alpha native output, catalog and byte planes",
+      "float32 output plus catalog",
+      "One-byte-short refuses and releases all reservations",
+      "Shared frame clone holds only native output until last owner drops"
+    ],
+    "pipeline": {
+      "states": 290,
+      "added_rla_states": 2,
+      "ram_pressure_hits": 290,
+      "swap_writes": 290,
+      "swap_reads": 290,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1740,
+      "seconds": 7.36
+    }
+  },
+  "interpretation": [
+    "RLA16 uses authored native-u16 oracle with explicit straight alpha and linear-sRGB import",
+    "OpenImageIO float32 source uses producer-known two-pixel HDR sample oracle, explicit little-endian, straight alpha and linear-sRGB import"
+  ],
+  "limits": [
+    "RLA color/alpha/float-order interpretation remains explicit; no automatic producer identification qualification",
+    "Only two added RLA states in this combined pipeline; other VFX/RLA tests separate",
+    "No speedup or physical HDR luminance validation claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "vfx-tests": "vfx-tests.log",
+    "vfx-clippy": "vfx-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

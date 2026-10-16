@@ -1,0 +1,20 @@
+{
+  "status": "fixed and verified",
+  "failure_before": "Bayer corner 0,0, side63 RGGB GPU[71,57,77] vs CPU[68,63,65]",
+  "cause": "CPU thumbnail clamped sensor coordinates, changing CFA phase at edges; compute and fragment reflect",
+  "fix": "reflect CPU Bayer sensor coordinates and WB phase consistently, preserving separate green gains",
+  "tests": {
+    "raw_linear": 7,
+    "raw_orientation": 1,
+    "rgbe_view": 2,
+    "camera_color_after": 12,
+    "core": 142,
+    "core_ignored": 2
+  },
+  "unchanged_gate": "per-channel CPU/GPU delta <=2 and normal/tiled exact, four CFAs and sides63/64",
+  "source_sha256": "5481c30b7b04727cb0a800b3bf09fe45896a7154ca96f970ab2d5f7eaf012d8e",
+  "limitations": [
+    "synthetic camera fields and bounded pixel controls; not full real-camera corpus qualification",
+    "prior optimized benchmark binary predates CPU thumbnail fix"
+  ]
+}

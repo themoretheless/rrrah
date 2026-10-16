@@ -1,0 +1,251 @@
+{
+  "status": "retained experimental opt-in; next pixel incomplete",
+  "flag": "RRRAH_AI_LEFT_EDGE_EVENTS",
+  "default_enabled": false,
+  "algorithm": "Classify edge computed X across its clipped lifetime using endpoint evaluations and monotonic IEEE subtract/multiply/add with fixed slope. Require finite bounds and left/2+left/2==left. Keep all cuts and canonical grouping. Classified edges contribute to left winding through sorted start/end events at the original half-open slab sample Y, rather than repeated active-edge enumeration.",
+  "proof_scope": "Equivalence to the existing floating-point kernel; not certification of ideal source geometry or PDF rasterization policy. No epsilon classification.",
+  "accounting": "24 continuing work units per edge classification, counted start/end event scans, admitted edge bitset and region winding vector, exact capacity guards, checked integer winding arithmetic. No existing callback quotas reduced. Scratch data drops before credit.",
+  "limits": {
+    "source_per_pixel": 4000000,
+    "geometry_per_pixel": 40000000,
+    "memory_bytes": 268435456,
+    "deadline_seconds": 600
+  },
+  "tests": {
+    "default": {
+      "passed": 312,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-left-events-contract-all.log"
+    },
+    "enabled_final": {
+      "passed": 312,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-left-events-final-enabled-all.log"
+    },
+    "new_contracts": [
+      "All fragment area/centroid/vertex/owner bits identical across 64 tiles, outside vertices, repeated contours and both fill rules.",
+      "Reversed orientation, exact left-border contact and finite huge slope controls.",
+      "Every cancellation point, every insufficient work allowance and denied scratch admission refuse without credit leaks."
+    ]
+  },
+  "controls": [
+    {
+      "pixel": [
+        147,
+        59
+      ],
+      "completed": true,
+      "bytes": [
+        205,
+        151,
+        128
+      ],
+      "source_work": 2291055,
+      "source_remaining": 1708945
+    },
+    {
+      "pixel": [
+        147,
+        57
+      ],
+      "completed": true,
+      "bytes": [
+        187,
+        108,
+        78
+      ],
+      "source_work": 877955,
+      "source_remaining": 3122045
+    },
+    {
+      "pixel": [
+        138,
+        34
+      ],
+      "completed": true,
+      "bytes": [
+        219,
+        185,
+        167
+      ],
+      "source_work": 137582,
+      "source_remaining": 3862418
+    },
+    {
+      "pixel": [
+        147,
+        60
+      ],
+      "completed": true,
+      "bytes": [
+        213,
+        167,
+        146
+      ],
+      "source_work": 3366844,
+      "source_remaining": 633156
+    },
+    {
+      "pixel": [
+        147,
+        61
+      ],
+      "completed": false,
+      "bytes": null,
+      "source_work": 3895933,
+      "source_remaining": 104067
+    }
+  ],
+  "controls_log": "/tmp/ai-left-events-final-real5.log",
+  "final_credit": 0,
+  "peak_bytes": 266078344,
+  "14760": {
+    "baseline_geometry_remaining_after_gate": 4328277,
+    "events_geometry_remaining_after_gate": 5439065,
+    "bytes_unchanged": [
+      213,
+      167,
+      146
+    ],
+    "source_work_unchanged": 3366844
+  },
+  "14761": {
+    "completed": false,
+    "baseline_source_work_before_refusal": 3763148,
+    "events_source_work_before_refusal": 3895933
+  },
+  "timing": {
+    "scope": "Same debug binary, replay-only diagnostic; two ABBA series on completed147,60, no concurrent heavy work. Not a production/release benchmark.",
+    "runs": [
+      {
+        "events": false,
+        "seconds": 2.088399999998728,
+        "replay_ns": 105204250,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/0-baseline.log"
+      },
+      {
+        "events": true,
+        "seconds": 2.0804295409998304,
+        "replay_ns": 96163625,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/1-events.log"
+      },
+      {
+        "events": true,
+        "seconds": 2.085211916000844,
+        "replay_ns": 95530084,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/2-events.log"
+      },
+      {
+        "events": false,
+        "seconds": 2.071858458000861,
+        "replay_ns": 104621750,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/3-baseline.log"
+      },
+      {
+        "events": false,
+        "seconds": 2.085157084000457,
+        "replay_ns": 104131083,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/4-baseline.log"
+      },
+      {
+        "events": true,
+        "seconds": 2.1066751669986843,
+        "replay_ns": 97469625,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/5-events.log"
+      },
+      {
+        "events": true,
+        "seconds": 2.3858231249996606,
+        "replay_ns": 97157709,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/6-events.log"
+      },
+      {
+        "events": false,
+        "seconds": 2.067011541001193,
+        "replay_ns": 103525583,
+        "log": "/tmp/ai-left-events-roi-abba-20261015/7-baseline.log"
+      }
+    ],
+    "paired_events_over_baseline": [
+      0.9140659716693955,
+      0.9130996566201579,
+      0.9360281502114023,
+      0.9384898513442808
+    ],
+    "speedup_percent_range": [
+      6.151014865571924,
+      8.690034337984208
+    ],
+    "other_controls": [
+      {
+        "events": false,
+        "replay_ns": {
+          "147,59": 76187708,
+          "147,57": 45732916,
+          "138,34": 12957042,
+          "147,60": 103505417
+        },
+        "log": "/tmp/ai-left-events-other-controls-abba-20261015/0-baseline.log"
+      },
+      {
+        "events": true,
+        "replay_ns": {
+          "147,59": 70829167,
+          "147,57": 42719167,
+          "138,34": 12415875,
+          "147,60": 94452291
+        },
+        "log": "/tmp/ai-left-events-other-controls-abba-20261015/1-events.log"
+      },
+      {
+        "events": true,
+        "replay_ns": {
+          "147,59": 70859667,
+          "147,57": 42989792,
+          "138,34": 12245959,
+          "147,60": 94924250
+        },
+        "log": "/tmp/ai-left-events-other-controls-abba-20261015/2-events.log"
+      },
+      {
+        "events": false,
+        "replay_ns": {
+          "147,59": 76231417,
+          "147,57": 45674208,
+          "138,34": 17449667,
+          "147,60": 101958834
+        },
+        "log": "/tmp/ai-left-events-other-controls-abba-20261015/3-baseline.log"
+      }
+    ],
+    "other_paired_ratios": {
+      "147,59": [
+        0.9296665939865261,
+        0.929533646213083
+      ],
+      "147,57": [
+        0.9341010968992224,
+        0.9412268736000852
+      ],
+      "138,34": [
+        0.9582337542781755,
+        0.7017875470059114
+      ],
+      "147,60": [
+        0.9125347613449062,
+        0.9310056448860528
+      ]
+    },
+    "caveat": "138,34 second baseline timing outlier; do not generalize its apparent large percentage gain. Whole-test capture dominates and is not consistently faster.",
+    "post_primary_timing_changes": "Only exact-capacity guards and wrapper unused-mut cleanup; final other-controls ABBA uses final source."
+  },
+  "source_sha256": "3a7c97faa6cfe2987e6519e349cd9b6de31fe6d941e7ce6a8bbed95e67cae7af",
+  "limitations": [
+    "Experimental typed-white RGB8 path only; native output remains refused.",
+    "Full page remains incomplete at147,61; independent oracle disagreement remains unresolved.",
+    "Other small controls consume more accounted geometry setup work despite lower measured replay time; no universal budget reduction claimed.",
+    "No change to production format qualification or physical HDR/NVIDIA status."
+  ]
+}

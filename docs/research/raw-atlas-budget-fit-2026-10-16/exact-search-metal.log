@@ -1,0 +1,38 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9.19s
+     Running tests/real_bayer_compute.rs (target/debug/deps/real_bayer_compute-a157b9d47f2b79f2)
+
+running 4 tests
+test all_pixels_all_bayer_phases_and_algorithms_match_f64_reference ... full Bayer oracle adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+FULL_BAYER_ORACLE cases=192 pixels=19104 max_abs_error=0.0000010963906176275628 credits=0
+ok
+test original_cr3_all_compute_algorithms_match_sampled_f64_reference ... real Bayer oracle adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+real CR3 sampled oracle: Bilinear points=336 max_abs_error=0.000000030936066486297875 credits=0
+real CR3 sampled oracle: SmoothHue points=336 max_abs_error=0.000000040322531591474586 credits=0
+real CR3 sampled oracle: MalvarHeCutler points=336 max_abs_error=0.000000041521667049071453 credits=0
+real CR3 sampled oracle: Directional points=336 max_abs_error=0.00000005049570495074818 credits=0
+real CR3 sampled oracle: Vng points=336 max_abs_error=0.00000003172440382614994 credits=0
+real CR3 sampled oracle: Rcd points=336 max_abs_error=0.00000004071639023162099 credits=0
+ok
+test original_cr3_capacity_atlas_paired_upload_measurement ... capacity atlas timing adapter: Metal Apple M4 Max
+CAPACITY_UPLOAD_RAW algorithm=Bilinear default_ns=[18589125, 16899042, 17523500, 17621875, 18477583, 19868708, 20229958, 19037250, 18175500, 20209291, 18873083, 20861834] compact_ns=[12334042, 12532708, 12335250, 12531583, 13055708, 13288416, 12857416, 13311750, 13311416, 13511542, 13078292, 13005167] default_bytes=73400320 compact_bytes=51170700
+CAPACITY_UPLOAD_RAW algorithm=Rcd default_ns=[22259042, 18323250, 18938250, 20220583, 18081625, 19727500, 20226042, 20218750, 19663333, 19534084, 18985084, 19069542] compact_ns=[14351959, 13284916, 13313875, 14340167, 13562583, 13690125, 15389458, 13992208, 13838000, 14343875, 13541750, 13618583] default_bytes=73400320 compact_bytes=51468492
+ok
+test original_cr3_capacity_fallback_preserves_default_atlas_pixels ... capacity atlas adapter: Metal Apple M4 Max
+CAPACITY_ATLAS_PIXELS algorithm=Bilinear hdr=false bytes=51170700 peak=51170700 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Bilinear hdr=true bytes=51170700 peak=51170700 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=SmoothHue hdr=false bytes=51269868 peak=51269868 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=SmoothHue hdr=true bytes=51269868 peak=51269868 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=MalvarHeCutler hdr=false bytes=51269868 peak=51269868 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=MalvarHeCutler hdr=true bytes=51269868 peak=51269868 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Directional hdr=false bytes=51369132 peak=51369132 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Directional hdr=true bytes=51369132 peak=51369132 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Vng hdr=false bytes=51369132 peak=51369132 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Vng hdr=true bytes=51369132 peak=51369132 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Rcd hdr=false bytes=51468492 peak=51468492 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Rcd hdr=true bytes=51468492 peak=51468492 exact=true
+CAPACITY_ATLAS_FULL_FRAME readbacks=120 pixels_per_frame=921600 all_exact=true final=0
+ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.59s
+

@@ -1,0 +1,66 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.80s
+     Running tests/mng_readback.rs (target/debug/deps/mng_readback-300c3ccbe5a34ca7)
+
+running 2 tests
+test alpha_mng_linear_frames_survive_ram_swap_and_metal ... alpha MNG adapter: Metal Apple M4 Max
+rgba8-alpha-animated.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgba8-alpha-animated.mng frame 1: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgba8-alpha-animated.mng frame 2: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgba16-alpha-animated.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgba16-alpha-animated.mng frame 1: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgba16-alpha-animated.mng frame 2: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgba8-alpha-still.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgb8-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+gray8-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+palette8-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+grayalpha8.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+palette8-global.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+palette8-global-override.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+rgb16-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+gray16-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+grayalpha16.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba8-alpha-animated.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba8-alpha-animated.mng frame 1: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba8-alpha-animated.mng frame 2: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba16-alpha-animated.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba16-alpha-animated.mng frame 1: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba16-alpha-animated.mng frame 2: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgb8-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgb16-trns.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba8-filters.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba16-filters.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba8-adam7.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+intrapixel-rgba16-adam7.mng frame 0: independent float reference, RAM lease, swap pressure/retry, Metal verified
+ok
+test mng_frames_preserve_native_and_prepared_samples_ram_swap_and_metal ... MNG cache adapter: Metal Apple M4 Max
+rgb8-two-frames.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-two-frames.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-two-frames.mng frame 1 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-two-frames.mng frame 1 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+gray16-still.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+gray16-still.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-two-layer-still.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-two-layer-still.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-global-srgb.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-global-srgb.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-global-srgb.mng frame 1 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-global-srgb.mng frame 1 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-partial-two-frames.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-partial-two-frames.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-partial-two-frames.mng frame 1 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-partial-two-frames.mng frame 1 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb16-partial-two-frames.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb16-partial-two-frames.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb16-partial-two-frames.mng frame 1 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb16-partial-two-frames.mng frame 1 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-partial-still.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-partial-still.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-tall-partial-two-frames.mng frame 0 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-tall-partial-two-frames.mng frame 0 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-tall-partial-two-frames.mng frame 1 native: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+rgb8-tall-partial-two-frames.mng frame 1 prepared: samples, selection/color, RAM leases, swap pressure/retry and Metal frame exact
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.32s
+

@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "exit_code": 0,
+  "test": "raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source",
+  "backend_env": "metal",
+  "binary_sha256": "7ebdb0817d63ad3ec00135c9610dae656544d6785e8a452f06e61dc83073e6a3",
+  "log_sha256": "576841ffacd8505e524ac54cf76f95494cd0611a92edc710d45703fa572e0e08",
+  "scope": "headless actual Metal worker/swap/HDR readback; not full window navigation",
+  "invariants": [
+    "old source file/index released before latest result",
+    "no stale wake/result",
+    "new HDR half-readback exact",
+    "cpu/output/scratch/index/texture/upload credits and disk bytes final0"
+  ]
+}

@@ -175,7 +175,7 @@ pub fn decode_mef_zd_sensor_file(
             index: request.image_index,
         });
     }
-    use std::io::{Read, Seek, SeekFrom};
+    use std::io::{Seek, SeekFrom};
     let io_error = |source| DecodeError::Io {
         path: request.path.clone(),
         source,
@@ -195,7 +195,7 @@ pub fn decode_mef_zd_sensor_file(
     )?;
     for chunk in source.chunks_mut(64 * 1024) {
         request.check_cancelled()?;
-        file.read_exact(chunk).map_err(io_error)?;
+        crate::bounded_io::read_exact_checked(&mut file, request, chunk)?;
     }
     let range = validated_sensor_range(&source, &|| request.check_cancelled().is_err())?;
     let mut expected = blake3::Hasher::new();
@@ -222,16 +222,12 @@ fn read_verified_sensor(
     expected: blake3::Hash,
 ) -> Result<PixelBuffer<u16>, DecodeError> {
     request.check_cancelled()?;
-    let io_error = |source| DecodeError::Io {
-        path: request.path.clone(),
-        source,
-    };
     let mut row = budget.try_buffer(4016 / 2 * 3, 0u8)?;
     let mut output = budget.try_buffer(4016 * 5344, 0u16)?;
     let mut actual = blake3::Hasher::new();
     for pixels in output.chunks_exact_mut(4016) {
         request.check_cancelled()?;
-        reader.read_exact(&mut row).map_err(io_error)?;
+        crate::bounded_io::read_exact_checked(reader, request, &mut row)?;
         actual.update(&row);
         for (encoded, decoded) in row.chunks_exact(3).zip(pixels.chunks_exact_mut(2)) {
             decoded[0] = (u16::from(encoded[0]) << 4) | (u16::from(encoded[1]) >> 4);

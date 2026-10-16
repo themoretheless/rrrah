@@ -1,0 +1,46 @@
+
+running 6 tests
+test demosaic_compute::tests::bayer_compute_admitted_cancellation_retries_every_algorithm_exactly ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer Bilinear: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer SmoothHue: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer MalvarHeCutler: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Directional: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Vng: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Rcd: six admitted cancellations, exact retries, CPU/GPU final zero
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_algorithms_preserve_constant_hdr_and_sharpen_edges_on_gpu ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_rejects_invalid_inputs_and_cancels_cleanly ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_shader_validates_with_naga ... ok
+test demosaic_compute::tests::bayer_output_windows_match_whole_frame_all_algorithms_and_cfa_phases ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer windows Bilinear CFA=[0, 1, 1, 2]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[0, 1, 1, 2]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[0, 1, 1, 2]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[0, 1, 1, 2]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[0, 1, 1, 2]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[0, 1, 1, 2]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Bilinear CFA=[2, 1, 1, 0]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[2, 1, 1, 0]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[2, 1, 1, 0]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[2, 1, 1, 0]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[2, 1, 1, 0]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[2, 1, 1, 0]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Bilinear CFA=[1, 0, 2, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[1, 0, 2, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[1, 0, 2, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[1, 0, 2, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[1, 0, 2, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[1, 0, 2, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Bilinear CFA=[1, 2, 0, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[1, 2, 0, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[1, 2, 0, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[1, 2, 0, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[1, 2, 0, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[1, 2, 0, 1]: three strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+ok
+test demosaic_compute::tests::full_sensor_bayer_windows_match_independent_bilinear_every_pixel ... ignored, full-sensor Bayer output and CPU reference exceed 500MB
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 56 filtered out; finished in 0.41s
+

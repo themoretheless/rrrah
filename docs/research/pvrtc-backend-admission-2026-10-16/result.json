@@ -1,0 +1,63 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Reserve conservative 64 bytes per padded PVRTC block before calling pinned texture2ddecoder 0.1.2",
+    "Hold table credit only during backend call; release before cropped output allocation",
+    "Exact/short mip tests include max of backend table phase and RGBA conversion phase plus retained metadata"
+  ],
+  "source_audit": {
+    "version": "texture2ddecoder =0.1.2",
+    "file": "src/pvrtc.rs",
+    "sha256": "0a3f858400ff5ca928b9e229be4e2b3fc9558a84a56057a69f70f83fddfd7fca",
+    "texel_info_fields": "two 4-byte u8 colors + 32 i8 weights + one u32 flag",
+    "nominal_struct_bytes": 44,
+    "reserved_per_block": 64,
+    "blocks": "ceil(padded_width/(2bpp?8:4)) * ceil(padded_height/4)",
+    "allocation": "single Vec<PVRTCTexelInfo> with capacity num_blocks"
+  },
+  "checks": {
+    "texture_lib": {
+      "passed": 69,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pvr_mips": {
+      "states": 58,
+      "exact_peak_admission": true,
+      "one_byte_short_refuses": true,
+      "last_owner_releases": true
+    },
+    "pipeline": {
+      "states": 272,
+      "ram_pressure_hits": 272,
+      "swap_writes": 272,
+      "swap_reads": 272,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1632,
+      "seconds": 5.63
+    }
+  },
+  "limits": [
+    "Backend table credit is conservative source-audited capacity, not custom allocator telemetry",
+    "Backend PVRTC call remains synchronous and cancellation is checked before/after it, not inside its block loop",
+    "No speedup, full independent PVR container or physical HDR qualification claim",
+    "Arc control structures and general allocator overhead are outside payload-capacity budget",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

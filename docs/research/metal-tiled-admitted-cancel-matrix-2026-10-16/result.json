@@ -1,0 +1,61 @@
+{
+  "status": "all_tiled_admitted_upload_checkpoints_verified",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "optional_gpu": false,
+  "negotiated_texture_extent": 64,
+  "shapes": [
+    [
+      130,
+      5
+    ],
+    [
+      5,
+      130
+    ],
+    [
+      130,
+      130
+    ]
+  ],
+  "target_formats": [
+    "SDR Rgba8Unorm",
+    "linear HDR Rgba16Float"
+  ],
+  "cutoffs_per_shape_per_format": [
+    5,
+    5,
+    11
+  ],
+  "total_cancelled_uploads": 42,
+  "successful_final_retries": 6,
+  "checks": [
+    "Successful probe measures every callback after resource admission; counts equal layer_count+2",
+    "Cancel at each tile boundary and final pre-install check",
+    "Full64x64 previous SDR/HDR readback stays exact after each cancellation",
+    "Independent64-byte standing owners in GPU-texture and upload-queue budgets retained after every failure",
+    "Final retry equals corresponding ordinary-texture reference frame including negative/HDR/alpha values",
+    "Renderer drop retains standing owners, then owner drop returns both budgets0"
+  ],
+  "suite": {
+    "passed": 28,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 44.44
+  },
+  "session_recheck": {
+    "CGSSessionScreenIsLocked": true,
+    "kCGSSessionOnConsoleKey": true,
+    "live_hdr_probe_rerun": false
+  },
+  "changes": "Tests only; production renderer unchanged",
+  "limits": [
+    "Synchronous callback cutoffs and queue drain do not prove arbitrary mid-DMA cancellation",
+    "Tiled vs ordinary transport comparison, not independent physical color calibration",
+    "Negotiated extent64 intentionally forces small tile geometry; not a maximum-size texture throughput benchmark",
+    "Source float arrays outside tested GPU/queue budgets; credits not RSS/driver residency",
+    "Physical HDR remains blocked by locked screen; NVIDIA deferred by user",
+    "No complete100-format qualification claim"
+  ],
+  "source_sha256": "4d9ffa56350fcc1628217ba056056aa35916bbc0e0fa185e6920e0698eab3727"
+}

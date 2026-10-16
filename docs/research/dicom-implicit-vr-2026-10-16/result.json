@@ -1,0 +1,199 @@
+{
+  "status": "native uncompressed Implicit VR Little Endian scalar DICOM implemented and tested",
+  "primary_specification": "https://dicom.nema.org/Medical/dicom/2023b/output/chtml/part05/chapter_A.html",
+  "syntax_uid": "1.2.840.10008.1.2",
+  "implementation": [
+    "Part10 file meta remains ExplicitVRLE; dataset mode changes at the checked meta boundary.",
+    "Implicit dataset tags and32-bit lengths read LE; core scalar attribute VR comes from fixed standard definitions, never from payload heuristics.",
+    "Static native dictionary classifies5091publictags,1277standardSQtags and88repeating patterns; source facts pinned to pydicom3.0.2, MIT attribution retained.",
+    "Known standardSQ, item/delimiter roots and undefined lengths refuse; unknown public tags refuse except standardized generic group-length rule.",
+    "Private defined-length values are opaque and skipped within checked bounds; they cannot overwrite root attributes. Private undefined lengths refuse, no private semantic/presentation interpretation.",
+    "Existing8/16-bit scalar, stored/signed bits, frame selection, rescale, explicitwindow, source/output admission and cancellation remain shared."
+  ],
+  "dictionary": {
+    "generator": "scripts/generate-dicom-implicit-tags.py",
+    "data": "crates/rrrah-scientific/src/dicom_implicit_tags.rs",
+    "license": "crates/rrrah-scientific/data/pydicom-dictionary-LICENSE.txt",
+    "byte_reproducible": true,
+    "runtime_external_dependency_added": false,
+    "future_unknown_public_tag_policy": "explicit refusal"
+  },
+  "authored_oracles": {
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "new_files": [
+      {
+        "source": "dicom-implicit-signed12-rescale.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 2,
+        "window": [
+          -5096.0,
+          3094.0
+        ],
+        "sha256": {
+          "dicom-implicit-signed12-rescale.dcm": "4a55e333606be56fdf118b08ff3994cd905c265061c66b72cd052a844b1a86a8",
+          "dicom-implicit-signed12-rescale.dcm.0.raw-f32": "b9357067704491bdeb882e15e5f28780d90e52d805256760f04ff12034a23f4a",
+          "dicom-implicit-signed12-rescale.dcm.0.window-f32": "0b25619bf88720c507bb5e1a26b6abb7870ec8f6a345d78fa2ad6d2ec1a8cfcc",
+          "dicom-implicit-signed12-rescale.dcm.0.alternate-window-f32": "e78a127e2e469b216b9f9ba226037fb87ce9555ebb0952f334c3349f3ba11c50",
+          "dicom-implicit-signed12-rescale.dcm.1.raw-f32": "b0c1b3b49fdf3aeadbbe6ae69de53a177e26e4e9b238a0b0440b3123f33a9c2f",
+          "dicom-implicit-signed12-rescale.dcm.1.window-f32": "e71db0a53a26453f2b2244d7716ebbe5aeae0c62bf9caaccd79a22bd4babceaf",
+          "dicom-implicit-signed12-rescale.dcm.1.alternate-window-f32": "3a0986893e828aea4efd8ae509e00dbce6e94724842167c4f2eabad9c6c7394e"
+        }
+      },
+      {
+        "source": "dicom-implicit-unsigned16.dcm",
+        "dimensions": [
+          3,
+          2
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          65535.0
+        ],
+        "sha256": {
+          "dicom-implicit-unsigned16.dcm": "6f5dfa1083c94598d58ee27fbb8a9a44a468b7acd77c2c7ea2f8fe38045756a1",
+          "dicom-implicit-unsigned16.dcm.0.raw-f32": "5f41e32a20866728d317559c23ad6c9135418c3fff52af6fac5ccfcf67b382e5",
+          "dicom-implicit-unsigned16.dcm.0.window-f32": "9f41c68eba77875c95f274ef818f43f0a2ae2e0c6939be2bf18261eae2ea5edc",
+          "dicom-implicit-unsigned16.dcm.0.alternate-window-f32": "f5554b55ebf9e3c70ccbc78eb5d0f85c4439e2c4e58be96563e6c128f023cbdf"
+        }
+      },
+      {
+        "source": "dicom-implicit-mono1-odd8.dcm",
+        "dimensions": [
+          3,
+          1
+        ],
+        "frames": 1,
+        "window": [
+          0.0,
+          255.0
+        ],
+        "sha256": {
+          "dicom-implicit-mono1-odd8.dcm": "b57dc58e75d5b7e31a65d7a832988c6ad6472d526995fbc4edb67a97e61092f5",
+          "dicom-implicit-mono1-odd8.dcm.0.raw-f32": "189ef46239cc16b238aea93b260070e88f98d8c946a8f6c59ececf9f4ce128e3",
+          "dicom-implicit-mono1-odd8.dcm.0.window-f32": "e765a5d901d4728d237297024e38cd4cd2b388aa59b152760fc100b91e458ff3",
+          "dicom-implicit-mono1-odd8.dcm.0.alternate-window-f32": "081841cec1de28c242e15e9d1badd6fa820fda2f654289727993e588a57894b9"
+        }
+      },
+      {
+        "source": "dicom-implicit-odd8-multiframe.dcm",
+        "dimensions": [
+          3,
+          1
+        ],
+        "frames": 3,
+        "window": [
+          0.0,
+          255.0
+        ],
+        "sha256": {
+          "dicom-implicit-odd8-multiframe.dcm": "9f042deddebc2fc30cd53fcf4fd5146b8b3323f40abaf38f2fc178a0a429088d",
+          "dicom-implicit-odd8-multiframe.dcm.0.raw-f32": "77013792108e2226ed15966ae30f279b3d247b54bc4da86da6b8a04e9c8543de",
+          "dicom-implicit-odd8-multiframe.dcm.0.window-f32": "55eaba57f8234071bdbdef66c761e305228113c60d2ff41cac42ea3a20e1419a",
+          "dicom-implicit-odd8-multiframe.dcm.0.alternate-window-f32": "c41861748509cec7903cf9025b773179349bc8ca13aebccaba898d76c46b12af",
+          "dicom-implicit-odd8-multiframe.dcm.1.raw-f32": "418589b74b17ad1d58d7b5b192d4daa13933a2079e05f0cc9fe1c3431f3f71f5",
+          "dicom-implicit-odd8-multiframe.dcm.1.window-f32": "fcec4fca4c73560c5a9d8c3213691eb387a79a060652e036a2d794fe44855952",
+          "dicom-implicit-odd8-multiframe.dcm.1.alternate-window-f32": "1fb2869f1bea0d04eabc58206244582df6f89975818ccd379cfadc3e9ffa4e06",
+          "dicom-implicit-odd8-multiframe.dcm.2.raw-f32": "4f47aeb46e9663129d92fb2069336793e32685e5bf52b98311105c6528b00585",
+          "dicom-implicit-odd8-multiframe.dcm.2.window-f32": "cb4392ae7693547005cefd5b237084d93c0a0de801741056c6e9be0af04bc8a7",
+          "dicom-implicit-odd8-multiframe.dcm.2.alternate-window-f32": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+        }
+      }
+    ],
+    "all_previous9sources_and_primary_oracles_byte_unchanged": true
+  },
+  "packaged_mr_control": {
+    "source": "/tmp/rrrah-dicom-oracle-deps-20261016/pydicom/data/test_files/MR_small_implicit.dcm",
+    "source_sha256": "6077442c42a56fc7fcc7db8411a657dded9fc109e6d3275765c4de358292b299",
+    "dimensions": [
+      64,
+      64
+    ],
+    "syntax": "1.2.840.10008.1.2",
+    "sample_count": 4096,
+    "minimum": 127.0,
+    "maximum": 2145.0,
+    "window": [
+      0,
+      2048
+    ],
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "oracles": {
+      "raw": "8f2623f701f43c58ade385eed5c2c161b9343a0f66676a09cf92edc07e56e0e1",
+      "window": "1f00dbd26ecb2ad29a9f9ca4ca773170d7462b76953d9b60686e36156b5e4a31"
+    },
+    "log": "/tmp/dicom-implicit-packaged-mr-exact-20261016.log",
+    "passed": 1,
+    "sample_comparison": "Every raw/physicalRGBAfloat32 component and explicitwindowRGBAcomponent matches independentpydicom; selected64x64frame, managed source+output peak75238bytes, final0, one-byte-short refusal0retained.",
+    "provenance_scope": "Supplied pydicom test asset, read in place; original scanner-produced implicit encoding provenance not established; source not copied into repository."
+  },
+  "tests": {
+    "scientific": {
+      "passed": 22,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-implicit-authored-fixed-20261016.log"
+    },
+    "decode_facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-implicit-common-decode-20261016.log"
+    },
+    "app_cpu": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-uncompressed-30-cpu-20261016.log"
+    },
+    "actual_metal": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "adapter": "Metal Apple M4 Max",
+      "optional_gpu_skip": false,
+      "log": "/tmp/dicom-uncompressed-30-metal-20261016.log"
+    }
+  },
+  "pipeline": {
+    "files": 9,
+    "frames": 15,
+    "windows_per_frame": 2,
+    "cases": 30,
+    "ram_full_pressure_hits": 30,
+    "swap_writes": 30,
+    "swap_reads": 30,
+    "swap_errors": 0,
+    "nonzero_ttl_visible_pin_and_real_foreground_transition": true,
+    "stale_generation_refused": true,
+    "reverse_prefetch_with_decoder_blocked": true,
+    "managed_root_peak": 65536,
+    "peak_includes_intentional_full_pressure_reservations": true,
+    "final_credit": 0,
+    "gpu_readback_frames": 180,
+    "gpu_scope": "60independentoracle-input references,60nativewarmframes and60restored/RAMframes; entire SDR and binary16 HDR buffers bit-equal. Shared GPU renderer, not independent shader algorithm proof."
+  },
+  "filter_audit": {
+    "unqualified_initial_command": "/tmp/dicom-implicit-packaged-mr-20261016.log",
+    "reason": "Bare test name with exact filter ran0tests; not counted. Full module-qualified exact run passed1test."
+  },
+  "source_sha256": {
+    "crates/rrrah-scientific/src/dicom.rs": "23aea167282527df60d465f15d81cca23a1db1c6430e2c17b521446625cd40e2",
+    "crates/rrrah-scientific/src/dicom_implicit_tags.rs": "547565e99a31787b642b02d4a075edd3d36bfdcbfaa3e893ffcbe5e052121ef8",
+    "scripts/generate-dicom-implicit-tags.py": "bec4d688a3bf9710391777a4b9e8137da289e14ef1079ec07d2ea6aa8af398df",
+    "scripts/generate-dicom-fixtures.py": "43eb053e80e057b3c2042864cce760711136288c1a945633a97e577d91a05d69",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "c730ec4989da0d3f89f48a19606aa16ec2bb8081bd864579ba075175ca506f81",
+    "tests/fixtures/raster/dicom-manifest.tsv": "6aaaf9796b29407fd2146023cbe4f839d67af4a3342c22b4a0ccf2d3bd9dc281"
+  },
+  "limitations": [
+    "No compressed syntax, sequences/LUT/color or private presentation semantics.",
+    "No complete clinical IOD/presentation qualification, physical HDR calibration or all-producer support.",
+    "PackagedMR received decode/window qualification; 30case GPU/cache tests use authored encoding sources.",
+    "Catalogue94implementedsubsets/6pending/0fullyqualified and overall100-format/GPU goal remain open."
+  ]
+}

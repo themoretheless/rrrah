@@ -1,0 +1,180 @@
+{
+  "status": "63 GPU library tests and actual Metal sampled-f64 oracle for all6 full-sensor algorithms pass",
+  "library": {
+    "session": 13724,
+    "log": "/tmp/gpu-current-library-20261015.log",
+    "status": "terminal",
+    "passed": 63,
+    "failed": 0,
+    "ignored": 2
+  },
+  "real_bayer_build": {
+    "session": 31768,
+    "log": "/tmp/gpu-current-real-bayer-build-20261015.log",
+    "status": "terminal success"
+  },
+  "source_hashes": {
+    "crates/rrrah-gpu/tests/real_bayer_compute.rs": "59c465cac2d0452d46f482c83ddeb152fb218d923b5c8915274346724d7fa78f",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "9a229396b82a9dca34a6e494f40948cb4dd7bd6cac7afffbbab8f704ea48e811"
+  },
+  "planned_scope": "Actual Metal native full-sensor dispatch for all six algorithms, sampled independent f64 reference at documented selected sites; not every pixel or every camera, not physical HDR display.",
+  "real_bayer": {
+    "log": "/tmp/gpu-current-real-bayer-metal-20261015.log",
+    "status": "terminal pass",
+    "passed": 1,
+    "failed": 0,
+    "seconds": 2.98,
+    "adapter": "Apple M4 Max",
+    "backend": "Metal",
+    "algorithms": [
+      {
+        "algorithm": "Bilinear",
+        "points": 336,
+        "max_abs_error": 3.0936066486297875e-08
+      },
+      {
+        "algorithm": "SmoothHue",
+        "points": 336,
+        "max_abs_error": 4.0322531591474586e-08
+      },
+      {
+        "algorithm": "MalvarHeCutler",
+        "points": 336,
+        "max_abs_error": 4.1521667049071453e-08
+      },
+      {
+        "algorithm": "Directional",
+        "points": 336,
+        "max_abs_error": 5.049570495074818e-08
+      },
+      {
+        "algorithm": "Vng",
+        "points": 336,
+        "max_abs_error": 3.172440382614994e-08
+      },
+      {
+        "algorithm": "Rcd",
+        "points": 336,
+        "max_abs_error": 4.071639023162099e-08
+      }
+    ],
+    "final_credit": 0
+  },
+  "source_hashes_after": {
+    "crates/rrrah-gpu/tests/real_bayer_compute.rs": "59c465cac2d0452d46f482c83ddeb152fb218d923b5c8915274346724d7fa78f",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "9a229396b82a9dca34a6e494f40948cb4dd7bd6cac7afffbbab8f704ea48e811"
+  },
+  "source_snapshot_unchanged": true,
+  "full_sensor_bilinear": {
+    "status": "terminal passed",
+    "log": "/tmp/gpu-current-full-sensor-bilinear-metal-20261015.log",
+    "required_gpu": true,
+    "backend": "Metal",
+    "size": [
+      6188,
+      4120
+    ],
+    "pixels_compared": 25494560,
+    "paths": [
+      "managed readback",
+      "resident chunked16MiB readback"
+    ],
+    "oracle": "Independent CPU bilinear formula on authored HDR mosaic with reflected edges; every pixel exact",
+    "gpu_peak_bytes": 575657360,
+    "cpu_final_credit": 0,
+    "gpu_final_credit": 0,
+    "test_seconds": 6.06,
+    "scope": "Authored synthetic full-size mosaic, single bilinear algorithm, not real-camera every-pixel fidelity or physical HDR display."
+  },
+  "required_metal_library": {
+    "passed": 63,
+    "failed": 0,
+    "ignored": 2,
+    "seconds": 1.69,
+    "log": "/tmp/gpu-current-library-required-metal-20261015.log",
+    "required_gpu": true,
+    "confirmed_adapter_messages": 7,
+    "skip_messages": 0,
+    "scope": "Library suite includes CPU validation tests and actual GPU tests; seven hardware adapter confirmations. Not63 distinct hardware qualifications."
+  },
+  "production_source_hashes_at_report": {
+    "crates/rrrah-gpu/src/rgbe_plan.rs": "f101008e5c0abbc9d9682abb62cc4023fa79581b0586e3711f7e8b0017f21306",
+    "crates/rrrah-gpu/src/rgbe_compute.rs": "fc9780a773597bd581f7dda87c70d4229ad1fc46c437cac51979f2662f8d5d17",
+    "crates/rrrah-gpu/src/filmstrip.rs": "93f41e6e623f03f983aab51e7e365a0e0793987e0c966ac52752bd8fc63019f4",
+    "crates/rrrah-gpu/src/backend.rs": "cf3dc1d751d5d5937d860d41e33e860d9f425b8bb2707a283673322909c09174",
+    "crates/rrrah-gpu/src/lib.rs": "53bf20fc2bc8339063d6672d75ce2e2dab876a1efea02a3ff47f124a119e36fa",
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "e8ff8f1ecaba7f4050c06209b257cb17346661518e3b611cfe37b1f25aa2dd42",
+    "crates/rrrah-gpu/src/compute.rs": "c7a7ccddd563cb337b6c2556dbb753285516fbd777d086513fff64723bc1b16d",
+    "crates/rrrah-gpu/src/raster.rs": "f263c87b91e8f331d6a3122fac46d2e91e8317f4b1742df506b1699ceaf20954",
+    "crates/rrrah-gpu/src/model.rs": "d1709118186aa33590e3b007ca3d698051c8a12b41bdfea2cb46fd6f03fcfd7f"
+  },
+  "hash_scope_note": "Initial before/after hashes cover recorded oracle/reference files; production Rust hashes captured at report time only.",
+  "raster_readback": {
+    "log": "/tmp/gpu-current-raster-metal-20261015.log",
+    "required_gpu": true,
+    "backend": "Metal",
+    "scope": "Current ordinary raster readback suite; ignored tests remain excluded.",
+    "status": "terminal pass",
+    "passed": 28,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 87.14,
+    "weighted_f64_audit": [
+      {
+        "algorithm": "Directional",
+        "fragment_error": 5.339379818281031e-07,
+        "compute_error": 5.336090245222636e-07,
+        "cross_stage_error": 4.76837158203125e-07
+      },
+      {
+        "algorithm": "Vng",
+        "fragment_error": 4.562982449662911e-07,
+        "compute_error": 4.4675847732378315e-07,
+        "cross_stage_error": 4.76837158203125e-07
+      },
+      {
+        "algorithm": "Rcd",
+        "fragment_error": 5.488710836942801e-07,
+        "compute_error": 5.068938233598885e-07,
+        "cross_stage_error": 4.76837158203125e-07
+      }
+    ],
+    "limitations": "Eight ignored empirical-range, external-profile and large-frame scenarios excluded. Headless Metal readback only, not physical HDR luminance/calibration."
+  },
+  "large_raster_controls": {
+    "log": "/tmp/gpu-current-large-raster-metal-20261015.log",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "seconds": 2.84,
+    "adapter": "Metal Apple M4 Max",
+    "upload_cancel": "12MP float replacement: validation/admission/cancellation preserve previous visible texture",
+    "hdr_lod": {
+      "source_dimensions": [
+        6000,
+        6000
+      ],
+      "source_bytes": 576000000,
+      "output_dimensions": [
+        1000,
+        1000
+      ],
+      "output_bytes": 16000000,
+      "all_output_pixels_exact": 1000000,
+      "metal_output_sizes": [
+        [
+          64,
+          64
+        ],
+        [
+          1000,
+          1000
+        ]
+      ],
+      "every_sdr_hdr_component_matches_constant_reference": true,
+      "downsample_ms": 95.570458,
+      "output_final_credit": 0
+    },
+    "scope": "Two explicit manual controls on authored synthetic inputs. One optimized test-build measurement, not release throughput/camera/physicalHDR qualification."
+  }
+}

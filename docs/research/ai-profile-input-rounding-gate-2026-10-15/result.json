@@ -1,0 +1,42 @@
+{
+  "change": "Closed unit-native error interval endpoint rounding gate certifies identical f32 component input bits. Since native_frame conversion casts native components to f32 before transforming, successful gate proves identical color-transform input for that stage, excluding alpha and display. Diagnostic wired to stored owner replacement bound.",
+  "tests": {
+    "passed": 288,
+    "ignored": 12,
+    "failed": 0,
+    "new_controls": "Interior f32 bin, bin-crossing error, exact midpoint with zero error, midpoint-crossing tiny error,0/1 edges; invalid/inactive errors, all short work and every cancellation refuse."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "profile_input_identical_f32_certified": false,
+    "alpha_certified": false,
+    "display_certified": false,
+    "conditional_native_bound": 2.3902076348623936e-07,
+    "geometry_setup": 80708,
+    "geometry_traversal_export_gate": 39331060,
+    "geometry_total": 39411768,
+    "remaining": 588232,
+    "limit": 40000000,
+    "original_native_exact": true,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "conversion_path": "native_frame::convert_group_pixel -> native_components castf32 -> ColorSpace::device_sample_to_rgb -> DEVICE_CMYK_FLOAT / CGATS001Compat-v2-micro.icc, rrrah_cmyk_hybrid=true. Hybrid interpolation implementation vendor/moxcms/src/conversions/lut4.rs::hybrid_fetch.",
+  "sources": {
+    "vendor/hayro/src/native_frame.rs": "c1339941de06c39336645464cf274d5f1e0bbe16b0078c7b063249c79ebf1865",
+    "vendor/hayro/src/native_spatial.rs": "8f1fdc026ade05105389dbe702ddf8d5428e52e1c0d1e350230ef63d983b43fa",
+    "vendor/hayro-interpret/src/color.rs": "6d98433e271efded991d09044d855a5c24a015e5255cd0e5f3c241bb1810f1c3",
+    "vendor/moxcms/src/conversions/lut4.rs": "a4b1c80bfd87ca67893649b4f4cfbbe816f60dd6e60568a0550ab189cdb03a65"
+  },
+  "next_requirement": "Native interval too wide to prove single f32 bin on problem pixel; propagate error through actual hybrid ICC stages and alpha/display quantization rather than treating measured native closeness as display proof.",
+  "limitations": [
+    "Success certifies only color-transform inputbits; alpha/display remain separate.",
+    "Real gate false, so no profile or display acceptance.",
+    "Original color reads retained; ordinary4M/fullpageAI/100-format objective incomplete."
+  ]
+}

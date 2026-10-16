@@ -1,0 +1,141 @@
+{
+  "status": "native16-bit segmented RGB palette expansion implemented and verified through required Metal/cache/swap",
+  "specifications": [
+    "https://dicom.nema.org/medical/Dicom/2016c/output/chtml/part03/sect_C.7.9.2.2.html",
+    "https://dicom.nema.org/medical/Dicom/2016c/output/chtml/part03/sect_C.7.9.2.3.html"
+  ],
+  "implementation": {
+    "runtime": "owned Rust; Python/pydicom/Fraction test-only",
+    "syntax": "ImplicitLE and ExplicitLE/BE,16-bit segmentedLUT units",
+    "opcodes": "0discrete,1linear,2indirect; firstlinear/indirect refuse without prior endpoint; zero prior endpoint valid; indirect offsets bytes, lower16word thenupper16word intransferendian",
+    "indirect": "must reference a real segment boundary; cannot point to or copy anyindirectsegment perstandard, so no recursion/cycles",
+    "index": "one precomputed admitted bitmap, ceil(sourcebytes/16), allows constant-time segment-boundary validation rather than repeated scanning",
+    "bounds": "1,000,000 segment visits perchannel,65536expandedentries, exact descriptor count, checked source boundaries/alignment and cooperative cancellation",
+    "interpolation": "exact nonnegative integer rational weights, nearest-even ties; no accumulated floating step error",
+    "memory": "expanded16 LUT bytes pre-admitted perchannel, all3tables held only until nativeRGBA16mapping; boundarybitmaps separately pre-admitted and released perchannel; ICC/nativeoutput remain sharedmanagedowners",
+    "unsupported": "8-bit segmented encoding explicitly refused until byte/word conventions qualified; alpha/enhanced/supplemental palettes and compressed DICOM remain refused"
+  },
+  "fixtures": {
+    "generator": "scripts/generate-dicom-segmented-fixtures.py",
+    "containers": 15,
+    "frames": 33,
+    "all_dicom_containers": 123,
+    "all_dicom_frames": 275,
+    "variants": [
+      "linear increasing/decreasing half ties",
+      "nonzero byteoffset and copiedlinear anchored atzero",
+      "indirectdiscrete",
+      "full65536entryramp",
+      "ICCindirect"
+    ],
+    "full_ramp_frames": 3,
+    "full_ramp_pixels": 196608,
+    "source_sha256": {
+      "dicom-segmented-big-endian-full-ramp.dcm": "70f20990008a585b8114fd846f2c549cbe69adb830adbb77bdf7d1d504c0b70e",
+      "dicom-segmented-big-endian-icc-indirect.dcm": "257d87d37d4d2799f535e7c44c2b93a6d6aa373de1b33d56fc452658e39a6f12",
+      "dicom-segmented-big-endian-indirect-discrete.dcm": "083a4beb1aae78a0aa050f4db36df0d8a965733526f771d1d59a274c9f428240",
+      "dicom-segmented-big-endian-indirect-zero.dcm": "0aab503caa38683bbae26cdb8ea37564492a12571b9992b66e326dd19aff9104",
+      "dicom-segmented-big-endian-linear.dcm": "9496730ab9943c88ffb8f389e291e1e972198add2fee7b1e34c1ecf1ea3c3cba",
+      "dicom-segmented-explicit-full-ramp.dcm": "d2df78abf0467546a55d3f3a239834657c8cabdabde224c7a7819bf7974dffd2",
+      "dicom-segmented-explicit-icc-indirect.dcm": "e7fbb9dd5fbbad894cef5576061a5f5069fa88c8dca138704527e9bfceab9628",
+      "dicom-segmented-explicit-indirect-discrete.dcm": "fc00a875b9cbdb283823e9d21e67a24f656c456cdfa2f539ca6d551e63d04565",
+      "dicom-segmented-explicit-indirect-zero.dcm": "320c9b8b3e0a992e041470102bbfd42ee0de00a328b5181f5d223b51ae7b5909",
+      "dicom-segmented-explicit-linear.dcm": "51f0d7055b37dd7fdf5ea766bb7b4a280a182bf134adf69b125bcd60a47392ad",
+      "dicom-segmented-implicit-full-ramp.dcm": "187887aa00edfbf66166ec64f8a5e4df98ddc6b2897ed6a81390145e14857320",
+      "dicom-segmented-implicit-icc-indirect.dcm": "62f1f396ae3d8f4e7a66173c7eb5539f0a801ec7185ee2c7e62f2aac40960dae",
+      "dicom-segmented-implicit-indirect-discrete.dcm": "0f6931f8d5dbd52e2936e0ac1a31b6f749eaa683a7eb7d6de7d0657c424bb82a",
+      "dicom-segmented-implicit-indirect-zero.dcm": "96c11f63a7268f8ac46793d2f617c81c7b0342633ff27fc11ea5039af6f08d0c",
+      "dicom-segmented-implicit-linear.dcm": "3d3201ca9a45d80dde2705213b65aa3a3c55c3ec2168234039a8e7c78a501f5f"
+    },
+    "oracle": "pydicom unpacks sourceindices; independent Python parser builds physicalbyte-offset segment map and Fraction/round(nearest-even) expansion, then NumPy performs LUT lookup; every nativeRGBA16component compared",
+    "memory_oracle": "current controls assert exact source+all3expandedtables+nativeoutput+ICC peak and onebyte-short refusal; admitted boundarybitmap peak is below later outputallocation in these controls; large literal/tinyimage shapes may need additional bitmap allowance",
+    "scope": "authoredCC0 encoding containers, not producer-original or clinical segmentedpalette qualification"
+  },
+  "pydicom_helper_disagreements": {
+    "count": 9,
+    "artifact": "tests/fixtures/raster/dicom-segmented-oracle-differences.json",
+    "reason": "pydicom3.0.2 helper uses16bit tuple indexing with a byteoffset; offset6 should point to word3linear, but helper points to word6discrete; native and independent reference follow standard byteoffset",
+    "handling": "differences retained without tolerance or dropping frames; source unpack remains independently checked"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 33,
+      "failed": 0,
+      "ignored": 5,
+      "log": "/tmp/dicom-segmented-final2-scientific-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-segmented-final-facade-20261016.log"
+    },
+    "manual_controls": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-segmented-external-20261016.log"
+    },
+    "cpu_pipeline_watchdog": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-segmented-watchdog-cpu-20261016.log"
+    },
+    "actual_metal": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-segmented-watchdog-metal-20261016.log"
+    }
+  },
+  "clippy": {
+    "passed": true,
+    "command": "cargo +stable clippy -p rrrah-scientific --lib --offline -- -D warnings",
+    "log": "/tmp/dicom-segmented-final2-clippy-20261016.log"
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "states": 321,
+    "segmented_states": 33,
+    "full_palette_frames": 6,
+    "full_viewport": [
+      512,
+      512
+    ],
+    "full_view_zoom": 2,
+    "readbacks": 2046,
+    "full_palette_readbacks": 36,
+    "geometry_negative_controls": 120,
+    "ram_pressure_hits": 321,
+    "swap_writes": 321,
+    "swap_reads": 321,
+    "swap_errors": 0,
+    "managed_root_limit": 8388608,
+    "managed_peak": 8388608,
+    "managed_final": 0,
+    "peak_scope": "includes artificial pressurereservation, notRSS",
+    "comparison": "full reference/nativewarm/restored SDRRGBA8 and HDRbinary16 buffers exact; referenceinput independent but samecolorprep andrenderer, not independentICC/shaderalgorithmproof",
+    "ttl_visible_protected": true,
+    "blocked_decoder_prefetch": true,
+    "stale_generation_refused": true,
+    "duration_seconds": 12.92,
+    "timing_scope": "qualification helper creates renderers/readbacks; not viewerFPS or paired performancebenchmark"
+  },
+  "watchdog": {
+    "old_failed_log": "/tmp/dicom-segmented-metal-20261016.log",
+    "old_result": "cancelled by30saggregate watchdog during GPUreadbacks;100.11s terminalfailed, notqualified",
+    "fix": "same30sdeadline now armed around each CPUpreload call and disarmed before GPUreadback; blockeddecode ticket remainsheld throughout; allpixel/swap/memoryassertions retained",
+    "unit_control": "5msarmeddeadline cancels blockedcall,30msunarmedinterval doesnotcancel; unitpasses",
+    "compile_repair_log": "/tmp/dicom-segmented-final3-cpu-20261016.log",
+    "compile_repair": "explicitboolchannelannotation added to test watchdog"
+  },
+  "remaining": [
+    "8-bit segmentedpalettes,alpha/enhanced/supplementalpipelines",
+    "producer-original segmentedfixture interoperability",
+    "compressedDICOM and fullclinicalpresentation",
+    "full100formatqualification",
+    "NVIDIAhardware deferred byuser"
+  ]
+}

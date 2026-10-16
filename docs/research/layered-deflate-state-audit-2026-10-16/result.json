@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "layered_passed": 76,
+  "layered_ignored": 2,
+  "decoder_credit_bytes": 65536,
+  "changes": [
+    "Aseprite compressed cel inflate reserves state before decoder creation",
+    "managed XCF level reserves state around each zlib tile call"
+  ],
+  "already_accounted": [
+    "PSD",
+    "NRRD gzip plus header fields",
+    "KTX2",
+    "STI"
+  ],
+  "test_only_constructors": [
+    "EAC oracle inflater",
+    "PKM oracle inflater",
+    "XCF half oracle inflater"
+  ],
+  "boundary": "public low-level decode_xcf_tile has no budget parameter; unchanged unmanaged API",
+  "layered_log_sha256": "54b04158a4c8f80e768989b3c87899bf87b1552ec89d5cba21f94fc2c1cb22d3",
+  "public_passed": 197,
+  "public_ignored": 5,
+  "viewer_passed": 282,
+  "viewer_ignored": 79,
+  "legacy_metal_exit": 0,
+  "legacy_cases": 2019,
+  "legacy_metal_readbacks": 12114,
+  "legacy_swap_writes": 2019,
+  "legacy_swap_reads": 2019,
+  "metal_adapter": "Metal Apple M4 Max",
+  "legacy_log_sha256": "b10346ef262cb8124e2f412a90f95b731b1fa3ad04e72785d5f1a02bc1586d3d",
+  "scope": "Aseprite and managed XCF heap-state admission with full targeted CPU gates; 2019-case legacy raster Metal corpus includes Aseprite, not a new XCF GPU corpus"
+}

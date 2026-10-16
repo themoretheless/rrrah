@@ -1,0 +1,107 @@
+{
+  "status": "actual_metal_revalidated",
+  "environment": {
+    "backend": "Metal",
+    "adapter": "Apple M4 Max",
+    "device_type": "IntegratedGpu",
+    "RRRAH_GPU_OPTIONAL": "0",
+    "CPU_fallback": false
+  },
+  "real_camera": {
+    "local_media_used_in_place": true,
+    "source_pixels_exported": false,
+    "full_sensor_gpu_dispatch": true,
+    "accuracy_scope": "336 sampled points per algorithm against f64 reconstruction reference, not every camera pixel",
+    "algorithms": [
+      {
+        "algorithm": "Bilinear",
+        "sampled_points": 336,
+        "max_absolute_error": 3.0936066486297875e-08,
+        "final_compute_credit_bytes": 0
+      },
+      {
+        "algorithm": "SmoothHue",
+        "sampled_points": 336,
+        "max_absolute_error": 4.0322531591474586e-08,
+        "final_compute_credit_bytes": 0
+      },
+      {
+        "algorithm": "MalvarHeCutler",
+        "sampled_points": 336,
+        "max_absolute_error": 4.1521667049071453e-08,
+        "final_compute_credit_bytes": 0
+      },
+      {
+        "algorithm": "Directional",
+        "sampled_points": 336,
+        "max_absolute_error": 5.049570495074818e-08,
+        "final_compute_credit_bytes": 0
+      },
+      {
+        "algorithm": "Vng",
+        "sampled_points": 336,
+        "max_absolute_error": 3.172440382614994e-08,
+        "final_compute_credit_bytes": 0
+      },
+      {
+        "algorithm": "Rcd",
+        "sampled_points": 336,
+        "max_absolute_error": 4.071639023162099e-08,
+        "final_compute_credit_bytes": 0
+      }
+    ],
+    "test_seconds": 2.53
+  },
+  "compute_regression": {
+    "passed": 7,
+    "failed": 0,
+    "ignored_in_group": 1,
+    "seconds": 2.13,
+    "scope": [
+      "shader validation",
+      "all six algorithms HDR/edge controls",
+      "calibrated resident CFA phase and white handling",
+      "admitted cancellation and exact retry",
+      "invalid input/geometry limits"
+    ]
+  },
+  "full_sensor_bilinear": {
+    "manual_ignored_test_run_separately": true,
+    "passed": 1,
+    "failed": 0,
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "pixels": 25494560,
+    "all_pixels_independently_exact": true,
+    "paths": [
+      "managed full output",
+      "resident output with 16MiB readback chunks"
+    ],
+    "clone_retains_credit": true,
+    "gpu_peak_bytes": 575657360,
+    "final_gpu_credit_bytes": 0,
+    "final_cpu_credit_bytes": 0,
+    "test_seconds": 3.4,
+    "synthetic_source": true
+  },
+  "source_sha256": {
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "e8ff8f1ecaba7f4050c06209b257cb17346661518e3b611cfe37b1f25aa2dd42",
+    "crates/rrrah-gpu/shaders/bayer_demosaic.wgsl": "4ca8f11952d623ecbe78a5b02a5f7f6a344baa2d43c47c9107652b7f31f1c6fb",
+    "crates/rrrah-gpu/tests/real_bayer_compute.rs": "59c465cac2d0452d46f482c83ddeb152fb218d923b5c8915274346724d7fa78f",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "9a229396b82a9dca34a6e494f40948cb4dd7bd6cac7afffbbab8f704ea48e811"
+  },
+  "limits": [
+    "Full-sensor every-pixel proof covers bilinear synthetic input; six real-CR3 algorithms use sampled oracle",
+    "Camera color/WB/metadata and all 100 formats not qualified by compute reconstruction tests",
+    "Compute credit excludes original decoded mosaic and some harness allocations; no RSS claim",
+    "No paired performance or physical HDR display luminance claim",
+    "NVIDIA remains deferred by user"
+  ],
+  "logs": {
+    "real-cr3": "real-cr3.log",
+    "compute-regression": "compute-regression.log",
+    "full-sensor": "full-sensor.log"
+  }
+}

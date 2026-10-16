@@ -1,0 +1,894 @@
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/target/ai-native-harness-20261013/hayro)
+warning: unnecessary qualification
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:11:21
+   |
+11 |     NativeColor(Box<super::native_paint::NativePaint>),
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+11 -     NativeColor(Box<super::native_paint::NativePaint>),
+11 +     NativeColor(Box<native_paint::NativePaint>),
+   |
+
+warning: unnecessary qualification
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:66:87
+   |
+66 |     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+   |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+66 -     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+66 +     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>,
+   |
+
+warning: unnecessary qualification
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:446:100
+    |
+446 | ...   if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, boo...
+    |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+446 -             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>())) { return; }
+446 +             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>())) { return; }
+    |
+
+warning: unnecessary qualification
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:448:41
+    |
+448 |             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+448 -             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+448 +             let Some(native_backdrop) = native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |
+
+warning: unnecessary qualification
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:569:35
+    |
+569 |                 let Some(paint) = super::native_paint::NativePaint::capture(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+569 -                 let Some(paint) = super::native_paint::NativePaint::capture(
+569 +                 let Some(paint) = native_paint::NativePaint::capture(
+    |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:4928:25
+     |
+4928 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4928 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4928 +             let clear = native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:4928:65
+     |
+4928 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4928 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4928 +             let clear = super::native_blend::Pixel::from_native(native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:4929:29
+     |
+4929 |             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4929 -             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+4929 +             let mut frame = native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:4963:13
+     |
+4963 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4963 - ) -> Option<super::native_frame::Buffer> {
+4963 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:5108:15
+     |
+5108 |     let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled...
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5108 -     let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+5108 +     let row = polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:5216:59
+     |
+5216 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5216 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5216 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:5219:13
+     |
+5219 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5219 - ) -> Option<super::native_frame::Buffer> {
+5219 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:5225:59
+     |
+5225 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5225 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5225 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:5229:13
+     |
+5229 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5229 - ) -> Option<super::native_frame::Buffer> {
+5229 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:5255:62
+     |
+5255 |     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5255 -     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+5255 +     let _backdrop_credit = admit(count.checked_mul(size_of::<native_blend::Pixel>())?)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6108:36
+     |
+6108 |             let fingerprint=|pixel:super::native_blend::Pixel|(pixel.alpha(),pixel.native_components().unwrap().to_vec());
+     |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6108 -             let fingerprint=|pixel:super::native_blend::Pixel|(pixel.alpha(),pixel.native_components().unwrap().to_vec());
+6108 +             let fingerprint=|pixel:native_blend::Pixel|(pixel.alpha(),pixel.native_components().unwrap().to_vec());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6146:65
+     |
+6146 | ...   let (aw,ah)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,aw,ah,transform,rect,1...
+     |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6146 -                 let (aw,ah)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,aw,ah,transform,rect,10000,&||false,&admit).unwrap();
+6146 +                 let (aw,ah)=alpha.dimensions();let (color,mask)=native_spatial::admitted_raster_mask_cells(w,h,aw,ah,transform,rect,10000,&||false,&admit).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6148:22
+     |
+6148 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,transform,rect,10000,&||false,&admit).unwrap(),None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6148 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,transform,rect,10000,&||false,&admit).unwrap(),None)};
+6148 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,transform,rect,10000,&||false,&admit).unwrap(),None)};
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6149:31
+     |
+6149 |             let check=|cells:&super::native_spatial::RasterCells,cell_transform:Affine,alpha_field:bool| {
+     |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6149 -             let check=|cells:&super::native_spatial::RasterCells,cell_transform:Affine,alpha_field:bool| {
+6149 +             let check=|cells:&native_spatial::RasterCells,cell_transform:Affine,alpha_field:bool| {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6212:54
+     |
+6212 | type RasterLastPixel=std::cell::Cell<Option<([u64;2],super::native_blend::Pixel)>>;
+     |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6212 - type RasterLastPixel=std::cell::Cell<Option<([u64;2],super::native_blend::Pixel)>>;
+6212 + type RasterLastPixel=std::cell::Cell<Option<([u64;2],native_blend::Pixel)>>;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6214:63
+     |
+6214 |     cache:&RasterLastPixel,cancelled:&dyn Fn()->bool)->Option<super::native_blend::Pixel> {
+     |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6214 -     cache:&RasterLastPixel,cancelled:&dyn Fn()->bool)->Option<super::native_blend::Pixel> {
+6214 +     cache:&RasterLastPixel,cancelled:&dyn Fn()->bool)->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6540:79
+     |
+6540 |         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+     |                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6540 -         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+6540 +         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|native_spatial::SpatialPaint {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6543:19
+     |
+6543 |         let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6543 -         let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+6543 +         let pixel=native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6922:72
+     |
+6922 |     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6922 -     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+6922 +     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6925:11
+     |
+6925 | )->Option<super::native_blend::Pixel> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6925 - )->Option<super::native_blend::Pixel> {
+6925 + )->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6938:64
+     |
+6938 | type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+     |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6938 - type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+6938 + type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<native_spatial::RasterCells>,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6939:27
+     |
+6939 |     Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6939 -     Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6939 +     Option<std::sync::Arc<native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6950:11
+     |
+6950 | )->Option<super::native_spatial::NativeSpatialSample<'a>> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6950 - )->Option<super::native_spatial::NativeSpatialSample<'a>> {
+6950 + )->Option<native_spatial::NativeSpatialSample<'a>> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:6968:10
+     |
+6968 |     Some(super::native_spatial::NativeSpatialSample {cell_key:None,pixel,space})
+     |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6968 -     Some(super::native_spatial::NativeSpatialSample {cell_key:None,pixel,space})
+6968 +     Some(native_spatial::NativeSpatialSample {cell_key:None,pixel,space})
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7000:72
+     |
+7000 |     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7000 -     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+7000 +     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7003:11
+     |
+7003 | )->Option<super::native_blend::Pixel> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7003 - )->Option<super::native_blend::Pixel> {
+7003 + )->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7029:24
+     |
+7029 |         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7029 -         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+7029 +         std::sync::Arc<native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7029:82
+     |
+7029 |         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7029 -         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+7029 +         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7041:22
+     |
+7041 |         2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7041 -         2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+7041 +         2*(size_of::<native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7050:65
+     |
+7050 |                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7050 -                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+7050 +                 let (mw,mh)=alpha.dimensions();let (color,mask)=native_spatial::admitted_raster_mask_cells(
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7052:22
+     |
+7052 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7052 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+7052 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7099:34
+     |
+7099 |                 let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7099 -                 let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+7099 +                 let (color,mask)=native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7101:22
+     |
+7101 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7101 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+7101 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7161:27
+     |
+7161 |                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7161 -                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+7161 +                 let cells=native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7192:62
+     |
+7192 |             .checked_add(size_of::<std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>())?)?)
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7192 -             .checked_add(size_of::<std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>())?)?)
+7192 +             .checked_add(size_of::<std::cell::RefCell<Option<native_moments::OpaqueCandidateInputs>>>())?)?)
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7296:48
+     |
+7296 | ...   if let Some(bound)=super::native_blend::normal_premultiplied_error_bound(backdrop.model(),[0.;4],[0.;4],bounds,f64::from(opa...
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7296 -                             if let Some(bound)=super::native_blend::normal_premultiplied_error_bound(backdrop.model(),[0.;4],[0.;4],bounds,f64::from(opacity),1.,&mut work,cancelled) {
+7296 +                             if let Some(bound)=native_blend::normal_premultiplied_error_bound(backdrop.model(),[0.;4],[0.;4],bounds,f64::from(opacity),1.,&mut work,cancelled) {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7438:75
+     |
+7438 |         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+     |                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7438 -         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+7438 +         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<Pixel>())?)?
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7546:5
+     |
+7546 |     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7546 -     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+7546 +     native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7548:73
+     |
+7548 |     let _raster_region_credit=admit(rasters.len().checked_mul(size_of::<super::native_spatial::RasterRegionKeys>())?)?;
+     |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7548 -     let _raster_region_credit=admit(rasters.len().checked_mul(size_of::<super::native_spatial::RasterRegionKeys>())?)?;
+7548 +     let _raster_region_credit=admit(rasters.len().checked_mul(size_of::<native_spatial::RasterRegionKeys>())?)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7553:18
+     |
+7553 | ...   let keys=super::native_spatial::admitted_raster_region_keys(color,mask.as_deref(),&regions,&mut raster_region_work,cancelled...
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7553 -         let keys=super::native_spatial::admitted_raster_region_keys(color,mask.as_deref(),&regions,&mut raster_region_work,cancelled,admit)?;
+7553 +         let keys=native_spatial::admitted_raster_region_keys(color,mask.as_deref(),&regions,&mut raster_region_work,cancelled,admit)?;
+     |
+
+warning: unused import: `kurbo::Shape`
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7586:17
+     |
+7586 |             use kurbo::Shape;
+     |                 ^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7619:21
+     |
+7619 |                     super::native_spatial::NativeField::ConstantCells
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7619 -                     super::native_spatial::NativeField::ConstantCells
+7619 +                     native_spatial::NativeField::ConstantCells
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7620:25
+     |
+7620 |                 } else {super::native_spatial::NativeField::Unknown};
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7620 -                 } else {super::native_spatial::NativeField::Unknown};
+7620 +                 } else {native_spatial::NativeField::Unknown};
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7628:89
+     |
+7628 | ...   field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {s...
+     |                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7628 -                     field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+7628 +                     field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7628:144
+     |
+7628 | ..._spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;m...
+     |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7628 -                     field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+7628 +                     field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7637:5
+     |
+7637 |     super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7637 -     super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+7637 +     native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7638:17
+     |
+7638 |     let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7638 -     let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+7638 +     let cleared=native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7640:19
+     |
+7640 |     let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7640 -     let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+7640 +     let flattened=native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7643:5
+     |
+7643 |     super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7643 -     super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+7643 +     native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7656:40
+     |
+7656 |                         let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+     |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7656 -                         let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+7656 +                         let candidate:&native_spatial::NativeSpatialSampler<'_>=candidate;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7660:40
+     |
+7660 |                         let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+     |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7660 -                         let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+7660 +                         let candidate:&native_spatial::NativeSpatialSampler<'_>=candidate;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7680:16
+     |
+7680 |     let result=super::native_spatial::compose_grouped_polygon_with_candidate_inputs(&regions,&commands,space,backdrop,x,y,point,
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7680 -     let result=super::native_spatial::compose_grouped_polygon_with_candidate_inputs(&regions,&commands,space,backdrop,x,y,point,
+7680 +     let result=native_spatial::compose_grouped_polygon_with_candidate_inputs(&regions,&commands,space,backdrop,x,y,point,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7691:13
+     |
+7691 |             super::native_moments::opaque_candidate_native_error(&inputs,source.max_error,source.gradient,&mut 10000,cancelled)
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7691 -             super::native_moments::opaque_candidate_native_error(&inputs,source.max_error,source.gradient,&mut 10000,cancelled)
+7691 +             native_moments::opaque_candidate_native_error(&inputs,source.max_error,source.gradient,&mut 10000,cancelled)
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7811:30
+     |
+7811 |                     let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7811 -                     let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+7811 +                     let area=polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7827:13
+     |
+7827 |             std::mem::size_of::<std::cell::RefCell<[(usize,usize);64]>>()
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7827 -             std::mem::size_of::<std::cell::RefCell<[(usize,usize);64]>>()
+7827 +             size_of::<std::cell::RefCell<[(usize,usize);64]>>()
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7828:14
+     |
+7828 |             +std::mem::size_of::<std::cell::Cell<usize>>()
+     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7828 -             +std::mem::size_of::<std::cell::Cell<usize>>()
+7828 +             +size_of::<std::cell::Cell<usize>>()
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7852:81
+     |
+7852 | ...   println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::...
+     |                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7852 -             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+7852 +             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7852:110
+     |
+7852 | ...nt_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame...
+     |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7852 -             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+7852 +             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7852:130
+     |
+7852 | ...}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFra...
+     |                                                        ^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7852 -             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+7852 +             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7852:156
+     |
+7852 | ...:size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+     |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7852 -             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+7852 +             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),size_of::<super::native_frame::PaintFrame>());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7852:176
+     |
+7852 | ...:<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+     |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7852 -             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+7852 +             println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<native_frame::PaintFrame>());
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7860:42
+     |
+7860 |         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7860 -         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+7860 +         let white_rgb=result.and_then(|p|native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7890:21
+     |
+7890 |                     super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7890 -                     super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+7890 +                     native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7932:50
+     |
+7932 |                 let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7932 -                 let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+7932 +                 let converted=result.and_then(|p|native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:8064:9
+     |
+8064 |         super::native_frame::assert_normal_batch_equivalence(image.color_space(),model);
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+8064 -         super::native_frame::assert_normal_batch_equivalence(image.color_space(),model);
+8064 +         native_frame::assert_normal_batch_equivalence(image.color_space(),model);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/native_spatial.rs:3355:27
+     |
+3355 |                 if bytes==std::mem::size_of::<super::native_frame::PaintFrame>() {frames.set(frames.get()+1);}
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3355 -                 if bytes==std::mem::size_of::<super::native_frame::PaintFrame>() {frames.set(frames.get()+1);}
+3355 +                 if bytes==size_of::<super::native_frame::PaintFrame>() {frames.set(frames.get()+1);}
+     |
+
+warning: unused variable: `paint`
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7454:62
+     |
+7454 |         if let Event::Path(path,_,RecordedPaint::NativeColor(paint),clips,PathDrawMode::Fill(rule))=event {
+     |                                                              ^^^^^ help: if this is intentional, prefix it with an underscore: `_paint`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sample`
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/native_spatial.rs:1341:53
+     |
+1341 |                 SpatialCommand::NativeSampledPaint {sample,alpha_is_shape,mode,..}=>{
+     |                                                     ^^^^^^ help: try ignoring the field: `sample: _`
+
+warning: method `pixel_incremental_selected_rect_fragments` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/polygon_coverage.rs:451:19
+    |
+358 | impl PolygonRow {
+    | --------------- method in this implementation
+...
+451 |     pub(super) fn pixel_incremental_selected_rect_fragments(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hayro` (lib test) generated 74 warnings (run `cargo fix --lib -p hayro --tests` to apply 73 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 17.95s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/lib.rs (target/ai-native-harness-20261013/hayro/target/debug/deps/hayro-028233655b833e03)
+
+running 1 test
+test knockout_compositor::interpreter_tests::spatial_region_budget_ignores_far_geometry_before_count_admission ... 
+thread 'knockout_compositor::interpreter_tests::spatial_region_budget_ignores_far_geometry_before_count_admission' (25870335) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7963:50:
+off-pixel geometry must not exhaust live region limit
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    knockout_compositor::interpreter_tests::spatial_region_budget_ignores_far_geometry_before_count_admission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 275 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`

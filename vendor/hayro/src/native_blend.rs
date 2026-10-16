@@ -93,6 +93,42 @@ pub(super) fn group_error_bound(model:Model,current:[f64;4],step:GroupErrorStep,
     if cancelled() {return None;}Some(output)
 }
 
+/// Absolute error of from_native(...).native_components() for supplied unit
+/// components and the same positive alpha. Covers CMYK complements, multiply,
+/// division and gradual underflow; excludes incoming quotient/source errors.
+pub(super) fn native_storage_error_bound(model:Model,alpha:f64,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;4]> {
+    if cancelled() {return None;}*work=work.checked_sub(24)?;
+    if !alpha.is_finite() || alpha<=0. || alpha>1. {return None;}
+    let u=f64::EPSILON;let tiny=f64::from_bits(1);
+    let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
+    let mut error=if model==Model::Cmyk {add(u,tiny)} else {0.};
+    // Normalize multiplication error by alpha before bounding division.
+    error=add(error,add(mul(u,add(1.,error)),(tiny/alpha).next_up()));
+    error=add(error,add(mul(u,add(1.,error)),tiny));
+    if model==Model::Cmyk {error=add(error,add(mul(u,add(2.,error)),tiny));}
+    if !error.is_finite() || cancelled() {return None;}
+    let mut out=[0.;4];out[..model.channels()].fill(error);Some(out)
+}
+
+#[test]
+fn native_storage_envelope_covers_unit_colors_and_subnormal_alpha() {
+    for model in [Model::Gray,Model::Rgb,Model::Cmyk] {
+        for alpha in [f64::from_bits(1),f64::MIN_POSITIVE,1e-300,1e-12,0.6737398252860969,1.] {
+            let bound=native_storage_error_bound(model,alpha,&mut 24,&||false).unwrap();
+            for value in [0.,f64::from_bits(1),2f64.powi(-54),0.125,0.5,1.-f64::EPSILON/2.,1.] {
+                let input=[value;4];let pixel=Pixel::from_native(model,&input[..model.channels()],alpha).unwrap();
+                let recovered=pixel.native_components().unwrap();
+                for i in 0..model.channels() {assert!((recovered[i]-value).abs()<=bound[i],"model={model:?} alpha={alpha} value={value}");}
+                assert!(bound[model.channels()..].iter().all(|v|*v==0.));
+            }
+        }
+    }
+    for work in 0..24 {assert!(native_storage_error_bound(Model::Cmyk,1.,&mut {work},&||false).is_none());}
+    for alpha in [0.,-1.,f64::NAN,f64::INFINITY,1.1] {assert!(native_storage_error_bound(Model::Cmyk,alpha,&mut 24,&||false).is_none());}
+    let polls=std::cell::Cell::new(0);native_storage_error_bound(Model::Cmyk,1.,&mut 24,&||{polls.set(polls.get()+1);false}).unwrap();
+    for stop in 1..=polls.get() {let n=std::cell::Cell::new(0);assert!(native_storage_error_bound(Model::Cmyk,1.,&mut 24,&||{n.set(n.get()+1);n.get()>=stop}).is_none());}
+}
+
 impl Pixel {
     pub(super) fn same_storage(self,other:Self)->bool {
         self.model==other.model && self.alpha.to_bits()==other.alpha.to_bits()
@@ -179,6 +215,11 @@ impl Pixel {
             )
         {
             return None;
+        }
+        // Source-over at full shape/opacity is exact replacement. Avoid an
+        // unnecessary weighted backdrop sum that can perturb source bits.
+        if source.alpha == 1. && shape == 1. && mode == BlendMode::Normal {
+            return Some(source);
         }
         let (a, b) = (source.alpha, backdrop.alpha);
         let mut result = Self {
@@ -430,4 +471,19 @@ fn nonisolated_constant_hardlight_group_after_variable_parent_is_not_affine() {
     assert_eq!(evaluate(0.),0.);assert_eq!(evaluate(1.),1.);
     assert_eq!(evaluate(0.5),0.375);
     assert_ne!((evaluate(0.)+evaluate(1.))/2.,evaluate(0.5));
+}
+
+#[test]
+fn opaque_normal_source_replaces_backdrop_bit_exactly() {
+    for model in [Model::Gray,Model::Rgb,Model::Cmyk] {
+        for alpha in [0.,0.23,0.31,1./3.,0.77,1.] {
+            let previous=Pixel::from_native(model,&[0.1,0.4,0.9,0.2][..model.channels()],alpha).unwrap();
+            for value in [0.1f32,0.2,0.3,0.7,0.9] {
+                let v=f64::from(value);
+                let source=Pixel::from_native(model,&[v,1.-v,0.125,0.75][..model.channels()],1.).unwrap();
+                let result=Pixel::composite(previous,previous,source,1.,BlendMode::Normal).unwrap();
+                assert!(result.same_storage(source),"{model:?} alpha{alpha} source{v}: opaque paint must retain exact storage");
+            }
+        }
+    }
 }

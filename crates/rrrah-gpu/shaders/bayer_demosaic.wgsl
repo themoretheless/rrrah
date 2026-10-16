@@ -5,7 +5,10 @@ struct Parameters {
     dimensions: vec2<u32>,
     row_range: vec2<u32>,
     cfa: vec4<u32>,
-    output_window: vec4<u32>, // .x = output_first_pixel, .y = source_first_sample, .z = algorithm
+    output_window: vec4<u32>, // .x = output_first_pixel, .y = source_first_sample, .z = algorithm, .w = calibrated color
+    camera_red: vec4<f32>,
+    camera_green: vec4<f32>,
+    camera_blue: vec4<f32>,
 };
 
 @group(0) @binding(0) var<storage, read> source: array<f32>;
@@ -318,6 +321,10 @@ fn main(@builtin(global_invocation_id) id: vec3<u32>) {
         rgb = rcd_at(x, y);
     } else {
         rgb = bilinear_at(x, y);
+    }
+    if parameters.output_window.w != 0u {
+        rgb = vec3<f32>(dot(parameters.camera_red.xyz, rgb),
+            dot(parameters.camera_green.xyz, rgb), dot(parameters.camera_blue.xyz, rgb));
     }
     output[sensor_y * parameters.dimensions.x + id.x - parameters.output_window.x] = vec4<f32>(rgb, 1.0);
 }

@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "api": "BayerDemosaicCompute::execute_mosaic_resident -> ResidentLinearBayer",
+  "behavior": [
+    "native Bayer normalization of phase levels and WB before demosaic",
+    "camera-to-linear-sRGB matrix applied inside GPU compute without CPU RGB roundtrip",
+    "typed calibrated result separates linear sRGB from uncalibrated camera RGB",
+    "negative RGB and HDR retained; alpha1",
+    "conservative calibrated filter/matrix arithmetic range admission",
+    "uniform allocation/credit expanded to96bytes",
+    "queue-written resources retain budgets through completion/cancellation"
+  ],
+  "qualification": {
+    "adapter": "Apple M4 Max Metal",
+    "gpu_library_passed": 61,
+    "failed": 0,
+    "ignored": 2,
+    "algorithms": 6,
+    "authored_sensor": [
+      17,
+      13
+    ],
+    "black_repeat_grid": [
+      3,
+      5
+    ],
+    "phase_white": [
+      1000,
+      2000,
+      3000,
+      4000
+    ],
+    "wb": [
+      2,
+      1,
+      0.5,
+      1
+    ],
+    "expected_camera_rgb": [
+      0.5,
+      2,
+      0.5
+    ],
+    "color_reference": "CPU core matrix multiplication; all output pixels within5e-5, negative red and HDR green explicitly asserted",
+    "normalized_cpu_credit_after_submission": 0,
+    "gpu_credit_after_completion": "only retained output bytes",
+    "gpu_credit_after_drop": 0,
+    "normalization_cancel": "Cancelled variant and both credits zero"
+  },
+  "limitations": [
+    "small authored constant camera-color field, not independent camera fidelity or full calibrated sensor qualification",
+    "typed resident upload into raster renderer still pending",
+    "main viewer compute integration pending",
+    "queue/driver staging outside logical credits"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "5ae854d9c281e7f5427773b0eddd15550464b8e71ecb58eb55f3f388cbcb3955",
+    "crates/rrrah-gpu/src/lib.rs": "53bf20fc2bc8339063d6672d75ce2e2dab876a1efea02a3ff47f124a119e36fa",
+    "crates/rrrah-gpu/shaders/bayer_demosaic.wgsl": "4ca8f11952d623ecbe78a5b02a5f7f6a344baa2d43c47c9107652b7f31f1c6fb"
+  }
+}

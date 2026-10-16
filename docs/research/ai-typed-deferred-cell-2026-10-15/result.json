@@ -1,0 +1,19 @@
+{
+  "change": "Composition evaluator distinguishes Sampled(Pixel) from Deferred(command,owner). Both fragment integration and centroid replay refuse deferred cells until bound-only integration is implemented. Existing Pixel evaluators convert through From<Pixel>.",
+  "focused_test": {
+    "passed": 1,
+    "failed": 0,
+    "control": "Sampled color preserved; deferred geometry cannot become output Pixel or publish candidate inputs."
+  },
+  "full_suite": {
+    "passed": 291,
+    "failed": 0,
+    "ignored": 12
+  },
+  "source_sha256": "3a9a75cd1b5c62c7ac100219cedab0e82121f5e7140db7654b128c85ad800a30",
+  "limitations": [
+    "No source reads skipped yet.",
+    "Bound-only reference accumulation and output-intent acceptance still required.",
+    "No fullpage/ordinary4M/HDR qualification."
+  ]
+}

@@ -1,0 +1,22 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 14s
+     Running unittests src/lib.rs (target/avif-prem-validation-20261014/debug/deps/rrrah_decode-9bd398ccea4932bc)
+
+running 1 test
+test avif_color::tests::repeated_auxiliary_targets_do_not_require_per_reference_storage ... FAILED
+
+failures:
+
+---- avif_color::tests::repeated_auxiliary_targets_do_not_require_per_reference_storage stdout ----
+
+thread 'avif_color::tests::repeated_auxiliary_targets_do_not_require_per_reference_storage' (17684826) panicked at crates/rrrah-decode/src/avif_color.rs:650:42:
+called `Result::unwrap()` on an `Err` value: InvalidAvif("too many auxiliary references")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    avif_color::tests::repeated_auxiliary_targets_do_not_require_per_reference_storage
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1121 filtered out; finished in 0.28s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

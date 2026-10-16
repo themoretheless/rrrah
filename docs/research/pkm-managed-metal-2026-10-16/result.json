@@ -1,0 +1,59 @@
+{
+  "status": "validated_scoped_change",
+  "change": [
+    "PKM RGBA output uses shared admitted PixelBuffer with fallible unmanaged fallback",
+    "All ETC1 differential blocks validated without heap allocation before output admission",
+    "Six manifest cases verify exact and one-byte-short budgets, oracle pixels and clone ownership",
+    "Six invalid ETC1 channel overflow/underflow cases return InvalidPkm at zero budget"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 62,
+      "failed": 0
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "viewer": {
+      "passed": 248,
+      "failed": 0,
+      "ignored": 69
+    },
+    "pipeline": {
+      "states": 20,
+      "pkm_states": 6,
+      "ram_pressure_hits": 20,
+      "swap_writes": 20,
+      "swap_reads": 20,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "readbacks": 120,
+      "targets": [
+        "SDR",
+        "RGBA16F"
+      ],
+      "duration_seconds": 1.61
+    }
+  },
+  "limits": [
+    "ETC2 independent fixtures still cover only ETC1-compatible RGB, opaque RGBA1 and authored constant-alpha RGBA8",
+    "No qualification of ETC2 T/H/planar, variable alpha or punch-through",
+    "RGBA16F readback is not physical HDR display validation",
+    "NVIDIA deferred by user",
+    "No performance speedup claim; ETC1 now has validation prepass"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log",
+    "viewer-tests": "viewer-tests.log"
+  }
+}

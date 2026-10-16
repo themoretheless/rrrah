@@ -3909,6 +3909,7 @@ dependencies = [
 name = "rrrah-decode"
 version = "0.1.0"
 dependencies = [
+ "basis-universal",
  "blake3",
  "charls",
  "criterion",
@@ -4031,7 +4032,9 @@ dependencies = [
  "flate2",
  "rrrah-core",
  "rrrah-raw",
+ "tempfile",
  "thiserror 2.0.19",
+ "zlib-rs",
 ]
 
 [[package]]
@@ -4057,6 +4060,7 @@ dependencies = [
  "rrrah-scientific",
  "texture2ddecoder",
  "thiserror 2.0.19",
+ "zlib-rs",
 ]
 
 [[package]]

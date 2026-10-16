@@ -51,11 +51,30 @@ fn grow_array<T>(
     credit: &mut Option<Credit>,
     admit: Option<&Admitter<'_>>,
 ) -> Result<(), AdaptivePatchError> {
+    grow_array_with_step(array, credit, admit, 1)
+}
+fn grow_array_with_step<T>(
+    array: &mut Vec<T>,
+    credit: &mut Option<Credit>,
+    admit: Option<&Admitter<'_>>,
+    step_divisor: usize,
+) -> Result<(), AdaptivePatchError> {
     use AdaptivePatchError::Admission;
-    let capacity = array.capacity().checked_mul(2).ok_or(Admission)?.max(4);
+    let capacity = array.capacity()
+        .checked_add((array.capacity() / step_divisor).max(1))
+        .ok_or(Admission)?.max(4);
     let bytes = capacity.checked_mul(size_of::<T>()).ok_or(Admission)?;
     let next = match admit {
-        Some(admit) => Some(admit(bytes).ok_or(Admission)?),
+        Some(admit) => match admit(bytes) {
+            Some(credit) => Some(credit),
+            None => {
+                if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                    eprintln!("NATIVE_ADAPTIVE_ADMISSION type={} len={} old_capacity={} requested_capacity={capacity} requested_bytes={bytes}",
+                        std::any::type_name::<T>(), array.len(), array.capacity());
+                }
+                return Err(Admission);
+            }
+        },
         None => None,
     };
     array
@@ -101,6 +120,22 @@ impl<'a, T> MeshArray<'a, T> {
         for value in values {
             self.push(value)?;
         }
+        Ok(())
+    }
+    fn compact(&mut self) -> Result<(), AdaptivePatchError> {
+        use AdaptivePatchError::Admission;
+        if self.data.capacity() == self.data.len() { return Ok(()); }
+        let bytes = self.data.len().checked_mul(size_of::<T>()).ok_or(Admission)?;
+        let next = match self.admit {
+            Some(admit) => Some(admit(bytes).ok_or(Admission)?),
+            None => None,
+        };
+        let mut exact = Vec::new();
+        exact.try_reserve_exact(self.data.len()).map_err(|_| Admission)?;
+        if exact.capacity() > self.data.len() { return Err(Admission); }
+        exact.append(&mut self.data);
+        self.data = exact;
+        self.credit = next;
         Ok(())
     }
     fn into_parts(self) -> (Vec<T>, Option<Credit>) {
@@ -167,10 +202,47 @@ impl TriangleOutput for Vec<Triangle> {
         Vec::truncate(self, len)
     }
     fn push_triangle(&mut self, triangle: Triangle) -> Result<(), AdaptivePatchError> {
-        push_array(self, triangle)
+        if self.len() == self.capacity() {
+            grow_array_with_step(self, &mut None, None, 4)?;
+        }
+        self.push(triangle);
+        Ok(())
     }
 }
-impl TriangleOutput for MeshArray<'_, Triangle> {
+trait EmittedTriangle {
+    fn from_triangle(triangle: Triangle) -> Self;
+}
+impl EmittedTriangle for Triangle {
+    fn from_triangle(triangle: Triangle) -> Self { triangle }
+}
+/// Compact device-coordinate geometry retaining all source components (one to four).
+/// Cached generic interpolation fields are omitted; coordinates/components are unchanged.
+#[derive(Debug, Clone)]
+pub struct CompactAdaptiveTriangle {
+    points: [Point; 3],
+    components: [[f32; 4]; 3],
+    component_count: usize,
+}
+impl CompactAdaptiveTriangle {
+    /// Original vertices in transformed device coordinates.
+    pub fn points(&self) -> &[Point; 3] { &self.points }
+    /// Original source components; inactive slots are zero.
+    pub fn components(&self) -> &[[f32; 4]; 3] { &self.components }
+    /// Number of active components at each vertex.
+    pub fn component_count(&self) -> usize { self.component_count }
+}
+impl EmittedTriangle for CompactAdaptiveTriangle {
+    fn from_triangle(triangle: Triangle) -> Self {
+        let vertices = [&triangle.p0, &triangle.p1, &triangle.p2];
+        let component_count = vertices[0].colors.len();
+        let mut components = [[0.; 4]; 3];
+        for (out, vertex) in components.iter_mut().zip(vertices) {
+            out[..component_count].copy_from_slice(&vertex.colors);
+        }
+        Self { points: vertices.map(|v| v.point), components, component_count }
+    }
+}
+impl<T: EmittedTriangle> TriangleOutput for MeshArray<'_, T> {
     fn len(&self) -> usize {
         self.data.len()
     }
@@ -178,7 +250,12 @@ impl TriangleOutput for MeshArray<'_, Triangle> {
         self.data.truncate(len)
     }
     fn push_triangle(&mut self, triangle: Triangle) -> Result<(), AdaptivePatchError> {
-        self.push(triangle)
+        // Only retained triangles grow by 5/4; planning scratch keeps doubling.
+        if self.data.len() == self.data.capacity() {
+            grow_array_with_step(&mut self.data, &mut self.credit, self.admit, 4)?;
+        }
+        self.data.push(T::from_triangle(triangle));
+        Ok(())
     }
 }
 type Grid = [[Point; 4]; 4];
@@ -329,7 +406,7 @@ pub fn tessellate_patch_mesh_adaptive_with_ranges(
 /// by each patch. The triangle cap applies to the whole call; errors roll back
 /// all newly appended triangles. Near but distinct curves are never welded.
 /// Temporary planning allocations are count-bounded, not charged to a memory budget.
-/// Shared cubic edges receive a chord tolerance sixteen times tighter than
+/// Shared cubic edges receive a chord tolerance 128 times tighter than
 /// `pixel_error`; depth and triangle caps also apply to this refinement.
 /// This opt-in API does not change the renderer's legacy tessellation path.
 pub fn tessellate_tensor_patch_mesh_adaptive(
@@ -351,15 +428,15 @@ pub fn tessellate_tensor_patch_mesh_adaptive(
 }
 /// An admitted mesh with immutable triangles and their retained capacity owner.
 /// Parsed source patches belong to the caller and precede this reservation.
-pub struct AdmittedAdaptivePatchMesh {
-    triangles: Vec<Triangle>,
+pub struct AdmittedAdaptivePatchMesh<T = Triangle> {
+    triangles: Vec<T>,
     stats: AdaptivePatchStats,
     // Geometry drops before the reservation that owns its capacity.
     _credit: Option<Credit>,
 }
-impl AdmittedAdaptivePatchMesh {
+impl<T> AdmittedAdaptivePatchMesh<T> {
     /// Original source-component triangles in source patch order.
-    pub fn triangles(&self) -> &[Triangle] {
+    pub fn triangles(&self) -> &[T] {
         &self.triangles
     }
     /// Accepted subdivision bounds and occupancy.
@@ -399,13 +476,21 @@ pub fn tessellate_tensor_patch_mesh_adaptive_admitted(
         admit,
     )
 }
-fn admitted_mesh<'a>(
+/// Emit compact geometry directly, without a retained generic-triangle intermediate.
+/// Original f64 coordinates, f32 components, capacity admission and cancellation are preserved.
+pub fn tessellate_tensor_patch_mesh_compact_admitted(
+    patches: &[TensorProductPatch], transform: Affine, limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool, admit: &Admitter<'_>,
+) -> Result<AdmittedAdaptivePatchMesh<CompactAdaptiveTriangle>, AdaptivePatchError> {
+    admitted_mesh(patches.iter().map(AdaptivePatchRef::Tensor), transform, limits, cancelled, admit)
+}
+fn admitted_mesh<'a, T: EmittedTriangle>(
     patches: impl ExactSizeIterator<Item = AdaptivePatchRef<'a>> + Clone,
     transform: Affine,
     limits: AdaptivePatchLimits,
     cancelled: &dyn Fn() -> bool,
     admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
-) -> Result<AdmittedAdaptivePatchMesh, AdaptivePatchError> {
+) -> Result<AdmittedAdaptivePatchMesh<T>, AdaptivePatchError> {
     use AdaptivePatchError::*;
     if cancelled() {
         return Err(Cancelled);
@@ -441,7 +526,7 @@ fn admitted_mesh<'a>(
             return Err(Invalid);
         }
     }
-    let mut triangles = MeshArray::new(Some(admit));
+    let mut triangles: MeshArray<'_, T> = MeshArray::new(Some(admit));
     let stats = tessellate_mesh(
         patches,
         transform,
@@ -583,7 +668,7 @@ fn tessellate_mesh<'a, 'mem>(
                 if cancelled() { return Err(AdaptivePatchError::Cancelled); }
                 let deviation = (p[1] - p[0].lerp(p[3], 1. / 3.)).hypot()
                     .max((p[2] - p[0].lerp(p[3], 2. / 3.)).hypot());
-                if deviation <= limits.pixel_error / 16. {
+                if deviation <= limits.pixel_error / 128. {
                     if shared.len() >= limits.max_triangles * 4 {
                         return Err(AdaptivePatchError::TriangleLimit);
                     }
@@ -605,9 +690,14 @@ fn tessellate_mesh<'a, 'mem>(
         }
         shared.sort_unstable_by_key(|sample| (sample.edge, sample.parameter));
         shared.dedup_by(|a, b| a.edge == b.edge && a.parameter == b.parameter);
+        // Drop duplicate/capacity slack before output growth. Full old+new capacity
+        // is admitted while copying; output triangles do not yet overlap this stage.
+        shared.compact()?;
         if cancelled() {
             return Err(AdaptivePatchError::Cancelled);
         }
+        // Canonical controls are no longer read after shared samples are finalized.
+        drop(edge_records);
         let mut total = AdaptivePatchStats::default();
         for ((patch, leaves), edges) in planned.into_iter().zip(patch_edges) {
             let boundaries = edges.map(|(edge, reversed)| Boundary {
@@ -1127,6 +1217,50 @@ mod qualification_tests {
         }
     }
     #[test]
+    fn compact_mesh_is_bit_exact_and_releases_every_refused_allocation() {
+        use std::{cell::Cell, sync::{Arc, atomic::{AtomicUsize, Ordering}}};
+        struct Owner(Arc<AtomicUsize>, usize);
+        impl Drop for Owner { fn drop(&mut self) { self.0.fetch_sub(self.1,Ordering::Relaxed); } }
+        let used = Arc::new(AtomicUsize::new(0));
+        let calls = Cell::new(0usize);
+        let refuse = Cell::new(usize::MAX);
+        let admit = |bytes| -> Option<Box<dyn std::any::Any+Send+Sync>> {
+            calls.set(calls.get()+1);
+            if calls.get() == refuse.get() { return None; }
+            used.fetch_add(bytes,Ordering::Relaxed);
+            Some(Box::new(Owner(used.clone(),bytes)))
+        };
+        let mut source = patch(0.,[0.25;4]);
+        source.control_points[1].x = -0.1;
+        source.colors = std::array::from_fn(|_| smallvec::smallvec![0.25,2.,-0.,-1.]);
+        let legacy = tessellate_tensor_patch_mesh_adaptive_admitted(&[source.clone()],Affine::IDENTITY,limits(),&||false,&admit).unwrap();
+        calls.set(0);
+        let compact = tessellate_tensor_patch_mesh_compact_admitted(&[source.clone()],Affine::IDENTITY,limits(),&||false,&admit).unwrap();
+        let reservations = calls.get();
+        assert_eq!(size_of::<CompactAdaptiveTriangle>(),104);
+        assert!(size_of::<CompactAdaptiveTriangle>() < size_of::<Triangle>());
+        assert_eq!(legacy.triangles().len(),compact.triangles().len());
+        for (a,b) in legacy.triangles().iter().zip(compact.triangles()) {
+            assert_eq!(b.component_count(),4);
+            for (i,v) in [&a.p0,&a.p1,&a.p2].iter().enumerate() {
+                assert_eq!([v.point.x.to_bits(),v.point.y.to_bits()], [b.points()[i].x.to_bits(),b.points()[i].y.to_bits()]);
+                assert_eq!(v.colors.iter().map(|v|v.to_bits()).collect::<Vec<_>>(),b.components()[i].map(f32::to_bits));
+            }
+        }
+        drop(legacy);drop(compact);assert_eq!(used.load(Ordering::Relaxed),0);
+        for failed in 1..=reservations {
+            calls.set(0);refuse.set(failed);
+            assert!(matches!(tessellate_tensor_patch_mesh_compact_admitted(&[source.clone()],Affine::IDENTITY,limits(),&||false,&admit),Err(AdaptivePatchError::Admission)));
+            assert_eq!(used.load(Ordering::Relaxed),0,"reservation{failed}");
+        }
+        refuse.set(usize::MAX);
+        let seen = Cell::new(false);
+        assert!(matches!(tessellate_tensor_patch_mesh_compact_admitted(&[source],Affine::IDENTITY,limits(),&|| {
+            let admitted=used.load(Ordering::Relaxed)>0; seen.set(seen.get()||admitted); admitted
+        },&admit),Err(AdaptivePatchError::Cancelled)));
+        assert!(seen.get());assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    #[test]
     fn curved_boundary_area_matches_analytic_cubic_integral() {
         let mut source = patch(0., [0.25; 4]);
         source.control_points[1].x = -0.1;
@@ -1140,7 +1274,7 @@ mod qualification_tests {
         }).sum();
         // Left cubic: x(t)=-0.3*t*(1-t), y(t)=8*t.
         // Its signed strip integral is -0.4, so the patch area is 64.4.
-        assert!((area - 64.4).abs() < 0.002, "area={area}");
+        assert!((area - 64.4).abs() < 0.0002, "area={area}");
     }
     #[test]
     fn bilinear_source_component_is_within_bound_at_independent_dense_samples() {

@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "change": "calibrated Bayer uploaded into RGBA16Float explicitly clamps final exposed/composited signed RGB to[-65504,65504]; float32 compute result and ordinary raster contract unchanged; ordinary uploads reset policy",
+  "reason": "portable explicit WGSL range policy matching fragment RAW path, rather than relying on empirical backend float-to-half saturation",
+  "qualification": {
+    "adapter": "Apple M4 Max Metal",
+    "algorithms": 6,
+    "input": "authored16x16 constant camera RGB[1000,4000,1000], XYZ-camera identity transform",
+    "exposure_stops": 10,
+    "expected_half_bits": [
+      64511,
+      31743,
+      31743,
+      15360
+    ],
+    "whole_frame_pixels_each": 4096,
+    "comparisons": "every pixel exactly saturated signed finite extrema with alpha1",
+    "final_credits": 0,
+    "raster_suite_passed": 22,
+    "failed": 0,
+    "ignored": 8
+  },
+  "limitations": [
+    "physical HDR calibration and NVIDIA remain pending",
+    "this controlled field validates range policy, not camera fidelity",
+    "ordinary HDR empirical edge tests still ignored; Bayer policy is explicit"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "aedfd89a26995f10e0d7e63672a735c62923ee057f2414b8d3a52afbf9a42960",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "f84483625a4f695a39630c411d59583e3c8b6ef2a54facd622057879756f95c2",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "601128da16f09ca5ead2bab305eb9a38fea1efdba70b02f102c399b793f210f4"
+  }
+}

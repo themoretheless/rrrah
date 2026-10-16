@@ -1,0 +1,84 @@
+{
+  "status": "actual_metal_large_hdr_pressure_validated",
+  "adapter": "Metal Apple M4 Max",
+  "test": "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+  "source": {
+    "dimensions": [
+      6000,
+      6000
+    ],
+    "pixels": 36000000,
+    "float_bytes": 576000000,
+    "synthetic": true,
+    "pattern": "Signed/above-one HDR colors with fractional alpha and extreme invisible RGB"
+  },
+  "output": {
+    "dimensions": [
+      1000,
+      1000
+    ],
+    "pixels": 1000000,
+    "managed_budget_bytes": 16000000,
+    "every_pixel_exact": true,
+    "reference_rgba": [
+      -2,
+      8,
+      0.5,
+      0.375
+    ]
+  },
+  "gpu_readback": {
+    "sizes": [
+      [
+        64,
+        64
+      ],
+      [
+        1000,
+        1000
+      ]
+    ],
+    "targets": [
+      "SDR",
+      "RGBA16F"
+    ],
+    "every_component_matches_independent_constant": true
+  },
+  "pressure_checks": [
+    "Last shared output clone retains full 16MB credit and refuses replacement",
+    "One-byte standing pressure refuses full-size output and preserves standing reservation",
+    "Cancellation callback observes admitted output before cancelling",
+    "Cancelled output fully releases credit",
+    "Retry independently verifies all million output pixels",
+    "Final output budget used=0"
+  ],
+  "timing": {
+    "first_cpu_downsample_ms": 92.383166,
+    "test_seconds": 1.78,
+    "paired_speedup_claim": false
+  },
+  "checks": {
+    "metal_test": {
+      "passed": 1,
+      "failed": 0
+    },
+    "clippy": {
+      "status": "blocked_in_library_before_test_target",
+      "library_errors": 65,
+      "scope": "rrrah-gpu library diagnostics outside edited raster_readback test; see log"
+    },
+    "diff_check": "passed"
+  },
+  "source_sha256": "398dae5f67e728b7b2b610ad0b3268470f911fae67a17e6992e3a487438c2a69",
+  "limits": [
+    "Budget covers LOD output only; source, GPU resources and harness allocations are separate",
+    "Synthetic periodic pattern does not qualify arbitrary camera/image detail",
+    "Offscreen Metal does not validate physical HDR display luminance; current live session was locked in previous probe",
+    "No overall loading/navigation speedup claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": [
+    "metal-test.log",
+    "clippy.log"
+  ]
+}

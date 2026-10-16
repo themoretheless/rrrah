@@ -1,0 +1,15 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+error[E0433]: cannot find module or crate `rrrah_decode` in this scope
+  --> crates/rrrah-gpu/tests/real_bayer_compute.rs:10:18
+   |
+10 |     let mosaic = rrrah_decode::decode_file(&path).unwrap().mosaic;
+   |                  ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_decode`
+   |
+help: there is a crate or module with a similar name
+   |
+10 -     let mosaic = rrrah_decode::decode_file(&path).unwrap().mosaic;
+10 +     let mosaic = rrrah_core::decode_file(&path).unwrap().mosaic;
+   |
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `rrrah-gpu` (test "real_bayer_compute") due to 1 previous error

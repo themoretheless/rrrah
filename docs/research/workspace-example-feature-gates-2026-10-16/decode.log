@@ -1,0 +1,166 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: method `search_reflected` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:103:12
+    |
+ 28 | impl<'a> GradientDescriptorIndex<'a> {
+    | ------------------------------------ method in this implementation
+...
+103 |     pub fn search_reflected(
+    |            ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:219:8
+    |
+219 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:244:12
+    |
+244 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:254:8
+    |
+254 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_with_reflection` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:282:8
+    |
+282 | pub fn gradient_file_pair_report_with_reflection(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_with_actual_work` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:322:8
+    |
+322 | pub fn gradient_file_pair_report_with_actual_work(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_selected` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:349:4
+    |
+349 | fn gradient_file_pair_report_selected(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `search_reflected` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:100:12
+    |
+ 27 | impl<'a> GradientDescriptorIndex<'a> {
+    | ------------------------------------ method in this implementation
+...
+100 |     pub fn search_reflected(
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:198:8
+    |
+198 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:223:12
+    |
+223 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:230:8
+    |
+230 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_with_reflection` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:257:8
+    |
+257 | pub fn gradient_file_pair_report_with_reflection(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_selected` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:283:4
+    |
+283 | fn gradient_file_pair_report_selected(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (example "gradient_index_result_growth_bench") generated 13 warnings
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-borrowed-distance.rs:171:8
+    |
+171 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-borrowed-distance.rs:196:12
+    |
+196 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-borrowed-distance.rs:203:8
+    |
+203 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (example "gradient_index_borrow_bench") generated 10 warnings (7 duplicates)
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:171:8
+    |
+171 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:196:12
+    |
+196 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:203:8
+    |
+203 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (example "gradient_index_early_exit_bench") generated 10 warnings (7 duplicates)
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/examples/mesh_rank_probe.rs:138:5
+    |
+138 |     drop(av);
+    |     ^^^^^--^
+    |          |
+    |          argument has type `LinearRgbaView<'_>`
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+138 -     drop(av);
+138 +     let _ = av;
+    |
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/examples/mesh_rank_probe.rs:139:5
+    |
+139 |     drop(bv);
+    |     ^^^^^--^
+    |          |
+    |          argument has type `LinearRgbaView<'_>`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+139 -     drop(bv);
+139 +     let _ = bv;
+    |
+
+warning: `rrrah-dedup` (example "mesh_rank_probe") generated 2 warnings
+warning: unused import: `search_anchor_rank_geometry_fallback_files`
+   --> crates/rrrah-dedup/examples/candidate_collection_admission_probe.rs:120:58
+    |
+120 |         anchor_rank_file::{AnchorGeometryFallbackPolicy, search_anchor_rank_geometry_fallback_files},
+    |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (example "candidate_collection_admission_probe") generated 1 warning (run `cargo fix --example "candidate_collection_admission_probe" -p rrrah-dedup` to apply 1 suggestion)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1m 01s

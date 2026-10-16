@@ -1,0 +1,16 @@
+{
+  "finding": "captured native triangle support is the dominant residual area loss at this pixel",
+  "original_clip_area": 0.21446166842042694,
+  "missing_support_area": 3.510572886160524e-05,
+  "last_reference_area_change": 1.36265858208251e-07,
+  "independent_union_vs_native_alpha": 7.573458455645277e-07,
+  "next_experiment": "reduce tessellation admission peak/capacity before precision increase",
+  "status": "independent area confirmed; global tighter-boundary experiment failed admission and reverted",
+  "baseline_test_session": null,
+  "limitations": [
+    "one pixel/event; not whole page fidelity",
+    "original curves numerically subdivided, not interval-certified",
+    "triangle generation is native; only union/intersection independently evaluated",
+    "no independent color or mask oracle"
+  ]
+}

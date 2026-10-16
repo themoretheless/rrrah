@@ -41,6 +41,8 @@ struct Parameters {
     curve: [[f32; 4]; 256],
     resident_rect: [u32; 4],
     comparison: [f32; 4],
+    sensor_geometry: [u32; 4],
+    crop: [u32; 4],
 }
 
 // Balanced tiles minimize padding while respecting negotiated device extents.
@@ -218,6 +220,8 @@ impl RasterRenderer {
             curve: [[0.0; 4]; 256],
             resident_rect: [0, 0, 1, 1],
             comparison: [0.; 4],
+            sensor_geometry: [1, 1, 0, 0],
+            crop: [0, 0, 1, 1],
         };
         let uniform = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Rrrah raster parameters"),
@@ -650,6 +654,69 @@ impl RasterRenderer {
         source: &crate::ResidentExposure,
         dimensions: [u32; 2],
         aspect: Option<f32>,
+        cancelled: F,
+    ) -> Result<(), RasterUploadError> {
+        self.upload_resident_buffer(
+            device,
+            queue,
+            source.buffer(),
+            u64::from(source.pixels()),
+            source.resource_lease(),
+            source.raster_alpha_valid,
+            dimensions,
+            aspect,
+            cancelled,
+        )
+    }
+
+    /// Upload calibrated scene-linear Bayer output directly from its GPU buffer.
+    /// RGBA16F presentation explicitly saturates to its finite signed range after exposure.
+    /// Exposure, display transfer and RAW tone mapping remain caller controls.
+    pub fn upload_bayer_resident<F: FnMut() -> bool>(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        source: &crate::ResidentLinearBayer,
+        cancelled: F,
+    ) -> Result<(), RasterUploadError> {
+        let dimensions = source.dimensions();
+        self.upload_resident_buffer(
+            device,
+            queue,
+            source.buffer(),
+            u64::from(dimensions[0]) * u64::from(dimensions[1]),
+            source.resource_lease(),
+            true,
+            dimensions,
+            None,
+            cancelled,
+        )?;
+        let crop = source.crop;
+        self.parameters.crop = [crop.x, crop.y, crop.width, crop.height];
+        // Calibrated Bayer input is range-admitted; its area sum stays far below f32 overflow.
+        self.parameters.sensor_geometry = [dimensions[0], dimensions[1], source.orientation.shader_code(), 1];
+        self.parameters.image_size = if source.orientation.swaps_dimensions() {
+            [crop.height as f32, crop.width as f32]
+        } else {
+            [crop.width as f32, crop.height as f32]
+        };
+        // Match the fragment RAW path without relying on backend conversion behavior.
+        self.parameters.raw_development[2] = u32::from(self.target == wgpu::TextureFormat::Rgba16Float);
+        self.parameters.raw_development[3] = 1;
+        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        Ok(())
+    }
+
+    fn upload_resident_buffer<F: FnMut() -> bool>(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        source: &wgpu::Buffer,
+        pixels: u64,
+        source_lease: crate::GpuResourceLease,
+        alpha_valid: bool,
+        dimensions: [u32; 2],
+        aspect: Option<f32>,
         mut cancelled: F,
     ) -> Result<(), RasterUploadError> {
         if cancelled() {
@@ -661,14 +728,14 @@ impl RasterRenderer {
         if !aspect.is_finite() || aspect <= 0.0 || !physical_width.is_finite() || physical_width <= 0.0 {
             return Err(RasterUploadError::InvalidPixelAspect);
         }
-        if width == 0 || height == 0 || u64::from(width) * u64::from(height) != u64::from(source.pixels()) {
+        if width == 0 || height == 0 || u64::from(width) * u64::from(height) != pixels {
             return Err(RasterUploadError::TextureLimit);
         }
         let tiles = RasterTiles::new(width, height, &device.limits())?;
-        if !source.raster_alpha_valid {
+        if !alpha_valid {
             return Err(RasterUploadError::InvalidSamples);
         }
-        let bytes = u64::from(source.pixels()) * 16;
+        let bytes = pixels * 16;
         let reservation = self
             .memory_budget
             .as_ref()
@@ -717,7 +784,7 @@ impl RasterRenderer {
                 }
                 encoder.copy_buffer_to_texture(
                     wgpu::TexelCopyBufferInfo {
-                        buffer: source.buffer(),
+                        buffer: source,
                         layout: wgpu::TexelCopyBufferLayout {
                             offset: (u64::from(y + row) * u64::from(width) + u64::from(x)) * 16,
                             bytes_per_row: Some(
@@ -748,7 +815,7 @@ impl RasterRenderer {
         if cancelled() {
             return Err(RasterUploadError::Cancelled);
         }
-        let mut resources = source.resource_lease();
+        let mut resources = source_lease;
         resources.extend(crate::GpuResourceLease::new(reservation.iter().cloned()));
         let _in_flight = crate::QueuedUploadReservation {
             queue: queue.clone(),
@@ -792,6 +859,8 @@ impl RasterRenderer {
         self.texture_reservation = reservation;
         self.parameters.raw_development = [0; 4];
         self.parameters.image_size = [width as f32, height as f32];
+        self.parameters.sensor_geometry = [width, height, 0, 0];
+        self.parameters.crop = [0, 0, width, height];
         self.parameters.resident_rect = [0, 0, width, height];
         self.parameters.pixel_aspect = 1.0;
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
@@ -801,8 +870,20 @@ impl RasterRenderer {
     /// monotone luminance curve. Uploading an ordinary raster resets this mode.
     pub fn set_raw_development(&mut self, queue: &wgpu::Queue, curve: &rrrah_core::develop::MonotoneCurve) {
         let knots = curve.gpu_knots();
-        self.parameters.raw_development = [1, knots.len() as u32, 0, 0];
+        self.parameters.raw_development = [
+            1,
+            knots.len() as u32,
+            self.parameters.raw_development[2],
+            self.parameters.raw_development[3],
+        ];
         self.parameters.curve[..knots.len()].copy_from_slice(&knots);
+        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+    }
+
+    /// Integrate premultiplied linear pixels over the output pixel footprint when shrinking.
+    /// Ordinary uploads reset to bilinear; calibrated Bayer uploads enable this automatically.
+    pub fn set_area_minification(&mut self, queue: &wgpu::Queue, enabled: bool) {
+        self.parameters.raw_development[3] = u32::from(enabled);
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
     }
 
@@ -896,8 +977,8 @@ impl RasterRenderer {
                 != [
                     0,
                     0,
-                    self.parameters.image_size[0] as u32,
-                    self.parameters.image_size[1] as u32,
+                    self.parameters.sensor_geometry[0],
+                    self.parameters.sensor_geometry[1],
                 ];
             pass.set_pipeline(match (single, region) {
                 (true, false) => &self.single_layer_pipeline,
@@ -936,6 +1017,119 @@ fn normalized_view(view: ViewParameters) -> ViewParameters {
 #[cfg(test)]
 mod tile_admission_tests {
     use super::*;
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn area_float32_extreme_channel_scaling_metal() {
+        let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+        descriptor.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(descriptor);
+        let adapter = match pollster::block_on(instance.request_adapter(&Default::default())) {
+            Ok(adapter) => adapter,
+            Err(error) => {
+                assert!(
+                    std::env::var("RRRAH_GPU_OPTIONAL").as_deref() != Ok("0"),
+                    "required Metal unavailable: {error}"
+                );
+                return;
+            }
+        };
+        eprintln!("area float32 scaling adapter: {:?}", adapter.get_info());
+        let (device, queue) = pollster::block_on(adapter.request_device(&Default::default())).unwrap();
+        for red in [f32::MAX, -f32::MAX, 0.] {
+            let pixels: Vec<f32> = (0..16)
+                .flat_map(|i| {
+                    [
+                        if red == 0. {
+                            if i % 4 < 2 { f32::MAX } else { -f32::MAX }
+                        } else {
+                            red
+                        },
+                        1.,
+                        0.25,
+                        1.,
+                    ]
+                })
+                .collect();
+            let raster = DecodedRaster::new(
+                4,
+                4,
+                rrrah_core::RasterPixels::Rgba32Float(std::sync::Arc::new(pixels).into()),
+                rrrah_core::RasterColorSpace::LinearSrgb,
+            )
+            .unwrap();
+            let mut renderer = RasterRenderer::create(&device, wgpu::TextureFormat::Rgba32Float);
+            renderer.upload(&device, &queue, &raster).unwrap();
+            renderer.set_area_minification(&queue, true);
+            renderer.update_view(
+                &queue,
+                ViewParameters {
+                    viewport: [1., 1.],
+                    zoom: 1.,
+                    ..Default::default()
+                },
+            );
+            let target = device.create_texture(&wgpu::TextureDescriptor {
+                label: Some("area float32 range oracle"),
+                size: wgpu::Extent3d {
+                    width: 1,
+                    height: 1,
+                    depth_or_array_layers: 1,
+                },
+                mip_level_count: 1,
+                sample_count: 1,
+                dimension: wgpu::TextureDimension::D2,
+                format: wgpu::TextureFormat::Rgba32Float,
+                usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+                view_formats: &[],
+            });
+            let readback = device.create_buffer(&wgpu::BufferDescriptor {
+                label: None,
+                size: 256,
+                usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+                mapped_at_creation: false,
+            });
+            let mut encoder = device.create_command_encoder(&Default::default());
+            renderer.encode(&mut encoder, &target.create_view(&Default::default()));
+            encoder.copy_texture_to_buffer(
+                wgpu::TexelCopyTextureInfo {
+                    texture: &target,
+                    mip_level: 0,
+                    origin: wgpu::Origin3d::ZERO,
+                    aspect: wgpu::TextureAspect::All,
+                },
+                wgpu::TexelCopyBufferInfo {
+                    buffer: &readback,
+                    layout: wgpu::TexelCopyBufferLayout {
+                        offset: 0,
+                        bytes_per_row: Some(256),
+                        rows_per_image: Some(1),
+                    },
+                },
+                wgpu::Extent3d {
+                    width: 1,
+                    height: 1,
+                    depth_or_array_layers: 1,
+                },
+            );
+            queue.submit([encoder.finish()]);
+            let (tx, rx) = std::sync::mpsc::channel();
+            readback.slice(..).map_async(wgpu::MapMode::Read, move |status| {
+                tx.send(status).unwrap();
+            });
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            rx.recv().unwrap().unwrap();
+            let mapped = readback.slice(..).get_mapped_range().unwrap();
+            let value = bytemuck::cast_slice::<u8, f32>(&mapped[..16]);
+            assert_eq!(value, [red, 1., 0.25, 1.]);
+            assert!(value.iter().all(|v| v.is_finite()));
+            drop(mapped);
+            readback.unmap();
+        }
+        eprintln!(
+            "area float32 range: +/-MAX and signed cancellation exact, small channels intact, all finite"
+        );
+    }
+
     #[test]
     #[ignore = "manual actual Metal paired uniform-update timing for RR-0027"]
     fn repeated_view_uniform_ab_probe() {

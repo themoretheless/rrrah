@@ -1,0 +1,49 @@
+{
+  "status": "Nightly installed and repaired; validation stopped on existing formatting failure",
+  "before": {
+    "release": "2026-10-14",
+    "rustc": "1.101.0-nightly (822182db4 2026-10-13)"
+  },
+  "after": {
+    "release": "2026-10-15",
+    "rustc": "1.101.0-nightly (7df81381d 2026-10-14)"
+  },
+  "project_toolchain": "stable; rust-toolchain.toml unchanged",
+  "worktree_dirty_before": true,
+  "rollback": "nightly-2026-10-14 installed and version verified, matching original alias version",
+  "installation_recovery": {
+    "initial_update_failed": "rust-src conflict lib/rustlib/src/rust/library/.cargo/config.toml; rustup rollback directory rename failures",
+    "preserved_entire_damaged_toolchain": "/private/tmp/rrrah-nightly-recovery-20261015-7df81381d",
+    "action": "Renamed old directory intact, clean-installed latest nightly with all15 previous components/targets",
+    "successful": true
+  },
+  "installed_components": [
+    "clippy-preview-aarch64-apple-darwin",
+    "miri-preview-aarch64-apple-darwin",
+    "cargo-aarch64-apple-darwin",
+    "rust-src",
+    "rust-docs-aarch64-apple-darwin",
+    "rust-std-aarch64-apple-darwin",
+    "rust-std-aarch64-unknown-uefi",
+    "rust-std-aarch64-unknown-none",
+    "rust-std-wasm32-unknown-unknown",
+    "rust-std-x86_64-apple-darwin",
+    "rust-std-x86_64-unknown-none",
+    "rust-std-x86_64-unknown-uefi",
+    "rust-std-x86_64-pc-windows-msvc",
+    "rustfmt-preview-aarch64-apple-darwin",
+    "rustc-aarch64-apple-darwin"
+  ],
+  "checks": {
+    "stable_fmt_exit": 1,
+    "nightly_fmt_exit": 1,
+    "format_logs_identical": true,
+    "first_difference": "crates/rrrah-animation/src/raster_color.rs:289",
+    "clippy": "not run: skill stop at first failed project check",
+    "build": "not run: same reason",
+    "test": "not run: same reason"
+  },
+  "rust_toolchain_sha256": "0c9b811689c2817b6404b2858b3e8f7aebf513af379da94774521025b7008863",
+  "skill": "/Users/themoretheless/.skills/skills/update-rust-nightly/SKILL.md",
+  "limitations": "No claim that project builds/tests on new nightly; format baseline already fails. No code formatting or source fixes applied for the toolchain update."
+}

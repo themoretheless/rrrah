@@ -1,0 +1,39 @@
+
+running 12 tests
+test all_bayer_phases_reconstruct_affine_color_fields_on_metal ... Affine demosaic qualification adapter: Metal Apple M4 Max
+ok
+test bayer_sensor_boundaries_and_small_tiles_match_cpu_preview ... Bayer boundary qualification adapter: Metal Apple M4 Max
+
+thread 'bayer_sensor_boundaries_and_small_tiles_match_cpu_preview' (24274700) panicked at crates/rrrah-gpu/tests/camera_color_readback.rs:574:25:
+boundary at 0,0, side 63, CFA [0, 1, 1, 2]: [71, 57, 77, 255] vs [68, 63, 65, 255]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test color_thumbnail_uses_crop_and_oriented_dimensions ... ok
+test cropped_bayer_all_orientations_match_cpu_and_tiled_metal ... Oriented Bayer qualification adapter: Metal Apple M4 Max
+ok
+test distinct_green_wb_is_applied_before_demosaic ... ok
+test hero9_dual_illuminant_colors_match_independent_adobe_matrix_on_gpu ... HERO9 neutral matrix adapter: Metal Apple M4 Max
+ok
+test minification_integrates_all_sensor_cells_instead_of_aliasing_the_stride ... ok
+test minified_cropped_bayer_all_orientations_match_cpu_and_tiled_metal ... Minified Bayer qualification adapter: Metal Apple M4 Max
+ok
+test real_camera_colors_match_gpu_readback ... RAW color qualification adapter: Metal Apple M4 Max
+ok
+test real_camera_profiles_match_independent_linear_transforms ... ok
+test sensor_clipped_near_white_is_neutral_but_chromatic_highlights_keep_color ... ok
+test six_official_gpr_camera_fields_match_independent_color_oracles_on_metal ... six GPR camera color adapter: Metal Apple M4 Max
+HERO5: four independent fields passed
+HERO6: four independent fields passed
+HERO7: four independent fields passed
+HERO9: four independent fields passed
+Fusion-back: four independent fields passed
+Fusion-front: four independent fields passed
+ok
+
+failures:
+
+failures:
+    bayer_sensor_boundaries_and_small_tiles_match_cpu_preview
+
+test result: FAILED. 11 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.98s
+

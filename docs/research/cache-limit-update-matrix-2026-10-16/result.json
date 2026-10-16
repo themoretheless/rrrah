@@ -1,0 +1,66 @@
+{
+  "status": "validated_contract_matrix",
+  "production_behavior_changed": false,
+  "test": "policy::tests::limit_update_matrix_is_atomic_preserves_pins_and_fixed_deadlines",
+  "matrix": {
+    "cases": 2592,
+    "initial_entries": 3,
+    "entry_weight": 4,
+    "pin_patterns": 8,
+    "old_ttl": [
+      null,
+      "zero"
+    ],
+    "new_byte_caps": [
+      0,
+      1,
+      3,
+      4,
+      7,
+      8,
+      11,
+      12,
+      13
+    ],
+    "new_count_caps": [
+      null,
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "new_ttl": [
+      null,
+      "zero",
+      "Duration::MAX"
+    ]
+  },
+  "verified": [
+    "Accept iff pinned weight and count fit proposed limits",
+    "Refusal preserves policy, membership, values, weights, LRU ranks, deadlines, protected membership and clock",
+    "Successful update applies requested policy and returns exact oldest-unpinned victims",
+    "Pinned survivors remain; old deadlines and recency unchanged",
+    "Unrepresentable future TTL refuses insertion without evicting existing keys or advancing recency"
+  ],
+  "checks": {
+    "memory_lib": {
+      "passed": 43,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 1.02
+    },
+    "memory_clippy_lib_tests_no_deps": "passed -D warnings",
+    "mismatches": 0
+  },
+  "source_sha256": "f6323c794968fbba4f8f3910c4f7cb5034174aa02e0ff14e4e39169862432751",
+  "limits": [
+    "Three-entry exhaustive policy matrix, not large-collection or disk/hardware stress",
+    "Mixed ongoing expiry operations checked separately by 96,000-operation model",
+    "No production behavior or performance change claimed"
+  ],
+  "logs": [
+    "memory-tests.log",
+    "memory-clippy.log"
+  ]
+}

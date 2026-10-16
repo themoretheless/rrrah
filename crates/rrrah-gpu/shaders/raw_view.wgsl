@@ -44,15 +44,31 @@ fn clamped_sensor_coordinate(position: vec2<i32>) -> vec2<i32> {
     return clamp(position, vec2<i32>(0, 0), upper);
 }
 
+// Bayer neighbours must keep their CFA phase beyond the sensor edge.
+// Reflection matches native CPU/compute interpolation; RGBE keeps its own lattice edge rule.
+fn reflected_sensor_axis(value: i32, size: i32) -> i32 {
+    if size <= 1 { return 0; }
+    if value >= 0 && value < size { return value; }
+    let period = 2 * (size - 1);
+    var reflected = value % period;
+    if reflected < 0 { reflected += period; }
+    return select(reflected, period - reflected, reflected >= size);
+}
+fn sensor_coordinate(position: vec2<i32>) -> vec2<i32> {
+    if parameters._padding.x == 1u { return clamped_sensor_coordinate(position); }
+    return vec2<i32>(reflected_sensor_axis(position.x, i32(parameters.raw_size.x)),
+        reflected_sensor_axis(position.y, i32(parameters.raw_size.y)));
+}
+
 fn phase_index(position: vec2<i32>) -> u32 {
-    let positive = clamped_sensor_coordinate(position);
+    let positive = sensor_coordinate(position);
     return u32(positive.y & 1) * 2u + u32(positive.x & 1);
 }
 
 fn cfa_color(position: vec2<i32>) -> u32 { return parameters.cfa[phase_index(position)]; }
 
 fn sensor_sample(position: vec2<i32>) -> f32 {
-    let coordinate = clamped_sensor_coordinate(position);
+    let coordinate = sensor_coordinate(position);
     let phase = phase_index(coordinate);
     // Keep all coordinate arithmetic signed. WGSL does not implicitly convert
     // the u32 uniform fields to i32, and relying on a backend's permissive
@@ -391,13 +407,13 @@ fn camera_rgb_at(raw_position: vec2<f32>) -> vec3<f32> {
     var rgb: vec3<f32>;
     if parameters.algorithm == 1u && parameters.tile_halo >= 2u {
         rgb = malvar_he_cutler_demosaic(position);
-    } else if parameters.algorithm == 2u && parameters.tile_halo >= 2u {
+    } else if parameters.algorithm == 2u && parameters.tile_halo >= 3u {
         rgb = directional_demosaic(position);
     } else if parameters.algorithm == 3u && parameters.tile_halo >= 2u {
         rgb = smooth_hue_demosaic(position);
-    } else if parameters.algorithm == 4u && parameters.tile_halo >= 2u {
+    } else if parameters.algorithm == 4u && parameters.tile_halo >= 3u {
         rgb = vng_demosaic(position);
-    } else if parameters.algorithm == 5u && parameters.tile_halo >= 3u {
+    } else if parameters.algorithm == 5u && parameters.tile_halo >= 4u {
         rgb = rcd_demosaic(position);
     } else {
         rgb = bilinear_demosaic(position);

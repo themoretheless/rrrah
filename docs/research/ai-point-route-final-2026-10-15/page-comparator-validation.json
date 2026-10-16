@@ -1,0 +1,20 @@
+{
+  "scope": "Synthetic comparator checks only; no native page qualification",
+  "cases": [
+    {
+      "case": "equal",
+      "exit_code": 0,
+      "output": "different_pixels=0 max_channel_error=0 exact=True"
+    },
+    {
+      "case": "different",
+      "exit_code": 1,
+      "output": "different_pixels=1 max_channel_error=1 exact=False"
+    },
+    {
+      "case": "partial",
+      "exit_code": 2,
+      "output": "qualification refused: page incomplete or deadline expired"
+    }
+  ]
+}

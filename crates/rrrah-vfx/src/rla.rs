@@ -215,7 +215,9 @@ fn decode_with_settings(
     let mut out = budget
         .try_buffer(w * h * 4, 0u16)
         .map_err(crate::DecodeError::Memory)?;
-    let mut ranges = Vec::with_capacity(ah);
+    let mut ranges = budget
+        .try_buffer(ah, (0usize, 0usize))
+        .map_err(crate::DecodeError::Memory)?;
     for row in 0..ah {
         let output_row = (top - active_bottom - row as i32) as usize;
         for pixel in
@@ -266,11 +268,11 @@ fn decode_with_settings(
             }
             at = end;
         }
-        ranges.push((start, at));
+        ranges[row] = (start, at);
     }
     ranges.sort_unstable();
     let mut end = directory;
-    for (start, next) in ranges {
+    for &(start, next) in ranges.iter() {
         if start != end {
             return Err(bad("overlapping rows or unqualified gap"));
         }
@@ -279,6 +281,7 @@ fn decode_with_settings(
     if end != b.len() {
         return Err(bad("trailing image bytes"));
     }
+    drop(ranges);
     if matte > 0 && mode == Some(RlaAlphaMode::Premultiplied) {
         let mut float = budget
             .try_buffer(out.len(), 0.0f32)
@@ -363,7 +366,9 @@ fn decode_float_records(
     let mut output = budget
         .try_buffer(width * height * 4, 0.0f32)
         .map_err(crate::DecodeError::Memory)?;
-    let mut ranges = Vec::with_capacity(active_height);
+    let mut ranges = budget
+        .try_buffer(active_height, (0usize, 0usize))
+        .map_err(crate::DecodeError::Memory)?;
     for row in 0..active_height {
         request.check_cancelled()?;
         let output_row = first_row - row;
@@ -414,11 +419,11 @@ fn decode_float_records(
             }
             at = end;
         }
-        ranges.push((start, at));
+        ranges[row] = (start, at);
     }
     ranges.sort_unstable();
     let mut end = directory;
-    for (start, next) in ranges {
+    for &(start, next) in ranges.iter() {
         if start != end {
             return Err(bad("overlapping rows or unqualified gap"));
         }
@@ -427,6 +432,7 @@ fn decode_float_records(
     if end != b.len() {
         return Err(bad("trailing image bytes"));
     }
+    drop(ranges);
     if matte > 0 && mode == Some(RlaAlphaMode::Premultiplied) {
         for pixel in output.chunks_exact_mut(4) {
             request.check_cancelled()?;
@@ -453,6 +459,58 @@ fn decode_float_records(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn integer_and_float_row_directories_use_exact_budget_and_release() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        for (name, pixel_bytes, order) in [
+            ("rla-16-c3-a16-mixed0.rla", 8u64, None),
+            (
+                "rla-float32-le-hdr-oiio.rla",
+                16u64,
+                Some(RlaFloatByteOrder::Little),
+            ),
+        ] {
+            let source = std::fs::read(root.join(name)).unwrap();
+            let word = |at| i16::from_be_bytes(source[at..at + 2].try_into().unwrap()) as i32;
+            let width = (word(2) - word(0) + 1) as u64;
+            let height = (word(6) - word(4) + 1) as u64;
+            let active_width = (word(10) - word(8) + 1) as u64;
+            let rows = (word(14) - word(12) + 1) as u64;
+            let output = width * height * pixel_bytes;
+            let scratch = rows * std::mem::size_of::<(usize, usize)>() as u64;
+            let peak = output + scratch + if order.is_none() { active_width * 2 } else { 0 };
+            let budget = rrrah_core::MemoryBudget::new(peak);
+            let mut request = DecodeRequest::new(name);
+            request.memory_budget = Some(budget.clone());
+            let frame = decode_with_settings(
+                &source,
+                &request,
+                Some(RlaAlphaMode::Straight),
+                RasterColorSpace::LinearSrgb,
+                order,
+            )
+            .unwrap();
+            assert_eq!((budget.used(), budget.peak()), (output, peak));
+            let shared = frame.clone();
+            drop(frame);
+            assert_eq!(budget.used(), output);
+            drop(shared);
+            assert_eq!(budget.used(), 0);
+            let short = rrrah_core::MemoryBudget::new(peak - 1);
+            request.memory_budget = Some(short.clone());
+            assert!(matches!(
+                decode_with_settings(
+                    &source,
+                    &request,
+                    Some(RlaAlphaMode::Straight),
+                    RasterColorSpace::LinearSrgb,
+                    order
+                ),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
+            assert_eq!(short.used(), 0);
+        }
+    }
     #[test]
     fn explicit_float_byte_order_preserves_hdr_and_manages_public_output() {
         let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))

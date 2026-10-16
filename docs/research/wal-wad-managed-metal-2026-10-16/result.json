@@ -1,0 +1,51 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "WAL and WAD3 final RGBA output now uses admitted PixelBuffer",
+    "Direct writes into final output; fallible compatibility allocation",
+    "Two WAL/Pillow and four WAD/vgio+Pillow fixture oracles check exact/short budget, shared owner and final release",
+    "Public loader integration creates a temporary Quake II game tree with textures and pics/colormap.pcx"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 71,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pipeline": {
+      "states": 278,
+      "added_wal": 2,
+      "added_wad": 4,
+      "ram_pressure_hits": 278,
+      "swap_writes": 278,
+      "swap_reads": 278,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1668,
+      "seconds": 4.68
+    }
+  },
+  "limits": [
+    "WAD3 range/image directory Vec allocations remain outside shared admission",
+    "WAL only returns base mip and requires explicit palette or canonical game-tree palette",
+    "Fixtures validate supported subsets, not arbitrary game producers or full WAD/WAL variants",
+    "No speedup or physical HDR display qualification claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  },
+  "follow_up": "WAD3 directory admission limitation addressed by ../wad-directory-admission-2026-10-16/result.json."
+}

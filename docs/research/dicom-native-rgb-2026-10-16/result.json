@@ -1,0 +1,204 @@
+{
+  "status": "owned native uncompressed RGB8/16 DICOM decoding, color preservation and required Metal pipeline pass",
+  "specifications": [
+    "https://dicom.nema.org/Medical/dicom/2021a/output/chtml/part03/sect_C.7.6.3.html",
+    "https://dicom.nema.org/medical/dicom/2014c/output/chtml/part03/sect_C.7.6.3.html"
+  ],
+  "implementation": {
+    "native": "owned Rust; no runtime pydicom dependency",
+    "syntaxes": [
+      "Implicit VR LE",
+      "Explicit VR LE",
+      "Explicit VR BE"
+    ],
+    "pixels": "full-width unsigned RGB8/RGB16, planar0/interleaved or planar1/color planes, frame-local planes, native RGBA8/RGBA16 storage, opaque alpha",
+    "packing": "8-bit BE OW pair swapping over complete payload including odd frame boundaries and final pad; OB byte order unchanged;16-bit endian words",
+    "allocation": "single admitted output allocation, no full-image planar/repacking intermediate; bounded source remains admitted until decode returns",
+    "color": "ICC bytes retained exactly with pre-copy managed credit and shared owner lifetime; header envelope RGB/acsp/size checked, full profile interpretation remains the existing color-management layer; explicit SRGB label preserved; unlabeled source Unspecified unless caller explicitly enables assume_untagged_srgb",
+    "strictness": "RGB scalar-window, rescale, padding, signed or partial-width sample layouts refuse; scalar ICC/color declarations now refuse rather than being silently discarded"
+  },
+  "fixtures": {
+    "generator": "scripts/generate-dicom-rgb-fixtures.py",
+    "new_containers": 23,
+    "new_frames": 60,
+    "combined_scalar_rgb_containers": 54,
+    "combined_scalar_rgb_frames": 104,
+    "profile": "tests/fixtures/raster/dicom-rgb-profile.icc",
+    "profile_bytes": 588,
+    "profile_sha256": "997e3ae554d84879d0e8588b4ecc73b4509270526d2543603887c08d62180f85",
+    "profile_origin": "existing pattern.profiled.png fixture, extracted iCCP payload",
+    "source_sha256": {
+      "dicom-rgb-big-endian-16-planar0-plain.dcm": "599d324b7f59bab68eedc03a480e9f6ca35cc608dcae4097d73db00396531503",
+      "dicom-rgb-big-endian-16-planar1-icc.dcm": "200ecb1cc0436f24d958ebf873829dab7dee03a593a0cf9dd4e2e279279b4d35",
+      "dicom-rgb-big-endian-16-planar1-plain.dcm": "2c9204efe8e68658f3e6013aeb751d14c00c8d6830f57d78dbfece7d224021ce",
+      "dicom-rgb-big-endian-8-planar0-ow.dcm": "f040a5602ad3298349c22b737f9d6e1acf8c5f965fd6adbf67a14d98f110bd07",
+      "dicom-rgb-big-endian-8-planar0-plain.dcm": "2a29452220361ecb68a9247741ffcc917bcac8b4b5fc78c3cfa8ba63feb387f5",
+      "dicom-rgb-big-endian-8-planar0-srgb.dcm": "0130658da2f75c90f06aa983ef2e8fc996f9763a148dec945ca1443791462553",
+      "dicom-rgb-big-endian-8-planar1-icc.dcm": "adbbe8ff6ab5069b0a4a6efadfa5d007a145c1ab86a38c9297e385ed441602a4",
+      "dicom-rgb-big-endian-8-planar1-ow.dcm": "0886d0f626b91e8125363356574b8c70b15e349c67badc9de6e411abf2a68b1c",
+      "dicom-rgb-big-endian-8-planar1-plain.dcm": "5027800ec4490075edb14b1ce151b2cea4d3b42819ea508bde81ea1f9e8a8e37",
+      "dicom-rgb-explicit-16-planar0-plain.dcm": "f1dae0a2d9f79e1d9ee05e9cc63322b45f3a92f1cbbb1dcabbbfb50dbf3bd0ab",
+      "dicom-rgb-explicit-16-planar1-icc.dcm": "ce821ab3064067897bad0f7b659f04b55dfb59efb890ae2ac7480492364ce4f3",
+      "dicom-rgb-explicit-16-planar1-plain.dcm": "2e2d7f2593e421a31eda3605fc4a1395d1633da753dffca4a6ba7bf6f0e373d2",
+      "dicom-rgb-explicit-8-planar0-plain.dcm": "f03c1096f442aa100a859ae1e34752c8008b8b52319a3da9e47eec59c7c0cdca",
+      "dicom-rgb-explicit-8-planar0-srgb.dcm": "b30e3b1289782b503eb5e0f8d2fe724371957dc416690de0c035bdbecd777eb1",
+      "dicom-rgb-explicit-8-planar1-icc.dcm": "1c4c1a57dbba2cc96f127c824772ef9e95808e5cd7f435995014ec2b0050e482",
+      "dicom-rgb-explicit-8-planar1-plain.dcm": "f9be608862f4a98624782e480d392ba4d79f18ef69de3866ab0908b91d864831",
+      "dicom-rgb-implicit-16-planar0-plain.dcm": "91b5c4cc369b9cc5dc084ddfabf183e9cd7c814d286ffdfd3cce2bf522af8a27",
+      "dicom-rgb-implicit-16-planar1-icc.dcm": "80a6c62686869805218677d7a2d2e5de292ae06abdfc6480e235c2132b81cc27",
+      "dicom-rgb-implicit-16-planar1-plain.dcm": "f6ede4c5806e067fcd2bcdc16f5cb90483e7a049a159bb6105a9c4523f2c397c",
+      "dicom-rgb-implicit-8-planar0-plain.dcm": "cf86123a602f33fac7bd2fee9af6527ef63b1a0c0cc7489f43a356e5a9202b40",
+      "dicom-rgb-implicit-8-planar0-srgb.dcm": "bfe82b9ce627552ea4d226f1a802a0ef442de28202a8c14cf597e8f18265692c",
+      "dicom-rgb-implicit-8-planar1-icc.dcm": "a1bde5ad5a51dcfc70868b8af8b0e0381c00b62bbd1157c21e36896344ecc128",
+      "dicom-rgb-implicit-8-planar1-plain.dcm": "def78ded9d0c23e483fed7174887bb8ebd8ec60be10f35c4836b18760b3ddcc5"
+    },
+    "oracle": "pydicom3.0.2/NumPy2.2.6; full selected-frame native integer RGBA comparisons; all truncated prefixes refuse; exact source+output+profile admission and one-byte-short refusal",
+    "scope": "authored CC0 encoding containers, not complete clinical IODs"
+  },
+  "packaged_rgb_controls": {
+    "sources": [
+      {
+        "name": "ExplVR_BigEnd.dcm",
+        "source_sha256": "42eb61ea5650f1064e52d48019cd87b118e52cf4dfbc8fa57427ed2ed4c036ea",
+        "source_bytes": 15412,
+        "dimensions": [
+          80,
+          60
+        ],
+        "pixel_count": 4800,
+        "planar": 1,
+        "pixel_vr": "OB",
+        "syntax": "1.2.840.10008.1.2.2",
+        "oracle_sha256": "f9a786565372f6a06987c7243fa407164de08295029eb6dfce967090b881f67a",
+        "full_native_rgba8_match": true,
+        "managed_peak": 34612,
+        "managed_final": 0,
+        "one_byte_short_refused": true
+      },
+      {
+        "name": "examples_rgb_color.dcm",
+        "source_sha256": "bdd7f166ccef2dbd7ea9fc601ac25811f45aa623493b86cec0979b47109b83d4",
+        "source_bytes": 231710,
+        "dimensions": [
+          320,
+          240
+        ],
+        "pixel_count": 76800,
+        "planar": 0,
+        "pixel_vr": "OB",
+        "syntax": "1.2.840.10008.1.2.1",
+        "oracle_sha256": "048ec7ee1c635a4a5d38a67af78b9256eead8582da02d90ac21a23732cf32952",
+        "full_native_rgba8_match": true,
+        "managed_peak": 538910,
+        "managed_final": 0,
+        "one_byte_short_refused": true
+      },
+      {
+        "name": "SC_rgb_small_odd.dcm",
+        "source_sha256": "4aca361ab330f57f60e6b1e3b31dcd834a512bee8a4246bbe1d151011c47e031",
+        "source_bytes": 1444,
+        "dimensions": [
+          3,
+          3
+        ],
+        "pixel_count": 9,
+        "planar": 0,
+        "pixel_vr": "OW",
+        "syntax": "1.2.840.10008.1.2.1",
+        "oracle_sha256": "766e2c0cd569a9a3132d195bd86bf7d7ccd0e7eefc5a7d4302356eaa46d33325",
+        "full_native_rgba8_match": true,
+        "managed_peak": 1480,
+        "managed_final": 0,
+        "one_byte_short_refused": true
+      },
+      {
+        "name": "SC_rgb_small_odd_big_endian.dcm",
+        "source_sha256": "f78881064e2ba75d0a5139bbb1495c12b143307c4b8706cde5bc20229c1d3611",
+        "source_bytes": 1444,
+        "dimensions": [
+          3,
+          3
+        ],
+        "pixel_count": 9,
+        "planar": 0,
+        "pixel_vr": "OW",
+        "syntax": "1.2.840.10008.1.2.2",
+        "oracle_sha256": "766e2c0cd569a9a3132d195bd86bf7d7ccd0e7eefc5a7d4302356eaa46d33325",
+        "full_native_rgba8_match": true,
+        "managed_peak": 1480,
+        "managed_final": 0,
+        "one_byte_short_refused": true
+      }
+    ],
+    "total_pixels": 81618,
+    "provenance": "pydicom packaged test assets read in place; original scanner encoding provenance not independently established; source files not copied into repository",
+    "oracle_script": "scripts/research/dicom-rgb-oracle.py"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 28,
+      "failed": 0,
+      "ignored": 3,
+      "log": "/tmp/dicom-rgb-profile-final-scientific-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-rgb-final-facade-20261016.log"
+    },
+    "all_packaged_controls": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-rgb-all-packaged-final-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-rgb-cpu-fixed-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-rgb-final-metal-20261016.log"
+    }
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "states": 138,
+    "scalar_window_states": 78,
+    "rgb_frame_states": 60,
+    "ram_pressure_hits": 138,
+    "swap_writes": 138,
+    "swap_reads": 138,
+    "swap_errors": 0,
+    "sdr_hdr_readbacks": 828,
+    "comparison": "independent pydicom raw/window pixels; RGB reference prepared through the same existing ICC/sRGB conversion as native input, then same renderer; full SDRRGBA8 and HDRbinary16 buffers bit exact for reference/warm/restored",
+    "scope": "verifies native sample extraction, color declaration routing and transport; not an independent ICC algorithm or shader algorithm proof; packaged RGB images separately checked in full on CPU",
+    "ttl_visible_protected": true,
+    "stale_generation_refused": true,
+    "decoder_blocked_reverse_prefetch": true,
+    "managed_root_peak": 65536,
+    "managed_final": 0,
+    "peak_scope": "includes artificial pressure reservation, not process RSS",
+    "duration_seconds": 3.34
+  },
+  "failed_attempts": [
+    {
+      "log": "/tmp/dicom-rgb-final-cpu-20261016.log",
+      "reason": "test refactor referred to loop index outside its scope; corrected to request.image_index, production code unaffected"
+    }
+  ],
+  "remaining": [
+    "YBR and palette color",
+    "partial-width or signed RGB sample interpretation",
+    "compressed DICOM and transformation sequences/LUT/full clinical presentation",
+    "independent physical HDR color calibration",
+    "NVIDIA deferred by user",
+    "full100format qualification remains open"
+  ]
+}

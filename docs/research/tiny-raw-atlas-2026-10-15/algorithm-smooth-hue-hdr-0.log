@@ -1,0 +1,16 @@
+[2026-10-14T23:45:13Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-14T23:45:13Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-10-14T23:45:13Z INFO  rrrah] viewer GPU setup: device_ms=9.677 surface_ms=0.493 raw_ms=0.001 raster_ms=3.417 filmstrip_ms=1.167 total_ms=14.754
+[2026-10-14T23:45:13Z INFO  rrrah] viewer lazy RAW setup: ms=10.420
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[1, 2] simulated_notification=true
+[2026-10-14T23:45:14Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-10-14T23:45:14Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-14T23:45:14Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-10-14T23:45:14Z INFO  rrrah] viewer GPU setup: device_ms=1.669 surface_ms=0.217 raw_ms=0.001 raster_ms=2.780 filmstrip_ms=0.923 total_ms=5.588
+[2026-10-14T23:45:14Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+[2026-10-14T23:45:14Z INFO  rrrah] viewer lazy RAW setup: ms=9.879
+LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+[2026-10-14T23:45:14Z INFO  rrrah] Raster ready: generation=3 path=/tmp/rrrah-live-raw-switch-20261015/files/b-raster.avif index=0 dimensions=16x16 elapsed=12.8125ms
+LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count=1 device_epoch=3
+LIVE_RAW_SWITCH_PASS init_count=1 raw_bytes=2592 raw_peak=2592 raw_limit=1048576 same_device=true
+[2026-10-14T23:45:14Z INFO  rrrah] Viewer transient storage shutdown complete

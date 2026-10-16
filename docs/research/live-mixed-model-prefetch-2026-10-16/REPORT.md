@@ -1,0 +1,7 @@
+Current actual native Metal viewer: four sequential EXR→model→EXR roundtrips passed with authored STL/OBJ/PLY/OFF subset fixtures. Each uses actual navigate_gallery(+1/-1), configured previous2/next1, RAMraster32MiB/count8,model16MiB/count4,swapdisabled. Three retained neighbouring raster/model leases and allthreeattempts required at everygeneration2/3/4. Actualforegroundpresentation confirms kind=model atgen3 andkind=raster atgen4 on samepostrecoverydevice, GPUwaitpass. EXRreturnRAMhit withfallbackdecode forbidden.
+
+Acrossfourcases:8unique actualnavigationtransitions,36retainedneighbourattempts,8model-prefetchleases(generation2and4),4cachedEXRreturns. Source/binary/loghashes andexacttypedpathorder retained; qualify.py reproduces and checks each case. StartupNone/Forwardordering accepted without directionalclaim; arroworders exact.
+
+Opt-in debug probe RRRAH_QUALIFY_MODEL_SWITCH permits modeltarget and verifies modelrendereractive. Generic diagnostic counters now include modelprefetch leases; terminalprobe stops extraexitcallbacks. Productionmodelpreload semantics unchanged. Simulatedlossnotification is not driverreset. This is geometry-only authoredsubset live presentation/navigation; not renderedmaterials/textures/transparency, exactframebufferoracle, broadrealasset/GLB/glTF/CAD support, latency, physicalHDR or100formatcompletion. Ordinaryviewerregression pending separately.
+
+Ordinaryviewerregressioncompleted:280passed/0failed/78ignored; viewer-regression.log SHA retained in result.json. This supersedes pendingregression status for this change.

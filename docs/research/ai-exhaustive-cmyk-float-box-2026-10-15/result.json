@@ -1,0 +1,92 @@
+{
+  "changes": [
+    "Tightened source cast error to2^-25 only when convex unit range plus outward normalization/accumulation error proves the required input range; original conservative path retained otherwise.",
+    "Rounded f64 interval endpoints directly to f32, preserving the actual monotone conversion without invented adjacent inputs.",
+    "On ambiguous ICC output, exhaust every possible f32 CMYK tuple in the closed input box, cap4096, charge512 per tuple plus16 setup, no heap allocation or partial bounds. Same actual CGATS executor as original conversion. Existing alpha/storage/white/byte gate reused."
+  ],
+  "tests": {
+    "interpret_passed": 131,
+    "interpret_ignored": 1,
+    "hayro_passed": 297,
+    "hayro_ignored": 12,
+    "failed": 0,
+    "controls": "Binades/midpoint ties, subnormals/overshoot, actual nearest-cast containment, full Cartesian16-tuple controls, every short allowance and cancellation checkpoint, cap/invalid input refusal."
+  },
+  "real": {
+    "pixel": [
+      147,
+      57
+    ],
+    "certified_rgb8": [
+      187,
+      108,
+      78
+    ],
+    "white_bounds": [
+      [
+        187.15382939403804,
+        187.15382944662622
+      ],
+      [
+        108.49664920493679,
+        108.4966492476306
+      ],
+      [
+        78.0720574222025,
+        78.07205746106916
+      ]
+    ],
+    "direct_original_white_rgb": [
+      187.153829420347,
+      108.4966492263158,
+      78.07205744167456
+    ],
+    "direct_original_inside_certified_bounds": true,
+    "source_work": 1848722,
+    "source_limit": 4000000,
+    "direct_original_source_work": 3246873,
+    "geometry_total": 28515109,
+    "geometry_limit": 40000000,
+    "geometry_remaining": 11484891,
+    "peak_admitted_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "controls": [
+      {
+        "pixel": [
+          147,
+          59
+        ],
+        "rgb8": [
+          205,
+          151,
+          128
+        ],
+        "source_work": 3831146,
+        "geometry_remaining": 585628
+      },
+      {
+        "pixel": [
+          138,
+          34
+        ],
+        "rgb8": [
+          219,
+          185,
+          167
+        ],
+        "source_work": 254986,
+        "geometry_remaining": 32682174
+      }
+    ]
+  },
+  "source_sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "22ad4ca7bd7368906a2b9b6647ff2c3a33d0912b465077e52749d3015c81431a",
+    "vendor/hayro-interpret/src/color.rs": "f2d3cc9e60fd9b42794d4b81e64aeef8a2c256a4ffed38cea35835e3561fe5bf",
+    "vendor/hayro/src/native_frame.rs": "ec5818445d32dfbdaee747b553c1e462b179d00d56a6171478ad9a3311401d10"
+  },
+  "limitations": [
+    "Conditional same-original-sampler white RGB8 equivalence; no absolute geometry or default Poppler72dpi correctness claim.",
+    "Full page and production AI/native HDR still unqualified."
+  ]
+}

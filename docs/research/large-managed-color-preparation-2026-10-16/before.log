@@ -1,0 +1,19 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.07s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-a975e9ebc3faac09)
+
+running 1 test
+
+thread 'raster::tests::raw_psd_36mp_public_file_uses_source_plus_rgba_peak_without_plane_copy' (5179129) panicked at crates/rrrah-decode/src/raster.rs:1228:100:
+called `Result::unwrap()` on an `Err` value: OutputTooLarge
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster::tests::raw_psd_36mp_public_file_uses_source_plus_rgba_peak_without_plane_copy ... FAILED
+
+failures:
+
+failures:
+    raster::tests::raw_psd_36mp_public_file_uses_source_plus_rgba_peak_without_plane_copy
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 195 filtered out; finished in 0.50s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

@@ -14,7 +14,88 @@ fn invalid(message: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidPcx(message)
 }
 
+fn buffer(count: usize, request: &DecodeRequest) -> Result<rrrah_core::PixelBuffer<u8>, RasterDecodeError> {
+    Ok(match &request.memory_budget {
+        Some(budget) => budget
+            .try_buffer(count, 0u8)
+            .map_err(crate::DecodeError::Memory)?
+            .freeze()
+            .into(),
+        None => {
+            let mut values = Vec::new();
+            values
+                .try_reserve_exact(count)
+                .map_err(|_| RasterDecodeError::OutputTooLarge)?;
+            values.resize(count, 0);
+            Arc::new(values).into()
+        }
+    })
+}
+fn scanline<const EMIT: bool>(
+    encoded: &[u8],
+    offset: &mut usize,
+    row_len: usize,
+    packed: bool,
+    output: &mut [u8],
+    request: &DecodeRequest,
+) -> Result<(), RasterDecodeError> {
+    if !packed {
+        let end = (*offset)
+            .checked_add(row_len)
+            .ok_or_else(|| invalid("scanline offset overflow"))?;
+        let row = encoded
+            .get(*offset..end)
+            .ok_or_else(|| invalid("truncated raster"))?;
+        if EMIT {
+            output.copy_from_slice(row);
+        }
+        *offset = end;
+        return Ok(());
+    }
+    let (mut filled, mut packets) = (0usize, 0usize);
+    while filled < row_len {
+        if packets % 4096 == 0 {
+            request.check_cancelled()?;
+        }
+        packets += 1;
+        let marker = *encoded.get(*offset).ok_or_else(|| invalid("truncated raster"))?;
+        *offset += 1;
+        let (count, value) = if packed && marker & 0xc0 == 0xc0 {
+            let count = usize::from(marker & 0x3f);
+            if count == 0 {
+                return Err(invalid("zero-length RLE run"));
+            }
+            let value = *encoded.get(*offset).ok_or_else(|| invalid("truncated RLE run"))?;
+            *offset += 1;
+            (count, value)
+        } else {
+            (1, marker)
+        };
+        if count > row_len - filled {
+            return Err(invalid("RLE run crosses a scanline"));
+        }
+        if EMIT {
+            output[filled..filled + count].fill(value);
+        }
+        filled += count;
+    }
+    Ok(())
+}
 pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
+    decode_internal(bytes, request, false)?.ok_or_else(|| invalid("missing decoded raster"))
+}
+
+/// Validate the complete external indexed palette source without allocating its image.
+pub(crate) fn validate_game_palette(bytes: &[u8], request: &DecodeRequest) -> Result<(), RasterDecodeError> {
+    decode_internal(bytes, request, true).map(|_| ())
+}
+
+fn decode_internal(
+    bytes: &[u8],
+    request: &DecodeRequest,
+    palette_only: bool,
+) -> Result<Option<DecodedRaster>, RasterDecodeError> {
+    crate::check_single_image(request)?;
     let header = bytes.get(..128).ok_or_else(|| invalid("truncated header"))?;
     if header[0] != 10 || !matches!(header[1], 0 | 2 | 3 | 4 | 5) || header[2] > 1 {
         return Err(invalid("manufacturer, version or encoding"));
@@ -30,6 +111,9 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
     let planes = usize::from(header[65]);
     let rgb = bits == 8 && planes == 3;
     let indexed8 = bits == 8 && planes == 1;
+    if palette_only && !indexed8 {
+        return Err(invalid("game palette requires indexed 8-bit pixels"));
+    }
     let low_color = matches!(bits, 1 | 2 | 4) && planes > 0 && bits * planes <= 4;
     if !(rgb || indexed8 || low_color) {
         return Err(invalid("unsupported bit depth or plane count"));
@@ -62,37 +146,38 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
     } else {
         (&bytes[128..], &header[16..64])
     };
-    let mut output = Vec::new();
-    output
-        .try_reserve_exact(output_bytes)
-        .map_err(|_| RasterDecodeError::OutputTooLarge)?;
     let row_len = stride * planes;
-    let mut row = vec![0_u8; row_len];
     let mut offset = 0;
     for _ in 0..height {
         request.check_cancelled()?;
-        let mut filled = 0;
-        while filled < row_len {
-            let marker = *encoded.get(offset).ok_or_else(|| invalid("truncated raster"))?;
-            offset += 1;
-            let (count, value) = if header[2] == 1 && marker & 0xc0 == 0xc0 {
-                let count = usize::from(marker & 0x3f);
-                if count == 0 {
-                    return Err(invalid("zero-length RLE run"));
-                }
-                let value = *encoded.get(offset).ok_or_else(|| invalid("truncated RLE run"))?;
-                offset += 1;
-                (count, value)
-            } else {
-                (1, marker)
-            };
-            if count > row_len - filled {
-                return Err(invalid("RLE run crosses a scanline"));
-            }
-            row[filled..filled + count].fill(value);
-            filled += count;
-        }
+        scanline::<false>(encoded, &mut offset, row_len, header[2] == 1, &mut [], request)?;
+    }
+    if offset != encoded.len() {
+        return Err(invalid("unexpected data after raster"));
+    }
+    request.check_cancelled()?;
+    if palette_only {
+        return Ok(None);
+    }
+    let mut output = buffer(output_bytes, request)?;
+    let pixels = output.get_mut().unwrap();
+    let mut row = buffer(row_len, request)?;
+    let mut offset = 0;
+    let mut pixel_index = 0;
+    for _ in 0..height {
+        request.check_cancelled()?;
+        scanline::<true>(
+            encoded,
+            &mut offset,
+            row_len,
+            header[2] == 1,
+            row.get_mut().unwrap(),
+            request,
+        )?;
         for x in 0..width as usize {
+            if x % 4096 == 0 {
+                request.check_cancelled()?;
+            }
             let color = if rgb {
                 [row[x], row[stride + x], row[2 * stride + x]]
             } else {
@@ -116,23 +201,119 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
                     [palette[start], palette[start + 1], palette[start + 2]]
                 }
             };
-            output.extend_from_slice(&[color[0], color[1], color[2], 255]);
+            pixels[pixel_index * 4..pixel_index * 4 + 4]
+                .copy_from_slice(&[color[0], color[1], color[2], 255]);
+            pixel_index += 1;
         }
     }
     if offset != encoded.len() {
         return Err(invalid("unexpected data after raster"));
     }
-    Ok(DecodedRaster::new(
+    Ok(Some(DecodedRaster::new(
         width,
         height,
-        RasterPixels::Rgba8(Arc::new(output).into()),
+        RasterPixels::Rgba8(output),
         RasterColorSpace::AssumedSrgb,
-    )?)
+    )?))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn external_palette_validation_has_zero_pixel_allocation_and_keeps_strict_errors() {
+        let bytes = include_bytes!("../../../tests/fixtures/raster/wal-colormap.pcx");
+        let budget = rrrah_core::MemoryBudget::new(0);
+        let mut request = DecodeRequest::new("palette.pcx");
+        request.memory_budget = Some(budget.clone());
+        validate_game_palette(bytes, &request).unwrap();
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
+        // Every truncated prefix remains invalid, as in ordinary full decoding.
+        for length in 0..bytes.len() {
+            assert!(validate_game_palette(&bytes[..length], &request).is_err());
+        }
+        let ordinary = DecodeRequest::new("palette.pcx");
+        for (offset, value) in [(0, 0), (2, 2), (3, 4), (65, 3), (66, 0), (67, 0)] {
+            let mut malformed = bytes.to_vec();
+            malformed[offset] = value;
+            if decode(&malformed, &ordinary).is_err() {
+                assert!(validate_game_palette(&malformed, &request).is_err());
+            }
+        }
+        let mut trailing = bytes.to_vec();
+        trailing.insert(trailing.len() - 769, 0);
+        assert!(validate_game_palette(&trailing, &request).is_err());
+        request.cancellation = Some(crate::GenerationToken::new(
+            Arc::new(std::sync::atomic::AtomicU64::new(2)), 1,
+        ));
+        assert!(matches!(validate_game_palette(bytes, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))));
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
+    }
+
+    #[test]
+    fn managed_pillow_rgb_and_indexed_exact_short_and_shared_ownership() {
+        for data in [
+            include_bytes!("../../../tests/fixtures/pcx/rgb.pcx").as_slice(),
+            include_bytes!("../../../tests/fixtures/pcx/indexed.pcx").as_slice(),
+        ] {
+            let row = u64::from(u16::from_le_bytes(data[66..68].try_into().unwrap())) * u64::from(data[65]);
+            let budget = rrrah_core::MemoryBudget::new(24 + row);
+            let mut request = DecodeRequest::new("managed.pcx");
+            request.memory_budget = Some(budget.clone());
+            let frame = decode(data, &request).unwrap();
+            let RasterPixels::Rgba8(p) = frame.pixels() else {
+                panic!()
+            };
+            assert_eq!(
+                &p[..],
+                [
+                    11, 22, 33, 255, 192, 193, 255, 255, 1, 2, 3, 255, 44, 55, 66, 255, 77, 88, 99, 255, 0,
+                    255, 127, 255
+                ]
+            );
+            assert_eq!((budget.used(), budget.peak()), (24, 24 + row));
+            let shared = frame.clone();
+            drop(frame);
+            assert_eq!(budget.used(), 24);
+            drop(shared);
+            assert_eq!(budget.used(), 0);
+            let short = rrrah_core::MemoryBudget::new(23 + row);
+            request.memory_budget = Some(short.clone());
+            assert!(matches!(
+                decode(data, &request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
+            assert_eq!(short.used(), 0);
+        }
+    }
+    #[test]
+    fn invalid_packets_and_trailing_data_precede_output_admission() {
+        let budget = rrrah_core::MemoryBudget::new(0);
+        let mut request = DecodeRequest::new("bad.pcx");
+        request.memory_budget = Some(budget.clone());
+        for data in [
+            &[0xc0, 1][..],
+            &[0xc7, 1][..],
+            &[0xc2][..],
+            &[1, 2][..],
+            &[0xc6, 7, 99][..],
+        ] {
+            let mut bytes = header(8, 3, 1, 1, 2);
+            bytes.extend(data);
+            assert!(matches!(
+                decode(&bytes, &request),
+                Err(RasterDecodeError::InvalidPcx(_))
+            ));
+        }
+        let mut valid = header(8, 3, 1, 1, 2);
+        valid.extend([0xc6, 7]);
+        assert!(matches!(
+            decode(&valid, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
+    }
 
     #[test]
     fn independently_encoded_pillow_corpus_matches_pixel_oracle() {

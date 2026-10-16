@@ -1,0 +1,55 @@
+{
+  "status": "validated_bug_fix",
+  "problem": "Direct PCX/PKM/ASTC APIs ignored nonzero selection although they expose one image. Common raster router already rejects these indices.",
+  "changes": [
+    "Shared cancellation and single-image selection guard before header/output processing",
+    "DCX delegates selected embedded PCX with internal image_index=0 and restores external index/count afterward",
+    "DCX delegated request retains same budget/cancellation/color options by cloning original request"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 75,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "direct_api_regression": {
+      "decoders": [
+        "PCX",
+        "PKM",
+        "ASTC"
+      ],
+      "unsupported_indices": [
+        1,
+        4,
+        "usize::MAX"
+      ],
+      "cancelled_precedence": true,
+      "zero_used_and_peak": true
+    },
+    "dcx": "Both original pages still match exact oracle bytes and selection metadata",
+    "pipeline": {
+      "states": 288,
+      "ram_pressure_hits": 288,
+      "swap_writes": 288,
+      "swap_reads": 288,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    }
+  },
+  "scope_limits": [
+    "Request validation only; no newly implemented format variants",
+    "No Metal rerun for request guards; pixel/GPU evidence remains in ../sti-inflate-admission-2026-10-16/result.json",
+    "No full format qualification claim"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log"
+  }
+}

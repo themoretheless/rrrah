@@ -1,0 +1,18 @@
+
+running 1 test
+test calibrated_bayer_compute_and_fragment_match_at_sensor_pixel_scale ... Bayer fragment/compute Bilinear: whole64x64 HDR exact at1:1, native normalization, credits zero
+Bayer fragment/compute SmoothHue: whole64x64 HDR exact at1:1, native normalization, credits zero
+Bayer fragment/compute MalvarHeCutler: whole64x64 HDR exact at1:1, native normalization, credits zero
+
+thread 'calibrated_bayer_compute_and_fragment_match_at_sensor_pixel_scale' (21258189) panicked at crates/rrrah-gpu/tests/raster_readback.rs:1853:9:
+Directional: first mismatched half channels [(610, (14502, 14501)), (618, (14588, 14587)), (666, (15103, 15104)), (682, (15275, 15276)), (802, (13350, 13349)), (858, (14445, 14444)), (860, (16535, 16536)), (898, (14875, 14874))]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    calibrated_bayer_compute_and_fragment_match_at_sensor_pixel_scale
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 30 filtered out; finished in 153.26s
+

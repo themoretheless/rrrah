@@ -1,0 +1,12 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.79s
+     Running unittests src/main.rs (target/debug/deps/rrrah-973d254e7d272201)
+
+running 3 tests
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_metal_readback ... ignored, actual Metal uncompressed DICOM window/frame cache and swap SDR/HDR readback
+test dicom_pipeline_tests::prefetch_watchdog_excludes_gpu_idle_but_cancels_a_blocked_call ... ok
+DICOM_SCALAR_PIPELINE cases=352 rle_states=31 full_palette_frames=7 ram_pressure_hits=352 swap_writes=352 swap_reads=352 shape_controls=0 stale_refused=true decoder_blocked_prefetch=true ttl_nonzero=true visible_ttl_protected=true gpu=false root_peak=8388608 final=0
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_blocked_prefetch ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 308 filtered out; finished in 0.40s
+

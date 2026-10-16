@@ -1,0 +1,62 @@
+{
+  "status": "main_viewer_recreation_wired_ordinary231_and_normal_metal120_passed_live_loss_recovery_unverified",
+  "scope": "main viewer device loss callback/poll, recreate GPU state, cancel stale uploads/foreground generation, re-request current selection through loader caches",
+  "preserved": [
+    "current file",
+    "current or pending selected page",
+    "scalar window",
+    "pan/zoom/exposure",
+    "model orbit encoded in view pan/zoom",
+    "directional neighbor prefetch policy"
+  ],
+  "bounds": "automatic retry throttled for30 seconds after an attempt; refocusing main window retries failed recovery explicitly; intentional Destroyed ignored",
+  "idle_progress": "track every submitted viewer render until GPU completion, even when upload lease list is empty",
+  "signal_test": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0
+  },
+  "full_ordinary_session": 11505,
+  "full_ordinary_log": "/tmp/viewer-device-recovery-full-ordinary.log",
+  "source_sha256": "3154402ac15e65ce7a9a5e9ff4c53bcdeb31cebec9f534714b359091aa11b2a7",
+  "limitations": [
+    "real window recovery after actual device loss not exercised yet",
+    "does not fix original GPU hang trigger",
+    "same-device successful render is not recreation proof",
+    "no complete100-format/NVIDIA/HDR calibration qualification",
+    "separate telemetry device does not yet share this recovery flow",
+    "reloading after recovery validates source/cache again; deleted or unavailable source recovery not qualified"
+  ],
+  "full_ordinary": {
+    "exit_code": 0,
+    "passed": 231,
+    "failed": 0,
+    "ignored": 62,
+    "scope": "all ordinary viewer binary tests, manual/external excluded"
+  },
+  "sandbox_first_attempt": {
+    "exit_code": 101,
+    "passed": 229,
+    "failed": 2,
+    "reason": "PermissionDenied creating special temporary filesystem test objects; full same-binary rerun unsandboxed passed"
+  },
+  "normal_metal": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "steps": 120,
+    "files": 8,
+    "formats": 7,
+    "scope": "successful ordinary rendering, not device recreation"
+  },
+  "binary_sha256": "20ef898725d992925e6199b66187ccc8549d59dc6a2cdb58a15981285b26a6e9",
+  "source_drift": false,
+  "telemetry_followup": {
+    "report": "../telemetry-device-recovery-2026-10-15/result.json",
+    "scope": "telemetry recreation now wired and HUD device-to-device pixels checked; live window failure path still open"
+  },
+  "live_notification_recovery_followup": {
+    "report": "../live-device-recovery-2026-10-15/result.json",
+    "scope": "three real-window notification/recreation scenarios pass; actual hardware error recovery and original hang trigger still unqualified"
+  }
+}

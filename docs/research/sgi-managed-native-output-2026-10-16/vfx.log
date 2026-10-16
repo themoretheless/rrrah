@@ -1,0 +1,58 @@
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.29s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_vfx-8d21ea395b58a4eb)
+
+running 50 tests
+test pix::tests::malformed_runs_are_rejected ... ok
+test cineon::tests::envelope_and_decoded_output_share_budget_and_release_on_refusal ... ok
+test dpx::tests::explicit_line_and_image_padding_and_abgr16 ... ok
+test dpx::tests::explicit_untagged_policy_requires_absent_transfer_and_color_declarations ... ok
+test rla::tests::premultiplied_zero_alpha_emission_is_explicitly_rejected ... ok
+test pix::tests::maximum_run_and_row_reset ... ok
+test dpx::tests::all_orientations_color_and_bounds ... ok
+test dpx::tests::direct_output_is_admitted_without_eight_bit_intermediate_allocation ... ok
+test rla::tests::offset_active_window_places_rows_in_transparent_full_canvas ... ok
+test rla::tests::malformed_directory_headers_and_planes_are_rejected ... ok
+test dpx::tests::linear_assumption_requires_normalized_reference_and_undefined_colorimetry ... ok
+test cineon::tests::header_bounds_channel_consistency_and_orientation ... ok
+test rpf::alpha_display_tests::emission_nonfinite_alpha_and_division_overflow_refuse_without_leak ... ok
+test rpf::allocation_plan_tests::all_rows_count_toward_global_byte_and_layer_caps ... ok
+test rpf::alpha_display_tests::straight_and_associated_hdr_colors_have_explicit_numeric_results ... ok
+test rpf::color_tests::float_bits_hdr_signed_zero_and_nan_are_preserved ... ok
+test rpf::color_tests::integer_planes_share_one_record_and_match_sdk_normalization ... ok
+test rpf::color_tests::malformed_low_plane_or_float_length_does_not_modify_output ... ok
+test rpf::aspect_tests::image_ratio_and_pixel_ratio_are_distinct_and_crop_uses_full_window ... ok
+test rpf::coordinate_tests::descending_and_malformed_streams_are_rejected ... ok
+test rpf::coordinate_tests::duplicate_layers_and_coordinates_above_one_byte_remain_ordered ... ok
+test rpf::display_tests::explicit_selection_preserves_hdr_and_both_allocations_share_root_cap ... ok
+test rla::tests::common_raster_route_requires_explicit_alpha_then_matches_direct_api ... ok
+test rpf::file_tests::duplicate_reversed_or_metadata_overlapping_rows_refuse ... ok
+test rla::tests::explicit_float_byte_order_preserves_hdr_and_manages_public_output ... ok
+test rpf::file_tests::joins_metadata_and_constant_time_oriented_row_ranges ... ok
+test rla::tests::explicit_rla_api_manages_pixels_and_refuses_short_output_budget ... ok
+test rpf::layer_budget_tests::root_admission_aliases_failure_cancellation_and_retry ... ok
+test rpf::image_budget_tests::complete_image_hdr_channels_layers_and_last_owner ... ok
+test rpf::layer_tests::complete_layer_inventory_is_borrowed_and_decodes_exactly ... ok
+test rpf::layer_tests::counts_limits_zero_truncation_and_cancellation ... ok
+test rpf::name_tests::producer_bytes_empty_names_padding_and_next_block_are_preserved ... ok
+test rpf::name_tests::truncation_caps_terminators_and_cancellation ... ok
+test rpf::actual_swap_tests::disk_swap_restores_all_bytes_after_source_drop_and_memory_pressure ... ok
+test rpf::plane_tests::malformed_records_leave_destination_unchanged ... ok
+test rpf::render_info_tests::exact_modern_and_legacy_fields_and_next_block_boundary ... ok
+test rpf::plane_tests::all_gbuffer_sizes_restore_exact_memory_bytes_for_both_record_lengths ... ok
+test rpf::row_tests::complete_color_matte_aux_gbuffer_layer_row_and_all_truncations ... ok
+test rpf::tests::every_truncated_header_or_table_is_refused ... ok
+test rpf::tests::malformed_dimensions_counts_flags_offsets_and_next_are_refused ... ok
+test rpf::tests::preserves_all_channel_flags_and_unsorted_rows ... ok
+test rpf::file_input_tests::file_and_decoded_buffers_share_root_cap_and_read_source_is_released ... ok
+test sgi::tests::managed_native_output_and_row_scratch_exact_short_and_shared_lifetime ... ok
+test sgi::tests::pillow_rgb_and_rgba_oracles_match_with_exact_managed_capacity ... ok
+test sgi::tests::rle_bounds_and_termination ... ok
+test sgi::tests::shared_rle_rows_and_malformed_tables ... ok
+test sgi::tests::verbatim_precision_and_bottom_up ... ok
+test softimage::tests::bounded_packets_and_runs ... ok
+test rpf::sdk_plane_oracle_tests::official_sdk_encoded_runs_restore_all_samples_for_image_and_layer_records ... ok
+test rpf::file_raster_tests::explicit_file_raster_preserves_hdr_alpha_aspect_and_releases_intermediates ... ok
+
+test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

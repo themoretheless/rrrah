@@ -1,0 +1,48 @@
+{
+  "change": "Recover exact positive-unit-product mass interval from count, product count and reported sum; solve the conservative relative/additive rounding inequality outward. The observer uses this recovered interval for arithmetic estimates; old per-fragment intervals remain reference only.",
+  "unit_tests": {
+    "passed": 276,
+    "failed": 0,
+    "ignored": 12
+  },
+  "tests": [
+    "Independent exact dyadic sums under lossy and reversed accumulation",
+    "Underflow: exact one-subnormal sum despite zero reported sum",
+    "All short work budgets and cancellation checkpoints",
+    "Invalid domain, zero-count/nonzero sum, excessive relative factor and unsupported product count refuse"
+  ],
+  "sources": {
+    "vendor/hayro/src/native_moments.rs": "7f8b41c95d390662719264ef0b663174a488cadd4ec1dae205400b7633a3f2ca",
+    "vendor/hayro/src/native_spatial.rs": "469fad1fde24c48a8790e09437b906c61f02aa9bcb6758684f9a2fb91a2da743"
+  },
+  "real_control": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "count": 633426,
+    "recovered_mass": [
+      0.6737398251913357,
+      0.6737398253808581
+    ],
+    "per_term_reference_mass": [
+      0.6737398252464769,
+      0.6737398253257169
+    ],
+    "encloses_reference": true,
+    "alpha_error": 9.47608650284749e-11,
+    "component_error": 9.476101462876827e-11,
+    "quotient_error": 2.812992063089785e-10,
+    "source_work": 9618324,
+    "source_allowance": 16000000,
+    "observer_work": 98206347,
+    "observer_allowance": 256000000,
+    "peak_bytes": 266512708,
+    "deadline": false,
+    "final_credit": 0,
+    "scope": "No original color sampling skipped; range/domain/composition/profile/display obligations remain separate"
+  },
+  "limitations": "Arithmetic prerequisite only; ordinary4M/fullpage AI still unqualified",
+  "returned_original_native_result_exact": true
+}

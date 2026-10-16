@@ -1,0 +1,331 @@
+{
+  "status": "raw_prefetch_filters_borrowed_paths_before_cloning",
+  "changes": [
+    "RawPrefetcher builds one neighbour list from lazy index iterator",
+    "Borrow and test source path before clone; non-RAW neighbour paths never cloned",
+    "Retain configured directional order, generation publication and telemetry semantics"
+  ],
+  "correctness": {
+    "mixed_edge_cases": 2592,
+    "small_window_model_cases": 44550,
+    "gallery_tests": {
+      "passed": 41,
+      "failed": 0,
+      "ignored": 16
+    },
+    "viewer_tests": {
+      "passed": 251,
+      "failed": 0,
+      "ignored": 71
+    }
+  },
+  "profile": {
+    "platform": "Apple M4 Max macOS",
+    "source_paths": 1024,
+    "raw_fraction": "1/4",
+    "path_shape": "collection/subfolder/image-NNNNN.cr3 or.png",
+    "plans_per_sample": 4096,
+    "order": "alternating A/B and B/A with warmups",
+    "runs": [
+      {
+        "log": "raw-prefetch-filtered-profile.log",
+        "windows": [
+          {
+            "window": {
+              "behind": 2,
+              "ahead": 5
+            },
+            "pairs": [
+              {
+                "pair": 0,
+                "previous_ns": 1996500,
+                "filtered_ns": 1409625
+              },
+              {
+                "pair": 1,
+                "previous_ns": 2054167,
+                "filtered_ns": 1440458
+              },
+              {
+                "pair": 2,
+                "previous_ns": 2107333,
+                "filtered_ns": 1549250
+              },
+              {
+                "pair": 3,
+                "previous_ns": 2093417,
+                "filtered_ns": 1541083
+              },
+              {
+                "pair": 4,
+                "previous_ns": 2059333,
+                "filtered_ns": 1483792
+              },
+              {
+                "pair": 5,
+                "previous_ns": 2110958,
+                "filtered_ns": 1510042
+              },
+              {
+                "pair": 6,
+                "previous_ns": 2107917,
+                "filtered_ns": 1502208
+              },
+              {
+                "pair": 7,
+                "previous_ns": 2089791,
+                "filtered_ns": 1491750
+              },
+              {
+                "pair": 8,
+                "previous_ns": 2113334,
+                "filtered_ns": 1444709
+              },
+              {
+                "pair": 9,
+                "previous_ns": 1980625,
+                "filtered_ns": 1398458
+              },
+              {
+                "pair": 10,
+                "previous_ns": 1985583,
+                "filtered_ns": 1378125
+              },
+              {
+                "pair": 11,
+                "previous_ns": 1981541,
+                "filtered_ns": 1374792
+              }
+            ],
+            "wins": 12,
+            "median_pair_time_reduction_percent": 29.064025273971062
+          },
+          {
+            "window": {
+              "behind": 100,
+              "ahead": 100
+            },
+            "pairs": [
+              {
+                "pair": 0,
+                "previous_ns": 49630875,
+                "filtered_ns": 36305333
+              },
+              {
+                "pair": 1,
+                "previous_ns": 48565667,
+                "filtered_ns": 34549041
+              },
+              {
+                "pair": 2,
+                "previous_ns": 48876417,
+                "filtered_ns": 33982291
+              },
+              {
+                "pair": 3,
+                "previous_ns": 48477208,
+                "filtered_ns": 34769875
+              },
+              {
+                "pair": 4,
+                "previous_ns": 55358250,
+                "filtered_ns": 35516125
+              },
+              {
+                "pair": 5,
+                "previous_ns": 49788542,
+                "filtered_ns": 35448958
+              },
+              {
+                "pair": 6,
+                "previous_ns": 51442417,
+                "filtered_ns": 36972791
+              },
+              {
+                "pair": 7,
+                "previous_ns": 52301125,
+                "filtered_ns": 35091250
+              },
+              {
+                "pair": 8,
+                "previous_ns": 50304458,
+                "filtered_ns": 36469625
+              },
+              {
+                "pair": 9,
+                "previous_ns": 49969667,
+                "filtered_ns": 35512584
+              },
+              {
+                "pair": 10,
+                "previous_ns": 49269709,
+                "filtered_ns": 34852041
+              },
+              {
+                "pair": 11,
+                "previous_ns": 49123166,
+                "filtered_ns": 34537917
+              }
+            ],
+            "wins": 12,
+            "median_pair_time_reduction_percent": 28.896450329065996
+          }
+        ]
+      },
+      {
+        "log": "raw-prefetch-filtered-profile-repeat.log",
+        "windows": [
+          {
+            "window": {
+              "behind": 2,
+              "ahead": 5
+            },
+            "pairs": [
+              {
+                "pair": 0,
+                "previous_ns": 1970417,
+                "filtered_ns": 1388041
+              },
+              {
+                "pair": 1,
+                "previous_ns": 1963625,
+                "filtered_ns": 1371417
+              },
+              {
+                "pair": 2,
+                "previous_ns": 1992458,
+                "filtered_ns": 1383875
+              },
+              {
+                "pair": 3,
+                "previous_ns": 1976959,
+                "filtered_ns": 1390542
+              },
+              {
+                "pair": 4,
+                "previous_ns": 1943292,
+                "filtered_ns": 1358250
+              },
+              {
+                "pair": 5,
+                "previous_ns": 2023584,
+                "filtered_ns": 1380000
+              },
+              {
+                "pair": 6,
+                "previous_ns": 1974584,
+                "filtered_ns": 1399959
+              },
+              {
+                "pair": 7,
+                "previous_ns": 1948833,
+                "filtered_ns": 1372416
+              },
+              {
+                "pair": 8,
+                "previous_ns": 1985500,
+                "filtered_ns": 1404916
+              },
+              {
+                "pair": 9,
+                "previous_ns": 1993375,
+                "filtered_ns": 1394083
+              },
+              {
+                "pair": 10,
+                "previous_ns": 1985167,
+                "filtered_ns": 1400584
+              },
+              {
+                "pair": 11,
+                "previous_ns": 1988083,
+                "filtered_ns": 1407542
+              }
+            ],
+            "wins": 12,
+            "median_pair_time_reduction_percent": 29.620062452467405
+          },
+          {
+            "window": {
+              "behind": 100,
+              "ahead": 100
+            },
+            "pairs": [
+              {
+                "pair": 0,
+                "previous_ns": 46652750,
+                "filtered_ns": 35042916
+              },
+              {
+                "pair": 1,
+                "previous_ns": 49980750,
+                "filtered_ns": 35577917
+              },
+              {
+                "pair": 2,
+                "previous_ns": 49392125,
+                "filtered_ns": 35475958
+              },
+              {
+                "pair": 3,
+                "previous_ns": 50019959,
+                "filtered_ns": 34328292
+              },
+              {
+                "pair": 4,
+                "previous_ns": 52548542,
+                "filtered_ns": 37895458
+              },
+              {
+                "pair": 5,
+                "previous_ns": 51733375,
+                "filtered_ns": 37665042
+              },
+              {
+                "pair": 6,
+                "previous_ns": 47994042,
+                "filtered_ns": 36826083
+              },
+              {
+                "pair": 7,
+                "previous_ns": 51996083,
+                "filtered_ns": 34645292
+              },
+              {
+                "pair": 8,
+                "previous_ns": 53982333,
+                "filtered_ns": 35195000
+              },
+              {
+                "pair": 9,
+                "previous_ns": 49122875,
+                "filtered_ns": 35605541
+              },
+              {
+                "pair": 10,
+                "previous_ns": 49742334,
+                "filtered_ns": 36336750
+              },
+              {
+                "pair": 11,
+                "previous_ns": 48723125,
+                "filtered_ns": 35538459
+              }
+            ],
+            "wins": 12,
+            "median_pair_time_reduction_percent": 27.701122717872074
+          }
+        ]
+      }
+    ],
+    "wins": 48,
+    "pairs": 48
+  },
+  "source_sha256": "8fb211f9a23d8b9ebbb6d5be09c2916696b229f2080de8cfcf89001c2ce62f16",
+  "limits": [
+    "Planning-only synthetic mixed gallery; no image decode, IO, GPU or end-to-end load throughput claim",
+    "All-RAW galleries avoid discarded clones but may have different timing; not measured here",
+    "Raw file recognition policy unchanged; no additional RAW format qualification",
+    "No new physical HDR/NVIDIA qualification"
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "status": "native DICOM pixel geometry preserved through scalar/RGB preparation, cache/swap and required Metal",
+  "specifications": [
+    "https://dicom.nema.org/medical/Dicom/2018d/output/chtml/part03/sect_C.7.6.3.html",
+    "https://dicom.nema.org/medical/dicom/final/cp2529_ft_clarify_definition_of_pixel_aspect_ratio_and_presentation_pixel_aspect_ratio.pdf"
+  ],
+  "problem": "DICOM pixel spacing/aspect declarations were ignored, so non-square pixels reached the renderer with square geometry even though the renderer already supports pixel aspect.",
+  "implementation": {
+    "native": "owned Rust fixed-size geometry metadata; no new heap buffers or pixel resampling",
+    "tags": [
+      "00280030 PixelSpacing DS2",
+      "00181164 ImagerPixelSpacing DS2",
+      "00182010 NominalScannedPixelSpacing DS2",
+      "00280034 PixelAspectRatio IS2"
+    ],
+    "direction": "DICOM vertical,row then horizontal,column; RasterRenderer stretches horizontal coordinates, hence aspect=column/row or horizontal/vertical",
+    "priority": "PixelSpacing -> ImagerPixelSpacing -> NominalScannedPixelSpacing -> PixelAspectRatio; validate every declaration even when higher priority supplies the ratio",
+    "limits": "exactly two DS/IS values, per-value text limits, finite nonnegative DS, positive signed32-range IS, positive finite f32 aspect and representable horizontal extent",
+    "singleton_zero": "zero spacing allowed only on a singleton corresponding dimension; cannot supply a finite pixel extent, so another valid source/ratio may supply aspect; otherwise None retains unknown aspect",
+    "scope": "root metadata only; functional-group geometry and presentation-state overrides remain refused/unsupported; no physical display calibration",
+    "routes": "scalar integer/float and RGB/YBR all attach validated pixel_aspect to DecodedRaster; existing preparation and swap retain it"
+  },
+  "fixtures": {
+    "generator": "scripts/generate-dicom-geometry-fixtures.py",
+    "new_containers": 18,
+    "new_color_containers": 12,
+    "new_scalar_containers": 6,
+    "new_frames": 48,
+    "all_dicom_containers": 87,
+    "all_dicom_frames": 191,
+    "new_pipeline_states": 60,
+    "syntaxes": "Implicit LE and Explicit LE/BE",
+    "aspects": [
+      1.5,
+      0.75,
+      2.0,
+      0.6666666865348816
+    ],
+    "oracle": "independent pydicom metadata and full raw/color/window pixels, ratios evaluated into float32; generator confirms original source pixel bytes unchanged",
+    "checks": "all native selected-frame pixel buffers exact; correct aspect; truncation refusal; exact source/output budget and one-byte-short refusal; malformed syntax/VR/range/zero/precedence unit controls",
+    "source_sha256": {
+      "dicom-geometry-big-endian-color-ImagerPixelSpacing.dcm": "c078b53352f11d74df624ff8e0b6ee9c28284e4bb0655f5a2940b4d9bf696d30",
+      "dicom-geometry-big-endian-color-NominalScannedPixelSpacing.dcm": "31796773480e5a5367c3aae593a222dee727c26a512fe8585db97cac052c54a4",
+      "dicom-geometry-big-endian-color-PixelAspectRatio.dcm": "e7f75b6db9a3916c13d035bcb90602b387d5c9f0866fd8d9a389c76b71cd5042",
+      "dicom-geometry-big-endian-color-PixelSpacing.dcm": "dfa4b923ac9d7a601458828bf179d4db09e22776e9370a6856b738e630daae55",
+      "dicom-geometry-big-endian-scalar-PixelAspectRatio.dcm": "45adc9f47a3086538c9d0fe9530617b72d6457c26f5668588733b17f54548de5",
+      "dicom-geometry-big-endian-scalar-PixelSpacing.dcm": "f287a69d020618d7b2f454e0e912f9429a5a8d1c8d1f50b879ac4050e1dcf4b6",
+      "dicom-geometry-explicit-color-ImagerPixelSpacing.dcm": "425cb7f41e948040e65ca6eeee6a37ee73dc40a98d9e1507009284e6bbd1f56e",
+      "dicom-geometry-explicit-color-NominalScannedPixelSpacing.dcm": "181f3b075d3c70b3c29ecf85ecb4204ca51f0592c819e3edcaaf101986e7e40c",
+      "dicom-geometry-explicit-color-PixelAspectRatio.dcm": "e2c3ea2122d658df70d99338766dd6228070f02e8c779fa5b793eeb56f2e7f22",
+      "dicom-geometry-explicit-color-PixelSpacing.dcm": "453db2c0d66622c8f87d22b16ba7258bdde4c143365626eaedec6164b067aee6",
+      "dicom-geometry-explicit-scalar-PixelAspectRatio.dcm": "bb89bba5356427664ced1d1703e26f5aa4720239b51eeb4c3d296b111ada4ee8",
+      "dicom-geometry-explicit-scalar-PixelSpacing.dcm": "f639080f82ed9cffeec45bfa22499ade34b0476ce86c1c0d69afc18faf4f2d27",
+      "dicom-geometry-implicit-color-ImagerPixelSpacing.dcm": "873d89557ec29d513bbb2e32607013572069e5361ade48edea9e9c94a3c527d6",
+      "dicom-geometry-implicit-color-NominalScannedPixelSpacing.dcm": "cc66eb48544654d3e42ce660f443d7c720e2f5f96b60905b9dcd4980b0ef2537",
+      "dicom-geometry-implicit-color-PixelAspectRatio.dcm": "0378005f8e97284ba6518d627cf4b798e426cda82571e5da0b03020132bf202d",
+      "dicom-geometry-implicit-color-PixelSpacing.dcm": "66ae4601694a632c7e29bc8bc01fee9e52d802e165e974f84e370c97751a180a",
+      "dicom-geometry-implicit-scalar-PixelAspectRatio.dcm": "bc32ae105c3155b9eddfdfab2620dc4251723ad2f948b9ac09437489a62ae6f7",
+      "dicom-geometry-implicit-scalar-PixelSpacing.dcm": "028991b308428230650d0f7b9126f83373d71375e23a3ab8bb3027d2f7944a45"
+    }
+  },
+  "tests": {
+    "scientific": {
+      "passed": 30,
+      "failed": 0,
+      "ignored": 4,
+      "log": "/tmp/dicom-geometry-final3-scientific-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-geometry-final3-facade-20261016.log"
+    },
+    "manual_controls": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-geometry-external-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-geometry-final3-cpu-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-geometry-metal-20261016.log"
+    }
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_gpu_skip": false,
+    "states": 237,
+    "geometry_states": 60,
+    "ram_pressure_hits": 237,
+    "swap_writes": 237,
+    "swap_reads": 237,
+    "swap_errors": 0,
+    "base_sdr_hdr_readbacks": 1422,
+    "additional_square_pixel_negative_controls": 120,
+    "total_sdr_hdr_readbacks": 1542,
+    "negative_control": "each of60 non-square states rendered once with explicit aspect and once without; SDR and HDR buffers must differ; native warm/restored buffers match declared-aspect reference exactly",
+    "comparison_scope": "independent source metadata/pixels but same color preparation and renderer; not independent shader implementation proof",
+    "ttl_visible_protected": true,
+    "foreground_pin_transition": true,
+    "blocked_decoder_reverse_prefetch": true,
+    "stale_generation_refused": true,
+    "managed_root_peak": 65536,
+    "managed_final": 0,
+    "peak_scope": "includes artificial pressure reservation, not RSS",
+    "duration_seconds": 4.53
+  },
+  "failed_attempts": [
+    {
+      "log": "/tmp/dicom-geometry-initial-20261016.log",
+      "reason": "test-only Rust literal .75 lacked leading zero; corrected before successful scientific run"
+    }
+  ],
+  "remaining": [
+    "per-frame functional-group geometry and presentation-state transforms",
+    "DICOM palette, compression and fullclinicalpresentation",
+    "full100format qualification",
+    "NVIDIA deferred by user"
+  ]
+}

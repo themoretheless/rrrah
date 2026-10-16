@@ -1,0 +1,14 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.08s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_scientific-1fb9c939397fc2c9)
+
+running 1 test
+test scientific_cancel_stress::large_gzip_volume_selected_planes_keep_bounded_memory ... LARGE_NRRD section=0 source_bytes=5648176 volume_bytes=268435456 output_bytes=4194304 scratch_bytes=524288 cap=10366768 peak=10366768 decode_ns=50305041 final=0
+LARGE_NRRD_WINDOW section=0 cap=10366768 peak=10366768 decode_ns=51415042 final=0
+LARGE_NRRD section=256 source_bytes=5648176 volume_bytes=268435456 output_bytes=4194304 scratch_bytes=524288 cap=10366768 peak=10366768 decode_ns=49939916 final=0
+LARGE_NRRD_WINDOW section=256 cap=10366768 peak=10366768 decode_ns=50987375 final=0
+LARGE_NRRD section=511 source_bytes=5648176 volume_bytes=268435456 output_bytes=4194304 scratch_bytes=524288 cap=10366768 peak=10366768 decode_ns=50818708 final=0
+LARGE_NRRD_WINDOW section=511 cap=10366768 peak=10366768 decode_ns=51107875 final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 56 filtered out; finished in 0.67s
+

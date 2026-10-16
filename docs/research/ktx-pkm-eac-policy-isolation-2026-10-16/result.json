@@ -1,0 +1,29 @@
+{
+  "status": "eac_color_policy_isolation_verified",
+  "cases": 132,
+  "pkm_cases": 4,
+  "ktx_mip_cases": 128,
+  "policy_refusals": 528,
+  "qualified_swap_restores": 132,
+  "checks": [
+    "Resident strict-request isolation expanded to all four KTX EAC signed/unsigned R/RG formats",
+    "Zero-TTL spill after test explicitly unpins the original visible frame",
+    "Both strict and encoded-sRGB-only requests refuse in foreground and prefetch",
+    "Invalid policy requests preserve disk quota and record zero successful swap reads",
+    "Original linear-qualified request restores bit-exact float32 pixels with decoder fallback disabled",
+    "Explicit swap shutdown followed by cache drop removes temporary swap directory",
+    "Final memory credit0"
+  ],
+  "viewer": {
+    "passed": 252,
+    "failed": 0,
+    "ignored": 71
+  },
+  "implementation": "Existing display key correctly includes both color-policy flags; production unchanged in this follow-up",
+  "limits": [
+    "Explicit test unpin is fixture control, not a claim failed requests unpin visible frames",
+    "Generated KTX corpus does not establish independent producer color semantics",
+    "No new physical HDR, NVIDIA or throughput qualification"
+  ],
+  "source_sha256": "3d875acfc0fd01df8701cf8fc2158e39ca2c7f3efc48a25dc879c161a35d7406"
+}

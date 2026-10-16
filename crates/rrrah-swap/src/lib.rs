@@ -315,6 +315,7 @@ impl SwapStore {
         let mut hasher = blake3::Hasher::new();
         let mut remaining = bytes;
         let result = {
+            #[expect(clippy::large_stack_arrays, reason = "Fixed 64 KiB I/O scratch stays on stack; heap scratch would require managed admission") ]
             let mut stream = WriteStream {
                 buffer: [0; BLOCK],
                 used: 0,
@@ -364,6 +365,9 @@ impl SwapStore {
     /// is bounded to 4 MiB and joined before cancellation is checked again.
     /// Thread stacks (at most 4 × 512 KiB) and pool bookkeeping are outside the
     /// managed buffer budget. Both methods preserve identical object digests.
+    ///
+    /// # Errors
+    /// Rejects foreign handles, cancellation, incomplete reads, corrupt data and decoder/I/O errors.
     pub fn read_stream_with_scratch<T>(
         &self,
         handle: &SwapHandle,
@@ -397,6 +401,7 @@ impl SwapStore {
         let mut hasher = blake3::Hasher::new();
         let mut remaining = handle.byte_len();
         let result = {
+            #[expect(clippy::large_stack_arrays, reason = "Fixed 64 KiB I/O scratch stays on stack; heap scratch would require managed admission") ]
             let mut stream = ReadStream {
                 buffer: [0; BLOCK],
                 start: 0,
@@ -623,7 +628,7 @@ mod tests {
     use super::*;
     #[test]
     fn mixed_small_and_bulk_restore_keeps_prefix_tail_and_hash_exact() {
-        let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| (i % 251) as u8).collect();
+        let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| u8::try_from(i % 251).unwrap()).collect();
         let store = make_store(source.len() as u64, Some(1));
         let handle = store
             .write_stream(source.len() as u64, || false, |writer| writer.write_all(&source))
@@ -950,7 +955,7 @@ mod concurrency_tests {
     fn multiblock_restore_cancellation_releases_ram_and_preserves_retry() {
         let directory = tempfile::tempdir().unwrap();
         let length = 2 * BLOCK + 17;
-        let source: Vec<u8> = (0..length).map(|index| (index % 251 + 1) as u8).collect();
+        let source: Vec<u8> = (0..length).map(|index| u8::try_from(index % 251 + 1).unwrap()).collect();
         let store = SwapStore::new(
             directory.path(),
             SwapLimits {
@@ -1070,6 +1075,10 @@ mod stream_tests {
             .unwrap();
         let restored = store.restore(&flushed, &MemoryBudget::new(5), || false).unwrap();
         assert_eq!(&*restored, &[1, 2, 3, 4, 5]);
+        assert_stream_rejections(&store, &handle);
+    }
+
+    fn assert_stream_rejections(store: &SwapStore, handle: &SwapHandle) {
         let before = store.usage().unwrap();
         assert!(
             store
@@ -1085,7 +1094,7 @@ mod stream_tests {
         let mut calls = 0;
         assert!(matches!(
             store.read_stream(
-                &handle,
+                handle,
                 || {
                     calls += 1;
                     calls > 2
@@ -1101,7 +1110,7 @@ mod stream_tests {
         std::fs::write(handle.0.file.path(), vec![124; 150_000]).unwrap();
         assert!(matches!(
             store.read_stream(
-                &handle,
+                handle,
                 || false,
                 |reader| {
                     let mut out = Vec::new();

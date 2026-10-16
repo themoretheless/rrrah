@@ -1,0 +1,21 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 25.89s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+
+thread 'foreground_loader_tests::manual_animation_boundary_keeps_active_deadline_and_does_not_submit' (4613731) panicked at crates/rrrah-app/src/main.rs:8133:9:
+assertion `left == right` failed
+  left: None
+ right: Some(Instant { tv_sec: 54711, tv_nsec: 431384250 })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test foreground_loader_tests::manual_animation_boundary_keeps_active_deadline_and_does_not_submit ... FAILED
+
+failures:
+
+failures:
+    foreground_loader_tests::manual_animation_boundary_keeps_active_deadline_and_does_not_submit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 331 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

@@ -1,0 +1,24 @@
+{
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "docs/research/tiff-native-icc-2026-10-16/probe.rs",
+    "-L",
+    "dependency=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps",
+    "--extern",
+    "image=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/libimage-e2567c97e8a824e2.rlib",
+    "--extern",
+    "rrrah_decode=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_decode-12e794bc337bac55.rlib",
+    "-o",
+    "/tmp/rrrah-tiff-icc-probe-20261016",
+    "-L",
+    "native=/opt/homebrew/Cellar/dav1d/1.5.4/lib",
+    "-L",
+    "native=/opt/homebrew/opt/libheif/lib",
+    "--extern",
+    "rrrah_memory=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_memory-b1076162c3140c4a.rlib"
+  ],
+  "image_rlib_sha256": "c9936f4c2a13917eb022a1fb9a987e53263460f69a7d653e4a017f6bd9a0cde1",
+  "decode_rlib_sha256": "2021d8214b1777c9d05f014d4c0c80b40a9bcc512c7607015ec505646a990bf6"
+}

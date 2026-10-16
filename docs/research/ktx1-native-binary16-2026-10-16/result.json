@@ -1,0 +1,70 @@
+{
+  "status": "ktx1_binary16_storage_implemented",
+  "references": [
+    "https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/main/api/GL/glcorearb.h",
+    "https://registry.khronos.org/KTX/specs/1.0/ktxspec.v1.html"
+  ],
+  "formats": [
+    "R16F",
+    "RG16F",
+    "RGB16F",
+    "RGBA16F"
+  ],
+  "changes": [
+    "Reuse owned scientific half_to_f32 converter through existing dependency; no external half decoder or new dependency",
+    "Expand binary16 to admitted float32 preserving finite values and signed zero, standard quiet-NaN conversion",
+    "Output cap and budget use16 bytes/pixel, not source8 bytes/pixel",
+    "Missing texture channels zero, alpha1; R/RG require explicit linear color policy"
+  ],
+  "fixtures": {
+    "files": 32,
+    "selected_mip_cases": 128,
+    "orientations": 4,
+    "byte_orders": 2,
+    "mips": 4,
+    "oracle": "Python struct IEEE half expansion and authored finite controls, including smallest/largest subnormal, first normal, signed zero, negative and max65504, explicit straight alpha"
+  },
+  "exhaustive": {
+    "patterns_per_byte_order": 65536,
+    "byte_orders": 2,
+    "native_sample_comparisons": 131072,
+    "oracle": "existing independent NumPy mrc-half-all.r32f fixture; all decoded R bits exact, missingG/B0 alpha1",
+    "nonfinite_display_refusal": true,
+    "managed_output_per_case": 1048576,
+    "final_credit": 0
+  },
+  "checks": {
+    "native_ktx_matrix": 540,
+    "exact_short_clone_ownership": true,
+    "all_prefix_truncation": true,
+    "texture_passed": 91,
+    "texture_ignored": 3,
+    "decode_passed": 190,
+    "decode_ignored": 3,
+    "viewer_passed": 252,
+    "viewer_ignored": 71,
+    "cpu_pipeline_states": 1620,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_pipeline_states": 1620,
+    "metal_readbacks": 9720,
+    "metal_elapsed_seconds": 19.0,
+    "ram_pressure_hits": 1620,
+    "swap_writes": 1620,
+    "swap_reads": 1620,
+    "blocked_decoder_prefetch": true,
+    "final_memory_credit": 0
+  },
+  "limits": [
+    "Authored KTX wrappers, not independent exporter-file qualification",
+    "NaN payloads follow shared converter quieting contract, not signaling-NaN preservation",
+    "Offscreen Metal transport does not prove physical HDR calibration or NVIDIA behavior",
+    "Array/cube/volume/integer signed and complete KTX/full100-format qualification remain open"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/ktx.rs": "cda2914a4586e75243571705612d9141881785949e13ca0ab344085f8e5c616c",
+    "crates/rrrah-scientific/src/sample.rs": "677eade5aaead12d3f6e5509ac8596e1f75d91e0c3adeac4a59a2b875c85df9b",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "62ab40ddc73a349eba163147ef4e98301c3022063e35b9ee207b37c791203444",
+    "scripts/generate-ktx-half-fixtures.py": "6aeeaf36977c6e7a3d3332a5596fe727a53c384b59921ffed3c818d7345be69c",
+    "tests/fixtures/raster/ktx-half-manifest.tsv": "246655b33ed84a4a0815f3af01f2f3a36b0caa8ae5fe11c8f5846f77cde8d2e8"
+  }
+}

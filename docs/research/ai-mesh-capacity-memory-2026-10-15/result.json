@@ -1,0 +1,41 @@
+{
+  "status": "retained memory optimization; tighter-boundary experiment rejected",
+  "change": "triangle output capacity grows5/4; scratch keeps doubling; obsolete canonical edge controls released before triangle emission",
+  "admission": "complete old allocation remains charged until replacement succeeds, unchanged256MiB cap",
+  "original_source_control": {
+    "baseline_peak_admitted_bytes": 239197736,
+    "retained_peak_admitted_bytes": 232907656,
+    "saved_bytes": 6290080,
+    "saved_percent": 2.629656996419063,
+    "captured_control_triangles_alpha_and_components": "exactly unchanged",
+    "final_credit": 0,
+    "current_test_seconds": 2.83
+  },
+  "rejected_trials": [
+    {
+      "change": "all arrays grow3/2",
+      "peak": 250136808
+    },
+    {
+      "change": "only triangles grow3/2",
+      "peak": 250207872
+    },
+    {
+      "change": "triangle5/4 + boundary error/128",
+      "result": "original1455-patch shading Admission refusal; precision changes reverted"
+    }
+  ],
+  "interpreter_suite": {
+    "passed": 125,
+    "failed": 0,
+    "ignored": 1,
+    "covers": "every allocation refusal/one-byte-short/cancellation/geometry bit preservation"
+  },
+  "source_sha256": "7254cc2b7034d2fe1ad40397c676b7dd742553668d61adaf96142645bf01f01e",
+  "limitations": [
+    "one original-source diagnostic, not generalized RSS/whole-page or workload speedup",
+    "geometric precision unchanged; original residual AI coverage error remains",
+    "memory saving not yet sufficient for boundary/128 under same cap",
+    "test-only native AI path, not complete production AI support"
+  ]
+}

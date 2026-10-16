@@ -1,0 +1,147 @@
+{
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "renders": [
+    {
+      "mode": "default",
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-antialias-policy-20261015/default"
+      ]
+    },
+    {
+      "mode": "aa-off",
+      "pixel14759": [
+        188,
+        82,
+        64
+      ],
+      "ppm_sha256": "abb15c9e2456b35af54cdf158462bda3c2b8f3f71547b0c9b31455215aec6adb",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "no",
+        "-aaVector",
+        "no",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-antialias-policy-20261015/aa-off"
+      ]
+    },
+    {
+      "mode": "aa-on",
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "yes",
+        "-aaVector",
+        "yes",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-antialias-policy-20261015/aa-on"
+      ]
+    },
+    {
+      "mode": "aa-text-off",
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "no",
+        "-aaVector",
+        "yes",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-antialias-policy-20261015/aa-text-off"
+      ]
+    },
+    {
+      "mode": "aa-vector-off",
+      "pixel14759": [
+        188,
+        82,
+        64
+      ],
+      "ppm_sha256": "abb15c9e2456b35af54cdf158462bda3c2b8f3f71547b0c9b31455215aec6adb",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "yes",
+        "-aaVector",
+        "no",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "/tmp/ai-poppler-antialias-policy-20261015/aa-vector-off"
+      ]
+    }
+  ],
+  "native_center": {
+    "point": [
+      147.5,
+      59.5
+    ],
+    "rgb": [
+      180.41906118392944,
+      103.0829206109047,
+      63.532701060175896
+    ],
+    "alpha": 1.0,
+    "final_credit": 0,
+    "log": "/tmp/ai-point-center-policy-20261015.log"
+  },
+  "specification": {
+    "url": "https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.6.pdf",
+    "location": "Table4.28 printed page275 (PDFpage296); discussion printed pages276-277",
+    "interpretation": "AntiAlias requests filtering of the shading function and may be ignored by devices lacking support. It does not by itself establish a mandate for center-only clipping. Device-space shading interpolation and conversion may be device dependent."
+  },
+  "source_audit": {
+    "shading_struct": "vendor/hayro-interpret/src/shading.rs:153",
+    "anti_alias_field_present": false,
+    "production_changes": false
+  },
+  "conclusion": "Global vector AA changes this Poppler pixel. Native center sampling is opaque but differs from Poppler AA-off color; replacing area integration with center sampling does not establish equivalence. Source AntiAlias=false is not alone proof of the correct boundary policy. Keep independent oracle mismatch open and zero tolerance unchanged.",
+  "limitations": [
+    "One source/pixel only, not whole-page qualification.",
+    "Different device CMYK policies remain a separate unresolved contributor.",
+    "No assertion that Poppler default or native integrated policy is the sole normative rasterization."
+  ]
+}

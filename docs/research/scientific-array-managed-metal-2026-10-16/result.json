@@ -1,0 +1,74 @@
+{
+  "status": "Native NRRD/MRC explicit-window display paths verified through RAM, swap and actual Metal SDR/HDR readback after managed-buffer fixes",
+  "scope": {
+    "nrrd_plane_oracles": 32,
+    "mrc_section_oracles": 20,
+    "windows": [
+      [
+        -100,
+        100
+      ],
+      [
+        0,
+        255
+      ]
+    ],
+    "states": 104,
+    "independent_data": "Original pynrrd/mrcfile raw-sample .rgba32f files; window reference computed directly from those pixels",
+    "size": "All current independent sources5x3 pixels, two sections each; not large-volume or all-format qualification"
+  },
+  "assertions": [
+    "Decoded and restored selected frames exactly match reference float pixels and image metadata",
+    "Full managed budget pressure still permits cached foreground hits without decoding",
+    "Count1 cache forces eviction; each of104 distinct source/index/window keys written to swap and restored",
+    "Foreground decode gate held; background restoration must bypass decoder; per-call watchdog prevents deadlock",
+    "Visible frame remains pinned during reverse swap prefetch",
+    "Actual Metal SDR and RGBA16F HDR readbacks of native, RAM and restored pixels match reference renders",
+    "Final managed allocations zero"
+  ],
+  "metal": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "passed": 1,
+    "failed": 0,
+    "seconds": 6.12,
+    "states": 104,
+    "readbacks": 624,
+    "ram_pressure_hits": 104,
+    "swap_writes": 104,
+    "swap_reads": 104,
+    "swap_errors": 0,
+    "swap_dropped": 0
+  },
+  "cpu_group": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 3,
+    "includes": "Existing DICOM TTL/window/pressure tests and120directional-prefetch scenarios"
+  },
+  "policy": {
+    "root_bytes": 1048576,
+    "ram_bytes": 4096,
+    "ram_count": 1,
+    "ttl": null,
+    "swap_bytes": 4194304,
+    "swap_count": 512,
+    "queue_bytes": 65536,
+    "restore_bytes": 65536
+  },
+  "checks": {
+    "focused_rustfmt": "passed"
+  },
+  "limitations": [
+    "New NRRD/MRC matrix uses no TTL; nonzero TTL covered separately for DICOM/cache",
+    "Windowed values lie0..1; no new above1 scientific HDR range claim",
+    "No physical panel photometry, NVIDIA test, spatial orientation or live UI automation here",
+    "Not full100format qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "9061972abaa4f6b19367e39427630f5a78bc70567301d0f42e8493f6098dc7ea",
+    "crates/rrrah-scientific/src/nrrd.rs": "686159c55a276cb87821dee8e57fd8df878ee4f3ee0ca0738178a80dd5a9be7f",
+    "crates/rrrah-scientific/src/mrc.rs": "e3c0f36435ebadbf74e9ea162ac6a65c766274ae83ac9bf7666c07c484b14d7c",
+    "crates/rrrah-scientific/src/scientific.rs": "8affbc438c711ecd8b157ff1e2e0ff058024ee210349bbf156b21da8b7e14b55"
+  }
+}

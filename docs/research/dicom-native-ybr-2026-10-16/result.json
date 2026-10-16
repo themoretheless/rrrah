@@ -1,0 +1,354 @@
+{
+  "status": "native unsigned8-bit YBR_FULL and nativeYBR_FULL_422 implemented; exhaustive canonical color and required Metal controls pass",
+  "specification": "https://dicom.nema.org/medical/DICOM/current/output/chtml/part03/sect_C.7.6.3.html",
+  "implementation": {
+    "runtime": "owned Rust; pydicom/NumPy/Fraction test-only",
+    "syntaxes": "ImplicitVRLE and ExplicitVRLE/BE",
+    "YBR_FULL": "planar0/interleaved or planar1; frame-local color planes; odd frame sizes and global BE8 OW swaps",
+    "YBR_FULL_422": "native Y1,Y2,Cb,Cr pairs; planar0 and even columns required; source has two bytes per output pixel despite SamplesPerPixel3; pairs never cross a row",
+    "color_model": "BT.601 full-range inverse derived from exact Kr299/1000,Kb114/1000,Kg587/1000; round-half-up and saturate; i32 arithmetic within bounds for all8-bit inputs",
+    "canonical_fixed_rationals": "R=Y+701/500*(Cr-128); G=Y-101004/293500*(Cb-128)-209599/293500*(Cr-128); B=Y+443/250*(Cb-128)",
+    "allocation": "one admitted RGBA8 output; no full-frame YBR expansion or planar intermediate",
+    "metadata": "existing exact ICC ownership and explicit SRGB/assumed color policy retained after YBR->RGB; DerivationCodeSequence00089215 added to structural-only reference/identity metadata allowlist",
+    "refusals": "16-bit YBR, partial/reversible/irreversible YBR variants, odd-width native422, planar1native422, signed/partial-width storage and scalar RGB/YBR windows/transforms remain refused"
+  },
+  "exhaustive_oracle": {
+    "oracle": "/tmp/dicom-ybr-exhaustive-20261016/rgb.bin",
+    "triples": 16777216,
+    "bytes": 50331648,
+    "sha256": "0ba8336eb8688d01b4eaaae86c589ba9f005852be000ce53787cc889283292de",
+    "source_model": "exact Kr=299/1000, Kb=114/1000, Kg=1-Kr-Kb; derive r,b then g from luminance equation; integer Y translation of exact rounded chroma offsets",
+    "rounding": "floor(value+1/2), saturated to [0,255]",
+    "pydicom_float32_disagreeing_pixels": 28,
+    "examples": [
+      {
+        "source": [
+          19,
+          78,
+          178
+        ],
+        "exact": [
+          89,
+          1,
+          0
+        ],
+        "pydicom": [
+          89,
+          0,
+          0
+        ]
+      },
+      {
+        "source": [
+          20,
+          78,
+          178
+        ],
+        "exact": [
+          90,
+          2,
+          0
+        ],
+        "pydicom": [
+          90,
+          1,
+          0
+        ]
+      },
+      {
+        "source": [
+          21,
+          78,
+          178
+        ],
+        "exact": [
+          91,
+          3,
+          0
+        ],
+        "pydicom": [
+          91,
+          2,
+          0
+        ]
+      },
+      {
+        "source": [
+          22,
+          78,
+          178
+        ],
+        "exact": [
+          92,
+          4,
+          0
+        ],
+        "pydicom": [
+          92,
+          3,
+          0
+        ]
+      },
+      {
+        "source": [
+          23,
+          78,
+          178
+        ],
+        "exact": [
+          93,
+          5,
+          0
+        ],
+        "pydicom": [
+          93,
+          4,
+          0
+        ]
+      },
+      {
+        "source": [
+          24,
+          78,
+          178
+        ],
+        "exact": [
+          94,
+          6,
+          0
+        ],
+        "pydicom": [
+          94,
+          5,
+          0
+        ]
+      },
+      {
+        "source": [
+          25,
+          78,
+          178
+        ],
+        "exact": [
+          95,
+          7,
+          0
+        ],
+        "pydicom": [
+          95,
+          6,
+          0
+        ]
+      },
+      {
+        "source": [
+          26,
+          78,
+          178
+        ],
+        "exact": [
+          96,
+          8,
+          0
+        ],
+        "pydicom": [
+          96,
+          7,
+          0
+        ]
+      },
+      {
+        "source": [
+          27,
+          78,
+          178
+        ],
+        "exact": [
+          97,
+          9,
+          0
+        ],
+        "pydicom": [
+          97,
+          8,
+          0
+        ]
+      },
+      {
+        "source": [
+          28,
+          78,
+          178
+        ],
+        "exact": [
+          98,
+          10,
+          0
+        ],
+        "pydicom": [
+          98,
+          9,
+          0
+        ]
+      },
+      {
+        "source": [
+          29,
+          78,
+          178
+        ],
+        "exact": [
+          99,
+          11,
+          0
+        ],
+        "pydicom": [
+          99,
+          10,
+          0
+        ]
+      },
+      {
+        "source": [
+          30,
+          78,
+          178
+        ],
+        "exact": [
+          100,
+          12,
+          0
+        ],
+        "pydicom": [
+          100,
+          11,
+          0
+        ]
+      }
+    ],
+    "pydicom_runtime_warnings": [
+      "divide by zero encountered in matmul",
+      "invalid value encountered in matmul",
+      "overflow encountered in matmul"
+    ]
+  },
+  "exhaustive_scope": "Every8-bit Y/Cb/Cr tuple, not every DICOM file or shader; independent Fraction oracle derives r,b then g from luminance equation rather than reusing native integer coefficients",
+  "rounding_disagreements": "28of16,777,216 tuples differ from pydicom3.0.2 float32 by one green code at an exact half; native follows declared exact round-half-up policy. Example [19,78,178] exactRGB[89,1,0], pydicom[89,0,0]. Authored differences retained in dicom-ybr-rounding-differences.json; not hidden by tolerance.",
+  "fixtures": {
+    "generator": "scripts/generate-dicom-ybr-fixtures.py",
+    "new_containers": 15,
+    "new_frames": 39,
+    "all_containers": 69,
+    "all_frames": 143,
+    "scope": "authored CC0 encoding containers, not clinical IODs",
+    "raw_unpacked_components": "every sample matches independent pydicom raw=True output",
+    "converted_rgba": "independent exact Fraction oracle, including ties/clipping; all selected frames match native",
+    "truncation_and_managed_limits": "every prefix refuses; source+output+ICC exact admission, one-byte-short refusal, clone ownership and final zero pass",
+    "previous23rgb_sources_byte_unchanged": true,
+    "source_sha256": {
+      "dicom-ybr-big-endian-422-planar0-plain.dcm": "820ccc11c9eaa8d81b887a2df42050f2e5c144cbc0f7bf7e225bd1ac64e21cf7",
+      "dicom-ybr-big-endian-422-planar0-srgb.dcm": "f8dce780ab807a4b7f280c73c18c331f208280a344de84da0e063757f2c7ee85",
+      "dicom-ybr-big-endian-full-planar0-icc.dcm": "030617eff4bfcbb87f5430fd916874fe779e173b03b87f7d3d45a04cb84b928b",
+      "dicom-ybr-big-endian-full-planar0-plain.dcm": "82ebcb8851c8fa9550b9df694c692011d19852b62edcb630cfd92a5212a76aff",
+      "dicom-ybr-big-endian-full-planar1-plain.dcm": "f2b7b143d78d5071ef53b826dd77b7f77eb6d4404455c202925dc692d3fb0d08",
+      "dicom-ybr-explicit-422-planar0-plain.dcm": "0f7d24fe0d672933ceab8bc1cf4097b4185654dc9059c0345f5de903de39f1af",
+      "dicom-ybr-explicit-422-planar0-srgb.dcm": "13e525015e621da2d0edfbdf5ee818823753af1bf7b7456e729d73af04a65675",
+      "dicom-ybr-explicit-full-planar0-icc.dcm": "07eb8735aa02a9aaf5dbce37d6284013b68e43697e76fba060171c466ffb8790",
+      "dicom-ybr-explicit-full-planar0-plain.dcm": "d37cd184e6cc30b308c8414fd34420b7a2e062477ab95e9317ac0e268b937d9a",
+      "dicom-ybr-explicit-full-planar1-plain.dcm": "4eca038937111cc716995712325444401893e6ef3e153789533eb042e8d42d63",
+      "dicom-ybr-implicit-422-planar0-plain.dcm": "27c1f1d03501628c2a14df3716871fb8ab4f6dce08477287d7c3c2cd74d93f2a",
+      "dicom-ybr-implicit-422-planar0-srgb.dcm": "136c87312125143f0e42291e6fc2d981a566e159a51aabddac24434ec39cc4f5",
+      "dicom-ybr-implicit-full-planar0-icc.dcm": "b04177ec6c1e98feca8e759d6d55e6641371d61b13e4b42b12570f6f5ed8cd25",
+      "dicom-ybr-implicit-full-planar0-plain.dcm": "0073ab8c973cdd0bfe9150caa4c1a9d912d08df534581cfa6870eb420d96e4ec",
+      "dicom-ybr-implicit-full-planar1-plain.dcm": "c3ce04fffed4910bba8f9cc9d2e0d48a2b8a49b4081e87c3ac52bb43aca82e52"
+    }
+  },
+  "packaged_ybr_control": {
+    "name": "SC_ybr_full_422_uncompressed.dcm",
+    "source_sha256": "08f6f4935ae225282d8481f297d37b1cf33be8c3d99028f310a9a3f9e8aaf284",
+    "source_bytes": 21686,
+    "dimensions": [
+      100,
+      100
+    ],
+    "pixel_count": 10000,
+    "planar": 0,
+    "photometric": "YBR_FULL_422",
+    "pydicom_conversion_differences": 0,
+    "pixel_vr": "OB",
+    "syntax": "1.2.840.10008.1.2.1",
+    "oracle_sha256": "37c271c9beefa6e6f9d413440f39f4e4e9c02d246c61527fc4ce67e41674688d",
+    "native_full_rgba8_match": true,
+    "managed_peak": 61686,
+    "managed_final": 0,
+    "one_byte_short_refused": true,
+    "source_scope": "unmodified pydicom packaged test asset, read in place; original scanner encoding provenance not established; source not copied"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 29,
+      "failed": 0,
+      "ignored": 4,
+      "log": "/tmp/dicom-ybr-scientific-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-ybr-facade-20261016.log"
+    },
+    "all_manual_controls": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-ybr-all-external-20261016.log"
+    },
+    "exhaustive_color": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-ybr-exhaustive-native-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-ybr-cpu-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-ybr-metal-20261016.log"
+    }
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_gpu_skip": false,
+    "states": 177,
+    "scalar_window_states": 78,
+    "rgb_states": 60,
+    "ybr_states": 39,
+    "ram_pressure_hits": 177,
+    "swap_writes": 177,
+    "swap_reads": 177,
+    "swap_errors": 0,
+    "sdr_hdr_readbacks": 1062,
+    "comparison": "independent scalar/pydicom raw/exact Fraction RGB input, then same existing ICC/sRGB preparation and renderer; full RGBA8/HDRbinary16 buffers exact for oracle/warm/restored",
+    "scope": "not independent ICC/shader algorithm proof or physical HDR calibration; packagedYBR separately full-pixel CPU validated",
+    "nonzero_ttl_visible_pin": true,
+    "real_foreground_transition": true,
+    "decoder_blocked_reverse_prefetch": true,
+    "stale_generation_refused": true,
+    "managed_root_peak": 65536,
+    "managed_final": 0,
+    "peak_scope": "includes artificial pressure reservation, not RSS",
+    "duration_seconds": 3.43
+  },
+  "remaining": [
+    "palette color, compression, transformation sequences/LUT/fullclinicalpresentation",
+    "other YBR variants and partial-width RGB layouts",
+    "full100format qualification",
+    "NVIDIA hardware explicitly deferred by user"
+  ]
+}

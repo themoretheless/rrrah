@@ -1,0 +1,40 @@
+{
+  "status": "geometry scan optimized, full pixel/page still incomplete",
+  "algorithm": "Y start/end ordering plus admitted dense active bits; iterate only open-Y-overlapping edges in original source index order; full-span/midpoint winding and tie fallback unchanged",
+  "memory": "extra end-index and active-word storage admitted before allocation; old caps/cancellation retained",
+  "geometry_budget": {
+    "limit": 40000000,
+    "before_remaining_at_refusal": 0,
+    "after_remaining_when_color_budget_refuses": 11342230
+  },
+  "color_budget": {
+    "limit": 4000000,
+    "spent": 4000000,
+    "completed": false,
+    "next": "reduce native source sampling/owner lookup work without increasing cap"
+  },
+  "regression": {
+    "triangles_in_sparse_bands": 1024,
+    "reference": "analytic root triangle area1/2 and affine integrals1/6",
+    "error_bound": 1e-12,
+    "work_spent": 19564568,
+    "test_work_limit": 40000000,
+    "note": "initial stricter16M experiment failed both variants; final test uses existing40M geometric policy, not a raised production limit; earlier rectangle drafts hit edge cap and were corrected to triangles"
+  },
+  "ordinary_tests": {
+    "passed": 265,
+    "failed": 0,
+    "ignored": 12,
+    "seconds": 6.77
+  },
+  "limitations": [
+    "real pixel still incomplete, no full-page or AI qualification",
+    "geometry remaining is observed at subsequent color refusal, not full successful pixel timing",
+    "test-only polygon/native compositor path; no GPU/FPS claim"
+  ],
+  "source_sha256": {
+    "vendor/hayro/src/polygon_coverage.rs": "57fbca46813892020d56b5eb887c72621cec2f9fca1c54ab8f77ae245add43d9",
+    "vendor/hayro/src/native_spatial.rs": "5e827bed0b27ed3b6ffb64db1b630750114f2663ea4f8fcf1c8184171d40df6e",
+    "vendor/hayro/src/knockout_interpreter.rs": "8c2dfe323d9c1b279b51f0e48423d0862feadeaa12a44748c802125a30fbec64"
+  }
+}

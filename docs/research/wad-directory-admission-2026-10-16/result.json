@@ -1,0 +1,59 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Single borrowed selected texture tuple and image count replace image list",
+    "First nonallocating pass validates all directory extents and counts nonempty lumps",
+    "Admitted sorted range table includes only nonempty lumps plus directory",
+    "Range table drops before selected texture validation/output",
+    "Directory scans check cancellation including runs of empty service entries"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 72,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "large_directory_unit": {
+      "added_service_entries": 256,
+      "total_entries": 259,
+      "image_count": 2,
+      "scratch_bytes": 4160,
+      "retained_rgba_bytes": 1024,
+      "short_refused": 4159,
+      "last_service_overlap_refused": true,
+      "final_bytes": 0
+    },
+    "pipeline": {
+      "states": 278,
+      "wad_fixture_states": 4,
+      "ram_pressure_hits": 278,
+      "swap_writes": 278,
+      "swap_reads": 278,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1668,
+      "seconds": 9.61
+    }
+  },
+  "limits": [
+    "Large service-directory case validated at decoder level; Metal pipeline uses four original WAD selections",
+    "Supported WAD3 subset only; full producer/variant, WAD2 external palette and other lump codecs remain pending",
+    "No speedup or physical HDR qualification claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

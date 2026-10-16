@@ -1,0 +1,24 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+    Finished `test` profile [optimized + debuginfo] target(s) in 7.94s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_layered-abb59544ff2eadad)
+
+running 1 test
+test psd::tests::original_rgb_gray_16_32_composites_match_independent_planes ... FAILED
+
+failures:
+
+---- psd::tests::original_rgb_gray_16_32_composites_match_independent_planes stdout ----
+
+thread 'psd::tests::original_rgb_gray_16_32_composites_match_independent_planes' (9632481) panicked at crates/rrrah-layered/src/psd.rs:411:50:
+called `Result::unwrap()` on an `Err` value: InvalidPsd("unexpected color mode data")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    psd::tests::original_rgb_gray_16_32_composites_match_independent_planes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 68 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-layered --lib`

@@ -281,7 +281,7 @@ impl Reservation {
     ///
     /// # Errors
     /// Rejects capacity arithmetic overflow and admission beyond the budget limit.
-    pub fn try_adopt<T: Copy>(mut self, values: Vec<T>) -> Result<SharedBuffer<T>, BufferError> {
+    pub fn try_adopt<T>(mut self, values: Vec<T>) -> Result<SharedBuffer<T>, BufferError> {
         let actual = buffer_bytes::<T>(values.capacity())?;
         if actual > self.bytes {
             self.grow(actual - self.bytes)?;
@@ -463,6 +463,43 @@ impl<T: Copy> PixelBuffer<T> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn admitted_non_copy_owners_drop_only_after_last_shared_owner() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        #[derive(Debug)]
+        struct Owner(Arc<AtomicUsize>);
+        impl Drop for Owner {
+            fn drop(&mut self) {
+                self.0.fetch_add(1, Ordering::SeqCst);
+            }
+        }
+        let dropped = Arc::new(AtomicUsize::new(0));
+        let values = vec![Owner(dropped.clone()), Owner(dropped.clone())];
+        let bytes = (values.capacity() * std::mem::size_of::<Owner>()) as u64;
+        let budget = MemoryBudget::new(bytes);
+        let buffer = budget
+            .try_reserve(bytes)
+            .unwrap()
+            .try_adopt(values)
+            .unwrap();
+        let shared = buffer.clone();
+        drop(buffer);
+        assert_eq!(dropped.load(Ordering::SeqCst), 0);
+        assert_eq!(budget.used(), bytes);
+        drop(shared);
+        assert_eq!(dropped.load(Ordering::SeqCst), 2);
+        assert_eq!(budget.used(), 0);
+        let short = MemoryBudget::new(bytes - 1);
+        let credit = short.try_reserve(bytes - 1).unwrap();
+        assert!(
+            credit
+                .try_adopt(vec![Owner(dropped.clone()), Owner(dropped.clone())])
+                .is_err()
+        );
+        assert_eq!(dropped.load(Ordering::SeqCst), 4);
+        assert_eq!(short.used(), 0);
+    }
+
     #[test]
     fn paired_headroom_counts_shared_ancestors_without_reserving() {
         use super::MemoryBudget;

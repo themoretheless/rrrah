@@ -1,0 +1,28 @@
+{
+  "change": "Native selected-owner sampling and geometry-only projection evidence share mesh_triangle_weights; inverse transform, finite raw weights, positive finite projected sum, normalization. Helper reads triangle points, not source components/functions.",
+  "tests": {
+    "interpret_passed": 127,
+    "interpret_ignored": 1,
+    "hayro_passed": 284,
+    "hayro_ignored": 12,
+    "new_control": "Independent basis-color expectations for interior/projected exterior points; invalid owner/nonfinite/overflow points refuse consistently."
+  },
+  "real_control": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "source_work": 6993741,
+    "source_allowance": 16000000,
+    "native_pixel_exact": true,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "sha256": "96da131dbe8ba5bd47b5688a35eb304436b2bc5665fc2e414948a2193eb3b08b",
+  "limitations": [
+    "Geometry normalization alone does not prove color range, clipping, ownership, profile or display.",
+    "All source colors remain sampled; no ordinary4M or completeAI claim."
+  ]
+}

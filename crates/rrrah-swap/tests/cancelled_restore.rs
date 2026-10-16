@@ -14,7 +14,7 @@ fn partially_read_cancelled_restore_releases_ram_and_preserves_retryable_handle(
         },
     )
     .unwrap();
-    let payload: Vec<u8> = (0..SIZE).map(|index| (index % 251) as u8).collect();
+    let payload: Vec<u8> = (0..SIZE).map(|index| u8::try_from(index % 251).unwrap()).collect();
     let handle = store
         .write_chunks(SIZE as u64, payload.chunks(4096), || false)
         .unwrap();

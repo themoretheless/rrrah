@@ -1,0 +1,116 @@
+
+running 62 tests
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
+test demosaic_compute::tests::bayer_compute_admitted_cancellation_retries_every_algorithm_exactly ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer Bilinear: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer SmoothHue: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer MalvarHeCutler: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Directional: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Vng: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Rcd: six admitted cancellations, exact retries, CPU/GPU final zero
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_algorithms_preserve_constant_hdr_and_sharpen_edges_on_gpu ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_rejects_invalid_inputs_and_cancels_cleanly ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_shader_validates_with_naga ... ok
+test demosaic_compute::tests::bayer_output_windows_match_whole_frame_all_algorithms_and_cfa_phases ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer windows Bilinear CFA=[0, 1, 1, 2]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[0, 1, 1, 2]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[0, 1, 1, 2]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[0, 1, 1, 2]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[0, 1, 1, 2]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[0, 1, 1, 2]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Bilinear CFA=[2, 1, 1, 0]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[2, 1, 1, 0]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[2, 1, 1, 0]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[2, 1, 1, 0]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[2, 1, 1, 0]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[2, 1, 1, 0]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Bilinear CFA=[1, 0, 2, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[1, 0, 2, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[1, 0, 2, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[1, 0, 2, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[1, 0, 2, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[1, 0, 2, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Bilinear CFA=[1, 2, 0, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows SmoothHue CFA=[1, 2, 0, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows MalvarHeCutler CFA=[1, 2, 0, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Directional CFA=[1, 2, 0, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Vng CFA=[1, 2, 0, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+Bayer windows Rcd CFA=[1, 2, 0, 1]: nine source/output strips, every pixel exact, second-strip cancellation/retry exact, credits zero
+ok
+test demosaic_compute::tests::full_sensor_bayer_windows_match_independent_bilinear_every_pixel ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer full sensor 6188x4120: all pixels independently exact, HDR, reflected edges, output windows, GPU peak=301900208, CPU final=0 GPU final=0 total_ms=14755
+ok
+test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
+test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
+test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test filmstrip::tests::strip_band_hit_region ... ok
+test model::tests::model_shader_validates ... ok
+test raster::tile_admission_tests::metadata_region_rejects_invalid_geometry_without_source_allocation ... ok
+test raster::tile_admission_tests::rejects_unrepresentable_extents_layers_and_padded_over_budget ... ok
+test raster::tile_admission_tests::repeated_view_uniform_ab_probe ... uniform AB adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+uniform AB: pair=0; baseline_ns=16737291; candidate_ns=2330584; iterations=1000; uniform_bytes=4208
+uniform AB: pair=1; baseline_ns=30261209; candidate_ns=681125; iterations=1000; uniform_bytes=4208
+uniform AB: pair=2; baseline_ns=19612834; candidate_ns=3074833; iterations=1000; uniform_bytes=4208
+uniform AB: pair=3; baseline_ns=27453250; candidate_ns=2760083; iterations=1000; uniform_bytes=4208
+uniform AB: pair=4; baseline_ns=23480292; candidate_ns=3341875; iterations=1000; uniform_bytes=4208
+uniform AB: pair=5; baseline_ns=31284458; candidate_ns=1373000; iterations=1000; uniform_bytes=4208
+uniform AB: pair=6; baseline_ns=20365125; candidate_ns=653625; iterations=1000; uniform_bytes=4208
+uniform AB: pair=7; baseline_ns=23879833; candidate_ns=5044958; iterations=1000; uniform_bytes=4208
+uniform AB: pair=8; baseline_ns=50965583; candidate_ns=9567042; iterations=1000; uniform_bytes=4208
+uniform AB: pair=9; baseline_ns=32737667; candidate_ns=11137500; iterations=1000; uniform_bytes=4208
+ok
+test raster::tile_admission_tests::visible_region_normalizes_view_and_skips_wholly_offscreen_images ... ok
+test rgbe_plan::tests::aligned_windows_contain_every_lattice_read_for_varied_odd_extents ... RGBE geometry sweep: attempted=16384; admitted=7557; every lattice read/output row in bounds
+ok
+test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
+test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
+test rgbe_plan::tests::source_larger_than_binding_is_windowed_with_interpolation_halo ... ok
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
+test tests::card_layout_scales_for_a_retina_surface ... ok
+test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
+test tests::default_tiling_avoids_the_4096_frame_regression ... ok
+test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
+test tests::default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller ... ok
+test tests::default_tiling_rejects_tiny_adapters ... ok
+test tests::default_tiling_shrinks_for_small_adapters ... ok
+test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
+test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
+test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
+test tests::dense_card_grid_scales_for_a_retina_surface ... ok
+test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
+test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
+test tests::edge_tiles_clamp_without_out_of_bounds_reads ... ok
+test tests::eleven_cards_use_three_columns_for_the_total_block ... ok
+test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
+test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
+test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
+test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::halo_packing_cancels_inside_large_tiles_and_preserves_scalar_samples ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
+test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
+test tests::odd_dense_card_count_keeps_row_major_order ... ok
+test tests::padded_upload_rows_cancel_and_preserve_bytes ... ok
+test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry ... ok
+test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
+test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
+test tests::tile_halo_matches_full_frame_at_internal_boundary ... ok
+test tests::tiling_override_below_minimum_is_rejected ... ok
+test tests::tiling_override_exceeding_texture_limit_is_rejected ... ok
+test tests::tiling_override_is_applied_verbatim ... ok
+test tests::tiling_override_respects_array_layer_limit ... ok
+test tests::tiny_mosaics_use_one_minimum_tile_instead_of_full_default_atlas ... ok
+test tests::twenty_eight_cards_fill_a_five_column_six_row_dashboard ... ok
+test tests::twenty_four_cards_fill_a_four_column_six_row_dashboard ... ok
+test tests::uniform_layout_remains_wgsl_compatible ... ok
+test tests::upload_rows_are_padded_to_webgpu_alignment ... ok
+test tests::viewport_shader_parses_and_validates_with_naga ... ok
+
+test result: ok. 62 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.57s
+

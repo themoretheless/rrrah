@@ -12,7 +12,12 @@
 
 pub use rrrah_raw::{DecodeError, DecodeRequest, GenerationToken, bounded_io};
 
+/// Conservative state/history heap credit for the pinned zlib-rs 0.6.8 backend.
+/// The texture crate allocator probe verifies the bound on each tested target.
+pub const DEFLATE_DECODER_CREDIT_BYTES: u64 = 65536;
+
 pub mod dicom;
+pub mod dicom_rle;
 pub mod fits;
 pub mod mrc;
 pub mod nrrd;
@@ -52,3 +57,6 @@ pub enum ScientificDecodeError {
 }
 
 pub type RasterDecodeError = ScientificDecodeError;
+
+#[cfg(test)]
+mod scientific_cancel_stress;

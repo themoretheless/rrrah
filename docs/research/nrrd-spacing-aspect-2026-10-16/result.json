@@ -1,0 +1,37 @@
+{
+  "status": "Bare NRRD spacings produce storage-plane pixel aspect; shared scientific window now preserves aspect metadata",
+  "source_specification": "https://teem.sourceforge.net/nrrd/format.html#spacings",
+  "semantics": "Axis0 horizontal and axis1 vertical in storage order. Pixel aspect=abs(spacing0/spacing1), computed f64 then represented f32. Signed coordinate directions remain in original fields, no world-axis flip/resampling implied.",
+  "validation": [
+    "exact spacing count equals dimension",
+    "zero and infinity refused on every axis",
+    "NaN unknown spacing accepted but ratio not inferred when either display-axis spacing unknown",
+    "spacings must follow dimension",
+    "ratio must be finite positive representable f32"
+  ],
+  "limits": [
+    "space directions present: no spacing-only ratio inferred; orientation/shear/world coordinates remain unsupported",
+    "units absent: relative axis spacing used; units present: only simple quoted identical first2units permit ratio; differing/ambiguous/multiword units left unspecified",
+    "No spatial calibration for MRC added in this turn",
+    "No new Metal or liveGUI validation yet; metadata/window preservation verified in library",
+    "Not full NRRD spatial qualification"
+  ],
+  "tests": {
+    "scientific": {
+      "passed": 46,
+      "failed": 0,
+      "ignored": 8
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed",
+    "new_regression": "2,-1,nan spacing with mm units gives aspect2; window preserves2x1 dimensions and aspect2. Invalid count/zero/inf/text/range rejected; unknown/different units/directions do not invent ratio."
+  },
+  "source_sha256": {
+    "crates/rrrah-scientific/src/nrrd.rs": "abbf241b89ca31eaf7f54aa7a1376518b719533e59a543cd7936aaeeb070930f",
+    "crates/rrrah-scientific/src/scientific.rs": "7b333926431ca3ecf0acb5344cb68d1e16eb49061445d1f6224351479124a5f3"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "change": "Build admitted union of owner-region bits once per area replay. Occupied-word hint tracks coverage intersected with this union, excluding words occupied only by unrelated path/clip regions. Additional AND per coverage update charged by selector cost7 vs6; union preparation separately charged. Point mode unchanged.",
+  "unit_tests": {
+    "passed": 271,
+    "failed": 0,
+    "ignored": 12
+  },
+  "source_sha256": "f2f213953250748bebef66c2c8a322a0851675128debf12db9f717b3e0eed4e8",
+  "same_binary_grid4_complete": {
+    "old_color_work": 6993741,
+    "new_color_work": 6362465,
+    "old_geometry_work": 25838802,
+    "new_geometry_work": 27089192,
+    "native_result_exact": true,
+    "color_allowance": 16000000,
+    "geometry_allowance": 40000000,
+    "final_credit_both": 0,
+    "deadline_both": false
+  },
+  "ordinary_acceptance": {
+    "grid4_completed": false,
+    "grid8_completed": false,
+    "color_allowance": 4000000
+  },
+  "limits": [
+    "Color work falls about9percent; geometry work increases; total work units do not prove throughput improvement",
+    "Timing comparison remains unqualified because paired runs were concurrent",
+    "Grid8 complete numerical control running; full AI/color/production integration remains Pending"
+  ],
+  "default_policy": "Owner-word filter now opt-in RRRAH_AI_OWNER_WORD_OCCUPANCY only; restored default await unit gate. Mixed work evidence does not qualify a throughput improvement.",
+  "combined_work_units": {
+    "old": 32832543,
+    "new": 33451657,
+    "increase": 619114,
+    "interpretation": "Modeled units across two separate budgets; not elapsed time"
+  },
+  "grid8_complete": {
+    "color_work": 4910711,
+    "geometry_work": 25894328,
+    "fragments": 489486,
+    "completed": true,
+    "color_allowance": 16000000,
+    "deadline": false,
+    "final_credit": 0,
+    "max_component_abs_difference_vs_grid4": 3.4821256988948335e-10,
+    "qualification": "Diagnostic reference only; exceeds ordinary4M"
+  },
+  "default_policy_source_sha256": "68e3176811ee9380dc4fa832e451387955cb5dda88a68ae606aad86e229e084b",
+  "default_policy_check": {
+    "state": "passed",
+    "passed": 271,
+    "failed": 0,
+    "ignored": 12,
+    "elapsed_seconds": 38.98
+  },
+  "next_action": "Reduce arrangement fragmentation with a geometry-domain algorithm and retain independent ownership/color checks; do not qualify larger diagnostic grids or larger source-work budgets as completed AI support."
+}

@@ -1,0 +1,503 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 36s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_raw-4953d6146c93232a)
+
+running 495 tests
+test api_contract_regressions::generation_token_cancels_stale_work ... ok
+test bay::tests::authored_full_sensors_match_independent_libraw_oracles ... ignored, requires pinned authored BAY and independent LibRaw dumps at RRRAH_BAY_AUTHORED_CORPUS; not camera/color qualification
+test bay::tests::image_rows_match_independent_oracles_without_trailer_or_full_copy ... ignored, requires pinned authored BAY and independent dumps at RRRAH_BAY_AUTHORED_CORPUS
+test api_contract_regressions::stale_request_is_rejected_without_io ... ok
+test api_contract_regressions::combined_generation_tokens_cancel_from_either_owner_and_deduplicate ... ok
+test api_contract_regressions::explicit_linear_assumption_only_qualifies_unspecified_linear_primaries ... ok
+test bounded_io::interrupted_read_tests::cancellation_interrupts_retry_and_partial_exact_reads ... ok
+test bounded_io::interrupted_read_tests::exact_read_handles_short_input_and_partial_success ... ok
+test camtiff::arw::tests::cancelled_callback_aborts_decode ... ok
+test camtiff::arw::tests::decodes_arw2_craw_delta_blocks ... ok
+test camtiff::arw::tests::decodes_sony_32767_uncompressed_twelve_bit_variant ... ok
+test camtiff::arw::tests::decodes_uncompressed_lsb_packed_twelve_bit ... ok
+test camtiff::arw::tests::decodes_uncompressed_sixteen_bit_words ... ok
+test bay::tests::oversized_file_is_refused_before_source_admission_for_every_layout ... ok
+test camtiff::arw::tests::parses_header_selects_raw_ifd_and_reads_metadata ... ok
+test camtiff::arw::tests::rejects_arw1_huffman_curve_variant_with_typed_error ... ok
+test camtiff::arw::tests::rejects_arw2_block_with_equal_extrema_indices ... ok
+test camtiff::color::tests::nikon_rational_white_balance_uses_green_relative_rb ... ok
+test bay::tests::file_source_and_sensor_share_budget_and_release_after_refusal ... ok
+test camtiff::cr2::tests::cancellation_during_decode_is_typed ... ok
+test camtiff::arw::tests::rejects_arw2_width_not_multiple_of_32 ... ok
+test camtiff::arw::tests::rejects_missing_cfa_tags_with_typed_error ... ok
+test camtiff::arw::tests::rejects_unsupported_compression_with_typed_error ... ok
+test camtiff::color::tests::panasonic_white_balance_reads_actual_directory_values ... ok
+test camtiff::color::tests::sony_encrypted_metadata_has_correct_channel_order ... ok
+test camtiff::color::tests::sony_rejects_invalid_metadata_ranges ... ok
+test camtiff::color::tests::wb_uses_measured_channels ... ok
+test camtiff::cr2::tests::decodes_ljpeg_slices_into_row_major_sensor_order ... ok
+test camtiff::cr2::tests::parses_header_signature_and_selects_raw_ifd_via_pointer ... ok
+test camtiff::cr2::tests::rejects_dangling_raw_ifd_pointer ... ok
+test camtiff::cr2::tests::reads_metadata_from_dng_like_cr2_tags ... ok
+test camtiff::cr2::tests::rejects_non_cfa_photometric ... ok
+test camtiff::cr2::tests::rejects_slice_geometry_mismatch ... ok
+test camtiff::cr2::tests::rejects_unsupported_compression ... ok
+test camtiff::cr2::tests::decodes_unsliced_stream_as_identity ... ok
+test camtiff::dcs_sensor::tests::native_response_curve_matches_first_oracle_sample ... ignored, requires CC0 DCS520C source and independent sensor oracle
+test camtiff::dcs_sensor::tests::original_tiff_public_route_is_managed_and_matches_oracle ... ignored, requires original CC0 DCS520C TIFF and independent sensor oracle
+test camtiff::dcs_sensor::tests::real_sensor_and_wb_match_independent_oracle ... ignored, requires CC0 DCS520C source and independent sensor oracle
+test bay::tests::eight_bit_layouts_preserve_all_values_and_exact_storage_dimensions ... ok
+test camtiff::cr2::tests::rejects_wrong_signature_and_non_little_endian ... ok
+test camtiff::dcs_sensor::tests::cancelled_empty_source_has_no_allocation ... ok
+test camtiff::erf::tests::rd1_color_parameters_match_independent_oracle_and_reject_bad_wb ... ignored, requires pinned CC0 Epson R-D1 ERF object 2680
+test camtiff::fixture_regression::configured_nef_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_arw_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_cr2_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_orf_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_pef_fixture_decodes_sensor_samples ... ok
+test camtiff::hasselblad::tests::real_3fr_retains_embedded_precision_and_rejects_zero_neutral ... ignored, requires external pinned CC0 Hasselblad X1D object 2058
+test camtiff::hasselblad_entropy::tests::complete_real_sensor_matches_oracle_and_truncation_cancels ... ignored, requires pinned CC0 Hasselblad CFV-50 FFF source and LibRaw dump
+test camtiff::hasselblad_entropy::tests::paired_prefix_vs_bitwise_full_sensor_timing ... ignored, requires pinned CC0 FFF source; paired full-sensor performance run
+test camtiff::kodak_65000::tests::real_full_sensor_matches_libraw ... ignored, requires pinned Kodak DCS760C DCR object 1347 and LibRaw sensor dump
+test camtiff::fixture_regression::configured_raf_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_rw2_fixture_decodes_sensor_samples ... ok
+test camtiff::hasselblad_entropy::tests::prefix_lookup_preserves_long_codes_and_short_final_tail ... ok
+test camtiff::hasselblad_entropy::tests::tiny_predictor8_signed_pairs_and_row_reset ... ok
+test camtiff::hasselblad_entropy::tests::tiny_predictor8_rejects_truncated_words_bad_codes_and_mismatched_dimensions ... ok
+test camtiff::kodak_65000::tests::synthetic_invalid_prediction_dimensions_and_cancel_reject ... ok
+test camtiff::kodak_dcr_color::tests::all_native_wb_selectors_match_independent_oracle ... ignored, requires CC0 Kodak DCS760C source; six independently pinned WB modes
+test camtiff::kodak_dcr_color::tests::native_daylight_wb_matches_libraw ... ignored, requires CC0 Kodak DCS760C source
+test camtiff::leaf_packets::tests::real_native_packets_match_independent_wb ... ignored, requires pinned Leaf Aptus 22 MOS
+test camtiff::mef_sensor::tests::real_zd_all_sensor_values_match_pinned_independent_oracle ... ignored, requires pinned RRRAH_MEF_SOURCE and shasum; full independent sensor hash, not color qualification
+test camtiff::mef_sensor::tests::real_zd_file_import_shares_source_and_output_budget ... ignored, requires pinned Mamiya ZD source; qualifies file admission, not camera color
+test camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle ... ignored, requires external Mamiya ZD source and independent sensor oracle
+test camtiff::mef_sensor::tests::real_zd_sensor_admission_cancellation_and_last_owner ... ignored, requires pinned Mamiya ZD source; validates lifecycle, not photographic color
+test camtiff::kodak_65000::tests::synthetic_packed_fallback_retains_all_twelve_bits ... ok
+test camtiff::kodak_65000::tests::synthetic_prediction_and_partial_block_are_exact ... ok
+test camtiff::leaf_packets::tests::native_wb_and_packet_boundaries ... ok
+test camtiff::makernote_color::tests::vendor_makernotes_read_as_shot_channels ... ok
+test camtiff::mef_sensor::tests::packed_boundaries_admission_cancel_and_ownership ... ok
+test camtiff::mef_sensor::tests::file_import_rejects_selection_and_stale_generation_before_reading ... ok
+test camtiff::makernote_color::tests::canon_unknown_colordata_version_is_rejected ... ok
+test camtiff::mef_sensor::tests::sensor_strip_cannot_alias_out_of_line_metadata ... ok
+test camtiff::nef::tests::decodes_14bit_lossless_makernote_format2_last_curve_tag_wins ... ok
+test camtiff::nef::tests::decodes_big_endian_packed_12bit_round_trip ... ok
+test camtiff::nef::tests::decodes_little_endian_packed_12bit_round_trip ... ok
+test camtiff::nef::tests::decodes_multi_strip_14bit ... ok
+test camtiff::nef::tests::decodes_12bit_lossy_interpolated_curve_with_split ... ok
+test camtiff::nef::tests::decodes_12bit_lossless_makernote_format1_plain ... ok
+test camtiff::nef::tests::honors_cancelled_callback ... ok
+test camtiff::nef::tests::nrw_guard_rejects_unqualified_nef_camera ... ok
+test camtiff::nef::tests::rejects_broken_makernote_tiff_header ... ok
+test camtiff::nef::tests::rejects_makernote_without_curve_tag ... ok
+test camtiff::nef::tests::rejects_missing_cfa_tags ... ok
+test camtiff::nef::tests::rejects_nikon_lossless_16bit ... ok
+test camtiff::nef::tests::rejects_nikon_lossless_multi_strip ... ok
+test camtiff::nef::tests::rejects_nikon_lossless_without_makernote ... ok
+test camtiff::nef::tests::rejects_other_compressions_with_typed_error ... ok
+test camtiff::nef::tests::rejects_truncated_entropy_stream ... ok
+test camtiff::nef::tests::rejects_unsupported_bit_depth ... ok
+test camtiff::nef::tests::decodes_12bit_lossless_makernote_format3_mixed_byte_order ... ok
+test camtiff::nef::tests::rejects_curve_out_of_range_samples ... ok
+test camtiff::nef::tests::p7800_unpacked_checks_mode_layout_endianness_and_cancellation ... ok
+test camtiff::nef::tests::rejects_non_rgb_bayer_cfa ... ok
+test camtiff::nef::tests::rejects_truncated_curve_blob ... ok
+test camtiff::nef::tests::rejects_truncated_strip_data ... ok
+test camtiff::nef::tests::seed_order_matches_the_canonical_rawspeed_layout ... ok
+test camtiff::nef::tests::honors_cancelled_callback_compressed ... ok
+test camtiff::olympus_entropy::tests::paired_bit_reader_throughput ... ignored, manual paired bit-reader throughput benchmark
+test camtiff::olympus_entropy::tests::paired_real_orf_entropy ... ignored, manual paired real ORF entropy stream benchmark
+test camtiff::olympus_entropy::tests::paired_real_orf_prefix ... ignored, manual paired real ORF prefix benchmark
+test camtiff::olympus_entropy::tests::truncated_stream_and_cancellation_are_errors ... ok
+test camtiff::orf::tests::invalid_explicit_white_levels_are_rejected ... ok
+test camtiff::orf::tests::olympus12_unpacking_matches_dcraw_reference ... ok
+test camtiff::orf::tests::parse_container_rejects_non_orf_bytes ... ok
+test camtiff::orf::tests::invalid_black_levels_and_collapsed_sensor_range_are_rejected ... ok
+test camtiff::orf::tests::recognizes_orf_magics ... ok
+test camtiff::olympus_entropy::tests::byte_window_matches_bit_reference_at_every_alignment_and_tail ... ok
+test bay::tests::qv5700_trailer_changes_do_not_change_image_samples ... ok
+test camtiff::nef::tests::selects_the_sub_ifd_raw_directory ... ok
+test camtiff::nef::tests::undefined_cfa_pattern_preserves_bayer_cells_and_rejects_invalid_colors ... ok
+test camtiff::olympus_entropy::tests::zero_residuals_predict_full_sensor_plane ... ok
+test camtiff::orf::tests::cancellation_is_typed ... ok
+test camtiff::orf::tests::declared_black_grid_preserves_sensor_coordinates_and_checks_shape ... ok
+test camtiff::orf::tests::rejects_missing_cfa_tags ... ok
+test camtiff::orf::tests::rejects_non_bayer_cfa ... ok
+test camtiff::orf::tests::uncompressed16_decodes_little_endian ... ok
+test camtiff::orf::tests::rejects_unsupported_bit_depth ... ok
+test bay::tests::interrupted_stream_retries_eof_and_checks_cancellation_inside_rows ... ok
+test camtiff::orf::tests::rejects_unsupported_compression ... ok
+test camtiff::orf::tests::rejects_unverifiable_packed_byte_count ... ok
+test camtiff::orf::tests::selects_subifd_and_reads_metadata ... ok
+test camtiff::orf::tests::white_level_defaults_to_full_scale ... ok
+test camtiff::pef::tests::cancellation_returns_cancelled ... ok
+test camtiff::pef::tests::compression_65535_ambiguous_table_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_cancelled_returns_cancelled ... ok
+test camtiff::pef::tests::compression_65535_inline_short_table_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_invalid_code_length_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_multiple_strips_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_odd_width_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_out_of_range_sample_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_truncated_stream_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_truncated_table_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_without_huffman_tag_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_without_makernote_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_wrong_table_field_type_is_a_typed_rejection ... ok
+test camtiff::pef::tests::dng_level_and_white_balance_tags_override_defaults ... ok
+test camtiff::phaseone::tests::public_iiq_router_managed_memory_and_full_sensor ... ignored, requires pinned P20+ IIQ and corrected oracle
+test camtiff::phaseone::tests::real_clustered_columns_match_full_independent_sensors ... ignored, requires controlled P20+ clustered-column variants and LibRaw corrected oracles
+test camtiff::phaseone::tests::real_native_pipeline_matches_independent_full_sensor_and_color ... ignored, requires pinned P20+ source and original full corrected oracle
+test camtiff::phaseone::tests::real_pipeline_stage_timing_preserves_oracle ... ignored, external P20+ source/oracle; informational per-stage timing, no wall-clock gate
+test camtiff::pef::tests::lossless_jpeg_strip_round_trip ... ok
+test camtiff::pef::tests::metadata_from_synthetic_pef ... ok
+test camtiff::pef::tests::missing_cfa_tags_are_a_typed_rejection ... ok
+test camtiff::pef::tests::multi_strip_packed_decode ... ok
+test camtiff::pef::tests::packed_12_and_14_bit_round_trip ... ok
+test camtiff::pef::tests::pentax_jpeg_extreme_samples_round_trip ... ok
+test camtiff::pef::tests::pentax_jpeg_makernote_table_round_trip ... ok
+test camtiff::pef::tests::unknown_compression_is_a_typed_rejection ... ok
+test camtiff::pef::tests::unsupported_bit_depth_is_a_typed_rejection ... ok
+test camtiff::phaseone_calibration::tests::adjacent_columns_use_valid_diagonal_neighbours_at_sensor_edges ... ok
+test camtiff::phaseone_calibration::tests::real_flat_field_specialization_paired ... ignored, P20+ external source and stage oracles; paired informational benchmark
+test camtiff::phaseone_calibration::tests::real_native_black_and_flat_fields_match_stage_oracles ... ignored, requires P20+ native sensor and independent black/flat-field stage oracles
+test camtiff::phaseone_calibration::tests::real_pixel_repair_and_flat_fields_match_independent_sensor ... ignored, requires P20+ sensor and independent corrected oracle with column entries disabled
+test camtiff::phaseone_calibration::tests::black_saturation_chroma_and_field_bounds ... ok
+test camtiff::phaseone_calibration::tests::isolated_columns_preserve_constant_sensor_and_validate_before_mutation ... ok
+test camtiff::phaseone_calibration::tests::pixel_defects_use_valid_neighbours_and_reject_malformed_records ... ok
+test camtiff::phaseone_container::tests::real_private_sensor_and_calibration_payloads ... ignored, requires pinned P20+ IIQ source
+test camtiff::phaseone_entropy::tests::real_format3_matches_full_independent_sensor ... ignored, requires pinned Phase One P20+ IIQ object 4366 and independent sensor oracle
+test camtiff::phaseone_container::tests::private_directory_bounds_and_duplicate_tags ... ok
+test camtiff::phaseone_entropy::tests::absolute_tail_and_invalid_geometry ... ok
+test camtiff::phaseone_entropy::tests::predictor_reuse_signed_steps_and_row_reset ... ok
+test camtiff::raf::tests::rejects_unsupported_compression_tag ... ok
+test camtiff::raf::tests::honours_cancellation_per_row ... ok
+test camtiff::raf::tests::parses_header_selects_fuji_ifd_and_decodes_lsb_packed_bayer ... ok
+test camtiff::raf::tests::rejects_broken_headers_with_typed_errors ... ok
+test camtiff::raf::tests::rejects_fuji_proprietary_compression_without_soi ... ok
+test camtiff::raf::tests::rejects_cfa_pattern_with_non_rgb_colors ... ok
+test camtiff::raf::tests::rejects_non_2x2_cfa_repeat_pattern_dim ... ok
+test camtiff::raf::tests::rejects_rotated_super_ccd_layout ... ok
+test camtiff::raf::tests::decodes_uncompressed_sixteen_bit_with_container_byte_order ... ok
+test camtiff::raf::tests::rejects_xtrans_via_raf_directory_tag ... ok
+test camtiff::raf::tests::uncompressed_xtrans_preserves_directory_phase_and_black_grid ... ok
+test camtiff::rw2::tests::decodes_panasonic_packed_constant_rows ... ok
+test camtiff::raf::tests::rejects_xtrans_via_thirty_six_black_levels ... ok
+test camtiff::rw2::tests::decodes_lossless_jpeg_strip ... ok
+test camtiff::rw2::tests::decodes_panasonic_packed_delta_paths ... ok
+test camtiff::rw2::tests::decodes_unpacked_16_bit_strips ... ok
+test camtiff::rw2::tests::keeps_rgb_linearity_limits_and_rejects_partial_or_invalid_limits ... ok
+test camtiff::rw2::tests::honours_cancellation ... ok
+test camtiff::rw2::tests::parse_container_recognizes_iiu_signature ... ok
+test camtiff::rw2::tests::legacy_panasonic_left_aligned_samples_and_black_level ... ok
+test camtiff::rw2::tests::legacy_fz8_packed_pairs_are_bounded_and_cancellable ... ok
+test camtiff::rw2::tests::reads_panasonic_metadata_tags ... ok
+test camtiff::rw2::tests::rejects_missing_cfa ... ok
+test camtiff::rw2::tests::rejects_multi_strip_lossless_jpeg ... ok
+test camtiff::rw2::tests::rejects_non_rw2_signature ... ok
+test camtiff::rw2::tests::rejects_unsupported_compression ... ok
+test camtiff::srf_sensor::tests::real_full_encrypted_sensor_matches_independent_oracle ... ignored, requires pinned DSC-F828 SRF and independent LibRaw unpack oracle
+test camtiff::rw2::tests::rejects_unsupported_uncompressed_bit_depth ... ok
+test camtiff::rw2::tests::selects_the_directory_with_sensor_tags ... ok
+test camtiff::srf_sensor::tests::cipher_continues_across_chunks_and_sensor_rejects_truncation ... ok
+test camtiff::tests::camera_recipes_use_the_expected_backend_revisions ... ok
+test camtiff::tests::camera_recipes_are_distinct_from_existing_backends ... ok
+test camtiff::tests::generic_selection_prefers_the_large_cfa_directory ... ok
+test camtiff::tests::parse_rejects_directory_cycles ... ok
+test ciff::tests::both_orders_nested_payloads_and_all_prefixes ... ok
+test ciff::tests::real_10d_auto_white_balance_matches_independent_oracle ... ignored, requires pinned CC0 EOS 10D CRW object 2027
+test ciff::tests::malicious_offsets_counts_and_inline_records ... ok
+test ciff::tests::real_d30_directory_tree_and_sensor_metadata ... ignored, requires pinned CC0 EOS D30 CRW object 1307
+test ciff::tests::ten_d_calibration_transform_matches_independent_oracle ... ok
+test ciff::tests::ten_d_wb_layout_refuses_missing_coefficients_and_unknown_presets ... ok
+test ciff::tests::unique_lookup_is_cancellable_and_rejects_duplicates ... ok
+test ciff::tests::lookup_caps_admit_boundary_and_refuse_next_level_or_record ... ok
+test cr3::assemble::tests::a_plane_panic_is_contained_until_every_worker_joins ... ok
+test cr3::assemble::tests::cancellation_prevents_any_plane_from_starting ... ok
+test cr3::assemble::tests::interleave_rejects_invalid_geometry_before_allocating ... ok
+test cr3::assemble::tests::interleave_rejects_each_wrong_plane_length ... ok
+test cr3::assemble::tests::interleaves_each_plane_row_directly_into_the_final_mosaic ... ok
+test cr3::assemble::tests::interleaves_four_parities_in_rggb_sensor_order ... ok
+test cr3::assemble::tests::an_error_signals_inflight_decoders_and_is_attributed ... ok
+test cr3::assemble::tests::parallel_decode_is_bounded_and_returns_stable_plane_order ... ok
+test cr3::assemble::tests::streaming_decode_attributes_a_plane_failure_without_hanging ... ok
+test cr3::assemble::tests::streaming_decode_external_cancellation_unblocks_all_workers ... ok
+test cr3::assemble::tests::streaming_decode_attributes_a_plane_panic ... ok
+test cr3::bmff::tests::handles_large_open_ended_and_uuid_headers ... ok
+test cr3::assemble::tests::streaming_decode_matches_four_plane_interleave ... ok
+test cr3::assemble::tests::streaming_decode_rejects_an_extra_row ... ok
+test cr3::assemble::tests::zero_worker_request_still_uses_one_caller_worker ... ok
+test cr3::bmff::tests::enforces_box_and_file_limits ... ok
+test cr3::bmff::tests::linear_sample_iterator_reports_one_error_then_fuses ... ok
+test cr3::bmff::tests::optionally_validates_a_real_cr3_fixture ... ok
+test cr3::assemble::tests::streaming_decode_rejects_an_individual_wrong_row_width ... ok
+test cr3::bmff::tests::parses_64_bit_chunk_offsets ... ok
+test cr3::bmff::tests::parses_track_extensions_and_resolves_samples ... ok
+test cr3::assemble::tests::streaming_decode_rejects_early_success_from_one_plane ... ok
+test cr3::assemble::tests::streaming_decode_rejects_out_of_order_rows ... ok
+test cr3::bmff::tests::rejects_boxes_smaller_than_headers_or_outside_parent ... ok
+test cr3::bmff::tests::rejects_duplicate_structural_boxes_even_when_the_first_is_empty ... ok
+test cr3::bmff::tests::rejects_malformed_table_counts_before_allocating ... ok
+test cr3::assemble::tests::streaming_decode_rejects_reordering_inside_a_batch ... ok
+test cr3::bmff::tests::rejects_sample_end_overflow_and_out_of_file_range ... ok
+test cr3::bmff::tests::rejects_truncated_base_and_extended_headers ... ok
+test cr3::crx::tests::parses_both_eos_r8_track_configurations ... ok
+test cr3::crx::tests::rejects_config_dimension_mismatch ... ok
+test cr3::crx::tests::rejects_unbounded_or_internally_inconsistent_samples ... ok
+test cr3::crx::tests::splits_a_small_four_plane_sample_into_bounded_chunks ... ok
+test cr3::ctmd::tests::enforces_record_count_and_byte_limits ... ok
+test cr3::ctmd::tests::parses_records_and_extracts_exact_eos_r8_ratios ... ok
+test cr3::ctmd::tests::reads_dynamic_sensor_levels_and_rejects_invalid_ordering ... ok
+test cr3::ctmd::tests::record_debug_does_not_expose_payload_bytes ... ok
+test cr3::ctmd::tests::rejects_ambiguous_records_and_tags ... ok
+test cr3::ctmd::tests::rejects_tiff_signature_with_truncated_header ... ok
+test cr3::ctmd::tests::rejects_truncated_and_invalid_record_lengths ... ok
+test cr3::fixture_regression::eos_r8_full_native_decode_matches_pixel_oracles ... ignored, requires owner-supplied private EOS R8 fixtures
+test cr3::ctmd::tests::rejects_unsupported_type_count_and_layout_marker ... ok
+test cr3::ctmd::tests::rejects_zero_denominators ... ok
+test cr3::lossless::tests::adaptive_rice_increases_by_at_most_two_for_one_symbol ... ok
+test cr3::lossless::tests::adaptive_rice_matches_confirmed_transition_rule ... ok
+test cr3::lossless::tests::eos_r8_plane_zero_first_64_samples_match_black_box_oracle ... ok
+test cr3::lossless::tests::branchless_median_predictor_matches_the_piecewise_definition ... ok
+test cr3::ctmd::tests::retains_second_green_gain_without_renormalizing_blue ... ok
+test cr3::lossless::tests::full_plane_checks_cancellation_and_resource_limits_before_decode ... ok
+test cr3::lossless::tests::msb_reader_failed_fixed_width_read_does_not_consume_buffered_bits ... ok
+test cr3::lossless::tests::msb_reader_fixed_width_reads_cross_reservoir_boundaries ... ok
+test cr3::lossless::tests::msb_reader_is_bounded_and_crosses_bytes ... ok
+test cr3::lossless::tests::msb_reader_unary_eof_reports_the_consumed_bit_position ... ok
+test cr3::lossless::tests::msb_reader_unary_limit_consumes_the_offending_zero ... ok
+test cr3::lossless::tests::msb_reader_unary_scan_crosses_a_zero_word ... ok
+test cr3::lossless::tests::rejects_impossible_width_before_allocating_samples ... ok
+test cr3::lossless::tests::prefix_validation_rejects_unproven_layouts ... ok
+test cr3::metadata::tests::rejects_another_camera_before_applying_the_profile ... ok
+test cr3::metadata::tests::rejects_duplicate_interpreted_tags_instead_of_using_file_order ... ok
+test cr3::lossless::tests::rejects_pathological_unary_run_at_the_confirmed_symbol_bound ... ok
+test cr3::metadata::tests::extracts_identity_profile_and_preserves_unknown_fields ... ok
+test cr3::metadata::tests::malformed_tiff_and_missing_identity_have_explicit_errors ... ok
+test cr3::metadata::tests::maps_all_standard_tiff_orientations ... ok
+test cr3::metadata::tests::reports_missing_and_unmapped_white_balance_distinctly ... ok
+test cr3::metadata::tests::rejects_missing_invalid_and_duplicate_orientation ... ok
+test cr3::native::tests::cmt_payload_limit_is_checked_before_access ... ok
+test cr3::native::tests::direct_cmt_lookup_requires_one_bounded_container_child ... ok
+test cr3::native::tests::facade_limit_rejects_input_before_box_traversal ... ok
+test cr3::select::tests::a_craw_jpeg_without_cmp1_or_cdi1_is_not_native ... ok
+test cr3::select::tests::rejects_equal_best_candidates_instead_of_using_file_order ... ok
+test cr3::select::tests::chooses_largest_native_track_and_ignores_jpeg_craw_preview ... ok
+test cr3::select::tests::rejects_extra_bytes_beyond_the_crx_declared_plane_sum ... ok
+test cr3::select::tests::rejects_input_that_is_not_the_indexed_file ... ok
+test cr3::select::tests::rejects_pathological_candidate_counts_before_walking_the_table ... ok
+test cr3::select::tests::selects_real_fixture_when_environment_path_is_set ... ok
+test cr3::tiff::tests::big_endian_arrays_and_signed_values ... ok
+test cr3::tiff::tests::caller_can_follow_pointer_entry_explicitly ... ok
+test cr3::native::tests::parses_both_local_eos_r8_fixtures_when_available ... ok
+test crw::router_tests::real_crw_public_route_matches_explicit_import ... ignored, requires pinned EOS 10D source via RRRAH_CRW_SOURCE
+test crw::router_tests::real_crw_routed_budget_pressure_is_retryable_and_last_owner_charged ... ignored, requires pinned EOS 10D source via RRRAH_CRW_SOURCE
+test cr3::tiff::tests::checked_range_reports_arithmetic_overflow ... ok
+test cr3::tiff::tests::enforces_entry_depth_and_value_limits ... ok
+test cr3::tiff::tests::little_endian_inline_and_out_of_line_values ... ok
+test cr3::tiff::tests::rejects_truncated_header_directory_and_value ... ok
+test cr3::tiff::tests::typed_accessors_reject_wrong_types_and_non_scalars ... ok
+test cr3::tiff::tests::unsigned_rational_arrays_preserve_exact_components ... ok
+test crw::tests::admission_and_table_identity_refuse_before_source_io ... ok
+test cr3::tiff::tests::follows_linked_ifds_and_rejects_cycles ... ok
+test crw_entropy::tests::all_twelve_bit_values_and_legacy_low_value_boundary ... ok
+test crw_entropy::tests::authored_difference_block_and_row_reset_with_carried_dc ... ok
+test crw_entropy::tests::canonical_prefixes_and_deep_code_match_authored_bit_patterns ... ok
+test crw_entropy::tests::real_10d_low_plane_matches_every_independent_sensor_sample ... ignored, requires pinned EOS 10D CRW and independent full sensor oracle
+test crw_entropy::tests::empty_truncated_and_unstuffed_streams_refuse ... ok
+test crw_entropy::tests::real_full_sensor_entropy_matches_independent_oracle ... ignored, requires CRW source, independent sensor and external camera table data
+test crw_entropy::tests::full_high_plane_cancellation_and_truncation ... ok
+test crw_entropy::tests::impossible_entropy_geometry_refuses_before_reserving_output ... ok
+test dng::default_scale_admission_tests::default_scale_is_carried_and_malformed_values_refused ... ignored, requires pinned official HERO9 source
+test dng::fixture_regression::lossy_jpeg_dng_is_rejected_instead_of_misdecoded ... ignored, requires separately downloaded non-lossless DNG fixture
+test dng::fixture_regression::real_dng_pixels_match_exact_oracles ... ignored, requires separately downloaded CC0 DNG fixtures
+test crw_entropy::tests::impossible_trees_and_symbol_count_mismatches_refuse ... ok
+test crw_entropy::tests::managed_admission_and_cancel_release_partial_output ... ok
+test crw_entropy::tests::predictor_refuses_overflow_without_advancing_state ... ok
+test crw::router_tests::ciff_signature_routes_even_with_unknown_extension ... ok
+test dng::lossless_jpeg::tests::accepts_marker_fill_before_initial_soi ... ok
+test dng::lossless_jpeg::tests::accepts_the_complete_huffman_table_shape_used_by_canon ... ok
+test dng::lossless_jpeg::tests::applies_linearization_curve_with_checked_bounds ... ok
+test dng::lossless_jpeg::tests::applies_point_transform_after_prediction ... ok
+test dng::lossless_jpeg::tests::applies_point_transform_per_noninterleaved_component_scan ... ok
+test dng::lossless_jpeg::tests::container_geometry_is_checked_before_entropy_decode ... ok
+test dng::lossless_jpeg::tests::decodes_all_seven_annex_h_predictors ... ok
+test dng::lossless_jpeg::tests::decodes_category_sixteen_modulo_difference ... ok
+test dng::lossless_jpeg::tests::cancellation_is_polled_during_entropy_decode ... ok
+test dng::lossless_jpeg::tests::decodes_noninterleaved_component_scans_in_any_order ... ok
+test dng::lossless_jpeg::tests::decodes_one_through_four_interleaved_components ... ok
+test dng::lossless_jpeg::tests::decodes_stream_without_dht_using_external_table ... ok
+test dng::lossless_jpeg::tests::entropy_reader_unstuffs_ff_and_finds_eoi ... ok
+test dng::lossless_jpeg::tests::external_table_symbol_count_must_match_counts ... ok
+test dng::lossless_jpeg::tests::leaf_mos_compatibility_matches_independent_sensor ... ignored, requires pinned Leaf Aptus 22 MOS and full-sensor oracle
+test dng::lossless_jpeg::tests::huffman_fallback_decodes_codes_longer_than_fast_lookup ... ok
+test dng::lossless_jpeg::tests::leaf_mos_nonstandard_quantization_selector_is_rejected ... ignored, requires pinned Leaf Aptus 22 MOS source
+test dng::lossless_jpeg::tests::in_stream_dht_overrides_external_table_unless_forced ... ok
+test dng::lossless_jpeg::tests::mos_header_compatibility_does_not_relax_strict_dng ... ok
+test dng::lossless_jpeg::tests::predictor_formulas_cover_negative_odd_deltas_independently ... ok
+test dng::lossless_jpeg::tests::rejects_interleaved_scan_components_out_of_sof_order ... ok
+test dng::lossless_jpeg::tests::linearization_curve_honours_cancellation ... ok
+test dng::lossless_jpeg::tests::parses_multiple_tables_and_allows_later_dht_redefinition ... ok
+test dng::lossless_jpeg::tests::rejects_component_subsampling ... ok
+test dng::lossless_jpeg::tests::rejects_restart_interval_inside_a_lossless_row ... ok
+test dng::lossless_jpeg::tests::rejects_truncated_and_non_sof3_inputs ... ok
+test dng::lossless_jpeg::tests::rejects_stuffed_zero_after_entropy_marker_fill ... ok
+test dng::lossless_jpeg::tests::rejects_zero_padding_and_marker_inside_a_symbol ... ok
+test dng::lossless_jpeg::tests::rejects_wrong_restart_number ... ok
+test dng::lossless_jpeg::tests::resets_prediction_at_row_aligned_restart_markers ... ok
+test dng::lossless_jpeg::tests::restart_sequence_wraps_from_rst7_to_rst0 ... ok
+test dng::parallel::tests::effective_workers_clamps_to_hardware_and_units ... ok
+test dng::parallel::tests::effective_workers_stays_sequential_for_small_jobs ... ok
+test dng::lossless_jpeg::tests::word_refill_matches_bytewise_on_stuffed_restart_stream ... ok
+test dng::parallel::tests::run_units_surfaces_cancellation_without_units_observing_it ... ok
+test dng::tests::clamps_linearization_indices_to_the_last_table_entry ... ok
+test dng::parallel::tests::split_row_bands_covers_the_output_exactly_once ... ok
+test dng::tests::camera_classification_admits_linked_subifds_but_rejects_cycles ... ok
+test dng::tests::cancellation_stops_before_pixel_allocation ... ok
+test dng::parallel::tests::run_units_reports_the_lowest_index_failure ... ok
+test dng::tests::exact_directory_cap_accepts_but_extra_next_link_refuses ... ok
+test dng::tests::oversized_subifd_fanout_refuses_before_offset_vector_allocation ... ok
+test dng::tests::rejects_a_sub_ifd_chain ... ok
+test dng::parallel::tests::run_units_processes_every_unit_once_at_any_worker_count ... ok
+test dng::tests::selects_raw_sub_ifd_and_parses_required_metadata ... ok
+test crw_entropy::tests::stuffed_bytes_cross_byte_reads_and_signed_amplitudes ... ok
+test dng::tiff::tests::accepts_orf_camera_magics_as_classic_tiff ... ok
+test dng::tiff::tests::accepts_rw2_magic_as_classic_tiff ... ok
+test dng::tiff::tests::parses_big_tiff_and_ifd8_offsets ... ok
+test dng::tiff::tests::parses_classic_little_endian_inline_and_out_of_line_values ... ok
+test dng::tiff::tests::rejects_out_of_range_values_before_borrowing ... ok
+test dng::tiff::tests::still_rejects_unrelated_magics ... ok
+test camtiff::tests::implemented_quirks_fail_typed_without_not_implemented ... ok
+test dng::uncompressed::tests::applies_linearization_after_unpacking ... ok
+test dng::uncompressed::tests::decodes_big_endian_sixteen_bit_edge_tiles ... ok
+test dng::uncompressed::tests::decodes_row_aligned_twelve_bit_strips ... ok
+test dng_backend::gpr_admission_tests::damaged_gpr_refuses_without_retaining_managed_pixels ... ignored, requires pinned HERO9 GPR source
+test dng_backend::gpr_admission_tests::hero9_native_dng_matches_sensor_oracle_and_releases_budget ... ignored, requires pinned HERO9 source and independent full Bayer oracle
+test dng_backend::tests::calibration_tags_gate_neutral_solver_at_parse_time ... ok
+test dng::uncompressed::tests::fixed_group_unpack_preserves_truncation_errors_and_partial_output ... ok
+test dng::tests::stripped_uncompressed_is_bit_identical_across_workers ... ok
+test dng_backend::tests::d65_color_matrix_2_wins_verbatim_over_illuminant_a_matrix_1 ... ok
+test dng_backend::tests::dng_cfa_and_black_grid_are_anchored_to_full_sensor ... ok
+test dng_backend::tests::dng_color_metadata_is_required_and_measured_wb_is_preserved ... ok
+test dng_backend::tests::dual_illuminant_resolution_respects_calibration_contract ... ok
+test dng_backend::tests::exact_geometry_rejects_fractional_values ... ok
+test dng::tests::tiled_uncompressed_is_bit_identical_across_workers ... ok
+test dng_backend::tests::lone_illuminant_a_matrix_is_bradford_adapted ... ok
+test dng_backend::tests::missing_or_untagged_matrices_keep_legacy_behavior ... ok
+test dng_backend::tests::nonzero_image_index_is_rejected_before_io ... ok
+test dng_backend::tests::neutral_color_revision_invalidates_previously_cached_dng_metadata ... ok
+test dng_backend::tests::dng_managed_source_and_output_share_budget_and_retain_owners ... ok
+test eip::tests::cancellation_before_and_during_inflation_releases_admission ... ok
+test dng_backend::tests::recipe_is_distinct_and_complete ... ok
+test dng_backend::tests::stale_request_is_rejected_before_io ... ok
+test eip::tests::common_eip_crw_preserves_original_sensor_and_metadata ... ignored, requires pinned EOS 10D CRW source
+test eip::tests::common_eip_gpr_preserves_original_sensor_and_development_metadata ... ignored, requires pinned official HERO9 GPR source
+test eip::tests::file_cr3_sensor_matches_original_with_package_raw_and_sensor_admission ... ignored, manual real CR3 file lifecycle qualification
+test eip::tests::directory_admission_precedes_zip_metadata_allocation ... ok
+test eip::tests::independent_zip_raw_matches_original_source ... ignored, requires independently authored ZIP containing pinned IIQ source
+test eip::tests::inventories_raw_and_assets_without_inflating ... ok
+test dng::tests::parallel_decode_reports_cancellation ... ok
+test eip::tests::disk_package_and_inflated_raw_share_root_and_failures_release_source ... ok
+test eip::tests::memory_cr3_import_matches_both_independent_local_sensor_oracles ... ignored, requires authored local EOS R8 packages and independent sensor oracles
+test eip::tests::memory_dng_import_matches_full_independent_sensor ... ignored, requires authored DNG ZIP and independent LibRaw full sensor oracle
+test eip::tests::memory_mrw_import_matches_both_independent_sensor_oracles ... ignored, requires authored MRW packages and independent LibRaw full sensor oracles
+test eip::tests::memory_sensor_import_matches_full_independent_sensor ... ignored, requires authored IIQ ZIP and independent corrected LibRaw sensor oracle
+test eip::tests::ptx_and_pef_members_reach_native_decoder_and_release_failed_import ... ok
+test eip::tests::managed_raw_exact_bytes_crc_and_last_owner_accounting ... ok
+test eip::tests::ptx_member_is_inventory_raw_and_ambiguous_sources_are_refused ... ok
+test eip::tests::common_eip_route_refuses_corruption_and_releases_managed_credit ... ok
+test gpr_opcode_tests::official_gpr_corrections_are_not_silently_omitted ... ignored, requires pinned official GoPro sample corpus via RRRAH_GPR_CORPUS
+test mrw::tests::dynax_7d_matches_every_independent_sensor_sample ... ignored, requires CC0 MRW object 1826 and independent LibRaw sensor dump
+test eip::tests::rejects_encryption_unknown_codec_and_expansion_claims ... ok
+test eip::tests::sensor_import_refuses_unsupported_raw_before_inflation_and_releases_bad_camera ... ok
+test eip::tests::rejects_unsafe_ambiguous_missing_and_duplicate_sources ... ok
+test mrw::tests::every_truncation_and_unqualified_storage_fail_before_allocation ... ok
+test mrw::tests::managed_sensor_admission_cancellation_and_shared_ownership ... ok
+test native_backend::tests::cr3_output_budget_reserves_before_decode_and_retains_owners ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test native_backend::tests::adaptation_summary_cannot_borrow_the_source_buffer ... ok
+test native_backend::tests::nonzero_image_index_is_rejected_before_io ... ok
+test native_backend::tests::plane_worker_knob_accepts_only_supported_values ... ok
+test native_backend::tests::recipe_is_distinct_and_complete ... ok
+test native_backend::tests::stale_request_is_rejected_before_io ... ok
+test native_backend::tests::streaming_requires_full_plane_coverage_and_a_spare_thread ... ok
+test native_router::tests::maps_every_camera_extension ... ok
+test native_router::tests::cancelled_router_refuses_before_opening_or_resolving_source ... ok
+test native_router::tests::mef_refuses_unimplemented_color_without_dng_or_memory_admission ... ok
+test native_router::tests::routes_extensions_case_insensitively ... ok
+test native_router::tests::strong_magic_overrides_the_extension ... ok
+test native_router::tests::camera_placeholder_backends_fail_typed_end_to_end ... ok
+test native_router::tests::tiff_family_and_unreadable_files_keep_the_extension ... ok
+test native_router::tests::unreadable_file_falls_back_to_extension_routing ... ok
+test optio_s4::tests::camera_file_matches_complete_independent_sensor_and_exact_root_boundary ... ignored, manual camera-produced Optio S4 corpus qualification
+test native_router::tests::mismatched_extension_is_corrected_by_magic ... ok
+test native_router::tests::unsupported_raw_index_precedes_format_resolution_and_source_io ... ok
+test opcode_geometry_serde_compatibility_tests::old_lists_remain_square_and_new_aspect_roundtrips ... ok
+test sniff::tests::detects_cr2_signature_at_offset_8 ... ok
+test sniff::tests::detects_cr3_iso_bmff_brand ... ok
+test eip::tests::file_recipe_uses_inventory_without_inflating_named_raw ... ok
+test sniff::tests::detects_orf_magics ... ok
+test sniff::tests::detects_raf_header ... ok
+test sniff::tests::detects_rw2_magic ... ok
+test sniff::tests::detects_tiff_family_variants ... ok
+test sniff::tests::unrelated_content_is_unknown ... ok
+test sniff::tests::short_and_empty_inputs_never_panic ... ok
+test vc5::prescale_tests::conflicting_prescale_is_rejected_before_band_admission ... ok
+test vc5::immutable_header_tests::conflicting_sensor_headers_refuse_including_zero_first_values ... ok
+test vc5::prefix_tree_tests::every_original_codeword_resolves_to_its_exact_symbol ... ok
+test sniff::kodak_identity_tests::bounded_probe_requires_unique_native_identity_and_excludes_dng ... ok
+test vc5::tests::bayer_assembly_refuses_bad_geometry_and_cancels_before_writing ... ok
+test vc5::tests::component_to_bayer_cells_match_independent_gopro_all_output_precisions ... ok
+test vc5::tests::entropy_sign_runs_band_end_and_truncation ... ok
+test vc5::tests::header_and_borrowed_chunks_have_exact_extents ... ok
+test vc5::tests::horizontal_inverse_matches_independent_gopro_edges_odd_widths_and_saturation ... ok
+test vc5::tests::horizontal_prescaled_inverse_matches_independent_gopro_edges_odd_widths_and_saturation ... ok
+test vc5::tests::inverse_companding_and_quantization_match_independent_gopro_oracle ... ok
+test vc5::tests::managed_reconstruction_admits_overlapping_output_scratch_and_releases_on_refusal ... ok
+test vc5::tests::inverse_log_matches_every_independent_gopro_code ... ok
+test vc5::tests::lowpass_unpack_has_exact_geometry_and_byte_order ... ok
+test vc5::tests::managed_entropy_band_reserves_before_decode_and_releases_failed_input ... ok
+test vc5::tests::pinned_hero9_has_four_bounded_channel_sections ... ignored, requires pinned official HERO9 GPR; set RRRAH_GPR_SOURCE
+test vc5::tests::reconstruction_cancels_between_rows_and_returns_partial_output_to_caller ... ok
+test vc5::tests::truncation_fails_once_without_allocation_or_resynchronization ... ok
+test vc5::tests::spatial_prescaled_inverse_matches_independent_gopro_odd_extents_and_borders ... ok
+test vc5::tests::spatial_inverse_matches_independent_gopro_odd_extents_and_borders ... ok
+test x3f::tests::bad_pixels_neighbor_mask_origin_edges_signed_means_and_cancel ... ok
+test x3f::tests::black_scene_adjustment_sample_stride_signed_values_and_refusal ... ok
+test x3f::tests::black_smoothing_constant_outlier_invalid_and_cancel ... ok
+test x3f::tests::borrowed_unknown_section_and_all_truncated_prefixes ... ok
+test x3f::tests::camf_float_access_refuses_nonfinite_wrong_type_and_bad_indices ... ok
+test x3f::tests::camf_matrix_rejects_corrupt_dimensions_ranges_and_overflow ... ok
+test x3f::tests::camf_property_links_refuse_truncation_offsets_and_cancel ... ok
+test x3f::tests::camf_type2_budget_cancellation_and_round_trip ... ok
+test x3f::tests::chroma_guide_bottom_up_partial_blocks_budget_and_cancel ... ok
+test x3f::tests::chroma_smoothing_zero_border_budget_and_cancellation ... ok
+test x3f::tests::crop_channels_exact_rows_bounds_budget_cancel_and_lease ... ok
+test x3f::tests::dark_drift_interpolates_all_channels_and_rejects_bad_rows ... ok
+test x3f::tests::highlights_threshold_transition_saturation_and_invalid_calibration ... ok
+test x3f::tests::hue_smoothing_constant_impulse_edges_budget_and_cancel ... ok
+test x3f::tests::image_header_refuses_truncation_and_reports_reserved_sensor_encoding ... ok
+test x3f::tests::invalid_ranges_versions_dimensions_and_cancellation ... ok
+test x3f::tests::legacy_tables_refuse_prefix_collisions_row_aliasing_and_cancel ... ok
+test x3f::tests::linear_output_matrix_truncation_clamp_budget_release ... ok
+test x3f::tests::linear_raster_preserves_values_color_alpha_and_lease ... ok
+test x3f::tests::noise_curve_domain_symmetry_finite_budget_and_cancellation ... ok
+test x3f::tests::properties_validate_offsets_unicode_and_cancellation ... ok
+test x3f::tests::post_polynomial_fixed_point_terms_and_overflow ... ok
+test x3f::tests::red_sharpen_constant_impulse_edges_other_channels_budget_and_cancel ... ok
+test x3f::tests::pixel_transform_rounding_clamps_validation_and_cancel ... ok
+test x3f::tests::sigma_sd10_inventory_distinguishes_sensor_from_previews ... ignored, requires pinned Sigma SD10 X3F and independent LibRaw channel dump
+test x3f::tests::sigma_sd14_native_sensor_matches_full_independent_unpack ... ignored, requires pinned CC0 Sigma SD14 source and independent enabled LibRaw unpack
+test x3f::tests::rotation_clockwise_non_square_budget_cancel ... ok
+test x3f::tests::shield_mean_signed_samples_bounds_and_cancellation ... ok
+test x3f::tests::shield_columns_filter_trim_and_invalid_ranges ... ok
+test x3f::tests::spatial_gain_bilinear_grid_boundaries_and_invalid_values ... ok
+test x3f::tests::wide_hue_smoothing_constant_impulse_border_and_release ... ok
+test dng::tests::decode_hook_checksum_matches_across_workers ... ok
+test camtiff::color::tests::profiles_are_exact_and_invertible ... ok
+test dng::uncompressed::tests::optimized_unpack_matches_bytewise_across_widths_depths_and_padding ... ok
+test optio_s4::tests::row_padding_admission_and_mid_import_cancellation ... ok
+test dng::tests::damaged_dngs_never_panic ... ok
+test dng::tests::tiled_lossless_jpeg_is_bit_identical_across_workers ... ok
+test bay::tests::all_ten_bit_values_storage_columns_padding_and_managed_ownership ... ok
+test dng::tests::stripped_lossless_jpeg_is_bit_identical_across_workers ... ok
+test camtiff::arw::tests::dsc_r1_words_are_big_endian_inside_little_endian_tiff ... ok
+test bay::tests::streamed_files_match_every_authored_sample_with_one_row_scratch ... ok
+test bay::tests::streamed_truncation_growth_and_cancellation_release_partial_sensor ... ok
+test camtiff::mef_sensor::tests::second_pass_rejects_changed_truncated_or_cancelled_sensor_without_credit_leak ... ok
+
+test result: ok. 436 passed; 0 failed; 59 ignored; 0 measured; 0 filtered out; finished in 0.76s
+

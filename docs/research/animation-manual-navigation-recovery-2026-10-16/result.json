@@ -1,0 +1,30 @@
+{
+  "status": "manual_animation_navigation_clock_regression_fixed",
+  "reproduction": "Actual App::navigate_image(-1) at index0 reset Playback before checking next-image bounds; deadline changed Some->None without submitting a new request.",
+  "changes": [
+    "Check valid next index before touching playback",
+    "Valid manual seek clears deadline/remaining time and restarts repeat count while preserving pause",
+    "Manual submission updates clock generation, allowing pause state to survive async ready/presentation",
+    "Submission failure resets pending playback instead of leaving a stuck waiting clock",
+    "README distinguishes same-file manual seek from new-file reset"
+  ],
+  "checks": {
+    "before": "focused actual-App boundary regression failed with deadline None vs expected Some",
+    "after_actual_app_tests": 2,
+    "clock_seek_repeat_count_test": true,
+    "paused_seek_new_frame_delay_ms": 100,
+    "invalid_boundary_no_request_or_generation_change": true,
+    "viewer_passed": 262,
+    "viewer_failed": 0,
+    "viewer_ignored": 72
+  },
+  "limits": [
+    "Actual App method tests use a controlled foreground request receiver and headless App setup; native key event/physical display still unqualified",
+    "No new wall-clock FPS, Metal color, HDR/NVIDIA or complete100-format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-app/src/raster_playback.rs": "d67a6d76f4d4f9c8fd3a14685627a87faf7401606fcffae9c2e5744ac887c9ea",
+    "crates/rrrah-app/src/main.rs": "aad540fa38494389c0cea32e722a14184d9fc750a0f5f155baca8f67de5c45e5",
+    "README.md": "411b5e8c93fa500622afa6fe909c74d01451af8140a2a0473478ab2dad15f1f6"
+  }
+}

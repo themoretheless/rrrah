@@ -1,0 +1,42 @@
+{
+  "status": "SGI output and row scratch admitted;8bit decode writes directly to u8 output without intermediate u16 image",
+  "before": "Unmanaged u16 full output, unmanaged row buffer, then separate u8 output collection for8bit",
+  "change": "One native-depth managed output and one width*u16 managed row; checked output sample arithmetic and native-depth byte cap; initial cancellation checked. Unmanaged API retains fallible Vec admission.",
+  "regressions": {
+    "raw_rle_precisions": "8/16bit x verbatim/RLE x exact/one-byte-short caps; lower-left storage inversion preserved",
+    "tiny_peaks": {
+      "rgba8_output": 16,
+      "rgba16_output": 32,
+      "row_scratch": 4
+    },
+    "shared": "Cloned frames retain output credit after first frame dropped; final0",
+    "independent_rgb_rgba": "Both Pillow16x16 SGI sources compare all1024outputbytes with independent RGBA oracle under exact1056byte managed budget,32byte row scratch; final0"
+  },
+  "tests": {
+    "vfx": {
+      "passed": 50,
+      "failed": 0,
+      "ignored": 0
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_vfx_lib_tests_no_deps_warnings_denied": "passed",
+    "full_clippy": "Blocked by15existing rrrah-swap diagnostics; not reported clean"
+  },
+  "additional_fix": "Equivalent one-byte string spelling in existing RPF test removes byte_char_slices lint so focused library/tests clippy passes. No RPF runtime behavior changed.",
+  "memory_error_routing": "VfxDecodeError::Source flattened to public RasterDecodeError::Source, recognized by viewer retryable_memory_pressure; existing retry path remains available.",
+  "limits": [
+    "Source bytes borrowed in direct SGI tests; common file route still owns entire source separately",
+    "RLE packet validation follows managed output/row admission, so no malformed-before-memory guarantee",
+    "No new Metal test or performance timing this turn",
+    "Sun Raster unmanaged output found but not changed in this turn",
+    "Full SGI/100format qualification remains incomplete"
+  ],
+  "source_sha256": {
+    "crates/rrrah-vfx/src/sgi.rs": "bdc31bd9b9afb1669c2a3154756ac02abe31c64c5b9cfd72831ad5020bc997d0",
+    "crates/rrrah-vfx/src/rpf.rs": "65a037c3561c659236c96b47f68c58c7d2bf58a9b896af102c1d2f9581b37700"
+  }
+}

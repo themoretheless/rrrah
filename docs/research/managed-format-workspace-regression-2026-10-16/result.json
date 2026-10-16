@@ -1,0 +1,207 @@
+{
+  "status": "passed_scoped_regression",
+  "command": "cargo +stable test --workspace --lib --offline",
+  "workspace_head": "289a860ca4ffca915956455a51cc3c70fec5334f",
+  "workspace_dirty": true,
+  "libraries": 20,
+  "totals": {
+    "passed": 1567,
+    "failed": 0,
+    "ignored": 93
+  },
+  "groups": [
+    {
+      "library": "rrrah_animation",
+      "status": "ok",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.01
+    },
+    {
+      "library": "rrrah_bench",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    },
+    {
+      "library": "rrrah_cache",
+      "status": "ok",
+      "passed": 141,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 2.46
+    },
+    {
+      "library": "rrrah_color",
+      "status": "ok",
+      "passed": 35,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    },
+    {
+      "library": "rrrah_core",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    },
+    {
+      "library": "rrrah_cuda",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.0
+    },
+    {
+      "library": "rrrah_decode",
+      "status": "ok",
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3,
+      "seconds": 0.26
+    },
+    {
+      "library": "rrrah_dedup",
+      "status": "ok",
+      "passed": 49,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 0.87
+    },
+    {
+      "library": "rrrah_demosaic",
+      "status": "ok",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.12
+    },
+    {
+      "library": "rrrah_develop",
+      "status": "ok",
+      "passed": 97,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 0.08
+    },
+    {
+      "library": "rrrah_gpu",
+      "status": "ok",
+      "passed": 63,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 4.05
+    },
+    {
+      "library": "rrrah_layered",
+      "status": "ok",
+      "passed": 50,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.01
+    },
+    {
+      "library": "rrrah_memory",
+      "status": "ok",
+      "passed": 41,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 1.02
+    },
+    {
+      "library": "rrrah_mesh",
+      "status": "ok",
+      "passed": 55,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.05
+    },
+    {
+      "library": "rrrah_raw",
+      "status": "ok",
+      "passed": 433,
+      "failed": 0,
+      "ignored": 59,
+      "seconds": 0.27
+    },
+    {
+      "library": "rrrah_scientific",
+      "status": "ok",
+      "passed": 49,
+      "failed": 0,
+      "ignored": 9,
+      "seconds": 0.08
+    },
+    {
+      "library": "rrrah_swap",
+      "status": "ok",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.01
+    },
+    {
+      "library": "rrrah_texture",
+      "status": "ok",
+      "passed": 72,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.02
+    },
+    {
+      "library": "rrrah_vector",
+      "status": "ok",
+      "passed": 178,
+      "failed": 0,
+      "ignored": 10,
+      "seconds": 0.03
+    },
+    {
+      "library": "rrrah_vfx",
+      "status": "ok",
+      "passed": 51,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    }
+  ],
+  "viewer": {
+    "binary": "target/debug/deps/rrrah-7b6010029655b625",
+    "passed": 248,
+    "failed": 0,
+    "ignored": 69,
+    "seconds": 10.52,
+    "local_socket_permission": "escalated"
+  },
+  "source_sha256": {
+    "crates/rrrah-memory/src/lib.rs": "7726dc8d3991ed1b45092ef6dfd6a21c1dac5266327df3113270a973db026fbb",
+    "crates/rrrah-texture/Cargo.toml": "4d381a2c1bd5ae567848b86fb0f11503780c8f580e6f83c39c47a315b9345a73",
+    "crates/rrrah-texture/src/lib.rs": "72e857e8cf6f40f0d3cccfc98ef5ef06032b9dd8cb7debc2ae685ac0d56caf44",
+    "crates/rrrah-texture/src/deflate.rs": "440c2ae14e4c2c971d9f5a8690362d3ef087004d6c917fc43e7d8839d9f6fad2",
+    "crates/rrrah-texture/src/pkm.rs": "3a82a4a0225546f7151ca07048dab374c36a415f4dc06b3aa75690e489ab36dd",
+    "crates/rrrah-texture/src/ktx.rs": "5fccba5cc8b67562bd5cbacb0c4e3792dcc3da2f051f50f828d7f54ac187b86a",
+    "crates/rrrah-texture/src/ktx2.rs": "abbe88d9f1d64f95aa4d0a12945d5ab66a104645a14c0ebfe3bcdc8680b4dd7e",
+    "crates/rrrah-texture/src/pvr.rs": "23f59cab9c878069bd14200eb6b0bde9bb003665c8b695a4ac88aa59429402cf",
+    "crates/rrrah-texture/src/dds.rs": "af10c64a4ea5c45f88a31c62c70264d4e73c9baf1e55110cdc34e5626d274427",
+    "crates/rrrah-texture/src/wal.rs": "860db74bc73b1fd99529edc26ed908f4a42ed4ec920b6500245ae5978a4257cc",
+    "crates/rrrah-texture/src/wad.rs": "3453a443e8957b5743a3fd317b823f5ba592da2f3adf1be27848035c2db15a86",
+    "crates/rrrah-texture/src/sti.rs": "a6d73c700122cf0f34f03fcc19ad4b039058717953c8c8af85c2730afdb05d9c",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "4f750b343a0d0a6af6c350c2a8400ed1154d828df8e00e244fb15914d2317694"
+  },
+  "scope_limits": [
+    "Workspace library tests only: no all-targets, all-features, doc, integration or release qualification claim",
+    "Viewer ignored/manual tests not run by viewer regression; latest separate actual Metal pipeline evidence is ../sti-inflate-admission-2026-10-16/result.json",
+    "Library CUDA tests do not qualify real NVIDIA hardware; user deferred hardware validation",
+    "No full 100-format qualification or physical HDR display validation claim"
+  ],
+  "logs": [
+    "workspace-lib.log",
+    "viewer.log"
+  ]
+}

@@ -13,7 +13,7 @@ pub fn has_magic(bytes: &[u8]) -> bool {
     bytes.starts_with(&[0x13, 0xab, 0xa1, 0x5c])
 }
 pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
-    request.check_cancelled()?;
+    crate::check_single_image(request)?;
     let header = bytes.get(..16).ok_or_else(|| bad("truncated header"))?;
     if !has_magic(header) {
         return Err(bad("signature"));

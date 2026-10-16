@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "initial_exit": 1,
+  "diagnostic_exit": 1,
+  "root_cause": "App constructor reused disabled independent RAW disk-warmer window for gallery navigation, so configured raster/model neighbours became empty after arrow navigation",
+  "change": "separate configured gallery window from raw_disk_prefetch_window",
+  "regression_session": 63405,
+  "regression_log": "/tmp/rrrah-prefetch-window-fix-viewer-20261016.log",
+  "viewer_passed": 279,
+  "viewer_failed": 0,
+  "viewer_ignored": 78,
+  "build_session": 14518,
+  "build_log": "/tmp/rrrah-prefetch-window-fixed-build-20261016.log",
+  "build_exit": 0,
+  "live_exit": 0,
+  "live_log_sha256": "950f6fa56a9c4ea9118801a2d4c1e8c34b8970180d7b8ab6f389dfb91d21420d",
+  "binary_sha256": "d0ae1498d91d60e833386de826a6358e3ed93b7e19bce045f57094900c3a3c1c",
+  "previous": 2,
+  "next": 1,
+  "required_retained_neighbours": 3,
+  "ram_cache_mb": 32,
+  "ram_cache_count": 8,
+  "swap_enabled": false,
+  "unique_navigation_transitions": 2,
+  "retained_neighbours": {
+    "2": [
+      "04-target.psd",
+      "02-left.psb",
+      "01-left.psd"
+    ],
+    "3": [
+      "05-right.psb",
+      "03-selected.exr",
+      "02-left.psb"
+    ],
+    "4": [
+      "02-left.psb",
+      "04-target.psd",
+      "05-right.psb"
+    ]
+  },
+  "source_hashes": {
+    "01-left.psd": "f7160dd9dea521cb05e586dd62cff3f7a2429b070b2aba38cdc71b5522e9217c",
+    "02-left.psb": "99e7b4652b50e4b518e9f071bd630b3e73f3c874b5b0348db44fa911793ed1db",
+    "03-selected.exr": "70fe9844ea7ea6e32020b79f9cae433bde4644c023b99809ab902507489b990b",
+    "04-target.psd": "f7160dd9dea521cb05e586dd62cff3f7a2429b070b2aba38cdc71b5522e9217c",
+    "05-right.psb": "99e7b4652b50e4b518e9f071bd630b3e73f3c874b5b0348db44fa911793ed1db",
+    "06-far.psd": "f7160dd9dea521cb05e586dd62cff3f7a2429b070b2aba38cdc71b5522e9217c"
+  },
+  "scope": "actual native Metal App arrow navigation with retained neighbour leases and cached return; not pixeloracle, timing, calibrated HDR, allformats or physical slowdisk"
+}

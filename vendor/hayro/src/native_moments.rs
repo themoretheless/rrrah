@@ -128,6 +128,87 @@ pub(super) struct GeometryRoundingBounds {
     pub(super) area_error:f64,
     pub(super) centroid_error:[f64;2],
 }
+/// Bound rounding of an unobserved nonnegative stream: each term is a product
+/// of at most three independently proved factors in [0,1], followed by ordinary
+/// f64 additions from zero. `sum_upper` independently bounds the exact sum of
+/// those products. This does not prove source range, geometry or membership.
+/// Using EPSILON as a conservative unit roundoff and additive min-subnormal
+/// error covers gradual underflow; overflow/nonpositive denominator refuses.
+/// This permits bounding an old color accumulation without sampling its colors.
+pub(super) fn positive_unit_stream_rounding_bound(count:usize,multiplications:usize,sum_upper:f64,
+    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<f64> {
+    debit(work,1,cancelled)?;
+    if multiplications>2 || !sum_upper.is_finite() || sum_upper<0. {return None;}
+    if count==0 {return if cancelled() {None} else {Some(0.)};}
+    debit(work,12,cancelled)?;
+    let n=(count as f64).next_up();
+    let stages=(n+multiplications as f64).next_up();
+    let relative=(stages*f64::EPSILON).next_up();
+    if !relative.is_finite() || relative>=1. {return None;}
+    let denominator=(1.-relative).next_down();
+    if denominator<=0. {return None;}
+    let gamma=(relative/denominator).next_up();
+    let operations=(n*(multiplications+1) as f64).next_up();
+    let underflow=((operations*f64::from_bits(1)).next_up()/denominator).next_up();
+    let error=((gamma*sum_upper).next_up()+underflow).next_up();
+    if cancelled() || !error.is_finite() {return None;}Some(error)
+}
+
+/// Recover an exact positive unit-product sum enclosure from its reported
+/// ordinary floating sum and count. Requires the same independently certified
+/// source-factor contract as positive_unit_stream_rounding_bound; no term reads.
+pub(super) fn positive_unit_stream_mass_bounds(count:usize,multiplications:usize,reported:f64,
+    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;2]> {
+    debit(work,1,cancelled)?;
+    if multiplications>2 || !reported.is_finite() || reported<0.
+        || reported>(count as f64).next_up() {return None;}
+    if count==0 {return if reported==0. && !cancelled() {Some([0.;2])} else {None};}
+    // E(S)<=c*S+d, with c>=gamma and d>=the additive underflow term.
+    let d=positive_unit_stream_rounding_bound(count,multiplications,0.,work,cancelled)?;
+    let c=positive_unit_stream_rounding_bound(count,multiplications,1.,work,cancelled)?;
+    debit(work,8,cancelled)?;
+    if c>=1. {return None;}
+    let low_denominator=(1.+c).next_up();
+    let high_denominator=(1.-c).next_down();
+    if high_denominator<=0. {return None;}
+    let low=(((reported-d).next_down().max(0.))/low_denominator).next_down().max(0.);
+    let high=((reported+d).next_up()/high_denominator).next_up();
+    if cancelled() || !low.is_finite() || !high.is_finite() || low>high {return None;}
+    Some([low,high])
+}
+
+/// Reference arithmetic for a stream whose colors are deliberately unread.
+/// Callers independently certify each source component in [0,1]. No component
+/// sums are stored or exposed: these are error bounds, not observed integrals.
+#[derive(Clone,Copy,Default,Debug,PartialEq)]
+pub(super) struct UnobservedUnitReference {count:usize,alpha:f64}
+#[derive(Clone,Copy,Debug,PartialEq)]
+pub(super) struct UnobservedUnitBounds {
+    pub(super) count:usize,
+    pub(super) reported_alpha:f64,
+    pub(super) exact_mass:[f64;2],
+    pub(super) alpha_error:f64,
+    pub(super) component_error:f64,
+}
+impl UnobservedUnitReference {
+    pub(super) fn added(self,area:f64,alpha:f64,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
+        debit(work,4,cancelled)?;
+        if !(0. ..=1.).contains(&area) || !(0. ..=1.).contains(&alpha) {return None;}
+        // Match the original accumulator's multiplication and addition order.
+        let weight=area*alpha;let sum=self.alpha+weight;
+        let count=self.count.checked_add(1)?;
+        if !sum.is_finite() || cancelled() {return None;}
+        Some(Self {count,alpha:sum})
+    }
+    pub(super) fn finish(self,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<UnobservedUnitBounds> {
+        let mass=positive_unit_stream_mass_bounds(self.count,1,self.alpha,work,cancelled)?;
+        let alpha_error=positive_unit_stream_rounding_bound(self.count,1,mass[1],work,cancelled)?;
+        let component_error=positive_unit_stream_rounding_bound(self.count,2,mass[1],work,cancelled)?;
+        if cancelled() {return None;}
+        Some(UnobservedUnitBounds {count:self.count,reported_alpha:self.alpha,exact_mass:mass,alpha_error,component_error})
+    }
+}
+
 /// Complete numerical inputs for constant fields or an opaque native Normal
 /// tail, with exact identity fallbacks retained. This is not a PDF/display proof.
 #[derive(Clone,Copy)]
@@ -140,7 +221,31 @@ pub(super) struct OpaqueCandidateInputs {
 /// Combine source/opaque-tail arithmetic, area/centroid and ratio errors.
 /// Caller certifies source coverage and the opaque-tail route profile before
 /// passing inputs. Result excludes later Pixel storage/profile/display changes.
+/// Numerical replacement prerequisites with no observed component sums.
+/// Alpha intervals, unit source bounds and arithmetic errors must be certified
+/// independently. This type can represent an unread original color stream.
+#[derive(Clone,Copy)]
+pub(super) struct OpaqueReplacementBounds {
+    pub(super) original_alpha:[f64;2],pub(super) candidate_alpha:[f64;2],
+    pub(super) original_component_abs:[f64;4],pub(super) candidate_component_abs:[f64;4],
+    pub(super) arithmetic_native:[f64;4],pub(super) variable_area_original:f64,pub(super) variable_area_candidate:f64,
+    pub(super) weighted_centroid_error:[f64;2],pub(super) total_area_error:f64,
+}
+impl From<&OpaqueCandidateInputs> for OpaqueReplacementBounds {
+    fn from(inputs:&OpaqueCandidateInputs)->Self {
+        Self {original_alpha:inputs.original.alpha,candidate_alpha:inputs.candidate.alpha,
+            original_component_abs:inputs.original.max_component_abs,candidate_component_abs:inputs.candidate.max_component_abs,
+            arithmetic_native:inputs.arithmetic_native,variable_area_original:inputs.variable_area_original,
+            variable_area_candidate:inputs.variable_area_candidate,weighted_centroid_error:inputs.weighted_centroid_error,
+            total_area_error:inputs.total_area_error}
+    }
+}
 pub(super) fn opaque_candidate_native_error(inputs:&OpaqueCandidateInputs,source_error:f64,gradient:[f64;2],
+    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;4]> {
+    opaque_replacement_native_error(&OpaqueReplacementBounds::from(inputs),source_error,gradient,work,cancelled)
+}
+/// Bound-only replacement proof. Does not read or fabricate either color sum.
+pub(super) fn opaque_replacement_native_error(inputs:&OpaqueReplacementBounds,source_error:f64,gradient:[f64;2],
     work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;4]> {
     debit(work,64,cancelled)?;
     let values=[source_error,gradient[0],gradient[1],inputs.variable_area_original,inputs.variable_area_candidate,
@@ -150,12 +255,12 @@ pub(super) fn opaque_candidate_native_error(inputs:&OpaqueCandidateInputs,source
     // The absolute opaque-tail allowance and area term below assume unit-
     // bounded native components. Enforce that prerequisite on both streams;
     // out-of-range fields retain the original compositor without a certificate.
-    if inputs.original.max_component_abs.iter().chain(inputs.candidate.max_component_abs.iter())
+    if inputs.original_component_abs.iter().chain(inputs.candidate_component_abs.iter())
         .any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) {return None;}
-    for interval in [inputs.original.alpha,inputs.candidate.alpha] {
+    for interval in [inputs.original_alpha,inputs.candidate_alpha] {
         if interval.iter().any(|v|!v.is_finite()) || interval[0]>interval[1] {return None;}
     }
-    let lower=inputs.original.alpha[0].min(inputs.candidate.alpha[0]).next_down();
+    let lower=inputs.original_alpha[0].min(inputs.candidate_alpha[0]).next_down();
     if !lower.is_finite() || lower<=0. {return None;}
     let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
     // An opaque final Normal paint overwrites its prefix. Same-coordinate
@@ -168,7 +273,7 @@ pub(super) fn opaque_candidate_native_error(inputs:&OpaqueCandidateInputs,source
     let numerator=add(source,geometry);let mut out=[0.;4];
     for channel in 0..4 {
         if cancelled() {return None;}
-        let ratio=(add(numerator,mul(inputs.original.max_component_abs[channel],alpha))/lower).next_up();
+        let ratio=(add(numerator,mul(inputs.original_component_abs[channel],alpha))/lower).next_up();
         out[channel]=add(ratio,inputs.arithmetic_native[channel]);
         if !out[channel].is_finite() {return None;}
     }
@@ -888,4 +993,111 @@ fn opaque_combined_bound_refuses_invalid_domains_and_overflow() {
     }
     let mut tiny=input;tiny.original.alpha=[1e-300;2];tiny.candidate.alpha=[1e-300;2];
     assert!(opaque_candidate_native_error(&tiny,0.,[0.;2],&mut 64,&||false).is_some());
+}
+
+
+#[test]
+fn unsampled_positive_stream_bound_covers_lost_dyadic_terms_and_underflow() {
+    let n=4096usize;let tiny=2f64.powi(-54);
+    let exact=1.+2f64.powi(-42);
+    for multiplications in 0..=2 {
+        let mut reported=1.;
+        for _ in 0..n {
+            let term=match multiplications {0=>tiny,1=>0.5*(2.*tiny),_=>0.5*0.5*(4.*tiny)};
+            reported+=term;
+        }
+        assert_eq!(reported,1.);assert!(exact>reported);
+        let bound=positive_unit_stream_rounding_bound(n+1,multiplications,exact,&mut 100,&||false).unwrap();
+        assert!(bound>=exact-reported);
+        let ascending=(0..n).fold(0.,|sum,_|sum+tiny)+1.;
+        assert_eq!(ascending,exact);assert!((ascending-exact).abs()<=bound);
+    }
+    let eta=f64::from_bits(1);
+    let reported=(eta*0.5)+(eta*0.5);assert_eq!(reported,0.);
+    let bound=positive_unit_stream_rounding_bound(2,1,eta,&mut 100,&||false).unwrap();
+    assert!(bound>=eta,"two lost half-subnormals sum to one exact subnormal");
+    assert_eq!(positive_unit_stream_rounding_bound(0,2,0.,&mut 100,&||false),Some(0.));
+}
+
+#[test]
+fn unsampled_positive_stream_bound_refuses_missing_work_cancel_and_invalid_inputs() {
+    let mut remaining=100;
+    let polls=std::cell::Cell::new(0usize);
+    assert!(positive_unit_stream_rounding_bound(4097,2,1.1,&mut remaining,
+        &||{polls.set(polls.get()+1);false}).is_some());
+    let spent=100-remaining;
+    for budget in 0..spent {assert!(positive_unit_stream_rounding_bound(4097,2,1.1,&mut {budget},&||false).is_none());}
+    for stop in 1..=polls.get() {
+        let current=std::cell::Cell::new(0usize);
+        assert!(positive_unit_stream_rounding_bound(4097,2,1.1,&mut 100,
+            &||{current.set(current.get()+1);current.get()>=stop}).is_none());
+    }
+    for upper in [f64::NAN,f64::INFINITY,-1.] {
+        assert!(positive_unit_stream_rounding_bound(1,1,upper,&mut 100,&||false).is_none());
+    }
+    assert!(positive_unit_stream_rounding_bound(1,3,1.,&mut 100,&||false).is_none());
+    if usize::BITS>=53 {assert!(positive_unit_stream_rounding_bound(usize::MAX,2,1.,&mut 100,&||false).is_none());}
+    assert!(positive_unit_stream_rounding_bound(1_000_000,2,f64::MAX,&mut 100,&||false).is_some());
+}
+
+
+#[test]
+fn recovered_unit_stream_mass_contains_independent_dyadic_and_underflow_sums() {
+    let tiny=2f64.powi(-54);let exact=1.+2f64.powi(-42);
+    for products in 0..=2 {
+        for reported in [1.,(0..4096).fold(0.,|sum,_|sum+tiny)+1.] {
+            let bounds=positive_unit_stream_mass_bounds(4097,products,reported,&mut 100,&||false).unwrap();
+            assert!(bounds[0]<=exact && exact<=bounds[1]);
+        }
+    }
+    let eta=f64::from_bits(1);
+    let bounds=positive_unit_stream_mass_bounds(2,1,0.,&mut 100,&||false).unwrap();
+    assert!(bounds[0]<=eta && eta<=bounds[1]);
+    assert_eq!(positive_unit_stream_mass_bounds(0,2,0.,&mut 100,&||false),Some([0.;2]));
+}
+
+#[test]
+fn recovered_unit_stream_mass_refuses_invalid_domain_short_work_and_cancel() {
+    let mut left=100;let polls=std::cell::Cell::new(0usize);
+    assert!(positive_unit_stream_mass_bounds(4097,2,1.,&mut left,
+        &||{polls.set(polls.get()+1);false}).is_some());
+    for budget in 0..100-left {assert!(positive_unit_stream_mass_bounds(4097,2,1.,&mut {budget},&||false).is_none());}
+    for stop in 1..=polls.get() {
+        let current=std::cell::Cell::new(0usize);
+        assert!(positive_unit_stream_mass_bounds(4097,2,1.,&mut 100,
+            &||{current.set(current.get()+1);current.get()>=stop}).is_none());
+    }
+    for value in [f64::NAN,f64::INFINITY,-1.,2.] {
+        assert!(positive_unit_stream_mass_bounds(1,1,value,&mut 100,&||false).is_none());
+    }
+    assert!(positive_unit_stream_mass_bounds(0,0,1.,&mut 100,&||false).is_none());
+    assert!(positive_unit_stream_mass_bounds(1,3,1.,&mut 100,&||false).is_none());
+    if let Some(count)=1usize.checked_shl(51) {
+        assert!(positive_unit_stream_mass_bounds(count,2,1.,&mut 100,&||false).is_none());
+    }
+}
+
+#[test]
+fn unobserved_reference_tracks_only_alpha_and_bounds_unread_colors() {
+    let mut reference=UnobservedUnitReference::default();let mut alpha=0.;let mut integral=0.;
+    // Dyadic products permit an independent exact arithmetic control.
+    let mut exact_mass=0u64;let mut exact_integral=0u64;
+    for i in 0..4096u64 {
+        let area=(i%8) as f64/8.;let opacity=(i%4) as f64/4.;let color=(i%16) as f64/16.;
+        let weight=area*opacity;alpha+=weight;integral+=weight*color;
+        exact_mass+=(i%8)*(i%4);exact_integral+=(i%8)*(i%4)*(i%16);
+        reference=reference.added(area,opacity,&mut 100,&||false).unwrap();
+    }
+    let bounds=reference.finish(&mut 1000,&||false).unwrap();
+    assert_eq!(bounds.reported_alpha.to_bits(),alpha.to_bits());assert_eq!(bounds.count,4096);
+    let mass=exact_mass as f64/32.;let exact=exact_integral as f64/512.;
+    assert!(bounds.exact_mass[0]<=mass && mass<=bounds.exact_mass[1]);
+    assert!((integral-exact).abs()<=bounds.component_error);
+    let saved=reference;
+    for bad in [f64::NAN,f64::INFINITY,-0.1,1.1] {assert!(reference.added(bad,1.,&mut 100,&||false).is_none());}
+    for work in 0..4 {assert!(reference.added(1.,1.,&mut {work},&||false).is_none());}
+    assert!(reference.added(1.,1.,&mut 100,&||true).is_none());assert_eq!(reference,saved);
+    let mut work=1000;reference.finish(&mut work,&||false).unwrap();
+    for allowance in 0..1000-work {assert!(reference.finish(&mut {allowance},&||false).is_none());}
+    assert!(reference.finish(&mut 1000,&||true).is_none());
 }

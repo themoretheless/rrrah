@@ -1,0 +1,67 @@
+{
+  "status": "telemetry_recreation_wired_ordinary231_and_two_device_hud_pixels_passed_live_window_loss_unverified",
+  "change": "separate loss signal and device recreation for telemetry window; preserve pipeline/cache cards and absolute zoom/scroll; idle completion progress;30s automatic retry throttle and focus retry",
+  "scope": "source and ordinary tests, no actual window-loss injection yet",
+  "signal_test": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0
+  },
+  "build_session": 95355,
+  "build_log": "/tmp/telemetry-device-recovery-final-build.log",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "0917d2b1d5918e619d89c0e9e06268c660e0e491d29bb9481674d93dd509a2dd",
+    "crates/rrrah-gpu/src/lib.rs": "13d8139f56eee61f769402ebe35f743eff21f73a0cdd4be2b6afff3f386b4985"
+  },
+  "limitations": [
+    "live two-window recreation and frame fidelity after loss not qualified",
+    "does not diagnose original GPU hang trigger",
+    "not full100-format or NVIDIA completion"
+  ],
+  "ordinary": {
+    "exit_code": 0,
+    "passed": 231,
+    "failed": 0,
+    "ignored": 62
+  },
+  "hardware_build_session": 52902,
+  "hardware_build_log": "/tmp/telemetry-recreation-hardware-build.log",
+  "final_source_sha256": {
+    "crates/rrrah-app/src/main.rs": "ff65571bdb92fb8363610716802e42e0948837b55f35329e6713e89e3fe5fc6a",
+    "crates/rrrah-gpu/src/lib.rs": "13d8139f56eee61f769402ebe35f743eff21f73a0cdd4be2b6afff3f386b4985"
+  },
+  "hardware_first_attempt": {
+    "exit_code": 101,
+    "reason": "test expected nonzero scroll but responsive dashboard fits cards; failure before rendering; corrected control uses actual clamped view"
+  },
+  "scope_detail": "whole320x240 SDR HUD and nondefault zoom; clamped scroll zero, not nonzero-scroll qualification",
+  "ordinary_after_hardware_test_added": {
+    "exit_code": 0,
+    "passed": 231,
+    "failed": 0,
+    "ignored": 63,
+    "scope": "before test-only impossible nonzero-scroll assertion corrected; production source unchanged"
+  },
+  "hardware": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "logical_devices": 2,
+    "frame": [
+      320,
+      240
+    ],
+    "pixel_format": "SDR RGBA8",
+    "whole_frame_exact": true,
+    "nondefault_zoom_bits_exact": true,
+    "clamped_scroll_bits_exact": true,
+    "nonzero_scroll_qualified": false,
+    "window_device_loss_injected": false
+  },
+  "source_drift": false,
+  "binary_sha256": "163ba9b8914b61686118130f56769b732482715ccf3ae620128df44919457dbc",
+  "live_notification_recovery_followup": {
+    "report": "../live-device-recovery-2026-10-15/result.json",
+    "scope": "three real-window notification/recreation scenarios pass; actual hardware error recovery and original hang trigger still unqualified"
+  }
+}

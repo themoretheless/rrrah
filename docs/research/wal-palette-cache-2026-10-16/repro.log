@@ -1,0 +1,26 @@
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 24.18s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+test raster_swap_viewer_tests::wal_palette_change_invalidates_ram_and_swap_without_changing_wal ... FAILED
+
+failures:
+
+---- raster_swap_viewer_tests::wal_palette_change_invalidates_ram_and_swap_without_changing_wal stdout ----
+
+thread 'raster_swap_viewer_tests::wal_palette_change_invalidates_ram_and_swap_without_changing_wal' (11719425) panicked at crates/rrrah-app/src/main.rs:11677:13:
+assertion `left == right` failed: palette change served stale pixels; spilled=false
+  left: 0
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    raster_swap_viewer_tests::wal_palette_change_invalidates_ram_and_swap_without_changing_wal
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 361 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

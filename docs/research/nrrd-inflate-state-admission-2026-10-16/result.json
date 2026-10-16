@@ -1,0 +1,56 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "NRRD gzip reserves pinned-backend 65536-byte state/history credit before decoder construction",
+    "State credit released before converting selected expanded slice into native float output",
+    "Shared constant used by NRRD/KTX2/STI; scientific crate pins zlib-rs 0.6.8",
+    "Exact/short gzip budgets now include max(backend state, native output) plus retained selected-slice scratch/source"
+  ],
+  "checks": {
+    "scientific_lib": {
+      "passed": 49,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "texture_lib": {
+      "passed": 75,
+      "failed": 0
+    },
+    "nrrd_gzip": [
+      "Independent native/window sample oracles",
+      "Exact/one-byte-short admission",
+      "First/middle/last slices in 128-plane volume",
+      "Late CRC corruption releases state/slice reservations"
+    ],
+    "pipeline": {
+      "scientific_states": 492,
+      "ram_pressure_hits": 492,
+      "swap_writes": 492,
+      "swap_reads": 492,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 3688,
+      "shape_controls": 736,
+      "seconds": 15.65
+    }
+  },
+  "limits": [
+    "Backend credit is conservative state/history capacity, not total process heap/RSS",
+    "Optional gzip header metadata retained by flate2 is not covered by state credit and remains for separate audit",
+    "NRRD parsed header/map allocations remain outside pixel/scratch admission",
+    "No physical HDR display or full format qualification claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "texture-tests": "texture-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  },
+  "follow_up": "Optional gzip metadata admission addressed by ../nrrd-gzip-optional-header-admission-2026-10-16/result.json; parsed NRRD header/map accounting remains open."
+}

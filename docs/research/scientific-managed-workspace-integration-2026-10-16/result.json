@@ -1,0 +1,26 @@
+{
+  "status": "Full workspace all-targets check passes with rrrah-dedup/decode feature after fixture-generator dev dependency fix",
+  "passed_command": "cargo +stable check --workspace --all-targets --features rrrah-dedup/decode --offline",
+  "seconds": 52.71,
+  "scope": "Compile all workspace libraries, binaries, tests, examples/benches; verifies current FITS/MRC PixelBuffer public payloads integrate across consumers; no runtime-test result inferred",
+  "fix": {
+    "file": "crates/rrrah-decode/Cargo.toml",
+    "dev_dependency": "basis-universal = =0.3.1",
+    "reason": "generate_basis_fixtures example imports encoder directly, but dependency absent after extraction; pinned version already used by rrrah-texture",
+    "production_change": false,
+    "lockfile": "Adds existing basis-universal to rrrah-decode dependency list, no new package version"
+  },
+  "other_attempts": {
+    "default_all_targets": "Failed: some dedup examples import decode-gated modules without requiring feature",
+    "all_features": "Failed: optional LoFTR/tch requires unavailable libtorch",
+    "remaining": "Default-example feature declarations and full all-features/libtorch gate not fixed/qualified in this turn"
+  },
+  "warnings": "Pre-existing/unrelated dedup example warnings remain; check success is not warnings-denied lint success",
+  "source_sha256": {
+    "crates/rrrah-decode/Cargo.toml": "b10842872f9f2f4b8ba233bed4b1b231637198ce2346fc6c41ff844c77d8d8f3",
+    "Cargo.lock": "c11fbcfa26c9a761aff6311e4273ab071cb7365b97aaa0fa176359fe6355f1a4",
+    "crates/rrrah-scientific/src/fits.rs": "2a3308f184f5fd33b2e803ea84b0d2915795d0b2f0107f5c741ab62f43af7c63",
+    "crates/rrrah-scientific/src/mrc.rs": "e3c0f36435ebadbf74e9ea162ac6a65c766274ae83ac9bf7666c07c484b14d7c"
+  },
+  "goal": "100format/CUDA/fullHDR objective remains active and incomplete"
+}

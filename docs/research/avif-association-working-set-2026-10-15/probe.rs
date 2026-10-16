@@ -1,3 +1,4 @@
+#[derive(Debug)] enum DecodeError { Memory(rrrah_core::BufferError) }
 // Rust allocation-capacity probe for the current metadata parser, not OS RSS.
 use std::alloc::{GlobalAlloc,Layout,System};
 use std::sync::atomic::{AtomicUsize,Ordering};
@@ -18,7 +19,7 @@ unsafe impl GlobalAlloc for Counting {
     }
 }
 #[global_allocator] static ALLOC:Counting=Counting;
-mod raster{#[derive(Debug)]pub enum RasterDecodeError{InvalidAvif(&'static str)}}
+mod raster{#[derive(Debug)]pub enum RasterDecodeError{InvalidAvif(&'static str),Source(crate::DecodeError)}}
 struct DecodeRequest;
 impl DecodeRequest{fn check_cancelled(&self)->Result<(),raster::RasterDecodeError>{Ok(())}}
 #[path="../../../crates/rrrah-decode/src/avif_color.rs"] mod avif_color;
@@ -31,7 +32,7 @@ fn main(){
     let bytes=[bx(b"ftyp",b"avif\0\0\0\0avif"),bx(b"meta",&meta)].concat();
     drop(assoc);drop(iprp);drop(meta);
     let before=USED.load(Ordering::Relaxed);PEAK.store(before,Ordering::Relaxed);
-    let properties=avif_color::properties(&bytes).unwrap();
+    let properties=avif_color::properties_with_budget(&bytes,&||Ok(()),None).unwrap();
     assert!(properties.color.is_none());assert!(properties.bit_depth.is_none());
     assert!(!properties.premultiplied_alpha);drop(properties);
     let extra=PEAK.load(Ordering::Relaxed)-before;

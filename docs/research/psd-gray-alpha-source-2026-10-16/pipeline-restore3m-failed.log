@@ -1,0 +1,30 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 30s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 2 tests
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_blocked_prefetch ... GRAY_ALPHA_PIPELINE root=8388608 ram=3145728/count1 swap=16777216/count4 queue=3145728/count4 restore=3145728
+
+thread 'dicom_pipeline_tests::original_gray_alpha_ram_swap_and_blocked_prefetch' (9990487) panicked at crates/rrrah-app/src/dicom_pipeline_tests.rs:1410:28:
+called `Result::unwrap()` on an `Err` value: SendError { .. }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_metal ... GRAY_ALPHA_METAL adapter=Metal Apple M4 Max
+GRAY_ALPHA_PIPELINE root=8388608 ram=3145728/count1 swap=16777216/count4 queue=3145728/count4 restore=3145728
+
+thread 'dicom_pipeline_tests::original_gray_alpha_ram_swap_and_metal' (9993258) panicked at crates/rrrah-app/src/dicom_pipeline_tests.rs:1410:28:
+called `Result::unwrap()` on an `Err` value: SendError { .. }
+FAILED
+
+failures:
+
+failures:
+    dicom_pipeline_tests::original_gray_alpha_ram_swap_and_blocked_prefetch
+    dicom_pipeline_tests::original_gray_alpha_ram_swap_and_metal
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 352 filtered out; finished in 71.95s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

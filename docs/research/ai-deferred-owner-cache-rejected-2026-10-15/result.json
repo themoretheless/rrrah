@@ -1,0 +1,19 @@
+{
+  "status": "rejected; native_spatial restored byte-exact",
+  "restored_sha256": "9e6e6a99aabbc97b6a83fcf4bdd5d3939e7a745718e813540c9438bb1da26ae7",
+  "tests": {
+    "default": 299,
+    "enabled": 299,
+    "failed": 0,
+    "ignored": 12
+  },
+  "log": "/tmp/ai-deferred-owner-cache-real4m.log",
+  "regression": "147,59 now refuses ordinary4M at567186 fragments instead of completing;147,57 source2129146 vs1848735;138,34 source287181 vs254999. Invalidating on any coverage change prevents sufficient reuse; extra lookup cost not recovered.",
+  "decision": "Removed cache and extra transition debit; retain existing tile-Y filtering only. No budget raised.",
+  "restoration_tests": {
+    "passed": 299,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-deferred-owner-cache-restored-all.log"
+  }
+}

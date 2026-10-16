@@ -1,0 +1,50 @@
+{
+  "measurements": [
+    {
+      "phase": "constructor",
+      "limit": 0,
+      "ok": false,
+      "peak": 20856,
+      "live": 0,
+      "alloc_calls": 5
+    },
+    {
+      "phase": "constructor",
+      "limit": 64,
+      "ok": true,
+      "peak": 20856,
+      "live": 0,
+      "alloc_calls": 5
+    },
+    {
+      "phase": "constructor",
+      "limit": 1048576,
+      "ok": true,
+      "peak": 20856,
+      "live": 0,
+      "alloc_calls": 5
+    },
+    {
+      "phase": "full_decode_excluding_output",
+      "ok": true,
+      "peak": 27768,
+      "live": 0,
+      "alloc_calls": 6
+    }
+  ],
+  "fixture_dimensions": [
+    16,
+    16
+  ],
+  "output_bytes_excluded": 1024,
+  "source_sha256": {
+    "vendor/image/src/codecs/png.rs": "0bdbbd9f213164903deda0e08c309bb279eee6e4cd3ed17d228ba31a0cd1efcd",
+    "tests/fixtures/raster/pattern.png": "ab4ec13714b17812fc06a82bda473f753c071aefd698e8a385bf22914afa737c",
+    "tests/fixtures/raster/pattern.png.rgba": "bd5e05ad977cf5c3f6c90045e8554ddb6c716cb4152f23ef92217d6835f9dcb9",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/png-0.18.1/src/decoder/mod.rs": "8c15bb208e38ffcc55421fd3ece858dfa6460d0cc05be76d56d1640591669249",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/png-0.18.1/src/decoder/stream.rs": "af87e912accd5057dcb098ca8aa3b6d4a1a1a2abc2412955409ee8260112e4ff",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/png-0.18.1/src/decoder/zlib.rs": "fb97c2706b5901de03d23deee39e5d8fda4860b55ce0bbbe5fb8fd1206db4039",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/png-0.18.1/src/decoder/unfiltering_buffer.rs": "6e146579e29cb57197375e61b077296e979ab80421a5b3d200f3b2cbddbd159e"
+  },
+  "status": "verified allocation-budget gap; no production correction yet"
+}

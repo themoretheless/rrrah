@@ -1,0 +1,18 @@
+{
+  "status": "four explicit real-camera sensor controls pass across initial3pass/1setupfailure plus corrected1pass",
+  "logs": [
+    "/tmp/mef-current-native-sensor-controls-20261015.log",
+    "/tmp/mef-current-full-sensor-oracle-20261015.log"
+  ],
+  "setup_correction": "Initial batch omitted RRRAH_MEF_ORACLE for one test; reran only that test with existing independent oracle. Initial failed log preserved.",
+  "sensor_dimensions": [
+    4016,
+    5344
+  ],
+  "all_sensor_values_compared": 21461504,
+  "oracle": "Pinned independent LibRaw0.22.2 unpack output, test-only; production native Rust decoder unchanged",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "oracle_sha256": "3daa5dcb996733310dc06971f75066c74ded92d2f645cc25fc61878dd574eb1b",
+  "scope": "Native sensor import, independent full output equality, source/output admission, cancellation/last owner; no WB/color/viewer qualification",
+  "color_status": "Unresolved. Existing source metadata audit numeric fields zero; independent unpack metadata WB[0,1,0,0] is not usable as camera WB. Viewer color route remains refused."
+}

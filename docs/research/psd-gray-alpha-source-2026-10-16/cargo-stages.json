@@ -1,0 +1,67 @@
+[
+  {
+    "stage": "layered",
+    "command": [
+      "cargo",
+      "+stable",
+      "test",
+      "-p",
+      "rrrah-layered",
+      "--lib",
+      "--offline"
+    ],
+    "exit_code": 0,
+    "log": "/tmp/rrrah-alpha-isolated-layered.log"
+  },
+  {
+    "stage": "animation",
+    "command": [
+      "cargo",
+      "+stable",
+      "test",
+      "-p",
+      "rrrah-animation",
+      "--lib",
+      "--offline"
+    ],
+    "exit_code": 0,
+    "log": "/tmp/rrrah-alpha-isolated-animation.log"
+  },
+  {
+    "stage": "public",
+    "command": [
+      "cargo",
+      "+stable",
+      "test",
+      "-p",
+      "rrrah-decode",
+      "--lib",
+      "original_gray_alpha_public",
+      "--offline",
+      "--",
+      "--nocapture"
+    ],
+    "exit_code": 0,
+    "log": "/tmp/rrrah-alpha-isolated-public.log"
+  },
+  {
+    "stage": "app-metal",
+    "command": [
+      "cargo",
+      "+stable",
+      "test",
+      "-p",
+      "rrrah",
+      "--bin",
+      "rrrah",
+      "original_gray_alpha",
+      "--offline",
+      "--",
+      "--include-ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "log": "/tmp/rrrah-alpha-isolated-app-metal.log"
+  }
+]

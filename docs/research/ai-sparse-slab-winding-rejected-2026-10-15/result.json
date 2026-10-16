@@ -1,0 +1,69 @@
+{
+  "status": "three variants rejected; source restored byte-exact",
+  "restored_sha256": "4aec51dc4d67d04461d6c47c45c0aaadc09f03a0332c30fcc462c71690cd3628",
+  "saved_candidate": "/tmp/ai-sparse-slab-winding-v3-rejected.rs",
+  "tests": {
+    "passed": 309,
+    "failed": 0,
+    "ignored": 12,
+    "property": "Area/centroid/vertex/winding bit identity and exact single-change callback contract; admission and continuing-work preservation."
+  },
+  "logs": [
+    "/tmp/ai-sparse-slab-winding-real4m.log",
+    "/tmp/ai-sparse-slab-winding-v2-real4m.log",
+    "/tmp/ai-sparse-slab-winding-v3-real4m.log"
+  ],
+  "v3": {
+    "147,59": {
+      "completed": true,
+      "typed_rgb8": [
+        205,
+        151,
+        128
+      ],
+      "source_work": 2291055
+    },
+    "147,60": {
+      "completed": false,
+      "fragments": 645632,
+      "source_work": 3362639,
+      "geometry_remaining": 0
+    },
+    "147,61": {
+      "completed": false,
+      "fragments": 641831,
+      "source_work": 3328141,
+      "geometry_remaining": 0
+    }
+  },
+  "decision": "Metadata tracking cost negates reset savings on actual dense scene; accepted147,60 baseline regresses. Removed flag, helper, extra buffers and policy wrapper; no quotas lowered or limits raised. Need reduce actual sweep traversal, not retain sparse-only toy win.",
+  "restored_validation": {
+    "source_sha256": "4aec51dc4d67d04461d6c47c45c0aaadc09f03a0332c30fcc462c71690cd3628",
+    "library": {
+      "passed": 308,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-sparse-slab-winding-restored-all.log"
+    },
+    "real_pixel": {
+      "pixel": [
+        147,
+        60
+      ],
+      "typed_white_completed": true,
+      "bytes": [
+        213,
+        167,
+        146
+      ],
+      "source_work": 3366844,
+      "source_limit": 4000000,
+      "geometry_remaining": 341380,
+      "final_credit": 0,
+      "deadline": false,
+      "elapsed_seconds": 10.23,
+      "log": "/tmp/ai-sparse-restored-real14760-20261015.log"
+    },
+    "scope": "Experimental typed white RGB8 diagnostic only; native output remains refused. No full-page or oracle-fidelity qualification."
+  }
+}

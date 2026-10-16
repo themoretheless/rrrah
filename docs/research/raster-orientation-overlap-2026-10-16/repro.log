@@ -1,0 +1,24 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.49s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_decode-a975e9ebc3faac09)
+
+running 1 test
+test raster::output_budget_tests::rgba_png_orientation_admits_copy_only_for_allocating_transforms ... FAILED
+
+failures:
+
+---- raster::output_budget_tests::rgba_png_orientation_admits_copy_only_for_allocating_transforms stdout ----
+
+thread 'raster::output_budget_tests::rgba_png_orientation_admits_copy_only_for_allocating_transforms' (12741043) panicked at crates/rrrah-decode/src/raster.rs:2593:17:
+assertion `left == right` failed: depth=8 orientation=5
+  left: (24, 24)
+ right: (24, 48)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    raster::output_budget_tests::rgba_png_orientation_admits_copy_only_for_allocating_transforms
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 203 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "binary_sha256": "de95fab3bd64680dd1f970be1eef2d3aefae8ccac69527cb5daee29a2fbf241d",
+  "backend_env": "metal",
+  "cases": [
+    {
+      "tier": "swap",
+      "exit_code": 0,
+      "swap_reads_before": 0,
+      "swap_reads_after": 1,
+      "log_sha256": "b280b5bffd374717a6cc8a476008a00f37ada9b7a6b0abdd7b9545368f2af997"
+    },
+    {
+      "tier": "ram",
+      "exit_code": 0,
+      "swap_reads_before": 0,
+      "swap_reads_after": 0,
+      "log_sha256": "fe15807002b04fb2d61a2d0e53a73dd01a8de417cb0ed715957a52a273ba2cef"
+    }
+  ],
+  "scope": "native App cached EXR return after PSD;foreground RAM/swap attribution and decode guard;not pixeloracle, earlier speculative decodecounts, throughput or physicalHDR",
+  "viewer_regression_exit": 0,
+  "viewer_regression_passed": 278,
+  "viewer_regression_ignored": 78
+}

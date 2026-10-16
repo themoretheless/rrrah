@@ -50,7 +50,7 @@ pub use rrrah_demosaic::{
 };
 pub use frame::{DecodedMosaic, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel};
 pub use geometry::Rect;
-pub use raster::{DecodedRaster, RasterColorSpace, RasterError, RasterPixels};
+pub use raster::{DecodedRaster, RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels};
 pub use recipe::{
     DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16,
     DECODE_SENSOR_COORDINATES, KNOWN_MOSAIC_DECODE_FLAGS, MOSAIC_RECIPE_MANIFEST_BYTES,

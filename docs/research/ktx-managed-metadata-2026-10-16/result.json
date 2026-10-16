@@ -1,0 +1,58 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Removed unadmitted metadata HashSet",
+    "Borrow key bytes; allocate only managed (usize,usize) offsets when more than one key",
+    "Sort offset table in place, reject adjacent duplicate keys and release scratch before selected pixel allocation",
+    "Metadata grammar/orientation and all mip lengths validated before offset-table admission; metadata loop checks cancellation"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 63,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "metadata_unit": {
+      "unique_keys": 128,
+      "scratch_bytes": 2048,
+      "retained_pixel_bytes": 24,
+      "one_byte_short": "Memory, final 0",
+      "duplicate_keys": 129,
+      "duplicate": "InvalidKtx, final 0",
+      "zero_or_one_key_peak_bytes": 24
+    },
+    "public_pipeline": {
+      "states": 81,
+      "ktx_mips": 60,
+      "added_metadata_case_keys": 129,
+      "ram_full_budget_hits": 81,
+      "swap_writes": 81,
+      "swap_reads": 81,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 486,
+      "seconds": 3.35
+    }
+  },
+  "limits": [
+    "No CPU speedup claim or paired benchmark",
+    "Full KTX independent producer qualification, cube/array/volume and other storage remain pending",
+    "Readbacks do not prove physical HDR display luminance",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

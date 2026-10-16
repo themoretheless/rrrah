@@ -1,0 +1,58 @@
+{
+  "change": "ColorSpace device box conversion uses actual retained CMYK/RGB transform. Owner observer connects conditional stored-native replacement bound and independent alpha error to RGB Pixel storage/recovery, actual white-composite formula and round/clamp byte intervals. Returns bytes only if all interval endpoints round identically. Original colors and original returned Pixel retained.",
+  "tests": {
+    "passed": 289,
+    "ignored": 12,
+    "failed": 0,
+    "controls": "Stable RGB8 bytes, half-byte boundary refusal, exact transparent white, alpha interval crossing zero refusal; all short budgets and cancellation checkpoints."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "rgb8_certified": [
+      205,
+      151,
+      128
+    ],
+    "white_rgb_bounds": [
+      [
+        205.39596588002092,
+        205.4320220448932
+      ],
+      [
+        151.13551568000597,
+        151.16585774444215
+      ],
+      [
+        127.69766477647309,
+        127.73536448685165
+      ]
+    ],
+    "alpha_error": 9.529003495501907e-11,
+    "geometry_setup": 80708,
+    "geometry_traversal_export_gate": 39331573,
+    "geometry_total": 39412281,
+    "geometry_remaining": 587719,
+    "geometry_limit": 40000000,
+    "original_native_exact": true,
+    "peak_admitted_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "original_source_work": 6993741,
+    "original_source_allowance": 16000000
+  },
+  "sources": {
+    "vendor/hayro-interpret/src/color.rs": "5a67c2bf92daefd0f9d8250dfbd3754b45543dbec39865600d7c926c7de3dc4b",
+    "vendor/hayro/src/native_frame.rs": "f3c54b10683c46632aa99bc13c1b624c424498569b1835019ffc5251a4143388",
+    "vendor/hayro/src/native_spatial.rs": "baf03b893ffd03fd7612377986747e64767977cc0c30a957409aa763083cf96f"
+  },
+  "limitations": [
+    "Conditional equivalence to existing original sampler under qualified native opaque tail/source/owner and reported geometry; not independent absolute PDF clipping correctness.",
+    "Specifically diagnostic/page DeviceRGB on white with nearest byte rounding; no HDR/display-calibration claim.",
+    "All original samples retained; live deferral, ordinary4M/fullpage and production viewer AI integration unfinished.",
+    "Unsupported profiles, cross-cell ICC boxes and positive alpha interval crossing zero refuse."
+  ]
+}

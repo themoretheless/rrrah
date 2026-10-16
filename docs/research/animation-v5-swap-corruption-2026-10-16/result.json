@@ -1,0 +1,41 @@
+{
+  "status": "animation_v5_swap_corruption_matrix_verified",
+  "record": {
+    "wire_version": "RRRAST5",
+    "bytes": 95,
+    "native_samples": "float32 HDR/signed-zero/NaN bit patterns",
+    "profile_bytes": 3,
+    "timing": "1000/60 ms,3 total plays"
+  },
+  "cases": 856,
+  "mutations": {
+    "every_single_bit": 760,
+    "every_truncated_prefix": 95,
+    "appended_tail": 1
+  },
+  "checks": [
+    "Every mutated object rejected and removed without returning altered timing/pixels",
+    "Neighbour object retained with exact native sample bits and rational timing",
+    "Disk quota drops to exactly neighbour95 bytes and one object",
+    "Corrupt key does not produce repeated error after removal",
+    "Every same-key rewrite/read retry succeeds; both neighbour and retry timing exact",
+    "Output/profile and queued capacity released after each case; final0, peak19 bytes"
+  ],
+  "legacy_matrix": {
+    "cases": 748,
+    "preserved": true
+  },
+  "cache_lib": {
+    "passed": 147,
+    "failed": 0,
+    "ignored": 3
+  },
+  "changes": "Regression matrix parameterized for legacy and animated records; production unchanged",
+  "limits": [
+    "One representative ICC/float32 V5 record, not all color/sample/header combinations",
+    "Integrity is swap-store checksum plus payload validation, not authentication against adversarial replacement",
+    "Semantic base/color/aspect metadata combinations are covered by separate36-case V5 codec test",
+    "No new live animation pacing, physical HDR/NVIDIA or complete100-format qualification"
+  ],
+  "source_sha256": "020280c5396591fce3724034334a2e37a140a3063509845515c02d28eada60c3"
+}

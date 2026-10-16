@@ -1,0 +1,59 @@
+{
+  "change": "Opt-in RRRAH_AI_UNIT_STREAM_ARITHMETIC observer records count and outward alpha-mass interval, then estimates old accumulation/quotient rounding without using individual color values in that arithmetic. Source-unit-range is separately checked against still-observed pixels; source sampling remains unchanged.",
+  "unit_tests": {
+    "passed": 274,
+    "failed": 0,
+    "ignored": 12
+  },
+  "known_affine_control": {
+    "complete": true,
+    "count": 4,
+    "unit_sources": true,
+    "alpha_mass": [
+      0.9999999999999996,
+      1.0000000000000009
+    ],
+    "alpha_error": 1.11022302462516e-15,
+    "component_error": 1.3322676295501922e-15,
+    "quotient_error": 3.3306690738754846e-15,
+    "returned_pixel_exact": true
+  },
+  "real_control": {
+    "pixel": [
+      147,
+      59
+    ],
+    "grid": 4,
+    "completed": true,
+    "count": 633426,
+    "unit_sources": true,
+    "alpha_mass": [
+      0.6737398252464769,
+      0.6737398253257169
+    ],
+    "alpha_error": 9.476086502071933e-11,
+    "component_error": 9.47610146210127e-11,
+    "quotient_error": 2.8129920626293365e-10,
+    "old_per_element_quotient_error": 9.166527049435593e-11,
+    "source_work": 9618324,
+    "source_allowance": 16000000,
+    "observer_work": 98206312,
+    "observer_allowance": 256000000,
+    "returned_original_native_exact": true,
+    "peak_bytes": 266512708,
+    "deadline": false,
+    "final_credit": 0,
+    "scope": "Arithmetic estimate uses only count/mass; unit-range proof still checked from observed source samples. No live skipping."
+  },
+  "sources": {
+    "vendor/hayro/src/native_spatial.rs": "5fee8637685cc776b18c39eb059835e2bf17bfe559ce52e998c83ad4dfee057b",
+    "vendor/hayro/src/native_moments.rs": "b8a76f429b2966a05038288fdaf1f73c5018fd46c2ed10600f16d9286c156717",
+    "vendor/hayro/src/native_blend.rs": "797602a719903f200ffad34f1f79331dba4a0b23cdba2d3bd1c866ce2dde04de",
+    "vendor/hayro/src/native_frame.rs": "405f2698271ffbc582849555b854009f3b5fd98a2ed9c668b37e585584abb1c8",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "e65fcd2fece6897fe3bce7172e18cf8a50020113438744aa719dc6889e37b1a3"
+  },
+  "limitations": [
+    "Observational only; does not enable sample skipping or ordinary4M/fullpage acceptance",
+    "Source-range and geometry evidence still require separate proofs; profile/display excluded"
+  ]
+}

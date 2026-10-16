@@ -1,0 +1,72 @@
+{
+  "status": "bounded original-source geometry completed; full AI fidelity pending",
+  "point": [
+    149,
+    56
+  ],
+  "corpus": "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+  "current_result": {
+    "composited_alpha": 0.2144597600545531,
+    "clip_area": 0.2144597600545532,
+    "gap": 8.326672684688674e-17,
+    "peak_admitted_bytes": 266078344,
+    "limit_bytes": 268435456,
+    "final_credit": 0,
+    "test_seconds": 4.55
+  },
+  "current_code_finding": {
+    "source": "vendor/hayro-interpret/src/shading/adaptive.rs",
+    "source_sha256": "9feff9f20fb617472d41e9b06d4f10b7ce526e96e0515da2241a0bf7ad2c8732",
+    "boundary_error": 0.0001220703125
+  },
+  "historical_evidence_source_audit": [
+    {
+      "path": "vendor/hayro-interpret/src/shading/adaptive.rs",
+      "current_sha256": "9feff9f20fb617472d41e9b06d4f10b7ce526e96e0515da2241a0bf7ad2c8732"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/shading.rs",
+      "current_sha256": "1401ea99c279bf608a485f19a0f38ad8ae5e3d11b0282e0882c5784ee7b0ed7d"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/encode/native_source.rs",
+      "current_sha256": "a4dcf2df6263fece53a4a7deaf993d97dccb53eab2f3f636febf1b2c5e8579f5"
+    },
+    {
+      "path": "vendor/hayro/src/knockout_interpreter.rs",
+      "current_sha256": "5f5569845c4ac83709de8755c58ac7765711d6abeb7d747f58bd54337331e36b"
+    }
+  ],
+  "implementation": [
+    "direct104-byte compact triangle emission; generic240-byte API retained",
+    "f64 positions/f32 components bit-preserved at equal tessellation settings",
+    "shared edge samples compacted before output emission with complete old+new admission",
+    "private mesh-node indices u32, checked at construction; bounds and traversal unchanged",
+    "boundary chord tolerance pixel_error/128, interior and resource caps unchanged"
+  ],
+  "tests": {
+    "interpreter_passed": 126,
+    "failed": 0,
+    "ignored": 1,
+    "new_test": "compact vs generic bit equality incl HDR/signed inputs, every allocation refusal and post-admission cancellation"
+  },
+  "tensor_triangles": [
+    607802,
+    309762,
+    309762,
+    54822,
+    134489
+  ],
+  "equal_precision_memory_control": {
+    "before": 232907656,
+    "direct_compact_before_other_changes": 210602936,
+    "alpha_components_control_geometry": "exact unchanged"
+  },
+  "limitations": [
+    "one pixel diagnostic on original source; not full-page strict Poppler color equality",
+    "native compositor diagnostic does not establish normal production AI viewer route",
+    "peak is admitted capacity, not full process RSS",
+    "tighter boundary is not a universal area-error certificate",
+    "one ignored test not executed"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "app_tests_passed": 4,
+  "scenarios": {
+    "original_gray8": {
+      "cases": 2,
+      "metal_readbacks": 12,
+      "swap_count": 4
+    },
+    "authored_high_precision_alpha": {
+      "cases": 8,
+      "metal_readbacks": 48,
+      "swap_count": 16,
+      "depths": [
+        16,
+        32
+      ],
+      "modes": [
+        "RGB",
+        "gray"
+      ],
+      "containers": [
+        "PSD",
+        "PSB"
+      ],
+      "color_policy": "explicit linear sRGB"
+    }
+  },
+  "ram_hits_per_cpu_or_metal_run": {
+    "original_gray8": 2,
+    "high_precision": 8
+  },
+  "writes_and_reads_per_run": {
+    "original_gray8": 2,
+    "high_precision": 8
+  },
+  "decoder_blocked_during_prefetch": true,
+  "final_managed_credit": 0,
+  "target": "/tmp/rrrah-alpha-isolated-target-20261016",
+  "initial_failure": "helper reused swap count4 for8controls, correctly evicted earlier keys",
+  "limitations": [
+    "authored high precision producer controls, not original Photoshop corpus",
+    "App-loader integration tests, not live GUI event-loop qualification",
+    "not all100formats or NVIDIA"
+  ]
+}

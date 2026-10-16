@@ -56,15 +56,31 @@ impl SourceFingerprint {
         let mut hasher = blake3::Hasher::new();
         hasher.update(b"rrrah/source-sample/v1\0");
         hasher.update(&file_size.to_le_bytes());
+        // For small files the three samples overlap. Read their union once,
+        // while retaining the frozen offset/sample hash stream exactly.
+        let contiguous = if file_size > SAMPLE_BYTES && file_size <= 2 * SAMPLE_BYTES {
+            let mut bytes = vec![0u8; file_size as usize];
+            file.read_exact(&mut bytes).map_err(|source| CacheError::Io {
+                path: path.to_owned(),
+                source,
+            })?;
+            Some(bytes)
+        } else {
+            None
+        };
         for offset in sample_offsets(file_size) {
+            hasher.update(&offset.to_le_bytes());
+            let remaining = file_size.saturating_sub(offset).min(SAMPLE_BYTES);
+            let sample_len = usize::try_from(remaining).map_err(|_| CacheError::SizeOverflow)?;
+            if let Some(bytes) = &contiguous {
+                hasher.update(&bytes[offset as usize..offset as usize + sample_len]);
+                continue;
+            }
             file.seek(SeekFrom::Start(offset))
                 .map_err(|source| CacheError::Io {
                     path: path.to_owned(),
                     source,
                 })?;
-            hasher.update(&offset.to_le_bytes());
-            let remaining = file_size.saturating_sub(offset).min(SAMPLE_BYTES);
-            let sample_len = usize::try_from(remaining).map_err(|_| CacheError::SizeOverflow)?;
             let mut sample = vec![0_u8; sample_len];
             file.read_exact(&mut sample).map_err(|source| CacheError::Io {
                 path: path.to_owned(),
@@ -404,10 +420,7 @@ impl DiskMosaicCache {
                     return Err(CacheError::Cancelled);
                 }
                 let bytes = bytemuck::cast_slice_mut(samples);
-                reader.read_exact(bytes).map_err(|source| CacheError::Io {
-                    path: path.clone(),
-                    source,
-                })?;
+                read_payload_checked(&mut reader, bytes, &path, &mut cancelled)?;
                 payload_hasher.update(bytes);
                 #[cfg(target_endian = "big")]
                 for sample in samples {
@@ -430,10 +443,7 @@ impl DiskMosaicCache {
                 }
                 let chunk_len = remaining.min(buffer.len());
                 let chunk = &mut buffer[..chunk_len];
-                reader.read_exact(chunk).map_err(|source| CacheError::Io {
-                    path: path.clone(),
-                    source,
-                })?;
+                read_payload_checked(&mut reader, chunk, &path, &mut cancelled)?;
                 payload_hasher.update(chunk);
                 pixels.extend(
                     chunk
@@ -781,6 +791,28 @@ fn write_pixels(writer: &mut impl Write, pixels: &[u16]) -> Result<(), std::io::
             output.copy_from_slice(&sample.to_le_bytes());
         }
         writer.write_all(bytes)?;
+    }
+    Ok(())
+}
+
+// Observe cancellation even when a Read implementation returns partial data or
+// Interrupted repeatedly. An individual blocking OS call remains indivisible.
+fn read_payload_checked(
+    reader: &mut impl Read,
+    mut output: &mut [u8],
+    path: &Path,
+    cancelled: &mut impl FnMut() -> bool,
+) -> Result<(), CacheError> {
+    while !output.is_empty() {
+        if cancelled() { return Err(CacheError::Cancelled); }
+        let result = reader.read(output);
+        if cancelled() { return Err(CacheError::Cancelled); }
+        match result {
+            Ok(0) => return Err(CacheError::Io { path: path.to_path_buf(), source: std::io::ErrorKind::UnexpectedEof.into() }),
+            Ok(count) => output = &mut output[count..],
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+            Err(source) => return Err(CacheError::Io { path: path.to_path_buf(), source }),
+        }
     }
     Ok(())
 }
@@ -1456,6 +1488,34 @@ mod tests {
     }
 
     #[test]
+    fn overlapping_fingerprint_samples_preserve_frozen_hash_stream() {
+        let directory = tempdir().unwrap();
+        let path = directory.path().join("overlapping.raw");
+        for size in [0usize, 1, 65536, 65537, 67786, 131071, 131072, 131073, 262144] {
+            let mut bytes: Vec<u8> = (0..size).map(|i| (i.wrapping_mul(17) >> 5) as u8).collect();
+            for edited in [false, true] {
+                if edited && size > 0 {
+                    bytes[size / 2] ^= 0x81;
+                }
+                std::fs::write(&path, &bytes).unwrap();
+                let actual = SourceFingerprint::from_path(&path).unwrap();
+                let mut expected = blake3::Hasher::new();
+                expected.update(b"rrrah/source-sample/v1\0");
+                expected.update(&(size as u64).to_le_bytes());
+                for offset in super::sample_offsets(size as u64) {
+                    expected.update(&offset.to_le_bytes());
+                    let start = offset as usize;
+                    expected.update(&bytes[start..(start + 65536).min(size)]);
+                }
+                assert_eq!(
+                    actual.sampled_blake3,
+                    *expected.finalize().as_bytes(),
+                    "size={size}, edited={edited}"
+                );
+            }
+        }
+    }
+    #[test]
     fn source_fingerprint_is_deterministic_and_changes_when_sample_changes() {
         let directory = tempdir().unwrap();
         let path = directory.path().join("sample.raw");
@@ -1740,5 +1800,45 @@ mod tests {
             .set_times(std::fs::FileTimes::new().set_modified(future))
             .unwrap();
         assert!(cache.load(test_key(98)).unwrap().is_none());
+    }
+}
+
+#[cfg(test)]
+mod partial_payload_tests {
+    use super::*;
+    use std::cell::Cell;
+    #[test]
+    fn interrupted_and_partial_payload_reads_remain_cancellable() {
+        struct Reader<'a> { calls: &'a Cell<usize>, interrupted: bool }
+        impl Read for Reader<'_> {
+            fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
+                self.calls.set(self.calls.get()+1);
+                assert!(self.calls.get() <= 3);
+                if self.interrupted { Err(std::io::ErrorKind::Interrupted.into()) }
+                else { output[0]=17; Ok(1) }
+            }
+        }
+        for interrupted in [true, false] {
+            let calls = Cell::new(0);
+            let mut reader = Reader { calls: &calls, interrupted };
+            assert!(matches!(read_payload_checked(&mut reader, &mut [0; 16], Path::new("controlled"), &mut || calls.get() == 3), Err(CacheError::Cancelled)));
+            assert_eq!(calls.get(), 3);
+        }
+    }
+    #[test]
+    fn payload_read_retries_interruption_and_rejects_truncation() {
+        struct Once { interrupted: bool, bytes: std::io::Cursor<Vec<u8>> }
+        impl Read for Once {
+            fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
+                if !self.interrupted { self.interrupted=true; return Err(std::io::ErrorKind::Interrupted.into()); }
+                let count = output.len().min(1);
+                self.bytes.read(&mut output[..count])
+            }
+        }
+        let mut reader = Once { interrupted: false, bytes: std::io::Cursor::new(vec![1,2,3]) };
+        let mut output = [0; 3];
+        read_payload_checked(&mut reader, &mut output, Path::new("controlled"), &mut || false).unwrap();
+        assert_eq!(output, [1,2,3]);
+        assert!(matches!(read_payload_checked(&mut reader, &mut output, Path::new("controlled"), &mut || false), Err(CacheError::Io { source, .. }) if source.kind() == std::io::ErrorKind::UnexpectedEof));
     }
 }

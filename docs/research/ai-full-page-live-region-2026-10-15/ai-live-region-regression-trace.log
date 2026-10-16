@@ -1,0 +1,36 @@
+
+running 1 test
+test knockout_compositor::interpreter_tests::spatial_region_budget_ignores_far_geometry_before_count_admission ... SPATIAL_LIVE_MASKS total=0 live=0
+SPATIAL_EXCLUDED_MESH_REGIONS count=0
+SPATIAL_REGION_DEDUP original=3 unique=2
+SPATIAL_REDUNDANT_MASK_CLEARS_REMOVED=0
+SPATIAL_NEUTRAL_GROUP_BOUNDARIES_REMOVED=2
+SPATIAL_PAINT_COALESCE before=3 after=3
+SPATIAL_AFFINE_ROUTE_CANDIDATE eligible=false affine_meshes=0 constant_rasters=0
+SPATIAL_GROUP_PROPERTIES command=0 isolated=true knockout=false opacity=1 ais=false mode=Normal
+SPATIAL_PREPARED_KINDS retained=1 paint=0 native=0 sampled=0 begin=1 end=1 clear_mask=0 set_mask=0
+SPATIAL_CONSTANT_RECTANGLE_REGIONS=0
+SPATIAL_ROUTING_REGIONS total=2 used=2
+SPATIAL_ROUTE_STRUCTURE position=0 depth=0 begin isolated=true knockout=false opacity=1 ais=false mode=Normal
+SPATIAL_ROUTE_STRUCTURE position=1 depth=1 retained opacity=1 mode=Normal
+SPATIAL_ROUTE_STRUCTURE position=2 depth=0 end
+SPATIAL_ACTIVE_AFFINE_ROUTE eligible=false commands=3
+SPATIAL_POLYGON_WORK spent=413 remaining=39999587 limit=40000000
+SPATIAL_BUDGET_SPENT key=1 lookup=5 route_preparation=22 native_source=0 backdrop_comparison=0
+SPATIAL_NATIVE_SOURCE_SPENT owner_lookup=0 sample_and_coordinates=0 no_owner_sample=0
+SPATIAL_DISPATCH_KINDS retained=0 paint=0 native=0 sampled=0 begin=1 end=0 clear_mask=0 set_mask=0
+SPATIAL_WORK_COUNTS fragments=1 route_hits=0 route_misses=1 dispatch=1 groups=0 native_samples=0 fixed_samples=0 mask_samples=0 constant_hits=0 group_hits=0 paint_run_hits=0 hidden_commands=0 local_signature_hits=0
+SPATIAL_ROUTE_REFUSAL stage=preflight event=0
+
+thread 'knockout_compositor::interpreter_tests::spatial_region_budget_ignores_far_geometry_before_count_admission' (25917969) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro/src/knockout_interpreter.rs:7974:50:
+off-pixel geometry must not exhaust live region limit
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    knockout_compositor::interpreter_tests::spatial_region_budget_ignores_far_geometry_before_count_admission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 275 filtered out; finished in 0.01s
+

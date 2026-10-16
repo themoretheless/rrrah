@@ -1,0 +1,311 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Checking rrrah-develop v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop)
+    Checking hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+error[E0432]: unresolved import `rrrah_dedup::animated`
+  --> crates/rrrah-dedup/examples/projective_refinement_probe.rs:2:5
+   |
+ 2 |     animated::AnimationBudget,
+   |     ^^^^^^^^ could not find `animated` in `rrrah_dedup`
+   |
+note: found an item that was configured out
+  --> crates/rrrah-dedup/src/lib.rs:12:9
+   |
+11 | #[cfg(feature = "decode")]
+   |       ------------------ the item is gated behind the `decode` feature
+12 | pub mod animated;
+   |         ^^^^^^^^
+
+error[E0433]: cannot find module or crate `rrrah_core` in this scope
+  --> crates/rrrah-dedup/examples/projective_refinement_probe.rs:14:18
+   |
+14 |     let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+   |                  ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+   |
+   = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find `decode` in `rrrah_dedup`
+  --> crates/rrrah-dedup/examples/projective_refinement_probe.rs:20:26
+   |
+20 |     let a = rrrah_dedup::decode::decode_selected_frame_bounded(
+   |                          ^^^^^^ could not find `decode` in `rrrah_dedup`
+   |
+note: found an item that was configured out
+  --> crates/rrrah-dedup/src/lib.rs:26:9
+   |
+25 | #[cfg(feature = "decode")]
+   |       ------------------ the item is gated behind the `decode` feature
+26 | pub mod decode;
+   |         ^^^^^^
+
+error[E0432]: unresolved import `rrrah_core`
+ --> crates/rrrah-dedup/examples/../src/gradient_index.rs:6:5
+  |
+6 | use rrrah_core::{MemoryBudget, SharedBuffer};
+  |     ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+  |
+  = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0432]: unresolved import `rrrah_core`
+ --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:6:5
+  |
+6 | use rrrah_core::{MemoryBudget, SharedBuffer};
+  |     ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+  |
+  = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `rrrah_decode` in this scope
+  --> crates/rrrah-dedup/examples/projective_refinement_probe.rs:21:10
+   |
+21 |         &rrrah_decode::DecodeRequest::new(&args[0]),
+   |          ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_decode`
+   |
+help: there is a crate or module with a similar name
+   |
+21 -         &rrrah_decode::DecodeRequest::new(&args[0]),
+21 +         &rrrah_dedup::DecodeRequest::new(&args[0]),
+   |
+
+error[E0432]: unresolved imports `rrrah_dedup::animated`, `rrrah_dedup::local_scan`
+  --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:2:5
+   |
+ 2 |     animated::AnimationBudget,
+   |     ^^^^^^^^ could not find `animated` in `rrrah_dedup`
+...
+ 6 |     local_scan::{
+   |     ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+   |
+note: found an item that was configured out
+  --> crates/rrrah-dedup/src/lib.rs:12:9
+   |
+11 | #[cfg(feature = "decode")]
+   |       ------------------ the item is gated behind the `decode` feature
+12 | pub mod animated;
+   |         ^^^^^^^^
+note: found an item that was configured out
+  --> crates/rrrah-dedup/src/lib.rs:52:9
+   |
+51 | #[cfg(feature = "decode")]
+   |       ------------------ the item is gated behind the `decode` feature
+52 | pub mod local_scan;
+   |         ^^^^^^^^^^
+
+error[E0432]: unresolved imports `rrrah_dedup::anchor_rank`, `rrrah_dedup::anchor_rank_file`, `rrrah_dedup::local_rank`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:119:9
+    |
+119 |         anchor_rank::AnchorRankPolicy,
+    |         ^^^^^^^^^^^ could not find `anchor_rank` in `rrrah_dedup`
+120 |         anchor_rank_file::{AnchorGeometryFallbackPolicy, search_anchor_rank_geometry_fallback_files},
+    |         ^^^^^^^^^^^^^^^^ could not find `anchor_rank_file` in `rrrah_dedup`
+121 |         local_rank::LocalRankPolicy,
+    |         ^^^^^^^^^^ could not find `local_rank` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:563:9
+    |
+562 | #[cfg(feature = "raster")]
+    |       ------------------ the item is gated behind the `raster` feature
+563 | pub mod anchor_rank;
+    |         ^^^^^^^^^^^
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:566:9
+    |
+565 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+566 | pub mod anchor_rank_file;
+    |         ^^^^^^^^^^^^^^^^
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:557:9
+    |
+556 | #[cfg(feature = "raster")]
+    |       ------------------ the item is gated behind the `raster` feature
+557 | pub mod local_rank;
+    |         ^^^^^^^^^^
+
+error[E0433]: cannot find `decode` in `rrrah_dedup`
+  --> crates/rrrah-dedup/examples/projective_refinement_probe.rs:27:26
+   |
+27 |     let b = rrrah_dedup::decode::decode_selected_frame_bounded(
+   |                          ^^^^^^ could not find `decode` in `rrrah_dedup`
+   |
+note: found an item that was configured out
+  --> crates/rrrah-dedup/src/lib.rs:26:9
+   |
+25 | #[cfg(feature = "decode")]
+   |       ------------------ the item is gated behind the `decode` feature
+26 | pub mod decode;
+   |         ^^^^^^
+
+error[E0433]: cannot find module or crate `rrrah_decode` in this scope
+  --> crates/rrrah-dedup/examples/projective_refinement_probe.rs:28:10
+   |
+28 |         &rrrah_decode::DecodeRequest::new(&args[1]),
+   |          ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_decode`
+   |
+help: there is a crate or module with a similar name
+   |
+28 -         &rrrah_decode::DecodeRequest::new(&args[1]),
+28 +         &rrrah_dedup::DecodeRequest::new(&args[1]),
+   |
+
+error[E0433]: cannot find `local_scan` in `rrrah_dedup`
+  --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:82:19
+   |
+82 | ) -> rrrah_dedup::local_scan::ProjectiveDistinctScaleRegionsFilePolicy {
+   |                   ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+   |
+note: found an item that was configured out
+  --> crates/rrrah-dedup/src/lib.rs:52:9
+   |
+51 | #[cfg(feature = "decode")]
+   |       ------------------ the item is gated behind the `decode` feature
+52 | pub mod local_scan;
+   |         ^^^^^^^^^^
+
+error[E0433]: cannot find module or crate `rrrah_core` in this scope
+  --> crates/rrrah-dedup/examples/gradient_index_early_exit_bench.rs:31:18
+   |
+31 |     let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+   |                  ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+   |
+   = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find `local_scan` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:102:18
+    |
+102 |     rrrah_dedup::local_scan::ProjectiveDistinctScaleRegionsFilePolicy {
+    |                  ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:52:9
+    |
+ 51 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 52 | pub mod local_scan;
+    |         ^^^^^^^^^^
+
+Some errors have detailed explanations: E0432, E0433.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `rrrah-dedup` (example "projective_refinement_probe") due to 6 previous errors
+warning: build failed, waiting for other jobs to finish...
+error[E0433]: cannot find `local_scan` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:105:31
+    |
+105 |         spatial: rrrah_dedup::local_scan::SpatialFeaturePolicy {
+    |                               ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:52:9
+    |
+ 51 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 52 | pub mod local_scan;
+    |         ^^^^^^^^^^
+
+error[E0433]: cannot find `local_scan` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:127:35
+    |
+127 |     let mut config = rrrah_dedup::local_scan::ProjectiveCandidateUnionRegionsFilePolicy {
+    |                                   ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:52:9
+    |
+ 51 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 52 | pub mod local_scan;
+    |         ^^^^^^^^^^
+
+error[E0433]: cannot find module or crate `rrrah_core` in this scope
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:151:18
+    |
+151 |     let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+    |                  ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+    |
+    = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find `local_scan` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:152:33
+    |
+152 |     let fallback = rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
+    |                                 ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:52:9
+    |
+ 51 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 52 | pub mod local_scan;
+    |         ^^^^^^^^^^
+
+error[E0433]: cannot find module or crate `rrrah_core` in this scope
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:247:24
+    |
+247 |     _pair_reservation: rrrah_core::Reservation,
+    |                        ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+    |
+    = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `rrrah_core` in this scope
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:199:24
+    |
+199 |     _pair_reservation: rrrah_core::Reservation,
+    |                        ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+    |
+    = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `rrrah_decode` in this scope
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:190:35
+    |
+190 |         .map(|i| ((i + 1) as u64, rrrah_decode::DecodeRequest::new(&args[i])))
+    |                                   ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_decode`
+    |
+help: there is a crate or module with a similar name
+    |
+190 -         .map(|i| ((i + 1) as u64, rrrah_decode::DecodeRequest::new(&args[i])))
+190 +         .map(|i| ((i + 1) as u64, rrrah_dedup::DecodeRequest::new(&args[i])))
+    |
+
+error: could not compile `rrrah-dedup` (example "gradient_index_early_exit_bench") due to 5 previous errors
+error[E0433]: cannot find `local_collection` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:192:42
+    |
+192 |     let collection_policy = rrrah_dedup::local_collection::AnchorGeometryFallbackCollectionPolicy {
+    |                                          ^^^^^^^^^^^^^^^^ could not find `local_collection` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:49:9
+    |
+ 48 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 49 | pub mod local_collection;
+    |         ^^^^^^^^^^^^^^^^
+
+error[E0433]: cannot find `local_collection` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:203:31
+    |
+203 |     let report = rrrah_dedup::local_collection::scan_anchor_rank_geometry_fallback_collection(
+    |                               ^^^^^^^^^^^^^^^^ could not find `local_collection` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:49:9
+    |
+ 48 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 49 | pub mod local_collection;
+    |         ^^^^^^^^^^^^^^^^
+
+error[E0433]: cannot find `local_scan` in `rrrah_dedup`
+   --> crates/rrrah-dedup/examples/anchor_rank_real_collection_admitted_probe.rs:239:48
+    |
+239 |                 let points = |e: &rrrah_dedup::local_scan::ManagedCandidateUnionGeometryFileEvidence| {
+    |                                                ^^^^^^^^^^ could not find `local_scan` in `rrrah_dedup`
+    |
+note: found an item that was configured out
+   --> crates/rrrah-dedup/src/lib.rs:52:9
+    |
+ 51 | #[cfg(feature = "decode")]
+    |       ------------------ the item is gated behind the `decode` feature
+ 52 | pub mod local_scan;
+    |         ^^^^^^^^^^
+
+error: could not compile `rrrah-dedup` (example "anchor_rank_real_collection_admitted_probe") due to 12 previous errors

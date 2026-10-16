@@ -1,0 +1,15 @@
+
+running 1 test
+test calibrated_bayer_compute_and_fragment_match_at_sensor_pixel_scale ... 
+thread 'calibrated_bayer_compute_and_fragment_match_at_sensor_pixel_scale' (21203513) panicked at crates/rrrah-gpu/tests/raster_readback.rs:1853:9:
+Bilinear: first mismatched half channels [(1, (12352, 12608)), (2, (11616, 12380)), (6, (11616, 12072)), (9, (12868, 13182)), (10, (11960, 12438)), (14, (12296, 12696)), (17, (13434, 13677)), (18, (12468, 12954))]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    calibrated_bayer_compute_and_fragment_match_at_sensor_pixel_scale
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 30 filtered out; finished in 58.45s
+

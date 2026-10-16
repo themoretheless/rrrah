@@ -1,0 +1,381 @@
+{
+  "status": "retained_measured_optimization",
+  "change": "Share a lazy neighbour index iterator; path plans collect directly without intermediate index Vec. Container index plans still return their required Vec.",
+  "correctness": {
+    "independent_sorted_distance_model_cases": 44550,
+    "gallery_counts": "0..=32",
+    "directions": [
+      "none",
+      "forward",
+      "backward"
+    ],
+    "configured_counts": [
+      0,
+      1,
+      2,
+      5,
+      "usize::MAX"
+    ],
+    "selections": "all valid, count boundary and usize::MAX",
+    "checks": [
+      "exact index sequence",
+      "exact path sequence"
+    ],
+    "viewer": {
+      "passed": 249,
+      "failed": 0,
+      "ignored": 70,
+      "seconds": 9.57
+    }
+  },
+  "profiles": [
+    {
+      "run": "profile",
+      "rows": [
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4602500,
+          "old_ns": 5136667,
+          "pair": 0
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4726167,
+          "old_ns": 5577541,
+          "pair": 1
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 5008542,
+          "old_ns": 5816709,
+          "pair": 2
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 5152375,
+          "old_ns": 5761792,
+          "pair": 3
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 5135833,
+          "old_ns": 5725042,
+          "pair": 4
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 5176875,
+          "old_ns": 5722208,
+          "pair": 5
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4935875,
+          "old_ns": 5662459,
+          "pair": 6
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4829958,
+          "old_ns": 5330375,
+          "pair": 7
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4689541,
+          "old_ns": 5238458,
+          "pair": 8
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5291417,
+          "old_ns": 5512125,
+          "pair": 0
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5544667,
+          "old_ns": 4885709,
+          "pair": 1
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 4778625,
+          "old_ns": 4872625,
+          "pair": 2
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 4780042,
+          "old_ns": 4927125,
+          "pair": 3
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5127458,
+          "old_ns": 5083834,
+          "pair": 4
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5263625,
+          "old_ns": 5226708,
+          "pair": 5
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5270375,
+          "old_ns": 5545125,
+          "pair": 6
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5264667,
+          "old_ns": 5360208,
+          "pair": 7
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5301916,
+          "old_ns": 5385708,
+          "pair": 8
+        }
+      ],
+      "summary": [
+        {
+          "ahead": 5,
+          "pairs": 9,
+          "new_wins": 9,
+          "median_paired_gain": 0.10478598854853849,
+          "median_old_ns_per_plan": 283.12295,
+          "median_new_ns_per_plan": 246.79375
+        },
+        {
+          "ahead": 100,
+          "pairs": 9,
+          "new_wins": 6,
+          "median_paired_gain": 0.01782412175049919,
+          "median_old_ns_per_plan": 5226.708,
+          "median_new_ns_per_plan": 5264.667
+        }
+      ]
+    },
+    {
+      "run": "profile-repeat",
+      "rows": [
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4126125,
+          "old_ns": 5130333,
+          "pair": 0
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4131000,
+          "old_ns": 4550166,
+          "pair": 1
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4195625,
+          "old_ns": 4608167,
+          "pair": 2
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4127416,
+          "old_ns": 4879584,
+          "pair": 3
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4537000,
+          "old_ns": 4994542,
+          "pair": 4
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4350208,
+          "old_ns": 4679375,
+          "pair": 5
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4158459,
+          "old_ns": 4593375,
+          "pair": 6
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4324709,
+          "old_ns": 4798750,
+          "pair": 7
+        },
+        {
+          "ahead": 5,
+          "behind": 2,
+          "iterations": 20000,
+          "new_ns": 4759667,
+          "old_ns": 5000042,
+          "pair": 8
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5801459,
+          "old_ns": 5635167,
+          "pair": 0
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5055208,
+          "old_ns": 5232167,
+          "pair": 1
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5403750,
+          "old_ns": 5304250,
+          "pair": 2
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5642791,
+          "old_ns": 5521500,
+          "pair": 3
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5689375,
+          "old_ns": 5716458,
+          "pair": 4
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5618875,
+          "old_ns": 5557334,
+          "pair": 5
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5700083,
+          "old_ns": 5736417,
+          "pair": 6
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5685959,
+          "old_ns": 6256084,
+          "pair": 7
+        },
+        {
+          "ahead": 100,
+          "behind": 100,
+          "iterations": 1000,
+          "new_ns": 5995334,
+          "old_ns": 6027875,
+          "pair": 8
+        }
+      ],
+      "summary": [
+        {
+          "ahead": 5,
+          "pairs": 9,
+          "new_wins": 9,
+          "median_paired_gain": 0.09212103470510746,
+          "median_old_ns_per_plan": 239.9375,
+          "median_new_ns_per_plan": 209.78125
+        },
+        {
+          "ahead": 100,
+          "pairs": 9,
+          "new_wins": 5,
+          "median_paired_gain": 0.004737723954238771,
+          "median_old_ns_per_plan": 5635.167,
+          "median_new_ns_per_plan": 5685.959
+        }
+      ]
+    }
+  ],
+  "source_sha256": "eb62fc7a347a125732b24146c0329725d9dbdb5366f2975fe8354e5b8c5afd07",
+  "limits": [
+    "Resident synthetic path planning only, no file I/O, decoding or GPU",
+    "Default 2+5 window wins all 18 paired measurements; paired median gain 9.2-10.5 percent across two runs",
+    "100+100 results noisy; no stable speedup claim",
+    "No overall image loading or navigation speedup claim",
+    "No hardware qualification change"
+  ],
+  "logs": {
+    "model": "model.log",
+    "profile": "profile.log",
+    "profile-repeat": "profile-repeat.log",
+    "viewer": "viewer.log"
+  }
+}

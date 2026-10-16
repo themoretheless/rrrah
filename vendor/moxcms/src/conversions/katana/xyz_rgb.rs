@@ -51,6 +51,26 @@ where
     u32: AsPrimitive<T>,
     f32: AsPrimitive<T>,
 {
+    fn bound_float_rgb(&self,input:[[f32;2];3],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[[f32;2];3]> {
+        use crate::conversions::lut4::HybridInterval as I;
+        if T::FINITE || std::mem::size_of::<T>()!=4 || Layout::from(LAYOUT)!=Layout::Rgb
+            || !(1..=65536).contains(&self.gamma_lut) || cancelled() {return None;}
+        *work=work.checked_sub(3)?;let cap=(self.gamma_lut-1) as f32;
+        let tables=[&self.r_gamma,&self.g_gamma,&self.b_gamma];let mut out=[[0.;2];3];
+        for channel in 0..3 {
+            let index=I::new(input[channel])?.op(I::point(cap)?,2,work,cancelled)?.op(I::point(0.5)?,0,work,cancelled)?.0;
+            let first=index[0].clamp(0.,cap) as usize;let last=index[1].clamp(0.,cap) as usize;
+            let mut range=[f32::INFINITY,f32::NEG_INFINITY];
+            for index in first..=last {
+                if cancelled() {return None;}*work=work.checked_sub(1)?;
+                let value:f32=tables[channel][index].as_();
+                if !value.is_finite() || !(0. ..=1.).contains(&value) {return None;}
+                range[0]=range[0].min(value);range[1]=range[1].max(value);
+            }
+            out[channel]=range;
+        }
+        if cancelled() {return None;}Some(out)
+    }
     fn to_output(&self, src: &mut [f32], dst: &mut [T]) -> Result<(), CmsError> {
         let dst_cn = Layout::from(LAYOUT);
         let dst_channels = dst_cn.channels();

@@ -1,0 +1,84 @@
+{
+  "status": "linear_pvr_dxt2_dxt4_implemented",
+  "references": [
+    "https://learn.microsoft.com/en-us/windows/win32/direct3d9/textures-with-alpha-channels",
+    "https://docs.imgtec.com/specifications/pvr-file-format-specification/html/topics/pvr-header-format.html"
+  ],
+  "changes": [
+    "PVR formats8/10 use owned BC2/BC3 block reconstruction with intrinsic associated alpha",
+    "Associated semantics from codec or flag are combined once",
+    "Existing admitted float32 unassociation preserves values above1",
+    "Explicit sRGB association still refuses pending exporter interpretation"
+  ],
+  "fixtures": {
+    "files": 8,
+    "selected_mips": 32,
+    "formats": [
+      "DXT2",
+      "DXT4"
+    ],
+    "color": "declared linear",
+    "orientations": 4,
+    "dimensions": [
+      [
+        9,
+        5
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "oracle": "Pillow12.3.0 DDS decoder for stored BC samples; separate Python float32 normalization/unassociation and crop/orientation oracle"
+  },
+  "checks": {
+    "pvr_native_mip_cases": 218,
+    "managed_quota": "exact/one-byte-short includes simultaneous native/float output and retained metadata; shared owner release checked",
+    "association": "implicit and explicit flag outputs bit-identical; above-one RGB retained; transparent black accepted; zero-alpha nonblack refuses with zero final credit",
+    "texture_lib": {
+      "passed": 82,
+      "failed": 0,
+      "ignored": 1
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "app_cpu": {
+      "states": 484,
+      "swap_writes": 484,
+      "swap_reads": 484,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 484,
+      "readbacks": 2904,
+      "swap_writes": 484,
+      "swap_reads": 484,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "sRGB premultiplication refuses; qualified producer interpretation remains open",
+    "Zero-alpha emission requires associated rendering and is explicitly refused by current straight-alpha output contract",
+    "Compressed big-endian and full PVR variants remain open",
+    "No new physical HDR/NVIDIA or throughput claim"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/pvr.rs": "c097934bf3a07ad2f26e131c4d00b8dfc1ae8308a916d84205903f3c5a93bd0e",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "78379502e4637a1712ae16af3fba20f07fa0819d271330db9d92079659bcc9c8",
+    "scripts/generate-pvr-associated-bc-fixtures.py": "7c0390dbc41dfd6733c4311e682f111b87d493bebd107d7b76edf7b90a7dd820",
+    "tests/fixtures/raster/pvr-associated-bc-manifest.tsv": "ce914b3784313b586e7191fcca4880b92fbb3e19be0fbfdf2ecb9c408cf62b11"
+  }
+}

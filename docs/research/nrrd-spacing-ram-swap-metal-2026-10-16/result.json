@@ -1,0 +1,57 @@
+{
+  "status": "NRRD spacings preserved through explicit window, display preparation, RAM and swap, verified on actual Metal",
+  "states": {
+    "baseline_nrrd": 64,
+    "authored_nrrd_aspect_variants": 128,
+    "mrc": 40,
+    "fits": 20,
+    "total": 252
+  },
+  "geometry": "Derive temporary NRRD containers from original independent fixture bytes, changing only header: spacings -2,1,1 gives aspect2;1,2,1 gives aspect0.5. Preserve original binary/gzip/text payload exactly. One immutable derived file per source/aspect, shared by section requests, avoids fingerprint churn.",
+  "reference": "Original pynrrd/mrcfile/Astropy sample/window oracle files with authored analytical aspect ratio. No new independent producer geometry corpus claimed.",
+  "metal": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "passed": 1,
+    "failed": 0,
+    "seconds": 5.08,
+    "positive_sdr_hdr_readbacks": 1512,
+    "square_pixel_negative_controls": 256,
+    "total_readbacks": 1768
+  },
+  "cache": {
+    "ram_pressure_hits": 252,
+    "swap_writes": 252,
+    "swap_reads": 252,
+    "swap_errors": 0,
+    "swap_dropped": 0,
+    "blocked_decoder_prefetch": true,
+    "visible_preserved": true,
+    "final_managed_bytes": 0
+  },
+  "tests": {
+    "targeted_cpu": {
+      "passed": 1,
+      "failed": 0
+    },
+    "cpu_group": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 3
+    },
+    "focused_rustfmt": "passed"
+  },
+  "limits": [
+    "Small5x3authored sources, not large-volume throughput qualification",
+    "Native sample pixels retained without resampling; this verifies storage-plane metric, not world-axis orientation or oblique transforms",
+    "No MRC physical spacing change in this turn",
+    "Window values0..1, no new above1 scientific HDR or panel luminance claim",
+    "No new TTL matrix; DICOM/cache nonzero TTL has separate evidence",
+    "Not full100format qualification or NVIDIA test"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "cd62a0b7a50f1a35d4d9529d8803198532bce9101a0eabf24da2dbd6c8f3c5a1",
+    "crates/rrrah-scientific/src/nrrd.rs": "abbf241b89ca31eaf7f54aa7a1376518b719533e59a543cd7936aaeeb070930f",
+    "crates/rrrah-scientific/src/scientific.rs": "7b333926431ca3ecf0acb5344cb68d1e16eb49061445d1f6224351479124a5f3"
+  }
+}

@@ -15,6 +15,7 @@
 pub use resvg::usvg::roxmltree;
 pub use rrrah_raw::{DecodeError, DecodeRequest, GenerationToken, bounded_io};
 
+pub mod icc_colorimetry;
 pub mod emf;
 pub mod eps;
 pub mod eps_bounds;

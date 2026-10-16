@@ -1,0 +1,76 @@
+{
+  "status": "Release whole-file source before allocating scientific window output; request budgets can reuse source credit",
+  "problem": "NRRD/MRC selected raster and FITS native samples already own storage, but decode_raster_with_window retained read_bounded SourceBuffer through second output allocation",
+  "change": "FITS decode into owned FitsImage then drop source before window; NRRD/MRC extract owned selected raster then drop source before shared window. No pixel math or source validation changed.",
+  "budget_formulas": {
+    "nrrd": "max(source+gzip_selected_scratch+raw_RGBA, raw_RGBA+window_RGBA)",
+    "mrc": "max(source+extended_metadata+raw_RGBA, raw_RGBA+window_RGBA)",
+    "fits": "max(source+native_samples, native_samples+window_RGBA)"
+  },
+  "large_volume": {
+    "uncompressed_bytes": 268435456,
+    "compressed_source_bytes": 5648176,
+    "old_window_peak_bytes": 14036784,
+    "new_window_peak_bytes": 10366768,
+    "saved_bytes": 3670016,
+    "saved_percent": 26.145704030210908,
+    "runs": [
+      {
+        "section": 0,
+        "cap": 10366768,
+        "peak": 10366768,
+        "decode_ns": 51689542
+      },
+      {
+        "section": 256,
+        "cap": 10366768,
+        "peak": 10366768,
+        "decode_ns": 50784833
+      },
+      {
+        "section": 511,
+        "cap": 10366768,
+        "peak": 10366768,
+        "decode_ns": 50577833
+      }
+    ],
+    "pixels": "Every raw/window RGBA pixel checked at sections0,256,511; final managed memory0",
+    "timing_scope": "Single synthetic warm-filesystem post-change run, not controlled speedup evidence"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 47,
+      "failed": 0,
+      "ignored": 9
+    },
+    "large_manual": {
+      "passed": 1,
+      "failed": 0
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed",
+    "admission": "All independent science fixtures use updated exact peak formulas; one-byte-short caps still refuse and free reservations"
+  },
+  "routing_audit": {
+    "current": "Direct scientific decode, generic scientific-window route and raster router still whole-file read before parsing; public streaming API alone would not fix viewer path",
+    "next_required_for_streaming": "Wire file-backed parsing into direct API, scientific window dispatcher and generic raster/image routing, preserving signature routing under renamed suffixes"
+  },
+  "limits": [
+    "No streaming-file path introduced in this turn",
+    "Source still charged and resident through initial decoding; peak still depends on source size",
+    "Stack/gzip internal state/metadata strings not total RSS accounting",
+    "No new Metal test; existing pixel/render formulas unchanged",
+    "Full100format objective remains active"
+  ],
+  "source_sha256": {
+    "crates/rrrah-scientific/src/scientific.rs": "848b691b77e201ee32eaff9e993e19c9315022390c26f09838b479f73fec28ac",
+    "crates/rrrah-scientific/src/nrrd.rs": "401abaa420869ef28f87b9914155245e33e736d7a39cd3e35e19bc3c78cfda2f",
+    "crates/rrrah-scientific/src/mrc.rs": "227a13a1f0daf3bf4007cb99acf5f10849b606620a84514bddf62db672db796a",
+    "crates/rrrah-scientific/src/fits.rs": "86c26f9be0dfd0e3cc95954a4218b3caf0c9d56458f4f2e902212892f2ebb110",
+    "crates/rrrah-scientific/src/scientific_cancel_stress.rs": "74f8f135742d8d98b3ac2c8148d5654492619bb1fc5dd429a9b298a10bde878f"
+  }
+}

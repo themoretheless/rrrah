@@ -54,3 +54,6 @@ pub(crate) use stages::{
 };
 pub(crate) use xyz_lab::{KatanaStageLabToXyz, KatanaStageXyzToLab};
 pub(crate) use xyz_rgb::katana_prepare_inverse_lut_rgb_xyz;
+
+#[cfg(test)]
+pub(crate) use pcs_stages::KatanaMatrixStage;

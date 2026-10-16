@@ -1,0 +1,69 @@
+{
+  "status": "ktx1_native_r_rg_storage_implemented",
+  "references": [
+    "https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/main/api/GL/glcorearb.h",
+    "https://registry.khronos.org/KTX/specs/1.0/ktxspec.v1.html"
+  ],
+  "formats": [
+    "R8",
+    "RG8",
+    "R16",
+    "RG16",
+    "R32F",
+    "RG32F"
+  ],
+  "changes": [
+    "Native8/16/f32 R/RG storage with matching internal/type/base tuples",
+    "Missing G/B zero and opaque alpha, preserving original channels including signed zero and HDR float values",
+    "Native data color stays LinearRgbUnspecified unless explicit linear-sRGB policy",
+    "Existing row-aligned endian decoder extended without byte downconversion"
+  ],
+  "fixtures": {
+    "files": 48,
+    "cases": 192,
+    "byte_orders": 2,
+    "orientations": 4,
+    "mips": 4,
+    "oracle": "Independent Python mathematical sample construction; unsigned boundary/adjacent16-bit values and negative/HDR/signed-zero float32 controls; nonzero row padding ignored correctly",
+    "not_producer_corpus": true
+  },
+  "checks": {
+    "native_ktx_matrix": 412,
+    "exact_short_clone_ownership": true,
+    "all_prefix_truncation": true,
+    "texture_passed": 90,
+    "texture_ignored": 3,
+    "decode_passed": 190,
+    "decode_ignored": 3,
+    "viewer_passed": 252,
+    "viewer_ignored": 71,
+    "cpu_pipeline_states": 1492,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_pipeline_states": 1492,
+    "metal_readbacks": 8952,
+    "metal_elapsed_seconds": 69.75,
+    "ram_pressure_hits": 1492,
+    "swap_writes": 1492,
+    "swap_reads": 1492,
+    "blocked_decoder_prefetch": true,
+    "policy_cases": 324,
+    "policy_refusals": 1296,
+    "qualified_policy_restores": 324,
+    "final_memory_credit": 0
+  },
+  "limits": [
+    "Authored analytic samples are not independent exporter-file qualification",
+    "No automatic grayscale replication; R/RG use native texture channel semantics",
+    "Integer signed/snorm, half floats, arrays/cubes/volumes and other storage remain pending",
+    "Color interpretation requires explicit caller policy",
+    "Elapsed GPU time is not a throughput benchmark; no timing comparison claim",
+    "Physical HDR, NVIDIA and full100-format qualification remain open"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/ktx.rs": "4e8509a5c431c5380dad3ccdb1e1f224d7845e5a4e50fd39f2be6f60663e4a96",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "2cad6f80cdbc75dd5c7000b1548cc9f04d5cc67e1b029357cd7cc7d6c4194e9c",
+    "crates/rrrah-app/src/main.rs": "61b1767a031825321bde65c631b0f6bb57a294b449f54346b7c60085349a3de0",
+    "scripts/generate-ktx-rg-fixtures.py": "129038df2b11bc6cc4e6fac87a4733067c6c90a82e3830697c1ec3409bed06a3",
+    "tests/fixtures/raster/ktx-rg-manifest.tsv": "6100b1a12e311226b3682b56c0ba488f413f8c7df57da771fe444e3ef28e750e"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "status": "Sun Raster RGBA output and full RLE expansion admitted through request memory budget",
+  "change": "Shared bounded RLE packet walker first validates grammar/exact expanded count without allocation, then fills admitted expansion buffer; output allocated/admitted exactly, row/inner4096pixel cancellation checks. Legacy no-budget buffers retain fallible reservation.",
+  "regressions": {
+    "independent_sources": 8,
+    "coverage": "Pillow/FFmpeg mono, palette, BGR/RGB, XRGB/XBGR and RLE sources; all independent RGBA bytes exact",
+    "memory": "output bytes +RLEraw row-aligned size exact peak; nonRLE output alone. One-byte-short request refuses and releases credit. Cloned frames keep output reservation until last drop.",
+    "bad_rle": "Truncated escape/run, overrun and short expanded streams remain InvalidSun with0byte budget and0peak"
+  },
+  "tests": {
+    "decode_lib": {
+      "passed": 187,
+      "failed": 0,
+      "ignored": 2
+    },
+    "production_lib_clippy_no_deps_warnings_denied": "passed",
+    "all_tests_clippy": "Fails on diagnostics outside changed Sun module; not claimed clean"
+  },
+  "limits": [
+    "RLE still uses full expanded image scratch; not a row-streaming decoder",
+    "Validation performs an extra packet walk; no performance speedup claimed/measured",
+    "Palette-index corruption validation still follows output admission",
+    "Source borrowed in direct tests; common file reader separately owns full source",
+    "No new actual Metal runtime in this turn",
+    "Full Sun/100format qualification remains incomplete"
+  ],
+  "source_sha256": "1a33d2de62cd3582947e72be2808ff3c82f02d4a16f10341291a2ab7e3c93379"
+}

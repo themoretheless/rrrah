@@ -1,0 +1,73 @@
+{
+  "status": "passed_bounded_fractional_alpha_and_extreme_range",
+  "adapter": "Apple M4 Max Metal",
+  "fractional_oracle": {
+    "source": [
+      73,
+      69
+    ],
+    "zooms": [
+      0.37,
+      0.63,
+      0.91
+    ],
+    "pan": [
+      0.375,
+      -0.25
+    ],
+    "exposure_stops": 0.75,
+    "alpha": [
+      0,
+      0.25,
+      0.5,
+      1
+    ],
+    "cases": 12,
+    "rendered_frames": 24,
+    "devices": "normal extent and forced64px cap",
+    "reference": "independent f64 source-cell rectangle intersections, premultiplied RGB, alpha weighting, exposure and unexposed background",
+    "hidden_rgb": "[1e6,-1e6,9e5] atalpha0 vszero RGB gives bit-identical whole SDR/HDR frames",
+    "precision_gate": "SDR within1byte; HDR within binary16 step plus conservative f32 geometry budget for73px control",
+    "measured_hdr_errors": [
+      {
+        "tiled": false,
+        "max_hdr_abs_error": 0.0019468796896271456
+      },
+      {
+        "tiled": true,
+        "max_hdr_abs_error": 0.0019468796896271456
+      }
+    ]
+  },
+  "reproduced_bug": {
+    "control": "4x4 input signed +/-f32MAX red, green1, blue.25; mean red0",
+    "before": "red +infinity, half0x7c00",
+    "after": "exact HDR mean[0,1,.25], alpha1"
+  },
+  "production_fix": "adaptive per-channel binary exponent scaling before sum overflow; prevents cross-channel loss; range-admitted native Bayer retains direct fast accumulation",
+  "float32_range_control": "actual RGBA32Float attachment retains +/-f32MAX and signed cancellation exactly, small channels1/.25 intact, all finite",
+  "tests": {
+    "raster_passed": 28,
+    "raster_failed": 0,
+    "raster_ignored": 8,
+    "gpu_lib_passed": 62,
+    "gpu_lib_failed": 0,
+    "gpu_lib_ignored": 2
+  },
+  "limitations": [
+    "authored finite controls, not universal forward-error proof or camera corpus",
+    "float32 range control is Metal-specific; NVIDIA pending",
+    "large-area/extreme zoom GPU latency remains pending"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "f263c87b91e8f331d6a3122fac46d2e91e8317f4b1742df506b1699ceaf20954",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "095e0be26f7312d56af2b5d5f04e86dad4c2d894fa180ea52e01b8e00ec3fd66",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "1850d773c47f08c5363c8eebd220124deab4716e95042e5758942f019259f691"
+  },
+  "optimized_build": {
+    "exit_code": 0,
+    "seconds": 141,
+    "log": "/tmp/viewer-optimized-area-build.log"
+  },
+  "optimized_live_followup": "../viewer-paired-post-area-2026-10-15/result.json"
+}

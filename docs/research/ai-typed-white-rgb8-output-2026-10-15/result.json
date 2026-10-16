@@ -1,0 +1,119 @@
+{
+  "change": "Added private-byte WhiteRgb8Pixel type, explicit white-output sink through spatial composition/replay and white-page consumer. Native callers pass no sink and cannot enable deferral. Full native fallback converts with original white formula and byte rounding. Separate certified bytes never become native/HDR Pixel.",
+  "verified_before_empty_page_fix": {
+    "full_passed": 294,
+    "full_failed": 0,
+    "full_ignored": 12,
+    "real_pixel": [
+      147,
+      59
+    ],
+    "typed_rgb8_completed": true,
+    "rgb8": [
+      205,
+      151,
+      128
+    ],
+    "source_work": 3831146,
+    "source_limit": 4000000,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "regressions_found_and_fixed": [
+    "A final cancellation poll initially consumed one-shot cancellation on native return; native interface no longer adds that poll and explicit white sink cancellation refuses. Full294 suite passed after fix.",
+    "Full-page attempt reached first empty transparent pixel and refused because diagnostic source proof demanded positive alpha without any owner groups. Bound calculation now only runs for groups>0; empty native fallback regression added. Latest full test build is still running."
+  ],
+  "latest_tests": {
+    "status": "passed",
+    "hayro_passed": 297,
+    "hayro_ignored": 12,
+    "interpret_passed": 131,
+    "interpret_ignored": 1,
+    "failed": 0,
+    "logs": [
+      "/tmp/ai-exhaustive-cmyk-input-interpret.log",
+      "/tmp/ai-exhaustive-cmyk-input-hayro.log"
+    ]
+  },
+  "full_page": {
+    "status": "refused",
+    "completed": 18207,
+    "total": 74046,
+    "refused_pixel": [
+      147,
+      60
+    ],
+    "source_work_at_refusal": 4000000,
+    "source_limit": 4000000,
+    "deadline": false,
+    "final_credit": 0,
+    "peak_admitted_bytes": 266078344,
+    "published_ppm": false,
+    "log": "/tmp/ai-typed-white-output-page4m-v6.log",
+    "output_directory": "/tmp/rrrah-ai-typed-white-page-v6-20261015.9rOFet"
+  },
+  "next": "Compact active per-command owner IDs before owner-moment storage, preserving original triangle priority and remapping sampling/proof to original global IDs. Prepared route-pair experiment was slower and reverted exactly. No live handles remain.",
+  "limitations": [
+    "No completed full page or independent oracle equality.",
+    "Test-only path; production AI/native HDR/Metal/NVIDIA qualification remains open."
+  ],
+  "oracle": {
+    "directory": "/tmp/rrrah-ai-white-oracle-20261015.gxxzOk",
+    "fresh_render_equals_previous_ppm": true,
+    "metadata_issue": "Previous rgb_sha256 was whole-PPM hash including header; fresh metadata separates RGB and file hashes.",
+    "rgb_sha256": "57b154a1760616b953cea6b8f5672ec413882128b1a8f9ecbe800e721b52b591",
+    "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30"
+  },
+  "latest_real_controls": {
+    "transparent_pixel": [
+      0,
+      0
+    ],
+    "transparent_native_completed": true,
+    "transparent_white_rgb": [
+      255,
+      255,
+      255
+    ],
+    "problem_pixel": [
+      147,
+      59
+    ],
+    "typed_rgb8_completed": true,
+    "rgb8": [
+      205,
+      151,
+      128
+    ]
+  },
+  "oracle_disagreement": {
+    "pixel": [
+      147,
+      59
+    ],
+    "native_original_and_deferred": [
+      205,
+      151,
+      128
+    ],
+    "poppler": [
+      255,
+      255,
+      255
+    ],
+    "exact": false,
+    "meaning": "Same-sampler equivalence is not independent rendering correctness; underlying geometry/composition remains unqualified."
+  },
+  "initial_source_sha256": {
+    "vendor/hayro/src/native_spatial.rs": "aeefc626c7410d36e3823363db1017eddc87d8bbf79ab94f776ffe48d2f70ed4",
+    "vendor/hayro/src/knockout_interpreter.rs": "59946e67db6647d43173f82532e72ab270d83530ce2b167f952c53e72486f1bc"
+  },
+  "initial_test_source_hashes_unchanged": true,
+  "latest_source_sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "22ad4ca7bd7368906a2b9b6647ff2c3a33d0912b465077e52749d3015c81431a",
+    "vendor/hayro-interpret/src/color.rs": "f2d3cc9e60fd9b42794d4b81e64aeef8a2c256a4ffed38cea35835e3561fe5bf",
+    "vendor/hayro/src/native_frame.rs": "ec5818445d32dfbdaee747b553c1e462b179d00d56a6171478ad9a3311401d10",
+    "vendor/hayro/src/native_spatial.rs": "9e6e6a99aabbc97b6a83fcf4bdd5d3939e7a745718e813540c9438bb1da26ae7",
+    "vendor/hayro/src/knockout_interpreter.rs": "118c1691a2cea05bf59c5f78c7b24e053bb1e2d9d48b105a5feed2165f55961e"
+  }
+}

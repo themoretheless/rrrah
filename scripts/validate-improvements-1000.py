@@ -139,6 +139,11 @@ def validate(data, markdown, root=ROOT, strict_snapshot=False):
         if execution is not None and isinstance(execution, dict):
             if f"Выполнение: {execution.get('status')}" not in block or execution.get("result", "") not in block:
                 errors.append(f"{ident}: Markdown execution inconsistent")
+            report = execution.get("report")
+            if isinstance(report, str) and Path(report).is_relative_to("docs"):
+                report_link = f"[Отчёт]({Path(report).relative_to('docs').as_posix()})"
+                if report_link not in block:
+                    errors.append(f"{ident}: Markdown report link inconsistent")
         if f"### {ident} — {task['title']}" not in block:
             errors.append(f"{ident}: Markdown title missing or inconsistent")
         for key in ("proposed_change", "acceptance", "public_api"):

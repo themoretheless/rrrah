@@ -1,0 +1,176 @@
+{
+  "status": "passed_bounded_viewer_integration",
+  "cli": "--gpu-raw-compute --gpu-demosaic <algorithm>",
+  "default": "fragment path retained pending paired release performance comparison",
+  "behavior": [
+    "native full-resolution Bayer normalization and calibrated resident GPU color compute",
+    "GPU-to-GPU tiled raster upload with crop/orientation",
+    "SDR RAW tone mapping and scene-linear HDR selected from existing surface mode",
+    "existing raw GPU, raster GPU and managed upload budgets used",
+    "native source-mosaic cache/foreground generation/device recovery kept",
+    "compute pipeline lazily created and reused per device",
+    "viewer device max_buffer_size requests supported capability up to2GiB"
+  ],
+  "live_cases": [
+    {
+      "algorithm": "bilinear",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 3.2271665,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "bilinear-hdr-0.log"
+    },
+    {
+      "algorithm": "bilinear",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.8496929999999998,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "bilinear-hdr-1.log"
+    },
+    {
+      "algorithm": "smooth-hue",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 1.130130416,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "smooth-hue-hdr-0.log"
+    },
+    {
+      "algorithm": "smooth-hue",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.7300063329999995,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "smooth-hue-hdr-1.log"
+    },
+    {
+      "algorithm": "malvar-he-cutler",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 0.7128014579999995,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "malvar-he-cutler-hdr-0.log"
+    },
+    {
+      "algorithm": "malvar-he-cutler",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.728054792,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "malvar-he-cutler-hdr-1.log"
+    },
+    {
+      "algorithm": "directional",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 0.755732708,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "directional-hdr-0.log"
+    },
+    {
+      "algorithm": "directional",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.7883279170000002,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "directional-hdr-1.log"
+    },
+    {
+      "algorithm": "vng",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 0.8147692499999994,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "vng-hdr-0.log"
+    },
+    {
+      "algorithm": "vng",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.7498887500000002,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "vng-hdr-1.log"
+    },
+    {
+      "algorithm": "rcd",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 0.9296221249999999,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "rcd-hdr-0.log"
+    },
+    {
+      "algorithm": "rcd",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 0.7823150409999986,
+      "compute_uploads": 2,
+      "fragment_raw_initializations": 0,
+      "recovery_pass": true,
+      "log": "rcd-hdr-1.log"
+    }
+  ],
+  "live_fixture": {
+    "path": "/tmp/rrrah-live-raw-switch-20261015/files/a-sensor.dng",
+    "scope": "authored16x16 native DNG, not camera-produced fidelity",
+    "sha256": "a99eba55894e230d70a663310b81d029d9e24a6bfa23309b9cc0f1415ed3d0b5"
+  },
+  "app_ordinary": {
+    "passed": 231,
+    "failed": 0,
+    "ignored": 64
+  },
+  "nondebug_check_exit": 0,
+  "tiled_geometry": {
+    "adapter": "Apple M4 Max Metal",
+    "texture_extent_limit": 64,
+    "source": [
+      130,
+      129
+    ],
+    "crop": [
+      23,
+      17,
+      93,
+      87
+    ],
+    "orientations": 8,
+    "sdr_hdr_exact_comparisons": 16,
+    "ordinary_replacement_geometry_resets": true
+  },
+  "limitations": [
+    "viewer integration live qualified on tiny authored DNG; full-sensor native/calibrated viewer and camera corpus pending",
+    "safe notification injection tests lifecycle, not real hardware device loss",
+    "no physical HDR calibration or NVIDIA claim",
+    "fragment/compute throughput comparison pending; compute is opt-in",
+    "non-Bayer mosaics use existing fragment path"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "b385d2df59d97d53262a370c809aba60766b821caf7514828970b9c58f635bf0",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "ece749a941bafd7c3c4ad2e3b8be17c3823f3d36c8d3f2274af75a5d54fdb85d"
+  },
+  "live_binary_sha256": "0cb76bc1ab433b8a5828d3dfcc081ccac3d23db0d3058f06a8d61e027bf46695"
+}

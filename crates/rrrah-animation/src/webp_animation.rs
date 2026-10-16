@@ -232,6 +232,8 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<WebpImage, RasterDeco
         RasterPixels::Rgba32Float(Arc::new(canvas).into()),
         RasterColorSpace::LinearSrgb,
     )?
+    .with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(frames[request.image_index].delay, 1,
+        u32::from(u16::from_le_bytes(anim[4..6].try_into().unwrap())))?))
     .with_image_selection(request.image_index, frames.len())?;
     Ok(WebpImage {
         raster,

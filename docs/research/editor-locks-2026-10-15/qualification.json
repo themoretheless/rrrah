@@ -1,0 +1,68 @@
+{
+  "captured_at_utc": "2026-10-15T15:12:02.244281+00:00",
+  "tasks": [
+    "RR-0007",
+    "RR-0008",
+    "RR-0009",
+    "RR-0010"
+  ],
+  "status": "partial",
+  "all_first_30_completed": false,
+  "checks": {
+    "components": {
+      "passed": 25,
+      "failed": 0,
+      "ignored_helpers": 1
+    },
+    "develop_selected": {
+      "passed": 3,
+      "failed": 0,
+      "filtered_out": 96
+    },
+    "app_selected": {
+      "passed": 21,
+      "failed": 0,
+      "ignored": 3,
+      "ignored_helpers_invoked_by_parent": 1,
+      "ignored_hardware_tests": 2,
+      "filtered_out": 284
+    },
+    "native_crash_cases": 7,
+    "module_and_test_clippy": "passed; declared MSRV 1.92, not a rustc 1.92 run",
+    "app_check_tests": "passed",
+    "registry_tasks": 1000,
+    "registry_snapshot_warnings": 0,
+    "registry_mutation_tests_passed": 5,
+    "workspace_repository_metadata": {
+      "packages": 21,
+      "mismatches": 0
+    }
+  },
+  "before_reset_budget_regression": {
+    "expected_failure": true,
+    "observed": "existing history consumes entire budget; allocating another session leaves editor not ready after journal reset"
+  },
+  "backlog_moved_anchors": 457,
+  "changed_requirement_fields": [],
+  "source_sha256": {
+    "Cargo.toml": "98699e390c0096657c250bde17478d3a146bf2f9bfd47643dd1a04cf3248667b",
+    "Cargo.lock": "3be93d49ab02bd2c5ffe7585e42ad32f5e4c147562385e8441a505df57ee145a",
+    "crates/rrrah-app/Cargo.toml": "0197be58422751b07608ad64f3a9ee7398889777bb4d2df0ba8aee906f75b87a",
+    "crates/rrrah-app/src/editor.rs": "ad6b2978d122c15267da8d59691e9108af23b2902bd6119f604fedf8884655f1",
+    "crates/rrrah-app/src/edit_store.rs": "a4d10b7d3ae15b77dc06aa891dfda85ade4c7217ca19c08f9c59563a04f52779",
+    "crates/rrrah-app/src/accessibility.rs": "8da4301617b19b028246210e7534d62a2f6cdad5b46650d6b9e2e901dd7a6289",
+    "crates/rrrah-app/src/main.rs": "29939f4bed6ffa0b56fd7d4bed25faa184fcb2f6de9ad651f3f2e377a1be4faa",
+    "crates/rrrah-develop/src/edit.rs": "7bd8835b74cd5139e17f98e2ced24c23d6f32e908a6c5e53f4c77a4ee104f41f",
+    "crates/rrrah-develop/src/histogram.rs": "0aff5c885cc59f73b8d74538d76797722edf91e4a0bffec97a68152d8bac4d07"
+  },
+  "qualifications_not_performed": [
+    "live GUI and shortcut path",
+    "screen reader",
+    "Windows",
+    "network filesystems",
+    "power loss",
+    "CUDA",
+    "physical HDR"
+  ],
+  "note": "Native process crash checks use synthetic files only. Passing selected tests does not establish full app/GPU or end-to-end viewer qualification. Source hashes are a capture snapshot in a concurrently modified checkout."
+}

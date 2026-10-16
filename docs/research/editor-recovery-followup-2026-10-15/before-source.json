@@ -1,0 +1,7 @@
+{
+  "baseline_editor_sha256": "1baae8057938eb3263766f04f35fe472488a150bd346b23e887b46667595f230",
+  "baseline_git_blob": "bbc208dbacc0d458704af18ed4fe6f65c29b3c16",
+  "regression_test": "#[cfg(test)]\nmod source_reload_regression {\n use super::*;\n #[test]\n fn replacement_must_not_reuse_previous_preview() {\n  let dir = tempfile::tempdir().unwrap();\n  let path = dir.path().join(\"source.raw\");\n  std::fs::write(&path, b\"original\").unwrap();\n  let mut editor = Editor::new(MemoryBudget::new(1024*1024), dir.path().join(\"journal\"));\n  editor.activate(path.clone(), 0).unwrap();\n  editor.apply_exposure(1.5).unwrap();\n  editor.shutdown();\n  std::fs::write(&path, b\"replaced\").unwrap();\n  editor.activate(path, 0).unwrap();\n  assert_eq!(editor.current(), EditState::default(), \"old exposure leaked into replacement preview\");\n }\n}\n",
+  "expected_exit": 101,
+  "observation": "Old path/page-only editor retains exposure 1.5 after replacing the source. Current generation-bound regression rejects old history, including equal length/mtime."
+}

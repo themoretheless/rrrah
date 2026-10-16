@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "suite": "rrrah-decode library ordinary tests, locked offline build against current core",
+  "passed": 1052,
+  "failed": 0,
+  "ignored": 73,
+  "test_seconds": 7.71,
+  "trigger": "CPU Bayer thumbnail now reflects sensor coordinates and WB phase instead of clamping",
+  "limitations": [
+    "ignored fixtures/manual/hardware gates not executed by this suite",
+    "ordinary decoder tests do not qualify all100 formats, viewer behavior or independent camera corpus"
+  ],
+  "source_sha256": {
+    "crates/rrrah-core/src/thumbnail.rs": "5481c30b7b04727cb0a800b3bf09fe45896a7154ca96f970ab2d5f7eaf012d8e",
+    "crates/rrrah-decode/src/lib.rs": "e15233c224f401d05008dcc211c3aa93eea257ebe4218ab20c5f30a08b0bc2e7"
+  }
+}

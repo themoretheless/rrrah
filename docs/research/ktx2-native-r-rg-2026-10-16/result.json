@@ -1,0 +1,63 @@
+{
+  "status": "ktx2_native_r_rg_storage_implemented",
+  "formats": {
+    "9": "R8_UNORM",
+    "16": "R8G8_UNORM",
+    "70": "R16_UNORM",
+    "77": "R16G16_UNORM",
+    "100": "R32_SFLOAT",
+    "103": "R32G32_SFLOAT"
+  },
+  "changes": [
+    "Native8/16/f32 one/two-channel output without indexing missing input channels",
+    "MissingG/B0 and alpha opaque; signed-zero/negative/HDR float32 values preserved",
+    "Known DFD primary/transfer metadata retained; existing unknown-primary qualification policy unchanged",
+    "All22 supported Vulkan format DFDs now checked against pinned Khronos official generator, including6 new reference blobs"
+  ],
+  "fixtures": {
+    "sources": 48,
+    "selected_mips": 192,
+    "orientations": 4,
+    "compression_modes": [
+      "plain",
+      "DEFLATE"
+    ],
+    "mips": 4,
+    "oracle": "Independent Python mathematical sample construction; adjacent16-bit and float negative/HDR/signed-zero controls; generated DFDs byte-equal to official reference"
+  },
+  "checks": {
+    "native_ktx2_matrix": 416,
+    "official_supported_dfd_formats": 22,
+    "official_authored_descriptor_matches": 80,
+    "exact_short_clone_peak_quotas": true,
+    "texture_passed": 94,
+    "texture_ignored": 3,
+    "decode_passed": 190,
+    "decode_ignored": 3,
+    "viewer_passed": 253,
+    "viewer_ignored": 72,
+    "cpu_pipeline_states": 1940,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_pipeline_states": 1940,
+    "metal_readbacks": 11640,
+    "ram_pressure_hits": 1940,
+    "swap_writes": 1940,
+    "swap_reads": 1940,
+    "blocked_decoder_prefetch": true,
+    "final_memory_credit": 0
+  },
+  "limits": [
+    "Authored sample corpus, not independent R/RG producer-file coverage",
+    "Official DFD compatibility does not qualify all full-file exporters",
+    "R/RG texture channels are not automatically replicated to grayscale",
+    "No new throughput, physical HDR, NVIDIA or full100-format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/ktx2.rs": "ba57d93f1e97f4b7d81e9397b8612c995dd407976850f2ee064298066e788497",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "24b7ea4ac535ebd7a0f1693d9e6e1af1e588b8c6b5c128209b89cb3daa2b8898",
+    "scripts/generate-ktx2-rg-fixtures.py": "48fa3ea028790e701b2a686389c9771490c288879e44af10eb3ed65004050e54",
+    "scripts/generate-ktx2-dfd-oracles.py": "999cc716297bd12a86b9b4f5655d011df7adf02dcac4d943246d0a45ea9f2e15",
+    "tests/fixtures/raster/ktx2-rg-manifest.tsv": "fe8a185b46e8b0c0485f1cced35903870df7a415dfd139181638bd8f058cd46f",
+    "tests/fixtures/raster/ktx2-khronos-dfd-manifest.tsv": "1223148ad36adf9cb25a162f7b2b16d35f60fde4e73d553b7f89ab333f4fe694"
+  }
+}

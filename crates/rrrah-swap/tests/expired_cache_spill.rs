@@ -45,7 +45,8 @@ fn expired_values_transfer_to_streamed_swap_without_copy_or_early_budget_release
     drop(pixels);
     assert_eq!(budget.used(), 0);
     let restored = store.restore(&handle, &budget, || false).unwrap();
-    assert_eq!(&*restored, &[73u8; SIZE]);
+    assert_eq!(restored.len(), SIZE);
+    assert!(restored.iter().all(|&value| value == 73));
     drop(restored);
     drop(handle);
     assert_eq!(budget.used(), 0);

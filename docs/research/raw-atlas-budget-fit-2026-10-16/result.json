@@ -1,0 +1,243 @@
+{
+  "before_requested_bytes": 73400320,
+  "configured_raw_gpu_bytes": 67108864,
+  "after_raw_gpu_bytes": 52016688,
+  "raw_switch_released_bytes": 0,
+  "raw_renderer_initializations": 1,
+  "same_device_on_return": true,
+  "gpu_lib_passed": 64,
+  "gpu_lib_ignored": 2,
+  "native_source": "local CR3 6188x4120",
+  "simulated_recovery_passed": true,
+  "personal_source_copied": false,
+  "pixel_comparison": {
+    "algorithms": 6,
+    "outputs": [
+      "sRGB RGBA8",
+      "scene-linear RGBA16Float"
+    ],
+    "views": 4,
+    "readbacks": 96,
+    "pixels_per_frame": 921600,
+    "compared_pixel_pairs": 44236800,
+    "all_bit_exact": true,
+    "source_or_readback_exported": false,
+    "peak_bytes_by_case": [
+      52016688,
+      52016688,
+      52116672,
+      52116672,
+      52116672,
+      52116672,
+      52216752,
+      52216752,
+      52216752,
+      52216752,
+      52316928,
+      52316928
+    ]
+  },
+  "paired_upload_measurement": {
+    "warmup_pairs": 2,
+    "measured_pairs": 12,
+    "alternating_order": true,
+    "gpu_completion_waited": true,
+    "includes": "source validation, atlas planning, allocations, packing, GPU upload completion",
+    "excludes": "file decode, renderer construction, first draw",
+    "cases": [
+      {
+        "algorithm": "Bilinear",
+        "default_ns": [
+          16748458,
+          17341625,
+          15942917,
+          16488125,
+          17104875,
+          16791250,
+          15857875,
+          16834167,
+          16866334,
+          15983250,
+          15832208,
+          16034333
+        ],
+        "compact_ns": [
+          12118208,
+          12254083,
+          12152167,
+          12191334,
+          12033583,
+          12615208,
+          11759000,
+          11967750,
+          11328291,
+          11716875,
+          11690458,
+          11599791
+        ],
+        "default_median_ms": 16.6182915,
+        "compact_median_ms": 12.0006665,
+        "median_paired_speedup": 1.3731062909135001,
+        "compact_faster_pairs": 12,
+        "default_bytes": 73400320,
+        "compact_bytes": 52016688
+      },
+      {
+        "algorithm": "Rcd",
+        "default_ns": [
+          16434417,
+          15601834,
+          17277625,
+          16830917,
+          16431250,
+          16662708,
+          16698833,
+          16427958,
+          15901959,
+          17326875,
+          16539958,
+          18971000
+        ],
+        "compact_ns": [
+          11887792,
+          11991334,
+          12240417,
+          11766084,
+          11501250,
+          11822667,
+          11558375,
+          11652833,
+          11619417,
+          11697125,
+          11869292,
+          11975167
+        ],
+        "default_median_ms": 16.601333,
+        "compact_median_ms": 11.7943755,
+        "median_paired_speedup": 1.4106524531670017,
+        "compact_faster_pairs": 12,
+        "default_bytes": 73400320,
+        "compact_bytes": 52316928
+      }
+    ]
+  },
+  "replacement_refusal": {
+    "cases": 12,
+    "typed_memory_refusal": true,
+    "typed_cancelled": true,
+    "retained_credit_unchanged": true,
+    "previous_sdr_half_frame_bit_exact": true,
+    "total_readbacks_in_extended_test": 120,
+    "final_gpu_credit": 0
+  },
+  "exact_search_followup": {
+    "exhaustive_geometry_halo_cases": 126,
+    "tight_geometry": [
+      63,
+      129
+    ],
+    "tight_cap": 18000,
+    "tight_atlas_bytes": 17956,
+    "metal_tests_passed": 4,
+    "readbacks": 120,
+    "all_pixel_pairs_exact": true,
+    "gpu_bytes_by_case": [
+      51170700,
+      51170700,
+      51269868,
+      51269868,
+      51269868,
+      51269868,
+      51369132,
+      51369132,
+      51369132,
+      51369132,
+      51468492,
+      51468492
+    ],
+    "paired_measurements": [
+      {
+        "algorithm": "Bilinear",
+        "default_ns": [
+          18589125,
+          16899042,
+          17523500,
+          17621875,
+          18477583,
+          19868708,
+          20229958,
+          19037250,
+          18175500,
+          20209291,
+          18873083,
+          20861834
+        ],
+        "compact_ns": [
+          12334042,
+          12532708,
+          12335250,
+          12531583,
+          13055708,
+          13288416,
+          12857416,
+          13311750,
+          13311416,
+          13511542,
+          13078292,
+          13005167
+        ],
+        "default_median_ms": 18.731104,
+        "compact_median_ms": 13.0304375,
+        "compact_bytes": 51170700,
+        "faster_pairs": 12
+      },
+      {
+        "algorithm": "Rcd",
+        "default_ns": [
+          22259042,
+          18323250,
+          18938250,
+          20220583,
+          18081625,
+          19727500,
+          20226042,
+          20218750,
+          19663333,
+          19534084,
+          18985084,
+          19069542
+        ],
+        "compact_ns": [
+          14351959,
+          13284916,
+          13313875,
+          14340167,
+          13562583,
+          13690125,
+          15389458,
+          13992208,
+          13838000,
+          14343875,
+          13541750,
+          13618583
+        ],
+        "default_median_ms": 19.5987085,
+        "compact_median_ms": 13.7640625,
+        "compact_bytes": 51468492,
+        "faster_pairs": 12
+      }
+    ]
+  },
+  "eager_cap_fallback": {
+    "geometry": [
+      16370,
+      16370
+    ],
+    "single_tile_bytes": 536084768,
+    "hard_cap": 536870912,
+    "pure_planner_verified": true,
+    "full_sensor_gpu_upload_tested": false,
+    "gpu_library_passed": 66,
+    "ignored": 2
+  }
+}

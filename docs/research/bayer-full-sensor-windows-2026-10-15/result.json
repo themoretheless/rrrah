@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "change": "managed Bayer output and readback reuse row windows bounded by storage binding, buffer and dispatch limits; source retains global sensor coordinates and cross-window neighbors",
+  "metal_adapter": "Apple M4 Max",
+  "targeted_tests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "full_sensor": {
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "pixels": 25494560,
+    "algorithm": "Bilinear",
+    "comparison": "independent CPU bilinear every pixel exactly including reflected edges, HDR above1, nonperiodic x/y field",
+    "cpu_gpu_final_used": [
+      0,
+      0
+    ]
+  },
+  "cancellation_regression": "36 post-admission cancellation/retry pairs still exact",
+  "limitations": [
+    "resident Bayer path still requires single output binding",
+    "source mosaic still requires one storage binding",
+    "full-sensor independent CPU reference covers Bilinear only; other algorithms verified windowed vs whole-frame on authored 129x65 field",
+    "source Vec fixture not charged to output CPU budget",
+    "correctness build timing is not release benchmark"
+  ],
+  "source_sha256": "b854c8862ed8c5b0ff967ab0869cbd787363d90a2c8b68a5fd4c8ac3b6438783",
+  "window_boundary_qualification": {
+    "dimensions": [
+      129,
+      65
+    ],
+    "binding_limit_bytes": 65536,
+    "windows": 3,
+    "algorithms": 6,
+    "cfa_layouts": 4,
+    "comparisons": 24,
+    "contract": "every pixel exactly equals whole-frame GPU baseline; second-strip cancellation then exact retry in all24 cases; final tracked credits zero",
+    "scope": "windowing correctness, not independent algorithm fidelity"
+  },
+  "gpu_library_current": {
+    "passed": 60,
+    "failed": 0,
+    "ignored": 2
+  }
+}

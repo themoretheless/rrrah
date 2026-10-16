@@ -1,0 +1,70 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Replace mip/range Vec with fixed 17/20 element arrays, justified by 65536 dimension cap",
+    "Sort active range prefix in place",
+    "Replace metadata HashSet with managed sorted borrowed-key offsets, released on success/error before output",
+    "Check cancellation during metadata scans"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 66,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "metadata": {
+      "keys": 128,
+      "scratch_bytes": 2048,
+      "exact_and_short": true,
+      "duplicates_release": true,
+      "zero_one_key_no_allocation": true
+    },
+    "maximum_directory": {
+      "mips": 17,
+      "base_dimensions": [
+        65536,
+        1
+      ],
+      "selected_mip": 16,
+      "final_dimensions": [
+        1,
+        1
+      ],
+      "managed_peak_bytes": 4,
+      "final_bytes": 0
+    },
+    "pipeline": {
+      "states": 214,
+      "added_ktx2_metadata_keys": 129,
+      "ram_pressure_hits": 214,
+      "swap_writes": 214,
+      "swap_reads": 214,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1284,
+      "seconds": 4.49
+    }
+  },
+  "limits": [
+    "flate2 internal decoder allocation remains outside shared admission",
+    "No performance speedup claim",
+    "Authored fixtures and GPU readbacks do not qualify every KTX2 producer or physical HDR display",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  },
+  "follow_up": "Backend admission limitation addressed by ../ktx2-inflate-admission-2026-10-16/result.json using conservative pinned-backend credit."
+}

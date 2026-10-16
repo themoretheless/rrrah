@@ -1,0 +1,40 @@
+{
+  "status": "passed on required Metal Apple M4 Max",
+  "source": "one existing local EOS R8 CR3 read in place, no original media or rendered pixels exported",
+  "sensor": [
+    6188,
+    4120
+  ],
+  "comparison": "sampled resident RGBA32F compute output vs separately implemented f64 weighted interpolation and metadata camera matrix",
+  "results": [
+    {
+      "algorithm": "Directional",
+      "sampled_sensor_pixels": 336,
+      "max_absolute_error": 5.049570495074818e-08
+    },
+    {
+      "algorithm": "Vng",
+      "sampled_sensor_pixels": 336,
+      "max_absolute_error": 3.172440382614994e-08
+    },
+    {
+      "algorithm": "Rcd",
+      "sampled_sensor_pixels": 336,
+      "max_absolute_error": 4.071639023162099e-08
+    }
+  ],
+  "acceptance": "finite RGB; exact alpha1; abs error <=32*f32EPS*max(1,abs(reference)) per sampled channel",
+  "sampling": "81 edge/corner/grid candidates +256 deterministic interior candidates; duplicate origin removed ->336 unique points per algorithm",
+  "memory": "normalization and GPU reservations return to zero after each algorithm and actual GPU completion",
+  "implementation": "opt-in ignored integration test; decode dependency is dev-only, production GPU dependency graph unchanged",
+  "limitations": [
+    "not every pixel or every algorithm: Directional/VNG/RCD only",
+    "uses native decoded sensor and native metadata/matrix; not independent sensor decode, camera color profile or visual appearance oracle",
+    "one camera file; no full camera corpus, physical HDR or NVIDIA evidence",
+    "source decode itself not under this test normalization memory budget"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/real_bayer_compute.rs": "a27d4e36170e9cb8afc2f1c67cead2eac84a832f8f1f5e4909da0129ccfd5598",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "a802363da45284b98190bac30d7d29b07caa50a6ba10da65e4cfea934e267e2e"
+  }
+}

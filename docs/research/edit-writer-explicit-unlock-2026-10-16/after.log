@@ -1,0 +1,21 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9.60s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 13 tests
+test edit_store::tests::atomic_write_crash_helper ... ignored, subprocess helper; invoked by atomic_documents_survive_process_kill
+test edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive ... ok
+test edit_store::tests::source_content_change_with_same_length_and_mtime_is_refused ... ok
+test edit_store::tests::legacy_lock_is_never_stolen_and_non_regular_v2_locks_are_refused ... ok
+test edit_store::tests::oversized_and_non_regular_sidecars_are_refused ... ok
+test edit_store::tests::restart_refuses_changed_journal_source_and_backup_collision ... ok
+test edit_store::tests::concurrent_writers_are_refused_and_persistent_lock_is_reusable ... ok
+test edit_store::tests::restart_process_kill_keeps_both_refused_record_and_retained_backup ... ok
+test edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification ... ok
+test edit_store::tests::recovery_refuses_corruption_new_source_and_unknown_version_without_deleting ... ok
+test edit_store::tests::xmp_preserves_unknown_fields_and_pages_and_refuses_external_change ... ok
+test edit_store::tests::restart_preserves_exact_backup_and_reuses_it_without_overwriting ... ok
+test edit_store::tests::atomic_documents_survive_process_kill ... ok
+
+test result: ok. 12 passed; 0 failed; 1 ignored; 0 measured; 332 filtered out; finished in 0.47s
+

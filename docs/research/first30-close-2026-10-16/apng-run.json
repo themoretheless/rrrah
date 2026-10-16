@@ -1,0 +1,16 @@
+{
+  "binary_sha256": "e8b019785b1b97e72516c4c423f5eca6fcfce565fef4211785eab5c707dff06c",
+  "warmups_per_process": 3,
+  "alternating_pairs": 10,
+  "batches_per_process": 10,
+  "workloads_per_batch": 32,
+  "host": "darwin",
+  "allocation_scope": "one complete workload (two decodes for alternating, otherwise one) plus output/error fingerprint; balanced TLS Rust allocator counters",
+  "timing_scope": "complete workload, black-box output and destruction; full pixel fingerprint excluded from timing",
+  "rss_scope": "OS process peak RSS including fixture and warmups; baseline/candidate in separate fresh processes",
+  "limitations": [
+    "Warm in-memory input; not viewer latency or disk throughput.",
+    "Rust allocation accounting excludes native foreign allocations and transient allocator-internal realloc copies.",
+    "An unrelated compiler was active at experiment setup; no unrelated process stopped."
+  ]
+}

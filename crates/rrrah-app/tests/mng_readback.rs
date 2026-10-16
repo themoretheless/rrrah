@@ -62,12 +62,18 @@ fn mng_frames_preserve_native_and_prepared_samples_ram_swap_and_metal() {
                 rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
             let golden = golden.to_linear_srgb().unwrap();
             assert_equal(&prepared, &golden);
+            assert_eq!(prepared.animation_timing(), native.animation_timing());
             let parameters = rrrah_gpu::ViewParameters {
                 viewport: [96., 64.],
                 zoom: 1.,
                 ..Default::default()
             };
             let expected = gpu.render_raster(&golden, parameters, [96, 64]).pixels;
+            let expected_half = gpu.render_raster_half(&golden, parameters, [96, 64]);
+            assert_eq!(
+                gpu.render_raster_half(&prepared, parameters, [96, 64]),
+                expected_half
+            );
             assert_eq!(
                 gpu.render_raster(&prepared, parameters, [96, 64]).pixels,
                 expected
@@ -120,9 +126,14 @@ fn mng_frames_preserve_native_and_prepared_samples_ram_swap_and_metal() {
                 drop(pressure);
                 let restored = swap.try_get(&1, || false).unwrap().unwrap();
                 assert_equal(&restored, &source);
+                assert_eq!(restored.animation_timing(), source.animation_timing());
                 let display =
                     rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
                 assert_eq!(gpu.render_raster(&display, parameters, [96, 64]).pixels, expected);
+                assert_eq!(
+                    gpu.render_raster_half(&display, parameters, [96, 64]),
+                    expected_half
+                );
                 drop((display, restored, source));
                 assert_eq!(
                     (swap.stats().writes, swap.stats().reads, swap.stats().errors),
@@ -194,6 +205,7 @@ fn alpha_mng_linear_frames_survive_ram_swap_and_metal() {
                 ..Default::default()
             };
             let expected = gpu.render_raster(&source, parameters, [96, 64]).pixels;
+            let expected_half = gpu.render_raster_half(&source, parameters, [96, 64]);
             let reference_frame = gpu.render_raster(&golden, parameters, [96, 64]).pixels;
             for (a, b) in expected.iter().zip(reference_frame) {
                 assert!(a.abs_diff(b) <= 1);
@@ -202,6 +214,7 @@ fn alpha_mng_linear_frames_survive_ram_swap_and_metal() {
             assert!(ram.insert(index, source.clone()));
             let lease = ram.get_lease(&index).unwrap();
             assert_equal(&lease, &source);
+            assert_eq!(lease.animation_timing(), source.animation_timing());
             assert!(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).is_none());
             drop(lease);
             drop(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).unwrap());
@@ -233,9 +246,14 @@ fn alpha_mng_linear_frames_survive_ram_swap_and_metal() {
             drop(pressure);
             let restored = swap.try_get(&index, || false).unwrap().unwrap();
             assert_equal(&restored, &source);
+            assert_eq!(restored.animation_timing(), source.animation_timing());
             assert_eq!(
                 gpu.render_raster(&restored, parameters, [96, 64]).pixels,
                 expected
+            );
+            assert_eq!(
+                gpu.render_raster_half(&restored, parameters, [96, 64]),
+                expected_half
             );
             drop((restored, source, ram));
             assert_eq!(budget.used(), 0);

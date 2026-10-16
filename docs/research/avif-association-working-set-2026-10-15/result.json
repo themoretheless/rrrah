@@ -1,5 +1,5 @@
 {
-  "status": "streaming_fix_allocator_and14_module_tests_passed_public_followup_running",
+  "status": "current_streaming_allocator_full_decoder_and_metal_validated",
   "baseline_exit_code": 101,
   "source_sha256_before": "0e4b322dd279b64f11e8513c0bf406d203bbfd34823c150fa95a5b5638240209",
   "scope": "Rust allocation requested-capacity peak inside properties for metadata-only malformed-image control; no AV1 media, no OS RSS or public managed-budget measurement",
@@ -16,8 +16,9 @@
   "module_tests_session": 87656,
   "module_tests_log": "/tmp/rrrah-avif-streamed-module-tests-20261015.log",
   "limitations": [
-    "metadata-only malformed-image control; not whole decode budget or OS RSS",
-    "existing public decode and Metal results precede this streaming change; native revalidation pending"
+    "allocator control is metadata-only, not full-file AV1 decoding or OS RSS",
+    "73 decoder and3 Metal ignored tests excluded from these ordinary suites",
+    "current Metal case scope is offscreen readback, not physical display calibration, Nvidia or complete100-format qualification"
   ],
   "module_tests": {
     "exit_code": 0,
@@ -26,5 +27,81 @@
     "ignored": 0,
     "scope": "current metadata/conversion module with minimal request/error shell; not native cancellation or public pipeline"
   },
-  "public_followup_log": "/tmp/avif-streamed-public-producer-20261015.log"
+  "public_followup_log": "/tmp/avif-streamed-public-producer-20261015.log",
+  "public_followup_session": 30502,
+  "public_followup": {
+    "exit_code": 0,
+    "tests_passed": 1,
+    "cases": 4,
+    "integer_and_prepared_f32_oracles_exact": true,
+    "final_budget_zero": true,
+    "log_sha256": "7ea4318d4502724723a0a2b68e4983b929c1794c4459a3d708d91b1809b38d2d"
+  },
+  "full_decoder_followup": {
+    "session": 53723,
+    "log": "/tmp/avif-streamed-full-decode-20261015.log",
+    "status": "terminal_pass_before_lint_cleanup",
+    "exit_code": 0,
+    "passed": 1046,
+    "failed": 0,
+    "ignored": 73
+  },
+  "metal_rebuild": {
+    "session": 1314,
+    "log": "/tmp/avif-streamed-metal-build-20261015.log",
+    "status": "terminal_pass",
+    "exit_code": 0
+  },
+  "lint_probe": {
+    "session": 56104,
+    "log": "/tmp/avif-streamed-probe-lint-20261015.log",
+    "scope": "current production metadata module, all default Clippy warnings denied, dead_code allowed for isolated shell; not workspace lint",
+    "status": "initial_drop_lint_failed_then_fixed",
+    "initial_exit_code": 1,
+    "current_exit_code": 0,
+    "current_log": "/tmp/avif-streamed-probe-lint-current-20261015.log"
+  },
+  "final_source_sha256": "aa59361318f312c4a4b5ceff3bb3643e0c93f5e110f487e0eebd0a057f0e8b08",
+  "final_full_decoder_log": "/tmp/avif-streamed-full-decode-final-20261015.log",
+  "final_full_decoder_session": 87564,
+  "final_metal_log": "/tmp/avif-streamed-metal-final-20261015.log",
+  "final_metal_binary_sha256": "c6f1dcff4404b60f37633711e8416ebc3bb8f9ee9bb3efe178b0567f05220539",
+  "final_metal_session": 30766,
+  "final_full_decoder": {
+    "exit_code": 0,
+    "passed": 1046,
+    "failed": 0,
+    "ignored": 73,
+    "runtime_seconds": 81.12
+  },
+  "final_metal": {
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "runtime_seconds": 53.71,
+    "eight_cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "eight_case_verifier_passed": true,
+    "final_root_queue_zero_each": true
+  },
+  "final_source_drift": [],
+  "final_allocator_exit_code": 0,
+  "final_allocator_extra_peak": 384,
+  "final_allocator_retained_extra": 0,
+  "artifact_sha256": {
+    "allocator-final.log": "61b7319cf0e36284f1cdc2be2a0dee54a34b681e9a578641a6b72a19ac625a48",
+    "full-decoder-final.log": "8c91455e1c4c2584175702bf15567aa6063a42fe23fad9eb8b58a0ab5322dc8c",
+    "metal-final.log": "bb81f473b2f1cd2cc84fb827f8949f3890e59787a29d4d85d977793a3245e455",
+    "module-lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "post_validation_change": "metadata cooperative cancellation callbacks; prior hashes/logs remain frozen; see ../avif-metadata-cancellation-2026-10-15/result.json"
 }

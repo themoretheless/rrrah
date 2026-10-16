@@ -1,0 +1,24 @@
+{
+  "status": "actual_app_animation_request_coordination_verified",
+  "checks": [
+    "Actual App::advance_animation emits exactly selected index1 and waiting pipeline generation",
+    "Repeated calls while awaiting ready produce no additional requests or generation changes",
+    "Ready without presentation does not advance",
+    "Subsequent presentation permits exactly selected index2 with new generation",
+    "Paused expired deadline produces no requests until resume",
+    "External new-source request retains its path/generation despite repeated expired old animation timer calls"
+  ],
+  "actual_app_tests": 3,
+  "viewer": {
+    "passed": 265,
+    "failed": 0,
+    "ignored": 72
+  },
+  "source_inspection": "ForegroundLoader startup receives EventLoopProxy; publish_load_event sends WakeEvent::LoadProgress after enqueue, so async load publication has an explicit event-loop wake path.",
+  "changes": "Headless actual-App regression tests only; production unchanged",
+  "limits": [
+    "Controlled foreground request receiver, not a running native OS event loop or keyboard/display integration",
+    "No new actual GPU/physical pacing/HDR/NVIDIA/full100-format qualification"
+  ],
+  "source_sha256": "7e4ba11bfbfe685a2dd20b426a9cdb8d69ea116306d8c9c48a6855a6edfb7d17"
+}

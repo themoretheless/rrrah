@@ -1,0 +1,22 @@
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 41.94s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+LEGACY_RASTER_METAL adapter=Metal Apple M4 Max
+
+thread 'dicom_pipeline_tests::legacy_rasters_ram_swap_and_metal' (9676543) panicked at crates/rrrah-app/src/dicom_pipeline_tests.rs:1328:87:
+called `Result::unwrap()` on an `Err` value: InvalidInput
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test dicom_pipeline_tests::legacy_rasters_ram_swap_and_metal ... FAILED
+
+failures:
+
+failures:
+    dicom_pipeline_tests::legacy_rasters_ram_swap_and_metal
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 351 filtered out; finished in 22.05s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

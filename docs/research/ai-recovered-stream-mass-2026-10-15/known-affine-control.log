@@ -1,0 +1,11 @@
+
+running 1 test
+SPATIAL_RECOVERED_STREAM_MASS complete=true mass=Some([0.9999999999999984, 1.0000000000000018]) encloses_reference=Some(true)
+SPATIAL_UNIT_STREAM_ARITHMETIC complete=true count=Some(4) unit_sources=Some(true) alpha_mass=Some([0.9999999999999996, 1.0000000000000009]) alpha_error=Some(1.110223024625161e-15) component_error=Some(1.3322676295501934e-15) quotient_error=Some(3.3306690738754897e-15) diagnostic_work=4979
+SPATIAL_MOMENT_IDENTITY source_fields=false key_words=8
+SPATIAL_FRAGMENT_MOMENTS complete=true fragments=4 buckets=1 area=1.0 fallback_fragments=0 diagnostic_work=4979
+SPATIAL_FRAGMENT_MOMENT_COMPARISON complete=true samples=1 alpha_delta=0.0 premultiplied_component_delta=0.0
+test knockout_compositor::native_spatial::tiled_moment_observer_preserves_known_affine_pixel_and_requires_explicit_opt_in ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 287 filtered out; finished in 0.05s
+

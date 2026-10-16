@@ -1,0 +1,42 @@
+{
+  "scope": "current original VectorApple source clip and captured mesh at149,56",
+  "triangles": 64,
+  "shapely": "2.1.2",
+  "geos": "3.13.1",
+  "rows": [
+    {
+      "subdivisions": 512,
+      "original_clip_area": 0.21445935668059007,
+      "triangle_union_inside_original_clip": 0.2144256600068822,
+      "missing_support_area": 3.369667370791579e-05,
+      "union_vs_composited_alpha": 1.4533883754830335e-07
+    },
+    {
+      "subdivisions": 2048,
+      "original_clip_area": 0.21446153215456873,
+      "triangle_union_inside_original_clip": 0.21442651149550776,
+      "missing_support_area": 3.502065906104938e-05,
+      "union_vs_composited_alpha": 7.061497880045398e-07
+    },
+    {
+      "subdivisions": 8192,
+      "original_clip_area": 0.21446166842042694,
+      "triangle_union_inside_original_clip": 0.21442656269156532,
+      "missing_support_area": 3.510572886160524e-05,
+      "union_vs_composited_alpha": 7.573458455645277e-07
+    }
+  ],
+  "last_clip_area_change": 1.36265858208251e-07,
+  "sha256": {
+    "docs/research/ai-boundary-current-revalidation-2026-10-15/result.json": "26150c7b7c9c1c0bec28b44628515e6c005a33d735ea24c6064e53508a947647",
+    "docs/research/ai-boundary-current-revalidation-2026-10-15/diagnostic.log": "034794a8d93747e7f991e8df1264c767cd6465de489b8dc8d28ff0bff452a45f",
+    "docs/research/ai-original-path-inventory-2026-10-13.json": "ff76a51ccaedb8ba39c2ec8c4e356867cb8f88f11f714009a4ed4dd5f4499aa9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-ai-current-mesh-coverage.py": "df98d176fdb3e495804d3651c70fef6c02251fbf3a53f2f319d7799e37141519"
+  },
+  "limitations": [
+    "one pixel/event; not whole page fidelity",
+    "original curves numerically subdivided, not interval-certified",
+    "triangle generation is native; only union/intersection independently evaluated",
+    "no independent color or mask oracle"
+  ]
+}

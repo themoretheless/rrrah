@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "change": "shared sensor geometry validation before source scan/allocation; native mosaic validated before normalization",
+  "bounds": {
+    "minimum_axis": 2,
+    "maximum_reflected_axis": 1073741824,
+    "maximum_pixels": 4294967295
+  },
+  "reason": "WGSL u32 linear indexing and signed i32 reflection period 2*(n-1)",
+  "evidence": [
+    "pure geometry boundary test passed",
+    "required Metal managed/resident API rejection passed, exact error and CPU/GPU credits zero"
+  ],
+  "limitations": [
+    "geometry admission only; device memory/dispatch limits are separate and still enforced",
+    "existing optimized benchmark predates this host-side guard; shader unchanged"
+  ],
+  "source_sha256": "e8ff8f1ecaba7f4050c06209b257cb17346661518e3b611cfe37b1f25aa2dd42"
+}

@@ -1,0 +1,1193 @@
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation/src/raster_color.rs:289:
+     fn independent_littlecms_profile_matches_srgb_reference_across_the_pattern() {
+         use image::ImageDecoder;
+         let bytes = include_bytes!("../../../tests/fixtures/raster/pattern.profiled.png");
+-        let mut decoder = image::codecs::png::PngDecoder::new(std::io::Cursor::new(bytes.as_slice())).unwrap();
++        let mut decoder =
++            image::codecs::png::PngDecoder::new(std::io::Cursor::new(bytes.as_slice())).unwrap();
+         let icc = decoder.icc_profile().unwrap().unwrap();
+         let img = image::DynamicImage::from_decoder(decoder).unwrap().into_rgba8();
+         let frame = DecodedRaster::new(
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:24:
+ impl Probe {
+     pub(super) fn from_env() -> Option<Self> {
+         (std::env::var("RRRAH_QUALIFY_GPU_RECOVERY").as_deref() == Ok("1")).then(|| Self {
+-            started: Instant::now(), phase: 0, clock_started: false, old_frames: 0, old_devices: [0; 2],
+-            path: PathBuf::new(), index: 0, view: [0; 4], cards: [0; 2], comparison: [0; 2],
++            started: Instant::now(),
++            phase: 0,
++            clock_started: false,
++            old_frames: 0,
++            old_devices: [0; 2],
++            path: PathBuf::new(),
++            index: 0,
++            view: [0; 4],
++            cards: [0; 2],
++            comparison: [0; 2],
+             switch_path: std::env::var_os("RRRAH_QUALIFY_RAW_SWITCH").map(PathBuf::from),
+-            raw_budget: None, raw_initializations: 0, recovered_device: 0,
+-            success: false, failure: None,
++            raw_budget: None,
++            raw_initializations: 0,
++            recovered_device: 0,
++            success: false,
++            failure: None,
+         })
+     }
+ }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:40:
+     [view.pan[0], view.pan[1], view.zoom, view.exposure_stops].map(f32::to_bits)
+ }
+ fn wait(device: &wgpu::Device) -> Result<(), String> {
+-    device.poll(wgpu::PollType::Wait {
+-        submission_index: None, timeout: Some(Duration::from_secs(5)),
+-    }).map(|_| ()).map_err(|error| error.to_string())
++    device
++        .poll(wgpu::PollType::Wait {
++            submission_index: None,
++            timeout: Some(Duration::from_secs(5)),
++        })
++        .map(|_| ())
++        .map_err(|error| error.to_string())
+ }
+ impl App {
+     pub(super) fn qualify_recovery_step(&mut self, event_loop: &ActiveEventLoop) {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:49:
+-        let Some(mut probe) = self.recovery_probe.take() else { return; };
++        let Some(mut probe) = self.recovery_probe.take() else {
++            return;
++        };
+         let result = (|| -> Result<(), String> {
+             // App/GPU construction runs before the event loop can service its
+             // first window frame. Bound active qualification separately.
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:55:
+                 probe.clock_started = true;
+             }
+             if probe.started.elapsed() > Duration::from_secs(30) {
+-                return Err(format!("live recovery timed out phase={} ready={:?}", probe.phase, self.ready_generation));
++                return Err(format!(
++                    "live recovery timed out phase={} ready={:?}",
++                    probe.phase, self.ready_generation
++                ));
+             }
+-            let (Some(gpu), Some(telemetry)) = (&self.gpu, &self.telemetry) else { return Ok(()); };
++            let (Some(gpu), Some(telemetry)) = (&self.gpu, &self.telemetry) else {
++                return Ok(());
++            };
+             match probe.phase {
+                 0 if self.ready_generation == Some(self.foreground_loader.current_generation())
+-                    && gpu.presented_generation == self.ready_generation => {
++                    && gpu.presented_generation == self.ready_generation =>
++                {
+                     if let Some(window) = &self.telemetry_window {
+                         window.set_minimized(false);
+                         window.request_redraw();
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:70:
+                     self.view.zoom = 1.25;
+                     self.split_comparison = true;
+                     self.update_view();
+-                    if let Some(telemetry) = &mut self.telemetry { telemetry.zoom_cards(1.2); }
++                    if let Some(telemetry) = &mut self.telemetry {
++                        telemetry.zoom_cards(1.2);
++                    }
+                     probe.phase = 1;
+                 }
+-                1 if gpu.presented_frames > probe.old_frames && gpu.presented_generation == self.ready_generation
+-                    && telemetry.presented_hud_revision == Some(telemetry.hud_revision) => {
+-                    wait(&gpu.device)?; wait(&telemetry.device)?;
++                1 if gpu.presented_frames > probe.old_frames
++                    && gpu.presented_generation == self.ready_generation
++                    && telemetry.presented_hud_revision == Some(telemetry.hud_revision) =>
++                {
++                    wait(&gpu.device)?;
++                    wait(&telemetry.device)?;
+                     probe.old_devices = [gpu.device_epoch, telemetry.device_epoch];
+-                    probe.path = self.path.clone(); probe.index = self.image_navigation_index();
+-                    probe.view = view_bits(self.view); probe.cards = telemetry.hud.cards_view().map(f32::to_bits);
++                    probe.path = self.path.clone();
++                    probe.index = self.image_navigation_index();
++                    probe.view = view_bits(self.view);
++                    probe.cards = telemetry.hud.cards_view().map(f32::to_bits);
+                     probe.comparison = [gpu.raw_comparison.0, gpu.raw_comparison.1].map(f32::to_bits);
+-                    eprintln!("LIVE_RECOVERY_INJECT path={} page={} devices={:?} simulated_notification=true", probe.path.display(), probe.index, probe.old_devices);
+-                    gpu.loss.report(wgpu::DeviceLostReason::Unknown, "debug qualification simulated loss".into());
+-                    telemetry.loss.report(wgpu::DeviceLostReason::Unknown, "debug qualification simulated loss".into());
+-                    gpu.window.request_redraw(); telemetry.window.request_redraw();
++                    eprintln!(
++                        "LIVE_RECOVERY_INJECT path={} page={} devices={:?} simulated_notification=true",
++                        probe.path.display(),
++                        probe.index,
++                        probe.old_devices
++                    );
++                    gpu.loss.report(
++                        wgpu::DeviceLostReason::Unknown,
++                        "debug qualification simulated loss".into(),
++                    );
++                    telemetry.loss.report(
++                        wgpu::DeviceLostReason::Unknown,
++                        "debug qualification simulated loss".into(),
++                    );
++                    gpu.window.request_redraw();
++                    telemetry.window.request_redraw();
+                     probe.phase = 2;
+                 }
+                 2 if self.ready_generation == Some(self.foreground_loader.current_generation())
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:90:
+                     && gpu.presented_generation == self.ready_generation
+                     && telemetry.presented_hud_revision == Some(telemetry.hud_revision)
+-                    && self.last_gpu_recovery.is_some() && self.last_telemetry_recovery.is_some() => {
+-                    wait(&gpu.device)?; wait(&telemetry.device)?;
++                    && self.last_gpu_recovery.is_some()
++                    && self.last_telemetry_recovery.is_some() =>
++                {
++                    wait(&gpu.device)?;
++                    wait(&telemetry.device)?;
+                     let devices = [gpu.device_epoch, telemetry.device_epoch];
+                     if devices[0] == probe.old_devices[0] || devices[1] == probe.old_devices[1] {
+                         return Err("successful device-construction epoch did not change".into());
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:97:
+                     }
+-                    if self.path != probe.path || self.image_index != probe.index
++                    if self.path != probe.path
++                        || self.image_index != probe.index
+                         || view_bits(self.view) != probe.view
+                         || telemetry.hud.cards_view().map(f32::to_bits) != probe.cards
+-                        || [gpu.raw_comparison.0, gpu.raw_comparison.1].map(f32::to_bits) != probe.comparison {
++                        || [gpu.raw_comparison.0, gpu.raw_comparison.1].map(f32::to_bits) != probe.comparison
++                    {
+                         return Err("selection or view changed during recreation".into());
+                     }
+-                    eprintln!("LIVE_RECOVERY_PASS path={} page={} devices={devices:?} main_frames={} telemetry_frames={} selection_view_exact=true gpu_wait_ok=true simulated_notification=true", self.path.display(), self.image_index, gpu.presented_frames, telemetry.presented_frames);
++                    eprintln!(
++                        "LIVE_RECOVERY_PASS path={} page={} devices={devices:?} main_frames={} telemetry_frames={} selection_view_exact=true gpu_wait_ok=true simulated_notification=true",
++                        self.path.display(),
++                        self.image_index,
++                        gpu.presented_frames,
++                        telemetry.presented_frames
++                    );
+                     if let Some(path) = &probe.switch_path {
+-                        if self.pending_folder_scan.is_some() { return Ok(()); }
+-                        let budget = gpu.raw_gpu_budget.clone().ok_or("RAW switch probe requires raw GPU budget")?;
++                        if self.pending_folder_scan.is_some() {
++                            return Ok(());
++                        }
++                        let budget = gpu
++                            .raw_gpu_budget
++                            .clone()
++                            .ok_or("RAW switch probe requires raw GPU budget")?;
+                         if gpu.renderer.is_none() || budget.used() == 0 {
+                             return Err("RAW texture was not admitted before switch".into());
+                         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:111:
+                         probe.raw_initializations = gpu.raw_initializations;
+                         probe.recovered_device = gpu.device_epoch;
+                         probe.raw_budget = Some(budget);
+-                        let index = self.gallery.iter().position(|p| p.file_name() == path.file_name()).ok_or("switch raster absent from gallery")?;
++                        let index = self
++                            .gallery
++                            .iter()
++                            .position(|p| p.file_name() == path.file_name())
++                            .ok_or("switch raster absent from gallery")?;
+                         probe.phase = 3;
+                         self.open_gallery_index(index);
+                     } else {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:119:
+                         event_loop.exit();
+                     }
+                 }
+-                3 if gpu.raster_active && self.ready_generation == Some(self.foreground_loader.current_generation())
+-                    && gpu.presented_generation == self.ready_generation => {
++                3 if gpu.raster_active
++                    && self.ready_generation == Some(self.foreground_loader.current_generation())
++                    && gpu.presented_generation == self.ready_generation =>
++                {
+                     wait(&gpu.device)?;
+-                    if gpu.device_epoch != probe.recovered_device || gpu.raw_initializations != probe.raw_initializations {
++                    if gpu.device_epoch != probe.recovered_device
++                        || gpu.raw_initializations != probe.raw_initializations
++                    {
+                         return Err("RAW renderer unexpectedly recreated during raster switch".into());
+                     }
+                     let used = probe.raw_budget.as_ref().unwrap().used();
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:129:
+-                    if used != 0 { return Err(format!("RAW texture credit retained on raster: {used}")); }
+-                    eprintln!("LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count={} device_epoch={}", gpu.raw_initializations, gpu.device_epoch);
+-                    let index = self.gallery.iter().position(|p| p.file_name() == probe.path.file_name()).ok_or("original RAW absent from gallery")?;
++                    if used != 0 {
++                        return Err(format!("RAW texture credit retained on raster: {used}"));
++                    }
++                    eprintln!(
++                        "LIVE_RAW_SWITCH_RELEASE raw_bytes=0 init_count={} device_epoch={}",
++                        gpu.raw_initializations, gpu.device_epoch
++                    );
++                    let index = self
++                        .gallery
++                        .iter()
++                        .position(|p| p.file_name() == probe.path.file_name())
++                        .ok_or("original RAW absent from gallery")?;
+                     probe.phase = 4;
+                     self.open_gallery_index(index);
+                 }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:135:
+-                4 if !gpu.raster_active && !gpu.model_active
++                4 if !gpu.raster_active
++                    && !gpu.model_active
+                     && self.path.file_name() == probe.path.file_name()
+                     && self.ready_generation == Some(self.foreground_loader.current_generation())
+-                    && gpu.presented_generation == self.ready_generation => {
++                    && gpu.presented_generation == self.ready_generation =>
++                {
+                     wait(&gpu.device)?;
+-                    if gpu.device_epoch != probe.recovered_device || gpu.raw_initializations != probe.raw_initializations {
++                    if gpu.device_epoch != probe.recovered_device
++                        || gpu.raw_initializations != probe.raw_initializations
++                    {
+                         return Err("RAW renderer was recreated instead of reused".into());
+                     }
+                     let budget = probe.raw_budget.as_ref().unwrap();
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs:144:
+                     if budget.used() == 0 || budget.peak() > budget.limit() {
+                         return Err("RAW texture admission/limit invalid on return".into());
+                     }
+-                    eprintln!("LIVE_RAW_SWITCH_PASS init_count={} raw_bytes={} raw_peak={} raw_limit={} same_device=true", gpu.raw_initializations, budget.used(), budget.peak(), budget.limit());
++                    eprintln!(
++                        "LIVE_RAW_SWITCH_PASS init_count={} raw_bytes={} raw_peak={} raw_limit={} same_device=true",
++                        gpu.raw_initializations,
++                        budget.used(),
++                        budget.peak(),
++                        budget.limit()
++                    );
+                     probe.success = true;
+                     event_loop.exit();
+                 }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:1131:
+     event_loop.run_app(&mut app).context("run event loop")?;
+     #[cfg(debug_assertions)]
+     if let Some(probe) = &app.recovery_probe {
+-        if !probe.success { bail!("live recovery qualification failed: {:?}", probe.failure); }
++        if !probe.success {
++            bail!("live recovery qualification failed: {:?}", probe.failure);
++        }
+     }
+     Ok(())
+ }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:3913:
+                         GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
+                     let gpu_prepare_result: Option<Result<(GpuUploadTimings, Duration), String>> =
+                         if let Some(gpu) = self.gpu.as_mut() {
+-                            let use_compute = self.gpu_raw_compute && mosaic.metadata.width >= 2 && mosaic.metadata.height >= 2 && mosaic.metadata.cfa.as_ref().is_some_and(|cfa| cfa.bayer_quad().is_ok());
++                            let use_compute = self.gpu_raw_compute
++                                && mosaic.metadata.width >= 2
++                                && mosaic.metadata.height >= 2
++                                && mosaic
++                                    .metadata
++                                    .cfa
++                                    .as_ref()
++                                    .is_some_and(|cfa| cfa.bayer_quad().is_ok());
+                             let upload = if use_compute {
+-                                gpu.upload_bayer_compute(&mosaic, self.gpu_demosaic, || upload_token.is_cancelled()).map_err(|e| e.to_string())
++                                gpu.upload_bayer_compute(&mosaic, self.gpu_demosaic, || {
++                                    upload_token.is_cancelled()
++                                })
++                                .map_err(|e| e.to_string())
+                             } else {
+-                            let upload = gpu.prepare_raw_renderer(self.view).map_err(|e| e.to_string()).and_then(|()| {
+-                                gpu.renderer.as_mut().expect("RAW renderer prepared").upload_mosaic_with_cancel(
+-                                    &gpu.device, &gpu.queue, &mosaic, || upload_token.is_cancelled(),
+-                                ).map_err(|e| e.to_string())
+-                            });
++                                let upload = gpu
++                                    .prepare_raw_renderer(self.view)
++                                    .map_err(|e| e.to_string())
++                                    .and_then(|()| {
++                                        gpu.renderer
++                                            .as_mut()
++                                            .expect("RAW renderer prepared")
++                                            .upload_mosaic_with_cancel(
++                                                &gpu.device,
++                                                &gpu.queue,
++                                                &mosaic,
++                                                || upload_token.is_cancelled(),
++                                            )
++                                            .map_err(|e| e.to_string())
++                                    });
+                                 upload
+                             };
+                             match upload {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:3943:
+                                         model.clear_model();
+                                     }
+                                     if use_compute {
+-                                        if let Some(renderer) = gpu.renderer.as_mut() { renderer.clear_image(); }
++                                        if let Some(renderer) = gpu.renderer.as_mut() {
++                                            renderer.clear_image();
++                                        }
+                                     } else if let Some(raster) = gpu.raster.as_mut() {
+                                         raster.clear_image();
+                                     }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4040:
+                         if let Some(lease) = lease {
+                             submit_upload_lease(&gpu.queue, &gpu.upload_completions, lease);
+                         }
+-                        if let Some(renderer) = &mut gpu.renderer { renderer.clear_image(); }
++                        if let Some(renderer) = &mut gpu.renderer {
++                            renderer.clear_image();
++                        }
+                         if let Some(raster) = gpu.raster.as_mut() {
+                             raster.clear_image();
+                         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4148:
+                         if let Some(options) = development.as_ref() {
+                             renderer.set_raw_development(&gpu.queue, &options.curve);
+                         }
+-                        if let Some(renderer) = &mut gpu.renderer { renderer.clear_image(); }
++                        if let Some(renderer) = &mut gpu.renderer {
++                            renderer.clear_image();
++                        }
+                         gpu.raster_active = true;
+                         gpu.model_active = false;
+                         if let Some(model) = gpu.model.as_mut() {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4225:
+                     }
+                 }
+             }
+-            if self.gpu_recovery_generation.is_some()
+-                && self.gpu_recovery_generation == self.ready_generation
++            if self.gpu_recovery_generation.is_some() && self.gpu_recovery_generation == self.ready_generation
+             {
+                 self.gpu_recovery_generation = None;
+             }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4793:
+ 
+     fn restore_telemetry_gpu(&mut self, event_loop: &ActiveEventLoop, reason: &str, automatic: bool) {
+         log::error!("telemetry GPU device lost: {reason}");
+-        let Some(window) = self.telemetry_window.clone() else { return; };
++        let Some(window) = self.telemetry_window.clone() else {
++            return;
++        };
+         if let Some(old) = self.telemetry.take() {
+             self.telemetry_recovery_view = Some(old.hud.cards_view());
+             drop(old);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4800:
+         }
+-        if automatic && self.last_telemetry_recovery.is_some_and(|last| last.elapsed() < Duration::from_secs(30)) {
++        if automatic
++            && self
++                .last_telemetry_recovery
++                .is_some_and(|last| last.elapsed() < Duration::from_secs(30))
++        {
+             window.set_title("Rrrah — display unavailable; refocus to retry");
+             return;
+         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4805:
+         self.last_telemetry_recovery = Some(Instant::now());
+         match pollster::block_on(TelemetryState::new(
+-            event_loop.owned_display_handle(), window.clone(), self.gpu_backend, self.gpu_vendor,
++            event_loop.owned_display_handle(),
++            window.clone(),
++            self.gpu_backend,
++            self.gpu_vendor,
+         )) {
+             Ok(mut telemetry) => {
+                 telemetry.set_pipeline(&self.pipeline);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4826:
+ 
+     fn restore_gpu(&mut self, event_loop: &ActiveEventLoop, reason: &str, automatic: bool) {
+         log::error!("viewer GPU device lost: {reason}");
+-        let Some(window) = self.window.clone() else { return; };
++        let Some(window) = self.window.clone() else {
++            return;
++        };
+         let image_index = self.image_navigation_index();
+         self.foreground_loader.cancel_pending();
+         self.gpu_recovery_generation = None;
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4839:
+         self.raw_prefetcher.begin_foreground();
+         // Release device-owned textures and upload leases before admitting new ones.
+         drop(self.gpu.take());
+-        if automatic && self.last_gpu_recovery.is_some_and(|last| last.elapsed() < Duration::from_secs(30)) {
++        if automatic
++            && self
++                .last_gpu_recovery
++                .is_some_and(|last| last.elapsed() < Duration::from_secs(30))
++        {
+             self.set_status("display unavailable — refocus window to retry".into());
+             return;
+         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4846:
+         self.last_gpu_recovery = Some(Instant::now());
+         self.set_status("restoring display".into());
+         let mut gpu = match pollster::block_on(GpuState::new(
+-            event_loop.owned_display_handle(), window.clone(),
+-            self.raster_gpu_budget.clone(), self.raw_gpu_budget.clone(),
+-            self.filmstrip_gpu_budget.clone(), self.upload_memory_budget.clone(),
+-            self.gpu_backend, self.gpu_vendor,
++            event_loop.owned_display_handle(),
++            window.clone(),
++            self.raster_gpu_budget.clone(),
++            self.raw_gpu_budget.clone(),
++            self.filmstrip_gpu_budget.clone(),
++            self.upload_memory_budget.clone(),
++            self.gpu_backend,
++            self.gpu_vendor,
+         )) {
+             Ok(gpu) => gpu,
+             Err(error) => {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4864:
+         self.view.viewport = [gpu.size.width as f32, gpu.size.height as f32];
+         gpu.update_view(self.view);
+         gpu.update_comparison(
+-            if self.split_comparison && !self.before { 0.5 } else { 0.0 },
++            if self.split_comparison && !self.before {
++                0.5
++            } else {
++                0.0
++            },
+             self.editor.original().exposure_stops,
+         );
+         self.gpu = Some(gpu);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:4871:
+         self.strip.dirty = true;
+         if !self.path.as_os_str().is_empty() {
+-            let neighbours = self.gallery_index.map(|index| gallery::neighbour_prefetch_paths(
+-                &self.gallery, index, self.last_nav_direction, self.prefetch_window,
+-            ));
++            let neighbours = self.gallery_index.map(|index| {
++                gallery::neighbour_prefetch_paths(
++                    &self.gallery,
++                    index,
++                    self.last_nav_direction,
++                    self.prefetch_window,
++                )
++            });
+             match self.foreground_loader.submit_request_with_prefetch(
+-                self.path.clone(), image_index, self.scalar_window, true, neighbours,
++                self.path.clone(),
++                image_index,
++                self.scalar_window,
++                true,
++                neighbours,
+             ) {
+                 Ok(generation) => {
+                     self.pending_image_index = Some((generation, image_index));
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5053:
+             }
+         }
+         let telemetry_pending = self.telemetry.as_ref().is_some_and(|telemetry| {
+-            telemetry.upload_completions.poll(&telemetry.device).unwrap_or_else(|error| {
+-                log::warn!("telemetry completion polling failed: {error}");
+-                false
+-            })
++            telemetry
++                .upload_completions
++                .poll(&telemetry.device)
++                .unwrap_or_else(|error| {
++                    log::warn!("telemetry completion polling failed: {error}");
++                    false
++                })
+         });
+         let pending = self.gpu.as_ref().is_some_and(|gpu| {
+             gpu.upload_completions.poll(&gpu.device).unwrap_or_else(|error| {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5091:
+                 || telemetry_pending
+                 || cfg!(debug_assertions) && {
+                     #[cfg(debug_assertions)]
+-                    { self.recovery_probe.is_some() }
++                    {
++                        self.recovery_probe.is_some()
++                    }
+                     #[cfg(not(debug_assertions))]
+-                    { false }
++                    {
++                        false
++                    }
+                 }
+                 || self.pending_folder_scan.is_some()
+                 || self.pending_drop.is_some()
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5296:
+                 let display_submit = self.gpu.as_mut().and_then(|gpu| gpu.render(draw_strip));
+                 #[cfg(debug_assertions)]
+                 if display_submit.is_some() {
+-                    if let Some(gpu) = &mut self.gpu { gpu.presented_generation = self.ready_generation; }
++                    if let Some(gpu) = &mut self.gpu {
++                        gpu.presented_generation = self.ready_generation;
++                    }
+                 }
+                 if let Some(display_submit) = display_submit {
+                     if let Some(pending) = self.pending_first_present.take() {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5507:
+ impl TelemetryState {
+     fn poll_loss(&self) -> Option<String> {
+         if let Err(error) = self.device.poll(wgpu::PollType::Poll) {
+-            self.loss.report(wgpu::DeviceLostReason::Unknown, error.to_string());
++            self.loss
++                .report(wgpu::DeviceLostReason::Unknown, error.to_string());
+         }
+         self.loss.take()
+     }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5671:
+             .collect();
+         self.hud.update_cards(&self.device, &self.queue, &cards);
+         #[cfg(debug_assertions)]
+-        { self.hud_revision = self.hud_revision.saturating_add(1); }
++        {
++            self.hud_revision = self.hud_revision.saturating_add(1);
++        }
+     }
+ 
+     fn resize(&mut self, size: PhysicalSize<u32>) {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5761:
+             let size = [64, 64];
+             let fit = (32.0 / width as f32).min(32.0 / height as f32);
+             let cover = (64.0 / width as f32).max(64.0 / height as f32);
+-            let view = ViewParameters { viewport: [64.0, 64.0], zoom: cover / fit, ..Default::default() };
++            let view = ViewParameters {
++                viewport: [64.0, 64.0],
++                zoom: cover / fit,
++                ..Default::default()
++            };
+             for algorithm in rrrah_gpu::GpuDemosaicAlgorithm::ALL {
+                 let halo = algorithm.min_tile_halo();
+                 for hdr in [false, true] {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5768:
+-                    let format = if hdr { wgpu::TextureFormat::Rgba16Float } else { wgpu::TextureFormat::Rgba8UnormSrgb };
++                    let format = if hdr {
++                        wgpu::TextureFormat::Rgba16Float
++                    } else {
++                        wgpu::TextureFormat::Rgba8UnormSrgb
++                    };
+                     let mut reference = RawRenderer::new(&gpu.device, format);
+                     reference.set_demosaic_algorithm(&gpu.queue, algorithm);
+                     assert_eq!(reference.demosaic_algorithm(), algorithm);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5772:
+-                    reference.upload_mosaic_with_tiling(&gpu.device, &gpu.queue, &mosaic, rrrah_gpu::TilingOverrides {
+-                        tile_size: Some(1024 - halo * 2), tile_halo: Some(halo),
+-                    }).unwrap();
++                    reference
++                        .upload_mosaic_with_tiling(
++                            &gpu.device,
++                            &gpu.queue,
++                            &mosaic,
++                            rrrah_gpu::TilingOverrides {
++                                tile_size: Some(1024 - halo * 2),
++                                tile_halo: Some(halo),
++                            },
++                        )
++                        .unwrap();
+                     reference.update_view(&gpu.queue, view);
+                     let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+                     let mut compact = RawRenderer::new_with_budget(&gpu.device, format, budget.clone());
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5781:
+                     compact.update_view(&gpu.queue, view);
+                     assert!(budget.used() < 4096);
+                     if hdr {
+-                        reference.set_output_mode(&gpu.queue, rrrah_gpu::RawOutputMode::SceneLinear).unwrap();
+-                        compact.set_output_mode(&gpu.queue, rrrah_gpu::RawOutputMode::SceneLinear).unwrap();
+-                        assert_eq!(gpu.render_existing_raw_half(&compact, size), gpu.render_existing_raw_half(&reference, size));
++                        reference
++                            .set_output_mode(&gpu.queue, rrrah_gpu::RawOutputMode::SceneLinear)
++                            .unwrap();
++                        compact
++                            .set_output_mode(&gpu.queue, rrrah_gpu::RawOutputMode::SceneLinear)
++                            .unwrap();
++                        assert_eq!(
++                            gpu.render_existing_raw_half(&compact, size),
++                            gpu.render_existing_raw_half(&reference, size)
++                        );
+                     } else {
+-                        assert_eq!(gpu.render_existing_raw(&compact, size).pixels, gpu.render_existing_raw(&reference, size).pixels);
++                        assert_eq!(
++                            gpu.render_existing_raw(&compact, size).pixels,
++                            gpu.render_existing_raw(&reference, size).pixels
++                        );
+                     }
+                     drop(compact);
+                     assert_eq!(budget.used(), 0);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5792:
+                 }
+-                eprintln!("tiny RAW atlas {width}x{height} algorithm={algorithm:?}: SDR/HDR exact vs old1024 atlas; managed GPU<4096; final=0");
++                eprintln!(
++                    "tiny RAW atlas {width}x{height} algorithm={algorithm:?}: SDR/HDR exact vs old1024 atlas; managed GPU<4096; final=0"
++                );
+             }
+         }
+     }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5812:
+         // scroll (zero here) rather than requiring an impossible offset.
+         assert_ne!(view[0].to_bits(), 0.75_f32.to_bits());
+         let reference = gpu.read_frame(size, |encoder, target| hud.encode(encoder, target));
+-        assert!(reference.pixels.chunks_exact(4).any(|pixel| pixel[..3].iter().any(|&v| v != 0)));
++        assert!(
++            reference
++                .pixels
++                .chunks_exact(4)
++                .any(|pixel| pixel[..3].iter().any(|&v| v != 0))
++        );
+         drop(hud);
+         drop(gpu);
+         let gpu = navigation_metal_readback::qualification_gpu().expect("actual replacement GPU required");
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5823:
+         assert_eq!(hud.cards_view().map(f32::to_bits), view.map(f32::to_bits));
+         let restored = gpu.read_frame(size, |encoder, target| hud.encode(encoder, target));
+         assert_eq!(restored.pixels, reference.pixels);
+-        eprintln!("HUD independent-device recreation: zoom/scroll bits and whole320x240 SDR frame exact; no window loss injected");
++        eprintln!(
++            "HUD independent-device recreation: zoom/scroll bits and whole320x240 SDR frame exact; no window loss injected"
++        );
+     }
+ 
+     #[test]
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5857:
+     }
+ 
+     fn take(&self) -> Option<String> {
+-        self.0.lock().unwrap_or_else(std::sync::PoisonError::into_inner).take()
++        self.0
++            .lock()
++            .unwrap_or_else(std::sync::PoisonError::into_inner)
++            .take()
+     }
+ }
+ 
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5904:
+ impl GpuState {
+     fn update_comparison(&mut self, split: f32, baseline: f32) {
+         self.raw_comparison = (split, baseline);
+-        if let Some(renderer) = &mut self.renderer { renderer.set_comparison(&self.queue, split, baseline); }
+-        if let Some(raster) = &mut self.raster { raster.set_comparison(&self.queue, split, baseline); }
++        if let Some(renderer) = &mut self.renderer {
++            renderer.set_comparison(&self.queue, split, baseline);
++        }
++        if let Some(raster) = &mut self.raster {
++            raster.set_comparison(&self.queue, split, baseline);
++        }
+     }
+ 
+-    fn upload_bayer_compute(&mut self, mosaic: &DecodedMosaic, algorithm: rrrah_gpu::GpuDemosaicAlgorithm,
+-        cancelled: impl FnMut() -> bool) -> Result<GpuUploadTimings> {
++    fn upload_bayer_compute(
++        &mut self,
++        mosaic: &DecodedMosaic,
++        algorithm: rrrah_gpu::GpuDemosaicAlgorithm,
++        cancelled: impl FnMut() -> bool,
++    ) -> Result<GpuUploadTimings> {
+         let started = Instant::now();
+-        let gpu_budget = self.raw_gpu_budget.clone().unwrap_or_else(|| rrrah_core::MemoryBudget::new(u64::MAX));
+-        let cpu_budget = self.raw_upload_memory_budget.clone().unwrap_or_else(|| rrrah_core::MemoryBudget::new(u64::MAX));
+-        let compute = self.bayer_compute.get_or_insert_with(|| rrrah_gpu::BayerDemosaicCompute::new(&self.device));
++        let gpu_budget = self
++            .raw_gpu_budget
++            .clone()
++            .unwrap_or_else(|| rrrah_core::MemoryBudget::new(u64::MAX));
++        let cpu_budget = self
++            .raw_upload_memory_budget
++            .clone()
++            .unwrap_or_else(|| rrrah_core::MemoryBudget::new(u64::MAX));
++        let compute = self
++            .bayer_compute
++            .get_or_insert_with(|| rrrah_gpu::BayerDemosaicCompute::new(&self.device));
+         let mut cancelled = cancelled;
+-        let output = compute.execute_mosaic_resident(&self.queue, mosaic, algorithm, &gpu_budget, &cpu_budget, &mut cancelled)?;
+-        let raster = self.raster.as_mut().ok_or_else(|| anyhow::anyhow!("Bayer compute requires linear/sRGB raster presentation"))?;
++        let output = compute.execute_mosaic_resident(
++            &self.queue,
++            mosaic,
++            algorithm,
++            &gpu_budget,
++            &cpu_budget,
++            &mut cancelled,
++        )?;
++        let raster = self
++            .raster
++            .as_mut()
++            .ok_or_else(|| anyhow::anyhow!("Bayer compute requires linear/sRGB raster presentation"))?;
+         raster.upload_bayer_resident(&self.device, &self.queue, &output, &mut cancelled)?;
+         if self.config.color_space != wgpu::SurfaceColorSpace::ExtendedSrgbLinear {
+             raster.set_raw_development(&self.queue, &rrrah_core::develop::MonotoneCurve::identity());
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5923:
+         }
+         raster.set_comparison(&self.queue, self.raw_comparison.0, self.raw_comparison.1);
+         let total = started.elapsed();
+-        log::info!("viewer Bayer compute upload: algorithm={algorithm:?} sensor={}x{} total_ms={:.3}", mosaic.metadata.width, mosaic.metadata.height, total.as_secs_f64()*1000.0);
+-        Ok(GpuUploadTimings { total, ..Default::default() })
++        log::info!(
++            "viewer Bayer compute upload: algorithm={algorithm:?} sensor={}x{} total_ms={:.3}",
++            mosaic.metadata.width,
++            mosaic.metadata.height,
++            total.as_secs_f64() * 1000.0
++        );
++        Ok(GpuUploadTimings {
++            total,
++            ..Default::default()
++        })
+     }
+ 
+     fn prepare_raw_renderer(&mut self, view: ViewParameters) -> Result<()> {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5931:
+-        if self.renderer.is_some() { return Ok(()); }
++        if self.renderer.is_some() {
++            return Ok(());
++        }
+         let started = Instant::now();
+         let mut renderer = match self.raw_gpu_budget.clone() {
+             Some(budget) => RawRenderer::new_with_budget(&self.device, self.config.format, budget),
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5938:
+             renderer.set_output_mode(&self.queue, rrrah_gpu::RawOutputMode::SceneLinear)?;
+         }
+         if let Some(budget) = self.raw_upload_memory_budget.clone() {
+-            renderer = renderer.with_upload_memory_budget(budget.clone()).with_upload_queue_budget(budget);
++            renderer = renderer
++                .with_upload_memory_budget(budget.clone())
++                .with_upload_queue_budget(budget);
+         }
+         if let Some(algorithm) = self.raw_demosaic {
+             renderer.set_demosaic_algorithm(&self.queue, algorithm);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5947:
+         renderer.update_view(&self.queue, view);
+         self.renderer = Some(renderer);
+         #[cfg(debug_assertions)]
+-        { self.raw_initializations = self.raw_initializations.saturating_add(1); }
+-        log::info!("viewer lazy RAW setup: ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
++        {
++            self.raw_initializations = self.raw_initializations.saturating_add(1);
++        }
++        log::info!(
++            "viewer lazy RAW setup: ms={:.3}",
++            started.elapsed().as_secs_f64() * 1000.0
++        );
+         Ok(())
+     }
+ 
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:5955:
+     fn poll_loss(&self) -> Option<String> {
+         if let Err(error) = self.device.poll(wgpu::PollType::Poll) {
+-            self.loss.report(wgpu::DeviceLostReason::Unknown, error.to_string());
++            self.loss
++                .report(wgpu::DeviceLostReason::Unknown, error.to_string());
+         }
+         self.loss.take()
+     }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:6130:
+                 view.zoom,
+             );
+         }
+-        if let Some(renderer) = &mut self.renderer { renderer.update_view(&self.queue, view); }
++        if let Some(renderer) = &mut self.renderer {
++            renderer.update_view(&self.queue, view);
++        }
+         let identity = self
+             .raster_viewport
+             .as_ref()
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:6365:
+             let _clear = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                 label: Some("Rrrah empty viewport"),
+                 color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+-                    view: &view, depth_slice: None, resolve_target: None,
++                    view: &view,
++                    depth_slice: None,
++                    resolve_target: None,
+                     ops: wgpu::Operations {
+-                        load: wgpu::LoadOp::Clear(wgpu::Color { r: 0.012, g: 0.014, b: 0.018, a: 1.0 }),
++                        load: wgpu::LoadOp::Clear(wgpu::Color {
++                            r: 0.012,
++                            g: 0.014,
++                            b: 0.018,
++                            a: 1.0,
++                        }),
+                         store: wgpu::StoreOp::Store,
+                     },
+                 })],
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:6374:
+-                depth_stencil_attachment: None, timestamp_writes: None, occlusion_query_set: None,
++                depth_stencil_attachment: None,
++                timestamp_writes: None,
++                occlusion_query_set: None,
+                 multiview_mask: None,
+             });
+         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs:6406:
+         self.window.pre_present_notify();
+         self.queue.present(output);
+         #[cfg(debug_assertions)]
+-        { self.presented_frames = self.presented_frames.saturating_add(1); }
++        {
++            self.presented_frames = self.presented_frames.saturating_add(1);
++        }
+         let present_request = present_request_started.elapsed();
+         Some(FrameSubmitTimings {
+             surface_acquire,
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core/src/lib.rs:19:
+ };
+ 
+ pub use rrrah_demosaic::{
+-    CfaColor, CfaError, CfaPattern, DemosaicAlgorithm, DemosaicConfig, FrameError,
+-    demosaic_bayer_superpixel, demosaic_bayer_superpixel_f64, demosaic_f32, demosaic_f64, demosaic_u16,
+-    demosaic_u16_f64,
++    CfaColor, CfaError, CfaPattern, DemosaicAlgorithm, DemosaicConfig, FrameError, demosaic_bayer_superpixel,
++    demosaic_bayer_superpixel_f64, demosaic_f32, demosaic_f64, demosaic_u16, demosaic_u16_f64,
+ };
+ 
+ pub use rrrah_develop::{
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core/src/lib.rs:28:
+-    self as develop, DecodedMosaic, DecodedRaster, LevelGrid, ManifestError, MosaicRecipeManifest,
+-    Orientation, Photometric, RasterColorSpace, RasterError, RasterPixels, RawMetadata, Rect, ThumbnailError,
+-    WhiteLevel, bayer, edit, histogram, rgbe, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW,
+-    DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, KNOWN_MOSAIC_DECODE_FLAGS,
+-    MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,
+-    SENSOR_MOSAIC_ARTIFACT_KIND_CODE,
++    self as develop, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
++    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DecodedRaster, KNOWN_MOSAIC_DECODE_FLAGS,
++    LevelGrid, MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, ManifestError,
++    MosaicRecipeManifest, Orientation, Photometric, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS, RasterColorSpace,
++    RasterError, RasterPixels, RawMetadata, Rect, SENSOR_MOSAIC_ARTIFACT_KIND_CODE, ThumbnailError,
++    WhiteLevel, bayer, edit, histogram, rgbe,
+ };
+ 
+ /// Frozen legacy-v2 cache ABI. New semantic recipes use
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/lib.rs:24:
+     GenerationToken, MrwLayout, NATIVE_CR3_BACKEND_ID, NATIVE_DNG_BACKEND_ID, NATIVE_DNG_MOSAIC_CONTRACT_1,
+     NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder, NativeCrwDecoder, NativeDecodeTimings,
+     NativeDngDecoder, NativeMrwDecoder, NativeRawDecoder, OPTIO_S4_SENSOR_SIZE, OptioS4SensorError,
+-    RawDecoder, RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, RpfRasterInterpretation, WORKSPACE_LOCK_DIGEST,
+-    bounded_io, decode_crw_10d, decode_crw_10d_with_tables, decode_eip_file_sensor, decode_eip_sensor,
+-    decode_file, decode_mef_zd_sensor, decode_mef_zd_sensor_file, dng, eip_file_sensor_recipe, inspect_eip,
+-    raw_development_opcodes, read_bay_image_sensor_with_budget, read_bay_sensor_with_budget, read_eip_raw,
+-    read_eip_raw_with_budget, read_erf_maker_metadata, read_optio_s4_sensor_with_budget, sniff,
+-    unpack_bay_sensor, unpack_optio_s4_sensor, vc5,
++    RawDecoder, RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, RpfRasterInterpretation,
++    WORKSPACE_LOCK_DIGEST, bounded_io, decode_crw_10d, decode_crw_10d_with_tables, decode_eip_file_sensor,
++    decode_eip_sensor, decode_file, decode_mef_zd_sensor, decode_mef_zd_sensor_file, dng,
++    eip_file_sensor_recipe, inspect_eip, raw_development_opcodes, read_bay_image_sensor_with_budget,
++    read_bay_sensor_with_budget, read_eip_raw, read_eip_raw_with_budget, read_erf_maker_metadata,
++    read_optio_s4_sensor_with_budget, sniff, unpack_bay_sensor, unpack_optio_s4_sensor, vc5,
+ };
+ 
+ pub use rrrah_mesh::{
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/lib.rs:56:
+     eps_strings, eps_stroke, eps_stroke_prepare, eps_tokens, eps_vm, evaluate_eps_program,
+     evaluate_eps_vectors, fill_eps_path, flatten_eps_path, inspect_eps_bounds, inspect_eps_source,
+     outline_eps_join, outline_eps_polyline, outline_eps_prepared_stroke, outline_eps_segment,
+-    parse_eps_number, pdf, pict, png_color, prepare_eps_stroke, rasterize_eps_fills, rasterize_eps_scene, svg,
+-    wmf,
++    parse_eps_number, pdf, pict, png_color, prepare_eps_stroke, rasterize_eps_fills, rasterize_eps_scene,
++    svg, wmf,
+ };
+ 
+ mod jpeg_cmyk;
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/lib.rs:89:
+ };
+ 
+ pub use rrrah_scientific::{
+-    FitsImage, FitsSamples, MrcImage, NrrdImage, ScalarWindow, ScientificDecodeError, dicom, fits, mrc,
+-    nrrd, sample, scientific,
++    FitsImage, FitsSamples, MrcImage, NrrdImage, ScalarWindow, ScientificDecodeError, dicom, fits, mrc, nrrd,
++    sample, scientific,
+ };
+ 
+ pub fn decode_fits(request: &DecodeRequest) -> Result<FitsImage, RasterDecodeError> {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/raster.rs:211:
+             rrrah_scientific::ScientificDecodeError::InvalidMrc(e) => Self::InvalidMrc(e),
+             rrrah_scientific::ScientificDecodeError::InvalidFits(e) => Self::InvalidFits(e),
+             rrrah_scientific::ScientificDecodeError::InvalidDicom(e) => Self::InvalidDicom(e),
+-            rrrah_scientific::ScientificDecodeError::InvalidScalarWindow => {
+-                Self::InvalidScalarWindow
+-            }
++            rrrah_scientific::ScientificDecodeError::InvalidScalarWindow => Self::InvalidScalarWindow,
+             rrrah_scientific::ScientificDecodeError::ScalarWindowRequiresScientificArray => {
+                 Self::ScalarWindowRequiresScientificArray
+             }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/raster.rs:285:
+             rrrah_animation::AnimationDecodeError::Color(e) => Self::Color(e),
+             rrrah_animation::AnimationDecodeError::OutputTooLarge => Self::OutputTooLarge,
+             rrrah_animation::AnimationDecodeError::InvalidJng(e) => Self::InvalidJng(e),
+-            rrrah_animation::AnimationDecodeError::InvalidWebpAnimation(e) => {
+-                Self::InvalidWebpAnimation(e)
+-            }
++            rrrah_animation::AnimationDecodeError::InvalidWebpAnimation(e) => Self::InvalidWebpAnimation(e),
+             rrrah_animation::AnimationDecodeError::InvalidGif(e) => Self::InvalidGif(e),
+             rrrah_animation::AnimationDecodeError::InvalidApng(e) => Self::InvalidApng(e),
+             rrrah_animation::AnimationDecodeError::InvalidPngColor(e) => Self::InvalidPngColor(e),
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/raster.rs:866:
+         // coded dimensions inside dav1d before primary/alpha picture allocation.
+         // Higher-depth output admission and complete codec scratch are separate.
+         let maximum_pixels = (MAX_RASTER_BYTES / 4) as u32;
+-        let mut decoder = image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+-            reader.into_inner(),
+-            maximum_pixels,
+-        )?;
++        let mut decoder =
++            image::codecs::avif::AvifDecoder::new_with_pixel_limit(reader.into_inner(), maximum_pixels)?;
+         decoder.set_limits(limits)?;
+         (Box::new(decoder), None)
+     } else {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/raster.rs:1328:
+             include_bytes!("../../../tests/fixtures/raster/avif-mixed-primary10-alpha8.avif").as_slice(),
+         ] {
+             for limit in [0, 256] {
+-                let error = match image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+-                    Cursor::new(bytes), limit,
+-                ) {
+-                    Ok(_) => panic!("mixed coded alpha depth accepted"),
+-                    Err(error) => error,
+-                };
++                let error =
++                    match image::codecs::avif::AvifDecoder::new_with_pixel_limit(Cursor::new(bytes), limit) {
++                        Ok(_) => panic!("mixed coded alpha depth accepted"),
++                        Err(error) => error,
++                    };
+                 assert!(error.to_string().contains("alpha bit depth differs"));
+             }
+         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/raster.rs:1345:
+             include_bytes!("../../../tests/fixtures/raster/ravif-8bit-prem.avif").as_slice(),
+             include_bytes!("../../../tests/fixtures/raster/ravif-10bit-prem.avif").as_slice(),
+         ] {
+-            assert!(image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+-                Cursor::new(bytes), 255
+-            ).is_err());
+-            let decoder = image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+-                Cursor::new(bytes), 256
+-            ).unwrap();
++            assert!(image::codecs::avif::AvifDecoder::new_with_pixel_limit(Cursor::new(bytes), 255).is_err());
++            let decoder =
++                image::codecs::avif::AvifDecoder::new_with_pixel_limit(Cursor::new(bytes), 256).unwrap();
+             assert_eq!(decoder.dimensions(), (16, 16));
+             assert!(DynamicImage::from_decoder(decoder).is_ok());
+         }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-demosaic/src/demosaic.rs:2318:
+ /// colour-difference (`R - G`, `B - G`) refinement across each candidate before evaluating
+ /// 5×5 CIELab homogeneity, plus a post-selection colour-difference smoothing pass that pins
+ /// measured CFA channels bit-for-bit.
+-pub fn xtrans_markesteijn_3pass(
+-    m: &Mosaic,
+-    cancelled: &impl Fn() -> bool,
+-) -> Result<Rgb32f, DevelopError> {
++pub fn xtrans_markesteijn_3pass(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
+     #[derive(Default)]
+     struct XTrans3Scratch {
+         mos: Vec<f64>,
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop/src/frame.rs:446:
+             height: 2,
+             cells: Vec::new(),
+         };
+-        assert!(matches!(
+-            empty.validate(),
+-            Err(CfaError::InvalidCfaLength { .. })
+-        ));
++        assert!(matches!(empty.validate(), Err(CfaError::InvalidCfaLength { .. })));
+         let wrong_length = CfaPattern {
+             width: 2,
+             height: 2,
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop/src/lib.rs:30:
+ pub mod rgbe;
+ mod thumbnail;
+ 
+-pub use rrrah_memory::{BufferError, MemoryBudget, MutableBuffer, PixelBuffer, Reservation, SharedBuffer};
++pub use curve::MonotoneCurve;
++pub use edit::{EDIT_SCHEMA, EditError, EditSession, EditState, MAX_CURVE_POINTS};
++pub use frame::{DecodedMosaic, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel};
++pub use geometry::Rect;
++pub use histogram::{BINS, Histogram, HistogramError, MAX_SAMPLES};
++pub use opcodes::{Area, Opcode, OpcodeLists, parse_list as parse_opcode_list};
++pub use raster::{DecodedRaster, RasterColorSpace, RasterError, RasterPixels};
++pub use recipe::{
++    DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16,
++    DECODE_SENSOR_COORDINATES, KNOWN_MOSAIC_DECODE_FLAGS, MOSAIC_RECIPE_MANIFEST_BYTES,
++    MOSAIC_RECIPE_MANIFEST_VERSION_V1, ManifestError, MosaicRecipeManifest,
++    REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS, SENSOR_MOSAIC_ARTIFACT_KIND_CODE,
++};
+ pub use rrrah_color::{
+     BRADFORD, CameraProfileError, DNG_ILLUMINANT_D65, DngColorMatrix, GREEN_PLANE_RELATIVE_TOLERANCE,
+     GreenPlane, RgbChromaticities, SRGB_TO_XYZ_D65, SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65,
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop/src/lib.rs:48:
+     demosaic_f64, demosaic_u16, demosaic_u16_f64, is_valid_xtrans_6x6, par_rows, quality_cfa, reflect,
+     xtrans,
+ };
+-pub use frame::{DecodedMosaic, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel};
+-pub use geometry::Rect;
+-pub use raster::{DecodedRaster, RasterColorSpace, RasterError, RasterPixels};
+-pub use recipe::{
+-    DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16,
+-    DECODE_SENSOR_COORDINATES, KNOWN_MOSAIC_DECODE_FLAGS, MOSAIC_RECIPE_MANIFEST_BYTES,
+-    MOSAIC_RECIPE_MANIFEST_VERSION_V1, ManifestError, MosaicRecipeManifest,
+-    REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS, SENSOR_MOSAIC_ARTIFACT_KIND_CODE,
+-};
+-pub use thumbnail::ThumbnailError;
+-pub use curve::MonotoneCurve;
+-pub use edit::{EDIT_SCHEMA, EditError, EditSession, EditState, MAX_CURVE_POINTS};
+-pub use histogram::{BINS, Histogram, HistogramError, MAX_SAMPLES};
+-pub use opcodes::{Area, Opcode, OpcodeLists, parse_list as parse_opcode_list};
++pub use rrrah_memory::{BufferError, MemoryBudget, MutableBuffer, PixelBuffer, Reservation, SharedBuffer};
+ use thiserror::Error;
++pub use thumbnail::ThumbnailError;
+ 
+ #[derive(Debug, Error)]
+ pub enum DevelopError {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/src/demosaic_compute.rs:1219:
+     #[test]
+     fn sensor_geometry_stays_within_wgsl_integer_ranges() {
+         let max_axis = (i32::MAX as u32) / 2 + 1;
+-        assert_eq!(BayerDemosaicCompute::checked_sensor_count([6188, 4120]).unwrap(), 25_494_560);
+-        assert_eq!(BayerDemosaicCompute::checked_sensor_count([65535, 65537]).unwrap(), u64::from(u32::MAX));
++        assert_eq!(
++            BayerDemosaicCompute::checked_sensor_count([6188, 4120]).unwrap(),
++            25_494_560
++        );
++        assert_eq!(
++            BayerDemosaicCompute::checked_sensor_count([65535, 65537]).unwrap(),
++            u64::from(u32::MAX)
++        );
+         assert!(BayerDemosaicCompute::checked_sensor_count([65536, 65536]).is_err());
+-        for geometry in [[max_axis + 1, 2], [2, max_axis + 1], [u32::MAX, u32::MAX], [1, 2], [2, 0]] {
+-            assert!(BayerDemosaicCompute::checked_sensor_count(geometry).is_err(), "{geometry:?}");
++        for geometry in [
++            [max_axis + 1, 2],
++            [2, max_axis + 1],
++            [u32::MAX, u32::MAX],
++            [1, 2],
++            [2, 0],
++        ] {
++            assert!(
++                BayerDemosaicCompute::checked_sensor_count(geometry).is_err(),
++                "{geometry:?}"
++            );
+         }
+-        assert_eq!(BayerDemosaicCompute::checked_sensor_count([max_axis, 2]).unwrap(), u64::from(max_axis) * 2);
++        assert_eq!(
++            BayerDemosaicCompute::checked_sensor_count([max_axis, 2]).unwrap(),
++            u64::from(max_axis) * 2
++        );
+     }
+ 
+     #[test]
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/src/demosaic_compute.rs:1240:
+         // Reject shader-address overflow before sample admission or GPU allocation.
+         for dimensions in [[65536, 65536], [(i32::MAX as u32) / 2 + 2, 2]] {
+             assert!(matches!(
+-                compute.execute_managed(&queue, &[], dimensions, [0, 1, 1, 2],
+-                    GpuDemosaicAlgorithm::Bilinear, &gpu_budget, &cpu_budget),
++                compute.execute_managed(
++                    &queue,
++                    &[],
++                    dimensions,
++                    [0, 1, 1, 2],
++                    GpuDemosaicAlgorithm::Bilinear,
++                    &gpu_budget,
++                    &cpu_budget
++                ),
+                 Err(BayerDemosaicError::Invalid("geometry exceeds shader index range"))
+             ));
+             assert!(matches!(
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/src/demosaic_compute.rs:1248:
+-                compute.execute_resident(&queue, &[], dimensions, [0, 1, 1, 2],
+-                    GpuDemosaicAlgorithm::Bilinear, &gpu_budget, || false),
++                compute.execute_resident(
++                    &queue,
++                    &[],
++                    dimensions,
++                    [0, 1, 1, 2],
++                    GpuDemosaicAlgorithm::Bilinear,
++                    &gpu_budget,
++                    || false
++                ),
+                 Err(BayerDemosaicError::Invalid("geometry exceeds shader index range"))
+             ));
+             assert_eq!(cpu_budget.used(), 0);
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/src/lib.rs:32:
+ pub use compute::{ExposureError, LinearExposureCompute, ResidentExposure};
+ mod demosaic_compute;
+ pub use demosaic_compute::{
+-    BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic, ResidentLinearBayer,
++    BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic,
++    ResidentLinearBayer,
+ };
+ mod model;
+ pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/tests/raster_timing.rs:25:
+     let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&device, budget.clone());
+     renderer.upload(&device, &queue, &source).unwrap();
+     let area = std::env::var_os("RRRAH_TIMING_AREA").is_some_and(|v| v == "1");
+-    let zoom_factor: f32 = std::env::var("RRRAH_TIMING_ZOOM")
+-        .map_or(1.0, |v| v.parse().expect("numeric timing zoom"));
+-    assert!(matches!(zoom_factor, 1.0 | 0.5 | 0.25), "bounded timestamp footprints only");
++    let zoom_factor: f32 =
++        std::env::var("RRRAH_TIMING_ZOOM").map_or(1.0, |v| v.parse().expect("numeric timing zoom"));
++    assert!(
++        matches!(zoom_factor, 1.0 | 0.5 | 0.25),
++        "bounded timestamp footprints only"
++    );
+     renderer.set_area_minification(&queue, area);
+     renderer.update_view(
+         &queue,
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/tests/raster_timing.rs:73:
+     let mut times = Vec::new();
+     for iteration in 0..35 {
+         // Repeated pan/zoom state updates; upload and CPU waits are outside GPU timestamps.
+-        renderer.update_view(&queue, rrrah_gpu::ViewParameters {
+-            viewport: [2048., 2048.],
+-            zoom: (2048. / 2016.) * zoom_factor,
+-            pan: [((iteration % 5) as f32 - 2.) * 0.375, ((iteration % 3) as f32 - 1.) * 0.25],
+-            ..Default::default()
+-        });
++        renderer.update_view(
++            &queue,
++            rrrah_gpu::ViewParameters {
++                viewport: [2048., 2048.],
++                zoom: (2048. / 2016.) * zoom_factor,
++                pan: [
++                    ((iteration % 5) as f32 - 2.) * 0.375,
++                    ((iteration % 3) as f32 - 1.) * 0.25,
++                ],
++                ..Default::default()
++            },
++        );
+         let mut encoder = device.create_command_encoder(&Default::default());
+         renderer.encode_with_timestamps(
+             &mut encoder,
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw/src/lib.rs:178:
+         }
+     }
+ 
+-    pub fn qualify_linear_color(
+-        &self,
+-        color: rrrah_core::RasterColorSpace,
+-    ) -> rrrah_core::RasterColorSpace {
++    pub fn qualify_linear_color(&self, color: rrrah_core::RasterColorSpace) -> rrrah_core::RasterColorSpace {
+         if self.assume_untagged_linear_srgb && color == rrrah_core::RasterColorSpace::LinearRgbUnspecified {
+             rrrah_core::RasterColorSpace::LinearSrgb
+         } else {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector/src/emf.rs:74:
+ pub fn has_magic(b: &[u8]) -> bool {
+     b.len() >= 44 && word(b, 0) == 1 && word(b, 40) == 0x464d4520
+ }
+-pub fn decode(
+-    b: &[u8],
+-    request: &DecodeRequest,
+-) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
++pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
+     request.check_cancelled()?;
+     if request.image_index != 0 {
+         return Err(crate::DecodeError::UnsupportedImageIndex {
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector/src/pict.rs:1113:
+ }
+ #[cfg(test)]
+ mod public_tests {
+-    fn decode_file(request: &crate::DecodeRequest) -> Result<rrrah_core::DecodedRaster, crate::RasterDecodeError> {
++    fn decode_file(
++        request: &crate::DecodeRequest,
++    ) -> Result<rrrah_core::DecodedRaster, crate::RasterDecodeError> {
+         let bytes = crate::bounded_io::read_bounded(request)?;
+         super::decode(&bytes, request)
+     }
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector/src/wmf.rs:19:
+     }
+     Ok(format!("#{:02x}{:02x}{:02x}", b[0], b[1], b[2]))
+ }
+-pub fn decode(
+-    b: &[u8],
+-    request: &DecodeRequest,
+-) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
++pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
+     request.check_cancelled()?;
+     if request.image_index != 0 {
+         return Err(crate::DecodeError::UnsupportedImageIndex {

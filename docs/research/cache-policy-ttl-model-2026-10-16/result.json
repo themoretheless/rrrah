@@ -1,0 +1,64 @@
+{
+  "status": "validated_model_extension",
+  "production_behavior_changed": false,
+  "new_test": "policy::tests::deterministic_policy_model_covers_zero_limits_expiry_pins_and_replacement",
+  "scope": {
+    "configurations": 48,
+    "operations_each": 2000,
+    "total_operations": 96000,
+    "key_space": 16,
+    "byte_caps": [
+      0,
+      1,
+      8,
+      20
+    ],
+    "count_caps": [
+      null,
+      0,
+      1,
+      3
+    ],
+    "ttl_ms": [
+      null,
+      0,
+      5
+    ],
+    "operations": [
+      "pin-aware insertion/replacement",
+      "lookup",
+      "pin",
+      "unpin",
+      "expire/prune",
+      "explicit removal"
+    ],
+    "clock": "Deterministic virtual Instant; no sleeps",
+    "checks_after_every_operation": [
+      "Admission/hit/removal/expiry results agree with simple fixed-slot reference",
+      "Membership values and weights",
+      "Resident byte sum",
+      "Protected membership"
+    ]
+  },
+  "checks": {
+    "memory_lib": {
+      "passed": 42,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 1.02
+    },
+    "memory_clippy_lib_tests_no_deps": "passed -D warnings",
+    "model_mismatches": 0
+  },
+  "source_sha256": "21bf7dc570d4177148a4f620c9c85daa9366ee52296976d60d2c678f0e5193df",
+  "limits": [
+    "Reference model covers WeightedLru membership and fixed TTL, not disk I/O or GPU",
+    "No dynamic set_limits in generated model; existing dedicated set_limits regressions remain separate",
+    "Independent lease ownership/concurrent release tests run in same memory library suite",
+    "No new hardware or performance qualification claim"
+  ],
+  "logs": [
+    "memory-tests.log",
+    "memory-clippy.log"
+  ]
+}

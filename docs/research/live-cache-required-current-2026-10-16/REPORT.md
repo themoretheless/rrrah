@@ -1,0 +1,5 @@
+Opt-in debug-only RRRAH_QUALIFY_RASTER_REQUIRE_CACHE=1 installs a canonical-path decode guard after the second raster has presented and before returning to the first. The normal cache lookup remains enabled; the actual decode helper refuses any fallback for the guarded file. Guard inactive in ordinary runs and absent from release builds.
+
+Positive native Metal viewer: cachecount1,swap16MiB/count4/restore8MiB,previous1/next1; EXR→grayalphaPSD→EXR succeeds and presents generation4 on same device while fallbackdecode forbidden. No refuseddecode marker. Negative control: --no-cache produces the explicit refuseddecode marker and exits1 after probe timeout; no roundtripPASS. Both original logs retained.
+
+This proves cached RAM-or-swap return after target presentation, not RAMversusswap attribution, absence of every earlier speculativedecode, exactframebufferpixels, latency, physicalHDR or fulluserinput. Recovery notification remains simulated. Ordinary viewer regression passed278/0failed/78ignored; viewer-regression.log and result.json retained.

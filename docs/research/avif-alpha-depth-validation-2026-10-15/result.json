@@ -1,0 +1,67 @@
+{
+  "status": "current_native1052_metal24_producer4_public_refusal_retry_and_credit_passed",
+  "specification": "https://aomediacodec.github.io/av1-avif/#auxiliary-image-items-and-sequences",
+  "requirement": "alpha and associated master must have same encoded bit depth",
+  "baseline": {
+    "constructor_accepted": 2,
+    "conversion_accepted": 2,
+    "controls": [
+      "primary8-alpha10.avif",
+      "primary10-alpha8.avif"
+    ]
+  },
+  "change": "compare decoded dav1d pictures actual bit_depth before ICC copy or any pixel conversion",
+  "source_sha256": "23d6a3b00cd2cca9592773535b9f0348ae573f5bd20e696279ec98e999ad6433",
+  "standalone_session": 27529,
+  "limitations": [
+    "malformed spliced controls retain original declared properties; not valid producer evidence",
+    "does not account all AV1 codec scratch or qualify all AVIF sequences/derived items"
+  ],
+  "standalone": {
+    "exit_code": 0,
+    "mixed_depth_refusals": 4,
+    "valid_same_depth_retries": 2,
+    "profile": "unoptimized; independent small Cargo workspace; not full root/native test suite"
+  },
+  "native_session": 17156,
+  "native_log": "/tmp/avif-alpha-depth-native-full.log",
+  "native_test": "avif_mixed_coded_alpha_depth_refuses_before_pixel_conversion",
+  "root_source_sha256": "1e8ac8000db70b678ab55e1bc91ee498df2a3c958d654154b12d326671b8eaa2",
+  "metal_build_session": 33714,
+  "metal_build_log": "/tmp/avif-alpha-depth-metal-build.log",
+  "native": {
+    "exit_code": 0,
+    "passed": 1052,
+    "failed": 0,
+    "ignored": 73
+  },
+  "source_drift": false,
+  "metal": {
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "binary_sha256": "751008ae53c8755d480c4b10969cacc49f288afb1a7d500e1aa71efb43fc5285"
+  },
+  "producer": {
+    "exit_code": 0,
+    "tests_passed": 1,
+    "fixture_cases": 4
+  },
+  "public_api": {
+    "exit_code": 0,
+    "mixed_depth_refusals": 2,
+    "valid_same_depth_retries": 2,
+    "final_credit_each": 0
+  }
+}

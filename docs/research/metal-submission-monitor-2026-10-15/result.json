@@ -1,0 +1,35 @@
+{
+  "status": "encoder_observer_attempt_rejected_by_wgpu30_encoding_rules_and_removed",
+  "check": {
+    "exit_code": 0,
+    "warnings": 0
+  },
+  "build_session": 79129,
+  "build_log": "/tmp/metal-submission-monitor-viewer-build.log",
+  "change": "retain borrowed active native Metal command buffer; after ordinary wgpu submission wait inspect actual status/error before mapped pixels consumed",
+  "safety": "one locally allowed unsafe leaf under workspace deny: only borrow HAL encoder and retain command buffer, never encode/end/submit/destroy manually; no unsafe in callers",
+  "scope": "production-available monitor API; SDR/HDR test readback wired, live viewer recovery not wired yet",
+  "source_sha256": {
+    "crates/rrrah-gpu/src/submission.rs": "7b1c5e1ef37ab1ac48017e9b1792ab908c0cfea5d1d048f60c4b4605d9e28812",
+    "crates/rrrah-gpu/src/lib.rs": "e530a1dcafb4d742d3e0c581a19f014c81042c2e42bb5bca1c642e56628d5b30",
+    "crates/rrrah-gpu/tests/common/mod.rs": "962928d4adb60d22131e8a7dad8ab153293468586be87c854cd36eecf5c706d3",
+    "crates/rrrah-gpu/Cargo.toml": "9e4b883998e04117b38cf67242566324d6526be4a77702ecbb3d8214776eaef5",
+    "Cargo.lock": "c18ef35fe87a60beed4bbe157579ef399fce197691a4cf4aca9c848e8d3db267",
+    "crates/rrrah-app/src/main.rs": "473f1e4f2980b4109b1ecf356d256803522266abe528e4c71dc4b8ae9204bdb0"
+  },
+  "limitations": [
+    "does not fix or identify trigger of original GPU hang",
+    "real failed-command hardware path not deliberately injected",
+    "unsupported backends explicit; Metal hardware tests assert native capture exists",
+    "not full100-format/NVIDIA/HDR calibration completion"
+  ],
+  "hardware_attempt_exit_code": 101,
+  "reason": "as_hal_mut changes encoding API; normal wgpu recording cannot be mixed with raw encoding",
+  "removed": [
+    "crates/rrrah-gpu/src/submission.rs",
+    "public monitor exports",
+    "direct objc2 dependencies",
+    "readback monitor callsites"
+  ],
+  "replacement": "../metal-backend-error-propagation-2026-10-15/result.json"
+}

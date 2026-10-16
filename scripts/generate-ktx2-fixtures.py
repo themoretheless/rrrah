@@ -5,8 +5,8 @@ from pathlib import Path
 import struct,hashlib,zlib
 root=Path(__file__).resolve().parent.parent/'tests/fixtures/raster'
 lines=[l for l in (root/'manifest.tsv').read_text().splitlines() if not l.split('\t')[0].endswith('.ktx2')]
-def make(vk,channels,size,w,h,data,orientation='rd',compression=0,mips=()):
- srgb=vk in (29,36,43,50);isfloat=size==4;bgr=vk in (30,36,44,50)
+def make(vk,channels,size,w,h,data,orientation='rd',compression=0,mips=(),floating=None):
+ srgb=vk in (29,36,43,50);isfloat=(size==4 if floating is None else floating);bgr=vk in (30,36,44,50)
  descriptor_size=24+16*channels
  dfd=struct.pack('<IIHH4B4B8B',descriptor_size+4,0,2,descriptor_size,1,1,2 if srgb else 1,0,0,0,0,0,size*channels,0,0,0,0,0,0,0)
  for c in range(channels):
@@ -17,7 +17,7 @@ def make(vk,channels,size,w,h,data,orientation='rd',compression=0,mips=()):
  entry=b'KTXorientation\0'+orientation.encode()+b'\0';kvd=struct.pack('<I',len(entry))+entry+bytes(-len(entry)%4)
  levels=[data,*mips];dfd_offset=80+24*len(levels);kvd_offset=dfd_offset+len(dfd)
  out=bytearray(bytes(kvd_offset+len(kvd)));out[dfd_offset:kvd_offset]=dfd;out[kvd_offset:]=kvd
- alignment={3:12,6:12}.get(channels*size,channels*size)
+ alignment={3:12,6:12}.get(channels*size,max(4,channels*size))
  indices=[]
  for source in reversed(levels):
   payload=zlib.compress(source) if compression else source

@@ -362,6 +362,9 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         let _ = self.try_enqueue(key, mosaic);
     }
     /// Nonblocking admission. Rejected payload ownership is released before return.
+    /// A queued write may evict completed LRU objects to satisfy the hard disk
+    /// quota before serialization starts. Failure or cancellation removes the
+    /// new partial object, but does not restore those evicted cache entries.
     pub fn try_enqueue(&self, key: K, mosaic: V) -> SpillAdmission {
         if self.queue_count == 0 {
             self.counters.dropped.fetch_add(1, Ordering::Relaxed);
@@ -1103,6 +1106,133 @@ mod write_cancellation_tests {
         assert!(keys.lock().unwrap().is_empty());
     }
     #[test]
+    fn stalled_writer_keeps_producer_nonblocking_and_bounds_count_bytes_and_owners() {
+        let mut cases = 0;
+        for queue_count in [1usize, 2, 4] {
+            for queue_bytes in [16u64, 32, 64] {
+                for cancel in [false, true] {
+                    let directory = tempfile::tempdir().unwrap();
+                    let root = MemoryBudget::new(64 + queue_bytes + 16);
+                    let visible = root.try_buffer(64, 171u8).unwrap().freeze();
+                    let queue = MemoryBudget::new(queue_bytes);
+                    let swap = ImageSwapCache::<u8, Payload>::new_with_budgets(
+                        directory.path(),
+                        ImageSwapConfig {
+                            limits: CacheLimits {
+                                max_bytes: 4096,
+                                max_entries: Some(16),
+                                ttl: None,
+                            },
+                            queue_bytes,
+                            queue_count,
+                            restore_bytes: root.limit(),
+                        },
+                        queue.clone(),
+                        root.clone(),
+                    )
+                    .unwrap();
+                    let (started, started_rx) = mpsc::channel();
+                    let (resume, resume_rx) = mpsc::channel();
+                    assert_eq!(
+                        swap.try_enqueue(
+                            0,
+                            Payload {
+                                buffer: root.try_buffer(16, 0).unwrap().freeze(),
+                                pause: Some((started, resume_rx, false)),
+                            }
+                        ),
+                        SpillAdmission::Queued
+                    );
+                    started_rx
+                        .recv_timeout(std::time::Duration::from_secs(5))
+                        .unwrap();
+                    let waiting = queue_count.min((queue_bytes / 16 - 1) as usize);
+                    std::thread::scope(|scope| {
+                        let (done, completed) = mpsc::channel();
+                        let swap = &swap;
+                        let root = &root;
+                        let producer = scope.spawn(move || {
+                            let results: Vec<_> = (1..=64u8)
+                                .map(|key| {
+                                    swap.try_enqueue(
+                                        key,
+                                        Payload {
+                                            buffer: root.try_buffer(16, key).unwrap().freeze(),
+                                            pause: None,
+                                        },
+                                    )
+                                })
+                                .collect();
+                            done.send(results).unwrap();
+                        });
+                        // Completion while the writer is still gated proves that
+                        // producer admission does not wait for filesystem progress.
+                        let results = completed.recv_timeout(std::time::Duration::from_secs(5));
+                        if let Ok(results) = &results {
+                            assert_eq!(
+                                results.iter().filter(|r| **r == SpillAdmission::Queued).count(),
+                                waiting
+                            );
+                            assert_eq!(
+                                results.iter().filter(|r| **r == SpillAdmission::Full).count(),
+                                64 - waiting
+                            );
+                            assert_eq!(root.used(), 64 + (waiting as u64 + 1) * 16);
+                            assert_eq!(queue.used(), (waiting as u64 + 1) * 16);
+                            assert_eq!(swap.stats().queued_bytes, queue.used());
+                            assert!(visible.iter().all(|v| *v == 171));
+                        }
+                        if cancel {
+                            swap.discard_pending_writes();
+                        }
+                        // Release even after an observation timeout so the scoped
+                        // thread can finish; the timeout remains a test failure.
+                        resume.send(()).unwrap();
+                        producer.join().unwrap();
+                        assert!(results.is_ok(), "producer waited for the stalled writer");
+                    });
+                    swap.wait_idle().unwrap();
+                    assert_eq!((root.used(), queue.used()), (64, 0));
+                    assert_eq!(swap.stats().queued_bytes, 0);
+                    assert_eq!(swap.stats().errors, 0);
+                    assert_eq!(swap.stats().writes, if cancel { 0 } else { waiting as u64 + 1 });
+                    assert_eq!(
+                        swap.stats().dropped,
+                        if cancel { 65 } else { 64 - waiting as u64 }
+                    );
+                    assert_eq!(
+                        swap.try_enqueue(
+                            250,
+                            Payload {
+                                buffer: root.try_buffer(16, 250).unwrap().freeze(),
+                                pause: None,
+                            }
+                        ),
+                        SpillAdmission::Queued
+                    );
+                    swap.wait_idle().unwrap();
+                    let restored = swap.get(&250, || false).unwrap();
+                    assert_eq!(&*restored.buffer, &[250; 16]);
+                    assert_eq!(root.used(), 80);
+                    drop(restored);
+                    assert!(visible.iter().all(|v| *v == 171));
+                    swap.shutdown();
+                    drop(swap);
+                    assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(), 0);
+                    assert_eq!(root.used(), 64);
+                    drop(visible);
+                    assert_eq!((root.used(), queue.used()), (0, 0));
+                    cases += 1;
+                }
+            }
+        }
+        assert_eq!(cases, 18);
+        eprintln!(
+            "STALLED_SWAP_QUEUE cases={cases} producer_admissions={} recovery_restores={cases} final=0",
+            cases * 64
+        );
+    }
+    #[test]
     fn full_channel_releases_rejected_payload_and_accepts_same_key_later() {
         let directory = tempfile::tempdir().unwrap();
         let root = MemoryBudget::new(6);
@@ -1329,6 +1459,78 @@ mod write_cancellation_tests {
         }
     }
     #[test]
+    fn failed_replacement_obeys_hard_quota_and_exposes_lru_eviction_boundary() {
+        for limit in [1u64, 2] {
+            for cancel in [false, true] {
+                let directory = tempfile::tempdir().unwrap();
+                let root = MemoryBudget::new(1);
+                let swap = ImageSwapCache::<u8, FailingPayload>::new(
+                    directory.path(),
+                    ImageSwapConfig {
+                        limits: CacheLimits::bytes(limit),
+                        queue_bytes: 1,
+                        queue_count: 1,
+                        restore_bytes: 1,
+                    },
+                )
+                .unwrap();
+                let payload = |value, fail| {
+                    FailingPayload(
+                        Payload {
+                            buffer: root.try_buffer(1, value).unwrap().freeze(),
+                            pause: None,
+                        },
+                        fail,
+                    )
+                };
+                assert_eq!(swap.try_enqueue(1, payload(7, false)), SpillAdmission::Queued);
+                swap.wait_idle().unwrap();
+                assert_eq!(swap.disk_usage().unwrap().bytes, 1);
+                let (started, started_rx) = mpsc::channel();
+                let (resume, resume_rx) = mpsc::channel();
+                let mut replacement = payload(9, !cancel);
+                if cancel {
+                    replacement.0.pause = Some((started, resume_rx, false));
+                }
+                assert_eq!(swap.try_enqueue(2, replacement), SpillAdmission::Queued);
+                if cancel {
+                    started_rx
+                        .recv_timeout(std::time::Duration::from_secs(5))
+                        .unwrap();
+                    swap.discard_pending_writes();
+                    resume.send(()).unwrap();
+                }
+                swap.wait_idle().unwrap();
+                assert_eq!((root.used(), swap.stats().queued_bytes), (0, 0));
+                assert_eq!(
+                    (swap.stats().writes, swap.stats().errors),
+                    (1, if cancel { 0 } else { 1 })
+                );
+                assert_eq!(swap.stats().dropped, if cancel { 1 } else { 0 });
+                assert!(swap.pending.lock().unwrap().is_empty());
+                assert!(swap.get(&2, || false).is_none());
+                let previous = swap.get(&1, || false);
+                // Hard quota requires eviction before staging a new object. A codec
+                // failure rolls back its own file, but cannot resurrect that victim.
+                assert_eq!(previous.is_some(), limit == 2);
+                if let Some(previous) = previous {
+                    assert_eq!(&*previous.0.buffer, &[7]);
+                }
+                assert_eq!(root.used(), 0);
+                assert_eq!(swap.disk_usage().unwrap().bytes, if limit == 2 { 1 } else { 0 });
+                assert_eq!(swap.try_enqueue(2, payload(11, false)), SpillAdmission::Queued);
+                swap.wait_idle().unwrap();
+                assert_eq!(&*swap.get(&2, || false).unwrap().0.buffer, &[11]);
+                assert_eq!(swap.stats().writes, 2);
+                assert!(swap.disk_usage().unwrap().bytes <= limit);
+                swap.shutdown();
+                drop(swap);
+                assert_eq!(root.used(), 0);
+                assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(), 0);
+            }
+        }
+    }
+    #[test]
     fn codec_failure_after_write_rolls_back_disk_memory_and_pending_key() {
         let directory = tempfile::tempdir().unwrap();
         let root = MemoryBudget::new(1);
@@ -1472,6 +1674,91 @@ mod raster_tests {
             assert_eq!(budget.used(), 0);
         }
     }
+    fn qualify_wire_corruption(animated: bool) {
+        let parent = tempfile::tempdir().unwrap();
+        let budget = MemoryBudget::new(19);
+        let swap = RasterSwapCache::new_with_budgets(
+            parent.path(),
+            config(CacheLimits::bytes(1024)),
+            MemoryBudget::new(19),
+            budget.clone(),
+        )
+        .unwrap();
+        let timing = animated.then(|| rrrah_core::RasterAnimationTiming::new(1000,60,3).unwrap());
+        let make = || frame(&budget).with_animation_timing(timing);
+        let check = |frame: &DecodedRaster| {
+            assert_frame(frame);
+            assert_eq!(frame.animation_timing(),timing);
+        };
+        swap.enqueue(1u32, make());
+        swap.wait_idle().unwrap();
+        let first_path = stored_path(parent.path());
+        let directory = first_path.parent().unwrap();
+        let original = std::fs::read(&first_path).unwrap();
+        swap.enqueue(2u32, make());
+        swap.wait_idle().unwrap();
+        let neighbour_path = std::fs::read_dir(directory)
+            .unwrap()
+            .map(|entry| entry.unwrap().path())
+            .find(|path| *path != first_path)
+            .unwrap();
+        let neighbour_usage = original.len() as u64;
+        let mut cases = 0;
+        // Mutations exercise descriptor, profile and arbitrary float payload bits.
+        // The independent expected result is rejection for every changed wire object.
+        let mutations = (0..original.len() * 8)
+            .map(|bit| {
+                let mut bytes = original.clone();
+                bytes[bit / 8] ^= 1 << (bit % 8);
+                bytes
+            })
+            .chain((0..original.len()).map(|end| original[..end].to_vec()))
+            .chain([{
+                let mut bytes = original.clone();
+                bytes.push(0);
+                bytes
+            }]);
+        for bytes in mutations {
+            let path = std::fs::read_dir(directory)
+                .unwrap()
+                .map(|entry| entry.unwrap().path())
+                .find(|path| *path != neighbour_path)
+                .unwrap();
+            std::fs::write(path, bytes).unwrap();
+            assert!(swap.try_get(&1, || false).unwrap().is_none(), "case {cases}");
+            assert_eq!(budget.used(), 0, "case {cases}");
+            assert_eq!(swap.disk_usage().unwrap().bytes, neighbour_usage, "case {cases}");
+            assert_eq!(swap.disk_usage().unwrap().objects, 1);
+            let errors = swap.stats().errors;
+            assert_eq!(errors, cases + 1);
+            assert!(swap.try_get(&1, || false).unwrap().is_none());
+            assert_eq!(swap.stats().errors, errors);
+            check(&swap.try_get(&2, || false).unwrap().unwrap());
+            assert_eq!(budget.used(), 0);
+            swap.enqueue(1u32, make());
+            swap.wait_idle().unwrap();
+            check(&swap.try_get(&1, || false).unwrap().unwrap());
+            assert_eq!(budget.used(), 0);
+            assert_eq!(swap.stats().queued_bytes, 0);
+            cases += 1;
+        }
+        assert_eq!(cases as usize, original.len() * 9 + 1);
+        assert_eq!(swap.stats().reads, cases * 2);
+        assert_eq!(budget.peak(), 19);
+        drop(swap);
+        assert_eq!(budget.used(), 0);
+        eprintln!(
+            "RASTER_SWAP_CORRUPTION animated={animated} cases={cases} neighbouring_object_preserved=true retries={cases} final=0"
+        );
+    }
+    #[test]
+    fn every_wire_bit_truncation_and_tail_failure_preserves_neighbour_and_retry() {
+        qualify_wire_corruption(false);
+    }
+    #[test]
+    fn every_animation_v5_wire_mutation_preserves_neighbour_timing_and_retry() {
+        qualify_wire_corruption(true);
+    }
     #[test]
     fn cancelled_stream_restore_retains_disk_entry_and_releases_partial_allocation() {
         let parent = tempfile::tempdir().unwrap();
@@ -1555,6 +1842,112 @@ mod raster_tests {
         assert_frame(&swap.try_get(&1, || false).unwrap().unwrap());
         assert_eq!(swap.stats().reads, 1);
         assert_eq!(budget.used(), 0);
+    }
+    #[test]
+    #[ignore = "manual 60-second collection swap pressure soak"]
+    fn sustained_collection_restores_under_full_memory_pressure() {
+        let count: u32 = std::env::var("RRRAH_SWAP_SOAK_OBJECTS")
+            .map(|value| value.parse().expect("RRRAH_SWAP_SOAK_OBJECTS must be u32"))
+            .unwrap_or(256);
+        let seconds: u64 = std::env::var("RRRAH_SWAP_SOAK_SECONDS")
+            .map(|value| value.parse().expect("RRRAH_SWAP_SOAK_SECONDS must be u64"))
+            .unwrap_or(60);
+        assert!((1..=65536).contains(&count));
+        assert!(seconds > 0);
+        const BYTES: u64 = 128 * 128 * 4;
+        let parent = tempfile::tempdir().unwrap();
+        let budget = MemoryBudget::new(BYTES * 2);
+        let swap = RasterSwapCache::new_with_budgets(
+            parent.path(),
+            ImageSwapConfig {
+                limits: CacheLimits {
+                    max_bytes: (BYTES + 64) * u64::from(count),
+                    max_entries: Some(count as usize),
+                    ttl: None,
+                },
+                queue_bytes: BYTES,
+                queue_count: 1,
+                restore_bytes: BYTES * 2,
+            },
+            MemoryBudget::new(BYTES),
+            budget.child(BYTES * 2),
+        )
+        .unwrap();
+        for key in 0..count {
+            let mut values = budget.try_buffer(BYTES as usize, 0u8).unwrap();
+            for (i, pixel) in values.as_chunks_mut::<4>().0.iter_mut().enumerate() {
+                pixel.copy_from_slice(&[key as u8, (key >> 8) as u8, i as u8, 255]);
+            }
+            let frame = DecodedRaster::new(
+                128,
+                128,
+                RasterPixels::Rgba8(values.freeze().into()),
+                RasterColorSpace::Srgb,
+            )
+            .unwrap();
+            swap.enqueue(key, frame);
+            swap.wait_idle().unwrap();
+            assert_eq!(budget.used(), 0);
+        }
+        assert_eq!(swap.stats().writes, u64::from(count));
+        let disk = swap.disk_usage().unwrap();
+        assert_eq!(disk.objects, count as usize);
+        assert_eq!(disk.bytes, (BYTES + 64) * u64::from(count));
+        let pressure = budget.try_reserve(BYTES).unwrap();
+        let start = std::time::Instant::now();
+        let mut cycles = 0u64;
+        let mut last_progress = start;
+        while start.elapsed() < Duration::from_secs(seconds) {
+            let key = (cycles % u64::from(count)) as u32;
+            let restored = swap.try_get(&key, || false).unwrap().unwrap();
+            let RasterPixels::Rgba8(values) = restored.pixels() else {
+                panic!()
+            };
+            for (i, pixel) in values.as_chunks::<4>().0.iter().enumerate() {
+                assert_eq!(*pixel, [key as u8, (key >> 8) as u8, i as u8, 255]);
+            }
+            assert_eq!(budget.used(), BYTES * 2);
+            let held = restored.clone();
+            drop(restored);
+            let next = (key + 1) % count;
+            assert!(matches!(
+                swap.try_get(&next, || false),
+                Err(rrrah_memory::BufferError::Capacity { .. })
+            ));
+            assert_eq!(budget.used(), BYTES * 2);
+            drop(held);
+            assert_eq!(budget.used(), BYTES);
+            assert!(swap.try_get(&next, || true).unwrap().is_none());
+            let retry = swap.try_get(&next, || false).unwrap().unwrap();
+            let RasterPixels::Rgba8(values) = retry.pixels() else {
+                panic!()
+            };
+            for (i, pixel) in values.as_chunks::<4>().0.iter().enumerate() {
+                assert_eq!(*pixel, [next as u8, (next >> 8) as u8, i as u8, 255]);
+            }
+            drop(retry);
+            assert_eq!(budget.used(), BYTES);
+            assert_eq!(swap.disk_usage().unwrap(), disk);
+            cycles += 1;
+            if cycles.is_multiple_of(1024) && last_progress.elapsed() >= Duration::from_secs(10) {
+                eprintln!("RASTER_SWAP_SOAK_PROGRESS seconds={:.1} objects={count} cycles={cycles} reads={} used={} peak={}", start.elapsed().as_secs_f64(), swap.stats().reads, budget.used(), budget.peak());
+                last_progress = std::time::Instant::now();
+            }
+        }
+        assert!(cycles >= u64::from(count));
+        assert_eq!(swap.stats().reads, cycles * 2);
+        assert_eq!((swap.stats().errors, swap.stats().queued_bytes), (0, 0));
+        drop(pressure);
+        assert_eq!((budget.used(), budget.peak()), (0, BYTES * 2));
+        swap.shutdown();
+        drop(swap);
+        assert_eq!(std::fs::read_dir(parent.path()).unwrap().count(), 0);
+        eprintln!(
+            "RASTER_SWAP_SOAK seconds={} objects={count} cycles={cycles} verified_pixel_bytes={} pressure_refusals={cycles} retries={cycles} peak={} final=0",
+            start.elapsed().as_secs_f64(),
+            cycles * 2 * BYTES,
+            BYTES * 2
+        );
     }
     #[test]
     fn raster_swap_preserves_hdr_metadata_and_retries_memory_pressure() {

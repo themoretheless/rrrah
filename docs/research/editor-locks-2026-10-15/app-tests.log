@@ -1,0 +1,45 @@
+   Compiling rrrah-develop v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 47.89s
+     Running unittests src/main.rs (target/first30-aligned/debug/deps/rrrah-973d254e7d272201)
+
+running 24 tests
+test edit_store::tests::atomic_write_crash_helper ... ignored, subprocess helper; invoked by atomic_documents_survive_process_kill
+test edit_store::tests::oversized_and_non_regular_sidecars_are_refused ... ok
+test edit_store::tests::source_content_change_with_same_length_and_mtime_is_refused ... ok
+test edit_store::tests::legacy_lock_is_never_stolen_and_non_regular_v2_locks_are_refused ... ok
+test edit_store::tests::restart_refuses_changed_journal_source_and_backup_collision ... ok
+test editor::tests::stale_open_reply_cannot_initialize_new_decode_generation ... ok
+test foreground_loader_tests::raster_thumbnail_uses_shared_budget_and_last_owner_credit ... ok
+test model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit ... ignored, requires actual GPU for bounded model worker qualification
+test editor::tests::conflicting_recovery_and_sidecar_are_retained_without_implicit_overwrite ... ok
+test raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit ... ignored, actual Metal stale-generation LOD filtering and queued upload cancellation
+test edit_store::tests::concurrent_writers_are_refused_and_persistent_lock_is_reusable ... ok
+test edit_store::tests::xmp_preserves_unknown_fields_and_pages_and_refuses_external_change ... ok
+test edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification ... ok
+test edit_store::tests::recovery_refuses_corruption_new_source_and_unknown_version_without_deleting ... ok
+test edit_store::tests::restart_process_kill_keeps_both_refused_record_and_retained_backup ... ok
+test edit_store::tests::restart_preserves_exact_backup_and_reuses_it_without_overwriting ... ok
+test editor::tests::reload_reuses_history_only_after_matching_content_and_persisted_state ... ok
+test editor::tests::documents_keep_separate_history_and_latest_edit_recovers_after_restart ... ok
+test editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget ... ok
+test editor::tests::conflict_choice_does_not_authorize_overwriting_a_later_external_xmp_edit ... ok
+test editor::tests::explicit_conflict_choices_update_recovery_but_require_save_for_xmp ... ok
+test editor::tests::refused_recovery_requires_explicit_restart_and_retains_exact_bytes ... ok
+test model_swap_viewer_tests::native_model_eviction_restores_before_decoder_and_preserves_managed_credit ... ok
+test edit_store::tests::atomic_documents_survive_process_kill ... ok
+
+test result: ok. 21 passed; 0 failed; 3 ignored; 0 measured; 284 filtered out; finished in 0.70s
+

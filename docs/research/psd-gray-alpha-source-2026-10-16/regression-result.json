@@ -1,0 +1,14 @@
+{
+  "target": "/tmp/rrrah-alpha-isolated-target-20261016",
+  "decode_library": {
+    "passed": 196,
+    "ignored": 5
+  },
+  "viewer_bin": {
+    "passed": 278,
+    "ignored": 78
+  },
+  "initial_viewer_failure": "outdated substring assertion for ICC InvalidInput diagnostic",
+  "change": "assert exact RasterColorError::InvalidInput.to_string; all memory/peak/calls/resident-sharing assertions retained",
+  "scope": "ordinary decoder and App regression, not ignored hardware/fixture gates or full workspace"
+}

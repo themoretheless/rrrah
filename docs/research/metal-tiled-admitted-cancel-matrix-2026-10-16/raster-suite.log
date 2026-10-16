@@ -1,0 +1,125 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.34s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-0da309b8fc91efb4)
+
+running 36 tests
+test area_filtered_hdr_lod_matches_independent_alpha_reference_on_metal ... managed area HDR LOD: signed/bright/transparent-RGB oracle SDR/HDR exact; output root=0
+ok
+test area_large_signed_hdr_cancellation_preserves_small_other_channels ... ok
+test area_minification_matches_independent_sixteen_cell_linear_average ... area minification:64x64→16x16, independent f64 sixteen-cell average, HDR signed/bright and SDR exact, filtering before tone, credits zero
+ok
+test area_source_region_missing_footprint_stays_unexposed_background ... area region: unavailable four-cell footprint returns untouched background even at+10stops/tone; complete footprints show4 pixels; credits zero
+ok
+test bayer_resident_crop_and_all_orientations_match_materialized_sdr_hdr ... Bayer geometry Normal: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry HorizontalFlip: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Rotate180: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry VerticalFlip: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Transpose: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Rotate90: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Transverse: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Rotate270: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+ok
+test calibrated_bayer_compute_and_fragment_respect_shader_precision_at_sensor_pixel_scale ... Bayer cross-stage Bilinear: mismatched_channels=0 max_half_steps=0 first=[]
+Bayer fragment/compute Bilinear: whole64x64 HDR compared at1:1, native normalization, credits zero
+Bayer cross-stage SmoothHue: mismatched_channels=0 max_half_steps=0 first=[]
+Bayer fragment/compute SmoothHue: whole64x64 HDR compared at1:1, native normalization, credits zero
+Bayer cross-stage MalvarHeCutler: mismatched_channels=0 max_half_steps=0 first=[]
+Bayer fragment/compute MalvarHeCutler: whole64x64 HDR compared at1:1, native normalization, credits zero
+Bayer cross-stage Directional: mismatched_channels=374 max_half_steps=1 first=[(610, (14502, 14501)), (618, (14588, 14587)), (666, (15103, 15104)), (682, (15275, 15276)), (802, (13350, 13349)), (858, (14445, 14444)), (860, (16535, 16536)), (898, (14875, 14874))]
+Bayer fragment/compute Directional: whole64x64 HDR compared at1:1, native normalization, credits zero
+Bayer cross-stage Vng: mismatched_channels=274 max_half_steps=1 first=[(802, (13350, 13349)), (858, (14445, 14444)), (898, (14875, 14874)), (914, (15047, 15046)), (930, (15219, 15218)), (978, (12956, 12955)), (986, (13300, 13299)), (1110, (14431, 14430))]
+Bayer fragment/compute Vng: whole64x64 HDR compared at1:1, native normalization, credits zero
+Bayer cross-stage Rcd: mismatched_channels=258 max_half_steps=1 first=[(890, (14789, 14788)), (922, (15133, 15132)), (970, (12612, 12611)), (1126, (14603, 14602)), (1182, (15205, 15204)), (1186, (15247, 15248)), (1238, (13244, 13243)), (1346, (14154, 14153))]
+Bayer fragment/compute Rcd: whole64x64 HDR compared at1:1, native normalization, credits zero
+ok
+test calibrated_bayer_hdr_exposure_has_explicit_signed_half_range ... Bayer HDR range Bilinear: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero
+Bayer HDR range SmoothHue: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero
+Bayer HDR range MalvarHeCutler: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero
+Bayer HDR range Directional: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero
+Bayer HDR range Vng: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero
+Bayer HDR range Rcd: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero
+ok
+test calibrated_bayer_resident_upload_preserves_frames_budgets_sdr_hdr ... calibrated Bayer upload Bilinear: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero
+calibrated Bayer upload SmoothHue: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero
+calibrated Bayer upload MalvarHeCutler: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero
+calibrated Bayer upload Directional: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero
+calibrated Bayer upload Vng: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero
+calibrated Bayer upload Rcd: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero
+ok
+test cancelled_upload_validation_and_admission_preserve_visible_texture ... upload cancellation adapter: Metal Apple M4 Max
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+raster replacement values: format=Rgba8UnormSrgb; initial_center=[255, 0, 0, 255]; retry_center=[0, 0, 255, 255]
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+raster replacement values: format=Rgba16Float; initial_center=[15360, 0, 0, 15360]; retry_center=[0, 0, 15360, 15360]
+raster replacement recovery: format=Rgba16Float; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+ok
+test developed_raw_exposure_precedes_tone_and_monotone_curve ... ok
+test fractional_area_alpha_matches_independent_f64_and_ignores_invisible_rgb ... fractional area f64: tiled=false max_hdr_abs_error=0.0019468796896271456; three zooms, clipped edges, alpha0/.25/.5/1, invisible RGB bit-exact, CPU oracle within format/geometry precision, credits zero
+fractional area f64: tiled=true max_hdr_abs_error=0.0019468796896271456; three zooms, clipped edges, alpha0/.25/.5/1, invisible RGB bit-exact, CPU oracle within format/geometry precision, credits zero
+ok
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test gpu_resident_compute_rows_match_cpu_exposure_reference ... resident raster adapter: Metal Apple M4 Max
+ok
+test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification
+test linear_gray_and_straight_alpha_composite_match_display_reference ... raster readback adapter: Metal Apple M4 Max
+ok
+test linear_hdr_attachment_preserves_bright_negative_and_exposed_channels ... HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test nonfinite_raster_controls_produce_exact_finite_sdr_hdr_frames ... ok
+test pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry ... aspect transition adapter: Metal Apple M4 Max
+ok
+test planned_visible_regions_match_whole_image_during_pan_zoom_and_pixel_aspect ... visible-region planner: 60 exact full SDR/HDR view frames; uploads=46; offscreen_skips=14; aspects=0.5/1/2; root/queue=0
+ok
+test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU
+test raster_queue_admission_accounts_alignment_and_completion_ownership ... raster queue adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test resident_compute_tiles_match_cpu_sdr_hdr_across_aligned_and_packed_rows ... resident tiles: 130x5; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident tiles: 5x130; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident tiles: 128x130; SDR/HDR exact; padded_bytes=270336; compute/queue/texture root=0
+resident tiles: 130x130; SDR/HDR exact; padded_bytes=278784; compute/queue/texture root=0
+resident tiles: 20000x64; SDR/HDR exact; padded_bytes=20481024; compute/queue/texture root=0
+ok
+test resident_source_regions_preserve_full_geometry_hdr_and_transactional_admission ... resident source region=[35, 40, 130, 70]; bytes=145600; full geometry SDR/HDR exact; root/queue=0
+resident source region=[35, 40, 130, 70]; bytes=147840; full geometry SDR/HDR exact; root/queue=0
+resident source region=[0, 0, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+resident source region=[130, 90, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+ok
+test small_resident_region_renders_source_above_eager_atlas_limit ... 6000x6000 source=576000000 bytes > eager limit; resident 128x128=262144 bytes; full HDR viewport exact; root/queue=0
+ok
+test split_comparison_reuses_resident_pixels_and_matches_both_reference_exposures ... split comparison adapter: Metal Apple M4 Max
+ok
+test texture_budget_preserves_loaded_image_on_refusal_and_releases_owners ... texture budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test tiled_bayer_resident_crop_and_all_orientations_match_materialized_sdr_hdr ... Bayer geometry Normal: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry HorizontalFlip: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Rotate180: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry VerticalFlip: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Transpose: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Rotate90: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Transverse: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+Bayer geometry Rotate270: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero
+ok
+test tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr ... tiled raster adapter: Metal Apple M4 Max; negotiated extent64
+TILED_UPLOAD_CANCEL dimensions=130x5 hdr=false admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=130x5 hdr=true admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=5x130 hdr=false admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=5x130 hdr=true admitted_cutoffs=5 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=130x130 hdr=false admitted_cutoffs=11 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+TILED_UPLOAD_CANCEL dimensions=130x130 hdr=true admitted_cutoffs=11 previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0
+ok
+test transparent_rgb_is_removed_before_bilinear_interpolation ... ok
+test uploaded_rows_and_rgb_channels_keep_their_positions ... ok
+test weighted_fragment_compute_float32_accuracy_against_independent_f64 ... Directional independent f64 audit: max_abs_fragment=0.0000005339379818281031 max_abs_compute=0.0000005336090245222636 max_abs_cross_stage=0.000000476837158203125
+Vng independent f64 audit: max_abs_fragment=0.0000004562982449662911 max_abs_compute=0.00000044675847732378315 max_abs_cross_stage=0.000000476837158203125
+Rcd independent f64 audit: max_abs_fragment=0.0000005488710836942801 max_abs_compute=0.0000005068938233598885 max_abs_cross_stage=0.000000476837158203125
+ok
+
+test result: ok. 28 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 44.44s
+

@@ -1,0 +1,120 @@
+{
+  "status": "all65536 palette indices now independently verified in each native transfer syntax and full-image Metal/cache/swap pipeline",
+  "production_changes": false,
+  "change": "three maximum16 fixtures expanded from six selected indices to256x256frames containing everyuint16code exactlyonce; test view selects512x512zoom2 for those frames instead of small cropped64x32viewport",
+  "sources": [
+    {
+      "file": "tests/fixtures/raster/dicom-palette-big-endian-maximum16.dcm",
+      "source_bytes": 524874,
+      "sha256": "b228b6b3ce6cab33c6787c0f19f9a7ff4837c4b40ea8aeb3bc62e8058ef7ee74",
+      "unique_indices": 65536,
+      "minimum": 0,
+      "maximum": 65535,
+      "source_and_native_rgba16_peak": 1049162,
+      "native_rgba16_bytes": 524288,
+      "prepared_rgba32f_bytes": 1048576,
+      "oracle_sha256": "e3aaabc44e5fe1a4a853825c92a3cabe82fbdbb75c75d2e0c5e6e7cb1bbd971b"
+    },
+    {
+      "file": "tests/fixtures/raster/dicom-palette-explicit-maximum16.dcm",
+      "source_bytes": 524870,
+      "sha256": "cd13b0071b9ed94176a28836cafaae98d0a1569364c168fc5c2ae44462c5fe57",
+      "unique_indices": 65536,
+      "minimum": 0,
+      "maximum": 65535,
+      "source_and_native_rgba16_peak": 1049158,
+      "native_rgba16_bytes": 524288,
+      "prepared_rgba32f_bytes": 1048576,
+      "oracle_sha256": "e3aaabc44e5fe1a4a853825c92a3cabe82fbdbb75c75d2e0c5e6e7cb1bbd971b"
+    },
+    {
+      "file": "tests/fixtures/raster/dicom-palette-implicit-maximum16.dcm",
+      "source_bytes": 524856,
+      "sha256": "7806d49aadf0e10d1f2a3630542064b4eed2a11cab2e9320eaa98dfdc34c5aec",
+      "unique_indices": 65536,
+      "minimum": 0,
+      "maximum": 65535,
+      "source_and_native_rgba16_peak": 1049144,
+      "native_rgba16_bytes": 524288,
+      "prepared_rgba32f_bytes": 1048576,
+      "oracle_sha256": "e3aaabc44e5fe1a4a853825c92a3cabe82fbdbb75c75d2e0c5e6e7cb1bbd971b"
+    }
+  ],
+  "fixture_generator": "scripts/generate-dicom-palette-fixtures.py",
+  "unchanged_other_palette_sources": 18,
+  "native_oracle": {
+    "indices": "pydicom raw pixel_array, all65536unique codes verified from each final source",
+    "table_storage": "independent NumPy endian interpretation and component arrays",
+    "output": "every native RGBA16 component equals full independent NumPy LUT oracle; all3oracles have identical SHA256e3aaabc44e5fe1a4a853825c92a3cabe82fbdbb75c75d2e0c5e6e7cb1bbd971b",
+    "full_palette_pixels_compared": 196608,
+    "precision": "native16-bit samples retained; display inputs prepared linearRGBA32Float; HDR readbacks intentionallybinary16, not a claim all65536sourcelevels remain distinct after display quantization"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 31,
+      "failed": 0,
+      "ignored": 5,
+      "log": "/tmp/dicom-palette-allindices-scientific-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-palette-allindices-cpu-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-palette-allindices-metal-20261016.log"
+    }
+  },
+  "metal": {
+    "adapter": "Apple M4 Max Metal",
+    "optional_skip": false,
+    "states": 288,
+    "full_palette_frames": 3,
+    "full_palette_viewport": [
+      512,
+      512
+    ],
+    "full_palette_zoom": 2,
+    "source_extent": [
+      256,
+      256
+    ],
+    "full_palette_readbacks": 18,
+    "small_viewport_readbacks": 1830,
+    "total_sdr_hdr_readbacks": 1848,
+    "comparison": "full mapped output buffers reference/nativewarm/restored, including full image for all3maximumpalettes; reference input independent but same color conversion and renderer",
+    "duration_seconds": 5.87,
+    "readback_helper": "crates/rrrah-gpu/tests/common/mod.rs creates texture/copy buffers at requested extent and maps everyrow; this checkpoint inspects the helper instead of relying on a merely named full-frame test"
+  },
+  "storage": {
+    "ram_full_pressure_hits": 288,
+    "swap_writes": 288,
+    "swap_reads": 288,
+    "swap_errors": 0,
+    "managed_root_limit": 8388608,
+    "managed_root_peak": 8388608,
+    "managed_final": 0,
+    "initial_ram_byte_cap": 2097152,
+    "initial_ram_count_cap": 1,
+    "swap_byte_cap": 8388608,
+    "swap_count_cap": 384,
+    "queue_bytes": 2097152,
+    "queue_count": 4,
+    "restore_bytes": 2097152,
+    "reason": "1MiB preparedfullframe mustfit managed root/RAM/queue/restore caps; no precisionreduction or source truncation; later4KiBRAMphase verifies backgroundbigrestore cannot displace visibleentry",
+    "visible_ttl_protected": true,
+    "blocked_decoder_reverse_prefetch": true,
+    "stale_generation_refused": true,
+    "scope": "peakincludes artificial pressure reservations, not processRSS; synthetic controls, not multi-hour real-photo/physicalslowdisk soak"
+  },
+  "evidence_updates": "supersedes previous nativepalette maximum16 fixture hashes and small endpoint-only evidence; other18palettefiles byte unchanged; container/frame totals unchanged",
+  "remaining": [
+    "segmented/alpha/enhanced palettes and compressed DICOM",
+    "full100format fidelity qualification",
+    "NVIDIA hardware deferred by user"
+  ]
+}

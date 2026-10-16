@@ -1,0 +1,127 @@
+{
+  "status": "Measurement isolates source fingerprint from resident cache access; production freshness checks unchanged",
+  "runs": [
+    {
+      "run": 1,
+      "stages": {
+        "decode_prepare": {
+          "samples": 64,
+          "median_ns": 2068292,
+          "p95_ns": 2261334,
+          "max_ns": 2544541
+        },
+        "ram": {
+          "samples": 64,
+          "median_ns": 130875,
+          "p95_ns": 166459,
+          "max_ns": 302625
+        },
+        "fingerprint": {
+          "samples": 64,
+          "median_ns": 124833,
+          "p95_ns": 156334,
+          "max_ns": 315958
+        },
+        "resolved_ram": {
+          "samples": 64,
+          "median_ns": 2750,
+          "p95_ns": 6042,
+          "max_ns": 69875
+        },
+        "swap": {
+          "samples": 63,
+          "median_ns": 793666,
+          "p95_ns": 922500,
+          "max_ns": 1044417
+        }
+      }
+    },
+    {
+      "run": 2,
+      "stages": {
+        "decode_prepare": {
+          "samples": 64,
+          "median_ns": 2126541,
+          "p95_ns": 5463375,
+          "max_ns": 6619583
+        },
+        "ram": {
+          "samples": 64,
+          "median_ns": 123583,
+          "p95_ns": 136916,
+          "max_ns": 163875
+        },
+        "fingerprint": {
+          "samples": 64,
+          "median_ns": 127333,
+          "p95_ns": 156083,
+          "max_ns": 264375
+        },
+        "resolved_ram": {
+          "samples": 64,
+          "median_ns": 2792,
+          "p95_ns": 6500,
+          "max_ns": 10792
+        },
+        "swap": {
+          "samples": 63,
+          "median_ns": 810917,
+          "p95_ns": 877958,
+          "max_ns": 1540792
+        }
+      }
+    },
+    {
+      "run": 3,
+      "stages": {
+        "decode_prepare": {
+          "samples": 64,
+          "median_ns": 2152375,
+          "p95_ns": 6691333,
+          "max_ns": 10743958
+        },
+        "ram": {
+          "samples": 64,
+          "median_ns": 124250,
+          "p95_ns": 156292,
+          "max_ns": 170041
+        },
+        "fingerprint": {
+          "samples": 64,
+          "median_ns": 120500,
+          "p95_ns": 127459,
+          "max_ns": 148625
+        },
+        "resolved_ram": {
+          "samples": 64,
+          "median_ns": 2750,
+          "p95_ns": 3042,
+          "max_ns": 9250
+        },
+        "swap": {
+          "samples": 63,
+          "median_ns": 790583,
+          "p95_ns": 827875,
+          "max_ns": 959417
+        }
+      }
+    }
+  ],
+  "source": "64 separate copies of authored256x256 full-ramp RLE DICOM; warm OS file cache; Apple M4 Max; optimized test profile",
+  "measurement": "Fingerprint and resolved-key RAM intervals alternate; production RAM and swap stage includes full source key resolution. Exact pixels checked outside timing; decoder panic guards forbid hidden redecodes",
+  "finding": "Resident cache lookup is about2.75-2.79us median; fingerprint/key resolution is about120.5-127.3us median and dominates end-to-end RAM path in this workload",
+  "decision": "No metadata-only memoization introduced: sampled content hash is part of existing stale-file detection, including same-length edits. This evidence does not prove a safe faster fingerprint implementation",
+  "memory": {
+    "peak_bytes": 2883584,
+    "root_cap_bytes": 8388608,
+    "final_bytes": 0
+  },
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "cc453e62a2dd2cca3e7d1cd0d9727a24a2da28916090b3fab08ff0f05f969aad"
+  },
+  "limits": [
+    "Separate stage medians cannot be subtracted as paired per-request costs",
+    "Does not measure slow disks, large independent clinical corpus or GPU display latency",
+    "No speedup claimed; no production implementation changed"
+  ]
+}

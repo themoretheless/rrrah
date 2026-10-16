@@ -1,0 +1,43 @@
+{
+  "status": "corruption_recovery_matrix_passed",
+  "scope": "83-byte float32 raster swap object with ICC profile, signed zero, NaN payload, sample scale, hotspot and image selection",
+  "matrix": {
+    "single_bit_mutations": 664,
+    "all_truncation_lengths": 83,
+    "appended_tail": 1,
+    "total": 748
+  },
+  "invariants": [
+    "Changed object never published as a raster",
+    "Corrupted entry removed; repeat lookup does not increment errors",
+    "Restored allocation credit is zero after every failure",
+    "Disk quota returns to one unchanged neighbouring object",
+    "Neighbour remains bit-exact and readable after every failure",
+    "Same-key replacement and restore succeeds for all 748 cases",
+    "Queue occupancy returns to zero; restored payload peak19 bytes; final zero"
+  ],
+  "checks": {
+    "cache_lib": {
+      "passed": 142,
+      "failed": 0,
+      "ignored": 2
+    },
+    "swap_lib": {
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    },
+    "clippy": {
+      "status": "failed",
+      "diagnostics": 90,
+      "scope": "reported locations outside added matrix test; includes disk literal formatting, float equality and chunk conversion",
+      "log": "clippy.log"
+    }
+  },
+  "limits": [
+    "This is a deterministic small-object integrity and recovery matrix, not a physical slow-disk or long-duration collection qualification",
+    "No new GPU/HDR or performance claim",
+    "Production logic unchanged in this step"
+  ],
+  "source_sha256": "0a8ec35609b274dc8d58a798e5d8a5ac9958700f005199dff6ff979b55634c79"
+}

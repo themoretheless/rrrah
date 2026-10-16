@@ -1,0 +1,78 @@
+{
+  "status": "three_live_window_notification_recovery_cases_passed_ordinary231_and_nondebug_check_passed",
+  "scope": "real main and telemetry windows; simulated loss notifications, never an intentional GPU hang",
+  "checks": [
+    "both original windows submitted frames before injection",
+    "new successful device-construction epochs in both windows",
+    "new selected page ready and both replacement windows submitted frames",
+    "GPU completion waits succeed",
+    "path/page/pan/zoom/exposure and HUD view bits preserved"
+  ],
+  "flag": "RRRAH_QUALIFY_GPU_RECOVERY=1 (debug builds only)",
+  "deadline_seconds": 30,
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "c4b4dca089050f536947b90c946fc54ebe725ef3f21bd803b95c6b30c868c491",
+    "crates/rrrah-app/src/gpu_recovery_probe.rs": "7eff996652c15b3a7724de3149a799586946b55cea0d20cb1aa5c752a7286d46"
+  },
+  "limitations": [
+    "window lifecycle probe does not inject real driver/device failure",
+    "no pixel readback of drawable in this probe",
+    "does not fix original GPU hang trigger"
+  ],
+  "initial_build_exit_code": 101,
+  "initial_build_reason": "derive attribute attached to inserted module instead of WakeEvent; fixed placement",
+  "first_run": {
+    "exit_code": 1,
+    "phase": 0,
+    "injection_occurred": false,
+    "surface": "Occluded",
+    "ready_generation": 0,
+    "log": "avif-sdr-first.log"
+  },
+  "clock_followup": "start30s deadline at first event-loop qualification tick, not before cold GPU/window construction; initial startup latency remains unqualified",
+  "active_clock_build_session": 61437,
+  "active_clock_attempt": {
+    "exit_code": 1,
+    "injection_occurred": true,
+    "reason": "device hash reused after old object freed; unsuitable persistent identity check",
+    "replacement": "monotonic per-successful-constructor epochs; no old device retained"
+  },
+  "session_state": "on console true; lock flag absent; first Occluded was not sufficient to conclude locked",
+  "cases": [
+    {
+      "case": "avif-sdr",
+      "exit_code": 0,
+      "wall_seconds": 2.74802975,
+      "hdr_requested": false,
+      "page": 0
+    },
+    {
+      "case": "tiff-page1-sdr",
+      "exit_code": 0,
+      "wall_seconds": 0.6494327920000003,
+      "hdr_requested": false,
+      "page": 1
+    },
+    {
+      "case": "exr-hdr",
+      "exit_code": 0,
+      "wall_seconds": 29.668815207999998,
+      "hdr_requested": true,
+      "page": 0
+    }
+  ],
+  "device_identity_scope": "monotonic host construction epochs increment only after actual successful native-device setup; raw pointer hashes were removed",
+  "binary_sha256": "7e9092ca1a28de046ce188d0fb89c9eb900c319d61d6fafd3dfa61a98b84850b",
+  "startup_observation": "HDR case wall29.67s, mostly initial setup before first ready; cold-start latency remains open and is not a speed qualification",
+  "nondebug_check": {
+    "exit_code": 0,
+    "scope": "root rrrah crate with debug-assertions disabled; probe code/fields absent; not release performance build"
+  },
+  "ordinary": {
+    "exit_code": 0,
+    "passed": 231,
+    "failed": 0,
+    "ignored": 63
+  },
+  "source_drift": false
+}

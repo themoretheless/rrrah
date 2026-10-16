@@ -1,0 +1,23 @@
+{
+  "state": "passed",
+  "exit_code": 0,
+  "completed_utc": "2026-10-16T17:02:54.669358+00:00",
+  "summaries": 307,
+  "passed": 2365,
+  "failed": 0,
+  "ignored": 293,
+  "empty_summaries": 161,
+  "source_changes_during_execution": {
+    "crates/rrrah-app/src/main.rs": {
+      "before": "38ad7360b8aa150183bca21110618a4d5fc4d0ccf4adce1a9ac944c2b8c71605",
+      "after": "fb8e74be5a8e034f9be9ad45212b67648d15525bf45402a19141d530ac67232e"
+    }
+  },
+  "log_sha256": "48c017ae7e5d326c4e73ce7742608b7f619700a86fd6092e7b7880b19d0182df",
+  "limitations": [
+    "Default features only; ignored tests and doctests excluded.",
+    "PCX/WAL optimization and added Metal palette regression were validated separately during this run; broad log is not an immutable final-source release gate.",
+    "Existing unused test import warnings in bench includes remain.",
+    "No NVIDIA/CUDA hardware or calibrated physical HDR proof."
+  ]
+}

@@ -1,0 +1,9 @@
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 40.81s
+     Running `target/debug/rrrah tests/fixtures/raster/float-shifted-window-negative.exr`
+LIVE_RECOVERY_INJECT path=tests/fixtures/raster/float-shifted-window-negative.exr page=0 devices=[1, 2] simulated_notification=true
+[2026-10-16T11:29:03Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-10-16T11:29:03Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RECOVERY_PASS path=tests/fixtures/raster/float-shifted-window-negative.exr page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true

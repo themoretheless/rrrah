@@ -1,0 +1,104 @@
+{
+  "status": "Configurable directional prefetch windows exercised through native multiframe RLE decoder and app cache admission",
+  "fixture": {
+    "path": "tests/fixtures/raster/dicom-rle-prefetch-series64.dcm",
+    "frames": 64,
+    "size_bytes": 6152,
+    "producer": "scripts/generate-dicom-prefetch-series.py, independent pydicom RLE encoder; repeats3 authored RGB frames",
+    "oracle": "Each selected frame compared with prepared original3-frame source at index modulo3; not64 independent clinical images"
+  },
+  "scenarios": {
+    "count": 120,
+    "selected_positions": [
+      0,
+      1,
+      31,
+      62,
+      63
+    ],
+    "directions": [
+      "forward",
+      "backward"
+    ],
+    "windows_behind_ahead": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        "usize::MAX",
+        "usize::MAX"
+      ]
+    ],
+    "policies": [
+      {
+        "max_bytes": 1048576,
+        "max_entries": 2
+      },
+      {
+        "max_bytes": 96,
+        "max_entries": null
+      }
+    ],
+    "root_bytes": 65536
+  },
+  "assertions": [
+    "All decoded frames match native original reference pixels",
+    "Selected image_index and64-frame image_count remain exact",
+    "Zero window leaves only visible entry",
+    "Visible plus highest-priority nearest neighbour remain resident; farther frames cannot evict leased neighbours under count or byte limits",
+    "RAM hits guarded by panic decoder for visible and nearest after all prefetch requests",
+    "All managed allocations released at end of every scenario"
+  ],
+  "tests": {
+    "targeted": {
+      "passed": 1,
+      "failed": 0
+    },
+    "dicom_cpu_group": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 2
+    },
+    "metal_after_fingerprint_optimization": {
+      "passed": 1,
+      "failed": 0,
+      "adapter": "Metal Apple M4 Max",
+      "states": 352,
+      "readbacks": 2232,
+      "swap_writes": 352,
+      "swap_reads": 352,
+      "final_managed_bytes": 0
+    }
+  },
+  "checks": {
+    "focused_rustfmt": "passed"
+  },
+  "limitations": [
+    "Direct app preloader/policy test, not UI automation or full worker message-queue scheduling test",
+    "No TTL in new120scenario matrix; separate352state test verifies nonzero TTL and stale cancellation",
+    "64-frame authored series is small and repetitive; not large-corpus or physical slow-disk proof",
+    "NVIDIA remains deferred per user"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "e955f5d03c34924f2f5aeb0859d7099008349fe294878136633e83479a5e70e8",
+    "tests/fixtures/raster/dicom-rle-prefetch-series64.dcm": "936b1bc22ce79f2517ad4101f8d912e393397c7c46bf27c4c60290e65e71dc63",
+    "scripts/generate-dicom-prefetch-series.py": "a12feb47f346e2c5b07aecc5cdf4442bdefc9c620a4663ed06d49109d85c7fc7"
+  }
+}

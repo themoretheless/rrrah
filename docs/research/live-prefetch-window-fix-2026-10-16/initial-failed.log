@@ -1,0 +1,9 @@
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr page=0 devices=[1, 2] simulated_notification=true
+[2026-10-16T15:10:00Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-10-16T15:10:00Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RASTER_PREFETCH_READY generation=2 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd retained=true count=1
+LIVE_RASTER_PREFETCH_READY generation=2 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb retained=true count=2
+LIVE_RASTER_PREFETCH_READY generation=2 path=/tmp/rrrah-live-prefetch-20261016/01-left.psd retained=true count=3
+LIVE_RECOVERY_PASS path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr page=0 devices=[3, 4] main_frames=2 telemetry_frames=3 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RECOVERY_FAIL live recovery timed out phase=5 ready=Some(3)
+Error: live recovery qualification failed: Some("live recovery timed out phase=5 ready=Some(3)")

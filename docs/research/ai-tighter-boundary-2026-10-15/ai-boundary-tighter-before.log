@@ -1,0 +1,201 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/target/ai-native-harness-20261013/hayro-interpret)
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1450:25
+     |
+1450 | ...   for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0...
+     |                       ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+     |
+1450 -         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+1450 +         for inverse in [Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1450:49
+     |
+1450 | ...   for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0...
+     |                                               ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1450 -         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+1450 +         for inverse in [kurbo::Affine::IDENTITY,Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1450:96
+     |
+1450 | ...   for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0...
+     |                                                                                              ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1450 -         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+1450 +         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),Affine::new([-1.,0.,0.,1.,8.,0.])] {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1485:107
+     |
+1485 |         let mut source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();source.inverse=kurbo::Affine::IDENTITY;
+     |                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1485 -         let mut source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();source.inverse=kurbo::Affine::IDENTITY;
+1485 +         let mut source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();source.inverse=Affine::IDENTITY;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1497:19
+     |
+1497 |         let polls=std::cell::Cell::new(0);
+     |                   ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1497 -         let polls=std::cell::Cell::new(0);
+1497 +         let polls=Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1500:23
+     |
+1500 |             let count=std::cell::Cell::new(0);
+     |                       ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1500 -             let count=std::cell::Cell::new(0);
+1500 +             let count=Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1511:25
+     |
+1511 | ...   for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0...
+     |                       ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1511 -         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+1511 +         for inverse in [Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1511:49
+     |
+1511 | ...   for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0...
+     |                                               ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1511 -         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+1511 +         for inverse in [kurbo::Affine::IDENTITY,Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1511:96
+     |
+1511 | ...   for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0...
+     |                                                                                              ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1511 -         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
+1511 +         for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),Affine::new([-1.,0.,0.,1.,8.,0.])] {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1521:23
+     |
+1521 | ...   let polls=std::cell::Cell::new(0);source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{polls.set(po...
+     |                 ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1521 -             let polls=std::cell::Cell::new(0);source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{polls.set(polls.get()+1);false},&mut 1000).unwrap();
+1521 +             let polls=Cell::new(0);source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{polls.set(polls.get()+1);false},&mut 1000).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1522:52
+     |
+1522 | ...   for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(source.mesh_native_affine_gradient_bounds(0,&vertices...
+     |                                              ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1522 -             for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());}
+1522 +             for stop in 1..=polls.get() {let count=Cell::new(0);assert!(source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());}
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1544:23
+     |
+1544 |             let polls=std::cell::Cell::new(0);
+     |                       ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1544 -             let polls=std::cell::Cell::new(0);
+1544 +             let polls=Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:1547:27
+     |
+1547 |                 let count=std::cell::Cell::new(0);
+     |                           ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1547 -                 let count=std::cell::Cell::new(0);
+1547 +                 let count=Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2057:67
+     |
+2057 | ...   Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(crate::shading::ShadingType::TriangleMesh {triangles:vec![native_t...
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2057 -         Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(crate::shading::ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.,0.5,0.125,1.],[1.,0.5,0.875,0.],[0.,0.5,0.125,1.]],4)],function:None});
+2057 +         Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.,0.5,0.125,1.],[1.,0.5,0.875,0.],[0.,0.5,0.125,1.]],4)],function:None});
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2080:67
+     |
+2080 | ...   Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(crate::shading::ShadingType::TriangleMesh {triangles:vec![native_t...
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2080 -         Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(crate::shading::ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.25;4];3],4)],function:None});
+2080 +         Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.25;4];3],4)],function:None});
+     |
+
+warning: `hayro-interpret` (lib test) generated 15 warnings (run `cargo fix --lib -p hayro-interpret --tests` to apply 15 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 24.48s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/lib.rs (target/ai-native-harness-20261013/hayro/target/debug/deps/hayro_interpret-d399f4c587eae283)
+
+running 1 test
+test shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral ... 
+thread 'shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral' (25085853) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/shading/adaptive.rs:1143:9:
+area=64.3984375
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 125 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

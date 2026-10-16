@@ -1,0 +1,65 @@
+{
+  "change": "A completed but byte-ambiguous deferred proof retries original evaluation. Source allowance and polygon geometry remainder both continue; no budget reset. Other failures/cancellation do not retry. Explicit white output remains separate from native/HDR intent.",
+  "tests": {
+    "passed": 296,
+    "failed": 0,
+    "ignored": 12,
+    "regression": "Half-black pixel byte threshold: deferred proof ambiguous, original fallback yields128; same geometry allowance decreases on both attempts; exhausted allowance refuses."
+  },
+  "real": {
+    "pixel": [
+      138,
+      34
+    ],
+    "fallback_completed": true,
+    "original_native_and_white_results_exact_against_direct_original_control": true,
+    "rgb8": [
+      219,
+      185,
+      167
+    ],
+    "source_work_total": 667774,
+    "source_limit": 4000000,
+    "geometry_total": 12856089,
+    "geometry_limit": 40000000,
+    "geometry_remaining": 27143911,
+    "peak_admitted_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "accelerated_control_pixel": [
+      147,
+      59
+    ],
+    "accelerated_rgb8": [
+      205,
+      151,
+      128
+    ],
+    "accelerated_source_work": 3831146
+  },
+  "source_sha256": {
+    "vendor/hayro/src/native_spatial.rs": "9e6e6a99aabbc97b6a83fcf4bdd5d3939e7a745718e813540c9438bb1da26ae7"
+  },
+  "full_page": {
+    "status": "refused",
+    "completed": 17304,
+    "total": 74046,
+    "refused_pixel": [
+      147,
+      57
+    ],
+    "source_work_at_refusal": 3581508,
+    "source_limit": 4000000,
+    "shared_geometry_remaining": 0,
+    "geometry_limit": 40000000,
+    "deadline": false,
+    "final_credit": 0,
+    "published_ppm": false,
+    "log": "/tmp/ai-typed-white-output-page4m-v5.log",
+    "output_directory": "/tmp/rrrah-ai-typed-white-page-v5-20261015.avTLo6"
+  },
+  "limitations": [
+    "No completed full page, independent72dpi match, production AI or HDR qualification.",
+    "Fallback can still refuse if remaining ordinary allowance is insufficient."
+  ]
+}

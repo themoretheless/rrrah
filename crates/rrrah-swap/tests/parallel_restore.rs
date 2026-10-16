@@ -11,7 +11,7 @@ static SERIAL: Mutex<()> = Mutex::new(());
 const BLOCK: usize = 64 * 1024;
 fn fixture() -> (tempfile::TempDir, SwapStore, rrrah_swap::SwapHandle, Vec<u8>) {
     let directory = tempfile::tempdir().unwrap();
-    let source: Vec<_> = (0..8 * 1024 * 1024 + 97).map(|i| (i % 251) as u8).collect();
+    let source: Vec<_> = (0..8 * 1024 * 1024 + 97).map(|i| u8::try_from(i % 251).unwrap()).collect();
     let store = SwapStore::new(
         directory.path(),
         SwapLimits {

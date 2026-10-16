@@ -1,0 +1,53 @@
+{
+  "status": "Orthogonal MRC cell metric and axis permutations preserved through window, RAM/swap and actual Metal SDR/HDR rendering",
+  "states": {
+    "nrrd": 192,
+    "mrc_baseline": 40,
+    "mrc_calibrated_variants": 240,
+    "fits": 20,
+    "total": 492
+  },
+  "metric_fixture": "For each independent MRC source derive6temporary header variants, retaining all sample/extended-header bytes. Set physical sampling4,5,6, cell lengths8,20,48angstroms, all angles90degrees; axis permutations123,132,213,231,312,321. Expected displayed aspects0.5,0.25,2,0.5,4,2. Both source endian families included.",
+  "oracle": "Original mrcfile native-sample oracle plus explicit window reference and authored analytical metric; no independent calibrated producer geometry corpus claim",
+  "metal": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "passed": 1,
+    "failed": 0,
+    "seconds": 9.45,
+    "positive_readbacks": 2952,
+    "square_pixel_negative_controls": 736,
+    "total_readbacks": 3688
+  },
+  "cache": {
+    "ram_pressure_hits": 492,
+    "swap_writes": 492,
+    "swap_reads": 492,
+    "errors": 0,
+    "dropped": 0,
+    "decode_gate_blocked_on_prefetch": true,
+    "visible_frame_preserved": true,
+    "final_managed_bytes": 0
+  },
+  "cpu_group": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 3
+  },
+  "checks": {
+    "focused_rustfmt": "passed"
+  },
+  "limits": [
+    "Small5x3authored fixture planes; no large-volume performance claim",
+    "Storage-plane aspect only, not MRC handedness, world-space orientation, origin positioning or oblique rectification",
+    "Scalar windows0..1; not above1 scientific HDR/panel photometry qualification",
+    "No new TTL matrix; existing DICOM/cache nonzero TTL checks separate",
+    "No NVIDIA/CUDA hardware run; full100format objective remains active"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "6e2e6f332ae578d37c721bb4256b7aafe6939448b161516f2de15828ba6a8b61",
+    "crates/rrrah-scientific/src/mrc.rs": "f4c0a54124d4be8a30e72d3049db0db463462c15742098d17bd69a3a23c3ff1e",
+    "crates/rrrah-scientific/src/nrrd.rs": "abbf241b89ca31eaf7f54aa7a1376518b719533e59a543cd7936aaeeb070930f",
+    "crates/rrrah-scientific/src/scientific.rs": "7b333926431ca3ecf0acb5344cb68d1e16eb49061445d1f6224351479124a5f3"
+  }
+}

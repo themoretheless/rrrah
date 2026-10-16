@@ -263,6 +263,13 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
             None => Ok(None),
         }
     }
+    /// Conservative count-only admission check without eviction or recency changes.
+    /// Existing keys may replace membership; byte/TTL constraints still apply later.
+    pub fn can_admit_key_by_count(&self, key: &K) -> bool {
+        self.limits.max_entries.is_none_or(|max| {
+            max > 0 && (self.entries.contains_key(key) || self.protected.len() < max)
+        })
+    }
     fn needs_slot(&self) -> bool {
         self.limits
             .max_entries
@@ -408,6 +415,244 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
 #[cfg(test)]
 mod tests {
     use super::WeightedLru;
+    #[test]
+    fn limit_update_matrix_is_atomic_preserves_pins_and_fixed_deadlines() {
+        use super::CacheLimits;
+        use std::time::Duration;
+        let snapshot_entries = |cache: &WeightedLru<u8, u8>| {
+            cache
+                .entries
+                .iter()
+                .map(|(&k, v)| (k, v.value, v.weight, v.last_used, v.deadline))
+                .collect::<std::collections::BTreeSet<_>>()
+        };
+        let mut cases = 0;
+        for mask in 0u8..8 {
+            for old_ttl in [None, Some(Duration::ZERO)] {
+                for bytes in [0, 1, 3, 4, 7, 8, 11, 12, 13] {
+                    for count in [None, Some(0), Some(1), Some(2), Some(3), Some(4)] {
+                        for ttl in [None, Some(Duration::ZERO), Some(Duration::MAX)] {
+                            let mut cache = WeightedLru::with_limits(CacheLimits {
+                                max_bytes: 12,
+                                max_entries: Some(3),
+                                ttl: old_ttl,
+                            });
+                            for key in 0u8..3 {
+                                assert!(cache.insert(key, key, 4));
+                            }
+                            for key in 0u8..3 {
+                                if mask & (1 << key) != 0 {
+                                    assert!(cache.pin(&key));
+                                }
+                            }
+                            let previous = snapshot_entries(&cache);
+                            let clock = cache.clock;
+                            let pins = mask.count_ones() as usize;
+                            let accepted =
+                                pins as u64 * 4 <= bytes && count.is_none_or(|limit| pins <= limit);
+                            let result = cache.set_limits(CacheLimits {
+                                max_bytes: bytes,
+                                max_entries: count,
+                                ttl,
+                            });
+                            assert_eq!(result.is_some(), accepted);
+                            if let Some(victims) = result {
+                                assert_eq!(cache.capacity(), bytes);
+                                assert_eq!(cache.limits().max_entries, count);
+                                assert_eq!(cache.limits().ttl, ttl);
+                                let mut survivors = vec![0u8, 1, 2];
+                                let mut expected = Vec::new();
+                                while survivors.len() as u64 * 4 > bytes
+                                    || count.is_some_and(|limit| survivors.len() > limit)
+                                {
+                                    let index =
+                                        survivors.iter().position(|key| mask & (1 << key) == 0).unwrap();
+                                    expected.push(survivors.remove(index));
+                                }
+                                assert_eq!(
+                                    victims,
+                                    expected.iter().map(|&key| (key, key)).collect::<Vec<_>>()
+                                );
+                                assert_eq!(cache.len(), survivors.len());
+                                assert_eq!(cache.resident_weight(), survivors.len() as u64 * 4);
+                                for key in survivors {
+                                    let entry = &cache.entries[&key];
+                                    let old = previous.iter().find(|v| v.0 == key).unwrap();
+                                    assert_eq!((entry.last_used, entry.deadline), (old.3, old.4));
+                                    assert_eq!(cache.protected.contains(&key), mask & (1 << key) != 0);
+                                }
+                                if ttl == Some(Duration::MAX) {
+                                    let snapshot = cache
+                                        .entries
+                                        .keys()
+                                        .copied()
+                                        .collect::<std::collections::BTreeSet<_>>();
+                                    assert!(!cache.insert_prefetch(99, 99, 1));
+                                    assert_eq!(
+                                        cache
+                                            .entries
+                                            .keys()
+                                            .copied()
+                                            .collect::<std::collections::BTreeSet<_>>(),
+                                        snapshot
+                                    );
+                                }
+                            } else {
+                                assert_eq!(cache.capacity(), 12);
+                                assert_eq!(cache.limits().max_entries, Some(3));
+                                assert_eq!(cache.limits().ttl, old_ttl);
+                                assert_eq!(cache.protected.len(), pins);
+                                for key in 0u8..3 {
+                                    assert_eq!(cache.protected.contains(&key), mask & (1 << key) != 0);
+                                }
+                                assert_eq!(snapshot_entries(&cache), previous);
+                            }
+                            assert_eq!(cache.clock, clock);
+                            cases += 1;
+                        }
+                    }
+                }
+            }
+        }
+        assert_eq!(cases, 2592);
+    }
+
+    #[test]
+    #[expect(
+        clippy::too_many_lines,
+        reason = "Keep the reference state machine and generated operations together"
+    )]
+    fn deterministic_policy_model_covers_zero_limits_expiry_pins_and_replacement() {
+        use super::CacheLimits;
+        use std::time::{Duration, Instant};
+        #[derive(Clone, Copy)]
+        struct Item {
+            value: u64,
+            weight: u64,
+            rank: u64,
+            expires: Option<u64>,
+            pin: bool,
+        }
+        let base = Instant::now();
+        let mut operations = 0;
+        for capacity in [0, 1, 8, 20] {
+            for count in [None, Some(0), Some(1), Some(3)] {
+                for ttl in [None, Some(0), Some(5)] {
+                    let mut cache = WeightedLru::with_limits(CacheLimits {
+                        max_bytes: capacity,
+                        max_entries: count,
+                        ttl: ttl.map(Duration::from_millis),
+                    });
+                    let mut model: [Option<Item>; 16] = [None; 16];
+                    let mut rank = 0;
+                    let mut seed = 0x1234_5678_9abc_def0u64;
+                    let mut time = 0u64;
+                    for step in 0..2000u64 {
+                        seed = seed.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1);
+                        let key = ((seed >> 8) % 16) as usize;
+                        time += (seed >> 32) % 3;
+                        let now = base + Duration::from_millis(time);
+                        match seed % 7 {
+                            0 | 1 => {
+                                let weight = (seed >> 16) % 12;
+                                let mut trial = model;
+                                let pin = trial[key].is_some_and(|v| v.pin);
+                                trial[key] = None;
+                                let mut candidates: Vec<_> =
+                                    (0..16).filter(|&i| trial[i].is_some_and(|v| !v.pin)).collect();
+                                candidates.sort_unstable_by_key(|&i| {
+                                    let v = trial[i].unwrap();
+                                    (v.expires.is_none_or(|deadline| time < deadline), v.rank)
+                                });
+                                let mut admitted = weight <= capacity && count != Some(0);
+                                while admitted
+                                    && (trial.iter().flatten().map(|v| v.weight).sum::<u64>() + weight
+                                        > capacity
+                                        || count
+                                            .is_some_and(|limit| trial.iter().flatten().count() + 1 > limit))
+                                {
+                                    if candidates.is_empty() {
+                                        admitted = false;
+                                    } else {
+                                        trial[candidates.remove(0)] = None;
+                                    }
+                                }
+                                assert_eq!(cache.insert_at(key, step, weight, now, true), admitted);
+                                if admitted {
+                                    rank += 1;
+                                    trial[key] = Some(Item {
+                                        value: step,
+                                        weight,
+                                        rank,
+                                        expires: ttl.map(|v| time + v),
+                                        pin,
+                                    });
+                                    model = trial;
+                                }
+                            }
+                            2 => {
+                                let expected = if let Some(mut item) = model[key] {
+                                    if item.expires.is_some_and(|deadline| time >= deadline) {
+                                        if !item.pin {
+                                            model[key] = None;
+                                        }
+                                        None
+                                    } else {
+                                        rank += 1;
+                                        item.rank = rank;
+                                        model[key] = Some(item);
+                                        Some(item.value)
+                                    }
+                                } else {
+                                    None
+                                };
+                                assert_eq!(cache.get_at(&key, now).copied(), expected);
+                            }
+                            3 => {
+                                assert_eq!(cache.pin(&key), model[key].is_some());
+                                if let Some(item) = &mut model[key] {
+                                    item.pin = true;
+                                }
+                            }
+                            4 => {
+                                cache.unpin(&key);
+                                if let Some(item) = &mut model[key] {
+                                    item.pin = false;
+                                }
+                            }
+                            5 => {
+                                let mut removed = 0;
+                                for item in &mut model {
+                                    if item.is_some_and(|v| {
+                                        !v.pin && v.expires.is_some_and(|deadline| time >= deadline)
+                                    }) {
+                                        *item = None;
+                                        removed += 1;
+                                    }
+                                }
+                                assert_eq!(cache.prune_expired_at(now), removed);
+                            }
+                            _ => assert_eq!(cache.remove(&key), model[key].take().map(|v| v.value)),
+                        }
+                        assert_eq!(cache.len(), model.iter().flatten().count());
+                        assert_eq!(
+                            cache.resident_weight(),
+                            model.iter().flatten().map(|v| v.weight).sum::<u64>()
+                        );
+                        for (key, expected) in model.iter().enumerate() {
+                            assert_eq!(
+                                cache.entries.get(&key).map(|v| (v.value, v.weight)),
+                                expected.map(|v| (v.value, v.weight))
+                            );
+                            assert_eq!(cache.protected.contains(&key), expected.is_some_and(|v| v.pin));
+                        }
+                        operations += 1;
+                    }
+                }
+            }
+        }
+        assert_eq!(operations, 96_000);
+    }
 
     #[test]
     fn next_expiry_skips_future_and_protected_entries_then_tracks_unpin() {

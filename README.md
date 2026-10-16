@@ -227,6 +227,8 @@ cargo run -p rrrah -- --window -32768 32767 --image-index 1 volume.mrc
 cargo run -p rrrah -- --inspect --window -100 1000 --image-index 1 volume.nrrd
 ```
 
+GIF/APNG/WebP animations and the supported MNG sequences advance after each frame is presented. Supported MNG sequences play once; zero-tick MNG stays static. Press `P` to pause or resume; the remaining frame delay is preserved. Zero and sub-10 ms delays use a 10 ms minimum. Slow loads wait for the next frame without issuing a catch-up burst. Manual frame navigation restarts the repeat count and preserves pause; opening another file resets playback. Physical presentation pacing qualification is still pending.
+
 With a scientific window active, Up/Down shift its center by 10% of its width; PageUp widens it by 25%, and PageDown narrows it by 20%. Brackets change the slice while keeping the range. The window title shows the active bounds. Opening another file clears the range. Invalid ranges, missing-value ambiguity and attempts to window an ordinary color image report errors. Native keyboard/window qualification is still pending.
 
 FITS primary/IMAGE HDUs use `decode_fits`, retaining native integer/float sample types, scaling and original header cards. `--image-index` selects a plane across image HDUs and `--window MIN MAX` uses physical values after BSCALE/BZERO. Empty HDUs and tables are skipped. BLANK/nonfinite values require an explicit missing-value policy; float32 conversion rejects precision loss. Higher-precision raw samples remain accessible via `FitsSamples`. Compressed images and WCS sky projection remain pending.
@@ -344,16 +346,16 @@ not physical VRAM: driver allocation, padding, uniforms, queue staging,
 in-flight command retention, RAW/model/filmstrip resources and render targets
 are excluded. It is independent of the managed CPU memory budget.
 
-The shared `decode_model` entrypoint admits STL/OBJ/PLY/OFF retained geometry
-capacity after parsing and transfers exclusive mesh ownership into ModelBuffer.
-Its private reservation follows all ModelBuffer/DecodedModel clones, including
-cache and viewer owners; the underlying mesh Arc cannot be extracted separately.
-Admission includes the existing conservative nested vector/attribute/string
-capacity weight. Shared legacy mesh adoption is rejected instead of allowing
-owners to escape the reservation; already managed meshes retain their original
-budget. Source read admission remains in force. Parser construction, temporary
-triangulation buffers and allocator/ownership metadata are not included: this
-bounds retained geometry and is not pre-allocation model admission.
+The shared `decode_model` entrypoint reserves STL/OBJ/PLY/OFF geometry during
+construction, before the corresponding vector allocations or growth. OBJ also
+accounts for polygon triangulation scratch; PLY accounts for typed columns,
+list storage and header data; OFF accounts for declared geometry and attributes.
+The reservation transfers into ModelBuffer and follows all ModelBuffer/DecodedModel
+clones, including cache and viewer owners. The underlying mesh Arc cannot be
+extracted separately. Shared legacy mesh adoption is rejected; already managed
+meshes retain their original budget. Managed source read admission remains in
+force. These logical reservations do not measure process RSS or allocator/Arc
+bookkeeping, and do not qualify every allocation in arbitrary producer files.
 
 Binary STL through `decode_model` now reserves the mesh object and declared facet
 capacity before facet-array allocation/decoding, while managed source input is
@@ -361,8 +363,8 @@ still retained. The reservation transfers into the returned ModelBuffer; actual
 vector capacity beyond the estimate requires additional admission. Exact-length
 binary detection and the 512 MiB facet ceiling remain unchanged. Tests verify
 input+geometry peak, rejection before non-finite facet parsing, cleanup after
-parse errors and last-owner retention. OBJ/PLY/OFF still use post-allocation output admission; direct legacy `decode_stl` returns an unwrapped
-mesh and does not retain output admission.
+parse errors and last-owner retention. Direct legacy `decode_stl` returns an
+unwrapped mesh and does not retain output admission.
 
 ASCII STL now counts facet records with periodic cancellation checks before
 allocating geometry, and reserves exact facet-array capacity in the shared model

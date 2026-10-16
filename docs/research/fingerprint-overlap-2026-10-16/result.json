@@ -1,0 +1,159 @@
+{
+  "status": "Overlapping source samples read once for files64KiB<size<=128KiB; frozen fingerprint byte stream unchanged",
+  "experiment": {
+    "bytes": 67786,
+    "equal_production_fingerprint": true,
+    "iterations_per_interval": 256,
+    "order": "alternating baseline/reuse/coalesce",
+    "pairs_ns": [
+      [
+        115879,
+        115447,
+        110726
+      ],
+      [
+        118414,
+        116709,
+        111093
+      ],
+      [
+        121962,
+        115819,
+        114361
+      ],
+      [
+        116382,
+        118355,
+        112774
+      ],
+      [
+        123086,
+        114025,
+        115837
+      ],
+      [
+        113755,
+        110858,
+        112583
+      ],
+      [
+        124054,
+        122793,
+        110995
+      ],
+      [
+        119704,
+        116062,
+        112209
+      ],
+      [
+        115125,
+        118582,
+        108642
+      ],
+      [
+        125554,
+        113382,
+        110590
+      ],
+      [
+        115756,
+        117060,
+        109981
+      ]
+    ],
+    "source": "tests/fixtures/raster/dicom-rle-segmented-explicit-full-ramp.dcm"
+  },
+  "baseline_reuse_only": {
+    "bytes": 67786,
+    "equal_production_fingerprint": true,
+    "iterations_per_interval": 256,
+    "order": "alternating baseline/candidate",
+    "pairs_ns": [
+      [
+        119329,
+        135590
+      ],
+      [
+        119847,
+        115980
+      ],
+      [
+        126668,
+        119103
+      ],
+      [
+        119323,
+        128592
+      ],
+      [
+        119864,
+        131485
+      ],
+      [
+        122272,
+        120168
+      ],
+      [
+        120533,
+        122441
+      ],
+      [
+        120291,
+        118307
+      ],
+      [
+        117532,
+        114764
+      ],
+      [
+        117881,
+        115509
+      ],
+      [
+        119562,
+        117011
+      ]
+    ],
+    "source": "tests/fixtures/raster/dicom-rle-segmented-explicit-full-ramp.dcm"
+  },
+  "result": {
+    "median_baseline_ns": 118414,
+    "median_coalesced_ns": 111093,
+    "median_paired_gain_percent": 5.889378158360821,
+    "faster_pairs": 11,
+    "total_pairs": 11
+  },
+  "implementation": "Bounded contiguous read of overlapping union, then hash exact original offsets and64KiB slices. No metadata memoization or freshness hash skipped. Larger files retain original sampling reads. Temporary source scratch increases from64KiB to at most128KiB in this size range; not included in managed pixel budget.",
+  "correctness": {
+    "cache_tests_passed": 141,
+    "cache_tests_failed": 0,
+    "ignored": 2,
+    "frozen_hash_regression_sizes": [
+      0,
+      1,
+      65536,
+      65537,
+      67786,
+      131071,
+      131072,
+      131073,
+      262144
+    ],
+    "mutations": "Original and edited middle byte per size; hash stream checked against reference slices",
+    "app_latency": "Passed64decoded/64RAM/63swap plus64fingerprint/resolvedRAM checks; exact pixel oracle; peak2883584bytes, final0"
+  },
+  "lint": {
+    "full": "Failed:15 rrrah-swap diagnostics",
+    "focused_no_deps": "Failed:39 rrrah-cache diagnostics outside changed fingerprint function; no global clean lint claim"
+  },
+  "limits": [
+    "Measured67786byte authored DICOM with warm filesystem cache, optimized dev profile",
+    "Single end-to-end post-change app run is corroboration, not controlled before/after speedup evidence",
+    "No physical disk latency or large-file performance claim"
+  ],
+  "source_sha256": {
+    "crates/rrrah-cache/src/disk.rs": "70967276de17e43173911e5d8197b71f1d5f5561c4bdf4d287d058814d5d3cab",
+    "crates/rrrah-cache/examples/fingerprint_buffer_profile.rs": "170b3eb311ef0ecac7a67ed9b1278c44b3c85e1e0429eb3577d9a4e568ce0695"
+  }
+}

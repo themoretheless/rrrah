@@ -1,0 +1,124 @@
+    Checking rrrah-demosaic v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-demosaic)
+    Checking rrrah-color v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-color)
+    Checking rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+warning: unused import: `CfaError`
+ --> crates/rrrah-core/src/frame.rs:6:36
+  |
+6 | pub use rrrah_demosaic::{CfaColor, CfaError, CfaPattern};
+  |                                    ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: `?` couldn't convert the error to `bayer::CalibrationError`
+  --> crates/rrrah-core/src/bayer.rs:42:36
+   |
+42 |         let quad = cfa.bayer_quad()?;
+   |                        ------------^ the trait `From<CfaError>` is not implemented for `bayer::CalibrationError`
+   |                        |
+   |                        this can't be annotated with `?` because it has type `Result<_, CfaError>`
+   |
+note: `bayer::CalibrationError` needs to implement `From<CfaError>`
+  --> crates/rrrah-core/src/bayer.rs:6:1
+   |
+ 6 | pub enum CalibrationError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+help: `bayer::CalibrationError` implements trait `From<T>`
+  --> crates/rrrah-core/src/bayer.rs:8:13
+   |
+ 8 |     Frame(#[from] FrameError),
+   |             ^^^^ `From<FrameError>`
+ 9 |     #[error(transparent)]
+10 |     Memory(#[from] crate::BufferError),
+   |              ^^^^ `From<BufferError>`
+
+error[E0277]: `?` couldn't convert the error to `DevelopError`
+   --> crates/rrrah-core/src/develop/mod.rs:237:23
+    |
+236 | pub(super) fn quality_cfa(pattern: &CfaPattern, algo: DemosaicAlgorithm) -> Result<Cfa, DevelopError> {
+    |                                                                             ------------------------- expected `DevelopError` because of this
+237 |     pattern.validate()?;
+    |             ----------^ the trait `From<CfaError>` is not implemented for `DevelopError`
+    |             |
+    |             this can't be annotated with `?` because it has type `Result<_, CfaError>`
+    |
+note: `DevelopError` needs to implement `From<CfaError>`
+   --> crates/rrrah-core/src/develop/mod.rs:29:1
+    |
+ 29 | pub enum DevelopError {
+    | ^^^^^^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+help: `DevelopError` implements trait `From<T>`
+   --> crates/rrrah-core/src/develop/mod.rs:35:13
+    |
+ 35 |     Frame(#[from] crate::FrameError),
+    |             ^^^^ `From<FrameError>`
+ 36 |     #[error(transparent)]
+ 37 |     Buffer(#[from] crate::BufferError),
+    |              ^^^^ `From<BufferError>`
+ 38 |     #[error(transparent)]
+ 39 |     Raster(#[from] crate::RasterError),
+    |              ^^^^ `From<RasterError>`
+ 40 |     #[error(transparent)]
+ 41 |     Rgbe(#[from] crate::rgbe::CalibrationError),
+    |            ^^^^ `From<rgbe::CalibrationError>`
+
+error[E0277]: `?` couldn't convert the error to `FrameError`
+   --> crates/rrrah-core/src/frame.rs:97:36
+    |
+ 97 |         let quad = cfa.bayer_quad()?;
+    |                        ------------^ the trait `From<CfaError>` is not implemented for `FrameError`
+    |                        |
+    |                        this can't be annotated with `?` because it has type `Result<_, CfaError>`
+    |
+note: `FrameError` needs to implement `From<CfaError>`
+   --> crates/rrrah-core/src/frame.rs:384:1
+    |
+384 | pub enum FrameError {
+    | ^^^^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+error[E0277]: `?` couldn't convert the error to `FrameError`
+   --> crates/rrrah-core/src/frame.rs:243:27
+    |
+243 |             cfa.validate()?;
+    |                 ----------^ the trait `From<CfaError>` is not implemented for `FrameError`
+    |                 |
+    |                 this can't be annotated with `?` because it has type `Result<_, CfaError>`
+    |
+note: `FrameError` needs to implement `From<CfaError>`
+   --> crates/rrrah-core/src/frame.rs:384:1
+    |
+384 | pub enum FrameError {
+    | ^^^^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+error[E0277]: `?` couldn't convert the error to `rgbe::CalibrationError`
+   --> crates/rrrah-core/src/rgbe.rs:169:25
+    |
+169 |             .rgbe_quad()?;
+    |              -----------^ the trait `From<CfaError>` is not implemented for `rgbe::CalibrationError`
+    |              |
+    |              this can't be annotated with `?` because it has type `Result<_, CfaError>`
+    |
+note: `rgbe::CalibrationError` needs to implement `From<CfaError>`
+   --> crates/rrrah-core/src/rgbe.rs:121:1
+    |
+121 | pub enum CalibrationError {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+help: `rgbe::CalibrationError` implements trait `From<T>`
+   --> crates/rrrah-core/src/rgbe.rs:123:13
+    |
+123 |     Frame(#[from] crate::FrameError),
+    |             ^^^^ `From<FrameError>`
+124 |     #[error(transparent)]
+125 |     Profile(#[from] crate::CameraProfileError),
+    |               ^^^^ `From<CameraProfileError>`
+126 |     #[error(transparent)]
+127 |     Memory(#[from] crate::BufferError),
+    |              ^^^^ `From<BufferError>`
+
+For more information about this error, try `rustc --explain E0277`.
+warning: `rrrah-core` (lib) generated 1 warning
+error: could not compile `rrrah-core` (lib) due to 5 previous errors; 1 warning emitted

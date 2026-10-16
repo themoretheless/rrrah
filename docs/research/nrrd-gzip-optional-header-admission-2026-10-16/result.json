@@ -1,0 +1,65 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Nonallocating gzip fixed-header and extra-length validation before decoder construction",
+    "Reserve declared extra bytes, conservative 65536-byte capacity for each present filename/comment, and size_of flate2::Crc for FHCRC",
+    "Hold optional-header credit with state/history credit throughout inflation; release before native conversion"
+  ],
+  "source_audit": {
+    "flate2_version": "1.1.10",
+    "gzip_header_source_sha256": "4e7c40f63c24dbc6b2a0cd831431283a82fce7c693e259e59113a0c85ed73094",
+    "filename_comment_max_length": 65535,
+    "reserved_capacity_each_present_string": 65536,
+    "extra_max_length": 65535
+  },
+  "checks": {
+    "optional_header_cases": {
+      "count": 32,
+      "field_presence_patterns": 8,
+      "header_crc": [
+        false,
+        true
+      ],
+      "field_lengths": [
+        1,
+        65535
+      ],
+      "native_float_pixels_bit_exact": true,
+      "exact_and_one_byte_short": true,
+      "bad_header_crc_releases": true
+    },
+    "scientific_lib": {
+      "passed": 50,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pipeline": {
+      "scientific_states": 492,
+      "ram_pressure_hits": 492,
+      "swap_writes": 492,
+      "swap_reads": 492,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    }
+  },
+  "limits": [
+    "String capacity credit is conservative pinned-source audit, not allocator telemetry",
+    "NRRD parsed header/map allocation remains outside native pixel/scratch admission",
+    "Optional-header cases are decoder-level; 492-state application pipeline uses original sources",
+    "No new Metal run for header-only change; latest scientific Metal evidence is ../nrrd-inflate-state-admission-2026-10-16/result.json",
+    "No total RSS, physical HDR or full format qualification claim"
+  ],
+  "logs": {
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log"
+  },
+  "follow_up": "Retained NRRD header/map capacity admission addressed by ../nrrd-retained-metadata-admission-2026-10-16/result.json using shared conservative credit."
+}

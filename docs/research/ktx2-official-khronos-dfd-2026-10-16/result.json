@@ -1,0 +1,63 @@
+{
+  "status": "official_khronos_dfd_interoperability_verified",
+  "reference": {
+    "repo": "KhronosGroup/dfdutils",
+    "revision": "060e13229e6d5ff58498270e449334acfd06a5bf",
+    "sha256": {
+      "createdfd.c": "5f625c9ea86e5439342627036255cb6488c95a2bb1943e8c68023983f43a5092",
+      "vk2dfd.c": "8203bed277d72ce10bbe1f7b70430270624943339bf1bf2022e9ad2b7dd6bdcd",
+      "vk2dfd.inl": "79bc70554302392bcc30bc04358c2c640932935fc72fac364ebd8789098779b3",
+      "dfd.h": "869101206a6e1791a0bd9ec8e3813e5c36e32fdf3ae6d08572859d8a7d1572ee",
+      "KHR/khr_df.h": "11c1f2283b1fe2b76761923571453edce1898127f3385b257f1828b083d69438",
+      "vulkan/vulkan_core.h": "6e38292ff8f06baad8521fb58e370deff6570c412e28e783506e4eed79af2db9",
+      "vulkan/vk_platform.h": "c2aa81456e5d24f5931f9b2052aaeb85d1a6362abac9ee5fb2029a57579e03a7"
+    }
+  },
+  "reference_url": "https://github.com/KhronosGroup/dfdutils/tree/060e13229e6d5ff58498270e449334acfd06a5bf",
+  "oracle_generation": "Pinned official vk2dfd/createdfd C code compiled in temporary directory; source hashes verified. No reference code linked to Rust production. Generator run repeated and all16 descriptors match independent initial executable outputs.",
+  "formats": [
+    23,
+    29,
+    30,
+    36,
+    37,
+    43,
+    44,
+    50,
+    76,
+    83,
+    84,
+    90,
+    91,
+    97,
+    106,
+    109
+  ],
+  "descriptor_bytes_total": 1280,
+  "checks": [
+    "All16 official descriptors accepted by native format/DFD validator with exact declared linear/sRGB interpretation",
+    "All32 binary16 authored source DFD byte sequences equal official descriptors, across plain/DEFLATE and four orientations",
+    "Generator repeatability16/16"
+  ],
+  "texture_lib": {
+    "passed": 93,
+    "failed": 0,
+    "ignored": 3
+  },
+  "changes": [
+    "16 tiny generated official DFD oracle fixtures and manifest",
+    "Pinned reference regeneration script with source hash validation",
+    "Regression comparing native validation and authored half descriptor bytes to official outputs"
+  ],
+  "limits": [
+    "Official DFD generation qualifies descriptor compatibility, not complete file exporting/decoding or all producers",
+    "No new pixel oracle/GPU timing/physical HDR/NVIDIA qualification",
+    "Reference wrapper explicitly requires little-endian host",
+    "Production implementation unchanged in this follow-up"
+  ],
+  "files_sha256": {
+    "scripts/generate-ktx2-dfd-oracles.py": "b5a3f027fe9b17c721f856354ce32daf519effeff8ad3c2623d00df6d814fb48",
+    "tests/fixtures/raster/ktx2-khronos-dfd-manifest.tsv": "5093c39d1c653b2ada60b87d2c2c0d9a7ac503a1427522f6b2933511d327eda6",
+    "crates/rrrah-texture/src/ktx2.rs": "19e3460c10f5fcd22af407797e734bc52678f0d0bccaacf04baab2d9e9cb5d9f"
+  }
+}

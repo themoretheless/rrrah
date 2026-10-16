@@ -1,0 +1,88 @@
+{
+  "status": "retained_metadata_capacity_admitted",
+  "changes": [
+    "Nonallocating bounded ASCII/version header preflight counts metadata records before allocation",
+    "Reserve two line lengths for retained String capacities and 1024 bytes per record for BTreeMap nodes",
+    "Shared immutable NrrdFields map owners hold one shared header reservation independently of raster ownership",
+    "Both maps share conservative combined credit; retaining either map retains that header credit",
+    "Header comments ignored by parser do not consume record credit"
+  ],
+  "api_changes": [
+    "NrrdImage.fields/key_values: Arc<BTreeMap<String,String>> -> Arc<NrrdFields>",
+    "NrrdFields derefs to read-only BTreeMap; mutation requires an explicit unaccounted caller-owned copy"
+  ],
+  "source_audit": {
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "std_btree_node_sha256": "2200ca0a4fe38592c314dc7f5f40bbb160e06b6f9e4abd1eb5bc40701540ab25",
+    "B": 6,
+    "node_key_capacity": 11,
+    "internal_edge_capacity": 12,
+    "audited_64bit_node_payload_bound": 640,
+    "reserved_record_node_bytes": 1024,
+    "string_credit": "2 * original non-comment field-line bytes; ASCII lowercasing/unescaping cannot expand text"
+  },
+  "checks": {
+    "scientific_lib": {
+      "passed": 51,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "ownership": [
+      "64KiB custom field shared without string copies",
+      "Pixel credit releases while separately retained map handles keep metadata credit",
+      "Last retained map drop releases metadata credit",
+      "Exact/one-byte-short native and gzip/window quotas include metadata",
+      "Malformed payload checks run with metadata-only free credit and no pixel admission"
+    ],
+    "large_volume": {
+      "uncompressed_bytes": 268435456,
+      "selected_sections": [
+        0,
+        256,
+        511
+      ],
+      "source_bytes": 5648176,
+      "metadata_credit_bytes": 6338,
+      "selected_scratch_bytes": 524288,
+      "output_bytes": 4194304,
+      "tracked_peak_bytes": 10373106,
+      "every_selected_pixel_and_window_sample_exact": true,
+      "final_bytes": 0
+    },
+    "pipeline": {
+      "scientific_states": 492,
+      "ram_pressure_hits": 492,
+      "swap_writes": 492,
+      "swap_reads": 492,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 3688,
+      "geometry_controls": 736,
+      "seconds": 8.84
+    }
+  },
+  "limits": [
+    "Conservative payload/node credit, not allocator telemetry or total RSS",
+    "Arc/control blocks and general allocator overhead excluded from capacity budgets",
+    "BTree node allowance source-audited on current Rust; re-audit if standard implementation changes",
+    "No physical HDR display or full scientific-format qualification claim",
+    "NVIDIA remains deferred by user"
+  ],
+  "logs": {
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "large-volume": "large-volume.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

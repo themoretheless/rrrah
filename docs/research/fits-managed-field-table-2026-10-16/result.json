@@ -1,0 +1,52 @@
+{
+  "status": "temporary_field_storage_admitted",
+  "changes": [
+    "Replace borrowed BTreeMap nodes with one exact managed buffer of borrowed key/value/source-order tuples",
+    "Sort in place by key and source order; last nonstructural duplicate wins, structural duplicates refuse",
+    "Release selected header field storage before native samples and retained cards; account for later HDU validation while selected image remains live"
+  ],
+  "checks": {
+    "scientific_lib": {
+      "passed": 56,
+      "failed": 0,
+      "ignored": 9
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "scientific_clippy": "passed --lib --tests --no-deps -D warnings",
+    "field_table": "exact tuple payload accepted; one byte short refuses before allocation; structural duplicate releases; source-order last value and missing-key boundaries checked",
+    "native_and_window_oracles": "all fixture bytes/physical values/window outputs preserved; exact observed peak and one-byte-short reruns",
+    "app_cpu": {
+      "cases": 492,
+      "swap_writes": 492,
+      "swap_reads": 492,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "gpu_optional": false,
+      "cases": 492,
+      "readbacks": 3688,
+      "shape_controls": 736,
+      "swap_writes": 492,
+      "swap_reads": 492,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "Payload capacity admission excludes allocator/control overhead and RSS",
+    "Small axis Vec and formatted axis-key strings remain separate parser temporaries",
+    "No throughput or complete 100-format qualification claim; physical HDR and deferred NVIDIA remain open"
+  ],
+  "source_sha256": "59348249b82f091120f35b2a6495d97dde167c2e43b95d64498ddb5af1eb390e",
+  "logs": {
+    "tests": "tests.log",
+    "clippy": "clippy.log",
+    "decode": "decode.log",
+    "app": "app.log",
+    "metal": "metal.log"
+  }
+}

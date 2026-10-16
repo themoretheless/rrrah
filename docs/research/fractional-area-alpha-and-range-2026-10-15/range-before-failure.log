@@ -1,0 +1,17 @@
+
+running 1 test
+test area_large_signed_hdr_cancellation_preserves_small_other_channels ... 
+thread 'area_large_signed_hdr_cancellation_preserves_small_other_channels' (23327107) panicked at crates/rrrah-gpu/tests/raster_readback.rs:2404:5:
+assertion `left == right` failed: f64 mean of +/-f32MAX is0; green/blue remain1/.25
+  left: [31744, 15360, 13312, 15360]
+ right: [0, 15360, 13312, 15360]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    area_large_signed_hdr_cancellation_preserves_small_other_channels
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.12s
+

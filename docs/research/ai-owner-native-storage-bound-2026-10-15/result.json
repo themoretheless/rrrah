@@ -1,0 +1,40 @@
+{
+  "change": "Native unit-component from_native/native_components error envelope covers alpha multiplication/division, CMYK complementary storage and gradual underflow. Original and candidate completed Pixels constructed; storage envelopes added to conditional replacement bound and actual stored native discrepancy checked. Original pixel returned.",
+  "tests": {
+    "passed": 287,
+    "ignored": 12,
+    "failed": 0,
+    "new_controls": "Gray/RGB/CMYK unit values including tiny components, boundary colors, alpha=minsub/minnormal/1e-300/1e-12/ordinary/1; all short work and cancellation checks; invalid/zero alpha refuses."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "conditional_stored_native_bound": 2.3902076348623936e-07,
+    "added_storage_error": 2.2204460492503162e-15,
+    "measured_stored_native_delta": 7.972352777940728e-10,
+    "geometry_setup": 80708,
+    "geometry_traversal_export_bound": 39331027,
+    "geometry_total": 39411735,
+    "geometry_remaining": 588265,
+    "geometry_limit": 40000000,
+    "original_pixel_exact": true,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "original_source_work": 6993741,
+    "original_source_allowance": 16000000
+  },
+  "sources": {
+    "vendor/hayro/src/native_blend.rs": "94fe5944afba05b9dee1c48df9e4e6782e49df671a4e818b254291958918df84",
+    "vendor/hayro/src/native_spatial.rs": "d01b84f34a0a2a15e4d4e80fda41faad35061bccf74cf9946251d49319bbda5a"
+  },
+  "limitations": [
+    "Floating-point bound assumes gradual underflow and unit input components; zero alpha not certified.",
+    "Replacement remains conditional on qualified source/owner/root-tail and reported geometry.",
+    "Profile conversion, display quantization and absolute clipping/ownership are excluded.",
+    "All original color samples retained; ordinary4M and whole-page AI support remain incomplete."
+  ]
+}

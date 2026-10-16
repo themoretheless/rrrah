@@ -67,6 +67,29 @@ pub enum RasterColorSpace {
     Unspecified,
 }
 
+/// Selected animation frame timing. Zero plays means infinite repetition;
+/// positive plays count complete presentations, including the first.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct RasterAnimationTiming {
+    delay_ms_numerator: u32,
+    delay_ms_denominator: u32,
+    num_plays: u32,
+}
+impl RasterAnimationTiming {
+    pub fn new(numerator: u32, denominator: u32, num_plays: u32) -> Result<Self, RasterError> {
+        if denominator == 0 { return Err(RasterError::InvalidAnimationTiming); }
+        Ok(Self { delay_ms_numerator: numerator, delay_ms_denominator: denominator, num_plays })
+    }
+    pub fn delay_ms_numerator(self) -> u32 { self.delay_ms_numerator }
+    pub fn delay_ms_denominator(self) -> u32 { self.delay_ms_denominator }
+    pub fn num_plays(self) -> u32 { self.num_plays }
+    /// Round fractions upward to a nanosecond; zero delays remain zero.
+    pub fn delay(self) -> std::time::Duration {
+        std::time::Duration::from_nanos((u64::from(self.delay_ms_numerator) * 1_000_000)
+            .div_ceil(u64::from(self.delay_ms_denominator)))
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct DecodedRaster {
     width: u32,
@@ -78,6 +101,7 @@ pub struct DecodedRaster {
     pixel_aspect: Option<f32>,
     image_index: usize,
     image_count: usize,
+    animation_timing: Option<RasterAnimationTiming>,
 }
 
 #[derive(Debug)]
@@ -304,6 +328,7 @@ impl DecodedRaster {
         .with_pixel_aspect(self.pixel_aspect)?
         .with_sample_scale(self.sample_scale)?
         .with_hotspot(self.hotspot)?
+        .with_animation_timing(self.animation_timing)
         .with_image_selection(self.image_index, self.image_count)
     }
     /// Mutates native samples only while this allocation has one owner.
@@ -396,9 +421,15 @@ impl DecodedRaster {
             pixel_aspect: None,
             image_index: 0,
             image_count: 1,
+            animation_timing: None,
         })
     }
 
+    pub fn animation_timing(&self) -> Option<RasterAnimationTiming> { self.animation_timing }
+    pub fn with_animation_timing(mut self, timing: Option<RasterAnimationTiming>) -> Self {
+        self.animation_timing = timing;
+        self
+    }
     pub fn image_index(&self) -> usize {
         self.image_index
     }
@@ -753,6 +784,7 @@ impl DecodedRaster {
         .with_pixel_aspect(self.pixel_aspect)?
         .with_sample_scale(self.sample_scale)?
         .with_hotspot(self.hotspot)?
+        .with_animation_timing(self.animation_timing)
         .with_image_selection(self.image_index, self.image_count)
     }
 }
@@ -1127,6 +1159,8 @@ pub enum RasterError {
     Memory(#[from] rrrah_memory::BufferError),
     #[error("image selection must lie within a nonempty container")]
     InvalidImageSelection,
+    #[error("animation delay denominator must be nonzero")]
+    InvalidAnimationTiming,
     #[error("cursor hotspot lies outside image bounds")]
     InvalidHotspot,
     #[error("raster needs an ICC or source-primary transform before display")]
@@ -1679,6 +1713,23 @@ mod pixel_aspect_tests {
         for v in [0.0, -1.0, f32::NAN, f32::INFINITY] {
             assert!(image.clone().with_pixel_aspect(Some(v)).is_err());
             assert_eq!(image.pixel_aspect(), Some(2.0));
+        }
+    }
+}
+
+#[cfg(test)]
+mod animation_timing_tests {
+    use super::*;
+    #[test]
+    fn rational_delay_and_conversion_preserve_animation_timing() {
+        assert!(RasterAnimationTiming::new(1,0,1).is_err());
+        for (n,d,plays,nanos) in [(0,1,0,0),(1,65535,1,16),(1000,60,3,16_666_667),(u32::MAX,1,65536,4_294_967_295_000_000)] {
+            let timing=RasterAnimationTiming::new(n,d,plays).unwrap();
+            assert_eq!(timing.delay().as_nanos(),nanos);
+            let source=DecodedRaster::new(1,1,RasterPixels::Rgba8(Arc::new(vec![128,64,32,255]).into()),RasterColorSpace::Srgb).unwrap().with_animation_timing(Some(timing));
+            let ready=source.to_linear_srgb().unwrap();
+            assert_eq!(ready.animation_timing(),Some(timing));
+            assert_eq!(ready.clone().to_linear_srgb().unwrap().animation_timing(),Some(timing));
         }
     }
 }

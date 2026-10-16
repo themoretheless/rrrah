@@ -1,0 +1,19 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 24.44s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+PSD_36MP_DISK_REFUSAL case=disk-zero disk=0 count=Some(1) index_limit=300000 ram_retained=true files_unchanged=true final_temporary_credit=0
+PSD_36MP_DISK_REFUSAL case=disk-short disk=576000063 count=Some(1) index_limit=300000 ram_retained=true files_unchanged=true final_temporary_credit=0
+PSD_36MP_DISK_REFUSAL case=count-zero disk=576000064 count=Some(0) index_limit=300000 ram_retained=true files_unchanged=true final_temporary_credit=0
+PSD_36MP_DISK_REFUSAL case=index-zero disk=576000064 count=Some(1) index_limit=0 ram_retained=true files_unchanged=true final_temporary_credit=0
+PSD_36MP_DISK_REFUSAL case=index-short disk=576000064 count=Some(1) index_limit=281279 ram_retained=true files_unchanged=true final_temporary_credit=0
+PSD_36MP_CROP_QUOTA rect=[0, 0, 17, 11] exact_peak=68592 short_refused=true cancel_after_admission=true retry=true
+PSD_36MP_CROP_QUOTA rect=[2991, 2994, 17, 11] exact_peak=68592 short_refused=true cancel_after_admission=true retry=true
+PSD_36MP_CROP_QUOTA rect=[5983, 5989, 17, 11] exact_peak=68592 short_refused=true cancel_after_admission=true retry=true
+PSD_36MP_LOD target=1280x720 output_bytes=14745600 exact_peak=14948096 cached_peak=14811136 cache_hit_below_streaming_quota=true readbacks=8
+PSD_36MP_SEGMENTED_METAL adapter=Metal Apple M4 Max native_color_peak=720000000 disk=576000064 crops=3 readbacks=32 crop_bytes=2992 scratch_peak=65536 final=0
+test large_psd_pipeline_tests::psd_36mp_prepared_cache_segmented_swap_and_metal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 350 filtered out; finished in 4.19s
+

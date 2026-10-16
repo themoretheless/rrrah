@@ -1,0 +1,71 @@
+{
+  "status": "actual_metal_large_upload_pressure_cancel_retry_passed",
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo +stable test -p rrrah-gpu --test raster_readback --offline large_cancelled_upload_validation_and_admission_preserve_visible_texture -- --ignored --exact --nocapture --test-threads=1",
+  "adapter": "Metal Apple M4 Max",
+  "source": {
+    "size": [
+      4000,
+      3000
+    ],
+    "float_pixel_bytes": 192000000,
+    "original_rgba": [
+      4,
+      -0.5,
+      0,
+      1
+    ],
+    "replacement_rgba": [
+      -0.25,
+      0,
+      4,
+      1
+    ]
+  },
+  "formats": [
+    "Rgba8UnormSrgb",
+    "Rgba16Float"
+  ],
+  "checks": {
+    "independent_pressure_admissions": [
+      "GPU texture budget",
+      "upload queue budget"
+    ],
+    "checkpoint_count": 2933,
+    "tested_checkpoints": [
+      1,
+      2,
+      1466,
+      2931,
+      2932,
+      2933
+    ],
+    "cancellation_scenarios": 12,
+    "pressure_scenarios": 4,
+    "previous_frame": "All128x96 output components exact vs before on every pressure/cancellation refusal",
+    "retry": "Successful replacement changes frame; center matches exact expected SDR or signed/HDR binary16 values",
+    "final_gpu_credit": 0,
+    "final_upload_queue_credit": 0,
+    "test_passed": 1,
+    "failed": 0
+  },
+  "physical_hdr_state": {
+    "source": "current filtered ioreg Root/IOConsoleUsers state",
+    "CGSSessionScreenIsLocked": true,
+    "on_console": true,
+    "surface_probe": "not rerun while verified locked"
+  },
+  "limits": [
+    "Synthetic resident CPU source allocation is outside upload/GPU budgets",
+    "Tracked budget capacities are not driver residency/RSS measurements",
+    "Cancellation samples validation/admission boundaries, not all2933 checks or mid-DMA GPU preemption",
+    "Successful retry reference checks center; full previous-frame comparisons cover all pixels",
+    "Offscreen RGBA16F preservation is not physical HDR luminance/calibration qualification",
+    "NVIDIA remains deferred; no full goal completion claim"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/raster_readback.rs": "398dae5f67e728b7b2b610ad0b3268470f911fae67a17e6992e3a487438c2a69",
+    "crates/rrrah-gpu/tests/common/mod.rs": "825f1a4904da0acffa91efba25d913bd71b53448c189ccec420d641ffd99a687",
+    "crates/rrrah-gpu/src/raster.rs": "f263c87b91e8f331d6a3122fac46d2e91e8317f4b1742df506b1699ceaf20954",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "095e0be26f7312d56af2b5d5f04e86dad4c2d894fa180ea52e01b8e00ec3fd66"
+  }
+}

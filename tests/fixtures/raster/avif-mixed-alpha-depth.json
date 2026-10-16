@@ -1,0 +1,29 @@
+{
+  "scope": "malformed mixed-coded-depth controls; no image fidelity acceptance",
+  "producer_source_license": "CC0 authored ravif fixtures; see ravif-prem-producer-fixtures.json",
+  "reproducer": "../../../docs/research/avif-alpha-depth-validation-2026-10-15/generate-controls.py",
+  "controls": [
+    {
+      "file": "primary8-alpha10.avif",
+      "sha256": "4b3ae1b55009bbd71b64cb2325bca9de3da885cb78942484cd841aec59386388",
+      "coded_primary_depth": 8,
+      "coded_alpha_depth": 10,
+      "sources": {
+        "ravif-8bit-prem.avif": "c06a17d2641ad61e06f8cc79dcd17102c4b7e349b058fd26cd299b68cc5629fa",
+        "ravif-10bit-prem.avif": "a71ddc5735b7610152d05d80ea2d28ef5dfb68b50ea4a2aade170505cf6666e3"
+      },
+      "scope": "malformed diagnostic control; original declared properties retained; not valid producer/fidelity fixture"
+    },
+    {
+      "file": "primary10-alpha8.avif",
+      "sha256": "597f3d654f9a6342e7451d9a11428b75e81e9f8f690752ee1480195b2cb07346",
+      "coded_primary_depth": 10,
+      "coded_alpha_depth": 8,
+      "sources": {
+        "ravif-10bit-prem.avif": "a71ddc5735b7610152d05d80ea2d28ef5dfb68b50ea4a2aade170505cf6666e3",
+        "ravif-8bit-prem.avif": "c06a17d2641ad61e06f8cc79dcd17102c4b7e349b058fd26cd299b68cc5629fa"
+      },
+      "scope": "malformed diagnostic control; original declared properties retained; not valid producer/fidelity fixture"
+    }
+  ]
+}

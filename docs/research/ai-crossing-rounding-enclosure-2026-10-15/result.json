@@ -1,0 +1,49 @@
+{
+  "status": "305 tests pass; real control completes with typedRGB8 unchanged",
+  "source": "vendor/hayro/src/polygon_coverage.rs",
+  "source_sha256": "72ad4495c0dfd48bccae40f227c4bb3c27fe87d4e04852ac62425e29c405913e",
+  "tests": {
+    "passed": 305,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-crossing-enclosure-all.log",
+    "exact_rational_geometries": 3500,
+    "orientation_cases": 14000
+  },
+  "real_log": "/tmp/ai-crossing-enclosure-real13834.log",
+  "trace_flag": "RRRAH_AI_TRACE_CROSSING_ENCLOSURE",
+  "scope": "Outward ideal/computed Y intersection bound for nonhorizontal finite edges, rejects arithmetic ambiguity including denominator interval containing0. Audit only crossings emitted by current sweep; bound touching overlap endpoints flagged separately. Does not certify missing crossings, winding/edge order or original ownership. Extra diagnostics debit continuing work; no observations skipped.",
+  "real_control": {
+    "pixel": [
+      138,
+      34
+    ],
+    "typed_rgb8": [
+      219,
+      185,
+      167
+    ],
+    "source_work": 254999,
+    "final_credit": 0,
+    "deadline": false,
+    "traversal_passes": [
+      [
+        2798,
+        1620,
+        0,
+        6.7572614170785536e-12
+      ],
+      [
+        2798,
+        1620,
+        0,
+        6.7572614170785536e-12
+      ]
+    ],
+    "bounded_evaluations": 5596,
+    "boundary_ambiguous_evaluations": 3240,
+    "arithmetic_ambiguous_evaluations": 0,
+    "max_y_rounding": 6.7572614170785536e-12,
+    "count_scope": "Counts include count/fill traversals; not deduplicated unique geometric crossings."
+  }
+}

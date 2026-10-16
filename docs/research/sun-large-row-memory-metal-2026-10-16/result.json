@@ -1,0 +1,85 @@
+{
+  "status": "Large Sun RLE image verified under source+RGBA+one-row admission; current row decoder passes actual Metal cache/swap checks",
+  "large_probe": {
+    "runs": [
+      {
+        "run": 0,
+        "width": 4097,
+        "height": 2048,
+        "source_bytes": 295040,
+        "raw_bytes": 25174016,
+        "output_bytes": 33562624,
+        "scratch_bytes": 12292,
+        "cap": 33869956,
+        "decode_ns": 32809167
+      },
+      {
+        "run": 1,
+        "width": 4097,
+        "height": 2048,
+        "source_bytes": 295040,
+        "raw_bytes": 25174016,
+        "output_bytes": 33562624,
+        "scratch_bytes": 12292,
+        "cap": 33869956,
+        "decode_ns": 31018959
+      },
+      {
+        "run": 2,
+        "width": 4097,
+        "height": 2048,
+        "source_bytes": 295040,
+        "raw_bytes": 25174016,
+        "output_bytes": 33562624,
+        "scratch_bytes": 12292,
+        "cap": 33869956,
+        "decode_ns": 31113875
+      }
+    ],
+    "pixels_checked_per_run": 8390656,
+    "pattern": "Synthetic repetitiveBGR77 with odd-width row padding; every RGBA pixel checked",
+    "source_ownership": "Encoded source copied into managed source buffer before decode, construction buffers dropped; timer excludes source construction/adoption and fileIO",
+    "budget": "Exactcap33869956bytes, finalRGBA33562624bytes, row12292bytes, source295040bytes; source retained between runs and final0 afterdrop",
+    "short_budget": "One-byte pressure reservation while source remains live forces typed Memory; partial output dropped, unrelated pressure/source owners remain",
+    "old_full_expansion_formula_bytes": 59031680,
+    "old_memory_scope": "Formula from previous allocation structure, not a paired old-implementation run",
+    "speed_scope": "31-33ms synthetic resident-source decode in optimized test profile, not disk or natural-image throughput"
+  },
+  "tests": {
+    "ordinary_decode": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "large_manual": {
+      "passed": 1,
+      "failed": 0
+    },
+    "viewer_cpu_targeted": {
+      "passed": 1,
+      "failed": 0
+    },
+    "metal": {
+      "passed": 1,
+      "failed": 0,
+      "adapter": "Metal Apple M4 Max",
+      "optional_skip": false,
+      "cases": 10,
+      "readbacks": 60,
+      "swap_writes": 10,
+      "swap_reads": 10,
+      "ram_pressure_hits": 10,
+      "decoder_blocked_on_restore": true,
+      "final_managed_bytes": 0,
+      "seconds": 2.78
+    }
+  },
+  "limits": [
+    "Large probeCPU only; Metal comparison uses existing10independent SGI/Sun sources",
+    "RGBA source values0..1 after transfer; no physical HDR or above1 source-range claim",
+    "Common file reader still whole-source; row scratch reduction is not streaming fileIO",
+    "No throughput speedup comparison against previous decoder",
+    "Full100format/NVIDIA objective remains incomplete"
+  ],
+  "source_sha256": "a2f141a50c0cfb31e7dca94f8fb60650278d137d6ecb4d9f01459b22cb93315b"
+}

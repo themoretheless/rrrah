@@ -1,0 +1,163 @@
+{
+  "status": "concurrent_cancellation_revalidated",
+  "test": "scientific_cancel_stress::cancellation_after_large_output_admission_preserves_other_owners",
+  "runs": 6,
+  "scenarios": 18,
+  "formats": [
+    "NRRD",
+    "MRC",
+    "FITS"
+  ],
+  "output_admission_bytes": 16777216,
+  "root_cap_bytes": 20971520,
+  "unrelated_reservation_bytes": 4096,
+  "trigger": "Concurrent observer waits for observed >=16MiB admitted credit, then invalidates request generation",
+  "checks": [
+    "Typed Cancelled result for each format/run",
+    "Decoder buffers and NRRD metadata reservation release on error",
+    "Independent 4096-byte owner remains after decoder cancellation",
+    "Dropping independent owner returns root to zero"
+  ],
+  "records": [
+    {
+      "run": 0,
+      "format": "NRRD",
+      "output_bytes": 16777216,
+      "peak": 16785512,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 0,
+      "format": "MRC",
+      "output_bytes": 16777216,
+      "peak": 16781312,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 0,
+      "format": "FITS",
+      "output_bytes": 16777216,
+      "peak": 17829888,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 1,
+      "format": "NRRD",
+      "output_bytes": 16777216,
+      "peak": 16785512,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 1,
+      "format": "MRC",
+      "output_bytes": 16777216,
+      "peak": 16781312,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 1,
+      "format": "FITS",
+      "output_bytes": 16777216,
+      "peak": 17829888,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 2,
+      "format": "NRRD",
+      "output_bytes": 16777216,
+      "peak": 16785512,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 2,
+      "format": "MRC",
+      "output_bytes": 16777216,
+      "peak": 16781312,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 2,
+      "format": "FITS",
+      "output_bytes": 16777216,
+      "peak": 17829888,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 3,
+      "format": "NRRD",
+      "output_bytes": 16777216,
+      "peak": 16785512,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 3,
+      "format": "MRC",
+      "output_bytes": 16777216,
+      "peak": 16781312,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 3,
+      "format": "FITS",
+      "output_bytes": 16777216,
+      "peak": 17829888,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 4,
+      "format": "NRRD",
+      "output_bytes": 16777216,
+      "peak": 16785512,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 4,
+      "format": "MRC",
+      "output_bytes": 16777216,
+      "peak": 16781312,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 4,
+      "format": "FITS",
+      "output_bytes": 16777216,
+      "peak": 17829888,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 5,
+      "format": "NRRD",
+      "output_bytes": 16777216,
+      "peak": 16785512,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 5,
+      "format": "MRC",
+      "output_bytes": 16777216,
+      "peak": 16781312,
+      "preserved_unrelated": 4096
+    },
+    {
+      "run": 5,
+      "format": "FITS",
+      "output_bytes": 16777216,
+      "peak": 17829888,
+      "preserved_unrelated": 4096
+    }
+  ],
+  "source_sha256": "09e47dc08420f057719eb37ce415c2c1640ec569f807ea5dd681a25ff529d4ae",
+  "limits": [
+    "Scheduling-dependent manual cancellation probe; not every possible instruction/pixel boundary",
+    "Credit admission is the trigger, not proof of a particular number of converted pixels",
+    "CPU decode/metadata lifetime only; no new GPU, disk-throughput or physical HDR qualification"
+  ],
+  "logs": [
+    "run-0.log",
+    "run-1.log",
+    "run-2.log",
+    "run-3.log",
+    "run-4.log",
+    "run-5.log"
+  ]
+}

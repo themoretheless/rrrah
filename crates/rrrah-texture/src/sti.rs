@@ -219,6 +219,12 @@ fn decode_zlib(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Raste
         .map(|m| m.try_reserve(length as u64))
         .transpose()
         .map_err(DecodeError::Memory)?;
+    let decoder_credit = request
+        .memory_budget
+        .as_ref()
+        .map(|m| m.try_reserve(crate::deflate::INFLATE_BYTES))
+        .transpose()
+        .map_err(DecodeError::Memory)?;
     let mut decoded = Vec::new();
     decoded
         .try_reserve_exact(length)
@@ -227,7 +233,7 @@ fn decode_zlib(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Raste
     decoded[..start].copy_from_slice(&b[..start]);
     decoded[16..20].copy_from_slice(&((flags as u32) & !16).to_le_bytes());
     decoded[8..12].copy_from_slice(&(expanded as u32).to_le_bytes());
-    let mut z = flate2::read::ZlibDecoder::new(&b[start..start + stored]);
+    let mut z = flate2::bufread::ZlibDecoder::new(&b[start..start + stored]);
     for chunk in decoded[start..start + expanded].chunks_mut(65536) {
         request.check_cancelled()?;
         z.read_exact(chunk)
@@ -238,6 +244,8 @@ fn decode_zlib(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Raste
     if z.read(&mut extra).map_err(|_| bad("corrupt zlib checksum"))? != 0 || z.total_in() != stored as u64 {
         return Err(bad("zlib length/trailing data"));
     }
+    drop(z);
+    drop(decoder_credit);
     decoded[start + expanded..].copy_from_slice(&b[start + stored..]);
     decode(&decoded, request)
 }
@@ -367,7 +375,7 @@ mod tests {
         }
         b.extend(payload);
         b.extend([7, 8, 9]);
-        let budget = rrrah_core::MemoryBudget::new(100);
+        let budget = rrrah_core::MemoryBudget::new(76 + crate::deflate::INFLATE_BYTES);
         let mut request = DecodeRequest::new("rgb24.sti");
         request.memory_budget = Some(budget.clone());
         let image = decode(&b, &request).unwrap();
@@ -398,7 +406,7 @@ mod tests {
         source[16..20].copy_from_slice(&25u32.to_le_bytes());
         source[8..12].copy_from_slice(&(compressed.len() as u32).to_le_bytes());
         source.extend(compressed);
-        let budget = rrrah_core::MemoryBudget::new(88);
+        let budget = rrrah_core::MemoryBudget::new(76 + crate::deflate::INFLATE_BYTES);
         let mut request = DecodeRequest::new("zlib.sti");
         request.memory_budget = Some(budget.clone());
         let output = decode(&source, &request).unwrap();
@@ -407,6 +415,7 @@ mod tests {
         };
         assert_eq!(p.as_slice(), [255, 0, 0, 255, 9, 8, 7, 0, 0, 255, 0, 255]);
         assert_eq!(budget.used(), 12);
+        assert_eq!(budget.peak(), 76 + crate::deflate::INFLATE_BYTES);
         drop(output);
         assert_eq!(budget.used(), 0);
         let mut corrupt = source.clone();
@@ -425,6 +434,13 @@ mod tests {
             assert!(decode(&invalid, &request).is_err());
             assert_eq!(budget.used(), 0);
         }
+        let short = rrrah_core::MemoryBudget::new(75 + crate::deflate::INFLATE_BYTES);
+        request.memory_budget = Some(short.clone());
+        assert!(matches!(
+            decode(&source, &request),
+            Err(RasterDecodeError::Source(DecodeError::Memory(_)))
+        ));
+        assert_eq!(short.used(), 0);
         request.memory_budget = Some(rrrah_core::MemoryBudget::new(75));
         assert!(decode(&source, &request).is_err());
         assert_eq!(request.memory_budget.as_ref().unwrap().peak(), 0);

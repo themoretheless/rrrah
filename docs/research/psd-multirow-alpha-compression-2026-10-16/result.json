@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "cases": 32,
+  "dimensions": [
+    9,
+    3
+  ],
+  "depths": [
+    16,
+    32
+  ],
+  "color_modes": [
+    "RGB+alpha",
+    "gray+alpha"
+  ],
+  "versions": [
+    "PSD",
+    "PSB"
+  ],
+  "compressions": [
+    "raw",
+    "RLE",
+    "ZIP",
+    "ZIP prediction"
+  ],
+  "native_samples": "bit-exact to stdlib compressed-plane/rational16/f64 reference",
+  "budgets": "exact peak,one-byte-short refusal,last-owner retention and final0 everycase",
+  "layered_passed": 74,
+  "layered_ignored": 2,
+  "source_and_oracle_hashes_verified": true,
+  "log_sha256": "4aaabd41106c115f1427943ad386dd7e16495a9c3774578f2b4d2a8fc6db6de4",
+  "scope": "authored producer controls; native/public-file/source-budgets/App-loader RAM/swap/blocked-prefetch/actual Metal;not original Photoshop or liveGUI/calibratedHDR qualification",
+  "public_passed": 197,
+  "public_ignored": 5,
+  "public_cases": 32,
+  "public_source_decode_peaks": "exact source+native peak and one-byte-short refusal everycase",
+  "app_targeted_passed": 2,
+  "app_targeted_failed": 0,
+  "metal_adapter": "Metal Apple M4 Max",
+  "metal_readbacks": 192,
+  "ram_full_pressure_hits": 32,
+  "swap_writes": 32,
+  "swap_reads": 32,
+  "decode_gate_held_during_restore": true,
+  "final_managed_bytes": 0,
+  "public_log_sha256": "c0321f131f65f04d093d60f82aee15e8bc3c286852ac459d4f532c80a3dad6f0",
+  "app_log_sha256": "d98adbf9a2eccec84110fd4842767697987a6ecf12af8c33d1f689f61c5cb567"
+}

@@ -75,6 +75,11 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
             }
         });
     }
+    /// Count-only preflight; reconciles released leases before inspecting protection.
+    pub fn can_admit_key_by_count(&mut self, key: &K) -> bool {
+        self.reconcile();
+        self.inner.can_admit_key_by_count(key)
+    }
     pub fn capacity(&self) -> u64 {
         self.inner.capacity()
     }
@@ -243,6 +248,35 @@ mod tests {
         let victims = cache.set_limits(CacheLimits::bytes(0)).unwrap();
         assert_eq!(victims, vec![(1, 42)]);
         assert!(cache.is_empty());
+    }
+
+    #[test]
+    fn count_preflight_reconciles_last_lease_and_preserves_owner_pins() {
+        let mut cache = LeaseCache::new(CacheLimits {
+            max_bytes: 16, max_entries: Some(2), ttl: None,
+        });
+        cache.insert(1u8, 11u8, 1).unwrap();
+        cache.insert(2, 22, 1).unwrap();
+        assert!(cache.pin(&1));
+        let lease = cache.get(&2).unwrap();
+        let clone = lease.clone();
+        assert!(!cache.can_admit_key_by_count(&3));
+        assert!(cache.can_admit_key_by_count(&1), "existing membership is not a new slot");
+        drop(lease);
+        assert!(!cache.can_admit_key_by_count(&3), "last clone still protects slot");
+        assert!(cache.pin(&2));
+        drop(clone);
+        assert!(!cache.can_admit_key_by_count(&3), "owner pin survives consumer release");
+        cache.unpin(&2);
+        assert!(cache.can_admit_key_by_count(&3));
+        assert_eq!((cache.len(), cache.resident_weight()), (2, 2));
+        assert_eq!(cache.get_cloned(&1), Some(11));
+        let mut disabled: LeaseCache<u8, u8> = LeaseCache::new(CacheLimits {
+            max_bytes: 16, max_entries: Some(0), ttl: None,
+        });
+        assert!(!disabled.can_admit_key_by_count(&1));
+        let mut unlimited: LeaseCache<u8, u8> = LeaseCache::new(CacheLimits::bytes(0));
+        assert!(unlimited.can_admit_key_by_count(&1), "byte admission is a separate constraint");
     }
 
     #[test]

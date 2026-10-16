@@ -1,0 +1,49 @@
+{
+  "status": "supported_mng_ticks_reach_common_timing_and_viewer_single_play",
+  "reference": "https://www.libpng.org/pub/mng/spec/mng-vlc.html",
+  "changes": [
+    "Positive MHDR ticks attach rational1000/ticks millisecond timing with one total play for the admitted no-repetition subset",
+    "Zero ticks retains one composed still with no animation timing",
+    "Existing viewer scheduler and P pause/resume automatically consume common MNG timing",
+    "TERM/LOOP remain explicitly unsupported; no hidden repetition semantics inferred",
+    "Metal regression now compares timing after RAM/swap and exact RGBA16Float preservation in addition to SDR"
+  ],
+  "checks": {
+    "common_manifest_timing_display_cases": 41,
+    "unsupported_repetition_controls": 2,
+    "unsupported_peak_credit": 0,
+    "mng_single_pass_clock_and_swap_restore": true,
+    "decode_passed": 192,
+    "decode_failed": 0,
+    "decode_ignored": 3,
+    "viewer_passed": 259,
+    "viewer_failed": 0,
+    "viewer_ignored": 72,
+    "actual_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional_gpu": false,
+      "tests_passed": 2,
+      "native_prepared_swap_states": 26,
+      "linear_alpha_swap_states": 28,
+      "sdr_and_rgba16float_preservation": true,
+      "timing_ram_swap_equal": true,
+      "final_credit": 0
+    }
+  },
+  "remaining": [
+    "Aseprite tag ranges/directions/repeats need their own playback model; no automatic tag semantics introduced",
+    "Full MNG TERM/LOOP/FRAM and independent outer-MNG compositor remain unsupported/unqualified",
+    "Live App physical pacing/keyboard interaction, physical HDR/NVIDIA and full100-format qualification remain open"
+  ],
+  "limits": [
+    "MNG frame-rate semantics follow VLC one-frame-per-tick and zero-tick still model; only current admitted control subset",
+    "Metal16F check demonstrates attachment/sample preservation, not physical display luminance or HDR-source gamut calibration",
+    "Native/prepared math and alpha oracles remain authored/Python with independent embedded PNG references; not a complete independent MNG engine"
+  ],
+  "files_sha256": {
+    "crates/rrrah-decode/src/mng.rs": "81b66567f4596615bac3bf0480e36618c94ebcfe789422b07f033fa7268cc014",
+    "crates/rrrah-app/src/main.rs": "a9d82b7c6355b0fbbebff0a330f8cd376b7c6f387e17aab12657f78204076307",
+    "crates/rrrah-app/tests/mng_readback.rs": "7c38640ed10ce2fe91c96375771d20c3d58dd31e1a008c212fe59b5e42a4db0d",
+    "README.md": "b15531a43e639ace673e8b7745295c0153dfaf3d6511ea15f613c6fcc403bbae"
+  }
+}

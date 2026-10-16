@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "binary_sha256": "d1b2fde7b6386407c2eac8d18a56626fadd8347bbfc1399ebe3ee3151414e90c",
+  "seconds_per_test": 60,
+  "scope": "real local files; injected2ms per I/O call with max64KiB; production codec may request smaller chunks; not physical slow disk or GPU",
+  "cases": [
+    {
+      "test": "sustained_large_keyspace_delayed_swap_pressure_and_retry",
+      "exit_code": 0,
+      "log_sha256": "8295abc57a4f2248aca49f5e5272f39459571266f6aaf7a16a5b47f3fd6fa6a2"
+    },
+    {
+      "test": "sustained_byte_cap_evicts_without_count_or_ttl_pressure",
+      "exit_code": 0,
+      "log_sha256": "4a1ffefccc2e78d89992c238f03a4a65e8e3a417af3d7144929be503d601d53a"
+    },
+    {
+      "test": "sustained_count_cap_evicts_without_byte_or_ttl_pressure",
+      "exit_code": 0,
+      "log_sha256": "977a295f393d0f2d748802189b8acf211522fa957c5e5a5d9d1ee69c92bdd190"
+    },
+    {
+      "test": "sustained_float_hdr_delayed_swap_pressure_cancel_and_retry",
+      "exit_code": 0,
+      "log_sha256": "b8d6ee84c647151174830a6d95a894b4a7042ffeda98764a5aaa203a94d6bdf8"
+    }
+  ]
+}

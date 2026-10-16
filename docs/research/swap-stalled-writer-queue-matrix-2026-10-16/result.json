@@ -1,0 +1,45 @@
+{
+  "status": "stalled_writer_backpressure_verified",
+  "cases": 18,
+  "queue_count_limits": [
+    1,
+    2,
+    4
+  ],
+  "queue_byte_limits": [
+    16,
+    32,
+    64
+  ],
+  "payload_bytes": 16,
+  "producer_enqueue_attempts": 1152,
+  "recovery_restores": 18,
+  "modes": [
+    "drain",
+    "cancel active and queued writes"
+  ],
+  "checks": [
+    "Writer gated inside payload serialization after stream creation; producer completion observed before release",
+    "For each case64 producer enqueues return without writer progress; expected Queued/Full results exact",
+    "Active worker counts against byte credit and is excluded from waiting channel count",
+    "Held64-byte buffer remains unchanged through backpressure and cancellation",
+    "Root and queue credit equal accepted active+waiting payload capacity while gated",
+    "Draining or cancellation releases all temporary pixel/queue credits without errors",
+    "Same queue subsequently writes and restores key250 exactly",
+    "Explicit shutdown/drop removes temporary swap store; last held buffer drop leaves both budgets0"
+  ],
+  "cache_lib": {
+    "passed": 143,
+    "failed": 0,
+    "ignored": 3
+  },
+  "changes": "Regression tests only; existing queue implementation satisfies tested invariants",
+  "limits": [
+    "Gated serialization is a deterministic slow-writer model, not physical disk latency/throughput measurement",
+    "Five-second producer timeout is a deadlock guard, not a UI latency SLA",
+    "Held buffer is an ownership control, not an actual on-screen frame",
+    "Generic16-byte payloads do not qualify all image codecs or filesystem failure modes",
+    "No new GPU, physical HDR, NVIDIA or full100-format qualification"
+  ],
+  "source_sha256": "16ecc5b2f19e4ae414e53f9c6ed9efdc187e5d3e7492d53ae75c7641e5c1a729"
+}

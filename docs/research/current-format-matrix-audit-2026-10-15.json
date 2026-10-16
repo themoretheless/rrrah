@@ -1,0 +1,41 @@
+{
+  "scope": "Current catalogue status only; not decoder/viewer correctness qualification",
+  "source": "docs/IMAGE_FORMATS_100.md",
+  "source_sha256": "1a0fedd9c76d6bef0d53904f808eb08d40ab1a168866598b02788cd642dca9ef",
+  "rows": 100,
+  "implemented_subsets": 94,
+  "pending": [
+    {
+      "number": 55,
+      "format": "PTX",
+      "implementation": "Pending"
+    },
+    {
+      "number": 62,
+      "format": "MEF",
+      "implementation": "Pending: explicit native Mamiya ZD sensor import API"
+    },
+    {
+      "number": 68,
+      "format": "RWZ",
+      "implementation": "Pending: Rawzor compressed-file wrapper"
+    },
+    {
+      "number": 69,
+      "format": "BAY",
+      "implementation": "Pending: native explicit-layout sensor unpack for Casio QV-2000UX, QV-3000EX and QV-5700"
+    },
+    {
+      "number": 70,
+      "format": "CAP",
+      "implementation": "Pending: legacy Phase One / Capture One sensor format"
+    },
+    {
+      "number": 74,
+      "format": "AI",
+      "implementation": "Pending: `.ai` gallery candidate; PDF-compatible content uses the PDF renderer, including selected pages. PostScript AI remains unsupported."
+    }
+  ],
+  "fully_qualified": 0,
+  "basis": "Catalogue explicitly states none fully qualified; six pending normal-viewer families. Older 2026-10-06 matrix counts are historical."
+}

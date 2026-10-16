@@ -1,0 +1,29 @@
+{
+  "status": "axis_heap_temporaries_removed",
+  "changes": [
+    "Replace dimension Vec with three retained stack lengths; still parse, order-check and checked-multiply all declared axes",
+    "Encode NAXIS1 through NAXIS999 in an eight-byte stack buffer instead of format allocation"
+  ],
+  "checks": {
+    "scientific_lib": {
+      "passed": 57,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy": "passed --lib --tests --no-deps -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "axis_keyword": "all 999 indices in reverse order compared against independent formatting; reused buffer covers 3-to-2-to-1 digit transitions",
+    "maximum_axes": "empty 999-axis primary scans all axes; last negative size and duplicate structural keyword refuse; all paths release managed credit",
+    "oracles": "existing native/physical/window exact and one-byte-short fixture checks pass"
+  },
+  "limits": [
+    "No throughput claim",
+    "GPU pipeline was not rerun for this stack-only axis change; prior field-table Metal evidence is separate",
+    "Budget admission tracks payload capacities, not allocator/control overhead or RSS; no whole-decoder allocation-free claim"
+  ],
+  "source_sha256": "fdfb46905533a492e652c2009e5a312a764307c7db6a32c7ac6b9791f300a5f4"
+}

@@ -1155,7 +1155,7 @@ mod name_tests {
         let names = inspect_rpf_node_names(&bytes, 3, 8, || false).unwrap();
         assert_eq!(
             names.names().collect::<Vec<_>>(),
-            [&[0xff, 0x80][..], &[][..], &[b'N'][..]]
+            [&[0xff, 0x80][..], &[][..], &b"N"[..]]
         );
         assert_eq!(names.trailing_bytes(), [9, 8]);
         assert_eq!(names.consumed, size);

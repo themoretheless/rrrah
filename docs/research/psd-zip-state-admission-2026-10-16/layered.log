@@ -1,0 +1,85 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.95s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_layered-abb59544ff2eadad)
+
+running 75 tests
+test aseprite::tests::linked_cel_resolver_paired_benchmark ... ignored, manual paired linked-cel resolver microbenchmark
+test psd::tests::explicit_srgb_assumption_applies_to_untagged_psd_and_psb ... ok
+test psd::tests::float_unmatting_refuses_new_overflow_and_preserves_representable_hdr ... ok
+test psd::tests::icc_resource_is_admitted_before_copy_and_shared_by_raster_clones ... ok
+test psd::tests::independent_high_precision_alpha_controls_preserve_precision_and_hdr ... ok
+test psd::tests::independent_prediction_retains_high_precision ... ok
+test psd::tests::malformed_hdr_toning_sections_refuse_before_managed_admission ... ok
+test psd::tests::opaque_float_alpha_preserves_tiny_samples_signed_zero_and_nan_bits ... ok
+test aseprite::tests::pixel_aspect_header_domain_and_selected_frames ... ok
+test aseprite::tests::cyclic_links_unsupported_blend_and_gamma_reject ... ok
+test psd::tests::packbits_repeats_noop_and_row_limits ... ok
+test aseprite::tests::unselected_unrelated_compressed_streams_are_not_inflated ... ok
+test aseprite::tests::truncated_and_invalid_fields_reject ... ok
+test aseprite::tests::icc_chunk_admission_and_raster_metadata_clones_share_credit ... ok
+test aseprite::tests::source_color_reaches_display_without_changing_alpha ... ok
+test psd::tests::raw_planes_need_only_output_credit_for_all_sample_precisions ... ok
+test psd::tests::retains_float_values ... ok
+test psd::tests::pinned_original_psd_psb_rgb16_composites_match_independent_planar_oracle ... ok
+test psd::tests::retains_sixteen_bit_precision ... ok
+test psd::tests::zip_decoder_state_is_admitted_before_inflate_and_released_before_output ... ok
+test psd::tests::zip_rejects_truncation_and_trailing_stream_data ... ok
+test psd::tests::original_rgb_gray_16_32_composites_match_independent_planes ... ok
+test psd::tests::white_unmatting_cancels_before_next_4096_pixel_block_at_every_precision ... ok
+test xcf::selected_layer_tests::hidden_only_canvas_still_checks_global_compression_before_allocation ... ok
+test xcf::selected_layer_tests::hidden_layer_pixels_do_not_consume_flatten_working_budget ... ok
+test psd::tests::composition_buffers_respect_peak_credit_and_owner_lifetime ... ok
+test xcf::selected_layer_tests::legacy_flatten_masks_visibility_and_negative_offset_keep_managed_ownership ... ok
+test xcf::selected_layer_tests::legacy_flatten_preserves_indexed_pixels_and_releases_working_canvas ... ok
+test xcf::selected_layer_tests::legacy_composition_defaults_are_explicit_and_unknown_choices_refuse_before_allocation ... ok
+test xcf::selected_layer_tests::legacy_grayscale_flatten_preserves_levels_alpha_and_last_owner ... ok
+test aseprite::tests::low_output_zlib_stream_checks_cancellation_between_bounded_input_chunks ... ok
+test xcf::selected_layer_tests::legacy_half_opacity_mask_preserves_uncovered_and_composited_pixels ... ok
+test xcf::selected_layer_tests::legacy_normal_flatten_composes_bottom_to_top ... ok
+test xcf::selected_layer_tests::selected_gimp_layers_preserve_mask_and_rollback_partial_cancellation ... ignored, requires pinned external GIMP gimp-2-6-file.xcf fixture
+test xcf::selected_layer_tests::selected_indexed_layers_preserve_native_bytes_and_managed_ownership ... ok
+test xcf::tests::borrowed_properties_accept_historic_palette_size_and_stop_at_end ... ok
+test xcf::tests::channel_hierarchy_decodes_under_shared_budget_and_releases_last_owner ... ok
+test xcf::tests::channel_records_validate_parent_dimensions_and_borrow_metadata ... ok
+test xcf::tests::composition_attributes_preserve_auto_and_unknown_values_without_fallback ... ok
+test xcf::tests::duplicate_and_overlapping_object_offsets_are_rejected ... ok
+test xcf::tests::embedded_icc_is_borrowed_and_invalid_parasites_never_become_no_profile ... ok
+test aseprite::tests::large_metadata_chunk_count_does_not_allocate_descriptor_table ... ok
+test xcf::tests::empty_main_level_uses_one_null_pointer_and_no_tile_scratch ... ok
+test xcf::tests::excessive_layer_sizes_and_name_lengths_fail_before_payload_reads ... ok
+test xcf::tests::float_composite_preserves_hdr_and_validates_all_samples_before_writes ... ok
+test xcf::tests::group_membership_borrows_paths_and_rejects_duplicate_or_unbounded_records ... ok
+test xcf::selected_layer_tests::common_raster_route_preserves_xcf_pixels_profile_and_budget ... ok
+test xcf::tests::hierarchy_checks_main_level_and_edge_tile_tables ... ok
+test xcf::tests::layer_attributes_preserve_signed_offsets_and_float_opacity_precedence ... ok
+test xcf::tests::legacy_u8_expansion_covers_modes_palette_alpha_and_budget_rollback ... ok
+test xcf::tests::high_precision_samples_preserve_hdr_and_reject_ambiguous_or_nonfinite_values ... ok
+test xcf::tests::layer_records_borrow_names_and_preserve_mask_references ... ok
+test xcf::tests::long_rle_runs_and_invalid_lengths_are_bounded ... ok
+test xcf::tests::malformed_and_excessive_headers_refuse_without_panics ... ok
+test xcf::tests::managed_tree_resolves_groups_and_rolls_back_missing_parent_or_cancellation ... ok
+test xcf::tests::normal_composite_preserves_alpha_mask_clipping_and_input_validation ... ok
+test xcf::tests::managed_level_assembly_keeps_edge_rows_and_rolls_back_failures ... ok
+test xcf::tests::object_tables_are_borrowed_and_validate_both_offset_widths ... ok
+test xcf::tests::premultiplied_group_scales_color_once_and_matches_straight_source_over ... ok
+test xcf::tests::palette_extraction_refuses_duplicates_and_trailing_malformed_properties ... ok
+test xcf::tests::rgba_preparation_transfers_shared_owner_at_full_ram_capacity ... ok
+test xcf::tests::property_truncation_and_count_limit_are_terminal_errors ... ok
+test xcf::tests::valid_indexed_v1_files_preserve_native_palette_and_bounded_rgba ... ok
+test xcf::tests::version_specific_precision_and_offset_layouts ... ok
+test xcf::tests::tile_codecs_match_interleaved_pixels_and_leave_source_untouched ... ok
+test xcf::tests::every_half_pattern_matches_independent_python_ieee_oracle_or_is_refused ... ok
+test psd::tests::original_gray_merged_alpha_psd_psb_matches_independent_decoders ... ok
+test psd::tests::psb_rle_noop_rows_check_cancellation_and_preserve_valid_output ... ok
+test aseprite::tests::selected_frame_buffers_obey_peak_budget_and_keep_output_credit_until_last_owner ... ok
+test psd::tests::zip_empty_blocks_are_input_bounded_cancel_and_release_credit ... ok
+test aseprite::tests::selected_frame_oracles_and_metadata ... ok
+test aseprite::tests::corrupt_compressed_cels_release_admitted_buffers_and_allow_retry ... ok
+test aseprite::tests::file_source_and_decode_peak_share_budget_and_release_source_before_return ... ok
+test aseprite::tests::linked_cel_graph_resolves_long_chains_and_rejects_cycles_without_scratch ... ok
+test aseprite::tests::linked_cel_graph_matches_independent_exhaustive_walk_oracle ... ok
+
+test result: ok. 73 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

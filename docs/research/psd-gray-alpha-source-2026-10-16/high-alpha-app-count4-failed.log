@@ -1,0 +1,27 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 25.58s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-92bbc95cda3130da)
+
+running 2 tests
+test dicom_pipeline_tests::high_precision_alpha_ram_swap_and_blocked_prefetch ... HIGH_ALPHA_PIPELINE cases=8 explicit_linear=true
+
+thread 'dicom_pipeline_tests::high_precision_alpha_ram_swap_and_blocked_prefetch' (10483431) panicked at crates/rrrah-app/src/dicom_pipeline_tests.rs:1418:9:
+SGI/Sun/PCX/DCX/PKM foreground swap decoded
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test dicom_pipeline_tests::high_precision_alpha_ram_swap_and_metal ... HIGH_ALPHA_METAL adapter=Metal Apple M4 Max
+HIGH_ALPHA_PIPELINE cases=8 explicit_linear=true
+
+thread 'dicom_pipeline_tests::high_precision_alpha_ram_swap_and_metal' (10483437) panicked at crates/rrrah-app/src/dicom_pipeline_tests.rs:1418:9:
+SGI/Sun/PCX/DCX/PKM foreground swap decoded
+FAILED
+
+failures:
+
+failures:
+    dicom_pipeline_tests::high_precision_alpha_ram_swap_and_blocked_prefetch
+    dicom_pipeline_tests::high_precision_alpha_ram_swap_and_metal
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 354 filtered out; finished in 3.05s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

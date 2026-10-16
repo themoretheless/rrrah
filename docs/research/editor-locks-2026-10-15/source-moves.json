@@ -1,0 +1,2747 @@
+{
+  "note": "Navigation-only migration after crate extraction; acceptance, original audit fingerprints and statuses preserved. Unique source filenames or exact excerpt/symbol matches; six ambiguous paths resolved by domain/module ownership. No requalification of remaining 970 tasks.",
+  "moves": [
+    {
+      "id": "RR-0024",
+      "old_path": "crates/rrrah-decode/src/apng.rs",
+      "path": "crates/rrrah-animation/src/apng.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0026",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "amaze"
+    },
+    {
+      "id": "RR-0029",
+      "old_path": "crates/rrrah-decode/src/emf.rs",
+      "path": "crates/rrrah-vector/src/emf.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0031",
+      "old_path": "crates/rrrah-decode/src/pvr.rs",
+      "path": "crates/rrrah-texture/src/pvr.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0032",
+      "old_path": "crates/rrrah-decode/src/wmf.rs",
+      "path": "crates/rrrah-vector/src/wmf.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0033",
+      "old_path": "crates/rrrah-decode/src/ply.rs",
+      "path": "crates/rrrah-mesh/src/ply.rs",
+      "symbol": "decode_bytes_budgeted"
+    },
+    {
+      "id": "RR-0035",
+      "old_path": "crates/rrrah-core/src/raster.rs",
+      "path": "crates/rrrah-develop/src/raster.rs",
+      "symbol": "to_linear_srgb_with_budget_and_cancel"
+    },
+    {
+      "id": "RR-0036",
+      "old_path": "crates/rrrah-decode/src/dicom.rs",
+      "path": "crates/rrrah-scientific/src/dicom.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0037",
+      "old_path": "crates/rrrah-decode/src/dpx.rs",
+      "path": "crates/rrrah-vfx/src/dpx.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0039",
+      "old_path": "crates/rrrah-decode/src/ktx.rs",
+      "path": "crates/rrrah-texture/src/ktx.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0040",
+      "old_path": "crates/rrrah-decode/src/psd.rs",
+      "path": "crates/rrrah-layered/src/psd.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0044",
+      "old_path": "crates/rrrah-decode/src/jng.rs",
+      "path": "crates/rrrah-animation/src/jng.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0045",
+      "old_path": "crates/rrrah-decode/src/ply_swap.rs",
+      "path": "crates/rrrah-mesh/src/ply_swap.rs",
+      "symbol": "read_ply_swap_payload"
+    },
+    {
+      "id": "RR-0046",
+      "old_path": "crates/rrrah-decode/src/camtiff/cr2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0048",
+      "old_path": "crates/rrrah-decode/src/fits.rs",
+      "path": "crates/rrrah-scientific/src/fits.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0050",
+      "old_path": "crates/rrrah-decode/src/raster_color.rs",
+      "path": "crates/rrrah-animation/src/raster_color.rs",
+      "symbol": "prepare_raster_for_display_with_budget_and_cancel"
+    },
+    {
+      "id": "RR-0051",
+      "old_path": "crates/rrrah-decode/src/webp_animation.rs",
+      "path": "crates/rrrah-animation/src/webp_animation.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0053",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "read_obj_swap_payload"
+    },
+    {
+      "id": "RR-0054",
+      "old_path": "crates/rrrah-core/src/thumbnail.rs",
+      "path": "crates/rrrah-develop/src/thumbnail.rs",
+      "symbol": "develop_with_cancel"
+    },
+    {
+      "id": "RR-0057",
+      "old_path": "crates/rrrah-decode/src/pdf.rs",
+      "path": "crates/rrrah-vector/src/pdf.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0059",
+      "old_path": "crates/rrrah-decode/src/sti.rs",
+      "path": "crates/rrrah-texture/src/sti.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0060",
+      "old_path": "crates/rrrah-core/src/raster.rs",
+      "path": "crates/rrrah-develop/src/raster.rs",
+      "symbol": "hdr_to_linear_srgb"
+    },
+    {
+      "id": "RR-0062",
+      "old_path": "crates/rrrah-core/src/thumbnail.rs",
+      "path": "crates/rrrah-develop/src/thumbnail.rs",
+      "symbol": "develop_xtrans_thumbnail"
+    },
+    {
+      "id": "RR-0063",
+      "old_path": "crates/rrrah-core/src/thumbnail.rs",
+      "path": "crates/rrrah-develop/src/thumbnail.rs",
+      "symbol": "develop_rgbe_thumbnail"
+    },
+    {
+      "id": "RR-0064",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "decode_nikon_lossless"
+    },
+    {
+      "id": "RR-0069",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "decode_uncompressed"
+    },
+    {
+      "id": "RR-0073",
+      "old_path": "crates/rrrah-decode/src/off_swap.rs",
+      "path": "crates/rrrah-mesh/src/off_swap.rs",
+      "symbol": "read_off_swap_payload"
+    },
+    {
+      "id": "RR-0074",
+      "old_path": "crates/rrrah-decode/src/cineon.rs",
+      "path": "crates/rrrah-vfx/src/cineon.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0076",
+      "old_path": "crates/rrrah-decode/src/dds.rs",
+      "path": "crates/rrrah-texture/src/dds.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0080",
+      "old_path": "crates/rrrah-decode/src/eip.rs",
+      "path": "crates/rrrah-raw/src/eip.rs",
+      "symbol": "inspect_eip"
+    },
+    {
+      "id": "RR-0083",
+      "old_path": "crates/rrrah-core/src/develop/ahd.rs",
+      "path": "crates/rrrah-demosaic/src/ahd.rs",
+      "symbol": "ahd"
+    },
+    {
+      "id": "RR-0084",
+      "old_path": "crates/rrrah-decode/src/camtiff/hasselblad_entropy.rs",
+      "path": "crates/rrrah-raw/src/camtiff/hasselblad_entropy.rs",
+      "symbol": "decode_inner"
+    },
+    {
+      "id": "RR-0088",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "parse_curve_blob"
+    },
+    {
+      "id": "RR-0089",
+      "old_path": "crates/rrrah-decode/src/dds.rs",
+      "path": "crates/rrrah-texture/src/dds.rs",
+      "symbol": "uncompressed"
+    },
+    {
+      "id": "RR-0093",
+      "old_path": "crates/rrrah-decode/src/sti.rs",
+      "path": "crates/rrrah-texture/src/sti.rs",
+      "symbol": "decode_rgb"
+    },
+    {
+      "id": "RR-0099",
+      "old_path": "crates/rrrah-core/src/develop/mod.rs",
+      "path": "crates/rrrah-demosaic/src/lib.rs",
+      "symbol": "par_rows"
+    },
+    {
+      "id": "RR-0102",
+      "old_path": "crates/rrrah-decode/src/gif_animation.rs",
+      "path": "crates/rrrah-animation/src/gif_animation.rs",
+      "symbol": "inventory"
+    },
+    {
+      "id": "RR-0107",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0109",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "parse_frame_with_mos"
+    },
+    {
+      "id": "RR-0111",
+      "old_path": "crates/rrrah-decode/src/dng/tiff.rs",
+      "path": "crates/rrrah-raw/src/dng/tiff.rs",
+      "symbol": "numeric_values"
+    },
+    {
+      "id": "RR-0113",
+      "old_path": "crates/rrrah-decode/src/off.rs",
+      "path": "crates/rrrah-mesh/src/off.rs",
+      "symbol": "face_color"
+    },
+    {
+      "id": "RR-0115",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "decode_unpacked16"
+    },
+    {
+      "id": "RR-0116",
+      "old_path": "crates/rrrah-decode/src/sti.rs",
+      "path": "crates/rrrah-texture/src/sti.rs",
+      "symbol": "decode_zlib"
+    },
+    {
+      "id": "RR-0118",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0123",
+      "old_path": "crates/rrrah-decode/src/stl_swap.rs",
+      "path": "crates/rrrah-mesh/src/stl_swap.rs",
+      "symbol": "read_stl_swap_payload"
+    },
+    {
+      "id": "RR-0124",
+      "old_path": "crates/rrrah-decode/src/cr3/crx.rs",
+      "path": "crates/rrrah-raw/src/cr3/crx.rs",
+      "symbol": "parse_box"
+    },
+    {
+      "id": "RR-0125",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "decode_first_row"
+    },
+    {
+      "id": "RR-0126",
+      "old_path": "crates/rrrah-decode/src/fits.rs",
+      "path": "crates/rrrah-scientific/src/fits.rs",
+      "symbol": "parse_header"
+    },
+    {
+      "id": "RR-0127",
+      "old_path": "crates/rrrah-decode/src/sniff.rs",
+      "path": "crates/rrrah-raw/src/sniff.rs",
+      "symbol": "is_kodak_dcs520"
+    },
+    {
+      "id": "RR-0129",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "cfa_pattern"
+    },
+    {
+      "id": "RR-0134",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "write_obj_swap_payload"
+    },
+    {
+      "id": "RR-0136",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone_entropy.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone_entropy.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0143",
+      "old_path": "crates/rrrah-decode/src/cr3/ctmd.rs",
+      "path": "crates/rrrah-raw/src/cr3/ctmd.rs",
+      "symbol": "parse_with_limits"
+    },
+    {
+      "id": "RR-0153",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_tiles"
+    },
+    {
+      "id": "RR-0156",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "read_black_level"
+    },
+    {
+      "id": "RR-0157",
+      "old_path": "crates/rrrah-decode/src/dng/tiff.rs",
+      "path": "crates/rrrah-raw/src/dng/tiff.rs",
+      "symbol": "parse_ifd"
+    },
+    {
+      "id": "RR-0158",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "decode_p7800_unpacked"
+    },
+    {
+      "id": "RR-0159",
+      "old_path": "crates/rrrah-decode/src/dng/parallel.rs",
+      "path": "crates/rrrah-raw/src/dng/parallel.rs",
+      "symbol": "run_units"
+    },
+    {
+      "id": "RR-0168",
+      "old_path": "crates/rrrah-core/src/develop/xtrans.rs",
+      "path": "crates/rrrah-demosaic/src/xtrans.rs",
+      "symbol": "green"
+    },
+    {
+      "id": "RR-0174",
+      "old_path": "crates/rrrah-decode/src/camtiff/srf_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/srf_sensor.rs",
+      "symbol": "decode_f828"
+    },
+    {
+      "id": "RR-0175",
+      "old_path": "crates/rrrah-decode/src/camtiff/mod.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mod.rs",
+      "symbol": "parse_tiff"
+    },
+    {
+      "id": "RR-0176",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "collect_directories_with_chains"
+    },
+    {
+      "id": "RR-0177",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "decode_panasonic_packed"
+    },
+    {
+      "id": "RR-0180",
+      "old_path": "crates/rrrah-decode/src/obj.rs",
+      "path": "crates/rrrah-mesh/src/obj.rs",
+      "symbol": "owned_groups"
+    },
+    {
+      "id": "RR-0181",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "decode_uncompressed"
+    },
+    {
+      "id": "RR-0182",
+      "old_path": "crates/rrrah-decode/src/ply_swap.rs",
+      "path": "crates/rrrah-mesh/src/ply_swap.rs",
+      "symbol": "write_ply_swap_payload"
+    },
+    {
+      "id": "RR-0184",
+      "old_path": "crates/rrrah-core/src/develop/mod.rs",
+      "path": "crates/rrrah-develop/src/lib.rs",
+      "symbol": "develop_rgbe"
+    },
+    {
+      "id": "RR-0186",
+      "old_path": "crates/rrrah-decode/src/cr3/tiff.rs",
+      "path": "crates/rrrah-raw/src/cr3/tiff.rs",
+      "symbol": "parse_ifd"
+    },
+    {
+      "id": "RR-0191",
+      "old_path": "crates/rrrah-decode/src/ktx2.rs",
+      "path": "crates/rrrah-texture/src/ktx2.rs",
+      "symbol": "metadata"
+    },
+    {
+      "id": "RR-0192",
+      "old_path": "crates/rrrah-decode/src/stl.rs",
+      "path": "crates/rrrah-mesh/src/stl.rs",
+      "symbol": "stream_binary_facets"
+    },
+    {
+      "id": "RR-0193",
+      "old_path": "crates/rrrah-decode/src/camtiff/mef_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mef_sensor.rs",
+      "symbol": "decode_mef_zd_sensor_file"
+    },
+    {
+      "id": "RR-0202",
+      "old_path": "crates/rrrah-decode/src/bounded_io.rs",
+      "path": "crates/rrrah-raw/src/bounded_io.rs",
+      "symbol": "read_legacy"
+    },
+    {
+      "id": "RR-0203",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "read_cfa"
+    },
+    {
+      "id": "RR-0205",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0207",
+      "old_path": "crates/rrrah-decode/src/off_swap.rs",
+      "path": "crates/rrrah-mesh/src/off_swap.rs",
+      "symbol": "write_off_swap_payload"
+    },
+    {
+      "id": "RR-0208",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_storage.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_storage.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0214",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0218",
+      "old_path": "crates/rrrah-core/src/develop/opcodes.rs",
+      "path": "crates/rrrah-develop/src/opcodes.rs",
+      "symbol": "parse_list"
+    },
+    {
+      "id": "RR-0219",
+      "old_path": "crates/rrrah-decode/src/eip.rs",
+      "path": "crates/rrrah-raw/src/eip.rs",
+      "symbol": "read_eip_raw"
+    },
+    {
+      "id": "RR-0225",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0226",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_stsc"
+    },
+    {
+      "id": "RR-0229",
+      "old_path": "crates/rrrah-decode/src/dcx.rs",
+      "path": "crates/rrrah-texture/src/dcx.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0233",
+      "old_path": "crates/rrrah-decode/src/dng/tiff.rs",
+      "path": "crates/rrrah-raw/src/dng/tiff.rs",
+      "symbol": "unsigned_values"
+    },
+    {
+      "id": "RR-0234",
+      "old_path": "crates/rrrah-decode/src/fits.rs",
+      "path": "crates/rrrah-scientific/src/fits.rs",
+      "symbol": "raster"
+    },
+    {
+      "id": "RR-0239",
+      "old_path": "crates/rrrah-decode/src/bounded_io.rs",
+      "path": "crates/rrrah-raw/src/bounded_io.rs",
+      "symbol": "read_managed_capped"
+    },
+    {
+      "id": "RR-0244",
+      "old_path": "crates/rrrah-decode/src/stl.rs",
+      "path": "crates/rrrah-mesh/src/stl.rs",
+      "symbol": "try_stream_binary_model"
+    },
+    {
+      "id": "RR-0249",
+      "old_path": "crates/rrrah-decode/src/bay.rs",
+      "path": "crates/rrrah-raw/src/bay.rs",
+      "symbol": "read_bay_image_rows"
+    },
+    {
+      "id": "RR-0255",
+      "old_path": "crates/rrrah-decode/src/fits.rs",
+      "path": "crates/rrrah-scientific/src/fits.rs",
+      "symbol": "windowed_request"
+    },
+    {
+      "id": "RR-0256",
+      "old_path": "crates/rrrah-decode/src/scientific.rs",
+      "path": "crates/rrrah-scientific/src/scientific.rs",
+      "symbol": "windowed_with_request"
+    },
+    {
+      "id": "RR-0260",
+      "old_path": "crates/rrrah-decode/src/webp_animation.rs",
+      "path": "crates/rrrah-animation/src/webp_animation.rs",
+      "symbol": "chunks"
+    },
+    {
+      "id": "RR-0262",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "parse_makernote_entries"
+    },
+    {
+      "id": "RR-0264",
+      "old_path": "crates/rrrah-decode/src/obj.rs",
+      "path": "crates/rrrah-mesh/src/obj.rs",
+      "symbol": "triangulation_buffer"
+    },
+    {
+      "id": "RR-0265",
+      "old_path": "crates/rrrah-decode/src/rla.rs",
+      "path": "crates/rrrah-vfx/src/rla.rs",
+      "symbol": "plane"
+    },
+    {
+      "id": "RR-0266",
+      "old_path": "crates/rrrah-decode/src/stl_swap.rs",
+      "path": "crates/rrrah-mesh/src/stl_swap.rs",
+      "symbol": "write_stl_swap_payload"
+    },
+    {
+      "id": "RR-0268",
+      "old_path": "crates/rrrah-decode/src/camtiff/mef_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mef_sensor.rs",
+      "symbol": "read_verified_sensor"
+    },
+    {
+      "id": "RR-0269",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_stsz"
+    },
+    {
+      "id": "RR-0278",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_chunk_offsets"
+    },
+    {
+      "id": "RR-0283",
+      "old_path": "crates/rrrah-decode/src/camtiff/erf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/erf.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0289",
+      "old_path": "crates/rrrah-decode/src/cr3/tiff.rs",
+      "path": "crates/rrrah-raw/src/cr3/tiff.rs",
+      "symbol": "linked_ifds"
+    },
+    {
+      "id": "RR-0292",
+      "old_path": "crates/rrrah-decode/src/ply_swap.rs",
+      "path": "crates/rrrah-mesh/src/ply_swap.rs",
+      "symbol": "read_scalars"
+    },
+    {
+      "id": "RR-0307",
+      "old_path": "crates/rrrah-decode/src/camtiff/kdc.rs",
+      "path": "crates/rrrah-raw/src/camtiff/kdc.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0313",
+      "old_path": "crates/rrrah-decode/src/camtiff/srw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/srw.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0314",
+      "old_path": "crates/rrrah-decode/src/camtiff/three_fr.rs",
+      "path": "crates/rrrah-raw/src/camtiff/three_fr.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0315",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "read_records"
+    },
+    {
+      "id": "RR-0320",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "children"
+    },
+    {
+      "id": "RR-0321",
+      "old_path": "crates/rrrah-decode/src/off_swap.rs",
+      "path": "crates/rrrah-mesh/src/off_swap.rs",
+      "symbol": "read_records"
+    },
+    {
+      "id": "RR-0328",
+      "old_path": "crates/rrrah-decode/src/dng/parallel.rs",
+      "path": "crates/rrrah-raw/src/dng/parallel.rs",
+      "symbol": "split_row_bands"
+    },
+    {
+      "id": "RR-0347",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "segment"
+    },
+    {
+      "id": "RR-0357",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "read_optional"
+    },
+    {
+      "id": "RR-0358",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "read_string"
+    },
+    {
+      "id": "RR-0359",
+      "old_path": "crates/rrrah-decode/src/ply_swap.rs",
+      "path": "crates/rrrah-mesh/src/ply_swap.rs",
+      "symbol": "read_text"
+    },
+    {
+      "id": "RR-0369",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "allocate_coefficients"
+    },
+    {
+      "id": "RR-0370",
+      "old_path": "crates/rrrah-decode/src/cr3/tiff.rs",
+      "path": "crates/rrrah-raw/src/cr3/tiff.rs",
+      "symbol": "collect_values"
+    },
+    {
+      "id": "RR-0378",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "uint"
+    },
+    {
+      "id": "RR-0379",
+      "old_path": "crates/rrrah-decode/src/ply_swap.rs",
+      "path": "crates/rrrah-mesh/src/ply_swap.rs",
+      "symbol": "uint"
+    },
+    {
+      "id": "RR-0385",
+      "old_path": "crates/rrrah-decode/src/eps_vm.rs",
+      "path": "crates/rrrah-vector/src/eps_vm.rs",
+      "symbol": "operate"
+    },
+    {
+      "id": "RR-0386",
+      "old_path": "crates/rrrah-decode/src/aseprite.rs",
+      "path": "crates/rrrah-layered/src/aseprite.rs",
+      "symbol": "inventory"
+    },
+    {
+      "id": "RR-0387",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "xtrans_markesteijn_3pass"
+    },
+    {
+      "id": "RR-0388",
+      "old_path": "crates/rrrah-core/src/develop/mod.rs",
+      "path": "crates/rrrah-develop/src/lib.rs",
+      "symbol": "develop_raw"
+    },
+    {
+      "id": "RR-0389",
+      "old_path": "crates/rrrah-decode/src/nrrd.rs",
+      "path": "crates/rrrah-scientific/src/nrrd.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0390",
+      "old_path": "crates/rrrah-decode/src/obj.rs",
+      "path": "crates/rrrah-mesh/src/obj.rs",
+      "symbol": "decode_bytes_budgeted"
+    },
+    {
+      "id": "RR-0392",
+      "old_path": "crates/rrrah-decode/src/eps_raster.rs",
+      "path": "crates/rrrah-vector/src/eps_raster.rs",
+      "symbol": "rasterize"
+    },
+    {
+      "id": "RR-0394",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "xtrans_markesteijn"
+    },
+    {
+      "id": "RR-0395",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "parse"
+    },
+    {
+      "id": "RR-0396",
+      "old_path": "crates/rrrah-decode/src/rla.rs",
+      "path": "crates/rrrah-vfx/src/rla.rs",
+      "symbol": "decode_with_settings"
+    },
+    {
+      "id": "RR-0397",
+      "old_path": "crates/rrrah-decode/src/off.rs",
+      "path": "crates/rrrah-mesh/src/off.rs",
+      "symbol": "decode_bytes_budgeted"
+    },
+    {
+      "id": "RR-0400",
+      "old_path": "crates/rrrah-decode/src/ktx2.rs",
+      "path": "crates/rrrah-texture/src/ktx2.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0401",
+      "old_path": "crates/rrrah-decode/src/pict.rs",
+      "path": "crates/rrrah-vector/src/pict.rs",
+      "symbol": "render_rectangles"
+    },
+    {
+      "id": "RR-0406",
+      "old_path": "crates/rrrah-decode/src/eps_stroke.rs",
+      "path": "crates/rrrah-vector/src/eps_stroke.rs",
+      "symbol": "outline_eps_polyline"
+    },
+    {
+      "id": "RR-0411",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "lmmse"
+    },
+    {
+      "id": "RR-0412",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone_calibration.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone_calibration.rs",
+      "symbol": "repair_columns"
+    },
+    {
+      "id": "RR-0413",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "vng"
+    },
+    {
+      "id": "RR-0414",
+      "old_path": "crates/rrrah-decode/src/png_color.rs",
+      "path": "crates/rrrah-vector/src/png_color.rs",
+      "symbol": "declaration"
+    },
+    {
+      "id": "RR-0415",
+      "old_path": "crates/rrrah-decode/src/eps_fill.rs",
+      "path": "crates/rrrah-vector/src/eps_fill.rs",
+      "symbol": "fill_path_coverage"
+    },
+    {
+      "id": "RR-0416",
+      "old_path": "crates/rrrah-decode/src/eps_vm.rs",
+      "path": "crates/rrrah-vector/src/eps_vm.rs",
+      "symbol": "graphics_operation"
+    },
+    {
+      "id": "RR-0420",
+      "old_path": "crates/rrrah-decode/src/cr3/select.rs",
+      "path": "crates/rrrah-raw/src/cr3/select.rs",
+      "symbol": "select_full_resolution_crx"
+    },
+    {
+      "id": "RR-0421",
+      "old_path": "crates/rrrah-decode/src/eps_strings.rs",
+      "path": "crates/rrrah-vector/src/eps_strings.rs",
+      "symbol": "walk"
+    },
+    {
+      "id": "RR-0423",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "igv"
+    },
+    {
+      "id": "RR-0424",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "dcb"
+    },
+    {
+      "id": "RR-0426",
+      "old_path": "crates/rrrah-decode/src/eps_tokens.rs",
+      "path": "crates/rrrah-vector/src/eps_tokens.rs",
+      "symbol": "scan"
+    },
+    {
+      "id": "RR-0427",
+      "old_path": "crates/rrrah-decode/src/svg.rs",
+      "path": "crates/rrrah-vector/src/svg.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0429",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "rcd"
+    },
+    {
+      "id": "RR-0430",
+      "old_path": "crates/rrrah-core/src/develop/opcodes.rs",
+      "path": "crates/rrrah-develop/src/opcodes.rs",
+      "symbol": "parse_one"
+    },
+    {
+      "id": "RR-0432",
+      "old_path": "crates/rrrah-decode/src/eps_stroke.rs",
+      "path": "crates/rrrah-vector/src/eps_stroke.rs",
+      "symbol": "outline_eps_join"
+    },
+    {
+      "id": "RR-0433",
+      "old_path": "crates/rrrah-decode/src/eps_stroke.rs",
+      "path": "crates/rrrah-vector/src/eps_stroke.rs",
+      "symbol": "outline_eps_segment"
+    },
+    {
+      "id": "RR-0434",
+      "old_path": "crates/rrrah-decode/src/dng_backend.rs",
+      "path": "crates/rrrah-raw/src/dng_backend.rs",
+      "symbol": "adapt_dng"
+    },
+    {
+      "id": "RR-0435",
+      "old_path": "crates/rrrah-decode/src/eps_numbers.rs",
+      "path": "crates/rrrah-vector/src/eps_numbers.rs",
+      "symbol": "parse_eps_number"
+    },
+    {
+      "id": "RR-0438",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "hamilton_adams"
+    },
+    {
+      "id": "RR-0442",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "ppg"
+    },
+    {
+      "id": "RR-0443",
+      "old_path": "crates/rrrah-core/src/develop/opcodes.rs",
+      "path": "crates/rrrah-develop/src/opcodes.rs",
+      "symbol": "apply_list"
+    },
+    {
+      "id": "RR-0444",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "decode_context_row"
+    },
+    {
+      "id": "RR-0445",
+      "old_path": "crates/rrrah-decode/src/mrc.rs",
+      "path": "crates/rrrah-scientific/src/mrc.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0448",
+      "old_path": "crates/rrrah-decode/src/pcx.rs",
+      "path": "crates/rrrah-texture/src/pcx.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0451",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "check_raf_directory"
+    },
+    {
+      "id": "RR-0452",
+      "old_path": "crates/rrrah-decode/src/rla.rs",
+      "path": "crates/rrrah-vfx/src/rla.rs",
+      "symbol": "decode_float_records"
+    },
+    {
+      "id": "RR-0453",
+      "old_path": "crates/rrrah-decode/src/vc5.rs",
+      "path": "crates/rrrah-raw/src/vc5.rs",
+      "symbol": "index_raw"
+    },
+    {
+      "id": "RR-0455",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "smooth_hue"
+    },
+    {
+      "id": "RR-0459",
+      "old_path": "crates/rrrah-decode/src/eps_vm.rs",
+      "path": "crates/rrrah-vector/src/eps_vm.rs",
+      "symbol": "evaluate_eps_impl"
+    },
+    {
+      "id": "RR-0460",
+      "old_path": "crates/rrrah-decode/src/softimage.rs",
+      "path": "crates/rrrah-vfx/src/softimage.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0461",
+      "old_path": "crates/rrrah-decode/src/wad.rs",
+      "path": "crates/rrrah-texture/src/wad.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0465",
+      "old_path": "crates/rrrah-decode/src/basis.rs",
+      "path": "crates/rrrah-texture/src/basis.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0466",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "makernote_tag_value"
+    },
+    {
+      "id": "RR-0469",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "laroche_prescott"
+    },
+    {
+      "id": "RR-0470",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone_calibration.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone_calibration.rs",
+      "symbol": "flat_field_impl"
+    },
+    {
+      "id": "RR-0471",
+      "old_path": "crates/rrrah-decode/src/mrw.rs",
+      "path": "crates/rrrah-raw/src/mrw.rs",
+      "symbol": "decode_source"
+    },
+    {
+      "id": "RR-0473",
+      "old_path": "crates/rrrah-decode/src/camtiff/color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/color.rs",
+      "symbol": "resolve"
+    },
+    {
+      "id": "RR-0476",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "inspect_rpf"
+    },
+    {
+      "id": "RR-0477",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone.rs",
+      "symbol": "parse"
+    },
+    {
+      "id": "RR-0478",
+      "old_path": "crates/rrrah-decode/src/pict.rs",
+      "path": "crates/rrrah-vector/src/pict.rs",
+      "symbol": "direct_bits"
+    },
+    {
+      "id": "RR-0479",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "parse_xcf_hierarchy"
+    },
+    {
+      "id": "RR-0481",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "inspect_rpf_row"
+    },
+    {
+      "id": "RR-0484",
+      "old_path": "crates/rrrah-decode/src/eps_stroke_prepare.rs",
+      "path": "crates/rrrah-vector/src/eps_stroke_prepare.rs",
+      "symbol": "outline_eps_prepared_stroke"
+    },
+    {
+      "id": "RR-0485",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "read_cfa"
+    },
+    {
+      "id": "RR-0487",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "flatten_xcf_legacy_normal"
+    },
+    {
+      "id": "RR-0488",
+      "old_path": "crates/rrrah-decode/src/eps_bounds.rs",
+      "path": "crates/rrrah-vector/src/eps_bounds.rs",
+      "symbol": "inspect_eps_bounds"
+    },
+    {
+      "id": "RR-0489",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "decode_channels"
+    },
+    {
+      "id": "RR-0492",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "decode_top_row"
+    },
+    {
+      "id": "RR-0493",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "parse_xcf_layer"
+    },
+    {
+      "id": "RR-0496",
+      "old_path": "crates/rrrah-core/src/develop/mod.rs",
+      "path": "crates/rrrah-demosaic/src/lib.rs",
+      "symbol": "quality_cfa"
+    },
+    {
+      "id": "RR-0497",
+      "old_path": "crates/rrrah-decode/src/camtiff/makernote_color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/makernote_color.rs",
+      "symbol": "apply_olympus_levels"
+    },
+    {
+      "id": "RR-0498",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "next"
+    },
+    {
+      "id": "RR-0500",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "parse_cfa"
+    },
+    {
+      "id": "RR-0501",
+      "old_path": "crates/rrrah-decode/src/mrw.rs",
+      "path": "crates/rrrah-raw/src/mrw.rs",
+      "symbol": "parse"
+    },
+    {
+      "id": "RR-0502",
+      "old_path": "crates/rrrah-decode/src/sgi.rs",
+      "path": "crates/rrrah-vfx/src/sgi.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0504",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "malvar_he_cutler"
+    },
+    {
+      "id": "RR-0505",
+      "old_path": "crates/rrrah-decode/src/native_backend.rs",
+      "path": "crates/rrrah-raw/src/native_backend.rs",
+      "symbol": "adapt_native_frame"
+    },
+    {
+      "id": "RR-0509",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "inspect_rpf_layer_records"
+    },
+    {
+      "id": "RR-0510",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "decode_pentax_jpeg"
+    },
+    {
+      "id": "RR-0511",
+      "old_path": "crates/rrrah-decode/src/camtiff/mef_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mef_sensor.rs",
+      "symbol": "validated_sensor_range"
+    },
+    {
+      "id": "RR-0512",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "parse"
+    },
+    {
+      "id": "RR-0513",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "cfa_pattern"
+    },
+    {
+      "id": "RR-0514",
+      "old_path": "crates/rrrah-decode/src/camtiff/makernote_color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/makernote_color.rs",
+      "symbol": "apply_canon_levels"
+    },
+    {
+      "id": "RR-0515",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "read_makernote_huffman_bytes"
+    },
+    {
+      "id": "RR-0516",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "clustered_bayer"
+    },
+    {
+      "id": "RR-0519",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_jpeg_tiles"
+    },
+    {
+      "id": "RR-0520",
+      "old_path": "crates/rrrah-decode/src/eps.rs",
+      "path": "crates/rrrah-vector/src/eps.rs",
+      "symbol": "inspect_eps_source"
+    },
+    {
+      "id": "RR-0524",
+      "old_path": "crates/rrrah-decode/src/cr3/crx.rs",
+      "path": "crates/rrrah-raw/src/cr3/crx.rs",
+      "symbol": "parse_crx_sample"
+    },
+    {
+      "id": "RR-0525",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "allocation_plan"
+    },
+    {
+      "id": "RR-0526",
+      "old_path": "crates/rrrah-decode/src/camtiff/fff.rs",
+      "path": "crates/rrrah-raw/src/camtiff/fff.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0527",
+      "old_path": "crates/rrrah-decode/src/camtiff/olympus_entropy.rs",
+      "path": "crates/rrrah-raw/src/camtiff/olympus_entropy.rs",
+      "symbol": "decode_impl"
+    },
+    {
+      "id": "RR-0532",
+      "old_path": "crates/rrrah-decode/src/pkm.rs",
+      "path": "crates/rrrah-texture/src/pkm.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0534",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "decode_x3f_legacy_with_mode"
+    },
+    {
+      "id": "RR-0535",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "smooth_x3f_hues_wide"
+    },
+    {
+      "id": "RR-0536",
+      "old_path": "crates/rrrah-decode/src/stl.rs",
+      "path": "crates/rrrah-mesh/src/stl.rs",
+      "symbol": "decode_bytes_with_count"
+    },
+    {
+      "id": "RR-0538",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "read_cfa"
+    },
+    {
+      "id": "RR-0539",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "inspect_x3f"
+    },
+    {
+      "id": "RR-0540",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "composite_xcf_float"
+    },
+    {
+      "id": "RR-0542",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "decode_rpf_byte_planes"
+    },
+    {
+      "id": "RR-0543",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "legacy_huffman"
+    },
+    {
+      "id": "RR-0544",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "suppress_chromatic_fringe"
+    },
+    {
+      "id": "RR-0545",
+      "old_path": "crates/rrrah-decode/src/camtiff/dcs_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/dcs_sensor.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0546",
+      "old_path": "crates/rrrah-decode/src/cr3/native.rs",
+      "path": "crates/rrrah-raw/src/cr3/native.rs",
+      "symbol": "select_ctmd_sample"
+    },
+    {
+      "id": "RR-0547",
+      "old_path": "crates/rrrah-decode/src/eps_flatten.rs",
+      "path": "crates/rrrah-vector/src/eps_flatten.rs",
+      "symbol": "walk"
+    },
+    {
+      "id": "RR-0548",
+      "old_path": "crates/rrrah-decode/src/eps_program.rs",
+      "path": "crates/rrrah-vector/src/eps_program.rs",
+      "symbol": "walk"
+    },
+    {
+      "id": "RR-0549",
+      "old_path": "crates/rrrah-decode/src/vc5.rs",
+      "path": "crates/rrrah-raw/src/vc5.rs",
+      "symbol": "decode_channel"
+    },
+    {
+      "id": "RR-0550",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "attributes"
+    },
+    {
+      "id": "RR-0551",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "decode_xcf_level"
+    },
+    {
+      "id": "RR-0553",
+      "old_path": "crates/rrrah-decode/src/camtiff/dcr.rs",
+      "path": "crates/rrrah-raw/src/camtiff/dcr.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0554",
+      "old_path": "crates/rrrah-decode/src/camtiff/three_fr.rs",
+      "path": "crates/rrrah-raw/src/camtiff/three_fr.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0555",
+      "old_path": "crates/rrrah-decode/src/cr3/crx.rs",
+      "path": "crates/rrrah-raw/src/cr3/crx.rs",
+      "symbol": "parse_sample_header"
+    },
+    {
+      "id": "RR-0556",
+      "old_path": "crates/rrrah-decode/src/pdf.rs",
+      "path": "crates/rrrah-vector/src/pdf.rs",
+      "symbol": "preflight_fonts"
+    },
+    {
+      "id": "RR-0557",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "decode_rpf_file_raster_with_budget"
+    },
+    {
+      "id": "RR-0558",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "decode_xcf_tile"
+    },
+    {
+      "id": "RR-0561",
+      "old_path": "crates/rrrah-decode/src/aseprite.rs",
+      "path": "crates/rrrah-layered/src/aseprite.rs",
+      "symbol": "render_cel"
+    },
+    {
+      "id": "RR-0562",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0563",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "smooth_x3f_hues"
+    },
+    {
+      "id": "RR-0564",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "decode_xcf_layer"
+    },
+    {
+      "id": "RR-0566",
+      "old_path": "crates/rrrah-decode/src/camtiff/cr2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+      "symbol": "read_black_level"
+    },
+    {
+      "id": "RR-0567",
+      "old_path": "crates/rrrah-decode/src/camtiff/kodak_65000.rs",
+      "path": "crates/rrrah-raw/src/camtiff/kodak_65000.rs",
+      "symbol": "block"
+    },
+    {
+      "id": "RR-0568",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "decode_uncompressed_strips"
+    },
+    {
+      "id": "RR-0569",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone_calibration.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone_calibration.rs",
+      "symbol": "repair_pixels"
+    },
+    {
+      "id": "RR-0571",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "suppress_false_color"
+    },
+    {
+      "id": "RR-0572",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0573",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "decode_rpf_color_channel"
+    },
+    {
+      "id": "RR-0576",
+      "old_path": "crates/rrrah-core/src/develop/xtrans.rs",
+      "path": "crates/rrrah-demosaic/src/xtrans.rs",
+      "symbol": "directional"
+    },
+    {
+      "id": "RR-0577",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "parse_xcf_object_tables"
+    },
+    {
+      "id": "RR-0580",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "parse_xcf_channel"
+    },
+    {
+      "id": "RR-0582",
+      "old_path": "crates/rrrah-decode/src/camtiff/color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/color.rs",
+      "symbol": "sony_private"
+    },
+    {
+      "id": "RR-0583",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "decode_jpeg_strips"
+    },
+    {
+      "id": "RR-0584",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0585",
+      "old_path": "crates/rrrah-decode/src/camtiff/srw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/srw.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0586",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_stsd"
+    },
+    {
+      "id": "RR-0587",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_storage.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_storage.rs",
+      "symbol": "decode_tiles"
+    },
+    {
+      "id": "RR-0588",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "validate_coordinates"
+    },
+    {
+      "id": "RR-0589",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "sharpen_x3f_red"
+    },
+    {
+      "id": "RR-0591",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "generic_cfa"
+    },
+    {
+      "id": "RR-0592",
+      "old_path": "crates/rrrah-decode/src/camtiff/makernote_color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/makernote_color.rs",
+      "symbol": "apply_pentax_levels"
+    },
+    {
+      "id": "RR-0593",
+      "old_path": "crates/rrrah-decode/src/eip.rs",
+      "path": "crates/rrrah-raw/src/eip.rs",
+      "symbol": "extract_eip_sensor_raw"
+    },
+    {
+      "id": "RR-0594",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "composite_xcf_normal_rgba8"
+    },
+    {
+      "id": "RR-0597",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "bilinear"
+    },
+    {
+      "id": "RR-0598",
+      "old_path": "crates/rrrah-decode/src/camtiff/erf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/erf.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0599",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "black_level"
+    },
+    {
+      "id": "RR-0600",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0601",
+      "old_path": "crates/rrrah-core/src/develop/opcodes.rs",
+      "path": "crates/rrrah-develop/src/opcodes.rs",
+      "symbol": "validate_lists"
+    },
+    {
+      "id": "RR-0602",
+      "old_path": "crates/rrrah-decode/src/camtiff/cr2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0603",
+      "old_path": "crates/rrrah-decode/src/ktx2.rs",
+      "path": "crates/rrrah-texture/src/ktx2.rs",
+      "symbol": "descriptor"
+    },
+    {
+      "id": "RR-0604",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "matrix"
+    },
+    {
+      "id": "RR-0606",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "inspect_rpf_file"
+    },
+    {
+      "id": "RR-0607",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "parse_xcf_layer_tree"
+    },
+    {
+      "id": "RR-0608",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_lsb_packed_row"
+    },
+    {
+      "id": "RR-0609",
+      "old_path": "crates/rrrah-decode/src/ciff.rs",
+      "path": "crates/rrrah-raw/src/ciff.rs",
+      "symbol": "eos_10d_metadata"
+    },
+    {
+      "id": "RR-0612",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_arw2_row"
+    },
+    {
+      "id": "RR-0613",
+      "old_path": "crates/rrrah-decode/src/svg.rs",
+      "path": "crates/rrrah-vector/src/svg.rs",
+      "symbol": "fonts"
+    },
+    {
+      "id": "RR-0617",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "x3f_chroma_guide"
+    },
+    {
+      "id": "RR-0618",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "decode_raster"
+    },
+    {
+      "id": "RR-0619",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "decode_xcf_samples"
+    },
+    {
+      "id": "RR-0622",
+      "old_path": "crates/rrrah-core/src/develop/opcodes.rs",
+      "path": "crates/rrrah-develop/src/opcodes.rs",
+      "symbol": "fix_pixels"
+    },
+    {
+      "id": "RR-0623",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "decode_plane_rows"
+    },
+    {
+      "id": "RR-0624",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "read_bits"
+    },
+    {
+      "id": "RR-0625",
+      "old_path": "crates/rrrah-decode/src/pix.rs",
+      "path": "crates/rrrah-vfx/src/pix.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0626",
+      "old_path": "crates/rrrah-decode/src/vc5.rs",
+      "path": "crates/rrrah-raw/src/vc5.rs",
+      "symbol": "inverse_horizontal_prescaled"
+    },
+    {
+      "id": "RR-0630",
+      "old_path": "crates/rrrah-decode/src/camtiff/cr2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+      "symbol": "read_cfa"
+    },
+    {
+      "id": "RR-0631",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "storage_segments"
+    },
+    {
+      "id": "RR-0632",
+      "old_path": "crates/rrrah-decode/src/cr3/ctmd.rs",
+      "path": "crates/rrrah-raw/src/cr3/ctmd.rs",
+      "symbol": "find_eos_r8_levels"
+    },
+    {
+      "id": "RR-0633",
+      "old_path": "crates/rrrah-decode/src/obj_swap.rs",
+      "path": "crates/rrrah-mesh/src/obj_swap.rs",
+      "symbol": "obj_swap_payload_len"
+    },
+    {
+      "id": "RR-0634",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "decode_with_budget"
+    },
+    {
+      "id": "RR-0637",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "dual_demosaic"
+    },
+    {
+      "id": "RR-0638",
+      "old_path": "crates/rrrah-decode/src/aseprite.rs",
+      "path": "crates/rrrah-layered/src/aseprite.rs",
+      "symbol": "render_group"
+    },
+    {
+      "id": "RR-0639",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_sony"
+    },
+    {
+      "id": "RR-0640",
+      "old_path": "crates/rrrah-decode/src/crw_entropy.rs",
+      "path": "crates/rrrah-raw/src/crw_entropy.rs",
+      "symbol": "reconstruct_managed"
+    },
+    {
+      "id": "RR-0641",
+      "old_path": "crates/rrrah-decode/src/eps_fill.rs",
+      "path": "crates/rrrah-vector/src/eps_fill.rs",
+      "symbol": "edges"
+    },
+    {
+      "id": "RR-0647",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "strip_segments"
+    },
+    {
+      "id": "RR-0648",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "read_black_level"
+    },
+    {
+      "id": "RR-0649",
+      "old_path": "crates/rrrah-decode/src/pict.rs",
+      "path": "crates/rrrah-vector/src/pict.rs",
+      "symbol": "unpack_direct_row"
+    },
+    {
+      "id": "RR-0650",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "inspect_rpf_node_names"
+    },
+    {
+      "id": "RR-0651",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "visit_x3f_camf"
+    },
+    {
+      "id": "RR-0656",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "opcode_lists"
+    },
+    {
+      "id": "RR-0657",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "parse_segments"
+    },
+    {
+      "id": "RR-0658",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_strips"
+    },
+    {
+      "id": "RR-0659",
+      "old_path": "crates/rrrah-decode/src/eps_graphics.rs",
+      "path": "crates/rrrah-vector/src/eps_graphics.rs",
+      "symbol": "prepare_path"
+    },
+    {
+      "id": "RR-0661",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "xcf_icc_profile"
+    },
+    {
+      "id": "RR-0666",
+      "old_path": "crates/rrrah-decode/src/astc.rs",
+      "path": "crates/rrrah-texture/src/astc.rs",
+      "symbol": "decode_surface"
+    },
+    {
+      "id": "RR-0667",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "read_black_level"
+    },
+    {
+      "id": "RR-0668",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "decode_olympus_packed_strip"
+    },
+    {
+      "id": "RR-0669",
+      "old_path": "crates/rrrah-decode/src/eps_bounds.rs",
+      "path": "crates/rrrah-vector/src/eps_bounds.rs",
+      "symbol": "parse"
+    },
+    {
+      "id": "RR-0673",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "suppress_cfa_impulse_noise"
+    },
+    {
+      "id": "RR-0674",
+      "old_path": "crates/rrrah-core/src/frame.rs",
+      "path": "crates/rrrah-develop/src/frame.rs",
+      "symbol": "validate"
+    },
+    {
+      "id": "RR-0675",
+      "old_path": "crates/rrrah-core/src/rgbe.rs",
+      "path": "crates/rrrah-develop/src/rgbe.rs",
+      "symbol": "normalize_managed"
+    },
+    {
+      "id": "RR-0676",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "refill"
+    },
+    {
+      "id": "RR-0677",
+      "old_path": "crates/rrrah-decode/src/ply_swap.rs",
+      "path": "crates/rrrah-mesh/src/ply_swap.rs",
+      "symbol": "ply_swap_payload_len"
+    },
+    {
+      "id": "RR-0678",
+      "old_path": "crates/rrrah-decode/src/vc5.rs",
+      "path": "crates/rrrah-raw/src/vc5.rs",
+      "symbol": "decode_bayer"
+    },
+    {
+      "id": "RR-0683",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "read_cfa"
+    },
+    {
+      "id": "RR-0684",
+      "old_path": "crates/rrrah-decode/src/camtiff/color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/color.rs",
+      "symbol": "apply_nikon_levels"
+    },
+    {
+      "id": "RR-0685",
+      "old_path": "crates/rrrah-decode/src/ciff.rs",
+      "path": "crates/rrrah-raw/src/ciff.rs",
+      "symbol": "unique"
+    },
+    {
+      "id": "RR-0690",
+      "old_path": "crates/rrrah-decode/src/dds.rs",
+      "path": "crates/rrrah-texture/src/dds.rs",
+      "symbol": "select_mip"
+    },
+    {
+      "id": "RR-0691",
+      "old_path": "crates/rrrah-decode/src/jng.rs",
+      "path": "crates/rrrah-animation/src/jng.rs",
+      "symbol": "validate_jpeg_header"
+    },
+    {
+      "id": "RR-0693",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "decode_uncompressed"
+    },
+    {
+      "id": "RR-0694",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "decode_u16_with_workers"
+    },
+    {
+      "id": "RR-0695",
+      "old_path": "crates/rrrah-decode/src/eps_vm.rs",
+      "path": "crates/rrrah-vector/src/eps_vm.rs",
+      "symbol": "slot"
+    },
+    {
+      "id": "RR-0696",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "properties"
+    },
+    {
+      "id": "RR-0697",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "rotate_x3f_linear"
+    },
+    {
+      "id": "RR-0699",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "read_crop_area"
+    },
+    {
+      "id": "RR-0700",
+      "old_path": "crates/rrrah-decode/src/off_swap.rs",
+      "path": "crates/rrrah-mesh/src/off_swap.rs",
+      "symbol": "off_swap_payload_len"
+    },
+    {
+      "id": "RR-0701",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "build"
+    },
+    {
+      "id": "RR-0706",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "decode_u16_strip"
+    },
+    {
+      "id": "RR-0707",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "read_entropy_byte"
+    },
+    {
+      "id": "RR-0708",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "write_rpf_main_record"
+    },
+    {
+      "id": "RR-0709",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "visit_properties"
+    },
+    {
+      "id": "RR-0712",
+      "old_path": "crates/rrrah-decode/src/camtiff/mef_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mef_sensor.rs",
+      "symbol": "packed_12"
+    },
+    {
+      "id": "RR-0713",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "decode_vc5"
+    },
+    {
+      "id": "RR-0714",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "select_raw_ifd"
+    },
+    {
+      "id": "RR-0715",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_msb_packed_wordwise"
+    },
+    {
+      "id": "RR-0721",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_strip_rows"
+    },
+    {
+      "id": "RR-0722",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0723",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse"
+    },
+    {
+      "id": "RR-0724",
+      "old_path": "crates/rrrah-decode/src/native_router.rs",
+      "path": "crates/rrrah-raw/src/native_router.rs",
+      "symbol": "from_path"
+    },
+    {
+      "id": "RR-0728",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "white_level"
+    },
+    {
+      "id": "RR-0729",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_stbl"
+    },
+    {
+      "id": "RR-0730",
+      "old_path": "crates/rrrah-decode/src/sgi.rs",
+      "path": "crates/rrrah-vfx/src/sgi.rs",
+      "symbol": "row"
+    },
+    {
+      "id": "RR-0734",
+      "old_path": "crates/rrrah-decode/src/camtiff/mod.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mod.rs",
+      "symbol": "select_generic_raw_ifd"
+    },
+    {
+      "id": "RR-0735",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "decode_lossless_jpeg"
+    },
+    {
+      "id": "RR-0736",
+      "old_path": "crates/rrrah-decode/src/gif_animation.rs",
+      "path": "crates/rrrah-animation/src/gif_animation.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0737",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "decode_rpf_file_with_budget"
+    },
+    {
+      "id": "RR-0738",
+      "old_path": "crates/rrrah-decode/src/wal.rs",
+      "path": "crates/rrrah-texture/src/wal.rs",
+      "symbol": "validate"
+    },
+    {
+      "id": "RR-0739",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "group"
+    },
+    {
+      "id": "RR-0745",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "black_level"
+    },
+    {
+      "id": "RR-0749",
+      "old_path": "crates/rrrah-decode/src/camtiff/cr2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+      "symbol": "select_raw_ifd"
+    },
+    {
+      "id": "RR-0750",
+      "old_path": "crates/rrrah-decode/src/camtiff/mos.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mos.rs",
+      "symbol": "storage"
+    },
+    {
+      "id": "RR-0752",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "unshifted"
+    },
+    {
+      "id": "RR-0753",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "composition_attributes"
+    },
+    {
+      "id": "RR-0756",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_trak"
+    },
+    {
+      "id": "RR-0757",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_msb_packed_14"
+    },
+    {
+      "id": "RR-0759",
+      "old_path": "crates/rrrah-decode/src/obj.rs",
+      "path": "crates/rrrah-mesh/src/obj.rs",
+      "symbol": "charge_metadata"
+    },
+    {
+      "id": "RR-0760",
+      "old_path": "crates/rrrah-decode/src/obj.rs",
+      "path": "crates/rrrah-mesh/src/obj.rs",
+      "symbol": "join_metadata_tokens"
+    },
+    {
+      "id": "RR-0761",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "decode_x3f_legacy"
+    },
+    {
+      "id": "RR-0765",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "equilibrate_bayer_greens"
+    },
+    {
+      "id": "RR-0766",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "nearest"
+    },
+    {
+      "id": "RR-0767",
+      "old_path": "crates/rrrah-decode/src/bay.rs",
+      "path": "crates/rrrah-raw/src/bay.rs",
+      "symbol": "read_bay_source"
+    },
+    {
+      "id": "RR-0768",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "select_raw_ifd"
+    },
+    {
+      "id": "RR-0769",
+      "old_path": "crates/rrrah-decode/src/eip.rs",
+      "path": "crates/rrrah-raw/src/eip.rs",
+      "symbol": "eip_camera_format"
+    },
+    {
+      "id": "RR-0770",
+      "old_path": "crates/rrrah-decode/src/stl.rs",
+      "path": "crates/rrrah-mesh/src/stl.rs",
+      "symbol": "append"
+    },
+    {
+      "id": "RR-0771",
+      "old_path": "crates/rrrah-decode/src/stl.rs",
+      "path": "crates/rrrah-mesh/src/stl.rs",
+      "symbol": "facet_count"
+    },
+    {
+      "id": "RR-0773",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "x3f_linear_raster"
+    },
+    {
+      "id": "RR-0778",
+      "old_path": "crates/rrrah-decode/src/aseprite.rs",
+      "path": "crates/rrrah-layered/src/aseprite.rs",
+      "symbol": "color_chunk"
+    },
+    {
+      "id": "RR-0779",
+      "old_path": "crates/rrrah-decode/src/camtiff/dcs_sensor.rs",
+      "path": "crates/rrrah-raw/src/camtiff/dcs_sensor.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0780",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_mdia"
+    },
+    {
+      "id": "RR-0781",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "decode_symbol"
+    },
+    {
+      "id": "RR-0782",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_msb_packed_10"
+    },
+    {
+      "id": "RR-0783",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_row"
+    },
+    {
+      "id": "RR-0792",
+      "old_path": "crates/rrrah-core/src/develop/demosaic.rs",
+      "path": "crates/rrrah-demosaic/src/demosaic.rs",
+      "symbol": "is_clustered_bayer"
+    },
+    {
+      "id": "RR-0793",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "decode_run"
+    },
+    {
+      "id": "RR-0795",
+      "old_path": "crates/rrrah-decode/src/psd.rs",
+      "path": "crates/rrrah-layered/src/psd.rs",
+      "symbol": "unpack"
+    },
+    {
+      "id": "RR-0801",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "sony_curve"
+    },
+    {
+      "id": "RR-0802",
+      "old_path": "crates/rrrah-decode/src/camtiff/color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/color.rs",
+      "symbol": "decrypt"
+    },
+    {
+      "id": "RR-0803",
+      "old_path": "crates/rrrah-decode/src/camtiff/hasselblad.rs",
+      "path": "crates/rrrah-raw/src/camtiff/hasselblad.rs",
+      "symbol": "read_file_color"
+    },
+    {
+      "id": "RR-0804",
+      "old_path": "crates/rrrah-decode/src/ciff.rs",
+      "path": "crates/rrrah-raw/src/ciff.rs",
+      "symbol": "block"
+    },
+    {
+      "id": "RR-0805",
+      "old_path": "crates/rrrah-decode/src/crw_entropy.rs",
+      "path": "crates/rrrah-raw/src/crw_entropy.rs",
+      "symbol": "read"
+    },
+    {
+      "id": "RR-0806",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_storage.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_storage.rs",
+      "symbol": "decode_strips"
+    },
+    {
+      "id": "RR-0807",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "parse_white_level"
+    },
+    {
+      "id": "RR-0808",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_msb_packed_bytewise"
+    },
+    {
+      "id": "RR-0809",
+      "old_path": "crates/rrrah-decode/src/optio_s4.rs",
+      "path": "crates/rrrah-raw/src/optio_s4.rs",
+      "symbol": "unpack_optio_s4_sensor"
+    },
+    {
+      "id": "RR-0814",
+      "old_path": "crates/rrrah-decode/src/bay.rs",
+      "path": "crates/rrrah-raw/src/bay.rs",
+      "symbol": "unpack_bay_sensor"
+    },
+    {
+      "id": "RR-0815",
+      "old_path": "crates/rrrah-decode/src/camtiff/color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/color.rs",
+      "symbol": "sony_r1_black"
+    },
+    {
+      "id": "RR-0821",
+      "old_path": "crates/rrrah-decode/src/cr3/tiff.rs",
+      "path": "crates/rrrah-raw/src/cr3/tiff.rs",
+      "symbol": "ascii"
+    },
+    {
+      "id": "RR-0822",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "next_marker"
+    },
+    {
+      "id": "RR-0823",
+      "old_path": "crates/rrrah-decode/src/dng/uncompressed.rs",
+      "path": "crates/rrrah-raw/src/dng/uncompressed.rs",
+      "symbol": "decode_msb_packed_12"
+    },
+    {
+      "id": "RR-0824",
+      "old_path": "crates/rrrah-decode/src/eps_graphics.rs",
+      "path": "crates/rrrah-vector/src/eps_graphics.rs",
+      "symbol": "copy_path"
+    },
+    {
+      "id": "RR-0826",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "validate_rpf_plane"
+    },
+    {
+      "id": "RR-0835",
+      "old_path": "crates/rrrah-core/src/color/dng_neutral.rs",
+      "path": "crates/rrrah-color/src/dng_neutral.rs",
+      "symbol": "temperature"
+    },
+    {
+      "id": "RR-0836",
+      "old_path": "crates/rrrah-decode/src/bay.rs",
+      "path": "crates/rrrah-raw/src/bay.rs",
+      "symbol": "unpack_row"
+    },
+    {
+      "id": "RR-0837",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "nikon_makernote_blob"
+    },
+    {
+      "id": "RR-0838",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "select_sample"
+    },
+    {
+      "id": "RR-0839",
+      "old_path": "crates/rrrah-decode/src/cr3/lossless.rs",
+      "path": "crates/rrrah-raw/src/cr3/lossless.rs",
+      "symbol": "decode_plane"
+    },
+    {
+      "id": "RR-0840",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "parse_linearization_table"
+    },
+    {
+      "id": "RR-0841",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "decode_type2"
+    },
+    {
+      "id": "RR-0843",
+      "old_path": "crates/rrrah-decode/src/camtiff/hasselblad_entropy.rs",
+      "path": "crates/rrrah-raw/src/camtiff/hasselblad_entropy.rs",
+      "symbol": "read"
+    },
+    {
+      "id": "RR-0844",
+      "old_path": "crates/rrrah-decode/src/camtiff/kodak_65000.rs",
+      "path": "crates/rrrah-raw/src/camtiff/kodak_65000.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0845",
+      "old_path": "crates/rrrah-decode/src/eps_graphics.rs",
+      "path": "crates/rrrah-vector/src/eps_graphics.rs",
+      "symbol": "same_clip_path"
+    },
+    {
+      "id": "RR-0849",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_jpeg_strips"
+    },
+    {
+      "id": "RR-0850",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "decode_lsb_packed_bytewise"
+    },
+    {
+      "id": "RR-0851",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0854",
+      "old_path": "crates/rrrah-decode/src/apng.rs",
+      "path": "crates/rrrah-animation/src/apng.rs",
+      "symbol": "has_animation"
+    },
+    {
+      "id": "RR-0855",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "apply_linearization_curve"
+    },
+    {
+      "id": "RR-0857",
+      "old_path": "crates/rrrah-decode/src/vc5.rs",
+      "path": "crates/rrrah-raw/src/vc5.rs",
+      "symbol": "decode_highpass_managed"
+    },
+    {
+      "id": "RR-0858",
+      "old_path": "crates/rrrah-decode/src/wal.rs",
+      "path": "crates/rrrah-texture/src/wal.rs",
+      "symbol": "decode_using_game_palette"
+    },
+    {
+      "id": "RR-0867",
+      "old_path": "crates/rrrah-decode/src/cr3/assemble.rs",
+      "path": "crates/rrrah-raw/src/cr3/assemble.rs",
+      "symbol": "extend_interleaved_row"
+    },
+    {
+      "id": "RR-0868",
+      "old_path": "crates/rrrah-decode/src/eps_fill.rs",
+      "path": "crates/rrrah-vector/src/eps_fill.rs",
+      "symbol": "sift"
+    },
+    {
+      "id": "RR-0869",
+      "old_path": "crates/rrrah-decode/src/off.rs",
+      "path": "crates/rrrah-mesh/src/off.rs",
+      "symbol": "token"
+    },
+    {
+      "id": "RR-0874",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0875",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "select_raw_ifd"
+    },
+    {
+      "id": "RR-0876",
+      "old_path": "crates/rrrah-decode/src/crw_entropy.rs",
+      "path": "crates/rrrah-raw/src/crw_entropy.rs",
+      "symbol": "merge_low_bits"
+    },
+    {
+      "id": "RR-0877",
+      "old_path": "crates/rrrah-decode/src/crw_entropy.rs",
+      "path": "crates/rrrah-raw/src/crw_entropy.rs",
+      "symbol": "reconstruct_high"
+    },
+    {
+      "id": "RR-0878",
+      "old_path": "crates/rrrah-decode/src/dng/lossless_jpeg.rs",
+      "path": "crates/rrrah-raw/src/dng/lossless_jpeg.rs",
+      "symbol": "peek_bits"
+    },
+    {
+      "id": "RR-0879",
+      "old_path": "crates/rrrah-decode/src/off.rs",
+      "path": "crates/rrrah-mesh/src/off.rs",
+      "symbol": "skip"
+    },
+    {
+      "id": "RR-0880",
+      "old_path": "crates/rrrah-decode/src/optio_s4.rs",
+      "path": "crates/rrrah-raw/src/optio_s4.rs",
+      "symbol": "read_optio_s4_sensor_with_budget"
+    },
+    {
+      "id": "RR-0884",
+      "old_path": "crates/rrrah-decode/src/aseprite.rs",
+      "path": "crates/rrrah-layered/src/aseprite.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0885",
+      "old_path": "crates/rrrah-decode/src/camtiff/makernote_color.rs",
+      "path": "crates/rrrah-raw/src/camtiff/makernote_color.rs",
+      "symbol": "maker_note"
+    },
+    {
+      "id": "RR-0886",
+      "old_path": "crates/rrrah-decode/src/camtiff/raf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/raf.rs",
+      "symbol": "decode_lsb_packed"
+    },
+    {
+      "id": "RR-0887",
+      "old_path": "crates/rrrah-decode/src/dng/mod.rs",
+      "path": "crates/rrrah-raw/src/dng/mod.rs",
+      "symbol": "has_sensor_image"
+    },
+    {
+      "id": "RR-0888",
+      "old_path": "crates/rrrah-decode/src/fits.rs",
+      "path": "crates/rrrah-scientific/src/fits.rs",
+      "symbol": "physical_integer"
+    },
+    {
+      "id": "RR-0889",
+      "old_path": "crates/rrrah-decode/src/ply.rs",
+      "path": "crates/rrrah-mesh/src/ply.rs",
+      "symbol": "line"
+    },
+    {
+      "id": "RR-0890",
+      "old_path": "crates/rrrah-decode/src/vc5.rs",
+      "path": "crates/rrrah-raw/src/vc5.rs",
+      "symbol": "magnitude"
+    },
+    {
+      "id": "RR-0895",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "read_white_level"
+    },
+    {
+      "id": "RR-0896",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_moov"
+    },
+    {
+      "id": "RR-0897",
+      "old_path": "crates/rrrah-decode/src/mrw.rs",
+      "path": "crates/rrrah-raw/src/mrw.rs",
+      "symbol": "decode_sensor"
+    },
+    {
+      "id": "RR-0898",
+      "old_path": "crates/rrrah-decode/src/nrrd.rs",
+      "path": "crates/rrrah-scientific/src/nrrd.rs",
+      "symbol": "unescape"
+    },
+    {
+      "id": "RR-0899",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "property_string"
+    },
+    {
+      "id": "RR-0900",
+      "old_path": "crates/rrrah-decode/src/xcf.rs",
+      "path": "crates/rrrah-layered/src/xcf.rs",
+      "symbol": "xcf_compression"
+    },
+    {
+      "id": "RR-0908",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "read_metadata"
+    },
+    {
+      "id": "RR-0909",
+      "old_path": "crates/rrrah-decode/src/camtiff/olympus_entropy.rs",
+      "path": "crates/rrrah-raw/src/camtiff/olympus_entropy.rs",
+      "symbol": "take"
+    },
+    {
+      "id": "RR-0910",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "read_bits"
+    },
+    {
+      "id": "RR-0911",
+      "old_path": "crates/rrrah-decode/src/cr3/bmff.rs",
+      "path": "crates/rrrah-raw/src/cr3/bmff.rs",
+      "symbol": "parse_minf"
+    },
+    {
+      "id": "RR-0912",
+      "old_path": "crates/rrrah-decode/src/stl.rs",
+      "path": "crates/rrrah-mesh/src/stl.rs",
+      "symbol": "binary_facet"
+    },
+    {
+      "id": "RR-0920",
+      "old_path": "crates/rrrah-core/src/develop/xtrans.rs",
+      "path": "crates/rrrah-demosaic/src/xtrans.rs",
+      "symbol": "robust_mean"
+    },
+    {
+      "id": "RR-0921",
+      "old_path": "crates/rrrah-decode/src/camtiff/dcr.rs",
+      "path": "crates/rrrah-raw/src/camtiff/dcr.rs",
+      "symbol": "decode_pixels"
+    },
+    {
+      "id": "RR-0922",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone_calibration.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone_calibration.rs",
+      "symbol": "subtract_black"
+    },
+    {
+      "id": "RR-0924",
+      "old_path": "crates/rrrah-decode/src/native_router.rs",
+      "path": "crates/rrrah-raw/src/native_router.rs",
+      "symbol": "eip_request"
+    },
+    {
+      "id": "RR-0925",
+      "old_path": "crates/rrrah-decode/src/rpf.rs",
+      "path": "crates/rrrah-vfx/src/rpf.rs",
+      "symbol": "parse_declared_rpf_aspect"
+    },
+    {
+      "id": "RR-0926",
+      "old_path": "crates/rrrah-decode/src/x3f.rs",
+      "path": "crates/rrrah-raw/src/x3f.rs",
+      "symbol": "linearize_x3f_highlights_for_mode"
+    },
+    {
+      "id": "RR-0932",
+      "old_path": "crates/rrrah-decode/src/apng.rs",
+      "path": "crates/rrrah-animation/src/apng.rs",
+      "symbol": "save_previous_rectangle"
+    },
+    {
+      "id": "RR-0935",
+      "old_path": "crates/rrrah-decode/src/animation.rs",
+      "path": "crates/rrrah-animation/src/animation.rs",
+      "symbol": "over"
+    },
+    {
+      "id": "RR-0936",
+      "old_path": "crates/rrrah-decode/src/camtiff/mod.rs",
+      "path": "crates/rrrah-raw/src/camtiff/mod.rs",
+      "symbol": "optional_ascii"
+    },
+    {
+      "id": "RR-0937",
+      "old_path": "crates/rrrah-decode/src/camtiff/phaseone_container.rs",
+      "path": "crates/rrrah-raw/src/camtiff/phaseone_container.rs",
+      "symbol": "entry"
+    },
+    {
+      "id": "RR-0938",
+      "old_path": "crates/rrrah-decode/src/crw_entropy.rs",
+      "path": "crates/rrrah-raw/src/crw_entropy.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0939",
+      "old_path": "crates/rrrah-decode/src/eip.rs",
+      "path": "crates/rrrah-raw/src/eip.rs",
+      "symbol": "read_package_with_budget"
+    },
+    {
+      "id": "RR-0940",
+      "old_path": "crates/rrrah-decode/src/jng.rs",
+      "path": "crates/rrrah-animation/src/jng.rs",
+      "symbol": "png"
+    },
+    {
+      "id": "RR-0941",
+      "old_path": "crates/rrrah-decode/src/sample.rs",
+      "path": "crates/rrrah-scientific/src/sample.rs",
+      "symbol": "half_to_f32"
+    },
+    {
+      "id": "RR-0948",
+      "old_path": "crates/rrrah-decode/src/camtiff/cr2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+      "symbol": "read_white_level"
+    },
+    {
+      "id": "RR-0949",
+      "old_path": "crates/rrrah-decode/src/camtiff/rw2.rs",
+      "path": "crates/rrrah-raw/src/camtiff/rw2.rs",
+      "symbol": "read_into"
+    },
+    {
+      "id": "RR-0950",
+      "old_path": "crates/rrrah-decode/src/eps_fill.rs",
+      "path": "crates/rrrah-vector/src/eps_fill.rs",
+      "symbol": "sort"
+    },
+    {
+      "id": "RR-0962",
+      "old_path": "crates/rrrah-decode/src/camtiff/orf.rs",
+      "path": "crates/rrrah-raw/src/camtiff/orf.rs",
+      "symbol": "unpack_olympus12_row"
+    },
+    {
+      "id": "RR-0964",
+      "old_path": "crates/rrrah-decode/src/png_color.rs",
+      "path": "crates/rrrah-vector/src/png_color.rs",
+      "symbol": "crc32"
+    },
+    {
+      "id": "RR-0965",
+      "old_path": "crates/rrrah-decode/src/wal.rs",
+      "path": "crates/rrrah-texture/src/wal.rs",
+      "symbol": "wal_palette_path"
+    },
+    {
+      "id": "RR-0975",
+      "old_path": "crates/rrrah-decode/src/apng.rs",
+      "path": "crates/rrrah-animation/src/apng.rs",
+      "symbol": "restore_previous_rectangle"
+    },
+    {
+      "id": "RR-0976",
+      "old_path": "crates/rrrah-decode/src/camtiff/pef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/pef.rs",
+      "symbol": "peek_window"
+    },
+    {
+      "id": "RR-0977",
+      "old_path": "crates/rrrah-decode/src/cr3/metadata.rs",
+      "path": "crates/rrrah-raw/src/cr3/metadata.rs",
+      "symbol": "preserve_entries"
+    },
+    {
+      "id": "RR-0978",
+      "old_path": "crates/rrrah-decode/src/dng_backend.rs",
+      "path": "crates/rrrah-raw/src/dng_backend.rs",
+      "symbol": "sensor_grid"
+    },
+    {
+      "id": "RR-0979",
+      "old_path": "crates/rrrah-decode/src/eps_bounds.rs",
+      "path": "crates/rrrah-vector/src/eps_bounds.rs",
+      "symbol": "trim"
+    },
+    {
+      "id": "RR-0980",
+      "old_path": "crates/rrrah-decode/src/jng.rs",
+      "path": "crates/rrrah-animation/src/jng.rs",
+      "symbol": "chunk"
+    },
+    {
+      "id": "RR-0985",
+      "old_path": "crates/rrrah-core/src/thumbnail.rs",
+      "path": "crates/rrrah-develop/src/thumbnail.rs",
+      "symbol": "srgb_byte_f64"
+    },
+    {
+      "id": "RR-0986",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "first_ascii"
+    },
+    {
+      "id": "RR-0987",
+      "old_path": "crates/rrrah-decode/src/camtiff/arw.rs",
+      "path": "crates/rrrah-raw/src/camtiff/arw.rs",
+      "symbol": "first_scalar"
+    },
+    {
+      "id": "RR-0994",
+      "old_path": "crates/rrrah-core/src/raster.rs",
+      "path": "crates/rrrah-develop/src/raster.rs",
+      "symbol": "srgb_linear"
+    },
+    {
+      "id": "RR-0995",
+      "old_path": "crates/rrrah-decode/src/camtiff/nef.rs",
+      "path": "crates/rrrah-raw/src/camtiff/nef.rs",
+      "symbol": "fill"
+    },
+    {
+      "id": "RR-0996",
+      "old_path": "crates/rrrah-decode/src/crw.rs",
+      "path": "crates/rrrah-raw/src/crw.rs",
+      "symbol": "decode"
+    },
+    {
+      "id": "RR-0997",
+      "old_path": "crates/rrrah-decode/src/crw.rs",
+      "path": "crates/rrrah-raw/src/crw.rs",
+      "symbol": "decode_crw_10d"
+    },
+    {
+      "id": "RR-0825",
+      "old_path": "crates/rrrah-decode/src/lib.rs",
+      "path": "crates/rrrah-raw/src/lib.rs",
+      "symbol": "combine"
+    }
+  ]
+}

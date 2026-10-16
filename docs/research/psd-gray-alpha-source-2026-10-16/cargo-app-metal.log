@@ -1,0 +1,18 @@
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 00s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-92bbc95cda3130da)
+
+running 2 tests
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_blocked_prefetch ... GRAY_ALPHA_PIPELINE root=8388608 ram=3145728/count1 swap=16777216/count4 queue=3145728/count4 restore=6291456
+LEGACY_RASTER_PIPELINE cases=2 gpu=false readbacks=0 ram_pressure_hits=2 swap_writes=2 swap_reads=2 blocked_decoder=true final=0
+ok
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_metal ... GRAY_ALPHA_METAL adapter=Metal Apple M4 Max
+GRAY_ALPHA_PIPELINE root=8388608 ram=3145728/count1 swap=16777216/count4 queue=3145728/count4 restore=6291456
+LEGACY_RASTER_PIPELINE cases=2 gpu=true readbacks=12 ram_pressure_hits=2 swap_writes=2 swap_reads=2 blocked_decoder=true final=0
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 352 filtered out; finished in 4.04s
+

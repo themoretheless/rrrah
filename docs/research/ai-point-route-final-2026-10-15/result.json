@@ -1,0 +1,63 @@
+{
+  "change": "One-shot point routes consume coverage directly, do not index/mask a cache key, allocate no reuse signature, and use the unchanged first generation identity without advancing a counter. Multi-fragment area traversal retains original policy.",
+  "unit_tests": {
+    "passed": 269,
+    "failed": 0,
+    "ignored": 12
+  },
+  "sources": {
+    "vendor/hayro/src/native_spatial.rs": "a11a50c852a1fad388e120892e3d035e338bf6e62955688f446eff9b79be0adc",
+    "vendor/hayro/src/knockout_interpreter.rs": "24fe71c3b7e6daceefabe33481f11d6ecc5534e85d005a20d982e7351e497991"
+  },
+  "binary_sha256": "400f06a004831e69bf573812e63f95fe398edffe0b24f821d01138c34040b0d5",
+  "pixel_checks": {
+    "pixel": [
+      108,
+      58
+    ],
+    "grid": 4,
+    "ordinary_completed": true,
+    "ordinary_work": 3986611,
+    "ordinary_limit": 4000000,
+    "same_binary_control_work": 4278031,
+    "control_allowance": 16000000,
+    "native_result_exact": true,
+    "deadline_both": false,
+    "final_credit_both": 0,
+    "peak_bytes": 266078344,
+    "full_page": "running; unchanged4M/40M/256MiB/180s; tiling still diagnostic"
+  },
+  "limitations": "Tiling is diagnostic, complete AI page/color/production routing unqualified",
+  "full_page_180s": {
+    "completed": 17504,
+    "total": 74046,
+    "stop_pixel": [
+      46,
+      58
+    ],
+    "deadline": true,
+    "elapsed_seconds": 180.02,
+    "maximum_color_work": 3246873,
+    "maximum_work_pixel": [
+      147,
+      57
+    ],
+    "final_credit": 0,
+    "published": false,
+    "interpretation": "Time limit, not source-work refusal; initial108,58 diagnostic consumed part of the same180s deadline"
+  },
+  "full_page_600s": {
+    "completed": 17906,
+    "total": 74046,
+    "refusal_pixel": [
+      147,
+      59
+    ],
+    "deadline": false,
+    "elapsed_seconds": 432.25,
+    "maximum_color_work": 4000000,
+    "final_credit": 0,
+    "published": false,
+    "interpretation": "Ordinary source-work refusal; whole-page RGB comparison remains unavailable"
+  }
+}

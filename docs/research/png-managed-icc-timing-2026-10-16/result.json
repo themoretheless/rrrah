@@ -1,0 +1,35 @@
+{
+  "cases": {
+    "small": {
+      "profile_bytes": 588,
+      "pairs": 40,
+      "old_median_ns": 8083.0,
+      "new_median_ns": 7125.0,
+      "paired_median_ratio_new_over_old": 0.8808680045356951,
+      "paired_ratio_bootstrap95": [
+        0.8727929427513521,
+        0.8856743191992043
+      ],
+      "new_faster_pairs": 40
+    },
+    "large": {
+      "profile_bytes": 4194304,
+      "pairs": 40,
+      "old_median_ns": 498500.0,
+      "new_median_ns": 413479.0,
+      "paired_median_ratio_new_over_old": 0.8358084018750599,
+      "paired_ratio_bootstrap95": [
+        0.8250865333338935,
+        0.8501689402672323
+      ],
+      "new_faster_pairs": 39
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-decode/src/png_profile.rs": "41eced2440c2caab4ee2d6d7604a8423d3eff896b17626b852d1b4a0dbde1b85",
+    "docs/research/png-managed-icc-timing-2026-10-16/probe.rs": "d581c965ef5da6051ea3cee2af4c2ac440516476ae40dab38dc88e7e22be85c6",
+    "docs/research/png-managed-icc-timing-2026-10-16/generate.py": "a8c449d813c9e6c7930f2354d19238173765845bdb7904b497b6782138d09eec",
+    "tests/fixtures/raster/pattern.profiled.png": "3c551ef8c29f2ede5b2ed5abcf237cee9e98832885865bc59c810e6455dc377b",
+    "/tmp/rrrah-png-used-large-icc-20261016.png": "aef1f09afac1411631bc0476d54aa275e162d9d14192f6590632e64d30784490"
+  }
+}

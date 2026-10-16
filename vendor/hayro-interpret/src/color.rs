@@ -337,6 +337,55 @@ impl ColorSpace {
         }
         Some(output)
     }
+    /// Closed normalized f32 box to bare DeviceRGB using the same device policy
+    /// as device_sample_to_rgb. Unsupported source spaces refuse; no alpha or
+    /// display quantization is included. All stages share caller work/cancel.
+    pub fn device_sample_to_rgb_bounds(&self,input:&[[f32;2]],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[[f32;2];3]> {
+        if cancelled() {return None;}*work=work.checked_sub(1+2*input.len())?;
+        if input.len()!=usize::from(self.num_components()) || input.iter().any(|v|!v[0].is_finite() || !v[1].is_finite() || v[0]>v[1] || v[0]<0. || v[1]>1.) {return None;}
+        let output=match self.0.as_ref() {
+            ColorSpaceType::DeviceGray=>[input[0];3],
+            ColorSpaceType::DeviceRgb=>input.try_into().ok()?,
+            ColorSpaceType::DeviceCmyk=>DEVICE_CMYK_FLOAT.bound_float_cmyk_to_rgb(input.try_into().ok()?,work,cancelled)?,
+            _=>return None,
+        };
+        if cancelled() {return None;}Some(output)
+    }
+    /// Number of discrete nonnegative f32 CMYK tuples in a small closed box.
+    /// A large/unsupported box refuses; this never substitutes sparse sampling.
+    pub fn device_exact_input_count(&self,input:&[[f32;2]])->Option<usize> {
+        if !matches!(self.0.as_ref(),ColorSpaceType::DeviceCmyk) || input.len()!=4 {return None;}
+        let mut count=1usize;
+        for &[lo,hi] in input {
+            let (a,b)=(lo.to_bits(),hi.to_bits());
+            if a>b || b>1f32.to_bits() {return None;}
+            count=count.checked_mul(usize::try_from(b.checked_sub(a)?.checked_add(1)?).ok()?)?;
+            if count>4096 {return None;}
+        }
+        Some(count)
+    }
+    /// Exhaust all possible rounded inputs using the same original executor.
+    /// No interpolation enclosure or per-call heap allocation; every Cartesian
+    /// tuple is evaluated. Work/cancellation failures publish no partial bounds.
+    pub fn device_exact_input_rgb_bounds(&self,input:&[[f32;2]],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[[f32;2];3]> {
+        if cancelled() {return None;}*work=work.checked_sub(16)?;
+        self.device_exact_input_count(input)?;
+        let low:[u32;4]=std::array::from_fn(|i|input[i][0].to_bits());
+        let high:[u32;4]=std::array::from_fn(|i|input[i][1].to_bits());
+        let mut bounds=[[f32::INFINITY,f32::NEG_INFINITY];3];
+        for a in low[0]..=high[0] {for b in low[1]..=high[1] {for c in low[2]..=high[2] {for d in low[3]..=high[3] {
+            if cancelled() {return None;}*work=work.checked_sub(512)?;
+            let values=[a,b,c,d].map(f32::from_bits);let mut rgb=[0.;3];
+            DEVICE_CMYK_FLOAT.transform(&values,&mut rgb).ok()?;
+            for i in 0..3 {
+                if !rgb[i].is_finite() || !(0. ..=1.).contains(&rgb[i]) {return None;}
+                bounds[i][0]=bounds[i][0].min(rgb[i]);bounds[i][1]=bounds[i][1].max(rgb[i]);
+            }
+            if cancelled() {return None;}
+        }}}}
+        Some(bounds)
+    }
+
     /// Compile a direct ICC-to-ICC native blending conversion.
     /// Device/calibrated spaces require an explicit profile policy and are
     /// refused here rather than assigning an implicit display profile.
@@ -1683,5 +1732,29 @@ mod blending_coordinate_tests {
         let separate=ColorSpace(Arc::new(ColorSpaceType::ICCBased(ICCProfile::new(include_bytes!("../assets/CGATS001Compat-v2-micro.icc"),4).unwrap())),0);
         assert!(!p.shares_blending_coordinates(&separate));
         assert!(!ColorSpace::pattern().shares_blending_coordinates(&ColorSpace::pattern()));
+    }
+}
+
+#[cfg(test)]
+mod exact_cmyk_box_tests {
+    use super::*;
+    #[test]
+    fn exhaustive_float_input_bounds_cover_all_tuples_and_refuse_partial_work() {
+        let source=ColorSpace::device_cmyk();
+        let input=[0.2f32,0.4,0.6,0.1].map(|v|[v,f32::from_bits(v.to_bits()+1)]);
+        assert_eq!(source.device_exact_input_count(&input),Some(16));
+        let mut work=10000;let polls=std::cell::Cell::new(0);
+        let bounds=source.device_exact_input_rgb_bounds(&input,&mut work,&||{polls.set(polls.get()+1);false}).unwrap();
+        for mask in 0..16 {
+            let values:Vec<_>=(0..4).map(|i|input[i][(mask>>i)&1]).collect();
+            let actual=source.device_sample_to_rgb(&ColorSpace::device_rgb(),&values).unwrap();
+            for i in 0..3 {assert!(bounds[i][0]<=actual[i] && actual[i]<=bounds[i][1]);}
+        }
+        for allowance in 0..10000-work {assert!(source.device_exact_input_rgb_bounds(&input,&mut {allowance},&||false).is_none());}
+        for stop in 1..=polls.get() {let n=std::cell::Cell::new(0);assert!(source.device_exact_input_rgb_bounds(&input,&mut 10000,&||{n.set(n.get()+1);n.get()>=stop}).is_none());}
+        assert!(source.device_exact_input_count(&[[0.,1.];4]).is_none());
+        assert!(source.device_exact_input_count(&[[f32::NAN,1.];4]).is_none());
+        assert!(source.device_exact_input_count(&[[0.5,0.25];4]).is_none());
+        assert!(ColorSpace::device_rgb().device_exact_input_count(&input).is_none());
     }
 }

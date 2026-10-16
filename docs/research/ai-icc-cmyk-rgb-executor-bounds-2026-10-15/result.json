@@ -1,0 +1,71 @@
+{
+  "change": "Optional TransformExecutor::bound_float_cmyk_to_rgb follows retained hybrid4D initial stage, every supported PCS stage, final RGB gamma-table lookup and verified RGB-preserving post stages. Defaults refuse unsupported transformations. Lab inverse joins threshold branches; matrices preserve signed coefficients and point order; gamma bounds scan all reachable rounded lookup indices. Arrays only; continuing caller work/cancellation. Original transform unchanged.",
+  "tests": {
+    "focused_passed": 5,
+    "focused_ignored": 1,
+    "rust185_focused_passed": 5,
+    "retained_profile_control_passed": 1,
+    "full_passed": 64,
+    "full_failed": 3,
+    "full_ignored": 1,
+    "existing_failures": "Missing assets/swapped_intent.icc, assets/Display P3.icc, assets/truncated_desc_v4.icc",
+    "controls": "Original PCS matrix/Lab point stages against boxes including nonlinear threshold crossing and negative coefficients; empty matrix identity validates input; unsupported RGB-source transform refuses. Real executor every short budget and every cancellation checkpoint refuses without partial result."
+  },
+  "retained_cgats_rgb": {
+    "native_input_box": [
+      [
+        0.18747221,
+        0.18747272
+      ],
+      [
+        0.6583001,
+        0.6583007
+      ],
+      [
+        0.7777766,
+        0.7777772
+      ],
+      [
+        0.13612585,
+        0.13612635
+      ]
+    ],
+    "rgb_bounds": [
+      [
+        0.71127486,
+        0.71148473
+      ],
+      [
+        0.3954466,
+        0.3956232
+      ],
+      [
+        0.2590243,
+        0.25924373
+      ]
+    ],
+    "work": 376,
+    "point_controls": 4096,
+    "all_controls_inside": true,
+    "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "alpha_display_certified": false
+  },
+  "sources": {
+    "vendor/moxcms/src/transform.rs": "16c5c6c34054b3f2344c736ab3452e81e01dbfa8aa1ac67aea1943550b652bd7",
+    "vendor/moxcms/src/conversions/lut4.rs": "159cc21b3d87d057edaa4cd7bd3293b831bd8a1cb46c579f7f1c21b89c301dd2",
+    "vendor/moxcms/src/conversions/katana/stages.rs": "1704c2bd084fb519c5bfa32a623b567ecb780605549a532ef5ee3c229ea0ade8",
+    "vendor/moxcms/src/conversions/katana/pcs_stages.rs": "af0c6894d4b51a6034ea1cc2e6ea6bd134c641a9d1d897cb3b727a5e6ac96598",
+    "vendor/moxcms/src/conversions/katana/xyz_lab.rs": "c26881e4d6f8a8426b73e57aaa0948ee5568508e0c561432f0956245dda21c81",
+    "vendor/moxcms/src/conversions/katana/xyz_rgb.rs": "fcc11646577251dcea4e073c534ca2aa92fdb350cca876bba11272517593d975",
+    "vendor/moxcms/src/conversions/katana/finalizers.rs": "a7a3dc1ce1686c9a4842b954605cedad24a3c9d9cf7d70b0b3876cd41f824368",
+    "vendor/moxcms/src/conversions/katana/mod.rs": "7ad1b89bf3a1964d61745c28be6faffe4416e3d18fc403de74efe6e0aaec3e18"
+  },
+  "limitations": [
+    "Not yet wired through hayro ColorSpace/native-frame AI replacement gate.",
+    "Alpha composition and output byte quantization not bounded in this method.",
+    "Only supported normalized f32 hybrid CMYK\u2192RGB pipelines; unsupported PCS stages/profiles/integer layouts refuse.",
+    "Single-cell hybrid boxes remain required; cross-cell subdivision not implemented.",
+    "Gradual underflow assumed. Existing3 missing-asset tests remain failing.",
+    "No original AI samples skipped or fullpage/ordinary4M acceptance."
+  ]
+}

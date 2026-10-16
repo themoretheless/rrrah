@@ -1,0 +1,18 @@
+{
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "docs/research/png-cicp-unused-icc-2026-10-16/probe.rs",
+    "-L",
+    "dependency=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps",
+    "--extern",
+    "image=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/libimage-d24fceec883153d9.rlib",
+    "-o",
+    "/tmp/rrrah-png-cicp-icc-probe-20261016",
+    "-L",
+    "native=/opt/homebrew/Cellar/dav1d/1.5.4/lib"
+  ],
+  "rlib_sha256": "d6d05012b35c500c38065c17ed9c41efd9e1af5ad9dbb90aed28390ec20fe02d",
+  "exit_code": 0
+}

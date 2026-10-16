@@ -5,6 +5,24 @@ use crate::{
 };
 use rrrah_core::{DecodedRaster, RasterColorSpace, RasterPixels};
 use std::sync::Arc;
+fn output(len: usize, request: &DecodeRequest) -> Result<rrrah_core::PixelBuffer<u8>, RasterDecodeError> {
+    Ok(match &request.memory_budget {
+        Some(budget) => budget
+            .try_buffer(len, 0u8)
+            .map_err(crate::DecodeError::Memory)?
+            .freeze()
+            .into(),
+        None => {
+            let mut values = Vec::new();
+            values
+                .try_reserve_exact(len)
+                .map_err(|_| RasterDecodeError::OutputTooLarge)?;
+            values.resize(len, 0);
+            Arc::new(values).into()
+        }
+    })
+}
+
 fn invalid(s: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidDds(s)
 }
@@ -22,7 +40,7 @@ fn rgb565(v: u16) -> [u8; 4] {
         255,
     ]
 }
-fn block(b: &[u8], variant: u8) -> [[u8; 4]; 16] {
+pub(crate) fn block(b: &[u8], variant: u8) -> [[u8; 4]; 16] {
     let c = if variant == 1 { b } else { &b[8..] };
     let a = u16::from_le_bytes([c[0], c[1]]);
     let z = u16::from_le_bytes([c[2], c[3]]);
@@ -212,35 +230,32 @@ fn uncompressed(
     let raw = bytes
         .get(mip.start..mip.start + total as usize)
         .ok_or_else(|| invalid("truncated uncompressed image"))?;
-    let mut pixels = Vec::new();
-    pixels
-        .try_reserve_exact(width as usize * height as usize * 4)
-        .map_err(|_| RasterDecodeError::OutputTooLarge)?;
+    let mut storage = output(width as usize * height as usize * 4, request)?;
+    let pixels = storage.get_mut().unwrap();
+    let mut destination = pixels.chunks_exact_mut(4);
     for row in raw.chunks_exact(pitch) {
         request.check_cancelled()?;
         for pixel in row[..row_size].chunks_exact(size) {
             let mut packed = [0; 4];
             packed[..size].copy_from_slice(pixel);
             let value = u32::from_le_bytes(packed);
-            for &mask in &masks {
+            let target = destination.next().unwrap();
+            for (out, &mask) in target.iter_mut().zip(&masks) {
                 if mask == 0 {
-                    pixels.push(255);
+                    *out = 255;
                 } else {
                     let shift = mask.trailing_zeros();
                     let max = u64::from(mask >> shift);
                     let sample = u64::from((value & mask) >> shift);
-                    pixels.push(((sample * 255 + max / 2) / max) as u8);
+                    *out = ((sample * 255 + max / 2) / max) as u8;
                 }
             }
         }
     }
-    Ok(DecodedRaster::new(
-        width,
-        height,
-        RasterPixels::Rgba8(Arc::new(pixels).into()),
-        layout.color,
-    )?
-    .with_image_selection(request.image_index, mip.count)?)
+    Ok(
+        DecodedRaster::new(width, height, RasterPixels::Rgba8(storage), layout.color)?
+            .with_image_selection(request.image_index, mip.count)?,
+    )
 }
 
 pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
@@ -336,11 +351,8 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
     let encoded = bytes
         .get(start..start + columns * rows * size)
         .ok_or_else(|| invalid("truncated block storage"))?;
-    let mut pixels = Vec::new();
-    pixels
-        .try_reserve_exact(width as usize * height as usize * 4)
-        .map_err(|_| RasterDecodeError::OutputTooLarge)?;
-    pixels.resize(width as usize * height as usize * 4, 0);
+    let mut storage = output(width as usize * height as usize * 4, request)?;
+    let pixels = storage.get_mut().unwrap();
     for y in 0..rows {
         request.check_cancelled()?;
         for x in 0..columns {
@@ -364,7 +376,7 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
         }
     }
     Ok(
-        DecodedRaster::new(width, height, RasterPixels::Rgba8(Arc::new(pixels).into()), color)?
+        DecodedRaster::new(width, height, RasterPixels::Rgba8(storage), color)?
             .with_image_selection(request.image_index, mip.count)?,
     )
 }
@@ -375,11 +387,16 @@ mod tests {
     fn selected_mips_match_standalone_pillow_oracles() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let manifest = std::fs::read_to_string(root.join("dds-mip-manifest.tsv")).unwrap();
+        let mut cases = 0;
         for line in manifest.lines().filter(|s| !s.starts_with('#') && !s.is_empty()) {
             let c: Vec<_> = line.split('\t').collect();
             let mut request = DecodeRequest::new(root.join(c[0]));
             request.image_index = c[1].parse().unwrap();
             let bytes = std::fs::read(&request.path).unwrap();
+            let oracle = std::fs::read(root.join(c[5])).unwrap();
+            let size = oracle.len() as u64;
+            let budget = rrrah_core::MemoryBudget::new(size);
+            request.memory_budget = Some(budget.clone());
             let raster = decode(&bytes, &request).unwrap();
             assert_eq!(
                 (raster.width(), raster.height()),
@@ -398,14 +415,26 @@ mod tests {
             let RasterPixels::Rgba8(values) = raster.pixels() else {
                 panic!()
             };
-            assert_eq!(
-                &values[..],
-                std::fs::read(root.join(c[5])).unwrap(),
-                "{} mip {}",
-                c[0],
-                c[1]
-            );
-            assert!(decode(&bytes[..bytes.len() - 1], &request).is_err());
+            assert_eq!(&values[..], oracle, "{} mip {}", c[0], c[1]);
+            assert_eq!((budget.used(), budget.peak()), (size, size));
+            let shared = raster.clone();
+            drop(raster);
+            assert_eq!(budget.used(), size);
+            drop(shared);
+            assert_eq!(budget.used(), 0);
+            let short = rrrah_core::MemoryBudget::new(size - 1);
+            request.memory_budget = Some(short.clone());
+            assert!(matches!(
+                decode(&bytes, &request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
+            assert_eq!(short.used(), 0);
+            request.memory_budget = Some(rrrah_core::MemoryBudget::new(0));
+            assert!(matches!(
+                decode(&bytes[..bytes.len() - 1], &request),
+                Err(RasterDecodeError::InvalidDds(_))
+            ));
+            cases += 1;
             request.image_index = 4;
             assert!(matches!(
                 decode(&bytes, &request),
@@ -414,6 +443,7 @@ mod tests {
                 ))
             ));
         }
+        assert_eq!(cases, 36);
     }
     #[test]
     fn invalid_mip_count_trailing_storage_and_ambiguous_pitch_are_rejected() {
@@ -443,6 +473,39 @@ mod tests {
         let flags = u32le(&bytes, 8) | 0x20000;
         bytes[8..12].copy_from_slice(&flags.to_le_bytes());
         assert!(decode(&bytes, &request).is_err());
+    }
+    #[test]
+    fn owned_bc_blocks_match_independent_pillow_oracles() {
+        let cases: [(u8, &[u8], &[u8]); 3] = [
+            (
+                1,
+                include_bytes!("../../../tests/fixtures/raster/bc1-block-oracles.bin"),
+                include_bytes!("../../../tests/fixtures/raster/bc1-block-oracles.rgba"),
+            ),
+            (
+                2,
+                include_bytes!("../../../tests/fixtures/raster/bc2-block-oracles.bin"),
+                include_bytes!("../../../tests/fixtures/raster/bc2-block-oracles.rgba"),
+            ),
+            (
+                3,
+                include_bytes!("../../../tests/fixtures/raster/bc3-block-oracles.bin"),
+                include_bytes!("../../../tests/fixtures/raster/bc3-block-oracles.rgba"),
+            ),
+        ];
+        for (variant, encoded, expected) in cases {
+            let size = if variant == 1 { 8 } else { 16 };
+            assert_eq!(encoded.len(), 4096 * size);
+            assert_eq!(expected.len(), 4096 * 64);
+            for (i, (input, oracle)) in encoded
+                .chunks_exact(size)
+                .zip(expected.as_chunks::<64>().0)
+                .enumerate()
+            {
+                let actual = block(input, variant);
+                assert_eq!(actual.as_flattened(), oracle, "BC{variant} block{i}");
+            }
+        }
     }
     #[test]
     fn bc1_transparency() {

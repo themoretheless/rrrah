@@ -1,0 +1,63 @@
+{
+  "change": "Borrowed hybrid CLUT interval core follows existing C-axis linear/tetrahedral M-Y-K evaluation. Outward f32 arithmetic unions all feasible coordinate orderings and their8-vertex sums. Boxes crossing grid cells refuse; finite/unit input, clut extent, cancellation and continuing work validated. Original point interpolator unchanged.",
+  "tests": {
+    "focused_passed": 2,
+    "focused_ignored_real_control": 1,
+    "rust185_focused_passed": 2,
+    "real_control_passed": 1,
+    "full_suite_passed": 61,
+    "full_suite_failed": 3,
+    "full_suite_ignored": 1,
+    "full_suite_failures": "Missing pre-existing assets/swapped_intent.icc, assets/Display P3.icc, assets/truncated_desc_v4.icc",
+    "controls": "Synthetic affine CLUT reference and actual existing fetch,1024 points each in stable-order and order-crossing boxes; every short budget/cancel checkpoint; invalid cell-crossing/extent/input and explicit adjacent-float zero/infinity/max cases."
+  },
+  "retained_cgats": {
+    "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "grid": 6,
+    "domain": "CLUT input box after input curves, around linearized real pixel147,59, plus/minus1e-6 (not yet a propagated native error interval)",
+    "input": [
+      [
+        0.22739945,
+        0.22740148
+      ],
+      [
+        0.6543671,
+        0.65436924
+      ],
+      [
+        0.7886317,
+        0.7886338
+      ],
+      [
+        0.13822392,
+        0.13822594
+      ]
+    ],
+    "bounds": [
+      [
+        0.5158956,
+        0.5159427
+      ],
+      [
+        0.6206638,
+        0.62071866
+      ],
+      [
+        0.6340151,
+        0.63407105
+      ]
+    ],
+    "bounded_arithmetic_work": 132,
+    "point_controls": 4096,
+    "all_controls_inside": true,
+    "end_to_end": false
+  },
+  "source_sha256": "0570a49199874d969a22740f07258f285e1b4a8dfd8e8e568993d264a8a43b13",
+  "limitations": [
+    "New bounds method not connected to full transform executor or AI replacement gate.",
+    "Input/output curve interpolation, PCS adaptation/RGB conversion, alpha/display quantization not bounded yet.",
+    "Single grid-cell boxes only; cross-cell subdivision remains caller requirement.",
+    "Gradual underflow assumed; no all-profile or wholepage/color-work acceptance.",
+    "Existing full-suite asset failures remain unresolved; no full-green claim."
+  ]
+}

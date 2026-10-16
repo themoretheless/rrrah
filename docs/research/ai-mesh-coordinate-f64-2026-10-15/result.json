@@ -1,0 +1,125 @@
+{
+  "status": "coordinate precision defect reproduced and fixed",
+  "problem": "Adjacent32-bit coordinate codes0x80000000 and0x80000001 both decoded to0.5 through f32. Decode coordinate bounds also narrowed to f32. Distinct mesh positions could collapse before geometry processing.",
+  "changes": [
+    "Type4/5/6/7 mesh Decode uses separate f64 coordinate ranges and original direct f32 component ranges.",
+    "Coordinate integer conversion, maximum code2^bits-1 and interpolation remain f64 through Point construction.",
+    "Color parsing remains original f32 path, avoiding a new f64-to-f32 double rounding step.",
+    "Dense authored mesh regression now compares area to exact source rational127/680 rather than old f32-rounded coordinate oracle; strict1e-12 tolerance unchanged."
+  ],
+  "red_regression": {
+    "log": "/tmp/ai-mesh-coordinate-red.log",
+    "failure": "Both adjacent positions decoded to(0.5,0.0)."
+  },
+  "tests": {
+    "interpret": {
+      "passed": 133,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/ai-mesh-coordinate-final-typed-interpret.log"
+    },
+    "hayro": {
+      "passed": 312,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-mesh-coordinate-final-typed-hayro.log"
+    },
+    "new_contracts": [
+      "Actual bit-reader adjacent32-bit positions remain distinct and equal independent unit-range ratios.",
+      "Precise Decode endpoints survive for8/16/24/32-bit geometry.",
+      "Component decode bits match original f32 interpolation."
+    ]
+  },
+  "controls": [
+    {
+      "pixel": [
+        147,
+        59
+      ],
+      "completed": true,
+      "bytes": [
+        205,
+        151,
+        128
+      ],
+      "source_work": 2287827,
+      "source_remaining": 1712173
+    },
+    {
+      "pixel": [
+        147,
+        57
+      ],
+      "completed": true,
+      "bytes": [
+        187,
+        108,
+        78
+      ],
+      "source_work": 880174,
+      "source_remaining": 3119826
+    },
+    {
+      "pixel": [
+        138,
+        34
+      ],
+      "completed": true,
+      "bytes": [
+        219,
+        185,
+        167
+      ],
+      "source_work": 137083,
+      "source_remaining": 3862917
+    },
+    {
+      "pixel": [
+        147,
+        60
+      ],
+      "completed": true,
+      "bytes": [
+        213,
+        167,
+        146
+      ],
+      "source_work": 3368439,
+      "source_remaining": 631561
+    },
+    {
+      "pixel": [
+        147,
+        61
+      ],
+      "completed": false,
+      "bytes": null,
+      "source_work": 3895882,
+      "source_remaining": 104118
+    }
+  ],
+  "controls_log": "/tmp/ai-mesh-coordinate-f64-real5.log",
+  "memory_peak_bytes": 266079344,
+  "memory_limit_bytes": 268435456,
+  "final_credit": 0,
+  "limits_unchanged": {
+    "source": 4000000,
+    "geometry": 40000000,
+    "deadline_seconds": 600
+  },
+  "original_center_rgb_unchanged": [
+    180.41906118392944,
+    103.0829206109047,
+    63.532701060175896
+  ],
+  "source_sha256": {
+    "vendor/hayro-interpret/src/shading.rs": "906b694054b52e17a07bd5755fd71d81b1c8946f9d4247204fd3ad210a8cb7a4",
+    "vendor/hayro/src/knockout_interpreter.rs": "8e8d7d0ba73f6aa458bfb6fb09056e8ace72845e96b82f29637d4f984da650b1"
+  },
+  "limitations": [
+    "Native adaptive tensor tessellation still approximates source geometry and colors.",
+    "No exact-decimal coordinate arithmetic or certified global tessellation bound claimed.",
+    "Actual source work changes with corrected geometry; no speedup claimed.",
+    "147,61 still refuses; full-page, independent fidelity and100-format qualification remain open."
+  ]
+}

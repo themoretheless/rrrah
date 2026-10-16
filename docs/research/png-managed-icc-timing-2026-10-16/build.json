@@ -1,0 +1,50 @@
+{
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "-C",
+    "opt-level=3",
+    "docs/research/png-managed-icc-timing-2026-10-16/probe.rs",
+    "-L",
+    "dependency=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps",
+    "-o",
+    "/tmp/rrrah-png-icc-timing-20261016",
+    "--extern",
+    "image=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/libimage-e2567c97e8a824e2.rlib",
+    "--extern",
+    "rrrah_decode=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_decode-12e794bc337bac55.rlib",
+    "--extern",
+    "rrrah_core=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_core-ee1a6c239ef50b53.rlib",
+    "--extern",
+    "rrrah_scientific=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_scientific-449d761af3dc68af.rlib",
+    "--extern",
+    "flate2=/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/libflate2-35a78ced54d5c883.rlib",
+    "-L",
+    "native=/opt/homebrew/Cellar/dav1d/1.5.4/lib",
+    "-L",
+    "native=/opt/homebrew/opt/libheif/lib"
+  ],
+  "libraries": {
+    "image": {
+      "path": "/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/libimage-e2567c97e8a824e2.rlib",
+      "sha256": "c9936f4c2a13917eb022a1fb9a987e53263460f69a7d653e4a017f6bd9a0cde1"
+    },
+    "rrrah_decode": {
+      "path": "/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_decode-12e794bc337bac55.rlib",
+      "sha256": "feb27829917b8228c11748a5296ba2ba8a16e0e8e3608bd75e8941b9a75a98b6"
+    },
+    "rrrah_core": {
+      "path": "/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_core-ee1a6c239ef50b53.rlib",
+      "sha256": "210c48481f186f35fdadff20a8138e545e5e86ba36225736f4feaaad129aa801"
+    },
+    "rrrah_scientific": {
+      "path": "/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/librrrah_scientific-449d761af3dc68af.rlib",
+      "sha256": "aab10112f05c5d05a05bb78d1bb53751e87b71a66a5c9d9ad3ad31c7f143e7d7"
+    },
+    "flate2": {
+      "path": "/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/libflate2-35a78ced54d5c883.rlib",
+      "sha256": "c23272ee0cd8adcacf14c8480d4862c1bddfd81c1eaf600b8d9d201b4e48f127"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+Timestamp               Ty Process[PID:TID]
+2026-10-15 02:13:41.785 A  rrrah-a37e2f05ecca44b8[18113:111d0d9] (Metal) Metal Compiling Shader
+2026-10-15 02:13:42.315 A  rrrah-a37e2f05ecca44b8[18113:111d0d6] (Metal) Metal Compiling Shader
+2026-10-15 02:13:42.375 A  rrrah-a37e2f05ecca44b8[18113:111d0d9] (Metal) Metal Compiling Shader
+2026-10-15 02:13:42.404 A  rrrah-a37e2f05ecca44b8[18113:111d0d6] (Metal) Metal Compiling Shader
+2026-10-15 02:13:43.357 A  rrrah-a37e2f05ecca44b8[18113:111d0d9] (Metal) Metal Compiling Shader
+2026-10-15 02:14:00.791 F  kernel[0:728] (IOGPUFamily) void IOGPUScheduler::signalHardwareError(eRestartRequest, int32_t): GPURestartSignaled stampIdx=126 type=1 prevType=0 numStamps=128
+2026-10-15 02:14:00.791 F  kernel[0:728] (IOGPUFamily) void IOGPUScheduler::signalHardwareError(eRestartRequest, int32_t): GPURestartEnqueued stampIdx=126 type=1
+2026-10-15 02:14:00.791 F  kernel[0:703] (IOGPUFamily) void IOGPUScheduler::hardware_error_interrupt(IOInterruptEventSource *, int): setting channel 126 restart type to 1
+2026-10-15 02:14:00.791 F  kernel[0:703] (IOGPUFamily) void IOGPUScheduler::hardware_error_interrupt(IOInterruptEventSource *, int): GPURestartDequeued stampIdx=126 type=1
+2026-10-15 02:14:00.792 F  kernel[0:703] (IOGPUFamily) void IOGPUScheduler::hardware_error_interrupt(IOInterruptEventSource *, int): GPURestartBegin stampIdx=126 type=1
+2026-10-15 02:14:00.799 F  kernel[0:703] (IOGPUFamily) void IOGPUScheduler::hardware_error_interrupt(IOInterruptEventSource *, int): GPURestartEnd stampIdx=126 type=1
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] (IOGPU) IOGPUMetalError: <private>
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] (Metal) Execution of the command buffer was aborted due to an error during execution. Discarded (victim of GPU error/recovery) (00000005:kIOGPUCommandBufferCallbackErrorInnocentVictim)
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] [com.apple.SkyLight:default] Detected command buffer completion failure.  Error code = 0x1
+2026-10-15 02:14:00.801 Df WindowServer[420:111c700] [com.apple.SkyLight:default] Flushing display space to aid GPU restart recovery.
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] [com.apple.coreanimation:Metal] MTLCommandBuffer 0xb75510e00, protection 0x0, label (null), error = Discarded (victim of GPU error/recovery) (00000005:kIOGPUCommandBufferCallbackErrorInnocentVictim)
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] (IOGPU) IOGPUMetalError: <private>
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] (Metal) Execution of the command buffer was aborted due to an error during execution. Discarded (victim of GPU error/recovery) (00000005:kIOGPUCommandBufferCallbackErrorInnocentVictim)
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] [com.apple.SkyLight:default] Detected command buffer completion failure.  Error code = 0x1
+2026-10-15 02:14:00.801 Df WindowServer[420:111c700] [com.apple.SkyLight:default] Flushing display space to aid GPU restart recovery.
+2026-10-15 02:14:00.801 E  WindowServer[420:111c700] [com.apple.coreanimation:Metal] MTLCommandBuffer 0xb75510000, protection 0x0, label (null), error = Discarded (victim of GPU error/recovery) (00000005:kIOGPUCommandBufferCallbackErrorInnocentVictim)
+2026-10-15 02:14:00.801 E  rrrah-a37e2f05ecca44b8[18113:111da55] (IOGPU) IOGPUMetalError: <private>
+2026-10-15 02:14:00.801 E  rrrah-a37e2f05ecca44b8[18113:111da55] (Metal) Execution of the command buffer was aborted due to an error during execution. Caused GPU Hang Error (00000003:kIOGPUCommandBufferCallbackErrorHang)
+2026-10-15 02:14:00.801 E  rrrah-a37e2f05ecca44b8[18113:111da55] (IOGPU) IOGPUMetalError: <private>
+2026-10-15 02:14:00.801 E  rrrah-a37e2f05ecca44b8[18113:111da55] (Metal) Execution of the command buffer was aborted due to an error during execution. Discarded (victim of GPU error/recovery) (00000005:kIOGPUCommandBufferCallbackErrorInnocentVictim)

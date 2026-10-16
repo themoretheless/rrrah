@@ -1,0 +1,33 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "cases": 2,
+  "pixels_per_frame": 143600,
+  "sdr_float_readbacks": 8,
+  "all_restore_bits_and_gpu_frames_exact": true,
+  "writes": 2,
+  "reads": 2,
+  "root_limit_bytes": 8388608,
+  "root_peak_bytes": 8388608,
+  "ram_bytes": 3145728,
+  "restore_bytes": 6291456,
+  "disk_bytes": 16777216,
+  "full_root_pressure_ram_hit": true,
+  "final_root_bytes": 0,
+  "current_source_modules": [
+    "psd.rs",
+    "raster_color.rs",
+    "icc_colorimetry.rs"
+  ],
+  "cached_supporting_libraries": [
+    "rrrah-layered error aliases",
+    "rrrah-core",
+    "rrrah-cache",
+    "rrrah-gpu",
+    "moxcms and image"
+  ],
+  "limitations": [
+    "not full application or public decode_image route",
+    "no actual DecodeGate or app prefetch test",
+    "shared Cargo session5651 remains independent"
+  ]
+}

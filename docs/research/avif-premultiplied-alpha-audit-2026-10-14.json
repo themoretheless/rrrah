@@ -1,5 +1,5 @@
 {
-  "status": "prem_subset_validated_prior_streaming_snapshot_current_metadata_followup_pending",
+  "status": "prem_still_subset_and_streamed_metadata_current_followup_validated",
   "primary_source": "https://aomediacodec.github.io/av1-avif/",
   "container_parser": "mp4parse 0.17.0 exposes premultiplied_alpha from selected primary-to-alpha prem reference",
   "codec": "image 0.25.10 AvifDecoder extracts primary/alpha planes but does not retain/use ctx.premultiplied_alpha",
@@ -266,5 +266,13 @@
     "checker_v3_exit_code": 0,
     "repeated_encoding_byte_exact": true
   },
-  "post_validation_metadata_change": "stream selected AVIF property associations without retained per-reference vectors; see avif-association-working-set-2026-10-15/result.json"
+  "post_validation_metadata_change": "stream selected AVIF property associations without retained per-reference vectors; see avif-association-working-set-2026-10-15/result.json",
+  "current_streaming_followup": {
+    "result": "avif-association-working-set-2026-10-15/result.json",
+    "full_decoder_passed": 1046,
+    "metal_passed": 24,
+    "actual_heif_avif_cases": 8,
+    "source_drift": [],
+    "scope": "latest source followup; earlier embedded snapshot hashes/logs retained as historical evidence"
+  }
 }

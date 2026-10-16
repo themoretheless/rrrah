@@ -1,0 +1,34 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 14s
+     Running unittests src/lib.rs (target/avif-prem-validation-20261014/debug/deps/rrrah_decode-9bd398ccea4932bc)
+
+running 26 tests
+test avif_color::tests::exact_clean_aperture_signed_offsets_and_bounds ... ok
+test avif_color::tests::invalid_transform_reserved_bits_are_rejected ... ok
+test avif_color::tests::prem_reference_requires_unique_selected_primary_auxiliary_link ... ok
+test avif_color::tests::primary_pixel_aspect_must_be_positive_square_and_unique ... ok
+test avif_color::tests::prem_reference_v1_and_selected_auxiliary_property_are_validated ... ok
+test avif_color::tests::primary_color_association_and_icc_precedence ... ok
+test avif_color::tests::primary_transform_order_is_validated_before_codec_decode ... ok
+test avif_color::tests::streamed_associations_preserve_transform_order_and_essential_offsets_across_boxes ... ok
+test avif_color::tests::truncated_and_overflowing_boxes_are_errors ... ok
+test avif_color::tests::invalid_nclx_and_unknown_transfer ... ok
+test avif_color::tests::block_and_reference_walks_cancel_midstream_and_retry ... ok
+test avif_color::tests::selected_primary_prem_alpha_and_integer_conversion ... ok
+test avif_color::tests::clean_aperture_follows_primary_association_and_rejects_duplicates ... ok
+test raster::tests::avif_prem_conversion_cancellation_preserves_input_and_releases_budget ... ok
+test avif_color::tests::repeated_auxiliary_targets_do_not_require_per_reference_storage ... ok
+test raster::tests::avif_integer_normalization_covers_every_10_and_12_bit_code ... ok
+test avif_color::tests::clean_aperture_and_orientation_match_independent_libavif_metadata ... ok
+test raster_corpus::profiled_avif_reaches_linear_display_and_preserves_alpha ... ok
+test raster_corpus::nclx_srgb_avif_reaches_display_without_icc ... ok
+test raster::tests::avif_prem_alpha_is_unassociated_before_color_preparation ... ok
+test raster::tests::avif_square_pixel_property_preserves_samples_and_rejects_invalid_geometry ... ok
+test raster_corpus::avif_clean_aperture_file_refusals_release_managed_input_and_output ... ok
+test raster_corpus::independent_hlg10_avif_retains_precision_metadata_and_releases_credit ... ok
+test raster_corpus::independent_pq10_avif_retains_precision_metadata_and_releases_credit ... ok
+test raster::tests::avif_metadata_generation_cancels_during_associations_and_retries ... ok
+test avif_color::tests::high_depth_prem_codes_match_direct_rational_normalization ... ok
+
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 1096 filtered out; finished in 2.28s
+

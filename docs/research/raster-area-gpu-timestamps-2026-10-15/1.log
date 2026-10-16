@@ -1,0 +1,9 @@
+
+running 1 test
+test raster_single_layer_gpu_timestamp_timing ... raster timestamp adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+TIMING_CONFIGURATION area=true zoom_factor=1 repeated_pan=true
+{"median_gpu_ms":2.774604,"p95_gpu_ms":4.608167,"max_gpu_ms":5.356334,"warmups":5,"samples_gpu_ms":[2.888792, 4.608167, 1.372709, 2.847583, 2.954791, 1.995292, 2.842208, 1.997542, 1.916917, 2.843167, 5.356334, 1.917791, 1.947375, 2.855166, 2.084166, 3.110625, 2.912959, 1.312, 3.405333, 3.283458, 1.918459, 3.217334, 2.562708, 2.707, 2.845833, 2.592291, 2.009375, 2.097583, 2.860416, 1.914292],"source":[4096,4096],"target":[2048,2048],"target_format":"Rgba16Float"}
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.95s
+

@@ -1,0 +1,191 @@
+{
+  "status": "passed_bounded_full_sensor_viewer",
+  "adapter": "Apple M4 Max Metal",
+  "dimensions": [
+    6188,
+    4120
+  ],
+  "pixels": 25494560,
+  "cases": [
+    {
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 18.217534417,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-bilinear-hdr-0.log",
+      "algorithm": "bilinear",
+      "preparation_enqueue_ms": [
+        2896.216,
+        2881.529
+      ]
+    },
+    {
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 17.702579749999998,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-bilinear-hdr-1.log",
+      "algorithm": "bilinear",
+      "preparation_enqueue_ms": [
+        2910.055,
+        2881.233
+      ]
+    },
+    {
+      "algorithm": "smooth-hue",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 15.206253125,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-smooth-hue-hdr-0.log",
+      "preparation_enqueue_ms": [
+        2928.557,
+        2919.98
+      ]
+    },
+    {
+      "algorithm": "smooth-hue",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 15.117701375000001,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-smooth-hue-hdr-1.log",
+      "preparation_enqueue_ms": [
+        2933.894,
+        2966.349
+      ]
+    },
+    {
+      "algorithm": "malvar-he-cutler",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 14.756467540999996,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-malvar-he-cutler-hdr-0.log",
+      "preparation_enqueue_ms": [
+        2940.054,
+        2922.715
+      ]
+    },
+    {
+      "algorithm": "malvar-he-cutler",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 15.365106292,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-malvar-he-cutler-hdr-1.log",
+      "preparation_enqueue_ms": [
+        2950.033,
+        2888.96
+      ]
+    },
+    {
+      "algorithm": "directional",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 14.747641292000004,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-directional-hdr-0.log",
+      "preparation_enqueue_ms": [
+        2918.347,
+        2860.922
+      ]
+    },
+    {
+      "algorithm": "directional",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 14.823731707999997,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-directional-hdr-1.log",
+      "preparation_enqueue_ms": [
+        2881.102,
+        2866.734
+      ]
+    },
+    {
+      "algorithm": "vng",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 15.191328583,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-vng-hdr-0.log",
+      "preparation_enqueue_ms": [
+        2899.659,
+        2874.762
+      ]
+    },
+    {
+      "algorithm": "vng",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 13.474245541000002,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-vng-hdr-1.log",
+      "preparation_enqueue_ms": [
+        2884.736,
+        2872.19
+      ]
+    },
+    {
+      "algorithm": "rcd",
+      "hdr": false,
+      "exit_code": 0,
+      "wall_seconds": 12.782596791999993,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-rcd-hdr-0.log",
+      "preparation_enqueue_ms": [
+        2883.495,
+        2850.627
+      ]
+    },
+    {
+      "algorithm": "rcd",
+      "hdr": true,
+      "exit_code": 0,
+      "wall_seconds": 15.214843166999998,
+      "compute_uploads": 2,
+      "recovery_pass": true,
+      "log": "viewer-rcd-hdr-1.log",
+      "preparation_enqueue_ms": [
+        2885.738,
+        2828.763
+      ]
+    }
+  ],
+  "cache_policy": "--no-cache --ram-cache-mb0 --swap-mb0; native decode repeated after device recreation",
+  "limits_mib": {
+    "gpu": 2048,
+    "raw_gpu": 1024,
+    "managed": 2048
+  },
+  "proof": "loaded current-generation main frame and current HUD revision presented, GPU wait succeeded; device epochs changed; selection/view exact; two real calibrated compute uploads per case and no fragment RAW renderer",
+  "limitations": [
+    "authored uncompressed native DNG, not camera-produced fidelity corpus",
+    "presentation proof does not compare live window pixels independently; separate library readback references cover bounded controls",
+    "simulated notification recovery, not hardware failure injection",
+    "correctness build with unoptimized local crates; preparation/enqueue and wall times are not release throughput",
+    "extreme signed HDR values near binary16 limits still need explicit calibrated-viewer policy qualification",
+    "paired optimized fragment/compute benchmark and physical HDR/NVIDIA remain pending"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "b385d2df59d97d53262a370c809aba60766b821caf7514828970b9c58f635bf0",
+    "crates/rrrah-core/src/bayer.rs": "1b2843f44f73d7329569f13d3675b71c7110d9585aa8fb3d452ab91653105838",
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "1bbfdf2fe5d9d7a958bca657ab8c4af19497a83ac850b4475c2508a19c9306a1",
+    "crates/rrrah-gpu/src/raster.rs": "bd3f176dfefb85c5f3d058e35cea1004dde124c0a6e070504c501055cc024e80",
+    "crates/rrrah-gpu/shaders/bayer_demosaic.wgsl": "4ca8f11952d623ecbe78a5b02a5f7f6a344baa2d43c47c9107652b7f31f1c6fb",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "04dd5a0a0a68b45cd7c6b7a371896e963c29277716a4bd119fb4f0c709a8d23f"
+  },
+  "binary_sha256": "0cb76bc1ab433b8a5828d3dfcc081ccac3d23db0d3058f06a8d61e027bf46695"
+}

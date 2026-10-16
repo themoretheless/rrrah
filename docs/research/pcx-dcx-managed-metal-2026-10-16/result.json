@@ -1,0 +1,64 @@
+{
+  "status": "PCX RGB/indexed and both DCX pages verified through prepared display, managed RAM/swap and required actual Metal",
+  "matrix": {
+    "sgi": 2,
+    "sun": 8,
+    "pcx": 2,
+    "dcx_pages": 2,
+    "states": 14,
+    "files": 13,
+    "oracles": "Pillow/FFmpeg independent RGBA bytes and known3x2Pillow PCX pattern; shared assumed-sRGB display preparation"
+  },
+  "checks": [
+    "Full managed budget pressure still permits RAM hits without decode",
+    "Count1RAM forces spill; all14keys written/restored",
+    "Foreground decode gate blocks decoder while reverse prefetch restores swap",
+    "DCX image index/count checked on initial load and restoration, preserving separate page keys",
+    "All native/prepared/restored float samples exactly match reference",
+    "Viewport8ximage covers every image; SDR and RGBA16F readbacks exact",
+    "Final managed CPU creditzero"
+  ],
+  "metal": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_skip": false,
+    "passed": 1,
+    "failed": 0,
+    "states": 14,
+    "readbacks": 84,
+    "ram_pressure_hits": 14,
+    "swap_writes": 14,
+    "swap_reads": 14,
+    "errors": 0,
+    "dropped": 0,
+    "seconds": 2.43
+  },
+  "tests": {
+    "cpu_targeted": {
+      "passed": 1,
+      "failed": 0
+    },
+    "cpu_pipeline_group": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 4
+    },
+    "full_viewer": {
+      "passed": 248,
+      "failed": 0,
+      "ignored": 69,
+      "seconds": 3.68
+    },
+    "focused_rustfmt": "passed"
+  },
+  "limitations": [
+    "PCX low-bit/legacy/raw and malformed-directory variants have separate CPU unit evidence, not all represented in new Metal corpus",
+    "No nonzero TTL added to this matrix; existing cache/DICOM TTL tests separate",
+    "No above1source HDR, panel photometry or NVIDIA execution",
+    "Not full PCX/DCX or100format qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/pcx.rs": "ae4bd9a7fdf1480af447c63b7d44f7c5d23b9decdaa98e92703d2810fcc462c3",
+    "crates/rrrah-texture/src/dcx.rs": "488107fca6dcfd358e979e639482a933497fa4e138685717a383598af4e90356",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "d269a4eeb83dc6c66a44fcd0871c4494d7e92a3e4f4e85e1a3e1760140965f32"
+  }
+}

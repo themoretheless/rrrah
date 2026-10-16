@@ -1,0 +1,58 @@
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.17s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_scientific-b1526b6fcadfa52e)
+
+running 50 tests
+test dicom::palette::tests::packaged_palette_matches_all_samples_with_exact_managed_admission ... ignored, external packaged ultrasound palette source and independent pydicom LUT oracle
+test dicom::rgb::tests::exhaustive_ybr_rgb_matches_exact_external_rational_oracle ... ignored, full external Fraction oracle for all16M YBR triples
+test dicom::rgb::tests::packaged_rgb_sources_match_every_native_sample_and_release_memory ... ignored, external packaged uncompressed RGB sources and independent pydicom oracles
+test dicom::geometry::tests::direction_precedence_singletons_and_strict_multiplicity ... ok
+test dicom::encapsulation::tests::exact_and_empty_bot_selection_and_all_truncations ... ok
+test dicom::palette::segments::tests::malformed_expansion_is_rejected_before_large_output_admission ... ok
+test dicom::palette::tests::malformed_segmented_count_is_format_error_under_full_source_pressure ... ok
+test dicom::rgb::tests::packed_ybr_rejects_planar_odd_width_and_wrong_storage ... ok
+test dicom::palette::tests::mismatched_descriptors_alpha_supplemental_and_bad_legacy_words_refuse ... ok
+test dicom::tests::encapsulated_rle_legacy_word_vr_preserves_selected_frame_bytes ... ok
+test dicom::tests::implicit_dictionary_refuses_standard_sequences_and_unknown_public_tags ... ok
+test dicom::rgb::tests::malformed_planar_signed_transform_and_icc_declarations_refuse ... ok
+test dicom::palette::segments::tests::exact_linear_zero_endpoint_byte_offsets_and_indirect_forbidden ... ok
+test dicom::sequences::tests::malformed_delimiters_boundaries_and_scalar_headers_are_rejected ... ok
+test dicom::tests::packaged_ct_metadata_sequence_and_absent_padding_match_every_sample ... ignored, external packaged CT source and independent pydicom oracles
+test dicom::tests::packaged_mr_implicit_matches_every_external_raw_and_window_sample ... ignored, external packaged MR implicit source and independent pydicom oracles
+test dicom::tests::packaged_mr_rle_matches_native_selected_scalar_pixels ... ignored, external packaged MR RLE source and independent scalar/window oracle
+test dicom::sequences::tests::depth_and_total_item_limits_are_bounded_and_cancellation_is_observed ... ok
+test dicom_rle::tests::packaged_rle_frames_match_all_native_component_bytes ... ignored, external packaged RLE frames and independent pydicom samples
+test dicom_rle::tests::cancellation_during_tail_validation_is_observed ... ok
+test dicom::tests::rescale_overflow_and_unsupported_color_release_admitted_output ... ok
+test dicom::tests::malformed_native_elements_transfer_syntax_and_truncations_fail ... ok
+test dicom_rle::tests::malformed_packets_and_headers_fail_before_output_admission ... ok
+test dicom_rle::tests::rows_runs_nop_padding_precision_layout_and_managed_admission ... ok
+test fits::exact_scaling_tests::wide_integer_offset_preserves_small_differences ... ok
+test dicom::tests::declared_padding_is_checked_in_stored_domain_for_each_syntax ... ok
+test fits::exact_scaling_tests::floating_bits_scaling_syntax_and_undefined_contracts ... ok
+test fits::tests::structural_corruption_truncation_and_padding_fail ... ok
+test mrc::tests::malformed_bounds_modes_axes_and_selection_fail ... ok
+test mrc::tests::nonfinite_array_is_retained_and_needs_window_policy ... ok
+test dicom::tests::implicit_truncation_sequence_lengths_private_bounds_and_public_unknown_refuse ... ok
+test nrrd::tests::explicit_window_and_nonfinite_policy ... ok
+test dicom::tests::rle_container_corruption_is_not_retryable_memory_pressure ... ok
+test fits::tests::tables_are_skipped_and_header_metadata_is_retained ... ok
+test nrrd::tests::malformed_and_unsupported_contracts_are_rejected ... ok
+test nrrd::tests::gzip_volume_retains_only_selected_slice_and_checks_late_crc ... ok
+test mrc::tests::exhaustive_half_conversion_matches_numpy ... ok
+test dicom::tests::floating_layout_truncation_nonfinite_and_conflicting_pixels_release_memory ... ok
+test dicom::tests::big_endian_meta_boundary_vr_lengths_and_truncations_refuse_without_credit ... ok
+test scientific::tests::public_window_api_selects_scientific_planes_only ... ok
+test fits::tests::common_router_and_explicit_window_preserve_selection ... ok
+test mrc::tests::selected_slice_routes_under_raw_extension_without_guessed_display ... ok
+test nrrd::tests::public_router_selects_volume_under_raw_suffix ... ok
+test dicom::palette::segments::tests::work_limit_and_interior_cancellation_release_admitted_scratch ... ok
+test dicom_rle::tests::independent_pydicom_frame_oracles_all_planes_and_bounded_buffers ... ok
+test fits::tests::independent_native_physical_and_window_oracles ... ok
+test mrc::tests::independent_native_sample_oracles_and_metadata ... ok
+test nrrd::tests::independent_scalar_volume_oracles ... ok
+test dicom::tests::pydicom_scalar_rescale_window_and_managed_frame_oracles ... ok
+test dicom::rgb::tests::independent_planar_interleaved_rgb_words_frames_profiles_and_admission ... ok
+
+test result: ok. 43 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 0.05s
+

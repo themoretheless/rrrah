@@ -1,0 +1,21 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.16s
+     Running unittests src/main.rs (target/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+
+thread 'dicom_pipeline_tests::legacy_rasters_ram_swap_and_blocked_prefetch' (5051243) panicked at crates/rrrah-app/src/dicom_pipeline_tests.rs:1302:5:
+assertion `left == right` failed
+  left: 2009
+ right: 2008
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test dicom_pipeline_tests::legacy_rasters_ram_swap_and_blocked_prefetch ... FAILED
+
+failures:
+
+failures:
+    dicom_pipeline_tests::legacy_rasters_ram_swap_and_blocked_prefetch
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 349 filtered out; finished in 0.14s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

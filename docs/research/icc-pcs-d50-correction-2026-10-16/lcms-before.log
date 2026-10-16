@@ -1,0 +1,20 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 22.41s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-a975e9ebc3faac09)
+
+running 1 test
+PSD16_LCMS source=psd-tools-16bit5x5.psd pixels=25 max_rgb_absolute_error=0.000381529331 declared_bound=0.00002 alpha_exact=true
+
+thread 'image_router::tests::original_rgb16_psd_psb_display_color_matches_independent_littlecms_double' (5662834) panicked at crates/rrrah-decode/src/image_router.rs:225:13:
+psd-tools-16bit5x5.psd exceeds declared independent CMS bound: 0.0003815293312072754
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test image_router::tests::original_rgb16_psd_psb_display_color_matches_independent_littlecms_double ... FAILED
+
+failures:
+
+failures:
+    image_router::tests::original_rgb16_psd_psb_display_color_matches_independent_littlecms_double
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 198 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

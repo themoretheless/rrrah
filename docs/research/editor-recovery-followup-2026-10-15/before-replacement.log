@@ -1,0 +1,28 @@
+     Locking 41 packages to latest Rust 1.98.1 compatible versions
+      Adding serde_json v1.0.151 (available: v1.0.154)
+   Compiling syn v3.0.9
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling thiserror v2.0.21
+   Compiling serde v1.0.229
+   Compiling rrrah-first30-harness v0.1.0 (/tmp/rrrah-editor-before)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2m 13s
+     Running unittests src/lib.rs (/tmp/rrrah-first30-harness/target/debug/deps/rrrah_first30_harness-c8cfd6e7a69d741b)
+
+running 1 test
+
+thread 'editor::source_reload_regression::replacement_must_not_reuse_previous_preview' (27606739) panicked at /tmp/rrrah-editor-before/src/editor.rs:480:3:
+assertion `left == right` failed: old exposure leaked into replacement preview
+  left: EditState { exposure_stops: 1.5, curve: [[0.0, 0.0], [1.0, 1.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0]], curve_len: 2 }
+ right: EditState { exposure_stops: 0.0, curve: [[0.0, 0.0], [1.0, 1.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0]], curve_len: 2 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test editor::source_reload_regression::replacement_must_not_reuse_previous_preview ... FAILED
+
+failures:
+
+failures:
+    editor::source_reload_regression::replacement_must_not_reuse_previous_preview
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `--lib`

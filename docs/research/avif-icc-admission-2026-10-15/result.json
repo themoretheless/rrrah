@@ -1,0 +1,71 @@
+{
+  "status": "native1050_metal24_eight_cases_and_icc_admission_regression_passed",
+  "change": "reserve selected AVIF ICC copy before allocation, retain RAII credit through inner decoding, reject duplicate ICC before second allocation",
+  "source_sha256": {
+    "crates/rrrah-decode/src/avif_color.rs": "0a0f5cb582d13a93b24d46e016820dbcf9ff95256f9bb2c7d9dfea59abd6b0a4",
+    "crates/rrrah-decode/src/raster.rs": "281eac29caa341202e8ade7460b9c847a67945edd5a24827bbf838f4bbb1cfb2"
+  },
+  "probe": {
+    "exit_code": 0,
+    "icc_bytes": 588,
+    "one_byte_short_refused": true,
+    "exact_admitted": true,
+    "post_copy_cancellation_released": true,
+    "retry_passed": true,
+    "final_credit": 0
+  },
+  "focused_before_permanent_regression": {
+    "exit_code": 0,
+    "passed": 26,
+    "failed": 0
+  },
+  "permanent_regression_session": 28573,
+  "permanent_regression_log": "/tmp/avif-icc-admission-with-regression.log",
+  "limitations": [
+    "only selected native AVIF ICC copy; third-party codec ICC copy and decode scratch are not yet admitted",
+    "box descriptor allocations not covered",
+    "final retained raster metadata admission remains existing outer try_manage_pixels",
+    "not full 100-format fidelity"
+  ],
+  "focused": {
+    "exit_code": 0,
+    "passed": 27,
+    "failed": 0,
+    "ignored": 0
+  },
+  "native_session": 1778,
+  "metal_build_session": 9317,
+  "codec_followup": {
+    "source": "image0.25.10 src/codecs/avif/decoder.rs icc_profile",
+    "finding": "icc_profile clones decoder internal ICC Vec; native selected ICC also exists. Decode scratch and internal profile allocations still require separate admission; avoid claiming whole-codec bound."
+  },
+  "native": {
+    "exit_code": 0,
+    "passed": 1050,
+    "failed": 0,
+    "ignored": 73
+  },
+  "metal": {
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "binary_sha256": "14dcd52f15f887929b28fbee07435530fd0e738fd0839bb75be615b234f79bfe"
+  },
+  "source_drift": false,
+  "warning_followup": "production build warns dead_code on now test/diagnostic-only properties_with_check wrapper; scope wrapper to tests and update diagnostic callers next",
+  "subsequent_source_change": {
+    "report": "../avif-icc-no-getter-copy-2026-10-15/result.json",
+    "scope": "skip redundant image ICC getter clone and test-scope unused wrapper"
+  }
+}

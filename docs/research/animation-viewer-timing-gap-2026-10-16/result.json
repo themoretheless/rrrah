@@ -1,0 +1,49 @@
+{
+  "status": "live_animation_playback_not_implemented_in_current_viewer",
+  "evidence": {
+    "gif_animation": {
+      "route_line": 627,
+      "selected_raster_only": true
+    },
+    "webp_animation": {
+      "route_line": 624,
+      "selected_raster_only": true
+    },
+    "apng": {
+      "route_line": 664,
+      "selected_raster_only": true
+    }
+  },
+  "decoder_metadata": {
+    "GIF": "delay_ms and optional repeat-after-first-play count",
+    "APNG": "rational delay_ms_numerator/denominator and total num_plays",
+    "WebP": "delay_ms and total num_plays"
+  },
+  "common_raster_timing_field": false,
+  "impact": "Native disposal/composition and manual frame selection do not establish timed playback; common raster cache/frame-ready route cannot schedule from currently discarded timing.",
+  "implementation_requirements": [
+    "Normalize total-play semantics without changing native format metadata",
+    "Carry selected-frame timing from source decode through display preparation and ready events",
+    "Preserve or independently rehydrate timing on RAM/swap hits; never confuse image pages/mips with animation",
+    "Bounded playback state: wait for ready, stale generation cancellation, zero-duration policy, finite/infinite loops, reset on file navigation",
+    "Prefetch next/previous frame window without admitting unbounded complete animation",
+    "Deterministic clock regression tests plus actual Metal transport; live physical presentation remains separately gated by unlocked screen"
+  ],
+  "not_claimed": [
+    "No animation implementation fix in this audit",
+    "No new GPU, physical HDR, NVIDIA or complete format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-decode/src/raster.rs": "229659de91ce9d8cee7c674b1b92f1f6dd68161bd76956792f55fbb8faae469f",
+    "crates/rrrah-develop/src/raster.rs": "c4c90bc0bc7ddb159f0bff682245ed0b32ca4895e936721815fface7ef44134f",
+    "crates/rrrah-animation/src/gif_animation.rs": "97e3612a26a6ce3b803900847595ccc284146c14d6172d5b526edbdee90205c4",
+    "crates/rrrah-animation/src/apng.rs": "34f90827cb7d549d7546017eb2d3ae313e19855f33e60a925e1e230d6801985c",
+    "crates/rrrah-animation/src/webp_animation.rs": "4f49ff6bb13f8af8a64358fbc09df9af77c23d82fd296bea002553847b2087eb",
+    "crates/rrrah-app/src/main.rs": "61b1767a031825321bde65c631b0f6bb57a294b449f54346b7c60085349a3de0",
+    "crates/rrrah-cache/src/raster_payload.rs": "3d7e642a677351fc743b0807c2b7586eafc75b17b810d346f85208aa10388803"
+  },
+  "follow_up": {
+    "report": "../animation-common-timing-swap-v5-2026-10-16/result.json",
+    "scope": "Common raster/display/RAM/swap timing loss fixed; automatic viewer scheduler remains unimplemented"
+  }
+}

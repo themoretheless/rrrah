@@ -1,0 +1,20 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "authored_high_precision_cases": 8,
+  "high_precision_readbacks": 32,
+  "high_precision_writes": 8,
+  "high_precision_reads": 8,
+  "hdr_above_one_in_float_samples_and_half_readback": true,
+  "all_swap_float_bits_and_sdr_half_frames_exact": true,
+  "original_gray8_cases": 2,
+  "original_gray8_readbacks": 8,
+  "final_credits": 0,
+  "linear_policy_fix": "PSD/PSB now honors explicit assume_untagged_linear_srgb; ICC retains precedence",
+  "psd_current_source_tests_passed": 16,
+  "source_sha256": "f96ecc128b86086f8636026d06d873e793e245cddf0c6cb7efb9087febd21c8c",
+  "limitations": [
+    "current source PSD/CMS plus compatible cached core/cache/GPU",
+    "not full Cargo/public/App prefetch",
+    "high precision authored producer controls, not original Photoshop alpha files"
+  ]
+}

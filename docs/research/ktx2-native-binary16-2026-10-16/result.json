@@ -1,0 +1,70 @@
+{
+  "status": "ktx2_binary16_storage_implemented",
+  "references": [
+    "https://raw.githubusercontent.com/KhronosGroup/Vulkan-Headers/main/include/vulkan/vulkan_core.h",
+    "https://registry.khronos.org/KTX/specs/2.0/ktxspec.v2.html"
+  ],
+  "formats": {
+    "76": "R16_SFLOAT",
+    "83": "R16G16_SFLOAT",
+    "90": "R16G16B16_SFLOAT",
+    "97": "R16G16B16A16_SFLOAT"
+  },
+  "changes": [
+    "Owned shared scientific half-to-f32 expansion to direct managed float output",
+    "DFD validates16-bit signed float sample qualifiers/ranges/channels/block bytes against Vulkan header",
+    "Output cap charges actual float32 output plus source expansion size",
+    "Ordinary R16 uncompressed level alignment uses lcm2,4=4",
+    "Existing builder optional floating flag preserves old generated formats; no regeneration of previous files"
+  ],
+  "fixtures": {
+    "sources": 32,
+    "selected_mips": 128,
+    "orientations": 4,
+    "compression_modes": [
+      "plain",
+      "DEFLATE"
+    ],
+    "mips": 4,
+    "oracle": "Python struct IEEE half expansion with subnormal/normal boundaries, signed zero, negative/HDR max65504 and alpha; authored DFD, not independent libktx interoperability"
+  },
+  "checks": {
+    "native_ktx2_matrix": 224,
+    "exact_short_clone_peak_quotas": true,
+    "malformed_header_dfd_range_cases": 32,
+    "malformed_peak_credit": 0,
+    "texture_passed": 92,
+    "texture_ignored": 3,
+    "decode_passed": 190,
+    "decode_ignored": 3,
+    "viewer_passed": 252,
+    "viewer_ignored": 71,
+    "cpu_pipeline_states": 1748,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_pipeline_states": 1748,
+    "metal_readbacks": 10488,
+    "ram_pressure_hits": 1748,
+    "swap_writes": 1748,
+    "swap_reads": 1748,
+    "blocked_decoder_prefetch": true,
+    "final_memory_credit": 0
+  },
+  "limits": [
+    "RGBSDA DFD primaries1 explicitly declares linear sRGB; unknown/other primaries retain existing policy/refusal rules",
+    "Finite selected corpus; all-half-pattern conversion was separately verified through shared converter/KTX1",
+    "No independent producer-file DFD interoperability claim",
+    "Basis/UASTC/Zstd/compressed blocks/array/cube/volume remain pending",
+    "No throughput, physical HDR, NVIDIA or full100-format qualification"
+  ],
+  "files_sha256": {
+    "crates/rrrah-texture/src/ktx2.rs": "5c02a7f2852020aa2ec9e89a8f6482fc7c743af5bbb396f8d150d9e5842124b3",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "ab3e556417673bf10c1865ca0b59089328b6468d925c12b41adb3c21479b67ca",
+    "scripts/generate-ktx2-fixtures.py": "3e6e37cd4c2786da68c2cd6cdfb0fa5c05ec6fb2ac5fc4c1fe10f86fb2045614",
+    "scripts/generate-ktx2-half-fixtures.py": "0edf273888c4bd64de4520b82ceb371b8dd53b5d823c08bd648295f9f33115d1",
+    "tests/fixtures/raster/ktx2-half-manifest.tsv": "fab05c381eb82cc9007f5dbc496bb12663d9795ba08bbf36c49d51903b695aea"
+  },
+  "follow_up": {
+    "report": "../ktx2-official-khronos-dfd-2026-10-16/result.json",
+    "scope": "All binary16 authored DFDs now byte-match pinned official Khronos generator; full-file exporter interoperability remains unqualified"
+  }
+}

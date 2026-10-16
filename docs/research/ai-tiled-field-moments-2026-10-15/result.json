@@ -1,0 +1,67 @@
+{
+  "change": "Explicit RRRAH_AI_ALLOW_TILED_MOMENT_OBSERVATION permits existing no-skip moment observer with diagnostic tiling. Absent flag still refuses tiled observation; default rendering unchanged.",
+  "unit_tests": {
+    "passed": 272,
+    "failed": 0,
+    "ignored": 12
+  },
+  "synthetic_control": {
+    "fragments": 4,
+    "buckets": 1,
+    "area": 1.0,
+    "centroid_samples": 1,
+    "alpha_delta": 0.0,
+    "premultiplied_component_delta": 0.0,
+    "guard_without_opt_in": "passed refusal assertion"
+  },
+  "real_control": {
+    "pixel": [
+      147,
+      59
+    ],
+    "grid": 4,
+    "completed": true,
+    "deadline": false,
+    "source_work": 9618324,
+    "source_work_allowance": 16000000,
+    "observer_work": 41200649,
+    "observer_allowance": 256000000,
+    "fragments_grouped": 633421,
+    "groups": 1798,
+    "fallback_fragments": 5,
+    "identity_fallback_groups": 0,
+    "area": 1.0000000000000049,
+    "alpha_comparison_delta": 8.704148513061227e-14,
+    "premultiplied_component_comparison_delta": 4.4129255805103185e-10,
+    "final_credit": 0,
+    "peak_bytes": 266078344,
+    "scope": "No original sampling skipped. Ordinary4M/fullpage/production/color qualification remains open."
+  },
+  "sources": {
+    "vendor/hayro/src/native_spatial.rs": "b4470dbffbfdfbd4b0c56640bb2a1f2962ff80636c2b039ff6fbec46520af3ca",
+    "vendor/hayro/src/knockout_interpreter.rs": "7808ce3805b884f1b623a7382332bcac94447c4f154379b9e37f6fbc33682bb7"
+  },
+  "binary_sha256": "c78db342dc5c9cf46894db3f95e3e800aa0cb2f1e6f7505b39b4f72d56fa7c36",
+  "returned_original_native_result_exact": true,
+  "combined_bound_control": {
+    "completed": true,
+    "conditional_native_error_bound": 2.387867828932541e-07,
+    "original_variable_points": 632522,
+    "candidate_variable_points": 1788,
+    "observed_points": 634310,
+    "required_points": 634310,
+    "observed_owners": 666,
+    "unused_owners": 157,
+    "source_refusals": 0,
+    "max_projection_deficit": 2.7558559112020896e-10,
+    "source_component_error_bound": 1.1933653437754575e-07,
+    "original_quotient_arithmetic_bound": 9.166527049435593e-11,
+    "candidate_plus_original_arithmetic_bound": 9.191671672688148e-11,
+    "moment_groups_certified": 1798,
+    "moment_groups_unavailable": 0,
+    "peak_bytes": 266512676,
+    "final_credit": 0,
+    "deadline": false,
+    "limitations": "Requires all original/candidate source-point observations; excludes absolute clipping/source/profile/display fidelity and does not enable ordinary-budget sample skipping"
+  }
+}

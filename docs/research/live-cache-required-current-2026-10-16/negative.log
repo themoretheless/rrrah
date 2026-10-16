@@ -1,0 +1,10 @@
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-live-raster-navigation-20261016/01-hdr.exr page=0 devices=[1, 2] simulated_notification=true
+[2026-10-16T15:00:21Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-10-16T15:00:21Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RECOVERY_PASS path=/tmp/rrrah-live-raster-navigation-20261016/01-hdr.exr page=0 devices=[3, 4] main_frames=2 telemetry_frames=2 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RASTER_NAV_PRESENT phase=5 path=/tmp/rrrah-live-raster-navigation-20261016/02-gray-alpha.psd generation=3 previous_generation=2 frames=4 same_device=true gpu_wait_ok=true
+LIVE_RASTER_CACHE_GUARD path=/tmp/rrrah-live-raster-navigation-20261016/01-hdr.exr fallback_decode=forbidden
+LIVE_RASTER_DECODE_REFUSED path=/tmp/rrrah-live-raster-navigation-20261016/01-hdr.exr
+[2026-10-16T15:00:21Z WARN  rrrah] Image load failed: generation=4 path=/tmp/rrrah-live-raster-navigation-20261016/01-hdr.exr error=qualification requires cached raster; fallback decode forbidden
+LIVE_RECOVERY_FAIL live recovery timed out phase=6 ready=Some(3)
+Error: live recovery qualification failed: Some("live recovery timed out phase=6 ready=Some(3)")

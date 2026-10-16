@@ -1,0 +1,36 @@
+{
+  "status": "303 tests pass; real138,34 trace complete and output preserved",
+  "source": "vendor/hayro/src/polygon_coverage.rs",
+  "source_sha256": "8c5d18a547ae507afb889dabc8a6a432440f8f0701c6914ef3fd21030e1b149b",
+  "helper_tests": {
+    "passed": 303,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-edge-enclosure-all.log",
+    "rational_geometries": 2100,
+    "traversal_evaluations": 4200,
+    "oracle": "Exact signed i128 rational compared to dyadic f64 interval endpoints, no rounded-rational oracle"
+  },
+  "integrated_tests": {
+    "log": "/tmp/ai-edge-enclosure-integrated-all.log",
+    "passed": 303,
+    "failed": 0,
+    "ignored": 12,
+    "status": "terminal"
+  },
+  "scope": "Outward bounds ideal affine edge X and existing computed X at a supplied finite row Y, including slope/subtract/multiply/add rounding; left/right clipping preserves interval containment. Same continuing work/cancellation, no heap. Not proof of intersection Y or edge/winding order, original owner containment, complete polygon error or faster rendering.",
+  "real_control": {
+    "log": "/tmp/ai-edge-enclosure-real13834.log",
+    "fragment_checks": 34296,
+    "max_edge_rounding": 5.684341886080803e-14,
+    "typed_rgb8": [
+      219,
+      185,
+      167
+    ],
+    "source_work": 254999,
+    "final_credit": 0,
+    "deadline": false,
+    "scope": "All4 edge positions per emitted fragment checked; boundary constants exact; diagnostic charges continuing geometry allowance. Not intersection/ordering certification."
+  }
+}

@@ -33,6 +33,14 @@ class ExecutionValidation(unittest.TestCase):
     def test_markdown_status_mismatch_is_refused(self):
         self.assertTrue(any('Markdown execution inconsistent' in e for e in self.errors_for(lambda x: x.update(status='pending'))))
 
+    def test_stale_report_link_is_refused(self):
+        data = copy.deepcopy(self.data)
+        task = data['tasks'][23]
+        old = Path(task['execution']['report']).relative_to('docs').as_posix()
+        markdown = self.markdown.replace(f'[Отчёт]({old})', '[Отчёт](research/first30-2026-10-14/REPORT.md)')
+        errors, _ = validator.validate(data, markdown)
+        self.assertIn('RR-0024: Markdown report link inconsistent', errors)
+
     def test_missing_first_task_execution_is_refused(self):
         data = copy.deepcopy(self.data)
         del data['tasks'][0]['execution']

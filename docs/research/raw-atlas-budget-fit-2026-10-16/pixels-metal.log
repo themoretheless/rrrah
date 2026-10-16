@@ -1,0 +1,23 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.95s
+     Running tests/real_bayer_compute.rs (target/debug/deps/real_bayer_compute-a157b9d47f2b79f2)
+
+running 1 test
+capacity atlas adapter: Metal Apple M4 Max
+CAPACITY_ATLAS_PIXELS algorithm=Bilinear hdr=false bytes=52016688 peak=52016688 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Bilinear hdr=true bytes=52016688 peak=52016688 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=SmoothHue hdr=false bytes=52116672 peak=52116672 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=SmoothHue hdr=true bytes=52116672 peak=52116672 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=MalvarHeCutler hdr=false bytes=52116672 peak=52116672 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=MalvarHeCutler hdr=true bytes=52116672 peak=52116672 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Directional hdr=false bytes=52216752 peak=52216752 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Directional hdr=true bytes=52216752 peak=52216752 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Vng hdr=false bytes=52216752 peak=52216752 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Vng hdr=true bytes=52216752 peak=52216752 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Rcd hdr=false bytes=52316928 peak=52316928 exact=true
+CAPACITY_ATLAS_PIXELS algorithm=Rcd hdr=true bytes=52316928 peak=52316928 exact=true
+CAPACITY_ATLAS_FULL_FRAME readbacks=96 pixels_per_frame=921600 all_exact=true final=0
+test original_cr3_capacity_fallback_preserves_default_atlas_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 3.51s
+

@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "change": "resident Bayer streams source+halo and computes bounded RGBA strips; copies each strip GPU-to-GPU into one resident result without CPU readback",
+  "actual_metal": "Apple M4 Max",
+  "qualification": {
+    "algorithms": 6,
+    "cfa_layouts": 4,
+    "cases": 24,
+    "dimensions": [
+      129,
+      257
+    ],
+    "binding_limit_bytes": 65536,
+    "source_and_output_strips": 9,
+    "pixels": "whole resident output exactly equals whole-frame managed baseline in each case",
+    "ownership": "after completion only output byte credit retained; dropping output returns zero",
+    "cancellation": "cancel before second submission after first strip submitted; queue completion releases output and temporary credits"
+  },
+  "gpu_library": {
+    "passed": 60,
+    "failed": 0,
+    "ignored": 2
+  },
+  "limitations": [
+    "resident buffer must fit device max_buffer_size; caller must request sufficient supported limit",
+    "independent full-sensor oracle covers Bilinear; other algorithms have authored window equivalence tests",
+    "logical budget excludes driver/queue staging and qualification readback buffer",
+    "Bayer compute library is not currently wired into main viewer; viewer uses fragment RAW rendering"
+  ],
+  "source_sha256": "48918750a453bb1e4e4b4ca6580a3e52de906b4457fdef54321a2a2dcaeaa8e0",
+  "full_sensor": {
+    "passed": 1,
+    "failed": 0,
+    "adapter": "Apple M4 Max Metal",
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "pixels": 25494560,
+    "algorithm": "Bilinear",
+    "reference": "independent CPU bilinear compares every managed and resident output pixel exactly, HDR and reflected edges",
+    "requested_max_buffer_size_bytes": 407912960,
+    "storage_binding_limit_bytes": 134217728,
+    "qualification_readback_chunk_bytes": 16777216,
+    "gpu_logical_peak_bytes": 575657328,
+    "completed_resident_credit_bytes": 407912960,
+    "clone_lifetime": "retained until last resident clone drops",
+    "final_cpu_gpu_used_bytes": [
+      0,
+      0
+    ],
+    "correctness_build_total_ms": 27416
+  }
+}

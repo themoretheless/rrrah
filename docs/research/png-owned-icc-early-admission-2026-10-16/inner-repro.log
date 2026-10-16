@@ -1,0 +1,24 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.61s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_decode-a975e9ebc3faac09)
+
+running 1 test
+test raster::output_budget_tests::png_owned_icc_profile_credit_is_shared_and_admitted_before_copy ... FAILED
+
+failures:
+
+---- raster::output_budget_tests::png_owned_icc_profile_credit_is_shared_and_admitted_before_copy stdout ----
+
+thread 'raster::output_budget_tests::png_owned_icc_profile_credit_is_shared_and_admitted_before_copy' (13077554) panicked at crates/rrrah-decode/src/raster.rs:2591:9:
+assertion `left == right` failed
+  left: (1024, 1024)
+ right: (1612, 1612)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    raster::output_budget_tests::png_owned_icc_profile_credit_is_shared_and_admitted_before_copy
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 207 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

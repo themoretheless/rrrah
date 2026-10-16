@@ -1,0 +1,46 @@
+{
+  "status": "shared_metadata_ownership_implemented_admission_open",
+  "problem": "Derived NrrdImage clone deep-copied both BTreeMaps and every retained header String outside payload accounting.",
+  "changes": [
+    "Store original fields and custom key_values in shared Arc<BTreeMap> owners",
+    "Image clones share header storage; separately retained map handles outlive image/pixels"
+  ],
+  "api_changes": [
+    "NrrdImage.fields: BTreeMap<String,String> -> Arc<BTreeMap<String,String>>",
+    "NrrdImage.key_values: BTreeMap<String,String> -> Arc<BTreeMap<String,String>>",
+    "Read/index/iteration remain available through Arc deref; mutation requires explicit Arc::make_mut or an owned map copy"
+  ],
+  "checks": {
+    "scientific_lib": {
+      "passed": 51,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "workspace": "cargo +stable check --workspace --lib --offline passed",
+    "ownership": {
+      "custom_value_bytes": 65536,
+      "maps_arc_ptr_eq": true,
+      "string_pointer_preserved": true,
+      "retained_map_survives_both_image_drops": true,
+      "pixel_credit_released_after_image_drops": true
+    }
+  },
+  "limits": [
+    "This removes duplicate metadata allocations but does not yet admit original parsed header/map capacity",
+    "Pixel-only budget in ownership test is explicitly not total process/metadata accounting",
+    "No measured throughput, GPU or full format qualification claim"
+  ],
+  "logs": {
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "workspace-check": "workspace-check.log"
+  },
+  "follow_up": "Retained NRRD header/map capacity admission addressed by ../nrrd-retained-metadata-admission-2026-10-16/result.json using shared conservative credit."
+}

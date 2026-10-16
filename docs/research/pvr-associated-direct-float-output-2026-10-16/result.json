@@ -1,0 +1,63 @@
+{
+  "status": "associated_independent_blocks_decode_directly_into_float_output",
+  "changes": [
+    "Associated ETC1/BC blocks normalize/unassociate during cropped block writes",
+    "Allocate only float32 final plane for associated independent-block formats; no full RGBA8 staging",
+    "Share zero-alpha/overflow validation helper with existing uncompressed and PVRTC conversion paths",
+    "Unassociated integer outputs and existing metadata ownership unchanged"
+  ],
+  "memory": {
+    "old_pixel_plane_peak_bytes_per_pixel": 20,
+    "new_pixel_plane_peak_bytes_per_pixel": 16,
+    "reduction_percent": 20,
+    "old_basis": "Prior implementation held4-byte native RGBA buffer during16-byte float output construction",
+    "large_regression": {
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "linear DXT2",
+      "tracked_output_peak": 16777216,
+      "tracked_retained_output": 16777216,
+      "one_byte_short": "refuses before output admission; used0 peak0",
+      "shared_owner": "holds entire output; second decode refuses; final drop releases0",
+      "pixels": "all1,048,576 output pixels match repeated independent Pillow-derived float oracle"
+    }
+  },
+  "checks": {
+    "pvr_native_matrix": 218,
+    "texture_lib": {
+      "passed": 83,
+      "failed": 0,
+      "ignored": 1
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "app_cpu": {
+      "states": 484,
+      "swap_writes": 484,
+      "swap_reads": 484,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 484,
+      "readbacks": 2904,
+      "swap_writes": 484,
+      "swap_reads": 484,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "Large exact16MiB test receives already-resident source bytes; source input is outside its output budget",
+    "Public file-read admission and retained metadata remain additional budget owners; output saving is4 bytes per pixel",
+    "Tracked buffer capacities exclude allocator/control overhead and RSS",
+    "No measured throughput change claim",
+    "Associated sRGB, nonblack zero-alpha rendering, compressed big-endian and full qualification remain open"
+  ],
+  "source_sha256": "2d73f2f2383e2a3845d56f7e50f5acaabe4e036541d0f0fe5f06ea8dcd8fbbfc"
+}

@@ -1,0 +1,40 @@
+{
+  "status": "temporary_string_copies_removed",
+  "changes": [
+    "Private Header fields store BTreeMap<&str,&str> borrowed from original 80-byte cards",
+    "Parse card as a borrowed fixed array; no key/value String copies",
+    "D-exponent normalization uses a bounded 80-byte stack buffer only when required; ordinary scaling parses original text directly"
+  ],
+  "checks": {
+    "scientific_lib": {
+      "passed": 55,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pointer_regression": "Parsed SIMPLE key and T value point directly into original card bytes",
+    "scaling": [
+      "Positive/negative D exponents exact f64 bits",
+      "Positive/negative zero sign preserved",
+      "Maximum 70-byte numeric field matches expected tiny f64 value"
+    ],
+    "existing_oracles": "Native/physical/window FITS oracle comparisons remain exact"
+  },
+  "source_sha256": "8890687f0eacc85910107c1f09fadac17dda6ae87b5b8c5438184e10513495f5",
+  "limits": [
+    "Temporary BTreeMap nodes still need admission accounting",
+    "Other short parser temporaries, such as formatted axis keys, are not claimed allocation-free",
+    "No throughput, new Metal or full FITS qualification claim"
+  ],
+  "logs": {
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "decode-tests": "decode-tests.log"
+  },
+  "follow_up": "../fits-managed-field-table-2026-10-16/result.json replaces temporary BTreeMap with exact admitted sorted borrowed tuples"
+}

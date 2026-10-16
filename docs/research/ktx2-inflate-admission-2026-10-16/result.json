@@ -1,0 +1,62 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Replace read::ZlibDecoder with bufread::ZlibDecoder over borrowed source, removing 32768-byte input heap buffer",
+    "Reserve conservative 65536-byte backend credit before decoder construction and hold until its drop",
+    "Pin zlib-rs 0.6.8 used by flate2; internal-api enabled for allocator probe only in dev dependencies",
+    "Probe backend init with refusing allocator to observe requested allocation without actually allocating state",
+    "All 96 mip tests account for expansion + max(decoder credit, final output), since decoder drops before conversion"
+  ],
+  "checks": {
+    "allocator_probe": {
+      "target": "aarch64-apple-darwin",
+      "requested_bytes": 47497,
+      "credit_bytes": 65536
+    },
+    "texture_lib": {
+      "passed": 67,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "pipeline": {
+      "states": 214,
+      "ram_pressure_hits": 214,
+      "swap_writes": 214,
+      "swap_reads": 214,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1284,
+      "seconds": 4.44
+    }
+  },
+  "source_audit": {
+    "flate2-1.1.10/src/zlib/read.rs": "e3677ad2b1327dfea8ea149eb1a824ede3a2a8480c1d2d0df3cd373317b34f8c",
+    "flate2-1.1.10/src/zlib/bufread.rs": "9231f4b860e25322339343e307187abdd63dcba329c2de2e06434f6579b32ecd",
+    "flate2-1.1.10/src/ffi/zlib_rs.rs": "d6b912d9dcfaffb320c556b96d4ccfe2e2a03fa04939c36824298207bb764450",
+    "zlib-rs-0.6.8/src/inflate.rs": "dc52b71c986b2b121af2fd678049e6eaac92b30971f39cf41e13702b45a1bc29",
+    "zlib-rs-0.6.8/src/stable.rs": "ba6f0d5ce10aaa274b30103bc86c0766068b2dc62d7faafced1df8c782c0c703"
+  },
+  "limits": [
+    "Backend credit is conservative rather than actual allocator-request accounting",
+    "Allocation probe verifies this target; must run on other targets and after backend changes",
+    "Stack-local conversion chunk is outside shared heap accounting",
+    "No decoder speedup or full KTX2 producer qualification claim",
+    "RGBA16F is not physical HDR luminance validation",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

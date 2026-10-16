@@ -1,0 +1,57 @@
+{
+  "captured_at_utc": "2026-10-15T05:23:10.791476+00:00",
+  "tasks": [
+    "RR-0007",
+    "RR-0008",
+    "RR-0009",
+    "RR-0010"
+  ],
+  "status": "partial",
+  "all_first_30_completed": false,
+  "checks": {
+    "components": {
+      "passed": 17,
+      "failed": 0,
+      "ignored_helpers": 1
+    },
+    "app_selected_tests": {
+      "editor_passed": 6,
+      "store_passed": 6,
+      "accessibility_passed": 1,
+      "ignored_helpers": 1
+    },
+    "native_crash_cases": 6,
+    "before_replacement": {
+      "expected_failure": true,
+      "observed_exposure": 1.5,
+      "expected_exposure": 0.0
+    },
+    "production_module_clippy": "passed",
+    "module_test_clippy": "passed",
+    "registry_tasks": 1000,
+    "registry_snapshot_warnings": 0,
+    "registry_mutation_tests_passed": 5,
+    "app_check_earlier": "passed",
+    "app_check_final": "failed: five CfaError conversion E0277 errors during parallel CFA migration"
+  },
+  "qualifications_not_performed": [
+    "live GUI",
+    "screen reader",
+    "physical HDR",
+    "CUDA",
+    "Windows",
+    "power loss"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/editor.rs": "2722a8d5862aa1764b180187c057b523c9d3f5edee23f87618f031589a825201",
+    "crates/rrrah-app/src/edit_store.rs": "2cf79e16f63c38335d96e1aeb45a491a492a1a9a3d1feb26d1d819e0c5161be1",
+    "crates/rrrah-app/src/accessibility.rs": "6e9429eafb5cf731d1a3ddb0bb75e91bd1efa6de022fef14d3edcc0f1cf3865c",
+    "crates/rrrah-app/src/main.rs": "4efcbde6c8b095cc202f03642e0d96de2f3cf82ce29aed424b4c9718f83a0003",
+    "crates/rrrah-core/src/edit.rs": "417c9fe7534f8ef968bd824619906b19920f820f9135dfb249366223b2b91ce3",
+    "crates/rrrah-core/src/frame.rs": "00d18aaca6de66c213dab5c0e9f182a539a34cbeb192509bd28177f6ec6e05af",
+    "crates/rrrah-core/src/bayer.rs": "1b2843f44f73d7329569f13d3675b71c7110d9585aa8fb3d452ab91653105838",
+    "crates/rrrah-core/src/rgbe.rs": "dbac4c054bc4bad646c6be4dcb173068bac8ef5dd2ed12e4d64032c75cbb3c86",
+    "crates/rrrah-core/src/develop/mod.rs": "86d6bfabaf426a176a89a75d79987c0ad552dc808570fea274d9ea5cd6302665"
+  },
+  "note": "Source hashes are a capture snapshot in a concurrently modified checkout. Selected app test binary was built before the final whole-tree check; passing tests do not override that later failed gate."
+}

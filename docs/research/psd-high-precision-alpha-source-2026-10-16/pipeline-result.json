@@ -1,0 +1,41 @@
+{
+  "corpus_cases": 2018,
+  "metal_readbacks": 12108,
+  "ram_pressure_hits": 2018,
+  "swap_writes": 2018,
+  "swap_restores": 2018,
+  "final_budget": 0,
+  "animation_tests_passed": 33,
+  "animation_tests_ignored": 1,
+  "positive_hdr_admission": "only exactly linear RGB/gray TRCs without input A2B LUTs",
+  "independent_hdr_reference": "LittleCMS double RGB relative NOOPTIMIZE; same original source ICC; f32 inputs1.00001/2/4",
+  "rgb_absolute_bound": 2e-05,
+  "reference_sha256": "1aca7abd982f47524d40890b3e6f5a02e1d81c906601967751aed0ddee2c16a8",
+  "gray_linear_hdr": {
+    "inputs": [
+      1.00001,
+      2,
+      4,
+      16
+    ],
+    "max_absolute_rgb_error": 1.9073486328125e-06,
+    "bound": 2e-05,
+    "alpha_exact": true,
+    "final_budget": 0,
+    "oracle_sha256": "5b59230820900523589034a92b93d8c079ff3a034d7073c5bafb1415bcc098d1"
+  },
+  "psb32_followup": {
+    "original_fixture": "psd-tools-32bit5x5.psb",
+    "width": 5,
+    "height": 5,
+    "depth": 32,
+    "native_float_bits_exact": true,
+    "oracle_regenerated_identically": true,
+    "corpus_cases": 2019,
+    "metal_readbacks": 12114,
+    "ram_pressure_hits": 2019,
+    "swap_writes": 2019,
+    "swap_restores": 2019,
+    "final_budget": 0
+  }
+}

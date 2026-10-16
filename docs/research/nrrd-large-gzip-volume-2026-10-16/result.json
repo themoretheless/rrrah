@@ -1,0 +1,206 @@
+{
+  "status": "256MiB uncompressed gzip NRRD volume verified at first/middle/last sections under exact selected-plane memory budgets",
+  "fixture": {
+    "size": [
+      512,
+      512,
+      512
+    ],
+    "type": "uint16LE",
+    "uncompressed_bytes": 268435456,
+    "compressed_file_bytes": 5648176,
+    "construction": "Generated directly into gzip file one512KiB plane at a time; value(section,pixel)=section*17+pixel%257; no whole-volume input allocation",
+    "source": "Synthetic repetitive data, not independent medical acquisition"
+  },
+  "correctness": "All262144pixels per raw/window frame checked includingRGB andalpha, frame index/count checked, native/display credits drop tozero.9raw+9windowselected frames over3runs.",
+  "memory": {
+    "raw_peak_bytes": 10366768,
+    "window_peak_bytes": 14036784,
+    "native_selected_slice_bytes": 524288,
+    "float_output_bytes": 4194304,
+    "includes": "Entire compressed source plus selected slice and/or float outputs; not total RSS or gzip internal workspace"
+  },
+  "runs": [
+    {
+      "run": 1,
+      "raw": [
+        {
+          "section": 0,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 50714083
+        },
+        {
+          "section": 256,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 50226791
+        },
+        {
+          "section": 511,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 49926958
+        }
+      ],
+      "window": [
+        {
+          "section": 0,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 51217791
+        },
+        {
+          "section": 256,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 51339250
+        },
+        {
+          "section": 511,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 51230083
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "raw": [
+        {
+          "section": 0,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 49989250
+        },
+        {
+          "section": 256,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 54105709
+        },
+        {
+          "section": 511,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 49805625
+        }
+      ],
+      "window": [
+        {
+          "section": 0,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 56716667
+        },
+        {
+          "section": 256,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 51879417
+        },
+        {
+          "section": 511,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 51478625
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "raw": [
+        {
+          "section": 0,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 50697542
+        },
+        {
+          "section": 256,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 49365875
+        },
+        {
+          "section": 511,
+          "source_bytes": 5648176,
+          "volume_bytes": 268435456,
+          "output_bytes": 4194304,
+          "scratch_bytes": 524288,
+          "cap": 10366768,
+          "peak": 10366768,
+          "decode_ns": 50465333
+        }
+      ],
+      "window": [
+        {
+          "section": 0,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 51829875
+        },
+        {
+          "section": 256,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 50690583
+        },
+        {
+          "section": 511,
+          "cap": 14036784,
+          "peak": 14036784,
+          "decode_ns": 50904583
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "ordinary_scientific": {
+      "passed": 47,
+      "failed": 0,
+      "ignored": 9
+    },
+    "clippy_scientific_lib_and_tests_warnings_denied": "passed"
+  },
+  "limits": [
+    "read_bounded still owns entire compressed file, so cap scales with compressed source size",
+    "Every selected section scans full gzip volume and validates trailer; no random-access speedup claimed",
+    "Warm temporary filesystem source, highly repetitive synthetic data; not physical slow-disk or natural-volume throughput",
+    "No GPU readback in this probe; small scientific state matrices cover Metal separately",
+    "No full100format qualification"
+  ],
+  "source_sha256": "73d3d4d6c904a8927a66fa0f24a8bf288efb290fadf401fc7f1549f3717eb23c"
+}

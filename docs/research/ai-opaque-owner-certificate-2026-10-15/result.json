@@ -1,0 +1,44 @@
+{
+  "change": "Immutable typed full-opacity affine owner certificate required by geometry proof collector; source opacity must equal 1. Coverage, masks and group route remain separate obligations.",
+  "tests": {
+    "interpret_passed": 129,
+    "interpret_ignored": 1,
+    "hayro_passed": 290,
+    "hayro_ignored": 12,
+    "failed": 0,
+    "controls": "Exact opacity, transparent source rejection, source binding, short setup work and cancellation checkpoints."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "source_work": 6993741,
+    "source_allowance": 16000000,
+    "native_pixel_exact": true,
+    "rgb8_certified": [
+      205,
+      151,
+      128
+    ],
+    "geometry_setup": 81531,
+    "geometry_total": 39413104,
+    "geometry_limit": 40000000,
+    "geometry_remaining": 586896,
+    "peak_admitted_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false
+  },
+  "source_sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "c4d75cf86071480e8b2460cd8880e07fe0def4e6beb91f5cc522a4307c38f745",
+    "vendor/hayro-interpret/src/encode.rs": "6d5272310c3db6351879b7a06b16a736b0407e9d7501776123357b5f61b5b91e",
+    "vendor/hayro/src/knockout_interpreter.rs": "9474e2f4b723b3561ee6a1d7a0ef7da3849e409cf0c361d664d894089e48ad9a"
+  },
+  "limitations": [
+    "All original source colors still read; no live deferral.",
+    "Conditional white RGB8 proof relative to original sampler geometry; no absolute clipping/HDR/fullpage qualification.",
+    "Ordinary 4M source budget remains unresolved."
+  ],
+  "next": "Typed sampled/deferred cells with bound-only unsampled reference and output-intent gate."
+}

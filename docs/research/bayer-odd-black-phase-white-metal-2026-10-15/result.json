@@ -1,0 +1,27 @@
+{
+  "status": "passed required Metal Apple M4 Max",
+  "control": "63x63, four Bayer CFA layouts,3x5 black grid, per-phase whites1000/2000/3000/4000,WB2/1/.5/1.25",
+  "oracle": "independently constructed flat-black sensor with exactly equivalent phase-normalized samples",
+  "checks": [
+    "normal SDR exact vs equivalent sensor",
+    "32-pixel tiled SDR exact vs equivalent sensor",
+    "normal linear HDR half words exact vs equivalent sensor",
+    "CPU thumbnail bytes exact vs equivalent sensor",
+    "CPU vs GPU SDR within existing2-byte transfer tolerance"
+  ],
+  "suite": {
+    "passed": 13,
+    "failed": 0,
+    "ignored": 0,
+    "seconds": 3.65
+  },
+  "limitations": [
+    "authored calibration equivalence, not camera-produced black-grid corpus",
+    "HDR tiling not covered by this new case",
+    "fragment Bilinear and CPU thumbnail; six compute algorithm calibrated grids covered separately"
+  ],
+  "source_sha256": {
+    "crates/rrrah-core/src/thumbnail.rs": "b8146028545ffb3dc158446e46fa7dcd1d1d5edb127802e386f527ea5e2a0c7f",
+    "crates/rrrah-gpu/tests/camera_color_readback.rs": "4593e62b0773e85b18a19c8b5e70e050f5e26e7b0d8f74ddb8acb6361e000869"
+  }
+}

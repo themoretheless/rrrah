@@ -1,0 +1,30 @@
+{
+  "status": "terminal passed",
+  "build_log": "/tmp/viewer-swapped-soak-build-20261015.log",
+  "test": "raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit",
+  "planned_seconds": 600,
+  "source_hashes": {
+    "crates/rrrah-app/src/raster_viewport.rs": "ccd4e291e6a03c67634a1e30bda6dbb7fc8b8edb148388a8d8b0980b1544a44f",
+    "crates/rrrah-app/src/raster_lod_worker.rs": "2932224a8a2795d72d067085670aec3506e7786c24baf15c02a451cdf0ef61dd"
+  },
+  "scope": "Actual headless Metal synthetic512x320 signedHDR source, real original-swap file, detail panning/fit, CPU/GPU pressure and latest-generation publication. Not physical HDR screen, slow physical disk or large real-image collection.",
+  "run_log": "/tmp/viewer-swapped-metal-soak-600s-20261015.log",
+  "binary_sha256": "8e8741a222df2ab17c8e2603554b4cbabe93e9cb8974ce1187a5f6d7b3a1935d",
+  "result": {
+    "passed": 1,
+    "failed": 0,
+    "test_seconds": 607.46,
+    "soak_seconds": 600.002,
+    "cycles": 36097,
+    "exact_detail_frames": 108291,
+    "cpu_pressure_refusals": 36097,
+    "gpu_pressure_refusals": 108291,
+    "cpu_peak_bytes": 2662400,
+    "texture_peak_bytes": 160000,
+    "queue_peak_bytes": 160000,
+    "full_source_retained": false,
+    "additional_fit_downgrade_recovery_cycles": 8,
+    "corrupt_selected_block": "refused; previous HDR frame/preview retained; transient memory0/no retry wake"
+  },
+  "source_drift": []
+}

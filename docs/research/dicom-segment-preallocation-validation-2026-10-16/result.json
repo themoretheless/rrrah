@@ -1,0 +1,85 @@
+{
+  "status": "segmented LUT structural/count validation now precedes expanded table allocation; malformed data remains format error under managed memory pressure",
+  "problem": {
+    "before": "after building boundary bitmap, decoder reserved descriptor-size expanded LUT before checking logical expanded count/indirect structure; malformed tiny stream claiming65536entries could fail131072byte reservation first",
+    "impact": "with a sufficiently large root cap but little freecredit, capacity error is retryable by RasterLoadError::retryable_memory_pressure and can prompt unneeded unpinned-cache release/redecode",
+    "classification_source": "crates/rrrah-app/src/main.rs:RasterLoadError::retryable_memory_pressure; only memory errors qualify, InvalidDicom doesnot"
+  },
+  "change": {
+    "planning": "shared nonallocating walk checks firstsegment restrictions, indirect boundaries/noindirectcopies, output count cap and exact descriptor count before reserving expandedLUT",
+    "emission": "same walk drives exact pixel-table emission, preventing separate parser grammars from drifting",
+    "empty": "emptysegmentedstream rejected immediately",
+    "bounds": "existing admitted boundarybitmap, cancellation and aggregate1Mvisitedsegment budget apply across allphases; planning itself is not heap-free overall because boundaryindex still needs admitted bytes",
+    "valid_outputs": "unchanged; allpixelreferences remain strict"
+  },
+  "regressions": {
+    "algorithm": "LE/BE malformedempty/shortcount/firstlinear/badbyteoffset/selfindirect streams under1byte expansionbudget returnInvalidDicom and releaseall; no131072byteoutputallocation",
+    "public_parser": "native public dicom::decode over an already-admitted source with consistent65536entrydescriptors but actual5entrystream;1MiBroot artificiallyfilled leaving1byte free; returnsInvalidDicom countmismatch instead ofMemoryCapacity; bitmapreleased, oldsource/pressureowners retained, finalzero afterownersdrop",
+    "public_peak": 1048576,
+    "peak_scope": "includes synthetic pressure reservation, notRSS; this regression models admitted source rather than measuring fileIO/navigationlatency"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 35,
+      "failed": 0,
+      "ignored": 5,
+      "log": "/tmp/dicom-segment-plan-pressure-scientific-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-segment-plan-facade-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-segment-plan-final-cpu-20261016.log"
+    },
+    "manual_controls": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-segment-plan-external-20261016.log"
+    },
+    "metal": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-segment-plan-metal-20261016.log"
+    }
+  },
+  "clippy": {
+    "passed": true,
+    "log": "/tmp/dicom-segment-plan-final-clippy-20261016.log",
+    "scope": "rrrah-scientific lib with warningsdenied"
+  },
+  "source_sha256": {
+    "crates/rrrah-scientific/src/dicom_segments.rs": "4a17b1da9a97173ecd79404b4ea7768ccf442dc9fa98a536674b6d9ffd9b7c62",
+    "crates/rrrah-scientific/src/dicom_palette.rs": "2c396c11e2025042effd813599f6a634aaa69fa0d7f7c2aeb075d8b782ada930"
+  },
+  "pipeline": {
+    "adapter": "Apple M4 Max Metal",
+    "optional_skip": false,
+    "states": 321,
+    "full_palette_frames": 6,
+    "sdr_hdr_readbacks": 2046,
+    "ram_full_pressure_hits": 321,
+    "swap_writes": 321,
+    "swap_reads": 321,
+    "swap_errors": 0,
+    "managed_root_peak": 8388608,
+    "managed_final": 0,
+    "nonzero_ttl_visible_protection": true,
+    "decoder_blocked_reverse_prefetch": true,
+    "stale_generation_refused": true,
+    "duration_seconds": 11.67,
+    "scope": "same-renderer independentinput reference comparisons; qualification runtime, not paired performancebenchmark or physicalHDRproof"
+  },
+  "remaining": [
+    "8-bit segmented/alpha/enhanced palettes, compressedDICOM and fullclinicalpresentation",
+    "full100formatqualification",
+    "NVIDIA deferred byuser"
+  ]
+}

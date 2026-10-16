@@ -1,0 +1,46 @@
+{
+  "status": "filtering rejected and removed; diagnostic-only adaptive predicate retained;308 tests pass",
+  "source": "vendor/hayro/src/polygon_coverage.rs",
+  "algorithm": "Outward interval sign then error-free TwoDiff/FMA products and bounded32-slot growing expansion. Nonzero exact-product operands restricted to2^-450..2^450 so tails remain normal; unsupported arithmetic returns unknown, notzero. No heap or epsilon. Continuing bounded work/cancellation.",
+  "tests": {
+    "passed": 308,
+    "failed": 0,
+    "ignored": 12,
+    "exact_parametric_segment_cases": 59049,
+    "near_collinear_integer_cases": 384,
+    "logs": [
+      "/tmp/ai-certified-crossing-filter-all.log",
+      "/tmp/ai-certified-crossing-filter-enabled-all.log"
+    ]
+  },
+  "rejected_filter_log": "/tmp/ai-certified-crossing-filter-real4m.log",
+  "audit_counts": {
+    "147,59": {
+      "checked": 26998,
+      "nonproper": 0,
+      "undecided": 0
+    },
+    "147,60": {
+      "checked": 42560,
+      "nonproper": 0,
+      "undecided": 0
+    },
+    "147,61": {
+      "checked": 141632,
+      "nonproper": 0,
+      "undecided": 0
+    }
+  },
+  "count_scope": "Count/fill visits included; not unique crossings. Only candidates emitted by original sweep, not all potential/missing intersections.",
+  "regression": "Extra proof work causes147,60 geometry40M refusal at635456fragments/source3311759 vs baseline complete646473/source3366844.147,61 reaches536342 vs baseline620575 before geometry exhaustion. No cut rejected; filtering offers no benefit here.",
+  "decision": "Removed rejection behavior and retired filter flag. Retain exact orientation/proper-crossing predicate for separate topology audit under RRRAH_AI_AUDIT_PROPER_CROSSINGS, disabled bydefault. Shared-exact-vertex optimization retained. No limit change/fullpage rerun.",
+  "final_test_log": "/tmp/ai-proper-crossing-audit-only-all.log",
+  "final_tests": {
+    "passed": 308,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-proper-crossing-audit-only-all.log"
+  },
+  "source_sha256": "4aec51dc4d67d04461d6c47c45c0aaadc09f03a0332c30fcc462c71690cd3628",
+  "restored_14760_log": "/tmp/ai-proper-crossing-audit-default14760.log"
+}

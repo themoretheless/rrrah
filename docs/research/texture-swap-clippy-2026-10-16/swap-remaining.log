@@ -1,0 +1,208 @@
+    Checking rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+error: allocating a local array larger than 16384 bytes
+   --> crates/rrrah-swap/src/lib.rs:319:25
+    |
+319 |                 buffer: [0; BLOCK],
+    |                         ^^^^^^^^^^
+    |
+    = help: consider allocating on the heap with `vec![0; BLOCK].into_boxed_slice()`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_stack_arrays
+    = note: `-D clippy::large-stack-arrays` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::large_stack_arrays)]`
+
+error: allocating a local array larger than 16384 bytes
+   --> crates/rrrah-swap/src/lib.rs:404:25
+    |
+404 |                 buffer: [0; BLOCK],
+    |                         ^^^^^^^^^^
+    |
+    = help: consider allocating on the heap with `vec![0; BLOCK].into_boxed_slice()`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_stack_arrays
+
+error: could not compile `rrrah-swap` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: casting `i32` to `u8` may truncate the value
+   --> crates/rrrah-swap/src/segmented.rs:365:59
+    |
+365 |         let bytes: Vec<u8> = (0..8 * 1024 * 1024).map(|i| (i * 73) as u8).collect();
+    |                                                           ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+    = note: `-D clippy::cast-possible-truncation` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+    |
+365 -         let bytes: Vec<u8> = (0..8 * 1024 * 1024).map(|i| (i * 73) as u8).collect();
+365 +         let bytes: Vec<u8> = (0..8 * 1024 * 1024).map(|i| u8::try_from(i * 73)).collect();
+    |
+
+error: casting `i32` to `u8` may lose the sign of the value
+   --> crates/rrrah-swap/src/segmented.rs:365:59
+    |
+365 |         let bytes: Vec<u8> = (0..8 * 1024 * 1024).map(|i| (i * 73) as u8).collect();
+    |                                                           ^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+    = note: `-D clippy::cast-sign-loss` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::cast_sign_loss)]`
+
+error: using `chunks_exact_mut` with a constant chunk size
+   --> crates/rrrah-swap/src/segmented.rs:395:59
+    |
+395 |                     for (offset, destination) in restored.chunks_exact_mut(2048).enumerate() {
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks_mut::<2048>().0.iter()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+    = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: using `chunks_exact_mut` with a constant chunk size
+   --> crates/rrrah-swap/src/segmented.rs:402:59
+    |
+402 |                     for (offset, destination) in restored.chunks_exact_mut(2048).enumerate() {
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks_mut::<2048>().0.iter()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+error: casting `usize` to `u8` may truncate the value
+   --> crates/rrrah-swap/src/segmented.rs:435:53
+    |
+435 |         let bytes: Vec<u8> = (0..BLOCK * 2).map(|i| (i * 73) as u8).collect();
+    |                                                     ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+435 -         let bytes: Vec<u8> = (0..BLOCK * 2).map(|i| (i * 73) as u8).collect();
+435 +         let bytes: Vec<u8> = (0..BLOCK * 2).map(|i| u8::try_from(i * 73)).collect();
+    |
+
+error: an inclusive range would be more readable
+   --> crates/rrrah-swap/src/segmented.rs:474:31
+    |
+474 |         file.write_all(&bytes[..BLOCK + 1]).unwrap();
+    |                               ^^^^^^^^^^^ help: use: `..=BLOCK`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#range_plus_one
+    = note: `-D clippy::range-plus-one` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::range_plus_one)]`
+
+error: casting `usize` to `u8` may truncate the value
+   --> crates/rrrah-swap/src/segmented.rs:526:22
+    |
+526 |             .map(|i| (i.wrapping_mul(73) ^ (i >> 9)) as u8)
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+526 -             .map(|i| (i.wrapping_mul(73) ^ (i >> 9)) as u8)
+526 +             .map(|i| u8::try_from(i.wrapping_mul(73) ^ (i >> 9)))
+    |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:718:37
+    |
+718 |         assert_eq!(&*result, &bytes[offset as usize..offset as usize + BLOCK + 19]);
+    |                                     ^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+718 -         assert_eq!(&*result, &bytes[offset as usize..offset as usize + BLOCK + 19]);
+718 +         assert_eq!(&*result, &bytes[usize::try_from(offset)..offset as usize + BLOCK + 19]);
+    |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:718:54
+    |
+718 |         assert_eq!(&*result, &bytes[offset as usize..offset as usize + BLOCK + 19]);
+    |                                                      ^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+718 -         assert_eq!(&*result, &bytes[offset as usize..offset as usize + BLOCK + 19]);
+718 +         assert_eq!(&*result, &bytes[offset as usize..usize::try_from(offset) + BLOCK + 19]);
+    |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:732:35
+    |
+732 |         assert_eq!(&*good, &bytes[offset as usize..offset as usize + 19]);
+    |                                   ^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+732 -         assert_eq!(&*good, &bytes[offset as usize..offset as usize + 19]);
+732 +         assert_eq!(&*good, &bytes[usize::try_from(offset)..offset as usize + 19]);
+    |
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-swap/src/segmented.rs:732:52
+    |
+732 |         assert_eq!(&*good, &bytes[offset as usize..offset as usize + 19]);
+    |                                                    ^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+732 -         assert_eq!(&*good, &bytes[offset as usize..offset as usize + 19]);
+732 +         assert_eq!(&*good, &bytes[offset as usize..usize::try_from(offset) + 19]);
+    |
+
+error: this function has too many lines (135/100)
+   --> crates/rrrah-swap/src/segmented.rs:755:5
+    |
+755 |     fn failed_writes_ranges_and_cancellation_roll_back_all_credits() {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-D clippy::too-many-lines` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::too_many_lines)]`
+
+error: casting `usize` to `u8` may truncate the value
+   --> crates/rrrah-swap/src/lib.rs:629:59
+    |
+629 |         let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| (i % 251) as u8).collect();
+    |                                                           ^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+629 -         let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| (i % 251) as u8).collect();
+629 +         let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| u8::try_from(i % 251)).collect();
+    |
+
+error: casting `usize` to `u8` may truncate the value
+   --> crates/rrrah-swap/src/lib.rs:956:55
+    |
+956 |         let source: Vec<u8> = (0..length).map(|index| (index % 251 + 1) as u8).collect();
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+956 -         let source: Vec<u8> = (0..length).map(|index| (index % 251 + 1) as u8).collect();
+956 +         let source: Vec<u8> = (0..length).map(|index| u8::try_from(index % 251 + 1)).collect();
+    |
+
+error: this function has too many lines (108/100)
+    --> crates/rrrah-swap/src/lib.rs:1006:5
+     |
+1006 |     fn stream_roundtrip_rejects_partial_decoders_and_bad_encoders() {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+error: could not compile `rrrah-swap` (lib test) due to 17 previous errors

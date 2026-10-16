@@ -1,0 +1,78 @@
+{
+  "measurements": [
+    {
+      "mode": "legacy_getter",
+      "profile_bytes": 65536,
+      "ok": true,
+      "peak": 2162688,
+      "live": 0,
+      "alloc_calls": 3
+    },
+    {
+      "mode": "native_borrow",
+      "profile_bytes": 65536,
+      "ok": true,
+      "peak": 0,
+      "live": 0,
+      "alloc_calls": 0
+    },
+    {
+      "mode": "native_owned_copy",
+      "profile_bytes": 65536,
+      "ok": true,
+      "peak": 65536,
+      "live": 0,
+      "alloc_calls": 1
+    },
+    {
+      "mode": "public_exact_file_budget",
+      "profile_bytes": 65536,
+      "ok": true,
+      "peak": 131862,
+      "live": 0
+    },
+    {
+      "mode": "legacy_getter",
+      "profile_bytes": 4194304,
+      "ok": true,
+      "peak": 138412032,
+      "live": 0,
+      "alloc_calls": 3
+    },
+    {
+      "mode": "native_borrow",
+      "profile_bytes": 4194304,
+      "ok": true,
+      "peak": 0,
+      "live": 0,
+      "alloc_calls": 0
+    },
+    {
+      "mode": "native_owned_copy",
+      "profile_bytes": 4194304,
+      "ok": true,
+      "peak": 4194304,
+      "live": 0,
+      "alloc_calls": 1
+    },
+    {
+      "mode": "public_exact_file_budget",
+      "profile_bytes": 4194304,
+      "ok": true,
+      "peak": 8389398,
+      "live": 0
+    }
+  ],
+  "public_passed": 205,
+  "public_ignored": 5,
+  "viewer_passed": 285,
+  "viewer_ignored": 80,
+  "failures": 0,
+  "source_sha256": {
+    "crates/rrrah-decode/src/tiff_profile.rs": "8d91c57eac8a48114d77550f04c36c02e78ce9e79383a280d0dfdcbc7fa42cd3",
+    "crates/rrrah-decode/src/raster.rs": "1bc151ccb6dc3459c0ee322107bf7cc1928cfb18470e3caf06c7ccdda6ce0845",
+    "docs/research/tiff-native-icc-2026-10-16/probe.rs": "2102c88ae8d9df149e74274336a9aa189eac911c70c04e4590d353395f6ab622",
+    "docs/research/tiff-native-icc-2026-10-16/generate.py": "a59b6e3063b6848b4be4e490d444881c0e3c265031b8c291fa06069fedd0eeeb",
+    "tests/fixtures/raster/oriented.profiled.tif": "ec07bfd978be0eec6267ae0fed1036a341fa5ed76988492b73fbe644d501406c"
+  }
+}

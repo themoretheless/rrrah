@@ -1,0 +1,62 @@
+{
+  "status": "current_native1049_metal24_eight_cases_allocator384_and_module_lint_passed",
+  "baseline_exit_code": 101,
+  "baseline_failure": "too many auxiliary references",
+  "control": "metadata-only repeated auxiliary target IDs; not a producer conformance fixture",
+  "reference_count": 80000,
+  "change": "resolve selected prem target in a bounded box pass, validate all bodies in second pass, retain only boolean inverse auxiliary link instead of per-target Vec",
+  "limitations": [
+    "box descriptor vector remains bounded by existing 65536 boxes",
+    "no runtime throughput measurement",
+    "ICC and codec scratch admission still require audit"
+  ],
+  "source_sha256": "4bbd20f74118c9ae65e43a1123b82eec5ac331c7f967513233b93d8a28bc1b52",
+  "test_session": 17185,
+  "test_log": "/tmp/avif-aux-stream-after.log",
+  "focused": {
+    "passed": 26,
+    "failed": 0,
+    "ignored": 0
+  },
+  "allocator": {
+    "input_bytes": 160188,
+    "references": 80000,
+    "extra_rust_capacity_peak": 384,
+    "retained_extra": 0,
+    "scope": "requested Rust capacity, not OS RSS or complete decoder budget"
+  },
+  "module_clippy": {
+    "exit_code": 0,
+    "scope": "isolated module; dead_code allowed for shell"
+  },
+  "native_session": 39522,
+  "metal_session": 50289,
+  "native": {
+    "exit_code": 0,
+    "passed": 1049,
+    "failed": 0,
+    "ignored": 73
+  },
+  "metal": {
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "binary_sha256": "dd15fee3de440457fd34e63a2d9dc78a9f23a128aa147a9fcb1109b228ba4dc8"
+  },
+  "source_drift": false,
+  "subsequent_source_change": {
+    "report": "../avif-icc-admission-2026-10-15/result.json",
+    "scope": "selected AVIF ICC preallocation admission; previous results frozen"
+  }
+}

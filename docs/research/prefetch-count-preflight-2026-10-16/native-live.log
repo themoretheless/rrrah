@@ -1,0 +1,56 @@
+[2026-10-16T15:33:00Z DEBUG rrrah] foreground generation=0 RAW policy=cache-first
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch plan generation=0 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr selected=0 count=1 looping=false direction=Forward ahead=1 behind=2 indices=[]
+[2026-10-16T15:33:00Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-16T15:33:00Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-10-16T15:33:00Z INFO  rrrah] viewer GPU setup: device_ms=7.055 surface_ms=0.197 raw_ms=0.000 raster_ms=3.510 filmstrip_ms=1.002 total_ms=11.764
+[2026-10-16T15:33:00Z DEBUG rrrah] viewer surface acquisition deferred: occluded
+[2026-10-16T15:33:00Z INFO  rrrah] Raster ready: generation=0 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr index=0 dimensions=6x5 elapsed=2.676125ms
+[2026-10-16T15:33:00Z DEBUG rrrah] GPU upload consumer lease released; pending=1
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr page=0 devices=[1, 2] simulated_notification=true
+[2026-10-16T15:33:00Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-10-16T15:33:00Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-16T15:33:00Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+LIVE_RASTER_PREFETCH_ATTEMPT generation=0 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb retained=false attempts=1 retained_count=0
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch refused generation=0 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb image_index=0: raster prefetch cancelled
+[2026-10-16T15:33:00Z DEBUG rrrah] prefetch stale generation=0 path=/tmp/rrrah-live-prefetch-20261016/01-left.psd image_index=0
+[2026-10-16T15:33:00Z DEBUG rrrah] prefetch stale generation=0 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd image_index=0
+[2026-10-16T15:33:00Z INFO  rrrah] viewer GPU setup: device_ms=0.850 surface_ms=0.052 raw_ms=0.000 raster_ms=1.907 filmstrip_ms=0.387 total_ms=3.196
+[2026-10-16T15:33:00Z DEBUG rrrah] foreground generation=2 RAW policy=cache-first
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch plan generation=2 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr selected=0 count=1 looping=false direction=Forward ahead=1 behind=2 indices=[]
+[2026-10-16T15:33:00Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+[2026-10-16T15:33:00Z INFO  rrrah] Raster ready: generation=2 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr index=0 dimensions=6x5 elapsed=119µs
+[2026-10-16T15:33:00Z DEBUG rrrah] GPU upload consumer lease released; pending=0
+LIVE_RASTER_PREFETCH_READY generation=2 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd retained=true attempts=1 retained_count=1
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch ready generation=2 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd image_index=0 image_count=1 retained=true
+LIVE_RASTER_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb retained=false attempts=2 retained_count=1
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch refused generation=2 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb image_index=0: raster prefetch skipped: all count slots are protected
+LIVE_RASTER_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-live-prefetch-20261016/01-left.psd retained=false attempts=3 retained_count=1
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch refused generation=2 path=/tmp/rrrah-live-prefetch-20261016/01-left.psd image_index=0: raster prefetch skipped: all count slots are protected
+LIVE_RECOVERY_PASS path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr page=0 devices=[3, 4] main_frames=2 telemetry_frames=3 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+[2026-10-16T15:33:00Z DEBUG rrrah] foreground generation=3 RAW policy=cache-first
+[2026-10-16T15:33:00Z DEBUG rrrah] raster prefetch plan generation=3 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd selected=0 count=1 looping=false direction=Forward ahead=1 behind=2 indices=[]
+[2026-10-16T15:33:00Z INFO  rrrah] Raster ready: generation=3 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd index=0 dimensions=400x359 elapsed=290.917µs
+[2026-10-16T15:33:00Z DEBUG rrrah] GPU upload consumer lease released; pending=0
+LIVE_RASTER_PREFETCH_READY generation=3 path=/tmp/rrrah-live-prefetch-20261016/05-right.psb retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-live-prefetch-20261016/05-right.psb retained=true attempts=1 retained_count=1
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch ready generation=3 path=/tmp/rrrah-live-prefetch-20261016/05-right.psb image_index=0 image_count=1 retained=true
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr retained=false attempts=2 retained_count=1
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch refused generation=3 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr image_index=0: raster prefetch skipped: all count slots are protected
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb retained=false attempts=3 retained_count=1
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch refused generation=3 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb image_index=0: raster prefetch skipped: all count slots are protected
+LIVE_RASTER_NAV_PRESENT phase=5 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd generation=3 previous_generation=2 frames=6 same_device=true gpu_wait_ok=true
+[2026-10-16T15:33:01Z DEBUG rrrah] foreground generation=4 RAW policy=cache-first
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch plan generation=4 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr selected=0 count=1 looping=false direction=Forward ahead=1 behind=2 indices=[]
+[2026-10-16T15:33:01Z INFO  rrrah] Raster ready: generation=4 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr index=0 dimensions=6x5 elapsed=141.75µs
+[2026-10-16T15:33:01Z DEBUG rrrah] GPU upload consumer lease released; pending=0
+LIVE_RASTER_PREFETCH_READY generation=4 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb retained=true attempts=1 retained_count=1
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch ready generation=4 path=/tmp/rrrah-live-prefetch-20261016/02-left.psb image_index=0 image_count=1 retained=true
+LIVE_RASTER_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd retained=false attempts=2 retained_count=1
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch refused generation=4 path=/tmp/rrrah-live-prefetch-20261016/04-target.psd image_index=0: raster prefetch skipped: all count slots are protected
+LIVE_RASTER_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-live-prefetch-20261016/05-right.psb retained=false attempts=3 retained_count=1
+[2026-10-16T15:33:01Z DEBUG rrrah] raster prefetch refused generation=4 path=/tmp/rrrah-live-prefetch-20261016/05-right.psb image_index=0: raster prefetch skipped: all count slots are protected
+LIVE_RASTER_NAV_PRESENT phase=6 path=/tmp/rrrah-live-prefetch-20261016/03-selected.exr generation=4 previous_generation=3 frames=8 same_device=true gpu_wait_ok=true
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=false
+[2026-10-16T15:33:01Z INFO  rrrah] Viewer transient storage shutdown complete

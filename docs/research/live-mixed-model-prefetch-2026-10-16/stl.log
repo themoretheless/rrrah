@@ -1,0 +1,29 @@
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr page=0 devices=[1, 2] simulated_notification=true
+[2026-10-16T15:37:26Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+LIVE_RASTER_PREFETCH_ATTEMPT generation=0 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=false attempts=1 retained_count=0
+[2026-10-16T15:37:26Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RASTER_PREFETCH_READY generation=2 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=true attempts=1 retained_count=1
+LIVE_RASTER_PREFETCH_READY generation=2 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/01-left.psd retained=true count=2
+LIVE_RASTER_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/01-left.psd retained=true attempts=2 retained_count=2
+LIVE_MODEL_PREFETCH_READY generation=2 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/04-target.stl retained=true count=3
+LIVE_MODEL_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/04-target.stl retained=true attempts=3 retained_count=3
+LIVE_RECOVERY_PASS path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr page=0 devices=[3, 4] main_frames=3 telemetry_frames=4 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RASTER_PREFETCH_READY generation=3 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/05-right.psb retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/05-right.psb retained=true attempts=1 retained_count=1
+LIVE_RASTER_PREFETCH_READY generation=3 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr retained=true count=2
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr retained=true attempts=2 retained_count=2
+LIVE_RASTER_PREFETCH_READY generation=3 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=true count=3
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=true attempts=3 retained_count=3
+LIVE_RASTER_NAV_PRESENT phase=5 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/04-target.stl generation=3 previous_generation=2 frames=14 same_device=true gpu_wait_ok=true kind=model
+LIVE_RASTER_CACHE_GUARD path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr fallback_decode=forbidden
+LIVE_RASTER_CACHE_HIT path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr tier=ram swap_reads_before=0 swap_reads_after=0 foreground=true
+LIVE_RASTER_PREFETCH_READY generation=4 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/02-left.psb retained=true attempts=1 retained_count=1
+LIVE_MODEL_PREFETCH_READY generation=4 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/04-target.stl retained=true count=2
+LIVE_MODEL_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/04-target.stl retained=true attempts=2 retained_count=2
+LIVE_RASTER_PREFETCH_READY generation=4 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/05-right.psb retained=true count=3
+LIVE_RASTER_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/05-right.psb retained=true attempts=3 retained_count=3
+LIVE_RASTER_NAV_PRESENT phase=6 path=/tmp/rrrah-mixed-model-prefetch-20261016/stl/03-selected.exr generation=4 previous_generation=3 frames=15 same_device=true gpu_wait_ok=true kind=raster
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=true
+LIVE_MIXED_NAV_PASS raster_model_raster=true model_renderer_confirmed=true

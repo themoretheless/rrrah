@@ -1,0 +1,57 @@
+{
+  "status": "validated_scoped_change",
+  "changes": [
+    "Shared pinned-backend inflate credit constant for KTX2 and STI",
+    "STI admits 65536-byte state/history credit before constructing DEFLATE decoder",
+    "Borrowed-slice bufread decoder removes old 32768-byte input buffer",
+    "Drop decoder and its credit before converting expanded STI container to native pixel output",
+    "Existing checksum/declared size/trailing stream validation retained"
+  ],
+  "checks": {
+    "texture_lib": {
+      "passed": 72,
+      "failed": 0
+    },
+    "texture_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "sti_zlib_units": {
+      "expanded_container_bytes": 76,
+      "backend_credit_bytes": 65536,
+      "exact_peak_bytes": 65612,
+      "one_byte_short_refused": 65611,
+      "checksum_trailing_size_corruption_releases": true
+    },
+    "pipeline": {
+      "states": 288,
+      "added_sti_states": 10,
+      "added_sti_files": 9,
+      "ram_pressure_hits": 288,
+      "swap_writes": 288,
+      "swap_reads": 288,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 1728,
+      "seconds": 5.67
+    }
+  },
+  "limits": [
+    "Conservative backend credit as guarded by pinned zlib-rs allocator probe in KTX2 tests",
+    "STI pipeline cases authored; independent zlib/RGB STI producer qualification remains pending",
+    "No decode speedup or physical HDR display qualification claim",
+    "NVIDIA deferred by user"
+  ],
+  "logs": {
+    "texture-tests": "texture-tests.log",
+    "texture-clippy": "texture-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}

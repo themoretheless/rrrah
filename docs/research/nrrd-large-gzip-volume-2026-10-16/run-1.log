@@ -1,0 +1,15 @@
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.69s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_scientific-1fb9c939397fc2c9)
+
+running 1 test
+test scientific_cancel_stress::large_gzip_volume_selected_planes_keep_bounded_memory ... LARGE_NRRD section=0 source_bytes=5648176 volume_bytes=268435456 output_bytes=4194304 scratch_bytes=524288 cap=10366768 peak=10366768 decode_ns=50714083 final=0
+LARGE_NRRD_WINDOW section=0 cap=14036784 peak=14036784 decode_ns=51217791 final=0
+LARGE_NRRD section=256 source_bytes=5648176 volume_bytes=268435456 output_bytes=4194304 scratch_bytes=524288 cap=10366768 peak=10366768 decode_ns=50226791 final=0
+LARGE_NRRD_WINDOW section=256 cap=14036784 peak=14036784 decode_ns=51339250 final=0
+LARGE_NRRD section=511 source_bytes=5648176 volume_bytes=268435456 output_bytes=4194304 scratch_bytes=524288 cap=10366768 peak=10366768 decode_ns=49926958 final=0
+LARGE_NRRD_WINDOW section=511 cap=14036784 peak=14036784 decode_ns=51230083 final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 55 filtered out; finished in 0.67s
+

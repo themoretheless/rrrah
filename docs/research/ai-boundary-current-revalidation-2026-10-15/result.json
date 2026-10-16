@@ -1,0 +1,65 @@
+{
+  "status": "diagnostic completed, residual coverage mismatch remains",
+  "log": "/tmp/ai-current-boundary-diagnostic-20261015.log",
+  "point": [
+    149,
+    56
+  ],
+  "corpus": "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+  "diagnostic_deadline_seconds": 60,
+  "historical_evidence_source_audit": [
+    {
+      "path": "docs/research/ai-native-mesh-area-verified-2026-10-13.log",
+      "previous_sha256": "c77dee4ac3df55a6e5631578fe96818c98992b510586bb21fbfa5b77671ac41a",
+      "current_sha256": "c77dee4ac3df55a6e5631578fe96818c98992b510586bb21fbfa5b77671ac41a",
+      "matches": true
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/scripts/diagnose-ai-native-mesh-support.py",
+      "previous_sha256": "086afff3c7d180d31b87ae3f298446a5aaac6f7b384b7d623f6d11dc4302df42",
+      "current_sha256": "9f0b3b5ae46a30b468c4c0c6a63ab889f399ca92b2d1868828306127730d9819",
+      "matches": false
+    },
+    {
+      "path": "vendor/hayro/src/knockout_interpreter.rs",
+      "previous_sha256": "71f54c1e647f1685dd859efffae4f77b37a0c2f79e469675a6f1dcb91255631a",
+      "current_sha256": "5f5569845c4ac83709de8755c58ac7765711d6abeb7d747f58bd54337331e36b",
+      "matches": false
+    },
+    {
+      "path": "vendor/hayro-interpret/src/encode/native_source.rs",
+      "previous_sha256": "d74c34d8847c3cbba814da08e3b7d84881d1c83d8a841f9eb7da6447e140b25c",
+      "current_sha256": "859185ae6a6304f8f75da0501eff75a96b8abb48dcf1818aa3ed5826dc8ac85c",
+      "matches": false
+    }
+  ],
+  "finding": "historical compositor/source-encoder hashes differ from current; previous pixel deficit cannot qualify current source",
+  "next": "qualify remaining local coverage and independent source-curve/mesh union; strict full-page color comparison still required",
+  "limitations": [
+    "cargo success alone is not diagnostic completion",
+    "test-only compositor diagnostic is not production AI viewing qualification"
+  ],
+  "current_code_finding": {
+    "boundary_refinement": "all canonical cubic edges refined independently of interior leaves",
+    "chord_tolerance": "limits.pixel_error /16",
+    "default_pixel_error": 0.015625,
+    "default_boundary_error": 0.0009765625,
+    "source": "vendor/hayro-interpret/src/shading/adaptive.rs",
+    "source_sha256": "f628ae36e2045ca12a38619f650ed6f6d483a00b211e128811a84f429b3a748c",
+    "implication": "historical deficit predates current source hashes; do not tighten global surface tolerance before fresh result"
+  },
+  "exit_code": 0,
+  "current_result": {
+    "clip_area": 0.2144597600545532,
+    "composited_alpha": 0.21442580534571976,
+    "absolute_gap": 3.3954708833439096e-05,
+    "historical_gap": 0.0026123173114955545,
+    "historical_gap_over_current_gap": 76.93534715052265,
+    "peak_admitted_bytes": 239197736,
+    "limit_bytes": 268435456,
+    "final_credit": 0,
+    "diagnostic_seconds": 4.22,
+    "capture_completed": true,
+    "deadline_expired": false
+  }
+}

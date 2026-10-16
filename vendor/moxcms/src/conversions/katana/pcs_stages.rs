@@ -47,6 +47,22 @@ impl KatanaMatrixStage {
 pub(crate) type KatanaDefaultIntermediate = dyn KatanaIntermediateStage<f32> + Send + Sync;
 
 impl KatanaIntermediateStage<f32> for KatanaMatrixStage {
+    fn bound_float_pcs(&self,input:[[f32;2];3],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[[f32;2];3]> {
+        use crate::conversions::lut4::HybridInterval as I;
+        if cancelled() {return None;}*work=work.checked_sub(3)?;
+        for value in input {I::new(value)?;}
+        let mut values=input;
+        for matrix in &self.matrices {
+            if cancelled() {return None;}*work=work.checked_sub(1)?;
+            let x=I::new(values[0])?;let y=I::new(values[1])?;let z=I::new(values[2])?;
+            for row in 0..3 {
+                let r=matrix.v[row];
+                values[row]=x.op(I::point(r[0])?,2,work,cancelled)?.op(y.op(I::point(r[1])?,2,work,cancelled)?,0,work,cancelled)?.op(z.op(I::point(r[2])?,2,work,cancelled)?,0,work,cancelled)?.0;
+            }
+        }
+        if cancelled() {return None;}Some(values)
+    }
+
     fn stage(&self, input: &mut Vec<f32>) -> Result<Vec<f32>, CmsError> {
         if input.len() % 3 != 0 {
             return Err(CmsError::LaneMultipleOfChannels);

@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-16",
+  "apng": {
+    "status": "rejected",
+    "production_changed": false,
+    "cases": 11,
+    "paired_process_runs_per_case": 10,
+    "processes": 220,
+    "warmups_per_process": 3,
+    "batches_per_process": 10,
+    "workloads_per_batch": 32,
+    "correctness_pairs_matched": 110,
+    "regressions": {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_reason": "manual paired12MP APNG PREVIOUS storage benchmark"
+    },
+    "binary_sha256": "e8b019785b1b97e72516c4c423f5eca6fcfce565fef4211785eab5c707dff06c",
+    "production_source_sha256": "fba9bea6778a1c16250833a21b7adcdf1d1b9fe2a0178a12db1061ae9c8c3497"
+  },
+  "watchdog": {
+    "passed": 3,
+    "mutation_expected_failures": 1,
+    "mutation_reason": "child still executing",
+    "scope": "macOS POSIX only; Windows unexecuted; zombie is terminated execution pending OS reaping"
+  },
+  "registry": {
+    "tasks": 1000,
+    "strict_snapshot_warnings": 0,
+    "tests_passed": 6
+  },
+  "limits": [
+    "NVIDIA/CUDA and physical HDR qualification not run.",
+    "GUI/screen reader and RAW GPU pipeline blocked or unqualified as recorded per task.",
+    "APNG timings are warm synthetic in-memory decoder measurements, not viewer or disk performance."
+  ],
+  "artifacts": {
+    "REPORT.md": "73dae97c629fc3241c11dd5a88e37a70260399f1b193425ae09ba8e21e98e2a4",
+    "apng-build.log": "c08ac368e9adc0512dcd04110f01140c6900611cb379ea6c27583c938fc3a2dc",
+    "apng-probe/Cargo.lock": "4f8349547a30614e4e03fca80857d8bbedb1e3ef90e1d9023d201fbb5d77c3fe",
+    "apng-probe/Cargo.toml": "edf8eaa9285fe7ce1a4f60f4e26ed17f6e5b65aa1702341df6dcaa203787496d",
+    "apng-probe/source.json": "00f81ae9eac4ffa9da71d5cb56ab25ee66415fb1057dad8eb436313761bd3451",
+    "apng-probe/src/baseline.rs": "fba9bea6778a1c16250833a21b7adcdf1d1b9fe2a0178a12db1061ae9c8c3497",
+    "apng-probe/src/candidate.rs": "1f3e7b0e65c23fd0fefa4fa5248b25990989318181db0f5aba2e3ef0bc1bbc91",
+    "apng-probe/src/main.rs": "bcf8e0f95cf3f1c23f919a0db7888e344cfbaf38f1654121473e26793f4c331e",
+    "apng-progress.log": "40c52ea5d6b380ae09c36847381d066009d8717fad8f95b1517ed979ea310a51",
+    "apng-raw.json": "16ee121b3af264e627b149c6edb929d5b1c5df25ddb0661c5c27435584c67c57",
+    "apng-run.json": "f6eb15df89f56e136229f8f2816b7be3ddb446d78292511b98dacd66054f7095",
+    "apng-summary.json": "08ab66156c3a4a73fed0c2e19e07fc732ceb84614cbd2030d1bd02ed62c8c45b",
+    "apng-tests.log": "c101f967063942bf06c2e92369e04ced469dc873455bddbc76396ddbf659060b",
+    "host.txt": "06e2953e4e3e4fd6521fcfe63fbf981447d5b2874cdddfb7845c0071ed8dd112",
+    "refresh.log": "0a610626be5576b774439a3ef04ea15be196c07ebb024ddb57e4dc79fa52df63",
+    "registry-tests.log": "8e3b2c6f30050af9bf7df92a77f4f011730d8f099aa8aa08e83cd184d8eb4a1a",
+    "registry-validation.log": "5e4e3654e6a0e067dd4e683a4bf3b8af62253d54659b63a4a3215e3f915c3c8f",
+    "run-apng.py": "84dc8b76b23d2ee32381d5d8e0d1f6f35e3295020a1f7c3760c5b5bc843d031d",
+    "toolchain.txt": "2073de5abf149185c2f4d7473dc833bc921b99135560d24ae7b2293f33a9c376",
+    "watchdog-mutation.log": "b4f61bcda127fa8118b78b64626a5fc19531c988b17115d5d10ea20f2f77caf2",
+    "watchdog-mutation.py": "ddca11b24c380cc971ac8ebb2637a248d38d146bd4fcacb7e687521be6cbc306",
+    "watchdog-tests.log": "0be75d51fec55dc0b59db3e18fc4ff9a4cba93a2e1d4fa52bbf40af817745f08"
+  }
+}

@@ -26,6 +26,121 @@ pub(super) fn convert_group_pixel(
     let values = converted.map(f64::from);
     Pixel::from_native(model,&values[..model.channels()],pixel.alpha())
 }
+/// Certify identical f32 input bits for every unit-native component inside the
+/// supplied closed error interval. Monotonic f64-to-f32 rounding makes endpoint
+/// agreement sufficient. This says nothing about alpha or final display bytes.
+pub(super) fn stable_native_f32_input(pixel:Pixel,error:[f64;4],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<bool> {
+    if cancelled() {return None;}let channels=pixel.model().channels();
+    *work=work.checked_sub(1+8*channels)?;
+    if pixel.alpha()<=0. || error.iter().any(|v|!v.is_finite() || *v<0.)
+        || error[channels..].iter().any(|v|*v!=0.) {return None;}
+    let components=pixel.native_components()?;let mut stable=true;
+    for i in 0..channels {
+        if cancelled() {return None;}
+        let value=components[i];if !(0. ..=1.).contains(&value) {return None;}
+        let (lo,hi)=if error[i]==0. {(value,value)} else {((value-error[i]).next_down().max(0.),(value+error[i]).next_up().min(1.))};
+        let bits=(value as f32).to_bits();
+        stable &= (lo as f32).to_bits()==bits && (hi as f32).to_bits()==bits;
+    }
+    if cancelled() {return None;}Some(stable)
+}
+
+#[test]
+fn native_f32_input_gate_distinguishes_bins_and_rounding_boundaries() {
+    use super::native_blend::Model;
+    let make=|value|Pixel::from_native(Model::Rgb,&[value;3],1.).unwrap();
+    let bound=|value,error|stable_native_f32_input(make(value),[error,error,error,0.],&mut 25,&||false).unwrap();
+    assert!(bound(0.5,2f64.powi(-28)));
+    assert!(!bound(0.5,2f64.powi(-25)));
+    let midpoint=0.5+2f64.powi(-25);
+    assert!(bound(midpoint,0.));assert!(!bound(midpoint,2f64.powi(-55)));
+    assert!(bound(0.,f64::from_bits(1)));assert!(bound(1.,2f64.powi(-28)));
+    for work in 0..25 {assert!(stable_native_f32_input(make(0.5),[0.;4],&mut {work},&||false).is_none());}
+    for error in [[f64::NAN;4],[-1.;4],[f64::INFINITY;4],[0.,0.,0.,1.]] {assert!(stable_native_f32_input(make(0.5),error,&mut 25,&||false).is_none());}
+    let polls=std::cell::Cell::new(0);stable_native_f32_input(make(0.5),[0.;4],&mut 25,&||{polls.set(polls.get()+1);false}).unwrap();
+    for stop in 1..=polls.get() {let n=std::cell::Cell::new(0);assert!(stable_native_f32_input(make(0.5),[0.;4],&mut 25,&||{n.set(n.get()+1);n.get()>=stop}).is_none());}
+}
+
+// The actual converter consumes nearest-rounded f32 inputs, not real-valued
+// native components. Rounding is monotone: rounded interval endpoints already
+// enclose every possible converted input; extra adjacent f32 values are spurious.
+fn rounded_unit_f32_box(value:f64,error:f64)->Option<[f32;2]> {
+    if !(0. ..=1.).contains(&value) || !error.is_finite() || error<0. {return None;}
+    let (lo,hi)=if error==0. {(value,value)} else {
+        ((value-error).next_down().max(0.),(value+error).next_up().min(1.))
+    };
+    Some([lo as f32,hi as f32])
+}
+
+pub(super) struct WhiteRgb8Bounds {pub(super) rgb:[[f64;2];3],pub(super) bytes:Option<[u8;3]>}
+/// Bound the actual diagnostic/page output: RGB Pixel storage/recovery, then
+/// 255*(component*alpha+1-alpha), rounded/clamped to bytes. Source uncertainty
+/// and alpha disagreement must be supplied independently by the caller.
+pub(super) fn certify_white_rgb8(source:&hayro_interpret::color::ColorSpace,candidate:Pixel,native_error:[f64;4],alpha_error:f64,
+    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<WhiteRgb8Bounds> {
+    if cancelled() {return None;}*work=work.checked_sub(64)?;
+    let channels=candidate.model().channels();
+    if !candidate.valid() || !alpha_error.is_finite() || alpha_error<0.
+        || native_error.iter().any(|v|!v.is_finite() || *v<0.) || native_error[channels..].iter().any(|v|*v!=0.) {return None;}
+    let center=candidate.alpha();
+    let alpha=if alpha_error==0. {[center,center]} else {[(center-alpha_error).next_down().max(0.),(center+alpha_error).next_up().min(1.)]};
+    if alpha[1]==0. {return Some(WhiteRgb8Bounds {rgb:[[255.;2];3],bytes:Some([255;3])});}
+    if alpha[0]<=0. || alpha[1]>1. {return None;}
+    let values=candidate.native_components()?;let mut input=[[0.;2];4];
+    for i in 0..channels {
+        if cancelled() || !(0. ..=1.).contains(&values[i]) {return None;}
+        input[i]=rounded_unit_f32_box(values[i],native_error[i])?;
+    }
+    let converted=source.device_sample_to_rgb_bounds(&input[..channels],work,cancelled)?;
+    let initial=white_rgb8_from_converted(converted,alpha,work,cancelled)?;
+    if initial.bytes.is_some() {return Some(initial);}
+    if let Some(count)=source.device_exact_input_count(&input[..channels]) {
+        // Reserve the full exhaustive transform charge plus output arithmetic.
+        // If it does not fit, retain ambiguity for the original fallback.
+        let required=count.checked_mul(512)?.checked_add(128)?;
+        if *work>=required {
+            let exact=source.device_exact_input_rgb_bounds(&input[..channels],work,cancelled)?;
+            return white_rgb8_from_converted(exact,alpha,work,cancelled);
+        }
+    }
+    Some(initial)
+}
+
+fn white_rgb8_from_converted(converted:[[f32;2];3],alpha:[f64;2],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<WhiteRgb8Bounds> {
+    use super::native_blend::{Model,native_storage_error_bound};
+    let storage=native_storage_error_bound(Model::Rgb,alpha[0],work,cancelled)?;
+    let mut rgb=[[0.;2];3];let mut bytes=[0u8;3];let mut stable=true;
+    for i in 0..3 {
+        if cancelled() {return None;}*work=work.checked_sub(12)?;
+        if converted[i][0]<0. || converted[i][1]>1. {return None;}
+        let component=[(f64::from(converted[i][0])-storage[i]).next_down().max(0.),(f64::from(converted[i][1])+storage[i]).next_up().min(1.)];
+        let weighted=[(component[0]*alpha[0]).next_down(),(component[1]*alpha[1]).next_up()];
+        let on_white=[((weighted[0]+1.).next_down()-alpha[1]).next_down(),((weighted[1]+1.).next_up()-alpha[0]).next_up()];
+        rgb[i]=[(255.*on_white[0]).next_down().max(0.),(255.*on_white[1]).next_up().min(255.)];
+        let lower=rgb[i][0].round().clamp(0.,255.) as u8;let upper=rgb[i][1].round().clamp(0.,255.) as u8;
+        stable &= lower==upper;bytes[i]=lower;
+    }
+    if cancelled() {return None;}Some(WhiteRgb8Bounds {rgb,bytes:stable.then_some(bytes)})
+}
+
+#[test]
+fn white_rgb8_gate_distinguishes_stable_bytes_from_half_byte_boundary() {
+    use super::native_blend::Model;
+    let color=hayro_interpret::color::Color::from_rgba(hayro_interpret::color::AlphaColor::new([0.,0.,0.,1.]));
+    let space=color.color_space();
+    let pixel=Pixel::from_native(Model::Rgb,&[0.25,0.5,0.75],0.5).unwrap();
+    let mut work=10000;let polls=std::cell::Cell::new(0);
+    let output=certify_white_rgb8(&space,pixel,[1e-8,1e-8,1e-8,0.],1e-12,&mut work,&||{polls.set(polls.get()+1);false}).unwrap();
+    assert_eq!(output.bytes,Some([159,191,223]));
+    for budget in 0..10000-work {assert!(certify_white_rgb8(&space,pixel,[1e-8,1e-8,1e-8,0.],1e-12,&mut {budget},&||false).is_none());}
+    for stop in 1..=polls.get() {let n=std::cell::Cell::new(0);assert!(certify_white_rgb8(&space,pixel,[1e-8,1e-8,1e-8,0.],1e-12,&mut 10000,&||{n.set(n.get()+1);n.get()>=stop}).is_none());}
+    let edge=Pixel::from_native(Model::Rgb,&[0.;3],0.5).unwrap();
+    assert!(certify_white_rgb8(&space,edge,[1e-8,1e-8,1e-8,0.],1e-12,&mut 10000,&||false).unwrap().bytes.is_none());
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    assert_eq!(certify_white_rgb8(&space,clear,[0.;4],0.,&mut 10000,&||false).unwrap().bytes,Some([255;3]));
+    assert!(certify_white_rgb8(&space,clear,[0.;4],1e-12,&mut 10000,&||false).is_none());
+}
+
 struct CoverageBuffer {
     values: Vec<PreciseCoverage>,
     _credit: Credit,
@@ -1015,4 +1130,23 @@ fn reused_root_restores_fresh_frame_state_and_rejects_failed_or_multi_pixel_fram
     assert!(failed.prepare_native_pixel(clear,rgb.color_space(),&||true).is_none());
     assert!(failed.reset_single_pixel_root(clear,rgb.color_space(),&||false).is_none());
     assert!(failed.finished_single_pixel(&||false).is_none());
+}
+
+#[test]
+fn rounded_native_boxes_cover_actual_casts_without_spurious_adjacent_values() {
+    assert_eq!(rounded_unit_f32_box(0.5,2f64.powi(-28)),Some([0.5;2]));
+    assert_eq!(rounded_unit_f32_box(0.5+2f64.powi(-25),0.),Some([0.5;2]));
+    assert_eq!(rounded_unit_f32_box(0.,0.),Some([0.;2]));
+    assert_eq!(rounded_unit_f32_box(1.,0.),Some([1.;2]));
+    for value in [0.,f64::from(f32::from_bits(1)),0.125,0.5,0.5+2f64.powi(-25),1.] {
+        for error in [0.,f64::from_bits(1),2f64.powi(-55),2f64.powi(-28),2f64.powi(-25),0.01] {
+            let bounds=rounded_unit_f32_box(value,error).unwrap();
+            for step in 0..=128 {
+                let actual=(value-error+2.*error*(step as f64/128.)).clamp(0.,1.) as f32;
+                assert!(bounds[0]<=actual && actual<=bounds[1]);
+            }
+        }
+    }
+    for value in [f64::NAN,f64::INFINITY,-0.1,1.1] {assert!(rounded_unit_f32_box(value,0.).is_none());}
+    for error in [f64::NAN,f64::INFINITY,-0.1] {assert!(rounded_unit_f32_box(0.5,error).is_none());}
 }

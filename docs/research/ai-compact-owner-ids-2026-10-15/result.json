@@ -1,0 +1,133 @@
+{
+  "status": "scoped implementation unit and real controls complete; timing inconclusive",
+  "source_sha256": "0bb8edde8463d543b1ade6da2e181d3e0be717a41c26b28b8c1f53f26d90069c",
+  "implementation": "Compact ascending owner ranks only when spatial owner-moment storage is explicitly enabled. Preserve original priority, aliases, sampling IDs and immutable evidence. Ordinary color-only mode keeps original IDs and work accounting. Admission, cancellation and work checked before publishing mapping.",
+  "tests": {
+    "passed": 298,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-compact-owner-ids-scoped-all.log"
+  },
+  "limitations": "Full-page ordinary-budget and independent color fidelity remain incomplete. No speed claim or production HDR qualification.",
+  "controls": [
+    {
+      "session": 77442,
+      "log": "/tmp/ai-compact-owner-ids-scoped-real4m.log",
+      "scope": "147,59;147,57;138,34;147,60 deferred ordinary source4M geometry40M",
+      "result": {
+        "completed_rgb8": {
+          "147,59": [
+            205,
+            151,
+            128
+          ],
+          "147,57": [
+            187,
+            108,
+            78
+          ],
+          "138,34": [
+            219,
+            185,
+            167
+          ]
+        },
+        "source_work": [
+          3831159,
+          1848735,
+          254999,
+          4000000
+        ],
+        "147,60": "refused at ordinary source budget; no output",
+        "final_credit": 0,
+        "deadline": false,
+        "peak_bytes": 266078344
+      }
+    },
+    {
+      "session": 94909,
+      "log": "/tmp/ai-compact-owner-ids-scoped-original16m.log",
+      "scope": "147,60 original all-color diagnostic16M; expected source10063934 and exact prior output",
+      "result": {
+        "completed": true,
+        "source_work": 10063934,
+        "original_output_exact": true,
+        "final_credit": 0,
+        "deadline": false
+      }
+    }
+  ],
+  "benchmark": {
+    "status": "terminal; all four controls complete with identical bytes",
+    "rows": [
+      {
+        "run": "1-baseline.log",
+        "elapsed_ns": 9718084250,
+        "bytes": [
+          205,
+          151,
+          128
+        ],
+        "source_work": 3831146,
+        "log": "/tmp/rrrah-ai-compact-owner-timing-20261015/1-baseline.log"
+      },
+      {
+        "run": "2-candidate.log",
+        "elapsed_ns": 6413985041,
+        "bytes": [
+          205,
+          151,
+          128
+        ],
+        "source_work": 3831159,
+        "log": "/tmp/rrrah-ai-compact-owner-timing-20261015/2-candidate.log"
+      },
+      {
+        "run": "3-candidate.log",
+        "elapsed_ns": 11925763333,
+        "bytes": [
+          205,
+          151,
+          128
+        ],
+        "source_work": 3831159,
+        "log": "/tmp/rrrah-ai-compact-owner-timing-20261015/3-candidate.log"
+      },
+      {
+        "run": "4-baseline.log",
+        "elapsed_ns": 11514917500,
+        "bytes": [
+          205,
+          151,
+          128
+        ],
+        "source_work": 3831146,
+        "log": "/tmp/rrrah-ai-compact-owner-timing-20261015/4-baseline.log"
+      }
+    ],
+    "scope": "pixel147,59; ordinary4M source40M geometry; sequential ABBA, ROI excludes capture; not full-page benchmark",
+    "candidate_binary_sha256": "45d073a684c30e19b48bdc50ccfb9200f011a11f6499f4e7d3a061a64b444d5e",
+    "candidate_to_baseline_ratios": [
+      0.6600050870108478,
+      1.0356794421670845
+    ],
+    "conclusion": "No stable throughput claim: substantial within-mode timing variation. Retain only tested compact memory/setup improvement; full-page still incomplete."
+  },
+  "next_structural_target": "Test tile-Y edge compaction before per-tile sorting/scratch preparation. Crossing cache stores coordinate pairs rather than source edge indices, so filtering can retain original relative edge order without remapping crossing references. Must preserve inclusive boundary cut semantics, half-open active lifetimes, admission, continuing work budget and exact fragment/output controls. No implementation or speed claim yet.",
+  "geometry_profile": {
+    "log": "/tmp/ai-compact-owner-ids-14760-geometry-profile.log",
+    "source_limit": 16000000,
+    "geometry_limit": 40000000,
+    "scope": "Diagnostic only; identify actual geometry exhaustion after compact owner setup. Not ordinary-budget qualification.",
+    "status": "terminal: geometry exhausted",
+    "source_spent": 4128564,
+    "source_remaining": 11871436,
+    "geometry_remaining": 0,
+    "fragments": 661243,
+    "setup_work": 75735,
+    "typed_output_complete": false,
+    "deadline": false,
+    "final_credit": 0,
+    "peak_bytes": 266078344
+  }
+}

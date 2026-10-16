@@ -785,3 +785,62 @@ fn avif_clean_aperture_file_refusals_release_managed_input_and_output() {
     assert_eq!(budget.used(), 0);
     std::fs::remove_file(&path).unwrap();
 }
+
+#[test]
+fn avif_crop_and_transform_exact_pixel_overlap_file_admission() {
+    use crate::{DecodeRequest, decode_raster, raster::RasterDecodeError};
+    use rrrah_core::{MemoryBudget, RasterPixels};
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    let manifest = include_str!("../../../tests/fixtures/raster/manifest.tsv");
+    let mut cases = 0;
+    let metadata: Vec<Vec<_>> = include_str!("../../../tests/fixtures/raster/avif-crop-libavif-1.4.2.tsv")
+        .lines().map(|line| line.split('\t').collect()).collect();
+    let names: Vec<_> = metadata.iter().map(|fields| fields[0]).chain(
+        manifest.lines().map(|line| line.split('\t').next().unwrap())
+            .filter(|name| name.starts_with("avif-orientation-"))
+    ).collect();
+    for name in names {
+        // Standalone orientation sources use the producer's fixed 8x4 coded image.
+        let (coded_width,coded_height): (u64,u64) = metadata.iter().find(|fields| fields[0] == name)
+            .map_or((8,4),|fields| (fields[1].parse().unwrap(),fields[2].parse().unwrap()));
+        let oracle_fields: Vec<_> = manifest.lines().find(|line| line.split('\t').next() == Some(name))
+            .unwrap().split('\t').collect();
+        let width: u32 = oracle_fields[1].parse().unwrap();
+        let height: u32 = oracle_fields[2].parse().unwrap();
+        let tolerance: u8 = oracle_fields[3].parse().unwrap();
+        let original = std::fs::read(root.join(name)).unwrap();
+        let properties = crate::avif_color::properties(&original).unwrap();
+        if name.starts_with("avif-orientation-") {
+            assert!(properties.clean_aperture.is_none());
+            assert!(properties.rotation != 0 || properties.mirror.is_some());
+        }
+        assert!(!matches!(properties.color, Some(rrrah_core::RasterColorSpace::Icc(_))),
+            "this pixel-only admission control must not silently include ICC storage");
+        let source_bytes = original.len() as u64;
+        let output_bytes = u64::from(width) * u64::from(height) * 4;
+        let native_bytes = coded_width * coded_height * 4;
+        let peak = source_bytes + output_bytes + native_bytes;
+        let budget = MemoryBudget::new(peak);
+        let mut request = DecodeRequest::new(root.join(name));
+        request.memory_budget = Some(budget.clone());
+        let frame = decode_raster(&request).unwrap();
+        assert_eq!((frame.width(),frame.height()),(width,height),"{name}");
+        assert_eq!((budget.used(),budget.peak()),(output_bytes,peak),"{name}");
+        let oracle = std::fs::read(root.join(oracle_fields[4])).unwrap();
+        let RasterPixels::Rgba8(actual) = frame.pixels() else { panic!("unexpected precision: {name}") };
+        assert_eq!(actual.len(),oracle.len());
+        assert!(actual.iter().zip(&oracle).all(|(&a,&b)| a.abs_diff(b) <= tolerance),"{name}");
+        let held = frame.clone(); drop(frame); assert_eq!(budget.used(),output_bytes);
+        drop(held); assert_eq!(budget.used(),0);
+        let short = MemoryBudget::new(peak-1);
+        request.memory_budget = Some(short.clone());
+        assert!(matches!(decode_raster(&request),Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))),"{name}");
+        assert_eq!(short.used(),0);
+        request.memory_budget = Some(budget.clone());
+        let retry = decode_raster(&request).unwrap();
+        drop(retry); assert_eq!(budget.used(),0);
+        assert_eq!(std::fs::read(root.join(name)).unwrap(),original);
+        cases += 1;
+    }
+    assert_eq!(cases,31);
+}

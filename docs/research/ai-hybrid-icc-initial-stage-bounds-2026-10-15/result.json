@@ -1,0 +1,62 @@
+{
+  "change": "Bound input/output LUT curves and combine them with existing hybrid CLUT enclosure. Curve boxes scan every touched table segment, use shared-diff affine form only for enclosure, and add8*EPSILON*maxabs_table+8*minsub for original rounded/fused arithmetic. Actual point execution unchanged. Hybrid stage requires explicit hybrid mode and continuing caller work.",
+  "tests": {
+    "focused_passed": 4,
+    "focused_ignored": 1,
+    "rust185_focused_passed": 4,
+    "retained_profile_control_passed": 1,
+    "full_passed": 63,
+    "full_failed": 3,
+    "full_ignored": 1,
+    "existing_failures": "Missing assets/swapped_intent.icc, assets/Display P3.icc, assets/truncated_desc_v4.icc",
+    "controls": "Nonmonotone/signed/constant/multisegment LUTs, endpoints, clamping,1024 point comparisons per box, every short curve/stage budget, all curve cancellation points; synthetic combined initial stage versus original to_pcs."
+  },
+  "retained_profile": {
+    "native_input_box": [
+      [
+        0.18747221,
+        0.18747272
+      ],
+      [
+        0.6583001,
+        0.6583007
+      ],
+      [
+        0.7777766,
+        0.7777772
+      ],
+      [
+        0.13612585,
+        0.13612635
+      ]
+    ],
+    "pcs_bounds": [
+      [
+        0.5158989,
+        0.51593935
+      ],
+      [
+        0.6206682,
+        0.6207144
+      ],
+      [
+        0.6340196,
+        0.63406646
+      ]
+    ],
+    "work": 251,
+    "point_controls": 4096,
+    "all_inside": true,
+    "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "rgb_certified": false
+  },
+  "source_sha256": "cf430cb7671209f9ab0720538d118abef418b6486484faa3701e3f4a1981e691",
+  "limitations": [
+    "Private stage bounds not connected to full transform executor or AI acceptance gate.",
+    "PCS Lab/XYZ adaptation, RGB stages, alpha/display quantization remain outside this bound.",
+    "Hybrid CLUT cell crossing still refuses; caller subdivision not implemented.",
+    "Assumes gradual underflow and finite enclosable intermediates.",
+    "Existing3 missing-asset failures remain; fullsuite is not green.",
+    "No original source reads skipped or ordinary4M/fullpage qualification."
+  ]
+}

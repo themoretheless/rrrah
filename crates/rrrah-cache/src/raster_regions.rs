@@ -425,7 +425,58 @@ mod tests {
             scratch.peak()
         );
         drop(region);
-        let lod_budget = MemoryBudget::new(300000);
+        let rect = [5983, 5989, 17, 11];
+        let crop_peak = 64 + 2992 + 65536;
+        for limit in [crop_peak - 1, crop_peak] {
+            let root = MemoryBudget::new(limit);
+            let scratch = root.child(65536);
+            let result = swapped.restore_region(rect, &root, &scratch, || false);
+            if limit == crop_peak {
+                let crop = result.unwrap();
+                assert_eq!((root.used(), root.peak()), (2992, crop_peak));
+                let held = crop.frame.clone();
+                drop(crop);
+                assert_eq!(root.used(), 2992);
+                assert!(swapped.restore_region(rect, &root, &scratch, || false).is_err());
+                assert_eq!(root.used(), 2992);
+                drop(held);
+            } else {
+                assert!(result.is_err());
+            }
+            assert_eq!(root.used(), 0);
+        }
+        let cancel_budget = MemoryBudget::new(crop_peak);
+        let cancel_scratch = cancel_budget.child(65536);
+        let mut observed_admission = false;
+        assert!(matches!(
+            swapped.restore_region(rect, &cancel_budget, &cancel_scratch, || {
+                observed_admission |= cancel_budget.used() == crop_peak;
+                observed_admission
+            }),
+            Err(RasterRegionError::Swap(rrrah_swap::SwapError::Cancelled))
+        ));
+        assert!(observed_admission);
+        assert_eq!((cancel_budget.used(), cancel_scratch.used()), (0, 0));
+        drop(
+            swapped
+                .restore_region(rect, &cancel_budget, &cancel_scratch, || false)
+                .unwrap(),
+        );
+        assert_eq!(cancel_budget.used(), 0);
+        assert_eq!(
+            (index.used(), store.usage().unwrap().bytes),
+            (281280, 576_000_064)
+        );
+        let lod_peak = 2992 + 6000 * 16 + 17 * 32 + 65536;
+        let short = MemoryBudget::new(lod_peak - 1);
+        let short_scratch = short.child(65536);
+        assert!(
+            swapped
+                .downsample_linear([17, 11], &short, &short_scratch, || false)
+                .is_err()
+        );
+        assert_eq!((short.used(), short_scratch.used()), (0, 0));
+        let lod_budget = MemoryBudget::new(lod_peak);
         let lod_scratch = lod_budget.child(65536);
         let lod = swapped
             .downsample_linear([17, 11], &lod_budget, &lod_scratch, || false)
@@ -438,7 +489,7 @@ mod tests {
             assert_eq!(a.to_bits(), b.to_bits());
         }
         assert_eq!(lod.pixel_aspect(), reference.pixel_aspect());
-        assert_eq!(lod_budget.used(), 2992);
+        assert_eq!((lod_budget.used(), lod_budget.peak()), (2992, lod_peak));
         eprintln!(
             "36MP streamed native LOD:17x11 exact direct-source reference; managed peak={} scratch_peak={}; full source remains released",
             lod_budget.peak(),
@@ -668,6 +719,7 @@ pub struct SwappedRaster {
     header: [u8; 64],
     size: [u32; 2],
     prefix: u64,
+    animation_timing: Option<rrrah_core::RasterAnimationTiming>,
     bytes_per_pixel: u64,
     index_budget: MemoryBudget,
     cached_lod: std::sync::Arc<std::sync::Mutex<Option<([u32; 2], SegmentedSwapHandle)>>>,
@@ -683,7 +735,7 @@ impl SwappedRaster {
         cancelled: impl FnMut() -> bool,
     ) -> Result<Self, RasterRegionError> {
         let (header, profile, bytes) = crate::raster_payload::region_source_descriptor(frame)?;
-        let prefix = 64 + profile.len() as u64;
+        let prefix = 64 + profile.len() as u64 + if frame.animation_timing().is_some() { 12 } else { 0 };
         let bytes_per_pixel = match header[16] {
             1 => 4,
             2 => 8,
@@ -700,6 +752,7 @@ impl SwappedRaster {
             header,
             size: [frame.width(), frame.height()],
             prefix,
+            animation_timing: frame.animation_timing(),
             bytes_per_pixel,
             index_budget: index_budget.clone(),
             cached_lod: Default::default(),
@@ -713,7 +766,8 @@ impl SwappedRaster {
         let value = f32::from_le_bytes(self.header[60..64].try_into().unwrap());
         ((self.header[..8] == *b"RRRAST2\0"
             || self.header[..8] == *b"RRRAST3\0"
-            || self.header[..8] == *b"RRRAST4\0")
+            || self.header[..8] == *b"RRRAST4\0"
+            || (self.header[..8] == *b"RRRAST5\0" && self.header[19] >= 2))
             && value != 0.0)
             .then_some(value)
     }
@@ -905,6 +959,7 @@ impl SwappedRaster {
         ))?
         .with_sample_scale(f32::from_le_bytes(self.header[20..24].try_into().unwrap()))?
         .with_hotspot(hotspot)?
+        .with_animation_timing(self.animation_timing)
         .with_image_selection(selection(32)?, selection(40)?)?;
         // This optional exact level shares source disk/index quotas. Retain at
         // most one level, preserving the larger exact level across pressure
@@ -1074,5 +1129,32 @@ impl SwappedRaster {
             rect,
             frame,
         })
+    }
+}
+
+#[cfg(test)]
+mod animation_region_tests {
+    use super::*;
+    use std::sync::Arc;
+    #[test]
+    fn animated_segmented_region_and_lod_keep_timing_and_aspect() {
+        let dir=tempfile::tempdir().unwrap();
+        let store=SwapStore::new(dir.path(),rrrah_swap::SwapLimits { max_bytes:65536,max_objects:Some(4) }).unwrap();
+        let timing=rrrah_core::RasterAnimationTiming::new(1000,60,3).unwrap();
+        let frame=DecodedRaster::new(4,4,RasterPixels::Rgba32Float(Arc::new([2.,-0.5,0.25,1.].repeat(16)).into()),RasterColorSpace::LinearSrgb).unwrap()
+            .with_pixel_aspect(Some(1.25)).unwrap().with_animation_timing(Some(timing));
+        let index=MemoryBudget::new(65536);
+        let swapped=SwappedRaster::write(&store,&frame,&index,||false).unwrap();
+        assert_eq!(swapped.pixel_aspect(),Some(1.25));
+        let budget=MemoryBudget::new(262144);let scratch=budget.child(65536);
+        let region=swapped.restore_region([1,1,2,2],&budget,&scratch,||false).unwrap();
+        assert_eq!(region.frame.animation_timing(),Some(timing));assert_eq!(region.frame.pixel_aspect(),Some(1.25));drop(region);
+        for _ in 0..2 {
+            let lod=swapped.downsample_linear([2,2],&budget,&scratch,||false).unwrap();
+            assert_eq!(lod.animation_timing(),Some(timing));drop(lod);assert_eq!(budget.used(),0);
+        }
+        let lod=frame.downsample_linear_with_budget_and_cancel([2,2],&budget,||false).unwrap();
+        assert_eq!(lod.animation_timing(),Some(timing));drop(lod);
+        drop(swapped);drop(store);assert_eq!((budget.used(),index.used()),(0,0));
     }
 }

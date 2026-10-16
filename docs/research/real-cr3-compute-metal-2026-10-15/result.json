@@ -1,0 +1,41 @@
+{
+  "status": "12 live cases passed plus 2 source/cache tests",
+  "source": "existing local EOS R8 CR3 read in place; no original media copied or uploaded",
+  "sensor": [
+    6188,
+    4120
+  ],
+  "algorithms": [
+    "bilinear",
+    "directional",
+    "malvar-he-cutler",
+    "rcd",
+    "smooth-hue",
+    "vng"
+  ],
+  "surfaces": [
+    "SDR",
+    "HDR"
+  ],
+  "live_evidence": {
+    "compute_uploads": 24,
+    "context_recovery_passes": 12,
+    "main_and_HUD_current_frame_gpu_completion": true,
+    "selection_view_preserved": true,
+    "cache": "disabled; native sensor decoded on each context load"
+  },
+  "source_cache_tests": [
+    "idle TTL spills and restores every sensor value/metadata",
+    "classification pressure protects visible then releases unpinned sensor"
+  ],
+  "binary_sha256": "2cf99364c112a51b5f21f20f3df55b8532aa510a91d8c18c48c0fbbbae799870",
+  "binary_profile": "release optimization with debug assertions retained for live probe",
+  "limitations": [
+    "one actual camera file, not full camera corpus",
+    "live completion/recovery only; no independent image/color pixel oracle for this file",
+    "simulated loss notification, not induced hardware failure",
+    "no physical HDR luminance calibration",
+    "frozen optimized binary predates host index guard and CPU-thumbnail reflection fix; compute shader/area fix included",
+    "wall times include native decode/recovery and are not comparative performance measurements"
+  ]
+}

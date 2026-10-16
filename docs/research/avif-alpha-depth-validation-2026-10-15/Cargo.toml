@@ -1,0 +1,17 @@
+[package]
+name = "avif-alpha-depth-validation"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[dependencies]
+image = { path = "../../../vendor/image", default-features = false, features = ["avif-native"] }
+
+[[bin]]
+name = "avif-alpha-depth-validation"
+path = "probe.rs"
+
+[profile.dev]
+debug = 0

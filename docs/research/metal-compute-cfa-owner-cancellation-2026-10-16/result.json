@@ -1,0 +1,68 @@
+{
+  "status": "all_bayer_algorithms_and_cfa_cancel_retry_preserve_other_owners",
+  "gpu": {
+    "adapter": "Apple M4 Max",
+    "backend": "Metal",
+    "optional": false
+  },
+  "matrix": {
+    "algorithms": [
+      "Bilinear",
+      "SmoothHue",
+      "Mhc",
+      "Directional",
+      "Vng",
+      "Rcd"
+    ],
+    "cfa": [
+      [
+        0,
+        1,
+        1,
+        2
+      ],
+      [
+        2,
+        1,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        2,
+        1
+      ],
+      [
+        1,
+        2,
+        0,
+        1
+      ]
+    ],
+    "size": [
+      129,
+      65
+    ],
+    "admitted_cutoffs": 6,
+    "cancellations": 144,
+    "retries": 144
+  },
+  "checks": [
+    "Cancellation returns typed BayerDemosaicError::Cancelled",
+    "Each cutoff observes both compute GPU and CPU admission beyond standing reservations",
+    "After device wait, only unrelated GPU1024/CPU4096 reservations remain",
+    "Every retry has baseline length and identical RGBA float32 bits including zero signs",
+    "After standing reservation owners drop, both budgets are zero"
+  ],
+  "scope": "GPU successful-run baseline verifies recovery determinism; independent demosaic correctness remains in separate oracle tests",
+  "changes": "Test expanded from one CFA with empty budgets to four CFA patterns with standing unrelated owners and explicit bit comparison; production compute algorithm unchanged",
+  "source_sha256": "146db129385c8faceb57b480a5cfc0d97085051e12609f2ca9092789836264b5",
+  "limits": [
+    "129x65 synthetic source; not full sensor or arbitrary cancellation scheduling",
+    "Cutoffs are cooperative validation/encoded work/readback/final-return checks, not GPU preemption",
+    "Input/reference host allocations outside compute output budgets",
+    "Standing owners reserve credit; no claim of separate GPU allocations for them",
+    "No NVIDIA or physical HDR qualification"
+  ]
+}

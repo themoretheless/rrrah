@@ -1,0 +1,82 @@
+{
+  "status": "large_native_region_and_lod_pressure_passed",
+  "source": {
+    "size": [
+      6000,
+      6000
+    ],
+    "pixel_type": "rgba32float",
+    "pixel_bytes": 576000000,
+    "disk_bytes": 576000064,
+    "retained_digest_index_bytes": 281280,
+    "full_payload_api": "refuses above512MiB as intended",
+    "full_source_credit_after_write": 0
+  },
+  "region": {
+    "rect": [
+      5983,
+      5989,
+      17,
+      11
+    ],
+    "retained_output_bytes": 2992,
+    "exact_peak_bytes": 68592,
+    "peak_components": {
+      "prefix": 64,
+      "packed_rows": 2992,
+      "verified_swap_block": 65536
+    },
+    "checks": [
+      "Exact limit accepts; one byte short refuses and releases",
+      "Shared decoded crop owner keeps2992 credit; competing restore refuses without releasing existing owner",
+      "Cancellation observed at full packed-row/block admission releases transient credits; retry succeeds",
+      "All crop sample bits match independent source function; aspect retained"
+    ]
+  },
+  "lod": {
+    "size": [
+      17,
+      11
+    ],
+    "exact_peak_bytes": 165072,
+    "peak_components": {
+      "output": 2992,
+      "source_row": 96000,
+      "float64_accumulators": 544,
+      "verified_swap_block": 65536
+    },
+    "checks": [
+      "One byte short refuses and releases; exact limit succeeds",
+      "All samples bit-exact to direct-source area-filter reference",
+      "Aspect retained; source full pixels remain released"
+    ]
+  },
+  "final": {
+    "source_credit": 0,
+    "crop_credit": 0,
+    "lod_credit": 0,
+    "scratch_credit": 0,
+    "index_credit": 0,
+    "disk_bytes": 0
+  },
+  "checks": {
+    "manual_large_test": "passed",
+    "cache_lib": {
+      "passed": 142,
+      "failed": 0,
+      "ignored": 3
+    },
+    "swap_lib": {
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    }
+  },
+  "limits": [
+    "Payload and digest-index budgets exclude allocator/control overhead/RSS",
+    "Baseline first crop quota estimate omitted retained64-byte prefix; corrected test from observed capacity error and implementation lifetime",
+    "Synthetic source; warm filesystem; no physical slow-disk, new Metal or performance claim",
+    "Production code unchanged in this test expansion"
+  ],
+  "source_sha256": "43f8ad116a6bcbee66b1897af73fdb0c2122e8df8964a4bdead1fe2f29aedfad"
+}

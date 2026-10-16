@@ -1,0 +1,90 @@
+{
+  "status": "DICOM BE frame/window RAM-swap-prefetch and actual Metal readback passed",
+  "fixtures": 5,
+  "selected_frames": 8,
+  "windows_per_frame": 2,
+  "cases": 16,
+  "oracles": {
+    "generator": "scripts/generate-dicom-fixtures.py",
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "alternate_window": "Central half of each original explicit window; recomputed independently from pydicom physical values.",
+    "new_alternate_oracle_sha256": {
+      "dicom-big-endian-mono1-odd8-ob.dcm.0.alternate-window-f32": "081841cec1de28c242e15e9d1badd6fa820fda2f654289727993e588a57894b9",
+      "dicom-big-endian-odd8-ow-multiframe.dcm.1.alternate-window-f32": "1fb2869f1bea0d04eabc58206244582df6f89975818ccd379cfadc3e9ffa4e06",
+      "dicom-big-endian-unsigned16.dcm.0.alternate-window-f32": "f5554b55ebf9e3c70ccbc78eb5d0f85c4439e2c4e58be96563e6c128f023cbdf",
+      "dicom-big-endian-odd8-ow-multiframe.dcm.0.alternate-window-f32": "c41861748509cec7903cf9025b773179349bc8ca13aebccaba898d76c46b12af",
+      "dicom-big-endian-signed12-rescale.dcm.1.alternate-window-f32": "3a0986893e828aea4efd8ae509e00dbce6e94724842167c4f2eabad9c6c7394e",
+      "dicom-big-endian-odd8-ow-multiframe.dcm.2.alternate-window-f32": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2",
+      "dicom-big-endian-signed12-rescale.dcm.0.alternate-window-f32": "e78a127e2e469b216b9f9ba226037fb87ce9555ebb0952f334c3349f3ba11c50",
+      "dicom-big-endian-mono1-odd8-ow.dcm.0.alternate-window-f32": "081841cec1de28c242e15e9d1badd6fa820fda2f654289727993e588a57894b9"
+    },
+    "all_previous_source_and_primary_oracle_hashes_unchanged": true
+  },
+  "pipeline": [
+    "Native prepared pixels match independent primary/alternate float32 oracles for every frame.",
+    "16 RAM hits under full managed-root pressure share original pixel allocations; no decoder invocation.",
+    "One-entry RAM policy spills distinct frame/window keys; strict request without window cannot reuse prepared entry.",
+    "50ms insertion TTL preserves visible frame after expiry. A real foreground navigation releases old pin and spills its expired entry.",
+    "Future insertion TTL60s leaves old50msdeadline unchanged and keeps the new visible frame live through readback/prefetch checks.",
+    "Stale generation rejects lookup; fresh reverse prefetch visits16cases with native decoder blocked by foreground gate.",
+    "One foreground restore plus15disk-backed reverse-prefetch cases and1RAMreverse hit; total swap writes16/reads16/errors0.",
+    "Every reverse restore preserves exact payload, frame/count metadata and current visible frame lease.",
+    "Dropping cache retains visible-owner credit; last visible owner drop releases managed root to0."
+  ],
+  "cpu": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 1,
+    "log": "/tmp/dicom-be-viewer-cpu-stable-20261016.log"
+  },
+  "metal": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "adapter": "Metal Apple M4 Max",
+    "required_gpu": true,
+    "render_size": [
+      64,
+      32
+    ],
+    "total_readback_frames": 96,
+    "scope": "32oracle-input GPUframes,32nativewarm GPUframes and32restored/RAM GPUframes; full SDR RGBA8 and linear HDR binary16 buffers compare bit-exact. Oracle input pixels come from independent pydicom, renderer is shared.",
+    "log": "/tmp/dicom-be-pipeline-metal-final-20261016.log"
+  },
+  "memory": {
+    "managed_root_limit": 65536,
+    "peak": 65536,
+    "peak_includes_intentional_full_pressure_reservations": true,
+    "final": 0,
+    "swap_queue_limit": 4096,
+    "restore_child_limit": 4096
+  },
+  "harness_corrections": [
+    {
+      "log": "/tmp/dicom-be-pipeline-cpu-20261016.log",
+      "finding": "Invalid test expectation tried to expire current visible pin; production correctly protected it."
+    },
+    {
+      "log": "/tmp/dicom-be-pipeline-cpu-fixed-20261016.log",
+      "finding": "TTL policy only affects future insertions; test had initially inserted without TTL. Corrected fixture cache policy from creation."
+    },
+    {
+      "log": "/tmp/dicom-be-pipeline-metal-20261016.log",
+      "finding": "All pixel checks passed, but slow GPU let short TTL expire a later lookup, causing17instead16reads. Separated tested expiration phase from deterministic blocked-prefetch phase."
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "2a21c86fd76975cec2b8885e6d924df1358839d2d6b6f20782b6049e482c295c",
+    "crates/rrrah-app/src/main.rs": "f7eae04351b93f7dc729a788bea0624e7cc08efa2061bcdbf02f243280b7b0db",
+    "crates/rrrah-scientific/src/dicom.rs": "aaa922e5a57e6b5fb5733fc19336882dff709926573181a3e370ad20149810c7",
+    "scripts/generate-dicom-fixtures.py": "638dda1bf680f409b389421316a0ef056a50b7a4dbf405d7e4ac7c9734b828f6"
+  },
+  "binary_sha256": "2a93730ca5f4f2a7cac03b374bf4ef62c61b01cec1c73671bafe827f7abaea68",
+  "limitations": [
+    "Small authored scalar encoding fixtures, not complete clinical IOD or presentation-state qualification.",
+    "Headless Metal transport checks, not live physical HDR luminance/color or independent shader algorithm proof.",
+    "No large real DICOM collection/decode throughput or long-duration DICOM soak claim.",
+    "Broader unsupported DICOM syntax/LUT/color cases and overall100-format goal remain open."
+  ]
+}

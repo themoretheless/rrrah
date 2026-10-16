@@ -1,0 +1,23 @@
+{
+  "status": "empty_gallery_animation_generation_contract_verified",
+  "checks": [
+    "Explicit App::open_folder(empty) increments/cancels source generation before scan completes",
+    "Expired old animation timer emits no requests during scan or after empty result",
+    "Empty gallery removes navigation index but can retain previous visible path; no implicit reopen",
+    "Passive sibling-only scan preserves current source generation/deadline and can continue standalone animation even with zero siblings"
+  ],
+  "new_actual_app_tests": 2,
+  "focused_empty_folder_tests_passed": 4,
+  "viewer": {
+    "passed": 267,
+    "failed": 0,
+    "ignored": 72
+  },
+  "implementation": "Existing generation gates are correct; tests added without production behavior changes",
+  "limits": [
+    "Headless actual-App setup with controlled request receiver and real temporary folder scan; no native physical display/pacing qualification",
+    "An empty sibling list is different from explicit replacement-folder selection",
+    "No new GPU, HDR/NVIDIA, physical disk or complete100-format qualification"
+  ],
+  "source_sha256": "c9d8fb3f24bc455058cd3c69909b37e8c2ff3fd5a4061eb1f5ab16a01f3158fc"
+}

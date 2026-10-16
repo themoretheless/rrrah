@@ -1,0 +1,169 @@
+{
+  "status": "owned native classic RGB palette DICOM decode and required Metal pipeline pass",
+  "specifications": [
+    "https://dicom.nema.org/medical/DICOM/current/output/chtml/part03/sect_C.7.6.3.html",
+    "https://dicom.nema.org/medical/dicom/Final/cp2481_ft_oddnumberof8bitpalettecolorlutentries.pdf",
+    "https://dicom.nema.org/medical/dicom/2024e/output/chtml/part03/sect_C.8.5.5.html"
+  ],
+  "implementation": {
+    "runtime": "owned Rust; pydicom/NumPy used only for independent test sources and oracles",
+    "palettes": "direct classic RGB LUTs,8/16-bit entries; matching count/firstmapped/depth across3descriptors; count0 means65536; firstmapped follows signed PixelRepresentation while count/depth remainunsigned",
+    "indices": "native8/16-bit stored samples, signed12 in16 with unused high bits, frame selection, endpoint clamp in stored domain before any color transform",
+    "storage": "packed8 OW including odd entry count padding and BE word-pair swap; legacy8 in16-bit words accepts only zero high bits;16-bit words follow transfer endian",
+    "allocation": "palette slices borrowed from already admitted source; one pre-admitted RGBA8/16 output; no full-image index/color intermediate; ICC ownership shared through existing RGB color helper",
+    "declarations": "ICC bytes and explicit/assumed color policies retained; pixel aspect retained; scalarwindow/rescale/padding/planar palette transforms refuse",
+    "ultrasound_metadata": "00186011 structurally traversed by bounded sequence walker; region physical calibration/measurements not interpreted, does not replace root palette/pixels",
+    "refusals": "segmented palettes, alpha palettes, enhanced/supplemental color pipelines, inconsistent/missing descriptors, invalid VR/length/high bits remain explicit errors"
+  },
+  "fixtures": {
+    "generator": "scripts/generate-dicom-palette-fixtures.py",
+    "new_containers": 21,
+    "new_frames": 51,
+    "all_dicom_containers": 108,
+    "all_dicom_frames": 242,
+    "cases": [
+      "packed8 LUT",
+      "legacy8 LUT in16 words",
+      "odd5entry packed8 LUT",
+      "signed12indices and16-bit LUT",
+      "65536entry16-bit LUT with zero descriptor count",
+      "ICC16",
+      "explicitSRGB8"
+    ],
+    "syntaxes": "ImplicitLE and ExplicitLE/BE",
+    "oracle": "every input index decoded by independent pydicom; each source table endian/padding checked independently by NumPy; NumPy lookup/clamp produces exact selected-frame RGBA oracle; large65536-entry cases exercise zero descriptor and endpoint/index word cases, not every entry as output",
+    "pydicom_scope": "direct apply_color_lut only used for the unmodified LE packaged asset; authored odd8/legacy8/BE table interpretation uses explicit descriptor/storage oracle, avoiding pydicom raw dtype/endianness assumptions",
+    "truncations": "all prefixes for small controls; first1024 and last32prefixes for >16KiB controls; full-source exact/short admission checked for all",
+    "source_sha256": {
+      "dicom-palette-big-endian-icc16.dcm": "737214ebeb873f8538bb2b4a4d1ecae44296cb4f69af635c658922cd894c0a80",
+      "dicom-palette-big-endian-legacy8.dcm": "ccd2713f3d9f762c66219b0881b5b10b22170a9f88417369c9d0eb215ea02f67",
+      "dicom-palette-big-endian-maximum16.dcm": "941884907b5f9c954bee3143137a06617471852b2fd91e6ab712a7095ea74e5a",
+      "dicom-palette-big-endian-odd8.dcm": "f65d9ebf8a3483bcf0da0fffdb4464a7ff3bb3d8210c14d100ba872f2a8fe31c",
+      "dicom-palette-big-endian-packed8.dcm": "51360a412fa05d9f114cf6f12a0e98ee8dc6d491d7d3cc53b4fa4c7e1d561599",
+      "dicom-palette-big-endian-signed12.dcm": "a663d36f4dd27212adb851a600611052b98eb944e3babff9819ce1e86d6d178a",
+      "dicom-palette-big-endian-srgb8.dcm": "4e5c52c3cc1f901731bcaa8f5bef61b42cb0d246e1019ab0d5ef70ee355af014",
+      "dicom-palette-explicit-icc16.dcm": "3495b4ebe1dde6c311f2a90315f68260d9d3072ecc2282e230899fd539d1b6f5",
+      "dicom-palette-explicit-legacy8.dcm": "74ba25f62d5eb93420208c8c5e1b8f744b86d314c50f4d5d29e79ee3a5b456eb",
+      "dicom-palette-explicit-maximum16.dcm": "dd4a9a792ef466caf0237206d5a4232027d14996c86e14c5290d04e1e38648d4",
+      "dicom-palette-explicit-odd8.dcm": "3149d11540441a76bce5933f2cf0c05ab7758ee16cd8d022a914b5fbd7a71b8a",
+      "dicom-palette-explicit-packed8.dcm": "16e3e34d21afcd04e268bf2e0832cfc63cb1635351a82d483689f04931d329d5",
+      "dicom-palette-explicit-signed12.dcm": "551342ada3f6f152c4c481aad904e43e21e81a4faec457a582ac04b74eadc9e8",
+      "dicom-palette-explicit-srgb8.dcm": "fbb8e7b21967cda5c5bd31f0762401d5a203d492876dad583995792d04bf2954",
+      "dicom-palette-implicit-icc16.dcm": "dee283a3517a641a6ac054faa1ccd08a1212bd52335870bd13f55f55936da965",
+      "dicom-palette-implicit-legacy8.dcm": "6e7b61fa93bb4fd938e3759a714980db9ad6fc522485b6853baa1d59556bf2de",
+      "dicom-palette-implicit-maximum16.dcm": "b410017685ae4b3a710856f2fa04f414c5652ef48df2e558d78b0333d32a497d",
+      "dicom-palette-implicit-odd8.dcm": "ce606dd6486b8c5c692fea8c40b400db6f805952fc82b9d162d484f5549a0230",
+      "dicom-palette-implicit-packed8.dcm": "47ca0e19f9e4eccb256b346e22ac9e9f3e0247031641db3963da24b6e8e057c8",
+      "dicom-palette-implicit-signed12.dcm": "523c89776746db7d9762d31151fe965fbe7310bcfd3a03cd1cbeef72aabaee35",
+      "dicom-palette-implicit-srgb8.dcm": "103f51b20de8429cf308fa07623b4c586507789cd571245d0635e8333cde2464"
+    }
+  },
+  "external_palette": {
+    "source": "/tmp/rrrah-dicom-oracle-deps-20261016/pydicom/data/test_files/examples_palette.dcm",
+    "source_bytes": 283486,
+    "source_sha256": "c6f5b60e1711d6009f7a944873969d4c8d4fcbd6ad96099a3a1a20f32a95a2bb",
+    "dimensions": [
+      800,
+      350
+    ],
+    "pixels": 280000,
+    "oracle_sha256": "d33db6fa409125e0fdf24ca6ea60e583e35046dabce75d7b7865fac237839e27",
+    "oracle_bytes": 2240000,
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "root_sequences": [
+      "(0018,6011)"
+    ],
+    "native_full_rgba16_match": true,
+    "managed_peak": 2523486,
+    "managed_final": 0,
+    "one_byte_short_refused": true,
+    "provenance": "unmodified pydicom packaged ultrasound palette asset, read in place; original scanner encoding provenance not established; source not copied"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 31,
+      "failed": 0,
+      "ignored": 5,
+      "log": "/tmp/dicom-palette-final2-scientific-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-palette-final2-facade-20261016.log"
+    },
+    "manual_controls": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-palette-final2-external-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-palette-final2-cpu-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-palette-final2-metal-20261016.log"
+    }
+  },
+  "clippy": {
+    "command": "cargo +stable clippy -p rrrah-scientific --lib --offline -- -D warnings",
+    "passed": true,
+    "log": "/tmp/dicom-palette-final2-clippy-20261016.log"
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_gpu_skip": false,
+    "states": 288,
+    "palette_states": 51,
+    "geometry_states": 60,
+    "ram_pressure_hits": 288,
+    "swap_writes": 288,
+    "swap_reads": 288,
+    "swap_errors": 0,
+    "base_sdr_hdr_readbacks": 1728,
+    "square_pixel_negative_controls": 120,
+    "total_readbacks": 1848,
+    "comparison": "independent decoded indices/NumPy palette values versus native input, same existing ICC/sRGB preparation and renderer; full RGBA8/HDRbinary16 exact for reference/warm/restored; not independent ICC/shader algorithm proof",
+    "limits": {
+      "managed_root": 1048576,
+      "ram_entries": 1,
+      "swap_entries": 384,
+      "swap_bytes": 131072,
+      "queue_bytes": 4096,
+      "queue_count": 4,
+      "restore_bytes": 4096
+    },
+    "budget_reason": "root raised from64KiB to1MiB to admit borrowed maximum65536-entry source tables; swap cap raised for288small selected outputs; output source precision not reduced",
+    "managed_peak": 1048576,
+    "managed_final": 0,
+    "peak_scope": "includes artificial full-pressure reservation; not process RSS",
+    "nonzero_ttl_visible_protection": true,
+    "foreground_pin_transition": true,
+    "blocked_decoder_reverse_prefetch": true,
+    "stale_generation_refusal": true,
+    "duration_seconds": 5.38
+  },
+  "failed_attempts": [
+    {
+      "log": "/tmp/dicom-palette-scientific-20261016.log",
+      "reason": "test searched for13-byte PALETTE COLOR in12-byte windows; fixed test boundary; production palette decode already passed authored controls"
+    },
+    {
+      "log": "/tmp/dicom-palette-clippy-20261016.log",
+      "reason": "descriptor type complexity and unnecessary lazy Option closure; corrected with named type alias and eager Option::and; final gates and Metal rerun passed"
+    }
+  ],
+  "remaining": [
+    "segmented/alpha/enhanced/supplemental palettes",
+    "compressed transfer syntaxes and transformation/LUT/presentation qualification",
+    "full100format qualification",
+    "NVIDIA hardware deferred by user"
+  ]
+}

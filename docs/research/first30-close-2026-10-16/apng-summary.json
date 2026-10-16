@@ -1,0 +1,640 @@
+[
+  {
+    "count": 1,
+    "case": "valid",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 3294.5,
+        "wall_p95_ns": 3682,
+        "cpu_median_ns": 3312.0,
+        "cpu_p95_ns": 3718,
+        "peak_rss_bytes": 2736128,
+        "allocation_calls": [
+          29
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          38326
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 3211.0,
+        "wall_p95_ns": 3569,
+        "cpu_median_ns": 3218.0,
+        "cpu_p95_ns": 3562,
+        "peak_rss_bytes": 2703360,
+        "allocation_calls": [
+          29
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          38326
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.0086396481306943,
+      1.0291201007398079,
+      1.0006298220752636,
+      1.0395226286422814,
+      1.037507749535028,
+      0.9881710646041856,
+      1.057573354480571,
+      1.0109187334269225,
+      1.0167364016736402,
+      1.0474258970358814
+    ],
+    "median_paired_ratio": 1.0229282512067241,
+    "candidate_wins": 9
+  },
+  {
+    "count": 16,
+    "case": "valid",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 10180.0,
+        "wall_p95_ns": 11019,
+        "cpu_median_ns": 10187.0,
+        "cpu_p95_ns": 10937,
+        "peak_rss_bytes": 2801664,
+        "allocation_calls": [
+          44
+        ],
+        "realloc_calls": [
+          3
+        ],
+        "tracked_peak_live_bytes": [
+          38326
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 10038.0,
+        "wall_p95_ns": 13013,
+        "cpu_median_ns": 10062.0,
+        "cpu_p95_ns": 13031,
+        "peak_rss_bytes": 2736128,
+        "allocation_calls": [
+          44
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          38326
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.0028504275641346,
+      1.0149290868375218,
+      1.0300110408511494,
+      1.0155655655655655,
+      1.018491678744565,
+      1.0285471877027499,
+      1.0161502632644794,
+      0.7940576183373891,
+      0.7942725605711833,
+      0.8053915781188509
+    ],
+    "median_paired_ratio": 1.0152473262015436,
+    "candidate_wins": 7
+  },
+  {
+    "count": 512,
+    "case": "valid",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 236762.5,
+        "wall_p95_ns": 325691,
+        "cpu_median_ns": 236390.5,
+        "cpu_p95_ns": 323093,
+        "peak_rss_bytes": 3375104,
+        "allocation_calls": [
+          540
+        ],
+        "realloc_calls": [
+          8
+        ],
+        "tracked_peak_live_bytes": [
+          85389
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 234649.5,
+        "wall_p95_ns": 326213,
+        "cpu_median_ns": 234452.5,
+        "cpu_p95_ns": 325968,
+        "peak_rss_bytes": 2965504,
+        "allocation_calls": [
+          540
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          85389
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.0060310277127862,
+      1.01398427412609,
+      1.3841694957339234,
+      1.01670769001268,
+      1.0126685633364378,
+      1.005891317553526,
+      1.0103381931677284,
+      0.736623812047013,
+      0.7289929841901797,
+      1.0073568565306479
+    ],
+    "median_paired_ratio": 1.0088475248491882,
+    "candidate_wins": 8
+  },
+  {
+    "count": 4096,
+    "case": "valid",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 1860439.0,
+        "wall_p95_ns": 2905865,
+        "cpu_median_ns": 1856203.0,
+        "cpu_p95_ns": 2677093,
+        "peak_rss_bytes": 3981312,
+        "allocation_calls": [
+          4124
+        ],
+        "realloc_calls": [
+          11
+        ],
+        "tracked_peak_live_bytes": [
+          486797
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 1856463.5,
+        "wall_p95_ns": 3565993,
+        "cpu_median_ns": 1854265.5,
+        "cpu_p95_ns": 2658156,
+        "peak_rss_bytes": 3833856,
+        "allocation_calls": [
+          4124
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          486797
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.4077776309239958,
+      1.377323327995382,
+      1.0051452865951,
+      0.7213523078695017,
+      1.0002549688442162,
+      1.3916294079180263,
+      1.387620616424102,
+      0.5418532228188094,
+      0.7273048738252287,
+      0.9945713117277069
+    ],
+    "median_paired_ratio": 1.002700127719658,
+    "candidate_wins": 6
+  },
+  {
+    "count": 512,
+    "case": "large",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 451817.5,
+        "wall_p95_ns": 638446,
+        "cpu_median_ns": 451671.5,
+        "cpu_p95_ns": 638125,
+        "peak_rss_bytes": 3162112,
+        "allocation_calls": [
+          540
+        ],
+        "realloc_calls": [
+          8
+        ],
+        "tracked_peak_live_bytes": [
+          106402
+        ],
+        "managed_peak_bytes": [
+          36864
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 450676.5,
+        "wall_p95_ns": 679743,
+        "cpu_median_ns": 450624.5,
+        "cpu_p95_ns": 641750,
+        "peak_rss_bytes": 3047424,
+        "allocation_calls": [
+          540
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          106402
+        ],
+        "managed_peak_bytes": [
+          36864
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.0031472001962818,
+      1.006095461658842,
+      1.4191203158365862,
+      1.0017102516991028,
+      0.710566976684968,
+      0.9975182029673564,
+      1.0036450518171312,
+      1.0050288364508777,
+      0.7127900650502661,
+      1.0050619096006925
+    ],
+    "median_paired_ratio": 1.0033961260067064,
+    "candidate_wins": 7
+  },
+  {
+    "count": 4096,
+    "case": "invalid",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 1739308.0,
+        "wall_p95_ns": 2504694,
+        "cpu_median_ns": 1738406.0,
+        "cpu_p95_ns": 2489875,
+        "peak_rss_bytes": 3145728,
+        "allocation_calls": [
+          12
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          38326
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 1730072.5,
+        "wall_p95_ns": 2448903,
+        "cpu_median_ns": 1729109.0,
+        "cpu_p95_ns": 2432562,
+        "peak_rss_bytes": 3162112,
+        "allocation_calls": [
+          12
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          196734
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      0.992047966422121,
+      1.4255940621383345,
+      1.4223869322596554,
+      1.009997756085638,
+      0.9932845775926366,
+      1.013365080058542,
+      0.997101816516298,
+      1.3779025862645073,
+      1.0149036845477488,
+      0.7114064459837548
+    ],
+    "median_paired_ratio": 1.01168141807209,
+    "candidate_wins": 6
+  },
+  {
+    "count": 16,
+    "case": "truncated",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 7023.5,
+        "wall_p95_ns": 9868,
+        "cpu_median_ns": 7031.0,
+        "cpu_p95_ns": 9875,
+        "peak_rss_bytes": 2490368,
+        "allocation_calls": [
+          3
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          120
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 7030.0,
+        "wall_p95_ns": 7337,
+        "cpu_median_ns": 7031.0,
+        "cpu_p95_ns": 7343,
+        "peak_rss_bytes": 2457600,
+        "allocation_calls": [
+          3
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          120
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      0.9945137157107232,
+      0.9722397919741373,
+      0.998992443324937,
+      1.0020884343943541,
+      1.0168437793681775,
+      0.9749154453213078,
+      1.0051384527547815,
+      1.0064800968454033,
+      0.9990787329034087,
+      1.395018045432029
+    ],
+    "median_paired_ratio": 1.0005835836488814,
+    "candidate_wins": 5
+  },
+  {
+    "count": 512,
+    "case": "no_memory",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 230973.0,
+        "wall_p95_ns": 235549,
+        "cpu_median_ns": 230843.5,
+        "cpu_p95_ns": 235468,
+        "peak_rss_bytes": 3063808,
+        "allocation_calls": [
+          524
+        ],
+        "realloc_calls": [
+          9
+        ],
+        "tracked_peak_live_bytes": [
+          57454
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 231514.5,
+        "wall_p95_ns": 330785,
+        "cpu_median_ns": 231390.5,
+        "cpu_p95_ns": 330312,
+        "peak_rss_bytes": 2949120,
+        "allocation_calls": [
+          524
+        ],
+        "realloc_calls": [
+          2
+        ],
+        "tracked_peak_live_bytes": [
+          57454
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.002920255239025,
+      1.0037126179451101,
+      1.0033819868576987,
+      0.9846524744687518,
+      0.9986448195145989,
+      1.0034698890975047,
+      0.9861278987446688,
+      0.695501976188891,
+      1.0027053161091253,
+      1.0199342964887361
+    ],
+    "median_paired_ratio": 1.0028127856740752,
+    "candidate_wins": 6
+  },
+  {
+    "count": 512,
+    "case": "cancelled",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 181.5,
+        "wall_p95_ns": 268,
+        "cpu_median_ns": 187.0,
+        "cpu_p95_ns": 343,
+        "peak_rss_bytes": 2654208,
+        "allocation_calls": [
+          5
+        ],
+        "realloc_calls": [
+          0
+        ],
+        "tracked_peak_live_bytes": [
+          147
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 190.5,
+        "wall_p95_ns": 281,
+        "cpu_median_ns": 187.0,
+        "cpu_p95_ns": 312,
+        "peak_rss_bytes": 2637824,
+        "allocation_calls": [
+          5
+        ],
+        "realloc_calls": [
+          0
+        ],
+        "tracked_peak_live_bytes": [
+          147
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      0.9775280898876404,
+      1.035294117647059,
+      1.132183908045977,
+      0.8737373737373737,
+      0.8948717948717949,
+      0.952,
+      1.0260115606936415,
+      0.8305084745762712,
+      1.0249307479224377,
+      1.0057803468208093
+    ],
+    "median_paired_ratio": 0.9916542183542248,
+    "candidate_wins": 5
+  },
+  {
+    "count": 1,
+    "case": "empty",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 181.0,
+        "wall_p95_ns": 304,
+        "cpu_median_ns": 187.0,
+        "cpu_p95_ns": 343,
+        "peak_rss_bytes": 2441216,
+        "allocation_calls": [
+          3
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          120
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 183.0,
+        "wall_p95_ns": 305,
+        "cpu_median_ns": 187.0,
+        "cpu_p95_ns": 375,
+        "peak_rss_bytes": 2424832,
+        "allocation_calls": [
+          3
+        ],
+        "realloc_calls": [
+          1
+        ],
+        "tracked_peak_live_bytes": [
+          120
+        ],
+        "managed_peak_bytes": [
+          0
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      1.0224719101123596,
+      1.0056818181818181,
+      1.08,
+      1.0083565459610029,
+      0.9656084656084656,
+      0.9545454545454546,
+      0.9228723404255319,
+      0.9648648648648649,
+      0.9591280653950953,
+      0.9831932773109243
+    ],
+    "median_paired_ratio": 0.974400871459695,
+    "candidate_wins": 4
+  },
+  {
+    "count": 4096,
+    "case": "alternating",
+    "statistics": {
+      "baseline": {
+        "wall_median_ns": 1855604.5,
+        "wall_p95_ns": 2716276,
+        "cpu_median_ns": 1855109.0,
+        "cpu_p95_ns": 2707875,
+        "peak_rss_bytes": 3964928,
+        "allocation_calls": [
+          4168
+        ],
+        "realloc_calls": [
+          14
+        ],
+        "tracked_peak_live_bytes": [
+          486797
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      },
+      "candidate": {
+        "wall_median_ns": 1853421.0,
+        "wall_p95_ns": 2677662,
+        "cpu_median_ns": 1852437.5,
+        "cpu_p95_ns": 2672781,
+        "peak_rss_bytes": 3866624,
+        "allocation_calls": [
+          4168
+        ],
+        "realloc_calls": [
+          2
+        ],
+        "tracked_peak_live_bytes": [
+          486797
+        ],
+        "managed_peak_bytes": [
+          94
+        ]
+      }
+    },
+    "paired_baseline_over_candidate": [
+      0.7240911348361824,
+      1.0100161441924422,
+      0.9998643239391879,
+      1.0078675290039614,
+      1.4504295796836941,
+      0.9925515747306666,
+      1.0076356691146748,
+      1.4443036116210877,
+      1.0050020888440516,
+      0.6939327716911695
+    ],
+    "median_paired_ratio": 1.0063188789793633,
+    "candidate_wins": 6
+  }
+]

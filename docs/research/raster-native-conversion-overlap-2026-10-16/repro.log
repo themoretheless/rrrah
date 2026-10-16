@@ -1,0 +1,25 @@
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.13s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_decode-a975e9ebc3faac09)
+
+running 1 test
+test raster::output_budget_tests::rgb_png_conversion_admits_native_and_rgba_overlap_before_decode ... FAILED
+
+failures:
+
+---- raster::output_budget_tests::rgb_png_conversion_admits_native_and_rgba_overlap_before_decode stdout ----
+
+thread 'raster::output_budget_tests::rgb_png_conversion_admits_native_and_rgba_overlap_before_decode' (12698206) panicked at crates/rrrah-decode/src/raster.rs:2570:13:
+assertion `left == right` failed
+  left: (48, 48)
+ right: (48, 84)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    raster::output_budget_tests::rgb_png_conversion_admits_native_and_rgba_overlap_before_decode
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 202 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

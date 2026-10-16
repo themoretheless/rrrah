@@ -1,0 +1,175 @@
+{
+  "status": "post_native_texture_expansion_default_workspace_gates_passed",
+  "toolchain": "rustc1.98.1 (48a229cea2026-09-01) stable aarch64-apple-darwin",
+  "commands": [
+    "cargo +stable check --workspace --all-targets --offline",
+    "cargo +stable test --workspace --lib --offline"
+  ],
+  "check_seconds": 62,
+  "library_binaries": 20,
+  "library_passed": 1604,
+  "library_failed": 0,
+  "library_ignored": 97,
+  "results_by_binary": [
+    {
+      "binary": "target/debug/deps/rrrah_animation-77b6e3e47eb1ed75",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_bench-4d082af919439740",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_cache-f012e7b9f409bbc3",
+      "passed": 144,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "binary": "target/debug/deps/rrrah_color-8f2c252718de0acc",
+      "passed": 35,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_core-17a5f41b37242076",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_cuda-fd37fd45eaea4254",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_decode-eff9d141767f10e0",
+      "passed": 190,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "binary": "target/debug/deps/rrrah_dedup-ea8e86fc6d800997",
+      "passed": 49,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "binary": "target/debug/deps/rrrah_demosaic-b12cfad1a2027a0e",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_develop-c3f10a7304690f87",
+      "passed": 97,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "binary": "target/debug/deps/rrrah_gpu-8c5648e2074df8b5",
+      "passed": 63,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "binary": "target/debug/deps/rrrah_layered-757e5ba05ab8767a",
+      "passed": 50,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_memory-a0d195a99e254284",
+      "passed": 43,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_mesh-b575dcfa78ac4ff5",
+      "passed": 55,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_raw-9b1d3d7d548344ab",
+      "passed": 433,
+      "failed": 0,
+      "ignored": 59
+    },
+    {
+      "binary": "target/debug/deps/rrrah_scientific-5d55ac13706a2718",
+      "passed": 57,
+      "failed": 0,
+      "ignored": 9
+    },
+    {
+      "binary": "target/debug/deps/rrrah_swap-8ad772fc385c0054",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_texture-a826dbaf9a566757",
+      "passed": 94,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "binary": "target/debug/deps/rrrah_vector-25ae87613fb0a389",
+      "passed": 178,
+      "failed": 0,
+      "ignored": 10
+    },
+    {
+      "binary": "target/debug/deps/rrrah_vfx-f91a817d5db7f791",
+      "passed": 52,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "target_inventory": {
+    "packages": 21,
+    "kinds": {
+      "lib": 20,
+      "bin": 2,
+      "example": 120,
+      "test": 235,
+      "custom-build": 1,
+      "bench": 5
+    },
+    "feature_gated": 71
+  },
+  "additional_checks": {
+    "generator_syntax_files": 6,
+    "source_manifest_sha256_rows": 648,
+    "official_dfd_blobs_sha256_and_sizes": 22,
+    "rustfmt_scoped_ktx2": "passed"
+  },
+  "companion_viewer_run": {
+    "report": "../ktx2-native-r-rg-2026-10-16/result.json",
+    "passed": 253,
+    "ignored": 72
+  },
+  "limits": [
+    "Default feature scope only; required-feature targets may be skipped",
+    "All-targets check compiles but does not execute integrations/examples/benches",
+    "Workspace lib excludes viewer bin tests; companion current viewer result is separate",
+    "Ignored hardware/manual tests excluded; recent actual Metal evidence separate",
+    "Scoped KTX2 format check does not establish global fmt or strict Clippy clean",
+    "Full100-format, producer/variant, physical HDR and NVIDIA qualification remain open"
+  ],
+  "files_sha256": {
+    "Cargo.lock": "e5c7c46052e0fa86cc9bf71e780b647363ac2a2d63370ada0b31e5a74a1dd783",
+    "crates/rrrah-texture/src/ktx.rs": "cda2914a4586e75243571705612d9141881785949e13ca0ab344085f8e5c616c",
+    "crates/rrrah-texture/src/ktx2.rs": "ba57d93f1e97f4b7d81e9397b8612c995dd407976850f2ee064298066e788497",
+    "crates/rrrah-cache/src/swap.rs": "37a4aa950d646d162c35053ae853d430b4dde80fd20050e1ee634be44d60db60",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "4d9ffa56350fcc1628217ba056056aa35916bbc0e0fa185e6920e0698eab3727",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "24b7ea4ac535ebd7a0f1693d9e6e1af1e588b8c6b5c128209b89cb3daa2b8898",
+    "tests/fixtures/raster/ktx2-khronos-dfd-manifest.tsv": "1223148ad36adf9cb25a162f7b2b16d35f60fde4e73d553b7f89ab333f4fe694"
+  }
+}

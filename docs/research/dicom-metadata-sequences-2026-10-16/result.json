@@ -1,0 +1,145 @@
+{
+  "status": "bounded reference/identity sequence traversal and absent-padding scalar support implemented; independent CT and required Metal controls pass",
+  "specifications": [
+    "https://dicom.nema.org/medical/Dicom/2025c/output/chtml/part05/sect_7.5.2.html",
+    "https://dicom.nema.org/medical/Dicom/2015c/output/chtml/part03/sect_C.2.2.html"
+  ],
+  "implementation": {
+    "runtime": "owned Rust, zero additional heap allocations for sequence traversal; external tools test-only",
+    "root_sequence_allowlist": [
+      "00081110 ReferencedStudySequence",
+      "00081111 ReferencedPerformedProcedureStepSequence",
+      "00081115 ReferencedSeriesSequence",
+      "00081120 ReferencedPatientSequence",
+      "00081140 ReferencedImageSequence",
+      "00082112 SourceImageSequence",
+      "00101002 OtherPatientIDsSequence"
+    ],
+    "syntax": "Implicit VR LE and Explicit VR LE/BE; nested datasets use enclosing transfer syntax",
+    "lengths": "all defined/undefined combinations of sequences and items, exact parent boundaries and zero-length delimiters",
+    "limits": "16 sequence levels; shared 65536 elements/items/delimiters; cancellation every32 visited objects",
+    "scope_isolation": "nested metadata/pixels structurally scanned but never assigned to root image attributes",
+    "padding": "integer padding VR and signed stored range validated; selected frame succeeds only when no source sample matches the declared inclusive range; actual padding still refuses without missing-value display policy",
+    "still_refused": "root sequences outside allowlist, transformation/VOI/per-frame sequences, undefined non-SQ data, unknown public implicit tags, compression and nonfinite display"
+  },
+  "fixtures": {
+    "generator": "scripts/generate-dicom-sequence-fixtures.py",
+    "new_containers": 12,
+    "all_containers": 31,
+    "all_frames": 44,
+    "cases": "three transfer syntaxes times all four defined/undefined outer-sequence/item combinations; complementary nested sequence/item lengths; empty item; malicious nested Rows/Columns/PixelData cannot replace root",
+    "source_sha256": {
+      "dicom-big-endian-sequence-dd.dcm": "11fe465c4b40b7b084b8e43c70deb37e30a0a838b288478f5b451733e0c0d8c3",
+      "dicom-big-endian-sequence-du.dcm": "c14da9c7b427530a17494649bb42a4380f39ccfd31836e9c2af0415c0ca5ef86",
+      "dicom-big-endian-sequence-ud.dcm": "f0ea815bafb6819a7d840a8abefb59deae90f8c67bab07389d54ad4173044059",
+      "dicom-big-endian-sequence-uu.dcm": "468eb794431b61cfafa77805064408b9c0b91aca15ecc2a5c4ee3171746c6974",
+      "dicom-explicit-sequence-dd.dcm": "8436e4700a76e61dcc257c0e76af6b4ea3be7f607fe7c8fe431e64c41d61d422",
+      "dicom-explicit-sequence-du.dcm": "33597028b21c7b33bcbb7ad9774b6624054ec09ea020925dab252e94c75e6dc3",
+      "dicom-explicit-sequence-ud.dcm": "de772474a70b8f6a814bc68b68f8af49a118cecfc1ad712c78ff695ca6d0f6ec",
+      "dicom-explicit-sequence-uu.dcm": "0901ceeaa85d1993ab8552f8dc2016ccf0bef6103bfc97a9392a8a296a502390",
+      "dicom-implicit-sequence-dd.dcm": "599368a997dd3455d964b9789538c2f1b3971679db5dbb0d2a09bb4bc26fd361",
+      "dicom-implicit-sequence-du.dcm": "782994d5743212d7f81f85c898a922289343d39324339f16e7ab3f4dd9d1a71a",
+      "dicom-implicit-sequence-ud.dcm": "0ab8dbe49713924eda1fb867af034352b1be8406d75794ef43d148a3a5f8916c",
+      "dicom-implicit-sequence-uu.dcm": "8619260b6a7a7dab79276bf895831e916976433420eed0200c0a686ad92e3acf"
+    },
+    "scope": "authored CC0 structural/pixel-encoding containers, not complete clinical IODs",
+    "every_prefix_truncation_refuses": true,
+    "previous6float_sources_byte_unchanged": true
+  },
+  "external_ct": {
+    "source": "/tmp/rrrah-dicom-oracle-deps-20261016/pydicom/data/test_files/CT_small.dcm",
+    "source_sha256": "3dd31e5cc835b3f2cdd46c9da1982f59251e78518fefa8163d914631c66437d6",
+    "source_bytes": 39206,
+    "dimensions": [
+      128,
+      128
+    ],
+    "frames": 1,
+    "samples": 16384,
+    "physical_minimum": -896.0,
+    "physical_maximum": 1167.0,
+    "window": [
+      -1024.0,
+      2048.0
+    ],
+    "declared_padding_sample_count": 0,
+    "root_sequence_tags": [
+      "(0010,1002)"
+    ],
+    "oracles": {
+      "raw": "2c25a6bf2a96ad04fca92366fab6101b31423bda54e5cedf0de96a55f478a31a",
+      "window": "07357b1906f6f094b7176b93df2947bac204bf38df2b22f43e3e989bb133208f"
+    },
+    "pydicom": "3.0.2",
+    "numpy": "2.2.6",
+    "native_full_raw_and_window_match": true,
+    "managed_peak": 301350,
+    "managed_final": 0,
+    "one_byte_short_budget_refused": true,
+    "source_provenance": "pydicom packaged CT test asset, source read in place; original scanner encoding provenance not independently established"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 26,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-sequences-final3-scientific-20261016.log"
+    },
+    "ct_external": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-sequences-final3-ct-20261016.log"
+    },
+    "mr_external": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-sequences-final3-mr-20261016.log"
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/dicom-sequences-final3-facade-20261016.log"
+    },
+    "cpu_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/dicom-sequences-final3-cpu-20261016.log"
+    },
+    "metal_pipeline": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/dicom-sequences-final3-metal-20261016.log"
+    }
+  },
+  "pipeline": {
+    "adapter": "Metal Apple M4 Max",
+    "optional_gpu_skip": false,
+    "frame_window_states": 78,
+    "ram_full_pressure_hits": 78,
+    "swap_writes": 78,
+    "swap_reads": 78,
+    "swap_errors": 0,
+    "sdr_hdr_full_buffer_readbacks": 468,
+    "comparison": "independent pydicom window pixels versus native warm/restored inputs, using the same renderer; exact RGBA8 and HDR binary16 buffers",
+    "nonzero_ttl_visible_pin_protection": true,
+    "real_foreground_transition": true,
+    "decoder_blocked_reverse_prefetch": true,
+    "stale_generation_refused": true,
+    "managed_root_peak": 65536,
+    "managed_final": 0,
+    "peak_scope": "includes artificial pressure reservation; not process RSS",
+    "duration_seconds": 3.28,
+    "scope": "authored sequence/integer/float fixtures; packaged CT full pixels independently validated by CPU, not included in this small-frame Metal pipeline"
+  },
+  "remaining": [
+    "actual padding display needs explicit missing-value policy",
+    "transformation sequences/LUT/color/compression and full clinical presentation remain unqualified",
+    "full100format fidelity and physical HDR calibration are not established",
+    "NVIDIA remains deferred by user"
+  ]
+}

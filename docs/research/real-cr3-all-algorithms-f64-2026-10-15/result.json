@@ -1,0 +1,50 @@
+{
+  "status": "all six passed, warning-free locked offline rebuild",
+  "results": [
+    {
+      "algorithm": "Bilinear",
+      "points": 336,
+      "max_absolute_error": 3.0936066486297875e-08
+    },
+    {
+      "algorithm": "SmoothHue",
+      "points": 336,
+      "max_absolute_error": 4.0322531591474586e-08
+    },
+    {
+      "algorithm": "MalvarHeCutler",
+      "points": 336,
+      "max_absolute_error": 4.1521667049071453e-08
+    },
+    {
+      "algorithm": "Directional",
+      "points": 336,
+      "max_absolute_error": 5.049570495074818e-08
+    },
+    {
+      "algorithm": "Vng",
+      "points": 336,
+      "max_absolute_error": 3.172440382614994e-08
+    },
+    {
+      "algorithm": "Rcd",
+      "points": 336,
+      "max_absolute_error": 4.071639023162099e-08
+    }
+  ],
+  "test_seconds": 38.07,
+  "compared_RGB_components": 6048,
+  "acceptance": "finite RGB/exact alpha1; abs <=32*f32EPS*max(1,abs(f64 reference)), unchanged from prior weighted controls",
+  "source": "local real CR3 read in place; no source/frames exported",
+  "reference": "separate f64 stencil/weighted interpolation implementation, including clipped MHC and epsilon-regularized SmoothHue",
+  "memory": "GPU/normalization credits zero after each actual completion",
+  "limitations": [
+    "336 sampled pixels, not whole image",
+    "same native sensor samples, WB/black/white and native camera matrix as input; does not independently validate decoder or camera appearance",
+    "single camera; no all-camera/HDR physical/NVIDIA qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/real_bayer_compute.rs": "59c465cac2d0452d46f482c83ddeb152fb218d923b5c8915274346724d7fa78f",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "9a229396b82a9dca34a6e494f40948cb4dd7bd6cac7afffbbab8f704ea48e811"
+  }
+}

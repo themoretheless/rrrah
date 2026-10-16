@@ -1,0 +1,36 @@
+{
+  "status": "hard_quota_failure_and_cancellation_boundary_verified",
+  "cases": 4,
+  "disk_byte_limits": [
+    1,
+    2
+  ],
+  "payload_bytes": 1,
+  "modes": [
+    "codec failure after writing",
+    "generation cancellation while gated inside serialization"
+  ],
+  "checks": [
+    "With spare quota, completed key1 remains byte-exact after failed/cancelled key2",
+    "With full quota, completed LRU key1 is evicted before serialization and is not restored on failure/cancellation",
+    "New partial object and pending-key marker removed; pixel/queue credit0",
+    "Typed counters distinguish codec error from cancelled write",
+    "Same key2 can retry and restore exact new bytes within unchanged hard quota",
+    "Shutdown/drop removes store directory and final pixel credit0"
+  ],
+  "cache_lib": {
+    "passed": 144,
+    "failed": 0,
+    "ignored": 3
+  },
+  "changes": [
+    "Regression controls for spare/full quota",
+    "Public enqueue documentation now states pre-write LRU eviction boundary"
+  ],
+  "limits": [
+    "This records existing opportunistic cache semantics, not transactional preservation of evicted objects",
+    "Atomic new-object cleanup does not guarantee completed LRU victims survive failed replacement under full quota",
+    "No full image/display, physical slow disk, GPU, HDR or NVIDIA qualification"
+  ],
+  "source_sha256": "37a4aa950d646d162c35053ae853d430b4dde80fd20050e1ee634be44d60db60"
+}

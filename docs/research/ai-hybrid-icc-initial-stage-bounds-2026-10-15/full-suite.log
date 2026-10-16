@@ -1,0 +1,99 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.10s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms/src/lib.rs (target/ai-native-harness-20261013/moxcms/target/debug/deps/moxcms-9a255e08cd7690f9)
+
+running 67 tests
+test cicp::tests::test_to_xyz_using_absolute_coordinates ... ok
+test cicp::tests::test_to_xyz_using_absolute_coordinates_f ... ok
+test cicp::tests::test_to_xyz_using_absolute_coordinates_xyz ... ok
+test conversions::gray2rgb::tests::gray_rgb_roundtrip ... ok
+test conversions::lut4::hybrid_bound_tests::curve_intervals_cover_knots_nonmonotone_tables_and_shared_diff_rounding ... ok
+test conversions::lut4::hybrid_bound_tests::hybrid_bounds_cover_actual_fetch_and_affine_reference_across_order_changes ... ok
+test conversions::lut4::hybrid_bound_tests::hybrid_bounds_refuse_cell_crossings_invalid_short_work_and_cancel ... ok
+test conversions::lut4::hybrid_bound_tests::hybrid_initial_stage_bounds_cover_input_curves_clut_and_output_curves ... ok
+test conversions::lut4::hybrid_bound_tests::retained_cgats_hybrid_clut_box_control ... ignored, Requires RRRAH_CMYK_PROFILE pointing at the renderer's retained ICC
+test dt_ucs::tests::test_darktable_hcb ... ok
+test dt_ucs::tests::test_darktable_hsb ... ok
+test dt_ucs::tests::test_darktable_ucs_jch ... ok
+test dt_ucs::tests::test_darktable_ucs_jch_from_xyz ... ok
+test gamma::tests::bt1361_test ... ok
+test gamma::tests::hlg_test ... ok
+test gamma::tests::iec61966_test ... ok
+test gamma::tests::iec_test ... ok
+test gamma::tests::log100_sqrt10_test ... ok
+test gamma::tests::log100_test ... ok
+test gamma::tests::pq_test ... ok
+test gamma::tests::pqf_test ... ok
+test gamma::tests::rec709_test ... ok
+test gamma::tests::smpte240_test ... ok
+test gamma::tests::smpte428_test ... ok
+test gamma::tests::srgb_test ... ok
+test ictcp::tests::check_roundtrip ... ok
+test ictcp::tests::check_roundtrip_rgb ... ok
+test jzazbz::tests::jzazbz_round ... ok
+test jzczhz::tests::jzczhz_round ... ok
+test lab::tests::round_pcs_trip ... ok
+test lab::tests::round_trip ... ok
+test luv::tests::round_trip_lch ... ok
+test luv::tests::round_trip_luv ... ok
+test oklab::tests::round_trip ... ok
+test oklch::tests::round_trip ... ok
+test profile::tests::test_gray ... ok
+test profile::tests::test_invalid_rendering_intent_defaults_to_perceptual ... FAILED
+test profile::tests::test_matrix_shaper ... ok
+test profile::tests::test_perceptual ... ok
+test profile::tests::test_profile_version_parsing_patch_versions ... ok
+test profile::tests::test_profile_version_parsing_rejected ... ok
+test profile::tests::test_profile_version_parsing_standard ... ok
+test profile::tests::test_profile_version_v4_4_mapping ... ok
+test profile::tests::test_rendering_intent_invalid_defaults_to_perceptual ... ok
+test profile::tests::test_rgb_to_xyz_matrix_equals_colorant_matrix ... ok
+test profile::tests::test_us_swop_coated ... ok
+test profile::tests::test_v4_mluc_description_parses_as_localizable ... FAILED
+test profile::tests::test_v4_truncated_desc_tag ... FAILED
+test srlab2::tests::test_srlab2 ... ok
+test transform::tests::test_transform_gray_to_gray_alpha8 ... ok
+test transform::tests::test_transform_gray_to_rgb8 ... ok
+test transform::tests::test_transform_gray_to_rgba8 ... ok
+test transform::tests::test_transform_rgb10 ... ok
+test transform::tests::test_transform_rgb12 ... ok
+test transform::tests::test_transform_rgb16 ... ok
+test transform::tests::test_transform_rgb8 ... ok
+test transform::tests::test_transform_rgb8_pixel_independence ... ok
+test transform::tests::test_transform_rgba8 ... ok
+test transform::tests::test_transform_round_trip_rgb10 ... ok
+test transform::tests::test_transform_round_trip_rgb12 ... ok
+test transform::tests::test_transform_round_trip_rgb16 ... ok
+test transform::tests::test_transform_round_trip_rgb8 ... ok
+test writer::tests::to_s15_fixed16 ... ok
+test writer::tests::to_u8_fixed8 ... ok
+test xyy::tests::test_xyzd_xyy ... ok
+test yrg::tests::test_ych ... ok
+test yrg::tests::test_yrg ... ok
+
+failures:
+
+---- profile::tests::test_invalid_rendering_intent_defaults_to_perceptual stdout ----
+
+thread 'profile::tests::test_invalid_rendering_intent_defaults_to_perceptual' (28774820) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms/src/profile.rs:1580:53:
+swapped_intent.icc test asset: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- profile::tests::test_v4_mluc_description_parses_as_localizable stdout ----
+
+thread 'profile::tests::test_v4_mluc_description_parses_as_localizable' (28774831) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms/src/profile.rs:1603:60:
+Display P3.icc test asset: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+
+---- profile::tests::test_v4_truncated_desc_tag stdout ----
+
+thread 'profile::tests::test_v4_truncated_desc_tag' (28774832) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms/src/profile.rs:1630:56:
+truncated_desc_v4.icc test asset: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+
+
+failures:
+    profile::tests::test_invalid_rendering_intent_defaults_to_perceptual
+    profile::tests::test_v4_mluc_description_parses_as_localizable
+    profile::tests::test_v4_truncated_desc_tag
+
+test result: FAILED. 63 passed; 3 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

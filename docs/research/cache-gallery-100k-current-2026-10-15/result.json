@@ -1,0 +1,47 @@
+{
+  "swap": {
+    "status": "passed",
+    "distinct_keys": 100000,
+    "writes": 100000,
+    "reads": 100000,
+    "pressure_refusals_and_retry": 1000,
+    "seconds": 39.161796917,
+    "managed_root_peak": 131072,
+    "queue_peak": 4,
+    "physical_caps": {
+      "bytes": 4096,
+      "objects": 17
+    },
+    "teardown_ms": 4.069458,
+    "final_files_bytes_cpu_queue": 0
+  },
+  "gallery": {
+    "status": "passed",
+    "log": "/tmp/gallery-100k-current-metal.log",
+    "paths": 100000,
+    "source_contents": 4,
+    "planned_navigation_steps": 512,
+    "planned_surfaces": [
+      "SDR",
+      "HDR"
+    ],
+    "navigation_steps": 512,
+    "source_count": 100000,
+    "formats": 4,
+    "scan_and_navigation_seconds": 7.574038,
+    "total_test_seconds": 77.0,
+    "managed_peak": 1048576,
+    "final_managed": 0,
+    "SDR_HDR": "exact same-decoder cache consistency reference",
+    "nearest_prefetch": "protected",
+    "pressure_and_stale_cancellation": "passed"
+  },
+  "limitations": [
+    "tiny payloads isolate swap index and lifecycle, large HDR pressure verified separately",
+    "100000 gallery paths are hard links to four authored sources, not100000 distinct media files",
+    "bounded run does not prove multi-hour stability"
+  ],
+  "source_sha256": {
+    "crates/rrrah-cache/tests/sustained_swap.rs": "b43d6b4f0ae3b32ac6cdf583fbfb86f3a3438a80335cfd9276159af9faf79220"
+  }
+}

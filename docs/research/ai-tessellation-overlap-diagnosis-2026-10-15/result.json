@@ -1,0 +1,31 @@
+{
+  "status": "root admission overlap identified; compaction trial rejected; precision restored",
+  "refusal": {
+    "type": "hayro_interpret::shading::Triangle",
+    "length": 574588,
+    "old_capacity": 574588,
+    "requested_capacity": 718235,
+    "element_bytes": 240,
+    "old_and_new_bytes": 310277520,
+    "budget_bytes": 268435456
+  },
+  "rejected_compaction": {
+    "peak_admitted_bytes": 235471120,
+    "prior_retained_best": 232907656,
+    "reason": "extra full-buffer compaction overlap raises peak even though retained capacity decreases",
+    "action": "fully removed"
+  },
+  "retained_changes": "prior5/4 triangle growth + earlier edge-control release; opt-in existing trace reports failed type/capacity/bytes",
+  "verification": {
+    "interpreter_passed": 125,
+    "failed": 0,
+    "ignored": 1
+  },
+  "next_implementation": "emit compact96-byte geometry directly rather than retain240-byte generic Triangle, preserving original f64 coordinates and all four f32 components; existing API must remain compatible",
+  "limitations": [
+    "higher precision still refused and reverted",
+    "trace from one original-source tensor mesh",
+    "not production AI or whole-page fidelity qualification"
+  ],
+  "source_sha256": "87619d756db70475715a6aaa72c65911b9067825d01ae240e751317d6ff21dd8"
+}

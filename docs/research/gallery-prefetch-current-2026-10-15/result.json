@@ -1,0 +1,81 @@
+{
+  "status": "38 ordinary gallery tests and5 actual EOS R8 native RAW prefetch controls pass",
+  "session": 30514,
+  "log": "/tmp/gallery-current-prefetch-bin-tests-20261015.log",
+  "source_hashes": {
+    "crates/rrrah-app/src/gallery.rs": "815430b323b22827c59fdb036fa1f6c2296ecfcb08004974e596a60af0c3fc74",
+    "crates/rrrah-app/src/main.rs": "29939f4bed6ffa0b56fd7d4bed25faa184fcb2f6de9ad651f3f2e377a1be4faa"
+  },
+  "scope": "Current gallery unit/worker controls, excludes ignored external camera/Metal tests. No real large-collection throughput claim.",
+  "initial_command_correction": "Package rrrah is a binary; first --lib attempt failed before running tests. Corrected to --bin rrrah.",
+  "sandbox_result": {
+    "passed": 37,
+    "failed": 1,
+    "ignored": 14,
+    "cause": "UnixListener::bind temporary local socket denied by filesystem sandbox; same binary passed outside sandbox"
+  },
+  "result": {
+    "passed": 38,
+    "failed": 0,
+    "ignored": 14,
+    "log": "/tmp/gallery-current-prefetch-unsandboxed-20261015.log"
+  },
+  "source_hashes_after": {
+    "crates/rrrah-app/src/gallery.rs": "815430b323b22827c59fdb036fa1f6c2296ecfcb08004974e596a60af0c3fc74",
+    "crates/rrrah-app/src/main.rs": "29939f4bed6ffa0b56fd7d4bed25faa184fcb2f6de9ad651f3f2e377a1be4faa"
+  },
+  "source_snapshot_unchanged": true,
+  "binary_sha256": "88d3505275ad1cf14c8aa8a990fc92988247a436e97ff995c796d3921db550fe",
+  "cr3_controls": {
+    "log": "/tmp/gallery-current-cr3-prefetch-20261015.log",
+    "scope": "Explicit ignored raw_prefetch controls with actual local EOS R8 fixture; external Sony SRF test excluded. No GPU qualification.",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "seconds": 3.68
+  },
+  "additional_cr3_controls": {
+    "reversal": {
+      "passed": 1,
+      "log": "/tmp/gallery-current-cr3-reversal-20261015.log",
+      "sensor_samples_exact": 25494560,
+      "cancelled_forward_absent": true,
+      "backward_entries": 1,
+      "peak_bytes": 72357586,
+      "final_credit": 0
+    },
+    "raster_neighbor": {
+      "passed": 1,
+      "log": "/tmp/gallery-current-cr3-raster-neighbor-20261015.log"
+    }
+  },
+  "metal_reversal": {
+    "log": "/tmp/gallery-current-cr3-reversal-metal-valid-20261015.log",
+    "adapter": "Metal Apple M4 Max",
+    "initial_setup_error": "Unsupported RRRAH_GPU_VENDOR=apple failed before adapter creation; removed vendor override, actual Metal adapter confirmed.",
+    "status": "terminal passed",
+    "passed": 1,
+    "failed": 0,
+    "seconds": 57.76,
+    "full_size": [
+      6188,
+      4120
+    ],
+    "sensor_samples": 25494560,
+    "final_credit": 0,
+    "scope": "Same native decoder and Metal renderer reference versus worker/cache-restored data. Full sensor/metadata and SDR/HDR binary16 frames exact after cancellation and two further direction changes with one disk slot. Not independent decoding/rendering oracle or physical HDR display qualification."
+  },
+  "fixtures": {
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+  },
+  "hundred_thousand_directory_entries": {
+    "passed": 1,
+    "failed": 0,
+    "retained": 100000,
+    "enumeration_seconds": 0.430602542,
+    "test_seconds_including_creation_cleanup": 8.94,
+    "log": "/tmp/gallery-current-100k-scan-20261015.log",
+    "scope": "100000 actual temporary supported-extension directory entries; enumeration only, no media decoding or collection viewing."
+  }
+}

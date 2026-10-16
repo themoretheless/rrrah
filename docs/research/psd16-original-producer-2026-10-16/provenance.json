@@ -1,0 +1,41 @@
+{
+  "repository": "https://github.com/psd-tools/psd-tools",
+  "commit": "9ea48dad04a32a6977b3109ebfae23b667590d42",
+  "license": "MIT",
+  "fixtures": [
+    {
+      "source": "psd-tools-16bit5x5.psd",
+      "sha256": "c78689ea7b576f23bbd8b6b4f4993a365266c3ffc9aaa02cc20bef4a36a9d7a0",
+      "depth": 16,
+      "compression": "raw",
+      "merged_transparency": false,
+      "distinct_codes": 10,
+      "codes_not_exact_u8_expansion": 60,
+      "oracle_sha256": "5c13d67442a05e237ca48d81a71005b4cfc1d64b547e7e68457f6cb569020782",
+      "profile_bytes": 3144,
+      "profile_sha256": "3f6d674174f3804eb0dabdac90ae17486e898c5063a66f861c116ea033da8301",
+      "source_url": "https://raw.githubusercontent.com/psd-tools/psd-tools/9ea48dad04a32a6977b3109ebfae23b667590d42/tests/psd_files/16bit5x5.psd"
+    },
+    {
+      "source": "psd-tools-16bit5x5.psb",
+      "sha256": "e0c9b37ffb5981aaedbeec2b2dfa3ad561b57e86e5e04758ed859ca819cd427c",
+      "depth": 16,
+      "compression": "raw",
+      "merged_transparency": false,
+      "distinct_codes": 10,
+      "codes_not_exact_u8_expansion": 60,
+      "oracle_sha256": "5c13d67442a05e237ca48d81a71005b4cfc1d64b547e7e68457f6cb569020782",
+      "profile_bytes": 3144,
+      "profile_sha256": "3f6d674174f3804eb0dabdac90ae17486e898c5063a66f861c116ea033da8301",
+      "source_url": "https://raw.githubusercontent.com/psd-tools/psd-tools/9ea48dad04a32a6977b3109ebfae23b667590d42/tests/psd_files/16bit5x5.psb"
+    }
+  ],
+  "oracle": "Independent Python struct extraction of uncompressed big-endian composite RGB16 planes; opaque alpha",
+  "producer_application_verified": false,
+  "native_tests": {
+    "layered_passed": 66,
+    "layered_ignored": 2,
+    "decode_passed": 193,
+    "decode_ignored": 5
+  }
+}

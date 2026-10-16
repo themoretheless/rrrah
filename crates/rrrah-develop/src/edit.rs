@@ -114,6 +114,21 @@ impl EditSession {
         self.gesture = false;
         self.gesture_written = false;
     }
+    /// Start a new document baseline using the existing admitted allocation.
+    ///
+    /// Undo/redo and active gesture state are cleared. Invalid input leaves
+    /// the complete history unchanged; the memory reservation is retained.
+    pub fn reset(&mut self, initial: EditState) -> Result<(), EditError> {
+        initial.validate()?;
+        self.states.fill(initial);
+        self.start = 0;
+        self.count = 1;
+        self.cursor = 0;
+        self.gesture = false;
+        self.gesture_written = false;
+        self.original = initial;
+        Ok(())
+    }
     pub fn apply(&mut self, state: EditState) -> Result<bool, EditError> {
         state.validate()?;
         if state == self.current() {
@@ -157,6 +172,38 @@ impl EditSession {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn reset_keeps_reservation_clears_redo_and_gesture_and_validates_before_mutation() {
+        let bytes = u64::try_from(8 * std::mem::size_of::<EditState>()).unwrap();
+        let budget = MemoryBudget::new(bytes);
+        let mut history = EditSession::new(EditState::default(), 8, &budget).unwrap();
+        let mut state = EditState {
+            exposure_stops: 1.,
+            ..EditState::default()
+        };
+        history.apply(state).unwrap();
+        history.undo();
+        history.begin_gesture();
+        state.exposure_stops = -2.;
+        history.reset(state).unwrap();
+        assert_eq!(history.current(), state);
+        assert_eq!(history.original(), state);
+        assert_eq!(history.history_len(), 1);
+        assert!(!history.undo());
+        assert!(!history.redo());
+        assert_eq!(budget.used(), bytes);
+        let mut invalid = state;
+        invalid.exposure_stops = f32::NAN;
+        assert!(history.reset(invalid).is_err());
+        assert_eq!(history.current(), state);
+        state.exposure_stops = 0.;
+        history.apply(state).unwrap();
+        state.exposure_stops = 1.;
+        history.apply(state).unwrap();
+        assert_eq!(history.history_len(), 3);
+        drop(history);
+        assert_eq!(budget.used(), 0);
+    }
     #[test]
     fn gestures_redo_truncation_curves_and_bounded_ring() {
         let budget = MemoryBudget::new(3 * std::mem::size_of::<EditState>() as u64);

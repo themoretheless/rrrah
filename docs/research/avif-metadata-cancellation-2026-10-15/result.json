@@ -1,0 +1,95 @@
+{
+  "status": "current_native1048_metal24_eight_cases_allocator_and_module_lint_passed",
+  "session": 6843,
+  "log": "/tmp/avif-metadata-cancel-tests-20261015.log",
+  "scope": "request cancellation reaches box walking, item references, property associations, before ICC copy and metadata completion; periodic checks bound uninterrupted loop work",
+  "new_tests": [
+    "block_and_reference_walks_cancel_midstream_and_retry",
+    "avif_metadata_generation_cancels_during_associations_and_retries"
+  ],
+  "source_sha256": {
+    "crates/rrrah-decode/src/avif_color.rs": "fc851072eab369a3e14701ca45f5b3982e2e7a1d4b47ed28cec777e0eb7a6c82",
+    "crates/rrrah-decode/src/raster.rs": "ea3a85e25aa649d8557da446e23fb228f64d6313a0970f48097823458fd5f2f6"
+  },
+  "limitations": [
+    "does not interrupt inside third-party AV1 decode or a single allocation/copy",
+    "no latency or throughput measurement yet",
+    "previous streaming/full decoder/Metal results precede this change"
+  ],
+  "focused": {
+    "exit_code": 0,
+    "passed": 25,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 1096,
+    "runtime_seconds": 4.01
+  },
+  "full_decoder_log": "/tmp/avif-metadata-cancel-full-decoder-20261015.log",
+  "producer_public_log": "/tmp/avif-metadata-cancel-public-producer-20261015.log",
+  "full_decoder_session": 28449,
+  "producer_public_session": 96850,
+  "metal_build_log": "/tmp/avif-metadata-cancel-metal-build-20261015.log",
+  "metal_build_session": 27833,
+  "full_decoder": {
+    "exit_code": 0,
+    "passed": 1048,
+    "failed": 0,
+    "ignored": 73,
+    "runtime_seconds": 62.91
+  },
+  "producer_public": {
+    "exit_code": 0,
+    "tests_passed": 1,
+    "fixture_cases": 4,
+    "scope": "native integer pixels and prepared F32 match pinned oracles, final budget zero"
+  },
+  "static_check": {
+    "initial_exit_code": 127,
+    "initial_reason": "new periodic-counter idiom Clippy warnings; probe binary was not produced",
+    "fixed": "use usize::is_multiple_of for periodic reference checks, supported by project MSRV1.92",
+    "current_module_clippy_exit_code": 0,
+    "scope": "isolated production module, default warnings denied, dead_code allowed for diagnostic shell"
+  },
+  "allocator_followup": {
+    "exit_code": 0,
+    "input_bytes": 528470,
+    "associations": 522240,
+    "extra_rust_capacity_peak": 384,
+    "retained_extra": 0
+  },
+  "final_source_sha256": {
+    "crates/rrrah-decode/src/avif_color.rs": "735ea5ef1e7a33fe6dcf654e6673e7928e408ba85bbe661c0b135efb4c3517ae",
+    "crates/rrrah-decode/src/raster.rs": "ea3a85e25aa649d8557da446e23fb228f64d6313a0970f48097823458fd5f2f6"
+  },
+  "metal_final": {
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "fixtures": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "binary_sha256": "0ed7ac1df17209a196253683f45fa72347d5d3293f72a0a2edf94118dcfac289",
+    "scope": "offscreen real Metal, exact F32/SDR/HDR after source-deleted swap, pressure cancellation retry, root and queue zero"
+  },
+  "final_native_session": 17377,
+  "final_native": {
+    "exit_code": 0,
+    "passed": 1048,
+    "failed": 0,
+    "ignored": 73,
+    "runtime_seconds": 33.57,
+    "source_drift": false
+  },
+  "subsequent_source_change": {
+    "report": "../avif-aux-reference-streaming-2026-10-15/result.json",
+    "scope": "replace per-auxiliary-target list with two reference passes and boolean inverse link; previous results remain frozen snapshot"
+  }
+}

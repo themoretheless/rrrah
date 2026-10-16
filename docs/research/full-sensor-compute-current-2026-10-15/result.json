@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "dimensions": [
+    6188,
+    4120
+  ],
+  "pixels": 25494560,
+  "dispatch_windows": 7,
+  "pixel_contract": "all output pixels exactly compared for both managed and interleaved paths; HDR signed RGB and independent alpha; source fields distinguish dispatch windows",
+  "pressure_and_cancellation": "CPU/GPU exhaustion refuses, cancellation after admission releases temporary credits, source retained, retry exact",
+  "managed_gpu_peak_bytes": 1223738992,
+  "managed_cpu_peak_bytes": 815825920,
+  "final_cpu_gpu_used_bytes": [
+    0,
+    0
+  ],
+  "timings_ms": {
+    "compute_submission_wait_p50": 3.243375,
+    "compute_submission_wait_samples": [
+      2.651042,
+      2.863833,
+      3.243375,
+      3.357625,
+      5.060708
+    ],
+    "interleaved_end_to_end": 3091.667,
+    "managed_end_to_end": 1996.286
+  },
+  "limitations": [
+    "correctness build uses unoptimized local crates; end-to-end times are not release performance",
+    "compute-only timing excludes uploads and complete readback",
+    "authored exposure fields do not qualify native camera decoding or Bayer demosaicing",
+    "logical budget credits exclude driver/system GPU memory"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/compute_readback.rs": "f12c2ac18f0d67f8330e68caead4eef05cf0e84fec780060619ec6099e201a66"
+  },
+  "test_binary_sha256": "f03144597104959caae82698a7e720a241591fe87ce4a1be56782a594334c8b5"
+}

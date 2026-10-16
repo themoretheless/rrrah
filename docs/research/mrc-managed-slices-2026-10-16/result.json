@@ -1,0 +1,35 @@
+{
+  "status": "MRC selected section and extended metadata use managed buffers; exact native/window and clone lifetime admission verified",
+  "problem": "Ordinary Vec output and copied extended header bypassed request memory budget",
+  "change": {
+    "pixels": "Selected float RGBA plane admitted before allocation; source array is borrowed",
+    "metadata": "extended_header public field now PixelBuffer<u8> rather than Arc<Vec<u8>>, sharing both bytes and budget reservation across clones",
+    "cancellation": "Extended metadata copied in64KiB checked chunks; per4096samples cancellation unchanged",
+    "cap": "Explicit extended header MAX_RASTER_BYTES cap"
+  },
+  "tests": {
+    "independent_containers": 10,
+    "selected_section_oracles": 20,
+    "native_admission": "Every oracle: source bytes +32-byte extended header +240-byte output exact peak; one-byte-short failure releases credit",
+    "clone_lifetime": "After dropping MrcImage, standalone extended_header clone retains32bytes until final clone dropped",
+    "window": "Source +480bytes exact peak,240byte live output; one-byte-short window refusal releases all credit",
+    "scientific": {
+      "passed": 43,
+      "failed": 0,
+      "ignored": 7
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_warnings_denied": "passed"
+  },
+  "limits": [
+    "Header fields, stack state and allocation metadata are not total process RSS accounting",
+    "Public extended_header type changed; consumers explicitly requiring Arc<Vec<u8>> must adapt to PixelBuffer<u8>",
+    "No new Metal runtime check in this turn; native values and explicit window math retain oracle checks",
+    "Full spatial/display qualification and unsupported MRC modes remain open"
+  ],
+  "source_sha256": "e3c0f36435ebadbf74e9ea162ac6a65c766274ae83ac9bf7666c07c484b14d7c"
+}

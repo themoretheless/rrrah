@@ -1,0 +1,108 @@
+{
+  "status": "zero_frame_correlated_with_rrrah_gpu_hang_and_system_gpu_reset_underlying_hang_unresolved",
+  "build_session": 80474,
+  "build_log": "/tmp/viewer-prefetch-current-build-20261015.log",
+  "source_manifest": "source-start.json",
+  "scope": "ordinary prefetch plus explicit Metal ping-pong navigation over eight files/seven formats; AVIF pixel oracle separately qualified",
+  "baseline_build": {
+    "exit_code": 0,
+    "executed_tests": false
+  },
+  "expansion": [
+    "ravif-8bit-prem.avif",
+    "ravif-10bit-prem.avif"
+  ],
+  "expanded_build_log": "/tmp/viewer-prefetch-avif-expanded-build-20261015.log",
+  "expanded_build_session": 47893,
+  "concurrent_changes_detected": [
+    "crates/rrrah-core/src/thumbnail.rs",
+    "crates/rrrah-core/src/lib.rs",
+    "crates/rrrah-core/src/develop/opcodes.rs"
+  ],
+  "verification_policy": "preserve concurrent changes, revalidate build fingerprints after completion and compare current source manifest before/after execution",
+  "ordinary_session": 39485,
+  "mixed_metal_session": 93617,
+  "binary_sha256": "949a76b3232a5465bf5c784e45ff1196f9e74c4565f43f313c9d67717de0edfe",
+  "ordinary": {
+    "passed": 35,
+    "failed": 0,
+    "ignored": 17
+  },
+  "metal_failure": {
+    "exit_code": 101,
+    "step": 100,
+    "selected": 2,
+    "fixture": "float-none-rec709-declared.exr",
+    "attachment": "SDR",
+    "observation": "all-zero readback; exact reference differs"
+  },
+  "repeat": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "steps": 120,
+    "files": 8,
+    "formats": 7
+  },
+  "interpretation": "one repeat passed; original all-zero readback remains unexplained and is not cleared by a green rerun",
+  "stress": {
+    "runs": [
+      {
+        "run": 1,
+        "exit_code": 0,
+        "seconds": 13.177295042
+      },
+      {
+        "run": 2,
+        "exit_code": 0,
+        "seconds": 11.054034082999998
+      },
+      {
+        "run": 3,
+        "exit_code": 0,
+        "seconds": 15.195866375000001
+      },
+      {
+        "run": 4,
+        "exit_code": 0,
+        "seconds": 9.904078000000005
+      },
+      {
+        "run": 5,
+        "exit_code": 0,
+        "seconds": 16.090165625000004
+      }
+    ],
+    "steps_per_run": 120,
+    "total_steps": 600,
+    "exact_visible_attachment_comparisons": 1200,
+    "scope": "five separate same-binary sequential Metal executions; not one continuous soak"
+  },
+  "original_failure_resolved": false,
+  "diagnostic_build_session": 75032,
+  "diagnostic_source_sha256": "473f1e4f2980b4109b1ecf356d256803522266abe528e4c71dc4b8ae9204bdb0",
+  "diagnostic_change": "GPU warn logger and compact exact-comparison mismatch metadata; no renderer fix or relaxed assertion",
+  "diagnostic_run": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "steps": 120,
+    "gpu_error_log_messages": 0
+  },
+  "system_evidence": {
+    "local_timestamp": "2026-10-15 02:14:00.801",
+    "process": "rrrah-a37e2f05ecca44b8",
+    "pid": 18113,
+    "metal_error": "Caused GPU Hang Error (00000003:kIOGPUCommandBufferCallbackErrorHang)",
+    "kernel": "GPURestartBegin/End",
+    "other_observation": "WindowServer command buffers discarded as innocent victims",
+    "interpretation": "hang attributed by Metal to this test process; cannot blame an external application; trigger still unknown"
+  },
+  "actual_backend_audit": {
+    "version": "wgpu-hal30.0.0, verified Cargo.toml/Cargo.lock",
+    "source": "metal/mod.rs Queue::submit completion callback and Fence::get_latest",
+    "finding": "callback marks fence synchronized without status check; Error is considered terminal in fence get_latest; a successful wait alone is not evidence of successful GPU execution",
+    "correction": "initial exploratory source lookup used cached29.0.4; verified equivalent relevant completion behavior in actual30.0.0"
+  },
+  "next_required": "observe native Metal command-buffer status and error on test and production submissions; diagnose hang before claiming stable Metal qualification"
+}

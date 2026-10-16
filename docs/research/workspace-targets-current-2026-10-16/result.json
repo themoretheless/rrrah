@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "exit_code": 0,
+  "command": "cargo +stable test --workspace --all-targets --locked --offline",
+  "features": "workspace default features",
+  "test_suites": 307,
+  "passed": 2350,
+  "failed": 0,
+  "ignored": 292,
+  "empty_suites": 161,
+  "log_sha256": "33e6ae018028a0cefa613826fb2fd28de0d40c966f7aae98b2e7ab5241dfb0d2",
+  "scope": "default-feature all-targets including libraries,binaries,integration tests,examples,benches; excludes doctests,all-features,ignored tests and external qualification",
+  "history": [
+    "sandbox Unix-socket setup denied",
+    "host retry exposed stale STI fixture budget;fixed test quota and added low-budget refusal regression",
+    "full retry completed with exit0"
+  ],
+  "warnings": "unused imports in gallery test modules as included by benches;not a strict Clippy or fmt pass"
+}

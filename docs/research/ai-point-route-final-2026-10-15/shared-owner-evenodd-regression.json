@@ -1,0 +1,20 @@
+{
+  "regression": "Shared region ownership across two native paint commands with different source priorities; NonZero/EvenOdd paths, duplicate contours, holes and exact boundary coordinates",
+  "points": 63,
+  "default_tests": {
+    "passed": 270,
+    "failed": 0,
+    "ignored": 12
+  },
+  "old_path_control": {
+    "passed": 1,
+    "failed": 0,
+    "disabled": [
+      "direct point owner",
+      "lazy point coverage",
+      "single-point route specialization"
+    ]
+  },
+  "result": "Exact native pixel storage equals independently selected maximum-covered source priorities and explicit ordered blending in all points; old and new paths both satisfy the oracle",
+  "source_sha256": "b053a8e25f0b4ce41b453f2e4ec521c7b4f6f94ab3e590a0e708eb0a59d9bf30"
+}

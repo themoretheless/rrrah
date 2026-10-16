@@ -1,0 +1,295 @@
+{
+  "status": "broad ordinary regression after native DICOM expansion passed",
+  "toolchain": "stable (project configured stable; nightly maintenance is separate)",
+  "results": {
+    "viewer": {
+      "log": "/tmp/viewer-after-dicom-unsandboxed-20261016.log",
+      "passed": 244,
+      "failed": 0,
+      "ignored": 66,
+      "targets": [
+        {
+          "target": "Running unittests src/main.rs (target/debug/deps/rrrah-973d254e7d272201)",
+          "passed": 244,
+          "failed": 0,
+          "ignored": 66
+        }
+      ]
+    },
+    "storage": {
+      "log": "/tmp/storage-after-dicom-20261016.log",
+      "passed": 218,
+      "failed": 0,
+      "ignored": 8,
+      "targets": [
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_cache-9b63e723e982ac26)",
+          "passed": 140,
+          "failed": 0,
+          "ignored": 2
+        },
+        {
+          "target": "Running tests/cache_stress.rs (target/debug/deps/cache_stress-7a48167cf60809d9)",
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running tests/parallel_swap_budget.rs (target/debug/deps/parallel_swap_budget-52f2ac9d7847a6aa)",
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running tests/sustained_swap.rs (target/debug/deps/sustained_swap-5e70643a4a69b4bc)",
+          "passed": 5,
+          "failed": 0,
+          "ignored": 5
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_memory-a0d195a99e254284)",
+          "passed": 40,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running tests/ttl_ownership.rs (target/debug/deps/ttl_ownership-5975a2cf3f6bdc6e)",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_swap-5f4634a443639d29)",
+          "passed": 16,
+          "failed": 0,
+          "ignored": 1
+        },
+        {
+          "target": "Running tests/cancelled_restore.rs (target/debug/deps/cancelled_restore-d3b082964fbd28a4)",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running tests/expired_cache_spill.rs (target/debug/deps/expired_cache_spill-0749cfd9d3ab4e31)",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running tests/parallel_restore.rs (target/debug/deps/parallel_restore-ffa61d79fd4bddf2)",
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Doc-tests rrrah_cache",
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Doc-tests rrrah_memory",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Doc-tests rrrah_swap",
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    "native_libraries": {
+      "log": "/tmp/native-libraries-after-dicom-20261016.log",
+      "passed": 1207,
+      "failed": 0,
+      "ignored": 79,
+      "targets": [
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_animation-51042870d1a4fa9c)",
+          "passed": 28,
+          "failed": 0,
+          "ignored": 1
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_color-4cc5c83a6128ef48)",
+          "passed": 35,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_core-fb49f8bfb1310cae)",
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_decode-e2221e8aab5b3c0b)",
+          "passed": 185,
+          "failed": 0,
+          "ignored": 2
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_demosaic-fcc93856def2b316)",
+          "passed": 12,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_develop-3483c2a5290f8bd7)",
+          "passed": 97,
+          "failed": 0,
+          "ignored": 2
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_layered-d5e15534060f9387)",
+          "passed": 50,
+          "failed": 0,
+          "ignored": 1
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_mesh-503884be29aa8374)",
+          "passed": 55,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_raw-485af2efd12f0013)",
+          "passed": 433,
+          "failed": 0,
+          "ignored": 59
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_scientific-5302f10e79cf639f)",
+          "passed": 29,
+          "failed": 0,
+          "ignored": 4
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_texture-7e85e6b99a2847a4)",
+          "passed": 57,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_vector-0bfbf972514ba01f)",
+          "passed": 178,
+          "failed": 0,
+          "ignored": 10
+        },
+        {
+          "target": "Running unittests src/lib.rs (target/debug/deps/rrrah_vfx-980217a55e3b7f24)",
+          "passed": 48,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    }
+  },
+  "totals": {
+    "passed": 1669,
+    "failed": 0,
+    "ignored": 153
+  },
+  "source_snapshot": {
+    "rrrah-app": {
+      "source_files": 23,
+      "aggregate_sha256": "5ce9e8c71cbc1390ff5371b78e9917f4893ca8b83205da18425e056f368dcc9e"
+    },
+    "rrrah-cache": {
+      "source_files": 14,
+      "aggregate_sha256": "6a0fe4274e10eae07856b4127e8e589035aff56c30023573bae7931926d1f35c"
+    },
+    "rrrah-memory": {
+      "source_files": 4,
+      "aggregate_sha256": "9936446bc47d22ffe36dadaa11ffc6d40acf233f46c851ee1d7ce14c1056cb82"
+    },
+    "rrrah-swap": {
+      "source_files": 3,
+      "aggregate_sha256": "d878888f689dae53a3a1a0c5cd4af0f55a653390cc2c1d7f2197f847a2458ad1"
+    },
+    "rrrah-raw": {
+      "source_files": 66,
+      "aggregate_sha256": "911f80a4faa449a0cf9ddc70f62f81fa1cad1bb384bb14d47e78c7498793ac98"
+    },
+    "rrrah-mesh": {
+      "source_files": 11,
+      "aggregate_sha256": "b5505b9265f156f795ded2256168614980cba9388e5f22c8a0efb211afbf2ea5"
+    },
+    "rrrah-vector": {
+      "source_files": 24,
+      "aggregate_sha256": "13d6e00178cc78194573474c6f8c30c03f06d48bfaf97d836f01959b03f30dbb"
+    },
+    "rrrah-scientific": {
+      "source_files": 11,
+      "aggregate_sha256": "3a9d23b337c9d1ede5c9758d9bac512c81dc58dc168647aaa40737030790da10"
+    },
+    "rrrah-vfx": {
+      "source_files": 9,
+      "aggregate_sha256": "d6d09193f41831009c8fd795964d2f2599dc7ab45b64dcce5f885d0c439b2ead"
+    },
+    "rrrah-layered": {
+      "source_files": 5,
+      "aggregate_sha256": "d636b11c750da5f558d7caf1641f21c14e70dbaf0c132b86104d9e65b9afdfeb"
+    },
+    "rrrah-texture": {
+      "source_files": 14,
+      "aggregate_sha256": "1d508e694e3c444dda491556fc03ba9fc45a04e41e2e80b5ede2f1d4025d9914"
+    },
+    "rrrah-animation": {
+      "source_files": 8,
+      "aggregate_sha256": "aa24ac6a42bb85aadb7f7f5cdefb124ad626d56071e9721d9f51b3a283d7d10e"
+    },
+    "rrrah-decode": {
+      "source_files": 28,
+      "aggregate_sha256": "21c2f0f1fe8079ff0868bbff6b8e5d94a9e1776154eefb8bf36dc388e62caf3c"
+    },
+    "rrrah-color": {
+      "source_files": 4,
+      "aggregate_sha256": "22d0e047d5408538dcca459a4c10d8c55d4a15643fe7d364bdead8ac1006f1a8"
+    },
+    "rrrah-demosaic": {
+      "source_files": 5,
+      "aggregate_sha256": "da04dfae74a2ca16b27222c7da8f026d10cefdbc8e13abcd5da32a60b06714f5"
+    },
+    "rrrah-develop": {
+      "source_files": 15,
+      "aggregate_sha256": "d9ee658d89d59f5b11a867aad56d9b563c3b653ba01561bf9a5fa3f66a502f55"
+    },
+    "rrrah-core": {
+      "source_files": 2,
+      "aggregate_sha256": "99958fa68c7b751f995e2dc1d86a4c7da791b993ed1496c3ea53b7e14e1061ed"
+    }
+  },
+  "scope": {
+    "viewer": "all ordinary rrrah binary unit tests, including DICOM frame/window/color states, cache/swap and navigation integration",
+    "native_libraries": "13 native library lib targets; includes RAW433, commondecode185, scientific29, mesh55, vector178 and other listed modules; no main GPU/CUDA test targets in this run",
+    "storage": "cache/memory/swap unit, integration and doctest targets;215 non-doctest plus3 doctests",
+    "ignored": "manual/external/oracle/hardware/sustained tests were not executed by this broad run; not counted as passed",
+    "gpu": "no new GPU run in this checkpoint; separate preceding DICOM YBR required Metal evidence at docs/research/dicom-native-ybr-2026-10-16/result.json",
+    "production_changes_this_checkpoint": false
+  },
+  "sandbox_failure": {
+    "log": "/tmp/viewer-after-dicom-20261016.log",
+    "initial_result": {
+      "passed": 242,
+      "failed": 2,
+      "ignored": 66
+    },
+    "tests": [
+      "drop_inspection::tests::symlinks_broken_links_and_special_files_are_rejected",
+      "gallery::tests::required_source_stamp_rejects_non_files_and_preserves_identity"
+    ],
+    "cause": "sandbox forbids UnixListener::bind temporary local sockets (EPERM); failed before assertions on inspected file behavior",
+    "resolution": "same whole viewer command rerun with escalated filesystem/socket permissions;244pass/0fail/66ignored; no test or production weakening"
+  },
+  "requirements_remaining": {
+    "format_catalog": "94implementedsubsets/6Pending/0fullyqualified per current docs/IMAGE_FORMATS_100.md; broad ordinary regressions do not certify allvariants or interoperability",
+    "DICOM": "palette color, compressed transfer syntax and transformation/LUT/presentation qualification remain open; current native RGB/YBR/scalar subsets preserved",
+    "NVIDIA": "deferred explicitly by user; not claimed passed",
+    "cache_soak": "this checkpoint uses ordinary integration tests; previous sustained reports remain separately scoped, not refreshed here"
+  }
+}

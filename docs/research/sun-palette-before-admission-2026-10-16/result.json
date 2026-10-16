@@ -1,0 +1,27 @@
+{
+  "status": "Sun Raster visible palette indices validated before decoder output/RLE scratch admission",
+  "change": "Fallible shared RLE walker validates visible mapped8bit bytes during nonallocating grammar pass. Raw indexed rows checked in cancellation-aware chunks before output allocation. Padding values ignored. Output conversion keeps defensive index guard.",
+  "regression": {
+    "zero_output_budget": "Invalid raw/RLE visible index1 for one-entry map returns InvalidSun, no managed allocation; valid pixel0 plus invalid padding99 instead reaches typed Memory",
+    "valid_controls": "With exact4byte raw or6byteRLE budget output[4,5,6,255] correct",
+    "cross_row_run": "RLE repeat beginning at padding but covering next row visible pixel is refused",
+    "managed_peak": 0,
+    "scope": "Borrowed/already available source; not file-reader admission precedence"
+  },
+  "tests": {
+    "decode_lib": {
+      "passed": 188,
+      "failed": 0,
+      "ignored": 2
+    },
+    "production_lib_clippy_no_deps_warnings_denied": "passed"
+  },
+  "limits": [
+    "Raw indexed data has an added validation scan; no speed improvement claimed",
+    "RLE full expansion remains managed whole-image scratch, not row streaming",
+    "Source file reader may require admission before reaching this decoder",
+    "No new GPU/runtime navigation check this turn",
+    "Full100format objective remains incomplete"
+  ],
+  "source_sha256": "2de784b9def2221c0f7a59439603976d0f34c4624a6a83baf11cad383ad46b16"
+}

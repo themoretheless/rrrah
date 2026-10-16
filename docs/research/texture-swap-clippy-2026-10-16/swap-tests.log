@@ -1,0 +1,58 @@
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.90s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_swap-5f4634a443639d29)
+
+running 17 tests
+test segmented::tests::scoped_reader_row_timing_comparison ... ignored, manual warm-filesystem scoped reader timing comparison
+test concurrency_tests::already_cancelled_restore_allocates_no_managed_memory ... ok
+test tests::roundtrip_shared_handles_and_buffers_retain_their_own_quotas ... ok
+test tests::handles_keep_store_alive_and_zero_count_refuses_admission ... ok
+test concurrency_tests::concurrent_restores_share_ram_cap_without_consuming_disk_object ... ok
+test concurrency_tests::concurrent_writes_share_disk_quota_and_reservations_roll_back ... ok
+test tests::streaming_cancellation_stays_cancelled_after_a_single_signal ... ok
+test segmented::tests::bounded_ranges_preserve_hdr_bits_verify_requested_blocks_and_release_owners ... ok
+test tests::mixed_small_and_bulk_restore_keeps_prefix_tail_and_hash_exact ... ok
+test tests::corruption_truncation_trailing_and_foreign_handles_reject ... ok
+test concurrency_tests::multiblock_restore_cancellation_releases_ram_and_preserves_retry ... ok
+test segmented::tests::scoped_reader_reuses_verified_bytes_and_invalidates_failed_block ... ok
+test tests::cancellation_failed_length_and_ram_failure_leave_source_and_usage_intact ... ok
+test stream_tests::stream_roundtrip_rejects_partial_decoders_and_bad_encoders ... ok
+test segmented::tests::failed_writes_ranges_and_cancellation_roll_back_all_credits ... ok
+test segmented::tests::packed_rows_match_independent_source_slices_and_skip_unrequested_blocks ... ok
+test segmented::tests::generated_large_source_and_tiny_range_stay_within_one_block_plus_index ... ok
+
+test result: ok. 16 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/cancelled_restore.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/cancelled_restore-d3b082964fbd28a4)
+
+running 1 test
+test partially_read_cancelled_restore_releases_ram_and_preserves_retryable_handle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/expired_cache_spill.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/expired_cache_spill-0749cfd9d3ab4e31)
+
+running 1 test
+test expired_values_transfer_to_streamed_swap_without_copy_or_early_budget_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+
+     Running tests/parallel_restore.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/parallel_restore-ffa61d79fd4bddf2)
+
+running 4 tests
+test cancellation_during_batch_is_latched_and_releases_scratch ... ok
+test exact_stream_and_memory_pressure_fallback ... ok
+test concurrent_stores_share_one_scratch_slot_and_do_not_wait ... ok
+test parallel_integrity_rejects_partial_corrupt_trailing_and_truncated_objects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+   Doc-tests rrrah_swap
+
+running 2 tests
+test crates/rrrah-swap/src/lib.rs - (line 50) ... ok
+test crates/rrrah-swap/src/lib.rs - (line 18) ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 2.07s; merged doctests compilation took 1.38s

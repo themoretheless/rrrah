@@ -1,0 +1,24 @@
+
+running 19 tests
+test psd::tests::packbits_repeats_noop_and_row_limits ... ok
+test psd::tests::opaque_float_alpha_preserves_tiny_samples_signed_zero_and_nan_bits ... ok
+test psd::tests::retains_sixteen_bit_precision ... ok
+test psd::tests::float_unmatting_refuses_new_overflow_and_preserves_representable_hdr ... ok
+test psd::tests::retains_float_values ... ok
+test psd::tests::malformed_hdr_toning_sections_refuse_before_managed_admission ... ok
+test psd::tests::independent_prediction_retains_high_precision ... ok
+test psd::tests::explicit_srgb_assumption_applies_to_untagged_psd_and_psb ... ok
+test psd::tests::raw_planes_need_only_output_credit_for_all_sample_precisions ... ok
+test psd::tests::zip_rejects_truncation_and_trailing_stream_data ... ok
+test psd::tests::icc_resource_is_admitted_before_copy_and_shared_by_raster_clones ... ok
+test psd::tests::pinned_original_psd_psb_rgb16_composites_match_independent_planar_oracle ... ok
+test psd::tests::composition_buffers_respect_peak_credit_and_owner_lifetime ... ok
+test psd::tests::white_unmatting_cancels_before_next_4096_pixel_block_at_every_precision ... ok
+test psd::tests::independent_high_precision_alpha_controls_preserve_precision_and_hdr ... ok
+test psd::tests::original_rgb_gray_16_32_composites_match_independent_planes ... ok
+test psd::tests::zip_empty_blocks_are_input_bounded_cancel_and_release_credit ... ok
+test psd::tests::original_gray_merged_alpha_psd_psb_matches_independent_decoders ... ok
+test psd::tests::psb_rle_noop_rows_check_cancellation_and_preserve_valid_output ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

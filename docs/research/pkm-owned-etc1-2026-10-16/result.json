@@ -1,0 +1,55 @@
+{
+  "status": "pkm_etc1_uses_owned_rust_block_decoder",
+  "changes": [
+    "Own individual4-bit and differential5-bit endpoint reconstruction",
+    "Own column-major selector extraction, split orientation, eight modifier tables and channel clamp",
+    "Keep pre-admission differential endpoint validation, managed RGBA output, cancellation and crop logic"
+  ],
+  "independent_oracle": {
+    "source": "https://android.googlesource.com/platform/frameworks/native/+/refs/heads/main/opengl/libs/ETC1/etc1.cpp",
+    "source_sha256": "5e6e1f9d5515f9a4ee58ef3e40ec71ed23995ae1410c72db3ccab6e25ae1931b",
+    "role": "temporary C++ test oracle only; not production dependency",
+    "blocks": 4096,
+    "pixels": 65536,
+    "checks": "all RGB bytes exact, alpha255; both modes, both splits, all modifier table pairs, valid differential sign/boundary controls and seeded selectors"
+  },
+  "checks": {
+    "texture_lib": {
+      "passed": 76,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "app_cpu": {
+      "states": 290,
+      "swap_writes": 290,
+      "swap_reads": 290,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 290,
+      "readbacks": 1740,
+      "swap_writes": 290,
+      "swap_reads": 290,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "Owned path applies to ETC1 kind0 in PKM; ETC2 paths retain texture2ddecoder",
+    "EAC R11/RG11 native11-bit formats remain unsupported, not qualified via8-bit truncation",
+    "Synthetic block oracle and six PKM fixtures do not establish full ETC2/EAC or100-format qualification",
+    "No throughput improvement claim; no new physical HDR or NVIDIA qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/pkm.rs": "d3ae1c75072f3ba435b25618a13a7ce752b189b79bb559f4f38fba74674b3ff9",
+    "scripts/generate-etc1-block-oracles.py": "08c519b857a5219bf3a6f6d370033c5ae864c513fd43363e0eb65838db095267",
+    "tests/fixtures/raster/etc1-block-oracles.bin": "0cf34deb2ad130d8afaafaa0a7a9195e2a2242c0db2af725e4d04b7fe7e85cd1",
+    "tests/fixtures/raster/etc1-block-oracles.rgb": "c09a0e8677061b24a1dde95832c85dab1bae87d275eb632980fd25349b4407dd"
+  }
+}

@@ -1,0 +1,15 @@
+
+running 7 tests
+test dicom_pipeline_tests::managed_nrrd_mrc_fits_windows_ram_swap_and_metal ... ignored, actual Metal SDR/HDR scientific NRRD/MRC/FITS cache and swap verification
+test dicom_pipeline_tests::rle_collection_latency ... ignored, manual DICOM RLE decode/RAM/swap latency measurement; warm OS file cache
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_metal_readback ... ignored, actual Metal uncompressed DICOM window/frame cache and swap SDR/HDR readback
+test dicom_pipeline_tests::prefetch_watchdog_excludes_gpu_idle_but_cancels_a_blocked_call ... ok
+SCIENTIFIC_ARRAY_PIPELINE cases=124 gpu=false readbacks=0 ram_pressure_hits=124 swap_writes=124 swap_reads=124 blocked_decoder=true final=0
+test dicom_pipeline_tests::managed_nrrd_mrc_fits_windows_ram_swap_and_blocked_prefetch ... ok
+RLE_PREFETCH_WINDOWS scenarios=120 frames=64 directions=2 policies=count,bytes zero_and_unbounded=true nearest_retained=true visible_retained=true final=0
+test dicom_pipeline_tests::rle_multiframe_prefetch_windows_preserve_nearest_under_count_and_byte_limits ... ok
+DICOM_SCALAR_PIPELINE cases=352 rle_states=31 full_palette_frames=7 ram_pressure_hits=352 swap_writes=352 swap_reads=352 shape_controls=0 stale_refused=true decoder_blocked_prefetch=true ttl_nonzero=true visible_ttl_protected=true gpu=false root_peak=8388608 final=0
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_blocked_prefetch ... ok
+
+test result: ok. 4 passed; 0 failed; 3 ignored; 0 measured; 308 filtered out; finished in 0.27s
+

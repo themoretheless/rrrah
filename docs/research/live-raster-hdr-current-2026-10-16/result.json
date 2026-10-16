@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "binary_sha256": "e1d78c565bfca51c3aaccda287e8c0e968850e826a6c98bf028ac6c94efebd9f",
+  "cases": [
+    {
+      "fixture": "heif-physical-alpha.heic",
+      "sha256": "47dbc6f47f6d52a79ac48abc50c7d6511c0703ce46a277c097d334e283e5d09b",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 175,
+      "elapsed_seconds": 3.012,
+      "frames_after_resize": 145,
+      "log_sha256": "2b0d62f46490cdc25f035c5e3299e1db28e5d67e5defbcf06cd70821c67e1638"
+    },
+    {
+      "fixture": "heif-physical-rotate90.heic",
+      "sha256": "344ee76cab184873f07d91eb42f9dfeaa54825376b22fc31a4c1e34c09dbd00f",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 174,
+      "elapsed_seconds": 3.002,
+      "frames_after_resize": 144,
+      "log_sha256": "56f2a301a9c6c1f83ee4e6008823f1724158035ca268b38484b0b60a314005e9"
+    },
+    {
+      "fixture": "heif-physical-mirror.heif",
+      "sha256": "d7fe7412b06a069ec94fa91095216a88ab6ff25976840fb0d65fcb4fa87d1332",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 176,
+      "elapsed_seconds": 3.005,
+      "frames_after_resize": 146,
+      "log_sha256": "53644b64e7933aaea9787ce5bf50b98e6fd2ad55a4f83d5f74e3fa7f8b3207f8"
+    },
+    {
+      "fixture": "float-shifted-window-negative.exr",
+      "sha256": "70fe9844ea7ea6e32020b79f9cae433bde4644c023b99809ab902507489b990b",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 174,
+      "elapsed_seconds": 3.005,
+      "frames_after_resize": 144,
+      "log_sha256": "5730e4167cd24e4c0ebc67a31e04392fb3223c8e545b7b4e419b3729960863b2"
+    },
+    {
+      "fixture": "float-shifted-window-positive-crop.exr",
+      "sha256": "f1f2957336bfe41abd9b954698d395a8cb9c1ca2f182d5b2464db6d938be0d4f",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 174,
+      "elapsed_seconds": 3.014,
+      "frames_after_resize": 144,
+      "log_sha256": "dbf6b1c2d3bd336c397b4f6d8e6b21a55180e7a57e696e1a2ccd5654311e1c46"
+    },
+    {
+      "fixture": "float-shifted-window-translated.exr",
+      "sha256": "2239c8940dba59aa5ca09662e452919119ab90d15691943d1a62440aa61e7fd1",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 175,
+      "elapsed_seconds": 3.014,
+      "frames_after_resize": 145,
+      "log_sha256": "ce019efce750f9029d824f1891cecd2a7965432265089c9e2b41f512cc3d440c"
+    }
+  ],
+  "limitations": [
+    "live probe, not full viewer navigation or prefetch",
+    "presentation is not calibrated luminance/color measurement",
+    "offscreen exact pixel tests are separate evidence"
+  ],
+  "total_presented_frames": 1048
+}

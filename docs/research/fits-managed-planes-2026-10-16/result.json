@@ -1,0 +1,34 @@
+{
+  "status": "FITS native selected-plane samples and request-aware raster/window output admitted through memory budget",
+  "change": {
+    "samples": "FitsSamples variants now contain PixelBuffer<T> rather than Arc<Vec<T>>, preserving native uint8/int16/int32/int64/float32/float64 and shared reservation lifetime",
+    "display": "Request-aware raw conversion/window output managed; integer exactness guards, f64 physical/window math and native f32 signed zero unchanged",
+    "cancellation": "uint8 selected-plane copy checked per64KiB; numeric unpack and display loops per4096 samples"
+  },
+  "regressions": {
+    "astropy_selected_planes": 22,
+    "native": "source+native selected plane exact peak; one-byte-short fails; cloned samples retain credit after FitsImage dropped",
+    "window": "source+native plane+float RGBA output exact peak; one-byte-short fails; final output retains only output reservation",
+    "precision": "Existing int64/scaled/blank/nonfinite/float32 signed-zero and float64 window oracles remain passing"
+  },
+  "tests": {
+    "scientific": {
+      "passed": 44,
+      "failed": 0,
+      "ignored": 7
+    },
+    "facade": {
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2
+    },
+    "clippy_scientific_lib_warnings_denied": "passed"
+  },
+  "limits": [
+    "Public FitsSamples variant payload types changed; explicit Arc<Vec<T>> constructors need .into() or adaptation",
+    "Header cards and parser bookkeeping are not total process heap/RSS accounting",
+    "Request-free to_raster/windowed convenience methods still have no caller budget",
+    "No new Metal run in this turn; full compressed FITS/WCS/table display qualification remains open"
+  ],
+  "source_sha256": "2a3308f184f5fd33b2e803ea84b0d2915795d0b2f0107f5c741ab62f43af7c63"
+}

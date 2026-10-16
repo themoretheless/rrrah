@@ -1,0 +1,73 @@
+{
+  "status": "rejected and source restored exactly",
+  "baseline_source_sha256": "9e6e6a99aabbc97b6a83fcf4bdd5d3939e7a745718e813540c9438bb1da26ae7",
+  "candidate_source_sha256": "526687f215bb0834bc09cfac25e4567e869b4380109bcbb57344feb04d277e52",
+  "benchmark": {
+    "scope": "SequentialABBA original all-color diagnostic at147,60;16Msource comparison only, not ordinary4M qualification.",
+    "rows": [
+      {
+        "mode": "baseline",
+        "elapsed_ns": 242145583,
+        "source_work": 10063934,
+        "output": [
+          "Some(0.5770124599523326)",
+          "Some([0.1957395447949678, 0.6516873837976049, 0.7808840527972956, 0.12729011925856604])",
+          "Some([212.58851238180955, 166.9801103668213, 146.2529650952822])"
+        ],
+        "log": "/tmp/rrrah-ai-route-pair-benchmark-20261015.b95Ura/1-baseline.log"
+      },
+      {
+        "mode": "candidate",
+        "elapsed_ns": 556128000,
+        "source_work": 9166482,
+        "output": [
+          "Some(0.5770124599523326)",
+          "Some([0.1957395447949678, 0.6516873837976049, 0.7808840527972956, 0.12729011925856604])",
+          "Some([212.58851238180955, 166.9801103668213, 146.2529650952822])"
+        ],
+        "log": "/tmp/rrrah-ai-route-pair-benchmark-20261015.b95Ura/2-candidate.log"
+      },
+      {
+        "mode": "candidate",
+        "elapsed_ns": 651210708,
+        "source_work": 9166482,
+        "output": [
+          "Some(0.5770124599523326)",
+          "Some([0.1957395447949678, 0.6516873837976049, 0.7808840527972956, 0.12729011925856604])",
+          "Some([212.58851238180955, 166.9801103668213, 146.2529650952822])"
+        ],
+        "log": "/tmp/rrrah-ai-route-pair-benchmark-20261015.b95Ura/3-candidate.log"
+      },
+      {
+        "mode": "baseline",
+        "elapsed_ns": 367494875,
+        "source_work": 10063934,
+        "output": [
+          "Some(0.5770124599523326)",
+          "Some([0.1957395447949678, 0.6516873837976049, 0.7808840527972956, 0.12729011925856604])",
+          "Some([212.58851238180955, 166.9801103668213, 146.2529650952822])"
+        ],
+        "log": "/tmp/rrrah-ai-route-pair-benchmark-20261015.b95Ura/4-baseline.log"
+      }
+    ],
+    "candidate_to_baseline_ratios": [
+      2.296667951196946,
+      1.772026638466727
+    ],
+    "outputs_exact": true
+  },
+  "compact_candidate_tests": {
+    "passed": 298,
+    "failed": 0,
+    "ignored": 12
+  },
+  "restored_tests": {
+    "passed": 297,
+    "failed": 0,
+    "ignored": 12
+  },
+  "memory_regression_fixed_before_benchmark": "Initial48-byte prepared masks/keys per route exceeded existing sparse-mesh65536-byte assertion (66570); compact2-index plan reused existing masks and passed. No memory cap raised.",
+  "decision": "Fewer logical source units did not translate into speed: both paired measurements slower. Do not retain this optimization in default code.",
+  "scope": "One sequentialABBA diagnostic pixel,16Msource only, not a complete ordinary-budget renderer benchmark.",
+  "next_candidate": "Owner moment setup sizes dense maps by highest global triangle index. Compact per-command owner IDs to active sorted source owners, preserving highest original source-owner priority and remapping to original indices for all sampling/evidence. Existing owner routes are already sorted descending; canonical aliases must share a compact key. Explicit admission and work charges required."
+}

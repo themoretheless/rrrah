@@ -1,0 +1,53 @@
+{
+  "status": "unsigned_pvr_eac_explicit_srgb_display_pipeline_verified",
+  "new_cases": 224,
+  "coverage": {
+    "formats": [
+      25,
+      26
+    ],
+    "unsigned_channel_types": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      13
+    ],
+    "orientations": 4,
+    "mips": 4,
+    "generated_source_files": 56,
+    "selected_pixels": 3136
+  },
+  "oracle": "Independent Ericsson-derived encoded sample fixtures; test-local sRGB inverse transfer checked against f64 reference within 2e-7. Already-linear float32 expected frame avoids using production display conversion to construct expected values. Alpha1 remains bit exact.",
+  "checks": {
+    "cpu_states": 1172,
+    "metal_adapter": "Metal Apple M4 Max",
+    "metal_states": 1172,
+    "metal_readbacks": 7032,
+    "ram_pressure_hits": 1172,
+    "swap_writes": 1172,
+    "swap_reads": 1172,
+    "swap_errors": 0,
+    "swap_dropped": 0,
+    "blocked_decoder_prefetch": true,
+    "final_memory_credit": 0,
+    "viewer_passed": 252,
+    "viewer_ignored": 71,
+    "viewer_failed": 0
+  },
+  "changes": [
+    "Test-only source copies change PVR color declaration0->1; original corpus unchanged",
+    "Test-only swap count cap1024->2048 to retain1172 states, byte cap remains1MiB",
+    "Production implementation unchanged"
+  ],
+  "limits": [
+    "Software interpretation of explicit PVR sRGB declaration; EAC hardware transport has no sRGB variant",
+    "Unsigned samples only; signed EAC color interpretation remains unqualified",
+    "Generated header variants are not an independent producer-file corpus",
+    "Offscreen SDR/float16 preservation does not qualify physical HDR calibration or NVIDIA",
+    "No throughput or full100-format qualification claim"
+  ],
+  "source_sha256": "c444803a1154ecc434fdd996554f7e04046b8dfd7a4671890462cdc18fe27d4f"
+}

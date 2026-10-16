@@ -1,0 +1,24 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+    Finished `test` profile [optimized + debuginfo] target(s) in 11.62s
+     Running unittests src/lib.rs (target/avif-prem-validation-20261014/debug/deps/rrrah_core-3e9fff3eb93501b3)
+
+running 1 test
+test thumbnail::numerical_tests::odd_black_repeat_grid_matches_equivalent_flat_calibration ... FAILED
+
+failures:
+
+---- thumbnail::numerical_tests::odd_black_repeat_grid_matches_equivalent_flat_calibration stdout ----
+
+thread 'thumbnail::numerical_tests::odd_black_repeat_grid_matches_equivalent_flat_calibration' (24848901) panicked at crates/rrrah-core/src/thumbnail.rs:358:17:
+assertion `left == right` failed: [Red, Green, Green, Blue], edge5
+  left: []
+ right: [232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255, 232, 179, 124, 255]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    thumbnail::numerical_tests::odd_black_repeat_grid_matches_equivalent_flat_calibration
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 144 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-core --lib`

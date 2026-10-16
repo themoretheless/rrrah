@@ -1,0 +1,14 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.43s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_scientific-b1526b6fcadfa52e)
+
+running 7 tests
+test dicom::tests::packaged_mr_rle_matches_native_selected_scalar_pixels ... ok
+test dicom::tests::packaged_ct_metadata_sequence_and_absent_padding_match_every_sample ... ok
+test dicom::palette::tests::packaged_palette_matches_all_samples_with_exact_managed_admission ... ok
+test dicom::tests::packaged_mr_implicit_matches_every_external_raw_and_window_sample ... ok
+test dicom_rle::tests::packaged_rle_frames_match_all_native_component_bytes ... ok
+test dicom::rgb::tests::packaged_rgb_sources_match_every_native_sample_and_release_memory ... ok
+test dicom::rgb::tests::exhaustive_ybr_rgb_matches_exact_external_rational_oracle ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 40 filtered out; finished in 0.08s
+

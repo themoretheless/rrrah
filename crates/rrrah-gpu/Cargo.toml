@@ -14,6 +14,7 @@ thiserror.workspace = true
 wgpu.workspace = true
 
 [dev-dependencies]
+rrrah-decode = { path = "../rrrah-decode", version = "0.1.0" }
 pollster.workspace = true
 # Keep shader validation on the same Naga major/minor as wgpu. This test is
 # backend-independent and catches WGSL/host-layout drift without requiring a

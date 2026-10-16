@@ -1,0 +1,51 @@
+{
+  "status": "current_native1050_metal24_eight_cases_producer4_passed_no_build_warnings",
+  "change": "AVIF with native selected primary ICC skips image decoder ICC getter clone; native owned admitted profile is consumed by frame; all other profile fallback paths preserved",
+  "dependency_evidence": "image0.25.10 avif decoder icc_profile() returns self.icc_profile.clone(); constructor still owns internal profile",
+  "source_sha256": {
+    "crates/rrrah-decode/src/avif_color.rs": "cadb272d8eab5c67abc0170b3f5496e8e0f68022ca1215d44d4650bcf7b52bd1",
+    "crates/rrrah-decode/src/raster.rs": "1fdb1e64f2e0cc034ac073249c4ca7dfc7b41c600b37fee838e05a1da64e8b63"
+  },
+  "native_session": 72226,
+  "metal_build_session": 96177,
+  "limitations": [
+    "decoder internal ICC copy and scratch remain outside current admission",
+    "no throughput or OS RSS measurement",
+    "not physical HDR or NVIDIA qualification"
+  ],
+  "cleanup": "properties_with_check is test-only; standalone research callers use budget-aware API with None",
+  "source_drift": false,
+  "native": {
+    "exit_code": 0,
+    "passed": 1050,
+    "failed": 0,
+    "ignored": 73
+  },
+  "metal": {
+    "exit_code": 0,
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "binary_sha256": "7e119f39a8c932c98d50b97acdbfd45145ce46aafc0117f5a706a610a4c3b38e"
+  },
+  "producer": {
+    "exit_code": 0,
+    "tests_passed": 1,
+    "fixture_cases": 4
+  },
+  "build_warnings": 0,
+  "subsequent_source_change": {
+    "report": "../raster-codec-cancellation-boundaries-2026-10-15/result.json",
+    "scope": "request checks directly around generic codec constructor; prior snapshot remains frozen"
+  }
+}

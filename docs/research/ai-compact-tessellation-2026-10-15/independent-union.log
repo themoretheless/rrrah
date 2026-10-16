@@ -1,0 +1,42 @@
+{
+  "scope": "current original VectorApple source clip and captured mesh at149,56",
+  "triangles": 70,
+  "shapely": "2.1.2",
+  "geos": "3.13.1",
+  "rows": [
+    {
+      "subdivisions": 512,
+      "original_clip_area": 0.21445935668059007,
+      "triangle_union_inside_original_clip": 0.21445935668059007,
+      "missing_support_area": 0.0,
+      "union_vs_composited_alpha": 4.033739630371347e-07
+    },
+    {
+      "subdivisions": 2048,
+      "original_clip_area": 0.21446153215456873,
+      "triangle_union_inside_original_clip": 0.21446153215456876,
+      "missing_support_area": 0.0,
+      "union_vs_composited_alpha": 1.7721000156456501e-06
+    },
+    {
+      "subdivisions": 8192,
+      "original_clip_area": 0.21446166842042694,
+      "triangle_union_inside_original_clip": 0.2144616684204269,
+      "missing_support_area": 0.0,
+      "union_vs_composited_alpha": 1.90836587379839e-06
+    }
+  ],
+  "last_clip_area_change": 1.36265858208251e-07,
+  "sha256": {
+    "docs/research/ai-compact-tessellation-2026-10-15/result.json": "469996c37fd3f8d88ae2ecd66dfbdcc83267b3395b1ac48747a52c26595330b0",
+    "docs/research/ai-compact-tessellation-2026-10-15/diagnostic.log": "6428780e443e1ebe5c913266755620314150d4ef882f3174d10ff797631c868f",
+    "docs/research/ai-original-path-inventory-2026-10-13.json": "ff76a51ccaedb8ba39c2ec8c4e356867cb8f88f11f714009a4ed4dd5f4499aa9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-ai-current-mesh-coverage.py": "df98d176fdb3e495804d3651c70fef6c02251fbf3a53f2f319d7799e37141519"
+  },
+  "limitations": [
+    "one pixel/event; not whole page fidelity",
+    "original curves numerically subdivided, not interval-certified",
+    "triangle generation is native; only union/intersection independently evaluated",
+    "no independent color or mask oracle"
+  ]
+}

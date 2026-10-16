@@ -1,0 +1,166 @@
+{
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "renders": [
+    {
+      "source_AntiAlias": false,
+      "vector_AA": "yes",
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30",
+      "shading_stream_sha256": "a51df229e7f38a60233a8fffa44b1ce205be18e25d90dfbc23c0d5de6ae864fe",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "yes",
+        "-aaVector",
+        "yes",
+        "/tmp/ai-source-antialias-toggle-20261015/source-aa-False.pdf",
+        "/tmp/ai-source-antialias-toggle-20261015/source-False-vector-yes"
+      ]
+    },
+    {
+      "source_AntiAlias": false,
+      "vector_AA": "no",
+      "pixel14759": [
+        188,
+        82,
+        64
+      ],
+      "ppm_sha256": "abb15c9e2456b35af54cdf158462bda3c2b8f3f71547b0c9b31455215aec6adb",
+      "shading_stream_sha256": "a51df229e7f38a60233a8fffa44b1ce205be18e25d90dfbc23c0d5de6ae864fe",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "yes",
+        "-aaVector",
+        "no",
+        "/tmp/ai-source-antialias-toggle-20261015/source-aa-False.pdf",
+        "/tmp/ai-source-antialias-toggle-20261015/source-False-vector-no"
+      ]
+    },
+    {
+      "source_AntiAlias": true,
+      "vector_AA": "yes",
+      "pixel14759": [
+        255,
+        255,
+        255
+      ],
+      "ppm_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30",
+      "shading_stream_sha256": "a51df229e7f38a60233a8fffa44b1ce205be18e25d90dfbc23c0d5de6ae864fe",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "yes",
+        "-aaVector",
+        "yes",
+        "/tmp/ai-source-antialias-toggle-20261015/source-aa-True.pdf",
+        "/tmp/ai-source-antialias-toggle-20261015/source-True-vector-yes"
+      ]
+    },
+    {
+      "source_AntiAlias": true,
+      "vector_AA": "no",
+      "pixel14759": [
+        188,
+        82,
+        64
+      ],
+      "ppm_sha256": "abb15c9e2456b35af54cdf158462bda3c2b8f3f71547b0c9b31455215aec6adb",
+      "shading_stream_sha256": "a51df229e7f38a60233a8fffa44b1ce205be18e25d90dfbc23c0d5de6ae864fe",
+      "command": [
+        "/opt/homebrew/bin/pdftoppm",
+        "-f",
+        "1",
+        "-singlefile",
+        "-r",
+        "72",
+        "-aa",
+        "yes",
+        "-aaVector",
+        "no",
+        "/tmp/ai-source-antialias-toggle-20261015/source-aa-True.pdf",
+        "/tmp/ai-source-antialias-toggle-20261015/source-True-vector-no"
+      ]
+    }
+  ],
+  "profile_header": {
+    "sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "class_signature": "scnr",
+    "input_space": "CMYK",
+    "pcs": "Lab "
+  },
+  "scope": "Independent pypdf reserialization; only Sh8 AntiAlias entry changed, decoded shading stream preserved. Byte equality against original default and no-vector-AA controls checked separately.",
+  "all_source_flag_variants_match_original_entire_page": true,
+  "profile_alignment_attempt": {
+    "command": [
+      "/opt/homebrew/bin/pdftoppm",
+      "-f",
+      "1",
+      "-singlefile",
+      "-r",
+      "72",
+      "-aaVector",
+      "no",
+      "-defaultcmykprofile",
+      "/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+      "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+      "/tmp/ai-source-antialias-toggle-20261015/native-input-profile"
+    ],
+    "exit_code": 99,
+    "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+    "stdout": ""
+  },
+  "lcms_supported_intents": {
+    "input": {
+      "perceptual": true,
+      "relative_colorimetric": false,
+      "saturation": false,
+      "absolute_colorimetric": false
+    },
+    "output": {
+      "perceptual": false,
+      "relative_colorimetric": false,
+      "saturation": false,
+      "absolute_colorimetric": false
+    },
+    "proof": {
+      "perceptual": false,
+      "relative_colorimetric": false,
+      "saturation": false,
+      "absolute_colorimetric": false
+    }
+  },
+  "poppler_checker_audit": {
+    "version": "26.10.0",
+    "source_archive_url": "https://poppler.freedesktop.org/poppler-26.10.0.tar.xz",
+    "archive_sha256": "6792cb7c69205007ad87d2e936cecc5b3a31fac29ab54ffc3175fdb6b2a6ce35",
+    "file": "utils/sanitychecks.cc",
+    "line": 26,
+    "finding": "Perceptual branch hardcodes LCMS_USED_AS_OUTPUT instead of supplied UsedDirection. On this valid scnr CMYK profile, only perceptual input is supported, so the checker rejects it as not an input profile.",
+    "expected_input_support_check": true,
+    "actual_checker_support_condition": false,
+    "runtime_refusal_reproduced": true,
+    "profile_modified": false,
+    "binary_modified": false
+  },
+  "conclusion": "Changing source Sh8 AntiAlias flag does not change the full Poppler page in either global vector-AA mode. Native/oracle fidelity mismatch remains. Poppler CLI default-CMYK profile alignment is blocked by a reproduced support-direction check defect, not by this profile having printer class. Next test-only alignment should bypass/fix the checker without changing ICC payload or class; it must remain distinct from original-document strict oracle."
+}

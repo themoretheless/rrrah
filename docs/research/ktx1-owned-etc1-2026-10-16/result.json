@@ -1,0 +1,87 @@
+{
+  "status": "ktx1_etc1_selected_mips_implemented",
+  "changes": [
+    "Shared owned ETC1 module used by PKM and KTX1",
+    "KTX1 ETC1_RGB8_OES internalformat0x8d64 with RGB base and eight-byte blocks",
+    "Selected ETC1 endpoints validated before managed pixel admission",
+    "Reuse KTX orientation, endian, selected-mip and cropped-block handling"
+  ],
+  "specification": "https://registry.khronos.org/OpenGL/extensions/OES/OES_compressed_ETC1_RGB8_texture.txt",
+  "fixtures": {
+    "sources": 8,
+    "selected_mips": 32,
+    "dimensions": [
+      [
+        9,
+        5
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "endian": [
+      "little",
+      "big"
+    ],
+    "orientation": [
+      "rd",
+      "ru",
+      "ld",
+      "lu"
+    ],
+    "oracle": "Android ETC1 RGB block bytes from4096-block independently generated fixture; container crop/orientation assembly is separate Python code"
+  },
+  "checks": {
+    "texture_lib": {
+      "passed": 77,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "ktx_selected_native_mips": 92,
+    "managed_admission": "exact output quota; one byte short; clone retention; malformed ETC1 refuses under zero output budget",
+    "app_cpu": {
+      "states": 322,
+      "swap_writes": 322,
+      "swap_reads": 322,
+      "final_credit": 0
+    },
+    "app_metal": {
+      "adapter": "Metal Apple M4 Max",
+      "optional": false,
+      "states": 322,
+      "readbacks": 1932,
+      "swap_writes": 322,
+      "swap_reads": 322,
+      "final_credit": 0
+    }
+  },
+  "limits": [
+    "KTX1 ETC1 only; KTX2 ETC and PVR ETC not added",
+    "Existing KTX1 BC codecs remain external Rust block decoder",
+    "ETC2/EAC and full container variants including cube/array/volume remain open",
+    "No throughput, physical HDR or NVIDIA qualification claim"
+  ],
+  "source_sha256": {
+    "crates/rrrah-texture/src/etc1.rs": "a80516ba27dc2c831dab145dec44001e0f4124fab65f8c391699725d8af21baa",
+    "crates/rrrah-texture/src/ktx.rs": "67cfc41074195314ff4770c692df7fbfd945de13d4b2cbf35349a31dea310f6b",
+    "crates/rrrah-texture/src/pkm.rs": "8de214be978ddcc8c384e53bac0d6d3dc7f61eb6990eb8a94e12cb3b775db950",
+    "crates/rrrah-texture/src/lib.rs": "4ff22fb0971dcdc7f895bb1ea7389f4ccabe0d788679bb92370dc6f241ad034f",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "c420d6ebe9ca7ac43e9d09fca3e76fff52e4adce9f60dfc8902245d64cfc64b5",
+    "scripts/generate-ktx-etc1-fixtures.py": "4fa38395a4ad61b852840d3c4daf6a272323e3f2163ffa6f81a386452d55d7de",
+    "tests/fixtures/raster/ktx-etc1-manifest.tsv": "1f9be63b4300579faeae6a0247419f0876bfb6891e7709e097ad0934a8f77f3d"
+  }
+}

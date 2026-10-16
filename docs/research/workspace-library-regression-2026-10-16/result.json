@@ -1,0 +1,191 @@
+{
+  "status": "All default-feature workspace library tests passed after scientific/cache and manifest changes",
+  "command": "cargo +stable test --workspace --lib --offline",
+  "exit_code": 0,
+  "totals": {
+    "passed": 1539,
+    "failed": 0,
+    "ignored": 90
+  },
+  "binaries": [
+    {
+      "crate_binary": "rrrah_animation",
+      "status": "ok",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.0
+    },
+    {
+      "crate_binary": "rrrah_bench",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    },
+    {
+      "crate_binary": "rrrah_cache",
+      "status": "ok",
+      "passed": 141,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 2.38
+    },
+    {
+      "crate_binary": "rrrah_color",
+      "status": "ok",
+      "passed": 35,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    },
+    {
+      "crate_binary": "rrrah_core",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    },
+    {
+      "crate_binary": "rrrah_cuda",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.0
+    },
+    {
+      "crate_binary": "rrrah_decode",
+      "status": "ok",
+      "passed": 185,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 0.2
+    },
+    {
+      "crate_binary": "rrrah_dedup",
+      "status": "ok",
+      "passed": 49,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 0.9
+    },
+    {
+      "crate_binary": "rrrah_demosaic",
+      "status": "ok",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.14
+    },
+    {
+      "crate_binary": "rrrah_develop",
+      "status": "ok",
+      "passed": 97,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 0.08
+    },
+    {
+      "crate_binary": "rrrah_gpu",
+      "status": "ok",
+      "passed": 63,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 2.5
+    },
+    {
+      "crate_binary": "rrrah_layered",
+      "status": "ok",
+      "passed": 50,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.01
+    },
+    {
+      "crate_binary": "rrrah_memory",
+      "status": "ok",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 1.01
+    },
+    {
+      "crate_binary": "rrrah_mesh",
+      "status": "ok",
+      "passed": 55,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.1
+    },
+    {
+      "crate_binary": "rrrah_raw",
+      "status": "ok",
+      "passed": 433,
+      "failed": 0,
+      "ignored": 59,
+      "seconds": 0.3
+    },
+    {
+      "crate_binary": "rrrah_scientific",
+      "status": "ok",
+      "passed": 44,
+      "failed": 0,
+      "ignored": 7,
+      "seconds": 0.08
+    },
+    {
+      "crate_binary": "rrrah_swap",
+      "status": "ok",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1,
+      "seconds": 0.02
+    },
+    {
+      "crate_binary": "rrrah_texture",
+      "status": "ok",
+      "passed": 57,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.02
+    },
+    {
+      "crate_binary": "rrrah_vector",
+      "status": "ok",
+      "passed": 178,
+      "failed": 0,
+      "ignored": 10,
+      "seconds": 0.03
+    },
+    {
+      "crate_binary": "rrrah_vfx",
+      "status": "ok",
+      "passed": 48,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 0.0
+    }
+  ],
+  "scope": "Library unit tests for20 workspace libraries; includes scientific/decode/native RAW/cache/memory/swap/mesh/vector/texture/animation/GPU library contracts",
+  "limitations": [
+    "90 ignored tests were not run and are not passes",
+    "No application binary unit tests, integration targets or doctests in this command",
+    "Optional dedup decode/raster/LoFTR feature combinations not enabled here",
+    "CUDA library5passing tests are not NVIDIA hardware qualification; its actual hardware test remains ignored",
+    "GPU library results do not replace explicit required Metal tests or calibrated HDR display proof",
+    "Passing current subsets does not qualify all100formats"
+  ],
+  "changed_source_sha256": {
+    "crates/rrrah-scientific/src/nrrd.rs": "c6309a48f35d9ba950665162449062adb9e22d9fcbd91dbff15568018bf31468",
+    "crates/rrrah-scientific/src/mrc.rs": "e3c0f36435ebadbf74e9ea162ac6a65c766274ae83ac9bf7666c07c484b14d7c",
+    "crates/rrrah-scientific/src/fits.rs": "2a3308f184f5fd33b2e803ea84b0d2915795d0b2f0107f5c741ab62f43af7c63",
+    "crates/rrrah-scientific/src/scientific.rs": "8affbc438c711ecd8b157ff1e2e0ff058024ee210349bbf156b21da8b7e14b55",
+    "crates/rrrah-cache/src/disk.rs": "70967276de17e43173911e5d8197b71f1d5f5561c4bdf4d287d058814d5d3cab",
+    "crates/rrrah-decode/Cargo.toml": "b10842872f9f2f4b8ba233bed4b1b231637198ce2346fc6c41ff844c77d8d8f3",
+    "crates/rrrah-dedup/Cargo.toml": "933ca1d09cf5a6b2eaa5919720ef122a3501bbcdfb9137a11a08a69494132fcb",
+    "Cargo.lock": "c11fbcfa26c9a761aff6311e4273ab071cb7365b97aaa0fa176359fe6355f1a4"
+  }
+}

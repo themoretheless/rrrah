@@ -1,0 +1,44 @@
+{
+  "status": "maximum_integer_prefetch_boundaries_and_gallery_regression_passed",
+  "changes": "Add regression for lazy neighbour iterator at usize::MAX; production planner unchanged",
+  "matrix": {
+    "virtual_collection_count": "usize::MAX",
+    "max_window": [
+      "usize::MAX behind",
+      "usize::MAX ahead"
+    ],
+    "valid_selections": [
+      0,
+      "usize::MAX/2",
+      "usize::MAX-1"
+    ],
+    "directions": [
+      "None",
+      "Forward",
+      "Backward"
+    ],
+    "prefix_checks": 9,
+    "prefix_length": 16,
+    "asymmetric_boundary_checks": 3,
+    "empty_invalid_checks": 12
+  },
+  "checks": [
+    "Exact size hints do not overflow",
+    "First16 indices match explicit direction/edge expectations without exhausting huge ranges",
+    "Asymmetric2/4 window clamps at upper edge and backward direction swaps extents",
+    "Zero/one-element and invalid selected indices produce empty iterator",
+    "Existing44550 small-window independent model remains green in gallery group"
+  ],
+  "gallery_tests": {
+    "passed": 40,
+    "failed": 0,
+    "ignored": 15
+  },
+  "environment": "First sandbox group run39passed/1failed on temporary Unix socket PermissionDenied; same group passes with local IPC permission, no source change",
+  "source_sha256": "9b30bf351c956101257eaaf16d8427916cde0073a86d2b497ae5683237f70b8f",
+  "limits": [
+    "Virtual index arithmetic and laziness, not actual usize::MAX source files or a filesystem scan",
+    "No new decoder, GPU/HDR/NVIDIA or throughput qualification",
+    "Manual gallery profiles/hardware tests remain ignored"
+  ]
+}

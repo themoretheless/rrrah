@@ -1,0 +1,101 @@
+{
+  "status": "terminal structural diagnostics",
+  "cut_profile": {
+    "log": "/tmp/ai-cut-duplicates-14760.log",
+    "tile_rows": [
+      [
+        676,
+        576,
+        107
+      ],
+      [
+        1146,
+        1356,
+        821
+      ],
+      [
+        894,
+        1156,
+        779
+      ],
+      [
+        652,
+        715,
+        136
+      ],
+      [
+        1147,
+        1033,
+        634
+      ],
+      [
+        996,
+        3333,
+        2755
+      ]
+    ],
+    "emitted": 8169,
+    "unique": 5232,
+    "scope": "Six tiles reached before refusal, not complete pixel. Duplicate-cut sorting savings alone small relative to fragment count."
+  },
+  "owner_occupancy_plus_y_filter": {
+    "log": "/tmp/ai-tile-y-owner-occupancy4m.log",
+    "147,59": {
+      "rgb8": [
+        205,
+        151,
+        128
+      ],
+      "source_work": 3199873,
+      "baseline_source_work": 3831159
+    },
+    "147,60": {
+      "completed": false,
+      "source_work": 3478928,
+      "source_remaining": 521072,
+      "geometry_remaining": 0,
+      "fragments": 662838
+    },
+    "final_credit": 0,
+    "limits": {
+      "source": 4000000,
+      "geometry": 40000000
+    }
+  },
+  "decision": "Do not promote combination: exchanges source savings for geometry exhaustion. No cut-dedup implementation added without sufficient structural benefit. Need reduce arrangement fragment processing while preserving numerical proof.",
+  "owner_run_trace": {
+    "unit_tests": {
+      "passed": 299,
+      "failed": 0,
+      "ignored": 12,
+      "log": "/tmp/ai-owner-run-trace-all.log"
+    },
+    "real_log": "/tmp/ai-owner-run-trace-real4m.log",
+    "147,59": {
+      "repeats": 213463,
+      "starts": 419059,
+      "typed_rgb8": [
+        205,
+        151,
+        128
+      ],
+      "source_work": 3199873
+    },
+    "147,60": {
+      "repeats": 250860,
+      "starts": 410535,
+      "completed": false,
+      "source_work": 3478928
+    },
+    "scope": "Consecutive deferred identities only, not spatial adjacency or merged-arithmetic proof; budgets and output unchanged from prior occupancy+Yfilter control. No sampling or geometry skipped."
+  },
+  "next": "Design streaming same-owner fragment coalescing with certified adjacency, original reference term counts/rounding and projection evidence; measure whether observer work can actually fall without relaxing accuracy.",
+  "domain_certificate_audit": {
+    "source": "vendor/hayro-interpret/src/encode/native_source.rs",
+    "existing_method": "mesh_triangle_weight_bounds_over_vertices",
+    "existing_guarantee": "Outward bounds computed raw barycentric weights over convex hull of finite device vertices, with sampler-order rounding envelope over hull bounding rectangle. Does not certify caller fragment centroid membership.",
+    "geometry_source": "knockout_interpreter builds each source-owned path directly from visit_mesh_triangles device vertices",
+    "remaining_proof": "Enclose error of polygon kernel edge evaluation/intersection and weighted centroid arithmetic, then prove each selected fragment centroid lies in the certified hull/enlargement. Merely measuring agreement is insufficient.",
+    "decision": "Do not remove per-fragment Observe or lower callback quota before a membership certificate exists; no source/geometry limits changed."
+  }
+}

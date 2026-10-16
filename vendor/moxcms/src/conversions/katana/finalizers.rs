@@ -50,6 +50,10 @@ impl<T: Copy + Default + AsPrimitive<f32> + PointeeSizeExpressible + Send + Sync
 where
     f32: AsPrimitive<T>,
 {
+    fn preserves_float_rgb(&self,work:&mut usize,cancelled:&dyn Fn()->bool)->bool {
+        if cancelled() {return false;}let Some(left)=work.checked_sub(1) else {return false;};*work=left;
+        self.dst_layout==Layout::Rgb && self.target_color_space==DataColorSpace::Rgb && !cancelled()
+    }
     fn finalize(&self, _: &[T], dst: &mut [T]) -> Result<(), CmsError> {
         let norm_value: T = (if T::FINITE {
             ((1u32 << self.bit_depth) - 1) as f32
@@ -77,6 +81,10 @@ impl<T: Copy + Default + AsPrimitive<f32> + PointeeSizeExpressible + Send + Sync
 where
     f32: AsPrimitive<T>,
 {
+    fn preserves_float_rgb(&self,work:&mut usize,cancelled:&dyn Fn()->bool)->bool {
+        if cancelled() {return false;}let Some(left)=work.checked_sub(1) else {return false;};*work=left;
+        self.dst_layout==Layout::Rgb && self.target_color_space==DataColorSpace::Rgb && !cancelled()
+    }
     fn finalize(&self, src: &[T], dst: &mut [T]) -> Result<(), CmsError> {
         if self.dst_layout == Layout::Rgba && self.target_color_space == DataColorSpace::Rgb {
             if self.src_layout == Layout::Rgba {

@@ -769,41 +769,96 @@ fn tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr() {
                 tiled.render_raster_half(&raster, view, [64, 64])
             );
         }
-        let budget = rrrah_core::MemoryBudget::new(bytes + 16);
-        let uploads = rrrah_core::MemoryBudget::new(1024 * 1024);
-        let mut renderer = rrrah_gpu::RasterRenderer::new_with_budget(
-            &tiled.device,
-            common::READBACK_FORMAT,
-            budget.clone(),
-        )
-        .with_upload_queue_budget(uploads.clone());
-        renderer
-            .upload(&tiled.device, &tiled.queue, &frame(1, vec![1., 0., 0., 1.]))
-            .unwrap();
-        renderer.update_view(&tiled.queue, view());
-        let before = tiled.render_existing_raster(&renderer, [64, 64]).pixels;
-        let calls = std::cell::Cell::new(0);
-        assert!(matches!(
-            renderer.upload_with_cancel(&tiled.device, &tiled.queue, &raster, || {
-                if budget.used() > 16 {
-                    calls.set(calls.get() + 1);
+        for hdr in [false, true] {
+            let budget = rrrah_core::MemoryBudget::new(bytes + 16 + 64);
+            let uploads = rrrah_core::MemoryBudget::new(1024 * 1024 + 64);
+            let texture_owner = budget.try_reserve(64).unwrap();
+            let queue_owner = uploads.try_reserve(64).unwrap();
+            let mut renderer = if hdr {
+                rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&tiled.device, budget.clone())
+            } else {
+                rrrah_gpu::RasterRenderer::new_with_budget(
+                    &tiled.device,
+                    common::READBACK_FORMAT,
+                    budget.clone(),
+                )
+            }
+            .with_upload_queue_budget(uploads.clone());
+            let read = |renderer: &rrrah_gpu::RasterRenderer| -> Vec<u16> {
+                if hdr {
+                    tiled.render_existing_raster_half(renderer, [64, 64])
+                } else {
+                    tiled
+                        .render_existing_raster(renderer, [64, 64])
+                        .pixels
+                        .into_iter()
+                        .map(u16::from)
+                        .collect()
                 }
-                calls.get() == 3
-            }),
-            Err(rrrah_gpu::RasterUploadError::Cancelled)
-        ));
-        tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
-        assert_eq!(budget.used(), 16);
-        assert_eq!(uploads.used(), 0);
-        assert_eq!(tiled.render_existing_raster(&renderer, [64, 64]).pixels, before);
-        renderer.upload(&tiled.device, &tiled.queue, &raster).unwrap();
-        tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
-        assert_eq!(renderer.resident_bytes(), bytes);
-        assert_eq!(budget.used(), bytes);
-        drop(renderer);
-        tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
-        assert_eq!(budget.used(), 0);
-        assert_eq!(uploads.used(), 0);
+            };
+            let old = frame(1, vec![4., -0.5, 0., 1.]);
+            renderer.upload(&tiled.device, &tiled.queue, &old).unwrap();
+            renderer.update_view(&tiled.queue, view());
+            let before = read(&renderer);
+            assert_eq!((budget.used(), uploads.used()), (80, 64));
+            // Measure every callback after resource admission, including each
+            // tile boundary and the final check before installing the texture.
+            let calls = std::cell::Cell::new(0usize);
+            renderer
+                .upload_with_cancel(&tiled.device, &tiled.queue, &raster, || {
+                    if budget.used() > 80 {
+                        calls.set(calls.get() + 1);
+                    }
+                    false
+                })
+                .unwrap();
+            tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(calls.get(), (columns * rows + 2) as usize);
+            renderer.upload(&tiled.device, &tiled.queue, &old).unwrap();
+            tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(read(&renderer), before);
+            for cutoff in 1..=calls.get() {
+                let observed = std::cell::Cell::new(0usize);
+                assert!(matches!(
+                    renderer.upload_with_cancel(&tiled.device, &tiled.queue, &raster, || {
+                        if budget.used() > 80 {
+                            observed.set(observed.get() + 1);
+                        }
+                        observed.get() == cutoff
+                    }),
+                    Err(rrrah_gpu::RasterUploadError::Cancelled)
+                ));
+                tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+                assert_eq!(observed.get(), cutoff);
+                assert_eq!((budget.used(), uploads.used()), (80, 64));
+                assert_eq!(read(&renderer), before);
+            }
+            renderer.upload(&tiled.device, &tiled.queue, &raster).unwrap();
+            tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            let expected: Vec<u16> = if hdr {
+                reference.render_raster_half(&raster, view(), [64, 64])
+            } else {
+                reference
+                    .render_raster(&raster, view(), [64, 64])
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
+            };
+            assert_eq!(read(&renderer), expected);
+            assert_eq!(renderer.resident_bytes(), bytes);
+            assert_eq!((budget.used(), uploads.used()), (bytes + 64, 64));
+            drop(renderer);
+            tiled.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!((budget.used(), uploads.used()), (64, 64));
+            drop(texture_owner);
+            drop(queue_owner);
+            assert_eq!((budget.used(), uploads.used()), (0, 0));
+            eprintln!(
+                "TILED_UPLOAD_CANCEL dimensions={width}x{height} hdr={hdr} admitted_cutoffs={} previous_frame_exact=true retry_exact=true unrelated_owners_preserved=true final=0",
+                calls.get()
+            );
+        }
     }
 }
 
@@ -1319,6 +1374,56 @@ fn area_filtered_hdr_lod_matches_independent_alpha_reference_on_metal() {
     eprintln!("managed area HDR LOD: signed/bright/transparent-RGB oracle SDR/HDR exact; output root=0");
 }
 
+fn qualify_large_lod_pressure(
+    source: &DecodedRaster,
+    lod: DecodedRaster,
+    budget: &rrrah_core::MemoryBudget,
+) {
+    assert_eq!(budget.used(), 16000000);
+    let held = lod.clone();
+    drop(lod);
+    assert_eq!(budget.used(), 16000000);
+    assert!(matches!(
+        source.downsample_linear_with_budget_and_cancel([1000, 1000], budget, || false),
+        Err(rrrah_core::RasterError::Memory(_))
+    ));
+    drop(held);
+    assert_eq!(budget.used(), 0);
+    let pressure = budget.try_reserve(1).unwrap();
+    assert!(matches!(
+        source.downsample_linear_with_budget_and_cancel([1000, 1000], budget, || false),
+        Err(rrrah_core::RasterError::Memory(_))
+    ));
+    assert_eq!(budget.used(), 1);
+    drop(pressure);
+    let mut checks = 0;
+    let mut admitted = false;
+    assert!(matches!(
+        source.downsample_linear_with_budget_and_cancel([1000, 1000], budget, || {
+            checks += 1;
+            admitted |= budget.used() == 16000000;
+            checks == 5
+        }),
+        Err(rrrah_core::RasterError::Cancelled)
+    ));
+    assert!(admitted, "cancellation must observe admitted output");
+    assert_eq!(budget.used(), 0);
+    let retry = source
+        .downsample_linear_with_budget_and_cancel([1000, 1000], budget, || false)
+        .unwrap();
+    let RasterPixels::Rgba32Float(pixels) = retry.pixels() else {
+        panic!()
+    };
+    for pixel in pixels.chunks_exact(4) {
+        assert_eq!(pixel, [-2., 8., 0.5, 0.375]);
+    }
+    drop(retry);
+    assert_eq!(budget.used(), 0);
+    eprintln!(
+        "36 MP HDR LOD pressure: held clone refuses replacement; one-byte pressure refuses; admitted cancellation releases; retry all1000000 exact; final0"
+    );
+}
+
 #[test]
 #[ignore = "manual 36 MP HDR area LOD and actual Metal qualification"]
 fn large_hdr_area_lod_preserves_all_output_samples_and_metal_frame() {
@@ -1374,9 +1479,7 @@ fn large_hdr_area_lod_preserves_all_output_samples_and_metal_frame() {
             output_size[0], output_size[1]
         );
     }
-    assert_eq!(budget.used(), 16000000);
-    drop(lod);
-    assert_eq!(budget.used(), 0);
+    qualify_large_lod_pressure(&source, lod, &budget);
     eprintln!(
         "36 MP HDR area LOD: source=576000000; output=16000000; all1000000 pixels exact; SDR/HDR Metal exact; elapsed={elapsed:?}; output root=0"
     );
@@ -1410,4 +1513,1002 @@ fn nonfinite_raster_controls_produce_exact_finite_sdr_hdr_frames() {
             assert_eq!(hdr, gpu.render_raster_half(&source, expected, [64, 64]));
         }
     }
+}
+
+#[test]
+fn calibrated_bayer_resident_upload_preserves_frames_budgets_sdr_hdr() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let mosaic = common::profiled_pattern_mosaic(
+        17,
+        13,
+        1000.,
+        [2., 1., 0.5, 1.],
+        [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.]],
+        |x, y| (100 + (x * 43 + y * 29) % 2000) as u16,
+    );
+    let texture_bytes = rrrah_gpu::RasterRenderer::texture_bytes_for_extent(&gpu.device, 17, 13).unwrap();
+    let parameters = ViewParameters {
+        viewport: [64., 64.],
+        zoom: 2.,
+        ..Default::default()
+    };
+    let compute = rrrah_gpu::BayerDemosaicCompute::new(&gpu.device);
+    for algorithm in rrrah_gpu::GpuDemosaicAlgorithm::ALL {
+        let compute_budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let cpu_budget = rrrah_core::MemoryBudget::new(17 * 13 * 4);
+        let resident = compute
+            .execute_mosaic_resident(
+                &gpu.queue,
+                &mosaic,
+                algorithm,
+                &compute_budget,
+                &cpu_budget,
+                || false,
+            )
+            .unwrap();
+        let bytes = 17 * 13 * 16;
+        let readback = gpu.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("Bayer upload oracle pixels"),
+            size: bytes,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = gpu.device.create_command_encoder(&Default::default());
+        encoder.copy_buffer_to_buffer(resident.buffer(), 0, &readback, 0, bytes);
+        gpu.queue.submit([encoder.finish()]);
+        let (tx, rx) = std::sync::mpsc::channel();
+        readback.slice(..).map_async(wgpu::MapMode::Read, move |status| {
+            tx.send(status).unwrap();
+        });
+        gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = readback.slice(..).get_mapped_range().unwrap();
+        let expected = DecodedRaster::new(
+            17,
+            13,
+            RasterPixels::Rgba32Float(Arc::new(bytemuck::cast_slice::<u8, f32>(&mapped).to_vec()).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        drop(mapped);
+        readback.unmap();
+        for hdr in [false, true] {
+            let texture_budget = rrrah_core::MemoryBudget::new(texture_bytes * 2);
+            let queue_budget = rrrah_core::MemoryBudget::new(bytes);
+            let mut renderer = if hdr {
+                rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, texture_budget.clone())
+            } else {
+                rrrah_gpu::RasterRenderer::new_with_budget(
+                    &gpu.device,
+                    common::READBACK_FORMAT,
+                    texture_budget.clone(),
+                )
+            }
+            .with_upload_queue_budget(queue_budget.clone());
+            renderer
+                .upload(&gpu.device, &gpu.queue, &frame(1, vec![0.18, 0.18, 0.18, 1.]))
+                .unwrap();
+            renderer.update_view(&gpu.queue, parameters);
+            let old = if hdr {
+                gpu.render_existing_raster_half(&renderer, [64, 64])
+            } else {
+                gpu.render_existing_raster(&renderer, [64, 64])
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
+            };
+            let pressure = texture_budget
+                .try_reserve(texture_budget.available_bytes())
+                .unwrap();
+            assert!(
+                renderer
+                    .upload_bayer_resident(&gpu.device, &gpu.queue, &resident, || false)
+                    .is_err()
+            );
+            drop(pressure);
+            let mut checks = 0;
+            assert!(matches!(
+                renderer.upload_bayer_resident(&gpu.device, &gpu.queue, &resident, || {
+                    checks += 1;
+                    checks == 2
+                }),
+                Err(rrrah_gpu::RasterUploadError::Cancelled)
+            ));
+            let preserved = if hdr {
+                gpu.render_existing_raster_half(&renderer, [64, 64])
+            } else {
+                gpu.render_existing_raster(&renderer, [64, 64])
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
+            };
+            assert_eq!(old, preserved);
+            renderer
+                .upload_bayer_resident(&gpu.device, &gpu.queue, &resident, || false)
+                .unwrap();
+            renderer.update_view(&gpu.queue, parameters);
+            let actual = if hdr {
+                gpu.render_existing_raster_half(&renderer, [64, 64])
+            } else {
+                gpu.render_existing_raster(&renderer, [64, 64])
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
+            };
+            let reference = if hdr {
+                gpu.render_raster_half(&expected, parameters, [64, 64])
+            } else {
+                gpu.render_raster(&expected, parameters, [64, 64])
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
+            };
+            assert_eq!(actual, reference, "{algorithm:?} hdr={hdr}");
+            assert_eq!(queue_budget.used(), 0);
+            assert_eq!(texture_budget.used(), texture_bytes);
+            drop(renderer);
+            assert_eq!(texture_budget.used(), 0);
+        }
+        let texture_budget = rrrah_core::MemoryBudget::new(texture_bytes);
+        let mut renderer =
+            rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, texture_budget.clone());
+        renderer
+            .upload_bayer_resident(&gpu.device, &gpu.queue, &resident, || false)
+            .unwrap();
+        drop(resident);
+        // The queued GPU copy, rather than the producer, now owns this credit.
+        assert!(compute_budget.used() > 0);
+        renderer.update_view(&gpu.queue, parameters);
+        assert_eq!(
+            gpu.render_existing_raster_half(&renderer, [64, 64]),
+            gpu.render_raster_half(&expected, parameters, [64, 64])
+        );
+        assert_eq!((compute_budget.used(), cpu_budget.used()), (0, 0));
+        drop(renderer);
+        assert_eq!(texture_budget.used(), 0);
+        eprintln!(
+            "calibrated Bayer upload {algorithm:?}: SDR/HDR whole64x64 exact, pressure/cancel preserve prior frame, credits zero"
+        );
+    }
+}
+
+#[test]
+fn bayer_resident_crop_and_all_orientations_match_materialized_sdr_hdr() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    check_bayer_resident_geometry(&gpu, 17, 13, rrrah_core::Rect::new(3, 2, 11, 7));
+}
+
+#[test]
+fn tiled_bayer_resident_crop_and_all_orientations_match_materialized_sdr_hdr() {
+    let mut gpu = common::qualification_gpu().expect("actual GPU required");
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(&instance, &Default::default())).unwrap();
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        required_limits: wgpu::Limits {
+            max_texture_dimension_2d: 64,
+            ..Default::default()
+        },
+        ..Default::default()
+    }))
+    .unwrap();
+    gpu.device = device;
+    gpu.queue = queue;
+    check_bayer_resident_geometry(&gpu, 130, 129, rrrah_core::Rect::new(23, 17, 93, 87));
+}
+
+fn check_bayer_resident_geometry(
+    gpu: &common::GpuReadback,
+    sensor_width: u32,
+    sensor_height: u32,
+    crop: rrrah_core::Rect,
+) {
+    use rrrah_core::Orientation::*;
+    let compute = rrrah_gpu::BayerDemosaicCompute::new(&gpu.device);
+    for orientation in [
+        Normal,
+        HorizontalFlip,
+        Rotate180,
+        VerticalFlip,
+        Transpose,
+        Rotate90,
+        Transverse,
+        Rotate270,
+    ] {
+        let mut mosaic = common::profiled_pattern_mosaic(
+            sensor_width,
+            sensor_height,
+            1000.,
+            [2., 1., 0.5, 1.],
+            [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.]],
+            |x, y| (100 + (x * 43 + y * 29) % 2000) as u16,
+        );
+        mosaic.metadata.crop_area = Some(crop);
+        mosaic.metadata.orientation = orientation;
+        let compute_budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let cpu_budget =
+            rrrah_core::MemoryBudget::new(u64::from(sensor_width) * u64::from(sensor_height) * 4);
+        let resident = compute
+            .execute_mosaic_resident(
+                &gpu.queue,
+                &mosaic,
+                rrrah_gpu::GpuDemosaicAlgorithm::Bilinear,
+                &compute_budget,
+                &cpu_budget,
+                || false,
+            )
+            .unwrap();
+        let readback = gpu.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("Bayer geometry pixel oracle"),
+            size: u64::from(sensor_width) * u64::from(sensor_height) * 16,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = gpu.device.create_command_encoder(&Default::default());
+        encoder.copy_buffer_to_buffer(
+            resident.buffer(),
+            0,
+            &readback,
+            0,
+            u64::from(sensor_width) * u64::from(sensor_height) * 16,
+        );
+        gpu.queue.submit([encoder.finish()]);
+        let (tx, rx) = std::sync::mpsc::channel();
+        readback.slice(..).map_async(wgpu::MapMode::Read, move |status| {
+            tx.send(status).unwrap();
+        });
+        gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = readback.slice(..).get_mapped_range().unwrap();
+        let source = bytemuck::cast_slice::<u8, [f32; 4]>(&mapped);
+        let [width, height] = if orientation.swaps_dimensions() {
+            [crop.height, crop.width]
+        } else {
+            [crop.width, crop.height]
+        };
+        let mut pixels = Vec::new();
+        for y in 0..height {
+            for x in 0..width {
+                let uv = orientation.map_display_uv_f64([
+                    (f64::from(x) + 0.5) / f64::from(width),
+                    (f64::from(y) + 0.5) / f64::from(height),
+                ]);
+                let sx = crop.x + (uv[0] * f64::from(crop.width)).floor() as u32;
+                let sy = crop.y + (uv[1] * f64::from(crop.height)).floor() as u32;
+                pixels.extend_from_slice(&source[(sy * sensor_width + sx) as usize]);
+            }
+        }
+        let expected = DecodedRaster::new(
+            width,
+            height,
+            RasterPixels::Rgba32Float(Arc::new(pixels).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        drop(mapped);
+        readback.unmap();
+        let parameters = ViewParameters {
+            viewport: [64., 64.],
+            zoom: 1.25,
+            pan: [3., -2.],
+            exposure_stops: 0.5,
+        };
+        for hdr in [false, true] {
+            let budget = rrrah_core::MemoryBudget::new(
+                rrrah_gpu::RasterRenderer::texture_bytes_for_extent(&gpu.device, sensor_width, sensor_height)
+                    .unwrap()
+                    * 2,
+            );
+            let mut renderer = if hdr {
+                rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, budget.clone())
+            } else {
+                rrrah_gpu::RasterRenderer::new_with_budget(
+                    &gpu.device,
+                    common::READBACK_FORMAT,
+                    budget.clone(),
+                )
+            };
+            renderer
+                .upload_bayer_resident(&gpu.device, &gpu.queue, &resident, || false)
+                .unwrap();
+            renderer.update_view(&gpu.queue, parameters);
+            let mut reference_renderer = if hdr {
+                rrrah_gpu::RasterRenderer::new_linear_hdr(&gpu.device)
+            } else {
+                rrrah_gpu::RasterRenderer::new(&gpu.device, common::READBACK_FORMAT)
+            };
+            reference_renderer
+                .upload(&gpu.device, &gpu.queue, &expected)
+                .unwrap();
+            reference_renderer.set_area_minification(&gpu.queue, true);
+            reference_renderer.update_view(&gpu.queue, parameters);
+            if hdr {
+                assert_eq!(
+                    gpu.render_existing_raster_half(&renderer, [64, 64]),
+                    gpu.render_existing_raster_half(&reference_renderer, [64, 64]),
+                    "{orientation:?}"
+                );
+            } else {
+                assert_eq!(
+                    gpu.render_existing_raster(&renderer, [64, 64]).pixels,
+                    gpu.render_existing_raster(&reference_renderer, [64, 64]).pixels,
+                    "{orientation:?}"
+                );
+            }
+            let ordinary = frame(1, vec![0.18, 0.27, 0.36, 1.]);
+            renderer.upload(&gpu.device, &gpu.queue, &ordinary).unwrap();
+            renderer.update_view(&gpu.queue, parameters);
+            if hdr {
+                assert_eq!(
+                    gpu.render_existing_raster_half(&renderer, [64, 64]),
+                    gpu.render_raster_half(&ordinary, parameters, [64, 64])
+                );
+            } else {
+                assert_eq!(
+                    gpu.render_existing_raster(&renderer, [64, 64]).pixels,
+                    gpu.render_raster(&ordinary, parameters, [64, 64]).pixels
+                );
+            }
+            drop(renderer);
+            assert_eq!(budget.used(), 0);
+        }
+        drop(resident);
+        assert_eq!((compute_budget.used(), cpu_budget.used()), (0, 0));
+        eprintln!(
+            "Bayer geometry {orientation:?}: offset crop, whole SDR/HDR exact, ordinary upload resets geometry, credits zero"
+        );
+    }
+}
+
+#[test]
+fn calibrated_bayer_hdr_exposure_has_explicit_signed_half_range() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let mosaic = common::profiled_pattern_mosaic(
+        16,
+        16,
+        1.,
+        [1.; 4],
+        [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.]],
+        |x, y| if (x + y) % 2 == 1 { 4000 } else { 1000 },
+    );
+    let compute = rrrah_gpu::BayerDemosaicCompute::new(&gpu.device);
+    for algorithm in rrrah_gpu::GpuDemosaicAlgorithm::ALL {
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let cpu = rrrah_core::MemoryBudget::new(16 * 16 * 4);
+        let output = compute
+            .execute_mosaic_resident(&gpu.queue, &mosaic, algorithm, &root, &cpu, || false)
+            .unwrap();
+        let texture_budget = rrrah_core::MemoryBudget::new(16 * 16 * 16);
+        let mut renderer =
+            rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, texture_budget.clone());
+        renderer
+            .upload_bayer_resident(&gpu.device, &gpu.queue, &output, || false)
+            .unwrap();
+        drop(output);
+        renderer.update_view(
+            &gpu.queue,
+            ViewParameters {
+                viewport: [64., 64.],
+                zoom: 2.,
+                exposure_stops: 10.,
+                ..Default::default()
+            },
+        );
+        let pixels = gpu.render_existing_raster_half(&renderer, [64, 64]);
+        for pixel in pixels.chunks_exact(4) {
+            assert_eq!(pixel, [0xfbff, 0x7bff, 0x7bff, 0x3c00], "{algorithm:?}");
+        }
+        assert_eq!((root.used(), cpu.used()), (0, 0));
+        drop(renderer);
+        assert_eq!(texture_budget.used(), 0);
+        eprintln!(
+            "Bayer HDR range {algorithm:?}: signed +/-65504 after10stops, all4096 pixels exact, alpha1, credits zero"
+        );
+    }
+}
+
+#[test]
+fn calibrated_bayer_compute_and_fragment_respect_shader_precision_at_sensor_pixel_scale() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let inverse = rrrah_core::invert_3x3(rrrah_core::SRGB_TO_XYZ_D65).unwrap();
+    let mosaic = common::profiled_pattern_mosaic(
+        64,
+        64,
+        1024.,
+        [2., 1., 0.5, 1.],
+        [inverse[0], inverse[1], inverse[2], [0.; 3]],
+        |x, y| (100 + (x * 43 + y * 29) % 2000) as u16,
+    );
+    let parameters = ViewParameters {
+        viewport: [64., 64.],
+        zoom: 2.,
+        ..Default::default()
+    };
+    let compute = rrrah_gpu::BayerDemosaicCompute::new(&gpu.device);
+    for algorithm in rrrah_gpu::GpuDemosaicAlgorithm::ALL {
+        let mut raw = rrrah_gpu::RawRenderer::new(&gpu.device, wgpu::TextureFormat::Rgba16Float);
+        raw.set_output_mode(&gpu.queue, rrrah_gpu::RawOutputMode::SceneLinear)
+            .unwrap();
+        raw.set_demosaic_algorithm(&gpu.queue, algorithm);
+        raw.upload_mosaic(&gpu.device, &gpu.queue, &mosaic).unwrap();
+        raw.update_view(&gpu.queue, parameters);
+        let reference = gpu.render_existing_raw_half(&raw, [64, 64]);
+        let gpu_budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let cpu_budget = rrrah_core::MemoryBudget::new(64 * 64 * 4);
+        let output = compute
+            .execute_mosaic_resident(&gpu.queue, &mosaic, algorithm, &gpu_budget, &cpu_budget, || false)
+            .unwrap();
+        let mut raster = rrrah_gpu::RasterRenderer::new_linear_hdr(&gpu.device);
+        raster
+            .upload_bayer_resident(&gpu.device, &gpu.queue, &output, || false)
+            .unwrap();
+        drop(output);
+        raster.update_view(&gpu.queue, parameters);
+        let actual = gpu.render_existing_raster_half(&raster, [64, 64]);
+        let mismatches: Vec<_> = actual
+            .iter()
+            .zip(&reference)
+            .enumerate()
+            .filter(|(_, (a, b))| a != b)
+            .take(8)
+            .collect();
+        let count = actual.iter().zip(&reference).filter(|(a, b)| a != b).count();
+        let max_steps = actual
+            .iter()
+            .zip(&reference)
+            .map(|(a, b)| a.abs_diff(*b))
+            .max()
+            .unwrap();
+        eprintln!(
+            "Bayer cross-stage {algorithm:?}: mismatched_channels={count} max_half_steps={max_steps} first={mismatches:?}"
+        );
+        // Dyadic fixture: simple filters match exactly. Weighted reciprocals may
+        // straddle adjacent half quantization bins (WGSL15.7 allows reassociation/fusion).
+        // A separate independent f64 oracle enforces f32 accuracy for every weighted pixel.
+        if matches!(
+            algorithm,
+            rrrah_gpu::GpuDemosaicAlgorithm::Bilinear
+                | rrrah_gpu::GpuDemosaicAlgorithm::SmoothHue
+                | rrrah_gpu::GpuDemosaicAlgorithm::MalvarHeCutler
+        ) {
+            assert_eq!(count, 0, "{algorithm:?}");
+        } else {
+            assert!(
+                max_steps <= 1,
+                "{algorithm:?}: half quantization mismatch exceeds one step"
+            );
+        }
+        for (&a, &b) in actual.iter().zip(&reference) {
+            assert_ne!(a & 0x7c00, 0x7c00);
+            assert_ne!(b & 0x7c00, 0x7c00);
+        }
+        assert_eq!((gpu_budget.used(), cpu_budget.used()), (0, 0));
+        eprintln!(
+            "Bayer fragment/compute {algorithm:?}: whole64x64 HDR compared at1:1, native normalization, credits zero"
+        );
+    }
+}
+
+#[path = "common/bayer_directional_reference.rs"]
+mod directional_reference;
+
+#[test]
+fn weighted_fragment_compute_float32_accuracy_against_independent_f64() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let inverse = rrrah_core::invert_3x3(rrrah_core::SRGB_TO_XYZ_D65).unwrap();
+    let mosaic = common::profiled_pattern_mosaic(
+        64,
+        64,
+        1024.,
+        [2., 1., 0.5, 1.],
+        [inverse[0], inverse[1], inverse[2], [0.; 3]],
+        |x, y| (100 + (x * 43 + y * 29) % 2000) as u16,
+    );
+    let parameters = ViewParameters {
+        viewport: [64., 64.],
+        zoom: 2.,
+        ..Default::default()
+    };
+    for algorithm in [
+        rrrah_gpu::GpuDemosaicAlgorithm::Directional,
+        rrrah_gpu::GpuDemosaicAlgorithm::Vng,
+        rrrah_gpu::GpuDemosaicAlgorithm::Rcd,
+    ] {
+        let mut raw = rrrah_gpu::RawRenderer::new(&gpu.device, wgpu::TextureFormat::Rgba32Float);
+        raw.set_output_mode(&gpu.queue, rrrah_gpu::RawOutputMode::SceneLinear)
+            .unwrap();
+        raw.set_demosaic_algorithm(&gpu.queue, algorithm);
+        raw.upload_mosaic(&gpu.device, &gpu.queue, &mosaic).unwrap();
+        raw.update_view(&gpu.queue, parameters);
+        let fragment = gpu.read_float_frame([64, 64], |encoder, target| raw.encode(encoder, target));
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let cpu = rrrah_core::MemoryBudget::new(64 * 64 * 4);
+        let output = rrrah_gpu::BayerDemosaicCompute::new(&gpu.device)
+            .execute_mosaic_resident(&gpu.queue, &mosaic, algorithm, &root, &cpu, || false)
+            .unwrap();
+        let readback = gpu.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("independent directional f32 compute audit"),
+            size: 64 * 64 * 16,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = gpu.device.create_command_encoder(&Default::default());
+        encoder.copy_buffer_to_buffer(output.buffer(), 0, &readback, 0, 64 * 64 * 16);
+        gpu.queue.submit([encoder.finish()]);
+        let (tx, rx) = std::sync::mpsc::channel();
+        readback.slice(..).map_async(wgpu::MapMode::Read, move |status| {
+            tx.send(status).unwrap();
+        });
+        gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = readback.slice(..).get_mapped_range().unwrap();
+        let compute = bytemuck::cast_slice::<u8, f32>(&mapped).to_vec();
+        drop(mapped);
+        readback.unmap();
+        drop(output);
+        let mut maxima = [0.0f64; 3];
+        for y in 0..64 {
+            for x in 0..64 {
+                let expected = directional_reference::weighted_rgb(&mosaic, x, y, algorithm);
+                for channel in 0..3 {
+                    let index = ((y * 64 + x) * 4 + channel as u32) as usize;
+                    let a = f64::from(fragment[index]);
+                    let b = f64::from(compute[index]);
+                    maxima[0] = maxima[0].max((a - expected[channel]).abs());
+                    maxima[1] = maxima[1].max((b - expected[channel]).abs());
+                    maxima[2] = maxima[2].max((a - b).abs());
+                    assert!(a.is_finite() && b.is_finite());
+                    // This authored dyadic field isolates reciprocal/filter rounding.
+                    // 32 f32 eps covers the composed weighted arithmetic, well below
+                    // binary16 quantization here; this is not a bound for arbitrary inputs.
+                    let tolerance = 32.0 * f64::from(f32::EPSILON) * expected[channel].abs().max(1.0);
+                    assert!(
+                        (a - expected[channel]).abs() <= tolerance,
+                        "fragment {algorithm:?} {x},{y} channel={channel}"
+                    );
+                    assert!(
+                        (b - expected[channel]).abs() <= tolerance,
+                        "compute {algorithm:?} {x},{y} channel={channel}"
+                    );
+                }
+            }
+        }
+        // Retain measured errors alongside the independent numerical accuracy gate.
+        eprintln!(
+            "{algorithm:?} independent f64 audit: max_abs_fragment={} max_abs_compute={} max_abs_cross_stage={}",
+            maxima[0], maxima[1], maxima[2]
+        );
+        assert_eq!((root.used(), cpu.used()), (0, 0));
+    }
+}
+
+#[test]
+fn area_minification_matches_independent_sixteen_cell_linear_average() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    // Source is deliberately above1 and signed, with a high-frequency term.
+    let source: Vec<[f32; 4]> = (0..64 * 64)
+        .map(|i| {
+            let x = i % 64;
+            let y = i / 64;
+            let high = if x % 4 == 0 && y % 4 == 0 { 32.0 } else { 0.0 };
+            [
+                high + x as f32 / 64.,
+                -high - y as f32 / 128.,
+                (x % 7) as f32 / 8.,
+                1.,
+            ]
+        })
+        .collect();
+    let mut averaged = Vec::new();
+    for y in 0..16 {
+        for x in 0..16 {
+            for channel in 0..4 {
+                let mut sum = 0.0f64;
+                for dy in 0..4 {
+                    for dx in 0..4 {
+                        sum += f64::from(source[((y * 4 + dy) * 64 + x * 4 + dx) as usize][channel]);
+                    }
+                }
+                averaged.push((sum / 16.) as f32);
+            }
+        }
+    }
+    let full = DecodedRaster::new(
+        64,
+        64,
+        RasterPixels::Rgba32Float(Arc::new(source.into_iter().flatten().collect::<Vec<_>>()).into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    let expected = DecodedRaster::new(
+        16,
+        16,
+        RasterPixels::Rgba32Float(Arc::new(averaged).into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    for hdr in [false, true] {
+        let budget = rrrah_core::MemoryBudget::new(64 * 64 * 16);
+        let mut renderer = if hdr {
+            rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, budget.clone())
+        } else {
+            rrrah_gpu::RasterRenderer::new_with_budget(&gpu.device, common::READBACK_FORMAT, budget.clone())
+        };
+        renderer.upload(&gpu.device, &gpu.queue, &full).unwrap();
+        renderer.set_area_minification(&gpu.queue, true);
+        renderer.update_view(
+            &gpu.queue,
+            ViewParameters {
+                viewport: [64., 64.],
+                zoom: 0.5,
+                ..Default::default()
+            },
+        );
+        let parameters = ViewParameters {
+            viewport: [64., 64.],
+            zoom: 0.5,
+            ..Default::default()
+        };
+        if hdr {
+            assert_eq!(
+                gpu.render_existing_raster_half(&renderer, [64, 64]),
+                gpu.render_raster_half(&expected, parameters, [64, 64])
+            );
+        } else {
+            assert_eq!(
+                gpu.render_existing_raster(&renderer, [64, 64]).pixels,
+                gpu.render_raster(&expected, parameters, [64, 64]).pixels
+            );
+        }
+        // Averaging takes place in linear space before RAW tone mapping.
+        renderer.set_raw_development(&gpu.queue, &rrrah_core::develop::MonotoneCurve::identity());
+        let mut reference = if hdr {
+            rrrah_gpu::RasterRenderer::new_linear_hdr(&gpu.device)
+        } else {
+            rrrah_gpu::RasterRenderer::new(&gpu.device, common::READBACK_FORMAT)
+        };
+        reference.upload(&gpu.device, &gpu.queue, &expected).unwrap();
+        reference.update_view(&gpu.queue, parameters);
+        reference.set_raw_development(&gpu.queue, &rrrah_core::develop::MonotoneCurve::identity());
+        if hdr {
+            assert_eq!(
+                gpu.render_existing_raster_half(&renderer, [64, 64]),
+                gpu.render_existing_raster_half(&reference, [64, 64])
+            );
+        } else {
+            assert_eq!(
+                gpu.render_existing_raster(&renderer, [64, 64]).pixels,
+                gpu.render_existing_raster(&reference, [64, 64]).pixels
+            );
+        }
+        drop(renderer);
+        assert_eq!(budget.used(), 0);
+    }
+    eprintln!(
+        "area minification:64x64→16x16, independent f64 sixteen-cell average, HDR signed/bright and SDR exact, filtering before tone, credits zero"
+    );
+}
+
+#[test]
+fn area_source_region_missing_footprint_stays_unexposed_background() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let mut background = rrrah_gpu::RasterRenderer::new_linear_hdr(&gpu.device);
+    background
+        .upload(&gpu.device, &gpu.queue, &frame(1, vec![0., 0., 0., 1.]))
+        .unwrap();
+    background.update_view(
+        &gpu.queue,
+        ViewParameters {
+            viewport: [64., 64.],
+            pan: [1000., 1000.],
+            ..Default::default()
+        },
+    );
+    // Match shader background conversion, not the backend's render-pass clear conversion.
+    let blank = gpu.render_existing_raster_half(&background, [64, 64]);
+    for (edge, origin, visible) in [(3u32, [32, 32], 0usize), (8, [28, 28], 4)] {
+        let crop = DecodedRaster::new(
+            edge,
+            edge,
+            RasterPixels::Rgba32Float(Arc::new([4., 1., 0.5, 1.].repeat((edge * edge) as usize)).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        let budget = rrrah_core::MemoryBudget::new(u64::from(edge * edge) * 16);
+        let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, budget.clone());
+        renderer
+            .upload_packed_region_with_cancel(&gpu.device, &gpu.queue, &crop, [64, 64], origin, || false)
+            .unwrap();
+        renderer.set_area_minification(&gpu.queue, true);
+        renderer.set_raw_development(&gpu.queue, &rrrah_core::develop::MonotoneCurve::identity());
+        renderer.update_view(
+            &gpu.queue,
+            ViewParameters {
+                viewport: [64., 64.],
+                zoom: 0.5,
+                exposure_stops: 10.,
+                ..Default::default()
+            },
+        );
+        let actual = gpu.render_existing_raster_half(&renderer, [64, 64]);
+        let displayed = actual
+            .chunks_exact(4)
+            .filter(|pixel| *pixel != &blank[..4])
+            .count();
+        assert_eq!(displayed, visible, "region edge={edge}");
+        if visible == 0 {
+            assert_eq!(actual, blank);
+        }
+        drop(renderer);
+        assert_eq!(budget.used(), 0);
+    }
+    eprintln!(
+        "area region: unavailable four-cell footprint returns untouched background even at+10stops/tone; complete footprints show4 pixels; credits zero"
+    );
+}
+
+#[test]
+fn fractional_area_alpha_matches_independent_f64_and_ignores_invisible_rgb() {
+    fn half_value(word: u16) -> f64 {
+        let sign = if word & 0x8000 != 0 { -1. } else { 1. };
+        let exponent = (word >> 10) & 31;
+        let fraction = word & 1023;
+        assert_ne!(exponent, 31);
+        sign * if exponent == 0 {
+            f64::from(fraction) * 2.0f64.powi(-24)
+        } else {
+            f64::from(1024 + fraction) * 2.0f64.powi(i32::from(exponent) - 25)
+        }
+    }
+    fn expected(source: &[[f32; 4]], size: [u32; 2], view: ViewParameters) -> Vec<[f64; 3]> {
+        let [w, h] = size;
+        let background = f64::from(0.018f32);
+        let fit = (32.0 / f64::from(w)).min(32.0 / f64::from(h));
+        let scale = fit * f64::from(view.zoom);
+        let footprint = 1. / scale;
+        let mut result = Vec::new();
+        for py in 0..64 {
+            for px in 0..64 {
+                let x = (f64::from(px) + 0.5 - 32. - f64::from(view.pan[0])) / scale + f64::from(w) / 2.;
+                let y = (f64::from(py) + 0.5 - 32. - f64::from(view.pan[1])) / scale + f64::from(h) / 2.;
+                if x < 0. || y < 0. || x >= f64::from(w) || y >= f64::from(h) {
+                    result.push([background; 3]);
+                    continue;
+                }
+                let left = (x - footprint / 2.).max(0.);
+                let right = (x + footprint / 2.).min(f64::from(w));
+                let top = (y - footprint / 2.).max(0.);
+                let bottom = (y + footprint / 2.).min(f64::from(h));
+                let mut sum = [0.0f64; 4];
+                let mut total = 0.;
+                for sy in top.floor() as u32..bottom.ceil() as u32 {
+                    for sx in left.floor() as u32..right.ceil() as u32 {
+                        let weight = (right.min(f64::from(sx + 1)) - left.max(f64::from(sx)))
+                            * (bottom.min(f64::from(sy + 1)) - top.max(f64::from(sy)));
+                        let pixel = source[(sy * w + sx) as usize];
+                        let alpha = f64::from(pixel[3]);
+                        for channel in 0..3 {
+                            sum[channel] += f64::from(pixel[channel]) * alpha * weight;
+                        }
+                        sum[3] += alpha * weight;
+                        total += weight;
+                    }
+                }
+                result.push(std::array::from_fn(|channel| {
+                    sum[channel] / total * 2.0f64.powf(f64::from(view.exposure_stops))
+                        + background * (1. - sum[3] / total)
+                }));
+            }
+        }
+        result
+    }
+    let size = [73u32, 69u32];
+    let pixels: Vec<[f32; 4]> = (0..size[0] * size[1])
+        .map(|i| {
+            let x = i % size[0];
+            let y = i / size[0];
+            let alpha = [0., 0.25, 0.5, 1.][((x + 2 * y) % 4) as usize];
+            if alpha == 0. {
+                [1e6, -1e6, 9e5, 0.]
+            } else {
+                [
+                    1.25 + (x % 9) as f32 / 4.,
+                    (x % 5) as f32 / 4. - 0.5,
+                    0.125 + (y % 7) as f32 / 8.,
+                    alpha,
+                ]
+            }
+        })
+        .collect();
+    let clean: Vec<[f32; 4]> = pixels
+        .iter()
+        .map(|p| if p[3] == 0. { [0.; 4] } else { *p })
+        .collect();
+    let source = DecodedRaster::new(
+        size[0],
+        size[1],
+        RasterPixels::Rgba32Float(Arc::new(pixels.iter().flatten().copied().collect::<Vec<_>>()).into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    let cleaned = DecodedRaster::new(
+        size[0],
+        size[1],
+        RasterPixels::Rgba32Float(Arc::new(clean.into_iter().flatten().collect::<Vec<_>>()).into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    for tiled in [false, true] {
+        let Some(mut gpu) = common::qualification_gpu() else {
+            return;
+        };
+        if tiled {
+            let instance = common::headless_instance();
+            let adapter =
+                pollster::block_on(common::request_adapter(&instance, &Default::default())).unwrap();
+            let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+                required_limits: wgpu::Limits {
+                    max_texture_dimension_2d: 64,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }))
+            .unwrap();
+            gpu.device = device;
+            gpu.queue = queue;
+        }
+        let mut maximum_error = 0.0f64;
+        for zoom in [0.37, 0.63, 0.91] {
+            let view = ViewParameters {
+                viewport: [64., 64.],
+                zoom,
+                pan: [0.375, -0.25],
+                exposure_stops: 0.75,
+            };
+            let reference = expected(&pixels, size, view);
+            for hdr in [false, true] {
+                let budget = rrrah_core::MemoryBudget::new(
+                    rrrah_gpu::RasterRenderer::texture_bytes_for_extent(&gpu.device, size[0], size[1])
+                        .unwrap()
+                        * 2,
+                );
+                let mut renderer = if hdr {
+                    rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, budget.clone())
+                } else {
+                    rrrah_gpu::RasterRenderer::new_with_budget(
+                        &gpu.device,
+                        common::READBACK_FORMAT,
+                        budget.clone(),
+                    )
+                };
+                renderer.upload(&gpu.device, &gpu.queue, &source).unwrap();
+                renderer.set_area_minification(&gpu.queue, true);
+                renderer.update_view(&gpu.queue, view);
+                let actual: Vec<u16> = if hdr {
+                    gpu.render_existing_raster_half(&renderer, [64, 64])
+                } else {
+                    gpu.render_existing_raster(&renderer, [64, 64])
+                        .pixels
+                        .into_iter()
+                        .map(u16::from)
+                        .collect()
+                };
+                renderer.upload(&gpu.device, &gpu.queue, &cleaned).unwrap();
+                renderer.set_area_minification(&gpu.queue, true);
+                renderer.update_view(&gpu.queue, view);
+                let no_hidden: Vec<u16> = if hdr {
+                    gpu.render_existing_raster_half(&renderer, [64, 64])
+                } else {
+                    gpu.render_existing_raster(&renderer, [64, 64])
+                        .pixels
+                        .into_iter()
+                        .map(u16::from)
+                        .collect()
+                };
+                assert_eq!(
+                    actual, no_hidden,
+                    "invisible RGB tiled={tiled} zoom={zoom} hdr={hdr}"
+                );
+                for (index, pixel) in actual.chunks_exact(4).enumerate() {
+                    assert_eq!(pixel[3], if hdr { 0x3c00 } else { 255 });
+                    for channel in 0..3 {
+                        let target = reference[index][channel];
+                        if hdr {
+                            let value = half_value(pixel[channel]);
+                            let error = (value - target).abs();
+                            maximum_error = maximum_error.max(error);
+                            let half_step = if target.abs() < 2.0f64.powi(-14) {
+                                2.0f64.powi(-24)
+                            } else {
+                                2.0f64.powi(target.abs().log2().floor() as i32 - 10)
+                            };
+                            // Format quantization plus conservative f32 geometry budget for this73-pixel control.
+                            let geometry = 8. * f64::from(f32::EPSILON) * 73. * 5. * 2.0f64.powf(0.75);
+                            assert!(
+                                error <= half_step + geometry,
+                                "HDR tiled={tiled} zoom={zoom} pixel={index} ch={channel} error={error}"
+                            );
+                        } else {
+                            let linear = target.clamp(0., 1.);
+                            let encoded = if linear <= 0.0031308 {
+                                linear * 12.92
+                            } else {
+                                1.055 * linear.powf(1. / 2.4) - 0.055
+                            };
+                            let byte = (encoded * 255.).round() as u16;
+                            assert!(
+                                pixel[channel].abs_diff(byte) <= 1,
+                                "SDR tiled={tiled} zoom={zoom} pixel={index} ch={channel}"
+                            );
+                        }
+                    }
+                }
+                drop(renderer);
+                assert_eq!(budget.used(), 0);
+            }
+        }
+        eprintln!(
+            "fractional area f64: tiled={tiled} max_hdr_abs_error={maximum_error}; three zooms, clipped edges, alpha0/.25/.5/1, invisible RGB bit-exact, CPU oracle within format/geometry precision, credits zero"
+        );
+    }
+}
+
+#[test]
+fn area_large_signed_hdr_cancellation_preserves_small_other_channels() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let source = DecodedRaster::new(
+        4,
+        4,
+        RasterPixels::Rgba32Float(
+            Arc::new(
+                (0..16)
+                    .flat_map(|i| [if i % 4 < 2 { f32::MAX } else { -f32::MAX }, 1., 0.25, 1.])
+                    .collect::<Vec<_>>(),
+            )
+            .into(),
+        ),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    let budget = rrrah_core::MemoryBudget::new(4 * 4 * 16);
+    let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, budget.clone());
+    renderer.upload(&gpu.device, &gpu.queue, &source).unwrap();
+    renderer.set_area_minification(&gpu.queue, true);
+    renderer.update_view(
+        &gpu.queue,
+        ViewParameters {
+            viewport: [64., 64.],
+            zoom: 0.03125,
+            pan: [0.5, 0.5],
+            ..Default::default()
+        },
+    );
+    let frame = gpu.render_existing_raster_half(&renderer, [64, 64]);
+    let pixel = &frame[(32 * 64 + 32) * 4..(32 * 64 + 32 + 1) * 4];
+    assert_eq!(
+        pixel,
+        [0, 0x3c00, 0x3400, 0x3c00],
+        "f64 mean of +/-f32MAX is0; green/blue remain1/.25"
+    );
+    drop(renderer);
+    assert_eq!(budget.used(), 0);
 }

@@ -1,0 +1,28 @@
+
+running 7 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+test finite_large_bayer_values_refuse_unsafe_filter_range_before_replacement ... ok
+test nonfinite_raw_view_components_keep_previous_finite_frame ... ok
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... RAW linear adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW RGBE repeat grid: Rgba16Float; 3x5; four planes and independent signed HDR matrix preserved
+RAW above file white: Rgba16Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba16Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW invalid pixel count: Rgba16Float; empty/truncated/extra refused; prior frame and credit exact
+RAW fractional levels: Rgba16Float; black=.75 white=1.25 sample=1 exposure=1; RGB=1
+RAW extreme correction: Rgba16Float; subnormal zero field exact; normalization/gain overflow refused; prior frame and credit exact; valid retry
+RAW repeat grid: Rgba16Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+RAW RGBE repeat grid: Rgba32Float; 3x5; four planes and independent signed HDR matrix preserved
+RAW above file white: Rgba32Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba32Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW invalid pixel count: Rgba32Float; empty/truncated/extra refused; prior frame and credit exact
+RAW fractional levels: Rgba32Float; black=.75 white=1.25 sample=1 exposure=1; RGB=1
+RAW extreme correction: Rgba32Float; subnormal zero field exact; normalization/gain overflow refused; prior frame and credit exact; valid retry
+RAW repeat grid: Rgba32Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+ok
+test raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_linear_hdr ... ok
+test raw_split_comparison_matches_baseline_and_edit_without_another_atlas ... RAW split comparison adapter: Metal Apple M4 Max
+ok
+test signed_rgbe_hdr_saturation_preserves_float32_and_both_half_limits ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.62s
+

@@ -1,0 +1,43 @@
+{
+  "change": "Owner centroid candidate carries source gradient bounds. Collector outwardly accumulates group area error and mass-weighted centroid error; validates fallback/candidate native unit range and group area<=1; reconstructs original/candidate integral rounding using positive unit stream bounds and reported alpha mass. Both quotient arithmetic bounds feed existing opaque_candidate_native_error. Candidate measurement now uses its own accumulated alpha. Original pixel retained; conditional diagnostic refuses if measured discrepancy exceeds bound.",
+  "tests": {
+    "hayro_passed": 286,
+    "hayro_ignored": 12,
+    "failed": 0,
+    "coverage": "Existing independent opaque bound arithmetic controls plus integrated constant owner and half-pixel exact fallback; callback cancellation/mint/overrun controls."
+  },
+  "real": {
+    "pixel": [
+      147,
+      59
+    ],
+    "completed": true,
+    "owned_fragments": 632522,
+    "centroid_samples": 666,
+    "conditional_native_bound": 2.3902076126579326e-07,
+    "measured_component_delta_with_each_stream_own_alpha": 7.972352777940728e-10,
+    "alpha_delta": 8.659739592076221e-14,
+    "geometry_setup": 80708,
+    "geometry_traversal_export_bound": 39330967,
+    "geometry_total": 39411675,
+    "geometry_remaining": 588325,
+    "geometry_limit": 40000000,
+    "returned_original_native_exact": true,
+    "peak_bytes": 266078344,
+    "final_credit": 0,
+    "deadline": false,
+    "original_source_work": 6993741,
+    "original_source_allowance": 16000000
+  },
+  "sources": {
+    "vendor/hayro/src/native_spatial.rs": "f76ae1a951d143a51605e8fd5c6bec6008de9bf248071bc8cd2e7893aad42b8d",
+    "vendor/hayro/src/knockout_interpreter.rs": "8483cf6bdf49d4fb1f0f91bcb7531560513aa85d46a384890fa37da30ad1b7e0",
+    "vendor/hayro/src/native_moments.rs": "7f8b41c95d390662719264ef0b663174a488cadd4ec1dae205400b7633a3f2ca"
+  },
+  "limitations": [
+    "Bound is conditional on already-qualified native opaque root Normal tail, unit components, retained source/owner binding and reported fragment geometry.",
+    "Excludes absolute clipping/owner correctness and subsequent Pixel storage/profile/display errors.",
+    "No original color reads skipped; live deferral and ordinary4M acceptance remain unfinished.",
+    "One real pixel does not establish whole-page AI or100-format support."
+  ]
+}

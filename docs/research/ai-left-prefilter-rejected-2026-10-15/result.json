@@ -1,0 +1,85 @@
+{
+  "status": "rejected; accepted left-event source restored byte-exact",
+  "restored_sha256": "3a7c97faa6cfe2987e6519e349cd9b6de31fe6d941e7ce6a8bbed95e67cae7af",
+  "candidate": "/tmp/ai-left-candidate-prefilter-rejected.rs",
+  "algorithm": "Conservatively prune left-event classification candidates when both original endpoints are right of tile border. Pruned edges stay in ordinary traversal.",
+  "tests": {
+    "passed": 312,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-left-prefilter-enabled-all.log"
+  },
+  "controls_log": "/tmp/ai-left-candidate-prefilter-real3.log",
+  "14760": {
+    "bytes_unchanged": [
+      213,
+      167,
+      146
+    ],
+    "baseline_geometry_remaining": 5439065,
+    "candidate_geometry_remaining": 5553281
+  },
+  "14761": {
+    "completed": false,
+    "baseline_source_work_before_refusal": 3895933,
+    "candidate_source_work_before_refusal": 3903498
+  },
+  "timing": {
+    "runs": [
+      {
+        "prefilter": false,
+        "replay_ns": 95214750,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/0.log"
+      },
+      {
+        "prefilter": true,
+        "replay_ns": 96768458,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/1.log"
+      },
+      {
+        "prefilter": true,
+        "replay_ns": 95297208,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/2.log"
+      },
+      {
+        "prefilter": false,
+        "replay_ns": 97881917,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/3.log"
+      },
+      {
+        "prefilter": false,
+        "replay_ns": 95278667,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/4.log"
+      },
+      {
+        "prefilter": true,
+        "replay_ns": 95492208,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/5.log"
+      },
+      {
+        "prefilter": true,
+        "replay_ns": 96182000,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/6.log"
+      },
+      {
+        "prefilter": false,
+        "replay_ns": 95361958,
+        "log": "/tmp/ai-left-prefilter-roi-abba-20261015/7.log"
+      }
+    ],
+    "paired_candidate_over_baseline": [
+      1.0163179339335555,
+      0.9735936005421717,
+      1.0022412257299946,
+      1.008599257158709
+    ],
+    "scope": "Same debug binary, two ABBA series, replay147,60 only, no concurrent heavy work."
+  },
+  "decision": "Three of four paired timings regress despite lower accounted work. Removed prototype and flag; preserve actual measured speed.",
+  "restored_tests": {
+    "passed": 312,
+    "failed": 0,
+    "ignored": 12,
+    "log": "/tmp/ai-left-prefilter-restored-all.log"
+  }
+}

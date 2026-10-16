@@ -1,0 +1,56 @@
+{
+  "status": "passed_bounded_area_minification",
+  "behavior": [
+    "calibrated Bayer uploads enable area minification automatically",
+    "premultiplied linear color integrated over output pixel footprint, with fractional edge-cell overlap and crop/orientation/tile mapping",
+    "area filtering precedes exposure and RAW tone mapping; tone setter preserves minification policy",
+    "ordinary uploads reset to bilinear",
+    "no added image buffer or texture allocations",
+    "unavailable source-region footprint returns untouched background before exposure/tone",
+    "bilinear reads skipped when area mode selected"
+  ],
+  "qualification": {
+    "adapter": "Apple M4 Max Metal",
+    "raster_suite_passed": 26,
+    "failed": 0,
+    "ignored": 8,
+    "gpu_library_passed": 61,
+    "gpu_library_ignored": 2,
+    "independent_oracle": "64x64\u219216x16, f64 average of16 cells, sparse bright impulses distinguish bilinear; signed HDR and SDR whole64x64 attachments exact, before/after RAW tone",
+    "geometry": "eight orientations, offset crop across cap64 tiled source, whole SDR/HDR exact vs independently materialized geometry using same area filter",
+    "source_regions": "3x3 region cannot cover4x4 footprint and stays unexposed shader background even+10stops/tone; complete8x8 region shows exactly4 output pixels",
+    "live_full_sensor": [
+      {
+        "hdr": false,
+        "exit_code": 0,
+        "wall_seconds": 14.478721958000001,
+        "compute_uploads": 2,
+        "recovery_pass": true,
+        "log": "full-sensor-hdr-0.log"
+      },
+      {
+        "hdr": true,
+        "exit_code": 0,
+        "wall_seconds": 13.189503209,
+        "compute_uploads": 2,
+        "recovery_pass": true,
+        "log": "full-sensor-hdr-1.log"
+      }
+    ]
+  },
+  "probe_correction": "initial partial-region test compared render-pass clear and shader background; corrected oracle uses shader background via offscreen opaque image, strict equality retained",
+  "limitations": [
+    "independent numerical average oracle currently aligned4x4; arbitrary fractional footprint and alpha need separate numerical oracle",
+    "full sensor live recheck after area change covers Bilinear only",
+    "extreme zoom-out GPU work/latency not stress-qualified",
+    "old optimized timing snapshot used bilinear compute minification; post-area optimized comparison pending",
+    "physical HDR, NVIDIA, camera corpus and100-format completion not claimed"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "2835f4dfe61c17d7bdd3aa1cb4604a25870571393dc157f1887ecccb458e4ae3",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "fdbbb1e1cfecd7bf2d7aef0dcec5f602f2332964e36d3f80f54fac700c24716e",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "e85e9f2af4148fd6da3283dc65b013791e509c2213490e071de81644cb671a58"
+  },
+  "live_binary_sha256": "912b88b1e1a5a682f6a93daad57681d560d468ff04335c22eaf9d33cf02d9537",
+  "fractional_and_range_followup": "../fractional-area-alpha-and-range-2026-10-15/result.json"
+}

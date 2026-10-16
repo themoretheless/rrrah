@@ -1,0 +1,113 @@
+{
+  "status": "Measured native RLE app decode/prepare, RAM and swap paths; no optimization applied",
+  "source": "tests/fixtures/raster/dicom-rle-segmented-explicit-full-ramp.dcm",
+  "source_sha256": "9785d9012869e413cb33bc03f7337415174efa5436d817592e550c2d2581ed7f",
+  "scope": "64 separate paths copied from one authored256x256 palette frame; 1MiB linear RGBA output each; test-profile optimized binary; M4 Max; warm macOS filesystem cache",
+  "timed": "Foreground load including source fingerprint/key resolution and cache maintenance; pixel comparison and wait_idle outside timing",
+  "correctness": "Each result matches prepared reference exactly; panic decoder on RAM and swap prevents fallback from qualifying as a hit",
+  "policy": {
+    "root_bytes": 8388608,
+    "ram_bytes": 2097152,
+    "ram_count": 1,
+    "ttl": null,
+    "swap_bytes": 134217728,
+    "swap_count": 128,
+    "queue_bytes": 2097152,
+    "restore_bytes": 2097152
+  },
+  "runs": [
+    {
+      "run": 1,
+      "stages": {
+        "decode_prepare": {
+          "samples": 64,
+          "median_ns": 2207167,
+          "p95_ns": 2390375,
+          "max_ns": 2776792
+        },
+        "ram": {
+          "samples": 64,
+          "median_ns": 125125,
+          "p95_ns": 171625,
+          "max_ns": 330500
+        },
+        "swap": {
+          "samples": 63,
+          "median_ns": 789792,
+          "p95_ns": 912958,
+          "max_ns": 1527417
+        }
+      },
+      "peak_bytes": 2883584,
+      "final_managed_bytes": 0,
+      "swap_writes": 64,
+      "swap_reads": 63,
+      "errors": 0,
+      "dropped": 0
+    },
+    {
+      "run": 2,
+      "stages": {
+        "decode_prepare": {
+          "samples": 64,
+          "median_ns": 2891459,
+          "p95_ns": 5790750,
+          "max_ns": 12822750
+        },
+        "ram": {
+          "samples": 64,
+          "median_ns": 152792,
+          "p95_ns": 177375,
+          "max_ns": 205208
+        },
+        "swap": {
+          "samples": 63,
+          "median_ns": 1058042,
+          "p95_ns": 12412916,
+          "max_ns": 32315041
+        }
+      },
+      "peak_bytes": 2883584,
+      "final_managed_bytes": 0,
+      "swap_writes": 64,
+      "swap_reads": 63,
+      "errors": 0,
+      "dropped": 0
+    },
+    {
+      "run": 3,
+      "stages": {
+        "decode_prepare": {
+          "samples": 64,
+          "median_ns": 2169750,
+          "p95_ns": 4849000,
+          "max_ns": 6103625
+        },
+        "ram": {
+          "samples": 64,
+          "median_ns": 120292,
+          "p95_ns": 163375,
+          "max_ns": 198083
+        },
+        "swap": {
+          "samples": 63,
+          "median_ns": 800208,
+          "p95_ns": 902417,
+          "max_ns": 1956959
+        }
+      },
+      "peak_bytes": 2883584,
+      "final_managed_bytes": 0,
+      "swap_writes": 64,
+      "swap_reads": 63,
+      "errors": 0,
+      "dropped": 0
+    }
+  ],
+  "limits": [
+    "Not physical cold disk or slow-disk benchmark",
+    "Not clinical corpus or large-sensor throughput",
+    "No GPU/display latency measured in this probe",
+    "Serial disk barriers exclude queue saturation; separate stress evidence is required"
+  ]
+}

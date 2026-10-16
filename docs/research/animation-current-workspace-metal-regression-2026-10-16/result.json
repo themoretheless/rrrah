@@ -1,0 +1,178 @@
+{
+  "status": "post_animation_metadata_scheduler_default_workspace_and_metal_passed",
+  "toolchain": "stable rustc1.98.1 aarch64-apple-darwin",
+  "commands": [
+    "cargo +stable check --workspace --all-targets --offline",
+    "cargo +stable test --workspace --lib --offline",
+    "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo +stable test -p rrrah-gpu --test raster_readback --offline -- --nocapture --test-threads=1",
+    "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo +stable test -p rrrah-gpu --lib demosaic_compute --offline -- --nocapture --test-threads=1"
+  ],
+  "check_seconds": 147,
+  "library_binaries": 20,
+  "library_passed": 1610,
+  "library_failed": 0,
+  "library_ignored": 97,
+  "results_by_binary": [
+    {
+      "binary": "target/debug/deps/rrrah_animation-77b6e3e47eb1ed75",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_bench-4d082af919439740",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_cache-f012e7b9f409bbc3",
+      "passed": 147,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "binary": "target/debug/deps/rrrah_color-8f2c252718de0acc",
+      "passed": 35,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_core-17a5f41b37242076",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_cuda-fd37fd45eaea4254",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_decode-eff9d141767f10e0",
+      "passed": 192,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "binary": "target/debug/deps/rrrah_dedup-ea8e86fc6d800997",
+      "passed": 49,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "binary": "target/debug/deps/rrrah_demosaic-b12cfad1a2027a0e",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_develop-c3f10a7304690f87",
+      "passed": 98,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "binary": "target/debug/deps/rrrah_gpu-8c5648e2074df8b5",
+      "passed": 63,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "binary": "target/debug/deps/rrrah_layered-757e5ba05ab8767a",
+      "passed": 50,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_memory-a0d195a99e254284",
+      "passed": 43,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_mesh-b575dcfa78ac4ff5",
+      "passed": 55,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "binary": "target/debug/deps/rrrah_raw-9b1d3d7d548344ab",
+      "passed": 433,
+      "failed": 0,
+      "ignored": 59
+    },
+    {
+      "binary": "target/debug/deps/rrrah_scientific-5d55ac13706a2718",
+      "passed": 57,
+      "failed": 0,
+      "ignored": 9
+    },
+    {
+      "binary": "target/debug/deps/rrrah_swap-8ad772fc385c0054",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "binary": "target/debug/deps/rrrah_texture-a826dbaf9a566757",
+      "passed": 94,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "binary": "target/debug/deps/rrrah_vector-25ae87613fb0a389",
+      "passed": 178,
+      "failed": 0,
+      "ignored": 10
+    },
+    {
+      "binary": "target/debug/deps/rrrah_vfx-f91a817d5db7f791",
+      "passed": 52,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "metal": {
+    "adapter": "Apple M4 Max",
+    "optional": false,
+    "raster_passed": 28,
+    "raster_ignored": 8,
+    "compute_passed": 7,
+    "compute_ignored": 1,
+    "scope": [
+      "SDR/float16 HDR sample transport",
+      "tiled admitted cancellation/other owner preservation",
+      "area/filter fragment and compute accuracy",
+      "six native Bayer algorithms/calibration",
+      "finite managed memory recovery"
+    ]
+  },
+  "companion_viewer": {
+    "report": "../mng-common-timing-playback-2026-10-16/result.json",
+    "passed": 259,
+    "ignored": 72
+  },
+  "limits": [
+    "Default feature scope only; all-features and required-feature targets not blanket verified",
+    "Workspace --lib excludes viewer bin and integration execution; companion evidence separate",
+    "Ignored full-sensor/manual cases excluded from this regression",
+    "Offscreen Metal readback/compute do not qualify native event-loop pacing, physical HDR or NVIDIA",
+    "Global fmt/strict Clippy and full100-format/producer/variant qualification remain open"
+  ],
+  "files_sha256": {
+    "crates/rrrah-develop/src/raster.rs": "69b0afeaef6862f9f71dc64ca4bcad091a80a878337cfb5cd5ca97e9b982ac12",
+    "crates/rrrah-develop/src/raster_lod.rs": "da9a1c0727a36c302f9afcbf407fa39583ef9098b699b39dc6afe14e4a23619e",
+    "crates/rrrah-animation/src/raster_color.rs": "e4c60cff0a1a3bb881ac322a9d494716f89dc1c73ff187bbc7e10ae15f0da9b8",
+    "crates/rrrah-animation/src/gif_animation.rs": "34c9dabd4f9b758381307569e1a58f4031f461cff19d5551756c1884945ebb3b",
+    "crates/rrrah-animation/src/apng.rs": "fba9bea6778a1c16250833a21b7adcdf1d1b9fe2a0178a12db1061ae9c8c3497",
+    "crates/rrrah-animation/src/webp_animation.rs": "7c65fa966f5061b7273597c51660676058b5b8af18f0f046afa1195a75e91a36",
+    "crates/rrrah-cache/src/raster_payload.rs": "a724c344d102f4701996f040729f33b04a260a782903a5a24ba476f5ee1a59f1",
+    "crates/rrrah-cache/src/raster_regions.rs": "b6f4e435af47f4d7349a28e0a4bf8a4fd6092f6f80843cfb9ce08b173a427a4d",
+    "crates/rrrah-cache/src/swap.rs": "020280c5396591fce3724034334a2e37a140a3063509845515c02d28eada60c3",
+    "crates/rrrah-decode/src/mng.rs": "81b66567f4596615bac3bf0480e36618c94ebcfe789422b07f033fa7268cc014",
+    "crates/rrrah-app/src/raster_playback.rs": "9af68a7a81d4d139617bcde2d4e558fbcd17758bc484dbf4287ecbd94f5d9dcd",
+    "crates/rrrah-app/src/main.rs": "a9d82b7c6355b0fbbebff0a330f8cd376b7c6f387e17aab12657f78204076307"
+  }
+}

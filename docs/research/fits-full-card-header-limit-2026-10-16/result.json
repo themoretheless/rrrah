@@ -1,0 +1,42 @@
+{
+  "status": "reproduced_and_fixed",
+  "problem": "Header cap checked only the next card start. END could finish 64 bytes past the 1MiB header-card cap and return before the next limit check.",
+  "change": "Require the complete next 80-byte card to fit before reading, including END.",
+  "regression": {
+    "test": "fits::tests::end_card_must_fit_entirely_inside_header_limit",
+    "fails_before_fix": true,
+    "card_cap_bytes": 1048576,
+    "largest_valid_cards": 13107,
+    "largest_valid_card_bytes": 1048560,
+    "rejected_cards": 13108,
+    "rejected_card_bytes": 1048640,
+    "old_overshoot_bytes": 64,
+    "alignment_padding": "FITS 2880-byte padding remains separate from card cap",
+    "zero_managed_budget_invalid_header_before_native_or_card_output_admission": true
+  },
+  "checks": {
+    "scientific_lib": {
+      "passed": 53,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "diff_check": "passed"
+  },
+  "limits": [
+    "Temporary parsed field-map allocations remain separate and are not claimed zero",
+    "No new GPU run for parser-limit-only change",
+    "No full FITS/100-format qualification claim"
+  ],
+  "logs": {
+    "before": "before.log",
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "decode-tests": "decode-tests.log"
+  }
+}

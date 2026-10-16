@@ -1,0 +1,49 @@
+{
+  "status": "passed_bounded_independent_precision",
+  "adapter": "Apple M4 Max Metal",
+  "raster_suite": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 8
+  },
+  "dimensions": [
+    64,
+    64
+  ],
+  "scope": "authored dyadic normalized field, native WB and near-identity camera transform, sensor scale1:1; not general input error proof",
+  "metrics": [
+    {
+      "algorithm": "Directional",
+      "max_abs_fragment": 5.339379818281031e-07,
+      "max_abs_compute": 5.336090245222636e-07,
+      "max_abs_cross_stage": 4.76837158203125e-07
+    },
+    {
+      "algorithm": "Vng",
+      "max_abs_fragment": 4.562982449662911e-07,
+      "max_abs_compute": 4.4675847732378315e-07,
+      "max_abs_cross_stage": 4.76837158203125e-07
+    },
+    {
+      "algorithm": "Rcd",
+      "max_abs_fragment": 5.488710836942801e-07,
+      "max_abs_compute": 5.068938233598885e-07,
+      "max_abs_cross_stage": 4.76837158203125e-07
+    }
+  ],
+  "pointwise_f32_gate": "each fragment/compute RGB channel compared against independent f64 oracle; abs error <=32*f32::EPSILON*max(1,abs(reference)); finite required",
+  "half_gate": "Bilinear/SmoothHue/MHC exact in controlled field; Directional/VNG/RCD at most one adjacent finite half step, plus independent f64 f32 gate; no global bit identity claim",
+  "methodology": "original universal bit-identity experiment found CFA edge defect and then quantified valid-looking weighted rounding differences; replacing artificial cross-stage bit requirement with independent numerical reference strengthens algorithm correctness evidence; original failures preserved",
+  "standard_context": "https://www.w3.org/TR/WGSL/#floating-point-evaluation",
+  "limitations": [
+    "only authored64x64 field",
+    "no claim of universal f32 forward-error bound",
+    "minified compute presentation still uses bilinear sampling and needs area filtering",
+    "NVIDIA/physical HDR/camera corpus pending"
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/raster_readback.rs": "ac7c3243468380ef03969913aa6db756c7ddfa3475f644ff6cd89c26a6051e66",
+    "crates/rrrah-gpu/tests/common/bayer_directional_reference.rs": "a802363da45284b98190bac30d7d29b07caa50a6ba10da65e4cfea934e267e2e",
+    "crates/rrrah-gpu/tests/common/mod.rs": "825f1a4904da0acffa91efba25d913bd71b53448c189ccec420d641ffd99a687"
+  }
+}

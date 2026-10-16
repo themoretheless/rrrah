@@ -1,0 +1,541 @@
+{
+  "status": "all_six_algorithms_paired_optimized_passed",
+  "profile": "Cargo release opt3/thinLTO/codegen1, debug assertions enabled solely to retain existing live qualification",
+  "hardware": "Apple M4 Max Metal",
+  "fixture": "authored uncompressed6188x4120 native DNG; no camera fidelity claim",
+  "runs": 16,
+  "excluded_warmups": 4,
+  "measured_runs": 12,
+  "pairs_per_surface": 3,
+  "order": "AB/BA/AB after excluded warmup",
+  "cache": "native mosaic disk/RAM/swap caches disabled, source OS file cache not flushed",
+  "result": {
+    "binary": "/Users/themoretheless/Documents/Sources/rrrah/target/viewer-optimized-20261015/release/rrrah",
+    "binary_sha256": "6c79dd3d5ba6bfb7acb16349b21b9204c06c5ce3dae57e07379eb1945bc6459d",
+    "source_sha256": "ea89a274ba8bbe602c4400bd21062e3635a15d8785d8389d35ec8cc7c4ad5fcf",
+    "pairs": 3,
+    "summary": [
+      {
+        "algorithm": "bilinear",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              475.429,
+              411.734,
+              352.294
+            ],
+            "recovery_present_ms": [
+              266.71,
+              103.609,
+              139.739
+            ],
+            "initial_median_ms": 411.734,
+            "recovery_median_ms": 139.739
+          },
+          "compute": {
+            "initial_present_ms": [
+              556.374,
+              643.621,
+              599.23
+            ],
+            "recovery_present_ms": [
+              314.586,
+              294.47,
+              391.007
+            ],
+            "initial_median_ms": 599.23,
+            "recovery_median_ms": 314.586
+          }
+        },
+        "initial_compute_over_fragment": 1.455381387012003
+      },
+      {
+        "algorithm": "bilinear",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              655.834,
+              460.679,
+              365.554
+            ],
+            "recovery_present_ms": [
+              166.238,
+              143.121,
+              98.701
+            ],
+            "initial_median_ms": 460.679,
+            "recovery_median_ms": 143.121
+          },
+          "compute": {
+            "initial_present_ms": [
+              656.931,
+              559.796,
+              513.347
+            ],
+            "recovery_present_ms": [
+              396.44,
+              413.18,
+              250.766
+            ],
+            "initial_median_ms": 559.796,
+            "recovery_median_ms": 396.44
+          }
+        },
+        "initial_compute_over_fragment": 1.21515415289171
+      }
+    ],
+    "limitations": [
+      "authored native DNG, not camera corpus",
+      "CPU first-present submission timing, not GPU frame throughput or display latency",
+      "release optimization with debug assertions enabled for qualification",
+      "no physical HDR calibration or NVIDIA evidence",
+      "per-frame fidelity between fragment area sampling and full-resolution compute resampling is a separate gate"
+    ]
+  },
+  "decision": "retain fragment default: measured first-loaded-frame medians are lower in both surfaces; compute stays opt-in",
+  "quality_context": "bounded1:1 field: simple filters exact; weighted filters adjacent half bins and independent pointwise f64 accuracy pass. Minified compute presentation currently bilinear and must be area-filtered before broader equivalence claims.",
+  "pending": [
+    "per-frame GPU timestamps and repeated zoom/pan throughput",
+    "physical HDR calibration, NVIDIA and camera corpus",
+    "post-area optimized timing and arbitrary fractional/alpha numerical qualification"
+  ],
+  "benchmark_script_sha256": "f099ffaf376b81f0f88c725bd310cf8a2359167125779e5a374a408c71325bca",
+  "all_algorithms": {
+    "runs": 96,
+    "warmups": 24,
+    "measured_runs": 72,
+    "algorithms": 6,
+    "surfaces": 2,
+    "pairs_each": 3,
+    "summary": [
+      {
+        "algorithm": "bilinear",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              475.429,
+              411.734,
+              352.294
+            ],
+            "recovery_present_ms": [
+              266.71,
+              103.609,
+              139.739
+            ],
+            "initial_median_ms": 411.734,
+            "recovery_median_ms": 139.739
+          },
+          "compute": {
+            "initial_present_ms": [
+              556.374,
+              643.621,
+              599.23
+            ],
+            "recovery_present_ms": [
+              314.586,
+              294.47,
+              391.007
+            ],
+            "initial_median_ms": 599.23,
+            "recovery_median_ms": 314.586
+          }
+        },
+        "initial_compute_over_fragment": 1.455381387012003
+      },
+      {
+        "algorithm": "bilinear",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              655.834,
+              460.679,
+              365.554
+            ],
+            "recovery_present_ms": [
+              166.238,
+              143.121,
+              98.701
+            ],
+            "initial_median_ms": 460.679,
+            "recovery_median_ms": 143.121
+          },
+          "compute": {
+            "initial_present_ms": [
+              656.931,
+              559.796,
+              513.347
+            ],
+            "recovery_present_ms": [
+              396.44,
+              413.18,
+              250.766
+            ],
+            "initial_median_ms": 559.796,
+            "recovery_median_ms": 396.44
+          }
+        },
+        "initial_compute_over_fragment": 1.21515415289171
+      },
+      {
+        "algorithm": "smooth-hue",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              485.464,
+              592.798,
+              479.263
+            ],
+            "recovery_present_ms": [
+              199.724,
+              161.956,
+              196.945
+            ],
+            "initial_median_ms": 485.464,
+            "recovery_median_ms": 196.945
+          },
+          "compute": {
+            "initial_present_ms": [
+              586.387,
+              715.922,
+              495.917
+            ],
+            "recovery_present_ms": [
+              383.651,
+              407.432,
+              286.621
+            ],
+            "initial_median_ms": 586.387,
+            "recovery_median_ms": 383.651
+          }
+        },
+        "initial_compute_over_fragment": 1.2078897714351629
+      },
+      {
+        "algorithm": "smooth-hue",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              532.679,
+              439.49,
+              340.137
+            ],
+            "recovery_present_ms": [
+              144.084,
+              157.977,
+              169.642
+            ],
+            "initial_median_ms": 439.49,
+            "recovery_median_ms": 157.977
+          },
+          "compute": {
+            "initial_present_ms": [
+              738.653,
+              563.954,
+              507.784
+            ],
+            "recovery_present_ms": [
+              382.543,
+              411.134,
+              291.547
+            ],
+            "initial_median_ms": 563.954,
+            "recovery_median_ms": 382.543
+          }
+        },
+        "initial_compute_over_fragment": 1.2832009829575188
+      },
+      {
+        "algorithm": "malvar-he-cutler",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              456.658,
+              379.031,
+              441.313
+            ],
+            "recovery_present_ms": [
+              143.091,
+              113.497,
+              147.04
+            ],
+            "initial_median_ms": 441.313,
+            "recovery_median_ms": 143.091
+          },
+          "compute": {
+            "initial_present_ms": [
+              598.245,
+              606.632,
+              614.766
+            ],
+            "recovery_present_ms": [
+              253.143,
+              345.701,
+              407.458
+            ],
+            "initial_median_ms": 606.632,
+            "recovery_median_ms": 345.701
+          }
+        },
+        "initial_compute_over_fragment": 1.3746071382442846
+      },
+      {
+        "algorithm": "malvar-he-cutler",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              491.067,
+              310.531,
+              429.809
+            ],
+            "recovery_present_ms": [
+              189.918,
+              143.793,
+              134.11
+            ],
+            "initial_median_ms": 429.809,
+            "recovery_median_ms": 143.793
+          },
+          "compute": {
+            "initial_present_ms": [
+              752.142,
+              696.157,
+              481.04
+            ],
+            "recovery_present_ms": [
+              424.796,
+              361.689,
+              407.447
+            ],
+            "initial_median_ms": 696.157,
+            "recovery_median_ms": 407.447
+          }
+        },
+        "initial_compute_over_fragment": 1.6196892107889784
+      },
+      {
+        "algorithm": "directional",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              466.739,
+              444.506,
+              478.646
+            ],
+            "recovery_present_ms": [
+              172.742,
+              131.147,
+              287.996
+            ],
+            "initial_median_ms": 466.739,
+            "recovery_median_ms": 172.742
+          },
+          "compute": {
+            "initial_present_ms": [
+              696.745,
+              534.93,
+              629.225
+            ],
+            "recovery_present_ms": [
+              346.211,
+              327.861,
+              475.23
+            ],
+            "initial_median_ms": 629.225,
+            "recovery_median_ms": 346.211
+          }
+        },
+        "initial_compute_over_fragment": 1.3481303255138313
+      },
+      {
+        "algorithm": "directional",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              364.715,
+              340.729,
+              409.663
+            ],
+            "recovery_present_ms": [
+              140.46,
+              248.144,
+              159.798
+            ],
+            "initial_median_ms": 364.715,
+            "recovery_median_ms": 159.798
+          },
+          "compute": {
+            "initial_present_ms": [
+              658.49,
+              757.284,
+              488.242
+            ],
+            "recovery_present_ms": [
+              337.984,
+              347.002,
+              464.323
+            ],
+            "initial_median_ms": 658.49,
+            "recovery_median_ms": 347.002
+          }
+        },
+        "initial_compute_over_fragment": 1.8054919594752068
+      },
+      {
+        "algorithm": "vng",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              388.894,
+              357.939,
+              285.048
+            ],
+            "recovery_present_ms": [
+              143.484,
+              88.378,
+              126.652
+            ],
+            "initial_median_ms": 357.939,
+            "recovery_median_ms": 126.652
+          },
+          "compute": {
+            "initial_present_ms": [
+              904.136,
+              770.612,
+              702.855
+            ],
+            "recovery_present_ms": [
+              343.41,
+              317.131,
+              432.926
+            ],
+            "initial_median_ms": 770.612,
+            "recovery_median_ms": 343.41
+          }
+        },
+        "initial_compute_over_fragment": 2.152914323390298
+      },
+      {
+        "algorithm": "vng",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              503.037,
+              327.053,
+              379.872
+            ],
+            "recovery_present_ms": [
+              189.904,
+              99.563,
+              97.728
+            ],
+            "initial_median_ms": 379.872,
+            "recovery_median_ms": 99.563
+          },
+          "compute": {
+            "initial_present_ms": [
+              510.316,
+              502.647,
+              577.08
+            ],
+            "recovery_present_ms": [
+              323.536,
+              271.009,
+              334.118
+            ],
+            "initial_median_ms": 510.316,
+            "recovery_median_ms": 323.536
+          }
+        },
+        "initial_compute_over_fragment": 1.343389352202847
+      },
+      {
+        "algorithm": "rcd",
+        "hdr": false,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              366.478,
+              53362.256,
+              355.696
+            ],
+            "recovery_present_ms": [
+              95.883,
+              154.488,
+              99.03
+            ],
+            "initial_median_ms": 366.478,
+            "recovery_median_ms": 99.03
+          },
+          "compute": {
+            "initial_present_ms": [
+              512.123,
+              1322.334,
+              554.065
+            ],
+            "recovery_present_ms": [
+              335.655,
+              244.128,
+              357.814
+            ],
+            "initial_median_ms": 554.065,
+            "recovery_median_ms": 335.655
+          }
+        },
+        "initial_compute_over_fragment": 1.5118642865328888
+      },
+      {
+        "algorithm": "rcd",
+        "hdr": true,
+        "modes": {
+          "fragment": {
+            "initial_present_ms": [
+              366.98,
+              315.825,
+              375.907
+            ],
+            "recovery_present_ms": [
+              100.24,
+              77.544,
+              125.889
+            ],
+            "initial_median_ms": 366.98,
+            "recovery_median_ms": 100.24
+          },
+          "compute": {
+            "initial_present_ms": [
+              495.476,
+              539.658,
+              512.516
+            ],
+            "recovery_present_ms": [
+              405.59,
+              315.204,
+              326.942
+            ],
+            "initial_median_ms": 512.516,
+            "recovery_median_ms": 326.942
+          }
+        },
+        "initial_compute_over_fragment": 1.3965774701618614
+      }
+    ],
+    "compute_over_fragment_initial_median_range": [
+      1.2078897714351629,
+      2.152914323390298
+    ]
+  },
+  "post_filter_followup": "../bayer-area-minification-2026-10-15/result.json",
+  "current_performance_requalification_required": true
+}

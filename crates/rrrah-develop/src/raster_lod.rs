@@ -101,6 +101,7 @@ impl DecodedRaster {
         .with_pixel_aspect(Some(aspect))?
         .with_sample_scale(self.sample_scale())?
         .with_hotspot(hotspot)?
+        .with_animation_timing(self.animation_timing())
         .with_image_selection(self.image_index(), self.image_count())
     }
 }

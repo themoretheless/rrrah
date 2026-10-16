@@ -1,0 +1,21 @@
+
+running 5 tests
+test demosaic_compute::tests::bayer_compute_admitted_cancellation_retries_every_algorithm_exactly ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer Bilinear: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer SmoothHue: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer MalvarHeCutler: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Directional: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Vng: six admitted cancellations, exact retries, CPU/GPU final zero
+Bayer Rcd: six admitted cancellations, exact retries, CPU/GPU final zero
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_algorithms_preserve_constant_hdr_and_sharpen_edges_on_gpu ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_rejects_invalid_inputs_and_cancels_cleanly ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+ok
+test demosaic_compute::tests::bayer_demosaic_compute_shader_validates_with_naga ... ok
+test demosaic_compute::tests::full_sensor_bayer_windows_match_independent_bilinear_every_pixel ... Bayer compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Bayer full sensor 6188x4120: all pixels independently exact, HDR, reflected edges, output windows, GPU peak=370289984, CPU final=0 GPU final=0 total_ms=12900
+ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 56 filtered out; finished in 14.13s
+

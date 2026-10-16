@@ -1,0 +1,98 @@
+    Checking rrrah-first30-harness v0.1.0 (/tmp/rrrah-first30-harness)
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core/src/edit.rs:176:9
+    |
+176 |         assert_eq!(history.current().exposure_stops, 0.);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-D clippy::float-cmp` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::float_cmp)]`
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core/src/edit.rs:204:9
+    |
+204 |         assert_eq!(history.current().exposure_stops, 2.);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/edit_store.rs:359:17
+    |
+359 |                 assert_eq!(state.exposure_stops, expected, "{kind}/{stage}");
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/edit_store.rs:406:37
+    |
+406 |         fs::write(&path, vec![b' '; MAX_DOCUMENT_BYTES as usize + 1]).unwrap();
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+    = note: `-D clippy::cast-possible-truncation` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+    |
+406 -         fs::write(&path, vec![b' '; MAX_DOCUMENT_BYTES as usize + 1]).unwrap();
+406 +         fs::write(&path, vec![b' '; usize::try_from(MAX_DOCUMENT_BYTES) + 1]).unwrap();
+    |
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:506:9
+    |
+506 |         assert_eq!(editor.current().exposure_stops, 1.5);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:509:9
+    |
+509 |         assert_eq!(editor.current().exposure_stops, 0.);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:635:13
+    |
+635 |             assert_eq!(editor.current().exposure_stops, 1.5);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:637:13
+    |
+637 |             assert_eq!(editor.current().exposure_stops, 0.);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:642:13
+    |
+642 | /             assert_eq!(
+643 | |                 edit_store::read_sidecar(&source.with_extension("xmp"), 0)
+644 | |                     .unwrap()
+645 | |                     .0
+...   |
+648 | |                 1.5
+649 | |             );
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: strict comparison of `f32` or `f64`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/editor.rs:655:9
+    |
+655 |         assert_eq!(restored.current().exposure_stops, -0.5);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: could not compile `rrrah-first30-harness` (lib test) due to 10 previous errors

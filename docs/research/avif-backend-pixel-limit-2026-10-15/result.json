@@ -1,0 +1,104 @@
+{
+  "status": "area_limit_snapshot_native1051_metal24_passed_subsequent_depth_validation_in_progress",
+  "upstream": "image0.25.10",
+  "upstream_registry_checksum": "85ab80394333c02fe689eaf900ab500fbd0c2213da414687ebf995a65d5a6104",
+  "changed_upstream_files": [
+    "src/codecs/avif/decoder.rs"
+  ],
+  "licenses_preserved": true,
+  "api": "AvifDecoder::new_with_pixel_limit(reader,u32)",
+  "backend": "dav1d Settings::set_frame_size_limit for both primary and alpha",
+  "production_maximum_pixels": 134217728,
+  "compatibility": "RGBA8 is smallest supported AVIF output; this cap does not reject frames whose full RGBA output could fit previous MAX_RASTER_BYTES",
+  "native_session": 8616,
+  "native_log": "/tmp/avif-backend-pixel-limit-focused.log",
+  "source_sha256": {
+    "Cargo.toml": "e097051e5532db527836d187b7c8c78d83b0430ca748d6d12839102b819a8469",
+    "Cargo.lock": "914363e37091ef183baca6532cab4c131bee105e05647553ba2c95a61d730ce0",
+    "crates/rrrah-decode/src/raster.rs": "3160f592ebef3116e1dd42073e4e46260020e7bcd80715184118a3d5e2d4444a",
+    "vendor/image/src/codecs/avif/decoder.rs": "f3611dc38e60c0f1027a4ccaaa598e4f15067b1381ef85187be9bb66f23f3987"
+  },
+  "limitations": [
+    "pixel area is not total byte/scratch budget",
+    "higher-depth final byte cap still enforced separately after construction",
+    "no custom picture allocator admission yet",
+    "not 100-format or physical HDR/NVIDIA qualification"
+  ],
+  "current_image_artifact": "target/avif-prem-validation-20261014/debug/deps/libimage-d24fceec883153d9.rmeta",
+  "standalone_probe_attempt": {
+    "exit_code": 1,
+    "cause": "old registry rlib selected before local patched image rlib finished; missing new API",
+    "next": "use local image d24fceec883153d9 rlib after build completes",
+    "log": "/tmp/avif-backend-limit-probe-build.log"
+  },
+  "backend_probe": {
+    "exit_code": 0,
+    "files": [
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ],
+    "coded_dimensions": [
+      16,
+      16
+    ],
+    "limit255_refused": true,
+    "limit256_admitted": true,
+    "bounded_vs_default_raw_pixels_exact": true,
+    "image_artifact": "libimage-d24fceec883153d9.rlib"
+  },
+  "metal_build_session": 20502,
+  "focused": {
+    "exit_code": 0,
+    "passed": 28,
+    "failed": 0,
+    "ignored": 0
+  },
+  "full_native_session": 89902,
+  "alpha_control": {
+    "exit_code": 0,
+    "primary_coded_dimensions": [
+      8,
+      4
+    ],
+    "alpha_coded_dimensions": [
+      16,
+      16
+    ],
+    "limit32_refused_by_alpha": true,
+    "limit256_constructor_passed": true,
+    "scope": "malformed diagnostic container, no render/fidelity acceptance"
+  },
+  "followup_conformance_audit": {
+    "specification": "https://aomediacodec.github.io/av1-avif/#auxiliary-image-items-and-sequences",
+    "requirement": "alpha encoded bit depth must equal associated master bit depth",
+    "observed_wrapper": "image conversion uses master depth branch for alpha; constructor currently lacks explicit equal-depth check",
+    "next": "author mixed-depth alpha control; reproduce before adding backend picture validation; no new refusal without actual sample evidence"
+  },
+  "native_full": {
+    "exit_code": 0,
+    "passed": 1051,
+    "failed": 0,
+    "ignored": 73
+  },
+  "subsequent_source_change": {
+    "report": "../avif-alpha-depth-validation-2026-10-15/result.json",
+    "scope": "reject actual mixed-depth alpha/primary before conversion; preceding area-limit results frozen"
+  },
+  "metal": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3,
+    "exit_code": 0,
+    "cases": [
+      "heif-physical-alpha.heic",
+      "heif-physical-rotate90.heic",
+      "heif-physical-mirror.heif",
+      "avif-pasp-square.avif",
+      "avif-pasp-square-essential.avif",
+      "avif-alpha-icc-prem.avif",
+      "ravif-8bit-prem.avif",
+      "ravif-10bit-prem.avif"
+    ]
+  },
+  "source_scope": "frozen area-limit snapshot before mixed-depth validation; not current latest source qualification"
+}

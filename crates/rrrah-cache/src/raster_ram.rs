@@ -142,6 +142,10 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
         }
         self.entries.take_lru().is_some()
     }
+    /// Count-only preflight for a cache miss; does not reserve bytes or evict frames.
+    pub fn can_admit_key_by_count(&mut self, key: &K) -> bool {
+        self.entries.can_admit_key_by_count(key)
+    }
     pub fn resident_bytes(&self) -> u64 {
         self.entries.resident_weight()
     }

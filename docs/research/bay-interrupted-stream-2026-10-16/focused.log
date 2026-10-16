@@ -1,0 +1,22 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 42s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_raw-4953d6146c93232a)
+
+running 10 tests
+test bay::tests::authored_full_sensors_match_independent_libraw_oracles ... ignored, requires pinned authored BAY and independent LibRaw dumps at RRRAH_BAY_AUTHORED_CORPUS; not camera/color qualification
+test bay::tests::image_rows_match_independent_oracles_without_trailer_or_full_copy ... ignored, requires pinned authored BAY and independent dumps at RRRAH_BAY_AUTHORED_CORPUS
+test bay::tests::oversized_file_is_refused_before_source_admission_for_every_layout ... ok
+test bay::tests::file_source_and_sensor_share_budget_and_release_after_refusal ... ok
+test bay::tests::eight_bit_layouts_preserve_all_values_and_exact_storage_dimensions ... ok
+BAY streamed recovery: Qv2000Ux; image_only=false; four admitted cancellations and same-budget retries, truncation/growth refused; final=0
+test bay::tests::qv5700_trailer_changes_do_not_change_image_samples ... ok
+test bay::tests::interrupted_stream_retries_eof_and_checks_cancellation_inside_rows ... ok
+BAY streamed recovery: Qv3000Ex; image_only=true; four admitted cancellations and same-budget retries, truncation/growth refused; final=0
+test bay::tests::all_ten_bit_values_storage_columns_padding_and_managed_ownership ... ok
+test bay::tests::streamed_files_match_every_authored_sample_with_one_row_scratch ... ok
+BAY streamed recovery: Qv5700; image_only=false; four admitted cancellations and same-budget retries, truncation/growth refused; final=0
+BAY streamed recovery: Qv5700; image_only=true; four admitted cancellations and same-budget retries, truncation/growth refused; final=0
+test bay::tests::streamed_truncation_growth_and_cancellation_release_partial_sensor ... ok
+
+test result: ok. 8 passed; 0 failed; 2 ignored; 0 measured; 483 filtered out; finished in 0.28s
+

@@ -4,6 +4,7 @@
 
 mod adaptive;
 pub use adaptive::{
+    CompactAdaptiveTriangle, tessellate_tensor_patch_mesh_compact_admitted,
     AdmittedAdaptivePatchMesh, AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
     tessellate_patch_mesh_adaptive_admitted, tessellate_tensor_patch_mesh_adaptive_admitted,
     tessellate_patch_mesh_adaptive, tessellate_patch_mesh_adaptive_with_ranges,
@@ -220,7 +221,7 @@ impl Shading {
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let bpf = dict.get::<u8>(BITS_PER_FLAG)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
+                let decode = MeshDecode::read(dict.get::<Array<'_>>(DECODE)?)?;
 
                 let triangles = read_free_form_triangles(
                     stream_data.as_ref(),
@@ -239,7 +240,7 @@ impl Shading {
                 let bp_coord = dict.get::<u8>(BITS_PER_COORDINATE)?;
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
+                let decode = MeshDecode::read(dict.get::<Array<'_>>(DECODE)?)?;
                 let vertices_per_row = dict.get::<u32>(VERTICES_PER_ROW)?;
 
                 let triangles = read_lattice_triangles(
@@ -260,7 +261,7 @@ impl Shading {
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let bpf = dict.get::<u8>(BITS_PER_FLAG)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
+                let decode = MeshDecode::read(dict.get::<Array<'_>>(DECODE)?)?;
 
                 let patches = read_coons_patch_mesh(
                     stream_data.as_ref(),
@@ -280,7 +281,7 @@ impl Shading {
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let bpf = dict.get::<u8>(BITS_PER_FLAG)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
+                let decode = MeshDecode::read(dict.get::<Array<'_>>(DECODE)?)?;
 
                 let patches = read_tensor_product_patch_mesh(
                     stream_data.as_ref(),
@@ -570,7 +571,7 @@ fn read_free_form_triangles(
     bp_cord: u8,
     bp_comp: u8,
     has_function: bool,
-    decode: &[f32],
+    decode: &MeshDecode,
 ) -> Option<Vec<Triangle>> {
     let mut triangles = vec![];
 
@@ -633,17 +634,17 @@ fn read_component_bits(reader: &mut BitReader<'_>, bits: u8) -> Option<u32> {
 struct InterpolationHelpers {
     bp_coord: u8,
     bp_comp: u8,
-    coord_max: f32,
+    coord_max: f64,
     comp_max: f32,
-    x_min: f32,
-    x_max: f32,
-    y_min: f32,
-    y_max: f32,
+    x_min: f64,
+    x_max: f64,
+    y_min: f64,
+    y_max: f64,
 }
 
 impl InterpolationHelpers {
-    fn new(bp_coord: u8, bp_comp: u8, x_min: f32, x_max: f32, y_min: f32, y_max: f32) -> Self {
-        let coord_max = 2.0_f32.powi(bp_coord as i32) - 1.0;
+    fn new(bp_coord: u8, bp_comp: u8, x_min: f64, x_max: f64, y_min: f64, y_max: f64) -> Self {
+        let coord_max = 2.0_f64.powi(bp_coord as i32) - 1.0;
         let comp_max = 2.0_f32.powi(bp_comp as i32) - 1.0;
         Self {
             bp_coord,
@@ -657,8 +658,9 @@ impl InterpolationHelpers {
         }
     }
 
-    fn interpolate_coord(&self, n: u32, d_min: f32, d_max: f32) -> f32 {
-        interpolate(n as f32, 0.0, self.coord_max, d_min, d_max)
+    fn interpolate_coord(&self, n: u32, d_min: f64, d_max: f64) -> f64 {
+        // All u32 inputs and2^32-1are exact in f64; never narrow geometry to f32.
+        d_min + f64::from(n) * (d_max - d_min) / self.coord_max
     }
 
     fn interpolate_comp(&self, n: u32, d_min: f32, d_max: f32) -> f32 {
@@ -668,7 +670,7 @@ impl InterpolationHelpers {
     fn read_point(&self, reader: &mut BitReader<'_>) -> Option<Point> {
         let x = self.interpolate_coord(reader.read(self.bp_coord)?, self.x_min, self.x_max);
         let y = self.interpolate_coord(reader.read(self.bp_coord)?, self.y_min, self.y_max);
-        Some(Point::new(x as f64, y as f64))
+        Some(Point::new(x, y))
     }
 
     fn read_colors(
@@ -713,9 +715,19 @@ impl InterpolationHelpers {
     }
 }
 
-/// Split decode array into coordinate bounds and component decode values.
-fn split_decode(decode: &[f32]) -> Option<([f32; 4], &[f32])> {
-    decode.split_first_chunk::<4>().map(|(a, b)| (*a, b))
+// Coordinates and component ranges are parsed at their retained precision.
+// In particular, colors do not take a new f64 -> f32 double-rounding path.
+struct MeshDecode { coords:[f64;4], components:Vec<f32> }
+impl MeshDecode {
+    fn read(array:Array<'_>)->Option<Self> {
+        let mut coordinates=array.iter::<f64>();
+        let coords=[coordinates.next()?,coordinates.next()?,coordinates.next()?,coordinates.next()?];
+        let components=array.iter::<f32>().skip(4).collect();
+        Some(Self {coords,components})
+    }
+}
+fn split_decode(decode:&MeshDecode)->Option<([f64;4],&[f32])> {
+    Some((decode.coords,&decode.components))
 }
 
 /// Generate triangles from a grid of points using a mapping function.
@@ -794,7 +806,7 @@ fn read_lattice_triangles(
     bp_comp: u8,
     has_function: bool,
     vertices_per_row: u32,
-    decode: &[f32],
+    decode: &MeshDecode,
 ) -> Option<Vec<Triangle>> {
     let mut lattices = vec![];
 
@@ -855,7 +867,7 @@ fn read_coons_patch_mesh(
     bp_coord: u8,
     bp_comp: u8,
     has_function: bool,
-    decode: &[f32],
+    decode: &MeshDecode,
 ) -> Option<Vec<CoonsPatch>> {
     read_patch_mesh(
         data,
@@ -884,7 +896,7 @@ fn read_patch_mesh<P, F>(
     bp_coord: u8,
     bp_comp: u8,
     has_function: bool,
-    decode: &[f32],
+    decode: &MeshDecode,
     control_points_count: usize,
     create_patch: F,
 ) -> Option<Vec<P>>
@@ -1000,7 +1012,7 @@ fn read_tensor_product_patch_mesh(
     bp_coord: u8,
     bp_comp: u8,
     has_function: bool,
-    decode: &[f32],
+    decode: &MeshDecode,
 ) -> Option<Vec<TensorProductPatch>> {
     read_patch_mesh(
         data,
@@ -1057,4 +1069,34 @@ mod external_budget_tests {
         assert!(function.eval_native_with_budget(0.25,&mut output,&||true,&mut 4096).is_none());
         assert_eq!(output,previous);
     }
+}
+
+#[test]
+fn mesh_32bit_coordinates_preserve_adjacent_encoded_positions() {
+    let helpers=InterpolationHelpers::new(32,8,0.,1.,0.,1.);
+    let mut bytes=Vec::new();
+    for x in [0x8000_0000u32,0x8000_0001] {bytes.extend_from_slice(&x.to_be_bytes());bytes.extend_from_slice(&0u32.to_be_bytes());}
+    let mut reader=BitReader::new(&bytes);
+    let a=helpers.read_point(&mut reader).unwrap();let b=helpers.read_point(&mut reader).unwrap();
+    assert!(a.x<b.x,"adjacent32-bit coordinates must not collapse: {a:?} {b:?}");
+    assert_eq!(a.x,2147483648f64/4294967295f64);
+    assert_eq!(b.x,2147483649f64/4294967295f64);
+    assert_eq!((a.y,b.y),(0.,0.));
+}
+
+#[test]
+fn mesh_coordinate_decode_retains_precise_ranges_and_legacy_component_rounding() {
+    let low=1.0000000001;let high=1.0000000002;
+    for bits in [8,16,24,32] {
+        let helper=InterpolationHelpers::new(bits,8,low,high,-high,-low);
+        let maximum=((1u64<<bits)-1) as u32;
+        assert_eq!(helper.interpolate_coord(0,low,high),low);
+        assert_eq!(helper.interpolate_coord(maximum,low,high),high);
+        assert!(helper.interpolate_coord(maximum/2,low,high)>low);
+    }
+    let helper=InterpolationHelpers::new(32,8,low,high,low,high);
+    let data=[0u8,127,128,255];let mut reader=BitReader::new(&data);
+    let colors=helper.read_colors(&mut reader,false,&[0.,1.,0.,1.,0.,1.,0.,1.]).unwrap();
+    let expected=data.map(|n|interpolate(n as f32,0.,255.,0.,1.));
+    assert_eq!(colors.as_slice(),expected.as_slice());
 }

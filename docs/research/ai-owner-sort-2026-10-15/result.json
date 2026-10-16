@@ -1,0 +1,31 @@
+{
+  "change": "Replace charged insertion ordering with in-place charged heapsort in point evidence preparation. Comparisons cost1, swaps3; cancellation polled during each sift and extraction. Refused scratch is discarded.",
+  "tests": {
+    "passed": 284,
+    "failed": 0,
+    "ignored": 12,
+    "controls": "Ordering with duplicates through4095 entries; exact and one-short work; every cancellation and short budget for ten-entry fixture."
+  },
+  "real_pixel": [
+    147,
+    59
+  ],
+  "preparation_work_before": 831542,
+  "preparation_work_after": 117796,
+  "source_work": 6993741,
+  "source_allowance": 16000000,
+  "owned_points": 632522,
+  "observed_owners": 666,
+  "refused": 0,
+  "finish_refused": 0,
+  "native_pixel_exact": true,
+  "peak_bytes": 266078344,
+  "final_credit": 0,
+  "deadline": false,
+  "source_sha256": "cea33cac76c1f7770c63b12f84a90a82fb7cab0c25672cafe57812a861e1df2d",
+  "limitations": [
+    "Diagnostic preparation optimization only; original colors still sampled.",
+    "No ordinary4M acceptance, complete AI page, profile/display or100-format qualification.",
+    "Work counters establish reduced preparation operations, not a paired wall-clock speedup."
+  ]
+}

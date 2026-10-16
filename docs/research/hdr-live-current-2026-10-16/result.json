@@ -1,0 +1,123 @@
+{
+  "status": "current Metal HDR raster/RAW/model live presentation and resize passed",
+  "date": "2026-10-16",
+  "format": "Rgba16Float",
+  "color_space": "ExtendedSrgbLinear",
+  "adapter": "Apple M4 Max",
+  "runs": [
+    {
+      "mode": "raster",
+      "exit_code": 0,
+      "frames": 177,
+      "present_seconds": 3.011,
+      "frames_after_resize": 147,
+      "resize": [
+        800,
+        400
+      ],
+      "adapter_initializations": 1,
+      "os_hdr_active_reported": true,
+      "headroom_max": 16.0,
+      "validation_clean": true,
+      "source": null,
+      "source_sha256": null,
+      "log": "/tmp/hdr-raster-completion-guard-20261016.log",
+      "log_sha256": "5901d0f1de2bf8e35be491d8793500512a5e57eec98294cd73f5a5bd4bf6c423"
+    },
+    {
+      "mode": "raw",
+      "exit_code": 0,
+      "frames": 132,
+      "present_seconds": 3.009,
+      "frames_after_resize": 102,
+      "resize": [
+        800,
+        400
+      ],
+      "adapter_initializations": 1,
+      "os_hdr_active_reported": true,
+      "headroom_max": 16.0,
+      "validation_clean": true,
+      "source": "tests/IMG_9043.CR3",
+      "source_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+      "log": "/tmp/hdr-raw-completion-guard-20261016.log",
+      "log_sha256": "514ef0193f33be406551788a0a650ca2d1eb42b7aad35e2955c4b1a9375f9813",
+      "dimensions": [
+        6188,
+        4120
+      ],
+      "sensor_samples": 25494560,
+      "native_rust_decoder": true,
+      "output_mode": "SceneLinear",
+      "source_budget_released_before_present": true
+    },
+    {
+      "mode": "model",
+      "exit_code": 0,
+      "frames": 176,
+      "present_seconds": 3.008,
+      "frames_after_resize": 146,
+      "resize": [
+        800,
+        400
+      ],
+      "adapter_initializations": 1,
+      "os_hdr_active_reported": true,
+      "headroom_max": 16.0,
+      "validation_clean": true,
+      "source": "tests/fixtures/models/obj-concave-u.obj",
+      "source_sha256": "25c946020cd51a0ab38f3b5228b595ddcd3a8effff6993f527c23e8a82d107b5",
+      "log": "/tmp/hdr-model-completion-guard-20261016.log",
+      "log_sha256": "4bebe48657017116aad31a1817d44247b6b97185e093cf9b75258d962afa6ec3",
+      "triangles": 6,
+      "source_budget_released_before_present": true
+    }
+  ],
+  "total_frames": 485,
+  "build_log": "/tmp/hdr-current-final-completion-guard-build-20261015.log",
+  "binary_sha256": "19bd77f2d954aa822df4d45256199cd41464d46011c73d39d8aac8f3a6aef365",
+  "source_sha256": {
+    "Cargo.lock": "3be93d49ab02bd2c5ffe7585e42ad32f5e4c147562385e8441a505df57ee145a",
+    "crates/rrrah-app/examples/hdr_surface_probe.rs": "a158875ab8d3986a13b17b38664e2e5f577d28613c3a7cf780a0ae3e6759a319",
+    "crates/rrrah-gpu/src/rgbe_plan.rs": "f101008e5c0abbc9d9682abb62cc4023fa79581b0586e3711f7e8b0017f21306",
+    "crates/rrrah-gpu/src/rgbe_compute.rs": "fc9780a773597bd581f7dda87c70d4229ad1fc46c437cac51979f2662f8d5d17",
+    "crates/rrrah-gpu/src/filmstrip.rs": "93f41e6e623f03f983aab51e7e365a0e0793987e0c966ac52752bd8fc63019f4",
+    "crates/rrrah-gpu/src/backend.rs": "cf3dc1d751d5d5937d860d41e33e860d9f425b8bb2707a283673322909c09174",
+    "crates/rrrah-gpu/src/lib.rs": "53bf20fc2bc8339063d6672d75ce2e2dab876a1efea02a3ff47f124a119e36fa",
+    "crates/rrrah-gpu/src/demosaic_compute.rs": "e8ff8f1ecaba7f4050c06209b257cb17346661518e3b611cfe37b1f25aa2dd42",
+    "crates/rrrah-gpu/src/compute.rs": "c7a7ccddd563cb337b6c2556dbb753285516fbd777d086513fff64723bc1b16d",
+    "crates/rrrah-gpu/src/raster.rs": "f263c87b91e8f331d6a3122fac46d2e91e8317f4b1742df506b1699ceaf20954",
+    "crates/rrrah-gpu/src/model.rs": "d1709118186aa33590e3b007ca3d698051c8a12b41bdfea2cb46fd6f03fcfd7f",
+    "crates/rrrah-gpu/shaders/model_view.wgsl": "c52ec5d90f9430f3ce8d11e56908ed502451393e7826ffd3e8231dbbe11ad565",
+    "crates/rrrah-gpu/shaders/bayer_demosaic.wgsl": "4ca8f11952d623ecbe78a5b02a5f7f6a344baa2d43c47c9107652b7f31f1c6fb",
+    "crates/rrrah-gpu/shaders/linear_exposure.wgsl": "2f0346f2e9e6ccafcd99b90354f93e7bf24f673b554052dd4b1f364e323ea665",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "095e0be26f7312d56af2b5d5f04e86dad4c2d894fa180ea52e01b8e00ec3fd66",
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "1558fd36982e52d404c3e7caf5edd91cdd716f7c3c770f98880e3baaa0d9a41c"
+  },
+  "gpu_and_lock_sources_unchanged_during_checks": true,
+  "probe_changes": [
+    "Terminal finished state prevents queued redraw/resume/wait callbacks from recreating GPU after completion or refusal.",
+    "Main rejects event-loop return before completed presentation/validation; exit0 alone no longer qualifies."
+  ],
+  "initial_attempts": [
+    {
+      "log": "/tmp/hdr-current-raster-20261015.log",
+      "result": "69frames/5seconds and resize pass, but extra GPU created after completion; fixed."
+    },
+    {
+      "log": "/tmp/hdr-current-three-paths-20261015/raster.log",
+      "result": "25frames/10seconds, resize threshold30not reached; exit1 and not qualified."
+    },
+    {
+      "log": "/tmp/hdr-current-model-direct-20261015.log",
+      "result": "420frames logged, no completion/validation terminal line despite observedexit0; not qualified. Cause of early return unknown; completion guard added."
+    }
+  ],
+  "limitations": [
+    "Three-second completed presentation controls, not a frame-rate/first-frame performance benchmark or soak.",
+    "No independent physical luminance/chromaticity measurements; headroom16is macOS metadata.",
+    "Raw/model source credit release checked by probe path, not a full render teardown resource-leak audit.",
+    "Premature external platform termination was not deliberately re-triggered after completion guard.",
+    "Not all-format fidelity or NVIDIA/CUDA validation."
+  ]
+}

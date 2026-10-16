@@ -1,0 +1,18 @@
+{
+  "command": "CARGO_TARGET_DIR=/tmp/rrrah-alpha-isolated-target-20261016 cargo +stable test --workspace --all-targets --locked --offline",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "head": "0be4ce714d3028d950a639e609a715c106ea951d",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "38ad7360b8aa150183bca21110618a4d5fc4d0ccf4adce1a9ac944c2b8c71605",
+    "crates/rrrah-app/src/dicom_pipeline_tests.rs": "6c010ab7c8a2f70bb1aea143952411751a37e9679be577c0ce210868690c6c68",
+    "crates/rrrah-layered/src/psd.rs": "2a0d28d11afef6457949930fcb99df26505f46db5f6ed83df44c813b001c5778",
+    "crates/rrrah-layered/src/aseprite.rs": "bd3c2138ea09bf4f2813c7f8447d151634aee5e968d9661756260935b1849f66",
+    "crates/rrrah-layered/src/xcf.rs": "b33bc31a827a11067b87b23ec80e3b9517e3d14dc0ee5dcfbf57e3a389bed508",
+    "crates/rrrah-memory/src/policy.rs": "e00fdadb1123f5f9aa8be64c30163d2d26434adf39ebb1b5a0db4097d204ef08",
+    "crates/rrrah-memory/src/lease_cache.rs": "84c8748927757b93ae5c469543b06c9c5f79cea65cc362554b69114aff699086",
+    "crates/rrrah-cache/src/raster_ram.rs": "c713922a53f20dd88cf57f9db74c2561daaff7fb644bcf1350a0be4e2f0e5ff4",
+    "Cargo.lock": "e5c7c46052e0fa86cc9bf71e780b647363ac2a2d63370ada0b31e5a74a1dd783"
+  },
+  "scope": "default features; ordinary tests, integration tests, examples and bench targets; ignored tests not executed; no doctests, all-features or full format qualification",
+  "concurrent_followup": "After the broad run finished initial compilation, PCX/WAL palette validation was optimized; its texture/public/viewer gates are separate in wal-pcx-validation-2026-10-16. Broad results must not be described as an immutable current-source release gate."
+}

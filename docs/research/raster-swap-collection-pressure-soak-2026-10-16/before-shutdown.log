@@ -1,0 +1,22 @@
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9.91s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_cache-9b63e723e982ac26)
+
+running 1 test
+test swap::raster_tests::sustained_collection_restores_under_full_memory_pressure has been running for over 60 seconds
+
+thread 'swap::raster_tests::sustained_collection_restores_under_full_memory_pressure' (3506383) panicked at crates/rrrah-cache/src/swap.rs:1716:9:
+assertion `left == right` failed
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test swap::raster_tests::sustained_collection_restores_under_full_memory_pressure ... FAILED
+
+failures:
+
+failures:
+    swap::raster_tests::sustained_collection_restores_under_full_memory_pressure
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 144 filtered out; finished in 60.06s
+
+error: test failed, to rerun pass `-p rrrah-cache --lib`

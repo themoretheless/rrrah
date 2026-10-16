@@ -13,6 +13,8 @@ struct Parameters {
     curve: array<vec4<f32>, 256>,
     resident_rect: vec4<u32>,
     comparison: vec4<f32>,
+    sensor_geometry: vec4<u32>,
+    crop: vec4<u32>,
 };
 @group(0) @binding(0) var image: texture_2d_array<f32>;
 @group(0) @binding(1) var<uniform> p: Parameters;
@@ -26,6 +28,21 @@ fn vs_main(@builtin(vertex_index) index: u32) -> @builtin(position) vec4<f32> {
 fn premultiplied_at(coordinate: vec2<i32>) -> vec4<f32> {
     let upper = vec2<i32>(p.image_size) - vec2<i32>(1);
     var global = clamp(coordinate, vec2<i32>(0), upper);
+    let x = global.x;
+    let y = global.y;
+    let cw = i32(p.crop.z);
+    let ch = i32(p.crop.w);
+    switch p.sensor_geometry.z {
+        case 1u: { global = vec2<i32>(cw - 1 - x, y); }
+        case 2u: { global = vec2<i32>(cw - 1 - x, ch - 1 - y); }
+        case 3u: { global = vec2<i32>(x, ch - 1 - y); }
+        case 4u: { global = vec2<i32>(y, x); }
+        case 5u: { global = vec2<i32>(y, ch - 1 - x); }
+        case 6u: { global = vec2<i32>(cw - 1 - y, ch - 1 - x); }
+        case 7u: { global = vec2<i32>(cw - 1 - y, x); }
+        default: {}
+    }
+    global += vec2<i32>(p.crop.xy);
     if RESIDENT_REGION { global -= vec2<i32>(p.resident_rect.xy); }
     // Most images occupy one layer: bypass integer division/remainder there.
     if SINGLE_LAYER {
@@ -34,7 +51,7 @@ fn premultiplied_at(coordinate: vec2<i32>) -> vec4<f32> {
     }
     let tile_size = vec2<i32>(textureDimensions(image, 0));
     let tile = global / tile_size;
-    var resident_width = i32(p.image_size.x);
+    var resident_width = i32(p.sensor_geometry.x);
     if RESIDENT_REGION { resident_width = i32(p.resident_rect.z); }
     let columns = (resident_width + tile_size.x - 1) / tile_size.x;
     let layer = tile.y * columns + tile.x;
@@ -101,6 +118,64 @@ fn evaluate_curve(x:f32)->f32 {
     return clamp(value,a.y,b.y);
 }
 
+// Exact box integration of displayed sensor pixels, including partial edge cells.
+// Integer tap mapping applies crop/orientation before resolving source array layers.
+fn area_color(location: vec2<f32>, footprint: vec2<f32>) -> vec4<f32> {
+    let lower = max(vec2<f32>(0.0), location - footprint * 0.5);
+    let upper = min(p.image_size, location + footprint * 0.5);
+    let first = vec2<i32>(floor(lower));
+    let end = vec2<i32>(ceil(upper));
+    if p.sensor_geometry.w != 0u {
+        // Native calibrated Bayer has a proven sample-range admission bound.
+    var sum = vec4<f32>(0.0);
+    var total = 0.0;
+    for (var y = first.y; y < end.y; y += 1) {
+        for (var x = first.x; x < end.x; x += 1) {
+            let cell = vec2<f32>(f32(x), f32(y));
+            let overlap = max(vec2<f32>(0.0), min(cell + vec2<f32>(1.0), upper) - max(cell, lower));
+            let weight = overlap.x * overlap.y;
+            sum += premultiplied_at(vec2<i32>(x, y)) * weight;
+            total += weight;
+        }
+    }
+    return sum / total;
+    }
+    let maximum = bitcast<f32>(0x7f7fffffu);
+    let safe = maximum * 0.25;
+    var sum = vec4<f32>(0.0);
+    var total = 0.0;
+    var exponents = vec3<i32>(0);
+    var scaled = false;
+    for (var y = first.y; y < end.y; y += 1) {
+        for (var x = first.x; x < end.x; x += 1) {
+            let cell = vec2<f32>(f32(x), f32(y));
+            let overlap = max(vec2<f32>(0.0), min(cell + vec2<f32>(1.0), upper) - max(cell, lower));
+            let weight = overlap.x * overlap.y;
+            let pixel = premultiplied_at(vec2<i32>(x, y));
+            if scaled || any(abs(sum.rgb) > vec3<f32>(safe)) || any(abs(pixel.rgb) > vec3<f32>(safe)) {
+                // Promote before a sum can overflow. Per-channel binary scaling
+                // preserves small green/blue values beside extreme red values.
+                var magnitude = abs(pixel.rgb);
+                if !scaled { magnitude = max(magnitude, abs(sum.rgb)); }
+                let next = max(exponents, clamp(frexp(magnitude).exp, vec3<i32>(0), vec3<i32>(127)));
+                sum = vec4<f32>(ldexp(sum.rgb, exponents - next) + ldexp(pixel.rgb, -next) * weight,
+                    sum.a + pixel.a * weight);
+                exponents = next;
+                scaled = true;
+            } else {
+                sum += pixel * weight;
+            }
+            total += weight;
+        }
+    }
+    var mean = sum / total;
+    if scaled {
+        let bound = ldexp(vec3<f32>(maximum), -exponents);
+        mean = vec4<f32>(ldexp(clamp(mean.rgb, -bound, bound), exponents), mean.a);
+    }
+    return vec4<f32>(mean.rgb, clamp(mean.a, 0.0, 1.0));
+}
+
 @fragment
 fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
     let shape = vec2<f32>(p.pixel_aspect, 1.0);
@@ -110,21 +185,34 @@ fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
     if any(location < vec2<f32>(0.0)) || any(location >= p.image_size) {
         return p.background;
     }
-    let centered = location - vec2<f32>(0.5);
-    let base = vec2<i32>(floor(centered));
-    let weight = fract(centered);
-    if RESIDENT_REGION {
-        let upper = vec2<i32>(p.image_size) - vec2<i32>(1);
-        let first = clamp(base, vec2<i32>(0), upper);
-        let last = clamp(base + vec2<i32>(1), vec2<i32>(0), upper);
-        let origin = vec2<i32>(p.resident_rect.xy);
-        let end = origin + vec2<i32>(p.resident_rect.zw);
-        if any(first < origin) || any(last >= end) { return p.background; }
+    let footprint = vec2<f32>(1.0) / (fit * p.zoom * shape);
+    var color: vec4<f32>;
+    if p.raw_development.w != 0u && any(footprint > vec2<f32>(1.0)) {
+        if RESIDENT_REGION {
+            let first = vec2<i32>(floor(max(vec2<f32>(0.0), location - footprint * 0.5)));
+            let end = vec2<i32>(ceil(min(p.image_size, location + footprint * 0.5)));
+            let origin = vec2<i32>(p.resident_rect.xy);
+            let resident_end = origin + vec2<i32>(p.resident_rect.zw);
+            if any(first < origin) || any(end > resident_end) { return p.background; }
+        }
+        color = area_color(location, footprint);
+    } else {
+        let centered = location - vec2<f32>(0.5);
+        let base = vec2<i32>(floor(centered));
+        let weight = fract(centered);
+        if RESIDENT_REGION {
+            let upper = vec2<i32>(p.image_size) - vec2<i32>(1);
+            let first = clamp(base, vec2<i32>(0), upper);
+            let last = clamp(base + vec2<i32>(1), vec2<i32>(0), upper);
+            let origin = vec2<i32>(p.resident_rect.xy);
+            let end = origin + vec2<i32>(p.resident_rect.zw);
+            if any(first < origin) || any(last >= end) { return p.background; }
+        }
+        // Premultiply before interpolation, so invisible RGB cannot make fringes.
+        let top = mix(premultiplied_at(base), premultiplied_at(base+vec2<i32>(1,0)), weight.x);
+        let bottom = mix(premultiplied_at(base+vec2<i32>(0,1)), premultiplied_at(base+vec2<i32>(1,1)), weight.x);
+        color = mix(top,bottom,weight.y);
     }
-    // Premultiply before interpolation, so invisible RGB cannot make fringes.
-    let top = mix(premultiplied_at(base), premultiplied_at(base+vec2<i32>(1,0)), weight.x);
-    let bottom = mix(premultiplied_at(base+vec2<i32>(0,1)), premultiplied_at(base+vec2<i32>(1,1)), weight.x);
-    let color = mix(top,bottom,weight.y);
     let before = p.comparison.x > 0.0 && position.x < p.viewport.x * p.comparison.x;
     let exposure = select(p.exposure, p.comparison.y, before);
     var rgb = color.rgb * exp2(exposure);
@@ -136,5 +224,9 @@ fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
         let peak = max(rgb.r,max(rgb.g,rgb.b));
         if peak > 1.0 { rgb=mix(rgb,vec3<f32>(curve_luminance),clamp((peak-1.0)/max(peak-curve_luminance,0.000001),0.0,1.0)); }
     }
-    return vec4<f32>(rgb + p.background.rgb*(1.0-color.a),1.0);
+    var result = rgb + p.background.rgb*(1.0-color.a);
+    if p.raw_development.z != 0u {
+        result = clamp(result, vec3<f32>(-65504.0), vec3<f32>(65504.0));
+    }
+    return vec4<f32>(result,1.0);
 }

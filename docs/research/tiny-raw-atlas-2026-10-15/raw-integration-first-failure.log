@@ -1,0 +1,27 @@
+
+running 7 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+test finite_large_bayer_values_refuse_unsafe_filter_range_before_replacement ... ok
+test nonfinite_raw_view_components_keep_previous_finite_frame ... ok
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... RAW linear adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW RGBE repeat grid: Rgba16Float; 3x5; four planes and independent signed HDR matrix preserved
+RAW above file white: Rgba16Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba16Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW invalid pixel count: Rgba16Float; empty/truncated/extra refused; prior frame and credit exact
+
+thread 'raw_linear_float_target_preserves_hdr_and_negative_rgbe_color' (20195629) panicked at crates/rrrah-gpu/tests/raw_linear_readback.rs:264:17:
+assertion failed: renderer.upload_mosaic(&device, &queue, &repeated).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_linear_hdr ... ok
+test raw_split_comparison_matches_baseline_and_edit_without_another_atlas ... RAW split comparison adapter: Metal Apple M4 Max
+ok
+test signed_rgbe_hdr_saturation_preserves_float32_and_both_half_limits ... ok
+
+failures:
+
+failures:
+    raw_linear_float_target_preserves_hdr_and_negative_rgbe_color
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 29.88s
+

@@ -1,0 +1,225 @@
+    Checking rrrah-demosaic v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-demosaic)
+    Checking rrrah-color v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-color)
+    Checking hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+    Checking rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+    Checking rrrah-develop v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop)
+    Checking rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+    Checking rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+    Checking hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+    Checking rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+    Checking rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+    Checking rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+    Checking rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+    Checking rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+    Checking rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+    Checking rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error: for loop over a single element
+   --> crates/rrrah-decode/src/hdr_color.rs:197:9
+    |
+197 | /         for h in [header("")] {
+198 | |             assert_eq!(
+199 | |                 declaration(&h).unwrap(),
+200 | |                 Some(RasterColorSpace::LinearRgbUnspecified)
+201 | |             );
+202 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#single_element_loop
+    = note: `-D clippy::single-element-loop` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::single_element_loop)]`
+help: try
+    |
+197 ~         {
+198 +             let h = header("");
+199 +             assert_eq!(
+200 +                 declaration(&h).unwrap(),
+201 +                 Some(RasterColorSpace::LinearRgbUnspecified)
+202 +             );
+203 +         }
+    |
+
+error: the borrowed expression implements the required traits
+    --> crates/rrrah-decode/src/raster.rs:1362:40
+     |
+1362 |         let plain = decode_raster_file(&fixtures.join("avif-alpha-icc.avif")).unwrap();
+     |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: change this to: `fixtures.join("avif-alpha-icc.avif")`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrows_for_generic_args
+     = note: `-D clippy::needless-borrows-for-generic-args` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::needless_borrows_for_generic_args)]`
+
+error: the borrowed expression implements the required traits
+    --> crates/rrrah-decode/src/raster.rs:1363:39
+     |
+1363 |         let prem = decode_raster_file(&fixtures.join("avif-alpha-icc-prem.avif")).unwrap();
+     |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: change this to: `fixtures.join("avif-alpha-icc-prem.avif")`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrows_for_generic_args
+
+error: the borrowed expression implements the required traits
+    --> crates/rrrah-decode/src/raster.rs:1514:44
+     |
+1514 |         let reference = decode_raster_file(&fixtures.join("avif-rgb.avif")).unwrap();
+     |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: change this to: `fixtures.join("avif-rgb.avif")`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrows_for_generic_args
+
+error: very complex type used. Consider factoring parts into `type` definitions
+    --> crates/rrrah-decode/src/raster.rs:1585:20
+     |
+1585 |         let cases: [([i32; 2], [i32; 4], Option<&[u8]>); 8] = [
+     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#type_complexity
+     = note: `-D clippy::type-complexity` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::type_complexity)]`
+
+error: very complex type used. Consider factoring parts into `type` definitions
+    --> crates/rrrah-decode/src/raster.rs:2461:20
+     |
+2461 |         let cases: Vec<(&str, Vec<u8>, [[f64; 3]; 2])> = vec![
+     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#type_complexity
+
+error: could not compile `rrrah-decode` (lib test) due to 6 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/bay_sensor_oracle.rs:18:10
+   |
+18 |         .chunks_exact(2585)
+   |          ^^^^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2585>().0.iter()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+   = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/bay_sensor_oracle.rs:19:37
+   |
+19 |         .zip(oracle[header.len()..].chunks_exact(2576 * 2))
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: consider using `as_chunks::<2576 * 2>()` instead
+  --> crates/rrrah-decode/tests/bay_sensor_oracle.rs:19:37
+   |
+19 |         .zip(oracle[header.len()..].chunks_exact(2576 * 2))
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/bay_sensor_oracle.rs:21:67
+   |
+21 |         for (actual, encoded) in row[..2576].iter().zip(reference.chunks_exact(2)) {
+   |                                                                   ^^^^^^^^^^^^^^^
+   |
+help: consider using `as_chunks::<2>()` instead
+  --> crates/rrrah-decode/tests/bay_sensor_oracle.rs:21:67
+   |
+21 |         for (actual, encoded) in row[..2576].iter().zip(reference.chunks_exact(2)) {
+   |                                                                   ^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/avif_prem_producer.rs:31:22
+   |
+31 |                     .chunks_exact(2)
+   |                      ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+   = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: could not compile `rrrah-decode` (test "bay_sensor_oracle") due to 3 previous errors
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:22:30
+   |
+22 |     for (i, bytes) in oracle.chunks_exact(2).enumerate() {
+   |                              ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+   = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: calling `DevelopOptions::default()` is more clear than this expression
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:37:52
+   |
+37 |         rrrah_core::develop::develop_raw(&mosaic, &Default::default(), &lists, Some(&budget), &|| false)
+   |                                                    ^^^^^^^^^^^^^^^^^^ help: try: `DevelopOptions::default()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+   = note: `-D clippy::default-trait-access` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::default_trait_access)]`
+
+error: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:45:54
+   |
+45 |     assert_eq!((enabled.width(), enabled.height()), (w as u32, h as u32));
+   |                                                      ^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+   = note: `-D clippy::cast-possible-truncation` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+   |
+45 -     assert_eq!((enabled.width(), enabled.height()), (w as u32, h as u32));
+45 +     assert_eq!((enabled.width(), enabled.height()), (u32::try_from(w), h as u32));
+   |
+
+error: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:45:64
+   |
+45 |     assert_eq!((enabled.width(), enabled.height()), (w as u32, h as u32));
+   |                                                                ^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+45 -     assert_eq!((enabled.width(), enabled.height()), (w as u32, h as u32));
+45 +     assert_eq!((enabled.width(), enabled.height()), (w as u32, u32::try_from(h)));
+   |
+
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:52:27
+   |
+52 |     for (i, (a, b)) in on.chunks_exact(4).zip(off.chunks_exact(4)).enumerate() {
+   |                           ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<4>().0.iter()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+error: using `chunks_exact` with a constant chunk size
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:52:51
+   |
+52 |     for (i, (a, b)) in on.chunks_exact(4).zip(off.chunks_exact(4)).enumerate() {
+   |                                                   ^^^^^^^^^^^^^^^
+   |
+help: consider using `as_chunks::<4>()` instead
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:52:51
+   |
+52 |     for (i, (a, b)) in on.chunks_exact(4).zip(off.chunks_exact(4)).enumerate() {
+   |                                                   ^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+error: strict comparison of `f32` or `f64`
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:54:9
+   |
+54 |         assert_eq!(a[3], 1.0);
+   |         ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+   = note: `-D clippy::float-cmp` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::float_cmp)]`
+
+error: strict comparison of `f32` or `f64`
+  --> crates/rrrah-decode/tests/gpr_highlight_support.rs:55:9
+   |
+55 |         assert_eq!(b[3], 1.0);
+   |         ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+error: could not compile `rrrah-decode` (test "avif_prem_producer") due to 1 previous error
+error: could not compile `rrrah-decode` (test "gpr_highlight_support") due to 8 previous errors

@@ -725,3 +725,79 @@ fn minified_cropped_bayer_all_orientations_match_cpu_and_tiled_metal() {
         }
     }
 }
+
+#[test]
+fn odd_bayer_black_grid_phase_white_and_tiles_match_equivalent_sensor() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("odd Bayer calibration adapter: {}", gpu.adapter_name());
+    let side = 63;
+    for quad in [[0, 1, 1, 2], [2, 1, 1, 0], [1, 0, 2, 1], [1, 2, 0, 1]] {
+        let mut flat = profiled_pattern_mosaic(
+            side,
+            side,
+            1000.,
+            [2., 1., 0.5, 1.25],
+            camera_profiles::PROFILES[4].xyz,
+            |x, y| {
+                let phase = ((y % 2) * 2 + x % 2) as u16;
+                (phase + 1) * 500
+            },
+        );
+        flat.metadata.cfa = Some(CfaPattern {
+            width: 2,
+            height: 2,
+            cells: quad
+                .map(|c| match c {
+                    0 => CfaColor::Red,
+                    1 => CfaColor::Green,
+                    2 => CfaColor::Blue,
+                    _ => unreachable!(),
+                })
+                .to_vec(),
+        });
+        flat.metadata.white_level = rrrah_core::WhiteLevel(vec![1000., 2000., 3000., 4000.]);
+        let mut metadata = flat.metadata.clone();
+        metadata.black_level = LevelGrid {
+            width: 3,
+            height: 5,
+            components: 1,
+            values: (0..15).map(|i| (i * 2) as f32).collect(),
+        };
+        let pixels = (0..side)
+            .flat_map(|y| {
+                let m = &metadata;
+                (0..side).map(move |x| {
+                    let phase = ((y % 2) * 2 + x % 2) as usize;
+                    let black = m.black_level.at(y, x, 0).unwrap();
+                    (black + (m.white_level.0[phase] - black) / 2.) as u16
+                })
+            })
+            .collect::<Vec<_>>();
+        let odd = rrrah_core::DecodedMosaic::new(metadata, std::sync::Arc::new(pixels)).unwrap();
+        let expected = gpu.render(&flat, [side, side]);
+        let actual = gpu.render(&odd, [side, side]);
+        let tiled = gpu.render_with_tiling(
+            &odd,
+            [side, side],
+            rrrah_gpu::TilingOverrides {
+                tile_size: Some(32),
+                tile_halo: Some(1),
+            },
+        );
+        assert_eq!(
+            actual.pixels, expected.pixels,
+            "phase white/black mismatch: {quad:?}"
+        );
+        assert_eq!(tiled.pixels, expected.pixels, "tile mismatch: {quad:?}");
+        assert_eq!(
+            gpu.render_raw_half(&odd, [side, side]),
+            gpu.render_raw_half(&flat, [side, side]),
+            "HDR phase calibration: {quad:?}"
+        );
+        let cpu = odd.thumbnail_rgba8(side);
+        assert_eq!(cpu, flat.thumbnail_rgba8(side));
+        for (a, b) in cpu.iter().zip(&actual.pixels) {
+            assert!(a.abs_diff(*b) <= 2, "CPU/GPU transfer difference: {quad:?}");
+        }
+    }
+}

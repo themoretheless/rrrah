@@ -1,0 +1,63 @@
+{
+  "status": "selected_cards_admitted_and_shared",
+  "changes": [
+    "Header parser borrows original fixed 80-byte cards using safe slice as_chunks; no temporary card Vec for unselected HDUs",
+    "Only selected image header cards copied into admitted PixelBuffer<[u8;80]>",
+    "Cards clone shares allocation/reservation instead of deep copying Vec",
+    "Exact native/window quotas include retained selected cards"
+  ],
+  "api_changes": [
+    "FitsImage.cards: Vec<[u8;80]> -> PixelBuffer<[u8;80]>"
+  ],
+  "checks": {
+    "scientific_lib": {
+      "passed": 52,
+      "failed": 0,
+      "ignored": 9
+    },
+    "scientific_clippy_lib_tests_no_deps": "passed -D warnings",
+    "decode_lib": {
+      "passed": 189,
+      "failed": 0,
+      "ignored": 3
+    },
+    "card_ownership_unit": {
+      "borrowed_card_pointer_equals_source": true,
+      "retained_card_bytes": 1040,
+      "native_bytes": 15,
+      "exact_budget": 1055,
+      "short_refused": 1054,
+      "card_clone_survives_sample_drop": true,
+      "last_card_owner_releases": true
+    },
+    "oracles": "Independent native/physical/window FITS samples and HDU/section selection preserved",
+    "pipeline": {
+      "scientific_states": 492,
+      "ram_pressure_hits": 492,
+      "swap_writes": 492,
+      "swap_reads": 492,
+      "blocked_decoder": true,
+      "final_accounted_bytes": 0
+    },
+    "metal": {
+      "adapter": "Metal Apple M4 Max",
+      "sdr_rgba16f_readbacks": 3688,
+      "geometry_controls": 736,
+      "seconds": 18.97
+    }
+  },
+  "source_sha256": "6d3533c978cb97b1f3f86c13bb0ab3768539c270f7531ff70b5f443a001368eb",
+  "limits": [
+    "Temporary parsed FITS fields BTreeMap/String allocations still need admission audit",
+    "No measured decode-speedup or all-FITS/WCS/producer qualification claim",
+    "Pixel/card capacity budgets exclude Arc/allocator overhead and total RSS",
+    "No physical HDR display validation; NVIDIA deferred by user"
+  ],
+  "logs": {
+    "scientific-tests": "scientific-tests.log",
+    "scientific-clippy": "scientific-clippy.log",
+    "decode-tests": "decode-tests.log",
+    "pipeline-cpu": "pipeline-cpu.log",
+    "pipeline-metal": "pipeline-metal.log"
+  }
+}
