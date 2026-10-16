@@ -1,0 +1,30 @@
+{
+  "status": "verified_terminal_attempt_unqualified_due_observed_compiler",
+  "report": "docs/research/dedup-durable-actual-engine-v12-benchmark-20261016.json",
+  "report_sha256": "a75430a10cb3ae3a8c98bb838e139112731ad68978644d9259be9fc326f8a678",
+  "auditor_sha256": "34e9a031aa0a83c09d110e058784fb51238dff5b6f39344cd09b53f283901d87",
+  "retained_rows": 5,
+  "retained_logs": {
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-0-baseline.log": "ac4934447c83f2a7b49f1b5a723ac292f914faae21baf0f6319ea1c40ae676f8",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-0-candidate.log": "fc39b2cc2dde96fea6762cedcfd5eafcb63487b3df230c9d3d5b8626ac07149b",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-1-baseline.log": "1c1ee057f0103c4557a090af215c5413813abda37fb2555bfa86a39a8d4ea796",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-1-candidate.log": "9eeb3772692f3a1f6a7d1bc317d6e263daf1c98497ec42464df76cf9e360d167",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-2-baseline.log": "2c9b5b7f77c92d6457e99bd0dca1d21dd9dc52bf1e8e6eb15db4903fb0211271",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-2-candidate.log": "de9ca05fb6459e538d4af3e5468e3e90a6ea9c5af3da304513ba02f7aff17bd1"
+  },
+  "excluded_interfered_sample": ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v12/empty2-2-candidate.log",
+  "observed_compilers": [
+    {
+      "pid": 73368,
+      "parent_pid": 5850,
+      "executable": "/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    },
+    {
+      "pid": 73370,
+      "parent_pid": 73368,
+      "executable": "/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  ],
+  "speedup_qualified": false,
+  "scope": "All retained sample outcomes and ordered prefix verified, plus excluded last native passing sample. Entire timing attempt unqualified due observed concurrent compiler after sample. No ratios/adoption inferred, no selective mixing into next attempt. Frozen gates/36opt3correctness controls unaffected."
+}

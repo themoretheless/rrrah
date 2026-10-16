@@ -1,0 +1,405 @@
+{
+  "status": "executed_pending_independent_outcome_audit",
+  "producer_sha256": "ad853405e9940ee234fecc62849b645a348c97ab02dc969722b166fd26e5a098",
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/czid151-20261016/target/debug/czid-dedup",
+  "binary_sha256": "be800802a55c1eb6c7daf80fecad2299d4eeed29046a9664313f5fcf22f3d497",
+  "cases": 16,
+  "runs": 2,
+  "rows": [
+    {
+      "repeat": 1,
+      "case": "exact_default",
+      "exit_code": 0,
+      "stdout": "duplicates:                  1\nunique reads:                2\ntotal reads:                 3\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a612c610a612c620a632c630a",
+        "o": "3e610a414354470a3e630a414347470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-exact_default"
+    },
+    {
+      "repeat": 1,
+      "case": "prefix2_intended_collapse",
+      "exit_code": 0,
+      "stdout": "duplicates:                  2\nunique reads:                1\ntotal reads:                 3\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "o": "3e610a414354470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-prefix2_intended_collapse"
+    },
+    {
+      "repeat": 1,
+      "case": "prefix0_all_collapse",
+      "exit_code": 0,
+      "stdout": "duplicates:                  2\nunique reads:                1\ntotal reads:                 3\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "o": "3e610a414354470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-prefix0_all_collapse"
+    },
+    {
+      "repeat": 1,
+      "case": "same_path_truncates",
+      "exit_code": 0,
+      "stdout": "duplicates:                  0\nunique reads:                0\ntotal reads:                 0\n",
+      "stderr": "",
+      "files_hex": {
+        "a": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-same_path_truncates"
+    },
+    {
+      "repeat": 1,
+      "case": "cluster_same_input_truncates",
+      "exit_code": 0,
+      "stdout": "input file is not a valid FASTA or FASTQ file\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "726570726573656e74617469766520726561642069642c726561642069640a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-cluster_same_input_truncates"
+    },
+    {
+      "repeat": 1,
+      "case": "hardlink_output_truncates",
+      "exit_code": 0,
+      "stdout": "duplicates:                  0\nunique reads:                0\ntotal reads:                 0\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "",
+        "alias": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-hardlink_output_truncates"
+    },
+    {
+      "repeat": 1,
+      "case": "quality_ignored_first_retained",
+      "exit_code": 0,
+      "stdout": "duplicates:                  1\nunique reads:                1\ntotal reads:                 2\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "40610a414354470a2b0a212121210a40620a414354470a2b0a494949490a",
+        "o": "40610a414354470a2b0a212121210a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-quality_ignored_first_retained"
+    },
+    {
+      "repeat": 1,
+      "case": "late_bad_fastq_partial_exit0",
+      "exit_code": 0,
+      "stdout": "Unequal length of sequence an qualities.\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "40610a414354470a2b0a494949490a40620a414354470a2b0a490a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a612c610a",
+        "o": "40610a414354470a2b0a494949490a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-late_bad_fastq_partial_exit0"
+    },
+    {
+      "repeat": 1,
+      "case": "paired_length_mismatch_partial_exit0",
+      "exit_code": 0,
+      "stdout": "reached the end of r2 before r1\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e780a414354470a3e790a414347470a",
+        "b": "3e780a414141410a",
+        "o": "3e780a414354470a",
+        "p": "3e780a414141410a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-paired_length_mismatch_partial_exit0"
+    },
+    {
+      "repeat": 1,
+      "case": "paired_ids_mismatch_exit0",
+      "exit_code": 0,
+      "stdout": "read pair had different read IDs: (x/1, x/2)\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e782f310a414354470a",
+        "b": "3e782f320a414141410a",
+        "o": "",
+        "p": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-paired_ids_mismatch_exit0"
+    },
+    {
+      "repeat": 1,
+      "case": "paired_separator_ambiguity_accepted_ascii",
+      "exit_code": 0,
+      "stdout": "duplicates:                  1\nunique reads:                1\ntotal reads:                 2\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e780a4100000000420a3e790a410a",
+        "b": "3e780a430a3e790a4200000000430a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a782c780a782c790a",
+        "o": "3e780a4100000000420a",
+        "p": "3e780a430a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-paired_separator_ambiguity_accepted_ascii"
+    },
+    {
+      "repeat": 1,
+      "case": "empty_input_exit0",
+      "exit_code": 0,
+      "stdout": "input file is not a valid FASTA or FASTQ file\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-empty_input_exit0"
+    },
+    {
+      "repeat": 1,
+      "case": "invalid_input_exit0",
+      "exit_code": 0,
+      "stdout": "input file is not a valid FASTA or FASTQ file\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "6e6f7420612073657175656e63650a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-invalid_input_exit0"
+    },
+    {
+      "repeat": 1,
+      "case": "missing_input_panics",
+      "exit_code": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (2633190) panicked at src/main.rs:170:38:\ncalled `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: \"No such file or directory\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "files_hex": {},
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-missing_input_panics"
+    },
+    {
+      "repeat": 1,
+      "case": "non_numeric_prefix_panics",
+      "exit_code": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (2633192) panicked at src/main.rs:166:37:\ncalled `Result::unwrap()` on an `Err` value: ParseIntError { kind: InvalidDigit }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-non_numeric_prefix_panics"
+    },
+    {
+      "repeat": 1,
+      "case": "unequal_output_count_panics",
+      "exit_code": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (2633194) panicked at src/main.rs:176:36:\nmust have the same number of inputs and outputs\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "o": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/1-unequal_output_count_panics"
+    },
+    {
+      "repeat": 2,
+      "case": "exact_default",
+      "exit_code": 0,
+      "stdout": "duplicates:                  1\nunique reads:                2\ntotal reads:                 3\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a612c610a612c620a632c630a",
+        "o": "3e610a414354470a3e630a414347470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-exact_default"
+    },
+    {
+      "repeat": 2,
+      "case": "prefix2_intended_collapse",
+      "exit_code": 0,
+      "stdout": "duplicates:                  2\nunique reads:                1\ntotal reads:                 3\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "o": "3e610a414354470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-prefix2_intended_collapse"
+    },
+    {
+      "repeat": 2,
+      "case": "prefix0_all_collapse",
+      "exit_code": 0,
+      "stdout": "duplicates:                  2\nunique reads:                1\ntotal reads:                 3\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "o": "3e610a414354470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-prefix0_all_collapse"
+    },
+    {
+      "repeat": 2,
+      "case": "same_path_truncates",
+      "exit_code": 0,
+      "stdout": "duplicates:                  0\nunique reads:                0\ntotal reads:                 0\n",
+      "stderr": "",
+      "files_hex": {
+        "a": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-same_path_truncates"
+    },
+    {
+      "repeat": 2,
+      "case": "cluster_same_input_truncates",
+      "exit_code": 0,
+      "stdout": "input file is not a valid FASTA or FASTQ file\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "726570726573656e74617469766520726561642069642c726561642069640a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-cluster_same_input_truncates"
+    },
+    {
+      "repeat": 2,
+      "case": "hardlink_output_truncates",
+      "exit_code": 0,
+      "stdout": "duplicates:                  0\nunique reads:                0\ntotal reads:                 0\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "",
+        "alias": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-hardlink_output_truncates"
+    },
+    {
+      "repeat": 2,
+      "case": "quality_ignored_first_retained",
+      "exit_code": 0,
+      "stdout": "duplicates:                  1\nunique reads:                1\ntotal reads:                 2\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "40610a414354470a2b0a212121210a40620a414354470a2b0a494949490a",
+        "o": "40610a414354470a2b0a212121210a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-quality_ignored_first_retained"
+    },
+    {
+      "repeat": 2,
+      "case": "late_bad_fastq_partial_exit0",
+      "exit_code": 0,
+      "stdout": "Unequal length of sequence an qualities.\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "40610a414354470a2b0a494949490a40620a414354470a2b0a490a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a612c610a",
+        "o": "40610a414354470a2b0a494949490a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-late_bad_fastq_partial_exit0"
+    },
+    {
+      "repeat": 2,
+      "case": "paired_length_mismatch_partial_exit0",
+      "exit_code": 0,
+      "stdout": "reached the end of r2 before r1\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e780a414354470a3e790a414347470a",
+        "b": "3e780a414141410a",
+        "o": "3e780a414354470a",
+        "p": "3e780a414141410a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-paired_length_mismatch_partial_exit0"
+    },
+    {
+      "repeat": 2,
+      "case": "paired_ids_mismatch_exit0",
+      "exit_code": 0,
+      "stdout": "read pair had different read IDs: (x/1, x/2)\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e782f310a414354470a",
+        "b": "3e782f320a414141410a",
+        "o": "",
+        "p": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-paired_ids_mismatch_exit0"
+    },
+    {
+      "repeat": 2,
+      "case": "paired_separator_ambiguity_accepted_ascii",
+      "exit_code": 0,
+      "stdout": "duplicates:                  1\nunique reads:                1\ntotal reads:                 2\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "3e780a4100000000420a3e790a410a",
+        "b": "3e780a430a3e790a4200000000430a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a782c780a782c790a",
+        "o": "3e780a4100000000420a",
+        "p": "3e780a430a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-paired_separator_ambiguity_accepted_ascii"
+    },
+    {
+      "repeat": 2,
+      "case": "empty_input_exit0",
+      "exit_code": 0,
+      "stdout": "input file is not a valid FASTA or FASTQ file\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-empty_input_exit0"
+    },
+    {
+      "repeat": 2,
+      "case": "invalid_input_exit0",
+      "exit_code": 0,
+      "stdout": "input file is not a valid FASTA or FASTQ file\n",
+      "stderr": "",
+      "files_hex": {
+        "a": "6e6f7420612073657175656e63650a",
+        "c": "726570726573656e74617469766520726561642069642c726561642069640a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-invalid_input_exit0"
+    },
+    {
+      "repeat": 2,
+      "case": "missing_input_panics",
+      "exit_code": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (2633222) panicked at src/main.rs:170:38:\ncalled `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: \"No such file or directory\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "files_hex": {},
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-missing_input_panics"
+    },
+    {
+      "repeat": 2,
+      "case": "non_numeric_prefix_panics",
+      "exit_code": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (2633224) panicked at src/main.rs:166:37:\ncalled `Result::unwrap()` on an `Err` value: ParseIntError { kind: InvalidDigit }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a"
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-non_numeric_prefix_panics"
+    },
+    {
+      "repeat": 2,
+      "case": "unequal_output_count_panics",
+      "exit_code": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (2633226) panicked at src/main.rs:176:36:\nmust have the same number of inputs and outputs\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "files_hex": {
+        "a": "3e610a414354470a3e620a414354470a3e630a414347470a",
+        "o": ""
+      },
+      "fixture": ".dedup-work/czid151-20261016/cli-fixtures/2-unequal_output_count_panics"
+    }
+  ],
+  "scope": "Wholeunchanged lockedRustCLI actualbio0.32.0/clap2.33.3/csv1.1.3 dependencies, ownedminimalFASTA/FASTQ only. No adapters/bodyextraction/privatebio/userfiles/deletion/network. Samepath/hardlink/clusteralias cases affect onlynewownedfixtures.",
+  "limits": [
+    "Hashseparatorcounterexample usesNULASCII acceptedbyactualparser/check, notvalidbiologicalDNA; noordinaryACGTcryptographichashcollisionclaim",
+    "No realbiologicalquality/formats/platform/large-scale/mutation/concurrency/hardRSS/performance/adoption/currentroot proof"
+  ]
+}

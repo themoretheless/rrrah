@@ -1,0 +1,43 @@
+"""Verify complete pinned Rust repository, original tests, and whole CLI outcomes."""
+from pathlib import Path,PurePosixPath
+import hashlib,json,tomllib,re,subprocess
+R=Path(__file__).resolve().parents[1];W=R/'.dedup-work/czid151-20261016';D=R/'docs/research/dedup-500';h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+tree=json.loads((D/'evidence/chanzuckerberg--czid-dedup/tree.json').read_text());commit=json.loads((W/'commit.json').read_text());assert commit['sha']=='65f04c4cce9518e6f93837a700bd843f6745fb55' and commit['tree']['sha']==tree['sha'] and not tree['truncated'];entries=tree['tree'];blobs=[e for e in entries if e['type']=='blob'];assert len(blobs)==10
+build=json.loads((W/'build-preparation.json').read_text());B=Path(build['source']);pins=[]
+for e in blobs:
+ p=W/'source'/e['path'];b=p.read_bytes();b.decode('utf8');assert len(b)==e['size'] and hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==e['sha'];assert (B/e['path']).read_bytes()==b;pins.append({'repository_path':e['path'],'path':str(p.relative_to(R)),'sha256':h(p),'git_blob':e['sha'],'scope':'CompleteUTF8textread'})
+trees=[]
+for dirname in ['']+[e['path'] for e in entries if e['type']=='tree']:
+ children=[e for e in entries if ('' if str(PurePosixPath(e['path']).parent)=='.' else str(PurePosixPath(e['path']).parent))==dirname];children.sort(key=lambda e:(PurePosixPath(e['path']).name+('/' if e['type']=='tree' else '')).encode());b=b''.join((e['mode'].lstrip('0')+' '+PurePosixPath(e['path']).name).encode()+b'\0'+bytes.fromhex(e['sha']) for e in children);got=hashlib.sha1(b'tree '+str(len(b)).encode()+b'\0'+b).hexdigest();expected=tree['sha'] if not dirname else next(e['sha'] for e in entries if e['path']==dirname);assert got==expected;trees.append({'path':dirname,'sha':got})
+lock=tomllib.loads((W/'source/Cargo.lock').read_text());assert len(lock['package'])==90
+for p in lock['package']:
+ if p['name']!='czid-dedup':assert re.fullmatch('[0-9a-f]{64}',p['checksum'])
+test=json.loads((W/'test-binary.json').read_text());exe=test['executable'];names=re.findall(r'^(.*): test$',subprocess.check_output([exe,'--list'],text=True),re.M);assert len(names)==len(set(names))==11
+testlogs={}
+for i in [1,2]:
+ p=W/f'original-tests-{i}.log';s=p.read_text();assert '11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out' in s;assert sorted(re.findall(r'^test (\S+) \.\.\. ok$',s,re.M))==sorted(names);testlogs[str(p.relative_to(R))]=h(p)
+proof=D/'czid151-cli-controls-20261016.json';c=json.loads(proof.read_text());assert c['producer_sha256']==h(R/'scripts/qualify-czid151-cli-20261016.py') and h(c['binary'])==c['binary_sha256'] and len(c['rows'])==32
+first={r['case']:r for r in c['rows'][:16]};assert len(first)==16
+for r in c['rows']:
+ other=first[r['case']]
+ if r['exit_code']==101:assert 'panicked' in r['stderr']
+ else:assert not r['stderr']
+ for key in ['exit_code','stdout','files_hex']:assert r[key]==other[key]
+ for name,data in r['files_hex'].items():assert (R/r['fixture']/name).read_bytes()==bytes.fromhex(data)
+def data(case,path):return bytes.fromhex(first[case]['files_hex'][path])
+for name in first:assert first[name]['exit_code']==(101 if name in ['missing_input_panics','non_numeric_prefix_panics','unequal_output_count_panics'] else 0)
+assert data('exact_default','o')==b'>a\nACTG\n>c\nACGG\n'
+assert data('exact_default','c')==b'representative read id,read id\na,a\na,b\nc,c\n'
+for case in ['prefix2_intended_collapse','prefix0_all_collapse']:assert data(case,'o')==b'>a\nACTG\n'
+assert data('same_path_truncates','a')==data('hardlink_output_truncates','a')==data('hardlink_output_truncates','alias')==b''
+assert data('cluster_same_input_truncates','a')==b'representative read id,read id\n'
+assert data('quality_ignored_first_retained','o')==b'@a\nACTG\n+\n!!!!\n'
+assert data('late_bad_fastq_partial_exit0','o')==b'@a\nACTG\n+\nIIII\n' and 'Unequal length' in first['late_bad_fastq_partial_exit0']['stdout']
+assert data('paired_length_mismatch_partial_exit0','o')==b'>x\nACTG\n' and data('paired_length_mismatch_partial_exit0','p')==b'>x\nAAAA\n' and 'end of r2' in first['paired_length_mismatch_partial_exit0']['stdout']
+assert data('paired_ids_mismatch_exit0','o')==data('paired_ids_mismatch_exit0','p')==b'' and 'different read IDs' in first['paired_ids_mismatch_exit0']['stdout']
+assert data('paired_separator_ambiguity_accepted_ascii','o')==b'>x\nA\0\0\0\0B\n' and data('paired_separator_ambiguity_accepted_ascii','p')==b'>x\nC\n' and data('paired_separator_ambiguity_accepted_ascii','c')==b'representative read id,read id\nx,x\nx,y\n'
+assert b'A\0\0\0\0B'+b'\0'*4+b'C'==b'A'+b'\0'*4+b'B\0\0\0\0C'
+for case in ['empty_input_exit0','invalid_input_exit0']:assert 'not a valid FASTA or FASTQ' in first[case]['stdout'] and data(case,'c')==b'representative read id,read id\n' and 'o' not in first[case]['files_hex']
+logs={str(p.relative_to(R)):h(p) for p in [W/'original-test-build.log',W/'original-test-build-status.json',W/'original-test-build-online.log',W/'original-test-build-online-status.json',W/'original-cli-build.log',W/'original-cli-build-status.json',W/'test-binary.json',W/'build-preparation.json']}
+for name in ['original-test-build-online-status.json','original-cli-build-status.json']:assert json.loads((W/name).read_text())['exit_code']==0
+out=D/'czid151-complete-source-review-20261016.json';assert not out.exists();out.write_text(json.dumps({'status':'verified_complete_pinned_source_original_tests_and_native_cli_boundaries','repository':'chanzuckerberg/czid-dedup','commit':commit['sha'],'whole_repo_complete':True,'whole_implementation_complete':True,'blobs':10,'canonical_trees':len(trees),'pins':pins,'trees':trees,'commit_record':str((W/'commit.json').relative_to(R)),'commit_record_sha256':h(W/'commit.json'),'auditor_sha256':h(Path(__file__)),'original_tests':11,'original_test_runs':2,'original_test_binary':exe,'original_test_binary_sha256':h(exe),'original_test_inventory':names,'original_test_logs':testlogs,'build_logs':logs,'lock_packages':lock['package'],'native_controls':str(proof.relative_to(R)),'native_controls_sha256':h(proof),'native_cli_cases':16,'native_cli_processes':32,'upstream_tests_run':True,'scope':'All10trackedtextblobs fullyread, all4Rustmodules includingall11tests,90Cargo.lockrecords/89checksums,CI/docs/MITlicense. No trackedbinarymedia; READMEexternaldynamicbadges notfetched. ActualunchangedwholeCargo --locked build onRust1.98.1MacARM; all11originaltests twicepassed,32wholeCLIprocesses actuallockedbio0.32/clap2.33.3/csv1.1.3, no adapters/extractedbodies/sourcechanges.','findings':['Sameownedinput/outputpath orhardlink truncatesinputto0 andreturnsexit0/total0. ClusterCSVpathaliasinput replacesFASTAwithCSVheader; no pathidentity/atomicpublicationguard.','LatebadFASTQretainsfirstrecordandpartialclusterCSV whilemainprintserrorstdoutandreturnsexit0. Unequalpairedlength leavesfirstpairedoutputs andreturnsexit0.','PairedIDsx/1vsx/2 rejecteddespitecommonbasename, errorreturnsexit0; strictdocumentedIDcontract, notnormalizedpair-IDcoverage.','Pairedkey usesrawhash_slice theni32zero separator thenrawhash_slice withoutlengthframing. Two distinctacceptedASCII/NULpairs encodeidenticalhashbytes andcollapseonepair; notordinaryDNA/cryptographichashcollision.','64bitDefaultHasher keyalone establishesclusters; sequencebytesnotretainedforverification. Prefix2/0collapses distinctsuffixes asconfiguredpolicy; defaultfullsequenceexactpositive passesbuthashcollisionsunqualified.','FASTQqualityignored; firstlow-qualityrecordretainedoverlaterhigh-qualitysame-sequence record, consistentfirstrepresentativepolicy, notqualityselection.','Missinginput/nonnumericprefix/unequaloutputcountpanic101, lattercreatesemptyoutputbeforepanic. Empty/invalidinputprintserrorandexit0, maystillcreateclusterheader.','All11originaltests pass butomitthesepublication/exitstatus/pathalias/keyframingboundaries. No productionadoption/speedclaim.'],'decision':'Reference streaming/order-preservingpolicy only withtypedlengthframedkeys, byteconfirmation, explicitpairedcoverage, input/outputownership andatomicerrorpublication. Keepourguards; no productioncodecopied.','license':'CompleteMITLICENSE read; no productioncodecopied.','limits':c['limits']+['Initialofflinebuildfailedmissingbio; onlineexactlockeddependencies fetched, fullsource/lockunchanged andbinary/logsverified','Tests useupstreamunseededrandom4letter sequences; passingtwice isnotstatisticalquality/performance/platformproof','OriginalnightlycoverageCI/releaseLinux/Windows notexecuted; currentrootfullgate/universalallcases notqualified']},indent=2)+'\n');print(json.dumps({'status':'verified','blobs':10,'trees':len(trees),'original_test_executions':22,'native_cli_processes':32}))

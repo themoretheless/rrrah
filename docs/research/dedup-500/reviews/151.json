@@ -2,9 +2,9 @@
   "index": 151,
   "repository": "chanzuckerberg/czid-dedup",
   "commit": "65f04c4cce9518e6f93837a700bd843f6745fb55",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete10pinnedtextblobs/4trees/all4Rustmodules/90lockpackages/docs/MITlicense/CI read. OriginalunchangedlockedCargo build Rust1.98.1MacARM,11originaltests twice22passes,16wholeCLIcases twice32processes. No adapters/sourcechanges/realbiocorpus/performance/platform/adoptionproof.",
   "decision": "reject-domain",
-  "finding": "Rust FASTA/FASTQ sequence hashing; biological record identity.",
+  "finding": "NativewholeCLI input/outputsamepath orhardlink truncatesinput; lateparsererror leavespartialoutputandexit0. Pairrawhashslice+zero delimiter ambiguousforacceptedNULASCII. Firstrecord/quality/prefixpolicytested;11originaltests pass.",
   "available_source_evidence": [
     {
       "path": "src/clusters.rs",
@@ -38,9 +38,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "CompleteMITLICENSE read; no productioncodecopied.",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -63,6 +63,16 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/czid151-complete-source-review-20261016.json",
+  "upstream_test_scope": "All11originaltests twice22passes actualunchangedlockedsource/dependencies onRust1.98.1MacARM. Upstreamrandomsequences unseeded; no oldCI/Linux/Windows/corpus/performanceproof.",
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/czid151-complete-source-review-20261016.json",
+      "controls": "docs/research/dedup-500/czid151-cli-controls-20261016.json",
+      "scope": "Complete10sourceblobs/4trees/90lockrecords;actualwholeCargo11tests twice and16CLIcontrols twice. OwnedminimalFASTA/FASTQ, noadapters."
     }
   ]
 }
