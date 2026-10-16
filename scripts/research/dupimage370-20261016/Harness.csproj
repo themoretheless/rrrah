@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><LangVersion>12.0</LangVersion></PropertyGroup>
+ <ItemGroup>
+  <ProjectReference Include="../source/DupImageLib/DupImageLib.csproj" />
+  <Reference Include="DupImageLib.Tests"><HintPath>../source/DupImageLib.Tests/bin/Release/net5/DupImageLib.Tests.dll</HintPath></Reference>
+  <PackageReference Include="xunit" Version="2.4.1" />
+ </ItemGroup>
+</Project>

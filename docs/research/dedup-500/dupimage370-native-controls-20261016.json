@@ -1,0 +1,636 @@
+{
+  "status": "verified_original_method_compatibility_invocation_and_native_boundaries",
+  "producer_sha256": "919dcfc0a50879d23df38011af9742bd45020b740cd6fc957a379840f73ad330",
+  "source_pins": {
+    ".dedup-work/dupimage370-20261016/source/.github/workflows/build.yml": "a7192ab3c924f7bd83d42c54e970b8f6ee59968b6d489413a36adc770e1197c2",
+    ".dedup-work/dupimage370-20261016/source/.github/workflows/publish.yml": "07c02eb64cd66336fc73d7ddc97413b5589923bf072924a573c4e273e73a6692",
+    ".dedup-work/dupimage370-20261016/source/.gitignore": "edb99897c4175ad242dda5e8515d314e959220ca516cf37f6b49b6947bc3a8f7",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/DummyImageTransformer.cs": "76d73e498267c47a52867127c7cc3382c7ff513e6cb81cd7b32b86135354b6da",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/DupImageLib.Tests.csproj": "ac464bde0f6b2e07e7e6a602fa7a068ab31c20c3cbad820e824e8b8877d4dadd",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/ImageHashesTests.cs": "7deb11e6ab7a6951cedd8a32fb601e3f84fcfce1d5d87e5e1ed8796612f63b22",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/ImageSharpTransformerTests.cs": "3af20ae90efa007a4881f1b8e3451692c7135c511968b79cc66cec38854eca21",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/testPattern1.png": "209f47d59be7394e26f5ae6d5096863c5784796764102ecd383fa818a9fca964",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/testPattern2.png": "3254faf30c88a8034f7935627adbfbab70f4a858084046025fb3a5b9bd544ee0",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.sln": "5635c4e0a0f5d1ab9259b44a669804e3a6cf684b15fcf1fdc03d48529b037cb9",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib/DupImageLib.csproj": "164b69c937841453c67311c904d99dfc5e4b4dfd722ddd3441dd8a4575f05764",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib/GlobalSuppressions.cs": "1e14623b240111caf0962431ee63025e3437897f64783fbe4820f29e69c78706",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib/IImageTransformer.cs": "eb0f82d3db1a1a5ee9733ffb810c0596c6c6692f32ad0f989fcbb3680561d6ee",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib/ImageHashes.cs": "cb59383d17b16a86228e3dc9ceae77e408f6e068fafd3895786163a579341254",
+    ".dedup-work/dupimage370-20261016/source/DupImageLib/ImageSharpTransformer.cs": "2f5ca56f4b78cd72fe1f720eca2cc0cbb5cf972147f2fbd8931100363e8e8870",
+    ".dedup-work/dupimage370-20261016/source/LICENSE": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    ".dedup-work/dupimage370-20261016/source/README.md": "0b42d49e317477005bd3f3bfabb1ca30829e4a3fc2a2caeefe661f055853ffc6"
+  },
+  "harness_pins": {
+    "scripts/research/dupimage370-20261016/Program.cs": "347bb1bd27cfedc334bef9209fe81825a862ff2fce6a3d2c553756f218838bf1",
+    "scripts/research/dupimage370-20261016/Harness.csproj": "9c4b966fb00ed2a35f92ff7da115bb354293c422a39e38b95b2c52db1950c387",
+    ".dedup-work/dupimage370-20261016/harness/Program.cs": "347bb1bd27cfedc334bef9209fe81825a862ff2fce6a3d2c553756f218838bf1",
+    ".dedup-work/dupimage370-20261016/harness/Harness.csproj": "9c4b966fb00ed2a35f92ff7da115bb354293c422a39e38b95b2c52db1950c387",
+    ".dedup-work/dupimage370-20261016/global.json": "7d7f6b4036e1fb1880c01925a8c1409a4bcefc769c506c66146fa5a2ca1467c9",
+    ".dedup-work/dupimage370-20261016/harness-build.log": "fa800ee2a0865e12827c7cafc9e42e99e6359b259f937f526d245d8d4ab66903",
+    ".dedup-work/dupimage370-20261016/harness-build-v2.log": "60c1f4b28790bbea80d961ff06960c57ba222de42b9eb3f010e0e04edb24e2d0"
+  },
+  "runtime_pins": {
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/DupImageLib.Tests.dll": "ef37fafd06e97afbfdef512c567c0be70a94ec90f33af06e8d99309dcd01ca18",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/DupImageLib.Tests.pdb": "19f61e158903da014ac664a19983879086b35189478946309da2a0e57c6d5a36",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/DupImageLib.dll": "f5c9f2e21540970e527f8dc326beb7fbedf5c3403db2231242bc8c03d86d4304",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/DupImageLib.pdb": "dada1618978ce5f5ecccefb1256e4ebd35d1e6e39f38d15937be4ae6c29c0bbb",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Harness.deps.json": "575be945c2137f4eff2856e3a7fe7dcbdcb7fdb186aca261fe71fa4dba8c31b5",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Harness.dll": "44c96735fd45dca56d81741f1988f07f91feaf45236aa63f48d538802098fdc5",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Harness.pdb": "55ff8f2b9a7ecd67d653eb594f15e4de6da07864bcd8bc32dcf70322f11e8c4c",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Harness.runtimeconfig.json": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Microsoft.TestPlatform.CoreUtilities.dll": "48c11a0c498732c1f201a48fb0cfadcf8b1e8aa3c817e473a5b3b8d97f3fdf78",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Microsoft.TestPlatform.PlatformAbstractions.dll": "2435a402db9a7ef35771f38dfb473b0c74e9faba00a451a7f05feda787683760",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/Microsoft.VisualStudio.TestPlatform.ObjectModel.dll": "8b8ce3bdef878bab58965a54d4d5575ec9a5cb55e3d4473f08b0f9655b6b6a78",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/NuGet.Frameworks.dll": "bdef879f0a4ab2ad97fe934f54e30aee0d06ad06a3ef292933308fca34906ef8",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/SixLabors.ImageSharp.dll": "58bb0d041cc914ee41b6e7d3c5da2cf8bbf2b536402666489e00b121e4ec0ee9",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/xunit.abstractions.dll": "3166dc70323fb30ccf1cedb0fe86f2ad122c46d254542342d90386efc4c9285c",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/xunit.assert.dll": "17b97301ee85f235cc45134055a2edc2fe6996966bd9fdebf0aede9770c6a06e",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/xunit.core.dll": "ea7acbee4e78e941df6cfe346e44be0e35e959015dc4421635fd114dbec42467",
+    ".dedup-work/dupimage370-20261016/harness/bin/Release/net8.0/xunit.execution.dotnet.dll": "99088544fcadd500e30258645765ab01e21d31fc29c46fd46b7def55fe35268f"
+  },
+  "assets": {
+    ".dedup-work/dupimage370-20261016/source/DupImageLib/obj/project.assets.json": {
+      "sha256": "42d95a2ef0b68702d9144cceaff6b873f40bbb974259f06ca1da68266d6215c6",
+      "packages": [
+        "Microsoft.NETCore.Platforms/1.1.0",
+        "NETStandard.Library/2.0.3",
+        "SixLabors.ImageSharp/1.0.2",
+        "System.Buffers/4.5.1",
+        "System.Memory/4.5.4",
+        "System.Numerics.Vectors/4.5.0",
+        "System.Runtime.CompilerServices.Unsafe/4.5.3"
+      ]
+    },
+    ".dedup-work/dupimage370-20261016/source/DupImageLib.Tests/obj/project.assets.json": {
+      "sha256": "ed5d5489a10daa3ad0b0b864c2813ae0fb24f42a423556765a269ed87823eaf4",
+      "packages": [
+        "DupImageLib/1.0.0",
+        "Microsoft.CSharp/4.0.1",
+        "Microsoft.CodeCoverage/16.8.3",
+        "Microsoft.NET.Test.Sdk/16.8.3",
+        "Microsoft.NETCore.Platforms/1.1.0",
+        "Microsoft.NETCore.Targets/1.1.0",
+        "Microsoft.TestPlatform.ObjectModel/16.8.3",
+        "Microsoft.TestPlatform.TestHost/16.8.3",
+        "Microsoft.Win32.Primitives/4.3.0",
+        "NETStandard.Library/1.6.1",
+        "Newtonsoft.Json/9.0.1",
+        "NuGet.Frameworks/5.0.0",
+        "SixLabors.ImageSharp/1.0.2",
+        "System.AppContext/4.3.0",
+        "System.Buffers/4.3.0",
+        "System.Collections.Concurrent/4.3.0",
+        "System.Collections/4.3.0",
+        "System.Console/4.3.0",
+        "System.Diagnostics.Debug/4.3.0",
+        "System.Diagnostics.DiagnosticSource/4.3.0",
+        "System.Diagnostics.Tools/4.3.0",
+        "System.Diagnostics.Tracing/4.3.0",
+        "System.Dynamic.Runtime/4.0.11",
+        "System.Globalization.Calendars/4.3.0",
+        "System.Globalization.Extensions/4.3.0",
+        "System.Globalization/4.3.0",
+        "System.IO.Compression.ZipFile/4.3.0",
+        "System.IO.Compression/4.3.0",
+        "System.IO.FileSystem.Primitives/4.3.0",
+        "System.IO.FileSystem/4.3.0",
+        "System.IO/4.3.0",
+        "System.Linq.Expressions/4.3.0",
+        "System.Linq/4.3.0",
+        "System.Net.Http/4.3.0",
+        "System.Net.Primitives/4.3.0",
+        "System.Net.Sockets/4.3.0",
+        "System.ObjectModel/4.3.0",
+        "System.Reflection.Emit.ILGeneration/4.3.0",
+        "System.Reflection.Emit.Lightweight/4.3.0",
+        "System.Reflection.Emit/4.3.0",
+        "System.Reflection.Extensions/4.3.0",
+        "System.Reflection.Metadata/1.6.0",
+        "System.Reflection.Primitives/4.3.0",
+        "System.Reflection.TypeExtensions/4.3.0",
+        "System.Reflection/4.3.0",
+        "System.Resources.ResourceManager/4.3.0",
+        "System.Runtime.Extensions/4.3.0",
+        "System.Runtime.Handles/4.3.0",
+        "System.Runtime.InteropServices.RuntimeInformation/4.3.0",
+        "System.Runtime.InteropServices/4.3.0",
+        "System.Runtime.Numerics/4.3.0",
+        "System.Runtime.Serialization.Primitives/4.1.1",
+        "System.Runtime/4.3.0",
+        "System.Security.Cryptography.Algorithms/4.3.0",
+        "System.Security.Cryptography.Cng/4.3.0",
+        "System.Security.Cryptography.Csp/4.3.0",
+        "System.Security.Cryptography.Encoding/4.3.0",
+        "System.Security.Cryptography.OpenSsl/4.3.0",
+        "System.Security.Cryptography.Primitives/4.3.0",
+        "System.Security.Cryptography.X509Certificates/4.3.0",
+        "System.Text.Encoding.Extensions/4.3.0",
+        "System.Text.Encoding/4.3.0",
+        "System.Text.RegularExpressions/4.3.0",
+        "System.Threading.Tasks.Extensions/4.3.0",
+        "System.Threading.Tasks/4.3.0",
+        "System.Threading.Timer/4.3.0",
+        "System.Threading/4.3.0",
+        "System.Xml.ReaderWriter/4.3.0",
+        "System.Xml.XDocument/4.3.0",
+        "coverlet.collector/3.0.2",
+        "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.native.System.IO.Compression/4.3.0",
+        "runtime.native.System.Net.Http/4.3.0",
+        "runtime.native.System.Security.Cryptography.Apple/4.3.0",
+        "runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.native.System/4.3.0",
+        "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "xunit.abstractions/2.0.3",
+        "xunit.analyzers/0.10.0",
+        "xunit.assert/2.4.1",
+        "xunit.core/2.4.1",
+        "xunit.extensibility.core/2.4.1",
+        "xunit.extensibility.execution/2.4.1",
+        "xunit.runner.visualstudio/2.4.3",
+        "xunit/2.4.1"
+      ]
+    },
+    ".dedup-work/dupimage370-20261016/harness/obj/project.assets.json": {
+      "sha256": "7ca1dcbf997164a278522aec9d730c587b0431e7ff4f8b8534e280fba66118f2",
+      "packages": [
+        "DupImageLib/1.0.0",
+        "Microsoft.NETCore.Platforms/1.1.0",
+        "Microsoft.NETCore.Targets/1.1.0",
+        "Microsoft.Win32.Primitives/4.3.0",
+        "NETStandard.Library/1.6.1",
+        "SixLabors.ImageSharp/1.0.2",
+        "System.AppContext/4.3.0",
+        "System.Buffers/4.3.0",
+        "System.Collections.Concurrent/4.3.0",
+        "System.Collections/4.3.0",
+        "System.Console/4.3.0",
+        "System.Diagnostics.Debug/4.3.0",
+        "System.Diagnostics.DiagnosticSource/4.3.0",
+        "System.Diagnostics.Tools/4.3.0",
+        "System.Diagnostics.Tracing/4.3.0",
+        "System.Globalization.Calendars/4.3.0",
+        "System.Globalization.Extensions/4.3.0",
+        "System.Globalization/4.3.0",
+        "System.IO.Compression.ZipFile/4.3.0",
+        "System.IO.Compression/4.3.0",
+        "System.IO.FileSystem.Primitives/4.3.0",
+        "System.IO.FileSystem/4.3.0",
+        "System.IO/4.3.0",
+        "System.Linq.Expressions/4.3.0",
+        "System.Linq/4.3.0",
+        "System.Net.Http/4.3.0",
+        "System.Net.Primitives/4.3.0",
+        "System.Net.Sockets/4.3.0",
+        "System.ObjectModel/4.3.0",
+        "System.Reflection.Emit.ILGeneration/4.3.0",
+        "System.Reflection.Emit.Lightweight/4.3.0",
+        "System.Reflection.Emit/4.3.0",
+        "System.Reflection.Extensions/4.3.0",
+        "System.Reflection.Primitives/4.3.0",
+        "System.Reflection.TypeExtensions/4.3.0",
+        "System.Reflection/4.3.0",
+        "System.Resources.ResourceManager/4.3.0",
+        "System.Runtime.Extensions/4.3.0",
+        "System.Runtime.Handles/4.3.0",
+        "System.Runtime.InteropServices.RuntimeInformation/4.3.0",
+        "System.Runtime.InteropServices/4.3.0",
+        "System.Runtime.Numerics/4.3.0",
+        "System.Runtime/4.3.0",
+        "System.Security.Cryptography.Algorithms/4.3.0",
+        "System.Security.Cryptography.Cng/4.3.0",
+        "System.Security.Cryptography.Csp/4.3.0",
+        "System.Security.Cryptography.Encoding/4.3.0",
+        "System.Security.Cryptography.OpenSsl/4.3.0",
+        "System.Security.Cryptography.Primitives/4.3.0",
+        "System.Security.Cryptography.X509Certificates/4.3.0",
+        "System.Text.Encoding.Extensions/4.3.0",
+        "System.Text.Encoding/4.3.0",
+        "System.Text.RegularExpressions/4.3.0",
+        "System.Threading.Tasks.Extensions/4.3.0",
+        "System.Threading.Tasks/4.3.0",
+        "System.Threading.Timer/4.3.0",
+        "System.Threading/4.3.0",
+        "System.Xml.ReaderWriter/4.3.0",
+        "System.Xml.XDocument/4.3.0",
+        "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.native.System.IO.Compression/4.3.0",
+        "runtime.native.System.Net.Http/4.3.0",
+        "runtime.native.System.Security.Cryptography.Apple/4.3.0",
+        "runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.native.System/4.3.0",
+        "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0",
+        "xunit.abstractions/2.0.3",
+        "xunit.analyzers/0.10.0",
+        "xunit.assert/2.4.1",
+        "xunit.core/2.4.1",
+        "xunit.extensibility.core/2.4.1",
+        "xunit.extensibility.execution/2.4.1",
+        "xunit/2.4.1"
+      ]
+    }
+  },
+  "logs": {
+    ".dedup-work/dupimage370-20261016/native-v3-1.json": "0822b7646b355df62d1a89729280a7c44ac1a47aa4cc283f56909c828c7f45cc",
+    ".dedup-work/dupimage370-20261016/native-v3-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupimage370-20261016/native-v3-2.json": "0822b7646b355df62d1a89729280a7c44ac1a47aa4cc283f56909c828c7f45cc",
+    ".dedup-work/dupimage370-20261016/native-v3-2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "runs": 2,
+  "original_cases_per_run": 16,
+  "boundary_cases_per_run": 16,
+  "rows": [
+    {
+      "runtime": ".NET 8.0.32",
+      "architecture": "Arm64",
+      "original": [
+        {
+          "name": "ImageHashesTests.CalculateAverageHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateDctHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateDifferenceHash256",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateDifferenceHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateMedianHash256",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateMedianHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_halfIdenticalHashes",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_identicalHashesSize256",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_identicalHashesSize64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_nonIdenticalHashes",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_notEqualLength",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_ulongVersion",
+          "args": [
+            "1152640033925038080",
+            "1152640033925038080",
+            "1"
+          ],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_ulongVersion",
+          "args": [
+            "0",
+            "18446744073709551615",
+            "0"
+          ],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_ulongVersion",
+          "args": [
+            "4294967295",
+            "18446744073709551615",
+            "0.5"
+          ],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageSharpTransformerTests.CompareHashes_Size64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageSharpTransformerTests.ComputeHash",
+          "args": [],
+          "passed": true,
+          "error": null
+        }
+      ],
+      "controls": [
+        {
+          "name": "empty_hash_arrays_return_NaN",
+          "passed": true
+        },
+        {
+          "name": "null_hash_array_throws",
+          "passed": true
+        },
+        {
+          "name": "mismatched_hash_arrays_throw",
+          "passed": true
+        },
+        {
+          "name": "all_64_single_bit_distances",
+          "passed": true
+        },
+        {
+          "name": "1000_scalar_popcount_oracle",
+          "passed": true
+        },
+        {
+          "name": "1000_four_word_popcount_oracle",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_average_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_median64_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_median256_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_difference64_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_difference256_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_dct_zero",
+          "passed": true
+        },
+        {
+          "name": "real_invalid_image_throws",
+          "passed": true
+        },
+        {
+          "name": "caller_stream_remains_open",
+          "passed": true
+        },
+        {
+          "name": "short_transformer_buffer_throws",
+          "passed": true
+        },
+        {
+          "name": "null_transformer_throws_on_use",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "runtime": ".NET 8.0.32",
+      "architecture": "Arm64",
+      "original": [
+        {
+          "name": "ImageHashesTests.CalculateAverageHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateDctHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateDifferenceHash256",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateDifferenceHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateMedianHash256",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CalculateMedianHash64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_halfIdenticalHashes",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_identicalHashesSize256",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_identicalHashesSize64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_nonIdenticalHashes",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_notEqualLength",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_ulongVersion",
+          "args": [
+            "1152640033925038080",
+            "1152640033925038080",
+            "1"
+          ],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_ulongVersion",
+          "args": [
+            "0",
+            "18446744073709551615",
+            "0"
+          ],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageHashesTests.CompareHashes_ulongVersion",
+          "args": [
+            "4294967295",
+            "18446744073709551615",
+            "0.5"
+          ],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageSharpTransformerTests.CompareHashes_Size64",
+          "args": [],
+          "passed": true,
+          "error": null
+        },
+        {
+          "name": "ImageSharpTransformerTests.ComputeHash",
+          "args": [],
+          "passed": true,
+          "error": null
+        }
+      ],
+      "controls": [
+        {
+          "name": "empty_hash_arrays_return_NaN",
+          "passed": true
+        },
+        {
+          "name": "null_hash_array_throws",
+          "passed": true
+        },
+        {
+          "name": "mismatched_hash_arrays_throw",
+          "passed": true
+        },
+        {
+          "name": "all_64_single_bit_distances",
+          "passed": true
+        },
+        {
+          "name": "1000_scalar_popcount_oracle",
+          "passed": true
+        },
+        {
+          "name": "1000_four_word_popcount_oracle",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_average_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_median64_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_median256_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_difference64_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_white_difference256_collision",
+          "passed": true
+        },
+        {
+          "name": "real_black_dct_zero",
+          "passed": true
+        },
+        {
+          "name": "real_invalid_image_throws",
+          "passed": true
+        },
+        {
+          "name": "caller_stream_remains_open",
+          "passed": true
+        },
+        {
+          "name": "short_transformer_buffer_throws",
+          "passed": true
+        },
+        {
+          "name": "null_transformer_throws_on_use",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "original_cli_attempt": {
+    "result": "aborted_missing_X64_dotnet_host",
+    "sdk": "11.0.100-preview.5.26302.115",
+    "target": "net5",
+    "trx": ".dedup-work/dupimage370-20261016/original-results/original.trx",
+    "trx_sha256": "d066a28479c322f7ca0cc2b797b7fe2ba7e4f629a362f292cc2b3db6fd8dcb30"
+  },
+  "scope": "Whole unchanged original netstandard2.0productionproject withrealImageSharp1.0.2 andoriginalcompiled net5testassembly/realXunit2.4.1assertions. SDK10.0.402 buildsownednet8harness; runtime8.0.32ARM64. All11Fact+3Theorycases+2ImageSharpFact directlyinvokedtwice byreflection. InlineData scalarvalues explicitlyConvert.ChangeType todeclaredmethodparameter matchingtestbinding; originalmethods/assertions unchanged. 16additionalboundaries twice; onlyshortbuffer/null publictransformer injections, realPNGImageSharp for5solidimagehashcollisions/blackDCT/invalidimage/openstream.",
+  "limits": [
+    "Originaldotnet test/VSTest targetnet5 abortedmissingx64host; compatiblemethodinvocation isnotoriginalrunner/runtime5/platformqualification",
+    "No productioncodecopied, realcorpus precision/recall/formats/adoption/performance claim",
+    "Originaldependencyversion retained; packagewarnings inbuildlog, nosecurityremediationclaim",
+    "Earlierharnessfirstreflectionattemptfailedparameterbinding andfixedonlyownedharness; retainednative-1.stderr andv2/v3outputs"
+  ]
+}
