@@ -1,0 +1,381 @@
+{
+  "status": "verified_selected_native_boundaries",
+  "runs": 2,
+  "cases_per_run": 22,
+  "executions": 44,
+  "rows": [
+    [
+      {
+        "name": "ambiguous_field_concatenation",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "integer_string_coercion",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "none_string_coercion",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "single_field_distinct_positive",
+        "observed": 2,
+        "expected": 2
+      },
+      {
+        "name": "dotted_key_real_benedict",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "missing_field",
+        "observed": {
+          "exception": "KeyError"
+        },
+        "expected": {
+          "exception": "KeyError"
+        }
+      },
+      {
+        "name": "one_exact_window_omitted",
+        "observed": 0,
+        "expected": 0
+      },
+      {
+        "name": "two_exact_windows_last_omitted",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "partial_tail_positive",
+        "observed": 3,
+        "expected": 3
+      },
+      {
+        "name": "short_window_positive",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "empty_interval_positive",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "zero_window_accepted_no_loop_run",
+        "observed": 0,
+        "expected": 0
+      },
+      {
+        "name": "negative_window_accepted_no_loop_run",
+        "observed": -60,
+        "expected": -60
+      },
+      {
+        "name": "offset_formatted_as_utc_without_conversion",
+        "observed": "2021-01-01T12:30:00.000Z",
+        "expected": "2021-01-01T12:30:00.000Z"
+      },
+      {
+        "name": "non_timestamp_query_is_none",
+        "observed": null,
+        "expected": null
+      },
+      {
+        "name": "delete_preserves_first_scan_order",
+        "observed": [
+          {
+            "_op_type": "delete",
+            "_index": "owned",
+            "_id": "oldest"
+          }
+        ],
+        "expected": [
+          {
+            "_op_type": "delete",
+            "_index": "owned",
+            "_id": "oldest"
+          }
+        ]
+      },
+      {
+        "name": "sequential_counts_replicas",
+        "observed": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ],
+        "expected": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ]
+      },
+      {
+        "name": "parallel_counts_replicas",
+        "observed": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ],
+        "expected": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ]
+      },
+      {
+        "name": "wrapper_swallows_generator_error",
+        "observed": [
+          "first"
+        ],
+        "expected": [
+          "first"
+        ]
+      },
+      {
+        "name": "host_already_port_double_appended",
+        "observed": "http://localhost:9200:9200",
+        "expected": "http://localhost:9200:9200"
+      },
+      {
+        "name": "cli_echoes_owned_literal_password",
+        "observed": true,
+        "expected": true
+      },
+      {
+        "name": "parser_reuse_conflict",
+        "observed": {
+          "exception": "ArgumentError"
+        },
+        "expected": {
+          "exception": "ArgumentError"
+        }
+      }
+    ],
+    [
+      {
+        "name": "ambiguous_field_concatenation",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "integer_string_coercion",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "none_string_coercion",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "single_field_distinct_positive",
+        "observed": 2,
+        "expected": 2
+      },
+      {
+        "name": "dotted_key_real_benedict",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "missing_field",
+        "observed": {
+          "exception": "KeyError"
+        },
+        "expected": {
+          "exception": "KeyError"
+        }
+      },
+      {
+        "name": "one_exact_window_omitted",
+        "observed": 0,
+        "expected": 0
+      },
+      {
+        "name": "two_exact_windows_last_omitted",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "partial_tail_positive",
+        "observed": 3,
+        "expected": 3
+      },
+      {
+        "name": "short_window_positive",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "empty_interval_positive",
+        "observed": 1,
+        "expected": 1
+      },
+      {
+        "name": "zero_window_accepted_no_loop_run",
+        "observed": 0,
+        "expected": 0
+      },
+      {
+        "name": "negative_window_accepted_no_loop_run",
+        "observed": -60,
+        "expected": -60
+      },
+      {
+        "name": "offset_formatted_as_utc_without_conversion",
+        "observed": "2021-01-01T12:30:00.000Z",
+        "expected": "2021-01-01T12:30:00.000Z"
+      },
+      {
+        "name": "non_timestamp_query_is_none",
+        "observed": null,
+        "expected": null
+      },
+      {
+        "name": "delete_preserves_first_scan_order",
+        "observed": [
+          {
+            "_op_type": "delete",
+            "_index": "owned",
+            "_id": "oldest"
+          }
+        ],
+        "expected": [
+          {
+            "_op_type": "delete",
+            "_index": "owned",
+            "_id": "oldest"
+          }
+        ]
+      },
+      {
+        "name": "sequential_counts_replicas",
+        "observed": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ],
+        "expected": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ]
+      },
+      {
+        "name": "parallel_counts_replicas",
+        "observed": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ],
+        "expected": [
+          4,
+          [
+            "second",
+            "third"
+          ]
+        ]
+      },
+      {
+        "name": "wrapper_swallows_generator_error",
+        "observed": [
+          "first"
+        ],
+        "expected": [
+          "first"
+        ]
+      },
+      {
+        "name": "host_already_port_double_appended",
+        "observed": "http://localhost:9200:9200",
+        "expected": "http://localhost:9200:9200"
+      },
+      {
+        "name": "cli_echoes_owned_literal_password",
+        "observed": true,
+        "expected": true
+      },
+      {
+        "name": "parser_reuse_conflict",
+        "observed": {
+          "exception": "ArgumentError"
+        },
+        "expected": {
+          "exception": "ArgumentError"
+        }
+      }
+    ]
+  ],
+  "producer_sha256": "bee82f9a184ba185a9474df3da1dbde2b2051f97acd5152c8373f8dff91ed311",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "dependencies": [
+    {
+      "module": "ujson",
+      "version": "6.0.0",
+      "path": ".dedup-work/es113-20261016/python-deps/ujson.cpython-312-darwin.so",
+      "sha256": "ef1d8dc24afd5d7c7f7a9724ca4a6ddc401f34e7783a3922eeeed5cd2b74d5d0"
+    },
+    {
+      "module": "benedict",
+      "version": "0.40.0",
+      "path": ".dedup-work/es113-20261016/python-deps/benedict/__init__.py",
+      "sha256": "0da61753149ee5dcff16fc9e4aef69e9dcc85f051d139ebb544ea3dbda55f2b0"
+    },
+    {
+      "module": "psutil",
+      "version": "7.2.2",
+      "path": ".dedup-work/es113-20261016/python-deps/psutil/__init__.py",
+      "sha256": "d138a5786b163b56ba86ea0b2d5589dfca37e1bcdf8de1057fe1e933d6ab808a"
+    },
+    {
+      "module": "requests",
+      "version": "2.34.2",
+      "path": ".dedup-work/es113-20261016/python-deps/requests/__init__.py",
+      "sha256": "311157e7fa4aa9166c827d5237e6fd694eeb5ca549ee40e2e90f89f21abcd56e"
+    },
+    {
+      "module": "tqdm",
+      "version": "4.70.1",
+      "path": ".dedup-work/es113-20261016/python-deps/tqdm/__init__.py",
+      "sha256": "f6640d6124aa3fdf496acb9b102d4f3892cc9a1924047e9c259c4f211e46da94"
+    },
+    {
+      "module": "elasticsearch",
+      "version": "(8, 19, 0)",
+      "path": ".dedup-work/es113-20261016/python-deps/elasticsearch/__init__.py",
+      "sha256": "2a272350f7c2673462e274e0daf25ad42925635ebc81523a5b042c176aaca173"
+    },
+    {
+      "module": "urllib3",
+      "version": "1.26.20",
+      "path": ".dedup-work/es113-20261016/python-deps/urllib3/__init__.py",
+      "sha256": "8972dc6222724a7d0635b58e3990c30298012f52603f8e0467c8b5efad12f0c7"
+    }
+  ],
+  "scope": "Whole unchanged esdedupe.py/cli.py/utils.py imported with real benedict/ujson/requests/Elasticsearch8 SDK dependencies. Only helpers.scan and module bulk entrypoints temporarily replaced by owned empty-query recorder and success-response generators, restored finally. HTTP session request blocked before source imports. No function extraction or algorithm changes.",
+  "limits": [
+    "Original8integrationtests require actualElasticsearch and were read not executed",
+    "No real cluster/delete/network/SDK bulk integration, package install, platform/scale/performance/imagequality/currentroot proof",
+    "Dependency versions resolved now, no historical environment parity",
+    "Zero/negative window conversion tested without executing potentially unbounded loop"
+  ]
+}

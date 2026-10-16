@@ -2,9 +2,9 @@
   "index": 113,
   "repository": "deric/es-dedupe",
   "commit": "7abed1353a32cf72b763067b33e46fc62b85ddc2",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete22pinnedUTF8blobs/6canonicaltrees read, includingallsource/4integrationtestfiles/docs/Apache2license/build/packaging/CI. 22nativeboundarycases twice44passes withrealdependencies andexplicitESscan/bulkresponseadapters; noactualcluster/upstreamintegrationtests/performance/imagequality.",
   "decision": "reject-domain",
-  "finding": "Elasticsearch selected-field digest keys; document field equality not image comparison.",
+  "finding": "Nativeconfirmed ambiguousmultifieldkeys/typecoercion; last exacttimestampwindowomitted; timezoneformattedasZwithoutconversion; survivorisscanorder; shardreplicascountedasdocs. Rejectimage/fileidentityimplementation.",
   "available_source_evidence": [
     {
       "path": "esdedupe/esdedupe.py",
@@ -58,7 +58,7 @@
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "CompleteApache2LICENSE read. No productioncodecopied.",
   "tests_detected": 4,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -83,6 +83,16 @@
       "lines": 201,
       "source": false,
       "test": false
+    }
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/es113-complete-source-review-20261016.json",
+  "upstream_test_scope": "All8originalintegrationtestmethods read, notrun: actualEScluster notstarted.",
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/es113-complete-source-review-20261016.json",
+      "controls": "docs/research/dedup-500/es113-boundary-controls-20261016.json",
+      "scope": "Complete22blobs read; wholeunchanged Pythonmodules realdependencies,22nativecases twice; SDKscan/bulkboundaryproviders only, noactualES."
     }
   ]
 }
