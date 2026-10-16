@@ -1,0 +1,26 @@
+{
+  "status": "verified_original_audio_runtime_boundary_failures",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "evidence": "docs/research/dedup-500/phash434-native-audio-20261016.json",
+  "evidence_sha256": "d54039415b7aa8cb2d1f096bd44d1b28857c5f071f6d7f2307f761171a0b9714",
+  "actual_processes": 8,
+  "expected_sanitizer_failures": 6,
+  "normal_control_processes": 2,
+  "new_full_source_reads": 0,
+  "findings": [
+    "131072 byte-pair BER block oracle checks pass across two fresh processes; each normalized by fixed32bits",
+    "64 single-bit popcounts and6 silent-signal audio hash framing cases pass",
+    "16 normal WAV reads leave16 additional open descriptors in each fresh process; original readaudio_snd lacks sf_close",
+    "One-element input with block_size2 causes ASAN stack-buffer-overflow in original ph_compare_blocks, twice",
+    "block_size0 causes UBSAN division by zero in original BER comparator, twice",
+    "Zero-sample audiohash requests oversized allocation from negative frame count converted to unsigned size, twice"
+  ],
+  "limits": [
+    "Selected audio functions only; not full audio codec/resample/multichannel/MP3/BER tail/malformed-file qualification",
+    "Descriptor growth measured by fcntl F_GETFD across0..4095; no heap leak/LSAN/RSS cap claim",
+    "CImg pinned and compiled transitively, not fully read",
+    "No production adoption, no current rrrah-dedup defect inferred, GPL3+ source retained outside production",
+    "pHash434 full source and all500 full repository review remain incomplete"
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "status": "verified_selected_actual_native_audio_boundary_controls",
+  "repository": "aetilius/pHash",
+  "commit": "887d07b9bdd9e2fb082c932002cefbcb1c8c20a1",
+  "source_pins": {
+    "src/audiophash.cpp": {
+      "sha256": "c7e3b373835bc3c56764669823d81f6d822fd549204993a1271fa4feb49c8dbb",
+      "git_blob": "3df017a2a4ba9aafdfdea6b5d5ef262cc906fd3f",
+      "bytes": 16073
+    },
+    "src/audiophash.h": {
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "git_blob": "3838473d39f58af14618e2f6d1f64717d3c75224",
+      "bytes": 3880
+    },
+    "src/ph_fft.cpp": {
+      "sha256": "3df3b3fd5aa266d9dd266a5019a16fd27de01333ac0f0ddf48b5ca25d05e9849",
+      "git_blob": "db2615769378c050b5cdf2a32400631c9a9b8bce",
+      "bytes": 1796
+    },
+    "src/ph_fft.h": {
+      "sha256": "aa6696c84a94d856b1f6a64fef2ed2b53f7869d1dcd1d50140056318baea3c46",
+      "git_blob": "69ece097da6eb8d457fa9149057c0418acbaaed4",
+      "bytes": 1032
+    },
+    "src/pHash.h.cmake": {
+      "sha256": "90a7c94962bf54e9dc2eb4ddaceae6a058345ca6d05adeadeafbe007ae30dfb2",
+      "git_blob": "8ab414a91c41a46733e410f122108d2e0d5d20f6",
+      "bytes": 17214
+    },
+    "third-party/CImg/CImg.h": {
+      "sha256": "abdc3e469923fa6a4ade7a7bde1f553c3310a441ed2323d8cbaa720e9793cadb",
+      "git_blob": "250da229984c687af69e40c5c98b5938967929e9",
+      "bytes": 3952555
+    }
+  },
+  "artifact_pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe": "470fa826ac74f9dc8410593b990e10bd086dc8b7a6da7a8fd86f46ba3b94865a",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/build-plan.json": "336de32e4c0115eafdee9e4e3d8ee5e713395739c29f23ce6d34f40d7adad580",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/build.log": "fcbb8b789a582b478a29446ce0ac51d249a4752e94adfd40e33e78f2424062af",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/generated/pHash.h": "568122c9dd79b35bbae5949ad064d8b2d62aade0d037e63a8476320b43542f70",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/silence.wav": "c726d333dd159a31423f3480dbb1c5c4a9dfcd30efe1f7e12ade390dc92e8908",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/linked-libraries.log": "89af705e039c3fb7795c59a4c47ab03fad9e86adf6be401fc85f22b4f5184cf0",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/phash434-audio-controls-20261016.cpp": "7c00c162e01dd5184fc224f7085ac0ccc264d579927d1a05143a53315f068ba5",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-phash434-audio-20261016.py": "fbe391ad8f6a765a61581e34f835e5e10459f92ce2c4d742a6582e3b1b9f6ad8",
+    "/opt/homebrew/lib/libsndfile.dylib": "d9dee887a1a8b370079cb1116f80d166725fb9a04287faeb4ea6f387be61629b",
+    "/opt/homebrew/lib/libsamplerate.dylib": "22eb4ded444adea39ef1316834dcdb3bcf053ca0bd50cd8437c52602e32184d3"
+  },
+  "results": [
+    {
+      "mode": "positive",
+      "repetition": 0,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "positive",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/silence.wav"
+      ],
+      "exit_code": 0,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/positive-qualified-0.log",
+      "log_sha256": "1a4b34eb6cdd4985a430c3177edee738cc374948ffedf3287c0b504fc0743c06"
+    },
+    {
+      "mode": "short-block",
+      "repetition": 0,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "short-block"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/short-block-qualified-0.log",
+      "log_sha256": "9551fbe7d43b9bfb4e4614d17427a935152487d1e4d0a26e365ac233fbee032e"
+    },
+    {
+      "mode": "zero-block",
+      "repetition": 0,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "zero-block"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/zero-block-qualified-0.log",
+      "log_sha256": "dc0ed7a19abc76ef2224972f5f26b2ab3494e35537af96fd1fc9a732762019f2"
+    },
+    {
+      "mode": "short-hash",
+      "repetition": 0,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "short-hash"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/short-hash-qualified-0.log",
+      "log_sha256": "5e5f8b1067c18464eb5725f965355482f5b7dee8802ae4368a61816650956d9b"
+    },
+    {
+      "mode": "positive",
+      "repetition": 1,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "positive",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/silence.wav"
+      ],
+      "exit_code": 0,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/positive-qualified-1.log",
+      "log_sha256": "1a4b34eb6cdd4985a430c3177edee738cc374948ffedf3287c0b504fc0743c06"
+    },
+    {
+      "mode": "short-block",
+      "repetition": 1,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "short-block"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/short-block-qualified-1.log",
+      "log_sha256": "27d3e6ee9ad90b73f0624811c5bdeddd64664fe931d1d201f2858da3998248a8"
+    },
+    {
+      "mode": "zero-block",
+      "repetition": 1,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "zero-block"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/zero-block-qualified-1.log",
+      "log_sha256": "b4eaa110994f9c08f2741ec635e3e3ffd51267032d4c81f79499937e40ddbd35"
+    },
+    {
+      "mode": "short-hash",
+      "repetition": 1,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/probe",
+        "short-hash"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-audio-fixtures/short-hash-qualified-1.log",
+      "log_sha256": "d6846169fbdfd38042d08cde7cbdbc16096d7941b65cd31ccec591b6174172c8"
+    }
+  ],
+  "findings": [
+    "131072 byte-pair BER block oracle checks pass across two fresh processes; each normalized by fixed32bits",
+    "64 single-bit popcounts and6 silent-signal audio hash framing cases pass",
+    "16 normal WAV reads leave16 additional open descriptors in each fresh process; original readaudio_snd lacks sf_close",
+    "One-element input with block_size2 causes ASAN stack-buffer-overflow in original ph_compare_blocks, twice",
+    "block_size0 causes UBSAN division by zero in original BER comparator, twice",
+    "Zero-sample audiohash requests oversized allocation from negative frame count converted to unsigned size, twice"
+  ],
+  "build_scope": "Whole unchanged original audiophash.cpp and ph_fft.cpp, original headers and configured original pHash.h.cmake. Real installed libsndfile/libsamplerate, ASAN+UBSAN, no extracted algorithm bodies or fake providers. Synthetic800sample mono8000Hz16bit silence WAV generated locally.",
+  "limits": [
+    "Selected audio functions only; not full audio codec/resample/multichannel/MP3/BER tail/malformed-file qualification",
+    "Descriptor growth measured by fcntl F_GETFD across0..4095; no heap leak/LSAN/RSS cap claim",
+    "CImg pinned and compiled transitively, not fully read",
+    "No production adoption, no current rrrah-dedup defect inferred, GPL3+ source retained outside production",
+    "pHash434 full source and all500 full repository review remain incomplete"
+  ]
+}
