@@ -1,0 +1,20 @@
+{
+  "status": "implemented_prepared_pending_feature_build_and_actual_inference",
+  "change": "Add search_loftr_native_bank_consensus_files_with_trace; existing summary function delegates to same guarded path and summarizes compact traces. Direction-specific proposal cap and lazy operation-local CPU model are retained.",
+  "source": "crates/rrrah-dedup/src/model_loftr.rs",
+  "source_sha256": "a055cf9a40ad06133a3161fb4b2fec60547a2babb163f638e0f2db517ed994fb",
+  "controls_plan": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-loftr-trace-controls-v1-20261016/plan.json",
+  "controls_plan_sha256": "29e6f04e60642ab7eecb14244e9e60f7ea96c4349b075bda219066bbfc7dcf62",
+  "control_count": 3,
+  "required_next": [
+    "Complete currently running decode suite and inspect failures, ignored inventory and drift",
+    "Complete currently queued loftr feature compilation; fix any errors",
+    "Build current-root control harness and run all three fixed-policy controls with actual native LoFTR",
+    "Audit per-direction compact diagnostics and retain positive/negative/unknown distinctions"
+  ],
+  "limits": [
+    "No actual inference from new wrapper yet",
+    "No historical false acceptance claimed current or fixed",
+    "No completed500 or universal coverage claim"
+  ]
+}

@@ -1543,8 +1543,41 @@ pub fn search_loftr_native_bank_consensus_files(
     cancel: impl Fn() -> bool,
 ) -> Result<crate::search_portfolio::NativeBankConsensusEvidence, crate::search_portfolio::SearchPortfolioError>
 {
+    search_loftr_native_bank_consensus_files_with_trace(
+        left,
+        right,
+        weights,
+        forward,
+        reverse,
+        work,
+        maximum_projection_checks,
+        budget,
+        cancel,
+    )
+    .map(|trace| trace.summary())
+}
+
+/// Two-direction CPU confirmation retaining compact diagnostics for unknowns.
+/// Uses the same guarded lifetime, lazy model and directional proposal caps as
+/// the summary API. Diagnostics retain no correspondence or decoded buffers.
+/// Tensor/RSS allocations remain outside managed payload admission.
+#[allow(clippy::too_many_arguments)]
+pub fn search_loftr_native_bank_consensus_files_with_trace(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    forward: crate::search_portfolio::NativeBankDirectionPolicy<'_>,
+    reverse: crate::search_portfolio::NativeBankDirectionPolicy<'_>,
+    work: crate::search_portfolio::PortfolioWorkLimits,
+    maximum_projection_checks: u64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::search_portfolio::NativeBankConsensusTraceEvidence,
+    crate::search_portfolio::SearchPortfolioError,
+> {
     let mut model = None;
-    crate::search_portfolio::search_native_bank_consensus_files_directional(
+    crate::search_portfolio::search_native_bank_consensus_files_directional_traced(
         left,
         right,
         weights,
