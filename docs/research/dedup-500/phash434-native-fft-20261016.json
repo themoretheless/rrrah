@@ -1,0 +1,96 @@
+{
+  "status": "verified_selected_native_fft_controls",
+  "repository": "aetilius/pHash",
+  "commit": "887d07b9bdd9e2fb082c932002cefbcb1c8c20a1",
+  "full_read_new_sources": {
+    "src/ph_fft.cpp": {
+      "sha256": "3df3b3fd5aa266d9dd266a5019a16fd27de01333ac0f0ddf48b5ca25d05e9849",
+      "git_blob": "db2615769378c050b5cdf2a32400631c9a9b8bce",
+      "bytes": 1796
+    },
+    "src/ph_fft.h": {
+      "sha256": "aa6696c84a94d856b1f6a64fef2ed2b53f7869d1dcd1d50140056318baea3c46",
+      "git_blob": "69ece097da6eb8d457fa9149057c0418acbaaed4",
+      "bytes": 1032
+    },
+    "src/audiophash.cpp": {
+      "sha256": "c7e3b373835bc3c56764669823d81f6d822fd549204993a1271fa4feb49c8dbb",
+      "git_blob": "3df017a2a4ba9aafdfdea6b5d5ef262cc906fd3f",
+      "bytes": 16073
+    },
+    "src/audiophash.h": {
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "git_blob": "3838473d39f58af14618e2f6d1f64717d3c75224",
+      "bytes": 3880
+    }
+  },
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-controls",
+  "binary_sha256": "50678e8a2097796be175ae4198022032b2e09cee5cd998143c56b1a199fe78dd",
+  "probe": "scripts/phash434-fft-controls-20261016.cpp",
+  "probe_sha256": "7180d6d240c63f76e9e9287469b086f060a89cd7972eef0abe305d9f89061ece",
+  "producer_sha256": "615fb536489a8ef2caa795d84e3301e215c9448fe5b1c84b2a671ae11864a3f2",
+  "results": [
+    {
+      "mode": "oracle",
+      "repetition": 0,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-controls",
+        "oracle"
+      ],
+      "exit_code": 0,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-fixtures/0-oracle.log",
+      "log_sha256": "0fc3bd15276c82fe4929b3ed88029d3a56ebc1060597002c6202abd540d7d8ae"
+    },
+    {
+      "mode": "zero",
+      "repetition": 0,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-controls",
+        "zero"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-fixtures/0-zero.log",
+      "log_sha256": "5939d0977a03abf5a96af43c31cc6d453c40e45e4a2f13b91501332e6fef90df"
+    },
+    {
+      "mode": "oracle",
+      "repetition": 1,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-controls",
+        "oracle"
+      ],
+      "exit_code": 0,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-fixtures/1-oracle.log",
+      "log_sha256": "0fc3bd15276c82fe4929b3ed88029d3a56ebc1060597002c6202abd540d7d8ae"
+    },
+    {
+      "mode": "zero",
+      "repetition": 1,
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-controls",
+        "zero"
+      ],
+      "exit_code": -6,
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-fft-fixtures/1-zero.log",
+      "log_sha256": "68994dbf424179b576f3899d7624d4be23a08f23790f39442dce1ef28861200b"
+    }
+  ],
+  "oracle": "Independent direct positive-exponent DFT, all output bins, eight deterministic inputs at each length1,2,4,8,16,32,64,128. Absolute complex tolerance1e-9.",
+  "findings": [
+    "64 power-of-two controls pass each of two runs",
+    "Lengths3,5,7,9,15,17 return success with incorrect output each run; no length guard in original API",
+    "Length0 recurses without reaching N==1 and causes ASAN stack-overflow in both fresh child processes"
+  ],
+  "static_audio_review": [
+    "Complete original audio implementation and header read, but no audio runtime qualification",
+    "readaudio_snd opens SNDFILE without a matching sf_close on its normal return path",
+    "Audio hash framing and BER blocks require separate short-input/allocation/tail/read-error runtime controls"
+  ],
+  "limits": [
+    "Whole unchanged original ph_fft.cpp and original ph_fft.h compiled; no algorithm extraction or substitute backend",
+    "Zero-input safety probe uses child-only8MiB stack limit; ASAN leak detection disabled; no leak/RSS claim",
+    "No audio decode/hash/BER runtime or full repository/CImg/bindings/platform qualification",
+    "No production code copied or adopted; original GPL3-or-later license retained in source",
+    "All500 repository full review remains incomplete"
+  ]
+}

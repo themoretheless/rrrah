@@ -1,0 +1,19 @@
+{
+  "status": "independently_verified_selected_fft_and_four_additional_full_source_reads",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "evidence": "docs/research/dedup-500/phash434-native-fft-20261016.json",
+  "evidence_sha256": "55e9b251185644e7fa396c702cfff3566613f761c116e2dc07d259fdbd5bb96e",
+  "power_two_controls": 128,
+  "silent_odd_length_failures": 12,
+  "expected_asan_stack_overflows": 2,
+  "new_whole_source_blobs": 4,
+  "limits": [
+    "Whole unchanged original ph_fft.cpp and original ph_fft.h compiled; no algorithm extraction or substitute backend",
+    "Zero-input safety probe uses child-only8MiB stack limit; ASAN leak detection disabled; no leak/RSS claim",
+    "No audio decode/hash/BER runtime or full repository/CImg/bindings/platform qualification",
+    "No production code copied or adopted; original GPL3-or-later license retained in source",
+    "All500 repository full review remains incomplete"
+  ],
+  "decision": "Keep algorithm length admission and full output correctness separate from a successful return. Audio implementation now read; decoder/hash/BER cases remain untested. pHash434 full repository remains incomplete."
+}
