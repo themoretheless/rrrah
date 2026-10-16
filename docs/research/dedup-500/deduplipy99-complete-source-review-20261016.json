@@ -1,0 +1,69 @@
+{
+  "status": "verified_complete_pinned_source_data_media_all_original_tests_and_native_boundaries",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "fritshermans/deduplipy",
+  "commit": "3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3",
+  "blobs": 62,
+  "canonical_trees": 21,
+  "acquisition": "docs/research/dedup-500/deduplipy99-complete-source-pins-20261016.json",
+  "acquisition_sha256": "208c8fb7c90d6dcba6620fe50742876b30215c18de37959ca65c4ed1d9dd2d3a",
+  "auditor_sha256": "99e18ca223e865436050494e878d7693b12893d2ed629b5a34e4604f34ac41cb",
+  "native_proofs": [
+    {
+      "path": "docs/research/dedup-500/deduplipy99-clustering-controls-20261016.json",
+      "sha256": "ed93c0e56c723f22f232d96d120911eaccb155b2021f19f76decf4678d3c0080",
+      "scope": "Wholeunchanged clustering.py/fill_missing_edges.py/config/init modules, actualNumPy/Pandas/SciPy/NetworkX/FancyImpute SoftImpute.9synthetic scoredpair/matrix controls twice, no adapters/extraction/modelnetwork. Dependencyversions resolvedunlocked andrecorded."
+    },
+    {
+      "path": "docs/research/dedup-500/deduplipy99-blocking-controls-20261016.json",
+      "sha256": "579d2f1e7195591af42341b8d1d23c90f5b47f57aa6dfae3501240bae5200372",
+      "scope": "Whole unchanged Blocking/all22rules/greedy_set_cover/config/init modules imported, actualPandas/NumPy/scikit-learn.10nativeboundarycontrols twice, no API/bodyadapters/extraction/network. Resolvedunlockeddepsrecorded."
+    },
+    {
+      "path": "docs/research/dedup-500/deduplipy99-sampling-controls-20261016.json",
+      "sha256": "2eec2453879eb112df85e0ea5cb84c2364d37d34bd39422ff89c188f56dbc222",
+      "scope": "Whole unchanged sampler/naive/minhash/stringmetrics modules, realPyMinHash/scikit-learn/Pandas/NumPy/thefuzz/rapidfuzz; native2row-ownedtext fixtures,11controls twice. No adapters/bodyextraction/network. Randomseed1234external; dependenciesunlocked/resolvedrecorded."
+    },
+    {
+      "path": "docs/research/dedup-500/deduplipy99-learning-controls-20261016.json",
+      "sha256": "93bda0ee228bf0a8f2f2466dbdc72562d6a9a687b9a23ab3650b687d0e935c43",
+      "scope": "Wholeunchanged classifier/activelearner/deduplicator modules imported, realmodAL0.4.2.1/scikit-learn/Pandas/NumPy. OriginalclassifierPytest case twice.11nativecontrols twice includingfulloriginalactivefit loop. Onlybuiltins.input replaced withownedanswerqueue, restoredfinally; no learner/estimator/bodyadapters."
+    },
+    {
+      "path": "docs/research/dedup-500/deduplipy99-full-tests-20261016.json",
+      "sha256": "00ea4278041920b50bdef2b21c25b2fad1b99e99442b4f636836540c48cb14d2",
+      "scope": "All49unchangedoriginalPytest tests twice incloriginalCSV/500x500case(seed1234), actualdependencies. FullunchangedDeduplicator.predict4controls twice withreallearnertrainedonsynthetic2featurevectors/actualBlockingfit. No estimator/API/bodyadapters; interactivefullfit notrunhere (previousstage actualmodALfit withstdinqueue separate)."
+    }
+  ],
+  "upstream_tests_run": true,
+  "upstream_test_scope": "All49originaltests twice98passes inresolvedMacARM/Python3.12deps; seed1234forrepeatability. Earlierselectedsubsets overlap samecases, not98additionaluniquetests. No originalrelease/historicalenvironment guarantee.",
+  "additional_native_controls": 90,
+  "native_scope": "45selectedboundarycases twice acrossclustering/blocking/sampling/learning/fullpredict. Realnumeric/MLdependencies; onlyinteractivebuiltininput replaced inlearningstage. Fullpredict usesactuallearnertrainedsyntheticfeatures+actualBlockingfit; no body/algorithmadapter.",
+  "media_scope": "Trackedlogo viewedfull; all73cells/outputs of3notebooks read, text/HTMLdataframes only,noembeddedimage/video. AllCSV/XLSXrecords structurallyreviewed andXLSXallcells read. Externaldynamicbadges/liveReadTheDocslogo notfetched; no linkedsite/fullversioncrawl claim.",
+  "license": "Complete MIT LICENSE read. No productioncodecopied.",
+  "findings": [
+    "Explicit score0 and absentedge both convertedNaN; realSoftImpute raisesA-C scoreabove.85, defaultclusteringmerges all3 whereasfill_missingFalse yields2groups. Cannotpreserveknownnegativepair constraints.",
+    "Centroidlinkage groupsall3 evenwhenone suppliedpairscore.49 below.5threshold. Intendedcentroidpolicy isnotall-pairthresholdguarantee.",
+    "No-missing branch returnsinputalias andkeepsasymmetry; duplicateedges overwritelastscore leadingorderdependence; nonfinitescore raises.",
+    "Greedysetcover includesoutside-universe elements andwhile strictsubsetcondition exitsat50%coverage despite recall1.0; actualBlockingfit withone negative matchingrule reproduces50%trainingrecall andomits truepair.",
+    "Nondefaulttrainingindex mixespositionalrule indices withoriginalpositiveindex,coverage0; nondefaulttransformindex alignsnewSeries0..N tocallerindex anddropsidenticalpair.",
+    "Uncoverableuniverse exhaustsheap andraisesIndexError; standardcoveredcase/emptyuniverse controls pass. ASCIIabbreviation andliteral-space rules have explicitUnicode/tab limitations.",
+    "Twofields: firstidenticalJaccard1, seconddisjointJaccard0 generatesno pair; originalcandidateaggregation averagesonlyreturnedfields to1 instead ofallfieldmean.5, passes.75threshold. ActualPyMinHash/nativecounterexample, nofakehashadapter.",
+    "Naiveemptyinput andzerorequest raiseKeyError; singleton/request1 canyieldonlysyntheticselftrainingpair. These are samplingcontracts, not actual duplicate detections.",
+    "Lengthadjustedidentity is18.126925foronecodepoint; empty0, familyemoji7codepoints75.34 despiteonegrapheme. Partial/token-set scores arenotbyteidentity. Intendedfeaturepolicy, notuniversalquality proof.",
+    "Previouscommand redisplayspriorpair butteacheslabel tocurrentpair; firstqueryprevious raisesTypeError. NativeactualmodALfit trace retained.",
+    "Singleclassfit leavesunfittedoroldmodel; DataFramebinarylabels skippedasoneclass; sklearnget_params failsmissinginteractionattribute.",
+    "PublicDeduplicator ruleslist ignoredin favorofall22rules; all-singletons helperraises dueNaNmax, mixedhelperpositive control passes.",
+    "Zero uncertainty improvement falsy so convergencehint guard skipsperfectplateau. Nativehelper+staticguard finding, notend-to-endconvergence proof.",
+    "Completepredict raisesValueError foridentical-only/distinct-only no-candidate tables andall-scores-filtered case. Nativefullflow extends priorhelper diagnosis.",
+    "Matchednonidenticalwhitespacepair plus singleton succeeds3rows/2groups positivecontrol.",
+    "Alloriginaltests pass but do notcover thesecompletepredict boundarycases."
+  ],
+  "decision": "Reference learnedcandidate selection/featurepipeline only withprovenrecall/index/objectidentity/negative-edge preservation andempty-input contracts. Entityresolution/centroidimputation isnotimage/file/pixel identity. No productionadoption orspeedclaim.",
+  "limits": [
+    "Fullsource reading andalloriginaltests donotprove realcorpus/entity/image precision/recall, million-scale/hardmemory/thread/platform/resources/performance.",
+    "Historicalnotebookoutputs read, notexecuted/reproduced. CSVrecordidentity notmanuallyvalidated; no privateuserdata/network/pickle/sourceuploads.",
+    "Knownnativecounterexamples remain; originaltests passing isnotuniversalcorrectness orcurrentrootqualification."
+  ]
+}
