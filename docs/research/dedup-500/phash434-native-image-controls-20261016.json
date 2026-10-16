@@ -1,0 +1,353 @@
+{
+  "status": "verified_selected_whole_cpp_image_profile_and_asan_boundaries",
+  "producer_sha256": "02d018148622ba07817f034d04886db75061bbc3d06176676f2a5b88460d83ad",
+  "probe": "scripts/phash434-native-controls-20261016.cpp",
+  "probe_sha256": "0381beb647fb390c39ffa9df6daa7183466061f1b87aa888f880ba8aab1e2b02",
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/phash434-20261016/native-image-profile",
+  "binary_sha256": "f3f8f0e3f736667954032fd2d2fb3b9ce11de89df3bad90c3671ed4a8f853e7e",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "build_log": ".dedup-work/phash434-20261016/native-image-build.log",
+  "build_log_sha256": "b561c223799da8f2f1aa5747cac9c018320b5dedb050d5b99cbdad2eadfdd9ea",
+  "asan_options": "detect_leaks=0:halt_on_error=1:abort_on_error=0:detect_stack_use_after_return=1",
+  "rows": [
+    {
+      "repeat": 1,
+      "mode": "hamming",
+      "exit_code": 0,
+      "result": {
+        "mode": "hamming",
+        "byte_pairs": 65536,
+        "bit_positions": 64,
+        "invalid_cases": 3
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/1-hamming/stdout.log",
+      "stdout_sha256": "3cef1d1f2a6b7d746e3cfc89b039d2fbb9a4bffba9361f8103109007c33e8fc7",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/1-hamming/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {}
+    },
+    {
+      "repeat": 1,
+      "mode": "mh2first",
+      "exit_code": 0,
+      "result": {
+        "mode": "mh2first",
+        "first": "3359532aff907535964abc032d1a99d0bb272a49d167d0dee1ec4791c2d6c6965bcfd02726db52a98c41c56d2846c408f9af09b272d1ce647153e462ab8215683859473509e14e72",
+        "second": "3359532aff907535964abc032d1a99d0bb272a49d167d0dee1ec4791c2d6c6965bcfd02726db52a98c41c56d2846c408f9af09b272d1ce647153e462ab8215683859473509e14e72",
+        "kernel_width": 17
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/1-mh2first/stdout.log",
+      "stdout_sha256": "4f53979e1256997fb6004b8cc0d23de225c352bfb8764337ae0c572f0f14d21b",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/1-mh2first/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-mh2first/mh.ppm": "18a90b3f8ca53ad16dca7e5cbe61ddfde90a37111a486bdbdac6b3c95599654b"
+      }
+    },
+    {
+      "repeat": 1,
+      "mode": "mh3first",
+      "exit_code": 0,
+      "result": {
+        "mode": "mh3first",
+        "first": "3359532aff907535964abc032d1a99d0bb276a49d167c0dee1ec4791c2d6c6965bcfd02726db52298c43c56d2846c488f9af09b262d1ce647053e462ab8215683859473519e14e72",
+        "second": "3359532aff907535964abc032d1a99d0bb276a49d167c0dee1ec4791c2d6c6965bcfd02726db52298c43c56d2846c488f9af09b262d1ce647053e462ab8215683859473519e14e72",
+        "kernel_width": 25
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/1-mh3first/stdout.log",
+      "stdout_sha256": "926512cedc4b0f892cbb86bb01abed8f8d2e328d863f3bd0f42026c457aac5b9",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/1-mh3first/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-mh3first/mh.ppm": "18a90b3f8ca53ad16dca7e5cbe61ddfde90a37111a486bdbdac6b3c95599654b"
+      }
+    },
+    {
+      "repeat": 1,
+      "mode": "dct",
+      "exit_code": 0,
+      "result": {
+        "mode": "dct",
+        "hashes": [
+          4333728135954757894,
+          11870380781334020606,
+          11891744791721107054,
+          3771555428104458808,
+          6728964485868485390,
+          7151254462365925698,
+          11388989236947903146,
+          2803073659271871470,
+          6592578537187647906,
+          4839655968583079490,
+          14163254115401443362,
+          14894130697698058062,
+          6308552935817452074,
+          11018722947677632398,
+          17774622500011910860,
+          16881294575975535404,
+          9735910169803766630,
+          4832646018331627730,
+          4106974148079914626,
+          6155474758174907412,
+          10571015247563816400,
+          2010682102887130594,
+          11713310859196100526,
+          15775706478709778546,
+          15666512518378205854,
+          12866482019157487202,
+          6120882514440613648,
+          3918190404811946654,
+          4264004971395861722,
+          9099629918444214122,
+          15790204535506012106,
+          1824746632225812814
+        ]
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/stdout.log",
+      "stdout_sha256": "b32352e46480e8cd6923154061de59ad81004ec2b408ca170100645d2171b325",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-0.ppm": "18a90b3f8ca53ad16dca7e5cbe61ddfde90a37111a486bdbdac6b3c95599654b",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-1.ppm": "e3209787e30c251236e166349c89667c2b608de37c80ee9c544f2f769257bf12",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-10.ppm": "278cf5f10ee2c7ddd76217f44af1d21dcdac5424b8f4cd76f47ff321f32039d3",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-11.ppm": "775e72a7ae3a8dec0d4fd89f1539888b930b289d0ba7bed3d86840a1e589f3ff",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-12.ppm": "760a4c7471d19dc9dc4885c84d2695735b2ac725b7f6a89542c09a6db3513557",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-13.ppm": "b763d9fd591198e27a33a071c37040332c45ff9220da7c5fdb205eb38f38542d",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-14.ppm": "c9ce5330e365abce497e53b16c3d9f873666132df3c0e83ffaafffbc4c45d10c",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-15.ppm": "83ef729b4cf63b7a45fc044c162f7d619f6bf644208ec17db0e42e5a29b5e6d1",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-16.ppm": "d1f65e4e306f14122831faef214c004fa2bf1d527b8182a1988f8364f6ea4b0b",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-17.ppm": "f25441869d023b86e964cdc9a6995f678854c69a2a2cb0ff94fff189ac915782",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-18.ppm": "ed09d0a34be45ddb0fc0b94a23a1c9810170e245f7753882c57b1c8bd692bbe9",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-19.ppm": "3e3f8c7a2906502442064aa7b79bacb2e71133d2daf9056fe9a817cf831d17b7",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-2.ppm": "f7e10957cb3cce6eb4257c8450cc5e25fe3f5032049589c2526ac023b77e39b4",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-20.ppm": "4017fcb08b956a894b487e5e943c16374002c8c209ecd07c96b8a431f4c5b205",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-21.ppm": "23dc2fb0e164e865175d4e94537ddb8ef70309f74096e2273e2ed8ce8edb9924",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-22.ppm": "bd2134f96889ed43b14bfcaf53d19c8d0061acd89db17c6df8d8a8999ebb8812",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-23.ppm": "63cdeda89674e63de4c2364f238eb48f4662b2995cfb592d814a78f178ef3606",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-24.ppm": "0ff7fb5c4c028ac5bb8e1fc0f9e665c72a40402e765926fea15c6dd5bb742cb8",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-25.ppm": "d0f8610e8b5f906f620f1ecb313a068dfb1be970f3ba22cc1d0d944b3991d9a2",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-26.ppm": "38a8b693d8f956fba85675f5d26ce2fd6500a94a0369f54f06673bf4fd7706bd",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-27.ppm": "c3d68cd2622cc3ddb105acae7f8546ce6a5399656c35518d9960cddc4d4cdf95",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-28.ppm": "9e89c44373a2dcaa6f9b566f646a84c4fa38988b9b1d6c6132d92180459475fa",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-29.ppm": "e3da5f1046ab3138f8d422c359ccb5dde3477c6b6bf5b6e7ac65f980d17a84b9",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-3.ppm": "2c9d4eb6243a3c7cd10f21a0d497bc3a199cb267a8ccda3805fad0dae16d3267",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-30.ppm": "1738841a47d8531bd460eb991e475783a08122252b1d99da25b7374aa019fba3",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-31.ppm": "651056dc88d36f948287a11928587829940a378c6820b0503f29de031599a039",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-4.ppm": "e071beb20f5bfbf640ac9d6e0f7eedfba9684bad93174e1a8e41f4b449cf9791",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-5.ppm": "c371cf3c31794b41ed0bfe63446fd0ead40e6d94b1d04addb2e46d2638d3ea80",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-6.ppm": "7668441eaf90d766d700e0c0cf90f1756560eb75cd40ec9a0937b108f7805979",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-7.ppm": "f59ebf961feb305afdcd76d8ecebda8477ca2983f38187dd8d3b87395747ee15",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-8.ppm": "974967654c3bd4647aeed0a6a40789e72692715759d42713031b235c504b7f22",
+        ".dedup-work/phash434-20261016/native-image-fixtures/1-dct/dct-9.ppm": "00bf7a4373ed01092f5cb6a8f2fc2f6ee5946efc7f3439488eb41e1b3767b226"
+      }
+    },
+    {
+      "repeat": 1,
+      "mode": "text-positive",
+      "exit_code": 0,
+      "result": {
+        "mode": "text-positive",
+        "matches": 1
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/1-text-positive/stdout.log",
+      "stdout_sha256": "c930eb70c448a6c0858f386d029c144f03c74a29146d4069e7eec1d2dc07427d",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/1-text-positive/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {}
+    },
+    {
+      "repeat": 1,
+      "mode": "text-overflow",
+      "exit_code": 1,
+      "result": {
+        "expected_asan_heap_overflow": true
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/1-text-overflow/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/1-text-overflow/stderr.log",
+      "stderr_sha256": "42a118ad851224b8c01b5731e13bef3c40c5b10699dd4fe617c55170d016c2fc",
+      "fixtures": {}
+    },
+    {
+      "repeat": 2,
+      "mode": "hamming",
+      "exit_code": 0,
+      "result": {
+        "mode": "hamming",
+        "byte_pairs": 65536,
+        "bit_positions": 64,
+        "invalid_cases": 3
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/2-hamming/stdout.log",
+      "stdout_sha256": "3cef1d1f2a6b7d746e3cfc89b039d2fbb9a4bffba9361f8103109007c33e8fc7",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/2-hamming/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {}
+    },
+    {
+      "repeat": 2,
+      "mode": "mh2first",
+      "exit_code": 0,
+      "result": {
+        "mode": "mh2first",
+        "first": "3359532aff907535964abc032d1a99d0bb272a49d167d0dee1ec4791c2d6c6965bcfd02726db52a98c41c56d2846c408f9af09b272d1ce647153e462ab8215683859473509e14e72",
+        "second": "3359532aff907535964abc032d1a99d0bb272a49d167d0dee1ec4791c2d6c6965bcfd02726db52a98c41c56d2846c408f9af09b272d1ce647153e462ab8215683859473509e14e72",
+        "kernel_width": 17
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/2-mh2first/stdout.log",
+      "stdout_sha256": "4f53979e1256997fb6004b8cc0d23de225c352bfb8764337ae0c572f0f14d21b",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/2-mh2first/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-mh2first/mh.ppm": "18a90b3f8ca53ad16dca7e5cbe61ddfde90a37111a486bdbdac6b3c95599654b"
+      }
+    },
+    {
+      "repeat": 2,
+      "mode": "mh3first",
+      "exit_code": 0,
+      "result": {
+        "mode": "mh3first",
+        "first": "3359532aff907535964abc032d1a99d0bb276a49d167c0dee1ec4791c2d6c6965bcfd02726db52298c43c56d2846c488f9af09b262d1ce647053e462ab8215683859473519e14e72",
+        "second": "3359532aff907535964abc032d1a99d0bb276a49d167c0dee1ec4791c2d6c6965bcfd02726db52298c43c56d2846c488f9af09b262d1ce647053e462ab8215683859473519e14e72",
+        "kernel_width": 25
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/2-mh3first/stdout.log",
+      "stdout_sha256": "926512cedc4b0f892cbb86bb01abed8f8d2e328d863f3bd0f42026c457aac5b9",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/2-mh3first/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-mh3first/mh.ppm": "18a90b3f8ca53ad16dca7e5cbe61ddfde90a37111a486bdbdac6b3c95599654b"
+      }
+    },
+    {
+      "repeat": 2,
+      "mode": "dct",
+      "exit_code": 0,
+      "result": {
+        "mode": "dct",
+        "hashes": [
+          4333728135954757894,
+          11870380781334020606,
+          11891744791721107054,
+          3771555428104458808,
+          6728964485868485390,
+          7151254462365925698,
+          11388989236947903146,
+          2803073659271871470,
+          6592578537187647906,
+          4839655968583079490,
+          14163254115401443362,
+          14894130697698058062,
+          6308552935817452074,
+          11018722947677632398,
+          17774622500011910860,
+          16881294575975535404,
+          9735910169803766630,
+          4832646018331627730,
+          4106974148079914626,
+          6155474758174907412,
+          10571015247563816400,
+          2010682102887130594,
+          11713310859196100526,
+          15775706478709778546,
+          15666512518378205854,
+          12866482019157487202,
+          6120882514440613648,
+          3918190404811946654,
+          4264004971395861722,
+          9099629918444214122,
+          15790204535506012106,
+          1824746632225812814
+        ]
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/stdout.log",
+      "stdout_sha256": "b32352e46480e8cd6923154061de59ad81004ec2b408ca170100645d2171b325",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-0.ppm": "18a90b3f8ca53ad16dca7e5cbe61ddfde90a37111a486bdbdac6b3c95599654b",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-1.ppm": "e3209787e30c251236e166349c89667c2b608de37c80ee9c544f2f769257bf12",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-10.ppm": "278cf5f10ee2c7ddd76217f44af1d21dcdac5424b8f4cd76f47ff321f32039d3",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-11.ppm": "775e72a7ae3a8dec0d4fd89f1539888b930b289d0ba7bed3d86840a1e589f3ff",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-12.ppm": "760a4c7471d19dc9dc4885c84d2695735b2ac725b7f6a89542c09a6db3513557",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-13.ppm": "b763d9fd591198e27a33a071c37040332c45ff9220da7c5fdb205eb38f38542d",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-14.ppm": "c9ce5330e365abce497e53b16c3d9f873666132df3c0e83ffaafffbc4c45d10c",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-15.ppm": "83ef729b4cf63b7a45fc044c162f7d619f6bf644208ec17db0e42e5a29b5e6d1",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-16.ppm": "d1f65e4e306f14122831faef214c004fa2bf1d527b8182a1988f8364f6ea4b0b",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-17.ppm": "f25441869d023b86e964cdc9a6995f678854c69a2a2cb0ff94fff189ac915782",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-18.ppm": "ed09d0a34be45ddb0fc0b94a23a1c9810170e245f7753882c57b1c8bd692bbe9",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-19.ppm": "3e3f8c7a2906502442064aa7b79bacb2e71133d2daf9056fe9a817cf831d17b7",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-2.ppm": "f7e10957cb3cce6eb4257c8450cc5e25fe3f5032049589c2526ac023b77e39b4",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-20.ppm": "4017fcb08b956a894b487e5e943c16374002c8c209ecd07c96b8a431f4c5b205",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-21.ppm": "23dc2fb0e164e865175d4e94537ddb8ef70309f74096e2273e2ed8ce8edb9924",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-22.ppm": "bd2134f96889ed43b14bfcaf53d19c8d0061acd89db17c6df8d8a8999ebb8812",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-23.ppm": "63cdeda89674e63de4c2364f238eb48f4662b2995cfb592d814a78f178ef3606",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-24.ppm": "0ff7fb5c4c028ac5bb8e1fc0f9e665c72a40402e765926fea15c6dd5bb742cb8",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-25.ppm": "d0f8610e8b5f906f620f1ecb313a068dfb1be970f3ba22cc1d0d944b3991d9a2",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-26.ppm": "38a8b693d8f956fba85675f5d26ce2fd6500a94a0369f54f06673bf4fd7706bd",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-27.ppm": "c3d68cd2622cc3ddb105acae7f8546ce6a5399656c35518d9960cddc4d4cdf95",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-28.ppm": "9e89c44373a2dcaa6f9b566f646a84c4fa38988b9b1d6c6132d92180459475fa",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-29.ppm": "e3da5f1046ab3138f8d422c359ccb5dde3477c6b6bf5b6e7ac65f980d17a84b9",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-3.ppm": "2c9d4eb6243a3c7cd10f21a0d497bc3a199cb267a8ccda3805fad0dae16d3267",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-30.ppm": "1738841a47d8531bd460eb991e475783a08122252b1d99da25b7374aa019fba3",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-31.ppm": "651056dc88d36f948287a11928587829940a378c6820b0503f29de031599a039",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-4.ppm": "e071beb20f5bfbf640ac9d6e0f7eedfba9684bad93174e1a8e41f4b449cf9791",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-5.ppm": "c371cf3c31794b41ed0bfe63446fd0ead40e6d94b1d04addb2e46d2638d3ea80",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-6.ppm": "7668441eaf90d766d700e0c0cf90f1756560eb75cd40ec9a0937b108f7805979",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-7.ppm": "f59ebf961feb305afdcd76d8ecebda8477ca2983f38187dd8d3b87395747ee15",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-8.ppm": "974967654c3bd4647aeed0a6a40789e72692715759d42713031b235c504b7f22",
+        ".dedup-work/phash434-20261016/native-image-fixtures/2-dct/dct-9.ppm": "00bf7a4373ed01092f5cb6a8f2fc2f6ee5946efc7f3439488eb41e1b3767b226"
+      }
+    },
+    {
+      "repeat": 2,
+      "mode": "text-positive",
+      "exit_code": 0,
+      "result": {
+        "mode": "text-positive",
+        "matches": 1
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/2-text-positive/stdout.log",
+      "stdout_sha256": "c930eb70c448a6c0858f386d029c144f03c74a29146d4069e7eec1d2dc07427d",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/2-text-positive/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixtures": {}
+    },
+    {
+      "repeat": 2,
+      "mode": "text-overflow",
+      "exit_code": 1,
+      "result": {
+        "expected_asan_heap_overflow": true
+      },
+      "stdout": ".dedup-work/phash434-20261016/native-image-fixtures/2-text-overflow/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ".dedup-work/phash434-20261016/native-image-fixtures/2-text-overflow/stderr.log",
+      "stderr_sha256": "0fede89cd94b7fb7d8b37f1e5b1e3e903e1291aaed8529862f7c8527751e79ba",
+      "fixtures": {}
+    }
+  ],
+  "source_pins": {
+    ".dedup-work/phash434-20261016/submodule/src/pHash.cpp": "b46d4f51a371c3538051d67155e942e71fbfc5ccd77bf5c7a0f9fd5eccd4cebb",
+    ".dedup-work/phash434-20261016/submodule/src/pHash.h.cmake": "90a7c94962bf54e9dc2eb4ddaceae6a058345ca6d05adeadeafbe007ae30dfb2",
+    ".dedup-work/phash434-20261016/submodule/third-party/CImg/CImg.h": "abdc3e469923fa6a4ade7a7bde1f553c3310a441ed2323d8cbaa720e9793cadb",
+    ".dedup-work/phash434-20261016/generated/pHash.h": "8a3e7f65f4790a78a5f4c58b0fbf26939a426dad3eae2596902a2ec53593a1f7"
+  },
+  "linked_libraries_log": ".dedup-work/phash434-20261016/native-image-linked-libraries.log",
+  "linked_libraries_log_sha256": "1f4b6a19fab3f9669cb5ca632d721ab27172c0c7a83fee13fa4efeb264798543",
+  "linked_library_pins": {
+    "/opt/homebrew/opt/libpng/lib/libpng16.16.dylib": "ec95a41f112fac5e0b077f129bccc67acf9b5ad1a01f56cc0ecebae2a8727ff2",
+    "/opt/homebrew/opt/jpeg-turbo/lib/libjpeg.8.dylib": "e17205913bfdb5535bbdbc7127d0eeb0970f5e6c85f68f0c75a1e711878e1e3a",
+    "/opt/homebrew/opt/libtiff/lib/libtiff.6.dylib": "168c75754e1cb9ac3ee714103df24e35e510106cf9fe9a4499c3bcfbb330ae4c"
+  },
+  "scope": "Whole unchanged pHash.cpp withoriginalpinnedCImg3.95MBheader, generatedoriginalCMakeheaderconfiguration imageenabled/audio-video-disabled. Clang17gnu++14/O1/debug/ASAN; realHomebrewPNG/JPEG/TIFF libraries. No sourcebodyextraction/algorithmadapters. 12freshnativeprocesses:131072bytepairs+12864bits+6invalidHammingchecks;4MHorderprocesses realownedPNM;64actualDCTimagehashes;2positivetextmatchand2expectedASANoverflowprocesses. Python/cppyy binding notexecuted.",
+  "limits": [
+    "Selectedimageprofile/nativeAPI evidence, notoriginalCMake/fullPythonpackage/video/audio/otherbindings/platform/originalexamples/fullsource/performance qualification",
+    "OriginalCImgdependency bytespinned/compiled butnotcompletelyread; full183entrysubmodule review remainsopen",
+    "LeakSanitizerdisabled dueplatformprofile; ASANheapoverflow only, no leaktiming/hardRSS claim",
+    "ActualDCTLSB0 confirmed on64syntheticimages andshiftloop staticallyread; no generalprecision/recall oralternateDCToracle claim",
+    "LibrarysourcepublicGPL3+, no productioncodecopied/adopted"
+  ]
+}
