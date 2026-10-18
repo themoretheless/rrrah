@@ -22,6 +22,7 @@ use vello_cpu::{
 
 pub(crate) struct Renderer {
     pub(crate) shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>,
+    pub(crate) shading_failed: Option<Arc<dyn Fn() + Send + Sync>>,
     pub(crate) shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>,
     pub(crate) ctx: RenderContext,
     pub(crate) inside_pattern: bool,
@@ -57,6 +58,7 @@ impl Renderer {
             shading_admission: cache.shading_admission.clone(),
             shading_guards: Rc::new(std::cell::RefCell::new(Vec::new())),
             shading_cancelled: cache.shading_cancelled.clone(),
+            shading_failed: cache.shading_failed.clone(),
             outline_cache: cache.outline_cache.clone(),
             cur_mask: None,
             in_type3_glyph: false,
@@ -112,6 +114,7 @@ impl Renderer {
                 shading_admission: self.shading_admission.clone(),
                 shading_guards: self.shading_guards.clone(),
                 shading_cancelled: self.shading_cancelled.clone(),
+                shading_failed: self.shading_failed.clone(),
                 outline_cache: self.outline_cache.clone(),
                 cur_mask: None,
                 in_type3_glyph: false,
@@ -474,6 +477,7 @@ impl Renderer {
                             else { Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>) }
                         };
                         let Some(encoded) = s.encode_with_sample_bounds_cancel_and_admission(Some(bbox), &cancelled, &admit) else {
+                            if let Some(failed)=&self.shading_failed {failed();}
                             self.ctx.set_paint(AlphaColor::<Srgb>::new([0.0; 4]));
                             return None;
                         };
@@ -554,6 +558,7 @@ impl Renderer {
                             shading_admission: self.shading_admission.clone(),
                 shading_guards: self.shading_guards.clone(),
                 shading_cancelled: self.shading_cancelled.clone(),
+                shading_failed: self.shading_failed.clone(),
                 outline_cache: self.outline_cache.clone(),
                             in_type3_glyph: false,
                             scaler: self.scaler,
@@ -824,6 +829,7 @@ impl<'a> Device<'a> for Renderer {
                                         shading_admission: self.shading_admission.clone(),
                 shading_guards: self.shading_guards.clone(),
                 shading_cancelled: self.shading_cancelled.clone(),
+                shading_failed: self.shading_failed.clone(),
                 outline_cache: self.outline_cache.clone(),
                                         cur_mask: None,
                                         in_type3_glyph: false,
@@ -915,7 +921,7 @@ impl<'a> Device<'a> for Renderer {
 
                 self.soft_mask_cache
                     .entry(m.cache_key())
-                    .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone()))
+                    .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone(), self.shading_failed.clone()))
                     .clone()
             }),
             None,
@@ -941,7 +947,7 @@ impl<'a> Device<'a> for Renderer {
 
             self.soft_mask_cache
                 .entry(m.cache_key())
-                .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone()))
+                .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone(), self.shading_failed.clone()))
                 .clone()
         });
         if let Some(mask) = self.cur_mask.clone() {
@@ -1126,7 +1132,7 @@ mod renderer_cancellation_tests {
     }
 }
 
-fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, height: u16, shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>, shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>, shading_guards: Rc<std::cell::RefCell<Vec<Box<dyn std::any::Any + Send + Sync>>>>) -> Mask {
+fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, height: u16, shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>, shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>, shading_guards: Rc<std::cell::RefCell<Vec<Box<dyn std::any::Any + Send + Sync>>>>, shading_failed: Option<Arc<dyn Fn()+Send+Sync>>) -> Mask {
     let mut renderer = Renderer {
         ctx: RenderContext::new_with(width, height, derive_settings(&settings)),
         inside_pattern: false,
@@ -1135,6 +1141,7 @@ fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, hei
         shading_admission,
         shading_guards,
         shading_cancelled,
+        shading_failed,
         outline_cache: Rc::new(std::cell::RefCell::new(HashMap::new())),
         in_type3_glyph: false,
         scaler: Scaler::new(ResamplingFunction::CatmullRom),

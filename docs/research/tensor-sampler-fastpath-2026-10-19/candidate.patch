@@ -1,0 +1,102 @@
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -417,6 +417,29 @@
+         Some(())
+     },components,transform,bounds,cancelled,admit)
+ }
++// Reusing cached coefficients is bit-preserving for identity transforms on
++// normal coordinates and positive zero. Keep the original arithmetic for signed
++// zero, subnormals and nonfinite inputs.
++fn triangle_in_device_space(t: Triangle, transform: Affine) -> Triangle {
++    if transform == Affine::IDENTITY && [&t.p0,&t.p1,&t.p2].iter().all(|v|
++        [v.point.x,v.point.y].iter().all(|x|x.is_normal() || x.to_bits()==0)) {
++        return t;
++    }
++            let p0 = transform * t.p0.point;
++            let p1 = transform * t.p1.point;
++            let p2 = transform * t.p2.point;
++
++            let mut v0 = t.p0.clone();
++            v0.point = p0;
++            let mut v1 = t.p1.clone();
++            v1.point = p1;
++            let mut v2 = t.p2.clone();
++            v2.point = p2;
++
++            Triangle::new(v0, v1, v2)
++
++}
++
+ fn sample_generated_triangles_with_admission(
+     generate: impl FnOnce(&mut dyn FnMut(Triangle)->Option<()>) -> Option<()>,
+     components:usize, transform:Affine, bounds:Option<kurbo::Rect>,
+@@ -429,27 +452,16 @@
+     let _scratch_guard = if spill == 0 { None } else { Some(admit(spill.checked_mul(8)?)?) };
+     let mut guard = None;
+     let mut map: MeshMap = MeshMap::default();
++    let clip = bounds.filter(|r| [r.x0,r.y0,r.x1,r.y1].iter().all(|v|v.is_finite())
++        && r.width()>=0.0 && r.height()>=0.0).map(|r|r.inflate(2.0,2.0));
+ 
+     generate(&mut |t| {
+         if cancelled() { return None; }
+-        let t = {
+-            let p0 = transform * t.p0.point;
+-            let p1 = transform * t.p1.point;
+-            let p2 = transform * t.p2.point;
+-
+-            let mut v0 = t.p0.clone();
+-            v0.point = p0;
+-            let mut v1 = t.p1.clone();
+-            v1.point = p1;
+-            let mut v2 = t.p2.clone();
+-            v2.point = p2;
+-
+-            Triangle::new(v0, v1, v2)
+-        };
++        let t = triangle_in_device_space(t, transform);
+ 
+         let bbox = t.bounding_box();
+-        let bbox = if let Some(bounds) = bounds.filter(|r| [r.x0,r.y0,r.x1,r.y1].iter().all(|v| v.is_finite()) && r.width() >= 0.0 && r.height() >= 0.0) {
+-            bbox.intersect(bounds.inflate(2.0, 2.0))
++        let bbox = if let Some(clip) = clip {
++            bbox.intersect(clip)
+         } else { bbox };
+ 
+         for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+@@ -498,6 +510,36 @@
+     use super::*;
+     use crate::shading::TensorProductPatch;
+ 
++    #[test]
++    fn cached_identity_triangle_preserves_coordinates_interpolation_and_coverage() {
++        let mut seed=Vec::new();
++        TensorProductPatch {control_points:[Point::ZERO;16],
++            colors:std::array::from_fn(|_|smallvec![0.0,0.5,1.0])}.to_triangles(&mut seed);
++        let template=seed[0].p0.clone();
++        for origin in [0.0,-0.0,f64::from_bits(1),-f64::from_bits(1),-2.5,0.125] {
++            let make=|x,y,value| {
++                let mut v=template.clone();v.point=Point::new(x,y);v.colors=smallvec![value,0.5,1.0-value];v
++            };
++            for transform in [Affine::IDENTITY,Affine::new([1.1,0.2,-0.1,0.9,0.3,0.7])] {
++                let source=Triangle::new(make(origin,origin,0.),make(4.5,0.25,0.5),make(0.75,5.5,1.));
++                let reference=|v:&crate::shading::TriangleVertex| {
++                    let mut v=v.clone();v.point=transform*v.point;v
++                };
++                let expected=Triangle::new(reference(&source.p0),reference(&source.p1),reference(&source.p2));
++                let actual=triangle_in_device_space(source,transform);
++                for (a,b) in [&actual.p0,&actual.p1,&actual.p2].iter().zip([&expected.p0,&expected.p1,&expected.p2]) {
++                    assert_eq!((a.point.x.to_bits(),a.point.y.to_bits()),(b.point.x.to_bits(),b.point.y.to_bits()));
++                }
++                for x in 0..8 {for y in 0..8 {
++                    let point=Point::new(x as f64+0.5,y as f64+0.5);
++                    assert_eq!(actual.interpolate(point).iter().map(|v|v.to_bits()).collect::<Vec<_>>(),
++                        expected.interpolate(point).iter().map(|v|v.to_bits()).collect::<Vec<_>>());
++                    let value=|v:Option<(f32,Point)>|v.map(|(a,p)|(a.to_bits(),p.x.to_bits(),p.y.to_bits()));
++                    assert_eq!(value(triangle_pixel_area(&actual,x,y)),value(triangle_pixel_area(&expected,x,y)));
++                }}
++            }
++        }
++    }
+     #[test]
+     fn patch_internal_cancellation_rolls_back_every_checkpoint() {
+         use crate::shading::CoonsPatch;

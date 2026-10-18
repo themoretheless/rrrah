@@ -69,6 +69,8 @@ mod renderer;
 pub struct RenderCache<'a> {
     /// Cooperative cancellation of expensive shading work.
     pub shading_cancelled: Option<std::sync::Arc<dyn Fn() -> bool + Send + Sync>>,
+    /// Report shading failure so strict callers can reject incomplete output.
+    pub shading_failed: Option<std::sync::Arc<dyn Fn() + Send + Sync>>,
     /// Admit texture storage before allocation; returned guards live through rendering.
     pub shading_admission: Option<std::sync::Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>,
     pub(crate) interpreter_cache: InterpreterCache<'a>,
@@ -80,6 +82,7 @@ impl<'a> RenderCache<'a> {
     pub fn new() -> Self {
         Self {
             shading_cancelled: None,
+            shading_failed: None,
             shading_admission: None,
             interpreter_cache: InterpreterCache::new(),
             outline_cache: Rc::new(RefCell::new(HashMap::new())),

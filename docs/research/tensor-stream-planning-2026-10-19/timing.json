@@ -1,0 +1,710 @@
+{
+  "scope": "Same-source baseline/candidate except encoder; dev optimized profile; warm filesystem, per-process3 warmups; in-process load+prepare times exclude hashing, destruction, startup and GPU; shared host",
+  "status": "completed",
+  "pairs": [
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pair": 0,
+      "rows": {
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.27625,
+          "load_p95_ms": 0.34375,
+          "prepare_p50_ms": 0.00675,
+          "prepare_p95_ms": 0.007958000000000002,
+          "cpu_ready_p50_ms": 0.282833,
+          "cpu_ready_p95_ms": 0.350875,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        },
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.204375,
+          "load_p95_ms": 0.23358299999999999,
+          "prepare_p50_ms": 0.006333,
+          "prepare_p95_ms": 0.006917,
+          "cpu_ready_p50_ms": 0.21075,
+          "cpu_ready_p95_ms": 0.2405,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        }
+      },
+      "ready_p50_ratio": 0.7451393578542814
+    },
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pair": 1,
+      "rows": {
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.226542,
+          "load_p95_ms": 0.23166699999999998,
+          "prepare_p50_ms": 0.00775,
+          "prepare_p95_ms": 0.007917,
+          "cpu_ready_p50_ms": 0.234333,
+          "cpu_ready_p95_ms": 0.239583,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        },
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.219541,
+          "load_p95_ms": 0.22737500000000002,
+          "prepare_p50_ms": 0.006375,
+          "prepare_p95_ms": 0.006417,
+          "cpu_ready_p50_ms": 0.225875,
+          "cpu_ready_p95_ms": 0.233792,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        }
+      },
+      "ready_p50_ratio": 1.0374454897620367
+    },
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pair": 2,
+      "rows": {
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.19808299999999998,
+          "load_p95_ms": 0.238542,
+          "prepare_p50_ms": 0.006333,
+          "prepare_p95_ms": 0.012625,
+          "cpu_ready_p50_ms": 0.204375,
+          "cpu_ready_p95_ms": 0.24495799999999998,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        },
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.191125,
+          "load_p95_ms": 0.19804100000000002,
+          "prepare_p50_ms": 0.00625,
+          "prepare_p95_ms": 0.006417,
+          "cpu_ready_p50_ms": 0.19737500000000002,
+          "cpu_ready_p95_ms": 0.204458,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        }
+      },
+      "ready_p50_ratio": 0.9657492354740063
+    },
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pair": 3,
+      "rows": {
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.189417,
+          "load_p95_ms": 0.19487500000000002,
+          "prepare_p50_ms": 0.006209,
+          "prepare_p95_ms": 0.006375,
+          "cpu_ready_p50_ms": 0.195708,
+          "cpu_ready_p95_ms": 0.201208,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        },
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.2185,
+          "load_p95_ms": 0.227209,
+          "prepare_p50_ms": 0.00625,
+          "prepare_p95_ms": 0.006875,
+          "cpu_ready_p50_ms": 0.224833,
+          "cpu_ready_p95_ms": 0.233459,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        }
+      },
+      "ready_p50_ratio": 0.8704594076492329
+    },
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pair": 4,
+      "rows": {
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.196,
+          "load_p95_ms": 0.20483400000000002,
+          "prepare_p50_ms": 0.006333,
+          "prepare_p95_ms": 0.0077919999999999994,
+          "cpu_ready_p50_ms": 0.203792,
+          "cpu_ready_p95_ms": 0.21125000000000002,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        },
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.200875,
+          "load_p95_ms": 0.226625,
+          "prepare_p50_ms": 0.00625,
+          "prepare_p95_ms": 0.006542,
+          "cpu_ready_p50_ms": 0.20708400000000002,
+          "cpu_ready_p95_ms": 0.233125,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        }
+      },
+      "ready_p50_ratio": 1.016153725367041
+    },
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pair": 5,
+      "rows": {
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.19037500000000002,
+          "load_p95_ms": 0.201791,
+          "prepare_p50_ms": 0.00625,
+          "prepare_p95_ms": 0.006333,
+          "cpu_ready_p50_ms": 0.196583,
+          "cpu_ready_p95_ms": 0.208041,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        },
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.196209,
+          "load_p95_ms": 0.201125,
+          "prepare_p50_ms": 0.006292,
+          "prepare_p95_ms": 0.007208,
+          "cpu_ready_p50_ms": 0.203042,
+          "cpu_ready_p95_ms": 0.207625,
+          "display_blake3": "fcf2f4fd22f4d95d704b3aedad9160df5a3431f6fe815ccd463b47b75369f97e",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=163148 final_bytes=0\n",
+          "accounted_peak_bytes": 163148
+        }
+      },
+      "ready_p50_ratio": 0.9681888476275845
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pair": 0,
+      "rows": {
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.618958000000003,
+          "load_p95_ms": 18.72,
+          "prepare_p50_ms": 0.013040999999999999,
+          "prepare_p95_ms": 0.013541,
+          "cpu_ready_p50_ms": 18.632291,
+          "cpu_ready_p95_ms": 18.733166,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        },
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 14.586500000000001,
+          "load_p95_ms": 15.001000000000001,
+          "prepare_p50_ms": 0.013292,
+          "prepare_p95_ms": 0.015792,
+          "cpu_ready_p50_ms": 14.599957999999999,
+          "cpu_ready_p95_ms": 15.016791999999999,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        }
+      },
+      "ready_p50_ratio": 0.7835836183537495
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pair": 1,
+      "rows": {
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 14.599,
+          "load_p95_ms": 15.6255,
+          "prepare_p50_ms": 0.012875,
+          "prepare_p95_ms": 0.01475,
+          "cpu_ready_p50_ms": 14.611875,
+          "cpu_ready_p95_ms": 15.640250000000002,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        },
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.649583,
+          "load_p95_ms": 18.751916,
+          "prepare_p50_ms": 0.013,
+          "prepare_p95_ms": 0.013583,
+          "cpu_ready_p50_ms": 18.662791000000002,
+          "cpu_ready_p95_ms": 18.765416,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        }
+      },
+      "ready_p50_ratio": 0.7829415761018809
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pair": 2,
+      "rows": {
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.572000000000003,
+          "load_p95_ms": 18.740291,
+          "prepare_p50_ms": 0.012792000000000001,
+          "prepare_p95_ms": 0.01325,
+          "cpu_ready_p50_ms": 18.585250000000002,
+          "cpu_ready_p95_ms": 18.753249999999998,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        },
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 14.526125,
+          "load_p95_ms": 14.778875000000001,
+          "prepare_p50_ms": 0.01275,
+          "prepare_p95_ms": 0.013333,
+          "cpu_ready_p50_ms": 14.538874999999999,
+          "cpu_ready_p95_ms": 14.79125,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        }
+      },
+      "ready_p50_ratio": 0.7822803029283973
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pair": 3,
+      "rows": {
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 14.574834,
+          "load_p95_ms": 14.784041,
+          "prepare_p50_ms": 0.01275,
+          "prepare_p95_ms": 0.013209,
+          "cpu_ready_p50_ms": 14.58725,
+          "cpu_ready_p95_ms": 14.79725,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        },
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.542666,
+          "load_p95_ms": 18.59225,
+          "prepare_p50_ms": 0.01275,
+          "prepare_p95_ms": 0.01325,
+          "cpu_ready_p50_ms": 18.555416,
+          "cpu_ready_p95_ms": 18.6055,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        }
+      },
+      "ready_p50_ratio": 0.7861451341214877
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pair": 4,
+      "rows": {
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.524541,
+          "load_p95_ms": 19.634083,
+          "prepare_p50_ms": 0.012666,
+          "prepare_p95_ms": 0.013,
+          "cpu_ready_p50_ms": 18.537083,
+          "cpu_ready_p95_ms": 19.647083,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        },
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 14.648541,
+          "load_p95_ms": 14.71975,
+          "prepare_p50_ms": 0.012833,
+          "prepare_p95_ms": 0.013709,
+          "cpu_ready_p50_ms": 14.66225,
+          "cpu_ready_p95_ms": 14.732458000000001,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        }
+      },
+      "ready_p50_ratio": 0.7909685682477658
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pair": 5,
+      "rows": {
+        "candidate": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 14.685749999999999,
+          "load_p95_ms": 14.814041999999999,
+          "prepare_p50_ms": 0.01325,
+          "prepare_p95_ms": 0.013625000000000002,
+          "cpu_ready_p50_ms": 14.698792000000001,
+          "cpu_ready_p95_ms": 14.826834,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        },
+        "baseline": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.655958000000002,
+          "load_p95_ms": 18.741083,
+          "prepare_p50_ms": 0.013,
+          "prepare_p95_ms": 0.01325,
+          "cpu_ready_p50_ms": 18.669208,
+          "cpu_ready_p95_ms": 18.754041,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632810 final_bytes=0\n",
+          "accounted_peak_bytes": 3632810
+        }
+      },
+      "ready_p50_ratio": 0.7873280966177033
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pair": 0,
+      "rows": {
+        "baseline": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 452.84304199999997,
+          "load_p95_ms": 460.424625,
+          "prepare_p50_ms": 0.453708,
+          "prepare_p95_ms": 0.45658299999999996,
+          "cpu_ready_p50_ms": 453.280333,
+          "cpu_ready_p95_ms": 460.878875,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        },
+        "candidate": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 419.73308399999996,
+          "load_p95_ms": 422.390791,
+          "prepare_p50_ms": 0.454125,
+          "prepare_p95_ms": 0.459084,
+          "cpu_ready_p50_ms": 420.18295900000004,
+          "cpu_ready_p95_ms": 422.844916,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        }
+      },
+      "ready_p50_ratio": 0.926982550112096
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pair": 1,
+      "rows": {
+        "candidate": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 418.84641700000003,
+          "load_p95_ms": 442.308791,
+          "prepare_p50_ms": 0.45425,
+          "prepare_p95_ms": 0.501583,
+          "cpu_ready_p50_ms": 419.307709,
+          "cpu_ready_p95_ms": 442.76304100000004,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        },
+        "baseline": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 456.464209,
+          "load_p95_ms": 465.60666699999996,
+          "prepare_p50_ms": 0.44566700000000004,
+          "prepare_p95_ms": 0.465833,
+          "cpu_ready_p50_ms": 456.93004199999996,
+          "cpu_ready_p95_ms": 466.047292,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        }
+      },
+      "ready_p50_ratio": 0.9176628158758711
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pair": 2,
+      "rows": {
+        "baseline": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 455.928834,
+          "load_p95_ms": 464.502083,
+          "prepare_p50_ms": 0.459125,
+          "prepare_p95_ms": 0.479125,
+          "cpu_ready_p50_ms": 456.376417,
+          "cpu_ready_p95_ms": 464.950541,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        },
+        "candidate": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 420.357583,
+          "load_p95_ms": 426.902041,
+          "prepare_p50_ms": 0.46799999999999997,
+          "prepare_p95_ms": 0.484541,
+          "cpu_ready_p50_ms": 420.818292,
+          "cpu_ready_p95_ms": 427.377916,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        }
+      },
+      "ready_p50_ratio": 0.9220859718524851
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pair": 3,
+      "rows": {
+        "candidate": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 419.64099999999996,
+          "load_p95_ms": 421.741083,
+          "prepare_p50_ms": 0.467542,
+          "prepare_p95_ms": 0.46875,
+          "cpu_ready_p50_ms": 420.10975,
+          "cpu_ready_p95_ms": 422.20075,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        },
+        "baseline": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 448.509083,
+          "load_p95_ms": 449.26658299999997,
+          "prepare_p50_ms": 0.446834,
+          "prepare_p95_ms": 0.450208,
+          "cpu_ready_p50_ms": 448.95495800000003,
+          "cpu_ready_p95_ms": 449.71325,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        }
+      },
+      "ready_p50_ratio": 0.9357503297691614
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pair": 4,
+      "rows": {
+        "baseline": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 457.464833,
+          "load_p95_ms": 460.048708,
+          "prepare_p50_ms": 0.452542,
+          "prepare_p95_ms": 0.461959,
+          "cpu_ready_p50_ms": 457.901583,
+          "cpu_ready_p95_ms": 460.50124999999997,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        },
+        "candidate": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 417.342667,
+          "load_p95_ms": 420.02945800000003,
+          "prepare_p50_ms": 0.446959,
+          "prepare_p95_ms": 0.45645800000000003,
+          "cpu_ready_p50_ms": 417.787917,
+          "cpu_ready_p95_ms": 420.47641699999997,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        }
+      },
+      "ready_p50_ratio": 0.9123967518583572
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pair": 5,
+      "rows": {
+        "candidate": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 420.46745899999996,
+          "load_p95_ms": 422.060916,
+          "prepare_p50_ms": 0.449375,
+          "prepare_p95_ms": 0.459292,
+          "cpu_ready_p50_ms": 420.91612499999997,
+          "cpu_ready_p95_ms": 422.510291,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        },
+        "baseline": {
+          "path": "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 459.318583,
+          "load_p95_ms": 461.758,
+          "prepare_p50_ms": 0.466167,
+          "prepare_p95_ms": 0.481,
+          "cpu_ready_p50_ms": 459.78475000000003,
+          "cpu_ready_p95_ms": 462.23475,
+          "display_blake3": "c6354e6e388adb14801e9115775470da959c4dc89bd93e2088e61c2625bbfc0c",
+          "cache": "warm filesystem; process warm; no decoded image cache",
+          "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=26534362 final_bytes=0\n",
+          "accounted_peak_bytes": 26534362
+        }
+      },
+      "ready_p50_ratio": 0.9154634315296449
+    }
+  ],
+  "source_sha256": {
+    "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-solid-rgb.pdf": "19fd0abde598c492cff2f31abe5e44753b57d461cd9387b939c04e52a9cc5b28",
+    "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/tensor-parabolic-rgb.pdf": "825aa4872501a361b1d4e603d5fd39c5af2186901fe30c7ccfd96d1ebe3dca19",
+    "/tmp/rrrah-ai-current-corpus-20261016/VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+  },
+  "binary_sha256": {
+    "baseline": "443b032d74264d63d6eaed69e856fe6c9f68fe689dc05cb6533bc6999e90de2d",
+    "candidate": "795839bf12ea3f69422dfb73f404dbf1ec9da76c4f518ffee1bbc24dfa866c29"
+  },
+  "summary": [
+    {
+      "fixture": "tensor-solid-rgb.pdf",
+      "pairs": 6,
+      "median_pair_ratio": 0.9669690415507954,
+      "baseline_ready_p50_ms": 0.21460400000000002,
+      "candidate_ready_p50_ms": 0.2022295,
+      "baseline_accounted_peak": 163148,
+      "candidate_accounted_peak": 163148
+    },
+    {
+      "fixture": "tensor-parabolic-rgb.pdf",
+      "pairs": 6,
+      "median_pair_ratio": 0.7848643762376186,
+      "baseline_ready_p50_ms": 18.6087705,
+      "candidate_ready_p50_ms": 14.6059165,
+      "baseline_accounted_peak": 3632810,
+      "candidate_accounted_peak": 3632810
+    },
+    {
+      "fixture": "VectorApple.ai",
+      "pairs": 6,
+      "median_pair_ratio": 0.919874393864178,
+      "baseline_ready_p50_ms": 456.65322949999995,
+      "candidate_ready_p50_ms": 420.14635450000003,
+      "baseline_accounted_peak": 26534362,
+      "candidate_accounted_peak": 26534362
+    }
+  ]
+}

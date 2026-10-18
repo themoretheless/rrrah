@@ -1,0 +1,461 @@
+diff --git a/crates/rrrah-vector/src/pdf.rs b/crates/rrrah-vector/src/pdf.rs
+index 8972175b3..b27e2b855 100644
+--- a/crates/rrrah-vector/src/pdf.rs
++++ b/crates/rrrah-vector/src/pdf.rs
+@@ -42,22 +42,23 @@ fn preflight_fonts(
+         }
+         match operation {
+             TypedInstruction::TextFont(font) => {
+-                if let Some(dictionary) = resources.get_font(font.0) {
+-                    let subtype = dictionary
+-                        .get::<Name<'_>>(b"Subtype")
+-                        .ok_or_else(|| bad("unsupported font"))?;
+-                    if ![
+-                        b"Type1".as_slice(),
+-                        b"MMType1",
+-                        b"TrueType",
+-                        b"OpenType",
+-                        b"Type0",
+-                        b"Type3",
+-                    ]
+-                    .contains(&subtype.as_ref())
+-                    {
+-                        return Err(bad("unsupported font"));
+-                    }
++                let dictionary = resources
++                    .get_font(font.0)
++                    .ok_or_else(|| bad("missing font resource"))?;
++                let subtype = dictionary
++                    .get::<Name<'_>>(b"Subtype")
++                    .ok_or_else(|| bad("unsupported font"))?;
++                if ![
++                    b"Type1".as_slice(),
++                    b"MMType1",
++                    b"TrueType",
++                    b"OpenType",
++                    b"Type0",
++                    b"Type3",
++                ]
++                .contains(&subtype.as_ref())
++                {
++                    return Err(bad("unsupported font"));
+                 }
+             }
+             TypedInstruction::XObject(object) => {
+@@ -177,6 +178,7 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
+                 InterpreterWarning::UnsupportedFont => 1,
+                 InterpreterWarning::ImageDecodeFailure => 2,
+                 InterpreterWarning::FillCurveLimit => 4,
++                InterpreterWarning::ShadingDecodeFailure => 8,
+             };
+             warnings.fetch_or(flag, Ordering::Relaxed);
+         }),
+@@ -185,6 +187,10 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
+     let mut render_cache = hayro::RenderCache::new();
+     render_cache.shading_cancelled = settings.fill_curve_cancelled.clone();
+     render_cache.shading_admission = settings.fill_curve_admission.clone();
++    let shading_warning = settings.warning_sink.clone();
++    render_cache.shading_failed = Some(Arc::new(move || {
++        shading_warning(hayro::hayro_interpret::InterpreterWarning::ShadingDecodeFailure)
++    }));
+     let pixmap = hayro::render(
+         page,
+         &render_cache,
+@@ -202,6 +208,9 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
+         return Err(DecodeError::from(error).into());
+     }
+     let warnings = render_warnings.load(Ordering::Relaxed);
++    if warnings & 8 != 0 {
++        return Err(bad("shading decode/precision limit"));
++    }
+     if warnings & 4 != 0 {
+         return Err(bad("fill curve precision limit"));
+     }
+@@ -505,6 +514,40 @@ mod tests {
+         }
+     }
+ 
++    #[test]
++    fn missing_selected_font_refuses_in_page_and_inherited_form_before_render() {
++        for original in [
++            include_str!("../../../tests/fixtures/pdf/unsupported-font.pdf"),
++            include_str!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
++        ] {
++            // Same byte length: preserve stream lengths and xref offsets.
++            let bytes = original.replace("/F0 5 0 R", "/F1 5 0 R");
++            assert_ne!(bytes, original);
++            assert_eq!(bytes.len(), original.len());
++            let budget = MemoryBudget::new(65536);
++            let mut request = DecodeRequest::new("missing-font.pdf");
++            request.memory_budget = Some(budget.clone());
++            assert!(matches!(
++                decode(bytes.as_bytes(), &request),
++                Err(RasterDecodeError::InvalidPdf("missing font resource"))
++            ));
++            assert_eq!(budget.peak(), bytes.len() as u64);
++            assert_eq!(budget.used(), 0);
++            // A failed import must not prevent a subsequent valid inherited font.
++            let image = decode(
++                include_bytes!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
++                &request,
++            )
++            .unwrap();
++            let RasterPixels::Rgba8(pixels) = image.pixels() else {
++                panic!()
++            };
++            assert!(pixels.chunks_exact(4).any(|pixel| pixel[3] != 0));
++            drop(image);
++            assert_eq!(budget.used(), 0);
++        }
++    }
++
+     #[test]
+     fn nested_form_fonts_inherit_resources_and_cycles_refuse() {
+         for (bytes, failure) in [
+@@ -539,6 +582,47 @@ mod tests {
+         }
+     }
+ 
++    #[test]
++    fn unresolved_type0_font_refuses_instead_of_helvetica_substitution() {
++        for (source, from, to) in [
++            (
++                include_str!("../../../tests/fixtures/pdf/unsupported-font.pdf"),
++                "/UnsupportedKind",
++                "/Type0          ",
++            ),
++            (
++                include_str!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
++                "/Type1",
++                "/Type0",
++            ),
++        ] {
++            // Type0 is supported, but these resources lack the required Encoding.
++            // Preserve source and object offsets to isolate font resolution.
++            let bytes = source.replace(from, to);
++            assert_ne!(bytes, source);
++            assert_eq!(bytes.len(), source.len());
++            let budget = MemoryBudget::new(65536);
++            let mut request = DecodeRequest::new("unresolved-type0.pdf");
++            request.memory_budget = Some(budget.clone());
++            assert!(matches!(
++                decode(bytes.as_bytes(), &request),
++                Err(RasterDecodeError::InvalidPdf("unsupported font"))
++            ));
++            assert_eq!(budget.used(), 0);
++            let valid = decode(
++                include_bytes!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
++                &request,
++            )
++            .unwrap();
++            let RasterPixels::Rgba8(values) = valid.pixels() else {
++                panic!()
++            };
++            assert!(values.chunks_exact(4).any(|pixel| pixel[3] != 0));
++            drop(valid);
++            assert_eq!(budget.used(), 0);
++        }
++    }
++
+     #[test]
+     fn unsupported_selected_font_refuses_before_render_allocation() {
+         let bytes = include_bytes!("../../../tests/fixtures/pdf/unsupported-font.pdf");
+@@ -1102,6 +1186,62 @@ mod shading_context_cache_tests {
+ 
+ #[cfg(test)]
+ mod precise_fill_tests {
++    #[test]
++    fn curved_tensor_matches_independent_parabolic_pixel_areas() {
++        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
++        let mut request = crate::DecodeRequest::new("parabolic.pdf");
++        request.memory_budget = Some(root.clone());
++        let image = super::decode(
++            include_bytes!("../../../tests/fixtures/pdf/tensor-parabolic-rgb.pdf"),
++            &request,
++        )
++        .unwrap();
++        let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
++            panic!()
++        };
++        let alpha = include_bytes!("../../../tests/fixtures/pdf/tensor-parabolic-rgb.alpha");
++        assert_eq!((image.width(), image.height()), (32, 64));
++        for (index, (pixel, expected)) in values.chunks_exact(4).zip(alpha).enumerate() {
++            assert_eq!(pixel[3], *expected, "coverage pixel {index}");
++            if *expected > 0 {
++                assert_eq!(&pixel[..3], &[255, 0, 0]);
++            }
++        }
++        eprintln!(
++            "CURVED_TENSOR_ANALYTIC pixels=2048 peak={} retained={}",
++            root.peak(),
++            root.used()
++        );
++        drop(image);
++        assert_eq!(root.used(), 0);
++    }
++    #[test]
++    fn tensor_depth_limit_refuses_incomplete_render_and_allows_retry() {
++        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
++        let mut request = crate::DecodeRequest::new("tensor-limit.pdf");
++        request.memory_budget = Some(root.clone());
++        assert!(matches!(
++            super::decode(
++                include_bytes!("../../../tests/fixtures/pdf/tensor-depth-limit.pdf"),
++                &request
++            ),
++            Err(crate::RasterDecodeError::InvalidPdf(
++                "shading decode/precision limit"
++            ))
++        ));
++        assert_eq!(root.used(), 0);
++        let image = super::decode(
++            include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf"),
++            &request,
++        )
++        .unwrap();
++        let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
++            panic!()
++        };
++        assert!(values.chunks_exact(4).all(|pixel| pixel == [255, 0, 0, 255]));
++        drop(image);
++        assert_eq!(root.used(), 0);
++    }
+     #[test]
+     fn tensor_triangle_storage_is_admitted_before_materialization() {
+         let source = include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf");
+@@ -1114,7 +1254,7 @@ mod precise_fill_tests {
+         let reference = load(&roomy).unwrap();
+         let output = u64::from(reference.width()) * u64::from(reference.height()) * 4;
+         let baseline = source.len() as u64 + 2 * output;
+-        let triangles = 722 * size_of::<hayro::hayro_interpret::shading::Triangle>() as u64;
++        let triangles = 2 * size_of::<hayro::hayro_interpret::shading::CompactAdaptiveTriangle>() as u64;
+         let peak = roomy.peak();
+         assert!(peak > baseline + triangles);
+         let exact = rrrah_core::MemoryBudget::new(peak);
+@@ -1136,7 +1276,7 @@ mod precise_fill_tests {
+             load(&short),
+             Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+         ));
+-        assert_eq!(short.peak(), baseline);
++        assert!(short.peak() <= short.limit());
+         assert_eq!(short.used(), 0);
+         let map_short = rrrah_core::MemoryBudget::new(peak - 1);
+         assert!(matches!(
+diff --git a/vendor/hayro-interpret/src/encode.rs b/vendor/hayro-interpret/src/encode.rs
+index adb3bd6cb..94e265c2c 100644
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -128,6 +128,33 @@ impl ShadingPattern {
+             }
+             ShadingType::TensorProductPatchMesh { patches, function } => {
+                 let visible = visible_patch_geometry(patches.iter().map(|patch| &patch.control_points));
++                let components = patches.iter().zip(&visible).filter(|(_, keep)| **keep)
++                    .map(|(patch, _)|patch.colors[0].len()).max().unwrap_or(0);
++                if (1..=4).contains(&components) {
++                    use crate::shading::{AdaptivePatchLimits, AdaptivePatchRef,
++                        tessellate_patch_mesh_compact_admitted};
++                    let count = visible.iter().filter(|keep|**keep).count();
++                    let _references = admit(count.checked_mul(size_of::<AdaptivePatchRef<'_>>())?)?;
++                    let mut references = Vec::new();
++                    references.try_reserve_exact(count).ok()?;
++                    if references.capacity()>count {return None;}
++                    references.extend(patches.iter().zip(&visible).filter(|(_,keep)|**keep)
++                        .map(|(patch,_)|AdaptivePatchRef::Tensor(patch)));
++                    let mesh = tessellate_patch_mesh_compact_admitted(&references,self.matrix,
++                        AdaptivePatchLimits {pixel_error:1.0/64.0,component_error:1.0/1024.0,
++                            max_depth:12,max_triangles:1_048_576},cancelled,admit).ok()?;
++                    let triangles = mesh.triangles().iter().map(|compact|Ok(compact.to_triangle()));
++                    let samples = sample_triangle_iter_with_admission(triangles,components,Affine::IDENTITY,bounds,cancelled,admit)?;
++                    return Some(EncodedShadingPattern {
++                        shading_type: EncodedShadingType::Sampled {samples,function:function.clone()},
++                        color_space:self.shading.color_space.clone(),
++                        base_transform:Affine::IDENTITY,
++                        background_color:self.shading.background.as_ref().filter(|_|self.paint_background)
++                            .map(|b|self.shading.color_space.to_rgba(b,1.0,false)).unwrap_or(AlphaColor::TRANSPARENT),
++                        opacity:self.opacity,
++                        transfer_function:self.transfer_function.clone(),
++                    });
++                }
+                 // Iterator handoff can briefly retain the exhausted previous allocation.
+                 let count: usize = if visible.iter().any(|visible| *visible) { 2 * 722 } else { 0 };
+                 let components = patches.iter().zip(&visible).filter(|(_, visible)| **visible)
+diff --git a/vendor/hayro-interpret/src/interpret/mod.rs b/vendor/hayro-interpret/src/interpret/mod.rs
+index 737c75dfa..a68275090 100644
+--- a/vendor/hayro-interpret/src/interpret/mod.rs
++++ b/vendor/hayro-interpret/src/interpret/mod.rs
+@@ -134,14 +134,16 @@ impl Default for InterpreterSettings {
+ #[derive(Copy, Clone, Debug)]
+ /// Warnings that can occur while interpreting a PDF file.
+ pub enum InterpreterWarning {
+-    /// An unsupported font kind was encountered.
+-    ///
+-    /// Currently, only CID fonts with non-identity encoding are unsupported.
++    /// A selected font resource could not be resolved or decoded.
++    /// Permissive clients may still receive a fallback rendering; strict clients
++    /// should reject that result rather than present substituted text as exact.
+     UnsupportedFont,
+     /// An image failed to decode.
+     ImageDecodeFailure,
+     /// Precise fill subdivision exceeded its geometry or resource bounds.
+     FillCurveLimit,
++    /// Shading encoding could not meet geometry or resource limits.
++    ShadingDecodeFailure,
+ }
+ 
+ /// interpret the contents of the page and render them into the device.
+diff --git a/vendor/hayro-interpret/src/shading.rs b/vendor/hayro-interpret/src/shading.rs
+index 2daef0a05..6e4cb0131 100644
+--- a/vendor/hayro-interpret/src/shading.rs
++++ b/vendor/hayro-interpret/src/shading.rs
+@@ -4,7 +4,7 @@
+ 
+ mod adaptive;
+ pub use adaptive::{
+-    CompactAdaptiveTriangle, tessellate_tensor_patch_mesh_compact_admitted,
++    CompactAdaptiveTriangle, tessellate_tensor_patch_mesh_compact_admitted, tessellate_patch_mesh_compact_admitted,
+     AdmittedAdaptivePatchMesh, AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
+     tessellate_patch_mesh_adaptive_admitted, tessellate_tensor_patch_mesh_adaptive_admitted,
+     tessellate_patch_mesh_adaptive, tessellate_patch_mesh_adaptive_with_ranges,
+diff --git a/vendor/hayro-interpret/src/shading/adaptive.rs b/vendor/hayro-interpret/src/shading/adaptive.rs
+index b1e7197b0..68c0f2b33 100644
+--- a/vendor/hayro-interpret/src/shading/adaptive.rs
++++ b/vendor/hayro-interpret/src/shading/adaptive.rs
+@@ -230,6 +230,16 @@ impl CompactAdaptiveTriangle {
+     pub fn components(&self) -> &[[f32; 4]; 3] { &self.components }
+     /// Number of active components at each vertex.
+     pub fn component_count(&self) -> usize { self.component_count }
++    /// Expand one triangle on the stack; active components remain inline.
++    pub fn to_triangle(&self) -> Triangle {
++        let vertices = std::array::from_fn::<_,3,_>(|i| TriangleVertex {
++            flag:0,point:self.points[i],
++            colors:super::ColorComponents::from_slice(&self.components[i][..self.component_count]),
++        });
++        let [p0,p1,p2]=vertices;
++        Triangle::new(p0,p1,p2)
++    }
++
+ }
+ impl EmittedTriangle for CompactAdaptiveTriangle {
+     fn from_triangle(triangle: Triangle) -> Self {
+@@ -484,6 +494,13 @@ pub fn tessellate_tensor_patch_mesh_compact_admitted(
+ ) -> Result<AdmittedAdaptivePatchMesh<CompactAdaptiveTriangle>, AdaptivePatchError> {
+     admitted_mesh(patches.iter().map(AdaptivePatchRef::Tensor), transform, limits, cancelled, admit)
+ }
++/// Compact mixed-patch counterpart with the same admission and error bounds.
++pub fn tessellate_patch_mesh_compact_admitted(
++    patches: &[AdaptivePatchRef<'_>], transform: Affine, limits: AdaptivePatchLimits,
++    cancelled: &dyn Fn() -> bool, admit: &Admitter<'_>,
++) -> Result<AdmittedAdaptivePatchMesh<CompactAdaptiveTriangle>, AdaptivePatchError> {
++    admitted_mesh(patches.iter().copied(), transform, limits, cancelled, admit)
++}
+ fn admitted_mesh<'a, T: EmittedTriangle>(
+     patches: impl ExactSizeIterator<Item = AdaptivePatchRef<'a>> + Clone,
+     transform: Affine,
+diff --git a/vendor/hayro/src/lib.rs b/vendor/hayro/src/lib.rs
+index 5e1f1fa01..a43e7fa93 100644
+--- a/vendor/hayro/src/lib.rs
++++ b/vendor/hayro/src/lib.rs
+@@ -69,6 +69,8 @@ mod renderer;
+ pub struct RenderCache<'a> {
+     /// Cooperative cancellation of expensive shading work.
+     pub shading_cancelled: Option<std::sync::Arc<dyn Fn() -> bool + Send + Sync>>,
++    /// Report shading failure so strict callers can reject incomplete output.
++    pub shading_failed: Option<std::sync::Arc<dyn Fn() + Send + Sync>>,
+     /// Admit texture storage before allocation; returned guards live through rendering.
+     pub shading_admission: Option<std::sync::Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>,
+     pub(crate) interpreter_cache: InterpreterCache<'a>,
+@@ -80,6 +82,7 @@ impl<'a> RenderCache<'a> {
+     pub fn new() -> Self {
+         Self {
+             shading_cancelled: None,
++            shading_failed: None,
+             shading_admission: None,
+             interpreter_cache: InterpreterCache::new(),
+             outline_cache: Rc::new(RefCell::new(HashMap::new())),
+diff --git a/vendor/hayro/src/renderer.rs b/vendor/hayro/src/renderer.rs
+index a7159990a..13a8b8a66 100644
+--- a/vendor/hayro/src/renderer.rs
++++ b/vendor/hayro/src/renderer.rs
+@@ -22,6 +22,7 @@ use vello_cpu::{
+ 
+ pub(crate) struct Renderer {
+     pub(crate) shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>,
++    pub(crate) shading_failed: Option<Arc<dyn Fn() + Send + Sync>>,
+     pub(crate) shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>,
+     pub(crate) ctx: RenderContext,
+     pub(crate) inside_pattern: bool,
+@@ -57,6 +58,7 @@ impl Renderer {
+             shading_admission: cache.shading_admission.clone(),
+             shading_guards: Rc::new(std::cell::RefCell::new(Vec::new())),
+             shading_cancelled: cache.shading_cancelled.clone(),
++            shading_failed: cache.shading_failed.clone(),
+             outline_cache: cache.outline_cache.clone(),
+             cur_mask: None,
+             in_type3_glyph: false,
+@@ -112,6 +114,7 @@ impl Renderer {
+                 shading_admission: self.shading_admission.clone(),
+                 shading_guards: self.shading_guards.clone(),
+                 shading_cancelled: self.shading_cancelled.clone(),
++                shading_failed: self.shading_failed.clone(),
+                 outline_cache: self.outline_cache.clone(),
+                 cur_mask: None,
+                 in_type3_glyph: false,
+@@ -474,6 +477,7 @@ impl Renderer {
+                             else { Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>) }
+                         };
+                         let Some(encoded) = s.encode_with_sample_bounds_cancel_and_admission(Some(bbox), &cancelled, &admit) else {
++                            if let Some(failed)=&self.shading_failed {failed();}
+                             self.ctx.set_paint(AlphaColor::<Srgb>::new([0.0; 4]));
+                             return None;
+                         };
+@@ -554,6 +558,7 @@ impl Renderer {
+                             shading_admission: self.shading_admission.clone(),
+                 shading_guards: self.shading_guards.clone(),
+                 shading_cancelled: self.shading_cancelled.clone(),
++                shading_failed: self.shading_failed.clone(),
+                 outline_cache: self.outline_cache.clone(),
+                             in_type3_glyph: false,
+                             scaler: self.scaler,
+@@ -824,6 +829,7 @@ impl<'a> Device<'a> for Renderer {
+                                         shading_admission: self.shading_admission.clone(),
+                 shading_guards: self.shading_guards.clone(),
+                 shading_cancelled: self.shading_cancelled.clone(),
++                shading_failed: self.shading_failed.clone(),
+                 outline_cache: self.outline_cache.clone(),
+                                         cur_mask: None,
+                                         in_type3_glyph: false,
+@@ -915,7 +921,7 @@ impl<'a> Device<'a> for Renderer {
+ 
+                 self.soft_mask_cache
+                     .entry(m.cache_key())
+-                    .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone()))
++                    .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone(), self.shading_failed.clone()))
+                     .clone()
+             }),
+             None,
+@@ -941,7 +947,7 @@ impl<'a> Device<'a> for Renderer {
+ 
+             self.soft_mask_cache
+                 .entry(m.cache_key())
+-                .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone()))
++                .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone(), self.shading_failed.clone()))
+                 .clone()
+         });
+         if let Some(mask) = self.cur_mask.clone() {
+@@ -1126,7 +1132,7 @@ mod renderer_cancellation_tests {
+     }
+ }
+ 
+-fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, height: u16, shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>, shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>, shading_guards: Rc<std::cell::RefCell<Vec<Box<dyn std::any::Any + Send + Sync>>>>) -> Mask {
++fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, height: u16, shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>, shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>, shading_guards: Rc<std::cell::RefCell<Vec<Box<dyn std::any::Any + Send + Sync>>>>, shading_failed: Option<Arc<dyn Fn()+Send+Sync>>) -> Mask {
+     let mut renderer = Renderer {
+         ctx: RenderContext::new_with(width, height, derive_settings(&settings)),
+         inside_pattern: false,
+@@ -1135,6 +1141,7 @@ fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, hei
+         shading_admission,
+         shading_guards,
+         shading_cancelled,
++        shading_failed,
+         outline_cache: Rc::new(std::cell::RefCell::new(HashMap::new())),
+         in_type3_glyph: false,
+         scaler: Scaler::new(ResamplingFunction::CatmullRom),

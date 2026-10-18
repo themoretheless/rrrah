@@ -463,3 +463,102 @@ fn independently_referenced_pdfs_and_profiled_jpegs_match_through_ram_swap_and_m
         assert_eq!(budget.used(), 0);
     }
 }
+
+#[test]
+#[ignore = "requires actual Metal; full parabolic source coverage through RAM/swap SDR and half-float"]
+fn analytic_curved_tensor_preserves_full_metal_frame_through_ram_and_swap() {
+    assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
+    let gpu = common::qualification_gpu().expect("actual Metal required");
+    eprintln!("CURVED_TENSOR_METAL adapter={}", gpu.adapter_name());
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/pdf/tensor-parabolic-rgb.pdf");
+    let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+    let mut request = rrrah_decode::DecodeRequest::new(&path);
+    request.memory_budget = Some(root.clone());
+    let native = rrrah_decode::decode_raster(&request).unwrap();
+    let decode_peak = root.peak();
+    let alpha = include_bytes!("../../../tests/fixtures/pdf/tensor-parabolic-rgb.alpha");
+    let oracle: Vec<u8> = alpha
+        .iter()
+        .flat_map(|&a| if a == 0 { [0, 0, 0, 0] } else { [255, 0, 0, a] })
+        .collect();
+    let rrrah_core::RasterPixels::Rgba8(actual) = native.pixels() else {
+        panic!()
+    };
+    assert_eq!(actual.as_ref(), oracle.as_slice());
+    assert_eq!((native.width(), native.height()), (32, 64));
+    let golden = rrrah_core::DecodedRaster::new(
+        32,
+        64,
+        rrrah_core::RasterPixels::Rgba8(std::sync::Arc::new(oracle).into()),
+        rrrah_core::RasterColorSpace::Srgb,
+    )
+    .unwrap();
+    let golden = rrrah_decode::prepare_raster_for_display(&golden).unwrap();
+    // 16-pixel margins make fit=1: every source pixel reaches this attachment.
+    let size = [64, 96];
+    let view = rrrah_gpu::ViewParameters {
+        viewport: size.map(|v| v as f32),
+        ..Default::default()
+    };
+    let sdr = gpu.render_raster(&golden, view, size).pixels;
+    let half = gpu.render_raster_half(&golden, view, size);
+    let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&root)).unwrap();
+    let check = |frame: &rrrah_core::DecodedRaster| {
+        assert_eq!(gpu.render_raster(frame, view, size).pixels, sdr);
+        assert_eq!(gpu.render_raster_half(frame, view, size), half);
+    };
+    check(&prepared);
+    let mut ram =
+        rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(prepared.capacity_bytes()));
+    assert!(ram.insert(1u8, prepared.clone()));
+    let lease = ram.get_lease(&1).unwrap();
+    assert!(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).is_none());
+    let pressure = root.try_reserve(root.available_bytes()).unwrap();
+    check(&lease);
+    drop((pressure, lease, ram));
+    for source in [native, prepared] {
+        let directory = tempfile::tempdir().unwrap();
+        let weight = source.capacity_bytes();
+        let swap = rrrah_cache::ImageSwapCache::<u8, rrrah_core::DecodedRaster>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(65536),
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            rrrah_core::MemoryBudget::new(weight),
+            root.clone(),
+        )
+        .unwrap();
+        assert_eq!(
+            swap.try_enqueue(1, source.clone()),
+            rrrah_cache::SpillAdmission::Queued
+        );
+        swap.wait_idle().unwrap();
+        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(pressure);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        assert_eq!((restored.width(), restored.height()), (32, 64));
+        match (source.pixels(), restored.pixels()) {
+            (rrrah_core::RasterPixels::Rgba8(a), rrrah_core::RasterPixels::Rgba8(b)) => {
+                assert_eq!(a.as_ref(), b.as_ref())
+            }
+            (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) => {
+                assert_eq!(a.len(), b.len());
+                assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()));
+            }
+            _ => panic!("swap changed pixel representation"),
+        }
+        let display = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        check(&display);
+        let stats = swap.stats();
+        assert_eq!((stats.writes, stats.reads, stats.errors), (1, 1, 0));
+    }
+    assert_eq!(root.used(), 0);
+    eprintln!(
+        "CURVED_TENSOR_PIPELINE source=32x64 readbacks=10 decode_peak={decode_peak} root=8388608 native_and_float_swap=true final=0"
+    );
+}

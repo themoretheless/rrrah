@@ -10561,3 +10561,35 @@ Completed `cargo +stable test --workspace --all-targets --locked --offline`: 238
 ## Current AI fidelity and cache/Metal checks — 2026-10-16
 
 Fresh native vs Poppler 26.10.0 check still fails 2/3 pinned pages: VectorApple 33167 differing pixels/max214; one.ai page0 2522/max58; page1 exact. Three actual corpus RAM/prefetch/page-key, swap/Metal and full-pressure SDR/half-float cache tests passed with final accounted root zero. Bounded viewport transport does not close AI fidelity or PostScript support. [Evidence](research/ai-current-requalification-2026-10-16/REPORT.md).
+
+## PDF/AI missing-font resource refusal — 2026-10-19
+
+Preflight now rejects missing Tf resources before render output admission instead of accepting upstream Helvetica substitution. Page and inherited-Form regressions failed before/fixed after; source-only managed peak, final zero and valid retry verified. Vector lib 181 passed/10 ignored; public decode lib 216 passed/5 ignored; fmt/diff checks pass. This is malformed-input correctness, not a fix for existing AI appearance mismatches. [Evidence](research/pdf-missing-font-refusal-2026-10-19/REPORT.md).
+
+## PDF missing-font viewer recovery — 2026-10-19
+
+Actual foreground and prefetch failures preserve the sole visible red frame, its lease/shared pixels and root use; full-budget RAM hits bypass decode. Repairing the same file successfully preloads through the same gate and enters RAM; final accounted root zero. Full app 287 passed/81 ignored/zero failures; format and diff checks pass. CPU cache recovery only, not a GPU or AI appearance gate. [Report](research/pdf-font-cache-recovery-2026-10-19/REPORT.md).
+
+## PDF unresolved-font diagnostic — 2026-10-19
+
+Hayro now reports existing UnsupportedFont warning when selected font decoding fails; rrrah rejects the fallback render instead of accepting Helvetica substitution. Page and inherited-Form Type0-without-Encoding regression fails before/fixed after, releases root credit and permits valid retry. Ordinary vector/app/public suites total 685 passed/96 ignored/zero failed; format/diff checks pass. Pinned three-page native-reference cache SDR/half-float Metal pressure test also passes, final root zero. AI appearance and physical-HDR qualification remain open. [Evidence](research/pdf-unresolved-font-warning-2026-10-19/REPORT.md).
+
+## AI OutputIntent hypothesis and current strict baseline — 2026-10-19
+
+Pinned plain Catalog inspection rules out missing OutputIntent handling as the cause of these two sources: neither declares one. Fresh native dump after font diagnostics still differs on VectorApple page0 (33167/max214) and one.ai page0 (2522/max58); page1 exact; no decode errors. The guarded inspection tool and exact metrics are in the [report](research/ai-output-intent-boundary-2026-10-19/REPORT.md). No renderer policy changed; general OutputIntent/AI qualification remains unproven.
+
+## Production Tensor adaptive experiment — 2026-10-19
+
+Added independent analytic parabolic Tensor fixture: fixed722-triangle path has alpha error up to19 on2048pixels; compact adaptive candidate is byte-exact. Original VectorApple MAE improves slightly but remains unqualified. Candidate rejects8MiB on the curved control (3,285,360 requested with5,736,013 held), so default integration was reverted rather than raising budgets. Candidate patch/logs retained. Restored vector182 passed/11 ignored; the added known-gap qualification test explicitly fails when run manually. [Full tradeoff and evidence](research/tensor-production-adaptive-candidate-2026-10-19/REPORT.md). Adaptive planning/growth memory remains implementation work, not a completed feature.
+
+## Adaptive mesh working memory — 2026-10-19
+
+Edge-table compaction and exact fan-count output preallocation make the unchanged35584-triangle parabolic adaptive mesh fit8MiB: peak4,975,184/retained3,700,736 accounted bytes. Generic coordinates/components match bit-for-bit; exact-peak success, one-byte-short refusal and last-owner zero pass. Vector183 passed/11 ignored; internal interpreter133 passed/1 ignored. No bound/limit relaxation, RSS or latency claim. Ordinary viewer integration and analytical fixed-grid coverage gap remain open. [Evidence](research/adaptive-mesh-working-set-2026-10-19/REPORT.md).
+
+## Ordinary streaming adaptive Tensor rendering — 2026-10-19
+
+Connected bounded adaptive Tensor1..4component shading to the ordinary PDF/AI renderer through a streaming sampler, avoiding >60MiB retained geometry on original VectorApple. Independent2048pixel parabolic coverage now exact (old max alpha error19). Full1:1 Metal RAM/native+float swap test passes8MiB with3,632,714-byte decode peak/final0; original3page AI pressure gate passes64MiB. Final ordinary suites1134passed/109ignored/0failures; two actual-Metal tests pass. Corrected depth fixture uses valid decimal PDF numbers and verifies explicit refusal/retry. Warm paired CPU: solid0.445→0.198ms; curved0.563→18.399ms; VectorApple395.167→456.923ms (~15% slower). AI still differs on2/3Poppler pages; no complete-format, general-speed or physical-HDR claim. [Implementation, costs and evidence](research/tensor-production-stream-2026-10-19/REPORT.md).
+
+## Streaming capacity planning optimization — 2026-10-19
+
+Removed redundant streaming triangle-count pass while retaining owned-output global reservation and per-emission limits. Six paired warm CPU measurements: curved Tensor18.609→14.606ms (~21.5% faster), VectorApple456.653→420.146ms (~8%); every complex pair improves. All three fixture pixel hashes and accounted peaks unchanged. Flat timing noisy. Actual Apple M4 Max Metal test passes10full-frame comparisons through RAM/native+float swap at8MiB, peak3,632,714/final0. No general format, cold I/O or physical HDR qualification claim. [Raw evidence and limits](research/tensor-stream-planning-2026-10-19/REPORT.md).

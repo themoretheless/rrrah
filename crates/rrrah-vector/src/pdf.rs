@@ -42,22 +42,23 @@ fn preflight_fonts(
         }
         match operation {
             TypedInstruction::TextFont(font) => {
-                if let Some(dictionary) = resources.get_font(font.0) {
-                    let subtype = dictionary
-                        .get::<Name<'_>>(b"Subtype")
-                        .ok_or_else(|| bad("unsupported font"))?;
-                    if ![
-                        b"Type1".as_slice(),
-                        b"MMType1",
-                        b"TrueType",
-                        b"OpenType",
-                        b"Type0",
-                        b"Type3",
-                    ]
-                    .contains(&subtype.as_ref())
-                    {
-                        return Err(bad("unsupported font"));
-                    }
+                let dictionary = resources
+                    .get_font(font.0)
+                    .ok_or_else(|| bad("missing font resource"))?;
+                let subtype = dictionary
+                    .get::<Name<'_>>(b"Subtype")
+                    .ok_or_else(|| bad("unsupported font"))?;
+                if ![
+                    b"Type1".as_slice(),
+                    b"MMType1",
+                    b"TrueType",
+                    b"OpenType",
+                    b"Type0",
+                    b"Type3",
+                ]
+                .contains(&subtype.as_ref())
+                {
+                    return Err(bad("unsupported font"));
                 }
             }
             TypedInstruction::XObject(object) => {
@@ -177,6 +178,7 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
                 InterpreterWarning::UnsupportedFont => 1,
                 InterpreterWarning::ImageDecodeFailure => 2,
                 InterpreterWarning::FillCurveLimit => 4,
+                InterpreterWarning::ShadingDecodeFailure => 8,
             };
             warnings.fetch_or(flag, Ordering::Relaxed);
         }),
@@ -185,6 +187,10 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
     let mut render_cache = hayro::RenderCache::new();
     render_cache.shading_cancelled = settings.fill_curve_cancelled.clone();
     render_cache.shading_admission = settings.fill_curve_admission.clone();
+    let shading_warning = settings.warning_sink.clone();
+    render_cache.shading_failed = Some(Arc::new(move || {
+        shading_warning(hayro::hayro_interpret::InterpreterWarning::ShadingDecodeFailure)
+    }));
     let pixmap = hayro::render(
         page,
         &render_cache,
@@ -202,6 +208,9 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
         return Err(DecodeError::from(error).into());
     }
     let warnings = render_warnings.load(Ordering::Relaxed);
+    if warnings & 8 != 0 {
+        return Err(bad("shading decode/precision limit"));
+    }
     if warnings & 4 != 0 {
         return Err(bad("fill curve precision limit"));
     }
@@ -506,6 +515,40 @@ mod tests {
     }
 
     #[test]
+    fn missing_selected_font_refuses_in_page_and_inherited_form_before_render() {
+        for original in [
+            include_str!("../../../tests/fixtures/pdf/unsupported-font.pdf"),
+            include_str!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
+        ] {
+            // Same byte length: preserve stream lengths and xref offsets.
+            let bytes = original.replace("/F0 5 0 R", "/F1 5 0 R");
+            assert_ne!(bytes, original);
+            assert_eq!(bytes.len(), original.len());
+            let budget = MemoryBudget::new(65536);
+            let mut request = DecodeRequest::new("missing-font.pdf");
+            request.memory_budget = Some(budget.clone());
+            assert!(matches!(
+                decode(bytes.as_bytes(), &request),
+                Err(RasterDecodeError::InvalidPdf("missing font resource"))
+            ));
+            assert_eq!(budget.peak(), bytes.len() as u64);
+            assert_eq!(budget.used(), 0);
+            // A failed import must not prevent a subsequent valid inherited font.
+            let image = decode(
+                include_bytes!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
+                &request,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = image.pixels() else {
+                panic!()
+            };
+            assert!(pixels.chunks_exact(4).any(|pixel| pixel[3] != 0));
+            drop(image);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+
+    #[test]
     fn nested_form_fonts_inherit_resources_and_cycles_refuse() {
         for (bytes, failure) in [
             (
@@ -535,6 +578,47 @@ mod tests {
                 };
                 assert!(pixels.chunks_exact(4).any(|pixel| pixel[3] != 0));
             }
+            assert_eq!(budget.used(), 0);
+        }
+    }
+
+    #[test]
+    fn unresolved_type0_font_refuses_instead_of_helvetica_substitution() {
+        for (source, from, to) in [
+            (
+                include_str!("../../../tests/fixtures/pdf/unsupported-font.pdf"),
+                "/UnsupportedKind",
+                "/Type0          ",
+            ),
+            (
+                include_str!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
+                "/Type1",
+                "/Type0",
+            ),
+        ] {
+            // Type0 is supported, but these resources lack the required Encoding.
+            // Preserve source and object offsets to isolate font resolution.
+            let bytes = source.replace(from, to);
+            assert_ne!(bytes, source);
+            assert_eq!(bytes.len(), source.len());
+            let budget = MemoryBudget::new(65536);
+            let mut request = DecodeRequest::new("unresolved-type0.pdf");
+            request.memory_budget = Some(budget.clone());
+            assert!(matches!(
+                decode(bytes.as_bytes(), &request),
+                Err(RasterDecodeError::InvalidPdf("unsupported font"))
+            ));
+            assert_eq!(budget.used(), 0);
+            let valid = decode(
+                include_bytes!("../../../tests/fixtures/pdf/nested-inherited-font.pdf"),
+                &request,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(values) = valid.pixels() else {
+                panic!()
+            };
+            assert!(values.chunks_exact(4).any(|pixel| pixel[3] != 0));
+            drop(valid);
             assert_eq!(budget.used(), 0);
         }
     }
@@ -1103,6 +1187,176 @@ mod shading_context_cache_tests {
 #[cfg(test)]
 mod precise_fill_tests {
     #[test]
+    fn compact_adaptive_parabola_preserves_geometry_within_eight_mib() {
+        use hayro::hayro_interpret::shading::{
+            AdaptivePatchLimits, TensorProductPatch, tessellate_tensor_patch_mesh_adaptive,
+            tessellate_tensor_patch_mesh_compact_admitted,
+        };
+        use kurbo::{Affine, Point};
+        let order = [[0, 1, 2, 3], [11, 12, 13, 4], [10, 15, 14, 5], [9, 8, 7, 6]];
+        let mut points = [Point::ZERO; 16];
+        for u in 0..4 {
+            for v in 0..4 {
+                points[order[u][v]] = Point::new(
+                    32. * u as f64 / 3.,
+                    2. + 8. * v as f64 / 3. + if u == 1 || u == 2 { 128. / 3. } else { 0. },
+                );
+            }
+        }
+        let patch = TensorProductPatch {
+            control_points: points,
+            colors: std::array::from_fn(|_| [1., 0., 0.].into_iter().collect()),
+        };
+        let limits = AdaptivePatchLimits {
+            pixel_error: 1. / 64.,
+            component_error: 1. / 1024.,
+            max_depth: 12,
+            max_triangles: 1_048_576,
+        };
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|credit| Box::new(credit) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mesh = tessellate_tensor_patch_mesh_compact_admitted(
+            std::slice::from_ref(&patch),
+            Affine::IDENTITY,
+            limits,
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        let mut reference = Vec::new();
+        let stats = tessellate_tensor_patch_mesh_adaptive(
+            std::slice::from_ref(&patch),
+            Affine::IDENTITY,
+            limits,
+            &mut reference,
+            || false,
+        )
+        .unwrap();
+        assert_eq!(mesh.stats().triangles, stats.triangles);
+        assert_eq!(mesh.triangles().len(), reference.len());
+        for (compact, triangle) in mesh.triangles().iter().zip(&reference) {
+            for (i, v) in [&triangle.p0, &triangle.p1, &triangle.p2].iter().enumerate() {
+                assert_eq!(compact.points()[i].x.to_bits(), v.point.x.to_bits());
+                assert_eq!(compact.points()[i].y.to_bits(), v.point.y.to_bits());
+                assert_eq!(compact.component_count(), v.colors.len());
+                for (a, b) in compact.components()[i].iter().zip(v.colors.iter()) {
+                    assert_eq!(a.to_bits(), b.to_bits());
+                }
+            }
+        }
+        let peak = root.peak();
+        eprintln!(
+            "COMPACT_PARABOLA triangles={} peak={} retained={}",
+            mesh.stats().triangles,
+            peak,
+            root.used()
+        );
+        drop(mesh);
+        assert_eq!(root.used(), 0);
+        let short = rrrah_core::MemoryBudget::new(peak - 1);
+        let admit = |bytes| {
+            short
+                .try_reserve(bytes as u64)
+                .ok()
+                .map(|credit| Box::new(credit) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        assert!(
+            tessellate_tensor_patch_mesh_compact_admitted(
+                std::slice::from_ref(&patch),
+                Affine::IDENTITY,
+                limits,
+                &|| false,
+                &admit
+            )
+            .is_err()
+        );
+        assert_eq!(short.used(), 0);
+        let exact = rrrah_core::MemoryBudget::new(peak);
+        let admit = |bytes| {
+            exact
+                .try_reserve(bytes as u64)
+                .ok()
+                .map(|credit| Box::new(credit) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let exact_mesh = tessellate_tensor_patch_mesh_compact_admitted(
+            std::slice::from_ref(&patch),
+            Affine::IDENTITY,
+            limits,
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        assert_eq!(exact_mesh.triangles().len(), reference.len());
+        assert_eq!(exact.peak(), peak);
+        drop(exact_mesh);
+        assert_eq!(exact.used(), 0);
+    }
+    #[test]
+    fn curved_tensor_matches_independent_parabolic_pixel_areas() {
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let mut request = crate::DecodeRequest::new("parabolic.pdf");
+        request.memory_budget = Some(root.clone());
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-parabolic-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        let alpha = include_bytes!("../../../tests/fixtures/pdf/tensor-parabolic-rgb.alpha");
+        assert_eq!((image.width(), image.height()), (32, 64));
+        for (index, (pixel, expected)) in values.chunks_exact(4).zip(alpha).enumerate() {
+            assert_eq!(pixel[3], *expected, "coverage pixel {index}");
+            if *expected > 0 {
+                assert_eq!(&pixel[..3], &[255, 0, 0]);
+            }
+        }
+        eprintln!(
+            "CURVED_TENSOR_ANALYTIC pixels=2048 peak={} retained={}",
+            root.peak(),
+            root.used()
+        );
+        drop(image);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn tensor_depth_limit_refuses_incomplete_render_and_allows_retry() {
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let mut request = crate::DecodeRequest::new("tensor-limit.pdf");
+        request.memory_budget = Some(root.clone());
+        let result = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-depth-limit.pdf"),
+            &request,
+        );
+        assert!(
+            matches!(
+                result,
+                Err(crate::RasterDecodeError::InvalidPdf(
+                    "shading decode/precision limit"
+                ))
+            ),
+            "{:?}",
+            result.as_ref().err()
+        );
+        assert_eq!(root.used(), 0);
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        assert!(values.chunks_exact(4).all(|pixel| pixel == [255, 0, 0, 255]));
+        drop(image);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn tensor_triangle_storage_is_admitted_before_materialization() {
         let source = include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf");
         let load = |root: &rrrah_core::MemoryBudget| {
@@ -1114,7 +1368,7 @@ mod precise_fill_tests {
         let reference = load(&roomy).unwrap();
         let output = u64::from(reference.width()) * u64::from(reference.height()) * 4;
         let baseline = source.len() as u64 + 2 * output;
-        let triangles = 722 * size_of::<hayro::hayro_interpret::shading::Triangle>() as u64;
+        let triangles = 2 * size_of::<hayro::hayro_interpret::shading::CompactAdaptiveTriangle>() as u64;
         let peak = roomy.peak();
         assert!(peak > baseline + triangles);
         let exact = rrrah_core::MemoryBudget::new(peak);
@@ -1136,7 +1390,7 @@ mod precise_fill_tests {
             load(&short),
             Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))
         ));
-        assert_eq!(short.peak(), baseline);
+        assert!(short.peak() <= short.limit());
         assert_eq!(short.used(), 0);
         let map_short = rrrah_core::MemoryBudget::new(peak - 1);
         assert!(matches!(

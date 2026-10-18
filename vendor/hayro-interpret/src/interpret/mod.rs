@@ -134,14 +134,16 @@ impl Default for InterpreterSettings {
 #[derive(Copy, Clone, Debug)]
 /// Warnings that can occur while interpreting a PDF file.
 pub enum InterpreterWarning {
-    /// An unsupported font kind was encountered.
-    ///
-    /// Currently, only CID fonts with non-identity encoding are unsupported.
+    /// A selected font resource could not be resolved or decoded.
+    /// Permissive clients may still receive a fallback rendering; strict clients
+    /// should reject that result rather than present substituted text as exact.
     UnsupportedFont,
     /// An image failed to decode.
     ImageDecodeFailure,
     /// Precise fill subdivision exceeded its geometry or resource bounds.
     FillCurveLimit,
+    /// Shading encoding could not meet geometry or resource limits.
+    ShadingDecodeFailure,
 }
 
 /// interpret the contents of the page and render them into the device.

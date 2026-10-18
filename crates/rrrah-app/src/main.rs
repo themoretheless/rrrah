@@ -7536,6 +7536,74 @@ mod foreground_loader_tests {
         assert_eq!(budget.used(), 0);
     }
     #[test]
+    fn missing_pdf_font_failure_preserves_visible_cache_and_retries_same_path() {
+        let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("font.pdf");
+        let original = include_str!("../../../tests/fixtures/pdf/nested-inherited-font.pdf");
+        let broken = original.replace("/F0 5 0 R", "/F1 5 0 R");
+        assert_ne!(broken, original);
+        std::fs::write(&path, broken).unwrap();
+        let root = rrrah_cache::MemoryBudget::new(65536);
+        let mut visible_request = DecodeRequest::new(fixtures.join("red-green-pages.pdf"));
+        visible_request.memory_budget = Some(root.clone());
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(root.clone());
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
+            max_bytes: 65536,
+            max_entries: Some(2),
+            ttl: None,
+        });
+        let (visible, _) = load_cached_raster_for_display(&visible_request, None, &mut cache).unwrap();
+        let used = root.used();
+        let gate = Arc::new(DecodeGate::new());
+        for prefetch in [false, true] {
+            let result = if prefetch {
+                preload_raster(&request, None, &mut cache, &gate)
+            } else {
+                load_cached_raster_for_display(&request, None, &mut cache)
+            };
+            let error = result.unwrap_err();
+            assert!(error.contains("missing font resource"), "{error}");
+            assert_eq!(cache.len(), 1);
+            assert_eq!(root.used(), used);
+            assert!(cache.get_visible_lease_for(&visible).is_some());
+            let pressure = root.try_reserve(root.available_bytes()).unwrap();
+            let (hit, _) = load_cached_raster_with(&visible_request, None, &mut cache, || {
+                panic!("failed PDF evicted visible frame")
+            })
+            .unwrap();
+            let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                (visible.pixels(), hit.pixels())
+            else {
+                panic!()
+            };
+            assert!(a.ptr_eq(b));
+            assert!(b.chunks_exact(4).all(|pixel| pixel == [1., 0., 0., 1.]));
+            drop((hit, pressure));
+            assert_eq!(root.used(), used);
+        }
+        // Repair the same file, exercising source identity and releasing the
+        // failed prefetch's gate permit rather than using a separate request key.
+        std::fs::write(&path, original).unwrap();
+        let (repaired, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
+        assert_eq!(cache.len(), 2);
+        assert_eq!((repaired.width(), repaired.height()), (100, 20));
+        let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("repaired PDF did not enter RAM cache")
+        })
+        .unwrap();
+        let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+            (repaired.pixels(), hit.pixels())
+        else {
+            panic!()
+        };
+        assert!(a.ptr_eq(b));
+        drop((hit, repaired, visible, cache));
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
     fn incomplete_pdf_prefetch_is_not_cached_and_next_decode_can_run() {
         let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
         let budget = rrrah_cache::MemoryBudget::new(65536);

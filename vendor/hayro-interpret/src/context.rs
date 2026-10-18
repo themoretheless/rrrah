@@ -328,6 +328,9 @@ impl<'a> Context<'a> {
         if let Some(resolved) = resolved {
             Some(TextStateFont::Font(resolved))
         } else {
+            // Keep the upstream fallback for permissive clients, but allow strict
+            // importers to reject an incomplete render instead of accepting it.
+            (self.settings.warning_sink)(crate::InterpreterWarning::UnsupportedFont);
             Font::new_standard(StandardFont::Helvetica, &self.settings.font_resolver)
                 .map(TextStateFont::Fallback)
         }

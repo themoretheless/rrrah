@@ -4,7 +4,7 @@
 
 mod adaptive;
 pub use adaptive::{
-    CompactAdaptiveTriangle, tessellate_tensor_patch_mesh_compact_admitted,
+    CompactAdaptiveTriangle, tessellate_tensor_patch_mesh_compact_admitted, tessellate_patch_mesh_compact_admitted, tessellate_patch_mesh_stream_admitted,
     AdmittedAdaptivePatchMesh, AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
     tessellate_patch_mesh_adaptive_admitted, tessellate_tensor_patch_mesh_adaptive_admitted,
     tessellate_patch_mesh_adaptive, tessellate_patch_mesh_adaptive_with_ranges,
