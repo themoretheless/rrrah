@@ -168,8 +168,15 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<GifImage, RasterDecod
                 RasterPixels::Rgba8(Arc::new(pixels.into_raw()).into()),
                 RasterColorSpace::Srgb,
             )?
-            .with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(delays[index], 1,
-                match repeats { None => 1, Some(0) => 0, Some(n) => u32::from(n) + 1 })?))
+            .with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(
+                delays[index],
+                1,
+                match repeats {
+                    None => 1,
+                    Some(0) => 0,
+                    Some(n) => u32::from(n) + 1,
+                },
+            )?))
             .with_image_selection(index, count)?;
             return Ok(GifImage {
                 raster,

@@ -20,7 +20,10 @@ pub(crate) fn read_checked(
             Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
             result => {
                 request.check_cancelled()?;
-                return result.map_err(|source| DecodeError::Io { path: request.path.clone(), source });
+                return result.map_err(|source| DecodeError::Io {
+                    path: request.path.clone(),
+                    source,
+                });
             }
         }
     }
@@ -34,7 +37,10 @@ pub(crate) fn read_exact_checked(
     while !output.is_empty() {
         let count = read_checked(reader, request, output)?;
         if count == 0 {
-            return Err(DecodeError::Io { path: request.path.clone(), source: std::io::ErrorKind::UnexpectedEof.into() });
+            return Err(DecodeError::Io {
+                path: request.path.clone(),
+                source: std::io::ErrorKind::UnexpectedEof.into(),
+            });
         }
         output = &mut output[count..];
     }
@@ -87,16 +93,24 @@ fn read_legacy_stream(
         .map_err(|_| DecodeError::InputAllocation { bytes: capacity })?;
     let mut scratch = [0u8; 64 * 1024];
     loop {
-        let probe = (limit.saturating_sub(data.len() as u64).saturating_add(1))
-            .min(scratch.len() as u64) as usize;
+        let probe =
+            (limit.saturating_sub(data.len() as u64).saturating_add(1)).min(scratch.len() as u64) as usize;
         let count = read_checked(reader, request, &mut scratch[..probe])?;
-        if count == 0 { return Ok(data); }
+        if count == 0 {
+            return Ok(data);
+        }
         let actual = data.len() as u64 + count as u64;
         if actual > limit {
-            return Err(DecodeError::InputTooLarge { path: request.path.clone(), actual, limit });
+            return Err(DecodeError::InputTooLarge {
+                path: request.path.clone(),
+                actual,
+                limit,
+            });
         }
         data.try_reserve_exact(count)
-            .map_err(|_| DecodeError::InputAllocation { bytes: actual as usize })?;
+            .map_err(|_| DecodeError::InputAllocation {
+                bytes: actual as usize,
+            })?;
         data.extend_from_slice(&scratch[..count]);
     }
 }
@@ -187,15 +201,28 @@ pub fn read_managed(request: &DecodeRequest) -> Result<rrrah_core::PixelBuffer<u
 #[cfg(test)]
 mod interrupted_read_tests {
     use super::*;
-    use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
-    struct Reader { calls: usize, token: Arc<AtomicU64>, interrupt: bool }
+    use std::sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+    };
+    struct Reader {
+        calls: usize,
+        token: Arc<AtomicU64>,
+        interrupt: bool,
+    }
     impl Read for Reader {
         fn read(&mut self, out: &mut [u8]) -> std::io::Result<usize> {
             self.calls += 1;
-            if self.calls == 3 { self.token.store(2, Ordering::Release); }
+            if self.calls == 3 {
+                self.token.store(2, Ordering::Release);
+            }
             assert!(self.calls <= 3, "cancelled reader retried");
-            if self.interrupt { Err(std::io::ErrorKind::Interrupted.into()) }
-            else { out[0] = 42; Ok(1) }
+            if self.interrupt {
+                Err(std::io::ErrorKind::Interrupted.into())
+            } else {
+                out[0] = 42;
+                Ok(1)
+            }
         }
     }
     #[test]
@@ -204,14 +231,23 @@ mod interrupted_read_tests {
             let token = Arc::new(AtomicU64::new(1));
             let mut request = DecodeRequest::new("controlled.raw");
             request.cancellation = Some(crate::GenerationToken::new(token.clone(), 1));
-            let mut reader = Reader { calls: 0, token, interrupt };
-            assert!(matches!(read_exact_checked(&mut reader, &request, &mut [0; 16]), Err(DecodeError::Cancelled)));
+            let mut reader = Reader {
+                calls: 0,
+                token,
+                interrupt,
+            };
+            assert!(matches!(
+                read_exact_checked(&mut reader, &request, &mut [0; 16]),
+                Err(DecodeError::Cancelled)
+            ));
             assert_eq!(reader.calls, 3);
         }
     }
     #[test]
     fn cancelled_eof_never_publishes_legacy_source() {
-        struct CancelEof { token: Arc<AtomicU64> }
+        struct CancelEof {
+            token: Arc<AtomicU64>,
+        }
         impl Read for CancelEof {
             fn read(&mut self, _: &mut [u8]) -> std::io::Result<usize> {
                 self.token.store(2, Ordering::Release);
@@ -221,14 +257,27 @@ mod interrupted_read_tests {
         let token = Arc::new(AtomicU64::new(1));
         let mut request = DecodeRequest::new("controlled.raw");
         request.cancellation = Some(crate::GenerationToken::new(token.clone(), 1));
-        assert!(matches!(read_legacy_stream(&mut CancelEof { token: token.clone() }, &request, 0, 16), Err(DecodeError::Cancelled)));
+        assert!(matches!(
+            read_legacy_stream(&mut CancelEof { token: token.clone() }, &request, 0, 16),
+            Err(DecodeError::Cancelled)
+        ));
         token.store(1, Ordering::Release);
-        assert!(matches!(read_checked(&mut CancelEof { token }, &request, &mut [0]), Err(DecodeError::Cancelled)));
+        assert!(matches!(
+            read_checked(&mut CancelEof { token }, &request, &mut [0]),
+            Err(DecodeError::Cancelled)
+        ));
     }
 
     #[test]
     fn already_cancelled_public_source_read_skips_file_open_in_both_modes() {
-        let missing = std::env::temp_dir().join(format!("rrrah-cancelled-missing-{}-{}.raw", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        let missing = std::env::temp_dir().join(format!(
+            "rrrah-cancelled-missing-{}-{}.raw",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
         assert!(!missing.exists());
         let token = Arc::new(AtomicU64::new(2));
         let mut request = DecodeRequest::new(missing);
@@ -247,15 +296,39 @@ mod interrupted_read_tests {
             let token = Arc::new(AtomicU64::new(1));
             let mut request = DecodeRequest::new("controlled.raw");
             request.cancellation = Some(crate::GenerationToken::new(token.clone(), 1));
-            let mut reader = Reader { calls: 0, token, interrupt };
-            assert!(matches!(read_legacy_stream(&mut reader, &request, 0, 16), Err(DecodeError::Cancelled)));
+            let mut reader = Reader {
+                calls: 0,
+                token,
+                interrupt,
+            };
+            assert!(matches!(
+                read_legacy_stream(&mut reader, &request, 0, 16),
+                Err(DecodeError::Cancelled)
+            ));
             assert_eq!(reader.calls, 3);
         }
         let request = DecodeRequest::new("controlled.raw");
-        assert_eq!(read_legacy_stream(&mut &b"abc"[..], &request, 0, 3).unwrap(), b"abc");
+        assert_eq!(
+            read_legacy_stream(&mut &b"abc"[..], &request, 0, 3).unwrap(),
+            b"abc"
+        );
         assert_eq!(read_legacy_stream(&mut &b""[..], &request, 0, 0).unwrap(), b"");
-        assert!(matches!(read_legacy_stream(&mut &b"abcd"[..], &request, 1, 3), Err(DecodeError::InputTooLarge { actual: 4, limit: 3, .. })));
-        assert!(matches!(read_legacy_stream(&mut &b"x"[..], &request, 0, 0), Err(DecodeError::InputTooLarge { actual: 1, limit: 0, .. })));
+        assert!(matches!(
+            read_legacy_stream(&mut &b"abcd"[..], &request, 1, 3),
+            Err(DecodeError::InputTooLarge {
+                actual: 4,
+                limit: 3,
+                ..
+            })
+        ));
+        assert!(matches!(
+            read_legacy_stream(&mut &b"x"[..], &request, 0, 0),
+            Err(DecodeError::InputTooLarge {
+                actual: 1,
+                limit: 0,
+                ..
+            })
+        ));
     }
 
     #[test]
@@ -264,7 +337,9 @@ mod interrupted_read_tests {
         let mut output = [0; 3];
         read_exact_checked(&mut &b"abc"[..], &request, &mut output).unwrap();
         assert_eq!(&output, b"abc");
-        assert!(matches!(read_exact_checked(&mut &b"ab"[..], &request, &mut output), Err(DecodeError::Io { source, .. }) if source.kind() == std::io::ErrorKind::UnexpectedEof));
+        assert!(
+            matches!(read_exact_checked(&mut &b"ab"[..], &request, &mut output), Err(DecodeError::Io { source, .. }) if source.kind() == std::io::ErrorKind::UnexpectedEof)
+        );
         assert_eq!(read_checked(&mut &b""[..], &request, &mut output).unwrap(), 0);
     }
 }

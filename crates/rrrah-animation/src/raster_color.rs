@@ -14,7 +14,9 @@ pub enum RasterColorError {
     Icc(String),
     #[error("ICC source must describe RGB or replicated grayscale samples; other layouts are unsupported")]
     UnsupportedProfileSpace,
-    #[error("ICC input must be finite, nonnegative and normalized unless the source profile is explicitly linear")]
+    #[error(
+        "ICC input must be finite, nonnegative and normalized unless the source profile is explicitly linear"
+    )]
     InvalidInput,
     #[error("linear raster exceeds the bounded allocation limit")]
     OutputTooLarge,
@@ -101,8 +103,12 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
     let extended_linear = profile.lut_a_to_b_perceptual.is_none()
         && profile.lut_a_to_b_colorimetric.is_none()
         && profile.lut_a_to_b_saturation.is_none()
-        && if gray { linear_curve(&profile.gray_trc) } else {
-            linear_curve(&profile.red_trc) && linear_curve(&profile.green_trc) && linear_curve(&profile.blue_trc)
+        && if gray {
+            linear_curve(&profile.gray_trc)
+        } else {
+            linear_curve(&profile.red_trc)
+                && linear_curve(&profile.green_trc)
+                && linear_curve(&profile.blue_trc)
         };
     let valid_input = |value: f64| value.is_finite() && value >= 0.0 && (extended_linear || value <= 1.0);
     // Reject inadmissible float input before reserving the full output and rows.
@@ -113,10 +119,7 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
             if index.is_multiple_of(4096) {
                 check()?;
             }
-            if rgba[..3]
-                .iter()
-                .any(|v| !valid_input(f64::from(*v)))
-            {
+            if rgba[..3].iter().any(|v| !valid_input(f64::from(*v))) {
                 return Err(RasterColorError::InvalidInput);
             }
             if !rgba[3].is_finite() || !(0.0..=1.0).contains(&rgba[3]) {
@@ -141,8 +144,10 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
     }
     let mut destination = ColorProfile::new_srgb();
     rrrah_vector::icc_colorimetry::set_rgb_colorimetry(
-        &mut destination, [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290],
-    ).expect("standard sRGB chromaticities are valid");
+        &mut destination,
+        [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290],
+    )
+    .expect("standard sRGB chromaticities are valid");
     let linear = ToneReprCurve::Parametric(vec![1.0]);
     destination.red_trc = Some(linear.clone());
     destination.green_trc = Some(linear.clone());
@@ -304,7 +309,8 @@ mod tests {
     fn independent_littlecms_profile_matches_srgb_reference_across_the_pattern() {
         use image::ImageDecoder;
         let bytes = include_bytes!("../../../tests/fixtures/raster/pattern.profiled.png");
-        let mut decoder = image::codecs::png::PngDecoder::new(std::io::Cursor::new(bytes.as_slice())).unwrap();
+        let mut decoder =
+            image::codecs::png::PngDecoder::new(std::io::Cursor::new(bytes.as_slice())).unwrap();
         let icc = decoder.icc_profile().unwrap().unwrap();
         let img = image::DynamicImage::from_decoder(decoder).unwrap().into_rgba8();
         let frame = DecodedRaster::new(
@@ -347,24 +353,38 @@ mod tests {
         let pixels = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0.rgba");
         let profile = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0.icc");
         let oracle = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0-lcms.rgb64le");
-        assert_eq!(oracle.len(),256*3*8);
-        let budget = rrrah_core::MemoryBudget::new(4*1024*1024);
-        let frame = DecodedRaster::new(400,359,RasterPixels::Rgba8(Arc::new(pixels.to_vec()).into()),RasterColorSpace::Icc(profile.to_vec())).unwrap().try_manage_pixels(&budget).unwrap();
-        let prepared = prepare_raster_for_display_with_budget(&frame,Some(&budget)).unwrap();
-        let RasterPixels::Rgba32Float(actual)=prepared.pixels() else {panic!()};
+        assert_eq!(oracle.len(), 256 * 3 * 8);
+        let budget = rrrah_core::MemoryBudget::new(4 * 1024 * 1024);
+        let frame = DecodedRaster::new(
+            400,
+            359,
+            RasterPixels::Rgba8(Arc::new(pixels.to_vec()).into()),
+            RasterColorSpace::Icc(profile.to_vec()),
+        )
+        .unwrap()
+        .try_manage_pixels(&budget)
+        .unwrap();
+        let prepared = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+        let RasterPixels::Rgba32Float(actual) = prepared.pixels() else {
+            panic!()
+        };
         let mut maximum = 0f64;
-        for (pixel,rgba) in pixels.chunks_exact(4).enumerate() {
-            assert_eq!(rgba[0],rgba[1]);assert_eq!(rgba[1],rgba[2]);
+        for (pixel, rgba) in pixels.chunks_exact(4).enumerate() {
+            assert_eq!(rgba[0], rgba[1]);
+            assert_eq!(rgba[1], rgba[2]);
             for c in 0..3 {
-                let offset=(usize::from(rgba[0])*3+c)*8;
-                let expected=f64::from_le_bytes(oracle[offset..offset+8].try_into().unwrap());
-                let error=(f64::from(actual[pixel*4+c])-expected).abs();maximum=maximum.max(error);
-                assert!(error<=2e-5,"pixel={pixel} channel={c} error={error}");
+                let offset = (usize::from(rgba[0]) * 3 + c) * 8;
+                let expected = f64::from_le_bytes(oracle[offset..offset + 8].try_into().unwrap());
+                let error = (f64::from(actual[pixel * 4 + c]) - expected).abs();
+                maximum = maximum.max(error);
+                assert!(error <= 2e-5, "pixel={pixel} channel={c} error={error}");
             }
-            assert_eq!(actual[pixel*4+3],f32::from(rgba[3])/255.);
+            assert_eq!(actual[pixel * 4 + 3], f32::from(rgba[3]) / 255.);
         }
         eprintln!("GRAY_ALPHA_LCMS pixels=143600 max_abs_error={maximum} alpha_exact=true");
-        drop(prepared);drop(frame);assert_eq!(budget.used(),0);
+        drop(prepared);
+        drop(frame);
+        assert_eq!(budget.used(), 0);
     }
 
     #[test]
@@ -373,28 +393,44 @@ mod tests {
             &include_bytes!("../../../tests/fixtures/raster/psd-tools-4x4_32bit_grayscale.psd.icc")[..],
             &include_bytes!("../../../tests/fixtures/raster/linear-identity-grayscale.icc")[..],
         ] {
-        let expected = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray-linear-hdr.rgb64le");
-        let input = [1.00001f32,2.,4.,16.];
-        let values = input.into_iter().enumerate().flat_map(|(i,v)| [v,v,v,i as f32/4.]).collect::<Vec<_>>();
-        let budget = rrrah_core::MemoryBudget::new(1024*1024);
-        let frame = DecodedRaster::new(4,1,RasterPixels::Rgba32Float(Arc::new(values).into()),RasterColorSpace::Icc(profile.to_vec())).unwrap().try_manage_pixels(&budget).unwrap();
-        let ready = prepare_raster_for_display_with_budget(&frame,Some(&budget)).unwrap();
-        let RasterPixels::Rgba32Float(actual) = ready.pixels() else {panic!()};
-        let mut maximum = 0f64;
-        for pixel in 0..4 {
-            for c in 0..3 {
-                let offset = (pixel*3+c)*8;
-                let reference = f64::from_le_bytes(expected[offset..offset+8].try_into().unwrap());
-                let error = (f64::from(actual[pixel*4+c])-reference).abs();
-                maximum = maximum.max(error);
-                assert!(error<=2e-5,"pixel={pixel} channel={c} error={error}");
-                assert!(actual[pixel*4+c]>1.);
+            let expected = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray-linear-hdr.rgb64le");
+            let input = [1.00001f32, 2., 4., 16.];
+            let values = input
+                .into_iter()
+                .enumerate()
+                .flat_map(|(i, v)| [v, v, v, i as f32 / 4.])
+                .collect::<Vec<_>>();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let frame = DecodedRaster::new(
+                4,
+                1,
+                RasterPixels::Rgba32Float(Arc::new(values).into()),
+                RasterColorSpace::Icc(profile.to_vec()),
+            )
+            .unwrap()
+            .try_manage_pixels(&budget)
+            .unwrap();
+            let ready = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+            let RasterPixels::Rgba32Float(actual) = ready.pixels() else {
+                panic!()
+            };
+            let mut maximum = 0f64;
+            for pixel in 0..4 {
+                for c in 0..3 {
+                    let offset = (pixel * 3 + c) * 8;
+                    let reference = f64::from_le_bytes(expected[offset..offset + 8].try_into().unwrap());
+                    let error = (f64::from(actual[pixel * 4 + c]) - reference).abs();
+                    maximum = maximum.max(error);
+                    assert!(error <= 2e-5, "pixel={pixel} channel={c} error={error}");
+                    assert!(actual[pixel * 4 + c] > 1.);
+                }
+                assert_eq!(actual[pixel * 4 + 3], pixel as f32 / 4.);
             }
-            assert_eq!(actual[pixel*4+3],pixel as f32/4.);
+            eprintln!("GRAY_LINEAR_HDR_LCMS max_abs_error={maximum} bound=0.00002 alpha_exact=true");
+            drop(ready);
+            drop(frame);
+            assert_eq!(budget.used(), 0);
         }
-        eprintln!("GRAY_LINEAR_HDR_LCMS max_abs_error={maximum} bound=0.00002 alpha_exact=true");
-        drop(ready);drop(frame);assert_eq!(budget.used(),0);
-            }
     }
 
     #[test]
@@ -403,46 +439,90 @@ mod tests {
             include_bytes!("../../../tests/fixtures/raster/psd-tools-4x4_32bit_rgb.psd.icc").to_vec(),
             include_bytes!("../../../tests/fixtures/raster/linear-identity-rgb.icc").to_vec(),
         ] {
-        let expected = include_bytes!("../../../tests/fixtures/raster/psd-tools-linear-hdr.rgb64le");
-        let make = |values: Vec<f32>| DecodedRaster::new(1,1,
-            RasterPixels::Rgba32Float(Arc::new(values).into()),RasterColorSpace::Icc(bytes.clone())).unwrap();
-        let budget = rrrah_core::MemoryBudget::new(1024*1024);
-        let frame = make(vec![1.00001,2.,4.,0.25]);
-        let ready = prepare_raster_for_display_with_budget(&frame,Some(&budget)).unwrap();
-        let RasterPixels::Rgba32Float(actual) = ready.pixels() else { panic!() };
-        for (&value,expected) in actual[..3].iter().zip(expected.chunks_exact(8).map(|b| f64::from_le_bytes(b.try_into().unwrap()))) {
-            assert!((f64::from(value)-expected).abs()<=2e-5,"{value} vs {expected}");
-        }
-        assert_eq!(actual[3],0.25);
-        drop(ready);assert_eq!(budget.used(),0);
-        let invalid = make(vec![-0.1,2.,4.,0.25]);
-        assert!(matches!(prepare_raster_for_display_with_budget(&invalid,Some(&budget)),Err(RasterColorError::InvalidInput)));
-        assert_eq!(budget.used(),0);
+            let expected = include_bytes!("../../../tests/fixtures/raster/psd-tools-linear-hdr.rgb64le");
+            let make = |values: Vec<f32>| {
+                DecodedRaster::new(
+                    1,
+                    1,
+                    RasterPixels::Rgba32Float(Arc::new(values).into()),
+                    RasterColorSpace::Icc(bytes.clone()),
+                )
+                .unwrap()
+            };
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let frame = make(vec![1.00001, 2., 4., 0.25]);
+            let ready = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+            let RasterPixels::Rgba32Float(actual) = ready.pixels() else {
+                panic!()
+            };
+            for (&value, expected) in actual[..3].iter().zip(
+                expected
+                    .chunks_exact(8)
+                    .map(|b| f64::from_le_bytes(b.try_into().unwrap())),
+            ) {
+                assert!(
+                    (f64::from(value) - expected).abs() <= 2e-5,
+                    "{value} vs {expected}"
+                );
             }
+            assert_eq!(actual[3], 0.25);
+            drop(ready);
+            assert_eq!(budget.used(), 0);
+            let invalid = make(vec![-0.1, 2., 4., 0.25]);
+            assert!(matches!(
+                prepare_raster_for_display_with_budget(&invalid, Some(&budget)),
+                Err(RasterColorError::InvalidInput)
+            ));
+            assert_eq!(budget.used(), 0);
+        }
     }
 
     #[test]
     fn gray_icc_matches_pinned_independent_littlecms_double_reference() {
         let profile = include_bytes!("../../../tests/fixtures/raster/gray-gamma2-lcms.icc");
         let reference = include_bytes!("../../../tests/fixtures/raster/gray-gamma2-lcms.rgb64le");
-        let samples = [0u16,32768,32769,65535];
-        let alpha = [0u16,16384,32768,65535];
-        let values: Vec<u16> = samples.into_iter().zip(alpha).flat_map(|(value, alpha)| [value,value,value,alpha]).collect();
+        let samples = [0u16, 32768, 32769, 65535];
+        let alpha = [0u16, 16384, 32768, 65535];
+        let values: Vec<u16> = samples
+            .into_iter()
+            .zip(alpha)
+            .flat_map(|(value, alpha)| [value, value, value, alpha])
+            .collect();
         let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
-        let frame = DecodedRaster::new(4,1,RasterPixels::Rgba16(Arc::new(values).into()),RasterColorSpace::Icc(profile.to_vec())).unwrap().try_manage_pixels(&budget).unwrap();
-        let prepared = prepare_raster_for_display_with_budget(&frame,Some(&budget)).unwrap();
-        let RasterPixels::Rgba32Float(actual) = prepared.pixels() else { panic!() };
-        let expected: Vec<f64> = reference.chunks_exact(8).map(|b| f64::from_le_bytes(b.try_into().unwrap())).collect();
-        assert_eq!(expected.len(),12);
+        let frame = DecodedRaster::new(
+            4,
+            1,
+            RasterPixels::Rgba16(Arc::new(values).into()),
+            RasterColorSpace::Icc(profile.to_vec()),
+        )
+        .unwrap()
+        .try_manage_pixels(&budget)
+        .unwrap();
+        let prepared = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+        let RasterPixels::Rgba32Float(actual) = prepared.pixels() else {
+            panic!()
+        };
+        let expected: Vec<f64> = reference
+            .chunks_exact(8)
+            .map(|b| f64::from_le_bytes(b.try_into().unwrap()))
+            .collect();
+        assert_eq!(expected.len(), 12);
         let mut maximum = 0f64;
         for pixel in 0..4 {
-            for channel in 0..3 { maximum = maximum.max((f64::from(actual[pixel*4+channel])-expected[pixel*3+channel]).abs()); }
-            assert_eq!(actual[pixel*4+3], f32::from(alpha[pixel])/65535.);
+            for channel in 0..3 {
+                maximum = maximum
+                    .max((f64::from(actual[pixel * 4 + channel]) - expected[pixel * 3 + channel]).abs());
+            }
+            assert_eq!(actual[pixel * 4 + 3], f32::from(alpha[pixel]) / 65535.);
         }
         assert!(actual[4] < actual[8]);
-        eprintln!("GRAY_ICC_LCMS pixels=4 max_rgb_error={maximum:.12} bound=0.00002 alpha_exact=true adjacent_u16_distinct=true");
+        eprintln!(
+            "GRAY_ICC_LCMS pixels=4 max_rgb_error={maximum:.12} bound=0.00002 alpha_exact=true adjacent_u16_distinct=true"
+        );
         assert!(maximum <= 2e-5);
-        drop(prepared);drop(frame);assert_eq!(budget.used(),0);
+        drop(prepared);
+        drop(frame);
+        assert_eq!(budget.used(), 0);
     }
 
     #[test]
@@ -455,16 +535,23 @@ mod tests {
         let peak_bytes = native_bytes + 65536 * (16 + 8 + 24);
         let budget = rrrah_core::MemoryBudget::new(peak_bytes);
         let frame = DecodedRaster::new(
-            65536, 1, RasterPixels::Rgba16(Arc::new(values).into()),
+            65536,
+            1,
+            RasterPixels::Rgba16(Arc::new(values).into()),
             RasterColorSpace::Icc(profile.to_vec()),
-        ).unwrap().try_manage_pixels(&budget).unwrap();
+        )
+        .unwrap()
+        .try_manage_pixels(&budget)
+        .unwrap();
         let pressure = budget.try_reserve(1).unwrap();
         assert!(matches!(
             prepare_raster_for_display_with_budget(&frame, Some(&budget)),
             Err(RasterColorError::Frame(RasterError::Memory(_)))
         ));
         assert_eq!(budget.used(), native_bytes + 1);
-        let RasterPixels::Rgba16(original) = frame.pixels() else { panic!() };
+        let RasterPixels::Rgba16(original) = frame.pixels() else {
+            panic!()
+        };
         for (code, rgba) in (0..=u16::MAX).zip(original.chunks_exact(4)) {
             assert_eq!(rgba, &[code; 4]);
         }
@@ -472,23 +559,33 @@ mod tests {
         assert_eq!(budget.used(), native_bytes);
         let prepared = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
         assert_eq!(budget.peak(), peak_bytes);
-        let RasterPixels::Rgba32Float(actual) = prepared.pixels() else { panic!() };
+        let RasterPixels::Rgba32Float(actual) = prepared.pixels() else {
+            panic!()
+        };
         let mut maximum = 0f64;
         for code in 0..=u16::MAX {
             let pixel = usize::from(code);
             for channel in 0..3 {
                 let offset = (pixel * 3 + channel) * 8;
-                let expected = f64::from_le_bytes(reference[offset..offset+8].try_into().unwrap());
+                let expected = f64::from_le_bytes(reference[offset..offset + 8].try_into().unwrap());
                 let value = actual[pixel * 4 + channel];
                 assert!(value.is_finite());
                 maximum = maximum.max((f64::from(value) - expected).abs());
-                if pixel > 0 { assert!(value > actual[(pixel-1)*4+channel], "code={code} channel={channel}"); }
+                if pixel > 0 {
+                    assert!(
+                        value > actual[(pixel - 1) * 4 + channel],
+                        "code={code} channel={channel}"
+                    );
+                }
             }
-            assert_eq!(actual[pixel*4+3], f32::from(code)/65535.);
+            assert_eq!(actual[pixel * 4 + 3], f32::from(code) / 65535.);
         }
         assert!(maximum <= 2e-5, "max_rgb_error={maximum}");
         assert_eq!(budget.used(), 65536 * 24 + profile.len() as u64);
-        eprintln!("GRAY_ICC_FULL_U16 pixels=65536 max_rgb_error={maximum:.12} bound=0.00002 alpha_exact=true monotonic=true retained={}", budget.used());
+        eprintln!(
+            "GRAY_ICC_FULL_U16 pixels=65536 max_rgb_error={maximum:.12} bound=0.00002 alpha_exact=true monotonic=true retained={}",
+            budget.used()
+        );
         drop(prepared);
         drop(frame);
         assert_eq!(budget.used(), 0);
@@ -503,39 +600,57 @@ mod tests {
         let budget = rrrah_core::MemoryBudget::new(peak_bytes);
         let values: Vec<u16> = (0..=u16::MAX).flat_map(|v| [v; 4]).collect();
         let frame = DecodedRaster::new(
-            65536, 1, RasterPixels::Rgba16(Arc::new(values).into()),
+            65536,
+            1,
+            RasterPixels::Rgba16(Arc::new(values).into()),
             RasterColorSpace::Icc(profile.to_vec()),
-        ).unwrap().try_manage_pixels(&budget).unwrap();
+        )
+        .unwrap()
+        .try_manage_pixels(&budget)
+        .unwrap();
         let checks = Cell::new(0usize);
         let prepared = prepare_raster_for_display_with_budget_and_cancel(&frame, Some(&budget), || {
-            checks.set(checks.get()+1);
+            checks.set(checks.get() + 1);
             false
-        }).unwrap();
-        let RasterPixels::Rgba32Float(expected) = prepared.pixels() else { panic!() };
+        })
+        .unwrap();
+        let RasterPixels::Rgba32Float(expected) = prepared.pixels() else {
+            panic!()
+        };
         let expected = expected.to_vec();
         drop(prepared);
         assert!(checks.get() > 60);
         for stop in 1..=checks.get() {
             let visited = Cell::new(0usize);
             let result = prepare_raster_for_display_with_budget_and_cancel(&frame, Some(&budget), || {
-                visited.set(visited.get()+1);
+                visited.set(visited.get() + 1);
                 visited.get() == stop
             });
-            assert!(matches!(result, Err(RasterColorError::Frame(RasterError::Cancelled))), "stop={stop}");
+            assert!(
+                matches!(result, Err(RasterColorError::Frame(RasterError::Cancelled))),
+                "stop={stop}"
+            );
             assert_eq!(visited.get(), stop);
             assert_eq!(budget.used(), native_bytes, "stop={stop}");
-            let RasterPixels::Rgba16(original) = frame.pixels() else { panic!() };
+            let RasterPixels::Rgba16(original) = frame.pixels() else {
+                panic!()
+            };
             for (code, rgba) in (0..=u16::MAX).zip(original.chunks_exact(4)) {
                 assert_eq!(rgba, &[code; 4]);
             }
             let retry = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
-            let RasterPixels::Rgba32Float(actual) = retry.pixels() else { panic!() };
+            let RasterPixels::Rgba32Float(actual) = retry.pixels() else {
+                panic!()
+            };
             assert_eq!(&actual[..], &expected[..], "stop={stop}");
             drop(retry);
             assert_eq!(budget.used(), native_bytes);
         }
         assert_eq!(budget.peak(), peak_bytes);
-        eprintln!("GRAY_ICC_CANCEL points={} pixels=65536 retry_bit_exact=true peak={peak_bytes}", checks.get());
+        eprintln!(
+            "GRAY_ICC_CANCEL points={} pixels=65536 retry_bit_exact=true peak={peak_bytes}",
+            checks.get()
+        );
         drop(frame);
         assert_eq!(budget.used(), 0);
     }
@@ -670,7 +785,8 @@ mod budget_tests {
                 RasterPixels::Rgba16(Arc::new(vec![32768, 32769, 65535, 12345]).into()),
                 color,
             )
-            .unwrap().with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(1000,60,3).unwrap()));
+            .unwrap()
+            .with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(1000, 60, 3).unwrap()));
             let expected = prepare_raster_for_display(&frame).unwrap();
             let denied_limits: &[u64] = if matches!(frame.color_space(), RasterColorSpace::Icc(_)) {
                 &[15, 16, 39, 40, 63]
@@ -707,7 +823,7 @@ mod budget_tests {
             else {
                 panic!("precision changed")
             };
-            assert_eq!(actual.animation_timing(),frame.animation_timing());
+            assert_eq!(actual.animation_timing(), frame.animation_timing());
             assert!(a.is_managed());
             assert_eq!(a.as_slice(), b.as_slice());
             assert_eq!(budget.peak(), peak);

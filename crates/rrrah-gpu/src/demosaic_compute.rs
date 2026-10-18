@@ -1213,7 +1213,10 @@ mod tests {
                         .unwrap();
                     assert_eq!(retry.len(), baseline.len());
                     assert!(
-                        retry.iter().zip(&baseline).all(|(a, b)| a.map(f32::to_bits) == b.map(f32::to_bits)),
+                        retry
+                            .iter()
+                            .zip(&baseline)
+                            .all(|(a, b)| a.map(f32::to_bits) == b.map(f32::to_bits)),
                         "{algorithm:?} cfa={cfa:?} cutoff={cutoff}"
                     );
                     drop(retry);

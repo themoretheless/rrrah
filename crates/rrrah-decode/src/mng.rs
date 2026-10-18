@@ -283,8 +283,10 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<MngImage, 
     }
     // Repetition/TERM controls are refused by this admitted subset, so its
     // presentation is one pass. Zero ticks describes one composed still.
-    .with_animation_timing(if ticks == 0 { None } else {
-        Some(rrrah_core::RasterAnimationTiming::new(1000,ticks,1)?)
+    .with_animation_timing(if ticks == 0 {
+        None
+    } else {
+        Some(rrrah_core::RasterAnimationTiming::new(1000, ticks, 1)?)
     })
     .with_image_selection(request.image_index, count)?;
     Ok(MngImage {
@@ -797,28 +799,53 @@ mod tests {
     }
     #[test]
     fn common_mng_timing_matches_ticks_and_refuses_unimplemented_repetition() {
-        let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/mng");
-        let mut cases=0;
-        for (name,key,ticks_key) in [("manifest.json","rgba","ticks_per_second"),("alpha-manifest.json","linear_rgba","ticks")] {
-            let manifest:serde_json::Value=serde_json::from_slice(&std::fs::read(root.join(name)).unwrap()).unwrap();
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/mng");
+        let mut cases = 0;
+        for (name, key, ticks_key) in [
+            ("manifest.json", "rgba", "ticks_per_second"),
+            ("alpha-manifest.json", "linear_rgba", "ticks"),
+        ] {
+            let manifest: serde_json::Value =
+                serde_json::from_slice(&std::fs::read(root.join(name)).unwrap()).unwrap();
             for case in manifest["cases"].as_array().unwrap() {
-                let ticks=case[ticks_key].as_u64().unwrap() as u32;
+                let ticks = case[ticks_key].as_u64().unwrap() as u32;
                 for index in 0..case[key].as_array().unwrap().len() {
-                    let budget=rrrah_core::MemoryBudget::new(1024*1024);
-                    let mut request=DecodeRequest::new(root.join(case["file"].as_str().unwrap()));
-                    request.image_index=index;request.memory_budget=Some(budget.clone());request.assume_untagged_srgb=true;
-                    let frame=crate::decode_raster(&request).unwrap();
-                    let expected=if ticks==0 { None } else { Some(rrrah_core::RasterAnimationTiming::new(1000,ticks,1).unwrap()) };
-                    assert_eq!(frame.animation_timing(),expected);
-                    let display=crate::prepare_raster_for_display_with_budget(&frame,Some(&budget)).unwrap();
-                    assert_eq!(display.animation_timing(),expected);drop(display);drop(frame);assert_eq!(budget.used(),0);cases+=1;
+                    let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+                    let mut request = DecodeRequest::new(root.join(case["file"].as_str().unwrap()));
+                    request.image_index = index;
+                    request.memory_budget = Some(budget.clone());
+                    request.assume_untagged_srgb = true;
+                    let frame = crate::decode_raster(&request).unwrap();
+                    let expected = if ticks == 0 {
+                        None
+                    } else {
+                        Some(rrrah_core::RasterAnimationTiming::new(1000, ticks, 1).unwrap())
+                    };
+                    assert_eq!(frame.animation_timing(), expected);
+                    let display =
+                        crate::prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+                    assert_eq!(display.animation_timing(), expected);
+                    drop(display);
+                    drop(frame);
+                    assert_eq!(budget.used(), 0);
+                    cases += 1;
                 }
             }
         }
-        for (kind,data) in [(b"TERM".as_slice(),vec![0]),(b"LOOP".as_slice(),vec![0,0,0,0,2])] {
-            let mut source=RGB.to_vec();source.splice(48..48,chunk(kind,&data));
-            let zero=rrrah_core::MemoryBudget::new(0);let mut request=DecodeRequest::new("unsupported-control.mng");request.memory_budget=Some(zero.clone());
-            assert!(matches!(decode(&source,&request),Err(RasterDecodeError::InvalidMng(_))));assert_eq!((zero.used(),zero.peak()),(0,0));
+        for (kind, data) in [
+            (b"TERM".as_slice(), vec![0]),
+            (b"LOOP".as_slice(), vec![0, 0, 0, 0, 2]),
+        ] {
+            let mut source = RGB.to_vec();
+            source.splice(48..48, chunk(kind, &data));
+            let zero = rrrah_core::MemoryBudget::new(0);
+            let mut request = DecodeRequest::new("unsupported-control.mng");
+            request.memory_budget = Some(zero.clone());
+            assert!(matches!(
+                decode(&source, &request),
+                Err(RasterDecodeError::InvalidMng(_))
+            ));
+            assert_eq!((zero.used(), zero.peak()), (0, 0));
         }
         eprintln!("MNG_COMMON_TIMING cases={cases} repetition_refusals=2 final=0");
     }
@@ -1013,9 +1040,12 @@ mod tests {
         let denied = rrrah_core::MemoryBudget::new(32768);
         let mut request = DecodeRequest::new("icc-global.mng");
         request.memory_budget = Some(denied.clone());
-        assert!(matches!(decode(&bytes, &request),Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
-        assert_eq!(denied.used(),0);
-        let budget = rrrah_core::MemoryBudget::new(32768+rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES);
+        assert!(matches!(
+            decode(&bytes, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!(denied.used(), 0);
+        let budget = rrrah_core::MemoryBudget::new(32768 + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES);
         request.memory_budget = Some(budget.clone());
         let output = decode(&bytes, &request).unwrap();
         assert!(matches!(

@@ -19,18 +19,17 @@ pub use rrrah_color::{
 };
 
 pub use rrrah_demosaic::{
-    CfaColor, CfaError, CfaPattern, DemosaicAlgorithm, DemosaicConfig, FrameError,
-    demosaic_bayer_superpixel, demosaic_bayer_superpixel_f64, demosaic_f32, demosaic_f64, demosaic_u16,
-    demosaic_u16_f64,
+    CfaColor, CfaError, CfaPattern, DemosaicAlgorithm, DemosaicConfig, FrameError, demosaic_bayer_superpixel,
+    demosaic_bayer_superpixel_f64, demosaic_f32, demosaic_f64, demosaic_u16, demosaic_u16_f64,
 };
 
 pub use rrrah_develop::{
-    self as develop, DecodedMosaic, DecodedRaster, LevelGrid, ManifestError, MosaicRecipeManifest,
-    Orientation, Photometric, RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels, RawMetadata, Rect, ThumbnailError,
-    WhiteLevel, bayer, edit, histogram, rgbe, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW,
-    DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, KNOWN_MOSAIC_DECODE_FLAGS,
-    MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,
-    SENSOR_MOSAIC_ARTIFACT_KIND_CODE,
+    self as develop, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
+    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DecodedRaster, KNOWN_MOSAIC_DECODE_FLAGS,
+    LevelGrid, MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, ManifestError,
+    MosaicRecipeManifest, Orientation, Photometric, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,
+    RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels, RawMetadata, Rect,
+    SENSOR_MOSAIC_ARTIFACT_KIND_CODE, ThumbnailError, WhiteLevel, bayer, edit, histogram, rgbe,
 };
 
 /// Frozen legacy-v2 cache ABI. New semantic recipes use

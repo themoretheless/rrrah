@@ -1684,11 +1684,11 @@ mod raster_tests {
             budget.clone(),
         )
         .unwrap();
-        let timing = animated.then(|| rrrah_core::RasterAnimationTiming::new(1000,60,3).unwrap());
+        let timing = animated.then(|| rrrah_core::RasterAnimationTiming::new(1000, 60, 3).unwrap());
         let make = || frame(&budget).with_animation_timing(timing);
         let check = |frame: &DecodedRaster| {
             assert_frame(frame);
-            assert_eq!(frame.animation_timing(),timing);
+            assert_eq!(frame.animation_timing(), timing);
         };
         swap.enqueue(1u32, make());
         swap.wait_idle().unwrap();
@@ -1930,7 +1930,13 @@ mod raster_tests {
             assert_eq!(swap.disk_usage().unwrap(), disk);
             cycles += 1;
             if cycles.is_multiple_of(1024) && last_progress.elapsed() >= Duration::from_secs(10) {
-                eprintln!("RASTER_SWAP_SOAK_PROGRESS seconds={:.1} objects={count} cycles={cycles} reads={} used={} peak={}", start.elapsed().as_secs_f64(), swap.stats().reads, budget.used(), budget.peak());
+                eprintln!(
+                    "RASTER_SWAP_SOAK_PROGRESS seconds={:.1} objects={count} cycles={cycles} reads={} used={} peak={}",
+                    start.elapsed().as_secs_f64(),
+                    swap.stats().reads,
+                    budget.used(),
+                    budget.peak()
+                );
                 last_progress = std::time::Instant::now();
             }
         }

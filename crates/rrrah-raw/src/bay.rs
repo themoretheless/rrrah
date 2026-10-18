@@ -153,9 +153,13 @@ fn read_bay_image_rows(
         while !remaining.is_empty() {
             request.check_cancelled()?;
             match file.read(remaining) {
-                Ok(0) => return Err(io_error(std::io::Error::new(
-                    std::io::ErrorKind::UnexpectedEof, "truncated BAY row",
-                )).into()),
+                Ok(0) => {
+                    return Err(io_error(std::io::Error::new(
+                        std::io::ErrorKind::UnexpectedEof,
+                        "truncated BAY row",
+                    ))
+                    .into());
+                }
                 Ok(count) => remaining = &mut remaining[count..],
                 Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
                 Err(error) => return Err(io_error(error).into()),
@@ -382,7 +386,10 @@ mod tests {
 
     #[test]
     fn interrupted_stream_retries_eof_and_checks_cancellation_inside_rows() {
-        use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
+        use std::sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        };
         struct Reader {
             inner: std::io::Cursor<Vec<u8>>,
             generation: Arc<AtomicU64>,
@@ -394,8 +401,12 @@ mod tests {
             fn read(&mut self, out: &mut [u8]) -> std::io::Result<usize> {
                 self.calls += 1;
                 if self.cancel_after.is_some() {
-                    if self.cancel_after == Some(self.calls) { self.generation.store(2, Ordering::Release); }
-                    if self.calls > 10 { panic!("cancelled read was retried indefinitely"); }
+                    if self.cancel_after == Some(self.calls) {
+                        self.generation.store(2, Ordering::Release);
+                    }
+                    if self.calls > 10 {
+                        panic!("cancelled read was retried indefinitely");
+                    }
                     return Err(std::io::ErrorKind::Interrupted.into());
                 }
                 if self.inner.position() == self.inner.get_ref().len() as u64 && self.eof_interrupt {
@@ -406,15 +417,28 @@ mod tests {
                 std::io::Read::read(&mut self.inner, &mut out[..length])
             }
         }
-        for layout in [BaySensorLayout::Qv2000Ux, BaySensorLayout::Qv3000Ex, BaySensorLayout::Qv5700] {
+        for layout in [
+            BaySensorLayout::Qv2000Ux,
+            BaySensorLayout::Qv3000Ex,
+            BaySensorLayout::Qv5700,
+        ] {
             let (width, height) = layout.image_dimensions();
-            let peak = u64::from(width)*u64::from(height)*2 + layout.row_bytes() as u64;
+            let peak = u64::from(width) * u64::from(height) * 2 + layout.row_bytes() as u64;
             let generation = Arc::new(AtomicU64::new(1));
             let mut request = crate::DecodeRequest::new("interrupted.bay");
             request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
             let budget = rrrah_core::MemoryBudget::new(peak);
-            let mut reader = Reader { inner: std::io::Cursor::new(vec![173; layout.row_bytes()*height as usize]), generation: generation.clone(), eof_interrupt: true, cancel_after: Some(3), calls: 0 };
-            assert!(matches!(read_bay_image_rows(&mut reader, &request, layout, &budget, width as usize), Err(BayReadError::Source(crate::DecodeError::Cancelled))));
+            let mut reader = Reader {
+                inner: std::io::Cursor::new(vec![173; layout.row_bytes() * height as usize]),
+                generation: generation.clone(),
+                eof_interrupt: true,
+                cancel_after: Some(3),
+                calls: 0,
+            };
+            assert!(matches!(
+                read_bay_image_rows(&mut reader, &request, layout, &budget, width as usize),
+                Err(BayReadError::Source(crate::DecodeError::Cancelled))
+            ));
             assert_eq!(reader.calls, 3);
             assert_eq!(budget.used(), 0);
             generation.store(1, Ordering::Release);
@@ -423,7 +447,9 @@ mod tests {
             assert!(!reader.eof_interrupt);
             let mut expected_row = vec![0; width as usize];
             unpack_row(&vec![173; layout.row_bytes()], &mut expected_row, layout);
-            for row in result.chunks_exact(width as usize) { assert_eq!(row, expected_row); }
+            for row in result.chunks_exact(width as usize) {
+                assert_eq!(row, expected_row);
+            }
             assert_eq!(budget.peak(), peak);
             drop(result);
             assert_eq!(budget.used(), 0);

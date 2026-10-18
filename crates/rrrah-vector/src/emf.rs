@@ -74,10 +74,7 @@ fn color(value: u32) -> Result<String, RasterDecodeError> {
 pub fn has_magic(b: &[u8]) -> bool {
     b.len() >= 44 && word(b, 0) == 1 && word(b, 40) == 0x464d4520
 }
-pub fn decode(
-    b: &[u8],
-    request: &DecodeRequest,
-) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
+pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
     if request.image_index != 0 {
         return Err(crate::DecodeError::UnsupportedImageIndex {

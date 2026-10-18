@@ -572,7 +572,9 @@ fn rle_multiframe_prefetch_windows_preserve_nearest_under_count_and_byte_limits(
                             Ok((frame, _, lease)) => {
                                 same_pixels(&frame, &oracles[index % 3]);
                                 assert_eq!((frame.image_index(), frame.image_count()), (index, 64));
-                                if let Some(lease) = lease { protected.push(lease); }
+                                if let Some(lease) = lease {
+                                    protected.push(lease);
+                                }
                             }
                             Err(error) => {
                                 assert!(count_limited && !protected.is_empty());
@@ -581,7 +583,14 @@ fn rle_multiframe_prefetch_windows_preserve_nearest_under_count_and_byte_limits(
                             }
                         }
                     }
-                    assert_eq!(skipped, if count_limited { indices.len().saturating_sub(1) } else { 0 });
+                    assert_eq!(
+                        skipped,
+                        if count_limited {
+                            indices.len().saturating_sub(1)
+                        } else {
+                            0
+                        }
+                    );
                     assert_eq!(cache.len(), if indices.is_empty() { 1 } else { 2 });
                     assert_eq!(protected.len(), usize::from(!indices.is_empty()));
                     if let Some(&nearest) = indices.first() {
@@ -889,7 +898,6 @@ fn managed_nrrd_mrc_fits_windows_ram_swap_and_metal() {
     qualify_managed_scientific_arrays(Some(&gpu));
 }
 
-
 // Authored 2x3 RGBA PNGs use a single stored DEFLATE block. Neither the encoder
 // nor the explicit six-pixel permutations call the decoder's orientation code.
 fn png_orientation_cases(dir: &Path) -> Vec<(PathBuf, usize, usize, DecodedRaster)> {
@@ -907,85 +915,159 @@ fn png_orientation_cases(dir: &Path) -> Vec<(PathBuf, usize, usize, DecodedRaste
         output.extend_from_slice(&(!crc).to_be_bytes());
     }
     let pixels: [[u8; 4]; 6] = [
-        [255,0,0,255], [0,255,0,128], [0,0,255,64],
-        [255,255,0,0], [255,0,255,192], [0,255,255,255],
+        [255, 0, 0, 255],
+        [0, 255, 0, 128],
+        [0, 0, 255, 64],
+        [255, 255, 0, 0],
+        [255, 0, 255, 192],
+        [0, 255, 255, 255],
     ];
     let mut rows = Vec::new();
     for row in pixels.chunks_exact(2) {
         rows.push(0); // PNG filter None.
-        for pixel in row { rows.extend_from_slice(pixel); }
+        for pixel in row {
+            rows.extend_from_slice(pixel);
+        }
     }
-    let mut compressed = vec![0x78,0x01,0x01]; // zlib header, final stored block.
+    let mut compressed = vec![0x78, 0x01, 0x01]; // zlib header, final stored block.
     let len = rows.len() as u16;
     compressed.extend_from_slice(&len.to_le_bytes());
     compressed.extend_from_slice(&(!len).to_le_bytes());
     compressed.extend_from_slice(&rows);
-    let (mut a, mut b) = (1u32,0u32);
-    for &byte in &rows { a=(a+u32::from(byte))%65521; b=(b+a)%65521; }
-    compressed.extend_from_slice(&((b<<16)|a).to_be_bytes());
+    let (mut a, mut b) = (1u32, 0u32);
+    for &byte in &rows {
+        a = (a + u32::from(byte)) % 65521;
+        b = (b + a) % 65521;
+    }
+    compressed.extend_from_slice(&((b << 16) | a).to_be_bytes());
     let permutations = [
-        [0,1,2,3,4,5], [1,0,3,2,5,4], [5,4,3,2,1,0], [4,5,2,3,0,1],
-        [0,2,4,1,3,5], [4,2,0,5,3,1], [5,3,1,4,2,0], [1,3,5,0,2,4],
+        [0, 1, 2, 3, 4, 5],
+        [1, 0, 3, 2, 5, 4],
+        [5, 4, 3, 2, 1, 0],
+        [4, 5, 2, 3, 0, 1],
+        [0, 2, 4, 1, 3, 5],
+        [4, 2, 0, 5, 3, 1],
+        [5, 3, 1, 4, 2, 0],
+        [1, 3, 5, 0, 2, 4],
     ];
-    permutations.into_iter().enumerate().map(|(index, permutation)| {
-        let orientation = index as u8 + 1;
-        let mut png = b"\x89PNG\r\n\x1a\n".to_vec();
-        let mut ihdr = Vec::new();
-        ihdr.extend_from_slice(&2u32.to_be_bytes());
-        ihdr.extend_from_slice(&3u32.to_be_bytes());
-        ihdr.extend_from_slice(&[8,6,0,0,0]);
-        chunk(&mut png,b"IHDR",&ihdr);
-        chunk(&mut png,b"sRGB",&[0]);
-        let mut exif = b"II\x2a\0\x08\0\0\0\x01\0\x12\x01\x03\0\x01\0\0\0\x01\0\0\0\0\0\0\0".to_vec();
-        exif[18] = orientation;
-        chunk(&mut png,b"eXIf",&exif);
-        chunk(&mut png,b"IDAT",&compressed);
-        chunk(&mut png,b"IEND",&[]);
-        let path = dir.join(format!("orientation-{orientation}.png"));
-        std::fs::write(&path,png).unwrap();
-        let expected: Vec<u8> = permutation.into_iter().flat_map(|at|pixels[at]).collect();
-        let (width,height) = if orientation <= 4 {(2,3)} else {(3,2)};
-        (path,0,1,DecodedRaster::new(width,height,
-            RasterPixels::Rgba8(Arc::new(expected).into()),RasterColorSpace::Srgb).unwrap())
-    }).collect()
+    permutations
+        .into_iter()
+        .enumerate()
+        .map(|(index, permutation)| {
+            let orientation = index as u8 + 1;
+            let mut png = b"\x89PNG\r\n\x1a\n".to_vec();
+            let mut ihdr = Vec::new();
+            ihdr.extend_from_slice(&2u32.to_be_bytes());
+            ihdr.extend_from_slice(&3u32.to_be_bytes());
+            ihdr.extend_from_slice(&[8, 6, 0, 0, 0]);
+            chunk(&mut png, b"IHDR", &ihdr);
+            chunk(&mut png, b"sRGB", &[0]);
+            let mut exif = b"II\x2a\0\x08\0\0\0\x01\0\x12\x01\x03\0\x01\0\0\0\x01\0\0\0\0\0\0\0".to_vec();
+            exif[18] = orientation;
+            chunk(&mut png, b"eXIf", &exif);
+            chunk(&mut png, b"IDAT", &compressed);
+            chunk(&mut png, b"IEND", &[]);
+            let path = dir.join(format!("orientation-{orientation}.png"));
+            std::fs::write(&path, png).unwrap();
+            let expected: Vec<u8> = permutation.into_iter().flat_map(|at| pixels[at]).collect();
+            let (width, height) = if orientation <= 4 { (2, 3) } else { (3, 2) };
+            (
+                path,
+                0,
+                1,
+                DecodedRaster::new(
+                    width,
+                    height,
+                    RasterPixels::Rgba8(Arc::new(expected).into()),
+                    RasterColorSpace::Srgb,
+                )
+                .unwrap(),
+            )
+        })
+        .collect()
 }
 
 #[derive(Clone, Copy)]
-enum RasterCorpus { Legacy, KtxProducers, GrayAlpha, HighAlpha, MultiAlpha, PngTiffMetadata }
+enum RasterCorpus {
+    Legacy,
+    KtxProducers,
+    GrayAlpha,
+    HighAlpha,
+    MultiAlpha,
+    PngTiffMetadata,
+}
 fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuReadback>, corpus: RasterCorpus) {
     let png_tiff = matches!(corpus, RasterCorpus::PngTiffMetadata);
-    let producers = matches!(corpus,RasterCorpus::KtxProducers);
-    let gray_alpha = matches!(corpus,RasterCorpus::GrayAlpha);
-    let multi_alpha = matches!(corpus,RasterCorpus::MultiAlpha);
-    let high_alpha = matches!(corpus,RasterCorpus::HighAlpha | RasterCorpus::MultiAlpha);
+    let producers = matches!(corpus, RasterCorpus::KtxProducers);
+    let gray_alpha = matches!(corpus, RasterCorpus::GrayAlpha);
+    let multi_alpha = matches!(corpus, RasterCorpus::MultiAlpha);
+    let high_alpha = matches!(corpus, RasterCorpus::HighAlpha | RasterCorpus::MultiAlpha);
     let alpha = gray_alpha || high_alpha;
     let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
     let dir = tempfile::tempdir().unwrap();
-    let root = rrrah_cache::MemoryBudget::new(if alpha { 8388608 } else if producers { 2097152 } else { 131072 });
+    let root = rrrah_cache::MemoryBudget::new(if alpha {
+        8388608
+    } else if producers {
+        2097152
+    } else {
+        131072
+    });
     let mut cache = raster_cache_with_swap(
         Some(dir.path()),
         false,
         rrrah_cache::CacheLimits {
-            max_bytes: if alpha { 3145728 } else if producers { 524288 } else { 8192 },
+            max_bytes: if alpha {
+                3145728
+            } else if producers {
+                524288
+            } else {
+                8192
+            },
             max_entries: Some(1),
             ttl: None,
         },
         Some(rrrah_cache::ImageSwapConfig {
             limits: rrrah_cache::CacheLimits {
                 max_bytes: if alpha { 16777216 } else { 1048576 },
-                max_entries: Some(if multi_alpha {64} else if high_alpha {16} else if gray_alpha {4} else if producers { 16 } else { 2048 }),
+                max_entries: Some(if multi_alpha {
+                    64
+                } else if high_alpha {
+                    16
+                } else if gray_alpha {
+                    4
+                } else if producers {
+                    16
+                } else {
+                    2048
+                }),
                 ttl: None,
             },
-            queue_bytes: if alpha { 3145728 } else if producers { 1048576 } else { 65536 },
+            queue_bytes: if alpha {
+                3145728
+            } else if producers {
+                1048576
+            } else {
+                65536
+            },
             queue_count: 4,
-            restore_bytes: if alpha { 6291456 } else if producers { 1048576 } else { 65536 },
+            restore_bytes: if alpha {
+                6291456
+            } else if producers {
+                1048576
+            } else {
+                65536
+            },
         }),
         Some(&root),
     );
     let mut cases = Vec::new();
     let params = |frame: &DecodedRaster| {
-        let scale = if alpha {1} else {8};
-        let viewport = if high_alpha {[128,64]} else {[frame.width()*scale,frame.height()*scale]};
+        let scale = if alpha { 1 } else { 8 };
+        let viewport = if high_alpha {
+            [128, 64]
+        } else {
+            [frame.width() * scale, frame.height() * scale]
+        };
         (
             rrrah_gpu::ViewParameters {
                 viewport: viewport.map(|v| v as f32),
@@ -1015,17 +1097,29 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
         .unwrap();
         inputs.push((fixtures.join(f[0]), 0usize, 1usize, raw));
     }
-    for line in include_str!("../../../tests/fixtures/raster/pkm-eac-manifest.tsv").lines().filter(|line| !line.starts_with('#')) {
+    for line in include_str!("../../../tests/fixtures/raster/pkm-eac-manifest.tsv")
+        .lines()
+        .filter(|line| !line.starts_with('#'))
+    {
         let fields: Vec<_> = line.split('\t').collect();
         let bytes = std::fs::read(fixtures.join(fields[4])).unwrap();
-        let values: Vec<f32> = bytes.as_chunks::<4>().0.iter().map(|b| f32::from_le_bytes(*b)).collect();
-        let raw = DecodedRaster::new(fields[1].parse().unwrap(),fields[2].parse().unwrap(),
-            RasterPixels::Rgba32Float(Arc::new(values).into()),RasterColorSpace::LinearSrgb).unwrap();
-        inputs.push((fixtures.join(fields[0]),0usize,1usize,raw));
+        let values: Vec<f32> = bytes
+            .as_chunks::<4>()
+            .0
+            .iter()
+            .map(|b| f32::from_le_bytes(*b))
+            .collect();
+        let raw = DecodedRaster::new(
+            fields[1].parse().unwrap(),
+            fields[2].parse().unwrap(),
+            RasterPixels::Rgba32Float(Arc::new(values).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        inputs.push((fixtures.join(fields[0]), 0usize, 1usize, raw));
     }
     let pcx_oracle = vec![
-        11, 22, 33, 255, 192, 193, 255, 255, 1, 2, 3, 255, 44, 55, 66, 255, 77, 88, 99, 255, 0,
-        255, 127, 255,
+        11, 22, 33, 255, 192, 193, 255, 255, 1, 2, 3, 255, 44, 55, 66, 255, 77, 88, 99, 255, 0, 255, 127, 255,
     ];
     for name in ["rgb.pcx", "indexed.pcx"] {
         let raw = DecodedRaster::new(
@@ -1038,8 +1132,7 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
         inputs.push((fixtures.join("../pcx").join(name), 0, 1, raw));
     }
     for index in 0..2 {
-        let pixels =
-            std::fs::read(fixtures.join(format!("two-pages.dcx.page{index}.rgba"))).unwrap();
+        let pixels = std::fs::read(fixtures.join(format!("two-pages.dcx.page{index}.rgba"))).unwrap();
         let raw = DecodedRaster::new(
             3,
             2,
@@ -1130,23 +1223,36 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
         let path = dir.path().join(format!("srgb-{}", fields[0]));
         std::fs::write(&path, source).unwrap();
         let bytes = std::fs::read(fixtures.join(fields[6])).unwrap();
-        let mut values: Vec<f32> = bytes.chunks_exact(4)
-            .map(|b| f32::from_le_bytes(b.try_into().unwrap())).collect();
+        let mut values: Vec<f32> = bytes
+            .chunks_exact(4)
+            .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+            .collect();
         for rgba in values.chunks_exact_mut(4) {
             assert_eq!(rgba[3].to_bits(), 1f32.to_bits());
             for value in &mut rgba[..3] {
                 let encoded = *value;
                 let x = f64::from(encoded);
-                let reference = if x <= 0.04045 { x / 12.92 }
-                    else { ((x + 0.055) / 1.055).powf(2.4) };
-                *value = if encoded <= 0.04045 { encoded / 12.92 }
-                    else { ((encoded + 0.055) / 1.055).powf(2.4) };
+                let reference = if x <= 0.04045 {
+                    x / 12.92
+                } else {
+                    ((x + 0.055) / 1.055).powf(2.4)
+                };
+                *value = if encoded <= 0.04045 {
+                    encoded / 12.92
+                } else {
+                    ((encoded + 0.055) / 1.055).powf(2.4)
+                };
                 assert!((f64::from(*value) - reference).abs() < 0.0000002);
             }
         }
         // Already-linear independent oracle: preparing it must be an identity.
-        let raw = DecodedRaster::new(fields[2].parse().unwrap(), fields[3].parse().unwrap(),
-            RasterPixels::Rgba32Float(Arc::new(values).into()), RasterColorSpace::LinearSrgb).unwrap();
+        let raw = DecodedRaster::new(
+            fields[2].parse().unwrap(),
+            fields[3].parse().unwrap(),
+            RasterPixels::Rgba32Float(Arc::new(values).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
         inputs.push((path, fields[1].parse().unwrap(), 4, raw));
     }
     // Exercise the managed metadata index through the public loader and swap.
@@ -1170,9 +1276,7 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
     let raw = DecodedRaster::new(
         3,
         2,
-        RasterPixels::Rgba8(
-            Arc::new(std::fs::read(fixtures.join("rgba8-0-rd.ktx.rgba")).unwrap()).into(),
-        ),
+        RasterPixels::Rgba8(Arc::new(std::fs::read(fixtures.join("rgba8-0-rd.ktx.rgba")).unwrap()).into()),
         RasterColorSpace::Srgb,
     )
     .unwrap();
@@ -1229,8 +1333,7 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
         9,
         5,
         RasterPixels::Rgba8(
-            Arc::new(std::fs::read(fixtures.join("ktx2-mips-29-0-rd.ktx2.mip0.rgba8")).unwrap())
-                .into(),
+            Arc::new(std::fs::read(fixtures.join("ktx2-mips-29-0-rd.ktx2.mip0.rgba8")).unwrap()).into(),
         ),
         RasterColorSpace::Srgb,
     )
@@ -1250,11 +1353,7 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
     let game = dir.path().join("wal-game");
     std::fs::create_dir_all(game.join("textures")).unwrap();
     std::fs::create_dir_all(game.join("pics")).unwrap();
-    std::fs::copy(
-        fixtures.join("wal-colormap.pcx"),
-        game.join("pics/colormap.pcx"),
-    )
-    .unwrap();
+    std::fs::copy(fixtures.join("wal-colormap.pcx"), game.join("pics/colormap.pcx")).unwrap();
     for line in include_str!("../../../tests/fixtures/raster/wal-manifest.tsv").lines() {
         let f: Vec<_> = line.split('\t').collect();
         let path = game.join("textures").join(f[0]);
@@ -1297,12 +1396,7 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
                 )
             };
             let raw = DecodedRaster::new(3, 2, pixels, RasterColorSpace::AssumedSrgb).unwrap();
-            inputs.push((
-                fixtures.join("../sti").join(name),
-                index,
-                oracles.len(),
-                raw,
-            ));
+            inputs.push((fixtures.join("../sti").join(name), index, oracles.len(), raw));
         }
     }
     let bytes = std::fs::read(fixtures.join("rla-16-c3-a16-mixed0.rla.u16")).unwrap();
@@ -1337,171 +1431,376 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
             source.extend(word.to_le_bytes());
         }
         source.extend(16u32.to_le_bytes());
-        source.extend(if internal == 0x83f2 { [255u8; 8] } else { [255, 0, 0, 0, 0, 0, 0, 0] });
+        source.extend(if internal == 0x83f2 {
+            [255u8; 8]
+        } else {
+            [255, 0, 0, 0, 0, 0, 0, 0]
+        });
         source.extend([0, 0, 255, 255, 0xee, 0xee, 0xee, 0xee]);
         let path = dir.path().join(format!("bc-reversed-{internal}.ktx"));
         std::fs::write(&path, source).unwrap();
-        let pixels: Vec<u8> = (0..16).flat_map(|i| {
-            let color = if i % 2 == 0 { 85 } else { 170 };
-            [color, color, color, 255]
-        }).collect();
-        let raw = DecodedRaster::new(4, 4, RasterPixels::Rgba8(Arc::new(pixels).into()),
-            RasterColorSpace::LinearSrgb).unwrap();
+        let pixels: Vec<u8> = (0..16)
+            .flat_map(|i| {
+                let color = if i % 2 == 0 { 85 } else { 170 };
+                [color, color, color, 255]
+            })
+            .collect();
+        let raw = DecodedRaster::new(
+            4,
+            4,
+            RasterPixels::Rgba8(Arc::new(pixels).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
         inputs.push((path, 0, 1, raw));
     }
     // Pixel references are independent asefile/authored composition dumps.
     // ICC expected metadata comes from a separately pinned profile file.
     for line in include_str!("../../../tests/fixtures/raster/aseprite-manifest.tsv")
-        .lines().filter(|line| !line.starts_with('#') && !line.is_empty())
+        .lines()
+        .filter(|line| !line.starts_with('#') && !line.is_empty())
     {
         let fields: Vec<_> = line.split('\t').collect();
-        let color = if fields[0].starts_with("ase-profile-icc.") { RasterColorSpace::Icc(std::fs::read(fixtures.join("dicom-rgb-profile.icc")).unwrap()) }
-            else if fields[0].starts_with("ase-profile-linear.") { RasterColorSpace::LinearSrgb }
-            else if fields[0].starts_with("ase-profile-assumed.") { RasterColorSpace::AssumedSrgb }
-            else { RasterColorSpace::Srgb };
-        let raw = DecodedRaster::new(fields[2].parse().unwrap(), fields[3].parse().unwrap(),
-            RasterPixels::Rgba8(Arc::new(std::fs::read(fixtures.join(fields[7])).unwrap()).into()), color).unwrap();
-        inputs.push((fixtures.join(fields[0]), fields[1].parse().unwrap(), fields[4].parse().unwrap(), raw));
+        let color = if fields[0].starts_with("ase-profile-icc.") {
+            RasterColorSpace::Icc(std::fs::read(fixtures.join("dicom-rgb-profile.icc")).unwrap())
+        } else if fields[0].starts_with("ase-profile-linear.") {
+            RasterColorSpace::LinearSrgb
+        } else if fields[0].starts_with("ase-profile-assumed.") {
+            RasterColorSpace::AssumedSrgb
+        } else {
+            RasterColorSpace::Srgb
+        };
+        let raw = DecodedRaster::new(
+            fields[2].parse().unwrap(),
+            fields[3].parse().unwrap(),
+            RasterPixels::Rgba8(Arc::new(std::fs::read(fixtures.join(fields[7])).unwrap()).into()),
+            color,
+        )
+        .unwrap();
+        inputs.push((
+            fixtures.join(fields[0]),
+            fields[1].parse().unwrap(),
+            fields[4].parse().unwrap(),
+            raw,
+        ));
     }
     for line in include_str!("../../../tests/fixtures/raster/psd-tools-16bit-manifest.tsv")
-        .lines().filter(|line| !line.starts_with('#') && !line.is_empty())
+        .lines()
+        .filter(|line| !line.starts_with('#') && !line.is_empty())
     {
         let fields: Vec<_> = line.split('\t').collect();
         let bytes = std::fs::read(fixtures.join(fields[3])).unwrap();
-        let values = bytes.chunks_exact(2).map(|b| u16::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>();
-        let raw = DecodedRaster::new(fields[1].parse().unwrap(), fields[2].parse().unwrap(),
+        let values = bytes
+            .chunks_exact(2)
+            .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+            .collect::<Vec<_>>();
+        let raw = DecodedRaster::new(
+            fields[1].parse().unwrap(),
+            fields[2].parse().unwrap(),
             RasterPixels::Rgba16(Arc::new(values).into()),
-            RasterColorSpace::Icc(std::fs::read(fixtures.join(fields[5])).unwrap())).unwrap();
+            RasterColorSpace::Icc(std::fs::read(fixtures.join(fields[5])).unwrap()),
+        )
+        .unwrap();
         inputs.push((fixtures.join(fields[0]), 0, 1, raw));
     }
-    for name in ["4x4_16bit_rgb.psd", "4x4_16bit_grayscale.psd", "4x4_32bit_rgb.psd", "4x4_32bit_grayscale.psd", "32bit5x5.psb"] {
+    for name in [
+        "4x4_16bit_rgb.psd",
+        "4x4_16bit_grayscale.psd",
+        "4x4_32bit_rgb.psd",
+        "4x4_32bit_grayscale.psd",
+        "32bit5x5.psb",
+    ] {
         let name = format!("psd-tools-{name}");
         let bytes = std::fs::read(fixtures.join(format!("{name}.rgba-le"))).unwrap();
         let pixels = if name.contains("16bit") {
-            RasterPixels::Rgba16(Arc::new(bytes.chunks_exact(2).map(|b| u16::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>()).into())
+            RasterPixels::Rgba16(
+                Arc::new(
+                    bytes
+                        .chunks_exact(2)
+                        .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+                        .collect::<Vec<_>>(),
+                )
+                .into(),
+            )
         } else {
-            RasterPixels::Rgba32Float(Arc::new(bytes.chunks_exact(4).map(|b| f32::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>()).into())
+            RasterPixels::Rgba32Float(
+                Arc::new(
+                    bytes
+                        .chunks_exact(4)
+                        .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+                        .collect::<Vec<_>>(),
+                )
+                .into(),
+            )
         };
-        let edge = if name.ends_with(".psb") {5} else {4};
-        let raw = DecodedRaster::new(edge,edge,pixels,RasterColorSpace::Icc(std::fs::read(fixtures.join(format!("{name}.icc"))).unwrap())).unwrap();
-        inputs.push((fixtures.join(name),0,1,raw));
+        let edge = if name.ends_with(".psb") { 5 } else { 4 };
+        let raw = DecodedRaster::new(
+            edge,
+            edge,
+            pixels,
+            RasterColorSpace::Icc(std::fs::read(fixtures.join(format!("{name}.icc"))).unwrap()),
+        )
+        .unwrap();
+        inputs.push((fixtures.join(name), 0, 1, raw));
     }
     if producers {
         inputs.clear();
         for line in include_str!("../../../tests/fixtures/raster/ktx2-khronos-producer-manifest.tsv")
-            .lines().filter(|line| !line.starts_with('#') && !line.is_empty())
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.is_empty())
         {
             let fields: Vec<_> = line.split('\t').collect();
-            let raw = DecodedRaster::new(fields[2].parse().unwrap(), fields[3].parse().unwrap(),
+            let raw = DecodedRaster::new(
+                fields[2].parse().unwrap(),
+                fields[3].parse().unwrap(),
                 RasterPixels::Rgba8(Arc::new(std::fs::read(fixtures.join(fields[5])).unwrap()).into()),
-                RasterColorSpace::Srgb).unwrap();
-            inputs.push((fixtures.join(fields[0]), fields[1].parse().unwrap(), fields[4].parse().unwrap(), raw));
+                RasterColorSpace::Srgb,
+            )
+            .unwrap();
+            inputs.push((
+                fixtures.join(fields[0]),
+                fields[1].parse().unwrap(),
+                fields[4].parse().unwrap(),
+                raw,
+            ));
         }
-        eprintln!("OFFICIAL_KTX2_PIPELINE root=2097152 ram=524288/count1 queue=1048576/count4 restore=1048576 swap=1048576/count16");
+        eprintln!(
+            "OFFICIAL_KTX2_PIPELINE root=2097152 ram=524288/count1 queue=1048576/count4 restore=1048576 swap=1048576/count16"
+        );
     }
     if gray_alpha {
         inputs.clear();
-        for ext in ["psd","psb"] {
-            let raw = DecodedRaster::new(400,359,
-                RasterPixels::Rgba8(Arc::new(std::fs::read(fixtures.join("psd-tools-gray0.rgba")).unwrap()).into()),
-                RasterColorSpace::Icc(std::fs::read(fixtures.join("psd-tools-gray0.icc")).unwrap())).unwrap();
-            inputs.push((fixtures.join(format!("psd-tools-gray0.{ext}")),0,1,raw));
+        for ext in ["psd", "psb"] {
+            let raw = DecodedRaster::new(
+                400,
+                359,
+                RasterPixels::Rgba8(
+                    Arc::new(std::fs::read(fixtures.join("psd-tools-gray0.rgba")).unwrap()).into(),
+                ),
+                RasterColorSpace::Icc(std::fs::read(fixtures.join("psd-tools-gray0.icc")).unwrap()),
+            )
+            .unwrap();
+            inputs.push((fixtures.join(format!("psd-tools-gray0.{ext}")), 0, 1, raw));
         }
-        eprintln!("GRAY_ALPHA_PIPELINE root=8388608 ram=3145728/count1 swap=16777216/count4 queue=3145728/count4 restore=6291456");
+        eprintln!(
+            "GRAY_ALPHA_PIPELINE root=8388608 ram=3145728/count1 swap=16777216/count4 queue=3145728/count4 restore=6291456"
+        );
     }
     if high_alpha && !multi_alpha {
         inputs.clear();
-        for line in include_str!("../../../tests/fixtures/raster/psd-tools-alpha-manifest.tsv").lines().filter(|s| !s.starts_with('#')) {
-            let fields:Vec<_>=line.split('\t').collect();
-            let bytes=std::fs::read(fixtures.join(fields[4])).unwrap();
-            let pixels=if fields[3]=="16" {
-                RasterPixels::Rgba16(Arc::new(bytes.chunks_exact(2).map(|b|u16::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>()).into())
+        for line in include_str!("../../../tests/fixtures/raster/psd-tools-alpha-manifest.tsv")
+            .lines()
+            .filter(|s| !s.starts_with('#'))
+        {
+            let fields: Vec<_> = line.split('\t').collect();
+            let bytes = std::fs::read(fixtures.join(fields[4])).unwrap();
+            let pixels = if fields[3] == "16" {
+                RasterPixels::Rgba16(
+                    Arc::new(
+                        bytes
+                            .chunks_exact(2)
+                            .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
             } else {
-                RasterPixels::Rgba32Float(Arc::new(bytes.chunks_exact(4).map(|b|f32::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>()).into())
+                RasterPixels::Rgba32Float(
+                    Arc::new(
+                        bytes
+                            .chunks_exact(4)
+                            .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
             };
-            let raw=DecodedRaster::new(4,1,pixels,RasterColorSpace::LinearSrgb).unwrap();
-            inputs.push((fixtures.join(fields[0]),0,1,raw));
+            let raw = DecodedRaster::new(4, 1, pixels, RasterColorSpace::LinearSrgb).unwrap();
+            inputs.push((fixtures.join(fields[0]), 0, 1, raw));
         }
         eprintln!("HIGH_ALPHA_PIPELINE cases=8 explicit_linear=true root=8388608 ram_count=1 swap_count=16");
     }
     if multi_alpha {
         inputs.clear();
         for line in include_str!("../../../tests/fixtures/raster/psd-tools-alpha-multi-manifest.tsv")
-            .lines().filter(|s| !s.starts_with('#') && !s.is_empty())
+            .lines()
+            .filter(|s| !s.starts_with('#') && !s.is_empty())
         {
             let f: Vec<_> = line.split('\t').collect();
             let bytes = std::fs::read(fixtures.join(f[1])).unwrap();
             let pixels = if f[4] == "16" {
-                RasterPixels::Rgba16(Arc::new(bytes.chunks_exact(2)
-                    .map(|b| u16::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>()).into())
+                RasterPixels::Rgba16(
+                    Arc::new(
+                        bytes
+                            .chunks_exact(2)
+                            .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
             } else {
-                RasterPixels::Rgba32Float(Arc::new(bytes.chunks_exact(4)
-                    .map(|b| f32::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>()).into())
+                RasterPixels::Rgba32Float(
+                    Arc::new(
+                        bytes
+                            .chunks_exact(4)
+                            .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
             };
-            let raw = DecodedRaster::new(f[2].parse().unwrap(), f[3].parse().unwrap(), pixels,
-                RasterColorSpace::LinearSrgb).unwrap();
+            let raw = DecodedRaster::new(
+                f[2].parse().unwrap(),
+                f[3].parse().unwrap(),
+                pixels,
+                RasterColorSpace::LinearSrgb,
+            )
+            .unwrap();
             inputs.push((fixtures.join(f[0]), 0, 1, raw));
         }
-        eprintln!("MULTI_ALPHA_PIPELINE cases=32 all_compressions=true explicit_linear=true root=8388608 ram_count=1 swap_count=64");
+        eprintln!(
+            "MULTI_ALPHA_PIPELINE cases=32 all_compressions=true explicit_linear=true root=8388608 ram_count=1 swap_count=64"
+        );
     }
     if png_tiff {
         inputs.clear();
         // Pixel oracles come from the producer fixtures. Metadata and CMM preparation
         // are shared: this proves transport/rendering, not independent ICC accuracy.
-        for name in ["pattern.png", "pattern.tif", "pattern.indexed.png", "pattern.profiled.png"] {
+        for name in [
+            "pattern.png",
+            "pattern.tif",
+            "pattern.indexed.png",
+            "pattern.profiled.png",
+        ] {
             let path = fixtures.join(name);
             let decoded = rrrah_decode::decode_raster_file(&path).unwrap();
             let color = if matches!(decoded.color_space(), RasterColorSpace::Unspecified) {
                 RasterColorSpace::AssumedSrgb
-            } else { decoded.color_space().clone() };
-            let raw = DecodedRaster::new(16,16,
-                RasterPixels::Rgba8(Arc::new(std::fs::read(fixtures.join(format!("{name}.rgba"))).unwrap()).into()), color).unwrap();
-            inputs.push((path,0,1,raw));
+            } else {
+                decoded.color_space().clone()
+            };
+            let raw = DecodedRaster::new(
+                16,
+                16,
+                RasterPixels::Rgba8(
+                    Arc::new(std::fs::read(fixtures.join(format!("{name}.rgba"))).unwrap()).into(),
+                ),
+                color,
+            )
+            .unwrap();
+            inputs.push((path, 0, 1, raw));
         }
         // Fixed coefficient reference avoids calling the production xy matrix builder.
         // The authored generator specifies black, red, white with full-range half alpha.
         for (name, primaries, matrix) in [
-            ("cicp-linear-p3.png",12, [
-                [1.224940176,-0.224940176,0.],
-                [-0.042056955,1.042056955,0.],
-                [-0.019637555,-0.078636046,1.098273601],
-            ]),
-            ("cicp-linear-2020.png",9, [
-                [1.660491002,-0.587641139,-0.072849863],
-                [-0.124550475,1.132899897,-0.008349423],
-                [-0.018150763,-0.100578898,1.118729661],
-            ]),
+            (
+                "cicp-linear-p3.png",
+                12,
+                [
+                    [1.224940176, -0.224940176, 0.],
+                    [-0.042056955, 1.042056955, 0.],
+                    [-0.019637555, -0.078636046, 1.098273601],
+                ],
+            ),
+            (
+                "cicp-linear-2020.png",
+                9,
+                [
+                    [1.660491002, -0.587641139, -0.072849863],
+                    [-0.124550475, 1.132899897, -0.008349423],
+                    [-0.018150763, -0.100578898, 1.118729661],
+                ],
+            ),
         ] {
-            let samples: Vec<u16> = vec![0,0,0,32768,65535,0,0,32768,65535,65535,65535,32768];
-            let raw = DecodedRaster::new(3,1,RasterPixels::Rgba16(Arc::new(samples.clone()).into()),
-                RasterColorSpace::Cicp {primaries,transfer:8,matrix:0,full_range:true}).unwrap();
-            let oracle = rrrah_decode::prepare_raster_for_display_with_budget(&raw,None).unwrap();
-            let RasterPixels::Rgba32Float(values) = oracle.pixels() else {panic!("linear float required")};
+            let samples: Vec<u16> = vec![0, 0, 0, 32768, 65535, 0, 0, 32768, 65535, 65535, 65535, 32768];
+            let raw = DecodedRaster::new(
+                3,
+                1,
+                RasterPixels::Rgba16(Arc::new(samples.clone()).into()),
+                RasterColorSpace::Cicp {
+                    primaries,
+                    transfer: 8,
+                    matrix: 0,
+                    full_range: true,
+                },
+            )
+            .unwrap();
+            let oracle = rrrah_decode::prepare_raster_for_display_with_budget(&raw, None).unwrap();
+            let RasterPixels::Rgba32Float(values) = oracle.pixels() else {
+                panic!("linear float required")
+            };
             for (source, result) in samples.chunks_exact(4).zip(values.chunks_exact(4)) {
                 for channel in 0..3 {
-                    let expected: f64 = (0..3).map(|i|matrix[channel][i]*f64::from(source[i])/65535.).sum();
-                    assert!((f64::from(result[channel])-expected).abs()<2e-6,"{name} channel={channel}");
+                    let expected: f64 = (0..3)
+                        .map(|i| matrix[channel][i] * f64::from(source[i]) / 65535.)
+                        .sum();
+                    assert!(
+                        (f64::from(result[channel]) - expected).abs() < 2e-6,
+                        "{name} channel={channel}"
+                    );
                 }
-                assert_eq!(result[3],32768_f32/65535.);
+                assert_eq!(result[3], 32768_f32 / 65535.);
             }
-            assert!(values[4]>1. && values[5]<0. && values[6]<0.,"extended gamut lost: {name}");
-            inputs.push((fixtures.join(name),0,1,raw));
+            assert!(
+                values[4] > 1. && values[5] < 0. && values[6] < 0.,
+                "extended gamut lost: {name}"
+            );
+            inputs.push((fixtures.join(name), 0, 1, raw));
         }
         inputs.extend(png_orientation_cases(dir.path()));
         let path = fixtures.join("oriented.profiled.tif");
-        let color = rrrah_decode::decode_raster_file(&path).unwrap().color_space().clone();
-        inputs.push((path,0,1,DecodedRaster::new(1,2,
-            RasterPixels::Rgba8(Arc::new(vec![255,0,0,255,0,255,0,128]).into()),color).unwrap()));
-        for (name, transparent) in [("gray-gamma2-alpha16.png",true),("gray-gamma2-16.tif",false)] {
+        let color = rrrah_decode::decode_raster_file(&path)
+            .unwrap()
+            .color_space()
+            .clone();
+        inputs.push((
+            path,
+            0,
+            1,
+            DecodedRaster::new(
+                1,
+                2,
+                RasterPixels::Rgba8(Arc::new(vec![255, 0, 0, 255, 0, 255, 0, 128]).into()),
+                color,
+            )
+            .unwrap(),
+        ));
+        for (name, transparent) in [("gray-gamma2-alpha16.png", true), ("gray-gamma2-16.tif", false)] {
             let path = fixtures.join(name);
-            let color = rrrah_decode::decode_raster_file(&path).unwrap().color_space().clone();
-            let pixels: Vec<u16> = [0,32768,32769,65535].into_iter().zip([0,16384,32768,65535])
-                .flat_map(|(v,a)| [v,v,v,if transparent {a} else {65535}]).collect();
-            inputs.push((path,0,1,DecodedRaster::new(4,1,RasterPixels::Rgba16(Arc::new(pixels).into()),color).unwrap()));
+            let color = rrrah_decode::decode_raster_file(&path)
+                .unwrap()
+                .color_space()
+                .clone();
+            let pixels: Vec<u16> = [0, 32768, 32769, 65535]
+                .into_iter()
+                .zip([0, 16384, 32768, 65535])
+                .flat_map(|(v, a)| [v, v, v, if transparent { a } else { 65535 }])
+                .collect();
+            inputs.push((
+                path,
+                0,
+                1,
+                DecodedRaster::new(4, 1, RasterPixels::Rgba16(Arc::new(pixels).into()), color).unwrap(),
+            ));
         }
     }
     let count = inputs.len() as u64;
-    assert_eq!(count, if png_tiff {17} else if multi_alpha {32} else if gray_alpha {2} else if high_alpha {8} else if producers { 8 } else { 2019 });
+    assert_eq!(
+        count,
+        if png_tiff {
+            17
+        } else if multi_alpha {
+            32
+        } else if gray_alpha {
+            2
+        } else if high_alpha {
+            8
+        } else if producers {
+            8
+        } else {
+            2019
+        }
+    );
     for (path, index, frames, raw) in inputs {
         let raw = raw.with_image_selection(index, frames).unwrap();
         let expected_assumed = raw.color_space() == &RasterColorSpace::AssumedSrgb;
@@ -1510,8 +1809,16 @@ fn qualify_legacy_rasters(gpu: Option<&crate::navigation_metal_readback::GpuRead
         request.image_index = index;
         request.memory_budget = Some(root.clone());
         request.assume_untagged_srgb = true;
-        if high_alpha {request.assume_untagged_srgb=false;request.assume_untagged_linear_srgb=true;}
-        if request.path.file_name().is_some_and(|name| name.to_string_lossy().starts_with("pkm-eac-") || name.to_string_lossy().starts_with("ktx-eac-") || name.to_string_lossy().starts_with("ktx-rg-") || name.to_string_lossy().starts_with("ktx-half-")) {
+        if high_alpha {
+            request.assume_untagged_srgb = false;
+            request.assume_untagged_linear_srgb = true;
+        }
+        if request.path.file_name().is_some_and(|name| {
+            name.to_string_lossy().starts_with("pkm-eac-")
+                || name.to_string_lossy().starts_with("ktx-eac-")
+                || name.to_string_lossy().starts_with("ktx-rg-")
+                || name.to_string_lossy().starts_with("ktx-half-")
+        }) {
             request.assume_untagged_linear_srgb = true;
         }
         if request.path.extension().is_some_and(|ext| ext == "rla") {
@@ -1636,34 +1943,33 @@ fn official_ktx2_producers_ram_swap_and_blocked_prefetch() {
 #[ignore = "actual Metal official KTX2 producer full-image SDR/HDR RAM/swap readback"]
 fn official_ktx2_producers_ram_swap_and_metal() {
     let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual Metal required");
-    eprintln!("OFFICIAL_KTX2_METAL adapter={}",gpu.adapter_name());
+    eprintln!("OFFICIAL_KTX2_METAL adapter={}", gpu.adapter_name());
     qualify_legacy_rasters(Some(&gpu), RasterCorpus::KtxProducers);
 }
 
 #[test]
 fn original_gray_alpha_ram_swap_and_blocked_prefetch() {
-    qualify_legacy_rasters(None,RasterCorpus::GrayAlpha);
+    qualify_legacy_rasters(None, RasterCorpus::GrayAlpha);
 }
 #[test]
 #[ignore = "actual Metal original grayscale PSD/PSB transparency cache and swap"]
 fn original_gray_alpha_ram_swap_and_metal() {
     let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual Metal required");
-    eprintln!("GRAY_ALPHA_METAL adapter={}",gpu.adapter_name());
-    qualify_legacy_rasters(Some(&gpu),RasterCorpus::GrayAlpha);
+    eprintln!("GRAY_ALPHA_METAL adapter={}", gpu.adapter_name());
+    qualify_legacy_rasters(Some(&gpu), RasterCorpus::GrayAlpha);
 }
 
 #[test]
 fn high_precision_alpha_ram_swap_and_blocked_prefetch() {
-    qualify_legacy_rasters(None,RasterCorpus::HighAlpha);
+    qualify_legacy_rasters(None, RasterCorpus::HighAlpha);
 }
 #[test]
 #[ignore = "actual Metal authored16/32bit RGB/gray PSD/PSB alpha and HDR"]
 fn high_precision_alpha_ram_swap_and_metal() {
-    let gpu=crate::navigation_metal_readback::qualification_gpu().expect("actual Metal required");
-    eprintln!("HIGH_ALPHA_METAL adapter={}",gpu.adapter_name());
-    qualify_legacy_rasters(Some(&gpu),RasterCorpus::HighAlpha);
+    let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual Metal required");
+    eprintln!("HIGH_ALPHA_METAL adapter={}", gpu.adapter_name());
+    qualify_legacy_rasters(Some(&gpu), RasterCorpus::HighAlpha);
 }
-
 
 #[test]
 fn multirow_alpha_ram_swap_and_blocked_prefetch() {

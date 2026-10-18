@@ -25,9 +25,12 @@ fn raster_single_layer_gpu_timestamp_timing() {
     let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&device, budget.clone());
     renderer.upload(&device, &queue, &source).unwrap();
     let area = std::env::var_os("RRRAH_TIMING_AREA").is_some_and(|v| v == "1");
-    let zoom_factor: f32 = std::env::var("RRRAH_TIMING_ZOOM")
-        .map_or(1.0, |v| v.parse().expect("numeric timing zoom"));
-    assert!(matches!(zoom_factor, 1.0 | 0.5 | 0.25), "bounded timestamp footprints only");
+    let zoom_factor: f32 =
+        std::env::var("RRRAH_TIMING_ZOOM").map_or(1.0, |v| v.parse().expect("numeric timing zoom"));
+    assert!(
+        matches!(zoom_factor, 1.0 | 0.5 | 0.25),
+        "bounded timestamp footprints only"
+    );
     renderer.set_area_minification(&queue, area);
     renderer.update_view(
         &queue,
@@ -73,12 +76,18 @@ fn raster_single_layer_gpu_timestamp_timing() {
     let mut times = Vec::new();
     for iteration in 0..35 {
         // Repeated pan/zoom state updates; upload and CPU waits are outside GPU timestamps.
-        renderer.update_view(&queue, rrrah_gpu::ViewParameters {
-            viewport: [2048., 2048.],
-            zoom: (2048. / 2016.) * zoom_factor,
-            pan: [((iteration % 5) as f32 - 2.) * 0.375, ((iteration % 3) as f32 - 1.) * 0.25],
-            ..Default::default()
-        });
+        renderer.update_view(
+            &queue,
+            rrrah_gpu::ViewParameters {
+                viewport: [2048., 2048.],
+                zoom: (2048. / 2016.) * zoom_factor,
+                pan: [
+                    ((iteration % 5) as f32 - 2.) * 0.375,
+                    ((iteration % 3) as f32 - 1.) * 0.25,
+                ],
+                ..Default::default()
+            },
+        );
         let mut encoder = device.create_command_encoder(&Default::default());
         renderer.encode_with_timestamps(
             &mut encoder,

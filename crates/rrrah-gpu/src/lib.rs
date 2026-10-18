@@ -32,7 +32,8 @@ mod compute;
 pub use compute::{ExposureError, LinearExposureCompute, ResidentExposure};
 mod demosaic_compute;
 pub use demosaic_compute::{
-    BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic, ResidentLinearBayer,
+    BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic,
+    ResidentLinearBayer,
 };
 mod model;
 pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
@@ -153,11 +154,13 @@ pub fn plan_tiling(
     let tile_size = overrides
         .tile_size
         .unwrap_or_else(|| default_tile_size(width, height, max_dimension, max_array_layers, tile_halo));
-    let texture_extent = tile_size.checked_add(halo_extent).ok_or(GpuError::InvalidTilingOverride {
-        tile_size,
-        tile_halo,
-        max: max_dimension,
-    })?;
+    let texture_extent = tile_size
+        .checked_add(halo_extent)
+        .ok_or(GpuError::InvalidTilingOverride {
+            tile_size,
+            tile_halo,
+            max: max_dimension,
+        })?;
     if tile_size < MIN_TILE_SIZE || texture_extent > max_dimension {
         if overrides.tile_size.is_some() || overrides.tile_halo.is_some() {
             return Err(GpuError::InvalidTilingOverride {
@@ -213,9 +216,9 @@ fn fit_tiling_capacity(
     match &default {
         Ok(plan) if plan.atlas_bytes <= capacity || overrides.tile_size.is_some() => return default,
         Err(_) if overrides.tile_size.is_some() => return default,
-        Err(GpuError::AtlasTooLarge { .. }) => {},
+        Err(GpuError::AtlasTooLarge { .. }) => {}
         Err(_) => return default,
-        _ => {},
+        _ => {}
     }
     let halo = overrides.tile_halo.unwrap_or(DEFAULT_TILE_HALO);
     let mut best = default.as_ref().ok().copied();
@@ -227,10 +230,25 @@ fn fit_tiling_capacity(
     for axis in [width, height] {
         for layers in 1..=max_layers.min(axis.div_ceil(MIN_TILE_SIZE)) {
             let tile = axis.div_ceil(layers).max(MIN_TILE_SIZE);
-            if tile > max_tile { continue; }
-            if let Ok(candidate) = plan_tiling(width, height, max_dimension, max_layers,
-                TilingOverrides { tile_size: Some(tile), tile_halo: Some(halo) }) {
-                if best.as_ref().is_none_or(|plan| candidate.atlas_bytes < plan.atlas_bytes) { best = Some(candidate); }
+            if tile > max_tile {
+                continue;
+            }
+            if let Ok(candidate) = plan_tiling(
+                width,
+                height,
+                max_dimension,
+                max_layers,
+                TilingOverrides {
+                    tile_size: Some(tile),
+                    tile_halo: Some(halo),
+                },
+            ) {
+                if best
+                    .as_ref()
+                    .is_none_or(|plan| candidate.atlas_bytes < plan.atlas_bytes)
+                {
+                    best = Some(candidate);
+                }
             }
         }
     }
@@ -1665,7 +1683,9 @@ impl RawRenderer {
             max_dimension,
             device.limits().max_texture_array_layers,
             tiling,
-            self.memory_budget.as_ref().map_or(u64::MAX, |budget| budget.available_bytes().saturating_sub(grid_bytes)),
+            self.memory_budget.as_ref().map_or(u64::MAX, |budget| {
+                budget.available_bytes().saturating_sub(grid_bytes)
+            }),
         )?;
         let tile_halo = plan.tile_halo;
         let tile_size = plan.tile_size;
@@ -2919,40 +2939,90 @@ mod capacity_tiling_tests {
     use super::*;
     #[test]
     fn extreme_explicit_halos_and_edges_refuse_without_overflow() {
-        for (tile,halo) in [(32,u32::MAX),(32,1<<31),(u32::MAX,1),(u32::MAX-1,1)] {
-            let overrides = TilingOverrides { tile_size: Some(tile), tile_halo: Some(halo) };
-            assert!(matches!(plan_tiling(64,64,u32::MAX,2048,overrides),Err(GpuError::InvalidTilingOverride { .. })));
-            assert!(matches!(fit_tiling_capacity(64,64,u32::MAX,2048,overrides,u64::MAX),Err(GpuError::InvalidTilingOverride { .. })));
+        for (tile, halo) in [(32, u32::MAX), (32, 1 << 31), (u32::MAX, 1), (u32::MAX - 1, 1)] {
+            let overrides = TilingOverrides {
+                tile_size: Some(tile),
+                tile_halo: Some(halo),
+            };
+            assert!(matches!(
+                plan_tiling(64, 64, u32::MAX, 2048, overrides),
+                Err(GpuError::InvalidTilingOverride { .. })
+            ));
+            assert!(matches!(
+                fit_tiling_capacity(64, 64, u32::MAX, 2048, overrides, u64::MAX),
+                Err(GpuError::InvalidTilingOverride { .. })
+            ));
         }
-        assert!(matches!(plan_tiling(64,64,16384,2048,TilingOverrides {tile_size: None,tile_halo:Some(u32::MAX)}),Err(GpuError::InvalidTilingOverride { .. })));
+        assert!(matches!(
+            plan_tiling(
+                64,
+                64,
+                16384,
+                2048,
+                TilingOverrides {
+                    tile_size: None,
+                    tile_halo: Some(u32::MAX)
+                }
+            ),
+            Err(GpuError::InvalidTilingOverride { .. })
+        ));
     }
 
     #[test]
     fn default_eager_cap_refusal_still_searches_admissible_geometry() {
         let overrides = TilingOverrides::default();
-        assert!(matches!(plan_tiling(16370,16370,16384,2048,overrides),Err(GpuError::AtlasTooLarge { .. })));
-        let fit = fit_tiling_capacity(16370,16370,16384,2048,overrides,MAX_EAGER_ATLAS_BYTES).unwrap();
-        assert!(fit.atlas_bytes<=MAX_EAGER_ATLAS_BYTES);
-        assert_eq!(fit.tile_grid,[1,1]);
-        assert_eq!(fit.tile_size,16370);
-        let explicit = TilingOverrides { tile_size: Some(1022), tile_halo: Some(1) };
-        assert!(matches!(fit_tiling_capacity(16370,16370,16384,2048,explicit,u64::MAX),Err(GpuError::AtlasTooLarge { .. })));
+        assert!(matches!(
+            plan_tiling(16370, 16370, 16384, 2048, overrides),
+            Err(GpuError::AtlasTooLarge { .. })
+        ));
+        let fit = fit_tiling_capacity(16370, 16370, 16384, 2048, overrides, MAX_EAGER_ATLAS_BYTES).unwrap();
+        assert!(fit.atlas_bytes <= MAX_EAGER_ATLAS_BYTES);
+        assert_eq!(fit.tile_grid, [1, 1]);
+        assert_eq!(fit.tile_size, 16370);
+        let explicit = TilingOverrides {
+            tile_size: Some(1022),
+            tile_halo: Some(1),
+        };
+        assert!(matches!(
+            fit_tiling_capacity(16370, 16370, 16384, 2048, explicit, u64::MAX),
+            Err(GpuError::AtlasTooLarge { .. })
+        ));
     }
 
     #[test]
     fn tight_capacity_finds_unaligned_edge_and_matches_exhaustive_minimum() {
-        let overrides = TilingOverrides { tile_size: None, tile_halo: Some(1) };
-        let tight = fit_tiling_capacity(63,129,1024,256,overrides,18000).unwrap();
-        assert_eq!((tight.tile_size,tight.atlas_bytes),(65,17956));
-        for width in [2,31,63,95,163,257,500] {
-            for height in [3,47,79,129,211,417] {
-                for halo in [1,2,3] {
-                    let overrides = TilingOverrides { tile_size: None, tile_halo: Some(halo) };
-                    let actual = fit_tiling_capacity(width,height,1024,256,overrides,0).unwrap();
-                    let expected = (MIN_TILE_SIZE..=1024-2*halo).filter_map(|tile|
-                        plan_tiling(width,height,1024,256,TilingOverrides {tile_size:Some(tile),..overrides}).ok()
-                    ).map(|plan|plan.atlas_bytes).min().unwrap();
-                    assert_eq!(actual.atlas_bytes,expected,"{width}x{height} halo={halo}");
+        let overrides = TilingOverrides {
+            tile_size: None,
+            tile_halo: Some(1),
+        };
+        let tight = fit_tiling_capacity(63, 129, 1024, 256, overrides, 18000).unwrap();
+        assert_eq!((tight.tile_size, tight.atlas_bytes), (65, 17956));
+        for width in [2, 31, 63, 95, 163, 257, 500] {
+            for height in [3, 47, 79, 129, 211, 417] {
+                for halo in [1, 2, 3] {
+                    let overrides = TilingOverrides {
+                        tile_size: None,
+                        tile_halo: Some(halo),
+                    };
+                    let actual = fit_tiling_capacity(width, height, 1024, 256, overrides, 0).unwrap();
+                    let expected = (MIN_TILE_SIZE..=1024 - 2 * halo)
+                        .filter_map(|tile| {
+                            plan_tiling(
+                                width,
+                                height,
+                                1024,
+                                256,
+                                TilingOverrides {
+                                    tile_size: Some(tile),
+                                    ..overrides
+                                },
+                            )
+                            .ok()
+                        })
+                        .map(|plan| plan.atlas_bytes)
+                        .min()
+                        .unwrap();
+                    assert_eq!(actual.atlas_bytes, expected, "{width}x{height} halo={halo}");
                 }
             }
         }
@@ -2960,17 +3030,30 @@ mod capacity_tiling_tests {
 
     #[test]
     fn real_cr3_shape_fits_64_mib_without_changing_unlimited_default() {
-        for halo in [1,2,3] {
-            let overrides = TilingOverrides { tile_halo: Some(halo), tile_size: None };
-            let default = plan_tiling(6188,4120,16384,2048,overrides).unwrap();
-            assert_eq!(fit_tiling_capacity(6188,4120,16384,2048,overrides,u64::MAX).unwrap(),default);
-            let constrained = fit_tiling_capacity(6188,4120,16384,2048,overrides,64*1024*1024).unwrap();
-            assert!(constrained.atlas_bytes <= 64*1024*1024);
-            assert_eq!(constrained.tile_halo,halo);
-            assert!(constrained.tile_grid[0]*constrained.tile_size >= 6188);
-            assert!(constrained.tile_grid[1]*constrained.tile_size >= 4120);
-            let explicit = TilingOverrides { tile_size: Some(default.tile_size), ..overrides };
-            assert_eq!(fit_tiling_capacity(6188,4120,16384,2048,explicit,1).unwrap(),default);
+        for halo in [1, 2, 3] {
+            let overrides = TilingOverrides {
+                tile_halo: Some(halo),
+                tile_size: None,
+            };
+            let default = plan_tiling(6188, 4120, 16384, 2048, overrides).unwrap();
+            assert_eq!(
+                fit_tiling_capacity(6188, 4120, 16384, 2048, overrides, u64::MAX).unwrap(),
+                default
+            );
+            let constrained =
+                fit_tiling_capacity(6188, 4120, 16384, 2048, overrides, 64 * 1024 * 1024).unwrap();
+            assert!(constrained.atlas_bytes <= 64 * 1024 * 1024);
+            assert_eq!(constrained.tile_halo, halo);
+            assert!(constrained.tile_grid[0] * constrained.tile_size >= 6188);
+            assert!(constrained.tile_grid[1] * constrained.tile_size >= 4120);
+            let explicit = TilingOverrides {
+                tile_size: Some(default.tile_size),
+                ..overrides
+            };
+            assert_eq!(
+                fit_tiling_capacity(6188, 4120, 16384, 2048, explicit, 1).unwrap(),
+                default
+            );
         }
     }
 }

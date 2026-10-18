@@ -2318,10 +2318,7 @@ pub fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
 /// colour-difference (`R - G`, `B - G`) refinement across each candidate before evaluating
 /// 5×5 CIELab homogeneity, plus a post-selection colour-difference smoothing pass that pins
 /// measured CFA channels bit-for-bit.
-pub fn xtrans_markesteijn_3pass(
-    m: &Mosaic,
-    cancelled: &impl Fn() -> bool,
-) -> Result<Rgb32f, DevelopError> {
+pub fn xtrans_markesteijn_3pass(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct XTrans3Scratch {
         mos: Vec<f64>,

@@ -178,10 +178,7 @@ impl DecodeRequest {
         }
     }
 
-    pub fn qualify_linear_color(
-        &self,
-        color: rrrah_core::RasterColorSpace,
-    ) -> rrrah_core::RasterColorSpace {
+    pub fn qualify_linear_color(&self, color: rrrah_core::RasterColorSpace) -> rrrah_core::RasterColorSpace {
         if self.assume_untagged_linear_srgb && color == rrrah_core::RasterColorSpace::LinearRgbUnspecified {
             rrrah_core::RasterColorSpace::LinearSrgb
         } else {
@@ -388,11 +385,7 @@ mod api_contract_regressions {
         }
         let owner = Arc::new(AtomicU64::new(4));
         let token = GenerationToken::new(owner.clone(), 4);
-        assert!(
-            token
-                .combine(&GenerationToken::new(owner, 5))
-                .is_cancelled()
-        );
+        assert!(token.combine(&GenerationToken::new(owner, 5)).is_cancelled());
     }
 
     #[test]
@@ -454,10 +447,7 @@ mod opcode_geometry_serde_compatibility_tests {
             let mut current = lists.clone();
             current.pixel_aspect = Some(aspect);
             let encoded = serde_json::to_string(&current).unwrap();
-            assert_eq!(
-                serde_json::from_str::<OpcodeLists>(&encoded).unwrap(),
-                current
-            );
+            assert_eq!(serde_json::from_str::<OpcodeLists>(&encoded).unwrap(), current);
         }
     }
 }
@@ -481,12 +471,7 @@ mod gpr_opcode_tests {
             assert!(lists.list1.is_empty());
             if name == "HERO9" {
                 assert_eq!(lists.list2.len(), 4);
-                assert!(
-                    lists
-                        .list2
-                        .iter()
-                        .all(|op| matches!(op, Opcode::GainMap { .. }))
-                );
+                assert!(lists.list2.iter().all(|op| matches!(op, Opcode::GainMap { .. })));
                 assert!(lists.list3.is_empty());
             } else {
                 assert!(lists.list2.is_empty());

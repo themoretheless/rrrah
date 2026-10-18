@@ -77,16 +77,29 @@ pub struct RasterAnimationTiming {
 }
 impl RasterAnimationTiming {
     pub fn new(numerator: u32, denominator: u32, num_plays: u32) -> Result<Self, RasterError> {
-        if denominator == 0 { return Err(RasterError::InvalidAnimationTiming); }
-        Ok(Self { delay_ms_numerator: numerator, delay_ms_denominator: denominator, num_plays })
+        if denominator == 0 {
+            return Err(RasterError::InvalidAnimationTiming);
+        }
+        Ok(Self {
+            delay_ms_numerator: numerator,
+            delay_ms_denominator: denominator,
+            num_plays,
+        })
     }
-    pub fn delay_ms_numerator(self) -> u32 { self.delay_ms_numerator }
-    pub fn delay_ms_denominator(self) -> u32 { self.delay_ms_denominator }
-    pub fn num_plays(self) -> u32 { self.num_plays }
+    pub fn delay_ms_numerator(self) -> u32 {
+        self.delay_ms_numerator
+    }
+    pub fn delay_ms_denominator(self) -> u32 {
+        self.delay_ms_denominator
+    }
+    pub fn num_plays(self) -> u32 {
+        self.num_plays
+    }
     /// Round fractions upward to a nanosecond; zero delays remain zero.
     pub fn delay(self) -> std::time::Duration {
-        std::time::Duration::from_nanos((u64::from(self.delay_ms_numerator) * 1_000_000)
-            .div_ceil(u64::from(self.delay_ms_denominator)))
+        std::time::Duration::from_nanos(
+            (u64::from(self.delay_ms_numerator) * 1_000_000).div_ceil(u64::from(self.delay_ms_denominator)),
+        )
     }
 }
 
@@ -425,7 +438,9 @@ impl DecodedRaster {
         })
     }
 
-    pub fn animation_timing(&self) -> Option<RasterAnimationTiming> { self.animation_timing }
+    pub fn animation_timing(&self) -> Option<RasterAnimationTiming> {
+        self.animation_timing
+    }
     pub fn with_animation_timing(mut self, timing: Option<RasterAnimationTiming>) -> Self {
         self.animation_timing = timing;
         self
@@ -1722,14 +1737,29 @@ mod animation_timing_tests {
     use super::*;
     #[test]
     fn rational_delay_and_conversion_preserve_animation_timing() {
-        assert!(RasterAnimationTiming::new(1,0,1).is_err());
-        for (n,d,plays,nanos) in [(0,1,0,0),(1,65535,1,16),(1000,60,3,16_666_667),(u32::MAX,1,65536,4_294_967_295_000_000)] {
-            let timing=RasterAnimationTiming::new(n,d,plays).unwrap();
-            assert_eq!(timing.delay().as_nanos(),nanos);
-            let source=DecodedRaster::new(1,1,RasterPixels::Rgba8(Arc::new(vec![128,64,32,255]).into()),RasterColorSpace::Srgb).unwrap().with_animation_timing(Some(timing));
-            let ready=source.to_linear_srgb().unwrap();
-            assert_eq!(ready.animation_timing(),Some(timing));
-            assert_eq!(ready.clone().to_linear_srgb().unwrap().animation_timing(),Some(timing));
+        assert!(RasterAnimationTiming::new(1, 0, 1).is_err());
+        for (n, d, plays, nanos) in [
+            (0, 1, 0, 0),
+            (1, 65535, 1, 16),
+            (1000, 60, 3, 16_666_667),
+            (u32::MAX, 1, 65536, 4_294_967_295_000_000),
+        ] {
+            let timing = RasterAnimationTiming::new(n, d, plays).unwrap();
+            assert_eq!(timing.delay().as_nanos(), nanos);
+            let source = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba8(Arc::new(vec![128, 64, 32, 255]).into()),
+                RasterColorSpace::Srgb,
+            )
+            .unwrap()
+            .with_animation_timing(Some(timing));
+            let ready = source.to_linear_srgb().unwrap();
+            assert_eq!(ready.animation_timing(), Some(timing));
+            assert_eq!(
+                ready.clone().to_linear_srgb().unwrap().animation_timing(),
+                Some(timing)
+            );
         }
     }
 }

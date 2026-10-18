@@ -190,15 +190,22 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
             valid.ok_or_else(|| bad("sample type or internal format unsupported"))?,
         )
     };
-    if compressed && channels != match codec {
-        0 | 4 => 3,
-        5 | 6 => 1,
-        7 | 8 => 2,
-        _ => 4,
-    } {
+    if compressed
+        && channels
+            != match codec {
+                0 | 4 => 3,
+                5 | 6 => 1,
+                7 | 8 => 2,
+                _ => 4,
+            }
+    {
         return Err(bad("compressed base format mismatch"));
     }
-    let output_size = if (compressed && codec >= 5) || ty == 0x140b { 4 } else { size };
+    let output_size = if (compressed && codec >= 5) || ty == 0x140b {
+        4
+    } else {
+        size
+    };
     if (width as u64) * (height as u64) * 4 * (output_size as u64) > MAX_RASTER_BYTES {
         return Err(RasterDecodeError::OutputTooLarge);
     }
@@ -285,7 +292,9 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
             let red = crate::eac::decode(b[..8].try_into().unwrap(), signed);
             let green = if dual {
                 crate::eac::decode(b[8..].try_into().unwrap(), signed)
-            } else { [0; 16] };
+            } else {
+                [0; 16]
+            };
             let left = i % width.div_ceil(4) * 4;
             let top = i / width.div_ceil(4) * 4;
             for y in 0..4 {
@@ -295,7 +304,9 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
                         let sample = y * 4 + x;
                         out[at..at + 4].copy_from_slice(&[
                             f32::from(red[sample]) / denominator,
-                            f32::from(green[sample]) / denominator, 0.0, 1.0,
+                            f32::from(green[sample]) / denominator,
+                            0.0,
+                            1.0,
                         ]);
                     }
                 }
@@ -519,27 +530,47 @@ mod tests {
     fn every_binary16_pattern_matches_independent_numpy_expansion_in_both_endians() {
         let oracle = include_bytes!("../../../tests/fixtures/raster/mrc-half-all.r32f");
         for be in [false, true] {
-            let word = |value: u32| if be { value.to_be_bytes() } else { value.to_le_bytes() };
+            let word = |value: u32| {
+                if be {
+                    value.to_be_bytes()
+                } else {
+                    value.to_le_bytes()
+                }
+            };
             let mut source = MAGIC.to_vec();
-            for value in [0x04030201, 0x140b, 2, 0x1903, 0x822d, 0x1903, 256, 256, 0, 0, 1, 1, 0, 131072] {
+            for value in [
+                0x04030201, 0x140b, 2, 0x1903, 0x822d, 0x1903, 256, 256, 0, 0, 1, 1, 0, 131072,
+            ] {
                 source.extend(word(value));
             }
             for bits in 0..=u16::MAX {
-                source.extend(if be { bits.to_be_bytes() } else { bits.to_le_bytes() });
+                source.extend(if be {
+                    bits.to_be_bytes()
+                } else {
+                    bits.to_le_bytes()
+                });
             }
             let root = rrrah_core::MemoryBudget::new(65536 * 16);
             let mut request = DecodeRequest::new("all-half.ktx");
             request.assume_untagged_linear_srgb = true;
             request.memory_budget = Some(root.clone());
             let decoded = decode(&source, &request).unwrap();
-            let RasterPixels::Rgba32Float(values) = decoded.pixels() else { panic!() };
+            let RasterPixels::Rgba32Float(values) = decoded.pixels() else {
+                panic!()
+            };
             for (index, rgba) in values.chunks_exact(4).enumerate() {
                 let expected = u32::from_le_bytes(oracle[index * 4..index * 4 + 4].try_into().unwrap());
                 assert_eq!(rgba[0].to_bits(), expected, "half{index:04x} be={be}");
-                assert_eq!([rgba[1].to_bits(), rgba[2].to_bits(), rgba[3].to_bits()], [0, 0, 1f32.to_bits()]);
+                assert_eq!(
+                    [rgba[1].to_bits(), rgba[2].to_bits(), rgba[3].to_bits()],
+                    [0, 0, 1f32.to_bits()]
+                );
             }
             // Native bits include nonfinite values, which must never be admitted as display colors.
-            assert!(matches!(decoded.to_linear_srgb(), Err(rrrah_core::RasterError::NonFiniteSample)));
+            assert!(matches!(
+                decoded.to_linear_srgb(),
+                Err(rrrah_core::RasterError::NonFiniteSample)
+            ));
             assert_eq!(root.used(), 65536 * 16);
             drop(decoded);
             assert_eq!((root.used(), root.peak()), (0, 65536 * 16));
@@ -553,18 +584,27 @@ mod tests {
         assert!(native.to_linear_srgb().is_err());
         let mut request = DecodeRequest::new("data.ktx");
         request.assume_untagged_srgb = true;
-        assert_eq!(decode(source, &request).unwrap().color_space(), &RasterColorSpace::LinearRgbUnspecified);
+        assert_eq!(
+            decode(source, &request).unwrap().color_space(),
+            &RasterColorSpace::LinearRgbUnspecified
+        );
         request.assume_untagged_linear_srgb = true;
         let qualified = decode(source, &request).unwrap();
         assert_eq!(qualified.color_space(), &RasterColorSpace::LinearSrgb);
         let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) =
-            (native.pixels(), qualified.pixels()) else { panic!() };
+            (native.pixels(), qualified.pixels())
+        else {
+            panic!()
+        };
         assert_eq!(a.as_slice(), b.as_slice());
         let mut invalid = source.to_vec();
         invalid[32..36].copy_from_slice(&0x1908u32.to_le_bytes());
         let zero = rrrah_core::MemoryBudget::new(0);
         request.memory_budget = Some(zero.clone());
-        assert!(matches!(decode(&invalid, &request), Err(RasterDecodeError::InvalidKtx("compressed base format mismatch"))));
+        assert!(matches!(
+            decode(&invalid, &request),
+            Err(RasterDecodeError::InvalidKtx("compressed base format mismatch"))
+        ));
         assert_eq!((zero.used(), zero.peak()), (0, 0));
     }
     #[test]

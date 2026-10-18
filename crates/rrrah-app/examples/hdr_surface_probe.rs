@@ -343,7 +343,7 @@ impl ApplicationHandler for Probe {
                         Err(error) => return Err(error.into()),
                     };
                     match policy.as_str() {
-                        "strict" => {},
+                        "strict" => {}
                         "srgb" => request.assume_untagged_srgb = true,
                         "linear-srgb" => request.assume_untagged_linear_srgb = true,
                         _ => anyhow::bail!("HDR untagged color must be strict, srgb or linear-srgb"),

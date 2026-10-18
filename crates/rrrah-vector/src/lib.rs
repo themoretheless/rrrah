@@ -15,7 +15,6 @@
 pub use resvg::usvg::roxmltree;
 pub use rrrah_raw::{DecodeError, DecodeRequest, GenerationToken, bounded_io};
 
-pub mod icc_colorimetry;
 pub mod emf;
 pub mod eps;
 pub mod eps_bounds;
@@ -31,6 +30,7 @@ pub mod eps_stroke;
 pub mod eps_stroke_prepare;
 pub mod eps_tokens;
 pub mod eps_vm;
+pub mod icc_colorimetry;
 pub mod pdf;
 #[cfg(test)]
 mod pdf_device_default_tests;

@@ -266,9 +266,9 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
     /// Conservative count-only admission check without eviction or recency changes.
     /// Existing keys may replace membership; byte/TTL constraints still apply later.
     pub fn can_admit_key_by_count(&self, key: &K) -> bool {
-        self.limits.max_entries.is_none_or(|max| {
-            max > 0 && (self.entries.contains_key(key) || self.protected.len() < max)
-        })
+        self.limits
+            .max_entries
+            .is_none_or(|max| max > 0 && (self.entries.contains_key(key) || self.protected.len() < max))
     }
     fn needs_slot(&self) -> bool {
         self.limits

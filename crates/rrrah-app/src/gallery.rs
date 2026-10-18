@@ -589,13 +589,30 @@ pub struct ContainerPrefetchPlan {
 }
 /// Automatic requests carry exact repeat-phase information; manual requests
 /// infer direction and use the source's declared total-play semantics.
-pub fn container_prefetch_plan(count: usize, selected: usize, previous: Option<usize>, source_looping: bool, automatic_wrap: Option<bool>, window: PrefetchWindow) -> ContainerPrefetchPlan {
-    let cyclic=source_looping && automatic_wrap.unwrap_or(true);
-    let direction=if automatic_wrap.is_some() { NavDirection::Forward }
-        else { container_prefetch_direction(count,selected,previous,cyclic) };
-    let indices=if cyclic { cyclic_neighbour_prefetch_indices(count,selected,direction,window) }
-        else { neighbour_prefetch_indices(count,selected,direction,window) };
-    ContainerPrefetchPlan { direction,cyclic,indices }
+pub fn container_prefetch_plan(
+    count: usize,
+    selected: usize,
+    previous: Option<usize>,
+    source_looping: bool,
+    automatic_wrap: Option<bool>,
+    window: PrefetchWindow,
+) -> ContainerPrefetchPlan {
+    let cyclic = source_looping && automatic_wrap.unwrap_or(true);
+    let direction = if automatic_wrap.is_some() {
+        NavDirection::Forward
+    } else {
+        container_prefetch_direction(count, selected, previous, cyclic)
+    };
+    let indices = if cyclic {
+        cyclic_neighbour_prefetch_indices(count, selected, direction, window)
+    } else {
+        neighbour_prefetch_indices(count, selected, direction, window)
+    };
+    ContainerPrefetchPlan {
+        direction,
+        cyclic,
+        indices,
+    }
 }
 
 pub fn cyclic_neighbour_prefetch_indices(
@@ -2857,8 +2874,12 @@ mod tests {
     }
     #[test]
     fn filtered_raw_neighbours_preserve_mixed_gallery_order_and_boundaries() {
-        let paths: Vec<_> = ["a.png", "b.cr3", "c.jpg", "d.nef", "e.webp", "f.dng", "g.hdr", "h.arw"]
-            .into_iter().map(PathBuf::from).collect();
+        let paths: Vec<_> = [
+            "a.png", "b.cr3", "c.jpg", "d.nef", "e.webp", "f.dng", "g.hdr", "h.arw",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .collect();
         let mut cases = 0;
         for count in 0..=paths.len() {
             for selected in (0..=count).chain([usize::MAX]) {
@@ -2866,9 +2887,15 @@ mod tests {
                     for behind in [0, 1, 3, usize::MAX] {
                         for ahead in [0, 1, 3, usize::MAX] {
                             let window = PrefetchWindow { behind, ahead };
-                            let expected: Vec<_> = neighbour_prefetch_paths(&paths[..count], selected, direction, window)
-                                .into_iter().filter(|path| rrrah_decode::is_supported_raw_path(path)).collect();
-                            assert_eq!(raw_neighbour_prefetch_paths(&paths[..count], selected, direction, window), expected);
+                            let expected: Vec<_> =
+                                neighbour_prefetch_paths(&paths[..count], selected, direction, window)
+                                    .into_iter()
+                                    .filter(|path| rrrah_decode::is_supported_raw_path(path))
+                                    .collect();
+                            assert_eq!(
+                                raw_neighbour_prefetch_paths(&paths[..count], selected, direction, window),
+                                expected
+                            );
                             cases += 1;
                         }
                     }
@@ -2882,24 +2909,50 @@ mod tests {
     #[ignore = "manual alternating paired mixed-gallery RAW planning profile"]
     fn raw_prefetch_filtered_clone_paired_profile() {
         use std::{hint::black_box, time::Instant};
-        let paths: Vec<_> = (0..1024).map(|i| PathBuf::from(format!("collection/subfolder/image-{i:05}.{}", if i % 4 == 0 { "cr3" } else { "png" }))).collect();
-        for window in [PrefetchWindow { behind: 2, ahead: 5 }, PrefetchWindow { behind: 100, ahead: 100 }] {
+        let paths: Vec<_> = (0..1024)
+            .map(|i| {
+                PathBuf::from(format!(
+                    "collection/subfolder/image-{i:05}.{}",
+                    if i % 4 == 0 { "cr3" } else { "png" }
+                ))
+            })
+            .collect();
+        for window in [
+            PrefetchWindow { behind: 2, ahead: 5 },
+            PrefetchWindow {
+                behind: 100,
+                ahead: 100,
+            },
+        ] {
             let run = |candidate| {
                 let start = Instant::now();
                 for _ in 0..4 {
                     for selected in 0..paths.len() {
                         let result = if candidate {
-                            raw_neighbour_prefetch_paths(black_box(&paths), black_box(selected), NavDirection::Forward, window)
+                            raw_neighbour_prefetch_paths(
+                                black_box(&paths),
+                                black_box(selected),
+                                NavDirection::Forward,
+                                window,
+                            )
                         } else {
-                            neighbour_prefetch_paths(black_box(&paths), black_box(selected), NavDirection::Forward, window)
-                                .into_iter().filter(|path| rrrah_decode::is_supported_raw_path(path)).collect()
+                            neighbour_prefetch_paths(
+                                black_box(&paths),
+                                black_box(selected),
+                                NavDirection::Forward,
+                                window,
+                            )
+                            .into_iter()
+                            .filter(|path| rrrah_decode::is_supported_raw_path(path))
+                            .collect()
                         };
                         black_box(result);
                     }
                 }
                 start.elapsed().as_nanos()
             };
-            run(false); run(true);
+            run(false);
+            run(true);
             for pair in 0..12 {
                 let (previous_ns, filtered_ns) = if pair % 2 == 0 {
                     (run(false), run(true))
@@ -2907,7 +2960,10 @@ mod tests {
                     let filtered = run(true);
                     (run(false), filtered)
                 };
-                eprintln!("RAW_PLAN_AB behind={} ahead={} pair={pair} plans=4096 previous_ns={previous_ns} filtered_ns={filtered_ns}", window.behind, window.ahead);
+                eprintln!(
+                    "RAW_PLAN_AB behind={} ahead={} pair={pair} plans=4096 previous_ns={previous_ns} filtered_ns={filtered_ns}",
+                    window.behind, window.ahead
+                );
             }
         }
     }
@@ -2915,24 +2971,35 @@ mod tests {
     #[test]
     fn virtual_maximum_collection_prefetch_stays_lazy_and_never_overflows() {
         let maximum = usize::MAX;
-        let full = PrefetchWindow { behind: maximum, ahead: maximum };
+        let full = PrefetchWindow {
+            behind: maximum,
+            ahead: maximum,
+        };
         for selected in [0, maximum / 2, maximum - 1] {
             for direction in [NavDirection::None, NavDirection::Forward, NavDirection::Backward] {
                 let iterator = neighbour_prefetch_iterator(maximum, selected, direction, full);
                 assert_eq!(iterator.size_hint(), (maximum - 1, Some(maximum - 1)));
                 let actual: Vec<_> = iterator.take(16).collect();
                 let ascend = selected == 0 || selected != maximum - 1 && direction == NavDirection::Forward;
-                let expected: Vec<_> = (1..=16).map(|step| if ascend { selected + step } else { selected - step }).collect();
+                let expected: Vec<_> = (1..=16)
+                    .map(|step| if ascend { selected + step } else { selected - step })
+                    .collect();
                 assert_eq!(actual, expected);
             }
         }
         let window = PrefetchWindow { behind: 2, ahead: 4 };
         for (direction, expected) in [
             (NavDirection::Forward, vec![maximum - 1, maximum - 3, maximum - 4]),
-            (NavDirection::Backward, vec![maximum - 3, maximum - 4, maximum - 5, maximum - 6, maximum - 1]),
+            (
+                NavDirection::Backward,
+                vec![maximum - 3, maximum - 4, maximum - 5, maximum - 6, maximum - 1],
+            ),
             (NavDirection::None, vec![maximum - 3, maximum - 4, maximum - 1]),
         ] {
-            assert_eq!(neighbour_prefetch_iterator(maximum, maximum - 2, direction, window).collect::<Vec<_>>(), expected);
+            assert_eq!(
+                neighbour_prefetch_iterator(maximum, maximum - 2, direction, window).collect::<Vec<_>>(),
+                expected
+            );
         }
         for (count, selected) in [(maximum, maximum), (0, maximum), (0, 0), (1, 0)] {
             for direction in [NavDirection::None, NavDirection::Forward, NavDirection::Backward] {
@@ -2946,15 +3013,9 @@ mod tests {
     fn directional_prefetch_matches_sorted_distance_model_for_all_small_windows() {
         let mut cases = 0;
         for count in 0..=32 {
-            let paths: Vec<_> = (0..count)
-                .map(|i| PathBuf::from(format!("{i}.png")))
-                .collect();
+            let paths: Vec<_> = (0..count).map(|i| PathBuf::from(format!("{i}.png"))).collect();
             for selected in (0..=count).chain(std::iter::once(usize::MAX)) {
-                for direction in [
-                    NavDirection::None,
-                    NavDirection::Forward,
-                    NavDirection::Backward,
-                ] {
+                for direction in [NavDirection::None, NavDirection::Forward, NavDirection::Backward] {
                     for behind in [0, 1, 2, 5, usize::MAX] {
                         for ahead in [0, 1, 2, 5, usize::MAX] {
                             let (left, right) = if direction == NavDirection::Backward {
@@ -2990,10 +3051,7 @@ mod tests {
                             );
                             assert_eq!(
                                 neighbour_prefetch_paths(&paths, selected, direction, window),
-                                expected
-                                    .iter()
-                                    .map(|&i| paths[i].clone())
-                                    .collect::<Vec<_>>()
+                                expected.iter().map(|&i| paths[i].clone()).collect::<Vec<_>>()
                             );
                             cases += 1;
                         }
@@ -3441,16 +3499,21 @@ mod repeat_phase_prefetch_tests {
     use super::*;
     #[test]
     fn final_pass_is_linear_and_auto_wrap_direction_is_explicit() {
-        let window=PrefetchWindow { ahead:2,behind:0 };
-        let repeating=container_prefetch_plan(4,3,Some(2),true,Some(true),window);
-        assert_eq!(repeating.indices,[0,1]);assert!(repeating.cyclic);
-        let final_pass=container_prefetch_plan(4,3,Some(2),true,Some(false),window);
-        assert!(final_pass.indices.is_empty());assert!(!final_pass.cyclic);
-        let wrapped_final=container_prefetch_plan(4,0,Some(3),true,Some(false),window);
-        assert_eq!(wrapped_final.direction,NavDirection::Forward);assert_eq!(wrapped_final.indices,[1,2]);
-        let manual=container_prefetch_plan(4,2,Some(3),true,None,window);
-        assert_eq!(manual.direction,NavDirection::Backward);assert_eq!(manual.indices,[1,0]);
-        let page=container_prefetch_plan(4,3,Some(2),false,Some(true),window);
-        assert!(!page.cyclic);assert!(page.indices.is_empty());
+        let window = PrefetchWindow { ahead: 2, behind: 0 };
+        let repeating = container_prefetch_plan(4, 3, Some(2), true, Some(true), window);
+        assert_eq!(repeating.indices, [0, 1]);
+        assert!(repeating.cyclic);
+        let final_pass = container_prefetch_plan(4, 3, Some(2), true, Some(false), window);
+        assert!(final_pass.indices.is_empty());
+        assert!(!final_pass.cyclic);
+        let wrapped_final = container_prefetch_plan(4, 0, Some(3), true, Some(false), window);
+        assert_eq!(wrapped_final.direction, NavDirection::Forward);
+        assert_eq!(wrapped_final.indices, [1, 2]);
+        let manual = container_prefetch_plan(4, 2, Some(3), true, None, window);
+        assert_eq!(manual.direction, NavDirection::Backward);
+        assert_eq!(manual.indices, [1, 0]);
+        let page = container_prefetch_plan(4, 3, Some(2), false, Some(true), window);
+        assert!(!page.cyclic);
+        assert!(page.indices.is_empty());
     }
 }

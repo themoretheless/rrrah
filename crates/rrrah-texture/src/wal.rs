@@ -186,8 +186,14 @@ mod tests {
     }
     #[test]
     fn game_palette_uses_source_and_wal_output_budget_without_unused_pcx_pixels() {
-        let directory = std::env::temp_dir().join(format!("rrrah-wal-palette-budget-{}-{}",
-            std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        let directory = std::env::temp_dir().join(format!(
+            "rrrah-wal-palette-budget-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
         std::fs::create_dir_all(directory.join("pics")).unwrap();
         std::fs::create_dir_all(directory.join("textures")).unwrap();
         let pcx = include_bytes!("../../../tests/fixtures/raster/wal-colormap.pcx");
@@ -199,7 +205,9 @@ mod tests {
         let mut request = DecodeRequest::new(directory.join("textures/grid.wal"));
         request.memory_budget = Some(root.clone());
         let frame = decode_using_game_palette(source, &request).unwrap();
-        let RasterPixels::Rgba8(values) = frame.pixels() else { panic!() };
+        let RasterPixels::Rgba8(values) = frame.pixels() else {
+            panic!()
+        };
         assert_eq!(&values[..], oracle);
         assert_eq!((root.used(), root.peak()), (oracle.len() as u64, peak));
         let held = frame.clone();
@@ -209,8 +217,10 @@ mod tests {
         assert_eq!(root.used(), 0);
         let short = rrrah_core::MemoryBudget::new(peak - 1);
         request.memory_budget = Some(short.clone());
-        assert!(matches!(decode_using_game_palette(source, &request),
-            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+        assert!(matches!(
+            decode_using_game_palette(source, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
         assert_eq!(short.used(), 0);
         std::fs::remove_dir_all(directory).unwrap();
     }

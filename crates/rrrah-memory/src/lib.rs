@@ -477,11 +477,7 @@ mod tests {
         let values = vec![Owner(dropped.clone()), Owner(dropped.clone())];
         let bytes = (values.capacity() * std::mem::size_of::<Owner>()) as u64;
         let budget = MemoryBudget::new(bytes);
-        let buffer = budget
-            .try_reserve(bytes)
-            .unwrap()
-            .try_adopt(values)
-            .unwrap();
+        let buffer = budget.try_reserve(bytes).unwrap().try_adopt(values).unwrap();
         let shared = buffer.clone();
         drop(buffer);
         assert_eq!(dropped.load(Ordering::SeqCst), 0);

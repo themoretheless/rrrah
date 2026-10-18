@@ -1374,11 +1374,7 @@ fn area_filtered_hdr_lod_matches_independent_alpha_reference_on_metal() {
     eprintln!("managed area HDR LOD: signed/bright/transparent-RGB oracle SDR/HDR exact; output root=0");
 }
 
-fn qualify_large_lod_pressure(
-    source: &DecodedRaster,
-    lod: DecodedRaster,
-    budget: &rrrah_core::MemoryBudget,
-) {
+fn qualify_large_lod_pressure(source: &DecodedRaster, lod: DecodedRaster, budget: &rrrah_core::MemoryBudget) {
     assert_eq!(budget.used(), 16000000);
     let held = lod.clone();
     drop(lod);

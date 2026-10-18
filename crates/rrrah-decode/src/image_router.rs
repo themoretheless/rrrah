@@ -209,28 +209,44 @@ mod tests {
         for extension in ["psd", "psb"] {
             let name = format!("psd-tools-16bit5x5.{extension}");
             let budget = rrrah_core::MemoryBudget::new(65536);
-            let mut request = DecodeRequest::new(root.join(&name)); request.memory_budget = Some(budget.clone());
-            let DecodedImage::Raster(native) = decode_image(&request).unwrap() else { panic!() };
+            let mut request = DecodeRequest::new(root.join(&name));
+            request.memory_budget = Some(budget.clone());
+            let DecodedImage::Raster(native) = decode_image(&request).unwrap() else {
+                panic!()
+            };
             let prepared = crate::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
             let reference = std::fs::read(root.join(format!("{name}.linear-rgba64le"))).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(actual) = prepared.pixels() else { panic!() };
+            let rrrah_core::RasterPixels::Rgba32Float(actual) = prepared.pixels() else {
+                panic!()
+            };
             assert_eq!(reference.len(), actual.len() * 8);
             let mut maximum = 0f64;
             for (index, (actual, encoded)) in actual.iter().zip(reference.chunks_exact(8)).enumerate() {
                 let expected = f64::from_le_bytes(encoded.try_into().unwrap());
-                if index % 4 == 3 { assert_eq!(f64::from(*actual), expected); }
-                else { maximum = maximum.max((f64::from(*actual) - expected).abs()); }
+                if index % 4 == 3 {
+                    assert_eq!(f64::from(*actual), expected);
+                } else {
+                    maximum = maximum.max((f64::from(*actual) - expected).abs());
+                }
             }
-            eprintln!("PSD16_LCMS source={name} pixels=25 max_rgb_absolute_error={maximum:.12} declared_bound=0.00002 alpha_exact=true");
-            assert!(maximum <= 2e-5, "{name} exceeds declared independent CMS bound: {maximum}");
-            drop(native); drop(prepared); assert_eq!(budget.used(), 0);
+            eprintln!(
+                "PSD16_LCMS source={name} pixels=25 max_rgb_absolute_error={maximum:.12} declared_bound=0.00002 alpha_exact=true"
+            );
+            assert!(
+                maximum <= 2e-5,
+                "{name} exceeds declared independent CMS bound: {maximum}"
+            );
+            drop(native);
+            drop(prepared);
+            assert_eq!(budget.used(), 0);
         }
     }
 
     #[test]
     fn pinned_original_rgb16_psd_psb_common_file_route_preserves_samples_and_profile() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        for row in include_str!("../../../tests/fixtures/raster/psd-tools-16bit-manifest.tsv").lines()
+        for row in include_str!("../../../tests/fixtures/raster/psd-tools-16bit-manifest.tsv")
+            .lines()
             .filter(|line| !line.starts_with('#') && !line.is_empty())
         {
             let fields: Vec<_> = row.split('\t').collect();
@@ -240,16 +256,22 @@ mod tests {
             let source_bytes = std::fs::metadata(&path).unwrap().len();
             let retained = reference.len() as u64 + profile.len() as u64;
             let budget = rrrah_core::MemoryBudget::new(source_bytes + retained);
-            let mut request = DecodeRequest::new(path); request.memory_budget = Some(budget.clone());
-            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else { panic!() };
-            let rrrah_core::RasterPixels::Rgba16(values) = image.pixels() else { panic!() };
+            let mut request = DecodeRequest::new(path);
+            request.memory_budget = Some(budget.clone());
+            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {
+                panic!()
+            };
+            let rrrah_core::RasterPixels::Rgba16(values) = image.pixels() else {
+                panic!()
+            };
             assert!(values.is_managed());
             let actual: Vec<_> = values.iter().flat_map(|value| value.to_le_bytes()).collect();
             assert_eq!(actual, reference);
             assert_eq!(image.color_space(), &rrrah_core::RasterColorSpace::Icc(profile));
             assert_eq!(budget.used(), retained);
             assert_eq!(budget.peak(), source_bytes + retained);
-            drop(image); assert_eq!(budget.used(), 0);
+            drop(image);
+            assert_eq!(budget.used(), 0);
         }
     }
 
@@ -258,55 +280,91 @@ mod tests {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let reference = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0.rgba");
         let profile = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0.icc");
-        let retained = (reference.len()+profile.len()) as u64;
-        for ext in ["psd","psb"] {
+        let retained = (reference.len() + profile.len()) as u64;
+        for ext in ["psd", "psb"] {
             let path = root.join(format!("psd-tools-gray0.{ext}"));
             let source = std::fs::metadata(&path).unwrap().len();
-            let peak = source+retained+400*359*2;
+            let peak = source + retained + 400 * 359 * 2;
             let budget = rrrah_core::MemoryBudget::new(peak);
             let mut request = DecodeRequest::new(path);
-            let short = rrrah_core::MemoryBudget::new(peak-1);
-            request.memory_budget=Some(short.clone());assert!(decode_image(&request).is_err());assert_eq!(short.used(),0);
-            request.memory_budget=Some(budget.clone());
-            let DecodedImage::Raster(image)=decode_image(&request).unwrap() else {panic!()};
-            let rrrah_core::RasterPixels::Rgba8(values)=image.pixels() else {panic!()};
-            assert_eq!(&values[..],&reference[..]);assert!(values.is_managed());
-            assert_eq!(image.color_space(),&rrrah_core::RasterColorSpace::Icc(profile.to_vec()));
-            assert_eq!((budget.used(),budget.peak()),(retained,peak));
-            let clone=image.clone();drop(image);assert_eq!(budget.used(),retained);
-            drop(clone);assert_eq!(budget.used(),0);
+            let short = rrrah_core::MemoryBudget::new(peak - 1);
+            request.memory_budget = Some(short.clone());
+            assert!(decode_image(&request).is_err());
+            assert_eq!(short.used(), 0);
+            request.memory_budget = Some(budget.clone());
+            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {
+                panic!()
+            };
+            let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
+                panic!()
+            };
+            assert_eq!(&values[..], &reference[..]);
+            assert!(values.is_managed());
+            assert_eq!(
+                image.color_space(),
+                &rrrah_core::RasterColorSpace::Icc(profile.to_vec())
+            );
+            assert_eq!((budget.used(), budget.peak()), (retained, peak));
+            let clone = image.clone();
+            drop(image);
+            assert_eq!(budget.used(), retained);
+            drop(clone);
+            assert_eq!(budget.used(), 0);
         }
     }
 
     #[test]
     fn original_high_precision_psd_psb_public_source_peak_and_refusal() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        for name in ["4x4_16bit_rgb.psd","4x4_16bit_grayscale.psd","4x4_32bit_rgb.psd","4x4_32bit_grayscale.psd","32bit5x5.psb"] {
+        for name in [
+            "4x4_16bit_rgb.psd",
+            "4x4_16bit_grayscale.psd",
+            "4x4_32bit_rgb.psd",
+            "4x4_32bit_grayscale.psd",
+            "32bit5x5.psb",
+        ] {
             let name = format!("psd-tools-{name}");
             let path = root.join(&name);
             let reference = std::fs::read(root.join(format!("{name}.rgba-le"))).unwrap();
             let profile = std::fs::read(root.join(format!("{name}.icc"))).unwrap();
             let source = std::fs::metadata(&path).unwrap().len();
-            let retained = (reference.len()+profile.len()) as u64;
+            let retained = (reference.len() + profile.len()) as u64;
             let mut request = DecodeRequest::new(path);
-            let short = rrrah_core::MemoryBudget::new(source+retained-1);
+            let short = rrrah_core::MemoryBudget::new(source + retained - 1);
             request.memory_budget = Some(short.clone());
             assert!(decode_image(&request).is_err());
-            assert_eq!(short.used(),0);
-            let budget = rrrah_core::MemoryBudget::new(source+retained);
+            assert_eq!(short.used(), 0);
+            let budget = rrrah_core::MemoryBudget::new(source + retained);
             request.memory_budget = Some(budget.clone());
-            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {panic!()};
+            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {
+                panic!()
+            };
             let actual = match image.pixels() {
-                rrrah_core::RasterPixels::Rgba16(values) => { assert!(values.is_managed());values.iter().flat_map(|v| v.to_le_bytes()).collect::<Vec<_>>() },
-                rrrah_core::RasterPixels::Rgba32Float(values) => { assert!(values.is_managed());values.iter().flat_map(|v| v.to_bits().to_le_bytes()).collect::<Vec<_>>() },
+                rrrah_core::RasterPixels::Rgba16(values) => {
+                    assert!(values.is_managed());
+                    values.iter().flat_map(|v| v.to_le_bytes()).collect::<Vec<_>>()
+                }
+                rrrah_core::RasterPixels::Rgba32Float(values) => {
+                    assert!(values.is_managed());
+                    values
+                        .iter()
+                        .flat_map(|v| v.to_bits().to_le_bytes())
+                        .collect::<Vec<_>>()
+                }
                 _ => panic!("precision changed"),
             };
-            assert_eq!(actual,reference);
-            assert_eq!(image.color_space(),&rrrah_core::RasterColorSpace::Icc(profile));
-            assert_eq!((budget.used(),budget.peak()),(retained,source+retained));
-            let clone = image.clone();drop(image);assert_eq!(budget.used(),retained);
-            drop(clone);assert_eq!(budget.used(),0);
-            eprintln!("ORIGINAL_PSD_PUBLIC name={name} peak={} retained={retained} short_refusal=true final=0",source+retained);
+            assert_eq!(actual, reference);
+            assert_eq!(image.color_space(), &rrrah_core::RasterColorSpace::Icc(profile));
+            assert_eq!((budget.used(), budget.peak()), (retained, source + retained));
+            let clone = image.clone();
+            drop(image);
+            assert_eq!(budget.used(), retained);
+            drop(clone);
+            assert_eq!(budget.used(), 0);
+            eprintln!(
+                "ORIGINAL_PSD_PUBLIC name={name} peak={} retained={retained} short_refusal=true final=0",
+                source + retained
+            );
         }
     }
 
@@ -315,7 +373,10 @@ mod tests {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let manifest = include_str!("../../../tests/fixtures/raster/psd-tools-alpha-multi-manifest.tsv");
         let mut cases = 0;
-        for row in manifest.lines().filter(|line| !line.starts_with('#') && !line.is_empty()) {
+        for row in manifest
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.is_empty())
+        {
             let f: Vec<_> = row.split('\t').collect();
             let width: u64 = f[2].parse().unwrap();
             let height: u64 = f[3].parse().unwrap();
@@ -330,8 +391,16 @@ mod tests {
             let decode_peak = match compression {
                 0 => output,
                 1 => planes + output,
-                2 | 3 => planes + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES.max(output)
-                    .max(if compression == 3 && depth == 32 { width * 4 } else { 0 }),
+                2 | 3 => {
+                    planes
+                        + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES.max(output).max(
+                            if compression == 3 && depth == 32 {
+                                width * 4
+                            } else {
+                                0
+                            },
+                        )
+                }
                 _ => panic!("fixture compression"),
             };
             let peak = source + decode_peak;
@@ -343,7 +412,9 @@ mod tests {
             assert_eq!(short.used(), 0);
             let budget = rrrah_core::MemoryBudget::new(peak);
             request.memory_budget = Some(budget.clone());
-            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else { panic!("routing changed") };
+            let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {
+                panic!("routing changed")
+            };
             let actual: Vec<_> = match image.pixels() {
                 rrrah_core::RasterPixels::Rgba16(values) if depth == 16 => {
                     assert!(values.is_managed());
@@ -356,7 +427,10 @@ mod tests {
                 _ => panic!("native precision changed"),
             };
             assert_eq!(actual, expected, "{}", f[0]);
-            assert_eq!((u64::from(image.width()), u64::from(image.height())), (width, height));
+            assert_eq!(
+                (u64::from(image.width()), u64::from(image.height())),
+                (width, height)
+            );
             assert_eq!((image.image_index(), image.image_count()), (0, 1));
             assert_eq!(image.color_space(), &rrrah_core::RasterColorSpace::LinearSrgb);
             assert_eq!((budget.used(), budget.peak()), (output, peak));
@@ -372,30 +446,59 @@ mod tests {
 
     #[test]
     fn common_animation_loading_and_display_keep_rational_timing_and_total_plays() {
-        let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        let manifests=[("gif",include_str!("../../../tests/fixtures/raster/gif-animation-manifest.tsv")),
-            ("apng",include_str!("../../../tests/fixtures/raster/apng-manifest.tsv")),
-            ("webp",include_str!("../../../tests/fixtures/raster/webp-animation-manifest.tsv"))];
-        let mut count=0;
-        for (kind,manifest) in manifests {
-            for line in manifest.lines().filter(|line| !line.starts_with('#') && !line.is_empty()) {
-                let f:Vec<_>=line.split('\t').collect();
-                let budget=rrrah_core::MemoryBudget::new(4*1024*1024);
-                let mut request=crate::DecodeRequest::new(root.join(f[0]));
-                request.image_index=f[1].parse().unwrap();request.memory_budget=Some(budget.clone());
-                let raster=crate::decode_raster(&request).unwrap();
-                let timing=raster.animation_timing().expect("common route discarded timing");
-                let numerator=f[4].parse::<u32>().unwrap();
-                let denominator=if kind=="apng" { f[5].parse::<u32>().unwrap() } else { 1 };
-                let plays=if kind=="gif" { f[5].parse::<u32>().unwrap()+1 } else { f[if kind=="apng" {6} else {5}].parse::<u32>().unwrap() };
-                assert_eq!(u64::from(timing.delay_ms_numerator())*u64::from(denominator),u64::from(numerator)*u64::from(timing.delay_ms_denominator()));
-                assert_eq!(timing.num_plays(),plays);
-                let ready=crate::prepare_raster_for_display_with_budget(&raster,Some(&budget)).unwrap();
-                assert_eq!(ready.animation_timing(),Some(timing));
-                drop(ready);drop(raster);assert_eq!(budget.used(),0);count+=1;
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        let manifests = [
+            (
+                "gif",
+                include_str!("../../../tests/fixtures/raster/gif-animation-manifest.tsv"),
+            ),
+            (
+                "apng",
+                include_str!("../../../tests/fixtures/raster/apng-manifest.tsv"),
+            ),
+            (
+                "webp",
+                include_str!("../../../tests/fixtures/raster/webp-animation-manifest.tsv"),
+            ),
+        ];
+        let mut count = 0;
+        for (kind, manifest) in manifests {
+            for line in manifest
+                .lines()
+                .filter(|line| !line.starts_with('#') && !line.is_empty())
+            {
+                let f: Vec<_> = line.split('\t').collect();
+                let budget = rrrah_core::MemoryBudget::new(4 * 1024 * 1024);
+                let mut request = crate::DecodeRequest::new(root.join(f[0]));
+                request.image_index = f[1].parse().unwrap();
+                request.memory_budget = Some(budget.clone());
+                let raster = crate::decode_raster(&request).unwrap();
+                let timing = raster.animation_timing().expect("common route discarded timing");
+                let numerator = f[4].parse::<u32>().unwrap();
+                let denominator = if kind == "apng" {
+                    f[5].parse::<u32>().unwrap()
+                } else {
+                    1
+                };
+                let plays = if kind == "gif" {
+                    f[5].parse::<u32>().unwrap() + 1
+                } else {
+                    f[if kind == "apng" { 6 } else { 5 }].parse::<u32>().unwrap()
+                };
+                assert_eq!(
+                    u64::from(timing.delay_ms_numerator()) * u64::from(denominator),
+                    u64::from(numerator) * u64::from(timing.delay_ms_denominator())
+                );
+                assert_eq!(timing.num_plays(), plays);
+                let ready = crate::prepare_raster_for_display_with_budget(&raster, Some(&budget)).unwrap();
+                assert_eq!(ready.animation_timing(), Some(timing));
+                drop(ready);
+                drop(raster);
+                assert_eq!(budget.used(), 0);
+                count += 1;
             }
         }
-        assert!(count>=40);
+        assert!(count >= 40);
         eprintln!("ANIMATION_COMMON_TIMING cases={count} final=0");
     }
     #[test]
@@ -723,8 +826,8 @@ mod selected_mip_route_regressions {
     }
     fn source(extension: &str) -> TemporarySource {
         use std::io::Write;
-        let fixture = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/raster/dds-mips-bc1.dds");
+        let fixture =
+            Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/dds-mips-bc1.dds");
         let nonce = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
@@ -800,28 +903,21 @@ mod pict_color_route_regressions {
 
     #[test]
     fn common_image_route_requires_explicit_color_assumption_for_display() {
-        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/pict/short-rgb555.pict");
+        let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pict/short-rgb555.pict");
         let mut request = DecodeRequest::new(path);
         for linear_assumption in [false, true] {
             request.assume_untagged_linear_srgb = linear_assumption;
             let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {
                 panic!("PICT routed to sensor")
             };
-            assert_eq!(
-                image.color_space(),
-                &rrrah_core::RasterColorSpace::Unspecified
-            );
+            assert_eq!(image.color_space(), &rrrah_core::RasterColorSpace::Unspecified);
             assert!(crate::prepare_raster_for_display(&image).is_err());
         }
         request.assume_untagged_srgb = true;
         let DecodedImage::Raster(image) = decode_image(&request).unwrap() else {
             panic!("PICT routed to sensor")
         };
-        assert_eq!(
-            image.color_space(),
-            &rrrah_core::RasterColorSpace::AssumedSrgb
-        );
+        assert_eq!(image.color_space(), &rrrah_core::RasterColorSpace::AssumedSrgb);
         let display = crate::prepare_raster_for_display(&image).unwrap();
         assert_eq!((display.width(), display.height()), (1, 1));
         let rrrah_core::RasterPixels::Rgba32Float(pixels) = display.pixels() else {
@@ -878,10 +974,7 @@ mod dicom_big_endian_route_regressions {
             ),
             (3, 1, 1, 3)
         );
-        assert_eq!(
-            image.color_space(),
-            &rrrah_core::RasterColorSpace::Unspecified
-        );
+        assert_eq!(image.color_space(), &rrrah_core::RasterColorSpace::Unspecified);
         let rrrah_core::RasterPixels::Rgba32Float(pixels) = image.pixels() else {
             panic!("scalar precision")
         };
@@ -898,8 +991,7 @@ mod dicom_big_endian_route_regressions {
         drop(image);
         assert_eq!(budget.used(), 0);
         let display =
-            crate::decode_raster_with_window(&request, crate::ScalarWindow::new(0., 255.).unwrap())
-                .unwrap();
+            crate::decode_raster_with_window(&request, crate::ScalarWindow::new(0., 255.).unwrap()).unwrap();
         let rrrah_core::RasterPixels::Rgba32Float(pixels) = display.pixels() else {
             panic!("window precision")
         };
@@ -911,10 +1003,7 @@ mod dicom_big_endian_route_regressions {
                 .map(|b| u32::from_le_bytes(b.try_into().unwrap()))
                 .collect::<Vec<_>>()
         );
-        assert_eq!(
-            display.color_space(),
-            &rrrah_core::RasterColorSpace::LinearSrgb
-        );
+        assert_eq!(display.color_space(), &rrrah_core::RasterColorSpace::LinearSrgb);
         drop(display);
         assert_eq!(budget.used(), 0);
         request.image_index = 3;

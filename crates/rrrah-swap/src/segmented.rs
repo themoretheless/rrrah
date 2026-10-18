@@ -121,7 +121,8 @@ impl SwapStore {
         if cancelled() {
             return Err(SwapError::Cancelled);
         }
-        let scratch_len = usize::try_from(handle.byte_len().min(BLOCK as u64)).map_err(|_| SwapError::Length)?;
+        let scratch_len =
+            usize::try_from(handle.byte_len().min(BLOCK as u64)).map_err(|_| SwapError::Length)?;
         let scratch = scratch_budget.try_buffer(scratch_len, 0_u8)?;
         let file = handle.0.blob.0.file.reopen()?;
         if file.metadata()?.len() != handle.byte_len() {
@@ -362,7 +363,9 @@ mod tests {
     #[ignore = "manual warm-filesystem scoped reader timing comparison"]
     fn scoped_reader_row_timing_comparison() {
         let directory = tempfile::tempdir().unwrap();
-        let bytes: Vec<u8> = (0_u32..8 * 1024 * 1024).map(|i| (i * 73).to_le_bytes()[0]).collect();
+        let bytes: Vec<u8> = (0_u32..8 * 1024 * 1024)
+            .map(|i| (i * 73).to_le_bytes()[0])
+            .collect();
         let store = SwapStore::new(
             directory.path(),
             SwapLimits {
@@ -715,7 +718,10 @@ mod tests {
                 || false,
             )
             .unwrap();
-        assert_eq!(&*result, &bytes[usize::try_from(offset).unwrap()..usize::try_from(offset).unwrap() + BLOCK + 19]);
+        assert_eq!(
+            &*result,
+            &bytes[usize::try_from(offset).unwrap()..usize::try_from(offset).unwrap() + BLOCK + 19]
+        );
         assert_eq!(scratch.used(), 0);
         drop(result);
         assert_eq!(output_budget.used(), 0);
@@ -729,7 +735,10 @@ mod tests {
         let good = store
             .restore_range(&handle, offset, 19, &output_budget, &scratch, || false)
             .unwrap();
-        assert_eq!(&*good, &bytes[usize::try_from(offset).unwrap()..usize::try_from(offset).unwrap() + 19]);
+        assert_eq!(
+            &*good,
+            &bytes[usize::try_from(offset).unwrap()..usize::try_from(offset).unwrap() + 19]
+        );
         drop(good);
         assert!(matches!(
             store.restore_range(&handle, BLOCK as u64 * 5, 36, &output_budget, &scratch, || false),
@@ -825,7 +834,12 @@ mod tests {
         assert_range_rejections(&store, &bytes, &budget, directory.path());
     }
 
-    fn assert_range_rejections(store: &SwapStore, bytes: &[u8], budget: &MemoryBudget, directory: &std::path::Path) {
+    fn assert_range_rejections(
+        store: &SwapStore,
+        bytes: &[u8],
+        budget: &MemoryBudget,
+        directory: &std::path::Path,
+    ) {
         let handle = store
             .write_segmented(
                 &mut Cursor::new(&bytes),

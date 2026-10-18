@@ -244,10 +244,13 @@ mod tests {
         trailing.insert(trailing.len() - 769, 0);
         assert!(validate_game_palette(&trailing, &request).is_err());
         request.cancellation = Some(crate::GenerationToken::new(
-            Arc::new(std::sync::atomic::AtomicU64::new(2)), 1,
+            Arc::new(std::sync::atomic::AtomicU64::new(2)),
+            1,
         ));
-        assert!(matches!(validate_game_palette(bytes, &request),
-            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))));
+        assert!(matches!(
+            validate_game_palette(bytes, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+        ));
         assert_eq!((budget.used(), budget.peak()), (0, 0));
     }
 

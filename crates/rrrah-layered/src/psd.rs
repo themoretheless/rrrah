@@ -177,8 +177,7 @@ fn unmatte_pixels(
                 let a = u64::from(rgba[3]);
                 if a > 0 {
                     for c in &mut rgba[..3] {
-                        *c = ((u64::from(*c) + a).saturating_sub(65535) * 65535 / a).min(65535)
-                            as u16;
+                        *c = ((u64::from(*c) + a).saturating_sub(65535) * 65535 / a).min(65535) as u16;
                     }
                 }
             }
@@ -442,7 +441,9 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
             Rgba32Float
         ),
     };
-    if alpha { unmatte_pixels(&mut pixels, || request.check_cancelled())?; }
+    if alpha {
+        unmatte_pixels(&mut pixels, || request.check_cancelled())?;
+    }
     let raster = DecodedRaster::new(width, height, pixels, color)?;
     let raster = match profile_credit {
         Some(credit) => raster
@@ -459,104 +460,194 @@ mod tests {
     use super::*;
     #[test]
     fn opaque_float_alpha_preserves_tiny_samples_signed_zero_and_nan_bits() {
-        for rgb in [[-0.0,f32::from_bits(1),1e-30],[f32::from_bits(0x7fc00031),f32::MIN_POSITIVE,-1e-30]] {
-            let budget=rrrah_core::MemoryBudget::new(16);
-            let expected=[rgb[0],rgb[1],rgb[2],1.];
-            let mut values=budget.try_buffer(4,0f32).unwrap();values.copy_from_slice(&expected);
-            let mut pixels=RasterPixels::Rgba32Float(values.freeze().into());
-            unmatte_pixels(&mut pixels,||Ok(())).unwrap();
-            let RasterPixels::Rgba32Float(values)=&pixels else {panic!()};
-            assert_eq!(values.iter().map(|v|v.to_bits()).collect::<Vec<_>>(),expected.map(f32::to_bits));
-            drop(pixels);assert_eq!(budget.used(),0);
+        for rgb in [
+            [-0.0, f32::from_bits(1), 1e-30],
+            [f32::from_bits(0x7fc00031), f32::MIN_POSITIVE, -1e-30],
+        ] {
+            let budget = rrrah_core::MemoryBudget::new(16);
+            let expected = [rgb[0], rgb[1], rgb[2], 1.];
+            let mut values = budget.try_buffer(4, 0f32).unwrap();
+            values.copy_from_slice(&expected);
+            let mut pixels = RasterPixels::Rgba32Float(values.freeze().into());
+            unmatte_pixels(&mut pixels, || Ok(())).unwrap();
+            let RasterPixels::Rgba32Float(values) = &pixels else {
+                panic!()
+            };
+            assert_eq!(
+                values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                expected.map(f32::to_bits)
+            );
+            drop(pixels);
+            assert_eq!(budget.used(), 0);
         }
     }
 
     #[test]
     fn float_unmatting_refuses_new_overflow_and_preserves_representable_hdr() {
-        for alpha in [f32::MIN_POSITIVE,f32::from_bits(1)] {
-            let budget=rrrah_core::MemoryBudget::new(16);
-            let mut values=budget.try_buffer(4,0f32).unwrap();values.copy_from_slice(&[f32::MAX,2.,4.,alpha]);
-            let mut pixels=RasterPixels::Rgba32Float(values.freeze().into());
-            assert!(matches!(unmatte_pixels(&mut pixels,||Ok(())),Err(RasterDecodeError::InvalidPsd("merged transparency unmatting exceeds float32 range"))));
-            drop(pixels);assert_eq!(budget.used(),0);
+        for alpha in [f32::MIN_POSITIVE, f32::from_bits(1)] {
+            let budget = rrrah_core::MemoryBudget::new(16);
+            let mut values = budget.try_buffer(4, 0f32).unwrap();
+            values.copy_from_slice(&[f32::MAX, 2., 4., alpha]);
+            let mut pixels = RasterPixels::Rgba32Float(values.freeze().into());
+            assert!(matches!(
+                unmatte_pixels(&mut pixels, || Ok(())),
+                Err(RasterDecodeError::InvalidPsd(
+                    "merged transparency unmatting exceeds float32 range"
+                ))
+            ));
+            drop(pixels);
+            assert_eq!(budget.used(), 0);
         }
-        for alpha in [0.,1.] {
-            let budget=rrrah_core::MemoryBudget::new(16);
-            let mut values=budget.try_buffer(4,0f32).unwrap();values.copy_from_slice(&[f32::MAX,-2.,4.,alpha]);
-            let mut pixels=RasterPixels::Rgba32Float(values.freeze().into());
-            unmatte_pixels(&mut pixels,||Ok(())).unwrap();
-            let RasterPixels::Rgba32Float(values)=&pixels else {panic!()};
-            assert_eq!(&values[..],&[f32::MAX,-2.,4.,alpha]);
-            drop(pixels);assert_eq!(budget.used(),0);
+        for alpha in [0., 1.] {
+            let budget = rrrah_core::MemoryBudget::new(16);
+            let mut values = budget.try_buffer(4, 0f32).unwrap();
+            values.copy_from_slice(&[f32::MAX, -2., 4., alpha]);
+            let mut pixels = RasterPixels::Rgba32Float(values.freeze().into());
+            unmatte_pixels(&mut pixels, || Ok(())).unwrap();
+            let RasterPixels::Rgba32Float(values) = &pixels else {
+                panic!()
+            };
+            assert_eq!(&values[..], &[f32::MAX, -2., 4., alpha]);
+            drop(pixels);
+            assert_eq!(budget.used(), 0);
         }
     }
 
     #[test]
     fn white_unmatting_cancels_before_next_4096_pixel_block_at_every_precision() {
-        for depth in [8,16,32] {
-            let budget=rrrah_core::MemoryBudget::new(8193*16);
-            let mut pixels=match depth {
-                8=>RasterPixels::Rgba8(budget.try_buffer(8193*4,0u8).unwrap().freeze().into()),
-                16=>RasterPixels::Rgba16(budget.try_buffer(8193*4,0u16).unwrap().freeze().into()),
-                _=>RasterPixels::Rgba32Float(budget.try_buffer(8193*4,0f32).unwrap().freeze().into()),
+        for depth in [8, 16, 32] {
+            let budget = rrrah_core::MemoryBudget::new(8193 * 16);
+            let mut pixels = match depth {
+                8 => RasterPixels::Rgba8(budget.try_buffer(8193 * 4, 0u8).unwrap().freeze().into()),
+                16 => RasterPixels::Rgba16(budget.try_buffer(8193 * 4, 0u16).unwrap().freeze().into()),
+                _ => RasterPixels::Rgba32Float(budget.try_buffer(8193 * 4, 0f32).unwrap().freeze().into()),
             };
             match &mut pixels {
-                RasterPixels::Rgba8(v)=>for p in v.get_mut().unwrap().chunks_exact_mut(4) {p.copy_from_slice(&[190,190,190,128]);},
-                RasterPixels::Rgba16(v)=>for p in v.get_mut().unwrap().chunks_exact_mut(4) {p.copy_from_slice(&[49151,49151,49151,32768]);},
-                RasterPixels::Rgba32Float(v)=>for p in v.get_mut().unwrap().chunks_exact_mut(4) {p.copy_from_slice(&[0.75,0.75,0.75,0.5]);},
-            }
-            let mut polls=0;
-            assert!(matches!(unmatte_pixels(&mut pixels,|| {polls+=1;if polls==2 {Err(crate::DecodeError::Cancelled)} else {Ok(())}}),Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))));
-            assert_eq!(polls,2);
-            for pixel in 0..8193 {
-                match &pixels {
-                    RasterPixels::Rgba8(v)=>assert_eq!(&v[pixel*4..pixel*4+4],if pixel<4096 {&[125,125,125,128]} else {&[190,190,190,128]}),
-                    RasterPixels::Rgba16(v)=>assert_eq!(&v[pixel*4..pixel*4+4],if pixel<4096 {&[32767,32767,32767,32768]} else {&[49151,49151,49151,32768]}),
-                    RasterPixels::Rgba32Float(v)=>assert_eq!(&v[pixel*4..pixel*4+4],if pixel<4096 {&[0.5,0.5,0.5,0.5]} else {&[0.75,0.75,0.75,0.5]}),
+                RasterPixels::Rgba8(v) => {
+                    for p in v.get_mut().unwrap().chunks_exact_mut(4) {
+                        p.copy_from_slice(&[190, 190, 190, 128]);
+                    }
+                }
+                RasterPixels::Rgba16(v) => {
+                    for p in v.get_mut().unwrap().chunks_exact_mut(4) {
+                        p.copy_from_slice(&[49151, 49151, 49151, 32768]);
+                    }
+                }
+                RasterPixels::Rgba32Float(v) => {
+                    for p in v.get_mut().unwrap().chunks_exact_mut(4) {
+                        p.copy_from_slice(&[0.75, 0.75, 0.75, 0.5]);
+                    }
                 }
             }
-            drop(pixels);assert_eq!(budget.used(),0);
+            let mut polls = 0;
+            assert!(matches!(
+                unmatte_pixels(&mut pixels, || {
+                    polls += 1;
+                    if polls == 2 {
+                        Err(crate::DecodeError::Cancelled)
+                    } else {
+                        Ok(())
+                    }
+                }),
+                Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+            ));
+            assert_eq!(polls, 2);
+            for pixel in 0..8193 {
+                match &pixels {
+                    RasterPixels::Rgba8(v) => assert_eq!(
+                        &v[pixel * 4..pixel * 4 + 4],
+                        if pixel < 4096 {
+                            &[125, 125, 125, 128]
+                        } else {
+                            &[190, 190, 190, 128]
+                        }
+                    ),
+                    RasterPixels::Rgba16(v) => assert_eq!(
+                        &v[pixel * 4..pixel * 4 + 4],
+                        if pixel < 4096 {
+                            &[32767, 32767, 32767, 32768]
+                        } else {
+                            &[49151, 49151, 49151, 32768]
+                        }
+                    ),
+                    RasterPixels::Rgba32Float(v) => assert_eq!(
+                        &v[pixel * 4..pixel * 4 + 4],
+                        if pixel < 4096 {
+                            &[0.5, 0.5, 0.5, 0.5]
+                        } else {
+                            &[0.75, 0.75, 0.75, 0.5]
+                        }
+                    ),
+                }
+            }
+            drop(pixels);
+            assert_eq!(budget.used(), 0);
         }
     }
 
     #[test]
     fn independent_high_precision_alpha_controls_preserve_precision_and_hdr() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        for depth in [16,32] {
-            for mode in ["rgba","la"] {
-                let channels = if mode=="rgba" {4} else {2};
-                for version in [1,2] {
-                    let suffix=if version==1 {"psd"} else {"psb"};
-                    let name=format!("psd-tools-alpha-{mode}-{depth}-v{version}.{suffix}");
-                    let bytes=std::fs::read(root.join(&name)).unwrap();
-                    let expected=std::fs::read(root.join(format!("{name}.f32le"))).unwrap();
-                    let expected=expected.chunks_exact(4).map(|b| f32::from_le_bytes(b.try_into().unwrap())).collect::<Vec<_>>();
-                    let output_bytes=4*4*(depth/8) as u64;
-                    let peak=output_bytes+4*channels as u64*(depth/8) as u64;
-                    let budget=rrrah_core::MemoryBudget::new(peak);
-                    let short=rrrah_core::MemoryBudget::new(peak-1);
-                    let mut request=DecodeRequest::new(root.join(&name));
-                    request.memory_budget=Some(short.clone());assert!(decode(&bytes,&request).is_err());assert_eq!(short.used(),0);
-                    request.memory_budget=Some(budget.clone());
-                    let image=decode(&bytes,&request).unwrap();
-                    assert_eq!((image.width(),image.height()),(4,1));
+        for depth in [16, 32] {
+            for mode in ["rgba", "la"] {
+                let channels = if mode == "rgba" { 4 } else { 2 };
+                for version in [1, 2] {
+                    let suffix = if version == 1 { "psd" } else { "psb" };
+                    let name = format!("psd-tools-alpha-{mode}-{depth}-v{version}.{suffix}");
+                    let bytes = std::fs::read(root.join(&name)).unwrap();
+                    let expected = std::fs::read(root.join(format!("{name}.f32le"))).unwrap();
+                    let expected = expected
+                        .chunks_exact(4)
+                        .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+                        .collect::<Vec<_>>();
+                    let output_bytes = 4 * 4 * (depth / 8) as u64;
+                    let peak = output_bytes + 4 * channels as u64 * (depth / 8) as u64;
+                    let budget = rrrah_core::MemoryBudget::new(peak);
+                    let short = rrrah_core::MemoryBudget::new(peak - 1);
+                    let mut request = DecodeRequest::new(root.join(&name));
+                    request.memory_budget = Some(short.clone());
+                    assert!(decode(&bytes, &request).is_err());
+                    assert_eq!(short.used(), 0);
+                    request.memory_budget = Some(budget.clone());
+                    let image = decode(&bytes, &request).unwrap();
+                    assert_eq!((image.width(), image.height()), (4, 1));
                     for pixel in 0..4 {
                         for channel in 0..4 {
-                            let oracle_channel=if channel==3 {channels-1} else if channels==2 {0} else {channel};
-                            let reference=f64::from(expected[pixel*channels+oracle_channel]);
-                            let actual=match image.pixels() {
-                                RasterPixels::Rgba16(values)=>f64::from(values[pixel*4+channel])/65535.,
-                                RasterPixels::Rgba32Float(values)=>f64::from(values[pixel*4+channel]),
-                                _=>panic!("precision changed"),
+                            let oracle_channel = if channel == 3 {
+                                channels - 1
+                            } else if channels == 2 {
+                                0
+                            } else {
+                                channel
                             };
-                            let bound=if depth==16 && channel!=3 {1./65535.} else {2e-6};
-                            assert!((actual-reference).abs()<=bound,"{name} pixel={pixel} channel={channel} actual={actual} reference={reference}");
-                            if depth==32 && channel<3 && pixel>=2 {assert!(actual>1.);}
+                            let reference = f64::from(expected[pixel * channels + oracle_channel]);
+                            let actual = match image.pixels() {
+                                RasterPixels::Rgba16(values) => {
+                                    f64::from(values[pixel * 4 + channel]) / 65535.
+                                }
+                                RasterPixels::Rgba32Float(values) => f64::from(values[pixel * 4 + channel]),
+                                _ => panic!("precision changed"),
+                            };
+                            let bound = if depth == 16 && channel != 3 {
+                                1. / 65535.
+                            } else {
+                                2e-6
+                            };
+                            assert!(
+                                (actual - reference).abs() <= bound,
+                                "{name} pixel={pixel} channel={channel} actual={actual} reference={reference}"
+                            );
+                            if depth == 32 && channel < 3 && pixel >= 2 {
+                                assert!(actual > 1.);
+                            }
                         }
                     }
-                    assert_eq!((budget.used(),budget.peak()),(output_bytes,peak));
-                    let clone=image.clone();drop(image);assert_eq!(budget.used(),output_bytes);
-                    drop(clone);assert_eq!(budget.used(),0);
+                    assert_eq!((budget.used(), budget.peak()), (output_bytes, peak));
+                    let clone = image.clone();
+                    drop(image);
+                    assert_eq!(budget.used(), output_bytes);
+                    drop(clone);
+                    assert_eq!(budget.used(), 0);
                 }
             }
         }
@@ -567,7 +658,10 @@ mod tests {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let manifest = include_str!("../../../tests/fixtures/raster/psd-tools-alpha-multi-manifest.tsv");
         let mut cases = 0;
-        for row in manifest.lines().filter(|line| !line.starts_with('#') && !line.is_empty()) {
+        for row in manifest
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.is_empty())
+        {
             let f: Vec<_> = row.split('\t').collect();
             let width: u64 = f[2].parse().unwrap();
             let height: u64 = f[3].parse().unwrap();
@@ -581,33 +675,59 @@ mod tests {
             let peak = match compression {
                 0 => output,
                 1 => planes + output,
-                2 | 3 => planes + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES.max(output)
-                    .max(if compression == 3 && depth == 32 { width * 4 } else { 0 }),
+                2 | 3 => {
+                    planes
+                        + rrrah_scientific::DEFLATE_DECODER_CREDIT_BYTES.max(output).max(
+                            if compression == 3 && depth == 32 {
+                                width * 4
+                            } else {
+                                0
+                            },
+                        )
+                }
                 _ => panic!("fixture compression"),
             };
             let mut request = DecodeRequest::new(root.join(f[0]));
             request.assume_untagged_linear_srgb = true;
             let short = rrrah_core::MemoryBudget::new(peak - 1);
             request.memory_budget = Some(short.clone());
-            assert!(matches!(decode(&bytes, &request),
-                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))), "{}", f[0]);
+            assert!(
+                matches!(
+                    decode(&bytes, &request),
+                    Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+                ),
+                "{}",
+                f[0]
+            );
             assert_eq!(short.used(), 0);
             let budget = rrrah_core::MemoryBudget::new(peak);
             request.memory_budget = Some(budget.clone());
             let image = decode(&bytes, &request).unwrap();
-            assert_eq!((u64::from(image.width()), u64::from(image.height())), (width, height));
+            assert_eq!(
+                (u64::from(image.width()), u64::from(image.height())),
+                (width, height)
+            );
             assert_eq!(image.color_space(), &RasterColorSpace::LinearSrgb);
             match image.pixels() {
                 RasterPixels::Rgba16(values) if depth == 16 => {
-                    let oracle: Vec<_> = expected.chunks_exact(2)
-                        .map(|b| u16::from_le_bytes(b.try_into().unwrap())).collect();
+                    let oracle: Vec<_> = expected
+                        .chunks_exact(2)
+                        .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+                        .collect();
                     assert_eq!(values.as_slice(), oracle, "{}", f[0]);
                     assert!(values.is_managed());
                 }
                 RasterPixels::Rgba32Float(values) if depth == 32 => {
-                    let oracle: Vec<_> = expected.chunks_exact(4)
-                        .map(|b| u32::from_le_bytes(b.try_into().unwrap())).collect();
-                    assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), oracle, "{}", f[0]);
+                    let oracle: Vec<_> = expected
+                        .chunks_exact(4)
+                        .map(|b| u32::from_le_bytes(b.try_into().unwrap()))
+                        .collect();
+                    assert_eq!(
+                        values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                        oracle,
+                        "{}",
+                        f[0]
+                    );
                     assert!(values.is_managed());
                     assert!(values.iter().any(|v| *v > 1.));
                     assert!(values.iter().any(|v| *v < 0.));
@@ -630,87 +750,129 @@ mod tests {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let expected = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0.rgba");
         let profile = include_bytes!("../../../tests/fixtures/raster/psd-tools-gray0.icc");
-        let retained = (expected.len()+profile.len()) as u64;
-        let peak = retained+400*359*2;
-        for ext in ["psd","psb"] {
+        let retained = (expected.len() + profile.len()) as u64;
+        let peak = retained + 400 * 359 * 2;
+        for ext in ["psd", "psb"] {
             let path = root.join(format!("psd-tools-gray0.{ext}"));
             let bytes = std::fs::read(&path).unwrap();
             let budget = rrrah_core::MemoryBudget::new(peak);
             let mut request = DecodeRequest::new(path);
-            let short = rrrah_core::MemoryBudget::new(peak-1);
-            request.memory_budget=Some(short.clone());assert!(decode(&bytes,&request).is_err());assert_eq!(short.used(),0);
-            request.memory_budget=Some(budget.clone());
-            let image=decode(&bytes,&request).unwrap();
-            assert_eq!((image.width(),image.height()),(400,359));
-            let RasterPixels::Rgba8(values)=image.pixels() else {panic!()};
-            assert!(values.is_managed());assert_eq!(&values[..],&expected[..]);
-            assert_eq!(image.color_space(),&RasterColorSpace::Icc(profile.to_vec()));
-            assert!(values.chunks_exact(4).any(|p| p[3]>0 && p[3]<255));
-            assert_eq!((budget.used(),budget.peak()),(retained,peak));
-            let clone=image.clone();drop(image);assert_eq!(budget.used(),retained);
-            drop(clone);assert_eq!(budget.used(),0);
+            let short = rrrah_core::MemoryBudget::new(peak - 1);
+            request.memory_budget = Some(short.clone());
+            assert!(decode(&bytes, &request).is_err());
+            assert_eq!(short.used(), 0);
+            request.memory_budget = Some(budget.clone());
+            let image = decode(&bytes, &request).unwrap();
+            assert_eq!((image.width(), image.height()), (400, 359));
+            let RasterPixels::Rgba8(values) = image.pixels() else {
+                panic!()
+            };
+            assert!(values.is_managed());
+            assert_eq!(&values[..], &expected[..]);
+            assert_eq!(image.color_space(), &RasterColorSpace::Icc(profile.to_vec()));
+            assert!(values.chunks_exact(4).any(|p| p[3] > 0 && p[3] < 255));
+            assert_eq!((budget.used(), budget.peak()), (retained, peak));
+            let clone = image.clone();
+            drop(image);
+            assert_eq!(budget.used(), retained);
+            drop(clone);
+            assert_eq!(budget.used(), 0);
         }
     }
 
     #[test]
     fn malformed_hdr_toning_sections_refuse_before_managed_admission() {
         let original = include_bytes!("../../../tests/fixtures/raster/psd-tools-4x4_32bit_rgb.psd");
-        assert_eq!(u32::from_be_bytes(original[26..30].try_into().unwrap()),112);
+        assert_eq!(u32::from_be_bytes(original[26..30].try_into().unwrap()), 112);
         let mut cases = Vec::new();
-        let mut signature = original.to_vec();signature[30] ^= 1;cases.push(signature);
-        let mut version = original.to_vec();version[37] = 4;cases.push(version);
-        let mut short = original.to_vec();short.remove(141);short[26..30].copy_from_slice(&111u32.to_be_bytes());cases.push(short);
-        let mut long = original.to_vec();long.insert(142,0);long[26..30].copy_from_slice(&113u32.to_be_bytes());cases.push(long);
-        let mut integer = original.to_vec();integer[22..24].copy_from_slice(&16u16.to_be_bytes());cases.push(integer);
+        let mut signature = original.to_vec();
+        signature[30] ^= 1;
+        cases.push(signature);
+        let mut version = original.to_vec();
+        version[37] = 4;
+        cases.push(version);
+        let mut short = original.to_vec();
+        short.remove(141);
+        short[26..30].copy_from_slice(&111u32.to_be_bytes());
+        cases.push(short);
+        let mut long = original.to_vec();
+        long.insert(142, 0);
+        long[26..30].copy_from_slice(&113u32.to_be_bytes());
+        cases.push(long);
+        let mut integer = original.to_vec();
+        integer[22..24].copy_from_slice(&16u16.to_be_bytes());
+        cases.push(integer);
         cases.push(original[..80].to_vec());
         for bytes in cases {
             let budget = rrrah_core::MemoryBudget::new(0);
             let mut request = DecodeRequest::new("malformed-hdrt.psd");
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(decode(&bytes,&request),Err(RasterDecodeError::InvalidPsd(_))));
-            assert_eq!((budget.used(),budget.peak()),(0,0));
+            assert!(matches!(
+                decode(&bytes, &request),
+                Err(RasterDecodeError::InvalidPsd(_))
+            ));
+            assert_eq!((budget.used(), budget.peak()), (0, 0));
         }
     }
 
     #[test]
     fn original_rgb_gray_16_32_composites_match_independent_planes() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        for name in ["4x4_16bit_rgb.psd","4x4_16bit_grayscale.psd","4x4_32bit_rgb.psd","4x4_32bit_grayscale.psd","32bit5x5.psb"] {
+        for name in [
+            "4x4_16bit_rgb.psd",
+            "4x4_16bit_grayscale.psd",
+            "4x4_32bit_rgb.psd",
+            "4x4_32bit_grayscale.psd",
+            "32bit5x5.psb",
+        ] {
             let path = root.join(format!("psd-tools-{name}"));
             let bytes = std::fs::read(&path).unwrap();
             let expected = std::fs::read(path.with_file_name(format!("psd-tools-{name}.rgba-le"))).unwrap();
             let profile = std::fs::read(path.with_file_name(format!("psd-tools-{name}.icc"))).unwrap();
-            let retained_bytes = (expected.len()+profile.len()) as u64;
+            let retained_bytes = (expected.len() + profile.len()) as u64;
             let budget = rrrah_core::MemoryBudget::new(retained_bytes);
             let mut request = DecodeRequest::new(path);
-            let short = rrrah_core::MemoryBudget::new(retained_bytes-1);
+            let short = rrrah_core::MemoryBudget::new(retained_bytes - 1);
             request.memory_budget = Some(short.clone());
-            let error = decode(&bytes,&request).unwrap_err();
-            assert!(format!("{error:?}").contains("Memory"),"{error:?}");
-            assert_eq!(short.used(),0);
-            assert!(short.peak()<retained_bytes);
+            let error = decode(&bytes, &request).unwrap_err();
+            assert!(format!("{error:?}").contains("Memory"), "{error:?}");
+            assert_eq!(short.used(), 0);
+            assert!(short.peak() < retained_bytes);
             request.memory_budget = Some(budget.clone());
-            let raster = decode(&bytes,&request).unwrap();
-            assert_eq!(raster.color_space(),&RasterColorSpace::Icc(profile));
-            assert_eq!((budget.used(),budget.peak()),(retained_bytes,retained_bytes));
-            assert_eq!((raster.width(),raster.height()),if name.ends_with(".psb") {(5,5)} else {(4,4)});
+            let raster = decode(&bytes, &request).unwrap();
+            assert_eq!(raster.color_space(), &RasterColorSpace::Icc(profile));
+            assert_eq!((budget.used(), budget.peak()), (retained_bytes, retained_bytes));
+            assert_eq!(
+                (raster.width(), raster.height()),
+                if name.ends_with(".psb") { (5, 5) } else { (4, 4) }
+            );
             match raster.pixels() {
                 RasterPixels::Rgba16(values) => {
                     assert!(values.is_managed());
-                    for (&value, encoded) in values.iter().zip(expected.chunks_exact(2)) { assert_eq!(value,u16::from_le_bytes(encoded.try_into().unwrap()),"{name}"); }
-                    assert_eq!(values.len()*2,expected.len());
+                    for (&value, encoded) in values.iter().zip(expected.chunks_exact(2)) {
+                        assert_eq!(value, u16::from_le_bytes(encoded.try_into().unwrap()), "{name}");
+                    }
+                    assert_eq!(values.len() * 2, expected.len());
                 }
                 RasterPixels::Rgba32Float(values) => {
                     assert!(values.is_managed());
-                    for (&value, encoded) in values.iter().zip(expected.chunks_exact(4)) { assert_eq!(value.to_bits(),u32::from_le_bytes(encoded.try_into().unwrap()),"{name}"); }
-                    assert_eq!(values.len()*4,expected.len());
+                    for (&value, encoded) in values.iter().zip(expected.chunks_exact(4)) {
+                        assert_eq!(
+                            value.to_bits(),
+                            u32::from_le_bytes(encoded.try_into().unwrap()),
+                            "{name}"
+                        );
+                    }
+                    assert_eq!(values.len() * 4, expected.len());
                 }
                 _ => panic!("precision changed"),
             }
             let clone = raster.clone();
             let retained = budget.used();
-            drop(raster);assert_eq!(budget.used(),retained);
-            drop(clone);assert_eq!(budget.used(),0);
+            drop(raster);
+            assert_eq!(budget.used(), retained);
+            drop(clone);
+            assert_eq!(budget.used(), 0);
         }
     }
 
@@ -1192,7 +1354,10 @@ mod tests {
             let raster = decode(&bytes, &request).unwrap();
             assert_eq!(raster.color_space(), &RasterColorSpace::AssumedSrgb);
             request.assume_untagged_linear_srgb = true;
-            assert_eq!(decode(&bytes, &request).unwrap().color_space(), &RasterColorSpace::LinearSrgb);
+            assert_eq!(
+                decode(&bytes, &request).unwrap().color_space(),
+                &RasterColorSpace::LinearSrgb
+            );
             // This test checks resource precedence/preservation, not ICC validity.
             let mut resource = b"8BIM".to_vec();
             resource.extend(1039u16.to_be_bytes());

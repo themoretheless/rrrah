@@ -379,7 +379,11 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<ApngImage, RasterDeco
         RasterColorSpace::LinearSrgb,
     )?
     .with_pixel_aspect(declaration.pixel_aspect)?
-    .with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(delay_ms_numerator, delay_ms_denominator, num_plays)?))
+    .with_animation_timing(Some(rrrah_core::RasterAnimationTiming::new(
+        delay_ms_numerator,
+        delay_ms_denominator,
+        num_plays,
+    )?))
     .with_image_selection(request.image_index, count as usize)?;
     Ok(ApngImage {
         raster,

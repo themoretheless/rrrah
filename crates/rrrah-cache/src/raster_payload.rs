@@ -97,7 +97,14 @@ fn descriptor_with_limit(
         h[19] = h[6] - b'0';
         h[..8].copy_from_slice(b"RRRAST5\0");
     }
-    Ok((h, profile, HEADER as u64 + profile.len() as u64 + pixel_bytes + if frame.animation_timing().is_some() { 12 } else { 0 }))
+    Ok((
+        h,
+        profile,
+        HEADER as u64
+            + profile.len() as u64
+            + pixel_bytes
+            + if frame.animation_timing().is_some() { 12 } else { 0 },
+    ))
 }
 pub fn raster_payload_len(frame: &DecodedRaster) -> Result<u64, RasterPayloadError> {
     Ok(descriptor(frame)?.2)
@@ -214,7 +221,9 @@ fn read_raster_payload_impl(
     let animated = &h[..8] == b"RRRAST5\0";
     if animated {
         let version = h[19];
-        if !(1..=4).contains(&version) { return Err(RasterPayloadError::Invalid("animation base version")); }
+        if !(1..=4).contains(&version) {
+            return Err(RasterPayloadError::Invalid("animation base version"));
+        }
         h[..8].copy_from_slice(b"RRRAST1\0");
         h[6] = b'0' + version;
         h[19] = 0;
@@ -324,13 +333,16 @@ fn read_raster_payload_impl(
         _ => RasterColorSpace::Unspecified,
     };
     let animation_timing = if animated {
-        let mut fields = [0u8;12];
+        let mut fields = [0u8; 12];
         reader.read_exact(&mut fields)?;
         Some(rrrah_core::RasterAnimationTiming::new(
             u32::from_le_bytes(fields[0..4].try_into().unwrap()),
             u32::from_le_bytes(fields[4..8].try_into().unwrap()),
-            u32::from_le_bytes(fields[8..12].try_into().unwrap()))?)
-    } else { None };
+            u32::from_le_bytes(fields[8..12].try_into().unwrap()),
+        )?)
+    } else {
+        None
+    };
     let count = usize::try_from(count).map_err(|_| RasterPayloadError::Invalid("sample count"))?;
     let pixels = match h[16] {
         1 => RasterPixels::Rgba8(read_samples(reader, count, 1, budget, |b| b[0])?),
@@ -360,45 +372,87 @@ mod tests {
     use std::{io::Cursor, sync::Arc};
     #[test]
     fn animation_v5_preserves_legacy_color_aspect_selection_and_exact_ownership() {
-        let base = rrrah_core::RgbChromaticities::new([0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767]).unwrap();
-        let colors = [RasterColorSpace::Srgb, RasterColorSpace::LinearSrgb, RasterColorSpace::Icc(vec![9,7,3]),
-            RasterColorSpace::Cicp { primaries:9,transfer:8,matrix:0,full_range:true },
+        let base =
+            rrrah_core::RgbChromaticities::new([0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767])
+                .unwrap();
+        let colors = [
+            RasterColorSpace::Srgb,
+            RasterColorSpace::LinearSrgb,
+            RasterColorSpace::Icc(vec![9, 7, 3]),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 8,
+                matrix: 0,
+                full_range: true,
+            },
             RasterColorSpace::LinearRgb(base.clone()),
-            RasterColorSpace::LinearRgb(base.with_adopted_neutral([0.34567,0.35850]).unwrap())];
-        let mut cases=0;
+            RasterColorSpace::LinearRgb(base.with_adopted_neutral([0.34567, 0.35850]).unwrap()),
+        ];
+        let mut cases = 0;
         for color in colors {
-            for aspect in [None,Some(1.25)] {
-                for (numerator,denominator,plays) in [(0,1,0),(1000,65535,2),(u32::MAX,1,65536)] {
-                    let timing=rrrah_core::RasterAnimationTiming::new(numerator,denominator,plays).unwrap();
-                    let frame=DecodedRaster::new(1,1,RasterPixels::Rgba8(Arc::new(vec![1,2,3,255]).into()),color.clone()).unwrap()
-                        .with_pixel_aspect(aspect).unwrap().with_hotspot(Some((0,0))).unwrap()
-                        .with_image_selection(2,4).unwrap().with_animation_timing(Some(timing));
-                    let mut bytes=Vec::new();write_raster_payload(&mut bytes,&frame).unwrap();
-                    assert_eq!(&bytes[..8],b"RRRAST5\0");
-                    assert_eq!(bytes.len() as u64,raster_payload_len(&frame).unwrap());
-                    let profile=if let RasterColorSpace::Icc(p)=&color { p.len() as u64 } else { 0 };
-                    let budget=MemoryBudget::new(4+profile);
-                    let restored=read_raster_payload_with_length(&mut Cursor::new(&bytes),bytes.len() as u64,&budget).unwrap();
-                    assert_eq!(restored.animation_timing(),Some(timing));
-                    assert_eq!(restored.color_space(),&color);
-                    assert_eq!(restored.pixel_aspect(),aspect);
-                    assert_eq!(restored.hotspot(),Some((0,0)));
-                    assert_eq!((restored.image_index(),restored.image_count()),(2,4));
-                    let retained=restored.clone();drop(restored);assert_eq!(budget.used(),4+profile);drop(retained);assert_eq!(budget.used(),0);
-                    let at=64+u32::from_le_bytes(bytes[48..52].try_into().unwrap()) as usize;
-                    let mut invalid=bytes.clone();invalid[at+4..at+8].fill(0);
-                    assert!(read_raster_payload(&mut Cursor::new(invalid),&budget).is_err());
-                    assert_eq!(budget.used(),0);
-                    let mut invalid=bytes.clone();invalid[19]=0;
-                    assert!(read_raster_payload(&mut Cursor::new(invalid),&budget).is_err());
-                    let short=MemoryBudget::new(3+profile);
-                    assert!(matches!(read_raster_payload(&mut Cursor::new(&bytes),&short),Err(RasterPayloadError::Memory(_))));
-                    assert_eq!(short.used(),0);
-                    cases+=1;
+            for aspect in [None, Some(1.25)] {
+                for (numerator, denominator, plays) in [(0, 1, 0), (1000, 65535, 2), (u32::MAX, 1, 65536)] {
+                    let timing =
+                        rrrah_core::RasterAnimationTiming::new(numerator, denominator, plays).unwrap();
+                    let frame = DecodedRaster::new(
+                        1,
+                        1,
+                        RasterPixels::Rgba8(Arc::new(vec![1, 2, 3, 255]).into()),
+                        color.clone(),
+                    )
+                    .unwrap()
+                    .with_pixel_aspect(aspect)
+                    .unwrap()
+                    .with_hotspot(Some((0, 0)))
+                    .unwrap()
+                    .with_image_selection(2, 4)
+                    .unwrap()
+                    .with_animation_timing(Some(timing));
+                    let mut bytes = Vec::new();
+                    write_raster_payload(&mut bytes, &frame).unwrap();
+                    assert_eq!(&bytes[..8], b"RRRAST5\0");
+                    assert_eq!(bytes.len() as u64, raster_payload_len(&frame).unwrap());
+                    let profile = if let RasterColorSpace::Icc(p) = &color {
+                        p.len() as u64
+                    } else {
+                        0
+                    };
+                    let budget = MemoryBudget::new(4 + profile);
+                    let restored = read_raster_payload_with_length(
+                        &mut Cursor::new(&bytes),
+                        bytes.len() as u64,
+                        &budget,
+                    )
+                    .unwrap();
+                    assert_eq!(restored.animation_timing(), Some(timing));
+                    assert_eq!(restored.color_space(), &color);
+                    assert_eq!(restored.pixel_aspect(), aspect);
+                    assert_eq!(restored.hotspot(), Some((0, 0)));
+                    assert_eq!((restored.image_index(), restored.image_count()), (2, 4));
+                    let retained = restored.clone();
+                    drop(restored);
+                    assert_eq!(budget.used(), 4 + profile);
+                    drop(retained);
+                    assert_eq!(budget.used(), 0);
+                    let at = 64 + u32::from_le_bytes(bytes[48..52].try_into().unwrap()) as usize;
+                    let mut invalid = bytes.clone();
+                    invalid[at + 4..at + 8].fill(0);
+                    assert!(read_raster_payload(&mut Cursor::new(invalid), &budget).is_err());
+                    assert_eq!(budget.used(), 0);
+                    let mut invalid = bytes.clone();
+                    invalid[19] = 0;
+                    assert!(read_raster_payload(&mut Cursor::new(invalid), &budget).is_err());
+                    let short = MemoryBudget::new(3 + profile);
+                    assert!(matches!(
+                        read_raster_payload(&mut Cursor::new(&bytes), &short),
+                        Err(RasterPayloadError::Memory(_))
+                    ));
+                    assert_eq!(short.used(), 0);
+                    cases += 1;
                 }
             }
         }
-        assert_eq!(cases,36);
+        assert_eq!(cases, 36);
     }
     #[test]
     fn chromaticity_v3_is_exact_inline_bounded_and_refuses_malformed_metadata() {

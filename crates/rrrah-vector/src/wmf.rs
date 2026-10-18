@@ -19,10 +19,7 @@ fn color(b: &[u8]) -> Result<String, RasterDecodeError> {
     }
     Ok(format!("#{:02x}{:02x}{:02x}", b[0], b[1], b[2]))
 }
-pub fn decode(
-    b: &[u8],
-    request: &DecodeRequest,
-) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
+pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
     if request.image_index != 0 {
         return Err(crate::DecodeError::UnsupportedImageIndex {

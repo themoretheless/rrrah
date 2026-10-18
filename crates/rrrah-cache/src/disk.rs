@@ -804,14 +804,28 @@ fn read_payload_checked(
     cancelled: &mut impl FnMut() -> bool,
 ) -> Result<(), CacheError> {
     while !output.is_empty() {
-        if cancelled() { return Err(CacheError::Cancelled); }
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         let result = reader.read(output);
-        if cancelled() { return Err(CacheError::Cancelled); }
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         match result {
-            Ok(0) => return Err(CacheError::Io { path: path.to_path_buf(), source: std::io::ErrorKind::UnexpectedEof.into() }),
+            Ok(0) => {
+                return Err(CacheError::Io {
+                    path: path.to_path_buf(),
+                    source: std::io::ErrorKind::UnexpectedEof.into(),
+                });
+            }
             Ok(count) => output = &mut output[count..],
             Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
-            Err(source) => return Err(CacheError::Io { path: path.to_path_buf(), source }),
+            Err(source) => {
+                return Err(CacheError::Io {
+                    path: path.to_path_buf(),
+                    source,
+                });
+            }
         }
     }
     Ok(())
@@ -1809,36 +1823,62 @@ mod partial_payload_tests {
     use std::cell::Cell;
     #[test]
     fn interrupted_and_partial_payload_reads_remain_cancellable() {
-        struct Reader<'a> { calls: &'a Cell<usize>, interrupted: bool }
+        struct Reader<'a> {
+            calls: &'a Cell<usize>,
+            interrupted: bool,
+        }
         impl Read for Reader<'_> {
             fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
-                self.calls.set(self.calls.get()+1);
+                self.calls.set(self.calls.get() + 1);
                 assert!(self.calls.get() <= 3);
-                if self.interrupted { Err(std::io::ErrorKind::Interrupted.into()) }
-                else { output[0]=17; Ok(1) }
+                if self.interrupted {
+                    Err(std::io::ErrorKind::Interrupted.into())
+                } else {
+                    output[0] = 17;
+                    Ok(1)
+                }
             }
         }
         for interrupted in [true, false] {
             let calls = Cell::new(0);
-            let mut reader = Reader { calls: &calls, interrupted };
-            assert!(matches!(read_payload_checked(&mut reader, &mut [0; 16], Path::new("controlled"), &mut || calls.get() == 3), Err(CacheError::Cancelled)));
+            let mut reader = Reader {
+                calls: &calls,
+                interrupted,
+            };
+            assert!(matches!(
+                read_payload_checked(&mut reader, &mut [0; 16], Path::new("controlled"), &mut || calls
+                    .get()
+                    == 3),
+                Err(CacheError::Cancelled)
+            ));
             assert_eq!(calls.get(), 3);
         }
     }
     #[test]
     fn payload_read_retries_interruption_and_rejects_truncation() {
-        struct Once { interrupted: bool, bytes: std::io::Cursor<Vec<u8>> }
+        struct Once {
+            interrupted: bool,
+            bytes: std::io::Cursor<Vec<u8>>,
+        }
         impl Read for Once {
             fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
-                if !self.interrupted { self.interrupted=true; return Err(std::io::ErrorKind::Interrupted.into()); }
+                if !self.interrupted {
+                    self.interrupted = true;
+                    return Err(std::io::ErrorKind::Interrupted.into());
+                }
                 let count = output.len().min(1);
                 self.bytes.read(&mut output[..count])
             }
         }
-        let mut reader = Once { interrupted: false, bytes: std::io::Cursor::new(vec![1,2,3]) };
+        let mut reader = Once {
+            interrupted: false,
+            bytes: std::io::Cursor::new(vec![1, 2, 3]),
+        };
         let mut output = [0; 3];
         read_payload_checked(&mut reader, &mut output, Path::new("controlled"), &mut || false).unwrap();
-        assert_eq!(output, [1,2,3]);
-        assert!(matches!(read_payload_checked(&mut reader, &mut output, Path::new("controlled"), &mut || false), Err(CacheError::Io { source, .. }) if source.kind() == std::io::ErrorKind::UnexpectedEof));
+        assert_eq!(output, [1, 2, 3]);
+        assert!(
+            matches!(read_payload_checked(&mut reader, &mut output, Path::new("controlled"), &mut || false), Err(CacheError::Io { source, .. }) if source.kind() == std::io::ErrorKind::UnexpectedEof)
+        );
     }
 }

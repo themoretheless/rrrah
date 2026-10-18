@@ -24,12 +24,12 @@ pub use rrrah_raw::{
     GenerationToken, MrwLayout, NATIVE_CR3_BACKEND_ID, NATIVE_DNG_BACKEND_ID, NATIVE_DNG_MOSAIC_CONTRACT_1,
     NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder, NativeCrwDecoder, NativeDecodeTimings,
     NativeDngDecoder, NativeMrwDecoder, NativeRawDecoder, OPTIO_S4_SENSOR_SIZE, OptioS4SensorError,
-    RawDecoder, RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, RpfRasterInterpretation, WORKSPACE_LOCK_DIGEST,
-    bounded_io, decode_crw_10d, decode_crw_10d_with_tables, decode_eip_file_sensor, decode_eip_sensor,
-    decode_file, decode_mef_zd_sensor, decode_mef_zd_sensor_file, dng, eip_file_sensor_recipe, inspect_eip,
-    raw_development_opcodes, read_bay_image_sensor_with_budget, read_bay_sensor_with_budget, read_eip_raw,
-    read_eip_raw_with_budget, read_erf_maker_metadata, read_optio_s4_sensor_with_budget, sniff,
-    unpack_bay_sensor, unpack_optio_s4_sensor, vc5,
+    RawDecoder, RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, RpfRasterInterpretation,
+    WORKSPACE_LOCK_DIGEST, bounded_io, decode_crw_10d, decode_crw_10d_with_tables, decode_eip_file_sensor,
+    decode_eip_sensor, decode_file, decode_mef_zd_sensor, decode_mef_zd_sensor_file, dng,
+    eip_file_sensor_recipe, inspect_eip, raw_development_opcodes, read_bay_image_sensor_with_budget,
+    read_bay_sensor_with_budget, read_eip_raw, read_eip_raw_with_budget, read_erf_maker_metadata,
+    read_optio_s4_sensor_with_budget, sniff, unpack_bay_sensor, unpack_optio_s4_sensor, vc5,
 };
 
 pub use rrrah_mesh::{
@@ -56,8 +56,8 @@ pub use rrrah_vector::{
     eps_strings, eps_stroke, eps_stroke_prepare, eps_tokens, eps_vm, evaluate_eps_program,
     evaluate_eps_vectors, fill_eps_path, flatten_eps_path, inspect_eps_bounds, inspect_eps_source,
     outline_eps_join, outline_eps_polyline, outline_eps_prepared_stroke, outline_eps_segment,
-    parse_eps_number, pdf, pict, png_color, prepare_eps_stroke, rasterize_eps_fills, rasterize_eps_scene, svg,
-    wmf,
+    parse_eps_number, pdf, pict, png_color, prepare_eps_stroke, rasterize_eps_fills, rasterize_eps_scene,
+    svg, wmf,
 };
 
 mod jpeg_cmyk;
@@ -89,8 +89,8 @@ pub use rrrah_raw::{
 };
 
 pub use rrrah_scientific::{
-    FitsImage, FitsSamples, MrcImage, NrrdImage, ScalarWindow, ScientificDecodeError, dicom, fits, mrc,
-    nrrd, sample, scientific,
+    FitsImage, FitsSamples, MrcImage, NrrdImage, ScalarWindow, ScientificDecodeError, dicom, fits, mrc, nrrd,
+    sample, scientific,
 };
 
 pub fn decode_fits(request: &DecodeRequest) -> Result<FitsImage, RasterDecodeError> {

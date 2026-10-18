@@ -68,11 +68,7 @@ fn sti_images_preserve_native_and_prepared_samples_ram_swap_and_metal() {
             let compressed = name.contains("-zlib");
             // The pinned zlib backend admits 64 KiB of state/history in
             // addition to the source and decoded planes.
-            let budget = rrrah_core::MemoryBudget::new(if compressed {
-                4096 + 64 * 1024
-            } else {
-                4096
-            });
+            let budget = rrrah_core::MemoryBudget::new(if compressed { 4096 + 64 * 1024 } else { 4096 });
             let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
             request.image_index = index;
             if compressed {

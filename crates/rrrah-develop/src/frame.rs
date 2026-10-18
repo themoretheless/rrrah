@@ -446,10 +446,7 @@ mod tests {
             height: 2,
             cells: Vec::new(),
         };
-        assert!(matches!(
-            empty.validate(),
-            Err(CfaError::InvalidCfaLength { .. })
-        ));
+        assert!(matches!(empty.validate(), Err(CfaError::InvalidCfaLength { .. })));
         let wrong_length = CfaPattern {
             width: 2,
             height: 2,

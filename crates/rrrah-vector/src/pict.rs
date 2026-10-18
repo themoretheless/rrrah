@@ -1113,7 +1113,9 @@ pub fn decode(
 }
 #[cfg(test)]
 mod public_tests {
-    fn decode_file(request: &crate::DecodeRequest) -> Result<rrrah_core::DecodedRaster, crate::RasterDecodeError> {
+    fn decode_file(
+        request: &crate::DecodeRequest,
+    ) -> Result<rrrah_core::DecodedRaster, crate::RasterDecodeError> {
         let bytes = crate::bounded_io::read_bounded(request)?;
         super::decode(&bytes, request)
     }

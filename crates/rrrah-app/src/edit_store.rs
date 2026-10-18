@@ -581,7 +581,8 @@ mod tests {
         let duplicate = guard._file.try_clone().unwrap();
         assert!(writer_lock(&path).is_err());
         drop(guard);
-        let next = writer_lock(&path).expect("completed transaction must release lock independently of duplicated descriptors");
+        let next = writer_lock(&path)
+            .expect("completed transaction must release lock independently of duplicated descriptors");
         drop(next);
         drop(duplicate);
         assert!(writer_lock(&path).is_ok());
