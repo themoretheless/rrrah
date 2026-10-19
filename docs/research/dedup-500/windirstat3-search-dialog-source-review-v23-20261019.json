@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of both dialog files; byte comparison to pinned Git objects. Compiled original ReadCriteria unchanged with synthetic dialog:75boundary/invalid/empty logical-minimum controls across5units passed; other fields not runtime-qualified.",
+  "new_whole_files_read": {
+    "windirstat/Dialogs/SearchDlg.cpp": "0b51a6f14f537688959813ade0c70c6e0483be6ad35eafeefd4776bcc5bc33dd",
+    "windirstat/Dialogs/SearchDlg.h": "e744d7acab25a14627e93e871d9fec8b81521c9f2356e0613e18afadd4c91086"
+  },
+  "whole_files_read": 60,
+  "coverage": "docs/research/dedup-500/windirstat3-search-dialog-coverage-v23-20261019.json",
+  "coverage_sha256": "8150e4a21631768da3b4ac6b852af476ece4d1f1282974be71541122f17f41ba",
+  "findings": [
+    "ReadCriteria reads logical and physical bounds as decimal integer strings. Unit selection clamped0..4 gives shift0/10/20/30/40; maximum pre-shift value is ULLONG_MAX>>shift. Empty field means absent bound; both ranges require min<=max.",
+    "Both OK handler and live status require valid sizes, at least one enabled type and successful optimized regex compilation. Failed compilation returns default regex lacking optimize flag, so dialog prevents it reaching ProcessSearch.",
+    "Search history stores term plus3flag bits after U+001F prefix, truncates to configured count and deduplicates exact term text. Distinct flag variants of identical term are replaced rather than separate history identities.",
+    "History is sanitized/saved during dialog initialization, and removing history can clear persisted current term even if later cancelling dialog; criteria fields are committed on valid OK.",
+    "Glob term containing star auto-enables wholePhrase when not regex; removal of star does not auto-clear that checkbox. This is source behavior, not a verified UX defect."
+  ],
+  "limits": [
+    "No real Windows widgets, regex UI/persistence roundtrip or app search executed.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ],
+  "controls": "docs/research/dedup-500/windirstat3-search-bounds-control-v23-20261019.json",
+  "controls_sha256": "93fa50abf5e2552971e80df634f54f6461950882b4abde14b9ff72e780d7e507"
+}
