@@ -1,0 +1,28 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of ProfileManager, project, Fody and application XAML; exact-commit download bytes matched Git blob inventory.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Managers/ProfileManager.cs": "67b677f7f9df1c9faccb17b4d97d9e3c60fac193791f05889ff57ce026f34baa",
+    "ExplorerTabUtility/ExplorerTabUtility.csproj": "b8d86fd4351549e3a50901d05f05f02693bbceb8254049ee5d9cd2b88d8c777f",
+    "ExplorerTabUtility/FodyWeavers.xml": "bd3aa3e520bb169160737dffd3dbd9b98e07246cfa0089af95f0d8ad68356c27",
+    "ExplorerTabUtility/App.xaml": "6aae9e6e5452c48a3ebd319ca36e3f4c2eccae076e8293e993aba88f073381f7"
+  },
+  "whole_files_read": 24,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v12-20261019.json",
+  "coverage_sha256": "a99ef2998b9f4e3ffdc00e820f0a12b58ba86a62cd9678b90b7926361c206a42",
+  "findings": [
+    "ImportProfiles deserializes then clears temporary list before cloning all entries; a null entry/clone failure is swallowed and can leave a partially replaced list with old UI because RefreshPanel not reached. No transactional prepare/commit or error result.",
+    "LoadSavedProfiles similarly replaces saved list before cloning temporary copies and swallows exceptions. SaveProfiles filters only absent hotkeys, clones then serializes; enum validity, Delay range, scope and key combinations are not validated here.",
+    "ExportProfiles serializes saved state, not temporary editing state. Tray enable mutates saved and temporary objects but does not persist directly; callers may save later. GetProfiles returns read-only list wrapper over mutable profile objects.",
+    "SetProfileEnabledFromTray uses First for saved ID and may throw if stale/missing; temporary counterpart may be absent. No synchronization or UI-thread admission here.",
+    "Project targets net9.0-windows and net481 with WPF and SHDocVw/Shell32 COM references. Existing net10isolated probes do not qualify original target compatibility, COM build or WPF runtime.",
+    "Fody ConfigureAwait sets ContinueOnCapturedContext=false globally, requiring use-site dispatcher handling for UI/COM continuations; STA scheduler alone does not establish continuation affinity.",
+    "App resources merge three theme dictionaries; XML structure is declaration only. Package versions are pinned values in source, not current dependency recommendations or vulnerability assessment."
+  ],
+  "limits": [
+    "No original build, UI import/export or persistence fault injection performed. No foreign production code adopted.",
+    "Completed count148/500; full filtered checkout session13181 remains separate; pHash deferred."
+  ]
+}
