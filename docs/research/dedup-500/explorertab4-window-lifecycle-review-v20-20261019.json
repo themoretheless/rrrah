@@ -1,0 +1,28 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading; ExplorerWatcher split into consecutive chunks through final braces after initial combined output truncation. Git blob identity verified. No Windows hooks executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Hooks/ExplorerWatcher.cs": "fe9518c1d5e1c29bc4d341553e4914a5aa756462d38a3960bc3374e7894a7c86",
+    "ExplorerTabUtility/Managers/HookManager.cs": "b26867bf01cca5d51bf6041887e0cd7bf95d06e2c3d6671a19bc01aea4efb084"
+  },
+  "whole_files_read": 54,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v20-20261019.json",
+  "coverage_sha256": "4bcb37dc9a112f46373ee673865421dc63c188b43ca6cb47666281da36915076",
+  "findings": [
+    "HookManager async-void dispatch has no encompassing error handler; undefined profile enum values reach throwing default. Dispose does not detach profile-manager or session-ending subscriptions or cancel pending actions.",
+    "ExplorerWatcher singleton flag is unsynchronized and set before constructor initialization succeeds. Dispose has no idempotence/initialization guard; shell fields may still be null before first timer initialization. Explorer check timer is not explicitly disposed by Dispose.",
+    "Shell dictionary uses selective locks, with unlocked enumeration, count and key updates on asynchronous paths. Source does not establish thread-safe access across timer, COM callbacks, scheduler and consumers.",
+    "Five-second navigation timeout releases semaphore but does not detach NavigateComplete2 handler or cancel navigation; late callback can still select items. Queued STA tasks and delayed continuations have no lifecycle cancellation.",
+    "RequestToOpenNewTab zero-handle branch passes lockToOpenWindows as second positional argument to OpenNewWindowWithSelection, where it binds duplicate rather than lockToOpenWindows. Caller intent to bypass semaphore is not forwarded by this branch.",
+    "Automatic conversion starts destination-tab task without awaiting success, then quits source window. Closed-record reopen removes history before successful navigation; failure lacks rollback.",
+    "GetWindows and persistence group by default string equality of Location rather than shell equivalence or content identity; last 100 persisted entries limit storage only, while live closed-window history grows without an explicit cap.",
+    "Recently-closed age subtracts signed Environment.TickCount from promoted stored value; wrap handling is not explicit. A stale record encountered first terminates backward search.",
+    "Cleanup releases COM objects before draining STA scheduler and lacks try/finally around the complete resource sequence; an exception can skip remaining cleanup. Subscription failure removes dictionary entry without explicit matching detach/release in that catch."
+  ],
+  "limits": [
+    "Static findings, not reproduced Windows race/crash claims. Original application runtime, COM apartment correctness and actual deadlock reachability remain unqualified.",
+    "No implementation adopted from tab-management repository; file-content dedup remains separate. Fully reviewed repository count148/500; native pHash investigation deferred."
+  ]
+}
