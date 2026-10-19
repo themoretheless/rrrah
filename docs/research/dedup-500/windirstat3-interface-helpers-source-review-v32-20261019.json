@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole HelpersInterface.cpp782lines and header manually read; pinned Git bytes matched. No Windows helper execution.",
+  "new_whole_files_read": {
+    "windirstat/HelpersInterface.cpp": "e72d4a04fae19c690863de7e1af6b8c53bbe9427d240c057c6a042e16b2e892a",
+    "windirstat/HelpersInterface.h": "7674996b0ea586c1c12340d8339c747a487a9a54e14c5daf6b41d295e65afbab"
+  },
+  "whole_files_read": 78,
+  "coverage": "docs/research/dedup-500/windirstat3-interface-helpers-coverage-v32-20261019.json",
+  "coverage_sha256": "9ba3d340d1cbbcfab97b2fa505d8387f48de77a41db18fd613f7f7402153e8af",
+  "findings": [
+    "NormalizeScanPaths splits pipe list, trims spaces/empty entries, expands native paths with _wfullpath when successful, preserves MTP spelling, normalizes extended/native path key and lowercases. Adds trailing separator to key before ancestor-prefix checks, preventing similar-name sibling prefix collapse.",
+    "Normalization removes previously admitted descendants when later ancestor arrives and skips newly covered descendants. It does not resolve physical symlink/junction/file identity, and lowercased keys may collapse case-distinct selected roots; case-sensitive Windows directory behavior remains untested.",
+    "GlobToRegex escapes regex metacharacters, collapses repeated stars to nonseparator wildcard and maps question mark to single nonseparator character. Wildcards exclude slash/backslash/colon and optional anchors wrap complete pattern. This is component wildcard matching, not recursive double-star semantics.",
+    "SplitString trims literal spaces at both ends of each token; JoinString delimits based on current output nonempty state. These are application serialization conventions, not lossless arbitrary filename-list encoding.",
+    "CreateShellItemArray retains PIDLs while aggregating and allOrNothing mode rejects entire selection if any identity fails; default may omit unresolved items. Context-menu helper explicitly requires allOrNothing.",
+    "COM scope balances successful initializations and rejects incompatible mode via false; resource decompression uses function-static context pointer and ignores FDICopy result. No concurrent decompression or malformed resource runtime qualification.",
+    "Formatting uses locale-cached separators and rounded suffixes; numeric display is not exact identity evidence. FormatDouble multiplies by100 then narrows to int, so arbitrary large/floating exceptional inputs not generically qualified.",
+    "Small rectangle storage narrows coordinates to WORD, unlike full signed CRect; negative/large coordinate preservation cannot be inferred. Actual consumers still require review."
+  ],
+  "limits": [
+    "No Windows full-path/case-sensitive filesystem, shell, localization, resources or render runtime executed.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
