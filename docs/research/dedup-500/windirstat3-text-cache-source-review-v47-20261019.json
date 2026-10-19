@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole2files manual reading; pinned Git bytes matched. No GDI/runtime benchmark.",
+  "new_whole_files_read": {
+    "windirstat/Controls/DrawTextCache.h": "3b0791857a4ce7eda027d19a13947577a94a2463e0dce155eadbf288fb6e4377",
+    "windirstat/Controls/DrawTextCache.cpp": "fddddef0c12ce0adf3ad67d401b3c67ce0fb5e72704f164b5f756750934dbddd"
+  },
+  "whole_files_read": 130,
+  "coverage": "docs/research/dedup-500/windirstat3-text-cache-coverage-v47-20261019.json",
+  "coverage_sha256": "4e5623c35d079ae6e452df334842ed87f3894faa1e0ca4ddc1c9e3c7bbc0e165",
+  "findings": [
+    "LRU limits1000entries and16MiB nominal bitmap bytes, evicts before insertion, touch moves existing list node front. Text keys copied into both map and list; string/container/GDI bookkeeping not part of bitmap-byte budget.",
+    "Key covers text/colors/format/cell dimensions/DPIX/HFONT handle. Font-object lifetime/handle reuse requires caller ClearCache; no generation field. Cache not internally synchronized, implying UI-thread ownership assumption.",
+    "Raster caching bypassed for disabled option, transparent background, nonzero layout, empty or oversized bitmap. CalcRect measurements cached separately by format bit, with no bitmap bytes. Selected/partially highlighted cells can request transparent fallback.",
+    "Bitmap path draws full opaque cell with current font/colors and native DrawText, then BitBlt. Failed initial compatible DC/bitmap falls back uncached DrawText. PaintCachedEntry does not check memory DC/BitBlt success.",
+    "bitmapBytes multiplies dimensions and color size in size_t without checked arithmetic. Real client geometry bounded by UI assumptions; arbitrary huge geometry and32bit overflow not runtime tested.",
+    "CreateCacheKey/CreateCachedBitmap declared noexcept despite string/make_unique allocations; allocation failure can terminate rather than fall back. Cache admission also not exception-transactional across LRU/map operations; no allocation fault injection.",
+    "Nominal budget approach is a reference idea only. No measured win or production adoption in rrrah-dedup; text renderer not duplicate comparison engine."
+  ],
+  "limits": [
+    "No actual font/DPI/background correctness, GDI resource accounting, allocation faults or paired performance tests.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
