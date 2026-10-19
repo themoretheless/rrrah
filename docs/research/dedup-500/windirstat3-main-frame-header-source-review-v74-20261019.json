@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of MainFrame.h; pinned bytes verified. No Windows command execution.",
+  "new_whole_files_read": {
+    "windirstat/MainFrame.h": "f5d4602dd3b8051aff66ac9750c0c7d2c6a508af8d4caeb1fe8c7657ae86023e"
+  },
+  "whole_files_read": 203,
+  "coverage": "docs/research/dedup-500/windirstat3-main-frame-header-coverage-v74-20261019.json",
+  "coverage_sha256": "cdee3c70cf51c5a3f9acb8b4e1dcfd41a077663f08024083143d00cab7258ad2",
+  "findings": [
+    "Main-frame routes connect close/end-session/destroy/timer and synchronous callback messages to previously reviewed implementations. Taskbar creation uses registered message. Presence of a route is not proof handler succeeds at runtime.",
+    "Logical focus distinguishes file, duplicate, top, search, watcher, permissions, extension and analytics views; inline view switches select appropriate existing tabs. View getters dereference borrowed tabbed-view pointer without independent null guard; valid frame construction remains precondition.",
+    "Frame owns embedded splitter/status/toolbar/progress controls but retains borrowed pointers to pane instances and working CItem. Clear/teardown sequencing, not header ownership, determines pointer validity.",
+    "Cleanup result future and jthread are members, with cached four counters. Explicit shutdown join was reviewed in MainFrame.cpp; declaration alone does not establish cancellation or timeout.",
+    "Splitter storage pointers reference persisted option storage; SetStorage dereferences supplied pointer and only regards strictly0..1as user ratio. No null/finite contract enforcement in this setter.",
+    "Settings sheet snapshots initial dark-mode/language values and computes restart request against them. Request flag and actual restart outcome remain distinct.",
+    "Watcher-filter paint handler is routed for WM_NCPAINT, WM_PAINT and WM_PRINT; actual paint and invalid-regex behavior remains in unreviewed MainFrame.Commands.cpp.",
+    "Tool command ranges cover shadow-copy/defrag/checkdisk and UI scaling; update routes are distinct from execution routes. Numeric range disjointness and authorization behavior are not established by declaration reading."
+  ],
+  "limits": [
+    "No UI command, resource-ID overlap, pointer-lifetime, focus, paint or cleanup-thread runtime tests performed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
