@@ -1,0 +1,28 @@
+{
+  "status": "passed_original_plotter_suite_and_Agg_output",
+  "source_pins": {
+    "imagededup/utils/plotter.py": "302bc0f133fc44c7f1ace8e440bd476320ce6cbaa4a8af1bb732f7f547c1676e",
+    "tests/test_plotter.py": "6bb1df16516c0d828a628d4d0b64974f9bdd4d0c0c409af00fb536834bc6e231"
+  },
+  "original_suite": {
+    "tests": "11",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "matplotlib_version": "3.10.8",
+  "output_dimensions": [
+    640,
+    480
+  ],
+  "findings": [
+    "Original _plot_images allocates Figure10x14 but uses pyplot.subplot/savefig on a separate current figure; actual output dimensions recorded.",
+    "Upstream plotter tests exercise validation/dispatch but leave integrated rendering test commented out.",
+    "Original loader uses Image.open directly without EXIF transpose, unlike an orientation-normalized preview contract."
+  ],
+  "limits": [
+    "Entire original plotter module/tests unchanged with namespace-package routing; real matplotlib Agg/Pillow/pytest.",
+    "Synthetic two-image PNG output generated; visual layout inspection pending, no GUI/interactive/platform proof.",
+    "No foreign production code adopted; pHash native investigation remains deferred."
+  ]
+}

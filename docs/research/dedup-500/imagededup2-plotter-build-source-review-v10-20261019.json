@@ -1,0 +1,46 @@
+{
+  "status": "partial_source_and_original_plotter_suite_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "imagededup/utils/plotter.py": "302bc0f133fc44c7f1ace8e440bd476320ce6cbaa4a8af1bb732f7f547c1676e",
+    "tests/test_plotter.py": "6bb1df16516c0d828a628d4d0b64974f9bdd4d0c0c409af00fb536834bc6e231",
+    ".github/workflows/codeql.yml": "ec282aac0614d679c577c5455a183f78a02a99e657ae43f3f33a3384e710110e",
+    ".github/workflows/docs_deploy.yml": "b7d44c440ec403283d5743a3d9454dd9f11a149fa85f9fd738e7dbd30415f5cd",
+    ".gitignore": "d0c5bfd5cfeb957b127252aa3950aee4d76174f193c06ad8a13c34c3cc7d2734",
+    "CODEOWNERS": "dd490fb6a91c53306b0423ed83e276e97649e7b94cc63c076c3d467b6901fa1b",
+    "mkdocs/README.md": "5b3136786cfe249409797728a4bd2dfc13b694c287f0f67d7c2f1fd9ee283d29",
+    "mkdocs/autogen.py": "82cb964ad933605192f49437385870e213c1e88abeaf8f41e66c54ac929becbb",
+    "mkdocs/build_docs.sh": "3c2bb01de80f5294c6ac42c64cf90b48e7fdf0cdc69a51450f9775276ad596f3",
+    "mkdocs/mkdocs.yml": "3134a5c82593769fbfcd552a91a0eff14a544877a61d09b572316d78a986e9e2",
+    "mkdocs/run_docs.sh": "bca6b3a1dea982307acecbd4625d72fb54abb48e98cf8364095dd4f473a04142",
+    "imagededup/handlers/search/builtin/README.md": "1d5fc3b1c84e11a3799594e0e9c7bcc4af51f5c2f08901ebb89f29d5132828d6"
+  },
+  "whole_files_read_across_v1_v10": 56,
+  "controls": "docs/research/dedup-500/imagededup2-plotter-build-reproducer-v10-20261019/result.json",
+  "controls_sha256": "d4322a9ad727f12f442308d14cd52b4483e734b1fd539e8523b4a0439199ef2a",
+  "coverage": "docs/research/dedup-500/imagededup2-plotter-build-reproducer-v10-20261019/coverage.json",
+  "coverage_sha256": "17a3a750772eec1a0778718de6b5db54798039536002a2191d6c36247e3d6c3a",
+  "reproducer": "scripts/qualify-imagededup2-plotter-20261019.py",
+  "reproducer_sha256": "47d0483b515e74b2fb72112d7bc92b8facaa55d7df998128bb160bcb3b52ce29",
+  "findings": [
+    "Original _plot_images allocates Figure10x14 but uses pyplot.subplot/savefig on a separate current figure; actual output dimensions recorded.",
+    "Upstream plotter tests exercise validation/dispatch but leave integrated rendering test commented out.",
+    "Original loader uses Image.open directly without EXIF transpose, unlike an orientation-normalized preview contract.",
+    "Source CODEOWNERS contains only usernames without path pattern; not tested with GitHub parser.",
+    "Autogen reads source AST and writes docs as module top-level action; did not import or execute it in checkout.",
+    "Documentation workflow declares build/deploy; no current job execution verified."
+  ],
+  "visual_review": {
+    "artifact": "docs/research/dedup-500/imagededup2-plotter-build-reproducer-v10-20261019/plot.png",
+    "sha256": "dc0146982dd230639acbf4e8b460a08b2571df2f45b3fbae6389af87cdbab06b",
+    "observed": "Red original top center and blue duplicate lower left; readable labels, no missing image. Single synthetic two-image layout only."
+  },
+  "limits": [
+    "Entire original plotter module/tests unchanged with namespace-package routing; real matplotlib Agg/Pillow/pytest.",
+    "Synthetic two-image PNG output generated; visual layout inspection pending, no GUI/interactive/platform proof.",
+    "No foreign production code adopted; pHash native investigation remains deferred.",
+    "Visual layout inspected for this synthetic output after runtime capture; original repository binary assets remain unreviewed."
+  ]
+}
