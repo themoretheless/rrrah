@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole653lines across two files manually read; pinned bytes verified. No rendering/runtime test.",
+  "new_whole_files_read": {
+    "windirstat/Views/GraphView.h": "72ef784f2ff1a37bf62334d49f88aa5fdb2c7c870ed4e0e7cee3e37486c8da53",
+    "windirstat/Views/GraphView.cpp": "01120d34a6ecddcee0ae2af9892940858d3cdf3da4cae497611f85a41a748730"
+  },
+  "whole_files_read": 117,
+  "coverage": "docs/research/dedup-500/windirstat3-graph-base-coverage-v43-20261019.json",
+  "coverage_sha256": "091a3d2c9246e3f0dead65c0d1da7c0276a74a4495267a546995e4daaca5fecd",
+  "findings": [
+    "SuspendRecalculationDrawing clears input/hover/layout through hooks and Inactivate before marking suspended, matching model caller order before source mutation. Cached dimmed pixels may remain but pointer-bearing layout cleared.",
+    "Ready-to-draw tests root exists/DONE/not suspended; it does not independently prove exhaustive/current disk scan. ResolveItemAtPoint also requires valid layout and client bounds, rather than testing current disk paths.",
+    "Synchronous render bitmap can reuse same-size dimmed bitmap; differently sized old bitmap released before allocation. Failed memory DC/bitmap clears cache and fills background. These are allocation fallback paths, not measured memory bounds or runtime leak proof.",
+    "Selection/hover overlays composed with cached graph into buffered frame. New root empties all graph state; selection changes invalidate overlays, geometry-affecting changes inactivate or trim hidden cache. Renderer-specific reuse decisions still need review.",
+    "Hover stores copied path/size text plus borrowed current item pointer; resets on suspension,size,newroot. HoverInfo returns view of owned pane text while visible/cursor inside. No arbitrary asynchronous lifetime guarantee.",
+    "Mouse wheel retains separate navigation/zoom partial-delta remainders, executes one command per full delta and stops if selected/zoomed item unchanged. Mode resets clear remainders.",
+    "Hardlink highlighted display maps flag to index snapshot; extensions based on model registration grouping. Neither visualization hit test nor highlight is content-equality evidence."
+  ],
+  "limits": [
+    "No Windows GDI frame capture, geometry, pointer-lifetime race, DPI, cache allocation or performance runtime test.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
