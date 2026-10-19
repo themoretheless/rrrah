@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of RecoveryFat.h/cpp,691 lines; pinned bytes verified. No raw disk or recovery execution.",
+  "new_whole_files_read": {
+    "windirstat/RecoveryFat.h": "bd2431b35690785d48bc23d21609a87a9c725739c6eabaab11eef0a12c27802b",
+    "windirstat/RecoveryFat.cpp": "3f1c807b95ba8d626592b47fa569e1a3ebc85d389793f6cbeb6fa3ef88632d3d"
+  },
+  "whole_files_read": 189,
+  "coverage": "docs/research/dedup-500/windirstat3-fat-recovery-coverage-v65-20261019.json",
+  "coverage_sha256": "5a883f06ef4866419dcd5cb34c7204907f3a6fad220cc3e564233e35dc0444f3",
+  "findings": [
+    "Boot parser derives FAT12/16/32 from cluster count, validates jump/signature, power-of-two sectors/clusters, <=64KiB clusters, metadata/data bounds, FAT capacity and active/mirrored configuration. Filesystem label is not authoritative.",
+    "FAT page cache includes overlap bytes for packed FAT12 entries crossing64KiB boundaries. Mirrored copies must match for queried entry; differing copies fail rather than choose one. This is not full-volume mirror equality verification.",
+    "Chain traversal validates cluster range, rejects revisits with a set and rejects reserved/bad/free links before end marker. Scan uses explicit directory stack and global visited clusters to reject overlapping directory chains. Memory can grow with traversed clusters; no hard budget established.",
+    "Long-name assembly checks ordinal/checksum/type/cluster/padding and UTF16 validity. Deleted ordinals and first short-name byte are reconstructed from checksum; fallback short names use OEM code page and erased initial underscore. No host-portable Unicode runtime qualification.",
+    "Only deleted nondirectory candidates from allocated directory trees are published. Deleted directories are not traversed, and erased file chains are approximated by consecutive free clusters. Therefore fragmented deleted-file recovery is not established by free-allocation checks.",
+    "Validation rereads boot except dirty-state byte, containing-directory chain, exact saved directory fragments and allocation. Copy checks fresh allocation before/after each chunk and metadata before/after final flush. These checks do not freeze free-cluster contents or establish original file bytes.",
+    "Scan retains valid candidates while counting invalid directory/entry records, propagates cancellation and non-invalid-data I/O failures. Discovered callback occurs before final Recycle Bin name resolution, so streaming names can differ from final results.",
+    "RecoveryFile does not itself compare source volume identity with canonical destination in this implementation. Same-volume confirmation policy, if any, requires dialog review. No destructive action executed."
+  ],
+  "limits": [
+    "No synthetic FAT image parser harness, malformed-volume tests, fragmented-file oracle, source mutation, real disk read or recovered output performed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
