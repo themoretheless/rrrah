@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Full XAML and code-behind reading; pinned Git blob identity verified. No dialog displayed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/CustomMessageBox.xaml": "454c2b27fb91311eb04a6ff194105614adc766983fe896292177810f3b90efdf",
+    "ExplorerTabUtility/UI/Views/CustomMessageBox.xaml.cs": "413fb7f68091e8aa9f41bd1b3f98dc8f70adcde179ae5d2bd65e3f3066b54eba"
+  },
+  "whole_files_read": 60,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v23-20261019.json",
+  "coverage_sha256": "dd24895bb2b29fd3f8a85fc7f72c83b784af1e5427fbdae2edc911155bc6dde6",
+  "findings": [
+    "Default unspecified YesNo/YesNoCancel selects Yes; prior clear-history call explicitly supplies No, so this reviewed call avoids affirmative default. Other callers must be checked individually.",
+    "Only button click changes result; external window close returns initial None. Cancel buttons do not set IsCancel and no explicit Escape handler appears. No title-bar close button in borderless XAML.",
+    "Unsupported MessageBoxButton enum value creates no buttons; incompatible defaultButton selects no default. Arguments lack explicit enum validation.",
+    "ShowDialog runs synchronously on caller thread without dispatcher marshalling. Current helper supplies optional owner; ownerless overload centers screen and remains topmost. Caller apartment/thread remains responsible.",
+    "Message text is assigned as TextBlock.Text, not parsed as XAML or HTML. Text wraps at maximum width400 but dialog height is unconstrained and no content scrolling is defined.",
+    "Button labels are fixed English; no explicit access-key labels or automation metadata in these files. Visual keyboard behavior and accessibility require runtime verification."
+  ],
+  "limits": [
+    "Static source review only; WPF Escape/Alt-F4 behavior, layout scaling and caller threading not runtime-qualified. No own-library production changes.",
+    "148/500 repositories fully reviewed. ExplorerTabUtility partial60/104. Native pHash investigation deferred."
+  ]
+}
