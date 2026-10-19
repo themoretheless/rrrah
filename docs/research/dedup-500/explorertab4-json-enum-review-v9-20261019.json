@@ -1,0 +1,27 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of both JSON converters and action/scope enums; exact-commit downloads matched pinned Git blob IDs.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Helpers/HotKeyActionJsonConverter.cs": "819a469c2b59d14c864a9be35c5b98072e7f9f420d267b1d37427590dfd88986",
+    "ExplorerTabUtility/Helpers/IntPtrConverter.cs": "c463bb1e739c8ef531c017265e4d08ad5958de704cf3c548b925262b27bc73a9",
+    "ExplorerTabUtility/Models/HotKeyAction.cs": "9dd859071a15fd637298cf10e6d2ee1cc6883b816b69e6f18ff0031eb5f75007",
+    "ExplorerTabUtility/Models/HotkeyScope.cs": "0cfcce9a30ebcab3ea7c2379062f2c188867aafacb0343736c3986661add644f"
+  },
+  "whole_files_read": 15,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v9-20261019.json",
+  "coverage_sha256": "33233fede887a54cfa0fba8802acba542180b2542d78e166d90d21662ceac6ca",
+  "findings": [
+    "Action numeric tokens0..14 use explicit legacy mapping after enum reorder; string tokens use case-insensitive Enum.TryParse directly. Numeric3 maps SetTargetWindow whereas string3 maps current enum ordinal TabSearch. Source-level representation-dependent semantics require runtime probe.",
+    "String enum parse is not followed by Enum.IsDefined; numeric strings can represent undefined enum values, unlike out-of-map numeric token fallback. Unknown names silently become Open. These behaviors are inappropriate for strict persisted scanner policy without explicit validation.",
+    "Writer always emits value.ToString; undefined enum values can become numeric strings. Roundtrip validity depends on accepted enum domain, not serialization success alone.",
+    "Legacy mapping has no NavigateForward entry; numeric15 falls through to current enum SnapDown. Explicit version/schema is absent from this converter.",
+    "IntPtr converter accepts signed64-bit numeric JSON then constructs native-sized pointer; negative values allowed and32-bit overflow behavior is platform-dependent. Persisted OS handles are not durable identity evidence across sessions.",
+    "HotkeyScope has Global/FileExplorer ordinals without custom converter here. Enum descriptions define navigation/window actions, not content deduplication."
+  ],
+  "limits": [
+    "No converter runtime probes in this increment; no Windows application,32-bit runtime or original tests. No foreign production code adopted.",
+    "Full filtered checkout remains separate session13181; source downloads individually pinned. Completed count148/500; pHash deferred."
+  ]
+}
