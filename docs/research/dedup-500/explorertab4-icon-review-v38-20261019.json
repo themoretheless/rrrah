@@ -1,0 +1,20 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Pinned ICO Git blob verified; decoded all seven available sizes with bundled Pillow and visually inspected labeled contact sheet at native pixel dimensions.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Icon.ico": "4109e7788587cb9faec97f2581580a5f6c3ffe519e70b5c3f88030b5fc675da1"
+  },
+  "whole_files_read": 95,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v38-20261019.json",
+  "coverage_sha256": "21e4a7a31636a215d8fac05d399c558c65031a72582fa5110849e55821e6239d",
+  "findings": [
+    "ICO exposes16,24,32,48,64,96,128-pixel square representations, all decoded and displayed. Each depicts same blue circular window/tab and E-key illustration as PNG; smallest sizes have expected reduced visible detail.",
+    "Image decode and visual inspection do not prove Windows icon selection or scaling behavior. No executable/algorithmic material adopted."
+  ],
+  "limits": [
+    "Nine GIF timelines remain unreviewed. Repository still partial95/104; fully reviewed count148/500.",
+    "No own-library changes or fresh tests. Native pHash investigation deferred."
+  ]
+}
