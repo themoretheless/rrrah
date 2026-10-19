@@ -1,0 +1,23 @@
+{
+  "status": "verified_complete_source_and_selected_actual_runtime",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "complete_source_review": "docs/research/dedup-500/fizz457-complete-source-review-20261019.json",
+  "complete_source_review_sha256": "61834e25cae43fa239955f1d191925fa793a712c571c2c857ca7fbad91509476",
+  "selected_runtime": "docs/research/dedup-500/fizz457-selected-runtime-20261019.json",
+  "selected_runtime_sha256": "07be7364e46dcacd9f237031ff7dbed5f9fe9f570469111fb3a649590de74886",
+  "fully_read_blobs": 19,
+  "auditor_sha256": "d5ad34554028a490082cc5591d846b8ad62001f6005c354019f60a1e3423935f",
+  "scope": "Complete pinned source read, all Gitblob hashes and archived bytes verified; actual original selected scanner/analyzer/ZIP controls. Runtime tests do not cover complete GUI, video decode, format/platform or release behavior.",
+  "limits": [
+    "Full pinned source reading and Gitblob verification, not whole application runtime proof",
+    "All19repositoryblobs are text; noembeddedmedia assets orsubmoduleleftunread",
+    "Selectedruntimecontrols reportedseparately; PyQt6 GUI and realvideo decode remainuntested",
+    "No foreignproductioncodeadopted",
+    "Whole original modules imported with actual dependencies, no body extraction or fake provider",
+    "Only owned synthetic fixture files used; no file deletion method or external messages invoked",
+    "No GUI/PyQt6/package/release/actual-video decoder/all-format/performance qualification",
+    "No upstream tests exist in pinned repository; these are independently written selected controls",
+    "External code is research evidence; no production adoption"
+  ]
+}

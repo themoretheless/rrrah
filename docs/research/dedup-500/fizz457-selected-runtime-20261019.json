@@ -1,0 +1,50 @@
+{
+  "status": "passed_selected_original_module_controls",
+  "repository": "Fizzolas/duplicate-file-finder",
+  "commit": "18d1b587e7bc13b6fe610da5efd8f812887251e3",
+  "findings": [
+    "Actual public exact scan finds two identical PNGs with real SHA256",
+    "Directory scanner excludes both identical .bin files by its media-only suffix list",
+    "Repeated scan appends paths again:2 becomes4",
+    "Original overlapping group merge returns[a,b] and drops c from[b,c]",
+    "Actual real Pillow/imagehash image identity compares equal at100",
+    "Original video signature comparator accepts a matching prefix at100; this is signature-only, no video decode claim",
+    "Backup stores two distinct source files under the same basename; ZIP contains duplicate same.png entries and emits warning"
+  ],
+  "dependencies": {
+    "opencv-python": "5.0.0.93",
+    "ImageHash": "4.3.2",
+    "Pillow": "12.3.0",
+    "numpy": "2.3.5",
+    "Send2Trash": "2.1.0"
+  },
+  "source_pins": {
+    "build.py": "72bfb92ea3df4a896178dda01f351110545a42c6a493c0bf4209895353bd6a4c",
+    "LICENSE": "924b1203b99cc2edbfc30dfe33afa15ef8a854f4b2c66bdf8c8d3e051e2db6ef",
+    "requirements.txt": "3bb5906454e3a74aa97f1c99f30ef320ee57d21b97d771ebf5870435ee9de96b",
+    "README.md": "2c23d039270ab633717533d80da226b6f18f9a0045e801c30b1b043a774910d5",
+    "build.bat": "20275d683940b08327a1746ff206925c3ef34e5c79f0789f8fe2c82947d52957",
+    "build.sh": "dfde84eff714391c5cae0645c80923792ce50f9d6aeb05a6716dc507ccd7957e",
+    "requirements-build.txt": "fd4793d40bcce021205b8bc1a30c0b78f88c154ac99e097a49b7afc8bad53132",
+    ".gitignore": "f6c859d172e125240e28c3a04a508836d73d52d8b7dcaf674ade7c07963149eb",
+    "main.py": "1f00fa64ccd5f21119c7d0f1fab33c06a611252669db15e7e3a2b99b9a30e2bb",
+    "core/analyzers.py": "f53cc50c491348e03460309f9297c0a1baae680307768c40e0e46731159d1bc2",
+    "core/scanner.py": "0fd6812d7c35357d7d774a82249e056646d91990a8c7d26b1974c5c49e92c880",
+    "core/__init__.py": "6a5fa93ea425f585a98a613af5f2071156b4e1d54fc6be16c146f602a150e127",
+    "core/deletion.py": "60ff2af79a8d38575eb025661230575c4c4cee37c8e79e7e2d12cd6370403b5d",
+    "utils/config.py": "e14d1920d286533678068058909b60eebb1f5b84b317aae58533b1d4bf46ea6b",
+    "utils/__init__.py": "ed29dbc69c4a10d2bed9e7142f935f9d9f6890623b08e298c38585e3ad7bd873",
+    "utils/logger.py": "baf64299476c3b066cba534635847ad8b2fea1d87c2f1394b724084feb4f8198",
+    "gui/main_window.py": "434fac0389aac5cfd5373f3310f21b8c495111fc24e8bb187aa8db08f176577e",
+    "gui/__init__.py": "eba43fb0d9b09a4fa16d3bccd1174d9a51d435914fa52a395d194afa239bb59b",
+    "gui/styles.py": "b49b36de5de676151a4042a4a2ef2dbc1295496290c584e7de3fa53a0c7cc417"
+  },
+  "producer_sha256": "c20c0d202bc6cdb44a9451fa40d6cf0fce4df8fed70560cb025ee36fa5330453",
+  "limits": [
+    "Whole original modules imported with actual dependencies, no body extraction or fake provider",
+    "Only owned synthetic fixture files used; no file deletion method or external messages invoked",
+    "No GUI/PyQt6/package/release/actual-video decoder/all-format/performance qualification",
+    "No upstream tests exist in pinned repository; these are independently written selected controls",
+    "External code is research evidence; no production adoption"
+  ]
+}
