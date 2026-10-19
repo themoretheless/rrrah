@@ -2,9 +2,9 @@
   "index": 400,
   "repository": "kseo/blockhash",
   "commit": "81fc40852aeb95ec1e5376bc8d7ddbf341a57da3",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete32blobs:15textfiles and17fixtureimages, pinnedGitblobhashesverified. Alllibrary/CLI/config/build/test/docs/license textread, all17images viewedincludingtransparentfixtures. NativeHaskellruntime notexecuted: noGHC/Stack/Cabal. Storedgoldens only; no productionadoption.",
   "decision": "reference",
-  "finding": "Haskell Blockhash converts inputs to RGBA8 and compares Hamming; independent oracle candidate with tests.",
+  "finding": "RGBAblockmeans andPrecise/Quickweighting; published17goldens analysed,15differ bymethod. Hammingzip truncates unequallength, mediancompatibilityFIXME; nativeadmission/runtime notqualified. Cabaltestprintsplaceholder; actualgoldentest.sh notrun.",
   "available_source_evidence": [
     {
       "path": "src/Data/Blockhash.hs",
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/blockhash400-complete-source-review-20261019.json",
+  "complete_runtime_audit": "docs/research/dedup-500/blockhash400-complete-audit-20261019.json"
 }
