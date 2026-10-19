@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Korean catalog; pinned bytes reverified; v91 structural parity retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_ko.txt": "60acf0df2e7e5896523e1dd8783f5e547208cb8e4f21ba48b2be4ba36e3249bd"
+  },
+  "whole_files_read": 243,
+  "coverage": "docs/research/dedup-500/windirstat3-korean-coverage-v110-20261019.json",
+  "coverage_sha256": "bf60d36e55c5553dbb6d19f5fa7cadbe39b49262261e7d38cb7d31a0b1957852",
+  "findings": [
+    "중복 후보 means duplicate candidates, 해시 접두사 explicitly marks prefix and 샘플 해시 marks sampling. Advanced option says sparse hashes above64MiB; no full-content equality proof inferred.",
+    "Recovery completion requests checking file data, recoverable versus possible recovery remain separate, source metadata change requests rescan and same-source restoration warns of overwriting deleted data.",
+    "All-local-drives caption instead says all physical drives; this can blur local logical volumes with physical devices. Junctions translated 교차점 is a generic intersection rather than precise filesystem wording.",
+    "Glob patterns rendered 전역 패턴 means global patterns; light-incidence label 밝기 감소 means brightness decrease. These are terminology findings without rendered UI reproduction.",
+    "Sparse action 파일 희소화 remains separate from compression; hardlinks, symbolic links, logical/physical sizes and binary units remain distinct. Account column says security principal.",
+    "Most mnemonics use parenthesized Latin letters; no routing/conflict qualification. Cloud warning describes download risk, permanent deletion is not secure-erasure proof; MSI ko-KR/1042/949 needs installer encoding verification."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Korean UI, mnemonic behavior, installer or Windows runtime verified. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
