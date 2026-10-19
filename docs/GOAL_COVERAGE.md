@@ -10593,3 +10593,51 @@ Connected bounded adaptive Tensor1..4component shading to the ordinary PDF/AI re
 ## Streaming capacity planning optimization — 2026-10-19
 
 Removed redundant streaming triangle-count pass while retaining owned-output global reservation and per-emission limits. Six paired warm CPU measurements: curved Tensor18.609→14.606ms (~21.5% faster), VectorApple456.653→420.146ms (~8%); every complex pair improves. All three fixture pixel hashes and accounted peaks unchanged. Flat timing noisy. Actual Apple M4 Max Metal test passes10full-frame comparisons through RAM/native+float swap at8MiB, peak3,632,714/final0. No general format, cold I/O or physical HDR qualification claim. [Raw evidence and limits](research/tensor-stream-planning-2026-10-19/REPORT.md).
+
+## Ordinary adaptive Coons shading — 2026-10-19
+
+Connected Type6 Coons1..4components to admitted streaming adaptive rendering with unchanged bounds/limits. Independent parabolic2048pixel oracle fails on fixed-grid alpha48vs56 at pixel717 and passes exactly after. Decimal-number excessive-curvature fixture refuses explicitly, releases ownership and permits retry. Vector187/decode216/app287/interpreter134 pass (824total/97ignored), plus actual M4 Max Metal10full-frame RAM/native+float-swap comparisons at8MiB, peak3,632,650/final0. Exploratory warm CPU cost0.622→15.443ms; accuracy costs time and remains optimization work. No complete PDF/AI, overlap/color, physical HDR or NVIDIA qualification. [Evidence](research/coons-production-stream-2026-10-19/REPORT.md).
+
+## Adaptive borrowed-edge experiment — 2026-10-19
+
+Borrowed per-leaf edge intervals preserve all4fixture pixel hashes and pass interpreter134/vector187tests, but remove no measured peak and show late VectorApple2.16x/2.10x regressions. Small1–2% median improvements are insufficient; candidate reverted byte-for-byte. Cause unproven; no speedup claim. [Raw measurements and rejected patch](research/adaptive-borrowed-edges-2026-10-19/REPORT.md). Production Coons correctness fix retained.
+
+## Independent Coons producer and restored AI gate — 2026-10-19
+
+Pinned SerenityOS Type6/Type7 pages expose an open fidelity boundary: Coons adaptive improves42772→42556different pixels against Poppler but max255 remains; Tensor42373unchanged. Same-length isolated RGB and function cases both differ, ruling out a function-only explanation. [Pinned inputs, reproducible isolation and metrics](research/coons-upstream-serenity-2026-10-19/REPORT.md). Fresh original AI comparison remains2/3non-exact; all3RAM/prefetch/swap/Metal/full-pressure tests pass with finalroot0 after restoring production planner. [Regression evidence](research/coons-current-ai-requalification-2026-10-19/REPORT.md). No complete-format/HDR claim.
+
+## Mesh boundary versus interior color diagnosis — 2026-10-19
+
+Same-length solid source-code derivatives isolate external Type6/7 coverage. PDFium16 BOX references reduce solid Coons max255→20/17; Tensor54/17, with22TensorRGBpixels above32. Direct-Poppler step edges are not sufficient proof of a native geometry defect. Eroded common solid-interior masks still expose color error up to6RGB/15function levels; independent inversion/integration remains needed. No tolerance relaxed and no production algorithm changed. [Reproduction scripts, renderer versions and raw convergence/interior data](research/coons-upstream-serenity-2026-10-19/REPORT.md).
+
+## Independent Coons tint integration — 2026-10-19
+
+Direct16-bit source-control decoding, independent Coons inverse and cubic stitched tint integration validate18interior pixels: all native RGB equal rounded numerical integrals; max error0.44453level,8→16quadraturedelta<0.000415. Same-pixel Poppler/PDFium16 deviate up to9.325/7.736levels, so that sampled discrepancy does not establish a native tint defect. Pinned external Rust regression passes:8MiBtyped refusal/root0/small retry; full-page existing64MiBgate peak10,306,739/final0. No tolerance/budget/policy changed; no whole-page or general-format proof. [Independent equations, numerical limits and regression](research/coons-upstream-serenity-2026-10-19/REPORT.md).
+
+## Sustained cache/swap and Metal collection gate — 2026-10-19
+
+Delayed real-file swap180s/1375full-pressure refusal+retry cycles;100000unique small raster writes/reads with1000pressure refusals;64MiBfloat/HDR3cycles/90.462s with admitted read cancellation; independent byte/count gates and5TTL/overload/cancel controls pass. Actual M4 Max Metal100000paths/fourfixtures/512transitions preserve nearest leases/visible SDR+half frames at count2/64KiB,1022expected protected-slot refusals; TTL128restores+2preloads pass. All final root/queue ownership0. Corrected stale100ktest unwrap to require exact far-prefetch refusal and unchanged accounting, without changing production limits. App287pass/81ignored;12selectedcontrols pass. Emulated delay, short bounded duration and fixture reuse do not prove physical HDD, live GUI, independent100000photos or full HDR. [Evidence and exact scope](research/cache-sustained-requalification-2026-10-19/REPORT.md).
+
+## Animated JPEG XL independent foundation — 2026-10-19
+
+Added2CC0RGB/transparent3frame controls: cjxl/djxl presentations and40/90/130ms match independent GIF composition; regeneration exact. Pinned jxl-oxide JxlImage probe renders all6frames exactly and validates rational durations. Encoded loop0 confirmed independently; input GIF loop2 did not survive producer conversion, finite repeats remain unqualified. Public viewer gate explicitly fails: firstframecount1, other indicesunsupported. No production route, limits or catalog qualification changed. [Source hashes, probe and failing public gate](research/jxl-animation-foundation-2026-10-19/REPORT.md).
+
+## Selected ordinary JPEG XL animation — 2026-10-19
+
+Connected JxlImage display-frame APIs to ordinary decoding/routing, native precision/ICC, exact reduced rational timing and selected count/index. All6independentRGB/binary-alpha presentations now pass public API (previouscount1/unsupportedindices). Final decoder219pass/5ignored; existing16bitstill/admission checks retained. Actual M4 Max Metal all6frames preserve RAM/native+float swap timing/count and SDR/half frames, full-pressure refusal/retry and finalroot0 at1MiB. Fixed working-credit drop order and validated sizes before multiplication, without increasing limits. Finite-loop producer/highprecisionanimation/broadercolor/alpha/liveplayback/performance remain unqualified; no general-format/HDR/NVIDIA completion claim. [Implementation and validation](research/jxl-selected-animation-2026-10-19/REPORT.md).
+
+## Finite-loop RGBA16 JXL producer — 2026-10-19
+
+Independent CC0libjxl C encode/decode confirms3full-frameRGBA16presentations, every authored sample including adjacent codes/partial and zero alpha, num_loops2and24000/1001TPS. Rust8targetedtests preserve exact16bits and delays1001/8,7007/24,11011/24ms. Actual decoded Playback stops after0,1,2,0,1,2without early scheduling. Actual M4 Max Metal gate now9frames: RAM/native+float swap metadata and source bits exact, pressure refusal/retry, finalroot0 at1MiB. Regeneration byte-exact. No production limit/policy changed; float/HDR/complexanimation/livewindow remain unqualified. [Producer, oracles, clock and hardware evidence](research/jxl-finite16-animation-2026-10-19/REPORT.md).
+
+## Signed linear ICC and float/HDR JXL — 2026-10-19
+
+Independent CC0RGBA32F3frame libjxl source preserves all180authored bits including adjacentfloatcodes, negativeRGB and valuesup to16. Reproduced native-exact/display-InvalidInput; fixed signed input only for strictly linear ICC matrix/gray profiles and canonicalized gamma1 to identity to avoid negative clipping.5profiles+45JXLpixels match same-profile LittleCMS with max1.90735e-6, unchangedbound2e-5; alphaexact.544ordinarypasses/87ignored; actual M4 Max Metal12presentations preserve native/float swap bits/timing, with explicit above-one and negative half-attachment assertions/root0 at1MiB. Reference encoder needed documented zero-predictor workaround; production decoder unchanged. BroaderHDR/float/GUI/physicaldisplay/NVIDIA stillunqualified. [Reproduction, failures and numeric/hardware evidence](research/jxl-float-animation-2026-10-19/REPORT.md).
+
+## JPEG XL encoded-history accounting — 2026-10-19
+
+Independent3/30/300/3000frame5x3RGBA16sources expose false codec OOM on3000frames/444615bytes despite512MiBparent. Working reservation now includes a separately charged encoded-history copy; user/global caps unchanged and still-image calculation preserved. All12first/middle/last native/count/timing gates pass; exact-peak/one-byte-short refusal+retry/root0.3000frame admittedpeak955966bytes;600frame normalregression peak244520within256KiB. Decoder222/app288pass (510total/86ignored), plusactualMetal12presentationgate. Full-history read stillscaleslinearly; initial try_init buffered feeding and untracked metadata are remaining admission gaps, not a completed whole-memory proof. [Raw timing, source hashes and precise limits](research/jxl-frame-scaling-2026-10-19/REPORT.md).
+
+## Deferred JXL initial frame payload — 2026-10-19
+
+Pinned local jxl-oxide0.12.6 adds optional header-only initialization and one-time buffered codestream resume; eager API/version/transitives preserved. Reproduced valid header failure with tracker0 beforepatch. Public rrrah now keeps tracker0 through header parsing and admits finite output/working credit before any tracked frame loading.6controls×3resume paths verify0initial frames then complete rendering; decoder223/app288pass (511/86ignored), actualMetal12presentationgate passes; all12scale source selections/peak/refusal/retry and prepared hashes remain exact. Parser/ICC/header/TOC metadata remain untracked: no whole-RSS/all-allocation claim. [API delta, provenance and runtime evidence](research/jxl-header-admission-2026-10-19/REPORT.md).

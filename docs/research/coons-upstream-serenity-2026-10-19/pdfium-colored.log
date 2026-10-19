@@ -1,0 +1,18 @@
+/Users/themoretheless/Documents/Sources/rrrah/docs/research/coons-upstream-serenity-2026-10-19/compare-pdfium.py:19: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  difference=ImageChops.difference(native,oracle);values=list(difference.getdata());maximum=max(max(v) for v in values)
+{'file': 'shade-coons-sh1.pdf', 'scale': 1, 'different_pixels': 27336, 'max_channel_error': 251, 'mean_absolute_channel_error': 0.5011303418803419, 'pixels_above_32': 678, 'pixels_above_128': 262}
+{'file': 'shade-coons-sh1.pdf', 'scale': 4, 'different_pixels': 28436, 'max_channel_error': 78, 'mean_absolute_channel_error': 0.3247777777777778, 'pixels_above_32': 228, 'pixels_above_128': 0}
+{'file': 'shade-coons-sh1.pdf', 'scale': 8, 'different_pixels': 28449, 'max_channel_error': 36, 'mean_absolute_channel_error': 0.3075747863247863, 'pixels_above_32': 5, 'pixels_above_128': 0}
+{'file': 'shade-coons-sh1.pdf', 'scale': 16, 'different_pixels': 28449, 'max_channel_error': 20, 'mean_absolute_channel_error': 0.3003162393162393, 'pixels_above_32': 0, 'pixels_above_128': 0}
+{'file': 'shade-coons-sh2.pdf', 'scale': 1, 'different_pixels': 17409, 'max_channel_error': 255, 'mean_absolute_channel_error': 0.6311089743589744, 'pixels_above_32': 609, 'pixels_above_128': 371}
+{'file': 'shade-coons-sh2.pdf', 'scale': 4, 'different_pixels': 20431, 'max_channel_error': 85, 'mean_absolute_channel_error': 0.4582029914529914, 'pixels_above_32': 409, 'pixels_above_128': 0}
+{'file': 'shade-coons-sh2.pdf', 'scale': 8, 'different_pixels': 20444, 'max_channel_error': 38, 'mean_absolute_channel_error': 0.4299294871794872, 'pixels_above_32': 2, 'pixels_above_128': 0}
+{'file': 'shade-coons-sh2.pdf', 'scale': 16, 'different_pixels': 20443, 'max_channel_error': 17, 'mean_absolute_channel_error': 0.4168076923076923, 'pixels_above_32': 0, 'pixels_above_128': 0}
+{'file': 'shade-tensor-sh1.pdf', 'scale': 1, 'different_pixels': 27243, 'max_channel_error': 251, 'mean_absolute_channel_error': 0.4921388888888889, 'pixels_above_32': 674, 'pixels_above_128': 261}
+{'file': 'shade-tensor-sh1.pdf', 'scale': 4, 'different_pixels': 28433, 'max_channel_error': 78, 'mean_absolute_channel_error': 0.3235128205128205, 'pixels_above_32': 230, 'pixels_above_128': 0}
+{'file': 'shade-tensor-sh1.pdf', 'scale': 8, 'different_pixels': 28454, 'max_channel_error': 36, 'mean_absolute_channel_error': 0.30855128205128207, 'pixels_above_32': 5, 'pixels_above_128': 0}
+{'file': 'shade-tensor-sh1.pdf', 'scale': 16, 'different_pixels': 28447, 'max_channel_error': 20, 'mean_absolute_channel_error': 0.3018162393162393, 'pixels_above_32': 0, 'pixels_above_128': 0}
+{'file': 'shade-tensor-sh2.pdf', 'scale': 1, 'different_pixels': 16427, 'max_channel_error': 255, 'mean_absolute_channel_error': 0.6038888888888889, 'pixels_above_32': 609, 'pixels_above_128': 371}
+{'file': 'shade-tensor-sh2.pdf', 'scale': 4, 'different_pixels': 20256, 'max_channel_error': 85, 'mean_absolute_channel_error': 0.4458931623931624, 'pixels_above_32': 409, 'pixels_above_128': 0}
+{'file': 'shade-tensor-sh2.pdf', 'scale': 8, 'different_pixels': 20259, 'max_channel_error': 38, 'mean_absolute_channel_error': 0.4215811965811966, 'pixels_above_32': 2, 'pixels_above_128': 0}
+{'file': 'shade-tensor-sh2.pdf', 'scale': 16, 'different_pixels': 20263, 'max_channel_error': 17, 'mean_absolute_channel_error': 0.4105897435897436, 'pixels_above_32': 0, 'pixels_above_128': 0}

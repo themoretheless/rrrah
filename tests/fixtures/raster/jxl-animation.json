@@ -1,0 +1,48 @@
+{
+  "scope": "libjxl cjxl/djxl frames and durations agree with independently composed Pillow GIF. Invisible RGB normalized to zero. These fixtures do not establish viewer support.",
+  "producer": "cjxl v0.12.0 0.12.0 [_NEON_BF16_,NEON] {AppleClang 21.0.0.21000334}\nCopyright (c) the JPEG XL Project",
+  "fixtures": [
+    {
+      "name": "animation-rgb.jxl",
+      "license": "CC0",
+      "width": 5,
+      "height": 3,
+      "frames": 3,
+      "durations_ms": [
+        40,
+        90,
+        130
+      ],
+      "input_gif_loop": 2,
+      "decoded_apng_loop": 0,
+      "loop_scope": "Producer output must be inspected independently; GIF repeat count must not be assumed preserved by cjxl.",
+      "sha256": "3fd9c98af4cda9c895d11ac38e1cb17ccec38f8b50f0f0ca9f504b4b5798aa8c",
+      "rgba_sha256": [
+        "a76a451200228a9b197bbfaf7de1aea17207fd7ec054a72683ae3797ce28fb13",
+        "4ca32020e78606a21e0d51512ae53e8580e327666301c75dd65062fb2808b278",
+        "ea46436be6e352bae5837d8c2778c1bb8348912dcdbf4ddec02fda1e3dbac6b4"
+      ]
+    },
+    {
+      "name": "animation-alpha.jxl",
+      "license": "CC0",
+      "width": 5,
+      "height": 3,
+      "frames": 3,
+      "durations_ms": [
+        40,
+        90,
+        130
+      ],
+      "input_gif_loop": 2,
+      "decoded_apng_loop": 0,
+      "loop_scope": "Producer output must be inspected independently; GIF repeat count must not be assumed preserved by cjxl.",
+      "sha256": "4be627d0100c5a92f21095de601e7eb0649fca26b52df2766a271e20f030ab20",
+      "rgba_sha256": [
+        "6101037f817082d076931ad068120ac9f9f6afd2e5498852311ad851b69324b1",
+        "727fb50e1ee77f7334f19f43694aee51577ee4686c0123a35924add8c8b3ae68",
+        "24d84d01efa5f6c09a6ed23f50447e713012fc6661e78b6063935098208404ad"
+      ]
+    }
+  ]
+}

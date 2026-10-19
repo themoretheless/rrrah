@@ -1,0 +1,24 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.32s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-92bbc95cda3130da)
+
+running 1 test
+100k source adapter: Metal Apple M4 Max
+
+thread 'foreground_loader_tests::hundred_thousand_valid_sources_preserve_metal_frames_and_priority' (24568011) panicked at crates/rrrah-app/src/main.rs:10216:93:
+called `Result::unwrap()` on an `Err` value: "raster prefetch skipped: all count slots are protected"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test foreground_loader_tests::hundred_thousand_valid_sources_preserve_metal_frames_and_priority ... FAILED
+
+failures:
+
+failures:
+    foreground_loader_tests::hundred_thousand_valid_sources_preserve_metal_frames_and_priority
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 367 filtered out; finished in 36.26s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

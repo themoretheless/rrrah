@@ -1,0 +1,60 @@
+{
+  "scope": "public selected frames/count and independent source RGBA, not timing, memory or GPU gates; failures intentionally remain failures",
+  "decoder_sha256": "144e23f481f39d059a500dada189d29bf63471fd800a283109a8a501fea3ae7b",
+  "rows": [
+    {
+      "file": "animation-rgb.jxl",
+      "index": 0,
+      "exit": 0,
+      "passed": false,
+      "metadata": {
+        "width": 5,
+        "height": 3,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "rgba_exact": true
+    },
+    {
+      "file": "animation-rgb.jxl",
+      "index": 1,
+      "exit": 1,
+      "passed": false,
+      "error": "Error: Source(UnsupportedImageIndex { index: 1 })\n"
+    },
+    {
+      "file": "animation-rgb.jxl",
+      "index": 2,
+      "exit": 1,
+      "passed": false,
+      "error": "Error: Source(UnsupportedImageIndex { index: 2 })\n"
+    },
+    {
+      "file": "animation-alpha.jxl",
+      "index": 0,
+      "exit": 0,
+      "passed": false,
+      "metadata": {
+        "width": 5,
+        "height": 3,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "rgba_exact": true
+    },
+    {
+      "file": "animation-alpha.jxl",
+      "index": 1,
+      "exit": 1,
+      "passed": false,
+      "error": "Error: Source(UnsupportedImageIndex { index: 1 })\n"
+    },
+    {
+      "file": "animation-alpha.jxl",
+      "index": 2,
+      "exit": 1,
+      "passed": false,
+      "error": "Error: Source(UnsupportedImageIndex { index: 2 })\n"
+    }
+  ]
+}

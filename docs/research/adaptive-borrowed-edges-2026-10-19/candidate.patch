@@ -1,0 +1,75 @@
+--- /tmp/rrrah-before-borrowed-edges.rs	2026-10-19 02:59:12
++++ vendor/hayro-interpret/src/shading/adaptive.rs	2026-10-19 02:59:12
+@@ -881,17 +881,12 @@
+     let end=edges.points.partition_point(|&point|point<(fixed,high));
+     end-start
+ }
+-fn interior<'mem>(
+-    edges: &Edges<'mem>,
+-    fixed: u32,
+-    low: u32,
+-    high: u32,
+-) -> Result<MeshArray<'mem, u32>, AdaptivePatchError> {
++// Borrow the sorted edge interval. The table remains alive through emission;
++// no per-leaf allocation or admission is needed for this read-only view.
++fn interior<'a>(edges: &'a Edges<'_>, fixed: u32, low: u32, high: u32) -> &'a [(u32, u32)] {
+     let start = edges.points.partition_point(|&point| point <= (fixed, low));
+     let end = edges.points.partition_point(|&point| point < (fixed, high));
+-    let mut result = MeshArray::new(edges.points.admit);
+-    result.extend(edges.points[start..end].iter().map(|&(_, value)| value))?;
+-    Ok(result)
++    &edges.points[start..end]
+ }
+ 
+ fn patch_vertex(
+@@ -1164,10 +1159,10 @@
+             }
+             let [u0, u1, v0, v1] = leaf.uv;
+             let [x0, x1, y0, y1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
+-            let bottom = interior(&horizontal, y0, x0, x1)?;
+-            let top = interior(&horizontal, y1, x0, x1)?;
+-            let left = interior(&vertical, x0, y0, y1)?;
+-            let right = interior(&vertical, x1, y0, y1)?;
++            let bottom = interior(&horizontal, y0, x0, x1);
++            let top = interior(&horizontal, y1, x0, x1);
++            let left = interior(&vertical, x0, y0, y1);
++            let right = interior(&vertical, x1, y0, y1);
+             let a = Point::new(u0, v0);
+             let b = Point::new(u1, v0);
+             let c = Point::new(u0, v1);
+@@ -1192,27 +1187,27 @@
+                 first.push(a)?;
+                 first.extend(
+                     bottom
+-                        .into_iter()
+-                        .map(|x| Point::new(f64::from(x) / PARAM_SCALE, v0)),
++                        .iter()
++                        .map(|&(_, x)| Point::new(f64::from(x) / PARAM_SCALE, v0)),
+                 )?;
+                 first.extend([b, c])?;
+                 first.extend(
+-                    left.into_iter()
++                    left.iter()
+                         .rev()
+-                        .map(|y| Point::new(u0, f64::from(y) / PARAM_SCALE)),
++                        .map(|&(_, y)| Point::new(u0, f64::from(y) / PARAM_SCALE)),
+                 )?;
+                 let mut second = MeshArray::new(admit);
+                 second.push(b)?;
+                 second.extend(
+                     right
+-                        .into_iter()
+-                        .map(|y| Point::new(u1, f64::from(y) / PARAM_SCALE)),
++                        .iter()
++                        .map(|&(_, y)| Point::new(u1, f64::from(y) / PARAM_SCALE)),
+                 )?;
+                 second.push(d)?;
+                 second.extend(
+-                    top.into_iter()
++                    top.iter()
+                         .rev()
+-                        .map(|x| Point::new(f64::from(x) / PARAM_SCALE, v1)),
++                        .map(|&(_, x)| Point::new(f64::from(x) / PARAM_SCALE, v1)),
+                 )?;
+                 second.push(c)?;
+                 emit_fan(

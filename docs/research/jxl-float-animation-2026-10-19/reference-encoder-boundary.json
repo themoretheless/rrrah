@@ -1,0 +1,8 @@
+{
+  "version": 12000,
+  "initial": "effort1, mixed positive/negative f32: GENERIC encoder failure",
+  "secondary": "effort7 patches0 RCT0: same failure",
+  "accepted": "effort7 patches0 RCT0 zero predictor: every authored f32 bit equals C-decoded output",
+  "primary_issue": "https://github.com/libjxl/libjxl/issues/4902",
+  "scope": "Local reproduction agrees with reported signed residual overflow boundary; not proof of precise internal failure location; workaround applies only to test producer."
+}

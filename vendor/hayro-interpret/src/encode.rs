@@ -102,6 +102,35 @@ impl ShadingPattern {
             }
             ShadingType::CoonsPatchMesh { patches, function } => {
                 let visible = visible_patch_geometry(patches.iter().map(|patch| &patch.control_points));
+                let components = patches.iter().zip(&visible).filter(|(_, keep)| **keep)
+                    .map(|(patch, _)|patch.colors[0].len()).max().unwrap_or(0);
+                if (1..=4).contains(&components) {
+                    use crate::shading::{AdaptivePatchLimits, AdaptivePatchRef,
+                        tessellate_patch_mesh_stream_admitted, AdaptivePatchError};
+                    let count = visible.iter().filter(|keep|**keep).count();
+                    let _references = admit(count.checked_mul(size_of::<AdaptivePatchRef<'_>>())?)?;
+                    let mut references = Vec::new();
+                    references.try_reserve_exact(count).ok()?;
+                    if references.capacity()>count {return None;}
+                    references.extend(patches.iter().zip(&visible).filter(|(_,keep)|**keep)
+                        .map(|(patch,_)|AdaptivePatchRef::Coons(patch)));
+                    let samples=sample_generated_triangles_with_admission(|consume| {
+                        tessellate_patch_mesh_stream_admitted(&references,self.matrix,
+                            AdaptivePatchLimits {pixel_error:1.0/64.0,component_error:1.0/1024.0,
+                                max_depth:12,max_triangles:1_048_576},cancelled,admit,
+                            &mut |triangle|consume(triangle).ok_or(AdaptivePatchError::Admission)).ok()?;
+                        Some(())
+                    },components,Affine::IDENTITY,bounds,cancelled,admit)?;
+                    return Some(EncodedShadingPattern {
+                        shading_type: EncodedShadingType::Sampled {samples,function:function.clone()},
+                        color_space:self.shading.color_space.clone(),
+                        base_transform:Affine::IDENTITY,
+                        background_color:self.shading.background.as_ref().filter(|_|self.paint_background)
+                            .map(|b|self.shading.color_space.to_rgba(b,1.0,false)).unwrap_or(AlphaColor::TRANSPARENT),
+                        opacity:self.opacity,
+                        transfer_function:self.transfer_function.clone(),
+                    });
+                }
                 // Iterator handoff can briefly retain the exhausted previous allocation.
                 let count: usize = if visible.iter().any(|visible| *visible) { 2 * 722 } else { 0 };
                 let components = patches.iter().zip(&visible).filter(|(_, visible)| **visible)

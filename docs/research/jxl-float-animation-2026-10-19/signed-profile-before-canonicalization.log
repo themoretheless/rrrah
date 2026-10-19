@@ -1,0 +1,74 @@
+   Compiling image v0.25.10 (/Users/themoretheless/Documents/Sources/rrrah/vendor/image)
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: constant `PNG_SIGNATURE` is never used
+  --> vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+    Finished `test` profile [optimized + debuginfo] target(s) in 26.50s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_animation-f2aa6967836a320f)
+
+running 14 tests
+test raster_color::tests::invalid_float_icc_input_is_refused_before_output_memory_admission ... ok
+SIGNED_LINEAR_ICC profile=linear-identity-rgb.icc max_error=test raster_color::tests::srgb_icc_converts_gray_without_gamma_correcting_alpha ... ok
+0.0000019073486328125 bound=0.00002
+
+thread 'raster_color::tests::linear_matrix_icc_preserves_extended_linear_range' (24723261) panicked at crates/rrrah-animation/src/raster_color.rs:529:13:
+assertion failed: values[0] < 0.0
+test raster_color::tests::adjacent_sixteen_bit_samples_remain_distinct_after_icc_conversion ... ok
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+GRAY_LINEAR_HDR_LCMS max_abs_error=0.0000019073486328125 bound=0.00002 alpha_exact=true
+test raster_color::tests::independent_littlecms_profile_matches_srgb_reference_across_the_pattern ... ok
+GRAY_ICC_LCMS pixels=4 max_rgb_error=
+thread 'raster_color::tests::signed_linear_rgb_and_gray_match_independent_lcms_double_oracles' (24723263) panicked at crates/rrrah-animation/src/raster_color.rs:293:21:
+psd-tools-4x4_32bit_rgb.psd.icc pixel 0 channel 0: 1.9999532540387008
+test raster_color::tests::wide_gamut_red_is_not_clipped_and_invalid_profiles_fail ... ok
+0.test raster_color::tests::gray_icc_uses_gray_curve_and_refuses_nonreplicated_samples ... ok
+000000119209 bound=0.00002 alpha_exact=true adjacent_u16_distinct=true
+test raster_color::tests::gray_icc_png_alpha16_and_tiff16_reach_display_with_native_precision ... ok
+GRAY_LINEAR_HDR_LCMS max_abs_error=0.0000019073486328125 bound=0.00002 alpha_exact=true
+test raster_color::tests::gray_icc_matches_pinned_independent_littlecms_double_reference ... ok
+test raster_color::tests::linear_matrix_icc_preserves_extended_linear_range ... FAILED
+test raster_color::tests::signed_linear_rgb_and_gray_match_independent_lcms_double_oracles ... FAILED
+test raster_color::tests::linear_gray_icc_positive_hdr_matches_independent_littlecms ... ok
+GRAY_ICC_FULL_U16 pixels=65536 max_rgb_error=0.000000178814 bound=0.00002 alpha_exact=true monotonic=true retained=1573056
+test raster_color::tests::gray_icc_full_u16_range_matches_independent_littlecms ... ok
+GRAY_ALPHA_LCMS pixels=143600 max_abs_error=0.00000011920928955078125 alpha_exact=true
+test raster_color::tests::original_gray_alpha_display_matches_independent_littlecms_all_pixels ... ok
+GRAY_ICC_CANCEL points=68 pixels=65536 retry_bit_exact=true peak=3670208
+test raster_color::tests::gray_icc_full_u16_cancellation_releases_rows_and_allows_retry ... ok
+
+failures:
+
+failures:
+    raster_color::tests::linear_matrix_icc_preserves_extended_linear_range
+    raster_color::tests::signed_linear_rgb_and_gray_match_independent_lcms_double_oracles
+
+test result: FAILED. 12 passed; 2 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.22s
+
+error: test failed, to rerun pass `-p rrrah-animation --lib`

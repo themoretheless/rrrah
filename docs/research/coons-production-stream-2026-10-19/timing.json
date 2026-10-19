@@ -1,0 +1,117 @@
+{
+  "scope": "Warm filesystem; dev optimized builds; 3 warmups and 9 timed CPU load+prepare iterations; excludes startup, GPU, hashing and destruction. Shared host; exploratory only. Baseline predates Tensor planning optimization, irrelevant to this Coons-only fixture. Outputs intentionally differ; independent analytic test establishes correctness.",
+  "source_sha256": "8052a30140c74c63e7a699ebb5af860e88d0f61d4b514802eb0b8c9c8e0c387e",
+  "binary_sha256": {
+    "fixed": "443b032d74264d63d6eaed69e856fe6c9f68fe689dc05cb6533bc6999e90de2d",
+    "adaptive": "bdc5ba6a4cb58547ace0c622164b65f4ba90ed1ffcff688e2e8472f8dfad4470"
+  },
+  "pairs": [
+    {
+      "fixed": {
+        "result": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/coons-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.5493330000000001,
+          "load_p95_ms": 0.625209,
+          "prepare_p50_ms": 0.012542,
+          "prepare_p95_ms": 0.012666,
+          "cpu_ready_p50_ms": 0.561917,
+          "cpu_ready_p95_ms": 0.6377499999999999,
+          "display_blake3": "649c7af3aca3c382ef097178568dff2e7ee9d45fa9101dbd12d39d4a1e4dabda",
+          "cache": "warm filesystem; process warm; no decoded image cache"
+        },
+        "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=402362 final_bytes=0\n"
+      },
+      "adaptive": {
+        "result": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/coons-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 15.14325,
+          "load_p95_ms": 16.790333,
+          "prepare_p50_ms": 0.0135,
+          "prepare_p95_ms": 0.014042,
+          "cpu_ready_p50_ms": 15.157167,
+          "cpu_ready_p95_ms": 16.804375,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache"
+        },
+        "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632746 final_bytes=0\n"
+      }
+    },
+    {
+      "adaptive": {
+        "result": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/coons-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 15.429292,
+          "load_p95_ms": 16.977834,
+          "prepare_p50_ms": 0.013584,
+          "prepare_p95_ms": 0.017666,
+          "cpu_ready_p50_ms": 15.442584,
+          "cpu_ready_p95_ms": 16.9955,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache"
+        },
+        "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632746 final_bytes=0\n"
+      },
+      "fixed": {
+        "result": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/coons-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.609459,
+          "load_p95_ms": 0.739334,
+          "prepare_p50_ms": 0.012666,
+          "prepare_p95_ms": 0.014,
+          "cpu_ready_p50_ms": 0.621959,
+          "cpu_ready_p95_ms": 0.7533340000000001,
+          "display_blake3": "649c7af3aca3c382ef097178568dff2e7ee9d45fa9101dbd12d39d4a1e4dabda",
+          "cache": "warm filesystem; process warm; no decoded image cache"
+        },
+        "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=402362 final_bytes=0\n"
+      }
+    },
+    {
+      "fixed": {
+        "result": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/coons-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 0.619666,
+          "load_p95_ms": 0.653417,
+          "prepare_p50_ms": 0.012584,
+          "prepare_p95_ms": 0.020041,
+          "cpu_ready_p50_ms": 0.6326250000000001,
+          "cpu_ready_p95_ms": 0.665917,
+          "display_blake3": "649c7af3aca3c382ef097178568dff2e7ee9d45fa9101dbd12d39d4a1e4dabda",
+          "cache": "warm filesystem; process warm; no decoded image cache"
+        },
+        "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=402362 final_bytes=0\n"
+      },
+      "adaptive": {
+        "result": {
+          "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pdf/coons-parabolic-rgb.pdf",
+          "index": 0,
+          "iterations": 9,
+          "load_p50_ms": 18.185958,
+          "load_p95_ms": 60.798125,
+          "prepare_p50_ms": 0.01375,
+          "prepare_p95_ms": 0.032458,
+          "cpu_ready_p50_ms": 18.199666999999998,
+          "cpu_ready_p95_ms": 60.830124999999995,
+          "display_blake3": "cb0a13b9487ba51621604d218572e6d66fc6c9c8aae79fa4e5c6fe4968c8ca6f",
+          "cache": "warm filesystem; process warm; no decoded image cache"
+        },
+        "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=3632746 final_bytes=0\n"
+      }
+    }
+  ],
+  "median_p50_ms": {
+    "fixed": 0.621959,
+    "adaptive": 15.442584
+  },
+  "status": "completed"
+}

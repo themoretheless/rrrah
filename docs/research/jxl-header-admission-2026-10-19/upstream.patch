@@ -1,0 +1,87 @@
+--- /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jxl-oxide-0.12.6/src/lib.rs	2006-07-24 05:21:28
++++ vendor/jxl-oxide/src/lib.rs	2026-10-19 04:09:07
+@@ -350,7 +350,20 @@
+     /// - `Ok(InitializeResult::NeedMoreData(_))` if the data was not enough, and
+     /// - `Err(_)` if there was a decode error during the initialization, meaning invalid bitstream
+     ///   was given.
+-    pub fn try_init(mut self) -> Result<InitializeResult> {
++    pub fn try_init(self) -> Result<InitializeResult> {
++        self.try_init_inner(false)
++    }
++
++    /// Initialize image metadata without loading buffered frame payloads.
++    ///
++    /// After admitting codec working storage and updating its allocation tracker,
++    /// call [`JxlImage::resume_frame_loading`] before rendering. Parser/metadata
++    /// allocations are not covered by the grid allocation tracker.
++    pub fn try_init_header_only(self) -> Result<InitializeResult> {
++        self.try_init_inner(true)
++    }
++
++    fn try_init_inner(mut self, defer_frame_data: bool) -> Result<InitializeResult> {
+         let mut bitstream = Bitstream::new(&self.buffer);
+         let image_header = match ImageHeader::parse(&mut bitstream, ()) {
+             Ok(x) => x,
+@@ -436,6 +449,7 @@
+             image_header,
+             ctx: Box::new(ctx),
+             render_spot_color,
++            initial_codestream: None,
+             inner: JxlImageInner {
+                 end_of_image: false,
+                 buffer: Vec::new(),
+@@ -444,7 +458,11 @@
+                 aux_boxes: self.aux_boxes,
+             },
+         };
+-        image.inner.feed_bytes_inner(&mut image.ctx, &self.buffer)?;
++        if defer_frame_data {
++            image.initial_codestream = Some(self.buffer);
++        } else {
++            image.inner.feed_bytes_inner(&mut image.ctx, &self.buffer)?;
++        }
+ 
+         Ok(InitializeResult::Initialized(image))
+     }
+@@ -466,6 +484,7 @@
+     image_header: Arc<ImageHeader>,
+     ctx: Box<RenderContext>,
+     render_spot_color: bool,
++    initial_codestream: Option<Vec<u8>>,
+     inner: JxlImageInner,
+ }
+ 
+@@ -484,12 +503,25 @@
+     /// Opens an image in the filesystem with default options.
+     pub fn open_with_defaults(path: impl AsRef<std::path::Path>) -> Result<JxlImage> {
+         Self::builder().open(path)
++    }
++
++    /// Load codestream bytes deferred by header-only initialization.
++    ///
++    /// This is idempotent after success. On failure, discard the image as with
++    /// a failed `feed_bytes` call. Feeding more input or finalizing also resumes
++    /// pending data, so the container parser never sees decoded payload twice.
++    pub fn resume_frame_loading(&mut self) -> Result<()> {
++        if let Some(pending) = self.initial_codestream.take() {
++            self.inner.feed_bytes_inner(&mut self.ctx, &pending)?;
++        }
++        Ok(())
+     }
+ 
+     /// Feeds more data into the decoder.
+     ///
+     /// Returns total consumed bytes from the buffer.
+     pub fn feed_bytes(&mut self, buf: &[u8]) -> Result<usize> {
++        self.resume_frame_loading()?;
+         for event in self.reader.feed_bytes(buf) {
+             match event? {
+                 ParseEvent::BitstreamKind(_) => {}
+@@ -508,6 +540,7 @@
+     ///
+     /// This is automatically done if `open()` or `read()` is used to decode the image.
+     pub fn finalize(&mut self) -> Result<()> {
++        self.resume_frame_loading()?;
+         self.inner.aux_boxes.eof()?;
+         Ok(())
+     }

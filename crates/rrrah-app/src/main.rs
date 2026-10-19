@@ -10167,6 +10167,7 @@ mod foreground_loader_tests {
             max_entries: Some(2),
             ttl: None,
         });
+        let mut protected_count_refusals = 0;
         for step in 0..512usize {
             let selected = match step {
                 0 => 0,
@@ -10212,8 +10213,19 @@ mod foreground_loader_tests {
             let nearest = neighbours.first().cloned().unwrap();
             let mut protected = Vec::new();
             for (index, path) in neighbours.into_iter().enumerate() {
-                let (_, _, lease) =
-                    preload_raster_with_lease(&request_for(&path), None, &mut cache, &gate).unwrap();
+                let before = (budget.used(), cache.len(), cache.resident_bytes());
+                let lease = match preload_raster_with_lease(&request_for(&path), None, &mut cache, &gate) {
+                    Ok((_, _, lease)) => lease,
+                    Err(error) => {
+                        assert!(index > 0, "nearest neighbour must be retained: {error}");
+                        assert_eq!(error, "raster prefetch skipped: all count slots are protected");
+                        assert_eq!(cache.len(), 2);
+                        assert!(!protected.is_empty());
+                        assert_eq!((budget.used(), cache.len(), cache.resident_bytes()), before);
+                        protected_count_refusals += 1;
+                        None
+                    }
+                };
                 if index == 0 {
                     assert!(lease.is_some());
                 }
@@ -10256,10 +10268,11 @@ mod foreground_loader_tests {
             drop(visible);
             drop(protected);
         }
+        assert!(protected_count_refusals > 0);
         drop(cache);
         assert_eq!(budget.used(), 0);
         eprintln!(
-            "100k valid-source navigation: seconds={} steps=512 cpu_peak={} final=0",
+            "100k valid-source navigation: seconds={} steps=512 protected_count_refusals={protected_count_refusals} cpu_peak={} final=0",
             start.elapsed().as_secs_f64(),
             budget.peak()
         );

@@ -29,6 +29,19 @@ alpha=bytes(round(max(0,min(1,integral(64-row,x)-integral(56-row,x)))*255) for r
 (root/'tensor-parabolic-rgb.alpha').write_bytes(alpha)
 (root/'tensor-parabolic-rgb.json').write_text(json.dumps({'license':'CC0','construction':'x=32u, y=2+8v+128u(1-u); solid red; page32x64','oracle':'Exact piecewise antiderivative of clamped parabola vertical coverage; independent of triangle code','coordinate_quantization_max':64/(2**32-1)/2,'sha256':hashlib.sha256(out).hexdigest()},indent=2)+'\n')
 
+# The same boundary is an exact Coons patch: its transfinite blend
+# reproduces x=32u, y=2+8v+128u(1-u). Interior Tensor points are omitted.
+coons_data=data[:1+12*8]+data[1+16*8:]
+coons_objects=objects.copy()
+coons_objects[-1]=objects[-1].replace(b'/ShadingType 7',b'/ShadingType 6').replace(
+    b'/Length '+str(len(data)).encode(),b'/Length '+str(len(coons_data)).encode()).replace(data,coons_data)
+out=bytearray(b'%PDF-1.7\n');offsets=[0]
+for i,obj in enumerate(coons_objects,1):offsets.append(len(out));out.extend(f'{i} 0 obj\n'.encode()+obj+b'\nendobj\n')
+xref=len(out);out.extend(f'xref\n0 {len(offsets)}\n0000000000 65535 f \n'.encode())
+for offset in offsets[1:]:out.extend(f'{offset:010} 00000 n \n'.encode())
+out.extend(f'trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n'.encode())
+(root/'coons-parabolic-rgb.pdf').write_bytes(out)
+
 # A finite, intersecting patch whose curvature cannot meet the depth bound.
 # PDF numbers use decimal notation; exponent syntax is not a PDF number.
 objects[-1]=objects[-1].replace(b'/Decode [0 32 0 64',b'/Decode [0 32000000000000000000 -2000000000000000000 62000000000000000000')
@@ -38,3 +51,11 @@ xref=len(out);out.extend(f'xref\n0 {len(offsets)}\n0000000000 65535 f \n'.encode
 for offset in offsets[1:]:out.extend(f'{offset:010} 00000 n \n'.encode())
 out.extend(f'trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n'.encode())
 (root/'tensor-depth-limit.pdf').write_bytes(out)
+
+coons_objects[-1]=coons_objects[-1].replace(b'/Decode [0 32 0 64',b'/Decode [0 32000000000000000000 -2000000000000000000 62000000000000000000')
+out=bytearray(b'%PDF-1.7\n');offsets=[0]
+for i,obj in enumerate(coons_objects,1):offsets.append(len(out));out.extend(f'{i} 0 obj\n'.encode()+obj+b'\nendobj\n')
+xref=len(out);out.extend(f'xref\n0 {len(offsets)}\n0000000000 65535 f \n'.encode())
+for offset in offsets[1:]:out.extend(f'{offset:010} 00000 n \n'.encode())
+out.extend(f'trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n'.encode())
+(root/'coons-depth-limit.pdf').write_bytes(out)

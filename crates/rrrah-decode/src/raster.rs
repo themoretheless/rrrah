@@ -378,7 +378,8 @@ pub(crate) fn decode_raster_inspected(
     }
     if request.image_index != 0
         && !request.path.extension().is_some_and(|e| {
-            e.eq_ignore_ascii_case("cur")
+            e.eq_ignore_ascii_case("jxl")
+                || e.eq_ignore_ascii_case("cur")
                 || e.eq_ignore_ascii_case("ico")
                 || e.eq_ignore_ascii_case("tif")
                 || e.eq_ignore_ascii_case("tiff")
@@ -416,7 +417,8 @@ pub(crate) fn decode_raster_inspected(
         let selectable = std::fs::File::open(&request.path)
             .and_then(|file| file.take(216).read_to_end(&mut prefix))
             .is_ok()
-            && (prefix.starts_with(&[0, 0, 2, 0])
+            && (crate::jxl::has_magic(&prefix)
+                || prefix.starts_with(&[0, 0, 2, 0])
                 || ico_pages::has_magic(&prefix)
                 || tiff_pages::has_magic(&prefix)
                 || crate::dicom::has_magic(&prefix)
@@ -665,6 +667,9 @@ fn decode_raster_bytes_inner(
     if crate::apng::has_animation(&bytes) {
         return Ok(crate::apng::decode(&bytes, request)?.raster);
     }
+    if crate::jxl::has_magic(&bytes) {
+        return crate::jxl::decode(&bytes, request);
+    }
     if request.image_index != 0 {
         return Err(DecodeError::UnsupportedImageIndex {
             index: request.image_index,
@@ -706,9 +711,6 @@ fn decode_raster_bytes_inner(
     }
     if crate::jp2::has_magic(&bytes) {
         return crate::jp2::decode(&bytes, request);
-    }
-    if crate::jxl::has_magic(&bytes) {
-        return crate::jxl::decode(&bytes, request);
     }
     if crate::kra::has_magic(&bytes)
         || bytes.starts_with(b"PK\x03\x04")

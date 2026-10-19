@@ -1,0 +1,19 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 35.69s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_decode-a975e9ebc3faac09)
+
+running 1 test
+
+thread 'jxl::tests::header_initialization_does_not_allocate_codec_frame_groups_before_admission' (24798833) panicked at crates/rrrah-decode/src/jxl.rs:241:9:
+header initialization allocated codec payload before admission
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test jxl::tests::header_initialization_does_not_allocate_codec_frame_groups_before_admission ... FAILED
+
+failures:
+
+failures:
+    jxl::tests::header_initialization_does_not_allocate_codec_frame_groups_before_admission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 227 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

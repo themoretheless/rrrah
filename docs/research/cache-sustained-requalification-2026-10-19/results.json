@@ -1,0 +1,57 @@
+{
+  "scope": "Current locked offline stable builds; synthetic public-fixture correctness/ownership gates, not physical HDD or GUI/HDR calibration. Tests may overlap on shared host; durations are workload completion times, not paired performance benchmarks.",
+  "sustained": {
+    "seconds": 180.083569875,
+    "cycles": 1375,
+    "pressure_refusals": 1375,
+    "root_peak": 2097152,
+    "queue_peak": 262144,
+    "disk_peak_bytes": 4195328,
+    "disk_peak_objects": 16,
+    "final": 0
+  },
+  "distinct_keys": {
+    "keys": 100000,
+    "writes": 100000,
+    "reads": 100000,
+    "pressure_refusals": 1000,
+    "root_peak": 131072,
+    "queue_peak": 4,
+    "final": 0
+  },
+  "float_hdr": {
+    "seconds": 90.462,
+    "cycles": 3,
+    "width": 2048,
+    "height": 2048,
+    "pixel_bytes": 67108864,
+    "root_limit": 134217728,
+    "queue_limit": 67108864,
+    "disk_cap_count": 2,
+    "final": 0
+  },
+  "gallery": {
+    "paths": 100000,
+    "source_fixtures": 4,
+    "steps": 512,
+    "behind": 1,
+    "ahead": 2,
+    "cache_count_cap": 2,
+    "cache_byte_cap": 65536,
+    "root_limit": 1048576,
+    "protected_count_refusals": 1022,
+    "backend": "Metal Apple M4 Max",
+    "final": 0
+  },
+  "ttl_viewer": {
+    "restores_without_decode": 128,
+    "real_preloads": 2,
+    "sdr_and_half_float_exact": true,
+    "final": 0
+  },
+  "ordinary_app": {
+    "passed": 287,
+    "ignored": 81,
+    "failed": 0
+  }
+}

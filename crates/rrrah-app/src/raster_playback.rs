@@ -143,6 +143,38 @@ impl Playback {
 mod tests {
     use super::*;
     #[test]
+    fn decoded_jxl_fractional_frames_stop_after_two_complete_presentations() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/animation-finite16.jxl");
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut playback = Playback::default();
+        let mut now = Instant::now();
+        let sequence = [0, 1, 2, 0, 1, 2];
+        for (position, index) in sequence.into_iter().enumerate() {
+            let mut request = rrrah_decode::DecodeRequest::new(&path);
+            request.image_index = index;
+            request.memory_budget = Some(root.clone());
+            let frame = rrrah_decode::decode_raster(&request).unwrap();
+            let timing = frame.animation_timing().unwrap();
+            assert_eq!(timing.num_plays(), 2);
+            playback.ready(42, index, frame.image_count(), Some(timing));
+            assert_eq!(playback.deadline(42), None);
+            playback.presented(42, now);
+            let deadline = now + timing.delay();
+            assert_eq!(playback.deadline(42), Some(deadline));
+            assert_eq!(playback.take_next(42, deadline - Duration::from_nanos(1)), None);
+            assert_eq!(
+                playback.take_next(42, deadline),
+                sequence.get(position + 1).copied()
+            );
+            assert_eq!(playback.deadline(42), None);
+            now = deadline;
+            drop(frame);
+            assert_eq!(root.used(), 0);
+        }
+        assert_eq!(playback.take_next(42, now + Duration::from_secs(10)), None);
+    }
+    #[test]
     fn finite_infinite_rational_and_zero_delay_follow_presented_frames() {
         let mut cases = 0;
         for count in 2..=5 {

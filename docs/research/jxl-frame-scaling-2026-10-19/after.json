@@ -1,0 +1,337 @@
+{
+  "scope": "single fresh process per case;3warmups/9timed in-process iterations; warm filesystem/dev optimized/shared host; no decoded cache/GPU/cold-disk or paired speedup claim",
+  "source": {
+    "license": "CC0",
+    "scope": "5x3RGBA16 full replacements isolate frame-count/metadata scaling, not photographic complexity. All frames checked by libjxl C; only first/middle/last raw oracles retained.",
+    "producer_source_sha256": "ed298ad4abab6c6e484c3812f9cdbde2ba3b5d7dfbaa751c97c2f8af1257c0cc",
+    "sources": [
+      {
+        "libjxl_version": 12000,
+        "frames": 3,
+        "encoded_bytes": 488,
+        "width": 5,
+        "height": 3,
+        "bits": 16,
+        "all_native_samples_match_authored": true,
+        "name": "animation-scale-3.jxl",
+        "sha256": "d627c2e9316edc54615d7cf19e724554cf7029725bf1147048ab98379898b446",
+        "selected_indices": [
+          0,
+          1,
+          2
+        ],
+        "rgba16le_sha256": {
+          "0": "7901b226389408e8070c77f579a6810413fdd321f8fb2cd15ce4e17a386906d3",
+          "1": "2c6ab171a1017667167c04f656a313ee0c5b0242910acd629e323e7d875446f3",
+          "2": "e72e673d35141cfc93edbbffc9f0f103113f8d5b7881442d26bbad306deadfd4"
+        }
+      },
+      {
+        "libjxl_version": 12000,
+        "frames": 30,
+        "encoded_bytes": 4405,
+        "width": 5,
+        "height": 3,
+        "bits": 16,
+        "all_native_samples_match_authored": true,
+        "name": "animation-scale-30.jxl",
+        "sha256": "200dd52c08b65e8ee18b2b8225c2f478f727f1515ddecb2f27f0b962142ae964",
+        "selected_indices": [
+          0,
+          15,
+          29
+        ],
+        "rgba16le_sha256": {
+          "0": "7901b226389408e8070c77f579a6810413fdd321f8fb2cd15ce4e17a386906d3",
+          "15": "abb2e9f26971cff7237f50d156b1226ea108ab160d756cefe1711e820e4d2fd8",
+          "29": "a8b868c9127ddfb2f2a3f93125cfdf762371c4d8592bfd4a037332afddc0fbf8"
+        }
+      },
+      {
+        "libjxl_version": 12000,
+        "frames": 300,
+        "encoded_bytes": 44408,
+        "width": 5,
+        "height": 3,
+        "bits": 16,
+        "all_native_samples_match_authored": true,
+        "name": "animation-scale-300.jxl",
+        "sha256": "54603cc62a97c91727f6ab7fbe630c1e5ede65596e42ac792c8fc76f421ce238",
+        "selected_indices": [
+          0,
+          150,
+          299
+        ],
+        "rgba16le_sha256": {
+          "0": "7901b226389408e8070c77f579a6810413fdd321f8fb2cd15ce4e17a386906d3",
+          "150": "5e912e689506c3a03a19771f2a730e1283c0cc396f6cbaed3967faf9d87c6b8d",
+          "299": "bb504dd9790c8ec613fd187ff7aac1c3be085cfe0407e8a369626d9c07804a59"
+        }
+      },
+      {
+        "libjxl_version": 12000,
+        "frames": 3000,
+        "encoded_bytes": 444615,
+        "width": 5,
+        "height": 3,
+        "bits": 16,
+        "all_native_samples_match_authored": true,
+        "name": "animation-scale-3000.jxl",
+        "sha256": "59dcf91965ee313b3f722c43955288448283b8dd4fc3e0bcbb4a3339d94ba3ac",
+        "selected_indices": [
+          0,
+          1500,
+          2999
+        ],
+        "rgba16le_sha256": {
+          "0": "7901b226389408e8070c77f579a6810413fdd321f8fb2cd15ce4e17a386906d3",
+          "1500": "cee02f478daff62d295930f84ed835674691b85ce2ebfd071a397f8b73cfa190",
+          "2999": "2e30287dd485bd27a971ba095ebdbc06207bc1ca2ca3183cb227625ad4edc9d2"
+        }
+      }
+    ]
+  },
+  "bench_sha256": "7a40f2a8cdf6713d590410ed4ce8ab5f100ea15321a9f761d8de489f334b0962",
+  "rows": [
+    {
+      "file": "animation-scale-3.jxl",
+      "frames": 3,
+      "index": 0,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=67712 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-3.jxl",
+        "index": 0,
+        "iterations": 9,
+        "load_p50_ms": 0.039084,
+        "load_p95_ms": 0.048875,
+        "prepare_p50_ms": 0.0035,
+        "prepare_p95_ms": 0.015458999999999999,
+        "cpu_ready_p50_ms": 0.04275,
+        "cpu_ready_p95_ms": 0.057042,
+        "display_blake3": "c6dbde5e7486a5eee5d9e433009b4d74c3cd3869214f74b10fe91de401fbb8fa",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-3.jxl",
+      "frames": 3,
+      "index": 1,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=67712 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-3.jxl",
+        "index": 1,
+        "iterations": 9,
+        "load_p50_ms": 0.038834,
+        "load_p95_ms": 0.043292,
+        "prepare_p50_ms": 0.003375,
+        "prepare_p95_ms": 0.007291,
+        "cpu_ready_p50_ms": 0.042416,
+        "cpu_ready_p95_ms": 0.048374999999999994,
+        "display_blake3": "fb7c522d6da20c58bf7478369be018deccbee5816f40a3dd1d09b5e57f897056",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-3.jxl",
+      "frames": 3,
+      "index": 2,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=67712 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-3.jxl",
+        "index": 2,
+        "iterations": 9,
+        "load_p50_ms": 0.054208,
+        "load_p95_ms": 0.181084,
+        "prepare_p50_ms": 0.003584,
+        "prepare_p95_ms": 0.007500000000000001,
+        "cpu_ready_p50_ms": 0.057791999999999996,
+        "cpu_ready_p95_ms": 0.188584,
+        "display_blake3": "4b37d6109b1030e73fd1345a802719aeb813619262e91a4e5a37fd55be96dbc1",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-30.jxl",
+      "frames": 30,
+      "index": 0,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=75546 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-30.jxl",
+        "index": 0,
+        "iterations": 9,
+        "load_p50_ms": 0.052375,
+        "load_p95_ms": 0.06275,
+        "prepare_p50_ms": 0.003625,
+        "prepare_p95_ms": 0.005,
+        "cpu_ready_p50_ms": 0.056833999999999996,
+        "cpu_ready_p95_ms": 0.066791,
+        "display_blake3": "c6dbde5e7486a5eee5d9e433009b4d74c3cd3869214f74b10fe91de401fbb8fa",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-30.jxl",
+      "frames": 30,
+      "index": 15,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=75546 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-30.jxl",
+        "index": 15,
+        "iterations": 9,
+        "load_p50_ms": 0.052792,
+        "load_p95_ms": 0.090208,
+        "prepare_p50_ms": 0.00325,
+        "prepare_p95_ms": 0.0053750000000000004,
+        "cpu_ready_p50_ms": 0.055875,
+        "cpu_ready_p95_ms": 0.093958,
+        "display_blake3": "7597ed4852cc3c5b6796cb0c36de698f6010c4d0494f4491a791bdbb66ef0ffa",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-30.jxl",
+      "frames": 30,
+      "index": 29,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=75546 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-30.jxl",
+        "index": 29,
+        "iterations": 9,
+        "load_p50_ms": 0.052584,
+        "load_p95_ms": 0.070625,
+        "prepare_p50_ms": 0.003708,
+        "prepare_p95_ms": 0.007291,
+        "cpu_ready_p50_ms": 0.059875,
+        "cpu_ready_p95_ms": 0.074875,
+        "display_blake3": "7211986bf05cf6ddf24471bd3fd0bd1a9df6a915f4079ae0a7914b656fd17633",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-300.jxl",
+      "frames": 300,
+      "index": 0,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=155552 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-300.jxl",
+        "index": 0,
+        "iterations": 9,
+        "load_p50_ms": 0.230292,
+        "load_p95_ms": 0.25875,
+        "prepare_p50_ms": 0.004291,
+        "prepare_p95_ms": 0.011958,
+        "cpu_ready_p50_ms": 0.23441700000000001,
+        "cpu_ready_p95_ms": 0.270708,
+        "display_blake3": "c6dbde5e7486a5eee5d9e433009b4d74c3cd3869214f74b10fe91de401fbb8fa",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-300.jxl",
+      "frames": 300,
+      "index": 150,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=155552 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-300.jxl",
+        "index": 150,
+        "iterations": 9,
+        "load_p50_ms": 0.225625,
+        "load_p95_ms": 0.239791,
+        "prepare_p50_ms": 0.0045839999999999995,
+        "prepare_p95_ms": 0.006459,
+        "cpu_ready_p50_ms": 0.23208399999999998,
+        "cpu_ready_p95_ms": 0.244375,
+        "display_blake3": "0677e8d4f52974f9fe49cf27e9d3ae3d7c81d093e2ef620339684ac28ce42236",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-300.jxl",
+      "frames": 300,
+      "index": 299,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=155552 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-300.jxl",
+        "index": 299,
+        "iterations": 9,
+        "load_p50_ms": 0.216125,
+        "load_p95_ms": 0.22733399999999998,
+        "prepare_p50_ms": 0.0029170000000000003,
+        "prepare_p95_ms": 0.003875,
+        "cpu_ready_p50_ms": 0.218917,
+        "cpu_ready_p95_ms": 0.23066699999999998,
+        "display_blake3": "2c86c35a12fa3d25cd6d161cab6601a9ef3eb921e4414e31348062d168fd5e78",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-3000.jxl",
+      "frames": 3000,
+      "index": 0,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=955966 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-3000.jxl",
+        "index": 0,
+        "iterations": 9,
+        "load_p50_ms": 1.8471250000000001,
+        "load_p95_ms": 1.8895419999999998,
+        "prepare_p50_ms": 0.0049169999999999995,
+        "prepare_p95_ms": 0.007708,
+        "cpu_ready_p50_ms": 1.8528749999999998,
+        "cpu_ready_p95_ms": 1.894417,
+        "display_blake3": "c6dbde5e7486a5eee5d9e433009b4d74c3cd3869214f74b10fe91de401fbb8fa",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-3000.jxl",
+      "frames": 3000,
+      "index": 1500,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=955966 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-3000.jxl",
+        "index": 1500,
+        "iterations": 9,
+        "load_p50_ms": 1.914833,
+        "load_p95_ms": 1.97625,
+        "prepare_p50_ms": 0.0054589999999999994,
+        "prepare_p95_ms": 0.007042,
+        "cpu_ready_p50_ms": 1.920292,
+        "cpu_ready_p95_ms": 1.9830830000000002,
+        "display_blake3": "350fde97c6d6ec2ba717324e36b83386b1bc88067bc339af559e7ed33815718c",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    },
+    {
+      "file": "animation-scale-3000.jxl",
+      "frames": 3000,
+      "index": 2999,
+      "exit": 0,
+      "stderr": "managed_srgb: limit_bytes=536870912 peak_bytes=955966 final_bytes=0\n",
+      "timing": {
+        "path": "/tmp/rrrah-jxl-scale-20261019/animation-scale-3000.jxl",
+        "index": 2999,
+        "iterations": 9,
+        "load_p50_ms": 2.1485,
+        "load_p95_ms": 2.288083,
+        "prepare_p50_ms": 0.010334,
+        "prepare_p95_ms": 0.0165,
+        "cpu_ready_p50_ms": 2.159125,
+        "cpu_ready_p95_ms": 2.303916,
+        "display_blake3": "360918d5c265b26f58b66f8355fdfc914181727374a65cffcfadb39c649344ef",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      }
+    }
+  ]
+}

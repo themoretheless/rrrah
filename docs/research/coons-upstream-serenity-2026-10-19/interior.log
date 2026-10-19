@@ -1,0 +1,8 @@
+/Users/themoretheless/Documents/Sources/rrrah/docs/research/coons-upstream-serenity-2026-10-19/compare-interior.py:19: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  mask=Image.new('L',n.size);mask.putdata([255 if v==expected and w==expected else 0 for v,w in zip(sn.getdata(),so.getdata())]);mask=mask.filter(ImageFilter.MinFilter(5))
+/Users/themoretheless/Documents/Sources/rrrah/docs/research/coons-upstream-serenity-2026-10-19/compare-interior.py:20: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  values=[v for v,m in zip(ImageChops.difference(n,o).getdata(),mask.getdata()) if m]
+{'file': 'shade-coons-sh1.pdf', 'interior_pixels': 25606, 'max_channel_error': 6, 'mean_absolute_channel_error': 1.5918404540602462, 'pixels_above_1': 24303, 'pixels_above_8': 0, 'pixels_above_32': 0}
+{'file': 'shade-coons-sh2.pdf', 'interior_pixels': 23587, 'max_channel_error': 15, 'mean_absolute_channel_error': 2.396404799253826, 'pixels_above_1': 14711, 'pixels_above_8': 2959, 'pixels_above_32': 0}
+{'file': 'shade-tensor-sh1.pdf', 'interior_pixels': 25608, 'max_channel_error': 6, 'mean_absolute_channel_error': 1.5977038425492034, 'pixels_above_1': 24573, 'pixels_above_8': 0, 'pixels_above_32': 0}
+{'file': 'shade-tensor-sh2.pdf', 'interior_pixels': 23587, 'max_channel_error': 15, 'mean_absolute_channel_error': 2.357866621444016, 'pixels_above_1': 14528, 'pixels_above_8': 2922, 'pixels_above_32': 0}

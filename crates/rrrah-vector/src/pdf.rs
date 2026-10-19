@@ -1325,12 +1325,137 @@ mod precise_fill_tests {
         assert_eq!(root.used(), 0);
     }
     #[test]
+    #[ignore = "requires pinned external Serenity Coons source; RRRAH_COONS_CORPUS"]
+    fn upstream_coons_function_matches_independent_interior_integrals() {
+        let corpus = std::env::var_os("RRRAH_COONS_CORPUS").expect("RRRAH_COONS_CORPUS required");
+        let bytes = std::fs::read(std::path::Path::new(&corpus).join("shade-coons-sh2.pdf")).unwrap();
+        assert_eq!(
+            blake3::hash(&bytes).to_hex().as_str(),
+            "227db92d2870aa723f09c784b052776630c91c52af82fc4747a65f844cf0d1a6"
+        );
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../docs/research/coons-upstream-serenity-2026-10-19/function-oracle.json"
+        ))
+        .unwrap();
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let mut request = crate::DecodeRequest::new("upstream-coons-function.pdf");
+        request.memory_budget = Some(root.clone());
+        assert!(matches!(
+            super::decode(&bytes, &request),
+            Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!(root.used(), 0);
+        let retry = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        drop(retry);
+        assert_eq!(root.used(), 0);
+        // Complete external pages use the existing 64MiB AI qualification root.
+        // This does not change the separately verified 8MiB refusal behavior.
+        let root = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+        request.memory_budget = Some(root.clone());
+        let image = super::decode(&bytes, &request).unwrap();
+        assert_eq!((image.width(), image.height()), (300, 520));
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!()
+        };
+        let rows = reference["rows"].as_array().unwrap();
+        assert_eq!(rows.len(), 18);
+        for row in rows {
+            let x = row["x"].as_u64().unwrap() as usize;
+            let y = row["y_bottom"].as_u64().unwrap() as usize;
+            let offset = ((519 - y) * 300 + x) * 4;
+            assert_eq!(pixels[offset + 3], 255);
+            assert!(row["max_8_to_16_delta"].as_f64().unwrap() < 0.001);
+            // Expected values come from inverse-map polynomial integration;
+            // the recorded native output in the research JSON is not consulted.
+            for channel in 0..3 {
+                let value = row["integrated_rgb"]["16"][channel].as_f64().unwrap();
+                assert_eq!(
+                    pixels[offset + channel],
+                    value.round() as u8,
+                    "pixel {x},{y} channel {channel}"
+                );
+            }
+        }
+        eprintln!(
+            "COONS_FUNCTION_INDEPENDENT pixels=18 peak={} final_before_drop={}",
+            root.peak(),
+            root.used()
+        );
+        drop(image);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn curved_coons_matches_independent_parabolic_pixel_areas() {
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let mut request = crate::DecodeRequest::new("parabolic.pdf");
+        request.memory_budget = Some(root.clone());
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/coons-parabolic-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        let alpha = include_bytes!("../../../tests/fixtures/pdf/tensor-parabolic-rgb.alpha");
+        assert_eq!((image.width(), image.height()), (32, 64));
+        for (index, (pixel, expected)) in values.chunks_exact(4).zip(alpha).enumerate() {
+            assert_eq!(pixel[3], *expected, "coverage pixel {index}");
+            if *expected > 0 {
+                assert_eq!(&pixel[..3], &[255, 0, 0]);
+            }
+        }
+        eprintln!(
+            "CURVED_COONS_ANALYTIC pixels=2048 peak={} retained={}",
+            root.peak(),
+            root.used()
+        );
+        drop(image);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn tensor_depth_limit_refuses_incomplete_render_and_allows_retry() {
         let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
         let mut request = crate::DecodeRequest::new("tensor-limit.pdf");
         request.memory_budget = Some(root.clone());
         let result = super::decode(
             include_bytes!("../../../tests/fixtures/pdf/tensor-depth-limit.pdf"),
+            &request,
+        );
+        assert!(
+            matches!(
+                result,
+                Err(crate::RasterDecodeError::InvalidPdf(
+                    "shading decode/precision limit"
+                ))
+            ),
+            "{:?}",
+            result.as_ref().err()
+        );
+        assert_eq!(root.used(), 0);
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        assert!(values.chunks_exact(4).all(|pixel| pixel == [255, 0, 0, 255]));
+        drop(image);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn coons_depth_limit_refuses_incomplete_render_and_allows_retry() {
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let mut request = crate::DecodeRequest::new("tensor-limit.pdf");
+        request.memory_budget = Some(root.clone());
+        let result = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/coons-depth-limit.pdf"),
             &request,
         );
         assert!(

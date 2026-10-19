@@ -1,0 +1,16 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 20s
+     Running tests/pdf_readback.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/pdf_readback-37cc23edfbe1bf8a)
+
+running 1 test
+CURVED_PATCH_METAL fixture=coons-parabolic-rgb.pdf adapter=Metal Apple M4 Max
+CURVED_PATCH_PIPELINE fixture=coons-parabolic-rgb.pdf source=32x64 readbacks=10 decode_peak=3632650 root=8388608 native_and_float_swap=true final=0
+test analytic_curved_coons_preserves_full_metal_frame_through_ram_and_swap ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 5.13s
+

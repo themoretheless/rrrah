@@ -467,11 +467,25 @@ fn independently_referenced_pdfs_and_profiled_jpegs_match_through_ram_swap_and_m
 #[test]
 #[ignore = "requires actual Metal; full parabolic source coverage through RAM/swap SDR and half-float"]
 fn analytic_curved_tensor_preserves_full_metal_frame_through_ram_and_swap() {
+    analytic_curved_patch_pipeline("tensor-parabolic-rgb.pdf");
+}
+
+#[test]
+#[ignore = "requires actual Metal; full analytic Coons coverage through RAM/swap"]
+fn analytic_curved_coons_preserves_full_metal_frame_through_ram_and_swap() {
+    analytic_curved_patch_pipeline("coons-parabolic-rgb.pdf");
+}
+
+fn analytic_curved_patch_pipeline(fixture: &str) {
     assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
     let gpu = common::qualification_gpu().expect("actual Metal required");
-    eprintln!("CURVED_TENSOR_METAL adapter={}", gpu.adapter_name());
+    eprintln!(
+        "CURVED_PATCH_METAL fixture={fixture} adapter={}",
+        gpu.adapter_name()
+    );
     let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/pdf/tensor-parabolic-rgb.pdf");
+        .join("../../tests/fixtures/pdf")
+        .join(fixture);
     let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
     let mut request = rrrah_decode::DecodeRequest::new(&path);
     request.memory_budget = Some(root.clone());
@@ -559,6 +573,113 @@ fn analytic_curved_tensor_preserves_full_metal_frame_through_ram_and_swap() {
     }
     assert_eq!(root.used(), 0);
     eprintln!(
-        "CURVED_TENSOR_PIPELINE source=32x64 readbacks=10 decode_peak={decode_peak} root=8388608 native_and_float_swap=true final=0"
+        "CURVED_PATCH_PIPELINE fixture={fixture} source=32x64 readbacks=10 decode_peak={decode_peak} root=8388608 native_and_float_swap=true final=0"
+    );
+}
+
+#[test]
+#[ignore = "requires actual Metal; selected JXL frames, rational timing and RAM/swap preservation"]
+fn jxl_animation_frames_preserve_metadata_ram_swap_and_metal() {
+    assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
+    let gpu = common::qualification_gpu().expect("actual Metal required");
+    let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    for name in [
+        "animation-rgb.jxl",
+        "animation-alpha.jxl",
+        "animation-finite16.jxl",
+        "animation-linear-float.jxl",
+    ] {
+        for index in 0..3 {
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
+            request.image_index = index;
+            request.memory_budget = Some(root.clone());
+            let native = rrrah_decode::decode_raster(&request).unwrap();
+            let timing = native.animation_timing().unwrap();
+            let prepared =
+                rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&root)).unwrap();
+            let view = rrrah_gpu::ViewParameters {
+                viewport: [128., 96.],
+                ..Default::default()
+            };
+            let sdr = gpu.render_raster(&prepared, view, [128, 96]).pixels;
+            let half = gpu.render_raster_half(&prepared, view, [128, 96]);
+            if name == "animation-linear-float.jxl" {
+                assert!(
+                    half.chunks_exact(4)
+                        .any(|p| p[..3].iter().any(|&v| v > 0x3c00 && v < 0x7c00)),
+                    "HDR readback must retain above-one RGB"
+                );
+                assert!(
+                    half.chunks_exact(4).any(|p| p[..3]
+                        .iter()
+                        .any(|&v| v & 0x8000 != 0 && v & 0x7fff != 0 && v & 0x7c00 != 0x7c00)),
+                    "HDR readback must retain finite negative RGB"
+                );
+            }
+            let check = |raster: &rrrah_core::DecodedRaster| {
+                assert_eq!((raster.image_index(), raster.image_count()), (index, 3));
+                assert_eq!(raster.animation_timing(), Some(timing));
+                assert_eq!(gpu.render_raster(raster, view, [128, 96]).pixels, sdr);
+                assert_eq!(gpu.render_raster_half(raster, view, [128, 96]), half);
+            };
+            let mut ram =
+                rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(prepared.capacity_bytes()));
+            assert!(ram.insert(1u8, prepared.clone()));
+            let lease = ram.get_lease(&1).unwrap();
+            let pressure = root.try_reserve(root.available_bytes()).unwrap();
+            check(&lease);
+            drop((pressure, lease, ram));
+            for source in [native, prepared] {
+                let directory = tempfile::tempdir().unwrap();
+                let weight = source.capacity_bytes();
+                let swap = rrrah_cache::ImageSwapCache::<u8, rrrah_core::DecodedRaster>::new_with_budgets(
+                    directory.path(),
+                    rrrah_cache::ImageSwapConfig {
+                        limits: rrrah_cache::CacheLimits::bytes(65536),
+                        queue_bytes: weight,
+                        queue_count: 1,
+                        restore_bytes: weight,
+                    },
+                    rrrah_core::MemoryBudget::new(weight),
+                    root.clone(),
+                )
+                .unwrap();
+                assert_eq!(
+                    swap.try_enqueue(1, source.clone()),
+                    rrrah_cache::SpillAdmission::Queued
+                );
+                swap.wait_idle().unwrap();
+                let pressure = root.try_reserve(root.available_bytes()).unwrap();
+                assert!(swap.try_get(&1, || false).is_err());
+                drop(pressure);
+                let restored = swap.try_get(&1, || false).unwrap().unwrap();
+                assert_eq!((restored.image_index(), restored.image_count()), (index, 3));
+                assert_eq!(restored.animation_timing(), Some(timing));
+                match (source.pixels(), restored.pixels()) {
+                    (rrrah_core::RasterPixels::Rgba8(a), rrrah_core::RasterPixels::Rgba8(b)) => {
+                        assert_eq!(a.as_ref(), b.as_ref())
+                    }
+                    (rrrah_core::RasterPixels::Rgba16(a), rrrah_core::RasterPixels::Rgba16(b)) => {
+                        assert_eq!(a.as_ref(), b.as_ref())
+                    }
+                    (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) => {
+                        assert_eq!(a.len(), b.len());
+                        assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()))
+                    }
+                    _ => panic!("swap changed JXL sample representation"),
+                }
+                let display =
+                    rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+                check(&display);
+                let stats = swap.stats();
+                assert_eq!((stats.writes, stats.reads, stats.errors), (1, 1, 0));
+            }
+            assert_eq!(root.used(), 0);
+        }
+    }
+    eprintln!(
+        "JXL_ANIMATION_METAL adapter={} frames=12 native_and_float_swap metadata_exact root_final=0",
+        gpu.adapter_name()
     );
 }

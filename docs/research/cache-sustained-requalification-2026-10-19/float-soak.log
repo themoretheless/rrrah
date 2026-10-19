@@ -1,0 +1,14 @@
+    Blocking waiting for file lock on build directory
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.01s
+     Running tests/sustained_swap.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/sustained_swap-5e70643a4a69b4bc)
+
+running 1 test
+large float delayed progress: cycles=1; elapsed=30.236s; root=0; queue=0; disk_bytes=67108928; disk_count=1
+test sustained_float_hdr_delayed_swap_pressure_cancel_and_retry has been running for over 60 seconds
+large float delayed progress: cycles=2; elapsed=60.660s; root=0; queue=0; disk_bytes=134217856; disk_count=2
+large float delayed progress: cycles=3; elapsed=90.462s; root=0; queue=0; disk_bytes=134217856; disk_count=2
+large float delayed swap: cycles=3; seconds=90.462;2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0
+test sustained_float_hdr_delayed_swap_pressure_cancel_and_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 90.46s
+

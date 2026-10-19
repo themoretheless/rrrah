@@ -1,0 +1,12 @@
+    Blocking waiting for file lock on build directory
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.86s
+     Running tests/sustained_swap.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/sustained_swap-5e70643a4a69b4bc)
+
+running 2 tests
+sustained swap: seconds=10.033240875 cycles=77 pressure_refusals=77 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure ... ok
+sustained swap: seconds=10.038022708 cycles=77 pressure_refusals=77 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 10.04s
+

@@ -1,0 +1,48 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: constant `PNG_SIGNATURE` is never used
+  --> vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+    Finished `test` profile [optimized + debuginfo] target(s) in 52.09s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_vector-62ef4717741c3af3)
+
+running 1 test
+
+thread 'pdf::precise_fill_tests::upstream_coons_function_matches_independent_interior_integrals' (24560676) panicked at crates/rrrah-vector/src/pdf.rs:1343:53:
+called `Result::unwrap()` on an `Err` value: Source(Memory(Capacity { requested: 2097152, used: 7161011, limit: 8388608 }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test pdf::precise_fill_tests::upstream_coons_function_matches_independent_interior_integrals ... FAILED
+
+failures:
+
+failures:
+    pdf::precise_fill_tests::upstream_coons_function_matches_independent_interior_integrals
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 197 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p rrrah-vector --lib`

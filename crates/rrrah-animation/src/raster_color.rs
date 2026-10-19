@@ -92,7 +92,7 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
             }
         }
     }
-    // Extended positive HDR is defined for matrix/gray profiles whose input
+    // Signed finite HDR is defined for matrix/gray profiles whose input
     // curves are exactly linear. LUT profiles and nonlinear curves retain the
     // normalized-input contract; their extrapolation is not qualified.
     let linear_curve = |curve: &Option<ToneReprCurve>| match curve {
@@ -110,7 +110,7 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
                 && linear_curve(&profile.green_trc)
                 && linear_curve(&profile.blue_trc)
         };
-    let valid_input = |value: f64| value.is_finite() && value >= 0.0 && (extended_linear || value <= 1.0);
+    let valid_input = |value: f64| value.is_finite() && (extended_linear || (0.0..=1.0).contains(&value));
     // Reject inadmissible float input before reserving the full output and rows.
     // Integer storage is normalized by construction. Float ICC input uses the
     // profile-dependent contract above; alpha is always normalized.
@@ -136,6 +136,13 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
         &mut profile.blue_trc,
         &mut profile.gray_trc,
     ] {
+        // Gamma exactly one is identity on the signed extended domain. The
+        // generic parametric evaluator clips negative operands; an empty ICC
+        // curve selects the mathematically equivalent identity matrix path.
+        if linear_curve(curve) {
+            *curve = Some(ToneReprCurve::Lut(Vec::new()));
+            continue;
+        }
         if let Some(ToneReprCurve::Lut(values)) = curve {
             if values.len() == 1 {
                 *curve = Some(ToneReprCurve::Parametric(vec![f32::from(values[0]) / 256.0]));
@@ -249,6 +256,59 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn signed_linear_rgb_and_gray_match_independent_lcms_double_oracles() {
+        let directory = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        for (profile, gray) in [
+            ("linear-identity-rgb.icc", false),
+            ("psd-tools-4x4_32bit_rgb.psd.icc", false),
+            ("animation-linear-float.icc", false),
+            ("linear-identity-grayscale.icc", true),
+            ("psd-tools-4x4_32bit_grayscale.psd.icc", true),
+        ] {
+            let raw = std::fs::read(directory.join(if gray {
+                "signed-linear-gray.rgba32fle"
+            } else {
+                "signed-linear-rgb.rgba32fle"
+            }))
+            .unwrap();
+            let values: Vec<f32> = raw
+                .chunks_exact(4)
+                .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+                .collect();
+            let count = values.len() / 4;
+            let expected = std::fs::read(directory.join(format!("{profile}.signed-linear.rgb64le"))).unwrap();
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let frame = DecodedRaster::new(
+                count as u32,
+                1,
+                RasterPixels::Rgba32Float(Arc::new(values.clone()).into()),
+                RasterColorSpace::Icc(std::fs::read(directory.join(profile)).unwrap()),
+            )
+            .unwrap();
+            let ready = prepare_raster_for_display_with_budget(&frame, Some(&root)).unwrap();
+            let RasterPixels::Rgba32Float(actual) = ready.pixels() else {
+                panic!()
+            };
+            let mut maximum = 0f64;
+            for index in 0..count {
+                for channel in 0..3 {
+                    let offset = (index * 3 + channel) * 8;
+                    let value = f64::from_le_bytes(expected[offset..offset + 8].try_into().unwrap());
+                    let error = (f64::from(actual[index * 4 + channel]) - value).abs();
+                    maximum = maximum.max(error);
+                    assert!(
+                        error <= 2e-5,
+                        "{profile} pixel {index} channel {channel}: {error}"
+                    );
+                }
+                assert_eq!(actual[index * 4 + 3].to_bits(), values[index * 4 + 3].to_bits());
+            }
+            eprintln!("SIGNED_LINEAR_ICC profile={profile} max_error={maximum} bound=0.00002");
+            drop(ready);
+            assert_eq!(root.used(), 0);
+        }
+    }
     #[test]
     fn invalid_float_icc_input_is_refused_before_output_memory_admission() {
         let icc = ColorProfile::new_srgb().encode().unwrap();
@@ -434,7 +494,7 @@ mod tests {
     }
 
     #[test]
-    fn linear_matrix_icc_preserves_positive_hdr_and_still_refuses_negative_input() {
+    fn linear_matrix_icc_preserves_extended_linear_range() {
         for bytes in [
             include_bytes!("../../../tests/fixtures/raster/psd-tools-4x4_32bit_rgb.psd.icc").to_vec(),
             include_bytes!("../../../tests/fixtures/raster/linear-identity-rgb.icc").to_vec(),
@@ -468,11 +528,13 @@ mod tests {
             assert_eq!(actual[3], 0.25);
             drop(ready);
             assert_eq!(budget.used(), 0);
-            let invalid = make(vec![-0.1, 2., 4., 0.25]);
-            assert!(matches!(
-                prepare_raster_for_display_with_budget(&invalid, Some(&budget)),
-                Err(RasterColorError::InvalidInput)
-            ));
+            let signed = make(vec![-0.1, 2., 4., 0.25]);
+            let ready = prepare_raster_for_display_with_budget(&signed, Some(&budget)).unwrap();
+            let RasterPixels::Rgba32Float(values) = ready.pixels() else {
+                panic!()
+            };
+            assert!(values[0] < 0.0);
+            drop(ready);
             assert_eq!(budget.used(), 0);
         }
     }

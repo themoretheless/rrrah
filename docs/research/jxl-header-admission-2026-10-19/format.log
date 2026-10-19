@@ -1,0 +1,70 @@
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/jxl.rs:241:
+             include_bytes!("../../../tests/fixtures/raster/animation-scale-600.jxl").as_slice(),
+         ] {
+             for mode in 0..3 {
+-                let tracker=jxl_oxide::AllocTracker::with_limit(0);
+-                let mut uninit=jxl_oxide::JxlImage::builder().alloc_tracker(tracker.clone()).build_uninit();
++                let tracker = jxl_oxide::AllocTracker::with_limit(0);
++                let mut uninit = jxl_oxide::JxlImage::builder()
++                    .alloc_tracker(tracker.clone())
++                    .build_uninit();
+                 uninit.feed_bytes(bytes).unwrap();
+-                let jxl_oxide::InitializeResult::Initialized(mut image)=uninit.try_init_header_only().unwrap() else {panic!("complete header needed")};
+-                assert_eq!(image.num_loaded_frames(),0);
++                let jxl_oxide::InitializeResult::Initialized(mut image) =
++                    uninit.try_init_header_only().unwrap()
++                else {
++                    panic!("complete header needed")
++                };
++                assert_eq!(image.num_loaded_frames(), 0);
+                 assert!(!image.is_loading_done());
+-                let root=rrrah_core::MemoryBudget::new(1024*1024);
+-                let credit=root.try_reserve(root.limit()).unwrap();
++                let root = rrrah_core::MemoryBudget::new(1024 * 1024);
++                let credit = root.try_reserve(root.limit()).unwrap();
+                 tracker.expand_limit(root.limit() as usize);
+                 match mode {
+-                    0=>{image.resume_frame_loading().unwrap();image.resume_frame_loading().unwrap();},
+-                    1=>{image.feed_bytes(&[]).unwrap();},
+-                    _=>{image.finalize().unwrap();},
++                    0 => {
++                        image.resume_frame_loading().unwrap();
++                        image.resume_frame_loading().unwrap();
++                    }
++                    1 => {
++                        image.feed_bytes(&[]).unwrap();
++                    }
++                    _ => {
++                        image.finalize().unwrap();
++                    }
+                 }
+                 assert!(image.is_loading_done());
+-                let count=image.num_loaded_keyframes();assert!(count>0);
+-                assert!(image.render_frame(count-1).is_ok());
+-                drop(image);drop(credit);assert_eq!(root.used(),0);
++                let count = image.num_loaded_keyframes();
++                assert!(count > 0);
++                assert!(image.render_frame(count - 1).is_ok());
++                drop(image);
++                drop(credit);
++                assert_eq!(root.used(), 0);
+             }
+         }
+         // Existing callers retain the eager API; zero codec storage still
+Diff in /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/jxl.rs:265:
+         // refuses a buffered payload rather than silently ignoring its limit.
+-        let tracker=jxl_oxide::AllocTracker::with_limit(0);
+-        let mut eager=jxl_oxide::JxlImage::builder().alloc_tracker(tracker).build_uninit();
+-        eager.feed_bytes(include_bytes!("../../../tests/fixtures/raster/alpha-container-1.jxl")).unwrap();
++        let tracker = jxl_oxide::AllocTracker::with_limit(0);
++        let mut eager = jxl_oxide::JxlImage::builder()
++            .alloc_tracker(tracker)
++            .build_uninit();
++        eager
++            .feed_bytes(include_bytes!(
++                "../../../tests/fixtures/raster/alpha-container-1.jxl"
++            ))
++            .unwrap();
+         assert!(eager.try_init().is_err());
+     }
+     #[test]
