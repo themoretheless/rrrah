@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of both headers; pinned Git byte comparison. No application/runtime control execution.",
+  "new_whole_files_read": {
+    "windirstat/WinDirStatModel.h": "c5b7984ee6bea84133de43c7cffe5e7f215810e986e0593d041a8b81f00764b9",
+    "windirstat/Item.h": "4bed40cbde3c9f0598532ee81053165efa9a162d770bc253ca49ed8a5e55c282"
+  },
+  "whole_files_read": 71,
+  "coverage": "docs/research/dedup-500/windirstat3-model-types-coverage-v27-20261019.json",
+  "coverage_sha256": "541ae889ef86714968fe7842e654659d7171362590697836426edee9748e7840",
+  "findings": [
+    "CItem type mask separates base/pseudo file kinds, hash-stage bits, reparse-kind bits and general flags including DONE/MTP. DONE tests enumeration state, not complete-content identity or mutation validation.",
+    "IsTypeOrFlag combines supplied masks then tests any matching bit, not all. Callers needing conjunction must use separate tests; no assertion all callers correct before full review.",
+    "Logical/physical byte sums and file index use64bit values; per-subtree file/folder/read-job counts are atomic ULONG32 on Windows. Whole-tree counts above32bit limits not qualified by64bit byte storage. No billion-node runtime test.",
+    "GetItemsRecursive traverses children with explicit stack and invokes predicate only on nodes without children. Default predicate selects IT_FILE. Loaded top-list population therefore collects file leaves rather than every directory; pseudo/hardlink handling depends on their flags.",
+    "m_index is a general-purpose field for special scan types, not universal persistent identity: header also supports linked items, MTP and preview flags. Separate source-specific identity checks remain necessary.",
+    "SupportsFilesystemApis excludes MTP flag only; shell-identity capability is a separate method. This inline predicate does not by itself establish current path existence or immutable source identity.",
+    "Model stores non-owning selected-item vector/span cache keyed by logical focus and validity flag; InvalidateSelectionCache clears validity, notifications invalidate. All mutation invalidation paths still need remaining Actions/Control review.",
+    "SExtensionRecord uses separate relaxed atomic count/byte accumulators, not a jointly consistent snapshot or checked arithmetic. A read pair during active updates need not describe one instant; no concurrency stress proof."
+  ],
+  "limits": [
+    "Header contracts and storage widths only; no overflow, race, malformed model or Windows runtime execution.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
