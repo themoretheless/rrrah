@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Slovenian catalog; pinned bytes reverified; v91 structural comparison retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_sl.txt": "a1c3edaf2eef9a46f2415b985615e6f7a9f30876cd3db9126110daee90cbfc3a"
+  },
+  "whole_files_read": 239,
+  "coverage": "docs/research/dedup-500/windirstat3-slovenian-coverage-v106-20261019.json",
+  "coverage_sha256": "a1c7ea10f6adfd09cf81e3ac239172663d46705f7bd6abd01e0854f7a9cac15c",
+  "findings": [
+    "Verjetni dvojniki and Vzorčna zgoščena vrednost preserve probability/sampling distinction. Advanced option says sparse hashing above64MiB; this is sampled content, not qualification of sparse-file equality.",
+    "Hash prefix and compute-hash labels use zgoščenka, which can denote a compact disc rather than a digest; sampled hash uses explicit zgoščena vrednost. This inconsistency can obscure meaning.",
+    "Recovery completion requests checking file data; candidate labels retain recovery/possible recovery distinctions; metadata changes request rescan and same-source-volume restore warns of overwrite. No actual restoration tested.",
+    "Junction label retains technical English in parentheses; hardlinks/symbolic links remain separate. Sparse action is separate from compression and logical/physical size labels are explicit.",
+    "Whole-phrase search is rendered whole sentence, possibly narrower to a reader than arbitrary phrase. Suspend Prekini can suggest interrupt/terminate; Stop has a separate label Ustavi. These are text-level concerns.",
+    "Cloud warning describes potential downloads and refers to settings; permanent-delete wording does not prove secure erasure. Cleanup tokens and permission list ordering retained; MSI sl-SI/1060/1250 remains declaration-only."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Slovenian UI, mnemonic conflict, installer or Windows runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
