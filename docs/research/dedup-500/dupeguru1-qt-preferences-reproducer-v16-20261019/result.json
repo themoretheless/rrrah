@@ -1,0 +1,82 @@
+{
+  "status": "preferences_roundtrip_passed_export_cancel_write_request_reproduced",
+  "source_pins": {
+    "qt/preferences.py": "dfdc90e1d01c4f2ce29cd1b67e079dbc43a40858051786fed97be3e024abc5b6",
+    "qt/app.py": "a914adaddf254b31a3811e46d7368e82c15ec888d85b00607fe4d798dbed980c",
+    "core/app.py": "ed7ba34c717236333b88876bf8152ec515c47baf8badbe29c77ec2e3b157e04d"
+  },
+  "default_preferences": {
+    "big_file_partial_hashes": false,
+    "big_file_size_threshold": 100,
+    "ignore_small_files": true,
+    "small_file_threshold": 10,
+    "ignore_hardlink_matches": false
+  },
+  "default_options": {
+    "mix_file_kind": true,
+    "escape_filter_regexp": true,
+    "clean_empty_dirs": false,
+    "ignore_hardlink_matches": false,
+    "copymove_dest_type": 1,
+    "scan_type": 5,
+    "min_match_percentage": 95,
+    "word_weighting": true,
+    "match_similar_words": false,
+    "size_threshold": 10240,
+    "large_size_threshold": 0,
+    "big_file_size_threshold": 0,
+    "scanned_tags": [
+      "album",
+      "artist",
+      "title"
+    ],
+    "match_scaled": false,
+    "match_rotated": false,
+    "include_exists_check": true,
+    "rehash_ignore_mtime": false
+  },
+  "roundtripped_options": {
+    "mix_file_kind": true,
+    "escape_filter_regexp": true,
+    "clean_empty_dirs": false,
+    "ignore_hardlink_matches": false,
+    "copymove_dest_type": 1,
+    "scan_type": 0,
+    "min_match_percentage": 95,
+    "word_weighting": true,
+    "match_similar_words": false,
+    "size_threshold": 0,
+    "large_size_threshold": 11534336,
+    "big_file_size_threshold": 7340032,
+    "scanned_tags": [
+      "album",
+      "artist",
+      "title"
+    ],
+    "match_scaled": false,
+    "match_rotated": false,
+    "include_exists_check": true,
+    "rehash_ignore_mtime": false
+  },
+  "cancel_dialog_return": ".csv",
+  "captured_export_write_requests": [
+    {
+      "path": ".csv",
+      "columns": [
+        "Name"
+      ],
+      "rows": [
+        [
+          "synthetic.bin"
+        ]
+      ]
+    }
+  ],
+  "limits": [
+    "Original preference constructor/load/save and native task-owned QSettings INI; only font lookup and settings destination adapted.",
+    "Original Qt option mapping invoked on a receiver with no details widget/style effects; no full GUI launch.",
+    "Dialog cancellation simulated at getSaveFileName; original Qt and core export dispatch unchanged, final writer replaced by capture.",
+    "No CSV written, no user settings loaded, no external application or deletion/move invoked.",
+    "Supplemental controls, not additional upstream tests or production fixes."
+  ]
+}

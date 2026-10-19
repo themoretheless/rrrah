@@ -1,0 +1,88 @@
+{
+  "status": "partial_Qt_preferences_app_review_with_export_cancel_dispatch_counterexample",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-qt-model-review-v15-20261019.json",
+  "previous_sha256": "4aeddd66e432897b2750210d3c0aaef589272d7fb9ff61fcca1e3673b95a8521",
+  "new_whole_blobs": [
+    {
+      "path": "qt/preferences.py",
+      "git_blob": "1f88cc314c15ee836dc666e58773cafbd9622643",
+      "sha256": "dfdc90e1d01c4f2ce29cd1b67e079dbc43a40858051786fed97be3e024abc5b6",
+      "bytes": 15700,
+      "fully_read": true
+    },
+    {
+      "path": "qt/preferences_dialog.py",
+      "git_blob": "216d3f7e5a5250fd787308a0e36881f9457a8c5c",
+      "sha256": "a6ef9edccc45beaf35e1011ef1174f1babbd9fc16cdd699f832d46652a0e9251",
+      "bytes": 20141,
+      "fully_read": true
+    },
+    {
+      "path": "qt/se/preferences_dialog.py",
+      "git_blob": "d3a69fe53cd9f3a9f0d9ae802b8405296c75e0ef",
+      "sha256": "861144e7efb26b0dbbd281447c10f49e19639f63468e5afd4508013574b990ea",
+      "bytes": 6728,
+      "fully_read": true
+    },
+    {
+      "path": "qt/me/preferences_dialog.py",
+      "git_blob": "abcd7a16d57299669fb8dfd0ce064731761dd922",
+      "sha256": "f67e56da7812486d808b1c95dafab078bafefd14b841c72d5e942a6271a41b4c",
+      "bytes": 5113,
+      "fully_read": true
+    },
+    {
+      "path": "qt/pe/preferences_dialog.py",
+      "git_blob": "735d4eda85e88a5de33a51ec2fcf23df08c9cfc4",
+      "sha256": "4b93cc87b00d8acd26a35a7175e79c929eb988a19dc7ee674cfb47ab4c3b64ca",
+      "bytes": 3875,
+      "fully_read": true
+    },
+    {
+      "path": "qt/app.py",
+      "git_blob": "30312cd88d8e87207e77ed4dc82008b5e113de07",
+      "sha256": "a914adaddf254b31a3811e46d7368e82c15ec888d85b00607fe4d798dbed980c",
+      "bytes": 19602,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 138,
+  "cumulative_distinct_original_tests_passed": 514,
+  "new_original_tests_run": 0,
+  "reproducer_files": [
+    {
+      "path": "docs/research/dedup-500/dupeguru1-qt-preferences-reproducer-v16-20261019/preferences.ini",
+      "sha256": "e2fadb7554ba109b8854510d4a13fbae931db27d34694e1343113f03702d1785"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-qt-preferences-reproducer-v16-20261019/result.json",
+      "sha256": "d0ebfca500c6cf20be77f09af45dad2c495aec617436a3a58b3debea086c7e88"
+    }
+  ],
+  "findings": [
+    {
+      "scope": "actual_isolated_QSettings_and_option_mapping",
+      "finding": "Original Preferences reset/load/save and native private INI roundtrip pass. Font-only facade avoids QApplication. Default standard scan CONTENTS, partial hashes off, small-file exclusion on at10KiB. Enabled7MiB partial/11MiB large threshold and filename mode survive roundtrip and map correctly to byte options."
+    },
+    {
+      "scope": "export_cancel_dispatch_control",
+      "finding": "Simulated getSaveFileName cancellation returns empty string pair; original Qt select_dest_file returns .csv; original core export_to_csv invokes final writer with .csv. Writer captured only: no real CSV file written or overwritten. No real dialog UI exercised."
+    },
+    {
+      "scope": "preferences_dialog_source_only",
+      "finding": "Standard/music/picture dialogs expose word/tag/pixel choices and partial hashing; base load/save handles presentation, advanced cache/existence options and reset sections. Dialog interaction/rendering and platform style branches remain unqualified."
+    }
+  ],
+  "limits": [
+    "Six additional complete source files;138of368 tracked blobs,whole repository incomplete.",
+    "Captured export request is not an observed disk overwrite.",
+    "No real GUI/preferences dialogs or user settings accessed; no clipboard/external application or destructive actions invoked.",
+    "514 distinct upstream tests remain earlier combined core/hscommon run; supplemental controls not counted as upstream tests.",
+    "No production patch or performance claim; foreign GUI behavior is not a defect in our dedup library.",
+    "Deferred pHash memory/ASAN investigations remain skipped."
+  ]
+}
