@@ -1,0 +1,49 @@
+{
+  "status": "verified_original_large_file_script_and_parser_source",
+  "whole_repo_complete": false,
+  "previous": "docs/research/dedup-500/dupd50-statistics-review-v9-20261019.json",
+  "previous_sha256": "8a1a0c16f2d7babc21d43fcc98a4c6cf5c567bafff0392b801c2ec2c851b01da",
+  "new_whole_blobs": [
+    {
+      "path": "src/optgen.c",
+      "git_blob": "f5785ea6d429da66a3df67a4f0fce064ed89b528",
+      "sha256": "4a65667b18f56e53fd4829975fda567741d5eaaf68a92e481c2224b507511f99",
+      "bytes": 40215,
+      "fully_read": true
+    },
+    {
+      "path": "tests/output.76",
+      "git_blob": "e370586c1875e8ca07ad169c9071b7b948deecad",
+      "sha256": "8a6a6b664bcdda244312f22448d5d027995cb605486c6a45b44ac9d9b4d3ca6b",
+      "bytes": 184,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 157,
+  "upstream_additional_tests": [
+    "test.76"
+  ],
+  "upstream_cumulative_distinct_tests_passed": 68,
+  "result": {
+    "command": [
+      "./run",
+      "test.76"
+    ],
+    "exit_code": 0,
+    "home": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupd50-20261019/test-home-v10",
+    "log_sha256": "c6611ca42f03230a387ea03168852daac6b0ddacf6073c5d360d91437f8eb09d"
+  },
+  "archived_log": "docs/research/dedup-500/dupd50-large-file-test76-20261019.log",
+  "binary_sha256": "5ba2cdb07bff74d316d1dc722c5b876c6d02ea0672a7d1240abf2d4f758beb7a",
+  "findings": [
+    "Original test76 passes its golden report for default hash, SHA512,SHA1 and xxHash on five1000001-byte fixture files with varying buffer limits.",
+    "This is one original script with four algorithm cases; counted once, not four additional scripts.",
+    "Generated parser fully read: exact option-name matches, command allowlists, path callback, missing-value errors, bounded repeated flags; opt_int uses atoi. No parser runtime boundary claim from source reading alone.",
+    "Fresh our-library exact integration boundary regression is running separately; no success inferred yet."
+  ],
+  "limits": [
+    "157wholefiles read; remaining generated license/man/hash implementations and fixture corpus still incomplete. Full repository count stays144/500.",
+    "Upstream large-file tests are correctness evidence for authored fixtures, not a measured speedup or full cache-validity proof.",
+    "User-deferred pHash item remains deferred."
+  ]
+}

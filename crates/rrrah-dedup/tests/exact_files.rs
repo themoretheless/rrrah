@@ -2,6 +2,61 @@ use rrrah_dedup::exact::{IssueKind, Options, scan};
 use std::{cell::Cell, fs};
 
 #[test]
+fn block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let mut expected = BTreeSet::new();
+    for size in [65_535, 65_536, 65_537, 131_071, 131_072, 131_073, 1_000_001] {
+        let bytes: Vec<u8> = (0..size).map(|index| (index % 251) as u8).collect();
+        let mut copies = vec![
+            root.path().join(format!("original-{size}")),
+            root.path().join(format!("copy-{size}")),
+        ];
+        for path in &copies {
+            fs::write(path, &bytes).unwrap();
+        }
+        copies.sort();
+        expected.insert((size as u64, copies));
+        for offset in [size / 2, size - 1] {
+            let mut different = bytes.clone();
+            different[offset] ^= 1;
+            fs::write(root.path().join(format!("different-{size}-{offset}")), different).unwrap();
+        }
+    }
+    let mut roots: Vec<_> = fs::read_dir(root.path())
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .collect();
+    roots.sort();
+    for reverse in [false, true] {
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty());
+            assert!(report.aliases.is_empty());
+            assert_eq!(report.files_observed, 28);
+            let actual = report
+                .groups
+                .iter()
+                .map(|group| {
+                    let mut paths = group.paths.clone();
+                    paths.sort();
+                    (group.bytes, paths)
+                })
+                .collect::<BTreeSet<_>>();
+            assert_eq!(actual, expected);
+        }
+    }
+}
+
+#[test]
 fn sibling_roots_with_a_shared_name_prefix_keep_both_file_sets() {
     let root = tempfile::tempdir().unwrap();
     let directories = [root.path().join("images"), root.path().join("images-backup")];
