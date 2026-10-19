@@ -1,0 +1,30 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of seven COM/input/geometry/hook declaration files; exact-commit downloads matched pinned Git blob IDs.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Interop/IAccessible.cs": "dc94259a0c89d148e509bec7ccb9be8f7e8a2f1b95340254c537d1fc15028949",
+    "ExplorerTabUtility/Interop/IServiceProvider.cs": "7d927ca9dd7b0a5cf396236c391a427841109c255be9ca919f23aca66ccd7dd0",
+    "ExplorerTabUtility/Interop/IShellBrowser.cs": "dc9a998511e070150af5a50d092749a10a8a5c9d64e4ca59d492ccc4dacf5e9e",
+    "ExplorerTabUtility/WinAPI/INPUT.cs": "ad97e7e6fd2074c1a9da75081c8e2d0c0cb67ce08cc783ffeb0a91135299c039",
+    "ExplorerTabUtility/WinAPI/RECT.cs": "df3acb6be8c76a173141d1cd79e6f3edc279b30cb2c766cc2daaae74e53d6918",
+    "ExplorerTabUtility/WinAPI/WinEventDelegate.cs": "11dc762eba30407ec1de61655443e3b44fb083f9968aa01f5b8f541b6cc5eac5",
+    "ExplorerTabUtility/Hooks/IHook.cs": "6da074b640fe728b5e04906180b8e653f5a39b8299ada6669f3f9f17eaebbb7b"
+  },
+  "whole_files_read": 34,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v14-20261019.json",
+  "coverage_sha256": "b6edbcbdf194bea72c3b5b9fd9d7b14ecc0846a4d6cd02152398f43098cc0356",
+  "findings": [
+    "IServiceProvider.QueryService and IShellBrowser.GetWindow preserve HRESULT int returns; success must be checked by callers. Out interface/handle declarations alone provide no ownership or lifetime validation.",
+    "IShellBrowser is a minimal interface declaration exposing inherited GetWindow slot only. No full shell browsing or content comparison implementation present.",
+    "IAccessible exposes dispatch IDs, BStr strings, variant object children/roles and locations. Returned objects/strings require caller handling; accessibility role is not filesystem type or file identity.",
+    "INPUT is sequential tag plus explicit union at offset0, with native-width extra-info fields. KEYBDINPUT depends on VirtualKey underlying type, not inspected in this increment; no ABI size/alignment qualification claimed.",
+    "RECT has four signed32-bit coordinates and no geometry arithmetic or bounds checks. WinEventDelegate carries hook/window handles and32-bit event/thread/time fields; no lifecycle guarantees in declaration.",
+    "IHook only promises StartHook/StopHook/Dispose and IsHookActive. Idempotence, callback drainage, synchronization and failure reporting remain implementation questions."
+  ],
+  "limits": [
+    "No WinAPI invocation, ABI layout test, COM ownership/reentrancy test or original build. No foreign production code adopted.",
+    "Completed count148/500; full filtered checkout session13181 remains separate; pHash deferred."
+  ]
+}
