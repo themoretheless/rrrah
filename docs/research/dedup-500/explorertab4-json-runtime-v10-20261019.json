@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Compiled unchanged pinned action enum and both converters in isolated net10.0 console harness SDK10.0.402; source Git blob pins verified in v9.",
+  "command": "dotnet run --project probe.csproj --verbosity quiet",
+  "exit_code": 0,
+  "checks_passed": 36,
+  "source_pins": {
+    "HotKeyAction.cs": "9dd859071a15fd637298cf10e6d2ee1cc6883b816b69e6f18ff0031eb5f75007",
+    "HotKeyActionJsonConverter.cs": "819a469c2b59d14c864a9be35c5b98072e7f9f420d267b1d37427590dfd88986",
+    "IntPtrConverter.cs": "c463bb1e739c8ef531c017265e4d08ad5958de704cf3c548b925262b27bc73a9"
+  },
+  "harness_sha256": "e1a3cb9f5d671e72d3bdfb32e7451f5af9fc1a03b6bb6f3e3bfc6472fc6b902c",
+  "findings": [
+    "Runtime reproduced numeric3→SetTargetWindow versus string3→TabSearch.",
+    "Numeric999 defaults Open, but string999 becomes undefined enum ordinal999 and serializes back as string999. Unknown action name also defaults Open.",
+    "All16defined action values roundtrip through name serialization; case-insensitive NavigateForward accepted. Boolean/object/array tokens throw JsonException.",
+    "Pointer converter roundtrips -1,0,1,Int64.MaxValue,Int64.MinValue on this64-bit host. This does not qualify32-bit pointer width or persisted handle validity."
+  ],
+  "limits": [
+    "36synthetic controls only; not original suite or Windows application. No foreign production code adopted.",
+    "Full filtered checkout remains separate session13181. Completed repository count148/500; pHash deferred."
+  ]
+}
