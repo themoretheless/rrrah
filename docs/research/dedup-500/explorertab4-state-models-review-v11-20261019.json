@@ -1,0 +1,28 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of five state/model files; exact-commit downloads matched pinned Git blob IDs.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Models/WindowInfo.cs": "91e662b88ff142a05977226ace32531478060420e629589a4a2d2bc4d46581de",
+    "ExplorerTabUtility/Models/WindowRecord.cs": "211d42ee209de5e6d6353610c48ae288cb10b58f94597016db38bed97924cd52",
+    "ExplorerTabUtility/Models/HotKeyProfile.cs": "f55ce8f7c9e8685b483e52c8de8575a0363f55c51a4db9f2f509b40266eccd88",
+    "ExplorerTabUtility/Models/HotKeyEventArgs.cs": "24980892ca3819ccf4e577a14f927d02acc45a19b97cbd7120e0170452f91594",
+    "ExplorerTabUtility/Models/SupporterInfo.cs": "72744696cc5606ce18babcc8ab1622335888213f0394696952a242ecd8cdd12e"
+  },
+  "whole_files_read": 20,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v11-20261019.json",
+  "coverage_sha256": "05aed4b79457b66d9e20ad6404c100778fb0da23f4df7c80eb86d3c31b0cc6ed",
+  "findings": [
+    "WindowRecord persists mutable native Handle using IntPtrConverter and CreatedAt from Environment.TickCount. Handle can be recycled and TickCount is boot-relative signed32-bit before promotion to long; persisted values alone cannot establish cross-session identity or absolute chronology. Caller restoration validation not yet reviewed.",
+    "WindowInfo uses Stopwatch timestamp for creation and stores COM event delegates with mutable location/name. Its timestamp differs in scale/origin from WindowRecord CreatedAt; no interchangeability implied.",
+    "DisplayLocation globally replaces literal file scheme/backslash prefix then URI-unescapes for display. It is not general canonicalization or an identity key; encoded separators may become display characters without representing original path bytes.",
+    "HotKeyProfile Clone preserves Guid Id and copies HotKeys array, isolating array mutation but retaining same logical profile identity. Other fields are mutable; no Delay range or enum/key validation within model.",
+    "HotKeyEventArgs stores original profile reference rather than snapshot. Deferred consumers can observe subsequent edits unless callers clone. No actual race reproduced.",
+    "WindowRecord selected items array is stored directly without defensive copying. Supporter URLs are unvalidated model strings; use-site navigation/image loading not yet reviewed."
+  ],
+  "limits": [
+    "No Windows handle-reuse, persistence roundtrip, COM lifecycle or original tests executed in this increment. No foreign production code adopted.",
+    "Completed count148/500; full filtered checkout session13181 remains separate; pHash deferred."
+  ]
+}
