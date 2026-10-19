@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of four MessageBoxDlg/AboutDlg files; pinned bytes verified. No Windows runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Dialogs/MessageBoxDlg.h": "4fbeeb04b311decbbc519e7a8e38d8359586e490d1bb868b155ed4c848e2e338",
+    "windirstat/Dialogs/MessageBoxDlg.cpp": "3071aba9af6f7beef4aa977ddbe58742d4a51a0b9554ccdd00a35846dc87234a",
+    "windirstat/Dialogs/AboutDlg.h": "4de14655c24fe80ccb8eeb1872dcf59a6120adb87936ab697ff49ad7e8210721",
+    "windirstat/Dialogs/AboutDlg.cpp": "b49c00117a8d6065654efb019d9048acd951f07cd2cdf34188355dcafb09bc1b"
+  },
+  "whole_files_read": 152,
+  "coverage": "docs/research/dedup-500/windirstat3-message-about-coverage-v54-20261019.json",
+  "coverage_sha256": "5af3388cb8434f366b54606f9b87133ef432fff7167623835c39642afbbecb7b",
+  "findings": [
+    "Message dialog stores copies of message, title, optional list and checkbox state. List is sorted and owner-data rendering checks index, subitem, text mask and destination capacity before bounded copy. List selection changes are vetoed.",
+    "Checkbox state is read in explicit left/middle/right click handlers before CloseModal. This class does not persist suppression decisions itself; caller use and other close routes must be reviewed separately.",
+    "Constructor handles six MB_TYPEMASK variants using a map with assert plus at(); unsupported variants can throw. Retry/abort/ignore labels are intentionally blank placeholders. No runtime caller violation demonstrated.",
+    "Custom dialog chooses initial focus from button-type table; MB_DEFBUTTON flags are not interpreted here. Global wrappers use native message boxes in light mode and custom dialog in dark mode, so complete flag parity is not established.",
+    "Text measurement expands width/height, auto-width uses unwrapped measurement and removes resizing border. No explicit monitor-size cap appears here; huge/localized messages require UI qualification.",
+    "About dialog creates read-only RichEdit pages from built-in/localized strings and license resource. Detected link clicks delegate to ShellExecute; this review did not activate links or send external messages.",
+    "About keyboard handling cycles tabs and OK focus, Escape posts OK, and mouse filtering suppresses text selection. Actual accessibility and keyboard behavior require Windows execution."
+  ],
+  "limits": [
+    "No native message-box parity, close-route checkbox behavior, oversized-message, keyboard, accessibility or localization GUI tests executed.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains 147/500."
+  ]
+}
