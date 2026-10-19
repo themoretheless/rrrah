@@ -1,0 +1,36 @@
+{
+  "status": "partial_source_with_complete_original_metric_targets_passed",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_information_retrieval.py": "58c4837b7c1bae72f11ae608566d37ac606b3c538eea2b39eee271be7721bb48",
+    "tests/test_evaluator.py": "bb60867f1bebf7f09e7cc9faa5ae55b365469f0673374f589dd8b04c87493488"
+  },
+  "whole_files_read_across_v1_v12": 60,
+  "controls": "docs/research/dedup-500/imagededup2-metric-suites-reproducer-v12-20261019/result.json",
+  "controls_sha256": "517d2a0eeb1de30512538e04cfbc74b90e15a67e2c620188a9bb5a23f821dfc1",
+  "coverage": "docs/research/dedup-500/imagededup2-metric-suites-reproducer-v12-20261019/coverage.json",
+  "coverage_sha256": "6c5e730cb17a1ebfa556f2195eaa68987914a25bd9eb94a6523960d42bfe7d0f",
+  "reproducer": "scripts/qualify-imagededup2-metric-suites-20261019.py",
+  "reproducer_sha256": "f8481bfbaa3db2bcdf2172762bf22b054358d358bb6686b79163baf37f520015",
+  "original_suite": {
+    "tests": "48",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "findings": [
+    "All three original classification/information-retrieval/evaluator test targets pass together using actual sklearn/NumPy.",
+    "Existing NDCG test explicitly expects1.0 with incomplete relevant retrievals; previous characterization is intended implementation behavior.",
+    "Prior two selected classification helper tests are included in this48; do not add them again as distinct tests.",
+    "Three primitive pickle fixture opcode inventories retained; binary structural inspection does not count as manual text reading or visual review."
+  ],
+  "limits": [
+    "Original four complete modules and three complete test targets unchanged; namespace package routing bypasses unrelated model/plot imports.",
+    "Real sklearn/NumPy, no score-function substitution; pickle opcodes inspected before original tests load primitive fixtures.",
+    "Not entire package/CNN/hash/worker/decode/platform or quality-corpus validation.",
+    "Original tests do not negate separately reproduced duplicate-entry AP2.0/empty-NaN controls.",
+    "No production code adoption; pHash native investigation remains deferred."
+  ]
+}

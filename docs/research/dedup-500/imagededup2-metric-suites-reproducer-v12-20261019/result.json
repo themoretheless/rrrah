@@ -1,0 +1,78 @@
+{
+  "status": "original_metric_suites_passed",
+  "pytest_exit_code": 0,
+  "source_pins": {
+    "imagededup/utils/logger.py": "d40aacf469865b61e7df7b43af17a741642d0e8787090547f77b19c6b703b4c9",
+    "imagededup/handlers/metrics/information_retrieval.py": "1b21a177211c3884a8debab173794f7d861d03655dbe813d5a1cd6d0c31dff04",
+    "imagededup/handlers/metrics/classification.py": "76282992e07d7c8bf6b007919d16b8a6db5d3dad25eafa5f7a3125db9255d260",
+    "imagededup/evaluation/evaluation.py": "d1ab6414db85d7eda1d5eb12ed2538767bc0d7e538901ef13b9575f973fcd50c",
+    "tests/test_classification.py": "23e506b35337f31cc4f778890d8489a6f1663d71c6875d8c52cfb837196e8c98",
+    "tests/test_information_retrieval.py": "58c4837b7c1bae72f11ae608566d37ac606b3c538eea2b39eee271be7721bb48",
+    "tests/test_evaluator.py": "bb60867f1bebf7f09e7cc9faa5ae55b365469f0673374f589dd8b04c87493488"
+  },
+  "inspected_pickle_fixtures": [
+    {
+      "path": "tests/data/evaluation_files/all_correct_retrievals.pkl",
+      "sha256": "cdd6ea22b2a43312014df32017ca8677ce5215f268f5e738786fbeb07283af88",
+      "opcodes": [
+        "APPENDS",
+        "BINPUT",
+        "BINUNICODE",
+        "EMPTY_DICT",
+        "EMPTY_LIST",
+        "MARK",
+        "PROTO",
+        "SETITEMS",
+        "STOP"
+      ]
+    },
+    {
+      "path": "tests/data/evaluation_files/ground_truth.pkl",
+      "sha256": "cdd6ea22b2a43312014df32017ca8677ce5215f268f5e738786fbeb07283af88",
+      "opcodes": [
+        "APPENDS",
+        "BINPUT",
+        "BINUNICODE",
+        "EMPTY_DICT",
+        "EMPTY_LIST",
+        "MARK",
+        "PROTO",
+        "SETITEMS",
+        "STOP"
+      ]
+    },
+    {
+      "path": "tests/data/evaluation_files/incorrect_retrievals.pkl",
+      "sha256": "981af24e3fa97685ed3735748324d0a1c2f448068d5cb42b5a5fe3f9170dcfea",
+      "opcodes": [
+        "APPENDS",
+        "BINPUT",
+        "BINUNICODE",
+        "EMPTY_DICT",
+        "EMPTY_LIST",
+        "MARK",
+        "PROTO",
+        "SETITEMS",
+        "STOP"
+      ]
+    }
+  ],
+  "suite": {
+    "tests": "48",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "environment": {
+    "numpy": "2.5.4",
+    "scikit-learn": "1.7.2",
+    "pytest": "7.4.4"
+  },
+  "limits": [
+    "Original four complete modules and three complete test targets unchanged; namespace package routing bypasses unrelated model/plot imports.",
+    "Real sklearn/NumPy, no score-function substitution; pickle opcodes inspected before original tests load primitive fixtures.",
+    "Not entire package/CNN/hash/worker/decode/platform or quality-corpus validation.",
+    "Original tests do not negate separately reproduced duplicate-entry AP2.0/empty-NaN controls.",
+    "No production code adoption; pHash native investigation remains deferred."
+  ]
+}
