@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Arabic catalog; pinned bytes reverified; v91 structural parity retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_ar.txt": "94f4edc871ff2a0fb8edc5fb6e34c818532107606a59267e9b9d3a7306f4a73e"
+  },
+  "whole_files_read": 246,
+  "coverage": "docs/research/dedup-500/windirstat3-arabic-coverage-v113-20261019.json",
+  "coverage_sha256": "5f09866919e0bfd2159e14bb482296998400915c2da2420c77a990d85cda452f",
+  "findings": [
+    "Probable duplicates تكرارات محتملة, hash prefix بادئة التجزئة and sample hashes تجزئة عينات preserve confidence/prefix/sampling distinctions. Advanced option explicitly names partial hashes above64MiB.",
+    "Recovery completion asks to verify file data; recoverable and possibly recoverable remain separate, metadata changes request rescan and same-source-volume restoration warns about overwriting deleted data.",
+    "Sparse conversion retains English Sparse File clarification, junctions retains Junctions, and hardlinks/symlinks have distinct labels. Logical size and actual on-disk size remain explicit.",
+    "Storage cool tier is rendered warm الطبقة الدافئة rather than cool. Monthly savings adds expected qualifier, consistent with estimated-cost semantics but not provider-price proof.",
+    "Mixed RTL Arabic, Latin algorithm names, placeholders, file paths and ampersand mnemonics require actual bidi/layout/keyboard tests; text parity does not validate those. No right-to-left rendering was executed.",
+    "Cloud warning mentions avoiding data use and automatic downloads; permanent-delete/no-recovery wording does not prove secure erasure. Cleanup tokens retained; MSI ar-SA/1025/1256 declarations need installer encoding and bidi qualification."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, Arabic shaping, rendered RTL interface, mnemonic conflicts, installer or Windows runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
