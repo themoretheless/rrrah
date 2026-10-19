@@ -1,0 +1,32 @@
+{
+  "status": "partial_source_review_test_scope",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/Harness/Desktop.cs": "31c0e8e6171c733026abec911acfe63cfdabaee4ca967c0d8736cbda72116cae",
+    "tests/Scenarios/Reports.ps1": "322b98e8c2831745862b4cdeec6f10f52eda50fb393c56ca7252c77bbe84389e",
+    "tests/Test-WinDirStat.ps1": "7077faa65fd318d400828f8c63a58f8cd4492a5a6efe79af02c6aa04d46ad447",
+    "tests/Harness/Core.ps1": "f4bcd26765b995b669ebcd9cb39ba0585799ccb2a10eb083eab488ae9a72c11b",
+    "tests/ScriptSupport.ps1": "420fa9ab8fc7950e3ae32cee92896aaed9f42060da013ecf8b5a57d667e3c6fb"
+  },
+  "whole_files_read": 39,
+  "coverage": "docs/research/dedup-500/windirstat3-test-scope-coverage-v15-20261019.json",
+  "coverage_sha256": "49e9f79c8dcb5931111ff1e629a06acf9654bbe3922b4342c7ec435ffa1a5a0b",
+  "method": "Manual whole-file source reading; all five files byte-compared with pinned Git objects. No upstream tests executed.",
+  "findings": [
+    "DuplicateContent constructs 2MiB identical copies and a same-prefix file altered at 1MiB+211, compares exported duplicates with independent whole-file Get-FileHash results, and checks source hashes remain unchanged. Both SHA256 and xxHash scenario registrations explicitly disable SampleLargeFiles. This does not cover the above-64MiB sampling branch.",
+    "Roundtrip scenarios for CSV/JSON mutate a source file and create a new file after export, then check loading preserves the saved model and explicit refresh sees current disk state.",
+    "Malformed report scenarios reject pointer-backed hardlink type masks 0x30000200 and 0x30000204. Quiet CLI failure, malformed integer-list settings and ACL CSV/JSON parity are separate scenarios.",
+    "Desktop capture reads actual screen pixels with BitBlt rather than WM_PRINT, requests per-monitor DPI context, rejects off-desktop rectangles, and releases GDI resources in finally. Difference ignores alpha and changes up to tolerance8 per RGB channel, counts changed pixels, and returns1 on dimension mismatch. This is a rendering regression metric, not duplicate-file identity.",
+    "Runner requires PowerShell7.6 and Windows for execution, records executable version/hash through shared reporting path, supports seeded shuffling/repeat, and distinguishes skipped scenarios via RequireAll exit3. Default exit0 may include skips.",
+    "Whole Core.ps1 confirms failed scenarios retain evidence; successful scenarios require at least one assertion. Capability skips occur before body execution, cleanup errors mark FAIL, cleanup callbacks run in reverse order. Write-TestReports computes executable SHA256 and emits JSON/JUnit, with exit precedence FAIL1, noPASS2, RequireAll plus skips3, otherwise0.",
+    "ScriptSupport numeric parsers support literal decimal/hex defines and sequential line-oriented enums, not general C expressions. Map function sizes use distances between adjacent symbol RVAs with final symbol size0; these are estimates, not measured function body sizes or runtime performance."
+  ],
+  "limits": [
+    "Source review only: no Windows executable, UI, ACL, filesystem or PowerShell scenario execution in this increment.",
+    "Fixtures.ps1 and Ui.ps1 remain unread as whole files; scenario assertions do not independently qualify those helper implementations.",
+    "Desktop Difference assumes consistent pixel buffer lengths and dimensions supplied by its capture path; no malformed TestFrame runtime controls performed.",
+    "Native pHash memory-error investigation remains deferred; no production code adopted."
+  ]
+}
