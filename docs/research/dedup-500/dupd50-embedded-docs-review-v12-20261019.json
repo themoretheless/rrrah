@@ -1,0 +1,93 @@
+{
+  "status": "verified_rendered_docs_licenses_and_complete_generated_representations",
+  "whole_repo_complete": false,
+  "previous": "docs/research/dedup-500/dupd50-hash-streaming-review-v11-20261019.json",
+  "previous_sha256": "b095422f478c158da26beef465b32c7557b801616eb984e4718e5bcf4224e9e6",
+  "new_whole_blobs": [
+    {
+      "path": "man/dupd",
+      "git_blob": "f81961d94911e1ced0b825c5ad47543fd4d5a5ee",
+      "sha256": "d94846f2e5cb4530441128fd1859e71442fe6fa2945db434284d095c666122bd",
+      "bytes": 13052,
+      "fully_read": true
+    },
+    {
+      "path": "COPYING",
+      "git_blob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "bytes": 35147,
+      "fully_read": true
+    },
+    {
+      "path": "src/copying.h",
+      "git_blob": "f3d30148766234cd8e8d67eb15d87a3ca82c9377",
+      "sha256": "af7c65072ff2f08a6a3519ef2f741f5c8c483376f9fa57c14e8404c1932d887e",
+      "bytes": 776,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 162,
+  "additional_generated_artifacts_completely_verified": [
+    {
+      "path": "src/copying.c",
+      "sha256": "95f5553001c17fdea14368c61c22f5e2bd05d6fcbafb12ea2ee66a5d7a27aa39",
+      "complete_representation_verified": true,
+      "manual_line_by_line_read": false
+    },
+    {
+      "path": "src/man.h",
+      "sha256": "d79aaceaa158f7df40f4fb410865e5337c282c5765a0b615322553d45c95d06a",
+      "complete_representation_verified": true,
+      "manual_line_by_line_read": false
+    }
+  ],
+  "total_source_and_generated_paths_covered": 164,
+  "upstream_distinct_scripts_passed": 68,
+  "result": {
+    "status": "verified_complete_generated_representation_and_cli_output",
+    "source_pins": {
+      "man/dupd": "d94846f2e5cb4530441128fd1859e71442fe6fa2945db434284d095c666122bd",
+      "COPYING": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "src/copying.h": "af7c65072ff2f08a6a3519ef2f741f5c8c483376f9fa57c14e8404c1932d887e",
+      "src/copying.c": "95f5553001c17fdea14368c61c22f5e2bd05d6fcbafb12ea2ee66a5d7a27aa39",
+      "src/man.h": "d79aaceaa158f7df40f4fb410865e5337c282c5765a0b615322553d45c95d06a",
+      "src/main.c": "3df33ad17759b11b984543675d15b656bae9d4dd60ad94b37a1844338a9c1462",
+      "version": "0a462a4aac80e5fc93c7f66e64a04b62089442a4f0b827c6ac5531fcf1fcb56f"
+    },
+    "binary_sha256": "5ba2cdb07bff74d316d1dc722c5b876c6d02ea0672a7d1240abf2d4f758beb7a",
+    "commands": [
+      {
+        "command": "man",
+        "exit_code": 0,
+        "bytes": 13269,
+        "stdout_sha256": "d64803ba61e44fea8b4de4c01b37c07cb6f78be5b29f20791ac435fe89d300b1"
+      },
+      {
+        "command": "license",
+        "exit_code": 0,
+        "bytes": 36707,
+        "stdout_sha256": "99bacbf841925d70b8d2ea38ee93fe70bc47e848a887c36b7ddc81134c617f92"
+      }
+    ],
+    "license_suffix_sha256": "62f1e875a328a9021186ffc4425ba59eb4cc4641fe503805c0eb7a905938282d",
+    "limits": [
+      "Generated sources decoded and structurally checked completely, not claimed line-by-line manual reading.",
+      "Manual GPL and rendered man text reading recorded separately; this is not legal advice or full repository runtime coverage."
+    ]
+  },
+  "archived_reproducer": "docs/research/dedup-500/dupd50-embedded-docs-reproducer-20261019",
+  "harness": "scripts/audit-dupd50-embedded-docs-20261019.py",
+  "harness_sha256": "b0df4e1d6c3b07ebd9a007db1999be1e92fb3229528321c05c01ee8763d9767d",
+  "findings": [
+    "Rendered manpage and complete GPL text read. copying.h declares only show_license. Nested xxHash BSD notice also read.",
+    "Complete generated man byte array equals the rendered13052-byte manpage with declared length checked.",
+    "Complete copying.c is structurally restricted to literal printf calls with no format directives; decoded content equals complete GPL text plus reviewed xxHash attribution.",
+    "Actual man and license commands exit0 with exact expected output, no stderr. man includes217-byte banner before rendered text.",
+    "Initial harness wrongly omitted man banner; firstfailedobservationretained, correctedv2passes. No upstream defect inferred."
+  ],
+  "limits": [
+    "Manualreading162paths and complete generatedverification2paths remain distinct.",
+    "607 remaining fixture/golden paths contain68 distinct Git blobs; still require content/fixture review. Full repository count stays144/500.",
+    "No foreign production source adoption or legal compatibility conclusion; user-deferred pHash item remains deferred."
+  ]
+}
