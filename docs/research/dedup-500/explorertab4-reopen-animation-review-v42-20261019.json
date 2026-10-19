@@ -1,0 +1,21 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Pinned Git blob verified; all142 composited GIF frames inspected sequentially on five labeled sheets at396x220 thumbnails; duration sum11060ms, source1920x1080.",
+  "new_whole_files_read": {
+    "Assets/ReopenClosedTab.gif": "3837b3ab0cd17a91c3f3b19ff111179f8b1b8512a8eec1b4190c3dd2f513e980"
+  },
+  "whole_files_read": 98,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v42-20261019.json",
+  "coverage_sha256": "072be472d45188e326ddb3dc08fdc7b7c2eeba003eafa81c429be09e5c64c6b3",
+  "findings": [
+    "Title frames0-16 introduce Reopen Closed Tabs. Explorer desktop begins17; tab strip changes as tabs are closed before shortcut sequence.",
+    "Ctrl+Shift+T overlays begin around82 and recur through130 while tabs return, with intermediate empty/loading list states before folder rows reappear.",
+    "Illustrates restoration of navigation history within Explorer, not deleted-file recovery or content-based dedup. No crash restart, invalid history, vanished folder or failure rollback scenario is demonstrated."
+  ],
+  "limits": [
+    "All frames viewed at thumbnail resolution; small labels and selected-file identity not qualified. Demonstration is not independently executed runtime test or performance measurement.",
+    "ExplorerTabUtility partial98/104; six GIFs remain unreviewed. Full repository count148/500. Native pHash investigation deferred."
+  ]
+}
