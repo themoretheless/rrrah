@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_original_NTFS_iterator_characterized",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/FinderNtfs.cpp": "f53db8dcccd24edaaffe3667c80c5b8185afb4c8eba7778ddb2c49fc19bdd9ef",
+    "windirstat/FinderNtfs.h": "eee419661532b54c1b60526e8cad190f4c051bf0379932927eacfc3dbd8b631c"
+  },
+  "whole_files_read": 15,
+  "controls": "docs/research/dedup-500/windirstat3-ntfs-reproducer-v7-20261019/result.json",
+  "controls_sha256": "e7867f0d19c826904684290ecae23635dbb23abf85bd09b76ad2dda4b2262cb8",
+  "coverage": "docs/research/dedup-500/windirstat3-ntfs-reproducer-v7-20261019/coverage.json",
+  "coverage_sha256": "e6a4bca5663bb4d35aa1f07b2afbe28fdcd235559772659e5e292d76d5412981",
+  "reproducer": "scripts/qualify-windirstat3-ntfs-iteration-20261019.py",
+  "reproducer_sha256": "20aa9fab4aa2d845b4b17d5f3356e347f5cfc29418fe67767d1c4b9594376bea",
+  "findings": [
+    "Original FindNext masks48bit record index for base-map lookup while retaining full sequence-bearing reference on name record.",
+    "Synthetic incomplete base map: missing first/middle child returns false without advancing iterator, so later valid siblings are not reached by normal iteration.",
+    "This demonstrates behavior given inconsistent maps, not proof a valid Windows scan creates that state.",
+    "LoadRoot validates record signature/fixup-array placement and applies sector fixups; attribute payload offsets/lengths need separate qualification."
+  ],
+  "limits": [
+    "Original FindNext method and mask compiled unchanged with synthetic record/map/iterator structs.",
+    "No actual MFT parser, malformed disk data, Windows volume, concurrent filesystem mutation or hardlink dedup run.",
+    "Two whole NTFS source/header files read; no whole-repository/runtime qualification.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}

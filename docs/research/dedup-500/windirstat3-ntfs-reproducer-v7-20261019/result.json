@@ -1,0 +1,20 @@
+{
+  "status": "passed_original_NTFS_iterator_characterization",
+  "controls": 8,
+  "source_pins": {
+    "windirstat/FinderNtfs.cpp": "f53db8dcccd24edaaffe3667c80c5b8185afb4c8eba7778ddb2c49fc19bdd9ef",
+    "windirstat/FinderNtfs.h": "eee419661532b54c1b60526e8cad190f4c051bf0379932927eacfc3dbd8b631c"
+  },
+  "findings": [
+    "Original FindNext masks48bit record index for base-map lookup while retaining full sequence-bearing reference on name record.",
+    "Synthetic incomplete base map: missing first/middle child returns false without advancing iterator, so later valid siblings are not reached by normal iteration.",
+    "This demonstrates behavior given inconsistent maps, not proof a valid Windows scan creates that state.",
+    "LoadRoot validates record signature/fixup-array placement and applies sector fixups; attribute payload offsets/lengths need separate qualification."
+  ],
+  "limits": [
+    "Original FindNext method and mask compiled unchanged with synthetic record/map/iterator structs.",
+    "No actual MFT parser, malformed disk data, Windows volume, concurrent filesystem mutation or hardlink dedup run.",
+    "Two whole NTFS source/header files read; no whole-repository/runtime qualification.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}
