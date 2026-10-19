@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of WinDirStat.cpp; pinned bytes verified. No executable, elevation or cleanup actions run.",
+  "new_whole_files_read": {
+    "windirstat/WinDirStat.cpp": "60620dd73675a447a227f641a2c4d37d434592c2f394a7885eea5a952ce40101"
+  },
+  "whole_files_read": 201,
+  "coverage": "docs/research/dedup-500/windirstat3-app-startup-coverage-v72-20261019.json",
+  "coverage_sha256": "9dfb8df34abfd53391f60bd0e3350f383cd691141f0a516a1f7776cb71239157",
+  "findings": [
+    "Command-line parser requires immediate non-flag value for save/load operation, rejects multiple operations and load plus scan paths. Unknown flags are ignored here. LegacyUninstall must be standalone and action is deferred until malformed-line check.",
+    "Paths split on pipe, support MTP shell paths or absolute existing filesystem folders. Invalid roots reject hidden save operations; interactive behavior may retain valid subset. Save variants hide main window and toggle duplicate scan where applicable. Export completion/exit status remains MainFrame review.",
+    "InitInstance loads persisted settings before parsing, initializes COM/common controls/GDI+ with return values mostly ignored, constructs model/frame and starts scan. Failed CreateFromResource returns false without explicitly setting nonzero exit in this implementation.",
+    "Portable-mode file-open failure falls back to registry storage; disable mode restores INI on deletion failure. Presence check alone does not prove readable/writable settings.",
+    "Restart normally creates suspended child, synchronously closes old frame to save settings, then resumes child. Resume failure is only traced. Reset restart removes settings before process creation and hard exits to avoid rewriting them; this path was read only.",
+    "Destructor explicitly destroys/resets frame while model still alive; remaining member destruction then follows reverse declaration order, including icon handler and model. Full worker lifecycle requires their implementations, not this order alone.",
+    "Legacy cleanup terminates processes by case-insensitive executable-name prefix rather than exact process path, removes selected installation filenames from registry location, deletes legacy keys/shortcuts across users and exits0. Numerous cleanup errors are ignored. No cleanup executed.",
+    "Reparse policy permits unknown tags by default and separately consults mount/symlink/junction exclusions. This policy alone does not prove loop prevention, offline-cloud behavior or duplicate identity handling."
+  ],
+  "limits": [
+    "No Windows CLI, startup failure, headless export, settings persistence, process restart, elevation, cleanup, filesystem deletion or external link actions executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
