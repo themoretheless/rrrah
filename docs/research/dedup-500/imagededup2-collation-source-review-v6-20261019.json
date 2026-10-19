@@ -1,0 +1,31 @@
+{
+  "status": "partial_source_and_captured_collation_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "imagededup/utils/data_generator.py": "985e2456c04ac435c0219ec85681ede528b241c34d03ef1701a3ecc5d5a2afb7",
+    "tests/test_data_generator.py": "2ab072f9e615ce7b313a436d3054b51d5d9a27326fa47752736489d7840c9858",
+    "imagededup/utils/models.py": "66ac778ef28f5b44612240d4a0405952bc8b548627711a8edd6c9cd627b29534"
+  },
+  "whole_files_read_across_v1_v6": 30,
+  "controls": "docs/research/dedup-500/imagededup2-collation-reproducer-v6-20261019/result.json",
+  "controls_sha256": "e0424ef541d6c0f1ec4616cf723cc51f3516c5dab15771b6c8b7975f17ee8810",
+  "reproducer": "scripts/qualify-imagededup2-collation-20261019.py",
+  "reproducer_sha256": "612db4009f5c6b428eec4531e8685b20d5b51c6a452f4bc1150a738acf1f9971",
+  "captured_masks": 32,
+  "findings": [
+    "All32five-entry masks preserve exact ordering/alignment of valid image tokens and filenames; invalid names separated.",
+    "All-invalid and empty batches call torch.stack with an empty list; no guard or early return in original body.",
+    "Original data-generator tests cover mixed corruption but not all-invalid batches or empty directories.",
+    "Read CNN batch-method excerpt: bad_im_count increments once per batch containing bad images, not once per bad image; final torch.stack(feat_arr) unconditional.",
+    "ImgDataset catches image decode failure via None; basenet_preprocess exceptions are not caught by __getitem__."
+  ],
+  "limits": [
+    "Captured stack returns tuples of integer tokens; no actual torch import, tensor execution, DataLoader or original upstream test run.",
+    "Empty-list dispatch established; actual torch exception type/message not qualified.",
+    "Whole data_generator, test_data_generator and models read; CNN only excerpt through line220, not whole-file credit.",
+    "Model weights, torchvision compatibility, embedding quality and GPU/CPU runtime unqualified.",
+    "No production adoption; pHash native investigation remains deferred."
+  ]
+}
