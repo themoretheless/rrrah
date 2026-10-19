@@ -1,0 +1,45 @@
+{
+  "status": "verified_bundled_xxhash_source_and_streaming_consistency",
+  "whole_repo_complete": false,
+  "previous": "docs/research/dedup-500/dupd50-parser-large-file-review-v10-20261019.json",
+  "previous_sha256": "353309a147dd719d0058f1525e1c1e96b42ad73021925abfb12c7f42851bbe15",
+  "new_whole_blobs": [
+    {
+      "path": "src/xxhash.c",
+      "git_blob": "da06ea72bff7a375e14aa3abace50cf58e70fe8d",
+      "sha256": "37982751eed89252553f7f57eed03c9d493920ca13347efa2a0079bef0c411fd",
+      "bytes": 33771,
+      "fully_read": true
+    },
+    {
+      "path": "src/xxhash.h",
+      "git_blob": "d6bad943358d37e01471681e4c2b25d0c2275e87",
+      "sha256": "aefdd236f35130495c18764cabed3f7b216906855fc5e6a9025cd2040bc84444",
+      "bytes": 13466,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 159,
+  "original_scripts_passed": 68,
+  "additional_harness_cases": 9072,
+  "harness": "scripts/qualify-dupd50-hash-streaming-20261019.py",
+  "harness_sha256": "5437a6e874c09b54da106b27a5a3dad4c35faf1e9f7b5dcf617f8ea0db3eefad",
+  "runtime_result": ".dedup-work/dupd50-hash-streaming-20261019/result.json",
+  "runtime_result_sha256": "dfe9e743e52d636fdc68ed1e97ce4fdcbc44e6f8e4d7f289b914628046651301",
+  "runtime_status": "passed_normal_input_streaming_consistency",
+  "library_sha256": "f7bc15db7494575dc64107e4c22c013da7539a636ed7d8034398c7f3682365a6",
+  "findings": [
+    "BundledxxHash0.6.5 includes32bitand64bit streaming and one-shot implementations, canonical big-endian conversion and default endian-independent hashes.",
+    "9072 normal-buffer cases check140lengths,three seeds,selectedchunkwidths: each streaming result equals original one-shot; repeated digest preserves state.",
+    "No copying of old alignment-specific native shortcuts into Rust. Preserve current exact byte confirmation independently of hash choice."
+  ],
+  "limits": [
+    "One-shot and streaming use the same original implementation; no independent hash oracle.",
+    "Normal valid buffers only; no invalid pointers, sanitizers or memory-error probes.",
+    "No collision-resistance, cross-platform, speed or whole-repository claim.",
+    "Canonical encoding and copied state interfaces read, not executed by this harness.",
+    "Additional harness cases are not9072upstreamscripts; originalscriptcount remains68.",
+    "159wholefiles read; remaining license/generated man text and fixture corpus still incomplete; fullrepositoryfalse.",
+    "User-deferred pHash investigation remains deferred."
+  ]
+}
