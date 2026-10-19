@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of ProcessWatcher.cs and SettingsManager.cs; exact-commit download bytes matched pinned Git blob IDs. No process hooks or settings mutation executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Helpers/ProcessWatcher.cs": "e9e842ab8eb8b91feae4929dda1880eed0101a537b8680cc211265468dfff3a9",
+    "ExplorerTabUtility/Managers/SettingsManager.cs": "aa4cb17e345317141fb8afcb4799fcb52c2152d0c47f08aa68f0318fdf07720a"
+  },
+  "whole_files_read": 11,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v8-20261019.json",
+  "coverage_sha256": "25d4bc93a2338f9fcb7972d37897f3534c95ab3621c86d27571fe06ce08b66a6",
+  "findings": [
+    "Process watcher skips overlapping scans using Monitor.TryEnter, polls at minimum100ms and tracks PID plus Process object/session. HasExited exceptions are treated as termination, conflating inaccessible/inconsistent observation with actual exit.",
+    "Dispose stops/disposes timer but does not acquire scan lock or wait in-flight callbacks. Scan admission checks disposed only before locking, so callbacks can continue enumerating/adding after disposal begins. Source-level race, not reproduced runtime outcome.",
+    "Exited event enabled before dictionary insertion can race fast termination; later scans may recover via HasExited. Failed TryAdd does not explicitly unsubscribe/dispose new Process instance.",
+    "Events posted to captured SynchronizationContext may run after disposal; callback exceptions occur later outside posting caller catch. Without context, ProcessCreated handler exception is caught as process handling failure after insertion, potentially retaining a disposed tracked object.",
+    "Settings serializes directly via File.WriteAllText to main settings path without temp/replace, backup or durability barrier. Write failures are only Debug logged; setters already mutate memory and some emit change events despite persistence failure.",
+    "Settings load catches read/parse failures and uses defaults, but directory creation precedes that catch and can fail static initialization. No file-size limit, locking, schema version or explicit corruption diagnostic present.",
+    "ClosedWindows array and other settings are mutable references without internal synchronization. These utility preferences are not a transactional duplicate-index/cache design."
+  ],
+  "limits": [
+    "No Windows process lifecycle, timer-race fault injection, settings durability tests or original suite executed. No foreign production code adopted.",
+    "Full filtered checkout remains separate session13181; individually retrieved source is pinned. Completed count148/500; pHash deferred."
+  ]
+}
