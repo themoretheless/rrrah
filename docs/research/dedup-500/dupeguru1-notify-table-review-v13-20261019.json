@@ -1,0 +1,130 @@
+{
+  "status": "partial_repository_with_notify_selection_table_source_and_tests_review",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-core-suite-review-v12-20261019.json",
+  "previous_sha256": "5310ef71faff3a854c5619dfb64fe4450f80d00706e3520789adcd788980a25d",
+  "new_whole_blobs": [
+    {
+      "path": "hscommon/notify.py",
+      "git_blob": "71c2848147e0472504d9398a64774a6bc4e24f55",
+      "sha256": "106b7e732462c36dcbb33c2e615967d1a1f97aeddbc7b9dde121e6908c800da3",
+      "bytes": 3343,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/notify_test.py",
+      "git_blob": "062ed5a93183f1971648471490da435991cbb244",
+      "sha256": "400606f90e88bd2beee20c3442b167b8782c54be661dd571217dac48dbf0dc98",
+      "bytes": 4444,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/gui/base.py",
+      "git_blob": "6ba0bd35defc7ba6097aa298b8cd490378692d2d",
+      "sha256": "77cb970812482516036fac1a7d433648f4ce8ff9b1993452dd8e1196d35e51ed",
+      "bytes": 3581,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/gui/text_field.py",
+      "git_blob": "31a87a2589e09dbabf10facc4eb6ebabdfc9b191",
+      "sha256": "22d47131a0f9bdfbcfa9a1a7638ab28bf427321d392c831a568b6a0d49913a12",
+      "bytes": 3465,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/gui/selectable_list.py",
+      "git_blob": "352c4f5b0f66aa26693d1ca3173e539f35b6b12f",
+      "sha256": "3cf3396892dcaf23a0aa8303110ac80345bf09d9160d519cc959dd59628ac284",
+      "bytes": 6722,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/selectable_list_test.py",
+      "git_blob": "5b4c0c9588e74a05e28aee6f5924b366512e5225",
+      "sha256": "6fc46f93451be50ef76efa4d2299fd9b375824657d1df8030fc1d849c5e86e58",
+      "bytes": 2577,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/gui/column.py",
+      "git_blob": "942546ac5a204dbfa4900cd394d3cc0298eb65b0",
+      "sha256": "e3753da6396fd5064116945654e589e492bf2ea2bbc19a9a4e7c725adc50996c",
+      "bytes": 12278,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/table_test.py",
+      "git_blob": "30b8d3edd65ce72a3a1c95802a118fb472ed1040",
+      "sha256": "3e64b12c7d44b1629c95dabb220df7a8955e716905bcdee7791ca5998a410778",
+      "bytes": 10049,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/gui/table.py",
+      "git_blob": "8be9d2d77130cd0c5675be93133d63ca6662a0a0",
+      "sha256": "4a4560728f5b50cf687e82a5e7305fc1e938a682070750587860d6580e78fc91",
+      "bytes": 21256,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 105,
+  "cumulative_distinct_original_tests_passed": 501,
+  "new_tests": {
+    "modules": [
+      "hscommon/tests/notify_test.py",
+      "hscommon/tests/selectable_list_test.py",
+      "hscommon/tests/table_test.py"
+    ],
+    "passed": 46,
+    "failed": 0,
+    "skipped": 0,
+    "source_drift": []
+  },
+  "reproducer_files": [
+    {
+      "path": "docs/research/dedup-500/dupeguru1-notify-table-reproducer-v13-20261019/junit.xml",
+      "sha256": "da3f5e40ea517bc66a94052b82ce154e748c49aa804e87d8b4e9c5a22f7f63c4"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-notify-table-reproducer-v13-20261019/private_appdata_plugin.py",
+      "sha256": "d65c6f431bf9cf6c03c64f3cb7d27577c3987d73b9c443184fca5ed8454336c3"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-notify-table-reproducer-v13-20261019/result.json",
+      "sha256": "2c16e4eb802721835d169496d0a0180a097c0ea46bfa1e6fdd2adf352ab717a8"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-notify-table-reproducer-v13-20261019/tests.log",
+      "sha256": "73b8ada0f7bce00d0c7086c67292e8f1b09588fa9ced513cdcc3125c5464b010"
+    }
+  ],
+  "findings": [
+    {
+      "scope": "notification_source_and_tests",
+      "finding": "Broadcaster iterates a copy of connected listeners and rechecks membership; original tests qualify disconnect-during-notify and reconnect/repeater/bind behavior. Listener set does not specify callback order; this is not thread-safety qualification."
+    },
+    {
+      "scope": "selection_source_and_tests",
+      "finding": "SelectableList adjusts selection after deletion and distinguishes select() callbacks from direct index assignments. Original tests qualify upper-range fallback and prefix search; arbitrary negative/non-integer indexes not covered."
+    },
+    {
+      "scope": "table_source_and_tests",
+      "finding": "Original tests qualify header/footer placement through mutation and sorting, row editability and reserved-word access, restored selection, sorting selection update and save-during-refresh behavior using authored rows and CallLogger views."
+    },
+    {
+      "scope": "column_text_view_source_only",
+      "finding": "Column configuration copied per instance; optional columns and preference persistence are presentation features. TextField mirrors parsed values/formatted text. Read without additional dedicated column/text/view tests in this turn."
+    }
+  ],
+  "limits": [
+    "46 new distinct upstream tests;501 cumulative includes411 core tests plus90 distinct hscommon tests.",
+    "No real GUI, threaded notification scheduling, image quality, exact identity, scaling or performance proof.",
+    "No production change or foreign code copied.",
+    "Entire repository remains partial; Qt/platform/build/docs/localization/media and remaining hscommon files incomplete.",
+    "Deferred pHash memory/ASAN investigations remain skipped."
+  ]
+}
