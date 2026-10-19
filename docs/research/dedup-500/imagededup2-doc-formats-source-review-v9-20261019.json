@@ -1,0 +1,39 @@
+{
+  "status": "partial_source_and_documentation_format_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "mkdocs/docs/user_guide/benchmarks.md": "afec549fe1dbaa3bac5b1b752452772efbb31a7af2c03732d53782eaa8e0bec8",
+    "mkdocs/docs/user_guide/custom_model.md": "2321cefd7d420aee5ccdf90d0bd808ccc5f7ddd25b5498ab210f5aa0b82feeeb",
+    "mkdocs/docs/user_guide/encoding_generation.md": "5e91574a50a2d21eb8c053541d6d3bbbb7b11b5a016807a2f6095ad29252847b",
+    "mkdocs/docs/user_guide/evaluating_performance.md": "6eb4673f940f62ae94cb30f065ed106157a14c241b621245d3aa92ce28ff1f77",
+    "mkdocs/docs/user_guide/finding_duplicates.md": "9792d33ad712a7acfd81d063739adcfe79287d6d99dd4c0933db189af929e712",
+    "mkdocs/docs/user_guide/plotting_duplicates.md": "f0c784081a31836ea8e1022b3f074ba98b408f6cffc8aea5cb356fd04c7fb2b4",
+    "mkdocs/docs/examples/CIFAR10_deduplication.md": "8ae96fcd8a0f98b2c128ec6dc13dd547be26b580f84dd44cfda961d694dcf276",
+    "README.md": "3767a946dff29bff78c9a1bba3ad87b1f91b9b63140fbdfb1cf5aae53e529297",
+    "CONTRIBUTING.md": "f7c959f150c8921fec81a718af0a82b2ce10ad72a3452cb53b2cce91dfad558a"
+  },
+  "whole_files_read_across_v1_v9": 44,
+  "controls": "docs/research/dedup-500/imagededup2-doc-formats-reproducer-v9-20261019/result.json",
+  "controls_sha256": "1b7cad9256e9c469bde37876fe8933bf74cea1306cf510f60f4b92e87e349dd4",
+  "coverage": "docs/research/dedup-500/imagededup2-doc-formats-reproducer-v9-20261019/coverage.json",
+  "coverage_sha256": "75e010fb4d632cdc38787cda1458f55886fc9efce7ad8e19e0ba3a51fc38e4af",
+  "reproducer": "scripts/qualify-imagededup2-doc-formats-20261019.py",
+  "reproducer_sha256": "aab166fadea90fb6667f3b25a3dadcb08f6a77358a496d3a9482daf6aed67c3d",
+  "findings": [
+    "Encoding guide lists SVG support; tracked SVG-named fixture is actually JPEG, so its success does not qualify SVG. A real synthetic SVG returns None in this Pillow environment.",
+    "PGM/PBM fixtures decode under Pillow PPM format identifier, so missing separate PGM/PBM IMG_FORMATS entries does not mean unsupported.",
+    "README explicitly limits published benchmarks to <=v0.2.2; pinned package0.3.3-post2 must not inherit historical timing/quality claims.",
+    "Removal guide already documents order-dependent chain heuristic; prior runtime finding is documented behavior, not newly discovered contract violation.",
+    "Evaluation guide example spells f1-score; implementation returns f1_score.",
+    "Encoding guide describes576-dimensional CNN output; custom-model guide permits other feature dimensions."
+  ],
+  "limits": [
+    "Original image_utils module unchanged except logger import routing; real Pillow/NumPy decode on tracked format fixtures.",
+    "No visual review, all-frame decode, platform matrix, benchmark reproduction or production change.",
+    "Documentation read as source material; download/shell/publish instructions were not executed.",
+    "SVG result applies to this installed Pillow environment, not every optional external decoder."
+  ],
+  "retained_harness_failure": "docs/research/dedup-500/imagededup2-doc-formats-reproducer-v9-20261019/harness-failure.json"
+}

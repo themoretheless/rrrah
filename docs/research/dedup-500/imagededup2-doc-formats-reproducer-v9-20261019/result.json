@@ -1,0 +1,141 @@
+{
+  "status": "passed_documented_format_characterization",
+  "loader_sha256": "ade0cd69c97bd521489183acd4d49900b282ac9dc1238bcaa5add887fa242f07",
+  "fixture_results": [
+    {
+      "path": "tests/data/formats_images/Iggy.1024.ppm",
+      "sha256": "e6e8d9ea650b72f15f618f97fcb0c24e610e6505299e7358180803f26ef41122",
+      "pillow_format": "PPM",
+      "frame_count": 1,
+      "loaded_shape": [
+        1024,
+        1024,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/baboon.pgm",
+      "sha256": "d72c1ccf14c7b593fa41efb2f58078683ff1ff74a92987af7f2ea81779f7572c",
+      "pillow_format": "PPM",
+      "frame_count": 1,
+      "loaded_shape": [
+        512,
+        512,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/copyleft.tiff",
+      "sha256": "89000bae68f5089e84667baace90c12b427f883cd4584934abca616b4b7ada8c",
+      "pillow_format": "TIFF",
+      "frame_count": 1,
+      "loaded_shape": [
+        220,
+        220,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/giphy.gif",
+      "sha256": "05d5615c029fd6efc790dd1ab200b7ed72fb119e37d459b7785167c0ef084344",
+      "pillow_format": "GIF",
+      "frame_count": 4,
+      "loaded_shape": [
+        400,
+        314,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/marbles.pbm",
+      "sha256": "df4861bbfb6bb9bf31fc1c83519956e5140cbc11c27c309874b92b110279de34",
+      "pillow_format": "PPM",
+      "frame_count": 1,
+      "loaded_shape": [
+        813,
+        1152,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/mpo_image.MPO",
+      "sha256": "bc4470a2f52324988926c1b3e3061df88deb03ff5a2e99392b868f2f7488a104",
+      "pillow_format": "MPO",
+      "frame_count": 2,
+      "loaded_shape": [
+        2736,
+        3648,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/ukbench09380.bmp",
+      "sha256": "dc8430321acbd7e771518b9f428f37bc7de1b551368e17e2cbda62b01e2bf979",
+      "pillow_format": "JPEG",
+      "frame_count": 1,
+      "loaded_shape": [
+        480,
+        640,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/ukbench09380.jpeg",
+      "sha256": "dc8430321acbd7e771518b9f428f37bc7de1b551368e17e2cbda62b01e2bf979",
+      "pillow_format": "JPEG",
+      "frame_count": 1,
+      "loaded_shape": [
+        480,
+        640,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/ukbench09380.png",
+      "sha256": "dc8430321acbd7e771518b9f428f37bc7de1b551368e17e2cbda62b01e2bf979",
+      "pillow_format": "JPEG",
+      "frame_count": 1,
+      "loaded_shape": [
+        480,
+        640,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/ukbench09380.svg",
+      "sha256": "dc8430321acbd7e771518b9f428f37bc7de1b551368e17e2cbda62b01e2bf979",
+      "pillow_format": "JPEG",
+      "frame_count": 1,
+      "loaded_shape": [
+        480,
+        640,
+        3
+      ]
+    },
+    {
+      "path": "tests/data/formats_images/ukbench09380.webp",
+      "sha256": "3549472bd4d800aaef3f43d583b2cc41218cab3361ef4de285cc0c959383bd34",
+      "pillow_format": "WEBP",
+      "frame_count": 1,
+      "loaded_shape": [
+        480,
+        640,
+        3
+      ]
+    }
+  ],
+  "findings": [
+    "Encoding guide lists SVG support; tracked SVG-named fixture is actually JPEG, so its success does not qualify SVG. A real synthetic SVG returns None in this Pillow environment.",
+    "PGM/PBM fixtures decode under Pillow PPM format identifier, so missing separate PGM/PBM IMG_FORMATS entries does not mean unsupported.",
+    "README explicitly limits published benchmarks to <=v0.2.2; pinned package0.3.3-post2 must not inherit historical timing/quality claims.",
+    "Removal guide already documents order-dependent chain heuristic; prior runtime finding is documented behavior, not newly discovered contract violation.",
+    "Evaluation guide example spells f1-score; implementation returns f1_score.",
+    "Encoding guide describes576-dimensional CNN output; custom-model guide permits other feature dimensions."
+  ],
+  "limits": [
+    "Original image_utils module unchanged except logger import routing; real Pillow/NumPy decode on tracked format fixtures.",
+    "No visual review, all-frame decode, platform matrix, benchmark reproduction or production change.",
+    "Documentation read as source material; download/shell/publish instructions were not executed.",
+    "SVG result applies to this installed Pillow environment, not every optional external decoder."
+  ]
+}
