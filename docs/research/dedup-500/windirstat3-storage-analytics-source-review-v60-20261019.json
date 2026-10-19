@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of StorageAnalyticsView header and implementation; pinned bytes verified. No GUI or native runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Views/StorageAnalyticsView.h": "a39672f31f9e6d3f93097ec320444b3a7376661f4de476fa6161ef58e0fdbfb1",
+    "windirstat/Views/StorageAnalyticsView.cpp": "eaea3a39ab90f3b3de993c578c007545bb50e442db007c204e7e9b45abad48fe"
+  },
+  "whole_files_read": 180,
+  "coverage": "docs/research/dedup-500/windirstat3-storage-analytics-coverage-v60-20261019.json",
+  "coverage_sha256": "938235f319be913b184842837466d5454c6e8ed16aa2ec7362c4731af74975b5",
+  "findings": [
+    "Recalculate requires IsScanSettled and validates all tier parameters before applying them. Prior review established settled can follow user-stopped partial scans; settled alone does not prove complete filesystem coverage.",
+    "Traverse is recursive despite the header describing performant single-pass DFS; deeply nested loaded trees can grow native call stack. Files are counted by logical size and last-change age, not physical reclaimable bytes or duplicate groups. No performance/stack test executed.",
+    "Tier names derive from localization. Traverse unconditionally uses tier zero for fallback files and assumes at least one tier; OnDraw empty-tier guard does not establish this precondition for Traverse. Actual shipped localization emptiness not demonstrated.",
+    "ReadParameters parses full strings with wcstod, rejects nonfinite and negative costs, requires positive increasing active thresholds; empty thresholds disable optional tiers. Parameter collection precedes mutation, avoiding partial application on invalid input.",
+    "Typing filter only permits digits and optional dot but paste/control paths are allowed. Full parser therefore remains the validation gate, and can accept finite representations beyond the typing filter.",
+    "Default archive cost0.005 is formatted with two decimals before parsing. Sub-cent defaults are rounded for display and later computation; exact original numeric default is not retained by that initialization path.",
+    "Unit switches scale positive finite edit values and stored costs, format edits to eight decimals, and do not validate post-multiply finiteness. Later parameter validation may reject overflow, but repeated unit conversion can incur rounding.",
+    "Age clamps future timestamps to zero and assigns threshold boundaries inclusively to older tiers. Last tier label uses greater-than while calculation uses greater-than-or-equal.",
+    "Totals use unchecked u64 additions and cost multiplications use doubles. Fixed765logical-pixel dashboard and per-paint bitmap/fonts do not establish bounded rendering cost or narrow-window usability."
+  ],
+  "limits": [
+    "No runtime tier parsing, tree-depth, huge-total, unit-roundtrip, localization, rendering or financial accuracy qualification. Values are user-entered estimates, not retrieved provider prices.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
