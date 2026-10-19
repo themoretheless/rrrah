@@ -1,0 +1,80 @@
+{
+  "status": "selected_original_hash_cases_characterized",
+  "cases": [
+    {
+      "method": "AHash",
+      "original_test": "test_len_hash",
+      "status": "passed"
+    },
+    {
+      "method": "AHash",
+      "original_test": "test_hash_resize",
+      "status": "passed"
+    },
+    {
+      "method": "AHash",
+      "original_test": "test_hash_small_rotation",
+      "status": "passed"
+    },
+    {
+      "method": "AHash",
+      "original_test": "test_hash_distinct_images",
+      "status": "passed"
+    },
+    {
+      "method": "AHash",
+      "original_test": "test_same_hashes_with_different_inputs",
+      "status": "passed"
+    },
+    {
+      "method": "AHash",
+      "original_test": "test_same_hashes_with_different_inputs_gray_scale",
+      "status": "passed"
+    },
+    {
+      "method": "DHash",
+      "original_test": "test_len_hash",
+      "status": "passed"
+    },
+    {
+      "method": "DHash",
+      "original_test": "test_hash_resize",
+      "status": "passed"
+    },
+    {
+      "method": "DHash",
+      "original_test": "test_hash_small_rotation",
+      "status": "passed"
+    },
+    {
+      "method": "DHash",
+      "original_test": "test_hash_distinct_images",
+      "status": "passed"
+    },
+    {
+      "method": "DHash",
+      "original_test": "test_same_hashes_with_different_inputs",
+      "status": "passed"
+    },
+    {
+      "method": "DHash",
+      "original_test": "test_same_hashes_with_different_inputs_gray_scale",
+      "status": "passed"
+    }
+  ],
+  "passed": 12,
+  "failed": 0,
+  "test_source_sha256": "a32b51af710f62d3316ee8710dc4345aac5107f3838b645a8894aed3861e089a",
+  "setup_script_sha256": "e2cda266e224092110877dc8174213b7cdddc3555233c6b6553948cd944c39a6",
+  "findings": [
+    "Six original common test bodies called unchanged for AHash and DHash using tracked real image/resize/grayscale fixtures.",
+    "Full944line hashing test source read; many wrapper/worker tests assert mocked dispatch, not actual worker behavior.",
+    "Original common distinct-image case covers one image pair, not absence of hash collisions or general quality."
+  ],
+  "limits": [
+    "Original class parametrize decorator removed; only AHash/DHash cases called explicitly.",
+    "Reuses original-class/Pillow/NumPy setup prefix from pinned own harness; no real package imports or full upstream suite.",
+    "No PHash/WHash/native/worker execution; pHash native investigation remains deferred.",
+    "No production adoption or performance claim."
+  ]
+}

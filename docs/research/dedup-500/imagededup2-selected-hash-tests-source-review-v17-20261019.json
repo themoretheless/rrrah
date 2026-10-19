@@ -1,0 +1,31 @@
+{
+  "status": "partial_source_selected_original_hash_cases_passed",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_hashing.py": "a32b51af710f62d3316ee8710dc4345aac5107f3838b645a8894aed3861e089a"
+  },
+  "manual_whole_text_files": 69,
+  "total_reviewed_by_declared_methods": 111,
+  "tracked_blobs": 114,
+  "controls": "docs/research/dedup-500/imagededup2-selected-hash-tests-reproducer-v17-20261019/result.json",
+  "controls_sha256": "29952c8eed8ed60cc61f0ed0dc771e31a8c7a8f5af8d1f41ef5d12d67c7938b2",
+  "coverage": "docs/research/dedup-500/imagededup2-selected-hash-tests-reproducer-v17-20261019/coverage.json",
+  "coverage_sha256": "b891382624a2a0cc19eacadffa7ccb94e9bacad88f59c2ca63ffd78f9e75dc47",
+  "reproducer": "scripts/qualify-imagededup2-selected-hash-tests-20261019.py",
+  "reproducer_sha256": "0ca1be544bd2aca1dde2c519894a096e4a88cb672f04c30a675ce74f49d93bb4",
+  "passed": 12,
+  "failed": 0,
+  "findings": [
+    "Six original common test bodies called unchanged for AHash and DHash using tracked real image/resize/grayscale fixtures.",
+    "Full944line hashing test source read; many wrapper/worker tests assert mocked dispatch, not actual worker behavior.",
+    "Original common distinct-image case covers one image pair, not absence of hash collisions or general quality."
+  ],
+  "limits": [
+    "Original class parametrize decorator removed; only AHash/DHash cases called explicitly.",
+    "Reuses original-class/Pillow/NumPy setup prefix from pinned own harness; no real package imports or full upstream suite.",
+    "No PHash/WHash/native/worker execution; pHash native investigation remains deferred.",
+    "No production adoption or performance claim."
+  ]
+}
