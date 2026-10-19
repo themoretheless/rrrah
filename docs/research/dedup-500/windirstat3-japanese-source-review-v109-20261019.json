@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Japanese catalog; pinned bytes reverified; v91 structural parity retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_ja.txt": "00f70d838ae221447459848ffc9ecea8ff97f81c43e9a09e46232848f1a474d8"
+  },
+  "whole_files_read": 242,
+  "coverage": "docs/research/dedup-500/windirstat3-japanese-coverage-v109-20261019.json",
+  "coverage_sha256": "c9737bf8bff95f30ddcf00cabdc0a6de9b4ea2bd1eafcfa0b028d0ca047e6867",
+  "findings": [
+    "Probable duplicate caption 重複候補 explicitly means duplicate candidates; hash prefix and sampled hash remain explicit. Large-file option says sparse hash over64MiB, not full-content equality.",
+    "Recovery completion requests verifying file data; recoverable versus possibly recoverable states remain separate. Changed source metadata requests rescan and same-volume restoration warns of overwriting deleted data.",
+    "Sparse action スパースファイルを作成 says create a sparse file, which can obscure conversion of an existing selected file. Compression remains separate; hardlinks, symlinks and junctions have distinct labels.",
+    "Many mnemonic suffixes use parenthesized Latin letters, while graph algorithm names retain ampersands inside Latin names. Text reading does not qualify native/custom menu routing or conflicts.",
+    "Hidden attribute label says hidden file although also used in directory exclusion context. Permanent deletion wording does not prove secure erasure; cloud warning explicitly describes download risk.",
+    "Logical/physical sizes, binary units, cleanup tokens and ordered permissions remain explicit. Account caption uses principal rather than generic account. MSI ja-JP/1041/932 needs separate encoding and installer checks."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Japanese UI, mnemonic conflict, font fit, installer or Windows runtime verified. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
