@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of TreeListControl header and implementation in complete ranges; pinned bytes verified. No Windows runtime.",
+  "new_whole_files_read": {
+    "windirstat/Controls/TreeListControl.h": "26d731040a8b85f7e92f42a2b26c5b9105810e540c4c8d5562a409f3c697a1a6",
+    "windirstat/Controls/TreeListControl.cpp": "64a53dcad495b1be02e9a1d0b203c0e5e622592eab4eb4d433ad2e4e294f3c47"
+  },
+  "whole_files_read": 207,
+  "coverage": "docs/research/dedup-500/windirstat3-tree-list-coverage-v77-20261019.json",
+  "coverage_sha256": "0a43ecdf6165e9b85b4a0e424a3202d8620056f6a1d58bd6c81e57da9570a628",
+  "findings": [
+    "Visible-item VIEWSTATE is stored in a process-static map keyed by item pointer, including control pointer, indent, icon and cached rectangles. Access is partly mutex-protected; GetViewState returns pointer after shared lock release and is explicitly UI-thread-only. This does not establish arbitrary-thread lifetime safety.",
+    "SetVisible(false) removes view state then forgets async icon lookup; control-wide ClearViewStates erases matching entries without per-item Forget in this method. Earlier icon delivery identity checks remain separate protection, not proof of all teardown paths.",
+    "Expand gathers all direct child pointers, marks visible and inserts batch. Width auto-sizing examines only first50children when scrolling. Settled file tree sorts child batch only; other expansion sorts entire list. No benchmark or maximum-memory claim.",
+    "Collapse walks contiguous deeper rows iteratively, removes their view states and bulk list rows, and moves focus to parent when needed. Child-removal notifications and ancestor-aware Compare remain recursive on tree depth.",
+    "Selection normalization deselects a selected descendant when its mapped ancestor is selected, preventing double-counted selected subtrees in this view. Linked wrapper identity and GetAncestorCheckItem determine scope; filesystem identity is not checked by this rule.",
+    "Double-click opens linked file or toggles non-file expansion. Context menu hides hardlink action outside duplicate view, but comment claiming identical content is not a byte-equality guarantee: earlier duplicate sampling/hash and execution validation limitations still apply.",
+    "Context menu object remains a control member so queued WM_MENUCOMMAND retains menu lifetime. Selection/focus is carried by item pointers; model mutation coordination remains necessary.",
+    "DrawNode multiplies indent by row-height-based step without explicit extreme-depth overflow guard. Header reorder optionally blocks moving column zero; actual notification assumptions and deep-tree behavior remain unqualified."
+  ],
+  "limits": [
+    "No Windows selection, expansion, sorting, icon teardown, hardlink action, deep-tree or memory/performance tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
