@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Sunburst.h and Sunburst.cpp, pinned bytes verified. No runtime tests in this increment.",
+  "new_whole_files_read": {
+    "windirstat/Controls/Sunburst.h": "749490c3146d0ae363519fc5966b454065958add9d80a1d63bd01d787d231284",
+    "windirstat/Controls/Sunburst.cpp": "2053ec1a8265dc37dac3e8e8db286e002cbc989c7d3611777c73017b4df2d015"
+  },
+  "whole_files_read": 142,
+  "coverage": "docs/research/dedup-500/windirstat3-sunburst-layout-coverage-v51-20261019.json",
+  "coverage_sha256": "99ae12e4dd5a8cdcccd4672491a6b837035b83f3c0cedbfd534dcb094ce70243",
+  "findings": [
+    "Depth is clamped to 1..64 and additionally bounded by available radius and minimum ring width. Traversal uses an explicit pending vector, not recursive calls. Ring indexes may repeat visual-leaf entries across multiple depths; no whole-memory budget established.",
+    "Children are assumed size-sorted. At the first zero or sector smaller than the stroke/hit threshold, traversal stops; omitted bytes are represented by a residual sector owned by the parent. This preserves aggregate context without giving each omitted file a distinct hit target.",
+    "Child size is bounded by remaining parent bytes before addition. Angular arithmetic converts u64 to double; exact proportional geometry for extreme size ratios is not guaranteed by source.",
+    "Layout cache depends on root pointer, render rectangle, depth and DPI; content changes at the same root require external invalidation. Font percentage affects geometry but is not an explicit cache-key field. Caller-triggered invalidation coverage remains unqualified.",
+    "ClearLayout drops borrowed pointers and index entries, while TrimMemory also swaps containers to release capacity. Cached root and entries do not own CItem lifetime.",
+    "Hit testing uses radius-to-ring conversion and upper_bound on angular end positions. Debug assertions check start/end sortedness. Outline lookup falls back to a remainder or visible ancestor for an omitted item.",
+    "Rendering draws all stored sectors and gathers label candidates. The 8..128 density budget only limits additional leaf labels: directory labels are attempted first without that cap. Reserve(128/256) does not bound candidate-vector growth.",
+    "UI font family name is initialized once in a static string. Live font changes and actual GDI+ text placement require Windows runtime qualification."
+  ],
+  "limits": [
+    "No Windows build, GUI rendering, font-change, cache-invalidation, memory profiling or hit-test runtime execution performed.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains 147/500."
+  ]
+}
