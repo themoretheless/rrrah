@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole HelpersTasks.cpp935lines and HelpersTasks.h manually read; bytes matched pinned Git objects. No task/API execution.",
+  "new_whole_files_read": {
+    "windirstat/HelpersTasks.cpp": "7c52d469727739ad977e625cb744054801b2e91e1a0a12e9b342d9937224d280",
+    "windirstat/HelpersTasks.h": "6bbcae93b2ad8eb8d5b91495c5e5ff7e9256f1f60bc3abb4b77a9c55c2265b98"
+  },
+  "whole_files_read": 76,
+  "coverage": "docs/research/dedup-500/windirstat3-task-helpers-coverage-v31-20261019.json",
+  "coverage_sha256": "7d3662aa716056565bd342badd3781a75129b25e055cf983023fa92252181e9a",
+  "findings": [
+    "CreateHardlinkFromFile creates GUID-suffixed temporary hardlink to source, MoveFileEx REPLACE_EXISTING over target, and attempts temp deletion on move failure. It does not read/compare content, lock source and target, or validate unchanged identities against scan evidence. Actual replacement/race behavior untested.",
+    "ReadFileContent uses synchronous native ReadFile with optional SetFilePointerEx offset, or globally mutex-serialized MTP stream Seek/Read. OpenMtpStream also serializes shell binding under same mutex. This limits parallel MTP content reads despite multiple possible logical callers.",
+    "ComputeFileHashes reads1MiB chunks once and updates all initialized algorithms in parallel, preserves full displayed digest lengths unlike reduced duplicate fingerprints. BCryptHashData return value ignored here; finalization failure skips algorithm output. No crypto failure injection.",
+    "ComputeFileHashes allows filesystem sharing write/delete and does not revalidate file generation. Cancellation checked after a nonempty read; no explicit cancellation of blocked read in this helper.",
+    "SparsifyFile scans zero runs, cluster-aligns selected ranges, then marks sparse and zero-deallocates ranges. Handle allows concurrent write/delete; no reread or source-generation verification before applying previously detected ranges. No file modification or destructive probe executed.",
+    "Sparsify scan breaks on ReadFile error/zero read and may continue processing accumulated ranges; normal boolean return does not independently prove complete read of original length. Custom chunk parameters are not validated in helper; defaults1MiB/minZeroRun64KiB.",
+    "Compression opens exclusively for read/write; support cached per resolved volume with separate standard/modern maps. WOF not-beneficial error treated as success. This is operation policy, not throughput evidence.",
+    "SID-to-name cache guarded by mutex but has no eviction; WMI enumeration uses infinite waits and checks cancellation only between calls. Drive-mapping tasks async per missing drive and waited with UI updates, without per-server deadline in this module.",
+    "DeleteFileForce tries normal delete, clears selected attributes and retries, then delete-on-close and path absence check. No atomic immutable-identity guarantee inferred. All destructive/elevation/WMI operations were only read."
+  ],
+  "limits": [
+    "No Windows native reads, MTP, hash, hardlink, sparsification, compression, privilege or registry runtime execution.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
