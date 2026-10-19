@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file reading of4files; bytes matched pinned Git objects. No PowerShell script or Windows localization execution.",
+  "new_whole_files_read": {
+    "windirstat/Build/Format Sources.ps1": "0d71e78c438194f3477ac35760e65c5bd11e1be9d153873feda72b12aa08627c",
+    "windirstat/Build/Compress Strings.ps1": "75dd621beb883ef7bdc93409c8cc0c842c743dd094d538246cd3d9b755422e97",
+    "windirstat/Localization.h": "6e886cd06c4752fe64177103dbae0167df0aba388875673da153fd2c31f1ee0c",
+    "windirstat/Localization.cpp": "3d51280783f061322b971172034782159f031a8381eeb1eaa996ed99666058fa"
+  },
+  "whole_files_read": 87,
+  "coverage": "docs/research/dedup-500/windirstat3-localization-build-coverage-v34-20261019.json",
+  "coverage_sha256": "b6cdcab933afd22b3eeebfa34e9c4dee8ce227e14252761aa20dbccedeb68b8f",
+  "findings": [
+    "Format Sources accepts Path parameter but enumerates ProjectRoot two levels above script, recursively rewriting cpp/h/ps1 to UTF8BOM/CRLF, trimming trailing whitespace/blank excess. Writes only changed bytes, reducing timestamp churn. No script executed.",
+    "Compress Strings sorts/deduplicates and rewrites language sources, excludes MSI keys from combined runtime resource, generates LangStrings.h only on hash change and invokes makecab LZX. No explicit LASTEXITCODE failure check after makecab visible.",
+    "Language enumeration and sorting do not specify explicit ordinal/culture order; identical normalized resource bytes across environments not proved. Source formatting/translation packaging are checkout mutations during prebuild, not only generated-output writes.",
+    "Localization.LoadResource overlays English baseline then external specific/generic or built-in specific/generic translation, sets RTL. Global map is not cleared here, so keys absent in later English/selected language can retain prior map entries; actual installed translation behavior not exercised.",
+    "CrackStrings strips carriage returns, expands literal backslash-n/t, splits first equals and last duplicate key assignment wins. With prefix it checks prefix occurrence before starts-with filtering. Return value tests global map nonempty, not necessarily newly loaded keys.",
+    "UTF8conversion uses MB_ERR_INVALID_CHARS and two-pass sizing. External language file is read in full without explicit byte budget, with size narrowed to int for conversion; huge-file behavior unqualified.",
+    "Localization.Format catches format_error and returns untranslated format string rather than terminate on malformed user-editable formatting. Menu/control/tab updating and RTL styling read only; no rendered validation."
+  ],
+  "limits": [
+    "No build, cabinet compression, source rewriting, Windows UTF8 API, localization switch or UI execution.",
+    "Language catalog contents/assets still require their own declared review method; reading loader does not count catalogs.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
