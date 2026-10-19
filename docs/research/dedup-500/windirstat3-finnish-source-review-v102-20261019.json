@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Finnish catalog; source bytes reverified against pinned Git blob; v91 structural evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_fi.txt": "8bfb874faf9ccd0e873a4a1680a330fffbd210950d8a0c861b02264c219ea25d"
+  },
+  "whole_files_read": 235,
+  "coverage": "docs/research/dedup-500/windirstat3-finnish-coverage-v102-20261019.json",
+  "coverage_sha256": "afc6c141de731abb59851659feb3e9f1e1cf0944ec68f2cbc6483761e37c14b6",
+  "findings": [
+    "Todennäköiset kaksoiskappaleet, Hashin etuliite and Otantatiiviste preserve probability/prefix/sampling distinctions. Advanced option explicitly says sample digests above64MiB.",
+    "Recovery completion requests checking file data, separates recoverable from recovery-may-succeed and warns that same-source-volume restoration can replace deleted data. Metadata changes request rescan. No recovery runtime qualified.",
+    "Collapse rendered Palauta can suggest restore rather than collapse; component store rendered Komponenttikauppa can suggest a shop; hardlinks vary between Kovakytkökset, kovat linkit and kovalinkit. These are terminology concerns, not reproduced library defects.",
+    "General size-format caption uses Gt/Mt/kt while unit keys use GiB/MiB/KiB; actual size formatting needs runtime verification. Sparse action remains distinct from compression and logical/physical labels are explicit.",
+    "Cloud warning explains potential download and adjustable settings; delete tooltip says cannot recover, which is not evidence of secure erasure.",
+    "Regex versus glob, cleanup %p/%n/%sp/%sn and ordered permission lists are retained. MSI fi-FI/1035/1252 declarations alone do not prove installer encoding."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered UI, mnemonic conflict, installer or Windows runtime verification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
