@@ -1,0 +1,18 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "whole_files_read": 115,
+  "coverage": "docs/research/dedup-500/windirstat3-extension-control-coverage-v41-20261019.json",
+  "controls": "docs/research/dedup-500/windirstat3-extension-filter-control-v42-20261019.json",
+  "controls_sha256": "f51713eeae7ecbf711e6fde4c6e3dd6fc890be30aa342065a24ae240f483a4bd",
+  "findings": [
+    "Follow-up resolves v41regex-mode exclusion question: original pattern compilation rejects generated *.txt in regex mode; glob and correct regex positive/negative controls passed5assertions.",
+    "Original CompileFilters catch displays error and omits rejected token, so generated extension exclusion is not installed by that path in regex mode. No full UI run or MSVC engine assertion."
+  ],
+  "limits": [
+    "Native extracted-function control with libc++ only. No newly counted whole files.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
