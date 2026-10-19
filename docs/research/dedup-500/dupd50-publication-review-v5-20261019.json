@@ -1,0 +1,206 @@
+{
+  "status": "verified_selected_publication_reporting_and_eight_more_original_tests",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "previous": "docs/research/dedup-500/dupd50-cache-queue-review-v4-20261019.json",
+  "previous_sha256": "f5d866a875cf18d078277fa65a379dd4c2a86a4a1fd4ef4f95ff0d3721b55941",
+  "new_whole_blobs": [
+    {
+      "path": "src/hashlist.c",
+      "git_blob": "a81c1a6843726efb3db78f08123a00f0677515fd",
+      "sha256": "90f06b9c00c3c43222b1774acb5d4d7c9046bfc66bfe0d42fd4a475f28cd0bb6",
+      "bytes": 13508,
+      "fully_read": true
+    },
+    {
+      "path": "src/hashlist.h",
+      "git_blob": "988c6edb32f2831d55116a42b3623f06f2678a5d",
+      "sha256": "eca5f7f0d807221bbd606d80ad6185972d557b50a72bf66fb01f2724df4f5b6e",
+      "bytes": 5660,
+      "fully_read": true
+    },
+    {
+      "path": "src/hashlist_priv.h",
+      "git_blob": "0b239a03ec0124c87f9e78f47bf4cca82f05306a",
+      "sha256": "4d3f6f785f66e2d8bd66326c3d562c3b475e207f7bf782ddb3f378b361491914",
+      "bytes": 1546,
+      "fully_read": true
+    },
+    {
+      "path": "src/report.c",
+      "git_blob": "9f8e5e1903bb4e3a07c8543f1d05de32877caca9",
+      "sha256": "0e1aff51410558fc50920b16d0ad1222d4e7603f04de9d7fa12722f965e22e6c",
+      "bytes": 20535,
+      "fully_read": true
+    },
+    {
+      "path": "src/report.h",
+      "git_blob": "efd6b5378cd872e44c503ef1b4aecfbaca821f61",
+      "sha256": "0794edcbcfbca6da443e5886d8a58db23f5a3e4d2e5d682ddf18180a0613dcea",
+      "bytes": 2625,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.41",
+      "git_blob": "f61c09373ea7e20ebb599097f34c10e75bf32734",
+      "sha256": "99884f69ba14ab99ebc33692021621c05ec4c025f648717ec39da55b6fd702bc",
+      "bytes": 323,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.42",
+      "git_blob": "05849b82ff6f38ffc41030864637f10b0745a503",
+      "sha256": "e859c2ecf4405f44189ad2bc89691a8b6be9be9a52a49dea01b630b0c5682f88",
+      "bytes": 354,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.43",
+      "git_blob": "645518e34e83e99dfa9ecee42a90c6da350ed816",
+      "sha256": "a6649f7ea59ddf60659a16cd465aa7c18858f8483d64a9797e3838119f5b294d",
+      "bytes": 322,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.44",
+      "git_blob": "98b656cfe870d3f48d8cd1bb56e582dd63877dc7",
+      "sha256": "ef44de8ab8ab84d40737cd0158fa50fcf7285676ad8bc58b0aca5cc147f1a6aa",
+      "bytes": 305,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.45",
+      "git_blob": "2560bea762f18cc192094b190398cfa531fc7cf7",
+      "sha256": "82080e3f6ebe3e05f9ad0383f83ff76e4c596ced9aecbea08e0da5e7981e6573",
+      "bytes": 304,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.47",
+      "git_blob": "27ce84883999c97541c188d54a5501989ff36e8e",
+      "sha256": "1ca5586a8572e03a47dca141a4398608dc8fbc603395c16c81d7cef39c219d7b",
+      "bytes": 255,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.48",
+      "git_blob": "e240755057940c84771f199ccb9361420a2bd61c",
+      "sha256": "18721bf054288638e2b550a6408bf6cbd8a14e75392bde147358e1b43e890b48",
+      "bytes": 326,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.49",
+      "git_blob": "afca52e3c242f876ed5b18f2a86902a1e1107f9f",
+      "sha256": "cb7739664c66f91808698bba147f21f654c32b19d8f28fdb527e97849d10ea7d",
+      "bytes": 922,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.50",
+      "git_blob": "4461389559cab1230d770a9eb46d7052e3393600",
+      "sha256": "a626b155aab4d6f28033e402f8e49c73254b698bc45c16d3095cd504120a8470",
+      "bytes": 337,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 80,
+  "upstream_additional_tests": [
+    "test.41",
+    "test.42",
+    "test.43",
+    "test.44",
+    "test.45",
+    "test.47",
+    "test.48",
+    "test.50"
+  ],
+  "upstream_cumulative_distinct_tests_passed": 40,
+  "result": {
+    "command": [
+      "./run",
+      "test.41",
+      "test.42",
+      "test.43",
+      "test.44",
+      "test.45",
+      "test.47",
+      "test.48",
+      "test.50"
+    ],
+    "exit_code": 0,
+    "home": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupd50-20261019/test-home-v5",
+    "log_sha256": "7024e32d5cbfa39e7c7216108531a59c0fcc286fff4810ee8e0752284c51e239"
+  },
+  "binary_sha256": "5ba2cdb07bff74d316d1dc722c5b876c6d02ea0672a7d1240abf2d4f758beb7a",
+  "comparator_source_references": [
+    {
+      "path": "src/main.h",
+      "line": 162,
+      "text": "extern int opt_compare_two;",
+      "log_string": false
+    },
+    {
+      "path": "src/filecompare.c",
+      "line": 64,
+      "text": "      LOG(L_TRACE, \"compare_two_files: differ after reading %d blocks\\n\",",
+      "log_string": true
+    },
+    {
+      "path": "src/filecompare.c",
+      "line": 73,
+      "text": "  LOG(L_TRACE, \"compare_two_files: duplicates after reading full files\\n\");",
+      "log_string": true
+    },
+    {
+      "path": "src/filecompare.c",
+      "line": 92,
+      "text": "void compare_two_files(sqlite3 * dbh, char * path1, char * path2,",
+      "log_string": false
+    },
+    {
+      "path": "src/filecompare.c",
+      "line": 95,
+      "text": "  LOG(L_TRACE, \"compare_two_files: [%s] vs [%s]\\n\", path1, path2);",
+      "log_string": true
+    },
+    {
+      "path": "src/main.c",
+      "line": 73,
+      "text": "int opt_compare_two = 0;",
+      "log_string": false
+    },
+    {
+      "path": "src/main.c",
+      "line": 405,
+      "text": "    opt_compare_two = 1;",
+      "log_string": false
+    },
+    {
+      "path": "src/filecompare.h",
+      "line": 39,
+      "text": "void compare_two_files(sqlite3 * dbh, char * path1, char * path2,",
+      "log_string": false
+    }
+  ],
+  "findings": [
+    "Hashlistpublicationgroupsfullhashmatcheswithoutbytecomparison.8C/Htextreferences:3logstrings+5declarations/definition/flaginitialization/set; no activecomparatorcallerfound. Presenceofsymbolisnotbyteconfirmation",
+    "Reportdumpspersistedgroups;file/ls/dups/uniques/validate rehashselectedmembersbutremainhash-based",
+    "Structuredreportescapingonlyquotes; pathstorageusesU+001Cseparatorandtraversalskipsnamescontainingit; no allfilename serializationproof",
+    "Eightmoreoriginaltests41/42/43/44/45/47/48/50pass:minimumsize,relativepaths/exclusion/cut,smallbuffers andauthoredpartitions",
+    "Ourcurrent49unitgatealreadycoversbytepartitionwithidenticalindexkeys. Keepbyteconfirmation; noforeignproductionadoption"
+  ],
+  "unexecuted_read_tests": [
+    {
+      "test": "test.49",
+      "reason": "Hardcodes shared /tmp/test_hash_db; fullyread butnotrun. Needsseparatefilesystemisolation ordeclaredmodifiedfixturevariant."
+    }
+  ],
+  "limits": [
+    "Only80wholefilesof793entryrepositoryreviewed; fullsourcefalse",
+    "Only40distinctoriginaltestsexecuted; no alltests/performance/otherplatform/currentrootquality claim",
+    "Call-reference/formatobservations arestatic; no nativecollision/malformed-inputcounterexampleconstructed",
+    "Initialreferencecounter countedlogstrings; correctedto8raw/5code refs beforecreatingthisevidence",
+    "pHashmemorytests remainuserdeferred"
+  ]
+}

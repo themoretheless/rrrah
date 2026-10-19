@@ -961,7 +961,20 @@ fn whitespace_path_names_preserve_all_authored_copy_partitions() {
     fs::create_dir(&left).unwrap();
     fs::create_dir(&right).unwrap();
     let names = [
-        "plain", " plain", "plain ", "\tplain", "plain\t", "plain\n", "\nplain", "plain\r",
+        "plain",
+        " plain",
+        "plain ",
+        "\tplain",
+        "plain\t",
+        "plain\n",
+        "\nplain",
+        "plain\r",
+        "plain\u{1c}",
+        "comma,name",
+        "quote\"name",
+        "back\\slash",
+        "percent%",
+        "under_score",
     ];
     let mut expected = BTreeSet::new();
     for (family, name) in names.iter().enumerate() {
@@ -983,7 +996,7 @@ fn whitespace_path_names_preserve_all_authored_copy_partitions() {
                 scan(&roots, &Options::default(), || false)
             };
             assert!(report.complete(), "{report:?}");
-            assert_eq!(report.files_observed, 16);
+            assert_eq!(report.files_observed, names.len() * 2);
             let actual = report
                 .groups
                 .iter()
