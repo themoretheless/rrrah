@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of German catalog; pinned bytes reverified and v91 structural comparison retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_de.txt": "3af7ca2e0578eb5166638d6aedd1b8e036131339d02c661df7617555e69493f6"
+  },
+  "whole_files_read": 227,
+  "coverage": "docs/research/dedup-500/windirstat3-german-coverage-v94-20261019.json",
+  "coverage_sha256": "7db2c7d92396c61603bf1177f91f3f3aec4ebe967c39a6ade163e77c62b9060b",
+  "findings": [
+    "Vermutliche Duplikate, Hash-Präfix and Stichproben-Hash retain distinct confidence/hash representations; sampling option explicitly specifies files over64MiB. No proof of full equality inferred from sampled hashes.",
+    "Recovery distinguishes Wiederherstellbar from Möglicherweise wiederherstellbar and requests Dateidaten prüfen after restoration. Same-source-volume warning explains overwrite risk.",
+    "Recovery metadata-changed message says Quelldaten geändert rather than explicitly metadata; Junctions is generic Verknüpfungen whereas symbolic links and hardlinks have distinct labels. These wording limitations can blur source-specific distinctions.",
+    "Sparsify is Datei ausdünnen, distinct from Komprimieren; glob and regex remain distinguished. Logical/physical size labels and binary-unit labels are explicit.",
+    "Ctrl display is localized to Strg in custom cleanup shortcut format while both brace fields remain intact. This does not verify actual accelerator routing or mnemonic uniqueness.",
+    "Delete irreversible wording denotes the permanent-delete path, not tested secure erasure. MSI de-DE/1031/1252 values are declarations only."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No rendered German interface, Windows installer encoding, keyboard navigation or runtime validation. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
