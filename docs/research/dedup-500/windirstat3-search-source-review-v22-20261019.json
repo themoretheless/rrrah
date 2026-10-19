@@ -1,0 +1,30 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file source reading; pinned Git object byte verification. Original totals method compiled unchanged with synthetic7node tree:128exhaustive selection subsets with duplicate pointers compared to independent descendant-leaf oracle, plus cancellation.",
+  "new_whole_files_read": {
+    "windirstat/ItemSearch.h": "8d32eda93a365125150d28bb4bee4dffab408159d38d13092a4648bf2cdeeda4",
+    "windirstat/ItemSearch.cpp": "355d1c30145b3b4e40a072296a63f7404b4fbdcfd269480574c07256925d5a2a",
+    "windirstat/Controls/FileSearchControl.h": "bc27c13de73ca431993f78bf975c653677890a3f77f8b460939d6e1828179cb6",
+    "windirstat/Controls/FileSearchControl.cpp": "38170686311272b83b1c02bffa943458854cb8ab103d2b1ce2a7ec9caf5a48d9"
+  },
+  "whole_files_read": 58,
+  "coverage": "docs/research/dedup-500/windirstat3-search-coverage-v22-20261019.json",
+  "coverage_sha256": "7e322d807176ae9d10f02d3ec9a406b84683f6f2d926c6536a5c5e7a3332b87d",
+  "findings": [
+    "ProcessSearch refuses unsettled scan, searches existing CItem hierarchy rather than discovering current files, skips descending hardlink pseudo-nodes, applies type/logical/physical range before name and owner query.",
+    "Result limit retains largest logical-size matches through min-heap. Equal-size later matches do not replace earlier entries; tie selection depends on traversal order.",
+    "Cancelled search publishes partial matched items and marks root incomplete; cancellation during totals can leave totals pending rather than publish a partial sum.",
+    "CalculateTotals deduplicates CItem pointers and counts only outermost selected ancestors, preventing nested result byte totals from double counting. No overflow check visible in unsigned sums.",
+    "Refresh restoration saves paths and selected state, rebinds surviving nodes and reapplies original criteria. It restores prior results rather than rerunning exhaustive search to find all new matches or refill topK; incompleteness marker retained.",
+    "ComputeSearchRegex catches compilation failure and returns default regex; dialog validation is separate and not yet whole-file reviewed. No general invalid-regex API rejection guarantee inferred."
+  ],
+  "limits": [
+    "No original Windows application, filesystem refresh or UI execution.",
+    "SearchDlg.cpp/h and watcher source still require review.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ],
+  "controls": "docs/research/dedup-500/windirstat3-search-totals-control-v22-20261019.json",
+  "controls_sha256": "6d056ddd64772fd1d9b9e078c5044fe1ca22290121befcb82d60fbd1ab36ede1"
+}

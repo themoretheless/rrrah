@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "subsets": 128,
+  "duplicate_input_pointers": true,
+  "cancel_control": true,
+  "source_sha256": "355d1c30145b3b4e40a072296a63f7404b4fbdcfd269480574c07256925d5a2a",
+  "original_method_sha256": "71e662141b241c64af5fb0994e69140e5ab9f8825c2bc8a8968997916e9f84b1",
+  "control_source": "#include <span>\n#include <optional>\n#include <functional>\n#include <unordered_set>\n#include <utility>\n#include <vector>\n#include <cassert>\n#include <iostream>\nusing ULONGLONG=unsigned long long;\nstruct CItem { CItem* parent=nullptr; ULONGLONG logical=0,physical=0; CItem* GetParent() const{return parent;} ULONGLONG GetSizeLogical() const{return logical;} ULONGLONG GetSizePhysical() const{return physical;} };\nstruct CItemSearch {using SizeTotals=std::pair<ULONGLONG,ULONGLONG>;static std::optional<SizeTotals> CalculateTotals(std::span<CItem* const>, const std::function<bool()>& = {});};\nstd::optional<CItemSearch::SizeTotals> CItemSearch::CalculateTotals(const std::span<CItem* const> items,\n    const std::function<bool()>& isCancelled)\n{\n    ULONGLONG totalLogical = 0;\n    ULONGLONG totalPhysical = 0;\n    const std::unordered_set<const CItem*> matches(items.begin(), items.end());\n\n    // Count only the outermost matching items, so nested results contribute once.\n    for (const auto* item : matches)\n    {\n        if (isCancelled && isCancelled()) return std::nullopt;\n        auto* parent = item->GetParent();\n        while (parent != nullptr && !matches.contains(parent)) parent = parent->GetParent();\n        if (parent != nullptr) continue;\n        totalLogical += item->GetSizeLogical();\n        totalPhysical += item->GetSizePhysical();\n    }\n    return SizeTotals{ totalLogical, totalPhysical };\n}\nint main(){CItem n[7]; n[1].parent=n[2].parent=&n[0]; n[3].parent=n[4].parent=&n[1]; n[5].parent=n[6].parent=&n[2]; for(int i=3;i<7;++i){n[i].logical=i*11;n[i].physical=i*16;}for(int i=2;i>=0;--i){n[i].logical=n[2*i+1].logical+n[2*i+2].logical;n[i].physical=n[2*i+1].physical+n[2*i+2].physical;}int checks=0;for(int mask=0;mask<128;++mask){std::vector<CItem*> selected;for(int i=0;i<7;++i)if(mask&(1<<i)){selected.push_back(&n[i]);selected.push_back(&n[i]);}ULONGLONG l=0,p=0;for(int leaf=3;leaf<7;++leaf){bool included=false;for(int i=leaf;;i=(i-1)/2){if(mask&(1<<i))included=true;if(i==0)break;}if(included){l+=n[leaf].logical;p+=n[leaf].physical;}}auto r=CItemSearch::CalculateTotals(selected);assert(r&&r->first==l&&r->second==p);++checks;}std::vector<CItem*> all{&n[0],&n[1]};assert(!CItemSearch::CalculateTotals(all,[]{return true;}));std::cout<<checks<<\" exhaustive subset totals and cancellation passed\\n\";}\n",
+  "stdout": "128 exhaustive subset totals and cancellation passed\n",
+  "method": "Original CalculateTotals unchanged; synthetic7node tree; independent oracle sums unique selected descendant leaves.",
+  "limits": [
+    "Synthetic model only; no Windows app or UI.",
+    "Does not qualify integer overflow, malformed/cyclic trees or cancellation latency in very deep ancestors."
+  ]
+}
