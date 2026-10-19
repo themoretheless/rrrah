@@ -1,0 +1,31 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of6files; bytes matched pinned Git objects. No rendered/UI execution.",
+  "new_whole_files_read": {
+    "windirstat/Pages/PageTreeMap.h": "261b8af319c5b0daa30889b82a7ca82d44686924f60740624ed3e77e19f8544c",
+    "windirstat/Pages/PageTreeMap.cpp": "8c8c8f3bb3c3d2e5f26a91399084f995720df5df364d5796b611f64d105454a7",
+    "windirstat/Views/WinDirStatPane.h": "7e15102cf66208e8ba5918c34fc1ec9b22690950451b4eb9719d47fb5232181b",
+    "windirstat/Views/WinDirStatPane.cpp": "79c92a9259dff1670abf87c38274cdc552bddae04234a6b2124f058aac366f17",
+    "windirstat/Views/ControlView.h": "7ea69599d9a18b2a9f5a64e5cc826d548a7c2e03d9613a0b760f65674fd59c78",
+    "windirstat/Views/ControlView.cpp": "4bcd221e9e7692a1efb4da757fac3825ec8c5a917168bd5a119de0c3b501c2d3"
+  },
+  "whole_files_read": 105,
+  "coverage": "docs/research/dedup-500/windirstat3-page-pane-coverage-v38-20261019.json",
+  "coverage_sha256": "b4ff2a9d39011ae9b3dc63aa81051b10d4d39fc147daeafdadda33a91c91fb2f",
+  "whole_page_files": 18,
+  "findings": [
+    "Graph page keeps options/custom preset locally, live preview points to local options, and stages copied options/highlight color for commit. Apply notifies graph and selection styles without filesystem rescan.",
+    "Graph style selection validated against declared range; brightness/shading/height/scale/light values come from controls/setters, height explicit0..200. Forged widget ranges and numeric setters not yet runtime-qualified.",
+    "Preset selection changes appearance while maintaining layout-related options through SetAppearance implementation elsewhere. Invalid preset beyond built-in selects saved custom if present; absence resets displayed matching preset.",
+    "Base pane paint delegates OnDraw; context menu preserves current selection if clicked descendant already covered, otherwise requests selection action. Persistent menu commands loop for repeated menu choices.",
+    "ControlView owns virtual owner-data native list via typed template, initializes columns/styles, resizes and forwards focus. Model changes switch root, update list styles, sort on size mode, or invalidate display.",
+    "Selection notifications deferred to PostSelectionChanged; cached selection correctness still depends on remaining tree/list implementation. UI invalidation is not source content revalidation."
+  ],
+  "limits": [
+    "All tracked Pages files now read by declared source method; not proof every setting transaction/render path works.",
+    "No Windows UI, preset rendering, focus/selection race or duplicate engine runtime test.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
