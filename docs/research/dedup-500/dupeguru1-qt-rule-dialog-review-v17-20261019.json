@@ -1,0 +1,92 @@
+{
+  "status": "partial_Qt_rule_problem_deletion_dialog_source_review",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-qt-preferences-review-v16-20261019.json",
+  "previous_sha256": "7767ae6a05a22b0c31ca11eb6c40c9bdae7927a86cab61a67cb6c56ae5465e25",
+  "new_whole_blobs": [
+    {
+      "path": "qt/exclude_list_dialog.py",
+      "git_blob": "43747b5d689a309c95fc32defef1d04e67b736d1",
+      "sha256": "899488f160a1942d6ce41bfd20ab0fac447a128050f1858757cfbf610269abd0",
+      "bytes": 7362,
+      "fully_read": true
+    },
+    {
+      "path": "qt/exclude_list_table.py",
+      "git_blob": "f07d8cf090c5351acad56da9735121081339c463",
+      "sha256": "d41444292676b79f4b2295736814a704dce4d17f8335310946828447a590d046",
+      "bytes": 2560,
+      "fully_read": true
+    },
+    {
+      "path": "qt/ignore_list_dialog.py",
+      "git_blob": "1ccdcc47d633b20a693847db28a96f4a99bc4750",
+      "sha256": "5def04e2573b5ada1649b41658199815e37af51fe5df14481eb5e6dd06c4dc9b",
+      "bytes": 2502,
+      "fully_read": true
+    },
+    {
+      "path": "qt/ignore_list_table.py",
+      "git_blob": "908d93a6c27f7edc39b8ef905cc27f946125a0bf",
+      "sha256": "c5abc8c877af5ac0d4704f5ebef0d3de95fb788b54d7adb867a3eccb4939e260",
+      "bytes": 529,
+      "fully_read": true
+    },
+    {
+      "path": "qt/deletion_options.py",
+      "git_blob": "2f4ef1b6533bcf6f73885d8ad4d37d5efa5207eb",
+      "sha256": "67bb1c03316151c8528e92463f88e79a33f5a1f9695e7ecaa1a00f493b28de9f",
+      "bytes": 3578,
+      "fully_read": true
+    },
+    {
+      "path": "qt/problem_dialog.py",
+      "git_blob": "38c0515f6524173ee9bba69ced0f03336e81e393",
+      "sha256": "8316f70cc3ad1b7c8910d7bee854ba5447958a3c6ab109b0d08e97e31730f1de",
+      "bytes": 3069,
+      "fully_read": true
+    },
+    {
+      "path": "qt/problem_table.py",
+      "git_blob": "9e8a3515803a2b1c476c58deeb76e1827ef33856",
+      "sha256": "419fdc5f340e0238a8a2aa093747ae237e3bd6aabaf2ff4514ca9e22c717cf79",
+      "bytes": 727,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 145,
+  "cumulative_distinct_original_tests_passed": 514,
+  "new_original_tests_run": 0,
+  "supplemental_control": {
+    "path": "docs/research/dedup-500/dupeguru1-qt-rule-dialog-reproducer-v17-20261019/result.json",
+    "sha256": "b88718ef005a9655c460fead5a18f98e482e3f18b6ede1c2c0d5e90217ed68a1"
+  },
+  "findings": [
+    {
+      "scope": "actual_core_exclusion_preview_control",
+      "finding": "Enabled .tmp rule excludes sample.tmp; after unmark and refresh actual is_excluded returns false while test_string still returns true and highlights row. Preview tests pattern match irrespective of enabled status; positive preview alone is not evidence a scan excludes file."
+    },
+    {
+      "scope": "actual_core_invalid_expression_control",
+      "finding": "Adding malformed [ expression raises re.error and leaves rule count unchanged; nonmatching sample.bin preview false."
+    },
+    {
+      "scope": "Qt_rule_dialog_source_only",
+      "finding": "UI add catches duplicate/invalid expression errors; help claims at least one highlight means path ignored, which omits enabled-state distinction from control. Qt table shows compilation error tooltip/icon and disables marking invalid rules."
+    },
+    {
+      "scope": "Qt_problem_ignore_deletion_dialog_source_only",
+      "finding": "Ignore dialog removes/clears pairs through core model; problem dialog reveals selected path on explicit click; deletion dialog collects link/direct settings and reports accepted status. No reveal, trash, delete, link replacement or real Qt dialog actions executed."
+    }
+  ],
+  "limits": [
+    "Seven additional whole files;145of368 dupeGuru blobs read. This file count is separate from145of500 fully reviewed repositories.",
+    "514 distinct original tests remain previous combined core/hscommon run; supplemental control adds no upstream test count.",
+    "No actual Qt rendering/interactions, filesystem scan, production patch or performance result.",
+    "Preview result may intentionally support experimenting with disabled patterns; no incorrect actual scan exclusion established.",
+    "Whole repository review remains incomplete; deferred pHash memory/ASAN investigations skipped."
+  ]
+}

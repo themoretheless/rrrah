@@ -1,0 +1,21 @@
+{
+  "status": "disabled_rule_preview_matches_but_scan_filter_does_not",
+  "source_pins": {
+    "core/exclude.py": "d81a49065b6895b689ccc95cac2f45e19f5d1ea54ec76e435d8a9fc4e461b331",
+    "core/gui/exclude_list_dialog.py": "62993a67b07227a9c77d3b483e9cf3bbec87668f4745e2f62adf90aedf0e265c",
+    "core/gui/exclude_list_table.py": "7614cce0e0c9b00a0edfec815d7ebe02dc4bd8ee82a33cda15e5b30dce35ab8a"
+  },
+  "enabled_preview": true,
+  "disabled_preview": true,
+  "disabled_actual_exclusion": false,
+  "disabled_highlighted_rules": [
+    ".*\\.tmp"
+  ],
+  "invalid_expression_rejected_without_adding_rule": true,
+  "limits": [
+    "Actual ExcludeDict and core dialog/table logic; original CallLogger view, no Qt widget or filesystem traversal.",
+    "Preview can be useful for testing a disabled regex, but its positive highlight is not proof the path will be excluded.",
+    "No app constructor, user data, file actions, source patches or production changes.",
+    "Supplemental authored control, not an additional upstream test."
+  ]
+}
