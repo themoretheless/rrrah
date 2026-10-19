@@ -1,0 +1,13 @@
+{
+  "reproduction": "shared_segmented_quota_refuses_spill_without_corrupting_visible_and_retries",
+  "before": "failed: errors=1 for expected shared quota refusal",
+  "after": {
+    "library_passed": 149,
+    "library_ignored": 3,
+    "integration_passed": 4
+  },
+  "source_sha256": {
+    "crates/rrrah-cache/src/swap.rs": "84ca02ee65108d6750cfba6923ae12d331f152ab8083c0294a06f3f48a682913",
+    "crates/rrrah-cache/tests/associated_raster.rs": "b2331356242b5c77044537cc607e18a315aeda159714f6ab31298dbc30211cf0"
+  }
+}

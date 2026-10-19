@@ -1,0 +1,11 @@
+# Retained prefetch avoids unretainable swap reads
+
+Background worker prefetch requests a lease so that a prepared neighbour remains in RAM. If all count slots are protected, a speculative swap restore previously decoded the swap payload into a transient frame and failed to retain it. The worker now skips that restore when count-only admission cannot succeed. Existing RAM hits remain eligible because they occupy an existing key. Source identity/fingerprint reads still occur; this is not a no-filesystem-I/O claim. Byte admission and cancellation checks remain separate.
+
+The model retained-prefetch mode checks protected count slots after resident lookup and before swap/native decode. Raster worker preload opts into a specific early-swap policy. The common raster lookup wrapper retains its prior behavior: an explicit low-level request can obtain an ephemeral swap frame even when RAM slots are protected. Its existing regression remains unchanged and passes. Foreground navigation still restores normally.
+
+New regressions cover STL, OBJ, PLY, OFF and associated-emission EXR. With selected and nearest slots protected, far swap-prefetch returns the protected-count refusal and the disk-read counter stays zero. After releasing the nearest lease, the request restores once, obtains a lease and produces an exact native serialized payload. Selected-frame protection survives and managed roots return to zero after explicit worker drain/shutdown.
+
+The first model test checked final accounting before pending spill ownership had completed; the test was corrected to use the documented drain/shutdown synchronization. A broader pilot also detected that applying early refusal to every low-level raster request would violate the existing ephemeral-hit contract. Production logic was narrowed to the retained worker policy; the old regression was not weakened. Both pilot logs are retained.
+
+Final application suite:291 passed,82 ignored. This covers existing foreground swap, warm ephemeral raster hits, cancellation, TTL and prefetch regressions as well as the new cases. Formatting and whitespace checks passed. No throughput improvement, physical disk endurance, GPU or live-window correctness is inferred from these checks.

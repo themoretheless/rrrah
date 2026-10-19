@@ -154,7 +154,7 @@ impl RasterRenderer {
     }
 
     /// Renders linear HDR into RGBA16F, with binary16 precision and range.
-    /// Callers must keep exposed/composited values within that representable range.
+    /// Finite exposed/composited values saturate to the binary16 range at output.
     /// No display transfer, tone mapping or HDR surface configuration is applied.
     pub fn new_linear_hdr(device: &wgpu::Device) -> Self {
         Self::create(device, wgpu::TextureFormat::Rgba16Float)
@@ -1146,6 +1146,187 @@ mod tile_admission_tests {
         }
         eprintln!(
             "area float32 range: +/-MAX and signed cancellation exact, small channels intact, all finite"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn associated_exr_extreme_float32_and_half_metal() {
+        let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+        descriptor.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(descriptor);
+        let adapter = match pollster::block_on(instance.request_adapter(&Default::default())) {
+            Ok(adapter) => adapter,
+            Err(error) => {
+                assert!(
+                    std::env::var("RRRAH_GPU_OPTIONAL").as_deref() != Ok("0"),
+                    "required Metal unavailable: {error}"
+                );
+                return;
+            }
+        };
+        eprintln!("area float32 scaling adapter: {:?}", adapter.get_info());
+        let (device, queue) = pollster::block_on(adapter.request_device(&Default::default())).unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/raster/associated-overflow-rec709.exr"),
+        );
+        request.memory_budget = Some(root.clone());
+        let decoded = rrrah_decode::decode_raster(&request).unwrap();
+        let raster = rrrah_decode::prepare_raster_for_display_with_budget(&decoded, Some(&root)).unwrap();
+        assert_eq!(
+            raster.alpha_association(),
+            rrrah_core::RasterAlphaAssociation::Associated
+        );
+        let compute = crate::LinearExposureCompute::new(&device);
+        let refused = rrrah_core::MemoryBudget::new(4096);
+        assert!(matches!(
+            compute.execute_raster_resident(&queue, &raster, 1., &refused, || false),
+            Err(crate::ExposureError::Invalid(
+                "exposure requires finite input and output"
+            ))
+        ));
+        assert_eq!(refused.peak(), 0, "overflow must fail before GPU admission");
+        for (half, resident, stops) in [
+            (false, false, 0.),
+            (true, false, 0.),
+            (false, true, 0.),
+            (true, true, 0.),
+            (false, true, -1.),
+            (true, true, -1.),
+        ] {
+            let format = if half {
+                wgpu::TextureFormat::Rgba16Float
+            } else {
+                wgpu::TextureFormat::Rgba32Float
+            };
+            let mut renderer = RasterRenderer::create(&device, format);
+            let gpu_budget = rrrah_core::MemoryBudget::new(8192);
+            renderer.memory_budget = Some(gpu_budget.clone());
+            let output = if resident {
+                let result = compute
+                    .execute_raster_resident(&queue, &raster, stops, &gpu_budget, || false)
+                    .unwrap();
+                assert_eq!(result.alpha_association(), raster.alpha_association());
+                renderer
+                    .upload_resident_with_aspect(
+                        &device,
+                        &queue,
+                        &result,
+                        [raster.width(), raster.height()],
+                        raster.pixel_aspect(),
+                        || false,
+                    )
+                    .unwrap();
+                Some(result)
+            } else {
+                renderer.upload(&device, &queue, &raster).unwrap();
+                None
+            };
+            renderer.set_background(&queue, [0.; 3]).unwrap();
+            renderer.set_area_minification(&queue, true);
+            renderer.update_view(
+                &queue,
+                ViewParameters {
+                    viewport: [1., 1.],
+                    zoom: 1.,
+                    ..Default::default()
+                },
+            );
+            let target = device.create_texture(&wgpu::TextureDescriptor {
+                label: Some("area float32 range oracle"),
+                size: wgpu::Extent3d {
+                    width: 1,
+                    height: 1,
+                    depth_or_array_layers: 1,
+                },
+                mip_level_count: 1,
+                sample_count: 1,
+                dimension: wgpu::TextureDimension::D2,
+                format,
+                usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+                view_formats: &[],
+            });
+            let readback = device.create_buffer(&wgpu::BufferDescriptor {
+                label: None,
+                size: 256,
+                usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+                mapped_at_creation: false,
+            });
+            let mut encoder = device.create_command_encoder(&Default::default());
+            renderer.encode(&mut encoder, &target.create_view(&Default::default()));
+            encoder.copy_texture_to_buffer(
+                wgpu::TexelCopyTextureInfo {
+                    texture: &target,
+                    mip_level: 0,
+                    origin: wgpu::Origin3d::ZERO,
+                    aspect: wgpu::TextureAspect::All,
+                },
+                wgpu::TexelCopyBufferInfo {
+                    buffer: &readback,
+                    layout: wgpu::TexelCopyBufferLayout {
+                        offset: 0,
+                        bytes_per_row: Some(256),
+                        rows_per_image: Some(1),
+                    },
+                },
+                wgpu::Extent3d {
+                    width: 1,
+                    height: 1,
+                    depth_or_array_layers: 1,
+                },
+            );
+            queue.submit([encoder.finish()]);
+            let (tx, rx) = std::sync::mpsc::channel();
+            readback.slice(..).map_async(wgpu::MapMode::Read, move |status| {
+                tx.send(status).unwrap();
+            });
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            rx.recv().unwrap().unwrap();
+            let mapped = readback.slice(..).get_mapped_range().unwrap();
+            if half {
+                let value = bytemuck::cast_slice::<u8, u16>(&mapped[..8]);
+                assert_eq!(
+                    value,
+                    [0x7bff, 0xfbff, if stops == 0. { 0x3d00 } else { 0x3900 }, 0x3c00]
+                );
+            } else {
+                let value = bytemuck::cast_slice::<u8, f32>(&mapped[..16]);
+                let gain = if stops == 0. { 1. } else { 0.5 };
+                assert_eq!(
+                    value,
+                    [f32::MAX / 4. * gain, -f32::MAX / 4. * gain, 1.25 * gain, 1.]
+                );
+                assert!(value.iter().all(|v| v.is_finite()));
+            }
+            drop(mapped);
+            readback.unmap();
+            drop((renderer, output));
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(
+                gpu_budget.used(),
+                0,
+                "resident/input credit retained after completed render"
+            );
+        }
+        let gpu_root = rrrah_core::MemoryBudget::new(4096);
+        let rrrah_core::RasterPixels::Rgba32Float(values) = raster.pixels() else {
+            panic!()
+        };
+        let result = compute
+            .execute_interleaved_with_cancel(&queue, values, 0., &gpu_root, &root, || false)
+            .unwrap();
+        assert_eq!(
+            result.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            values.iter().map(|v| v.to_bits()).collect::<Vec<_>>()
+        );
+        drop(result);
+        assert_eq!(gpu_root.used(), 0);
+        drop((raster, decoded));
+        assert_eq!(root.used(), 0);
+        eprintln!(
+            "associated EXR Metal: float32 mean exact; half output finite saturation; compute bits exact; resident 0/-1 stops exact; +1 overflow refused before admission; managed roots zero"
         );
     }
 

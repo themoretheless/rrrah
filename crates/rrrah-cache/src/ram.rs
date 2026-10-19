@@ -77,6 +77,17 @@ impl MosaicRamCache {
         true
     }
 
+    /// Count-only admission without restoring or evicting mosaics.
+    /// Existing resident keys remain eligible; released leases are reconciled.
+    pub fn can_admit_key_by_count(&mut self, key: &CacheKey) -> bool {
+        self.inner.can_admit_key_by_count(key)
+    }
+
+    /// Minimum-weight admission without restoring or evicting mosaics.
+    pub fn can_admit_key_by_minimum_weight(&mut self, key: &CacheKey, minimum: u64) -> bool {
+        self.inner.can_admit_key_by_minimum_weight(key, minimum)
+    }
+
     pub fn resident_weight(&self) -> u64 {
         self.inner.resident_weight()
     }
@@ -286,6 +297,50 @@ mod tests {
             Arc::new(vec![42_u16; pixels]),
         )
         .unwrap()
+    }
+
+    #[test]
+    fn minimum_sensor_weight_preflight_blocks_full_protected_byte_budget() {
+        let mut cache = MosaicRamCache::with_limits(crate::CacheLimits::bytes(8));
+        assert!(cache.insert_visible(key(1), mosaic(2)));
+        assert!(cache.insert(key(2), mosaic(2)));
+        let lease = cache.get_lease(&key(2)).unwrap();
+        assert!(cache.can_admit_key_by_count(&key(3)));
+        assert!(!cache.can_admit_key_by_minimum_weight(&key(3), 2));
+        assert!(cache.can_admit_key_by_minimum_weight(&key(1), 2));
+        assert!(!cache.can_admit_key_by_minimum_weight(&key(1), 5));
+        assert!(!cache.can_admit_key_by_minimum_weight(&key(3), u64::MAX));
+        assert_eq!(
+            (cache.len(), cache.resident_weight(), cache.visible()),
+            (2, 8, Some(key(1)))
+        );
+        drop(lease);
+        assert!(cache.can_admit_key_by_minimum_weight(&key(3), 2));
+        assert_eq!(
+            (cache.len(), cache.resident_weight(), cache.visible()),
+            (2, 8, Some(key(1)))
+        );
+    }
+
+    #[test]
+    fn count_preflight_preserves_ready_raw_and_reconciles_released_lease() {
+        let mut cache = MosaicRamCache::with_limits(crate::CacheLimits {
+            max_bytes: 8,
+            max_entries: Some(2),
+            ttl: None,
+        });
+        assert!(cache.insert_visible(key(1), mosaic(2)));
+        assert!(cache.insert(key(2), mosaic(2)));
+        let lease = cache.get_lease(&key(2)).unwrap();
+        assert!(cache.can_admit_key_by_count(&key(1)));
+        assert!(cache.can_admit_key_by_count(&key(2)));
+        assert!(!cache.can_admit_key_by_count(&key(3)));
+        assert_eq!((cache.len(), cache.resident_weight()), (2, 8));
+        assert_eq!(cache.visible(), Some(key(1)));
+        drop(lease);
+        assert!(cache.can_admit_key_by_count(&key(3)));
+        assert_eq!((cache.len(), cache.resident_weight()), (2, 8));
+        assert_eq!(cache.visible(), Some(key(1)));
     }
 
     #[test]

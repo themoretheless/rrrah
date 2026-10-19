@@ -1,0 +1,107 @@
+{
+  "runs": [
+    {
+      "name": "diagnostic300",
+      "launch": {
+        "exit": 0,
+        "wall_seconds": 13.317839333001757,
+        "command": [
+          "/tmp/rrrah-alpha-isolated-target-20261016/debug/rrrah",
+          "--gpu-backend",
+          "metal",
+          "--managed-memory-mb",
+          "64",
+          "--raster-gpu-mb",
+          "16",
+          "--raster-cache-mb",
+          "8",
+          "--raster-cache-count",
+          "1",
+          "--raster-swap-mb",
+          "16",
+          "--raster-swap-count",
+          "4",
+          "--raster-swap-restore-mb",
+          "8",
+          "--prefetch-previous",
+          "0",
+          "--prefetch-next",
+          "0",
+          "/tmp/rrrah-live-endurance-20261019/01-emission.exr"
+        ],
+        "rounds_requested": 300
+      },
+      "completed_rounds": 300,
+      "guarded_swap_hits": 300
+    },
+    {
+      "name": "diagnostic3000-context",
+      "launch": {
+        "exit": 1,
+        "wall_seconds": 3.4980977089726366,
+        "command": [
+          "/tmp/rrrah-alpha-isolated-target-20261016/debug/rrrah",
+          "--gpu-backend",
+          "metal",
+          "--managed-memory-mb",
+          "64",
+          "--raster-gpu-mb",
+          "16",
+          "--raster-cache-mb",
+          "8",
+          "--raster-cache-count",
+          "1",
+          "--raster-swap-mb",
+          "16",
+          "--raster-swap-count",
+          "4",
+          "--raster-swap-restore-mb",
+          "8",
+          "--prefetch-previous",
+          "0",
+          "--prefetch-next",
+          "0",
+          "/tmp/rrrah-live-endurance-20261019/01-emission.exr"
+        ],
+        "rounds_requested": 3000
+      },
+      "completed_rounds": 108,
+      "guarded_swap_hits": 108
+    },
+    {
+      "name": "isolated3000",
+      "launch": {
+        "exit": 1,
+        "wall_seconds": 2.5302858329960145,
+        "command": [
+          "/tmp/rrrah-alpha-isolated-target-20261016/debug/rrrah",
+          "--gpu-backend",
+          "metal",
+          "--managed-memory-mb",
+          "64",
+          "--raster-gpu-mb",
+          "16",
+          "--raster-cache-mb",
+          "8",
+          "--raster-cache-count",
+          "1",
+          "--raster-swap-mb",
+          "16",
+          "--raster-swap-count",
+          "4",
+          "--raster-swap-restore-mb",
+          "8",
+          "--prefetch-previous",
+          "0",
+          "--prefetch-next",
+          "0",
+          "/tmp/rrrah-live-isolated-20261019/corpus/01-emission.exr"
+        ],
+        "rounds_requested": 3000
+      },
+      "completed_rounds": 129,
+      "guarded_swap_hits": 130
+    }
+  ],
+  "source_sha256": "906148e81838621e0168803ff56a6521339e8c7fc747456a657edbf05af7c302"
+}

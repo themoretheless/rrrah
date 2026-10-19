@@ -577,20 +577,23 @@ fn rle_multiframe_prefetch_windows_preserve_nearest_under_count_and_byte_limits(
                                 }
                             }
                             Err(error) => {
-                                assert!(count_limited && !protected.is_empty());
-                                assert_eq!(error, "raster prefetch skipped: all count slots are protected");
+                                assert!(
+                                    !protected.is_empty(),
+                                    "nearest must be retained before refusing farther frames"
+                                );
+                                assert_eq!(
+                                    error,
+                                    if count_limited {
+                                        "raster prefetch skipped: all count slots are protected"
+                                    } else {
+                                        "raster prefetch skipped: protected byte budget exhausted"
+                                    }
+                                );
                                 skipped += 1;
                             }
                         }
                     }
-                    assert_eq!(
-                        skipped,
-                        if count_limited {
-                            indices.len().saturating_sub(1)
-                        } else {
-                            0
-                        }
-                    );
+                    assert_eq!(skipped, indices.len().saturating_sub(1));
                     assert_eq!(cache.len(), if indices.is_empty() { 1 } else { 2 });
                     assert_eq!(protected.len(), usize::from(!indices.is_empty()));
                     if let Some(&nearest) = indices.first() {

@@ -10775,3 +10775,189 @@ LOD and Metal raster/compute. Independent signed HDR compositing passes on M4 Ma
 The collection remains 962/1024 accepted: the former emission case now requires
 source color interpretation. This is not full EXR or physical HDR qualification.
 See [report](research/exr-associated-emission-2026-10-19/REPORT.md).
+
+
+## Opaque EXR alpha scan optimization — 2026-10-19
+
+Skip overflow checks at alpha=1 and skip the unassociation pass if no sample
+needs division. Independent prepared hashes match in paired warm CPU runs.
+Opaque CPU-ready p50 improves by 8.75% in the retained direct comparison;
+fractional-alpha difference is small/noisy. Fractional overhead versus the
+original straight-only decoder remains unresolved. A max-channel candidate
+was rejected after a fractional regression.
+See [measurements](research/exr-associated-emission-2026-10-19/performance/opaque-fast-path/REPORT.md).
+
+
+## Late EXR unassociation overflow — 2026-10-19
+
+An independent four-pixel OpenEXR FLOAT oracle proves finite RGB with tiny
+positive alpha retains exact associated samples throughout decode/preparation
+and swap, including preceding fractional and signed-zero pixels. CPU/swapped
+LOD agree at f32 extremes; managed pixel/index roots release to zero.
+This is CPU/cache evidence, not f16 GPU extreme-range qualification.
+See [report](research/exr-associated-emission-2026-10-19/overflow-boundary/REPORT.md).
+
+
+## Extreme associated EXR on Metal — 2026-10-19
+
+Actual M4 Max Metal now proves exact RGBA32F area mean for the independent
+late-overflow EXR fixture and finite RGBA16F saturation at +/-65504. Managed
+zero-stop compute readback preserves all source bits; CPU/compute roots return
+to zero. No shader change was needed. This supersedes the missing GPU extreme
+evidence for this particular fixture/geometry, not physical HDR or CUDA gates.
+See [report](research/exr-associated-emission-2026-10-19/overflow-metal/REPORT.md).
+
+
+## Extreme EXR resident compute transport — 2026-10-19
+
+Actual Metal now proves association-preserving compute-to-raster at 0/-1 stops,
+exact float area output and finite half saturation, with per-case GPU credit
+release. +1-stop source overflow is explicitly refused before reservation.
+This extends the earlier blocking-compute proof to resident transport.
+See [report](research/exr-associated-emission-2026-10-19/overflow-resident-metal/REPORT.md).
+
+
+## External collection asymmetric prefetch windows — 2026-10-19
+
+Eight direction/window combinations (disabled, ahead-only, behind-only and mixed)
+pass across 962/1024 strict-color accepted files. 720 nearest-prefetch foreground
+lookups avoid decoding; 61 TTL restores pass with pressure refusal/retry. Swap
+errors/drops zero in this run, final managed usage zero. Source SHA256 rechecked
+for all 1024 files. This is shared loader/cache evidence, not live GUI or physical
+pressure endurance. See [report](research/external-varied-prefetch-2026-10-19/REPORT.md).
+
+
+## Live repeated raster navigation — incomplete, 2026-10-19
+
+The debug probe now supports repeated guarded cache roundtrips. Real window
+runs observed294 and203 completed EXR/PSD cycles with matching foreground swap
+hits; neither completed the300-cycle gate. First failed after a gallery context
+loss, repeat stopped progressing and hit the240s watchdog. Cause unresolved;
+no GUI endurance success claim. Ordinary regression288 passed/82 ignored.
+See [report](research/live-raster-endurance-2026-10-19/REPORT.md).
+
+
+## Live navigation diagnostics follow-up — 2026-10-19
+
+A diagnostic run completed300 real EXR/PSD cycles with guarded foreground swap
+hits, same recovered Metal device and exit0. The3000-cycle follow-up changed
+to an unrelated JXL gallery; canonical paths were intact. An isolated follow-up
+exited after129 cycles without a probe failure marker. Initiating input/window
+events are unrecorded; no runtime root-cause fix or long-duration GUI claim.
+Further window testing awaits desktop availability.
+See [report](research/live-raster-diagnostics-2026-10-19/REPORT.md).
+
+
+## MEF independent WB reference audit — 2026-10-19
+
+Pinned LegacyDenoiser source uses a D65-derived fallback when camera WB is
+unavailable; that does not qualify as-shot WB for the existing zero-multiplier
+MEF source. Another sample-library download helper supplies instructions rather
+than a new MEF URL. No runtime dependency or unsupported WB guess was introduced;
+MEF remains pending. See [audit](research/mef-independent-wb-audit-2026-10-19/REPORT.md).
+
+
+## Shared visible/spill swap quota accounting — 2026-10-19
+
+A visible segmented object can occupy the shared hard quota outside the spill
+LRU. Its expected typed quota refusal now increments dropped rather than errors.
+Regression proves exact visible restoration, queue-credit release and successful
+same-key retry after quota release; final roots zero.149 library tests and4
+associated-raster integrations pass. Real codec/corruption failures remain errors.
+See [report](research/shared-visible-swap-quota-2026-10-19/REPORT.md).
+
+
+## 3D retained-prefetch count preflight — 2026-10-19
+
+OBJ/STL/PLY/OFF background retained prefetch now skips cold parsing when all
+RAM count slots are protected. Regression proves decoder bypass, unchanged peak
+geometry credit, warm resident hit, and admission after nearest lease release.
+Foreground/cancellation/swap semantics remain covered by289 passing ordinary
+app tests (82 ignored). Full-count speculative swap restoration remains before
+this preflight. See [report](research/model-prefetch-count-preflight-2026-10-19/REPORT.md).
+
+
+## Retained prefetch swap admission — 2026-10-19
+
+Worker prefetch now avoids swap reads that cannot be retained because all RAM
+count slots are protected. STL/OBJ/PLY/OFF and associated EXR regressions prove
+zero refused reads, exact single restore after lease release, preserved selected
+protection and final managed release. Explicit low-level ephemeral raster swap
+hits retain their existing contract.291 app tests pass,82 ignored.
+See [report](research/prefetch-swap-admission-2026-10-19/REPORT.md).
+
+
+## Paired retained-prefetch collection measurement — 2026-10-19
+
+Six alternating full1024-source runs on one binary compare the legacy swap
+probe with early retained-prefetch admission. Median collection time improves
+8.2350→7.0283s (-14.65%); median swap reads1327→628. All prepared/source digests
+match;962 navigation sources,720 nearest hits and61 TTL restores survive in
+every run. Managed final zero, swap errors zero, bounded queue drops2..7.
+The test-only baseline switch is absent from production builds.291 ordinary
+app tests pass. This is bounded warm-local CPU/cache evidence, not slow physical
+disk or live GUI speed. See [report](research/prefetch-admission-paired-2026-10-19/REPORT.md).
+
+
+## Associated extreme HDR magnification — 2026-10-19
+
+Actual M4 Max Metal bilinear enlargement now covers associated zero-alpha
+emission beside opposite f32 extremes, with exact central-row half-float
+saturation/cancellation and finite output frames. Three targeted hardware tests
+pass, including existing exposure and36MP HDR LOD controls. Synthetic renderer
+evidence, not new EXR decode, physical HDR or all-pixel appearance qualification.
+See [report](research/associated-hdr-magnification-metal-2026-10-19/REPORT.md).
+
+
+## RAW retained-prefetch count admission — 2026-10-19
+
+RAW neighbours now skip swap/disk restore and native sensor decode when all
+RAM count slots are protected. Recipe/fingerprint work remains; byte-only
+admission is unchanged. Unit coverage reconciles released leases; strengthened
+original CR3 test passes both directions, full-pressure ready hit, unchanged
+sensor peak for blocked count cases, release/retry and final zero.150 cache
+and291 app tests pass. See [report](research/raw-prefetch-count-preflight-2026-10-19/REPORT.md).
+
+
+## RAW fully protected byte-budget admission — 2026-10-19
+
+A generic minimum-weight preflight now checks count plus bytes occupied by
+other protected entries. RAW uses a two-byte lower bound, avoiding unretainable
+work when the protected byte budget is exhausted, without guessing dimensions.
+Partial free space insufficient for a particular sensor remains outside this
+estimator.195 library tests,291 app tests and strengthened original CR3 count/
+byte cases in both directions pass.
+See [report](research/raw-prefetch-protected-bytes-2026-10-19/REPORT.md).
+
+
+## Prepared native CR3 cold-prefetch source — 2026-10-19
+
+PreparedCr3 retains one encoded source owner, reports full-sensor byte bounds
+without entropy decode and consumes the same snapshot on success. Cold CR3
+prefetch now skips a W-byte sensor with only0.5W free beside protected entries.
+Original-file tests prove snapshot decode after temporary-path removal, exact
+values/metadata, encoded+sensor managed peak and cancel/drop release.292 app
+tests,7 native unit tests and2 original manual cases pass. Current EOS R8 scope
+only; other formats/cache tiers and fitting-path overhead remain unqualified.
+See [report](research/prepared-cr3-source-admission-2026-10-19/REPORT.md).
+
+
+## Prepared CR3 fitting-path timing — 2026-10-19
+
+Twelve alternating measured pairs (four warmup pairs excluded) compare direct
+and prepared decode on one original CR3: median44.42 vs44.02ms, median paired
+difference-0.61%, within the observed variation. No speedup/equivalence claim.
+Every full native-sample/metadata hash matches, managed final zero. This supplies
+bounded fitting-path evidence, not all-source overhead or cold physical disk
+qualification. See [timings](research/prepared-cr3-paired-timing-2026-10-19/REPORT.md).
+
+
+## Raster/model fully protected byte budgets — 2026-10-19
+
+Retained worker prefetch now avoids cold parse and swap restore when protected
+entries leave less than the guaranteed minimum model/raster weight. Independent
+count/byte cases pass for STL/OBJ/PLY/OFF and associated EXR; empty STL header
+admission and DICOM RLE window policies are covered. Explicit ephemeral requests
+keep their old contract.293 app tests pass,83 ignored. Partial free-space exact
+size estimation remains outside this lower-bound check.
+See [report](research/raster-model-protected-bytes-2026-10-19/REPORT.md).

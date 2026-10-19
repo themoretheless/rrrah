@@ -146,6 +146,9 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
     let generation = Arc::new(AtomicU64::new(0));
     let gate = Arc::new(DecodeGate::new());
     let paths: Vec<_> = valid.iter().map(|(p, ..)| p.clone()).collect();
+    let varied_windows = std::env::var_os("RRRAH_COLLECTION_VARY_PREFETCH").is_some_and(|v| v == "1");
+    let mut window_steps = BTreeMap::<String, usize>::new();
+    let mut prefetched_hits = 0usize;
     let mut far_refusals = 0;
     let mut ttl_restores = 0;
     let mut max_pre_pressure_used = 0;
@@ -167,16 +170,47 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
         let (visible, assumed) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
         assert_eq!(digest(&visible), valid[selected].1);
         assert_eq!(assumed, valid[selected].2);
-        let neighbours = gallery::neighbour_prefetch_paths(
-            &paths,
-            selected,
-            if step % 2 == 0 {
-                NavDirection::Forward
-            } else {
-                NavDirection::Backward
-            },
-            gallery::PrefetchWindow { behind: 1, ahead: 2 },
+        let direction = if step % 2 == 0 {
+            NavDirection::Forward
+        } else {
+            NavDirection::Backward
+        };
+        let window = if varied_windows {
+            // Cycle independently of direction: both directions see every policy.
+            match (step / 2) % 4 {
+                0 => gallery::PrefetchWindow { behind: 0, ahead: 0 },
+                1 => gallery::PrefetchWindow { behind: 0, ahead: 3 },
+                2 => gallery::PrefetchWindow { behind: 3, ahead: 0 },
+                _ => gallery::PrefetchWindow { behind: 1, ahead: 2 },
+            }
+        } else {
+            gallery::PrefetchWindow { behind: 1, ahead: 2 }
+        };
+        *window_steps
+            .entry(format!(
+                "{direction:?}:behind={}:ahead={}",
+                window.behind, window.ahead
+            ))
+            .or_default() += 1;
+        let neighbours = gallery::neighbour_prefetch_paths(&paths, selected, direction, window);
+        let (left, right) = if direction == NavDirection::Forward {
+            (window.behind, window.ahead)
+        } else {
+            (window.ahead, window.behind)
+        };
+        assert_eq!(
+            neighbours.len(),
+            left.min(selected) + right.min(paths.len() - selected - 1)
         );
+        for path in &neighbours {
+            let index = paths.iter().position(|p| p == path).unwrap();
+            assert_ne!(index, selected);
+            assert!(if index < selected {
+                selected - index <= left
+            } else {
+                index - selected <= right
+            });
+        }
         let mut protected = Vec::new();
         for (n, path) in neighbours.into_iter().enumerate() {
             match preload_raster_with_lease(&request_for(&path), None, &mut cache, &gate) {
@@ -186,6 +220,19 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
                     assert_eq!(assumption, reference.2);
                     if n == 0 {
                         assert!(lease.is_some());
+                        // Prove the warmed item can be navigated to without decoding.
+                        let (hit, hit_assumed) =
+                            load_cached_raster_with(&request_for(&path), None, &mut cache, || {
+                                panic!("nearest prefetched neighbour decoded again")
+                            })
+                            .unwrap();
+                        assert_eq!(digest(&hit), reference.1);
+                        assert_eq!(hit_assumed, reference.2);
+                        // This visible lookup must not steal protection from selection.
+                        let mut selected_key = raster_display_key(&request, None).unwrap();
+                        selected_key.6 = assumed;
+                        cache.mark_visible(selected_key);
+                        prefetched_hits += 1;
                     }
                     if let Some(lease) = lease {
                         protected.push(lease);
@@ -289,7 +336,7 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
         }
     }
     let report = serde_json::json!({"scope":"external content-unique corpus; strict application color defaults; same-decoder baseline hashes test transport, not independent color correctness",
-        "attempted":sources.len(),"refusal_categories":refusal_categories,"accepted_extensions":accepted,"navigation_sources":valid.len(),"far_count_refusals":far_refusals,"ttl_restores":ttl_restores,
+        "legacy_prefetch_swap_reads":std::env::var("RRRAH_BENCH_LEGACY_PREFETCH_SWAP").as_deref()==Ok("1"),"attempted":sources.len(),"refusal_categories":refusal_categories,"accepted_extensions":accepted,"navigation_sources":valid.len(),"far_count_refusals":far_refusals,"ttl_restores":ttl_restores,"varied_prefetch_windows":varied_windows,"window_steps":window_steps,"nearest_navigation_hits":prefetched_hits,
         "swap":{"writes":stats.writes,"reads":stats.reads,"dropped":stats.dropped,"errors":stats.errors},"disk_debug":format!("{disk:?}"),
         "baseline_peak":baseline_peak,"max_observed_pre_pressure_used":max_pre_pressure_used,"root_peak_includes_synthetic_pressure":true,"root_peak":root.peak(),"root_limit":root.limit(),"root_final":root.used(),"seconds":started.elapsed().as_secs_f64(),"rows":rows});
     std::fs::write(

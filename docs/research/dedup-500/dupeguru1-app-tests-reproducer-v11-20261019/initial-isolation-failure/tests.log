@@ -1,0 +1,64 @@
+..FF.................................F                                   [100%]
+=================================== FAILURES ===================================
+______________________ TestCaseDupeGuru.test_copy_or_move ______________________
+
+self = <core.tests.app_test.TestCaseDupeGuru object at 0x1072c1a00>
+tmpdir = local('/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-app-tests-20261019/pytest-temp/test_copy_or_move0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1072d66c0>
+
+    def test_copy_or_move(self, tmpdir, monkeypatch):
+        # The goal here is just to have a test for a previous blowup I had. I know my test coverage
+        # for this unit is pathetic. What's done is done. My approach now is to add tests for
+        # every change I want to make. The blowup was caused by a missing import.
+        p = Path(str(tmpdir))
+        p.joinpath("foo").touch()
+        monkeypatch.setattr(
+            hscommon.conflict,
+            "smart_copy",
+            log_calls(lambda source_path, dest_path: None),
+        )
+        # XXX This monkeypatch is temporary. will be fixed in a better monkeypatcher.
+        monkeypatch.setattr(app, "smart_copy", hscommon.conflict.smart_copy)
+        monkeypatch.setattr(os, "makedirs", lambda path: None)  # We don't want the test to create that fake directory
+        dgapp = TestApp().app
+        dgapp.directories.add_path(p)
+>       [f] = dgapp.directories.get_files()
+E       ValueError: too many values to unpack (expected 1)
+
+core/tests/app_test.py:71: ValueError
+_____________ TestCaseDupeGuru.test_copy_or_move_clean_empty_dirs ______________
+
+self = <core.tests.app_test.TestCaseDupeGuru object at 0x1072c1be0>
+tmpdir = local('/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-app-tests-20261019/pytest-temp/test_copy_or_move_clean_empty_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1072d7b90>
+
+    def test_copy_or_move_clean_empty_dirs(self, tmpdir, monkeypatch):
+        tmppath = Path(str(tmpdir))
+        sourcepath = tmppath.joinpath("source")
+        sourcepath.mkdir()
+        sourcepath.joinpath("myfile").touch()
+        app = TestApp().app
+        app.directories.add_path(tmppath)
+>       [myfile] = app.directories.get_files()
+E       ValueError: too many values to unpack (expected 1)
+
+core/tests/app_test.py:86: ValueError
+_ TestAppWithDirectoriesInTree.test_set_root_as_ref_makes_subfolders_ref_as_well _
+
+self = <core.tests.app_test.TestAppWithDirectoriesInTree object at 0x1072d57c0>
+do_setup = None
+
+    def test_set_root_as_ref_makes_subfolders_ref_as_well(self, do_setup):
+        # Setting a node state to something also affect subnodes. These subnodes must be correctly
+        # refreshed.
+        node = self.dtree[0]
+>       eq_(len(node), 3)  # a len() call is required for subnodes to be loaded
+E       AssertionError: 4 != 3
+
+core/tests/app_test.py:503: AssertionError
+- generated xml file: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-app-tests-20261019/junit.xml -
+=========================== short test summary info ============================
+FAILED core/tests/app_test.py::TestCaseDupeGuru::test_copy_or_move - ValueErr...
+FAILED core/tests/app_test.py::TestCaseDupeGuru::test_copy_or_move_clean_empty_dirs
+FAILED core/tests/app_test.py::TestAppWithDirectoriesInTree::test_set_root_as_ref_makes_subfolders_ref_as_well
+3 failed, 35 passed in 0.17s

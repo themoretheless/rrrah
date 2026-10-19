@@ -1106,6 +1106,7 @@ fn decode_raster_bytes_inner(
                 // Preserve valid associated emission/overflow cases exactly.
                 // Ordinary EXR keeps its established straight-alpha contract.
                 let mut needs_associated = false;
+                let mut needs_unassociation = false;
                 for (index, pixel) in pixels.chunks_exact(4).enumerate() {
                     if index % 4096 == 0 {
                         request.check_cancelled()?;
@@ -1115,16 +1116,21 @@ fn decode_raster_bytes_inner(
                             "non-finite or out-of-range alpha/RGB",
                         ));
                     }
-                    needs_associated |= if pixel[3] == 0.0 {
+                    let alpha = pixel[3];
+                    if alpha == 1.0 {
+                        continue;
+                    }
+                    needs_unassociation |= alpha > 0.0;
+                    needs_associated |= if alpha == 0.0 {
                         pixel[..3].iter().any(|v| *v != 0.0)
                     } else {
-                        let bound = f64::from(f32::MAX) * f64::from(pixel[3]);
+                        let bound = f64::from(f32::MAX) * f64::from(alpha);
                         pixel[..3].iter().any(|v| f64::from(v.abs()) > bound)
                     };
                 }
                 if needs_associated {
                     alpha_association = rrrah_core::RasterAlphaAssociation::Associated;
-                } else {
+                } else if needs_unassociation {
                     for (index, pixel) in pixels.chunks_exact_mut(4).enumerate() {
                         if index % 4096 == 0 {
                             request.check_cancelled()?;

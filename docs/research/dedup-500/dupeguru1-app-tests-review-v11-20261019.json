@@ -1,0 +1,105 @@
+{
+  "status": "partial_application_test_and_progress_source_review",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-app-identity-review-v10-20261019.json",
+  "previous_sha256": "4decd662d376b279d285b485652791634ac507a0d45b1cbc3bb849fad44336cf",
+  "new_whole_blobs": [
+    {
+      "path": "core/tests/app_test.py",
+      "git_blob": "6d6581aaeab5c96e7d25541a3a7332d53a8c6a4b",
+      "sha256": "144bbfb0d48bda4bf77fb3ea5e9d63ed0bcf909237e8e8c6ab468f7d81ade6e2",
+      "bytes": 20612,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/gui/progress_window.py",
+      "git_blob": "7adafb1d65e8d312670899a004325e3604a0d7f9",
+      "sha256": "11321fefc0c16c17998c8335ebd9a0dfce25b742c3e2bd16e03ecc0897fe14ad",
+      "bytes": 6316,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/jobprogress/performer.py",
+      "git_blob": "8e64e5408089e4999146a62a979906bffd7e7ede",
+      "sha256": "02bbe6fc378d61d0b622a184005f6a23f3cfb1c793c1b7db57e8e504f20485a9",
+      "bytes": 2373,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 80,
+  "cumulative_distinct_original_tests_passed": 451,
+  "new_original_tests": {
+    "module": "core/tests/app_test.py",
+    "passed": 38,
+    "failed": 0,
+    "ignored": 0,
+    "source_drift": []
+  },
+  "initial_attempt": {
+    "passed": 35,
+    "failed": 3,
+    "cause": "Our autouse appdata adapter created a private-appdata child under tmp_path, contaminating directories explicitly scanned/count-checked by original tests. Corrected adapter keeps appdata outside fixture scan roots. No foreign test/source edits."
+  },
+  "reproducer_files": [
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/corrected-isolation/junit.xml",
+      "sha256": "57dbfd50e33dc6d4329aa104a1728dcda5b593bf1aaccaa1e4a6fa50948306d2"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/corrected-isolation/private_appdata_plugin.py",
+      "sha256": "d65c6f431bf9cf6c03c64f3cb7d27577c3987d73b9c443184fca5ed8454336c3"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/corrected-isolation/result.json",
+      "sha256": "177fdfb78a587319800b8d40c287a30748cd23982901bd70b05422bed7b73eb4"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/corrected-isolation/tests.log",
+      "sha256": "76d2cfa4d9911437da4e99ce18c0f790df241055a388f12d7cad562067885a5b"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/initial-isolation-failure/junit.xml",
+      "sha256": "60cccfb944164e0d9585801b45a48a166e6f0dbb4b29d5f9ef3ba67608b83b9e"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/initial-isolation-failure/private_appdata_plugin.py",
+      "sha256": "29c8f01e725a0a9db19a66641b20751c1a1dd3ff5a42c086e73ec9387ce454a5"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/initial-isolation-failure/result.json",
+      "sha256": "b1f0c0307dadfa37c7f0cf8e939e12988e1d2c5890f0308a22f5a43a87b5a2ee"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/initial-isolation-failure/tests.log",
+      "sha256": "a79a4a410e165be705bb9879dfab28dd714380b6bd84efa6ac1cfd6865a3cfcd"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-app-tests-reproducer-v11-20261019/real-scan-result.json",
+      "sha256": "a23dcb37e320308ecc0b3a611b31903262c96c2d7ba52ad61e1c9f260cb3d5eb"
+    }
+  ],
+  "findings": [
+    {
+      "scope": "original_tests",
+      "finding": "Covers filtering, selection/mark/reference transitions, synthetic result groups, task-owned rename/move/hardlink fixtures and directory-tree state. GUI views are original CallLogger test fixtures, not a real GUI. Immediate post-start assertions are not evidence that asynchronous scan work completed."
+    },
+    {
+      "scope": "supplemental_real_scan_closure",
+      "finding": "Real original app scan closure with real files and original Scanner: default copy/copy/hardlink triple; enabled hardlink filtering produces pair; same-length changed negative excluded; immediate pre-cancel clears groups and raises; retry returns pair."
+    },
+    {
+      "scope": "transport_limit",
+      "finding": "Supplemental scan uses synchronous progress.run adapter and isolated appdata. Does not qualify native GUI, actual threaded completion, cross-device identity, copy/move/deletion lifecycle or full upstream suite."
+    },
+    {
+      "scope": "progress_source_only",
+      "finding": "ProgressWindow and ThreadedJobPerformer fully read; runtime scheduling/cancellation races not qualified by these synchronous supplemental controls."
+    }
+  ],
+  "production_changes": false,
+  "performance_gain_proven": false,
+  "deferred_item": "pHash native memory/ASAN investigations remain skipped"
+}

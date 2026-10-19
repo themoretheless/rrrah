@@ -147,6 +147,10 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
     pub fn can_admit_key_by_count(&mut self, key: &K) -> bool {
         self.entries.can_admit_key_by_count(key)
     }
+    /// Non-evicting count/byte preflight for a lower bound on the raster weight.
+    pub fn can_admit_key_by_minimum_weight(&mut self, key: &K, minimum: u64) -> bool {
+        self.entries.can_admit_key_by_minimum_weight(key, minimum)
+    }
     pub fn resident_bytes(&self) -> u64 {
         self.entries.resident_weight()
     }

@@ -7,6 +7,7 @@ pub(super) struct Probe {
     started: Instant,
     phase: u8,
     clock_started: bool,
+    diagnostic_at: Instant,
     old_frames: u64,
     old_devices: [u64; 2],
     path: PathBuf,
@@ -25,6 +26,8 @@ pub(super) struct Probe {
     raw_budget: Option<rrrah_core::MemoryBudget>,
     raw_initializations: u64,
     recovered_device: u64,
+    rounds: usize,
+    completed_rounds: usize,
     pub(super) success: bool,
     pub(super) failure: Option<String>,
 }
@@ -34,6 +37,7 @@ impl Probe {
             started: Instant::now(),
             phase: 0,
             clock_started: false,
+            diagnostic_at: Instant::now(),
             old_frames: 0,
             old_devices: [0; 2],
             path: PathBuf::new(),
@@ -56,6 +60,14 @@ impl Probe {
             raw_budget: None,
             raw_initializations: 0,
             recovered_device: 0,
+            rounds: std::env::var("RRRAH_QUALIFY_NAV_ROUNDS")
+                .map(|v| {
+                    v.parse::<usize>()
+                        .expect("valid qualification rounds")
+                        .clamp(1, 10000)
+                })
+                .unwrap_or(1),
+            completed_rounds: 0,
             success: false,
             failure: None,
         })
@@ -93,7 +105,7 @@ impl App {
                 probe.started = Instant::now();
                 probe.clock_started = true;
             }
-            if probe.started.elapsed() > Duration::from_secs(30) {
+            if probe.started.elapsed() > Duration::from_secs(30 + (probe.rounds as u64).saturating_mul(2)) {
                 return Err(format!(
                     "live recovery timed out phase={} ready={:?}",
                     probe.phase, self.ready_generation
@@ -102,6 +114,23 @@ impl App {
             let (Some(gpu), Some(telemetry)) = (&self.gpu, &self.telemetry) else {
                 return Ok(());
             };
+            if probe.diagnostic_at.elapsed() >= Duration::from_secs(2) {
+                eprintln!(
+                    "LIVE_NAV_STATE phase={} round={} path={} gallery_len={} gallery_index={:?} scan={:?} generation={} ready={:?} presented={:?} frames={} status={:?}",
+                    probe.phase,
+                    probe.completed_rounds,
+                    self.path.display(),
+                    self.gallery.len(),
+                    self.gallery_index,
+                    self.pending_folder_scan,
+                    self.foreground_loader.current_generation(),
+                    self.ready_generation,
+                    gpu.presented_generation,
+                    gpu.presented_frames,
+                    self.status
+                );
+                probe.diagnostic_at = Instant::now();
+            }
             match probe.phase {
                 0 if self.ready_generation == Some(self.foreground_loader.current_generation())
                     && gpu.presented_generation == self.ready_generation =>
@@ -340,9 +369,12 @@ impl App {
                         probe.navigation_frames = gpu.presented_frames;
                         if probe.require_raster_cache {
                             let path = probe.path.canonicalize().map_err(|error| error.to_string())?;
-                            FORBIDDEN_RASTER_DECODE
-                                .set(path)
-                                .map_err(|_| "raster decode guard already installed")?;
+                            if FORBIDDEN_RASTER_DECODE.get().is_none() {
+                                FORBIDDEN_RASTER_DECODE
+                                    .set(path)
+                                    .map_err(|_| "raster decode guard already installed")?;
+                            }
+                            GUARDED_CACHE_HIT.store(0, Ordering::Release);
                             eprintln!(
                                 "LIVE_RASTER_CACHE_GUARD path={} fallback_decode=forbidden",
                                 probe.path.display()
@@ -372,6 +404,22 @@ impl App {
                                 "LIVE_MIXED_NAV_PASS raster_model_raster=true model_renderer_confirmed=true"
                             );
                         }
+                        probe.completed_rounds += 1;
+                        eprintln!(
+                            "LIVE_RASTER_ENDURANCE_ROUND completed={} target={} elapsed_ms={}",
+                            probe.completed_rounds,
+                            probe.rounds,
+                            probe.started.elapsed().as_millis()
+                        );
+                        if probe.completed_rounds < probe.rounds {
+                            let index =
+                                gallery_target(&self.gallery, probe.raster_switch_path.as_ref().unwrap())?;
+                            probe.navigation_generation = generation;
+                            probe.navigation_frames = gpu.presented_frames;
+                            probe.phase = 5;
+                            self.open_gallery_index(index);
+                            return Ok(());
+                        }
                         probe.success = true;
                         event_loop.exit();
                     }
@@ -397,7 +445,21 @@ fn gallery_target(gallery: &[PathBuf], path: &std::path::Path) -> Result<usize, 
     gallery
         .iter()
         .position(|candidate| candidate.canonicalize().is_ok_and(|value| value == expected))
-        .ok_or_else(|| format!("navigation source absent from gallery: {}", path.display()))
+        .ok_or_else(|| {
+            let entries: Vec<_> = gallery
+                .iter()
+                .map(|candidate| {
+                    (
+                        candidate.display().to_string(),
+                        candidate.canonicalize().map_err(|e| e.to_string()),
+                    )
+                })
+                .collect();
+            format!(
+                "navigation source absent from gallery: {} expected={expected:?} entries={entries:?}",
+                path.display()
+            )
+        })
 }
 
 static FORBIDDEN_RASTER_DECODE: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();

@@ -113,27 +113,81 @@ fn hdr_exposure_saturates_to_finite_binary16_range() {
 }
 
 #[test]
-#[ignore = "Metal-specific empirical range edge; outside portable binary16 caller contract"]
+#[ignore = "requires actual Metal for extreme signed HDR interpolation and associated emission"]
 fn hdr_opposite_extreme_samples_interpolate_without_nan() {
+    assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
     let gpu = common::qualification_gpu().expect("actual GPU required");
     eprintln!("HDR opposite-extreme adapter: {}", gpu.adapter_name());
-    let source = frame(2, vec![f32::MAX, f32::MAX, 0.5, 1., -f32::MAX, f32::MAX, 0.5, 1.]);
-    let output = gpu.render_raster_half(
-        &source,
-        ViewParameters {
-            viewport: [63., 65.],
-            zoom: 2.,
-            ..Default::default()
-        },
-        [63, 65],
-    );
-    let center = (32 * 63 + 31) * 4;
-    assert_eq!(&output[center..center + 4], &[0, 0x7bff, 0x3800, 0x3c00]);
-    assert!(
-        output.iter().all(|v| v & 0x7c00 != 0x7c00),
-        "no Inf or NaN in HDR target"
-    );
-    eprintln!("HDR opposite-extreme: 63x65; symmetric center exact; all components finite");
+    for association in [
+        rrrah_core::RasterAlphaAssociation::Straight,
+        rrrah_core::RasterAlphaAssociation::Associated,
+    ] {
+        let alphas = if association == rrrah_core::RasterAlphaAssociation::Associated {
+            [0., 0.5]
+        } else {
+            [1., 1.]
+        };
+        let source = frame(
+            2,
+            vec![
+                f32::MAX,
+                f32::MAX,
+                0.5,
+                alphas[0],
+                -f32::MAX,
+                f32::MAX,
+                0.5,
+                alphas[1],
+            ],
+        )
+        .with_alpha_association(association)
+        .unwrap();
+        let output = gpu.render_raster_half_background(
+            &source,
+            ViewParameters {
+                viewport: [63., 65.],
+                zoom: 2.,
+                ..Default::default()
+            },
+            [63, 65],
+            [0.; 3],
+        );
+        let center = (32 * 63 + 31) * 4;
+        assert_eq!(
+            &output[center..center + 4],
+            &[0, 0x7bff, 0x3800, 0x3c00],
+            "{association:?}"
+        );
+        // On this row all noncentral interpolated red magnitudes exceed
+        // binary16 max; the center cancels exactly and the last column is outside.
+        for x in 0..63 {
+            let at = (32 * 63 + x) * 4;
+            let expected = if x == 62 {
+                [0, 0, 0, 0x3c00]
+            } else {
+                [
+                    if x < 31 {
+                        0x7bff
+                    } else if x > 31 {
+                        0xfbff
+                    } else {
+                        0
+                    },
+                    0x7bff,
+                    0x3800,
+                    0x3c00,
+                ]
+            };
+            assert_eq!(&output[at..at + 4], &expected, "{association:?} x={x}");
+        }
+        assert!(
+            output.iter().all(|v| v & 0x7c00 != 0x7c00),
+            "no Inf or NaN in HDR target: {association:?}"
+        );
+        eprintln!(
+            "HDR opposite-extreme: {association:?}; 63x65; signed cancellation and small blue exact at center; all components finite"
+        );
+    }
 }
 
 #[test]

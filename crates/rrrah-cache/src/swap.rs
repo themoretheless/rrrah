@@ -54,6 +54,11 @@ pub trait SwapPayload: Send + 'static + Sized {
         false
     }
     fn capacity_bytes(&self) -> u64;
+    /// Optional guaranteed lower bound on restored RAM-cache weight.
+    /// Unknown/compressed codecs must not guess from serialized byte length.
+    fn minimum_restore_weight(&self) -> Option<u64> {
+        None
+    }
     fn payload_len(&self) -> std::io::Result<u64>;
     fn write_payload(&self, writer: &mut impl Write) -> std::io::Result<()>;
     fn read_payload(
@@ -65,6 +70,9 @@ pub trait SwapPayload: Send + 'static + Sized {
 impl SwapPayload for DecodedMosaic {
     fn capacity_bytes(&self) -> u64 {
         self.pixels.capacity_bytes()
+    }
+    fn minimum_restore_weight(&self) -> Option<u64> {
+        u64::try_from(self.pixels.len()).ok()?.checked_mul(2)
     }
     fn payload_len(&self) -> std::io::Result<u64> {
         prepare_mosaic_payload_v1(self)
@@ -95,6 +103,14 @@ impl SwapPayload for DecodedRaster {
     fn capacity_bytes(&self) -> u64 {
         self.capacity_bytes()
     }
+    fn minimum_restore_weight(&self) -> Option<u64> {
+        let (length, bytes) = match self.pixels() {
+            rrrah_core::RasterPixels::Rgba8(v) => (v.len(), 1),
+            rrrah_core::RasterPixels::Rgba16(v) => (v.len(), 2),
+            rrrah_core::RasterPixels::Rgba32Float(v) => (v.len(), 4),
+        };
+        u64::try_from(length).ok()?.checked_mul(bytes)
+    }
     fn payload_len(&self) -> std::io::Result<u64> {
         crate::raster_payload_len(self).map_err(std::io::Error::other)
     }
@@ -116,6 +132,27 @@ pub type MosaicSwapCache = ImageSwapCache<CacheKey, DecodedMosaic>;
 pub type RasterSwapCache<K> = ImageSwapCache<K, DecodedRaster>;
 pub type MosaicSwapConfig = ImageSwapConfig;
 pub type MosaicSwapStats = ImageSwapStats;
+
+/// Hint and handle are published/replaced/expired together in the same index entry.
+#[derive(Debug, Clone)]
+struct StoredPayload {
+    handle: SwapHandle,
+    minimum_restore_weight: Option<u64>,
+}
+impl std::ops::Deref for StoredPayload {
+    type Target = SwapHandle;
+    fn deref(&self) -> &SwapHandle {
+        &self.handle
+    }
+}
+impl From<SwapHandle> for StoredPayload {
+    fn from(handle: SwapHandle) -> Self {
+        Self {
+            handle,
+            minimum_restore_weight: None,
+        }
+    }
+}
 
 /// Bound channel bookkeeping independently of payload byte admission.
 pub const MAX_SWAP_QUEUE_COUNT: usize = 1024;
@@ -141,7 +178,9 @@ struct Counters {
 pub struct ImageSwapStats {
     pub writes: u64,
     pub reads: u64,
+    /// Codec, corruption or filesystem failures; expected quota refusals are excluded.
     pub errors: u64,
+    /// Writes refused by admission, quota, cancellation or publication policy.
     pub dropped: u64,
     pub queued_bytes: u64,
 }
@@ -170,7 +209,7 @@ impl<K: Eq + Hash> Drop for PendingSpill<K> {
 pub struct ImageSwapCache<K, V> {
     tx: SyncSender<Command<K, V>>,
     worker: Mutex<Option<std::thread::JoinHandle<()>>>,
-    index: Arc<Mutex<WeightedLru<K, SwapHandle>>>,
+    index: Arc<Mutex<WeightedLru<K, StoredPayload>>>,
     store: SwapStore,
     queue_budget: MemoryBudget,
     restore_budget: MemoryBudget,
@@ -221,7 +260,7 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             },
         )
         .map_err(std::io::Error::other)?;
-        let index = Arc::new(Mutex::new(WeightedLru::<K, SwapHandle>::with_limits(
+        let index = Arc::new(Mutex::new(WeightedLru::<K, StoredPayload>::with_limits(
             config.limits,
         )));
         let cancelled = Arc::new(AtomicBool::new(false));
@@ -310,6 +349,7 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                                         }
                                     }
                                 }
+                                let minimum_restore_weight = mosaic.minimum_restore_weight();
                                 let handle = worker_store.write_stream(bytes, cancelled, |mut writer| {
                                     mosaic.write_payload(&mut writer)
                                 })?;
@@ -321,15 +361,30 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                                 if cancelled() {
                                     return Err(rrrah_swap::SwapError::Cancelled.into());
                                 }
-                                if index.insert_prefetch(key, handle, bytes) {
+                                if index.insert_prefetch(
+                                    key,
+                                    StoredPayload {
+                                        handle,
+                                        minimum_restore_weight,
+                                    },
+                                    bytes,
+                                ) {
                                     worker_counters.writes.fetch_add(1, Ordering::Relaxed);
                                 } else {
                                     worker_counters.dropped.fetch_add(1, Ordering::Relaxed);
                                 }
                                 Ok(())
                             })();
-                            if result.is_err() {
-                                if cancelled() {
+                            if let Err(error) = result {
+                                // Region backing shares the hard quota but is owned
+                                // outside the LRU. Refusal while it is live is normal
+                                // bounded admission, not a codec or filesystem failure.
+                                if cancelled()
+                                    || matches!(
+                                        error.downcast_ref::<rrrah_swap::SwapError>(),
+                                        Some(rrrah_swap::SwapError::Quota)
+                                    )
+                                {
                                     worker_counters.dropped.fetch_add(1, Ordering::Relaxed);
                                 } else {
                                     worker_counters.errors.fetch_add(1, Ordering::Relaxed);
@@ -440,6 +495,12 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         }
         self.scratch_budget = budget.clone();
         self.restore_budget = budget.child(self.restore_limit);
+    }
+    /// Index-only lookup; no payload read, decode or restore-budget reservation.
+    /// Like other lookups this updates recency and removes expired membership.
+    /// A hint is not an integrity check; actual restoration still verifies the object.
+    pub fn minimum_restore_weight(&self, key: &K) -> Option<u64> {
+        self.index.lock().ok()?.get(key)?.minimum_restore_weight
     }
     pub fn get(&self, key: &K, cancelled: impl FnMut() -> bool) -> Option<V> {
         self.try_get(key, cancelled).ok().flatten()
@@ -1828,7 +1889,7 @@ mod raster_tests {
                     // old handle already selected, before its read
                     swap.index.lock().unwrap().insert_prefetch(
                         1,
-                        replacement.clone(),
+                        replacement.clone().into(),
                         replacement.byte_len(),
                     );
                 }
@@ -1966,10 +2027,16 @@ mod raster_tests {
         )
         .unwrap();
         let original = frame(&root);
+        assert_eq!(swap.minimum_restore_weight(&1), None);
+        let expected_floor = original.minimum_restore_weight().unwrap();
         swap.enqueue(1u32, original.clone()); // full allocation root must not prevent spill
         swap.wait_idle().unwrap();
         assert_eq!(swap.stats().writes, 1);
         assert_eq!(swap.stats().queued_bytes, 0);
+        // The index hint stays available under exhausted restore credit.
+        assert_eq!(swap.minimum_restore_weight(&1), Some(expected_floor));
+        assert_eq!(swap.stats().reads, 0);
+        assert_eq!(root.used(), 19);
         assert!(matches!(
             swap.try_get(&1, || false),
             Err(rrrah_memory::BufferError::Capacity { .. })

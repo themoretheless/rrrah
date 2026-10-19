@@ -113,3 +113,135 @@ fn associated_ram_and_swapped_lod_keep_emission_and_crop_metadata() {
     drop((crop, lod, swapped, expected, source));
     assert_eq!(root.used(), 0);
 }
+
+#[test]
+fn associated_overflow_fixture_survives_swap_and_both_lod_paths() {
+    let native =
+        include_bytes!("../../../tests/fixtures/raster/associated-overflow-rec709.exr.native-rgba32le");
+    let values: Vec<f32> = native
+        .chunks_exact(4)
+        .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+        .collect();
+    let root = MemoryBudget::new(16384);
+    let source = DecodedRaster::new(
+        4,
+        1,
+        RasterPixels::Rgba32Float(root.try_reserve(64).unwrap().try_adopt(values).unwrap().into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap()
+    .with_alpha_association(Alpha::Associated)
+    .unwrap();
+    let tmp = tempfile::tempdir().unwrap();
+    let store = rrrah_swap::SwapStore::new(
+        tmp.path(),
+        rrrah_swap::SwapLimits {
+            max_bytes: 1024 * 1024,
+            max_objects: Some(8),
+        },
+    )
+    .unwrap();
+    let index = MemoryBudget::new(8192);
+    let swapped = rrrah_cache::SwappedRaster::write(&store, &source, &index, || false).unwrap();
+    let restored = swapped
+        .restore_region([0, 0, 4, 1], &root, &MemoryBudget::new(8192), || false)
+        .unwrap();
+    assert_eq!(restored.frame.alpha_association(), Alpha::Associated);
+    let RasterPixels::Rgba32Float(pixels) = restored.frame.pixels() else {
+        panic!()
+    };
+    let bits: Vec<u8> = pixels.iter().flat_map(|v| v.to_le_bytes()).collect();
+    assert_eq!(bits.as_slice(), native);
+    let cpu = source
+        .downsample_linear_with_budget_and_cancel([1, 1], &root, || false)
+        .unwrap();
+    let disk = swapped
+        .downsample_linear([1, 1], &root, &MemoryBudget::new(8192), || false)
+        .unwrap();
+    for frame in [&cpu, &disk] {
+        assert_eq!(frame.alpha_association(), Alpha::Associated);
+        let RasterPixels::Rgba32Float(v) = frame.pixels() else {
+            panic!()
+        };
+        let expected = [f32::MAX / 4., -f32::MAX / 4., 1.25, 0.375];
+        assert_eq!(
+            v.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            expected.map(f32::to_bits)
+        );
+    }
+    drop((cpu, disk, restored, swapped, source));
+    assert_eq!(root.used(), 0);
+    assert_eq!(index.used(), 0);
+}
+
+#[test]
+fn shared_segmented_quota_refuses_spill_without_corrupting_visible_and_retries() {
+    let root = MemoryBudget::new(8192);
+    let original = frame(&root);
+    let directory = tempfile::tempdir().unwrap();
+    let queue = MemoryBudget::new(64);
+    let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+        directory.path(),
+        rrrah_cache::ImageSwapConfig {
+            limits: rrrah_cache::CacheLimits {
+                max_bytes: 4096,
+                max_entries: Some(1),
+                ttl: None,
+            },
+            queue_bytes: 64,
+            queue_count: 1,
+            restore_bytes: 4096,
+        },
+        queue.clone(),
+        root.clone(),
+    )
+    .unwrap();
+    let index = MemoryBudget::new(8192);
+    let visible =
+        rrrah_cache::SwappedRaster::write(&swap.region_store(), &original, &index, || false).unwrap();
+    assert_eq!(swap.disk_usage().unwrap().objects, 1);
+    assert_eq!(
+        swap.try_enqueue(1, original.clone()),
+        rrrah_cache::SpillAdmission::Queued
+    );
+    swap.wait_idle().unwrap();
+    assert_eq!(
+        swap.stats().errors,
+        0,
+        "expected shared quota refusal is not an I/O failure"
+    );
+    assert_eq!(swap.stats().dropped, 1);
+    assert_eq!(queue.used(), 0);
+    assert!(swap.try_get(&1, || false).unwrap().is_none());
+    assert_eq!(swap.disk_usage().unwrap().objects, 1);
+    let restored = visible
+        .restore_region([0, 0, 2, 1], &root, &MemoryBudget::new(8192), || false)
+        .unwrap();
+    assert_eq!(restored.frame.alpha_association(), Alpha::Associated);
+    let RasterPixels::Rgba32Float(p) = restored.frame.pixels() else {
+        panic!()
+    };
+    assert_eq!(p.as_ref(), &[2., 0.5, 0.25, 0., -0.25, 4., 0.5, 0.5]);
+    drop((restored, visible));
+    assert_eq!(index.used(), 0);
+    assert_eq!(swap.disk_usage().unwrap().objects, 0);
+    assert_eq!(
+        swap.try_enqueue(1, original.clone()),
+        rrrah_cache::SpillAdmission::Queued
+    );
+    swap.wait_idle().unwrap();
+    assert_eq!(swap.stats().writes, 1);
+    assert_eq!(swap.stats().dropped, 1);
+    assert_eq!(swap.stats().errors, 0);
+    let retry = swap.try_get(&1, || false).unwrap().unwrap();
+    assert_eq!(retry.alpha_association(), Alpha::Associated);
+    let RasterPixels::Rgba32Float(p) = retry.pixels() else {
+        panic!()
+    };
+    assert_eq!(p.as_ref(), &[2., 0.5, 0.25, 0., -0.25, 4., 0.5, 0.5]);
+    drop((retry, original));
+    swap.shutdown();
+    drop(swap);
+    assert_eq!(root.used(), 0);
+    assert_eq!(queue.used(), 0);
+}

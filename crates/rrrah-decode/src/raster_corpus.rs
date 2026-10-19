@@ -287,6 +287,39 @@ fn qualified_exr_emission_reference_and_associated_preparation_are_exact() {
 }
 
 #[test]
+fn exr_late_unassociation_overflow_preserves_all_native_samples() {
+    let bytes = include_bytes!("../../../tests/fixtures/raster/associated-overflow-rec709.exr");
+    let native =
+        include_bytes!("../../../tests/fixtures/raster/associated-overflow-rec709.exr.native-rgba32le");
+    let expected: Vec<u32> = native
+        .chunks_exact(4)
+        .map(|b| u32::from_le_bytes(b.try_into().unwrap()))
+        .collect();
+    let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let mut request = crate::DecodeRequest::new("overflow.exr");
+    request.memory_budget = Some(root.clone());
+    let frame = crate::raster::decode_raster_bytes(bytes.to_vec(), &request).unwrap();
+    assert_eq!(
+        frame.alpha_association(),
+        rrrah_core::RasterAlphaAssociation::Associated
+    );
+    let RasterPixels::Rgba32Float(values) = frame.pixels() else {
+        panic!()
+    };
+    assert!(values[12].is_finite() && (values[12] / values[15]).is_infinite());
+    assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), expected);
+    let prepared = crate::prepare_raster_for_display_with_budget(&frame, Some(&root)).unwrap();
+    assert_eq!(prepared.alpha_association(), frame.alpha_association());
+    let RasterPixels::Rgba32Float(values) = prepared.pixels() else {
+        panic!()
+    };
+    assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), expected);
+    assert_eq!(root.used(), frame.capacity_bytes());
+    drop((frame, prepared));
+    assert_eq!(root.used(), 0);
+}
+
+#[test]
 fn exr_straight_alpha_matches_associated_reference_composition() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
     let background = [0.25_f32, 0.5, 0.75];

@@ -1,0 +1,36 @@
+{
+  "status": "passed_original_app_real_file_scan_controls",
+  "source_pins": {
+    "core/app.py": "ed7ba34c717236333b88876bf8152ec515c47baf8badbe29c77ec2e3b157e04d",
+    "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+    "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+    "core/directories.py": "8ee772b58be5afb623c04797c896b0f48adf71694d882c55db61cb845acf2c68",
+    "core/tests/base.py": "4d59b4619b043fb956c5ffe9ba95cbaff6556a2263cc2c39b9d7e8113e726d0c"
+  },
+  "default_groups": [
+    [
+      "alias.bin",
+      "copy.bin",
+      "original.bin"
+    ]
+  ],
+  "ignore_hardlink_groups": [
+    [
+      "copy.bin",
+      "original.bin"
+    ]
+  ],
+  "cancelled_groups": [],
+  "retry_groups": [
+    [
+      "copy.bin",
+      "original.bin"
+    ]
+  ],
+  "limits": [
+    "Original scan closure executed synchronously; not threaded progress or real GUI qualification.",
+    "Ordinary copies, one real hardlink and same-length negative on one task-owned filesystem.",
+    "No copy/move/delete actions invoked; only task-owned hash cache and fixture writes.",
+    "These are authored supplemental controls, not additional upstream tests."
+  ]
+}

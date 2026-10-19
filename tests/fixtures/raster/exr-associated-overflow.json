@@ -1,0 +1,10 @@
+{
+  "reference": "OpenEXR 3.5.2",
+  "license": "CC0 authored samples",
+  "case": "Last-pixel finite RGB/positive-alpha quotient overflow; earlier opaque/fractional/zero samples and signed zero remain associated bit-exact",
+  "sha256": {
+    "scripts/exr-alpha-overflow-oracle.cpp": "68f951916d44c6417dae7d82e0df62e8e77ae5ebb18baf0c5e6cb5beb8770170",
+    "tests/fixtures/raster/associated-overflow-rec709.exr": "5f2c155083058c9f24943c4a07de6ba43fb521920302fe8015c5eea51540c66a",
+    "tests/fixtures/raster/associated-overflow-rec709.exr.native-rgba32le": "7c58d0c56b62500a8428a9aeb6f5de08a003d1a0d83fc580949c28bd9586e181"
+  }
+}

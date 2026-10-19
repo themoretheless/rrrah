@@ -1,0 +1,40 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 46s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-b180ac92e3f43d6e)
+
+running 1 test
+test foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads ... FAILED
+
+failures:
+
+---- foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads stdout ----
+
+thread 'foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads' (27719697) panicked at crates/rrrah-app/src/main.rs:10083:13:
+assertion `left == right` failed
+  left: 108
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 371 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

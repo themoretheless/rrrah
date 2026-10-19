@@ -88,7 +88,9 @@ use std::{
 };
 
 pub use dng_backend::{NATIVE_DNG_BACKEND_ID, NATIVE_DNG_MOSAIC_CONTRACT_1, NativeDngDecoder};
-pub use native_backend::{NATIVE_CR3_BACKEND_ID, NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder};
+pub use native_backend::{
+    NATIVE_CR3_BACKEND_ID, NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder, PreparedCr3,
+};
 pub use native_router::NativeRawDecoder;
 use rrrah_core::{DecodedMosaic, FrameError, MosaicRecipeManifest};
 use thiserror::Error;

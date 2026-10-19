@@ -1,0 +1,24 @@
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+    Finished `test` profile [optimized + debuginfo] target(s) in 22.38s
+     Running tests/associated_raster.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/associated_raster-876b0f32b5c77cc3)
+
+running 1 test
+test shared_segmented_quota_refuses_spill_without_corrupting_visible_and_retries ... FAILED
+
+failures:
+
+---- shared_segmented_quota_refuses_spill_without_corrupting_visible_and_retries stdout ----
+
+thread 'shared_segmented_quota_refuses_spill_without_corrupting_visible_and_retries' (27644116) panicked at crates/rrrah-cache/tests/associated_raster.rs:208:5:
+assertion `left == right` failed: expected shared quota refusal is not an I/O failure
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    shared_segmented_quota_refuses_spill_without_corrupting_visible_and_retries
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-cache --test associated_raster`

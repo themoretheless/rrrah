@@ -1,0 +1,38 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.32s
+     Running tests/raster_readback.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/raster_readback-dc70844d201ea711)
+
+running 3 tests
+HDR opposite-extreme adapter: Metal Apple M4 Max
+36 MP HDR LOD adapter: Metal Apple M4 Max
+HDR finite-range adapter: Metal Apple M4 Max
+HDR finite-range: exposure=-10; all4096 pixels exact; finite signed binary16
+HDR opposite-extreme: Straight; 63x65; signed cancellation and small blue exact at center; all components finite
+HDR finite-range: exposure=0; all4096 pixels exact; finite signed binary16
+HDR opposite-extreme: Associated; 63x65; signed cancellation and small blue exact at center; all components finite
+HDR finite-range: exposure=10; all4096 pixels exact; finite signed binary16
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ok
+test hdr_exposure_saturates_to_finite_binary16_range ... ok
+36 MP HDR area LOD full output: 64x64; every SDR/HDR component matches independent constant reference
+36 MP HDR area LOD full output: 1000x1000; every SDR/HDR component matches independent constant reference
+36 MP HDR LOD pressure: held clone refuses replacement; one-byte pressure refuses; admitted cancellation releases; retry all1000000 exact; final0
+36 MP HDR area LOD: source=576000000; output=16000000; all1000000 pixels exact; SDR/HDR Metal exact; elapsed=178.485208ms; output root=0
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 33 filtered out; finished in 25.07s

@@ -2090,6 +2090,16 @@ impl ModelDisplayCache {
         &mut self,
         resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
         visible: bool,
+        decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<rrrah_decode::DecodedModel, String> {
+        self.load_with_cancel_resolving_key_mode(resolve_key, visible, false, decode, cancelled)
+    }
+    fn load_with_cancel_resolving_key_mode(
+        &mut self,
+        resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
+        visible: bool,
+        require_retention: bool,
         mut decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
         mut cancelled: impl FnMut() -> bool,
     ) -> Result<rrrah_decode::DecodedModel, String> {
@@ -2112,6 +2122,20 @@ impl ModelDisplayCache {
                 }
                 return Ok(model);
             }
+        }
+        if require_retention
+            && !visible
+            && let Some(key) = &key
+            && !self.entries.can_admit_key_by_count(key)
+        {
+            return Err("model prefetch skipped: all count slots are protected".into());
+        }
+        if require_retention && !visible
+            && let Some(key) = &key
+            // Even an empty model owns a nonzero model-header allocation.
+            && !self.entries.can_admit_key_by_minimum_weight(key, 1)
+        {
+            return Err("model prefetch skipped: protected byte budget exhausted".into());
         }
         let mut restored = None;
         if let (Some(key), Some(swap)) = (&key, &self.swap) {
@@ -2264,12 +2288,13 @@ fn preload_model_mode(
     String,
 > {
     let mut resolved = None;
-    let model = cache.load_with_cancel_resolving_key(
+    let model = cache.load_with_cancel_resolving_key_mode(
         || {
             resolved = model_display_key(request);
             resolved.clone()
         },
         false,
+        retain,
         || {
             let cancelled = || {
                 request
@@ -2336,6 +2361,14 @@ fn preload_raw_with_lease(
         .map_err(|e| e.to_string())?;
     let fingerprint = SourceFingerprint::from_path(&request.path).map_err(|e| e.to_string())?;
     let key = CacheKey::for_mosaic_recipe(&fingerprint, 0, recipe);
+    if cancelled() {
+        return Err("RAW prefetch cancelled".into());
+    }
+    // Every valid nonempty u16 sensor requires at least one sample. A lower
+    // bound avoids guessing dimensions and still detects a fully protected budget.
+    if !ram.can_admit_key_by_minimum_weight(&key, 2) {
+        return Ok((false, None));
+    }
     if ram.get_background_with_cancel(&key, cancelled).is_some() {
         return Ok((true, ram.get_lease(&key)));
     }
@@ -2361,13 +2394,23 @@ fn preload_raw_with_lease(
             if !prefetch_source_fits(request) {
                 return Ok((false, None));
             }
-            (
+            let mosaic = if recipe.decoder_backend_id() == rrrah_decode::NATIVE_CR3_BACKEND_ID {
+                let prepared = match rrrah_decode::NativeCr3Decoder.prepare(request) {
+                    Ok(prepared) => prepared,
+                    Err(rrrah_decode::DecodeError::Memory(_)) => return Ok((false, None)),
+                    Err(error) => return Err(error.to_string()),
+                };
+                if !ram.can_admit_key_by_minimum_weight(&key, prepared.minimum_pixel_bytes()) {
+                    return Ok((false, None));
+                }
+                prepared.decode().map_err(|error| error.to_string())?.mosaic
+            } else {
                 NativeRawDecoder
                     .decode(request)
-                    .map_err(|e| e.to_string())?
-                    .mosaic,
-                true,
-            )
+                    .map_err(|error| error.to_string())?
+                    .mosaic
+            };
+            (mosaic, true)
         }
     };
     drop(permit);
@@ -2425,7 +2468,12 @@ fn preload_raster_mode(
     String,
 > {
     let mut resolved = None;
-    let (frame, assumed) = load_cached_raster_mode_resolving_key(
+    let skip_unretained_swap = retain;
+    // Explicit opt-in benchmark control; absent from production builds.
+    #[cfg(test)]
+    let skip_unretained_swap =
+        skip_unretained_swap && std::env::var("RRRAH_BENCH_LEGACY_PREFETCH_SWAP").as_deref() != Ok("1");
+    let (frame, assumed) = load_cached_raster_mode_resolving_key_policy(
         request,
         || {
             resolved = raster_display_key(request, window);
@@ -2434,6 +2482,7 @@ fn preload_raster_mode(
         cache,
         false,
         retain,
+        skip_unretained_swap,
         || {
             let cancelled = || {
                 request
@@ -2643,6 +2692,26 @@ fn load_cached_raster_mode_resolving_key(
     cache: &mut RasterDisplayCache,
     visible: bool,
     require_retention: bool,
+    load: impl FnMut() -> Result<(rrrah_core::DecodedRaster, bool), RasterLoadError>,
+) -> Result<(rrrah_core::DecodedRaster, bool), String> {
+    load_cached_raster_mode_resolving_key_policy(
+        request,
+        resolve_key,
+        cache,
+        visible,
+        require_retention,
+        false,
+        load,
+    )
+}
+
+fn load_cached_raster_mode_resolving_key_policy(
+    request: &DecodeRequest,
+    resolve_key: impl FnOnce() -> Option<RasterDisplayKey>,
+    cache: &mut RasterDisplayCache,
+    visible: bool,
+    require_retention: bool,
+    skip_unretained_swap: bool,
     mut load: impl FnMut() -> Result<(rrrah_core::DecodedRaster, bool), RasterLoadError>,
 ) -> Result<(rrrah_core::DecodedRaster, bool), String> {
     if request
@@ -2668,6 +2737,8 @@ fn load_cached_raster_mode_resolving_key(
                 .then(|| cache.swap().map_or(0, |swap| swap.stats().reads));
             let hit = if visible {
                 cache.get_with_cancel(&probe, cancelled)
+            } else if skip_unretained_swap && !cache.can_admit_key_by_minimum_weight(&probe, 4) {
+                None
             } else {
                 cache.get_background_with_cancel(&probe, cancelled)
             };
@@ -2699,6 +2770,17 @@ fn load_cached_raster_mode_resolving_key(
         if !fits_count {
             return Err("raster prefetch skipped: all count slots are protected".into());
         }
+    }
+    if skip_unretained_swap
+        && !visible
+        && let Some(key) = &key
+        && ![false, true].into_iter().any(|assumed| {
+            let mut probe = key.clone();
+            probe.6 = assumed;
+            cache.can_admit_key_by_minimum_weight(&probe, 4)
+        })
+    {
+        return Err("raster prefetch skipped: protected byte budget exhausted".into());
     }
     let (raster, assumed) = loop {
         match load() {
@@ -9921,6 +10003,291 @@ mod foreground_loader_tests {
         assert!(a.ptr_eq(b));
     }
     #[test]
+    fn model_retained_prefetch_skips_protected_count_slots_and_retries() {
+        for name in [
+            "triangle.stl",
+            "off-attributes-binary.off",
+            "obj-shared-metadata.obj",
+            "ply-64-le.ply",
+        ] {
+            for by_count in [true, false] {
+                let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models");
+                let weight = rrrah_decode::decode_model(&DecodeRequest::new(fixtures.join(name)))
+                    .unwrap()
+                    .capacity_bytes();
+                let directory = tempfile::tempdir().unwrap();
+                let root = rrrah_core::MemoryBudget::new(128 * 1024);
+                let mut cache = ModelDisplayCache::new(rrrah_cache::CacheLimits {
+                    max_bytes: if by_count { root.limit() } else { weight * 2 },
+                    max_entries: by_count.then_some(2),
+                    ttl: None,
+                });
+                let mut selected = DecodeRequest::new(fixtures.join(name));
+                selected.memory_budget = Some(root.clone());
+                drop(
+                    cache
+                        .load(&selected, true, || {
+                            rrrah_decode::decode_model(&selected).map_err(ModelLoadError::Decode)
+                        })
+                        .unwrap(),
+                );
+                let mut nearest = selected.clone();
+                nearest.path = directory.path().join(format!("nearest-{name}"));
+                std::fs::copy(&selected.path, &nearest.path).unwrap();
+                let gate = Arc::new(DecodeGate::new());
+                let (model, lease) = preload_model_with_lease(&nearest, &mut cache, &gate).unwrap();
+                let lease = lease.unwrap();
+                drop(model);
+                let visible = cache.visible.clone();
+                let mut far = selected.clone();
+                far.path = directory.path().join(format!("far-{name}"));
+                std::fs::copy(&selected.path, &far.path).unwrap();
+                let peak = root.peak();
+                assert_eq!(
+                    preload_model_with_lease(&far, &mut cache, &gate).unwrap_err(),
+                    if by_count {
+                        "model prefetch skipped: all count slots are protected"
+                    } else {
+                        "model prefetch skipped: protected byte budget exhausted"
+                    }
+                );
+                assert_eq!(root.peak(), peak, "refused prefetch allocated geometry: {name}");
+                let key = model_display_key(&far);
+                assert!(
+                    cache
+                        .load_with_cancel_resolving_key_mode(
+                            || key,
+                            false,
+                            true,
+                            || panic!("protected slots must skip the decoder"),
+                            || false
+                        )
+                        .is_err()
+                );
+                let (hit, hit_lease) = preload_model_with_lease(&nearest, &mut cache, &gate).unwrap();
+                assert!(hit_lease.is_some(), "ready hit must bypass count refusal");
+                assert_eq!(cache.visible, visible);
+                drop((hit, hit_lease, lease));
+                let (retry, retry_lease) = preload_model_with_lease(&far, &mut cache, &gate).unwrap();
+                assert!(retry_lease.is_some());
+                assert_eq!(cache.visible, visible);
+                assert_eq!(cache.entries.len(), 2);
+                drop((retry, retry_lease, cache));
+                assert_eq!(root.used(), 0);
+            }
+        }
+    }
+
+    #[test]
+    fn retained_model_prefetch_avoids_unretainable_swap_reads() {
+        for name in [
+            "triangle.stl",
+            "off-attributes-binary.off",
+            "obj-shared-metadata.obj",
+            "ply-64-le.ply",
+        ] {
+            for by_count in [true, false] {
+                let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models");
+                let weight = rrrah_decode::decode_model(&DecodeRequest::new(fixtures.join(name)))
+                    .unwrap()
+                    .capacity_bytes();
+                let directory = tempfile::tempdir().unwrap();
+                let root = rrrah_core::MemoryBudget::new(128 * 1024);
+                let cli = Cli::try_parse_from(["rrrah", "--model-swap-mb", "1"]).unwrap();
+                let mut cache = model_cache_with_swap(
+                    Some(directory.path()),
+                    false,
+                    rrrah_cache::CacheLimits {
+                        max_bytes: if by_count { root.limit() } else { weight * 2 },
+                        max_entries: by_count.then_some(2),
+                        ttl: None,
+                    },
+                    cli.model_swap_config(),
+                    Some(&root),
+                );
+                let mut selected = DecodeRequest::new(fixtures.join(name));
+                selected.memory_budget = Some(root.clone());
+                drop(
+                    cache
+                        .load(&selected, true, || {
+                            rrrah_decode::decode_model(&selected).map_err(ModelLoadError::Decode)
+                        })
+                        .unwrap(),
+                );
+                let mut nearest = selected.clone();
+                nearest.path = directory.path().join(format!("nearest-{name}"));
+                std::fs::copy(&selected.path, &nearest.path).unwrap();
+                let gate = Arc::new(DecodeGate::new());
+                let (ready, lease) = preload_model_with_lease(&nearest, &mut cache, &gate).unwrap();
+                drop(ready);
+                let lease = lease.unwrap();
+                let mut far = selected.clone();
+                far.path = directory.path().join(format!("far-{name}"));
+                std::fs::copy(&selected.path, &far.path).unwrap();
+                let far_model = rrrah_decode::decode_model(&far).unwrap();
+                let mut expected = Vec::new();
+                rrrah_cache::SwapPayload::write_payload(
+                    &model_swap::ModelPayload(far_model.clone()),
+                    &mut expected,
+                )
+                .unwrap();
+                cache.swap.as_ref().unwrap().enqueue(
+                    model_display_key(&far).unwrap(),
+                    model_swap::ModelPayload(far_model),
+                );
+                cache.swap.as_ref().unwrap().wait_idle().unwrap();
+                let peak = root.peak();
+                let visible = cache.visible.clone();
+                assert_eq!(
+                    preload_model_with_lease(&far, &mut cache, &gate).unwrap_err(),
+                    if by_count {
+                        "model prefetch skipped: all count slots are protected"
+                    } else {
+                        "model prefetch skipped: protected byte budget exhausted"
+                    }
+                );
+                assert_eq!(cache.swap.as_ref().unwrap().stats().reads, 0);
+                assert_eq!(root.peak(), peak);
+                assert_eq!(cache.visible, visible);
+                drop(lease);
+                let (retry, lease) = preload_model_with_lease(&far, &mut cache, &gate).unwrap();
+                assert!(lease.is_some());
+                assert_eq!(cache.swap.as_ref().unwrap().stats().reads, 1);
+                let mut actual = Vec::new();
+                rrrah_cache::SwapPayload::write_payload(
+                    &model_swap::ModelPayload(retry.clone()),
+                    &mut actual,
+                )
+                .unwrap();
+                assert_eq!(actual, expected);
+                assert_eq!(cache.visible, visible);
+                cache.swap.as_ref().unwrap().wait_idle().unwrap();
+                cache.swap.as_ref().unwrap().shutdown();
+                drop((retry, lease, cache));
+                assert_eq!(root.used(), 0);
+            }
+        }
+    }
+
+    #[test]
+    fn retained_raster_prefetch_avoids_unretainable_swap_reads() {
+        for by_count in [true, false] {
+            let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/raster/associated-emission-rec709.exr");
+            let weight = load_raster_for_display_typed(&DecodeRequest::new(&source), None)
+                .unwrap()
+                .0
+                .capacity_bytes();
+            let directory = tempfile::tempdir().unwrap();
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let cli = Cli::try_parse_from(["rrrah", "--raster-swap-mb", "1"]).unwrap();
+            let mut cache = raster_cache_with_swap(
+                Some(directory.path()),
+                false,
+                rrrah_cache::CacheLimits {
+                    max_bytes: if by_count { root.limit() } else { weight * 2 },
+                    max_entries: by_count.then_some(2),
+                    ttl: None,
+                },
+                cli.raster_swap_config(),
+                Some(&root),
+            );
+            let mut selected = DecodeRequest::new(&source);
+            selected.memory_budget = Some(root.clone());
+            drop(load_cached_raster_for_display(&selected, None, &mut cache).unwrap());
+            let mut nearest = selected.clone();
+            nearest.path = directory.path().join("nearest.exr");
+            std::fs::copy(&source, &nearest.path).unwrap();
+            let gate = Arc::new(DecodeGate::new());
+            let (frame, _, lease) = preload_raster_with_lease(&nearest, None, &mut cache, &gate).unwrap();
+            drop(frame);
+            let lease = lease.unwrap();
+            let mut far = selected.clone();
+            far.path = directory.path().join("far.exr");
+            std::fs::copy(&source, &far.path).unwrap();
+            let (frame, assumed) = load_raster_for_display_typed(&far, None).unwrap();
+            let mut expected = Vec::new();
+            rrrah_cache::write_raster_payload(&mut expected, &frame).unwrap();
+            let mut key = raster_display_key(&far, None).unwrap();
+            key.6 = assumed;
+            cache.swap().unwrap().enqueue(key, frame);
+            cache.swap().unwrap().wait_idle().unwrap();
+            assert_eq!(
+                preload_raster_with_lease(&far, None, &mut cache, &gate).unwrap_err(),
+                if by_count {
+                    "raster prefetch skipped: all count slots are protected"
+                } else {
+                    "raster prefetch skipped: protected byte budget exhausted"
+                }
+            );
+            assert_eq!(cache.swap().unwrap().stats().reads, 0);
+            let (hit, _, hit_lease) = preload_raster_with_lease(&nearest, None, &mut cache, &gate).unwrap();
+            assert!(hit_lease.is_some());
+            drop((hit, hit_lease, lease));
+            let (retry, _, lease) = preload_raster_with_lease(&far, None, &mut cache, &gate).unwrap();
+            assert!(lease.is_some());
+            assert_eq!(cache.swap().unwrap().stats().reads, 1);
+            let mut actual = Vec::new();
+            rrrah_cache::write_raster_payload(&mut actual, &retry).unwrap();
+            assert_eq!(actual, expected);
+            let selected = load_cached_raster_with(&selected, None, &mut cache, || {
+                panic!("selected raster must remain resident")
+            })
+            .unwrap();
+            cache.swap().unwrap().wait_idle().unwrap();
+            cache.swap().unwrap().shutdown();
+            drop((selected, retry, lease, cache));
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
+    fn empty_stl_remains_admissible_with_its_header_budget() {
+        let directory = tempfile::tempdir().unwrap();
+        let mut empty = DecodeRequest::new(directory.path().join("empty.stl"));
+        std::fs::write(&empty.path, b"solid\nendsolid\n").unwrap();
+        let decoded = rrrah_decode::decode_model(&empty).unwrap();
+        assert_eq!(decoded.bounds(), None);
+        let header = decoded.capacity_bytes();
+        assert!(header > 0, "empty geometry still owns a model header");
+        drop(decoded);
+        let mut selected = DecodeRequest::new(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models/triangle.stl"),
+        );
+        let selected_bytes = rrrah_decode::decode_model(&selected).unwrap().capacity_bytes();
+        let root = rrrah_core::MemoryBudget::new(128 * 1024);
+        selected.memory_budget = Some(root.clone());
+        empty.memory_budget = Some(root.clone());
+        let mut cache = ModelDisplayCache::new(rrrah_cache::CacheLimits::bytes(selected_bytes + header));
+        drop(
+            cache
+                .load(&selected, true, || {
+                    rrrah_decode::decode_model(&selected).map_err(ModelLoadError::Decode)
+                })
+                .unwrap(),
+        );
+        let gate = Arc::new(DecodeGate::new());
+        let (model, lease) = preload_model_with_lease(&empty, &mut cache, &gate).unwrap();
+        assert_eq!(model.bounds(), None);
+        let lease = lease.unwrap();
+        drop(model);
+        let mut next = empty.clone();
+        next.path = directory.path().join("next.stl");
+        std::fs::write(&next.path, b"solid\nendsolid\n").unwrap();
+        assert_eq!(
+            preload_model_with_lease(&next, &mut cache, &gate).unwrap_err(),
+            "model prefetch skipped: protected byte budget exhausted"
+        );
+        drop(lease);
+        let (retry, lease) = preload_model_with_lease(&next, &mut cache, &gate).unwrap();
+        assert_eq!(retry.bounds(), None);
+        assert!(lease.is_some());
+        assert_eq!(cache.entries.len(), 2);
+        drop((retry, lease, cache));
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
     fn model_prefetch_headroom_skips_cold_load_but_keeps_ready_geometry() {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../tests/fixtures/models/off-attributes-binary.off");
@@ -15066,6 +15433,78 @@ mod hdr_surface_policy_tests {
 mod gpr_preload_tests {
     use super::*;
     #[test]
+    fn prepared_cr3_invalid_source_releases_encoded_credit() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("invalid.CR3");
+        let bytes = b"invalid bounded CR3 source";
+        std::fs::write(&path, bytes).unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(root.clone());
+        assert!(matches!(
+            rrrah_decode::NativeCr3Decoder.prepare(&request),
+            Err(rrrah_decode::DecodeError::NativeCr3(_))
+        ));
+        assert_eq!(root.used(), 0);
+        assert_eq!(root.peak(), bytes.len() as u64);
+        let empty = rrrah_core::MemoryBudget::new(0);
+        request.memory_budget = Some(empty.clone());
+        assert!(matches!(
+            rrrah_decode::NativeCr3Decoder.prepare(&request),
+            Err(rrrah_decode::DecodeError::Memory(_))
+        ));
+        assert_eq!(empty.peak(), 0);
+    }
+
+    #[test]
+    #[ignore = "requires original local CR3; prepared snapshot ownership and bit oracle"]
+    fn prepared_cr3_source_reuses_snapshot_and_releases_cancelled_owner() {
+        let original = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let reference = rrrah_decode::NativeCr3Decoder
+            .decode(&DecodeRequest::new(&original))
+            .unwrap();
+        let directory = tempfile::tempdir().unwrap();
+        let copy = directory.path().join("owned.CR3");
+        std::fs::copy(&original, &copy).unwrap();
+        let source_bytes = std::fs::metadata(&copy).unwrap().len();
+        let pixel_bytes = reference.mosaic.pixels.len() as u64 * 2;
+        let root = rrrah_core::MemoryBudget::new(source_bytes + pixel_bytes);
+        let mut request = DecodeRequest::new(&copy);
+        request.memory_budget = Some(root.clone());
+        let prepared = rrrah_decode::NativeCr3Decoder.prepare(&request).unwrap();
+        assert_eq!(prepared.minimum_pixel_bytes(), pixel_bytes);
+        assert_eq!(prepared.source_bytes() as u64, source_bytes);
+        assert_eq!(root.used(), source_bytes, "preparation allocated sensor pixels");
+        std::fs::remove_file(&copy).unwrap(); // owned temporary copy only
+        let decoded = prepared.decode().unwrap();
+        assert_eq!(decoded.mosaic.pixels, reference.mosaic.pixels);
+        assert_eq!(decoded.mosaic.metadata, reference.mosaic.metadata);
+        assert_eq!(
+            root.peak(),
+            source_bytes + pixel_bytes,
+            "encoded source was copied during decode"
+        );
+        drop(decoded);
+        assert_eq!(root.used(), 0);
+        std::fs::copy(&original, &copy).unwrap();
+        let epoch = Arc::new(AtomicU64::new(1));
+        request.cancellation = Some(GenerationToken::new(epoch.clone(), 1));
+        let prepared = rrrah_decode::NativeCr3Decoder.prepare(&request).unwrap();
+        epoch.store(2, Ordering::Release);
+        assert!(matches!(
+            prepared.decode(),
+            Err(rrrah_decode::DecodeError::Cancelled)
+        ));
+        assert_eq!(root.used(), 0);
+        request.cancellation = None;
+        drop(rrrah_decode::NativeCr3Decoder.prepare(&request).unwrap());
+        assert_eq!(root.used(), 0);
+        eprintln!(
+            "PREPARED_CR3 snapshot survives temporary source removal; all sensor bits/metadata exact; source+sensor peak exact; cancel/drop final=0"
+        );
+    }
+
+    #[test]
     #[ignore = "manual original CR3 foreground prefetch priority qualification"]
     fn real_cr3_prefetch_leases_keep_nearest_in_both_directions() {
         let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
@@ -15115,6 +15554,11 @@ mod gpr_preload_tests {
                     max_entries: None,
                     ttl: None,
                 },
+                rrrah_cache::CacheLimits {
+                    max_bytes: weight * 2 + weight / 2,
+                    max_entries: None,
+                    ttl: None,
+                },
             ] {
                 let mut ram = MosaicRamCache::with_limits(limits);
                 assert!(ram.insert_visible(key, visible.clone()));
@@ -15136,6 +15580,12 @@ mod gpr_preload_tests {
                     preload_raw_with_lease(&nearest, &disk, &mut ram, None, 1, &gate).unwrap();
                 assert!(admitted);
                 let lease = lease.unwrap();
+                assert_eq!(
+                    &*lease.pixels, &*visible.pixels,
+                    "prepared CR3 changed sensor samples"
+                );
+                assert_eq!(lease.metadata, visible.metadata);
+                let before_far_peak = root.peak();
                 for path in &planned[1..] {
                     let (admitted, extra) =
                         preload_raw_with_lease(&request_for(path.clone()), &disk, &mut ram, None, 1, &gate)
@@ -15143,6 +15593,11 @@ mod gpr_preload_tests {
                     assert!(!admitted);
                     assert!(extra.is_none());
                 }
+                assert_eq!(
+                    root.peak(),
+                    before_far_peak,
+                    "protected count/byte budget allocated another RAW sensor"
+                );
                 let pressure = root.try_reserve(root.available_bytes()).unwrap();
                 let (admitted, hit) =
                     preload_raw_with_lease(&nearest, &disk, &mut ram, None, 1, &gate).unwrap();

@@ -80,6 +80,11 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
         self.reconcile();
         self.inner.can_admit_key_by_count(key)
     }
+    /// Minimum-weight/count preflight after reconciling released leases.
+    pub fn can_admit_key_by_minimum_weight(&mut self, key: &K, minimum: u64) -> bool {
+        self.reconcile();
+        self.inner.can_admit_key_by_minimum_weight(key, minimum)
+    }
     pub fn capacity(&self) -> u64 {
         self.inner.capacity()
     }

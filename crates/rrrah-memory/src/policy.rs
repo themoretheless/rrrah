@@ -270,6 +270,21 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
             .max_entries
             .is_none_or(|max| max > 0 && (self.entries.contains_key(key) || self.protected.len() < max))
     }
+    /// Conservative admission using only a lower bound on the new value's weight.
+    /// Other protected entries cannot be evicted; an existing key can replace
+    /// its own weight. Does not evict, renew TTL or change recency.
+    pub fn can_admit_key_by_minimum_weight(&self, key: &K, minimum: u64) -> bool {
+        if !self.can_admit_key_by_count(key) || minimum > self.capacity {
+            return false;
+        }
+        let protected_others = self
+            .protected
+            .iter()
+            .filter(|protected| *protected != key)
+            .filter_map(|protected| self.entries.get(protected))
+            .fold(0u64, |weight, entry| weight.saturating_add(entry.weight));
+        minimum <= self.capacity.saturating_sub(protected_others)
+    }
     fn needs_slot(&self) -> bool {
         self.limits
             .max_entries

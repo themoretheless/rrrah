@@ -24,7 +24,7 @@ pub use rrrah_raw::{
     GenerationToken, MrwLayout, NATIVE_CR3_BACKEND_ID, NATIVE_DNG_BACKEND_ID, NATIVE_DNG_MOSAIC_CONTRACT_1,
     NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder, NativeCrwDecoder, NativeDecodeTimings,
     NativeDngDecoder, NativeMrwDecoder, NativeRawDecoder, OPTIO_S4_SENSOR_SIZE, OptioS4SensorError,
-    RawDecoder, RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, RpfRasterInterpretation,
+    PreparedCr3, RawDecoder, RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, RpfRasterInterpretation,
     WORKSPACE_LOCK_DIGEST, bounded_io, decode_crw_10d, decode_crw_10d_with_tables, decode_eip_file_sensor,
     decode_eip_sensor, decode_file, decode_mef_zd_sensor, decode_mef_zd_sensor_file, dng,
     eip_file_sensor_recipe, inspect_eip, raw_development_opcodes, read_bay_image_sensor_with_budget,

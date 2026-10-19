@@ -131,7 +131,82 @@ pub const NATIVE_EOS_R8_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeMa
 #[derive(Debug, Clone, Copy, Default)]
 pub struct NativeCr3Decoder;
 
+/// Admitted compressed CR3 source and validated sensor-size lower bound.
+/// No entropy decoding or sensor allocation has occurred. Dropping this owner
+/// releases compressed-source credit; decoding reuses the same source bytes.
+pub struct PreparedCr3 {
+    request: DecodeRequest,
+    data: rrrah_core::PixelBuffer<u8>,
+    minimum_pixel_bytes: u64,
+    source_open: std::time::Duration,
+    preflight: std::time::Duration,
+    started: Instant,
+}
+impl std::fmt::Debug for PreparedCr3 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("PreparedCr3")
+            .field("source_bytes", &self.data.len())
+            .field("minimum_pixel_bytes", &self.minimum_pixel_bytes)
+            .finish_non_exhaustive()
+    }
+}
+impl PreparedCr3 {
+    pub fn minimum_pixel_bytes(&self) -> u64 {
+        self.minimum_pixel_bytes
+    }
+    pub fn source_bytes(&self) -> usize {
+        self.data.len()
+    }
+    pub fn decode(self) -> Result<DecodeOutput, DecodeError> {
+        let Self {
+            request,
+            data,
+            source_open,
+            preflight,
+            started,
+            ..
+        } = self;
+        let mut result = NativeCr3Decoder.decode_source(&request, data, source_open, started)?;
+        result.timings.decoder_select += preflight;
+        result.timings.raw_decode += preflight;
+        Ok(result)
+    }
+}
+
 impl NativeCr3Decoder {
+    /// Prepare the bounded encoded source without allocating decoded sensor pixels.
+    /// The caller must still perform actual decode/admission; this size query
+    /// does not validate entropy samples or reserve their eventual allocation.
+    pub fn prepare(&self, request: &DecodeRequest) -> Result<PreparedCr3, DecodeError> {
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
+        }
+        let started = Instant::now();
+        let data = read_managed(request)?;
+        let source_open = started.elapsed();
+        let parsing = Instant::now();
+        let frame = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| parse(&data)))
+            .map_err(|_| DecodeError::DecoderPanicked)?
+            .map_err(|error| DecodeError::NativeCr3(error.to_string()))?;
+        let minimum_pixel_bytes = u64::from(frame.config.compression.image_width)
+            .checked_mul(u64::from(frame.config.compression.image_height))
+            .and_then(|n| n.checked_mul(2))
+            .ok_or(DecodeError::DimensionOverflow)?;
+        drop(frame);
+        request.check_cancelled()?;
+        Ok(PreparedCr3 {
+            request: request.clone(),
+            data,
+            minimum_pixel_bytes,
+            source_open,
+            preflight: parsing.elapsed(),
+            started,
+        })
+    }
+
     /// Shared CR3 pipeline for filesystem and managed in-memory source owners.
     /// Entropy worker borrows end before source release and metadata adaptation.
     pub(crate) fn decode_source<S: std::ops::Deref<Target = [u8]>>(
@@ -405,6 +480,26 @@ mod tests {
 
     use super::*;
     use crate::GenerationToken;
+
+    #[test]
+    fn prepared_cr3_checks_selection_and_cancellation_before_source_io() {
+        let root = rrrah_core::MemoryBudget::new(0);
+        let mut request = DecodeRequest::new("nonexistent-prepared-source.CR3");
+        request.memory_budget = Some(root.clone());
+        request.image_index = 1;
+        assert!(matches!(
+            NativeCr3Decoder.prepare(&request),
+            Err(DecodeError::UnsupportedImageIndex { index: 1 })
+        ));
+        request.image_index = 0;
+        request.cancellation = Some(GenerationToken::new(Arc::new(AtomicU64::new(2)), 1));
+        assert!(matches!(
+            NativeCr3Decoder.prepare(&request),
+            Err(DecodeError::Cancelled)
+        ));
+        assert_eq!(root.peak(), 0);
+        assert_eq!(root.used(), 0);
+    }
 
     #[test]
     #[ignore = "requires local EOS R8 tests/IMG_9043.CR3 fixture"]
