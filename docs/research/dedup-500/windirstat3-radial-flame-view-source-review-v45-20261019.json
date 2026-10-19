@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole4files manual reading; pinned Git byte comparison. No renderer/runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Views/SunburstView.h": "47d6864d05d2d8740f39e678b488ed67b9eb9baadbef3954e3a434be970120b7",
+    "windirstat/Views/SunburstView.cpp": "1c6575f8dd6e187f7cc4bb87b5fbe07e21c89cfc23f24c6b9bec22a33dddda0a",
+    "windirstat/Views/FlameGraphView.h": "8b4059e13bb330dcd10688a39ecccba80df2df30c96f74ba5d7f0c54372ab971",
+    "windirstat/Views/FlameGraphView.cpp": "5feb796af112435ec1357a6b82d11ac4489a3b648e12fd9ea9221ac92ce10a2f"
+  },
+  "whole_files_read": 125,
+  "coverage": "docs/research/dedup-500/windirstat3-radial-flame-view-coverage-v45-20261019.json",
+  "coverage_sha256": "13c0071ff528248c3cee0b41ac17af68aea82c90e6b9fef408efef2b2ccb15da",
+  "findings": [
+    "Sunburst view delegates layout to renderer with max depth, caches extension-outline pointers by extension/grouping state, clears highlight cache after base render and layout reset, frees capacity on trim. Style-only changes may reuse layout.",
+    "Sunburst hit test returns item plus remainder-size metadata; hover can display ellipsis path and remainder bytes, not individual hidden file. No proof that remainder identifies duplicate candidates.",
+    "Flame graph caches only client viewport below sticky breadcrumbs, separate full geometry. ScrollDC shifts retained pixels and redraws exposed strip, with full viewport redraw when shift larger or ScrollDC fails. This is code structure, not measured speed.",
+    "Flame PrepareDrawing recomputes width-dependent visible depth across scrollbar transitions, can retain disabled bar to avoid oscillation, scales scroll on text row-height change and clamps position. Two-pass geometry stabilization read only, not UI validated.",
+    "Input recomputes layout height if queued input arrives before paint; wheel fractional delta retained separately from base Ctrl zoom. Scrollbar actions reset fractional wheel state.",
+    "Hover cleared before viewport move, selections mapped through hardlink display references, overlay clipping avoids fixed breadcrumb region. Model/zoom changes reset appropriate cached geometry/scroll.",
+    "Style reuse preserves logical geometry but base rendering may rebuild for DPI/size; actual renderer correctness/memory budget remains in unread Controls/Sunburst and FlameGraph implementations."
+  ],
+  "limits": [
+    "No GDI frame/render geometry, scrollbar/DPI race, memory or paired performance measurement.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
