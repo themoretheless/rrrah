@@ -1,0 +1,158 @@
+{
+  "index": 2,
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "review_scope": "Selected complete BKTree and tests module with13unchangedupstream testbodies/2304independent queries and explicit scalar np.sum adapter; complete metricsmodule with21oracles using actualnumpy. Not fullrepository/package/CNN/image/runtimequalification. Additional eight whole search/util/test files reviewed; two original Python brute-force tests and2304 queries pass with actual NumPy2.5.4. Repository remains partial.",
+  "decision": "shortlist",
+  "finding": "Separate hashing, BK-tree retrieval and ranking evaluation; Apache-2.0 and matching tests make this a useful independent oracle.",
+  "license_metadata": "Apache-2.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 13,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "imagededup/methods/hashing.py",
+      "local": "02-hashing.py",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/imagededup/methods/hashing.py",
+      "sha256": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+      "truncated": false,
+      "lines": 691,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "imagededup/handlers/metrics/information_retrieval.py",
+      "local": "03-information_retrieval.py",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/imagededup/handlers/metrics/information_retrieval.py",
+      "sha256": "1b21a177211c3884a8debab173794f7d861d03655dbe813d5a1cd6d0c31dff04",
+      "truncated": false,
+      "lines": 143,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "imagededup/handlers/search/bktree.py",
+      "local": "04-bktree.py",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/imagededup/handlers/search/bktree.py",
+      "sha256": "f43e9555c74f28c436d20dbe21b0b72adc2d7963df22d7869d07e789a93411e4",
+      "truncated": false,
+      "lines": 138,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_bktree.py",
+      "local": "05-test_bktree.py",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/tests/test_bktree.py",
+      "sha256": "9491a26ed9e1943f560ccadc70d0264a0bb86a8d6e84b1b280dbcbc03564547a",
+      "truncated": false,
+      "lines": 167,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "examples/CIFAR10_duplicates.ipynb",
+      "local": "06-CIFAR10_duplicates.ipynb",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/examples/CIFAR10_duplicates.ipynb",
+      "sha256": "8c7c8ae5d1ee2a76df07715208d571ecbc5e7ebd23ede8292022b3390bdcd9da",
+      "truncated": true,
+      "lines": 481,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/Finding_duplicates.ipynb",
+      "local": "07-Finding_duplicates.ipynb",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/examples/Finding_duplicates.ipynb",
+      "sha256": "3898ac105f964c46a6aed14bf30c1817cd33ea1c21d95f0c3c35d6ba74e78011",
+      "truncated": false,
+      "lines": 462,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/README.md",
+      "sha256": "3767a946dff29bff78c9a1bba3ad87b1f91b9b63140fbdfb1cf5aae53e529297",
+      "truncated": false,
+      "lines": 164,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/idealo/imagededup/blob/f0534a6ec10c02379c627696fbd486841068631c/LICENSE",
+      "sha256": "a175e976b594a62a92868edc2b6b81e4d57e822518f3e8e90681d497d2026f45",
+      "truncated": false,
+      "lines": 203,
+      "source": false,
+      "test": false
+    }
+  ],
+  "selected_runtime_reviews": [
+    "docs/research/dedup-500/imagededup2-bktree-selected-runtime-v3-20261015.json",
+    "docs/research/dedup-500/imagededup2-metrics-selected-runtime-v1-20261015.json"
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/imagededup2-search-source-review-v1-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-removal-source-review-v2-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-images-source-review-v3-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-retrieval-source-review-v4-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-packaging-source-review-v5-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-collation-source-review-v6-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-cnn-boundaries-source-review-v7-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-evaluation-source-review-v8-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-doc-formats-source-review-v9-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-plotter-build-source-review-v10-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-hash-collisions-source-review-v11-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-metric-suites-source-review-v12-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-raster-assets-source-review-v13-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-bktree-license-source-review-v14-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-notebook-fixtures-source-review-v15-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-notebook-images-source-review-v16-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-selected-hash-tests-source-review-v17-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagededup2-CNN-tests-source-review-v18-20261019.json"
+    }
+  ]
+}

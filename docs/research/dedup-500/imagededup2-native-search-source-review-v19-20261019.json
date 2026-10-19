@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_actual_native_search_qualified",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "manual_whole_text_files": 70,
+  "total_reviewed_by_declared_methods": 112,
+  "tracked_blobs": 114,
+  "remaining_whole_source_reviews": 2,
+  "controls": "docs/research/dedup-500/imagededup2-native-search-reproducer-v19-20261019/result.json",
+  "controls_sha256": "0c74b63df512a922c1e02d038b087fd1c395457b1a27cdfe41873b729e9978d8",
+  "reproducer": "scripts/qualify-imagededup2-native-search-20261019.py",
+  "reproducer_sha256": "01d199c5559b9c51cd73f80c7a3ed0188ef9d5d1a0d14d74d48f343b149f418c",
+  "findings": [
+    "Actual unchanged generated C++ compiles with bundled header on MacARM/Python3.12.14; native Unicode filename search matches independent fullscan.",
+    "Supplied distance callback is ignored by native backend; actual callback99 still returns distance0.",
+    "Unsigned conversion rejects negative radius and negative/oversized hashes; no arbitrary-width metric parity."
+  ],
+  "limits": [
+    "Direct clang build with dynamic_lookup, not setup.py/package/wheel/install/platform matrix.",
+    "No source regeneration or modification; no sanitizer, malformed mismatched-vector execution or memory-safety qualification.",
+    "Entire files compiler-processed, but only query-related generated code manually read; not full manual source-review credit.",
+    "No performance claim/adoption; deferred native pHash investigation remains untouched."
+  ],
+  "native_tests_passed": 2,
+  "native_oracle_queries": 2304,
+  "license_note": "Bundled builtin.h header declares CC0 and public-domain bit-hack origins, separately from root Apache2.0; no production copying."
+}

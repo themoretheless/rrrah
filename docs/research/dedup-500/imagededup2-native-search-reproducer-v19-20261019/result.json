@@ -1,0 +1,43 @@
+{
+  "status": "passed_compiled_original_generated_CPP_and_native_search",
+  "source_pins": {
+    "imagededup/handlers/search/brute_force_cython_ext.cpp": "b73c41fad670f3b217872abc19344351dd7feba5969a8fc416aedf88d40bbbfd",
+    "imagededup/handlers/search/builtin/builtin.h": "7ab392427bf8eb268b94f6c0dfca5e54eb4090b70230cc00de1020d6b541477f",
+    "imagededup/handlers/search/brute_force_cython.py": "d59276db9604f8b13f80c99236a02ae2c2197e3357b85343f8afcd46b7939594",
+    "imagededup/methods/hashing.py": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+    "tests/test_brute_force_cython.py": "ff8a61b745a248d22524faf8865cfb75a284da49e8bedc8f1b8dc49bed8f817e"
+  },
+  "original_tests_passed": [
+    "test_search_correctness",
+    "test_tolerance_value_effect"
+  ],
+  "independent_oracle_queries": 2304,
+  "native_binary_sha256": "3a9d75fd5f257a76960a66df7388d29c7a1f1cc431f73d0a66257540f4f2a287",
+  "integer_boundary_exceptions": {
+    "negative_radius": "OverflowError",
+    "negative_hash": "OverflowError",
+    "oversized_hash": "OverflowError",
+    "oversized_query": "OverflowError"
+  },
+  "callback_control": {
+    "calls": 0,
+    "actual": [
+      [
+        "a",
+        0
+      ]
+    ]
+  },
+  "empty_database": "returns empty list",
+  "findings": [
+    "Actual unchanged generated C++ compiles with bundled header on MacARM/Python3.12.14; native Unicode filename search matches independent fullscan.",
+    "Supplied distance callback is ignored by native backend; actual callback99 still returns distance0.",
+    "Unsigned conversion rejects negative radius and negative/oversized hashes; no arbitrary-width metric parity."
+  ],
+  "limits": [
+    "Direct clang build with dynamic_lookup, not setup.py/package/wheel/install/platform matrix.",
+    "No source regeneration or modification; no sanitizer, malformed mismatched-vector execution or memory-safety qualification.",
+    "Entire files compiler-processed, but only query-related generated code manually read; not full manual source-review credit.",
+    "No performance claim/adoption; deferred native pHash investigation remains untouched."
+  ]
+}
