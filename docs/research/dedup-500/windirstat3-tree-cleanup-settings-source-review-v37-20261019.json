@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole4files manually read; pinned Git byte comparison. No UI/commands executed.",
+  "new_whole_files_read": {
+    "windirstat/Pages/PageFileTree.h": "bbe23115b30cbf7c8198cae04869a29109c4cc60c8aec62e870c9ae70908b384",
+    "windirstat/Pages/PageFileTree.cpp": "b8dc7d07dfeade61122cafb645b9dc4a57c0b26414469a582c842428ee137027",
+    "windirstat/Pages/PageCleanups.h": "ee7c74eb99bddc67a0a82e370f31f14957479d72d62b4b254bc78aee08439657",
+    "windirstat/Pages/PageCleanups.cpp": "150ec92f1f707849236976ac4c1bad5015248fbcc6d6343a4a91db39922a6abe"
+  },
+  "whole_files_read": 99,
+  "coverage": "docs/research/dedup-500/windirstat3-tree-cleanup-settings-coverage-v37-20261019.json",
+  "coverage_sha256": "02a64055d02082a2c52514f114c9524ee65552735feaa6516daf1e7329596f65",
+  "findings": [
+    "File-tree page stages9column visibility choices, animation/time display,1..8color selection and palette. Apply effect updates changed columns, resorts on animation toggle and notifies list-style; no filesystem rescan requested by this page.",
+    "Color count comes from bounded slider and is staged without separate explicit range validation in PrepareSettings; no forged native-control input test.",
+    "Cleanup page copies persistent list into local m_udc, edits/adds/removes/reorders locally, then stages one SetUserDefinedCleanups action with copied list. It does not execute configured commands.",
+    "PrepareSettings validates current refresh-policy selection0..2, normalizes empty current title and stores current dialog; does not validate every command string or every inactive item policy. Persisted legacy/inactive values require separate qualification.",
+    "Event handlers enforce no recursive operation without directory/drive applicability, force WaitForCompletion for recursion and reset refresh policy when wait disabled. Initialization displays loaded values without replaying all normalization handlers; no invariant guarantee for arbitrary persisted input.",
+    "Add count has no practical cap in this page and narrows vector size to int for selection; memory/count stress untested. Move validates destination and swaps local items, preserving persistent application until commit.",
+    "Command syntax, path placeholders and shell evaluation belong to previously reviewed runtime helper; local edit transaction does not imply safe immutable-file replacement."
+  ],
+  "limits": [
+    "No UI apply/cancel, native-control manipulation, command syntax or filesystem action runtime test.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
