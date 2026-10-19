@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole4files manually read; pinned Git bytes verified. No desktop execution.",
+  "new_whole_files_read": {
+    "windirstat/Views/FileTabbedView.h": "5f68369bbc5b22a882dd3a332246c0361090b0e3254adada5b42924ecfe93cee",
+    "windirstat/Views/FileTabbedView.cpp": "068ab5a506c39f5cffce21431d24b8de5bb6b677fce34a968118d22faee7a8cf",
+    "windirstat/Views/ExtensionView.h": "e195b85c3c019113664b6c4b292092df556df8556709d6646df86ff799f710fd",
+    "windirstat/Views/ExtensionView.cpp": "78e915ae91c8c2109b69535c7b7abbd47b9c046605c7b8445335cde3183aec44"
+  },
+  "whole_files_read": 113,
+  "coverage": "docs/research/dedup-500/windirstat3-tab-extension-coverage-v40-20261019.json",
+  "coverage_sha256": "74ee6d3f8743080cf4b6b8bcb0bf8f836aaed23a1e6600a0f6324bd85dfafe00",
+  "findings": [
+    "Tabbed view owns7pane unique_ptrs; creation returns failure if any pane unavailable. New-root update resets optional visibility then forwards model changes to panes except sender.",
+    "Watcher show calls StartMonitoring, restarting prior monitor; hide stops and clears history. Permission show calls synchronous modal StartScan and sets visibility from completion result; hide alone does not explicitly clear retained rows here.",
+    "Duplicate tab visibility depends on scan option and existing root; activation sorts stored duplicate results rather than starting a fresh equality scan. Search/analytics visibility changes are presentation actions only.",
+    "Keyboard tab cycles visible panes without wrap at endpoints, then routes focus to extension list. Programmatic active-tab changes focus content when prior focus already inside container.",
+    "Extension view publishes model extension data only when types shown and root done; stopped/partial finalized root can satisfy this state. Hiding clears displayed data pointer. No disk reread or completeness evidence.",
+    "Extension synchronization selects first selected IT_FILE extension; multiple-extension selection is not aggregated here. Highlight notifications depend on extension-control focus.",
+    "Extension percentages receive physical root size while per-extension data bytes were collected from logical file sizes; interpretation needs remaining ExtensionListControl review, not assumed same denominator semantics."
+  ],
+  "limits": [
+    "No UI tab/focus, monitor restart, permission cancel, extension percentage or stale-pointer runtime test.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
