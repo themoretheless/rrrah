@@ -1,0 +1,21 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Compiled unchanged pinned DualKeyDictionary.cs in isolated net10.0 console harness using SDK10.0.402; no Windows/WPF components. Source Git blob pin verified in v6.",
+  "command": "dotnet run --project probe.csproj --verbosity quiet",
+  "exit_code": 0,
+  "checks_passed": 6,
+  "source_sha256": "0886d13f5ab4b2dc5f317c2440c08a9bf4980b5190c29fc8b3d023ba819c89f8",
+  "harness_sha256": "0101099f4fad89ad3737b3d688ae2459feb36a9212f1942fea56ebb54161c776",
+  "findings": [
+    "Runtime reproduced: Contains(pair with wrong value) is false, but Remove(same mismatched pair) returns true, removes primary entry and removes its alias.",
+    "Overwrite alias conflict retains both primary entries, detaches alias from former owner and maps alias to new owner; TryAdd rejects occupied alias.",
+    "Value-type optional key default becomes key0; a second default-key TryAdd fails. This confirms generic absence semantics differ from nullable reference-key use."
+  ],
+  "limits": [
+    "Six synthetic source-level behavior controls only, not upstream test suite, full application or Windows qualification.",
+    "No production code adopted or modified. Full filtered checkout remains separate session13181.",
+    "Completed count148/500; pHash investigation deferred."
+  ]
+}
