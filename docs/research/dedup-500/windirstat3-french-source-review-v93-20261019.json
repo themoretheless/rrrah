@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of French catalog; v91 structural parity evidence retained; pinned source bytes reverified.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_fr.txt": "ec81ae92b58365afc39ff31b9ba5a572baf519ae63a066e8b2c500693dc9f0e8"
+  },
+  "whole_files_read": 226,
+  "coverage": "docs/research/dedup-500/windirstat3-french-coverage-v93-20261019.json",
+  "coverage_sha256": "dc0c7aecac5d7dbd2e6e6b0d6c8b614b58ad9b6bf097697db9ae55c9d777bda7",
+  "findings": [
+    "Doublons probables, Préfixe de hachage and Hachage échantillonné explicitly preserve probability/prefix/sampling distinctions. Advanced option describes partial hashing above64Mio, consistent with reviewed sample threshold.",
+    "Recovery labels distinguish Récupérable and Peut-être récupérable; completed recovery still says verify file data. Same-volume restoration warns it can overwrite deleted data. These are product statements, not proof of recovery outcomes.",
+    "Unlike Russian/Ukrainian wording, sparsify is explicitly Rendre le fichier clairsemé and glob patterns remain modèles glob, preserving distinctions from compression and regular expressions.",
+    "Logical and physical size are distinct; a general size-display caption uses Go/Mo/Ko while explicit unit labels use GiB/MiB/KiB. Actual numerical unit presentation requires runtime inspection.",
+    "Deletion captions claim impossible recovery/undo; these describe permanent-delete UI intent, not secure erasure. No destructive command executed.",
+    "Cleanup placeholders %p/%n/%sp/%sn and brace fields are retained; line breaks in subdirectory-help label can affect rendered fit. MSI fr-FR/1036/1252 declarations alone do not prove installer encoding."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No rendered layout, mnemonic collision or Windows installer validation. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
