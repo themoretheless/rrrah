@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of UiControls.cpp in three ranges; pinned bytes verified. No Windows runtime.",
+  "new_whole_files_read": {
+    "windirstat/UiControls.cpp": "283dbdd7b931bdab9c9793aa600d3bbd4491cc31b1eaede92a70a0262605412f"
+  },
+  "whole_files_read": 205,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-controls-implementation-coverage-v76-20261019.json",
+  "coverage_sha256": "3fff9ae6d106586ecd20c02d06c7a21a3cc8cdbd819a4d95633b71c074c5d346",
+  "findings": [
+    "Tab control maps visible native indexes to stable logical indexes, validates index/visibility before activation, chooses another visible tab when hiding active one and notifies parent before/after changes. Return from changing notification is not treated as a veto in this implementation.",
+    "Painted tab rectangles are reused for hit testing; active overlapping tab has priority, other tabs checked in reverse order. This keeps hit selection consistent with source draw order, without runtime pixel verification.",
+    "Keyboard forwarding requires active pane visible/enabled and redirects focus into it; plain Tab traversal is left to normal dialog handling. Label-only settings tabs retain strip focus, pane-backed tabs redirect away from strip.",
+    "RebuildNativeTabs deletes native entries then inserts visible tabs, but insertion return is ignored while logical map advances. Failure can desynchronize map from native control; no failure injection performed.",
+    "LayoutPanes clamps bottom-tab remaining height but top-tab rectangle begins at top+tabHeight without equivalent clamp against bottom. Tiny top-tab client areas can produce inverted pane geometry. Actual Window API behavior not tested.",
+    "Toolbar AddImage validates bitmap dimensions/byte allocation and requires full GetDIBits transfer, bicubic-scales when dimensions differ, constructs disabled bitmap and rolls back image-list adds when indexes disagree. Resize failure falls back to original bitmap rather than reporting which stage failed.",
+    "Disabled icon generation infers alpha presence from any nonzero fourth byte; all-zero alpha32bit source is treated opaque. Channels blended with disabled text and alpha reduced to75percent; premultiplication/fidelity remains unqualified.",
+    "Tab/status painting uses full client buffered DC and per-paint brushes/fonts; no cache/performance or tiny-window runtime gate. Theme changes update tab content background."
+  ],
+  "limits": [
+    "No Windows focus/tab traversal, paint/hit-test parity, insertion failure, icon alpha, scaling or performance tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
