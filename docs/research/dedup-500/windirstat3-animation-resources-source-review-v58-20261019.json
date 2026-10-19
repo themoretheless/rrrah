@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of five animation/resource files, pinned bytes verified. Manifest XML parsed. No Windows execution.",
+  "new_whole_files_read": {
+    "windirstat/Controls/PacMan.h": "17804c2144583d49656ece94dab9545b99ff2e7dd52376c1110d6482bf3b1cc1",
+    "windirstat/Controls/PacMan.cpp": "dce8088e66780390c344729b4a77364f4de33755cde69e379e58c4a388b4f6fc",
+    "windirstat/res/windirstat.manifest": "ee15013e470407fca6cdf873066e80cf45f17640d9d65aa352408f7ed508b2c4",
+    "windirstat/res/windirstat.rc2": "5c0e8376a44c31d9be2ebbab6e6c9b2d16df56c4899fe3c39a040864c8bc1051",
+    "windirstat/version.rc": "1d2e23506280e020208b615d8de54497322425e6ded0a3a633068625a89c0a5a"
+  },
+  "whole_files_read": 175,
+  "coverage": "docs/research/dedup-500/windirstat3-animation-resources-coverage-v58-20261019.json",
+  "coverage_sha256": "79be035105e455b6ba9e81832996111bb03b20a6c990864edbcce9d775aee9e0",
+  "findings": [
+    "Animation inactivity threshold750ms sets moving false but still draws a sleeping figure; Stop sets done and suppresses figure after optional background fill. This indicator is not a worker-completion or scan-settled oracle.",
+    "Suspension rebases timestamps so resume avoids a large movement delta. Empty outer rectangles rebase draw time and return; positive outer rectangles are later deflated without a second size check, so very small controls can produce nonpositive drawing geometry. Actual GDI+ handling unqualified.",
+    "Position uses modulo-two reflection, with finite nonnegative diff and position0..1 assumed by assertions. No per-instance timer or repaint scheduler appears in these files; caller drives updates and draws.",
+    "Static global suspension and shared font cache have no synchronization here. GUI-thread use is assumed; source does not prove arbitrary-thread safety. Font cache refreshes by font percentage.",
+    "Manifest declares dpiAware true, longPathAware, SegmentHeap and asInvoker with uiAccess false, plus Windows compatibility identifiers. These declarations do not establish runtime long-path or per-monitor-DPI correctness.",
+    "Resource version file contains MIT permission text, while animation and rc2 carry GPL-3.0-or-later identifiers. Per-file licensing must be preserved; no production code adopted.",
+    "Version resource constructs four-part numeric file/product versions and a three-part product-version string; metadata is generated from macros, not verification of executable contents."
+  ],
+  "limits": [
+    "No native rendering, animation timing, tiny-control, concurrency, resource compilation or installed-executable validation performed.",
+    "Native pHash investigation remains deferred. Global completed repository count remains147/500."
+  ]
+}
