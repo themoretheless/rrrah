@@ -1,0 +1,40 @@
+{
+  "status": "byte_identical_regeneration",
+  "cython_version": "3.1.3",
+  "tracked_sha256": "b73c41fad670f3b217872abc19344351dd7feba5969a8fc416aedf88d40bbbfd",
+  "regenerated_sha256": "b73c41fad670f3b217872abc19344351dd7feba5969a8fc416aedf88d40bbbfd",
+  "byte_identical": true,
+  "tracked_lines": 9116,
+  "metadata": {
+    "distutils": {
+      "depends": [
+        "imagededup/handlers/search/builtin/builtin.h"
+      ],
+      "extra_compile_args": [
+        "-O3",
+        "-march=native",
+        "-mtune=native"
+      ],
+      "extra_link_args": [
+        "-O3",
+        "-march=native",
+        "-mtune=native"
+      ],
+      "include_dirs": [
+        "imagededup/handlers/search"
+      ],
+      "language": "c++",
+      "name": "brute_force_cython_ext",
+      "sources": [
+        "imagededup/handlers/search/brute_force_cython_ext.pyx"
+      ]
+    },
+    "module_name": "brute_force_cython_ext"
+  },
+  "limits": [
+    "Regeneration in owned copy; original checkout untouched.",
+    "Generated-file provenance check, not manual reading of every Cython runtime helper or other-platform proof.",
+    "Prior unchanged original binary compilation/native oracle evidence separate; no new memory-safety or performance claim.",
+    "No production code adopted; deferred native pHash investigation untouched."
+  ]
+}
