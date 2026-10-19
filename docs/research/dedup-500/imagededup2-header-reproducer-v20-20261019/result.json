@@ -1,0 +1,29 @@
+{
+  "status": "passed_actual_selected_and_original_portable_popcount",
+  "header_sha256": "7ab392427bf8eb268b94f6c0dfca5e54eb4090b70230cc00de1020d6b541477f",
+  "probe_sha256": "38027eee113723d757b31cc61eca0208534346a5c6947b34455b6018e7e9c21e",
+  "build_command": [
+    "clang++",
+    "-dynamiclib",
+    "-O2",
+    "-std=c++11",
+    "-I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/imagededup2-20261019/source/imagededup/handlers/search",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/imagededup2-popcount-20261019/probe.cpp",
+    "-o",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/imagededup2-popcount-20261019/probe.dylib"
+  ],
+  "values_per_implementation": 69762,
+  "implementations": 2,
+  "comparisons": 139524,
+  "domain": "all16bit values,64singlebit,64one-zero-bit,4096seeded64bit random,zero/allones",
+  "findings": [
+    "Full1500line header manually read, including compiler/width selection, fallback functions, intrinsics and CC0 origin notice.",
+    "Original portable popcount macro instantiated under distinct name, avoiding edits to bundled source or builtin selection.",
+    "Selected compiler builtin and original portable expansion agree with independent int.bit_count on complete control domain."
+  ],
+  "limits": [
+    "Only popcountll implementations executed; other header functions and platform-specific branches not runtime-qualified.",
+    "MacARM clang only; no Windows/Linux/otherCPU portability, timing or memory-safety proof.",
+    "No production code adopted; deferred native pHash investigation untouched."
+  ]
+}

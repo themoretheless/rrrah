@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_complete_header_read_and_popcount_controls",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "imagededup/handlers/search/builtin/builtin.h": "7ab392427bf8eb268b94f6c0dfca5e54eb4090b70230cc00de1020d6b541477f"
+  },
+  "manual_whole_text_files": 71,
+  "total_reviewed_by_declared_methods": 113,
+  "tracked_blobs": 114,
+  "controls": "docs/research/dedup-500/imagededup2-header-reproducer-v20-20261019/result.json",
+  "controls_sha256": "5cf38ee13532a48150b751bc02852a734f07b2e5734c5ab1a425eb1654dc8f25",
+  "coverage": "docs/research/dedup-500/imagededup2-header-reproducer-v20-20261019/coverage.json",
+  "coverage_sha256": "a92e5a6a287545053f82e0f647d2531518447cd17b7eefe4e460d26b1d0cf33d",
+  "reproducer": "scripts/qualify-imagededup2-popcount-20261019.py",
+  "reproducer_sha256": "c6d510a44be2e7da87a3c6f4ca26bb59730515bc109170b7c5f19f6c02e17b13",
+  "comparisons": 139524,
+  "findings": [
+    "Full1500line header manually read, including compiler/width selection, fallback functions, intrinsics and CC0 origin notice.",
+    "Original portable popcount macro instantiated under distinct name, avoiding edits to bundled source or builtin selection.",
+    "Selected compiler builtin and original portable expansion agree with independent int.bit_count on complete control domain."
+  ],
+  "limits": [
+    "Only popcountll implementations executed; other header functions and platform-specific branches not runtime-qualified.",
+    "MacARM clang only; no Windows/Linux/otherCPU portability, timing or memory-safety proof.",
+    "No production code adopted; deferred native pHash investigation untouched."
+  ]
+}
