@@ -1,0 +1,81 @@
+{
+  "status": "passed_original_selected_hash_encoding_characterization",
+  "source_pins": {
+    "imagededup/methods/hashing.py": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+    "imagededup/utils/image_utils.py": "ade0cd69c97bd521489183acd4d49900b282ac9dc1238bcaa5add887fa242f07"
+  },
+  "collision_controls": [
+    {
+      "method": "AHash",
+      "distinct_constant_RGB_arrays": 256,
+      "unique_hashes": 1,
+      "shared_hash": "ffffffffffffffff",
+      "black_white_hamming_distance": 0
+    },
+    {
+      "method": "DHash",
+      "distinct_constant_RGB_arrays": 256,
+      "unique_hashes": 1,
+      "shared_hash": "0000000000000000",
+      "black_white_hamming_distance": 0
+    }
+  ],
+  "threshold_controls": [
+    {
+      "value": "False",
+      "type": "bool",
+      "result": "accepted"
+    },
+    {
+      "value": "True",
+      "type": "bool",
+      "result": "accepted"
+    },
+    {
+      "value": "np.int64(3)",
+      "type": "int64",
+      "result": "TypeError"
+    },
+    {
+      "value": "0",
+      "type": "int",
+      "result": "accepted"
+    },
+    {
+      "value": "64",
+      "type": "int",
+      "result": "accepted"
+    },
+    {
+      "value": "65",
+      "type": "int",
+      "result": "ValueError"
+    },
+    {
+      "value": "-1",
+      "type": "int",
+      "result": "ValueError"
+    },
+    {
+      "value": "1.0",
+      "type": "float",
+      "result": "TypeError"
+    }
+  ],
+  "empty_map_control": {
+    "exception": "ValueError",
+    "message": "Provide either an image directory or encodings!"
+  },
+  "findings": [
+    "AHash and DHash zero-distance matches do not establish exact pixel or byte identity: black and white arrays collide.",
+    "Each method collapses all256distinct constant RGB levels into one64bit hash through original public encode_image preprocessing.",
+    "Hash threshold validator accepts booleans as int, rejects NumPy int64; empty mapping rejected by public truthiness check.",
+    "BKTree source fully read; previously qualified empty-root and recursive equal-hash chain limitations retained."
+  ],
+  "limits": [
+    "Original Hashing/AHash/DHash class bodies AST extracted unchanged; entire original image-utils body with logger import routing.",
+    "Actual NumPy2.5.4/Pillow12.3.0; no pywt/scipy/Cython/native backend or original hashing test-suite execution.",
+    "Synthetic array path only; no files/corpus/quality/performance/platform claims or production adoption.",
+    "PHash/WHash source read, not executed; pHash native memory-error investigation remains deferred."
+  ]
+}

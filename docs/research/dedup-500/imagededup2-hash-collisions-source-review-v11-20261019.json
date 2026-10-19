@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_and_selected_hash_encoding_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "imagededup/methods/hashing.py": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+    "imagededup/handlers/search/bktree.py": "f43e9555c74f28c436d20dbe21b0b72adc2d7963df22d7869d07e789a93411e4"
+  },
+  "whole_files_read_across_v1_v11": 58,
+  "controls": "docs/research/dedup-500/imagededup2-hash-collisions-reproducer-v11-20261019/result.json",
+  "controls_sha256": "b3962d25a911438d376214c3eb27a51f2220d93c3e4e2f6f0673ea0d4a3f11dd",
+  "coverage": "docs/research/dedup-500/imagededup2-hash-collisions-reproducer-v11-20261019/coverage.json",
+  "coverage_sha256": "338a8fe51086145866fda816d975bc8eaa2b817a00549f5440fbd0b97b0b1336",
+  "reproducer": "scripts/qualify-imagededup2-hash-collisions-20261019.py",
+  "reproducer_sha256": "e2cda266e224092110877dc8174213b7cdddc3555233c6b6553948cd944c39a6",
+  "findings": [
+    "AHash and DHash zero-distance matches do not establish exact pixel or byte identity: black and white arrays collide.",
+    "Each method collapses all256distinct constant RGB levels into one64bit hash through original public encode_image preprocessing.",
+    "Hash threshold validator accepts booleans as int, rejects NumPy int64; empty mapping rejected by public truthiness check.",
+    "BKTree source fully read; previously qualified empty-root and recursive equal-hash chain limitations retained."
+  ],
+  "limits": [
+    "Original Hashing/AHash/DHash class bodies AST extracted unchanged; entire original image-utils body with logger import routing.",
+    "Actual NumPy2.5.4/Pillow12.3.0; no pywt/scipy/Cython/native backend or original hashing test-suite execution.",
+    "Synthetic array path only; no files/corpus/quality/performance/platform claims or production adoption.",
+    "PHash/WHash source read, not executed; pHash native memory-error investigation remains deferred."
+  ]
+}
