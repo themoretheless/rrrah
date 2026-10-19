@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Czech catalog; pinned bytes reverified; v91 structural evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_cs.txt": "0fcc72c37d73dc3b2eea402c67093280aaeaf568cacaafa62013483b9c9f342b"
+  },
+  "whole_files_read": 238,
+  "coverage": "docs/research/dedup-500/windirstat3-czech-coverage-v105-20261019.json",
+  "coverage_sha256": "bb86500170cf1fd207037d0f4b2db7de1389afe888f654da8523b311285d1cb8",
+  "findings": [
+    "Pravděpodobné duplicity, Prefix kontrolního součtu and Vzorkovaný haš preserve probability/prefix/sampling distinctions. Advanced sampling option names files over64MiB.",
+    "Recovery completion requests verification of file data; recoverable and possibly recoverable remain distinct, metadata change requests rescan and same-volume restore warns about overwritten deleted data. No disk/runtime recovery verified.",
+    "Sparse action Vytvořit sparse soubor can suggest creating a file rather than converting selected existing file. Junction label Odkazy složek is general folder-link wording; hardlinks and symlinks remain separate.",
+    "Refresh/rescan and recovery both use forms of Obnovit; tooltips clarify refresh rescans trees, but context is needed. No actual navigation or keyboard flow validated.",
+    "Regex alternative uses wildcard characters rather than explicit glob terminology. Logical/physical size labels, binary-unit keys and cleanup %p/%n/%sp/%sn remain distinct/intact.",
+    "Permanent deletion is not secure-erasure proof. MSI cs-CZ/1029/1250 is declaration-only; ordered permission lists passed prior structural checks but runtime mapping is not tested here."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Czech UI, mnemonic conflict, installer or Windows runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
