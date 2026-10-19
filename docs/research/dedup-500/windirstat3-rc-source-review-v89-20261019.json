@@ -1,0 +1,30 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual reading of complete resource script; truncated middle reread explicitly as lines400..660. Parsed local identifier references against resource.h.",
+  "new_whole_files_read": {
+    "windirstat/windirstat.rc": "5eb51b69c143bc9b1168ffd48f574c3c6f172f11d11e680b036219622db1bf53"
+  },
+  "whole_files_read": 223,
+  "coverage": "docs/research/dedup-500/windirstat3-rc-coverage-v89-20261019.json",
+  "coverage_sha256": "2f58e5f37f29bee54b2ec8d62301e47e3031b920aaff05d455d076bd3a04ad6a",
+  "findings": [
+    "All referenced IDC/IDD/IDR/ID underscore identifiers resolve in resource.h except standard IDC_STATIC; this lexical check is not a Windows resource compiler.",
+    "Select-drives dialog exposes duplicate scanning and fast scanning separately. Advanced page separately exposes sampling of large files, hardlink processing and hash selection. Resource presence does not prove exactness or default option values.",
+    "Static advanced-page DLGINIT contains thread choices1..16 and MD5/SHA1/SHA256/SHA384/SHA512/xxHash strings; actual population and selection remain governed by already reviewed runtime initialization.",
+    "Accelerators distinguish Shift+Delete from Delete, and Shift+F5 refresh-all from F5 refresh-selected; their presence does not bypass handler state/confirmation checks. No operations executed.",
+    "Dialogs use mostly8-point MS Shell Dlg2, About9-point Microsoft Sans Serif; general page height237 differs from most settings pages221. This supports keeping lazy settings page sizing and font scaling under runtime qualification.",
+    "License and language payloads reference generated res/license.bin and res/lang_combined.bin; final rc2 include remains part of resource build. Source reading does not prove packaged payload freshness.",
+    "Most menu/dialog captions are localization keys, while DISM arguments and percentage mnemonics are literal. Message box has three ordinary PUSHBUTTON placeholders, leaving runtime default-button behavior to code."
+  ],
+  "checks": {
+    "referenced_local_identifiers": 306,
+    "unresolved_nonstandard_identifiers": [],
+    "dialog_templates": 14
+  },
+  "limits": [
+    "No Windows resource compilation, rendered layout, keyboard navigation or accessibility test executed. Non-English catalogs remain unreviewed.",
+    "Native pHash investigation deferred; completed repositories remain147/500."
+  ]
+}
