@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of DarkMode.h and cpp,450 lines; pinned bytes verified. No native UI execution.",
+  "new_whole_files_read": {
+    "windirstat/DarkMode.h": "90bbb547d9333d1c67e3663a7d30b6ca431dd9e37c59065be707b9bd1692161b",
+    "windirstat/DarkMode.cpp": "edb9e4a824e5dfa550ac5d2a587afdcbae0a3630cdae8fa80301369d0e043fc5"
+  },
+  "whole_files_read": 183,
+  "coverage": "docs/research/dedup-500/windirstat3-dark-mode-coverage-v62-20261019.json",
+  "coverage_sha256": "3291689a1faa986fa3d4021c76ccfbab0ca760b70dfc5f4b12649deff67f3b3c",
+  "findings": [
+    "Dark mode combines configured preference, Windows theme registry value, version/build capability and high-contrast state. High contrast disables custom dark mode; system colors are used when dark mode is disabled. This is source policy, not an accessibility qualification.",
+    "Undocumented uxtheme ordinals133/135 are runtime-resolved; ordinal135 is called through an older bool signature before build18362 and preferred-mode enum thereafter. Compatibility across actual Windows builds was not executed.",
+    "AdjustControls applies themes recursively and updates list/RichEdit colors, then requests frame change. Most theme/DWM return values are ignored except E_INVALIDARG fallback for immersive dark mode attribute. Partial adjustment is not reported as failure.",
+    "Enhanced button support is determined by registry build/revision and cached in a function-static bool. This source records a capability threshold; no external verification of the referenced update or live system behavior was performed.",
+    "Menu label buffer is fixed256 wchar_t and GetMenuItemInfo result is not checked; unusually long menu text may be truncated. Owner-drawn menu items fall back to DefWindowProc.",
+    "LightenBitmap rejects nonpositive dimensions and checks width*height*4 overflow before allocating. GetDIBits is accepted on any nonzero scanline count rather than verifying full requested height, and SetDIBits result is ignored. Partial-transfer behavior remains untested.",
+    "Bitmap transform modifies only BGR channels, leaving the fourth byte unchanged; invert maps255-channel and lightening uses sqrt gamma LUT. No image fidelity, alpha semantics or performance measurement established.",
+    "Global dark-mode state and shared static brushes are unsynchronized; normal GUI-thread ownership is assumed rather than proven for arbitrary concurrent callers."
+  ],
+  "limits": [
+    "No Windows version, high-contrast, theme switching, menu, bitmap transfer or GUI tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
