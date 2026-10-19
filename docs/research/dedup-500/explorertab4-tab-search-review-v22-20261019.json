@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete XAML and code-behind reading through EOF; pinned Git blob identity verified. No WPF execution.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/TabSearchPopup.xaml": "0b0881417a1f86c06330ad816897ded859dfecc28ffa6decbb316fbd7cbf3164",
+    "ExplorerTabUtility/UI/Views/TabSearchPopup.xaml.cs": "d19a1723ae3123cd9cfead75dd1f2725ecf3705798ab139b61034d15cb270a1d"
+  },
+  "whole_files_read": 58,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v22-20261019.json",
+  "coverage_sha256": "5b223d13d96de6d25b38073b0f2d7e4839658cbb506f00bec5902d64a6e32e58",
+  "findings": [
+    "Search is ordinal case-insensitive substring matching over Name and raw Location, with name matches first and stable original order otherwise; no content hashing, fuzzy metric or filesystem identity comparison.",
+    "Window records are collected once at construction and refreshed after history clearing only. Popup has no subscription to window changes; selected handles and record data can become stale while open.",
+    "Every nonblank query synchronously filters, repeats name matching during sorting, and materializes a new list on UI thread; no debounce, cancellation or admitted history-size cap here.",
+    "Selection starts asynchronous SwitchTo without awaiting or observing task failure, then closes popup immediately; no navigation result shown. Ctrl requests duplicate, Shift requests new window.",
+    "Clear history reload sets full unfiltered ItemsSource without reapplying current SearchBox.Text. A retained nonempty query may display unrelated results until text changes.",
+    "Dialog-state flag is reset after modal call without finally; exception can leave deactivation-close suppressed. Closing itself is guarded against repeated calls.",
+    "XAML fixed 600x450 topmost transparent popup presents both open and history records with same icon and no explicit open/closed indicator. Rendering, accessibility and scaling were not exercised."
+  ],
+  "limits": [
+    "Source review only; no Windows runtime reproduction. No production implementation adopted.",
+    "Fully reviewed count148/500; ExplorerTabUtility remains partial58/104. Native pHash memory-error investigation deferred."
+  ]
+}
