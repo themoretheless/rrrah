@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Russian localization; parsed every key and compared key sets and brace field names with English catalog.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_ru.txt": "ea39b227c621c99ad250baa4cc3f3006b07d58182d1eb11d279d3b9d6b210961"
+  },
+  "whole_files_read": 224,
+  "coverage": "docs/research/dedup-500/windirstat3-russian-coverage-v90-20261019.json",
+  "coverage_sha256": "e0cb92d2b09290343fd871671bf92e76bc0598560eecb4117c4277eaea67e943",
+  "findings": [
+    "Russian catalog has full English key parity and matching brace-field names; no duplicate keys. This does not prove C++ format specification or rendered layout correctness.",
+    "Probable duplicates is explicitly Вероятные дубликаты, hash column Префикс хеша, sampled hash Выборочный хеш. Large-file sampling option names64МиБ threshold. These labels retain the distinction between sampling candidates and exact equality.",
+    "Recovery result explicitly says restored—verify file data; unallocated candidate says recovery possible, while same-volume confirmation warns about overwriting deleted data. Labels do not qualify recovery implementation against actual disks.",
+    "Visible translation shortcomings include Bytes and Item/Items remaining English, junctions rendered Перекрестки, sparsify rendered Сжать файл and regex alternative rendered глобальных шаблонов. These are upstream localization findings, not defects in our library.",
+    "Cloud warning describes avoiding downloads; advanced setting permits changing that behavior. Labels alone do not prove hydration avoidance under filesystem races."
+  ],
+  "checks": {
+    "keys": 365,
+    "missing_english_keys": [],
+    "extra_keys": [],
+    "brace_field_mismatches": []
+  },
+  "limits": [
+    "No rendered Russian interface, accelerator conflict, installer encoding or Windows runtime verified. No upstream files modified or copied into production.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
