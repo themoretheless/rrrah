@@ -1,0 +1,27 @@
+{
+  "status": "partial_source_filter_settings_review",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/Pages/PageFiltering.cpp": "91236e872680677a71079c161d20395ad96e472da3c34c472ba449ff4fce9e34",
+    "windirstat/Pages/PageFiltering.h": "2719c120985295d17c2fc7a7f535146b39822fd03e20d2a23e8c7fbfb78f3736"
+  },
+  "whole_files_read": 24,
+  "controls": "docs/research/dedup-500/windirstat3-filter-settings-reproducer-v9-20261019/controls.json",
+  "controls_sha256": "5a3233ec669d20186c23bee70a719f4d7a1e9e3ea2d3061554f7eae226af8cdc",
+  "coverage": "docs/research/dedup-500/windirstat3-filter-settings-reproducer-v9-20261019/coverage.json",
+  "coverage_sha256": "8d593e83db6d8f0dab4666bb717a7d368dc3e6de61a4656e0f893397ecda8d19",
+  "findings": [
+    "PrepareSettings validates unit/comparison selections, numeric size/age and each pattern before staging effects.",
+    "AtTiB units maximum UI number is16777215, limiting shifted size to u64range; lowerunits cap toINT_MAX. Independent arithmetic table retained, not UI runtime proof.",
+    "Age maximum bounded by currentFILETIME days; prevents subtraction below epoch for UI-admitted age at validation time.",
+    "BeforeApply stops scan when settings change; staged effect recompiles filters then optionally starts scan.",
+    "Constructor flag can suppress automatic refresh; full transactional Stage/BeforeApply framework not yet read."
+  ],
+  "limits": [
+    "Two whole page files read, all source bytes verified against pinnedGit.",
+    "No real Windows settings dialog, option persistence, concurrent refresh, malformed external configuration or end-to-end scan execution.",
+    "No production code adopted; pHash native investigation remains deferred."
+  ]
+}
