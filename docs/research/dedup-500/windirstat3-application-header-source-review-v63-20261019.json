@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of WinDirStat.h and UiApplication.h; pinned bytes verified. No Windows execution.",
+  "new_whole_files_read": {
+    "windirstat/WinDirStat.h": "28c4df899543615e5319de437001b27e60b55620a240822c6c78f956a928874e",
+    "windirstat/UiApplication.h": "803d8647f5fad8e181058f968a4844ab7b988e72662d5a7d8f79fd7ffdf50b87"
+  },
+  "whole_files_read": 185,
+  "coverage": "docs/research/dedup-500/windirstat3-application-header-coverage-v63-20261019.json",
+  "coverage_sha256": "6cd34a7adc1fc43c338c1f5d75bc548968d85b1a31a4321b2f8675640c2ec88c",
+  "findings": [
+    "Application header owns model/main frame via unique_ptr and central icon handler by value; declaration order implies reverse member destruction but custom destructor implementation remains separate review. Worker wait/task APIs are declarations here, not evidence of completion semantics.",
+    "Modal dialog scope stacks thread-local pretranslation targets and shares one WH_MSGFILTER hook, removing it when outermost scope exits. Hook creation failure is not surfaced. OwnerEnableScope restores captured enabled state when owner still exists.",
+    "FrameworkDialogProc catches initialization exceptions and aborts creation, catches routed message exceptions without reporting, and detaches on WM_NCDESTROY before PostNcDestroy. Exception containment is not proof requested operation completed.",
+    "Default CDialog OnOK/OnCancel close with IDOK/IDCANCEL. This connects earlier custom message-box review: inherited cancel routes do not read the optional checkbox in this header; checkbox is sampled only by its explicit button handlers. Actual keyboard/dialog-manager routing remains untested.",
+    "Main pump distinguishes GetMessage error from WM_QUIT: on error it synthesizes quit with exit-1, while ordinary quit preserves wParam. Run performs idle UI update then pumps queued messages. No scan-specific completion gate is present here.",
+    "Command routing traverses focused child ancestors, frame, document target and application. Frame destruction posts quit only for current main window and clears application pointer on nonclient destruction.",
+    "Frame creation uses scope cleanup for menu/accelerator on failure, transfers accelerator/menu after successful window creation. Layout subtracts visible top/bottom bars without explicit nonnegative remaining-height clamp."
+  ],
+  "limits": [
+    "No Windows message pump, modal nesting, shutdown, command routing, resource-failure or task-wait runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
