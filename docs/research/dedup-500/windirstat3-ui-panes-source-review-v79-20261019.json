@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of UiPanes.h; prior property-sheet-only excerpt upgraded to whole-file credit. Pinned bytes verified.",
+  "new_whole_files_read": {
+    "windirstat/UiPanes.h": "0dcec639dc528952cc7ca812e058080ffd04f72eb706037ced513ef2366d89d4"
+  },
+  "whole_files_read": 210,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-panes-coverage-v79-20261019.json",
+  "coverage_sha256": "c0dc0b239abaf89088dea4f697d77bfca9c9add3de95feeb9e062fd076eefbca",
+  "findings": [
+    "Static splitter permits at most two rows or columns with one dimension exactly1. Pane access validates indexes; created view objects are owned by unique_ptr vector. ResetPanes clears size vectors but not owned objects, so recreation lifetime requires surrounding code review.",
+    "Splitter clamps split-axis first size and second size nonnegative, but moves second rectangle using fixed7pixel bar and deflated bounds. Very small client areas can still yield inverted rectangle endpoints or negative perpendicular dimensions.",
+    "Drag tracks original first pane size, updates continuously, restores on capture loss/cancel and commits on button release. Tracking flag is cleared before ReleaseCapture to avoid reentrant rollback. No native interaction tests executed.",
+    "Toolbar stores tooltip strings, owns normal/disabled image lists and replaces them on metrics change. Idle UI callback captures pointer plus HWND and checks current attachment before dereferencing; this is a reuse guard, not general ownership.",
+    "Toolbar addition/deletion and many native message results are ignored. Tooltip callback writes pszText[0] without explicit capacity/null check, relying on native notification contract.",
+    "Status bar reserves fixed widths for size/RAM and gives remainder to idle pane. When fixed widths exceed client width, final edge snap can invert final pane rectangle. Caller-measured widths and narrow-window rendering remain unqualified.",
+    "Tab windows are borrowed pointers, property-sheet pages are uniquely owned, and property sheet creates pages lazily through implementation reviewed earlier. Page CommitApply defaults to OnOK but page OnOK/OnCancel do not close individual dialogs.",
+    "Property-sheet close is suppressed while applying. No rollback or transaction mechanism is declared; previous ordering controls remain narrower than exception-safe whole-settings behavior."
+  ],
+  "limits": [
+    "No splitter recreation, drag/capture, tiny-client, toolbar failure, tooltip contract, status rendering or modal runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
