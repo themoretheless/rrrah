@@ -1,0 +1,41 @@
+{
+  "status": "focused_regression_passed",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_repeated_metadata",
+  "exit_code": 0,
+  "passed_tests": 1,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "elapsed_test_seconds": 0.03,
+  "source_pins": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_repeated_metadata.rs": "84cf30c288f3906de934126838566951b69c3c1524394258050f0cb56daa581d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "312d92d73e10dac18655056e51e0b517e5e3954dc7cb37b4c185329190e2891a"
+  },
+  "runtime_scope": {
+    "sizes_bytes": [
+      4,
+      261,
+      4096,
+      65537
+    ],
+    "scan_modes": [
+      "scan",
+      "scan_verified"
+    ],
+    "authored_cases": 8,
+    "operation": "Rewrite middle member final byte, restore mtime and verify same length; compare both directions and healthy pair; rescan must retain exactly healthy a/c group. Unix fixture asserts unchanged device/inode."
+  },
+  "source_contract_findings": [
+    "Hash equality is byte-confirmed by exact scan, unlike digest-only publication examined in competitor.",
+    "compare_files validates both observations after final caller checkpoint, with no caller callback during final publication validation.",
+    "ContentSnapshot.verify rereads complete digest and validates original identity/time stamp; metadata alone is not content proof.",
+    "Report.complete excludes cancellation/I/O/change/limit omissions but does not claim an atomic filesystem snapshot.",
+    "Existing checkpoint-sweep test explicitly allows late mutation after last validation to remain unobserved; no global atomicity claim."
+  ],
+  "limits": [
+    "Single focused integration target on current macOS host, no Windows run and no all-feature/workspace gate.",
+    "Four sizes and eight authored mode cases do not prove all mutation schedules or multi-GiB concurrency.",
+    "Library exposes observation evidence; subsequent destructive actions need their own immutable-source/transactional contract.",
+    "No production change or performance measurement in this increment; pHash investigation deferred."
+  ]
+}
