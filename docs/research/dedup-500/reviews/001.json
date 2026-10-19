@@ -2,7 +2,7 @@
   "index": 1,
   "repository": "arsenetar/dupeguru",
   "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
-  "review_scope": "Partial pinned review:80wholefilesread,451selectedoriginaltestspass. Complete38app_tests pass after correcting our appdata fixture contamination. Supplemental original app scan closure on real copies/hardlink/negative, pre-cancel and retry passes under synchronous transport. Remaining repository incomplete; no realGUI/threadedqualification.",
+  "review_scope": "Partial pinned repository review:96wholefilesread; entire tracked core subtree read. Complete original core/tests suite411pass0fail0skip;455distinctoriginaltestscumulativeincluding44selectedhscommon. RemainingrepositoryandGUI/platformruntimeincomplete.",
   "decision": "reference",
   "finding": "Five complete selected modules reviewed across filesystem/engine/scanner,8fs+7contents controls. Configured bigfile samples accepted distinct bytes; default cache can reuse restoredmtime digest. Default fullhash rejects sample collision; exists filter mitigates missing inputs. Not whole368blob review; no adoption.",
   "license_metadata": "GPL-3.0",
@@ -155,6 +155,11 @@
       "audit": "docs/research/dedup-500/dupeguru1-app-tests-review-v11-20261019.json",
       "controls": "docs/research/dedup-500/dupeguru1-app-tests-review-v11-20261019.json",
       "scope": "3newwholefiles/80cumulative;38additionaloriginaltests/451cumulative. First35pass3adapterfail retained, corrected38pass. Realfile synchronous app scan,alias,cancel,retrycontrols. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-core-suite-review-v12-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-core-suite-review-v12-20261019.json",
+      "scope": "16newwholefiles/96cumulative;completecoresubtreeread;411coretests pass,4newdistinct/455cumulative. No fullrepository/runtimeplatformclaim."
     }
   ],
   "full_repository_read": false
