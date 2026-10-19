@@ -1,0 +1,34 @@
+{
+  "status": "partial_source_documentation_and_build_review",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.md": "e247a8cb973f335be941fe0124fc3e216a0d49fb4ce2d0f8667f010c88a350cd",
+    ".editorconfig": "e662331de77d170c500fbce64c1f76d957f156fa3775ea67fdd8cc8bf6b60af9",
+    ".gitignore": "20e89834083b7f9597319d508137ea00a4021f698e9dfa6a54bf932c37ec2f10",
+    "windirstat/Build/Project.props": "4565ea02adda5da6ac261ccf2733e8446a4e529a8c6e82f7b848f0afa96836c8",
+    "windirstat/Build/GitRevision.targets": "ffbd8621a47d83306fd7153274d3c4a44829318ed18c015e893d957c31cb8c21",
+    "tests/Run-Tests.cmd": "66752cbfbc79ae0d7a78074483fc985dde189f65807be62a3c199a7c06d7b51d",
+    "build.cmd": "6ac769cec054298db3491c4789f545fabadf8e53d3ebe828921aa1fdcbdb5db5"
+  },
+  "whole_files_read": 22,
+  "controls": "docs/research/dedup-500/windirstat3-build-docs-reproducer-v8-20261019/controls.json",
+  "controls_sha256": "56d4385fdc7172220695f8e8a62ef9c202abf406eedee46b5bcf54939b80e0f4",
+  "coverage": "docs/research/dedup-500/windirstat3-build-docs-reproducer-v8-20261019/coverage.json",
+  "coverage_sha256": "b43f036efeb422ce10096120229512d22462f6076667cd1dfee0593fcda138d8",
+  "findings": [
+    "README describes probable sampled matches and opt-in duplicate scanning; aligns with already examined code.",
+    "Build script targetsWin32/x64/ARM64 with installedSDK checks; no actual successful platform-build evidence inferred.",
+    "Behavioral test launcher requires pwsh and dispatches -STA to Windows harness; not executed onMac.",
+    "Build script removes build/publish folders and invokes signing/installers; read only, never executed.",
+    "GitRevision.targets derives GIT_COUNT from rev-list --count --all, making this metadata depend on available refs rather than HEAD alone.",
+    "MSBuild XML syntax parses; not property/import expansion or build verification."
+  ],
+  "limits": [
+    "Seven complete source/config/docs files read and pinnedGitbytes checked.",
+    "README-linked remote wiki/web pages and logo were not opened; no visual or current upstream runtime claim.",
+    "No tests, release/publish/sign commands or package installation executed; no production adoption.",
+    "pHash native investigation remains deferred."
+  ]
+}
