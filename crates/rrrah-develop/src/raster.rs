@@ -1,4 +1,4 @@
-//! Interleaved, straight-alpha raster data, separate from sensor mosaics.
+//! Interleaved raster data with explicit RGB/alpha association, separate from sensor mosaics.
 
 use rrrah_memory::PixelBuffer;
 use std::sync::Arc;
@@ -67,6 +67,15 @@ pub enum RasterColorSpace {
     Unspecified,
 }
 
+/// Meaning of RGB relative to coverage. Associated linear RGB may contain
+/// emission even when alpha is zero; do not multiply it by alpha again.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
+pub enum RasterAlphaAssociation {
+    #[default]
+    Straight,
+    Associated,
+}
+
 /// Selected animation frame timing. Zero plays means infinite repetition;
 /// positive plays count complete presentations, including the first.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -115,6 +124,7 @@ pub struct DecodedRaster {
     image_index: usize,
     image_count: usize,
     animation_timing: Option<RasterAnimationTiming>,
+    alpha_association: RasterAlphaAssociation,
 }
 
 #[derive(Debug)]
@@ -342,7 +352,8 @@ impl DecodedRaster {
         .with_sample_scale(self.sample_scale)?
         .with_hotspot(self.hotspot)?
         .with_animation_timing(self.animation_timing)
-        .with_image_selection(self.image_index, self.image_count)
+        .with_image_selection(self.image_index, self.image_count)?
+        .with_alpha_association(self.alpha_association)
     }
     /// Mutates native samples only while this allocation has one owner.
     /// Slice length and the raster's metadata remain unchanged.
@@ -400,7 +411,7 @@ impl DecodedRaster {
             .saturating_add(self.color_profile_capacity_bytes())
     }
 
-    /// Pixels are row-major RGBA with straight alpha, after EXIF orientation.
+    /// Pixels are row-major RGBA, initially straight alpha, after EXIF orientation.
     pub fn new(
         width: u32,
         height: u32,
@@ -435,7 +446,34 @@ impl DecodedRaster {
             image_index: 0,
             image_count: 1,
             animation_timing: None,
+            alpha_association: RasterAlphaAssociation::Straight,
         })
+    }
+
+    pub fn alpha_association(&self) -> RasterAlphaAssociation {
+        self.alpha_association
+    }
+    /// Associated storage is currently qualified only for float linear RGB.
+    pub fn with_alpha_association(mut self, mode: RasterAlphaAssociation) -> Result<Self, RasterError> {
+        if mode == RasterAlphaAssociation::Associated
+            && (!matches!(self.pixels, RasterPixels::Rgba32Float(_))
+                || !matches!(
+                    self.color_space.space,
+                    RasterColorSpace::LinearSrgb
+                        | RasterColorSpace::LinearRgb(_)
+                        | RasterColorSpace::LinearRgbUnspecified
+                        | RasterColorSpace::Cicp {
+                            transfer: 8,
+                            matrix: 0,
+                            full_range: true,
+                            ..
+                        }
+                ))
+        {
+            return Err(RasterError::ColorTransformRequired);
+        }
+        self.alpha_association = mode;
+        Ok(self)
     }
 
     pub fn animation_timing(&self) -> Option<RasterAnimationTiming> {
@@ -515,7 +553,7 @@ impl DecodedRaster {
         Ok(self)
     }
 
-    /// Convert declared sRGB samples to straight-alpha linear sRGB floats.
+    /// Convert declared RGB samples to linear sRGB floats, retaining alpha association.
     /// Alpha is coverage and never receives the RGB transfer function. HDR
     /// values are retained; no tone mapping or quantization is performed.
     /// ICC/unknown primaries need a separate qualified color transform.
@@ -800,7 +838,8 @@ impl DecodedRaster {
         .with_sample_scale(self.sample_scale)?
         .with_hotspot(self.hotspot)?
         .with_animation_timing(self.animation_timing)
-        .with_image_selection(self.image_index, self.image_count)
+        .with_image_selection(self.image_index, self.image_count)?
+        .with_alpha_association(self.alpha_association)
     }
 }
 
@@ -1761,5 +1800,61 @@ mod animation_timing_tests {
                 Some(timing)
             );
         }
+    }
+}
+
+#[cfg(test)]
+mod associated_linear_tests {
+    use super::*;
+    #[test]
+    fn associated_linear_p3_transform_preserves_emission_and_tag() {
+        let input = vec![2., 0.5, 0.25, 0., -0.25, 4., 0.5, 0.5];
+        let source = DecodedRaster::new(
+            2,
+            1,
+            RasterPixels::Rgba32Float(Arc::new(input.clone()).into()),
+            RasterColorSpace::Cicp {
+                primaries: 12,
+                transfer: 8,
+                matrix: 0,
+                full_range: true,
+            },
+        )
+        .unwrap()
+        .with_alpha_association(RasterAlphaAssociation::Associated)
+        .unwrap();
+        let root = rrrah_memory::MemoryBudget::new(32);
+        let converted = source.to_linear_srgb_with_budget(Some(&root)).unwrap();
+        assert_eq!(converted.alpha_association(), RasterAlphaAssociation::Associated);
+        let RasterPixels::Rgba32Float(values) = converted.pixels() else {
+            panic!()
+        };
+        let matrix = [
+            [1.224940176, -0.224940176, 0.],
+            [-0.042056955, 1.042056955, 0.],
+            [-0.019637555, -0.078636046, 1.098273601],
+        ];
+        for (rgba, original) in values.chunks_exact(4).zip(input.chunks_exact(4)) {
+            for c in 0..3 {
+                let expected = (0..3).map(|j| matrix[c][j] * f64::from(original[j])).sum::<f64>();
+                assert!((f64::from(rgba[c]) - expected).abs() < 2e-6);
+            }
+            assert_eq!(rgba[3].to_bits(), original[3].to_bits());
+        }
+        assert!(values[0] > 2.);
+        drop(converted);
+        assert_eq!(root.used(), 0);
+        let encoded = DecodedRaster::new(
+            1,
+            1,
+            RasterPixels::Rgba32Float(Arc::new(vec![1., 0., 0., 0.]).into()),
+            RasterColorSpace::Srgb,
+        )
+        .unwrap();
+        assert!(
+            encoded
+                .with_alpha_association(RasterAlphaAssociation::Associated)
+                .is_err()
+        );
     }
 }

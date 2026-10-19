@@ -588,6 +588,8 @@ fn jxl_animation_frames_preserve_metadata_ram_swap_and_metal() {
         "animation-alpha.jxl",
         "animation-finite16.jxl",
         "animation-linear-float.jxl",
+        "animation-embedded-icc.jxl",
+        "animation-large-icc.jxl",
     ] {
         for index in 0..3 {
             let root = rrrah_core::MemoryBudget::new(1024 * 1024);
@@ -679,7 +681,118 @@ fn jxl_animation_frames_preserve_metadata_ram_swap_and_metal() {
         }
     }
     eprintln!(
-        "JXL_ANIMATION_METAL adapter={} frames=12 native_and_float_swap metadata_exact root_final=0",
+        "JXL_ANIMATION_METAL adapter={} frames=18 native_and_float_swap metadata_exact root_final=0",
+        gpu.adapter_name()
+    );
+}
+
+#[test]
+#[ignore = "requires actual Metal for associated EXR/HDR, RAM, swap and compute"]
+fn associated_exr_emission_preserves_reference_hdr_through_cache_and_compute() {
+    assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
+    let gpu = common::qualification_gpu().unwrap();
+    let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/raster/associated-emission-rec709.exr");
+    let mut request = rrrah_decode::DecodeRequest::new(path);
+    request.memory_budget = Some(root.clone());
+    let native = rrrah_decode::decode_raster(&request).unwrap();
+    let ready = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&root)).unwrap();
+    let expected = [0x4080, 0x3c00, 0x3c00, 0x3c00, 0xb000, 0x4440, 0x3b00, 0x3c00];
+    let check = |frame: &rrrah_core::DecodedRaster| {
+        assert_eq!(
+            frame.alpha_association(),
+            rrrah_core::RasterAlphaAssociation::Associated
+        );
+        assert_eq!(
+            gpu.render_raster_half_background(
+                frame,
+                rrrah_gpu::ViewParameters {
+                    viewport: [2., 1.],
+                    zoom: 2.,
+                    ..Default::default()
+                },
+                [2, 1],
+                [0.25, 0.5, 0.75]
+            ),
+            expected
+        );
+    };
+    check(&ready);
+    assert_eq!(gpu.render_associated_tiled_reference([0.25, 0.5, 0.75]), expected);
+    let straight = ready
+        .clone()
+        .with_alpha_association(rrrah_core::RasterAlphaAssociation::Straight)
+        .unwrap();
+    let view = rrrah_gpu::ViewParameters {
+        viewport: [128., 96.],
+        ..Default::default()
+    };
+    let (_, transition) = gpu.render_raster_frame_transition(&ready, &straight, view, [128, 96]);
+    assert_eq!(transition, gpu.render_raster(&straight, view, [128, 96]));
+    drop(straight);
+    assert_eq!(
+        gpu.render_associated_resident_half(&ready, [2, 1], [0.25, 0.5, 0.75]),
+        expected
+    );
+    let lod = ready
+        .downsample_linear_with_budget_and_cancel([1, 1], &root, || false)
+        .unwrap();
+    assert_eq!(
+        gpu.render_raster_half_background(
+            &lod,
+            rrrah_gpu::ViewParameters {
+                viewport: [1., 1.],
+                ..Default::default()
+            },
+            [1, 1],
+            [0.25, 0.5, 0.75]
+        ),
+        [0x3c40, 0x4140, 0x3b80, 0x3c00]
+    );
+    drop(lod);
+    let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(ready.capacity_bytes()));
+    assert!(ram.insert_visible(1u8, ready.clone()));
+    let lease = ram.get_lease(&1).unwrap();
+    let blocker = root.try_reserve(root.available_bytes()).unwrap();
+    check(&lease);
+    drop((blocker, lease, ram));
+    for frame in [native, ready] {
+        let tmp = tempfile::tempdir().unwrap();
+        let weight = frame.capacity_bytes();
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            tmp.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(65536),
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            rrrah_core::MemoryBudget::new(weight),
+            root.clone(),
+        )
+        .unwrap();
+        assert_eq!(
+            swap.try_enqueue(1, frame.clone()),
+            rrrah_cache::SpillAdmission::Queued
+        );
+        swap.wait_idle().unwrap();
+        let blocker = root.try_reserve(root.available_bytes()).unwrap();
+        assert!(matches!(
+            swap.try_get(&1, || false),
+            Err(rrrah_core::BufferError::Capacity { .. })
+        ));
+        drop(blocker);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        check(&restored);
+        drop(restored);
+        drop(frame);
+        swap.shutdown();
+        assert_eq!(swap.stats().errors, 0);
+    }
+    assert_eq!(root.used(), 0);
+    eprintln!(
+        "ASSOCIATED_EXR_METAL adapter={} native_float_bits exact_HDR_half RAM_swap_compute LOD final=0",
         gpu.adapter_name()
     );
 }

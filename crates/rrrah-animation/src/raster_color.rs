@@ -22,7 +22,7 @@ pub enum RasterColorError {
     OutputTooLarge,
 }
 
-/// Return straight-alpha, linear sRGB floats for display. This uses relative
+/// Return linear sRGB floats for display, retaining qualified alpha association. Uses relative
 /// colorimetric ICC conversion, without gamut clipping or tone mapping.
 /// Decoder pixels remain untouched; advisory unit scale remains metadata.
 #[allow(clippy::cast_possible_truncation)] // GPU output is f32; bounds are checked before narrowing.

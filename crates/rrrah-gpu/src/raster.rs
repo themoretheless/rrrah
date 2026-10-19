@@ -35,7 +35,8 @@ struct Parameters {
     zoom: f32,
     exposure: f32,
     pixel_aspect: f32,
-    aspect_padding: [f32; 3],
+    alpha_associated: u32,
+    aspect_padding: [f32; 2],
     background: [f32; 4],
     raw_development: [u32; 4],
     curve: [[f32; 4]; 256],
@@ -214,7 +215,8 @@ impl RasterRenderer {
             zoom: 1.0,
             exposure: 0.0,
             pixel_aspect: 1.0,
-            aspect_padding: [0.0; 3],
+            alpha_associated: 0,
+            aspect_padding: [0.0; 2],
             background: [0.018, 0.018, 0.018, 1.0],
             raw_development: [0; 4],
             curve: [[0.0; 4]; 256],
@@ -628,6 +630,8 @@ impl RasterRenderer {
             source_size[0],
             source_size[1],
         );
+        self.parameters.alpha_associated =
+            u32::from(raster.alpha_association() == rrrah_core::RasterAlphaAssociation::Associated);
         self.parameters.resident_rect = rect;
         self.set_pixel_aspect(queue, aspect)?;
         Ok(())
@@ -666,7 +670,11 @@ impl RasterRenderer {
             dimensions,
             aspect,
             cancelled,
-        )
+        )?;
+        self.parameters.alpha_associated =
+            u32::from(source.alpha_association() == rrrah_core::RasterAlphaAssociation::Associated);
+        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        Ok(())
     }
 
     /// Upload calibrated scene-linear Bayer output directly from its GPU buffer.
@@ -863,6 +871,7 @@ impl RasterRenderer {
         self.parameters.crop = [0, 0, width, height];
         self.parameters.resident_rect = [0, 0, width, height];
         self.parameters.pixel_aspect = 1.0;
+        self.parameters.alpha_associated = 0;
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
     }
 
@@ -885,6 +894,16 @@ impl RasterRenderer {
     pub fn set_area_minification(&mut self, queue: &wgpu::Queue, enabled: bool) {
         self.parameters.raw_development[3] = u32::from(enabled);
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+    }
+
+    /// Opaque scene-linear background for associated/straight over compositing.
+    pub fn set_background(&mut self, queue: &wgpu::Queue, rgb: [f32; 3]) -> Result<(), RasterUploadError> {
+        if rgb.iter().any(|v| !v.is_finite()) {
+            return Err(RasterUploadError::InvalidSamples);
+        }
+        self.parameters.background = [rgb[0], rgb[1], rgb[2], 1.0];
+        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        Ok(())
     }
 
     /// Adjust display geometry without resampling or changing texture coordinates.

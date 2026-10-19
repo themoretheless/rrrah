@@ -1,0 +1,42 @@
+   Compiling jxl-color v0.11.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/jxl-color)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib test) generated 1 warning (run `cargo fix --lib -p jxl-color --tests` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.07s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/jxl_color-f20147cc04699190)
+
+running 18 tests
+test convert::tone_map::tests::detect_peak ... ok
+test convert::tone_map::tests::detect_peak_zero ... ok
+test convert::tone_map::tests::tone_map_range ... ok
+test convert::tone_map::tests::tone_map_range_detect_peak ... ok
+test icc::decode::bounded_profile_tests::every_expanding_command_refuses_before_growing_output ... ok
+test icc::decode::bounded_profile_tests::exact_header_table_and_main_command_sizes_remain_valid ... ok
+test icc::decode::bounded_profile_tests::truncated_tag_table_cannot_succeed_with_wrong_output_length ... ok
+test icc::parse::tests::gray_d65_linear_rel ... ok
+test icc::decode::bounded_profile_tests::truncated_nonempty_tag_table_cannot_succeed ... ok
+test icc::parse::tests::gray_d65_srgb_rel ... ok
+test icc::parse::tests::srgb_bt709_per ... ok
+test icc::parse::tests::srgb_gamma22_per ... ok
+test icc::parse::tests::srgb_linear_per ... ok
+test icc::parse::tests::srgb_rel ... ok
+test tf::pq::tests::pq_inverse_eotf_100k ... ok
+test tf::pq::tests::pq_inverse_eotf_100k_generic ... ok
+test tf::pq::tests::pq_roundtrip_10k ... ok
+test tf::pq::tests::pq_roundtrip_10k_generic ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

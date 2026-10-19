@@ -1,0 +1,475 @@
+--- registry/jxl-color-0.11.0/src/icc.rs
++++ vendor/jxl-color/src/icc.rs
+@@ -8,7 +8,7 @@
+ mod parse;
+ mod synthesize;
+ 
+-pub use decode::{decode_icc, read_icc};
++pub use decode::{decode_icc, read_icc, read_icc_with_admission};
+ pub use parse::icc_tf;
+ pub(crate) use parse::parse_icc;
+ pub(crate) use parse::parse_icc_raw;
+--- registry/jxl-color-0.11.0/src/error.rs
++++ vendor/jxl-color/src/error.rs
+@@ -3,6 +3,7 @@
+ pub enum Error {
+     Bitstream(jxl_bitstream::Error),
+     Decoder(jxl_coding::Error),
++    AllocationDenied(Box<dyn std::error::Error + Send + Sync + 'static>),
+     InvalidIccStream(&'static str),
+     IccParseFailure(&'static str),
+     UnsupportedColorEncoding,
+@@ -32,6 +33,7 @@
+         match self {
+             Bitstream(err) => write!(f, "bitstream error: {}", err),
+             Decoder(err) => write!(f, "entropy decoder error: {}", err),
++            AllocationDenied(err) => write!(f, "ICC allocation admission failed: {err}"),
+             InvalidIccStream(s) => write!(f, "invalid ICC stream: {s}"),
+             IccParseFailure(s) => write!(f, "parsing ICC profile failed: {s}"),
+             UnsupportedColorEncoding => write!(f, "unsupported color encoding"),
+@@ -51,7 +53,7 @@
+         match self {
+             Bitstream(err) => Some(err),
+             Decoder(err) => Some(err),
+-            CmsFailure(err) => Some(&**err),
++            CmsFailure(err) | AllocationDenied(err) => Some(&**err),
+             _ => None,
+         }
+     }
+--- registry/jxl-color-0.11.0/src/icc/decode.rs
++++ vendor/jxl-color/src/icc/decode.rs
+@@ -7,17 +7,29 @@
+ 
+ /// Reads the encoded ICC profile stream from the given bitstream.
+ pub fn read_icc(bitstream: &mut Bitstream) -> Result<Vec<u8>> {
++    read_icc_with_admission(bitstream, |_| Ok(()))
++}
++
++/// Read ICC after admitting its encoded/reconstructed/shuffle buffer high water.
++///
++/// The callback receives an absolute byte bound (not an incremental charge). It
++/// must retain admitted credit while returned ICC data and reconstruction live.
++/// Entropy decoder state and profile parsing are outside this bound.
++pub fn read_icc_with_admission(
++    bitstream: &mut Bitstream,
++    mut admit: impl FnMut(u64) -> Result<()>,
++) -> Result<Vec<u8>> {
+     let enc_size = bitstream.read_u64()?;
+     tracing::trace!(enc_size);
+ 
+     if enc_size > (1 << 28) {
+         // Avoids allocating too much memory (>256MiB)
+         // Maximum ICC output_size for Level 10
+-        return Err(
+-            jxl_bitstream::Error::ProfileConformance("Too large encoded ICC profile").into(),
+-        );
+-    }
+-
++        return Err(jxl_bitstream::Error::ProfileConformance("Too large encoded ICC profile").into());
++    }
++
++    // Include up to 18 bytes of old header storage during exact reallocation.
++    admit(enc_size + 18)?;
+     let mut decoder = jxl_coding::Decoder::parse(bitstream, 41)?;
+ 
+     let max_size_header_len = enc_size.min(18) as usize;
+@@ -62,6 +74,12 @@
+         ));
+     }
+ 
++    // Output plus at most one output-sized shuffle buffer.
++    admit(enc_size + 2 * output_size + 18)?;
++    // Avoid geometric Vec growth beyond the admitted encoded-buffer size.
++    encoded_icc
++        .try_reserve_exact(enc_size as usize - encoded_icc.len())
++        .map_err(|e| Error::AllocationDenied(Box::new(e)))?;
+     // Read remaining data
+     encoded_icc.resize(enc_size as usize, 0);
+     for (idx, b) in encoded_icc.iter_mut().enumerate().skip(max_size_header_len) {
+@@ -187,13 +205,35 @@
+     out
+ }
+ 
++fn check_output_size(current: usize, additional: usize, limit: usize) -> Result<()> {
++    if current.checked_add(additional).is_none_or(|size| size > limit) {
++        return Err(Error::InvalidIccStream(
++            "decoded ICC profile exceeds declared size",
++        ));
++    }
++    Ok(())
++}
++
++fn extend_output(out: &mut Vec<u8>, limit: usize, bytes: &[u8]) -> Result<()> {
++    check_output_size(out.len(), bytes.len(), limit)?;
++    out.extend_from_slice(bytes);
++    Ok(())
++}
++
++fn finish_output(out: Vec<u8>, expected: usize) -> Result<Vec<u8>> {
++    if out.len() != expected {
++        return Err(Error::InvalidIccStream("decoded ICC profile size mismatch"));
++    }
++    Ok(out)
++}
++
+ /// Decodes the given ICC profile stream.
+ pub fn decode_icc(stream: &[u8]) -> Result<Vec<u8>> {
+     use std::num::Wrapping;
+ 
+     const COMMON_TAGS: [&[u8]; 19] = [
+-        b"rTRC", b"rXYZ", b"cprt", b"wtpt", b"bkpt", b"rXYZ", b"gXYZ", b"bXYZ", b"kXYZ", b"rTRC",
+-        b"gTRC", b"bTRC", b"kTRC", b"chad", b"desc", b"chrm", b"dmnd", b"dmdd", b"lumi",
++        b"rTRC", b"rXYZ", b"cprt", b"wtpt", b"bkpt", b"rXYZ", b"gXYZ", b"bXYZ", b"kXYZ", b"rTRC", b"gTRC",
++        b"bTRC", b"kTRC", b"chad", b"desc", b"chrm", b"dmnd", b"dmdd", b"lumi",
+     ];
+ 
+     const COMMON_DATA: [&[u8]; 8] = [
+@@ -224,7 +264,7 @@
+     // Header
+     for (idx, &e) in header_data.iter().enumerate() {
+         let p = predict_header(idx, output_size as u32, header_data);
+-        out.push(p.wrapping_add(e));
++        extend_output(&mut out, output_size as usize, &[p.wrapping_add(e)])?;
+     }
+     if output_size <= 128 {
+         return Ok(out);
+@@ -237,7 +277,7 @@
+             return Err(Error::InvalidIccStream("num_tags too large"));
+         }
+         let num_tags = num_tags as u32;
+-        out.extend_from_slice(&num_tags.to_be_bytes());
++        extend_output(&mut out, output_size as usize, &num_tags.to_be_bytes())?;
+ 
+         let mut prev_tagstart = num_tags * 12 + 128;
+         let mut prev_tagsize = 0u32;
+@@ -248,7 +288,7 @@
+                 .read_exact(std::slice::from_mut(&mut command))
+                 .is_err()
+             {
+-                return Ok(out);
++                return finish_output(out, output_size as usize);
+             }
+             let tagcode = command & 63;
+             let tag = match tagcode {
+@@ -282,23 +322,31 @@
+             prev_tagstart = tagstart;
+             prev_tagsize = tagsize;
+ 
+-            out.extend_from_slice(tag);
+-            out.extend_from_slice(&tagstart.to_be_bytes());
+-            out.extend_from_slice(&tagsize.to_be_bytes());
++            extend_output(&mut out, output_size as usize, tag)?;
++            extend_output(&mut out, output_size as usize, &tagstart.to_be_bytes())?;
++            extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
+             if tagcode == 2 {
+-                out.extend_from_slice(b"gTRC");
+-                out.extend_from_slice(&tagstart.to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
+-                out.extend_from_slice(b"bTRC");
+-                out.extend_from_slice(&tagstart.to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
++                extend_output(&mut out, output_size as usize, b"gTRC")?;
++                extend_output(&mut out, output_size as usize, &tagstart.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, b"bTRC")?;
++                extend_output(&mut out, output_size as usize, &tagstart.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
+             } else if tagcode == 3 {
+-                out.extend_from_slice(b"gXYZ");
+-                out.extend_from_slice(&(tagstart + tagsize).to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
+-                out.extend_from_slice(b"bXYZ");
+-                out.extend_from_slice(&(tagstart + tagsize * 2).to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
++                extend_output(&mut out, output_size as usize, b"gXYZ")?;
++                extend_output(
++                    &mut out,
++                    output_size as usize,
++                    &(tagstart + tagsize).to_be_bytes(),
++                )?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, b"bXYZ")?;
++                extend_output(
++                    &mut out,
++                    output_size as usize,
++                    &(tagstart + tagsize * 2).to_be_bytes(),
++                )?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
+             }
+         }
+     }
+@@ -315,15 +363,17 @@
+                 if num > data.len() {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
++                check_output_size(out.len(), num, output_size as usize)?;
+                 let (bytes, next_data) = data.split_at(num);
+                 data = next_data;
+-                out.extend_from_slice(bytes);
++                extend_output(&mut out, output_size as usize, bytes)?;
+             }
+             2 | 3 => {
+                 let num = varint(&mut commands_stream)? as usize;
+                 if num > data.len() {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
++                check_output_size(out.len(), num, output_size as usize)?;
+                 let (bytes, next_data) = data.split_at(num);
+                 data = next_data;
+                 let bytes = if command == 2 {
+@@ -331,7 +381,7 @@
+                 } else {
+                     shuffle4(bytes)
+                 };
+-                out.extend_from_slice(&bytes);
++                extend_output(&mut out, output_size as usize, &bytes)?;
+             }
+             4 => {
+                 let mut flags = 0u8;
+@@ -361,6 +411,7 @@
+                 if data.len() < num {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
++                check_output_size(out.len(), num, output_size as usize)?;
+                 let (bytes, next_data) = data.split_at(num);
+                 data = next_data;
+                 let shuffled;
+@@ -394,7 +445,7 @@
+ 
+                     for j in 0..width.min(num - i) {
+                         let val = Wrapping(bytes[i + j] as u32) + (p >> (8 * (width - 1 - j)));
+-                        out.push(val.0 as u8);
++                        extend_output(&mut out, output_size as usize, &[val.0 as u8])?;
+                     }
+                 }
+             }
+@@ -402,22 +453,105 @@
+                 if data.len() < 12 {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
+-                out.extend_from_slice(&[b'X', b'Y', b'Z', b' ', 0, 0, 0, 0]);
++                extend_output(
++                    &mut out,
++                    output_size as usize,
++                    &[b'X', b'Y', b'Z', b' ', 0, 0, 0, 0],
++                )?;
+                 let (bytes, next_data) = data.split_at(12);
+                 data = next_data;
+-                out.extend_from_slice(bytes);
++                extend_output(&mut out, output_size as usize, bytes)?;
+             }
+             16..=23 => {
+-                out.extend_from_slice(COMMON_DATA[command as usize - 16]);
+-                out.extend_from_slice(&[0, 0, 0, 0]);
++                extend_output(&mut out, output_size as usize, COMMON_DATA[command as usize - 16])?;
++                extend_output(&mut out, output_size as usize, &[0, 0, 0, 0])?;
+             }
+             _ => {
+                 return Err(Error::InvalidIccStream("invalid command"));
+             }
+         }
+     }
+-    if out.len() != output_size as usize {
+-        return Err(Error::InvalidIccStream("decoded ICC profile size mismatch"));
+-    }
+-    Ok(out)
+-}
++    finish_output(out, output_size as usize)
++}
++
++#[cfg(test)]
++mod bounded_profile_tests {
++    use super::*;
++    fn stream(size: u64, commands: &[u8], payload: &[u8]) -> Vec<u8> {
++        fn write(mut n: u64, out: &mut Vec<u8>) {
++            while n >= 128 {
++                out.push((n as u8 & 127) | 128);
++                n >>= 7;
++            }
++            out.push(n as u8);
++        }
++        let mut out = Vec::new();
++        write(size, &mut out);
++        write(commands.len() as u64, &mut out);
++        out.extend_from_slice(commands);
++        out.extend_from_slice(payload);
++        out
++    }
++    #[test]
++    fn truncated_tag_table_cannot_succeed_with_wrong_output_length() {
++        // Header plus an advertised zero-entry tag table cannot fit 129 bytes.
++        assert!(decode_icc(&stream(129, &[1], &[0; 128])).is_err());
++    }
++    #[test]
++    fn truncated_nonempty_tag_table_cannot_succeed() {
++        assert!(decode_icc(&stream(144, &[2], &[0; 128])).is_err());
++    }
++    #[test]
++    fn every_expanding_command_refuses_before_growing_output() {
++        let cases: &[&[u8]] = &[
++            &[0, 1, 2],
++            &[0, 2, 2],
++            &[0, 3, 2],
++            &[0, 4, 0, 2],
++            &[0, 4, 1, 2],
++            &[0, 4, 3, 2],
++            &[0, 10],
++            &[0, 16],
++            &[0, 17],
++            &[0, 18],
++            &[0, 19],
++            &[0, 20],
++            &[0, 21],
++            &[0, 22],
++            &[0, 23],
++            // Zero-entry table plus a tag descriptor cannot fit 132 bytes.
++            &[1, 4],
++            // The first descriptor fits, but the implicit G/B descriptors do not.
++            &[2, 2],
++            &[2, 3],
++        ];
++        for commands in cases {
++            let size = if *commands == [2, 3] {
++                164
++            } else if commands[0] == 2 {
++                144
++            } else if *commands == [1, 4] {
++                132
++            } else {
++                129
++            };
++            let error = decode_icc(&stream(size, commands, &[0; 140])).unwrap_err();
++            assert!(
++                matches!(
++                    error,
++                    Error::InvalidIccStream("decoded ICC profile exceeds declared size")
++                ),
++                "{commands:?}: {error}"
++            );
++        }
++    }
++    #[test]
++    fn exact_header_table_and_main_command_sizes_remain_valid() {
++        for (size, commands) in [(128, &[][..]), (132, &[1, 0][..]), (136, &[0, 16][..])] {
++            assert_eq!(
++                decode_icc(&stream(size, commands, &[0; 128])).unwrap().len(),
++                size as usize
++            );
++        }
++    }
++}
+--- registry/jxl-oxide-0.12.6/src/lib.rs
++++ vendor/jxl-oxide/src/lib.rs
+@@ -350,7 +350,37 @@
+     /// - `Ok(InitializeResult::NeedMoreData(_))` if the data was not enough, and
+     /// - `Err(_)` if there was a decode error during the initialization, meaning invalid bitstream
+     ///   was given.
+-    pub fn try_init(mut self) -> Result<InitializeResult> {
++    pub fn try_init(self) -> Result<InitializeResult> {
++        self.try_init_inner(false, |_| Ok(()))
++    }
++
++    /// Initialize image metadata without loading buffered frame payloads.
++    ///
++    /// After admitting codec working storage and updating its allocation tracker,
++    /// call [`JxlImage::resume_frame_loading`] before rendering. Parser/metadata
++    /// allocations are not covered by the grid allocation tracker.
++    pub fn try_init_header_only(self) -> Result<InitializeResult> {
++        self.try_init_inner(true, |_| Ok(()))
++    }
++
++    /// Initialize metadata after admitting ICC encoded/output/shuffle storage.
++    ///
++    /// The callback receives absolute high-water bytes, including at most 18
++    /// bytes of header reallocation overlap. Keep credit until the image drops.
++    /// It can run repeatedly when streaming headers require additional input.
++    /// Entropy state, other metadata and rendered ICC copies are not covered.
++    pub fn try_init_header_only_with_icc_admission(
++        self,
++        admit: impl FnMut(u64) -> Result<()>,
++    ) -> Result<InitializeResult> {
++        self.try_init_inner(true, admit)
++    }
++
++    fn try_init_inner(
++        mut self,
++        defer_frame_data: bool,
++        mut admit: impl FnMut(u64) -> Result<()>,
++    ) -> Result<InitializeResult> {
+         let mut bitstream = Bitstream::new(&self.buffer);
+         let image_header = match ImageHeader::parse(&mut bitstream, ()) {
+             Ok(x) => x,
+@@ -363,8 +393,11 @@
+         };
+ 
+         let embedded_icc = if image_header.metadata.colour_encoding.want_icc() {
+-            let icc = match jxl_color::icc::read_icc(&mut bitstream) {
++            let icc = match jxl_color::icc::read_icc_with_admission(&mut bitstream, |bytes| {
++                admit(bytes).map_err(jxl_color::Error::AllocationDenied)
++            }) {
+                 Ok(x) => x,
++                Err(jxl_color::Error::AllocationDenied(e)) => return Err(e),
+                 Err(e) if e.unexpected_eof() => {
+                     return Ok(InitializeResult::NeedMoreData(self));
+                 }
+@@ -436,6 +469,7 @@
+             image_header,
+             ctx: Box::new(ctx),
+             render_spot_color,
++            initial_codestream: None,
+             inner: JxlImageInner {
+                 end_of_image: false,
+                 buffer: Vec::new(),
+@@ -444,7 +478,11 @@
+                 aux_boxes: self.aux_boxes,
+             },
+         };
+-        image.inner.feed_bytes_inner(&mut image.ctx, &self.buffer)?;
++        if defer_frame_data {
++            image.initial_codestream = Some(self.buffer);
++        } else {
++            image.inner.feed_bytes_inner(&mut image.ctx, &self.buffer)?;
++        }
+ 
+         Ok(InitializeResult::Initialized(image))
+     }
+@@ -466,6 +504,7 @@
+     image_header: Arc<ImageHeader>,
+     ctx: Box<RenderContext>,
+     render_spot_color: bool,
++    initial_codestream: Option<Vec<u8>>,
+     inner: JxlImageInner,
+ }
+ 
+@@ -486,10 +525,23 @@
+         Self::builder().open(path)
+     }
+ 
++    /// Load codestream bytes deferred by header-only initialization.
++    ///
++    /// This is idempotent after success. On failure, discard the image as with
++    /// a failed `feed_bytes` call. Feeding more input or finalizing also resumes
++    /// pending data, so the container parser never sees decoded payload twice.
++    pub fn resume_frame_loading(&mut self) -> Result<()> {
++        if let Some(pending) = self.initial_codestream.take() {
++            self.inner.feed_bytes_inner(&mut self.ctx, &pending)?;
++        }
++        Ok(())
++    }
++
+     /// Feeds more data into the decoder.
+     ///
+     /// Returns total consumed bytes from the buffer.
+     pub fn feed_bytes(&mut self, buf: &[u8]) -> Result<usize> {
++        self.resume_frame_loading()?;
+         for event in self.reader.feed_bytes(buf) {
+             match event? {
+                 ParseEvent::BitstreamKind(_) => {}
+@@ -508,6 +560,7 @@
+     ///
+     /// This is automatically done if `open()` or `read()` is used to decode the image.
+     pub fn finalize(&mut self) -> Result<()> {
++        self.resume_frame_loading()?;
+         self.inner.aux_boxes.eof()?;
+         Ok(())
+     }

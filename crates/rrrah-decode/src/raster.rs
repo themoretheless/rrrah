@@ -1078,6 +1078,7 @@ fn decode_raster_bytes_inner(
     };
     let color_space = request.qualify_linear_color(color_space);
     let (width, height) = (image.width(), image.height());
+    let mut alpha_association = rrrah_core::RasterAlphaAssociation::Straight;
     let pixels = match sample_bytes {
         2 => {
             let mut pixels = image.into_rgba16().into_raw();
@@ -1102,31 +1103,36 @@ fn decode_raster_bytes_inner(
                 tiff_alpha::f32_pixels(&mut pixels, request)?;
             }
             if format == ImageFormat::OpenExr {
-                // OpenEXR's conventional RGB channels are alpha-associated.
-                // Our raster API and common renderer use straight alpha.
-                for (index, pixel) in pixels.chunks_exact_mut(4).enumerate() {
+                // Preserve valid associated emission/overflow cases exactly.
+                // Ordinary EXR keeps its established straight-alpha contract.
+                let mut needs_associated = false;
+                for (index, pixel) in pixels.chunks_exact(4).enumerate() {
                     if index % 4096 == 0 {
                         request.check_cancelled()?;
                     }
-                    let alpha = pixel[3];
-                    if !alpha.is_finite() || !(0.0..=1.0).contains(&alpha) {
+                    if pixel.iter().any(|v| !v.is_finite()) || !(0.0..=1.0).contains(&pixel[3]) {
                         return Err(RasterDecodeError::InvalidExrAlpha(
-                            "non-finite or out-of-range alpha",
+                            "non-finite or out-of-range alpha/RGB",
                         ));
                     }
-                    if alpha == 0.0 {
-                        if pixel[..3].iter().any(|value| *value != 0.0) {
-                            return Err(RasterDecodeError::InvalidExrAlpha(
-                                "zero-alpha emission requires associated-alpha rendering",
-                            ));
-                        }
+                    needs_associated |= if pixel[3] == 0.0 {
+                        pixel[..3].iter().any(|v| *v != 0.0)
                     } else {
-                        for value in &mut pixel[..3] {
-                            *value /= alpha;
-                            if !value.is_finite() {
-                                return Err(RasterDecodeError::InvalidExrAlpha(
-                                    "unassociation overflows or contains non-finite RGB",
-                                ));
+                        let bound = f64::from(f32::MAX) * f64::from(pixel[3]);
+                        pixel[..3].iter().any(|v| f64::from(v.abs()) > bound)
+                    };
+                }
+                if needs_associated {
+                    alpha_association = rrrah_core::RasterAlphaAssociation::Associated;
+                } else {
+                    for (index, pixel) in pixels.chunks_exact_mut(4).enumerate() {
+                        if index % 4096 == 0 {
+                            request.check_cancelled()?;
+                        }
+                        if pixel[3] > 0.0 && pixel[3] != 1.0 {
+                            let alpha = pixel[3];
+                            for value in &mut pixel[..3] {
+                                *value /= alpha;
                             }
                         }
                     }
@@ -1146,6 +1152,7 @@ fn decode_raster_bytes_inner(
         }
     };
     let raster = DecodedRaster::new(width, height, pixels, color_space)?
+        .with_alpha_association(alpha_association)?
         .with_pixel_aspect(pixel_aspect)?
         .with_hotspot(hotspot)?;
     match owned_profile_credit {

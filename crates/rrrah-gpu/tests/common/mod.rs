@@ -304,6 +304,16 @@ impl GpuReadback {
         view: ViewParameters,
         size: [u32; 2],
     ) -> Vec<u16> {
+        self.render_raster_half_background(raster, view, size, [0.018; 3])
+    }
+
+    pub fn render_raster_half_background(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+        background: [f32; 3],
+    ) -> Vec<u16> {
         let budget = rrrah_core::MemoryBudget::new(
             rrrah_gpu::RasterRenderer::texture_bytes_for_extent(
                 &self.device,
@@ -316,6 +326,7 @@ impl GpuReadback {
             rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&self.device, budget.clone());
         renderer.upload(&self.device, &self.queue, raster).unwrap();
         renderer.update_view(&self.queue, view);
+        renderer.set_background(&self.queue, background).unwrap();
         let result = self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target));
         drop(renderer);
         assert_eq!(
@@ -324,6 +335,75 @@ impl GpuReadback {
             "HDR renderer credit must return after completed submission"
         );
         result
+    }
+
+    pub fn render_associated_resident_half(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        size: [u32; 2],
+        background: [f32; 3],
+    ) -> Vec<u16> {
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let compute = rrrah_gpu::LinearExposureCompute::new(&self.device);
+        let resident = compute
+            .execute_raster_resident(&self.queue, raster, 0., &budget, || false)
+            .unwrap();
+        let mut renderer =
+            rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&self.device, budget.clone());
+        renderer
+            .upload_resident_with_aspect(
+                &self.device,
+                &self.queue,
+                &resident,
+                [raster.width(), raster.height()],
+                raster.pixel_aspect(),
+                || false,
+            )
+            .unwrap();
+        renderer.set_background(&self.queue, background).unwrap();
+        renderer.update_view(
+            &self.queue,
+            ViewParameters {
+                viewport: [size[0] as f32, size[1] as f32],
+                zoom: 2.,
+                ..Default::default()
+            },
+        );
+        let output = self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target));
+        drop((renderer, resident));
+        assert_eq!(budget.used(), 0);
+        output
+    }
+
+    pub fn render_associated_tiled_reference(&self, background: [f32; 3]) -> Vec<u16> {
+        let width = self.device.limits().max_texture_dimension_2d + 2;
+        let mut values = Vec::with_capacity(width as usize * 4);
+        for i in 0..width {
+            values.extend_from_slice(if i < width / 2 {
+                &[2., 0.5, 0.25, 0.]
+            } else {
+                &[-0.25, 4., 0.5, 0.5]
+            });
+        }
+        let frame = rrrah_core::DecodedRaster::new(
+            width,
+            1,
+            rrrah_core::RasterPixels::Rgba32Float(std::sync::Arc::new(values).into()),
+            rrrah_core::RasterColorSpace::LinearSrgb,
+        )
+        .unwrap()
+        .with_alpha_association(rrrah_core::RasterAlphaAssociation::Associated)
+        .unwrap();
+        self.render_raster_half_background(
+            &frame,
+            ViewParameters {
+                viewport: [2., 1.],
+                zoom: 2.,
+                ..Default::default()
+            },
+            [2, 1],
+            background,
+        )
     }
 
     pub fn render_model_half<T: Copy + Into<f64>>(

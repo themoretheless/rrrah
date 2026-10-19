@@ -8,6 +8,7 @@ struct Parameters {
     zoom: f32,
     exposure: f32,
     pixel_aspect: f32,
+    alpha_associated: u32,
     background: vec4<f32>,
     raw_development: vec4<u32>,
     curve: array<vec4<f32>, 256>,
@@ -47,7 +48,7 @@ fn premultiplied_at(coordinate: vec2<i32>) -> vec4<f32> {
     // Most images occupy one layer: bypass integer division/remainder there.
     if SINGLE_LAYER {
         let color = textureLoad(image, global, 0, 0);
-        return vec4<f32>(color.rgb * color.a, color.a);
+        return vec4<f32>(color.rgb * select(color.a, 1.0, p.alpha_associated != 0u), color.a);
     }
     let tile_size = vec2<i32>(textureDimensions(image, 0));
     let tile = global / tile_size;
@@ -56,7 +57,7 @@ fn premultiplied_at(coordinate: vec2<i32>) -> vec4<f32> {
     let columns = (resident_width + tile_size.x - 1) / tile_size.x;
     let layer = tile.y * columns + tile.x;
     let color = textureLoad(image, global % tile_size, layer, 0);
-    return vec4<f32>(color.rgb * color.a, color.a);
+    return vec4<f32>(color.rgb * select(color.a, 1.0, p.alpha_associated != 0u), color.a);
 }
 
 fn aces_scalar(value: f32) -> f32 {

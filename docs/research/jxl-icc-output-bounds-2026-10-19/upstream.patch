@@ -1,0 +1,285 @@
+--- registry/jxl-color-0.11.0/src/icc/decode.rs
++++ vendor/jxl-color/src/icc/decode.rs
+@@ -13,9 +13,7 @@
+     if enc_size > (1 << 28) {
+         // Avoids allocating too much memory (>256MiB)
+         // Maximum ICC output_size for Level 10
+-        return Err(
+-            jxl_bitstream::Error::ProfileConformance("Too large encoded ICC profile").into(),
+-        );
++        return Err(jxl_bitstream::Error::ProfileConformance("Too large encoded ICC profile").into());
+     }
+ 
+     let mut decoder = jxl_coding::Decoder::parse(bitstream, 41)?;
+@@ -187,13 +185,35 @@
+     out
+ }
+ 
++fn check_output_size(current: usize, additional: usize, limit: usize) -> Result<()> {
++    if current.checked_add(additional).is_none_or(|size| size > limit) {
++        return Err(Error::InvalidIccStream(
++            "decoded ICC profile exceeds declared size",
++        ));
++    }
++    Ok(())
++}
++
++fn extend_output(out: &mut Vec<u8>, limit: usize, bytes: &[u8]) -> Result<()> {
++    check_output_size(out.len(), bytes.len(), limit)?;
++    out.extend_from_slice(bytes);
++    Ok(())
++}
++
++fn finish_output(out: Vec<u8>, expected: usize) -> Result<Vec<u8>> {
++    if out.len() != expected {
++        return Err(Error::InvalidIccStream("decoded ICC profile size mismatch"));
++    }
++    Ok(out)
++}
++
+ /// Decodes the given ICC profile stream.
+ pub fn decode_icc(stream: &[u8]) -> Result<Vec<u8>> {
+     use std::num::Wrapping;
+ 
+     const COMMON_TAGS: [&[u8]; 19] = [
+-        b"rTRC", b"rXYZ", b"cprt", b"wtpt", b"bkpt", b"rXYZ", b"gXYZ", b"bXYZ", b"kXYZ", b"rTRC",
+-        b"gTRC", b"bTRC", b"kTRC", b"chad", b"desc", b"chrm", b"dmnd", b"dmdd", b"lumi",
++        b"rTRC", b"rXYZ", b"cprt", b"wtpt", b"bkpt", b"rXYZ", b"gXYZ", b"bXYZ", b"kXYZ", b"rTRC", b"gTRC",
++        b"bTRC", b"kTRC", b"chad", b"desc", b"chrm", b"dmnd", b"dmdd", b"lumi",
+     ];
+ 
+     const COMMON_DATA: [&[u8]; 8] = [
+@@ -224,7 +244,7 @@
+     // Header
+     for (idx, &e) in header_data.iter().enumerate() {
+         let p = predict_header(idx, output_size as u32, header_data);
+-        out.push(p.wrapping_add(e));
++        extend_output(&mut out, output_size as usize, &[p.wrapping_add(e)])?;
+     }
+     if output_size <= 128 {
+         return Ok(out);
+@@ -237,7 +257,7 @@
+             return Err(Error::InvalidIccStream("num_tags too large"));
+         }
+         let num_tags = num_tags as u32;
+-        out.extend_from_slice(&num_tags.to_be_bytes());
++        extend_output(&mut out, output_size as usize, &num_tags.to_be_bytes())?;
+ 
+         let mut prev_tagstart = num_tags * 12 + 128;
+         let mut prev_tagsize = 0u32;
+@@ -248,7 +268,7 @@
+                 .read_exact(std::slice::from_mut(&mut command))
+                 .is_err()
+             {
+-                return Ok(out);
++                return finish_output(out, output_size as usize);
+             }
+             let tagcode = command & 63;
+             let tag = match tagcode {
+@@ -282,23 +302,31 @@
+             prev_tagstart = tagstart;
+             prev_tagsize = tagsize;
+ 
+-            out.extend_from_slice(tag);
+-            out.extend_from_slice(&tagstart.to_be_bytes());
+-            out.extend_from_slice(&tagsize.to_be_bytes());
++            extend_output(&mut out, output_size as usize, tag)?;
++            extend_output(&mut out, output_size as usize, &tagstart.to_be_bytes())?;
++            extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
+             if tagcode == 2 {
+-                out.extend_from_slice(b"gTRC");
+-                out.extend_from_slice(&tagstart.to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
+-                out.extend_from_slice(b"bTRC");
+-                out.extend_from_slice(&tagstart.to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
++                extend_output(&mut out, output_size as usize, b"gTRC")?;
++                extend_output(&mut out, output_size as usize, &tagstart.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, b"bTRC")?;
++                extend_output(&mut out, output_size as usize, &tagstart.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
+             } else if tagcode == 3 {
+-                out.extend_from_slice(b"gXYZ");
+-                out.extend_from_slice(&(tagstart + tagsize).to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
+-                out.extend_from_slice(b"bXYZ");
+-                out.extend_from_slice(&(tagstart + tagsize * 2).to_be_bytes());
+-                out.extend_from_slice(&tagsize.to_be_bytes());
++                extend_output(&mut out, output_size as usize, b"gXYZ")?;
++                extend_output(
++                    &mut out,
++                    output_size as usize,
++                    &(tagstart + tagsize).to_be_bytes(),
++                )?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
++                extend_output(&mut out, output_size as usize, b"bXYZ")?;
++                extend_output(
++                    &mut out,
++                    output_size as usize,
++                    &(tagstart + tagsize * 2).to_be_bytes(),
++                )?;
++                extend_output(&mut out, output_size as usize, &tagsize.to_be_bytes())?;
+             }
+         }
+     }
+@@ -315,15 +343,17 @@
+                 if num > data.len() {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
++                check_output_size(out.len(), num, output_size as usize)?;
+                 let (bytes, next_data) = data.split_at(num);
+                 data = next_data;
+-                out.extend_from_slice(bytes);
++                extend_output(&mut out, output_size as usize, bytes)?;
+             }
+             2 | 3 => {
+                 let num = varint(&mut commands_stream)? as usize;
+                 if num > data.len() {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
++                check_output_size(out.len(), num, output_size as usize)?;
+                 let (bytes, next_data) = data.split_at(num);
+                 data = next_data;
+                 let bytes = if command == 2 {
+@@ -331,7 +361,7 @@
+                 } else {
+                     shuffle4(bytes)
+                 };
+-                out.extend_from_slice(&bytes);
++                extend_output(&mut out, output_size as usize, &bytes)?;
+             }
+             4 => {
+                 let mut flags = 0u8;
+@@ -361,6 +391,7 @@
+                 if data.len() < num {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
++                check_output_size(out.len(), num, output_size as usize)?;
+                 let (bytes, next_data) = data.split_at(num);
+                 data = next_data;
+                 let shuffled;
+@@ -394,7 +425,7 @@
+ 
+                     for j in 0..width.min(num - i) {
+                         let val = Wrapping(bytes[i + j] as u32) + (p >> (8 * (width - 1 - j)));
+-                        out.push(val.0 as u8);
++                        extend_output(&mut out, output_size as usize, &[val.0 as u8])?;
+                     }
+                 }
+             }
+@@ -402,22 +433,105 @@
+                 if data.len() < 12 {
+                     return Err(Error::InvalidIccStream("stream is too short"));
+                 }
+-                out.extend_from_slice(&[b'X', b'Y', b'Z', b' ', 0, 0, 0, 0]);
++                extend_output(
++                    &mut out,
++                    output_size as usize,
++                    &[b'X', b'Y', b'Z', b' ', 0, 0, 0, 0],
++                )?;
+                 let (bytes, next_data) = data.split_at(12);
+                 data = next_data;
+-                out.extend_from_slice(bytes);
++                extend_output(&mut out, output_size as usize, bytes)?;
+             }
+             16..=23 => {
+-                out.extend_from_slice(COMMON_DATA[command as usize - 16]);
+-                out.extend_from_slice(&[0, 0, 0, 0]);
++                extend_output(&mut out, output_size as usize, COMMON_DATA[command as usize - 16])?;
++                extend_output(&mut out, output_size as usize, &[0, 0, 0, 0])?;
+             }
+             _ => {
+                 return Err(Error::InvalidIccStream("invalid command"));
+             }
+         }
+     }
+-    if out.len() != output_size as usize {
+-        return Err(Error::InvalidIccStream("decoded ICC profile size mismatch"));
+-    }
+-    Ok(out)
+-}
++    finish_output(out, output_size as usize)
++}
++
++#[cfg(test)]
++mod bounded_profile_tests {
++    use super::*;
++    fn stream(size: u64, commands: &[u8], payload: &[u8]) -> Vec<u8> {
++        fn write(mut n: u64, out: &mut Vec<u8>) {
++            while n >= 128 {
++                out.push((n as u8 & 127) | 128);
++                n >>= 7;
++            }
++            out.push(n as u8);
++        }
++        let mut out = Vec::new();
++        write(size, &mut out);
++        write(commands.len() as u64, &mut out);
++        out.extend_from_slice(commands);
++        out.extend_from_slice(payload);
++        out
++    }
++    #[test]
++    fn truncated_tag_table_cannot_succeed_with_wrong_output_length() {
++        // Header plus an advertised zero-entry tag table cannot fit 129 bytes.
++        assert!(decode_icc(&stream(129, &[1], &[0; 128])).is_err());
++    }
++    #[test]
++    fn truncated_nonempty_tag_table_cannot_succeed() {
++        assert!(decode_icc(&stream(144, &[2], &[0; 128])).is_err());
++    }
++    #[test]
++    fn every_expanding_command_refuses_before_growing_output() {
++        let cases: &[&[u8]] = &[
++            &[0, 1, 2],
++            &[0, 2, 2],
++            &[0, 3, 2],
++            &[0, 4, 0, 2],
++            &[0, 4, 1, 2],
++            &[0, 4, 3, 2],
++            &[0, 10],
++            &[0, 16],
++            &[0, 17],
++            &[0, 18],
++            &[0, 19],
++            &[0, 20],
++            &[0, 21],
++            &[0, 22],
++            &[0, 23],
++            // Zero-entry table plus a tag descriptor cannot fit 132 bytes.
++            &[1, 4],
++            // The first descriptor fits, but the implicit G/B descriptors do not.
++            &[2, 2],
++            &[2, 3],
++        ];
++        for commands in cases {
++            let size = if *commands == [2, 3] {
++                164
++            } else if commands[0] == 2 {
++                144
++            } else if *commands == [1, 4] {
++                132
++            } else {
++                129
++            };
++            let error = decode_icc(&stream(size, commands, &[0; 140])).unwrap_err();
++            assert!(
++                matches!(
++                    error,
++                    Error::InvalidIccStream("decoded ICC profile exceeds declared size")
++                ),
++                "{commands:?}: {error}"
++            );
++        }
++    }
++    #[test]
++    fn exact_header_table_and_main_command_sizes_remain_valid() {
++        for (size, commands) in [(128, &[][..]), (132, &[1, 0][..]), (136, &[0, 16][..])] {
++            assert_eq!(
++                decode_icc(&stream(size, commands, &[0; 128])).unwrap().len(),
++                size as usize
++            );
++        }
++    }
++}

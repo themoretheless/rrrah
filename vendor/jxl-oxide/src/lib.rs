@@ -323,10 +323,43 @@ impl UninitializedJxlImage {
     ///
     /// Returns total consumed bytes from the buffer.
     pub fn feed_bytes(&mut self, buf: &[u8]) -> Result<usize> {
+        self.feed_header_bytes_inner(buf, |_| Ok(()), false)
+    }
+
+    /// Admit encoded header-buffer growth before allocation. The callback gets
+    /// the planned new capacity plus old capacity for reallocation overlap.
+    /// Retain the high-water credit through deferred frame loading, which drops
+    /// this buffer. Container/auxiliary/parser allocations are not covered.
+    pub fn feed_bytes_with_header_admission(
+        &mut self,
+        buf: &[u8],
+        admit: impl FnMut(u64) -> Result<()>,
+    ) -> Result<usize> {
+        self.feed_header_bytes_inner(buf, admit, true)
+    }
+
+    fn feed_header_bytes_inner(
+        &mut self,
+        buf: &[u8],
+        mut admit: impl FnMut(u64) -> Result<()>,
+        bounded: bool,
+    ) -> Result<usize> {
         for event in self.reader.feed_bytes(buf) {
             match event? {
                 ParseEvent::BitstreamKind(_) => {}
                 ParseEvent::Codestream(buf) => {
+                    if bounded {
+                        let needed = self.buffer.len().checked_add(buf.len())
+                            .ok_or_else(|| std::io::Error::other("JXL header size overflow"))?;
+                        let old = self.buffer.capacity();
+                        if needed > old {
+                            let capacity = needed.max(old.saturating_mul(2)).max(8);
+                            let overlap = capacity.checked_add(old)
+                                .ok_or_else(|| std::io::Error::other("JXL header capacity overflow"))?;
+                            admit(overlap as u64)?;
+                            self.buffer.try_reserve_exact(capacity - self.buffer.len())?;
+                        }
+                    }
                     self.buffer.extend_from_slice(buf);
                 }
                 aux_box_event => {
@@ -351,7 +384,7 @@ impl UninitializedJxlImage {
     /// - `Err(_)` if there was a decode error during the initialization, meaning invalid bitstream
     ///   was given.
     pub fn try_init(self) -> Result<InitializeResult> {
-        self.try_init_inner(false)
+        self.try_init_inner(false, |_| Ok(()))
     }
 
     /// Initialize image metadata without loading buffered frame payloads.
@@ -360,10 +393,27 @@ impl UninitializedJxlImage {
     /// call [`JxlImage::resume_frame_loading`] before rendering. Parser/metadata
     /// allocations are not covered by the grid allocation tracker.
     pub fn try_init_header_only(self) -> Result<InitializeResult> {
-        self.try_init_inner(true)
+        self.try_init_inner(true, |_| Ok(()))
     }
 
-    fn try_init_inner(mut self, defer_frame_data: bool) -> Result<InitializeResult> {
+    /// Initialize metadata after admitting ICC encoded/output/shuffle storage.
+    ///
+    /// The callback receives absolute high-water bytes, including at most 18
+    /// bytes of header reallocation overlap. Keep credit until the image drops.
+    /// It can run repeatedly when streaming headers require additional input.
+    /// Entropy state, other metadata and rendered ICC copies are not covered.
+    pub fn try_init_header_only_with_icc_admission(
+        self,
+        admit: impl FnMut(u64) -> Result<()>,
+    ) -> Result<InitializeResult> {
+        self.try_init_inner(true, admit)
+    }
+
+    fn try_init_inner(
+        mut self,
+        defer_frame_data: bool,
+        mut admit: impl FnMut(u64) -> Result<()>,
+    ) -> Result<InitializeResult> {
         let mut bitstream = Bitstream::new(&self.buffer);
         let image_header = match ImageHeader::parse(&mut bitstream, ()) {
             Ok(x) => x,
@@ -376,8 +426,13 @@ impl UninitializedJxlImage {
         };
 
         let embedded_icc = if image_header.metadata.colour_encoding.want_icc() {
-            let icc = match jxl_color::icc::read_icc(&mut bitstream) {
+            let mut icc_bound = 0u64;
+            let icc = match jxl_color::icc::read_icc_with_admission(&mut bitstream, |bytes| {
+                icc_bound = icc_bound.max(bytes);
+                admit(bytes).map_err(jxl_color::Error::AllocationDenied)
+            }) {
                 Ok(x) => x,
+                Err(jxl_color::Error::AllocationDenied(e)) => return Err(e),
                 Err(e) if e.unexpected_eof() => {
                     return Ok(InitializeResult::NeedMoreData(self));
                 }
@@ -386,7 +441,13 @@ impl UninitializedJxlImage {
                 }
             };
             tracing::debug!("Image has an embedded ICC profile");
-            let icc = jxl_color::icc::decode_icc(&icc)?;
+            let icc = match jxl_color::icc::decode_icc_with_check(&icc, || {
+                admit(icc_bound).map_err(jxl_color::Error::AllocationDenied)
+            }) {
+                Ok(profile) => profile,
+                Err(jxl_color::Error::AllocationDenied(error)) => return Err(error),
+                Err(error) => return Err(error.into()),
+            };
             Some(icc)
         } else {
             None
@@ -584,6 +645,34 @@ impl JxlImage {
                 jxl_color::icc::colour_encoding_to_icc(encoding)
             }
             color::ColourEncoding::IccProfile(_) => encoding.icc_profile().to_vec(),
+        }
+    }
+
+    /// Create the rendered profile after admitting its final output allocation.
+    /// Synthesis metadata/scratch and the source profile are outside this credit.
+    pub fn rendered_icc_with_admission(
+        &self,
+        mut admit: impl FnMut(u64) -> Result<()>,
+    ) -> Result<Vec<u8>> {
+        let encoding = self.ctx.requested_color_encoding();
+        match encoding.encoding() {
+            color::ColourEncoding::Enum(encoding) => {
+                match jxl_color::icc::colour_encoding_to_icc_with_admission(encoding, |bytes| {
+                    admit(bytes).map_err(jxl_color::Error::AllocationDenied)
+                }) {
+                    Ok(profile) => Ok(profile),
+                    Err(jxl_color::Error::AllocationDenied(error)) => Err(error),
+                    Err(error) => Err(error.into()),
+                }
+            }
+            color::ColourEncoding::IccProfile(_) => {
+                let source = encoding.icc_profile();
+                admit(source.len() as u64)?;
+                let mut profile = Vec::new();
+                profile.try_reserve_exact(source.len())?;
+                profile.extend_from_slice(source);
+                Ok(profile)
+            }
         }
     }
 

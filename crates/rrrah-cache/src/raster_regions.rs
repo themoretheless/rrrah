@@ -767,7 +767,8 @@ impl SwappedRaster {
         ((self.header[..8] == *b"RRRAST2\0"
             || self.header[..8] == *b"RRRAST3\0"
             || self.header[..8] == *b"RRRAST4\0"
-            || (self.header[..8] == *b"RRRAST5\0" && self.header[19] >= 2))
+            || (self.header[..8] == *b"RRRAST5\0" && self.header[19] >= 2)
+            || (self.header[..8] == *b"RRRAST6\0" && self.header[19] & 127 >= 2))
             && value != 0.0)
             .then_some(value)
     }
@@ -913,7 +914,12 @@ impl SwappedRaster {
                         let wx = (x1.min(f64::from(x + 1)) - x0.max(f64::from(x))).max(0.);
                         let alpha = f64::from(rgba[3]) * wx * wy;
                         for c in 0..3 {
-                            sum[c] += f64::from(rgba[c]) * alpha;
+                            sum[c] += f64::from(rgba[c])
+                                * if self.header[..8] == *b"RRRAST6\0" {
+                                    wx * wy
+                                } else {
+                                    alpha
+                                };
                         }
                         sum[3] += alpha;
                     }
@@ -924,7 +930,11 @@ impl SwappedRaster {
                 let x1 = (f64::from(ox + 1) * scale[0]).min(f64::from(self.size[0]));
                 let sum = sums[ox as usize];
                 let begin = (oy as usize * target[0] as usize + ox as usize) * 4;
-                if sum[3] > 0. {
+                if self.header[..8] == *b"RRRAST6\0" {
+                    for c in 0..3 {
+                        output[begin + c] = (sum[c] / ((x1 - x0) * (y1 - y0))) as f32;
+                    }
+                } else if sum[3] > 0. {
                     for c in 0..3 {
                         output[begin + c] = (sum[c] / sum[3]) as f32;
                     }
@@ -935,7 +945,7 @@ impl SwappedRaster {
         if cancelled() {
             return Err(rrrah_swap::SwapError::Cancelled.into());
         }
-        let hotspot = (self.header[18] == 1).then(|| {
+        let hotspot = (self.header[18] & 1 == 1).then(|| {
             let coordinate = |offset| u32::from_le_bytes(self.header[offset..offset + 4].try_into().unwrap());
             (
                 (u64::from(coordinate(24)) * u64::from(target[0]) / u64::from(self.size[0])) as u32,
@@ -954,6 +964,11 @@ impl SwappedRaster {
             RasterPixels::Rgba32Float(output.freeze().into()),
             RasterColorSpace::LinearSrgb,
         )?
+        .with_alpha_association(if self.header[..8] == *b"RRRAST6\0" {
+            rrrah_core::RasterAlphaAssociation::Associated
+        } else {
+            rrrah_core::RasterAlphaAssociation::Straight
+        })?
         .with_pixel_aspect(Some(
             (f64::from(self.pixel_aspect().unwrap_or(1.)) * scale[0] / scale[1]) as f32,
         ))?
@@ -1102,14 +1117,14 @@ impl SwappedRaster {
         let mut header = self.header;
         header[8..12].copy_from_slice(&width.to_le_bytes());
         header[12..16].copy_from_slice(&height.to_le_bytes());
-        if header[18] == 1 {
+        if header[18] & 1 == 1 {
             let hx = u32::from_le_bytes(header[24..28].try_into().unwrap());
             let hy = u32::from_le_bytes(header[28..32].try_into().unwrap());
             if hx >= x && hy >= y && hx - x < width && hy - y < height {
                 header[24..28].copy_from_slice(&(hx - x).to_le_bytes());
                 header[28..32].copy_from_slice(&(hy - y).to_le_bytes());
             } else {
-                header[18] = 0;
+                header[18] &= !1;
                 header[24..32].fill(0);
             }
         }

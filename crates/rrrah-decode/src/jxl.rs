@@ -15,11 +15,14 @@ fn invalid(message: &'static str) -> RasterDecodeError {
     image::ImageError::IoError(std::io::Error::new(std::io::ErrorKind::InvalidData, message)).into()
 }
 fn codec_error(error: Box<dyn std::error::Error + Send + Sync>) -> RasterDecodeError {
-    image::ImageError::Decoding(image::error::DecodingError::new(
-        image::error::ImageFormatHint::Unknown,
-        error,
-    ))
-    .into()
+    match error.downcast::<crate::DecodeError>() {
+        Ok(error) => (*error).into(),
+        Err(error) => image::ImageError::Decoding(image::error::DecodingError::new(
+            image::error::ImageFormatHint::Unknown,
+            error,
+        ))
+        .into(),
+    }
 }
 fn samples<T: jxl_oxide::FrameBufferSample + Default + Copy>(
     render: &jxl_oxide::Render,
@@ -77,12 +80,21 @@ fn timing(
 }
 pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
-    // Header-only initialization cannot allocate tracked codec groups. Parser,
-    // ICC metadata and the buffered encoded header remain outside this tracker.
+    // Header-only initialization cannot allocate tracked codec groups. ICC byte
+    // buffers are admitted separately; parser metadata is outside this tracker.
     let tracker = jxl_oxide::AllocTracker::with_limit(0);
     // Declared before codec state: buffers must drop before their working credit,
     // including every early return after admission.
     let _working;
+    // Must outlive codec state, including every partial initialization attempt.
+    let mut header_credit = request
+        .memory_budget
+        .as_ref()
+        .map(|root| root.try_reserve(0))
+        .transpose()
+        .map_err(crate::DecodeError::Memory)?;
+    let mut icc_credit = Vec::new();
+    let mut icc_admitted = 0u64;
     let mut uninit = jxl_oxide::JxlImage::builder()
         .alloc_tracker(tracker.clone())
         .build_uninit();
@@ -98,10 +110,33 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
             return Err(invalid("incomplete JPEG XL header"));
         }
         valid += count;
-        let consumed = uninit.feed_bytes(&buffer[..valid]).map_err(codec_error)?;
+        let consumed = uninit
+            .feed_bytes_with_header_admission(&buffer[..valid], |bytes| {
+                request.check_cancelled()?;
+                if let Some(credit) = &mut header_credit {
+                    credit.ensure_bytes(bytes).map_err(crate::DecodeError::Memory)?;
+                }
+                Ok(())
+            })
+            .map_err(codec_error)?;
         buffer.copy_within(consumed..valid, 0);
         valid -= consumed;
-        match uninit.try_init_header_only().map_err(codec_error)? {
+        match uninit
+            .try_init_header_only_with_icc_admission(|bytes| {
+                request.check_cancelled()?;
+                if bytes > icc_admitted {
+                    if let Some(root) = &request.memory_budget {
+                        icc_credit.push(
+                            root.try_reserve(bytes - icc_admitted)
+                                .map_err(crate::DecodeError::Memory)?,
+                        );
+                    }
+                    icc_admitted = bytes;
+                }
+                Ok(())
+            })
+            .map_err(codec_error)?
+        {
             jxl_oxide::InitializeResult::Initialized(image) => break image,
             jxl_oxide::InitializeResult::NeedMoreData(next) => uninit = next,
         }
@@ -166,6 +201,8 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
     tracker.expand_limit(codec_bytes as usize);
     request.check_cancelled()?;
     image.resume_frame_loading().map_err(codec_error)?;
+    // Deferred initial codestream Vec has now been consumed and dropped.
+    drop(header_credit);
     while !image.is_loading_done() {
         request.check_cancelled()?;
         if valid > 0 {
@@ -202,7 +239,18 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         .as_ref()
         .map(|a| timing(render.duration(), a.tps_numerator, a.tps_denominator, a.num_loops))
         .transpose()?;
-    let color = RasterColorSpace::Icc(image.rendered_icc());
+    let mut profile_reservation = None;
+    let color = RasterColorSpace::Icc(
+        image
+            .rendered_icc_with_admission(|bytes| {
+                request.check_cancelled()?;
+                if let Some(root) = &request.memory_budget {
+                    profile_reservation = Some(root.try_reserve(bytes).map_err(crate::DecodeError::Memory)?);
+                }
+                Ok(())
+            })
+            .map_err(codec_error)?,
+    );
     macro_rules! pixels {
         ($ty:ty,$opaque:expr,$variant:ident) => {{
             let values = samples::<$ty>(&render, $opaque, request)?;
@@ -222,9 +270,15 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         _ => pixels!(u8, u8::MAX, Rgba8),
     };
     request.check_cancelled()?;
-    Ok(DecodedRaster::new(width, height, pixels, color)?
+    let frame = DecodedRaster::new(width, height, pixels, color)?
         .with_animation_timing(animation)
-        .with_image_selection(request.image_index, count)?)
+        .with_image_selection(request.image_index, count)?;
+    match profile_reservation {
+        Some(credit) => frame
+            .with_color_profile_reservation(credit)
+            .map_err(|e| crate::DecodeError::Memory(e).into()),
+        None => Ok(frame),
+    }
 }
 
 #[cfg(test)]
@@ -331,6 +385,191 @@ mod tests {
             root.peak(),
             root.limit()
         );
+    }
+    #[test]
+    fn embedded_icc_working_storage_is_admitted_before_initialization_and_retries() {
+        let bytes = include_bytes!("../../../tests/fixtures/raster/animation-embedded-icc.jxl");
+        let profile = include_bytes!("../../../tests/fixtures/raster/linear-identity-rgb.icc");
+        let mut events = Vec::new();
+        let mut uninit = jxl_oxide::JxlImage::builder()
+            .alloc_tracker(jxl_oxide::AllocTracker::with_limit(0))
+            .build_uninit();
+        let mut header_requests = Vec::new();
+        uninit
+            .feed_bytes_with_header_admission(bytes, |n| {
+                header_requests.push(n);
+                Ok(())
+            })
+            .unwrap();
+        let jxl_oxide::InitializeResult::Initialized(image) = uninit
+            .try_init_header_only_with_icc_admission(|n| {
+                events.push(n);
+                Ok(())
+            })
+            .unwrap()
+        else {
+            panic!()
+        };
+        assert_eq!(image.num_loaded_frames(), 0);
+        assert_eq!(image.original_icc().unwrap(), profile);
+        drop(image);
+        assert!(events.len() > 2);
+        assert!(events[2..].iter().all(|&n| n == events[1]));
+        assert_eq!(events[1] - events[0], 2 * profile.len() as u64);
+        let (first, high) = (events[0], events[1]);
+        // Seven-byte feeds repeatedly retry the entropy/header parser. Only
+        // increases of the high-water reservation may consume additional credit.
+        let root = rrrah_core::MemoryBudget::new(high);
+        let mut credit = Vec::new();
+        let mut admitted = 0;
+        let mut calls = 0;
+        let mut uninit = jxl_oxide::JxlImage::builder()
+            .alloc_tracker(jxl_oxide::AllocTracker::with_limit(0))
+            .build_uninit();
+        let mut initialized = None;
+        let mut pending = Vec::new();
+        for chunk in bytes.chunks(7) {
+            pending.extend_from_slice(chunk);
+            let consumed = uninit.feed_bytes(&pending).unwrap();
+            pending.drain(..consumed);
+            match uninit
+                .try_init_header_only_with_icc_admission(|n| {
+                    calls += 1;
+                    if n > admitted {
+                        credit.push(root.try_reserve(n - admitted)?);
+                        admitted = n;
+                    }
+                    Ok(())
+                })
+                .unwrap()
+            {
+                jxl_oxide::InitializeResult::NeedMoreData(next) => uninit = next,
+                jxl_oxide::InitializeResult::Initialized(image) => {
+                    initialized = Some(image);
+                    break;
+                }
+            }
+        }
+        let image = initialized.unwrap();
+        assert!(calls > 2);
+        assert_eq!(image.num_loaded_frames(), 0);
+        assert_eq!(image.original_icc().unwrap(), profile);
+        assert_eq!(root.used(), high);
+        assert_eq!(root.peak(), high);
+        drop(image);
+        drop(credit);
+        assert_eq!(root.used(), 0);
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/animation-embedded-icc.jxl");
+        let source_bytes = bytes.len() as u64;
+        // Container parsing can emit multiple codestream parts from one feed.
+        // Include their measured capacity/reallocation high water, not file len.
+        let held_source_and_header = source_bytes + header_requests.into_iter().max().unwrap();
+        for (limit, requested, used) in [
+            (held_source_and_header + first - 1, first, held_source_and_header),
+            (
+                held_source_and_header + high - 1,
+                high - first,
+                held_source_and_header + first,
+            ),
+        ] {
+            let root = rrrah_core::MemoryBudget::new(limit);
+            let mut request = DecodeRequest::new(&path);
+            request.memory_budget = Some(root.clone());
+            let result = crate::decode_raster(&request);
+            assert!(
+                matches!(result,Err(RasterDecodeError::Source(crate::DecodeError::Memory(rrrah_core::BufferError::Capacity{requested:r,used:u,..}))) if r==requested && u==used)
+            );
+            assert_eq!(root.used(), 0);
+            assert_eq!(root.peak(), used);
+        }
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new(&path);
+        request.image_index = 2;
+        request.memory_budget = Some(root.clone());
+        drop(crate::decode_raster(&request).unwrap());
+        let peak = root.peak();
+        assert_eq!(root.used(), 0);
+        for limit in [peak - 1, peak] {
+            let root = rrrah_core::MemoryBudget::new(limit);
+            request.memory_budget = Some(root.clone());
+            let result = crate::decode_raster(&request);
+            if limit < peak {
+                assert!(matches!(
+                    result,
+                    Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+                ));
+            } else {
+                assert!(result.is_ok());
+            }
+            drop(result);
+            assert_eq!(root.used(), 0);
+        }
+        eprintln!(
+            "JXL_ICC_ADMISSION first={first} working={high} header_calls={calls} public_peak={peak} final=0"
+        );
+    }
+    #[test]
+    fn truncated_embedded_icc_releases_preinitialization_credit() {
+        let bytes = include_bytes!("../../../tests/fixtures/raster/animation-embedded-icc.jxl");
+        let mut header_failures = 0;
+        for end in 1..bytes.len() {
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = DecodeRequest::new("truncated-icc.jxl");
+            request.memory_budget = Some(root.clone());
+            let result = decode(&bytes[..end], &request);
+            if result.is_err() && root.peak() > 0 && root.peak() < 65536 {
+                header_failures += 1;
+            }
+            drop(result);
+            assert_eq!(root.used(), 0, "prefix {end}");
+        }
+        assert!(
+            header_failures > 0,
+            "must exercise errors after ICC admission but before frame admission"
+        );
+        eprintln!(
+            "JXL_ICC_TRUNCATION prefixes={} admitted_header_failures={header_failures} final=0",
+            bytes.len() - 1
+        );
+    }
+    #[test]
+    fn embedded_icc_animation_preserves_independent_profile_and_native_samples() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/animation-embedded-icc.jxl");
+        let bytes = std::fs::read(&path).unwrap();
+        let image = jxl_oxide::JxlImage::builder().read(Cursor::new(&bytes)).unwrap();
+        assert!(image.image_header().metadata.colour_encoding.want_icc());
+        let profile = include_bytes!("../../../tests/fixtures/raster/linear-identity-rgb.icc");
+        assert_eq!(image.original_icc().unwrap(), profile);
+        // jxl-oxide may describe a recognized profile with synthesized ICC bytes.
+        let rendered_profile = image.rendered_icc();
+        drop(image);
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        for index in 0..3 {
+            let mut request = DecodeRequest::new(&path);
+            request.image_index = index;
+            request.memory_budget = Some(root.clone());
+            let frame = crate::decode_raster(&request).unwrap();
+            let RasterPixels::Rgba16(values) = frame.pixels() else {
+                panic!("native precision lost")
+            };
+            let reference = std::fs::read(format!("{}.{index}.rgba16le", path.display())).unwrap();
+            let expected: Vec<u16> = reference
+                .chunks_exact(2)
+                .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+                .collect();
+            assert_eq!(values.as_ref(), expected);
+            assert_eq!(
+                frame.color_space(),
+                &RasterColorSpace::Icc(rendered_profile.clone())
+            );
+            assert_eq!((frame.image_index(), frame.image_count()), (index, 3));
+            let prepared = crate::prepare_raster_for_display_with_budget(&frame, Some(&root)).unwrap();
+            assert_eq!(frame.animation_timing(), prepared.animation_timing());
+            drop((prepared, frame));
+            assert_eq!(root.used(), 0);
+        }
     }
     #[test]
     fn float_animation_preserves_independent_bits_and_signed_linear_display_range() {
@@ -522,6 +761,257 @@ mod tests {
         );
     }
     #[test]
+    fn buffered_header_growth_is_admitted_with_reallocation_overlap() {
+        fn initialize(
+            root: &rrrah_core::MemoryBudget,
+        ) -> Result<(jxl_oxide::JxlImage, rrrah_core::Reservation, Vec<u64>), RasterDecodeError> {
+            let bytes = include_bytes!("../../../tests/fixtures/raster/animation-large-icc.jxl");
+            let mut credit = root.try_reserve(0).map_err(crate::DecodeError::Memory)?;
+            let mut requests = Vec::new();
+            let mut uninit = jxl_oxide::JxlImage::builder()
+                .alloc_tracker(jxl_oxide::AllocTracker::with_limit(0))
+                .build_uninit();
+            let mut pending = Vec::new();
+            for chunk in bytes.chunks(4096) {
+                pending.extend_from_slice(chunk);
+                let consumed = uninit
+                    .feed_bytes_with_header_admission(&pending, |n| {
+                        requests.push(n);
+                        credit.ensure_bytes(n).map_err(crate::DecodeError::Memory)?;
+                        Ok(())
+                    })
+                    .map_err(codec_error)?;
+                pending.drain(..consumed);
+                match uninit.try_init_header_only().map_err(codec_error)? {
+                    jxl_oxide::InitializeResult::NeedMoreData(next) => uninit = next,
+                    jxl_oxide::InitializeResult::Initialized(image) => return Ok((image, credit, requests)),
+                }
+            }
+            Err(invalid("header fixture incomplete"))
+        }
+        // This root deliberately covers only the encoded header Vec; the ICC
+        // working callback is tested separately. No frame groups are loaded.
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let (image, credit, requests) = initialize(&root).unwrap();
+        assert_eq!(requests, [4043, 12182, 24417]);
+        assert_eq!(root.used(), 24417);
+        assert_eq!(root.peak(), 24417);
+        assert_eq!(image.num_loaded_frames(), 0);
+        assert_eq!(image.original_icc().unwrap().len(), 8712);
+        drop(image);
+        drop(credit);
+        assert_eq!(root.used(), 0);
+        for (limit, peak) in [(4042, 0), (24416, 12182)] {
+            let root = rrrah_core::MemoryBudget::new(limit);
+            assert!(matches!(
+                initialize(&root),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
+            assert_eq!(root.peak(), peak);
+            assert_eq!(root.used(), 0);
+        }
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/animation-large-icc.jxl");
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new(path);
+        request.image_index = 2;
+        request.memory_budget = Some(root.clone());
+        let frame = crate::decode_raster(&request).unwrap();
+        assert_eq!(root.used(), frame.capacity_bytes());
+        drop(frame);
+        assert_eq!(root.used(), 0);
+        let peak = root.peak();
+        for limit in [peak - 1, peak] {
+            let root = rrrah_core::MemoryBudget::new(limit);
+            request.memory_budget = Some(root.clone());
+            let result = crate::decode_raster(&request);
+            if limit < peak {
+                assert!(matches!(
+                    result,
+                    Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+                ));
+            } else {
+                assert!(result.is_ok());
+            }
+            drop(result);
+            assert_eq!(root.used(), 0);
+        }
+        eprintln!("JXL_HEADER_BUFFER growth={requests:?} overlap_peak=24417 public_peak={peak} final=0");
+    }
+    #[test]
+    fn icc_reconstruction_cancellation_preserves_typed_error_and_same_root_retry() {
+        use std::sync::atomic::{AtomicU64, Ordering};
+        let bytes = include_bytes!("../../../tests/fixtures/raster/animation-embedded-icc.jxl");
+        let owner = Arc::new(AtomicU64::new(1));
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("icc.jxl");
+        request.cancellation = Some(crate::GenerationToken::new(owner.clone(), 1));
+        let mut credits = Vec::new();
+        let mut admitted = 0;
+        let mut calls = 0;
+        let mut uninit = jxl_oxide::JxlImage::builder()
+            .alloc_tracker(jxl_oxide::AllocTracker::with_limit(0))
+            .build_uninit();
+        uninit.feed_bytes(bytes).unwrap();
+        let result = uninit.try_init_header_only_with_icc_admission(|n| {
+            calls += 1;
+            // Small ICC: two admission calls, reconstruction output check,
+            // then a tag-command checkpoint after the ICC header is built.
+            if calls == 4 {
+                owner.store(2, Ordering::Release);
+            }
+            request.check_cancelled()?;
+            if n > admitted {
+                credits.push(root.try_reserve(n - admitted)?);
+                admitted = n;
+            }
+            Ok(())
+        });
+        let error = match result {
+            Err(e) => e,
+            Ok(_) => panic!("reconstruction ignored cancellation"),
+        };
+        assert!(matches!(
+            codec_error(error),
+            RasterDecodeError::Source(crate::DecodeError::Cancelled)
+        ));
+        assert_eq!(calls, 4);
+        assert_eq!(admitted, 1445);
+        drop(credits);
+        assert_eq!(root.used(), 0);
+        request.cancellation = Some(crate::GenerationToken::new(owner, 2));
+        request.memory_budget = Some(root.clone());
+        for index in 0..3 {
+            request.image_index = index;
+            let frame = decode(bytes, &request).unwrap();
+            assert_eq!((frame.image_index(), frame.image_count()), (index, 3));
+            drop(frame);
+            assert_eq!(root.used(), 0);
+        }
+        eprintln!("JXL_ICC_RECONSTRUCT_CANCEL callbacks={calls} admitted={admitted} retry_frames=3 final=0");
+    }
+    #[test]
+    fn large_icc_entropy_cancellation_releases_credit_and_preserves_retry() {
+        use std::sync::atomic::{AtomicU64, Ordering};
+        let bytes = include_bytes!("../../../tests/fixtures/raster/animation-large-icc.jxl");
+        let owner = Arc::new(AtomicU64::new(7));
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("large-icc.jxl");
+        request.cancellation = Some(crate::GenerationToken::new(owner.clone(), 7));
+        let mut credit = Vec::new();
+        let mut admitted = 0;
+        let mut calls = 0;
+        let mut uninit = jxl_oxide::JxlImage::builder()
+            .alloc_tracker(jxl_oxide::AllocTracker::with_limit(0))
+            .build_uninit();
+        uninit.feed_bytes(bytes).unwrap();
+        let result = uninit.try_init_header_only_with_icc_admission(|n| {
+            calls += 1;
+            // First two calls admit buffers. The third must occur within the
+            // entropy loop, before the complete encoded profile is read.
+            if calls == 3 {
+                owner.store(8, Ordering::Release);
+            }
+            request.check_cancelled()?;
+            if n > admitted {
+                credit.push(root.try_reserve(n - admitted)?);
+                admitted = n;
+            }
+            Ok(())
+        });
+        let error = match result {
+            Err(e) => e,
+            Ok(_) => panic!("ICC entropy loop did not observe cancellation"),
+        };
+        assert!(matches!(
+            codec_error(error),
+            RasterDecodeError::Source(crate::DecodeError::Cancelled)
+        ));
+        assert_eq!(calls, 3);
+        assert!(admitted > 8192);
+        assert_eq!(root.peak(), admitted);
+        drop(credit);
+        assert_eq!(root.used(), 0);
+        request.cancellation = Some(crate::GenerationToken::new(owner, 8));
+        request.memory_budget = Some(root.clone());
+        for index in 0..3 {
+            request.image_index = index;
+            let frame = decode(bytes, &request).unwrap();
+            let RasterPixels::Rgba16(values) = frame.pixels() else {
+                panic!()
+            };
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(format!(
+                "../../tests/fixtures/raster/animation-large-icc.jxl.{index}.rgba16le"
+            ));
+            let reference = std::fs::read(path).unwrap();
+            let expected: Vec<u16> = reference
+                .chunks_exact(2)
+                .map(|b| u16::from_le_bytes(b.try_into().unwrap()))
+                .collect();
+            assert_eq!(values.as_ref(), expected);
+            assert_eq!((frame.image_index(), frame.image_count()), (index, 3));
+            assert_eq!(root.used(), frame.capacity_bytes());
+            drop(frame);
+            assert_eq!(root.used(), 0);
+        }
+        eprintln!("JXL_ICC_CANCEL callbacks={calls} admitted={admitted} retry_frames=3 final=0");
+    }
+    #[test]
+    fn rendered_profile_admission_covers_synthesized_and_unrecognized_icc_paths() {
+        let bytes = include_bytes!("../../../tests/fixtures/raster/animation-embedded-icc.jxl");
+        let mut image = jxl_oxide::JxlImage::builder().read(Cursor::new(bytes)).unwrap();
+        let mut table_profile =
+            include_bytes!("../../../tests/fixtures/raster/linear-identity-rgb.icc").to_vec();
+        let offset = table_profile.len();
+        table_profile.extend_from_slice(b"curv\0\0\0\0\0\0\0\x03\0\0\x20\0\xff\xff\0\0");
+        let length = table_profile.len() as u32;
+        table_profile[..4].copy_from_slice(&length.to_be_bytes());
+        let tags = u32::from_be_bytes(table_profile[128..132].try_into().unwrap()) as usize;
+        for entry in 0..tags {
+            let at = 132 + entry * 12;
+            if [b"rTRC", b"gTRC", b"bTRC"].contains(&table_profile[at..at + 4].try_into().unwrap()) {
+                table_profile[at + 4..at + 8].copy_from_slice(&(offset as u32).to_be_bytes());
+                table_profile[at + 8..at + 12].copy_from_slice(&18u32.to_be_bytes());
+            }
+        }
+        for opaque in [false, true] {
+            if opaque {
+                image.request_icc(&table_profile).unwrap();
+            }
+            let expected = image.rendered_icc();
+            if opaque {
+                assert_eq!(expected, table_profile, "must exercise retained raw ICC branch");
+            }
+            for limit in [expected.len() as u64 - 1, expected.len() as u64] {
+                let root = rrrah_core::MemoryBudget::new(limit);
+                let mut credit = None;
+                let mut calls = 0;
+                let result = image.rendered_icc_with_admission(|n| {
+                    calls += 1;
+                    assert_eq!(n, expected.len() as u64);
+                    credit = Some(root.try_reserve(n).map_err(crate::DecodeError::Memory)?);
+                    Ok(())
+                });
+                assert_eq!(calls, 1);
+                if limit < expected.len() as u64 {
+                    assert!(matches!(
+                        codec_error(result.unwrap_err()),
+                        RasterDecodeError::Source(crate::DecodeError::Memory(_))
+                    ));
+                    assert_eq!(root.peak(), 0);
+                } else {
+                    let output = result.unwrap();
+                    assert_eq!(output, expected);
+                    assert_eq!(output.capacity(), output.len());
+                    assert_eq!(root.used(), output.capacity() as u64);
+                    drop(output);
+                }
+                drop(credit);
+                assert_eq!(root.used(), 0);
+            }
+        }
+    }
+    #[test]
     fn output_admission_precedes_pixel_decode_and_tracks_shared_owners() {
         for bytes in [
             include_bytes!("../../../tests/fixtures/raster/precision16.jxl").as_slice(),
@@ -545,13 +1035,20 @@ mod tests {
                 Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
             ));
             assert_eq!(budget.used(), 0);
-            let budget = rrrah_core::MemoryBudget::new(weight + working);
+            let profile = reference.color_profile_capacity_bytes();
+            let budget = rrrah_core::MemoryBudget::new(weight + working + profile - 1);
+            request.memory_budget = Some(budget.clone());
+            assert!(
+                matches!(decode(bytes, &request), Err(RasterDecodeError::Source(crate::DecodeError::Memory(rrrah_core::BufferError::Capacity { requested, used, .. }))) if requested == profile && used == weight + working)
+            );
+            assert_eq!(budget.used(), 0);
+            let budget = rrrah_core::MemoryBudget::new(weight + working + profile);
             request.memory_budget = Some(budget.clone());
             let frame = decode(bytes, &request).unwrap();
-            assert_eq!(budget.used(), weight);
+            assert_eq!(budget.used(), weight + profile);
             let retained = frame.clone();
             drop(frame);
-            assert_eq!(budget.used(), weight);
+            assert_eq!(budget.used(), weight + profile);
             drop(retained);
             assert_eq!(budget.used(), 0);
         }

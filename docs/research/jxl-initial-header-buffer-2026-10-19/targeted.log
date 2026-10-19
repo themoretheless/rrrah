@@ -1,0 +1,51 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 00s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_decode-c2c124b3c0a5ef9f)
+
+running 18 tests
+test jxl::tests::rational_jxl_ticks_reduce_without_overflow_or_silent_rounding ... ok
+test jxl::tests::rendered_profile_admission_covers_synthesized_and_unrecognized_icc_paths ... ok
+test jxl::tests::sixteen_bit_samples_remain_distinct ... ok
+JXL_ICC_RECONSTRUCT_CANCEL callbacks=4 admitted=1445 retry_frames=3 final=0
+test jxl::tests::icc_reconstruction_cancellation_preserves_typed_error_and_same_root_retry ... ok
+JXL_ICC_ADMISSION first=405 working=1445 header_calls=70 public_peak=70550 final=0
+test jxl::tests::embedded_icc_working_storage_is_admitted_before_initialization_and_retries ... ok
+test jxl::tests::output_admission_precedes_pixel_decode_and_tracks_shared_owners ... ok
+test jxl::tests::icc_profile_reaches_display_and_alpha_is_retained ... ok
+JXL_HEADER_BUFFER growth=[4043, 12182, 24417] overlap_peak=24417 public_peak=135023 final=0
+JXL_FLOAT_LINEAR frame=0 lcms_max_error=0.0000019073486328125 bound=0.00002
+test jxl::tests::buffered_header_growth_is_admitted_with_reallocation_overlap ... ok
+JXL_FLOAT_LINEAR frame=1 lcms_max_error=0.0000019073486328125 bound=0.00002
+test jxl::tests::finite_rgba16_animation_matches_libjxl_samples_and_fractional_timing ... ok
+test jxl::tests::truncated_stream_errors_release_admitted_output_and_working_credit ... ok
+JXL_FLOAT_LINEAR frame=2 lcms_max_error=0.0000019073486328125 bound=0.00002
+test jxl::tests::float_animation_preserves_independent_bits_and_signed_linear_display_range ... ok
+test jxl::tests::embedded_icc_animation_preserves_independent_profile_and_native_samples ... ok
+test jxl::tests::animation_invalid_index_and_truncation_leave_same_root_retryable ... ok
+test jxl::tests::selected_animation_frames_match_independent_oracles_and_release_owners ... ok
+JXL_ICC_CANCEL callbacks=3 admitted=26022 retry_frames=3 final=0
+test jxl::tests::large_icc_entropy_cancellation_releases_credit_and_preserves_retry ... ok
+test jxl::tests::header_initialization_does_not_allocate_codec_frame_groups_before_admission ... ok
+JXL_HISTORY frames=600 selections=3 root_peak=251528 limit=262144 final=0
+test jxl::tests::long_animation_history_is_admitted_and_native_selections_survive_tight_parent_budget ... ok
+JXL_ICC_TRUNCATION prefixes=678 admitted_header_failures=205 final=0
+test jxl::tests::truncated_embedded_icc_releases_preinitialization_credit ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 217 filtered out; finished in 0.01s
+

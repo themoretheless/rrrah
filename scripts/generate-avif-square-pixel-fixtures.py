@@ -90,8 +90,11 @@ if __name__ == '__main__':
         else:
             fixture.write_bytes(generated)
         cases.append({'fixture': fixture.name, 'spacing': [h,v], 'essential': essential,
+                      'conforming_pasp': h > 0 and h == v,
                       'sha256': hashlib.sha256(generated).hexdigest(), 'media_unchanged': True})
     (ROOT / 'avif-square-pixel-fixtures.json').write_text(json.dumps({
+        'specification': 'https://aomediacodec.github.io/av1-avif/v1.2.0.html',
+        'pasp_requirement': 'If present, pixel aspect ratio shall be 1:1; spacing values must be positive',
         'source': source.name, 'source_sha256': hashlib.sha256(original).hexdigest(), 'cases': cases,
         'scope': 'pinned iloc-v0 absolute-extent layout; metadata only, no AV1 re-encode'}, indent=2)+'\n')
     print('Four AVIF pasp fixtures reproduced exactly; all AV1 media unchanged')

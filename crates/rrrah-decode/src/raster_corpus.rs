@@ -226,12 +226,64 @@ fn exr_zero_alpha_emission_is_not_silently_discarded() {
     let bytes = include_bytes!("../../../tests/fixtures/raster/zero-alpha-emission.exr");
     let result =
         crate::raster::decode_raster_bytes(bytes.to_vec(), &crate::DecodeRequest::new("emission.exr"));
-    assert!(matches!(
-        result,
-        Err(crate::RasterDecodeError::InvalidExrAlpha(
-            "zero-alpha emission requires associated-alpha rendering"
-        ))
-    ));
+    let frame = result.unwrap();
+    assert_eq!(
+        frame.alpha_association(),
+        rrrah_core::RasterAlphaAssociation::Associated
+    );
+    let RasterPixels::Rgba32Float(values) = frame.pixels() else {
+        panic!()
+    };
+    assert_eq!(values.as_ref(), &[2., 0.5, 0.25, 0.]);
+}
+
+#[test]
+fn qualified_exr_emission_reference_and_associated_preparation_are_exact() {
+    let bytes = include_bytes!("../../../tests/fixtures/raster/associated-emission-rec709.exr");
+    assert_eq!(
+        crate::exr_color::metadata(bytes).unwrap().color,
+        Some(rrrah_core::RasterColorSpace::LinearSrgb)
+    );
+    let decoded = image::load_from_memory_with_format(bytes, image::ImageFormat::OpenExr)
+        .unwrap()
+        .into_rgba32f()
+        .into_raw();
+    let native =
+        include_bytes!("../../../tests/fixtures/raster/associated-emission-rec709.exr.native-rgba32le");
+    let expected: Vec<u32> = native
+        .chunks_exact(4)
+        .map(|b| u32::from_le_bytes(b.try_into().unwrap()))
+        .collect();
+    assert_eq!(decoded.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), expected);
+    let over = include_bytes!("../../../tests/fixtures/raster/associated-emission-rec709.exr.over-rgb32le");
+    let background = [0.25, 0.5, 0.75];
+    for (pixel, rgba) in decoded.chunks_exact(4).enumerate() {
+        for channel in 0..3 {
+            let actual = rgba[channel] + (1. - rgba[3]) * background[channel];
+            let at = (pixel * 3 + channel) * 4;
+            assert_eq!(
+                actual.to_bits(),
+                u32::from_le_bytes(over[at..at + 4].try_into().unwrap())
+            );
+        }
+    }
+    let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let mut request = crate::DecodeRequest::new("qualified-emission.exr");
+    request.memory_budget = Some(root.clone());
+    let frame = crate::raster::decode_raster_bytes(bytes.to_vec(), &request).unwrap();
+    assert_eq!(
+        frame.alpha_association(),
+        rrrah_core::RasterAlphaAssociation::Associated
+    );
+    let prepared = crate::prepare_raster_for_display_with_budget(&frame, Some(&root)).unwrap();
+    assert_eq!(prepared.alpha_association(), frame.alpha_association());
+    let RasterPixels::Rgba32Float(values) = prepared.pixels() else {
+        panic!()
+    };
+    assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), expected);
+    assert_eq!(root.used(), frame.capacity_bytes());
+    drop((frame, prepared));
+    assert_eq!(root.used(), 0);
 }
 
 #[test]

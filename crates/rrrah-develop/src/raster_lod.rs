@@ -2,9 +2,9 @@
 use crate::{DecodedRaster, MemoryBudget, RasterColorSpace, RasterError, RasterPixels};
 
 impl DecodedRaster {
-    /// Area-filter straight-alpha linear RGBA32F into a smaller managed raster.
-    /// Filter RGB in premultiplied space, then return straight alpha; invisible RGB
-    /// cannot bleed into visible pixels. Signed/above-one HDR values are preserved.
+    /// Area-filter linear RGBA32F, retaining straight or associated interpretation.
+    /// Straight RGB is premultiplied for filtering; associated RGB/emission is
+    /// integrated directly. Signed/above-one HDR values are preserved.
     /// Fractional footprints cover the entire source, including odd edge extents.
     /// Pixel aspect is adjusted for rounded target dimensions to retain geometry.
     /// The source stays owned by its caller; only the output is charged here.
@@ -68,13 +68,22 @@ impl DecodedRaster {
                         let wx = (x1.min(f64::from(x + 1)) - x0.max(f64::from(x))).max(0.);
                         let alpha = f64::from(rgba[3]) * wx * wy;
                         for c in 0..3 {
-                            sum[c] += f64::from(rgba[c]) * alpha;
+                            sum[c] += f64::from(rgba[c])
+                                * if self.alpha_association() == crate::RasterAlphaAssociation::Associated {
+                                    wx * wy
+                                } else {
+                                    alpha
+                                };
                         }
                         sum[3] += alpha;
                     }
                 }
                 let begin = (oy as usize * target[0] as usize + ox as usize) * 4;
-                if sum[3] > 0. {
+                if self.alpha_association() == crate::RasterAlphaAssociation::Associated {
+                    for c in 0..3 {
+                        output[begin + c] = (sum[c] / ((x1 - x0) * (y1 - y0))) as f32;
+                    }
+                } else if sum[3] > 0. {
                     for c in 0..3 {
                         output[begin + c] = (sum[c] / sum[3]) as f32;
                     }
@@ -102,7 +111,8 @@ impl DecodedRaster {
         .with_sample_scale(self.sample_scale())?
         .with_hotspot(hotspot)?
         .with_animation_timing(self.animation_timing())
-        .with_image_selection(self.image_index(), self.image_count())
+        .with_image_selection(self.image_index(), self.image_count())?
+        .with_alpha_association(self.alpha_association())
     }
 }
 

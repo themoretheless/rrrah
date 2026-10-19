@@ -28,8 +28,8 @@ pub use rrrah_develop::{
     DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DecodedRaster, KNOWN_MOSAIC_DECODE_FLAGS,
     LevelGrid, MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, ManifestError,
     MosaicRecipeManifest, Orientation, Photometric, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,
-    RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels, RawMetadata, Rect,
-    SENSOR_MOSAIC_ARTIFACT_KIND_CODE, ThumbnailError, WhiteLevel, bayer, edit, histogram, rgbe,
+    RasterAlphaAssociation, RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels, RawMetadata,
+    Rect, SENSOR_MOSAIC_ARTIFACT_KIND_CODE, ThumbnailError, WhiteLevel, bayer, edit, histogram, rgbe,
 };
 
 /// Frozen legacy-v2 cache ABI. New semantic recipes use

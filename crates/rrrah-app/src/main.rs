@@ -15543,3 +15543,6 @@ mod eps_preload_tests {
         }
     }
 }
+
+#[cfg(test)]
+mod external_collection_qualification;

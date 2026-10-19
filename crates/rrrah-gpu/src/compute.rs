@@ -18,9 +18,19 @@ pub struct ResidentExposure {
     buffer: wgpu::Buffer,
     pixels: u32,
     pub(crate) raster_alpha_valid: bool,
+    alpha_association: rrrah_core::RasterAlphaAssociation,
     _reservation: std::sync::Arc<rrrah_core::Reservation>,
 }
 impl ResidentExposure {
+    /// Exposure preserves RGB/alpha association; callers pass the input tag.
+    pub fn with_alpha_association(mut self, mode: rrrah_core::RasterAlphaAssociation) -> Self {
+        self.alpha_association = mode;
+        self
+    }
+    pub fn alpha_association(&self) -> rrrah_core::RasterAlphaAssociation {
+        self.alpha_association
+    }
+
     /// Retain this owner or resource_lease through completion of downstream work.
     pub fn buffer(&self) -> &wgpu::Buffer {
         &self.buffer
@@ -38,6 +48,32 @@ pub struct LinearExposureCompute {
     pipeline: wgpu::ComputePipeline,
 }
 impl LinearExposureCompute {
+    /// Expose prepared raster samples without losing RGB/alpha association.
+    /// CPU ownership stays with the caller; output remains queue-ordered GPU data.
+    pub fn execute_raster_resident<F: FnMut() -> bool>(
+        &self,
+        queue: &wgpu::Queue,
+        raster: &rrrah_core::DecodedRaster,
+        stops: f32,
+        budget: &rrrah_core::MemoryBudget,
+        cancelled: F,
+    ) -> Result<ResidentExposure, ExposureError> {
+        if raster.color_space() != &rrrah_core::RasterColorSpace::LinearSrgb {
+            return Err(ExposureError::Invalid("raster requires linear sRGB preparation"));
+        }
+        let rrrah_core::RasterPixels::Rgba32Float(values) = raster.pixels() else {
+            return Err(ExposureError::Invalid("raster requires float preparation"));
+        };
+        self.execute_resident(
+            queue,
+            bytemuck::cast_slice(values.as_ref()),
+            stops,
+            budget,
+            cancelled,
+        )
+        .map(|output| output.with_alpha_association(raster.alpha_association()))
+    }
+
     /// Submit exposure and retain its output on GPU. Input is CPU-owned;
     /// GPU admission covers source, output and per-dispatch uniforms. Subsequent
     /// commands on the same queue can consume the result without a CPU wait.
@@ -114,6 +150,7 @@ impl LinearExposureCompute {
             buffer: output,
             pixels: count,
             raster_alpha_valid,
+            alpha_association: rrrah_core::RasterAlphaAssociation::Straight,
             _reservation: resident,
         })
     }

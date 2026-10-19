@@ -55,7 +55,8 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
             && lease.width() == raster.width()
             && lease.height() == raster.height()
             && lease.pixel_aspect() == raster.pixel_aspect()
-            && lease.color_space() == raster.color_space())
+            && lease.color_space() == raster.color_space()
+            && lease.alpha_association() == raster.alpha_association())
         .then_some(lease)
     }
     /// Updates limits atomically while retaining visible-frame protection.

@@ -1,5 +1,7 @@
 //! Versioned streaming raster payload; checksum/publication belong to the swap store.
-//! Animated records use RRRAST5: byte19 identifies the legacy color/aspect base
+//! Associated float linear RGB uses RRRAST6: byte18 bit1 marks association,
+//! byte19 low7 bits store base1..4, high bit stores animation presence.
+//! Legacy straight records remain byte-compatible. Animated records use RRRAST5: byte19 identifies the legacy color/aspect base
 //! version1..4, and12 little-endian bytes after color metadata store rational
 //! delay numerator/denominator and total plays. Ordinary records are unchanged.
 use rrrah_core::{DecodedRaster, MemoryBudget, PixelBuffer, RasterColorSpace, RasterPixels};
@@ -96,6 +98,13 @@ fn descriptor_with_limit(
     if frame.animation_timing().is_some() {
         h[19] = h[6] - b'0';
         h[..8].copy_from_slice(b"RRRAST5\0");
+    }
+    if frame.alpha_association() == rrrah_core::RasterAlphaAssociation::Associated {
+        let animated = frame.animation_timing().is_some();
+        let base = if animated { h[19] } else { h[6] - b'0' };
+        h[..8].copy_from_slice(b"RRRAST6\0");
+        h[19] = base | if animated { 128 } else { 0 };
+        h[18] |= 2;
     }
     Ok((
         h,
@@ -218,9 +227,16 @@ fn read_raster_payload_impl(
 ) -> Result<DecodedRaster, RasterPayloadError> {
     let mut h = [0u8; HEADER];
     reader.read_exact(&mut h)?;
-    let animated = &h[..8] == b"RRRAST5\0";
-    if animated {
-        let version = h[19];
+    let associated = &h[..8] == b"RRRAST6\0";
+    let animated = &h[..8] == b"RRRAST5\0" || (associated && h[19] & 128 != 0);
+    if associated {
+        if h[18] & !1 != 2 {
+            return Err(RasterPayloadError::Invalid("alpha association flags"));
+        }
+        h[18] &= 1;
+    }
+    if animated || associated {
+        let version = if associated { h[19] & 127 } else { h[19] };
         if !(1..=4).contains(&version) {
             return Err(RasterPayloadError::Invalid("animation base version"));
         }
@@ -279,6 +295,22 @@ fn read_raster_payload_impl(
         || index >= images
     {
         return Err(RasterPayloadError::Invalid("descriptor"));
+    }
+    if associated
+        && (h[16] != 3
+            || !match h[17] {
+                2 | 3 | 8 => true,
+                7 => {
+                    u16::from_le_bytes(h[54..56].try_into().unwrap()) == 8
+                        && h[56..58] == [0, 0]
+                        && h[58] == 1
+                }
+                _ => false,
+            })
+    {
+        return Err(RasterPayloadError::Invalid(
+            "association requires float linear RGB",
+        ));
     }
     let hotspot = if h[18] == 1 {
         let x = u32_at(24);
@@ -358,6 +390,11 @@ fn read_raster_payload_impl(
         return Err(RasterPayloadError::Invalid("trailing bytes"));
     }
     Ok(DecodedRaster::new(width, height, pixels, color)?
+        .with_alpha_association(if associated {
+            rrrah_core::RasterAlphaAssociation::Associated
+        } else {
+            rrrah_core::RasterAlphaAssociation::Straight
+        })?
         .with_color_profile_reservation(profile_reservation)?
         .with_sample_scale(scale)?
         .with_pixel_aspect(aspect)?

@@ -10641,3 +10641,137 @@ Independent3/30/300/3000frame5x3RGBA16sources expose false codec OOM on3000frame
 ## Deferred JXL initial frame payload — 2026-10-19
 
 Pinned local jxl-oxide0.12.6 adds optional header-only initialization and one-time buffered codestream resume; eager API/version/transitives preserved. Reproduced valid header failure with tracker0 beforepatch. Public rrrah now keeps tracker0 through header parsing and admits finite output/working credit before any tracked frame loading.6controls×3resume paths verify0initial frames then complete rendering; decoder223/app288pass (511/86ignored), actualMetal12presentationgate passes; all12scale source selections/peak/refusal/retry and prepared hashes remain exact. Parser/ICC/header/TOC metadata remain untracked: no whole-RSS/all-allocation claim. [API delta, provenance and runtime evidence](research/jxl-header-admission-2026-10-19/REPORT.md).
+
+
+## Bounded reconstructed JPEG XL ICC — 2026-10-19
+
+Reproduced two accepted malformed ICC command streams in pinned jxl-color 0.11.0.
+The same-version local patch bounds every reconstructed output append, checks
+shuffle sizes before allocation, and verifies exact output length on tag-table
+EOF. A new independently encoded/decoded RGBA16 animation verifies embedded ICC
+bytes and native samples through the public decoder; Metal RAM/swap transport
+now covers 15 JXL frames. See
+[report](research/jxl-icc-output-bounds-2026-10-19/REPORT.md).
+
+This closes expansion past the declared reconstructed ICC size, not root-budget
+admission of ICC/parser/header allocations. It does not establish all-format,
+physical HDR or NVIDIA qualification.
+
+
+## JPEG XL ICC working storage admission — 2026-10-19
+
+Encoded/reconstructed/shuffle ICC payload storage is now admitted against the
+parent budget before allocation, using the optional same-version codec APIs.
+Streaming initialization reserves only high-water increases and retains credit
+through codec teardown. The independent 520-byte profile requests 405 then 1445
+bytes; 50 small-feed callback retries hold 1445 bytes total. Public one-byte-short
+errors remain typed memory refusals and exact-peak retry succeeds. See
+[report](research/jxl-icc-working-admission-2026-10-19/REPORT.md).
+
+Entropy state, header/TOC and parser metadata, profile copies, retained rendered
+ICC, allocator/RSS accounting and large-profile qualification remain open.
+
+
+## Pre-admitted retained JPEG XL ICC — 2026-10-19
+
+The general raster wrapper/core/swap already charged and shared retained ICC;
+JXL now additionally admits final profile output before allocation while codec
+working credit is live. Synthesized and raw-profile branches both support typed
+one-byte-short refusal/exact retry. The reservation is attached to existing
+shared color metadata, avoiding duplicate outer admission. See
+[report](research/jxl-retained-icc-admission-2026-10-19/REPORT.md).
+
+Public managed peak for the embedded-ICC control increases from 69539 to 70355
+bytes because the 816-byte final profile is now included in the overlapping
+working peak. Temporary synthesis metadata/tables, ICC entropy/parser storage,
+header/TOC and allocator/RSS accounting remain open.
+
+
+## JPEG XL ICC entropy-loop cancellation — 2026-10-19
+
+The admission callback now rechecks stale generations at 4096-symbol boundaries
+while reading encoded ICC. A libjxl-verified synthetic 8712-byte profile reproduces
+the previous missing checkpoint, then verifies cancellation with 26022-byte
+working credit, teardown to zero, and exact three-frame retry with a new generation.
+Actual Metal RAM/native-and-float-swap transport now covers 18 JXL frames.
+See [report](research/jxl-icc-entropy-cancellation-2026-10-19/REPORT.md).
+
+This controlled boundary test does not prove live GUI cancellation latency.
+Entropy table building, ICC reconstruction/shuffle, profile parsing/synthesis and
+frame rendering still lack equivalent internal checkpoints; their metadata
+accounting and broader producer/physical hardware qualification remain open.
+
+
+## JPEG XL ICC reconstruction cancellation — 2026-10-19
+
+The same absolute ICC high-water callback now checks cancellation before
+reconstruction allocation, between commands, inside shuffle/predictor loops,
+and per 64 KiB copy chunk. Six long command controls cancel mid-work and retry;
+a JXL generation-change test preserves typed cancellation, releases 1445-byte
+credit and retries all three selected frames. Repeated checks do not add quota.
+See [report](research/jxl-icc-reconstruction-cancellation-2026-10-19/REPORT.md).
+
+571 ordinary tests and actual Metal RAM/swap transport of 18 frames passed.
+Entropy table construction, profile parsing/synthesis and frame rendering still
+need internal cancellation checkpoints; their metadata accounting, live GUI,
+broad producer and physical hardware qualifications remain open.
+
+
+## Initial JPEG XL codestream buffer admission — 2026-10-19
+
+The initial accumulated codestream Vec now admits planned geometric capacity
+and old/new realloc overlap before growth. One high-water reservation persists
+through partial metadata initialization and is released after deferred initial
+frame loading drops that Vec. Container parts are counted individually, even
+when emitted by one input feed. Header-only refusal/retry, typed public memory
+errors, exact-peak retry and steady pixel/profile ownership are verified. See
+[report](research/jxl-initial-header-buffer-2026-10-19/REPORT.md).
+
+The large-ICC control's header high water is 24417 bytes and public peak 135023;
+600-frame selected animation remains within the existing 256 KiB root. Container/
+auxiliary, inner parser, TOC/entropy and temporary profile metadata remain outside
+this targeted accounting; broader producer and physical hardware proof remain open.
+
+
+## Mixed local collection cache transport — 2026-10-19
+
+Added reproducible, metadata-only selection and an opt-in app qualification over
+1024 encoded-content-unique files (video/source/test assets, not 1024 independent
+photographs). 962 accepted files passed navigation, nearest prefetch protection,
+959 count refusals, 61 TTL/swap retry cycles, 1878 swap reads and synthetic managed
+root pressure with unchanged sample/frame hashes and warning flags. Final root
+and queue usage zero. 62 refusals are retained with diagnostics, not counted as
+working-format proof. See [report](research/external-mixed-collection-2026-10-19/REPORT.md).
+
+The two AVIF pasp controls are conformance refusals: AVIF 1.2 section 9.1.2
+requires a present ratio to be 1:1. The earlier 2:1 feature-gap classification
+was incorrect and is withdrawn. Other refusals concern missing/contradictory
+color metadata or unsupported valid EXR associated-alpha emission. This is CPU/cache
+transport evidence on bounded local files, not independent color correctness,
+full-resolution physical-pressure endurance, live GUI, Metal/HDR or NVIDIA proof.
+
+
+## Normative refusal taxonomy and EXR emission witness — 2026-10-19
+
+Corrected the earlier false AVIF 2:1 feature-gap conclusion: AVIF 1.2 section
+9.1.2 requires a present pasp to signal 1:1, so its refusal is conforming behavior.
+The metadata fixture generator/manifest now cite this rule and expected outcomes.
+The same 1024-source rerun classifies 62 refusals: 46 source-color interpretation,
+13 EXR color constraints, 2 nonconforming AVIF pasp and 1 unsupported valid EXR
+associated-alpha emission. 962 still pass CPU/cache transport, final root zero.
+
+Added an independent OpenEXR 3.5.2 FLOAT Rec709/D65 two-pixel associated-emission
+oracle. Rust primitive samples and exact signed/HDR composition match; public
+display still explicitly refuses emission. Associated raster/color/swap/GPU
+semantics remain to be implemented; a refusal regression is not feature proof.
+See [report](research/normative-refusals-and-exr-emission-2026-10-19/REPORT.md).
+
+
+## Associated EXR emission follow-up — 2026-10-19
+
+The earlier unsupported-emission snapshot above is superseded for qualified float
+linear RGB EXR with alpha in 0..1. Association now survives preparation, RAM/swap,
+LOD and Metal raster/compute. Independent signed HDR compositing passes on M4 Max.
+The collection remains 962/1024 accepted: the former emission case now requires
+source color interpretation. This is not full EXR or physical HDR qualification.
+See [report](research/exr-associated-emission-2026-10-19/REPORT.md).

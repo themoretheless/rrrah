@@ -238,7 +238,9 @@ pub(crate) fn properties_with_budget(
                 }
                 let horizontal = u32::from_be_bytes(data[..4].try_into().unwrap());
                 let vertical = u32::from_be_bytes(data[4..].try_into().unwrap());
-                // AVIF requires square pixels; compare integers without rounding.
+                // AVIF 1.2 section 9.1.2 requires pasp 1:1 (HEIF box table).
+                // https://aomediacodec.github.io/av1-avif/v1.2.0.html
+                // Compare integers without rounding.
                 if horizontal == 0 || horizontal != vertical {
                     return Err(invalid("AVIF pixel aspect ratio must be positive and square"));
                 }
