@@ -1,0 +1,17 @@
+{
+  "status": "original_JSON_layout_sensitivity_characterized",
+  "cases": 3,
+  "source_sha256": "94c7b9b7d2fbffa76a8781bcc1424074708a20bc4ce813da9a95b141a1846a4c",
+  "findings": [
+    "Original reader accepts one-property-per-line object; equivalent one-line object yields no object.",
+    "Two properties on one line retain only first; independent standard parser confirms equivalent semantics across all3fixtures.",
+    "FullCsvLoader read: parent-before-child snapshot reconstruction uses saved metadata; hash flags removed and process-local MTPtokens not serialized.",
+    "Localized column labels used by writer/reader; cross-language report compatibility requires separate verification."
+  ],
+  "limits": [
+    "Original JsonUnescape/JsonReadObject unchanged; ASCII widening shim substitutes Windows UTF8 conversion.",
+    "No complete CItem tree/load dispatcher, physical file or Windows runtime validation.",
+    "Own exporter pretty layout accepted; not claim every self-exported report fails.",
+    "WholeCsvLoader.cpp read across increments; no production adoption; pHash native investigation deferred."
+  ]
+}

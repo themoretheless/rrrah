@@ -1,0 +1,28 @@
+{
+  "status": "partial_source_complete_report_module_read",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/CsvLoader.cpp": "94c7b9b7d2fbffa76a8781bcc1424074708a20bc4ce813da9a95b141a1846a4c"
+  },
+  "whole_files_read": 34,
+  "controls": "docs/research/dedup-500/windirstat3-report-layout-reproducer-v14-20261019/result.json",
+  "controls_sha256": "6cebccd1513e3efbcd988434723fcd6d968a4b675946e5f877bc276ca1c75b49",
+  "coverage": "docs/research/dedup-500/windirstat3-report-layout-reproducer-v14-20261019/coverage.json",
+  "coverage_sha256": "e121510e24a57f7e46039be8b7a7f415ad955b3631f6383f38ab421f76d6c9b0",
+  "reproducer": "scripts/qualify-windirstat3-json-layout-20261019.py",
+  "reproducer_sha256": "f267788b510ab23402a71d46e8695d24770ed5b152e56aa95ff89fa0f6ca0b30",
+  "findings": [
+    "Original reader accepts one-property-per-line object; equivalent one-line object yields no object.",
+    "Two properties on one line retain only first; independent standard parser confirms equivalent semantics across all3fixtures.",
+    "FullCsvLoader read: parent-before-child snapshot reconstruction uses saved metadata; hash flags removed and process-local MTPtokens not serialized.",
+    "Localized column labels used by writer/reader; cross-language report compatibility requires separate verification."
+  ],
+  "limits": [
+    "Original JsonUnescape/JsonReadObject unchanged; ASCII widening shim substitutes Windows UTF8 conversion.",
+    "No complete CItem tree/load dispatcher, physical file or Windows runtime validation.",
+    "Own exporter pretty layout accepted; not claim every self-exported report fails.",
+    "WholeCsvLoader.cpp read across increments; no production adoption; pHash native investigation deferred."
+  ]
+}
