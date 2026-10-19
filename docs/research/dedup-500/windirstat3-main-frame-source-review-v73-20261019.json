@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of MainFrame.cpp plus targeted reread of previously reviewed WinDirStatModel.Actions.cpp quiet-export branches1280..1313. Pinned MainFrame bytes verified.",
+  "new_whole_files_read": {
+    "windirstat/MainFrame.cpp": "6334e09d81f65680a1f35124af6452c3f99bf4317b67af7353fe8fd3602ee4f3"
+  },
+  "whole_files_read": 202,
+  "coverage": "docs/research/dedup-500/windirstat3-main-frame-coverage-v73-20261019.json",
+  "coverage_sha256": "4a63a2423f06e4cf246e550b6cb0a28e199539dfae5f24bacb648c840a71928f",
+  "findings": [
+    "Quiet-export exit is implemented in model actions, not MainFrame: after finalization save results/duplicates/permissions maps writer boolean to process0/1, with missing root failing1. This verifies source exit policy, not actual artifact content or completeness of every scan.",
+    "OnClose marks shutting down, aborts/waits scan, joins cleanup thread through UI-pumping helper, stops icon queue and then closes frame. Persistent attributes captured before child destruction, properties written after nonclient teardown. No bounded wait proof.",
+    "InvokeInMessageThread executes directly on owner thread or synchronously sends callback pointer. Stack callback lifetime relies on SendMessage synchrony; target-window failure/teardown is not reported here.",
+    "Progress uses range0when following mount/junction/symlink roots and changes taskbar100percent to indeterminate until finalization. Displayed100percent is explicitly not completion. Percentage multiplication m_progressPos*100uses u64 without explicit overflow check; realistic viewport/scan counterexample not tested.",
+    "Timer runs every25ms, with less frequent sorting every15ticks, avoids updates during shutdown and calls pending heap cleanup. This scheduling is not a throughput, responsiveness or memory-bound measurement.",
+    "Splitter positions derive double ratios with only partial input guards; restore can reset collapsed user positions. Invalid/nonfinite persisted values depend on upstream validation already reviewed, not these arithmetic casts.",
+    "Settings sheet creates eight lazy pages; restart confirmation cancel rejects applying, no records refusal for subsequent apply prompts, yes can exit sheet after apply. Declining restart still allows settings commit."
+  ],
+  "limits": [
+    "No Windows export run, artifact parsing, partial-scan status test, shutdown, synchronous callback, progress overflow or persistence runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
