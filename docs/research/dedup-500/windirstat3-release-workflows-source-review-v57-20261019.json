@@ -1,0 +1,31 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of six GitHub funding/template/script/workflow files; pinned bytes verified. No workflow execution or external writes.",
+  "new_whole_files_read": {
+    ".github/FUNDING.yml": "2e6de15395f39420409bdaf0f6507550b36aa1d85f634cd59e68c2cc65f7425c",
+    ".github/release-template.md": "9e33100abf5565afa8823303b3709d21d47e60217ff47c369e54385b1f1ad008",
+    ".github/scripts/New-ReleaseBody.ps1": "4aaebaaf8ac9f5c9448dcbc2ac5e64cab2161f8be65b17972508192b9b663e21",
+    ".github/scripts/Publish-WinGetPackage.ps1": "58fa4ae0e39f05df32cda1b640df979cc615fcf1ebb5a85d0f44b1a0267d9b37",
+    ".github/workflows/publish-betas-to-winget-pkgs.yml": "fcdd6331b591e913270d9d5e6c589e4d29acc297f86a9917029240fb895c6b3b",
+    ".github/workflows/publish-releases-to-winget-pkgs.yml": "afea3908bec9e6525d8cad74ed1e95ee63e342a5522193f92a093d7d8bc6be1b"
+  },
+  "whole_files_read": 170,
+  "coverage": "docs/research/dedup-500/windirstat3-release-workflows-coverage-v57-20261019.json",
+  "coverage_sha256": "260b4bb45e72895891bc37ee389480da06dafedee9e03900cf0d4b4b81268c1f",
+  "findings": [
+    "Release-body generator validates X.Y.Z, checks gh exit codes, lists uploaded public assets and excludes debug symbols. It preserves notes around a managed section, checks marker counts and normalizes line endings for equality. Marker count equality alone does not check start-before-end ordering.",
+    "Release edit re-reads original body before overwriting and verifies resulting body afterwards. This is optimistic conflict detection with a read/write race window, not atomic compare-and-swap. Asset list is not revalidated at edit time.",
+    "Changelog uses release-tag path when possible but falls back to mutable master if only local master has the anchor. Therefore every generated changelog link is not immutable despite the script description.",
+    "WinGet helper skips submission if any matching historical PR title is returned, including closed PRs. Search is capped at100 and not an authoritative registry lookup.",
+    "WinGet validates at least one MSI, exactly one installer manifest, matching identifier/version and inclusion of MSI URLs. It removes only en-US InstallerLocale lines, rejects unexpected locales, and delegates schema/hash/installer generation to Komac. This does not establish installed upgrade behavior.",
+    "Komac is pinned2.16.0 and binstall action is commit-pinned; checkout uses mutable v4 tag and hosted runner uses windows-latest. No fully reproducible runner/toolchain guarantee.",
+    "Stable workflow downloads release MSI assets, checks presence and generated nuspec version, removes old package files before packing. Actual MSI execution and duplicate-engine tests are absent from these publish workflows.",
+    "Funding links and release-body links were read only. Scripts can submit PRs, sync forks, update release text and push packages, but none of those actions were executed."
+  ],
+  "limits": [
+    "No workflows, package installation, remote release validation, manifest runtime tests, publication or external messages performed.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains147/500."
+  ]
+}
