@@ -1,0 +1,34 @@
+{
+  "status": "partial_source_and_actual_native_publish_queue_review",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/BlockingQueue.h": "d8190ed49197dc95cfb864ede71ec88c266ce3017207b8b23be48da11dc714c3",
+    "windirstat/SmartPointer.h": "f2f40ea3c2e9459d04a8efd0ec529b0f9ab90bb85c3bc3646219cded21f53611"
+  },
+  "partial_file": {
+    "path": "windirstat/HelpersTasks.cpp",
+    "scope": "ReadFileContent method only"
+  },
+  "whole_files_read": 6,
+  "controls": "docs/research/dedup-500/windirstat3-queue-reproducer-v2-20261019/result.json",
+  "controls_sha256": "117b88f9dfd351194b09fe57a2dc185b7fcbeaa9eae5fb214c25fe3e3bcaf1a8",
+  "coverage": "docs/research/dedup-500/windirstat3-queue-reproducer-v2-20261019/coverage.json",
+  "coverage_sha256": "9c839ce46389cff6a78e16689093b1f47c3a3b934a3a3d03957e46c2f7bf4841",
+  "reproducer": "scripts/qualify-windirstat3-publish-queue-20261019.py",
+  "reproducer_sha256": "2a18fb956501117e5c677c20cec8d5e9df4e53b09d004910bd990b4318bf15a2",
+  "findings": [
+    "Original SingleConsumerQueue supports multiple producers and one consumer; clear explicitly unsafe with active producers.",
+    "Publication node allocation occurs inside noexcept push; allocation failure is not a recoverable return in this interface.",
+    "BlockingQueue cancellation joins workers and retains cancelled state until reset; ResetQueue clears thread objects while holding mutexes, requiring correct lifecycle ordering.",
+    "ReadFileContent excerpt serializes shell-backed streams via one mutex and supports explicit seek offsets; not independent file identity validation."
+  ],
+  "limits": [
+    "Exact SingleConsumerQueue class body extracted; two alignment constants replaced by64 for portable compilation, no algorithm edits.",
+    "Not full BlockingQueue/Windows CancelSynchronousIo, SmartPointer runtime or Windows application qualification.",
+    "No sanitizer/performance/all-interleaving guarantee; only stated deterministic sequence invariants under actual native threads.",
+    "Two full headers read; HelpersTasks.cpp only ReadFileContent excerpt, not whole-file credit.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}

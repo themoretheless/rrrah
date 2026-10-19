@@ -1,0 +1,36 @@
+{
+  "status": "passed_original_publish_queue_with_alignment_adapter",
+  "source_pins": {
+    "windirstat/BlockingQueue.h": "d8190ed49197dc95cfb864ede71ec88c266ce3017207b8b23be48da11dc714c3",
+    "windirstat/SmartPointer.h": "f2f40ea3c2e9459d04a8efd0ec529b0f9ab90bb85c3bc3646219cded21f53611"
+  },
+  "original_class_sha256": "7cde5e9fa58bca84c89b6926678804dc840eef32e53035762e852a9e31c9eeef",
+  "adapted_class_sha256": "de370dc1f24930806f46c7e80f36ca51f4757aef92b9d449f4b3f3ac44f368ab",
+  "messages_checked": 225000,
+  "producer_counts": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "rounds_each": 3,
+  "invariants": [
+    "every producer sequence delivered exactly once in order",
+    "queue empty after joined producers",
+    "quiescent clear empties queue",
+    "queue reusable after clear"
+  ],
+  "findings": [
+    "Original SingleConsumerQueue supports multiple producers and one consumer; clear explicitly unsafe with active producers.",
+    "Publication node allocation occurs inside noexcept push; allocation failure is not a recoverable return in this interface.",
+    "BlockingQueue cancellation joins workers and retains cancelled state until reset; ResetQueue clears thread objects while holding mutexes, requiring correct lifecycle ordering.",
+    "ReadFileContent excerpt serializes shell-backed streams via one mutex and supports explicit seek offsets; not independent file identity validation."
+  ],
+  "limits": [
+    "Exact SingleConsumerQueue class body extracted; two alignment constants replaced by64 for portable compilation, no algorithm edits.",
+    "Not full BlockingQueue/Windows CancelSynchronousIo, SmartPointer runtime or Windows application qualification.",
+    "No sanitizer/performance/all-interleaving guarantee; only stated deterministic sequence invariants under actual native threads.",
+    "Two full headers read; HelpersTasks.cpp only ReadFileContent excerpt, not whole-file credit.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
