@@ -1,0 +1,82 @@
+{
+  "status": "partial_viewer_source_review_with_EXIF_dimension_disagreement",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-qt-rule-dialog-review-v17-20261019.json",
+  "previous_sha256": "7ee2ff04947c99d96fc5e9d878bfa50e5fb81442d2cf7f95252f27234d78746c",
+  "new_whole_blobs": [
+    {
+      "path": "qt/details_dialog.py",
+      "git_blob": "63e41c6218f4e0f394b541b3d393f409faca1a11",
+      "sha256": "d8e167288bb6229c88ce2afcfa437a8d612145cddb97cdf489fceba27c9ea273",
+      "bytes": 3489,
+      "fully_read": true
+    },
+    {
+      "path": "qt/details_table.py",
+      "git_blob": "56d51bda4b6ad56ead1da6f3ee97a34ccfbb6321",
+      "sha256": "282e04aef45fbf73b257081ca4ae0e9095550b714dcb7c8392e9ab0b103980d3",
+      "bytes": 3369,
+      "fully_read": true
+    },
+    {
+      "path": "qt/se/details_dialog.py",
+      "git_blob": "ea59c7c2a1bbb1e293f0161160e2e1b53b49c8e9",
+      "sha256": "b08349fcca49acb0b2a0c9686ae3a8e221c1002d9efcc0e95330917736ecb7c3",
+      "bytes": 947,
+      "fully_read": true
+    },
+    {
+      "path": "qt/me/details_dialog.py",
+      "git_blob": "43619af6a91dfdebeb061c829d0695d0bf7a0283",
+      "sha256": "523677ae196b909bfaccd7c830ecfdaab823df8dd0c7f9a7df494f993fbdc1dc",
+      "bytes": 949,
+      "fully_read": true
+    },
+    {
+      "path": "qt/pe/details_dialog.py",
+      "git_blob": "9f6083b6fe5805cf55659c90eaf8881b5b08774d",
+      "sha256": "5a3e5a04989b61d2ba961bfcd3b0e24a9c0011a35729692f5470e20a99b5cd27",
+      "bytes": 6224,
+      "fully_read": true
+    },
+    {
+      "path": "qt/pe/image_viewer.py",
+      "git_blob": "06d849af8174c393fe841465c8e0cbaf50f3af82",
+      "sha256": "3d00cf02137409829d7848b6037494ea445dcff8d91cd5988d425a5fde629b6b",
+      "bytes": 51061,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 151,
+  "cumulative_distinct_original_tests_passed": 514,
+  "new_original_tests_run": 0,
+  "supplemental_control": {
+    "path": "docs/research/dedup-500/dupeguru1-viewer-reproducer-v18-20261019/result.json",
+    "sha256": "6bda5d723b739db8b825d03dca7cc6213faeecdff34b4ca5367d1376b226548b",
+    "exit_code": 0,
+    "terminal_session": 29224
+  },
+  "findings": [
+    {
+      "scope": "actual_original_viewer_loading",
+      "finding": "Original BaseController.updateView on actual Qt Photo ref=selected fixture loads QPixmap40x20 for all8EXIF orientations. Photo dimensions20x40 for5..8,40x20 for1..4. Dimension disagreement reproduced for5,6,7,8 on offscreen Qt5.15.19."
+    },
+    {
+      "scope": "separate_prior_block_control",
+      "finding": "Earlier Qt native block5/7 transform mismatch remains separate. Current viewer dimension mismatch for5..8 is not counted as the same test and does not prove pixel orientation for1..4."
+    },
+    {
+      "scope": "viewer_source_read",
+      "finding": "1333-line viewer module fully read: base/scroll/widget/graphics controllers, cached pixmaps, zoom/best-fit, swapping, synchronized scroll/pan and input handlers. DetailsDialog projects selected/reference records, loads viewer on visible refresh. No new identity confirmation in this presentation path."
+    }
+  ],
+  "limits": [
+    "Six additional complete source files1699lines;151of368blobs,whole repo incomplete.",
+    "Control uses real offscreen QGuiApplication/QPixmap and unchanged updateView; receiver bypasses widget creation, buttons, scaling, centering and group reset. Not a full GUI/window/gesture/render test.",
+    "Only existing ordinary eight synthetic EXIF JPEGs. No invalid images, user images or deferred native memory/ASAN probes.",
+    "514 previous distinct upstream tests unchanged; no additional original tests, performance claim, production fix or source copying."
+  ]
+}
