@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file review of both files; pinned Git byte comparison. No Windows ACL API execution.",
+  "new_whole_files_read": {
+    "windirstat/Controls/FilePermsControl.h": "3e009df29758936182a7ce89e958d82fa1942d491aacca6743aaa111685fc8d1",
+    "windirstat/Controls/FilePermsControl.cpp": "cf0483f9b27daef458e4edd3dc713c32444950962f84cc96168d3bee73588806"
+  },
+  "whole_files_read": 95,
+  "coverage": "docs/research/dedup-500/windirstat3-permission-scan-coverage-v36-20261019.json",
+  "coverage_sha256": "122ccabdf9ce471e053b457bc040d7f3075b8de4d2005d582fa319e68b60cf49",
+  "findings": [
+    "ScanItem returns same empty vector on GetNamedSecurityInfo failure, null DACL, or no qualifying rows. No per-path diagnostics/completeness flag distinguishes these conditions. Empty published result still counts successful StartScan.",
+    "Only ACCESS_ALLOWED_ACE_TYPE and ACCESS_DENIED_ACE_TYPE processed; inherited ACEs included only at selected roots. Other object/callback/audit ACE forms skipped; no effective-access calculation.",
+    "GetSecurityDescriptorControl result unchecked; default control0can yield inherited-enabled label on failure. Generic masks expanded through file mapping before display classification.",
+    "BuildScanList comment says snapshot but returns borrowed pointers into live CItem tree, not copied nodes. Actual per-row shared snapshot created only later in ScanItem when first qualifying ACE found. Modal settled-state lifecycle is required for pointer safety.",
+    "MTP subtrees skipped, reserved items excluded, every real type path otherwise considered. Reparse-directory handling follows already built model; no independent filesystem-boundary proof.",
+    "Parallel ScanItems uses atomic cursor and configured1..16jthreads, joined before returning; cancellation checked between items, not inside potentially blocking descriptor/SID/regex calls. No per-call deadline.",
+    "StartScan clears previous results before settled-state guard; cancelled scan deletes all newly produced rows and returns false. Invalid persisted exclusion regex silently ignored. Headless ScanTree has no cancellation callback or diagnostics.",
+    "Results vector holds raw owned row pointers, UI control owns published rows. Worker exceptions are not locally caught; no allocation/regex/API fault injection."
+  ],
+  "limits": [
+    "No Windows ACL corpus, null-DACL, API-error, cancellation latency, concurrency or headless export runtime test.",
+    "Source review cannot convert empty output to proof of absent permissions.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
