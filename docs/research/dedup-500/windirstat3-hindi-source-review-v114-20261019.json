@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Hindi catalog; pinned bytes reverified; v91 structural checks retained. All25language catalogs now have whole-file manual-reading credit, without native-speaker or rendered-interface certification.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_hi.txt": "3ef6f41b46749223ed9e1b4c6cc58d5751f106feca0221e3ae5716f7dd100d64"
+  },
+  "whole_files_read": 247,
+  "coverage": "docs/research/dedup-500/windirstat3-hindi-coverage-v114-20261019.json",
+  "coverage_sha256": "694ce24917c7230a62cacd15aa60ca74c3aa6c5424da9fffee750a6b6cca6438",
+  "findings": [
+    "संभावित डुप्लिकेट indicates probable duplicates, hash column explicitly says initial part and नमूने का हैश indicates sample hash. Advanced option describes hashes of selected portions of files larger than64MiB, directly exposing sample scope.",
+    "Recovery completion requests checking file data; recoverable and file-may-return remain distinct. Metadata changes request rescan and same-source-volume restoration warns about overwriting deleted data.",
+    "Access-type column uses पहुँच, while rights column uses अधिकार; generic access and type may be less clear than English Type. No runtime column mapping defect inferred.",
+    "Sparse-file conversion explicitly says make file sparse, distinct from compression; hardlinks, symlinks and junctions remain separate. Logical/physical size and binary units are explicit.",
+    "Graph algorithms localized consistently in menu/style list; cleanup tokens and regex/glob distinction retained. Mixed Devanagari/Latin mnemonic suffixes require actual keyboard and shaping checks.",
+    "Cloud warning states scans may download files and points to settings. Permanent-delete wording does not prove secure erasure. MSI hi-IN/1081/codepage65001 needs installer compatibility/encoding verification."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, Devanagari shaping, rendered UI, mnemonic conflicts, installer or Windows runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
