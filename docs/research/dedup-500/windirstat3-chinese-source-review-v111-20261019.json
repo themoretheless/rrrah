@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of simplified Chinese catalog; pinned bytes reverified; v91 structural evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_zh.txt": "f1cc01a8a3c7008e6340b7bb1a55b0a7aa3d75116d030214db8d14e3c49c5ca8"
+  },
+  "whole_files_read": 244,
+  "coverage": "docs/research/dedup-500/windirstat3-chinese-coverage-v111-20261019.json",
+  "coverage_sha256": "e860f9a6cbc1f3ec46a1e526f7732e59c1f20673a6bf8fb94d2c82d7f7cc0ac3",
+  "findings": [
+    "疑似重复文件 denotes suspected duplicates, 哈希前缀 marks prefix and 采样哈希 marks sampling. Advanced option says sparse hashing for files over64MiB; this does not prove full-content equality.",
+    "Recovery completion requests verifying file data, recoverable and possible recovery remain separate, changed source metadata requests rescan and same-source-volume restoration warns of overwrite.",
+    "Sparse-file action 文件稀疏压缩 says sparse compression and may conflate sparsification with compression. File-selection tooltip says read disk scan records rather than opening drive selection.",
+    "Cloud warning says scanning will trigger download, stronger than the English may-download wording. It still directs users to change settings; runtime hydration prevention is not proven.",
+    "Regex setting omits the explicit alternative to glob patterns, and portable-mode text omits exact WinDirStat.ini filename. Treemap caption says tree view, potentially confusing graph with hierarchical list.",
+    "Hardlinks/symlinks/junctions, logical/physical sizes and binary units remain distinct. Custom-cleanup fields intact; MSI zh-CN/2052/936 differs from capture neutral resource ID30724, not by itself an error."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, Chinese rendered UI, mnemonic conflict, installer encoding or Windows locale/runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
