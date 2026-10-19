@@ -1,0 +1,280 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Complete UTF-8 decoding and line-by-line structural parsing of all23 remaining language catalogs. Each source byte stream verified against pinned Git blob and existing coverage SHA256. This is automated structural inspection, not manual whole-file semantic reading.",
+  "new_whole_files_read": {},
+  "whole_files_read": 224,
+  "coverage": "docs/research/dedup-500/windirstat3-russian-coverage-v90-20261019.json",
+  "findings": [
+    "All23catalogs contain365unique keys each,8395entries total, matching the English key set with no missing or extra keys.",
+    "All brace field names, format specifications and conversions match English under Python Formatter parsing. This covers the observed catalog syntax, not all C++ formatting behavior.",
+    "Eight delimiter-based lists per catalog match English cardinality: time suffixes, graph styles, permission applicability/levels/types, priority, tiers and watcher verbs.",
+    "No malformed nonempty lines, duplicate keys or empty values except intentional IDS_GENERIC_BLANK.",
+    "No manual-reading credit added for these23catalogs. Semantic accuracy, mnemonic conflicts, bidi behavior, installer encoding and rendered layout remain unverified."
+  ],
+  "checks": {
+    "catalogs": 23,
+    "entries": 8395,
+    "list_cardinality_checks": 184,
+    "rows": [
+      {
+        "path": "windirstat/res/langs/lang_ar.txt",
+        "sha256": "94f4edc871ff2a0fb8edc5fb6e34c818532107606a59267e9b9d3a7306f4a73e",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_cs.txt",
+        "sha256": "0fcc72c37d73dc3b2eea402c67093280aaeaf568cacaafa62013483b9c9f342b",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_da.txt",
+        "sha256": "64ea59d851877accca3cc23ea1f1531df61630755c47e577fd65955cc49a3bba",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_de.txt",
+        "sha256": "3af7ca2e0578eb5166638d6aedd1b8e036131339d02c661df7617555e69493f6",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_es.txt",
+        "sha256": "ef6a8c9922549e859af09cd5d180e138ee8dcd0ddaa0d1ab425a4d708f9463ef",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_et.txt",
+        "sha256": "d1ed5818b0c2a61d55cda7c49ae47b5c5f476291a3e43ddef6fbb6018358ca19",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_fi.txt",
+        "sha256": "8bfb874faf9ccd0e873a4a1680a330fffbd210950d8a0c861b02264c219ea25d",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_fr.txt",
+        "sha256": "ec81ae92b58365afc39ff31b9ba5a572baf519ae63a066e8b2c500693dc9f0e8",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_hi.txt",
+        "sha256": "3ef6f41b46749223ed9e1b4c6cc58d5751f106feca0221e3ae5716f7dd100d64",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_hu.txt",
+        "sha256": "a22e0c051a0efe021225fb091550eac7006bb025644d25d3574cbc2961a75e81",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_it.txt",
+        "sha256": "c67903832a7b77c4081fec09d864f2f4af29f2663395a90b1c685711795674de",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_ja.txt",
+        "sha256": "00f70d838ae221447459848ffc9ecea8ff97f81c43e9a09e46232848f1a474d8",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_ko.txt",
+        "sha256": "60acf0df2e7e5896523e1dd8783f5e547208cb8e4f21ba48b2be4ba36e3249bd",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_nb.txt",
+        "sha256": "ec02641d6247401120914b6033e0b12b9305eedd613f3f97b5720cef22489418",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_nl.txt",
+        "sha256": "0208d167e7b464a2de2dce1c54e1aacd4a06f1a1c70bf9b821456fc929b34029",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_pl.txt",
+        "sha256": "7422499aa17bfd4a70fbee2ebf19d1d545d56571bd8f1dd3a233a72ef022a10a",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_pt.txt",
+        "sha256": "a8cc686c77ef81b6fca9384865e8b6249fc5c5190d31da65eb9e41752966a332",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_sl.txt",
+        "sha256": "a1c3edaf2eef9a46f2415b985615e6f7a9f30876cd3db9126110daee90cbfc3a",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_sv.txt",
+        "sha256": "67d7be0b7963af9d4276b4e9e85f550b13fac9c8aa96f924edab2004aa1d1e38",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_tr.txt",
+        "sha256": "3f4c80854e1d74889b4b38be8f77c6518ebf06e2064aee14a5d31bdf698a0c49",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_uk.txt",
+        "sha256": "2837655abf5651d5898fd6d65475b9233e6e927f0539b3734cfc35453bf9f65d",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_zh-HK.txt",
+        "sha256": "56805c6e4d40b6857774c3db8c5f1624b02337c4a619c3b25a3f71c36015dd9b",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      },
+      {
+        "path": "windirstat/res/langs/lang_zh.txt",
+        "sha256": "f1cc01a8a3c7008e6340b7bb1a55b0a7aa3d75116d030214db8d14e3c49c5ca8",
+        "keys": 365,
+        "duplicates": [],
+        "invalid_lines": [],
+        "missing": [],
+        "extra": [],
+        "issues": [],
+        "empty_nonblank_values": []
+      }
+    ]
+  },
+  "limits": [
+    "No Windows build or original application run. All500repositories are not reviewed: completed count remains147.",
+    "Native pHash investigation deferred."
+  ]
+}
