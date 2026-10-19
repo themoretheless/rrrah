@@ -1,0 +1,716 @@
+   Compiling rrrah-color v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-color)
+   Compiling rrrah-demosaic v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-demosaic)
+   Compiling moxcms v0.8.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms)
+   Compiling wgpu-hal v30.0.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/wgpu-hal)
+   Compiling jxl-color v0.11.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/jxl-color)
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+   Compiling rrrah-cuda v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cuda)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+   Compiling jxl-render v0.12.4
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling image v0.25.10 (/Users/themoretheless/Documents/Sources/rrrah/vendor/image)
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-develop v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling wgpu-core-deps-apple v30.0.0
+   Compiling wgpu-core v30.0.0
+   Compiling jxl-oxide v0.12.6 (/Users/themoretheless/Documents/Sources/rrrah/vendor/jxl-oxide)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling wgpu v30.0.0
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 35s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-accf832a078022d1)
+
+running 378 tests
+test cache_maintenance::tests::disabled_and_idle_completion_do_not_create_extra_sweeps ... ok
+test cache_telemetry::tests::writer_snapshot_tracks_pending_active_and_result ... ok
+test cache_telemetry::tests::stale_foreground_generation_does_not_change_hit_rate ... ok
+test cache_telemetry::tests::stale_prefetch_generation_cannot_overwrite_new_plan ... ok
+test accessibility::tests::commands_are_focusable_and_selection_and_errors_have_text ... ok
+test cache_writer::tests::enqueue_reuses_reference_counted_sensor_pixels ... ok
+test cache_telemetry::tests::disabled_hud_does_not_claim_cache_activity ... ok
+test cache_telemetry::tests::hit_rate_and_disk_bar_are_stable_at_boundaries ... ok
+test cache_telemetry::tests::cache_panel_fits_the_telemetry_window_contract ... ok
+test decode_gate::tests::granted_prefetch_token_is_invalidated_before_foreground_waits ... ok
+test decode_gate::tests::foreground_intent_is_nonblocking_and_invalidates_prefetch_generation ... ok
+test decode_gate::tests::production_prefetch_debounce_is_two_hundred_milliseconds ... ok
+test device_loss_signal_tests::hud_view_and_pixels_survive_independent_device_recreation_metal ... ignored, actual Metal HUD view/frame preservation across two independent devices
+test device_loss_signal_tests::tiny_raw_atlas_budget_preserves_sdr_hdr_for_every_algorithm_metal ... ignored, actual Metal tiny RAW atlas budget and old-layout pixel comparison
+test cache_writer::tests::queued_write_is_latest_wins_while_active_store_finishes ... ok
+test decode_gate::tests::superseded_ticket_does_not_clear_newer_foreground_priority ... ok
+test decode_gate::tests::foreground_jumps_a_waiting_prefetch_after_current_permit ... ok
+test dicom_pipeline_tests::high_precision_alpha_ram_swap_and_metal ... ignored, actual Metal authored16/32bit RGB/gray PSD/PSB alpha and HDR
+test dicom_pipeline_tests::legacy_rasters_ram_swap_and_metal ... ignored, actual Metal SGI/Sun/PCX/DCX/PKM/KTX/KTX2/DDS full-image SDR/HDR cache and swap readback
+test cache_writer::tests::writer_budget_covers_active_jobs_and_rejects_without_pixel_copy ... ok
+test decode_gate::tests::dropping_current_ticket_unblocks_prefetch ... ok
+test decode_gate::tests::cancelled_prefetch_waiter_returns_none_while_permit_is_busy ... ok
+test cache_maintenance::tests::continuous_neighbours_do_not_postpone_expiry_and_pins_survive ... ok
+test decode_gate::tests::newer_foreground_releases_obsolete_waiter_before_active_decode_finishes ... ok
+test device_loss_signal_tests::destruction_is_ignored_and_first_loss_survives_duplicate_notifications ... ok
+test dicom_pipeline_tests::managed_nrrd_mrc_fits_windows_ram_swap_and_metal ... ignored, actual Metal SDR/HDR scientific NRRD/MRC/FITS cache and swap verification
+test dicom_pipeline_tests::multirow_alpha_ram_swap_and_metal ... ignored, actual Metal multirow16/32bit alpha PSD/PSB all compression modes
+test dicom_pipeline_tests::official_ktx2_producers_ram_swap_and_metal ... ignored, actual Metal official KTX2 producer full-image SDR/HDR RAM/swap readback
+test decode_gate::tests::permits_serialize_foreground_and_prefetch_work ... ok
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_metal ... ignored, actual Metal original grayscale PSD/PSB transparency cache and swap
+test dicom_pipeline_tests::png_tiff_metadata_ram_swap_and_metal ... ignored, actual Metal PNG/TIFF ICC/orientation/16-bit RAM and swap readback
+test dicom_pipeline_tests::rle_collection_latency ... ignored, manual DICOM RLE decode/RAM/swap latency measurement; warm OS file cache
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_metal_readback ... ignored, actual Metal uncompressed DICOM window/frame cache and swap SDR/HDR readback
+test drop_inspection::tests::blocked_inspection_does_not_block_latest_drop_or_publish_old_result ... ok
+test dicom_viewer_tests::native_dicom_selected_frames_prepare_cache_and_release_managed_pixels ... ok
+test drop_inspection::tests::cancel_clears_published_result_and_drop_stops_idle_worker ... ok
+test drop_inspection::tests::symlinks_broken_links_and_special_files_are_rejected ... ok
+test decode_gate::tests::viewport_token_cancels_prefetch_waiter_while_foreground_permit_is_live ... ok
+test edit_store::tests::atomic_write_crash_helper ... ignored, subprocess helper; invoked by atomic_documents_survive_process_kill
+test edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive ... ok
+test drop_inspection::tests::real_paths_preserve_file_folder_and_refusal_policy ... ok
+test decode_gate::tests::prefetch_waits_for_idle_debounce ... ok
+test dicom_pipeline_tests::prefetch_watchdog_excludes_gpu_idle_but_cancels_a_blocked_call ... ok
+test edit_store::tests::legacy_lock_is_never_stolen_and_non_regular_v2_locks_are_refused ... ok
+test edit_store::tests::oversized_and_non_regular_sidecars_are_refused ... ok
+test cache_writer::tests::debounce_discards_generation_superseded_before_store ... ok
+test edit_store::tests::concurrent_writers_are_refused_and_persistent_lock_is_reusable ... ok
+test edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification ... ok
+test edit_store::tests::restart_refuses_changed_journal_source_and_backup_collision ... ok
+test edit_store::tests::source_content_change_with_same_length_and_mtime_is_refused ... ok
+test edit_store::tests::recovery_refuses_corruption_new_source_and_unknown_version_without_deleting ... ok
+test dicom_pipeline_tests::rle_multiframe_prefetch_windows_preserve_nearest_under_count_and_byte_limits ... ok
+test edit_store::tests::restart_preserves_exact_backup_and_reuses_it_without_overwriting ... ok
+test edit_store::tests::restart_process_kill_keeps_both_refused_record_and_retained_backup ... ok
+test edit_store::tests::xmp_preserves_unknown_fields_and_pages_and_refuses_external_change ... ok
+test editor::tests::conflicting_recovery_and_sidecar_are_retained_without_implicit_overwrite ... ok
+test cache_writer::tests::generation_change_cancels_real_store_waiting_on_disk_lock ... ok
+test editor::tests::documents_keep_separate_history_and_latest_edit_recovers_after_restart ... ok
+test editor::tests::conflict_choice_does_not_authorize_overwriting_a_later_external_xmp_edit ... ok
+test editor::tests::reload_reuses_history_only_after_matching_content_and_persisted_state ... ok
+test editor::tests::stale_open_reply_cannot_initialize_new_decode_generation ... ok
+test external_collection_qualification::external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure ... ignored, external mixed-source manifest; RRRAH_COLLECTION_MANIFEST and RRRAH_COLLECTION_REPORT
+test eps_preload_tests::eps_source_vm_and_graphics_admission_errors_are_retryable ... ok
+test eps_preload_tests::expired_eps_preload_redecodes_without_invalidating_external_frame ... ok
+test filmstrip_ui::tests::pressure_eviction_promotes_recency_and_clears_source_inventory ... ok
+test filmstrip_ui::tests::strip_frame_marks_current_and_applies_scroll ... ok
+test filmstrip_ui::tests::delayed_source_evidence_cannot_evict_a_replaced_texture ... ok
+test filmstrip_ui::tests::strip_scroll_is_clamped_to_content ... ok
+test eps_preload_tests::eps_neighbour_windows_reuse_preload_preserve_visible_and_cancel_stale ... ok
+test filmstrip_ui::tests::thumb_cache_evicts_least_recently_used_and_reports_handle ... ok
+test filmstrip_ui::tests::thumb_cache_replacement_returns_previous_handle_without_eviction ... ok
+test foreground_loader_tests::animation_controller_final_pass_clears_wrap_hint_and_stops_requests ... ok
+test foreground_loader_tests::animation_controller_never_replaces_a_new_source_request_with_old_timer ... ok
+test foreground_loader_tests::animation_controller_pause_blocks_expired_deadline_until_resume ... ok
+test foreground_loader_tests::animation_controller_submits_once_and_waits_for_ready_then_presentation ... ok
+test foreground_loader_tests::animation_prefetch_phase_updates_coalesced_request_without_redecode ... ok
+test foreground_loader_tests::blocked_startup_admission_does_not_block_navigation_or_publish_obsolete_error ... ok
+test foreground_loader_tests::blocked_duplicate_validation_keeps_ui_submissions_and_navigation_responsive ... ok
+test editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget ... ok
+test foreground_loader_tests::cancelled_thumbnail_viewport_does_not_open_source_or_allocate ... ok
+test foreground_loader_tests::cancelled_startup_admission_never_reads_the_source ... ok
+test foreground_loader_tests::cli_prefetch_counts_support_defaults_aliases_and_disabled_sides ... ok
+test foreground_loader_tests::cli_ram_limits_are_independent_and_optional ... ok
+test foreground_loader_tests::disabled_raw_disk_warmer_preserves_gallery_prefetch_in_both_directions ... ok
+test foreground_loader_tests::changed_animation_source_discards_old_repeat_phase_before_retry ... ok
+test foreground_loader_tests::dpx_cineon_prefetch_keeps_srgb_and_linear_cache_entries_distinct ... ok
+test foreground_loader_tests::changed_source_retry_keeps_explicit_or_disabled_prefetch_plan ... ok
+test foreground_loader_tests::dropping_foreground_loader_invalidates_an_unsuperseded_active_token ... ok
+test foreground_loader_tests::disk_cli_limits_are_independent_and_configure_real_cache ... ok
+test filmstrip_ui::tests::source_and_external_wal_palette_changes_invalidate_textures ... ok
+test foreground_loader_tests::foreground_prefetch_respects_asymmetric_and_disabled_windows ... ok
+test foreground_loader_tests::equivalent_foreground_requests_join_pending_and_active_generation ... ok
+test foreground_loader_tests::empty_stl_remains_admissible_with_its_header_budget ... ok
+test foreground_loader_tests::generation_superseded_after_decode_cancels_color_before_output_admission ... ok
+test foreground_loader_tests::hundred_thousand_valid_sources_navigate_with_bounded_prefetch_and_pressure ... ignored, manual 100000 valid file paths with mixed-format cache navigation
+test foreground_loader_tests::hundred_thousand_valid_sources_preserve_metal_frames_and_priority ... ignored, manual100k valid sources with actual Metal SDR/HDR and nearest prefetch protection
+test foreground_loader_tests::invalid_float_icc_does_not_pollute_raster_cache_or_evict_visible_pixels ... ok
+test foreground_loader_tests::incomplete_pdf_prefetch_is_not_cached_and_next_decode_can_run ... ok
+test foreground_loader_tests::keyboard_windows_shift_center_and_resize_without_invalid_ranges ... ok
+test foreground_loader_tests::known_prefetch_windows_bypass_scanning_and_keep_exact_priority ... ok
+test foreground_loader_tests::manual_animation_boundary_keeps_active_deadline_and_does_not_submit ... ok
+test foreground_loader_tests::hlg_display_cli_separates_all_policy_fields_and_reaches_thumbnail ... ok
+test foreground_loader_tests::metal_upload_retains_raw_lease_until_submission_completion ... ignored, requires Metal device and RRRAH_SONY_SR2_CORPUS pinned source
+test foreground_loader_tests::manual_animation_seek_keeps_paused_through_actual_app_submission ... ok
+test foreground_loader_tests::missing_source_duplicate_reloads_once_even_after_original_decode_finishes ... ok
+test foreground_loader_tests::missing_pdf_font_failure_preserves_visible_cache_and_retries_same_path ... ok
+test foreground_loader_tests::mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure ... ignored, requires actual GPU for mixed-format prefetch navigation readback
+test foreground_loader_tests::model_cache_hit_shares_geometry_and_bypasses_decoder ... ok
+test editor::tests::explicit_conflict_choices_update_recovery_but_require_save_for_xmp ... ok
+test foreground_loader_tests::model_cancelled_resident_does_not_transfer_visible_pin ... ok
+test foreground_loader_tests::model_cache_policy_is_independent_and_expired_hits_decode_again ... ok
+test foreground_loader_tests::dropping_foreground_loader_cancels_active_and_drains_pending_work ... ok
+test foreground_loader_tests::model_prefetch_headroom_skips_cold_load_but_keeps_ready_geometry ... ok
+test foreground_loader_tests::navigation_stays_within_decoded_container_bounds ... ok
+test foreground_loader_tests::model_cancelled_swap_lookup_does_not_fall_through_to_decode ... ok
+test editor::tests::refused_recovery_requires_explicit_restart_and_retains_exact_bytes ... ok
+test foreground_loader_tests::new_duplicate_cannot_reuse_validation_completed_before_source_change ... ok
+test foreground_loader_tests::newer_gallery_navigation_cancels_pending_drop ... ok
+test foreground_loader_tests::off_discovery_inspection_and_frame_boundary ... ok
+test foreground_loader_tests::obj_uses_common_model_discovery_and_inspection ... ok
+test foreground_loader_tests::model_retained_prefetch_skips_protected_count_slots_and_retries ... ok
+test foreground_loader_tests::pdf_selected_page_preload_keeps_distinct_cache_keys_and_visible_page ... ok
+test foreground_loader_tests::pict_filmstrip_uses_explicit_viewer_policy_and_releases_last_owner ... ok
+test foreground_loader_tests::pict_neighbour_preload_recovers_from_pressure_and_reuses_managed_pixels ... ok
+test foreground_loader_tests::pict_neighbour_windows_obey_count_bytes_and_ttl_without_losing_visible_frame ... ok
+test foreground_loader_tests::ply_discovery_and_float64_inspection_are_connected ... ok
+test foreground_loader_tests::pq_white_cli_separates_cache_and_reaches_thumbnail ... ok
+test dicom_pipeline_tests::official_ktx2_producers_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::high_precision_alpha_ram_swap_and_blocked_prefetch ... ok
+test foreground_loader_tests::queued_ai_page_reversal_cancels_stale_preload_and_preserves_metal ... ignored, requires pinned AI corpus and actual Metal for queued page navigation
+test foreground_loader_tests::profiled_jpeg_neighbour_windows_preserve_visible_and_respect_count_size_ttl ... ok
+test foreground_loader_tests::queued_navigation_cancels_x3f_preload_and_decodes_latest_raster ... ignored, requires external SD10 source
+test foreground_loader_tests::rapid_page_navigation_accumulates_pending_intent_and_reverses ... ok
+test foreground_loader_tests::rapid_submissions_keep_only_the_latest_pending_request ... ok
+test dicom_pipeline_tests::png_tiff_metadata_ram_swap_and_blocked_prefetch ... ok
+test foreground_loader_tests::raster_cache_does_not_hide_replaced_source_or_merge_scalar_windows ... ok
+test edit_store::tests::atomic_documents_survive_process_kill ... ok
+test foreground_loader_tests::raster_cache_hits_share_pixels_and_separate_animation_indices ... ok
+test foreground_loader_tests::raster_cache_hit_does_not_call_decode_admission_closure ... ok
+test foreground_loader_tests::raster_folder_thumbnail_applies_icc_and_composites_alpha ... ok
+test foreground_loader_tests::raster_prefetch_headroom_preserves_ram_hits_and_recovers_after_pressure ... ok
+test foreground_loader_tests::raster_limits_are_independent_of_raw_limits_and_accept_zero ... ok
+test foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root ... ignored, requires external Sony DSC-F828 SRF fixture
+test foreground_loader_tests::real_ai_cached_pages_preserve_metal_sdr_hdr_under_full_pressure ... ignored, requires pinned AI corpus and actual Metal for cached production-page transport
+test foreground_loader_tests::real_ai_cancel_after_render_scratch_admission_recovers_metal ... ignored, requires pinned VectorApple original and actual Metal; observes render scratch admission
+test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS
+test foreground_loader_tests::raster_thumbnail_uses_shared_budget_and_last_owner_credit ... ok
+test foreground_loader_tests::real_x3f_generation_cancellation_after_sensor_allocation_recovers ... ignored, requires external SD10 source
+test foreground_loader_tests::real_x3f_neighbour_windows_preserve_visible_and_reuse_preload ... ignored, requires external SD10 source
+test foreground_loader_tests::real_model_preload_is_available_without_foreground_decode ... ok
+test foreground_loader_tests::real_raster_preload_preserves_original_pin_and_shares_warmed_storage ... ok
+test foreground_loader_tests::rejected_model_transition_restores_the_visible_pin ... ok
+test foreground_loader_tests::rejected_drop_preserves_queued_folder_context_without_opening_it_early ... ok
+test foreground_loader_tests::rla_cache_alpha_policy_cannot_bypass_strict_refusal ... ok
+test foreground_loader_tests::rla_cli_policy_reaches_requests_and_thumbnail_loader ... ok
+test foreground_loader_tests::rla_float_byte_order_isolated_in_actual_display_cache ... ok
+test foreground_loader_tests::rla_float_cli_reaches_decode_and_thumbnail_and_clears_defaults ... ok
+test foreground_loader_tests::rla_linear_color_cli_preserves_hdr_and_separates_cached_transfer ... ok
+test foreground_loader_tests::rla_offset_canvas_thumbnail_preserves_extent_and_releases_budget ... ok
+test foreground_loader_tests::rla_straight_and_premultiplied_use_distinct_cached_pixels ... ok
+test foreground_loader_tests::rpf_cli_preload_and_cache_keys_keep_explicit_interpretations_separate ... ok
+test foreground_loader_tests::scientific_preload_retains_window_key_and_bypasses_repeat_decode ... ok
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_blocked_prefetch ... ok
+test foreground_loader_tests::scientific_window_reaches_selected_plane_and_cli_bounds_are_validated ... ok
+test foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test foreground_loader_tests::speculative_cache_paths_reject_cancelled_requests_and_stale_decode_results ... ok
+test foreground_loader_tests::speculative_model_admission_cannot_replace_visible_count_one ... ok
+test foreground_loader_tests::retained_raster_prefetch_avoids_unretainable_swap_reads ... ok
+test foreground_loader_tests::stale_page_failure_retains_latest_intent_and_current_failure_resets_it ... ok
+test foreground_loader_tests::stl_discovery_inspection_and_thumbnail_boundary ... ok
+test foreground_loader_tests::startup_admission_error_reaches_app_and_later_selection_can_load ... ok
+test foreground_loader_tests::swap_restore_budget_is_independent_and_accepts_zero ... ok
+test foreground_loader_tests::tiff_neighbour_is_classified_and_reuses_preloaded_managed_pixels ... ok
+test foreground_loader_tests::selected_raster_reaches_display_preparation ... ok
+test foreground_loader_tests::strict_raster_request_cannot_reuse_assumed_color_cache_entry ... ok
+test foreground_loader_tests::viewer_untagged_policy_is_explicit_and_preserves_strict_cache_boundary ... ok
+test fusion_warp_tests::fusion_warp_triggers_quality_and_changes_corrected_channels ... ignored, requires pinned official Fusion GPR
+test gallery::cyclic_prefetch_tests::cyclic_windows_match_independent_modulo_model_without_duplicates ... ok
+test gallery::cyclic_prefetch_tests::virtual_maximum_cycles_stay_lazy_overflow_safe_and_wrap_direction_correct ... ok
+test gallery::repeat_phase_prefetch_tests::final_pass_is_linear_and_auto_wrap_direction_is_explicit ... ok
+test gallery::tests::configured_raw_window_reaches_worker_and_is_clamped ... ok
+test gallery::tests::directional_prefetch_iterator_paired_profile ... ignored, paired resident path-plan microbenchmark; no file I/O
+test foreground_loader_tests::wal_thumbnail_rereads_palette_and_composites_transparency ... ok
+test gallery::tests::dropping_folder_scanner_cancels_generation_and_stops_idle_worker ... ok
+test gallery::tests::dropping_thumbnail_prefetcher_cancels_active_loader ... ok
+test gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package ... ignored, requires authored EIP pair and local EOS R8 CR3
+test gallery::tests::extension_filter_is_case_insensitive ... ok
+test gallery::tests::filtered_raw_neighbours_preserve_mixed_gallery_order_and_boundaries ... ok
+test foreground_loader_tests::unknown_prefetch_window_scans_once_and_preserves_backward_order ... ok
+test gallery::tests::folder_scan_invalidates_a_new_cover_even_if_old_source_is_unchanged ... ok
+test gallery::tests::folder_scan_retains_all_hundred_thousand_supported_files ... ignored, manual 100000 actual directory entries; enumeration without image decode
+test gallery::tests::folder_scanner_replaces_pending_and_published_stale_folders ... ok
+test gallery::tests::folder_scanner_reports_worker_disconnect_instead_of_waiting_forever ... ok
+test gallery::tests::folder_source_validation_is_background_and_stale_generations_are_discarded ... ok
+test gallery::tests::foreground_bit_prevents_new_store_admission_without_losing_state ... ok
+test gallery::tests::foreground_pause_invalidates_pending_then_resumes_fresh_generation ... ok
+test gallery::tests::jobs_are_bounded_around_selection ... ok
+test foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads ... ok
+test gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames ... ignored, requires real RAW manifest and actual Metal
+test gallery::tests::mixed_gallery_submits_raw_neighbours_from_raster_or_model_selection ... ok
+test gallery::tests::multi_neighbor_raw_worker_preserves_metal_frames ... ignored, requires real RAW manifest and actual Metal
+test gallery::tests::navigation_reversal_cancels_blocked_forward_and_warms_backward_raw ... ignored, manual real EOS R8 navigation reversal qualification
+test gallery::tests::navigation_reversal_worker_preserves_full_raw_metal_frames ... ignored, requires real EOS R8 sources and actual Metal for worker navigation qualification
+test gallery::tests::neighbour_windows_match_distance_contract_for_every_small_gallery ... ok
+test gallery::tests::new_camera_formats_enter_gallery_and_directional_prefetch_window ... ok
+test gallery::tests::prefetch_plan_handles_edges_without_duplicates ... ok
+test gallery::tests::prefetch_plan_is_forward_biased_and_bounded ... ok
+test dicom_pipeline_tests::multirow_alpha_ram_swap_and_blocked_prefetch ... ok
+test gallery::tests::raster_selection_warms_real_crw_neighbour ... ignored, requires pinned EOS 10D via RRRAH_CRW_SOURCE
+test gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_backward_window_is_bounded_at_gallery_edges ... ok
+test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture
+test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_duplicate_source_does_not_consume_distinct_count_slot ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_failed_nearest_does_not_consume_count_slot_in_either_direction ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_filtered_clone_paired_profile ... ignored, manual alternating paired mixed-gallery RAW planning profile
+test gallery::tests::raw_prefetch_paths_are_two_back_then_five_ahead ... ok
+test gallery::tests::raw_prefetch_paths_swap_window_when_travelling_backward ... ok
+test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_shutdown_cancels_only_its_own_lifetime ... ok
+test gallery::tests::rapid_navigation_never_accumulates_raw_commands ... ok
+test gallery::tests::raw_prefetch_window_is_bounded_at_both_gallery_edges ... ok
+test gallery::tests::raw_queue_is_latest_wins_and_bounded_to_one_command ... ok
+test gallery::tests::required_source_stamp_keeps_external_palette_identity ... ok
+test gallery::tests::required_source_stamp_rejects_non_files_and_preserves_identity ... ok
+test gallery::tests::raw_worker_skips_rasters_even_with_raw_suffix_without_decoding_failure ... ok
+test gallery::tests::sibling_folder_tiles_handles_missing_parent_and_filesystem_root ... ok
+test gallery::tests::sibling_folder_tiles_ignores_symlinked_dirs ... ok
+test gallery::tests::sibling_folder_tiles_lists_only_dirs_with_supported_images ... ok
+test gallery::tests::thumbnail_queue_replaces_stale_pending_window_at_capacity ... ok
+test gallery::tests::thumbnail_submit_discards_already_ready_stale_generation ... ok
+test gallery::tests::thumbnail_submit_evaluates_only_queue_capacity_from_large_lazy_source ... ok
+test gallery::tests::thumbnail_submit_never_consumes_beyond_window_capacity ... ok
+test gallery::tests::thumbnail_viewport_cancels_active_loader ... ok
+test gallery::tests::thumbnail_worker_drops_an_inflight_stale_generation ... ok
+test gallery::tests::virtual_maximum_collection_prefetch_stays_lazy_and_never_overflows ... ok
+test gpr_development_tests::gpr_opcodes_trigger_default_quality_development ... ignored, requires pinned HERO9 GPR
+test gpr_development_tests::navigation_cancels_gpr_quality_development_after_float_admission ... ignored, requires pinned HERO9 GPR
+test gpr_preload_tests::gpr_neighbour_windows_preserve_visible_and_bound_count_and_bytes ... ignored, requires pinned HERO9 GPR
+test gpr_preload_tests::gpr_preload_hits_ram_and_disk_and_cancels_stale_generation ... ignored, requires pinned HERO9 GPR
+test gpr_preload_tests::prepared_cr3_invalid_source_releases_encoded_credit ... ok
+test gpr_preload_tests::prepared_cr3_source_reuses_snapshot_and_releases_cancelled_owner ... ignored, requires original local CR3; prepared snapshot ownership and bit oracle
+test gpr_preload_tests::real_cr3_partial_protected_budget_skips_swap_until_lease_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions ... ignored, manual original CR3 foreground prefetch priority qualification
+test gpu_backend_cli_tests::backend_selection_is_explicit_and_cuda_is_not_a_wgpu_backend ... ok
+test gpu_vendor_cli_tests::nvidia_vendor_request_is_distinct_from_api_selection ... ok
+test hdr_surface_policy_tests::hdr_requires_matching_format_color_space_and_never_silently_falls_back ... ok
+test histogram_worker::tests::stale_generation_is_refused_and_pixels_release_before_wake ... ok
+test large_psd_pipeline_tests::icc_psd_36mp_prepared_cache_segmented_swap_and_metal ... ignored, manual 36MP ICC PSD display cache, async viewport, segmented swap and Metal qualification
+test large_psd_pipeline_tests::psd_36mp_prepared_cache_segmented_swap_and_metal ... ignored, manual 36MP PSD display cache, segmented swap and actual Metal qualification
+test linear_pfm_viewer_tests::heif_hdr_cli_reaches_preload_and_thumbnail_without_assuming_srgb ... ok
+test gallery::tests::streaming_folder_limit_preserves_sorted_prefix_and_name_ties ... ok
+test gallery::tests::folder_scan_cancels_during_enumeration_without_partial_publication ... ok
+test linear_pfm_viewer_tests::linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device
+test linear_pfm_viewer_tests::linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device
+test foreground_loader_tests::queued_navigation_cancels_pict_preload_and_decodes_latest_raster ... ok
+test linear_pfm_viewer_tests::linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device
+test linear_pfm_viewer_tests::linear_cli_pfm_preload_swap_and_strict_cache_boundaries ... ok
+test linear_pfm_viewer_tests::linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device
+test foreground_loader_tests::queued_navigation_cancels_profiled_jpeg_preload_and_decodes_latest_raster ... ok
+test linear_pfm_viewer_tests::linear_cli_ktx2_hdr_preload_swap_and_strict_cache_boundaries ... ok
+test linear_pfm_viewer_tests::linear_cli_dpx_preload_swap_and_strict_cache_boundaries ... ok
+test linear_pfm_viewer_tests::pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows ... ignored, requires actual Metal device
+test linear_pfm_viewer_tests::photographic_heif_preload_cache_hit_under_full_pressure_and_metal ... ignored, requires external 24 MP Canon DPP PQ HEIF and actual Metal
+test linear_pfm_viewer_tests::viewer_uses_supported_metal_texture_extent_above_default ... ignored, requires Metal adapter supporting textures wider than portable default
+test linear_pfm_viewer_tests::linear_cli_pfm_thumbnail_policy_and_last_owner_release ... ok
+test linear_pfm_viewer_tests::linear_thumbnail_worker_reversal_cancels_astc_and_publishes_only_latest_pfm ... ok
+test managed_model_ttl_tests::expired_model_entry_preserves_visible_and_external_geometry_owners ... ok
+test managed_model_ttl_tests::disabled_ttl_waits_for_request_without_maintenance ... ok
+test model_gpu_cli_tests::model_gpu_budget_is_opt_in_and_accepts_zero ... ok
+test model_retry_tests::real_stl_retry_releases_off_neighbour_and_preserves_visible_mesh ... ok
+test model_swap::tests::malformed_all_model_codecs_refuse_geometry_without_large_reservations ... ok
+test model_source_pressure_tests::tiff_classification_releases_only_unpinned_model_storage ... ok
+test managed_model_ttl_tests::idle_receive_expires_managed_model_and_accepts_next_request ... ok
+test linear_pfm_viewer_tests::linear_cli_astc_hdr_preload_swap_and_strict_cache_boundaries ... ok
+test linear_pfm_viewer_tests::pfm_top_down_cli_separates_ram_and_swap_rows ... ok
+test model_swap_viewer_tests::model_swap_cli_is_independent_and_no_cache_disables_it ... ok
+test model_swap_viewer_tests::impossible_restore_limit_does_not_evict_unpinned_models ... ok
+test model_upload_worker::full_grid_tests::million_triangle_grid_worker_full_hd_sdr_hdr ... ignored, manual million-triangle grid with full HD SDR/HDR Metal readback
+test model_upload_worker::large_tests::million_triangle_worker_keeps_submission_light_and_releases_memory ... ignored, manual million-triangle native STL and Metal worker qualification
+test model_upload_worker::swap_tests::native_models_swap_through_worker_preserve_sdr_hdr ... ignored, requires actual GPU for model swap-to-worker SDR/HDR qualification
+test model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit ... ignored, requires actual GPU for bounded model worker qualification
+test pipeline_telemetry::tests::cache_hit_route_has_twenty_two_cards_and_no_decoder_stages ... ok
+test pipeline_telemetry::tests::decode_route_has_forty_one_cards_and_ten_format_steps ... ok
+test pipeline_telemetry::tests::exact_decode_and_adapter_boundaries_map_to_separate_cards ... ok
+test pipeline_telemetry::tests::failure_preserves_finished_work_and_marks_downstream_not_reached ... ok
+test pipeline_telemetry::tests::format_routes_are_distinct_and_document_conditional_work ... ok
+test pipeline_telemetry::tests::frame_stages_and_end_to_end_total_latch_once ... ok
+test pipeline_telemetry::tests::frontend_progress_moves_explicitly_from_fingerprint_to_cache ... ok
+test pipeline_telemetry::tests::gpu_and_shader_stages_are_maximally_split_without_fake_gpu_time ... ok
+test pipeline_telemetry::tests::idle_route_is_one_waiting_card ... ok
+test pipeline_telemetry::tests::no_cache_skips_both_cache_frontend_stages_without_claiming_miss ... ok
+test pipeline_telemetry::tests::source_kind_is_case_insensitive ... ok
+test pipeline_telemetry::tests::sub_millisecond_timings_never_collapse_to_zero_ms ... ok
+test model_swap::tests::restored_model_weight_floor_survives_all_fixture_payloads ... ok
+test raster_budget_pressure_tests::raster_retry_releases_unpinned_storage_and_preserves_visible ... ok
+test raster_gpu_cli_tests::raster_gpu_budget_is_opt_in_and_accepts_zero ... ok
+test raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source ... ignored, actual Metal navigation while old swapped region worker is delayed
+test raster_lod_worker::tests::generation_changed_after_publication_releases_output_before_consumption ... ok
+test raster_lod_worker::tests::pending_requests_coalesce_without_blocking_and_only_latest_result_owns_output ... ok
+test raster_lod_worker::tests::stale_submission_preserves_current_completed_level_and_revision ... ok
+test raster_lod_worker::tests::stale_persisted_source_releases_disk_index_and_input_before_consumption ... ok
+test raster_playback::pause_tests::pause_before_presentation_and_during_pending_load_preserves_cycle_count ... ok
+test raster_playback::pause_tests::running_pause_preserves_remaining_time_and_stale_generation_is_inert ... ok
+test raster_playback::seek_tests::manual_seek_preserves_pause_and_restarts_repeat_count ... ok
+test raster_playback::tests::decoded_jxl_fractional_frames_stop_after_two_complete_presentations ... ok
+test raster_playback::tests::finite_infinite_rational_and_zero_delay_follow_presented_frames ... ok
+test raster_playback::tests::new_source_manual_reset_and_nonanimation_never_inherit_loop_state ... ok
+test raster_source_pressure_tests::tiff_classification_releases_raster_neighbour_and_preserves_visible ... ok
+test raster_swap_viewer_tests::apng_selected_frame_ttl_prefetch_preserves_metal_sdr_hdr ... ignored, manual actual Metal APNG nonzero TTL and decoder-blocked prefetch qualification
+test model_swap_viewer_tests::expired_models_spill_and_restore_without_redecoding ... ok
+test raster_lod_worker::tests::swapped_regions_coalesce_drop_stale_output_and_retry_memory_pressure ... ok
+test raster_swap_viewer_tests::aseprite_non_square_swap_preserves_metal_output ... ignored, requires actual Metal for Aseprite non-square pixel swap rendering
+test raster_swap_viewer_tests::cancelled_loads_skip_lazy_key_resolution_and_decode ... ok
+test model_swap_viewer_tests::model_consumer_leases_block_background_eviction_then_allow_exact_swap ... ok
+test raster_swap_viewer_tests::count_preflight_keeps_swap_hits_available_when_all_ram_slots_are_protected ... ok
+test raster_swap_viewer_tests::ico_cur_selected_images_loader_cache_and_blocked_prefetch_metal ... ignored, actual Metal ICO/CUR production loader cache and blocked prefetch
+test model_swap_viewer_tests::native_model_eviction_restores_before_decoder_and_preserves_managed_credit ... ok
+test raster_swap_viewer_tests::looping_animation_prefetch_warms_wrapped_first_frame_under_full_memory_pressure ... ok
+test gallery::tests::large_gallery_rapid_jumps_keep_only_latest_bounded_prefetch_command ... ok
+test gallery::tests::directional_prefetch_matches_sorted_distance_model_for_all_small_windows ... ok
+test raster_swap_viewer_tests::mng_single_play_stops_and_retains_timing_on_swap_restore ... ok
+test raster_swap_viewer_tests::playback_clock_animation_swap_preserves_metal_sdr_and_float_output ... ignored, requires actual Metal for animation playback clock and swap readback
+test raster_swap_viewer_tests::aseprite_non_square_frames_restore_aspect_without_repeat_decode ... ok
+test raster_swap_viewer_tests::nearest_prefetched_raster_survives_count_and_byte_pressure_after_failed_neighbor ... ok
+test raster_swap_viewer_tests::protected_count_slots_skip_far_decode_but_keep_hits_and_retry_after_release ... ok
+test raster_swap_viewer_tests::protected_preloads_return_leases_for_the_loaded_allocation ... ok
+test raster_swap_viewer_tests::prepared_hdr_swap_hit_preserves_values_and_cancelled_generation_skips_restore ... ok
+test raster_swap_viewer_tests::raster_swap_cli_limits_and_disabled_modes_are_independent ... ok
+test raster_swap_viewer_tests::real_x3f_display_ram_hit_and_swap_restore_exact ... ignored, requires external SD10 source
+test raster_swap_viewer_tests::real_animation_restores_prepared_pixels_without_decode_and_preserves_background_pin ... ok
+test raster_swap_viewer_tests::recognized_raster_with_wal_suffix_has_no_palette_cache_dependency ... ok
+test raster_swap_viewer_tests::repeated_hdr_ttl_viewer_prefetch_restore_preserves_metal_frames ... ignored, requires actual Metal for viewer TTL swap and prefetch readback
+test raster_swap_viewer_tests::selected_page_prefetch_cancel_after_restore_admission_metal ... ignored, manual 64MiB selected-page swap cancellation after admission and Metal retry
+test raster_swap_viewer_tests::swap_color_assumptions_cannot_satisfy_strict_request ... ok
+test raster_swap_viewer_tests::playback_clock_drives_real_animation_cache_and_swap_without_repeat_decode ... ok
+test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_prefetch_metal ... ignored, actual Metal TIFF viewer selected-page cache/TTL/prefetch qualification
+test raster_swap_viewer_tests::model_prefetch_priority_survives_count_bytes_and_failed_neighbor ... ok
+test raster_swap_viewer_tests::wal_palette_change_ram_swap_and_metal ... ignored, actual Metal SDR/half-float external WAL palette replacement verification
+test raster_swap_viewer_tests::wal_prefetch_replaces_palette_identity_while_old_lease_stays_immutable ... ok
+test raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit ... ignored, actual Metal stale-generation LOD filtering and queued upload cancellation
+test raster_viewport::tests::large_swapped_hdr_lod_reaches_exact_metal_frame ... ignored, actual Metal 36MP original-swap HDR LOD latency and bounded workspace
+test raster_viewport::tests::panning_reuses_margin_with_replacement_headroom_and_exact_frames ... ignored, actual Metal panning overscan residency and exact SDR/HDR frames
+test raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit ... ignored, actual Metal swapped source residency, worker panning and fit preview
+test raster_viewport::tests::viewer_automatically_opens_hdr_lod_switches_to_source_and_reuses_cached_level ... ignored, actual Metal automatic fit HDR LOD and source-region switching
+test raster_viewport::tests::viewer_region_fallback_retains_source_reuses_and_retries ... ignored, actual Metal viewer region fallback and managed source lifetime
+test raster_viewport::tests::worker_prepared_level_installs_without_filtering_or_scanning_full_source_on_ui ... ignored, actual Metal worker-prepared managed HDR level publication
+test raw_gpu_cli_tests::raw_gpu_local_cap_is_independent_under_shared_parent ... ok
+test raw_load_policy::tests::confidence_hysteresis_and_probe_preserve_default ... ok
+test raw_load_policy::tests::measured_costs_hysteresis_and_bounded_identity ... ok
+test raw_load_policy::tests::pressure_deferral_is_retryable_and_not_a_failed_cost_sample ... ok
+test raw_load_policy::tests::real_3fr_decode_admission_refusal_recovers_disk_and_swap ... ignored, requires pinned Hasselblad X1D 3FR source
+test raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test shared_gpu_cli_tests::retained_write_queues_do_not_charge_managed_pixels_twice ... ok
+test shared_gpu_cli_tests::viewer_gpu_caps_share_parent_and_preserve_local_limits ... ok
+test source_validation::tests::blocked_reader_does_not_block_submit_and_queue_stays_bounded ... ok
+test raster_swap_viewer_tests::wal_palette_change_invalidates_ram_and_swap_without_changing_wal ... ok
+test source_validation::tests::expired_thumbnail_releases_pixels_while_source_reader_is_blocked ... ok
+test source_validation::tests::changed_and_missing_sources_fail_closed ... ok
+test speculative_pressure_tests::raster_preload_refuses_pressure_without_discarding_warmed_neighbour ... ok
+test thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw ... ignored, requires actual Metal device
+test thumbnail_retry_tests::retry_keeps_managed_pixels_and_rejects_expired_or_changed_source ... ok
+test raster_swap_viewer_tests::repeated_hdr_ttl_spill_and_restore_preserves_payload_without_decode ... ok
+test raster_swap_viewer_tests::idle_timer_spills_profiled_raster_and_restores_exact_payload ... ok
+test foreground_loader_tests::mixed_gallery_reversals_bound_prefetch_and_release_managed_pixels ... ok
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::managed_nrrd_mrc_fits_windows_ram_swap_and_blocked_prefetch ... ok
+test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_prefetch ... ok
+test foreground_loader_tests::linear_texture_policy_isolated_across_ram_expiry_and_swap_restore ... ok
+test raster_swap_viewer_tests::apng_selected_frames_expire_and_prefetch_from_swap_without_decode ... ok
+test raster_swap_viewer_tests::ico_cur_selected_images_loader_cache_and_blocked_prefetch ... ok
+test foreground_loader_tests::opening_empty_folder_cancels_old_load_and_drains_queued_file ... ok
+test foreground_loader_tests::passive_empty_sibling_scan_does_not_stop_current_standalone_animation ... ok
+test foreground_loader_tests::opening_empty_folder_never_reloads_previous_animation_from_expired_timer ... ok
+test dicom_pipeline_tests::legacy_rasters_ram_swap_and_blocked_prefetch ... ok
+test foreground_loader_tests::empty_folder_scan_clears_previous_navigation_without_reopening_old_files ... ok
+
+test result: ok. 294 passed; 0 failed; 84 ignored; 0 measured; 0 filtered out; finished in 6.64s
+
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_mesh-512f771d9517cad8)
+
+running 55 tests
+test model::managed_tests::cancelled_model_request_precedes_source_io_and_format_resolution ... ok
+test model::managed_tests::nonzero_model_index_is_refused_before_source_io ... ok
+test obj::fixture_tests::cancelled_obj_never_opens_source ... ok
+test obj::tests::concave_polygon_retains_area_winding_and_cutout ... ok
+test model::ownership_tests::model_clone_shares_original_geometry_without_reallocation ... ok
+test obj::tests::managed_triangulation_bounds_scratch_and_cleans_up_failure_and_cancel ... ok
+test model::ownership_tests::model_weight_counts_reserved_geometry_even_without_triangles ... ok
+test obj::tests::group_arrays_account_conversion_overlap_and_transfer_credit_to_faces ... ok
+test model::managed_tests::shared_legacy_mesh_is_rejected_and_managed_mesh_retains_original_budget ... ok
+test obj::tests::continued_line_scratch_is_admitted_before_growth_and_released ... ok
+test obj::tests::malformed_geometry_and_unsupported_elements_fail ... ok
+test obj::tests::negative_indices_uv_normals_weights_and_state_are_retained ... ok
+test obj::tests::managed_obj_arrays_and_polygon_scratch_share_budget_and_owner_lifetime ... ok
+test obj::tests::object_material_credit_transfers_once_and_cleans_up_unused_state ... ok
+test obj::tests::relative_index_extremes_reject_without_wrapping ... ok
+test obj::tests::line_continuations_collinear_edges_rotated_planes_and_limits ... ok
+test obj_swap::tests::empty_mesh_has_independently_specified_wire_layout ... ok
+test off::tests::face_color_storage_is_admitted_before_allocation ... ok
+test model::managed_tests::model_kinds_preserve_geometry_and_last_owner_admission ... ok
+test obj_swap::tests::native_obj_corpus_preserves_geometry_and_attribute_references ... ok
+test obj::tests::metadata_join_preserves_spacing_and_rejects_before_large_token_allocation ... ok
+test off::tests::free_format_comments_headerless_dimension_and_malformed_inputs ... ok
+test off::tests::attributes_binary_and_ascii_match_authored_data ... ok
+test off::tests::cancellation_budget_and_polygon_failures_are_explicit ... ok
+test obj::fixture_tests::common_model_matches_independent_geometry_oracles ... ok
+test obj_swap::tests::numeric_arrays_cross_block_boundary_and_release_truncated_allocations ... ok
+test off::tests::integer_storage_boundaries_are_explicit ... ok
+test off::tests::managed_geometry_reserves_before_growth_and_transfers_credit_to_model ... ok
+test ply::tests::cancellation_before_io_and_during_polygon_tessellation ... ok
+test obj_swap::tests::shared_metadata_uses_previous_references_and_length_is_exact ... ok
+test off_swap::tests::block_writes_preserve_scalar_bits_across_boundaries ... ok
+test off_swap::tests::blocked_arrays_preserve_records_across_non_aligned_boundaries ... ok
+test off_swap::tests::every_native_face_color_kind_is_preserved ... ok
+test ply::tests::face_before_vertex_negative_indices_nonfinite_positions_and_point_cloud_contract ... ok
+test ply::tests::header_memory_rejection_precedes_body_validation_and_cleans_up ... ok
+test ply::tests::native_integer_indices_preserve_signed_and_unsigned_boundaries ... ok
+test ply_swap::tests::all_scalar_types_preserve_native_bits_in_independent_layout ... ok
+test ply_swap::tests::blocked_scalar_restore_preserves_bits_and_bounds_reader_calls ... ok
+test stl::tests::binary_and_ascii_preserve_geometry ... ok
+test stl::tests::preserves_attributes_empty_mesh_and_cancellation ... ok
+test off_swap::tests::native_attributes_and_polygon_storage_roundtrip_exactly ... ok
+test stl::tests::rejects_truncation_nonfinite_and_trailing_data ... ok
+test stl::tests::ascii_model_reserves_exact_facets_before_coordinate_decode ... ok
+test stl::tests::binary_model_admits_before_facets_and_retains_reservation ... ok
+test stl::tests::public_file_api_and_cancellation_before_io ... ok
+test off::tests::independent_geometry_oracles_preserve_surface_winding_and_float64 ... ok
+test ply::tests::managed_typed_columns_lists_and_polygons_retain_exact_credit ... ok
+test stl_swap::tests::corrupt_truncated_and_pressure_cleanup ... ok
+test stl_swap::tests::exact_bits_and_last_owner_credit ... ok
+test stl_swap::tests::facet_block_boundaries_preserve_all_bits_and_attributes ... ok
+test stl_swap::tests::forged_counts_fail_before_admission_and_empty_mesh_is_managed ... ok
+test stl::tests::streamed_binary_blocks_preserve_facets_cancel_and_recover ... ok
+test ply::tests::all_native_columns_and_encodings_match_independent_oracles ... ok
+test ply::tests::truncated_binary_headers_payload_and_invalid_schema_reject ... ok
+test ply_swap::tests::native_fixture_framing_length_matches_all_encodings_and_precision ... ok
+
+test result: ok. 55 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_vector-7d4409c305e3df8f)
+
+running 219 tests
+test emf::tests::bezier_and_continuation_arrays_require_complete_segments ... ok
+test emf::tests::mapping_modes_extents_and_device_dimensions_are_validated ... ok
+test eps::tests::ascii_and_dos_sources_borrow_original_artwork_and_isolate_previews ... ok
+test emf::tests::truncated_records_eof_count_unknown_and_selection_refused ... ok
+test emf::tests::continuation_updates_position_even_with_null_pen ... ok
+test emf::tests::stock_rectangle_exact_pixels_and_admission ... ok
+test emf::tests::deleted_brush_defaults_and_invalid_indices_are_rejected ... ok
+test emf::tests::polygon_lengths_modes_and_open_lines ... ok
+test emf::tests::extension_header_bounds_and_gl_metadata_are_explicit ... ok
+test emf::tests::custom_object_indices_colors_and_null_pen ... ok
+test emf::tests::description_is_bounded_metadata_not_extension_fields ... ok
+test eps_bounds::tests::outer_header_trailer_and_hires_precedence ... ok
+test emf::tests::context_indices_and_stack_limit_are_bounded ... ok
+test eps_bounds::tests::refuses_ambiguous_unsupported_missing_and_cancelled_sources ... ok
+test eps_document::tests::document_errors_do_not_return_partial_preview_or_output ... ok
+test eps_document::tests::imported_showpage_keeps_complete_document_pixels ... ok
+test eps_document::tests::computed_numeric_coordinates_match_literal_document_pixels ... ok
+test eps_fill::tests::analytic_coverage_open_closure_holes_and_root_lifetime ... ok
+test eps_flatten::tests::refusals_and_output_pass_cancellation_release_credit ... ok
+test eps_graphics::tests::clipping_keeps_path_and_restores_saved_branches_with_bounded_records ... ok
+test eps_document::tests::bounded_file_source_cap_and_retained_output_share_root ... ok
+test eps_graphics::tests::limits_restore_forks_and_failed_operations_preserve_the_active_path ... ok
+test eps_fill::tests::sparse_tall_page_visits_only_active_edges_with_bounded_work ... ok
+test eps_numbers::tests::postscript_decimal_and_radix_numbers_keep_numeric_object_types ... ok
+test eps_graphics::tests::independent_graphics_queries_match_ghostscript_state_and_path_rules ... ok
+test eps_numbers::tests::independent_radix_reference_covers_all_bases_and_signed_bit_boundaries ... ok
+test eps_program::tests::nested_procedures_borrow_names_cache_numbers_and_preserve_runtime_marks ... ok
+test eps_document::tests::native_document_negative_origin_density_and_output_lifetime ... ok
+test eps_fill::tests::allocation_work_and_cancellation_fail_without_partial_mask ... ok
+test eps_flatten::tests::curves_preserve_topology_and_bound_dense_independent_samples ... ok
+test eps_graphics::tests::arcs_preserve_turns_transform_and_roll_back_failed_paths ... ok
+test eps_graphics::tests::persistent_fill_stroke_scene_reuses_geometry_preserves_pen_and_last_owner ... ok
+test eps_document::tests::rectangle_operator_pixels_match_explicit_paths_without_save_slots ... ok
+test eps_graphics::tests::numeric_rectclip_clears_success_and_preserves_failed_path_and_arena ... ok
+test eps_graphics::tests::root_admission_query_cancellation_and_destination_size_never_corrupt_scene ... ok
+test eps_fill::tests::empty_coverage_skips_image_scan_and_preserves_admission_and_cancel ... ok
+test eps_numbers::tests::full_name_grammar_ranges_limits_and_transient_cancellation ... ok
+test eps_graphics::tests::prepared_path_admits_exact_storage_transforms_and_releases_failed_output ... ok
+test eps_program::tests::root_pressure_and_cancel_during_second_pass_release_tape ... ok
+test eps_program::tests::malformed_procedures_and_limits_refuse_before_tape_allocation ... ok
+test eps_raster::tests::device_hairline_width_survives_paint_scale_and_singular_matrix ... ok
+test eps_raster::tests::independent_all_zero_adjust_arc_pixel_qualification ... ignored, zero-adjust ellipse boundary differs at pixel 19; keep full qualification open
+test eps_raster::tests::independent_default_adjust_arc_pixel_qualification ... ignored, default Ghostscript fill adjustment differs from native center coverage
+test eps_raster::tests::independent_ghostscript_full_color_pixel_qualification ... ignored, strict full-color qualification: gray/RGB 0.5 native 128 versus Ghostscript 127 remains unresolved
+test eps_raster::tests::independent_gray_rgb_ramp_full_strict_qualification ... ignored, strict reference parity: four half-tone cases differ after reference intermediate color quantization
+test eps_raster::tests::independent_ghostscript_binary_color_pixels_match_native_pipeline ... ok
+test eps_raster::tests::native_program_mixed_fill_stroke_scene_renders_in_source_order ... ok
+test eps_raster::tests::paint_order_straight_alpha_viewport_and_last_owner ... ok
+test eps_raster::tests::independent_clip_pixels_match_ghostscript ... ok
+test eps_raster::tests::subpixel_clip_intersects_samples_without_multiplying_alpha ... ok
+test eps_strings::tests::independent_python_ascii85_reference_covers_tail_lengths_and_all_byte_values ... ok
+test eps_raster::tests::rejects_unsupported_before_output_and_cancels_after_admission ... ok
+test eps_raster::tests::independent_zero_adjust_arc_pixels_match_ghostscript ... ok
+test eps_strings::tests::malformed_limits_and_transient_cancellation_do_not_leak_admission ... ok
+test eps_document::tests::imported_rectangles_and_showpage_match_independent_ghostscript_pixels ... ok
+test eps_strings::tests::source_and_decoded_string_share_root_admission_and_last_owner_lifetime ... ok
+test eps_strings::tests::strings_preserve_binary_values_and_postscript_escape_rules ... ok
+test eps_stroke::tests::cap_outlines_fill_to_analytic_pixel_coverage ... ok
+test eps_stroke::tests::independent_ghostscript_stroke_pixel_qualification ... ignored, strict stroke pixel qualification: Ghostscript butt stroke includes an extra row outside the native geometric outline
+test eps_stroke::tests::independent_shifted_bevel_pixel_qualification ... ignored, strict reference gate: shifted bevel also differs away from original diagonal tie; coverage rule unresolved
+test eps_stroke::tests::caps_and_affine_pen_have_analytic_geometry ... ok
+test eps_stroke::tests::independent_unadjusted_ghostscript_stroke_pixel_qualification ... ignored, strict unadjusted stroke qualification: bevel pixel 53 differs at diagonal boundary
+test eps_stroke::tests::independent_unadjusted_axis_stroke_pixels_match ... ok
+test eps_stroke::tests::joins_union_with_segment_outlines_and_miter_limit_bevels ... ok
+test eps_stroke::tests::polyline_closed_ring_repeated_points_and_error_release ... ok
+test eps_stroke::tests::round_zero_length_disk_and_error_release ... ok
+test eps_stroke::tests::independent_zero_adjust_bevel_pixels_match_away_from_exact_diagonal_tie ... ok
+test eps_stroke_prepare::tests::inverse_final_ctm_and_pixel_tolerance_prepare_native_curves ... ok
+test eps_tokens::tests::lexical_groups_strings_names_and_comments_preserve_source ... ok
+test eps_tokens::tests::malformed_limits_and_one_shot_cancellation_stop_iteration ... ok
+test eps_stroke_prepare::tests::prepared_multiple_subpaths_stroke_into_one_managed_outline ... ok
+test eps_stroke::tests::native_bevel_stroke_equals_explicit_union_at_subpixel_translations ... ok
+test eps_raster::tests::independent_gray_rgb_ramp_outside_reference_quantization_boundary ... ok
+test eps_vm::tests::definitions_procedures_aliases_and_conditionals_execute_native_values ... ok
+test eps_vm::tests::degree_trigonometry_preserves_cardinals_and_bounds_large_angles ... ok
+test eps_vm::tests::failures_limits_cancel_and_last_owner_release_all_managed_storage ... ok
+test eps_vm::tests::numeric_conversions_preserve_types_and_check_integer_range ... ok
+test eps_vm::tests::integer_division_remainder_and_square_root_obey_numeric_contract ... ok
+test eps_vm::tests::independent_ghostscript_values_and_types_match_scalar_and_procedure_cases ... ok
+test eps_vm::tests::operator_exec_chains_do_not_recurse_on_the_rust_stack ... ok
+test eps_vm::tests::tiny_negative_degree_angles_do_not_disappear_during_reduction ... ok
+test eps_vm::vector_tests::arc_operators_execute_and_account_each_generated_piece ... ok
+test eps_vm::tests::rounding_errors_release_managed_execution_memory ... ok
+test eps_vm::tests::rounding_preserves_types_and_uses_positive_ties ... ok
+test pdf::overlap_patch_tests::folded_tensor_uses_projected_union_not_multiplicity ... ignored, known folded Tensor coverage double-counting; exact mathematical control
+test eps_vm::vector_tests::computed_procedures_operator_aliases_and_fill_stroke_build_one_shared_path ... ok
+test eps_vm::vector_tests::drawing_failure_cancellation_and_quotas_discard_the_entire_partial_scene ... ok
+test eps_vm::vector_tests::eps_import_showpage_is_empty_aliasable_and_user_redefinable ... ok
+test eps_vm::vector_tests::numeric_rectangles_preserve_path_style_and_support_negative_sizes ... ok
+test eps_vm::vector_tests::path_bbox_preserves_original_vm_work_limit_and_transient_cancel_causes ... ok
+test eps_vm::vector_tests::native_vm_graphics_queries_match_all_independent_graphics_cases ... ok
+test icc_colorimetry::tests::invalid_chromaticities_leave_existing_profile_intact ... ok
+test icc_colorimetry::tests::synthesized_profiles_encode_icc_pcs_and_map_neutral_to_its_white ... ok
+test eps_raster::tests::cached_clip_yields_to_complex_paint_mask_admission ... ok
+test eps_vm::tests::stack_numeric_and_identity_operations_follow_object_semantics ... ok
+test pdf::overlap_patch_tests::partial_tensor_overlap_uses_later_patch_color ... ignored, known partial Tensor overlap mixes earlier color; exact source-order control
+test eps_vm::tests::powers_match_binary_oracle_and_refuse_nonfinite_results ... ok
+test pdf::precise_fill_tests::excessive_fill_precision_refuses_without_retaining_managed_credit ... ok
+test pdf::precise_fill_tests::precise_curve_storage_obeys_exact_shared_budget ... ok
+test pdf::precise_fill_tests::shading_texture_obeys_exact_shared_budget_and_releases_credit ... ok
+test pdf::precise_fill_tests::coons_depth_limit_refuses_incomplete_render_and_allows_retry ... ok
+test pdf::precise_fill_tests::tensor_depth_limit_refuses_incomplete_render_and_allows_retry ... ok
+test pdf::precise_fill_tests::curve_cancellation_at_every_checkpoint_releases_shared_credit ... ok
+test pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization ... ok
+test pdf::overlap_patch_tests::later_coincident_tensor_patch_covers_earlier_color ... ok
+test pdf::precise_fill_tests::upstream_coons_function_matches_independent_interior_integrals ... ignored, requires pinned external Serenity Coons source; RRRAH_COONS_CORPUS
+test pdf::precise_fill_tests::cubic_fill_matches_independent_parabola_pixel_integral ... ok
+test pdf::direct_shading_background_tests::direct_sh_ignores_background_and_preserves_fractional_alpha ... ok
+test pdf::soft_mask_isolation_tests::luminosity_soft_mask_bands_preserve_alpha_and_managed_ownership ... ok
+test pdf::tensor_background_coverage_tests::fractional_tensor_edges_mix_with_declared_background ... ok
+test pdf::tensor_center_tests::planar_tensor_samples_pixel_centers_with_bounded_color_error ... ok
+test pdf::tests::corrupt_embedded_image_refuses_incomplete_render_and_releases_credit ... ok
+test pdf::tensor_triangle_geometry_tests::inflated_patch_triangles_have_consistent_bounds_and_vertex_colors ... ok
+test pdf::tensor_fractional_coverage_tests::fractional_tensor_edges_match_exact_rectangle_area ... ok
+test pdf::tensor_patch_alignment_tests::two_bit_flags_preserve_shared_edge_like_eight_bit_flags ... ok
+test eps_vm::tests::logarithms_match_binary_oracle_and_reject_invalid_domains ... ok
+test pdf::tests::half_alpha_red_is_straight_and_matches_poppler_white_composite ... ok
+test pdf::tests::independent_image_transfer_channels_match_public_decode ... ok
+test pdf::tests::fractional_page_extents_keep_partial_edge_pixels ... ok
+test pdf::tests::malformed_source_and_source_admission_release_credit ... ok
+test pdf::tests::invalid_and_excessive_user_units_refuse_without_retained_credit ... ok
+test pdf::tests::missing_invoked_object_refuses_in_page_and_inherited_form ... ok
+test pdf::tests::malformed_invoked_form_geometry_refuses_without_output_reservation ... ok
+test pdf::tests::missing_selected_font_refuses_in_page_and_inherited_form_before_render ... ok
+test pdf::shading_context_cache_tests::shared_shading_keeps_background_context_in_both_draw_orders ... ok
+test pdf::tests::page_rotation_preserves_extent_and_matches_poppler ... ok
+test pdf::tests::page_user_unit_scales_geometry_and_pixels ... ok
+test pdf::tests::renderer_overflow_extents_are_rejected_before_output_allocation ... ok
+test pdf::tests::selected_pages_match_authored_samples_and_release_budget ... ok
+test pdf::tests::unsupported_invoked_object_kind_refuses_without_rendering ... ok
+test pdf::tests::unsupported_selected_font_refuses_before_render_allocation ... ok
+test pdf_device_default_tests::alpha_soft_mask_without_group_color_space_preserves_coverage ... ok
+test pdf::tests::unresolved_type0_font_refuses_instead_of_helvetica_substitution ... ok
+test pdf::tests::device_cmyk_float_fills_match_independent_littlecms ... ok
+test pdf_device_default_tests::device_rgb_soft_mask_luminosity_matches_independent_primary_bands ... ok
+test pdf::tests::embedded_ycck_jpeg_app14_matches_independent_oracle ... ok
+test pdf::tests::embedded_cmyk8_image_matches_full_domain_littlecms ... ok
+test pdf::tests::embedded_cmyk_jpeg_app14_decode_inversion_matches_independent_oracle ... ok
+test pdf_device_default_tests::equal_stream_headers_have_content_sensitive_cache_keys ... ok
+test pdf_device_default_tests::identical_shading_dictionaries_keep_distinct_stream_payloads ... ok
+test pdf_device_default_tests::implicit_initial_gray_remains_black_with_default_gray_resource ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_affine_components_integrate_over_winning_fragments ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_every_admission_failure_cancel_and_work_limit_are_transactional ... ok
+test pdf_device_default_tests::default_gray_and_rgb_isolate_device_fills_and_shared_images ... ok
+test pdf_device_default_tests::shared_soft_mask_group_preserves_mask_kind_and_transfer ... ok
+test pdf::tests::device_cmyk_hybrid_matches_full_domain_independent_oracle ... ok
+test pdf_device_default_tests::shared_soft_mask_group_isolates_inherited_color_resources ... ok
+test pdf::tests::nested_form_fonts_inherit_resources_and_cycles_refuse ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_folded_priority_uses_v_then_u_and_not_multiplicity ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_fragment_limits_and_invalid_input_preserve_previous_source ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_unions_coverage_and_preserves_later_patch_components ... ok
+test pdf::tests::nonlinear_image_transfer_preserves_all_byte_values_through_public_decode ... ok
+test eps_vm::tests::arctangent_quadrants_match_binary_oracle_and_refuse_zero_vector ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_every_mid_partition_cancel_preserves_published_regions ... ok
+test pdf_device_default_tests::default_cmyk_nested_scopes_cover_devices_meshes_images_and_alternates ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_partial_overlap_matches_exact_ordered_three_pixel_rows ... ok
+test pdf_patch_bridge_tests::tests::patch_identity_overflow_and_invalid_composition_never_mutate_owner ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_reconstructs_reflected_transformed_parameters_and_components ... ok
+test pdf_patch_bridge_tests::tests::patch_identity_preserves_folded_parameter_under_integer_affine_families ... ok
+test pdf_patch_bridge_tests::tests::projected_stream_depth_refusal_is_terminal_and_releases_credit ... ok
+test pdf_patch_bridge_tests::tests::patch_identity_proves_global_relations_and_rejects_one_ulp_curve_change ... ok
+test pdf_patch_tests::tests::coons_conversion_preserves_source_boundary_bits ... ok
+test pdf_patch_tests::tests::errors_and_cancellation_roll_back_only_new_triangles ... ok
+test pdf_patch_tests::tests::coons_control_conversion_matches_tensor_geometry_and_colors ... ok
+test pdf_patch_tests::tests::dense_curved_geometry_and_bilinear_color_stay_within_reported_bounds ... ok
+test pdf_patch_tests::tests::ordered_stream_failure_cancel_and_refusal_release_planner_credit ... ok
+test pdf_patch_bridge_tests::tests::projected_bounds_detect_curved_projection_and_enclose_source_residuals ... ok
+test pdf_patch_tests::tests::mixed_mesh_ranges_preserve_patch_ownership_and_roll_back_together ... ok
+test pdf_patch_tests::tests::affine_patch_is_two_triangles_and_transform_controls_error ... ok
+test pdf_patch_tests::tests::mesh_does_not_weld_near_curves_and_validates_empty_requests ... ok
+test pdf_patch_tests::tests::ordered_stream_preserves_patch_parameters_through_transform_and_fans ... ok
+test pict::command_tests::borrowed_colors_rectangles_and_end_are_exact_and_bounded ... ok
+test pict::command_tests::cancellation_and_visitor_failure_stop_before_next_command ... ok
+test pict::packed_row_tests::external_packed_rows_match_independent_rgba_oracles ... ignored, requires external PICT files and TwelveMonkeys RGBA oracle outputs
+test pict::packed_row_tests::byte_and_word_runs_preserve_units_and_exact_row_size ... ok
+test pict::packed_row_tests::malformed_runs_cannot_overwrite_canaries_and_cancel_before_mutation ... ok
+test pict::public_tests::external_96dpi_cropped_public_pixels_match_oracle ... ignored, requires external 96dpi PICT/TwelveMonkeys corpus
+test pict::public_tests::external_mire_public_render_matches_independent_oracle_and_releases_scratch ... ignored, requires downloaded TwelveMonkeys PICT corpus
+test pict::public_tests::content_signature_routes_misleading_raw_and_unknown_suffixes ... ok
+test pict::render_tests::authored_file_fixture_renders_full_rgba_and_releases_budget ... ok
+test pict::render_tests::cancellation_during_allocated_fill_releases_output_and_allows_retry ... ok
+test pict::public_tests::public_output_pressure_is_typed_and_retry_keeps_budget_clean ... ok
+test pict::public_tests::public_file_route_preserves_rgba_and_unspecified_color ... ok
+test pict::render_tests::default_highlight_reset_preserves_paint_but_highlight_mode_refuses ... ok
+test pict::render_tests::direct_bits_crop_excludes_padded_columns_and_preserves_row_pitch ... ok
+test pict::render_tests::direct_bits_unpacked_and_short_rows_preserve_rgb_and_ignore_pad_byte ... ok
+test pict::render_tests::exact_fill_budget_ownership_and_unsupported_preflight ... ok
+test pict::render_tests::extended_72dpi_matches_v2_and_other_resolution_refuses_before_allocation ... ok
+test pict::render_tests::rectangular_clip_changes_apply_to_later_paints ... ok
+test pict::tests::inverted_empty_and_full_signed_range_admission ... ok
+test pict::tests::record_and_arbitrary_file_header_preserve_signed_origin_and_size ... ok
+test pict::version_tests::version_headers_are_bounded_and_word_prefix_is_exact ... ok
+test png_color::tests::cicp_overrides_srgb_and_unknown_primaries_do_not_become_srgb ... ok
+test png_color::tests::cicp_preserves_hdr_unknown_and_narrow_range_declarations ... ok
+test svg::tests::fill_and_straight_alpha ... ok
+test svg::tests::output_admission_precedes_pixmap_allocation_and_last_owner_retains_credit ... ok
+test png_color::tests::gamma_only_requires_gray_ihdr_and_respects_srgb ... ok
+test png_color::tests::corrupt_duplicate_and_invalid_color_chunks_are_rejected ... ok
+test png_color::tests::gamma_chroma_profiles_obey_precedence_and_validate_chunks ... ok
+test pict::public_tests::authored_unpacked_public_fixtures_match_authored_pixels ... ok
+test svg::tests::unsupported_content_is_not_silently_dropped ... ok
+test wmf::tests::polygon_counts_are_signed_bounded_and_exact ... ok
+test wmf::tests::truncation_checksum_unknown_record_and_index_are_refused ... ok
+test svg::tests::oversized_viewport ... ok
+test wmf::tests::viewport_translation_scale_and_reflection ... ok
+test wmf::tests::deletion_reuses_free_slots_and_refuses_live_objects ... ok
+test wmf::tests::rectangle_pixels_budget_and_last_owner ... ok
+test wmf::tests::saved_context_indices_and_stack_bounds ... ok
+test wmf::tests::rounded_rectangle_clamps_ellipse_and_clears_corners ... ok
+test pdf_patch_tests::tests::mesh_stitches_unequal_depths_and_reversed_edges_without_blending_colors ... ok
+test pdf::precise_fill_tests::curved_coons_matches_independent_parabolic_pixel_areas ... ok
+test eps_vm::tests::degree_trigonometry_matches_exact_binary_ghostscript_reference ... ok
+test pdf::precise_fill_tests::curved_tensor_matches_independent_parabolic_pixel_areas ... ok
+test pdf_patch_tests::tests::adaptive_cells_share_complete_edges_without_t_junctions ... ok
+test pdf_patch_bridge_tests::tests::projected_stream_coons_preserves_limits_cancel_admission_failure_and_retry ... ok
+test pdf_patch_bridge_tests::tests::projected_stream_anisotropic_refinement_keeps_uv_edges_conforming ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_folded_projection_matches_exact_union_three_pixel_rows ... ok
+test pdf::precise_fill_tests::compact_adaptive_parabola_preserves_geometry_within_eight_mib ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_colored_fold_selects_largest_u_mapping ... ok
+
+test result: ok. 206 passed; 0 failed; 13 ignored; 0 measured; 0 filtered out; finished in 2.68s
+

@@ -35,6 +35,10 @@ pub mod pdf;
 #[cfg(test)]
 mod pdf_device_default_tests;
 #[cfg(test)]
+mod pdf_ordered_pixel_tests;
+#[cfg(test)]
+mod pdf_patch_bridge_tests;
+#[cfg(test)]
 mod pdf_patch_tests;
 pub mod pict;
 pub mod png_color;

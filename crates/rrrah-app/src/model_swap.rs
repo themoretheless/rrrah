@@ -20,6 +20,9 @@ impl SwapPayload for ModelPayload {
     fn capacity_bytes(&self) -> u64 {
         self.0.capacity_bytes()
     }
+    fn minimum_restore_weight(&self) -> Option<u64> {
+        Some(self.0.minimum_restore_weight())
+    }
     fn payload_len(&self) -> std::io::Result<u64> {
         match &self.0 {
             DecodedModel::Stl(mesh) => {
@@ -89,6 +92,49 @@ impl SwapPayload for ModelPayload {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn restored_model_weight_floor_survives_all_fixture_payloads() {
+        let fixtures =
+            std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models");
+        let mut checked = 0;
+        for entry in std::fs::read_dir(fixtures).unwrap() {
+            let path = entry.unwrap().path();
+            if !matches!(
+                path.extension().and_then(|s| s.to_str()),
+                Some("stl" | "obj" | "off" | "ply")
+            ) {
+                continue;
+            }
+            let payload =
+                ModelPayload(rrrah_decode::decode_model(&rrrah_decode::DecodeRequest::new(&path)).unwrap());
+            let floor = payload.minimum_restore_weight().unwrap();
+            assert!(
+                floor > 0 && floor <= payload.capacity_bytes(),
+                "{}",
+                path.display()
+            );
+            let mut bytes = Vec::new();
+            payload.write_payload(&mut bytes).unwrap();
+            let root = MemoryBudget::new(128 * 1024);
+            let restored =
+                ModelPayload::read_payload(&mut bytes.as_slice(), bytes.len() as u64, &root).unwrap();
+            assert_eq!(
+                restored.minimum_restore_weight(),
+                Some(floor),
+                "{}",
+                path.display()
+            );
+            assert!(floor <= restored.capacity_bytes(), "{}", path.display());
+            let mut again = Vec::new();
+            restored.write_payload(&mut again).unwrap();
+            assert_eq!(again, bytes, "{}", path.display());
+            drop(restored);
+            assert_eq!(root.used(), 0);
+            checked += 1;
+        }
+        assert_eq!(checked, 28, "update the explicit corpus count after review");
+    }
+
     #[test]
     fn malformed_all_model_codecs_refuse_geometry_without_large_reservations() {
         let mut stl = b"RRSTL001".to_vec();

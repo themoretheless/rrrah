@@ -1,0 +1,26 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 38.65s
+     Running unittests src/main.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah-b180ac92e3f43d6e)
+
+running 1 test
+test foreground_loader_tests::retained_raster_prefetch_avoids_unretainable_swap_reads ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 375 filtered out; finished in 0.01s
+

@@ -90,7 +90,12 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
                     .entry(source["extension"].as_str().unwrap().to_owned())
                     .or_default() += 1;
                 if frame.capacity_bytes() <= 16 * 1024 * 1024 {
-                    valid.push((path, row["digest"].as_str().unwrap().to_owned(), assumed));
+                    valid.push((
+                        path,
+                        row["digest"].as_str().unwrap().to_owned(),
+                        assumed,
+                        rrrah_cache::SwapPayload::minimum_restore_weight(&frame).unwrap(),
+                    ));
                     row["navigation_eligible"] = true.into();
                 } else {
                     row["navigation_eligible"] = false.into();
@@ -149,7 +154,9 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
     let varied_windows = std::env::var_os("RRRAH_COLLECTION_VARY_PREFETCH").is_some_and(|v| v == "1");
     let mut window_steps = BTreeMap::<String, usize>::new();
     let mut prefetched_hits = 0usize;
+    let partial_bytes = std::env::var_os("RRRAH_COLLECTION_PARTIAL_BYTES").is_some_and(|v| v == "1");
     let mut far_refusals = 0;
+    let mut far_byte_refusals = 0;
     let mut ttl_restores = 0;
     let mut max_pre_pressure_used = 0;
     for step in 0..valid.len() {
@@ -212,7 +219,45 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
             });
         }
         let mut protected = Vec::new();
+        let partial_headroom = neighbours
+            .iter()
+            .skip(1)
+            .map(|path| valid.iter().find(|(p, ..)| p == path).unwrap().3)
+            .min()
+            .map(|minimum| minimum / 2);
+        let mut active_limits = limits;
         for (n, path) in neighbours.into_iter().enumerate() {
+            let before_admission = if partial_bytes && n > 0 {
+                if n == 1 {
+                    assert_eq!(cache.len(), 2);
+                    active_limits = rrrah_cache::CacheLimits {
+                        max_bytes: cache.resident_bytes() + partial_headroom.unwrap(),
+                        max_entries: None,
+                        ttl: None,
+                    };
+                    assert!(cache.set_limits_and_spill(active_limits));
+                }
+                // Seed a verified payload so admission must use the swap index,
+                // rather than cold decode or the full-count fast refusal.
+                let (frame, assumption) = load_raster_for_display_typed(&request_for(&path), None).unwrap();
+                let reference = valid.iter().find(|(p, ..)| p == &path).unwrap();
+                assert_eq!(digest(&frame), reference.1);
+                assert_eq!(assumption, reference.2);
+                let mut key = raster_display_key(&request_for(&path), None).unwrap();
+                key.6 = assumption;
+                assert!(cache.can_admit_key_by_count(&key));
+                assert!(cache.can_admit_key_by_minimum_weight(&key, partial_headroom.unwrap()));
+                assert!(!cache.can_admit_key_by_minimum_weight(&key, reference.3));
+                cache.swap().unwrap().enqueue(key.clone(), frame);
+                cache.swap().unwrap().wait_idle().unwrap();
+                assert_eq!(
+                    cache.swap().unwrap().minimum_restore_weight(&key),
+                    Some(reference.3)
+                );
+                Some((cache.swap().unwrap().stats().reads, root.used(), root.peak()))
+            } else {
+                None
+            };
             match preload_raster_with_lease(&request_for(&path), None, &mut cache, &gate) {
                 Ok((frame, assumption, lease)) => {
                     let reference = valid.iter().find(|(p, ..)| p == &path).unwrap();
@@ -240,13 +285,24 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
                 }
                 Err(error) => {
                     assert!(n > 0, "nearest: {error}");
-                    assert_eq!(error, "raster prefetch skipped: all count slots are protected");
-                    far_refusals += 1;
+                    if partial_bytes {
+                        assert_eq!(error, "raster prefetch skipped: protected byte budget exhausted");
+                        far_byte_refusals += 1;
+                    } else {
+                        assert_eq!(error, "raster prefetch skipped: all count slots are protected");
+                        far_refusals += 1;
+                    }
                 }
+            }
+            if let Some(before) = before_admission {
+                assert_eq!(
+                    (cache.swap().unwrap().stats().reads, root.used(), root.peak()),
+                    before
+                );
             }
             assert!(cache.swap().unwrap().stats().queued_bytes <= 32 * 1024 * 1024);
             assert!(cache.len() <= 2);
-            assert!(cache.resident_bytes() <= limits.max_bytes);
+            assert!(cache.resident_bytes() <= active_limits.max_bytes);
         }
         max_pre_pressure_used = max_pre_pressure_used.max(root.used());
         let blocker = root.try_reserve(root.available_bytes()).unwrap();
@@ -268,6 +324,7 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
         };
         drop(protected);
         drop(visible);
+        assert!(cache.set_limits_and_spill(limits));
         if step % 16 == 0 {
             cache.swap().unwrap().wait_idle().unwrap();
             let mut key = raster_display_key(&request, None).unwrap();
@@ -324,7 +381,7 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
     assert!(disk.bytes <= 64 * 1024 * 1024 && disk.objects <= 8);
     assert_eq!(stats.queued_bytes, 0);
     assert_eq!(stats.errors, 0);
-    assert!(far_refusals > 0 && ttl_restores > 0);
+    assert!(far_refusals + far_byte_refusals > 0 && ttl_restores > 0);
     assert!(stats.reads >= ttl_restores);
     cache.swap().unwrap().shutdown();
     drop(cache);
@@ -336,7 +393,7 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
         }
     }
     let report = serde_json::json!({"scope":"external content-unique corpus; strict application color defaults; same-decoder baseline hashes test transport, not independent color correctness",
-        "legacy_prefetch_swap_reads":std::env::var("RRRAH_BENCH_LEGACY_PREFETCH_SWAP").as_deref()==Ok("1"),"attempted":sources.len(),"refusal_categories":refusal_categories,"accepted_extensions":accepted,"navigation_sources":valid.len(),"far_count_refusals":far_refusals,"ttl_restores":ttl_restores,"varied_prefetch_windows":varied_windows,"window_steps":window_steps,"nearest_navigation_hits":prefetched_hits,
+        "legacy_prefetch_swap_reads":std::env::var("RRRAH_BENCH_LEGACY_PREFETCH_SWAP").as_deref()==Ok("1"),"attempted":sources.len(),"refusal_categories":refusal_categories,"accepted_extensions":accepted,"navigation_sources":valid.len(),"far_count_refusals":far_refusals,"partial_byte_pressure":partial_bytes,"far_byte_refusals":far_byte_refusals,"ttl_restores":ttl_restores,"varied_prefetch_windows":varied_windows,"window_steps":window_steps,"nearest_navigation_hits":prefetched_hits,
         "swap":{"writes":stats.writes,"reads":stats.reads,"dropped":stats.dropped,"errors":stats.errors},"disk_debug":format!("{disk:?}"),
         "baseline_peak":baseline_peak,"max_observed_pre_pressure_used":max_pre_pressure_used,"root_peak_includes_synthetic_pressure":true,"root_peak":root.peak(),"root_limit":root.limit(),"root_final":root.used(),"seconds":started.elapsed().as_secs_f64(),"rows":rows});
     std::fs::write(

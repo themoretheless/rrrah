@@ -10961,3 +10961,130 @@ admission and DICOM RLE window policies are covered. Explicit ephemeral requests
 keep their old contract.293 app tests pass,83 ignored. Partial free-space exact
 size estimation remains outside this lower-bound check.
 See [report](research/raster-model-protected-bytes-2026-10-19/REPORT.md).
+
+
+## Raster swap admission with partial free space — 2026-10-19
+
+Retained raster prefetch now uses the indexed minimum restored pixel weight
+before reading nonresident swap objects. With 2W protected inside a 2.5W cache,
+the far W frame is refused without payload reads or managed peak growth; after
+releasing the nearest lease it restores once with exact raster equality.
+Warm RAM hits and explicit ephemeral requests remain covered by the application
+suite: 293 passed, 83 ignored. Unknown hints, persistent cache, model and RAW
+paths still retain their earlier admission behavior. This is a lower bound,
+not exact ICC-inclusive size prediction.
+See [report](research/raster-partial-swap-admission-2026-10-19/REPORT.md).
+
+
+## RAW swap admission with partial free space — 2026-10-19
+
+RAW retained prefetch now uses the temporary-swap index sensor-weight floor
+before restore; ready RAM hits are checked first. A local-original CR3 test
+proves zero reads and unchanged managed peak with 2W protected in a 2.5W cache,
+one exact sample/metadata restore after lease release, warm hits under exhausted
+root credit, and final zero. Existing cold CR3 both-direction/count/byte checks
+also pass. Ordinary app suite: 293 passed, 84 ignored. Persistent disk-cache
+objects without swap hints and model payloads retain their earlier behavior.
+See [report](research/raw-partial-swap-admission-2026-10-19/REPORT.md).
+
+
+## Model swap admission with partial free space — 2026-10-19
+
+STL/OBJ/OFF/PLY supply logical restored-weight floors, including nested model
+metadata, without source spare capacities. Retained prefetch checks this floor
+before swap reads. All four variants pass count/full-byte/partial-byte refusal
+and retry tests; all 28 model fixture payloads preserve their floor and exact
+serialization after restoration. Empty STL capacity/header accounting remains
+covered. Application: 294 passed, 84 ignored; mesh: 55 passed. Actual M4 Max Metal
+model readback: 7 passed, 1 ignored; six swap-cycle models preserve SDR/HDR target
+pixels with final managed/queued zero. Physical HDR is not established by these
+offscreen targets. Cold source admission and persistent-cache hints remain
+separate work. See [report](research/model-partial-swap-admission-2026-10-19/REPORT.md).
+
+
+## External collection partial-byte prefetch — 2026-10-19
+
+The varied-window external collection now has a byte-only partial-headroom mode.
+All 1024 source SHA256 values rechecked; 962 strict-color displayable paths,
+eight direction/window combinations, 1438 far byte refusals with no admission
+payload reads, 720 nearest navigation hits without decoding, 61 TTL restores,
+final managed zero. Count control has identical source/digest/refusal rows,
+720 hits and 61 restores. Byte/control swap errors are zero; control has six
+bounded write drops. Ordinary app suite: 294 passed, 84 ignored. Controlled swap
+seeding and synthetic reservations are not live GUI, physical-disk or RSS
+qualification. See [report](research/external-partial-byte-prefetch-2026-10-19/REPORT.md).
+
+
+## Tensor folded/partial-overlap defects reproduced — 2026-10-19
+
+An independent source-net projected-union estimate converges at22selected
+upstream Tensor pixels (max512→1024delta0.01048alpha level). Native differs by
+up to32.685levels and follows summed triangle multiplicity rather than union.
+Two owned exact3x3controls reproduce folded alpha255instead of128 and incorrect
+partial-overlap source color (6pixels, max85levels). Explicit Rust regressions
+fail as expected, with managed credit released before comparison; they are
+known ignored failures, not qualification passes. Existing coincident-patch test
+passes. Production sampler remains unchanged; admitted ordered ownership and
+folded v/u priority integration are required. AI stays Pending.
+See [analysis and exact controls](research/tensor-solid-boundary-investigation-2026-10-19/REPORT.md).
+
+
+## Patch source provenance for overlap correction — 2026-10-19
+
+Adaptive streaming now optionally supplies source patch indices and exact
+per-vertex (u,v), including conforming fans and mixed Tensor/Coons input.
+Existing stream/owned geometry remains unchanged; metadata is callback-only,
+without another retained mesh. Public API tests cover transformed coordinates,
+source components, cancellation/refusal/consumer failure and retry with final
+managed zero. Full vector suite:189passed/13ignored. Production pixel ownership
+integration is not yet connected; both exact folded/partial-overlap regressions
+remain known failures and AI stays Pending.
+See [implementation and validation](research/patch-source-provenance-2026-10-19/REPORT.md).
+
+
+## Admitted pixel ownership partition kernel — 2026-10-19
+
+Native local-pixel clipping now partitions opaque source geometry into disjoint
+winning regions, compares patch/v/u fields, and retains unaveraged components.
+Six kernel tests cover union, crossing priorities, exact affine integrals,
+every exercised allocation failure, cancellation at every observed checkpoint,
+fragment/work/invalid-input refusal and retry. Managed roots return to zero;
+vector suite195passed/13ignored. This kernel is not yet connected to production
+PDF sampling: source-field conditioning, bounded page candidate processing and
+nonlinear source integration remain. Full-PDF folded/partial-overlap controls
+are still known failures; AI stays Pending.
+See [implementation and limits](research/ordered-pixel-partition-2026-10-19/REPORT.md).
+
+
+## Adaptive provenance to local-field bridge — 2026-10-19
+
+The candidate bridge now fits checked local affine source/u/v fields without
+allocation and links real tessellation to the pixel partition. Connected exact
+partial-overlap and black folded3x3controls pass, as do transformed field and
+explicit singular/nonfinite refusal checks. Rounded clipping invariants are
+restored with anchored calculations and epsilon-free convex normalization.
+Vector suite198passed/14ignored. A stronger analytic colored-fold control still
+fails explicitly (maxRGB10): per-triangle v fits differ from a shared source
+identity by up to5.12e-13 and do not prove correct branch priority. This remains
+a known ignored candidate failure, not a production fix. Colored9pixel candidate
+costs2496triangles/6495fragments/5.4MBpeak; full-page cost is unqualified. Runtime
+PDF sampling and both earlier exact PDF regressions remain unchanged/pending.
+See [passing evidence and remaining failure](research/patch-field-bridge-2026-10-19/REPORT.md).
+
+
+## Exact global Tensor parameter identities — 2026-10-19
+
+Optional source-u/v affine identities are now proved over every Bernstein
+control using checked i128 dyadic arithmetic, without epsilon tests or heap
+allocation. Proved fields are shared across triangles; unproved fields remain
+untouched.201vector tests pass,14ignored, including63invertible affine source
+families, one-ULP rejection, source/device overflow, singular transforms and
+transactional application failure. Colored-fold candidate maxRGB error improves
+10→1 with zero shared-v inconsistency; unchanged analytic177oracle still fails
+at176. A separate exact-rational1Dcontrol establishes projected component error
+that the current parameter-bilinear bound misses. Production PDF routing and
+full AI qualification remain open. See [proof, limits and raw evidence](research/exact-patch-parameter-identities-2026-10-19/REPORT.md).
+
+### 2026-10-19 — projected source-component candidate delivery
+
+Opt-in Tensor/Coons adaptive streaming now checks projected source-component residuals on candidate and actual emitted triangles, with anisotropic refinement. The exact colored folded 3×3 control passes all 36 bytes at unchanged 1/64 geometry, 1/1024 component, and 8 MiB managed limits. Curved Coons, typed refusal/retry, and UV conformity controls pass. Combined delivery tests: app 294 passed/84 ignored, mesh 55 passed, vector 206 passed/13 ignored. This candidate is not integrated into default PDF viewing; numerical hull bounds are not interval certificates, nonlinear transforms and full-page AI remain unqualified. Evidence: `docs/research/projected-component-adaptive-stream-2026-10-19/README.md`.

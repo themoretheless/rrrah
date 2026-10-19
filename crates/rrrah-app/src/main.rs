@@ -2130,10 +2130,16 @@ impl ModelDisplayCache {
         {
             return Err("model prefetch skipped: all count slots are protected".into());
         }
-        if require_retention && !visible
+        if require_retention
+            && !visible
             && let Some(key) = &key
-            // Even an empty model owns a nonzero model-header allocation.
-            && !self.entries.can_admit_key_by_minimum_weight(key, 1)
+            && !self.entries.can_admit_key_by_minimum_weight(
+                key,
+                self.swap
+                    .as_ref()
+                    .and_then(|swap| swap.minimum_restore_weight(key))
+                    .unwrap_or(1),
+            )
         {
             return Err("model prefetch skipped: protected byte budget exhausted".into());
         }
@@ -2364,9 +2370,19 @@ fn preload_raw_with_lease(
     if cancelled() {
         return Err("RAW prefetch cancelled".into());
     }
-    // Every valid nonempty u16 sensor requires at least one sample. A lower
-    // bound avoids guessing dimensions and still detects a fully protected budget.
-    if !ram.can_admit_key_by_minimum_weight(&key, 2) {
+    if ram.get_resident(&key).is_some() {
+        if cancelled() {
+            return Err("RAW prefetch cancelled".into());
+        }
+        return Ok((true, ram.get_lease(&key)));
+    }
+    // A swap index hint describes the logical sensor bytes without restoring
+    // pixels. Unknown/cold objects retain the one-u16-sample lower bound.
+    let minimum = ram
+        .swap()
+        .and_then(|swap| swap.minimum_restore_weight(&key))
+        .unwrap_or(2);
+    if !ram.can_admit_key_by_minimum_weight(&key, minimum) {
         return Ok((false, None));
     }
     if ram.get_background_with_cancel(&key, cancelled).is_some() {
@@ -2722,6 +2738,7 @@ fn load_cached_raster_mode_resolving_key_policy(
         return Err("raster load cancelled".into());
     }
     let key = resolve_key();
+    let mut swap_weight_refused = false;
     if let Some(key) = &key {
         for assumed in [false, true] {
             let mut probe = key.clone();
@@ -2737,8 +2754,21 @@ fn load_cached_raster_mode_resolving_key_policy(
                 .then(|| cache.swap().map_or(0, |swap| swap.stats().reads));
             let hit = if visible {
                 cache.get_with_cancel(&probe, cancelled)
-            } else if skip_unretained_swap && !cache.can_admit_key_by_minimum_weight(&probe, 4) {
-                None
+            } else if skip_unretained_swap {
+                if let Some(lease) = cache.get_lease(&probe) {
+                    Some((*lease).clone())
+                } else {
+                    let minimum = cache
+                        .swap()
+                        .and_then(|swap| swap.minimum_restore_weight(&probe))
+                        .unwrap_or(4);
+                    if cache.can_admit_key_by_minimum_weight(&probe, minimum) {
+                        cache.get_background_with_cancel(&probe, cancelled)
+                    } else {
+                        swap_weight_refused = true;
+                        None
+                    }
+                }
             } else {
                 cache.get_background_with_cancel(&probe, cancelled)
             };
@@ -2774,11 +2804,12 @@ fn load_cached_raster_mode_resolving_key_policy(
     if skip_unretained_swap
         && !visible
         && let Some(key) = &key
-        && ![false, true].into_iter().any(|assumed| {
-            let mut probe = key.clone();
-            probe.6 = assumed;
-            cache.can_admit_key_by_minimum_weight(&probe, 4)
-        })
+        && (swap_weight_refused
+            || ![false, true].into_iter().any(|assumed| {
+                let mut probe = key.clone();
+                probe.6 = assumed;
+                cache.can_admit_key_by_minimum_weight(&probe, 4)
+            }))
     {
         return Err("raster prefetch skipped: protected byte budget exhausted".into());
     }
@@ -10086,11 +10117,14 @@ mod foreground_loader_tests {
             "obj-shared-metadata.obj",
             "ply-64-le.ply",
         ] {
-            for by_count in [true, false] {
+            for policy in 0..3 {
+                let by_count = policy == 0;
                 let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models");
-                let weight = rrrah_decode::decode_model(&DecodeRequest::new(fixtures.join(name)))
-                    .unwrap()
-                    .capacity_bytes();
+                let model = rrrah_decode::decode_model(&DecodeRequest::new(fixtures.join(name))).unwrap();
+                let weight = model.capacity_bytes();
+                let minimum = model.minimum_restore_weight();
+                assert!(minimum > 1 && minimum <= weight);
+                drop(model);
                 let directory = tempfile::tempdir().unwrap();
                 let root = rrrah_core::MemoryBudget::new(128 * 1024);
                 let cli = Cli::try_parse_from(["rrrah", "--model-swap-mb", "1"]).unwrap();
@@ -10098,7 +10132,11 @@ mod foreground_loader_tests {
                     Some(directory.path()),
                     false,
                     rrrah_cache::CacheLimits {
-                        max_bytes: if by_count { root.limit() } else { weight * 2 },
+                        max_bytes: match policy {
+                            0 => root.limit(),
+                            1 => weight * 2,
+                            _ => weight * 2 + minimum / 2,
+                        },
                         max_entries: by_count.then_some(2),
                         ttl: None,
                     },
@@ -10131,12 +10169,23 @@ mod foreground_loader_tests {
                     &mut expected,
                 )
                 .unwrap();
-                cache.swap.as_ref().unwrap().enqueue(
-                    model_display_key(&far).unwrap(),
-                    model_swap::ModelPayload(far_model),
-                );
+                let far_key = model_display_key(&far).unwrap();
+                if policy == 2 {
+                    assert!(cache.entries.can_admit_key_by_minimum_weight(&far_key, 1));
+                    assert!(!cache.entries.can_admit_key_by_minimum_weight(&far_key, minimum));
+                }
+                cache
+                    .swap
+                    .as_ref()
+                    .unwrap()
+                    .enqueue(far_key.clone(), model_swap::ModelPayload(far_model));
                 cache.swap.as_ref().unwrap().wait_idle().unwrap();
+                assert_eq!(
+                    cache.swap.as_ref().unwrap().minimum_restore_weight(&far_key),
+                    Some(minimum)
+                );
                 let peak = root.peak();
+                let used = root.used();
                 let visible = cache.visible.clone();
                 assert_eq!(
                     preload_model_with_lease(&far, &mut cache, &gate).unwrap_err(),
@@ -10148,6 +10197,7 @@ mod foreground_loader_tests {
                 );
                 assert_eq!(cache.swap.as_ref().unwrap().stats().reads, 0);
                 assert_eq!(root.peak(), peak);
+                assert_eq!(root.used(), used);
                 assert_eq!(cache.visible, visible);
                 drop(lease);
                 let (retry, lease) = preload_model_with_lease(&far, &mut cache, &gate).unwrap();
@@ -10171,7 +10221,8 @@ mod foreground_loader_tests {
 
     #[test]
     fn retained_raster_prefetch_avoids_unretainable_swap_reads() {
-        for by_count in [true, false] {
+        for policy in 0..3 {
+            let by_count = policy == 0;
             let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
                 .join("../../tests/fixtures/raster/associated-emission-rec709.exr");
             let weight = load_raster_for_display_typed(&DecodeRequest::new(&source), None)
@@ -10185,7 +10236,11 @@ mod foreground_loader_tests {
                 Some(directory.path()),
                 false,
                 rrrah_cache::CacheLimits {
-                    max_bytes: if by_count { root.limit() } else { weight * 2 },
+                    max_bytes: match policy {
+                        0 => root.limit(),
+                        1 => weight * 2,
+                        _ => weight * 2 + weight / 2,
+                    },
                     max_entries: by_count.then_some(2),
                     ttl: None,
                 },
@@ -10210,8 +10265,13 @@ mod foreground_loader_tests {
             rrrah_cache::write_raster_payload(&mut expected, &frame).unwrap();
             let mut key = raster_display_key(&far, None).unwrap();
             key.6 = assumed;
+            if policy == 2 {
+                assert!(cache.can_admit_key_by_minimum_weight(&key, 4));
+                assert!(!cache.can_admit_key_by_minimum_weight(&key, weight));
+            }
             cache.swap().unwrap().enqueue(key, frame);
             cache.swap().unwrap().wait_idle().unwrap();
+            let before = (root.used(), root.peak());
             assert_eq!(
                 preload_raster_with_lease(&far, None, &mut cache, &gate).unwrap_err(),
                 if by_count {
@@ -10221,6 +10281,7 @@ mod foreground_loader_tests {
                 }
             );
             assert_eq!(cache.swap().unwrap().stats().reads, 0);
+            assert_eq!((root.used(), root.peak()), before);
             let (hit, _, hit_lease) = preload_raster_with_lease(&nearest, None, &mut cache, &gate).unwrap();
             assert!(hit_lease.is_some());
             drop((hit, hit_lease, lease));
@@ -15623,6 +15684,101 @@ mod gpr_preload_tests {
         assert_eq!(root.used(), 0);
         eprintln!(
             "RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0"
+        );
+    }
+
+    #[test]
+    #[ignore = "requires local EOS R8 tests/IMG_9043.CR3 fixture"]
+    fn real_cr3_partial_protected_budget_skips_swap_until_lease_release() {
+        let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let directory = tempfile::tempdir().unwrap();
+        let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
+        let requests: Vec<_> = (0..3)
+            .map(|i| {
+                let path = directory.path().join(format!("{i}.CR3"));
+                std::fs::copy(&source, &path).unwrap();
+                std::fs::File::open(&path)
+                    .unwrap()
+                    .set_times(
+                        std::fs::FileTimes::new()
+                            .set_modified(std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i)),
+                    )
+                    .unwrap();
+                let mut request = DecodeRequest::new(path);
+                request.memory_budget = Some(root.clone());
+                request
+            })
+            .collect();
+        let keys: Vec<_> = requests
+            .iter()
+            .map(|request| {
+                CacheKey::for_mosaic_recipe(
+                    &SourceFingerprint::from_path(&request.path).unwrap(),
+                    0,
+                    NativeRawDecoder.mosaic_recipe(request).unwrap(),
+                )
+            })
+            .collect();
+        assert_ne!(keys[0], keys[1]);
+        assert_ne!(keys[1], keys[2]);
+        let selected = NativeRawDecoder.decode(&requests[0]).unwrap().mosaic;
+        let nearest = NativeRawDecoder.decode(&requests[1]).unwrap().mosaic;
+        let weight = selected.pixels.capacity_bytes();
+        let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits::bytes(weight * 2 + weight / 2));
+        ram.enable_swap(
+            rrrah_cache::MosaicSwapCache::new_with_budgets(
+                directory.path(),
+                rrrah_cache::MosaicSwapConfig {
+                    limits: rrrah_cache::CacheLimits::bytes(root.limit()),
+                    queue_bytes: root.limit(),
+                    queue_count: 4,
+                    restore_bytes: root.limit(),
+                },
+                retained_queue_budget(root.limit()),
+                root.child(root.limit()),
+            )
+            .unwrap(),
+        );
+        assert!(ram.insert_visible(keys[0], selected.clone()));
+        assert!(ram.insert(keys[1], nearest));
+        let lease = ram.get_lease(&keys[1]).unwrap();
+        ram.swap().unwrap().enqueue(keys[2], selected.clone());
+        ram.swap().unwrap().wait_idle().unwrap();
+        assert_eq!(ram.swap().unwrap().minimum_restore_weight(&keys[2]), Some(weight));
+        assert!(ram.can_admit_key_by_minimum_weight(&keys[2], 2));
+        assert!(!ram.can_admit_key_by_minimum_weight(&keys[2], weight));
+        let disk = DiskMosaicCache::with_max_bytes(directory.path().join("persistent"), root.limit());
+        let gate = Arc::new(DecodeGate::new());
+        let before = (root.used(), root.peak());
+        let (admitted, far) = preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
+        assert!(!admitted);
+        assert!(far.is_none());
+        assert_eq!(ram.swap().unwrap().stats().reads, 0);
+        assert_eq!((root.used(), root.peak()), before);
+        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        let (admitted, warm) = preload_raw_with_lease(&requests[1], &disk, &mut ram, None, 1, &gate).unwrap();
+        assert!(admitted);
+        assert!(warm.as_ref().unwrap().pixels.ptr_eq(&lease.pixels));
+        drop((warm, pressure, lease));
+        let (admitted, far) = preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
+        assert!(admitted);
+        let far = far.unwrap();
+        assert_eq!(&*far.pixels, &*selected.pixels);
+        assert_eq!(far.metadata, selected.metadata);
+        assert_eq!(ram.swap().unwrap().stats().reads, 1);
+        assert_eq!(ram.visible(), Some(keys[0]));
+        assert!(
+            ram.get_resident(&keys[0])
+                .unwrap()
+                .pixels
+                .ptr_eq(&selected.pixels)
+        );
+        ram.swap().unwrap().wait_idle().unwrap();
+        ram.swap().unwrap().shutdown();
+        drop((far, ram, selected));
+        assert_eq!(root.used(), 0);
+        eprintln!(
+            "RAW_PARTIAL_SWAP protected=2W capacity=2.5W refused_reads=0 retry_reads=1 sensor_metadata=exact warm_under_pressure=hit final=0"
         );
     }
 

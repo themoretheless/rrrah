@@ -1,7 +1,16 @@
 //! Encoding shading patterns for easy sampling.
 
 mod native_source;
-pub use native_source::{NativeAffineDomain, NativeAffinePointEvidence, NativeOpaqueAffinePointEvidence, NativeShadingError, NativeShadingSample, NativeShadingSource, NativeShadingTriangle};
+mod projected_components;
+pub use projected_components::projected_component_bounds;
+mod patch_parameters;
+pub use patch_parameters::PatchParameterIdentity;
+mod ordered_pixel;
+pub use native_source::{
+    NativeAffineDomain, NativeAffinePointEvidence, NativeOpaqueAffinePointEvidence, NativeShadingError,
+    NativeShadingSample, NativeShadingSource, NativeShadingTriangle,
+};
+pub use ordered_pixel::{OrderedPixel, PixelPartitionError, PixelSourceOwner};
 
 use crate::color::{AlphaColor, ColorComponents, ColorSpace};
 use crate::interpret::state::ActiveTransferFunction;
@@ -53,17 +62,29 @@ impl ShadingPattern {
     /// Analytic shadings are unaffected. Bounds are expanded conservatively for
     /// fractional texture origins and partially covered final texture pixels.
     pub fn encode_with_sample_bounds(&self, bounds: Option<kurbo::Rect>) -> EncodedShadingPattern {
-        self.encode_with_sample_bounds_and_cancel(bounds, &|| false).unwrap()
+        self.encode_with_sample_bounds_and_cancel(bounds, &|| false)
+            .unwrap()
     }
 
     /// Encode with cooperative cancellation during patch construction and sampling.
-    pub fn encode_with_sample_bounds_and_cancel(&self, bounds: Option<kurbo::Rect>, cancelled: &dyn Fn() -> bool) -> Option<EncodedShadingPattern> {
+    pub fn encode_with_sample_bounds_and_cancel(
+        &self,
+        bounds: Option<kurbo::Rect>,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Option<EncodedShadingPattern> {
         self.encode_with_sample_bounds_cancel_and_admission(bounds, cancelled, &|_| Some(Box::new(())))
     }
 
     /// Admit temporary patch triangle storage before materializing it.
-    pub fn encode_with_sample_bounds_cancel_and_admission(&self, bounds: Option<kurbo::Rect>, cancelled: &dyn Fn() -> bool, admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>) -> Option<EncodedShadingPattern> {
-        if cancelled() { return None; }
+    pub fn encode_with_sample_bounds_cancel_and_admission(
+        &self,
+        bounds: Option<kurbo::Rect>,
+        cancelled: &dyn Fn() -> bool,
+        admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+    ) -> Option<EncodedShadingPattern> {
+        if cancelled() {
+            return None;
+        }
         let base_transform;
 
         let shading_type = match self.shading.shading_type.as_ref() {
@@ -91,7 +112,8 @@ impl ShadingPattern {
             }
             ShadingType::TriangleMesh { triangles, function } => {
                 let full_transform = self.matrix;
-                let samples = sample_triangles_with_admission(triangles, full_transform, bounds, cancelled, admit)?;
+                let samples =
+                    sample_triangles_with_admission(triangles, full_transform, bounds, cancelled, admit)?;
 
                 base_transform = Affine::IDENTITY;
 
@@ -102,51 +124,114 @@ impl ShadingPattern {
             }
             ShadingType::CoonsPatchMesh { patches, function } => {
                 let visible = visible_patch_geometry(patches.iter().map(|patch| &patch.control_points));
-                let components = patches.iter().zip(&visible).filter(|(_, keep)| **keep)
-                    .map(|(patch, _)|patch.colors[0].len()).max().unwrap_or(0);
+                let components = patches
+                    .iter()
+                    .zip(&visible)
+                    .filter(|(_, keep)| **keep)
+                    .map(|(patch, _)| patch.colors[0].len())
+                    .max()
+                    .unwrap_or(0);
                 if (1..=4).contains(&components) {
-                    use crate::shading::{AdaptivePatchLimits, AdaptivePatchRef,
-                        tessellate_patch_mesh_stream_admitted, AdaptivePatchError};
-                    let count = visible.iter().filter(|keep|**keep).count();
+                    use crate::shading::{
+                        AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef,
+                        tessellate_patch_mesh_stream_admitted,
+                    };
+                    let count = visible.iter().filter(|keep| **keep).count();
                     let _references = admit(count.checked_mul(size_of::<AdaptivePatchRef<'_>>())?)?;
                     let mut references = Vec::new();
                     references.try_reserve_exact(count).ok()?;
-                    if references.capacity()>count {return None;}
-                    references.extend(patches.iter().zip(&visible).filter(|(_,keep)|**keep)
-                        .map(|(patch,_)|AdaptivePatchRef::Coons(patch)));
-                    let samples=sample_generated_triangles_with_admission(|consume| {
-                        tessellate_patch_mesh_stream_admitted(&references,self.matrix,
-                            AdaptivePatchLimits {pixel_error:1.0/64.0,component_error:1.0/1024.0,
-                                max_depth:12,max_triangles:1_048_576},cancelled,admit,
-                            &mut |triangle|consume(triangle).ok_or(AdaptivePatchError::Admission)).ok()?;
-                        Some(())
-                    },components,Affine::IDENTITY,bounds,cancelled,admit)?;
+                    if references.capacity() > count {
+                        return None;
+                    }
+                    references.extend(
+                        patches
+                            .iter()
+                            .zip(&visible)
+                            .filter(|(_, keep)| **keep)
+                            .map(|(patch, _)| AdaptivePatchRef::Coons(patch)),
+                    );
+                    let samples = sample_generated_triangles_with_admission(
+                        |consume| {
+                            tessellate_patch_mesh_stream_admitted(
+                                &references,
+                                self.matrix,
+                                AdaptivePatchLimits {
+                                    pixel_error: 1.0 / 64.0,
+                                    component_error: 1.0 / 1024.0,
+                                    max_depth: 12,
+                                    max_triangles: 1_048_576,
+                                },
+                                cancelled,
+                                admit,
+                                &mut |triangle| consume(triangle).ok_or(AdaptivePatchError::Admission),
+                            )
+                            .ok()?;
+                            Some(())
+                        },
+                        components,
+                        Affine::IDENTITY,
+                        bounds,
+                        cancelled,
+                        admit,
+                    )?;
                     return Some(EncodedShadingPattern {
-                        shading_type: EncodedShadingType::Sampled {samples,function:function.clone()},
-                        color_space:self.shading.color_space.clone(),
-                        base_transform:Affine::IDENTITY,
-                        background_color:self.shading.background.as_ref().filter(|_|self.paint_background)
-                            .map(|b|self.shading.color_space.to_rgba(b,1.0,false)).unwrap_or(AlphaColor::TRANSPARENT),
-                        opacity:self.opacity,
-                        transfer_function:self.transfer_function.clone(),
+                        shading_type: EncodedShadingType::Sampled {
+                            samples,
+                            function: function.clone(),
+                        },
+                        color_space: self.shading.color_space.clone(),
+                        base_transform: Affine::IDENTITY,
+                        background_color: self
+                            .shading
+                            .background
+                            .as_ref()
+                            .filter(|_| self.paint_background)
+                            .map(|b| self.shading.color_space.to_rgba(b, 1.0, false))
+                            .unwrap_or(AlphaColor::TRANSPARENT),
+                        opacity: self.opacity,
+                        transfer_function: self.transfer_function.clone(),
                     });
                 }
                 // Iterator handoff can briefly retain the exhausted previous allocation.
-                let count: usize = if visible.iter().any(|visible| *visible) { 2 * 722 } else { 0 };
-                let components = patches.iter().zip(&visible).filter(|(_, visible)| **visible)
-                    .map(|(patch, _)| patch.colors[0].len()).max().unwrap_or(0);
+                let count: usize = if visible.iter().any(|visible| *visible) {
+                    2 * 722
+                } else {
+                    0
+                };
+                let components = patches
+                    .iter()
+                    .zip(&visible)
+                    .filter(|(_, visible)| **visible)
+                    .map(|(patch, _)| patch.colors[0].len())
+                    .max()
+                    .unwrap_or(0);
                 let spill = color_spill_bound(components)?;
-                let bytes = count.checked_mul(size_of::<Triangle>())?
+                let bytes = count
+                    .checked_mul(size_of::<Triangle>())?
                     .checked_add(count.checked_mul(3)?.checked_add(64)?.checked_mul(spill)?)?;
                 let _triangle_guard = admit(bytes)?;
-                if cancelled() { return None; }
+                if cancelled() {
+                    return None;
+                }
                 let triangles = stream_patch_triangles(
-                    patches.iter().zip(visible).filter(|(_, visible)| *visible).map(|(patch, _)| patch),
-                    cancelled, |patch, triangles| patch.to_triangles_with_cancel(triangles, cancelled),
+                    patches
+                        .iter()
+                        .zip(visible)
+                        .filter(|(_, visible)| *visible)
+                        .map(|(patch, _)| patch),
+                    cancelled,
+                    |patch, triangles| patch.to_triangles_with_cancel(triangles, cancelled),
                 );
 
                 let full_transform = self.matrix;
-                let samples = sample_triangle_iter_with_admission(triangles, components, full_transform, bounds, cancelled, admit)?;
+                let samples = sample_triangle_iter_with_admission(
+                    triangles,
+                    components,
+                    full_transform,
+                    bounds,
+                    cancelled,
+                    admit,
+                )?;
 
                 base_transform = Affine::IDENTITY;
 
@@ -157,51 +242,114 @@ impl ShadingPattern {
             }
             ShadingType::TensorProductPatchMesh { patches, function } => {
                 let visible = visible_patch_geometry(patches.iter().map(|patch| &patch.control_points));
-                let components = patches.iter().zip(&visible).filter(|(_, keep)| **keep)
-                    .map(|(patch, _)|patch.colors[0].len()).max().unwrap_or(0);
+                let components = patches
+                    .iter()
+                    .zip(&visible)
+                    .filter(|(_, keep)| **keep)
+                    .map(|(patch, _)| patch.colors[0].len())
+                    .max()
+                    .unwrap_or(0);
                 if (1..=4).contains(&components) {
-                    use crate::shading::{AdaptivePatchLimits, AdaptivePatchRef,
-                        tessellate_patch_mesh_stream_admitted, AdaptivePatchError};
-                    let count = visible.iter().filter(|keep|**keep).count();
+                    use crate::shading::{
+                        AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef,
+                        tessellate_patch_mesh_stream_admitted,
+                    };
+                    let count = visible.iter().filter(|keep| **keep).count();
                     let _references = admit(count.checked_mul(size_of::<AdaptivePatchRef<'_>>())?)?;
                     let mut references = Vec::new();
                     references.try_reserve_exact(count).ok()?;
-                    if references.capacity()>count {return None;}
-                    references.extend(patches.iter().zip(&visible).filter(|(_,keep)|**keep)
-                        .map(|(patch,_)|AdaptivePatchRef::Tensor(patch)));
-                    let samples=sample_generated_triangles_with_admission(|consume| {
-                        tessellate_patch_mesh_stream_admitted(&references,self.matrix,
-                            AdaptivePatchLimits {pixel_error:1.0/64.0,component_error:1.0/1024.0,
-                                max_depth:12,max_triangles:1_048_576},cancelled,admit,
-                            &mut |triangle|consume(triangle).ok_or(AdaptivePatchError::Admission)).ok()?;
-                        Some(())
-                    },components,Affine::IDENTITY,bounds,cancelled,admit)?;
+                    if references.capacity() > count {
+                        return None;
+                    }
+                    references.extend(
+                        patches
+                            .iter()
+                            .zip(&visible)
+                            .filter(|(_, keep)| **keep)
+                            .map(|(patch, _)| AdaptivePatchRef::Tensor(patch)),
+                    );
+                    let samples = sample_generated_triangles_with_admission(
+                        |consume| {
+                            tessellate_patch_mesh_stream_admitted(
+                                &references,
+                                self.matrix,
+                                AdaptivePatchLimits {
+                                    pixel_error: 1.0 / 64.0,
+                                    component_error: 1.0 / 1024.0,
+                                    max_depth: 12,
+                                    max_triangles: 1_048_576,
+                                },
+                                cancelled,
+                                admit,
+                                &mut |triangle| consume(triangle).ok_or(AdaptivePatchError::Admission),
+                            )
+                            .ok()?;
+                            Some(())
+                        },
+                        components,
+                        Affine::IDENTITY,
+                        bounds,
+                        cancelled,
+                        admit,
+                    )?;
                     return Some(EncodedShadingPattern {
-                        shading_type: EncodedShadingType::Sampled {samples,function:function.clone()},
-                        color_space:self.shading.color_space.clone(),
-                        base_transform:Affine::IDENTITY,
-                        background_color:self.shading.background.as_ref().filter(|_|self.paint_background)
-                            .map(|b|self.shading.color_space.to_rgba(b,1.0,false)).unwrap_or(AlphaColor::TRANSPARENT),
-                        opacity:self.opacity,
-                        transfer_function:self.transfer_function.clone(),
+                        shading_type: EncodedShadingType::Sampled {
+                            samples,
+                            function: function.clone(),
+                        },
+                        color_space: self.shading.color_space.clone(),
+                        base_transform: Affine::IDENTITY,
+                        background_color: self
+                            .shading
+                            .background
+                            .as_ref()
+                            .filter(|_| self.paint_background)
+                            .map(|b| self.shading.color_space.to_rgba(b, 1.0, false))
+                            .unwrap_or(AlphaColor::TRANSPARENT),
+                        opacity: self.opacity,
+                        transfer_function: self.transfer_function.clone(),
                     });
                 }
                 // Iterator handoff can briefly retain the exhausted previous allocation.
-                let count: usize = if visible.iter().any(|visible| *visible) { 2 * 722 } else { 0 };
-                let components = patches.iter().zip(&visible).filter(|(_, visible)| **visible)
-                    .map(|(patch, _)| patch.colors[0].len()).max().unwrap_or(0);
+                let count: usize = if visible.iter().any(|visible| *visible) {
+                    2 * 722
+                } else {
+                    0
+                };
+                let components = patches
+                    .iter()
+                    .zip(&visible)
+                    .filter(|(_, visible)| **visible)
+                    .map(|(patch, _)| patch.colors[0].len())
+                    .max()
+                    .unwrap_or(0);
                 let spill = color_spill_bound(components)?;
-                let bytes = count.checked_mul(size_of::<Triangle>())?
+                let bytes = count
+                    .checked_mul(size_of::<Triangle>())?
                     .checked_add(count.checked_mul(3)?.checked_add(64)?.checked_mul(spill)?)?;
                 let _triangle_guard = admit(bytes)?;
-                if cancelled() { return None; }
+                if cancelled() {
+                    return None;
+                }
                 let triangles = stream_patch_triangles(
-                    patches.iter().zip(visible).filter(|(_, visible)| *visible).map(|(patch, _)| patch),
-                    cancelled, |patch, triangles| patch.to_triangles_with_cancel(triangles, cancelled),
+                    patches
+                        .iter()
+                        .zip(visible)
+                        .filter(|(_, visible)| *visible)
+                        .map(|(patch, _)| patch),
+                    cancelled,
+                    |patch, triangles| patch.to_triangles_with_cancel(triangles, cancelled),
                 );
 
                 let full_transform = self.matrix;
-                let samples = sample_triangle_iter_with_admission(triangles, components, full_transform, bounds, cancelled, admit)?;
+                let samples = sample_triangle_iter_with_admission(
+                    triangles,
+                    components,
+                    full_transform,
+                    bounds,
+                    cancelled,
+                    admit,
+                )?;
 
                 base_transform = Affine::IDENTITY;
 
@@ -285,18 +433,28 @@ fn encode_axial_shading(
 // A later patch with identical control geometry covers the earlier patch at
 // every location, including fractional edge pixels. Retain source order for all
 // other patches; this does not solve arbitrary partial-overlap integration.
-fn visible_patch_geometry<'a, const N: usize>(patches: impl DoubleEndedIterator<Item = &'a [Point; N]> + ExactSizeIterator) -> Vec<bool> {
+fn visible_patch_geometry<'a, const N: usize>(
+    patches: impl DoubleEndedIterator<Item = &'a [Point; N]> + ExactSizeIterator,
+) -> Vec<bool> {
     let mut seen = FxHashSet::default();
     let mut visible = Vec::with_capacity(patches.len());
     for points in patches.rev() {
-        if points.iter().any(|point| !point.x.is_finite() || !point.y.is_finite()) {
+        if points
+            .iter()
+            .any(|point| !point.x.is_finite() || !point.y.is_finite())
+        {
             visible.push(true);
             continue;
         }
-        let key: Vec<_> = points.iter().map(|point| (
-            if point.x == 0.0 { 0 } else { point.x.to_bits() },
-            if point.y == 0.0 { 0 } else { point.y.to_bits() },
-        )).collect();
+        let key: Vec<_> = points
+            .iter()
+            .map(|point| {
+                (
+                    if point.x == 0.0 { 0 } else { point.x.to_bits() },
+                    if point.y == 0.0 { 0 } else { point.y.to_bits() },
+                )
+            })
+            .collect();
         visible.push(seen.insert(key));
     }
     visible.reverse();
@@ -311,24 +469,41 @@ pub(crate) struct MeshSamples {
     _guard: Option<Box<dyn std::any::Any + Send + Sync>>,
 }
 impl std::fmt::Debug for MeshSamples {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { self.map.fmt(f) }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.map.fmt(f)
+    }
 }
 impl std::ops::Deref for MeshSamples {
     type Target = MeshMap;
-    fn deref(&self) -> &MeshMap { &self.map }
+    fn deref(&self) -> &MeshMap {
+        &self.map
+    }
 }
 
 // Conservative bound for pinned hashbrown 0.16.1 table storage, including
 // control bytes, alignment and separately allocated per-entry color components.
 fn color_spill_bound(components: usize) -> Option<usize> {
-    if components <= 4 { Some(0) }
-    else { components.checked_next_power_of_two()?.checked_mul(size_of::<f32>())?.checked_mul(2) }
+    if components <= 4 {
+        Some(0)
+    } else {
+        components
+            .checked_next_power_of_two()?
+            .checked_mul(size_of::<f32>())?
+            .checked_mul(2)
+    }
 }
 
 fn mesh_table_bound(capacity: usize, components: usize) -> Option<usize> {
-    let buckets = if capacity < 4 { 4 } else if capacity < 8 { 8 }
-        else { capacity.checked_mul(8)?.div_ceil(7).checked_next_power_of_two()? };
-    buckets.checked_mul(size_of::<((u16,u16),MeshSample)>() + 1)?.checked_add(128)?
+    let buckets = if capacity < 4 {
+        4
+    } else if capacity < 8 {
+        8
+    } else {
+        capacity.checked_mul(8)?.div_ceil(7).checked_next_power_of_two()?
+    };
+    buckets
+        .checked_mul(size_of::<((u16, u16), MeshSample)>() + 1)?
+        .checked_add(128)?
         .checked_add(buckets.checked_mul(color_spill_bound(components)?)?)
 }
 
@@ -406,15 +581,39 @@ fn sample_triangles(triangles: &[Triangle], transform: Affine, bounds: Option<ku
 }
 
 #[cfg(test)]
-fn sample_triangles_with_cancel(triangles: &[Triangle], transform: Affine, bounds: Option<kurbo::Rect>, cancelled: &dyn Fn() -> bool) -> Option<MeshSamples> {
+fn sample_triangles_with_cancel(
+    triangles: &[Triangle],
+    transform: Affine,
+    bounds: Option<kurbo::Rect>,
+    cancelled: &dyn Fn() -> bool,
+) -> Option<MeshSamples> {
     sample_triangles_with_admission(triangles, transform, bounds, cancelled, &|_| Some(Box::new(())))
 }
 
-fn sample_triangles_with_admission(triangles: &[Triangle], transform: Affine, bounds: Option<kurbo::Rect>, cancelled: &dyn Fn() -> bool, admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>) -> Option<MeshSamples> {
-    if cancelled() { return None; }
-    let components = triangles.iter().flat_map(|t| [&t.p0, &t.p1, &t.p2])
-        .map(|vertex| vertex.colors.len()).max().unwrap_or(0);
-    sample_triangle_iter_with_admission(triangles.iter().cloned().map(Ok), components, transform, bounds, cancelled, admit)
+fn sample_triangles_with_admission(
+    triangles: &[Triangle],
+    transform: Affine,
+    bounds: Option<kurbo::Rect>,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+) -> Option<MeshSamples> {
+    if cancelled() {
+        return None;
+    }
+    let components = triangles
+        .iter()
+        .flat_map(|t| [&t.p0, &t.p1, &t.p2])
+        .map(|vertex| vertex.colors.len())
+        .max()
+        .unwrap_or(0);
+    sample_triangle_iter_with_admission(
+        triangles.iter().cloned().map(Ok),
+        components,
+        transform,
+        bounds,
+        cancelled,
+        admit,
+    )
 }
 
 // A cancellation is yielded explicitly once: consumers cannot accidentally
@@ -427,40 +626,80 @@ fn stream_patch_triangles<'a, P: 'a>(
     let mut current = Vec::new().into_iter();
     let mut stopped = false;
     std::iter::from_fn(move || {
-        if stopped { return None; }
+        if stopped {
+            return None;
+        }
         loop {
-            if cancelled() { stopped = true; return Some(Err(())); }
-            if let Some(triangle) = current.next() { return Some(Ok(triangle)); }
+            if cancelled() {
+                stopped = true;
+                return Some(Err(()));
+            }
+            if let Some(triangle) = current.next() {
+                return Some(Ok(triangle));
+            }
             let patch = patches.next()?;
-            if cancelled() { stopped = true; return Some(Err(())); }
+            if cancelled() {
+                stopped = true;
+                return Some(Err(()));
+            }
             let mut triangles = Vec::with_capacity(722);
-            if generate(patch, &mut triangles).is_err() { stopped = true; return Some(Err(())); }
+            if generate(patch, &mut triangles).is_err() {
+                stopped = true;
+                return Some(Err(()));
+            }
             current = triangles.into_iter();
         }
     })
 }
 
-fn sample_triangle_iter_with_admission<I: IntoIterator<Item = Result<Triangle, ()>>>(triangles: I, components: usize, transform: Affine, bounds: Option<kurbo::Rect>, cancelled: &dyn Fn() -> bool, admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>) -> Option<MeshSamples> {
-    sample_generated_triangles_with_admission(|consume| {
-        for triangle in triangles {consume(triangle.ok()?)?;}
-        Some(())
-    },components,transform,bounds,cancelled,admit)
+fn sample_triangle_iter_with_admission<I: IntoIterator<Item = Result<Triangle, ()>>>(
+    triangles: I,
+    components: usize,
+    transform: Affine,
+    bounds: Option<kurbo::Rect>,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+) -> Option<MeshSamples> {
+    sample_generated_triangles_with_admission(
+        |consume| {
+            for triangle in triangles {
+                consume(triangle.ok()?)?;
+            }
+            Some(())
+        },
+        components,
+        transform,
+        bounds,
+        cancelled,
+        admit,
+    )
 }
 fn sample_generated_triangles_with_admission(
-    generate: impl FnOnce(&mut dyn FnMut(Triangle)->Option<()>) -> Option<()>,
-    components:usize, transform:Affine, bounds:Option<kurbo::Rect>,
-    cancelled:&dyn Fn()->bool, admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    generate: impl FnOnce(&mut dyn FnMut(Triangle) -> Option<()>) -> Option<()>,
+    components: usize,
+    transform: Affine,
+    bounds: Option<kurbo::Rect>,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
 ) -> Option<MeshSamples> {
-    if cancelled() { return None; }
+    if cancelled() {
+        return None;
+    }
     let spill = color_spill_bound(components)?;
     // Input and transformed vertex clones plus one interpolated color buffer. The
     // bound includes overlap during SmallVec growth.
-    let _scratch_guard = if spill == 0 { None } else { Some(admit(spill.checked_mul(8)?)?) };
+    let _scratch_guard = if spill == 0 {
+        None
+    } else {
+        Some(admit(spill.checked_mul(8)?)?)
+    };
     let mut guard = None;
     let mut map: MeshMap = MeshMap::default();
 
     generate(&mut |t| {
-        if cancelled() { return None; }
+        if cancelled() {
+            return None;
+        }
         let t = {
             let p0 = transform * t.p0.point;
             let p1 = transform * t.p1.point;
@@ -477,22 +716,32 @@ fn sample_generated_triangles_with_admission(
         };
 
         let bbox = t.bounding_box();
-        let bbox = if let Some(bounds) = bounds.filter(|r| [r.x0,r.y0,r.x1,r.y1].iter().all(|v| v.is_finite()) && r.width() >= 0.0 && r.height() >= 0.0) {
+        let bbox = if let Some(bounds) = bounds.filter(|r| {
+            [r.x0, r.y0, r.x1, r.y1].iter().all(|v| v.is_finite()) && r.width() >= 0.0 && r.height() >= 0.0
+        }) {
             bbox.intersect(bounds.inflate(2.0, 2.0))
-        } else { bbox };
+        } else {
+            bbox
+        };
 
         for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
-            if cancelled() { return None; }
+            if cancelled() {
+                return None;
+            }
             for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
-                if x % 64 == 0 && cancelled() { return None; }
+                if x % 64 == 0 && cancelled() {
+                    return None;
+                }
                 if let Some((area, point)) = triangle_pixel_area(&t, x, y) {
                     let colors = t.interpolate(point);
-                    if map.len() == map.capacity() && !map.contains_key(&(x,y)) {
+                    if map.len() == map.capacity() && !map.contains_key(&(x, y)) {
                         let capacity = map.capacity().checked_mul(2)?.max(3);
                         let bytes = mesh_table_bound(capacity, components)?;
                         // Both old and new tables exist during rehashing.
                         let next_guard = admit(bytes)?;
-                        if cancelled() { return None; }
+                        if cancelled() {
+                            return None;
+                        }
                         map.reserve(capacity - map.len());
                         assert!(map.allocation_size() <= bytes, "mesh table admission bound");
                         guard = Some(next_guard);
@@ -512,13 +761,17 @@ fn sample_generated_triangles_with_admission(
     })?;
 
     for (index, sample) in map.values_mut().enumerate() {
-        if index % 64 == 0 && cancelled() { return None; }
+        if index % 64 == 0 && cancelled() {
+            return None;
+        }
         for color in &mut sample.colors {
             *color /= sample.coverage;
         }
         sample.coverage = sample.coverage.min(1.0);
     }
-    if cancelled() { return None; }
+    if cancelled() {
+        return None;
+    }
     Some(MeshSamples { map, _guard: guard })
 }
 
@@ -543,15 +796,25 @@ mod sample_bounds_tests {
         tensor.to_triangles(&mut seed);
         for kind in 0..2 {
             let build = |output: &mut Vec<Triangle>, cancelled: &dyn Fn() -> bool| {
-                if kind == 0 { tensor.to_triangles_with_cancel(output, cancelled) }
-                else { coons.to_triangles_with_cancel(output, cancelled) }
+                if kind == 0 {
+                    tensor.to_triangles_with_cancel(output, cancelled)
+                } else {
+                    coons.to_triangles_with_cancel(output, cancelled)
+                }
             };
             let mut expected = vec![seed[0].clone()];
-            if kind == 0 { tensor.to_triangles(&mut expected); }
-            else { coons.to_triangles(&mut expected); }
+            if kind == 0 {
+                tensor.to_triangles(&mut expected);
+            } else {
+                coons.to_triangles(&mut expected);
+            }
             let checkpoints = Cell::new(0);
             let mut actual = vec![seed[0].clone()];
-            build(&mut actual, &|| { checkpoints.set(checkpoints.get() + 1); false }).unwrap();
+            build(&mut actual, &|| {
+                checkpoints.set(checkpoints.get() + 1);
+                false
+            })
+            .unwrap();
             assert_eq!(actual.len(), expected.len());
             for (a, b) in actual.iter().zip(&expected) {
                 for (a, b) in [&a.p0, &a.p1, &a.p2].into_iter().zip([&b.p0, &b.p1, &b.p2]) {
@@ -565,10 +828,14 @@ mod sample_bounds_tests {
             for stop in 1..=count {
                 let current = Cell::new(0);
                 let mut output = vec![seed[0].clone()];
-                assert!(build(&mut output, &|| {
-                    current.set(current.get() + 1);
-                    current.get() == stop
-                }).is_err(), "kind {kind}, checkpoint {stop}/{count}");
+                assert!(
+                    build(&mut output, &|| {
+                        current.set(current.get() + 1);
+                        current.get() == stop
+                    })
+                    .is_err(),
+                    "kind {kind}, checkpoint {stop}/{count}"
+                );
                 assert_eq!(current.get(), stop);
                 assert_eq!(output.len(), 1);
                 assert_eq!(output[0].p0.point, seed[0].p0.point);
@@ -580,31 +847,49 @@ mod sample_bounds_tests {
     #[test]
     fn patch_stream_cancellation_is_explicit_and_stops_generation() {
         use std::cell::Cell;
-        use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
-        struct Credit { used: Arc<AtomicUsize>, bytes: usize }
+        use std::sync::{
+            Arc,
+            atomic::{AtomicUsize, Ordering},
+        };
+        struct Credit {
+            used: Arc<AtomicUsize>,
+            bytes: usize,
+        }
         impl Drop for Credit {
-            fn drop(&mut self) { self.used.fetch_sub(self.bytes, Ordering::Relaxed); }
+            fn drop(&mut self) {
+                self.used.fetch_sub(self.bytes, Ordering::Relaxed);
+            }
         }
         let used = Arc::new(AtomicUsize::new(0));
         let admit = |bytes| {
             used.fetch_add(bytes, Ordering::Relaxed);
-            Some(Box::new(Credit { used: used.clone(), bytes }) as Box<dyn std::any::Any + Send + Sync>)
+            Some(Box::new(Credit {
+                used: used.clone(),
+                bytes,
+            }) as Box<dyn std::any::Any + Send + Sync>)
         };
         let mut seed = Vec::new();
         TensorProductPatch {
             control_points: [Point::ZERO; 16],
             colors: std::array::from_fn(|_| (0..9).map(|i| i as f32 / 10.).collect()),
-        }.to_triangles(&mut seed);
+        }
+        .to_triangles(&mut seed);
         let patches = [0u8, 1, 2];
         let calls = Cell::new(0);
         let generated = Cell::new(0);
-        let cancelled = || { calls.set(calls.get() + 1); false };
+        let cancelled = || {
+            calls.set(calls.get() + 1);
+            false
+        };
         let stream = stream_patch_triangles(patches.iter(), &cancelled, |_, output| {
             generated.set(generated.get() + 1);
             output.extend(seed[..2].iter().cloned());
             Ok(())
         });
-        assert!(sample_triangle_iter_with_admission(stream, 9, Affine::IDENTITY, None, &cancelled, &admit).is_some());
+        assert!(
+            sample_triangle_iter_with_admission(stream, 9, Affine::IDENTITY, None, &cancelled, &admit)
+                .is_some()
+        );
         assert_eq!(generated.get(), patches.len());
         assert_eq!(used.load(Ordering::Relaxed), 0);
         let count = calls.get();
@@ -614,16 +899,25 @@ mod sample_bounds_tests {
             generated.set(0);
             // Return true once only; an explicit iterator error must survive
             // the next false predicate value and prevent partial acceptance.
-            let cancelled = || { calls.set(calls.get() + 1); calls.get() == stop };
+            let cancelled = || {
+                calls.set(calls.get() + 1);
+                calls.get() == stop
+            };
             let stream = stream_patch_triangles(patches.iter(), &cancelled, |_, output| {
                 generated.set(generated.get() + 1);
                 output.extend(seed[..2].iter().cloned());
                 Ok(())
             });
-            assert!(sample_triangle_iter_with_admission(stream, 9, Affine::IDENTITY, None, &cancelled, &admit).is_none(), "checkpoint {stop}/{count}");
+            assert!(
+                sample_triangle_iter_with_admission(stream, 9, Affine::IDENTITY, None, &cancelled, &admit)
+                    .is_none(),
+                "checkpoint {stop}/{count}"
+            );
             assert_eq!(calls.get(), stop);
             assert_eq!(used.load(Ordering::Relaxed), 0);
-            if stop <= 3 { assert_eq!(generated.get(), 0); }
+            if stop <= 3 {
+                assert_eq!(generated.get(), 0);
+            }
         }
         let stream = stream_patch_triangles(patches.iter(), &|| true, |_, _| panic!("cancelled generation"));
         let mut stream = stream;
@@ -633,16 +927,25 @@ mod sample_bounds_tests {
 
     #[test]
     fn table_growth_and_multicomponent_spills_release_credit() {
-        use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
-        struct Credit { used: Arc<AtomicUsize>, bytes: usize }
+        use std::sync::{
+            Arc,
+            atomic::{AtomicUsize, Ordering},
+        };
+        struct Credit {
+            used: Arc<AtomicUsize>,
+            bytes: usize,
+        }
         impl Drop for Credit {
-            fn drop(&mut self) { self.used.fetch_sub(self.bytes, Ordering::Relaxed); }
+            fn drop(&mut self) {
+                self.used.fetch_sub(self.bytes, Ordering::Relaxed);
+            }
         }
         let mut seed = Vec::new();
         TensorProductPatch {
             control_points: [Point::ZERO; 16],
             colors: std::array::from_fn(|_| (0..9).map(|i| i as f32 / 10.).collect()),
-        }.to_triangles(&mut seed);
+        }
+        .to_triangles(&mut seed);
         let mut a = seed[0].p0.clone();
         let mut b = a.clone();
         let mut c = a.clone();
@@ -652,16 +955,25 @@ mod sample_bounds_tests {
         let triangles = [Triangle::new(a, b, c)];
         let used = Arc::new(AtomicUsize::new(0));
         let calls = AtomicUsize::new(0);
-        let result = sample_triangles_with_admission(&triangles, Affine::IDENTITY, None, &|| false, &|bytes| {
-            calls.fetch_add(1, Ordering::Relaxed);
-            used.fetch_add(bytes, Ordering::Relaxed);
-            Some(Box::new(Credit { used: used.clone(), bytes }))
-        }).unwrap();
-        let color_bytes: usize = result.map.values().map(|sample| {
-            assert_eq!(sample.colors.len(), 9);
-            assert!(sample.colors.spilled());
-            sample.colors.capacity() * size_of::<f32>()
-        }).sum();
+        let result =
+            sample_triangles_with_admission(&triangles, Affine::IDENTITY, None, &|| false, &|bytes| {
+                calls.fetch_add(1, Ordering::Relaxed);
+                used.fetch_add(bytes, Ordering::Relaxed);
+                Some(Box::new(Credit {
+                    used: used.clone(),
+                    bytes,
+                }))
+            })
+            .unwrap();
+        let color_bytes: usize = result
+            .map
+            .values()
+            .map(|sample| {
+                assert_eq!(sample.colors.len(), 9);
+                assert!(sample.colors.spilled());
+                sample.colors.capacity() * size_of::<f32>()
+            })
+            .sum();
         assert!(used.load(Ordering::Relaxed) >= result.map.allocation_size() + color_bytes);
         let baseline = sample_triangles(&triangles, Affine::IDENTITY, None);
         assert_eq!(baseline.len(), result.len());
@@ -678,11 +990,19 @@ mod sample_bounds_tests {
         assert_eq!(used.load(Ordering::Relaxed), 0);
         for stop in 1..=count {
             calls.store(0, Ordering::Relaxed);
-            assert!(sample_triangles_with_admission(&triangles, Affine::IDENTITY, None, &|| false, &|bytes| {
-                if calls.fetch_add(1, Ordering::Relaxed) + 1 == stop { return None; }
-                used.fetch_add(bytes, Ordering::Relaxed);
-                Some(Box::new(Credit { used: used.clone(), bytes }))
-            }).is_none());
+            assert!(
+                sample_triangles_with_admission(&triangles, Affine::IDENTITY, None, &|| false, &|bytes| {
+                    if calls.fetch_add(1, Ordering::Relaxed) + 1 == stop {
+                        return None;
+                    }
+                    used.fetch_add(bytes, Ordering::Relaxed);
+                    Some(Box::new(Credit {
+                        used: used.clone(),
+                        bytes,
+                    }))
+                })
+                .is_none()
+            );
             assert_eq!(calls.load(Ordering::Relaxed), stop);
             assert_eq!(used.load(Ordering::Relaxed), 0);
         }
@@ -695,7 +1015,8 @@ mod sample_bounds_tests {
         TensorProductPatch {
             control_points: [Point::ZERO; 16],
             colors: std::array::from_fn(|_| smallvec![0.1, 0.2, 0.3]),
-        }.to_triangles(&mut seed);
+        }
+        .to_triangles(&mut seed);
         let mut a = seed[0].p0.clone();
         let mut b = a.clone();
         let mut c = a.clone();
@@ -707,16 +1028,21 @@ mod sample_bounds_tests {
         let complete = sample_triangles_with_cancel(&triangles, Affine::IDENTITY, None, &|| {
             checkpoints.set(checkpoints.get() + 1);
             false
-        }).unwrap();
+        })
+        .unwrap();
         assert!(!complete.is_empty());
         let count = checkpoints.get();
         assert!(count > 30);
         for stop in 1..=count {
             let current = Cell::new(0);
-            assert!(sample_triangles_with_cancel(&triangles, Affine::IDENTITY, None, &|| {
-                current.set(current.get() + 1);
-                current.get() == stop
-            }).is_none(), "checkpoint {stop}/{count}");
+            assert!(
+                sample_triangles_with_cancel(&triangles, Affine::IDENTITY, None, &|| {
+                    current.set(current.get() + 1);
+                    current.get() == stop
+                })
+                .is_none(),
+                "checkpoint {stop}/{count}"
+            );
             assert_eq!(current.get(), stop);
         }
     }
@@ -727,7 +1053,8 @@ mod sample_bounds_tests {
         TensorProductPatch {
             control_points: [Point::ZERO; 16],
             colors: std::array::from_fn(|_| smallvec![0.0, 0.0, 0.0]),
-        }.to_triangles(&mut seed);
+        }
+        .to_triangles(&mut seed);
         let template = seed[0].p0.clone();
         let vertex = |x, y, color| {
             let mut vertex = template.clone();
@@ -738,24 +1065,38 @@ mod sample_bounds_tests {
         let triangles = [
             Triangle::new(vertex(0., 0., 0.), vertex(50., 0., 1.), vertex(0., 50., 0.5)),
             Triangle::new(vertex(50., 0., 1.), vertex(50., 50., 0.), vertex(0., 50., 0.5)),
-            Triangle::new(vertex(80., 80., 0.), vertex(100., 80., 1.), vertex(80., 100., 0.5)),
+            Triangle::new(
+                vertex(80., 80., 0.),
+                vertex(100., 80., 1.),
+                vertex(80., 100., 0.5),
+            ),
         ];
         for transform in [Affine::IDENTITY, Affine::new([1.1, 0.2, -0.1, 0.9, 0.3, 0.7])] {
             let complete = sample_triangles(&triangles, transform, None);
             for origin in [0.0, 0.01, 0.49, 0.51, 0.99] {
                 for extent in [0.0_f64, 0.1, 1.0, 1.01, 9.75] {
-                    let bounds = kurbo::Rect::new(3. + origin, 4. + origin, 3. + origin + extent, 4. + origin + extent);
+                    let bounds = kurbo::Rect::new(
+                        3. + origin,
+                        4. + origin,
+                        3. + origin + extent,
+                        4. + origin + extent,
+                    );
                     let bounded = sample_triangles(&triangles, transform, Some(bounds));
                     assert!(bounded.len() < complete.len());
                     let size = extent.max(1.0).ceil() as usize;
                     for y in 0..size {
                         for x in 0..size {
-                            let key = ((bounds.x0 + 0.5 + x as f64) as u16, (bounds.y0 + 0.5 + y as f64) as u16);
+                            let key = (
+                                (bounds.x0 + 0.5 + x as f64) as u16,
+                                (bounds.y0 + 0.5 + y as f64) as u16,
+                            );
                             match (complete.get(&key), bounded.get(&key)) {
                                 (Some(a), Some(b)) => {
                                     assert_eq!(a.coverage.to_bits(), b.coverage.to_bits());
                                     assert_eq!(a.colors.len(), b.colors.len());
-                                    for (a, b) in a.colors.iter().zip(&b.colors) { assert_eq!(a.to_bits(), b.to_bits()); }
+                                    for (a, b) in a.colors.iter().zip(&b.colors) {
+                                        assert_eq!(a.to_bits(), b.to_bits());
+                                    }
                                 }
                                 (None, None) => {}
                                 _ => panic!("missing consumed sample {key:?}"),

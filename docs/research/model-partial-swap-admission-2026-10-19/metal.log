@@ -1,0 +1,37 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.50s
+     Running tests/model_readback.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/model_readback-c70b4e50be054ca2)
+
+running 8 tests
+test repeated_model_swap_pressure_and_cancellation_preserve_metal_frames ... ignored, manual repeated model swap pressure and Metal frame qualification
+test model_swap::tests::malformed_all_model_codecs_refuse_geometry_without_large_reservations ... ok
+test model_swap::tests::restored_model_weight_floor_survives_all_fixture_payloads ... ok
+PLY readback adapter: Metal Apple M4 Max
+OBJ readback adapter: Metal Apple M4 Max
+OFF readback adapter: Metal Apple M4 Max
+Model swap readback adapter: Metal Apple M4 Max
+test decoded_obj_notch_survives_common_model_and_gpu_upload ... ok
+test managed_model_decoding_preserves_gpu_pixels_and_releases_cpu_credit ... ok
+test off_binary_attributes_float64_and_concave_surface_reach_gpu ... ok
+test native_float64_ply_reaches_gpu_before_precision_reduction ... ok
+model swap cycles=1; models=6; all payloads and Metal frames exact; pressure/cancel recover; root=0; queue=0; SDR/HDR exact
+test real_model_swap_preserves_gpu_pixels_and_releases_restored_geometry ... ok
+
+test result: ok. 7 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 12.32s
+

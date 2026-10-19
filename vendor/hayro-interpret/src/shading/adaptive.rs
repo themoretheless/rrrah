@@ -29,6 +29,8 @@ pub enum AdaptivePatchError {
     TriangleLimit,
     /// Capacity admission or a fallible allocation was refused.
     Admission,
+    /// An emitted projected source component exceeds the requested bound.
+    ComponentAccuracy,
 }
 #[derive(Debug, Default, Clone, Copy)]
 /// Bounds and occupancy of successfully tessellated cells.
@@ -60,17 +62,23 @@ fn grow_array_with_step<T>(
     step_divisor: usize,
 ) -> Result<(), AdaptivePatchError> {
     use AdaptivePatchError::Admission;
-    let capacity = array.capacity()
+    let capacity = array
+        .capacity()
         .checked_add((array.capacity() / step_divisor).max(1))
-        .ok_or(Admission)?.max(4);
+        .ok_or(Admission)?
+        .max(4);
     let bytes = capacity.checked_mul(size_of::<T>()).ok_or(Admission)?;
     let next = match admit {
         Some(admit) => match admit(bytes) {
             Some(credit) => Some(credit),
             None => {
                 if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
-                    eprintln!("NATIVE_ADAPTIVE_ADMISSION type={} len={} old_capacity={} requested_capacity={capacity} requested_bytes={bytes}",
-                        std::any::type_name::<T>(), array.len(), array.capacity());
+                    eprintln!(
+                        "NATIVE_ADAPTIVE_ADMISSION type={} len={} old_capacity={} requested_capacity={capacity} requested_bytes={bytes}",
+                        std::any::type_name::<T>(),
+                        array.len(),
+                        array.capacity()
+                    );
                 }
                 return Err(Admission);
             }
@@ -124,7 +132,9 @@ impl<'a, T> MeshArray<'a, T> {
     }
     fn compact(&mut self) -> Result<(), AdaptivePatchError> {
         use AdaptivePatchError::Admission;
-        if self.data.capacity() == self.data.len() { return Ok(()); }
+        if self.data.capacity() == self.data.len() {
+            return Ok(());
+        }
         let bytes = self.data.len().checked_mul(size_of::<T>()).ok_or(Admission)?;
         let next = match self.admit {
             Some(admit) => Some(admit(bytes).ok_or(Admission)?),
@@ -132,7 +142,9 @@ impl<'a, T> MeshArray<'a, T> {
         };
         let mut exact = Vec::new();
         exact.try_reserve_exact(self.data.len()).map_err(|_| Admission)?;
-        if exact.capacity() > self.data.len() { return Err(Admission); }
+        if exact.capacity() > self.data.len() {
+            return Err(Admission);
+        }
         exact.append(&mut self.data);
         self.data = exact;
         self.credit = next;
@@ -193,8 +205,23 @@ trait TriangleOutput {
     fn len(&self) -> usize;
     fn truncate(&mut self, len: usize);
     fn push_triangle(&mut self, triangle: Triangle) -> Result<(), AdaptivePatchError>;
-    fn reserve_patch(&mut self, _triangles: usize) -> Result<(), AdaptivePatchError> { Ok(()) }
-    fn plans_global_capacity(&self) -> bool { false }
+    fn push_patch_triangle(
+        &mut self,
+        triangle: Triangle,
+        _parameters: [Point; 3],
+    ) -> Result<(), AdaptivePatchError> {
+        self.push_triangle(triangle)
+    }
+    fn begin_patch(&mut self, _index: usize) {}
+    fn projected_components(&self) -> bool {
+        false
+    }
+    fn reserve_patch(&mut self, _triangles: usize) -> Result<(), AdaptivePatchError> {
+        Ok(())
+    }
+    fn plans_global_capacity(&self) -> bool {
+        false
+    }
 }
 impl TriangleOutput for Vec<Triangle> {
     fn len(&self) -> usize {
@@ -215,7 +242,9 @@ trait EmittedTriangle {
     fn from_triangle(triangle: Triangle) -> Self;
 }
 impl EmittedTriangle for Triangle {
-    fn from_triangle(triangle: Triangle) -> Self { triangle }
+    fn from_triangle(triangle: Triangle) -> Self {
+        triangle
+    }
 }
 /// Compact device-coordinate geometry retaining all source components (one to four).
 /// Cached generic interpolation fields are omitted; coordinates/components are unchanged.
@@ -227,21 +256,27 @@ pub struct CompactAdaptiveTriangle {
 }
 impl CompactAdaptiveTriangle {
     /// Original vertices in transformed device coordinates.
-    pub fn points(&self) -> &[Point; 3] { &self.points }
+    pub fn points(&self) -> &[Point; 3] {
+        &self.points
+    }
     /// Original source components; inactive slots are zero.
-    pub fn components(&self) -> &[[f32; 4]; 3] { &self.components }
+    pub fn components(&self) -> &[[f32; 4]; 3] {
+        &self.components
+    }
     /// Number of active components at each vertex.
-    pub fn component_count(&self) -> usize { self.component_count }
+    pub fn component_count(&self) -> usize {
+        self.component_count
+    }
     /// Expand one triangle on the stack; active components remain inline.
     pub fn to_triangle(&self) -> Triangle {
-        let vertices = std::array::from_fn::<_,3,_>(|i| TriangleVertex {
-            flag:0,point:self.points[i],
-            colors:super::ColorComponents::from_slice(&self.components[i][..self.component_count]),
+        let vertices = std::array::from_fn::<_, 3, _>(|i| TriangleVertex {
+            flag: 0,
+            point: self.points[i],
+            colors: super::ColorComponents::from_slice(&self.components[i][..self.component_count]),
         });
-        let [p0,p1,p2]=vertices;
-        Triangle::new(p0,p1,p2)
+        let [p0, p1, p2] = vertices;
+        Triangle::new(p0, p1, p2)
     }
-
 }
 impl EmittedTriangle for CompactAdaptiveTriangle {
     fn from_triangle(triangle: Triangle) -> Self {
@@ -251,23 +286,36 @@ impl EmittedTriangle for CompactAdaptiveTriangle {
         for (out, vertex) in components.iter_mut().zip(vertices) {
             out[..component_count].copy_from_slice(&vertex.colors);
         }
-        Self { points: vertices.map(|v| v.point), components, component_count }
+        Self {
+            points: vertices.map(|v| v.point),
+            components,
+            component_count,
+        }
     }
 }
 impl<T: EmittedTriangle> TriangleOutput for MeshArray<'_, T> {
-    fn plans_global_capacity(&self) -> bool { true }
+    fn plans_global_capacity(&self) -> bool {
+        true
+    }
     fn reserve_patch(&mut self, triangles: usize) -> Result<(), AdaptivePatchError> {
         use AdaptivePatchError::Admission;
-        let capacity=self.data.len().checked_add(triangles).ok_or(Admission)?;
-        if capacity<=self.data.capacity() {return Ok(());}
-        let bytes=capacity.checked_mul(size_of::<T>()).ok_or(Admission)?;
-        let next=match self.admit {
-            Some(admit)=>Some(admit(bytes).ok_or(Admission)?), None=>None,
+        let capacity = self.data.len().checked_add(triangles).ok_or(Admission)?;
+        if capacity <= self.data.capacity() {
+            return Ok(());
+        }
+        let bytes = capacity.checked_mul(size_of::<T>()).ok_or(Admission)?;
+        let next = match self.admit {
+            Some(admit) => Some(admit(bytes).ok_or(Admission)?),
+            None => None,
         };
         // Admit new capacity while the old allocation/credit is still live.
-        self.data.try_reserve_exact(capacity-self.data.len()).map_err(|_|Admission)?;
-        if self.data.capacity()>capacity {return Err(Admission);}
-        self.credit=next;
+        self.data
+            .try_reserve_exact(capacity - self.data.len())
+            .map_err(|_| Admission)?;
+        if self.data.capacity() > capacity {
+            return Err(Admission);
+        }
+        self.credit = next;
         Ok(())
     }
 
@@ -509,15 +557,27 @@ pub fn tessellate_tensor_patch_mesh_adaptive_admitted(
 /// Emit compact geometry directly, without a retained generic-triangle intermediate.
 /// Original f64 coordinates, f32 components, capacity admission and cancellation are preserved.
 pub fn tessellate_tensor_patch_mesh_compact_admitted(
-    patches: &[TensorProductPatch], transform: Affine, limits: AdaptivePatchLimits,
-    cancelled: &dyn Fn() -> bool, admit: &Admitter<'_>,
+    patches: &[TensorProductPatch],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
 ) -> Result<AdmittedAdaptivePatchMesh<CompactAdaptiveTriangle>, AdaptivePatchError> {
-    admitted_mesh(patches.iter().map(AdaptivePatchRef::Tensor), transform, limits, cancelled, admit)
+    admitted_mesh(
+        patches.iter().map(AdaptivePatchRef::Tensor),
+        transform,
+        limits,
+        cancelled,
+        admit,
+    )
 }
 /// Compact mixed-patch counterpart with the same admission and error bounds.
 pub fn tessellate_patch_mesh_compact_admitted(
-    patches: &[AdaptivePatchRef<'_>], transform: Affine, limits: AdaptivePatchLimits,
-    cancelled: &dyn Fn() -> bool, admit: &Admitter<'_>,
+    patches: &[AdaptivePatchRef<'_>],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
 ) -> Result<AdmittedAdaptivePatchMesh<CompactAdaptiveTriangle>, AdaptivePatchError> {
     admitted_mesh(patches.iter().copied(), transform, limits, cancelled, admit)
 }
@@ -525,30 +585,188 @@ pub fn tessellate_patch_mesh_compact_admitted(
 /// Source components are limited to one through four, keeping emitted colors inline.
 /// The caller must discard its partial sink on error; planner buffers are released.
 pub fn tessellate_patch_mesh_stream_admitted(
-    patches: &[AdaptivePatchRef<'_>], transform: Affine, limits: AdaptivePatchLimits,
-    cancelled: &dyn Fn()->bool, admit: &Admitter<'_>,
-    consume: &mut dyn FnMut(Triangle)->Result<(),AdaptivePatchError>,
-) -> Result<AdaptivePatchStats,AdaptivePatchError> {
-    if cancelled() {return Err(AdaptivePatchError::Cancelled);}
+    patches: &[AdaptivePatchRef<'_>],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
+    consume: &mut dyn FnMut(Triangle) -> Result<(), AdaptivePatchError>,
+) -> Result<AdaptivePatchStats, AdaptivePatchError> {
+    tessellate_patch_mesh_stream_ordered_admitted(
+        patches,
+        transform,
+        limits,
+        cancelled,
+        admit,
+        &mut |triangle, _source| consume(triangle),
+    )
+}
+/// Source provenance needed for projected overlap ownership. Parameters refer to
+/// the three emitted vertices before the device transform; patch order follows
+/// the supplied source slice. Folded mappings must compare interpolated v then u,
+/// not triangle emission order or device winding.
+#[derive(Debug, Clone, Copy)]
+pub struct PatchTriangleSource {
+    /// Later indices cover earlier patches.
+    pub patch_index: usize,
+    /// Original (u,v) for p0, p1 and p2, respectively.
+    pub parameters: [Point; 3],
+}
+/// Streaming adaptive tessellation retaining source-order/parameter provenance.
+/// No extra retained mesh or per-triangle allocation is introduced. Callback
+/// failure/cancellation invalidates the whole consumer result as in the plain API.
+pub fn tessellate_patch_mesh_stream_ordered_admitted(
+    patches: &[AdaptivePatchRef<'_>],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
+    consume: &mut dyn FnMut(Triangle, PatchTriangleSource) -> Result<(), AdaptivePatchError>,
+) -> Result<AdaptivePatchStats, AdaptivePatchError> {
+    stream_ordered(patches, transform, limits, cancelled, admit, consume, false)
+}
+/// Opt-in streaming with projected source-component planning and verification
+/// of every emitted triangle, including conforming fans. Error bounds concern
+/// raw source components, not nonlinear functions, coverage or inverse ownership.
+/// On error the caller must discard all partially consumed output.
+pub fn tessellate_patch_mesh_stream_projected_admitted(
+    patches: &[AdaptivePatchRef<'_>],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
+    consume: &mut dyn FnMut(Triangle, PatchTriangleSource) -> Result<(), AdaptivePatchError>,
+) -> Result<AdaptivePatchStats, AdaptivePatchError> {
+    let mut maximum = 0.0f64;
+    let mut stats = stream_ordered(
+        patches,
+        transform,
+        limits,
+        cancelled,
+        admit,
+        &mut |triangle, source| {
+            let converted;
+            let patch = match patches[source.patch_index] {
+                AdaptivePatchRef::Tensor(p) => p,
+                AdaptivePatchRef::Coons(p) => {
+                    converted = p.adaptive_tensor()?;
+                    &converted
+                }
+            };
+            let bound = crate::encode::projected_component_bounds(
+                patch, transform, &triangle, source, &mut 4096, cancelled,
+            )
+            .map_err(projected_error)?;
+            let bound = bound.into_iter().fold(0., f64::max);
+            if bound > limits.component_error {
+                if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                    eprintln!(
+                        "PROJECTED_COMPONENT_REFUSAL patch={} bound={bound} limit={} uv={:?}",
+                        source.patch_index, limits.component_error, source.parameters
+                    );
+                }
+                return Err(AdaptivePatchError::ComponentAccuracy);
+            }
+            maximum = maximum.max(bound);
+            consume(triangle, source)
+        },
+        true,
+    )?;
+    stats.max_component_bound = stats.max_component_bound.max(maximum);
+    Ok(stats)
+}
+fn projected_error(error: crate::encode::PixelPartitionError) -> AdaptivePatchError {
+    use crate::encode::PixelPartitionError as E;
+    match error {
+        E::Cancelled => AdaptivePatchError::Cancelled,
+        E::Admission => AdaptivePatchError::Admission,
+        E::Limit => AdaptivePatchError::TriangleLimit,
+        E::Invalid => AdaptivePatchError::Invalid,
+        E::Conditioning => AdaptivePatchError::ComponentAccuracy,
+    }
+}
+fn stream_ordered(
+    patches: &[AdaptivePatchRef<'_>],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
+    consume: &mut dyn FnMut(Triangle, PatchTriangleSource) -> Result<(), AdaptivePatchError>,
+    projected: bool,
+) -> Result<AdaptivePatchStats, AdaptivePatchError> {
+    if cancelled() {
+        return Err(AdaptivePatchError::Cancelled);
+    }
     for patch in patches {
-        if cancelled() {return Err(AdaptivePatchError::Cancelled);}
-        let colors=match patch {AdaptivePatchRef::Tensor(p)=>&p.colors,AdaptivePatchRef::Coons(p)=>&p.colors};
-        let count=colors[0].len();
-        if !(1..=4).contains(&count) || colors.iter().any(|c|c.len()!=count||c.iter().any(|v|!v.is_finite())) {
+        if cancelled() {
+            return Err(AdaptivePatchError::Cancelled);
+        }
+        let colors = match patch {
+            AdaptivePatchRef::Tensor(p) => &p.colors,
+            AdaptivePatchRef::Coons(p) => &p.colors,
+        };
+        let count = colors[0].len();
+        if !(1..=4).contains(&count)
+            || colors
+                .iter()
+                .any(|c| c.len() != count || c.iter().any(|v| !v.is_finite()))
+        {
             return Err(AdaptivePatchError::Invalid);
         }
     }
-    struct Sink<'a> {len:usize,consume:&'a mut dyn FnMut(Triangle)->Result<(),AdaptivePatchError>}
+    struct Sink<'a> {
+        len: usize,
+        patch_index: usize,
+        projected: bool,
+        consume: &'a mut dyn FnMut(Triangle, PatchTriangleSource) -> Result<(), AdaptivePatchError>,
+    }
     impl TriangleOutput for Sink<'_> {
-        fn len(&self)->usize {self.len}
-        fn truncate(&mut self,len:usize) {self.len=len;}
-        fn push_triangle(&mut self,triangle:Triangle)->Result<(),AdaptivePatchError> {
-            (self.consume)(triangle)?;
-            self.len+=1;
+        fn len(&self) -> usize {
+            self.len
+        }
+        fn truncate(&mut self, len: usize) {
+            self.len = len;
+        }
+        fn push_triangle(&mut self, _triangle: Triangle) -> Result<(), AdaptivePatchError> {
+            // Every adaptive emission must supply its source parameters.
+            Err(AdaptivePatchError::Invalid)
+        }
+        fn begin_patch(&mut self, index: usize) {
+            self.patch_index = index;
+        }
+        fn projected_components(&self) -> bool {
+            self.projected
+        }
+        fn push_patch_triangle(
+            &mut self,
+            triangle: Triangle,
+            parameters: [Point; 3],
+        ) -> Result<(), AdaptivePatchError> {
+            (self.consume)(
+                triangle,
+                PatchTriangleSource {
+                    patch_index: self.patch_index,
+                    parameters,
+                },
+            )?;
+            self.len += 1;
             Ok(())
         }
     }
-    tessellate_mesh(patches.iter().copied(),transform,limits,&mut Sink{len:0,consume},None,||cancelled(),Some(admit))
+    tessellate_mesh(
+        patches.iter().copied(),
+        transform,
+        limits,
+        &mut Sink {
+            len: 0,
+            patch_index: 0,
+            projected,
+            consume,
+        },
+        None,
+        || cancelled(),
+        Some(admit),
+    )
 }
 fn admitted_mesh<'a, T: EmittedTriangle>(
     patches: impl ExactSizeIterator<Item = AdaptivePatchRef<'a>> + Clone,
@@ -676,7 +894,13 @@ fn tessellate_mesh<'a, 'mem>(
             };
             let mut available = limits;
             available.max_triangles = limits.max_triangles - minimum;
-            let leaves = patch.plan_adaptive(transform, available, &mut cancelled, admit)?;
+            let leaves = patch.plan_adaptive(
+                transform,
+                available,
+                &mut cancelled,
+                admit,
+                output.projected_components(),
+            )?;
             minimum += leaves.len() * 2;
             let controls = boundary_controls(&patch);
             let edges = controls.map(canonical_edge).map(|(key, reversed, _)| {
@@ -731,8 +955,11 @@ fn tessellate_mesh<'a, 'mem>(
             while count > 0 {
                 count -= 1;
                 let (p, low, high, depth) = stack[count];
-                if cancelled() { return Err(AdaptivePatchError::Cancelled); }
-                let deviation = (p[1] - p[0].lerp(p[3], 1. / 3.)).hypot()
+                if cancelled() {
+                    return Err(AdaptivePatchError::Cancelled);
+                }
+                let deviation = (p[1] - p[0].lerp(p[3], 1. / 3.))
+                    .hypot()
                     .max((p[2] - p[0].lerp(p[3], 2. / 3.)).hypot());
                 if deviation <= limits.pixel_error / 128. {
                     if shared.len() >= limits.max_triangles * 4 {
@@ -741,11 +968,16 @@ fn tessellate_mesh<'a, 'mem>(
                     // Source endpoints already occur in the planned leaves.
                     // Each interior endpoint is emitted once, by its left span.
                     if high != 65536 {
-                        shared.push(SharedEdgeSample { edge, parameter: high,
-                            point: transform * curve_point(record.controls, high) })?;
+                        shared.push(SharedEdgeSample {
+                            edge,
+                            parameter: high,
+                            point: transform * curve_point(record.controls, high),
+                        })?;
                     }
                 } else {
-                    if depth >= limits.max_depth { return Err(AdaptivePatchError::Depth); }
+                    if depth >= limits.max_depth {
+                        return Err(AdaptivePatchError::Depth);
+                    }
                     let (left, right) = split_curve(p);
                     let mid = (low + high) / 2;
                     stack[count] = (right, mid, high, depth + 1);
@@ -767,22 +999,30 @@ fn tessellate_mesh<'a, 'mem>(
         // Managed output is one retained allocation. Count all patch fans before
         // materializing it, so later patches cannot duplicate a growing prefix.
         if output.plans_global_capacity() {
-            let mut count=0usize;
-            for ((_,leaves),edges) in planned.iter().zip(patch_edges.iter()) {
-                if cancelled() {return Err(AdaptivePatchError::Cancelled);}
-                let boundaries=(*edges).map(|(edge,reversed)|Boundary {
+            let mut count = 0usize;
+            for ((_, leaves), edges) in planned.iter().zip(patch_edges.iter()) {
+                if cancelled() {
+                    return Err(AdaptivePatchError::Cancelled);
+                }
+                let boundaries = (*edges).map(|(edge, reversed)| Boundary {
                     reversed,
-                    points:&shared[shared.partition_point(|sample|sample.edge<edge)
-                        ..shared.partition_point(|sample|sample.edge<=edge)],
+                    points: &shared[shared.partition_point(|sample| sample.edge < edge)
+                        ..shared.partition_point(|sample| sample.edge <= edge)],
                 });
-                let (_,_,triangles)=plan_leaf_edges(leaves,Some(&boundaries),limits,&mut cancelled,admit,true)?;
-                count=count.checked_add(triangles).ok_or(AdaptivePatchError::TriangleLimit)?;
-                if count>limits.max_triangles {return Err(AdaptivePatchError::TriangleLimit);}
+                let (_, _, triangles) =
+                    plan_leaf_edges(leaves, Some(&boundaries), limits, &mut cancelled, admit, true)?;
+                count = count
+                    .checked_add(triangles)
+                    .ok_or(AdaptivePatchError::TriangleLimit)?;
+                if count > limits.max_triangles {
+                    return Err(AdaptivePatchError::TriangleLimit);
+                }
             }
             output.reserve_patch(count)?;
         }
         let mut total = AdaptivePatchStats::default();
-        for ((patch, leaves), edges) in planned.into_iter().zip(patch_edges) {
+        for (patch_index, ((patch, leaves), edges)) in planned.into_iter().zip(patch_edges).enumerate() {
+            output.begin_patch(patch_index);
             let boundaries = edges.map(|(edge, reversed)| Boundary {
                 reversed,
                 points: &shared[shared.partition_point(|sample| sample.edge < edge)
@@ -820,66 +1060,76 @@ fn tessellate_mesh<'a, 'mem>(
 }
 
 fn plan_leaf_edges<'mem>(
-    leaves: &[Leaf], boundaries: Option<&[Boundary<'_>;4]>,
-    limits: AdaptivePatchLimits, cancelled: &mut impl FnMut()->bool,
-    admit: Option<&'mem Admitter<'mem>>, count_output: bool,
-) -> Result<(Edges<'mem>,Edges<'mem>,usize),AdaptivePatchError> {
-        let mut vertical = Edges::new(admit);
-        let mut horizontal = Edges::new(admit);
+    leaves: &[Leaf],
+    boundaries: Option<&[Boundary<'_>; 4]>,
+    limits: AdaptivePatchLimits,
+    cancelled: &mut impl FnMut() -> bool,
+    admit: Option<&'mem Admitter<'mem>>,
+    count_output: bool,
+) -> Result<(Edges<'mem>, Edges<'mem>, usize), AdaptivePatchError> {
+    let mut vertical = Edges::new(admit);
+    let mut horizontal = Edges::new(admit);
+    for leaf in leaves {
+        if cancelled() {
+            return Err(AdaptivePatchError::Cancelled);
+        }
+        let [u0, u1, v0, v1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
+        for x in [u0, u1] {
+            for y in [v0, v1] {
+                vertical.insert(x, y)?;
+                horizontal.insert(y, x)?;
+            }
+        }
+    }
+    if let Some(boundaries) = boundaries {
+        for (edge, boundary) in boundaries.iter().enumerate() {
+            if cancelled() {
+                return Err(AdaptivePatchError::Cancelled);
+            }
+            let values = boundary
+                .points
+                .iter()
+                .map(|sample| boundary.local(sample.parameter));
+            match edge {
+                0 => horizontal.extend(0, values),
+                1 => vertical.extend(65536, values),
+                2 => horizontal.extend(65536, values),
+                _ => vertical.extend(0, values),
+            }?;
+        }
+    }
+    if cancelled() {
+        return Err(AdaptivePatchError::Cancelled);
+    }
+    vertical.finish()?;
+    horizontal.finish()?;
+    // The shared-edge plan fixes the exact fan count. Reserve once before
+    // emitting instead of retaining successive old/new triangle capacities.
+    let mut triangle_count = 0usize;
+    if count_output {
         for leaf in leaves {
             if cancelled() {
                 return Err(AdaptivePatchError::Cancelled);
             }
-            let [u0, u1, v0, v1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
-            for x in [u0, u1] {
-                for y in [v0, v1] {
-                    vertical.insert(x, y)?;
-                    horizontal.insert(y, x)?;
-                }
-            }
-        }
-        if let Some(boundaries) = boundaries {
-            for (edge, boundary) in boundaries.iter().enumerate() {
-                if cancelled() {
-                    return Err(AdaptivePatchError::Cancelled);
-                }
-                let values = boundary
-                    .points
-                    .iter()
-                    .map(|sample| boundary.local(sample.parameter));
-                match edge {
-                    0 => horizontal.extend(0, values),
-                    1 => vertical.extend(65536, values),
-                    2 => horizontal.extend(65536, values),
-                    _ => vertical.extend(0, values),
-                }?;
-            }
-        }
-        if cancelled() {
-            return Err(AdaptivePatchError::Cancelled);
-        }
-        vertical.finish()?;
-        horizontal.finish()?;
-        // The shared-edge plan fixes the exact fan count. Reserve once before
-        // emitting instead of retaining successive old/new triangle capacities.
-        let mut triangle_count=0usize;
-        if count_output { for leaf in leaves {
-            if cancelled() {return Err(AdaptivePatchError::Cancelled);}
-            let [x0,x1,y0,y1]=leaf.uv.map(|v|(v*PARAM_SCALE).round() as u32);
-            let count=interior_count(&horizontal,y0,x0,x1)
-                +interior_count(&horizontal,y1,x0,x1)
-                +interior_count(&vertical,x0,y0,y1)
-                +interior_count(&vertical,x1,y0,y1);
-            triangle_count=triangle_count.checked_add(if count==0 {2} else {6+count})
+            let [x0, x1, y0, y1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
+            let count = interior_count(&horizontal, y0, x0, x1)
+                + interior_count(&horizontal, y1, x0, x1)
+                + interior_count(&vertical, x0, y0, y1)
+                + interior_count(&vertical, x1, y0, y1);
+            triangle_count = triangle_count
+                .checked_add(if count == 0 { 2 } else { 6 + count })
                 .ok_or(AdaptivePatchError::TriangleLimit)?;
-            if triangle_count>limits.max_triangles {return Err(AdaptivePatchError::TriangleLimit);}
-        }}
-    Ok((vertical,horizontal,triangle_count))
+            if triangle_count > limits.max_triangles {
+                return Err(AdaptivePatchError::TriangleLimit);
+            }
+        }
+    }
+    Ok((vertical, horizontal, triangle_count))
 }
 fn interior_count(edges: &Edges<'_>, fixed: u32, low: u32, high: u32) -> usize {
-    let start=edges.points.partition_point(|&point|point<=(fixed,low));
-    let end=edges.points.partition_point(|&point|point<(fixed,high));
-    end-start
+    let start = edges.points.partition_point(|&point| point <= (fixed, low));
+    let end = edges.points.partition_point(|&point| point < (fixed, high));
+    end - start
 }
 fn interior<'mem>(
     edges: &Edges<'mem>,
@@ -939,16 +1189,24 @@ fn emit_fan(
     boundaries: Option<&[Boundary<'_>; 4]>,
     cancelled: &mut impl FnMut() -> bool,
 ) -> Result<(), AdaptivePatchError> {
+    let center_parameter = center;
     let center = patch_vertex(patch, transform, center, boundaries)?;
     for index in 0..polygon.len() {
         if cancelled() {
             return Err(AdaptivePatchError::Cancelled);
         }
-        output.push_triangle(Triangle::new(
-            center.clone(),
-            patch_vertex(patch, transform, polygon[index], boundaries)?,
-            patch_vertex(patch, transform, polygon[(index + 1) % polygon.len()], boundaries)?,
-        ))?;
+        output.push_patch_triangle(
+            Triangle::new(
+                center.clone(),
+                patch_vertex(patch, transform, polygon[index], boundaries)?,
+                patch_vertex(patch, transform, polygon[(index + 1) % polygon.len()], boundaries)?,
+            ),
+            [
+                center_parameter,
+                polygon[index],
+                polygon[(index + 1) % polygon.len()],
+            ],
+        )?;
     }
     Ok(())
 }
@@ -985,6 +1243,45 @@ fn split_grid(grid: Grid) -> [Grid; 4] {
         }
     }
     children
+}
+fn split_grid_axis(grid: Grid, axis: usize) -> [Grid; 2] {
+    let mut result = [[[Point::ZERO; 4]; 4]; 2];
+    for j in 0..4 {
+        let curve = if axis == 0 {
+            std::array::from_fn(|i| grid[i][j])
+        } else {
+            grid[j]
+        };
+        let (a, b) = split_curve(curve);
+        for (side, curve) in [a, b].into_iter().enumerate() {
+            for i in 0..4 {
+                if axis == 0 {
+                    result[side][i][j] = curve[i];
+                } else {
+                    result[side][j][i] = curve[i];
+                }
+            }
+        }
+    }
+    result
+}
+// Refinement heuristic only; actual emitted component bounds remain mandatory.
+fn dominant_curvature(grid: &Grid) -> Option<usize> {
+    let mut u = 0.0f64;
+    let mut v = 0.0f64;
+    for i in 1..3 {
+        for j in 0..4 {
+            u = u.max(((grid[i + 1][j] - grid[i][j]) - (grid[i][j] - grid[i - 1][j])).hypot());
+            v = v.max(((grid[j][i + 1] - grid[j][i]) - (grid[j][i] - grid[j][i - 1])).hypot());
+        }
+    }
+    if u > 2. * v {
+        Some(0)
+    } else if v > 2. * u {
+        Some(1)
+    } else {
+        None
+    }
 }
 // A bicubic minus the degree-elevated bilinear corner surface is a Bezier
 // surface whose deviation is bounded by its control hull. The bilinear surface
@@ -1026,7 +1323,7 @@ impl TensorProductPatch {
     ) -> Result<AdaptivePatchStats, AdaptivePatchError> {
         let initial = output.len();
         let result = (|| {
-            let leaves = self.plan_adaptive(transform, limits, &mut cancelled, None)?;
+            let leaves = self.plan_adaptive(transform, limits, &mut cancelled, None, false)?;
             self.emit_adaptive(leaves, transform, limits, output, None, &mut cancelled, None)
         })();
         if result.is_err() {
@@ -1040,6 +1337,7 @@ impl TensorProductPatch {
         limits: AdaptivePatchLimits,
         cancelled: &mut impl FnMut() -> bool,
         admit: Option<&'mem Admitter<'mem>>,
+        projected: bool,
     ) -> Result<MeshArray<'mem, Leaf>, AdaptivePatchError> {
         if cancelled() {
             return Err(AdaptivePatchError::Cancelled);
@@ -1103,7 +1401,54 @@ impl TensorProductPatch {
             }
             let [u0, u1, v0, v1] = cell.uv;
             let geometry = pixel_bound(&cell.grid);
-            let color = cross * (u1 - u0) * (v1 - v0) * 0.25 + 256. * f64::from(f32::EPSILON) * scale;
+            let param_color = cross * (u1 - u0) * (v1 - v0) * 0.25 + 256. * f64::from(f32::EPSILON) * scale;
+            let mut color = param_color;
+            if projected && geometry <= limits.pixel_error && color <= limits.component_error {
+                let points = [
+                    Point::new(u0, v0),
+                    Point::new(u1, v0),
+                    Point::new(u0, v1),
+                    Point::new(u1, v1),
+                ];
+                let a = points[0];
+                let b = points[1];
+                let c = points[2];
+                let d = points[3];
+                let first = Point::new(u0 + (u1 - u0) / 3., v0 + (v1 - v0) / 3.);
+                let second = Point::new(u0 + 2. * (u1 - u0) / 3., v0 + 2. * (v1 - v0) / 3.);
+                for uv in [
+                    [a, b, c],
+                    [b, d, c],
+                    [first, a, b],
+                    [first, b, c],
+                    [first, c, a],
+                    [second, b, d],
+                    [second, d, c],
+                    [second, c, b],
+                ] {
+                    let [a, b, c] = uv.map(|p| patch_vertex(self, transform, p, None));
+                    let triangle = Triangle::new(a?, b?, c?);
+                    // Planning uses the full cell rectangle for this conservative
+                    // preliminary bound. The actual emitted UV box is checked again.
+                    let source = PatchTriangleSource {
+                        patch_index: 0,
+                        parameters: uv,
+                    };
+                    let cancelled_read = std::cell::RefCell::new(&mut *cancelled);
+                    match crate::encode::projected_component_bounds(
+                        self,
+                        transform,
+                        &triangle,
+                        source,
+                        &mut 4096,
+                        &|| (**cancelled_read.borrow_mut())(),
+                    ) {
+                        Ok(bounds) => color = color.max(bounds.into_iter().fold(0., f64::max)),
+                        Err(crate::encode::PixelPartitionError::Conditioning) => color = f64::INFINITY,
+                        Err(error) => return Err(projected_error(error)),
+                    }
+                }
+            }
             if geometry <= limits.pixel_error && color <= limits.component_error {
                 if (leaves.len() + 1) * 2 > limits.max_triangles {
                     return Err(AdaptivePatchError::TriangleLimit);
@@ -1126,7 +1471,37 @@ impl TensorProductPatch {
                     [u0, um, vm, v1],
                     [um, u1, vm, v1],
                 ];
-                for (grid, uv) in split_grid(cell.grid).into_iter().zip(uv).rev() {
+                let axis =
+                    if projected && geometry <= limits.pixel_error && param_color <= limits.component_error {
+                        dominant_curvature(&cell.grid)
+                    } else {
+                        None
+                    };
+                let children = match axis {
+                    Some(0) => {
+                        let [a, b] = split_grid_axis(cell.grid, 0);
+                        [
+                            Some((a, [u0, um, v0, v1])),
+                            Some((b, [um, u1, v0, v1])),
+                            None,
+                            None,
+                        ]
+                    }
+                    Some(1) => {
+                        let [a, b] = split_grid_axis(cell.grid, 1);
+                        [
+                            Some((a, [u0, u1, v0, vm])),
+                            Some((b, [u0, u1, vm, v1])),
+                            None,
+                            None,
+                        ]
+                    }
+                    _ => {
+                        let grids = split_grid(cell.grid);
+                        std::array::from_fn(|i| Some((grids[i], uv[i])))
+                    }
+                };
+                for (grid, uv) in children.into_iter().rev().flatten() {
                     if pending_len >= pending.len() {
                         return Err(AdaptivePatchError::Invalid);
                     }
@@ -1153,7 +1528,8 @@ impl TensorProductPatch {
     ) -> Result<AdaptivePatchStats, AdaptivePatchError> {
         // Managed meshes reserve their complete output before reaching this
         // stage. Streaming/unmanaged sinks do not need a capacity-count pass.
-        let (vertical,horizontal,_)=plan_leaf_edges(&leaves,boundaries,limits,cancelled,admit,false)?;
+        let (vertical, horizontal, _) =
+            plan_leaf_edges(&leaves, boundaries, limits, cancelled, admit, false)?;
         if cancelled() {
             return Err(AdaptivePatchError::Cancelled);
         }
@@ -1181,12 +1557,19 @@ impl TensorProductPatch {
                 return Err(AdaptivePatchError::TriangleLimit);
             }
             if added == 2 {
+                let parameters = [a, b, c, d];
                 let a = patch_vertex(self, transform, a, boundaries)?;
                 let b = patch_vertex(self, transform, b, boundaries)?;
                 let c = patch_vertex(self, transform, c, boundaries)?;
                 let d = patch_vertex(self, transform, d, boundaries)?;
-                output.push_triangle(Triangle::new(a, b.clone(), c.clone()))?;
-                output.push_triangle(Triangle::new(b, d, c))?;
+                output.push_patch_triangle(
+                    Triangle::new(a, b.clone(), c.clone()),
+                    [parameters[0], parameters[1], parameters[2]],
+                )?;
+                output.push_patch_triangle(
+                    Triangle::new(b, d, c),
+                    [parameters[1], parameters[3], parameters[2]],
+                )?;
             } else {
                 let mut first = MeshArray::new(admit);
                 first.push(a)?;
@@ -1330,99 +1713,235 @@ mod qualification_tests {
     }
     #[test]
     fn streamed_mesh_matches_owned_order_and_releases_on_consumer_failure_and_cancel() {
-        use std::{cell::Cell, sync::{Arc, atomic::{AtomicUsize, Ordering}}};
-        struct Owner(Arc<AtomicUsize>,usize);
-        impl Drop for Owner {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
-        let used=Arc::new(AtomicUsize::new(0));
-        let calls=Cell::new(0usize);
-        let refuse=Cell::new(usize::MAX);
-        let admit=|bytes|->Option<Box<dyn std::any::Any+Send+Sync>> {
-            calls.set(calls.get()+1);
-            if calls.get()==refuse.get() {return None;}
-            used.fetch_add(bytes,Ordering::Relaxed);
-            Some(Box::new(Owner(used.clone(),bytes)))
+        use std::{
+            cell::Cell,
+            sync::{
+                Arc,
+                atomic::{AtomicUsize, Ordering},
+            },
         };
-        let mut source=patch(0.,[0.125,0.25,0.75,1.]);
-        source.control_points[1].x-=0.25;
-        let refs=[AdaptivePatchRef::Tensor(&source)];
-        let mut expected=Vec::new();
-        tessellate_patch_mesh_adaptive(&refs,Affine::IDENTITY,limits(),&mut expected,||false).unwrap();
-        assert!(!expected.is_empty());
-        let mut actual=Vec::new();
-        let stats=tessellate_patch_mesh_stream_admitted(&refs,Affine::IDENTITY,limits(),&||false,&admit,
-            &mut |triangle|{actual.push(triangle);Ok(())}).unwrap();
-        assert_eq!(stats.triangles,expected.len());
-        assert_eq!(actual.len(),expected.len());
-        for (a,b) in actual.iter().zip(&expected) {
-            for (a,b) in [&a.p0,&a.p1,&a.p2].iter().zip([&b.p0,&b.p1,&b.p2]) {
-                assert_eq!((a.point.x.to_bits(),a.point.y.to_bits(),a.flag),(b.point.x.to_bits(),b.point.y.to_bits(),b.flag));
-                assert_eq!(a.colors.iter().map(|v|v.to_bits()).collect::<Vec<_>>(),b.colors.iter().map(|v|v.to_bits()).collect::<Vec<_>>());
+        struct Owner(Arc<AtomicUsize>, usize);
+        impl Drop for Owner {
+            fn drop(&mut self) {
+                self.0.fetch_sub(self.1, Ordering::Relaxed);
             }
         }
-        assert_eq!(used.load(Ordering::Relaxed),0);
-        let mut seen=0;
-        assert_eq!(tessellate_patch_mesh_stream_admitted(&refs,Affine::IDENTITY,limits(),&||false,&admit,
-            &mut |_| {seen+=1;if seen==expected.len()/2 {Err(AdaptivePatchError::Admission)} else {Ok(())}}).err(),Some(AdaptivePatchError::Admission));
-        assert!(seen>0&&seen<expected.len());
-        assert_eq!(used.load(Ordering::Relaxed),0);
-        let cancelled=Cell::new(false);
-        assert_eq!(tessellate_patch_mesh_stream_admitted(&refs,Affine::IDENTITY,limits(),&||cancelled.get(),&admit,
-            &mut |_|{cancelled.set(true);Ok(())}).err(),Some(AdaptivePatchError::Cancelled));
-        assert_eq!(used.load(Ordering::Relaxed),0);
-        calls.set(0);refuse.set(1);
-        assert_eq!(tessellate_patch_mesh_stream_admitted(&refs,Affine::IDENTITY,limits(),&||false,&admit,
-            &mut |_|Ok(())).err(),Some(AdaptivePatchError::Admission));
-        assert_eq!(used.load(Ordering::Relaxed),0);
-        refuse.set(usize::MAX);cancelled.set(false);
-        let mut retry=0;
-        tessellate_patch_mesh_stream_admitted(&refs,Affine::IDENTITY,limits(),&||false,&admit,
-            &mut |_|{retry+=1;Ok(())}).unwrap();
-        assert_eq!(retry,expected.len());
-        assert_eq!(used.load(Ordering::Relaxed),0);
-    }
-    #[test]
-    fn compact_mesh_is_bit_exact_and_releases_every_refused_allocation() {
-        use std::{cell::Cell, sync::{Arc, atomic::{AtomicUsize, Ordering}}};
-        struct Owner(Arc<AtomicUsize>, usize);
-        impl Drop for Owner { fn drop(&mut self) { self.0.fetch_sub(self.1,Ordering::Relaxed); } }
         let used = Arc::new(AtomicUsize::new(0));
         let calls = Cell::new(0usize);
         let refuse = Cell::new(usize::MAX);
-        let admit = |bytes| -> Option<Box<dyn std::any::Any+Send+Sync>> {
-            calls.set(calls.get()+1);
-            if calls.get() == refuse.get() { return None; }
-            used.fetch_add(bytes,Ordering::Relaxed);
-            Some(Box::new(Owner(used.clone(),bytes)))
+        let admit = |bytes| -> Option<Box<dyn std::any::Any + Send + Sync>> {
+            calls.set(calls.get() + 1);
+            if calls.get() == refuse.get() {
+                return None;
+            }
+            used.fetch_add(bytes, Ordering::Relaxed);
+            Some(Box::new(Owner(used.clone(), bytes)))
         };
-        let mut source = patch(0.,[0.25;4]);
-        source.control_points[1].x = -0.1;
-        source.colors = std::array::from_fn(|_| smallvec::smallvec![0.25,2.,-0.,-1.]);
-        let legacy = tessellate_tensor_patch_mesh_adaptive_admitted(&[source.clone()],Affine::IDENTITY,limits(),&||false,&admit).unwrap();
-        calls.set(0);
-        let compact = tessellate_tensor_patch_mesh_compact_admitted(&[source.clone()],Affine::IDENTITY,limits(),&||false,&admit).unwrap();
-        let reservations = calls.get();
-        assert_eq!(size_of::<CompactAdaptiveTriangle>(),104);
-        assert!(size_of::<CompactAdaptiveTriangle>() < size_of::<Triangle>());
-        assert_eq!(legacy.triangles().len(),compact.triangles().len());
-        for (a,b) in legacy.triangles().iter().zip(compact.triangles()) {
-            assert_eq!(b.component_count(),4);
-            for (i,v) in [&a.p0,&a.p1,&a.p2].iter().enumerate() {
-                assert_eq!([v.point.x.to_bits(),v.point.y.to_bits()], [b.points()[i].x.to_bits(),b.points()[i].y.to_bits()]);
-                assert_eq!(v.colors.iter().map(|v|v.to_bits()).collect::<Vec<_>>(),b.components()[i].map(f32::to_bits));
+        let mut source = patch(0., [0.125, 0.25, 0.75, 1.]);
+        source.control_points[1].x -= 0.25;
+        let refs = [AdaptivePatchRef::Tensor(&source)];
+        let mut expected = Vec::new();
+        tessellate_patch_mesh_adaptive(&refs, Affine::IDENTITY, limits(), &mut expected, || false).unwrap();
+        assert!(!expected.is_empty());
+        let mut actual = Vec::new();
+        let stats = tessellate_patch_mesh_stream_admitted(
+            &refs,
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &admit,
+            &mut |triangle| {
+                actual.push(triangle);
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert_eq!(stats.triangles, expected.len());
+        assert_eq!(actual.len(), expected.len());
+        for (a, b) in actual.iter().zip(&expected) {
+            for (a, b) in [&a.p0, &a.p1, &a.p2].iter().zip([&b.p0, &b.p1, &b.p2]) {
+                assert_eq!(
+                    (a.point.x.to_bits(), a.point.y.to_bits(), a.flag),
+                    (b.point.x.to_bits(), b.point.y.to_bits(), b.flag)
+                );
+                assert_eq!(
+                    a.colors.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                    b.colors.iter().map(|v| v.to_bits()).collect::<Vec<_>>()
+                );
             }
         }
-        drop(legacy);drop(compact);assert_eq!(used.load(Ordering::Relaxed),0);
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+        let mut seen = 0;
+        assert_eq!(
+            tessellate_patch_mesh_stream_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &|| false,
+                &admit,
+                &mut |_| {
+                    seen += 1;
+                    if seen == expected.len() / 2 {
+                        Err(AdaptivePatchError::Admission)
+                    } else {
+                        Ok(())
+                    }
+                }
+            )
+            .err(),
+            Some(AdaptivePatchError::Admission)
+        );
+        assert!(seen > 0 && seen < expected.len());
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+        let cancelled = Cell::new(false);
+        assert_eq!(
+            tessellate_patch_mesh_stream_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &|| cancelled.get(),
+                &admit,
+                &mut |_| {
+                    cancelled.set(true);
+                    Ok(())
+                }
+            )
+            .err(),
+            Some(AdaptivePatchError::Cancelled)
+        );
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+        calls.set(0);
+        refuse.set(1);
+        assert_eq!(
+            tessellate_patch_mesh_stream_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &|| false,
+                &admit,
+                &mut |_| Ok(())
+            )
+            .err(),
+            Some(AdaptivePatchError::Admission)
+        );
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+        refuse.set(usize::MAX);
+        cancelled.set(false);
+        let mut retry = 0;
+        tessellate_patch_mesh_stream_admitted(
+            &refs,
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &admit,
+            &mut |_| {
+                retry += 1;
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert_eq!(retry, expected.len());
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+    }
+    #[test]
+    fn compact_mesh_is_bit_exact_and_releases_every_refused_allocation() {
+        use std::{
+            cell::Cell,
+            sync::{
+                Arc,
+                atomic::{AtomicUsize, Ordering},
+            },
+        };
+        struct Owner(Arc<AtomicUsize>, usize);
+        impl Drop for Owner {
+            fn drop(&mut self) {
+                self.0.fetch_sub(self.1, Ordering::Relaxed);
+            }
+        }
+        let used = Arc::new(AtomicUsize::new(0));
+        let calls = Cell::new(0usize);
+        let refuse = Cell::new(usize::MAX);
+        let admit = |bytes| -> Option<Box<dyn std::any::Any + Send + Sync>> {
+            calls.set(calls.get() + 1);
+            if calls.get() == refuse.get() {
+                return None;
+            }
+            used.fetch_add(bytes, Ordering::Relaxed);
+            Some(Box::new(Owner(used.clone(), bytes)))
+        };
+        let mut source = patch(0., [0.25; 4]);
+        source.control_points[1].x = -0.1;
+        source.colors = std::array::from_fn(|_| smallvec::smallvec![0.25, 2., -0., -1.]);
+        let legacy = tessellate_tensor_patch_mesh_adaptive_admitted(
+            &[source.clone()],
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        calls.set(0);
+        let compact = tessellate_tensor_patch_mesh_compact_admitted(
+            &[source.clone()],
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        let reservations = calls.get();
+        assert_eq!(size_of::<CompactAdaptiveTriangle>(), 104);
+        assert!(size_of::<CompactAdaptiveTriangle>() < size_of::<Triangle>());
+        assert_eq!(legacy.triangles().len(), compact.triangles().len());
+        for (a, b) in legacy.triangles().iter().zip(compact.triangles()) {
+            assert_eq!(b.component_count(), 4);
+            for (i, v) in [&a.p0, &a.p1, &a.p2].iter().enumerate() {
+                assert_eq!(
+                    [v.point.x.to_bits(), v.point.y.to_bits()],
+                    [b.points()[i].x.to_bits(), b.points()[i].y.to_bits()]
+                );
+                assert_eq!(
+                    v.colors.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                    b.components()[i].map(f32::to_bits)
+                );
+            }
+        }
+        drop(legacy);
+        drop(compact);
+        assert_eq!(used.load(Ordering::Relaxed), 0);
         for failed in 1..=reservations {
-            calls.set(0);refuse.set(failed);
-            assert!(matches!(tessellate_tensor_patch_mesh_compact_admitted(&[source.clone()],Affine::IDENTITY,limits(),&||false,&admit),Err(AdaptivePatchError::Admission)));
-            assert_eq!(used.load(Ordering::Relaxed),0,"reservation{failed}");
+            calls.set(0);
+            refuse.set(failed);
+            assert!(matches!(
+                tessellate_tensor_patch_mesh_compact_admitted(
+                    &[source.clone()],
+                    Affine::IDENTITY,
+                    limits(),
+                    &|| false,
+                    &admit
+                ),
+                Err(AdaptivePatchError::Admission)
+            ));
+            assert_eq!(used.load(Ordering::Relaxed), 0, "reservation{failed}");
         }
         refuse.set(usize::MAX);
         let seen = Cell::new(false);
-        assert!(matches!(tessellate_tensor_patch_mesh_compact_admitted(&[source],Affine::IDENTITY,limits(),&|| {
-            let admitted=used.load(Ordering::Relaxed)>0; seen.set(seen.get()||admitted); admitted
-        },&admit),Err(AdaptivePatchError::Cancelled)));
-        assert!(seen.get());assert_eq!(used.load(Ordering::Relaxed),0);
+        assert!(matches!(
+            tessellate_tensor_patch_mesh_compact_admitted(
+                &[source],
+                Affine::IDENTITY,
+                limits(),
+                &|| {
+                    let admitted = used.load(Ordering::Relaxed) > 0;
+                    seen.set(seen.get() || admitted);
+                    admitted
+                },
+                &admit
+            ),
+            Err(AdaptivePatchError::Cancelled)
+        ));
+        assert!(seen.get());
+        assert_eq!(used.load(Ordering::Relaxed), 0);
     }
     #[test]
     fn curved_boundary_area_matches_analytic_cubic_integral() {
@@ -1430,12 +1949,14 @@ mod qualification_tests {
         source.control_points[1].x = -0.1;
         source.control_points[2].x = -0.1;
         let mut triangles = Vec::new();
-        tessellate_tensor_patch_mesh_adaptive(
-            &[source], Affine::IDENTITY, limits(), &mut triangles, || false,
-        ).unwrap();
-        let area: f64 = triangles.iter().map(|t| {
-            ((t.p1.point - t.p0.point).cross(t.p2.point - t.p0.point)).abs() * 0.5
-        }).sum();
+        tessellate_tensor_patch_mesh_adaptive(&[source], Affine::IDENTITY, limits(), &mut triangles, || {
+            false
+        })
+        .unwrap();
+        let area: f64 = triangles
+            .iter()
+            .map(|t| ((t.p1.point - t.p0.point).cross(t.p2.point - t.p0.point)).abs() * 0.5)
+            .sum();
         // Left cubic: x(t)=-0.3*t*(1-t), y(t)=8*t.
         // Its signed strip integral is -0.4, so the patch area is 64.4.
         assert!((area - 64.4).abs() < 0.0002, "area={area}");
@@ -1510,30 +2031,43 @@ mod qualification_tests {
     fn refined_curved_shared_edge_is_bit_exact_when_reversed() {
         let mut left = patch(0., [0.125; 4]);
         let mut right = patch(8., [0.875; 4]);
-        for i in [8, 7] { left.control_points[i].x += 0.1; }
-        for i in [1, 2] { right.control_points[i].x += 0.1; }
+        for i in [8, 7] {
+            left.control_points[i].x += 0.1;
+        }
+        for i in [1, 2] {
+            right.control_points[i].x += 0.1;
+        }
         let original = right.control_points;
-        let indices = [[0,1,2,3], [11,12,13,4], [10,15,14,5], [9,8,7,6]];
-        for u in 0..4 { for v in 0..4 {
-            right.control_points[indices[u][v]] = original[indices[u][3-v]];
-        }}
+        let indices = [[0, 1, 2, 3], [11, 12, 13, 4], [10, 15, 14, 5], [9, 8, 7, 6]];
+        for u in 0..4 {
+            for v in 0..4 {
+                right.control_points[indices[u][v]] = original[indices[u][3 - v]];
+            }
+        }
         let mut triangles = Vec::new();
         let mut ranges = Vec::new();
         tessellate_patch_mesh_adaptive_with_ranges(
             &[AdaptivePatchRef::Tensor(&left), AdaptivePatchRef::Tensor(&right)],
-            Affine::IDENTITY, limits(), &mut triangles, &mut ranges, || false,
-        ).unwrap();
+            Affine::IDENTITY,
+            limits(),
+            &mut triangles,
+            &mut ranges,
+            || false,
+        )
+        .unwrap();
         let boundary = |range: std::ops::Range<usize>| {
             let mut points = Vec::new();
             for triangle in &triangles[range] {
                 for v in [&triangle.p0, &triangle.p1, &triangle.p2] {
                     let t = v.point.y / 8.;
-                    if (v.point.x - (8. + 0.3*t*(1.-t))).abs() < 1e-12 {
+                    if (v.point.x - (8. + 0.3 * t * (1. - t))).abs() < 1e-12 {
                         points.push((v.point.x.to_bits(), v.point.y.to_bits()));
                     }
                 }
             }
-            points.sort_unstable(); points.dedup(); points
+            points.sort_unstable();
+            points.dedup();
+            points
         };
         let a = boundary(ranges[0].clone());
         assert!(a.len() > 8);

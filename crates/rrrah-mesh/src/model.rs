@@ -152,6 +152,18 @@ impl DecodedModel {
     /// Includes vectors and nested attributes/strings, excludes allocator and
     /// Arc bookkeeping. Shared OBJ face strings are charged per reference.
     pub fn capacity_bytes(&self) -> u64 {
+        self.storage_bytes(true)
+    }
+    /// Lower bound for the retained weight after lossless payload restoration.
+    /// Counts logical contents instead of source-side spare vector capacity.
+    /// Uses the same per-reference accounting as `capacity_bytes`.
+    pub fn minimum_restore_weight(&self) -> u64 {
+        self.storage_bytes(false)
+    }
+    fn storage_bytes(&self, retained: bool) -> u64 {
+        fn extent(len: usize, capacity: usize, retained: bool) -> usize {
+            if retained { capacity } else { len }
+        }
         fn cap<T>(capacity: usize) -> u64 {
             capacity
                 .checked_mul(size_of::<T>())
@@ -161,80 +173,106 @@ impl DecodedModel {
         fn sum(values: impl IntoIterator<Item = u64>) -> u64 {
             values.into_iter().fold(0, u64::saturating_add)
         }
-        fn strings(values: &Vec<String>) -> u64 {
-            sum(std::iter::once(cap::<String>(values.capacity()))
-                .chain(values.iter().map(|s| s.capacity() as u64)))
+        fn strings(values: &Vec<String>, retained: bool) -> u64 {
+            sum(
+                std::iter::once(cap::<String>(extent(values.len(), values.capacity(), retained))).chain(
+                    values
+                        .iter()
+                        .map(|s| extent(s.len(), s.capacity(), retained) as u64),
+                ),
+            )
         }
-        fn scalars(values: &crate::ply::PlyScalars) -> u64 {
+        fn scalars(values: &crate::ply::PlyScalars, retained: bool) -> u64 {
             use crate::ply::PlyScalars::{F32, F64, I8, I16, I32, U8, U16, U32};
             match values {
-                I8(v) => cap::<i8>(v.capacity()),
-                U8(v) => cap::<u8>(v.capacity()),
-                I16(v) => cap::<i16>(v.capacity()),
-                U16(v) => cap::<u16>(v.capacity()),
-                I32(v) => cap::<i32>(v.capacity()),
-                U32(v) => cap::<u32>(v.capacity()),
-                F32(v) => cap::<f32>(v.capacity()),
-                F64(v) => cap::<f64>(v.capacity()),
+                I8(v) => cap::<i8>(extent(v.len(), v.capacity(), retained)),
+                U8(v) => cap::<u8>(extent(v.len(), v.capacity(), retained)),
+                I16(v) => cap::<i16>(extent(v.len(), v.capacity(), retained)),
+                U16(v) => cap::<u16>(extent(v.len(), v.capacity(), retained)),
+                I32(v) => cap::<i32>(extent(v.len(), v.capacity(), retained)),
+                U32(v) => cap::<u32>(extent(v.len(), v.capacity(), retained)),
+                F32(v) => cap::<f32>(extent(v.len(), v.capacity(), retained)),
+                F64(v) => cap::<f64>(extent(v.len(), v.capacity(), retained)),
             }
         }
         match self {
             Self::Stl(mesh) => sum([
                 size_of::<StlMesh>() as u64,
-                cap::<crate::stl::StlFacet>(mesh.facets.capacity()),
+                cap::<crate::stl::StlFacet>(extent(mesh.facets.len(), mesh.facets.capacity(), retained)),
             ]),
             Self::Obj(mesh) => {
                 let vectors = sum([
                     size_of::<ObjMesh>() as u64,
-                    cap::<[f32; 4]>(mesh.positions.capacity()),
-                    cap::<[f32; 3]>(mesh.texcoords.capacity()),
-                    cap::<[f32; 3]>(mesh.normals.capacity()),
-                    cap::<crate::obj::ObjCorner>(mesh.corners.capacity()),
-                    cap::<crate::obj::ObjFace>(mesh.faces.capacity()),
-                    cap::<crate::obj::ObjTriangle>(mesh.triangles.capacity()),
-                    strings(&mesh.material_libraries),
+                    cap::<[f32; 4]>(extent(mesh.positions.len(), mesh.positions.capacity(), retained)),
+                    cap::<[f32; 3]>(extent(mesh.texcoords.len(), mesh.texcoords.capacity(), retained)),
+                    cap::<[f32; 3]>(extent(mesh.normals.len(), mesh.normals.capacity(), retained)),
+                    cap::<crate::obj::ObjCorner>(extent(
+                        mesh.corners.len(),
+                        mesh.corners.capacity(),
+                        retained,
+                    )),
+                    cap::<crate::obj::ObjFace>(extent(mesh.faces.len(), mesh.faces.capacity(), retained)),
+                    cap::<crate::obj::ObjTriangle>(extent(
+                        mesh.triangles.len(),
+                        mesh.triangles.capacity(),
+                        retained,
+                    )),
+                    strings(&mesh.material_libraries, retained),
                 ]);
                 vectors.saturating_add(sum(mesh.faces.iter().map(|face| {
                     sum([
                         face.object.len() as u64,
                         face.material.as_ref().map_or(0, |m| m.len() as u64),
                         cap::<String>(face.groups.len()),
-                        sum(face.groups.iter().map(|s| s.capacity() as u64)),
+                        sum(face
+                            .groups
+                            .iter()
+                            .map(|s| extent(s.len(), s.capacity(), retained) as u64)),
                     ])
                 })))
             }
             Self::Off(mesh) => sum([
                 size_of::<crate::OffMesh>() as u64,
-                cap::<[f64; 3]>(mesh.positions.capacity()),
-                cap::<[f64; 3]>(mesh.normals.capacity()),
-                cap::<[f64; 4]>(mesh.colors.capacity()),
-                cap::<[f64; 2]>(mesh.texcoords.capacity()),
-                cap::<u32>(mesh.indices.capacity()),
-                cap::<crate::off::OffFace>(mesh.faces.capacity()),
-                cap::<[u32; 3]>(mesh.triangles.capacity()),
+                cap::<[f64; 3]>(extent(mesh.positions.len(), mesh.positions.capacity(), retained)),
+                cap::<[f64; 3]>(extent(mesh.normals.len(), mesh.normals.capacity(), retained)),
+                cap::<[f64; 4]>(extent(mesh.colors.len(), mesh.colors.capacity(), retained)),
+                cap::<[f64; 2]>(extent(mesh.texcoords.len(), mesh.texcoords.capacity(), retained)),
+                cap::<u32>(extent(mesh.indices.len(), mesh.indices.capacity(), retained)),
+                cap::<crate::off::OffFace>(extent(mesh.faces.len(), mesh.faces.capacity(), retained)),
+                cap::<[u32; 3]>(extent(mesh.triangles.len(), mesh.triangles.capacity(), retained)),
                 sum(mesh.faces.iter().map(|face| match &face.color {
-                    crate::off::OffColor::Bytes(v) => cap::<u8>(v.capacity()),
-                    crate::off::OffColor::Floats(v) => cap::<f64>(v.capacity()),
+                    crate::off::OffColor::Bytes(v) => cap::<u8>(extent(v.len(), v.capacity(), retained)),
+                    crate::off::OffColor::Floats(v) => cap::<f64>(extent(v.len(), v.capacity(), retained)),
                     _ => 0,
                 })),
             ]),
             Self::Ply(mesh) => sum([
                 size_of::<crate::PlyMesh>() as u64,
-                strings(&mesh.comments),
-                strings(&mesh.object_info),
-                cap::<crate::ply::PlyElement>(mesh.elements.capacity()),
-                cap::<[u32; 3]>(mesh.triangles.capacity()),
+                strings(&mesh.comments, retained),
+                strings(&mesh.object_info, retained),
+                cap::<crate::ply::PlyElement>(extent(
+                    mesh.elements.len(),
+                    mesh.elements.capacity(),
+                    retained,
+                )),
+                cap::<[u32; 3]>(extent(mesh.triangles.len(), mesh.triangles.capacity(), retained)),
                 sum(mesh.elements.iter().map(|element| {
                     sum([
-                        element.name.capacity() as u64,
-                        cap::<crate::ply::PlyProperty>(element.properties.capacity()),
+                        extent(element.name.len(), element.name.capacity(), retained) as u64,
+                        cap::<crate::ply::PlyProperty>(extent(
+                            element.properties.len(),
+                            element.properties.capacity(),
+                            retained,
+                        )),
                         sum(element.properties.iter().map(|property| {
-                            (property.name.capacity() as u64).saturating_add(match &property.values {
-                                crate::ply::PlyValues::Scalar(v) => scalars(v),
-                                crate::ply::PlyValues::List { offsets, values, .. } => {
-                                    cap::<u32>(offsets.capacity()).saturating_add(scalars(values))
-                                }
-                            })
+                            (extent(property.name.len(), property.name.capacity(), retained) as u64)
+                                .saturating_add(match &property.values {
+                                    crate::ply::PlyValues::Scalar(v) => scalars(v, retained),
+                                    crate::ply::PlyValues::List { offsets, values, .. } => {
+                                        cap::<u32>(extent(offsets.len(), offsets.capacity(), retained))
+                                            .saturating_add(scalars(values, retained))
+                                    }
+                                })
                         })),
                     ])
                 })),
@@ -309,6 +347,8 @@ mod ownership_tests {
         let model = DecodedModel::Stl(Arc::new(mesh).into());
         assert_eq!(model.triangle_count(), 0);
         assert_eq!(model.capacity_bytes(), expected as u64);
+        assert_eq!(model.minimum_restore_weight(), size_of::<StlMesh>() as u64);
+        assert!(model.minimum_restore_weight() < model.capacity_bytes());
         assert_eq!(model.clone().capacity_bytes(), model.capacity_bytes());
         let mut mesh = ObjMesh::default();
         mesh.positions = Vec::with_capacity(32);

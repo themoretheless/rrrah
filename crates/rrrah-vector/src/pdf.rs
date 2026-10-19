@@ -1105,6 +1105,45 @@ mod tensor_background_coverage_tests {
 
 #[cfg(test)]
 mod overlap_patch_tests {
+    fn assert_exact_overlap_control(bytes: &[u8], name: &str, expected: &[u8]) {
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let mut request = crate::DecodeRequest::new(name);
+        request.memory_budget = Some(root.clone());
+        let image = super::decode(bytes, &request).unwrap();
+        assert_eq!((image.width(), image.height()), (3, 3));
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!()
+        };
+        let actual = pixels.to_vec();
+        drop(image);
+        assert_eq!(root.used(), 0);
+        assert_eq!(
+            actual, expected,
+            "exact projected area / later-patch ownership: {name}"
+        );
+    }
+    #[test]
+    #[ignore = "known folded Tensor coverage double-counting; exact mathematical control"]
+    fn folded_tensor_uses_projected_union_not_multiplicity() {
+        // x(u)=6u(1-u), y(v)=3v projects onto [0,1.5]x[0,3].
+        let expected = [0, 0, 0, 255, 0, 0, 0, 128, 0, 0, 0, 0].repeat(3);
+        assert_exact_overlap_control(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-folded-solid.pdf"),
+            "tensor-folded-solid.pdf",
+            &expected,
+        );
+    }
+    #[test]
+    #[ignore = "known partial Tensor overlap mixes earlier color; exact source-order control"]
+    fn partial_tensor_overlap_uses_later_patch_color() {
+        // Red [0,1.5] followed by blue [.5,2], both full height.
+        let expected = [128, 0, 128, 255, 0, 0, 255, 255, 0, 0, 0, 0].repeat(3);
+        assert_exact_overlap_control(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-partial-overlap.pdf"),
+            "tensor-partial-overlap.pdf",
+            &expected,
+        );
+    }
     #[test]
     fn later_coincident_tensor_patch_covers_earlier_color() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

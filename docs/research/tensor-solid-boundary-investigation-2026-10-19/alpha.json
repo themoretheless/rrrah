@@ -1,0 +1,46 @@
+{
+  "scope": "Same control geometry, source-component codes changed to zero; direct alpha with transparent background; numerical independent-renderer evidence, no area certificate",
+  "sources": [
+    {
+      "name": "shade-tensor-sh1.pdf",
+      "source": "https://raw.githubusercontent.com/SerenityOS/serenity/31ed5be3770a30cd70b2d83af7047aa65408ba90/Tests/LibPDF/shade-tensor.pdf",
+      "transformation": "replace /Sh2 sh by same-length spaces; preserve all xref and stream lengths",
+      "parent_sha256": "9fa0cd5a862e36ff81a2bb172daf375f19abdd427695fb365cb128f8348fdf24",
+      "bytes": 2203,
+      "sha256": "c3e3ce7fcca1b7190827056a8765b9b5344a0b2a46ec109b64b69b20bdd2b0af"
+    },
+    {
+      "name": "shade-tensor-sh1-solid.pdf",
+      "source": "https://raw.githubusercontent.com/SerenityOS/serenity/31ed5be3770a30cd70b2d83af7047aa65408ba90/Tests/LibPDF/shade-tensor.pdf",
+      "parent_sha256": "c3e3ce7fcca1b7190827056a8765b9b5344a0b2a46ec109b64b69b20bdd2b0af",
+      "transformation": "same-length all mesh source component codes zero; selected paint unchanged",
+      "bytes": 2203,
+      "sha256": "057c59db36ebaf62646c20bef30f0f20a4f34995ebc409012db822e4c720f23c"
+    }
+  ],
+  "decoder_sha256": "5eb5a148082efc08bec3847f41c693eee1ece4e57d50f9b6f4b41c6d68927056",
+  "pdfium_version": "156.0.8076.0",
+  "rows": [
+    {
+      "engine": "native",
+      "different_alpha_pixels": 0,
+      "maximum_alpha_difference": 0,
+      "above32": 0,
+      "selected": []
+    },
+    {
+      "engine": "pdfium16",
+      "different_alpha_pixels": 431,
+      "maximum_alpha_difference": 33,
+      "above32": 1,
+      "selected": [
+        {
+          "x": 75,
+          "y_bottom": 456,
+          "colored_alpha": 78,
+          "solid_alpha": 45
+        }
+      ]
+    }
+  ]
+}

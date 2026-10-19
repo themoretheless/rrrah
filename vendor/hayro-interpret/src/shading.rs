@@ -4,11 +4,13 @@
 
 mod adaptive;
 pub use adaptive::{
-    CompactAdaptiveTriangle, tessellate_tensor_patch_mesh_compact_admitted, tessellate_patch_mesh_compact_admitted, tessellate_patch_mesh_stream_admitted,
-    AdmittedAdaptivePatchMesh, AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
-    tessellate_patch_mesh_adaptive_admitted, tessellate_tensor_patch_mesh_adaptive_admitted,
-    tessellate_patch_mesh_adaptive, tessellate_patch_mesh_adaptive_with_ranges,
-    tessellate_tensor_patch_mesh_adaptive,
+    AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats, AdmittedAdaptivePatchMesh,
+    CompactAdaptiveTriangle, PatchTriangleSource, tessellate_patch_mesh_adaptive,
+    tessellate_patch_mesh_adaptive_admitted, tessellate_patch_mesh_adaptive_with_ranges,
+    tessellate_patch_mesh_compact_admitted, tessellate_patch_mesh_stream_admitted,
+    tessellate_patch_mesh_stream_ordered_admitted, tessellate_patch_mesh_stream_projected_admitted,
+    tessellate_tensor_patch_mesh_adaptive, tessellate_tensor_patch_mesh_adaptive_admitted,
+    tessellate_tensor_patch_mesh_compact_admitted,
 };
 
 use crate::CacheKey;
@@ -40,38 +42,67 @@ pub enum ShadingFunction {
 }
 
 impl ShadingFunction {
-    pub(crate) fn native_retained_capacity(&self,cancelled:&dyn Fn()->bool)->Option<usize> {
-        let mut remaining=4096;
+    pub(crate) fn native_retained_capacity(&self, cancelled: &dyn Fn() -> bool) -> Option<usize> {
+        let mut remaining = 4096;
         match self {
-            Self::Single(f)=>f.native_retained_with_budget(cancelled,&mut remaining,0),
-            Self::Multiple(functions)=>{
-                if functions.is_empty() || functions.len()>4 {return None;}
-                let mut bytes=0usize;
-                if functions.spilled() {bytes=functions.capacity().checked_mul(size_of::<Function>())?;}
-                for f in functions {bytes=bytes.checked_add(f.native_retained_with_budget(cancelled,&mut remaining,0)?)?;}
+            Self::Single(f) => f.native_retained_with_budget(cancelled, &mut remaining, 0),
+            Self::Multiple(functions) => {
+                if functions.is_empty() || functions.len() > 4 {
+                    return None;
+                }
+                let mut bytes = 0usize;
+                if functions.spilled() {
+                    bytes = functions.capacity().checked_mul(size_of::<Function>())?;
+                }
+                for f in functions {
+                    bytes =
+                        bytes.checked_add(f.native_retained_with_budget(cancelled, &mut remaining, 0)?)?;
+                }
                 Some(bytes)
             }
         }
     }
     /// Evaluate original color components with one shared work budget, without
     /// heap scratch or converting the source color space into display RGB.
-    pub fn eval_native_bounded(&self,input:f32,output:&mut[f32],cancelled:&dyn Fn()->bool)->Option<()> {
-        self.eval_native_with_budget(input,output,cancelled,&mut 4096)
+    pub fn eval_native_bounded(
+        &self,
+        input: f32,
+        output: &mut [f32],
+        cancelled: &dyn Fn() -> bool,
+    ) -> Option<()> {
+        self.eval_native_with_budget(input, output, cancelled, &mut 4096)
     }
     /// Debit the caller's remaining function operations across consecutive samples.
     /// Refusal never publishes partially evaluated components.
-    pub fn eval_native_with_budget(&self,input:f32,output:&mut[f32],cancelled:&dyn Fn()->bool,remaining:&mut usize)->Option<()> {
-        if output.is_empty() || output.len()>4 {return None;}
-        let mut values=[0.;4];
+    pub fn eval_native_with_budget(
+        &self,
+        input: f32,
+        output: &mut [f32],
+        cancelled: &dyn Fn() -> bool,
+        remaining: &mut usize,
+    ) -> Option<()> {
+        if output.is_empty() || output.len() > 4 {
+            return None;
+        }
+        let mut values = [0.; 4];
         match self {
-            Self::Single(f)=>f.eval_components_with_budget(input,&mut values[..output.len()],cancelled,remaining,0)?,
-            Self::Multiple(functions)=>{
-                if functions.len()!=output.len() {return None;}
-                for (i,f) in functions.iter().enumerate() {f.eval_components_with_budget(input,&mut values[i..i+1],cancelled,remaining,0)?;}
+            Self::Single(f) => {
+                f.eval_components_with_budget(input, &mut values[..output.len()], cancelled, remaining, 0)?
+            }
+            Self::Multiple(functions) => {
+                if functions.len() != output.len() {
+                    return None;
+                }
+                for (i, f) in functions.iter().enumerate() {
+                    f.eval_components_with_budget(input, &mut values[i..i + 1], cancelled, remaining, 0)?;
+                }
             }
         }
-        if cancelled() {return None;}
-        output.copy_from_slice(&values[..output.len()]);Some(())
+        if cancelled() {
+            return None;
+        }
+        output.copy_from_slice(&values[..output.len()]);
+        Some(())
     }
     /// Evaluate the shading function.
     pub fn eval(&self, input: &Values) -> Option<Values> {
@@ -315,8 +346,11 @@ impl Shading {
 
 impl CacheKey for Shading {
     fn cache_key(&self) -> u128 {
-        if self.color_context_key == 0 { self.cache_key }
-        else { crate::util::hash128(&(self.cache_key, self.color_context_key)) }
+        if self.color_context_key == 0 {
+            self.cache_key
+        } else {
+            crate::util::hash128(&(self.cache_key, self.color_context_key))
+        }
     }
 }
 
@@ -461,8 +495,17 @@ impl CoonsPatch {
     }
 
     /// Build triangles with cancellation at each vertex and cell; roll back on cancellation.
-    pub fn to_triangles_with_cancel(&self, buffer: &mut Vec<Triangle>, cancelled: impl Fn() -> bool) -> Result<(), ()> {
-        generate_patch_triangles_with_cancel(|p| self.map_coordinate(p), |p| self.interpolate(p), buffer, &cancelled)
+    pub fn to_triangles_with_cancel(
+        &self,
+        buffer: &mut Vec<Triangle>,
+        cancelled: impl Fn() -> bool,
+    ) -> Result<(), ()> {
+        generate_patch_triangles_with_cancel(
+            |p| self.map_coordinate(p),
+            |p| self.interpolate(p),
+            buffer,
+            &cancelled,
+        )
     }
 
     /// Get the interpolated colors of the point from the patch.
@@ -543,8 +586,17 @@ impl TensorProductPatch {
     }
 
     /// Build triangles with cancellation at each vertex and cell; roll back on cancellation.
-    pub fn to_triangles_with_cancel(&self, buffer: &mut Vec<Triangle>, cancelled: impl Fn() -> bool) -> Result<(), ()> {
-        generate_patch_triangles_with_cancel(|p| self.map_coordinate(p), |p| self.interpolate(p), buffer, &cancelled)
+    pub fn to_triangles_with_cancel(
+        &self,
+        buffer: &mut Vec<Triangle>,
+        cancelled: impl Fn() -> bool,
+    ) -> Result<(), ()> {
+        generate_patch_triangles_with_cancel(
+            |p| self.map_coordinate(p),
+            |p| self.interpolate(p),
+            buffer,
+            &cancelled,
+        )
     }
 
     /// Get the interpolated colors of the point from the patch.
@@ -717,17 +769,25 @@ impl InterpolationHelpers {
 
 // Coordinates and component ranges are parsed at their retained precision.
 // In particular, colors do not take a new f64 -> f32 double-rounding path.
-struct MeshDecode { coords:[f64;4], components:Vec<f32> }
+struct MeshDecode {
+    coords: [f64; 4],
+    components: Vec<f32>,
+}
 impl MeshDecode {
-    fn read(array:Array<'_>)->Option<Self> {
-        let mut coordinates=array.iter::<f64>();
-        let coords=[coordinates.next()?,coordinates.next()?,coordinates.next()?,coordinates.next()?];
-        let components=array.iter::<f32>().skip(4).collect();
-        Some(Self {coords,components})
+    fn read(array: Array<'_>) -> Option<Self> {
+        let mut coordinates = array.iter::<f64>();
+        let coords = [
+            coordinates.next()?,
+            coordinates.next()?,
+            coordinates.next()?,
+            coordinates.next()?,
+        ];
+        let components = array.iter::<f32>().skip(4).collect();
+        Some(Self { coords, components })
     }
 }
-fn split_decode(decode:&MeshDecode)->Option<([f64;4],&[f32])> {
-    Some((decode.coords,&decode.components))
+fn split_decode(decode: &MeshDecode) -> Option<([f64; 4], &[f32])> {
+    Some((decode.coords, &decode.components))
 }
 
 /// Generate triangles from a grid of points using a mapping function.
@@ -739,64 +799,106 @@ where
     generate_patch_triangles_with_cancel(map_coordinate, interpolate, buffer, &|| false).unwrap()
 }
 
-fn generate_patch_triangles_with_cancel<F, I>(map_coordinate: F, interpolate: I, buffer: &mut Vec<Triangle>, cancelled: &dyn Fn() -> bool) -> Result<(), ()>
-where F: Fn(Point) -> Point, I: Fn(Point) -> ColorComponents {
+fn generate_patch_triangles_with_cancel<F, I>(
+    map_coordinate: F,
+    interpolate: I,
+    buffer: &mut Vec<Triangle>,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<(), ()>
+where
+    F: Fn(Point) -> Point,
+    I: Fn(Point) -> ColorComponents,
+{
     generate_patch_grid(map_coordinate, interpolate, buffer, cancelled, false)
 }
 
-fn generate_patch_grid<F, I>(map_coordinate: F, interpolate: I, buffer: &mut Vec<Triangle>, cancelled: &dyn Fn() -> bool, v_major: bool) -> Result<(), ()>
-where F: Fn(Point) -> Point, I: Fn(Point) -> ColorComponents {
+fn generate_patch_grid<F, I>(
+    map_coordinate: F,
+    interpolate: I,
+    buffer: &mut Vec<Triangle>,
+    cancelled: &dyn Fn() -> bool,
+    v_major: bool,
+) -> Result<(), ()>
+where
+    F: Fn(Point) -> Point,
+    I: Fn(Point) -> ColorComponents,
+{
     const GRID_SIZE: usize = 20;
     // Keep only adjacent vertex rows. Every grid coordinate and color is
     // evaluated once, while cell and triangle order remain unchanged.
     let original_len = buffer.len();
     let result = (|| {
-    if cancelled() { return Err(()); }
-    let row = |i: usize| -> Result<[TriangleVertex; GRID_SIZE], ()> {
-        let mut stopped = false;
-        let vertices = std::array::from_fn(|j| {
-            if stopped || cancelled() {
-                stopped = true;
-                return TriangleVertex { flag: 0, point: Point::ZERO, colors: SmallVec::new() };
-            }
-            let mut unit = Point::new(
-                i as f64 / (GRID_SIZE - 1) as f64,
-                j as f64 / (GRID_SIZE - 1) as f64,
-            );
-            if v_major { unit = Point::new(unit.y, unit.x); }
-            TriangleVertex {
-                flag: 0,
-                point: map_coordinate(unit),
-                colors: interpolate(unit),
-            }
-        });
-        if stopped { Err(()) } else { Ok(vertices) }
-    };
-    let mut lower = row(0)?;
-    for i in 0..(GRID_SIZE - 1) {
-        let upper = row(i + 1)?;
-        for j in 0..(GRID_SIZE - 1) {
-            if cancelled() { return Err(()); }
-            let v00 = lower[j].clone();
-            let v10 = if v_major { lower[j + 1].clone() } else { upper[j].clone() };
-            let v01 = if v_major { upper[j].clone() } else { lower[j + 1].clone() };
-            let v11 = upper[j + 1].clone();
-            // Exact triangle/pixel clipping handles shared edges without inflation.
-            buffer.push(Triangle::new(v00, v10.clone(), v01.clone()));
-            buffer.push(Triangle::new(v10, v11, v01));
+        if cancelled() {
+            return Err(());
         }
-        lower = upper;
-    }
-    if cancelled() { return Err(()); }
-    Ok(())
+        let row = |i: usize| -> Result<[TriangleVertex; GRID_SIZE], ()> {
+            let mut stopped = false;
+            let vertices = std::array::from_fn(|j| {
+                if stopped || cancelled() {
+                    stopped = true;
+                    return TriangleVertex {
+                        flag: 0,
+                        point: Point::ZERO,
+                        colors: SmallVec::new(),
+                    };
+                }
+                let mut unit = Point::new(
+                    i as f64 / (GRID_SIZE - 1) as f64,
+                    j as f64 / (GRID_SIZE - 1) as f64,
+                );
+                if v_major {
+                    unit = Point::new(unit.y, unit.x);
+                }
+                TriangleVertex {
+                    flag: 0,
+                    point: map_coordinate(unit),
+                    colors: interpolate(unit),
+                }
+            });
+            if stopped { Err(()) } else { Ok(vertices) }
+        };
+        let mut lower = row(0)?;
+        for i in 0..(GRID_SIZE - 1) {
+            let upper = row(i + 1)?;
+            for j in 0..(GRID_SIZE - 1) {
+                if cancelled() {
+                    return Err(());
+                }
+                let v00 = lower[j].clone();
+                let v10 = if v_major {
+                    lower[j + 1].clone()
+                } else {
+                    upper[j].clone()
+                };
+                let v01 = if v_major {
+                    upper[j].clone()
+                } else {
+                    lower[j + 1].clone()
+                };
+                let v11 = upper[j + 1].clone();
+                // Exact triangle/pixel clipping handles shared edges without inflation.
+                buffer.push(Triangle::new(v00, v10.clone(), v01.clone()));
+                buffer.push(Triangle::new(v10, v11, v01));
+            }
+            lower = upper;
+        }
+        if cancelled() {
+            return Err(());
+        }
+        Ok(())
     })();
-    if result.is_err() { buffer.truncate(original_len); }
+    if result.is_err() {
+        buffer.truncate(original_len);
+    }
     result
 }
 
 #[cfg(test)]
 pub(crate) fn generate_ordered_patch_grid<F, I>(map_coordinate: F, interpolate: I, buffer: &mut Vec<Triangle>)
-where F: Fn(Point) -> Point, I: Fn(Point) -> ColorComponents {
+where
+    F: Fn(Point) -> Point,
+    I: Fn(Point) -> ColorComponents,
+{
     generate_patch_grid(map_coordinate, interpolate, buffer, &|| false, true).unwrap();
 }
 
@@ -1054,49 +1156,82 @@ mod external_budget_tests {
     use hayro_syntax::object::FromBytes;
     #[test]
     fn native_shading_samples_share_function_work_and_never_publish_partial_output() {
-        let object=Object::from_bytes(b"<< /FunctionType 2 /Domain [0 1] /C0 [0 1] /C1 [1 0] /N 1 >>").unwrap();
-        let function=ShadingFunction::Single(Function::new(&object).unwrap());
-        let mut remaining=4096;let mut output=[9.;2];
-        function.eval_native_with_budget(0.25,&mut output,&||false,&mut remaining).unwrap();
-        assert_eq!(output,[0.25,0.75]);let cost=4096-remaining;assert!(cost>0);
-        let mut shared=2*cost-1;
-        function.eval_native_with_budget(0.75,&mut output,&||false,&mut shared).unwrap();
-        assert_eq!(output,[0.75,0.25]);let previous=output;
-        assert!(function.eval_native_with_budget(0.25,&mut output,&||false,&mut shared).is_none());
-        assert_eq!(output,previous);
-        let mut zero=0;assert!(function.eval_native_with_budget(0.25,&mut output,&||false,&mut zero).is_none());
-        assert_eq!(output,previous);
-        assert!(function.eval_native_with_budget(0.25,&mut output,&||true,&mut 4096).is_none());
-        assert_eq!(output,previous);
+        let object =
+            Object::from_bytes(b"<< /FunctionType 2 /Domain [0 1] /C0 [0 1] /C1 [1 0] /N 1 >>").unwrap();
+        let function = ShadingFunction::Single(Function::new(&object).unwrap());
+        let mut remaining = 4096;
+        let mut output = [9.; 2];
+        function
+            .eval_native_with_budget(0.25, &mut output, &|| false, &mut remaining)
+            .unwrap();
+        assert_eq!(output, [0.25, 0.75]);
+        let cost = 4096 - remaining;
+        assert!(cost > 0);
+        let mut shared = 2 * cost - 1;
+        function
+            .eval_native_with_budget(0.75, &mut output, &|| false, &mut shared)
+            .unwrap();
+        assert_eq!(output, [0.75, 0.25]);
+        let previous = output;
+        assert!(
+            function
+                .eval_native_with_budget(0.25, &mut output, &|| false, &mut shared)
+                .is_none()
+        );
+        assert_eq!(output, previous);
+        let mut zero = 0;
+        assert!(
+            function
+                .eval_native_with_budget(0.25, &mut output, &|| false, &mut zero)
+                .is_none()
+        );
+        assert_eq!(output, previous);
+        assert!(
+            function
+                .eval_native_with_budget(0.25, &mut output, &|| true, &mut 4096)
+                .is_none()
+        );
+        assert_eq!(output, previous);
     }
 }
 
 #[test]
 fn mesh_32bit_coordinates_preserve_adjacent_encoded_positions() {
-    let helpers=InterpolationHelpers::new(32,8,0.,1.,0.,1.);
-    let mut bytes=Vec::new();
-    for x in [0x8000_0000u32,0x8000_0001] {bytes.extend_from_slice(&x.to_be_bytes());bytes.extend_from_slice(&0u32.to_be_bytes());}
-    let mut reader=BitReader::new(&bytes);
-    let a=helpers.read_point(&mut reader).unwrap();let b=helpers.read_point(&mut reader).unwrap();
-    assert!(a.x<b.x,"adjacent32-bit coordinates must not collapse: {a:?} {b:?}");
-    assert_eq!(a.x,2147483648f64/4294967295f64);
-    assert_eq!(b.x,2147483649f64/4294967295f64);
-    assert_eq!((a.y,b.y),(0.,0.));
+    let helpers = InterpolationHelpers::new(32, 8, 0., 1., 0., 1.);
+    let mut bytes = Vec::new();
+    for x in [0x8000_0000u32, 0x8000_0001] {
+        bytes.extend_from_slice(&x.to_be_bytes());
+        bytes.extend_from_slice(&0u32.to_be_bytes());
+    }
+    let mut reader = BitReader::new(&bytes);
+    let a = helpers.read_point(&mut reader).unwrap();
+    let b = helpers.read_point(&mut reader).unwrap();
+    assert!(
+        a.x < b.x,
+        "adjacent32-bit coordinates must not collapse: {a:?} {b:?}"
+    );
+    assert_eq!(a.x, 2147483648f64 / 4294967295f64);
+    assert_eq!(b.x, 2147483649f64 / 4294967295f64);
+    assert_eq!((a.y, b.y), (0., 0.));
 }
 
 #[test]
 fn mesh_coordinate_decode_retains_precise_ranges_and_legacy_component_rounding() {
-    let low=1.0000000001;let high=1.0000000002;
-    for bits in [8,16,24,32] {
-        let helper=InterpolationHelpers::new(bits,8,low,high,-high,-low);
-        let maximum=((1u64<<bits)-1) as u32;
-        assert_eq!(helper.interpolate_coord(0,low,high),low);
-        assert_eq!(helper.interpolate_coord(maximum,low,high),high);
-        assert!(helper.interpolate_coord(maximum/2,low,high)>low);
+    let low = 1.0000000001;
+    let high = 1.0000000002;
+    for bits in [8, 16, 24, 32] {
+        let helper = InterpolationHelpers::new(bits, 8, low, high, -high, -low);
+        let maximum = ((1u64 << bits) - 1) as u32;
+        assert_eq!(helper.interpolate_coord(0, low, high), low);
+        assert_eq!(helper.interpolate_coord(maximum, low, high), high);
+        assert!(helper.interpolate_coord(maximum / 2, low, high) > low);
     }
-    let helper=InterpolationHelpers::new(32,8,low,high,low,high);
-    let data=[0u8,127,128,255];let mut reader=BitReader::new(&data);
-    let colors=helper.read_colors(&mut reader,false,&[0.,1.,0.,1.,0.,1.,0.,1.]).unwrap();
-    let expected=data.map(|n|interpolate(n as f32,0.,255.,0.,1.));
-    assert_eq!(colors.as_slice(),expected.as_slice());
+    let helper = InterpolationHelpers::new(32, 8, low, high, low, high);
+    let data = [0u8, 127, 128, 255];
+    let mut reader = BitReader::new(&data);
+    let colors = helper
+        .read_colors(&mut reader, false, &[0., 1., 0., 1., 0., 1., 0., 1.])
+        .unwrap();
+    let expected = data.map(|n| interpolate(n as f32, 0., 255., 0., 1.));
+    assert_eq!(colors.as_slice(), expected.as_slice());
 }

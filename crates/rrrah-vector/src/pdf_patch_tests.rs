@@ -37,6 +37,140 @@ mod tests {
         }
     }
     #[test]
+    fn ordered_stream_preserves_patch_parameters_through_transform_and_fans() {
+        use hayro::hayro_interpret::shading::{
+            AdaptivePatchRef, CoonsPatch, tessellate_patch_mesh_stream_ordered_admitted,
+        };
+        let sources = [patch(true, true), patch(false, false)];
+        let coons = CoonsPatch {
+            control_points: std::array::from_fn(|i| sources[0].control_points[i]),
+            colors: sources[0].colors.clone(),
+        };
+        let refs = [
+            AdaptivePatchRef::Tensor(&sources[0]),
+            AdaptivePatchRef::Coons(&coons),
+            AdaptivePatchRef::Tensor(&sources[1]),
+        ];
+        let transform = Affine::new([1.3, 0.2, -0.1, -0.7, 2., 3.]);
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|credit| Box::new(credit) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut counts = [0usize; 3];
+        let mut previous = 0;
+        let stats = tessellate_patch_mesh_stream_ordered_admitted(
+            &refs,
+            transform,
+            limits(),
+            &|| false,
+            &admit,
+            &mut |triangle, source| {
+                assert!(source.patch_index >= previous);
+                previous = source.patch_index;
+                counts[source.patch_index] += 1;
+                for (vertex, uv) in [&triangle.p0, &triangle.p1, &triangle.p2]
+                    .into_iter()
+                    .zip(source.parameters)
+                {
+                    assert!((0.0..=1.0).contains(&uv.x) && (0.0..=1.0).contains(&uv.y));
+                    let (point, colors) = match source.patch_index {
+                        0 => (sources[0].map_coordinate(uv), sources[0].interpolate(uv)),
+                        1 => (coons.map_coordinate(uv), coons.interpolate(uv)),
+                        2 => (sources[1].map_coordinate(uv), sources[1].interpolate(uv)),
+                        _ => panic!("unknown source patch"),
+                    };
+                    assert!((transform * point - vertex.point).hypot() < 1e-10);
+                    assert_eq!(vertex.colors, colors);
+                }
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert!(counts[0] > 2 && counts[1] > 2 && counts[2] >= 2);
+        assert_eq!(stats.triangles, counts.iter().sum::<usize>());
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn ordered_stream_failure_cancel_and_refusal_release_planner_credit() {
+        use hayro::hayro_interpret::shading::{
+            AdaptivePatchRef, tessellate_patch_mesh_stream_ordered_admitted,
+        };
+        use std::cell::Cell;
+        let source = patch(true, true);
+        let refs = [AdaptivePatchRef::Tensor(&source)];
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|credit| Box::new(credit) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut seen = 0;
+        assert_eq!(
+            tessellate_patch_mesh_stream_ordered_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &|| false,
+                &admit,
+                &mut |_, _| {
+                    seen += 1;
+                    Err(AdaptivePatchError::Admission)
+                }
+            )
+            .unwrap_err(),
+            AdaptivePatchError::Admission
+        );
+        assert_eq!(seen, 1);
+        assert_eq!(root.used(), 0);
+        let cancelled = Cell::new(false);
+        assert_eq!(
+            tessellate_patch_mesh_stream_ordered_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &|| cancelled.get(),
+                &admit,
+                &mut |_, _| {
+                    cancelled.set(true);
+                    Ok(())
+                }
+            )
+            .unwrap_err(),
+            AdaptivePatchError::Cancelled
+        );
+        assert_eq!(root.used(), 0);
+        assert_eq!(
+            tessellate_patch_mesh_stream_ordered_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &|| false,
+                &|_| None,
+                &mut |_, _| panic!("refused planning cannot publish triangles")
+            )
+            .unwrap_err(),
+            AdaptivePatchError::Admission
+        );
+        assert_eq!(root.used(), 0);
+        let mut retry = 0;
+        tessellate_patch_mesh_stream_ordered_admitted(
+            &refs,
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &admit,
+            &mut |_, _| {
+                retry += 1;
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert!(retry > 2);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn affine_patch_is_two_triangles_and_transform_controls_error() {
         let patch = patch(false, false);
         let mut output = vec![];
