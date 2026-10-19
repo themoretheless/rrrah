@@ -1,0 +1,98 @@
+{
+  "status": "partial_repository_Ukrainian_help_complete_source_read",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-French-German-help-review-v26-20261019.json",
+  "previous_sha256": "68c8299c17e6781ea30f797fb981dd1b06bd1855fdacdd53d743f118bb20f613",
+  "new_whole_blobs": [
+    {
+      "path": "help/uk/faq.rst",
+      "git_blob": "e63ebd08fddb3eb76e7a81a2739d73827c904e57",
+      "sha256": "abe5484b5cfa4c754c7efe2ba2fb705409e1d3f71099176aea5f1648c9b95dc2",
+      "bytes": 14494,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/uk/folders.rst",
+      "git_blob": "21f1a09c5bac8d1aff38af116d2d223ed05e95fb",
+      "sha256": "221ad23040924c645d90aae7e9d131b417e2125a6c55de5ba52550f2e0e74716",
+      "bytes": 3283,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/uk/index.rst",
+      "git_blob": "0209b804aa7cd951a86b196cda86f0b83c1d251d",
+      "sha256": "037e494776f7ff9640bce203cfa41e57bc957129844421f5dc431de0351852ef",
+      "bytes": 2052,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/uk/preferences.rst",
+      "git_blob": "6b2391e43ccaae7634bc3b8ee13ef3b3a121c732",
+      "sha256": "e6fc9c993dd91e5d43cd9a8fd3a0c36d5f6bac861f880ec535d534f0fcb44ec5",
+      "bytes": 15506,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/uk/quick_start.rst",
+      "git_blob": "343ac3d55ea6957ce44c8fd004ac07c05da296f0",
+      "sha256": "8c2edc510d86c59c390fc692cd69acfd158e105bb68082f8ae5f68e1d9818eab",
+      "bytes": 1724,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/uk/reprioritize.rst",
+      "git_blob": "27afb7ec0dc9aa0b63179370446fdc721eea6e7f",
+      "sha256": "192015e67c30fa314a0eb99c65f3f82c2bef4ab109d4d0aa8744398f912ad2ad",
+      "bytes": 3124,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/uk/results.rst",
+      "git_blob": "0fbbc327c2675c5fdafa70ffca0196b2c02b2a6c",
+      "sha256": "38fe8674478a7d46998252b88316d6963ac7b52e9bb91f73ba21be5be51ed28a",
+      "bytes": 18244,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    }
+  ],
+  "cumulative_whole_files_reviewed_by_declared_methods": 360,
+  "cumulative_text_files_manually_read": 268,
+  "cumulative_visual_files_reviewed": 26,
+  "cumulative_catalogs_structurally_analyzed": 66,
+  "cumulative_distinct_original_tests_passed": 514,
+  "new_original_tests_run": 0,
+  "findings": [
+    {
+      "scope": "complete_Ukrainian_text_read",
+      "finding": "SevenUkrainianhelpfiles374lines read. FAQ retains demo10duplicate limit/Fairware and iPhoto communication guidance; preferences retain removed audio-content scan and edition-only sections; result filtering still describes oldWindows menu workflow with TODO acknowledging toolbar."
+    },
+    {
+      "scope": "semantic_translation_observations",
+      "finding": "Duplicate/reference terminology repeatedly translated as deceived/exile rather than technical duplicate/reference; preferences custom-command explanation mangles %d into percent plus Cyrillic character though actual example correctly retains %d/%r. Literal examples and source/runtime remain authoritative."
+    },
+    {
+      "scope": "runtime_limit",
+      "finding": "No Ukrainian Sphinx build/render in this turn; earlierRussian build limitation not presented as direct Ukrainian runtime proof. No claim all linguistic defects enumerated."
+    }
+  ],
+  "remaining": {
+    "files_not_yet_reviewed_by_any_method": 8,
+    "Armenian_help_files": 7,
+    "XCF_files": 1
+  },
+  "limits": [
+    "Sevenadditionalmanualtextfiles;360of368reviewedbymixedmethods,268manualtext+26visual+66structuralcatalogs.",
+    "514 previous distinct original tests unchanged; no production patches, performance gains or full repository completion.",
+    "Documentation examples read as data, not executed user-file actions.",
+    "Deferred pHash native memory/ASAN investigations skipped."
+  ]
+}
