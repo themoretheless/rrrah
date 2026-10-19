@@ -1,0 +1,31 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of6files; bytes compared with pinned Git objects. No Windows UI/ACL runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Pages/PagePermissions.h": "b145735e323d3f7835539f034026c460f4e352b5b15dd4d510ddcaab4af76fda",
+    "windirstat/Pages/PagePermissions.cpp": "5d347fdf9b6161cdc036dbe5b8a045913795178e8643c9029c3fe23fdc835c82",
+    "windirstat/Pages/PagePrompts.h": "55b5a76184336bd018c97bb35e8b8cdfeb8288e3d987453729495cb245839461",
+    "windirstat/Pages/PagePrompts.cpp": "75a99a1b9afcd9291b3e46435101cbcacc47af945d185e4a5c54cb4b6ed77d27",
+    "windirstat/ItemPerm.h": "05bc7f88fd9e6527b71096dc0af46782c9aa910638d8e82bee212096d11aa338",
+    "windirstat/ItemPerm.cpp": "cf0a2da0dee528b23817e8d49731c38aa02d37adfe03a18077dcfefc949964af"
+  },
+  "whole_files_read": 93,
+  "coverage": "docs/research/dedup-500/windirstat3-permission-settings-coverage-v35-20261019.json",
+  "coverage_sha256": "133a0fec05b21f1503502fcece60f01e588dec633d41e80a13b0aab77becb9ee",
+  "findings": [
+    "Permission page validates5account regexes and level selection ranges plus exclusion regex before staging settings; effect invalidates rule colors and notifies list repaint. Transaction commit belongs to previously reviewed shared settings framework.",
+    "Prompt page stages14checkbox bindings, builds localized operation-specific confirmation labels. Changing settings does not execute those operations.",
+    "Permission item owns shared snapshot CItem and ACL account/mask/deny/flags data; GetLinkedItem only resolves to current scan tree while settled, matching stored path and exact child names. Snapshot row is not immutable live filesystem identity.",
+    "ComputeRightsLevel selects first cumulative bitmask fully contained in one ACE mask; deny flag displayed separately. This is rights summarization, not AccessCheck/token evaluation or combination of ordered allow/deny ACL entries.",
+    "ComputeApplies maps OI/CI/IO flags for containers; file rows always apply to themselves. Additional propagation flags are not represented by that simplified classification.",
+    "Color rules compiled on version change, use case-insensitive account regex and first matching rights threshold; invalid regex from persisted values silently skipped. No bound on pattern complexity or runtime regex budget shown.",
+    "Localized rights/type/scope/yes-no labels are cached in function statics; switching language may retain initial cached names. Actual UI language-switch behavior untested.",
+    "Permission snapshot icon lookup is asynchronous and uses stored path/attributes; lifetime correctness still depends on control teardown and request guards examined earlier. Full permission scan control remains unread."
+  ],
+  "limits": [
+    "No effective-access correctness, ACL corpus, UI transaction or platform runtime qualification.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
