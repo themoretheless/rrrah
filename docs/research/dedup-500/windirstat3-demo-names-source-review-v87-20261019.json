@@ -1,0 +1,30 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of 752-line demo folder translation JSON plus duplicate-preserving JSON parse and structural filename checks of every value. No claim of fluent semantic translation validation for every language.",
+  "new_whole_files_read": {
+    "setup/store/demo-folder-names.json": "5020eecf6c537f22f7bf1d6140ac85440548ef317fdea801f7542b701463d67e"
+  },
+  "whole_files_read": 221,
+  "coverage": "docs/research/dedup-500/windirstat3-demo-names-coverage-v87-20261019.json",
+  "coverage_sha256": "50c384244526ee241bf6bd8b95a188be8669763d9503913a495d25b0e0cc57a7",
+  "findings": [
+    "25 language dictionaries each contain the same28 keys:700 values total. Duplicate JSON keys rejected by parser; none found.",
+    "Every value is nonempty and passes checked Windows forbidden characters/control characters, trailing dot/space, dot entry and common reserved device basename checks. No normalized NFC/casefold duplicate values within any complete language dictionary. This is a conservative synthetic structural check, not execution on Windows filesystem.",
+    "The capture script maps en-us to en and zh-cn to zh; its27 target codes therefore resolve to these25 dictionaries. Fixed current names avoid the collision concern recorded for arbitrary future translations, without making the script validate those cases.",
+    "Russian demo names separate Photos/Фотографии from Pictures/Изображения and preserve distinct Reports/Отчёты and Annual Reports/Годовые отчёты. These names are display fixtures, not duplicate-engine correctness evidence."
+  ],
+  "checks": {
+    "languages": 25,
+    "keys_per_language": 28,
+    "values_checked": 700,
+    "duplicate_json_keys": 0,
+    "invalid_checked_names": 0,
+    "normalized_value_collisions": 0
+  },
+  "limits": [
+    "No localized filesystem trees, screenshots, Windows executable or complete UI translations tested. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
