@@ -1,0 +1,42 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of resource.h; parsed every decimal define and checked names, aliases, capture commands and selected contiguous arithmetic ID groups.",
+  "new_whole_files_read": {
+    "windirstat/resource.h": "7ced8dc3e0636c44a5a365722fb6f5fd7aac10c5ca7bf587e78abe09967934fb"
+  },
+  "whole_files_read": 222,
+  "coverage": "docs/research/dedup-500/windirstat3-resource-ids-coverage-v88-20261019.json",
+  "coverage_sha256": "6a5bf1c163b7094f226c07bc5187d7c8904af9183679f51a26ec64c8c5cc05a8",
+  "findings": [
+    "All seven command identifiers requested by language-screenshots.ps1 are defined. This proves source lookup availability, not actual runtime dispatch or screenshot success.",
+    "Color button0..7, permission account0..4, permission level0..4 and user-defined cleanup0..9 identifiers are consecutive, matching arithmetic grouping assumptions.",
+    "CHKDSK, DEFRAG and SHADOW_COPY base identifiers reserve26 numeric positions before the next command; declarations alone do not prove per-drive handler bounds.",
+    "Header declares duplicate scan, sample-large-files and hash-algorithm controls separately. Presence of UI identifiers is not proof of exact duplicate correctness or any test coverage.",
+    "Full resource script and non-English catalogs remain outside this increment; declaration consistency does not replace resource compilation."
+  ],
+  "checks": {
+    "decimal_definitions": 334,
+    "duplicate_names": 0,
+    "numeric_aliases": {
+      "119": [
+        "_APS_NEXT_RESOURCE_VALUE",
+        "_APS_NEXT_SYMED_VALUE"
+      ]
+    },
+    "capture_commands": {
+      "ID_REFRESH_ALL": 32813,
+      "ID_VIEW_ALL_FILES": 32926,
+      "ID_VIEW_LARGEST_FILES": 32942,
+      "ID_VIEW_DUPLICATE_FILES": 32927,
+      "ID_VIEW_TREEMAP_ROWS": 32957,
+      "ID_VIEW_SUNBURST": 32948,
+      "ID_VIEW_FLAMEGRAPH": 32928
+    },
+    "contiguous_groups_checked": 4
+  },
+  "limits": [
+    "No Windows resource compilation, executable or command execution tested. Native pHash investigation deferred. Completed repositories remain147/500."
+  ]
+}
