@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete MainWindow code-behind reading; pinned Git blob identity verified. XAML counterpart remains uncredited.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/MainWindow.xaml.cs": "02a93426e2d5cadff2b5bf474c8ca1f71c602eab156ead10081c12e1becc889e"
+  },
+  "whole_files_read": 86,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v35-20261019.json",
+  "coverage_sha256": "22fb119b50e9173df621a8f156388f5da369ef166f5a7481f40ed996ce792342",
+  "findings": [
+    "Import reads entire selected file synchronously without size admission or local IO exception handling before ProfileManager import. Export writes directly to destination stream without atomic temporary replacement or enclosing user-visible error handling.",
+    "Auto-save is invoked on HideWindow, including minimize/custom close and Closing, rather than only process exit. Export uses ProfileManager saved profiles, so unsaved editor changes can be absent as previously observed.",
+    "Tray-hide admission requires enabled ToggleVisibility action and active matching input hook setting, but does not explicitly require nonempty HotKeys or Global scope. Imported invalid profile can meet the predicate without proving usable recovery shortcut.",
+    "Window size assignment trusts settings Width/Height; SizeChanged writes settings on every normal-size event without debounce here. Screen-position and DPI qualification remain outstanding.",
+    "SessionEnding HookManager disposal and Application.Exit disposal converge on same HookManager without an idempotence guard in previously read code. Actual event ordering requires Windows runtime testing.",
+    "Application exit disposes tray then hooks without finally; first cleanup exception can skip remaining cleanup. Constructor starts hooks before completing settings initialization and lacks rollback sequence.",
+    "Closing always cancels close and schedules hide; actual application shutdown relies on WPF shutdown semantics. Custom maximize bounds use primary-screen height rather than current monitor."
+  ],
+  "limits": [
+    "Static source findings only; no Windows shutdown, import/export or UI runtime execution. No own-library production changes.",
+    "Fully reviewed count148/500; ExplorerTabUtility partial86/104. Native pHash memory-error investigation deferred."
+  ]
+}
