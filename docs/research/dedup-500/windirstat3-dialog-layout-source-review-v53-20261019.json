@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of four Layout/LayoutPopup files. Pinned source bytes verified; no Windows execution.",
+  "new_whole_files_read": {
+    "windirstat/Layout.h": "ded932742e822615af95acdd1e3da1ab8a7ab2f2488df7b1f1dfc99b7b932c7c",
+    "windirstat/Layout.cpp": "2bb99793012973bd3c44bbe88a79f4cd95053f11725408406b3d77671d047446",
+    "windirstat/LayoutPopup.h": "b79772f46f6ed72ff4904de0c2de1d6a7797c4f42fc4df7d47e6163f39851e51",
+    "windirstat/LayoutPopup.cpp": "54a1e4fbea8205e27afa60cb09886ca41683f71ae1c3d931968f259960469959"
+  },
+  "whole_files_read": 148,
+  "coverage": "docs/research/dedup-500/windirstat3-dialog-layout-coverage-v53-20261019.json",
+  "coverage_sha256": "989a265e1792a4361ca7af821126c3fa19a10e75999b548f89087c5a74832935",
+  "findings": [
+    "CLayout snapshots original outer-window size and control rectangles, applies double move/stretch factors to size differences with integer truncation, and sets minimum tracking size to original size. Factors and resulting child dimensions are not validated here.",
+    "Stored dialog RECT is restored directly with MoveWindow and saved with GetWindowRect. This class has no explicit monitor-work-area correction or rescaling of the stored RECT; higher-level correction, if any, is not established by these files.",
+    "Gripper width is DPI-scaled once during member initialization. These files have no explicit DPI-change geometry resnapshot; live multi-monitor DPI behavior remains unqualified.",
+    "CPositioner batches child positioning through BeginDeferWindowPos/DeferWindowPos/EndDeferWindowPos but has no direct-position fallback on failure. Returned errors are not surfaced.",
+    "Popup contains twelve fixed topology/permutation definitions; unknown mapping falls back to index zero. Preview ratios are illustrative and selection delegates actual rebuilding to MainFrame.",
+    "Popup chooses nearest monitor and shifts origin against work area. It does not shrink fixed popup dimensions when the work area is smaller than the popup; full visibility is therefore not guaranteed by this positioning code alone.",
+    "Popup selection commits options on button release over a card, then rebuilds with resetPositions. Escape, focus loss, app deactivation, capture loss and outside mouse clicks cancel without changing options in those handlers.",
+    "Each paint draws all twelve cards and constructs a treemap renderer per visualization preview using a shared static demo tree. No measured paint-cost or caching improvement claim."
+  ],
+  "limits": [
+    "No native UI, monitor migration, DPI change, capture, positioning-failure or performance tests executed.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains 147/500."
+  ]
+}
