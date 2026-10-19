@@ -1,0 +1,29 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Read all four installer/package template files through EOF; pinned Git blob identity verified. No installer executed.",
+  "new_whole_files_read": {
+    "installers/installer.iss": "bb93e951aa8ea186de7bf5e27699490b4aeeaec5502b54414b7992983391b16c",
+    "packages/chocolatey/templates/PACKAGE_NAME.nuspec": "418773866fd3f0269a6d6fe4797501fad44c5450c729785c1ed893e4bbf685a2",
+    "packages/chocolatey/templates/tools/chocolateyinstall.ps1": "36b988736ac431cf18e428c027e2b5c5d2bae097a83fde4cfc887846a67a732c",
+    "packages/chocolatey/templates/tools/chocolateyuninstall.ps1": "9c859c14cae7a6a1c61cd93b04b64087826d2402a3cd4363add8f0bc91eec448"
+  },
+  "whole_files_read": 52,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v19-20261019.json",
+  "coverage_sha256": "b1ed206cc97d4246468c6fc972136eebd8720d6d27d82a1e46d5479a01a667a9",
+  "findings": [
+    "Installer uses per-user lowest privileges and selects x86/x64/ARM64 package. Runtime detection searches PATH dotnet output for WindowsDesktop.App 9.0 without an explicit architecture check.",
+    "Silent mode falls back to net481 when net9 is absent; interactive runtime download/install failures also fall back. No explicit net481 availability check appears here. Runtime installer accepts only exit zero and rechecks detection.",
+    "Runtime download uses fixed 9.0.3 URLs with empty expected checksum argument. This script does not independently establish downloaded runtime integrity.",
+    "InstallDelete and UninstallDelete recursively remove all app-directory contents, including user-added content. Startup Run value is unquoted; archive extraction embeds installation path in a PowerShell single-quoted literal without escaping apostrophes.",
+    "Chocolatey install passes SHA256 to its package helper, refining prior builder observation: installation checks the generated digest, while generation trusts the release download. Unsupported Windows build only warns.",
+    "Interactive parameter string false is recognized; a boolean false still enables interactive mode by presence.",
+    "Uninstaller selects display-name prefix across three registry locations without exact product ID or single-match admission. Removing every quote from UninstallString does not parse arguments; multiple matching entries can produce an array instead of a single executable path.",
+    "Nuspec links mutable master resources. Description CDATA and plain metadata depend on caller escaping, absent in reviewed builder."
+  ],
+  "limits": [
+    "Static source evidence only, no Windows installer/runtime execution or package-helper implementation review.",
+    "Full repository count remains 148/500; ExplorerTabUtility partial 52/104. Native pHash memory-error investigation remains deferred."
+  ]
+}
