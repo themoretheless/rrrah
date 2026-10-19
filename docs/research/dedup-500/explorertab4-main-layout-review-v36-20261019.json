@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Full MainWindow XAML read through EOF; pinned Git blob verified. Remaining inventory classified by extension, not credited as viewed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/MainWindow.xaml": "73a6f803cb349c8b8964410e03bf76df2a09e39059f0854ed7a6a28a87533716"
+  },
+  "whole_files_read": 87,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v36-20261019.json",
+  "coverage_sha256": "0e6cecf43086f8d5de8981b1873a12aa317291550bd4f45a13263c9b143ae451",
+  "findings": [
+    "Window enforces MinWidth700 MinHeight175; this refines previous narrow-layout concern but does not establish usability at allowed minimum height or large DPI. Preferences content lacks its own ScrollViewer.",
+    "ProfilesPanel is a StackPanel inside ScrollViewer with direct child editor controls, not a virtualizing ItemsControl; no explicit profile-count cap here.",
+    "Auto-save tooltip says closing window; code also saves when minimizing through custom button, as previously found.",
+    "Status indicators bind settings values rather than independently observed hook initialization/success. Requested enabled state therefore cannot serve as runtime-health evidence.",
+    "Navigation drawer uses animated width165/0 and closes on any navigation-list KeyDown. TabControl selection binds navigation index while TabItem headers are collapsed; keyboard behavior needs runtime verification.",
+    "Title-bar buttons are Focusable=false and lack explicit automation labels in this XAML. This is a source observation, not a screen-reader failure claim.",
+    "Remaining17 tracked files are image assets or icon; all textual tracked files now carry whole-file reading credit. Images/GIF timelines still require visual review before full repository completion."
+  ],
+  "limits": [
+    "No Windows rendering or interaction; no own-library production changes or fresh tests.",
+    "148/500 repositories fully reviewed; ExplorerTabUtility partial87/104. Native pHash investigation deferred."
+  ]
+}
