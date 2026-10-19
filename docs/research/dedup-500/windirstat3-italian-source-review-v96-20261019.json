@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Italian catalog; pinned source bytes reverified; v91 structural parity evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_it.txt": "c67903832a7b77c4081fec09d864f2f4af29f2663395a90b1c685711795674de"
+  },
+  "whole_files_read": 229,
+  "coverage": "docs/research/dedup-500/windirstat3-italian-coverage-v96-20261019.json",
+  "coverage_sha256": "92fed17a2a6816a0f739b499869d0987b66f41aa8f925e6078c422ea53b3e0f8",
+  "findings": [
+    "Probabili duplicati, Prefisso hash and Campione hash distinguish probability, prefix display and sampling; advanced option explicitly says partial hashes above64MiB. No full-content equality inferred.",
+    "Recovery result asks to verify file data; recoverable and possibly recoverable states remain distinct, and same-source-volume warning states overwrite risk. Labels do not prove restoration correctness.",
+    "Auto-elevation label says system startup rather than simply application startup, potentially misleading about autostart behavior. Parent/child navigation rendered primario/secondario can obscure tree relationships.",
+    "Storage tier list uses intenso/medio/base/archive and current-hot-tier caption livello elevato; this is less direct than hot/cool/cold naming. Cost estimates remain modeled values, not provider prices.",
+    "Sparsify retains sparse wording, compression is separate, glob differs from regex, and hardlinks/symbolic links/junctions have distinct labels.",
+    "Rows/Squarified style names localized Righe/Squadrato in both menu and style list, maintaining correspondence. MSI it-IT/1040/1252 declarations require actual installer checks."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No rendered layout, mnemonic conflict, installer or Windows runtime verification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
