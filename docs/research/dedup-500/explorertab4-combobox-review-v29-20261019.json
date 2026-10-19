@@ -1,0 +1,24 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete resource dictionary read through EOF; pinned Git blob identity verified. No Windows runtime execution.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Themes/ComboBoxStyles.xaml": "b2a7291edc117f7bf44dc2ae6a620a53c4bd52f3e2787293e4dd88374be0a689"
+  },
+  "whole_files_read": 78,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v29-20261019.json",
+  "coverage_sha256": "778d96303223672b1093ede222793761e04d873eb5f3d7875c61057897d10107",
+  "findings": [
+    "Selected item is rendered via TextBlock.Text binding directly to SelectedItem; template does not forward SelectionBoxItem, ItemTemplate or DisplayMemberPath for selected display. Arbitrary item presentation is therefore not established.",
+    "Template lacks PART_EditableTextBox and editable-state branch; IsEditable support is not provided by this replacement template. Actual editable usage must be established at call sites.",
+    "Popup is named Popup rather than PART_Popup; template-part dependent behavior requires WPF runtime verification. IsDropDownOpen is bound explicitly and dropdown height is bounded by MaxDropDownHeight.",
+    "Item style supplies selected/highlighted/hover combinations and description-converter tooltip. Description affects tooltip only; no input enum validation occurs here.",
+    "Keyboard focus triggers exist on outer ComboBox, while inner ToggleButton is not focusable. Keyboard navigation and screen-reader behavior were not executed.",
+    "All eleven theme dictionary files in inventory now have whole-file source-read credit. This is not a rendered UI or application completeness claim."
+  ],
+  "limits": [
+    "Source review only; no own-library production change or fresh test.",
+    "148/500 repositories fully reviewed; ExplorerTabUtility partial78/104. Native pHash investigation deferred."
+  ]
+}
