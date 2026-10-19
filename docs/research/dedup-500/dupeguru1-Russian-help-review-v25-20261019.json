@@ -1,0 +1,123 @@
+{
+  "status": "partial_repository_Russian_help_read_and_original_build_qualified",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-locale-structural-review-v24-20261019.json",
+  "previous_sha256": "703b8b13ef279c143523bf58699f035554c009c665ff3249473bf8d0f2cff23b",
+  "new_whole_blobs": [
+    {
+      "path": "help/ru/faq.rst",
+      "git_blob": "214d674dc93faf46e9a3e49393736e5c42112b5a",
+      "sha256": "b5ed3d45236dcbb23ca7bc413cd101a9f8a0f361995654f0b424d9834ee85114",
+      "bytes": 15157,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/ru/folders.rst",
+      "git_blob": "ddf24f390f1cd5d9c233d473983eb50fc701caed",
+      "sha256": "cfdba5fef5708f5fba432c4127579b155889a1641435a6e0157ccbf8cd36201a",
+      "bytes": 3373,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/ru/index.rst",
+      "git_blob": "8b3be6b2ba89b233ad0c81b269e9d39a2b612e31",
+      "sha256": "638b2e7cd6ee4ea1dfec3b590aba3e3b870257cf04d1b5e26c0b58d003405f6a",
+      "bytes": 2116,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/ru/preferences.rst",
+      "git_blob": "f8140bfa5304bb09ed31c2fee134bf7a43a0a32d",
+      "sha256": "4ec942e78a32a1a28bd98e39b3e6b25bf0a100ff3acd689e6f4f8783374cef48",
+      "bytes": 16181,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/ru/quick_start.rst",
+      "git_blob": "6d4bded0bb728bc68fa9105c1e9ac865a6461887",
+      "sha256": "78a56997c8dcddd8a62a89a2d04968e8bc42eb52b22c8374a08806fece61509b",
+      "bytes": 1782,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/ru/reprioritize.rst",
+      "git_blob": "da5b8de7c0b3e07cdc5d908c74a706c1db8efe8e",
+      "sha256": "988432d38f91e931c8f797cbe6e12d235db9ec24d9baf7eaf87d2a1f149774b2",
+      "bytes": 3208,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    },
+    {
+      "path": "help/ru/results.rst",
+      "git_blob": "c7e5db5ed88bba51cd6b1fad35fe8cb7053c0669",
+      "sha256": "0f891c68d8a6875096027c22750a5a5ed6ad87fe084a62c5cdb0f6e11ae92692",
+      "bytes": 18906,
+      "fully_read": true,
+      "review_method": "whole_text_read"
+    }
+  ],
+  "cumulative_whole_files_reviewed_by_declared_methods": 339,
+  "cumulative_text_files_manually_read": 247,
+  "cumulative_visual_files_reviewed": 26,
+  "cumulative_catalogs_structurally_analyzed": 66,
+  "cumulative_distinct_original_tests_passed": 514,
+  "new_original_tests_run": 0,
+  "reproducer_files": [
+    {
+      "path": "docs/research/dedup-500/dupeguru1-Russian-help-reproducer-v25-20261019/build.log",
+      "sha256": "a3b185de15b8c8dab1404237b7707fd405db378bd632b18bd0ca80ed5dff9cce"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-Russian-help-reproducer-v25-20261019/environment.txt",
+      "sha256": "7e72a3d770da3c1e5c365292598721e54cccc0839f88b2c4ec59d8b2a24dbf91"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-Russian-help-reproducer-v25-20261019/preferences.html",
+      "sha256": "3d68470ce12933e91aa0e91ab3c39977853f804a354f290faa5c4b9117bd226f"
+    },
+    {
+      "path": "docs/research/dedup-500/dupeguru1-Russian-help-reproducer-v25-20261019/result.json",
+      "sha256": "7754586ba77c92e024ba5592e9cd0bcc6237dc8c64fc778581f20950cd8387fc"
+    }
+  ],
+  "findings": [
+    {
+      "scope": "Russian_help_semantic_read",
+      "finding": "SevenRussianhelpfiles fully read. Stale demo10duplicate limit/Fairware/iPhoto references and removed AudioContents mode remain; text repeatedly mistranslates duplicate/reference terms and includes malformed markup/TODOs. This is documentation evidence, not a currently enforced app limit."
+    },
+    {
+      "scope": "actual_original_help_build",
+      "finding": "Original build_one_help(ru) and sphinxgen used with Sphinx8.2.3 on task-owned copies. Process0,log build succeeded,no WARNING/ERROR lines. Preferences HTML lacks edition-conditional content, including existing tag and word-weighting descriptions, while shared custom-command text remains."
+    },
+    {
+      "scope": "cause_source_crosswalk",
+      "finding": "Russian source wraps mode descriptions in only::edition_se/me/pe; currentbuild_one_help passes language/version but no editiontags. Missing generated content observed, not merely inferred from source."
+    }
+  ],
+  "remaining": {
+    "files_not_yet_reviewed_by_any_method": 29,
+    "translated_help_files": 28,
+    "languages": [
+      "de",
+      "fr",
+      "hy",
+      "uk"
+    ],
+    "XCF_files": 1
+  },
+  "limits": [
+    "HTML content checked programmatically, not visually rendered. No fullapplication/startup/platformbuild claim.",
+    "OnlyRussianhelpbuild run; remaining languagefiles not counted yet.",
+    "Catalog linguistic/percentformat/UIquality remains unqualified despite prior complete structural pass.",
+    "514 previous distinct original tests unchanged; no production edits or measuredoptimization.",
+    "Deferred pHash native memory/ASAN investigations skipped."
+  ]
+}
