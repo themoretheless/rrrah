@@ -1,0 +1,36 @@
+{
+  "status": "verified_metadata_only_EXIF_timestamp_match_on_distinct_real_JPEGs",
+  "source_pins": {
+    "core/pe/matchexif.py": "f9dc7b9c340bcd79fb3d49683736e1d51746d40dea68c0518a8e4fc2697ee707",
+    "core/pe/exif.py": "cbbea379d22ef99c2be0a47f88c2a6bca9ea07ca746624402043a45c38932b81",
+    "core/pe/photo.py": "03aa6fca1733f2350ba5e39f8568e2319d015ba7af043b947a84e530d3f0f99b",
+    "qt/pe/photo.py": "544b153a6aec22491d1a00d6ac41e3c2365e911afb16a73ce0e3c8f57f8aa973"
+  },
+  "dimensions": [
+    [
+      40,
+      20
+    ],
+    [
+      40,
+      20
+    ]
+  ],
+  "timestamps": [
+    "2026:10:19 12:34:56",
+    "2026:10:19 12:34:56"
+  ],
+  "match_count": 1,
+  "percentage": 100,
+  "different_file_sha256": true,
+  "different_decoded_pixel_color": true,
+  "input_sha256": {
+    "red.jpg": "1d355b241b17baca2c07a1ed7ffb651d2578fdbafd91be2388588f63d269a53c",
+    "blue.jpg": "5c60af7d485c624f396cd94df65c1e41a97172772f1d4c4ccb4a62fc587571fc"
+  },
+  "limits": [
+    "Actual original Qt Photo, EXIF parser and timestamp matcher; ordinary real JPEG files, no mocked metadata.",
+    "EXIF mode explicitly compares capture metadata;100 here is not a pixel-identity statement or a defect claim.",
+    "No full GUI, Cocoa/platform matrix, memory probe or production source change."
+  ]
+}
