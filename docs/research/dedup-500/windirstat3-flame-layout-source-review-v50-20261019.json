@@ -1,0 +1,34 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of both files; exact pinned bytes verified; compiled original GetDrawableChildCount and ComputeChildSpans with synthetic CItem and Windows integer aliases.",
+  "new_whole_files_read": {
+    "windirstat/Controls/FlameGraph.h": "bf1740b033435fe87164e4d96551f2a127c0a195fddc2514a2dcd0c1d8f22973",
+    "windirstat/Controls/FlameGraph.cpp": "18c8ac300f8f2bf663e97235e3adb2eb17436f7d7a99f95c88baf0e034a7adca"
+  },
+  "whole_files_read": 140,
+  "coverage": "docs/research/dedup-500/windirstat3-flame-layout-coverage-v50-20261019.json",
+  "coverage_sha256": "63423e8100678e4662332348281cb91b52c309ad32abbb02f2efbbe483dfdb12",
+  "runtime_controls": {
+    "result": "9901 controls passed",
+    "compiler": "Apple clang, C++23, -O2",
+    "probe_path": ".dedup-work/windirstat3-20261019/flame-spans-v50/probe.cpp",
+    "probe_sha256": "0c71b1b04e12523212c6c6bcee652e9b9ca36538938a5c64010efdb0ece8cac5",
+    "scope": "9900 nonincreasing four-child size vectors in 0..8 with widths 1..20, shifted origin -7; independent exact rational half-up boundary oracle. One UINT64_MAX parent saturation case. No source algorithm changed.",
+    "adapters": "Synthetic CItem exposing size, leaf flag, children; LONG=int32_t, ULONGLONG=uint64_t. Not a Windows application run."
+  },
+  "findings": [
+    "LayoutItem uses an explicit pending stack, reversed child insertion preserves preorder, and vertical coordinate growth stops before LONG_MAX overflow. This removes recursive traversal from this layout path but does not bound total retained geometry.",
+    "Child spans saturate cumulative sum at parent size before addition, clamp rounded boundaries, omit zero-width children and let the last drawable child absorb aggregate mismatch. partition_point assumes positive children precede zeros.",
+    "PrepareLayout cache key is root pointer, width and effective row height. Mutating the same tree needs external ClearLayout invalidation; this increment does not establish every caller path.",
+    "ClearLayout drops item pointers and rows but may retain container capacity. TrimMemory additionally swaps containers to release storage. Borrowed CItem lifetime still depends on model/view coordination.",
+    "Hit testing and clip iteration use per-row upper_bound on ordered right edges; rendering visits intersecting rows rather than the entire layout. No measured speedup claim.",
+    "Breadcrumbs use one sticky row, nearest ancestors retained when ancestors exceed horizontal pixels. Zero-size root remains interactive."
+  ],
+  "limits": [
+    "No full Windows build, GUI, rendering, performance, adversarial deep-tree or concurrency qualification.",
+    "Original long-double behavior on Apple clang need not match MSVC floating-point behavior for huge weights.",
+    "No foreign production code adopted. Native pHash investigation remains deferred. Global completed repository count remains 147/500."
+  ]
+}
