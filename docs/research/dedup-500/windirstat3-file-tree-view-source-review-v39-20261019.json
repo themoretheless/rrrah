@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of4files; pinned Git byte comparison. No Windows UI runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Views/FileTreeView.h": "5ba90712afb96ea6538656975343cb7ee6a61fcf454bf51e45a582bac7c61192",
+    "windirstat/Views/FileTreeView.cpp": "88fdad98b5f778a35d81d5856dd7a9c03085713630c8b5d043db7c4ce47a1c10",
+    "windirstat/Controls/FileTreeControl.h": "1a80f4c47ae52eaad6984d79db088a84a81603cc83ae93b203c870ca62fe6d07",
+    "windirstat/Controls/FileTreeControl.cpp": "49305b20a969976a5206b29e6488949ee781812c6aa9968a7aa7c53e6e4ff061"
+  },
+  "whole_files_read": 109,
+  "coverage": "docs/research/dedup-500/windirstat3-file-tree-view-coverage-v39-20261019.json",
+  "coverage_sha256": "cbb3eb2d6ee1936c7339bf64e8e9409473f5a2ac78fcdb13a5dca3516a440988",
+  "findings": [
+    "FileTreeView initializes stable enumeration-order columns, binds actual model root on updates and handles selection action via EmulateInteractiveSelection. Shared view declarations own typed watcher/permission/top/duplicate/search controls.",
+    "Largest-file default display sort is physical size descending, while top candidate membership from earlier module uses logical size. Display order is not selection criterion. Search default logical descending; duplicate default physical descending.",
+    "Hardlink physical-column click only acts when scan settled, resolves index snapshot or linked source and notifies selection. Cursor hand indication itself does not check settled; actionable click guard does.",
+    "Proportion tooltip only for node with done parent and cursor in clipped visible bar, using absolute/parent fractions; tooltips cleared on scrolling, click, key and font changes. DONE is model-state marker, not exhaustive scan proof.",
+    "Ctrl-left/right selects first visible same-parent directory/file; it does not search entire filesystem or all hidden descendants.",
+    "Column width and style initialization describes UI only, no content evidence, freshness checks or duplicate comparison. Base tree/list implementation still requires source review."
+  ],
+  "limits": [
+    "No UI routing, stale pointer, tooltip, hardlink navigation or race runtime test.",
+    "Tabbed view implementation not read in this increment.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
