@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete reading of three resource dictionaries; exact-commit Git blob hashes verified. Source-only, no rendered UI qualification.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Themes/BorderStyles.xaml": "fe8e507effbe9a44bccba40d3054f5cf7a6c749deb78809d5250f4b7992db1bf",
+    "ExplorerTabUtility/UI/Themes/CheckBoxStyles.xaml": "4e34d183e5a0b22ccebd4a2a3d3691f208d7bf52255233939a02919fa0373e35",
+    "ExplorerTabUtility/UI/Themes/TabControlStyles.xaml": "e2e681d9ecc3f03130559e0690cd717ca48406db83735d9fd3c12c36f7184c41"
+  },
+  "whole_files_read": 73,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v26-20261019.json",
+  "coverage_sha256": "9a386babed88da52c091feb1b28635d47ceaf99569a434501f71ad7271cb4e3c",
+  "findings": [
+    "Profile card style enables previously reviewed HoverBorder behavior, uses fixed corner radius/padding, and enables layout rounding. This is a use site for existing hover lifecycle concerns, not a new runtime reproduction.",
+    "Checkbox template supplies explicit checked, disabled, focus and hover triggers. It has no indeterminate/null-state trigger, so a three-state checkbox would not receive a distinct mark from this template. Actual three-state use remains to be checked.",
+    "Checkbox ContentPresenter does not explicitly enable RecognizesAccessKey; caption mnemonic behavior is not established by this template. Focus visual is replaced with an explicit border-color trigger.",
+    "CustomTabControlStyle only sets background, thickness, margins and padding. It does not replace the TabControl template or define tab virtualization, navigation, or lifetime behavior.",
+    "No file-content comparison or hashing implementation is present in these styles."
+  ],
+  "limits": [
+    "No WPF rendering, interaction, scaling or screen-reader test. No library production changes adopted.",
+    "148/500 repositories fully reviewed; ExplorerTabUtility partial73/104. Native pHash memory-error investigation remains deferred."
+  ]
+}
