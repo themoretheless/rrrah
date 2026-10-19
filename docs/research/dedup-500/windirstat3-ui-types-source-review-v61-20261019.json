@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of954-line UiTypes.h; truncated middle reread separately. Pinned bytes verified. No Windows runtime.",
+  "new_whole_files_read": {
+    "windirstat/UiTypes.h": "ec716a98f50ddd8792b8fddc1093561f9535a377bb6525630d9f48adf3dfeb94"
+  },
+  "whole_files_read": 181,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-types-coverage-v61-20261019.json",
+  "coverage_sha256": "e544953d84f1d8bad8b898e26de3fb74a5237e32be9d140d0be339c21a4cd42b",
+  "findings": [
+    "GetWindowDpi runtime-resolves GetDpiForWindow and falls back to acquired DC with ReleaseDC and96default. Font and toolbar percentages clamp100..200. Multiplication and MulDiv wrappers do not establish behavior for arbitrary extreme coordinates/DPI.",
+    "CRect Width/Height subtract using int64 and clamp to int range; Center adds in int64. Other point arithmetic and manual rectangle deflation use ordinary signed arithmetic, so this is not general saturating geometry.",
+    "Language-specific string resource loader bounds-checks block traversal and string lengths against resource byte size; default resource loader uses LoadStringW buffer-reference mode.",
+    "Route duplicate validation is debug-only and checks identical route keys, not overlapping ID ranges. MessageTarget stores borrowed spans returned by static Routes; those spans require static lifetime.",
+    "GdiObject is move-only and owns DeleteObject; Reset clears handle even if deletion fails. CDC distinguishes owned DC from Borrow and detaches explicitly; owned DC destructor calls DeleteDC. Correct selected-object lifecycle remains caller-dependent.",
+    "GdiObjectSelection restores old valid selection; ScopedDcState restores only after successful SaveDC. Attribute scopes restore prior setter result without explicit failure sentinel handling. No failed-GDI-call injection performed.",
+    "WindowRef is a borrowed HWND wrapper with mutating operations but no lifetime/ownership guarantee. Many convenience wrappers ignore API error results; rectangle conversions can return unchanged/default data when API calls fail.",
+    "CDC FillSolidRect changes DC background color without restoring it itself; callers requiring state isolation need a scope. GetTextExtent returns zero-initialized size if API fails, unlike optional GetTextMetrics/GetClipBox.",
+    "WindowCreationScope and current-message/draw contexts are thread_local; global font percentages are ordinary ints. These definitions do not establish arbitrary cross-thread GUI safety."
+  ],
+  "limits": [
+    "No native GDI/window/DPI, route dispatch, resource corruption, arithmetic-boundary or lifecycle runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
