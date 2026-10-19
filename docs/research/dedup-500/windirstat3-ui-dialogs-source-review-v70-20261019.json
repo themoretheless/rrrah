@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of UiDialogs.cpp, upgrading prior ApplyPages-only excerpt credit. Pinned bytes verified. No Windows runtime.",
+  "new_whole_files_read": {
+    "windirstat/UiDialogs.cpp": "5a6e9f23578982235281f0146b1281c54342fec9ffe34685900828892cb685d9"
+  },
+  "whole_files_read": 199,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-dialogs-coverage-v70-20261019.json",
+  "coverage_sha256": "deafd4458264e4b6cffbf79c20b757f9866903dccbc4c76c43c80185bd1bf340",
+  "findings": [
+    "PickFile uses4096wchar buffer, pipe-to-null filter conversion and csv default extension. Open mode requires existing path but does not set OFN_FILEMUSTEXIST here; cancellation and common-dialog error both return nullopt. Long-path-aware manifest does not remove this buffer limit.",
+    "PickFolders uses COM filesystem-only folder picker and optional multiselect; any failed item/path extraction discards whole result. Cancel and COM errors both return empty vector. PickColor keeps16custom colors in process-static storage, commits result only on chooser success.",
+    "Property pages are created lazily; sheet dimensions use the first successfully created page, not maximum dimensions of every page template. Later pages are fitted to that rectangle. Actual clipping across languages/DPI unqualified.",
+    "Caption parser bounds-checks standard/extended dialog template word ranges, menu/class encodings and null-terminated title. It does not execute a complete dialog-template schema validator.",
+    "ApplyPages prepares all created pages, then confirms, runs all BeforeApply, all CommitApply, clears modified flags, then AfterApply and OnApplied. No exception rollback; uncreated pages are not prepared/committed. Prior six synthetic ordering controls remain narrower than actual Windows settings qualification.",
+    "Page switching checks creation before hiding other pages and reverts tab selection on failure; keyboard CtrlTab/PageUp/PageDown wraps and attempts focus restoration to valid tab control.",
+    "Command handling suppresses further commands while applying; cancel requests modal exit. Apply button reflects any modified page flag, including flags of pages not yet created. Creation/API failures are only partially surfaced in setup."
+  ],
+  "limits": [
+    "No native file/folder/color chooser, cancellation/error differentiation, page creation, template parser boundary or settings runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
