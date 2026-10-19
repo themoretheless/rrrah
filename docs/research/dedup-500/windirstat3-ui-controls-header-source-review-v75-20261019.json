@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of UiControls.h; pinned bytes verified. No native controls executed.",
+  "new_whole_files_read": {
+    "windirstat/UiControls.h": "0054b7356c358a92a1c1d9cfadaf6e98e31162120a3eb9315a71a10223ed66e3"
+  },
+  "whole_files_read": 204,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-controls-header-coverage-v75-20261019.json",
+  "coverage_sha256": "20441154d75962ffe1892fe323ef24e89d00f7325e0d9b3b9cb9ad6ec202623d",
+  "findings": [
+    "CEdit GetSel uses packed EM_GETSEL return and extracts16bit endpoints, unlike full-width out-parameter form. Selections beyond65535characters are not represented by this wrapper; no actual user field counterexample tested.",
+    "Combo GetItemText queries length, allocates length+1 and copies via native message, mapping CB_ERR to empty result. It assumes control contents remain consistent across synchronous query/copy; no concurrent/reentrant mutation test.",
+    "RichEdit text-range wrapper computes signed cpMax-cpMin before clamping and allocation; arbitrary extreme range arithmetic is not guarded. Normal ENLINK ranges from About dialog were source-reviewed, not runtime qualified.",
+    "List row geometry cache covers at most16logical columns per draw dispatch, uses header rectangles mapped into list coordinates to respect reorder/scroll, and falls back to native query outside cached range or failed entry. No pixel/performance parity measurement.",
+    "SetRowHeight creates and immediately detaches/destroys a temporary image list; it does not preserve a preexisting small-image-list attachment. Actual callers and icon ownership require runtime qualification.",
+    "Tooltip wrappers pass caller text pointers rather than owning strings; native API consumption/lifetime expectations must be satisfied by caller. Recovery dialog persistent tooltip array is one reviewed caller, not general lifetime proof.",
+    "BufferedDC allocates full client bitmap, selects/restores it and blits in destructor only after successful selection. On allocation/selection failure it does not redirect drawing to target, and destructor ignores blit failure.",
+    "ScopedRedrawPause always reenables redraw on destruction rather than restoring prior state or nesting count. Nested pauses therefore need caller coordination. Wait cursor uses scoped thread-local active flag and restores prior cursor."
+  ],
+  "limits": [
+    "No Windows edit selection, list geometry, image list, tooltip lifetime, redraw nesting, allocation failure or buffered paint tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
