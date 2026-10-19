@@ -1,0 +1,28 @@
+{
+  "status": "reproduced_stateful_repeated_no_field_order_scan_difference",
+  "source_pins": {
+    "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+    "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+    "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba"
+  },
+  "configured_scan_type": 2,
+  "scan_type_after_first_run": 1,
+  "first_run_groups": [
+    [
+      "Little Ghost - The White Stripes.bin",
+      "The White Stripes - Little Ghost.bin"
+    ]
+  ],
+  "second_run_same_scanner_groups": [],
+  "fresh_scanner_groups": [
+    [
+      "Little Ghost - The White Stripes.bin",
+      "The White Stripes - Little Ghost.bin"
+    ]
+  ],
+  "limits": [
+    "Original Scanner/engine/File modules with real ordinary synthetic files; no fake file-existence or digest provider.",
+    "Filename-field mode only, not exact byte matching or image pipeline.",
+    "No production/library or foreign source changed; this is a reference behavior counterexample."
+  ]
+}

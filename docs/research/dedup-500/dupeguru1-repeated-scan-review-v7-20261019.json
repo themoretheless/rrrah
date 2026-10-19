@@ -1,0 +1,108 @@
+{
+  "status": "partial_scanner_priority_review_with_repeated_field_mode_counterexample",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-engine-results-review-v6-20261019.json",
+  "previous_sha256": "37593797238c1575be073ec893f8d6ddd1f7e84c8098c0babf4d1e701ca03a66",
+  "new_whole_blobs": [
+    {
+      "path": "core/tests/scanner_test.py",
+      "git_blob": "6dc315fee0411148ba73b4f798fbb84e5a38f6fe",
+      "sha256": "918c768a95febf797f4958b81c43b1afb83522ce99cd0fdd3a42f5f4766d820f",
+      "bytes": 20264,
+      "fully_read": true
+    },
+    {
+      "path": "core/me/scanner.py",
+      "git_blob": "491df71882a057055c1b4b4b052cd70a13f92cc5",
+      "sha256": "60e2622edd764515b337f18a710d85edb82da78a97aa51c4c17383d606d7bc27",
+      "bytes": 913,
+      "fully_read": true
+    },
+    {
+      "path": "core/prioritize.py",
+      "git_blob": "065969a66f86feabbde6886e6f4a5d829ed40c21",
+      "sha256": "42f9a1d1e66cf70e8f1aa50ef2310e7800cc242c72ff5219ab5c2846df4035ca",
+      "bytes": 5457,
+      "fully_read": true
+    },
+    {
+      "path": "core/me/prioritize.py",
+      "git_blob": "8d468f3a4842f02bbcce9a2fcd45d92a643d7be2",
+      "sha256": "7d773d73750a27653024df37f3ec10845fd9e7834be4f5097fbec78daf1901c9",
+      "bytes": 1173,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 61,
+  "upstream_additional_tests_passed": 39,
+  "upstream_cumulative_distinct_tests_passed": 383,
+  "selected_runtime": {
+    "exit_code": 0,
+    "command": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+      "-m",
+      "pytest",
+      "core/tests/scanner_test.py",
+      "-q",
+      "--basetemp",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-scanner-tests-20261019/pytest-temp",
+      "--junitxml",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-scanner-tests-20261019/junit.xml"
+    ],
+    "source_pins": {
+      "core/tests/scanner_test.py": "918c768a95febf797f4958b81c43b1afb83522ce99cd0fdd3a42f5f4766d820f",
+      "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+      "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+      "core/me/scanner.py": "60e2622edd764515b337f18a710d85edb82da78a97aa51c4c17383d606d7bc27"
+    },
+    "source_drift": [],
+    "log_sha256": "a4692411243864b4bac7aa50f57cfcbed9f6aa6fca9db229aa2563b3533b824e"
+  },
+  "repeated_field_mode_control": {
+    "status": "reproduced_stateful_repeated_no_field_order_scan_difference",
+    "source_pins": {
+      "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+      "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba"
+    },
+    "configured_scan_type": 2,
+    "scan_type_after_first_run": 1,
+    "first_run_groups": [
+      [
+        "Little Ghost - The White Stripes.bin",
+        "The White Stripes - Little Ghost.bin"
+      ]
+    ],
+    "second_run_same_scanner_groups": [],
+    "fresh_scanner_groups": [
+      [
+        "Little Ghost - The White Stripes.bin",
+        "The White Stripes - Little Ghost.bin"
+      ]
+    ],
+    "limits": [
+      "Original Scanner/engine/File modules with real ordinary synthetic files; no fake file-existence or digest provider.",
+      "Filename-field mode only, not exact byte matching or image pipeline.",
+      "No production/library or foreign source changed; this is a reference behavior counterexample."
+    ]
+  },
+  "reproducer": "docs/research/dedup-500/dupeguru1-repeated-scan-reproducer-v7-20261019",
+  "harness": "scripts/qualify-dupeguru1-repeated-field-scan-20261019.py",
+  "harness_sha256": "4ec58d383424edde20100c7e1ea2de2753133c741fd10ea4a62bc37b601c2bfb",
+  "findings": [
+    "All39originalscanner_testtests pass unchanged, but test_fields_no_order covers one call only.",
+    "Real-file same-Scanner control: FIELDSNOORDER(2) first run finds reversed fields, changes self.scan_type to FIELDS(1), second run loses group, fresh configured Scanner restores group.",
+    "Originalscanner tests often use NamedObject, preset digests and Path.exists fixture; passing39tests is not an end-to-end filesystem or content-identity certificate.",
+    "MusicScannerreferencepriorityusesbitrate thenfile size; userchosenretentionpreferencesarenotcontent-equalityproof.",
+    "OurRustlibrary has no filename-field mode; no foreign-state mutation copied or gratuitous production patch."
+  ],
+  "limits": [
+    "61wholefilesread; GUI/nativeplatform/media/localization/remainingcodeandtests stillincomplete.",
+    "383selectedoriginaltests, notfullupstreamsuite; repeat-modecounterexample retained despite passing originalmodule.",
+    "No productionchange, upstream patch/push, deletion action orperformanceclaim.",
+    "User-deferred pHash memory investigation remains deferred; fullreviewcount145/500."
+  ]
+}
