@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of RecoveryShared.h/cpp,511 lines; pinned bytes verified. No disk access or recovery execution.",
+  "new_whole_files_read": {
+    "windirstat/RecoveryShared.h": "511ab69504bad800c2a62a933045be05a448f34b6cc04a55e563630a055ba0c8",
+    "windirstat/RecoveryShared.cpp": "263abfa6a92b50c8ee7495987a19930a989d4310a68d523f69f33b4b9b9aa634"
+  },
+  "whole_files_read": 187,
+  "coverage": "docs/research/dedup-500/windirstat3-recovery-shared-coverage-v64-20261019.json",
+  "coverage_sha256": "91fb7de0aafa399d20bffa64d5b80f13b17324de06cc807a188d2deffa0178ad",
+  "findings": [
+    "Recovery opens source volume read-only with read/write/delete sharing and unbuffered I/O. This does not freeze live source contents. Filesystem-specific readers are selected from volume metadata for NTFS/exFAT/FAT/FAT32 only.",
+    "ReadVolume validates power-of-two alignment <=64KiB, signed seek limit, requested range and rounded sector range, grows aligned buffer, checks full returned byte count before copying. Buffer and synchronous file position are shared instance state; concurrent calls are not synchronized here.",
+    "Read<T> and Slice check subtractive bounds before copying/subspan. ReadName multiplies length by wchar_t size before Slice; caller bounds are still required to exclude arithmetic overflow. Windows UTF16 width differs from this host wchar_t.",
+    "Destination is resolved through an opened directory handle to volume GUID or UNC canonical path and verified directory attribute. It returns a string and closes handle, so later path use is not a held-handle namespace guarantee. Same-volume policy belongs to downstream recovery reader/UI.",
+    "Recycle metadata supports fixed/count-prefixed layouts, requires size/terminator and absolute filename checks, rejects malformed surrogate/control sequences. Companion collisions with conflicting metadata disable that match; cancellation errors propagate.",
+    "SafeName caps255UTF16 units, handles reserved device stems, replaces invalid code units/characters, preserves complete surrogate pairs and removes trailing spaces/dots. This is filename sanitization, not content identity verification.",
+    "OutputFile uses CREATE_NEW temporary name based on record identifiers with no sharing, checks free-space estimate and full writes, then checks source callback before and after timestamps/flush. Final handle rename does not replace existing destination.",
+    "Uncommitted output requests deletion in destructor but ignores deletion result. Predictable partial-name collisions can fail safely at CREATE_NEW; automatic retry/unique-name generation absent. Flush then rename is not proof of crash-durable directory publication.",
+    "Progress polls paused state every25ms and raises cancellation; no timeout for blocked disk I/O is established by these checks. Scan result contract retains validated partial records on cancellation."
+  ],
+  "limits": [
+    "No raw-volume reads, recovered writes, device actions, Windows parser runtime, cancellation/fault injection, crash-durability or source-mutation tests performed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
