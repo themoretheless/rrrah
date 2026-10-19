@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of UiAppearance.cpp in contiguous ranges through EOF; source review only, without Windows rendering or fault injection.",
+  "new_whole_files_read": {
+    "windirstat/UiAppearance.cpp": "f7b2bb77d41c1d00d8dfcb0060480a171063c615d22a83d7b75eb5b00ce57c45"
+  },
+  "whole_files_read": 219,
+  "coverage": "docs/research/dedup-500/windirstat3-appearance-coverage-v85-20261019.json",
+  "coverage_sha256": "83588fb7a0e82c555789b59557e97cf676b5ad856af8f29f9f352d47a683931b",
+  "findings": [
+    "Font lookup cache is cleared on nonzero oldPercent; a separate LOGFONT-keyed owning cache retains font objects so existing control handles remain valid. Static maps assume serialized UI use; lifetime retention is not bounded by current lookup entries.",
+    "Menu conversion preserves original item data/type/bitmap and excludes existing owner-drawn/special items and shell command ranges. Mnemonics handle escaped ampersands and cycle multiple enabled matches. RTL layout is explicitly applied.",
+    "RestoreScaledMenu erases tracked items after attempting native restoration even if SetMenuItemInfo fails. Possible stale native item tokens under failure are a source-level concern, not a reproduced Windows defect.",
+    "MenuRef::SetItemInfo changes cached original data/bitmap before calling the native setter; native failure does not roll those cache changes back. Position-based tracking also requires menu mutations to preserve the recorded correspondence.",
+    "Scaled check/radio controls use custom geometry outside high contrast and native themed/frame fallback in high contrast. Paint allocation and GDI return failures are mostly unchecked; no visual/accessibility parity established.",
+    "Dialog scaling gathers immediate children and batches position changes. Begin/Defer/End failures have no individual-position fallback; scaled dialog size is not clamped here to monitor work area.",
+    "Appearance callbacks swallow exceptions in font enumeration, while NotifyAppearanceChanged invokes attached callbacks directly. Thread affinity and failure behavior require runtime qualification."
+  ],
+  "limits": [
+    "No original Windows build, rendering, accessibility, fault injection or performance measurement executed. No foreign production code adopted.",
+    "Native pHash memory-error investigation remains deferred. Completed repository count remains147/500."
+  ]
+}
