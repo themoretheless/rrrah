@@ -2,7 +2,7 @@
   "index": 50,
   "repository": "jvirkki/dupd",
   "commit": "33907bbcfd5fe8b63f54d4f55438fa222ea880aa",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run Additional21wholepinnedfilesread: design/build/filecompare/cache/hashers/APIheaders andtestsrun/common/00..07. Wholeoriginalnativeenginecompiled and8ordinaryupstreamtestspass withisolatedHOME.793entryfullrepository remainsincomplete.",
   "decision": "reference",
   "finding": "Full memcmp comparator and hashing modules show hash-then-byte-confirm pattern; GPL reference with hashlist tests.",
   "license_metadata": "GPL-3.0",
@@ -93,6 +93,14 @@
       "lines": 674,
       "source": false,
       "test": false
+    }
+  ],
+  "full_repository_read": false,
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/dupd50-selected-engine-runtime-20261019.json",
+      "controls": "docs/research/dedup-500/dupd50-selected-engine-runtime-20261019.json",
+      "scope": "21wholefilesread, nativebuild and8selectedupstreamtestspass; fullrepositoryfalse, notperformance/wholecode/runtime qualification."
     }
   ]
 }
