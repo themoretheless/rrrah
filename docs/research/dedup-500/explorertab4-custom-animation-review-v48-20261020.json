@@ -1,0 +1,23 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Full619-frame visual review cumulatively across v44-v47 and final frames448-618 displayed before interrupted turn. All20 indexed contact sheets inspected at396x220 thumbnails; pinned GIF blob reverified on persistence. Source1920x1080, duration51530ms.",
+  "new_whole_files_read": {
+    "Assets/CustomLocation.gif": "d823e7306a90141f1daede4094a5f5769d8aa8c999afb0b3d77ee135ab2812ba"
+  },
+  "whole_files_read": 100,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v48-20261020.json",
+  "coverage_sha256": "c4d8b7e9456d1397f8e69a556016c4c927712e70dc49d67dfe8f752e94e02672",
+  "findings": [
+    "Earlier sequence configures folder path, application executable and website in same Open action. Final browser sequence loads ExplorerTabUtility GitHub repository page after Ctrl+1, with additional tab/navigation activity.",
+    "Later sequence opens CLSID List reference page, copies a selected shell identifier, returns to profile editor, replaces location using Ctrl+A/Ctrl+V and saves.",
+    "After Ctrl+1, Explorer comes forward and Control Panel all-items interface appears. Final frames return to Explorer folder view. This confirms demonstration includes shell namespace location, not only filesystem directory.",
+    "External page text, precise CLSID and URL bytes are not qualified at thumbnail resolution. Embedded pages are reference content, not instructions executed by this agent.",
+    "No file-content comparison, file-copy deduplication, malformed-path rejection, cancellation or failed-launch recovery is demonstrated. GIF is illustrative source material, not independent runtime qualification."
+  ],
+  "limits": [
+    "Visual review complete at contact-sheet resolution only; no actual Windows app execution or fresh library tests.",
+    "ExplorerTabUtility partial100/104; remaining4 GIFs require full visual review. Global fully reviewed repository count148/500. Native pHash investigation deferred."
+  ]
+}
