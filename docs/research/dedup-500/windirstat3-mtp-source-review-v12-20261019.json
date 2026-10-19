@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_MTP_registry_controls_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/FinderMtp.cpp": "8d6cd421d18ba9ceff00cdb9838524024900cac1bcffc1bd4013414acdbc1b31",
+    "windirstat/FinderMtp.h": "14e0603e7587e9042cf5b5e979410f09ac9bfffbca5a590ec36d87540d869c97"
+  },
+  "whole_files_read": 32,
+  "controls": "docs/research/dedup-500/windirstat3-mtp-reproducer-v12-20261019/result.json",
+  "controls_sha256": "fcf092f16bea82c403ae7cfd3b947177c6b48bafaad0781208223985567d00da",
+  "coverage": "docs/research/dedup-500/windirstat3-mtp-reproducer-v12-20261019/coverage.json",
+  "coverage_sha256": "90b363a7dcff51e6e56d2b0e4b8c4fe548980c712e62d79c3329053a46437da0",
+  "reproducer": "scripts/qualify-windirstat3-mtp-tokens-20261019.py",
+  "reproducer_sha256": "a0aac5dcaf19808fee6e9dd02b3460102d0583ffb30748dedea25d53dbe68ba6",
+  "findings": [
+    "Original registry lock protects concurrent registration; high-bit tokens remain unique, unregister hides identity, wraparound skips occupied token.",
+    "MTP enumeration stores display path separately from owned shell PIDL/parsing path; GetIndex initially0 is not normal filesystem file ID.",
+    "Device correlation uses normalized alphanumeric containment and friendly-name fallback; device-match heuristic not exact file identity.",
+    "Unusable shell entries skipped; failed size/time properties leave zero defaults, so metadata availability differs from local files."
+  ],
+  "limits": [
+    "Original selected registry/path methods unchanged, synthetic RegisteredPath replaces PIDL clone/cleanup ownership; no COM operations.",
+    "ASCII case-insensitive prefix shim and Mac strings; not Windows Unicode/portable-device enumeration or stream-read proof.",
+    "No real device, PIDL clone lifetime, disconnection/cancellation/quality/performance qualification.",
+    "Two whole MTP files read; no production adoption; pHash native investigation deferred."
+  ]
+}
