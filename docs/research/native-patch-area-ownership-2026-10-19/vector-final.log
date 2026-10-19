@@ -1,0 +1,258 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: constant `PNG_SIGNATURE` is never used
+  --> vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 07s
+     Running unittests src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/rrrah_vector-14d3b109a0c844ed)
+
+running 221 tests
+test emf::tests::mapping_modes_extents_and_device_dimensions_are_validated ... ok
+test eps_bounds::tests::outer_header_trailer_and_hires_precedence ... ok
+test emf::tests::bezier_and_continuation_arrays_require_complete_segments ... ok
+test emf::tests::truncated_records_eof_count_unknown_and_selection_refused ... ok
+test eps::tests::ascii_and_dos_sources_borrow_original_artwork_and_isolate_previews ... ok
+test eps_bounds::tests::refuses_ambiguous_unsupported_missing_and_cancelled_sources ... ok
+test eps_document::tests::document_errors_do_not_return_partial_preview_or_output ... ok
+test eps_fill::tests::analytic_coverage_open_closure_holes_and_root_lifetime ... ok
+test eps_fill::tests::allocation_work_and_cancellation_fail_without_partial_mask ... ok
+test eps_document::tests::imported_showpage_keeps_complete_document_pixels ... ok
+test eps_document::tests::computed_numeric_coordinates_match_literal_document_pixels ... ok
+test eps_document::tests::bounded_file_source_cap_and_retained_output_share_root ... ok
+test emf::tests::extension_header_bounds_and_gl_metadata_are_explicit ... ok
+test eps_document::tests::native_document_negative_origin_density_and_output_lifetime ... ok
+test emf::tests::context_indices_and_stack_limit_are_bounded ... ok
+test emf::tests::description_is_bounded_metadata_not_extension_fields ... ok
+test emf::tests::custom_object_indices_colors_and_null_pen ... ok
+test emf::tests::deleted_brush_defaults_and_invalid_indices_are_rejected ... ok
+test emf::tests::stock_rectangle_exact_pixels_and_admission ... ok
+test eps_flatten::tests::refusals_and_output_pass_cancellation_release_credit ... ok
+test eps_document::tests::rectangle_operator_pixels_match_explicit_paths_without_save_slots ... ok
+test eps_fill::tests::sparse_tall_page_visits_only_active_edges_with_bounded_work ... ok
+test eps_graphics::tests::arcs_preserve_turns_transform_and_roll_back_failed_paths ... ok
+test emf::tests::polygon_lengths_modes_and_open_lines ... ok
+test emf::tests::continuation_updates_position_even_with_null_pen ... ok
+test eps_graphics::tests::clipping_keeps_path_and_restores_saved_branches_with_bounded_records ... ok
+test eps_graphics::tests::numeric_rectclip_clears_success_and_preserves_failed_path_and_arena ... ok
+test eps_graphics::tests::limits_restore_forks_and_failed_operations_preserve_the_active_path ... ok
+test eps_graphics::tests::persistent_fill_stroke_scene_reuses_geometry_preserves_pen_and_last_owner ... ok
+test eps_graphics::tests::prepared_path_admits_exact_storage_transforms_and_releases_failed_output ... ok
+test eps_graphics::tests::root_admission_query_cancellation_and_destination_size_never_corrupt_scene ... ok
+test eps_flatten::tests::curves_preserve_topology_and_bound_dense_independent_samples ... ok
+test eps_graphics::tests::independent_graphics_queries_match_ghostscript_state_and_path_rules ... ok
+test eps_numbers::tests::full_name_grammar_ranges_limits_and_transient_cancellation ... ok
+test eps_numbers::tests::postscript_decimal_and_radix_numbers_keep_numeric_object_types ... ok
+test eps_program::tests::malformed_procedures_and_limits_refuse_before_tape_allocation ... ok
+test eps_program::tests::nested_procedures_borrow_names_cache_numbers_and_preserve_runtime_marks ... ok
+test eps_program::tests::root_pressure_and_cancel_during_second_pass_release_tape ... ok
+test eps_numbers::tests::independent_radix_reference_covers_all_bases_and_signed_bit_boundaries ... ok
+test eps_raster::tests::independent_all_zero_adjust_arc_pixel_qualification ... ignored, zero-adjust ellipse boundary differs at pixel 19; keep full qualification open
+test eps_raster::tests::independent_default_adjust_arc_pixel_qualification ... ignored, default Ghostscript fill adjustment differs from native center coverage
+test eps_raster::tests::independent_ghostscript_full_color_pixel_qualification ... ignored, strict full-color qualification: gray/RGB 0.5 native 128 versus Ghostscript 127 remains unresolved
+test eps_raster::tests::independent_gray_rgb_ramp_full_strict_qualification ... ignored, strict reference parity: four half-tone cases differ after reference intermediate color quantization
+test eps_raster::tests::rejects_unsupported_before_output_and_cancels_after_admission ... ok
+test eps_raster::tests::device_hairline_width_survives_paint_scale_and_singular_matrix ... ok
+test eps_strings::tests::source_and_decoded_string_share_root_admission_and_last_owner_lifetime ... ok
+test eps_fill::tests::empty_coverage_skips_image_scan_and_preserves_admission_and_cancel ... ok
+test eps_strings::tests::malformed_limits_and_transient_cancellation_do_not_leak_admission ... ok
+test eps_strings::tests::strings_preserve_binary_values_and_postscript_escape_rules ... ok
+test eps_raster::tests::independent_ghostscript_binary_color_pixels_match_native_pipeline ... ok
+test eps_strings::tests::independent_python_ascii85_reference_covers_tail_lengths_and_all_byte_values ... ok
+test eps_raster::tests::paint_order_straight_alpha_viewport_and_last_owner ... ok
+test eps_raster::tests::native_program_mixed_fill_stroke_scene_renders_in_source_order ... ok
+test eps_raster::tests::subpixel_clip_intersects_samples_without_multiplying_alpha ... ok
+test eps_raster::tests::independent_zero_adjust_arc_pixels_match_ghostscript ... ok
+test eps_stroke::tests::independent_ghostscript_stroke_pixel_qualification ... ignored, strict stroke pixel qualification: Ghostscript butt stroke includes an extra row outside the native geometric outline
+test eps_stroke::tests::independent_shifted_bevel_pixel_qualification ... ignored, strict reference gate: shifted bevel also differs away from original diagonal tie; coverage rule unresolved
+test eps_raster::tests::independent_clip_pixels_match_ghostscript ... ok
+test eps_stroke::tests::caps_and_affine_pen_have_analytic_geometry ... ok
+test eps_stroke::tests::independent_unadjusted_ghostscript_stroke_pixel_qualification ... ignored, strict unadjusted stroke qualification: bevel pixel 53 differs at diagonal boundary
+test eps_stroke::tests::cap_outlines_fill_to_analytic_pixel_coverage ... ok
+test eps_document::tests::imported_rectangles_and_showpage_match_independent_ghostscript_pixels ... ok
+test eps_stroke_prepare::tests::inverse_final_ctm_and_pixel_tolerance_prepare_native_curves ... ok
+test eps_stroke::tests::independent_unadjusted_axis_stroke_pixels_match ... ok
+test eps_tokens::tests::lexical_groups_strings_names_and_comments_preserve_source ... ok
+test eps_stroke::tests::polyline_closed_ring_repeated_points_and_error_release ... ok
+test eps_stroke::tests::round_zero_length_disk_and_error_release ... ok
+test eps_stroke::tests::independent_zero_adjust_bevel_pixels_match_away_from_exact_diagonal_tie ... ok
+test eps_tokens::tests::malformed_limits_and_one_shot_cancellation_stop_iteration ... ok
+test eps_stroke::tests::joins_union_with_segment_outlines_and_miter_limit_bevels ... ok
+test eps_stroke_prepare::tests::prepared_multiple_subpaths_stroke_into_one_managed_outline ... ok
+test eps_vm::tests::degree_trigonometry_preserves_cardinals_and_bounds_large_angles ... ok
+test eps_vm::tests::definitions_procedures_aliases_and_conditionals_execute_native_values ... ok
+test eps_vm::tests::failures_limits_cancel_and_last_owner_release_all_managed_storage ... ok
+test eps_vm::tests::numeric_conversions_preserve_types_and_check_integer_range ... ok
+test eps_vm::tests::integer_division_remainder_and_square_root_obey_numeric_contract ... ok
+test eps_vm::tests::rounding_errors_release_managed_execution_memory ... ok
+test eps_vm::tests::rounding_preserves_types_and_uses_positive_ties ... ok
+test eps_vm::tests::tiny_negative_degree_angles_do_not_disappear_during_reduction ... ok
+test eps_vm::tests::stack_numeric_and_identity_operations_follow_object_semantics ... ok
+test eps_vm::vector_tests::arc_operators_execute_and_account_each_generated_piece ... ok
+test eps_vm::tests::operator_exec_chains_do_not_recurse_on_the_rust_stack ... ok
+test eps_vm::tests::independent_ghostscript_values_and_types_match_scalar_and_procedure_cases ... ok
+test eps_vm::vector_tests::computed_procedures_operator_aliases_and_fill_stroke_build_one_shared_path ... ok
+test eps_vm::vector_tests::eps_import_showpage_is_empty_aliasable_and_user_redefinable ... ok
+test eps_vm::vector_tests::numeric_rectangles_preserve_path_style_and_support_negative_sizes ... ok
+test eps_vm::vector_tests::path_bbox_preserves_original_vm_work_limit_and_transient_cancel_causes ... ok
+test eps_raster::tests::independent_gray_rgb_ramp_outside_reference_quantization_boundary ... ok
+test icc_colorimetry::tests::invalid_chromaticities_leave_existing_profile_intact ... ok
+test eps_vm::vector_tests::native_vm_graphics_queries_match_all_independent_graphics_cases ... ok
+test eps_vm::vector_tests::drawing_failure_cancellation_and_quotas_discard_the_entire_partial_scene ... ok
+test eps_stroke::tests::native_bevel_stroke_equals_explicit_union_at_subpixel_translations ... ok
+test icc_colorimetry::tests::synthesized_profiles_encode_icc_pcs_and_map_neutral_to_its_white ... ok
+test eps_vm::tests::powers_match_binary_oracle_and_refuse_nonfinite_results ... ok
+test pdf::precise_fill_tests::cubic_fill_matches_independent_parabola_pixel_integral ... ok
+test pdf::precise_fill_tests::excessive_fill_precision_refuses_without_retaining_managed_credit ... ok
+test pdf::precise_fill_tests::curve_cancellation_at_every_checkpoint_releases_shared_credit ... ok
+test eps_raster::tests::cached_clip_yields_to_complex_paint_mask_admission ... ok
+test pdf::overlap_patch_tests::partial_tensor_overlap_uses_later_patch_color ... ok
+test pdf::precise_fill_tests::upstream_coons_function_matches_independent_interior_integrals ... ignored, requires pinned external Serenity Coons source; RRRAH_COONS_CORPUS
+test pdf::overlap_patch_tests::later_coincident_tensor_patch_covers_earlier_color ... ok
+test pdf::precise_fill_tests::precise_curve_storage_obeys_exact_shared_budget ... ok
+test pdf::precise_fill_tests::shading_texture_obeys_exact_shared_budget_and_releases_credit ... ok
+test pdf::direct_shading_background_tests::direct_sh_ignores_background_and_preserves_fractional_alpha ... ok
+test pdf::precise_fill_tests::coons_depth_limit_refuses_incomplete_render_and_allows_retry ... ok
+test pdf::precise_fill_tests::tensor_depth_limit_refuses_incomplete_render_and_allows_retry ... ok
+test pdf::soft_mask_isolation_tests::luminosity_soft_mask_bands_preserve_alpha_and_managed_ownership ... ok
+test pdf::tensor_background_coverage_tests::fractional_tensor_edges_mix_with_declared_background ... ok
+test pdf::tensor_triangle_geometry_tests::inflated_patch_triangles_have_consistent_bounds_and_vertex_colors ... ok
+test pdf::tensor_fractional_coverage_tests::fractional_tensor_edges_match_exact_rectangle_area ... ok
+test pdf::tests::corrupt_embedded_image_refuses_incomplete_render_and_releases_credit ... ok
+test pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization ... ok
+test eps_vm::tests::logarithms_match_binary_oracle_and_reject_invalid_domains ... ok
+test pdf::tests::device_cmyk_hybrid_matches_full_domain_independent_oracle ... ok
+test pdf::tests::half_alpha_red_is_straight_and_matches_poppler_white_composite ... ok
+test pdf::tests::fractional_page_extents_keep_partial_edge_pixels ... ok
+test pdf::tests::device_cmyk_float_fills_match_independent_littlecms ... ok
+test pdf::tests::embedded_ycck_jpeg_app14_matches_independent_oracle ... ok
+test eps_vm::tests::arctangent_quadrants_match_binary_oracle_and_refuse_zero_vector ... ok
+test pdf::shading_context_cache_tests::shared_shading_keeps_background_context_in_both_draw_orders ... ok
+test pdf::tests::embedded_cmyk_jpeg_app14_decode_inversion_matches_independent_oracle ... ok
+test pdf::tests::independent_image_transfer_channels_match_public_decode ... ok
+test pdf::tests::invalid_and_excessive_user_units_refuse_without_retained_credit ... ok
+test pdf::tests::malformed_source_and_source_admission_release_credit ... ok
+test pdf::tests::malformed_invoked_form_geometry_refuses_without_output_reservation ... ok
+test pdf::tests::missing_invoked_object_refuses_in_page_and_inherited_form ... ok
+test pdf::tests::embedded_cmyk8_image_matches_full_domain_littlecms ... ok
+test pdf::tests::nonlinear_image_transfer_preserves_all_byte_values_through_public_decode ... ok
+test pdf::tests::page_rotation_preserves_extent_and_matches_poppler ... ok
+test pdf::tests::renderer_overflow_extents_are_rejected_before_output_allocation ... ok
+test pdf::tests::nested_form_fonts_inherit_resources_and_cycles_refuse ... ok
+test pdf::tests::page_user_unit_scales_geometry_and_pixels ... ok
+test pdf::tests::missing_selected_font_refuses_in_page_and_inherited_form_before_render ... ok
+test pdf::tests::selected_pages_match_authored_samples_and_release_budget ... ok
+test pdf::tests::unsupported_invoked_object_kind_refuses_without_rendering ... ok
+test pdf::tests::unsupported_selected_font_refuses_before_render_allocation ... ok
+test pdf_device_default_tests::alpha_soft_mask_without_group_color_space_preserves_coverage ... ok
+test pdf::tests::unresolved_type0_font_refuses_instead_of_helvetica_substitution ... ok
+test pdf_device_default_tests::equal_stream_headers_have_content_sensitive_cache_keys ... ok
+test pdf_device_default_tests::device_rgb_soft_mask_luminosity_matches_independent_primary_bands ... ok
+test pdf_device_default_tests::implicit_initial_gray_remains_black_with_default_gray_resource ... ok
+test pdf_device_default_tests::shared_soft_mask_group_preserves_mask_kind_and_transfer ... ok
+test pdf_device_default_tests::identical_shading_dictionaries_keep_distinct_stream_payloads ... ok
+test pdf_device_default_tests::shared_soft_mask_group_isolates_inherited_color_resources ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_affine_components_integrate_over_winning_fragments ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_convex_clip_preserves_sampling_ids_and_shared_work ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_every_admission_failure_cancel_and_work_limit_are_transactional ... ok
+test pdf_device_default_tests::default_gray_and_rgb_isolate_device_fills_and_shared_images ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_folded_priority_uses_v_then_u_and_not_multiplicity ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_every_mid_partition_cancel_preserves_published_regions ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_fragment_limits_and_invalid_input_preserve_previous_source ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_unions_coverage_and_preserves_later_patch_components ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_partial_overlap_matches_exact_ordered_three_pixel_rows ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_reconstructs_reflected_transformed_parameters_and_components ... ok
+test pdf_patch_bridge_tests::tests::patch_identity_overflow_and_invalid_composition_never_mutate_owner ... ok
+test pdf_patch_bridge_tests::tests::patch_identity_preserves_folded_parameter_under_integer_affine_families ... ok
+test pdf_patch_bridge_tests::tests::patch_identity_proves_global_relations_and_rejects_one_ulp_curve_change ... ok
+test pdf::tensor_patch_alignment_tests::two_bit_flags_preserve_shared_edge_like_eight_bit_flags ... ok
+test pdf_device_default_tests::default_cmyk_nested_scopes_cover_devices_meshes_images_and_alternates ... ok
+test pdf_patch_bridge_tests::tests::projected_stream_depth_refusal_is_terminal_and_releases_credit ... ok
+test pdf_patch_bridge_tests::tests::projected_bounds_detect_curved_projection_and_enclose_source_residuals ... ok
+test pdf_patch_tests::tests::coons_control_conversion_matches_tensor_geometry_and_colors ... ok
+test pdf_patch_tests::tests::coons_conversion_preserves_source_boundary_bits ... ok
+test pdf_patch_tests::tests::dense_curved_geometry_and_bilinear_color_stay_within_reported_bounds ... ok
+test pdf_patch_tests::tests::errors_and_cancellation_roll_back_only_new_triangles ... ok
+test pdf_patch_tests::tests::mesh_does_not_weld_near_curves_and_validates_empty_requests ... ok
+test pdf_patch_tests::tests::affine_patch_is_two_triangles_and_transform_controls_error ... ok
+test pdf_patch_tests::tests::mixed_mesh_ranges_preserve_patch_ownership_and_roll_back_together ... ok
+test eps_vm::tests::degree_trigonometry_matches_exact_binary_ghostscript_reference ... ok
+test pdf_patch_tests::tests::ordered_stream_failure_cancel_and_refusal_release_planner_credit ... ok
+test pict::command_tests::cancellation_and_visitor_failure_stop_before_next_command ... ok
+test pict::command_tests::borrowed_colors_rectangles_and_end_are_exact_and_bounded ... ok
+test pict::packed_row_tests::external_packed_rows_match_independent_rgba_oracles ... ignored, requires external PICT files and TwelveMonkeys RGBA oracle outputs
+test pdf_patch_tests::tests::ordered_stream_preserves_patch_parameters_through_transform_and_fans ... ok
+test pict::packed_row_tests::byte_and_word_runs_preserve_units_and_exact_row_size ... ok
+test pict::packed_row_tests::malformed_runs_cannot_overwrite_canaries_and_cancel_before_mutation ... ok
+test pict::public_tests::authored_unpacked_public_fixtures_match_authored_pixels ... ok
+test pict::public_tests::external_96dpi_cropped_public_pixels_match_oracle ... ignored, requires external 96dpi PICT/TwelveMonkeys corpus
+test pict::public_tests::external_mire_public_render_matches_independent_oracle_and_releases_scratch ... ignored, requires downloaded TwelveMonkeys PICT corpus
+test pict::public_tests::content_signature_routes_misleading_raw_and_unknown_suffixes ... ok
+test pict::public_tests::public_file_route_preserves_rgba_and_unspecified_color ... ok
+test pict::public_tests::public_output_pressure_is_typed_and_retry_keeps_budget_clean ... ok
+test pict::render_tests::authored_file_fixture_renders_full_rgba_and_releases_budget ... ok
+test pdf_patch_tests::tests::mesh_stitches_unequal_depths_and_reversed_edges_without_blending_colors ... ok
+test pict::render_tests::cancellation_during_allocated_fill_releases_output_and_allows_retry ... ok
+test pict::render_tests::default_highlight_reset_preserves_paint_but_highlight_mode_refuses ... ok
+test pict::render_tests::direct_bits_crop_excludes_padded_columns_and_preserves_row_pitch ... ok
+test pict::render_tests::direct_bits_unpacked_and_short_rows_preserve_rgb_and_ignore_pad_byte ... ok
+test pict::render_tests::exact_fill_budget_ownership_and_unsupported_preflight ... ok
+test pict::render_tests::extended_72dpi_matches_v2_and_other_resolution_refuses_before_allocation ... ok
+test pict::render_tests::rectangular_clip_changes_apply_to_later_paints ... ok
+test pict::tests::inverted_empty_and_full_signed_range_admission ... ok
+test pict::tests::record_and_arbitrary_file_header_preserve_signed_origin_and_size ... ok
+test pict::version_tests::version_headers_are_bounded_and_word_prefix_is_exact ... ok
+test png_color::tests::cicp_overrides_srgb_and_unknown_primaries_do_not_become_srgb ... ok
+test png_color::tests::cicp_preserves_hdr_unknown_and_narrow_range_declarations ... ok
+test png_color::tests::corrupt_duplicate_and_invalid_color_chunks_are_rejected ... ok
+test png_color::tests::gamma_chroma_profiles_obey_precedence_and_validate_chunks ... ok
+test png_color::tests::gamma_only_requires_gray_ihdr_and_respects_srgb ... ok
+test svg::tests::fill_and_straight_alpha ... ok
+test wmf::tests::polygon_counts_are_signed_bounded_and_exact ... ok
+test svg::tests::output_admission_precedes_pixmap_allocation_and_last_owner_retains_credit ... ok
+test svg::tests::oversized_viewport ... ok
+test svg::tests::unsupported_content_is_not_silently_dropped ... ok
+test wmf::tests::deletion_reuses_free_slots_and_refuses_live_objects ... ok
+test wmf::tests::viewport_translation_scale_and_reflection ... ok
+test wmf::tests::rectangle_pixels_budget_and_last_owner ... ok
+test wmf::tests::rounded_rectangle_clamps_ellipse_and_clears_corners ... ok
+test wmf::tests::truncation_checksum_unknown_record_and_index_are_refused ... ok
+test wmf::tests::saved_context_indices_and_stack_bounds ... ok
+test pdf_patch_tests::tests::adaptive_cells_share_complete_edges_without_t_junctions ... ok
+test pdf_patch_bridge_tests::tests::projected_stream_anisotropic_refinement_keeps_uv_edges_conforming ... ok
+test pdf_patch_bridge_tests::tests::projected_stream_coons_preserves_limits_cancel_admission_failure_and_retry ... ok
+test pdf::tensor_center_tests::planar_tensor_samples_pixel_centers_with_bounded_color_error ... ok
+test pdf::precise_fill_tests::compact_adaptive_parabola_preserves_geometry_within_eight_mib ... ok
+test pdf::overlap_patch_tests::folded_tensor_pattern_preserves_background_in_partial_pixels ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_folded_projection_matches_exact_union_three_pixel_rows ... ok
+test pdf::overlap_patch_tests::folded_tensor_uses_projected_union_not_multiplicity ... ok
+test pdf_patch_bridge_tests::tests::patch_bridge_colored_fold_selects_largest_u_mapping ... ok
+test pdf::precise_fill_tests::curved_coons_matches_independent_parabolic_pixel_areas ... ok
+test pdf::precise_fill_tests::curved_tensor_matches_independent_parabolic_pixel_areas ... ok
+
+test result: ok. 210 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 1.19s
+

@@ -254,6 +254,7 @@ mod tests {
         let origin = Point::new(9., 13.);
         let mut owner = PixelSourceOwner {
             patch_index: 7,
+            sample_index: 0,
             u: [77.; 3],
             v: [88.; 3],
             components: [[0.; 3]; 4],
@@ -286,6 +287,7 @@ mod tests {
         let identity = PatchParameterIdentity::tensor(&source, 0, Affine::scale(0.1)).unwrap();
         let mut owner = PixelSourceOwner {
             patch_index: 0,
+            sample_index: 0,
             u: [77.; 3],
             v: [88.; 3],
             components: [[0.; 3]; 4],
@@ -327,6 +329,7 @@ mod tests {
             let origin = Point::new(1000., 2000.);
             let mut owner = PixelSourceOwner {
                 patch_index: 0,
+                sample_index: 0,
                 u: [77.; 3],
                 v: [88.; 3],
                 components: [[0.; 3]; 4],

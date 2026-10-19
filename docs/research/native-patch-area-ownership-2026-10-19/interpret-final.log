@@ -1,0 +1,395 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+warning: constant `PNG_SIGNATURE` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling rrrah-ordered-sampler-validation v0.7.0 (/tmp/rrrah-ordered-sampler-harness-20261019)
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2881:17
+     |
+2881 |                 kurbo::Affine::IDENTITY,
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+     |
+2881 -                 kurbo::Affine::IDENTITY,
+2881 +                 Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2882:17
+     |
+2882 |                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2882 -                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2882 +                 Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2883:17
+     |
+2883 |                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2883 -                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2883 +                 Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2984:26
+     |
+2984 |         source.inverse = kurbo::Affine::IDENTITY;
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2984 -         source.inverse = kurbo::Affine::IDENTITY;
+2984 +         source.inverse = Affine::IDENTITY;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3016:21
+     |
+3016 |         let polls = std::cell::Cell::new(0);
+     |                     ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3016 -         let polls = std::cell::Cell::new(0);
+3016 +         let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3029:25
+     |
+3029 |             let count = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3029 -             let count = std::cell::Cell::new(0);
+3029 +             let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3059:13
+     |
+3059 |             kurbo::Affine::IDENTITY,
+     |             ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3059 -             kurbo::Affine::IDENTITY,
+3059 +             Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3060:13
+     |
+3060 |             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3060 -             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+3060 +             Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3061:13
+     |
+3061 |             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3061 -             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+3061 +             Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3089:25
+     |
+3089 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3089 -             let polls = std::cell::Cell::new(0);
+3089 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3103:29
+     |
+3103 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3103 -                 let count = std::cell::Cell::new(0);
+3103 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3200:25
+     |
+3200 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3200 -             let polls = std::cell::Cell::new(0);
+3200 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3214:29
+     |
+3214 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3214 -                 let count = std::cell::Cell::new(0);
+3214 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3881:26
+     |
+3881 |                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3881 -                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+3881 +                 Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3952:22
+     |
+3952 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3952 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3952 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4089:22
+     |
+4089 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4089 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4089 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4138:22
+     |
+4138 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4138 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4138 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4228:22
+     |
+4228 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4228 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4228 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: `rrrah-ordered-sampler-validation` (lib test) generated 18 warnings (run `cargo fix --lib -p rrrah-ordered-sampler-validation --tests` to apply 18 suggestions)
+    Finished `test` profile [optimized] target(s) in 2m 18s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/hayro_interpret-681fffb1e70a588d)
+
+running 140 tests
+test color::blending_coordinate_tests::device_gray_cmyk_boundaries_follow_independent_references ... ok
+test color::blending_coordinate_tests::calibrated_float_policy_retains_fractions_and_refuses_invalid_parameters ... ok
+test color::blending_coordinate_tests::explicit_bg_ucr_cmyk_conversion_is_bounded_and_cancellable ... ok
+test encode::native_source::tests::axial_boundary_lines_preserve_parameter_under_shear_and_reflection ... ok
+test encode::native_source::point_evidence_tests::geometry_projection_matches_native_sampling_without_component_reads ... ok
+test encode::native_source::tests::affine_mesh_capability_refuses_functions_transforms_and_invalid_metadata ... ok
+test encode::native_source::tests::batched_cmyk_interpolation_matches_scalar_bits_including_signed_zero ... ok
+test encode::native_source::point_evidence_tests::point_evidence_preparation_and_finish_refuse_all_short_budgets_and_cancel_checkpoints ... ok
+test encode::native_source::point_evidence_tests::shared_domain_preserves_evidence_bits_and_refuses_short_work_or_cancel ... ok
+test encode::native_source::point_evidence_tests::observed_point_certificate_covers_projected_exterior_samples_without_hull_assumptions ... ok
+test encode::native_source::tests::convex_unit_f32_cast_bound_covers_binades_ties_and_small_overshoot ... ok
+test encode::native_source::tests::affine_weight_domain_keeps_skinny_triangle_correlation_and_refuses_all_short_budgets ... ok
+test encode::native_source::tests::native_selected_mesh_interpolation_benchmark ... ignored, explicit native mesh interpolation timing
+test encode::native_source::tests::mesh_component_bounds_cover_rounded_samples_and_refuse_unsafe_sources ... ok
+test encode::native_source::point_evidence_tests::opaque_owner_certificate_requires_exact_opacity_and_preserves_source_binding ... ok
+test encode::native_source::tests::native_mesh_rectangle_query_affine_work_callback_and_every_cancel ... ok
+test encode::native_source::tests::native_source_samples_share_actual_work_and_preserve_legacy_values ... ok
+test encode::native_source::tests::affine_component_error_bounds_cover_projection_rounding_and_refuse_short_work ... ok
+test encode::native_source::tests::original_cmyk_axial_transform_and_extension_have_exact_samples ... ok
+test encode::native_source::tests::affine_gradient_bounds_enclose_known_device_derivatives_and_refuse_short_work ... ok
+test color::blending_coordinate_tests::device_calibration_and_shared_profile_coordinates_are_distinct ... ok
+test encode::native_source::tests::radial_concentric_translated_and_linear_cone_keep_original_gray ... ok
+test encode::native_source::tests::retained_source_admission_and_cancellation_release_all_credit ... ok
+test encode::native_source::tests::rectangle_query_excludes_zero_area_but_keeps_thin_source_triangles ... ok
+test encode::native_source::tests::selected_mesh_owner_identity_does_not_certify_affine_integration_across_projection ... ok
+test encode::native_source::tests::selected_triangle_field_preserves_affine_components_and_constant_edge_values ... ok
+test encode::native_source::tests::triangle_capture_refuses_before_allocation_and_releases_cancelled_credit ... ok
+test encode::native_source::tests::original_triangle_mesh_transform_overlap_and_function_preserve_cmyk ... ok
+test encode::native_source::tests::triangle_rectangle_query_rejects_bbox_false_positives_and_keeps_edges ... ok
+test encode::ordered_grid::tests::cancellation_after_storage_admission_releases_every_credit ... ok
+test encode::ordered_grid::tests::admission_refusal_and_cancellation_produce_no_partial_result ... ok
+test encode::native_source::tests::mesh_weight_intervals_enclose_all_rectangle_samples_and_bound_projection ... ok
+test encode::ordered_grid::tests::later_geometry_replaces_overlap_without_averaging_hidden_color ... ok
+test encode::ordered_grid::tests::partial_overlap_preserves_visible_portion_of_earlier_patch ... ok
+test encode::ordered_grid::tests::folded_patch_keeps_the_larger_v_branch ... ok
+test encode::native_source::tests::native_tensor_capture_preserves_transformed_cmyk_and_releases_intermediate_credit ... ok
+test color::blending_coordinate_tests::explicit_icc_blending_transform_preserves_float_samples ... ok
+test encode::sample_bounds_tests::patch_stream_cancellation_is_explicit_and_stops_generation ... ok
+test function::type0::scalar_tests::sampled_scalar_linear_references_cover_all_bit_depths ... ok
+test function::type0::scalar_tests::sampled_scalar_refuses_cancellation_missing_samples_and_work_exhaustion ... ok
+test function::type2::tests::bounded_scalar_validates_domains_ranges_and_nonfinite_arithmetic ... ok
+test function::type2::tests::clamp_domain ... ok
+test function::type2::tests::clamp_range ... ok
+test function::type2::tests::native_component_failure_and_every_cancellation_boundary_preserve_output ... ok
+test encode::sample_bounds_tests::table_growth_and_multicomponent_spills_release_credit ... ok
+test function::type2::tests::native_rgb_cmyk_exponential_components_have_analytical_references ... ok
+test function::type2::tests::simple ... ok
+test encode::ordered_samples::tests::interned_parameters_and_segment_growth_preserve_bits_and_release_credit ... ok
+test function::type2::tests::with_exponent ... ok
+test function::type3::tests::bounded_scalar_uses_exact_endpoints_and_right_interval_at_boundary ... ok
+test function::type3::tests::native_cmyk_stitch_has_exact_endpoints_and_right_interval_reference ... ok
+test color::blending_coordinate_tests::vectorapple_green_sample_matches_independent_profile_oracle ... ok
+test color::native_color_access_tests::preserves_native_components_and_opacity_across_display_conversion ... ok
+test color::blending_coordinate_tests::device_rgb_policy_avoids_display_quantization ... ok
+test function::type3::tests::native_stitch_refuses_malformed_ranges_bounds_and_widths_without_publication ... ok
+test function::type3::tests::simple ... ok
+test function::type4::tests::bounded_calculator_scalar_has_numeric_and_conditional_references ... ok
+test function::type3::tests::bounded_scalar_rejects_deep_nesting_and_invalid_bounds ... ok
+test encode::sample_bounds_tests::fractional_texture_bounds_preserve_every_consumed_sample ... ok
+test function::type4::tests::bounded_calculator_vector_refusal_and_cancel_preserve_output ... ok
+test function::type4::tests::domain ... ok
+test function::type4::tests::lex_1 ... ok
+test function::type4::tests::lex_3 ... ok
+test function::type4::tests::bounded_calculator_vector_matches_real_cyan_magenta_alternate ... ok
+test function::type4::tests::op_abs ... ok
+test function::type4::tests::op_and ... ok
+test function::type4::tests::op_atan ... ok
+test function::type4::tests::bounded_calculator_scalar_refuses_overflow_invalid_arithmetic_work_and_cancel ... ok
+test function::type4::tests::op_bitshift ... ok
+test function::type4::tests::op_ceiling ... ok
+test function::type4::tests::op_copy ... ok
+test function::type4::tests::op_cos ... ok
+test function::type3::tests::native_stitch_cancellation_and_shared_work_depth_bounds_preserve_output ... ok
+test function::type4::tests::op_cvi ... ok
+test function::type4::tests::op_cvr ... ok
+test function::type4::tests::op_div ... ok
+test function::type4::tests::op_dup ... ok
+test function::type4::tests::op_eq ... ok
+test function::type4::tests::op_exch ... ok
+test function::type4::tests::op_exp ... ok
+test encode::native_source::tests::native_tensor_fold_selects_source_uv_not_adaptive_triangle_order ... ok
+test function::type4::tests::op_false ... ok
+test function::type4::tests::op_floor ... ok
+test function::type4::tests::op_gt ... ok
+test function::type4::tests::op_ge ... ok
+test function::type4::tests::op_idiv ... ok
+test function::type4::tests::op_if ... ok
+test function::type4::tests::op_ifelse ... ok
+test function::type4::tests::op_index ... ok
+test function::type4::tests::op_le ... ok
+test function::type4::tests::op_ln ... ok
+test function::type4::tests::op_lt ... ok
+test function::type4::tests::op_mod ... ok
+test function::type4::tests::op_log ... ok
+test function::type4::tests::op_mul ... ok
+test function::type4::tests::op_ne ... ok
+test function::type4::tests::op_neg ... ok
+test function::type4::tests::op_not ... ok
+test function::type4::tests::op_or ... ok
+test function::type4::tests::op_pop ... ok
+test function::type4::tests::op_round ... ok
+test function::type4::tests::op_sin ... ok
+test function::type4::tests::op_roll ... ok
+test function::type4::tests::op_sqrt ... ok
+test function::type4::tests::op_sub ... ok
+test function::type4::tests::op_truncate ... ok
+test function::type4::tests::op_xor ... ok
+test native_image_samples::tests::native_component_samples_precision_padding_and_decode_ranges ... ok
+test native_image_samples::tests::native_component_samples_refusals_and_every_cancellation_release_credit ... ok
+test encode::sample_bounds_tests::mesh_sampling_cancels_at_every_checkpoint_without_partial_result ... ok
+test shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral ... ok
+test shading::adaptive::qualification_tests::fixed_planning_stack_reaches_maximum_depth_without_capacity_failure ... ok
+test shading::adaptive::qualification_tests::refined_curved_shared_edge_is_bit_exact_when_reversed ... ok
+test shading::adaptive::qualification_tests::mesh_cancellation_and_triangle_limit_preserve_existing_output_and_ranges ... ok
+test shading::external_budget_tests::native_shading_samples_share_function_work_and_never_publish_partial_output ... ok
+test shading::mesh_32bit_coordinates_preserve_adjacent_encoded_positions ... ok
+test shading::mesh_coordinate_decode_retains_precise_ranges_and_legacy_component_rounding ... ok
+test shading::adaptive::qualification_tests::unequal_patch_subdivision_welds_shared_boundary_and_preserves_source_color ... ok
+test shading::adaptive::qualification_tests::streamed_mesh_matches_owned_order_and_releases_on_consumer_failure_and_cancel ... ok
+test x_object::image_color_cancellation_tests::matte_conversion_checks_every_block_and_preserves_values ... ok
+test shading::adaptive::qualification_tests::reversed_identical_edges_weld_but_near_distinct_edges_do_not ... ok
+test shading::adaptive::qualification_tests::bilinear_source_component_is_within_bound_at_independent_dense_samples ... ok
+test x_object::image_color_cancellation_tests::one_shot_cancel_stays_latched_across_optional_mask_fallback ... ok
+test x_object::image_color_cancellation_tests::transfer_table_is_exact_and_evaluates_each_present_value_once ... ok
+test x_object::odd_16bit_component_payload_refuses_without_panic ... ok
+test x_object::image_color_cancellation_tests::nonlinear_pdf_transfer_table_matches_direct_function_for_every_byte ... ok
+test x_object::transparency_group_properties_tests::preserves_independent_isolation_and_knockout_flags ... ok
+test x_object::image_color_cancellation_tests::mask_bytes_preserve_values_and_cancel_at_every_checkpoint ... ok
+test x_object::image_color_cancellation_tests::block_conversion_preserves_pixels_and_refuses_partial_output ... ok
+test encode::native_source::tests::native_patch_priority_survives_reflection_and_later_patch_override ... ok
+test shading::adaptive::qualification_tests::compact_mesh_is_bit_exact_and_releases_every_refused_allocation ... ok
+test x_object::image_color_cancellation_tests::u8_block_conversion_is_exact_and_cancellation_returns_no_partial_buffer ... ok
+test color::exact_cmyk_box_tests::exhaustive_float_input_bounds_cover_all_tuples_and_refuse_partial_work ... ok
+test encode::ordered_samples::tests::ordered_samples_admission_and_cancellation_are_atomic_and_retryable ... ok
+test shading::adaptive::qualification_tests::admitted_mesh_cancels_every_checkpoint_without_retaining_capacity ... ok
+test encode::ordered_grid::tests::spatial_credit_is_bounded_independently_of_overlap_count_and_released ... ok
+test encode::native_source::tests::native_mesh_index_matches_source_order_with_bounded_sparse_query_work ... ok
+test shading::adaptive::qualification_tests::admitted_mesh_refusal_retry_capacity_and_original_components_match_legacy ... ok
+test encode::sample_bounds_tests::patch_internal_cancellation_rolls_back_every_checkpoint ... ok
+test encode::native_source::tests::native_patch_priority_owner_and_admission_cancel_retry ... ok
+
+test result: ok. 139 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.98s
+

@@ -1,0 +1,255 @@
+warning: constant `PNG_SIGNATURE` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling rrrah-ordered-sampler-validation v0.7.0 (/tmp/rrrah-ordered-sampler-harness-20261019)
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2421:17
+     |
+2421 |                 kurbo::Affine::IDENTITY,
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+     |
+2421 -                 kurbo::Affine::IDENTITY,
+2421 +                 Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2422:17
+     |
+2422 |                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2422 -                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2422 +                 Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2423:17
+     |
+2423 |                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2423 -                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2423 +                 Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2524:26
+     |
+2524 |         source.inverse = kurbo::Affine::IDENTITY;
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2524 -         source.inverse = kurbo::Affine::IDENTITY;
+2524 +         source.inverse = Affine::IDENTITY;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2556:21
+     |
+2556 |         let polls = std::cell::Cell::new(0);
+     |                     ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2556 -         let polls = std::cell::Cell::new(0);
+2556 +         let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2569:25
+     |
+2569 |             let count = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2569 -             let count = std::cell::Cell::new(0);
+2569 +             let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2599:13
+     |
+2599 |             kurbo::Affine::IDENTITY,
+     |             ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2599 -             kurbo::Affine::IDENTITY,
+2599 +             Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2600:13
+     |
+2600 |             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2600 -             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2600 +             Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2601:13
+     |
+2601 |             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2601 -             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2601 +             Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2629:25
+     |
+2629 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2629 -             let polls = std::cell::Cell::new(0);
+2629 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2643:29
+     |
+2643 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2643 -                 let count = std::cell::Cell::new(0);
+2643 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2740:25
+     |
+2740 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2740 -             let polls = std::cell::Cell::new(0);
+2740 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2754:29
+     |
+2754 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2754 -                 let count = std::cell::Cell::new(0);
+2754 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3421:26
+     |
+3421 |                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3421 -                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+3421 +                 Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3492:22
+     |
+3492 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3492 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3492 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3629:22
+     |
+3629 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3629 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3629 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3678:22
+     |
+3678 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3678 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3678 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3768:22
+     |
+3768 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3768 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3768 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: `rrrah-ordered-sampler-validation` (lib test) generated 18 warnings (run `cargo fix --lib -p rrrah-ordered-sampler-validation --tests` to apply 18 suggestions)
+    Finished `test` profile [optimized] target(s) in 7.84s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/hayro_interpret-681fffb1e70a588d)
+
+running 2 tests
+test encode::ordered_samples::tests::interned_parameters_and_segment_growth_preserve_bits_and_release_credit ... ok
+test encode::ordered_samples::tests::ordered_samples_admission_and_cancellation_are_atomic_and_retryable ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 135 filtered out; finished in 0.02s
+

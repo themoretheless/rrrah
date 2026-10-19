@@ -6,6 +6,7 @@ pub use projected_components::projected_component_bounds;
 mod patch_parameters;
 pub use patch_parameters::PatchParameterIdentity;
 mod ordered_pixel;
+mod ordered_samples;
 pub use native_source::{
     NativeAffineDomain, NativeAffinePointEvidence, NativeOpaqueAffinePointEvidence, NativeShadingError,
     NativeShadingSample, NativeShadingSource, NativeShadingTriangle,
@@ -132,10 +133,7 @@ impl ShadingPattern {
                     .max()
                     .unwrap_or(0);
                 if (1..=4).contains(&components) {
-                    use crate::shading::{
-                        AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef,
-                        tessellate_patch_mesh_stream_admitted,
-                    };
+                    use crate::shading::AdaptivePatchRef;
                     let count = visible.iter().filter(|keep| **keep).count();
                     let _references = admit(count.checked_mul(size_of::<AdaptivePatchRef<'_>>())?)?;
                     let mut references = Vec::new();
@@ -150,26 +148,10 @@ impl ShadingPattern {
                             .filter(|(_, keep)| **keep)
                             .map(|(patch, _)| AdaptivePatchRef::Coons(patch)),
                     );
-                    let samples = sample_generated_triangles_with_admission(
-                        |consume| {
-                            tessellate_patch_mesh_stream_admitted(
-                                &references,
-                                self.matrix,
-                                AdaptivePatchLimits {
-                                    pixel_error: 1.0 / 64.0,
-                                    component_error: 1.0 / 1024.0,
-                                    max_depth: 12,
-                                    max_triangles: 1_048_576,
-                                },
-                                cancelled,
-                                admit,
-                                &mut |triangle| consume(triangle).ok_or(AdaptivePatchError::Admission),
-                            )
-                            .ok()?;
-                            Some(())
-                        },
+                    let samples = ordered_samples::sample_patches(
+                        &references,
+                        self.matrix,
                         components,
-                        Affine::IDENTITY,
                         bounds,
                         cancelled,
                         admit,
@@ -250,10 +232,7 @@ impl ShadingPattern {
                     .max()
                     .unwrap_or(0);
                 if (1..=4).contains(&components) {
-                    use crate::shading::{
-                        AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef,
-                        tessellate_patch_mesh_stream_admitted,
-                    };
+                    use crate::shading::AdaptivePatchRef;
                     let count = visible.iter().filter(|keep| **keep).count();
                     let _references = admit(count.checked_mul(size_of::<AdaptivePatchRef<'_>>())?)?;
                     let mut references = Vec::new();
@@ -268,26 +247,10 @@ impl ShadingPattern {
                             .filter(|(_, keep)| **keep)
                             .map(|(patch, _)| AdaptivePatchRef::Tensor(patch)),
                     );
-                    let samples = sample_generated_triangles_with_admission(
-                        |consume| {
-                            tessellate_patch_mesh_stream_admitted(
-                                &references,
-                                self.matrix,
-                                AdaptivePatchLimits {
-                                    pixel_error: 1.0 / 64.0,
-                                    component_error: 1.0 / 1024.0,
-                                    max_depth: 12,
-                                    max_triangles: 1_048_576,
-                                },
-                                cancelled,
-                                admit,
-                                &mut |triangle| consume(triangle).ok_or(AdaptivePatchError::Admission),
-                            )
-                            .ok()?;
-                            Some(())
-                        },
+                    let samples = ordered_samples::sample_patches(
+                        &references,
+                        self.matrix,
                         components,
-                        Affine::IDENTITY,
                         bounds,
                         cancelled,
                         admit,

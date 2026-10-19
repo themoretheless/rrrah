@@ -1123,7 +1123,6 @@ mod overlap_patch_tests {
         );
     }
     #[test]
-    #[ignore = "known folded Tensor coverage double-counting; exact mathematical control"]
     fn folded_tensor_uses_projected_union_not_multiplicity() {
         // x(u)=6u(1-u), y(v)=3v projects onto [0,1.5]x[0,3].
         let expected = [0, 0, 0, 255, 0, 0, 0, 128, 0, 0, 0, 0].repeat(3);
@@ -1132,15 +1131,33 @@ mod overlap_patch_tests {
             "tensor-folded-solid.pdf",
             &expected,
         );
+        assert_exact_overlap_control(
+            include_bytes!("../../../tests/fixtures/pdf/coons-folded-solid.pdf"),
+            "coons-folded-solid.pdf",
+            &expected,
+        );
     }
     #[test]
-    #[ignore = "known partial Tensor overlap mixes earlier color; exact source-order control"]
     fn partial_tensor_overlap_uses_later_patch_color() {
         // Red [0,1.5] followed by blue [.5,2], both full height.
         let expected = [128, 0, 128, 255, 0, 0, 255, 255, 0, 0, 0, 0].repeat(3);
         assert_exact_overlap_control(
             include_bytes!("../../../tests/fixtures/pdf/tensor-partial-overlap.pdf"),
             "tensor-partial-overlap.pdf",
+            &expected,
+        );
+        assert_exact_overlap_control(
+            include_bytes!("../../../tests/fixtures/pdf/coons-partial-overlap.pdf"),
+            "coons-partial-overlap.pdf",
+            &expected,
+        );
+    }
+    #[test]
+    fn folded_tensor_pattern_preserves_background_in_partial_pixels() {
+        let expected = [0, 0, 0, 255, 0, 128, 0, 255, 0, 255, 0, 255].repeat(3);
+        assert_exact_overlap_control(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-folded-background.pdf"),
+            "tensor-folded-background.pdf",
             &expected,
         );
     }

@@ -194,6 +194,11 @@ fn compose_cells<T:Into<EvaluatedCell>>(
     compose_cells_budget(regions,backdrop,x,y,&mut {polygon_work},cancelled,admit,affine,source_key,transitions,owner_transitions,owner_region_masks,owner_observation,error_route,candidate_out,evaluate)
 }
 
+fn compensated_add(sum:&mut f64,correction:&mut f64,value:f64) {
+    let corrected=value-*correction;let next=*sum+corrected;
+    *correction=(next-*sum)-corrected;*sum=next;
+}
+
 fn compose_cells_budget<T:Into<EvaluatedCell>>(
     regions:&[(&BezPath,Fill)],backdrop:Pixel,x:i32,y:i32,polygon_allowance:&mut usize,
     cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
@@ -269,6 +274,10 @@ fn compose_cells_budget<T:Into<EvaluatedCell>>(
     let mut moment_fragments=0usize;let mut fallback_fragments=0usize;
     let mut fallback_alpha=0.;let mut fallback_integral=[0.;4];
     let mut alpha=0.;let mut integral=[0.;4];
+    let mut alpha_correction=0.;let mut integral_correction=[0.;4];
+    // Diagnostic/certified envelopes retain their original arithmetic stream.
+    // Ordinary composition uses compensated sums at the same source samples.
+    let compensate=!(integral_rounding || owner_observation.is_some() || observe_moments || candidate_out.is_some());
     let mut deferred_fragments=0usize;let mut evaluated_fragments=0usize;
     let mut select_fragment=|winding:&[i32],changed:Option<usize>,subset:Option<&[usize]>| {
         if cancelled() {return None;}
@@ -410,8 +419,16 @@ fn compose_cells_budget<T:Into<EvaluatedCell>>(
         if let Some(envelope)=integral_envelope {
             integral_envelope=envelope.added(fragment.area,pixel.alpha(),components,&mut moment_work,cancelled);
         }
-        let weight=fragment.area*pixel.alpha();alpha+=weight;
-        for (sum,value) in integral.iter_mut().zip(components) {*sum+=weight*value;}
+        let weight=fragment.area*pixel.alpha();
+        if compensate {
+            compensated_add(&mut alpha,&mut alpha_correction,weight);
+            for ((sum,correction),value) in integral.iter_mut().zip(&mut integral_correction).zip(components) {
+                compensated_add(sum,correction,weight*value);
+            }
+        } else {
+            alpha+=weight;
+            for (sum,value) in integral.iter_mut().zip(components) {*sum+=weight*value;}
+        }
         Some(())
     };
     // Explicit diagnostic only: measure spatially bounded traversal before

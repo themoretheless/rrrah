@@ -281,11 +281,12 @@ impl MeshTriangleInput for crate::shading::CompactAdaptiveTriangle {
         &self.components()[vertex][..self.component_count()]
     }
 }
-/// Original source triangle geometry in device coordinates. The stable index
-/// is its source order, not the spatial-index traversal order.
+/// Original source triangle geometry in device coordinates. Stable geometry
+/// indices are independent of spatial traversal; patch priority uses original UV.
 #[derive(Clone, Copy, Debug)]
 pub struct NativeShadingTriangle {
-    /// Stable original triangle index; larger indices cover earlier triangles.
+    /// Stable geometry index. For original triangle meshes larger indices win;
+    /// patch meshes require `mesh_triangle_patch_owner` source UV priority.
     pub index: usize,
     /// Original triangle vertices transformed once to device coordinates.
     pub points: [Point; 3],
@@ -358,10 +359,28 @@ struct MeshNode {
     children: Option<[u32; 2]>,
     latest: u32,
 }
+#[derive(Clone, Copy)]
+struct NativePatchPriority {
+    patch_index: usize,
+    u: [f64; 3],
+    v: [f64; 3],
+}
+impl NativePatchPriority {
+    fn values(self, point: Point) -> Result<[f64; 2], NativeShadingError> {
+        let values = [self.v, self.u].map(|f| f[0] + f[1] * point.x + f[2] * point.y);
+        if values.iter().any(|v| !v.is_finite()) {
+            return Err(NativeShadingError::Invalid);
+        }
+        Ok(values)
+    }
+}
 struct NativeMesh {
     triangles: Vec<NativeTriangle>,
     order: Vec<usize>,
     nodes: Vec<MeshNode>,
+    priorities: Option<Vec<NativePatchPriority>>,
+    // Priority storage drops before its independently admitted capacity.
+    _priority_credit: Option<Box<dyn std::any::Any + Send + Sync>>,
 }
 #[inline]
 fn interpolate_mesh_components(colors: &[[f32; 4]; 3], weights: [f64; 3], count: usize) -> [f32; 4] {
@@ -635,9 +654,10 @@ impl NativeMesh {
                 || point.x > r.x1
                 || point.y < r.y0
                 || point.y > r.y1
-                || selected
-                    .as_ref()
-                    .is_some_and(|(index, _)| node.latest as usize <= *index)
+                || (self.priorities.is_none()
+                    && selected
+                        .as_ref()
+                        .is_some_and(|(index, _)| node.latest as usize <= *index))
             {
                 continue;
             }
@@ -660,11 +680,30 @@ impl NativeMesh {
                     if cancelled() {
                         return Err(Cancelled);
                     }
-                    if selected.as_ref().is_some_and(|(chosen, _)| index <= *chosen) {
+                    if self.priorities.is_none()
+                        && selected.as_ref().is_some_and(|(chosen, _)| index <= *chosen)
+                    {
                         continue;
                     }
                     if let Some(weights) = self.triangles[index].weights(point)? {
-                        selected = Some((index, weights));
+                        let wins = if let (Some(priorities), Some((old, _))) = (&self.priorities, selected) {
+                            *remaining = remaining.checked_sub(4).ok_or(WorkLimit)?;
+                            let next = priorities[index];
+                            let previous = priorities[old];
+                            if next.patch_index != previous.patch_index {
+                                next.patch_index > previous.patch_index
+                            } else {
+                                let a = next.values(point)?;
+                                let b = previous.values(point)?;
+                                a[0] > b[0]
+                                    || (a[0] == b[0] && (a[1] > b[1] || (a[1] == b[1] && index > old)))
+                            }
+                        } else {
+                            true
+                        };
+                        if wins {
+                            selected = Some((index, weights));
+                        }
                     }
                 }
             }
@@ -766,6 +805,7 @@ impl NativeShadingSource {
                 cancelled,
                 admit,
             )?;
+            source.attach_tensor_priority(patches, pattern.matrix, cancelled, admit)?;
             source.patch_tessellation = Some(mesh.stats());
             return Ok(source);
         }
@@ -854,6 +894,134 @@ impl NativeShadingSource {
             _credit: credit,
         })
     }
+    // Preserve original patch UV priority independently of adaptive emission
+    // order. Replay must use the same old-stream geometry as compact capture;
+    // every index/point/component is checked before publishing the metadata.
+    fn attach_tensor_priority(
+        &mut self,
+        patches: &[crate::shading::TensorProductPatch],
+        transform: Affine,
+        cancelled: &dyn Fn() -> bool,
+        admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+    ) -> Result<(), NativeShadingError> {
+        use crate::shading::{
+            AdaptivePatchLimits, AdaptivePatchRef, tessellate_patch_mesh_stream_ordered_admitted,
+        };
+        use NativeShadingError::*;
+        let _references = admit(
+            patches
+                .len()
+                .checked_mul(size_of::<AdaptivePatchRef<'_>>())
+                .ok_or(Invalid)?,
+        )
+        .ok_or(Admission)?;
+        let mut references = Vec::new();
+        references
+            .try_reserve_exact(patches.len())
+            .map_err(|_| Admission)?;
+        if references.capacity() > patches.len() {
+            return Err(Admission);
+        }
+        references.extend(patches.iter().map(AdaptivePatchRef::Tensor));
+        let _identities = admit(
+            patches
+                .len()
+                .checked_mul(size_of::<Option<super::PatchParameterIdentity>>())
+                .ok_or(Invalid)?,
+        )
+        .ok_or(Admission)?;
+        let mut identities = Vec::new();
+        identities
+            .try_reserve_exact(patches.len())
+            .map_err(|_| Admission)?;
+        if identities.capacity() > patches.len() {
+            return Err(Admission);
+        }
+        for (i, patch) in patches.iter().enumerate() {
+            if cancelled() {
+                return Err(Cancelled);
+            }
+            identities.push(super::PatchParameterIdentity::tensor(patch, i, transform));
+        }
+        let mesh = self.mesh.as_mut().ok_or(Unsupported)?;
+        let credit = admit(
+            mesh.triangles
+                .len()
+                .checked_mul(size_of::<NativePatchPriority>())
+                .ok_or(Invalid)?,
+        )
+        .ok_or(Admission)?;
+        let mut priorities = Vec::new();
+        priorities
+            .try_reserve_exact(mesh.triangles.len())
+            .map_err(|_| Admission)?;
+        if priorities.capacity() > mesh.triangles.len() {
+            return Err(Admission);
+        }
+        let mut failure = None;
+        tessellate_patch_mesh_stream_ordered_admitted(
+            &references,
+            transform,
+            AdaptivePatchLimits {
+                pixel_error: 1. / 64.,
+                component_error: 1. / 1024.,
+                max_depth: 12,
+                max_triangles: 1_048_576,
+            },
+            cancelled,
+            admit,
+            &mut |triangle, source| {
+                let run = (|| -> Result<(), NativeShadingError> {
+                    let retained = mesh.triangles.get(priorities.len()).ok_or(Invalid)?;
+                    for (i, v) in [&triangle.p0, &triangle.p1, &triangle.p2].into_iter().enumerate() {
+                        if retained.points[i].x.to_bits() != v.point.x.to_bits()
+                            || retained.points[i].y.to_bits() != v.point.y.to_bits()
+                            || v.colors
+                                .iter()
+                                .enumerate()
+                                .any(|(k, c)| c.to_bits() != retained.colors[i][k].to_bits())
+                        {
+                            return Err(Invalid);
+                        }
+                    }
+                    let mut owner = super::PixelSourceOwner::from_triangle(&triangle, source, Point::ZERO)
+                        .map_err(|_| Unsupported)?;
+                    if let Some(identity) = identities[source.patch_index] {
+                        identity.apply(&mut owner, Point::ZERO).map_err(|_| Unsupported)?;
+                    }
+                    priorities.push(NativePatchPriority {
+                        patch_index: source.patch_index,
+                        u: owner.u,
+                        v: owner.v,
+                    });
+                    Ok(())
+                })();
+                if let Err(error) = run {
+                    failure = Some(error);
+                    return Err(crate::shading::AdaptivePatchError::Invalid);
+                }
+                Ok(())
+            },
+        )
+        .map_err(|error| {
+            failure.unwrap_or(match error {
+                crate::shading::AdaptivePatchError::Cancelled => Cancelled,
+                crate::shading::AdaptivePatchError::Admission => Admission,
+                crate::shading::AdaptivePatchError::Invalid => Invalid,
+                _ => Unsupported,
+            })
+        })?;
+        if cancelled() {
+            return Err(Cancelled);
+        }
+        if priorities.len() != mesh.triangles.len() {
+            return Err(Invalid);
+        }
+        mesh.priorities = Some(priorities);
+        mesh._priority_credit = Some(credit);
+        Ok(())
+    }
+
     fn capture_mesh<T: MeshTriangleInput>(
         pattern: &ShadingPattern,
         triangles: &[T],
@@ -961,6 +1129,8 @@ impl NativeShadingSource {
             triangles: mesh,
             order,
             nodes,
+            priorities: None,
+            _priority_credit: None,
         };
         let background = if pattern.paint_background {
             match &pattern.shading.background {
@@ -1024,6 +1194,93 @@ impl NativeShadingSource {
     /// may still be absent; callers must check sampled coverage and group masks.
     pub fn mesh_has_opaque_native_field(&self, destination: &ColorSpace) -> bool {
         self.opacity == 1. && self.mesh_has_affine_native_field(destination)
+    }
+
+    /// Whether point selection retains original patch-index/v/u ordering.
+    /// Area consumers must use `mesh_triangle_patch_owner`, not triangle indices.
+    pub fn mesh_has_patch_priority(&self) -> bool {
+        self.mesh.as_ref().is_some_and(|mesh| mesh.priorities.is_some())
+    }
+
+    /// Number of retained native triangles; absent for analytic sources.
+    pub fn mesh_triangle_count(&self) -> Option<usize> {
+        self.mesh.as_ref().map(|mesh| mesh.triangles.len())
+    }
+
+    /// Declared mesh background in original color-space coordinates, before
+    /// pattern opacity. It covers the paint domain outside projected geometry;
+    /// source functions are not applied to an already declared background.
+    pub fn mesh_background_sample(
+        &self,
+        cancelled: &dyn Fn() -> bool,
+        work: &mut usize,
+    ) -> Result<Option<NativeShadingSample>, NativeShadingError> {
+        if cancelled() {
+            return Err(NativeShadingError::Cancelled);
+        }
+        *work = work.checked_sub(1).ok_or(NativeShadingError::WorkLimit)?;
+        if self.mesh.is_none() {
+            return Err(NativeShadingError::Unsupported);
+        }
+        Ok(self.background.map(|components| NativeShadingSample {
+            components,
+            count: self.count,
+            opacity: self.opacity,
+        }))
+    }
+
+    /// Unconverted affine source fields and original patch UV priority for a
+    /// selected triangle, expressed relative to a device pixel origin. None
+    /// denotes an original triangle mesh. This does not clip geometry or apply
+    /// source functions/color conversions, and is not an interval certificate.
+    pub fn mesh_triangle_patch_owner(
+        &self,
+        index: usize,
+        origin: Point,
+        cancelled: &dyn Fn() -> bool,
+        work: &mut usize,
+    ) -> Result<Option<super::PixelSourceOwner>, NativeShadingError> {
+        use NativeShadingError::*;
+        if cancelled() {
+            return Err(Cancelled);
+        }
+        *work = work.checked_sub(1).ok_or(WorkLimit)?;
+        if !origin.x.is_finite() || !origin.y.is_finite() {
+            return Err(Invalid);
+        }
+        let mesh = self.mesh.as_ref().ok_or(Unsupported)?;
+        let triangle = mesh.triangles.get(index).ok_or(Invalid)?;
+        let Some(priorities) = &mesh.priorities else {
+            return Ok(None);
+        };
+        let priority = priorities[index];
+        let count = if self.function.is_some() { 1 } else { self.count };
+        let triangle = crate::shading::Triangle::from_points_colors(
+            triangle.points,
+            triangle
+                .colors
+                .map(|c| crate::color::ColorComponents::from_slice(&c[..count])),
+        );
+        let mut owner = super::PixelSourceOwner::from_triangle(
+            &triangle,
+            crate::shading::PatchTriangleSource {
+                patch_index: priority.patch_index,
+                parameters: [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)],
+            },
+            origin,
+        )
+        .map_err(|_| Unsupported)?;
+        let shift = |f: [f64; 3]| [f[0] + f[1] * origin.x + f[2] * origin.y, f[1], f[2]];
+        owner.sample_index = index;
+        owner.u = shift(priority.u);
+        owner.v = shift(priority.v);
+        if owner.u.iter().chain(&owner.v).any(|v| !v.is_finite()) {
+            return Err(Invalid);
+        }
+        if cancelled() {
+            return Err(Cancelled);
+        }
+        Ok(Some(owner))
     }
 
     /// Conservative component intervals for successful selected-triangle samples
@@ -2106,6 +2363,214 @@ mod tests {
         let [a, b, c] = vertices;
         Triangle::new(a, b, c)
     }
+    fn sheared_fold_pattern() -> ShadingPattern {
+        let mut pattern = axial();
+        let indices = [[0, 1, 2, 3], [11, 12, 13, 4], [10, 15, 14, 5], [9, 8, 7, 6]];
+        let mut points = [Point::ZERO; 16];
+        let xs = [0., 3., 1., 0.];
+        for u in 0..4 {
+            for v in 0..4 {
+                points[indices[u][v]] = Point::new(xs[u], v as f64 + 0.75 * u as f64 / 3.);
+            }
+        }
+        let patch = crate::shading::TensorProductPatch {
+            control_points: points,
+            colors: [0., 0., 1., 1.].map(|u| smallvec::smallvec![u, 0., 0., 0.]),
+        };
+        Arc::make_mut(&mut pattern.shading).shading_type = Arc::new(ShadingType::TensorProductPatchMesh {
+            patches: vec![patch],
+            function: None,
+        });
+        pattern
+    }
+    #[test]
+    fn native_tensor_fold_selects_source_uv_not_adaptive_triangle_order() {
+        let pattern = sheared_fold_pattern();
+        let source = NativeShadingSource::capture(&pattern, &|| false, &no_credit).unwrap();
+        // x(u)=3u(1-u)(3-2u). Its unique maximum is at
+        // (5-sqrt(7))/6. Here y=3v+0.75u: greatest v selects the
+        // smaller u, even though the later adaptive triangle has larger u.
+        let peak = (5. - 7f64.sqrt()) / 6.;
+        for xi in 1..=10 {
+            for yi in 8..=26 {
+                let x = xi as f64 / 10.;
+                let y = yi as f64 / 10.;
+                let mut lo = 0.;
+                let mut hi = peak;
+                for _ in 0..64 {
+                    let u = (lo + hi) * 0.5;
+                    if 3. * u * (1. - u) * (3. - 2. * u) < x {
+                        lo = u;
+                    } else {
+                        hi = u;
+                    }
+                }
+                let expected = (lo + hi) * 0.5;
+                let actual = source
+                    .sample(Point::new(x, y), &|| false)
+                    .unwrap()
+                    .unwrap()
+                    .components[0] as f64;
+                assert!(
+                    (actual - expected).abs() < 0.01,
+                    "x={x} y={y} actual={actual} greatest_v_u={expected}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn native_patch_priority_survives_reflection_and_later_patch_override() {
+        let transform = Affine::new([-1., 0.25, 0.5, 1., 11., 17.]);
+        let mut pattern = sheared_fold_pattern();
+        pattern.matrix = transform;
+        let source = NativeShadingSource::capture(&pattern, &|| false, &no_credit).unwrap();
+        for point in [Point::new(0.1, 0.8), Point::new(0.7, 1.4), Point::new(1., 2.6)] {
+            let sample = source.sample(transform * point, &|| false).unwrap().unwrap();
+            assert!(sample.components[0] < 0.2, "wrong folded branch after reflection");
+        }
+        let ShadingType::TensorProductPatchMesh { patches, .. } = pattern.shading.shading_type.as_ref()
+        else {
+            panic!()
+        };
+        let first = patches[0].clone();
+        let mut later = first.clone();
+        later.colors = std::array::from_fn(|_| smallvec::smallvec![0.25, 0.5, 0.75, 0.]);
+        Arc::make_mut(&mut pattern.shading).shading_type = Arc::new(ShadingType::TensorProductPatchMesh {
+            patches: vec![first, later],
+            function: None,
+        });
+        let source = NativeShadingSource::capture(&pattern, &|| false, &no_credit).unwrap();
+        let sample = source
+            .sample(transform * Point::new(0.1, 0.8), &|| false)
+            .unwrap()
+            .unwrap();
+        assert_eq!(sample.components, [0.25, 0.5, 0.75, 0.]);
+    }
+
+    #[test]
+    fn native_patch_priority_owner_and_admission_cancel_retry() {
+        let pattern = sheared_fold_pattern();
+        let used = Arc::new(AtomicUsize::new(0));
+        let calls = Cell::new(0);
+        let fail = Cell::new(0);
+        let metadata_bytes = Cell::new(usize::MAX);
+        let in_metadata = Cell::new(false);
+        struct Credit(Arc<AtomicUsize>, usize);
+        impl Drop for Credit {
+            fn drop(&mut self) {
+                self.0.fetch_sub(self.1, Ordering::Relaxed);
+            }
+        }
+        let admit = |bytes: usize| -> Option<Box<dyn std::any::Any + Send + Sync>> {
+            calls.set(calls.get() + 1);
+            if calls.get() == fail.get() {
+                return None;
+            }
+            let next = used.load(Ordering::Relaxed).checked_add(bytes)?;
+            if next > 8 * 1024 * 1024 {
+                return None;
+            }
+            used.store(next, Ordering::Relaxed);
+            if bytes == metadata_bytes.get() {
+                in_metadata.set(true);
+            }
+            Some(Box::new(Credit(used.clone(), bytes)))
+        };
+        let capture =
+            |cancelled: &dyn Fn() -> bool| NativeShadingSource::capture(&pattern, cancelled, &admit);
+        let source = capture(&|| false).unwrap();
+        assert!(source.mesh_has_patch_priority());
+        metadata_bytes.set(source.mesh.as_ref().unwrap().triangles.len() * size_of::<NativePatchPriority>());
+        let origin = Point::new(0., 1.);
+        let mut visited = 0;
+        source
+            .visit_mesh_triangles(
+                kurbo::Rect::new(0., 0., 3., 4.),
+                100_000,
+                &|| false,
+                &mut |triangle| {
+                    let owner = source
+                        .mesh_triangle_patch_owner(triangle.index, origin, &|| false, &mut 100)
+                        .unwrap()
+                        .unwrap();
+                    assert_eq!(owner.patch_index, 0);
+                    for point in triangle.points {
+                        let p = Point::new(point.x - origin.x, point.y - origin.y);
+                        let u = owner.u[0] + owner.u[1] * p.x + owner.u[2] * p.y;
+                        let v = owner.v[0] + owner.v[1] * p.x + owner.v[2] * p.y;
+                        assert!((v - (point.y - 0.75 * u) / 3.).abs() < 1e-10);
+                        assert!((owner.evaluate(p).unwrap()[0] - u).abs() < 1e-6);
+                    }
+                    visited += 1;
+                    Ok(())
+                },
+            )
+            .unwrap();
+        assert!(visited > 2);
+        assert_eq!(
+            source
+                .mesh_triangle_patch_owner(0, origin, &|| false, &mut 0)
+                .unwrap_err(),
+            NativeShadingError::WorkLimit
+        );
+        assert_eq!(
+            source
+                .mesh_triangle_patch_owner(0, origin, &|| true, &mut 100)
+                .unwrap_err(),
+            NativeShadingError::Cancelled
+        );
+        assert_eq!(
+            source
+                .mesh_triangle_patch_owner(usize::MAX, origin, &|| false, &mut 100)
+                .unwrap_err(),
+            NativeShadingError::Invalid
+        );
+        let count = calls.get();
+        drop(source);
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+        for stop in 1..=count {
+            calls.set(0);
+            fail.set(stop);
+            assert!(
+                matches!(capture(&|| false), Err(NativeShadingError::Admission)),
+                "admission {stop}/{count}"
+            );
+            assert_eq!(used.load(Ordering::Relaxed), 0);
+        }
+        fail.set(0);
+        in_metadata.set(false);
+        let checks = Cell::new(0);
+        drop(
+            capture(&|| {
+                if in_metadata.get() {
+                    checks.set(checks.get() + 1);
+                }
+                false
+            })
+            .unwrap(),
+        );
+        assert!(checks.get() > 10);
+        for stop in [1, checks.get() / 2, checks.get()] {
+            in_metadata.set(false);
+            let at = Cell::new(0);
+            assert!(matches!(
+                capture(&|| {
+                    if in_metadata.get() {
+                        at.set(at.get() + 1);
+                        at.get() == stop
+                    } else {
+                        false
+                    }
+                }),
+                Err(NativeShadingError::Cancelled)
+            ));
+            assert_eq!(used.load(Ordering::Relaxed), 0);
+        }
+        drop(capture(&|| false).unwrap());
+        assert_eq!(used.load(Ordering::Relaxed), 0);
+    }
+
     #[test]
     fn native_mesh_rectangle_query_affine_work_callback_and_every_cancel() {
         let triangle = native_triangle([[0.25; 4]; 3], 4);

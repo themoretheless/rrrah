@@ -554,6 +554,24 @@ impl PolygonRow {
         *remaining=work.left;result
     }
 
+    /// Intersect a pixel rectangle with all path/clip regions. Callback work
+    /// is debited directly from the geometry budget, including on refusal.
+    pub(super) fn pixel_intersection_rect_fragments_budget(
+        &self,regions:&[(&BezPath,Fill)],x:i32,y:i32,rect:kurbo::Rect,remaining:&mut usize,
+        cancelled:&dyn Fn()->bool,
+        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+        visit:&mut dyn FnMut(PixelFragment,&mut usize)->Option<()>,
+    )->Option<f64> {
+        if regions.is_empty() || regions.len()>64 || x.abs_diff(0)>1_048_576 || y.abs_diff(0)>1_048_576 {return None;}
+        if [rect.x0,rect.y0,rect.x1,rect.y1].iter().any(|v|!v.is_finite())
+            || rect.x0<f64::from(x) || rect.x1>f64::from(x)+1. || rect.y0<f64::from(y) || rect.y1>f64::from(y)+1.
+            || rect.width()<=0. || rect.height()<=0. {return None;}
+        let mut work=Work {left:*remaining,cancelled};
+        let result=self.pixel_area_with_work_policy::<false>(regions,x,y,&mut work,admit,Some(visit),None,None,Some(rect),0,None,
+            std::env::var_os("RRRAH_AI_LEFT_EDGE_EVENTS").is_some());
+        *remaining=work.left;result
+    }
+
     fn pixel_area_with_work<const PREFUND_VISITOR:bool>(
         &self,
         regions: &[(&BezPath, Fill)],
@@ -568,8 +586,14 @@ impl PolygonRow {
         visitor_cost:usize,
         subset_select:Option<&mut dyn FnMut(&[i32],Option<usize>,Option<&[usize]>)->Option<Option<usize>>>,
     ) -> Option<f64> {
-        self.pixel_area_with_work_policy::<PREFUND_VISITOR>(regions,x,y,work,admit,visit,select,incremental,bounds,visitor_cost,subset_select,
-            std::env::var_os("RRRAH_AI_LEFT_EDGE_EVENTS").is_some())
+        if let Some(visit)=visit {
+            let mut adapted=|fragment,_:&mut usize|visit(fragment);
+            self.pixel_area_with_work_policy::<PREFUND_VISITOR>(regions,x,y,work,admit,Some(&mut adapted),select,incremental,bounds,visitor_cost,subset_select,
+                std::env::var_os("RRRAH_AI_LEFT_EDGE_EVENTS").is_some())
+        } else {
+            self.pixel_area_with_work_policy::<PREFUND_VISITOR>(regions,x,y,work,admit,None,select,incremental,bounds,visitor_cost,subset_select,
+                std::env::var_os("RRRAH_AI_LEFT_EDGE_EVENTS").is_some())
+        }
     }
 
     fn pixel_area_with_work_policy<const PREFUND_VISITOR:bool>(
@@ -579,7 +603,7 @@ impl PolygonRow {
         y: i32,
         work: &mut Work<'_>,
         admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
-        mut visit: Option<&mut dyn FnMut(PixelFragment)->Option<()>>,
+        mut visit: Option<&mut dyn FnMut(PixelFragment,&mut usize)->Option<()>>,
         mut select: Option<&mut dyn FnMut(&[i32])->Option<Option<usize>>>,
         mut incremental: Option<(&mut dyn FnMut(&[i32],Option<usize>)->Option<Option<usize>>,usize)>,
         bounds: Option<kurbo::Rect>,
@@ -872,10 +896,13 @@ impl PolygonRow {
                                 centroid_endpoint_repair=centroid_endpoint_repair.max(if repair==0. {0.} else {repair.next_up()});
                                 centroid_checks=centroid_checks.checked_add(1)?;
                             }
-                            visitor(PixelFragment {
+                            let before=work.left;
+                            let result=visitor(PixelFragment {
                                 vertices,
                                 area:contribution,centroid,owner,
-                            })?;
+                            },&mut work.left);
+                            if work.left>before {work.left=before;return None;}
+                            result?;
                             if cancelled() {return None;}
                         }
                     }
@@ -3166,7 +3193,7 @@ fn left_edge_events_preserve_bit_exact_fragments_across_tiles_and_fill_rules() {
         for ty in 0..8 {for tx in 0..8 {
             let rect=kurbo::Rect::new(tx as f64/8.,ty as f64/8.,(tx+1) as f64/8.,(ty+1) as f64/8.);
             let area=row.pixel_area_with_work_policy::<false>(&regions,0,0,&mut work,&admit,
-                Some(&mut |f:PixelFragment| {out.push((f.owner,f.area.to_bits(),[f.centroid.x.to_bits(),f.centroid.y.to_bits()],f.vertices.map(|p|[p.x.to_bits(),p.y.to_bits()])));Some(())}),
+                Some(&mut |f:PixelFragment,_:&mut usize| {out.push((f.owner,f.area.to_bits(),[f.centroid.x.to_bits(),f.centroid.y.to_bits()],f.vertices.map(|p|[p.x.to_bits(),p.y.to_bits()])));Some(())}),
                 Some(&mut |w|Some(w.iter().enumerate().rfind(|(i,v)|match regions[*i].1 {Fill::NonZero=>**v!=0,Fill::EvenOdd=>**v%2!=0}).map(|(i,_)|i))),None,Some(rect),0,None,events).unwrap();
             assert!(area.is_finite());
         }}out
@@ -3198,7 +3225,7 @@ fn left_edge_events_refuse_every_cancel_short_budget_and_storage_without_leaks()
     let row=admitted_selected_polygon_pixel_row_budget(&regions,0,0,&mut 1_000_000,&||false,&admit).unwrap();let held=live.load(Ordering::Relaxed);
     let run=|left,cancelled:&dyn Fn()->bool,storage:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>| {
         let mut work=Work {left,cancelled};
-        let result=row.pixel_area_with_work_policy::<false>(&regions,0,0,&mut work,storage,Some(&mut |_|Some(())),
+        let result=row.pixel_area_with_work_policy::<false>(&regions,0,0,&mut work,storage,Some(&mut |_,_:&mut usize|Some(())),
             Some(&mut |w|Some(w.iter().rposition(|&v|v!=0))),None,None,0,None,true);
         (result,work.left)
     };
@@ -3206,4 +3233,30 @@ fn left_edge_events_refuse_every_cancel_short_budget_and_storage_without_leaks()
     for stop in 0..calls.get() {let n=Cell::new(0);assert!(run(1_000_000,&||{let old=n.get();n.set(old+1);old>=stop},&admit).0.is_none());assert_eq!(live.load(Ordering::Relaxed),held);}
     for limit in 0..1_000_000-left {let (result,remaining)=run(limit,&||false,&admit);assert!(result.is_none());assert!(remaining<=limit);assert_eq!(live.load(Ordering::Relaxed),held);}
     assert!(run(1_000_000,&||false,&|_|None).0.is_none());assert_eq!(live.load(Ordering::Relaxed),held);drop(row);assert_eq!(live.load(Ordering::Relaxed),0);
+}
+
+#[test]
+fn native_patch_clip_callbacks_debit_one_monotone_geometry_budget() {
+    use kurbo::Shape;
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=[(&path,Fill::NonZero)];let rect=kurbo::Rect::new(0.,0.,1.,1.);
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let row=admitted_selected_polygon_domain_budget(&regions,0,0.,1.,&mut 1_000_000,&||false,&admit).unwrap();
+    let mut ordinary=1_000_000;
+    let area=row.pixel_intersection_rect_fragments_budget(&regions,0,0,rect,&mut ordinary,&||false,&admit,&mut |_,_|Some(())).unwrap();
+    let mut paid=1_000_000;let mut callbacks=0;
+    let run=|work:&mut usize,visitor:&mut dyn FnMut(PixelFragment,&mut usize)->Option<()>|
+        row.pixel_intersection_rect_fragments_budget(&regions,0,0,rect,work,&||false,&admit,visitor);
+    assert_eq!(run(&mut paid,&mut |_,work|{*work=work.checked_sub(17)?;callbacks+=1;Some(())}),Some(area));
+    assert!(callbacks>0);assert_eq!(ordinary-paid,17*callbacks);
+    let required=1_000_000-paid;
+    let mut exact=required;
+    assert!(run(&mut exact,&mut |_,work|{*work=work.checked_sub(17)?;Some(())}).is_some());
+    let mut short=required-1;
+    assert!(run(&mut short,&mut |_,work|{*work=work.checked_sub(17)?;Some(())}).is_none());assert!(short<=required-1);
+    for success in [false,true] {
+        let mut work=1_000_000;
+        assert!(run(&mut work,&mut |_,left|{*left+=1;success.then_some(())}).is_none());
+        assert!(work<=1_000_000);
+    }
 }

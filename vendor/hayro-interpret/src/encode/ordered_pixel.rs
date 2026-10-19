@@ -1,5 +1,5 @@
 //! Admitted local-pixel ownership partition for affine source fields.
-//! Not yet connected to the production mesh sampler. Floating-point clipping
+//! Used by the sampled Tensor/Coons patch path. Floating-point clipping
 //! is numerical geometry, not an interval certificate for the original surface.
 use kurbo::Point;
 
@@ -25,10 +25,12 @@ type Result<T> = std::result::Result<T, PixelPartitionError>;
 
 /// Affine fields are `[constant, local_x, local_y]` in the unit pixel.
 /// The caller must qualify these fields against its source approximation.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct PixelSourceOwner {
     /// Later source patches cover earlier patches.
     pub patch_index: usize,
+    /// Caller sampling identifier, retained with fragments; never affects priority.
+    pub sample_index: usize,
     /// Original u in the source patch.
     pub u: [f64; 3],
     /// Original v; folded priority is greatest v, then greatest u.
@@ -119,6 +121,7 @@ impl PixelSourceOwner {
         }
         Ok(Self {
             patch_index: source.patch_index,
+            sample_index: 0,
             u: fit(source.parameters.map(|p| p.x))?,
             v: fit(source.parameters.map(|p| p.y))?,
             components,
@@ -146,6 +149,89 @@ fn tick(work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<()> {
     }
     *work = work.checked_sub(1).ok_or(PixelPartitionError::Limit)?;
     Ok(())
+}
+
+// Exact sign for represented finite coordinates. Fast ordinary determinants
+// use a conservative filter; ambiguous/overflowing/subnormal cases sum six
+// dyadic products in fixed storage (no allocator or geometric epsilon).
+fn orientation(a: Point, b: Point, c: Point) -> i8 {
+    if a == b || b == c || a == c || (a.x == b.x && b.x == c.x) || (a.y == b.y && b.y == c.y) {
+        return 0;
+    }
+    let u = b - a;
+    let v = c - a;
+    let left = u.x * v.y;
+    let right = u.y * v.x;
+    let det = left - right;
+    let bound = 64. * f64::EPSILON * (left.abs() + right.abs()) + 64. * f64::from_bits(1);
+    if det.is_finite() && bound.is_finite() && det.abs() > bound {
+        return if det > 0. { 1 } else { -1 };
+    }
+    fn parts(value: f64) -> (u64, i32, bool) {
+        let bits = value.to_bits();
+        let exponent = ((bits >> 52) & 2047) as i32;
+        let mantissa = (bits & ((1u64 << 52) - 1)) | if exponent == 0 { 0 } else { 1u64 << 52 };
+        (
+            mantissa,
+            if exponent == 0 {
+                -1074
+            } else {
+                exponent - 1023 - 52
+            },
+            bits >> 63 != 0,
+        )
+    }
+    fn add(words: &mut [u64; 68], mut at: usize, mut value: u64) {
+        while value != 0 {
+            let (next, carry) = words[at].overflowing_add(value);
+            words[at] = next;
+            value = u64::from(carry);
+            at += 1;
+        }
+    }
+    let mut positive = [0u64; 68];
+    let mut negative = [0u64; 68];
+    for (x, y, subtract) in [
+        (a.x, b.y, false),
+        (b.x, c.y, false),
+        (c.x, a.y, false),
+        (a.y, b.x, true),
+        (b.y, c.x, true),
+        (c.y, a.x, true),
+    ] {
+        let (xm, xe, xs) = parts(x);
+        let (ym, ye, ys) = parts(y);
+        let product = u128::from(xm) * u128::from(ym);
+        if product == 0 {
+            continue;
+        }
+        let shift = (xe + ye + 2148) as usize;
+        let at = shift / 64;
+        let bits = shift % 64;
+        let lo = product as u64;
+        let hi = (product >> 64) as u64;
+        let words = if xs ^ ys ^ subtract {
+            &mut negative
+        } else {
+            &mut positive
+        };
+        if bits == 0 {
+            add(words, at, lo);
+            add(words, at + 1, hi);
+        } else {
+            add(words, at, lo << bits);
+            add(words, at + 1, (hi << bits) | (lo >> (64 - bits)));
+            add(words, at + 2, hi >> (64 - bits));
+        }
+    }
+    for i in (0..68).rev() {
+        match positive[i].cmp(&negative[i]) {
+            std::cmp::Ordering::Greater => return 1,
+            std::cmp::Ordering::Less => return -1,
+            std::cmp::Ordering::Equal => {}
+        }
+    }
+    0
 }
 
 #[derive(Clone, Copy)]
@@ -181,7 +267,11 @@ impl Polygon {
         if self.len < 3 {
             return self;
         }
-        self.points[..self.len].sort_by(|a, b| a.x.total_cmp(&b.x).then(a.y.total_cmp(&b.y)));
+        self.points[..self.len].sort_by(|a, b| {
+            a.x.partial_cmp(&b.x)
+                .unwrap()
+                .then(a.y.partial_cmp(&b.y).unwrap())
+        });
         let mut unique = 0;
         for i in 0..self.len {
             if unique == 0 || self.points[i] != self.points[unique - 1] {
@@ -195,14 +285,9 @@ impl Polygon {
         }
         let mut hull = [Point::ZERO; VERTICES * 2];
         let mut n = 0;
-        let turn = |a: Point, b: Point, c: Point| {
-            let u = b - a;
-            let v = c - a;
-            let product = u.y * v.x;
-            u.x.mul_add(v.y, -product) - u.y.mul_add(v.x, -product)
-        };
+        let turn = orientation;
         for point in self.points[..unique].iter().copied() {
-            while n >= 2 && turn(hull[n - 2], hull[n - 1], point) <= 0. {
+            while n >= 2 && turn(hull[n - 2], hull[n - 1], point) <= 0 {
                 n -= 1;
             }
             hull[n] = point;
@@ -210,7 +295,7 @@ impl Polygon {
         }
         let lower = n;
         for point in self.points[..unique - 1].iter().copied().rev() {
-            while n > lower && turn(hull[n - 2], hull[n - 1], point) <= 0. {
+            while n > lower && turn(hull[n - 2], hull[n - 1], point) <= 0 {
                 n -= 1;
             }
             hull[n] = point;
@@ -297,6 +382,52 @@ impl Polygon {
         }
         Ok(out.convex_hull())
     }
+    // Join only identical-owner convex pieces sharing an exact reversed edge.
+    // Never replace a concave union by its hull or merge across sampling IDs.
+    fn convex_union(&self, other: &Self) -> Option<Self> {
+        if self.len + other.len - 2 > VERTICES {
+            return None;
+        }
+        for i in 0..self.len {
+            for j in 0..other.len {
+                if self.points[i] != other.points[(j + 1) % other.len]
+                    || self.points[(i + 1) % self.len] != other.points[j]
+                {
+                    continue;
+                }
+                let mut joined = Self::empty();
+                for k in 0..self.len {
+                    joined.push(self.points[(i + 1 + k) % self.len]).ok()?;
+                }
+                for k in 1..other.len - 1 {
+                    joined.push(other.points[(j + 1 + k) % other.len]).ok()?;
+                }
+                for k in 0..joined.len {
+                    let a = joined.points[(k + 1) % joined.len] - joined.points[k];
+                    let b = joined.points[(k + 2) % joined.len] - joined.points[(k + 1) % joined.len];
+                    let product = a.y * b.x;
+                    let cross = a.x.mul_add(b.y, -product) - a.y.mul_add(b.x, -product);
+                    let scale = (a.x * b.y).abs() + (a.y * b.x).abs();
+                    let roundoff = 32. * f64::EPSILON * scale + 32. * f64::from_bits(1);
+                    // Optional merging must not classify a numerically ambiguous
+                    // turn. Retain both original pieces in that case.
+                    if !cross.is_finite() || !roundoff.is_finite() || cross <= roundoff {
+                        return None;
+                    }
+                }
+                let first = (0..joined.len).min_by(|&i, &j| {
+                    joined.points[i]
+                        .x
+                        .total_cmp(&joined.points[j].x)
+                        .then(joined.points[i].y.total_cmp(&joined.points[j].y))
+                })?;
+                joined.points[..joined.len].rotate_left(first);
+                return Some(joined);
+            }
+        }
+        None
+    }
+
     fn bounds_overlap(&self, other: &Self) -> bool {
         let bounds = |polygon: &Self| {
             let mut b = [f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY];
@@ -367,6 +498,14 @@ impl<'a, T> AdmittedVec<'a, T> {
 }
 fn keep(out: &mut AdmittedVec<'_, Fragment>, polygon: Polygon, owner: PixelSourceOwner) -> Result<()> {
     if polygon.moments().is_some() {
+        if let Some(previous) = out.values.last_mut() {
+            if previous.owner == owner {
+                if let Some(joined) = previous.polygon.convex_union(&polygon) {
+                    previous.polygon = joined;
+                    return Ok(());
+                }
+            }
+        }
         out.push(Fragment { polygon, owner })?;
     }
     Ok(())
@@ -440,6 +579,88 @@ impl<'a> OrderedPixel<'a> {
         }
         Ok(())
     }
+    /// Intersect retained regions with a convex local clip (three or four
+    /// cyclic vertices), without heap scratch. Both orientations are accepted;
+    /// nonconvex/self-crossing clips refuse. Visitor work shares the same budget
+    /// and may not increase it. Discard accumulated results on any error.
+    pub fn visit_convex_clip(
+        &self,
+        points: &[Point],
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+        visitor: &mut dyn FnMut(f64, Point, &[Point], &PixelSourceOwner, &mut usize) -> Result<()>,
+    ) -> Result<()> {
+        tick(work, cancelled)?;
+        if !(3..=4).contains(&points.len()) {
+            return Err(PixelPartitionError::Invalid);
+        }
+        let mut clip = Polygon::empty();
+        for &point in points {
+            tick(work, cancelled)?;
+            clip.push(point)?;
+        }
+        let mut orientation = 0.;
+        for i in 0..clip.len {
+            tick(work, cancelled)?;
+            let a = clip.points[(i + 1) % clip.len] - clip.points[i];
+            let b = clip.points[(i + 2) % clip.len] - clip.points[(i + 1) % clip.len];
+            let product = a.y * b.x;
+            let cross = a.x.mul_add(b.y, -product) - a.y.mul_add(b.x, -product);
+            if !cross.is_finite() {
+                return Err(PixelPartitionError::Invalid);
+            }
+            if cross != 0. {
+                if orientation != 0. && cross.signum() != orientation {
+                    return Err(PixelPartitionError::Invalid);
+                }
+                orientation = cross.signum();
+            }
+        }
+        if orientation == 0. {
+            return Ok(());
+        }
+        if orientation < 0. {
+            clip.points[..clip.len].reverse();
+        }
+        clip = clip.convex_hull();
+        for fragment in &self.regions.values {
+            tick(work, cancelled)?;
+            if !fragment.polygon.bounds_overlap(&clip) {
+                continue;
+            }
+            let mut polygon = fragment.polygon;
+            for [a, b] in clip.edges() {
+                let edge = |p: Point| {
+                    let d = b - a;
+                    let q = p - a;
+                    let product = d.y * q.x;
+                    d.x.mul_add(q.y, -product) - d.y.mul_add(q.x, -product)
+                };
+                polygon = polygon.clip_by(edge, work, cancelled)?;
+                if polygon.moments().is_none() {
+                    break;
+                }
+            }
+            if let Some((area, center)) = polygon.moments() {
+                let before = *work;
+                let result = visitor(
+                    area,
+                    center,
+                    &polygon.points[..polygon.len],
+                    &fragment.owner,
+                    work,
+                );
+                if *work > before {
+                    *work = before;
+                    return Err(PixelPartitionError::Invalid);
+                }
+                result?;
+                tick(work, cancelled)?;
+            }
+        }
+        Ok(())
+    }
+
     /// Apply an opaque source triangle in local pixel coordinates. Ownership is
     /// independent of submission order: later patch, then greatest v, then u.
     /// Equality of v fields is exact equality of supplied affine coefficients;
@@ -485,6 +706,8 @@ impl<'a> OrderedPixel<'a> {
         })?;
         for old in &self.regions.values {
             tick(work, cancelled)?;
+            let prefix = next.values.len();
+            let previous_last = next.values.last().copied();
             let overlap = subtract(old.polygon, &triangle, old.owner, &mut next, work, cancelled)?;
             if overlap.moments().is_none() {
                 continue;
@@ -507,10 +730,24 @@ impl<'a> OrderedPixel<'a> {
             if old_wins.moments().is_none() {
                 continue;
             }
-            keep(&mut next, old_wins, old.owner)?;
+            // A losing incoming triangle must not subdivide a wholly winning
+            // retained region. Equality is of represented vertices, without a
+            // tolerance or a guess about the original curved source.
+            let whole_old_wins = old_wins.len == overlap.len
+                && old_wins.points[..old_wins.len] == overlap.points[..overlap.len];
+            if whole_old_wins {
+                next.values.truncate(prefix);
+                if let Some(previous) = previous_last {
+                    next.values[prefix - 1] = previous;
+                }
+                keep(&mut next, old.polygon, old.owner)?;
+            } else {
+                keep(&mut next, old_wins, old.owner)?;
+            }
             let mut remaining = AdmittedVec::new(admit, maximum);
             for part in &incoming.values {
-                subtract(part.polygon, &old_wins, owner, &mut remaining, work, cancelled)?;
+                let cut = if whole_old_wins { &old.polygon } else { &old_wins };
+                subtract(part.polygon, cut, owner, &mut remaining, work, cancelled)?;
             }
             incoming = remaining;
         }
@@ -520,5 +757,25 @@ impl<'a> OrderedPixel<'a> {
         tick(work, cancelled)?;
         self.regions = next;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod exact_orientation_tests {
+    use super::*;
+    #[test]
+    fn filtered_orientation_matches_independent_fraction_oracle() {
+        let cases = include!("../../../../tests/fixtures/geometry/orientation-sign-cases.rs");
+        for (bits, expected) in cases {
+            let v = bits.map(f64::from_bits);
+            let [a, b, c] = [
+                Point::new(v[0], v[1]),
+                Point::new(v[2], v[3]),
+                Point::new(v[4], v[5]),
+            ];
+            assert_eq!(orientation(a, b, c), expected, "{v:?}");
+            assert_eq!(orientation(b, c, a), expected, "cyclic {v:?}");
+            assert_eq!(orientation(a, c, b), -expected, "reverse {v:?}");
+        }
     }
 }

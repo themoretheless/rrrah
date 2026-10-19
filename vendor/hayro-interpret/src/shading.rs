@@ -370,6 +370,15 @@ pub struct Triangle {
 }
 
 impl Triangle {
+    pub(crate) fn from_points_colors(points: [Point; 3], colors: [ColorComponents; 3]) -> Self {
+        let [p0, p1, p2] = std::array::from_fn::<_, 3, _>(|i| TriangleVertex {
+            flag: 0,
+            point: points[i],
+            colors: colors[i].clone(),
+        });
+        Self::new(p0, p1, p2)
+    }
+
     /// Create a new triangle.
     pub fn new(p0: TriangleVertex, p1: TriangleVertex, p2: TriangleVertex) -> Self {
         let v0 = p1.point - p0.point;

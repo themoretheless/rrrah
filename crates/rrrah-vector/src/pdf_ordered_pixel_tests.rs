@@ -5,6 +5,7 @@ mod tests {
     fn owner(index: usize, color: [f64; 3]) -> PixelSourceOwner {
         PixelSourceOwner {
             patch_index: index,
+            sample_index: 0,
             u: [0.; 3],
             v: [0.; 3],
             component_count: 3,
@@ -54,6 +55,119 @@ mod tests {
             assert!((a - b).abs() < 1e-12, "{actual:?} != {expected:?}");
         }
     }
+    #[test]
+    fn convex_piece_merge_never_fills_a_concave_union() {
+        let admit = |_| Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>);
+        let mut pixel = OrderedPixel::new(&admit, 64);
+        let a = Point::new(0.25, 0.5);
+        let b = Point::new(0.75, 0.5);
+        for triangle in [[a, b, Point::new(0.25, 0.75)], [b, a, Point::ZERO]] {
+            pixel
+                .paint_triangle(triangle, owner(0, [1., 0., 0.]), &mut 1_000_000, &|| false)
+                .unwrap();
+        }
+        close(integrated(&pixel), [0.1875, 0., 0., 0.1875]);
+        assert!(pixel.fragments() >= 2);
+    }
+
+    #[test]
+    fn losing_triangles_do_not_fragment_a_wholly_winning_owner() {
+        let admit = |_| Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>);
+        let mut pixel = OrderedPixel::new(&admit, 64);
+        rectangle(&mut pixel, 0., 1., owner(2, [1., 0., 0.]));
+        let fragments = pixel.fragments();
+        let before = integrated(&pixel);
+        for i in 1..32 {
+            let x = i as f64 / 32.;
+            pixel
+                .paint_triangle(
+                    [Point::new(x, 0.), Point::new(1., x), Point::new(0., 1.)],
+                    owner(0, [0., 0., 1.]),
+                    &mut 1_000_000,
+                    &|| false,
+                )
+                .unwrap();
+            assert_eq!(pixel.fragments(), fragments);
+        }
+        assert_eq!(integrated(&pixel), before);
+    }
+
+    #[test]
+    fn ordered_pixel_convex_clip_preserves_sampling_ids_and_shared_work() {
+        let admit = |_| Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>);
+        let mut pixel = OrderedPixel::new(&admit, 256);
+        let mut a = owner(0, [1., 0., 0.]);
+        a.v = [0., 1., 0.];
+        a.sample_index = 11;
+        let mut b = owner(0, [0., 0., 1.]);
+        b.v = [1., -1., 0.];
+        b.sample_index = 22;
+        rectangle(&mut pixel, 0., 1., a);
+        rectangle(&mut pixel, 0., 1., b);
+        let clip = [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)];
+        for points in [clip, [clip[2], clip[1], clip[0]]] {
+            let mut areas = [0.; 2];
+            let mut work = 1_000_000;
+            pixel
+                .visit_convex_clip(&points, &mut work, &|| false, &mut |area, _, _, source, work| {
+                    *work = work.checked_sub(3).ok_or(PixelPartitionError::Limit)?;
+                    match source.sample_index {
+                        11 => areas[0] += area,
+                        22 => areas[1] += area,
+                        _ => panic!(),
+                    };
+                    Ok(())
+                })
+                .unwrap();
+            assert!((areas[0] - 0.125).abs() < 1e-12 && (areas[1] - 0.375).abs() < 1e-12);
+            assert!(work < 1_000_000);
+        }
+        let before = integrated(&pixel);
+        assert_eq!(
+            pixel
+                .visit_convex_clip(&clip, &mut 0, &|| false, &mut |_, _, _, _, _| Ok(()))
+                .unwrap_err(),
+            PixelPartitionError::Limit
+        );
+        assert_eq!(
+            pixel
+                .visit_convex_clip(&clip, &mut 1_000_000, &|| true, &mut |_, _, _, _, _| Ok(()))
+                .unwrap_err(),
+            PixelPartitionError::Cancelled
+        );
+        assert_eq!(
+            pixel
+                .visit_convex_clip(&clip, &mut 1_000_000, &|| false, &mut |_, _, _, _, work| {
+                    *work += 1;
+                    Ok(())
+                })
+                .unwrap_err(),
+            PixelPartitionError::Invalid
+        );
+        for points in [
+            [
+                Point::ZERO,
+                Point::new(1., 0.),
+                Point::new(0.25, 0.25),
+                Point::new(0., 1.),
+            ],
+            [
+                Point::ZERO,
+                Point::new(1., 1.),
+                Point::new(1., 0.),
+                Point::new(0., 1.),
+            ],
+        ] {
+            assert_eq!(
+                pixel
+                    .visit_convex_clip(&points, &mut 1_000_000, &|| false, &mut |_, _, _, _, _| Ok(()))
+                    .unwrap_err(),
+                PixelPartitionError::Invalid
+            );
+        }
+        assert_eq!(integrated(&pixel), before);
+    }
+
     #[test]
     fn ordered_pixel_unions_coverage_and_preserves_later_patch_components() {
         let root = rrrah_core::MemoryBudget::new(1024 * 1024);

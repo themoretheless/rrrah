@@ -1642,7 +1642,7 @@ impl super::CoonsPatch {
         self.adaptive_tensor()?
             .to_triangles_adaptive(transform, limits, output, cancelled)
     }
-    fn adaptive_tensor(&self) -> Result<TensorProductPatch, AdaptivePatchError> {
+    pub(crate) fn adaptive_tensor(&self) -> Result<TensorProductPatch, AdaptivePatchError> {
         let channels = self.colors[0].len();
         if channels == 0
             || channels > 32

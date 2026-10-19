@@ -5,6 +5,8 @@ use hayro_interpret::{
     BlendMode, ClipPath, Device, Paint, PathDrawMode, SoftMask, TransparencyGroupProperties,
 };
 use kurbo::{Affine, BezPath};
+#[path = "native_patch_coverage.rs"]
+mod native_patch_coverage;
 
 enum RecordedPaint {
     Color([u8; 4]),
@@ -13,13 +15,9 @@ enum RecordedPaint {
 }
 
 struct RecordedShading {
-    encoded: Box<hayro_interpret::encode::EncodedShadingPattern>,
+    encoded: Option<Box<hayro_interpret::encode::EncodedShadingPattern>>,
     native: Option<hayro_interpret::encode::NativeShadingSource>,
     refusal: Option<hayro_interpret::encode::NativeShadingError>,
-}
-impl std::ops::Deref for RecordedShading {
-    type Target = hayro_interpret::encode::EncodedShadingPattern;
-    fn deref(&self) -> &Self::Target { &self.encoded }
 }
 
 struct SharedClip {
@@ -60,6 +58,8 @@ struct Recorder {
     raster_spaces: Vec<(usize, Option<hayro_interpret::color::ColorSpace>)>,
     capture_native_rasters: bool,
     capture_native_shadings: bool,
+    // Explicit native replay may omit display-only compatibility sampling.
+    native_shadings_only: bool,
     integrate_native_mesh_boundaries: bool,
     native_rasters: Vec<(usize, Option<hayro_interpret::NativeRasterComponents>, Option<hayro_interpret::NativeRasterComponentsError>)>,
     mask_results: Vec<ShapeMask>,
@@ -362,6 +362,7 @@ impl<'a> Device<'a> for Recorder {
                 native_polygon: self.native_polygon,
                 admitted_strokes: self.admitted_strokes,
                 capture_native_shadings: self.capture_native_shadings,
+                native_shadings_only: self.native_shadings_only,
                 integrate_native_mesh_boundaries: self.integrate_native_mesh_boundaries,
                 capture_native_rasters: self.capture_native_rasters,
                 admission: self.admission.clone(),
@@ -631,26 +632,32 @@ impl<'a> Device<'a> for Recorder {
                     }
                 }
                 let cancelled = self.cancelled.clone();
-                let encoded = shading.encode_with_sample_bounds_cancel_and_admission(
-                    Some(kurbo::Rect::new(
-                        0.0,
-                        0.0,
-                        f64::from(self.width),
-                        f64::from(self.height),
-                    )),
-                    &|| cancelled.as_ref().is_some_and(|check| check()),
-                    &|bytes| {
-                        self.admission.as_ref().map_or_else(
-                            || Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>),
-                            |admit| admit(bytes),
-                        )
-                    },
-                );
-                let Some(encoded) = encoded else {
-                    self.failed = true;
-                    return;
+                let encoded = if self.native_shadings_only {
+                    if native.is_none() || cancelled.as_ref().is_some_and(|check|check()) {self.failed=true;return;}
+                    None
+                } else {
+                    let encoded = shading.encode_with_sample_bounds_cancel_and_admission(
+                        Some(kurbo::Rect::new(
+                            0.0,
+                            0.0,
+                            f64::from(self.width),
+                            f64::from(self.height),
+                        )),
+                        &|| cancelled.as_ref().is_some_and(|check| check()),
+                        &|bytes| {
+                            self.admission.as_ref().map_or_else(
+                                || Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>),
+                                |admit| admit(bytes),
+                            )
+                        },
+                    );
+                    let Some(encoded) = encoded else {
+                        self.failed = true;
+                        return;
+                    };
+                    Some(Box::new(encoded))
                 };
-                RecordedPaint::Shading(Box::new(RecordedShading { encoded:Box::new(encoded), native, refusal }))
+                RecordedPaint::Shading(Box::new(RecordedShading { encoded, native, refusal }))
             }
         };
         if std::env::var("RRRAH_TRACE_NATIVE_SOURCE_EVENT").ok()
@@ -1687,6 +1694,7 @@ fn replay_scene_precise_with_backdrop(
                             RecordedPaint::Color(color) => *color,
                             RecordedPaint::NativeColor(color) => color.display,
                             RecordedPaint::Shading(shading) => {
+                                let shading=shading.encoded.as_ref()?;
                                 let point = inverse_tile
                                     * kurbo::Point::new(
                                         (index % usize::from(width)) as f64 + 0.5,
@@ -5045,6 +5053,9 @@ fn sample_covered_shading_rect(
     cancelled: &dyn Fn() -> bool,
     admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
 ) -> Option<Option<(hayro_interpret::encode::NativeShadingSample, f64)>> {
+    if source.mesh_has_patch_priority() {
+        return native_patch_coverage::sample(source,path,rule,clips,x,y,rect,remaining,dense,cancelled,admit);
+    }
     use hayro_interpret::encode::{NativeShadingSample, NativeShadingTriangle, NativeShadingError};
     use vello_cpu::peniko::Fill;
     // VectorApple dense boundary pixel has 327 intersecting triangles.
@@ -5502,6 +5513,12 @@ fn replay_native_solid_scene_depth(
                         }
                     }
                     let (sample, source_coverage) = match sampled {
+                        _ if scene.integrate_native_mesh_boundaries && source.mesh_has_patch_priority() => {
+                            match sample_covered_shading_pixel(source,path,*rule,clips,
+                                (index % width as usize) as i32,(index / width as usize) as i32,cancelled,admit)? {
+                                Some(result)=>result,None=>continue,
+                            }
+                        },
                         Some(sample) => (sample, f64::from(coverage) / 255.),
                         None if !scene.integrate_native_mesh_boundaries => continue,
                         None => match sample_covered_shading_pixel(source, path, *rule, clips,
@@ -6955,7 +6972,21 @@ type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spa
 struct SpatialMeshGeometry {
     paths:Vec<BezPath>,
     owners:Vec<usize>,
+    patch_ordered:bool,
+    background_owner:Option<usize>,
+    domain:kurbo::Rect,
     _credit:Box<dyn std::any::Any+Send+Sync>,
+}
+impl SpatialMeshGeometry {
+    fn admitted(paths:Vec<BezPath>,owners:Vec<usize>,domain:kurbo::Rect,patch_ordered:bool,
+        background_owner:Option<usize>,credit:Box<dyn std::any::Any+Send+Sync>,
+        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>)->Option<Self> {
+        let metadata=match admit(size_of::<Self>()+2*size_of::<usize>()+2*size_of::<Box<dyn std::any::Any+Send+Sync>>()) {
+            Some(credit)=>credit,
+            None=>{drop(paths);drop(owners);drop(credit);return None;},
+        };
+        Some(Self {paths,owners,domain,patch_ordered,background_owner,_credit:Box::new((credit,metadata))})
+    }
 }
 // Per-command owner keys are compact; source sampling always uses the original
 // triangle index. Canonical ascending ranks preserve maximum-owner precedence.
@@ -7125,7 +7156,13 @@ fn replay_spatial_scene_with_white_output<'a>(
     for (child,_,_,_,_,_) in &masks {for (event_index,event) in child.events.iter().enumerate() {
         if let Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=event {
             trace.stage.set(("mask_mesh_query",0));
-            let source=paint.native.as_ref()?;let mut count=0usize;
+            let source=paint.native.as_ref()?;
+            if source.mesh_has_patch_priority() {
+                let geometry=native_patch_coverage::spatial_geometry(source,rect,remaining,cancelled,admit)?;
+                mask_mesh_paths.push((*child,event_index,std::sync::Arc::new(geometry)));continue;
+            }
+            let mut count=0usize;
+
             source.visit_mesh_triangles(rect,100_000,cancelled,&mut |_| {
                 count+=1;if count>4095 {return Err(hayro_interpret::encode::NativeShadingError::WorkLimit);}Ok(())
             }).ok()?;
@@ -7139,7 +7176,7 @@ fn replay_spatial_scene_with_white_output<'a>(
                     kurbo::PathEl::LineTo(triangle.points[2]),kurbo::PathEl::ClosePath]);paths.push(BezPath::from_vec(elements));owners.push(triangle.index);Ok(())
             }).ok()?;
             if paths.len()!=count {return None;}
-            mask_mesh_paths.push((*child,event_index,std::sync::Arc::new(SpatialMeshGeometry {paths,owners,_credit:credit})));
+            mask_mesh_paths.push((*child,event_index,std::sync::Arc::new(SpatialMeshGeometry::admitted(paths,owners,rect,false,None,credit,admit)?)));
         }
     }}
     for (index,event) in scene.events.iter().enumerate() {
@@ -7221,11 +7258,16 @@ fn replay_spatial_scene_with_white_output<'a>(
                 eprintln!("SPATIAL_AFFINE_MESH_CAPABILITY event={index} native_identity={}",source.mesh_has_affine_native_field(space));}
             if let Some((_,_,geometry))=mesh_cache.iter().find(|(owner,event,_)|
                 std::ptr::eq(*owner,scene) && *event==index) {
+                if source.mesh_has_patch_priority()!=geometry.patch_ordered || geometry.domain!=rect {return None;}
                 meshes.push((index,source,geometry.clone()));continue;
+            }
+            if source.mesh_has_patch_priority() {
+                let geometry=native_patch_coverage::spatial_geometry(source,rect,remaining,cancelled,admit)?;
+                meshes.push((index,source,std::sync::Arc::new(geometry)));continue;
             }
             if let Some(lines)=source.axial_boundary_lines() {
                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
-                let (paths,credit)=cells.into_parts();meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry {paths,owners:Vec::new(),_credit:credit})));continue;
+                let (paths,credit)=cells.into_parts();meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry::admitted(paths,Vec::new(),rect,false,None,credit,admit)?)));continue;
             }
             trace.stage.set(("mesh_query",index));
             let mut candidates=0usize;
@@ -7247,7 +7289,7 @@ fn replay_spatial_scene_with_white_output<'a>(
                 paths.push(BezPath::from_vec(elements));owners.push(triangle.index);Ok(())
             }).ok()?;
             if paths.len()!=candidates {return None;}
-            meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry {paths,owners,_credit:credit})));
+            meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry::admitted(paths,owners,rect,false,None,credit,admit)?)));
         }
     }
     #[derive(Default)]
@@ -7279,7 +7321,7 @@ fn replay_spatial_scene_with_white_output<'a>(
             let mut entries=Vec::new();entries.try_reserve_exact(owners.len()).ok()?;
             if entries.capacity()>owners.len() {return None;}
             for (index,&owner) in sorted.iter().enumerate() {
-                if index>0 && sorted[index-1]==owner {return None;}
+                if index>0 && sorted[index-1]==owner {continue;}
                 entries.push(source.prepare_native_affine_point_evidence(owner,domain,space,cancelled,&mut work).ok()?);
             }
             Some(Box::new(Self {event,entries:std::cell::RefCell::new(entries),work:std::cell::Cell::new(16_000_000),refused:std::cell::Cell::new(0),unowned:std::cell::Cell::new(0),preparation_work:4_000_000-work,cancelled,summary,_credit:credit}))
@@ -7436,7 +7478,9 @@ fn replay_spatial_scene_with_white_output<'a>(
             }
         }
         let before=*remaining;
-        let result=if let Some(owner)=owner {source.sample_mesh_triangle_with_budget(owner,point,cancelled,remaining).map(Some)}
+        let result=if source.mesh_has_patch_priority() && owner==source.mesh_triangle_count() {
+                source.mesh_background_sample(cancelled,remaining)
+            } else if let Some(owner)=owner {source.sample_mesh_triangle_with_budget(owner,point,cancelled,remaining).map(Some)}
             else {source.sample_with_budget(point,cancelled,remaining)};
         if cost.enabled {cost.calls.set(cost.calls.get()+1);cost.source.set(cost.source.get()+before.saturating_sub(*remaining));}
         let value=result.ok()?;
@@ -7715,7 +7759,8 @@ fn replay_spatial_scene_with_white_output<'a>(
                 if ais {return None;}
                 if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {cells:None,regions:&requirements[cursor],
                     sample:&mesh_samples[mesh_cursor],owners:&owner_routes[mesh_cursor],
-                    field:if meshes[mesh_cursor].1.mesh_has_opaque_native_field(space) {super::native_spatial::NativeField::OpaqueAffineOwner}
+                    field:if meshes[mesh_cursor].2.background_owner.is_some() {super::native_spatial::NativeField::Unknown}
+                        else if meshes[mesh_cursor].1.mesh_has_opaque_native_field(space) {super::native_spatial::NativeField::OpaqueAffineOwner}
                         else if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
             },
             Event::Path(_,_,RecordedPaint::NativeColor(paint),_,_)=>{

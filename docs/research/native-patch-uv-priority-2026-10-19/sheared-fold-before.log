@@ -1,0 +1,267 @@
+warning: constant `PNG_SIGNATURE` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling rrrah-ordered-sampler-validation v0.7.0 (/tmp/rrrah-ordered-sampler-harness-20261019)
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2446:17
+     |
+2446 |                 kurbo::Affine::IDENTITY,
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+     |
+2446 -                 kurbo::Affine::IDENTITY,
+2446 +                 Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2447:17
+     |
+2447 |                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2447 -                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2447 +                 Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2448:17
+     |
+2448 |                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2448 -                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2448 +                 Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2549:26
+     |
+2549 |         source.inverse = kurbo::Affine::IDENTITY;
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2549 -         source.inverse = kurbo::Affine::IDENTITY;
+2549 +         source.inverse = Affine::IDENTITY;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2581:21
+     |
+2581 |         let polls = std::cell::Cell::new(0);
+     |                     ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2581 -         let polls = std::cell::Cell::new(0);
+2581 +         let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2594:25
+     |
+2594 |             let count = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2594 -             let count = std::cell::Cell::new(0);
+2594 +             let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2624:13
+     |
+2624 |             kurbo::Affine::IDENTITY,
+     |             ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2624 -             kurbo::Affine::IDENTITY,
+2624 +             Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2625:13
+     |
+2625 |             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2625 -             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2625 +             Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2626:13
+     |
+2626 |             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2626 -             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2626 +             Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2654:25
+     |
+2654 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2654 -             let polls = std::cell::Cell::new(0);
+2654 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2668:29
+     |
+2668 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2668 -                 let count = std::cell::Cell::new(0);
+2668 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2765:25
+     |
+2765 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2765 -             let polls = std::cell::Cell::new(0);
+2765 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2779:29
+     |
+2779 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2779 -                 let count = std::cell::Cell::new(0);
+2779 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3446:26
+     |
+3446 |                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3446 -                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+3446 +                 Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3517:22
+     |
+3517 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3517 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3517 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3654:22
+     |
+3654 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3654 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3654 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3703:22
+     |
+3703 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3703 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3703 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3793:22
+     |
+3793 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3793 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3793 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: `rrrah-ordered-sampler-validation` (lib test) generated 18 warnings (run `cargo fix --lib -p rrrah-ordered-sampler-validation --tests` to apply 18 suggestions)
+    Finished `test` profile [optimized] target(s) in 54.86s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/lib.rs (/tmp/rrrah-alpha-isolated-target-20261016/debug/deps/hayro_interpret-681fffb1e70a588d)
+
+running 1 test
+test encode::native_source::tests::native_tensor_fold_selects_source_uv_not_adaptive_triangle_order ... FAILED
+
+failures:
+
+---- encode::native_source::tests::native_tensor_fold_selects_source_uv_not_adaptive_triangle_order stdout ----
+
+thread 'encode::native_source::tests::native_tensor_fold_selects_source_uv_not_adaptive_triangle_order' (29587768) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2130:13:
+x=0.1 y=0.8 actual=0.9681696891784668 greatest_v_u=0.011323859392943357
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    encode::native_source::tests::native_tensor_fold_selects_source_uv_not_adaptive_triangle_order
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 137 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
