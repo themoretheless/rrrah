@@ -1,0 +1,26 @@
+{
+  "status": "partial_source_actual_worker_lifecycle_controls_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "whole_files_read": 6,
+  "controls": "docs/research/dedup-500/windirstat3-worker-lifecycle-reproducer-v3-20261019/result.json",
+  "controls_sha256": "4a39ad4f3c15097c883388e1590d421d9debd78ce04a58f9a9ffbebf9835d955",
+  "reproducer": "scripts/qualify-windirstat3-worker-lifecycle-20261019.py",
+  "reproducer_sha256": "c9c264ebef422a91d8968f08606949c62d209b6c8e9bb2688cb59cff65a886c8",
+  "exact_once_deliveries": 24000,
+  "pause_resume_deliveries": 10000,
+  "findings": [
+    "Actual std::jthread state-machine controls pass on Mac with C++23.",
+    "Empty start is not automatically complete before any item has been processed; explicit cancel unblocks completion.",
+    "Pause/resume behavior tested with actual threads, not mocked parameter forwarding."
+  ],
+  "limits": [
+    "Original BlockingQueue class extracted; MSVC exception(message) replaced by runtime_error(message).",
+    "CancelSynchronousIo supplied as no-op template; CancelThreadIo not invoked. No Windows I/O cancellation proof.",
+    "No full app/GUI/hash publication or all-interleaving/sanitizer/performance qualification.",
+    "No new whole-source-file credit or production code adoption; pHash native investigation deferred.",
+    "Initial passing run retained; follow-up strengthens pause control using release gate and requires remaining work when paused. Counts overlap; do not add runs as distinct tests."
+  ]
+}

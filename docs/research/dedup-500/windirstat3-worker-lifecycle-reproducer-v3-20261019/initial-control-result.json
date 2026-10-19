@@ -1,0 +1,34 @@
+{
+  "status": "passed_original_worker_lifecycle_with_explicit_platform_adapters",
+  "source_sha256": "d8190ed49197dc95cfb864ede71ec88c266ce3017207b8b23be48da11dc714c3",
+  "original_class_sha256": "ad62849a230875735e1970090a94c5dd53f779abcddbba0192645a3b91652979",
+  "adapted_class_sha256": "4d571bc455dd3e907d735626a3b8492b576daf84a42a379774d6c557f6203d45",
+  "worker_counts": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "rounds_each": 3,
+  "exact_once_deliveries": 24000,
+  "pause_resume_deliveries": 10000,
+  "controls": [
+    "automatic idle completion",
+    "cancel reason remains observable",
+    "restart after join/cancel",
+    "pause holds processed count stable",
+    "resume drains work",
+    "initial empty start waits until explicit cancel"
+  ],
+  "findings": [
+    "Actual std::jthread state-machine controls pass on Mac with C++23.",
+    "Empty start is not automatically complete before any item has been processed; explicit cancel unblocks completion.",
+    "Pause/resume behavior tested with actual threads, not mocked parameter forwarding."
+  ],
+  "limits": [
+    "Original BlockingQueue class extracted; MSVC exception(message) replaced by runtime_error(message).",
+    "CancelSynchronousIo supplied as no-op template; CancelThreadIo not invoked. No Windows I/O cancellation proof.",
+    "No full app/GUI/hash publication or all-interleaving/sanitizer/performance qualification.",
+    "No new whole-source-file credit or production code adoption; pHash native investigation deferred."
+  ]
+}
