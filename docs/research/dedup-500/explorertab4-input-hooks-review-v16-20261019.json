@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of keyboard and mouse hook implementations; exact-commit downloads matched pinned Git blob IDs. Hooks not installed or executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Hooks/Keyboard.cs": "08e13a0aeb0da7385b19f14da7672a1bbb7a04e209e03cf5d607f96cca1f7a1e",
+    "ExplorerTabUtility/Hooks/Mouse.cs": "1f00cd1d3fc422e273be18887c4dd952b9bf8d0b36bf0ed240ef79822730405d"
+  },
+  "whole_files_read": 42,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v16-20261019.json",
+  "coverage_sha256": "2fad015487ad73a9b1369e2fa80b5edede0b0ecdf6d3ffc968989e2e301b01ea",
+  "findings": [
+    "Each matching profile queues an independent ThreadPool callback with original mutable profile reference, captured delegate and window handle; no bounded queue, cancellation token or callback drainage on Stop/Dispose. Already queued work can outlive hook stop.",
+    "Multiple profiles sharing keys all trigger; keyboard IsHandled is assigned per match, so last matching profile decides final handling value. Mouse handler does not use profile.IsHandled here.",
+    "Explorer foreground check is cached once within event iteration. A later Global profile can inherit handle populated by earlier Explorer-scoped match; a Global profile before that match receives0. Profile order affects captured handle context.",
+    "Mouse double-click check uses fixed500ms, same button and TickCount subtraction; no position tolerance or system double-click setting. Triple clicks can mark both second and third as double clicks.",
+    "Background delegate exceptions are not caught in these callbacks. No per-profile revalidation occurs at execution time; changed enabled/action/path values can be observed through mutable reference.",
+    "Dispose calls stop then dependency disposal without local disposed guard or unsubscribe; dependency idempotence and callback lifecycle not qualified."
+  ],
+  "limits": [
+    "No original H.Hooks dependency runtime, Windows input, timing or hook lifecycle tests performed. No input simulation executed or production code adopted.",
+    "Completed count148/500; full filtered checkout session13181 remains separate; native pHash investigation deferred."
+  ]
+}
