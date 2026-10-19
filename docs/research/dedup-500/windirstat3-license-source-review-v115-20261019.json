@@ -1,0 +1,30 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Complete manual reading of LICENSE.md. Full application TXT compared linewise, with only title spacing/Markdown differences. Full MSI RTF structurally decoded for its observed simple control vocabulary; all5644text tokens match manually read root license. Credit is manual root reading plus full-content equivalent-variant inspection, not independent manual reading of repeated payloads.",
+  "new_whole_files_read": {
+    "LICENSE.md": "631086d069c8ec9db1b308d050d096d53f74afb595635a5bd06dc254fc82cd06",
+    "setup/msi/license.rtf": "c05e607221c3a92464d8861e04974c51954711f6ab4bba3a51fa6c6ef284f604",
+    "windirstat/res/license.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+  },
+  "whole_files_read": 250,
+  "coverage": "docs/research/dedup-500/windirstat3-license-coverage-v115-20261019.json",
+  "coverage_sha256": "828a693d7a415cc249af2f6a28a6e90de9c9cdeb8f9f8b142c51959adfdfc0ff",
+  "findings": [
+    "All three files contain GPL version3 dated29June2007, including preamble, sections0..17 and application instructions. File-content identification only, not a legal compatibility or compliance opinion.",
+    "Application TXT differs from root Markdown only in heading format and blank-line layout; whitespace-normalized5644tokens are identical.",
+    "MSI RTF uses Consolas with bold/size changes and paragraph controls; after removal of observed formatting/font metadata, all5644tokens match root text in order. No license-text omission detected by this comparison.",
+    "Earlier reviewed resource script embeds generated license.bin; equality of source text variants does not prove freshness of generated payload or installed dialog rendering.",
+    "No foreign implementation code adopted in this increment. Nested notices previously reviewed remain separate from these top-level variants."
+  ],
+  "checks": {
+    "variants": 3,
+    "normalized_tokens_each": 5644,
+    "token_equality": true
+  },
+  "limits": [
+    "No legal advice, licensing compatibility determination, distribution audit or Windows installer/rendering test.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
