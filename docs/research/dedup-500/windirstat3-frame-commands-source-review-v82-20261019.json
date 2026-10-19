@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of MainFrame.Commands.cpp in four complete ranges; pinned bytes verified. No native command executed.",
+  "new_whole_files_read": {
+    "windirstat/MainFrame.Commands.cpp": "58138b3cf43148a60aaa491078f19684a9e39da3695df3971e8ce2eb99ae93fa"
+  },
+  "whole_files_read": 213,
+  "coverage": "docs/research/dedup-500/windirstat3-frame-commands-coverage-v82-20261019.json",
+  "coverage_sha256": "d8d735ceee39538acb2ca504d259de4a0e947d058fc419012df75087b83221bc",
+  "findings": [
+    "Recovery command checks elevation in execution as well as UI update. Graph style/preset and pane selection explicitly reject running scans. Logical/physical mode updates rely on command enabled-state gate and recursively sort entire tree when invoked; not a bounded-depth or performance proof.",
+    "Cleanup menu query keeps one packaged task/future alive, caches recycle/shadow counts and UI collects after thread termination. No timeout/cancellation on these queries; earlier shutdown join can wait indefinitely.",
+    "Dynamic custom cleanup menu retains index in menu item data and identifies menu using static tag. Population requires settled scan, filetree focus and matching selected item types; dispatch delegates index to model RunUserDefinedCleanup, whose own preconditions remain relevant.",
+    "Watcher filter edits immediately apply quick filter, invalid expressions paint red border; Escape clears, Return/Tab moves focus to watcher, CtrlA selects all. No debounce or regex time bound in this wrapper. Watcher running-state limitations remain as earlier reviewed.",
+    "Font changes defer while main window disabled by modal dialog, rescale state, clear text cache, apply fonts and rebuild toolbar. System/theme changes enumerate thread windows and notify appearance; this connects prior font-cache invalidation concerns but does not prove every renderer cache reacts.",
+    "RebuildLayout reparents stable pane HWNDs to frame before destroying splitters, recreates topology and reparents panes back. SetParent/CreateStatic/ID-change returns are ignored and no rollback is present; actual failure could leave partial layout.",
+    "Topology/permutation are normalized through known layout catalog. Splitter callbacks map minimization to pane visibility and persisted ratios. Recreated splitters retain owned view objects from initial creation, while stable window objects are reparented; runtime teardown still unqualified.",
+    "Tools menu offers shadow-copy/defrag/checkdisk for local drives with elevation UI gates; handlers delegate system operations. They were read only, never invoked.",
+    "Selection size/status accumulates logical or physical values after settled guard; hover overrides. Settled can represent user-stopped partial model as previously established; status label is not independent completeness proof."
+  ],
+  "limits": [
+    "No Windows commands, filesystem operations, cleanup, elevation, process launch, layout fault injection, watcher UI, font/theme or performance tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
