@@ -1,0 +1,24 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete profile editor XAML reading and pinned Git blob verification; cross-checked previous code-behind and numeric-control source findings.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/HotKeyProfileControl.xaml": "cd0f36d2cf39504ab2192f4bf00af3ca7c41337524057b762970ee913b74ddd7"
+  },
+  "whole_files_read": 85,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v34-20261019.json",
+  "coverage_sha256": "9097b0ce576064c35c58cae88f987fd5549e511326a582c366bd3317462b14ea",
+  "findings": [
+    "Delay control explicitly sets Minimum0 Maximum10000 Step100 and N0 format. This narrows ordinary UI intent and refines v33 range concern: handler cast lacks checks, but configured UI maximum is safely within int. Earlier missing property coercion still means imported/programmatic assignments require separate admission.",
+    "Suffix ms is overlaid by NumericInputControl rather than included in formatted text; this concrete use site gives suffix length2 to earlier caret-subtraction concern. Runtime reproduction remains outstanding.",
+    "Location textbox explicitly selects reusable Cut/Copy/Paste menu; name/hotkey textboxes inherit collapsed context-menu style. No MaxLength on these fields.",
+    "Scope and action selectors use noneditable custom ComboBox by default; earlier lack of editable template is not itself a defect at these use sites.",
+    "Expanded detail visibility binds toggle checked state; no three-state configuration appears on profile toggles, narrowing prior indeterminate-style concern.",
+    "Main editor row combines three flexible columns with fixed150 action selector and multiple auto columns; narrow-window and DPI behavior still needs rendering. Tooltips describe location as folder/file/website/CLSID, confirming shell navigation scope."
+  ],
+  "limits": [
+    "Static source refinement only; no Windows UI execution or fresh tests. No own-library code changes.",
+    "148/500 repositories fully reviewed; ExplorerTabUtility partial85/104. Native pHash investigation deferred."
+  ]
+}
