@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole1217line Item.cpp reading in four contiguous sections; bytes matched pinned Git object. No runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Item.cpp": "4da39a97ca74f328a0490291b5b773e10bfd87a64e2f297e02a5fc0b48c7c577"
+  },
+  "whole_files_read": 72,
+  "coverage": "docs/research/dedup-500/windirstat3-item-coverage-v28-20261019.json",
+  "coverage_sha256": "26525e107969c1cb8a524bc2af283d41b0b7d3ac4c469dd0b417fbfb50e9f2c5",
+  "findings": [
+    "ScanBatch accumulates new nodes, logical/physical counts and extension deltas; flush at128children or100ms, forced before duplicate processing when enabled. Parent/tree publication precedes queueing directories/top candidates. Destructor also Flushes; allocation/exception behavior not fault-injected.",
+    "CItem destructor uses explicit descendant stack, clears descendant child vectors before deleting them, avoiding depth-proportional recursive destructor calls. MTP token unregistered per destroyed node. No million-depth memory/stack test inferred.",
+    "Name allocation checks ushort name length and size_t allocation arithmetic. Drive names use separate buffer; ordinary names use trailing allocation. Names trim trailing backslashes and retain counted length.",
+    "FindItemByPath chooses longest case-insensitive root prefix with separator boundary, then compares child components exactly/case-sensitively. This preserves case-distinct names for stored path restoration but does not accept arbitrary case variants of descendant spelling.",
+    "GetPath reconstructs MTP via root registry and ancestry; linked hardlink pseudo-file delegates to original, hardlink grouping containers have empty paths. ComparePath uses ancestor hierarchy and case-insensitive sibling-name slices, distinct from exact path lookup.",
+    "Upward size/count additions use unsigned atomic arithmetic; subtractions rely on assertions for underflow. GetItemsCount widens file/folder counts only after each32bit counter load, so widened sum does not repair earlier counter overflow.",
+    "Physical contribution returns0for hardlink-flagged nodes when ProcessHardlinks enabled; raw physical bytes remain accessible separately. This is accounting policy, not proof of data-content equality.",
+    "Scan backend selects MTP first, otherwise loaded NTFS unless forced basic, otherwise basic enumeration. Filtered directories decrement outstanding jobs; file refresh updates metadata then reprocesses duplicate/top views. Full Actions/context population still incomplete.",
+    "ScanItemsFinalize marks partial tree nodes done, so DONE alone cannot establish exhaustive source enumeration. The caller stop reason and scan state must also be considered; no all-callers runtime completeness claim.",
+    "Scan clock freezes active milliseconds under high-bit suspended marker and returns elapsed seconds as ULONG. Suspend/resume uses load/store rather than compare-exchange; correctness assumes coordinated transitions, not concurrent arbitrary callers."
+  ],
+  "limits": [
+    "No Windows model, concurrent scan, cancellation, case-sensitive filesystem or allocation-error runtime execution.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
