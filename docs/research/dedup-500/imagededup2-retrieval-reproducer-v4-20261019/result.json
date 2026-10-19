@@ -1,0 +1,46 @@
+{
+  "status": "passed_selected_original_retrieval_body_with_explicit_adapters",
+  "source_pins": {
+    "imagededup/handlers/search/brute_force.py": "3f3a30e4c2a388c4ae0418e9c400a241aa66527eb5e04bbdef786a2c273f701c",
+    "imagededup/handlers/search/bktree.py": "f43e9555c74f28c436d20dbe21b0b72adc2d7963df22d7869d07e789a93411e4",
+    "imagededup/handlers/search/retrieval.py": "e46f002ef827cd50ae031c4a8d11f5a05364684b0023cc35a6dd27d681510fb9",
+    "tests/test_retrieval.py": "6543185653d30c4a99538581453e1518bfbd5401f198c6d34c655d3569cf7e57"
+  },
+  "original_tests_passed": [
+    "test_max_hamming_threshold_not_violated",
+    "test_results_sorted_in_ascending_distance_order"
+  ],
+  "oracle_queries": 4608,
+  "backends": [
+    "brute_force",
+    "bktree"
+  ],
+  "oracle": "all256eightbit fixed64bit hashes,9radii, self-free exact membership and monotone distance order",
+  "empty_and_unknown_backend_controls": {
+    "brute_force": {
+      "result": {}
+    },
+    "bktree": {
+      "exception": "IndexError",
+      "message": "list index out of range"
+    },
+    "typo": {
+      "exception": "RuntimeError",
+      "message": "native backend not qualified by this harness"
+    }
+  },
+  "same_key_control": {
+    "same.jpg": []
+  },
+  "findings": [
+    "Self suppression compares filename keys only; same key across separate namespaces is excluded.",
+    "Empty database differs between Python brute force and BKTree.",
+    "Unknown backend string falls through to native constructor; harness sentinel records dispatch only."
+  ],
+  "limits": [
+    "Original entire HashEval class AST unchanged; original Python backend modules loaded unchanged.",
+    "Serial parallelise adapter, logger adapter, cpu_count1 and independent integer XOR metric explicit.",
+    "Not multiprocessing, native Cython, original Hashing distance, cosine/sklearn, package or full test target qualification.",
+    "Tie ordering intentionally not treated as stable backend contract; no production adoption or speedup claim."
+  ]
+}

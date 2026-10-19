@@ -1,0 +1,28 @@
+{
+  "status": "partial_source_and_selected_retrieval_runtime_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_retrieval.py": "6543185653d30c4a99538581453e1518bfbd5401f198c6d34c655d3569cf7e57"
+  },
+  "whole_files_read_across_v1_v4": 12,
+  "controls": "docs/research/dedup-500/imagededup2-retrieval-reproducer-v4-20261019/result.json",
+  "controls_sha256": "7306541bd0a56a4ff5b93c380316eccf6fb9aad48246bc1484717bbdf6ffa025",
+  "reproducer": "scripts/qualify-imagededup2-retrieval-20261019.py",
+  "reproducer_sha256": "15cb38a87bdcc54f11717ded21327ccb08a8350034dcffa28b4b6476b4c2bd3c",
+  "original_selected_tests_passed": 2,
+  "oracle_queries": 4608,
+  "findings": [
+    "Self suppression compares filename keys only; same key across separate namespaces is excluded.",
+    "Empty database differs between Python brute force and BKTree.",
+    "Unknown backend string falls through to native constructor; harness sentinel records dispatch only."
+  ],
+  "limits": [
+    "Original entire HashEval class AST unchanged; original Python backend modules loaded unchanged.",
+    "Serial parallelise adapter, logger adapter, cpu_count1 and independent integer XOR metric explicit.",
+    "Not multiprocessing, native Cython, original Hashing distance, cosine/sklearn, package or full test target qualification.",
+    "Tie ordering intentionally not treated as stable backend contract; no production adoption or speedup claim."
+  ],
+  "deferred": "pHash native memory-error investigation"
+}
