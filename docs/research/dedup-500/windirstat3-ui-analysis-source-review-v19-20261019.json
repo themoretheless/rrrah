@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of three files; byte comparison against pinned Git objects. No upstream tests, builds or desktop actions executed.",
+  "new_whole_files_read": {
+    "tests/Harness/Ui.ps1": "79e5b0efdea6a7a1aa24a8cce7e55ab6f2914d441112406043b5d66c8b53654d",
+    "tests/Show-LargestFunctions.ps1": "6de389254ee042b007280312d35ecd1afbadc7a55aec51e058fa20da94975ef4",
+    "tests/Show-InlinedFunctions.ps1": "a38b91d43091eb2d3f0bf361f09ec5b6d0d0c1bbf7bc6f9b0c0d0503245329e5"
+  },
+  "whole_files_read": 49,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-analysis-coverage-v19-20261019.json",
+  "coverage_sha256": "aa8e9836ca6509c0ff13cdf9aa43913e5fdcf233140042045ec11f49e96cce5b",
+  "findings": [
+    "Wait-AppIdle requires enabled main window and title without scanning/percentage/suspended markers stable450ms. Wait-AppScanning requires title marker plus enabled suspend command. Neither reads worker state or joins; these are observable UI synchronization heuristics.",
+    "Get-StableFrame exposes/captures screen, compares successive frames via Desktop.Difference with default RGB tolerance8, and requires zero above-tolerance changed pixels across adjacent captures for300ms. This does not require exact bytes or comparison to a fixed first frame.",
+    "Assert-FrameEqual accepts changed-pixel fraction up to0.001 after color tolerance, saves expected/actual PNGs only above that fraction. Assert-GraphRendered requires more than24 distinct RGB colors; neither establishes semantic graph correctness independently.",
+    "Stop-TestApp requests WM_CLOSE and waits up to8seconds, verifies normal exit when observed, otherwise kills tracked process tree and fails unless explicitly forced. Unexpected process exits during general waits are checked in Core.ps1.",
+    "Find-AppRow uses case-insensitive exact-display-name or basename matching, demands exactly one match, and fails on ambiguity. The case-sensitive scenario obtains exact-name indices through Array.IndexOf for its metadata assertion instead. This limits generic row targeting in case-distinct populations.",
+    "Show-LargestFunctions builds a Release MAP or reuses existing artifacts and ranks approximate adjacent-RVA sizes. No timing measurement or build freshness validation is performed by SkipBuild.",
+    "Show-InlinedFunctions compares default Release with another build that changes inlining, whole-program optimization and link-time code generation together. Missing standalone MAP symbols are labeled fully inlined, but symbol absence alone cannot distinguish inlining from other elimination/folding/optimization effects, and binary-size differences cannot be attributed only to inlining."
+  ],
+  "limits": [
+    "Windows UI and MSVC runtime behavior not executed. No current graph pass or upstream performance claim inferred.",
+    "All five Harness files and all six scenario files now have whole-file reading credit; this still leaves most repository files unreviewed.",
+    "Build-PgoTrainingProfiles.ps1 remains unread as a whole file.",
+    "No production code adopted; native pHash investigation deferred."
+  ]
+}
