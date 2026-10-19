@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of pinned CHANGELOG.md. Historical claims compared with already inspected source; no release or performance verification.",
+  "new_whole_files_read": {
+    "CHANGELOG.md": "cf9dec717f8c42abd6b6e5d0be4bb4def697dc666a3c464e8c08ab878c9c5e86"
+  },
+  "whole_files_read": 218,
+  "coverage": "docs/research/dedup-500/windirstat3-changelog-coverage-v84-20261019.json",
+  "coverage_sha256": "b74f89c5f32b6931651cf5eec257f9bb26e0a2e8e419c3b9cc501db8057ff0dc",
+  "findings": [
+    "Pinned changelog labels2.9.1Upcoming; repository source therefore includes work beyond named2.9.0release. No claim this pin equals a released binary.",
+    "2.9.0adds optional sparse hashing over64MiB, matching reviewed sampling implementation and Probable duplicates resource label. Our existing66MiB regression checks changes outside those sample windows in our exact scanner; this is not an original WinDirStat runtime test.",
+    "Hardlink group overwrite/accounting, canceled watcher I/O lifetime, MFT sequence/cancellation and blocked drive selection are explicitly recorded fixes. Earlier source reviews located corresponding grouping, identity, join and detached-query mechanisms, without establishing all fault/runtime cases.",
+    "Changelog performance/memory improvements describe batching, incremental duplicate/top tracking and native Win32 migration; no paired measurements are supplied by this file. Cannot treat them as measured recommendations for our library.",
+    "2.9.1tiny squarified assertion and2.9.0deep-directory indentation fixes do not establish arithmetic safety for all dimensions/depths. Existing source-boundary concerns remain qualified, not refuted by historical fix descriptions.",
+    "Windows7support removed2.5and restored2.6; compatibility claims require actual platform gates and cannot be inferred from latest-source compilation on this host.",
+    "Version2.6changed save/load CLI and2.5invalidated older CSV compatibility. Historical formats/version migration remain separate from current writer roundtrips already tested."
+  ],
+  "limits": [
+    "No claims of all listed fixes reproduced, all releases tested, original Windows executable verified or measured performance.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
