@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole3files manually read; pinned Git byte comparison. No Windows compatibility execution.",
+  "new_whole_files_read": {
+    "windirstat/Tracer.h": "0d8b60f0564495606b0934c71bc3fb7a767d8c5afe644bb7f2b4caf7896c5c70",
+    "windirstat/UiFramework.h": "cc8e46d82d454f0e368cc07d14a330a6f651e19b5d970c926d22be7d378698ef",
+    "windirstat/LegacyOsCompat.cpp": "dbe944a791e5b58cfe385043060c35a66e21e9d7d26933458a4e6a18f828858d"
+  },
+  "whole_files_read": 128,
+  "coverage": "docs/research/dedup-500/windirstat3-compat-framework-coverage-v46-20261019.json",
+  "coverage_sha256": "4079e0c065939e0915e3e43a5c7199306d8e752908749a888f75de481e73f412",
+  "findings": [
+    "VTRACE formats source-location/debug message and calls OutputDebugString only under compile-time IsDebugBuild. As function call, argument expressions may still evaluate in Release despite empty function body; no macro-style lazy-evaluation guarantee.",
+    "UiFramework header adds app-exit and toolbar/status routing; toggles existing bar visibility and layout. Full custom window/message implementation remains elsewhere, no MFC parity claim.",
+    "Legacy CreateFile2 shim prefers native lookup, validates extended parameter size/flag subset then translates to CreateFileW. Runtime lookup preserves GetLastError. No unsupported flag/old-OS execution performed.",
+    "Precise time shim falls back GetSystemTimeAsFileTime; fallback does not preserve precise-clock resolution. WaitOnAddress validates pointer/size then memcmp polling, sleeps up to10ms finite waits or1ms infinite waits.",
+    "WakeByAddress fallbacks do nothing because polling handles eventual changed-value observation. Latency/memory-order semantics and Windows synchronization parity untested.",
+    "Import aliases emitted for x86/x64; project excludes file on ARM64. Presence of compatibility shims and WINVER macros does not qualify full application old-Windows support."
+  ],
+  "limits": [
+    "No legacy Windows, scheduler, memory-order, loader/import or timing runtime qualification.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
