@@ -1,0 +1,31 @@
+{
+  "status": "partial_source_and_selected_runtime_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_general_utils.py",
+      "sha256": "1bfde5dc58d65db550117c473f0beb75123c788e18b9d821c7dd4b8687aea8e4"
+    }
+  ],
+  "whole_files_read_across_v1_v2": 9,
+  "controls": "docs/research/dedup-500/imagededup2-removal-reproducer-v2-20261019/result.json",
+  "controls_sha256": "b1236cb2e51e141c1206abf4f0b649acf8be5c546963d3171af5a6cb1fa18dcc",
+  "reproducer": "scripts/qualify-imagededup2-removal-20261019.py",
+  "reproducer_sha256": "c77eacd504441c3e0448fdb35ef6ac6f815da79a6df3652702cc69c43919d055",
+  "analysis": [
+    "All1024 simple undirected five-vertex graphs times120orders preserve independent survivors and direct-survivor support for every removed vertex.",
+    "Three-node similarity chain keeps either1or2 files depending on insertion order; does not optimize survivor count or establish transitive byte identity.",
+    "Asymmetric input can select a file whose only neighbor is also selected; singleton self-edge selects sole file. These controls concern utility input assumptions, not proof normal retrieval emits such mappings.",
+    "Recursive discovery includes ordinary file under hidden parent; hidden basename itself excluded.",
+    "Original three general-utils test bodies passed in isolated temporary working directory. Four original utility bodies extracted unchanged by AST; explicit imports/logger routing. No multiprocessing/package/decode/deletion execution."
+  ],
+  "next_requirements": [
+    "Require symmetric self-free candidate graph before relying on survivor support.",
+    "Keep exact-byte identity proof separate from similarity graph grouping.",
+    "Specify deterministic survivor policy and hidden-directory discovery contract."
+  ],
+  "deferred": "pHash native memory-error investigations remain skipped",
+  "production_code_adopted": false
+}

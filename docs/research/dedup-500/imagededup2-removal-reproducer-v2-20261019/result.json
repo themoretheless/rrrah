@@ -1,0 +1,113 @@
+{
+  "status": "passed_selected_utilities_and_graph_invariants",
+  "source_pins": {
+    "imagededup/utils/general_utils.py": "7e3908d0ea41591635fc0824fbf2f321cad8d2499ff40509692aa29f9e2f89a2",
+    "tests/test_general_utils.py": "1bfde5dc58d65db550117c473f0beb75123c788e18b9d821c7dd4b8687aea8e4"
+  },
+  "original_tests_passed": [
+    "test_get_files_to_remove",
+    "test_correct_saving_floats",
+    "test_correct_saving_ints"
+  ],
+  "symmetric_graph_order_cases": 122880,
+  "invariants": [
+    "survivors independent",
+    "each removed vertex adjacent to a survivor"
+  ],
+  "chain_order_counterexample": [
+    {
+      "order": [
+        "a",
+        "b",
+        "c"
+      ],
+      "kept": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "order": [
+        "a",
+        "c",
+        "b"
+      ],
+      "kept": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "order": [
+        "b",
+        "a",
+        "c"
+      ],
+      "kept": [
+        "b"
+      ]
+    },
+    {
+      "order": [
+        "b",
+        "c",
+        "a"
+      ],
+      "kept": [
+        "b"
+      ]
+    },
+    {
+      "order": [
+        "c",
+        "a",
+        "b"
+      ],
+      "kept": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "order": [
+        "c",
+        "b",
+        "a"
+      ],
+      "kept": [
+        "a",
+        "c"
+      ]
+    }
+  ],
+  "asymmetric_control": {
+    "mapping": {
+      "a": [
+        "b"
+      ],
+      "b": [],
+      "c": [
+        "a"
+      ]
+    },
+    "removed": [
+      "a",
+      "b"
+    ],
+    "kept": [
+      "c"
+    ],
+    "finding": "b has no direct edge to survivor c"
+  },
+  "self_edge_control": "single self-matching file selected for removal",
+  "hidden_parent_control": [
+    ".hidden/visible.jpg",
+    "visible.jpg"
+  ],
+  "limits": [
+    "Original four AST-extracted function bodies; import routing and logger adapter explicit.",
+    "All 1024 simple undirected five-vertex graphs and all 120 orders; not arbitrary graph sizes.",
+    "Graph adjacency is similarity, not byte identity; no actual files deleted.",
+    "Three unchanged original test bodies only; no multiprocessing or full-package test."
+  ]
+}
