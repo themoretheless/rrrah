@@ -2,7 +2,7 @@
   "index": 50,
   "repository": "jvirkki/dupd",
   "commit": "33907bbcfd5fe8b63f54d4f55438fa222ea880aa",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run Additional21wholepinnedfilesread: design/build/filecompare/cache/hashers/APIheaders andtestsrun/common/00..07. Wholeoriginalnativeenginecompiled and8ordinaryupstreamtestspass withisolatedHOME.793entryfullrepository remainsincomplete. Additional13wholefiles(hash/dirtree/readlist+8tests)read;34cumulative,16distinctselectedupstreamtestspass. Full793entryrepository remainsfalse. Additional18wholefilesread(sizeBST/patharena/traversal/refresh/docs+8tests);52cumulative.8moreupstreamtestspass/24cumulative. Fullrepositoryfalse. Additional14wholefilesread(size-list/SQLite/CLI+8tests);66cumulative.8additionaloriginaltestspass,32cumulative. Fullrepositoryfalse. Additional14wholefilesread(hashlist/report+9tests),80cumulative.8moreoriginaltestspass,40cumulative; test49readbutnotrun(sharedtmpcache). Fullrepositoryfalse. Additional17wholefilesread(I/O/testhelpers/options+9tests+fixturecreator),97cumulative.8moreoriginaltestspass/48cumulative plusbuiltincommand.55readbutnotrun; fullrepositoryfalse.",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run Additional21wholepinnedfilesread: design/build/filecompare/cache/hashers/APIheaders andtestsrun/common/00..07. Wholeoriginalnativeenginecompiled and8ordinaryupstreamtestspass withisolatedHOME.793entryfullrepository remainsincomplete. Additional13wholefiles(hash/dirtree/readlist+8tests)read;34cumulative,16distinctselectedupstreamtestspass. Full793entryrepository remainsfalse. Additional18wholefilesread(sizeBST/patharena/traversal/refresh/docs+8tests);52cumulative.8moreupstreamtestspass/24cumulative. Fullrepositoryfalse. Additional14wholefilesread(size-list/SQLite/CLI+8tests);66cumulative.8additionaloriginaltestspass,32cumulative. Fullrepositoryfalse. Additional14wholefilesread(hashlist/report+9tests),80cumulative.8moreoriginaltestspass,40cumulative; test49readbutnotrun(sharedtmpcache). Fullrepositoryfalse. Additional17wholefilesread(I/O/testhelpers/options+9tests+fixturecreator),97cumulative.8moreoriginaltestspass/48cumulative plusbuiltincommand.55readbutnotrun; fullrepositoryfalse. Additional28wholefilesread(policy/test/trace/docs helpers),125cumulative.8moreoriginalscriptspass,56cumulative+builtincommand; tracehelpersnotexecuted. Fullrepositoryfalse.",
   "decision": "reference",
   "finding": "Full memcmp comparator and hashing modules show hash-then-byte-confirm pattern; GPL reference with hashlist tests.",
   "license_metadata": "GPL-3.0",
@@ -126,6 +126,11 @@
       "audit": "docs/research/dedup-500/dupd50-io-review-v6-20261019.json",
       "controls": "docs/research/dedup-500/dupd50-io-review-v6-20261019.json",
       "scope": "17newwholefiles,8moreoriginalscriptpasses+builtincommand;97files/48scriptstotal, fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupd50-policy-trace-review-v7-20261019.json",
+      "controls": "docs/research/dedup-500/dupd50-policy-trace-review-v7-20261019.json",
+      "scope": "28newwholefiles/8morescriptpasses;125files/56scripts total, full793entryrepository remainsincomplete."
     }
   ]
 }
