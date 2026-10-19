@@ -1,0 +1,52 @@
+{
+  "status": "built_original_complete_C_modules",
+  "source_pins": {
+    "core/pe/modules/block.c": "787a1239c4a5b47292126bfd65b92ffe5ce4d5660128157ba395e0042f659e03",
+    "core/pe/modules/cache.c": "805669b79d81ec584351db8aaa5930f0f174bf94029ea61d5c3e62bc88f06f35",
+    "core/pe/modules/common.c": "edfb7e1f94af7b956e72e0804ebbb66a372b15a099deb07125becc933195992b",
+    "core/pe/modules/common.h": "df30f763eaf24ac0f61d0239e8211897b8b03dc2cc9ab928edf6116c4420d153"
+  },
+  "commands": [
+    [
+      "cc",
+      "-O2",
+      "-bundle",
+      "-undefined",
+      "dynamic_lookup",
+      "-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12",
+      "-I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/block.c",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/common.c",
+      "-o",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_block.cpython-312-darwin.so"
+    ],
+    [
+      "cc",
+      "-O2",
+      "-bundle",
+      "-undefined",
+      "dynamic_lookup",
+      "-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12",
+      "-I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/cache.c",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/common.c",
+      "-o",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_cache.cpython-312-darwin.so"
+    ]
+  ],
+  "results": [
+    {
+      "module": "block",
+      "exit_code": 0,
+      "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_block.cpython-312-darwin.so",
+      "binary_sha256": "75a28a3dc4f4f5ea7d9c4e10137f9c3dc640a9e5bc8970431311c21d45cbff66"
+    },
+    {
+      "module": "cache",
+      "exit_code": 0,
+      "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_cache.cpython-312-darwin.so",
+      "binary_sha256": "460b8a30c09b0be1178ac5dbbd3babcf8ae5bad8e62aa5477bd146bdcbf6b85e"
+    }
+  ],
+  "scope": "Selectedoriginalblock/cachemodules,actualPython3.12headers; noupstreamfullsetup/Qtbuildclaim."
+}

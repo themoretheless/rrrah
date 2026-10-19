@@ -1,0 +1,304 @@
+{
+  "status": "partial_picture_source_review_with_original_C_tests_and_matching_pipeline_controls",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-results-review-v4-20261019.json",
+  "previous_sha256": "b3b6146d9fce985d0aa6de287e051fa6c15a8a24c123bde9d77d0963457bee66",
+  "new_whole_blobs": [
+    {
+      "path": "core/pe/block.py",
+      "git_blob": "84084e6f577cac4e183dea4a3ecb3a0c693b55f1",
+      "sha256": "6447220a01fd7571294d1c709b00b8f18b324dfdbd9564ec41ad652333310de6",
+      "bytes": 4409,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/matchblock.py",
+      "git_blob": "0aa0d2535ae0574e604e0a44cb040bef8caca1ce",
+      "sha256": "cdc57407107ddfc4ae7feb5ff6253a3d4ef40db7f514a82a85d84b8210f9ac47",
+      "bytes": 11751,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/photo.py",
+      "git_blob": "06c6c245b36fe4c2bc8d0f0896eaf7e2b27756cb",
+      "sha256": "03aa6fca1733f2350ba5e39f8568e2319d015ba7af043b947a84e530d3f0f99b",
+      "bytes": 4075,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/cache_sqlite.py",
+      "git_blob": "f7020e466de78c03b1371fd44254020c8847c6a5",
+      "sha256": "a37056faf31a533159435d51b99037ba6a808718e9ef474de7a20eeaed11f9de",
+      "bytes": 7379,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/cache.py",
+      "git_blob": "738037f79ff9e8ce807248f58a92385e156f2eb1",
+      "sha256": "a2a261cc39a58a5dde1d98adc94352674bc3e7a6f2059fc960bf8965a37694f1",
+      "bytes": 531,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/modules/common.h",
+      "git_blob": "eb33b5e52decbde05764f2141ca938631bbc984a",
+      "sha256": "df30f763eaf24ac0f61d0239e8211897b8b03dc2cc9ab928edf6116c4420d153",
+      "bytes": 590,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/modules/common.c",
+      "git_blob": "065bf388d38a1c3c0e55b7bc2e2c7fcbf27a059e",
+      "sha256": "edfb7e1f94af7b956e72e0804ebbb66a372b15a099deb07125becc933195992b",
+      "bytes": 946,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/modules/block.c",
+      "git_blob": "5690b2e1e63259777b245b96b31e19c4469e69e9",
+      "sha256": "787a1239c4a5b47292126bfd65b92ffe5ce4d5660128157ba395e0042f659e03",
+      "bytes": 7077,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/modules/cache.c",
+      "git_blob": "feccfeb504eee28a398958c19b2125617dcebdc9",
+      "sha256": "805669b79d81ec584351db8aaa5930f0f174bf94029ea61d5c3e62bc88f06f35",
+      "bytes": 1877,
+      "fully_read": true
+    },
+    {
+      "path": "build.py",
+      "git_blob": "ac650b200d361f1740ad3ee67d49396d6ecd0f88",
+      "sha256": "01a23d986c286307337a14ab6279e452d01ca13cba993b4b2029acecf4d6daed",
+      "bytes": 4885,
+      "fully_read": true
+    },
+    {
+      "path": "setup.py",
+      "git_blob": "97cb61e38b3d69f8a5d813f2d04461aff84b15fe",
+      "sha256": "77c0541951c25a9a22c2e2bf3aa773d5bf7cf37c5e785ca49be9c95ee263016b",
+      "bytes": 754,
+      "fully_read": true
+    },
+    {
+      "path": "setup.cfg",
+      "git_blob": "bc12410b285dabfca2c2ac765e2e8a94d9539ee0",
+      "sha256": "173411c6654ee3d95669f654f612835b7b2227aafb93b5ab18e5a65352be845a",
+      "bytes": 1481,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/scanner.py",
+      "git_blob": "8a1d53d26388caddd4535f53de8e22a36a2663d0",
+      "sha256": "792eae7ca66c4c2e0963e7d0d4ab2a7ee56a60d27dca959e9b6c2e45d7e90e4c",
+      "bytes": 1283,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/block_test.py",
+      "git_blob": "caec436c54d40d2ffed27b1091457603d8890cc6",
+      "sha256": "ecea96e903a49f6814fe403a6ed82bc53526e5dd98bb1cd166e3d7c1c81c9f0e",
+      "bytes": 5647,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/cache_test.py",
+      "git_blob": "6e9e0e8820459167de6585d1bd6f6db168c74424",
+      "sha256": "27da2743d7e8a1e80aa419e605f3c6373e8b26aa28bd9453da8f220ad3a6ef56",
+      "bytes": 4727,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 52,
+  "upstream_additional_tests_passed": 35,
+  "upstream_cumulative_distinct_tests_passed": 138,
+  "selected_upstream_runtime": {
+    "exit_code": 0,
+    "command": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+      "-m",
+      "pytest",
+      "core/tests/block_test.py",
+      "core/tests/cache_test.py",
+      "-q",
+      "--basetemp",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-block-cache-tests-20261019/pytest-temp",
+      "--junitxml",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-block-cache-tests-20261019/junit.xml"
+    ],
+    "source_pins": {
+      "core/tests/block_test.py": "ecea96e903a49f6814fe403a6ed82bc53526e5dd98bb1cd166e3d7c1c81c9f0e",
+      "core/tests/cache_test.py": "27da2743d7e8a1e80aa419e605f3c6373e8b26aa28bd9453da8f220ad3a6ef56",
+      "core/pe/block.py": "6447220a01fd7571294d1c709b00b8f18b324dfdbd9564ec41ad652333310de6",
+      "core/pe/cache.py": "a2a261cc39a58a5dde1d98adc94352674bc3e7a6f2059fc960bf8965a37694f1",
+      "core/pe/cache_sqlite.py": "a37056faf31a533159435d51b99037ba6a808718e9ef474de7a20eeaed11f9de"
+    },
+    "source_drift": [],
+    "log_sha256": "068f3d083e956dd4f1195edd4bc63e6b0b7d5beb5e3aedce5b4f1ffb0a1dc3e3"
+  },
+  "original_native_build": {
+    "status": "built_original_complete_C_modules",
+    "source_pins": {
+      "core/pe/modules/block.c": "787a1239c4a5b47292126bfd65b92ffe5ce4d5660128157ba395e0042f659e03",
+      "core/pe/modules/cache.c": "805669b79d81ec584351db8aaa5930f0f174bf94029ea61d5c3e62bc88f06f35",
+      "core/pe/modules/common.c": "edfb7e1f94af7b956e72e0804ebbb66a372b15a099deb07125becc933195992b",
+      "core/pe/modules/common.h": "df30f763eaf24ac0f61d0239e8211897b8b03dc2cc9ab928edf6116c4420d153"
+    },
+    "commands": [
+      [
+        "cc",
+        "-O2",
+        "-bundle",
+        "-undefined",
+        "dynamic_lookup",
+        "-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12",
+        "-I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/block.c",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/common.c",
+        "-o",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_block.cpython-312-darwin.so"
+      ],
+      [
+        "cc",
+        "-O2",
+        "-bundle",
+        "-undefined",
+        "dynamic_lookup",
+        "-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12",
+        "-I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/cache.c",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/modules/common.c",
+        "-o",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_cache.cpython-312-darwin.so"
+      ]
+    ],
+    "results": [
+      {
+        "module": "block",
+        "exit_code": 0,
+        "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_block.cpython-312-darwin.so",
+        "binary_sha256": "75a28a3dc4f4f5ea7d9c4e10137f9c3dc640a9e5bc8970431311c21d45cbff66"
+      },
+      {
+        "module": "cache",
+        "exit_code": 0,
+        "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_cache.cpython-312-darwin.so",
+        "binary_sha256": "460b8a30c09b0be1178ac5dbbd3babcf8ae5bad8e62aa5477bd146bdcbf6b85e"
+      }
+    ],
+    "scope": "Selectedoriginalblock/cachemodules,actualPython3.12headers; noupstreamfullsetup/Qtbuildclaim."
+  },
+  "native_candidates_and_cache": {
+    "status": "verified_original_native_block_candidates_and_same_second_cache_reuse",
+    "native_binary_pins": {
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_block.cpython-312-darwin.so": "75a28a3dc4f4f5ea7d9c4e10137f9c3dc640a9e5bc8970431311c21d45cbff66",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/pe/_cache.cpython-312-darwin.so": "460b8a30c09b0be1178ac5dbbd3babcf8ae5bad8e62aa5477bd146bdcbf6b85e"
+    },
+    "source_pins": {
+      "core/pe/matchblock.py": "cdc57407107ddfc4ae7feb5ff6253a3d4ef40db7f514a82a85d84b8210f9ac47",
+      "core/pe/cache_sqlite.py": "a37056faf31a533159435d51b99037ba6a808718e9ef474de7a20eeaed11f9de",
+      "core/pe/cache.py": "a2a261cc39a58a5dde1d98adc94352674bc3e7a6f2059fc960bf8965a37694f1"
+    },
+    "real_RGB_fixture_dimensions": [
+      30,
+      30
+    ],
+    "block_count": 225,
+    "different_pixels_same_block_means": true,
+    "original_async_candidate_score": 100,
+    "same_second_picture_cache_retains_old_blocks": true,
+    "fixture_contact_sheet_sha256": "bae6c9feb6cd76da2454821dd2d117486ca97376ae66e8d74adebe0a0586fc61",
+    "limits": [
+      "Original complete C modules with normal Pillow RGB images; no invalid native inputs, sanitizer or memory-error probes.",
+      "async_compare is candidate stage. Original getmatches final digest check may lower100to99; full multiprocessing/publication pipeline not invoked here.",
+      "Qt/Cocoa platform decode paths not qualified by Pillow fixture calls.",
+      "Cache observation is same-second timestamp granularity, not a hash collision. No production code adoption."
+    ]
+  },
+  "original_getmatches_controls": {
+    "status": "verified_original_picture_getmatches_digest_downgrade",
+    "threshold100_matches": [
+      [
+        [
+          "checker.png",
+          "copy.png"
+        ],
+        100
+      ]
+    ],
+    "threshold99_matches": [
+      [
+        [
+          "checker.png",
+          "copy.png"
+        ],
+        100
+      ],
+      [
+        [
+          "checker.png",
+          "stripes.png"
+        ],
+        99
+      ],
+      [
+        [
+          "copy.png",
+          "stripes.png"
+        ],
+        99
+      ]
+    ],
+    "source_pins": {
+      "core/pe/matchblock.py": "cdc57407107ddfc4ae7feb5ff6253a3d4ef40db7f514a82a85d84b8210f9ac47",
+      "core/pe/photo.py": "03aa6fca1733f2350ba5e39f8568e2319d015ba7af043b947a84e530d3f0f99b",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba"
+    },
+    "input_sha256": {
+      "checker.png": "a561f9955f6a05f882d1428c77c73a50549351090af01ddef0b4d5861c283743",
+      "copy.png": "a561f9955f6a05f882d1428c77c73a50549351090af01ddef0b4d5861c283743",
+      "stripes.png": "bac93486372ba51fddbd3b35230a9cb8d35932bdd72597b8573c50bdf1fb3262"
+    },
+    "adapters": [
+      "Photo platform methods implemented with real Pillow decode and original C getblocks2 for unrotated normal RGB PNGs.",
+      "Only pool factory capped at two real multiprocessing workers; original matching/candidate/final-digest functions unchanged."
+    ],
+    "limits": [
+      "Not native Qt/Cocoa decoding, GUI or unrestricted upstream default process count.",
+      "99percent is a fuzzy candidate outcome, not exact pixel identity.",
+      "No invalid buffers, memory-error probe, production source modification or performance claim."
+    ]
+  },
+  "reproducer": "docs/research/dedup-500/dupeguru1-picture-reproducer-v5-20261019",
+  "harnesses": [
+    {
+      "path": "scripts/qualify-dupeguru1-native-picture-controls-20261019.py",
+      "sha256": "d633d65fcfe9a8337422c91ea54ea1b27e3097f7e00fb26f5ec874fdfe63e972"
+    },
+    {
+      "path": "scripts/qualify-dupeguru1-picture-pipeline-20261019.py",
+      "sha256": "1813ee70d4daeb594cdb34d2a14ec7b0b8fbd59f5f38a50deb5accc4f11a2f38"
+    }
+  ],
+  "visual_fixture_inspected": true,
+  "findings": [
+    "All35unchangedblock/cachetestspasswithoriginalCmodulesloaded; no skip-on-missing-native qualification.",
+    "DifferentcheckerandstripedRGBimageshavesame225blockmeansand100candidate score; visuallyinspected contact sheet. Candidate isnotidentityproof.",
+    "Originalgetmatchesfunctionrejectsdifferentimagesatthreshold100andlowersbothdifferentpairsscores to99. Actualtwo-workerexecutionwithrealPillowdecoderadapter; no mockedcomparisonkernel.",
+    "Imageblockcachecolumnnamedmtime_nsactuallystoresintegerseconds; same-secondimagechange retainsoldblocks afterpurge_outdated.",
+    "ChunkcacheanalysisdocumentsreducedblockIOwhileallpairsremainquadratic; no actualend-to-endbenchmarkorportadopted.",
+    "OriginalC getdata callsproducePillow12.3deprecationwarnings; currentnormalinputcontrolscomplete, futurePillowcompatibilitynotqualified."
+  ],
+  "limits": [
+    "52wholefilesread; remainingCocoa/Qt/media/GUI/EXIF/translation/buildsourcesandtests stillincomplete.",
+    "Nativebuildselectedcompleteblock/cacheCmodules, notfullupstreamsetup/UI/packagebuild.",
+    "Photo platform methodsusePillowandpoolfactorycappedattworealworkers; Qt/CocoadecodeanddefaultunboundedCPUcountnotqualified.",
+    "AuthorblocktestsuseFakeImagefixtures; supplementalPillowcontrolsprovideactualRGBimageevidence.",
+    "User-deferred pHash memory investigation remains deferred; no invalidbuffer/sanitizerprobeorforeignproductionadoption.",
+    "Fullreviewcount145/500; no all-cases orperformance-completionclaim."
+  ]
+}

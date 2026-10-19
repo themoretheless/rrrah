@@ -1,0 +1,54 @@
+{
+  "status": "verified_original_picture_getmatches_digest_downgrade",
+  "threshold100_matches": [
+    [
+      [
+        "checker.png",
+        "copy.png"
+      ],
+      100
+    ]
+  ],
+  "threshold99_matches": [
+    [
+      [
+        "checker.png",
+        "copy.png"
+      ],
+      100
+    ],
+    [
+      [
+        "checker.png",
+        "stripes.png"
+      ],
+      99
+    ],
+    [
+      [
+        "copy.png",
+        "stripes.png"
+      ],
+      99
+    ]
+  ],
+  "source_pins": {
+    "core/pe/matchblock.py": "cdc57407107ddfc4ae7feb5ff6253a3d4ef40db7f514a82a85d84b8210f9ac47",
+    "core/pe/photo.py": "03aa6fca1733f2350ba5e39f8568e2319d015ba7af043b947a84e530d3f0f99b",
+    "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba"
+  },
+  "input_sha256": {
+    "checker.png": "a561f9955f6a05f882d1428c77c73a50549351090af01ddef0b4d5861c283743",
+    "copy.png": "a561f9955f6a05f882d1428c77c73a50549351090af01ddef0b4d5861c283743",
+    "stripes.png": "bac93486372ba51fddbd3b35230a9cb8d35932bdd72597b8573c50bdf1fb3262"
+  },
+  "adapters": [
+    "Photo platform methods implemented with real Pillow decode and original C getblocks2 for unrotated normal RGB PNGs.",
+    "Only pool factory capped at two real multiprocessing workers; original matching/candidate/final-digest functions unchanged."
+  ],
+  "limits": [
+    "Not native Qt/Cocoa decoding, GUI or unrestricted upstream default process count.",
+    "99percent is a fuzzy candidate outcome, not exact pixel identity.",
+    "No invalid buffers, memory-error probe, production source modification or performance claim."
+  ]
+}
