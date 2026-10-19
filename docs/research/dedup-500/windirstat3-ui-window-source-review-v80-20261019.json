@@ -1,0 +1,26 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of UiWindow.h in three complete ranges; pinned bytes verified. No Windows execution.",
+  "new_whole_files_read": {
+    "windirstat/UiWindow.h": "5fd15569b1426a5e72cff127e57daa8b66329300966ad120842a18d199eb34b2"
+  },
+  "whole_files_read": 211,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-window-coverage-v80-20261019.json",
+  "coverage_sha256": "6d8c585df90664e4b38a7421608777ebf9de5bec1386d3178f5e0ea0b32642c6",
+  "findings": [
+    "Attach refuses null/already-owned handles and stores object property and owner thread. Native subclass creation installs framework procedure and rolls back properties/procedure on failure; ordinary window creation uses thread-local creation scope.",
+    "Destructor distinguishes subclassed native controls from framework-owned windows, attempts procedure restoration and detaches or destroys accordingly. It does not enforce calling owner thread; Windows thread/lifetime contracts still apply.",
+    "Dispatch catches handler exceptions, validates paint region on paint exception, returns-1for create failure and otherwise0, then detaches and clears super procedure on nonclient destruction. Silent exception containment does not establish successful operation.",
+    "SendNativeMessage bypasses framework on owner thread through previous procedure, but uses synchronous SendMessage across threads. No timeout or deadlock prevention provided here.",
+    "Typed route thunks statically reject unsupported member signatures and decode mouse coordinates as signed16bit; size fields use unsigned LOWORD/HIWORD. Notification parameters rely on message contract; arbitrary pointer input not validated.",
+    "Route result is optional: contained0still means handled. Derived route tables are checked before base; reflected control/notification handling precedes parent handling. Command probing execute=false detects matching route without running it.",
+    "Menu/accelerator commands with no control HWND consult UpdateCode enabled state before execution; control notifications do not use that gate. This UI enabled-state mechanism is not a replacement for handler preconditions.",
+    "Owner-draw dispatch publishes scoped thread-local row geometry, permitting cached rectangle methods without recursive native queries. Device-context wrappers pair GetDC/ReleaseDC and BeginPaint/EndPaint; general resource failure tests not executed."
+  ],
+  "limits": [
+    "No native creation/subclass rollback, HWND reuse, cross-thread messaging, route ABI, paint exception or teardown runtime tests performed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
