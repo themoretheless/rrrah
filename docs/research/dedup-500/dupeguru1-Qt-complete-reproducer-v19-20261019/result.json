@@ -1,0 +1,29 @@
+{
+  "status": "passed_original_Qt_save_cancel_and_scan_confirmation_dispatch",
+  "source_pins": {
+    "qt/result_window.py": "49fae8e1ab95530b751fc953c3d335ff10d10e432d0ec55653f0583aeb292dc5",
+    "qt/directories_dialog.py": "daeb5b52323e195a8e26e2e8ea7b0b460aaa16f53e33df1df6ba417af46f4f14"
+  },
+  "cancel_save_calls": [],
+  "cancel_recent_calls": [],
+  "scan_calls": [
+    [
+      "scan",
+      false
+    ],
+    [
+      "scan",
+      true
+    ]
+  ],
+  "modified_results_confirmations": [
+    false,
+    true
+  ],
+  "limits": [
+    "Original Qt methods unchanged on receiver adapters, dialog response simulated.",
+    "Model write/scan and recent callbacks captured; no actual write, search, GUI or user settings.",
+    "Verifies dispatch only, not persistence, scan correctness or real confirmation interaction.",
+    "Supplemental authored controls, not additional upstream tests."
+  ]
+}
