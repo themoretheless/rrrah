@@ -1,0 +1,111 @@
+{
+  "status": "partial_results_export_review_with_original_snapshot_and_csv_controls",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-directory-review-v3-20261019.json",
+  "previous_sha256": "e7a8e9b6212f67c62a71cc781fe6a4c6e8202d60d0f54160bb5844af855da69a",
+  "new_whole_blobs": [
+    {
+      "path": "core/results.py",
+      "git_blob": "f9c9356e962a713c7e1d118d49efaac3c5229d0d",
+      "sha256": "61cf334eb37f2343ba183b0e790f1f7590acdd02199b7c617d6f0757af93bd39",
+      "bytes": 16064,
+      "fully_read": true
+    },
+    {
+      "path": "core/export.py",
+      "git_blob": "b8db8dc877ef6f09bd42d527cd9f3cffbb3d5eaa",
+      "sha256": "28ab4dd22bce0076062e94202a9baabfabf18951306f3787c63a716c8b607e4c",
+      "bytes": 3565,
+      "fully_read": true
+    },
+    {
+      "path": "core/util.py",
+      "git_blob": "4c3feef3f0df68cb743ff0583c00ce1713536327",
+      "sha256": "fdf63d2f7e57fc543bb7d82e0b0c6f66684d181a358447b8a4325e5f1a512107",
+      "bytes": 3646,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/conflict.py",
+      "git_blob": "0675efd0520238292c92c7b06582099ecb26391b",
+      "sha256": "4c823c4e8983bc9a39d6663cb64594e89e174481133946c2170487653c61db98",
+      "bytes": 2971,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/conflict_test.py",
+      "git_blob": "4f2dca851bf249b16ef855810755d604effb3d8d",
+      "sha256": "2c6b7cc3ae17da2102580e015e128c9c71398dce71f2b2a002e7108f95c855b8",
+      "bytes": 4451,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 37,
+  "upstream_additional_tests_passed": 12,
+  "upstream_cumulative_distinct_tests_passed": 103,
+  "selected_upstream_runtime": {
+    "exit_code": 0,
+    "command": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+      "-m",
+      "pytest",
+      "hscommon/tests/conflict_test.py",
+      "-q",
+      "--basetemp",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-conflict-tests-20261019/pytest-temp",
+      "--junitxml",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-conflict-tests-20261019/junit.xml"
+    ],
+    "source_pins": {
+      "hscommon/tests/conflict_test.py": "2c6b7cc3ae17da2102580e015e128c9c71398dce71f2b2a002e7108f95c855b8",
+      "hscommon/conflict.py": "4c823c4e8983bc9a39d6663cb64594e89e174481133946c2170487653c61db98"
+    },
+    "source_drift": [],
+    "log_sha256": "130252602e588ad26848d2d8f6b875cdb923fadd38c35ac0439f775c0adeb230"
+  },
+  "snapshot_csv_controls": {
+    "status": "verified_original_snapshot_and_csv_controls",
+    "source_pins": {
+      "core/results.py": "61cf334eb37f2343ba183b0e790f1f7590acdd02199b7c617d6f0757af93bd39",
+      "core/export.py": "28ab4dd22bce0076062e94202a9baabfabf18951306f3787c63a716c8b607e4c",
+      "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+      "hscommon/conflict.py": "4c823c4e8983bc9a39d6663cb64594e89e174481133946c2170487653c61db98"
+    },
+    "saved_group_count": 1,
+    "loaded_group_count_after_content_change": 1,
+    "fresh_full_content_match_count_after_change": 0,
+    "files_have_different_sha256": true,
+    "stored_match_percentages": [
+      100
+    ],
+    "csv_rows_roundtrip": 3,
+    "csv_sha256": "1b32738086c0c2020f0cf214327a165ce6a900b903bd251ff5086e66593fd9f1",
+    "snapshot_sha256": "d02bd289c22e34691730122680c0f86e73e470bb7ddae9cc5381eb2c386244bd",
+    "limits": [
+      "Loading persisted groups restores a historical snapshot and is not a fresh content-equality proof.",
+      "No marked-file action, deletion or move performed; only task-owned synthetic data used.",
+      "CSV normal Unicode/quoting controls only; no XHTML renderer, GUI, all-path encoding or full repository claim."
+    ]
+  },
+  "reproducer": "docs/research/dedup-500/dupeguru1-results-reproducer-v4-20261019",
+  "harness": "scripts/qualify-dupeguru1-result-snapshot-controls-20261019.py",
+  "harness_sha256": "398213d30e06220e610e1a2c3944823a52f92edb5719fdc585dfe073267b8b72",
+  "findings": [
+    "OriginalResultsloadsrecordedmatchesandpercentageswithoutcontentrehash; changingthecopythenloadingpreservesone100percentgroup,whilefreshfullcontentscomparisonreturnsnomatch.",
+    "Restoredhistoricalresultisnotafreshidentitycertificate; thisisobservedsnapshotbehavior,notanunqualifiedupstreamdefectclaim.",
+    "OriginalCSVwriterroundtrips3rowswithspaces,comma,quote,Unicode,newlineandtabthroughcsv.reader.",
+    "Original12conflict-name/move/copytestspassunchangedwithonlytaskownedpytestfixtures; notmarked-fileGUIactions.",
+    "XHTMLsourceinterpolatesfieldsdirectly; no renderedXHTML/arbitrarytext escapingclaim fromCSVcontrols.",
+    "core.utilupdate-checkerreadbutnotinvoked; nodependencyorremoteversionclaimfromsource."
+  ],
+  "limits": [
+    "37wholefilesread; GUI/media/native/translations/remainingcodeandtests stillincomplete.",
+    "No marked-file action oruserdata modification; syntheticResultssnapshot/CSVonly.",
+    "No productionchange orperformanceclaim; current exact/cancel/aliasregressionsnotrerunwithoutnewownsourcechanges.",
+    "User-deferred pHash investigation remains deferred; fullreviewcount145/500."
+  ]
+}
