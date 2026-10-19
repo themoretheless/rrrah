@@ -1,0 +1,157 @@
+{
+  "status": "verified_statistics_review_and_eleven_more_original_scripts",
+  "whole_repo_complete": false,
+  "previous": "docs/research/dedup-500/dupd50-report-cache-review-v8-20261019.json",
+  "previous_sha256": "8820bc41419512818a0bc2b4d6efa4d97bada3d1f7270fcaa1ce7ee30aeb1478",
+  "new_whole_blobs": [
+    {
+      "path": "src/stats.c",
+      "git_blob": "01667ef69c0249c1ea5aeab5931336e32fcab58c",
+      "sha256": "b07fc7acb0b716fb847e23aaae9595f1e01f75ad782b0cc1353de0696ca8b4cf",
+      "bytes": 16460,
+      "fully_read": true
+    },
+    {
+      "path": "src/stats.h",
+      "git_blob": "54ef4dec7ee75a574135b3da44cd588d6d12d800",
+      "sha256": "235c0956103ed51ef37685d56155ed7d98cbc76d9421798efadf3990a3437f94",
+      "bytes": 7364,
+      "fully_read": true
+    },
+    {
+      "path": "tests/validate.pl",
+      "git_blob": "b96013bcfb5047272839b0a47122b2d0b04bfeb1",
+      "sha256": "0a832f29a5fb6b1053f8e2def265d94314f7ca994b776ec56aaf8a1947685cfd",
+      "bytes": 1544,
+      "fully_read": true
+    },
+    {
+      "path": ".github/workflows/codeql-analysis.yml",
+      "git_blob": "6fa979e3e1875b47bd3858527ea5930a42ce1f7e",
+      "sha256": "33b251c5429d0e179ee087421739674d3891ca9fc3277dda2e9e887602da4d97",
+      "bytes": 1338,
+      "fully_read": true
+    },
+    {
+      "path": "tests/.gitignore",
+      "git_blob": "8f7d7b7ed6d7c2e81661cfc3f0c2fecdbf321146",
+      "sha256": "05bd46c3400c8a02a09679b488dd5024630677c3596e9a242b97316500b4bd2b",
+      "bytes": 15,
+      "fully_read": true
+    },
+    {
+      "path": "man/README",
+      "git_blob": "99c39263171a5c5759a3861c9027794de3d65e76",
+      "sha256": "bdfa9d33b6536d48890bdacb6c6f7afe4a5908428e46ac14e0e02037b7822364",
+      "bytes": 360,
+      "fully_read": true
+    },
+    {
+      "path": "docs/examples.md",
+      "git_blob": "db8f9508bc354ab22055c83783d357f51a1d0bfb",
+      "sha256": "d2c495b326909ccb92afab8f959e48fabc66d4f0a9b6184b19cca5be7f2396e9",
+      "bytes": 9949,
+      "fully_read": true
+    },
+    {
+      "path": "man/dupd.1",
+      "git_blob": "d4ba48807b066388c50bd897dfcf02770c519917",
+      "sha256": "2520c530b3338b57f099a7b9ce07248964a4da79f7800c12f4041d7ef9ebb6f8",
+      "bytes": 11313,
+      "fully_read": true
+    },
+    {
+      "path": "src/optgen.h",
+      "git_blob": "6f1b2ec524b087a64ffc2075a4c039d1ebbc2e9b",
+      "sha256": "e4e49756a501c6e0256829d6d479ec11ac48d535eceab0ea5b0de35704859d29",
+      "bytes": 8808,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 155,
+  "findings": [
+    "Statistics track file classification, cache reuse and selected managed allocation classes; these counters alone do not prove a whole-process memory bound.",
+    "The standalone validation helper runs cmp against report pairs, but line parsing trims whitespace; it is unsuitable as proof for arbitrary path names. Helper was read, not executed.",
+    "Documentation describes refresh as re-validating duplicates; previously read implementation removes missing paths without rehashing surviving files, so documentation is not evidence of content freshness.",
+    "Our exact-file regression inventory already covers same-size changes, growth, restored timestamps and replaced physical file identity; no redundant test was added.",
+    "The manpage explicitly states refresh does NOT re-verify duplicate content; it agrees with implementation and is more precise than examples.md.",
+    "Generated optgen header has38 options and18 commands plus GLOBAL pseudo-command; parser implementation still unread. Interface declaration does not prove option handling correctness."
+  ],
+  "archive_preflight": {
+    "path": ".dedup-work/dupd50-20261019/source/tests/files9/files.tar.gz",
+    "sha256": "a4a27bded8d7cf807b8d4c9ddee48974222c011e727c6d94b617dbde738671ba",
+    "members": [
+      {
+        "name": "1",
+        "size": 1000001,
+        "is_regular": true,
+        "linkname": ""
+      },
+      {
+        "name": "2",
+        "size": 1000001,
+        "is_regular": true,
+        "linkname": ""
+      },
+      {
+        "name": "3",
+        "size": 1000001,
+        "is_regular": true,
+        "linkname": ""
+      },
+      {
+        "name": "4",
+        "size": 1000001,
+        "is_regular": true,
+        "linkname": ""
+      },
+      {
+        "name": "5",
+        "size": 1000001,
+        "is_regular": true,
+        "linkname": ""
+      }
+    ],
+    "contents_fully_reviewed": false,
+    "runtime_test76_executed": false
+  },
+  "limits": [
+    "155 whole blobs reviewed; repository remains incomplete and does not increment144/500 full reviews.",
+    "Selected upstream batch completed0:67 distinct original scripts cumulative. Current baseline Cargo suite remains live; no terminal success inferred.",
+    "No foreign production code adopted; user-deferred item remains deferred."
+  ],
+  "upstream_additional_tests": [
+    "test.77",
+    "test.78",
+    "test.79",
+    "test.80",
+    "test.81",
+    "test.83",
+    "test.84",
+    "test.85",
+    "test.86",
+    "test.88",
+    "test.89"
+  ],
+  "upstream_cumulative_distinct_tests_passed": 67,
+  "result": {
+    "command": [
+      "./run",
+      "test.77",
+      "test.78",
+      "test.79",
+      "test.80",
+      "test.81",
+      "test.83",
+      "test.84",
+      "test.85",
+      "test.86",
+      "test.88",
+      "test.89"
+    ],
+    "exit_code": 0,
+    "home": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupd50-20261019/test-home-v8",
+    "log_sha256": "d00f08d120dc3c37d2ea1d27b2d79f4438653ac32b997bd67d619c2e549e5635"
+  },
+  "binary_sha256": "5ba2cdb07bff74d316d1dc722c5b876c6d02ea0672a7d1240abf2d4f758beb7a"
+}
