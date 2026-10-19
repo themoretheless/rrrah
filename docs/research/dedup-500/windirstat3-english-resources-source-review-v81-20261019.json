@@ -1,0 +1,30 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of English resource catalog; pinned bytes verified and every nonempty line parsed as key/value with unique keys.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_en.txt": "092772614060494bbdb5b50716623ebf18f808875cacc6507cdb0b84ed1bb085"
+  },
+  "whole_files_read": 212,
+  "coverage": "docs/research/dedup-500/windirstat3-english-resources-coverage-v81-20261019.json",
+  "coverage_sha256": "6b312151f659996d14246b84b6246fff22607c0486ca66c03292245f442f204f",
+  "resource_check": {
+    "key_count": 365,
+    "duplicate_keys": 0,
+    "malformed_nonempty_lines": 0
+  },
+  "findings": [
+    "English catalog explicitly labels sampled results Probable duplicates, distinguishes Hash Prefix from Sampled hash and states sparse hashes apply above64MiB. These labels agree with earlier sampling-source review but do not establish byte equality for destructive use.",
+    "Recovery copied outcome explicitly asks users to verify file data; unallocated assessment says May Be Recoverable. Same-volume warning explains deleted-data overwrite risk. This avoids equating successful output write with historically correct recovered bytes.",
+    "Deletion confirmation asks whether to continue and warns about important files; generic operation confirmations contain operation text. Catalog text alone does not prove every handler displays or honors them.",
+    "Cloud duplicate warning says cloud files are skipped to avoid download and points to settings; skipping is part of scan scope, not evidence all files were compared.",
+    "Tier list has four nonempty English entries, confirming nonempty tiers for this catalog only. Time suffixes day/mo/yr provide the month element used in analytics; other translations remain unreviewed.",
+    "Graph styles four entries and permission-level/type/applicability lists are positional resources consumed by code. Unique-key validation does not prove all positional consumers, placeholder arity or translated catalogs correct.",
+    "MSI locale metadata declares en-US/1033/codepage1252 and installer options. Read-only catalog inspection does not qualify localization rendering or installation."
+  ],
+  "limits": [
+    "No runtime resource lookup, formatting/placeholder arity tests, GUI localization, model accuracy, installer or translated-catalog semantic qualification.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
