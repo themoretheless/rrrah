@@ -1,0 +1,23 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of retained Helper.cs source; SHA256 matched registry evidence. No Windows operations executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Helpers/Helper.cs": "d1e9d3f113a7403a42ca813e0e29710a057052c4de79fd6b5008d4bd5d38e236"
+  },
+  "findings": [
+    "NormalizeLocation expands environment variables, rewrites leading shell GUID forms, trims spaces/slashes/backslashes/newline/quotes at both ends and converts slash to backslash. Consequently UNC leading separators and drive-root trailing separator are removed: this is navigation-oriented normalization, unsuitable as a general file identity/canonicalization function.",
+    "Generic DoUntilCondition and both generic async variants call action once after the polling loop even when cancellation is already requested or timeout reached. Void variants do not do that. Do not adopt for cancellation-sensitive file reads/publication.",
+    "Timeout only guards loop entry; action duration can exceed deadline. Async Task.Delay does not receive cancellation token, so cancellation cannot interrupt that delay. No bound on blocking action duration established.",
+    "ConcurrentDictionary.GetOrAdd value factory in HideWindow performs window mutations and can execute more than once under concurrency. ShowWindow removes cache before unchecked native restoration, so restoration failure can lose recovery state. These are source-level concerns, not reproduced Windows failures.",
+    "Ctrl+Shift true state is cached up to one second without synchronization; TickCount signed subtraction and cross-thread access require context. This utility keyboard state is not a scanner cancellation signal.",
+    "Default explorer PIDL is freed after GetPathFromPidl but not via finally; exception there can skip cleanup. Shell declaration error conventions still not inspected.",
+    "Supporter SVG retrieval catches all failures and returns empty list, uses no caller cancellation token or explicit response-size bound. No network request from this helper was executed."
+  ],
+  "limits": [
+    "Four retained source files now fully read across v1/v2; full repository clone remains separately running and no full-tree completion claim.",
+    "No original C# tests, Windows COM/WPF runtime or performance measurements. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains148/500."
+  ]
+}
