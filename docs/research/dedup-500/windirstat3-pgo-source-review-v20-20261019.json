@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of877lines; bytes matched pinned Git object. No script execution.",
+  "new_whole_files_read": {
+    "tests/Build-PgoTrainingProfiles.ps1": "52debce6017aa5126972bf37c4e7521fcc351e2bdf1892de892d337346f8468d"
+  },
+  "whole_files_read": 50,
+  "coverage": "docs/research/dedup-500/windirstat3-pgo-coverage-v20-20261019.json",
+  "coverage_sha256": "b03837cedf802b100ca615e995a76784e556c89c5e5050e84bebebb09bfb228c",
+  "findings": [
+    "PGO script automates instrumented workload execution and pgomgr merges, not instrumentation/optimized builds or independent performance comparison. Catalog has19workloads:13scan variants,3duplicate scans and3load sessions.",
+    "Scan variants exercise fast/basic engines,CSV/JSON,glob/regex,age/size,hidden/protected,thread1/8,hardlink/privilege toggles and reparse following. Duplicate variants use xxHash,SHA512,MD5. No authored equality oracle or expected output assertions.",
+    "Nonzero scan exit logs warning and still invokes profile merge. Per-scenario exceptions are caught and loop continues; no aggregate failure exit is emitted. Missing seed PGD or missing PGC produces warnings. Completion message is not a regression pass.",
+    "Load sessions sleep configured12seconds then request close or force kill, without observing load completion or comparing reexported results. Force-kill paths do not consistently wait for process exit before accessing ExitCode/profile files; actual failure behavior untested.",
+    "PGC attribution compares new filenames only, not changed content of existing names. Merge consumes all matching basename PGCs, including preexisting ones, then moves them under scenario label; profile provenance is not strictly per-scenario.",
+    "Portable WinDirStat.ini is rewritten beside executable and removed at end, without backup/restore of an existing file. Exception recovery enumerates processes by executable basename rather than tracked process handle. These are source-observed reasons to use isolated owned binaries if this script is ever executed.",
+    "List option resolves executable context and creates work/artifact directories before listing; it is not filesystem-side-effect-free. No listing or other script execution was performed here.",
+    "Regex include anchor only escapes backslashes, not all regex metacharacters in a user-supplied RestrictiveIncludeRoot. Default path does not demonstrate the problem; custom paths containing regex punctuation require a separate control."
+  ],
+  "limits": [
+    "No Windows PGO toolchain, original workload, timing or memory behavior executed.",
+    "All17tracked test-directory files now have whole-file reading credit, including launcher, scenario definitions, harness and analysis/training scripts. This does not imply tests passed.",
+    "No production code adopted. Native pHash investigation remains deferred."
+  ]
+}
