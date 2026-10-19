@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of UI framework implementation, project filters and contributor document. Pinned bytes verified; project filters XML parsed.",
+  "new_whole_files_read": {
+    "windirstat/windirstat.vcxproj.filters": "1e0a30edaf352e2e9e240068e55942586147f932a3b20afe169c8b3082ee4503",
+    "CONTRIBUTORS.md": "1dba623d8ac7bc9abc85d8dd5a65878052d3877683eb3ef293c53a49e9621aed",
+    "windirstat/UiFramework.cpp": "644d5d621a032ccd841f707fe2b6f6e51892ab3ed0e5319d1c5794d1c9218517"
+  },
+  "whole_files_read": 198,
+  "coverage": "docs/research/dedup-500/windirstat3-ui-task-framework-coverage-v69-20261019.json",
+  "coverage_sha256": "fbae6a86f3364eba25bc1fb66fb5c3913e2f26d9db6737a383d445e832a5c761",
+  "findings": [
+    "RunTaskWithUiUpdates executes synchronously off UI thread or without main window; otherwise launches jthread, captures exception, publishes completion with release/acquire, pumps messages, joins and rethrows. Per-call completion avoids using a shared completion message as the result itself.",
+    "Worker PostThreadMessage result is ignored. UI checks complete only before blocking GetMessage; a failed wake with otherwise idle queue can delay completion observation. No forced failure/runtime reproduction in this increment.",
+    "Nested task pump drops mouse/key/nonclient click messages, dispatches others directly without normal application preprocessing. WM_QUIT is remembered and reposted after join. GetMessage error breaks loop but then joins; no bounded shutdown guarantee.",
+    "WaitForHandleWithUiUpdates drains paint messages only and repeats the full timeout after each paint wake. Timeout is per wait iteration rather than a total wall-clock deadline; it returns void without distinguishing completion, timeout or failed wait.",
+    "Clipboard helper checks size overflow and frees memory on ownership-transfer failure, but EmptyClipboard occurs before allocation so subsequent failure can leave prior clipboard contents removed. No clipboard action executed.",
+    "Dialog-init resource parser uses bounded memcpy reads and string-terminator checks, remaps legacy list/combo add messages, rejects add failures. It can apply earlier entries before discovering a later malformed entry; no rollback transaction.",
+    "CenterWindow clamps origin to nearest monitor work area; oversized windows remain oversized. This supplies centering correction for callers using CenterWindow, but does not prove every persisted placement path does so.",
+    "Window-class registry caches names even when RegisterClassExW return is not checked. Project filters organize IDE display including generated language/license and contrib files; filters are not evidence those generated artifacts exist or compile. Contributor document read for attribution only."
+  ],
+  "limits": [
+    "No Windows task-pump, failed wake, timeout, dialog resource, clipboard, window registration or centering runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
