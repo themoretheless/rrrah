@@ -1,0 +1,80 @@
+{
+  "status": "partial_source_and_selected_runtime_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 114,
+  "whole_files_read_this_increment": [
+    {
+      "path": "imagededup/handlers/search/brute_force.py",
+      "sha256": "3f3a30e4c2a388c4ae0418e9c400a241aa66527eb5e04bbdef786a2c273f701c",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "imagededup/handlers/search/brute_force_cython.py",
+      "sha256": "d59276db9604f8b13f80c99236a02ae2c2197e3357b85343f8afcd46b7939594",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "imagededup/handlers/search/brute_force_cython_ext.pyx",
+      "sha256": "810b729ba6fd376a20385be8f23562a6aa14606e1693326b942156b96975a1e9",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "imagededup/handlers/search/retrieval.py",
+      "sha256": "e46f002ef827cd50ae031c4a8d11f5a05364684b0023cc35a6dd27d681510fb9",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "imagededup/utils/general_utils.py",
+      "sha256": "7e3908d0ea41591635fc0824fbf2f321cad8d2499ff40509692aa29f9e2f89a2",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "imagededup/utils/logger.py",
+      "sha256": "d40aacf469865b61e7df7b43af17a741642d0e8787090547f77b19c6b703b4c9",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "tests/test_brute_force.py",
+      "sha256": "d7a0e9c8849cac670df720229468123c2afb8ca25590f2f8247eb65ada77af87",
+      "whole_file_read_this_increment": true
+    },
+    {
+      "path": "tests/test_brute_force_cython.py",
+      "sha256": "ff8a61b745a248d22524faf8865cfb75a284da49e8bedc8f1b8dc49bed8f817e",
+      "whole_file_read_this_increment": true
+    }
+  ],
+  "runtime_result": "docs/research/dedup-500/imagededup2-search-reproducer-v1-20261019/result.json",
+  "runtime_result_sha256": "c0959dc9bbc2a952d5ea4eb59d85aaff613e590b51f1e92c5d5ac14c59258dd5",
+  "inventory": "docs/research/dedup-500/imagededup2-search-reproducer-v1-20261019/inventory.json",
+  "inventory_sha256": "b55acfa0b1dea6e239e361db1a79c9f7cfebb00ab10c9079521e81efc8e7b3c9",
+  "reproducer": "scripts/qualify-imagededup2-bruteforce-20261019.py",
+  "reproducer_sha256": "2a5363332c0f6380740c83edce2f40060a1de97f95673429e5d33e3857f5d47b",
+  "findings": [
+    {
+      "finding": "Python brute force recomputes distance for every accepted candidate",
+      "evidence": "Actual original module: 512 distance calls on 256 all-matching candidates",
+      "qualification": "Operation count, no measured speedup or adopted production change"
+    },
+    {
+      "finding": "Cython wrapper does not forward supplied distance callback to native query",
+      "qualification": "Static source finding; native backend not executed"
+    },
+    {
+      "finding": "Cosine chunk path converts scores to float16 and stacks complete matrix",
+      "qualification": "Static finding; neither bounded total NxN memory nor precision parity established"
+    },
+    {
+      "finding": "Removal candidates selected greedily from duplicate mapping",
+      "qualification": "Not byte identity verification or deletion-safety proof"
+    }
+  ],
+  "limits": [
+    "Not full repository review; generated C++, builtin header/README, remaining source, notebooks and binary assets remain unqualified.",
+    "Two original Python tests and 2304 oracle queries only; original distance body AST extraction with real NumPy 2.5.4 and explicit package-import routing.",
+    "Cython tests read but not executed; no package/CNN/decode/platform/full-suite qualification.",
+    "pHash native memory-error investigation remains deferred by user instruction."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "status": "passed_selected_original_Python_bruteforce_with_real_numpy",
+  "source_pins": {
+    "imagededup/handlers/search/brute_force.py": "3f3a30e4c2a388c4ae0418e9c400a241aa66527eb5e04bbdef786a2c273f701c",
+    "imagededup/methods/hashing.py": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+    "tests/test_brute_force.py": "d7a0e9c8849cac670df720229468123c2afb8ca25590f2f8247eb65ada77af87"
+  },
+  "numpy_version": "2.5.4",
+  "original_tests_passed": [
+    "test_search_correctness",
+    "test_tolerance_value_effect"
+  ],
+  "oracle_queries": 2304,
+  "oracle_domain": "all256eightbit patterns encoded64bit,all radii0..8,exactorderedlist compared against independent intXOR.bit_count fullscan",
+  "all_match_256_candidates_distance_calls": 512,
+  "empty_and_negative_radius_controls": "passed",
+  "limits": [
+    "Original entire BruteForce module loaded unchanged;2 original test bodies unchanged, only package imports routed explicitly.",
+    "Original Hashing.hamming_distance body extracted by AST with staticmethod decorator removed; real NumPy2.5.4, no sum adapter.",
+    "Not entire Hashing class, image decode/hash generation, Cython/native backend, package import or full upstream suite.",
+    "512calls is operation-count evidence, not measured speedup; no production code adopted."
+  ]
+}

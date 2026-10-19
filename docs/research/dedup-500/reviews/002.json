@@ -2,7 +2,7 @@
   "index": 2,
   "repository": "idealo/imagededup",
   "commit": "f0534a6ec10c02379c627696fbd486841068631c",
-  "review_scope": "Selected complete BKTree and tests module with13unchangedupstream testbodies/2304independent queries and explicit scalar np.sum adapter; complete metricsmodule with21oracles using actualnumpy. Not fullrepository/package/CNN/image/runtimequalification.",
+  "review_scope": "Selected complete BKTree and tests module with13unchangedupstream testbodies/2304independent queries and explicit scalar np.sum adapter; complete metricsmodule with21oracles using actualnumpy. Not fullrepository/package/CNN/image/runtimequalification. Additional eight whole search/util/test files reviewed; two original Python brute-force tests and2304 queries pass with actual NumPy2.5.4. Repository remains partial.",
   "decision": "shortlist",
   "finding": "Separate hashing, BK-tree retrieval and ranking evaluation; Apache-2.0 and matching tests make this a useful independent oracle.",
   "license_metadata": "Apache-2.0",
@@ -98,5 +98,10 @@
   "selected_runtime_reviews": [
     "docs/research/dedup-500/imagededup2-bktree-selected-runtime-v3-20261015.json",
     "docs/research/dedup-500/imagededup2-metrics-selected-runtime-v1-20261015.json"
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/imagededup2-search-source-review-v1-20261019.json"
+    }
   ]
 }
