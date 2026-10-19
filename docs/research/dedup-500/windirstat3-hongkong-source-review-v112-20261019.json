@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of traditional Chinese Hong Kong catalog; pinned bytes reverified; v91 structural comparison retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_zh-HK.txt": "56805c6e4d40b6857774c3db8c5f1624b02337c4a619c3b25a3f71c36015dd9b"
+  },
+  "whole_files_read": 245,
+  "coverage": "docs/research/dedup-500/windirstat3-hongkong-coverage-v112-20261019.json",
+  "coverage_sha256": "d4fe75e6185a32d6ed56999a3ef54facbb04c128528d933d8bff6d924769a81c",
+  "findings": [
+    "疑似重複檔案 denotes suspected duplicates, 雜湊前綴 explicitly marks prefix and 取樣雜湊 marks sampling; advanced option names sparse hashes above64MiB. Ordinary duplicate caption says same-content files, so probability caption must remain visible for sampled groups.",
+    "Recovery completion requests verification of file data, recoverable and possible recovery remain separate, metadata changes request rescan and same-volume restoration warns of overwritten deleted data.",
+    "Sparse action 檔案稀疏化 does not conflate conversion with compression, unlike simplified Chinese catalog. Logical size versus actual size labels retain a distinction, though physical is rendered actual.",
+    "Reselect-child caption specifies files within a folder, narrower than generic child; select-parent says containing folder of a file, narrower than arbitrary tree item. These are wording limitations.",
+    "Cloud warning says scanning will trigger download, stronger than English may-download wording. No hydration-prevention runtime proven. Permanent deletion is not secure-erasure evidence.",
+    "Graph algorithms are localized consistently in menu and style list; glob/regex, hardlinks/symlinks/junctions and cleanup tokens remain distinct. MSI zh-HK/3076/950 is declaration-only."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered traditional Chinese interface, mnemonic conflicts, installer encoding or Windows runtime validation. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
