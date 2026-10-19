@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole XAML and code-behind reading; pinned Git blob identities verified. No tray/hook/registry actions executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/Controls/SystemTrayIcon.xaml": "b9170b0cda95ce3080566e4ffc97bc3cf198774b3ff0bdf816fe1f80345f8b7f",
+    "ExplorerTabUtility/UI/Views/Controls/SystemTrayIcon.xaml.cs": "97c81caf5fabdea8ac53b70dfa667affadb959b68fd0904da9a66476d5f5c8f3"
+  },
+  "whole_files_read": 82,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v31-20261019.json",
+  "coverage_sha256": "49b149ec22813bb250e9240e0bb6070914f40a0e44ea39b9de227773022bf59d",
+  "findings": [
+    "Tray state XAML bindings are OneTime; subsequent state updates rely on imperative commands rather than observable settings synchronization.",
+    "Dispose only disposes TrayIcon; three HookManager event subscriptions remain attached and queued dispatcher work has no disposed guard or cancellation.",
+    "Shell-initialization callback loops helper for seven seconds when icon hidden and posts dispatcher updates; timing and callback-thread blocking require runtime qualification.",
+    "Hook toggle writes persistent setting before starting/stopping hook and does not rollback if action throws, allowing requested state to diverge from actual hook status.",
+    "Reuse-tabs command ensures window hook enabled, and disabling window hook disables reuse-tabs. Shortcut restoration uses a saved boolean rather than independent state transaction.",
+    "ToggleHookState assumes at least one profile when enabling keyboard/mouse menu and none checked, then accesses Items[0]. RelayCommand CanExecute guards HasItems for normal command routing but direct Execute calls do not enforce that predicate; actual empty-list reachability needs caller validation.",
+    "Profile submenu objects retain mutable profile references; enabling updates ProfileManager directly. No file-content comparison is implemented by reuse-tabs option."
+  ],
+  "limits": [
+    "Static review only; no reproduced tray race or runtime failure. Third-party TaskbarIcon implementation remains outside this repository source scope.",
+    "Fully reviewed count148/500; ExplorerTabUtility partial82/104. Native pHash investigation deferred."
+  ]
+}
