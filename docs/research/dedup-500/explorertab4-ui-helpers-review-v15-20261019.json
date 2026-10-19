@@ -1,0 +1,29 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of six UI command/converter/hover implementation files; exact-commit downloads matched pinned Git blob IDs.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Commands/RelayCommand.cs": "842a0f6c737b636a82a33ccd249800b7a194b2dda1c68d58d3e0691f85c0cf95",
+    "ExplorerTabUtility/UI/Converters/Base64ImageConverter.cs": "43ca9af0d5076e1403f6ec536289ab81e5e1428885b8edc5bd2d1bdb78f3104a",
+    "ExplorerTabUtility/UI/Converters/EnumDescriptionConverter.cs": "9092d8976adb6030997a63f477f0ec09965704e0b0a8165c1d9b5a3b17eac616",
+    "ExplorerTabUtility/UI/Behaviors/HoverBackground.cs": "5f111477082709caf8e9f67e9b70d10781d951aa5515d5acf99260fd714ba004",
+    "ExplorerTabUtility/UI/Behaviors/HoverBorder.cs": "cd3067b168ef2da250574cc0b9634ffd94be672aae2c9c34f301296e086b8cac",
+    "ExplorerTabUtility/UI/Behaviors/HoverBrightness.cs": "bb4e51876aeb4398efb653543b20c6bade4cd0880772e448cbf8be187c07dbab"
+  },
+  "whole_files_read": 40,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v15-20261019.json",
+  "coverage_sha256": "bd08b310eedab1fa86ddb609370489d1a331f8e7c1863ea96ffa1216be0062ca",
+  "findings": [
+    "RelayCommand delegates Execute without rechecking CanExecute or catching exceptions; callers own admission/error handling. CanExecuteChanged forwards WPF global requery event.",
+    "Base64ImageConverter decodes entire string without byte/pixel admission limits; data-URL failure falls back to treating original string as URI. Embedded images use OnLoad+Freeze, URI-loaded images do not; runtime loading/thread behavior unqualified.",
+    "Enum description converter returns text for undefined values and ConvertBack returns input unchanged; display text is not enum-domain validation.",
+    "HoverBackground installs anonymous Loaded handler without removing it on disable; disable restores only nonnull original brush, so originally null background may retain hover brush. Direct property assignment can replace existing bindings.",
+    "HoverBorder disable only detaches handlers and does not restore active hover border/thickness. HoverBrightness disable likewise leaves current adorner until another removal path; no unload cleanup here.",
+    "Brightness visual-tree search checks immediate children then recursively visits subtrees, not a globally breadth-first traversal; deep templates can consume recursive stack. Opacity and animation-duration attached values have no explicit validation/coercion in these helpers."
+  ],
+  "limits": [
+    "No WPF rendering, image decoder admission/runtime, binding or hover lifecycle tests executed. No foreign production code adopted.",
+    "Completed count148/500; filtered checkout session13181 remains separate; native pHash investigation deferred."
+  ]
+}
