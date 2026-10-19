@@ -1,0 +1,41 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 34.24s
+     Running tests/exact_files.rs (target/debug/deps/exact_files-40bb7ff71202deaf)
+
+running 33 tests
+test excess_root_admission_refuses_before_missing_source_io ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth ... ok
+test duplicate_root_admission_retains_boundary_and_fresh_retry ... ok
+test root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok
+test hidden_directories_and_empty_files_remain_in_exact_partitions ... ok
+test atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test reordered_middle_blocks_with_identical_sampled_edges_are_not_copies ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test sibling_roots_with_a_shared_name_prefix_keep_both_file_sets ... ok
+test exact_content_partitions_ignore_extensions_and_check_unsampled_bytes ... ok
+test verified_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test unique_sizes_skip_payload_reads_without_weakening_verified_observations ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test whitespace_path_names_preserve_all_authored_copy_partitions ... ok
+test late_exact_source_failures_preserve_healthy_members_and_other_groups ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test nested_overlapping_roots_match_the_full_authored_partition ... ok
+test restored_modified_time_does_not_hide_same_inode_edit_during_scan ... ok
+test block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.16s
+

@@ -1,0 +1,179 @@
+{
+  "status": "partial_source_review_with_actual_original_module_controls",
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "tree_entry_count": 450,
+  "new_whole_blobs": [
+    {
+      "path": "README.md",
+      "git_blob": "f574dee055923262cdc83782248340ab5f48a362",
+      "sha256": "6d7f60f53b80f281dfe0b82abd346acbae4d12a2d61c2d4007f47520ca42c895",
+      "bytes": 4049,
+      "fully_read": true
+    },
+    {
+      "path": "core/engine.py",
+      "git_blob": "934152fbb41fbf6f301c54a21cb35528d2b078d1",
+      "sha256": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+      "bytes": 19921,
+      "fully_read": true
+    },
+    {
+      "path": "core/fs.py",
+      "git_blob": "a62d29ce85be28cb346cc3502b95be1b5b1ed6e4",
+      "sha256": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+      "bytes": 15932,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/conftest.py",
+      "git_blob": "2a9cfd6133cc37ba6f7257e8578cd4b0a7dac7ca",
+      "sha256": "6a4c8d9be734def8e8924e631f0fad0cfcd8b5197817b4ba689c72d84bf8799d",
+      "bytes": 42,
+      "fully_read": true
+    },
+    {
+      "path": "requirements-extra.txt",
+      "git_blob": "d22806fde104e641ae2e957f115c809bceae4fd4",
+      "sha256": "aa9e7d6faf11a55c273f70f3b3491eaf78c0a37f2f8ace07734b4b37700ae5cc",
+      "bytes": 73,
+      "fully_read": true
+    },
+    {
+      "path": "requirements.txt",
+      "git_blob": "9618b5b1506d1292ca1b72a897185079a0c4790c",
+      "sha256": "95079977e43e0927672329d39cd670d11b2ba437319bd1c026a895db03eac5b3",
+      "bytes": 245,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/trans.py",
+      "git_blob": "694a36ba9b489a86d5c7f1165fd009e3910d6278",
+      "sha256": "708c0fd2bf9044046257fe944fab8a77edde6ba873331c1ba37958e2b94541f5",
+      "bytes": 5015,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/testutil.py",
+      "git_blob": "e4555fd4bcb7bff10128e51507a36a86403c0ac7",
+      "sha256": "8301c4494a3e710ef583307180d14d0b3d96dae095c07b85cecd22e57138f17e",
+      "bytes": 6339,
+      "fully_read": true
+    },
+    {
+      "path": "core/__init__.py",
+      "git_blob": "1982827c688bb10605c07a90e2c8c361ddcc642d",
+      "sha256": "6876157bc9968d163b0bd8043b404a4bb7a1997997d3e997fdec320c1306986f",
+      "bytes": 47,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/plat.py",
+      "git_blob": "f7213762f0a22c268db7317249a92bbdbf0beb09",
+      "sha256": "483ff22c7081dfa18e85b321ff532acec35f2cd1c8c9f435154a10dd90f4c4b8",
+      "bytes": 675,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/fs_test.py",
+      "git_blob": "d0f2634bef8e94ddcee7a8c42b29ef13e114b5f2",
+      "sha256": "95350ab91b9f90104df91e4344f281acdb1a006a2886a02f3857d320fa1d3ff1",
+      "bytes": 4604,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/engine_test.py",
+      "git_blob": "2e5170b9ab2c2b4ada495beb7b0fb576434f537a",
+      "sha256": "68d61a8df38980c9e4b34af1d91d7572e15587fef42ed546fb0aa183f0c5e02d",
+      "bytes": 30268,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/base.py",
+      "git_blob": "eeea7d6a287923d4f638312b02eeae105ee09239",
+      "sha256": "4d59b4619b043fb956c5ffe9ba95cbaff6556a2263cc2c39b9d7e8113e726d0c",
+      "bytes": 5792,
+      "fully_read": true
+    }
+  ],
+  "whole_files_read": 13,
+  "runtime": {
+    "status": "reproduced_sample_only_acceptance_and_restored_timestamp_cache_reuse",
+    "source_pins": {
+      "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba"
+    },
+    "backend": "_hashlib.openssl_md5",
+    "modules": {
+      "engine": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/engine.py",
+      "fs": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/fs.py"
+    },
+    "synthetic_size": 8388608,
+    "different_byte_offset": 4194304,
+    "full_content_pairs": [
+      [
+        "copy.bin",
+        "original.bin"
+      ]
+    ],
+    "sample_only_pairs": [
+      [
+        "copy.bin",
+        "different.bin"
+      ],
+      [
+        "copy.bin",
+        "original.bin"
+      ],
+      [
+        "different.bin",
+        "original.bin"
+      ]
+    ],
+    "sample_only_percentages": [
+      100,
+      100,
+      100
+    ],
+    "restored_timestamp_cache_reuse": {
+      "mtime_ns_preserved": true,
+      "content_changed_sha256": true,
+      "fresh_File_digest_equals_cached_old_digest": true
+    },
+    "input_sha256": {
+      "original.bin": "8915466a89b7008e77f6094e4d6abde067cf87f4e06a9c095e3d8c55ac33ecac",
+      "copy.bin": "8915466a89b7008e77f6094e4d6abde067cf87f4e06a9c095e3d8c55ac33ecac",
+      "different.bin": "eb43607ee7f1811966dd2b7880f4d5330c0d0d462f0d54dbd9ec8ad2503cca2f",
+      "cache-rewrite.bin": "eb43607ee7f1811966dd2b7880f4d5330c0d0d462f0d54dbd9ec8ad2503cca2f"
+    },
+    "limits": [
+      "Original complete modules imported, no mocked hash/digest or extracted functions.",
+      "Absent optional xxhash selects upstream-supported hashlib.md5 fallback; no xxHash runtime claim.",
+      "Synthetic ordinary file controls only; no GUI, whole upstream tests, deletion action or full repository claim.",
+      "This demonstrates sampled coverage and cache-key limitations, not a cryptographic hash collision."
+    ]
+  },
+  "harness": "scripts/qualify-dupeguru1-original-content-controls-20261019.py",
+  "harness_sha256": "9584c1e0e9d2252bc349ab7ee72ee751be5ae7d9186215a978a4ed32635a5c6a",
+  "findings": [
+    "Originalsampledcontentscomparison acceptsallthreepairsat100for8MiBoriginal,exactcopy,andonebytechangeat4MiB; full-hashmode finds onlytruecopypair.",
+    "OriginalSQLitecacheusespath,size,mtime_ns. Same-sizefile rewritewithrestoredmtime reusesoldcacheddigest eveninnewFileobject; ownrestoredmtime regressionsalreadycoverourfreshnesscontract.",
+    "Originalengine/fstestmodulesfullyread. The onlycontentstestusesNamedObjectpresetdigests, not actualfilebytes; do not confuse this with end-to-end samplingcoverage.",
+    "Name-basedmatchingandcontent-basedmatching have different score meanings; 100 fromfuzzywords is notbyteidentity.",
+    "Groupingrequiresall-pairmembership ratherthanarbitraryconnectedcomponents; no newadoptionwithoutcrosswalk."
+  ],
+  "limits": [
+    "Only13wholefilesread; GUI,images,translations,nativemodules,packaging,remainingtests/source stillunreviewed.",
+    "Nooriginalpytesttestrunclaimed: primaryPythonlackspytestandoptionalxxhash, actualcontroluses documentedmd5fallback.",
+    "Syntheticfilecontrolsare completeoriginalmodules; not a cryptographiccollision ormalformedinputprobe.",
+    "User-deferred pHash work remains deferred; full review count stays145/500.",
+    "Completeour33-testexactintegrationtargetpasseswith8MiBinteriorandtailnegatives; productioncodeunchanged."
+  ],
+  "our_exact_gate": {
+    "path": "docs/research/dedup-current-exact-large-unsampled-regression-20261019.json",
+    "sha256": "3262120ecf98b40061f277fc458b5ee8353ccc71045771218537881aa8af59f3",
+    "passed": 33
+  }
+}

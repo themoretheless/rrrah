@@ -1,0 +1,56 @@
+{
+  "status": "reproduced_sample_only_acceptance_and_restored_timestamp_cache_reuse",
+  "source_pins": {
+    "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+    "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba"
+  },
+  "backend": "_hashlib.openssl_md5",
+  "modules": {
+    "engine": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/engine.py",
+    "fs": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/fs.py"
+  },
+  "synthetic_size": 8388608,
+  "different_byte_offset": 4194304,
+  "full_content_pairs": [
+    [
+      "copy.bin",
+      "original.bin"
+    ]
+  ],
+  "sample_only_pairs": [
+    [
+      "copy.bin",
+      "different.bin"
+    ],
+    [
+      "copy.bin",
+      "original.bin"
+    ],
+    [
+      "different.bin",
+      "original.bin"
+    ]
+  ],
+  "sample_only_percentages": [
+    100,
+    100,
+    100
+  ],
+  "restored_timestamp_cache_reuse": {
+    "mtime_ns_preserved": true,
+    "content_changed_sha256": true,
+    "fresh_File_digest_equals_cached_old_digest": true
+  },
+  "input_sha256": {
+    "original.bin": "8915466a89b7008e77f6094e4d6abde067cf87f4e06a9c095e3d8c55ac33ecac",
+    "copy.bin": "8915466a89b7008e77f6094e4d6abde067cf87f4e06a9c095e3d8c55ac33ecac",
+    "different.bin": "eb43607ee7f1811966dd2b7880f4d5330c0d0d462f0d54dbd9ec8ad2503cca2f",
+    "cache-rewrite.bin": "eb43607ee7f1811966dd2b7880f4d5330c0d0d462f0d54dbd9ec8ad2503cca2f"
+  },
+  "limits": [
+    "Original complete modules imported, no mocked hash/digest or extracted functions.",
+    "Absent optional xxhash selects upstream-supported hashlib.md5 fallback; no xxHash runtime claim.",
+    "Synthetic ordinary file controls only; no GUI, whole upstream tests, deletion action or full repository claim.",
+    "This demonstrates sampled coverage and cache-key limitations, not a cryptographic hash collision."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "exit_code": 0,
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--test",
+    "exact_files",
+    "--offline",
+    "--locked",
+    "--jobs",
+    "2"
+  ],
+  "source_pins": {
+    "Cargo.toml": "9339d9eaa0a9eeb6189a36d9b6ea5ab684713a97911d52bac0101cefac462eab",
+    "Cargo.lock": "4a797a48e17a579a093dd59ebd7f6146c0dec493bd4dcc3eff5660face8deff6",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "312d92d73e10dac18655056e51e0b517e5e3954dc7cb37b4c185329190e2891a"
+  },
+  "source_drift": [],
+  "log_sha256": "4bdf35f85f2b5a9a5b4fb7a0ce04ea204b0935b4f6a4e3dda295d52cbac7fa49"
+}

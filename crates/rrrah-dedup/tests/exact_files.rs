@@ -6,7 +6,9 @@ fn block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
     let mut expected = BTreeSet::new();
-    for size in [65_535, 65_536, 65_537, 131_071, 131_072, 131_073, 1_000_001] {
+    for size in [
+        65_535, 65_536, 65_537, 131_071, 131_072, 131_073, 1_000_001, 8_388_608,
+    ] {
         let bytes: Vec<u8> = (0..size).map(|index| (index % 251) as u8).collect();
         let mut copies = vec![
             root.path().join(format!("original-{size}")),
@@ -41,7 +43,7 @@ fn block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes() {
             assert!(report.complete(), "{report:?}");
             assert!(report.issues.is_empty());
             assert!(report.aliases.is_empty());
-            assert_eq!(report.files_observed, 28);
+            assert_eq!(report.files_observed, 32);
             let actual = report
                 .groups
                 .iter()
