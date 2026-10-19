@@ -1,0 +1,91 @@
+{
+  "status": "passed_selected_CNN_boundary_characterization",
+  "source_pin": {
+    "path": "imagededup/methods/cnn.py",
+    "sha256": "9952a73910f44326335f66e446da2ff7e770d6d4c616257deca2ec1bfbe83000"
+  },
+  "threshold_controls": [
+    {
+      "value": "-1.0",
+      "result": "accepted"
+    },
+    {
+      "value": "0.0",
+      "result": "accepted"
+    },
+    {
+      "value": "1.0",
+      "result": "accepted"
+    },
+    {
+      "value": "nan",
+      "result": "accepted"
+    },
+    {
+      "value": "inf",
+      "result": "ValueError"
+    },
+    {
+      "value": "-inf",
+      "result": "ValueError"
+    },
+    {
+      "value": "-1.01",
+      "result": "ValueError"
+    },
+    {
+      "value": "1.01",
+      "result": "ValueError"
+    },
+    {
+      "value": "0",
+      "result": "TypeError"
+    },
+    {
+      "value": "True",
+      "result": "TypeError"
+    }
+  ],
+  "injected_score_precision_controls": [
+    {
+      "dtype": "float64",
+      "off_diagonal": 0.89999,
+      "results": {
+        "a": [],
+        "b": []
+      }
+    },
+    {
+      "dtype": "float16",
+      "off_diagonal": 0.89990234375,
+      "results": {
+        "a": [
+          "b"
+        ],
+        "b": [
+          "a"
+        ]
+      }
+    }
+  ],
+  "nan_score_result": {
+    "a": [],
+    "b": []
+  },
+  "no_input_removal": {
+    "exception": "UnboundLocalError",
+    "message": "cannot access local variable 'duplicates' where it is not associated with a value"
+  },
+  "findings": [
+    "NaN passes threshold validation, then all comparisons are false, returning empty matches.",
+    "Injected score0.89999 is below0.9 but accepted in float16 path with NumPy2.5.4 scalar casting; actual retrieval source uses float16 above row threshold.",
+    "find_duplicates_to_remove without directory/encodings reaches uninitialized duplicates local.",
+    "Self removal uses diagonal2sentinel; returned neighbors preserve insertion order rather than sorting scores."
+  ],
+  "limits": [
+    "Three original AST-extracted method bodies; staticmethod decorator removed only.",
+    "Cosine callback supplies matrices explicitly: not real sklearn precision or model/embedding/end-to-end qualification.",
+    "No original CNN tests, torch/torchvision, weights, multiprocessing, GPU, package execution or production adoption.",
+    "Full cnn.py source now read across two increments; pHash native investigation remains deferred."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "status": "partial_source_and_selected_CNN_boundary_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "imagededup/methods/cnn.py",
+      "sha256": "9952a73910f44326335f66e446da2ff7e770d6d4c616257deca2ec1bfbe83000"
+    }
+  ],
+  "whole_files_read_across_v1_v7": 31,
+  "controls": "docs/research/dedup-500/imagededup2-cnn-boundaries-reproducer-v7-20261019/result.json",
+  "controls_sha256": "0a7770ffb66210863dadd498a18e86deeae3735e29760136efd0c6c4dd62152f",
+  "retained_harness_failure": "docs/research/dedup-500/imagededup2-cnn-boundaries-reproducer-v7-20261019/harness-failure.json",
+  "reproducer": "scripts/qualify-imagededup2-cnn-boundaries-20261019.py",
+  "reproducer_sha256": "5d7a52836bb339aa84fde02bd396427b3fbb73048439ca3ead1bfadf814309d1",
+  "environment_numpy": "2.5.4",
+  "findings": [
+    "NaN passes threshold validation, then all comparisons are false, returning empty matches.",
+    "Injected score0.89999 is below0.9 but accepted in float16 path with NumPy2.5.4 scalar casting; actual retrieval source uses float16 above row threshold.",
+    "find_duplicates_to_remove without directory/encodings reaches uninitialized duplicates local.",
+    "Self removal uses diagonal2sentinel; returned neighbors preserve insertion order rather than sorting scores."
+  ],
+  "limits": [
+    "Three original AST-extracted method bodies; staticmethod decorator removed only.",
+    "Cosine callback supplies matrices explicitly: not real sklearn precision or model/embedding/end-to-end qualification.",
+    "No original CNN tests, torch/torchvision, weights, multiprocessing, GPU, package execution or production adoption.",
+    "Full cnn.py source now read across two increments; pHash native investigation remains deferred."
+  ]
+}
