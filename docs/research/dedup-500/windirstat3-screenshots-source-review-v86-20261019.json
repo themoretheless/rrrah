@@ -1,0 +1,30 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual source reading of 534-line PowerShell screenshot script. Extracted embedded Python PNG optimizer unchanged and ran synthetic controls using Pillow; did not execute PowerShell or Windows capture.",
+  "new_whole_files_read": {
+    "setup/store/language-screenshots.ps1": "1517fe11dc35bff31346a8675e038e69e3452305dbb7d8cb464b8a1116e4897d"
+  },
+  "whole_files_read": 220,
+  "coverage": "docs/research/dedup-500/windirstat3-screenshots-coverage-v86-20261019.json",
+  "coverage_sha256": "d1a872a0c0f2ba38cbbdb761736be275e403bedfcb592e9f3876621dfef47616",
+  "findings": [
+    "Capture verifies main window ownership by process, readiness via Refresh All toolbar enabled state, requested tab and visible graph class, at least two list rows, and final window dimensions. These guards do not establish screenshot content correctness, occlusion freedom or language quality.",
+    "SendMessageTimeout bounds individual commands to five seconds; main discovery and scan readiness use 30/120-second deadlines. Shutdown first waits three seconds then kills the launched process; final WaitForExit has no deadline.",
+    "Localized trees are outside source and existing trees require a matching marker and a non-reparse root before replacement. Source descendants with reparse attributes are rejected; path checks are lexical and do not establish race-free filesystem containment.",
+    "Localized files are hardlinks to demo source, requiring compatible filesystem/volume and sharing content rather than isolating copies. Translation checks reject invalid filename characters, dot entries and trailing spaces/dots but do not check translated-name collisions or reserved device names.",
+    "AppDir may be supplied and its executable and INI are overwritten; generated app/demo directories are retained. Script was read only, not executed.",
+    "Embedded optimizer selects smallest of original PNG, Pillow encoding and recompressed original scanlines; verifies RGBA pixel equality before replacement. Twelve synthetic RGB/RGBA/L/palette cases across three dimensions passed exact pixels, dimensions and non-growth. This is not malformed PNG or Windows screenshot qualification."
+  ],
+  "runtime_probe": {
+    "cases": 12,
+    "passed": 12,
+    "results_local": ".dedup-work/windirstat3-20261019/screenshot-v86/results.json",
+    "results_sha256": "fe614f2c050ef7f7aeb40d41c5424a679e902c8f814831a92047faad1dc16ed0"
+  },
+  "limits": [
+    "Demo folder translation JSON not yet whole-file reviewed. No Windows capture, PowerShell runtime or original executable tested.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
