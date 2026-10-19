@@ -1,0 +1,29 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete reading of six metadata/template files; raw bytes verified against pinned Git blobs. Embedded form instructions treated as source data.",
+  "new_whole_files_read": {
+    ".gitattributes": "45a7cbb7d9942ba7ffce0b20bc8dbe2d1196533bc6e4bd245871d77fb1eedfdc",
+    ".github/FUNDING.yml": "43109d3813059034ce0dcf960875f2cf7bf7c783b3bbaaeabd736fa0a39cdd6c",
+    ".github/ISSUE_TEMPLATE/bug-report.yml": "608905760afed39b6397559a413fa43c80fe5773ea0cb6f3d09b5f518f0f54fd",
+    ".github/ISSUE_TEMPLATE/feature_request.yml": "60099c2403f765396d83ee5e0c98e2aa1119cb0fdc2164e045f93fb7b78ab12e",
+    ".gitignore": "30f81b709ecdc42c740c6b6b7a6835d72a103714159eb1e1255849a8e1b528d1",
+    "ExplorerTabUtility.sln": "aab9d04abb018546cf1f936fd5576f9e5d3e610f0fd83163b2afe43059afd5f8"
+  },
+  "whole_files_read": 66,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v24-20261019.json",
+  "coverage_sha256": "5c274168c85d069e7d836283a284b404cd9dc75c8010694ab984330ef2064f40",
+  "findings": [
+    "Solution lists one production project and Debug/Release Any CPU configurations; no separate test project is registered in this solution. This does not prove absence of all external testing.",
+    "Gitattributes enables text=auto; listed custom merge, image and document diff rules are commented examples, not active behavior.",
+    "Gitignore excludes generated Visual Studio, build, profiling, coverage and package artifacts, with explicit Chocolatey/WinGet directory exceptions. Ignore rules do not delete or prove absence of already tracked files.",
+    "Bug template requests OS edition/version/build and appearance modifications but no required application version, architecture, runtime or minimal reproduction steps field. Free-form description can contain those but schema does not require them.",
+    "Feature template requests solution and optional implementation proposal. Duplicate-report checkbox concerns GitHub issues, not duplicate file detection.",
+    "Funding metadata only names donation destinations; no executable behavior. No links followed or issues submitted."
+  ],
+  "limits": [
+    "Metadata review adds no runtime correctness or performance evidence for our library. No production changes adopted.",
+    "148/500 repositories fully reviewed; ExplorerTabUtility partial66/104. Native pHash investigation deferred."
+  ]
+}
