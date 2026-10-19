@@ -1,0 +1,31 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading; pinned Git bytes verified. Nine compiled controls on original double-load method with synthetic storage.",
+  "new_whole_files_read": {
+    "windirstat/Options.h": "bf71fba6831435a34d03b8dcc473d7548e73fa6a011bebc496d55add5dae591b",
+    "windirstat/Options.cpp": "665445be52484ff83012bef9cb11ef70dee24ce9bc7ef224ceedce2cebdc388f",
+    "windirstat/Property.h": "2a766a6e99a7d49836ab42110c3ed9f1803fc935c9ee2e2534b6c4e102e3e76e",
+    "windirstat/Property.cpp": "d4689cd1ff0ee31ff01de2aa09d2574798fd9e37985d355cceb25cc1ae5ddd43"
+  },
+  "whole_files_read": 54,
+  "coverage": "docs/research/dedup-500/windirstat3-settings-coverage-v21-20261019.json",
+  "coverage_sha256": "1bf7e4a748f5c511413059a20d4749d5fe582f9771b8da7b910331568377ee72",
+  "controls": "docs/research/dedup-500/windirstat3-settings-control-v21-20261019.json",
+  "controls_sha256": "aa61b43ca273972b525f33e6ae9e9064a8e14a0274f7e210dcd293ae1b09b93f",
+  "findings": [
+    "Duplicate scan and large-file sampling default false; xxHash default hash, scanning threads4bounded1..16, cloud-link skipping true. Setting assignment/Obj access does not itself clamp; persisted integer reads clamp only when value differs from current default and min differs from max.",
+    "Original double-load method preserves NaN; infinities clamp, finite out-of-range values clamp, default-1sentinel remains outside0..1. Nine native controls confirm method behavior only, not downstream UI impact.",
+    "INI string reads grow8192buffer up to1MiB+2 and return default instead of truncated setting at cap. Registry string read uses reported allocation size without same1MiB cap. Storage write bool results are discarded by Setting write wrappers; no propagated persistence-success guarantee.",
+    "String newline persistence normalizes CRLF/CR/LF to record separator0x1E and restores CRLF; literal record separator cannot be distinguished from newline on reload.",
+    "Integer-list loader clears on failed/full-token wcstol parse or ERANGE; Windows long/int32 equivalence matters for reproducing range checks on non-Windows hosts. Binary reader verifies exact registry byte length; INI decoder writes destination incrementally and may return false after partial decode. No runtime controls of malformed binary branch here.",
+    "Options postprocess migrates legacy10cleanup slots, initializes default column visibility before exports, resolves localization and loads treemap settings. Cleanup count supports up toINT_MAX and allocation exceptions clear collection; no practical count budget or stress qualification inferred.",
+    "Custom treemap preset requires exactly10integers and clamps numeric ranges. Window sanitation and DPI rescaling read only; no multi-monitor runtime conclusion."
+  ],
+  "limits": [
+    "No original full Windows app, registry/INI I/O or UI behavior executed.",
+    "Isolated native control source and adapter details retained in controls artifact.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}

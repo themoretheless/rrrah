@@ -1,0 +1,17 @@
+{
+  "status": "passed_characterization",
+  "checks": 9,
+  "source_sha256": "d4689cd1ff0ee31ff01de2aa09d2574798fd9e37985d355cceb25cc1ae5ddd43",
+  "extracted_method_sha256": "bf3d076c8bd232154f98432d8944eab7e8013f48598612084a1b13c309b465b8",
+  "control_source": "#include <algorithm>\n#include <cmath>\n#include <limits>\n#include <cstring>\n#include <cassert>\n#include <iostream>\n#include <string>\ndouble incoming;\nbool ReadBinaryProperty(const std::wstring&,const std::wstring&,void* p,size_t n){assert(n==sizeof(double)); std::memcpy(p,&incoming,n); return true;}\ntemplate<class T> struct Setting { T m_value=-1,m_min=0,m_max=1; std::wstring m_section,m_entry; void ReadPersistedProperty(); };\ntemplate <> void Setting<double>::ReadPersistedProperty()\n{\n    const double def = m_value;\n    ReadBinaryProperty(m_section, m_entry, &m_value, sizeof(double));\n    if (m_value != def && m_min != m_max) m_value = std::clamp(m_value, m_min, m_max);\n}\nint main(){int checks=0; for(double value:{-2.,0.,0.5,1.,2.,-1.,std::numeric_limits<double>::infinity(),-std::numeric_limits<double>::infinity(),std::numeric_limits<double>::quiet_NaN()}){Setting<double> setting; incoming=value; setting.ReadPersistedProperty(); if(std::isnan(value))assert(std::isnan(setting.m_value)); else if(value==-1.)assert(setting.m_value==-1.); else assert(setting.m_value==std::clamp(value,0.,1.)); ++checks;}std::cout<<checks<<\" controls passed; NaN survives; default sentinel preserved\\n\";}\n",
+  "control_sha256": "9da83d5aab80091c24a8f1550be4ccd3b63b90537b0c8305177a589698ec74a3",
+  "stdout": "9 controls passed; NaN survives; default sentinel preserved\n",
+  "adapters": [
+    "Synthetic binary storage copies chosen double into supplied destination; no Windows API.",
+    "Minimal Setting<double> holds original member names and default-1/min0/max1. Original ReadPersistedProperty method unchanged."
+  ],
+  "limits": [
+    "NaN survives this isolated load method; no claim about downstream splitter behavior or app crash.",
+    "No production fix or Windows runtime execution."
+  ]
+}
