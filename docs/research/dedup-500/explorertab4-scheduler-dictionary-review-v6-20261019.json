@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of StaTaskScheduler.cs and DualKeyDictionary.cs; truncated dictionary middle explicitly reread lines140..225. Exact-commit downloads matched pinned Git blob IDs.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Helpers/StaTaskScheduler.cs": "19e7c45837d4f578cf7a6b071242adc63dda57ab582f63e768e215a8a3f71bc5",
+    "ExplorerTabUtility/Models/DualKeyDictionary.cs": "0886d13f5ab4b2dc5f317c2440c08a9bf4980b5190c29fc8b3d023ba819c89f8"
+  },
+  "whole_files_read": 9,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v6-20261019.json",
+  "coverage_sha256": "d9ca8df169483058e11bd6dcb9039de15cb81dd0635edc12954324423d7373de",
+  "findings": [
+    "STA scheduler has one background thread consuming unbounded BlockingCollection<Task>. No queue capacity, admission policy or cancellation-aware disposal. Dispose completes adding and joins without timeout; blocked tasks can block disposal indefinitely.",
+    "Dispose invoked from scheduler thread would self-join; no guard exists. QueueTask racing disposal can throw; repeated disposal is not guarded. These are source-level paths, not executed Windows failures.",
+    "No Windows message pump or SynchronizationContext setup is present in scheduler loop. STA marking alone is not proof of correct COM reentrancy/async continuation behavior.",
+    "TryExecuteTaskInline only admits scheduler thread and does not remove an already queued task from collection. Task execution state may prevent duplicate execution but queued entry retention remains until consumer drains.",
+    "DualKeyDictionary uses two ordinary dictionaries with no internal synchronization or custom comparers. Optional-key conflicts under overwrite detach optional key from former owner; Add throws, TryAdd rejects.",
+    "Remove(KeyValuePair) forwards to Remove(key), ignoring expected value although Contains(pair) checks it. This can remove a mapping with a different value; source confirms contract mismatch without runtime reproduction.",
+    "Primary CopyTo lacks explicit null/negative index guards unlike ValueCollection.CopyTo. Default optional key for value types is a real zero-like key because null checks do not represent absence. Generic optional-key semantics need constrained caller choices."
+  ],
+  "limits": [
+    "No original C# tests or Windows runtime executed; no foreign production code adopted.",
+    "Full filtered checkout remains session13181; individual downloads independently verified. Completed count148/500; pHash deferred."
+  ]
+}
