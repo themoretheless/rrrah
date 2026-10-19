@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole1146line file manually read in four contiguous sections, including previously reviewed hash excerpt; pinned bytes verified. Prior hash offset controls not rerun or counted anew.",
+  "new_whole_files_read": {
+    "windirstat/Item.Extended.cpp": "9a0866364fee8b3603fd030ffd7037b8a88877a332cd89e8a6db022a5da6ba0c"
+  },
+  "whole_files_read": 73,
+  "coverage": "docs/research/dedup-500/windirstat3-item-extended-coverage-v29-20261019.json",
+  "coverage_sha256": "55e5848d9722e1f87544d483da33d3f4f10a9e6776ca978b8c29acde76127641",
+  "findings": [
+    "Hardlink accounting only runs for drive roots, groups repeated nonzero file indices, avoids descending reparse directories to prevent foreign-volume index collisions. This is per-drive metadata grouping, not content-hash equality or path identity.",
+    "Hardlink physical accounting removes raw physical contributions from original parent chains, flags members, and contributes maximum physical member size once via synthetic index folder. Grouping references store source pointer in index and must be destroyed before source mutation.",
+    "RemoveHardlinksItem clears member flags, restores raw parent contributions, subtracts synthetic group contribution and deletes snapshot. Hardlink snapshot icons are synchronous generic icons, avoiding async callbacks outliving snapshot nodes.",
+    "Hash method uses per-thread1MiB read buffer, reused xxHash/BCrypt state. xxHash yields8canonical bytes; BCrypt results truncated to at most16bytes. Strong algorithm label does not mean full output retained or byte-for-byte equality proved.",
+    "Filesystem content handle permits FILE_SHARE_WRITE and FILE_SHARE_DELETE despite comment about avoiding active writers. No pre/post identity/length/timestamp revalidation visible in method. Mutation consistency remains unqualified.",
+    "Sampled mode demands exactly4MiB read at prefix and three spaced1MiB windows. Unsampled mode can finish at EOF before supplied hash limit without exact-length check. Caller size grouping matters; no mutation runtime control performed.",
+    "BCryptFinishHash is called after read/hash failure to reset reusable handle; sample read-count mismatch converts to read failure. No Windows cryptographic API failure tests executed.",
+    "Free/unknown disk nodes represent capacity accounting, not actual content files; unknown clamps to0when tallied exceeds used capacity, with no coherent disk snapshot guarantee. Administrative drive-share recognition accepts only UNC host plus letter-dollar root, including extended UNC spelling.",
+    "Graph size can be logical or physical; hardlink pseudo group is graph leaf and colors/labels distinguish accounting references. All paint code read, not visually rendered here."
+  ],
+  "limits": [
+    "No full Windows app, disk/hardlink accounting, writer-race, crypto or render execution.",
+    "Original source comment asserting SHA512 performance/FIPS status is not adopted as independently verified fact.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
