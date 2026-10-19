@@ -1,0 +1,106 @@
+{
+  "status": "complete_source_review_with_explicit_mixed_review_methods",
+  "repository": "jvirkki/dupd",
+  "commit": "33907bbcfd5fe8b63f54d4f55438fa222ea880aa",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "tree_entries": 793,
+  "blob_entries": 771,
+  "manually_read_whole_blobs": 162,
+  "generated_representations_completely_verified": 2,
+  "fixture_and_golden_paths_completely_analyzed": 607,
+  "unreviewed_blob_paths": [],
+  "prior_reviews": [
+    {
+      "path": "docs/research/dedup-500/dupd50-cache-queue-review-v4-20261019.json",
+      "sha256": "f5d866a875cf18d078277fa65a379dd4c2a86a4a1fd4ef4f95ff0d3721b55941"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-embedded-docs-review-v12-20261019.json",
+      "sha256": "148459a49cbb5823e138273b0afef65cdd996554ddc173d61e64d06031881745"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-hash-streaming-review-v11-20261019.json",
+      "sha256": "b095422f478c158da26beef465b32c7557b801616eb984e4718e5bcf4224e9e6"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-io-review-v6-20261019.json",
+      "sha256": "2b72a7c4f5e7aecf67a503a6a7b02ef1f9dd178153e1f71c320f791b48dc459c"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-parser-large-file-review-v10-20261019.json",
+      "sha256": "353309a147dd719d0058f1525e1c1e96b42ad73021925abfb12c7f42851bbe15"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-policy-trace-review-v7-20261019.json",
+      "sha256": "7ded763c5c46c08bbb0f5e0531acb2e954bdb3e186b466ac080fb618b44d6903"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-publication-review-v5-20261019.json",
+      "sha256": "ac1c2735850dc8475981983e2275828e940576253fa7d5bbe7314560e4c5ea59"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-report-cache-review-v8-20261019.json",
+      "sha256": "8820bc41419512818a0bc2b4d6efa4d97bada3d1f7270fcaa1ce7ee30aeb1478"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-selected-engine-runtime-20261019.json",
+      "sha256": "29f9ba5aad563ce3c91de1649ccc0bb6185ab531db33916732fcd14dce846cd9"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-staged-read-review-v2-20261019.json",
+      "sha256": "43574c7b1eb03c91000d6b8d0436a0efca1e628d7e1f5481dcbf717366bab190"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-staged-tree-review-v3-20261019.json",
+      "sha256": "63eec90b58f218afeef3dfd93d73ec6a5524aee67e75e30f7d402631cb708227"
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-statistics-review-v9-20261019.json",
+      "sha256": "8a1a0c16f2d7babc21d43fcc98a4c6cf5c567bafff0392b801c2ec2c851b01da"
+    }
+  ],
+  "fixture_reproducer": "docs/research/dedup-500/dupd50-complete-fixture-reproducer-20261019",
+  "fixture_result_sha256": "cd0526504ab877dd00227821fe4842a56fec6caa6e524e95f6e0de7cf5c4f192",
+  "fixture_harness": "scripts/audit-dupd50-fixture-corpus-20261019.py",
+  "fixture_harness_sha256": "550b0936c79a48cda83cebfd8e856a504b3c0ffe96881c3b347e0c91504c98fc",
+  "methods": {
+    "source": "Complete manual reading across prior reports; generated text strictly decoded and matched to reviewed original texts.",
+    "fixtures": "Every Git blob and checkout path byte-verified, exact-byte partitions, complete compressed archive member RLE, license-based text deltas, whole small golden text and independent exact line multisets for large repetitive goldens.",
+    "scope": "All771blobpaths accounted for. This does not claim manual visual reading of every hex byte or265304repeatedlines."
+  },
+  "selected_upstream_runtime": {
+    "original_scripts_total": 73,
+    "original_scripts_passed": 68,
+    "unexecuted_scripts": [
+      "test.49",
+      "test.55",
+      "test.66",
+      "test.70",
+      "test.87"
+    ],
+    "unexecuted_reasons": {
+      "test.49": "Shared fixed /tmp database and20000fixture generation; not executed.",
+      "test.55": "Shared fixed /tmp database and multi-GiB sparse fixtures; not executed.",
+      "test.66": "Arguments include filesystem root /; not executed on host.",
+      "test.70": "Arguments include shared /tmp; not executed on host.",
+      "test.87": "Intentional malformed hash cache scenario read but not selected for runtime."
+    },
+    "additional_normal_buffer_hash_consistency_cases": 9072,
+    "whole_upstream_suite_run": false
+  },
+  "findings": [
+    "Scan hashlist publishes full-hash equality without final byte comparison; independent comparator presence is not publication proof. Our exact engine preserves byte confirmation.",
+    "Default hidden/empty-file policies and hardlink treatment differ from our exact library; not silently ported.",
+    "Stored duplicate reports and deletion-only refresh are snapshots, not current content proofs; original examples are less precise than manpage.",
+    "Default hash cache uses path,size,seconds-resolution ctime and algorithm; not nanosecond/file-identity freshness proof.",
+    "515same-contentfixtures exercise nine duplicate groups,538duplicatefiles and8uniques; largegolden29 fullyvalidated265304lines by expected occurrence counts.",
+    "Four algorithm cases pass original large-file script; no measured end-to-end performance win established."
+  ],
+  "adoption": "reference_only_no_foreign_production_code_copied",
+  "limits": [
+    "Complete source/fixture review is distinct from whole-upstream, all-platform, performance or package qualification.",
+    "GPL3or-later program and nested BSDxxHash reviewed; no new redistribution compatibility conclusion.",
+    "pHash memory investigations remain user-deferred; other356repositories and original goal requirements remain open."
+  ]
+}

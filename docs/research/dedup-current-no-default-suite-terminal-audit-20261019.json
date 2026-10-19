@@ -1,0 +1,828 @@
+{
+  "status": "terminal_pass_with_one_test_source_extension_qualified_separately",
+  "exit_code": 0,
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--lib",
+    "--tests",
+    "--offline",
+    "--locked",
+    "--jobs",
+    "2"
+  ],
+  "target_summaries": 156,
+  "passed": 282,
+  "failed": 0,
+  "ignored": 2,
+  "zero_pass_targets": 111,
+  "nonzero_pass_targets": 45,
+  "source_drift": [
+    "crates/rrrah-dedup/tests/exact_files.rs"
+  ],
+  "all_other_captured_source_pins_still_match": true,
+  "targets": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 49,
+      "ignored": 2
+    },
+    {
+      "target": "tests/affine_candidate_search.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/affine_color.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/affine_color_heldout_negative.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/affine_region.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/affine_region_file.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/affine_region_grid.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/affine_region_input_contract.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_candidate_search.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_collection_preflight.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_collection_scaled.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_fallback_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_fallback_collection_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_fallback_collection_preflight.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_fallback_search.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_file_search_preflight.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_geometry_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_geometry_collection_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_geometry_collection_preflight.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_geometry_rank_fallback.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_geometry_search.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_geometry_smoothing.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_rank.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_rank_driven_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_rank_driven_collection_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_rank_driven_collection_preflight.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_rank_file.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_reflected_geometry.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_reflection_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_reflection_collection_cancel.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_reflection_collection_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_reflection_collection_tokens.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/anchor_reflection_fallback.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/animated.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/bank_geometry.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/bank_partition.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/build_context.rs",
+      "passed": 2,
+      "ignored": 0
+    },
+    {
+      "target": "tests/cache.rs",
+      "passed": 10,
+      "ignored": 0
+    },
+    {
+      "target": "tests/cache_interpretation.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/cache_rla_interpretation.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/candidate_geometry_only.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/candidate_reflected_geometry.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/candidate_union_files.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/competitive_rank.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/container.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/content_snapshot.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/correspondence_union.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/crop.rs",
+      "passed": 3,
+      "ignored": 0
+    },
+    {
+      "target": "tests/decode.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/diagonal_proposals.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/encoded_srgb.rs",
+      "passed": 2,
+      "ignored": 0
+    },
+    {
+      "target": "tests/exact_files.rs",
+      "passed": 32,
+      "ignored": 0
+    },
+    {
+      "target": "tests/exact_large_files.rs",
+      "passed": 3,
+      "ignored": 0
+    },
+    {
+      "target": "tests/exact_repeated_metadata.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/exposure.rs",
+      "passed": 5,
+      "ignored": 0
+    },
+    {
+      "target": "tests/exposure_files.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/filtered.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/five_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/five_gradient_region_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/five_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/five_region_admission.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/five_region_lifecycle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/geometry.rs",
+      "passed": 9,
+      "ignored": 0
+    },
+    {
+      "target": "tests/geometry_validation.rs",
+      "passed": 10,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient.rs",
+      "passed": 8,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_candidate_smoothing.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_distinct_locations.rs",
+      "passed": 3,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_empty.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_index.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_index_reflection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_interpolated.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_reflection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_scale.rs",
+      "passed": 2,
+      "ignored": 0
+    },
+    {
+      "target": "tests/gradient_scale_files.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/groups.rs",
+      "passed": 5,
+      "ignored": 0
+    },
+    {
+      "target": "tests/hamming_image_corpus.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/icc_oracle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/information.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/joint_projective.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/joint_witnesses.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/jpeg_orientation.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/linear.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/local.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/local_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/local_index.rs",
+      "passed": 6,
+      "ignored": 0
+    },
+    {
+      "target": "tests/local_rank.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/local_rank_cached.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/local_scan.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/managed_evidence.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/mesh_deformation.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/mesh_grid.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/mesh_landmark_admission.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/mesh_rank.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/mesh_rank_regions.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/mesh_refine.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_compare.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_input.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_input_file.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_projected_compare.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_projected_tiles.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_tiles.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/native_anchor_recovery.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/native_pixel_domain.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/ordinal.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/oriented.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/pages.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/pair_schedule.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/palette_mutation.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/palette_transparency.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/periodic_capture.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/photo_collages.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/photo_files.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/photo_jpeg_oracle.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/photometric.rs",
+      "passed": 7,
+      "ignored": 0
+    },
+    {
+      "target": "tests/photos_heldout.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/piecewise_local_rank.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/piecewise_warp.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/pixel_search.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/pixels.rs",
+      "passed": 8,
+      "ignored": 0
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/presentation_digest.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/presentation_kind.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projected_collection.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projected_portfolio.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projective_domains.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projective_exhaustive_domains.rs",
+      "passed": 3,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projective_files.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projective_geometry.rs",
+      "passed": 14,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projective_grid.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/projective_pruning.rs",
+      "passed": 3,
+      "ignored": 0
+    },
+    {
+      "target": "tests/proposals.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/pyramid.rs",
+      "passed": 4,
+      "ignored": 0
+    },
+    {
+      "target": "tests/rank_region.rs",
+      "passed": 7,
+      "ignored": 0
+    },
+    {
+      "target": "tests/raster.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/raster_equality.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/raw_selected.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/region_footprint.rs",
+      "passed": 5,
+      "ignored": 0
+    },
+    {
+      "target": "tests/region_grid.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/region_grid_files.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/region_transform.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/scan.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/scan_cancellation_checkpoints.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/scan_group_publication.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/scan_retry.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/sequence.rs",
+      "passed": 8,
+      "ignored": 0
+    },
+    {
+      "target": "tests/spatial.rs",
+      "passed": 1,
+      "ignored": 0
+    },
+    {
+      "target": "tests/triangulation.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/visual.rs",
+      "passed": 9,
+      "ignored": 0
+    },
+    {
+      "target": "tests/visual_publication.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/wal_dependency.rs",
+      "passed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/warp.rs",
+      "passed": 5,
+      "ignored": 0
+    },
+    {
+      "target": "tests/worker.rs",
+      "passed": 7,
+      "ignored": 0
+    },
+    {
+      "target": "tests/worker_group.rs",
+      "passed": 9,
+      "ignored": 0
+    }
+  ],
+  "ignored_tests": [
+    "test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control",
+    "test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control"
+  ],
+  "reproducer": "docs/research/dedup-current-no-default-suite-reproducer-20261019",
+  "log_sha256": "0983d6fd99866a62060c0363cd9b15e4bc1a3eb0a2a7741cf0dbdbd591edcc7b",
+  "latest_exact_target": {
+    "path": "docs/research/dedup-current-exact-block-boundary-regression-20261019.json",
+    "sha256": "24196ec72128f9f8d36652aaf5dbd32736cefd99da45b94279c74846ae7e1052",
+    "passed": 33,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limits": [
+    "Base no-default-features library and integration gate only;111 targets runzero tests due feature/platform configuration.",
+    "The base gate ran preceding32-test exact source; later full33-test exact target passes separately. Do not sum overlapping cases or claim single identical-source gate.",
+    "No decode/LoFTR/all-platform/full-workspace/corpus completeness inference."
+  ]
+}
