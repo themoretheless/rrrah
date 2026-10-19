@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Norwegian Bokmal catalog; pinned bytes reverified; v91 automated structural evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_nb.txt": "ec02641d6247401120914b6033e0b12b9305eedd613f3f97b5720cef22489418"
+  },
+  "whole_files_read": 233,
+  "coverage": "docs/research/dedup-500/windirstat3-norwegian-coverage-v100-20261019.json",
+  "coverage_sha256": "8a5a5a8cb2b278fe8489de17d1e6414cebcc6d616ce358caa8961adfd5714a1f",
+  "findings": [
+    "Sannsynlige duplikater, Hash-prefiks and Stikkprøvehash preserve probability/prefix/sampling distinctions; advanced option says sample hashing above64MiB.",
+    "Recovery asks to check restored file data, separates recoverable from possibly recoverable and warns about same-volume overwrite. Metadata changes require rescan. These remain UI statements without disk/runtime proof.",
+    "Logical size column is shortened Størrelse and physical size Diskbruk, while menu explicitly names logical size. Different labels describe size versus disk usage but column alone omits logical qualifier.",
+    "Select-parent caption Velg element omits parent relation; show-unknown translated show-unavailable may confuse unknown accounting with inaccessible items; cleanup refresh policy translated task settings may obscure refresh semantics.",
+    "Junctions and symlinks retain parenthesized technical English names, hardlinks remain separate, and backup/restore privileges explicitly name SeBackupPrivilege/SeRestorePrivilege. Sparse conversion remains separate from compression.",
+    "MSI culture nb-NO and LCID1044 differ from capture resource LangId31764; these serve different resource/installer contexts and are not by themselves an error. No Windows locale resolution executed."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered UI, locale resolution, installer or Windows runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
