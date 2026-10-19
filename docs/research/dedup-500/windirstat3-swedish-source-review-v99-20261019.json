@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Swedish catalog; source bytes reverified; v91 automated structural evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_sv.txt": "67d7be0b7963af9d4276b4e9e85f550b13fac9c8aa96f924edab2004aa1d1e38"
+  },
+  "whole_files_read": 232,
+  "coverage": "docs/research/dedup-500/windirstat3-swedish-coverage-v99-20261019.json",
+  "coverage_sha256": "b86d65921b924f75ec6fb0ea7559bd1deab6d87e0955c7d790778c715bcbf851",
+  "findings": [
+    "Troliga dubbletter, Hashprefix and Stickprovshash retain probability/prefix/sampling distinctions. Sampling option explicitly specifies files over64MiB.",
+    "Recovery completion asks to check file data; Kan återställas and Kan kanske återställas remain separate. Metadata changes request rescan; same-source-volume restoration warns about overwriting deleted data. These labels do not establish recovery outcome.",
+    "Permanent deletion is described as permanent, without proving secure erasure. Cloud warning explains potential download and refers to settings.",
+    "Cleanup recursion label Återgå till underkataloger can read as returning to subdirectories rather than recursively processing them; backup/restore privilege label has awkward split wording. These are text-level observations.",
+    "Sparse action Gör fil gles differs from compression. Symbolic links, hardlinks and junctions have separate labels; logical/physical sizes and binary units remain distinct.",
+    "Regex alternative is wildcard characters rather than explicit glob terminology; custom cleanup tokens and ordered permission lists are retained. MSI sv-SE/1053/1252 declarations do not prove installer encoding."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No Swedish Windows rendering, keyboard mnemonic conflict, installer/runtime or fluent native-speaker certification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
