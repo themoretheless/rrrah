@@ -1,0 +1,44 @@
+{
+  "status": "passed_original_selected_evaluation_controls",
+  "source_pins": {
+    "imagededup/handlers/metrics/classification.py": "76282992e07d7c8bf6b007919d16b8a6db5d3dad25eafa5f7a3125db9255d260",
+    "tests/test_classification.py": "23e506b35337f31cc4f778890d8489a6f1663d71c6875d8c52cfb837196e8c98",
+    "imagededup/evaluation/evaluation.py": "d1ab6414db85d7eda1d5eb12ed2538767bc0d7e538901ef13b9575f973fcd50c",
+    "imagededup/handlers/metrics/information_retrieval.py": "1b21a177211c3884a8debab173794f7d861d03655dbe813d5a1cd6d0c31dff04"
+  },
+  "original_selected_tests_passed": [
+    "test__get_unique_ordered_tuples",
+    "test__prepare_labels"
+  ],
+  "graph_pair_cases": 4096,
+  "duplicate_entries_accepted": true,
+  "repeated_average_precision": 2.0,
+  "partial_coverage_ndcg": 1.0,
+  "self_edges_accepted": true,
+  "empty_metrics": {
+    "map": "nan",
+    "ndcg": "nan",
+    "jaccard": "nan"
+  },
+  "empty_warnings": [
+    "Mean of empty slice",
+    "invalid value encountered in scalar divide",
+    "Mean of empty slice",
+    "invalid value encountered in scalar divide",
+    "Mean of empty slice",
+    "invalid value encountered in scalar divide"
+  ],
+  "numpy_version": "2.5.4",
+  "findings": [
+    "Validator permits duplicate neighbors; valid symmetric repeated mapping yields mean average precision2.0.",
+    "NDCG normalizes using retrieved relevance only: one of two relevant items alone scores1.0; no complete recall guarantee.",
+    "Empty maps validate, but real NumPy mean metrics return NaN with warnings.",
+    "Classification pair helper excludes self-pairs while validation accepts self-edges; metrics have differing domains."
+  ],
+  "limits": [
+    "Original six validation/classification helper bodies AST extracted, imports/logger routed explicitly.",
+    "Original whole information_retrieval module loaded unchanged with actual NumPy2.5.4.",
+    "4096four-vertex graph-pair combinations and two original test bodies only; sklearn/classification score runtime and full evaluator suite not executed.",
+    "No quality-corpus or model/runtime/platform qualification; no foreign production code adopted; pHash native work deferred."
+  ]
+}

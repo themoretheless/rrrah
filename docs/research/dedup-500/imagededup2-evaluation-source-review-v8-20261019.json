@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_and_selected_evaluation_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "imagededup/handlers/metrics/classification.py": "76282992e07d7c8bf6b007919d16b8a6db5d3dad25eafa5f7a3125db9255d260",
+    "tests/test_classification.py": "23e506b35337f31cc4f778890d8489a6f1663d71c6875d8c52cfb837196e8c98",
+    "imagededup/evaluation/evaluation.py": "d1ab6414db85d7eda1d5eb12ed2538767bc0d7e538901ef13b9575f973fcd50c",
+    "imagededup/handlers/metrics/information_retrieval.py": "1b21a177211c3884a8debab173794f7d861d03655dbe813d5a1cd6d0c31dff04"
+  },
+  "whole_files_read_across_v1_v8": 35,
+  "controls": "docs/research/dedup-500/imagededup2-evaluation-reproducer-v8-20261019/result.json",
+  "controls_sha256": "033dc711d95a52e0cd89d79021cd94944157b6e83683e46fdab173ffa4bbfa7d",
+  "reproducer": "scripts/qualify-imagededup2-evaluation-20261019.py",
+  "reproducer_sha256": "24823f9a388ac55ef4f0ac7b6914405113747bdc66c5e26497006c804fd50b4b",
+  "findings": [
+    "Validator permits duplicate neighbors; valid symmetric repeated mapping yields mean average precision2.0.",
+    "NDCG normalizes using retrieved relevance only: one of two relevant items alone scores1.0; no complete recall guarantee.",
+    "Empty maps validate, but real NumPy mean metrics return NaN with warnings.",
+    "Classification pair helper excludes self-pairs while validation accepts self-edges; metrics have differing domains."
+  ],
+  "limits": [
+    "Original six validation/classification helper bodies AST extracted, imports/logger routed explicitly.",
+    "Original whole information_retrieval module loaded unchanged with actual NumPy2.5.4.",
+    "4096four-vertex graph-pair combinations and two original test bodies only; sklearn/classification score runtime and full evaluator suite not executed.",
+    "No quality-corpus or model/runtime/platform qualification; no foreign production code adopted; pHash native work deferred."
+  ]
+}
