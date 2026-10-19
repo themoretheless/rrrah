@@ -2,7 +2,7 @@
   "index": 1,
   "repository": "arsenetar/dupeguru",
   "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
-  "review_scope": "Partial pinned review:61wholefilesread,383selectedoriginaltestspass. Actualfile/cache/snapshot/imagecontrols retained; repeatedFIELDSNOORDERstatechange reproduced despite originaltests passing. ExplicitPillow/twoworker/privateappdataadapters;remainingGUI/platform/media/localization/sourceandtests incomplete;fullrepositoryfalse.",
+  "review_scope": "Partial pinned review:67wholefilesread,398selectedoriginaltestspass. Actualfile/cache/snapshot/image/repeated-scancontrols and validAIFFtagmappingcounterexample retained. ExplicitPillow/twoworker/privateappdataadapters;remainingGUI/platform/media/localization/sourceandtests incomplete;fullrepositoryfalse.",
   "decision": "reference",
   "finding": "Five complete selected modules reviewed across filesystem/engine/scanner,8fs+7contents controls. Configured bigfile samples accepted distinct bytes; default cache can reuse restoredmtime digest. Default fullhash rejects sample collision; exists filter mitigates missing inputs. Not whole368blob review; no adoption.",
   "license_metadata": "GPL-3.0",
@@ -135,6 +135,11 @@
       "audit": "docs/research/dedup-500/dupeguru1-repeated-scan-review-v7-20261019.json",
       "controls": "docs/research/dedup-500/dupeguru1-repeated-scan-review-v7-20261019.json",
       "scope": "4newwholefiles/61cumulative;39originalscannertestspass,383cumulative;actualsame-ScannerFIELDSNOORDERsecond-runloss reproduced. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-music-priority-review-v8-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-music-priority-review-v8-20261019.json",
+      "scope": "6newwholefiles/67cumulative;15originalprioritytestspass,398cumulative;validAIFFtagreadingcounterexamplewithrealMutagen. Fullrepositoryfalse."
     }
   ],
   "full_repository_read": false

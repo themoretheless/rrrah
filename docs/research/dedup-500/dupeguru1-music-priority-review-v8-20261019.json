@@ -1,0 +1,145 @@
+{
+  "status": "partial_music_priority_review_with_valid_AIFF_tag_read_counterexample",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-repeated-scan-review-v7-20261019.json",
+  "previous_sha256": "c3166ca8e86eaf16fb0da64c202e9c80169ca82ce849bcb6c261203f7a1fb798",
+  "new_whole_blobs": [
+    {
+      "path": "core/me/fs.py",
+      "git_blob": "fbfdfa09f451012dbf0816d9d2d772a60ab8d7c6",
+      "sha256": "42bd74df24502d680b93fd27ea441b0ca47a8e9a51f111bd74f52d020fe271e1",
+      "bytes": 4008,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/prioritize.py",
+      "git_blob": "40784822433355d5a77b1eb90eadbb85f718c87f",
+      "sha256": "33f315f9c36ad6a0a6ad2912f227c55e63ffbc21bbcc5ad896e01fcc40766e33",
+      "bytes": 956,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/prioritize_test.py",
+      "git_blob": "87909a2f01a4c8b43941e8c325b407cf465549e5",
+      "sha256": "d68b22aa5955ba0ed38eb91c9ed6ce4a77d0416accad5f7320e7d626dfdc43c9",
+      "bytes": 6310,
+      "fully_read": true
+    },
+    {
+      "path": "core/gui/prioritize_dialog.py",
+      "git_blob": "adcd85156b23981c3e0fae3f241b26afdfb0de28",
+      "sha256": "2ba1969111051769ae67a0b389fbffe67e7d7ab941b2d406579c2edba3edb70c",
+      "bytes": 3022,
+      "fully_read": true
+    },
+    {
+      "path": "core/gui/deletion_options.py",
+      "git_blob": "ec6093b969cdc1bfb6bafb918a740b655f2f34e5",
+      "sha256": "230861f1a75c206dda781bc5f039268e73a87c534fcd4b9759292d9bb66599bd",
+      "bytes": 3919,
+      "fully_read": true
+    },
+    {
+      "path": "core/me/result_table.py",
+      "git_blob": "ea7c45f59afa367229a132176adf396d75b33340",
+      "sha256": "093937560634c7cc3a2d3201c03fd53406f3014e9837a1ff7ab296047d8752a9",
+      "bytes": 1876,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 67,
+  "upstream_additional_tests_passed": 15,
+  "upstream_cumulative_distinct_tests_passed": 398,
+  "selected_runtime": {
+    "exit_code": 0,
+    "command": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+      "-m",
+      "pytest",
+      "-p",
+      "private_appdata_plugin",
+      "core/tests/prioritize_test.py",
+      "-q",
+      "--basetemp",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-priority-tests-20261019/pytest-temp",
+      "--junitxml",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-priority-tests-20261019/junit.xml"
+    ],
+    "source_pins": {
+      "core/tests/prioritize_test.py": "d68b22aa5955ba0ed38eb91c9ed6ce4a77d0416accad5f7320e7d626dfdc43c9",
+      "core/prioritize.py": "42f9a1d1e66cf70e8f1aa50ef2310e7800cc242c72ff5219ab5c2846df4035ca",
+      "core/me/prioritize.py": "7d773d73750a27653024df37f3ec10845fd9e7834be4f5097fbec78daf1901c9",
+      "core/pe/prioritize.py": "33f315f9c36ad6a0a6ad2912f227c55e63ffbc21bbcc5ad896e01fcc40766e33",
+      "core/gui/prioritize_dialog.py": "2ba1969111051769ae67a0b389fbffe67e7d7ab941b2d406579c2edba3edb70c",
+      "core/tests/base.py": "4d59b4619b043fb956c5ffe9ba95cbaff6556a2263cc2c39b9d7e8113e726d0c",
+      "core/app.py": "ed7ba34c717236333b88876bf8152ec515c47baf8badbe29c77ec2e3b157e04d",
+      "hscommon/desktop.py": "50f9cd113cf01991933bcfa5509d00b9072d280cb04916495d72a0ea6605ec36"
+    },
+    "source_drift": [],
+    "plugin_sha256": "29c8f01e725a0a9db19a66641b20751c1a1dd3ff5a42c086e73ec9387ce454a5",
+    "log_sha256": "e1ba3ef419069eb408f7f24c6b11cd3fb7a19df509345b6a8659e6fd30240a3d",
+    "scope": "Original complete test modules unchanged; only Desktop special-folder lookup redirected to per-test task-owned appdata. No matching, grouping, persistence or exclusion logic replaced."
+  },
+  "aiff_metadata_control": {
+    "status": "executed_original_MusicFile_on_valid_tagged_aiff",
+    "source_pin": {
+      "core/me/fs.py": "42bd74df24502d680b93fd27ea441b0ca47a8e9a51f111bd74f52d020fe271e1"
+    },
+    "fixture_sha256": "c74505973638920ceb17e729dfdc303c939f798cf785138daa9c4f83e56769d5",
+    "native_mutagen_tags": {
+      "artist": [
+        "Fixture Artist"
+      ],
+      "title": [
+        "Fixture Title"
+      ]
+    },
+    "native_mutagen_info": {
+      "sample_rate": 16000,
+      "channels": 1,
+      "length": 0.1
+    },
+    "MusicFile_can_handle": true,
+    "MusicFile_fields": {
+      "artist": "",
+      "title": "",
+      "duration": 0.1,
+      "samplerate": 16000,
+      "bitrate": 256.0
+    },
+    "tag_values_preserved": false,
+    "limits": [
+      "Valid 0.1second synthetic AIFF with real PCM and real Mutagen ID3 serialization; no mocked tag or audio provider.",
+      "Single format/version control, not every music container/codec or auditory-identity qualification.",
+      "No audio playback, user data, deletion action or production source change."
+    ]
+  },
+  "reproducer": "docs/research/dedup-500/dupeguru1-music-priority-reproducer-v8-20261019",
+  "harnesses": [
+    {
+      "path": "scripts/qualify-dupeguru1-original-priority-tests-20261019.py",
+      "sha256": "625b0286ecb1e2a31ba6e42a32b3a989e02f899b1a1059e860b9244aa3ff4a71"
+    },
+    {
+      "path": "scripts/qualify-dupeguru1-aiff-metadata-20261019.py",
+      "sha256": "c50e8ed9249653dbf9b7890bd0a2be4c7653b5dd156875139c1c4b2c0af02468"
+    }
+  ],
+  "findings": [
+    "All15originalprioritize_testcasespassunchangedwithonlyprivateappdatafolderadapter. Authoredgroups/viewfixturesdo notestablishrealGUIoridentityproof.",
+    "Valid0.1secondmonoAIFFwith16000HzPCMandsavedTPE1/TIT2tagsisacceptedbyMusicFile.can_handle. DirectMutagenAIFFreadsFixtureArtist/Title,butoriginalMusicFileartist/titleboth empty. Duration0.1,rate16000,bitrate256read.",
+    "GenericMusicFileusesmutagen.File(easy=True)andcommonartist/titlekeys; observedAIFFID3tagsarenotmappedtothosekeys. Singleformat/versionfinding,notall-audiofailureclaim.",
+    "Prioritypolicychoosesretainedreferencewithinexistinggroups;highbitrate/largersize/folderchoiceisnotcontentproof.",
+    "DeletionOptionssourcefullyreadbutnomarked-filedeletion/trash/linkactioninvoked."
+  ],
+  "limits": [
+    "67wholefilesread; remainingapp/UI/platform/EXIF/media/localizationsourcesandtests incomplete.",
+    "398selectedoriginaltests,notfullupstream/allplatformsuite.",
+    "Python3.12aifcusedonlytogeneratesyntheticfixture;realMutagenusedtoauthor/readtags. No audio provider mock oruserrecording.",
+    "No productionchange,foreignpatch,push,userdataactionorperformanceclaim.",
+    "User-deferred pHash memory investigation remains deferred; fullreviewcount145/500."
+  ]
+}
