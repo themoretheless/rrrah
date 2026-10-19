@@ -1,0 +1,85 @@
+{
+  "status": "prepared_not_built_or_executed",
+  "cases": [
+    {
+      "label": "known_table_copy",
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000",
+        "8.0",
+        "false"
+      ],
+      "dimensions": [
+        [
+          640,
+          480
+        ],
+        [
+          2560,
+          1920
+        ]
+      ]
+    },
+    {
+      "label": "table_vs_fence_false",
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "1.0",
+        "1000000",
+        "4.0",
+        "false"
+      ],
+      "dimensions": [
+        [
+          640,
+          480
+        ],
+        [
+          1280,
+          960
+        ]
+      ]
+    },
+    {
+      "label": "portrait_false",
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.2314767602431815",
+        "1000000",
+        "1.792534912872715",
+        "false"
+      ],
+      "dimensions": [
+        [
+          1024,
+          680
+        ],
+        [
+          944,
+          568
+        ]
+      ]
+    }
+  ],
+  "source_pins": {
+    "crates/rrrah-dedup/src/model_loftr.rs": "a055cf9a40ad06133a3161fb4b2fec60547a2babb163f638e0f2db517ed994fb",
+    "crates/rrrah-dedup/src/search_portfolio.rs": "76ee01ea638dedb51be4576e802a3a7b1e110b27db10cb5e6be8f4e7cc0c668c"
+  },
+  "harness_pins": {
+    "Cargo.toml": "83987d910cb0b523d6b165054a9c7814e27a4693169f6d9d69d6404ebc74bdeb",
+    "src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+    "src/bin/native_bank_current_all_positives.rs": "eac8ba113d714a11175426d95d2d95847c281dc455762a360f5af9bb4e3f3c68"
+  },
+  "scope": "Current root dependencies, native CPU LoFTR trace API, common directional diagonal-scaled tolerance. Three historical controls are not current failures until actually reproduced. No old binary reused.",
+  "preparation_revision": "v2 includes all current root patches, including owned image and wgpu-hal; v1 retained unexecuted"
+}

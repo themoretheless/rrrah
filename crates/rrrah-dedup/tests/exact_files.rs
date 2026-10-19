@@ -2,6 +2,44 @@ use rrrah_dedup::exact::{IssueKind, Options, scan};
 use std::{cell::Cell, fs};
 
 #[test]
+fn unique_sizes_skip_payload_reads_without_weakening_verified_observations() {
+    let root = tempfile::tempdir().unwrap();
+    let mut total_bytes = 0_u64;
+    for index in 0..20 {
+        let bytes = vec![index as u8; index * 257];
+        total_bytes += bytes.len() as u64;
+        fs::write(root.path().join(format!("unique-{index}.bin")), bytes).unwrap();
+    }
+    let roots = [root.path().to_path_buf()];
+    let ordinary = scan(&roots, &Options::default(), || false);
+    assert!(ordinary.complete(), "{ordinary:?}");
+    assert_eq!(ordinary.files_observed, 20);
+    assert!(ordinary.groups.is_empty());
+    assert_eq!(ordinary.bytes_read, 0);
+
+    let observed = rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false);
+    assert!(observed.complete(), "{observed:?}");
+    assert_eq!(observed.files_observed, 20);
+    assert!(observed.groups.is_empty());
+    assert!(observed.bytes_read >= total_bytes);
+
+    let original = root.path().join("unique-19.bin");
+    let copy = root.path().join("copy.data");
+    fs::copy(&original, &copy).unwrap();
+    let fresh = scan(&roots, &Options::default(), || false);
+    assert!(fresh.complete(), "{fresh:?}");
+    assert_eq!(fresh.files_observed, 21);
+    assert_eq!(fresh.groups.len(), 1);
+    let mut expected = vec![original, copy];
+    expected.sort();
+    let mut actual = fresh.groups[0].paths.clone();
+    actual.sort();
+    assert_eq!(actual, expected);
+    assert_eq!(fresh.groups[0].bytes, 19 * 257);
+    assert!(fresh.bytes_read > 0);
+}
+
+#[test]
 fn exact_content_partitions_ignore_extensions_and_check_unsampled_bytes() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();

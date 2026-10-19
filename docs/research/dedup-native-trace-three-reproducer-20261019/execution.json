@@ -1,0 +1,117 @@
+{
+  "status": "complete_three_controls_pending_audit",
+  "producer_pid": 53925,
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/native_bank_current_all_positives",
+  "binary_sha256": "9c91f047f6d60b7674a07d868f646cddeb8137663f0b1e7da2e4937e4240fb55",
+  "plan_sha256": "f201869849080326be85c04fd7b67c7fe68e38f3c32ef44d2ac3015d90350018",
+  "runtime_cpu_sha256": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+  "engine_source_drift": [],
+  "results": [
+    {
+      "label": "known_table_copy",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/Documents/Sources/rrrah/target/debug/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000",
+        "8.0",
+        "false"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 121.08405129201128,
+      "stdout_sha256": "ec344fc25e19619ea6b4df469607e9876a5aef023d854de4b04fc1c5e7767aa8",
+      "stderr_sha256": "fbfc516258661ca05675d527e7a4f6f464d1f808bd0aa2f474162c7677058c99",
+      "evidence": {
+        "forward_model_attempted": false,
+        "forward_support": true,
+        "forward_trace": "NativeBankRecoveryTrace { support: Some(true), model_attempted: false, native_miss: Some(InsufficientAnchorGeometry(Native)), opposite_insufficient: Some(false), model_attempts: None, model_diagnostics: None }",
+        "managed_peak": 329062128,
+        "managed_used": 0,
+        "reverse_model_attempted": false,
+        "reverse_support": true,
+        "reverse_trace": "NativeBankRecoveryTrace { support: Some(true), model_attempted: false, native_miss: None, opposite_insufficient: None, model_attempts: None, model_diagnostics: None }",
+        "scope": "Actual operation-atomic two-direction CPU native/opposite/25bank consensus. Seed173 once per operation, two threads, source interpretation linear sRGB explicit. Development controls only; no universal precision/recall or hard RSS cap.",
+        "support": true
+      }
+    },
+    {
+      "label": "table_vs_fence_false",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/Documents/Sources/rrrah/target/debug/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "1.0",
+        "1000000",
+        "4.0",
+        "false"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 406.64241450000554,
+      "stdout_sha256": "c784701000acc92d088af09fcfa94d094644b5debab09aecadac66837237e3bd",
+      "stderr_sha256": "8abe5fed6f97f5983defbf2a2204cc2f1de6fa15af3d4d3ff81184558e3a9c96",
+      "evidence": {
+        "forward_model_attempted": true,
+        "forward_support": null,
+        "forward_trace": "NativeBankRecoveryTrace { support: None, model_attempted: true, native_miss: Some(Native { recipes: 6, candidates: 14 }), opposite_insufficient: Some(true), model_attempts: Some(25), model_diagnostics: Some(ModelBankDiagnostics { geometry_candidates: 0, pixel_geometry_refusals: 0, pixel_rejections: 0 }) }",
+        "managed_peak": 225857808,
+        "managed_used": 0,
+        "reverse_model_attempted": true,
+        "reverse_support": null,
+        "reverse_trace": "NativeBankRecoveryTrace { support: None, model_attempted: true, native_miss: Some(Native { recipes: 6, candidates: 7 }), opposite_insufficient: Some(true), model_attempts: Some(25), model_diagnostics: Some(ModelBankDiagnostics { geometry_candidates: 0, pixel_geometry_refusals: 0, pixel_rejections: 0 }) }",
+        "scope": "Actual operation-atomic two-direction CPU native/opposite/25bank consensus. Seed173 once per operation, two threads, source interpretation linear sRGB explicit. Development controls only; no universal precision/recall or hard RSS cap.",
+        "support": null
+      }
+    },
+    {
+      "label": "portrait_false",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/Documents/Sources/rrrah/target/debug/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.2314767602431815",
+        "1000000",
+        "1.792534912872715",
+        "false"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 339.8274705419899,
+      "stdout_sha256": "2043bd3c821aa5cab8d7478d3fc42d367a62cb5bbab2fa825980a894743e4073",
+      "stderr_sha256": "218671b79884ed4fc844b462502555067d550ce90a8b8bbc19b3f182894c22ee",
+      "evidence": {
+        "forward_model_attempted": true,
+        "forward_support": true,
+        "forward_trace": "NativeBankRecoveryTrace { support: Some(true), model_attempted: true, native_miss: Some(Native { recipes: 6, candidates: 24 }), opposite_insufficient: Some(true), model_attempts: Some(25), model_diagnostics: Some(ModelBankDiagnostics { geometry_candidates: 4, pixel_geometry_refusals: 2, pixel_rejections: 2 }) }",
+        "managed_peak": 214662816,
+        "managed_used": 0,
+        "reverse_model_attempted": true,
+        "reverse_support": null,
+        "reverse_trace": "NativeBankRecoveryTrace { support: None, model_attempted: true, native_miss: Some(Native { recipes: 6, candidates: 30 }), opposite_insufficient: Some(true), model_attempts: Some(25), model_diagnostics: Some(ModelBankDiagnostics { geometry_candidates: 4, pixel_geometry_refusals: 4, pixel_rejections: 4 }) }",
+        "scope": "Actual operation-atomic two-direction CPU native/opposite/25bank consensus. Seed173 once per operation, two threads, source interpretation linear sRGB explicit. Development controls only; no universal precision/recall or hard RSS cap.",
+        "support": null
+      }
+    }
+  ],
+  "scope": "Same pinned binary and fixed three-control policy. /usr/bin/env applies DYLD_LIBRARY_PATH after protected macOS time executable. Not fresh current-root/full-dependency/corpus qualification.",
+  "active_index": 2,
+  "child_pid": 62331,
+  "engine_source_drift_after": []
+}
