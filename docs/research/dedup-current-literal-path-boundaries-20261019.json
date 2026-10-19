@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files whitespace_path_names_preserve_all_authored_copy_partitions",
+  "exit_code": 0,
+  "passed_tests": 1,
+  "filtered_out": 32,
+  "elapsed_test_seconds": 0.17,
+  "source_sha256": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f",
+  "added_names": [
+    "\\plain",
+    "plain\\",
+    "\\\\server\\share",
+    "C:\\",
+    "%HOME%",
+    "\"plain\""
+  ],
+  "scope": {
+    "name_families": 20,
+    "files": 40,
+    "scan_modes": [
+      "scan",
+      "scan_verified"
+    ],
+    "root_orders": 2,
+    "assertions": "Complete reports observe all40files and exactly20authored content-equality pairs, preserving literal paths."
+  },
+  "motivation": "ExplorerTabUtility Helper.NormalizeLocation trims edge separators/quotes and expands environment variables. Exact scanner must preserve filesystem path semantics instead.",
+  "limits": [
+    "Unix/macOS literal filenames only; UNC-looking and drive-looking names are not Windows network shares or drive roots.",
+    "Focused no-default-features test, not full target, workspace, Windows or universal path qualification.",
+    "No production implementation change or performance claim; pHash investigation deferred."
+  ]
+}

@@ -1030,6 +1030,12 @@ fn whitespace_path_names_preserve_all_authored_copy_partitions() {
         "comma,name",
         "quote\"name",
         "back\\slash",
+        "\\plain",
+        "plain\\",
+        "\\\\server\\share",
+        "C:\\",
+        "%HOME%",
+        "\"plain\"",
         "percent%",
         "under_score",
     ];
