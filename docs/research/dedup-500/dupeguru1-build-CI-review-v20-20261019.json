@@ -1,0 +1,145 @@
+{
+  "status": "partial_repository_build_packaging_CI_source_review_and_test_environment_correction",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-Qt-complete-source-review-v19-20261019.json",
+  "previous_sha256": "ffe0af2c95896ab93246d69038004d4283386c926df80849314f33217da322e4",
+  "new_whole_blobs": [
+    {
+      "path": "pyproject.toml",
+      "git_blob": "a19877f96669bd5625398ce36ca37115b92b6d78",
+      "sha256": "8c3cb8af8e1c09093f0c35ebf06a042623b6d6dd44d97ad62d21a3538ecc268b",
+      "bytes": 197,
+      "fully_read": true
+    },
+    {
+      "path": "tox.ini",
+      "git_blob": "a6e641adaec00a24d1d8c693a4493e5163747556",
+      "sha256": "97a184583b6bae3b912953fe3994845967ace5be868618177ffc1ffe09a2a3e4",
+      "bytes": 458,
+      "fully_read": true
+    },
+    {
+      "path": "Makefile",
+      "git_blob": "c6a1d6b792960a7e4f7901c360d0baf1b99e464d",
+      "sha256": "662a44aa2fbc89249ca55f80eeadda9d1dbc4bcf92da1396123c10e5c5811728",
+      "bytes": 3709,
+      "fully_read": true
+    },
+    {
+      "path": "MANIFEST.in",
+      "git_blob": "894fe423857ccabb6137b59427c31c60537c1dc1",
+      "sha256": "56755cda7412d69abe6dca595b091f1ffa5a3ba6de4590c35c9138f9e2f912d2",
+      "bytes": 93,
+      "fully_read": true
+    },
+    {
+      "path": "run.py",
+      "git_blob": "079fd15591a45fbea738f8f20166f15ef541c7a2",
+      "sha256": "a8037caa700624e1d5b499d17cec8a8d216bd2b0f3acdab721b0866fad5a9a52",
+      "bytes": 2667,
+      "fully_read": true
+    },
+    {
+      "path": "package.py",
+      "git_blob": "90140c584d30d7078712368b955bcabd17fa6ae3",
+      "sha256": "4bf66f7c38ce89a864ce131f8165f47730868a8a7fdf19709fbb8132ac25e775",
+      "bytes": 8485,
+      "fully_read": true
+    },
+    {
+      "path": "setup.nsi",
+      "git_blob": "a6809cf7aae38c309ca37ecb39aaa98221700d6a",
+      "sha256": "55aab41a2ba353fee8faa804c9f84ba284739bb15bd9a460a3d2ae0c752e0c71",
+      "bytes": 11405,
+      "fully_read": true
+    },
+    {
+      "path": "macos.md",
+      "git_blob": "1270666ddb260c6326c9673dab7cd53c047cbed4",
+      "sha256": "270b9d2988ae19bb85eed5a725cacbdb1590b828128e1db2d13e2b16cd55b152",
+      "bytes": 2247,
+      "fully_read": true
+    },
+    {
+      "path": "Windows.md",
+      "git_blob": "e54737b7e211471656607fe245f87e182c24279c",
+      "sha256": "bd2e3fafe5db1f3db6e44a4e3dd09629e668da28023988582a305249c4475434",
+      "bytes": 3296,
+      "fully_read": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "git_blob": "58874a1df618c2e9477a76d49e7055c374119a0c",
+      "sha256": "1775b69ba54405483fddf96c851452f270a7880da1cd82c5ff02a54b2d277dac",
+      "bytes": 5429,
+      "fully_read": true
+    },
+    {
+      "path": ".github/workflows/default.yml",
+      "git_blob": "44a1d97eb7fa907e92b900f7a4f72302334e406b",
+      "sha256": "5a6c0a22316f809598b99b0cea7a259cb0b2e4a2d9d08c732fcff0b6c550f52a",
+      "bytes": 2047,
+      "fully_read": true
+    },
+    {
+      "path": ".github/workflows/codeql-analysis.yml",
+      "git_blob": "f89fcb945ec547eeaae24e498047049323843a75",
+      "sha256": "f6d66e435632cc8e12f1cda61c23fcdb7138c3ed8c3737db7620cc87f1de3ac7",
+      "bytes": 1622,
+      "fully_read": true
+    },
+    {
+      "path": ".github/workflows/tx-push.yml",
+      "git_blob": "50897dc99615834854f33fe600bf074f5fc2aa66",
+      "sha256": "098c0c74f815b0806bd392c25f90acef3101476f39b3608637eadd54e01f7435",
+      "bytes": 629,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 173,
+  "cumulative_distinct_original_tests_passed": 514,
+  "new_original_tests_run": 0,
+  "corrected_test_environment_assessment": {
+    "supersedes": "Pytest7.4.4 outside declared<7 interpreted as outside authored test environment in v14 and subsequent summaries",
+    "packaging_metadata": "setup.cfg tests_require pytest>=6,<7",
+    "CI_and_tox_test_dependency": "requirements-extra.txt pytest>=7,<8",
+    "CI_installs": "requirements.txt and requirements-extra.txt",
+    "actual_pytest": "7.4.4",
+    "conclusion": "Actual pytest matches CI/tox requirements; packaging metadata conflicts. Earlier broad caveat overstated environment incompatibility. Source includes Python3.12 CI lane matching actual interpreter major/minor.",
+    "pins": {
+      "setup.cfg": "173411c6654ee3d95669f654f612835b7b2227aafb93b5ab18e5a65352be845a",
+      "requirements-extra.txt": "aa9e7d6faf11a55c273f70f3b3491eaf78c0a37f2f8ace07734b4b37700ae5cc",
+      ".github/workflows/default.yml": "5a6c0a22316f809598b99b0cea7a259cb0b2e4a2d9d08c732fcff0b6c550f52a",
+      "tox.ini": "97a184583b6bae3b912953fe3994845967ace5be868618177ffc1ffe09a2a3e4"
+    },
+    "remaining_limit": "Native modules were built directly in prior controls; full build.py --modules, flake8,black,tox/platform matrix/package gates not qualified by514 tests."
+  },
+  "findings": [
+    {
+      "scope": "startup_source",
+      "finding": "run.py configures QApplication metadata/logging/gettext before importing application, installs signal forwarding and 500ms interpreter timer, enters Qt event loop and explicit shutdown GC. No startup launched or user settings loaded this turn."
+    },
+    {
+      "scope": "build_install_source_only",
+      "finding": "Makefile creates environment, compiles locale/modules/resources and installs under prefix/DESTDIR; clean/uninstall remove generated/install paths. None of these mutation targets executed."
+    },
+    {
+      "scope": "packaging_source_only",
+      "finding": "package.py branches Windows NSIS/PyInstaller, macOS PyInstaller, Debian/Arch/source archive. Locale/help prerequisites checked; setup.nsi handles install paths, shortcuts, associations and uninstaller. Read only; no installer/package/signing/deployment execution."
+    },
+    {
+      "scope": "platform_docs_CI_source_only",
+      "finding": "macOS docs identify supported Qt path and separate unsupported Cocoa UI. Default CI declares Linux Python3.8..3.14 and Windows/macOS3.12, builds modules then pytest core hscommon. Static workflow declaration is not evidence those remote jobs ran or passed. CodeQL/Transifex workflows read without invocation."
+    }
+  ],
+  "limits": [
+    "Thirteen additional whole files;173of368blobs,195remain. Fullrepositoryfalse.",
+    "514 previous distinct tests unchanged; no new test/performance/production claims.",
+    "External links in pinned docs treated as source text; no linked-site/current-platform support claims.",
+    "No shell commands from build/install/package/workflows executed; no external messages or uploads.",
+    "Deferred pHash native memory/ASAN investigations remain skipped."
+  ]
+}
