@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Read complete code-behind and full XAML in consecutive nontruncated chunks after initial truncated combined output; pinned Git blobs verified.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/AboutView.xaml": "1e4fda23eb0ff377283f46e9df73e53846b2fc98eaa10fa71bc0224dd7a05048",
+    "ExplorerTabUtility/UI/Views/AboutView.xaml.cs": "7246449e24b9d75a9f2065f78b74bc6f79ac4b2c8b7711cff1976aff78b002a7"
+  },
+  "whole_files_read": 80,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v30-20261019.json",
+  "coverage_sha256": "3c8ebf93540d454aad0242472e68fd3d93a87ca573f3026cb45091864ec80442",
+  "findings": [
+    "Loaded starts fire-and-forget supporter fetch. Loaded flag is set only after nonempty response; empty/failure causes later reload retries, and concurrent Loaded events can overlap before completion. No in-flight guard, cancellation or Unloaded check.",
+    "Fetch completion explicitly captures context ConfigureAwait(true), then updates ItemsSource; exceptions are swallowed. Empty list and fetch failure have no separate visible error state in these files.",
+    "Supporter profile URL from model Tag goes to ProcessStartInfo with UseShellExecute=true without scheme allowlist here. Review performed no URL launch.",
+    "XAML contains remote developer avatar and supporter images through earlier-reviewed converter, plus repeated unbounded-duration visual animations. No reduced-motion selection or explicit animation teardown appears here.",
+    "SupporterItemStyle uses TranslateTransform but its MouseEnter/Leave storyboards target ScaleTransform.ScaleX/Y on the same Border. Incompatible target path is a static concern requiring WPF reproduction. Avatar style uses ScaleTransform and is compatible with these hover paths.",
+    "Version display reads executing assembly major/minor/build, discarding revision and any prerelease label. This is distinct from release filename version discussed earlier.",
+    "Supporter ItemsControl uses WrapPanel without explicit virtualization; viewport MaxHeight300 bounds view, not materialized item count."
+  ],
+  "limits": [
+    "Source review only; no remote avatar fetching, browser launch, Windows rendering or original runtime tests. No production implementation adopted.",
+    "Fully reviewed count148/500; ExplorerTabUtility partial80/104. Native pHash investigation deferred."
+  ]
+}
