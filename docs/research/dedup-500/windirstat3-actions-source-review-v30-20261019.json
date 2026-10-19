@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole1576line Actions.cpp reading in five contiguous sections; pinned bytes verified. No action executed.",
+  "new_whole_files_read": {
+    "windirstat/WinDirStatModel.Actions.cpp": "9baf5b0a42dbaf82bc13fdabfaa1244aeffd098bceaa353ae9cc3233daf1029a"
+  },
+  "whole_files_read": 74,
+  "coverage": "docs/research/dedup-500/windirstat3-actions-coverage-v30-20261019.json",
+  "coverage_sha256": "9ed5e0c29623c3245775717b746955e7922b892bc7d9a929828b6fd038d2390c",
+  "findings": [
+    "Central UI capability table normally requires IsScanSettled unless allowEarly. File/shell capabilities and selected type masks differ. UI enabled-state rules are not universal handler-side validation; individual handlers vary.",
+    "StopScanningEngine cancels blocking worker I/O, suspends queues with UI pumping, cancels execution, joins coordinator and clears queues; resumes frozen clock. Coordinator combines strongest stop reason then joins workers.",
+    "Abort exits before postscan accounting/finalization. Stop follows same remaining finalization path as normal completion, including ScanItemsFinalize, extension data and progress completion. Thus settled/DONE after user Stop can describe partial enumeration.",
+    "StartScanningEngine resolves detached watcher paths to nearest modeled ancestor, resolves hardlink references before deleting snapshots, deduplicates selected pointers and prunes descendant refreshes. Derived duplicate/top/search views removed before source children.",
+    "Folder roots share bounded worker pool while keeping volume-specific contexts; MTP queue uses1worker, filesystem queues configured threads. Number of filesystem pools can still grow with volumes.",
+    "Empty items request launches coordinator with no enumeration queues but still recalculates hardlink/accounting/finalization/search totals. This explains loaded-model and display-only recalculation paths without implying disk rescan.",
+    "Hardlink UI update validates settled duplicate view, nonsampled selection, files and same volume. Execution rechecks settled/view/nonsampled, chooses separate source per stored hash group and calls CreateHardlinkFromFile; no content recompare in this handler. Helper implementation remains unreviewed as whole source.",
+    "Empty-directory cleanup excludes modeled reparse/invalid ancestors, deduplicates traversal, reverses directory order, then rechecks current path attributes before RemoveDirectory. This is a useful recheck but not an atomic handle-based resolution guarantee.",
+    "Quiet-save branches return process status from writer result after finalization; this indicates export success, not an independently complete scan/corpus quality oracle.",
+    "Shell move, compression, dates, cleanup utilities and profile removal read only. Operation progress or a later refresh does not by itself prove each filesystem action succeeded."
+  ],
+  "limits": [
+    "No Windows concurrency, I/O cancellation, file replacement, export or destructive action executed.",
+    "Previous partial Actions.cpp excerpts now receive one whole-file credit; prior controls not rerun or added to counts.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
