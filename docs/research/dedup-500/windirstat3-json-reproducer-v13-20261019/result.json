@@ -1,0 +1,86 @@
+{
+  "status": "original_JSON_helpers_characterized_with_independent_parser",
+  "positive_roundtrips": 4,
+  "unescaped_control_characters_rejected_by_standard_parser": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "standard_escape_mismatches": [
+    {
+      "input": "\\n",
+      "actual": "n",
+      "standard_expected": "\n"
+    },
+    {
+      "input": "\\t",
+      "actual": "t",
+      "standard_expected": "\t"
+    },
+    {
+      "input": "\\r",
+      "actual": "r",
+      "standard_expected": "\r"
+    },
+    {
+      "input": "\\b",
+      "actual": "b",
+      "standard_expected": "\b"
+    },
+    {
+      "input": "\\f",
+      "actual": "f",
+      "standard_expected": "\f"
+    },
+    {
+      "input": "\\u0041",
+      "actual": "u0041",
+      "standard_expected": "A"
+    }
+  ],
+  "source_pin": {
+    "path": "windirstat/CsvLoader.cpp",
+    "sha256": "94c7b9b7d2fbffa76a8781bcc1424074708a20bc4ce813da9a95b141a1846a4c"
+  },
+  "findings": [
+    "JsonQuote escapes quote/backslash but leaves all32control bytes unescaped, producing invalid JSON for such strings.",
+    "JsonUnescape removes slash but does not implement standard control or unicode escapes; six concrete mismatches retained.",
+    "Duplicate CSV/JSON export carries sampled flag, preserving probable/fullhash distinction in reviewed source.",
+    "Hardlink command/update excerpts reject sampled selections and unsettled scans; complete operation not reviewed."
+  ],
+  "limits": [
+    "Original two helper bodies compiled unchanged; independent Python json parser used as oracle.",
+    "Synthetic UTF8 strings, not claim normal Windows filenames legally contain control characters or actual report corpus fails.",
+    "No Windows wide-to-UTF8 conversion, full report save/load, UI/hardlink operation execution or whole CsvLoader.cpp review.",
+    "CsvLoader.h whole read; CsvLoader.cpp and Actions.cpp only selected excerpts; no production adoption, pHash native work deferred."
+  ]
+}

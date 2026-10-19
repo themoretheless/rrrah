@@ -1,0 +1,33 @@
+{
+  "status": "partial_source_original_JSON_helper_characterization",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/CsvLoader.h": "24f45ecea111151091910f0d9f504c828765ecd3db3eaba42f5a20d3606ab38c"
+  },
+  "partial_source": {
+    "path": "windirstat/CsvLoader.cpp",
+    "sha256": "94c7b9b7d2fbffa76a8781bcc1424074708a20bc4ce813da9a95b141a1846a4c"
+  },
+  "whole_files_read": 33,
+  "controls": "docs/research/dedup-500/windirstat3-json-reproducer-v13-20261019/result.json",
+  "controls_sha256": "02f628898e46d54f4dd789c713a026d05e2fd6465d5a9df39741f36c75ef9bad",
+  "coverage": "docs/research/dedup-500/windirstat3-json-reproducer-v13-20261019/coverage.json",
+  "coverage_sha256": "03b2c7a46e205f5748c5b294ba5b00c069845c0bf00a78b40e774d521593a1e5",
+  "reproducer": "scripts/qualify-windirstat3-json-helpers-20261019.py",
+  "reproducer_sha256": "ed664350d84434f5a40750d9dc332a2abc7356be649637d662b33a64b6a6f0ba",
+  "findings": [
+    "JsonQuote escapes quote/backslash but leaves all32control bytes unescaped, producing invalid JSON for such strings.",
+    "JsonUnescape removes slash but does not implement standard control or unicode escapes; six concrete mismatches retained.",
+    "Duplicate CSV/JSON export carries sampled flag, preserving probable/fullhash distinction in reviewed source.",
+    "Hardlink command/update excerpts reject sampled selections and unsettled scans; complete operation not reviewed."
+  ],
+  "limits": [
+    "Original two helper bodies compiled unchanged; independent Python json parser used as oracle.",
+    "Synthetic UTF8 strings, not claim normal Windows filenames legally contain control characters or actual report corpus fails.",
+    "No Windows wide-to-UTF8 conversion, full report save/load, UI/hardlink operation execution or whole CsvLoader.cpp review.",
+    "CsvLoader.h whole read; CsvLoader.cpp and Actions.cpp only selected excerpts; no production adoption, pHash native work deferred.",
+    "Initial5second launch timeout retained; original child terminal, samebinary subsequently returned correct baseline; fresh30second harness passes. No algorithm hang inferred."
+  ]
+}
