@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of WdsListControl header and implementation in complete ranges; pinned bytes verified. No Windows execution.",
+  "new_whole_files_read": {
+    "windirstat/Controls/WdsListControl.h": "7d428e451571b6d2cbd121149794590fbe6b1cd68e72a3d59130ca202b5bb951",
+    "windirstat/Controls/WdsListControl.cpp": "183a1a4ef1223614a9cac343c362c1e90069a389e4e8ca4d4f647647936e56f2"
+  },
+  "whole_files_read": 209,
+  "coverage": "docs/research/dedup-500/windirstat3-base-list-coverage-v78-20261019.json",
+  "coverage_sha256": "5da76cea2017e166f3d2ed63e208a098fe0d7721afacec8cd56db9d4d2be14c9",
+  "findings": [
+    "Owner-data rows are retained in pointer vector plus pointer-to-index map. Insert/remove/sort rebuild affected indexes and preserve selected/focused identities via pointer snapshots. Duplicate pointer admission is not rejected, so callers must preserve uniqueness for map/ownership consistency.",
+    "SelectionPreserver restores focus only if resulting row is inside viewport; selected identities and selection mark can be restored elsewhere. No scroll-anchor preservation is implemented by this helper.",
+    "Stable sorting uses primary then secondary subitems; Compare values with magnitude>=2 preserve direction irrespective of descending, supporting tree ancestor precedence. Arbitrary comparator values including INT_MIN are not guarded before abs.",
+    "InsertSortedListItems sorts incoming batch and inplace-merges into existing vector, assuming existing items already follow same comparator. No verification of this precondition or runtime sortedness test performed.",
+    "Removal optionally owns/deletes row items through temporary unique_ptr after selection restoration, forgets async icon requests and erases map. DeleteAll also forgets requests before deleting owned items. Destructor alone is default; callers must execute explicit cleanup for owned rows.",
+    "PostSelectionChanged coalesces notifications but ignores PostMessage failure after setting pending flag. A failed post can leave later notifications suppressed until handler/other reset. No injected failure reproduced.",
+    "Column persistence enforces required visible columns and moves sorting off hidden keys. Width loading uses min(width,width*2), which is no positive upper clamp and can overflow for extreme stored int; upstream setting bounds and real input reachability unqualified.",
+    "Auto-fit on header divider scans every retained row, unlike tree expansion first50width sampling. Virtual list storage does not make this operation bounded by visible rows.",
+    "DrawPercentage uses supplied double fraction without clamp; prior extension logical/physical mixed-basis values can exceed1. Rendering bounds/finiteness require caller discipline and actual GUI tests."
+  ],
+  "limits": [
+    "No Windows list selection, sorting invariants, duplicate-pointer ownership, post failure, column-width overflow, render/performance or cleanup tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
