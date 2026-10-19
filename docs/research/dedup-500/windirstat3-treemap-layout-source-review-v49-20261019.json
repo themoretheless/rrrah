@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of four files, 877 lines; pinned Git bytes verified. Source review only.",
+  "new_whole_files_read": {
+    "windirstat/Controls/TreeMapLayout.h": "b09773e7d14e912ec0f4b117deb905f34dfc4ec3d0153c7273635bffb1c0f90f",
+    "windirstat/Controls/TreeMapLayout.cpp": "3fae3c25f6a40a7c74899ba37a0b0f787d497e4f4af504509715c6eea6a27dc8",
+    "windirstat/Controls/HilbertMooreTreeMap.h": "fd2f1e96cf66bb50a805f7a1ad74e5f24a309a9a633b4da476042d36fde172bb",
+    "windirstat/Controls/HilbertMooreTreeMap.cpp": "b72bfcde26b569ca55f04da2be6e88a6332e177ea5e083dd78668264794c4037"
+  },
+  "whole_files_read": 138,
+  "coverage": "docs/research/dedup-500/windirstat3-treemap-layout-coverage-v49-20261019.json",
+  "coverage_sha256": "a28112af456090d6eb4d93c617340ca9c30922f2bdbe89c5676839112cc97b63",
+  "findings": [
+    "ArrangeChildren initializes output bounds/state and dispatches Rows, Squarified, Hilbert or Moore. Nonincreasing weights, trailing zeros and parent-weight sum are caller preconditions checked with assertions, not release input validation.",
+    "Rows and Squarified distribute all-zero inputs into equal vertical strips. Mixed zero weights and pixel rounding can yield degenerate rectangles, including for tiny positive weights; no minimum visible area guarantee.",
+    "Squarified computes rowThickness * rowThickness as integer multiplication before floating-point use; extremely large dimensions could overflow. No actual Windows viewport counterexample established.",
+    "Hilbert/Moore uses 14 patterns and average aspect ratio selection; contiguous four-way partitioning uses cumulative double weights and a variance heuristic. This is not proof of a globally optimal partition.",
+    "Unsigned 64-bit weights become doubles and cumulative sums: very small positive weights next to dominant weights can lose numerical distinction. All-zero curve weights become equal unit weights; mixed zeros are skipped.",
+    "Recursive partitions use Hilbert curves internally even for the outer Moore variant. Pixel conversion rounds and clamps to parent bounds.",
+    "HilbertMooreTreeMap.cpp includes an MIT attribution to the 2021 HPI Visual Analytics group. Nested licensing differs from repository-level GPL metadata; no code copied."
+  ],
+  "limits": [
+    "No Windows application, layout runtime, rendering, performance or numeric-boundary tests executed for this increment.",
+    "Native pHash memory-error investigation remains deferred. Global completed repository count remains 147/500."
+  ]
+}
