@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole942line Model.cpp manually read; pinned bytes verified. Actions.cpp1040..1110 excerpt only, not whole-file credit.",
+  "new_whole_files_read": {
+    "windirstat/WinDirStatModel.cpp": "f3025725391f8c76a5088fcb0d44aaf87c918df72c6908b59d635587c2be1f7b"
+  },
+  "whole_files_read": 69,
+  "coverage": "docs/research/dedup-500/windirstat3-model-coverage-v26-20261019.json",
+  "coverage_sha256": "0284ee33e5e3d315f28d16166e3d7dc36a0dc046e446ce2025ed21dc82e2b8ea",
+  "findings": [
+    "ClearScanState orders StopScanningEngine(Abort), watcher stop, top pending clear, icon async queue clear, extension data clear, all visual control clear, then delete old root and null root/zoom. This resolves the earlier open source-level question whether top pending clear is called before old tree destruction on ordinary reset.",
+    "Actions refresh excerpt removes duplicate/top/search wrappers before RemoveAllChildren of previously completed nodes. Hardlink derived snapshots removed for affected drives first; selection/expanded state recorded for later restoration. Remaining Actions.cpp requires full review.",
+    "IsScanSettled requires root done and coordinator thread not running according to GetExitCodeThread. This is stronger than test-harness title heuristic but API failure yields false running; no Windows API fault-injection or platform conclusion.",
+    "StartScan normalizes roots before clearing current model and records pipe-separated scan spec. Builds storage-specific single/multi roots; MTP paths registered separately. Normalization helper definition not whole-file reviewed here.",
+    "OpenLoadedScan clears old model, installs saved root, queues existing recursive items for largest-file view, notifies panes and starts empty scan-engine request. This is not itself a new filesystem enumeration; complete empty-request engine behavior remains in Actions.cpp.",
+    "Extension registration is snapshotted from HKCR and reused while nonempty; registered/unregistered grouping affects colors, not duplicate-content identity. Byte totals and selected pointers use cached model data.",
+    "Physical deletion, shell operations and user-defined commands were read only, never executed. Direct delete path retries remaining top-level items through shell and refreshes model afterward; return values alone do not establish successful deletion.",
+    "User-defined cleanup is a configurable COMSPEC command; placeholder substitution is not general shell quoting. Its behavior belongs to explicit user-authored actions, not core duplicate comparison. No command generation or execution test performed."
+  ],
+  "limits": [
+    "No Windows coordinator, UI, deletion, shell, command or filesystem execution.",
+    "No concurrency guarantee inferred from source call order alone.",
+    "No production code adopted; native pHash investigation deferred."
+  ]
+}
