@@ -1,0 +1,44 @@
+{
+  "status": "partial_source_and_captured_packaging_logic_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "setup.py": "96b8575baa79b44c9fa301f07a0e5d4e0d0c2abc208cc5873e62dc7c15ba3c0b",
+    "pyproject.toml": "af11bdf135a6245eaa314855d40fdc059e5f80d7f4b871849c362b79f9989d91",
+    "requirements.txt": "e32cf89ba03913fac9c62935716b04b9c9e2a4c205c96a3398fa9f4f7ce14d14",
+    "MANIFEST.in": "9de43abaf3f5d55c4cd76198c5e42ded541589dda715fc469dcdc5436cc5d47e",
+    "imagededup/__init__.py": "3b47a1946b87e3ab64af03dbb49ea1c2ffa83d05b66defcdcac3f5851fe34625",
+    "imagededup/methods/__init__.py": "16c8073a8f7e38a8ebb1fe57a6cf4979bda6916575a56e4ff9c651152408d7ad",
+    "imagededup/evaluation/__init__.py": "7647690429815f8dbaf395aa3a80b9fa82ef695efdec37e7cd699284f562005a",
+    "imagededup/handlers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "imagededup/handlers/search/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "imagededup/handlers/metrics/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "imagededup/utils/__init__.py": "58bc8c597cf7047e2f27e995cb0e4b80b2ed830b4697fd322f835ee5ce0da029",
+    ".github/workflows/test.yml": "77d1e6b78585d0947afe9c4a237f7f4900379183384827d27a094208bc752b9a",
+    ".github/workflows/build_wheels.yml": "2e96eb63683da887f0c17cfa8532f6c6fadbc2217c37a6966a29970d8e6f4437",
+    "new_release.sh": "d539a781785ea940dd4ebf44dc50dfe779726c00bbe8de120aba7c2e84b574e4",
+    "mkdocs/docs/user_guide/windows.md": "426ff59d8e752794a8358ffc2cbd2d893c5f349263e36bbc7a066491eac3d1cf"
+  },
+  "whole_files_read_across_v1_v5": 27,
+  "controls": "docs/research/dedup-500/imagededup2-packaging-reproducer-v5-20261019/result.json",
+  "controls_sha256": "d7099c7aefc6bdd2458926998da6f666e3298f093b522d68f7131e3517ca5bf7",
+  "reproducer": "scripts/qualify-imagededup2-packaging-20261019.py",
+  "reproducer_sha256": "0358f66ff74ecb806448669e02e51f59e6df81f5960ffcc805b0c6eb1e245928",
+  "captured_configurations": 6,
+  "findings": [
+    "Linux compile/link options include march=native and mtune=native; wheel portability needs actual artifact/CPU verification.",
+    "NumPy1.26.4 pin belongs to requirements.txt, not project.dependencies consumed by pip install .; direct imports rely on transitive NumPy installation.",
+    "methods initializer eagerly imports CNN as well as hashing; utils initializer imports plotting and model helpers.",
+    "Test workflow declares3OSx4Python versions; declaration alone is not evidence those jobs passed.",
+    "Wheel workflow disables CIBW_TEST_COMMAND on Windows, although separate test workflow includes Windows.",
+    "Windows guide documents multiprocessing main-guard requirement; zero requested workers is clamped to one Pool worker by general_utils.",
+    "Release helper includes git add ., commit and push; read only, never executed."
+  ],
+  "limits": [
+    "Captured Extension/setup and identity cythonize callbacks; imports/availability routed explicitly. No compiler, wheel, install, publish or platform execution.",
+    "Pinned source snapshot only, not current upstream CI status.",
+    "New15wholefiles read; earlier12files retained, repository still partial.",
+    "pHash native investigation deferred; no production code adopted."
+  ]
+}
