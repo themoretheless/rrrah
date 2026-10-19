@@ -1,0 +1,37 @@
+{
+  "status": "partial_source_BKTree_real_numpy_and_vector_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "LICENSE": "a175e976b594a62a92868edc2b6b81e4d57e822518f3e8e90681d497d2026f45",
+    "tests/test_bktree.py": "9491a26ed9e1943f560ccadc70d0264a0bb86a8d6e84b1b280dbcbc03564547a",
+    "mkdocs/docs/img/logo.svg": "5c1de0c24c7b0aff53080b2861c336b11de954bd7c502fd446348171b6f4c2b3"
+  },
+  "manual_whole_text_files": 63,
+  "total_reviewed_by_declared_methods": 102,
+  "tracked_blobs": 114,
+  "controls": "docs/research/dedup-500/imagededup2-bktree-license-reproducer-v14-20261019/result.json",
+  "controls_sha256": "4c62c39004d9bac22c7553f74fa5a9271b0210b3beae323c5ce9721dd4a1bf83",
+  "coverage": "docs/research/dedup-500/imagededup2-bktree-license-reproducer-v14-20261019/coverage.json",
+  "coverage_sha256": "68478f792f5426f63fc52350c8b7e1dd0a30d67afb6ee44453537bb6926f5b49",
+  "reproducer": "scripts/qualify-imagededup2-bktree-numpy-20261019.py",
+  "reproducer_sha256": "6ecb16adb00d989b620f0a73a68d404477adebc5553ddbcae6bdaa7e477a6a81",
+  "findings": [
+    "13unchanged original test bodies now run using original hamming_distance body with real NumPy, superseding sum-adapter limitation for these tests.",
+    "Existing tests use small nonempty dictionary, no empty/equal-hash long-chain or oversized-hash guard.",
+    "SVG logo is white overlapping square outlines; rendered on dark background for inspection.",
+    "Root license read in full: Apache2.0; bundled builtin header license still requires separate source review; no code copying."
+  ],
+  "visual_review": {
+    "artifact": "docs/research/dedup-500/imagededup2-bktree-license-reproducer-v14-20261019/logo.png",
+    "sha256": "27450f5ef3de6558775902857f97127b98e0b097ed0e3ad232fa94eeadb816d4",
+    "observed": "Two overlapping white square outlines on dark background, no clipped outer bounds. SVG counted once, both text and visual methods recorded."
+  },
+  "limits": [
+    "Whole original BKTree module unchanged; original Hashing method extracted by AST, staticmethod decorator removed, test package imports routed.",
+    "These13tests overlap earlier selected qualification; not13additional distinct upstream tests.",
+    "SVG rendered by QtSvg only; visual inspection recorded separately, not browser/platform fidelity proof.",
+    "No production code adopted; native pHash investigation deferred."
+  ]
+}

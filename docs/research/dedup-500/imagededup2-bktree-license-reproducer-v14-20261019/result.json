@@ -1,0 +1,37 @@
+{
+  "status": "passed_original_BKTree_test_bodies_real_numpy_and_SVG_render",
+  "source_pins": {
+    "imagededup/handlers/search/bktree.py": "f43e9555c74f28c436d20dbe21b0b72adc2d7963df22d7869d07e789a93411e4",
+    "imagededup/methods/hashing.py": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+    "tests/test_bktree.py": "9491a26ed9e1943f560ccadc70d0264a0bb86a8d6e84b1b280dbcbc03564547a",
+    "mkdocs/docs/img/logo.svg": "5c1de0c24c7b0aff53080b2861c336b11de954bd7c502fd446348171b6f4c2b3"
+  },
+  "original_tests_passed": [
+    "test_bktreenode_correct_initialization",
+    "test_construct_tree",
+    "test_get_next_candidates_invalid",
+    "test_get_next_candidates_valid",
+    "test_insert_tree",
+    "test_insert_tree_check_distance",
+    "test_insert_tree_collision",
+    "test_insert_tree_different_nodes",
+    "test_search",
+    "test_search_correctness",
+    "test_search_dist",
+    "test_search_zero_tolerance",
+    "test_tolerance_affects_retrievals"
+  ],
+  "numpy_version": "2.5.4",
+  "SVG_valid": true,
+  "findings": [
+    "13unchanged original test bodies now run using original hamming_distance body with real NumPy, superseding sum-adapter limitation for these tests.",
+    "Existing tests use small nonempty dictionary, no empty/equal-hash long-chain or oversized-hash guard.",
+    "SVG logo is white overlapping square outlines; rendered on dark background for inspection."
+  ],
+  "limits": [
+    "Whole original BKTree module unchanged; original Hashing method extracted by AST, staticmethod decorator removed, test package imports routed.",
+    "These13tests overlap earlier selected qualification; not13additional distinct upstream tests.",
+    "SVG rendered by QtSvg only; visual inspection recorded separately, not browser/platform fidelity proof.",
+    "No production code adopted; native pHash investigation deferred."
+  ]
+}
