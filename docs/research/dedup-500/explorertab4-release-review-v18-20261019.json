@@ -1,0 +1,27 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file reading of four release workflows/build scripts; exact bytes verified against pinned Git blob inventory. No publishing or foreign scripts executed.",
+  "new_whole_files_read": {
+    ".github/workflows/build-release.yml": "87d2b47c5657b9e5a9a5ccd5d2d3a52cc7ca43836c52b23fde6853ba633e84da",
+    ".github/workflows/publish-chocolatey.yml": "072654be6be29ea96f9bc432f8ab113ac0abde5c22e6b17c5e2c98b2c5c845d7",
+    ".github/workflows/publish-winget.yml": "4082fe50a65fd12ba64c9c8dca11f3e45107d701ba48f9459b5a9d32989a104f",
+    "packages/chocolatey/build.ps1": "809edfe7af36e0227a3252d97c2f1fe6f2cbe2477973a99a439ccfca71be3eab"
+  },
+  "whole_files_read": 48,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v18-20261019.json",
+  "coverage_sha256": "1a4e2fe033dce2788b31f804350f9ec0402659c603b478bd0becdeae6f78da7c",
+  "findings": [
+    "Release matrix builds net9.0-windows/net481 on x64/x86/arm64 but contains no test execution. Version affects output names; MSBuild invocation does not override project Version, allowing filename/binary-version mismatch for other tags.",
+    "SignPath signing is configured for bundles and installer; source configuration does not establish actual release signature validity. Draft release creation follows signing jobs.",
+    "Winget publication uses mutable vedantmgoyal9/winget-releaser@main. Other action tags and windows-latest also do not establish reproducible immutable build inputs.",
+    "Chocolatey builder computes SHA256 from downloaded release installer without independently expected digest/signature verification in this script.",
+    "Template substitutions do not escape XML or PowerShell special characters. Fixed package directory is recursively removed before construction.",
+    "PowerShell builder does not set ErrorActionPreference=Stop or explicitly check native choco pack/push exit codes; pack failure can continue toward push, potentially selecting an existing package."
+  ],
+  "limits": [
+    "Static source review only; no release, installation, Windows build or original application test executed.",
+    "148 of 500 repositories fully reviewed; this repository remains partial at 48/104. Native pHash memory-error investigation deferred."
+  ]
+}
