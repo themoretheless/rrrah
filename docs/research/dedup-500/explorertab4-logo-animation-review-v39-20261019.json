@@ -1,0 +1,20 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Verified pinned GIF Git blob; decoded all54 composited frames, inspected every frame on three labeled contact sheets and final frame at native1080x162 resolution; inspected duration list.",
+  "new_whole_files_read": {
+    "Assets/ExplorerTabUtilityLogo.gif": "80cb5dafa20b81eaae7be66abe19501267aafeefaead64fac4e804c0652e9ae8"
+  },
+  "whole_files_read": 96,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v39-20261019.json",
+  "coverage_sha256": "eba899f5b8f7af06dca576c89fb99ad40605764e179c19f8162ac38417420445",
+  "findings": [
+    "54-frame branding animation totals2850ms: first three frames100ms, remaining51 frames50ms. Banner depicts Explorer Tab Utility title and illustrated window/tab icon.",
+    "Early frames show pale/fading banner and icon movement/rotation followed by fully visible cyan title banner. No application workflow, file contents or algorithm is demonstrated."
+  ],
+  "limits": [
+    "Frame-by-frame visual review does not establish playback timing in target browser. Eight workflow GIFs remain unreviewed; repository partial96/104, global full count148/500.",
+    "No own-library code or tests changed. Native pHash investigation deferred."
+  ]
+}
