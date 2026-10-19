@@ -1,0 +1,25 @@
+{
+  "status": "passed_original_apply_controller_with_captured_pages",
+  "controls": 6,
+  "whole_files_read": {
+    "windirstat/Pages/PageShared.cpp": "1735e457f9da19cc01d0ea4504a06b412f480516f198fefcfff50b9400bf9a9e",
+    "windirstat/Pages/PageShared.h": "daf3d5d57c2f4e19aaf795e94c6c10c171443bd14086022e5bb0a7344af0d7c6"
+  },
+  "partial_source": {
+    "path": "windirstat/UiDialogs.cpp",
+    "sha256": "5a6e9f23578982235281f0146b1281c54342fec9ffe34685900828892cb685d9",
+    "scope": "ApplyPages and surrounding excerpt, not whole file"
+  },
+  "findings": [
+    "All page PrepareApply validation precedes confirmation, BeforeApply and commit; invalid first/middle/last page triggers no before/commit/effect.",
+    "Successful path runs all BeforeApply calls before any CommitApply, then all commits before effects.",
+    "Cancellation at ConfirmApply leaves staged writes uncommitted; next PrepareApply clears stale staged callbacks.",
+    "Reentrant ApplyPages call rejected by guard; no exception rollback guarantee for failures during commit/effect inferred."
+  ],
+  "limits": [
+    "Original ApplyPages controller with enumerate loop replaced by equivalent indexed loop for libc++ compatibility; synthetic page objects/captured UI calls and ScopedValue equivalent scaffolding.",
+    "No actual Windows controls, persistent settings, scan cancellation or exception-atomic commit proof.",
+    "Two whole shared-settings files read; UiDialogs.cpp/UiPanes.h excerpts do not count as whole-file review.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}

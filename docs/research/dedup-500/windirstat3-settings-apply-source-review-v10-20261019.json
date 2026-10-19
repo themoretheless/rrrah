@@ -1,0 +1,35 @@
+{
+  "status": "partial_source_settings_apply_controller_controls_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/Pages/PageShared.cpp": "1735e457f9da19cc01d0ea4504a06b412f480516f198fefcfff50b9400bf9a9e",
+    "windirstat/Pages/PageShared.h": "daf3d5d57c2f4e19aaf795e94c6c10c171443bd14086022e5bb0a7344af0d7c6"
+  },
+  "partial_source": {
+    "path": "windirstat/UiDialogs.cpp",
+    "sha256": "5a6e9f23578982235281f0146b1281c54342fec9ffe34685900828892cb685d9",
+    "scope": "ApplyPages and surrounding excerpt, not whole file"
+  },
+  "whole_files_read": 26,
+  "controls": "docs/research/dedup-500/windirstat3-settings-apply-reproducer-v10-20261019/result.json",
+  "controls_sha256": "d4406b8db54a3948a82ed1d255d56db422cde3d947c505bfd71fab8c310cfd69",
+  "coverage": "docs/research/dedup-500/windirstat3-settings-apply-reproducer-v10-20261019/coverage.json",
+  "coverage_sha256": "f91b07403d97002cd7711361e462740d348e541358f09acfee69995e2c389842",
+  "reproducer": "scripts/qualify-windirstat3-settings-apply-20261019.py",
+  "reproducer_sha256": "5961061d392e254a73c99e551cebe9f6d74f5392e99c4b9b17f53e0937fa74cf",
+  "findings": [
+    "All page PrepareApply validation precedes confirmation, BeforeApply and commit; invalid first/middle/last page triggers no before/commit/effect.",
+    "Successful path runs all BeforeApply calls before any CommitApply, then all commits before effects.",
+    "Cancellation at ConfirmApply leaves staged writes uncommitted; next PrepareApply clears stale staged callbacks.",
+    "Reentrant ApplyPages call rejected by guard; no exception rollback guarantee for failures during commit/effect inferred."
+  ],
+  "limits": [
+    "Original ApplyPages controller with enumerate loop replaced by equivalent indexed loop for libc++ compatibility; synthetic page objects/captured UI calls and ScopedValue equivalent scaffolding.",
+    "No actual Windows controls, persistent settings, scan cancellation or exception-atomic commit proof.",
+    "Two whole shared-settings files read; UiDialogs.cpp/UiPanes.h excerpts do not count as whole-file review.",
+    "No production adoption; pHash native investigation deferred.",
+    "Initial libc++ enumerate compilation gap retained separately; indexed loop adapter explicit."
+  ]
+}
