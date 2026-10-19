@@ -1,0 +1,30 @@
+{
+  "status": "partial_source_selected_directory_filter_controls_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/Filtering.cpp": "2d58d5342d3e2365f8ba785fb524605b192b985e041b24f7293fb025461c04db",
+    "windirstat/Filtering.h": "854232b8785ff08aedd76b48aceece6fd00932a609843dc5da9a75cf0308687d"
+  },
+  "whole_files_read": 10,
+  "controls": "docs/research/dedup-500/windirstat3-filters-reproducer-v5-20261019/result.json",
+  "controls_sha256": "670eb0a8688c833e5c0eaeb2c65e085e7766d88ac2f2e07bde3ca230ad4d203f",
+  "coverage": "docs/research/dedup-500/windirstat3-filters-reproducer-v5-20261019/coverage.json",
+  "coverage_sha256": "d099ba0cba248a7cd05d5c4eddf5095ac58d761a9078c796f5039513bd0d7c4c",
+  "reproducer": "scripts/qualify-windirstat3-directory-filters-20261019.py",
+  "reproducer_sha256": "9a463461941d49bc96ad972dbd8218d14a7e5e8b9c3c3657448daeeb9d107cf9",
+  "findings": [
+    "Include-directory anchors preserve ancestors needed to reach a selected directory; sibling prefix keep2 is excluded.",
+    "Exclude directory overrides includes and applies to descendants; disabled-filter fast path bypasses patterns.",
+    "Wildcard-leading include anchor is empty, so directories remain traversable until actual matches evaluated.",
+    "Full source also combines size,age,name/path filters; regex compilation errors display error and omit bad pattern."
+  ],
+  "limits": [
+    "Original four method bodies extracted unchanged; state and standard regex patterns supplied by harness.",
+    "_wcsnicmp shim uses towlower; ASCII Windows-style path cases only, no Windows Unicode equivalence proof.",
+    "No CompileFilters/GlobToRegex/options/UI/file-age runtime qualification or whole app scan.",
+    "No production adoption; pHash native investigation deferred.",
+    "Initial harness string escaping changed test regex literals; failure retained, corrected raw source run passes21controls."
+  ]
+}

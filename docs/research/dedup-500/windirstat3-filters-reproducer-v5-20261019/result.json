@@ -1,0 +1,20 @@
+{
+  "status": "passed_original_selected_directory_filter_methods",
+  "checks": 21,
+  "source_pins": {
+    "windirstat/Filtering.cpp": "2d58d5342d3e2365f8ba785fb524605b192b985e041b24f7293fb025461c04db",
+    "windirstat/Filtering.h": "854232b8785ff08aedd76b48aceece6fd00932a609843dc5da9a75cf0308687d"
+  },
+  "findings": [
+    "Include-directory anchors preserve ancestors needed to reach a selected directory; sibling prefix keep2 is excluded.",
+    "Exclude directory overrides includes and applies to descendants; disabled-filter fast path bypasses patterns.",
+    "Wildcard-leading include anchor is empty, so directories remain traversable until actual matches evaluated.",
+    "Full source also combines size,age,name/path filters; regex compilation errors display error and omit bad pattern."
+  ],
+  "limits": [
+    "Original four method bodies extracted unchanged; state and standard regex patterns supplied by harness.",
+    "_wcsnicmp shim uses towlower; ASCII Windows-style path cases only, no Windows Unicode equivalence proof.",
+    "No CompileFilters/GlobToRegex/options/UI/file-age runtime qualification or whole app scan.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}
