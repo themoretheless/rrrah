@@ -1,0 +1,151 @@
+{
+  "index": 1,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "review_scope": "Partial pinned review:76wholefilesread,413selectedoriginaltestspass. Actualfile/cache/snapshot/image/repeated-scan/AIFFcontrols retained;originalQtimagepathreproducesEXIF5/7transformmismatch. RuntimeQt5.15.19,bindings5.15.11,compileQt5.15.14separate. RemainingGUI/Cocoa/platform/media/localization/sourceandtests incomplete;fullrepositoryfalse.",
+  "decision": "reference",
+  "finding": "Five complete selected modules reviewed across filesystem/engine/scanner,8fs+7contents controls. Configured bigfile samples accepted distinct bytes; default cache can reuse restoredmtime digest. Default fullhash rejects sample collision; exists filter mitigates missing inputs. Not whole368blob review; no adoption.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 24,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "core/scanner.py",
+      "local": "03-scanner.py",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/core/scanner.py",
+      "sha256": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+      "truncated": false,
+      "lines": 216,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/me/scanner.py",
+      "local": "04-scanner.py",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/core/me/scanner.py",
+      "sha256": "60e2622edd764515b337f18a710d85edb82da78a97aa51c4c17383d606d7bc27",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/pe/matchblock.py",
+      "local": "05-matchblock.py",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/core/pe/matchblock.py",
+      "sha256": "cdc57407107ddfc4ae7feb5ff6253a3d4ef40db7f514a82a85d84b8210f9ac47",
+      "truncated": false,
+      "lines": 263,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/tests/scanner_test.py",
+      "local": "06-scanner_test.py",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/core/tests/scanner_test.py",
+      "sha256": "918c768a95febf797f4958b81c43b1afb83522ce99cd0fdd3a42f5f4766d820f",
+      "truncated": false,
+      "lines": 653,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "core/pe/scanner.py",
+      "local": "07-scanner.py",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/core/pe/scanner.py",
+      "sha256": "792eae7ca66c4c2e0963e7d0d4ab2a7ee56a60d27dca959e9b6c2e45d7e90e4c",
+      "truncated": false,
+      "lines": 39,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/README.md",
+      "sha256": "6d7f60f53b80f281dfe0b82abd346acbae4d12a2d61c2d4007f47520ca42c895",
+      "truncated": false,
+      "lines": 97,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/LICENSE",
+      "sha256": "c61f12da7cdad526bdcbed47a4c0a603e60dbbfdaf8b66933cd088e9132c303f",
+      "truncated": false,
+      "lines": 621,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "hscommon/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/arsenetar/dupeguru/blob/db097a030150b3d4ea9f492b85e7e4e4bcb3f789/hscommon/LICENSE",
+      "sha256": "9e74ae9c84dd8a5e646483bb67575e66eb409cab7496d66ce41e089dee67ad81",
+      "truncated": false,
+      "lines": 10,
+      "source": false,
+      "test": false
+    }
+  ],
+  "incremental_reviews": [
+    "dupeguru-exact-selected-review-20261013.json",
+    "dupeguru-contents-selected-review-20261013.json"
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-selected-content-review-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-selected-content-review-20261019.json",
+      "scope": "13wholefilesread;actualengine/fson8MiBsyntheticcontrolsdemonstratesample-onlyacceptanceandrestoredmtimecache-reuse; fullrepositoryfalse.",
+      "our_regression": "docs/research/dedup-current-exact-large-unsampled-regression-20261019.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-scanner-helpers-review-v2-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-scanner-helpers-review-v2-20261019.json",
+      "scope": "12additionalwholefiles/25cumulative;32originalhelpertestspass;realxxHashScannergroups,pre-cancelandretrycontrols. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-directory-review-v3-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-directory-review-v3-20261019.json",
+      "scope": "7newwholefiles/32cumulative;59additionaloriginaltestspass,91cumulative;actualacyclicdirectorysymlink,hiddenoverride,vanishedroot,cancelcontrols. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-results-review-v4-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-results-review-v4-20261019.json",
+      "scope": "5newwholefiles/37cumulative;12additionaloriginaltestspass,103cumulative;actualhistoricalResultsloadandCSVroundtripcontrols. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-picture-review-v5-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-picture-review-v5-20261019.json",
+      "scope": "15newwholefiles/52cumulative;35originalnativeblock/cachetestspass,138cumulative;realRGB/Pillow/twoworkergetmatchescontrols,final100to99guardverified. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-engine-results-review-v6-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-engine-results-review-v6-20261019.json",
+      "scope": "5newwholefiles/57cumulative;94originalengineand112results/exclusiontestspass,344distinctcumulative. Privateappdatapathadapterexplicit; fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-repeated-scan-review-v7-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-repeated-scan-review-v7-20261019.json",
+      "scope": "4newwholefiles/61cumulative;39originalscannertestspass,383cumulative;actualsame-ScannerFIELDSNOORDERsecond-runloss reproduced. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-music-priority-review-v8-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-music-priority-review-v8-20261019.json",
+      "scope": "6newwholefiles/67cumulative;15originalprioritytestspass,398cumulative;validAIFFtagreadingcounterexamplewithrealMutagen. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-qt-exif-review-v9-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-qt-exif-review-v9-20261019.json",
+      "scope": "9newwholefiles/76cumulative;15originalmarkabletestspass,413cumulative;actualQtEXIF1..8normalJPEGcontrolsreproduce5/7blocktransformmismatch. Fullrepositoryfalse."
+    }
+  ],
+  "full_repository_read": false
+}

@@ -2,7 +2,7 @@
   "index": 1,
   "repository": "arsenetar/dupeguru",
   "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
-  "review_scope": "Partial pinned review:76wholefilesread,413selectedoriginaltestspass. Actualfile/cache/snapshot/image/repeated-scan/AIFFcontrols retained;originalQtimagepathreproducesEXIF5/7transformmismatch. RuntimeQt5.15.19,bindings5.15.11,compileQt5.15.14separate. RemainingGUI/Cocoa/platform/media/localization/sourceandtests incomplete;fullrepositoryfalse.",
+  "review_scope": "Partial pinned review:77 whole files read,413 selected original tests pass. App scan lifecycle reviewed; enabled hardlink filter drops cross-device same-inode records in synthetic control. Real multi-volume test and remaining repository incomplete.",
   "decision": "reference",
   "finding": "Five complete selected modules reviewed across filesystem/engine/scanner,8fs+7contents controls. Configured bigfile samples accepted distinct bytes; default cache can reuse restoredmtime digest. Default fullhash rejects sample collision; exists filter mitigates missing inputs. Not whole368blob review; no adoption.",
   "license_metadata": "GPL-3.0",
@@ -145,6 +145,11 @@
       "audit": "docs/research/dedup-500/dupeguru1-qt-exif-review-v9-20261019.json",
       "controls": "docs/research/dedup-500/dupeguru1-qt-exif-review-v9-20261019.json",
       "scope": "9newwholefiles/76cumulative;15originalmarkabletestspass,413cumulative;actualQtEXIF1..8normalJPEGcontrolsreproduce5/7blocktransformmismatch. Fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupeguru1-app-identity-review-v10-20261019.json",
+      "controls": "docs/research/dedup-500/dupeguru1-app-identity-review-v10-20261019.json",
+      "scope": "1newwholefile/77cumulative;noadditionalupstreamtests,413cumulative;syntheticstatdevice/inodecounterexample,normalappfreshScannerclarification. Fullrepositoryfalse."
     }
   ],
   "full_repository_read": false

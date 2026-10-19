@@ -1,0 +1,46 @@
+{
+  "status": "reproduced_cross_device_inode_filter_loss_on_synthetic_stat_records",
+  "source_sha256": "ed7ba34c717236333b88876bf8152ec515c47baf8badbe29c77ec2e3b157e04d",
+  "cases": [
+    {
+      "input": [
+        "original",
+        "same-device-alias",
+        "other-device-distinct-file",
+        "same-device-distinct-file"
+      ],
+      "observed": [
+        "original",
+        "same-device-distinct-file"
+      ],
+      "device_inode_reference": [
+        "original",
+        "other-device-distinct-file",
+        "same-device-distinct-file"
+      ]
+    },
+    {
+      "input": [
+        "other-device-distinct-file",
+        "original",
+        "same-device-alias",
+        "same-device-distinct-file"
+      ],
+      "observed": [
+        "other-device-distinct-file",
+        "same-device-distinct-file"
+      ],
+      "device_inode_reference": [
+        "other-device-distinct-file",
+        "original",
+        "same-device-distinct-file"
+      ]
+    }
+  ],
+  "limits": [
+    "Original static filter invoked unchanged; synthetic stat records, not a real multi-volume filesystem test.",
+    "No application constructor, cache connection, file action, external command or GUI invoked.",
+    "Application option ignore_hardlink_matches defaults to false; this concerns its enabled path.",
+    "No production change or upstream patch; our Unix exact identity already includes device and inode."
+  ]
+}

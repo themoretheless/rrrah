@@ -1,0 +1,50 @@
+{
+  "status": "partial_app_source_review_with_synthetic_device_inode_counterexample",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-qt-exif-review-v9-20261019.json",
+  "previous_sha256": "0ff7c044cfd46fee2b087c17c301a2e8e09e460bb381a34df496da6a7ab79844",
+  "new_whole_blobs": [
+    {
+      "path": "core/app.py",
+      "git_blob": "7cde6317d09edbfc5a327a957b4d0d60cc5cdd9a",
+      "sha256": "ed7ba34c717236333b88876bf8152ec515c47baf8badbe29c77ec2e3b157e04d",
+      "bytes": 35740,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_files_read": 77,
+  "cumulative_distinct_original_tests_passed": 413,
+  "new_original_tests_run": 0,
+  "controls": {
+    "path": "docs/research/dedup-500/dupeguru1-app-identity-reproducer-v10-20261019/result.json",
+    "sha256": "0222f7a2376361ea322b66eb693805c947899ab7bb02fcbc9b49cd1509a12271"
+  },
+  "findings": [
+    {
+      "scope": "source_verified_application_scan_lifecycle",
+      "finding": "start_scanning constructs a fresh scanner each call. Earlier repeated FIELDSNOORDER counterexample applies to scanner reuse; it is not established for the normal application scan path."
+    },
+    {
+      "scope": "synthetic_stat_records_original_static_filter",
+      "finding": "Enabled ignore_hardlink_matches uses st_ino only. Same inode on different devices drops a distinct file in either input order. Default option false. Real multi-volume runtime remains untested."
+    },
+    {
+      "scope": "source_review_action_boundary",
+      "finding": "Deletion/copy/move entrypoints consume recorded groups and perform filesystem actions; no fresh byte comparison is visible in these app entrypoints. No destructive action invoked and no whole dependency-path guarantee inferred."
+    }
+  ],
+  "own_library_crosswalk": {
+    "path": "crates/rrrah-dedup/src/exact.rs",
+    "sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "finding": "Unix identity already uses Identity::Unix(metadata.dev(), metadata.ino()); no production patch warranted by this counterexample."
+  },
+  "limits": [
+    "Only one additional whole source file, not whole repository completion.",
+    "Synthetic metadata filter controls are not additional upstream tests.",
+    "No performance measurement or optimization gain claimed.",
+    "Deferred pHash memory/ASAN investigations remain skipped."
+  ]
+}
