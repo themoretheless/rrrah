@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_large_files",
+  "exit_code": 0,
+  "passed": 4,
+  "failed": 0,
+  "ignored": 0,
+  "elapsed_test_seconds": 28.5,
+  "test_source": "crates/rrrah-dedup/tests/exact_large_files.rs",
+  "test_source_sha256": "9c0f47f9b2ea40ba964ce806425c38da33c3f80b4cb2f6c2832e7ac174ba60ac",
+  "new_regression": {
+    "name": "dense_large_files_distinguish_changes_outside_spaced_samples",
+    "file_count": 3,
+    "bytes_each": 69206016,
+    "different_byte_offset": 2097169,
+    "reference_sample_ranges_half_open": [
+      [
+        0,
+        1048576
+      ],
+      [
+        22719146,
+        23767722
+      ],
+      [
+        45438293,
+        46486869
+      ],
+      [
+        68157440,
+        69206016
+      ]
+    ],
+    "change_outside_all_reference_samples": true,
+    "cases": "ordinary and verified scan, forward and reversed roots; exactly authored original/copy group, no issues/aliases, all3files observed"
+  },
+  "limits": [
+    "Focused no-default-features test target only; not whole workspace or all features.",
+    "Dense authored66MiB logical payloads fully scanned; filesystem copy may use clone/reflink and no physical allocation measurement claimed.",
+    "Other three cases qualify u64 admission/discovery and bounded cancellation of sparse large files, not full multi-GiB equality.",
+    "No throughput claim; shared machine had concurrent work.",
+    "Native pHash investigation deferred."
+  ]
+}

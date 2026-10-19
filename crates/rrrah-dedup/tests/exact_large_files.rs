@@ -1,9 +1,58 @@
 //! Large logical files exercise u64 admission and bounded cancellation, without
-//! reading every sparse byte. This does not qualify complete multi-GiB equality.
+//! reading every sparse byte. A separate dense 66MiB case reads complete files.
+//! This does not qualify complete multi-GiB equality.
 use rrrah_dedup::exact::{
     ContentSnapshot, IssueKind, Options, SnapshotError, compare_files, discover, scan, scan_verified,
 };
 use std::{cell::Cell, fs::File};
+
+#[test]
+fn dense_large_files_distinguish_changes_outside_spaced_samples() {
+    use std::io::{Seek, SeekFrom, Write};
+    let directory = tempfile::tempdir().unwrap();
+    let paths = ["original", "copy", "changed-middle"].map(|name| directory.path().join(name));
+    let chunk: Vec<u8> = (0..262_144).map(|index| (index % 251) as u8).collect();
+    let mut source = File::create(&paths[0]).unwrap();
+    for _ in 0..264 {
+        source.write_all(&chunk).unwrap();
+    }
+    drop(source);
+    let length = 66 * 1024 * 1024;
+    assert_eq!(std::fs::metadata(&paths[0]).unwrap().len(), length);
+    for path in &paths[1..] {
+        std::fs::copy(&paths[0], path).unwrap();
+    }
+    // Beyond the 1MiB prefix, before the first spaced interior 1MiB sample.
+    let offset = 2 * 1024 * 1024 + 17;
+    let original_byte = chunk[offset as usize % chunk.len()];
+    let mut changed = std::fs::OpenOptions::new().write(true).open(&paths[2]).unwrap();
+    changed.seek(SeekFrom::Start(offset)).unwrap();
+    changed.write_all(&[original_byte ^ 1]).unwrap();
+    drop(changed);
+    let mut expected = paths[..2].to_vec();
+    expected.sort();
+    for reverse in [false, true] {
+        let mut roots = paths.to_vec();
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, 3);
+            assert_eq!(report.groups.len(), 1);
+            assert_eq!(report.groups[0].bytes, length);
+            let mut actual = report.groups[0].paths.clone();
+            actual.sort();
+            assert_eq!(actual, expected);
+        }
+    }
+}
 
 fn sparse(path: &std::path::Path, bytes: u64) {
     let file = File::create(path).unwrap();

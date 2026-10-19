@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/Scenarios/Filesystem.ps1": "d6df6b0a6559eddbdff41288c1a714029b2126a5f1b3f4602ce766416b20db32",
+    "tests/Scenarios/Lifecycle.ps1": "93c7bbffa240e65c55c84c4b23c5a03391c7bc935e0763cc407291bb0d62b244"
+  },
+  "whole_files_read": 43,
+  "coverage": "docs/research/dedup-500/windirstat3-filesystem-coverage-v17-20261019.json",
+  "coverage_sha256": "c334b1d088f3e7ac842ca0312a61a4dcea9c35276fb81cb895bfae2722f7b39b",
+  "method": "Manual whole-file source review of both files and byte comparisons with pinned Git objects. No upstream tests run.",
+  "findings": [
+    "Filesystem scenarios explicitly register basic and fast engine variants for paths, overlapping roots, junctions, allocated sizes, filters and regex; defaults alone therefore understate this suite intended coverage.",
+    "Path scenarios include9nested levels, Unicode, uppercase trailing separator, extended path prefix and parent traversal. Multi-root cases include ancestor-child overlap, similarly named sibling roots, aliases and pipe-separated roots.",
+    "Junction scenarios compare excluded and followed traversal and replace an external target, checking changed file identity. Symbolic-link setup can SKIP before assertions when privilege is unavailable.",
+    "Allocation fixture combines sparse4MiB, compressed1MiB zeros, WOF LZX2MiB zeros, hardlink alias and Zone.Identifier ADS. It verifies sparse physical allocation, WOF algorithm, no standalone ADS row and unchanged exported bytes under UI hardlink accounting.",
+    "Filter cases check nested include traversal alongside hidden/file exclusions and regex escapes/backreferences. Access-denied case verifies visible sibling retained and inaccessible directory represented.",
+    "No duplicate-content scenario in this file establishes exact equality above64MiB; the allocation files are not a large-file duplicate oracle.",
+    "Lifecycle scenarios cover observed watcher readiness, create/write/paired rename/delete history, clear and pause/filter behavior, scan pause/resume, stop/rescan, resize overlap, shutdown and extension grouping admission.",
+    "External mutation stress waits for writer readiness, suspends scan, stops writer, resumes then explicitly refreshes and compares all paths to settled disk state. This establishes intended convergence after refresh, not snapshot consistency or equality safety of intermediate duplicate groups.",
+    "Pause/resume checks visible count stability for500ms then700ms; this is not a direct assertion that workers perform zero I/O. Watcher shutdown moves the fixture directory after process exit as a handle-release observation, not a full process-resource inventory."
+  ],
+  "limits": [
+    "Windows/NTFS/privilege/desktop behavior not executed here. Scenario registration is intended coverage, not a pass count.",
+    "No foreign production code adopted. Native pHash investigation remains deferred."
+  ]
+}
