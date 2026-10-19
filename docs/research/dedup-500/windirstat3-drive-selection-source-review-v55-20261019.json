@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of SelectDrivesDlg.h (199 lines) and cpp (718 lines); pinned bytes verified. No Windows execution.",
+  "new_whole_files_read": {
+    "windirstat/Dialogs/SelectDrivesDlg.h": "b1c78cd4ae2edc3c76ab0c46f20757e1c7a6b712afbb62a4333dbcaf7746c5f3",
+    "windirstat/Dialogs/SelectDrivesDlg.cpp": "117fb498116d5268834ce71ef0981644aeec23f9d38080bed53f224a806d6c8c"
+  },
+  "whole_files_read": 154,
+  "coverage": "docs/research/dedup-500/windirstat3-drive-selection-coverage-v55-20261019.json",
+  "coverage_sha256": "23f1224f5ec720d203df6a0f3aa56f22a141500464787654f60d3534b2e79994",
+  "findings": [
+    "Drive queries use packaged_task, shared_future and detached workers capturing path by value. Static GUI-thread registry reuses pending queries across dialog reopen, erases ready queries on a later StartQuery. Workers do not reference dialog or item pointers.",
+    "No query timeout, cancellation or concurrency limit appears here. A permanently blocked path can retain its pending query and worker across reopens. Dialog teardown does not wait for these workers; this is a lifecycle tradeoff, not proof of successful query completion.",
+    "GUI polls every100ms, consumes ready futures with exception handling, clears local future and stops timer when none remain. Used-space ratio guards total zero and free greater than total.",
+    "All Local Drives excludes remote, SUBST and MTP entries, but does not filter by successful accessibility query; selected-subset admission also does not require query success. Scan-time error handling remains separate.",
+    "Folder OK validation accepts any UNC-prefixed part without querying existence; local paths use DoesFileExist. SaveSelection normalizes paths and updates bounded case-insensitive history. This layer does not prove directory-only admission or atomic path stability.",
+    "Folder GetSelectedItems returns one joined specification string for downstream splitting. Manual drive selection persists separately from actual all/subset scan roots.",
+    "Elevation request snapshots persisted settings, invokes SaveSelection with ignored boolean result, requests elevation then restores previous settings and writes them. Actual elevation, failure and restart semantics were not executed.",
+    "Selection changes are suppressed during initial population and sorting, preventing programmatic sort notifications from switching to subset mode. MTP discovery and shell icon fetch occur during GUI population; this source alone does not establish bounded startup latency."
+  ],
+  "limits": [
+    "No drive, MTP, UNC, timeout, worker-lifetime, elevation or GUI runtime tests performed.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains147/500."
+  ]
+}
