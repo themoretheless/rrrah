@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Danish catalog; pinned bytes reverified; v91 automated structural comparison retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_da.txt": "64ea59d851877accca3cc23ea1f1531df61630755c47e577fd65955cc49a3bba"
+  },
+  "whole_files_read": 234,
+  "coverage": "docs/research/dedup-500/windirstat3-danish-coverage-v101-20261019.json",
+  "coverage_sha256": "e2fca7331c78b8beb30df33085228c9a6076a3d40e390359a0a701c363fb5b3a",
+  "findings": [
+    "Sandsynlige dubletter, Hash-præfiks and Stikprøvehash preserve probability/prefix/sampling distinctions. Large-file option names sampling above64MiB; no exact equality qualification inferred.",
+    "Recovery completion asks to check file data, possible recovery remains conditional, metadata-change requests rescan and same-source restoration warns about overwriting deleted data.",
+    "Junctions translated Kryds and missing extension Ingen forlængelse use general literal terms rather than precise filesystem terminology. Item count Enhed/Enheder can suggest units/devices rather than generic items.",
+    "Sparse action Gør fil sparsom is separate from compression. Hardlinks and symbolic links retain distinct labels; logical/physical size and binary-unit labels remain explicit.",
+    "Permanent-delete wording describes permanent removal, not secure erasure. Cloud warning describes potential downloads and adjustable settings; no hydration-prevention runtime verified.",
+    "Cleanup token labels preserve %p/%n/%sp/%sn; regex versus glob remains explicit. MSI da-DK/1030/1252 declarations require actual Windows installer qualification."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered UI, mnemonic conflict, installer or Windows runtime checks. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
