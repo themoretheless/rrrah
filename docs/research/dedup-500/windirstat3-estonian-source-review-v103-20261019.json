@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Estonian catalog; pinned bytes reverified; structural checks retained from v91.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_et.txt": "d1ed5818b0c2a61d55cda7c49ae47b5c5f476291a3e43ddef6fbb6018358ca19"
+  },
+  "whole_files_read": 236,
+  "coverage": "docs/research/dedup-500/windirstat3-estonian-coverage-v103-20261019.json",
+  "coverage_sha256": "4907cd086a01812f04ac50a28f5839868e8b478a3aa7069fd91e23cc965db9b1",
+  "findings": [
+    "Tõenäolised duplikaadid and Valimräsi preserve probable-versus-sampled distinction; sampling option names files over64MiB. Hash column instead says Hash / Failitee and omits prefix qualifier, unlike reviewed English label.",
+    "Recovery completion requests checking file data, possible recovery remains conditional, metadata changes request rescan, and same-source restore warns of overwriting deleted data. These are labels, not runtime recovery proof.",
+    "Stop and Suspend both translate Peata, obscuring different control semantics. Light-incidence label is Staatiline, which does not describe light source.",
+    "About body and refresh tooltips remain English; process failure and zoom tooltip suffixes are partly English. Complete key parity therefore does not mean complete translation.",
+    "Cleanup %n/%sn descriptions say tühja reaga rather than without path, potentially misleading command-template users. Tokens themselves remain intact.",
+    "Hardlink heading Kõvakettalingid may suggest hard-disk links; shadow-copy action uses generic backup wording. Sparse action remains separate from compression, regex/glob and logical/physical sizes are explicit. MSI et-EE/1061/1257 is declaration-only."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, Windows rendering, keyboard or installer/runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
