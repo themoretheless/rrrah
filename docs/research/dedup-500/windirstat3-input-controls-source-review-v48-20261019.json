@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole4files reading; pinned Git bytes matched. No native UI/runtime execution.",
+  "new_whole_files_read": {
+    "windirstat/Controls/ColorButton.h": "64c67891cf67f6e00457acabd22ce15d2a07dfdaa620f8bb81455c57028d7e8c",
+    "windirstat/Controls/ColorButton.cpp": "9b4b701868cc047470d01db61767b775727edbeb962a94f10c85a1300b398861",
+    "windirstat/Controls/XYSlider.h": "1f5abf1fccdd0880aba346ad0783141e8c8fde39f14dff1e36579b2a5d8567e6",
+    "windirstat/Controls/XYSlider.cpp": "91a6572cc78a28fc47213f3088b4585554e59a63dc6a68fc4229340c6f4140eb"
+  },
+  "whole_files_read": 134,
+  "coverage": "docs/research/dedup-500/windirstat3-input-controls-coverage-v48-20261019.json",
+  "coverage_sha256": "b9c22cb64fe24209b822f0361e02e19442be08c3df0789cfaef648c07335f04f",
+  "findings": [
+    "Color button lazily creates preview child on paint, destroys it on parent destroy, forwards preview click to parent. Color selection commits and sends WM_NOTIFY only when picker returns value; cancel leaves color unchanged by this handler.",
+    "XYSlider Initialize derives pixel range from odd client dimensions minus fixed8pixel gripper. SetRange assigns external range and SetPos converts without explicit range/nonzero validation. Tiny/zero geometry or custom zero range can invalidate conversion assumptions; actual GUI not tested.",
+    "DoMoveBy clamps pixel coordinates then converts rounded external values and notifies parent only on external-value change. Direct SetPos invalidates but does not notify or clamp.",
+    "Drag captures mouse, retains grab offset, clamps drag bounds, dispatches nested messages and releases capture on exit; no rollback to original value on capture loss or Escape-specific cancel handler visible.",
+    "Nested drag loop treats GetMessage0as exit without reposting WM_QUIT and does not explicitly handle negative GetMessage error. Shutdown/capture-loss behavior unqualified.",
+    "Double-click gripper resets center; outside gripper advances10pixels toward point using hypot. This interaction semantics differs from settings numeric validation; no duplicate-search guarantee."
+  ],
+  "limits": [
+    "No Windows paint, capture, keyboard, cancel, geometry or division-boundary runtime tests.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
