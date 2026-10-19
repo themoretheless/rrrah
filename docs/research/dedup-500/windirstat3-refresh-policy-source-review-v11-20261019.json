@@ -1,0 +1,32 @@
+{
+  "status": "partial_source_refresh_policy_truth_table_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/Pages/PageGeneral.cpp": "710a61c915f579b95340275db6da2f3fcf35e172a6b811ebe041970197f42631",
+    "windirstat/Pages/PageGeneral.h": "3a570174d5bfb2c993707c39f8d90e1f6a9776682a81b51677a6e8a80f052fb6",
+    "windirstat/Pages/PageAdvanced.cpp": "2db3e12daa7c3976fde2378ec291d82876c1d41e67a7b36bd20e9fb4d962e0e2",
+    "windirstat/Pages/PageAdvanced.h": "0fe8714e526370526e99bb83dbfa3d64666c28ccef359e310b770bb76b47a609"
+  },
+  "whole_files_read": 30,
+  "controls": "docs/research/dedup-500/windirstat3-refresh-policy-reproducer-v11-20261019/result.json",
+  "controls_sha256": "72f5e8160de28885ce8a75142665c6da307841508947aa0dfdbcc467ae025588",
+  "coverage": "docs/research/dedup-500/windirstat3-refresh-policy-reproducer-v11-20261019/coverage.json",
+  "coverage_sha256": "059e45c9b804d52288391c5918a97fa84f8ed90508e2fe0fb493c1e6a28efef8",
+  "reproducer": "scripts/qualify-windirstat3-refresh-policy-20261019.py",
+  "reproducer_sha256": "fca47df68036e4afb9e688efcf1f414ced7050dae18d8b70d5deb21f67bde363",
+  "findings": [
+    "All14change bits x duplicate-scan enabled/disabled checked: metadata/exclusion/hardlink changes request full refresh; hash/sample changes request it only with duplicate detection enabled.",
+    "Reparse-following changes request reparse refresh unless full refresh takes priority.",
+    "Thread-count change is staged but not part of refreshAll expression; already running worker-count change not proven.",
+    "Options.h excerpt declares defaultxxHash, SampleLargeFilesfalse, scanningthreads4 bounded1..16; whole Options.h not yet reviewed.",
+    "General settings stage portable-mode and shell-registration effects; none executed in this review."
+  ],
+  "limits": [
+    "Original two refresh expressions compiled unchanged; BindsChanged/setting references modeled as explicit changed-bit sets.",
+    "Truth-table consistency check, not actual UI/options persistence/scan execution or quality/performance proof.",
+    "Four whole page files read; Options.h declarations only partial source credit.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}
