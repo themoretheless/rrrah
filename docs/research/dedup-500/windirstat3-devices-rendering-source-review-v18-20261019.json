@@ -1,0 +1,34 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of all three files; bytes matched pinned Git objects. No upstream scenarios executed.",
+  "new_whole_files_read": {
+    "tests/Scenarios/Devices.ps1": "75b25198c95f9cc04029f4e923321176d7c7b1e79237b3d65eaf5e55d94c36d5",
+    "tests/Scenarios/Rendering.ps1": "f908439b430d08b94f1d88be04211a75227a1ccbcef425b9548d013a3adee466",
+    "tests/Scenarios/Interaction.ps1": "a70bc137ff7f1f5c9c5e3def71c249283ab4d72ff8db6bae26e0f5c4b5204cf1"
+  },
+  "whole_files_read": 46,
+  "coverage": "docs/research/dedup-500/windirstat3-devices-rendering-coverage-v18-20261019.json",
+  "coverage_sha256": "1e660ed65ff222c0de3e210ee9bacb86ca7225933ff91bd1598aead9c2fce4ff",
+  "findings": [
+    "Disposable-volume scenarios create an owned expandable2048MiB VHD and mount folder, register detach cleanup before disk creation, check attached filesystem and mount path, then compare basic and fast scans to independent disk snapshots for NTFS/FAT32/ReFS. Unsupported creation can SKIP; cleanup verifies image detached. No diskpart command executed in this review.",
+    "UNC scenarios use a temporary localhost SMB share with both engine settings and three UNC spellings. Snapshot path/count/logical comparisons omit optional physical-byte verification in this scenario. This is not evidence for remote-server latency, outage recovery or non-Windows SMB behavior.",
+    "MTP scenario requires an exact configured device label, checks virtual flags and zero serialized process-local indices, stops the app and reloads CSV in a fresh process before comparing selected metadata. It does not compare device payloads or duplicate decisions.",
+    "Real-monitor DPI scenario requires two screens with different observed window DPI, then checks graph rendering and a return-frame match. Equal DPI or insufficient screens can SKIP.",
+    "Rendering scenarios register six graph types in two themes. They check selection changes, partial invalidation, actual occlusion, minimize/restore and resize round trips. These are UI frame comparisons, not file-content similarity metrics.",
+    "Pane and splitter scenarios check collapsed-pane recovery, hidden columns, grab offsets,40pixel movement, accepted drag versus cancellation/capture-loss restoration, and released capture. Localization checks supplied French labels,100/200percent text scales and usable controls.",
+    "Resource scenario warms six renderers then cycles them12times and allows final GDI count up to baseline+24. It is a bounded short-run resource check, not proof of zero leaks or process memory bounds.",
+    "Interaction scenarios explicitly create two32768byte duplicate groups, hardlink selected groups independently, compare actual per-group volume/file identities and preserve full hashes. This small-file operation does not exercise sampled large groups or concurrent changes between scan and replacement.",
+    "Duplicate batch scenarios add two members to existing groups and create a new group through selected-folder refresh; assertions preserve collapsed/expanded state, selection, group counts and exact exported path multiset.",
+    "Scoped refresh preserves unselected snapshots, removed-root refresh avoids silently rescanning surviving roots, search refresh reapplies size criteria and preserves case-distinct filenames under NTFS case-sensitive directory setup. These are source-read intended contracts, not current runtime results.",
+    "Interaction cleanup scenario replaces a scanned ordinary directory with a junction and checks empty-folder cleanup preserves external target and replacement junction while actually removing ordinary empty directories. No such cleanup executed here.",
+    "Cross-page settings validation checks unchanged timestamp display and portable setting on invalid input, then commits valid display-only change without admitting an unscanned sentinel, and verifies persistence in a new process."
+  ],
+  "limits": [
+    "No Windows, filesystem image, SMB, device, monitor, UI or renderer runtime execution here.",
+    "These source-read scenario definitions establish intended assertions only; no pass count is inferred.",
+    "Ui.ps1 remains unread as a whole file, so synchronization/frame-comparison helper behavior still needs review.",
+    "No production code adopted. Deferred native pHash investigation untouched."
+  ]
+}
