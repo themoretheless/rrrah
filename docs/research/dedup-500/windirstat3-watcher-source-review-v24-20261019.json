@@ -1,0 +1,33 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual source review of four files, bytes compared to pinned Git objects. No Windows watcher runtime executed.",
+  "new_whole_files_read": {
+    "windirstat/Controls/FileWatcherControl.h": "0b9d66c742ffd5493c2e31249f35eb543e820b384cd4e2c0bd7072ce6a80adea",
+    "windirstat/Controls/FileWatcherControl.cpp": "27190474787c724448151f42c56b1d157d39cc80867c3fb7acfd74ea3753e325",
+    "windirstat/Dialogs/ProgressDlg.h": "541dd08d1c73beb1c7c6d3798cf9f3dbdf4c908ccfcddbbd445ec7397a2ab599",
+    "windirstat/Dialogs/ProgressDlg.cpp": "09be3e57b56200bcffc7b1490a6bdfdbaa9ab7dc45738752ecc5f5461cd937c3"
+  },
+  "whole_files_read": 64,
+  "coverage": "docs/research/dedup-500/windirstat3-watcher-coverage-v24-20261019.json",
+  "coverage_sha256": "d9832c8c8f8006140489cecda1411e288f9f94cc4ac43b9070ed2ce2e43b37c4",
+  "findings": [
+    "StartMonitoring stops prior threads, creates one jthread per selected root, and uses recursive ReadDirectoryChangesW with64KiB buffer. Stop requests all stop tokens then clears/join threads; cancellation path calls CancelIoEx and waits GetOverlappedResult before freeing request storage. Actual Windows cancellation not tested.",
+    "IsMonitoring only checks nonempty thread vector. A WatchDirectory early return for failed open/event creation leaves its thread object in vector until StopMonitoring; reported monitoring state is not proof of successful directory subscription.",
+    "Zero-byte completion is silently continued; non-aborted GetOverlappedResult errors also continue. No explicit completeness/lost-event marker or reconciliation scan in this control. This source path does not provide lossless incremental-index evidence.",
+    "Rename old/new actions are recorded as separate action/path entries; no rename pairing identity maintained. Entry timestamp is event-processing system time, not file last-write time. Metadata query failure leaves zero-initialized size/attributes, relevant to deleted or renamed-old paths.",
+    "Pending queue is drained at most1024events per UI callback. All drained records move to history even when hidden by filter. No history/pending count or byte budget visible in this module; batching bounds callback count, not retained memory.",
+    "Quick-filter compilation and matching collect candidate visible items before committing new filter/view. Regex errors return false and preserve prior state; clearing filter restores retained history. No model rescan is performed by this filter.",
+    "Notification coalescing uses atomic changePending and reposts if queue nonempty after drain. PostMessage failure clears flag but queued events await a later post trigger; no retry timer visible. No scheduling/liveness runtime claim.",
+    "ClearResults drains pending and clears history without stopping producers; events arriving concurrently may appear after clear. This is a history action, not a quiescent filesystem snapshot.",
+    "Progress dialog task runs on jthread; IsCancelled reads explicit atomic flag, not jthread stop token. Cancel sets flag, disables button, joins via RunTaskWithUiUpdates, then closes. ShowModal also joins surviving worker. Cancellation latency depends on task cooperation.",
+    "Progress task lambda has no local exception handler; propagation out of task into thread would terminate under standard C++ semantics unless task itself catches. No throw injection executed.",
+    "Worker performs synchronous final WM_TIMER send then posts IDOK unless cancelled. UI pumping during cancellation is therefore relevant to join ordering; helper RunTaskWithUiUpdates not yet whole-file qualified. No deadlock runtime claim."
+  ],
+  "limits": [
+    "No Windows directory notifications, overflow, remote-share, rename, shutdown or UI runtime controls.",
+    "No current defect impact inferred beyond source-observed conditions.",
+    "No production code adopted; native pHash investigation remains deferred."
+  ]
+}
