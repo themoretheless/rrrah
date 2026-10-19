@@ -1,0 +1,37 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of ten packaging/prerequisite files. Pinned bytes verified. Two XML documents parsed with stdlib ElementTree. No scripts executed.",
+  "new_whole_files_read": {
+    "setup/chocolatey/.gitignore": "8a76f7dc03986550dc61864651288ac25c7d99751efcf816d8eb205eec243e47",
+    "setup/chocolatey/WinDirStat.nuspec.template": "04655f8e9cdf607e69ce18cc17c217ab619bdfb736c30fdeea27edb9eb74a5e0",
+    "setup/chocolatey/release.cmd": "9d80eb083d26ca916ddfd5cbf6d864c6c1d05dd730b48363468549d576c09eec",
+    "setup/chocolatey/tools/chocolateyinstall.ps1.template": "2f343ecd27e68d46726402c7ec1a56d0c24ef16b1ebedb56c1bbf0fef7d558e3",
+    "setup/chocolatey/tools/chocolateyuninstall.ps1.template": "943edf1ae0f4129cd6cd62205295eb04c9c014ebe1aaba901880ff893839b88e",
+    "setup/chocolatey/update.cmd": "2410ff037140c46bfe8dff2b34a5d8b5de3644a5b6cd15e1f54c3b630c391939",
+    "setup/prereqs.cmd": "6f7bce80643b1eba73c6434d6dca73dc293b9b98f52153646c12c5bc71b63c21",
+    "setup/msi/build.cmd": "3e9c99c55f5eb0afeeb4d943745d81ece0c41af5777d06cc9374aac93e845e92",
+    "setup/msi/Defines.wxi": "b8f5f81f67ddacf266842abfcdd7a69ad4951c70bafd629d5e5abc543a57d707",
+    "setup/msi/make-multilingual.ps1": "aa73b4f416d1437081f29c91de9e12d854f0f3b5fddb7a009a278708567046f3"
+  },
+  "whole_files_read": 164,
+  "coverage": "docs/research/dedup-500/windirstat3-package-build-coverage-v56-20261019.json",
+  "coverage_sha256": "694f7b5f2be0814ab029022d74118c6cbe0177fc66c7d9629778ee2e812c8db4",
+  "findings": [
+    "Chocolatey update validates local version/MSI inputs, computes SHA256 for x86/x64 and replaces known placeholders, rejecting unresolved known placeholders. Installer template downloads corresponding versioned GitHub assets with these hashes. Local hashes alone do not prove remotely published bytes match.",
+    "Chocolatey uninstall acts only on exactly one registry match, warns and skips multiple matches. Release script upgrades Chocolatey, accepts an API key, packs and pushes with no explicit per-step failure gates. It was read only, never run.",
+    "Prerequisites script requires administrator, modifies Visual Studio installation, installs latest package/tool dependencies and accepts WiX EULA. It changes user PATH and global extensions. These actions were not executed. Dependency selection is not a reproducible version lock.",
+    "MSI build returns success when WiX is absent, explicitly skipping MSI generation. Therefore process exit zero alone cannot qualify installer availability. Architecture loop builds arm64/x86/x64 with shared per-architecture product code for base and language transforms.",
+    "Beta build number uses git rev-list --count --all, so output depends on available repository refs/history. Production and beta use distinct upgrade-code roles and same-version policy.",
+    "Localization generator reads MSI_ keys, requires culture/LCID/codepage and XML-escapes string values. Metadata fields are inserted directly; missing metadata languages are skipped. XML parse success here covers templates, not generated Windows artifacts.",
+    "Language builds have bounded parallel jobs by default up to six, collect per-language failure results, then embed successful transforms serially. Final failures return nonzero after partial mutation of the MSI; caller must reject partial artifacts.",
+    "Temporary transform root is a fixed TEMP/WinDirStat_transforms with architecture-language children and recursive cleanup. Concurrent independent invocations can collide; no session isolation/locking observed.",
+    "COM storage embedding commits in finally, so exceptional copying can still commit a partially modified storage; no full artifact transaction established. No fault-injection or MSI API test performed."
+  ],
+  "limits": [
+    "No installation, removal, elevation, prerequisite modification, downloads, package publication or external messages performed.",
+    "No Windows/WiX/Chocolatey runtime, generated MSI validation, transform fault injection or package end-to-end tests.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains147/500."
+  ]
+}
