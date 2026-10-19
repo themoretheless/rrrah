@@ -2,7 +2,7 @@
   "index": 3,
   "repository": "windirstat/windirstat",
   "commit": "a92886ff41934946d306909c01ee4447f3b60580",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Four whole duplicate-node/control files read plus complete GetFileHash method excerpt;16080compiled original offset-expression controls. Not whole repository, original tests or Windows runtime qualification.",
   "decision": "reference",
   "finding": "Windows duplicate display/control source; inspected excerpts do not establish a portable comparison engine.",
   "license_metadata": "GPL-3.0",
@@ -93,6 +93,11 @@
       "lines": 126,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/windirstat3-sampling-source-review-v1-20261019.json"
     }
   ]
 }

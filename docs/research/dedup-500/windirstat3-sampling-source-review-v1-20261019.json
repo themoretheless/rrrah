@@ -1,0 +1,36 @@
+{
+  "status": "partial_source_and_extracted_offset_control_review",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/ItemDupe.cpp": "652ee6a59db30aa5c00cafceffef35a0151d0a726f0c854892d2dfa25be434ce",
+    "windirstat/ItemDupe.h": "d5f8821e2098d439f09223a433a95f2b747d11b48d26ad7873b01dfb2f2df5c7",
+    "windirstat/Controls/FileDupeControl.cpp": "c8f7945dfe548b40d366c3cfed5580ff99ba2ac43bc970490fface9be52d747b",
+    "windirstat/Controls/FileDupeControl.h": "5d02a6e272f47bbdd634e8dc47c01abc7e6448036234b03f537072f61bef856d"
+  },
+  "partial_file": {
+    "path": "windirstat/Item.Extended.cpp",
+    "sha256": "9a0866364fee8b3603fd030ffd7037b8a88877a332cd89e8a6db022a5da6ba0c",
+    "scope": "Entire GetFileHash method from line946; not whole file"
+  },
+  "controls": "docs/research/dedup-500/windirstat3-sampling-reproducer-v1-20261019/result.json",
+  "controls_sha256": "f8134d58ad9bb1c8932b22cd0a26e7430dbf31394cd4c8ee9178d2212506637c",
+  "coverage": "docs/research/dedup-500/windirstat3-sampling-reproducer-v1-20261019/coverage.json",
+  "coverage_sha256": "b121eb4ee1fac796ad5435ef668cb2531fb6cf644b034376987aab7b8bb1ee37",
+  "reproducer": "scripts/qualify-windirstat3-sample-offsets-20261019.py",
+  "reproducer_sha256": "d8c1732e33d4ea8937b505951bdbfab75c3666901ab886b751179ff8d0c70684",
+  "findings": [
+    "Size buckets promote candidates through4KiB,1MiB,fullhash levels; selection keys include logical size plus hash.",
+    "Optional sampled final level applies above64MiB and reads4MiB total: prefix plus three spaced1MiB blocks ending atEOF.",
+    "CItemDupe caption explicitly labels sampled groups probable duplicates; displayed group alone is not exact-byte comparison.",
+    "GetFileHash returns XXH3_64digest or up to16bytes from selected BCrypt hash; no byte-comparison step in examined publication path.",
+    "Open comment says avoid active writers, but actual flags permit FILE_SHARE_WRITE/DELETE; no concurrent-mutation test yet."
+  ],
+  "limits": [
+    "Only original arithmetic expression compiled, types/cursor inputs supplied by portable harness; not full GetFileHash or Windows API execution.",
+    "No original upstream tests, physical file reads, locking/cancellation/GUI/platform/performance or whole repository qualification.",
+    "Four whole files read; GetFileHash excerpt does not grant whole Item.Extended.cpp credit.",
+    "No GPL code copied into production; pHash native investigation remains deferred."
+  ]
+}
