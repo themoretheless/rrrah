@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete XAML and code-behind source reading; code-behind reread without truncation; pinned Git blob identity verified.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/Controls/NumericInputControl.xaml": "6411299119f31124f60cffe24586fa45d22ec86f848eece110f04210e202f51f",
+    "ExplorerTabUtility/UI/Views/Controls/NumericInputControl.xaml.cs": "1b506eba81f18ce65935eac40e45e07dd7a8aa7d85291b1db3f69ae93b7497ec"
+  },
+  "whole_files_read": 56,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v21-20261019.json",
+  "coverage_sha256": "21f5197c3aeb5e982c42193969f59647b1108c3d0c8d9da68c40fd92174a04c4",
+  "findings": [
+    "Value/Minimum/Maximum/Step dependency properties lack coercion or validation callbacks. Programmatic assignments and changed limits do not enforce a shared finite ordered range.",
+    "Empty text and ResetToZero assign zero without clamping Minimum. Increment clamps only upper bound; decrement clamps only lower bound. Negative or nonfinite Step is not explicitly rejected.",
+    "Numeric normalization replaces periods with commas but parses with current culture, then emits invariant culture for fractions. Whole-number path casts double to int despite default Maximum double.MaxValue; larger values lack checked conversion admission.",
+    "TextChanged normalization may return before Value assignment: when normalized text differs but formatted current text already matches, model remains unchanged on that branch. Exact UI reachability depends on culture, binding and input sequence.",
+    "Paste accepts character whitelist without enforcing one decimal separator; typed input uses a separate separator rule. PreviewKeyDown numeric whitelist excludes decimal keys despite PreviewTextInput allowing separators.",
+    "Caret positioning subtracts Suffix length although suffix is a separate overlaid TextBlock, not appended by UpdateTextFromValue.",
+    "Repeat timer stops on selected mouse-up/leave paths; no Unloaded or LostMouseCapture handler appears. Click and preview-down both adjust value; actual routed-event double adjustment needs WPF runtime reproduction."
+  ],
+  "limits": [
+    "No WPF runtime execution or end-to-end delay-profile binding validation. Static source concerns are not proven defects in our Rust dedup library.",
+    "No production changes adopted. Fully reviewed count148/500; this repository56/104. Native pHash investigation deferred."
+  ]
+}
