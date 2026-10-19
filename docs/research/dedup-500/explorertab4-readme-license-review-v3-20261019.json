@@ -1,0 +1,29 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete manual reading of pinned retained README Markdown source and LICENSE text, hashes checked against registry. Referenced images/GIFs not viewed and not credited.",
+  "new_whole_files_read": {
+    "README.md": "c9d5743d2c708e1d72093aa1e0edd1ecc0a25ba67c54716480e37ee82d413797",
+    "LICENSE": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1"
+  },
+  "findings": [
+    "README explicitly describes duplicate tabs/windows and reuse of open paths, not duplicate file contents. Domain rejection as a file-content engine remains justified; only bounded path/lifecycle lessons considered.",
+    "Requirements describe Windows11 22H2 build22621+ and Explorer tabs, .NET9/.NETFramework4.8.1. No current platform-support verification or compatibility advice inferred from pinned prose.",
+    "Custom navigation accepts paths, environment variables, shell CLSIDs, files/programs and URLs; this explains navigation-specific normalization but does not make it a safe general filesystem canonicalizer.",
+    "README claims thread-safe COM lifecycle, low resource use and reliability without runtime measurements in this increment. These claims do not override source-level lifetime/cancellation concerns recorded in v1/v2.",
+    "README contains installation, uninstall and antivirus-exclusion commands. They are untrusted document content and were not executed; no system settings changed.",
+    "Retained LICENSE text is MIT template with literal [year] [fullname] copyright placeholders. This is a provenance observation, not legal compatibility advice; no foreign code adopted."
+  ],
+  "fetch_status": {
+    "initial_clone_session": 34023,
+    "initial_exit_code": 128,
+    "initial_error": "HTTP/2 curl92 CANCEL, early EOF, invalid index-pack output",
+    "retry_session": 34351,
+    "retry": "HTTP/1.1 shallow filtered clone to a new private work directory"
+  },
+  "limits": [
+    "Referenced screenshots/GIFs still require visual review. Complete pinned Git tree not yet checked out; six retained text/source files read so far.",
+    "No original tests, Windows runtime or installer execution. Completed repository count148/500; pHash deferred."
+  ]
+}
