@@ -1,0 +1,96 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Decoded four raster asset files with Pillow, enumerated every ICO size and visually inspected contact sheet. This is binary visual review, not manual source-text reading. Pinned bytes verified.",
+  "new_whole_files_read": {
+    "setup/msi/Background.bmp": "439d26e51771552a9306a4e300e0d5119a100c6f8e7f03e92ea2f354d95beb65",
+    "setup/msi/Banner.bmp": "d7ea52477637ee21784427460e9222e0f386d809cce227e8cc50dd819edaf8ec",
+    "windirstat/logos/logo_256px.png": "5e326fb6053a4e8f31fe000edd88664f272398b31cc14f4480ab82a047768992",
+    "windirstat/res/WinDirStat.ico": "0e6f6189bcf332158a56228faeb228e486e2a31432dffd15dad950f5e19c778e"
+  },
+  "whole_files_read": 217,
+  "coverage": "docs/research/dedup-500/windirstat3-raster-assets-coverage-v83-20261019.json",
+  "coverage_sha256": "51959dc309688c437428cb21077b119e2b50fc7247d67e16efeb9d4fa583e109",
+  "visual_evidence": {
+    "contact_sheet": ".dedup-work/windirstat3-20261019/visual-v83/contact.png",
+    "contact_sha256": "f29091f9fcc4564d253aaec6fc3f1e2176fe9b32525783015e620790b0862c92",
+    "decoded_images": [
+      {
+        "path": "setup/msi/Background.bmp",
+        "size": [
+          493,
+          312
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "setup/msi/Banner.bmp",
+        "size": [
+          493,
+          58
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "windirstat/logos/logo_256px.png",
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "windirstat/res/WinDirStat.ico",
+        "size": [
+          16,
+          16
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "windirstat/res/WinDirStat.ico",
+        "size": [
+          24,
+          24
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "windirstat/res/WinDirStat.ico",
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "windirstat/res/WinDirStat.ico",
+        "size": [
+          48,
+          48
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "path": "windirstat/res/WinDirStat.ico",
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA"
+      }
+    ],
+    "decoded_image_count": 8
+  },
+  "findings": [
+    "Installer background493x312and banner493x58show the same green/black circular tree mark on white; background places it at upper left, banner at right. Source images contain no installer text, so text is supplied separately by installer UI.",
+    "PNG logo256x256and all five ICO representations16/24/32/48/256show the same tree mark. Small sizes retain recognizable silhouette but cannot preserve all detail of256pixel version.",
+    "All four files decoded; every ICO representation was inspected at native size in contact sheet. No claim of Windows shell icon-selection, alpha-compositing or DPI runtime qualification.",
+    "Branding assets are not duplicate-search algorithm evidence and no library production behavior changed in this increment."
+  ],
+  "limits": [
+    "Contact sheet scales large installer images to fit; exact pixel fidelity/alpha correctness and rendered Windows installer composition were not tested.",
+    "No foreign assets copied into production; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
