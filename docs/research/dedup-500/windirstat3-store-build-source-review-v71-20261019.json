@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of build-store-msix.ps1; pinned bytes verified. No script execution or certificate access.",
+  "new_whole_files_read": {
+    "setup/store/build-store-msix.ps1": "7d8766c978a95dc64fe38ab82694114ad748c5c0baa21bdc337fdeb28de4bdb0"
+  },
+  "whole_files_read": 200,
+  "coverage": "docs/research/dedup-500/windirstat3-store-build-coverage-v71-20261019.json",
+  "coverage_sha256": "d8cac3ba4dab9262e326ec381f4b998d32c13aa1a25ee4a861da28e61a3de734",
+  "findings": [
+    "Architecture parameter validates x86/x64/arm64. Version is assembled from three header regex captures plus zero; captures are not explicitly checked for success before manifest generation. Windows tools may reject invalid version later.",
+    "Certificate selection requires private key, code-signing EKU and chain status with revocation disabled. Explicit missing thumbprint throws; no/multiple matches skip local build. This is source behavior, not certificate inspection or trust validation on this host.",
+    "Despite log text describing local signed packages, this script contains no signing invocation. Selected certificate changes store manifest publisher and enables second build mode; signing may belong to an external caller, not established here.",
+    "Manifest placeholder replacement XML-escapes supplied values. Source executable prefers publish/architecture executable over build executable, without checking version, freshness, architecture or hash in this script.",
+    "Resource generation creates21PNGvariants via bicubic resize with aspect ratio and transparent margins, disposes drawing resources, indexes PRI and checks makepri/makeappx exit codes. These checks do not establish visual fidelity or installed runtime.",
+    "Output preparation recursively deletes unsigned and fixed temporary subdirectories under caller OutDir. No unique run root or concurrency isolation; source review only, no deletion performed.",
+    "Package/bundle outputs use fixed architecture names. Packaging checks process exit status, but no explicit post-pack signature, archive contents or installed launch test appears here. Temporary cleanup only reaches final section on successful flow."
+  ],
+  "limits": [
+    "No script execution, certificate store access, asset generation, signing, packaging, installation, deletion or publication performed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
