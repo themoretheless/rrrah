@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete reading of both resource dictionaries; exact pinned Git blob identity verified. No rendered UI test.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Themes/ButtonStyles.xaml": "f9cec557b4b9dfba37f118a6c5336c3f1cd7fb826f4b026f5094111368e906e2",
+    "ExplorerTabUtility/UI/Themes/Colors.xaml": "d7bcc878d5b0f9c7d3f0ff3c94b9f52c3ea6f647b12a7e4d8e02e91399523c11"
+  },
+  "whole_files_read": 77,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v28-20261019.json",
+  "coverage_sha256": "2cf5311b24af442694f2db17b1473b8cd27ab05f664c029b11023f1960fdfd2c",
+  "findings": [
+    "Colors dictionary uses fixed dark-theme colors and gradient stops with StaticResource references; no system high-contrast or dynamic theme switching is implemented in this file. Contrast compliance was not measured.",
+    "Icon and flat button templates retain hover/focus/disabled/pressed triggers. Icon template sets Padding on style but does not bind it into its Border or ContentPresenter; flat template hardcodes padding10,5 rather than forwarding control Padding.",
+    "Toggle switch renders Content through TextBlock.Text rather than ContentPresenter, so arbitrary structured content is not preserved by this template. HasContent controls label visibility.",
+    "Toggle arrow has explicit checked-state path change; ToggleButtonIconStyle has no explicit checked visual trigger in its replacement template or inherited IconButtonStyle. Actual checked-state use remains caller-dependent.",
+    "Button templates explicitly replace FocusVisualStyle and supply some focus-color triggers; screen-reader, keyboard and high-contrast behavior require runtime checks.",
+    "No file dedup algorithm or content-verification behavior in these resources."
+  ],
+  "limits": [
+    "Static source observations only, no visual or Windows runtime qualification. No own-library code changes or fresh tests in this batch.",
+    "Fully reviewed repository count148/500; ExplorerTabUtility partial77/104. Native pHash investigation deferred."
+  ]
+}
