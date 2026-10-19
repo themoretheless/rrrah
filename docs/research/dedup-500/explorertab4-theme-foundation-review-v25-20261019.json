@@ -1,0 +1,27 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Read four complete resource dictionaries; verified raw bytes against pinned Git blob inventory. No rendering performed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Themes/DefaultStyles.xaml": "e485b92baadcdcef5d378f7212168a1779966eb54e71399dd99fddc330b40fd0",
+    "ExplorerTabUtility/UI/Themes/GroupBoxStyles.xaml": "6d323c2cce97343ba1a19fb7045400c09c6c56df2cbd9587f100beb3e0ed804e",
+    "ExplorerTabUtility/UI/Themes/ListBoxStyles.xaml": "61cde81ab362f78823ad61df328d268affdf30c0a740cbc12e275cb1dfcb8c19",
+    "ExplorerTabUtility/UI/Themes/ThemeResources.xaml": "35cad939f91acef9eb3ee910d6832396255388fec675b42714f479741c034106"
+  },
+  "whole_files_read": 70,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v25-20261019.json",
+  "coverage_sha256": "790a0a162cbb4d17f19b9098ca25b75f6d236b74211d2386af3bee9129ebe2cb",
+  "findings": [
+    "ThemeResources merges nine component-style dictionaries using assembly pack URIs; Colors and DefaultStyles are not merged by this dictionary itself, so application-level loading remains relevant.",
+    "DefaultStyles defines implicit Control, TextBlock, TextElement, ToolTip and ContextMenu styles. An implicit Control style alone does not establish all derived control styling; concrete controls and BasedOn chains require individual review.",
+    "Menu template includes checked/disabled/highlighted states and submenu popup; popup placement is fixed Left. No explicit right-to-left adaptation or bounded submenu viewport height here.",
+    "Navigation item style removes default focus visual and supplies hover/selected triggers without explicit keyboard-focus or disabled trigger. Runtime accessibility and inherited state behavior remain unqualified.",
+    "GroupBox template draws its internal patterned border from StaticResource BorderBrush rather than the GroupBox BorderBrush property; outer property customization does not directly select this inner brush. Header access keys are recognized.",
+    "These resources describe UI presentation only; no file identity, hash strategy or transferable dedup algorithm found."
+  ],
+  "limits": [
+    "Source-only review does not qualify rendering, DPI, contrast, screen readers or WPF runtime resource resolution.",
+    "Fully reviewed count148/500; ExplorerTabUtility partial70/104. Native pHash memory-error investigation deferred."
+  ]
+}
