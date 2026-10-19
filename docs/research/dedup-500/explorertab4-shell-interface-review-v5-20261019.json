@@ -1,0 +1,26 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of IShellFolder.cs retrieved at exact commit via raw GitHub; Git blob SHA1 independently matched pinned inventory.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Interop/IShellFolder.cs": "4708c5119260264e878b6c5309dedf046d74cf8ec7af170b3c0d8886537f4e83"
+  },
+  "whole_files_read": 7,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v5-20261019.json",
+  "coverage_sha256": "0bc3a53ba3931749187fe3ffdd2841ebf3584c542a19ee010aaceb71c7bd6830",
+  "findings": [
+    "ParseDisplayName is explicitly PreserveSig and returns int HRESULT. Previously reviewed GetPidlFromPath ignores this return and returns output PIDL directly; failure HRESULT does not itself become a managed exception through this declaration. This resolves v1/v2 uncertainty.",
+    "Two-string IsEquivalent overload does not check parsed PIDLs for nonzero before invoking CompareIds; mixed string/PIDL/target overload does check its newly parsed comparison PIDL. Invalid or failed parses therefore have inconsistent admission paths.",
+    "CompareIDs is PreserveSig and returns int; caller accepts only zero then falls back to case-insensitive URL names. Failure is not exposed distinctly to caller. No specific null-PIDL Shell outcome reproduced.",
+    "Interface skips three vtable methods through _VtblGap1_3 and declares no enumeration/binding implementation. This thin COM wrapper does not supply filesystem-content equality."
+  ],
+  "supersedes_uncertainty_in": [
+    "docs/research/dedup-500/explorertab4-path-comparer-source-review-v1-20261019.json",
+    "docs/research/dedup-500/explorertab4-helper-source-review-v2-20261019.json"
+  ],
+  "limits": [
+    "No Windows COM runtime, HRESULT fault injection or original tests executed. No foreign code adopted.",
+    "Full filtered checkout remains session13181; individual source retrieval succeeded independently. Completed count148/500; pHash deferred."
+  ]
+}
