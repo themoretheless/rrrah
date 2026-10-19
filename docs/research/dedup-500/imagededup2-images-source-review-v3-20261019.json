@@ -1,0 +1,150 @@
+{
+  "status": "partial_source_and_selected_image_runtime_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "imagededup/utils/image_utils.py": "ade0cd69c97bd521489183acd4d49900b282ac9dc1238bcaa5add887fa242f07",
+    "tests/test_image_utils.py": "268240efbd55163179b6674b33076129c1f2fa19c7ba94f493fd8f980d991588"
+  },
+  "whole_files_read_across_v1_v3": 11,
+  "original_image_utils_suite": {
+    "tests": "20",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "controls": "docs/research/dedup-500/imagededup2-images-reproducer-v3-20261019/result.json",
+  "controls_sha256": "c8f679a5bf2c28b5a2b65049a95e19e3591082899ac9dc72831c2a059223742a",
+  "junit": "docs/research/dedup-500/imagededup2-images-reproducer-v3-20261019/junit.xml",
+  "junit_sha256": "bc1de4334367c173041e18b46d345342f5853c37a9a3fe92b90413960c69c90b",
+  "reproducer": "scripts/qualify-imagededup2-images-20261019.py",
+  "reproducer_sha256": "687d6154308c2b3c171c14ae01c4d05d271ece0121fa342cb980aeaf733db02f",
+  "findings": {
+    "orientation_controls": [
+      {
+        "orientation": 1,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          3,
+          5,
+          3
+        ],
+        "matches_oriented": true
+      },
+      {
+        "orientation": 2,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          3,
+          5,
+          3
+        ],
+        "matches_oriented": false
+      },
+      {
+        "orientation": 3,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          3,
+          5,
+          3
+        ],
+        "matches_oriented": false
+      },
+      {
+        "orientation": 4,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          3,
+          5,
+          3
+        ],
+        "matches_oriented": false
+      },
+      {
+        "orientation": 5,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          5,
+          3,
+          3
+        ],
+        "matches_oriented": false
+      },
+      {
+        "orientation": 6,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          5,
+          3,
+          3
+        ],
+        "matches_oriented": false
+      },
+      {
+        "orientation": 7,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          5,
+          3,
+          3
+        ],
+        "matches_oriented": false
+      },
+      {
+        "orientation": 8,
+        "loaded_shape": [
+          3,
+          5,
+          3
+        ],
+        "oriented_shape": [
+          5,
+          3,
+          3
+        ],
+        "matches_oriented": false
+      }
+    ],
+    "alpha_control": "different invisible RGB values remain different after alpha discarded",
+    "animation_control": "two GIFs with equal first frames and different second frames load as equal arrays",
+    "uint16_array_control": "preprocess casts to uint8 modulo256; no range normalization",
+    "corrupt_control": "returns None"
+  },
+  "limits": [
+    "Entire original image_utils module unchanged; namespace package routing bypasses package initializer/CNN imports.",
+    "Actual original logger, real NumPy/Pillow/pytest and pytest-mock3.15.1; full original test_image_utils target only.",
+    "Lossless synthetic PNG EXIF controls use Pillow exif_transpose oracle; not JPEG/CMYK/all-format qualification.",
+    "No upstream matching/CNN/hash generation/full-package/runtime/platform/performance qualification.",
+    "No foreign production code adopted; pHash native investigation deferred."
+  ]
+}

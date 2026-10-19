@@ -1,0 +1,143 @@
+{
+  "status": "passed_original_selected_module_suite_and_characterization",
+  "source_pins": {
+    "imagededup/utils/image_utils.py": "ade0cd69c97bd521489183acd4d49900b282ac9dc1238bcaa5add887fa242f07",
+    "tests/test_image_utils.py": "268240efbd55163179b6674b33076129c1f2fa19c7ba94f493fd8f980d991588"
+  },
+  "original_suite": {
+    "tests": "20",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "environment": {
+    "numpy": "2.5.4",
+    "Pillow": "12.3.0",
+    "pytest": "7.4.4"
+  },
+  "orientation_controls": [
+    {
+      "orientation": 1,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        3,
+        5,
+        3
+      ],
+      "matches_oriented": true
+    },
+    {
+      "orientation": 2,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        3,
+        5,
+        3
+      ],
+      "matches_oriented": false
+    },
+    {
+      "orientation": 3,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        3,
+        5,
+        3
+      ],
+      "matches_oriented": false
+    },
+    {
+      "orientation": 4,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        3,
+        5,
+        3
+      ],
+      "matches_oriented": false
+    },
+    {
+      "orientation": 5,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        5,
+        3,
+        3
+      ],
+      "matches_oriented": false
+    },
+    {
+      "orientation": 6,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        5,
+        3,
+        3
+      ],
+      "matches_oriented": false
+    },
+    {
+      "orientation": 7,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        5,
+        3,
+        3
+      ],
+      "matches_oriented": false
+    },
+    {
+      "orientation": 8,
+      "loaded_shape": [
+        3,
+        5,
+        3
+      ],
+      "oriented_shape": [
+        5,
+        3,
+        3
+      ],
+      "matches_oriented": false
+    }
+  ],
+  "alpha_control": "different invisible RGB values remain different after alpha discarded",
+  "animation_control": "two GIFs with equal first frames and different second frames load as equal arrays",
+  "uint16_array_control": "preprocess casts to uint8 modulo256; no range normalization",
+  "corrupt_control": "returns None",
+  "limits": [
+    "Entire original image_utils module unchanged; namespace package routing bypasses package initializer/CNN imports.",
+    "Actual original logger, real NumPy/Pillow/pytest and pytest-mock3.15.1; full original test_image_utils target only.",
+    "Lossless synthetic PNG EXIF controls use Pillow exif_transpose oracle; not JPEG/CMYK/all-format qualification.",
+    "No upstream matching/CNN/hash generation/full-package/runtime/platform/performance qualification.",
+    "No foreign production code adopted; pHash native investigation deferred."
+  ]
+}
