@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of RecoveryExFat.h/cpp,724 lines; pinned bytes verified. No disk access or recovery execution.",
+  "new_whole_files_read": {
+    "windirstat/RecoveryExFat.h": "9560336cc94c8dbc7de417f5cfc03452f80a57bf832981098cf2def0b38ddd4d",
+    "windirstat/RecoveryExFat.cpp": "767620c522760caacfce7200770e12ef28b3ac415937082b0718a7d267665cfc"
+  },
+  "whole_files_read": 191,
+  "coverage": "docs/research/dedup-500/windirstat3-exfat-recovery-coverage-v66-20261019.json",
+  "coverage_sha256": "19b0495124e4f33a14c3413a661728f790d3844239b2622775faf548e16eadfc",
+  "findings": [
+    "Boot parser validates jump/name/revision, sector/cluster shifts, main boot checksum and extended signatures, device bounds and FAT/heap capacity. Requires one FAT and no active-secondary-FAT bit, so not all exFAT variants admitted. Backup boot-region recovery not implemented here.",
+    "Entry-set parser checks primary/stream/name types, restored InUse checksum, UTF16 names, size/initialized bounds and complete directory clusters. Deleted fragmented FAT-chain streams and extra benign secondary records are not supported recovery candidates; contiguous NoFatChain extents are supported.",
+    "Chain traversal is bounded by expected length or volume cluster count, detects cycles and demands exact FAT-chain length when provided. Directory traversal uses explicit stack and rejects reused/bitmap-owned/unallocated directory clusters. Memory still scales with cluster lists/visited set.",
+    "Allocation bitmap is read through its own possibly fragmented cluster chain; adjacent physical clusters are coalesced up to1MiB reads. Cached allocation pages are refreshed around source chunk reads. No throughput measurement established.",
+    "Validation rereads boot metadata, root/bitmap chains and allocation, then original entry offsets and exact entry-set bytes. Unlike FAT reader, this method does not validate the candidate containing-directory chain or membership of offsets in that directory; only aligned heap range is checked here. Runtime consequence unqualified.",
+    "Recovered bytes beyond ValidDataLength are explicitly zero-filled rather than exposing residual raw bytes. Initialized data is read only after/before fresh free-allocation checks, with final metadata validation around flush. Free allocation does not prove source data unchanged or historically correct.",
+    "Discovered callback fires before final Recycle Bin metadata name resolution. Partial scan candidates and later resolved names must be distinguished by consumers.",
+    "Source-volume/destination comparison is not performed in this RecoverFile implementation; policy remains to be checked in recovery dialog. No disk operations executed."
+  ],
+  "limits": [
+    "No synthetic exFAT image parser tests, malformed entries, initialized-tail oracle, mutation/fault injection, disk reads or recovered writes performed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
