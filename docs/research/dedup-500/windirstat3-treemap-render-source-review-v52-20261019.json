@@ -1,0 +1,28 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of TreeMap.h (418 lines) and TreeMap.cpp (1151 lines). Initial combined output truncated; cpp reread in three complete ranges. Pinned bytes verified.",
+  "new_whole_files_read": {
+    "windirstat/Controls/TreeMap.h": "cfc946b0b58bb2f152c725179dc6bf9040399cc824026956b7f275de4631429f",
+    "windirstat/Controls/TreeMap.cpp": "711eb54c1af9a40574bb8fe17dbca526fdebf0b54ab05436441cbe3a7926bae5"
+  },
+  "whole_files_read": 144,
+  "coverage": "docs/research/dedup-500/windirstat3-treemap-render-coverage-v52-20261019.json",
+  "coverage_sha256": "f56aa3b8651be3dbb7d89f7a94e5c221d85142cd9260f45f011992afce2f39a6",
+  "findings": [
+    "DrawTreeMap clears prior geometry before argument handling and uses an explicit stack plus reused child layout scratch. Debug RecurseCheckTree remains recursive and asserts sorted weights and exact aggregate sum; release drawing is not a validation of these invariants.",
+    "PrepareRenderArea rejects nonpositive areas and shrinks right/bottom by one. Zero-size root receives a visible root rectangle after background fill, without descending into children.",
+    "Rendering can write directly into a selected top-down 32-bit DIB with explicit stride and bounds checks; other DCs use a reusable full-area pixel vector and SetDIBitsToDevice. No measured memory or speed claim.",
+    "Hit index uses 16-pixel cells, prefix offsets and one compressed entry vector. Nonterminal items index only border strips when direct-child bounding box and summed area match; otherwise full-parent fallback. Equal area alone does not prove children form a disjoint tiling; normal child layout preconditions remain necessary.",
+    "Hit lookup chooses deepest containing indexed candidate. It depends on valid current geometry and normal nested partitions; this increment does not execute original hit-test runtime controls.",
+    "MakeBrightColor divides by the sum of input RGB channels without a zero-color guard, then converts results to integer. For black this expression is nonfinite; actual reachable GUI call with black and resulting Windows behavior remain unqualified. SetOptions clamps saturation only, relying on upstream validation for other numeric parameters.",
+    "Folder color cache has 4096 direct-mapped slots but a separate branch map that can grow with folders; fixed slot count does not bound all color-cache memory. ClearLayout retains capacities; TrimMemory swaps layout and pixel containers.",
+    "Cushion shading dispatches parallel row processing only at >=512K pixels, width>=256 and height>=64. This threshold and scheduler comment do not establish speedup on this host.",
+    "Extension labels skip small rectangles, cache measured extents per draw and optionally sample bitmap center for contrast. Theme text prefers contrast >=3:1; this is not a claim of complete accessibility compliance."
+  ],
+  "limits": [
+    "No Windows build, rendering, boundary runtime, numerical sanitizer, hit-index property tests or performance measurement in this increment.",
+    "No foreign production code adopted; native pHash investigation remains deferred. Global completed repository count remains 147/500."
+  ]
+}
