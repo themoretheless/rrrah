@@ -1,0 +1,27 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of update, registry and clipboard managers; exact-commit downloads matched pinned Git blob IDs. No updates, registry writes or clipboard access executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Managers/UpdateManager.cs": "49f40c4cb54dc4a05a1d5512895b749ecfa246a2ec6e5b75b2b7072d53d2f964",
+    "ExplorerTabUtility/Managers/RegistryManager.cs": "939f61a57a8246ca5c63bfe4ac31fffc33861e7c25f0924213c2c75f0c42cbf7",
+    "ExplorerTabUtility/Managers/ClipboardManager.cs": "cddf2bf3751a00d9061fb3ae926a779a2fe73bdc6e8d1cebf58d579c58ebce45"
+  },
+  "whole_files_read": 27,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v13-20261019.json",
+  "coverage_sha256": "096660d9c557d4f8b80aa2cc59765fd5d6693c1f254cf1f92234d552ed2ff342",
+  "findings": [
+    "Update asset selection uses first matching underscore-split filename with runtime StartsWith and architecture equality. Prefix matching is not exact runtime validation; unknown architectures default x64. URL/hash/signature validation not present in this wrapper; dependency behavior not reviewed here.",
+    "Update metadata parse errors are Debug logged, null fields can fail parsing, and missing matching asset yields null DownloadURL. Helper.GetIcon null-forgiven in static initialization can fail earlier. No actual update request executed.",
+    "Registry helper opens existing HKCU subkeys rather than creating missing keys; null keys silently skip writes. Startup Run value stores executable path directly without quoting; actual Windows launch handling not tested. Run and StartupApproved edits are separate nontransactional writes.",
+    "Clipboard writes empty existing contents before allocation/publication succeeds, so failures can lose prior data. SetClipboardData return ignored; allocation is not freed on rejected publication. No success/failure result exposed.",
+    "Clipboard GlobalLock/Unlock is not protected by inner finally around allocation/copy, so exceptions can skip unlock. GlobalSize declared uint and cast to int for copying lacks explicit admission bounds. Source-level interop concerns, no runtime memory corruption investigated.",
+    "Clipboard generic backup skips bitmap/enhanced metafile but treats all other formats as movable-memory bytes; format-specific handle semantics and delayed rendering not qualified. Reads can return partial dictionary after exception.",
+    "CloseClipboard called in finally even if OpenClipboard failed; empty strings/partial data conflate unavailable clipboard and actual empty contents. These patterns are unsuitable as reliable scanner evidence transport."
+  ],
+  "limits": [
+    "No Windows API execution, updater dependency audit, clipboard fault injection or original tests. No foreign production code adopted.",
+    "Completed count148/500; full filtered checkout session13181 remains separate; native pHash investigation deferred."
+  ]
+}
