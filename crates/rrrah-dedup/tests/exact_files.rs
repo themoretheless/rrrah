@@ -2,6 +2,39 @@ use rrrah_dedup::exact::{IssueKind, Options, scan};
 use std::{cell::Cell, fs};
 
 #[test]
+fn sibling_roots_with_a_shared_name_prefix_keep_both_file_sets() {
+    let root = tempfile::tempdir().unwrap();
+    let directories = [root.path().join("images"), root.path().join("images-backup")];
+    for directory in &directories {
+        fs::create_dir(directory).unwrap();
+    }
+    let mut expected = vec![directories[0].join("original"), directories[1].join("copy")];
+    for path in &expected {
+        fs::write(path, [19; 32]).unwrap();
+    }
+    fs::write(directories[0].join("left-only"), [37; 32]).unwrap();
+    fs::write(directories[1].join("right-only"), [83; 32]).unwrap();
+    expected.sort();
+    for roots in [directories.to_vec(), directories.iter().rev().cloned().collect()] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty());
+            assert_eq!(report.files_observed, 4);
+            assert_eq!(report.groups.len(), 1);
+            let mut actual = report.groups[0].paths.clone();
+            actual.sort();
+            assert_eq!(actual, expected);
+            assert!(report.aliases.is_empty());
+        }
+    }
+}
+
+#[test]
 fn hidden_directories_and_empty_files_remain_in_exact_partitions() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();

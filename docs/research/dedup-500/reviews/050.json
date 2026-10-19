@@ -2,7 +2,7 @@
   "index": 50,
   "repository": "jvirkki/dupd",
   "commit": "33907bbcfd5fe8b63f54d4f55438fa222ea880aa",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run Additional21wholepinnedfilesread: design/build/filecompare/cache/hashers/APIheaders andtestsrun/common/00..07. Wholeoriginalnativeenginecompiled and8ordinaryupstreamtestspass withisolatedHOME.793entryfullrepository remainsincomplete. Additional13wholefiles(hash/dirtree/readlist+8tests)read;34cumulative,16distinctselectedupstreamtestspass. Full793entryrepository remainsfalse. Additional18wholefilesread(sizeBST/patharena/traversal/refresh/docs+8tests);52cumulative.8moreupstreamtestspass/24cumulative. Fullrepositoryfalse.",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run Additional21wholepinnedfilesread: design/build/filecompare/cache/hashers/APIheaders andtestsrun/common/00..07. Wholeoriginalnativeenginecompiled and8ordinaryupstreamtestspass withisolatedHOME.793entryfullrepository remainsincomplete. Additional13wholefiles(hash/dirtree/readlist+8tests)read;34cumulative,16distinctselectedupstreamtestspass. Full793entryrepository remainsfalse. Additional18wholefilesread(sizeBST/patharena/traversal/refresh/docs+8tests);52cumulative.8moreupstreamtestspass/24cumulative. Fullrepositoryfalse. Additional14wholefilesread(size-list/SQLite/CLI+8tests);66cumulative.8additionaloriginaltestspass,32cumulative. Fullrepositoryfalse.",
   "decision": "reference",
   "finding": "Full memcmp comparator and hashing modules show hash-then-byte-confirm pattern; GPL reference with hashlist tests.",
   "license_metadata": "GPL-3.0",
@@ -111,6 +111,11 @@
       "audit": "docs/research/dedup-500/dupd50-staged-tree-review-v3-20261019.json",
       "controls": "docs/research/dedup-500/dupd50-staged-tree-review-v3-20261019.json",
       "scope": "18additionalwholefiles,8moreupstreamtests;52files/24tests cumulative, fullrepositoryfalse."
+    },
+    {
+      "audit": "docs/research/dedup-500/dupd50-cache-queue-review-v4-20261019.json",
+      "controls": "docs/research/dedup-500/dupd50-cache-queue-review-v4-20261019.json",
+      "scope": "14newwholeblobs;66sourcefiles/32originaltestscumulative, whole793entryrepository remainsincomplete."
     }
   ]
 }

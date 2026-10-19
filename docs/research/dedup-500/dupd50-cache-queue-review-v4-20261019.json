@@ -1,0 +1,149 @@
+{
+  "status": "verified_selected_queue_cache_cli_and_eight_more_original_tests",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "previous": "docs/research/dedup-500/dupd50-staged-tree-review-v3-20261019.json",
+  "previous_sha256": "63eec90b58f218afeef3dfd93d73ec6a5524aee67e75e30f7d402631cb708227",
+  "new_whole_blobs": [
+    {
+      "path": "src/sizelist.c",
+      "git_blob": "e10ebe07b8c145ee2a06ac3ca468b8e6b039f891",
+      "sha256": "66bdafa21cee4635b78a64752e894d5a236f883122bb5e1e1c5b8074e6299bce",
+      "bytes": 27814,
+      "fully_read": true
+    },
+    {
+      "path": "src/sizelist.h",
+      "git_blob": "0717d2e98f1f02c12993b6c96cfc36c227b7a555",
+      "sha256": "989d6d2e9b5e46633176459d6dba958d9639025706bce4b0c8f9ec403a6aec5c",
+      "bytes": 2599,
+      "fully_read": true
+    },
+    {
+      "path": "src/dbops.c",
+      "git_blob": "84279ea56609a6c73ece466bc2c31f718f64bed1",
+      "sha256": "bc70842784d65ea67c6931e034d12838f2c9a721f679a49ccf4a5f4214502998",
+      "bytes": 27532,
+      "fully_read": true
+    },
+    {
+      "path": "src/dbops.h",
+      "git_blob": "aa8cbbd22ddcfff4331b83d60daed93d6b79d0ef",
+      "sha256": "dd78615a8112df5fda1971cd722a1e0b0e42ac07ef13fde76193fb7333b861cd",
+      "bytes": 8191,
+      "fully_read": true
+    },
+    {
+      "path": "src/main.c",
+      "git_blob": "d2270db8a89de213dc9cdba50e34df39d4c212ba",
+      "sha256": "3df33ad17759b11b984543675d15b656bae9d4dd60ad94b37a1844338a9c1462",
+      "bytes": 18498,
+      "fully_read": true
+    },
+    {
+      "path": "src/main.h",
+      "git_blob": "7a23ca9e715d8272210a80000938b59f0077fcb8",
+      "sha256": "c3b543458ea26f0f237dee0156e90762ac273f08160f303273757219aa1215c5",
+      "bytes": 10894,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.30",
+      "git_blob": "e224a86ab719bdfbeb8cbb2912e6f26d48367c64",
+      "sha256": "609a1c3f47e787019a9f842fb74f1e517f9ac3ea13541f116bc452f1fac9ac3d",
+      "bytes": 118,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.31",
+      "git_blob": "45c333393b4d7afb059aad99d40d8ad2bf6321ad",
+      "sha256": "bbd5b976acaad6a7d3c356555c2d78c2b09376c1f18bf0a622055c878d676bd3",
+      "bytes": 122,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.32",
+      "git_blob": "041a1a15c9ea39c538fda9485d782a4aa6668991",
+      "sha256": "8b4875a879b6c39fd9ef5e8a07f83efa1b12aab51393950285a0d4fa445e0d2b",
+      "bytes": 112,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.33",
+      "git_blob": "ad3092074a51691e7dab885e6ee15b68308f3e91",
+      "sha256": "5cbf5e01ca54203dd3189d9963f9cec2d2bda1b504738273b9cd99cbe11893af",
+      "bytes": 154,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.34",
+      "git_blob": "b9bd4819936a579da7d9370a59a411cda49524e5",
+      "sha256": "a0a150e055a6130678ddbb24392c4acbe3b64e3b1516b75e6889e2383941597f",
+      "bytes": 260,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.36",
+      "git_blob": "dac34b3c72e4bb97c291c4fdb1f601e43bbc35b6",
+      "sha256": "7dab2b9d0fe1273d7de0101014edf40dedd22a880d52f1f277a4c704b6ac8cdc",
+      "bytes": 224,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.37",
+      "git_blob": "31f1c58d523e55fc83cd11db3640e069a5433860",
+      "sha256": "487263c02c664b211f166f4ad7c3d7e4629f880444a9820766ae80c2bc094b7a",
+      "bytes": 232,
+      "fully_read": true
+    },
+    {
+      "path": "tests/test.38",
+      "git_blob": "b18ae53fd2f89caf5b2b23411033161069a7a516",
+      "sha256": "8f66cf2ca852f775da780b53c11c66ec6a6deecca104357b262c9c6fadb52e3c",
+      "bytes": 377,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 66,
+  "upstream_additional_tests": [
+    "test.30",
+    "test.31",
+    "test.32",
+    "test.33",
+    "test.34",
+    "test.36",
+    "test.37",
+    "test.38"
+  ],
+  "upstream_cumulative_distinct_tests_passed": 32,
+  "result": {
+    "command": [
+      "./run",
+      "test.30",
+      "test.31",
+      "test.32",
+      "test.33",
+      "test.34",
+      "test.36",
+      "test.37",
+      "test.38"
+    ],
+    "exit_code": 0,
+    "home": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupd50-20261019/test-home-v4",
+    "log_sha256": "d44e4eaf0ffa7a427f38cd677b42789e74f9fb80cbbb33b1df55941a196d8566"
+  },
+  "binary_sha256": "5ba2cdb07bff74d316d1dc722c5b876c6d02ea0672a7d1240abf2d4f758beb7a",
+  "findings": [
+    "Twohasherqueuesandreadersize-listflusher: fallsbacktogroup-orderatbufferpressurethenreleasesperfilepayloads; nohardRSSguaranteeinferred",
+    "Persistentduplicategroupsandhashcachehave distinctschemas/lifetimes; cachevalidityusespath/size/32bitsecondsctime/algorithm, notcurrentfullcontentobservations",
+    "CLIrootvalidationusesstringsubstringoverlapcheck; lexicalnamesiblingscanbeclassifiedasoverlap. Ourrootidentity/traversalbehavior mustremainindependentofsuchheuristics",
+    "Minimumsizeclampedto1; emptyfileexclusioncannotbeoverriddenbyminsize0. Hiddenfilesneedexplicitflag",
+    "Eightadditionaloriginaltestsusage/license/help/version/globalflag/verbosepaths pass; noforeigncodeadopted"
+  ],
+  "limits": [
+    "Only66wholefilesreviewedof793entryrepository; fullrepositoryfalse",
+    "Only32distinctoriginaltestsexecuted; nofullupstream/performance/allplatformqualification",
+    "Staticcache/rootobservationsnotrepresented asnativecounterexampleruntimeproof",
+    "FurtherpHashmemory-errorinvestigationremainsuserdeferred"
+  ]
+}
