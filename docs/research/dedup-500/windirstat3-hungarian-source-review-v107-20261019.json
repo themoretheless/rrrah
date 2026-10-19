@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Hungarian catalog; pinned bytes reverified; automated structural comparison retained from v91.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_hu.txt": "a22e0c051a0efe021225fb091550eac7006bb025644d25d3574cbc2961a75e81"
+  },
+  "whole_files_read": 240,
+  "coverage": "docs/research/dedup-500/windirstat3-hungarian-coverage-v107-20261019.json",
+  "coverage_sha256": "747b2c88a512ecd786978da9179a62389c8dc37e35daf2e26e738aed8fafea6e",
+  "findings": [
+    "Valószínű másolatok, Kivonat előtag and Mintavételes hash preserve probability/prefix/sampling distinctions. Advanced sampling option specifies files over64MiB.",
+    "Recovery completion requests checking file data; Helyreállítható and Talán helyreállítható remain distinct, metadata changes request rescan and same-source-volume restoration warns of overwritten deleted data. No actual restoration verified.",
+    "Glob patterns rendered globális minták can suggest global patterns rather than wildcard syntax. Cleanup recursion Visszatér az alkönyvtárakba can read as returning to subdirectories.",
+    "Cleanup applies-to group Munkaterület suggests workspace, refresh-policy caption Házirend frissítése can suggest updating a policy, and collapse Bezár suggests close. These are text-level ambiguities.",
+    "Sparse conversion Fájl ritkítása remains distinct from compression; hardlinks and symlinks have separate labels; logical/physical size and binary units are explicit.",
+    "Cloud warning describes download risk and refers to settings. Permanent-delete/no-restore wording does not prove secure erasure. Cleanup tokens intact; MSI hu-HU/1038/1250 requires Windows installer encoding tests."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Hungarian interface, mnemonic conflict, installer or Windows runtime qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
