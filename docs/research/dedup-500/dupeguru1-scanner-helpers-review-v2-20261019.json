@@ -1,0 +1,215 @@
+{
+  "status": "partial_scanner_review_with_original_helpers_and_xxhash_controls",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-selected-content-review-20261019.json",
+  "previous_sha256": "8c71f6e2bb6c801f53a9c44b8cb4fabff20a378cb964438939594c9ef117ee7a",
+  "new_whole_blobs": [
+    {
+      "path": "core/scanner.py",
+      "git_blob": "cd2c0f0206eda9de8227c42dd111f8ff8c1a4925",
+      "sha256": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+      "bytes": 8974,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/jobprogress/job.py",
+      "git_blob": "eb9cca08fa5c36a9b5276c3b280944db4058dfa9",
+      "sha256": "6ceedf633664e0206aa890af76005b22a06a3cdd7cc102df59ff71373391d6c6",
+      "bytes": 6812,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/util.py",
+      "git_blob": "39b32a7e7c8b6fdc6890e8d578e89688f9fb9dde",
+      "sha256": "a53d5a04463e53035912c22c4221328bd71775b22a422edc6766e30c82ddc27b",
+      "bytes": 10435,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/jobprogress/__init__.py",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/path.py",
+      "git_blob": "65617f469fcc955da5493f89bc9009c9bc51c86a",
+      "sha256": "44c234bd4650412f9abe0e221b0772f4b65f727455724fd6102628ec24589660",
+      "bytes": 1892,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/path_test.py",
+      "git_blob": "d42b33d9b536ad69fabb0e309bddc9fd327c276d",
+      "sha256": "26a835bc6916cc2778fc369170f0891a7cf2dab0de464fc59e97bbecadc9035c",
+      "bytes": 857,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/util_test.py",
+      "git_blob": "601fa3bb160630ceff68e6895e0a9bf4f1e5ea65",
+      "sha256": "977e09005ecbd29cfa9dffd26dc406677fe78ddbb4bc0b32b9f74c71f5b4442c",
+      "bytes": 9695,
+      "fully_read": true
+    },
+    {
+      "path": "hscommon/tests/__init__.py",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/__init__.py",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "fully_read": true
+    },
+    {
+      "path": "core/pe/__init__.py",
+      "git_blob": "56d45b7b518eb028f922175d063c959a59ce103a",
+      "sha256": "a45c47a987247bc523ec0475b86864c2eaf054821488c2cc267d6aae921689fe",
+      "bytes": 153,
+      "fully_read": true
+    },
+    {
+      "path": "core/se/__init__.py",
+      "git_blob": "6d5f677d5fa7fc3fa7a3b1d0d245360e9edd4536",
+      "sha256": "c3b0357bd5cbcb5d66d23537333a614496e103f84643b558d173b887ef162126",
+      "bytes": 54,
+      "fully_read": true
+    },
+    {
+      "path": "core/me/__init__.py",
+      "git_blob": "d54766262771886a1c86e58d0ac9f5b97b61d460",
+      "sha256": "d50d4984201233d3ad546908d3bfcb00b7daa76fbda8fef36ed396df93295625",
+      "bytes": 66,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 25,
+  "upstream_selected_helpers": {
+    "exit_code": 0,
+    "command": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+      "-m",
+      "pytest",
+      "hscommon/tests/path_test.py",
+      "hscommon/tests/util_test.py",
+      "-q",
+      "--basetemp",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-selected-helpers-20261019/pytest-temp",
+      "--junitxml",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-selected-helpers-20261019/junit.xml"
+    ],
+    "source_pins": {
+      "hscommon/tests/path_test.py": "26a835bc6916cc2778fc369170f0891a7cf2dab0de464fc59e97bbecadc9035c",
+      "hscommon/tests/util_test.py": "977e09005ecbd29cfa9dffd26dc406677fe78ddbb4bc0b32b9f74c71f5b4442c",
+      "hscommon/path.py": "44c234bd4650412f9abe0e221b0772f4b65f727455724fd6102628ec24589660",
+      "hscommon/util.py": "a53d5a04463e53035912c22c4221328bd71775b22a422edc6766e30c82ddc27b",
+      "hscommon/testutil.py": "8301c4494a3e710ef583307180d14d0b3d96dae095c07b85cecd22e57138f17e"
+    },
+    "source_drift": [],
+    "log_sha256": "e556109fd2b1e42ef794675b2a550553256115aebb703bb7d51652d52b8671a1"
+  },
+  "upstream_helper_tests_passed": 32,
+  "original_engine_test_suite_run": false,
+  "xxhash_original_controls": {
+    "status": "reproduced_sample_only_acceptance_and_restored_timestamp_cache_reuse",
+    "source_pins": {
+      "core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+      "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+      "hscommon/jobprogress/job.py": "6ceedf633664e0206aa890af76005b22a06a3cdd7cc102df59ff71373391d6c6"
+    },
+    "backend": "xxhash.xxh3_128",
+    "xxhash_version": "3.8.2",
+    "modules": {
+      "engine": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/engine.py",
+      "fs": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/source/core/fs.py"
+    },
+    "synthetic_size": 8388608,
+    "different_byte_offset": 4194304,
+    "full_content_pairs": [
+      [
+        "copy.bin",
+        "original.bin"
+      ]
+    ],
+    "sample_only_pairs": [
+      [
+        "copy.bin",
+        "different.bin"
+      ],
+      [
+        "copy.bin",
+        "original.bin"
+      ],
+      [
+        "different.bin",
+        "original.bin"
+      ]
+    ],
+    "sample_only_percentages": [
+      100,
+      100,
+      100
+    ],
+    "restored_timestamp_cache_reuse": {
+      "mtime_ns_preserved": true,
+      "content_changed_sha256": true,
+      "fresh_File_digest_equals_cached_old_digest": true
+    },
+    "scanner_controls": {
+      "full_groups": [
+        [
+          "copy.bin",
+          "original.bin"
+        ]
+      ],
+      "sampled_groups": [
+        [
+          "copy.bin",
+          "different.bin",
+          "original.bin"
+        ]
+      ],
+      "pre_cancel_raises": true,
+      "fresh_retry_preserves_full_groups": true
+    },
+    "input_sha256": {
+      "original.bin": "8915466a89b7008e77f6094e4d6abde067cf87f4e06a9c095e3d8c55ac33ecac",
+      "copy.bin": "8915466a89b7008e77f6094e4d6abde067cf87f4e06a9c095e3d8c55ac33ecac",
+      "different.bin": "eb43607ee7f1811966dd2b7880f4d5330c0d0d462f0d54dbd9ec8ad2503cca2f",
+      "cache-rewrite.bin": "eb43607ee7f1811966dd2b7880f4d5330c0d0d462f0d54dbd9ec8ad2503cca2f"
+    },
+    "limits": [
+      "Original complete modules imported, no mocked hash/digest or extracted functions.",
+      "Actual dependency xxhash.xxh128 selected and asserted; no MD5fallback in this run.",
+      "Synthetic ordinary file controls only; no GUI, whole upstream tests, deletion action or full repository claim.",
+      "This demonstrates sampled coverage and cache-key limitations, not a cryptographic hash collision."
+    ]
+  },
+  "reproducer": "docs/research/dedup-500/dupeguru1-scanner-helpers-reproducer-v2-20261019",
+  "harness": "scripts/qualify-dupeguru1-xxhash-content-controls-20261019.py",
+  "harness_sha256": "789b05a4dcc5cffae806849b743992db7ac1397be135ed81974d57a2066a4a9c",
+  "findings": [
+    "xxHash3.8.2defaultdependencybackend reproduces earlier8MiBsample-onlyacceptanceandrestoredmtimecache-reuse; limitationsnotattributabletoMD5fallback.",
+    "Scannerdefaultbig_file_size_threshold=0: sampledcomparisonis opt-in inthisscanner; no default-modefalseacceptanceclaimed.",
+    "ActualScannergroupscontainallthreefilesinsampledmode,butonlycopy/originalinfullmode.",
+    "RealJobpre-cancellationraisesandfreshretryreturnscorrectfullgroups; no boundonmid-cohortcancellationlatencyproven.",
+    "Sourcecontentmatchingchecksprogressbetweenwholeequalsizecohorts; no per-pair/per-read cancellationinthatloop.",
+    "All32originalpath/utiltests pass without testbodymodification; notcoreengine/fs/GUIwhole-suite qualification."
+  ],
+  "limits": [
+    "25wholefilesread,includingemptyinitializers; remainderofrepository/media/GUI/native/translationsstillincomplete.",
+    "Syntheticcontrols donotprove hashcollisionresistance,platformparityorperformance.",
+    "Ourproductioncodeunchanged; previous33-testexactregressionalreadyqualified8MiBinterior/taildifferences.",
+    "User-deferred pHash investigation remains deferred; fullreviewcount145/500."
+  ]
+}
