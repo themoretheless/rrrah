@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete reading of both dictionaries through EOF; pinned Git blob identity verified. No WPF runtime execution.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Themes/ScrollViewerStyles.xaml": "85c74ab2fd4015bcbfaafc96d90a6656cdafa2f20c2a67a65d7404d0fa3c5357",
+    "ExplorerTabUtility/UI/Themes/TextBoxStyles.xaml": "331fb83db4c84d4cc2bc56e85f6a9059ec7858e467af4cb089d8206179b084f1"
+  },
+  "whole_files_read": 75,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v27-20261019.json",
+  "coverage_sha256": "fcd865c150972f19e62112b2d349c8e4060d78a50113a9e14aeab4f9d591a66d",
+  "findings": [
+    "Reusable text context menu defines standard Cut/Copy/Paste/SelectAll routed commands. CustomTextBoxStyle itself instead sets a collapsed context menu; callers must explicitly choose reusable menu to expose those entries.",
+    "TextBox template retains named PART_ContentHost, uses Tag as empty-text hint, and defines focus/disabled triggers. No input length limit or validation-error presentation is defined in this style; individual controls remain responsible.",
+    "ScrollViewer replacement uses an unnamed ScrollContentPresenter and no explicit CanContentScroll forwarding. Correct template-part discovery and logical scrolling require WPF runtime verification; source does not prove virtualization.",
+    "Vertical scrollbar column remains fixed width12 even when scrollbar visibility is collapsed. Horizontal template uses same reversed track and PageUp/PageDown commands without orientation-specific command triggers.",
+    "Track is enabled only while parent scrollbar IsMouseOver; keyboard/accessibility interactions and drag behavior outside bounds need runtime checks.",
+    "No dedup algorithm or content identity logic in either resource dictionary."
+  ],
+  "limits": [
+    "Static observations only; no claimed reproduced scrolling, command-routing or rendering failure. No own-library code changed.",
+    "Fully reviewed repository count148/500; ExplorerTabUtility partial75/104. Native pHash investigation deferred."
+  ]
+}
