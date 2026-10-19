@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Portuguese catalog; pinned bytes reverified; automated structural evidence retained separately.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_pt.txt": "a8cc686c77ef81b6fca9384865e8b6249fc5c5190d31da65eb9e41752966a332"
+  },
+  "whole_files_read": 230,
+  "coverage": "docs/research/dedup-500/windirstat3-portuguese-coverage-v97-20261019.json",
+  "coverage_sha256": "5915e88096b9930c6e876b9fc0f9eb40935c963849986c61632d9d6052a5be63",
+  "findings": [
+    "Duplicados prováveis, Prefixo de hash and Hash por amostragem preserve probability/prefix/sampling distinctions. Advanced sampling caption says hashes esparsos above64MiB: describes sparse sampling, not sparse-file equality qualification.",
+    "Recovery completion requests verifying file data, candidate status remains conditional, metadata changes request rescan and same-volume restoration warns it may replace deleted data. No disk recovery proof inferred.",
+    "Catalog mixes European ficheiros/guardar with Brazilian arquivos/salvar while MSI declares pt-PT. Some action descriptions retain English Delete, Command Prompt and Open; consistency issue, not a library algorithm defect.",
+    "Show stripes is translated Exibir Listas, which can imply lists rather than alternating stripes; component store becomes loja de componentes. These are terminology findings without rendered UI tests.",
+    "Sparsify is explicitly Tornar arquivo esparso, separate from compression; hardlinks, symbolic links, junctions and logical/physical sizes retain separate labels.",
+    "Operation confirmation keeps formatted operation field; custom cleanup retains %p/%n/%sp/%sn. Runtime expansion, keyboard mnemonics and installer encoding are not proven by text parity."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No Portuguese Windows UI, rendering, installer or keyboard qualification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
