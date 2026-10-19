@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Full WinApi.cs source reading and exact pinned Git blob verification. No native API executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/WinAPI/WinApi.cs": "0149e29114d5b97a71cd651b6bcdfa742de8b64e0e22487d3660dcb15359b579"
+  },
+  "whole_files_read": 83,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v32-20261019.json",
+  "coverage_sha256": "9099bd593b77b434bae6e04fea9338e7c30fa5691ef03f058576bf3d61f54769",
+  "findings": [
+    "GetProcessPath uses OpenProcess limited-information access and closes successful handle in finally. Path buffer is fixed260 characters with no retry on insufficient buffer; failed query returns null without distinguishing reason. Negative pid converts to uint without explicit validation.",
+    "FindWindow/FindWindowEx/RealGetWindowClass string declarations omit explicit Unicode charset, whereas some other declarations use Auto or Unicode. Non-ASCII matching needs runtime verification; reviewed class names are generally ASCII.",
+    "GetWindowClassName ignores native returned length/error. IsWindowHasClassName sizes buffer from requested name length; truncation can make longer names indistinguishable from prefixes. This is a static prefix-match concern, not a runtime reproduction.",
+    "FindAllWindowsEx is a lazy live enumeration, not an atomic snapshot. Window creation/destruction during iteration can affect observed set.",
+    "AccessibleObjectFromPoint is declared returning nint although result is treated conceptually as status; x86/x64 ABI and HRESULT interpretation require qualification. No automatic exception conversion or status validation is provided by this wrapper.",
+    "GetWindowLong/SetWindowLong expose int values, suitable only for intended narrow style fields, not a general pointer-width accessor. SetWindowLong lacks SetLastError configuration here.",
+    "RestoreWindowToForeground ignores final retry result. Many native return values remain caller responsibility; declarations alone do not establish successful hook, window, PIDL or input operation."
+  ],
+  "limits": [
+    "No Windows API reference/ABI runtime validation; static concerns not asserted as reproduced failures. No dedup library production change.",
+    "148/500 repositories fully reviewed; ExplorerTabUtility partial83/104. Native pHash investigation deferred."
+  ]
+}
