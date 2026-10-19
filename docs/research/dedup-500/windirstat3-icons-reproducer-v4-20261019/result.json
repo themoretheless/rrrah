@@ -1,0 +1,21 @@
+{
+  "status": "passed_original_stale_result_admission_with_captured_UI",
+  "source_pins": {
+    "windirstat/Controls/IconHandler.cpp": "18929ac679c305ddc2c2b86c112b9ae0f62baf827cd156481209d7bf38d8e61d",
+    "windirstat/Controls/IconHandler.h": "0eeb90b3f9afc2520264948a90747c448e2f20fd8e96e9bbed210b0fdc3e021d"
+  },
+  "extracted_body_sha256": "a41bbe69c8e2102722a6190eddbde282b6fff3b54dfad947a2000fa3e3f4f715",
+  "admission_controls": 18,
+  "findings": [
+    "Request identity must match pending item before writing icon/description; old completion at reused item address rejected without consuming newer request.",
+    "Matched but hidden/removed-list item consumes pending identity without publishing a UI update.",
+    "Read stop callsite orders I/O interruption, suspend, cancellation/join, wrapper join; aligns with prior queue lifecycle preconditions.",
+    "Offline icon requests use synthetic extension-only path to avoid opening original cloud placeholder; actual shell behavior not run."
+  ],
+  "limits": [
+    "Exact original delivery statements compiled with synthetic Item/Control/icon tokens; no real Windows window, shell call or freed pointer execution.",
+    "Actions.cpp scan suspend/resume/stop/start excerpts only; no whole-file credit or runtime cancellation proof.",
+    "Two complete icon source/header files read, but GDI+ rendering and shell icon ownership not runtime-qualified.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}

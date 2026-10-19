@@ -1,0 +1,33 @@
+{
+  "status": "partial_source_original_UI_admission_controls_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/Controls/IconHandler.cpp": "18929ac679c305ddc2c2b86c112b9ae0f62baf827cd156481209d7bf38d8e61d",
+    "windirstat/Controls/IconHandler.h": "0eeb90b3f9afc2520264948a90747c448e2f20fd8e96e9bbed210b0fdc3e021d"
+  },
+  "partial_file": {
+    "path": "windirstat/WinDirStatModel.Actions.cpp",
+    "scope": "Scan suspend/resume/stop/start excerpts only"
+  },
+  "whole_files_read": 8,
+  "controls": "docs/research/dedup-500/windirstat3-icons-reproducer-v4-20261019/result.json",
+  "controls_sha256": "85774dca4fac8fc2b9e73d3016e40ef356c7426145eca4c404f70b259d82bf79",
+  "coverage": "docs/research/dedup-500/windirstat3-icons-reproducer-v4-20261019/coverage.json",
+  "coverage_sha256": "f2e602755cb8b2ccf00beb91af1b4c39ff04c17c32cd3e2560908bd8468071f6",
+  "reproducer": "scripts/qualify-windirstat3-stale-icons-20261019.py",
+  "reproducer_sha256": "3953c29c7f35e9fdd3953a4887b6205218f8c33b4be020f966f604ac8f2131c2",
+  "findings": [
+    "Request identity must match pending item before writing icon/description; old completion at reused item address rejected without consuming newer request.",
+    "Matched but hidden/removed-list item consumes pending identity without publishing a UI update.",
+    "Read stop callsite orders I/O interruption, suspend, cancellation/join, wrapper join; aligns with prior queue lifecycle preconditions.",
+    "Offline icon requests use synthetic extension-only path to avoid opening original cloud placeholder; actual shell behavior not run."
+  ],
+  "limits": [
+    "Exact original delivery statements compiled with synthetic Item/Control/icon tokens; no real Windows window, shell call or freed pointer execution.",
+    "Actions.cpp scan suspend/resume/stop/start excerpts only; no whole-file credit or runtime cancellation proof.",
+    "Two complete icon source/header files read, but GDI+ rendering and shell icon ownership not runtime-qualified.",
+    "No production adoption; pHash native investigation deferred."
+  ]
+}
