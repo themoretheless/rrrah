@@ -1,0 +1,50 @@
+{
+  "status": "partial_source_all_notebooks_reviewed",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "examples/Encoding_generation.ipynb": "234d915b9a759d8e13259fe86739f7c7ccb06427cb94df96bd6f2bebe1e87a8f",
+    "examples/Finding_duplicates.ipynb": "3898ac105f964c46a6aed14bf30c1817cd33ea1c21d95f0c3c35d6ba74e78011",
+    "examples/CIFAR10_duplicates.ipynb": "9894b1d5a940fadb222a31a39133cb5f7b52e635a167c7040fef308d2ec9e6b0"
+  },
+  "manual_whole_text_files": 68,
+  "total_reviewed_by_declared_methods": 110,
+  "tracked_blobs": 114,
+  "controls": "docs/research/dedup-500/imagededup2-notebook-images-reproducer-v16-20261019/result.json",
+  "controls_sha256": "ecd3ea07114c7a150a04ce49cb5e9625235e49c1c1df30dd8ceec9649fe3e58f",
+  "coverage": "docs/research/dedup-500/imagededup2-notebook-images-reproducer-v16-20261019/coverage.json",
+  "coverage_sha256": "8421217fb49c9d20fdb7c94624c77221e83139eb7e1be123935e653c245e0dc2",
+  "reproducer": "scripts/inspect-imagededup2-notebook-images-20261019.py",
+  "reproducer_sha256": "673e1c9f3861cd0c6bfde797cfcb13aa5538df2b9819dad80d756066a74c29f6",
+  "visual_review": {
+    "saved_PNG_outputs": 11,
+    "contact_sheets": [
+      {
+        "path": "docs/research/dedup-500/imagededup2-notebook-images-reproducer-v16-20261019/contact-0.png",
+        "sha256": "00266af0b050a8eaa271305d434045ae7041926f8644c965e63e4dd4d0b4da22"
+      },
+      {
+        "path": "docs/research/dedup-500/imagededup2-notebook-images-reproducer-v16-20261019/contact-1.png",
+        "sha256": "cc1d5b40d97150579d763695d3ad22a9ddaecfa88f1e7e1f98c2c5f9c8cd4dc5"
+      },
+      {
+        "path": "docs/research/dedup-500/imagededup2-notebook-images-reproducer-v16-20261019/contact-2.png",
+        "sha256": "b7f440dc3be2efdb883de16c89de84d664cf6370e513add2a7122fbb64b2a747"
+      }
+    ],
+    "observed": "TwoUKBench clothing comparisons;CIFAR car-front/car-rear/horse/aircraft/deer grids. All11outputs visible; similarity examples, not byte-identity or current inference proof."
+  },
+  "findings": [
+    "All remaining notebook source and text outputs read separately.",
+    "Historical CIFAR10 output explicitly uses imagededup0.0.4/TensorFlow2.0.0/Python3.6; no current-model timing or quality qualification.",
+    "CIFAR example copies train and test into a flat directory, then filters by basename; namespace overlap must be checked before generalizing to other datasets.",
+    "Embedding array displays contain ellipses; cannot reconstruct full vectors or verify original model output from saved text."
+  ],
+  "limits": [
+    "No notebook cells, shell commands, models or downloads executed.",
+    "PNG decoding is not visual review until sheets inspected; no matching-quality proof.",
+    "All3contact sheets subsequently inspected; decoded_pending_visual_review in raw result records earlier capture stage.",
+    "Initial base64 strict decoder rejected whitespace; corrected normalization retained separately, not image corruption."
+  ]
+}
