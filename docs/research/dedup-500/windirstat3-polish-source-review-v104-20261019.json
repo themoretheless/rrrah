@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Polish catalog; pinned bytes reverified; v91 automated structural evidence retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_pl.txt": "7422499aa17bfd4a70fbee2ebf19d1d545d56571bd8f1dd3a233a72ef022a10a"
+  },
+  "whole_files_read": 237,
+  "coverage": "docs/research/dedup-500/windirstat3-polish-coverage-v104-20261019.json",
+  "coverage_sha256": "2eae5ae7f09f07e7e61cd3cc3740500f088c36cc7cedc25011c39f4f84249a84",
+  "findings": [
+    "Prawdopodobne duplikaty, Prefiks skrótu and Hasz próbek preserve probability/prefix/sampling distinctions. Advanced option says sample hashes above64MiB.",
+    "Recovery result requests checking file data, possible recovery remains conditional, source metadata changes require rescan and same-volume restore warns it may overwrite deleted data. No disk recovery tested.",
+    "Hardlinks vary between twarde łącza, dowiązania twarde and dowiązania trwałe; junction label Połączenia is generic. Symbolic links retain a separate label.",
+    "Roaming-profile removal caption says profilowanie roamingu rather than roaming profiles, potentially obscuring the operation. File-selection tooltip retains Open in English.",
+    "Selected-count wording has fixed grammatical forms across counts; numeric field parity does not test language pluralization. Sparse action is distinct from compression, logical/physical sizes and regex/glob are explicit.",
+    "Permanent deletion labels are not secure-erasure evidence. Cleanup %p/%n/%sp/%sn remain intact; MSI pl-PL/1045/1250 requires separate installer encoding validation."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Polish UI, mnemonic conflicts, installer or Windows runtime verified. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
