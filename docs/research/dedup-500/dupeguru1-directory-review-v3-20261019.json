@@ -1,0 +1,137 @@
+{
+  "status": "partial_directory_exclusion_review_with59_original_tests",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "previous": "docs/research/dedup-500/dupeguru1-scanner-helpers-review-v2-20261019.json",
+  "previous_sha256": "3531760884c45c043b93ced8e47628dc73c6554a5dbc4838be72f46c5ccb0357",
+  "new_whole_blobs": [
+    {
+      "path": "core/directories.py",
+      "git_blob": "a30e263a0043632d0cde680ca905e746c3ca8c96",
+      "sha256": "8ee772b58be5afb623c04797c896b0f48adf71694d882c55db61cb845acf2c68",
+      "bytes": 10673,
+      "fully_read": true
+    },
+    {
+      "path": "core/ignore.py",
+      "git_blob": "095da4fe236072bcd00006d36aef9cc632301b3e",
+      "sha256": "9475f525cd3b349232b0e8d0a7bec94f1e5eb036f7ebc3cae321fb6581c5ff3c",
+      "bytes": 4193,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/ignore_test.py",
+      "git_blob": "7e859cebe60507682015606d1bd98f3d18a1a53f",
+      "sha256": "5903d5d863ca29d0bbd67a76e6f2a57b9c3ca8aa735f3ff3ea3b971ea47cc001",
+      "bytes": 4351,
+      "fully_read": true
+    },
+    {
+      "path": "core/exclude.py",
+      "git_blob": "e304ef122f17a5d1baf1447926c3828917268f85",
+      "sha256": "d81a49065b6895b689ccc95cac2f45e19f5d1ea54ec76e435d8a9fc4e461b331",
+      "bytes": 18256,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/directories_test.py",
+      "git_blob": "8e0fe7bf4b38f181cc4e708d9cb9e72d418b592c",
+      "sha256": "28ad0ff3b7707382d0b6d17846a53d74ba7e43407038fa1edcf591f301009e6a",
+      "bytes": 21405,
+      "fully_read": true
+    },
+    {
+      "path": "core/markable.py",
+      "git_blob": "306b261033701795a193729615a0dac6e9bd695f",
+      "sha256": "ecf01bd7d1f451952721823ccd9e4728174b2c102b85cf39bcc36379dcf38205",
+      "bytes": 3064,
+      "fully_read": true
+    },
+    {
+      "path": "core/tests/exclude_test.py",
+      "git_blob": "64314b9767f8e1f408360a8dbea2605ae21d38c5",
+      "sha256": "13675048f0bc90ae1ec22cb8ac8cd6c2ed31bc0341ea7ba2e2ffecd2604a84e6",
+      "bytes": 17739,
+      "fully_read": true
+    }
+  ],
+  "cumulative_whole_read_blobs": 32,
+  "upstream_additional_tests_passed": 59,
+  "upstream_cumulative_distinct_tests_passed": 91,
+  "selected_runtime": {
+    "exit_code": 0,
+    "command": [
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+      "-m",
+      "pytest",
+      "core/tests/fs_test.py",
+      "core/tests/directories_test.py",
+      "core/tests/ignore_test.py",
+      "-q",
+      "--basetemp",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-directory-tests-20261019/pytest-temp",
+      "--junitxml",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-directory-tests-20261019/junit.xml"
+    ],
+    "source_pins": {
+      "core/tests/fs_test.py": "95350ab91b9f90104df91e4344f281acdb1a006a2886a02f3857d320fa1d3ff1",
+      "core/tests/directories_test.py": "28ad0ff3b7707382d0b6d17846a53d74ba7e43407038fa1edcf591f301009e6a",
+      "core/tests/ignore_test.py": "5903d5d863ca29d0bbd67a76e6f2a57b9c3ca8aa735f3ff3ea3b971ea47cc001",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+      "core/directories.py": "8ee772b58be5afb623c04797c896b0f48adf71694d882c55db61cb845acf2c68",
+      "core/exclude.py": "d81a49065b6895b689ccc95cac2f45e19f5d1ea54ec76e435d8a9fc4e461b331",
+      "core/ignore.py": "9475f525cd3b349232b0e8d0a7bec94f1e5eb036f7ebc3cae321fb6581c5ff3c",
+      "core/markable.py": "ecf01bd7d1f451952721823ccd9e4728174b2c102b85cf39bcc36379dcf38205",
+      "core/tests/conftest.py": "6a4c8d9be734def8e8924e631f0fad0cfcd8b5197817b4ba689c72d84bf8799d"
+    },
+    "source_drift": [],
+    "log_sha256": "2dac6e87b442858ce97f0911d86546f1fcfbe7a0ed11b601fc47d05e8d9a0029"
+  },
+  "directory_controls": {
+    "status": "verified_original_acyclic_directory_controls",
+    "source_pins": {
+      "core/directories.py": "8ee772b58be5afb623c04797c896b0f48adf71694d882c55db61cb845acf2c68",
+      "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+      "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4"
+    },
+    "directory_symlink": {
+      "paths": [
+        "alias/payload.bin",
+        "normal/payload.bin"
+      ],
+      "same_physical_file": true,
+      "scanner_publishes_group_of_two": true
+    },
+    "vanished_root_returns_empty_stream": true,
+    "hidden_default_excluded_explicit_normal_included": true,
+    "pre_cancel_raises": true,
+    "limits": [
+      "Task-owned synthetic acyclic symlink only; no external directory or cycle traversed.",
+      "Duplicate physical aliases are observed behavior, not two independently stored payloads.",
+      "Original iterator lacks a report-completeness diagnostic; empty stream alone does not prove complete traversal.",
+      "No GUI, native-platform or full repository qualification; no production adoption."
+    ]
+  },
+  "reproducer": "docs/research/dedup-500/dupeguru1-directory-reproducer-v3-20261019",
+  "harness": "scripts/qualify-dupeguru1-directory-controls-20261019.py",
+  "harness_sha256": "74ab1bfbbb5e588d72d7ad6cf1acd4ac8b1b4f21ec75e4490aa0f2c16d61c87a",
+  "findings": [
+    "All59unchangedoriginalfs/directories/ignoretestspass; nooverlapwithprevious32path/utiltests.",
+    "Originaldirectorywalkerfollowsacyclicdirectorysymlinks:twolexicalpathstosamephysicalfilebecomeatwo-membercontentsgroup. This doesnotrepresenttwostoredcopies.",
+    "Vanishedselectedrootproducesemptyiteratorwithoutreport-levelincompletenessdiagnostic; sourcecatchesOSError, testcontrolconfirmsobservedemptyresult.",
+    "HiddendirectorydefaultandexlicitNORMALoverride,reference/excludedstateinheritanceandXMLignore-listbehaviorcoveredbyselectedoriginaltests.",
+    "Actualpre-cancelraises; no boundoncycle/mid-recursionlatencyclaimed.",
+    "Ourphysical-hardlink/alias,cycleandmissing-inputexactregressionsalreadycoverowncontract; no redundant regression orforeignbehavioradoption."
+  ],
+  "read_but_not_executed": [
+    "core/tests/exclude_test.py"
+  ],
+  "limits": [
+    "32wholefilesread; entiredupeGuru/GUI/native/media/translationsremainincomplete.",
+    "Selectedfsdigestaggregationtestsarenotproofofcachefreshness; priorrestoredmtimecounterexampleremainspreserved.",
+    "Directorysymlinkfixtureacyclicandentirelytaskowned; nocycle, externaluserdata,tracingormemory-errorprobe.",
+    "User-deferred pHash item remains deferred; fullrepositorycount145/500."
+  ]
+}

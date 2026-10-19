@@ -1,0 +1,25 @@
+{
+  "status": "verified_original_acyclic_directory_controls",
+  "source_pins": {
+    "core/directories.py": "8ee772b58be5afb623c04797c896b0f48adf71694d882c55db61cb845acf2c68",
+    "core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+    "core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4"
+  },
+  "directory_symlink": {
+    "paths": [
+      "alias/payload.bin",
+      "normal/payload.bin"
+    ],
+    "same_physical_file": true,
+    "scanner_publishes_group_of_two": true
+  },
+  "vanished_root_returns_empty_stream": true,
+  "hidden_default_excluded_explicit_normal_included": true,
+  "pre_cancel_raises": true,
+  "limits": [
+    "Task-owned synthetic acyclic symlink only; no external directory or cycle traversed.",
+    "Duplicate physical aliases are observed behavior, not two independently stored payloads.",
+    "Original iterator lacks a report-completeness diagnostic; empty stream alone does not prove complete traversal.",
+    "No GUI, native-platform or full repository qualification; no production adoption."
+  ]
+}
