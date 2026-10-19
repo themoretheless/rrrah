@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Dutch catalog; pinned bytes reverified; previous complete structural comparison retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_nl.txt": "0208d167e7b464a2de2dce1c54e1aacd4a06f1a1c70bf9b821456fc929b34029"
+  },
+  "whole_files_read": 231,
+  "coverage": "docs/research/dedup-500/windirstat3-dutch-coverage-v98-20261019.json",
+  "coverage_sha256": "c477a79322d90234d5f8bbb15d1d0055e769257b30fcb80b5ad199ba451efe71",
+  "findings": [
+    "Vermoedelijke duplicaten, Hashvoorvoegsel and Steekproefhash preserve probability/prefix/sampling distinctions. Large-file option says sample hashes for files larger than64MiB.",
+    "Recovery completion requests checking file data, metadata-changed requests rescan and same-volume restore warns of overwriting deleted data. Te herstellen and Mogelijk te herstellen remain distinct. No runtime recovery proof inferred.",
+    "Junctions translated Kruispunten is a literal crossroads term that can obscure filesystem semantics; hardlinks and symbolic links have separate labels.",
+    "Sparse-file action says Bestand spars maken, distinct from compression; glob and regex and logical/physical size remain separate. These text distinctions do not test implementation.",
+    "Delete wording emphasizes impossible undo, which describes permanent-delete intent and does not establish secure erasure. Cloud warning describes potential downloads and refers to settings.",
+    "Parent/child navigation and cleanup %p/%n/%sp/%sn fields remain explicit. MSI nl-NL/1043/1252 declarations alone do not prove Windows rendering or encoding."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No rendered Dutch interface, mnemonic conflict or Windows installer/runtime verification. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
