@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of four files; byte verification against pinned Git objects. No original application execution.",
+  "new_whole_files_read": {
+    "windirstat/ItemTop.h": "5cefeba97a12a56695b1ce86703ac4d6e98fd0e41b7b14edca6e500b0d06b5b2",
+    "windirstat/ItemTop.cpp": "9a3ab2dcd87d9f33b1613e9ce73e9635dc91cc81c3915e3f66a9d5c11cb9b83b",
+    "windirstat/Controls/FileTopControl.h": "e6d6b7188969e3c510fc8bd823f1a80ca6802f2fdc6c341e5c8c8d034e1cab09",
+    "windirstat/Controls/FileTopControl.cpp": "3762d7664b0945e4b769af98c0b77d406bc60a9f005ccf2341b773b0e62d661a"
+  },
+  "whole_files_read": 68,
+  "coverage": "docs/research/dedup-500/windirstat3-top-files-coverage-v25-20261019.json",
+  "coverage_sha256": "14ea0f6d4faf6db74647fa4a10b84c3415995a45780e612b1c666408b6c25221",
+  "findings": [
+    "ProcessTop queues candidates unless LargeFileCount0. SortItems drains pending pointers into m_sizeMap and keeps topN via minheap ordered by logical size. All candidates are retained for refill after deletions/limit changes; topN is not an overall memory bound.",
+    "Changing topN forces rebuild from retained candidates; lowering to0 clears displayed heap on sort, while subsequent ProcessTop calls at0 do not admit new candidates. Enabling tracking later cannot recover candidates omitted while disabled without upstream rescanning/reprocessing; caller behavior not fully qualified.",
+    "Only strictly larger new size replaces heap minimum; equal-size cutoff membership depends on earlier queue order. Display sorting is separate from membership.",
+    "RemoveItem first drains pending candidates, traverses the removed subtree collecting file pointers, erases all matching candidates and schedules visual resort. This prevents already-queued removed descendants from being reintroduced by the next sort under the intended quiescent lifecycle. No concurrent lifecycle runtime test.",
+    "m_sizeMap and m_topItems have no pointer deduplication at admission; itemTracker is keyed by CItem pointer. Repeated ProcessTop of same object could occupy multiple heap slots; no claim actual callers violate single-admission invariant.",
+    "CItemTop stores borrowed CItem pointer, owns result children, delegates size/date/path data and asynchronously requests icons. Correctness requires lifecycle removal before source node destruction; whole source model/actions remain incomplete.",
+    "AfterDeleteAllItems resets candidate/tracker/heap and root; pending queue clear is a separate public operation. No assertion all callers reset both before source model destruction until remaining lifecycle source is reviewed."
+  ],
+  "limits": [
+    "No full Windows app, UI painting, queue stress or heap workload executed in this increment.",
+    "No production optimization adopted without measurements.",
+    "Native pHash investigation remains deferred."
+  ]
+}
