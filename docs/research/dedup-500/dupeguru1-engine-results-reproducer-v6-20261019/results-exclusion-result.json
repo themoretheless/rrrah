@@ -1,0 +1,30 @@
+{
+  "exit_code": 0,
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-20261019/venv/bin/python",
+    "-m",
+    "pytest",
+    "-p",
+    "private_appdata_plugin",
+    "core/tests/results_test.py",
+    "core/tests/exclude_test.py",
+    "-q",
+    "--basetemp",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-results-exclusion-tests-20261019/pytest-temp",
+    "--junitxml",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupeguru1-results-exclusion-tests-20261019/junit.xml"
+  ],
+  "source_pins": {
+    "core/tests/results_test.py": "2700f2091dc4ce325d9f02f7ab2401d473be341b4081b73e5897065b1e8037ad",
+    "core/tests/exclude_test.py": "13675048f0bc90ae1ec22cb8ac8cd6c2ed31bc0341ea7ba2e2ffecd2604a84e6",
+    "core/tests/base.py": "4d59b4619b043fb956c5ffe9ba95cbaff6556a2263cc2c39b9d7e8113e726d0c",
+    "core/results.py": "61cf334eb37f2343ba183b0e790f1f7590acdd02199b7c617d6f0757af93bd39",
+    "core/exclude.py": "d81a49065b6895b689ccc95cac2f45e19f5d1ea54ec76e435d8a9fc4e461b331",
+    "core/app.py": "ed7ba34c717236333b88876bf8152ec515c47baf8badbe29c77ec2e3b157e04d",
+    "hscommon/desktop.py": "50f9cd113cf01991933bcfa5509d00b9072d280cb04916495d72a0ea6605ec36"
+  },
+  "source_drift": [],
+  "plugin_sha256": "29c8f01e725a0a9db19a66641b20751c1a1dd3ff5a42c086e73ec9387ce454a5",
+  "log_sha256": "f160ae49c5cfda18e677bf2b9595b4399ed116d2b40bb0e11af2073bd318615e",
+  "scope": "Original complete test modules unchanged; only Desktop special-folder lookup redirected to per-test task-owned appdata. No matching, grouping, persistence or exclusion logic replaced."
+}
