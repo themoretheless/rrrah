@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole2files manual source review and pinned Git byte comparison. No Windows GUI execution.",
+  "new_whole_files_read": {
+    "windirstat/Controls/ExtensionListControl.h": "ff09a94d4a388312396c335251809fbea076b0ca7f844b6c4b04070f291789ed",
+    "windirstat/Controls/ExtensionListControl.cpp": "8cdd824978ad6862d0e975c86dd6b3c5f27fd1071b1a642329fecf3940f2ab06"
+  },
+  "whole_files_read": 115,
+  "coverage": "docs/research/dedup-500/windirstat3-extension-control-coverage-v41-20261019.json",
+  "coverage_sha256": "e1dd62d3bf2127c3d6573342e8c9b5c8842f9932955fa89b38fe0240e5b580ff",
+  "findings": [
+    "Extension rows copy logical file bytes/counts from extension records. GetBytesFraction divides copied bytes by rootSize supplied as model physical size, returns0if denominator0 and otherwise has no clamp. This confirms mixed quantity basis noted previously; actual sparse/compressed UI corpus not run.",
+    "SetExtensionData deletes/rebuilds rows, optionally aggregates nonempty unregistered extensions, keeps no-extension bucket separate and chooses largest contributing record color. Aggregate disables search/exclusion actions and shell lookup.",
+    "OnSearchExtension uses escaped suffix regex and excludes folders; empty extension uses no-dot regex. Thus leading-dot/trailing-dot semantics follow GetExtension implementation rather than platform MIME/type identity.",
+    "OnExcludeExtension always appends glob-style star+extension before CompileFilters and full refresh. It does not branch on FilteringUseRegex, so regex-mode compatibility remains a concrete follow-up; no actual GUI/filter invocation in this increment.",
+    "Async shell lookup supplies extension rather than physical source path; description remains empty until icon available. Grouping is based on HKCR registration snapshot, not content encoding.",
+    "Rows have owned deletion notifications; selected aggregate highlights all unregistered extensions. Selection/focus routing is presentation state, not file equality evidence."
+  ],
+  "limits": [
+    "No actual extension percentage, regex-mode exclude, rendering, shell or concurrency runtime test.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
