@@ -1,0 +1,25 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of Turkish catalog; pinned bytes reverified; v91 structural parity retained.",
+  "new_whole_files_read": {
+    "windirstat/res/langs/lang_tr.txt": "3f4c80854e1d74889b4b38be8f77c6518ebf06e2064aee14a5d31bdf698a0c49"
+  },
+  "whole_files_read": 241,
+  "coverage": "docs/research/dedup-500/windirstat3-turkish-coverage-v108-20261019.json",
+  "coverage_sha256": "a3e198c7a0e26052b6a591c0782608062473c1970f49e3bf121601666d06fc0f",
+  "findings": [
+    "Olası kopyalar, Hash Öneki and Örneklem karması retain probable/prefix/sampling distinctions. Advanced option explicitly names sample hashing above64MiB.",
+    "Recovery completion says verify file data, recoverable versus recovery-may-be-possible remain distinct, source metadata changes request rescan and same-volume restore warns about overwritten deleted data. No actual disk restoration tested.",
+    "Not-accessible label yok means absent/none and may blur inaccessibility with nonexistence. Index column Dizin can also mean directory; context is needed.",
+    "Hash terminology alternates Hash and Karma; wildcard filtering keeps English Glob pattern/regex while account filter uses düzenli ifade. Structural parity alone does not ensure consistent terminology.",
+    "Sparse action Dosyayı seyrekleştir remains separate from compression. Hardlinks, symbolic links and junctions have separate labels; logical/physical size and binary units remain explicit.",
+    "Cloud warning describes possible download and adjustable settings. Permanent deletion is not secure-erasure evidence. Cleanup tokens retained; MSI tr-TR/1055/1254 requires separate Windows installer verification."
+  ],
+  "structural_evidence": "docs/research/dedup-500/windirstat3-all-catalogs-structural-review-v91-20261019.json",
+  "limits": [
+    "No native-speaker certification, rendered Turkish UI, locale-sensitive mnemonic behavior, installer or Windows runtime checks. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed repository count remains147/500."
+  ]
+}
