@@ -1,0 +1,24 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of three retained nontruncated source evidence files; SHA256 matched registry. Full clone still running in session34023; complete pinned tree inventory not yet available.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Interop/ShellPathComparer.cs": "3787d73eb4c2e9a9d821d2277dcd46a7659efcb156e8a4545644db2bb3199db0",
+    "ExplorerTabUtility/App.xaml.cs": "0c2b61f6aba8c60edc9555d0fa5645de26f9f79c98ac7f543d899147986e1a34",
+    "ExplorerTabUtility/Helpers/Constants.cs": "c6c8c2a5dc8411d7f6b946bc60ccafa8e6bf44eb9f06030153679bb987881a26"
+  },
+  "findings": [
+    "String-path overloads accept OrdinalIgnoreCase equality before shell lookup, so same spelling/case-insensitive spelling does not require source existence and is not filesystem identity or content equality. Do not adopt as exact file comparison.",
+    "PIDL comparison accepts Shell CompareIDs equal or fallback case-insensitive SHGetNameFromIDList URL equality. Shell item equivalence is intended for navigation/tab reuse, not digest/byte equality.",
+    "IsEquivalent catches exceptions and returns false, conflating lookup failure with inequality; a scanner needs separate issue evidence rather than treating unreadable source as a healthy unique file.",
+    "Temporary PIDLs are released with FreeCoTaskMem in finally blocks. Desktop shell COM pointer is released after RCW creation. Dispose releases RCW and finalizer calls Dispose; no disposed-state guard exists on comparison methods. Thread/apartment behavior remains unverified.",
+    "ParseDisplayName declaration was not inspected, so whether HRESULT failures become exceptions is not established here. No claim of a concrete unchecked-HRESULT bug.",
+    "App startup uses a named mutex to admit one instance, second instance displays information and exits. Constants define keyboard profile defaults and update URL; no hooks, updates or external operations executed."
+  ],
+  "limits": [
+    "Three retained complete files only; no whole-repository inventory or full-source completion claim.",
+    "Windows COM/runtime and WPF behavior not tested. No foreign production code adopted.",
+    "Native pHash investigation deferred; completed count remains148/500."
+  ]
+}
