@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole4files manually read; pinned Git bytes compared. No GDI/UI execution.",
+  "new_whole_files_read": {
+    "windirstat/Views/VisualizationPane.h": "1ccd64c5cfe008c201c84af0e0a63dfd1f875d5cd62165b251a705a1d8604a4b",
+    "windirstat/Views/VisualizationPane.cpp": "4387e6729de2e5e7f1abbf10ec05b4d558179790c5a67b57a30d0f128c728869",
+    "windirstat/Views/TreeMapView.h": "95fba6cf3e0e1cb5566e8ca333d0d0e016cb4be5ed3f474e5508628da62268bb",
+    "windirstat/Views/TreeMapView.cpp": "88f2449489582fc898155b7f89603b5c19883496997c849333968da79e17e02b"
+  },
+  "whole_files_read": 121,
+  "coverage": "docs/research/dedup-500/windirstat3-visualization-pane-coverage-v44-20261019.json",
+  "coverage_sha256": "2b679c4b0d0468f42cd6003a3175018b86772015d5c0ded76ff31374fb7a7d96",
+  "findings": [
+    "VisualizationPane owns3renderer windows and maps enum indices by static assertion. Switching hides/trims previous graph; hidden visualization trims active cache; all model updates forwarded to all renderer instances.",
+    "Suspension uses unsigned reference count: first suspend forwarded, nested requests retained, only final resume forwarded. Unmatched resume asserts and returns. Overflow and cross-thread calls unqualified; intended UI coordinated lifecycle.",
+    "TreeMapView prefers top-down32bit DIB for direct rendering with compatible-bitmap fallback; graph renderer DrawTreeMap receives current zoom model and options. No actual bitmap allocation/performance measurement.",
+    "Zoom uses4pixel frame and corresponding offsets for hover/selection hit geometry. HasValidLayout delegates renderer root validation, not content/source revalidation.",
+    "Extension highlights iterate visible leaf geometry; selected items filtered to current zoom ancestry and hardlink display mapping. Absent/invalid rectangles skipped; single-selection border may expand within client.",
+    "TreeMapView cache trim delegates ClearLayout and TrimMemory. Actual renderer allocation, layout/point correctness and performance remain unreviewed until TreeMap implementation inspected."
+  ],
+  "limits": [
+    "No Windows rendering, memory accounting, resize/scan overlap, enum-fault or geometry runtime tests.",
+    "No foreign production code adopted; native pHash investigation deferred."
+  ]
+}
