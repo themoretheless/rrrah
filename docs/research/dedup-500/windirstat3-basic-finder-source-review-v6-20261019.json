@@ -1,0 +1,30 @@
+{
+  "status": "partial_source_original_long_path_string_controls_passed",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "windirstat/Finder.h": "5f34b1a5ff9d801ddc9f57c41ff8d0bab9384089fead29805c4c59b05064a3a0",
+    "windirstat/FinderBasic.h": "b53bd137f869f69e48ad27565f82d5fa1f2b3a0731bc2348432f7c70b10cf415",
+    "windirstat/FinderBasic.cpp": "0f8939af73c69be6cc378dd15549b08228b3b63b15bf225e2139fe8882a8acb5"
+  },
+  "whole_files_read": 13,
+  "controls": "docs/research/dedup-500/windirstat3-basic-finder-reproducer-v6-20261019/result.json",
+  "controls_sha256": "8f8ed7934d76569ce4d0b55312e0902bb1ea2d37675627e1617ac2a316a9b0ba",
+  "coverage": "docs/research/dedup-500/windirstat3-basic-finder-reproducer-v6-20261019/coverage.json",
+  "coverage_sha256": "fa39663813293a76085af67c407a0a246c694b643601f214182f22e4f79ac3e1",
+  "reproducer": "scripts/qualify-windirstat3-long-paths-20261019.py",
+  "reproducer_sha256": "38d85efb3c3a4c02f8634d047c171d526abaae9f3d7748f5d7766d1ec87315a3",
+  "findings": [
+    "Original conversion preserves prefixed/relative paths; drive/UNC conversion idempotent on controls.",
+    "FinderBasic uses4MiB local and64KiB remote directory buffers, falling back when file-ID enumeration unsupported.",
+    "Unknown file-ID support yields index0; not a unique identity for merging files.",
+    "UNC skips compressed-size fallback to avoid blocking unsupported remote IOCTLs; WSL9P capacity correction separate."
+  ],
+  "limits": [
+    "Original method and constants compiled unchanged; portable standard string scaffolding.",
+    "Mac wchar_t/stdlib, not Windows UTF16 filesystem resolution or real directory enumeration.",
+    "No FinderBasic WinAPI/MTP/hardlink/scan/filter integration qualification.",
+    "Three whole source files read; no production adoption; pHash native investigation deferred."
+  ]
+}
