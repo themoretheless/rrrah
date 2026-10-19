@@ -2,6 +2,52 @@ use rrrah_dedup::exact::{IssueKind, Options, scan};
 use std::{cell::Cell, fs};
 
 #[test]
+fn hidden_directories_and_empty_files_remain_in_exact_partitions() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    fs::create_dir_all(root.path().join(".hidden/deep")).unwrap();
+    fs::create_dir(root.path().join("visible")).unwrap();
+    let mut empty = [".empty", ".hidden/blank", "visible/zero"]
+        .map(|name| root.path().join(name))
+        .to_vec();
+    for path in &empty {
+        fs::write(path, []).unwrap();
+    }
+    let mut payload = [".hidden/deep/source", "visible/copy.bin"]
+        .map(|name| root.path().join(name))
+        .to_vec();
+    for path in &payload {
+        fs::write(path, b"binary\0payload\xff").unwrap();
+    }
+    fs::write(root.path().join(".hidden/deep/distinct"), [1, 2, 4]).unwrap();
+    empty.sort();
+    payload.sort();
+    let expected = BTreeSet::from([empty, payload]);
+    for verified in [false, true] {
+        let roots = [root.path().to_path_buf()];
+        let report = if verified {
+            rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+        } else {
+            scan(&roots, &Options::default(), || false)
+        };
+        assert!(report.complete(), "{report:?}");
+        assert!(report.issues.is_empty());
+        assert_eq!(report.files_observed, 6);
+        let actual = report
+            .groups
+            .iter()
+            .map(|group| {
+                let mut paths = group.paths.clone();
+                paths.sort();
+                paths
+            })
+            .collect::<BTreeSet<_>>();
+        assert_eq!(actual, expected);
+        assert!(report.aliases.is_empty());
+    }
+}
+
+#[test]
 fn unique_sizes_skip_payload_reads_without_weakening_verified_observations() {
     let root = tempfile::tempdir().unwrap();
     let mut total_bytes = 0_u64;
