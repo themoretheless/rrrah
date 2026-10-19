@@ -1,0 +1,613 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "tracked_blobs": 104,
+  "whole_files_read": 84,
+  "remaining_without_whole_file_credit": 20,
+  "rows": [
+    {
+      "path": ".gitattributes",
+      "git_blob": "1ff0c423042b46cb1d617b81efb715defbe8054d",
+      "whole_file_read": true,
+      "sha256": "45a7cbb7d9942ba7ffce0b20bc8dbe2d1196533bc6e4bd245871d77fb1eedfdc"
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "git_blob": "6716a3fbcaf9b1d1e08f279c4d84153bdbe6b501",
+      "whole_file_read": true,
+      "sha256": "43109d3813059034ce0dcf960875f2cf7bf7c783b3bbaaeabd736fa0a39cdd6c"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug-report.yml",
+      "git_blob": "78386706d484bd4df6294fd6eab574ca292f5ae6",
+      "whole_file_read": true,
+      "sha256": "608905760afed39b6397559a413fa43c80fe5773ea0cb6f3d09b5f518f0f54fd"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "git_blob": "2f96d25c86c117e7f44980cd9b0a6e6107472d3c",
+      "whole_file_read": true,
+      "sha256": "60099c2403f765396d83ee5e0c98e2aa1119cb0fdc2164e045f93fb7b78ab12e"
+    },
+    {
+      "path": ".github/workflows/build-release.yml",
+      "git_blob": "0df290b31d4582f1f96eb2a9f5b4927686f83a36",
+      "whole_file_read": true,
+      "sha256": "87d2b47c5657b9e5a9a5ccd5d2d3a52cc7ca43836c52b23fde6853ba633e84da"
+    },
+    {
+      "path": ".github/workflows/publish-chocolatey.yml",
+      "git_blob": "f59a84f140c582a03f943c92ae398e00269363e6",
+      "whole_file_read": true,
+      "sha256": "072654be6be29ea96f9bc432f8ab113ac0abde5c22e6b17c5e2c98b2c5c845d7"
+    },
+    {
+      "path": ".github/workflows/publish-winget.yml",
+      "git_blob": "00e233e7d2a85285145949005561bf820d163fd3",
+      "whole_file_read": true,
+      "sha256": "4082fe50a65fd12ba64c9c8dca11f3e45107d701ba48f9459b5a9d32989a104f"
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "8c4d7758277ef976ea881103751b3a5efca06a94",
+      "whole_file_read": true,
+      "sha256": "30f81b709ecdc42c740c6b6b7a6835d72a103714159eb1e1255849a8e1b528d1"
+    },
+    {
+      "path": "Assets/CustomLocation.gif",
+      "git_blob": "9411af1e87b78e2af9aa61a9c81a9f7107aaf9a8",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/DetachSnap.gif",
+      "git_blob": "a9e016421d07dc612fa7edfcdc90f4d85675229e",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/DuplicateTab.gif",
+      "git_blob": "42829af9ffb495babb9364cde411d2224633fe88",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/ExplorerTabUtility.gif",
+      "git_blob": "5b0db28636994e0c75c58bbd81d689a4decb734e",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/ExplorerTabUtilityLogo.gif",
+      "git_blob": "2537fb8db5f4b22a01908b3a5063da3055bda533",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/Form.png",
+      "git_blob": "a9a4fb7050c5534241d3f8e1fce07b05ecf6b448",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/Icon.png",
+      "git_blob": "10e82be5f4faa5acad81d421762ca6b4def305af",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/Menu.png",
+      "git_blob": "85ecdd15d40344320b0a387ecee9f8d2a9ccb9f8",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/NavigateBack.gif",
+      "git_blob": "4b235d7b7f734af1ff80a11dc5045c140c46c5fc",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/Preferences.png",
+      "git_blob": "b5ec92b9449431e212e2c3396112891bcce37609",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/ReopenClosedTab.gif",
+      "git_blob": "5cf7b6382ede24fe943c47a3c429463cfd1a0bee",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/RestorePrevious.png",
+      "git_blob": "696d746a4d955f02423001a1ed50916082628098",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/TabSearch.gif",
+      "git_blob": "1db9ae9cef29c91c22dca92263515807b957a59f",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/TabSearch.png",
+      "git_blob": "55ca3e0eb902f830ee9f0ad5d9fc4c1a913b1e3e",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/TheWhy.png",
+      "git_blob": "7c434b894bdeb8efe5b6253eb451ec365dfa081c",
+      "whole_file_read": false
+    },
+    {
+      "path": "Assets/WindowToTab.gif",
+      "git_blob": "64cd79430288eaf99ad5904d46d5dc7169933720",
+      "whole_file_read": false
+    },
+    {
+      "path": "ExplorerTabUtility.sln",
+      "git_blob": "d4b9c541140193bcb0ce4fe4f63a3bef7f9a86c5",
+      "whole_file_read": true,
+      "sha256": "aab9d04abb018546cf1f936fd5576f9e5d3e610f0fd83163b2afe43059afd5f8"
+    },
+    {
+      "path": "ExplorerTabUtility/App.xaml",
+      "git_blob": "385e340e0b9e7b3e74541aa0a413ae566f5698f8",
+      "whole_file_read": true,
+      "sha256": "6aae9e6e5452c48a3ebd319ca36e3f4c2eccae076e8293e993aba88f073381f7"
+    },
+    {
+      "path": "ExplorerTabUtility/App.xaml.cs",
+      "git_blob": "ff68cfe790b55e38100d98e6d15344b9b624196f",
+      "whole_file_read": true,
+      "sha256": "0c2b61f6aba8c60edc9555d0fa5645de26f9f79c98ac7f543d899147986e1a34"
+    },
+    {
+      "path": "ExplorerTabUtility/ExplorerTabUtility.csproj",
+      "git_blob": "b8d9016b91ac787d74a2cfe06694ba8d8b39312f",
+      "whole_file_read": true,
+      "sha256": "b8d86fd4351549e3a50901d05f05f02693bbceb8254049ee5d9cd2b88d8c777f"
+    },
+    {
+      "path": "ExplorerTabUtility/FodyWeavers.xml",
+      "git_blob": "0e5296674a939679b57e40674296ed69e0faf2e1",
+      "whole_file_read": true,
+      "sha256": "bd3aa3e520bb169160737dffd3dbd9b98e07246cfa0089af95f0d8ad68356c27"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/Constants.cs",
+      "git_blob": "03277e73440c7eddd7aa230f1be27dff8886785e",
+      "whole_file_read": true,
+      "sha256": "c6c8c2a5dc8411d7f6b946bc60ccafa8e6bf44eb9f06030153679bb987881a26"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/Helper.cs",
+      "git_blob": "55f7da111b52e1cdaa89f32b51d9fb455b167b48",
+      "whole_file_read": true,
+      "sha256": "d1e9d3f113a7403a42ca813e0e29710a057052c4de79fd6b5008d4bd5d38e236"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/HotKeyActionJsonConverter.cs",
+      "git_blob": "89cc9d4e9dab70489c6fa24c5e93b59d9e7f96a4",
+      "whole_file_read": true,
+      "sha256": "819a469c2b59d14c864a9be35c5b98072e7f9f420d267b1d37427590dfd88986"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/IntPtrConverter.cs",
+      "git_blob": "dfff92aeb388fb1ea7c10bc26f44d838384127ac",
+      "whole_file_read": true,
+      "sha256": "c463bb1e739c8ef531c017265e4d08ad5958de704cf3c548b925262b27bc73a9"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/KeyboardSimulator.cs",
+      "git_blob": "d1c7f135f5e772387bc1fcb13e3e86ecf34a61e8",
+      "whole_file_read": true,
+      "sha256": "163cc9fb28b19c49f10201e1b545e78c77d51e93951944be988f252cc49a643b"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/ProcessWatcher.cs",
+      "git_blob": "f869c964f228d63e65d2116a333f1ca846523684",
+      "whole_file_read": true,
+      "sha256": "e9e842ab8eb8b91feae4929dda1880eed0101a537b8680cc211265468dfff3a9"
+    },
+    {
+      "path": "ExplorerTabUtility/Helpers/StaTaskScheduler.cs",
+      "git_blob": "f8d133fc6c1d38a3d4f1d147d80f002d93d7e009",
+      "whole_file_read": true,
+      "sha256": "19e7c45837d4f578cf7a6b071242adc63dda57ab582f63e768e215a8a3f71bc5"
+    },
+    {
+      "path": "ExplorerTabUtility/Hooks/ExplorerWatcher.cs",
+      "git_blob": "0c71a89b4f29ab3166f43a208819e17fcba765ea",
+      "whole_file_read": true,
+      "sha256": "fe9518c1d5e1c29bc4d341553e4914a5aa756462d38a3960bc3374e7894a7c86"
+    },
+    {
+      "path": "ExplorerTabUtility/Hooks/IHook.cs",
+      "git_blob": "7fed91efb5de3dac2f400fa228e26ba6ab28dc08",
+      "whole_file_read": true,
+      "sha256": "6da074b640fe728b5e04906180b8e653f5a39b8299ada6669f3f9f17eaebbb7b"
+    },
+    {
+      "path": "ExplorerTabUtility/Hooks/Keyboard.cs",
+      "git_blob": "6d458970345ad0b1583d327a66659906dbfc4443",
+      "whole_file_read": true,
+      "sha256": "08e13a0aeb0da7385b19f14da7672a1bbb7a04e209e03cf5d607f96cca1f7a1e"
+    },
+    {
+      "path": "ExplorerTabUtility/Hooks/Mouse.cs",
+      "git_blob": "d8b523b4fdd2495845a298319a1caca78641d241",
+      "whole_file_read": true,
+      "sha256": "1f00cd1d3fc422e273be18887c4dd952b9bf8d0b36bf0ed240ef79822730405d"
+    },
+    {
+      "path": "ExplorerTabUtility/Icon.ico",
+      "git_blob": "4f0f98f8df09f0cdd4047ff05ca0323a7541a21a",
+      "whole_file_read": false
+    },
+    {
+      "path": "ExplorerTabUtility/Interop/IAccessible.cs",
+      "git_blob": "1389ea0cb3ef1bf3c160a74fce0b3d565b2d06a1",
+      "whole_file_read": true,
+      "sha256": "dc94259a0c89d148e509bec7ccb9be8f7e8a2f1b95340254c537d1fc15028949"
+    },
+    {
+      "path": "ExplorerTabUtility/Interop/IServiceProvider.cs",
+      "git_blob": "845a100676a7dba62dc19a2b7fc9538f15b53e5b",
+      "whole_file_read": true,
+      "sha256": "7d927ca9dd7b0a5cf396236c391a427841109c255be9ca919f23aca66ccd7dd0"
+    },
+    {
+      "path": "ExplorerTabUtility/Interop/IShellBrowser.cs",
+      "git_blob": "47fe997616ab7fe4a2a78f3200b5e9afaf3bc68c",
+      "whole_file_read": true,
+      "sha256": "dc9a998511e070150af5a50d092749a10a8a5c9d64e4ca59d492ccc4dacf5e9e"
+    },
+    {
+      "path": "ExplorerTabUtility/Interop/IShellFolder.cs",
+      "git_blob": "93a09de2047ad5fe298f246a6938de67aa226cd6",
+      "whole_file_read": true,
+      "sha256": "4708c5119260264e878b6c5309dedf046d74cf8ec7af170b3c0d8886537f4e83"
+    },
+    {
+      "path": "ExplorerTabUtility/Interop/ShellPathComparer.cs",
+      "git_blob": "873519862e734be65cc5a3c71df8c193211b0c2a",
+      "whole_file_read": true,
+      "sha256": "3787d73eb4c2e9a9d821d2277dcd46a7659efcb156e8a4545644db2bb3199db0"
+    },
+    {
+      "path": "ExplorerTabUtility/Managers/ClipboardManager.cs",
+      "git_blob": "20005a4ef30b44b993c976177cbb9d685fb3a573",
+      "whole_file_read": true,
+      "sha256": "cddf2bf3751a00d9061fb3ae926a779a2fe73bdc6e8d1cebf58d579c58ebce45"
+    },
+    {
+      "path": "ExplorerTabUtility/Managers/HookManager.cs",
+      "git_blob": "4d4dd1a9cf874a724d2fa9ad11d84b11f7ada807",
+      "whole_file_read": true,
+      "sha256": "b26867bf01cca5d51bf6041887e0cd7bf95d06e2c3d6671a19bc01aea4efb084"
+    },
+    {
+      "path": "ExplorerTabUtility/Managers/ProfileManager.cs",
+      "git_blob": "89865fe7ef23ee763a26e940ba3f69f5fc0bfb18",
+      "whole_file_read": true,
+      "sha256": "67b677f7f9df1c9faccb17b4d97d9e3c60fac193791f05889ff57ce026f34baa"
+    },
+    {
+      "path": "ExplorerTabUtility/Managers/RegistryManager.cs",
+      "git_blob": "d077c6f0be02ae66b4eb69b78316f7c0d60f8d51",
+      "whole_file_read": true,
+      "sha256": "939f61a57a8246ca5c63bfe4ac31fffc33861e7c25f0924213c2c75f0c42cbf7"
+    },
+    {
+      "path": "ExplorerTabUtility/Managers/SettingsManager.cs",
+      "git_blob": "0cac9aacbed82171966a746e67340c88bd6005e2",
+      "whole_file_read": true,
+      "sha256": "aa4cb17e345317141fb8afcb4799fcb52c2152d0c47f08aa68f0318fdf07720a"
+    },
+    {
+      "path": "ExplorerTabUtility/Managers/UpdateManager.cs",
+      "git_blob": "e2dcbf9e054c06ed52bdf7fe77be8e9a70451e3b",
+      "whole_file_read": true,
+      "sha256": "49f40c4cb54dc4a05a1d5512895b749ecfa246a2ec6e5b75b2b7072d53d2f964"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/DualKeyDictionary.cs",
+      "git_blob": "4f09a328e9d2adb3374eb5e08d624004bc9f043c",
+      "whole_file_read": true,
+      "sha256": "0886d13f5ab4b2dc5f317c2440c08a9bf4980b5190c29fc8b3d023ba819c89f8"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/HotKeyAction.cs",
+      "git_blob": "bba0a8cc09a0dffd55f4e01d7ac98c419c23b906",
+      "whole_file_read": true,
+      "sha256": "9dd859071a15fd637298cf10e6d2ee1cc6883b816b69e6f18ff0031eb5f75007"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/HotKeyEventArgs.cs",
+      "git_blob": "c73d34fd3d882947e5dffbcbd9d6399667e6833b",
+      "whole_file_read": true,
+      "sha256": "24980892ca3819ccf4e577a14f927d02acc45a19b97cbd7120e0170452f91594"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/HotKeyProfile.cs",
+      "git_blob": "7a6534c4fe64746f5e0ddbe559830d3e3733096a",
+      "whole_file_read": true,
+      "sha256": "f55ce8f7c9e8685b483e52c8de8575a0363f55c51a4db9f2f509b40266eccd88"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/HotkeyScope.cs",
+      "git_blob": "8d24ca8492d8fad9c51b82ef44ad3cf671424086",
+      "whole_file_read": true,
+      "sha256": "0cfcce9a30ebcab3ea7c2379062f2c188867aafacb0343736c3986661add644f"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/SupporterInfo.cs",
+      "git_blob": "a567e8f6515393a58ff6f5ca1cfcc176f840474e",
+      "whole_file_read": true,
+      "sha256": "72744696cc5606ce18babcc8ab1622335888213f0394696952a242ecd8cdd12e"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/WindowInfo.cs",
+      "git_blob": "fc689e20b6e985ada1d02f8449f5ab92880e8cc1",
+      "whole_file_read": true,
+      "sha256": "91e662b88ff142a05977226ace32531478060420e629589a4a2d2bc4d46581de"
+    },
+    {
+      "path": "ExplorerTabUtility/Models/WindowRecord.cs",
+      "git_blob": "c43efe3d8e61252c872d013a29e50880a1868d71",
+      "whole_file_read": true,
+      "sha256": "211d42ee209de5e6d6353610c48ae288cb10b58f94597016db38bed97924cd52"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Behaviors/HoverBackground.cs",
+      "git_blob": "3a4c528fb140513e79bf5893e1ee0d1d9e031382",
+      "whole_file_read": true,
+      "sha256": "5f111477082709caf8e9f67e9b70d10781d951aa5515d5acf99260fd714ba004"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Behaviors/HoverBorder.cs",
+      "git_blob": "dc17a4d3dfc9c40062fc6d8ca042cf8c71dcec0e",
+      "whole_file_read": true,
+      "sha256": "cd3067b168ef2da250574cc0b9634ffd94be672aae2c9c34f301296e086b8cac"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Behaviors/HoverBrightness.cs",
+      "git_blob": "1008ceae086ce90b6f9a0307d7a3625a67d6f9a3",
+      "whole_file_read": true,
+      "sha256": "bb4e51876aeb4398efb653543b20c6bade4cd0880772e448cbf8be187c07dbab"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Commands/RelayCommand.cs",
+      "git_blob": "784cd591bafafd01e2a7d3f5f38f6a59901ec025",
+      "whole_file_read": true,
+      "sha256": "842a0f6c737b636a82a33ccd249800b7a194b2dda1c68d58d3e0691f85c0cf95"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Converters/Base64ImageConverter.cs",
+      "git_blob": "4476bfb90adbac3f004e84c65695d2794544c20d",
+      "whole_file_read": true,
+      "sha256": "43ca9af0d5076e1403f6ec536289ab81e5e1428885b8edc5bd2d1bdb78f3104a"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Converters/EnumDescriptionConverter.cs",
+      "git_blob": "f53dfc8edc79f5bec28e5dd8d5281245b1d4c394",
+      "whole_file_read": true,
+      "sha256": "9092d8976adb6030997a63f477f0ec09965704e0b0a8165c1d9b5a3b17eac616"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/BorderStyles.xaml",
+      "git_blob": "6f144dc732b67887a6eca90573acfb9a924aa7f4",
+      "whole_file_read": true,
+      "sha256": "fe8e507effbe9a44bccba40d3054f5cf7a6c749deb78809d5250f4b7992db1bf"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/ButtonStyles.xaml",
+      "git_blob": "8aaabfcb8d56acc72f14b4a353e835e3ef5394d5",
+      "whole_file_read": true,
+      "sha256": "f9cec557b4b9dfba37f118a6c5336c3f1cd7fb826f4b026f5094111368e906e2"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/CheckBoxStyles.xaml",
+      "git_blob": "db4f003ef25e608275370259192adfdaf996e471",
+      "whole_file_read": true,
+      "sha256": "4e34d183e5a0b22ccebd4a2a3d3691f208d7bf52255233939a02919fa0373e35"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/Colors.xaml",
+      "git_blob": "b9995db3da50a9d0760a9df168378ee1459b052b",
+      "whole_file_read": true,
+      "sha256": "d7bcc878d5b0f9c7d3f0ff3c94b9f52c3ea6f647b12a7e4d8e02e91399523c11"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/ComboBoxStyles.xaml",
+      "git_blob": "ac2187fb98b445c88e3297ed6c5ea13284c42115",
+      "whole_file_read": true,
+      "sha256": "b2a7291edc117f7bf44dc2ae6a620a53c4bd52f3e2787293e4dd88374be0a689"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/DefaultStyles.xaml",
+      "git_blob": "bcac705f01cd665fd4deea045cea8bf2dfd542f9",
+      "whole_file_read": true,
+      "sha256": "e485b92baadcdcef5d378f7212168a1779966eb54e71399dd99fddc330b40fd0"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/GroupBoxStyles.xaml",
+      "git_blob": "d9caf0023d6d0488fddfee1d72482bb6d78434d8",
+      "whole_file_read": true,
+      "sha256": "6d323c2cce97343ba1a19fb7045400c09c6c56df2cbd9587f100beb3e0ed804e"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/ListBoxStyles.xaml",
+      "git_blob": "34b9b3350daa61e2e7d38aa2016910d3bee373df",
+      "whole_file_read": true,
+      "sha256": "61cde81ab362f78823ad61df328d268affdf30c0a740cbc12e275cb1dfcb8c19"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/ScrollViewerStyles.xaml",
+      "git_blob": "d2645fad1b449637995fd43b2f5e59d120a0c69b",
+      "whole_file_read": true,
+      "sha256": "85c74ab2fd4015bcbfaafc96d90a6656cdafa2f20c2a67a65d7404d0fa3c5357"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/TabControlStyles.xaml",
+      "git_blob": "16fd9c53aa2542fde9c3169f06669eaab467f68b",
+      "whole_file_read": true,
+      "sha256": "e2e681d9ecc3f03130559e0690cd717ca48406db83735d9fd3c12c36f7184c41"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/TextBoxStyles.xaml",
+      "git_blob": "6978414c695c954eb7f7b6770173bcb0b2e374ab",
+      "whole_file_read": true,
+      "sha256": "331fb83db4c84d4cc2bc56e85f6a9059ec7858e467af4cb089d8206179b084f1"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Themes/ThemeResources.xaml",
+      "git_blob": "96d083299b1d9e2036cd56503619a219369cadee",
+      "whole_file_read": true,
+      "sha256": "35cad939f91acef9eb3ee910d6832396255388fec675b42714f479741c034106"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/AboutView.xaml",
+      "git_blob": "6f9449c4c8a4d5b20a5b9815376ae8d870ac6ce0",
+      "whole_file_read": true,
+      "sha256": "1e4fda23eb0ff377283f46e9df73e53846b2fc98eaa10fa71bc0224dd7a05048"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/AboutView.xaml.cs",
+      "git_blob": "bfa743a3a98417c500644e96960aeec7b0864435",
+      "whole_file_read": true,
+      "sha256": "7246449e24b9d75a9f2065f78b74bc6f79ac4b2c8b7711cff1976aff78b002a7"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/Controls/NumericInputControl.xaml",
+      "git_blob": "9b02587cb0409e4d5574062bcfcdaaadd0829fc0",
+      "whole_file_read": true,
+      "sha256": "6411299119f31124f60cffe24586fa45d22ec86f848eece110f04210e202f51f"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/Controls/NumericInputControl.xaml.cs",
+      "git_blob": "1a97625bcbdcb0c42a9e58d93e76f66eb5e23a13",
+      "whole_file_read": true,
+      "sha256": "1b506eba81f18ce65935eac40e45e07dd7a8aa7d85291b1db3f69ae93b7497ec"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/Controls/SystemTrayIcon.xaml",
+      "git_blob": "3a030d03dc3c1ff666820492edd1a14d8637b634",
+      "whole_file_read": true,
+      "sha256": "b9170b0cda95ce3080566e4ffc97bc3cf198774b3ff0bdf816fe1f80345f8b7f"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/Controls/SystemTrayIcon.xaml.cs",
+      "git_blob": "cad4986e1c9e284908c8f035c53cb7e802986a85",
+      "whole_file_read": true,
+      "sha256": "97c81caf5fabdea8ac53b70dfa667affadb959b68fd0904da9a66476d5f5c8f3"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/CustomMessageBox.xaml",
+      "git_blob": "23b6d1e375c00cca3eb1207d4997ede9b9bab498",
+      "whole_file_read": true,
+      "sha256": "454c2b27fb91311eb04a6ff194105614adc766983fe896292177810f3b90efdf"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/CustomMessageBox.xaml.cs",
+      "git_blob": "d4a9e43540304decdfa835d3766af38f9fd824bd",
+      "whole_file_read": true,
+      "sha256": "413fb7f68091e8aa9f41bd1b3f98dc8f70adcde179ae5d2bd65e3f3066b54eba"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/HotKeyProfileControl.xaml",
+      "git_blob": "1cd859c6b87e3f3b140a312abfdf6e26604967d1",
+      "whole_file_read": false
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/HotKeyProfileControl.xaml.cs",
+      "git_blob": "4592e930f064b98e3e86dce1c25535fe11bab72a",
+      "whole_file_read": true,
+      "sha256": "15bf4f10c699d238c920cd9860ec1a55810d002ecbc7174e941888487f703a19"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/MainWindow.xaml",
+      "git_blob": "3be885e9118b9d7a74a74fb85792cacdd48131a0",
+      "whole_file_read": false
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/MainWindow.xaml.cs",
+      "git_blob": "fafeba6e35696bd7f0274d0ffa4208cef78472c9",
+      "whole_file_read": false
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/TabSearchPopup.xaml",
+      "git_blob": "757ce3a4d0df6470b9afdf0e0106704bf23572ab",
+      "whole_file_read": true,
+      "sha256": "0b0881417a1f86c06330ad816897ded859dfecc28ffa6decbb316fbd7cbf3164"
+    },
+    {
+      "path": "ExplorerTabUtility/UI/Views/TabSearchPopup.xaml.cs",
+      "git_blob": "8e121de9cd02f0ca70b85073578ad1d1e2658891",
+      "whole_file_read": true,
+      "sha256": "d19a1723ae3123cd9cfead75dd1f2725ecf3705798ab139b61034d15cb270a1d"
+    },
+    {
+      "path": "ExplorerTabUtility/WinAPI/INPUT.cs",
+      "git_blob": "936e1b127f069d6cdd4e4726373f3d879b237610",
+      "whole_file_read": true,
+      "sha256": "ad97e7e6fd2074c1a9da75081c8e2d0c0cb67ce08cc783ffeb0a91135299c039"
+    },
+    {
+      "path": "ExplorerTabUtility/WinAPI/RECT.cs",
+      "git_blob": "8d232aebceae83b0f316f2e67ef14b0225d229c2",
+      "whole_file_read": true,
+      "sha256": "df3acb6be8c76a173141d1cd79e6f3edc279b30cb2c766cc2daaae74e53d6918"
+    },
+    {
+      "path": "ExplorerTabUtility/WinAPI/VirtualKey.cs",
+      "git_blob": "ce73df524e5fd069e73c1010acc7f1a52424ef6a",
+      "whole_file_read": true,
+      "sha256": "e3a95a157d07e7e03cd79d85ab4e4a003115c7947cc384e21242969754e9e58e"
+    },
+    {
+      "path": "ExplorerTabUtility/WinAPI/WinApi.cs",
+      "git_blob": "fb9a8cd6409b261e976fc17ae192e2c7e57a0fc9",
+      "whole_file_read": true,
+      "sha256": "0149e29114d5b97a71cd651b6bcdfa742de8b64e0e22487d3660dcb15359b579"
+    },
+    {
+      "path": "ExplorerTabUtility/WinAPI/WinEventDelegate.cs",
+      "git_blob": "92451d43026a3d1f7f651e3bb0d731664b50724f",
+      "whole_file_read": true,
+      "sha256": "11dc762eba30407ec1de61655443e3b44fb083f9968aa01f5b8f541b6cc5eac5"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "8aa26455d23acf904be3ed9dfb3a3efe3e49245a",
+      "whole_file_read": true,
+      "sha256": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "3346da22f8a53cb7b1098a16137fce0c94d8070b",
+      "whole_file_read": true,
+      "sha256": "c9d5743d2c708e1d72093aa1e0edd1ecc0a25ba67c54716480e37ee82d413797"
+    },
+    {
+      "path": "installers/installer.iss",
+      "git_blob": "fba019685537dae6924513c3b8d5aa4ed06de394",
+      "whole_file_read": true,
+      "sha256": "bb93e951aa8ea186de7bf5e27699490b4aeeaec5502b54414b7992983391b16c"
+    },
+    {
+      "path": "packages/chocolatey/build.ps1",
+      "git_blob": "69675b877142dbab4e0dd781ffc2db78c3f0e5b9",
+      "whole_file_read": true,
+      "sha256": "809edfe7af36e0227a3252d97c2f1fe6f2cbe2477973a99a439ccfca71be3eab"
+    },
+    {
+      "path": "packages/chocolatey/templates/PACKAGE_NAME.nuspec",
+      "git_blob": "e88ebadbba800fe74f9851ca4198498aaca06c38",
+      "whole_file_read": true,
+      "sha256": "418773866fd3f0269a6d6fe4797501fad44c5450c729785c1ed893e4bbf685a2"
+    },
+    {
+      "path": "packages/chocolatey/templates/tools/chocolateyinstall.ps1",
+      "git_blob": "d906d2e0e6987a63e8ff3a91b88cd621ca75dfef",
+      "whole_file_read": true,
+      "sha256": "36b988736ac431cf18e428c027e2b5c5d2bae097a83fde4cfc887846a67a732c"
+    },
+    {
+      "path": "packages/chocolatey/templates/tools/chocolateyuninstall.ps1",
+      "git_blob": "1a94b02a287ba4f7a688ba45afa03bb2c4205821",
+      "whole_file_read": true,
+      "sha256": "9c859c14cae7a6a1c61cd93b04b64087826d2402a3cd4363add8f0bc91eec448"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Complete code-behind read and pinned Git blob identity verification. XAML counterpart not yet credited.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/UI/Views/HotKeyProfileControl.xaml.cs": "15bf4f10c699d238c920cd9860ec1a55810d002ecbc7174e941888487f703a19"
+  },
+  "whole_files_read": 84,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v33-20261019.json",
+  "coverage_sha256": "e343f160621dc87837bfaeb43831a06e22a05ea50fc46de9ed9003ead13fdf88",
+  "findings": [
+    "Editor mutates supplied HotKeyProfile object directly on events; it does not itself implement saved-state transaction. Enclosing ProfileManager controls clone/save boundary.",
+    "Numeric delay is cast double to int without explicit finite/range validation in this handler, linking earlier numeric-control boundary concerns to model. XAML admission limits still need reading.",
+    "new IsEnabled property hides inherited UIElement property and means checkbox state. Expanded fields are imperatively enabled; WPF dependency-property/binding semantics are not equivalent to this hidden CLR property.",
+    "Keybinding hooks start sequentially after notifying main hooks stopped. No try/finally rollback if keyboard/mouse hook construction or Start fails, and no Unloaded/IDisposable cleanup in this file. Normal cleanup occurs on hotkey field LostFocus.",
+    "Backspace clears HotKeys but leaves IsMouse/IsDoubleClick state intact and returns before setting event handled. Mouse click outside field posts focus removal asynchronously; later queued callbacks lack lifecycle guard.",
+    "Allowed keyboard combinations include modifier presence, F1-F23 and selected special keys; standalone F24 is absent. Mouse double-click uses fixed500ms same-key timing without position/system threshold and without explicit reset across editing sessions.",
+    "Scope change rebuilds allowed actions, preserving currently selected allowed action or first allowed; undefined scope falls into unrestricted enumeration. Imported enum validation remains a separate concern."
+  ],
+  "limits": [
+    "No WPF or third-party hook execution, no claim of reproduced leak or key handling failure. No own-library production change.",
+    "148/500 fully reviewed repositories; ExplorerTabUtility partial84/104. Native pHash investigation deferred."
+  ]
+}
