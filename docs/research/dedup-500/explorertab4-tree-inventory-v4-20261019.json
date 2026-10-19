@@ -1,0 +1,19 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Git ls-tree inventory from fetched exact commit; six retained whole-read files independently matched to pinned Git blob IDs using Git blob SHA1 construction and registry SHA256.",
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v4-20261019.json",
+  "coverage_sha256": "23edb03bbdd611fcbda8f55119831187b1dba1cbeccae3da244afaeaa2e52f14",
+  "tracked_blobs": 104,
+  "whole_files_read": 6,
+  "findings": [
+    "Exact commit fetched successfully through HTTP/1.1 shallow filtered clone after terminal failure of initial full clone.",
+    "Six previously read retained files match actual pinned tree blob IDs, strengthening earlier registry-only byte evidence.",
+    "Remaining source, workflow, installer, XAML and visual assets are inventoried without whole-reading credit. README GIFs/screenshots still require visual inspection."
+  ],
+  "limits": [
+    "Filtered checkout still running in session13181; not all source blobs locally materialized yet.",
+    "Tree inventory is not source review or runtime qualification. Completed count remains148/500; pHash deferred."
+  ]
+}
