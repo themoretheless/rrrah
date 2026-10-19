@@ -1,0 +1,34 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of RecoveryNtfs.h/cpp,755 lines; pinned bytes verified. Original BitmapFree compiled with primitive aliases and Failure adapter.",
+  "new_whole_files_read": {
+    "windirstat/RecoveryNtfs.h": "d0b0830055a1ac720370f71a6c5b4c5cce4e093877ab454a5788aaef8f95054e",
+    "windirstat/RecoveryNtfs.cpp": "ee9248ead0bd1242e5d937b7532c262f559313d912e9a6dcff803d4348e2665d"
+  },
+  "whole_files_read": 195,
+  "coverage": "docs/research/dedup-500/windirstat3-ntfs-recovery-coverage-v68-20261019.json",
+  "coverage_sha256": "8cd0f2ea9a03b2456302e3750212a17c64f0b68a64ef04a4e2345517b1f40ffc",
+  "runtime_controls": {
+    "result": "10027011 controls passed",
+    "scope": "All65536two-byte bitmaps times153valid offset/count pairs checked against independent per-bit oracle; three invalid ranges require ERROR_INVALID_DATA.",
+    "probe": ".dedup-work/windirstat3-20261019/ntfs-bitmap-v68/probe.cpp",
+    "probe_sha256": "0fc4780df5ba232cca5a770d011b92691962209454f4c0b713a242759aff5b68",
+    "compiler": "Apple clang C++23 -O2",
+    "adapters": "BYTE uint8_t, ULONGLONG uint64_t, synthetic Failure with error13; original BitmapFree body unchanged. No Windows API executed."
+  },
+  "findings": [
+    "Mapping-pair decoder validates nibble widths, signed relative offsets, logical coverage, physical bounds and overlap while preserving sparse holes. Missing terminator fails. Record parser validates512byte fixup trailers before restoring a private copy.",
+    "Recovery accepts unnamed resident/nonresident main data and sparse holes; attribute lists, reparse/encrypted records, compression and incomplete extents are unsupported. Multiple main data attributes disable support; named streams are not recovered.",
+    "MFT mapping uses retrieval pointers, bounds individual extents and rechecks mapping after scan and before record validation. Raw read views borrow a reusable buffer and expire after next raw read; concurrent instance use is not synchronized here.",
+    "Scan reads4MiB batches, retains deleted usable candidates and directory ancestry, marks missing/reused/cyclic paths uncertain using parent sequence numbers. Initial scan allocation cache is not fresh proof at recovery time.",
+    "BitmapFree exhaustive controls establish bit-range logic for two-byte inputs only, not DeviceIoControl response handling or whole NTFS recovery. ClustersFree handles returned bitmap origin and queries fresh pages when no scan cache supplied.",
+    "RecoverFile checks saved MFT record and free allocation, reads bounded chunks with fresh allocation before/after, zero-fills sparse/uninitialized tails and verifies final byte count. Allocation state does not establish historic data integrity or an immutable source snapshot.",
+    "Final ValidateRecord/allocation checks occur before OutputFile Commit. Commit callback here checks pause/cancel only, unlike FAT/exFAT callbacks which revalidate metadata around flush. Changes during/after final flush are not revalidated by this NTFS callback."
+  ],
+  "limits": [
+    "No raw device reads, recovered output, Windows IOCTL, malformed MFT corpus, mapping decoder runtime, source mutation or crash durability tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
