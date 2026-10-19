@@ -1,0 +1,319 @@
+{
+  "status": "passed_selected_original_CNN_model_free_tests",
+  "source_pins": {
+    "imagededup/methods/cnn.py": "9952a73910f44326335f66e446da2ff7e770d6d4c616257deca2ec1bfbe83000",
+    "tests/test_cnn.py": "b5335d44d346e9948b1d6402b636c416c55f054197076af1d9c22c31a3e66adc",
+    "imagededup/handlers/search/retrieval.py": "e46f002ef827cd50ae031c4a8d11f5a05364684b0023cc35a6dd27d681510fb9"
+  },
+  "original_tests_passed": [
+    "test__check_threshold_bounds_input_not_float",
+    "test__check_threshold_bounds_input_out_of_range",
+    "test__find_duplicates_dict_scores_false",
+    "test__find_duplicates_dict_scores_true",
+    "test_find_duplicates_wrong_threhsold_input",
+    "test_find_duplicates_wrong_input"
+  ],
+  "top_level_test_function_inventory": [
+    {
+      "name": "test_import_defaults",
+      "line": 50,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__init_defaults",
+      "line": 86,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__init_custom",
+      "line": 91,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__init_missing_custom_args_raises_exception",
+      "line": 103,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_default_custom_name_raises_warning",
+      "line": 113,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_positional_init",
+      "line": 119,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_call_method_accepted",
+      "line": 143,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_forward_method_accepted",
+      "line": 170,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__get_cnn_features_single",
+      "line": 182,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__get_cnn_features_batch",
+      "line": 190,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__get_cnn_features_batch_nondefault_models",
+      "line": 236,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__get_cnn_features_batch_num_workers_do_not_change_final_result",
+      "line": 257,
+      "uses_mock_fixture": false,
+      "decorators": [
+        "pytest.mark.skipif(sys.platform == 'win32' or sys.platform == 'darwin', reason='runs only on linux.')"
+      ]
+    },
+    {
+      "name": "test_encode_image_expand_image_array_cnn_gets_called",
+      "line": 279,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_encode_image_wrong_dim_input_array",
+      "line": 287,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_encode_image_2_dim_array_encoded",
+      "line": 293,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_encode_image_2_dim_file_equals_array",
+      "line": 299,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_encode_image",
+      "line": 306,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_encode_images",
+      "line": 325,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_encode_images_num_workers",
+      "line": 396,
+      "uses_mock_fixture": true,
+      "decorators": [
+        "pytest.mark.skipif(sys.platform == 'win32' or sys.platform == 'darwin', reason='CNN encoding parallelization not supported on Windows/mac.')"
+      ]
+    },
+    {
+      "name": "test_encode_images_num_workers_default_override_on_nonlinux",
+      "line": 404,
+      "uses_mock_fixture": true,
+      "decorators": [
+        "pytest.mark.skipif(sys.platform == 'linux', reason='This test checks multiprocessing override on non-linux platforms.')"
+      ]
+    },
+    {
+      "name": "test_recursive_on_flat_directory",
+      "line": 411,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_finds_non_recursive",
+      "line": 434,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__check_threshold_bounds_input_not_float",
+      "line": 448,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__check_threshold_bounds_input_out_of_range",
+      "line": 453,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__find_duplicates_dict_scores_false",
+      "line": 461,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test__find_duplicates_dict_scores_true",
+      "line": 473,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test__find_duplicates_dict_outfile_true",
+      "line": 489,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dir",
+      "line": 508,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dir_num_enc_workers",
+      "line": 541,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_mp",
+      "line": 563,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_with_dir",
+      "line": 590,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dict",
+      "line": 616,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dict_num_worker_has_impact",
+      "line": 640,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dict_recursive_warning",
+      "line": 664,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dict_num_enc_workers_warning",
+      "line": 689,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_wrong_threhsold_input",
+      "line": 708,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_wrong_input",
+      "line": 713,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_to_remove_outfile_false",
+      "line": 721,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_to_remove_outfile_true",
+      "line": 750,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_to_remove_encoding_map",
+      "line": 782,
+      "uses_mock_fixture": true,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_dir_integration",
+      "line": 818,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_recursive_find_duplicates_dir_integration",
+      "line": 863,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_encoding_integration",
+      "line": 908,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_to_remove_dir_integration",
+      "line": 953,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_recursive_find_duplicates_to_remove_dir_integration",
+      "line": 963,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_find_duplicates_to_remove_encoding_integration",
+      "line": 976,
+      "uses_mock_fixture": false,
+      "decorators": []
+    },
+    {
+      "name": "test_scores_saving",
+      "line": 986,
+      "uses_mock_fixture": false,
+      "decorators": []
+    }
+  ],
+  "findings": [
+    "Selected six original test bodies pass with real sklearn cosine path on3vectors; no injected score matrix.",
+    "Import-defaults test removes cached MobileNet files then instantiates model; must isolate TORCH_HOME before any future full-suite execution.",
+    "Integration tests compare neighbor membership and score type, not numeric scores in expected_duplicates literals.",
+    "No tests in this source cover NaN thresholds, all-invalid batches or empty-directory feature stacking.",
+    "SVG expected in format integration uses previously identified JPEG bytes under.svg filename."
+  ],
+  "limits": [
+    "Only three original CNN methods retained, model constructor excluded; namespace globals routed explicitly.",
+    "Entire original two cosine function bodies retained; small direct sklearn branch only, no chunking/worker execution.",
+    "Mock argument supplied only for original save-json-not-called assertion; no metric/score substitution.",
+    "Not full CNN test target, torch/model/weight/decode/end-to-end/platform validation; no production adoption."
+  ]
+}

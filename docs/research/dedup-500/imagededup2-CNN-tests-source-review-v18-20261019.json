@@ -1,0 +1,34 @@
+{
+  "status": "partial_source_selected_CNN_model_free_tests_passed",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_cnn.py": "b5335d44d346e9948b1d6402b636c416c55f054197076af1d9c22c31a3e66adc"
+  },
+  "manual_whole_text_files": 70,
+  "total_reviewed_by_declared_methods": 112,
+  "tracked_blobs": 114,
+  "controls": "docs/research/dedup-500/imagededup2-CNN-tests-reproducer-v18-20261019/result.json",
+  "controls_sha256": "13b7d1f90b6105dc795e53b7bdee18e51323c6f50eb44a9c86d3fabf91782088",
+  "coverage": "docs/research/dedup-500/imagededup2-CNN-tests-reproducer-v18-20261019/coverage.json",
+  "coverage_sha256": "ba74f07ebc22db48dc28a10f48d98f5625fbcfad20465b3b05550d4a7ec181e2",
+  "reproducer": "scripts/qualify-imagededup2-CNN-model-free-tests-20261019.py",
+  "reproducer_sha256": "3f319b877978b0fa14738de9e6a499462ebe5a951ac1b614c4168a032e5071c3",
+  "original_selected_tests_passed": 6,
+  "findings": [
+    "Selected six original test bodies pass with real sklearn cosine path on3vectors; no injected score matrix.",
+    "Import-defaults test removes cached MobileNet files then instantiates model; must isolate TORCH_HOME before any future full-suite execution.",
+    "Integration tests compare neighbor membership and score type, not numeric scores in expected_duplicates literals.",
+    "No tests in this source cover NaN thresholds, all-invalid batches or empty-directory feature stacking.",
+    "SVG expected in format integration uses previously identified JPEG bytes under.svg filename."
+  ],
+  "limits": [
+    "Only three original CNN methods retained, model constructor excluded; namespace globals routed explicitly.",
+    "Entire original two cosine function bodies retained; small direct sklearn branch only, no chunking/worker execution.",
+    "Mock argument supplied only for original save-json-not-called assertion; no metric/score substitution.",
+    "Not full CNN test target, torch/model/weight/decode/end-to-end/platform validation; no production adoption.",
+    "Initial harness missing PurePath annotation import failed before upstream tests; retained separately.",
+    "User-deferred native pHash investigation remains skipped."
+  ]
+}
