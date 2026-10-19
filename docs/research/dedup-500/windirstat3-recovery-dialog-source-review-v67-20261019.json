@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of RecoveryDlg.h/cpp,690 lines; pinned bytes verified. No GUI or recovery execution.",
+  "new_whole_files_read": {
+    "windirstat/Dialogs/RecoveryDlg.h": "ce86cd60164d7b32c9fc9700da60ff7a68a7ccac9af6c2ef3a7d53bafea616a2",
+    "windirstat/Dialogs/RecoveryDlg.cpp": "9ddeb5b0c9c343530074f29b7144f8febacd571660f0c6575905d954f5e9e03d"
+  },
+  "whole_files_read": 193,
+  "coverage": "docs/research/dedup-500/windirstat3-recovery-dialog-coverage-v67-20261019.json",
+  "coverage_sha256": "d20393feae23921631d32189fac5ed9d80217f2eb2ab967c2ab1a5dd05220562",
+  "findings": [
+    "Same-volume warning is implemented in OnRecover: canonical destination prefix compared case-insensitively with source volume GUID; explicit YES remembered once per source volume for the dialog session. This resolves the policy location left open in FAT/exFAT reviews. It is confirmation, not prohibition.",
+    "Worker previews copy only display fields under mutex; full metadata stays worker-owned until completion. Timer reads atomic done before draining queue, joins before moving completed scan and resolved paths into UI data.",
+    "Stop sets cancel and unpauses then calls CancelSynchronousIo; close while busy defers until worker completion. Destructor also cancels and joins. No bounded shutdown guarantee if underlying operation ignores cancellation.",
+    "StartWorker catches recovery failures, allocation failure and generic exceptions. Failed scans clear completed metadata and volume; cancellation preserves validated discoveries. A displayed candidate is not proof of successful recovery or complete scan.",
+    "Per-file recovery failures publish outcome and continue; cancellation breaks leaving later outcomes empty. Generic exceptions escape per-file loop into outer worker catch. Successful copies are reported without retaining returned output path in the UI outcome.",
+    "Filter uses150ms debounce, rejects invalid regex while retaining current view and disabling recovery. Full refresh preserves selection/focus/scroll by scan index; scan previews append without sorting until completion.",
+    "Pending preview/outcome vectors have no explicit memory cap; timer intervals50ms and virtual list do not bound retained scan metadata or regex execution time. Timer creation failure is not checked here.",
+    "Source enumeration queries volume metadata synchronously during dialog initialization, accepting local fixed/removable NTFS/exFAT/FAT/FAT32 volumes. Device latency and inaccessible-volume behavior remain unqualified."
+  ],
+  "limits": [
+    "No same-volume confirmation, cancellation, device access, recovered output, threading/UI, filter latency or allocation-failure runtime tests executed.",
+    "No foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
