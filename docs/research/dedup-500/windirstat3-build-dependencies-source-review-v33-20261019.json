@@ -1,0 +1,29 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual read of5files; pinned Git byte verification; vcxproj parsed as XML. No build/download executed.",
+  "new_whole_files_read": {
+    "windirstat/pch.h": "4274b15fa159404cb45ffee2c9091e4af3e4bc883ad423b2486dcdb67614cd7d",
+    "windirstat/pch.cpp": "a31ddc2e5d325cc9e22bdfd6cc841a5e15aa8b491bf1f49714eff9da7c25098e",
+    "windirstat/Version.h": "9afaa4fc953ac11d0e5e4fe7979c99af0d6b105a57976bc92d2298d176985ef3",
+    "windirstat/Constants.h": "63a50e6c3993d548ad73061c710a3d378004da06c44fbd63f9643b0a24528323",
+    "windirstat/windirstat.vcxproj": "a5f52402265676222bb1e62c8205996249c2dd6e5b3dc714f8b23b445cda33d3"
+  },
+  "whole_files_read": 83,
+  "coverage": "docs/research/dedup-500/windirstat3-build-dependencies-coverage-v33-20261019.json",
+  "coverage_sha256": "a7efca923d51cc62a22c8a318324f497aed425a225dce8b0e8792349aeeb4661",
+  "findings": [
+    "vcxproj defines Debug/Release for Win32/x64/ARM64, v145MSVC toolset, C++23, Unicode and no MFC. Windows SDK/ATL/COM/GDI/Shell/BCrypt/MTP/WMI dependencies in pch make original complete app Windows-specific; standalone extracted controls are not portable-app proof.",
+    "DownloadXXHash target queries GitHub releases/latest, falls back tov0.8.3, then downloads missing header/source from selected tag without checksum verification. Existing file left untouched, so separately missing members could derive from different versions. Commit pin alone does not freeze this generated dependency.",
+    "Prebuild executes source-formatting and string-compression scripts. Building can mutate checkout and generated resource files; these scripts still require review. No MSBuild invoked.",
+    "Release enables /Ob3, whole-program/LTCG, COMDAT folding and /OPT:ICF=8. This further limits earlier inference that missing MAP symbols prove inlining alone; no runtime speed attribution.",
+    "FloatingPointModelFast applies in common compile settings. Earlier extracted double-load NaN control used clang-O0 without fast-math, so source-method behavior cannot qualify actual MSVC optimized build behavior. Retain this restriction alongside v21control.",
+    "Version header at pinned source declares2.9.1, uses GIT_COUNT for build number with fallback deadbeef/date0 metadata and defaults PRODUCTION0. This is pinned-source metadata, not latest release/version claim.",
+    "Constants define binary Ki/Mi/Gi/Ti as powers1024 and pipe delimiter. Manifest/DPI options reference separate manifest; no platform minimum-support conclusion from WINVER7macros alone."
+  ],
+  "limits": [
+    "No dependency download, source-format script, resource generation, MSVC build, Windows execution or release qualification.",
+    "No foreign production code adopted; native pHash investigation remains deferred."
+  ]
+}
