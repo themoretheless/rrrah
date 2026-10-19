@@ -1,0 +1,22 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Pinned GIF Git blob verified; all235 composited frames inspected sequentially on eight indexed sheets,396x220 thumbnails. Source1920x1080, duration22060ms.",
+  "new_whole_files_read": {
+    "Assets/NavigateBack.gif": "2da8ffa3edd69730dbf7c0b1d46415e7756159f68c4d857aa2b064af2fd8dc4c"
+  },
+  "whole_files_read": 99,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v43-20261019.json",
+  "coverage_sha256": "aaa42198a07bcb81258dedc5e47e22c46b5bdf97aa7dbfcb5d44fa7656621bae",
+  "findings": [
+    "Title specifies Navigate Back/Up by double click in empty space. Early desktop sequence opens settings from tray.",
+    "Middle sequence navigates About/Preferences/Shortcuts, adds profile, records mouse input, chooses scope and navigation action, then saves and hides settings.",
+    "Final sequence shows Explorer changing folder views in response to clicks in blank list area; transient loading/empty states appear. Thumbnail resolution does not establish precise physical double-click cadence or target metadata.",
+    "No content dedup, file deletion, error recovery, network path or concurrent mutation scenario demonstrated. Edited animation is not latency or correctness benchmark."
+  ],
+  "limits": [
+    "All frames visually inspected at contact-sheet resolution; small field text and exact selected-file identity not qualified. No independent Windows runtime test.",
+    "ExplorerTabUtility partial99/104; five workflow GIFs remain. Fully reviewed count148/500. Native pHash investigation deferred."
+  ]
+}
