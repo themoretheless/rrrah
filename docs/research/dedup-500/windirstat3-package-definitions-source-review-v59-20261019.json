@@ -1,0 +1,27 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of three installer/solution definitions; pinned bytes verified and two XML documents parsed.",
+  "new_whole_files_read": {
+    "setup/msi/WinDirStat.wxs": "b6e6b9ad0c02297bd5b77ea1cdc605eb6ffb125641203843b26b98a142f12215",
+    "setup/store/Package.appxmanifest.template": "8b81dcb68047fcd71ccfe65a5e75998ed7d5b96f73baa8a4c95dea16f548933d",
+    "windirstat.sln": "c1315b43fd0418ee5e1f120062e9dfe9409d0d2dd47f4c8e0db3be0f858ae87d"
+  },
+  "whole_files_read": 178,
+  "coverage": "docs/research/dedup-500/windirstat3-package-definitions-coverage-v59-20261019.json",
+  "coverage_sha256": "baf1d2750075fada9fd3b1387db9a8aeddcca946d5a2f54fdcf009746204c88a",
+  "findings": [
+    "MSI is per-machine with embedded compressed cabinet, main executable and conditional context-menu, desktop-shortcut and system-PATH components. These declarations do not prove install, repair, rollback or uninstall behavior.",
+    "Major upgrade schedules afterInstallInitialize. Alternate upgrade-code range detects/removes other release channel. LegacyUninstall invokes installed executable deferred without impersonation and ignores return status; its completion is not an installer success gate.",
+    "Option preservation uses existing shortcut/context registry searches and a substring test for WinDirStat in system PATH, rather than exact normalized path membership. Actual migration cases remain unqualified.",
+    "Directory context command quotes executable and selected directory; Drive command quotes executable but leaves percent1 unquoted. No runtime argument-parsing counterexample established.",
+    "Desktop shortcut component uses HKCU registry key path in a per-machine package; multi-user repair and ownership behavior require Windows installer tests.",
+    "Store manifest template declares Windows FullTrustApplication and runFullTrust, with architecture/version/device-minimum placeholders and26 language resource entries. It does not declare installer-equivalent shell/PATH components here.",
+    "Solution has six named debug/release platform combinations, but Debug ARM64 maps to Release ARM64. A Debug ARM64 solution invocation therefore does not establish debug assertions or debug runtime for that platform."
+  ],
+  "limits": [
+    "XML well-formedness is not WiX/AppX schema, compilation, signing, installation, upgrade or runtime qualification.",
+    "No scripts or installers executed, no foreign production code adopted; native pHash investigation deferred. Global completed repository count remains147/500."
+  ]
+}
