@@ -1,0 +1,51 @@
+{
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": true,
+  "method": "Both SVGs XML-inspected and rendered through macOS Quick Look; both generated thumbnails visually inspected. Complete252-file coverage inventory revalidated against Git tree, working source SHA256 and pinned Git blob SHA256. Whole-repository content review complete, not original executable qualification.",
+  "new_whole_files_read": {
+    "windirstat/logos/logo_color.svg": "8d964da222de999bed0c665b0ca1d951ae66236052e038fd4960b467d6cca326",
+    "windirstat/logos/weblogo_color.svg": "778948d17ef49a4a8534f3d6461cfbd4416bacc40e5c0ce834e5198a011e0048"
+  },
+  "whole_files_read": 252,
+  "coverage": "docs/research/dedup-500/windirstat3-complete-coverage-v116-20261019.json",
+  "coverage_sha256": "24b26c605acb07f93a624236be522f54e9fbfca1f0d5d9c2ed379c73cad0f310",
+  "findings": [
+    "Both assets depict black branching directory/tree shapes inside lime-green circular backgrounds; no application logic or algorithm adopted. Quick Look produced512px previews with substantial whitespace; this renderer behavior does not prove browser or Windows asset layout.",
+    "Web SVG references radialGradient3453 but defines no matching id. Original SVG defines and references that gradient. Web asset still rendered recognizable logo in Quick Look; missing gradient is a source-level asset issue, not a reproduced browser failure.",
+    "All252tracked files now have recorded whole-content review credit across incremental audits. Text reading, structurally equivalent license variants and visual binary review methods are explicitly scoped in those records.",
+    "Source review identified sampling confidence, mutable filesystem observations, recovery limitations and UI/runtime gaps. Existing original arithmetic probes and our focused exact scanner tests remain bounded evidence, not proof of all cases."
+  ],
+  "asset_checks": [
+    {
+      "path": "windirstat/logos/logo_color.svg",
+      "elements": 21,
+      "width": "68.26667",
+      "height": "68.26667",
+      "unresolved_url_ids": [],
+      "thumbnail_sha256": "a7428ad68858f597fd0e3ff9d1800e973900ee1db9ae5b8d27eb2b1ccbbba49d"
+    },
+    {
+      "path": "windirstat/logos/weblogo_color.svg",
+      "elements": 13,
+      "width": "68.3",
+      "height": "68.3",
+      "unresolved_url_ids": [
+        "radialGradient3453"
+      ],
+      "thumbnail_sha256": "9e812d55e301906ba217d8d7e84b0b831d2e40e07dc1ddb500dd7ff580ef5e27"
+    }
+  ],
+  "completion_checks": {
+    "tracked_files": 252,
+    "coverage_rows": 252,
+    "whole_content_reviewed": 252,
+    "remaining": 0,
+    "all_source_and_git_blob_hashes_match": true
+  },
+  "limits": [
+    "No full Windows build, original upstream test suite, complete GUI/installer behavior or cross-platform qualification.",
+    "Global completed count needs registry-wide recomputation before reporting an updated total; prior snapshot147/500 predates this completion.",
+    "Native pHash investigation remains deferred; overall library goal and500-repository review remain incomplete."
+  ]
+}
