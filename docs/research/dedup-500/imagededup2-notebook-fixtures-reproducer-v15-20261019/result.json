@@ -1,0 +1,90 @@
+{
+  "status": "passed_primitive_fixture_and_notebook_IR_controls",
+  "fixtures": {
+    "all_correct_retrievals.pkl": {
+      "path": "tests/data/evaluation_files/all_correct_retrievals.pkl",
+      "sha256": "cdd6ea22b2a43312014df32017ca8677ce5215f268f5e738786fbeb07283af88",
+      "value": {
+        "ukbench09060.jpg": [
+          "ukbench09060_rotation.jpg",
+          "ukbench09060_hflip.jpg",
+          "ukbench09060_resize.jpg"
+        ],
+        "ukbench08976.jpg": [
+          "ukbench08976_rotation.jpg",
+          "ukbench08976_hflip.jpg",
+          "ukbench08976_resize.jpg"
+        ]
+      }
+    },
+    "ground_truth.pkl": {
+      "path": "tests/data/evaluation_files/ground_truth.pkl",
+      "sha256": "cdd6ea22b2a43312014df32017ca8677ce5215f268f5e738786fbeb07283af88",
+      "value": {
+        "ukbench09060.jpg": [
+          "ukbench09060_rotation.jpg",
+          "ukbench09060_hflip.jpg",
+          "ukbench09060_resize.jpg"
+        ],
+        "ukbench08976.jpg": [
+          "ukbench08976_rotation.jpg",
+          "ukbench08976_hflip.jpg",
+          "ukbench08976_resize.jpg"
+        ]
+      }
+    },
+    "incorrect_retrievals.pkl": {
+      "path": "tests/data/evaluation_files/incorrect_retrievals.pkl",
+      "sha256": "981af24e3fa97685ed3735748324d0a1c2f448068d5cb42b5a5fe3f9170dcfea",
+      "value": {
+        "ukbench09060.jpg": [
+          "ukbench09060_rotatn.jpg",
+          "ukbench09060_flip.jpg",
+          "ukbench09060_resize.jpg"
+        ],
+        "ukbench08976.jpg": [
+          "ukbench08976_rotation.jpg",
+          "ukbench08976_hflip.jpg",
+          "ukbench08976_resize.jpg"
+        ]
+      }
+    }
+  },
+  "notebooks": {
+    "use_custom_model.ipynb": {
+      "path": "examples/use_custom_model.ipynb",
+      "sha256": "4ef1f1bb89a7070de92ee60f8a2944aec3375dd26221ef4a2df8db9f2ad105f5",
+      "cells": 21,
+      "outputs": 0,
+      "attachments": 0
+    },
+    "Evaluation.ipynb": {
+      "path": "examples/Evaluation.ipynb",
+      "sha256": "f0552d28f3b5eeac017989046157c7e18d38956c8ee1074373d589ab64322295",
+      "cells": 11,
+      "outputs": 10,
+      "attachments": 0
+    }
+  },
+  "original_public_map_validation": {
+    "exception": "AssertionError",
+    "message": "Ground truth map validation failed, Ground truth has filenames that are not in the key filename of the map!"
+  },
+  "reproduced_notebook_IR": {
+    "map": 0.6,
+    "ndcg": 0.8,
+    "jaccard": 0.6
+  },
+  "findings": [
+    "Three lower-level IR pickle fixtures have values outside key domain; public evaluate validator rejects them. Passing direct IR tests do not prove public evaluate on those fixtures.",
+    "Evaluation notebook saved outputs originate2019TensorFlow/Python3.6, not current pinned PyTorch model execution.",
+    "Original IR module reproduces saved notebook MAP0.6/NDCG0.8/Jaccard0.6 from stored mappings; no inference rerun.",
+    "Custom-model notebook contains no saved outputs; pretrained downloads/transformers install cells are unexecuted source examples."
+  ],
+  "limits": [
+    "Full notebook cell source/text outputs read; no notebook cells, shell commands, downloads or models executed.",
+    "Primitive-only pickle loading plus full value/schema inspection; not image/visual or production input qualification.",
+    "Selected original map-validator bodies and entire IR module used; no whole-package/runtime/platform claim.",
+    "No foreign code adopted; pHash native investigation deferred."
+  ]
+}

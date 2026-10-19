@@ -1,0 +1,36 @@
+{
+  "status": "partial_source_notebook_and_primitive_fixture_review",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "examples/use_custom_model.ipynb": "4ef1f1bb89a7070de92ee60f8a2944aec3375dd26221ef4a2df8db9f2ad105f5",
+    "examples/Evaluation.ipynb": "f0552d28f3b5eeac017989046157c7e18d38956c8ee1074373d589ab64322295"
+  },
+  "new_binary_fixtures_reviewed": {
+    "tests/data/evaluation_files/all_correct_retrievals.pkl": "cdd6ea22b2a43312014df32017ca8677ce5215f268f5e738786fbeb07283af88",
+    "tests/data/evaluation_files/ground_truth.pkl": "cdd6ea22b2a43312014df32017ca8677ce5215f268f5e738786fbeb07283af88",
+    "tests/data/evaluation_files/incorrect_retrievals.pkl": "981af24e3fa97685ed3735748324d0a1c2f448068d5cb42b5a5fe3f9170dcfea"
+  },
+  "manual_whole_text_files": 65,
+  "total_reviewed_by_declared_methods": 107,
+  "tracked_blobs": 114,
+  "controls": "docs/research/dedup-500/imagededup2-notebook-fixtures-reproducer-v15-20261019/result.json",
+  "controls_sha256": "26a20e7d39f359313a6a462c53bbbc75d9c0dd90b9c47ad62cf845997c4e70e5",
+  "coverage": "docs/research/dedup-500/imagededup2-notebook-fixtures-reproducer-v15-20261019/coverage.json",
+  "coverage_sha256": "cd5b4f154922c447ff6d1bbbd805abc94765df30e195771bf0e131873d239d88",
+  "reproducer": "scripts/inspect-imagededup2-notebook-fixtures-20261019.py",
+  "reproducer_sha256": "ad1d48267d9d6e76f9f80da8e572103a288a3b9779dda2b545319e86a55acaed",
+  "findings": [
+    "Three lower-level IR pickle fixtures have values outside key domain; public evaluate validator rejects them. Passing direct IR tests do not prove public evaluate on those fixtures.",
+    "Evaluation notebook saved outputs originate2019TensorFlow/Python3.6, not current pinned PyTorch model execution.",
+    "Original IR module reproduces saved notebook MAP0.6/NDCG0.8/Jaccard0.6 from stored mappings; no inference rerun.",
+    "Custom-model notebook contains no saved outputs; pretrained downloads/transformers install cells are unexecuted source examples."
+  ],
+  "limits": [
+    "Full notebook cell source/text outputs read; no notebook cells, shell commands, downloads or models executed.",
+    "Primitive-only pickle loading plus full value/schema inspection; not image/visual or production input qualification.",
+    "Selected original map-validator bodies and entire IR module used; no whole-package/runtime/platform claim.",
+    "No foreign code adopted; pHash native investigation deferred."
+  ]
+}
