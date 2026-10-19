@@ -1,0 +1,29 @@
+{
+  "status": "partial_source_review_fixture_oracles",
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "whole_repo_complete": false,
+  "method": "Manual whole-file reading of both files, byte-compared against pinned Git objects; no upstream execution.",
+  "new_whole_files_read": {
+    "tests/Harness/Fixtures.ps1": "c854301d058ac224596f5a4096f9d502528aaf51dbb33e538db42f40ecacc0f6",
+    "tests/Harness/NativeInterop.cs": "7c0ef53ca3cf88410acbe3e60633b5d104611c4deb18ceb2fbd26d7baf59f7ed"
+  },
+  "whole_files_read": 41,
+  "coverage": "docs/research/dedup-500/windirstat3-fixture-coverage-v16-20261019.json",
+  "coverage_sha256": "3041b71e759016e813d03e529298fb16b656deae7d8881bf132230ae8b4dae62",
+  "findings": [
+    "New-TestFile uses seeded System.Random bytes and fixed UTC modification time; New-TestTree includes same-content 32768-byte pair, zero-length file, empty directories and punctuation/Unicode names. Stress corpus uses 64KiB payloads with distinct integer prefixes, so it primarily exercises enumeration rather than large-file sampling.",
+    "Get-DiskSnapshot independently enumerates filesystem entries via .NET, never follows directory reparse points, and treats links as zero logical/physical bytes. AllocationSize comes from handle-based FileStandardInfo; this is independent observation, not independent reimplementation of Windows filesystem semantics.",
+    "Assert-ScanSnapshot compares sorted path arrays including multiplicities and root, recursive file/folder counts and logical bytes, plus optional physical bytes. This assertion does not compare timestamps or attributes despite collecting them in snapshots.",
+    "GetFileIdentity returns volume serial plus64bit file index and separate link count. It is not a content identity and does not use128bit FILE_ID_INFO. No wider-platform identity guarantees inferred.",
+    "Fixture runner copies executable and language resource into per-scenario folder, writes portable settings, and defaults UseFastScanEngine0, ProcessHardlinks0, ScanForDuplicates0. Thus ordinary scenario defaults do not exercise fast NTFS scanning, hardlink accounting or duplicate mode unless overridden or enabled by CLI.",
+    "Process execution drains stdout/stderr asynchronously, imposes bounded exit wait and tracks command metadata. External writer creates/renames/deletes synthetic16384-byte files, signals readiness after33iterations, stops on marker or90second deadline. Its presence alone does not establish that each test overlaps the mutation interval.",
+    "Native UI exchange checks matching bitness for pointer-bearing text/header/selection structures and validates full remote-memory read/write lengths. Text reads follow returned owner-data pointers and cap4096UTF16 code units; count cap1000000. This bounds the evidence and may truncate longer text.",
+    "On message timeout, exchange buffers intentionally remain allocated in the target until process teardown, avoiding premature release while receiver may reference them. This design was read only; no actual Windows timeout or process-memory probe executed."
+  ],
+  "limits": [
+    "No Windows API, PowerShell, UI exchange, allocation, hardlink, reparse, mutation or complete upstream test execution in this increment.",
+    "Ui.ps1 and remaining scenario files still need whole-file review.",
+    "No production code adopted; native pHash memory-error investigation remains deferred."
+  ]
+}
