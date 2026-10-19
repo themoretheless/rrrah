@@ -1,0 +1,25 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Whole-file manual reading of KeyboardSimulator and VirtualKey; exact-commit bytes matched Git blob inventory. No key/input APIs executed.",
+  "new_whole_files_read": {
+    "ExplorerTabUtility/Helpers/KeyboardSimulator.cs": "163cc9fb28b19c49f10201e1b545e78c77d51e93951944be988f252cc49a643b",
+    "ExplorerTabUtility/WinAPI/VirtualKey.cs": "e3a95a157d07e7e03cd79d85ab4e4a003115c7947cc384e21242969754e9e58e"
+  },
+  "whole_files_read": 44,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v17-20261019.json",
+  "coverage_sha256": "88cae1158d4edd9a1f202ffffd570526e87a9c6fa5a32421132690c8c83b7234",
+  "findings": [
+    "VirtualKey explicitly uses ushort, resolving v14 uncertainty about KEYBDINPUT wVk width. Whole INPUT ABI layout still requires architecture/runtime checks.",
+    "Modifier strokes build down events then reverse-order releases; params main-key overload holds all main keys simultaneously, whereas SendKeyPress(params) emits sequential press pairs. These are distinct semantics.",
+    "SendInputs returns silently for empty arrays and defaults throwOnError=false; partial native input insertion is ignored in default path. Even throwing path does not compensate for already inserted down events.",
+    "CreateKeyDown/Up maps scan byte via MapVirtualKey and sets extended flag for fixed key set; scan-code flag is not set. Keyboard layout-specific behavior and special keys not qualified.",
+    "ModifierKeys is public readonly array: reference immutable but elements mutable. Currently-pressed modifier helpers sample key state at separate times and do not preserve one atomic keyboard-state snapshot.",
+    "Event-array length arithmetic uses int multiply/add without explicit checked admission, and null arrays are not guarded. CreateKeyInput accepts uint extra-info though structure is native-width; wider tag values cannot be expressed through this helper."
+  ],
+  "limits": [
+    "No keyboard simulation, hooks, foreground changes, Windows API execution or original runtime tests. No foreign production code adopted.",
+    "Completed count148/500; full filtered checkout session13181 remains separate; native pHash investigation deferred."
+  ]
+}
