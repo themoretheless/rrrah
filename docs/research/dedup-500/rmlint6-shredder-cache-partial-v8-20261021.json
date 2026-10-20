@@ -1,0 +1,50 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 8,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/shredder.c": {
+      "sha256": "66ea3d8743c7c5f3ce9d48d805f80d8396841a7adbd6d2f421d112414bf28f8c",
+      "new_ranges_inclusive": [
+        [
+          701,
+          774
+        ],
+        [
+          841,
+          979
+        ],
+        [
+          1041,
+          1260
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          1260
+        ],
+        [
+          1585,
+          1630
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Group destruction requires parent absent and pending count0; child orphaning clears parent under lock and finalizes only if pending0. This supplies part of candidate-group lifetime discipline but not full concurrent proof.",
+    "A file is considered complete for status decisions when group hash_offset equals file_size. Unique/unmatched flags can force more hashing; qualifying preferred/new/basename criteria also control admission.",
+    "External checksum strings are sorted and clustered by strcmp equality before normal progressive hashing. When every file has external checksums, each cluster group is finalized directly; trust depends on external checksum acquisition/validation still unreviewed.",
+    "Zero-size files receive a new empty digest during preprocessing without content reopening in this function. End-to-end mutation handling remains to inspect.",
+    "Hash callback signals waiting device task or invokes sift directly; earlier inspected sift drops hashing_failed entries.",
+    "Original selection ranks symlinks after regular files and respects cached-original/explicit preference criteria before general rank. This is output policy, not content-equality proof."
+  ],
+  "limits": [
+    "Source1-1260 now read; later sections and xattr admission still require inspection.",
+    "No runtime execution or own-library change; native pHash deferred."
+  ]
+}
