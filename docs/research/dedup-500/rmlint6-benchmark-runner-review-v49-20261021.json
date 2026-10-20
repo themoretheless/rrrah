@@ -1,0 +1,60 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_speed/benchmark.py": {
+      "sha256": "f435fa7569e11c24ada4bcbae5072d3a3964091cf9392af4e47fc92572823d1e",
+      "git_blob": "282513132d50d619dd13fd49c0813d65f0d599f7",
+      "lines": 737
+    }
+  },
+  "cumulative_whole_files_read": 101,
+  "tracked_blobs": 289,
+  "method": "Full pinned file read; Git blob verified. Original Program.run AST-extracted and executed with deterministic time, subprocess, cache-flush and statistics stubs; no real scanner process or system cache modification.",
+  "findings": [
+    "Program.run catches CalledProcessError then computes averages using configured n_runs even when fewer samples exist. First-run failure yields all-zero averages; partial runs are biased downward. No explicit failure field prevents storing these as benchmark results.",
+    "Across sub-runs it keeps fastest elapsed time plus matching CPU/memory values, but independently overwrites duplicate/group counters with later successful parsing. Thus one stored row may combine timing from one attempt with counts from another.",
+    "Timing uses time.time rather than a monotonic clock. Programs run sequentially; each sub-run flushes caches then runs three iterations. This is not alternating paired comparison.",
+    "Global /tmp/.cpu_usage and /tmp/rmlint.json paths allow concurrent or stale-file interference. read_time_info returns scalar zero on OSError although caller unpacks two values; malformed file parsing exceptions are not caught. memory_usage is initialized -1 and never updated, even though row peak memory is separately recorded.",
+    "Command construction joins unquoted path strings and uses shell=True, so literal whitespace/metacharacter paths are not preserved as argument boundaries. Rdfind output option is concatenated with joined input paths without a separating space.",
+    "Install skips rebuild whenever a cached binary exists; early return when no install procedure exists occurs before finally restoring cwd. Rmlint246 references a build script absent from the pinned tree inventory.",
+    "No expected-content partition gate runs before timing. Defaults datasets None is iterated unconditionally in main, so invoking without -d can fail before useful work."
+  ],
+  "executed_control": {
+    "function": "tests/test_speed/benchmark.py:Program.run",
+    "configured_runs": 3,
+    "configured_sub_runs": 1,
+    "cases": [
+      {
+        "successful_runs": 0,
+        "attempted_runs": 1,
+        "average": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "returned_memory": -1
+      },
+      {
+        "successful_runs": 1,
+        "attempted_runs": 2,
+        "average": [
+          3.0,
+          6.666666666666667,
+          0.3333333333333333,
+          2.3333333333333335,
+          0.6666666666666666
+        ],
+        "returned_memory": -1
+      }
+    ],
+    "scope": "Original method under synthetic subprocess and clock dependencies; verifies accounting behavior, not measured performance."
+  },
+  "limits": [
+    "No production change, upstream benchmark execution or new performance result.",
+    "Review incomplete: 101 of 289 tracked blobs; global full-repository count unchanged."
+  ]
+}
