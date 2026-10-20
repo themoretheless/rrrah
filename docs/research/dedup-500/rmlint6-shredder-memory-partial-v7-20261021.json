@@ -1,0 +1,51 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 8,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/shredder.c": {
+      "sha256": "66ea3d8743c7c5f3ce9d48d805f80d8396841a7adbd6d2f421d112414bf28f8c",
+      "new_ranges_inclusive": [
+        [
+          1,
+          700
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          700
+        ],
+        [
+          775,
+          840
+        ],
+        [
+          980,
+          1040
+        ],
+        [
+          1585,
+          1630
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Architecture uses progressive same-size child groups, per-device readers and ordered single-thread hash pipes. These are scheduling design references; no contemporary throughput measurements.",
+    "Read-size calculation rounds page-based increments, grows factor8 per generation, and caps paranoid increments at16MiB. Ordinary maximum factor derives from256MiB target.",
+    "Paranoid governor estimates memory from potential pending files in ancestor chain and remaining increment size. It explicitly admits work when active_groups is below threshold even if estimated memory exceeds available accounting. This is a progress governor, not strict memory ceiling.",
+    "mem_return releases accounted budget and unrefs group digest for active groups. Interaction with finishing release requires status/lifecycle continuation before asserting null-digest failure.",
+    "Counter notifications allocate queued work; full backlog and cancellation behavior require further reading. Fake-abort control can trigger after initial progress.",
+    "Extended-attribute write path explicitly avoids clamped partial-file scans. Cache read/admission checks remain unreviewed.",
+    "Architecture comment names Murmur shadow, while verified config/implementation use XXH3; comments alone are not algorithm evidence."
+  ],
+  "limits": [
+    "Source lines1-700 read; implementation still partial and receives no whole-file credit.",
+    "No runtime tests, performance claims or own-library edits. Native pHash deferred."
+  ]
+}
