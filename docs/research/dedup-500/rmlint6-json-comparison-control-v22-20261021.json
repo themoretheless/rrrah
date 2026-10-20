@@ -1,0 +1,29 @@
+{
+  "source_sha256": "f5e81eaa73dbc86021b153da2e3fc8f586bdecf813738c5f141f12118ce1b223",
+  "method": "AST extracts original two comparison functions unchanged; executes on synthetic JSON records, no subprocess or rmlint binary",
+  "results": {
+    "identical_control": true,
+    "extra_record_same_footer": true,
+    "unique_metadata_changed": true
+  },
+  "expected_strict_equivalence": {
+    "identical_control": true,
+    "extra_record_same_footer": false,
+    "unique_metadata_changed": false
+  },
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "status": "reproduced_test_helper_blind_spots",
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 33,
+  "findings": [
+    "Unchanged comparison functions accept extra second-document record when footer unchanged.",
+    "Unchanged comparison functions accept changed size/mtime/inode/device fields for unique_file records.",
+    "Identical documents accepted as positive control. This proves helper limitations, not incorrect rmlint output."
+  ],
+  "limits": [
+    "Synthetic JSON helper test only; no full upstream process execution or rrrah implementation change.",
+    "Global full repository count150/500; native pHash deferred."
+  ]
+}
