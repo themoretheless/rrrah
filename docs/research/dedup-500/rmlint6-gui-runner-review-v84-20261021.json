@@ -1,0 +1,32 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/runner.py": {
+      "sha256": "0c2a388b737573bb85ff022852d3634f9df3d71d38c3b24b349d4abbfbc720c5",
+      "git_blob": "7925c4ec4128a353cb6300d463387d9fb406b27d",
+      "lines": 547
+    }
+  },
+  "cumulative_whole_files_read": 187,
+  "tracked_blobs": 289,
+  "method": "Full pinned file read; Git/SHA256 verification. Executed AST-extracted Runner.replay and on_io_event with synthetic objects/stream. No Gio process, GUI or modification script launched.",
+  "findings": [
+    "Launcher uses spawnv argument arrays, preserving literal path arguments, but appends input paths without explicit -- separator. It changes cwd to temporary directory, so relative input paths require caller normalization.",
+    "Runner.run dereferences process even when launcher returns None after GLib error. stderr is not drained during stdout streaming; termination callback only reads4096 bytes after wait failure. Large stderr can stall child before termination; source-level concern not executed.",
+    "on_io_event treats empty string and EOF identically, emits process-finished from stream state without synchronizing successful wait callback. Synthetic blank-line control confirms early finish and process reference cleared; actual valid scanner stream impact not reproduced.",
+    "replay defaults allowed_paths=None but unconditionally subscribes allowed_paths[path] after condition accepting None. Nonempty valid synthetic report raises TypeError before writing or spawning. It also mutates is_original in original stored objects and sets was_replayed before completion.",
+    "on_replay_finish emits success-shaped signal even after wait error, save relies on was_replayed rather than verified outputs. Incomplete/malformed JSON rows are logged and skipped, with no explicit complete-report validation before replay in this module.",
+    "Script.run forces -p and -f, silences stderr and signals finished on stream EOF without checking exit status. Script display decodes invalid UTF8 with errors ignored and strips ANSI; displayed paths can lose identity. _fix_shell_auto_remove_path globally text-replaces source path without shell-context escaping."
+  ],
+  "executed_control": {
+    "replay_default_allowed_paths_exception": "TypeError",
+    "blank_line_emits_finished": true,
+    "blank_line_clears_process_reference": true
+  },
+  "limits": [
+    "No complete GUI/process-pipe or generated-script execution.",
+    "187/289 blobs reviewed; global whole-repository count150/500."
+  ]
+}
