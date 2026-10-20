@@ -1,0 +1,64 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_formatters/test_json.py": {
+      "sha256": "81de1de81b07eea61789d40cd6a1e53484e06b4bddfffbe41afb3b84e357032e",
+      "git_blob": "2cb439ea00940440a5e39ac37a206f302bc4a0bc",
+      "lines": 19
+    },
+    "tests/test_formatters/test_csv.py": {
+      "sha256": "1b453abf24116597ce6739a93ffbcbe0ea3c86d92f0cf27fc5803d929b7c1e2a",
+      "git_blob": "83bc0e330e11d12b5dedea284f1d2ead718bfa2e",
+      "lines": 42
+    },
+    "tests/test_formatters/test_others.py": {
+      "sha256": "f967d5418752c955dd786936629c486e03667b76f09940e4275858d3b170f30d",
+      "git_blob": "bf7a7dc134178c5b8bbb272972930ab5b0eeb044",
+      "lines": 60
+    },
+    "tests/test_formatters/test_backup_special.py": {
+      "sha256": "5d7523ec9a1d1b0894797c050e4a222c924f30c65bc0714ccbbae15b958926de",
+      "git_blob": "618dae3df938c5c539a1eeb22ba6daf9f17e740c",
+      "lines": 48
+    },
+    "tests/test_formatters/test_py.py": {
+      "sha256": "68183a70fd00fe554533cea821727a05c48dab9e4052f9b92a49df6f173b9bbd",
+      "git_blob": "c9ced12b00ad7d11d643a54e1ba71a5b0397d93f",
+      "lines": 100
+    }
+  },
+  "cumulative_whole_files_read": 78,
+  "tracked_blobs": 289,
+  "method": "Complete reads of five pinned test files; each Git blob identity and SHA256 checked. Executed original AST-extracted interpreter helper with a synthetic subprocess object; no generated scripts or upstream tests executed.",
+  "findings": [
+    "JSON test uses filenames with control characters, quote and backslash and opens returned paths. It does not assert returned path set equals the two authored paths; both fixtures have equal size, so swapped or repeated paths can satisfy these assertions.",
+    "CSV test uses csv.DictReader and asserts complete ordered type/name/size rows including apostrophe/comma filename. Its nonzero-checksum assertion also accepts empty strings because set(empty) differs from the singleton zero set. A separate regression explicitly expects empty checksums for unhashed unique files.",
+    "Multi-formatter smoke test explicitly does not validate results. Summary/fdupes regression excludes directory rows and checks one suspicious item text, but does not assert full duplicate path partition.",
+    "Backup tests preserve /dev/null and its symlink from renaming; missing/non-character device returns without a recorded pytest skip.",
+    "Python formatter tests execute generated deletion scripts in upstream bodies, check content/size/inode safeguards and rerun stability. None executed here. Interpreter helper uses subprocess.call without checking its returncode; CalledProcessError is not raised merely by nonzero call result."
+  ],
+  "executed_control": {
+    "function": "tests/test_formatters/test_py.py:_check_interpreter",
+    "cases": [
+      {
+        "subprocess_call_returncode": 0,
+        "helper_accepts_interpreter": true
+      },
+      {
+        "subprocess_call_returncode": 1,
+        "helper_accepts_interpreter": true
+      },
+      {
+        "subprocess_call_returncode": 127,
+        "helper_accepts_interpreter": true
+      }
+    ],
+    "scope": "Original helper, stubbed subprocess.call, no interpreter process or generated cleanup script execution"
+  },
+  "limits": [
+    "Source-level assertions and isolated helper control do not prove formatter runtime correctness.",
+    "No production optimization or complete repository-review claim."
+  ]
+}
