@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_impl.h": {
+      "sha256": "d388dca3574602c8849805ea3c8c0a12d082ac0e428756f305e111942f099af4",
+      "git_blob": "88e71e41e90f3f3cca4d39f19d50e74325fb5ce2",
+      "lines": 333
+    }
+  },
+  "cumulative_whole_files_read": 149,
+  "tracked_blobs": 289,
+  "method": "Full pinned internal-header read, Git/SHA256 verification. Compiled unchanged previously read portable compression source and original headers with a small authored known-answer harness.",
+  "findings": [
+    "Header defines domain flags for chunk boundaries, parent/root, keyed hashing and two derive-key stages. Explicit little-endian load/store helpers avoid host-byte-order serialization in portable code.",
+    "highest_one requires nonzero input; power-of-two helper guards zero by OR with one. Header fixes maximum SIMD degree16 on x86,4 for NEON and1 otherwise, plus at-least-two buffer capacity helper. These are internal preconditions, not public arbitrary-input guarantees.",
+    "AArch64 defaults NEON on except big-endian ARM. Counter low/high helpers preserve full64-bit counter across compression words. Dispatch declarations distinguish full-block multi-input hashing from individual compression/XOF."
+  ],
+  "executed_control": {
+    "function": "blake3_compress_xof_portable",
+    "source": "lib/checksums/blake3/blake3_portable.c",
+    "compiler": "host cc",
+    "exit_code": 0,
+    "flags": [
+      "CHUNK_START",
+      "CHUNK_END",
+      "ROOT"
+    ],
+    "cases": [
+      {
+        "input": "",
+        "digest": "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262"
+      },
+      {
+        "input": "abc",
+        "digest": "6437b3ac38465133ffb63b75273a8db548c558465d79db03fd359c6cd5bd9d85"
+      }
+    ],
+    "scope": "First32 output bytes for one root block at counter0. Does not execute hasher update/tree merging, SIMD, keyed or derive-key modes."
+  },
+  "limits": [
+    "Full local cargo session54565 remains live; no final package result claimed.",
+    "149/289 blobs reviewed; no production code change or measured speedup."
+  ]
+}
