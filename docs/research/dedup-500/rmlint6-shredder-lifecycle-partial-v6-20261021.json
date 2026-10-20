@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/config.h.in": {
+      "sha256": "894e517ff276f988ceed14457731597c0f54754cc00e1cd38300d2a3354a593a",
+      "git_blob": "a5d28cc327934b18cb98637c652acd0b1c8e7e9e"
+    }
+  },
+  "cumulative_whole_files_read": 8,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/shredder.c": {
+      "sha256": "66ea3d8743c7c5f3ce9d48d805f80d8396841a7adbd6d2f421d112414bf28f8c",
+      "git_blob": "10e337ce6f59db4a0d68c5a1647b8e44a8f6ff3b",
+      "ranges_inclusive": [
+        [
+          775,
+          840
+        ],
+        [
+          980,
+          1040
+        ],
+        [
+          1585,
+          1630
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Config binds paranoid shadow to RM_DIGEST_XXHASH, resolving prior uncertainty about xxhash-specific extraction in checksum.c. Default ordinary digest is BLAKE2B.",
+    "Observed release_buffers call occurs in RM_SHRED_GROUP_FINISHING before result processing. That is consistent with releasing byte evidence after grouping; it does not alone prove hash-only admission during initial grouping.",
+    "Sift discards files marked hashing_failed before hashtable lookup, then uses rm_digest_hash plus rm_digest_equal for child-group membership.",
+    "New child-group digest is sent as candidate to in-progress digests under parent lock. Paranoid task setup creates a fresh paranoid digest, registers pending digest and sends existing child candidates under same lock.",
+    "Non-paranoid task path copies progressive group digest; inspected code therefore narrows prior copy concern for the main paranoid hashing path.",
+    "Lifecycle of child groups, final status transition, mutation checks and output processing still require full reading before claiming strict correctness or a reachable lifecycle defect."
+  ],
+  "limits": [
+    "Only config header receives whole-file credit; shredder.c partial.",
+    "No runtime tests or implementation edits. Native pHash deferred; global count150/500."
+  ]
+}
