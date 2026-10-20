@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 177,
+  "tracked_blobs": 289,
+  "method": "Compiled previously reviewed original FTS source with a prefix mapping readdir to authored fault_readdir; original body unchanged. Linked installed GLib using pkg-config. Ran physical/no-chdir traversal on temporary directory with two authored regular files.",
+  "source_sha256": "2897c6212559eeeef1c70b5d6ba6042f7f95693ce9d374ad7cd7fd2297fad0ee",
+  "harness_sha256": "9ee1298e140a25354fce3959ff21f47baa025842131068b74ece5fc1c5b68229",
+  "executed_control": {
+    "exit_code": 0,
+    "cases": [
+      {
+        "injected_eio": false,
+        "regular_files": 2,
+        "error_entries": 0,
+        "terminal_errno": 0
+      },
+      {
+        "injected_eio": true,
+        "regular_files": 0,
+        "error_entries": 0,
+        "terminal_errno": 0
+      }
+    ],
+    "scope": "Original FTS API under synthetic readdir EIO on first directory read. No scanner binary, permissions change, deletion or data-loss action."
+  },
+  "findings": [
+    "Injected directory-read failure is indistinguishable from empty directory through observed entry error states and terminal errno. Normal traversal confirms fixture has two readable regular files.",
+    "This changes v80 finding from source-level concern to reproduced FTS behavior. It does not establish full rmlint report or directory-removal outcome; that remains unexecuted."
+  ],
+  "limits": [
+    "No new source-reading credit or production-library change.",
+    "177/289 rmlint blobs and150/500 whole repositories reviewed; goal incomplete."
+  ]
+}
