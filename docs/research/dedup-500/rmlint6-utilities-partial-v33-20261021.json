@@ -1,0 +1,38 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 42,
+  "partial_source_read": {
+    "lib/utilities.c": {
+      "sha256": "36243efa5680ab04d84c0cf842bf4a1562d2c379b1928a1904aa946fe1f17592",
+      "new_ranges_inclusive": [
+        [
+          661,
+          1000
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          1000
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Mount capability code compiled only with BLKID and GIO_UNIX. Physical scheduling/probing claims do not transfer to all platforms.",
+    "Reflink capability assumes btrfs/ocfs2 by filesystem name; xfs invokes xfs_info via shell pipeline. No physical clone operation or independent content proof in this probe.",
+    "Xfs command embeds mountpoint in single quotes without escaping embedded apostrophe. This is a construction defect from source, not executed or used against external system.",
+    "reflinkfs_table stores wrap_entry->type pointer, but mount_list_close frees that string. Later use of table values requires review before asserting reachable stale dereference.",
+    "Unknown devices grouped under disk0 with rotational assumption, while blkid failure branch treats device nonrotational. These are locality heuristics, not file identity validation.",
+    "Network filesystem server marker creates synthetic disk identifier; mapping must not be interpreted as unique file-content identity.",
+    "Mount iteration returns to beginning when current NULL on next call; code uses this to scan list twice. Not inherently termination bug in inspected loops."
+  ],
+  "limits": [
+    "utilities.c only1-1000 read; remaining API/FIEMAP content still to inspect.",
+    "No runtime tests, mount commands or rrrah edits. Native pHash deferred; global count150/500."
+  ]
+}
