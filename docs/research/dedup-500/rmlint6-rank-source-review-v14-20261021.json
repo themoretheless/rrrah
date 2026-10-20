@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/rank.c": {
+      "sha256": "5341e5e918e281bb1e6e19616c7bfa41cc8c5fa11cb9353fa37de74c9c974658",
+      "git_blob": "f230278756d1aa7e7e044c9f6f07d1f4ac58b2d0",
+      "lines": 398
+    },
+    "lib/rank.h": {
+      "sha256": "f5f2faa4fc41b08939b7705764d4625ab2551243d3976a9971b710c45533eb3d",
+      "git_blob": "9c3cd0718e197faae3aa3bfbe03479fbc8471455",
+      "lines": 72
+    }
+  },
+  "cumulative_whole_files_read": 19,
+  "tracked_blobs": 289,
+  "method": "Whole rank.c/h read, Git blob verification; no runtime execution.",
+  "findings": [
+    "Candidate grouping requires same observed size and symlink flag, then optional basename, extension, stem, parent basename and relative-path matches. These are explicit search filters and can split byte-identical files.",
+    "Case-insensitive comparison is ASCII case folding, not complete Unicode/filesystem name equivalence. Extension extraction is delegated to utilities and remains to inspect.",
+    "Original selection prioritizes lint type, regular-vs-symlink and preferred path, followed by configured mtime/name/length/depth/link/path/regex ranking. Ranking does not establish content equality.",
+    "Relative-path match compares traversal depth and corresponding trailing components, not root identity; directly supplied depth0 paths compare basenames.",
+    "Regex results cached in file bitmasks; compile limits patterns to RM_PATTERN_N_MAX(8). Cache freshness across configuration changes requires session lifecycle review.",
+    "Pattern delimiter parser checks only immediately preceding backslash for escaping angle brackets; complete regex escape parity not handled by this parser. No malformed-pattern runtime control yet.",
+    "Pattern compilation may return minified criteria alongside error; callers must reject error before using regex indexes. No claim of reachable invalid indexing until caller inspection."
+  ],
+  "limits": [
+    "Static source audit, no tests or own-library edits.",
+    "Config defaults, argument validation, utilities and session setup remain to inspect. Native pHash deferred; global count150/500."
+  ]
+}
