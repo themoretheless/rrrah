@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake2/blake2xb-ref.c": {
+      "sha256": "d19e46c7ac6da855c76a29e1b20d45fd0f091432365cab8c015bdf1a63d78d71",
+      "git_blob": "b369ee7ce5ba2ac25f74d8634c6307cb9f86fda9",
+      "lines": 241
+    },
+    "lib/checksums/blake2/blake2xs-ref.c": {
+      "sha256": "443850ea568fde695a23742f63f634358076c22c3ce9aa1802983c2919259121",
+      "git_blob": "4261e7ac8ca26c25eb8b078094367b10816736c5",
+      "lines": 239
+    }
+  },
+  "cumulative_whole_files_read": 162,
+  "tracked_blobs": 289,
+  "method": "Complete reads of two pinned reference implementations; verified Git blob and SHA256. No BLAKE2X runtime execution in this audit.",
+  "findings": [
+    "BLAKE2xb init limits declared output to1..2^32-1 and BLAKE2xs to1..65535; all-ones length acts as unknown-length sentinel. Ordinary final requires exact declared length; sentinel final accepts any nonzero output size.",
+    "Final rejects null/wrong-length output before finalizing root; propagates underlying root final failure, so repeated final is refused through consumed root state despite TODO comments about invalidation. This differs from unchecked leaf finalization in parallel variants.",
+    "Expansion creates per-block parameter domains with node offsets, full-width inner digests and final short block length. Intermediate key_length resets0 and fanout/depth reset0; result is not a prefix of a sequential BLAKE2 digest.",
+    "Output loop index is size_t but node_offset serialized32-bit. Sentinel mode lacks an explicit maximum output-block count check, so very large requests can eventually wrap serialized offset. Not allocated or executed here.",
+    "Successful final clears root/temp parameters/state; early errors inside expansion return before those clear calls. Selftests again require absent blake2-kat.h, so source inclusion does not prove vector execution."
+  ],
+  "limits": [
+    "No independent XOF oracle, huge-output allocation or performance run.",
+    "162/289 blobs reviewed; native pHash/ASAN item remains skipped."
+  ]
+}
