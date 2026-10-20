@@ -1,0 +1,38 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/chart.py": {
+      "sha256": "79be2446e5200fc39b09e1902f852daab2697d7de98d488c193034629bbde052",
+      "git_blob": "7d5a52fc2587a9e033c027f60b0307dcb92b3668",
+      "lines": 599
+    }
+  },
+  "cumulative_whole_files_read": 239,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read and Git/SHA256 verification; original AST hit/recursive-angle functions executed with fake nodes/allocation.",
+  "findings": [
+    "Hit testing computes x/distance before checking center layer. Original control at exact center raises ZeroDivisionError, so intended center-reset path is not reached for that coordinate. No live GTK input executed.",
+    "Zero-size parent assigns its entire angle to every child. Original control with two zero-size children assigns2pi to each; subsequent Segment normalizes offsets modulo2pi, potentially overlapping them. Pixel rendering remains unverified.",
+    "Child angular spans at or below pi/256 are intentionally omitted from chart recursion. Chart visibility therefore cannot demonstrate full-result coverage.",
+    "Rendering resets segment list but does not clear selected segment or pending tooltip timeout. Old selection may survive model/root changes; actual event-loop effect remains untested.",
+    "find_root and recursive_angle recurse by tree depth without local depth budget. Scanner depth configuration and Python recursion behavior are separate qualification gates.",
+    "Tooltip text is escaped before truncation to60 characters, allowing truncation inside markup entities. No Pango parse failure claimed without runtime control.",
+    "Drawing calculations divide by minimum allocation dimension and tooltip geometry uses tangent division. Zero/small allocation behavior requires actual Cairo/GTK validation.",
+    "Charts aggregate logical node sizes and do not prove physically reclaimable storage, duplicate partition completeness or scan success."
+  ],
+  "executed_control": {
+    "center_hit_exception": "ZeroDivisionError",
+    "zero_size_child_angles": [
+      6.283185307179586,
+      6.283185307179586
+    ],
+    "parent_angle": 6.283185307179586,
+    "scope": "Original extracted hit/angle methods with fake nodes and allocation; no Cairo drawing or GTK event loop."
+  },
+  "limits": [
+    "239/289 blobs reviewed; global whole-repository count150/500.",
+    "No chart screenshots, actual GUI events or performance qualification."
+  ]
+}
