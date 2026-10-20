@@ -1,0 +1,52 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/SConscript": {
+      "sha256": "13ada550128e046afd57e023a3bea9cde3ca9804ab839ce6482c3fc4bd621a65",
+      "git_blob": "aaee5b8daffc04dc8ada9bd7b9e4baacdbea95c6",
+      "lines": 101
+    },
+    "lib/checksums/SConscript": {
+      "sha256": "5407659b031168888fc1b4e63d2c542941845c3cad57e254f1a82dd999173e5f",
+      "git_blob": "5023991d1db59102a5c8f376a854bc98def10d05",
+      "lines": 73
+    },
+    "lib/checksums/versions.txt": {
+      "sha256": "c9de469fe98c3cd9569fac14b3a0852461ad729e525a2b768414f4438d1c80a6",
+      "git_blob": "bb4713dc9f4b733e0bf4790f8b60b24a55347d13",
+      "lines": 23
+    },
+    "lib/checksums/sha3/README.md": {
+      "sha256": "8472f01f5ce727233380c3b0a713192842ea0bc72588fdc391d754aff6800998",
+      "git_blob": "79490691fabb65d57bae72668b244f79e39c05ea",
+      "lines": 80
+    },
+    "lib/formats/null.c": {
+      "sha256": "ee23172948890179b18bb89c1b14f83dbadbbfcc206c2c0c429bc38f211ed488",
+      "git_blob": "3c861563d36c686541046b61b5117e0a51cbb08c",
+      "lines": 46
+    },
+    "lib/formats/timestamp.c": {
+      "sha256": "ba467963240d7c8bf5c7f4ddd2dcf70a25f120b804ab72b5664b5497ed4a99f1",
+      "git_blob": "ccf2b4b1e0d8f4a5ac18c6ca287a94b23ecdef25",
+      "lines": 68
+    }
+  },
+  "cumulative_whole_files_read": 122,
+  "tracked_blobs": 289,
+  "method": "Complete reads of six pinned source/documentation blobs; verified Git blob and SHA256. Build scripts not executed; provenance declarations not independently matched to upstream sources.",
+  "findings": [
+    "Library build generates config.h from explicit feature/version values and embeds Python/shell payloads using C23 embed when available or generated include fallback. Formatter objects explicitly depend on payloads, and library depends on config/generated payloads. This explains build dependencies, not runtime correctness.",
+    "BLAKE3 build selects handwritten SIMD assembly for x86_64, per-object ISA flags for 32-bit x86 C implementations, NEON for little-endian AArch64 and portable fallback otherwise. x86 runtime dispatch intent is documented, but dispatch implementation and target matrices remain unverified by this audit.",
+    "versions.txt declares BLAKE2 commit fb4b09b, BLAKE3 tag 1.8.5 and xxHash v0.8.3 as unmodified imports. These are pinned repository metadata assertions, not independently verified upstream equivalence.",
+    "SHA3 README documents incremental Init/Update/Finalize with internal-context output pointer, no allocation/free, SHA3-224 unsupported and Visual Studio target not tested. Described self-tests are documentation only and were not run here.",
+    "Timestamp formatter writes current wall-clock timestamp during INIT, not after successful traversal/hash completion. It has no later completion/abort check and ignores fprintf status. Therefore an updated stamp alone is not evidence of a successful complete scan.",
+    "Null formatter deliberately registers no callbacks; selecting it provides no report or correctness evidence."
+  ],
+  "limits": [
+    "No compiler-target qualification or executed benchmark result.",
+    "Review remains incomplete: 122 of 289 tracked blobs; problem pHash/ASAN item untouched."
+  ]
+}
