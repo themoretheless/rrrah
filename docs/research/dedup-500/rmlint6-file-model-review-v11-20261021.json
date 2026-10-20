@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/file.c": {
+      "sha256": "246f40439b9a4ba5efc01b93c01dc849a2dc0ab2ce14160660a8bc345fdfbf77",
+      "git_blob": "f86db1be3a9dacc64aab6de8d78cf1afc79b7bec",
+      "lines": 333
+    },
+    "lib/file.h": {
+      "sha256": "da1153c16ee516da7eb2325989c699ef666285d66eb686544aa1be422da27dd2",
+      "git_blob": "217cf3d5b8d104db491cfd15b895c5ff7625ab91",
+      "lines": 430
+    }
+  },
+  "cumulative_whole_files_read": 13,
+  "tracked_blobs": 289,
+  "method": "Whole file.c/file.h reads with Git blob and SHA256 verification.",
+  "findings": [
+    "RmFile captures initial stat size and floating mtime; device/inode stored in path trie node. Model has no retained ctime field or open-file descriptor in these files. This constrains available later mutation checks without proving whole-program behavior.",
+    "Path reconstruction uses fixed PATH_MAX buffers and void wrapper; trie truncation/error handling requires pathtricia implementation review.",
+    "path_index unsigned input is stored guint16; link and outer-link counts gint16, depth gint16. Range validation must be checked in callers before large-count conclusions.",
+    "Clamped comparison uses start/end offset or file-size factors, explicitly computes slice size and rejects nonempty file with empty slice. Partial equality is a configured behavior and should not be adopted as whole-file proof.",
+    "Lint-type string lookup clamps type to array element count, not last valid index. For value at/above count it selects one-past-end; caller reachability and runtime reproduction remain untested.",
+    "rm_file_copy calls rm_digest_copy(file->digest) without nullable guard, even though new model digest may be NULL. Valid copy call sites still require inspection.",
+    "Hardlink/cluster operations maintain shared queues and count all bundled paths; mutation/refcount atomicity does not make shared queue mutation automatically thread-safe."
+  ],
+  "limits": [
+    "Static model audit only; no new runtime tests or rrrah source edits.",
+    "Traverse/path-trie/copy callers remain to inspect. Native pHash deferred; global full repository count150/500."
+  ]
+}
