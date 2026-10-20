@@ -1,0 +1,22 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Pinned Git blob verified; all100 composited GIF frames visually inspected on four indexed sheets at396x220 thumbnails. Source1920x1080, duration8200ms.",
+  "new_whole_files_read": {
+    "Assets/DetachSnap.gif": "59d2be3468dbe12c35839c970230a35debd86ea877c1c55bcde432cca2abeadb"
+  },
+  "whole_files_read": 103,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v54-20261021.json",
+  "coverage_sha256": "2ff60c421727fbad200ddf6f6a99a67f29edac652fffd78cbfafa938d86bc6ab",
+  "findings": [
+    "Title describes Detach and Snap Windows. Starting Explorer window has multiple tabs and selected folder row.",
+    "Ctrl+Q overlay appears around43; Explorer window moves/resizes to left, then another separate Explorer window appears around65 and is placed at right. Final scene displays two side-by-side Explorer windows.",
+    "Visible outcome illustrates tab separation and window layout; exact preservation of selection, navigation history and file identity is not qualified from thumbnails.",
+    "No file copying or file-content duplicate detection demonstrated. Last-tab refusal, failed destination creation, shutdown and multi-monitor behavior are not exercised by this recording."
+  ],
+  "limits": [
+    "Visual source review only, no independent Windows execution, library changes or fresh tests.",
+    "ExplorerTabUtility partial103/104; only Assets/ExplorerTabUtility.gif remains. Global full repository count148/500. Native pHash investigation deferred."
+  ]
+}
