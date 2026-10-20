@@ -1,0 +1,61 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_symlinks.py": {
+      "sha256": "664651471f5649044425f9e50d809c4131ef10f7243c8c9228fe4e69ef93c0c5",
+      "git_blob": "2f9d5176cbe04d3a8f78444e40b14ed92b2f1584",
+      "lines": 91
+    },
+    "tests/test_options/test_stdin.py": {
+      "sha256": "925905befab7a7dcaf70c7ce66c3f8b871ed84f304c0f843e3b168de556d8340",
+      "git_blob": "ecf276464fe4bdb10cb2166eef99cdfabaf028aa",
+      "lines": 93
+    },
+    "tests/test_options/test_keep_hardlinks.py": {
+      "sha256": "ba02ad5a460a7e730eb7985e3b4a63712727a558728b83e73897f83c999286ca",
+      "git_blob": "cc43202c857021a63a2290c13db56b9a6f0a56a4",
+      "lines": 73
+    },
+    "tests/test_robustness/test_path_doubles.py": {
+      "sha256": "ad97e2007c92f12bf4d1431e3bc174c518efac0035084685ae3728ff8aa16528",
+      "git_blob": "7f9126c2406e2363a75d0acbb38b60bd9da715ac",
+      "lines": 82
+    },
+    "tests/test_robustness/test_badlinks_as_args.py": {
+      "sha256": "a4c75a68cd04d489693b861fbf4312d46ac0e74e92f921af3319a17da349a9de",
+      "git_blob": "74b6b901fbd00653830902cea6920507ea4f8a88",
+      "lines": 33
+    }
+  },
+  "cumulative_whole_files_read": 60,
+  "tracked_blobs": 289,
+  "method": "All five source files read completely; Git blob and SHA256 verified. Upstream tests not run.",
+  "findings": [
+    "Symlink tests distinguish link text from regular-file bytes, cover follow/ignore/see modes and original flags, and ensure ignored broken symlinks do not prevent directory matching. Default-path-set test does not assert record types.",
+    "stdin tests use subprocess argument arrays and cover newline-separated names, NUL-separated names containing newlines, leading-dash paths after --, and empty stdin without implicit current-directory traversal. These subprocesses use communicate without timeout and do not assert returncode.",
+    "Hardlink tests explicitly assert original flags for no-hardlinked, hardlinked and keep-hardlinked plus tagged roots. Initial single-group tests index expected records but do not assert total record count; multiple-original tests do assert counts.",
+    "Repeated-path tests cover identical roots, direct files, overlapping directory/file inputs, symlink aliases and directory loops. Most assertions only count duplicate_file records, so unrelated record types are not rejected. Bind-mount test requires root and explicitly checks final record count and ordering.",
+    "Broken-symlink-as-argument regression checks exactly two badlink records and both full paths.",
+    "Our existing exact tests separate hardlink aliases from independently copied bytes and test followed symlink cycles. Their semantics concern physical-file deduplication rather than rmlint original-selection policies."
+  ],
+  "limits": [
+    "No bind mounts or generated deletion scripts executed.",
+    "No performance improvement claimed; repository review remains partial."
+  ],
+  "local_verification": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files hardlink -- --nocapture",
+    "exit_code": 0,
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 31,
+    "tests": [
+      "hardlink_aliases_and_followed_symlink_cycles",
+      "physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files"
+    ],
+    "source_sha256": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f",
+    "scope": "Current host filesystem; default and followed symlinks, directory cycle, repeated direct input, physical aliases versus independent copy. No bind-mount or Windows runtime coverage."
+  }
+}
