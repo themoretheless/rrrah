@@ -1,0 +1,66 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/pyproject.toml": {
+      "sha256": "93a56c9f231308c403fa915bcab4761e725a3bb62d79c5e60315f2d8ba4f7304",
+      "git_blob": "b78fab8a9b5c5d6f458f0bd04844de674a953d0f",
+      "lines": 39
+    },
+    "gui/setup.py": {
+      "sha256": "05d05db5bbba74faf021576bd338218285faf4f3f182385f98c3bf3fba06828c",
+      "git_blob": "e50e66f855690d38cf02ae7c902fb82cf3f49cbb",
+      "lines": 116
+    },
+    "gui/shredder.desktop": {
+      "sha256": "6093644913a1dfcfd32e2e8ba22220602702a28d0c472efb57a379e0e3929d25",
+      "git_blob": "90142160f0229147ba87ac10abe3ef2fba5d9739",
+      "lines": 13
+    },
+    "gui/TODO": {
+      "sha256": "d9c8734ad92e548338f7d8dfcac1d51e77fae8c99faf668cffcdf3126c23f94a",
+      "git_blob": "c5e3890d9fb3e7d8bbc2defc773dcebeb74b90e6",
+      "lines": 2
+    },
+    "gui/.gitignore": {
+      "sha256": "03f60202f1c77c275ff9522534d37add7b7fd13b2faaef70563455b665623e58",
+      "git_blob": "bdf4b16ff39122f6489849a282646f68b770ef00",
+      "lines": 7
+    },
+    "gui/Makefile": {
+      "sha256": "878a1ed303a5e1fff469184579bfc75c8bd2ae45f1b1ac392cfc7a24861230e5",
+      "git_blob": "6a18f8f0ce9ea802880a433cb9ad0c115452c3cb",
+      "lines": 51
+    },
+    "gui/schemas/io.github.sahib.rmlint.Shredder.gschema.xml": {
+      "sha256": "cdffbc6a01a50ffa4cf4933fc14594f8e8b6beab3eef9f61cdbe7ebad456c52c",
+      "git_blob": "2097d26e7e7bfef66ce9a31bfd4ba991b6b8f309",
+      "lines": 118
+    }
+  },
+  "cumulative_whole_files_read": 199,
+  "tracked_blobs": 289,
+  "method": "Complete reads of seven pinned configuration/source files; Git/SHA256 verification. Executed original AST-extracted version writer and fallback reader against a temporary generated file, without setup invocation or installation.",
+  "findings": [
+    "Version writer emits __version__, __pep440__, __revision__, but fallback reader requests version and pep440. Original writer/reader control returns None for its own generated file. Thus fallback-only packaging cannot determine version via this path; full wheel/sdist failure not executed.",
+    "Build hook compiles GResource into source tree and asks glib tool for dependencies, splitting whitespace. Package requires Python>=3.12 with GTK/PyGObject/Cairo and includes only compiled resource bundle as package data. Installed schema/desktop integration depends on separate build/install system.",
+    "Desktop TryExec checks shredder while Exec invokes rmlint --gui; availability checks and executed command differ. Manual Makefile uses in-memory settings and local schema/locale paths, so development run does not qualify installed persistent configuration.",
+    "Schema defaults: BLAKE2b, report hardlinks, see symlinks, partial-hidden directory use, cross mounts, no name restriction, min1/maxUINT64 bytes and max-depth512. Handler defaults removal. These defaults intentionally differ from exhaustive exact-file equality over all entries.",
+    "Algorithm enum lists native CRC choices without per-machine capability gating in schema; launcher selection ultimately relies on scanner validation. Size limits tuple has no relational minimum<=maximum constraint in schema.",
+    "TODO explicitly calls out discoverability of size/mtime search and incomplete translation marking. Ignore rules exclude generated resource/version/schema artifacts; their presence cannot be inferred from tracked source."
+  ],
+  "executed_control": {
+    "generated_file_exists": true,
+    "generated_keys": [
+      "__version__",
+      "__pep440__",
+      "__revision__"
+    ],
+    "fallback_read_result": null
+  },
+  "limits": [
+    "No package install, schema runtime or GUI rendering.",
+    "199/289 blobs reviewed; global whole-repository count150/500."
+  ]
+}
