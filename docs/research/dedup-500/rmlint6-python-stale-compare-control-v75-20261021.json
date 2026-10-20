@@ -1,0 +1,30 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 171,
+  "tracked_blobs": 289,
+  "method": "Executed original AST-extracted original_check in one Python process against two temporary files. Compared equal bytes, rewrote one file with same-length distinct bytes, restored nanosecond mtime, compared again and repeated after filecmp.clear_cache. No deletion handler executed.",
+  "source_sha256": "9f103cc22ddc5f60f5351c0c00db9b333abe0457bb0ebeaa519429e5f3b45cf8",
+  "python_version": "3.15.0",
+  "filecmp_source_sha256": "f895d4defb64409dd31f860e8af58f3d2877bfc17aed4f93217d1417c791c28a",
+  "executed_control": {
+    "initial_equal_accepted": true,
+    "same_inode": true,
+    "same_size": true,
+    "mtime_ns_restored": true,
+    "actual_bytes_differ": true,
+    "paranoid_cached_check_accepts_changed_bytes": true,
+    "paranoid_check_after_clear_cache_accepts": false
+  },
+  "findings": [
+    "Even explicit paranoid mode can accept changed equal-size bytes when the same path pair was previously compared in-process and mtimes restored. Clearing filecmp cache makes original helper reject the same differing bytes.",
+    "This reproduces stale comparison in the original helper, not execution of generated cleanup script or a cross-process persistent cache. Repeated report entries/multiple reports can reuse the same in-process comparison cache, but a full script scenario remains unexecuted."
+  ],
+  "limits": [
+    "No new source-read credit, production-library change or cleanup action.",
+    "Our separate current-host no-default package run passed284 tests with2 manual timings ignored; this upstream finding does not imply our exact path uses filecmp.",
+    "171/289 rmlint blobs and150/500 whole repositories reviewed; goal incomplete."
+  ]
+}
