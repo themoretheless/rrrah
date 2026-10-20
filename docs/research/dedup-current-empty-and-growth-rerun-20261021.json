@@ -1,0 +1,44 @@
+{
+  "status": "passed_focused_current_library_controls",
+  "reason": "Check own empty/nonempty and stale-empty behavior after rmlint zero-to-EOF extracted-function finding",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f"
+  },
+  "tests": [
+    {
+      "target": "exact_files",
+      "filter": "copies_empty_files_and_equal_size_negatives",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    {
+      "target": "exact_files",
+      "filter": "hidden_directories_and_empty_files_remain_in_exact_partitions",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    {
+      "target": "lib",
+      "filter": "formerly_empty_entries_are_reopened_before_hash_or_equality",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    }
+  ],
+  "invocation": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 with respective target and filter",
+  "findings": [
+    "Nonempty alpha copy pair has expected BLAKE3 digest; equal-size omega excluded; empty pair retained.",
+    "Ordinary and verified scans preserve complete partitions across hidden paths, empty and nonempty files.",
+    "Formerly empty entries changed to nonempty are rejected at hash/equality; fresh verified scan retains healthy empty pair only."
+  ],
+  "limits": [
+    "Three focused tests, not complete crate/workspace suite or platform qualification.",
+    "No production implementation change; native pHash deferred."
+  ]
+}
