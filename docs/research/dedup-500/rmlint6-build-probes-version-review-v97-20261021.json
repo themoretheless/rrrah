@@ -1,0 +1,54 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "site_scons/rm_build_checks.py": {
+      "sha256": "4fe988664900dfbc94afe5703f249182cd864fc50bb0b55449cca65c3bf786ac",
+      "git_blob": "fb7417781481f41613e7a2d95136e955f397d287",
+      "lines": 413
+    },
+    "site_scons/rm_build_support.py": {
+      "sha256": "de6f10dc8881610d9e34db71cd181a4ea22b90be7a908f941fb753c808a6523c",
+      "git_blob": "98475e9a9c1d81f71084135643725ae8e0c365bc",
+      "lines": 206
+    },
+    "site_scons/rm_version.py": {
+      "sha256": "67d32718177467f3bccaaad020cc4d695af0e932d7179e8cc134edf4f636699e",
+      "git_blob": "13256f1a0192b03b2cca2c939b9e7706cbaf6626",
+      "lines": 114
+    },
+    "src/SConscript": {
+      "sha256": "b727d041efe1a58336197096668997e5026a0e84aaf56a5150e0a47d98432e46",
+      "git_blob": "f19190ac4697f2f56682780fb9024e118b63d3b9",
+      "lines": 20
+    }
+  },
+  "cumulative_whole_files_read": 217,
+  "tracked_blobs": 289,
+  "method": "Complete four pinned source reads, Git/SHA256 verification; original AST Sphinx finder executed with fake inventory.",
+  "findings": [
+    "Sphinx fallback parses numeric suffix as float, so8.10 becomes8.1 and sorts below8.9. Original function selects8.9 from a fake inventory containing both; no actual compiler/builder invoked.",
+    "Fallback glob does not explicitly check executability or enforce required Sphinx version; unversioned which result wins immediately.",
+    "Feature probes mix SCons.Conftest checks, whose error-string return conventions differ from context.TryCompile boolean, and explicitly invert former results. No inversion bug claimed from unfamiliar return conventions.",
+    "FIEMAP probes type availability, xattr probes header/functions, CRC probes declaration and CPU builtin compile support. These do not establish filesystem support, CPU instruction safety or live ioctl behavior.",
+    "Target architecture/OS is detected from compiler macros rather than Python host, useful for cross builds; /sys/block check instead examines build-host filesystem. Cross-target runtime qualification remains separate.",
+    "C23 embed probe temporarily replaces CCFLAGS and restores after TryCompile, without a finally block if probe raises. No exceptional SCons run executed.",
+    "Payload encoder rejects comment terminator, emits exact byte literals plus decoded comments. Generated configuration depends on source substitution; no build/install was performed.",
+    "NUM_CPU is converted directly to int with no positive bound; invalid/zero/negative configuration needs caller validation. No worker-count failure claimed without SConstruct review.",
+    "Version parsing requires accepted SemVer subset and codename; prerelease maps explicitly to PEP440. Revision uses repository-root check then archive metadata, neither proves dirty state or reproducible binary identity.",
+    "CLI install references staged prefix; uninstall target references prefix. DESTDIR uninstall semantics require full parent-build evaluation; no removal executed."
+  ],
+  "executed_control": {
+    "available": [
+      "8.9",
+      "8.10"
+    ],
+    "selected": "/fake/sphinx-build-8.9",
+    "scope": "Original function with fake PATH inventory and absent unversioned binary; no executable invoked."
+  },
+  "limits": [
+    "217/289 blobs reviewed; global whole-repository count150/500.",
+    "No full configure/build, install, cross-platform runtime or performance qualification."
+  ]
+}
