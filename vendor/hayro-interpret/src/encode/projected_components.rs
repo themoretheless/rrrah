@@ -145,3 +145,132 @@ pub fn projected_component_bounds(
     tick(work, cancelled)?;
     Ok(result)
 }
+
+/// Bound source-component residual only where the mapped source rectangle and
+/// the painted projected triangle overlap. Within that triangle interpolation
+/// is a convex combination of the three retained vertex components. Bilinear
+/// source extrema on a UV rectangle occur at its four corners. This range bound
+/// avoids an ill-conditioned inverse; it does not bound extrapolation outside
+/// the painted triangle or certify coverage/inverse ownership.
+pub fn visible_projected_component_bounds(
+    patch: &TensorProductPatch,
+    transform: Affine,
+    triangle: &Triangle,
+    source: PatchTriangleSource,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<[f64; 4], PixelPartitionError> {
+    tick(work, cancelled)?;
+    let vertices = [&triangle.p0, &triangle.p1, &triangle.p2];
+    let count = vertices[0].colors.len();
+    if !(1..=4).contains(&count)
+        || patch
+            .colors
+            .iter()
+            .any(|c| c.len() != count || c.iter().any(|v| !v.is_finite()))
+        || patch
+            .control_points
+            .iter()
+            .any(|p| !p.x.is_finite() || !p.y.is_finite())
+        || transform.as_coeffs().iter().any(|v| !v.is_finite())
+        || vertices.iter().any(|v| {
+            !v.point.x.is_finite()
+                || !v.point.y.is_finite()
+                || v.colors.len() != count
+                || v.colors.iter().any(|c| !c.is_finite())
+        })
+        || source
+            .parameters
+            .iter()
+            .any(|p| !(0.0..=1.0).contains(&p.x) || !(0.0..=1.0).contains(&p.y))
+    {
+        return Err(PixelPartitionError::Invalid);
+    }
+    let u0 = source.parameters.iter().map(|p| p.x).fold(1., f64::min);
+    let u1 = source.parameters.iter().map(|p| p.x).fold(0., f64::max);
+    let v0 = source.parameters.iter().map(|p| p.y).fold(1., f64::min);
+    let v1 = source.parameters.iter().map(|p| p.y).fold(0., f64::max);
+    if u0 >= u1 || v0 >= v1 {
+        return Err(PixelPartitionError::Conditioning);
+    }
+    if patch.control_points.iter().any(|p| {
+        let q = transform * *p;
+        !q.x.is_finite() || !q.y.is_finite()
+    }) {
+        return Err(PixelPartitionError::Conditioning);
+    }
+    let field = PixelSourceOwner::from_triangle(triangle, source, triangle.p0.point)?;
+    let dx = vertices
+        .iter()
+        .map(|v| (v.point.x - triangle.p0.point.x).abs())
+        .fold(0., f64::max);
+    let dy = vertices
+        .iter()
+        .map(|v| (v.point.y - triangle.p0.point.y).abs())
+        .fold(0., f64::max);
+    let mut range = [0.; 4];
+    for k in 0..count {
+        tick(work, cancelled)?;
+        let c = patch.colors.each_ref().map(|c| f64::from(c[k]));
+        let samples = [(u0, v0), (u0, v1), (u1, v0), (u1, v1)].map(|(u, v)| {
+            c[0] * (1. - u) * (1. - v) + c[3] * u * (1. - v) + c[1] * (1. - u) * v + c[2] * u * v
+        });
+        let low = samples.into_iter().fold(f64::INFINITY, f64::min);
+        let high = samples.into_iter().fold(f64::NEG_INFINITY, f64::max);
+        let painted_low = vertices
+            .iter()
+            .map(|v| f64::from(v.colors[k]))
+            .fold(f64::INFINITY, f64::min);
+        let painted_high = vertices
+            .iter()
+            .map(|v| f64::from(v.colors[k]))
+            .fold(f64::NEG_INFINITY, f64::max);
+        let magnitude = c.into_iter().map(f64::abs).fold(0., f64::max)
+            + painted_low.abs()
+            + painted_high.abs()
+            + field.components[k][0].abs()
+            + field.components[k][1].abs() * dx
+            + field.components[k][2].abs() * dy;
+        range[k] =
+            (painted_high - low).abs().max((high - painted_low).abs()) + 1024. * f64::EPSILON * magnitude;
+        if !range[k].is_finite() {
+            return Err(PixelPartitionError::Conditioning);
+        }
+    }
+    match projected_component_bounds(patch, transform, triangle, source, work, cancelled) {
+        Ok(full) => Ok(std::array::from_fn(|k| full[k].min(range[k]))),
+        Err(PixelPartitionError::Conditioning) => Ok(range),
+        Err(error) => Err(error),
+    }
+}
+
+/// Exactly zero area in the retained finite device coordinates. A small but
+/// nonzero triangle is never discarded by a floating-point tolerance here.
+pub(crate) fn projected_triangle_is_degenerate(triangle: &Triangle) -> bool {
+    let points = [triangle.p0.point, triangle.p1.point, triangle.p2.point];
+    points.iter().all(|p| p.x.is_finite() && p.y.is_finite())
+        && super::ordered_pixel::orientation(points[0], points[1], points[2]) == 0
+}
+
+#[cfg(test)]
+mod degeneracy_tests {
+    use super::*;
+    #[test]
+    fn zero_area_filter_preserves_subnormal_nonzero_triangles() {
+        let patch = TensorProductPatch {
+            control_points: std::array::from_fn(|i| Point::new((i % 4) as f64, (i / 4) as f64)),
+            colors: std::array::from_fn(|_| smallvec::smallvec![0.]),
+        };
+        let mut generated = Vec::new();
+        patch.to_triangles(&mut generated);
+        let mut triangle = generated.pop().unwrap();
+        triangle.p0.point = Point::ZERO;
+        triangle.p1.point = Point::new(f64::from_bits(1), 0.);
+        triangle.p2.point = triangle.p1.point;
+        assert!(projected_triangle_is_degenerate(&triangle));
+        triangle.p2.point.y = f64::from_bits(1);
+        assert!(!projected_triangle_is_degenerate(&triangle));
+        triangle.p2.point.y = f64::NAN;
+        assert!(!projected_triangle_is_degenerate(&triangle));
+    }
+}

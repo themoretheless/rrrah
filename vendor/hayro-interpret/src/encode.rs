@@ -2,7 +2,8 @@
 
 mod native_source;
 mod projected_components;
-pub use projected_components::projected_component_bounds;
+pub(crate) use projected_components::projected_triangle_is_degenerate;
+pub use projected_components::{projected_component_bounds, visible_projected_component_bounds};
 mod patch_parameters;
 pub use patch_parameters::PatchParameterIdentity;
 mod ordered_pixel;

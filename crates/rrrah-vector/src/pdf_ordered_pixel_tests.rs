@@ -2,6 +2,45 @@
 mod tests {
     use hayro::hayro_interpret::encode::{OrderedPixel, PixelPartitionError, PixelSourceOwner};
     use kurbo::Point;
+    #[test]
+    fn coons_affine_identity_checks_original_boundary_controls() {
+        use hayro::hayro_interpret::{encode::PatchParameterIdentity, shading::CoonsPatch};
+        let uv = [
+            [0., 0.],
+            [0., 1.],
+            [0., 2.],
+            [0., 3.],
+            [1., 3.],
+            [2., 3.],
+            [3., 3.],
+            [3., 2.],
+            [3., 1.],
+            [3., 0.],
+            [2., 0.],
+            [1., 0.],
+        ];
+        let mut patch = CoonsPatch {
+            control_points: uv.map(|[u, v]| Point::new(2. * u + v, u + 3. * v)),
+            colors: Default::default(),
+        };
+        let identity = PatchParameterIdentity::coons(&patch, 0, kurbo::Affine::IDENTITY).unwrap();
+        assert!(identity.has_u() && identity.has_v());
+        let mut source = owner(0, [0.; 3]);
+        identity.apply(&mut source, Point::ZERO).unwrap();
+        for i in 0..=16 {
+            for j in 0..=16 {
+                let u = i as f64 / 16.;
+                let v = j as f64 / 16.;
+                let point = patch.map_coordinate(Point::new(u, v));
+                let eval = |f: [f64; 3]| f[0] + f[1] * point.x + f[2] * point.y;
+                assert!((eval(source.u) - u).abs() < 1e-14);
+                assert!((eval(source.v) - v).abs() < 1e-14);
+            }
+        }
+        patch.control_points[5].x = f64::from_bits(patch.control_points[5].x.to_bits() + 1);
+        let rejected = PatchParameterIdentity::coons(&patch, 0, kurbo::Affine::IDENTITY).unwrap();
+        assert!(!rejected.has_u() && !rejected.has_v());
+    }
     fn owner(index: usize, color: [f64; 3]) -> PixelSourceOwner {
         PixelSourceOwner {
             patch_index: index,
@@ -92,6 +131,112 @@ mod tests {
         assert_eq!(integrated(&pixel), before);
     }
 
+    #[test]
+    fn wholly_occluded_triangles_need_no_new_admission_but_crossing_owners_do() {
+        use std::cell::Cell;
+        let deny = Cell::new(false);
+        let calls = Cell::new(0usize);
+        let admit = |_| {
+            calls.set(calls.get() + 1);
+            if deny.get() {
+                None
+            } else {
+                Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>)
+            }
+        };
+        let mut pixel = OrderedPixel::new(&admit, 64);
+        let mut retained = owner(2, [1., 0., 0.]);
+        retained.v = [0.75, 0., 0.];
+        rectangle(&mut pixel, 0., 1., retained);
+        let before = integrated(&pixel);
+        let fragments = pixel.fragments();
+        assert_eq!(fragments, 1);
+        deny.set(true);
+        calls.set(0);
+        let triangle = [
+            Point::new(0.25, 0.25),
+            Point::new(0.75, 0.25),
+            Point::new(0.25, 0.75),
+        ];
+        let mut lower = owner(2, [0., 0., 1.]);
+        lower.v = [0.5, 0., 0.];
+        pixel
+            .paint_triangle(triangle, lower, &mut 2000, &|| false)
+            .unwrap();
+        pixel
+            .paint_triangle(triangle, owner(1, [0., 0., 1.]), &mut 2000, &|| false)
+            .unwrap();
+        assert_eq!(calls.get(), 0);
+        let checkpoints = Cell::new(0usize);
+        pixel
+            .paint_triangle(triangle, lower, &mut 2000, &|| {
+                checkpoints.set(checkpoints.get() + 1);
+                false
+            })
+            .unwrap();
+        assert!(checkpoints.get() > 10);
+        for stop in 1..=checkpoints.get() {
+            let at = Cell::new(0usize);
+            assert_eq!(
+                pixel.paint_triangle(triangle, lower, &mut 2000, &|| {
+                    at.set(at.get() + 1);
+                    at.get() == stop
+                }),
+                Err(PixelPartitionError::Cancelled)
+            );
+            assert_eq!(integrated(&pixel), before);
+            assert_eq!(pixel.fragments(), fragments);
+        }
+        assert_eq!(calls.get(), 0);
+        assert_eq!(integrated(&pixel), before);
+        assert_eq!(pixel.fragments(), fragments);
+        assert_eq!(
+            pixel.paint_triangle(triangle, lower, &mut 0, &|| false),
+            Err(PixelPartitionError::Limit)
+        );
+        assert_eq!(
+            pixel.paint_triangle(triangle, lower, &mut 2000, &|| true),
+            Err(PixelPartitionError::Cancelled)
+        );
+        let mut tied = lower;
+        tied.v = retained.v;
+        assert_eq!(
+            pixel.paint_triangle(triangle, tied, &mut 2000, &|| false),
+            Err(PixelPartitionError::Admission)
+        );
+        let mut crossing = lower;
+        crossing.v = [0., 2., 0.];
+        assert_eq!(
+            pixel.paint_triangle(triangle, crossing, &mut 2000, &|| false),
+            Err(PixelPartitionError::Admission)
+        );
+        assert_eq!(
+            pixel.paint_triangle(triangle, owner(3, [0., 0., 1.]), &mut 2000, &|| false),
+            Err(PixelPartitionError::Admission)
+        );
+        assert_eq!(integrated(&pixel), before);
+        deny.set(false);
+        pixel
+            .paint_triangle(triangle, crossing, &mut 100_000, &|| false)
+            .unwrap();
+        assert_ne!(integrated(&pixel), before);
+        let mut ambiguous = OrderedPixel::new(&admit, 64);
+        let mut tiny = owner(2, [1., 0., 0.]);
+        tiny.v = [f64::from_bits(1), 0., 0.];
+        rectangle(&mut ambiguous, 0., 1., tiny);
+        let exact = integrated(&ambiguous);
+        deny.set(true);
+        assert_eq!(
+            ambiguous.paint_triangle(triangle, owner(2, [0., 0., 1.]), &mut 2000, &|| false),
+            Err(PixelPartitionError::Admission)
+        );
+        assert_eq!(integrated(&ambiguous), exact);
+        deny.set(false);
+        ambiguous
+            .paint_triangle(triangle, owner(2, [0., 0., 1.]), &mut 100_000, &|| false)
+            .unwrap();
+        assert_eq!(integrated(&ambiguous), exact);
+    }
     #[test]
     fn ordered_pixel_convex_clip_preserves_sampling_ids_and_shared_work() {
         let admit = |_| Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>);

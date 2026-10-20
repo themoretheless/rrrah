@@ -449,6 +449,351 @@ mod tests {
         assert_eq!(root.used(), 0);
     }
     #[test]
+    fn projected_compact_capture_matches_checked_stream_and_releases_partial_output() {
+        use hayro::hayro_interpret::shading::{
+            AdaptivePatchError, CoonsPatch, tessellate_patch_mesh_compact_projected_admitted,
+        };
+        use std::cell::Cell;
+        let mut tensor = patch([0., 2., 2., 0.], [0.; 3]);
+        tensor.colors =
+            [[0., 0., 0.], [0., 0., 0.], [1., 1., 1.], [1., 1., 1.]].map(|c| c.into_iter().collect());
+        let coons = CoonsPatch {
+            control_points: std::array::from_fn(|i| tensor.control_points[i]),
+            colors: tensor.colors.clone(),
+        };
+        for source in [AdaptivePatchRef::Tensor(&tensor), AdaptivePatchRef::Coons(&coons)] {
+            let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            let calls = Cell::new(0);
+            let refuse = Cell::new(usize::MAX);
+            let admit = |bytes: usize| {
+                calls.set(calls.get() + 1);
+                if calls.get() == refuse.get() {
+                    return None;
+                }
+                root.try_reserve(bytes as u64)
+                    .ok()
+                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+            };
+            let capture = |cancelled: &dyn Fn() -> bool| {
+                tessellate_patch_mesh_compact_projected_admitted(
+                    &[source],
+                    Affine::IDENTITY,
+                    limits(),
+                    cancelled,
+                    &admit,
+                )
+            };
+            let mesh = capture(&|| false).unwrap();
+            let reservations = calls.get();
+            assert!(mesh.triangles().len() > 2);
+            assert!(mesh.stats().max_component_bound <= limits().component_error);
+            let mut index = 0;
+            tessellate_patch_mesh_stream_projected_admitted(
+                &[source],
+                Affine::IDENTITY,
+                limits(),
+                &|| false,
+                &admit,
+                &mut |triangle, _| {
+                    let compact = &mesh.triangles()[index];
+                    for (i, vertex) in [&triangle.p0, &triangle.p1, &triangle.p2].iter().enumerate() {
+                        assert_eq!(compact.points()[i], vertex.point);
+                        for (a, b) in compact.components()[i].iter().zip(&vertex.colors) {
+                            assert_eq!(a.to_bits(), b.to_bits());
+                        }
+                    }
+                    index += 1;
+                    Ok(())
+                },
+            )
+            .unwrap();
+            assert_eq!(index, mesh.triangles().len());
+            drop(mesh);
+            assert_eq!(root.used(), 0);
+            for n in 1..=reservations {
+                calls.set(0);
+                refuse.set(n);
+                assert_eq!(capture(&|| false).err().unwrap(), AdaptivePatchError::Admission);
+                assert_eq!(root.used(), 0);
+            }
+            refuse.set(usize::MAX);
+            let checkpoints = Cell::new(0);
+            drop(
+                capture(&|| {
+                    checkpoints.set(checkpoints.get() + 1);
+                    false
+                })
+                .unwrap(),
+            );
+            for n in [1, checkpoints.get() / 2, checkpoints.get()] {
+                let at = Cell::new(0);
+                assert_eq!(
+                    capture(&|| {
+                        at.set(at.get() + 1);
+                        at.get() == n
+                    })
+                    .err()
+                    .unwrap(),
+                    AdaptivePatchError::Cancelled
+                );
+                assert_eq!(root.used(), 0);
+            }
+            drop(capture(&|| false).unwrap());
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn visible_component_range_encloses_only_painted_overlap_without_extrapolation() {
+        use hayro::hayro_interpret::encode::{
+            projected_component_bounds, visible_projected_component_bounds,
+        };
+        let mut source = patch([0., 2., 2., 0.], [0.; 3]);
+        source.colors =
+            [[0., 0., 0.], [0., 0., 0.], [1., 1., 1.], [1., 1., 1.]].map(|c| c.into_iter().collect());
+        let mut checked = 0;
+        let mut improved = 0;
+        tessellate_patch_mesh_stream_ordered_admitted(
+            &[AdaptivePatchRef::Tensor(&source)],
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &|_| Some(Box::new(())),
+            &mut |triangle, provenance| {
+                let bound = visible_projected_component_bounds(
+                    &source,
+                    Affine::IDENTITY,
+                    &triangle,
+                    provenance,
+                    &mut 4096,
+                    &|| false,
+                )
+                .unwrap();
+                let full = projected_component_bounds(
+                    &source,
+                    Affine::IDENTITY,
+                    &triangle,
+                    provenance,
+                    &mut 4096,
+                    &|| false,
+                )
+                .unwrap();
+                if bound[0] < full[0] {
+                    improved += 1;
+                }
+                let origin = triangle.p0.point;
+                let owner = PixelSourceOwner::from_triangle(&triangle, provenance, origin).unwrap();
+                let a = triangle.p1.point - origin;
+                let b = triangle.p2.point - origin;
+                let cross = |a: kurbo::Vec2, b: kurbo::Vec2| a.x * b.y - a.y * b.x;
+                let det = cross(a, b);
+                let u0 = provenance.parameters.iter().map(|p| p.x).fold(1., f64::min);
+                let u1 = provenance.parameters.iter().map(|p| p.x).fold(0., f64::max);
+                let v0 = provenance.parameters.iter().map(|p| p.y).fold(1., f64::min);
+                let v1 = provenance.parameters.iter().map(|p| p.y).fold(0., f64::max);
+                for i in 0..=16 {
+                    for j in 0..=16 {
+                        let uv = Point::new(u0 + (u1 - u0) * i as f64 / 16., v0 + (v1 - v0) * j as f64 / 16.);
+                        let p = source.map_coordinate(uv);
+                        let q = p - origin;
+                        let x = cross(q, b) / det;
+                        let y = cross(a, q) / det;
+                        if x >= 0. && y >= 0. && x + y <= 1. {
+                            let actual = owner.evaluate(q.to_point()).unwrap();
+                            for k in 0..3 {
+                                assert!((actual[k] - uv.x).abs() <= bound[k] + 1e-12);
+                            }
+                            checked += 1;
+                        }
+                    }
+                }
+                assert_eq!(
+                    visible_projected_component_bounds(
+                        &source,
+                        Affine::IDENTITY,
+                        &triangle,
+                        provenance,
+                        &mut 0,
+                        &|| false
+                    )
+                    .unwrap_err(),
+                    PixelPartitionError::Limit
+                );
+                assert_eq!(
+                    visible_projected_component_bounds(
+                        &source,
+                        Affine::IDENTITY,
+                        &triangle,
+                        provenance,
+                        &mut 4096,
+                        &|| true
+                    )
+                    .unwrap_err(),
+                    PixelPartitionError::Cancelled
+                );
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert!(
+            checked > 1000 && improved > 0,
+            "checked={checked} improved={improved}"
+        );
+    }
+    fn local_refinement_source(family: u64) -> TensorProductPatch {
+        let mut source = patch([0., 0.2, 2.8, 3.], [0.; 3]);
+        source.colors =
+            [[0., 0., 0.], [0., 1., 0.], [1., 1., 1.], [1., 0., 0.]].map(|v| v.into_iter().collect());
+        let mut seed = 20261021u64 + family * 101;
+        for point in &mut source.control_points {
+            let mut next = || {
+                seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
+                ((seed >> 32) as u32 as f64 / u32::MAX as f64 - 0.5) * 1.8
+            };
+            point.x += next();
+            point.y += next();
+        }
+        source
+    }
+    #[test]
+    fn conforming_fans_refine_only_failed_leaf_cells_before_emission() {
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut refined = 0;
+        for family in [2u64] {
+            let source = local_refinement_source(family);
+            let mut count = 0;
+            let stats = tessellate_patch_mesh_stream_projected_admitted(
+                &[AdaptivePatchRef::Tensor(&source)],
+                Affine::IDENTITY,
+                limits(),
+                &|| false,
+                &admit,
+                &mut |triangle, provenance| {
+                    let bounds = hayro::hayro_interpret::encode::visible_projected_component_bounds(
+                        &source,
+                        Affine::IDENTITY,
+                        &triangle,
+                        provenance,
+                        &mut 4096,
+                        &|| false,
+                    )
+                    .unwrap();
+                    assert!(bounds.into_iter().all(|v| v <= limits().component_error));
+                    count += 1;
+                    Ok(())
+                },
+            );
+            let stats = stats.unwrap();
+            if stats.refined_leaves > 0 {
+                eprintln!(
+                    "LOCAL_REFINEMENT_CONTROL family={family} leaves={} passes={}",
+                    stats.refined_leaves, stats.refinement_passes
+                );
+            }
+            assert_eq!(stats.triangles, count);
+            assert!(stats.triangles < limits().max_triangles);
+            refined += stats.refined_leaves;
+            assert_eq!(root.used(), 0);
+        }
+        assert!(refined > 0, "control must exercise actual local refinement");
+    }
+    #[test]
+    fn local_refinement_refusal_cancel_retry_and_shared_patch_boundary_are_consistent() {
+        use hayro::hayro_interpret::shading::AdaptivePatchError;
+        use std::{cell::Cell, collections::BTreeMap};
+        let source = local_refinement_source(2);
+        let mut neighbor = patch([3., 4., 5., 6.], [0.25; 3]);
+        for (i, j) in [9, 8, 7, 6].into_iter().enumerate() {
+            neighbor.control_points[i] = source.control_points[j];
+        }
+        let refs = [
+            AdaptivePatchRef::Tensor(&source),
+            AdaptivePatchRef::Tensor(&neighbor),
+        ];
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let calls = Cell::new(0usize);
+        let refuse = Cell::new(usize::MAX);
+        let admit = |bytes: usize| {
+            calls.set(calls.get() + 1);
+            if calls.get() == refuse.get() {
+                return None;
+            }
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut boundary: [BTreeMap<u64, (u64, u64)>; 2] = std::array::from_fn(|_| BTreeMap::new());
+        let stats = tessellate_patch_mesh_stream_projected_admitted(
+            &refs,
+            Affine::IDENTITY,
+            limits(),
+            &|| false,
+            &admit,
+            &mut |triangle, meta| {
+                for (uv, v) in meta
+                    .parameters
+                    .into_iter()
+                    .zip([&triangle.p0, &triangle.p1, &triangle.p2])
+                {
+                    if (meta.patch_index == 0 && uv.x == 1.) || (meta.patch_index == 1 && uv.x == 0.) {
+                        let point = (v.point.x.to_bits(), v.point.y.to_bits());
+                        if let Some(old) = boundary[meta.patch_index].insert(uv.y.to_bits(), point) {
+                            assert_eq!(old, point);
+                        }
+                    }
+                }
+                Ok(())
+            },
+        )
+        .unwrap();
+        assert!(stats.refined_leaves > 0 && stats.refinement_passes > 0);
+        assert!(boundary[0].len() > 3);
+        assert_eq!(boundary[0], boundary[1]);
+        let allocations = calls.get();
+        assert_eq!(root.used(), 0);
+        let run = |cancelled: &dyn Fn() -> bool| {
+            tessellate_patch_mesh_stream_projected_admitted(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                cancelled,
+                &admit,
+                &mut |_, _| Ok(()),
+            )
+        };
+        for stop in [1, allocations / 2, allocations] {
+            calls.set(0);
+            refuse.set(stop);
+            assert_eq!(run(&|| false).unwrap_err(), AdaptivePatchError::Admission);
+            assert_eq!(root.used(), 0);
+        }
+        refuse.set(usize::MAX);
+        let checkpoints = Cell::new(0usize);
+        run(&|| {
+            checkpoints.set(checkpoints.get() + 1);
+            false
+        })
+        .unwrap();
+        for stop in [1, checkpoints.get() / 2, checkpoints.get()] {
+            let at = Cell::new(0usize);
+            assert_eq!(
+                run(&|| {
+                    at.set(at.get() + 1);
+                    at.get() == stop
+                })
+                .unwrap_err(),
+                AdaptivePatchError::Cancelled
+            );
+            assert_eq!(root.used(), 0);
+        }
+        assert!(run(&|| false).unwrap().refined_leaves > 0);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn projected_stream_depth_refusal_is_terminal_and_releases_credit() {
         use hayro::hayro_interpret::shading::AdaptivePatchError;
         let mut source = patch([0., 0.25, 0.75, 1.5], [0.; 3]);

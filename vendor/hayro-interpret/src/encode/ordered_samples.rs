@@ -6,6 +6,9 @@ use crate::shading::{
 };
 use kurbo::{Affine, Point, Rect};
 type Credit = Box<dyn std::any::Any + Send + Sync>;
+// Split dense cells before quadratic partition work consumes the shared quota.
+const WORKING_FRAGMENTS: usize = 512;
+const MAX_LEAF_FRAGMENTS: usize = 4096;
 
 struct ParamPool {
     index: hashbrown::HashMap<u64, u16, rustc_hash::FxBuildHasher>,
@@ -87,6 +90,7 @@ impl Record {
 }
 
 struct Block {
+    bounds: Rect,
     records: Vec<Record>,
     _credit: Credit,
 }
@@ -117,12 +121,360 @@ fn push_record(
             return None;
         }
         blocks.push(Block {
+            bounds: Rect::ZERO,
             records,
             _credit: credit,
         });
     }
-    blocks.last_mut()?.records.push(record);
+    let block = blocks.last_mut()?;
+    let bounds = Rect::from_points(record.points[0], record.points[1]).union_pt(record.points[2]);
+    block.bounds = if block.records.is_empty() {
+        bounds
+    } else {
+        block.bounds.union(bounds)
+    };
+    block.records.push(record);
     Some(())
+}
+
+fn add_integral(sum: &mut [f64; 5], correction: &mut [f64; 5], value: [f64; 5]) {
+    for k in 0..5 {
+        let y = value[k] - correction[k];
+        let next = sum[k] + y;
+        correction[k] = (next - sum[k]) - y;
+        sum[k] = next;
+    }
+}
+fn integrate_children(
+    records: &[Block],
+    patches: &[AdaptivePatchRef<'_>],
+    pool: &ParamPool,
+    identities: &[Option<PatchParameterIdentity>],
+    origin: Point,
+    side: f64,
+    depth: u8,
+    fragment_limit: usize,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Credit>,
+) -> Option<[f64; 5]> {
+    if depth >= 8 || cancelled() {
+        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+            eprintln!("DENSE_CELL_DEPTH origin={origin:?} side={side} depth={depth} work={work}");
+        }
+        return None;
+    }
+    let half = side * 0.5;
+    let mut sum = [0.; 5];
+    let mut correction = [0.; 5];
+    for (x, y) in [(0., 0.), (half, 0.), (0., half), (half, half)] {
+        let value = integrate_cell(
+            records,
+            patches,
+            pool,
+            identities,
+            Point::new(origin.x + x, origin.y + y),
+            half,
+            depth + 1,
+            fragment_limit,
+            work,
+            cancelled,
+            admit,
+        )?;
+        add_integral(&mut sum, &mut correction, value);
+    }
+    Some(sum)
+}
+#[derive(Clone, Copy)]
+struct Candidate<'a> {
+    record: &'a Record,
+    rank: [f64; 2],
+    ordinal: usize,
+}
+fn rank_at_center(field: [f64; 3]) -> f64 {
+    let value = field[1].mul_add(0.5, field[2].mul_add(0.5, field[0]));
+    if value == 0. { 0. } else { value }
+}
+impl Candidate<'_> {
+    fn compare(&self, other: &Self) -> std::cmp::Ordering {
+        other
+            .record
+            .patch_index
+            .cmp(&self.record.patch_index)
+            .then_with(|| other.rank[0].total_cmp(&self.rank[0]))
+            .then_with(|| other.rank[1].total_cmp(&self.rank[1]))
+            .then_with(|| self.ordinal.cmp(&other.ordinal))
+    }
+}
+// Allocation-free, fallible heapsort. Each comparison debits the caller's
+// continuing work allowance and observes cancellation before doing more work.
+fn sort_candidates(
+    values: &mut [Candidate<'_>],
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Option<()> {
+    fn compare(
+        a: &Candidate<'_>,
+        b: &Candidate<'_>,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Option<std::cmp::Ordering> {
+        if cancelled() {
+            return None;
+        }
+        *work = work.checked_sub(1)?;
+        Some(a.compare(b))
+    }
+    fn sift(
+        values: &mut [Candidate<'_>],
+        mut root: usize,
+        end: usize,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Option<()> {
+        while root * 2 + 1 < end {
+            let mut child = root * 2 + 1;
+            if child + 1 < end && compare(&values[child], &values[child + 1], work, cancelled)?.is_lt() {
+                child += 1;
+            }
+            if !compare(&values[root], &values[child], work, cancelled)?.is_lt() {
+                break;
+            }
+            values.swap(root, child);
+            root = child;
+        }
+        Some(())
+    }
+    if cancelled() {
+        return None;
+    }
+    *work = work.checked_sub(1)?;
+    for start in (0..values.len() / 2).rev() {
+        sift(values, start, values.len(), work, cancelled)?;
+    }
+    for end in (1..values.len()).rev() {
+        values.swap(0, end);
+        sift(values, 0, end, work, cancelled)?;
+    }
+    Some(())
+}
+fn cell_owner(
+    record: &Record,
+    patches: &[AdaptivePatchRef<'_>],
+    pool: &ParamPool,
+    identities: &[Option<PatchParameterIdentity>],
+    origin: Point,
+    side: f64,
+) -> Option<PixelSourceOwner> {
+    let triangle = record.triangle(patches, pool);
+    let mut owner = PixelSourceOwner::from_triangle(&triangle, record.source(pool), origin).ok()?;
+    if let Some(identity) = identities[record.patch_index as usize] {
+        identity.apply(&mut owner, origin).ok()?;
+    }
+    for f in [&mut owner.u, &mut owner.v]
+        .into_iter()
+        .chain(owner.components.iter_mut())
+    {
+        f[1] *= side;
+        f[2] *= side;
+    }
+    Some(owner)
+}
+
+// Opt-in failure diagnostics only; no region is discarded or approximated.
+fn trace_dense_regions(
+    pixel: &OrderedPixel<'_>,
+    origin: Point,
+    side: f64,
+    candidates: usize,
+    processed: usize,
+) {
+    let mut minimum = f64::INFINITY;
+    let mut maximum = 0f64;
+    let mut area = 0.;
+    let mut bins = [0usize; 4];
+    let mut first_patch = usize::MAX;
+    let mut last_patch = 0usize;
+    let status = pixel.visit(&mut 100_000, &|| false, &mut |weight, _, _, owner| {
+        minimum = minimum.min(weight);
+        maximum = maximum.max(weight);
+        area += weight;
+        let bucket = if weight < 1e-12 {
+            0
+        } else if weight < 1e-9 {
+            1
+        } else if weight < 1e-6 {
+            2
+        } else {
+            3
+        };
+        bins[bucket] += 1;
+        first_patch = first_patch.min(owner.patch_index);
+        last_patch = last_patch.max(owner.patch_index);
+        Ok(())
+    });
+    eprintln!(
+        "DENSE_REGION_STATS origin={origin:?} side={side} candidates={candidates} processed={processed} fragments={} patch_range={first_patch}..={last_patch} min_area={minimum} max_area={maximum} sum_area={area} area_bins={bins:?} status={status:?}",
+        pixel.fragments()
+    );
+}
+
+// Integrals are in original device-pixel area. Each local partition owns the
+// same source priorities; only its coordinate frame and clipping square change.
+fn integrate_cell(
+    records: &[Block],
+    patches: &[AdaptivePatchRef<'_>],
+    pool: &ParamPool,
+    identities: &[Option<PatchParameterIdentity>],
+    origin: Point,
+    side: f64,
+    depth: u8,
+    fragment_limit: usize,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Credit>,
+) -> Option<[f64; 5]> {
+    let mut pixel = OrderedPixel::new(admit, fragment_limit);
+    let rect = Rect::new(origin.x, origin.y, origin.x + side, origin.y + side);
+    let mut candidate_credit: Option<Credit> = None;
+    let mut candidates: Vec<Candidate<'_>> = Vec::new();
+    for block in records {
+        if cancelled() {
+            return None;
+        }
+        *work = work.checked_sub(1)?;
+        let overlap = block.bounds.intersect(rect);
+        if overlap.width() <= 0. || overlap.height() <= 0. {
+            continue;
+        }
+        for record in &block.records {
+            if cancelled() {
+                return None;
+            }
+            *work = work.checked_sub(1)?;
+            let points = record.points;
+            let bbox = Rect::from_points(points[0], points[1])
+                .union_pt(points[2])
+                .intersect(rect);
+            if bbox.width() <= 0. || bbox.height() <= 0. {
+                continue;
+            }
+            let owner = cell_owner(record, patches, pool, identities, origin, side)?;
+            let rank = [rank_at_center(owner.v), rank_at_center(owner.u)];
+            if candidates.len() == candidates.capacity() {
+                let capacity = candidates.capacity().checked_mul(2)?.max(8);
+                let next = admit(capacity.checked_mul(size_of::<Candidate<'_>>())?)?;
+                candidates.try_reserve_exact(capacity - candidates.len()).ok()?;
+                if candidates.capacity() > capacity {
+                    return None;
+                }
+                candidate_credit = Some(next);
+            }
+            let ordinal = candidates.len();
+            candidates.push(Candidate {
+                record,
+                rank,
+                ordinal,
+            });
+        }
+    }
+    sort_candidates(&mut candidates, work, cancelled)?;
+    // The center key orders work only. Exact UV comparisons still select the
+    // owner at each overlap. Identical UV fields share a key, with original
+    // ordinal preserving the existing tie behavior (including signed zero).
+    for index in 0..candidates.len() {
+        if cancelled() {
+            return None;
+        }
+        *work = work.checked_sub(1)?;
+        let record = candidates[index].record;
+        let points = record.points;
+        let owner = cell_owner(record, patches, pool, identities, origin, side)?;
+        let local = points.map(|p| Point::new((p.x - origin.x) / side, (p.y - origin.y) / side));
+        match pixel.paint_triangle(local, owner, work, cancelled) {
+            Ok(()) => {}
+            Err(super::PixelPartitionError::Limit) if *work > 0 => {
+                if depth >= 8
+                    && fragment_limit == MAX_LEAF_FRAGMENTS
+                    && std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some()
+                {
+                    trace_dense_regions(&pixel, origin, side, candidates.len(), index);
+                }
+                drop(pixel);
+                drop(candidates);
+                drop(candidate_credit);
+                // Preserve the original 4096-region capacity at the deepest
+                // cell, after cheap subdivisions have reduced its support.
+                if depth >= 8 && fragment_limit < MAX_LEAF_FRAGMENTS {
+                    return integrate_cell(
+                        records,
+                        patches,
+                        pool,
+                        identities,
+                        origin,
+                        side,
+                        depth,
+                        MAX_LEAF_FRAGMENTS,
+                        work,
+                        cancelled,
+                        admit,
+                    );
+                }
+                return integrate_children(
+                    records,
+                    patches,
+                    pool,
+                    identities,
+                    origin,
+                    side,
+                    depth,
+                    fragment_limit,
+                    work,
+                    cancelled,
+                    admit,
+                );
+            }
+            Err(error) => {
+                if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                    if depth >= 8 || *work == 0 {
+                        trace_dense_regions(&pixel, origin, side, candidates.len(), index);
+                    }
+                    eprintln!("DENSE_CELL_PAINT origin={origin:?} side={side} refusal={error:?} work={work}");
+                }
+                return None;
+            }
+        }
+    }
+    drop(candidates);
+    drop(candidate_credit);
+    let mut sum = [0.; 5];
+    let mut correction = [0.; 5];
+    pixel
+        .visit(work, cancelled, &mut |area, center, _, owner| {
+            let values = owner
+                .evaluate(center)
+                .ok_or(super::PixelPartitionError::Invalid)?;
+            let area = area * side * side;
+            add_integral(
+                &mut sum,
+                &mut correction,
+                [
+                    area,
+                    area * values[0],
+                    area * values[1],
+                    area * values[2],
+                    area * values[3],
+                ],
+            );
+            Ok(())
+        })
+        .inspect_err(|error| {
+            if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                eprintln!("DENSE_CELL_VISIT origin={origin:?} side={side} refusal={error:?} work={work}");
+            }
+        })
+        .ok()?;
+    Some(sum)
 }
 
 pub(super) fn sample_patches(
@@ -152,9 +504,7 @@ pub(super) fn sample_patches(
         }
         let identity = match patch {
             AdaptivePatchRef::Tensor(p) => PatchParameterIdentity::tensor(p, index, transform),
-            AdaptivePatchRef::Coons(p) => {
-                PatchParameterIdentity::tensor(&p.adaptive_tensor().ok()?, index, transform)
-            }
+            AdaptivePatchRef::Coons(p) => PatchParameterIdentity::coons(p, index, transform),
         };
         identities.push(identity);
     }
@@ -175,7 +525,7 @@ pub(super) fn sample_patches(
         AdaptivePatchLimits {
             pixel_error: 1. / 64.,
             component_error: 1. / 1024.,
-            max_depth: 12,
+            max_depth: 16,
             max_triangles: 1_048_576,
         },
         cancelled,
@@ -229,6 +579,11 @@ pub(super) fn sample_patches(
             Ok(())
         },
     )
+    .inspect_err(|error| {
+        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+            eprintln!("ORDERED_SAMPLE_TESSELLATION refusal={error:?}");
+        }
+    })
     .ok()?;
     let mut guard = None;
     let mut map = MeshMap::default();
@@ -242,42 +597,66 @@ pub(super) fn sample_patches(
             if cancelled() {
                 return None;
             }
-            let mut pixels: [OrderedPixel<'_>; 16] = std::array::from_fn(|_| OrderedPixel::new(admit, 4096));
+            let mut pixels: [OrderedPixel<'_>; 16] =
+                std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
+            let mut dense = [false; 16];
             let tile = Rect::new(
                 tx as f64,
                 ty as f64,
                 (u32::from(tx) + 4).min(u32::from(x1)) as f64,
                 (u32::from(ty) + 4).min(u32::from(y1)) as f64,
             );
-            for record in records.iter().flat_map(|block| &block.records) {
-                work = work.checked_sub(1)?;
+            for block in &records {
                 if cancelled() {
                     return None;
                 }
-                let points = record.points;
-                let bbox = Rect::from_points(points[0], points[1])
-                    .union_pt(points[2])
-                    .intersect(tile);
-                if bbox.width() <= 0. || bbox.height() <= 0. {
+                work = work.checked_sub(1)?;
+                let overlap = block.bounds.intersect(tile);
+                if overlap.width() <= 0. || overlap.height() <= 0. {
                     continue;
                 }
-                let triangle = record.triangle(patches, &parameters_pool);
-                for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
-                    for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
-                        let origin = Point::new(x as f64, y as f64);
-                        let mut owner = PixelSourceOwner::from_triangle(
-                            &triangle,
-                            record.source(&parameters_pool),
-                            origin,
-                        )
-                        .ok()?;
-                        if let Some(identity) = identities[record.patch_index as usize] {
-                            identity.apply(&mut owner, origin).ok()?;
-                        }
-                        let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
-                        pixels[usize::from(y - ty) * 4 + usize::from(x - tx)]
-                            .paint_triangle(local, owner, &mut work, cancelled)
+                for record in &block.records {
+                    work = work.checked_sub(1)?;
+                    if cancelled() {
+                        return None;
+                    }
+                    let points = record.points;
+                    let bbox = Rect::from_points(points[0], points[1])
+                        .union_pt(points[2])
+                        .intersect(tile);
+                    if bbox.width() <= 0. || bbox.height() <= 0. {
+                        continue;
+                    }
+                    let triangle = record.triangle(patches, &parameters_pool);
+                    for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+                        for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
+                            let slot = usize::from(y - ty) * 4 + usize::from(x - tx);
+                            if dense[slot] {
+                                continue;
+                            }
+                            let origin = Point::new(x as f64, y as f64);
+                            let mut owner = PixelSourceOwner::from_triangle(
+                                &triangle,
+                                record.source(&parameters_pool),
+                                origin,
+                            )
                             .ok()?;
+                            if let Some(identity) = identities[record.patch_index as usize] {
+                                identity.apply(&mut owner, origin).ok()?;
+                            }
+                            let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
+                            match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
+                                Ok(()) => {}
+                                Err(super::PixelPartitionError::Limit) if work > 0 => {
+                                    pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
+                                    dense[slot] = true;
+                                    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                                        eprintln!("ORDERED_SAMPLE_SUBDIVIDE pixel={x},{y} work={work}");
+                                    }
+                                }
+                                Err(_) => return None,
+                            }
+                        }
                     }
                 }
             }
@@ -298,10 +677,30 @@ pub(super) fn sample_patches(
                             Ok(())
                         })
                         .ok()?;
+                    if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
+                        let value = integrate_children(
+                            &records,
+                            patches,
+                            &parameters_pool,
+                            &identities,
+                            Point::new(x as f64, y as f64),
+                            1.,
+                            0,
+                            WORKING_FRAGMENTS,
+                            &mut work,
+                            cancelled,
+                            admit,
+                        )?;
+                        coverage = value[0];
+                        sum.copy_from_slice(&value[1..]);
+                    }
                     if coverage <= 0. {
                         continue;
                     }
                     if !coverage.is_finite() || coverage > 1. + 1e-10 {
+                        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                            eprintln!("ORDERED_COVERAGE_REFUSAL pixel={x},{y} coverage={coverage}");
+                        }
                         return None;
                     }
                     if map.len() == map.capacity() {
@@ -361,6 +760,419 @@ mod tests {
             control_points,
             colors: std::array::from_fn(|_| color.into_iter().collect()),
         }
+    }
+    #[test]
+    fn ranked_candidates_match_total_order_preserve_ties_and_cancel_every_comparison() {
+        assert_eq!(rank_at_center([-0., -0., -0.]).to_bits(), 0f64.to_bits());
+        assert_eq!(rank_at_center([0., 0., 0.]).to_bits(), 0f64.to_bits());
+        let records = (0..96)
+            .map(|i| Record {
+                points: [Point::ZERO; 3],
+                parameters: [[0; 2]; 3],
+                patch_index: (i % 2) as u32,
+            })
+            .collect::<Vec<_>>();
+        let make = || {
+            let mut candidates = records
+                .iter()
+                .enumerate()
+                .map(|(i, record)| Candidate {
+                    record,
+                    rank: [(i % 3) as f64, (i % 5) as f64],
+                    ordinal: i,
+                })
+                .collect::<Vec<_>>();
+            candidates.reverse();
+            candidates
+        };
+        let mut expected = make();
+        expected.sort_by(Candidate::compare);
+        let expected = expected.iter().map(|c| c.ordinal).collect::<Vec<_>>();
+        let checks = Cell::new(0usize);
+        let mut candidates = make();
+        sort_candidates(&mut candidates, &mut 10000, &|| {
+            checks.set(checks.get() + 1);
+            false
+        })
+        .unwrap();
+        assert_eq!(candidates.iter().map(|c| c.ordinal).collect::<Vec<_>>(), expected);
+        for stop in 1..=checks.get() {
+            let at = Cell::new(0usize);
+            let mut candidates = make();
+            let mut work = 10000;
+            assert!(
+                sort_candidates(&mut candidates, &mut work, &|| {
+                    at.set(at.get() + 1);
+                    at.get() == stop
+                })
+                .is_none()
+            );
+            assert!(work <= 10000);
+        }
+        assert!(sort_candidates(&mut make(), &mut 0, &|| false).is_none());
+        let mut retry = make();
+        sort_candidates(&mut retry, &mut 10000, &|| false).unwrap();
+        assert_eq!(retry.iter().map(|c| c.ordinal).collect::<Vec<_>>(), expected);
+    }
+    #[test]
+    fn ranked_cell_keeps_crossing_uv_selection_exact() {
+        let admit = |_| Some(Box::new(()) as Credit);
+        let mut patch = source(0., 1., [0.; 3]);
+        patch.colors =
+            [[1., 0., 0.], [1., 0., 0.], [0., 0., 1.], [0., 0., 1.]].map(|c| c.into_iter().collect());
+        let refs = [AdaptivePatchRef::Tensor(&patch)];
+        let mut pool = ParamPool::new();
+        let mut records = Vec::new();
+        let mut credit = None;
+        let points = [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)];
+        // Two retained source fields over one projected triangle: v=x,u=y/4
+        // and v=1-x,u=1-y/4. The center keys favor the second, but v crosses
+        // at x=1/2. Exact rational region integrals are red=5/32, blue=11/32.
+        for uv in [[[0., 0.], [0., 1.], [0.25, 0.]], [[1., 1.], [1., 0.], [0.75, 1.]]] {
+            let mut parameters = [[0; 2]; 3];
+            for i in 0..3 {
+                parameters[i] = [
+                    pool.intern(uv[i][0], &admit).unwrap(),
+                    pool.intern(uv[i][1], &admit).unwrap(),
+                ];
+            }
+            push_record(
+                &mut records,
+                &mut credit,
+                Record {
+                    points,
+                    parameters,
+                    patch_index: 0,
+                },
+                &admit,
+            )
+            .unwrap();
+        }
+        let value = integrate_cell(
+            &records,
+            &refs,
+            &pool,
+            &[None],
+            Point::ZERO,
+            1.,
+            0,
+            32,
+            &mut 100_000,
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        for (a, b) in value.into_iter().zip([0.5, 5. / 32., 0., 11. / 32., 0.]) {
+            assert!((a - b).abs() < 1e-12, "{value:?}");
+        }
+    }
+    #[test]
+    fn ranked_dense_occlusion_preserves_integrals_with_less_shared_work() {
+        let used = Arc::new(AtomicUsize::new(0));
+        let admit = |bytes: usize| -> Option<Credit> {
+            let next = used.load(Ordering::SeqCst).checked_add(bytes)?;
+            if next > 8 * 1024 * 1024 {
+                return None;
+            }
+            used.store(next, Ordering::SeqCst);
+            Some(Box::new(Reservation(used.clone(), bytes)))
+        };
+        let mut fine = source(0., 1., [0.; 3]);
+        fine.colors =
+            [[0., 0., 0.], [0., 1., 0.], [1., 1., 1.], [1., 0., 0.]].map(|c| c.into_iter().collect());
+        let cover = source(0., 1., [0.25; 3]);
+        let refs = [AdaptivePatchRef::Tensor(&fine), AdaptivePatchRef::Tensor(&cover)];
+        let mut pool = ParamPool::new();
+        let mut records = Vec::new();
+        let mut credit = None;
+        let mut append = |points: [Point; 3], patch_index: u32| {
+            let mut parameters = [[0; 2]; 3];
+            for (i, p) in points.iter().enumerate() {
+                parameters[i] = [
+                    pool.intern(p.x, &admit).unwrap(),
+                    pool.intern(p.y, &admit).unwrap(),
+                ];
+            }
+            push_record(
+                &mut records,
+                &mut credit,
+                Record {
+                    points,
+                    parameters,
+                    patch_index,
+                },
+                &admit,
+            )
+            .unwrap();
+        };
+        for y in 0..16 {
+            for x in 0..32 {
+                let [a, b, c, d] = [(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)]
+                    .map(|(x, y)| Point::new(x as f64 / 32., y as f64 / 16.));
+                append([a, b, c], 0);
+                append([b, d, c], 0);
+            }
+        }
+        append([Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)], 1);
+        append([Point::new(1., 0.), Point::new(1., 1.), Point::new(0., 1.)], 1);
+        let baseline_bytes = used.load(Ordering::SeqCst);
+        let mut baseline_work = 100_000_000usize;
+        let mut pixel = OrderedPixel::new(&admit, 2048);
+        for block in &records {
+            baseline_work = baseline_work.checked_sub(1).unwrap();
+            for record in &block.records {
+                baseline_work = baseline_work.checked_sub(1).unwrap();
+                let owner = cell_owner(record, &refs, &pool, &[None, None], Point::ZERO, 1.).unwrap();
+                pixel
+                    .paint_triangle(record.points, owner, &mut baseline_work, &|| false)
+                    .unwrap();
+            }
+        }
+        let mut baseline = [0.; 5];
+        let mut correction = [0.; 5];
+        pixel
+            .visit(&mut baseline_work, &|| false, &mut |area, center, _, owner| {
+                let v = owner.evaluate(center).unwrap();
+                add_integral(
+                    &mut baseline,
+                    &mut correction,
+                    [area, area * v[0], area * v[1], area * v[2], area * v[3]],
+                );
+                Ok(())
+            })
+            .unwrap();
+        drop(pixel);
+        assert_eq!(used.load(Ordering::SeqCst), baseline_bytes);
+        let mut ranked_work = 100_000_000;
+        let ranked = integrate_cell(
+            &records,
+            &refs,
+            &pool,
+            &[None, None],
+            Point::ZERO,
+            1.,
+            0,
+            2048,
+            &mut ranked_work,
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        assert_eq!(ranked, baseline);
+        assert_eq!(ranked, [1., 0.25, 0.25, 0.25, 0.]);
+        let source_ticks = 100_000_000 - baseline_work;
+        let ranked_ticks = 100_000_000 - ranked_work;
+        eprintln!("RANKED_DENSE_WORK source_ticks={source_ticks} ranked_ticks={ranked_ticks}");
+        assert!(
+            ranked_ticks * 2 < source_ticks,
+            "source={source_ticks} ranked={ranked_ticks}"
+        );
+        assert_eq!(used.load(Ordering::SeqCst), baseline_bytes);
+        drop(records);
+        drop(credit);
+        drop(pool);
+        assert_eq!(used.load(Ordering::SeqCst), 0);
+    }
+    #[test]
+    fn dense_subcells_preserve_area_component_integrals_and_release_on_refusal() {
+        let used = Arc::new(AtomicUsize::new(0));
+        let calls = Cell::new(0usize);
+        let fail = Cell::new(usize::MAX);
+        let admit = |bytes: usize| -> Option<Credit> {
+            calls.set(calls.get() + 1);
+            if calls.get() == fail.get() {
+                return None;
+            }
+            let next = used.load(Ordering::SeqCst).checked_add(bytes)?;
+            if next > 8 * 1024 * 1024 {
+                return None;
+            }
+            used.store(next, Ordering::SeqCst);
+            Some(Box::new(Reservation(used.clone(), bytes)))
+        };
+        let mut patch = source(0., 1., [0.; 3]);
+        patch.colors =
+            [[0., 0., 0.], [0., 1., 0.], [1., 1., 1.], [1., 0., 0.]].map(|c| c.into_iter().collect());
+        let refs = [AdaptivePatchRef::Tensor(&patch)];
+        let mut pool = ParamPool::new();
+        let mut records = Vec::new();
+        let mut credit = None;
+        // A coarse baseline has identical UV fields but different affine color
+        // approximations. Later fine triangles must still win exact UV ties.
+        for points in [
+            [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)],
+            [Point::new(1., 0.), Point::new(1., 1.), Point::new(0., 1.)],
+        ] {
+            let mut parameters = [[0; 2]; 3];
+            for (i, p) in points.iter().enumerate() {
+                parameters[i] = [
+                    pool.intern(p.x, &admit).unwrap(),
+                    pool.intern(p.y, &admit).unwrap(),
+                ];
+            }
+            push_record(
+                &mut records,
+                &mut credit,
+                Record {
+                    points,
+                    parameters,
+                    patch_index: 0,
+                },
+                &admit,
+            )
+            .unwrap();
+        }
+        for y in 0..16 {
+            for x in 0..16 {
+                let [a, b, c, d] = [(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)]
+                    .map(|(x, y)| Point::new(x as f64 / 16., y as f64 / 16.));
+                for points in [[a, b, c], [b, d, c]] {
+                    let mut parameters = [[0; 2]; 3];
+                    for (i, p) in points.iter().enumerate() {
+                        parameters[i] = [
+                            pool.intern(p.x, &admit).unwrap(),
+                            pool.intern(p.y, &admit).unwrap(),
+                        ];
+                    }
+                    push_record(
+                        &mut records,
+                        &mut credit,
+                        Record {
+                            points,
+                            parameters,
+                            patch_index: 0,
+                        },
+                        &admit,
+                    )
+                    .unwrap();
+                }
+            }
+        }
+        let baseline = used.load(Ordering::SeqCst);
+        let run = |cancelled: &dyn Fn() -> bool, work: &mut usize| {
+            integrate_cell(
+                &records,
+                &refs,
+                &pool,
+                &[None],
+                Point::ZERO,
+                1.,
+                0,
+                32,
+                work,
+                cancelled,
+                &admit,
+            )
+        };
+        calls.set(0);
+        let mut work = 10_000_000;
+        let actual = run(&|| false, &mut work).unwrap();
+        let reservations = calls.get();
+        for (a, b) in actual
+            .into_iter()
+            .zip([1., 0.5, 0.5, 0.25 - 1. / (12. * 256.), 0.])
+        {
+            assert!((a - b).abs() < 1e-12, "{actual:?}");
+        }
+        assert!(reservations > 10 && work < 10_000_000);
+        assert_eq!(used.load(Ordering::SeqCst), baseline);
+        for stop in [1, reservations / 2, reservations] {
+            calls.set(0);
+            fail.set(stop);
+            assert!(run(&|| false, &mut 10_000_000).is_none());
+            assert_eq!(used.load(Ordering::SeqCst), baseline);
+        }
+        fail.set(usize::MAX);
+        assert!(run(&|| false, &mut 0).is_none());
+        assert!(run(&|| true, &mut 10_000_000).is_none());
+        let checkpoints = Cell::new(0usize);
+        run(
+            &|| {
+                checkpoints.set(checkpoints.get() + 1);
+                false
+            },
+            &mut 10_000_000,
+        )
+        .unwrap();
+        for stop in [checkpoints.get() / 2, checkpoints.get()] {
+            let at = Cell::new(0usize);
+            assert!(
+                run(
+                    &|| {
+                        at.set(at.get() + 1);
+                        at.get() == stop
+                    },
+                    &mut 10_000_000
+                )
+                .is_none()
+            );
+            assert_eq!(used.load(Ordering::SeqCst), baseline);
+        }
+        run(&|| false, &mut 10_000_000).unwrap();
+        // The same geometry in 1/16 of a pixel edge requires more than four
+        // recursion levels, while retaining exactly scaled source integrals.
+        for block in &mut records {
+            for record in &mut block.records {
+                record.points = record.points.map(|p| Point::new(p.x / 16., p.y / 16.));
+            }
+            block.bounds = Rect::new(
+                block.bounds.x0 / 16.,
+                block.bounds.y0 / 16.,
+                block.bounds.x1 / 16.,
+                block.bounds.y1 / 16.,
+            );
+        }
+        let scaled = integrate_cell(
+            &records,
+            &refs,
+            &pool,
+            &[None],
+            Point::ZERO,
+            1.,
+            0,
+            32,
+            &mut 10_000_000,
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        for (a, b) in scaled.into_iter().zip(actual) {
+            assert!((a - b / 256.).abs() < 1e-12);
+        }
+        assert_eq!(used.load(Ordering::SeqCst), baseline);
+        for block in &mut records {
+            for record in &mut block.records {
+                record.points = record.points.map(|p| Point::new(p.x / 16., p.y / 16.));
+            }
+            block.bounds = Rect::new(
+                block.bounds.x0 / 16.,
+                block.bounds.y0 / 16.,
+                block.bounds.x1 / 16.,
+                block.bounds.y1 / 16.,
+            );
+        }
+        let microscopic = integrate_cell(
+            &records,
+            &refs,
+            &pool,
+            &[None],
+            Point::ZERO,
+            1.,
+            0,
+            32,
+            &mut 10_000_000,
+            &|| false,
+            &admit,
+        )
+        .unwrap();
+        for (a, b) in microscopic.into_iter().zip(actual) {
+            assert!((a - b / 65536.).abs() < 1e-12);
+        }
+        assert_eq!(used.load(Ordering::SeqCst), baseline);
+        drop(records);
+        drop(credit);
+        drop(pool);
+        assert_eq!(used.load(Ordering::SeqCst), 0);
     }
     #[test]
     fn interned_parameters_and_segment_growth_preserve_bits_and_release_credit() {

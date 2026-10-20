@@ -37,6 +37,10 @@ pub enum AdaptivePatchError {
 pub struct AdaptivePatchStats {
     /// Number of triangles appended by this call.
     pub triangles: usize,
+    /// Additional local leaf-refinement passes after conforming fan validation.
+    pub refinement_passes: u8,
+    /// Leaf cells explicitly split after a failing emitted component bound.
+    pub refined_leaves: usize,
     /// Deepest accepted subdivision level.
     pub deepest: u8,
     /// Largest accepted geometric bound, including a floating-point safety margin.
@@ -213,6 +217,7 @@ trait TriangleOutput {
         self.push_triangle(triangle)
     }
     fn begin_patch(&mut self, _index: usize) {}
+    fn begin_leaf(&mut self, _uv: [f64;4], _depth: u8) {}
     fn projected_components(&self) -> bool {
         false
     }
@@ -601,6 +606,34 @@ pub fn tessellate_patch_mesh_stream_admitted(
         &mut |triangle, _source| consume(triangle),
     )
 }
+/// Compact capture using projected source-component planning and checking.
+/// The caller receives no partially checked geometry on refusal or cancellation.
+pub fn tessellate_patch_mesh_compact_projected_admitted(
+    patches: &[AdaptivePatchRef<'_>],
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    cancelled: &dyn Fn() -> bool,
+    admit: &Admitter<'_>,
+) -> Result<AdmittedAdaptivePatchMesh<CompactAdaptiveTriangle>, AdaptivePatchError> {
+    let mut output = MeshArray::new(Some(admit));
+    let stats = tessellate_patch_mesh_stream_projected_admitted(
+        patches,
+        transform,
+        limits,
+        cancelled,
+        admit,
+        &mut |triangle, _| output.push(CompactAdaptiveTriangle::from_triangle(triangle)),
+    )?;
+    if cancelled() {
+        return Err(AdaptivePatchError::Cancelled);
+    }
+    let (triangles, credit) = output.into_parts();
+    Ok(AdmittedAdaptivePatchMesh {
+        triangles,
+        stats,
+        _credit: credit,
+    })
+}
 /// Source provenance needed for projected overlap ownership. Parameters refer to
 /// the three emitted vertices before the device transform; patch order follows
 /// the supplied source slice. Folded mappings must compare interpolated v then u,
@@ -627,7 +660,8 @@ pub fn tessellate_patch_mesh_stream_ordered_admitted(
 }
 /// Opt-in streaming with projected source-component planning and verification
 /// of every emitted triangle, including conforming fans. Error bounds concern
-/// raw source components, not nonlinear functions, coverage or inverse ownership.
+/// raw source components on the painted triangle/source overlap, not nonlinear
+/// functions, extrapolation, coverage or inverse ownership.
 /// On error the caller must discard all partially consumed output.
 pub fn tessellate_patch_mesh_stream_projected_admitted(
     patches: &[AdaptivePatchRef<'_>],
@@ -638,6 +672,7 @@ pub fn tessellate_patch_mesh_stream_projected_admitted(
     consume: &mut dyn FnMut(Triangle, PatchTriangleSource) -> Result<(), AdaptivePatchError>,
 ) -> Result<AdaptivePatchStats, AdaptivePatchError> {
     let mut maximum = 0.0f64;
+    let mut skipped = 0usize;
     let mut stats = stream_ordered(
         patches,
         transform,
@@ -645,6 +680,10 @@ pub fn tessellate_patch_mesh_stream_projected_admitted(
         cancelled,
         admit,
         &mut |triangle, source| {
+            if crate::encode::projected_triangle_is_degenerate(&triangle) {
+                skipped+=1;
+                return Ok(());
+            }
             let converted;
             let patch = match patches[source.patch_index] {
                 AdaptivePatchRef::Tensor(p) => p,
@@ -653,7 +692,7 @@ pub fn tessellate_patch_mesh_stream_projected_admitted(
                     &converted
                 }
             };
-            let bound = crate::encode::projected_component_bounds(
+            let bound = crate::encode::visible_projected_component_bounds(
                 patch, transform, &triangle, source, &mut 4096, cancelled,
             )
             .map_err(projected_error)?;
@@ -673,6 +712,7 @@ pub fn tessellate_patch_mesh_stream_projected_admitted(
         true,
     )?;
     stats.max_component_bound = stats.max_component_bound.max(maximum);
+    stats.triangles = stats.triangles.checked_sub(skipped).ok_or(AdaptivePatchError::Invalid)?;
     Ok(stats)
 }
 fn projected_error(error: crate::encode::PixelPartitionError) -> AdaptivePatchError {
@@ -830,6 +870,69 @@ fn admitted_mesh<'a, T: EmittedTriangle>(
         _credit: credit,
     })
 }
+// Dry-run the exact conforming fan geometry before publishing output. Only
+// failing leaves are forced to split; all shared boundaries are then rebuilt.
+struct LocalComponentCheck<'a, 'mem> {
+    patch: &'a TensorProductPatch,
+    transform: Affine,
+    limits: AdaptivePatchLimits,
+    patch_index: usize,
+    uv: [f64; 4],
+    depth: u8,
+    failed: bool,
+    count: usize,
+    failures: &'a mut MeshArray<'mem, (usize, [f64; 4])>,
+}
+impl TriangleOutput for LocalComponentCheck<'_, '_> {
+    fn len(&self) -> usize {
+        self.count
+    }
+    fn truncate(&mut self, len: usize) {
+        self.count = len;
+    }
+    fn push_triangle(&mut self, _: Triangle) -> Result<(), AdaptivePatchError> {
+        Err(AdaptivePatchError::Invalid)
+    }
+    fn begin_leaf(&mut self, uv: [f64; 4], depth: u8) {
+        self.uv = uv;
+        self.depth = depth;
+        self.failed = false;
+    }
+    fn push_patch_triangle(
+        &mut self,
+        triangle: Triangle,
+        parameters: [Point; 3],
+    ) -> Result<(), AdaptivePatchError> {
+        self.count += 1;
+        if crate::encode::projected_triangle_is_degenerate(&triangle) {
+            return Ok(());
+        }
+        let bound = crate::encode::visible_projected_component_bounds(
+            self.patch,
+            self.transform,
+            &triangle,
+            PatchTriangleSource {
+                patch_index: self.patch_index,
+                parameters,
+            },
+            &mut 4096,
+            &|| false,
+        );
+        let failed = match bound {
+            Ok(values) => values.into_iter().any(|v| v > self.limits.component_error),
+            Err(crate::encode::PixelPartitionError::Conditioning) => true,
+            Err(error) => return Err(projected_error(error)),
+        };
+        if failed && !self.failed {
+            if self.depth >= self.limits.max_depth {
+                return Err(AdaptivePatchError::Depth);
+            }
+            self.failures.push((self.patch_index, self.uv))?;
+            self.failed = true;
+        }
+        Ok(())
+    }
+}
 fn tessellate_mesh<'a, 'mem>(
     patches: impl ExactSizeIterator<Item = AdaptivePatchRef<'a>> + Clone,
     transform: Affine,
@@ -880,175 +983,238 @@ fn tessellate_mesh<'a, 'mem>(
         if cancelled() {
             return Err(AdaptivePatchError::Cancelled);
         }
-        let mut planned = MeshArray::new(admit);
-        let mut minimum = 0;
-        let mut shared: MeshArray<'_, SharedEdgeSample> = MeshArray::new(admit);
-        let mut patch_edges = MeshArray::new(admit);
-        for source in patches {
-            if cancelled() {
-                return Err(AdaptivePatchError::Cancelled);
-            }
-            let patch = match source {
-                AdaptivePatchRef::Tensor(patch) => Cow::Borrowed(patch),
-                AdaptivePatchRef::Coons(patch) => Cow::Owned(patch.adaptive_tensor()?),
-            };
-            let mut available = limits;
-            available.max_triangles = limits.max_triangles - minimum;
-            let leaves = patch.plan_adaptive(
-                transform,
-                available,
-                &mut cancelled,
-                admit,
-                output.projected_components(),
-            )?;
-            minimum += leaves.len() * 2;
-            let controls = boundary_controls(&patch);
-            let edges = controls.map(canonical_edge).map(|(key, reversed, _)| {
-                (
-                    edge_records.binary_search_by_key(&key, |edge| edge.key).unwrap(),
-                    reversed,
-                )
-            });
-            for leaf in &leaves {
+        let mut forced = MeshArray::new(admit);
+        for _refinement_pass in 0..=16 {
+            let mut planned = MeshArray::new(admit);
+            let mut minimum = 0;
+            let mut shared: MeshArray<'_, SharedEdgeSample> = MeshArray::new(admit);
+            let mut patch_edges = MeshArray::new(admit);
+            for (patch_index, source) in patches.clone().enumerate() {
                 if cancelled() {
                     return Err(AdaptivePatchError::Cancelled);
                 }
-                let [u0, u1, v0, v1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
-                for (edge, touches, values) in [
-                    (0, v0 == 0, [u0, u1]),
-                    (1, u1 == 65536, [v0, v1]),
-                    (2, v1 == 65536, [u0, u1]),
-                    (3, u0 == 0, [v0, v1]),
-                ] {
-                    if touches {
-                        let (edge, reversed) = edges[edge];
-                        let controls = edge_records[edge].controls;
-                        for parameter in values.map(|t| if reversed { 65536 - t } else { t }) {
-                            if cancelled() {
-                                return Err(AdaptivePatchError::Cancelled);
+                let patch = match source {
+                    AdaptivePatchRef::Tensor(patch) => Cow::Borrowed(patch),
+                    AdaptivePatchRef::Coons(patch) => Cow::Owned(patch.adaptive_tensor()?),
+                };
+                let mut available = limits;
+                available.max_triangles = limits.max_triangles - minimum;
+                let leaves = patch.plan_adaptive(
+                    transform,
+                    available,
+                    &mut cancelled,
+                    admit,
+                    output.projected_components(),
+                    &forced,
+                    patch_index,
+                )?;
+                minimum += leaves.len() * 2;
+                let controls = boundary_controls(&patch);
+                let edges = controls.map(canonical_edge).map(|(key, reversed, _)| {
+                    (
+                        edge_records.binary_search_by_key(&key, |edge| edge.key).unwrap(),
+                        reversed,
+                    )
+                });
+                for leaf in &leaves {
+                    if cancelled() {
+                        return Err(AdaptivePatchError::Cancelled);
+                    }
+                    let [u0, u1, v0, v1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
+                    for (edge, touches, values) in [
+                        (0, v0 == 0, [u0, u1]),
+                        (1, u1 == 65536, [v0, v1]),
+                        (2, v1 == 65536, [u0, u1]),
+                        (3, u0 == 0, [v0, v1]),
+                    ] {
+                        if touches {
+                            let (edge, reversed) = edges[edge];
+                            let controls = edge_records[edge].controls;
+                            for parameter in values.map(|t| if reversed { 65536 - t } else { t }) {
+                                if cancelled() {
+                                    return Err(AdaptivePatchError::Cancelled);
+                                }
+                                let point = transform * curve_point(controls, parameter);
+                                if !point.x.is_finite() || !point.y.is_finite() {
+                                    return Err(AdaptivePatchError::Invalid);
+                                }
+                                shared.push(SharedEdgeSample {
+                                    edge,
+                                    parameter,
+                                    point,
+                                })?;
                             }
-                            let point = transform * curve_point(controls, parameter);
-                            if !point.x.is_finite() || !point.y.is_finite() {
-                                return Err(AdaptivePatchError::Invalid);
-                            }
-                            shared.push(SharedEdgeSample {
-                                edge,
-                                parameter,
-                                point,
-                            })?;
                         }
                     }
                 }
+                patch_edges.push(edges)?;
+                planned.push((patch, leaves))?;
             }
-            patch_edges.push(edges)?;
-            planned.push((patch, leaves))?;
-        }
-        if cancelled() {
-            return Err(AdaptivePatchError::Cancelled);
-        }
-        // Refine shared cubic boundaries independently of interior leaves.
-        // The tighter chord bound reduces silhouette coverage error without
-        // multiplying all boundary-adjacent quadtree cells.
-        for (edge, record) in edge_records.iter().enumerate() {
-            let mut stack = [(record.controls.map(|p| transform * p), 0u32, 65536u32, 0u8); 17];
-            let mut count = 1;
-            while count > 0 {
-                count -= 1;
-                let (p, low, high, depth) = stack[count];
-                if cancelled() {
-                    return Err(AdaptivePatchError::Cancelled);
+            if cancelled() {
+                return Err(AdaptivePatchError::Cancelled);
+            }
+            // Refine shared cubic boundaries independently of interior leaves.
+            // The tighter chord bound reduces silhouette coverage error without
+            // multiplying all boundary-adjacent quadtree cells.
+            for (edge, record) in edge_records.iter().enumerate() {
+                let mut stack = [(record.controls.map(|p| transform * p), 0u32, 65536u32, 0u8); 17];
+                let mut count = 1;
+                while count > 0 {
+                    count -= 1;
+                    let (p, low, high, depth) = stack[count];
+                    if cancelled() {
+                        return Err(AdaptivePatchError::Cancelled);
+                    }
+                    let deviation = (p[1] - p[0].lerp(p[3], 1. / 3.))
+                        .hypot()
+                        .max((p[2] - p[0].lerp(p[3], 2. / 3.)).hypot());
+                    if deviation <= limits.pixel_error / 128. {
+                        if shared.len() >= limits.max_triangles * 4 {
+                            return Err(AdaptivePatchError::TriangleLimit);
+                        }
+                        // Source endpoints already occur in the planned leaves.
+                        // Each interior endpoint is emitted once, by its left span.
+                        if high != 65536 {
+                            shared.push(SharedEdgeSample {
+                                edge,
+                                parameter: high,
+                                point: transform * curve_point(record.controls, high),
+                            })?;
+                        }
+                    } else {
+                        if depth >= limits.max_depth {
+                            return Err(AdaptivePatchError::Depth);
+                        }
+                        let (left, right) = split_curve(p);
+                        let mid = (low + high) / 2;
+                        stack[count] = (right, mid, high, depth + 1);
+                        stack[count + 1] = (left, low, mid, depth + 1);
+                        count += 2;
+                    }
                 }
-                let deviation = (p[1] - p[0].lerp(p[3], 1. / 3.))
-                    .hypot()
-                    .max((p[2] - p[0].lerp(p[3], 2. / 3.)).hypot());
-                if deviation <= limits.pixel_error / 128. {
-                    if shared.len() >= limits.max_triangles * 4 {
+            }
+            shared.sort_unstable_by_key(|sample| (sample.edge, sample.parameter));
+            shared.dedup_by(|a, b| a.edge == b.edge && a.parameter == b.parameter);
+            // Drop duplicate/capacity slack before output growth. Full old+new capacity
+            // is admitted while copying; output triangles do not yet overlap this stage.
+            shared.compact()?;
+            if cancelled() {
+                return Err(AdaptivePatchError::Cancelled);
+            }
+            if output.projected_components() {
+                let mut failures = MeshArray::new(admit);
+                let mut checked = 0;
+                for (patch_index, ((patch, leaves), edges)) in
+                    planned.iter().zip(patch_edges.iter()).enumerate()
+                {
+                    let boundaries = (*edges).map(|(edge, reversed)| Boundary {
+                        reversed,
+                        points: &shared[shared.partition_point(|sample| sample.edge < edge)
+                            ..shared.partition_point(|sample| sample.edge <= edge)],
+                    });
+                    let mut remaining = limits;
+                    remaining.max_triangles = limits
+                        .max_triangles
+                        .checked_sub(checked)
+                        .ok_or(AdaptivePatchError::TriangleLimit)?;
+                    let mut checker = LocalComponentCheck {
+                        patch,
+                        transform,
+                        limits,
+                        patch_index,
+                        uv: [0.; 4],
+                        depth: 0,
+                        failed: false,
+                        count: 0,
+                        failures: &mut failures,
+                    };
+                    let stats = patch.emit_adaptive(
+                        leaves,
+                        transform,
+                        remaining,
+                        &mut checker,
+                        Some(&boundaries),
+                        &mut cancelled,
+                        admit,
+                    )?;
+                    checked += stats.triangles;
+                }
+                if !failures.is_empty() {
+                    for failure in failures {
+                        if forced.iter().any(|old| *old == failure) {
+                            return Err(AdaptivePatchError::ComponentAccuracy);
+                        }
+                        forced.push(failure)?;
+                    }
+                    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                        eprintln!(
+                            "LOCAL_COMPONENT_REFINEMENT pass={} forced_leaves={}",
+                            _refinement_pass,
+                            forced.len()
+                        );
+                    }
+                    continue;
+                }
+            }
+            // Canonical controls are no longer read after shared samples are finalized.
+            drop(edge_records);
+            // Managed output is one retained allocation. Count all patch fans before
+            // materializing it, so later patches cannot duplicate a growing prefix.
+            if output.plans_global_capacity() {
+                let mut count = 0usize;
+                for ((_, leaves), edges) in planned.iter().zip(patch_edges.iter()) {
+                    if cancelled() {
+                        return Err(AdaptivePatchError::Cancelled);
+                    }
+                    let boundaries = (*edges).map(|(edge, reversed)| Boundary {
+                        reversed,
+                        points: &shared[shared.partition_point(|sample| sample.edge < edge)
+                            ..shared.partition_point(|sample| sample.edge <= edge)],
+                    });
+                    let (_, _, triangles) =
+                        plan_leaf_edges(leaves, Some(&boundaries), limits, &mut cancelled, admit, true)?;
+                    count = count
+                        .checked_add(triangles)
+                        .ok_or(AdaptivePatchError::TriangleLimit)?;
+                    if count > limits.max_triangles {
                         return Err(AdaptivePatchError::TriangleLimit);
                     }
-                    // Source endpoints already occur in the planned leaves.
-                    // Each interior endpoint is emitted once, by its left span.
-                    if high != 65536 {
-                        shared.push(SharedEdgeSample {
-                            edge,
-                            parameter: high,
-                            point: transform * curve_point(record.controls, high),
-                        })?;
-                    }
-                } else {
-                    if depth >= limits.max_depth {
-                        return Err(AdaptivePatchError::Depth);
-                    }
-                    let (left, right) = split_curve(p);
-                    let mid = (low + high) / 2;
-                    stack[count] = (right, mid, high, depth + 1);
-                    stack[count + 1] = (left, low, mid, depth + 1);
-                    count += 2;
                 }
+                output.reserve_patch(count)?;
             }
-        }
-        shared.sort_unstable_by_key(|sample| (sample.edge, sample.parameter));
-        shared.dedup_by(|a, b| a.edge == b.edge && a.parameter == b.parameter);
-        // Drop duplicate/capacity slack before output growth. Full old+new capacity
-        // is admitted while copying; output triangles do not yet overlap this stage.
-        shared.compact()?;
-        if cancelled() {
-            return Err(AdaptivePatchError::Cancelled);
-        }
-        // Canonical controls are no longer read after shared samples are finalized.
-        drop(edge_records);
-        // Managed output is one retained allocation. Count all patch fans before
-        // materializing it, so later patches cannot duplicate a growing prefix.
-        if output.plans_global_capacity() {
-            let mut count = 0usize;
-            for ((_, leaves), edges) in planned.iter().zip(patch_edges.iter()) {
-                if cancelled() {
-                    return Err(AdaptivePatchError::Cancelled);
-                }
-                let boundaries = (*edges).map(|(edge, reversed)| Boundary {
+            let mut total = AdaptivePatchStats::default();
+            for (patch_index, ((patch, leaves), edges)) in planned.into_iter().zip(patch_edges).enumerate() {
+                output.begin_patch(patch_index);
+                let boundaries = edges.map(|(edge, reversed)| Boundary {
                     reversed,
                     points: &shared[shared.partition_point(|sample| sample.edge < edge)
                         ..shared.partition_point(|sample| sample.edge <= edge)],
                 });
-                let (_, _, triangles) =
-                    plan_leaf_edges(leaves, Some(&boundaries), limits, &mut cancelled, admit, true)?;
-                count = count
-                    .checked_add(triangles)
-                    .ok_or(AdaptivePatchError::TriangleLimit)?;
-                if count > limits.max_triangles {
-                    return Err(AdaptivePatchError::TriangleLimit);
+                let mut remaining = limits;
+                remaining.max_triangles -= total.triangles;
+                let patch_start = output.len();
+                let stats = patch.emit_adaptive(
+                    &leaves,
+                    transform,
+                    remaining,
+                    output,
+                    Some(&boundaries),
+                    &mut cancelled,
+                    admit,
+                )?;
+                if let Some(ranges) = &mut ranges {
+                    push_array(ranges, patch_start..output.len())?;
                 }
+                total.triangles += stats.triangles;
+                total.deepest = total.deepest.max(stats.deepest);
+                total.max_pixel_bound = total.max_pixel_bound.max(stats.max_pixel_bound);
+                total.max_component_bound = total.max_component_bound.max(stats.max_component_bound);
             }
-            output.reserve_patch(count)?;
+            total.refinement_passes = _refinement_pass as u8;
+            total.refined_leaves = forced.len();
+            return Ok(total);
         }
-        let mut total = AdaptivePatchStats::default();
-        for (patch_index, ((patch, leaves), edges)) in planned.into_iter().zip(patch_edges).enumerate() {
-            output.begin_patch(patch_index);
-            let boundaries = edges.map(|(edge, reversed)| Boundary {
-                reversed,
-                points: &shared[shared.partition_point(|sample| sample.edge < edge)
-                    ..shared.partition_point(|sample| sample.edge <= edge)],
-            });
-            let mut remaining = limits;
-            remaining.max_triangles -= total.triangles;
-            let patch_start = output.len();
-            let stats = patch.emit_adaptive(
-                leaves,
-                transform,
-                remaining,
-                output,
-                Some(&boundaries),
-                &mut cancelled,
-                admit,
-            )?;
-            if let Some(ranges) = &mut ranges {
-                push_array(ranges, patch_start..output.len())?;
-            }
-            total.triangles += stats.triangles;
-            total.deepest = total.deepest.max(stats.deepest);
-            total.max_pixel_bound = total.max_pixel_bound.max(stats.max_pixel_bound);
-            total.max_component_bound = total.max_component_bound.max(stats.max_component_bound);
-        }
-        Ok(total)
+        Err(AdaptivePatchError::Depth)
     })();
     if result.is_err() {
         output.truncate(initial);
@@ -1058,7 +1224,6 @@ fn tessellate_mesh<'a, 'mem>(
     }
     result
 }
-
 fn plan_leaf_edges<'mem>(
     leaves: &[Leaf],
     boundaries: Option<&[Boundary<'_>; 4]>,
@@ -1323,8 +1488,8 @@ impl TensorProductPatch {
     ) -> Result<AdaptivePatchStats, AdaptivePatchError> {
         let initial = output.len();
         let result = (|| {
-            let leaves = self.plan_adaptive(transform, limits, &mut cancelled, None, false)?;
-            self.emit_adaptive(leaves, transform, limits, output, None, &mut cancelled, None)
+            let leaves = self.plan_adaptive(transform, limits, &mut cancelled, None, false, &[], 0)?;
+            self.emit_adaptive(&leaves, transform, limits, output, None, &mut cancelled, None)
         })();
         if result.is_err() {
             output.truncate(initial);
@@ -1338,6 +1503,8 @@ impl TensorProductPatch {
         cancelled: &mut impl FnMut() -> bool,
         admit: Option<&'mem Admitter<'mem>>,
         projected: bool,
+        forced: &[(usize, [f64;4])],
+        patch_index: usize,
     ) -> Result<MeshArray<'mem, Leaf>, AdaptivePatchError> {
         if cancelled() {
             return Err(AdaptivePatchError::Cancelled);
@@ -1428,6 +1595,7 @@ impl TensorProductPatch {
                 ] {
                     let [a, b, c] = uv.map(|p| patch_vertex(self, transform, p, None));
                     let triangle = Triangle::new(a?, b?, c?);
+                    if crate::encode::projected_triangle_is_degenerate(&triangle) { continue; }
                     // Planning uses the full cell rectangle for this conservative
                     // preliminary bound. The actual emitted UV box is checked again.
                     let source = PatchTriangleSource {
@@ -1435,7 +1603,7 @@ impl TensorProductPatch {
                         parameters: uv,
                     };
                     let cancelled_read = std::cell::RefCell::new(&mut *cancelled);
-                    match crate::encode::projected_component_bounds(
+                    match crate::encode::visible_projected_component_bounds(
                         self,
                         transform,
                         &triangle,
@@ -1449,7 +1617,9 @@ impl TensorProductPatch {
                     }
                 }
             }
-            if geometry <= limits.pixel_error && color <= limits.component_error {
+            if geometry <= limits.pixel_error && color <= limits.component_error
+                && !forced.iter().any(|(index, uv)| *index == patch_index && *uv == cell.uv)
+            {
                 if (leaves.len() + 1) * 2 > limits.max_triangles {
                     return Err(AdaptivePatchError::TriangleLimit);
                 }
@@ -1461,6 +1631,9 @@ impl TensorProductPatch {
                 })?;
             } else {
                 if cell.depth >= limits.max_depth {
+                    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                        eprintln!("ADAPTIVE_DEPTH_REFUSAL uv={:?} geometry={geometry} color={color} param_color={param_color} projected={projected}", cell.uv);
+                    }
                     return Err(AdaptivePatchError::Depth);
                 }
                 let um = (u0 + u1) * 0.5;
@@ -1518,7 +1691,7 @@ impl TensorProductPatch {
     }
     fn emit_adaptive<'mem>(
         &self,
-        leaves: MeshArray<'mem, Leaf>,
+        leaves: &MeshArray<'mem, Leaf>,
         transform: Affine,
         limits: AdaptivePatchLimits,
         output: &mut impl TriangleOutput,
@@ -1538,6 +1711,7 @@ impl TensorProductPatch {
             if cancelled() {
                 return Err(AdaptivePatchError::Cancelled);
             }
+            output.begin_leaf(leaf.uv, leaf.depth);
             let [u0, u1, v0, v1] = leaf.uv;
             let [x0, x1, y0, y1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
             let bottom = interior(&horizontal, y0, x0, x1)?;

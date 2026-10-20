@@ -321,8 +321,16 @@ mod tests {
     fn native_ordered_patch_full_pdf_exact_fold_and_partial_overlap() {
         for (bytes, row) in [
             (
+                include_bytes!("../../../tests/fixtures/pdf/coons-folded-solid.pdf").as_slice(),
+                [0, 0, 0, 255, 0, 0, 0, 128, 0, 0, 0, 0],
+            ),
+            (
                 include_bytes!("../../../tests/fixtures/pdf/tensor-folded-solid.pdf").as_slice(),
                 [0, 0, 0, 255, 0, 0, 0, 128, 0, 0, 0, 0],
+            ),
+            (
+                include_bytes!("../../../tests/fixtures/pdf/coons-partial-overlap.pdf").as_slice(),
+                [128, 0, 128, 255, 0, 0, 255, 255, 0, 0, 0, 0],
             ),
             (
                 include_bytes!("../../../tests/fixtures/pdf/tensor-partial-overlap.pdf").as_slice(),
@@ -517,8 +525,16 @@ mod tests {
         use super::super::super::native_blend::{Model, Pixel};
         for (bytes, row) in [
             (
+                include_bytes!("../../../tests/fixtures/pdf/coons-folded-solid.pdf").as_slice(),
+                [0, 0, 0, 255, 0, 0, 0, 128, 0, 0, 0, 0],
+            ),
+            (
                 include_bytes!("../../../tests/fixtures/pdf/tensor-folded-solid.pdf").as_slice(),
                 [0, 0, 0, 255, 0, 0, 0, 128, 0, 0, 0, 0],
+            ),
+            (
+                include_bytes!("../../../tests/fixtures/pdf/coons-partial-overlap.pdf").as_slice(),
+                [128, 0, 128, 255, 0, 0, 255, 255, 0, 0, 0, 0],
             ),
             (
                 include_bytes!("../../../tests/fixtures/pdf/tensor-partial-overlap.pdf").as_slice(),

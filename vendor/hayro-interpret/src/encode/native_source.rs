@@ -721,7 +721,7 @@ impl NativeShadingSource {
 
     /// Retain supported source geometry/color functions after capacity admission.
     /// Device and explicitly transformed Separation/DeviceN axial/radial, triangle
-    /// and bounded adaptive tensor meshes are supported. Coons, profiles and
+    /// and bounded adaptive Tensor/Coons meshes are supported. Profiles and
     /// transfers are refused. Source functions have bounded native evaluators.
     /// Tensor bounds apply to source components, not subsequent nonlinear transforms.
     pub fn capture(
@@ -742,9 +742,25 @@ impl NativeShadingSource {
             .native_sample_retained_capacity(cancelled)
             .ok_or_else(|| if cancelled() { Cancelled } else { Unsupported })?;
         let count = usize::from(pattern.shading.color_space.num_components());
-        if let ShadingType::TensorProductPatchMesh { patches, function } =
-            pattern.shading.shading_type.as_ref()
+        if matches!(pattern.shading.shading_type.as_ref(),
+            ShadingType::TensorProductPatchMesh { .. } | ShadingType::CoonsPatchMesh { .. })
         {
+            use crate::shading::AdaptivePatchRef;
+            let (patch_count, function) = match pattern.shading.shading_type.as_ref() {
+                ShadingType::TensorProductPatchMesh { patches, function } => (patches.len(), function),
+                ShadingType::CoonsPatchMesh { patches, function } => (patches.len(), function),
+                _ => unreachable!(),
+            };
+            let _reference_credit = admit(patch_count.checked_mul(size_of::<AdaptivePatchRef<'_>>()).ok_or(Invalid)?)
+                .ok_or(Admission)?;
+            let mut patches = Vec::new();
+            patches.try_reserve_exact(patch_count).map_err(|_| Admission)?;
+            if patches.capacity() > patch_count { return Err(Admission); }
+            match pattern.shading.shading_type.as_ref() {
+                ShadingType::TensorProductPatchMesh { patches: source, .. } => patches.extend(source.iter().map(AdaptivePatchRef::Tensor)),
+                ShadingType::CoonsPatchMesh { patches: source, .. } => patches.extend(source.iter().map(AdaptivePatchRef::Coons)),
+                _ => unreachable!(),
+            }
             if !pattern.opacity.is_finite()
                 || !(0.0..=1.0).contains(&pattern.opacity)
                 || pattern.matrix.as_coeffs().iter().any(|v| !v.is_finite())
@@ -753,15 +769,15 @@ impl NativeShadingSource {
                 return Err(Invalid);
             }
             use crate::shading::{
-                AdaptivePatchError, AdaptivePatchLimits, tessellate_tensor_patch_mesh_compact_admitted,
+                AdaptivePatchError, AdaptivePatchLimits, tessellate_patch_mesh_compact_projected_admitted,
             };
-            let mesh = tessellate_tensor_patch_mesh_compact_admitted(
-                patches,
+            let mesh = tessellate_patch_mesh_compact_projected_admitted(
+                &patches,
                 pattern.matrix,
                 AdaptivePatchLimits {
                     pixel_error: 1. / 64.,
                     component_error: 1. / 1024.,
-                    max_depth: 12,
+                    max_depth: 16,
                     max_triangles: 1_048_576,
                 },
                 cancelled,
@@ -805,7 +821,7 @@ impl NativeShadingSource {
                 cancelled,
                 admit,
             )?;
-            source.attach_tensor_priority(patches, pattern.matrix, cancelled, admit)?;
+            source.attach_patch_priority(&patches, pattern.matrix, cancelled, admit)?;
             source.patch_tessellation = Some(mesh.stats());
             return Ok(source);
         }
@@ -895,17 +911,17 @@ impl NativeShadingSource {
         })
     }
     // Preserve original patch UV priority independently of adaptive emission
-    // order. Replay must use the same old-stream geometry as compact capture;
+    // order. Replay must use the same projected-stream geometry as compact capture;
     // every index/point/component is checked before publishing the metadata.
-    fn attach_tensor_priority(
+    fn attach_patch_priority(
         &mut self,
-        patches: &[crate::shading::TensorProductPatch],
+        patches: &[crate::shading::AdaptivePatchRef<'_>],
         transform: Affine,
         cancelled: &dyn Fn() -> bool,
         admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
     ) -> Result<(), NativeShadingError> {
         use crate::shading::{
-            AdaptivePatchLimits, AdaptivePatchRef, tessellate_patch_mesh_stream_ordered_admitted,
+            AdaptivePatchLimits, AdaptivePatchRef, tessellate_patch_mesh_stream_projected_admitted,
         };
         use NativeShadingError::*;
         let _references = admit(
@@ -922,7 +938,7 @@ impl NativeShadingSource {
         if references.capacity() > patches.len() {
             return Err(Admission);
         }
-        references.extend(patches.iter().map(AdaptivePatchRef::Tensor));
+        references.extend(patches.iter().copied());
         let _identities = admit(
             patches
                 .len()
@@ -941,7 +957,10 @@ impl NativeShadingSource {
             if cancelled() {
                 return Err(Cancelled);
             }
-            identities.push(super::PatchParameterIdentity::tensor(patch, i, transform));
+            identities.push(match patch {
+                AdaptivePatchRef::Tensor(patch) => super::PatchParameterIdentity::tensor(patch, i, transform),
+                AdaptivePatchRef::Coons(patch) => super::PatchParameterIdentity::coons(patch, i, transform),
+            });
         }
         let mesh = self.mesh.as_mut().ok_or(Unsupported)?;
         let credit = admit(
@@ -959,13 +978,13 @@ impl NativeShadingSource {
             return Err(Admission);
         }
         let mut failure = None;
-        tessellate_patch_mesh_stream_ordered_admitted(
+        tessellate_patch_mesh_stream_projected_admitted(
             &references,
             transform,
             AdaptivePatchLimits {
                 pixel_error: 1. / 64.,
                 component_error: 1. / 1024.,
-                max_depth: 12,
+                max_depth: 16,
                 max_triangles: 1_048_576,
             },
             cancelled,
@@ -2450,7 +2469,22 @@ mod tests {
 
     #[test]
     fn native_patch_priority_owner_and_admission_cancel_retry() {
-        let pattern = sheared_fold_pattern();
+        patch_priority_admission_control(false);
+    }
+    #[test]
+    fn native_coons_priority_owner_and_admission_cancel_retry() {
+        patch_priority_admission_control(true);
+    }
+    fn patch_priority_admission_control(coons: bool) {
+        let mut pattern = sheared_fold_pattern();
+        if coons {
+            let ShadingType::TensorProductPatchMesh { patches, .. } = pattern.shading.shading_type.as_ref() else { unreachable!() };
+            let patch = crate::shading::CoonsPatch {
+                control_points: std::array::from_fn(|i| patches[0].control_points[i]),
+                colors: patches[0].colors.clone(),
+            };
+            Arc::make_mut(&mut pattern.shading).shading_type = Arc::new(ShadingType::CoonsPatchMesh { patches: vec![patch], function: None });
+        }
         let used = Arc::new(AtomicUsize::new(0));
         let calls = Cell::new(0);
         let fail = Cell::new(0);

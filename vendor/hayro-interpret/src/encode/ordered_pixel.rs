@@ -154,7 +154,7 @@ fn tick(work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<()> {
 // Exact sign for represented finite coordinates. Fast ordinary determinants
 // use a conservative filter; ambiguous/overflowing/subnormal cases sum six
 // dyadic products in fixed storage (no allocator or geometric epsilon).
-fn orientation(a: Point, b: Point, c: Point) -> i8 {
+pub(super) fn orientation(a: Point, b: Point, c: Point) -> i8 {
     if a == b || b == c || a == c || (a.x == b.x && b.x == c.x) || (a.y == b.y && b.y == c.y) {
         return 0;
     }
@@ -234,19 +234,238 @@ fn orientation(a: Point, b: Point, c: Point) -> i8 {
     0
 }
 
+fn canonical_edge(a: Point, b: Point) -> (Point, Point, bool) {
+    if a.x > b.x || (a.x == b.x && a.y > b.y) {
+        (b, a, true)
+    } else {
+        (a, b, false)
+    }
+}
+fn edge_function(a: Point, b: Point) -> impl Fn(Point) -> f64 {
+    let (anchor, end, reversed) = canonical_edge(a, b);
+    let d = end - anchor;
+    move |p| {
+        let q = p - anchor;
+        let product = d.y * q.x;
+        let result = d.x.mul_add(q.y, -product) - d.y.mul_add(q.x, -product);
+        if reversed { -result } else { result }
+    }
+}
+fn edge_snap(a: Point, b: Point) -> Option<(usize, f64)> {
+    let normalize = |v: f64| if v == 0. { 0. } else { v };
+    if a.x == b.x {
+        Some((0, normalize(a.x)))
+    } else if a.y == b.y {
+        Some((1, normalize(a.y)))
+    } else {
+        None
+    }
+}
+// The same represented segment and cut produce the same intersection bits
+// for either traversal and either half-plane. Anchor at the nearer endpoint
+// to avoid subtracting nearly equal coordinates at t close to one.
+fn intersection(a: Point, b: Point, fa: f64, fb: f64, snap: Option<(usize, f64)>) -> Result<Point> {
+    let (start, end, swapped) = canonical_edge(a, b);
+    let (left, right) = if swapped { (fb, fa) } else { (fa, fb) };
+    let (anchor, other, distance, opposite) = if left.abs() <= right.abs() {
+        (start, end, left, right)
+    } else {
+        (end, start, right, left)
+    };
+    let denominator = distance - opposite;
+    if !denominator.is_finite() {
+        return Err(PixelPartitionError::Invalid);
+    }
+    let t = distance / denominator;
+    if !t.is_finite() {
+        return Err(PixelPartitionError::Invalid);
+    }
+    let mut point = if distance == 0. {
+        anchor
+    } else {
+        Point::new(
+            (other.x - anchor.x).mul_add(t, anchor.x),
+            (other.y - anchor.y).mul_add(t, anchor.y),
+        )
+    };
+    if let Some((axis, coordinate)) = snap {
+        if axis == 0 {
+            point.x = coordinate;
+        } else {
+            point.y = coordinate;
+        }
+    }
+    if !point.x.is_finite() || !point.y.is_finite() {
+        return Err(PixelPartitionError::Invalid);
+    }
+    Ok(point)
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+enum LineKey {
+    Edge([u64; 4]),
+    Field([u64; 3]),
+    Axis(usize, u64),
+}
+impl LineKey {
+    fn bits(v: f64) -> u64 {
+        if v == 0. { 0 } else { v.to_bits() }
+    }
+    fn edge(a: Point, b: Point) -> Self {
+        if a.x == b.x {
+            return Self::Axis(0, Self::bits(a.x));
+        }
+        if a.y == b.y {
+            return Self::Axis(1, Self::bits(a.y));
+        }
+        let (a, b, _) = canonical_edge(a, b);
+        Self::Edge([a.x, a.y, b.x, b.y].map(Self::bits))
+    }
+    fn field(mut f: [f64; 3]) -> Result<Self> {
+        if f.iter().any(|v| !v.is_finite()) {
+            return Err(PixelPartitionError::Invalid);
+        }
+        if f[1].abs() == 1. && f[2] == 0. {
+            return Ok(Self::Axis(0, Self::bits(-f[0] / f[1])));
+        }
+        if f[2].abs() == 1. && f[1] == 0. {
+            return Ok(Self::Axis(1, Self::bits(-f[0] / f[2])));
+        }
+        if f.iter().copied().find(|v| *v != 0.).is_some_and(|v| v < 0.) {
+            f = f.map(|v| -v);
+        }
+        Ok(Self::Field(f.map(Self::bits)))
+    }
+}
+type LineMap = hashbrown::HashMap<LineKey, u32, rustc_hash::FxBuildHasher>;
+struct LinePool<'a> {
+    map: LineMap,
+    credit: Option<Credit>,
+    next: u32,
+    admit: &'a Admitter<'a>,
+}
+struct LineTransaction<'p, 'a> {
+    pool: &'p mut LinePool<'a>,
+    baseline: u32,
+    original: Option<(LineMap, Option<Credit>)>,
+    committed: bool,
+}
+impl<'a> LinePool<'a> {
+    fn new(admit: &'a Admitter<'a>) -> Self {
+        Self {
+            map: Default::default(),
+            credit: None,
+            next: 1,
+            admit,
+        }
+    }
+    fn transaction(&mut self) -> LineTransaction<'_, 'a> {
+        let baseline = self.next;
+        LineTransaction {
+            pool: self,
+            baseline,
+            original: None,
+            committed: false,
+        }
+    }
+}
+impl LineTransaction<'_, '_> {
+    fn intern(&mut self, key: LineKey, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<u32> {
+        tick(work, cancelled)?;
+        if let Some(&id) = self.pool.map.get(&key) {
+            return Ok(id);
+        }
+        if self.pool.map.len() == self.pool.map.capacity() {
+            let capacity = self
+                .pool
+                .map
+                .capacity()
+                .checked_mul(2)
+                .ok_or(PixelPartitionError::Limit)?
+                .max(3);
+            let buckets = if capacity < 4 {
+                4
+            } else if capacity < 8 {
+                8
+            } else {
+                capacity
+                    .checked_mul(8)
+                    .ok_or(PixelPartitionError::Limit)?
+                    .div_ceil(7)
+                    .checked_next_power_of_two()
+                    .ok_or(PixelPartitionError::Limit)?
+            };
+            let bytes = buckets
+                .checked_mul(size_of::<(LineKey, u32)>() + 1)
+                .and_then(|v| v.checked_add(128))
+                .ok_or(PixelPartitionError::Limit)?;
+            let next = (self.pool.admit)(bytes).ok_or(PixelPartitionError::Admission)?;
+            let mut replacement = LineMap::default();
+            replacement
+                .try_reserve(capacity)
+                .map_err(|_| PixelPartitionError::Admission)?;
+            if replacement.allocation_size() > bytes {
+                return Err(PixelPartitionError::Admission);
+            }
+            for (&key, &id) in &self.pool.map {
+                tick(work, cancelled)?;
+                replacement.insert(key, id);
+            }
+            let mut previous = std::mem::replace(&mut self.pool.map, replacement);
+            let previous_credit = self.pool.credit.replace(next);
+            if self.original.is_none() {
+                previous.retain(|_, id| *id < self.baseline);
+                self.original = Some((previous, previous_credit));
+            } else {
+                drop(previous);
+                drop(previous_credit);
+            }
+        }
+        let id = self.pool.next;
+        self.pool.next = id.checked_add(1).ok_or(PixelPartitionError::Limit)?;
+        self.pool.map.insert(key, id);
+        Ok(id)
+    }
+    fn commit(mut self) {
+        self.committed = true;
+    }
+}
+impl Drop for LineTransaction<'_, '_> {
+    fn drop(&mut self) {
+        if self.committed {
+            return;
+        }
+        if let Some((map, credit)) = self.original.take() {
+            let current = std::mem::replace(&mut self.pool.map, map);
+            let current_credit = std::mem::replace(&mut self.pool.credit, credit);
+            drop(current);
+            drop(current_credit);
+        } else {
+            self.pool.map.retain(|_, id| *id < self.baseline);
+        }
+        self.pool.next = self.baseline;
+    }
+}
+
 #[derive(Clone, Copy)]
 struct Polygon {
     points: [Point; VERTICES],
+    // The line of the edge ending at each vertex; zero means unknown.
+    incoming: [u32; VERTICES],
     len: usize,
 }
 impl Polygon {
     fn empty() -> Self {
         Self {
             points: [Point::ZERO; VERTICES],
+            incoming: [0; VERTICES],
             len: 0,
         }
     }
     fn push(&mut self, point: Point) -> Result<()> {
+        self.push_tagged(point, 0)
+    }
+    fn push_tagged(&mut self, point: Point, line: u32) -> Result<()> {
         if !point.x.is_finite() || !point.y.is_finite() {
             return Err(PixelPartitionError::Invalid);
         }
@@ -257,6 +476,7 @@ impl Polygon {
             return Err(PixelPartitionError::Limit);
         }
         self.points[self.len] = point;
+        self.incoming[self.len] = line;
         self.len += 1;
         Ok(())
     }
@@ -267,6 +487,7 @@ impl Polygon {
         if self.len < 3 {
             return self;
         }
+        let original = self;
         self.points[..self.len].sort_by(|a, b| {
             a.x.partial_cmp(&b.x)
                 .unwrap()
@@ -281,6 +502,7 @@ impl Polygon {
         }
         if unique < 3 {
             self.len = unique;
+            self.restore_lines(&original);
             return self;
         }
         let mut hull = [Point::ZERO; VERTICES * 2];
@@ -305,10 +527,52 @@ impl Polygon {
         debug_assert!(n <= unique);
         self.points[..n].copy_from_slice(&hull[..n]);
         self.len = n;
+        self.restore_lines(&original);
         self
+    }
+    fn on_line(&self, index: usize, line: u32) -> bool {
+        line != 0 && (self.incoming[index] == line || self.incoming[(index + 1) % self.len] == line)
+    }
+    fn restore_lines(&mut self, original: &Self) {
+        for i in 0..self.len {
+            let from = self.points[(i + self.len - 1) % self.len];
+            let to = self.points[i];
+            self.incoming[i] = original
+                .chain_line(from, to, false)
+                .or_else(|| original.chain_line(from, to, true))
+                .unwrap_or(0);
+        }
+    }
+    fn chain_line(&self, from: Point, to: Point, reverse: bool) -> Option<u32> {
+        let mut index = self.points[..self.len].iter().position(|p| *p == from)?;
+        let mut line = 0;
+        for _ in 0..self.len {
+            let next = if reverse {
+                (index + self.len - 1) % self.len
+            } else {
+                (index + 1) % self.len
+            };
+            let id = if reverse {
+                self.incoming[index]
+            } else {
+                self.incoming[next]
+            };
+            if id == 0 || (line != 0 && id != line) {
+                return None;
+            }
+            line = id;
+            index = next;
+            if self.points[index] == to {
+                return Some(line);
+            }
+        }
+        None
     }
     fn moments(&self) -> Option<(f64, Point)> {
         if self.len < 3 {
+            return None;
+        }
+        if self.incoming[0] != 0 && self.incoming[..self.len].iter().all(|id| *id == self.incoming[0]) {
             return None;
         }
         let mut area = 0.;
@@ -335,12 +599,53 @@ impl Polygon {
         }
         Some((area.abs() * 0.5, centroid))
     }
+    fn contains(&self, other: &Self, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<bool> {
+        for [a, b] in self.edges() {
+            for &point in &other.points[..other.len] {
+                tick(work, cancelled)?;
+                if orientation(a, b, point) < 0 {
+                    return Ok(false);
+                }
+            }
+        }
+        Ok(true)
+    }
     fn clip(&self, line: [f64; 3], work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<Self> {
-        self.clip_by(|p| value(line, p), work, cancelled)
+        self.clip_id(line, 0, work, cancelled)
+    }
+    fn clip_id(
+        &self,
+        line: [f64; 3],
+        id: u32,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<Self> {
+        let snap = if line[1] != 0. && line[2] == 0. {
+            Some((0, -line[0] / line[1]))
+        } else if line[2] != 0. && line[1] == 0. {
+            Some((1, -line[0] / line[2]))
+        } else {
+            None
+        };
+        let snap = snap
+            .filter(|(_, v)| v.is_finite())
+            .map(|(axis, v)| (axis, if v == 0. { 0. } else { v }));
+        self.clip_by_id(|p| value(line, p), snap, id, work, cancelled)
     }
     fn clip_by(
         &self,
         evaluate: impl Fn(Point) -> f64,
+        snap: Option<(usize, f64)>,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<Self> {
+        self.clip_by_id(evaluate, snap, 0, work, cancelled)
+    }
+    fn clip_by_id(
+        &self,
+        evaluate: impl Fn(Point) -> f64,
+        snap: Option<(usize, f64)>,
+        line: u32,
         work: &mut usize,
         cancelled: &dyn Fn() -> bool,
     ) -> Result<Self> {
@@ -350,34 +655,36 @@ impl Polygon {
             return Ok(out);
         }
         let mut previous = self.points[self.len - 1];
-        let mut a = evaluate(previous);
+        let mut previous_on = self.on_line(self.len - 1, line);
+        let mut a = if previous_on { 0. } else { evaluate(previous) };
         if !a.is_finite() {
             return Err(PixelPartitionError::Invalid);
         }
-        for current in self.points[..self.len].iter().copied() {
+        for (index, current) in self.points[..self.len].iter().copied().enumerate() {
             tick(work, cancelled)?;
-            let b = evaluate(current);
+            let current_on = self.on_line(index, line);
+            let b = if current_on { 0. } else { evaluate(current) };
             if !b.is_finite() {
                 return Err(PixelPartitionError::Invalid);
             }
             if (a >= 0.) != (b >= 0.) {
-                let denominator = a - b;
-                if !denominator.is_finite() {
-                    return Err(PixelPartitionError::Invalid);
-                }
-                let t = a / denominator;
-                if !t.is_finite() {
-                    return Err(PixelPartitionError::Invalid);
-                }
-                out.push(previous + (current - previous) * t)?;
+                let id = if a >= 0. { self.incoming[index] } else { line };
+                out.push_tagged(intersection(previous, current, a, b, snap)?, id)?;
             }
             if b >= 0. {
-                out.push(current)?;
+                let id = if previous_on && current_on {
+                    line
+                } else {
+                    self.incoming[index]
+                };
+                out.push_tagged(current, id)?;
             }
             previous = current;
+            previous_on = current_on;
             a = b;
         }
         if out.len > 1 && out.points[0] == out.points[out.len - 1] {
+            out.incoming[0] = out.incoming[out.len - 1];
             out.len -= 1;
         }
         Ok(out.convex_hull())
@@ -397,11 +704,18 @@ impl Polygon {
                 }
                 let mut joined = Self::empty();
                 for k in 0..self.len {
-                    joined.push(self.points[(i + 1 + k) % self.len]).ok()?;
+                    let index = (i + 1 + k) % self.len;
+                    joined
+                        .push_tagged(self.points[index], self.incoming[index])
+                        .ok()?;
                 }
                 for k in 1..other.len - 1 {
-                    joined.push(other.points[(j + 1 + k) % other.len]).ok()?;
+                    let index = (j + 1 + k) % other.len;
+                    joined
+                        .push_tagged(other.points[index], other.incoming[index])
+                        .ok()?;
                 }
+                joined.incoming[0] = other.incoming[j];
                 for k in 0..joined.len {
                     let a = joined.points[(k + 1) % joined.len] - joined.points[k];
                     let b = joined.points[(k + 2) % joined.len] - joined.points[(k + 1) % joined.len];
@@ -422,6 +736,7 @@ impl Polygon {
                         .then(joined.points[i].y.total_cmp(&joined.points[j].y))
                 })?;
                 joined.points[..joined.len].rotate_left(first);
+                joined.incoming[..joined.len].rotate_left(first);
                 return Some(joined);
             }
         }
@@ -516,6 +831,7 @@ fn subtract(
     cut: &Polygon,
     owner: PixelSourceOwner,
     out: &mut AdmittedVec<'_, Fragment>,
+    lines: &mut LineTransaction<'_, '_>,
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
 ) -> Result<Polygon> {
@@ -525,18 +841,24 @@ fn subtract(
         return Ok(Polygon::empty());
     }
     let mut inside = polygon;
-    for [a, b] in cut.edges() {
+    for (index, [a, b]) in cut.edges().enumerate() {
         tick(work, cancelled)?;
         // Local anchor avoids cancellation in ax*by-bx*ay for very short
         // edges near a unit-pixel boundary. Preserve orientation with FMA.
-        let edge = |p: Point| {
-            let d = b - a;
-            let q = p - a;
-            let product = d.y * q.x;
-            d.x.mul_add(q.y, -product) - d.y.mul_add(q.x, -product)
+        let edge = edge_function(a, b);
+        let snap = edge_snap(a, b);
+        let known = cut.incoming[(index + 1) % cut.len];
+        let id = if known != 0 {
+            known
+        } else {
+            lines.intern(LineKey::edge(a, b), work, cancelled)?
         };
-        keep(out, inside.clip_by(|p| -edge(p), work, cancelled)?, owner)?;
-        inside = inside.clip_by(edge, work, cancelled)?;
+        keep(
+            out,
+            inside.clip_by_id(|p| -edge(p), snap, id, work, cancelled)?,
+            owner,
+        )?;
+        inside = inside.clip_by_id(edge, snap, id, work, cancelled)?;
         if inside.moments().is_none() {
             break;
         }
@@ -548,12 +870,45 @@ fn subtract(
 /// vectors independently; a shared operation budget bounds all clipping work.
 pub struct OrderedPixel<'a> {
     regions: AdmittedVec<'a, Fragment>,
+    lines: LinePool<'a>,
+}
+// Prove a strict winner over a convex incoming polygon. Ambiguous rounded
+// affine evaluations decline the fast path and use the ordinary clipper.
+fn dominates(
+    old: &PixelSourceOwner,
+    incoming: &PixelSourceOwner,
+    polygon: &Polygon,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<bool> {
+    tick(work, cancelled)?;
+    if old.patch_index != incoming.patch_index {
+        return Ok(old.patch_index > incoming.patch_index);
+    }
+    let mut line = std::array::from_fn::<_, 3, _>(|i| old.v[i] - incoming.v[i]);
+    if line.iter().all(|v| *v == 0.) {
+        line = std::array::from_fn(|i| old.u[i] - incoming.u[i]);
+    }
+    if line.iter().all(|v| *v == 0.) {
+        return Ok(false);
+    }
+    for &p in &polygon.points[..polygon.len] {
+        tick(work, cancelled)?;
+        let actual = value(line, p);
+        let scale = line[0].abs() + (line[1] * p.x).abs() + (line[2] * p.y).abs();
+        let error = 32. * f64::EPSILON * scale + 32. * f64::from_bits(1);
+        if !actual.is_finite() || !error.is_finite() || actual <= error {
+            return Ok(false);
+        }
+    }
+    Ok(true)
 }
 impl<'a> OrderedPixel<'a> {
     /// No allocation occurs until the first nonempty triangle is painted.
     pub fn new(admit: &'a Admitter<'a>, maximum_fragments: usize) -> Self {
         Self {
             regions: AdmittedVec::new(admit, maximum_fragments),
+            lines: LinePool::new(admit),
         }
     }
     /// Retained disjoint region count, not triangle multiplicity.
@@ -630,13 +985,8 @@ impl<'a> OrderedPixel<'a> {
             }
             let mut polygon = fragment.polygon;
             for [a, b] in clip.edges() {
-                let edge = |p: Point| {
-                    let d = b - a;
-                    let q = p - a;
-                    let product = d.y * q.x;
-                    d.x.mul_add(q.y, -product) - d.y.mul_add(q.x, -product)
-                };
-                polygon = polygon.clip_by(edge, work, cancelled)?;
+                let edge = edge_function(a, b);
+                polygon = polygon.clip_by(edge, edge_snap(a, b), work, cancelled)?;
                 if polygon.moments().is_none() {
                     break;
                 }
@@ -696,8 +1046,30 @@ impl<'a> OrderedPixel<'a> {
         if triangle.moments().is_none() {
             return Ok(());
         }
+        if let Some(last) = self.regions.values.last() {
+            if dominates(&last.owner, &owner, &triangle, work, cancelled)?
+                && last.polygon.contains(&triangle, work, cancelled)?
+            {
+                return Ok(());
+            }
+        }
         let admit = self.regions.admit;
         let maximum = self.regions.maximum;
+        let mut lines = self.lines.transaction();
+        let mut tagged = Polygon::empty();
+        for i in 0..3 {
+            let previous = points[(i + 2) % 3];
+            let id = lines.intern(LineKey::edge(previous, points[i]), work, cancelled)?;
+            tagged.push_tagged(points[i], id)?;
+        }
+        for line in [[0., 1., 0.], [1., -1., 0.], [0., 0., 1.], [1., 0., -1.]] {
+            let id = lines.intern(LineKey::field(line)?, work, cancelled)?;
+            tagged = tagged.clip_id(line, id, work, cancelled)?;
+        }
+        if tagged.moments().is_none() {
+            return Ok(());
+        }
+        let triangle = tagged;
         let mut next = AdmittedVec::new(admit, maximum);
         let mut incoming = AdmittedVec::new(admit, maximum);
         incoming.push(Fragment {
@@ -706,9 +1078,21 @@ impl<'a> OrderedPixel<'a> {
         })?;
         for old in &self.regions.values {
             tick(work, cancelled)?;
+            if incoming.values.is_empty() {
+                keep(&mut next, old.polygon, old.owner)?;
+                continue;
+            }
             let prefix = next.values.len();
             let previous_last = next.values.last().copied();
-            let overlap = subtract(old.polygon, &triangle, old.owner, &mut next, work, cancelled)?;
+            let overlap = subtract(
+                old.polygon,
+                &triangle,
+                old.owner,
+                &mut next,
+                &mut lines,
+                work,
+                cancelled,
+            )?;
             if overlap.moments().is_none() {
                 continue;
             }
@@ -724,7 +1108,8 @@ impl<'a> OrderedPixel<'a> {
                 if difference.iter().all(|v| *v == 0.) {
                     Polygon::empty()
                 } else {
-                    overlap.clip(difference, work, cancelled)?
+                    let id = lines.intern(LineKey::field(difference)?, work, cancelled)?;
+                    overlap.clip_id(difference, id, work, cancelled)?
                 }
             };
             if old_wins.moments().is_none() {
@@ -747,7 +1132,15 @@ impl<'a> OrderedPixel<'a> {
             let mut remaining = AdmittedVec::new(admit, maximum);
             for part in &incoming.values {
                 let cut = if whole_old_wins { &old.polygon } else { &old_wins };
-                subtract(part.polygon, cut, owner, &mut remaining, work, cancelled)?;
+                subtract(
+                    part.polygon,
+                    cut,
+                    owner,
+                    &mut remaining,
+                    &mut lines,
+                    work,
+                    cancelled,
+                )?;
             }
             incoming = remaining;
         }
@@ -756,6 +1149,7 @@ impl<'a> OrderedPixel<'a> {
         }
         tick(work, cancelled)?;
         self.regions = next;
+        lines.commit();
         Ok(())
     }
 }
@@ -763,6 +1157,90 @@ impl<'a> OrderedPixel<'a> {
 #[cfg(test)]
 mod exact_orientation_tests {
     use super::*;
+    #[test]
+    fn canonical_intersections_match_fraction_oracle_and_reversal_bits() {
+        let cases: &[([u64; 4], usize, u64, [u64; 2])] =
+            &include!("../../../../tests/fixtures/geometry/clip-intersection-cases.rs");
+        let mut old_reversal_mismatches = 0;
+        for &(bits, axis, cut, expected) in cases {
+            let v = bits.map(f64::from_bits);
+            let a = Point::new(v[0], v[1]);
+            let b = Point::new(v[2], v[3]);
+            let cut = f64::from_bits(cut);
+            let e = expected.map(f64::from_bits);
+            let fa = if axis == 0 { a.x - cut } else { a.y - cut };
+            let fb = if axis == 0 { b.x - cut } else { b.y - cut };
+            let point = intersection(a, b, fa, fb, Some((axis, cut))).unwrap();
+            let reversed = intersection(b, a, fb, fa, Some((axis, cut))).unwrap();
+            let opposite = intersection(a, b, -fa, -fb, Some((axis, cut))).unwrap();
+            let result = [point.x.to_bits(), point.y.to_bits()];
+            assert_eq!(result, [reversed.x.to_bits(), reversed.y.to_bits()]);
+            assert_eq!(result, [opposite.x.to_bits(), opposite.y.to_bits()]);
+            assert_eq!(result[axis], expected[axis]);
+            let other = 1 - axis;
+            let ulp = f64::from_bits(expected[other] + 1) - e[other];
+            assert!(
+                ([point.x, point.y][other] - e[other]).abs() <= 16. * ulp,
+                "{a:?} {b:?} {point:?} expected={e:?}"
+            );
+            let first = a + (b - a) * (fa / (fa - fb));
+            let second = b + (a - b) * (fb / (fb - fa));
+            if [first.x.to_bits(), first.y.to_bits()] != [second.x.to_bits(), second.y.to_bits()] {
+                old_reversal_mismatches += 1;
+            }
+        }
+        assert!(old_reversal_mismatches > 0);
+        eprintln!(
+            "CLIP_ORACLE cases={} old_reversal_mismatches={old_reversal_mismatches}",
+            cases.len()
+        );
+    }
+    #[test]
+    fn adjacent_triangles_share_identical_clipped_boundary_vertices() {
+        let cases: &[([u64; 4], usize, u64, [u64; 2])] =
+            &include!("../../../../tests/fixtures/geometry/clip-intersection-cases.rs");
+        let mut checked = 0;
+        for &(bits, axis, cut, _) in cases {
+            let v = bits.map(f64::from_bits);
+            if axis != 0 || cut != 0 || v.iter().any(|v| v.abs() > 10.) {
+                continue;
+            }
+            let a = Point::new(v[0], v[1]);
+            let b = Point::new(v[2], v[3]);
+            let shared = intersection(a, b, a.x, b.x, Some((0, 0.))).unwrap();
+            for points in [[a, b, Point::new(2., 3.)], [b, a, Point::new(2., -3.)]] {
+                let mut polygon = Polygon::empty();
+                for point in points {
+                    polygon.push(point).unwrap();
+                }
+                let clipped = polygon.clip([0., 1., 0.], &mut 1000, &|| false).unwrap();
+                assert!(
+                    clipped.points[..clipped.len]
+                        .iter()
+                        .any(|p| p.x.to_bits() == shared.x.to_bits() && p.y.to_bits() == shared.y.to_bits()),
+                    "{a:?} {b:?} {shared:?}"
+                );
+            }
+            checked += 1;
+        }
+        assert_eq!(checked, 128);
+    }
+    #[test]
+    fn canonical_edge_distance_is_exactly_antisymmetric() {
+        let cases: &[([u64; 4], usize, u64, [u64; 2])] =
+            &include!("../../../../tests/fixtures/geometry/clip-intersection-cases.rs");
+        for &(bits, _, _, _) in cases {
+            let v = bits.map(f64::from_bits);
+            let a = Point::new(v[0], v[1]);
+            let b = Point::new(v[2], v[3]);
+            for p in [Point::ZERO, Point::new(0.125, 0.75), a, b] {
+                assert_eq!(
+                    edge_function(a, b)(p).to_bits(),
+                    (-edge_function(b, a)(p)).to_bits()
+                );
+            }
+        }
+    }
     #[test]
     fn filtered_orientation_matches_independent_fraction_oracle() {
         let cases = include!("../../../../tests/fixtures/geometry/orientation-sign-cases.rs");

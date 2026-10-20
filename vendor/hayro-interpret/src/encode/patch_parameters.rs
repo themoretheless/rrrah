@@ -127,22 +127,6 @@ impl PatchParameterIdentity {
     /// scale returns no certificate; it never falls back to a tolerance test.
     /// All arithmetic storage is fixed on the stack; no allocation occurs.
     pub fn tensor(patch: &TensorProductPatch, patch_index: usize, transform: Affine) -> Option<Self> {
-        let (points, exponent) = coordinates(patch)?;
-        let inverse = transform.inverse().as_coeffs();
-        if transform
-            .as_coeffs()
-            .iter()
-            .chain(inverse.iter())
-            .any(|v| !v.is_finite())
-            || !transform.determinant().is_finite()
-            || transform.determinant() == 0.
-            || patch.control_points.iter().any(|p| {
-                let q = transform * *p;
-                !q.x.is_finite() || !q.y.is_finite()
-            })
-        {
-            return None;
-        }
         let order = [
             [0, 0],
             [0, 1],
@@ -161,6 +145,58 @@ impl PatchParameterIdentity {
             [2, 2],
             [2, 1],
         ];
+        Self::from_control_net(patch, patch_index, transform, order)
+    }
+    /// An affine field of a Coons surface is determined by its four boundary
+    /// cubics: their transfinite blend reproduces the affine source parameter.
+    /// Check the original twelve controls, without rounded Tensor conversion.
+    pub fn coons(patch: &crate::shading::CoonsPatch, patch_index: usize, transform: Affine) -> Option<Self> {
+        let net = TensorProductPatch {
+            control_points: std::array::from_fn(|i| patch.control_points[if i < 12 { i } else { 0 }]),
+            colors: Default::default(),
+        };
+        let order = [
+            [0, 0],
+            [0, 1],
+            [0, 2],
+            [0, 3],
+            [1, 3],
+            [2, 3],
+            [3, 3],
+            [3, 2],
+            [3, 1],
+            [3, 0],
+            [2, 0],
+            [1, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+        ];
+        Self::from_control_net(&net, patch_index, transform, order)
+    }
+    fn from_control_net(
+        patch: &TensorProductPatch,
+        patch_index: usize,
+        transform: Affine,
+        order: [[i128; 2]; 16],
+    ) -> Option<Self> {
+        let (points, exponent) = coordinates(patch)?;
+        let inverse = transform.inverse().as_coeffs();
+        if transform
+            .as_coeffs()
+            .iter()
+            .chain(inverse.iter())
+            .any(|v| !v.is_finite())
+            || !transform.determinant().is_finite()
+            || transform.determinant() == 0.
+            || patch.control_points.iter().any(|p| {
+                let q = transform * *p;
+                !q.x.is_finite() || !q.y.is_finite()
+            })
+        {
+            return None;
+        }
         let compose = |field: [f64; 3]| {
             let f = [
                 field[1].mul_add(inverse[4], field[2].mul_add(inverse[5], field[0])),

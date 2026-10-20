@@ -20,9 +20,13 @@ def main():
     parser.add_argument("--dump", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--fetch", action="store_true")
+    parser.add_argument("--render-timeout", type=float, default=300.,
+                        help="Maximum seconds per native or Poppler page render")
     parser.add_argument("--viewer-target-dir", type=Path,
                         help="Also run pinned-corpus viewer RAM and swap/GPU tests")
     args = parser.parse_args()
+    if not 0. < args.render_timeout < float("inf"):
+        parser.error("--render-timeout must be finite and positive")
     project = Path(__file__).resolve().parents[1]
     manifest = json.loads((project / "docs/research/ai-upstream-poppler-2026-10-06.json").read_text())
     args.corpus.mkdir(parents=True, exist_ok=True)
@@ -52,13 +56,13 @@ def main():
                 try:
                     metadata = json.loads(subprocess.check_output(
                         [str(args.dump.resolve()), str(path), str(index), str(native)],
-                        text=True, stderr=subprocess.PIPE))
+                        text=True, stderr=subprocess.PIPE, timeout=args.render_timeout))
                     row["native"] = metadata
                     if metadata["image_index"] != index or metadata["image_count"] != count:
                         raise ValueError("selected page metadata mismatch")
                     subprocess.run(["pdftoppm", "-r", "72", "-f", str(index + 1),
                                     "-l", str(index + 1), "-singlefile", str(path), str(prefix)],
-                                   check=True, capture_output=True)
+                                   check=True, capture_output=True, timeout=args.render_timeout)
                     header, oracle = prefix.with_suffix(".ppm").read_bytes().split(b"\n255\n", 1)
                     width, height = metadata["width"], metadata["height"]
                     row["poppler_header"] = header.decode("ascii")
@@ -105,14 +109,20 @@ def main():
                                rms_channel_error=(squared_sum / len(oracle)) ** 0.5,
                                pixels_above_channel_error={str(key): value for key, value in above.items()},
                                rgba_sha256=sha256(rgba), exact=different == 0)
-                except (ValueError, subprocess.CalledProcessError) as error:
+                except (ValueError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
                     row["error"] = str(error)
+                    if isinstance(error, (subprocess.CalledProcessError, subprocess.TimeoutExpired)) and error.stderr:
+                        detail = error.stderr
+                        if isinstance(detail, bytes):
+                            detail = detail.decode("utf-8", errors="replace")
+                        row["renderer_stderr_tail"] = detail[-16384:]
                 rows.append(row)
     report = {"revision": manifest["revision"], "sources": manifest["sources"],
               "decoder_sha256": sha256(args.dump.read_bytes()),
               "poppler_version": subprocess.run(["pdftoppm", "-v"], capture_output=True,
                                                  text=True, check=True).stderr.strip(),
               "scope": "Strict 72 dpi white-composite RGB comparison; no tolerance. No GPU, private AI data or full format qualification.",
+              "render_timeout_seconds": args.render_timeout,
               "pages": rows}
     viewer_results = []
     if args.viewer_target_dir is not None:
