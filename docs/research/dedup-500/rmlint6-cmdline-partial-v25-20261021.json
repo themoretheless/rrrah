@@ -1,0 +1,42 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 40,
+  "partial_source_read": {
+    "lib/cmdline.c": {
+      "sha256": "fc63e2461e962260e2b400723bb4e72edf3834705b2c65b6c7a08c058ea34ecb",
+      "new_ranges_inclusive": [
+        [
+          1,
+          290
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          290
+        ],
+        [
+          1414,
+          1545
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Ordinary stdin input supports newline or NUL-delimited getdelim with growing buffer. This is stronger literal-name transport than separately reviewed --hash stdin fixed-line path.",
+    "Input reader accumulates rejected-root status but does not distinguish getdelim EOF from input error locally. Caller status handling remains to inspect.",
+    "--xattr option enables both cache read/write plus write_unfinished, confirming prior stale-cache analysis applies to explicitly enabled option.",
+    "Size-range parser uses mutable g_strstrip on const argument, split max2 and utility size parser; helper can return true with GError already set. GLib callback propagation still to inspect before malformed acceptance claim.",
+    "Open-ended size range initializes upper bound to G_MAXULONG rather than G_MAXUINT64; portability on32-bit needs explicit control.",
+    "Output formatter prefix before colon copies up to100bytes into100-byte zeroed buffer; exact/full-length prefix can lack terminal NUL. Runtime reachability not executed.",
+    "Paranoia table selects Metro, Metro256, Highway256, default BLAKE2B and paranoid levels. No speed or correctness ranking inferred from table."
+  ],
+  "limits": [
+    "cmdline source partial; remaining291-1413 and1546-end unreviewed.",
+    "No original runtime tests or own-library changes. Native pHash deferred; global full repository count150/500."
+  ]
+}
