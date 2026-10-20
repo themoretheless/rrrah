@@ -1,0 +1,38 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_cache.py": {
+      "sha256": "752cab5be2bbe6debbbdb7a7b797e095938d1e09822deb983c204f97e74dfadb",
+      "git_blob": "12db50ae3401eeb15414c3907000b3febd9d53a8",
+      "lines": 335
+    },
+    "tests/test_options/test_replay.py": {
+      "sha256": "bed97d852979ebcf01f4dd07e6007692ffe6260db290e5d4986ca17b952af9e0",
+      "git_blob": "8a85a6bc7172d261148647305fcc1ec5804170c4",
+      "lines": 521
+    }
+  },
+  "cumulative_whole_files_read": 50,
+  "tracked_blobs": 289,
+  "method": "Full source reads of both pinned files; SHA256 recorded and Git blob identities checked against pinned tree. Original data_by_type function extracted with AST and executed on synthetic inputs. Upstream suite not executed.",
+  "findings": [
+    "Cache tests independently compute expected digests for seven algorithms and check exact duplicate/unique/directory path sets. Repeated cache writes, reads and clears exercise hash-unmatched and hash-uniques.",
+    "Clamp tests cover false-negative and false-positive cache contamination. Module is skipped without xattr support; namespace test skips when foreign attributes exist. Hardlink regression executes a generated script in its upstream test body; it was not executed here.",
+    "Neither reviewed test file exercises a same-size content rewrite with restored mtime, malformed cached digest or NaN timestamp. This is a statement about these two files only.",
+    "Replay tests cover basename and hidden filters, tagged originals, cached original preference, sorting, default directory, Unicode names, directory packing/unpacking and hardlinks.",
+    "Replay packing/unpacking helper data_by_type explicitly discards is_original and stores False. Therefore its dictionary comparisons cannot validate original selection. Some separate replay tests explicitly assert original flags."
+  ],
+  "executed_control": {
+    "function": "tests/test_options/test_replay.py:data_by_type",
+    "input_records": 2,
+    "all_original_flags_inverted": true,
+    "comparison_still_equal": true,
+    "scope": "Original helper only, synthetic data, no upstream binary execution"
+  },
+  "limits": [
+    "No production code changed or performance gain measured.",
+    "These source reads do not establish full upstream runtime correctness or all-repository completion."
+  ]
+}
