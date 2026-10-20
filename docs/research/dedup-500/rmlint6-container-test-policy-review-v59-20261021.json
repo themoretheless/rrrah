@@ -1,0 +1,62 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "Containerfile": {
+      "sha256": "e558049d1a1e050777b3a31cba8a8e969b5c642f51b47793030f39ee94c24f5f",
+      "git_blob": "01b847944ad216a8e102a8586029c346e0aa3cf4",
+      "lines": 41
+    },
+    "ci/container/run_gui.sh": {
+      "sha256": "3a32cd81724aa3ff6fd88851237b6529c5e24de6d39483489ca16e77dc2ec569",
+      "git_blob": "d5cdc5582a273fb24924ab1091ffb85dcdfb549b",
+      "lines": 23
+    },
+    "ci/freebsd/build-and-test.sh": {
+      "sha256": "49ade0b0da5ae69e6dca0882661150d6fb1af946696b2d5bc441f6fddbf79013",
+      "git_blob": "8ede0409af50b31673443a64ff3c5e1e4da45ef8",
+      "lines": 12
+    },
+    "ci/freebsd/prepare.sh": {
+      "sha256": "06a915fc9a1e7eaaac52baf1fbbe6c32ba382f1fc5e7600472c1a68bf74933aa",
+      "git_blob": "47112615660723fd00b4f9a5b71fb05a01068a84",
+      "lines": 21
+    },
+    "ci/install/Containerfile.debian": {
+      "sha256": "9bc98389a22cc9fd2a44c45a11c78db2013e35f4ffce210fd5ad1e5a7b158c0e",
+      "git_blob": "a5bb4709cba919027737c3eda6184aaffa4e1573",
+      "lines": 17
+    },
+    "ci/install/Containerfile.fedora": {
+      "sha256": "b79c191dc512a39ce4b3986dc10d86e9600de4678059a7d3c6b81f0591154ba3",
+      "git_blob": "378ce39d95999e17da879f2fcd38f8becea9f14d",
+      "lines": 12
+    },
+    "ci/multi-arch/Containerfile": {
+      "sha256": "e2515c415d20231c8d36a5bad64d2df98e747820c985f902ce0388cad6868a80",
+      "git_blob": "ca2d4c4167ab10a350690bcd35ea0f05c4214d33",
+      "lines": 20
+    },
+    "ci/multi-arch/build-and-test.sh": {
+      "sha256": "c965bd2dee8142a3ebd69ffae4300bacc348158f15b19c3c6c3ae6d3de430813",
+      "git_blob": "31aa7412d541588bfc34aff2ed47e04ca6bf1e3a",
+      "lines": 55
+    }
+  },
+  "cumulative_whole_files_read": 142,
+  "tracked_blobs": 289,
+  "method": "Complete reads of eight pinned scripts/container definitions with Git blob and SHA256 validation. Containers and privileged/system commands not executed.",
+  "findings": [
+    "Alpine Containerfile test target invokes pytest tests without overriding default not-slow/not-manpage expression. It rebuilds DEBUG=1 and installs test dependencies; no explicit USER directive changes the image default root. This differs from non-root multi-arch coverage.",
+    "FreeBSD script uses set -eu, builds, mounts tmpfs /rt and invokes plain pytest with cleanup flag. Default exclusions still apply. Script has no explicit unmount trap, relying on VM lifetime for cleanup. Prepare script installs packages and Python requirements and creates /rt.",
+    "Multi-arch image explicitly creates and switches to user rmlint, then invokes pytest -n auto. Thus root-only account/mount tests are skipped or early-returned and slow/manpage defaults remain excluded. Wrapper checks build and container exit statuses and returns failure on either.",
+    "Debian/Fedora install containers prepare toolchains and copy tracked source using NUL-delimited git/rsync before opening an interactive shell. They do not automate install/uninstall assertions or duplicate scanning by themselves.",
+    "GUI wrapper passes a Wayland socket, graphics device and temporary runtime directories to podman. This is a launcher configuration, not a GUI correctness test.",
+    "Container base images and package repositories are moving tags; their definitions alone cannot prove exact installed compiler/runtime versions."
+  ],
+  "limits": [
+    "No actual container, FreeBSD, GUI or multi-architecture runtime qualification.",
+    "142/289 blobs reviewed; global full-repository count unchanged."
+  ]
+}
