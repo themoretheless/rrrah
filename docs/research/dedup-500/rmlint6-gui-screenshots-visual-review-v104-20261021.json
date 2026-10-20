@@ -1,0 +1,55 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/_static/gui_locations.png": {
+      "sha256": "2448dc0123cf39ec869891af7a51ba624c6454640fb6351531c5debf7355f29e",
+      "git_blob": "ab308bd0ef3b9572098145f6f2aa021a1baba335",
+      "bytes": 89216,
+      "width": 1280,
+      "height": 660,
+      "review_kind": "full image pixels viewed via view_image"
+    },
+    "docs/_static/gui_runner.png": {
+      "sha256": "8de23a00c85fab73dc83c0f824bf8fbf369f335493a78efd4da70f6721f61847",
+      "git_blob": "ea29ee895a8b953a70cc606b212c02b48049d9b9",
+      "bytes": 230511,
+      "width": 1280,
+      "height": 660,
+      "review_kind": "full image pixels viewed via view_image"
+    },
+    "docs/_static/gui_editor.png": {
+      "sha256": "0a77d8f518c4cb79ac995614f2cfc41c4045dd207756d37ab9409f07fe98411f",
+      "git_blob": "bb6de83586db4ddb39343a65a47c94aeb57a2e8c",
+      "bytes": 89884,
+      "width": 1280,
+      "height": 660,
+      "review_kind": "full image pixels viewed via view_image"
+    },
+    "docs/_static/gui_settings.png": {
+      "sha256": "9c41fe20210ca1445b983a2fa4569217b2bd4922aba90f388afe7f80e09e4a87",
+      "git_blob": "9801e27a0155c4e25fb904491a9b3005532b99ab",
+      "bytes": 67899,
+      "width": 1280,
+      "height": 660,
+      "review_kind": "full image pixels viewed via view_image"
+    }
+  },
+  "cumulative_whole_files_read": 244,
+  "tracked_blobs": 289,
+  "method": "Downloaded four pinned PNGs, verified Git/SHA256 and inspected all full images via view_image. No OCR/text-only substitution; no GUI launched.",
+  "findings": [
+    "Locations image shows seven visible directory rows, two selected/preferred rows, per-row size labels and switches, Add Location and Scan folders. List selection and preference are visibly distinct controls. It does not verify actual path identity or accurate size calculation.",
+    "Runner image shows Finished scanning, tree columns Path/Size/Count/Changed, red duplicate crosses/green kept checkmarks and a radial chart. Selected abs row and chart center both show1.2MB. Screenshot cannot prove complete or correct duplicate partition or physical storage savings.",
+    "Runner image clips/scolls tree vertically and long filename horizontally; visible rows are a subset of report. No whole-dataset inference.",
+    "Editor image shows source code, active search highlights, skull icon, red Run Script/Dry run controls and visible unlock/save controls. Current audited code intentionally does not pack lock button and uses different run controls, so image is historical rather than current-runtime qualification.",
+    "Settings image shows tagged-file policies, byte-by-byte selection, symlink and hardlink behavior, partial-hidden policy, mount crossing and depth512; lower content is cut off. Byte-by-byte shown is a selected example, not proof of current BLAKE2b default schema.",
+    "Mixed German native-widget text and English app labels are visible. These screenshots do not establish translation completeness, accessibility, keyboard operation or narrow-screen behavior.",
+    "No screenshot contains a verified failure, cancellation, stale filesystem, zero-size chart or very-large-size editor control. Previously reproduced callback/math failures remain separate evidence."
+  ],
+  "limits": [
+    "244/289 blobs reviewed; global whole-repository count150/500.",
+    "Static historical screenshot inspection only; no interactive or installed-runtime proof."
+  ]
+}
