@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/cautions.rst": {
+      "sha256": "e085da4b02d2fcafa2742e6b0baa219a2c9fafcc29307def0d2c15586b95e260",
+      "git_blob": "272f5e18a1629d96b6dc4f4b5dede7877175d9bc",
+      "lines": 375
+    },
+    "docs/faq.rst": {
+      "sha256": "e14032a8e3cb53c8832822294f786b741d53d80b709221fe6dba3d6d1874bdf7",
+      "git_blob": "aa927d7ecb79fc7b21bdb73d2afe8ff37965b39b",
+      "lines": 74
+    }
+  },
+  "cumulative_whole_files_read": 201,
+  "tracked_blobs": 289,
+  "method": "Complete reads of pinned cautions and FAQ; verified Git blob and SHA256. Documentation claims distinguished from executed evidence.",
+  "findings": [
+    "Count comparisons require matching hidden-file, hardlink, symlink and directory-merge policies; FAQ recommends paranoid comparison and raw file counts.",
+    "Replay assumes unchanged filesystem; cached checksums and newer-than filters do not establish final content equality.",
+    "Cautions discuss historical hash collision probabilities, other-tool bugs and benchmark timings; none establish current correctness or performance of those tools. No linked malicious fixtures or mutation commands executed.",
+    "Path identity and cycle discussion agrees with device/inode and parent-identity controls, but documentation is not an executed traversal proof.",
+    "FAQ estimates approximately150 bytes per file plus path storage, and cites five-million-file experience. This is neither a strict RAM bound nor a current measurement.",
+    "FAQ excludes similarity search and a Windows port from its requested scope; separately reviewed Cygwin smoke workflow limits any blanket unsupported-platform inference.",
+    "Hardlink/reflink replacement and kernel checks described here remain platform-dependent and were not executed."
+  ],
+  "limits": [
+    "201/289 blobs reviewed; global whole-repository count150/500.",
+    "No current platform or performance qualification from historical documentation."
+  ]
+}

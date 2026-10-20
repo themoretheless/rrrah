@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/developers.rst": {
+      "sha256": "12f02b0ae366888c05292f373707fe25a13ce0466edb9303fa7f2989c9d28c93",
+      "git_blob": "e1f2efdd480147a59278ebe75da651965a26175e",
+      "lines": 370
+    },
+    "docs/benchmarks.rst": {
+      "sha256": "88d7773aebaad03bebb67891d017d8eee48e9df37a80f0f79de5f0427ad32c04",
+      "git_blob": "0e90d554854ebb4ea009a46952c1df8d8e4961ee",
+      "lines": 162
+    }
+  },
+  "cumulative_whole_files_read": 203,
+  "tracked_blobs": 289,
+  "method": "Complete pinned documentation reads with Git blob and SHA256 verification. Referenced charts and external sources not credited as viewed.",
+  "findings": [
+    "Benchmark page explicitly warns it is out of date: v2.2 around2015, Linux3.14,8GB RAM and specific SSD/btrfs versus HDD/ext4 datasets. Comparisons cannot establish current ranking or our performance.",
+    "Page acknowledges every tool investigated different data and produced different counts. Its no-false-positive claim does not establish partition completeness; earlier original verifier controls accepted empty or split reports.",
+    "Replay avoids most IO and changes the operation being measured; warm scans, cold scans and replay need separate measurements. Logarithmic plots and historical CPU/RAM prose are not new measurements.",
+    "Developer optimization inventory suggests same-size partitioning, incremental early rejection, per-disk reader scheduling, separate hashing work and recycled IO buffers. These are design references only; source/runtime and paired performance qualification remain necessary.",
+    "Paranoid mode is described as retaining blocks rather than digest-then-confirm; claimed linear work and configurable memory do not establish a total strict-memory bound under all workloads.",
+    "Developer guide distinguishes DEBUG assertions from SYMBOLS, lists sanitizer and optional-feature controls. Documentation of these knobs is not evidence that corresponding runtime gates passed.",
+    "Guide philosophy says scanner itself should only emit outputs; this statement must be bounded by actual command modes and formatter code. No install, format, mutation or contributed-shell commands executed."
+  ],
+  "limits": [
+    "203/289 blobs reviewed; global whole-repository count150/500.",
+    "No chart pixels viewed, upstream suite executed or new speed measurement."
+  ]
+}
