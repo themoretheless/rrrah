@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats/sh.c": {
+      "sha256": "70e89fa671b193f003791d80d002582281f2bcefaa814f73543824c5485992a4",
+      "git_blob": "55c3b7e730525015878492b828ae605aa496da0a",
+      "lines": 536
+    }
+  },
+  "cumulative_whole_files_read": 173,
+  "tracked_blobs": 289,
+  "method": "Complete pinned generator source read; Git blob and SHA256 verified. No generated script or mutating action executed.",
+  "findings": [
+    "Generator default handler order is cmd,remove; cmd only emits when user command configured. Clone/link presets try ordered filesystem-capable alternatives. Invalid names log errors but parsing continues, potentially leaving empty handler list.",
+    "File/duplicate/original output arguments escape apostrophes using standard single-quote close/doublequote/reopen sequence. Header cwd/argv/binary/user/group fields use different template contexts and are interpolated without the same path escape routine; full arbitrary-path roundtrip remains unqualified.",
+    "Every is_original row replaces a retained last_original reference. Following duplicate rows use that state rather than an explicit group ID; correct grouping relies on ordered upstream output. Non-original before any original silently emits no action.",
+    "Clone/reflink generation inspects live filesystem link types and mount capabilities at generation time; runtime changes require separate checks in generated handlers. Same-device inode match emits skip_hardlink without fresh runtime identity validation.",
+    "line_count increments for duplicate records even if no handler emitted. Footer Done/progress is therefore not an action-count success receipt. Footer seeks to rewrite a fixed progress field and checks fseek!=-1 rather than standard success==0; no seek failure control run.",
+    "For stream output footer returns before unref of retained last_original; ordinary file output releases it. Most fprintf/fchmod failures are ignored or logged without a propagated formatter status."
+  ],
+  "limits": [
+    "Source-level findings, not arbitrary-path or cleanup runtime reproduction.",
+    "173/289 tracked blobs reviewed; global full-repository count remains150/500."
+  ]
+}
