@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats/json.c": {
+      "sha256": "1f46203e5b3bfa88d077b31ce55ee8f2ff2f3de625eed1339a9e0ba8465b10ba",
+      "git_blob": "b80641342f5323cfab0b0ca642890a5fd8313d7d",
+      "lines": 290
+    }
+  },
+  "cumulative_whole_files_read": 48,
+  "tracked_blobs": 289,
+  "method": "Whole JSON formatter source read and Git blob verified.",
+  "findings": [
+    "Header records checksum algorithm/optional seed; replay loader previously reviewed ignores header and assumes first/last array elements metadata. no_header/no_footer outputs therefore need explicit compatibility handling not present in replay.",
+    "Unique records may contain unfinished digest when write_unfinished enabled; record includes checksum but no local hashed-byte count or digest-complete boolean. Replay trusts checksum strings, so partial-digest cache semantics require end-to-end control.",
+    "Output path sent directly to JsonObject string setter; explicit raw filename-byte encoding or invalidUTF8 recovery absent in formatter. JSON-GLib behavior not executed.",
+    "JSON stream open/separator/close writes ignore returned status. Generator failure logged without propagating result and allocated GError not freed in failure branch.",
+    "Generated32-bit IDs retry collision up to8192 then accept value without failure; generating hardlink_of calls ID generator again rather than retrieving prior assigned ID. Referential consistency needs focused runtime control.",
+    "JSON element callback mutates file is_original for unique records, so handler order can affect subsequent handlers receiving same model. Reachable mixed-output impact untested.",
+    "Footer progress always100 even when aborted boolean true; progress field alone is not completeness proof."
+  ],
+  "limits": [
+    "No formatter runtime or replay roundtrip tests performed.",
+    "No rrrah edits/tests; native pHash deferred; global count150/500."
+  ]
+}
