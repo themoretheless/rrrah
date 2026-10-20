@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx2_x86-64_unix.S": {
+      "sha256": "a2d95519fd9845cf80252110e21a93124e81c03da836eaac0bca0537be4f8324",
+      "git_blob": "812bb8568295ad2a644f8170e01b7e2a552072a1",
+      "lines": 1815
+    }
+  },
+  "cumulative_whole_files_read": 277,
+  "tracked_blobs": 289,
+  "method": "Full1815-line pinned assembly read in contiguous1..450/451..900/901..1350/1351..1815. Git blob and SHA256 verified. Source review only on ARM host.",
+  "findings": [
+    "SysV argument placement, six callee-saved general registers, RBP stack anchor and 64-byte stack alignment are explicit; return restores anchor/registers and executes vzeroupper. Both plain and underscore symbol aliases are exported; ELF non-executable stack and conditional CET landing marker are present.",
+    "Hash-many handles batches8 then remainder bits4/2/1 without external fallback. Each input produces32 bytes: eight-way stores256, four-way128, two-way64 and one-way32. Smaller paths still require AVX2; XMM width is not a portable fallback.",
+    "Eight-way counters add masked offsets0..7 and masked step8, with low32 unsigned carry implemented by sign-bit xor and signed comparison; smaller groups select remaining counter lanes. Counter increment is controlled by mask derived from increment_counter.",
+    "Full-block loops advance byte offset64 before equality check against blocks shifted6. First/start flags and final/end flags are combined around that comparison. Positive block count and representable block-byte length are caller preconditions; zero blocks with nonzero inputs are not handled as an empty-message shortcut.",
+    "Four/two-way paths load32 bytes at offsets ending -0x10 then insert128 halves from another input; this can read16 bytes beyond the current64-byte block on the first input of each pair. Source establishes wider reads, not a reproduced fault: padded allocation and caller contracts require separate investigation.",
+    "Unaligned external loads/stores coexist with aligned stack/constants. Prefetches advance beyond current block. Seven-round tail loops permute message words; eight-way core is unrolled. No runtime correctness or speed is inferred from source similarity."
+  ],
+  "limits": [
+    "277/289 pinned blobs reviewed; global complete repositories remain150/500.",
+    "No x86 execution, guard-page control, sanitizer or throughput qualification. No upstream source imported into production. pHash/ASAN investigation remains deferred."
+  ]
+}
