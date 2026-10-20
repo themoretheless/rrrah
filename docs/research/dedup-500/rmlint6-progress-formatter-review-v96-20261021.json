@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats/progressbar.c": {
+      "sha256": "1b7e41d0b9f62d4281f31b043331fcd37c31abd581838b12e3bdd8b1c110fca1",
+      "git_blob": "b658fd2b6f01b191eed4902ee5cddbeba1b375ab",
+      "lines": 538
+    }
+  },
+  "cumulative_whole_files_read": 213,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read, Git/SHA256 verification; compiled original extracted text truncation loop with minimal state struct, no GLib or formatter substitution.",
+  "findings": [
+    "Text length initially uses g_utf8_strlen but subsequent truncation iterates bytes. Original loop control for \u00e9\u00e9 at max_len1 emits lone c3 byte, invalid UTF8. This proves loop behavior, not rendered terminal output.",
+    "Unicode scalar count also differs from terminal cell width for combining/wide glyphs; no wcwidth handling is present.",
+    "Matching percent divides bytes_remaining by bytes_after_preprocess without local zero guard; converting nonfinite percent to int in bar calculation is a source-level edge, not an executed full-scanner failure.",
+    "ETA averages actual read-byte deltas and elapsed monotonic time, adds4096 nominal bytes per remaining file and caches display using real wall clock. Filtering skipped bytes and file-overhead heuristic mean ETA is not throughput evidence.",
+    "ioctl terminal-width return is unchecked; state width may remain zero/stale. Text/bar widths are clamped nonnegative, but terminal resize refresh occurs only every250 callbacks.",
+    "On abort cursor is restored and callback returns before normal timer/means cleanup; total lifecycle/resource impact needs handler ownership validation. No leak claim established by source alone.",
+    "Timer pointer is not nulled after normal destruction in PRE_SHUTDOWN. Repeated lifecycle events require separate validation before claiming use-after-free.",
+    "INIT hides cursor regardless of output TTY and replay bypasses progress output. Summary state is ignored, so bar does not independently certify full scan success."
+  ],
+  "executed_control": {
+    "input": "\u00e9\u00e9",
+    "max_len": 1,
+    "output_hex": "c3",
+    "valid_utf8": false,
+    "scope": "Original byte truncation loop compiled with a minimal state struct; no full formatter, GLib or terminal runtime."
+  },
+  "limits": [
+    "213/289 blobs reviewed; global whole-repository count150/500.",
+    "No full upstream runtime, visual terminal qualification or new speed measurement."
+  ]
+}
