@@ -1,0 +1,45 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 279,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/blake3/blake3_sse41_x86-64_unix.S": {
+      "sha256": "135048e4a81a6f9e86960b115141874a55954dbfd2cd1e8e9818837b46b498ad",
+      "git_blob": "a3ff64269caaba80b4d7a3b0668a7bdca9f0090a",
+      "total_lines": 2028,
+      "read_ranges": [
+        [
+          1,
+          430
+        ],
+        [
+          1530,
+          2028
+        ]
+      ],
+      "unread_ranges": [
+        [
+          431,
+          1529
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Pinned blob verified before reading. Two untruncated source ranges inspected; remaining1099 lines excluded from completion credit.",
+  "findings": [
+    "Hash-many prologue saves six SysV nonvolatile general registers, reserves360 bytes and aligns stack64. Initial four lanes use masked offsets0..3 and step4; sign-bit-xor signed comparison supplies unsigned carry. Start/end flags surround full64-byte block loop.",
+    "Read four-input prefix uses16-byte loads at offsets0,16,32,48 for each input and transposes to stack message words. This inspected prefix does not contain the32-byte paired loads identified in AVX2; unread middle remains unqualified.",
+    "Single-input tail read uses four16-byte loads and seven-round permutation loop, writing32 bytes. Two-input tail ending writes64 bytes and shifts remaining counter lanes with blendvps; its setup before1530 remains unread.",
+    "compress_in_place reads32-byte CV and full64-byte padded block, combines counter/logical length/flags and writes32 bytes. compress_xof explicitly zero-extends length and flags bytes, reads same full block and writes64 bytes to R9; final upper half XORs original CV.",
+    "compress_in_place packs RDX and shifted R8 without the explicit byte zero-extension seen in XOF. Correctness depends on caller argument extension; no ABI defect inferred or reproduced.",
+    "Scalar entry points use caller-saved XMM registers and no stack frame; CET markers and plain/underscore aliases are present. Constants/rotate masks and read-only section inspected."
+  ],
+  "limits": [
+    "Source-only partial review on ARM; no x86 execution, ABI test, guard-page control or performance claim.",
+    "279/289 files and150/500 repositories remain the verified completion counts. Deferred pHash/ASAN untouched."
+  ]
+}
