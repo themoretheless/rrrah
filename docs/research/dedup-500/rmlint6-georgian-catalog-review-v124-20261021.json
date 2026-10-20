@@ -1,0 +1,43 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/ka.po": {
+      "sha256": "5d8f6d69c51702faab4b1ecab58afff9b62bb02cb105ed86dc30252e0c0bb950",
+      "git_blob": "d379dcedf646d51194c8bd75e8c65e919cc35ec3",
+      "lines": 1357
+    }
+  },
+  "cumulative_whole_files_read": 275,
+  "tracked_blobs": 289,
+  "method": "Full1357-line pinned catalog read in contiguous parts1..450/451..900/901..1357, blob verification, active-entry parsing and msgfmt checks into private outputs.",
+  "findings": [
+    "264 active entries,214 nonempty,36 fuzzy and178 nonfuzzy nonempty. Normal format/structure checks exit0 without diagnostics; explicit use-fuzzy diagnostics find6 fatal errors.",
+    "Pending fuzzy read-error translation uses long rather than long-long counters, several parser errors omit placeholders, and multiline credit message loses final newline. Excluded by normal msgfmt; no active runtime crash inferred.",
+    "Backup and cross-mount fuzzy labels express opposite behavior, while GUI find/clean fuzzy string borrows hidden-directory text. These cannot be approved by simply clearing fuzzy markers.",
+    "Replay-node extra percent-s translation is fuzzy here, unlike active French entry. Narrow heuristic placeholder-free-source scan has no active candidates; not an exhaustive format proof.",
+    "Translated truncated Only first percent key appends percent-s but does not match full runtime GLib-macro message, so cannot provide complete runtime translation. Do not conflate extraction mismatch with executed format error.",
+    "Active early-shutdown, interruption, read-directory and changed-mtime messages are present. Most reflink unknown/error exit-state and GUI settings remain untranslated.",
+    "Header revision predates POT creation; timestamps are not proof of synchronized semantic review. Obsolete source/translation entries excluded from active coverage."
+  ],
+  "executed_control": {
+    "active_entries": 264,
+    "nonempty_translations": 214,
+    "fuzzy_entries": 36,
+    "nonfuzzy_nonempty": 178,
+    "placeholder_free_source_added_candidates": [],
+    "default": {
+      "exit": 0,
+      "output": ""
+    },
+    "include_fuzzy_diagnostic": {
+      "exit": 1,
+      "output": ".dedup-work/rmlint6-20261021/po--ka.po:264: format specifications in 'msgid' and 'msgstr' for argument 2 are not the same\n.dedup-work/rmlint6-20261021/po--ka.po:366: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--ka.po:527: 'msgid' and 'msgstr' entries do not both end with '\\n'\n.dedup-work/rmlint6-20261021/po--ka.po:561: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--ka.po:566: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--ka.po:571: number of format specifications in 'msgid' and 'msgstr' does not match\n/opt/homebrew/bin/msgfmt: found 6 fatal errors\n"
+    }
+  },
+  "limits": [
+    "275/289 blobs reviewed; global whole-repository count150/500.",
+    "No Georgian application/GUI execution or native-speaker language qualification."
+  ]
+}
