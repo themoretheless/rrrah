@@ -1,0 +1,40 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.rst": {
+      "sha256": "71a314b1886328d46707161b513afa4070bc6e93c8d07ed1383c1eaf90948412",
+      "git_blob": "676c97faa69e138e56b702a7d890560b0c004420",
+      "lines": 132
+    },
+    "docs/install.rst": {
+      "sha256": "44daa97a4096bf874390ad191f9a580695cde8be12401f8a62c56db9f943d0e1",
+      "git_blob": "7af46eef5062b7586fb3e8fbbc74f3f6459dcebc",
+      "lines": 246
+    },
+    "docs/gui.rst": {
+      "sha256": "91990b96b4221d81f29029167ece117324b43ccab294427b181a8c01ac9bf68f",
+      "git_blob": "f771e0f867509c91e360549dd9a830410178ad98",
+      "lines": 136
+    }
+  },
+  "cumulative_whole_files_read": 235,
+  "tracked_blobs": 289,
+  "method": "Complete three pinned documentation reads and Git/SHA256 verification; cross-check against already audited source. Commands and external links treated as reference text only.",
+  "findings": [
+    "Install dependency section requires GLib>=2.74 and json-glib, consistent with SConstruct; later sentence says only GLib is hard requirement, contradicting required json-glib probe. No missing-package build executed.",
+    "GUI page says GTK>=3.14 while install page says>=3.22. Pyproject Python>=3.12 and other package dependencies were audited separately; GUI minimal dependency prose is not an exhaustive install specification.",
+    "GUI editor documentation promises editing generated script; previously audited on_run_script_clicked does not transfer text buffer edits to script file. Documentation therefore cannot qualify applied-edit behavior.",
+    "Deleted-byte counter is described as deleted storage, but previously reviewed RunningLabel sums stat sizes from output lines, without operation confirmation or physical-storage accounting.",
+    "GUI recheck promise is bounded by actual forced paranoid script options and filesystem races; it is not proof that every result or action succeeded. No destructive operation performed.",
+    "README speed and most-Unix compatibility assertions are scope claims, not measurements or platform gates. Pinned workflows and current local no-default test report are separate evidence.",
+    "Install examples use moving develop branch and distribution package inventories; no current availability/version claims made and no system package commands executed.",
+    "Homebrew GUI omission is a pinned documentation statement, not checked current packaging fact. Container mount example exposes selected directory only, distinct from host filesystem completeness.",
+    "Referenced screenshots, external badges and embedded video remain unviewed in this audit and receive no visual-review credit. GPLv3 reference-only decision remains."
+  ],
+  "limits": [
+    "235/289 blobs reviewed; global whole-repository count150/500.",
+    "No package installation, GUI runtime, visual inspection or performance qualification."
+  ]
+}
