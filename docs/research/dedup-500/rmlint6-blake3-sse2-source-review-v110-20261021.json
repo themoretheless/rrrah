@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse2.c": {
+      "sha256": "51194fff1b0e9cb79f4db6fc148a3b34f683ca6ec3a260d66166e0f7d5b7012e",
+      "git_blob": "691e1c6806cce42be54c0e4c03b79c25797550c5",
+      "lines": 566
+    }
+  },
+  "cumulative_whole_files_read": 254,
+  "tracked_blobs": 289,
+  "method": "Full pinned SSE2 C read and Git/SHA256 verification; comparison against already-read SSE4.1 source, without double credit.",
+  "findings": [
+    "SSE2 substitutes rotate16 halfword shuffles and rotate8 shifts for SSE4.1 byte shuffles; blend_epi16 emulates selected16-bit lanes using equality masks and and/or operations.",
+    "Seven-round single-block message schedule keeps same diagonalization convention as SSE4.1; implementation similarity is not an independent oracle.",
+    "compress_pre loads full64-byte block irrespective of logical block_len, requiring padded accessible storage from caller. In-place output32 bytes and XOF64 bytes use explicit unaligned16-byte stores.",
+    "Four-input vector path transposes lanes and applies start/end flags per first/last full block. One-to-three remaining inputs call single-input SSE2 compression. Zero input produces no writes.",
+    "Per-lane low-word addition/carry and outer counter updates mirror previously reviewed SSE4.1 arithmetic; no actual x86 counter-boundary execution established.",
+    "Prefetch offset256 and vector instruction selection require platform/runtime qualification. Reading C implementation does not credit separate Unix/Windows assembly variants or establish throughput."
+  ],
+  "limits": [
+    "254/289 blobs reviewed; global whole-repository count150/500.",
+    "No x86 execution or speed measurement; ARM parity remains a separate bounded result."
+  ]
+}
