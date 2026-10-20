@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/metrohash128.c": {
+      "sha256": "bdea5ff910e77bac150e29564ed5d129c93c803e41c46776067361c7d7b6db04",
+      "git_blob": "db93d3325d08b9d80070f3d880d8aa412939f718",
+      "lines": 566
+    }
+  },
+  "cumulative_whole_files_read": 169,
+  "tracked_blobs": 289,
+  "method": "Full pinned C implementation read; Git blob and SHA256 verified. No new execution or conventional MetroHash vector comparison.",
+  "findings": [
+    "State retains32-byte tail, four64-bit accumulators and use_sse flag; constructors zero state and use fixed initialization constants. State copy clones whole struct. Steal copies accumulators locally and processes tail without consuming live state.",
+    "All seeded one-shot128 wrappers feed four native-order seed bytes before message, including seed0. A direct fresh streaming state without that prefix therefore does not have identical input semantics. Conventional MetroHash compatibility is not implied by wrapper name.",
+    "256-bit mode concatenates outputs of variant1 and variant2 states. It has no separately defined256-bit compression and should not be treated as an independently verified algorithm.",
+    "METRO_FILL_XS narrows size_t length to int even for empty retained tail. Large direct updates can narrow or overflow signed byte-count arithmetic before memcpy; no large-update failure executed.",
+    "CRC functions are compiled under HAVE_MM_CRC32_U64 and mostly annotated target(sse4.2), while use_sse chooses scalar versus CRC behavior. Correct selection depends on caller CPU capability; passing TRUE alone does not detect CPU support.",
+    "Native-word input loads and memcpy output preserve host-dependent representation. The implementation has no total-length field; algorithm identity must be judged from actual implementation rather than assumed upstream MetroHash semantics."
+  ],
+  "limits": [
+    "No streaming runtime parity, CRC target qualification or performance measurement.",
+    "169/289 tracked blobs reviewed; global complete-repository count remains150/500."
+  ]
+}
