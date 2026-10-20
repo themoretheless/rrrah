@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/rmlint.c": {
+      "sha256": "ea26458f803dde1c9a29d5fec629ce7c7aafcb7d64b9581675d0b3ba577eb9aa",
+      "git_blob": "65460e07e9388e9da06c82aaffd6c7f0f8273b2a",
+      "lines": 140
+    },
+    "lib/formats/_equal.c": {
+      "sha256": "6930bef6ef097c771cba2a0f3cc1c7a926c8686672d78caec3ac263679b17e85",
+      "git_blob": "cb605106af81455f3fa963f49b64809b8dbd7404",
+      "lines": 142
+    }
+  },
+  "cumulative_whole_files_read": 29,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/cmdline.c": {
+      "sha256": "fc63e2461e962260e2b400723bb4e72edf3834705b2c65b6c7a08c058ea34ecb",
+      "git_blob": "50948a68cf237647b396bb16a27fceaa5ca1042b",
+      "lines": 1545,
+      "ranges_inclusive": [
+        [
+          1414,
+          1545
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Main initializes defaults/session, conditionally invokes rm_cmd_main after argument parse, then clears session. Alternate hash/gui/reflink/dedupe modes exit before normal signal/session setup.",
+    "rm_cmd_main resets equal_exit_code to EXIT_EQUAL_UNKNOWN before traversal. This resolves previous uncertainty: default session failure value does not itself abort ordinary hashing.",
+    "Normal path traversal and shredder routines finish their scheduler/hasher/pools before returning to main clear, narrowing earlier cleanup-order concern for normal successful execution.",
+    "Early returns after traversal can bypass preprocess; all_files cleanup ownership remains a concrete early-path concern, without runtime allocation measurement.",
+    "Two-input equal shortcut accepts hardlink/reflink/path-double/same-file classification; utility link-type correctness remains unread.",
+    "Equal formatter compares emitted digest strings for explicitly supplied paths; mismatch flag prevents later success. Its completeness depends on upstream output/admission and cannot independently prove all requested inputs were read.",
+    "Main exit uses remaining counters and abort state; --equal result returns before subsequent abort check if exit_state successful. Interrupted-equal outcome needs runtime control before correctness claim."
+  ],
+  "limits": [
+    "cmdline.c only132-line main range read, no whole-file credit.",
+    "No original full runtime or own-library changes/tests; native pHash deferred; global count150/500."
+  ]
+}
