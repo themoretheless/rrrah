@@ -1,0 +1,62 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 157,
+  "tracked_blobs": 289,
+  "method": "Compiled unchanged previously reviewed BLAKE2b reference implementation with an authored C harness and independent expected values generated using Python hashlib.blake2b.",
+  "executed_control": {
+    "exit_code": 0,
+    "oracle": "Python hashlib.blake2b",
+    "lengths": [
+      0,
+      1,
+      127,
+      128,
+      129,
+      255,
+      256,
+      257,
+      4097
+    ],
+    "digest_bytes": [
+      1,
+      16,
+      32,
+      64
+    ],
+    "key_bytes": [
+      0,
+      1,
+      64
+    ],
+    "steps": [
+      1,
+      127,
+      128,
+      129
+    ],
+    "cases": 432,
+    "zero_length_null_update": true,
+    "repeated_final_rejected_all_cases": true,
+    "invalid_digest_lengths_0_and_65_rejected": true,
+    "short_output_failure_then_retry_passes": true,
+    "scope": "Current host sequential BLAKE2b, fixed deterministic byte payload/key, independent digest values. Not tree/parallel/XOF or all-platform qualification."
+  },
+  "artifact_sha256": {
+    "blake2.h": "389bc87a83cdd9e25569a294d01a3347970d117237a66eee9df8edd6058736a4",
+    "blake2-impl.h": "bc0ead7f3259a415325fa40ddebb1876f903d5062d888fc5994e8b2d9e616ec4",
+    "blake2b-ref.c": "e2bf9872a8f0a51711b765936d420a7f8c34797db4d938948c24f2ddbc1dc588",
+    "control.c": "8d4630ac38e4d5954c8d8a83999210607817300ec44d0732e589c0a2a0ce2438",
+    "metadata.json": "c003d4c666de1a8ddc6b21f5bbe5edc4177b4b47adb34bcd0174f3e9a10fccb3"
+  },
+  "findings": [
+    "All432 streaming combinations match independent expected digests across9 message lengths,4 digest lengths,3 key lengths and4 update steps.",
+    "Short output failure occurs before consuming final state and permits successful retry; successful finalization consumes state and repeat is rejected."
+  ],
+  "limits": [
+    "No additional source-read credit or production optimization.",
+    "Local package session54565 remains active; no terminal package result claimed."
+  ]
+}
