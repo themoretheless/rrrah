@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/replay.c": {
+      "sha256": "9f89d294ecd127d5f4e88d48a8dfe49c4a831d40af93330dcdfbcc910e3cc550",
+      "git_blob": "2a3dc168ea43423aefd184d28b612ce7b67e3124",
+      "lines": 228
+    },
+    "lib/replay.h": {
+      "sha256": "edf10c870226e19489022546b76e59c54c08e69472956fd10aff73b5a8f4c9d1",
+      "git_blob": "653cd255f145b4ba97d6f78a1557a91c3a7e0256",
+      "lines": 36
+    }
+  },
+  "cumulative_whole_files_read": 35,
+  "tracked_blobs": 289,
+  "method": "Whole replay.c/h reads; Git blob verification, static analysis.",
+  "findings": [
+    "Replay obtains fresh lstat but mtime check is optional when report field absent; provided time accepted within0.05seconds. Stored checksum reused without fresh content verification here.",
+    "Report device/inode values inserted into trie before current lstat; this function does not compare report identity to fresh identity. Other trie/caller effects still need runtime validation.",
+    "Checksum string duplicated directly from JSON and passed as external checksum; syntax, algorithm tag and expected digest length not validated here. Previously reviewed clustering can group by those strings.",
+    "Loader requires array root then assumes interior objects between header/footer; no local per-field JSON type schema or record-count/resource bound. Each record admission return value ignored.",
+    "Any successfully parsed array marks report valid even if every record rejected. Overall success is not proof all saved files admitted.",
+    "Empty-directory replay rechecks current emptiness, a stronger local gate than ordinary stored checksum reuse.",
+    "Duplicated checksum ownership is passed to traverse_file; if admission fails before model takes ownership no free is visible in replay. Runtime leak not measured."
+  ],
+  "limits": [
+    "No original replay runtime or malformed-input controls executed.",
+    "No rrrah edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
