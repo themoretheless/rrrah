@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/reflink.h": {
+      "sha256": "2ac5e6ed6e5124e4ec15b2787e552416686c8b4f9be5bc035d83aa393165823f",
+      "git_blob": "8a0462de4f37e60c930a743b51d030bc1303a5bf"
+    }
+  },
+  "cumulative_whole_files_read": 44,
+  "partial_source_read": {
+    "lib/reflink.c": {
+      "sha256": "a8847b3f900a3adf35a9bd65589f87bdc5eb5aca54913f21d0e7b1fd45724e8c",
+      "git_blob": "1452307fab7d1c72c8d73261ec1133287eed0a12",
+      "ranges_inclusive": [
+        [
+          1,
+          330
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Reflink classification compares physical offsets, logical offsets, next offsets and last-extent flags across descriptors. Inline extents produce separate status; physical0 produces MAYBE rather than confirmed equality.",
+    "Nonprogressing extent offset returns error; abort returns error. Without FIEMAP returns NONE rather than claimed reflink.",
+    "Dedupe xattr shortcut treats destination already-deduplicated marker or stat failure as success before checking source. This is skipped-work status, not fresh equality proof.",
+    "Hardlink conversion creates temporary destination and attempts FICLONE; metadata restoration failures are warning-only in inspected branch. Further rename/cleanup logic still unread.",
+    "Compile-time ioctl selection has documented possible old-kernel compatibility gap; no runtime fallback established in this segment."
+  ],
+  "limits": [
+    "Only header receives full-file credit. No clone/dedupe ioctl or filesystem mutation executed.",
+    "No rrrah edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
