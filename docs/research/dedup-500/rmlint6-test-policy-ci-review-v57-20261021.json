@@ -1,0 +1,47 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/testing.rst": {
+      "sha256": "a516b64c72019667e842e323c9e0a8ed1aebfd9024746d72617db2d38c579d56",
+      "git_blob": "aaf15f08dfceb5ed57649e0807661e68cbd36ad5",
+      "lines": 177
+    },
+    ".pytest.toml": {
+      "sha256": "daa67e3656972da7ee4d2eb4bd4871e164b554466634f2d129a647d1d57836af",
+      "git_blob": "a747c8d8b3aa2f2c2ea40fce6a95f75accf08ed5",
+      "lines": 13
+    },
+    ".github/workflows/macos.yaml": {
+      "sha256": "116ed5ea1971eb6b7e2d6a9446529fcb0a3735811ef4f5d2476bcea675c929ca",
+      "git_blob": "0e0fc15505e67a3a894c504648b41697f7c927f6",
+      "lines": 50
+    },
+    ".github/workflows/linux.yaml": {
+      "sha256": "369db73ba5b80299178b0f30aabf2209230a6c782df882fe71ae44e1fb3fa188",
+      "git_blob": "5083860f2f38fb0576df16e07edb096ce101c281",
+      "lines": 88
+    },
+    ".github/workflows/multi-arch.yaml": {
+      "sha256": "90bdf7458f77c5b972acdb452a7ac517507e84c7448d3b5f92671ab0535f2508",
+      "git_blob": "b2000cb9e6ecdddbf39cb3abd4880421d5254a73",
+      "lines": 43
+    }
+  },
+  "cumulative_whole_files_read": 130,
+  "tracked_blobs": 289,
+  "method": "Complete reads of five pinned files; verified SHA256 and Git blob identity. Workflow definitions reviewed, no live CI run inspected or claimed.",
+  "findings": [
+    "Default pytest addopts selects not slow and not manpage. Thus plain pytest is not complete declared-suite coverage. Documentation recommends -m empty-string to include all marked tests and a root/valgrind/pedantic release run. These are instructions, not execution evidence.",
+    "Documentation recommends pytest.skip for unavailable root conditions, unlike early returns found in several reviewed tests. Its known_issue marker recommendation is not present in the reviewed strict pytest marker list.",
+    "macOS workflow builds then invokes plain pytest with RM_TS_ALWAYS_CLEAN, so default slow/manpage exclusions apply. Workflow itself does not install GNU coreutils despite documentation explaining GNU touch -d requirement; actual host provisioning not checked.",
+    "Linux workflow invokes pytest with empty marker expression on tmpfs, separately runs GUI tests with xvfb and reflink tests on Btrfs. Tests are invoked without sudo even though setup commands use it, so root-only cases are not proved exercised by definition alone. Cleanup step lacks always condition.",
+    "Multi-arch matrix lists amd64/i386/s390x/arm64/armv7, but continue-on-error is true for every non-amd64 job. Passing aggregate status therefore cannot alone prove every architecture passed. Build-and-test helper script remains unread in this audit.",
+    "Dependencies, runner images and action major tags are selected dynamically; pinned workflow source is not a frozen reproducible execution environment."
+  ],
+  "limits": [
+    "No actual CI status, root/valgrind run or platform qualification.",
+    "130 of 289 tracked blobs reviewed; global full-repository count unchanged."
+  ]
+}
