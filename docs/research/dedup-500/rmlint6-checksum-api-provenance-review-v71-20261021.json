@@ -1,0 +1,47 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/metrohash.h": {
+      "sha256": "dc33aa42cd56b1842a57a2255b9cefb13e256e52c40732ca8a2d93843cc46fc3",
+      "git_blob": "1b6fdc3aa95656ad0a59c903792651aa83aa650d",
+      "lines": 102
+    },
+    "lib/checksums/murmur3.h": {
+      "sha256": "bd07b598414cd9de936dc3d6d9cadcf1a86397defc855c08872e3ab9fc189ff1",
+      "git_blob": "8185bc8fe5854ac1e1482ab6ecfd786740445b96",
+      "lines": 81
+    },
+    "lib/checksums/xxhash/xxhash.c": {
+      "sha256": "5c3591fe6e6c86a619eb26760e9520e37a6fd5152882ab5ad93f912e2a855966",
+      "git_blob": "e60cc37f13c27ff0668ec2535937df3f4c097ec2",
+      "lines": 42
+    },
+    "lib/checksums/xxhash/LICENSE": {
+      "sha256": "6ffedbc0f7878612d2b23589f1ff2ab15633e1df7963a5d9fc750ec5500c7e7a",
+      "git_blob": "e4c5da7234eca7baad9a46f0b144e49ccad2e500",
+      "lines": 26
+    },
+    "lib/checksums/blake2/.gitignore": {
+      "sha256": "063083f7db4af129a45edcd296be9e89d18112d2256f92cfb6605be83d7694d7",
+      "git_blob": "531c8f1d92dc4528ad09b7adb24a4d9964471b46",
+      "lines": 21
+    }
+  },
+  "cumulative_whole_files_read": 167,
+  "tracked_blobs": 289,
+  "method": "Full reads of five pinned source/header/metadata files with Git blob and SHA256 verification. No runtime hash execution.",
+  "findings": [
+    "MetroHash header exposes32-bit seeded one-shot64/128 APIs and opaque streaming128/256 states with copy/free/steal. CRC variants are gated by HAVE_MM_CRC32_U64. Declarations alone do not prove streaming equivalence or dispatch correctness.",
+    "MetroHash helpers directly dereference cast16/32/64-bit pointers for unaligned reads, unlike byte-assembly/memcpy paths in previously reviewed BLAKE2/3. Endianness, alignment and strict-aliasing portability are not established by header comment about Nehalem. Implementation still unread.",
+    "Murmur streaming interfaces explicitly distinguish nonmutating const steal, finalise that frees state and independent free. State creation has no seed argument while one-shot wrappers accept seed. Exact initialization behavior remains to be checked in source.",
+    "xxhash.c only enables static-linking declarations and implementation macros then includes xxhash.h. Reading this47-line instantiation wrapper does not review the268319-byte implementation header; no extra credit given for that header.",
+    "Nested licenses declare MIT for MetroHash, public-domain Murmur provenance, BSD2 for xxHash. This is source-notice review, not a change to repository-level GPL reference decision or authorization to copy arbitrary project code.",
+    "BLAKE2 gitignore lists benchmark/selftest binaries and artifacts; these names provide no executed-test or benchmark evidence."
+  ],
+  "limits": [
+    "No new production code or benchmark result.",
+    "167/289 tracked blobs reviewed; global complete-repository count remains150/500."
+  ]
+}
