@@ -1,0 +1,38 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 42,
+  "partial_source_read": {
+    "lib/utilities.c": {
+      "sha256": "36243efa5680ab04d84c0cf842bf4a1562d2c379b1928a1904aa946fe1f17592",
+      "new_ranges_inclusive": [
+        [
+          331,
+          660
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          660
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "rm_util_list_foreach_remove updates previous next or list head but does not update surviving next->prev when deleting GList node. Subsequent backward traversal/removal may use stale linkage; caller reachability and original-function control still needed.",
+    "Singly linked removal maintains prev correctly; slist_pop uses supplied mutex when nonNULL. Queue concatenation transfers links and empties source, assumes distinct queues.",
+    "rm_util_get_groupname dereferences getpwuid result without NULL guard, unlike username helper. UID-not-in-database runtime case not tested.",
+    "User/group ID comparator subtracts unsigned IDs then returns int; wide ID difference can wrap/truncate and violate numeric ordering. Not equivalent to reviewed safe SIGN_DIFF.",
+    "ELF metadata path checks regular executable flag and opens path, but does not locally validate elf_begin or gelf_getshdr success before using section header. Backend behavior untested.",
+    "User/group list is snapshot at initialization and lookup protected by mutex; it does not automatically refresh account database.",
+    "Parent inode helper stats parent at call time and returns sentinel-1 on error without typed status, so consumers must interpret failure."
+  ],
+  "limits": [
+    "Only utilities.c1-660 read; physical-disk logic starts after this segment and remains unread.",
+    "No runtime tests or own-library change. Native pHash deferred; global full repository count150/500."
+  ]
+}
