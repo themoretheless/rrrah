@@ -1,0 +1,42 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 40,
+  "partial_source_read": {
+    "lib/cmdline.c": {
+      "sha256": "fc63e2461e962260e2b400723bb4e72edf3834705b2c65b6c7a08c058ea34ecb",
+      "new_ranges_inclusive": [
+        [
+          651,
+          990
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          990
+        ],
+        [
+          1414,
+          1545
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Memory/read-buffer/sweep callbacks call shared size parser and assign target only if GError absent. Local callbacks have no zero/min/max enforcement; final parser validation still unread.",
+    "Rank-by callback explicitly rejects regex compiler GError before valid-letter check, resolving earlier concern about using failed compiled pattern indexes in this path.",
+    "--equal configures file/directory comparison, enables hidden entries, disables empty-file lint via types df,dd, allows minsize0 and replaces default outputs with _equal. This explains inspected hidden/empty regression expectations.",
+    "Replay callback enables mode and ignores add_path return; overall report/root error handling remains elsewhere.",
+    "Symlink and hidden option callbacks set opposing flags explicitly, confirming later argument can override earlier convenience setting.",
+    "Permissions parser accumulates rwx bits and rejects other characters. Sort-output criteria copied into fixed64-byte field with63-byte bound; excessive valid criteria silently truncated here.",
+    "Default outputs include shell script and JSON unless replaced; output creation behavior resides in formatter module still unread."
+  ],
+  "limits": [
+    "Thread range validation and final option handling not yet read; source still partial.",
+    "No runtime tests, performance claims or rrrah edits; native pHash deferred; global count150/500."
+  ]
+}
