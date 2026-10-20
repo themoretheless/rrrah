@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx2_x86-64_windows_msvc.asm": {
+      "sha256": "2aad514ac8fb748accc8c0c0426606c91e6d404cff9c8499b2052e8108cbf67a",
+      "git_blob": "352298edd2e8af288122b4d396b2a55847f42c96",
+      "lines": 1828
+    }
+  },
+  "cumulative_whole_files_read": 279,
+  "tracked_blobs": 289,
+  "method": "Differential review against previously reviewed Windows GNU assembly. Initial raw diff was truncated and is not credited as full reading. Instead all1758 instructions were normalized and compared, branch targets resolved to instruction indices; all matched. Wrapper and constant declaration differences inspected from untruncated beginning/end portions. No independent serial reread of equivalent instructions.",
+  "equivalence_control": {
+    "gnu_instructions": 1758,
+    "msvc_instructions": 1758,
+    "normalized_instructions_and_branch_targets_identical": true,
+    "normalization": [
+      "Hex literal syntax converted to numeric value; whitespace collapsed.",
+      "GNU numeric forward/backward labels and MASM names resolved to target instruction index.",
+      "Explicit +rip in GNU constant operands removed for textual comparison only; relocation behavior remains unverified.",
+      "prefetcht0 byte ptr normalized to prefetcht0.",
+      "Assembler directives and data declarations excluded from instruction comparison and reviewed separately."
+    ]
+  },
+  "findings": [
+    "MSVC exports both symbol spellings via PUBLIC and paired PROC/ENDP; code segment ALIGN16 contrasts GNU entry64/loops32. Stack64 alignment,880-byte reservation, argument reshuffle and XMM6..15 preservation remain instruction-equivalent.",
+    "Read-only constants use _RDATA READONLY PAGE ALIAS(.rdata), ALIGN64, dd/db and DUP expansion. Eight repeated IV words, eight block-length64 words, eight sign masks and16-byte rotate masks match GNU values on source inspection.",
+    "Named labels preserve all conditional/unconditional control-flow targets under normalization. Same batch8/4/2/1 paths, output stores, wider tail reads and nonzero-block precondition apply.",
+    "PROC has no FRAME/.ENDPROLOG/.SAVEXMM128 annotations in pinned source. Instruction identity does not establish object relocations, unwind metadata or successful MASM assembly."
+  ],
+  "limits": [
+    "279/289 pinned blobs reviewed;150/500 repositories fully reviewed.",
+    "No MSVC build, Windows execution, guard-page test, performance evidence or upstream production import. Deferred pHash/ASAN item untouched."
+  ]
+}
