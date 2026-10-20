@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/rmlint.pot": {
+      "sha256": "b86878a87faa2d42e900925f01bbae66fbf8f0a322c89a7b66f726b7ce67d0f0",
+      "git_blob": "9f7ab034ac3e32bafd5dbd5843cb9e1401a9d454",
+      "lines": 1178
+    }
+  },
+  "cumulative_whole_files_read": 269,
+  "tracked_blobs": 289,
+  "method": "Complete pinned POT read and Git/SHA256 verification; parsed full msgids and compared two suspicious keys to previously reviewed pinned source. No xgettext/msgfmt or installed locale runtime.",
+  "findings": [
+    "Template contains264 nonempty msgids and zero msgid_plural sections, with empty translations as expected for POT. Header creation date2026-08-28 and project2.11.0 are metadata, not extraction completeness proof.",
+    "POT key Only first percent sign is truncated at G_GINT64_FORMAT; source reflink message continues with bytes deduped/files not fully identical. Runtime full-string lookup cannot match that truncated template key.",
+    "FIEMAP no-extents message likewise stops at offset percent sign before G_GUINT64_FORMAT. Source includes format macro, so exact key differs. This is localization coverage issue, not demonstrated format execution failure.",
+    "CLI mtime-window description says maxT seconds, while full manual explicitly permits chained groups with endpoints farther apart. Short help alone does not define pairwise-diameter guarantee.",
+    "Template includes warning/error states for incomplete scans, IO failures, invalid paths, replay changed mtime and reflink unknown/inline extents. Presence of messages does not prove error propagation, exit status or visibility.",
+    "Most GUI source prose remains unmarked in previously read editor/runner/location files; limited GUI msgids in POT cannot establish full localization. Language catalogs remain unread.",
+    "Source reference lines and empty msgstr values are extraction data, not commands or author instructions. No catalog regeneration or product change."
+  ],
+  "limits": [
+    "269/289 blobs reviewed; global whole-repository count150/500.",
+    "No gettext compile check, language rendering or runtime equality result."
+  ]
+}
