@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/reflink.c": {
+      "sha256": "a8847b3f900a3adf35a9bd65589f87bdc5eb5aca54913f21d0e7b1fd45724e8c",
+      "git_blob": "1452307fab7d1c72c8d73261ec1133287eed0a12",
+      "lines": 540
+    }
+  },
+  "cumulative_whole_files_read": 45,
+  "tracked_blobs": 289,
+  "method": "Remaining331-EOF read, previous v35 covers1-330; pinned Git blob verified. No filesystem mutation run.",
+  "findings": [
+    "Dedupe ioctl attempts16MiB chunks, reduces to16KiB after DATA_DIFFERS and stops on difference at minimum granularity, nonzero status, zero progress or abort. Success requires counted bytes equal source stat size.",
+    "Partial extent sharing can occur before later mismatch/failure; failure does not imply no filesystem changes. This is dedupe operation semantics, not a transactional exact-file API.",
+    "Hardlink conversion closes temporary fd then renames over destination; FICLONE failure unlinks temporary path but still reaches rename attempt. Existing destination preserved if rename fails; no crash durability/fsync directory transaction established.",
+    "Metadata restoration only covers coarse utime, ownership/group and mode; no ACL/xattr preservation in hardlink conversion path. Warning-only metadata failures may leave success result if cloning/rename succeeded.",
+    "Destination fd cleanup uses >0 rather than >=0, so fd0 is skipped. Runtime descriptor assignment scenario untested.",
+    "--is-reflink checks argument count and lstat, then delegates link-type; parse/arity early exits omit freeing context/summary in those paths. No production resource measurement."
+  ],
+  "limits": [
+    "Static complete source reading only; Linux reflink/dedupe ioctls not executed on this host.",
+    "No rrrah edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
