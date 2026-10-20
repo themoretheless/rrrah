@@ -1,0 +1,72 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/highwayhash.h": {
+      "sha256": "6baf884049d6824e1e333bc7d944411395d818f4b04ff25f8be37e8ae4064b48",
+      "git_blob": "0c7a7f4ae9afe781971c2436c14b5c34f8435b65",
+      "lines": 91
+    },
+    "lib/checksums/highwayhash.c": {
+      "sha256": "5197f4b68e62ddfbd7497ed62b1a5fb3faeb8d6fb55075defd99bc250dbb6521",
+      "git_blob": "902d62028434b537d31cb0dbed66be4194c11325",
+      "lines": 250
+    }
+  },
+  "cumulative_whole_files_read": 152,
+  "tracked_blobs": 289,
+  "method": "Complete reads of two pinned files, verified Git blob/SHA256; compiled unchanged HighwayHash implementation and authored streaming-consistency harness.",
+  "findings": [
+    "Low-level API requires32-byte packets and remainder length1..31; remainder zero must not be passed because rotation assumes nonzero count. One-shot path guards remainder call with size&31.",
+    "Streaming API buffers partial packets and flushes complete packets. CatFinish copies hash state before processing remainder/final permutations, enabling repeated finish without consuming live state; low-level finalize mutates state.",
+    "Byte loading explicitly assembles little-endian64-bit lanes; output APIs return integer words, so external serialization still needs an explicit byte-order contract.",
+    "Header usage example calls HighwayHashCatFinish64(state) instead of passing address; implementation declaration requires pointer. Documentation example is not an executed API test."
+  ],
+  "executed_control": {
+    "exit_code": 0,
+    "stream_cases": 780,
+    "lengths": "all integers0..129 inclusive",
+    "update_steps": [
+      1,
+      7,
+      31,
+      32,
+      33,
+      64
+    ],
+    "widths_bits": [
+      64,
+      128,
+      256
+    ],
+    "repeated_finish64": true,
+    "scope": "One-shot versus streaming same implementation, fixed key1,2,3,4 and incremental byte payload; not independent known-answer or cryptographic qualification."
+  },
+  "local_package_progress": {
+    "session_id": 54565,
+    "state": "still_running",
+    "observed_completed_targets": {
+      "exact_files": {
+        "passed": 33,
+        "failed": 0,
+        "ignored": 0
+      },
+      "exact_large_files": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      "exact_repeated_metadata": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "scope": "Terminal per-target results from ongoing no-default-features offline package run; not whole package completion."
+  },
+  "limits": [
+    "No production changes or measured speedup.",
+    "152/289 blobs reviewed; full local package process remains active."
+  ]
+}
