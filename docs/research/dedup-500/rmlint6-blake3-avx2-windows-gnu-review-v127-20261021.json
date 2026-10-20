@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx2_x86-64_windows_gnu.S": {
+      "sha256": "c5b5e561f8fbbd252492a52f9a09da8e9e99a6ecccb88e2d1bfa2ebc7961f425",
+      "git_blob": "3d4be4a7d7cb310270ad1f51156595965c5a6f12",
+      "lines": 1817
+    }
+  },
+  "cumulative_whole_files_read": 278,
+  "tracked_blobs": 289,
+  "method": "Differential whole-file review: all changed hunks read against previously fully read Unix assembly; remaining lines verified text-identical with SequenceMatcher autojunk disabled. This is not an independent serial reread of identical lines. Full untruncated unified diff inspected.",
+  "equivalence_accounting": {
+    "text_identical_lines_to_reviewed_unix": 1732,
+    "new_or_replaced_windows_lines_read": 85,
+    "total_windows_lines": 1817
+  },
+  "findings": [
+    "Windows entry saves RSI/RDI in addition to SysV callee-saved general registers, reserves880 bytes and aligns stack64. XMM6..15 lower128 halves are saved at aligned offsets0x2D0..0x360 and restored before return; upper YMM halves are volatile and cleared with vzeroupper.",
+    "Four Windows register arguments are reshuffled RCX/RDX/R8/R9 to internal RDI/RSI/RDX/RCX; counter at RBP+0x68, increment byte0x70, flags/start/end0x78/0x80/0x88 and output pointer0x90 account for eight pushes and caller shadow space.",
+    "Counter-low/high/mask/step/byte-length stack slots differ from Unix and all corresponding initialization, eight-way update and4/2/1 tail references are adjusted. Compression arithmetic and output widths are text-identical outside reviewed address changes.",
+    "Four-way prefetch instructions present in Unix are omitted here. Read-only section uses .rdata; ELF GNU-stack/CET and Apple conditionals are absent. No unwind metadata directives appear in this pinned source; Windows exception/unwind behavior is unqualified.",
+    "The same wider32-byte loads in paired tail inputs and nonzero-block precondition remain. Source equivalence does not establish actual Windows ABI correctness or runtime fault."
+  ],
+  "limits": [
+    "278/289 blobs reviewed; global whole-repository count150/500.",
+    "No Windows/x86 execution, unwind test or speed measurement. Reference only; pHash/ASAN remains deferred."
+  ]
+}
