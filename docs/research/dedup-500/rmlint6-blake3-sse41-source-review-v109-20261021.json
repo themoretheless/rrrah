@@ -1,0 +1,29 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse41.c": {
+      "sha256": "1f38e2ca58aa59af094f492f1326957b423d7a25e32daaae159fcc1966949f58",
+      "git_blob": "4653a856fe6c44de291387cdd24ecd76fec1a0ae",
+      "lines": 560
+    }
+  },
+  "cumulative_whole_files_read": 253,
+  "tracked_blobs": 289,
+  "method": "Complete pinned SSE4.1 C source read with Git/SHA256 verification; no x86 runtime credit from prior ARM controls.",
+  "findings": [
+    "Single-block compression performs seven explicit rounds, maintaining row1 unrotated and compensating message shuffles. In-place emits32 bytes; XOF emits64 with CV mixed into second half.",
+    "compress_pre reads all64 block bytes even when block_len is smaller. Caller must supply accessible padded block storage; block_len does not bound memory reads. Higher-level source was previously reviewed but no new unsafe-call failure claimed.",
+    "Vector hash_many processes four inputs with transposed message lanes and per-input counters;1..3 remaining inputs use this SSE compression individually. Unlike NEON, scalar-count remainder is still SSE accelerated.",
+    "32-bit counter carry uses unsigned comparison via sign-bit XOR, high-word subtract of all-ones mask. Boundary parity requires actual x86 execution or independently validated emulation.",
+    "Input/output use unaligned16-byte intrinsics; four-lane output ordering interleaves low/high halves into contiguous32-byte digests. No pixel or AST control can prove intrinsic lane correctness.",
+    "Start/end flags apply at first/last full block; counter remains same for blocks within one input and advances across inputs when requested. Zero-input call performs no output.",
+    "Message prefetch uses offset+256, and callers must satisfy complete-block data contract. No performance or memory-fault conclusion from prefetch syntax alone.",
+    "SSE4.1/SSSE3 intrinsics require correct dispatch and compiled feature flags. Separate x86 assembly implementations remain unread and do not inherit C-source review credit."
+  ],
+  "limits": [
+    "253/289 blobs reviewed; global whole-repository count150/500.",
+    "No SSE compilation/execution, x86 ABI qualification or throughput measurement."
+  ]
+}
