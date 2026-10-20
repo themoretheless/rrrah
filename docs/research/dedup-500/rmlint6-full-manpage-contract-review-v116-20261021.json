@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/rmlint.1.rst": {
+      "sha256": "8e09de1c95c72498af1fe6532b0a0df44353af17ee89a315cf9f8ea7011df470",
+      "git_blob": "96d4775ee2782e168eb6759fdcc92229bf0c0d44",
+      "lines": 1069
+    }
+  },
+  "cumulative_whole_files_read": 267,
+  "tracked_blobs": 289,
+  "method": "Complete pinned manual read with Git/SHA256 verification. Initial output truncated middle; reread lines440..740 and418..449 to cover omitted content before whole-file credit. No documented commands executed.",
+  "findings": [
+    "limit-mem explicitly permits total process memory exceeding limit and dataset-dependent overhead. threads1 explicitly does not mean single-threaded program. Neither option proves strict resource bound.",
+    "xattr caveat explicitly acknowledges false positives when contents change without mtime change. Clamp disables cache writes; partial write-unfinished hashes are distinct from full hash-unmatched/uniques.",
+    "Cross-endian cache portability limited to endian-agnostic families; manual admits on-disk xxHash/Highway differences. Digest byte equality across architectures requires algorithm-specific tests.",
+    "mtime-window groups can chain adjacent timestamps: endpoints may differ more than configured window. This is connected-component grouping, not pairwise-diameter guarantee.",
+    "Directory equality ignores names/layout/empty content by default; honour-dir-layout changes domain. Documentation sorted-stream analogy does not prove multiplicity-sensitive implementation.",
+    "Replay claims no filesystem IO while also describing current-mtime comparison and report writes; precise interpretation is no new traversal/content hashing, not literally zero filesystem calls.",
+    "Newer-than stamp prose says updated on finish, but previously reviewed stamp writer executes at INIT. Interrupted scan cannot be treated as completed checkpoint.",
+    "Case-insensitive match is explicitly ASCII-only. Basename, dirname, relative-path and extension filters impose extra conditions beyond exact byte equality.",
+    "Manual default duplicate-size minimum1 excludes empty files, hardlink reporting and symlink policies differ from counting independent physical objects. Compare eligible domains before result totals.",
+    "Standalone equal defaults hashing and needs explicit paranoid for bytes; is-reflink has multiple nonzero states including unknown/error/inline extents. Nonzero is not universally proven not-linked.",
+    "Some prose conflicts remain: max-depth1 listing versus tutorial0, none lint group tagged default versus types header defaults, and no_header/no_footer descriptions ambiguous. Parser/source is authoritative.",
+    "Handler never fails language is not an IO success proof; examples cannot replace verified postconditions. No mutating example executed."
+  ],
+  "limits": [
+    "267/289 blobs reviewed; global whole-repository count150/500.",
+    "Documentation/source cross-check only, no new runtime or resource/performance qualification."
+  ]
+}
