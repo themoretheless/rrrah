@@ -1,0 +1,32 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "whole_files_read": 101,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v50-20261021.json",
+  "new_whole_files_read": {},
+  "method": "Verified pinned Git blob; decoded all306 frames and inspected duration sum25330ms. Visually inspected frames0-31 only at396x220 thumbnail resolution; no whole-file credit.",
+  "asset": {
+    "path": "Assets/TabSearch.gif",
+    "sha256": "e46d7351828b336fbdeee14a679f60718664b07d3f39f1ae08a32f3b71841fc9",
+    "frames": 306,
+    "size": [
+      1920,
+      1080
+    ],
+    "duration_ms": 25330
+  },
+  "visual_frames_reviewed_inclusive": [
+    0,
+    31
+  ],
+  "next_frame": 32,
+  "findings": [
+    "Title describes tab search/switcher including closed history. After shortcut overlay popup shows folder records; Enter closes popup and Explorer opens.",
+    "Initial sequence does not demonstrate filtering, stale records, history clearing or failed navigation; later frames remain unreviewed."
+  ],
+  "limits": [
+    "Repository partial101/104; global fully reviewed count148/500.",
+    "No library code changes or fresh tests. Native pHash investigation deferred."
+  ]
+}
