@@ -1,0 +1,96 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".clang-format": {
+      "sha256": "b91fd330154ad0db06056e1e162e68f9ee14deea569f1ca309b8c83346874cab",
+      "git_blob": "189706cd791bcba5e262ebaabc1c476aef6e3f6b",
+      "lines": 57
+    },
+    ".clangd": {
+      "sha256": "b7e4ba0a12c9ed3460c66e35a3cb52d3578f72dc462678c6b2002f1a16cb3a79",
+      "git_blob": "dc90f588067287d7a406f14375b7af836a1ac94c",
+      "lines": 6
+    },
+    ".containerignore": {
+      "sha256": "bc37d034bad564583790a46f19d807abfe519c5671395fd494d8cce506c42947",
+      "git_blob": "3e4e48b0b5fe6b468434d6767749b399319f2da2",
+      "lines": 1
+    },
+    ".format.sh": {
+      "sha256": "38d391cb59f726228c9bd706847b82396997d0067a55aac8aa48e5c01e97fa40",
+      "git_blob": "1c9dbc74817cea19ee6d14fea5bb855bd713a3ac",
+      "lines": 23
+    },
+    ".git_archival.txt": {
+      "sha256": "3264a5094f885ad5993638eceab9b15fbf6e590de6d18a3cc8723b3e2dc7c235",
+      "git_blob": "2b181ff6f9c0133fe567ce9bc0d8fe13034f457d",
+      "lines": 4
+    },
+    ".gitattributes": {
+      "sha256": "d6c073627847f6b6c51ec2c99284db41c523cba7e4977d3b8dcc40a72b852875",
+      "git_blob": "4fabf774964a725564dae6bfa86ab8147c352a86",
+      "lines": 3
+    },
+    ".gitignore": {
+      "sha256": "feb457ec42054a4c4d253f23b7097682e54c5334c5b4958d9bfde90cd510d5be",
+      "git_blob": "e1f944f29af31dc1cfd71e0b0fd62e39b7930a4b",
+      "lines": 53
+    },
+    ".mailmap": {
+      "sha256": "d427ca8e207dcb176851060380062569ca8122a12c6daf15472adac2884380c3",
+      "git_blob": "5b047e8f5aecfe877be2c11716d6a53e943a3d5f",
+      "lines": 16
+    },
+    ".readthedocs.yaml": {
+      "sha256": "d7720a1ff91af45af339d198de7b83608bb212da0b6c8a22668767ed1ff56ee4",
+      "git_blob": "fe0dc367ddcaf5d04c411c3bc35ceafb296728b6",
+      "lines": 12
+    },
+    ".version": {
+      "sha256": "0f941f9ec4552d09c41a48d5a1c2d375d82cc6dae15b1676141920f260b3b5bd",
+      "git_blob": "f3514128046fd833b9c8308abafab64ad202060a",
+      "lines": 1
+    },
+    "po/SConscript": {
+      "sha256": "f1d9c26a534edb6b980c05f3be02c7af71732859d0db68c74bfda2bd14e83904",
+      "git_blob": "738bba4c6e99851456423135cf80c45717ef976f",
+      "lines": 71
+    },
+    "docs/_badges.rst": {
+      "sha256": "b21a486ee30045ab2092560d65935eff9ad9835372951f86530fc43429c6c52c",
+      "git_blob": "597e886f8a7e23753261a6fd5fcc107719ccf7f8",
+      "lines": 43
+    },
+    "docs/_templates/sidebar/brand.html": {
+      "sha256": "af4e087f9630c7206e3fdaa461860f5c84ce73934aec7f44f36c3600567ca397",
+      "git_blob": "41b0d6fe0f3ba59716bddec2e31911cade0300bd",
+      "lines": 19
+    },
+    "docs/translators.rst": {
+      "sha256": "f485798ed405aaa5df7686251a76483c15a1c751ce9d50ae2b9474c8d894d50a",
+      "git_blob": "7c43d24e2e1b98c830f980e5704d109134370437",
+      "lines": 81
+    }
+  },
+  "cumulative_whole_files_read": 232,
+  "tracked_blobs": 289,
+  "method": "Complete fourteen pinned text/blob reads with Git/SHA256 verification. Symlink .containerignore credited as tracked link payload only, not dereferenced extra content. No format/install/catalog mutation commands executed.",
+  "findings": [
+    "Formatting script uses whitespace-split find output, so paths containing whitespace are not preserved. Failure alternatives exit a subshell and script lacks set-e, allowing later stages after clang-format or dos2unix failure. Source-level observation only.",
+    "Formatting iconv loop uses a temporary file and mv, changing file metadata according to host tool behavior; this is not a runtime equality guarantee. No script execution.",
+    "Translation guide spells deferred macro _N but xgettext configuration extracts N_. Guide example is not covered by configured extraction keyword unless other parsing behavior intervenes; no gettext run performed.",
+    "Catalog compilation uses msgfmt without explicit check-format/check flags. Compilation does not establish language completeness or UI correctness. Catalog files themselves remain unread and uncredited.",
+    "xgettext action propagates subprocess return; msgmerge checks each result and raises on failure, contrasting with previously audited unchecked archive action.",
+    "ReadTheDocs sets fail_on_warning true, unlike local SCons default; ubuntu-lts-latest and Python latest plus loosely pinned theme prevent a fixed dependency environment. No hosted build result inspected.",
+    "Pinned version is2.11.0-rc.0 Evolving Echidna. git archive substitutes revision placeholders and omits attribute/ignore files; release archive contents intentionally differ from tracked tree.",
+    "clangd forces C23 for two formatter files while actual build can select fallback embed path. Editor parse success does not prove effective compiler configuration.",
+    "Badge URLs track live releases/workflows/issues and are not pinned runtime evidence; no remote badge pixels credited. Sidebar template supports light/dark logos and codename, but assets were not viewed here.",
+    "mailmap only maps contributor identities; ignore/style files do not change duplicate-equality semantics. No contacting contributors or external messages."
+  ],
+  "limits": [
+    "232/289 blobs reviewed; global whole-repository count150/500.",
+    "No catalog validation, rendering, package installation or production optimization."
+  ]
+}
