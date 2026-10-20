@@ -1,0 +1,56 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_robustness/test_collisions.py": {
+      "sha256": "b7b1585813b8d4bff7077edc2efb64b9a131e1f782f1ec98cabc9bfb80bfb75a",
+      "git_blob": "2deadaab102c49a55bbde71aac14645e05dffcda",
+      "lines": 31
+    },
+    "tests/test_robustness/test_bigfiles.py": {
+      "sha256": "32c3109fc639185f493a6d0e17269770778c23cc1b78f3f76610c40357922232",
+      "git_blob": "c182afe8c7f214af35a11497e0981cc4381d3cae",
+      "lines": 64
+    },
+    "tests/test_robustness/test_many_sparse_files.py": {
+      "sha256": "3b4d889b3dfc50460bffea39cdd7ed0fc556ba18cccfc46742463ab0ad7e230d",
+      "git_blob": "36c08de5210c55c1e6a74119d911348656571e20",
+      "lines": 28
+    },
+    "tests/test_types/test_duplicate.py": {
+      "sha256": "79798c6253f8e2c5e41a486aaa6af783b42669aa3dbc33272572571ce22895cc",
+      "git_blob": "a67b8a1c7fa74a93fd88f49bf38be7c2e04ef869",
+      "lines": 86
+    },
+    "tests/test_options/test_clamp.py": {
+      "sha256": "71bd5b46f7694dadeca6608826ca73ecf970b8faeaa841d85f23e7cce4383185",
+      "git_blob": "8c19afdab8a8affc7ea65e1d72e061db6ff73bcf",
+      "lines": 75
+    }
+  },
+  "cumulative_whole_files_read": 55,
+  "tracked_blobs": 289,
+  "method": "Read all five pinned files; verified each Git blob identity and recorded SHA256. Upstream tests not executed.",
+  "findings": [
+    "Collision resistance test generates 1048576 distinct integer payloads and checks footer duplicate count across checksum algorithms, explicitly excluding paranoid. It detects accidental collisions but does not force a full digest collision or assert byte-based partition membership.",
+    "Large-file test compares two equal 10000 KiB files against a one-byte mismatch 10 KiB from the end, asserting duplicate count only. Separate hash utility test creates 5 GiB sparse files, changes the final byte and compares metro hashes; it skips when initial sparse-file allocation uses blocks.",
+    "Sparse paranoid test creates 1352 files of 256 MiB with 676 content pairs and asserts 676 duplicates. Despite its memory-limiter description it records no memory high-water mark or enforced ceiling.",
+    "Small-difference tests distinguish first/last and mirrored offsets, positive identical controls and one-byte negatives. Hardlink tests check reported reclaimable space, including links outside the scanned subtree.",
+    "Clamp tests intentionally identify files differing outside the selected range. They check absolute and fractional boundaries and empty ranges. Such equivalence must stay distinct from whole-file equality in our library."
+  ],
+  "limits": [
+    "No upstream runtime or memory claim validated.",
+    "Review progress is 55 of 289 files, not a complete repository review."
+  ],
+  "local_verification": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --lib exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes -- --exact",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 50,
+    "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "scope": "15 files of lengths 0, 1 and 2*BLOCK+1; injected constant digest; exact expected path groups and shared digest verified. Not a full package run."
+  }
+}
