@@ -1,0 +1,44 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/treemerge.c": {
+      "sha256": "55448f1adf64f9aa90d391feddfe46e7a34fee738a82bba14960dbf88e687d64",
+      "git_blob": "933acc038d9e47a6b9e6f4cd671c2c8ebbcf4d32",
+      "lines": 1057
+    }
+  },
+  "cumulative_whole_files_read": 115,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read in three contiguous ranges; Git blob verified. Original rm_directory_equal compiled with synthetic digest/set adapters and XOR-populated directory summaries. No complete scanner execution.",
+  "findings": [
+    "Counting pass marks FTS_ERR and FTS_DC as errors and propagates -1 upward, but ignores FTS_DNR and continues after failed fallback stat without adding an error marker. fts_read termination is not checked for errno. This is separate from previously reviewed primary traversal behavior.",
+    "Directory admission requires positive counted file total equal to admitted duplicate count. Count-tree values use int/pointer conversions despite 64-bit directory count fields; parent lookup uses unsigned conversion, so an error sentinel -1 becomes a large positive value.",
+    "Directory equality checks duplicate count, cumulative XOR digest, distinct digest-set size and membership, not per-digest multiplicities. Without layout hashing, summaries of A,A,A,B and A,B,B,B are indistinguishable under this comparator. End-to-end impact still needs scanner reproduction.",
+    "Layout option additionally hashes basename plus digest and recursively includes child name/digest in cumulative summary, but equality still has no exact structural comparison. Default explicitly ignores paths and layout.",
+    "Counting failure causes rm_tm_new to return null after allocating tables/tries without local cleanup. Count pass failure path also omits destruction of initialized file_tree.",
+    "Output callback return value is ignored; directory metadata is captured at construction and no final recursive content revalidation occurs in this file. Aborted state prevents extraction, but cluster-up loop itself has no abort check."
+  ],
+  "executed_control": {
+    "function": "lib/treemerge.c:rm_directory_equal",
+    "left_multiplicities": {
+      "A": 3,
+      "B": 1
+    },
+    "right_multiplicities": {
+      "A": 1,
+      "B": 3
+    },
+    "equal_count": 4,
+    "equal_xor": true,
+    "equal_distinct_sets": true,
+    "comparator_accepts": true,
+    "changed_digest_negative_control_rejected": true,
+    "scope": "Original comparator with synthetic set/digest adapters. Does not execute actual file hashing, traversal or scanner grouping."
+  },
+  "limits": [
+    "Potential multiset and traversal issues are not claimed as full-program reproductions.",
+    "No production-library change; review remains incomplete at 115/289."
+  ]
+}
