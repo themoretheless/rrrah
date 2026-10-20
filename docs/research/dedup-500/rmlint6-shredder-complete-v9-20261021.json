@@ -1,0 +1,29 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/shredder.c": {
+      "sha256": "66ea3d8743c7c5f3ce9d48d805f80d8396841a7adbd6d2f421d112414bf28f8c",
+      "git_blob": "10e337ce6f59db4a0d68c5a1647b8e44a8f6ff3b",
+      "lines": 1832
+    }
+  },
+  "cumulative_whole_files_read": 9,
+  "tracked_blobs": 289,
+  "method": "Read remaining1261-1584 and1631-1832; earlier v6-v8 cover remaining ranges. All1832 source lines now read; Git blob verified.",
+  "findings": [
+    "File processing marks hashing_failed on reader failure, advances requested offset and finishes callback; sift then discards failed file before equality admission.",
+    "Actual read loop invokes path-based hasher per increment; this module has no fresh fstat/path identity or changed-size/mtime check before or after each read, and no fresh content check in result forwarding. Other modules still require inspection before whole-program claims.",
+    "Abort/equal failure path marks queued file failed and sifts it. Scheduler stop behavior remains separate.",
+    "Postprocessing applies basename and mtime filters, rechecks group qualification, selects originals, attaches shared digest, forwards output or feeds directory merger, then writes optional xattrs. No fresh byte comparison is performed at this output stage.",
+    "Initialization estimates memory from100 bytes per remaining file and grants at least1MiB read budget; paranoid memory is separately accounted. These estimates do not bound all allocations.",
+    "Shutdown waits scheduler, hasher, result pool and counters in sequence; early queue-length wait checks unprocessed count rather than explicit completion barrier for currently running counter task. Reachable race not tested.",
+    "Copied digest is also used for postprocessing reject groups, after grouping. This further narrows copy-only shadow concern to lifecycle/output semantics rather than proving incorrect initial byte comparison."
+  ],
+  "limits": [
+    "Original rmlint tests/build not run in this increment; mutation/race conclusions limited to inspected module.",
+    "External checksum acquisition/xattr validation, file metadata collection and scheduler implementation remain unreviewed.",
+    "No rrrah edits or new tests; native pHash deferred."
+  ]
+}
