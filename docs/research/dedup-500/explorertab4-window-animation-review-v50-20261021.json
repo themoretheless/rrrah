@@ -1,0 +1,22 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "All144 composited frames visually reviewed on five sequential indexed sheets, first32 in v49 and remaining32-143 this turn. Pinned GIF blob reverified. Thumbnail396x220, source1920x1080, total12730ms.",
+  "new_whole_files_read": {
+    "Assets/WindowToTab.gif": "e372f3cdab1b916c0a0bba5002c1dc98c331b2becd9c5538b7acc83af77c1e26"
+  },
+  "whole_files_read": 101,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v50-20261021.json",
+  "coverage_sha256": "ab0d966cea628d6bff8b0ac77f86dc0ece159ff1387f0ffbb3cef4a359428caa",
+  "findings": [
+    "Title introduces automatic window-to-tab conversion and switching to existing tabs. Desktop folder selection is followed by Enter and transient blank Explorer windows before a populated tabbed window appears.",
+    "Later desktop-folder activations leave one visible Explorer window while tab strip and active folder view change; transient loading states recur.",
+    "Demonstration is consistent with navigation reuse/conversion, not physical file duplication or content deduplication. Exact path equivalence, selected-item preservation and handle reuse are not established from thumbnails.",
+    "No failed navigation, COM failure, shutdown, simultaneous window registration or rollback case demonstrated. Edited frame durations are not a benchmark."
+  ],
+  "limits": [
+    "Visual source review only; no independent Windows execution. Small labels not qualified at thumbnail resolution.",
+    "ExplorerTabUtility partial101/104; three GIFs remain. Global fully reviewed count148/500. Native pHash investigation deferred."
+  ]
+}
