@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats/stats.c": {
+      "sha256": "26845d6f1c2033d56395d045500988b86d76348b353e17a6d780094a916f8149",
+      "git_blob": "734db388e089c1e8ee4571035d6615f131a60c47",
+      "lines": 139
+    },
+    "lib/formats/summary.c": {
+      "sha256": "6c2e9cb2d1c432c3a81228d3aba2ee894b05fae42b223d6dbd0b3443456340c7",
+      "git_blob": "4e6307e5e6a83e63e0b9b576dcd667e1bd1006e2",
+      "lines": 164
+    },
+    "lib/formats/pretty.c": {
+      "sha256": "6e5a36ae4dc90a790068645a3d65894ddede08c9a0f050c7d500cf54e5730195",
+      "git_blob": "94705a627047122e09b6b242585b11c21c522419",
+      "lines": 187
+    }
+  },
+  "cumulative_whole_files_read": 145,
+  "tracked_blobs": 289,
+  "method": "Complete reads of three pinned C formatters, verifying Git blob and SHA256. Source-level review, no formatter runtime execution.",
+  "findings": [
+    "Summary returns immediately when total_files<=1, before checking aborted/equal-failure state. In this branch explicit early-shutdown warning is omitted even if aborted; no runtime control executed here.",
+    "Summary and stats declare uninitialized winsize then call ioctl(TIOCGWINSZ) without checking success before reading ws_col. Aborted output redirected to a nonterminal can reach this source path; undefined-value behavior not executed.",
+    "Summary labels existing readable formatter paths as written using access(R_OK), without checking stream write/flush result. It describes replay as no I/O despite replay code reading report and filesystem metadata; this should not be interpreted as a fresh content validation.",
+    "Stats uses aggregate byte counters for efficiency; multiplication/division occurs in counter arithmetic before assignment to gfloat. Ratios are not independent correctness, peak-memory or speed measurements. Formatting ignores output errors.",
+    "Pretty formatter omits unique, directory-member and traversed-directory candidate records, distinguishes original rows with listing commands and quotes embedded apostrophes in paths. It remains human presentation, not a complete machine-readable partition or execution receipt."
+  ],
+  "limits": [
+    "Source-level potential failure cases only; no full-program or undefined-behavior reproduction.",
+    "145/289 tracked blobs reviewed; local package test session54565 remains active on last poll."
+  ]
+}
