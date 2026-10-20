@@ -1,0 +1,68 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/treemerge.h": {
+      "sha256": "2875457a9829bc1503e3cc19205912ad5a56d7563b1ccc4a219b7ded29220e70",
+      "git_blob": "5c45c76ed420795ebdfae98241b558ed1a284a8a",
+      "lines": 88
+    },
+    "lib/shredder.h": {
+      "sha256": "baab3207240adc757baf3871af1a0661ecd47ba2d74085d1cb03f5bfd39ec4e1",
+      "git_blob": "ba42a851d2a444fc519ec8bca1c271aba6ec334b",
+      "lines": 77
+    },
+    "lib/cmdline.h": {
+      "sha256": "b73f14b8f8d6bcaabfa725878b176c901eea573abb766eb033533c7a7f6948d2",
+      "git_blob": "75eb792e01a2d85c0ac20679c30c990fef250227",
+      "lines": 140
+    },
+    "lib/formats/csv.c": {
+      "sha256": "2d97a33808af63e92bfda8f10dd41f4db739d4a26e61ec6dae638ab728dfb218",
+      "git_blob": "e7218d5a4045b624e81e0537dc31e362408cf4ae",
+      "lines": 115
+    },
+    "lib/formats/fdupes.c": {
+      "sha256": "a61a0157cfe9931b34fd1efa95d79cc1c9cc98e9d7f9c9a2dd7069300ccc1ecf",
+      "git_blob": "c232fa912b06abab4821a3d289b3407e11bd63ba",
+      "lines": 119
+    },
+    "lib/formats/uniques.c": {
+      "sha256": "817dd068e7347dd088ae40ac5caf8a550d3e435cb99a6a0e8b85eb139e5f0910",
+      "git_blob": "c1a896343f5e8d675d6b1be284e9271ec34feb1e",
+      "lines": 80
+    }
+  },
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 289,
+  "method": "Full reads of six pinned files with Git blob and SHA256 validation. Compiled and executed original fdupes rm_fmt_elem with synthetic structures, snprintf substituted for g_snprintf, colors disabled and temporary output stream. No full upstream binary execution.",
+  "findings": [
+    "Treemerge header exposes feed, finish and output callback, but no explicit incomplete/error status return from feed or finish. Header alone does not establish how implementation propagates traversal errors; treemerge.c remains unread.",
+    "Shredder header enumerates dormant/start/hashing/finishing/finished states and separates original-selection/forwarding from hashing. No additional content or lifetime guarantee can be inferred from declarations alone.",
+    "cmdline.h contains an old-Apple getdelim fallback gated by maximum SDK before 10.7. It preserves NUL delimiters and returns byte count; buffer grows in 128-byte increments. This legacy branch is not exercised on current host.",
+    "CSV formatter doubles quotes and quotes entire path, dynamically allocates digest/path strings and emits empty checksum when unavailable. Unique records can expose unfinished digests under configured policies, without a per-record full-hash completion field. fprintf status is ignored.",
+    "fdupes formatter stores each formatted record in a fixed 544-byte buffer and ignores snprintf truncation status. Long paths truncate and can lose record separator; newline-containing paths are emitted without escaping. Unique and traversed-directory candidate rows are excluded.",
+    "uniques formatter writes full path directly and supports explicit NUL terminator via print0; default newline output cannot unambiguously represent newline-containing names. It applies tagged/untagged policy filters and ignores stream errors."
+  ],
+  "executed_control": {
+    "function": "lib/formats/fdupes.c:rm_fmt_elem",
+    "cases": [
+      {
+        "path_bytes": 20,
+        "output_bytes": 21,
+        "trailing_newline": true
+      },
+      {
+        "path_bytes": 700,
+        "output_bytes": 543,
+        "trailing_newline": false
+      }
+    ],
+    "scope": "Original function with stub types/macros and libc snprintf, no scanner execution."
+  },
+  "limits": [
+    "No production-library code copied or changed.",
+    "114/289 blobs reviewed; repository still incomplete."
+  ]
+}
