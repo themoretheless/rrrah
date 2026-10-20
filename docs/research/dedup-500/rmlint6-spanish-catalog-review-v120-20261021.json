@@ -1,0 +1,42 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/es.po": {
+      "sha256": "4096e29b776f71ed18a386c51bcaedb726022757a29b1f1dd1b1ea831c48f367",
+      "git_blob": "d8e73a846bfb4018f3703963b8f1204f3c3ba4d6",
+      "lines": 1371
+    }
+  },
+  "cumulative_whole_files_read": 271,
+  "tracked_blobs": 289,
+  "method": "Complete pinned Spanish catalog read, Git/SHA256 verification; parsed active entries and ran msgfmt normal checks plus explicit use-fuzzy diagnostic into private outputs.",
+  "findings": [
+    "264 active entries,172 nonempty,47 fuzzy,125 nonfuzzy nonempty. Obsolete historical entries are not counted as active coverage.",
+    "Normal msgfmt --check --check-format exits0 with four placeholder-header warnings. This is not complete or semantically verified Spanish UI.",
+    "Explicit --use-fuzzy diagnostic exits1 with12 fatal format/newline errors. Default build does not request use-fuzzy, so these are pending-translation issues, not proof of active-format crash.",
+    "Fuzzy read error changes long-long format to long; regex count changes unsigned to signed; several parser errors lose argument placeholders. Clearing fuzzy indiscriminately would fail validation.",
+    "Fuzzy Cross mountpoints translates opposite no-cross meaning; Not linked has unrelated other-lint text, and GUI find/clean label borrows hidden-directory text. These entries remain excluded by normal compiler.",
+    "Active early-shutdown/interruption/read-directory and changed-mtime messages are translated, while many newer reflink uncertainty/error states and GUI settings remain blank. Completeness must be assessed by message identity, not byte/file size.",
+    "Header Language and translator/revision metadata retain template defaults. Modern POT date alone does not establish maintained translations."
+  ],
+  "executed_control": {
+    "active_entries": 264,
+    "nonempty_translations": 172,
+    "fuzzy_entries": 47,
+    "nonfuzzy_nonempty": 125,
+    "default": {
+      "exit": 0,
+      "output": ".dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'PO-Revision-Date' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'Last-Translator' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'Language-Team' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'Language' still has the initial default value\n"
+    },
+    "include_fuzzy_diagnostic": {
+      "exit": 1,
+      "output": ".dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'PO-Revision-Date' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'Last-Translator' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'Language-Team' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:8: warning: header field 'Language' still has the initial default value\n.dedup-work/rmlint6-20261021/po--es.po:23: 'msgid' and 'msgstr' entries do not both end with '\\n'\n.dedup-work/rmlint6-20261021/po--es.po:28: 'msgid' and 'msgstr' entries do not both end with '\\n'\n.dedup-work/rmlint6-20261021/po--es.po:263: format specifications in 'msgid' and 'msgstr' for argument 2 are not the same\n.dedup-work/rmlint6-20261021/po--es.po:285: format specifications in 'msgid' and 'msgstr' for argument 1 are not the same\n.dedup-work/rmlint6-20261021/po--es.po:361: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--es.po:381: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--es.po:523: 'msgid' and 'msgstr' entries do not both begin with '\\n'\n.dedup-work/rmlint6-20261021/po--es.po:553: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--es.po:558: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--es.po:563: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--es.po:608: number of format specifications in 'msgid' and 'msgstr' does not match\n/opt/homebrew/bin/msgfmt: found 12 fatal errors\n"
+    }
+  },
+  "limits": [
+    "271/289 blobs reviewed; global whole-repository count150/500.",
+    "No installed Spanish locale execution, GUI rendering or product translation modification."
+  ]
+}
