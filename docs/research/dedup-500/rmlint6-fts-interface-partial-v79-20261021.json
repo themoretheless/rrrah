@@ -1,0 +1,40 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/fts/fts.h": {
+      "sha256": "61e64a6f7b0708ab324eabcc674aaeb4b1e75848e473e7ed1a1c8fc3d7c1723e",
+      "git_blob": "ac447ee1a76e4f9508e81a7fcbc64473363bcf09",
+      "lines": 151
+    }
+  },
+  "partial_source_read": {
+    "lib/fts/fts.c": {
+      "sha256": "2897c6212559eeeef1c70b5d6ba6042f7f95693ce9d374ad7cd7fd2297fad0ee",
+      "git_blob": "6355c5fa9df1bc70bf1a92c492622eba2ca5b77a",
+      "lines": 1199,
+      "ranges_inclusive": [
+        [
+          1,
+          350
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "cumulative_whole_files_read": 176,
+  "tracked_blobs": 289,
+  "method": "Complete header and first350 lines of implementation read; verified full retained-file SHA256/Git blobs. Implementation is explicitly partial and gains no full-file credit.",
+  "findings": [
+    "FTS interface distinguishes unreadable directory DNR, stat failure NS, traversal error ERR, cycle DC and missing symlink target SLNONE, with per-node errno. A caller must map these states explicitly to establish traversal completeness.",
+    "Header defaults path/name/count lengths to unsigned int, depth int, identity to platform inode/device types; these are not unrestricted size_t paths. Initial implementation helpers saturate length fields at UINT_MAX rather than proving arbitrary-long path support.",
+    "fts_open validates option mask and rejects zero-length path strings; logical traversal forces NOCHDIR. Root stat errors are retained as entry states rather than necessarily failing open.",
+    "Without NOCHDIR, open stores current-directory descriptor; failure falls back to NOCHDIR. Close attempts to restore cwd, saves restoration errno and returns -1 after releasing resources. Main callers must check close separately.",
+    "Beginning fts_read supports re-stat via AGAIN and returns NULL for finished or STOP condition. Remaining implementation must be reviewed before judging errno/termination semantics."
+  ],
+  "limits": [
+    "No FTS runtime or filesystem mutation control.",
+    "176/289 full blobs plus partial implementation; global full-repository count150/500."
+  ]
+}
