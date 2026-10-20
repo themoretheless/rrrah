@@ -1,0 +1,47 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/api.h": {
+      "sha256": "6a26a23ecc93ebd0f58ef38e8516f5c051ea7b716a399e6036735abbe1d1d18c",
+      "git_blob": "4be119e2a68ef9daf5a24f1f869bdb2fa8b8f6a7",
+      "lines": 33
+    },
+    "lib/gui.c": {
+      "sha256": "2a3721357350a8d21f75fbef4d04ea1be377416340940f314bccaea5d25a4e42",
+      "git_blob": "215e5304029a4ae7de915192b0fe5fc54e06a0ae",
+      "lines": 60
+    },
+    "lib/gui.h": {
+      "sha256": "b19b47157ba3fde02bfd8d7e3740ef4cbf9d802334af5ef9baf0546e93fbaac4",
+      "git_blob": "462ad2e4b6889ad663cc6d4cab52eb61e0e052d4",
+      "lines": 44
+    },
+    "lib/logger.c": {
+      "sha256": "4993e23e263f87fef71d7709b55ad9c45aebcd9f26516ea5238540697df50885",
+      "git_blob": "1dfe856bba294fe83b1f173701e183639578356f",
+      "lines": 90
+    },
+    "lib/logger.h": {
+      "sha256": "7545572c2c76fa4a4f419bb814538121e1d34a438fb735c89690b0f11b1e98b4",
+      "git_blob": "40baeee4b073258e8c0e71d3eb73a03f489e3110",
+      "lines": 155
+    }
+  },
+  "cumulative_whole_files_read": 40,
+  "tracked_blobs": 289,
+  "method": "Five whole file reads with Git blob verification, static analysis only.",
+  "findings": [
+    "api.h exposes command-line header and GLib types, not a separate minimal exact-file comparison API.",
+    "GUI uses execvp shredder with forwarded argv, no shell interpolation. Forwarding loop bounds i by sizeof(all_argv)/2 bytes rather than pointer count;512-slot array can be exceeded with sufficiently many arguments on32/64-bit. Not runtime reproduced.",
+    "Logger color removal assumes every escape has a later m; strchr NULL then loop increment is not handled. Actual filename/log-message reachability not checked.",
+    "rm_log_error maps to G_LOG_LEVEL_CRITICAL, not G_LOG_LEVEL_ERROR; logged error alone need not terminate process or set result status. Earlier g_error long-path call remains separately fatal.",
+    "Log line macros use function-local static mutex in static-inline header helper, giving per-translation-unit mutexes rather than one explicit global log-line lock. Concurrent output interleaving possible; not tested.",
+    "Logger verbosity/prettiness settings are process-global without synchronization in these files; initialization discipline remains caller responsibility."
+  ],
+  "limits": [
+    "No GUI launch, crash reproduction or logging stress run; no own-library edits/tests.",
+    "Native pHash deferred; global full repository count150/500."
+  ]
+}
