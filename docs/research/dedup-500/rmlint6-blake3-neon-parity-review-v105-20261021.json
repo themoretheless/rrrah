@@ -1,0 +1,64 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_neon.c": {
+      "sha256": "67e88d017a82df1b76d5f841e7b7215135a007486ac14c5be1407e1bca5201b0",
+      "git_blob": "794ea80f4715c63aa5d8593ad2cf21fe427089a9",
+      "lines": 367
+    }
+  },
+  "cumulative_whole_files_read": 245,
+  "tracked_blobs": 289,
+  "method": "Complete pinned source read, Git/SHA256 verification; compiled original NEON and previously reviewed portable sources with original headers, compared hash_many via ctypes.",
+  "findings": [
+    "Little-endian ARM only; big-endian build explicitly rejected. Unaligned load/store helpers use byte intrinsics rather than aligned word access.",
+    "Four-input vector path transposes message and output lanes, applies seven rounds and per-lane counter. Remainder1..3 inputs calls portable compression, not separate NEON compression.",
+    "Counter increment occurs per input, not per block; flags_start applies first block and flags_end last. Callers must supply full64-byte blocks; partial final blocks handled by higher-level code.",
+    "540 comparisons all matched for input counts0..9,blocks1/2/16, counters0/2^32-2/2^64-4, both counter modes, three flag domains and one-byte-unaligned input buffers. Output buffers included16 zero guard bytes and entire buffers compared.",
+    "NEON and portable belong to same implementation family; parity is not an independent cryptographic oracle, all possible lengths or complete scanner correctness.",
+    "Source TODOs explicitly leave compress_neon/hash2_neon unimplemented. Single-input path cannot be assumed SIMD accelerated. Rotation microarchitecture-speed comments are upstream claims, not locally measured gains."
+  ],
+  "executed_control": {
+    "comparisons": 540,
+    "all_equal": true,
+    "inputs_per_call": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "blocks_per_input": [
+      1,
+      2,
+      16
+    ],
+    "counter_values": [
+      0,
+      4294967294,
+      18446744073709551612
+    ],
+    "increment_counter": [
+      false,
+      true
+    ],
+    "flags": [
+      0,
+      16,
+      64
+    ],
+    "input_alignment_offset_bytes": 1,
+    "scope": "Original pinned NEON versus portable hash_many compiled and executed locally; shared implementation family, not independent cryptographic oracle or performance measurement."
+  },
+  "limits": [
+    "245/289 blobs reviewed; global whole-repository count150/500.",
+    "No sanitizer coverage, full upstream suite or throughput measurement."
+  ]
+}
