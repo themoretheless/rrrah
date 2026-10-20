@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/utilities.c": {
+      "sha256": "36243efa5680ab04d84c0cf842bf4a1562d2c379b1928a1904aa946fe1f17592",
+      "git_blob": "07f11ba21ce100e02cac22fb84556c5262307522",
+      "lines": 1560
+    }
+  },
+  "cumulative_whole_files_read": 43,
+  "tracked_blobs": 289,
+  "method": "Remaining1001-EOF read; previous partials cover1-1000. Whole source verified.",
+  "findings": [
+    "rm_util_link_type opens paths then separately lstats paths rather than fstats opened descriptors. Concurrent replacement can separate metadata identity from descriptors; no runtime race control here.",
+    "Same-device/inode equal-size files accepted as samefile/hardlinks; other reflink classification delegates rm_reflink_type_from_fd, still unread.",
+    "Mount-prefix matching uses strncmp without component-boundary condition; lexical prefix alone may pick unrelated longer mount path. Physical scenario not tested.",
+    "Previously noted reflinkfs table string pointers are propagated but not dereferenced in this complete module; can_reflink checks membership then partition filesystem-name strings which are separately copied. Reachable dangling string dereference remains unproven.",
+    "FIEMAP offset retrieval calls fsync ignoring result and returns0 on failures/no extents, conflating unavailable mapping and actual offset0. Intended scheduling fallback not exact content proof.",
+    "Threadpool push wrapper returns false on GError; inspected callers often discard result. Creation returns pool after logging error, so callers require failure lifecycle handling.",
+    "Running-mean window assumes positive max_values and bounded cursor lifetime; no local guard against zero modulo or eventual signed counter overflow."
+  ],
+  "limits": [
+    "Source reading complete, not original runtime qualification.",
+    "No own-library edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
