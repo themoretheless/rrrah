@@ -1,0 +1,54 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/views/runner.py": {
+      "sha256": "1aa78c648ce1d2683db134cb3f6694ebc4f0838f7e715d9c4310112e22673199",
+      "git_blob": "583160f29d6ac3c1f294126971018033d87f9d31",
+      "lines": 434
+    }
+  },
+  "cumulative_whole_files_read": 206,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read with blob verification. Original AST finish/chart callbacks executed using fake model and scheduled timers. Initial harness invocation omitted signal argument and failed; corrected invocation supplied it and completed.",
+  "findings": [
+    "Finish callback sets Finished scanning and progress100 even with non-null error; warning is shown but delayed render enables script controls whenever model has leaves. Original control with partial-result model confirms that path. No actual script generation or GTK subprocess was executed.",
+    "is_running is set true at trigger and not cleared by finish; original finish control retains true. Reset is the only explicit false assignment in this view.",
+    "Delayed render callbacks capture no run identifier and are not cancelled at reset; an old scheduled callback can observe the current model after rerun. Cross-run effects require actual event-loop qualification.",
+    "trigger_run starts runner before replacing model; correctness depends on asynchronous callback ordering. No synchronous-signal failure claimed.",
+    "Script generation marks _script_generated and switches to editor immediately after requesting replay, without waiting here for completion. Lower-level runner failure handling was audited separately.",
+    "Default action passes trie.root directly as nodes, while explicit all-script action passes a one-element list; consequences depend on root iteration semantics. No failure claimed without that check.",
+    "Filtered and selected actions use current tree model, whereas all uses original model; earlier filter-cache omissions therefore matter to exposed selection scope."
+  ],
+  "executed_control": {
+    "events": [
+      [
+        "progress",
+        100
+      ],
+      [
+        "warning",
+        "scanner failed"
+      ],
+      [
+        "chart",
+        "chart"
+      ],
+      [
+        "render"
+      ],
+      [
+        "actions_enabled",
+        true
+      ]
+    ],
+    "is_running_after_finish": true,
+    "subtitle": "Finished scanning.",
+    "scope": "Original callbacks; fake model with two partial-result rows; no GTK or real subprocess."
+  },
+  "limits": [
+    "206/289 blobs reviewed; global full-repository count150/500.",
+    "Source callback control only; no visual or installed GUI proof."
+  ]
+}
