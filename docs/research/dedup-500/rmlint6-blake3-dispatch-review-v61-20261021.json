@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3.h": {
+      "sha256": "df32c1e80577eabaab8ca9ba3b8be273bc2201a8cff6276c62cd8deba15f9348",
+      "git_blob": "423154ff75858d58cdb3f946a59426f8d9212012",
+      "lines": 86
+    },
+    "lib/checksums/blake3/blake3_dispatch.c": {
+      "sha256": "134f21550138c0af6312925c988aeee35df287e4119e8ad1d206fccdb2238fe3",
+      "git_blob": "14dfbbe0c8f385296adf691643481b87e8768522",
+      "lines": 332
+    },
+    "lib/checksums/blake3/blake3_portable.c": {
+      "sha256": "2bc25b0dad67b4329d0b49cfa075ab2b0d04e424addbddc4e9c389c52a192524",
+      "git_blob": "062dd1b47fb6424f4d3db4c6edd2f90efcb92973",
+      "lines": 160
+    }
+  },
+  "cumulative_whole_files_read": 148,
+  "tracked_blobs": 289,
+  "method": "Complete reads of three pinned BLAKE3 files with Git blob and SHA256 verification. No hash-vector, cross-ISA or throughput execution in this audit.",
+  "findings": [
+    "Public header declares 64-byte blocks, 1024-byte chunks, 32-byte default output/key and depth54 plus one lazy-merge stack slot. finalize/finalize_seek accept const hasher; API includes keyed and derive-key modes, not just file-content hashing. These are interface declarations, not independently verified implementation guarantees.",
+    "x86 dispatch checks CPUID and OSXSAVE/xgetbv state before enabling AVX paths. Single compression favors AVX512VL then SSE41/SSE2; multi-input hashing requires AVX512F plus VL, then AVX2/SSE and reports degrees16/8/4. AArch64 NEON selection is compile-time for hash_many, while single compression falls back portable in this dispatch file.",
+    "Feature cache uses C atomics when available, Windows interlocked operations under MSVC, otherwise plain int. Source warns TSAN users to enable atomics; no concurrency bug reproduced here.",
+    "xof_many explicitly returns on zero requested blocks before an assembly path that would emit at least one block. Fallback loops compression with increasing output-block counter; Windows/Cygwin bypass the AVX512 many-output assembly branch.",
+    "Portable implementation loads words, runs seven schedule rounds, writes little-endian CV/XOF output via helpers, and processes many inputs sequentially with optional counter increment. It assumes full blocks in hash_many; arbitrary-tail handling is delegated to the higher-level hasher, still unread."
+  ],
+  "limits": [
+    "No correctness or performance certification of cryptographic implementation or CPU targets.",
+    "148/289 blobs reviewed; local test session54565 still running on last poll."
+  ]
+}
