@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats.c": {
+      "sha256": "02a115cf227e13d8a14db5e74defeba345630c9219ba023ea5452cf5c3841dae",
+      "git_blob": "f00c682ee185517199e96516e60e5dc2957dccee",
+      "lines": 510
+    }
+  },
+  "cumulative_whole_files_read": 47,
+  "tracked_blobs": 289,
+  "method": "Remaining301-EOF read; v37 covered1-300. Full Git blob verified.",
+  "findings": [
+    "Close invokes foot then fclose without checking fclose return. Header/element/footer callbacks return void; this module does not propagate final buffered-write failure into session exit status.",
+    "rm_fmt_flush emits retained groups; it does not call fflush or return write status. Name means flush queued records, not durable storage barrier.",
+    "Output exclusion checks path string membership only, not dev/inode alias identity. Hardlinked alternate names of outputs are not excluded by this function alone.",
+    "Delayed output retains references to all emitted records in group queue until close; no explicit record/memory limit here.",
+    "Group sorting indexes rm_lint_type_order by lint_type; array initialized through DUPE index while enum also has later UNIQUE_FILE/PART_OF_DIRECTORY values. Reachability depends delayed record classes and requires focused control.",
+    "Repeated flush would re-emit retained records because queue remains populated. Normal reviewed main invokes once; no duplicate-output claim for ordinary path.",
+    "Clear removes handler objects without closing associated FILE handles; complete close path cannot recover handles removed earlier. Option ordering and process-exit cleanup still affect visible impact."
+  ],
+  "limits": [
+    "No disk-full/closed-stream runtime control or original suite execution.",
+    "No rrrah edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
