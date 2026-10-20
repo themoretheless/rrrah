@@ -1,0 +1,114 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_speed/verify.py": {
+      "sha256": "55787e80e52c4e0f417c04c25986b7d0d035cc34678c0d7e298d27a5e09d0d68",
+      "git_blob": "b4ed233495e5e1d945fe39684c534038ffeda1be",
+      "lines": 42
+    },
+    "tests/test_speed/bisect.sh": {
+      "sha256": "4c7faa13adf18010d3ba75df3c9325b12f25e58894c8250a4d757f35b26b2fde",
+      "git_blob": "b6acbe45ab6c62d07d07275574d25e34369b5672",
+      "lines": 52
+    },
+    "tests/test_speed/build_scripts/baseline.sh": {
+      "sha256": "5d295d5e7f92da755bc7ca7e0872b0f9dfdb27f4d09b0bdad7e58eee17baded7",
+      "git_blob": "3e594bd26fc6d3fb4a32650c8066241fae07bc22",
+      "lines": 70
+    },
+    "tests/test_speed/build_scripts/dupd.sh": {
+      "sha256": "502515532fa2d7a64e5ce7bddc09301fceb7b3a786d7d5ff220337c143362bbf",
+      "git_blob": "8b56bce80d4d8e03d242759aec59ef8fce92183c",
+      "lines": 5
+    },
+    "tests/test_speed/build_scripts/fdupes.sh": {
+      "sha256": "ffba43d3a9b47c31ae336f080eab700364b995b595ed9cec9bdf853605d172e8",
+      "git_blob": "5a4c9d0f3297d8e1becc65b4d7e67e1de92353fa",
+      "lines": 5
+    },
+    "tests/test_speed/build_scripts/rdfind.sh": {
+      "sha256": "6be6feac9b1260a41784e0dfa541fdca684303d2a468445bfc5ff391ed1fb10b",
+      "git_blob": "edc23c825ef237dda3d4e271dd57b6e937bba21d",
+      "lines": 6
+    },
+    "tests/test_speed/build_scripts/rmlint-master.sh": {
+      "sha256": "4d404c96e140a79e601302711367b3805afd3daafc797b0d15a740edb35af639",
+      "git_blob": "56292ba7609a7c820f1c1eb93e146a67973f4213",
+      "lines": 10
+    },
+    "tests/test_speed/build_scripts/rmlint-new.sh": {
+      "sha256": "90666f11049ad5b797fce08bb195a48e18a536622454a7cc6c393b9e08b745c4",
+      "git_blob": "bba734994a84b57056bb3f121b769e745572a189",
+      "lines": 6
+    },
+    "tests/test_speed/build_scripts/rmlint-old.sh": {
+      "sha256": "53f6b1f1e91c46868582ad5de12064a67855fe5eb0ba723b201850eb6d8b9e50",
+      "git_blob": "97142275af0b5477d71e02f5920bfa8a6bc82190",
+      "lines": 10
+    },
+    "tests/test_speed/build_scripts/rmlint-spot.sh": {
+      "sha256": "4fe0a10b913c50705e9be0685dbcec7bd09bfa48ba3a3b73687740e433934ef9",
+      "git_blob": "dc4fb939929d0008646cd634110848e349db5a97",
+      "lines": 10
+    },
+    "tests/test_speed/build_scripts/rmlint-v2.2.2.sh": {
+      "sha256": "ff42b952602dd12f7b451a37623b49c3074c1b20ded813f616a0223ceb85113a",
+      "git_blob": "937303d2d03885a5e9d7d09441a58fb01b65673e",
+      "lines": 10
+    },
+    "tests/test_speed/copytodocs.sh": {
+      "sha256": "b21995f278e144d9271cf08ad03459fdf0a395403ec0cc39f17b3ee2d136bff6",
+      "git_blob": "38b84c8068f6d93cab1f0a7bef39353cf5306721",
+      "lines": 6
+    }
+  },
+  "cumulative_whole_files_read": 100,
+  "tracked_blobs": 289,
+  "method": "Complete reads of twelve pinned source files; verified Git blobs and SHA256. Executed original verify.py in separate Python processes with synthetic reports and temporary authored files. Build and cache-dropping scripts only read, not executed.",
+  "findings": [
+    "verify.py groups report rows by checksum and compares independently computed SHA1 values within each group. It does not derive expected groups from input roots, check omitted files, verify checksum labels against a declared algorithm or ensure group cardinality.",
+    "Executed control shows equal pair accepted and unequal pair under one label rejected. Equal files assigned distinct labels and report with no body are also accepted: this checker cannot establish recall/completeness.",
+    "bisect.sh runs one timed command, attempts Linux cache dropping and warns but continues on failure. It does not separately require successful rmlint exit before classifying runtime; string manipulation assumes time output can become integer centiseconds. No pairing, confidence interval or correctness gate is provided here.",
+    "Baseline hashes regular-file paths with MD5, skips empty files, follows os.path.isfile symlinks, stores global digest groups and returns only aggregate duplicate/group counts. Errors return no digest. This differs from byte-confirmed equality and physical-alias handling in our library.",
+    "Several build scripts clone moving branches without a commit pin; release scripts select tags but do not verify binary hashes. rdfind script downloads an old version over HTTP without a content hash. These historical scripts do not establish a reproducible current benchmark environment.",
+    "copytodocs copies matching plot files into fixed documentation names without validating provenance or benchmark semantics."
+  ],
+  "executed_control": {
+    "program": "tests/test_speed/verify.py",
+    "cases": [
+      {
+        "case": "equal_positive",
+        "exit_code": 0,
+        "stdout": "Everything fine."
+      },
+      {
+        "case": "different_negative",
+        "exit_code": 255,
+        "stdout": "The following path differs:\n    6021e44b0893df4915983209e8e0f95bcb20132a=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/tmplewaqadj/c\nIt was in a group with this checksum\n    be76331b95dfc399cd776d2fc68021e0db03cc4f=['/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/tmplewaqadj/a', '/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/tmplewaqadj/c']"
+      },
+      {
+        "case": "equal_split_groups",
+        "exit_code": 0,
+        "stdout": "Everything fine."
+      },
+      {
+        "case": "omitted_all_records",
+        "exit_code": 0,
+        "stdout": "Everything fine."
+      }
+    ],
+    "expected_exit_codes": [
+      0,
+      255,
+      0,
+      0
+    ],
+    "scope": "Original script, four synthetic report cases with real temporary files. No upstream scanner, benchmark timing or memory measurement."
+  },
+  "limits": [
+    "No measured performance gain or complete upstream test run.",
+    "100 of 289 tracked blobs reviewed; global full-repository count unchanged."
+  ]
+}
