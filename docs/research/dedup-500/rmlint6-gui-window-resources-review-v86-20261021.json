@@ -1,0 +1,45 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/window.py": {
+      "sha256": "b5b9b06e8acc60d919e180e034a8568ff808e39ff7239f9a996aead9a59121c7",
+      "git_blob": "94a6c09ad5d94d00df2bd4f3e1fd70eba4cc94d3",
+      "lines": 287
+    },
+    "gui/shredder/resources/shredder.css": {
+      "sha256": "1bbe1a98fbae51cc5f4b20177ba29a506f88b3f4ab21259ebefa575fc013dff1",
+      "git_blob": "9e386d1d2fd7d6a23a381575669cf4dad659f042",
+      "lines": 89
+    },
+    "gui/shredder/resources/shredder.gresource.xml": {
+      "sha256": "5b3a6526d6c702949ef09547d837abda2bd762b5650d2dc289e9eb6ca41153d4",
+      "git_blob": "b478e525be13546856f319dcf3dc9558ac95d36e",
+      "lines": 7
+    },
+    "gui/shredder/views/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "lines": 0
+    }
+  },
+  "cumulative_whole_files_read": 192,
+  "tracked_blobs": 289,
+  "method": "Complete reads of four pinned blobs; Git/SHA256 verified. Original _set_visible_child executed with synthetic stack and signal-capable child; no Gtk runtime.",
+  "findings": [
+    "View switch activates new child and emits view-enter before emitting old view-leave. Only TypeError is caught; missing previous child raises AttributeError after new-enter. Synthetic control confirms behavior, normal Gtk startup reachability unproven.",
+    "Index navigation clamps to stack bounds but assumes nonempty stack; switch(name) assumes requested child exists. Search-mode delegation assumes active view supports method. These are caller preconditions, not independently tested UI guarantees.",
+    "Main window wires settings/about/search/default-action/quit and toggle-search, with header widgets added/removed by views. It provides no extra scan-completeness validation at presentation boundary.",
+    "CSS defines indicator colors/progress/location selection styles; manifest embeds CSS and SVG under fixed resource prefix. Empty views package initializer has no behavior. Reading styles/manifest does not qualify layout or icon pixels; SVG visual inspection remains outstanding."
+  ],
+  "executed_control": {
+    "no_previous_child_raises_AttributeError": true,
+    "new_child_enter_emitted_before_failure": true,
+    "scope": "Synthetic stack only; normal Gtk startup reachability not established."
+  },
+  "limits": [
+    "No rendered UI, navigation end-to-end or graphics verification.",
+    "192/289 blobs reviewed; global whole-repository count150/500."
+  ]
+}
