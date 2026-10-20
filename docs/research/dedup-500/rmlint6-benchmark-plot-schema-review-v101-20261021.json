@@ -1,0 +1,49 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_speed/plot_benchmark.py": {
+      "sha256": "71fd7632a5e0c0e424ff9c227fa1cb1b4f443ac64b4a70eca88ea3841d130fcf",
+      "git_blob": "dddc133628d626b2e307a7482d499d230470a0f0",
+      "lines": 200
+    },
+    "tests/test_speed/bench-output-example/benchmark.json": {
+      "sha256": "a7717707afb7974c781cc5ae55bca3a23791f057399ba9c6581ce8f3a21ff4aa",
+      "git_blob": "20ba2a4908c678b3a2316273e0496cc54cc4516d",
+      "lines": 291
+    },
+    "docs/_static/benchmarks/found_items.html": {
+      "sha256": "87b6818d6171a7ceb1390735c0664551e13ba7e73aeed7cde637be44d508986c",
+      "git_blob": "d3196d98496acfa46d07a62fd1d215e2b6b276c1",
+      "lines": 40
+    }
+  },
+  "cumulative_whole_files_read": 238,
+  "tracked_blobs": 289,
+  "method": "Complete three pinned text/source reads, blob/SHA256 verification. Original AST plotting functions executed on pinned bundled JSON with fake chart sink. HTML reviewed as source only, no visual render credit.",
+  "findings": [
+    "Bundled example has nine programs and all numeric records have four fields. Plotter expects five fields including peakmem at2, dupes at3 and sets at4. Original plot_found_results control raises IndexError on bundled example.",
+    "Original plot_memory control plots25512 for rmlint from array index2, while separate memory field is147.3617286682129. Thus bundled example and plotting schema cannot support a valid memory comparison together. Units and intended historical schema are not independently established.",
+    "unpack tests dictionary length rather than required run keys; average contributes to length. Missing run/average keys can still pass preliminary length check then fail indexing.",
+    "Generic plot rounds to three decimals without uncertainty, trial-status or validity checks. Found-results variance calculations are commented out. Graphs cannot supply missing raw-trial correctness or confidence evidence.",
+    "Memory uses StackedBar across programs, which aggregates series visually rather than presenting isolated per-program peaks; chart was not rendered here. Timing uses logarithmic scale.",
+    "Bundled output records different duplicate counts and swapped-looking dupd/rdfind website metadata; labels/URLs do not establish tool provenance or matched workloads.",
+    "Committed HTML table has different program set/counts from bundled example and rounded k values, so it is not established as a rendering of this JSON. No source-to-render provenance inferred.",
+    "No benchmark binaries, cold-cache controls or complete equality partitions are supplied by these plotting artifacts. Existing upstream speed claims remain historical."
+  ],
+  "executed_control": {
+    "program_count": 9,
+    "point_lengths": [
+      4
+    ],
+    "found_results_exception": "IndexError: list index out of range",
+    "rmlint_memory_plotted_value": 25512,
+    "rmlint_memory_separate_field": 147.3617286682129,
+    "scope": "Original plotting functions with fake chart sink and pinned bundled JSON; no charts rendered or new benchmarks executed."
+  },
+  "limits": [
+    "238/289 blobs reviewed; global whole-repository count150/500.",
+    "No actual chart rendering, benchmark rerun or production performance claim."
+  ]
+}
