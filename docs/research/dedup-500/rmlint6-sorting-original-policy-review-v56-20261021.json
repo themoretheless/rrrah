@@ -1,0 +1,42 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_sorting.py": {
+      "sha256": "bd874096557f57066f8f16411db6f4cb2085069fb4bae688f5c89199f1cad3f3",
+      "git_blob": "0e974c5075db123e37a3e776b4d2a817a49ff102",
+      "lines": 232
+    },
+    "tests/test_options/test_rankby.py": {
+      "sha256": "c9e44e5214c60d4e6e4009dc11a3ece4e92df9d629e84bb6ab2c6101be2116d2",
+      "git_blob": "b1f69bb28a79842b085987cb2519582af87bc424",
+      "lines": 53
+    },
+    "tests/test_options/test_km.py": {
+      "sha256": "6e719c1195522e9a33f86bc897403985a8d2bad63ac2cddfe1add2ba93845852",
+      "git_blob": "79419e8a4e7a69f598836c06f53c6cddcc663070",
+      "lines": 77
+    }
+  },
+  "cumulative_whole_files_read": 125,
+  "tracked_blobs": 289,
+  "method": "Full reads of three pinned files, Git blob/SHA256 verification. Original validate_order and path_index AST-extracted and executed on synthetic rows across all 570 generated legal criterion combinations. Upstream scanner not executed.",
+  "findings": [
+    "Sorting test generates 570 legal length-one through length-three criteria over five keys with ascending/descending forms. It asserts six output rows and pairwise order, but does not assert six distinct authored paths or original flags in this test.",
+    "Original order validator accepts six identical path/mtime records across all 570 combinations. Reversed-name negative control raises AssertionError, confirming ordering checks execute. This isolates missing membership/uniqueness validation; it is not a scanner defect reproduction.",
+    "Regex tests cover eight-pattern limit, invalid/empty expressions, escaped brackets and tie-breaking through later criteria. Multiple-match regression additionally asserts exact ordered path list on three runs; this is stronger membership evidence than generic sorting helper.",
+    "Outlier/hardlink sorting tests assert leading selected path under ranking combinations, not whole result partition. rankby tests assert complete expected basename or relative-path sequences for small fixtures and directory/file ordering.",
+    "Tagged/untagged policy test covers seven flag combinations, output sizes and aggregate duplicate counts. It uses backup/ substring checks for protected paths rather than asserting every group/member/original mapping. These explicit policies can intentionally omit content-equal files."
+  ],
+  "executed_control": {
+    "repeated_identical_records": 6,
+    "legal_criteria_combinations": 570,
+    "accepted_all": true,
+    "reversed_names_rejected": true
+  },
+  "limits": [
+    "No new production change or upstream suite execution.",
+    "125/289 tracked blobs reviewed; global complete-repository count remains unchanged."
+  ]
+}
