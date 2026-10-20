@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "method": "Whole text reads of three stored files, SHA256 and Git blob bytes verified against stored tree. Static analysis only.",
+  "new_whole_files_read": {
+    "lib/hash-utility.c": {
+      "sha256": "71ff87425032a07deb8cb5a6bf254a54c74e36d9b61557042adccf2d63f987da",
+      "git_blob": "1d77142c3b021e7994e9147a15f0c908a195e6e5",
+      "lines": 270
+    },
+    "lib/hash-utility.h": {
+      "sha256": "d3de7b7fe2500a7d2631bb1ad291bd3193e28ef02b0e54678284fccc9c18d2a3",
+      "git_blob": "881e381af7ce1363b07cbe3db049b2afc3600f2c",
+      "lines": 36
+    },
+    "tests/test_mains/test_dedupe.py": {
+      "sha256": "09c28896f4fa59ff64da3e0fa98cde61558738f1e0b92f12f4373f4f1fa0d37c",
+      "git_blob": "b5f782d24fd3e42fe80c794d15379061de5914b2",
+      "lines": 178
+    }
+  },
+  "tracked_blobs_in_stored_tree": 289,
+  "findings": [
+    "rm_hasher_main initializes path_index only when print_in_order is true. The ignore-order callback reads read_succesful[session->path_index], rather than read_succesful[index], so that branch uses an uninitialized index. Static defect, no runtime reproduction yet.",
+    "Ordered callback uses NULL digest as not-ready marker, but invalid-path dummy callbacks carry NULL and do not advance path_index. A failed position can therefore prevent subsequent completed digests from printing.",
+    "Invalid-path handling frees and replaces an interior tag.paths[i] with NULL. Later for-loop condition and g_strfreev use NULL termination, so processing/cleanup of subsequent entries can end early.",
+    "stdin path transport splits on newline and cannot represent filenames containing newline. Fixed PATH_MAX line buffer does not detect split long records. No claim about all platform path limits.",
+    "Seven test_dedupe.py functions cover equal/different files, hardlinks, arguments, directories, physical reflink transition and shell clone selection. Module-level reflink capability check can skip all; no hash utility failure/order controls are present in this file."
+  ],
+  "adoption": "Retain explicit per-input outcome/index and literal-path transport in own library; no upstream code copied or production optimization claimed.",
+  "limits": [
+    "Only3 files credited in this increment; remaining repository files require review.",
+    "No original rmlint build/tests or independent runtime reproduction performed.",
+    "Native pHash memory investigation remains deferred; library all-cases goal incomplete."
+  ]
+}
