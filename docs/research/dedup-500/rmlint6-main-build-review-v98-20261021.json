@@ -1,0 +1,45 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "SConstruct": {
+      "sha256": "a9dc6e277ea521aa68c2f6bef6044f629af631d013e9418bbf982417585c2b23",
+      "git_blob": "21f6021ba9e00c0a48db8fff632f93074de59351",
+      "lines": 574
+    }
+  },
+  "cumulative_whole_files_read": 218,
+  "tracked_blobs": 289,
+  "method": "Complete pinned SConstruct read with Git/SHA256 verification; original AST archive/sanitizer helper functions executed with stub subprocess.",
+  "findings": [
+    "build_tar_gz ignores subprocess.call return and always prints Wrote tarball. Original control with archive return128 returns None and prints success. No actual archive, deletion or release action performed.",
+    "Release mode explicitly defines G_DISABLE_ASSERT and NDEBUG; DEBUG adds RM_DEBUG and fno-inline. Sanitizers do not imply DEBUG, so sanitizer builds may still omit assertions.",
+    "Environment flags are merged again after project defaults, then command-line CCFLAGS appended. Effective configuration may override optimization or assertions; summary prints requested mode, not all final compiler semantics.",
+    "Sanitizer shorthand matches lowercase literals before lowercasing fallback: true yields address/undefined/leak while TRUE yields unsupported-looking true entry. Compiler acceptance not executed.",
+    "Prefix record is written before installation succeeds and when not staged; it records intent, not confirmed installed artifacts. install-lib is intentionally outside installing flag.",
+    "show-config -n deliberately enables configure actions temporarily, then restores dryrun. Treat this target as potentially running compile probes, not wholly read-only inspection.",
+    "Staged prefix strips absolute root before joining DESTDIR. Explicit uninstall helpers still reference PREFIX paths and full uninstall semantics remain unexecuted.",
+    "Build uses get_cpu_count directly for default jobs, while explicit -j is documented to override. No independent positive validation visible at this call site.",
+    "Tests SConscript is loaded but full suite execution requires its target; configuration, default build or feature summary is not upstream runtime proof.",
+    "Compiler/feature checks precede final Werror/debug/optimization/sanitizer/custom flags; successful probes do not prove final effective build configuration."
+  ],
+  "executed_control": {
+    "git_archive_return_code_stub": 128,
+    "action_return": null,
+    "output": "Wrote tarball to ./rmlint-9.9.9.tar.gz\n",
+    "sanitiser_true_lower": [
+      "address",
+      "undefined",
+      "leak"
+    ],
+    "sanitiser_true_upper": [
+      "true"
+    ],
+    "scope": "Original extracted functions; subprocess stub only, no git archive or build executed."
+  },
+  "limits": [
+    "218/289 blobs reviewed; global whole-repository count150/500.",
+    "No upstream configure/build/release execution or production-code optimization in this audit."
+  ]
+}
