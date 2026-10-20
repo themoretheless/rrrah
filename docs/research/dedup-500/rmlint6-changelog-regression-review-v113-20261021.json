@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "CHANGELOG.md": {
+      "sha256": "e2d768981b42f7673f381cb2d79330630d3a5356ebdd774cd7ace1299276dc01",
+      "git_blob": "6e0e133155137abc6775a3af138493d2e9b85d42",
+      "lines": 672
+    }
+  },
+  "cumulative_whole_files_read": 259,
+  "tracked_blobs": 289,
+  "method": "Complete pinned changelog read, Git/SHA256 verification and cross-check against previously reviewed source/tests. Historical fix entries are leads, not executed regression proof.",
+  "findings": [
+    "Unreleased2.11.0-rc.0 confirms GTK3.22/Python3.12/GLib2.74 and hard json-glib dependency, supporting earlier findings that some older GUI/install prose is stale.",
+    "XOR cancellation protection is explicitly listed; previously executed treemerge equality control still accepts A^3B versus AB^3 multiplicity pattern. Added protection is not a complete multiset equality proof.",
+    "Regression leads include FIFO nonstripped deadlock, size overflow,32-bit large-file hashing, quote/invalidUTF8 output, replay missing checksums, empty stdin directory merging and symlink/regular-file confusion. Existing tests must be assessed per case, not inferred from fix label.",
+    "Cache entries mention locale-sensitive mtime, intermediate checksum storage and disabling xattr writes for clamp mode. These do not establish robustness against same-size content rewrites preserving mtime, which requires separate controls.",
+    "Path beyond PATH_MAX now intended hard error rather than truncation; any skip/partial/error policy comparison must distinguish this from complete path support.",
+    "Historical coverage claim90percent lines/almostall functions explicitly excludes branch coverage and supplies no current report. Cannot prove all-cases goal.",
+    "Repeated reflink fixes and inline-extent exit12 show filesystem-specific result states; exact content grouping and physical extent dedupe need separate qualification.",
+    "Feature history changes defaults and options over time: SHA1 toBLAKE2b, -U meaning, installation prefix, schema/appID and GUI controls. Older screenshots/benchmarks/docs cannot qualify current defaults.",
+    "Root-level xattr metadata cache/SQLite strategy was added then removed historically. Do not recommend obsolete switches as current memory controls.",
+    "Fatal-signal/interruption exit-status fixes do not repair separately observed GUI finish-state loss or unchecked archive return. Caller propagation remains distinct."
+  ],
+  "limits": [
+    "259/289 blobs reviewed; global whole-repository count150/500.",
+    "No historical binaries, linked issues, current coverage instrumentation or upstream suite executed."
+  ]
+}
