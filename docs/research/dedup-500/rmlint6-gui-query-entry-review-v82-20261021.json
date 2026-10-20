@@ -1,0 +1,65 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/query.py": {
+      "sha256": "466374711c75d4a5d035938bfa799efc9c225cb1c445f441fb2dff6897a79610",
+      "git_blob": "cb81ac4d7404866deef962dfe5894a6e02532da4",
+      "lines": 232
+    },
+    "gui/shredder/cmdline.py": {
+      "sha256": "43e0ca6c9b6dbf66d3962c53390c34f2943dec024690aa9fe7edddcfc4f63d21",
+      "git_blob": "73375eb62b1059fb524e0ac4951c619a2676e723",
+      "lines": 104
+    },
+    "gui/shredder/__init__.py": {
+      "sha256": "929c94dffd0bc66de8c7fdb0655dd81caec5e6d3d0035b3161a569e1b8a91ac3",
+      "git_blob": "f71bc79c100ca413256be4a4ddadcaceaa9050d6",
+      "lines": 42
+    },
+    "gui/shredder/__main__.py": {
+      "sha256": "127504ab12cf36bfb277d5dac8f58e5f28bd12b128c0587244eb37bc2441b3e0",
+      "git_blob": "f2b98e8ddb077997454ccbff12be96e2d5193cb1",
+      "lines": 10
+    },
+    "gui/shredder/i18n.py": {
+      "sha256": "0c76a67974b7cd946771fd3dddf3235558cc4503802489c9777e07f46a6a9a10",
+      "git_blob": "c5bbb357b75958615fe4665b1994551297e6e336",
+      "lines": 27
+    },
+    "gui/shredder/version.py": {
+      "sha256": "a638a703411cbed42799532070f544a0e900ab0082c521b26e2defd0212c2922",
+      "git_blob": "114d5113bc740606d895b538849769ca866dd25a",
+      "lines": 34
+    }
+  },
+  "cumulative_whole_files_read": 183,
+  "tracked_blobs": 289,
+  "method": "Full reads of six pinned Python files; Git/SHA256 validation. Loaded query.py with runpy and executed numeric-range and query-subset controls, without importing GUI package or launching Gtk.",
+  "findings": [
+    "parse_generic_range only appends truthy converted values, dropping valid zero endpoints. count0-2 becomes singleton2 and exact0 becomes empty match list entry. Original helper control rejects0 and1 from intended inclusive range.",
+    "Query.issubset rejects numeric constraints on new query but ignores numeric constraints on old query. It declares text foobar a subset of foo size1 even though new query permits arbitrary sizes. Actual caller reuse impact requires unread tree/view code review.",
+    "Size parser accepts integer amounts and single-letter binary unit suffixes; date converter behavior depends on optional parsedatetime presence. Parsing invalid entries logs warnings rather than returning explicit invalid-query status.",
+    "CLI validates tagged/untagged/script existence, but added-location paths are not in validation list. Verbosity offset4 maps default to DEBUG while comment says INFO.",
+    "Package entry requires Gtk3/Gdk/GdkPixbuf/PangoCairo/GtkSource4 before run_gui; Polkit optional. i18n sets process locale with fallback translation. Version fallback invokes rmlint through Gio and parses stderr version text; no timeout or explicit exit-code validation in this helper."
+  ],
+  "executed_control": {
+    "zero_to_two_parsed": [
+      [
+        2
+      ]
+    ],
+    "accepted_values_0_to_3": [
+      2
+    ],
+    "zero_exact_parsed": [
+      []
+    ],
+    "new_foobar_considered_subset_of_foo_size1": true
+  },
+  "limits": [
+    "No GUI rendering, tree filtering integration or scanner runtime execution.",
+    "183/289 blobs reviewed; global whole-repository count remains150/500."
+  ]
+}
