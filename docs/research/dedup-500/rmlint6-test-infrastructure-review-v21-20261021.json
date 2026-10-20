@@ -1,0 +1,34 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/conftest.py": {
+      "sha256": "fc9720aa2ce6ea4f2fa5182ce097f418770c2e80ca69a7fd41118a8e5caf06d2",
+      "git_blob": "fa3e56bd1dec089b1540246ecfa2d948c5192ddc",
+      "lines": 108
+    },
+    "tests/utils.py": {
+      "sha256": "f5e81eaa73dbc86021b153da2e3fc8f586bdecf813738c5f141f12118ce1b223",
+      "git_blob": "c7d44f64b5cccb2b2cdb3f1af85ae8770ff6a78c",
+      "lines": 558
+    }
+  },
+  "cumulative_whole_files_read": 33,
+  "tracked_blobs": 289,
+  "method": "Whole conftest.py/utils.py read; Git blob verification. Tests not executed.",
+  "findings": [
+    "Binary selected as cwd/rmlint at import time; execution cwd becomes isolated per-test directory. Exact pinned binary must be built and hashed before claiming original-suite validation.",
+    "Fixtures provision per-test temporary paths and verify RM_TS_DIR ancestry. Reflink tests require compiled btrfs support plus filesystem name btrfs/xfs/ocfs2; APFS capability is not admitted by this helper.",
+    "Xattr helper probes user.rmlint_probe even though reviewed Apple production namespace is io.github.sahib.; probe tests a generic attribute rather than exact production naming.",
+    "CKSUM_TYPES contains explicit supported families so reviewed streaming family selections are nonempty for this inventory; SSE CRC families conditional on x86_64 sse4_2.",
+    "run_rmlint_once tokenises every argument with shlex.split, including strings described as pre-split entries. Literal whitespace/quotes in path arguments require deliberate quoting and cannot be assumed covered by basic tests.",
+    "Default timeout None; process environment replaced with helper-provided map, usually empty, rather than inherited. Test runtime portability differs from ordinary shell invocation.",
+    "Pedantic JSON comparison maps paths into dicts and iterates only first document paths; duplicate records collapse, second-only records not explicitly rejected except any footer effect. For unique_file pairs all listed fields are skipped. Thus it is not complete independent output equivalence proof.",
+    "mtime fixture invokes touch -m -d and ignores exit code, so requested timestamps require verification on non-GNU environments."
+  ],
+  "limits": [
+    "No upstream suite execution, no own-library edits or new tests.",
+    "Native pHash deferred; global full repository count150/500."
+  ]
+}
