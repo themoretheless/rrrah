@@ -1,0 +1,26 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "COPYING": {
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "git_blob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "lines": 674
+    }
+  },
+  "cumulative_whole_files_read": 268,
+  "tracked_blobs": 289,
+  "method": "Complete pinned root COPYING read with Git/SHA256 verification. License-text inventory only, no legal compatibility opinion or changed product licensing.",
+  "findings": [
+    "Root file contains GNU GPL version3 dated29June2007, preamble, sections0..17 and application appendix. It is not an LGPL text.",
+    "Text includes definitions/source forms, basic permissions, source/object conveyance, additional terms, termination/downstream licensing, patents, AGPL combination, revised versions and warranty/liability sections.",
+    "Appendix example mentions version3-or-later; presence of generic appendix alone does not select every file actual licensing version. Existing source-file notices and nested licenses remain separately inventoried.",
+    "Root COPYING and previously read BLAKE-specific CC0/Apache texts are distinct provenance artifacts. No blanket relicensing conclusion inferred from either.",
+    "No rmlint code imported into production and no legal/document instructions executed. Reference-only research decision remains in place."
+  ],
+  "limits": [
+    "268/289 blobs reviewed; global whole-repository count150/500.",
+    "Text identity/content review only; no runtime, test or performance result."
+  ]
+}
