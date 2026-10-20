@@ -1,0 +1,27 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": true,
+  "whole_files_read": 104,
+  "coverage": "docs/research/dedup-500/explorertab4-complete-coverage-v61-20261021.json",
+  "coverage_sha256": "5bdf1cfc720e44bdc1e6249809e7cc1ab86883914c153d40802a484708f42e70",
+  "new_whole_files_read": {
+    "Assets/ExplorerTabUtility.gif": "22537213e0573fbdf6d2839678960b2a11dce91f7c03babdba03db4ecad41f7c"
+  },
+  "method": "All846 GIF frames decoded; every frame visually reviewed in labeled contact sheets across v55-v61. Prior103 files retain their explicitly bounded source and visual methods.",
+  "visual_frames_reviewed_inclusive": [
+    0,
+    845
+  ],
+  "findings": [
+    "Frames672-692 show shell target opening Control Panel All Items, then return to Explorer.",
+    "Frames693-701 introduce tab search/history;702-832 show repeated search, filtering, arrow selection, Enter activation and loading transitions.",
+    "Frames833-845 show clear-history confirmation, confirmation selection, shorter remaining list and return to Explorer. Retained-query source issue is not reproduced by this recording.",
+    "Repository manages duplicate tabs, not duplicate file content. Reject-domain decision retained. Earlier source findings and independent limited probes remain applicable."
+  ],
+  "limits": [
+    "Full pinned-content review does not establish Windows build, GUI correctness, concurrency safety or performance.",
+    "Small text and exact target identities are not established by thumbnails.",
+    "No new library changes or tests. Native pHash investigation deferred; all-cases objective remains incomplete."
+  ]
+}
