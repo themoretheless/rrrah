@@ -1,0 +1,43 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats/sh.sh": {
+      "sha256": "f8410b5ed3f5612ad9fed317765bed58d155e2b247c8f8e27fc724832faca7aa",
+      "git_blob": "f777024d9d3c0c930f651dd5ec17435c2cbc7d61",
+      "lines": 464
+    }
+  },
+  "cumulative_whole_files_read": 172,
+  "tracked_blobs": 289,
+  "method": "Full pinned template read; Git/SHA256 verified. Extracted original equality-check functions, normalized printf template escapes and ran only original_check on temporary files through /bin/sh. No modification handlers or full generated script executed.",
+  "findings": [
+    "Default original_check checks existence and literal path-string inequality, allowing hardlinks. Size/content comparison requires explicit paranoid flag. Control accepts files differing in size and bytes with paranoid disabled and rejects them with enabled cmp.",
+    "Paranoid regular-file check calls cmp -s -- with quoted arguments; directory path delegates to configured rmlint -p --equal plus generated options. No fd-bound check prevents replacement between comparison and later action.",
+    "Symlink/hardlink replacement moves duplicate to fixed path suffix .temp, attempts link and restores on failure. Existing suffix conflicts and concurrent changes are not independently resolved in template.",
+    "Reflink copy uses GNU archive/reflink options and saves/restores mtime via temporary stamps. Clone handler delegates validation to --dedupe. These modes have different correctness dependencies; none executed here.",
+    "Error handling uses set -eu by default and optional set +e, EXIT cleanup and individual swallowed strip/chown failures. INT/TERM trap marks clean exit; exact signal-derived status remains unqualified. A final message alone cannot prove every operation succeeded.",
+    "Cleanup can walk upward removing empty parent directories when enabled, without explicit scan-root bound in this template. Empty-file/broken-link handlers do not revalidate type/emptiness. No such operations executed."
+  ],
+  "executed_control": {
+    "function": "lib/formats/sh.sh:original_check",
+    "cases": [
+      {
+        "paranoid_enabled": false,
+        "different_size_and_bytes_accepted": true,
+        "exit_code": 0
+      },
+      {
+        "paranoid_enabled": true,
+        "different_size_and_bytes_accepted": false,
+        "exit_code": 1
+      }
+    ],
+    "scope": "Only extracted predicate functions; no deletion/link/copy/ownership handlers."
+  },
+  "limits": [
+    "Generator sh.c and full generated-script integration remain unread/unexecuted at this step.",
+    "172/289 blobs reviewed; all500 review and allcases goal incomplete."
+  ]
+}
