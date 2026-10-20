@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 6,
+  "partial_source_read": {
+    "lib/checksum.c": {
+      "sha256": "8480883789103e708ce9d578b4f52d3e6851bfdf35b394c07fdd45871e71574f",
+      "new_ranges_inclusive": [
+        [
+          732,
+          1020
+        ],
+        [
+          1096,
+          1140
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          54,
+          135
+        ],
+        [
+          732,
+          1140
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Paranoid updates retain incoming data buffers and build a shadow hash. Copies retain only a copied shadow hash; they do not copy data buffers or candidate queues. Hence copied digests explicitly lack byte-comparison evidence.",
+    "release_buffers frees list and clears buffers but does not reset candidate/tail fields. An update after release needs caller lifecycle exclusion; not established as a reachable defect.",
+    "Running twin comparison dereferences candidate buffer without a local exhaustion guard, relying on candidates being completed and sufficiently long. Caller checks remain unreviewed.",
+    "send_match_candidate enqueues a raw candidate pointer without acquiring a reference in this function. Candidate lifetime must be maintained externally.",
+    "rm_digest_copy allocates the outer copy before testing interface copy support; NULL return branch does not free that allocation. Which interfaces lack copy support remains to inspect.",
+    "Shadow interface is64-bit; paranoid_steal invokes xxhash-specific extraction. Actual configured shadow algorithm binding must be checked before claiming equivalence."
+  ],
+  "limits": [
+    "Static lifecycle analysis only; caller reachability, races and failure behavior not executed.",
+    "Remaining source lines1-53 and136-731 still require reading; no full checksum.c credit.",
+    "No library edits or new tests; native pHash deferred."
+  ]
+}
