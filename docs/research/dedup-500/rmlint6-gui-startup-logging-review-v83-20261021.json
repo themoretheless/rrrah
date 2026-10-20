@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/application.py": {
+      "sha256": "c0ac3238fe62df8443a49411500f5a8c92c8776cc4b8bd8a8b4088a3fdac03a2",
+      "git_blob": "4e1d8149be559a02cc65ee65918c6af569970790",
+      "lines": 160
+    },
+    "gui/shredder/logger.py": {
+      "sha256": "ebf2ef37b095b6c557b79121abc40b25fdf11b82f01205a8e4fd9b2d8bdaf24d",
+      "git_blob": "b69f30e5b064ec73f7c1680bc892d3e0575c70a3",
+      "lines": 99
+    },
+    "gui/shredder/about.py": {
+      "sha256": "bc9ca385686fa83415abbf86b1d90628e32e9443fc753bc4e50df2c7c6e3557c",
+      "git_blob": "9f21c81aa86ecd5c0634083a1d3940445db9bc98",
+      "lines": 66
+    }
+  },
+  "cumulative_whole_files_read": 186,
+  "tracked_blobs": 289,
+  "method": "Complete reads of three pinned GUI files with Git blob/SHA256 verification. No Gtk runtime or actual subprocess executed.",
+  "findings": [
+    "Application loads required resource bundle and settings schema without local recovery; CSS failure is logged and icon failure falls back to no icon. Missing bundle/schema and cosmetic stylesheet failure therefore have different startup consequences.",
+    "Tagged/untagged command-line lists are handed to RunnerView.trigger_run. Script option constructs Script and overrides editor; these startup paths do not independently validate report contents or freshness in application.py.",
+    "Feature probe invokes rmlint --version through Gio, examines stderr for +feature substring and checks communication success rather than subprocess exit success. No timeout is set; prefix substring can match longer feature names. This helper is not actual scan qualification.",
+    "Logger deduplication relies on root logger having exactly two handlers, even when configuring named logger. This can suppress intended setup or duplicate handlers depending on preexisting logging configuration. Default rotating log path is shared /tmp/app.log, opened lazily; stream handler defaults stderr despite stdout comment.",
+    "Colored formatter indexes fixed map of standard numeric log levels; custom levels could fail formatting. Source observation only. About dialog displays version/license/authors and has no scan/grouping behavior; it adds no duplicate-search coverage."
+  ],
+  "limits": [
+    "GUI visual and startup behavior not executed.",
+    "186/289 tracked blobs reviewed; global whole-repository count150/500."
+  ]
+}
