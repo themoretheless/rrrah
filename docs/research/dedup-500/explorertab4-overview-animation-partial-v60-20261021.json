@@ -1,0 +1,35 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "whole_files_read": 103,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v54-20261021.json",
+  "new_whole_files_read": {},
+  "method": "Every frame544-671 visually inspected in four labeled396x220 contact sheets; cumulative visual review0-671. No full-file credit.",
+  "asset": {
+    "path": "Assets/ExplorerTabUtility.gif",
+    "sha256": "22537213e0573fbdf6d2839678960b2a11dce91f7c03babdba03db4ecad41f7c",
+    "frames": 846,
+    "size": [
+      1600,
+      900
+    ],
+    "duration_ms": 140850
+  },
+  "visual_frames_reviewed_inclusive": [
+    0,
+    671
+  ],
+  "next_frame": 672,
+  "findings": [
+    "Frames544-574 open browser with transient white/loading state, display a start page and its address context menu.",
+    "Frames575-618 switch back to settings, replace target via Ctrl+A/Ctrl+V, save and invoke Ctrl+1; browser loads the ExplorerTabUtility GitHub repository page.",
+    "Frames619-650 switch browser tabs, load a CLSID reference page, select a code snippet and copy via Ctrl+C. Exact code text is not established from thumbnails.",
+    "Frames651-671 return to settings, replace target with copied shell identifier, save and invoke Ctrl+1. The resulting shell view lies after this segment and is not yet credited."
+  ],
+  "limits": [
+    "Frames672-845 still require visual review. Repository103/104; global full repository review count remains148/500.",
+    "Thumbnail review does not establish exact small text or filesystem identity, and recorded UI is not runtime or performance validation.",
+    "No library changes or fresh tests in this increment. Native pHash investigation remains deferred."
+  ]
+}
