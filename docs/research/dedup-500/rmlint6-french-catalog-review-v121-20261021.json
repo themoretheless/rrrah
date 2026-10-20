@@ -1,0 +1,43 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/fr.po": {
+      "sha256": "d77bc8b5c88e6fa9fd02932a074175f4cb0e506386848058aad87e27550272c9",
+      "git_blob": "123b6905b1cd6c2094aa393a723cecb1171f94d5",
+      "lines": 1341
+    }
+  },
+  "cumulative_whole_files_read": 272,
+  "tracked_blobs": 289,
+  "method": "Full pinned French catalog read, blob verification, active-entry parsing and normal/use-fuzzy msgfmt checks. Compiled gettext lookup confirmed active translation; inspected previously read replay/logger code. No erroneous variadic logger call executed.",
+  "findings": [
+    "264 active entries,195 nonempty,18 fuzzy and177 nonfuzzy nonempty. Normal msgfmt --check --check-format exits0 without diagnostics.",
+    "Active translation of lint type of node not recognised adds percent-s placeholder absent in source. Compiled GNUTranslations lookup returns this string. Replay calls rm_log_warning_line with no arguments, macro forwards to g_log; runtime format argument contract is inconsistent. No crash/read outcome claimed or induced.",
+    "Entry lacks c-format flag because source has no placeholders, so ordinary msgfmt format check does not catch newly introduced placeholder. Successful catalog compilation is insufficient semantic/format coverage.",
+    "Explicit use-fuzzy diagnostic reports4 fatal format errors; these fuzzy entries are excluded normally. Do not conflate with the active unflagged-placeholder issue.",
+    "Translated pattern error says pattern may start with less-than or greater-than, while source demands less-than only. Verbosity prose suggests three repetitions although source/help says two.",
+    "cannot stat translated as cannot define and real-path failure translated as cannot open blur distinct error states. Numerous newer cache/reflink/size-overflow messages remain untranslated.",
+    "Obsolete historical diagnostics do not establish active coverage. No language files or scanner production code changed."
+  ],
+  "executed_control": {
+    "active_entries": 264,
+    "nonempty_translations": 195,
+    "fuzzy_entries": 18,
+    "nonfuzzy_nonempty": 177,
+    "default": {
+      "exit": 0,
+      "output": ""
+    },
+    "include_fuzzy_diagnostic": {
+      "exit": 1,
+      "output": ".dedup-work/rmlint6-20261021/po--fr.po:555: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--fr.po:560: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--fr.po:565: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--fr.po:610: number of format specifications in 'msgid' and 'msgstr' does not match\n/opt/homebrew/bin/msgfmt: found 4 fatal errors\n"
+    },
+    "compiled_lookup": "doublon de type '%s' non reconnu"
+  },
+  "limits": [
+    "272/289 blobs reviewed; global whole-repository count150/500.",
+    "No French application runtime, undefined logger execution or GUI rendering."
+  ]
+}
