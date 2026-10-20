@@ -1,0 +1,32 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/preprocess.c": {
+      "sha256": "316cb7d72f4b1cf706bc908f8d264bd1d748bde3a72f8725777dd28dd5a262e6",
+      "git_blob": "9a4efc5746d47d7d7ba76787d1ef421c60eb7fe0",
+      "lines": 324
+    },
+    "lib/preprocess.h": {
+      "sha256": "6ba75ef3172e8b7de496f06eff1be2516caf6501a285b9fb759c07432238b044",
+      "git_blob": "216d8c0ba5b63ea0c100ed1f891491147228377c",
+      "lines": 63
+    }
+  },
+  "cumulative_whole_files_read": 17,
+  "tracked_blobs": 289,
+  "method": "Whole preprocess.c/h read; Git blob verification, static analysis.",
+  "findings": [
+    "Same-file sorting uses observed size, device, inode, parent inode and basename before removing adjacent repeats. No fresh metadata lookup is explicitly requested by these comparisons; lazy parent lookup behavior was reviewed separately.",
+    "Hardlink sorting uses observed size/device/inode and rank. Equal aliases are bundled or discarded according to find_hardlinked_dupes; this is identity-based grouping rather than content equality.",
+    "Path repeats removed before nonduplicate-lint filtering, then hardlinks bundled and remaining files sorted into candidate groups by rank_group. Candidate grouping constraints depend on rank implementation still unread.",
+    "Other-lint output applies configured mtime/protection rules, sorts empty directories reverse alphabetically and forwards records without a fresh filesystem check in this module. It generates output records, not direct deletion here.",
+    "Source comment claims sort-based handling30percent faster than hashtable; no benchmark evidence collected, so this is not an accepted optimization for rrrah.",
+    "File-table destruction frees all_files queue container without unref of elements in that branch; normal preprocess drains it, but early lifecycle ownership needs inspection before leak claim. Header clear-function declaration has no definition in this implementation file."
+  ],
+  "limits": [
+    "No original tests/runtime or own-library source edits.",
+    "Rank/traverse/session lifecycle remain unreviewed. Native pHash deferred; global full repository count150/500."
+  ]
+}
