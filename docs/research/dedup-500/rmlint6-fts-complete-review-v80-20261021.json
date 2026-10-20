@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/fts/fts.c": {
+      "sha256": "2897c6212559eeeef1c70b5d6ba6042f7f95693ce9d374ad7cd7fd2297fad0ee",
+      "git_blob": "6355c5fa9df1bc70bf1a92c492622eba2ca5b77a",
+      "lines": 1199
+    }
+  },
+  "cumulative_whole_files_read": 177,
+  "tracked_blobs": 289,
+  "method": "Read remaining implementation lines351 through EOF, completing prior lines1..350 from v79. Git blob and SHA256 verified; no runtime fault injection.",
+  "findings": [
+    "Normal fts_read exhaustion explicitly sets errno0; unrecoverable transitions set STOP and return NULL retaining syscall error. Caller must distinguish terminal error from normal EOF immediately.",
+    "fts_build loops readdir until NULL without resetting/checking errno around end and ignores closedir result. A directory-stream error can therefore be treated as empty or partially enumerated directory rather than explicit error, even if final caller checks errno later. Source-level finding, not injected runtime failure.",
+    "opendir failure under BREAD records FTS_DNR and errno; chdir failure can defer parent error while returning NS/NSOK child names. Ignoring these entry states loses completeness evidence.",
+    "Safe directory-change helper fstats opened descriptor and compares dev/inode to observed directory before fchdir, unlike pure path-based transition. No equivalent content snapshot guarantee is implied.",
+    "Directory entries are materialized in a linked list before return; optional sorting allocates full pointer array and falls back to filesystem order on allocation failure. No explicit entry-memory or cancellation budget in this module.",
+    "Path buffer grows to next power-of-two; non-compat branch lacks explicit size overflow guard before rounding/allocation, while tracked lengths saturate at UINT_MAX. No extremely large allocation executed.",
+    "Cycle detection scans ancestors by device/inode. FTS_SKIP and XDEV yield postorder visits without enumerating children; this is intentional pruning that callers must distinguish from exhaustive traversal."
+  ],
+  "limits": [
+    "No filesystem read-error injection or source-code change.",
+    "177/289 full blobs reviewed; global whole-repository count150/500."
+  ]
+}
