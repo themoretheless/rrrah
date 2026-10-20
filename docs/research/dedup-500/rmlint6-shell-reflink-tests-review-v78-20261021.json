@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_formatters/test_sh.py": {
+      "sha256": "624435350440adbd9ea0e5c80d39d752897211197be5082512726d3e723a810a",
+      "git_blob": "866b2bd6f8903b6b2c19ff31895ff6a10c8dc8cc",
+      "lines": 320
+    },
+    "tests/test_mains/test_is_reflink.py": {
+      "sha256": "cdcfdbc65430ae11d91f025a982d177b38e59aa8a446cefdf1ffb1c06229e636",
+      "git_blob": "64827d9aa8fcd1dd250604664c183737d47da9b5",
+      "lines": 185
+    }
+  },
+  "cumulative_whole_files_read": 175,
+  "tracked_blobs": 289,
+  "method": "Full reads of two pinned test files, Git blob/SHA256 verification. Upstream scripts, deletion handlers and reflink mutations not executed.",
+  "findings": [
+    "Shell basic test runs dry-run then actual generated script and rescans aggregate counts. Paranoia case changes file size, checks preservation and missing-original handling; same-size restored-mtime and directory-multiplicity cases are absent from this file.",
+    "Shell tests cover multiple shell fixture, Unicode/apostrophe directory names, empty-parent cleanup, parent nanosecond mtime preservation, same-inode skip emission and binary path lookup on supported platforms. Most cases execute generated modifying script in their upstream bodies; source review is not their execution.",
+    "Hardlink duplicate-directory test compares os.stat inode of descendants after operation. Since stat follows symlinks and template falls back to symlink for directories, this assertion does not establish that directory trees were replaced by actual hardlinks.",
+    "run_shell_script uses check_output without timeout; a hung generated script can block this test helper. Anonymous-pipe case checks emitted path substrings, not full script validity or behavior.",
+    "Reflink suite module-skips without FIEMAP and filesystem-gates actual clone tests. It checks numeric statuses for wrong arguments, directories, sizes, repeated path, path aliases, hardlinks and symlinks; no implication for APFS runtime.",
+    "Extent regressions distinguish second/last changed extent, trailing sparse hole and holes before/between extents. Setup uses GNU dd/cp and copy_file_range, explicitly rejecting short range copies. These are filesystem-specific intended controls, not current-host execution evidence.",
+    "Default-output test accepts CalledProcessError without checking exact status; asserts only that standard script/report paths were not produced."
+  ],
+  "limits": [
+    "No upstream pytest or filesystem extent qualification.",
+    "175/289 tracked blobs reviewed; global whole-repository count remains150/500."
+  ]
+}
