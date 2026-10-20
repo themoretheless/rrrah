@@ -1,0 +1,65 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3.c": {
+      "sha256": "b118ddf7cf9e6e5ef3fded72dcb1acf9dfdc4ea923cbe4605900ad6ee9afe1af",
+      "git_blob": "00f91f444922df7c8e7b5ff69343852cbbf4c613",
+      "lines": 651
+    }
+  },
+  "cumulative_whole_files_read": 150,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read in contiguous ranges; Git/SHA256 verification. Compiled unchanged BLAKE3 core, dispatch, portable source and original headers with BLAKE3_USE_NEON=0 on current ARM host. Authored consistency harness executed successfully.",
+  "findings": [
+    "Chunk update retains last full block until it knows whether more input follows, zero-pads buffer and applies start/end flags at output. Zero-length update returns before null pointer memcpy.",
+    "Wide subtree compression preserves at least two chaining values on degree-one path to avoid premature root compression. Lazy CV stack merging preserves final root flags and extendable output when input arrives in whole subtrees.",
+    "Finalization works on const hasher state, folds pending stack to root and supports unaligned seek offset plus complete output blocks/tail. Zero output length returns before touching output. Reset keeps key/domain mode while clearing chunk counter and stack.",
+    "Long-input path uses power-of-two subtree sizes aligned to prior chunk count; this allows full subtree work instead of one-chunk updates. This design observation is not a measured optimization for our workload."
+  ],
+  "executed_control": {
+    "exit_code": 0,
+    "cases": 114,
+    "lengths": [
+      0,
+      1,
+      3,
+      63,
+      64,
+      65,
+      1023,
+      1024,
+      1025,
+      2047,
+      2048,
+      2049,
+      4095,
+      4096,
+      4097,
+      65535,
+      65536,
+      65537,
+      131073
+    ],
+    "update_steps": [
+      1,
+      63,
+      64,
+      1023,
+      1024,
+      4096
+    ],
+    "output_bytes": 200,
+    "seek_offset": 63,
+    "seek_bytes": 131,
+    "repeated_finalize": true,
+    "zero_length_null_update_and_finalize": true,
+    "reset_and_rehash": true,
+    "scope": "Portable same-implementation one-shot versus streaming consistency. Not independent cryptographic oracle, SIMD/keyed/derive-key qualification or throughput measurement."
+  },
+  "limits": [
+    "Full local cargo session54565 remains active, now at exact_files target.",
+    "150 of 289 rmlint blobs reviewed; global complete-repository count remains150/500."
+  ]
+}
