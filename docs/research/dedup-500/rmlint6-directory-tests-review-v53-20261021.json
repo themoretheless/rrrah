@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_merge_directories.py": {
+      "sha256": "01ac65d8087f2805776d9fc44ae2d5df6dc961dd0e9256c81dc19992cea0d2cd",
+      "git_blob": "e633e15c433d532e35b40f3e78e481b7e6d27ec0",
+      "lines": 534
+    }
+  },
+  "cumulative_whole_files_read": 116,
+  "tracked_blobs": 289,
+  "method": "Full pinned file read; Git blob verified; AST counted 17 top-level test functions, not expanded pytest cases. Ran existing local overlapping-root regression. Upstream directory tests not executed.",
+  "findings": [
+    "Directory tests cover nested merging, unequal counts, hardlinks, followed/ignored symlinks, zero-sized files under explicit types/size policies, tagged-root precedence and original flags. Bind-mount case explicitly requires root.",
+    "Layout tests distinguish default content-set semantics from explicit layout matching, including same filenames nested differently and swapped content under matching names. Several negative layout checks only iterate returned rows and assert duplicate_file type, so an empty result satisfies them.",
+    "Existing XOR-cancelling regression uses two copies of xxx versus two copies of yyy and checks two matching xxx directories plus internal yyy duplicates. This tests distinct hash-set protection, not the same-set/different-multiplicity counterexample from v52. No A,A,A,B versus A,B,B,B fixture exists in this file.",
+    "filter_part_of_directory deliberately removes directory-member detail records before assertions, so these tests do not validate complete member associations through this helper. Some tagged-root tests only assert at least two result rows and selected leading paths.",
+    "pedantic_options starts with paranoid and, outside pedantic environment, adds every configured checksum type. This expands source-level intended coverage but is not evidence of executed algorithm combinations."
+  ],
+  "local_verification": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files nested_overlapping_roots_match_the_full_authored_partition -- --exact",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 32,
+    "runtime_seconds": 1.22,
+    "source_sha256": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f",
+    "scope": "192 authored files, 48 exact three-member partitions, repeated/overlapping nested roots in forward/reverse order, limited traversal and cancellation/retry. File grouping only; no directory-equivalence API claim."
+  },
+  "limits": [
+    "No full upstream scanner reproduction of multiplicity issue.",
+    "Review remains partial: 116/289 tracked blobs."
+  ]
+}
