@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake2/blake2.h": {
+      "sha256": "389bc87a83cdd9e25569a294d01a3347970d117237a66eee9df8edd6058736a4",
+      "git_blob": "ca390305e60443931e155ad08c7eca86fc665b01",
+      "lines": 195
+    },
+    "lib/checksums/blake2/blake2-impl.h": {
+      "sha256": "bc0ead7f3259a415325fa40ddebb1876f903d5062d888fc5994e8b2d9e616ec4",
+      "git_blob": "c1df82e0c95dc8e57ee98342f5328ca57407816d",
+      "lines": 160
+    },
+    "lib/checksums/blake2/blake2b-ref.c": {
+      "sha256": "e2bf9872a8f0a51711b765936d420a7f8c34797db4d938948c24f2ddbc1dc588",
+      "git_blob": "cd38b1ba0083c4d8125b2f27e03498376946dc37",
+      "lines": 379
+    }
+  },
+  "cumulative_whole_files_read": 157,
+  "tracked_blobs": 289,
+  "method": "Complete reads of three pinned source/header files, Git blob and SHA256 validation. No new hash-vector execution in this audit.",
+  "findings": [
+    "Public header declares sequential, parallel and XOF variants and uses packed parameter blocks with compile-time size checks. Declarations do not establish runtime coverage of unread implementations.",
+    "Endian helpers use memcpy only under explicit NATIVE_LITTLE_ENDIAN; otherwise assemble/store little-endian bytes, including16/32/48/64-bit helpers. secure_zero_memory calls volatile memset function pointer.",
+    "BLAKE2b initializes output length1..64 and optional key1..64, sets sequential fanout/depth and clears salt/personal fields. init_param directly loads supplied parameter bytes without full validation; it is a lower-level caller contract.",
+    "Update keeps final full128-byte block buffered by using strict greater-than comparisons, maintains128-bit byte counter with carry and ignores zero input length. Final rejects null/small output and repeated finalization, zero-pads buffer and serializes digest before clearing temporary buffer.",
+    "One-shot entry validates pointers and lengths, initializes, updates and finalizes. Update/final results are not propagated after initialization. With validated ordinary inputs this alone does not establish reachable failure; no runtime bug claimed.",
+    "Selftest conditional requires blake2-kat.h, which is absent from pinned tree inventory. Existing selftest source therefore is not evidence that this imported package ran its original vectors."
+  ],
+  "limits": [
+    "No independent BLAKE2b oracle result yet; implementation review only.",
+    "157/289 rmlint blobs reviewed; local full test session54565 remains active."
+  ]
+}
