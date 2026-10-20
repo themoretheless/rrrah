@@ -1,0 +1,32 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/cfg.c": {
+      "sha256": "bcb3e773dfec8ab2d230563ab649b61d7fb48136a4f071ea88225032f826c553",
+      "git_blob": "876c614cdebe4e12bc1836bb63608338d18afdfe",
+      "lines": 219
+    },
+    "lib/cfg.h": {
+      "sha256": "a74b01edf59ccd94bc543959c14abf0ce38ecaaf19129b7f087f8b44326e811f",
+      "git_blob": "ffc6e2df5f5e391699b174732e1ba8710080caa0",
+      "lines": 216
+    }
+  },
+  "cumulative_whole_files_read": 21,
+  "tracked_blobs": 289,
+  "method": "Whole cfg.c/h read with Git blob verification.",
+  "findings": [
+    "Default initialization zeroes all settings, so xattr read/write and optional name/path matching filters are disabled before argument parsing. Prior cache-admission findings therefore concern explicitly enabled paths, not default xattr use.",
+    "Defaults: BLAKE2B digest, hidden files ignored, minsize1, empty-file lint enabled, hardlinked duplicates enabled, see_symlinks true and follow_symlinks false. Traversal interpretation of these options remains to inspect.",
+    "Default full-file range starts0 ends1.0 factor with clamping disabled. Buffer16KiB,16 hash threads,2 threads per disk,1GiB target memory. Header explicitly calls memory target-only, confirming it is not hard cap.",
+    "Input root admission uses access then readlink fallback, realpath or lexical canonicalization. Thus ordinary root inputs are made absolute before trie insertion; descendant and replay paths still need inspection.",
+    "Root provenance lookup walks ancestors and configured path list, with preferred-path list ordering as explicit precondition. Hidden components may stop traversal; TODO partial-hidden remains.",
+    "JSON replay roots return before path_count increment in this function although header describes common index accounting; caller behavior needed before claiming duplicated replay indexes."
+  ],
+  "limits": [
+    "Defaults may be changed by command-line parser; no command execution or runtime conformance verified.",
+    "No rrrah edits or fresh tests; native pHash deferred; global full repository count150/500."
+  ]
+}
