@@ -1,0 +1,94 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/README.rst": {
+      "sha256": "01d07ee60e9b0038b2684648a4932e34d15abbc8395ba7d24e0cc767d38657b4",
+      "git_blob": "2f4930f9e141457cafd2a389fa92e95866ce29b7",
+      "lines": 1,
+      "git_mode": "120000"
+    },
+    "tests/SConscript": {
+      "sha256": "55e5e7c32048b492768d54650c7da0ee24f266f62af7c4d38377d81c9c31392f",
+      "git_blob": "1cb93862ea3b4f933b09cc78c13050c28240d822",
+      "lines": 31,
+      "git_mode": "100644"
+    },
+    "tests/requirements.txt": {
+      "sha256": "c6b0f470bce911cfbc823c445af7f957afca95ff80954119aae25f060b8ef4f9",
+      "git_blob": "f6c74d94315bc076cfb0fd8013adcbfa3dfd4ee5",
+      "lines": 7,
+      "git_mode": "100644"
+    },
+    "tests/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "lines": 0,
+      "git_mode": "100644"
+    },
+    "tests/test_robustness/test_8Mlongpathfiles.py": {
+      "sha256": "12b1b42dabc94e7283e1f0113f2bf650815a756b485eefe344e081be8f7dbea9",
+      "git_blob": "39a65ede4bf111b487ca381d5bbe7dce3eeff68c",
+      "lines": 38,
+      "git_mode": "100644"
+    },
+    "tests/test_robustness/test_manyfiles.py": {
+      "sha256": "85089ed5d4ccaa5ce103092e57dae34a1fbffe1e123c0a97f9ef224053d7de7c",
+      "git_blob": "0c3495ea051575fd228c55482318bb2c77b12c31",
+      "lines": 20,
+      "git_mode": "100644"
+    },
+    "tests/test_robustness/test_manylongpathfiles.py": {
+      "sha256": "a614ca5b5d796e0adbf0c2057b90436bfc8ba37c1bf89484252bd139c77c624d",
+      "git_blob": "c9da508fda3e15910beb3d160dfdbd6ef2606424",
+      "lines": 32,
+      "git_mode": "100644"
+    },
+    "tests/test_options/test_help.py": {
+      "sha256": "d70def16bd08176ef3592a071b027445c0d9dfc1b559611a405c1536f195b806",
+      "git_blob": "dbbd8a656b8259ac356dbb476eb710effd09d219",
+      "lines": 30,
+      "git_mode": "100644"
+    },
+    "tests/test_options/test_color.py": {
+      "sha256": "1bde4df54a9520866506c02fcfb26aa1c9f167163f3be61a946f523e8991349e",
+      "git_blob": "c94c42cac3521428efab177b5bb35c511799be70",
+      "lines": 19,
+      "git_mode": "100644"
+    },
+    "tests/test_options/test_no_backup.py": {
+      "sha256": "66c30050a671c3562ce69297261ea5435180572cb9679d7f18cdcc87a8ff2cfb",
+      "git_blob": "86c6fb201c7a48fc2834c63a9e84b0fc2dba689d",
+      "lines": 32,
+      "git_mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 88,
+  "tracked_blobs": 289,
+  "method": "Complete reads of ten pinned blobs, including empty package marker and README symlink blob; verified Git identities and SHA256. Original tree generator executed with counting stubs at depth two; no filesystem load test or upstream suite run.",
+  "findings": [
+    "The nominal 8M test creates 8396800 directory entries at depth ten: 2099200 regular-file creations and 6297600 hardlinks. Its footer assertion adds duplicate count and group count, checking aggregate entries, not path membership or measured memory. ENOSPC turns setup into a skip.",
+    "Two smaller many-file tests each generate 98307 regular files and assert only output record count. Long-path variant budgets up to min(1024, PC_PATH_MAX), subtracts test-root prefix and splits remaining length into four components; it does not exercise paths beyond 1024 or arbitrary component limits.",
+    "SCons test launcher inherits environment, resolves pytest from PATH, splits PYTEST_ARGS with shlex and propagates a nonzero pytest result. It supplies a persistent RM_TS_DIR default /tmp/rmlint-tests. No subprocess timeout is set here.",
+    "Dependencies constrain major versions rather than exact builds. README blob is a symlink to ../docs/testing.rst; reading that link text does not credit the target document, which remains unread in this audit.",
+    "Help/man tests assert a few strings, with manpage marker; color tests check absent ANSI sequences and expected error status. They do not exercise arbitrary malformed escape strings previously identified in logger review.",
+    "Backup test checks ten repeated writes produce two results and that existing directory entries have allowed names/timestamp prefixes. It does not assert number of backup files or validate prior report contents."
+  ],
+  "executed_control": {
+    "function": "tests/test_robustness/test_8Mlongpathfiles.py:branch_tree",
+    "depth": 2,
+    "NUMPAIRS": 1025,
+    "counts": {
+      "files": 8200,
+      "hardlinks": 24600,
+      "directories": 6
+    },
+    "expected_entries": 32800,
+    "scope": "Original generator with counters replacing file/link/directory creation; validates fixture cardinality only."
+  },
+  "limits": [
+    "No measured throughput or peak-memory result.",
+    "No production change; 88 of 289 tracked blobs reviewed, repository incomplete."
+  ]
+}
