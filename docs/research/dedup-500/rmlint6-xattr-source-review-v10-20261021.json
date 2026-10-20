@@ -1,0 +1,34 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/xattr.c": {
+      "sha256": "f3e10322b426e81167b8520d981bad0091989ceba670cc27ca1afdd15a93c990",
+      "git_blob": "13a82d38508808c4c6a87489b11999addbab0f51",
+      "lines": 568
+    },
+    "lib/xattr.h": {
+      "sha256": "c99f8efa046f11d4f7bef63318f8714e1db85020b63bc4d070641ba741fc4f84",
+      "git_blob": "a91982b9d0fcd20f0854a7b90353802cbf1788bb",
+      "lines": 86
+    }
+  },
+  "cumulative_whole_files_read": 11,
+  "tracked_blobs": 289,
+  "method": "Whole text reads of xattr implementation/header, Git blob and SHA256 verified.",
+  "findings": [
+    "read_hash requires configured xattr use, nonempty checksum/mtime attributes and floating-point mtime comparison within MTIME_TOL. No fresh content digest, ctime, size or inode binding is checked in this function. Same-size rewritten file with restored mtime is therefore not ruled out by this admission guard. End-to-end control still needed.",
+    "Checksum text syntax/algorithm-specific length and complete finite timestamp parse are not validated here; strtod ignores end pointer. Caller contract and FLOAT_SIGN_DIFF macro need checking before malformed timestamp outcome claims.",
+    "write_hash stores checksum and mtime as two separate path-based xattr writes using previously collected file mtime. No transactional pair or fresh content check in this function.",
+    "rm_xattr_list can return NULL on list/read failure; is_deduplicated and mark_deduplicated pass map to hash-table iterator without a local NULL guard. Runtime consequences not reproduced.",
+    "Dedup-state routines mutate keys already owned by GHashTable from .mtime to .cksum/.dedup during iteration. Stored key hash/equality invariants need focused control.",
+    "Linux no-follow fallback follows links when HAVE_LXATTR is unavailable; Apple and BSD wrappers have explicit no-follow calls.",
+    "BSD setter maps all nonnegative written lengths to success without checking full requested count; fixed-size listing/value buffers have no resize retry."
+  ],
+  "limits": [
+    "Static source audit only; no physical xattr or upstream end-to-end runtime tests.",
+    "Own cache/mutation regressions exist from earlier work; not freshly run or broadened here.",
+    "Native pHash deferred; global full repository count remains150/500."
+  ]
+}
