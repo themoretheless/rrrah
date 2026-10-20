@@ -1,0 +1,63 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/_static/logo-dark.png": {
+      "sha256": "d20a164c1adf19834f6c1627761adc1ed3e7ee956a70638a771e30fa4ccac83c",
+      "git_blob": "131b91a750a1485decdd3e7ba059616acf586d41",
+      "bytes": 10983,
+      "width": 446,
+      "height": 164,
+      "review_kind": "full PNG viewed via view_image"
+    },
+    "docs/_static/logo.png": {
+      "sha256": "0223acae5eee1c2a2a5728f2aa8ec360ae5e7f5cb905f75b465f0ab6e8fe5262",
+      "git_blob": "bec6cddccf3db9323674f86bc7dfba96fac9cd47",
+      "bytes": 10414,
+      "width": 446,
+      "height": 164,
+      "review_kind": "full PNG viewed via view_image"
+    },
+    "docs/_static/logo_boot.png": {
+      "sha256": "1ece60b8754193ef6891f117f60edc3de00fb4c0fb8ba7d89624c76852ee7d4f",
+      "git_blob": "9479333b42155f50fb70ca7073883146ea2e74bc",
+      "bytes": 2439,
+      "width": 65,
+      "height": 32,
+      "review_kind": "full PNG viewed via view_image"
+    },
+    "docs/_static/mockup.png": {
+      "sha256": "2126f1d21187db8b27613cc7e0ff6cf24398ca81633eea151e97ac80bdd966b2",
+      "git_blob": "18abf2ac7d9d81cd787cab2bf2a82d53c10cb707",
+      "bytes": 1526960,
+      "width": 2590,
+      "height": 2212,
+      "review_kind": "full PNG viewed via view_image"
+    },
+    "docs/_static/screenshot.png": {
+      "sha256": "47f5c0345c68edb7ee55ef57bffc893e483f761b8316e2edb9e14a873401e179",
+      "git_blob": "de202da0be77a639b94337547c8af4ab3b09d646",
+      "bytes": 64577,
+      "width": 926,
+      "height": 218,
+      "review_kind": "full PNG viewed via view_image"
+    }
+  },
+  "cumulative_whole_files_read": 250,
+  "tracked_blobs": 289,
+  "method": "Verified five pinned PNG blobs and inspected full pixels with view_image; no OCR-only substitution or application launch.",
+  "findings": [
+    "Console screenshot shows command rmlint -g dot,945 usable files,36 ignored files/19 ignored folders,276 after preprocessing,145 duplicate files in44groups and81 other lint items. No ground-truth paths/partition, timing or exit status supplied by image.",
+    "Console summary labels1.91MB removable and prints JSON/shell output paths. Visible path message cannot prove successful complete durable writes or actual reclaimed bytes.",
+    "Mockup is a six-panel montage: location list, folder chooser, result tree/rings, blue dry-run editor, red execution editor and about dialog. About panel explicitly shows2.2.0, unlike audited2.11.0-rc.0 source.",
+    "Montage demonstrates intended navigation, directory preference/selection, script review and contrasting action colors; static concept is not implementation, usability or completion proof.",
+    "Montage includes German native labels and English app text; no translation completeness established. Tree and source panels are scrolled/clipped, not whole-report evidence.",
+    "Light/dark logos share bracketed rm mark with different contrast treatment; small boot wordmark adds lint. Branding assets contain no duplicate-search algorithm or runtime evidence.",
+    "Previously audited screenshot/code differences remain: current editor control structure and hidden lock control cannot be qualified from historical montage."
+  ],
+  "limits": [
+    "250/289 blobs reviewed; global whole-repository count150/500.",
+    "Static visual inspection only; remaining SVGs and other source/catalog blobs still require review."
+  ]
+}
