@@ -1,0 +1,29 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx512.c": {
+      "sha256": "46653e718211d883e56d5caa9ded6d9450f2f5b44ebfa81372b3c0be538e9e3c",
+      "git_blob": "f88a32d312b106ee975336751367bbd6cba4ce5c",
+      "lines": 1388
+    }
+  },
+  "cumulative_whole_files_read": 276,
+  "tracked_blobs": 289,
+  "method": "Full1388-line pinned source read in contiguous1..600/601..1000/1001..1388 with Git/SHA256 verification. No AVX512 execution on ARM host.",
+  "findings": [
+    "Hash-many decomposes inputs into16/8/4/1 groups with32-byte output per input; XOF-many uses same group widths but64-byte output blocks and always increments output-block counter. Distinct paths need distinct parity controls.",
+    "Four/eight lane counters use64-bit vector additions then low/high narrowing;16-lane counter uses low32 addition and top-bit carry detection with small offsets0..15. Wrap/carry logic requires actual runtime parity.",
+    "Vector transposition sizes4x4/8x8/16x16 words differ. Hash16 pads eight CV vectors with zero rows and stores lower256 bits of each transposed row; XOF16 transposes full16 vectors and stores512 bits. No output-overwrite bug inferred from shared helper.",
+    "storeu256/512 parameter annotations show dest16 but intrinsic writes32/64; call-site strides/contracts determine actual buffer requirement. Annotation mismatch is not independently proven overflow.",
+    "Compression paths read complete64-byte padded input even when logical block_len smaller. Caller contract must guarantee readable padding; full-block hash_many does not implement partial final-byte handling.",
+    "128/256-bit rotate intrinsics in AVX512 implementation still require AVX512VL-capable configuration, so vector width alone does not imply SSE/AVX2-safe fallback. Dispatcher gating previously reviewed separately.",
+    "Start/end flags apply first/last full block. Zero-input or zero-output-block loops do not write; nonzero counts require sufficient pointers/output capacity.",
+    "Prefetch uses+256 ahead and compile-time intrinsics/assembly alternatives are separate qualification gates. Source similarity to SSE/AVX2 and ARM parity does not establish AVX512 correctness or speed."
+  ],
+  "limits": [
+    "276/289 blobs reviewed; global whole-repository count150/500.",
+    "No x86 hardware run, ABI/sanitizer qualification or throughput measurement; assembly variants remain unread."
+  ]
+}
