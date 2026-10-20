@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/session.c": {
+      "sha256": "47d4975379438b3b14675e069900f5b603b9efbb106143182f155f4d5cf4daaf",
+      "git_blob": "45bf41e5e29dd26fa33618ba3f09c6c79dc2205a",
+      "lines": 155
+    },
+    "lib/session.h": {
+      "sha256": "706650d13bc97224575cbf6f5f41c7e2227c09d99526da695e825f802e71ffd1",
+      "git_blob": "50f7a35329c21f9a4d71e88e980188ea95f0b053",
+      "lines": 225
+    }
+  },
+  "cumulative_whole_files_read": 27,
+  "tracked_blobs": 289,
+  "method": "Whole session.c/h read; Git blob verification, static lifecycle analysis.",
+  "findings": [
+    "Abort counter and warning-once state are process-global and not reset in session_init. Reusing multiple sessions after cancellation would require external reset or process restart; call sites still to inspect.",
+    "Second acknowledged interrupt calls exit(EXIT_FAILURE), providing hard process termination rather than bounded cooperative cleanup. Normal abort only checked at strategic caller points.",
+    "Session clear closes formats and frees root paths before rm_mds_free waits scheduler. Correctness requires work already drained before clear; top-level sequence still unreviewed.",
+    "Session clear delegates file ownership to previously inspected file-table destructor, so early all_files elements are not independently cleaned here. Reachable early path still unproven.",
+    "Kernel version parse uses sscanf result !=EOF instead of requiring2 fields, and unknown version returns true. This is a capability heuristic, not physical ioctl feature proof.",
+    "equal_exit_code initialized failure; earlier shred loop treats failure as abort condition. Formatter/main initialization must be inspected to understand ordinary scan startup, not assume from these modules alone.",
+    "Header mentions session-cached kernel version, but implementation caches process-wide through GOnce. Regex cache is per-session and freed during clear."
+  ],
+  "limits": [
+    "No original process lifecycle tests or runtime bug reproduction.",
+    "Top-level main/output setup remains to read. No rrrah edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
