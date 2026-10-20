@@ -1,0 +1,22 @@
+{
+  "repository": "w4po/ExplorerTabUtility",
+  "commit": "fad736353210d36595c6e6caa77ac7ad9129b3ee",
+  "whole_repo_complete": false,
+  "method": "Cumulative full306-frame visual inspection: v51 frames0-31, v52 frames32-159, this turn160-305; indexed396x220 contact sheets. Pinned Git blob reverified. Source1920x1080, duration25330ms.",
+  "new_whole_files_read": {
+    "Assets/TabSearch.gif": "e46d7351828b336fbdeee14a679f60718664b07d3f39f1ae08a32f3b71841fc9"
+  },
+  "whole_files_read": 102,
+  "coverage": "docs/research/dedup-500/explorertab4-coverage-v53-20261021.json",
+  "coverage_sha256": "27c13a47f840b6969113c57a583719f6d5eae1a0ddc8d6cb192cb10df559a77c",
+  "findings": [
+    "Full sequence repeatedly opens search popup, narrows folder results, moves selection via arrows and confirms with Enter; active Explorer folder views change with transient loading states.",
+    "Later sequence clicks clear-history icon, shows confirmation dialog, then returns to popup with fewer records. This demonstrates removal of history entries while remaining records stay visible.",
+    "Exact query bytes and distinction of individual open/history records are not qualified from thumbnails. Demonstration does not reproduce previously identified retained-query clear-history issue.",
+    "No file-content duplicate search, vanished folder handling, concurrent tab closure or navigation failure demonstrated. Recorded UI is not an independent application test."
+  ],
+  "limits": [
+    "All frames visually reviewed at thumbnail resolution; no actual Windows execution, library changes or fresh tests.",
+    "ExplorerTabUtility partial102/104; remaining DetachSnap.gif and ExplorerTabUtility.gif. Global fully reviewed count148/500. Native pHash investigation deferred."
+  ]
+}
