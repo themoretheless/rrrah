@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_equal.py": {
+      "sha256": "b6ffe08c8eb960db286464efc8e5544d8d59640ce63a0bd3a25a64401690a198",
+      "git_blob": "d84c295f6ad675726b4562543674c0083783203f",
+      "lines": 140
+    },
+    "tests/test_mains/test_hash.py": {
+      "sha256": "edff89cb7647794f00c2ed4eccdfb16805774a57a080a3dca381da7e8ecde6c5",
+      "git_blob": "8771f50f9d636b7378540f1823270c54a43831b9",
+      "lines": 43
+    }
+  },
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 289,
+  "method": "Whole two test files read with Git blob verification; tests inspected, not executed.",
+  "findings": [
+    "Eight equal-mode test functions cover two/three equal files, mixed differing file, zero/one arguments, directory pairs, mixed file/directory rejection, hidden directories, empty files and absence of default output files. Some equal cases repeat with paranoid flag.",
+    "Several comments claim failure while surrounding assert_exit_code expects0; executable assertion is authoritative for intended behavior, not stale comment.",
+    "Hash streaming compliance compares outputs for same10000-byte repeated-content file at increments4096,1024,1,20000 across selected algorithm name families. This tests chunk consistency, not known-answer correctness or diverse byte distributions.",
+    "Algorithm list is selected by substring from imported CKSUM_TYPES; no nonempty selection assertion. Exact algorithm coverage requires tests.utils inventory inspection.",
+    "Neither file tests unreadable/missing path in hash list, ignore-order callback, zero-to-EOF API sentinel, concurrent mutation, cancellation or stale xattr admission. This is absence within these files, not entire suite.",
+    "Original test functions still depend on tests.utils fixture/helper behavior and built RMLINT_BINARY. Reading tests does not count as passing execution."
+  ],
+  "next_controls": [
+    "Inspect tests.utils and build setup before original targeted runs.",
+    "Prior extracted buffered-reader control already reproduces zero-to-EOF mismatch; do not conflate it with upstream CLI tests."
+  ],
+  "limits": [
+    "No original tests executed, no fresh rrrah tests or implementation change.",
+    "Native pHash deferred; global full repository count150/500."
+  ]
+}
