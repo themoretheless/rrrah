@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/resources/shredder.svg": {
+      "sha256": "c422c9c57646a5f45723bc98ad07492d135a63b470bbee3ec4f7a965bf98319c",
+      "git_blob": "906b71167ba59be67e429c58230b2b59cbafc6c4",
+      "bytes": 42157,
+      "review_kind": "full rendered icon inspected",
+      "render_sha256": "fc23121e8909459e10cd00838555fa040000cfb7c928c54b0580a3203f319885"
+    },
+    "docs/_static/shredder.svg": {
+      "sha256": "d3acec827d69fa9219b27e3d603a59ca2775a88cf9c3c3268fdc0633493887bf",
+      "git_blob": "395d29f8b2d595c5ba2a885061a43b7b0a08915d",
+      "bytes": 41,
+      "review_kind": "full tracked symlink payload read"
+    }
+  },
+  "cumulative_whole_files_read": 266,
+  "tracked_blobs": 289,
+  "method": "Verified pinned SVG and symlink Git blobs. Rendered icon with local QuickLook at1200px and inspected full pixels. Resolved tracked link lexically inside pinned tree; no installed filesystem changes.",
+  "findings": [
+    "Icon depicts brown broom with pale bristles on blue vertically striped circular background, matching previously viewed historical About panel. Branding similarity does not establish executable provenance.",
+    "docs/_static/shredder.svg is mode120000 symlink payload ../../gui/shredder/resources/shredder.svg, not a separate41-byte SVG document. Target resolves to tracked GUI icon.",
+    "Packaging and raw-file retrieval must preserve or resolve symlink semantics; treating raw link payload as SVG would not render the intended image. Actual installed docs/package behavior was not executed.",
+    "This review credits rendered visual content and full link payload, not exhaustive XML/path/editor-metadata audit or icon attribution/legal conclusion. No asset copied into product."
+  ],
+  "limits": [
+    "266/289 blobs reviewed; global whole-repository count150/500.",
+    "Static visual and link-identity evidence only; no application runtime or speed qualification."
+  ]
+}
