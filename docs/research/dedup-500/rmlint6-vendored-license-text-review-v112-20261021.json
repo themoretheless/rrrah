@@ -1,0 +1,41 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake2/COPYING": {
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "git_blob": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+      "lines": 121
+    },
+    "lib/checksums/blake3/LICENSE_CC0": {
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "git_blob": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+      "lines": 121
+    },
+    "lib/checksums/blake3/LICENSE_A2": {
+      "sha256": "00fcc7a934ddbc9ece2a7cc063ac788e284b703b1d705ccbba72d462aa97921e",
+      "git_blob": "d512ca94d0ca6bf6a7272b16c83f51b7045902ca",
+      "lines": 202
+    },
+    "lib/checksums/blake3/LICENSE_A2LLVM": {
+      "sha256": "a5695f57ea0c221e0e8b7d784ff774c35e88c3d3270353646a925880bb3492cc",
+      "git_blob": "8d11bec0e86f88276b155cd3214a3de45cdafeb7",
+      "lines": 219
+    }
+  },
+  "cumulative_whole_files_read": 258,
+  "tracked_blobs": 289,
+  "method": "Full pinned license text reads and Git/SHA256 verification. CC0 files proven byte-identical and shared full text reviewed once with both tracked identities verified. Text inventory, not a legal compatibility opinion.",
+  "findings": [
+    "BLAKE2 COPYING and BLAKE3 LICENSE_CC0 contain byte-identical CC0 1.0 Universal text: waiver, fallback license and limitations/disclaimers. Separate paths are tracked blobs, not duplicate reading-count for a single path.",
+    "BLAKE3 LICENSE_A2 contains Apache2.0 text including definitions, copyright/patent grants, redistribution/NOTICE conditions, contribution terms, trademark/warranty/liability sections and2019 author notice.",
+    "LICENSE_A2LLVM includes Apache2.0 plus LLVM exceptions concerning embedded object-form portions and specified GPLv2 combined-software conditions; this extra text is not identical to plain Apache2.0.",
+    "Presence of these nested texts does not by itself select a license for every source or override GPL notices in rmlint-owned files. No blanket relicensing or compatibility conclusion inferred.",
+    "No vendor source was copied into production by this review. Existing repository-level reference-only decision remains while file-specific provenance and license selection require separate evidence."
+  ],
+  "limits": [
+    "258/289 blobs reviewed; global whole-repository count150/500.",
+    "License-text inventory only; no runtime or performance evidence, root COPYING remains unread."
+  ]
+}
