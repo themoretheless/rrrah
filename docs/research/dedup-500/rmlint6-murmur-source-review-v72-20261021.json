@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/murmur3.c": {
+      "sha256": "941b0ec5bd31e759966de52ea93b1a748886644096677ec1e81de3d72ef25ff5",
+      "git_blob": "a830e6220d435a0a593ce52a2db06e843e5a50cb",
+      "lines": 558
+    }
+  },
+  "cumulative_whole_files_read": 168,
+  "tracked_blobs": 289,
+  "method": "Full pinned C implementation read; Git blob and SHA256 verified. Source review only, no new execution.",
+  "findings": [
+    "State constructors zero-initialize via GLib slice allocation; copy duplicates whole state including retained tail and total length. Steal copies accumulators into locals and emits result without consuming state; finalise calls steal then frees.",
+    "Nonzero seed in each one-shot wrapper is fed as four native-order input bytes before message, rather than initializing accumulator fields. Thus conventional MurmurHash3 seeded interchange cannot be inferred from function names; no independent oracle run here.",
+    "GET_UINT32/64 use direct cast dereferences; source explicitly warns big/little endian differ and asks alignment-restricted platforms to adjust conversion. Output similarly writes integer words directly, leaving serialization host-dependent.",
+    "MURMUR_FILL_XS casts size_t input length to int in its byte-count expression. Large updates with an existing tail can narrow length or overflow signed arithmetic before memcpy. Potential failure is source-level; no giant read or copy executed.",
+    "x86_128 tail assembly shifts promoted uint8 values by24 without first converting to uint32_t. High-bit tail bytes can invoke signed-shift portability issues. x64 tail path explicitly casts to uint64_t.",
+    "x64 state-equality helper compares accumulators, lengths and only live tail bytes, avoiding irrelevant tail garbage. It does not compare underlying source bytes; hash-state equality is not independent file equality."
+  ],
+  "limits": [
+    "No end-to-end scanner or portable Murmur compatibility claim.",
+    "168/289 tracked blobs reviewed; all500 review remains incomplete."
+  ]
+}
