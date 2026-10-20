@@ -1,0 +1,68 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/sha3/sha3.h": {
+      "sha256": "be49a75179d5d424897b424524dc4f6711475eba9d688f7344aec3140a578699",
+      "git_blob": "cbbe9ed576162631ffeb9f5cd8e8dc54421367f4",
+      "lines": 53
+    },
+    "lib/checksums/sha3/sha3.c": {
+      "sha256": "c4eef02f0eee3ebbbe0177aa6692f909d245711997f162106520d4313af08a81",
+      "git_blob": "eeb83c9863001910dca9fefda0b7e7e93ac49143",
+      "lines": 237
+    }
+  },
+  "cumulative_whole_files_read": 154,
+  "tracked_blobs": 289,
+  "method": "Full reads of two pinned sources; verified Git blob and SHA256. Compiled unchanged SHA3 C implementation with authored vectors generated independently by Python hashlib.",
+  "findings": [
+    "SHA3 context maintains saved partial word, byte/word indices and capacity; Init clears full context and selects256/384/512 capacity. Header does not include stdint/stddef itself despite using their types, so caller include order matters.",
+    "Update assembles little-endian64-bit words explicitly and carries partial words across updates. Finalize applies SHA3 suffix unless SHA3_USE_KECCAK is enabled, performs final permutation and serializes state bytes little-endian.",
+    "Finalize mutates context and returns pointer into context-owned output. It is not a const repeatable finalization contract like BLAKE3/Cat HighwayHash. SHA3_ASSERT macro is empty in pinned header, so internal conditions are not runtime guards."
+  ],
+  "executed_control": {
+    "exit_code": 0,
+    "lengths": [
+      0,
+      1,
+      7,
+      8,
+      9,
+      71,
+      72,
+      73,
+      103,
+      104,
+      105,
+      135,
+      136,
+      137,
+      271,
+      272,
+      273,
+      4097
+    ],
+    "steps": [
+      1,
+      7,
+      8,
+      31,
+      72,
+      136
+    ],
+    "widths": [
+      256,
+      384,
+      512
+    ],
+    "oracle": "Python hashlib SHA3",
+    "cases": 324,
+    "scope": "Independent expected digests for deterministic byte payloads, empty input, word and sponge-rate boundaries, repeated update. Current host only; no big-endian/32-bit, Keccak mode or performance qualification."
+  },
+  "limits": [
+    "No production code change.",
+    "154/289 blobs reviewed; local package test session54565 remains active."
+  ]
+}
