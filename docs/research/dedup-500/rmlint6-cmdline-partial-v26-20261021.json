@@ -1,0 +1,42 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 40,
+  "partial_source_read": {
+    "lib/cmdline.c": {
+      "sha256": "fc63e2461e962260e2b400723bb4e72edf3834705b2c65b6c7a08c058ea34ecb",
+      "new_ranges_inclusive": [
+        [
+          291,
+          650
+        ]
+      ],
+      "cumulative_ranges_inclusive": [
+        [
+          1,
+          650
+        ],
+        [
+          1414,
+          1545
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Clamp factor parser permits percent marker without checking remainder after marker and checks only0..1 comparisons, without explicit finite-value validation. Outer routing selects factor for strings containing dot or ending percent; malformed runtime admission still needs control.",
+    "Clamp option mutates configuration even after helper error; top-level parser rejection is essential to prevent partial invalid configuration use.",
+    "Directory-merge option enables partial-hidden visibility, link-text handling and hardlinked duplicates by convenience; later explicit arguments can override, so option ordering matters.",
+    "Lint-type parser resets selected switches, warns and continues on unknown type, returns true; requested unknown lint name is not itself a hard parser rejection in this function.",
+    "Plain timestamp uses strtod without end-pointer validation. Positive numeric prefix with trailing text is not excluded locally. Finite-value behavior depends further on comparison macro.",
+    "Timestamp-file parse returns before fclose when contained timestamp invalid; absent/unreadable file path assumes new stamp output should be created. Actual formatter open/write behavior still unread.",
+    "Formatter config validates names/keys then applies pairs incrementally; later invalid key does not roll back earlier settings. Top-level parse-error path remains to inspect."
+  ],
+  "limits": [
+    "Memory/thread parsing not yet reached; no claim about their validation.",
+    "Static reading only, no runtime tests or rrrah edits. Native pHash deferred; global count150/500."
+  ]
+}
