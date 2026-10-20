@@ -1,0 +1,41 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/cygwin.yaml": {
+      "sha256": "1d083676c5d8ebe1b7e4a5b457fe1c6293b8e9c07709a5bcca6c00fa181f8dc4",
+      "git_blob": "4d7d751dadb6d90483e792a6b830a733c8062ea7",
+      "lines": 76
+    },
+    ".github/workflows/freebsd.yaml": {
+      "sha256": "02271525ffb00cebdee954920dccaf24a7af3d32d2ef292a74b31cd7fde20460",
+      "git_blob": "2219230eb5572af162b00a29eef24bd572424aae",
+      "lines": 42
+    },
+    ".github/workflows/multi-distro.yaml": {
+      "sha256": "606da05d5b5d8413f5b12f5616bf84b9a34109c21808998e42f80901a9b0bb39",
+      "git_blob": "3e8adaa5116c585a7fb93edc9c26c2902302e301",
+      "lines": 88
+    },
+    ".github/workflows/musl.yaml": {
+      "sha256": "7d5139ba568e9f4b67366e1f69dcd60d526947bed0f401c1314dfe7ff5907e5c",
+      "git_blob": "e11553745b50fe8a04ecddd9e3ce843c8d3a966a",
+      "lines": 36
+    }
+  },
+  "cumulative_whole_files_read": 134,
+  "tracked_blobs": 289,
+  "method": "Full reads of four pinned workflow definitions with Git blob/SHA256 verification. No CI execution/status inspected.",
+  "findings": [
+    "Cygwin workflow builds and runs a small smoke fixture: rejects unequal pair and expects two duplicate_file CSV rows. It does not invoke pytest and ignores test-only source changes in trigger filters. Negative equal command treats any nonzero status as expected, including unrelated failures.",
+    "FreeBSD definition delegates prepare and build/test to scripts in a VM with cached preparation keyed through prepare-script SHA256 text. Delegated scripts remain unread, so actual test selection cannot be inferred from this workflow alone.",
+    "Multi-distro matrix is build-only: package installation and scons compilation in eleven container tags; no scanner correctness tests are invoked. It ignores test-only changes and permits Tumbleweed job failure. Moving image tags are not frozen runtime environments.",
+    "musl workflow delegates test behavior to Containerfile test target and starts privileged container, plus a separate GUI build target. Containerfile remains unread; definition alone does not prove suite selection or GUI runtime correctness."
+  ],
+  "limits": [
+    "Workflow declarations are not evidence that current platform jobs passed.",
+    "Local full-package cargo session54565 remains running on last successful poll; no result claimed.",
+    "134/289 tracked blobs reviewed; global completed-repository count unchanged."
+  ]
+}
