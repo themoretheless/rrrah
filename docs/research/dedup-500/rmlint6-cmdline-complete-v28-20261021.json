@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/cmdline.c": {
+      "sha256": "fc63e2461e962260e2b400723bb4e72edf3834705b2c65b6c7a08c058ea34ecb",
+      "git_blob": "50948a68cf237647b396bb16a27fceaa5ca1042b",
+      "lines": 1545
+    }
+  },
+  "cumulative_whole_files_read": 41,
+  "tracked_blobs": 289,
+  "method": "Remaining991-1413 read and EOF checked; earlier v19/v25-v27 cover1-990 and1414-end. Whole source now read.",
+  "findings": [
+    "Final parser clamps hash threads1..128 and depth1..PATH_MAX/2+1. Earlier thread-count uncertainty narrowed for ordinary CLI; separate --hash parser remains different.",
+    "threads-per-disk stored through G_OPTION_ARG_INT into guint field, with no final positive/range validation visible. Read-buffer length and memory/sweep counts also receive no final nonzero/max checks beyond shared size parser.",
+    "Path admission failure aborts unless ignore-bad-paths; argv separator // toggles preferred roots and minus reads stdin. Normal roots made absolute by reviewed config helper.",
+    "Final clamp check compares start/end factors regardless of absolute-offset flags; per-file clamped-size guard separately handles empty slices. Mixed-offset semantics need runtime cases.",
+    "Parser rejects conflicting protection flags and records cmdline_parse_error; invalid setup does not enter rm_cmd_main through reviewed top-level main.",
+    "Commandline metadata joins argv with spaces without escaping; this saved string does not preserve literal argv boundaries. Not used for ordinary in-process path admission here.",
+    "Own executable lookup supports Linux proc and FreeBSD sysctl, otherwise absolute/slash argv realpath fallback; no PATH search for basename-only executable in fallback. Generated-script consequence depends formatter code."
+  ],
+  "limits": [
+    "No original parser runtime tests or rrrah edits.",
+    "Global full repository count150/500; native pHash deferred."
+  ]
+}
