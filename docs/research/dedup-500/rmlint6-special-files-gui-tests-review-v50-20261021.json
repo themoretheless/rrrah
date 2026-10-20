@@ -1,0 +1,67 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_types/test_badlink.py": {
+      "sha256": "c2646ef24f00dc748cd81195905255a55376bd984b6aa49356fecf6a2270f68d",
+      "git_blob": "384d0b52b140ac816a16577630039177e98ecc16",
+      "lines": 26
+    },
+    "tests/test_types/test_baduids.py": {
+      "sha256": "a2e1ae1b01c16975ebe385d032b491d2b0d032f8fe18c8fdf14689517416d70e",
+      "git_blob": "2110e4a812b2379e9f8d45a9dbf11737eb50a269",
+      "lines": 91
+    },
+    "tests/test_types/test_nonstripped.py": {
+      "sha256": "fe9699ca2708bf000773fa3695b75880bc97f5e24f833a732460a988e73bfb6f",
+      "git_blob": "c62cfc076a413263db88765ac54078fa797270a2",
+      "lines": 68
+    },
+    "tests/test_gui/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "lines": 0
+    },
+    "tests/test_gui/helpers.py": {
+      "sha256": "3405a65851bdd74702783b4d00759af3c756095bb2f5bc8bb89171f6ca1ceba5",
+      "git_blob": "38c4ff18a80c1616a74817cdf156e911590560e3",
+      "lines": 30
+    },
+    "tests/test_gui/test_import.py": {
+      "sha256": "0da954c691f517773181cdcfe8f4291cb1f6cfaf285034c03a86a04b379d0880",
+      "git_blob": "beb60cae2e8472fa5d1dd9f0c782ac389b48f860",
+      "lines": 9
+    },
+    "tests/test_gui/test_tree.py": {
+      "sha256": "563178c04701882a52b63bf62d175e0690a8bf201f7687cce7f3d86fdd9e1907",
+      "git_blob": "964d6cd2c58625ab1d4cd092df2a5e46db97afc9",
+      "lines": 34
+    }
+  },
+  "cumulative_whole_files_read": 108,
+  "tracked_blobs": 289,
+  "method": "Complete reads of seven pinned blobs; Git and SHA256 identities verified. Ran one existing local exact-files regression; upstream tests and system account mutation were not run.",
+  "findings": [
+    "Badlink test creates a temporary target then removes it and checks one broken-link row under follow/ignore/see modes, including type and path suffix. This is lint classification rather than content equality.",
+    "Bad-UID/GID test is module-skipped outside Linux/FreeBSD and returns without pytest.skip when non-root. Its helper prints and swallows failed account-management commands, so setup/teardown command failure does not immediately fail the test. It modifies system accounts in its upstream body; none executed here.",
+    "Nonstripped tests compile source through a shell command and early-return when feature unavailable. Positive test indexes the first record without asserting full record count. Executable-FIFO regression explicitly uses timeout=5 and asserts no records or counted files.",
+    "GUI import test performs no import or assertion when DISPLAY is unset. Tree tests require successful GUI import at module collection, cover ascending/descending size sorting with three trie entries and two model children, not duplicate detection or full UI behavior.",
+    "GUI helper checks Path GUI_DIR membership in sys.path but inserts str(GUI_DIR); repeated calls can insert repeated path strings. This is a source-level observation, not a measured GUI failure."
+  ],
+  "local_verification": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files fifo_replacement_does_not_block_or_hide_healthy_copies -- --exact",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 32,
+    "runtime_seconds": 0.04,
+    "source_sha256": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f",
+    "scope": "Current Unix host: replace one authored copy with FIFO at pre-hash checkpoint; retain exact healthy pair and Changed issue; second scan reports preexisting FIFO as NotRegular. Terminal completion observed; no universal timeout bound proven."
+  },
+  "limits": [
+    "No GUI runtime, upstream suite or account-management commands executed.",
+    "Review remains partial; skipped pHash/ASAN work untouched."
+  ]
+}
