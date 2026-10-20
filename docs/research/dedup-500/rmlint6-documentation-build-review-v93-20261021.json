@@ -1,0 +1,43 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/SConscript": {
+      "sha256": "14e30681383758c2daae9c10210f8090a86ed8f662a423ff9a000fe32c891bc2",
+      "git_blob": "07c9427b3390b985522b2f0b2332928dfd56db8c",
+      "lines": 69
+    },
+    "docs/conf.py": {
+      "sha256": "0986d75b69688122b728a3a223277c15f2097002a668c3ca5feac36ff76cee82",
+      "git_blob": "7bc000bbebf4fea82caa7284fbc9770c32247255",
+      "lines": 58
+    },
+    "docs/requirements.txt": {
+      "sha256": "529c6d50a2cad3909521916bdcf5a41e93d5661edd96ee683a988b6b80de9ea9",
+      "git_blob": "f8b8288f4f8f935ab8c31c8f90d33ee8edc377ef",
+      "lines": 2
+    },
+    "docs/index.rst": {
+      "sha256": "b9731c9bb658a67cc16522b0911b33c9e190bbfb453a25bb90ae197886b37060",
+      "git_blob": "497b3efb54ffc24627f86a6d2317f9fc2490233d",
+      "lines": 112
+    }
+  },
+  "cumulative_whole_files_read": 211,
+  "tracked_blobs": 289,
+  "method": "Complete four pinned file reads and Git/SHA256 verification. Mistyped docs/badges.rst returned404; tree identified docs/_badges.rst, which was not read or credited.",
+  "findings": [
+    "Sphinx builder uses check_call, propagating builder failure. Warnings become errors only when STRICT=1. Missing Sphinx fails explicit man/docs targets.",
+    "HTML source list tracks top-level rst files; conf.py, included assets and theme requirements are not explicit sources in this action. Incremental rebuild freshness needs separate qualification.",
+    "Requirements constrain Sphinx>=8,<10 but furo has a lower bound only; dependency resolution is not fully pinned. No documentation build was run.",
+    "Sphinx conf reads repository .version but source links use moving develop branch. Generated documentation links are not immutable evidence for the audited commit.",
+    "Copyright year and last-updated date depend on wall clock; no reproducible-output claim established.",
+    "Index enumerates exact duplicate files/directories and filesystem lint, plus optional byte comparison; speed and million-file claims are product prose, not independent measurements.",
+    "Embedded external asciinema/Vimeo media were not viewed and receive no visual review credit. GPLv3 statement preserves reference-only decision."
+  ],
+  "limits": [
+    "211/289 blobs read; global whole-repository count150/500.",
+    "No HTML rendering, embedded video review or performance qualification."
+  ]
+}
