@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/md-scheduler.c": {
+      "sha256": "2709081e6bbe501772bb0cda83ac52ada45a97b92bbbc64d8c5d85ac65c18b13",
+      "git_blob": "012c92f4e0dc03d6cbfe9bb321d88302efbbf30c",
+      "lines": 425
+    },
+    "lib/md-scheduler.h": {
+      "sha256": "13a07cf16fadc54fd0497b587731a708d29265059b837b9978f8621cca2e76ad",
+      "git_blob": "4f90c2e3f1d35efff0f0aa3e18384d21ae438c11",
+      "lines": 217
+    }
+  },
+  "cumulative_whole_files_read": 25,
+  "tracked_blobs": 289,
+  "method": "Whole md-scheduler.c/h read with Git blob verification; static analysis.",
+  "findings": [
+    "Device workers keep unsorted and sorted queues, process quota per pass and resubmit while device reference count positive. Deferred callbacks must requeue work and retain device references themselves.",
+    "finish waits until device table empty then joins worker pool; no timeout or explicit cancellation path in this scheduler. Completion depends on balanced external references and callbacks making progress.",
+    "Queue push allocates task without queue-length or byte admission limit; read-buffer budget does not bound scheduler backlog.",
+    "Freshly sorted incoming tasks are concatenated before old sorted tasks rather than merged into a globally sorted sequence; elevator locality applies to batches, not whole queued set.",
+    "Device table keys convert dev_t through GINT_TO_POINTER. Wider device identifiers need platform-specific validation before claiming key collisions.",
+    "Header callback names task type but implementation passes task_data; quota documentation suggests decrement amount while worker counts any nonzero result as one. Internal caller behavior must follow implementation.",
+    "Startup uses configured threads_per_disk and max_threads; zero/negative argument validation is external. No benchmark evidence collected."
+  ],
+  "limits": [
+    "No concurrent stress tests or original runtime execution; suspected scheduling/lifetime hazards not proven reachable.",
+    "No rrrah edits/tests; native pHash deferred; global count150/500."
+  ]
+}
