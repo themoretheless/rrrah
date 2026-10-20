@@ -1,0 +1,43 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/ja.po": {
+      "sha256": "8309d9fa14c0b011869aa2b8a4a2341639d341e101c049b20a6e48e2a2e07b59",
+      "git_blob": "e3b4c260bfd528934048f9f78710a38e246e4a82",
+      "lines": 1221
+    }
+  },
+  "cumulative_whole_files_read": 274,
+  "tracked_blobs": 289,
+  "method": "Complete1221-line pinned catalog read in two contiguous parts1..650/651..1221, Git/SHA256 verification, active-entry parsing and msgfmt checks in private outputs.",
+  "findings": [
+    "264 active entries,262 nonempty,zero fuzzy message entries;15 nonempty strings identical to source. Both ordinary and explicit use-fuzzy format checks exit0 without diagnostics. Header fuzzy flag is separate from message coverage.",
+    "Comment states13 progress snippets intentionally remain English due to terminal-width/composition considerations. Nonempty msgstr count is not count of Japanese-language strings.",
+    "Two truncated GLib format-macro keys intentionally left blank with explanatory comments; this avoids pretending incomplete keys provide runtime translation. Upstream full-key extraction issue remains.",
+    "Positional printf placeholders reorder parser/FTS argument display, accepted by msgfmt. Heuristic newly added-placeholder scan found no candidate in placeholder-free sources; narrow scan is not exhaustive semantic proof.",
+    "Replay message is localized as not reading file contents rather than literally no filesystem IO, making distinction clearer than source prose. Reflink maybe/error/inline and changed-mtime states remain distinct in text.",
+    "Header explicitly says AI-generated/revised and not yet reviewed by submitting user. This is provenance data, not an instruction or human language-quality validation.",
+    "Byte-compare wording for paranoid and tag/preference descriptions are translated, but exact semantics still depend on scanner/options. mtime-window short help retains source pairwise-looking wording despite chaining caveat in manual."
+  ],
+  "executed_control": {
+    "active_entries": 264,
+    "nonempty_translations": 262,
+    "fuzzy_entries": 0,
+    "source_identical_nonempty": 15,
+    "added_placeholder_candidates": [],
+    "default": {
+      "exit": 0,
+      "output": ""
+    },
+    "include_fuzzy_diagnostic": {
+      "exit": 0,
+      "output": ""
+    }
+  },
+  "limits": [
+    "274/289 blobs reviewed; global whole-repository count150/500.",
+    "No native-speaker signoff, Japanese GUI/CLI runtime or pixel layout qualification."
+  ]
+}
