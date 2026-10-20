@@ -1,0 +1,38 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/hasher.c": {
+      "sha256": "8f869904168784bdac57aee234ec138c805a520cbcc0e749d4297a3b38f883c6",
+      "git_blob": "261313f36ee2a807ff0e33faafc53438ef685cb4",
+      "lines": 517
+    },
+    "lib/hasher.h": {
+      "sha256": "5adddedaea00028d1b0bc4585c627f0f42ba973c8f9b3164f4fd2c085bd51eb2",
+      "git_blob": "15716ce54b1bc6582e0103e6887fefdcd1d487df",
+      "lines": 157
+    }
+  },
+  "cumulative_whole_files_read": 5,
+  "tracked_blobs": 289,
+  "method": "Whole reads with SHA256 and Git blob verification; extracted original buffered reader compiled with stub buffer/queue infrastructure and no-op readahead/logging.",
+  "findings": [
+    "Header documents bytes_to_read=0 as whole-file read. Buffered reader sets bytes_remaining=0 and requests fread length0, then reports success because remaining is0.",
+    "Extracted-function reproduction on9-byte input: zero_to_eof success=1 read=0 submitted=0. Positive control explicit_length success=1 read=9 submitted=9.",
+    "Unbuffered path also initializes remaining to0 and clamps physical read count to remaining. Static analysis indicates zero-byte digest admission there; not independently executed.",
+    "Reader returns success separately from digest finalization, so consumers must preserve read outcome. No file identity or mutation snapshot validation is performed in these two files.",
+    "cache_quota_bytes is stored here but buffer semaphore budget is derived from thread count and buffer count; this module alone does not enforce advertised byte quota. Paranoid mode has no semaphore here; downstream digest implementation remains to inspect.",
+    "Thread-pool allocation checks and decrement are separate atomic operations; concurrent task creation needs examination. free(wait=false) with active tasks requires caller lifecycle discipline; no blanket runtime defect claim."
+  ],
+  "probe": {
+    "source": "docs/research/dedup-500/rmlint6-buffered-eof-probe-20261021.c",
+    "sha256": "1c8b1e5950858e9e0b9ce5f0ef77d058cacb849b7b176ed552f8f51aa7bbf530",
+    "exit_code": 0,
+    "cases": 2
+  },
+  "limits": [
+    "Focused extracted original-function control only; not complete original rmlint build, end-to-end duplicate scan or performance benchmark.",
+    "No rrrah implementation change or fresh rrrah tests in this increment. Native pHash remains deferred."
+  ]
+}
