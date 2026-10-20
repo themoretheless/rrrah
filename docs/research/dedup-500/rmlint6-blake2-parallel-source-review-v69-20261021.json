@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake2/blake2bp-ref.c": {
+      "sha256": "1d48e8e501e182f48cbfd4ea1b8f05aab7d17e11f53a9f09e56e6bacd502d748",
+      "git_blob": "d58a15297a27608aac95626304dbcda65d4bbaa6",
+      "lines": 359
+    },
+    "lib/checksums/blake2/blake2sp-ref.c": {
+      "sha256": "0eaacff19a941de158fecdd5b87db4e638a7cddc0a01778d132fcafc910da2ab",
+      "git_blob": "b0e9baef7ffe6035976b6a5198f6fbef5f1914a1",
+      "lines": 359
+    }
+  },
+  "cumulative_whole_files_read": 160,
+  "tracked_blobs": 289,
+  "method": "Full reads of two pinned reference implementations; verified Git blob and SHA256. No parallel hash execution in this audit.",
+  "findings": [
+    "BLAKE2bp uses4 BLAKE2b leaves with128-byte blocks; BLAKE2sp uses8 BLAKE2s leaves with64-byte blocks. Both buffer512-byte stripes and feed full-width leaf digests into a depth-one root. Leaf configured output width is explicitly replaced with inner_length.",
+    "Keyed initialization feeds a padded key block to every leaf and clears temporary key block; root and last leaf are marked last_node. These tree domains differ from sequential BLAKE2 digests.",
+    "Without OpenMP, explicit for-loops visit all lanes. With OpenMP, each thread handles exactly its thread index in a parallel region requesting4/8 threads; code does not check actual team size or use omp for. Correct coverage relies on obtaining the requested team size, a static concern not runtime-reproduced here.",
+    "Finalization checks null/short output before consuming leaf state, but ignores leaf final return values before feeding local hash array to root. Repeated-final invalid lifecycle could therefore read uninitialized local digest values; not executed.",
+    "Both update and one-shot paths form lane-offset pointers before checking whether a full stripe remains. Their dereferences are separately guarded; pointer-range portability remains unqualified. Selftest sections depend on absent blake2-kat.h."
+  ],
+  "limits": [
+    "No OpenMP team-size, cryptographic oracle or all-platform qualification.",
+    "160/289 blobs reviewed; latest no-default package run completed separately with284 pass and2 ignored."
+  ]
+}
