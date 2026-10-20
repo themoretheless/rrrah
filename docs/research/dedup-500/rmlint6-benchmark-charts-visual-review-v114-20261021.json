@@ -1,0 +1,58 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/_static/benchmark.svg": {
+      "sha256": "5fbd1557d662f82da8d58c38f77d0898b858ca6da0144cc79ee64db9a09bb977",
+      "git_blob": "3f3930adecc724c9da232cf6d2d4ae7d97186bc2",
+      "bytes": 35158,
+      "review_kind": "Full chart rendered via macOS QuickLook at1600px and visually inspected",
+      "render_sha256": "f759d43f0517270b82a8aa2cc3d017e5c133f4e8f7a767be446b1e838f3000ac"
+    },
+    "docs/_static/benchmarks/cpu_usage.svg": {
+      "sha256": "e6e7ed5216747ff41b9a730c0d0a15d00f6562462159ae451c45239c9862b4c5",
+      "git_blob": "b5679587d0224df3bc823413a78b97956424474c",
+      "bytes": 43399,
+      "review_kind": "Full chart rendered via macOS QuickLook at1600px and visually inspected",
+      "render_sha256": "dac5a6623210e2241a98b476850f19f538be4418b3257256d50b28568a896c63"
+    },
+    "docs/_static/benchmarks/found_items.svg": {
+      "sha256": "b430066ce71c846895c53f46ce95542949e361da10aed4ac8a1c220ec4010e47",
+      "git_blob": "34d2565b9655115fcc009f2601d04b419097606f",
+      "bytes": 28139,
+      "review_kind": "Full chart rendered via macOS QuickLook at1600px and visually inspected",
+      "render_sha256": "1cf36e1fc4f063568229a19d5c9357256cd99e24a63b8c753028acf59fc18e29"
+    },
+    "docs/_static/benchmarks/memory.svg": {
+      "sha256": "9e542946f4fcf1d027df737791330d5caa264ab2ef9cd6bd1b4b9465bb41fc68",
+      "git_blob": "313e88fabdf1065c574bd64fd851de59611b1a49",
+      "bytes": 43310,
+      "review_kind": "Full chart rendered via macOS QuickLook at1600px and visually inspected",
+      "render_sha256": "13dc5938aa23fac798a855cf074c8f47999f61ad52b51a623197a68393333011"
+    },
+    "docs/_static/benchmarks/timing.svg": {
+      "sha256": "1f9f4324d2e7df4bb0b9a18f7ecb256f9d660d66949e380b4595802cf4f2576f",
+      "git_blob": "ca7f251d7a65e6df9edfd179f110e5e027845f6d",
+      "bytes": 46841,
+      "review_kind": "Full chart rendered via macOS QuickLook at1600px and visually inspected",
+      "render_sha256": "103fa8c07f9a4276f09f44bcdbb9cf157df2a461d51347a9a78a14bf1a09773d"
+    }
+  },
+  "cumulative_whole_files_read": 264,
+  "tracked_blobs": 289,
+  "method": "Verified five pinned SVG blobs, rendered locally using QuickLook and viewed each full PNG. This credits visual artifact review, not full XML/embedded-script audit or interactive tooltips.",
+  "findings": [
+    "Standalone benchmark chart compares seven series on /home/sahib across four runs plus average; other charts use /usr and /mnt/music, three runs plus average and a different series set. These are different experiments, not one coherent dataset.",
+    "Timing chart has logarithmic vertical scale, crowded tick labels and combines replay with full scanning; replay does not perform equivalent IO/content work. No current speed ranking inferred.",
+    "CPU usage chart shows values above100 for parallel variants and substantial between-run differences. CPU utilization is not scan throughput or proof of useful work.",
+    "Memory chart visibly stacks all programs into one cumulative column per run. Total height is sum across separate programs, not a single program peak. Axis title lacks explicit byte/MiB unit.",
+    "Found-results pie divides chart across programs rather than validating per-file identities. Similar slice areas cannot establish equal duplicate partitions or correctness; exact values are not visible in static rendering.",
+    "Legends include legacy v2.2.2/spooky/old variants, and long legend labels are truncated on some charts. Static tooltips and links were not exercised.",
+    "No displayed chart supplies paired confidence intervals, all trial statuses, immutable binary/source identities or equality ground truth. Previously audited script/schema errors further prevent treating pictures as new measurements."
+  ],
+  "limits": [
+    "264/289 blobs reviewed; global whole-repository count150/500.",
+    "Visual static inspection only; no benchmarks executed or production speed improvement claimed."
+  ]
+}
