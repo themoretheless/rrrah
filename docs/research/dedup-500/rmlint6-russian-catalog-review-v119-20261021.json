@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/ru.po": {
+      "sha256": "e69bd8bc4ecdaa902a349fb9b25aed6cdd8fc12bf84462eba211e81637bbdd5b",
+      "git_blob": "a218a8e9c574ebe462ce92a66f094a1e82ac670e",
+      "lines": 1188
+    }
+  },
+  "cumulative_whole_files_read": 270,
+  "tracked_blobs": 289,
+  "method": "Complete pinned Russian catalog read and Git/SHA256 verification. Parsed all active entries; ran installed msgfmt --check --check-format into private temporary MO output, no system locale install.",
+  "findings": [
+    "264 active entries match template count;24 have nonempty translations including two fuzzy candidate labels.22 nonfuzzy translations provide only partial coverage.",
+    "msgfmt structural/format checks exit0 with no diagnostics. This checks catalog compilation and declared format strings, not natural-language semantics or live localization.",
+    "Fatal-signal newline version has empty active translation while older non-newline translated entry is obsolete. Obsolete content is not active translation coverage.",
+    "Read failures, changed-mtime replay, early shutdown, interruptions, cache/reflink uncertainty, size parsing and most CLI settings remain untranslated; fallback source language is expected.",
+    "Fuzzy duplicate-candidate labels translate as duplicates, omitting candidate distinction; fuzzy entries are not credited as current verified translations.",
+    "Russian plural formula is present but no pluralized entries use it; parenthesized file/group forms remain awkward and cannot qualify grammar for arbitrary counts.",
+    "Inherited truncated format-macro keys from POT remain empty here. Successful msgfmt cannot repair mismatched lookup keys or source messages absent from catalog."
+  ],
+  "executed_control": {
+    "active_entries": 264,
+    "nonempty_translations": 24,
+    "fuzzy_entries": 2,
+    "nonfuzzy_nonempty": 22,
+    "msgfmt": "/opt/homebrew/bin/msgfmt",
+    "check_exit": 0,
+    "check_output": ""
+  },
+  "limits": [
+    "270/289 blobs reviewed; global whole-repository count150/500.",
+    "No application launch under Russian locale, pixel review or production localization change."
+  ]
+}
