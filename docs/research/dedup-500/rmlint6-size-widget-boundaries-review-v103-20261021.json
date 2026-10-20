@@ -1,0 +1,57 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/util.py": {
+      "sha256": "9a518d793a32ac6a1a127ed9de4399d3454631dd60590380ec77e0889c4803c2",
+      "git_blob": "46b9fb199902961e0a03d09216df4c420c956ea8",
+      "lines": 907
+    }
+  },
+  "cumulative_whole_files_read": 240,
+  "tracked_blobs": 289,
+  "method": "Complete pinned source read and Git/SHA256 verification. Original AST size methods executed using fake spin/unit widgets, no settings mutation.",
+  "findings": [
+    "FileSizeSpinButton supports exponents0..5. _set_exponent falls through to last enum for unknown exponent without rescaling coefficient. Original control roundtrip1024^6 returns1024^5; UINT64_MAX returns18014398509481984. This includes schema default maximum, but actual GTK signal/clamp/persistence outcome remains unqualified.",
+    "Negative exponent also falls through to5, so decrementing unit below Byte jumps to Petabyte. No real wrapping event executed.",
+    "set_bytes uses floating log/division, losing exact integer precision for large values; min/max UI must not be treated as lossless uint64 representation.",
+    "Spin numeric range1..1023 and wrap semantics differ from set_bytes zero/fractional display state. Stub control intentionally does not model GTK clamping or notify ordering.",
+    "Range requires strict min<max and adjusts by one byte, whereas exact-size filtering often needs inclusive equal bounds. This UI restriction is separate from scanner CLI capabilities.",
+    "NodeState keep logic uses identity comparison on integer constants; ordinary current small-int behavior is not a proof for arbitrary equivalent numeric objects. No action-state failure claimed.",
+    "View.show_progress documents pulse for None but only reveals widget and skips fraction update; it does not call pulse. Previously read finish handler passes100 into direct set_fraction wrapper, outside usual fraction convention; actual GTK behavior not executed.",
+    "CurrentChoiceLabel interpolates unescaped choice into markup; currently schema/static labels bound exposure. remove_header_widget list.remove can raise despite documented no-op intent.",
+    "MultipleChoiceButton registers same popup click behavior twice; programmatic selection does not emit row-selected. External-setting synchronization and repeated callbacks require actual GUI qualification.",
+    "Datetime formatting uses local naive timestamps and future-day offsets may produce ago labels. Human-readable size formatting is display-only and must not establish exact file-size equality."
+  ],
+  "executed_control": {
+    "size_roundtrips": [
+      {
+        "input": 1,
+        "output": 1,
+        "exponent": 0
+      },
+      {
+        "input": 1125899906842624,
+        "output": 1125899906842624,
+        "exponent": 5
+      },
+      {
+        "input": 1152921504606846976,
+        "output": 1125899906842624,
+        "exponent": 5
+      },
+      {
+        "input": 18446744073709551615,
+        "output": 18014398509481984,
+        "exponent": 5
+      }
+    ],
+    "negative_exponent_maps_to": 5,
+    "scope": "Original AST size conversion methods with fake widgets; no GTK clamping/signals or settings persistence."
+  },
+  "limits": [
+    "240/289 blobs reviewed; global whole-repository count150/500.",
+    "No GUI runtime, persistent setting update, upstream suite or production optimization."
+  ]
+}
