@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 42,
+  "partial_source_read": {
+    "lib/utilities.c": {
+      "sha256": "36243efa5680ab04d84c0cf842bf4a1562d2c379b1928a1904aa946fe1f17592",
+      "git_blob": "07f11ba21ce100e02cac22fb84556c5262307522",
+      "ranges_inclusive": [
+        [
+          1,
+          330
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Size parser splits integer/fraction but derives fraction scale from numeric log10 value, losing leading zeros. Source expression maps fraction digits05 to0.5 rather than0.05; needs original-function execution control. Zero fraction uses log10(0) then int conversion, not handled explicitly.",
+    "Input size copied into511-byte bounded string without rejection if original longer; negative prefix rejected; suffix table maps k decimal1000 and kb binary1024.",
+    "Overflow check for suffixed/fractional result uses nextafter below2**64, but integer errno is not explicitly reset before strtoull, so stale ERANGE boundary needs control.",
+    "Size0 is not rejected by utility parser, confirming ordinary read-buffer0 can reach later code unless another external guard exists.",
+    "Apple/Cygwin preadv wrapper emulates using lseek+readv and returns0 on failed seek rather than-1. Earlier reader treats0 as EOF/progress condition; finite positive requests fail eventually, zero sentinel behavior separately reproduced.",
+    "Extension helper uses last dot and returns following pointer even for dotfile or trailing dot; this fixes previously unresolved name-filter semantics.",
+    "Path-hidden helper detects starting dot or slash-dot components without filesystem lookup; name policy rather than file attribute check."
+  ],
+  "limits": [
+    "Only utilities.c1-330 read; no whole-file credit.",
+    "No runtime execution or own-library edits in this increment. Native pHash deferred; global count150/500."
+  ]
+}
