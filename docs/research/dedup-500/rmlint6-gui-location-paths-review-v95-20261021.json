@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/views/locations.py": {
+      "sha256": "0f6e6f223d2cb979bf67b73a92b9fe3c69021ed2eb75aab6566f2e62df37d0b6",
+      "git_blob": "04b5bf375bc8673db30e244e719502ab23880488",
+      "lines": 606
+    }
+  },
+  "cumulative_whole_files_read": 212,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read and Git/SHA256 verification; original AST add_entry and size callback executed with synthetic data and fake widgets.",
+  "findings": [
+    "du callback joins all digits in entire stdout, including path. Original control for12KB reports12288 bytes with plain path but124954624 with data2026 path. It assumes1024-byte du units and does not validate exit status; partial output can appear complete.",
+    "add_entry strips leading/trailing whitespace, altering valid Unix paths. Original control inserts /tmp/name for input space-/tmp/name-space. Root slash is silently omitted by this view.",
+    "known_paths deduplicates literal normalized-by-strip strings only, not aliases, canonical paths, inode identity or overlapping roots. Scanner-level physical-identity guarantees remain separate.",
+    "Recent file URI is converted using removeprefix rather than percent decoding; non-file schemes are not filtered here. No real RecentManager behavior claimed.",
+    "Cache is directly truncated/written without atomic replacement or fsync. JSON is parsed without shape validation; malformed valid JSON can fail later outside loader exception handler. No cache corruption was induced.",
+    "Each initial/add entry can start a du process; no view-level concurrency bound or cancellation is visible. Historical comment asserting speed is not a benchmark.",
+    "Chooser installs a new selection-changed handler on each opening without disconnecting it; selected-row style and selected_locations reset independently. GTK consequences need runtime qualification.",
+    "Preferred directories are tagged for original ranking; this is not an exclusion from traversal. Shortcut intentionally scans as untagged."
+  ],
+  "executed_control": {
+    "du_reported_bytes_for_12KB_plain_path": 12288,
+    "du_reported_bytes_for_12KB_digit_path": 124954624,
+    "inserted_paths": [
+      "/tmp/name"
+    ],
+    "scope": "Original AST methods, synthetic du output and fake widgets; no scan, subprocess or persistent cache write."
+  },
+  "limits": [
+    "212/289 blobs reviewed; full-repository count150/500.",
+    "No GUI runtime, persistent cache mutation or current performance measurement."
+  ]
+}
