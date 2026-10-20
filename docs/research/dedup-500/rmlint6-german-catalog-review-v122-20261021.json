@@ -1,0 +1,43 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "po/de.po": {
+      "sha256": "19aa655ae0cf3fd90c2ec510e3a725294ae2868b10c9bd71faee94c91cce2c60",
+      "git_blob": "d2c639ffbeef0430b5c0961bf1bd11b1c5c3cd18",
+      "lines": 1426
+    }
+  },
+  "cumulative_whole_files_read": 273,
+  "tracked_blobs": 289,
+  "method": "Full pinned German catalog read, blob verification, active-entry parsing and normal/use-fuzzy msgfmt. Initial printed output clipped middle; reread665..805 before credit. Heuristic added-placeholder scan complements semantic read, not exhaustive format analysis.",
+  "findings": [
+    "264 active entries,212 nonempty,67 fuzzy,145 nonfuzzy nonempty. Normal msgfmt checks exit0 with four placeholder-header warnings; explicit use-fuzzy exits1 with13 fatal errors.",
+    "Fuzzy entries include opposite backup/cross-mount wording and file-name wording for layout/dirname/relative path. These are pending translations, excluded normally; no active-policy inversion claimed.",
+    "Same extra percent-s replay-node translation as French is fuzzy here and excluded. Heuristic scan of active nonfuzzy messages introducing placeholders into placeholder-free source found no candidates; this narrow scan is not proof of all format correctness.",
+    "Active output-writing error incorrectly says cannot open for reading, obscuring actual write failure. Active stamp message repeats finish-time promise already contradicted by INIT source writer.",
+    "Fuzzy read errors change long-long counters to int; several parser errors omit arguments. Do not remove fuzzy flags without format and semantic validation.",
+    "POT truncated Only first percent key is translated but cannot match full runtime key containing format macro. Successful compilation cannot establish actual lookup coverage.",
+    "Most new reflink exit states and GUI settings remain blank/fuzzy. Historical obsolete entries and template-date metadata do not count as verified localization."
+  ],
+  "executed_control": {
+    "active_entries": 264,
+    "nonempty_translations": 212,
+    "fuzzy_entries": 67,
+    "nonfuzzy_nonempty": 145,
+    "active_added_placeholder_candidates": [],
+    "default": {
+      "exit": 0,
+      "output": ".dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'PO-Revision-Date' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'Last-Translator' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'Language-Team' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'Language' still has the initial default value\n"
+    },
+    "include_fuzzy_diagnostic": {
+      "exit": 1,
+      "output": ".dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'PO-Revision-Date' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'Last-Translator' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'Language-Team' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:7: warning: header field 'Language' still has the initial default value\n.dedup-work/rmlint6-20261021/po--de.po:22: 'msgid' and 'msgstr' entries do not both end with '\\n'\n.dedup-work/rmlint6-20261021/po--de.po:27: 'msgid' and 'msgstr' entries do not both end with '\\n'\n.dedup-work/rmlint6-20261021/po--de.po:265: format specifications in 'msgid' and 'msgstr' for argument 2 are not the same\n.dedup-work/rmlint6-20261021/po--de.po:288: format specifications in 'msgid' and 'msgstr' for argument 1 are not the same\n.dedup-work/rmlint6-20261021/po--de.po:368: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--de.po:388: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--de.po:532: 'msgid' and 'msgstr' entries do not both begin with '\\n'\n.dedup-work/rmlint6-20261021/po--de.po:563: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--de.po:568: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--de.po:573: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--de.po:620: number of format specifications in 'msgid' and 'msgstr' does not match\n.dedup-work/rmlint6-20261021/po--de.po:1047: 'msgid' and 'msgstr' entries do not both end with '\\n'\n/opt/homebrew/bin/msgfmt: found 13 fatal errors\n"
+    }
+  },
+  "limits": [
+    "273/289 blobs reviewed; global whole-repository count150/500.",
+    "No German application runtime, GUI or product locale changes."
+  ]
+}
