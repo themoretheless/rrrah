@@ -1,0 +1,1228 @@
+
+running 51 tests
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test cache::publication_tests::every_stream_write_failure_is_reported_and_short_writes_preserve_bytes ... ok
+test exact::cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range ... ok
+test exact::cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures ... ok
+test exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry ... ok
+test exact::interrupted_read_tests::every_partial_read_failure_preserves_typed_error_and_unread_tail ... ok
+test exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader ... ok
+test exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors ... ok
+test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+test exact::cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt ... ok
+test exact::cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes ... ok
+test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test exact::collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle ... ok
+test local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation ... ok
+test sequence::duration_sum_tests::large_shared_denominator_reduces_before_overflow ... ok
+test sequence::duration_sum_tests::sum_retains_exact_time_and_refuses_unrepresentable_result ... ok
+test gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test gradient::matching_tests::sixteen_descriptor_lanes_preserve_scalar_bits_and_every_tail ... ok
+test exact::collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test exact::collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality ... ok
+test exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+test exact::cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller ... ok
+test exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+test worker::group_quiescence_tests::quiescence_refuses_live_leader_and_live_descendant_after_leader_exit ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::fused_pair_controls::fused_pair_matches_independent_bytes_across_block_edges_and_mismatch_positions ... ok
+test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test tests::every_byte_pattern_in_low_and_high_bits_matches_full_scan_at_every_radius ... ok
+test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+
+test result: ok. 49 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 1.17s
+
+     Running tests/affine_candidate_search.rs (target/debug/deps/affine_candidate_search-2ed6be70257b9cb2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_color.rs (target/debug/deps/affine_color-f1c3240c8f8c2875)
+
+running 4 tests
+test coefficient_offset_range_and_preflight_work_bounds ... ok
+test independent_mixed_channel_transform_and_disjoint_validation ... ok
+test uniform_rank_deficient_and_target_singular_inputs_refuse ... ok
+test every_fit_and_validation_checkpoint_cancels_without_partial_evidence ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_color_heldout_negative.rs (target/debug/deps/affine_color_heldout_negative-45a03c9279380112)
+
+running 1 test
+test fitted_color_does_not_accept_unrelated_heldout_samples ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_region.rs (target/debug/deps/affine_region-bfa43cf43a7474dd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_region_file.rs (target/debug/deps/affine_region_file-02382f974c228c0d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_region_grid.rs (target/debug/deps/affine_region_grid-030d4e5eedfecbc9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_region_input_contract.rs (target/debug/deps/affine_region_input_contract-10676f5a22422ae9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_candidate_search.rs (target/debug/deps/anchor_candidate_search-28c52c80e989add3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_collection.rs (target/debug/deps/anchor_collection-ef0e82ef9d5237d7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_collection_preflight.rs (target/debug/deps/anchor_collection_preflight-252941b0e58c12fc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_collection_scaled.rs (target/debug/deps/anchor_collection_scaled-75ffccdde6425b2c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_fallback_collection.rs (target/debug/deps/anchor_fallback_collection-9c5c91c892554359)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_fallback_collection_lifecycle.rs (target/debug/deps/anchor_fallback_collection_lifecycle-8f01aa6fa251b1f0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_fallback_collection_preflight.rs (target/debug/deps/anchor_fallback_collection_preflight-bb6d043999f8b16d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_fallback_search.rs (target/debug/deps/anchor_fallback_search-ecf75fa79c3548d8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_file_search_preflight.rs (target/debug/deps/anchor_file_search_preflight-8a0851955c7067e5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_collection.rs (target/debug/deps/anchor_geometry_collection-4ced698be4b8e603)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_collection_lifecycle.rs (target/debug/deps/anchor_geometry_collection_lifecycle-2b86f8b7c1dc8221)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_collection_preflight.rs (target/debug/deps/anchor_geometry_collection_preflight-fea60c3eeb8eecff)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_rank_fallback.rs (target/debug/deps/anchor_geometry_rank_fallback-e0b212a342ae2fdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_search.rs (target/debug/deps/anchor_geometry_search-cb05c1937fbd7530)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_smoothing.rs (target/debug/deps/anchor_geometry_smoothing-018dd89a5fce2f45)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_rank.rs (target/debug/deps/anchor_rank-13f50194f3e9dfc5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_rank_driven_collection.rs (target/debug/deps/anchor_rank_driven_collection-49618ae6970450da)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_rank_driven_collection_lifecycle.rs (target/debug/deps/anchor_rank_driven_collection_lifecycle-ed29a3d5fb6e4222)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_rank_driven_collection_preflight.rs (target/debug/deps/anchor_rank_driven_collection_preflight-d3537c6e3075efbd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_rank_file.rs (target/debug/deps/anchor_rank_file-90b031e251180135)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflected_geometry.rs (target/debug/deps/anchor_reflected_geometry-700da90e6e4e2687)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflection_collection.rs (target/debug/deps/anchor_reflection_collection-25a93bcf593ec85c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflection_collection_cancel.rs (target/debug/deps/anchor_reflection_collection_cancel-238780ac7bff4ea7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflection_collection_lifecycle.rs (target/debug/deps/anchor_reflection_collection_lifecycle-e9d8a18da1898cb7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflection_collection_tokens.rs (target/debug/deps/anchor_reflection_collection_tokens-de2b1f36448295ca)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflection_fallback.rs (target/debug/deps/anchor_reflection_fallback-dc21c82bcf5a7f72)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/animated.rs (target/debug/deps/animated-87aa1a0d05154d9b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/bank_geometry.rs (target/debug/deps/bank_geometry-9bb7822e495569f7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/bank_partition.rs (target/debug/deps/bank_partition-3dc3703a5ab2cd69)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/build_context.rs (target/debug/deps/build_context-e687e9b1d0beda6b)
+
+running 2 tests
+test context_is_order_independent_and_excludes_unrelated_environment ... ok
+test native_build_inputs_and_previously_absent_target_overrides_change_context ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cache.rs (target/debug/deps/cache-9b7ca22f8421d728)
+
+running 10 tests
+test cache_publication_child ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test zero_budget_and_owned_values_preserve_previous_entry ... ok
+test every_serialized_bit_corruption_is_rejected ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test cache_preserves_every_bit_of_all_transform_hash_channels ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test unwritable_parent_refuses_before_publication_and_preserves_retry ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.92s
+
+     Running tests/cache_interpretation.rs (target/debug/deps/cache_interpretation-879ab59fc322d48d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cache_rla_interpretation.rs (target/debug/deps/cache_rla_interpretation-071d63f16d4b5f06)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/candidate_geometry_only.rs (target/debug/deps/candidate_geometry_only-121ca6272481d24e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/candidate_reflected_geometry.rs (target/debug/deps/candidate_reflected_geometry-3e1ff3d768a2d823)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/candidate_union_files.rs (target/debug/deps/candidate_union_files-d3ddcef2c69e37d7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/competitive_rank.rs (target/debug/deps/competitive_rank-59e524a83630c3c5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/container.rs (target/debug/deps/container-7110b2121e565ab7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/content_snapshot.rs (target/debug/deps/content_snapshot-dada1f1fadde4e2d)
+
+running 1 test
+test full_digest_rejects_equal_length_mutation_and_budget_excess ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/correspondence_union.rs (target/debug/deps/correspondence_union-a5372b5f71b6d7af)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/crop.rs (target/debug/deps/crop-9922c56d39be9d77)
+
+running 3 tests
+test bordered_hdr_image_matches_only_the_full_crop ... ok
+test uniform_transparent_matches_expose_ambiguity_and_result_limits ... ok
+test work_budget_and_mid_search_cancel_are_inconclusive ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/decode.rs (target/debug/deps/decode-6adcb7f458b566bb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/diagonal_proposals.rs (target/debug/deps/diagonal_proposals-22a0f47b2b5b787c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/encoded_srgb.rs (target/debug/deps/encoded_srgb-c1624d1da31ee08d)
+
+running 2 tests
+test encoded_affine_changes_match_independent_decimal_fixtures_and_preserve_linear_identity ... ok
+test seven_by_seven_encoded_windows_retain_broad_color_and_alpha_edits ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/exact_files.rs (target/debug/deps/exact_files-f2fc6b3325e0c5aa)
+
+running 33 tests
+test excess_root_admission_refuses_before_missing_source_io ... ok
+test duplicate_root_admission_retains_boundary_and_fresh_retry ... ok
+test atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test reordered_middle_blocks_with_identical_sampled_edges_are_not_copies ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test hidden_directories_and_empty_files_remain_in_exact_partitions ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test verified_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test sibling_roots_with_a_shared_name_prefix_keep_both_file_sets ... ok
+test unique_sizes_skip_payload_reads_without_weakening_verified_observations ... ok
+test exact_content_partitions_ignore_extensions_and_check_unsampled_bytes ... ok
+test whitespace_path_names_preserve_all_authored_copy_partitions ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test late_exact_source_failures_preserve_healthy_members_and_other_groups ... ok
+test block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes ... ok
+test nested_overlapping_roots_match_the_full_authored_partition ... ok
+test restored_modified_time_does_not_hide_same_inode_edit_during_scan ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.07s
+
+     Running tests/exact_large_files.rs (target/debug/deps/exact_large_files-4e495fe7782c74f9)
+
+running 4 tests
+test large_file_discovery_keeps_u64_lengths_and_reports_limit_omissions ... ok
+test large_logical_lengths_cannot_wrap_byte_admission ... ok
+test large_sparse_reads_cancel_without_publishing_an_unread_group ... ok
+test dense_large_files_distinguish_changes_outside_spaced_samples ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.64s
+
+     Running tests/exact_repeated_metadata.rs (target/debug/deps/exact_repeated_metadata-dbdbecf66d6a3477)
+
+running 1 test
+test repeated_comparisons_reread_content_when_size_and_modified_time_are_restored ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/exposure.rs (target/debug/deps/exposure-fb054086fd76b693)
+
+running 5 tests
+test calibration_scratch_and_all_cancellation_boundaries_are_guarded ... ok
+test budget_precedes_reads_and_late_cancellation_discards_measurement ... ok
+test zero_negative_and_transparent_inputs_refuse_calibration ... ok
+test uniform_exposure_calibrates_dark_and_hdr_without_clipping ... ok
+test calibrated_rank_recovers_uniform_darkening_and_rejects_inversion ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/exposure_files.rs (target/debug/deps/exposure_files-aab67b086c53f543)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/filtered.rs (target/debug/deps/filtered-86cff0af854db2e3)
+
+running 4 tests
+test broad_content_edits_and_alpha_changes_remain_visible_after_filtering ... ok
+test complete_work_is_admitted_before_sampling_and_cancellation_has_no_partial_evidence ... ok
+test independently_known_box_mean_retains_strict_high_frequency_differences ... ok
+test reflected_filter_retains_color_space_alpha_work_and_cancel_policy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/five_collection.rs (target/debug/deps/five_collection-15646d1d4b220092)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/five_gradient_region_lifecycle.rs (target/debug/deps/five_gradient_region_lifecycle-6ad9f56362cb9160)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/five_lifecycle.rs (target/debug/deps/five_lifecycle-7987cac7c7d297d2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/five_region_admission.rs (target/debug/deps/five_region_admission-cb30445a61851999)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/five_region_lifecycle.rs (target/debug/deps/five_region_lifecycle-be393ec733261484)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/geometry.rs (target/debug/deps/geometry-274f52bab19cc19b)
+
+running 9 tests
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/geometry_validation.rs (target/debug/deps/geometry_validation-74b4cd6cf76465ac)
+
+running 10 tests
+test exact_work_limits_are_prepaid_and_one_less_refuses ... ok
+test coupled_fit_and_validation_enforce_both_work_budgets ... ok
+test invalid_endpoints_domains_models_and_policy_never_publish_evidence ... ok
+test aliases_in_either_domain_and_either_set_are_refused ... ok
+test every_one_shot_cancellation_checkpoint_refuses_and_retry_is_identical ... ok
+test scale_exposes_distinct_forward_reverse_and_joint_evidence ... ok
+test unchanged_model_scores_only_declared_validation_and_retains_outliers ... ok
+test malformed_validation_is_refused_even_when_training_has_no_model ... ok
+test fitting_never_uses_validation_to_select_refine_or_replace_the_training_model ... ok
+test coupled_fit_one_shot_cancellation_covers_training_and_validation_then_retry ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient.rs (target/debug/deps/gradient-e90452e9e2fc3605)
+
+running 8 tests
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/gradient_candidate_smoothing.rs (target/debug/deps/gradient_candidate_smoothing-e618e130011a8273)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_collection.rs (target/debug/deps/gradient_collection-10041e906d522336)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_distinct_locations.rs (target/debug/deps/gradient_distinct_locations-3f62c04edfd70332)
+
+running 3 tests
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_empty.rs (target/debug/deps/gradient_empty-d8e6a8766b7a527d)
+
+running 1 test
+test empty_gradient_inputs_honor_terminal_cancellation_and_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_index.rs (target/debug/deps/gradient_index-61a25fc131eaf7cb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_index_reflection.rs (target/debug/deps/gradient_index_reflection-c07e86b519a5011e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_interpolated.rs (target/debug/deps/gradient_interpolated-a24bcd1aa038555b)
+
+running 4 tests
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/gradient_reflection.rs (target/debug/deps/gradient_reflection-9953eced793d3f7f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_scale.rs (target/debug/deps/gradient_scale-d743b9bce141c0d2)
+
+running 2 tests
+test admission_and_cancellation_return_no_partial_features ... ok
+test intermediate_scale_recovers_authored_reduction_without_acceptance_relaxation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/gradient_scale_files.rs (target/debug/deps/gradient_scale_files-ea0c6a40cf0dda93)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/groups.rs (target/debug/deps/groups-f0f222c24dd6f139)
+
+running 5 tests
+test invalid_input_budget_and_cancellation_are_explicit ... ok
+test nontransitive_chain_preserves_edge_without_inventing_pair ... ok
+test every_emitted_group_has_all_pairs_for_all_small_graphs ... ok
+test isolated_and_sparse_entries_avoid_unrelated_group_checks ... ok
+test sparse_selection_matches_independent_exhaustive_reference_for_all_six_node_graphs ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/hamming_image_corpus.rs (target/debug/deps/hamming_image_corpus-2f029cb2b46ee900)
+
+running 1 test
+test image_hash_corpus_matches_full_scan_without_top_k_truncation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/icc_oracle.rs (target/debug/deps/icc_oracle-73c2562847d14e41)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/information.rs (target/debug/deps/information-40ead8298585c692)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/joint_projective.rs (target/debug/deps/joint_projective-d4f8e0fc69f39c46)
+
+running 4 tests
+test joint_projection_caps_overflow_invalid_and_cancellation_refuse ... ok
+test joint_first_middle_last_cancellation_and_retry_are_deterministic ... ok
+test real_reverse_points_select_joint_support_instead_of_target_only_winner ... ok
+test real_207700_recovers_with_explicit_larger_sampling_and_projection_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/joint_witnesses.rs (target/debug/deps/joint_witnesses-7fefddd189db93d5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/jpeg_orientation.rs (target/debug/deps/jpeg_orientation-1973b42824091498)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/linear.rs (target/debug/deps/linear-7d92a298efd19507)
+
+running 4 tests
+test hdr_and_sub_byte_differences_are_retained ... ok
+test hdr_fingerprints_keep_highlight_structure_without_quantization ... ok
+test invisible_rgb_and_signed_zero_are_canonical ... ok
+test invalid_samples_budget_and_cancel_are_explicit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local.rs (target/debug/deps/local-c35733ac791a04f5)
+
+running 4 tests
+test flat_images_ambiguous_descriptors_budgets_and_cancel_are_explicit ... ok
+test one_shot_matching_cancellation_discards_every_partial_result_and_retries ... ok
+test extracted_crop_matches_drive_geometry_and_pixel_verification ... ok
+test quarter_turn_crops_are_found_without_manual_correspondences ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/local_collection.rs (target/debug/deps/local_collection-8bbecbb1cfe59859)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_index.rs (target/debug/deps/local_index-3be72164410c1d50)
+
+running 6 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/local_rank.rs (target/debug/deps/local_rank-39fd53bb489ea9b4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_rank_cached.rs (target/debug/deps/local_rank_cached-a20852fdc0d69a53)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_scan.rs (target/debug/deps/local_scan-70772bd58e887543)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/managed_evidence.rs (target/debug/deps/managed_evidence-0f257fc638df91b1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_deformation.rs (target/debug/deps/mesh_deformation-38ddb0ca657cd629)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_grid.rs (target/debug/deps/mesh_grid-ed6fd4ea67290b19)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_landmark_admission.rs (target/debug/deps/mesh_landmark_admission-302f4f46e80b7ac6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_rank.rs (target/debug/deps/mesh_rank-458b00cedf4b2d85)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_rank_regions.rs (target/debug/deps/mesh_rank_regions-857238511ca7acb4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_refine.rs (target/debug/deps/mesh_refine-0d714e84aecb9e69)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_compare.rs (target/debug/deps/model_compare-944fbbaa7e7673f6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_input.rs (target/debug/deps/model_input-402f06dfba5e5a5a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_input_file.rs (target/debug/deps/model_input_file-1427162a6209a3cf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_projected_compare.rs (target/debug/deps/model_projected_compare-51a9ce7b8cb2352a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_projected_tiles.rs (target/debug/deps/model_projected_tiles-818b1b79171092cd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_tiles.rs (target/debug/deps/model_tiles-33e638753a7f8740)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/native_anchor_recovery.rs (target/debug/deps/native_anchor_recovery-b37ca56384e0976a)
+     Running tests/native_pixel_domain.rs (target/debug/deps/native_pixel_domain-de8226a5b5435407)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ordinal.rs (target/debug/deps/ordinal-20aa37f1a688e8b7)
+
+running 1 test
+test monotone_neutral_transfers_preserve_features_and_indexed_correspondences ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/oriented.rs (target/debug/deps/oriented-6b7af02eecd61faf)
+
+running 4 tests
+test oriented_extraction_cancels_inside_descriptor_work_and_enforces_budgets ... ok
+test independent_arbitrary_rotations_recover_geometry_and_reject_unrelated_texture ... ok
+test independently_resized_images_estimate_non_dyadic_scale_and_rotation ... ok
+test reflected_descriptors_reach_original_geometry_and_pixel_proof ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/pages.rs (target/debug/deps/pages-73ceb7833b52b680)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pair_schedule.rs (target/debug/deps/pair_schedule-612f01b75f95a057)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/palette_mutation.rs (target/debug/deps/palette_mutation-b592d7cb271e76a1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/palette_transparency.rs (target/debug/deps/palette_transparency-c1246ef16db06bc3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/periodic_capture.rs (target/debug/deps/periodic_capture-b8d3b4b24584cc8c)
+
+running 1 test
+test periodic_capture_bands_keep_strict_evidence_and_reject_broad_content_changes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.32s
+
+     Running tests/photo_collages.rs (target/debug/deps/photo_collages-8f873bc299b4d1fd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photo_files.rs (target/debug/deps/photo_files-ea078ce31a92c675)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photo_jpeg_oracle.rs (target/debug/deps/photo_jpeg_oracle-568aeabf96895f2c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photometric.rs (target/debug/deps/photometric-285f428a5e291617)
+
+running 7 tests
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photos_heldout.rs (target/debug/deps/photos_heldout-91cb416d7be18880)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/piecewise_local_rank.rs (target/debug/deps/piecewise_local_rank-545f74ebdb48dc5d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/piecewise_warp.rs (target/debug/deps/piecewise_warp-6f4a78cf0ce0ca61)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pixel_search.rs (target/debug/deps/pixel_search-f9d13162ada62b02)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pixels.rs (target/debug/deps/pixels-dd7227e74ee02ce5)
+
+running 8 tests
+test gradient_has_independently_known_difference_bits ... ok
+test identical_and_transparent_pixel_equality_observe_late_cancellation ... ok
+test identical_pixels_honor_each_block_and_final_cancellation_checkpoint ... ok
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection ... ok
+test validates_layout_budget_and_cancellation ... ok
+test all_opaque_gray_levels_collide_only_as_uninformative_candidates ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/portfolio_collection.rs (target/debug/deps/portfolio_collection-b4aac6262620fd5c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation_digest.rs (target/debug/deps/presentation_digest-3a9aeedf1158c2c1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation_kind.rs (target/debug/deps/presentation_kind-4beae7fe4b7b21de)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projected_collection.rs (target/debug/deps/projected_collection-5d5064c0aff5cb9f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projected_portfolio.rs (target/debug/deps/projected_portfolio-b191cfba7e956e72)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_domains.rs (target/debug/deps/projective_domains-85b614c03bfec3bb)
+
+running 4 tests
+test supported_horizon_model_is_excluded_from_whole_domains ... ok
+test inverse_horizon_is_rejected_even_when_forward_domain_is_valid ... ok
+test admissible_model_matches_original_and_cancellation_is_atomic ... ok
+test valid_alternative_survives_a_stronger_horizon_consensus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/projective_exhaustive_domains.rs (target/debug/deps/projective_exhaustive_domains-076fddea3fd4e3ae)
+
+running 3 tests
+test horizon_only_points_and_zero_domains_are_explicit ... ok
+test every_cancel_and_one_short_work_limit_refuse_partial_results ... ok
+test weaker_eligible_model_is_not_hidden_by_stronger_horizon_model ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_files.rs (target/debug/deps/projective_files-a3cdd3dd4426d3ae)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_geometry.rs (target/debug/deps/projective_geometry-e7a77269bb773a2b)
+
+running 14 tests
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test perspective_mapping_and_permutations ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/projective_grid.rs (target/debug/deps/projective_grid-2c5b7368284ea8dd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_pruning.rs (target/debug/deps/projective_pruning-3bd188916d619a57)
+
+running 3 tests
+test cancellation_and_malformed_suffix_still_refuse_before_any_evidence ... ok
+test real_reverse_correspondences_match_complete_reference_in_both_scoring_modes ... ok
+test seeded_identity_noise_and_outliers_match_unpruned_bits_and_exercise_dominance ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/proposals.rs (target/debug/deps/proposals-c9f459f0109577f4)
+
+running 4 tests
+test crop_center_offsets_use_full_domains_and_reject_points_outside_the_crop ... ok
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pyramid.rs (target/debug/deps/pyramid-d81585d6379d5053)
+
+running 4 tests
+test scale_is_estimated_from_extracted_multiresolution_features ... ok
+test enlarged_quarter_turn_recovers_scale_and_rotation_together ... ok
+test oriented_pyramid_keeps_recipe_source_coordinates_and_admission ... ok
+test spatial_pyramid_preserves_level_coordinates_admission_and_cancellation ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/rank_region.rs (target/debug/deps/rank_region-a3565222f8f7239f)
+
+running 7 tests
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster.rs (target/debug/deps/raster-0782b5d3cb95ddf8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_equality.rs (target/debug/deps/raster_equality-7d5ab417413721fe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raw_selected.rs (target/debug/deps/raw_selected-bf289ed254eb2f3f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_footprint.rs (target/debug/deps/region_footprint-35268a1e1e2602b8)
+
+running 5 tests
+test inlier_domain_observes_mid_and_final_cancel_without_partial_result ... ok
+test inlier_domain_rejects_unbounded_indices_coordinates_and_work ... ok
+test inlier_domain_rounds_neighbors_and_stays_inside_fitting_region ... ok
+test invalid_horizon_singular_and_cancelled_refuse ... ok
+test scale_rotation_and_homography_magnitude_preserve_footprint ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_grid.rs (target/debug/deps/region_grid-9fb84f627659fd9f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_grid_files.rs (target/debug/deps/region_grid_files-5015a3fa39653894)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_transform.rs (target/debug/deps/region_transform-02cae9fb5a56e051)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scan.rs (target/debug/deps/scan-00b5922f26029d04)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scan_cancellation_checkpoints.rs (target/debug/deps/scan_cancellation_checkpoints-79ba81f8c102c3bf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scan_group_publication.rs (target/debug/deps/scan_group_publication-9b0d2b9c4956ce30)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scan_retry.rs (target/debug/deps/scan_retry-40dc93751f6a3fb9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/search_portfolio.rs (target/debug/deps/search_portfolio-76280a73078e9220)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/sequence.rs (target/debug/deps/sequence-e306d74b613a8e42)
+
+running 8 tests
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test animation_requires_timing_and_compares_repetitions ... ok
+test complete_coverage_is_required ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test ordered_subsets_do_not_establish_complete_sequence_or_timeline_identity ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/spatial.rs (target/debug/deps/spatial-fe9fed1e22386b8d)
+
+running 1 test
+test spatial_quotas_keep_self_geometry_and_reject_unrelated_texture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/triangulation.rs (target/debug/deps/triangulation-7980ed3a520d099c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual.rs (target/debug/deps/visual-60ad3c84d4afbf00)
+
+running 9 tests
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test nonfinite_fingerprint_statistics_never_claim_informative_evidence ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/visual_publication.rs (target/debug/deps/visual_publication-4206f522d8c10179)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/wal_dependency.rs (target/debug/deps/wal_dependency-4f99fccd3a3aecef)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/warp.rs (target/debug/deps/warp-4d6384b69969e67f)
+
+running 5 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+test explicit_projective_regions_retain_edits_domains_and_atomic_refusals ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/worker.rs (target/debug/deps/worker-b1f4f6ac9b323189)
+
+running 7 tests
+test worker_fixture ... ok
+test invalid_policy_input_and_initial_cancellation_never_spawn ... ok
+test binary_input_and_output_survive_private_stdio_files ... ok
+test nonzero_exit_preserves_bounded_binary_diagnostics ... ok
+test live_cancellation_terminates_and_reaps_then_a_retry_succeeds ... ok
+test stdout_and_stderr_floods_stop_without_pipe_deadlock ... ok
+test deadline_terminates_and_reaps_a_blocking_worker ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/worker_group.rs (target/debug/deps/worker_group-4f54176ba899a242)
+
+running 9 tests
+test group_fixture ... ok
+test group_initial_refusals_do_not_spawn ... ok
+test group_observer_detects_live_and_reaped_child ... ok
+test group_callback_panic_still_stops_descendant ... ok
+test group_capture_limit_stops_descendant ... ok
+test group_normal_and_failed_leader_exit_stop_descendants ... ok
+test group_fast_empty_exit_keeps_status_and_diagnostics ... ok
+test group_cancel_stops_live_descendant_and_retry_succeeds ... ok
+test group_deadline_stops_live_descendant ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+
+   Doc-tests rrrah_dedup
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+

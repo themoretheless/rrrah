@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake2/blake2s-ref.c": {
+      "sha256": "645fb0212db0d6e15a1568da210ac3f7123da1ab4330d4fc0e33312d742d569a",
+      "git_blob": "c8b035f621356120285610313e8219035621abd4",
+      "lines": 367
+    }
+  },
+  "cumulative_whole_files_read": 158,
+  "tracked_blobs": 289,
+  "method": "Full pinned source read, Git/SHA256 validation; compiled unchanged source and authored canary control using a32-byte output buffer.",
+  "findings": [
+    "BLAKE2s uses64-byte blocks,32-bit lanes,64-bit counter with carry and retains final full block for padding/final flag. Key block is cleared after initialization.",
+    "Final checks outlen>=configured digest length but copies outlen rather than configured S->outlen, unlike BLAKE2b. Control with configured16-byte digest and32-byte output writes all32 bytes, changing16 trailing canary bytes. Output lengths beyond internal32-byte temporary would exceed source-buffer bounds by code inspection; that case was not executed.",
+    "Repeated final is rejected; conditional selftest depends on absent blake2-kat.h. No independent digest oracle run for this implementation in this step."
+  ],
+  "executed_control": {
+    "exit_code": 0,
+    "configured_digest_bytes": 16,
+    "output_capacity_and_final_argument": 32,
+    "changed_tail_canary_bytes": 16,
+    "scope": "Original source, abc input, allocated output32 bytes. No out-of-bounds read/write case executed."
+  },
+  "limits": [
+    "No production-library change; upstream API behavior observation.",
+    "158/289 blobs reviewed; rmlint full review still incomplete."
+  ]
+}
