@@ -1,0 +1,33 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/tutorial.rst": {
+      "sha256": "a246dcd07a88dcd1c744663f689000ccc86591adae36dd1a7a66cb2022739578",
+      "git_blob": "c855a57512ed01004616d0ea06b7e8901e2d56f9",
+      "lines": 907
+    }
+  },
+  "cumulative_whole_files_read": 251,
+  "tracked_blobs": 289,
+  "method": "Complete pinned tutorial read and Git/SHA256 verification. All commands treated as examples, no scan/removal/install executed. Cross-referenced previously read implementations.",
+  "findings": [
+    "Tutorial explicitly defines duplicate match as either exact equality or matching hashes depending on settings; ordinary hash results are not byte-equality certificates. Cryptographic probability prose is not independently validated here.",
+    "Original means retained representative, not historical source. Tagged paths outrank rank-by; keep-all-tagged is distinct from preference, and must-match-tagged intentionally limits output.",
+    "Size/name/extension/mtime/hidden/depth/mount filters intentionally change eligible domain. Empty files require explicit duplicate configuration in examples; lint categories differ from exact-equality groups.",
+    "Clamp compares chosen byte interval and ignores too-short files; identical ranges do not establish whole-file equality. Our forced-digest/full-byte controls remain separate evidence.",
+    "Directory merging is explicitly experimental, retains records until end and warns about concurrent filesystem changes. Merkle-tree prose does not override previously reproduced count/XOR/distinct-set multiplicity weakness.",
+    "Replay reuses stored results and hashing/algorithm/paranoid/traversal options have no effect. Newer-mtime filtering is not reliable changed-content detection when mtime is preserved. No fresh content proof from replay.",
+    "Stamp is run timestamp, not completed-success checkpoint; earlier formatter source writes at INIT. Incremental example cannot establish recovery after interrupted traversal.",
+    "xattr modes write metadata and may hash duplicates only, same-size unmatched or uniques depending options. This qualifies introductory never modifies filesystem assertion and changes workload of first/warm runs.",
+    "NUL-delimited find example addresses newline filenames; later hidden-exclusion pipeline places -print0 on grep rather than find, so it is not a valid general NUL-path recipe. No examples executed.",
+    "Shell formatter remove/symlink never fails prose is too broad for IO/permissions/resource errors and not a checked invariant. JSON header/footer can be configured off, so fixed slicing recipes depend on defaults.",
+    "Tutorial unit conventions distinguish decimal K/M from binary KB/MB, whereas GUI widget uses1024 with named units. Cross-UI equality of entered sizes needs explicit translation.",
+    "Referenced screenshot was already visually reviewed; SVG link target and remaining media receive no duplicate or new review credit."
+  ],
+  "limits": [
+    "251/289 blobs reviewed; global whole-repository count150/500.",
+    "Documentation/source cross-check only; no new runtime or throughput evidence."
+  ]
+}
