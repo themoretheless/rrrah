@@ -1,0 +1,52 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/SConscript": {
+      "sha256": "e29ccf234902a921d3858527ad873996ce8611fa081ee4769aaeed8a730f47d0",
+      "git_blob": "df60a4774e1145257fac87e548c41630753d94b9",
+      "lines": 225
+    },
+    "gui/shredder/views/settings.py": {
+      "sha256": "06eb4b9a36eb9bb8ec4e1506277b577945b4675060db25a46fe3e8f18bff7711",
+      "git_blob": "98bb93491e90b5cba03b5205552cbb7ede93fff0",
+      "lines": 381
+    }
+  },
+  "cumulative_whole_files_read": 205,
+  "tracked_blobs": 289,
+  "method": "Complete pinned reads, Git/SHA256 verification, original AST callback execution using fake settings and a queued timer. No installation or GTK invocation.",
+  "findings": [
+    "Settings on_view_enter connects changed each time without storing or disconnecting handler. Two original-method entries register two handlers in the control. Repeated live-view callbacks remain a source-level risk without actual GTK execution.",
+    "Reset reverts pending changes, queues a100ms reset and switches to previous view before callback. Original-method control records leave before reset:test-key and delay. Persistence semantics need real GSettings qualification; this is not proof of a persisted setting outcome.",
+    "Apply/revert is determined by save_settings on view leave; reset iterates every schema key including hidden ones. Unsupported variant types are silently skipped in UI construction.",
+    "Entry sorting uses order and widget object as tie-breaker, rather than key name. Equal order requires runtime widget comparability; no GTK failure claimed.",
+    "GUI build creates a wheel using selected Python and no build isolation; runtime data files/schema are installed separately. Source-only imports cannot prove installed resource availability.",
+    "Resource dependency output is split by whitespace. Build Python executable is interpolated without explicit quoting; paths containing spaces require separate validation.",
+    "Wheel uninstall uses distribution RECORD paths, legacy uninstall uses recorded paths, and prunes only empty directories; neither path was executed. Schema recompilation uses subprocess.call without propagating its exit status.",
+    "Delayed settings handlers and install/schema failure behavior are useful regression references, but no GPL source was copied into the library."
+  ],
+  "executed_control": {
+    "changed_handlers_after_two_enters": 2,
+    "events_before_timer": [
+      "delay",
+      "delay",
+      "revert",
+      "leave"
+    ],
+    "events_after_timer": [
+      "delay",
+      "delay",
+      "revert",
+      "leave",
+      "reset:test-key",
+      "delay"
+    ],
+    "scope": "Original AST methods with fake settings and timer; no GTK or persistence runtime."
+  },
+  "limits": [
+    "205/289 blobs reviewed; global full repository count150/500.",
+    "No GUI rendering, installation, uninstall or current performance measurement."
+  ]
+}
