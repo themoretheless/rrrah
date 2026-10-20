@@ -1,0 +1,44 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksum.h": {
+      "sha256": "09a41cdb6b11576e4d736328790eb95f710fbff28247a6f50ff12c17c8822adb",
+      "git_blob": "b704e46c85a036db6099738a05bde13f13c7aa0b",
+      "whole_file_read": true
+    }
+  },
+  "cumulative_whole_files_read": 6,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksum.c": {
+      "ranges_inclusive": [
+        [
+          54,
+          135
+        ],
+        [
+          1020,
+          1095
+        ]
+      ],
+      "sha256": "8480883789103e708ce9d578b4f52d3e6851bfdf35b394c07fdd45871e71574f",
+      "git_blob": "3450be63f7f22a2cfaca68d9029d753e31cb2576",
+      "whole_file_read": false
+    }
+  },
+  "method": "Whole header read and specified implementation ranges only; source bytes checked against stored pinned Git tree.",
+  "findings": [
+    "Buffer allocation acquires count semaphore before allocating; free releases it. Limit counts buffers, not a direct process-wide byte cap. Paranoid mode bypasses this semaphore.",
+    "RmBuffer stores allocation size and filled length as guint32 whereas allocation API accepts gsize; no input-range enforcement is shown in inspected allocation function. Large-size runtime behavior not tested.",
+    "Paranoid equality falls back to shadow digest equality when first operand buffers are absent; strict byte-proof conclusions therefore require lifecycle analysis of buffer release and callers.",
+    "With buffers present, ordinary slow path compares each block length/content and requires simultaneous list exhaustion; pre-matched twin/reject shortcuts precede it.",
+    "Header explicitly defines cumulative digest as order-insensitive. Such a digest cannot by itself prove ordered file-byte identity."
+  ],
+  "limits": [
+    "lib/checksum.c is only partially read and receives no whole-file credit.",
+    "No runtime tests or production changes in this increment; caller lifecycle and complete checksum implementation remain to inspect.",
+    "Native pHash deferred; global full repository count remains150/500."
+  ]
+}
