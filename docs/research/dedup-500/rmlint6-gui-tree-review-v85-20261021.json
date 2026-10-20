@@ -1,0 +1,36 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "gui/shredder/tree.py": {
+      "sha256": "6c7ac08cee0a7fd37ff3a12e6bbffb8b5c5092a85e9438cd8b39d26a87b47b68",
+      "git_blob": "dfacc4464f891247bec240248b8684efb090b27c",
+      "lines": 1069
+    }
+  },
+  "cumulative_whole_files_read": 188,
+  "tracked_blobs": 289,
+  "method": "Full source read in three contiguous ranges; Git/SHA256 verified. Executed original AST-extracted filter_model with original Query class and synthetic model/node adapters; no Gtk rendering.",
+  "findings": [
+    "filter_model directly uses prior partial trie when Query.issubset says true. Control shows foo size1 followed by foobar retains one of two authored matching paths, whereas fresh foobar search returns both. This reproduces method-level omission from v82 subset bug.",
+    "PathTrie groups leaf nodes solely by checksum value and appends on every insert. Re-inserting same path calls make_leaf again, increments ancestor counts/size again and appends same node again; no deduplication or old-row removal in this path.",
+    "Root-path index expects at least one nonempty component; slash root leaves last_map None before assignment. Nested predeclared roots can conflict with leaf-node dictionary representation. Source concerns not separately executed.",
+    "Column type list treats checksum as int despite storing hex string, size as float and mtime as int; generic get_value converts through these types. Large size precision and subsecond display loss are distinct from exact scanner evidence.",
+    "Filtered models share row objects and mtime cache, construct periodic GLib callbacks and retain only matching group members. Toggle-selected checks originals within current model group, not necessarily full group; toggle-all lacks matching original-preservation pass.",
+    "Tree iteration and ancestor walks recurse. Entry insertion is deferred in500-item chunks, but filtering and expansion iterate complete in-memory model synchronously; no explicit cancellation/work budget in these operations."
+  ],
+  "executed_control": {
+    "function": "gui/shredder/tree.py:PathTreeModel.filter_model",
+    "results": {
+      "first_matches": 1,
+      "warm_foobar_matches": 1,
+      "fresh_foobar_matches": 2
+    },
+    "scope": "Original filtering method and Query with fake Gtk-free model adapters; no complete UI/runtime or file operations."
+  },
+  "limits": [
+    "No production-library changes or GUI visual qualification.",
+    "188/289 blobs reviewed; global whole-repository count150/500."
+  ]
+}
