@@ -1,0 +1,57 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_size.py": {
+      "sha256": "8bfe9bdae15e0c6c95c3e0fdd75fbb065e69c1adb1305c2577180cb59fe14979",
+      "git_blob": "602149734ea5e4c41dbfa0c24aa92b951f50500c",
+      "lines": 133
+    },
+    "tests/test_options/test_mtime_window.py": {
+      "sha256": "df21ba2bfb8491c7bce285ee6095d9bbb10876d364751294356c137cb45a1b5e",
+      "git_blob": "0479fa4bde9c1063eb0eaeed03b845b57340583a",
+      "lines": 118
+    },
+    "tests/test_options/test_newer_than.py": {
+      "sha256": "bf1410b9dac0f8e2aa20fa93cf1c207aed1e58d9314592f19e08b619c9581451",
+      "git_blob": "4cd08aa7518e6849da844efa645581537f40aeb9",
+      "lines": 68
+    },
+    "tests/test_options/test_hidden_dirs.py": {
+      "sha256": "9b9ce1b8e3640694f0f9feb23924e192a9562757f2ef66ef9186e2f1b4c21486",
+      "git_blob": "f25b6e7aaa50daa2c5b2203fa2b8d21d0bc64105",
+      "lines": 70
+    },
+    "tests/test_options/test_perms.py": {
+      "sha256": "bb9ffd7ee0444580c8259b3a5071698fe5ab6146a8160eb9f048129920aa72fd",
+      "git_blob": "a9c52171680fbc00cd80f0663ee07d390c924844",
+      "lines": 68
+    }
+  },
+  "cumulative_whole_files_read": 65,
+  "tracked_blobs": 289,
+  "method": "Complete reads of five pinned test files; Git blob identities verified against pinned tree and SHA256 recorded. Upstream tests not executed.",
+  "findings": [
+    "Size tests assert scalar/range thresholds, inclusive equal bounds, uint64 maximum and invalid overflow/range failures. They do not cover fractional leading zeros implicated by our earlier original-parser control. Most positive checks assert footer duplicate counts rather than path partitions.",
+    "Directory-size filtering test depends on directory st_size behavior and skips incompatible filesystems. Replay size test deliberately retains empty-file and empty-directory lint despite a positive minimum duplicate-file size.",
+    "mtime-window tests distinguish disabled, exact, subsecond and positive windows, chained timestamps and content-group boundaries. These are explicit membership policies, not evidence that matching timestamps prove content equality.",
+    "Newer-than tests document a fast-execution assumption, use wall clock, future mtimes and a three-second sleep. Updating stamp files makes repeated pedantic runs inappropriate; tests call run_rmlint_once.",
+    "Hidden-directory tests cover exclusion, explicit hidden roots and partial-hidden directory matching, using footer counts and some path/type assertions.",
+    "Permission test simply returns when root rather than pytest.skip, so a reported pass can contain no assertions. Non-root cases enumerate permission combinations and assert aggregate counts, not path identities."
+  ],
+  "local_verification": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files size_depth_and_entry_limits_are_visible -- --exact",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 32,
+    "source_sha256": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f",
+    "scope": "Existing test uses a 100-byte file with max_file_bytes=99, max_depth=0 and max_entries=0. Each must report incomplete with an explicit Limit issue. Does not prove all threshold boundaries."
+  },
+  "limits": [
+    "No new production optimization or all-platform coverage claimed.",
+    "Repository remains partially reviewed; skipped native pHash/ASAN item untouched."
+  ]
+}
