@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 42,
+  "status": "reproduced_original_size_parser_fraction_error",
+  "method": "Original FormatSpec table and parser extracted unchanged, compiled against installed GLib2.90.1 with standard headers. Harness initial compile lacked stdbool include; fixed harness include then compile/run exit0.",
+  "source": "docs/research/dedup-500/rmlint6-size-parser-control-20261021.c",
+  "sha256": "63da08bc70d48a100a6f6616959cc66d6e52d79d700501afb93a6427d95b3e69",
+  "cases": [
+    {
+      "input": "1.5k",
+      "actual": 1500,
+      "expected": 1500
+    },
+    {
+      "input": "1.05k",
+      "actual": 1500,
+      "expected": 1050
+    },
+    {
+      "input": "1.005k",
+      "actual": 1500,
+      "expected": 1005
+    },
+    {
+      "input": "0",
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "input": "1kb",
+      "actual": 1024,
+      "expected": 1024
+    }
+  ],
+  "findings": [
+    "Two leading-zero fractional inputs parsed incorrectly without GError; three positive controls give expected values.",
+    "This validates size-parser boundary, not complete CLI interpretation or rrrah defect."
+  ],
+  "limits": [
+    "No full original build or upstream suite; GLib version is local dependency, not pinned upstream build environment.",
+    "No rrrah edits/tests; native pHash deferred; global full repository count150/500."
+  ]
+}
