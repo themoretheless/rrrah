@@ -1,0 +1,63 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_options/test_match_basenames.py": {
+      "sha256": "42f3d7bad05797d4a4709b25c4515bc9b2cd98d4d01ae607377d5d3d0afded5c",
+      "git_blob": "566a4efaa537bb7d42a03bc117ac0a5c08654522",
+      "lines": 81
+    },
+    "tests/test_options/test_match_dirname.py": {
+      "sha256": "1c102331f59c440b5be5e2f6da251011d438190be4d5f5022fa6c15638fb38e6",
+      "git_blob": "5b57eb1c25c103ec1749e58710c0dc53b0c1fda9",
+      "lines": 23
+    },
+    "tests/test_options/test_match_relative_path.py": {
+      "sha256": "154b75189abafc44b8336f6ab6b1993fe2ced62f8988d92964d44821ba93c488",
+      "git_blob": "3ba35dc2c1dea9ae1354f0ebd0de4aae1356dcff",
+      "lines": 88
+    },
+    "tests/test_options/test_match_with_extension.py": {
+      "sha256": "1ff43316ec9a68c45ebaff3b39c3270a5b5d516c420fd0799a902fae4af34edb",
+      "git_blob": "71e5a3d834140108e63a8693834639b403e7b2e9",
+      "lines": 20
+    },
+    "tests/test_options/test_match_without_extension.py": {
+      "sha256": "46ea9dc715c5e80b1a0a4623ecfd8047844d5637e101eb39b61fe6a847e41955",
+      "git_blob": "fe5a72c94115647f65e0ef7f062d461574477e46",
+      "lines": 46
+    },
+    "tests/test_options/test_pass_files.py": {
+      "sha256": "11da291e43c51a4abb12e9619a18588e3fac26bb5b5bd8d29cea34f26d27c77d",
+      "git_blob": "1ea35d88cb3a54505547a9ca25532f90d9c34a3c",
+      "lines": 14
+    },
+    "tests/test_types/test_empty_files.py": {
+      "sha256": "c6362852150eac191d216ccad9a87c54ebb057134cee469d5f0b2b624e3ea7ee",
+      "git_blob": "4590f7e1536d59e7c3144dd8f5b18d3b10253dcc",
+      "lines": 13
+    },
+    "tests/test_types/test_empty_dirs.py": {
+      "sha256": "78b1ed81a21d0d3d1b665c27b71883431a31b25a7302815c028ad3973f1cb5ec",
+      "git_blob": "4bf551db6ba8f3ef5c53e4c4c36ff030f1d5f311",
+      "lines": 53
+    }
+  },
+  "cumulative_whole_files_read": 73,
+  "tracked_blobs": 289,
+  "method": "Complete reads of eight pinned files with Git blob and SHA256 validation. No upstream suite execution.",
+  "findings": [
+    "Basename, parent-directory, extension and stem tests explicitly exclude equal-content files based on optional name policies. These policies cannot be silently applied to exhaustive content equality. Most checks assert footer counts rather than complete path partitions.",
+    "Basename split test checks two groups of five equal-content files but does not assert their actual member paths. Relative-path combined-basename test additionally asserts the exact non-original path set.",
+    "Relative-path tests reject different directory depth and different basename; case-insensitive matching explicitly folds ASCII but does not fold the tested Cyrillic/umlaut names.",
+    "Extensionless regression distinguishes abc from abcd while accepting equal abc names in different directories. Extension tests do not cover dotfiles or multiple-dot suffix selection in these files.",
+    "test_pass_files.py:test_stdin_read actually passes direct path arguments to run_rmlint, not stdin. It checks two leading records and reclaimable-size footer but not full record count. It therefore must not be credited as another stdin transport test.",
+    "Empty-file lint test checks one zero-sized record but does not assert its path or type. Empty-directory simple case checks two types and sizes; deep case indexes expected suffixes without asserting total count. Hidden-file case confirms that ignored hidden children do not cause the parent to be reported empty.",
+    "Empty-file lint is distinct from duplicate-content grouping: its footer reports zero duplicates and zero reclaimable bytes. Our exact API treats equal empty files as a content partition, as separately validated by existing local tests."
+  ],
+  "limits": [
+    "No production changes or new runtime coverage in this audit.",
+    "No complete rmlint or 500-repository review claim; native pHash/ASAN investigation remains skipped."
+  ]
+}
