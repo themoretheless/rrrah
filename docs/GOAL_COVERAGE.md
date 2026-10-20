@@ -11142,3 +11142,5 @@ Shared-edge intersection arithmetic is now invariant to traversal and half-plane
 ### 2026-10-21: clip-line provenance checkpoint
 
 The current local checkpoint adds exact-key clip-line identities, polygon boundary lineage and transactional line-pool admission to avoid repeatedly splitting known boundaries. The initial 11 ordered-pixel controls passed before the final rollback and symbolic-degeneracy adjustments. Full current-suite verification is recorded separately during publication. Dedicated provenance oracles and full-page AI requalification remain pending; this checkpoint does not establish the VectorApple.ai repair or performance improvement.
+
+Publication gate for this checkpoint: current `cargo +stable test -p rrrah-vector --lib --locked --offline` completed with 218 passed, 0 failed and 11 ignored (57.30 seconds test runtime). Python syntax checks and 102 committed JSON report parses also passed. Dedicated clip-line provenance and full-page AI qualification remain pending.
