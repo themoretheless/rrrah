@@ -1,0 +1,29 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx2.c": {
+      "sha256": "8b3516a8e42d981a9868ef670b1698f6d10207283086bd810b11cdaac1aca8f1",
+      "git_blob": "381e7c422f33c75c3a8aeb06e4e2e7e6be56e396",
+      "lines": 326
+    }
+  },
+  "cumulative_whole_files_read": 252,
+  "tracked_blobs": 289,
+  "method": "Complete pinned AVX2 C source read with Git/SHA256 verification. Source-only; ARM NEON parity is not reused as AVX2 runtime evidence.",
+  "findings": [
+    "Degree8 hash_many batches use unaligned32-byte loads/stores and transpose eight message lanes before seven rounds. Each input must contain blocks*64 readable bytes; final partial-block handling belongs to upper layers.",
+    "Counters add lane offsets0..7 only when increment requested; unsigned32 carry is implemented by sign-bit XOR before signed compare, then subtracting all-ones carry mask from high word. Boundary correctness still requires actual AVX2 execution.",
+    "Outer counter increments by8 per batch and output advances8*32. Remaining0..7 inputs delegate to SSE4.1 unless disabled, then portable implementation. Source references do not prove that linked fallback exists or was selected correctly.",
+    "storeu parameter annotation says dest[16] but intrinsic writes32 bytes; actual call sites stride sizeof(__m256i)=32 and allocate output contract accordingly. Annotation mismatch alone is not an overflow proof.",
+    "Prefetch targets block_offset+256 for all eight input lanes, including near end. No architectural read-fault or performance claim from prefetch syntax alone.",
+    "Flags_start applies first full block, flags_end last, base flags apply all blocks. Zero-block calls preserve key state and require caller contract assessment; no empty-file digest claim.",
+    "Runtime CPU/OS feature gating lives in previously reviewed dispatcher, not this function. Compiling this file cannot establish safe instruction dispatch on arbitrary hardware.",
+    "x86 assembly variants are separate unread blobs; reading intrinsics C does not count their review or their ABI/counter correctness."
+  ],
+  "limits": [
+    "252/289 blobs reviewed; global whole-repository count150/500.",
+    "No AVX2 compilation/execution, sanitizer coverage or speed measurement on this ARM host."
+  ]
+}
