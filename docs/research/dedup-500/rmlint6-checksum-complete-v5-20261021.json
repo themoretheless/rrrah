@@ -1,0 +1,29 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksum.c": {
+      "sha256": "8480883789103e708ce9d578b4f52d3e6851bfdf35b394c07fdd45871e71574f",
+      "git_blob": "3450be63f7f22a2cfaca68d9029d753e31cb2576",
+      "lines": 1157
+    }
+  },
+  "cumulative_whole_files_read": 7,
+  "tracked_blobs": 289,
+  "method": "Remaining lines1-53,136-731 and1141-1157 read; combined with v3/v4 ranges covers all1157 lines. Git blob verified.",
+  "findings": [
+    "Every concrete digest interface in this file supplies a copy function. Earlier NULL-copy allocation concern is a defensive branch concern, not a demonstrated reachable leak for this interface table.",
+    "External digest update overwrites rather than streams, accepts unvalidated character arithmetic, truncates odd nibble and stores half input length into guint8. Callers must constrain syntax and length; reachability not checked.",
+    "Cumulative digest uses XOR into a4-to64-byte state whose length is chosen by first update. This is specialized aggregation, not exact ordered file-content proof.",
+    "GLib, SHA3 and BLAKE extraction wrappers copy state before finalization; XXH3 and Highway use non-destructive output APIs. This describes wrapper intent, not external algorithm verification.",
+    "BLAKE2 state initialization/update/finalization status codes are ignored in adapters; fixed configured output lengths constrain normal calls.",
+    "SSE toggle checks runtime sse4.2 when compiled with feature detection. No portable speedup is inferred from availability."
+  ],
+  "correction": "v4 remaining-lines note omitted unread tail1141-1157; tail has now been read and included before whole-file credit.",
+  "limits": [
+    "No digest backend implementation source audit or runtime algorithm vectors in this increment.",
+    "Paranoid shadow algorithm configuration and candidate lifecycle caller constraints remain unresolved.",
+    "No own-library edits/tests; native pHash deferred."
+  ]
+}
