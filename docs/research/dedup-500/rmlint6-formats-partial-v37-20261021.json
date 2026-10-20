@@ -1,0 +1,37 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats.h": {
+      "sha256": "224eb05c776f11c6782e9bdea033f4bd1e33e40a9fb3e98c937aa74cc5a3ef9f",
+      "git_blob": "1f16b062bb5491c4f52b986c2dc7c82ce6e98f36"
+    }
+  },
+  "cumulative_whole_files_read": 46,
+  "partial_source_read": {
+    "lib/formats.c": {
+      "sha256": "02a115cf227e13d8a14db5e74defeba345630c9219ba023ea5452cf5c3841dae",
+      "git_blob": "f00c682ee185517199e96516e60e5dc2957dccee",
+      "ranges_inclusive": [
+        [
+          1,
+          300
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Formatter callbacks and write/flush/close public interfaces return void, so write-result propagation must be inspected explicitly rather than inferred from API.",
+    "Output files opened with fopen(w) during formatter addition; existing output can be truncated before traversal begins. Optional backup renames regular files only.",
+    "Backup rename failure only logged and function returns void; add continues to fopen(w), so requested backup failure is not a local guard against overwriting old output.",
+    "Handler clone copies full template including mutex then code initializes original template mutex rather than copied mutex. Actual GLib mutex initialization/lifetime effects require runtime control.",
+    "rm_fmt_clear removes handler/file table entries with handler free but no file-handle close in inspected path. Full close logic remains unread.",
+    "Output path resolved after opening; identity exclusion vs alias/hardlink cases still to inspect. No atomic output replacement or durable-write protocol in this addition path."
+  ],
+  "limits": [
+    "formats.c only1-300 read; no whole-file credit.",
+    "No output files mutated or runtime tests performed. Native pHash deferred; global count150/500."
+  ]
+}
