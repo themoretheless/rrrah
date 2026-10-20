@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/formats/py.c": {
+      "sha256": "5ccaf69873afb9fb590cf4c672ef7c676c92ebe50faad8cbf19375800ce41bc1",
+      "git_blob": "c7c1e3a72e64097351f917fe09a59862239a1fd6",
+      "lines": 116
+    },
+    "lib/formats/py.py": {
+      "sha256": "9f103cc22ddc5f60f5351c0c00db9b333abe0457bb0ebeaa519429e5f3b45cf8",
+      "git_blob": "b1e8e2d55185a97cc934b4ced7f617859ed7291c",
+      "lines": 285
+    }
+  },
+  "cumulative_whole_files_read": 171,
+  "tracked_blobs": 289,
+  "method": "Full reads of two pinned files with Git blob/SHA256 verification. Executed original AST-extracted original_check against two authored same-size distinct-content temporary files; no deletion or ownership operations executed.",
+  "findings": [
+    "Python formatter writes script to requested stream but JSON report to fixed relative .rmlint.json; script default reads that name in execution cwd. Concurrent generations or moving script can select unrelated report unless user supplies explicit JSON path.",
+    "C writer only tests fwrite<=0 rather than full byte count and ignores JSON fclose result. Handler pads object by1024 bytes before delegating JSON methods, relying on opaque layout compatibility rather than a typed embedded JSON handler.",
+    "original_check compares current device/inode and size; file bytes are checked only under paranoid. CLI default paranoid is False. Control accepts same-size alpha/omega files with False and rejects with True. This establishes helper behavior, not a removal reproduction.",
+    "Duplicate-directory handler invokes rmtree without original_check or recursive revalidation. Empty-file, empty-dir and broken-link handlers similarly rely on prior classification. No such operation executed here.",
+    "Main uses latest is_original row as original for following duplicates, rather than explicit group identifier; report validation is weak. Empty list indexing and zero total_files footer truthiness can cause handling errors. OSError is printed and swallowed; final Done message is not an operation success receipt.",
+    "Paranoid path uses filecmp.cmp(shallow=False), whose caching semantics need separate qualification for repeated same-metadata rewrites. No cache bypass or final fd-bound atomic check in this helper."
+  ],
+  "executed_control": {
+    "function": "lib/formats/py.py:original_check",
+    "cases": [
+      {
+        "paranoid": false,
+        "same_size_different_bytes_accepted": true
+      },
+      {
+        "paranoid": true,
+        "same_size_different_bytes_accepted": false
+      }
+    ],
+    "scope": "Original comparison helper only, temporary files, no generated script main or filesystem mutations beyond fixture creation."
+  },
+  "limits": [
+    "No production-library change or full cleanup-script runtime execution.",
+    "171/289 tracked blobs reviewed; global complete-repository count remains150/500."
+  ]
+}
