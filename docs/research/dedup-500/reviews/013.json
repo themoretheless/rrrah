@@ -2,11 +2,11 @@
   "index": 13,
   "repository": "Eul45/omni-search",
   "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 268 pinned tracked blobs assessed: first-party source text, structured metadata, visual assets and bundled binary artifact provenance/structure; damaged screenshot explicitly classified. Runtime and third-party implementation audit partial.",
   "decision": "reference",
-  "finding": "Windows NTFS scanner/index types; useful incremental discovery design, platform-specific and not yet a comparison oracle.",
+  "finding": "Reference only: byte-confirmed NTFS duplicate scanner plus source/control evidence on mutation, Unicode/path identity, settings migration, sync/result scope, malformed catalog data and lock drift. No production implementation adopted.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Root MIT text reviewed; wrapper scripts retain Apache notices and bundled JAR provenance assessed. Provider icons and all transitive dependencies have not undergone a full reuse/compatibility audit. No production code adopted.",
   "tests_detected": 3,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -81,7 +81,7 @@
       "test": false
     }
   ],
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tests_inventory_scope": "Historical path-name inventory only, not full test count. Isolated original/purpose-built controls are linked; full upstream suite not executed.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -403,6 +403,13 @@
     },
     {
       "audit": "docs/research/dedup-500/omni13-rust-lock-complete-review-v99-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/omni13-final-binary-assessment-v100-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/omni13-full-review-reconciliation-20261021.json",
+  "isolated_controls_run": true,
+  "full_upstream_suite_run": false
 }

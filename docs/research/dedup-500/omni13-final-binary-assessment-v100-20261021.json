@@ -1,0 +1,86 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/gradle/wrapper/gradle-wrapper.jar": {
+      "sha256": "e996d452d2645e70c01c11143ca2d3742734a28da2bf61f25c82bdc288c9e637",
+      "git_blob": "e708b1c023ec8b20f512888fe07c5bd3ff77bb8f",
+      "mode": "100644",
+      "bytes": 59203,
+      "method": "Whole ZIP artifact read, CRC-tested, all entry/class structures parsed and method signatures inspected; exact full byte equality with official Gradle v6.9.1 wrapper artifact and published checksum verified. Not instruction-level semantic reverse engineering."
+    },
+    "android/app/src/test/screenshots/greeting.png": {
+      "sha256": "08b77a026d9f6bc52b9404021e164eaf16d033701ddc0cdb1caabe6f5e7ed01b",
+      "git_blob": "e4ddd4d83f8e9f3371ff79553f28d13c82c90d62",
+      "mode": "100644",
+      "bytes": 2868,
+      "method": "Whole malformed binary assessed: invalid original signature and decode failure; strict UTF8/Latin1 and newline transformation hypothesis analyzed, CRC linear system solved and derived candidate visually viewed. Original is still malformed; diagnostic rendering is not an original expected-image certificate."
+    }
+  },
+  "cumulative_whole_files_read": 268,
+  "tracked_blobs": 268,
+  "artifact_assessment_scope": "All tracked blobs assessed under text/source, structured metadata, visual or binary-artifact methods. A reviewed defective file is not a repaired or runtime-qualified file. External wrapper implementation was not instruction-by-instruction reverse engineered.",
+  "executed_controls": {
+    "jar": {
+      "entries": 54,
+      "classes": 44,
+      "methods": 243,
+      "fields": 89,
+      "all_zip_crc_pass": true,
+      "all_class_structures_consumed": true,
+      "class_versions": [
+        [
+          50,
+          0
+        ]
+      ],
+      "official_full_byte_equal": true,
+      "official_reference_url": "https://raw.githubusercontent.com/gradle/gradle/v6.9.1/gradle/wrapper/gradle-wrapper.jar",
+      "official_checksum_url": "https://services.gradle.org/distributions/gradle-6.9.1-wrapper.jar.sha256",
+      "configured_distribution_version": "9.3.1",
+      "configured_version_wrapper_checksum_url": "https://services.gradle.org/distributions/gradle-9.3.1-wrapper.jar.sha256",
+      "configured_version_wrapper_checksum": "b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13",
+      "jvm_execution": false,
+      "java_tool_attempt": "System javap stub reported no Java Runtime. Local class-file structural reader used instead.",
+      "compatibility_with_configured_distribution": "not verified"
+    },
+    "png": {
+      "original_decode": "Pillow UnidentifiedImageError",
+      "derived_candidate_all_chunk_crc_pass": true,
+      "derived_candidate_zlib_bytes": 22302,
+      "derived_candidate_decodes": true,
+      "derived_candidate_size": [
+        353,
+        63
+      ],
+      "derived_candidate_visually_reviewed": true,
+      "visible_text": "Hello Robolectric!",
+      "exact_damage_transform_roundtrip_to_original": true,
+      "unique_crc_solution_under_hypothesis": true,
+      "unknowns": 21,
+      "linear_rank": 21,
+      "original_modified": false
+    }
+  },
+  "evidence": {
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/gradle-6.9.1-wrapper.jar.sha256": "a0239ffebf7c6a44659a73e55fba4d7f2cba4cfb4f702f0148d4717230197fce",
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/gradle-9.3.1-wrapper.jar.sha256": "8eb8234794bf3301383e41936b5044aa8c5fa1ceee72df7a5cb77487e0cbeb44",
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/greeting-diagnostic-candidate.png": "19799b48a74ba4134f68ae5a9a65f14158d8818cbfbb51f46ea40653f579d825",
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/inspect-jar.py": "c20cbe6f612fecc9d1f7667ec5eab40770dfafa1abd4536b8cffe3f2a1734008",
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/inspect-png-corruption.py": "193bf9c0c231ec43f5d3e11e65e26127887fabb5b07bec808563542f32b87054",
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/jar-structure.json": "298e62a511acab0c8d33b0146a4321516c73974aac9d6bfeb7f558234803b812",
+    "docs/research/dedup-500/omni13-binary-assessment-v100-20261021/png-corruption.json": "20159000499c292c43ff05e481f4c88c00b4ff2f6e1f1851e2ab200989fc8ca8"
+  },
+  "findings": [
+    "Bundled wrapper JAR is byte-identical to an official Gradle 6.9.1 artifact and checksum. Wrapper properties request a 9.3.1 distribution, whose published wrapper checksum differs. This establishes artifact age/provenance difference, not that using this older wrapper necessarily fails. No Gradle distribution was downloaded or executed.",
+    "The archive has 44 wrapper/CLI classes plus manifest/properties and directory entries. All entries passed stored CRCs, and complete class-file structures and method signatures were inspected. No jar execution, build or independent semantic review of every bytecode instruction claimed.",
+    "Original greeting.png is not a decodable PNG. A precisely stated UTF8/Latin1 plus newline hypothesis yields a unique CRC-consistent candidate with valid IHDR/IDAT/IEND, valid compressed scanline bytes and readable Hello Robolectric! text. Reapplying that transformation exactly produces the original damaged file. This supports the corruption hypothesis, not the original producer or intended test baseline.",
+    "The defective image is counted as fully assessed malformed data, not as a valid screenshot. The derived candidate is stored separately and the original remains unchanged. Earlier v83 inability to decode is preserved rather than retroactively described as a successful original-image review."
+  ],
+  "limits": [
+    "Binary artifact provenance/structure and malformed-image diagnosis do not prove application build, screenshots against a reference, Android tests or upstream full-suite success.",
+    "No user images or source assets modified. No production dedup code change or accepted optimization.",
+    "Repository-wide completion is recorded only after a separate full tree reconciliation. Native pHash/ASAN remains deferred."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "original_sha256": "08b77a026d9f6bc52b9404021e164eaf16d033701ddc0cdb1caabe6f5e7ed01b",
+  "original_bytes": 2868,
+  "strict_utf8_codepoints": 1948,
+  "all_codepoints_latin1_representable": true,
+  "candidate_bytes": 1949,
+  "candidate_sha256": "19799b48a74ba4134f68ae5a9a65f14158d8818cbfbb51f46ea40653f579d825",
+  "hypothesis": "Latin1 byte values re-encoded as UTF8 plus universal-newline normalization CR/CRLF to LF. Original producer and intended pixels not proven.",
+  "hypothesis_dependent_changes": {
+    "signature": "reinsert CR before first LF",
+    "IHDR_length": "10 to 13",
+    "IDAT_or_CRC_LF_to_CR_offsets_in_singlebyte_stream": [
+      68,
+      201,
+      464,
+      737,
+      880,
+      929,
+      1247,
+      1408,
+      1462,
+      1616,
+      1645,
+      1680,
+      1832,
+      1844,
+      1847,
+      1912
+    ]
+  },
+  "crc_linear_system": {
+    "unknowns": 21,
+    "rank": 21,
+    "unique_under_hypothesis": true
+  },
+  "zlib_decompression": {
+    "bytes": 22302,
+    "expected_filtered_bytes": 22302,
+    "scanline_filter_bytes_valid": true
+  },
+  "width": 353,
+  "height": 63,
+  "bit_depth": 8,
+  "color_type": 0,
+  "limits": "Original malformed PNG remains unchanged. Candidate validates only an explicit reversible-damage hypothesis, not original source provenance or expected screenshot correctness."
+}
