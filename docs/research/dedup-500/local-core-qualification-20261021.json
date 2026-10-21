@@ -1,0 +1,140 @@
+{
+  "scope": "Fresh focused local duplicate library qualification; not universal case completion",
+  "toolchain": "1.98.1",
+  "runs": [
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --lib --test visual --test groups --test pixels --test spatial --test pair_schedule",
+      "exit_code": 0,
+      "build_seconds": 20.37,
+      "passed": 74,
+      "failed": 0,
+      "ignored": 2,
+      "suites": {
+        "lib": {
+          "passed": 49,
+          "ignored": 2
+        },
+        "groups": {
+          "passed": 6
+        },
+        "pixels": {
+          "passed": 8
+        },
+        "spatial": {
+          "passed": 1
+        },
+        "visual": {
+          "passed": 10
+        },
+        "pair_schedule": {
+          "passed": 0,
+          "reason": "requires raster; no-feature run is not coverage"
+        }
+      }
+    },
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --features raster --offline --jobs 2 --test pair_schedule --test managed_evidence --test candidate_union_files",
+      "exit_code": 0,
+      "build_seconds": 8.46,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "suites": {
+        "pair_schedule": {
+          "passed": 5
+        },
+        "managed_evidence": {
+          "passed": 0,
+          "reason": "requires decode; not counted as coverage"
+        },
+        "candidate_union_files": {
+          "passed": 0,
+          "reason": "requires decode; not counted as coverage"
+        }
+      },
+      "warnings": [
+        "validate_unsmoothed_gradient_candidates unused in raster-only configuration"
+      ]
+    },
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --offline --jobs 2 --test managed_evidence --test scan_group_publication --test visual_publication",
+      "exit_code": 0,
+      "build_seconds_reported": 183,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "suites": {
+        "managed_evidence": {
+          "passed": 2,
+          "test_seconds": 0.0
+        },
+        "scan_group_publication": {
+          "passed": 2,
+          "test_seconds": 0.01
+        },
+        "visual_publication": {
+          "passed": 2,
+          "test_seconds": 0.01
+        }
+      },
+      "warnings": [
+        "Pre-existing vendor/jxl-color mismatched lifetime syntax warning."
+      ]
+    }
+  ],
+  "source_hashes": {
+    "crates/rrrah-dedup/src/lib.rs": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1",
+    "crates/rrrah-dedup/src/visual.rs": "6352224709d8f52d5f071bdb320d9595c647b8662c009eca8893a4e99d111400",
+    "crates/rrrah-dedup/src/pair_schedule.rs": "abac87f09608f072216974d50a640b14d65890a135476a44059773a1fd4f2c94",
+    "crates/rrrah-dedup/tests/visual.rs": "3c7cfb2f385c52b9f690a72af3699342038443dde5dfe11c530a9a0fb02a93a8",
+    "crates/rrrah-dedup/tests/groups.rs": "ef314ad1441389ab947ff75a8f68cc7224773aa0da36751519c9bff4de5a1fba",
+    "crates/rrrah-dedup/tests/pixels.rs": "463d56af46a7a3eadc4bd1e19986c47f18804e93f4ecf7ea189e3e0a2dc773ec",
+    "crates/rrrah-dedup/tests/spatial.rs": "21a9e79d7ad2761d63f12f83c40c7ae802f2709c17785de82563491b749fa005",
+    "crates/rrrah-dedup/tests/pair_schedule.rs": "d87c5190c9b800ef4fa9260a17f3df6998a219261a8e66255b4366a34cd02a68",
+    "crates/rrrah-dedup/src/scan.rs": "810b2b2a7c6e4f5fe7e6c77c05ea5b85562c54908c9a72606a4dc19334f7ddd9",
+    "crates/rrrah-dedup/src/managed_evidence.rs": "f48b7443734ccc4cab82a63dbd0ff2e06278ffbde775097220c602476e968500",
+    "crates/rrrah-dedup/tests/managed_evidence.rs": "1ed7b12eb4c0cb11d3d22f697e854954b04495d40c82eb93ecce1690049f561b",
+    "crates/rrrah-dedup/tests/scan_group_publication.rs": "18042c529060ab2299afc4ca5dd226dc4b75f9ae0c3e8a67f1cca27be333f002",
+    "crates/rrrah-dedup/tests/visual_publication.rs": "7b0723c536e8a6fcb3624ca592b610bf3873157eb1b4c6014c3dd01d1dcaf7fd"
+  },
+  "observations": [
+    "Base suite confirms byte-comparison collision defenses, short/interrupted I/O, cancellation, cache publication errors, exact metric retrieval, conservative grouping and synthetic pixel semantics.",
+    "Pair scheduling tests exercise all64 subsets of six proposals for four IDs, retaining every unordered pair even without descriptors; allocation refusal and cancellation/retry checked.",
+    "Two ignored tests are explicit manual timing controls. No speedup or benchmark conclusion.",
+    "Decode-enabled tests confirmed final-callback file mutations refuse stale pixel pairs, groups and both cold/warm visual reports; restoring source permits clean retry.",
+    "Flat black/white synthetic BMPs collide perceptually but remain separate exact-pixel pairs; low-information filtering suppresses perceptual candidates when requested.",
+    "Managed evidence tests confirm allocation ownership/capacity accounting, cancellation and complete credit release. No end-to-end allocator bound inferred."
+  ],
+  "limits": [
+    "No new production code or new test implemented in this step.",
+    "Passing synthetic/unit tests do not prove all real media, all supported formats or all500 repositories.",
+    "Native pHash/ASAN remains deferred.",
+    "Decode/raster configuration uses current dirty dependency sources, recorded separately; results qualify this worktree snapshot, not clean HEAD alone."
+  ],
+  "tested_worktree": {
+    "head_at_start": "a927bc66c048b37e467cd78143ea4ed4d7d8f0e0",
+    "dependency_sources_dirty": {
+      "crates/rrrah-decode/src/raster.rs": {
+        "sha256": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7",
+        "note": "Pre-existing concurrent working-tree changes; not authored or committed by this qualification.",
+        "unchanged_since_pretest_snapshot": true
+      },
+      "crates/rrrah-develop/src/raster.rs": {
+        "sha256": "1f92de172a3d4dee7456b0f446a36bbc78fced05f3aaa0645b307d5950f65afc",
+        "note": "Pre-existing concurrent working-tree changes; not authored or committed by this qualification.",
+        "unchanged_since_pretest_snapshot": true
+      },
+      "crates/rrrah-vector/src/eps_document.rs": {
+        "sha256": "d433b19f903b64326e3e1d9165caf3ed2f2ab70a50b315bd08b7f30cf03e6ec0",
+        "note": "Pre-existing concurrent working-tree changes; not authored or committed by this qualification.",
+        "unchanged_since_pretest_snapshot": true
+      }
+    }
+  },
+  "total": {
+    "passed": 85,
+    "failed": 0,
+    "ignored": 2,
+    "zero_test_targets_excluded": true
+  }
+}
