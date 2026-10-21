@@ -1,0 +1,12 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "exit_code": 0,
+  "control": "Original Server.Close with synthetic active search state and real cancellable context",
+  "observed": "Cleanup done channel closes, active search context remains uncancelled and search map retains entry",
+  "limits": [
+    "Unit lifecycle control; does not launch HTTP server or real image search worker.",
+    "Passing assertion confirms observed limitation, not desired shutdown behavior."
+  ],
+  "initial_attempt": "First command invoked from rrrah root failed because no Go module there; corrected working directory then passed."
+}

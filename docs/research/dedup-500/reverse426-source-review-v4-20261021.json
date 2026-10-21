@@ -1,0 +1,27 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "internal/testutil/testutil.go",
+    "internal/web/server.go"
+  ],
+  "controls": "docs/research/dedup-500/reverse426-lifecycle-controls-20261021/result.json",
+  "findings": [
+    "Server.Close closes cleanup done channel and cache but does not cancel or clear registered searches; isolated lifecycle control confirms. Start uses bare http.ListenAndServe with no owned shutdown handle.",
+    "Search state has a consuming flag but handleResults does not enforce a single consumer. Multiple listeners can divide the result channel; source inspection only, no runtime concurrency control yet.",
+    "Cache scan uses synchronous cache.Scan without request cancellation propagation; callback writes do not check write errors. Source inspection, not an interruption latency measurement.",
+    "Uploaded source hash work precedes search context creation, which uses context.Background rather than request context. No runtime cancellation qualification for decode.",
+    "Testutil images are generated solids, gradients, checkerboards and red/green splits. Real EXIF helper writes one big-endian orientation=1 fixture; no eight-orientation pixel oracle. EncodeJPEG helpers discard encoding errors."
+  ],
+  "remaining": [
+    "Web server tests whole-read",
+    "app.js and template.html whole-read",
+    "Docs/spec/config/license/go.sum whole-read"
+  ],
+  "limits": [
+    "223/500 fully reviewed; this repository remains partial.",
+    "Native pHash/ASAN remains deferred.",
+    "No new production performance claim or code adoption."
+  ]
+}
