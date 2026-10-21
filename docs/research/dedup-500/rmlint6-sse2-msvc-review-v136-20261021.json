@@ -1,0 +1,62 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse2_x86-64_windows_msvc.asm": {
+      "sha256": "27bf95d5611dca1530f85106748208a6d7a68f9a4f7f61670aa680bcc9a5e436",
+      "git_blob": "507502f11a80b3b05eb50a55e1535ecf3c96ed58",
+      "lines": 2350
+    }
+  },
+  "cumulative_whole_files_read": 285,
+  "tracked_blobs": 289,
+  "method": "Differential whole-source review against reviewed Windows GNU SSE2. Normalized all2265 instructions, resolved GNU numeric and MASM anonymous/named branch labels to instruction indices, inspected all six residual differences plus full directive inventory and labeled constant declarations. Equivalent instructions not independently serial-reread.",
+  "equivalence_control": {
+    "gnu_instructions": 2265,
+    "msvc_instructions": 2265,
+    "differences": [
+      {
+        "index": 1700,
+        "gnu": "movq xmm3, rax",
+        "msvc": "movd xmm3, rax"
+      },
+      {
+        "index": 1909,
+        "gnu": "movq xmm12, rax",
+        "msvc": "movd xmm12, rax"
+      },
+      {
+        "index": 2027,
+        "gnu": "movq xmm3, r9",
+        "msvc": "movd xmm3, r9"
+      },
+      {
+        "index": 2028,
+        "gnu": "movq xmm4, r8",
+        "msvc": "movd xmm4, r8"
+      },
+      {
+        "index": 2151,
+        "gnu": "movq xmm3, r9",
+        "msvc": "movd xmm3, r9"
+      },
+      {
+        "index": 2152,
+        "gnu": "movq xmm4, r8",
+        "msvc": "movd xmm4, r8"
+      }
+    ]
+  },
+  "findings": [
+    "Six residual instruction spellings replace GNU movq with MASM movd using64-bit general-register operands: two in hash-many tails packing flags/length, and two in each scalar compression entry packing counter and flags/length. Assembly acceptance and encoding require MASM/object validation; no truncation or compile failure claimed.",
+    "Remaining2259 instructions and all branch destinations coincide after numeric/label/whitespace normalization. Hash-many register preservation,528-byte frame and scalar120-byte frames retain the reviewed Windows GNU behavior.",
+    "Scalar blend temporary remains XMM14, avoiding unsaved XMM10 modification. Save/restore sequences match GNU.",
+    "PUBLIC and paired PROC/ENDP expose aliases for three entry points. Code alignment16 and read-only constants alignment64 replace GNU directives; no explicit FRAME/unwind annotations observed.",
+    "Named blend constants33/CC/3F/C0 contain matching complementary32-bit masks. CMP_MSB_MASK contains eight words compared with four in GNU; inspected128-bit consumers do not by themselves make extra storage a defect."
+  ],
+  "limits": [
+    "285/289 pinned blobs reviewed;150/500 complete repositories.",
+    "No MASM build, x86/Windows run, object disassembly, sanitizer or throughput measurement. Upstream reference-only; pHash/ASAN deferred."
+  ]
+}
