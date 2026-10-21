@@ -1,0 +1,52 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/browser_indexer.rs": {
+      "sha256": "ef7c710ce71e8cc0392ae1f854db05fd158534e7c821d7abc992f6e6098480b1",
+      "git_blob": "1a133eaf9046a7b05e357f3f43880a10a254d39f",
+      "mode": "100644",
+      "lines": 462
+    },
+    "omnisearch-lite/src/settings_startup.rs": {
+      "sha256": "4c213530a828a97c464a85a2e8b50b874ea677d02a44c8cf09aac6b1ece202cc",
+      "git_blob": "69cbaf14666d39d88283b9fdce2d1c8dd439335e",
+      "mode": "100644",
+      "lines": 94
+    }
+  },
+  "cumulative_whole_files_read": 77,
+  "tracked_blobs": 268,
+  "method": "Two pinned Rust files whole read. Original purehelper tests extracted unchanged; own PythonSQLite WAL fixture tests main-file-copy mechanism only. No browser/userprofile/registry access.",
+  "executed_controls": {
+    "browser_tests": "\nrunning 2 tests\ntest tests::browser_memory_events_use_unix_seconds ... ok\ntest tests::chromium_history_time_is_normalized_to_unix_micros ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "startup_tests": "\nrunning 1 test\ntest tests::startup_command_quotes_paths_with_spaces ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "wal_copy": {
+      "owned_live_db_rows": 1,
+      "raw_main_file_copy_rows": 0,
+      "scope": "SQLite main-file copying mechanism, not original Rust browser process or user profile"
+    }
+  },
+  "control_sources": {
+    "browser-tests-v19.rs": "fn chromium_time_to_unix_micros(chromium_time: i64) -> i64 {\n    chromium_time.saturating_sub(11_644_473_600_000_000)\n}\n\nfn unix_micros_to_secs(unix_micros: i64) -> i64 {\n    unix_micros / 1_000_000\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn chromium_history_time_is_normalized_to_unix_micros() {\n        assert_eq!(chromium_time_to_unix_micros(11_644_473_600_000_000), 0);\n        assert_eq!(\n            chromium_time_to_unix_micros(11_644_473_601_000_000),\n            1_000_000\n        );\n    }\n\n    #[test]\n    fn browser_memory_events_use_unix_seconds() {\n        assert_eq!(unix_micros_to_secs(1_700_000_000_123_456), 1_700_000_000);\n    }\n}\n",
+    "startup-tests-v19.rs": "fn format_startup_command(exe_path: &str) -> String {\n    if exe_path.starts_with('\"') {\n        exe_path.to_string()\n    } else {\n        format!(\"\\\"{}\\\"\", exe_path)\n    }\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn startup_command_quotes_paths_with_spaces() {\n        assert_eq!(\n            format_startup_command(r\"C:\\Program Files\\OmniSearchLite\\OmniSearchLite.exe\"),\n            r#\"\"C:\\Program Files\\OmniSearchLite\\OmniSearchLite.exe\"\"#\n        );\n        assert_eq!(\n            format_startup_command(r#\"\"C:\\Program Files\\OmniSearchLite\\OmniSearchLite.exe\"\"#),\n            r#\"\"C:\\Program Files\\OmniSearchLite\\OmniSearchLite.exe\"\"#\n        );\n    }\n}\n",
+    "browser-wal-v19.py": "import sqlite3,tempfile,shutil,json\nfrom pathlib import Path\nwith tempfile.TemporaryDirectory() as d:\n p=Path(d)/'owned.db';c=sqlite3.connect(p);c.execute('PRAGMA journal_mode=WAL');c.execute('CREATE TABLE urls(url TEXT)');c.commit();c.execute('PRAGMA wal_checkpoint(TRUNCATE)');c.execute('INSERT INTO urls VALUES (?)',('https://example.invalid/owned',));c.commit();shutil.copyfile(p,Path(d)/'copy.db');copy=sqlite3.connect(Path(d)/'copy.db');a=c.execute('SELECT count(*) FROM urls').fetchone()[0];b=copy.execute('SELECT count(*) FROM urls').fetchone()[0];assert(a,b)==(1,0);copy.close();c.close()\nPath('.dedup-work/omni13-20261021/browser-wal-v19-result.json').write_text(json.dumps({'owned_live_db_rows':a,'raw_main_file_copy_rows':b,'scope':'SQLite main-file copying mechanism, not original Rust browser process or user profile'})+'\\n')\n"
+  },
+  "findings": [
+    "Browser parser copies SQLite mainfile using fs::copy then openscopy; no SQLitebackup/snapshot/WAL inclusion. Own fixture originalcount1/copycount0 demonstrates maincopy canmiss committed WALrow. Not actual Rust/browser or userdatabase run.",
+    "Tempfilenames timestampmillisecond only; multipleinstances/calls cancollide, overwrite/delete sharedcopy. Singleindexer sequentialloop reduces sameinstance overlap, no actual collision run. Guard removes mainfile aftercopy success; failedcopy beforeguard mayleavepartialfile.",
+    "URL primarykey merges profiles/browsers; conflictupdates visitcount/time/source but nottitle. Later titlechanges remainold, source/bookmarkprovenance collapses. No content/fileduplicate identity.",
+    "All rowconversion errors flattened away, statementexecute errorsignored, perprofile errorslogged while outerrunreturnsOk. Pruning query errorsignored. Result completeness not surfaced.",
+    "Bookmark traversal depth>200 dropsdeeperitems, onlyhttp/httpsaccepted; historylimit2000 perprofile, prune top5000 overall timestampbut onlyhistoryrows deleted. Bookmarks canexcludehistoryfrom retentionranking; overallcount notbounded5000 becausebookmarks retained.",
+    "Deleted bookmarks/history not reconciled from source; UPSERT/limitedprune mayretainremovedentries. Memoryeventdedup helper in huge search.rs not yet reviewed, no duplicationclaim.",
+    "Profile discovery returns early if LOCALAPPDATAabsent beforeFirefoxAPPDATA scan; intendedWindows env assumptions not qualified. Directoryreaderrors ignored.",
+    "Backgroundbrowser loop detached with10sinitial/600speriodsleep, no stop/cancellation handle in module. No liveindexer started.",
+    "Startup module writesRunregistry and removes legacy entries/shortcut with ignoredresults; setters returnUnit, no persistenceack. Quoting helpertests pass, registrybehavior unexecuted. Source functions not invoked beyond purequotehelper."
+  ],
+  "limits": [
+    "77/268 pinnedwholefiles, fullrepo/all500 incomplete.",
+    "Threeoriginalpuretests passed; no full Windowsbuild/upstreamsuite, browserhistory, registry/startupmodification, realnetwork or benchmark.",
+    "No production changes. Native pHash/ASAN remains user-deferred."
+  ]
+}
