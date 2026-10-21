@@ -2,7 +2,7 @@
   "index": 38,
   "repository": "scrubbbbs/cbird",
   "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
-  "review_scope": "Partial pinned whole-source review:6/616 tracked blobs (DCT index, wrappers, both tree headers, DCT test). Three isolated active-VP-tree controls; no full upstream/media runtime.",
+  "review_scope": "Partial pinned whole-source review:10/616 tracked blobs; database.cpp selected caller ranges only. Three isolated active-VP-tree controls; no full Qt/SQL/media/upstream runtime.",
   "decision": "shortlist-reference",
   "finding": "DCT Hamming index and local keypoint hashes provide crop-oriented candidates; GPL code stays a reference only.",
   "license_metadata": "GPL-2.0",
@@ -108,6 +108,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/cbird38-dct-tree-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/cbird38-index-interface-test-review-v2-20261021.json"
     }
   ]
 }

@@ -1,0 +1,80 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/index.cpp": {
+      "sha256": "6cabbb044596bef5a8c607c5f80a15e4cb38c54770d6de2203836c8c1850cdde",
+      "git_blob": "a0dbed431864fa3b2f936a9df33f21d02118cb6e",
+      "bytes": 7926,
+      "lines": 195,
+      "method": "Whole pinned text/source read; no runtime execution."
+    },
+    "src/index.h": {
+      "sha256": "2cb6f18f8495801e0c25134c19649529849f54fbe0c76fac6ecddb156e2367e2",
+      "git_blob": "f996e224948df2f380b262fe0fd547ad80985cd7",
+      "bytes": 10588,
+      "lines": 286,
+      "method": "Whole pinned text/source read; no runtime execution."
+    },
+    "unit/testindexbase.cpp": {
+      "sha256": "b9b7c8a40b3b649bdbd8c55d584e302f67622200a1402b7d85375cae97e86dc9",
+      "git_blob": "ee40f1fff407bcc4bc56db6ecb56ecc6da5b2e49",
+      "bytes": 6752,
+      "lines": 218,
+      "method": "Whole pinned text/source read; no runtime execution."
+    },
+    "unit/testindexbase.h": {
+      "sha256": "1729d88f541a1f7f91e570ed17706a3c7c823732d44f2ebbd5a656d3be0b9611",
+      "git_blob": "1d4eb96f219fa70e2b53b0e8b792b4080883f0d7",
+      "bytes": 682,
+      "lines": 31,
+      "method": "Whole pinned text/source read; no runtime execution."
+    }
+  },
+  "partial_source_files": {
+    "src/database.cpp": {
+      "sha256": "88db5550c543082ef1cc85258a89802d088c4f1c94ccf86e079a0269b3625786",
+      "git_blob": "efbb42e51bba41c7738258643838fb67236c037a",
+      "bytes": 59743,
+      "lines": 1979,
+      "read_ranges_inclusive": [
+        [
+          1050,
+          1095
+        ],
+        [
+          1450,
+          1510
+        ],
+        [
+          1510,
+          1530
+        ],
+        [
+          1660,
+          1785
+        ]
+      ],
+      "method": "Targeted caller ranges read; rest of1979-line source incomplete, not counted whole."
+    }
+  },
+  "cumulative_assessed_blobs": 10,
+  "tracked_blobs": 616,
+  "findings": [
+    "SearchParams defaults maxMatches=5, filterSelf=true, filterGroups=true and maxThresh=0. Thus full active VP-tree recall from v1 does not imply an unlimited application result set. Database::searchIndex sorts then stops when admitted valid group reaches maxMatches.",
+    "searchIndex looks up each match and appends only if media.isValid(), otherwise warns stale/corrupt. mediaWithId returns default Media unless exactly one SQL row exists. A zero-ID tree tombstone therefore does not by itself prove a bogus user-visible file: validity and DB contents are caller gates; default Media internals still unread.",
+    "Adaptive widening checks raw matches.count() <= minMatches before self/invalid filtering and before maxMatches capping. Raw match count is not necessarily usable distinct results. maxThresh widening is disabled by default, so no default widening failure claimed.",
+    "SearchParams explicitly says only Engine::query incorporates all parameters. Database::similarTo handles subset slicing and per-group filtering; Engine and full group postprocessing remain unread. Do not attribute index-level controls to full product recall or grouping.",
+    "Generic index tests require external TEST_DATA_DIR, remove/recreate its _index directory, run actual scanner/database and require at least40 groups for a40x5 corpus. They require group.count()>1 rather than all expected five identities, so test names/comments do not establish exhaustive neighborhood recall. Tests were only read; no external corpus or directories touched.",
+    "Base add/remove tests check three queried identities disappear and re-add produces comparable groups. They do not test top-k completeness, all threshold boundaries, or raw-to-valid widening. The prior independent seeded VP controls cover a different narrower layer.",
+    "SearchParams default video skipFrames=300, minFramesMatched=30, minFramesNear=60, videoRadix=10; parameter label explicitly notes radix trades accuracy. Video algorithm implementation still unread; no video recall conclusion.",
+    "Index::memoryUsage interface describes heap usage, while previously reviewed DctHashIndex implementation omits tree heap. Source contract mismatch retained; no memory benchmark or production optimization."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "10/616 whole pinned parent blobs read. database.cpp only selected ranges, not counted complete. Three earlier isolated C++ tree controls remain the only executed cbird controls.",
+    "No Qt/SQL/scanner/full upstream test corpus executed. No native pHash or ASAN; deferred item remains skipped.",
+    "Source header licensing notices read; root/nested license review incomplete. No production source copying or algorithm change."
+  ]
+}
