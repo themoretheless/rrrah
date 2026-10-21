@@ -1,0 +1,38 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": false,
+      "read_ranges_inclusive": [
+        [
+          1,
+          3650
+        ],
+        [
+          6120,
+          6200
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "findings": [
+    "Completed source reading of significant-bit scaling, palette expansion, unpacking, IHDR/PLTE/sBIT/chromaticity/physical/time/EXIF/keyword validation and non-IDAT metadata parser.",
+    "Read undo/cache bookkeeping for text/suggested palettes/unknown chunks, optional malformed ancillary discard, initial row decode/conversion and Adam7 scatter, plus beginning of decode_image.",
+    "Critical versus ancillary policy matters: selected metadata validation errors are discarded when non-strict and ancillary; these errors do not automatically prove public decode failure.",
+    "RGBA8 output from 16-bit input takes high byte in source; RGBA16 conversion/scale order and native endian need continued end-to-end qualification. Current wrapper chooses G8 or RGB8 only.",
+    "Existing own PNG alpha regression covers explicit GA/RGBA only, not tRNS/palette transparency, sBIT, ICC, gamma or Adam7. These remain distinct coverage requirements.",
+    "No new runtime test, production code adoption or speed claim in this increment. Previously confirmed filter controls do not qualify metadata/parser behavior."
+  ],
+  "remaining": [
+    "spng.c lines3651..6119 and6201..6980",
+    "Remaining dependency docs/build/tests/assets and other codec gitlinks",
+    "Own equivalent tRNS/palette-versus-RGBA selected-frame regression"
+  ],
+  "full_review_count": 247
+}
