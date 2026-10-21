@@ -1,0 +1,126 @@
+{
+  "repository": "devonmurphy/GathererImageGatherer",
+  "commit": "aff7adee18a16fd5e9a23d52093b65018e9b46d9",
+  "whole_repo_complete": true,
+  "verified_blobs": {
+    ".gitignore": {
+      "git_blob": "a0b395ab82e51e9e0d4a1b2fb8e8d06f892c1181",
+      "sha256": "79982f1e103a2b5c0650bc58cabea6bf4105719baac7b82d86632893242d33e1",
+      "bytes": 17
+    },
+    "LICENSE.md": {
+      "git_blob": "a5d6062fc7ecdfe4255101fc35a72d633f9ac123",
+      "sha256": "b4f71c85a015555a0208e1307c03d1c5f9edf3deb3ffe2f15d765761400f1376",
+      "bytes": 1069
+    },
+    "README.md": {
+      "git_blob": "9b8ea3e7b73be5296bd4a893baf097bde991eb32",
+      "sha256": "361e8c64c94dc3312ff96effd8dbcd46b8111c42567ea04a042b035629ff477b",
+      "bytes": 1703
+    },
+    "box.jpg": {
+      "git_blob": "5da8e8628ac713fbebd72297ef883bb295e23b08",
+      "sha256": "90861a18862c1febeac7e77f73e945450365240dcab8035578b930011de95b7b",
+      "bytes": 154144
+    },
+    "buildBinaryDatabase.py": {
+      "git_blob": "63e73f22168ebb6a6d1c971f6b364350d234f244",
+      "sha256": "c277290e9ba089b9a503e5720f0be33cbb3bb02e970121c76d57a1ca5d326a8f",
+      "bytes": 2117
+    },
+    "cardImages/___images-go-here.txt": {
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "cardSets.txt": {
+      "git_blob": "88338b706313fc37c225ec3797c7de425bf82015",
+      "sha256": "54abd7c52f711ff6608f4d395450077319f8a1c3cc9c31a671be54094267ccfe",
+      "bytes": 3828
+    },
+    "createTables.sql": {
+      "git_blob": "a65d92c4891c698bc7e29c9e951d219ff8a7921c",
+      "sha256": "1f0434fc928232cbd55e529aaabb6a9028b0efdfec686d22abd314e0bf9d1afb",
+      "bytes": 350
+    },
+    "crop.jpg": {
+      "git_blob": "372d4698c36f050b4b71dec38f1aef2067b401b6",
+      "sha256": "d9e165417ca0fd30b73185f4a84279bbcf77a38592a94520d9ea290296e6c2ac",
+      "bytes": 53890
+    },
+    "frame.jpg": {
+      "git_blob": "4fab98fa1efd390cf3432fdd6b5b12c51b0fe59f",
+      "sha256": "b69715cde00a473f6b1e010f63b2364c8d984add0558302bdeff84a35896f2d6",
+      "bytes": 129452
+    },
+    "getHash.py": {
+      "git_blob": "ad3c382f1ec367459d3a5b58c3879c97e719455d",
+      "sha256": "77d69c5c8a18b32ef43be56656291fa41fe93d5d91c6561ec59e39049193f4ec",
+      "bytes": 1551
+    },
+    "kessig.JPG": {
+      "git_blob": "d6a4c1b9a9fc71da509fe4bb4e39758150e962a2",
+      "sha256": "ffaeaf53aa71a27661d282ff7265f819296754e1aec9f5d32e9144a1b14b4254",
+      "bytes": 1835355
+    },
+    "queryDatabase.py": {
+      "git_blob": "e4a6b9ecbcdea707db4e7d10ddcc73029b18b2c7",
+      "sha256": "69d6e6d76a8864ce8a3b1938bcabac2cca39c107ae67bf488f6679f2a6f110d4",
+      "bytes": 1263
+    },
+    "rotateCrop.py": {
+      "git_blob": "833ad61b6a95a1c8f746a94e044bcfcbb33f97a6",
+      "sha256": "92255734e59093cb65d516f43f95cc90722c570c71ab462802113f7a9db02650",
+      "bytes": 6353
+    },
+    "scrapeImages.py": {
+      "git_blob": "4baf048f1460353d0ef4aac1f1a4d3fbbecdedfb",
+      "sha256": "5ec20d320bd9292b5e4c63bf8c4ee2b9be41472111a7065eb27c7ce8ee8352aa",
+      "bytes": 2001
+    }
+  },
+  "whole_text_read": [
+    ".gitignore",
+    "LICENSE.md",
+    "README.md",
+    "buildBinaryDatabase.py",
+    "cardImages/___images-go-here.txt",
+    "cardSets.txt",
+    "createTables.sql",
+    "getHash.py",
+    "queryDatabase.py",
+    "rotateCrop.py",
+    "scrapeImages.py"
+  ],
+  "images_individually_viewed": [
+    "box.jpg",
+    "crop.jpg",
+    "frame.jpg",
+    "kessig.JPG"
+  ],
+  "visual_findings": [
+    "box.jpg is rotated card with green detected border;crop.jpg is warped artwork; kessig.JPG is camera photo of same card;frame.jpg is a different card on paper.",
+    "Camera lighting, rotation and perspective examples, without tracked expected matching decisions or database records."
+  ],
+  "controls": "docs/research/dedup-500/gatherer433-controls-20261021/result.json",
+  "findings": [
+    "Unchanged isolated order_points maps four diamond corners to only three unique corners because sum/difference extrema tie; no valid homography inferred.",
+    "rotateCrop.getHash returns phash in fourth slot instead of computed dhash;queryDatabase SQL selects phash twice and omits dhash. Six columns not six independent measures.",
+    "checkHashes preallocates200 placeholder tuples, fills matches then sorts entire list; Python2 placeholders can precede numeric distances and hide matches,Python3 mixed comparison fails. More than200 matches overruns fixed list. Source-only, DB not executed.",
+    "getHash.py converts binary string to decimal int, discarding leading zeros; later string Hamming can terminate on width mismatch rather than preserving64-bit identity.",
+    "Database hashes/names fetched in separate unordered selects and separate commits; no rowid join/order guarantee. DB build deletes both tables before population, commits each row; partial rebuild possible. No database actions executed.",
+    "Crop recipes differ:build uses25,37,195,150;getHash helpers17,37,205,150;camera path first resizes223x310. No shared recipe identity/version.",
+    "README says artwork has unique perceptual hash, unsupported as exact identity claim. No false-positive corpus or automated tests.",
+    "README buildDatabase.py absent, documented schema phash differs actual hashes/binaryhashes; required cameraImages and real-kessig.png absent.",
+    "Scraper uses HTTP, no timeout/status validation, maximum five pages per set and cross-set lastFirstPic state; no network scraper run.",
+    "Python2 print/top-level DB connections and old OpenCV3 contour return convention prevent assuming current Python3/OpenCV execution.",
+    "MIT2019DevonMurphy whole-read; third-party perspective ordering/tutorial attribution retained in upstream, no code/assets adopted."
+  ],
+  "upstream_tests_run": false,
+  "limits": [
+    "All15 pinned blobs reviewed:11 whole text files and4 individually viewed JPEGs.",
+    "Only isolated original point-order function executed; no full OpenCV/Python2/database/network runtime.",
+    "No card price or current external service facts verified or asserted.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}

@@ -2,9 +2,9 @@
   "index": 433,
   "repository": "devonmurphy/GathererImageGatherer",
   "commit": "aff7adee18a16fd5e9a23d52093b65018e9b46d9",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All15 pinned blobs:11 whole text files and4 individually viewed images. Isolated original corner-order control; full DB/OpenCV/scraper runtime unqualified.",
   "decision": "reference",
-  "finding": "Trading-card cropped pHash database; crop-region selection is domain-specific and must not become global photo identity.",
+  "finding": "Complete review: diamond corner duplication reproduced; repeated phash instead ofdhash, fixed200 result list, recipe/DB alignment/leadingzero gaps recorded. No production adoption.",
   "available_source_evidence": [
     {
       "path": "getHash.py",
@@ -64,5 +64,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/gatherer433-complete-source-review-20261021.json"
 }
