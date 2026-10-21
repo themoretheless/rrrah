@@ -1,0 +1,46 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_lifecycle_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/page-runner.ts": {
+      "sha256": "0317c176162c0fda4b2de81e54b30ffe5c2cbea59027a118fae6bdf56baabe8f",
+      "git_blob": "cc545d557cfedb00df387e9af014ea489134764c",
+      "bytes": 12779,
+      "lines": 398,
+      "method": "Whole pinned source/document read; no lifecycle execution."
+    },
+    "src/core/deletion-log.ts": {
+      "sha256": "b9c1042857fa6feb137df4b7ea466bddccb09336a8260a142e36934ba6a1b1eb",
+      "git_blob": "1a48f1114bb50587383730c9d07c9cda10b5223c",
+      "bytes": 2214,
+      "lines": 70,
+      "method": "Whole pinned source/document read; no lifecycle execution."
+    },
+    "docs/capabilities.md": {
+      "sha256": "569c74df5da1abc3f14bb3fdb9cccd828176bad666b9934fdfe688e7648c5ced",
+      "git_blob": "f9cfad967ae9c37bd2b45be6f343ee5e78fceb7c",
+      "bytes": 9284,
+      "lines": 39,
+      "method": "Whole pinned source/document read; no lifecycle execution."
+    }
+  },
+  "cumulative_assessed_blobs": 59,
+  "tracked_blobs": 230,
+  "findings": [
+    "Capabilities explicitly defines98percentconfidence againstseed, not allpairs or selectedkeeper. Earlier controls establish limitation of seed policy, not violation of this explicit specification.",
+    "PageRunner.start checksrunning then awaitsisPro fordatefilter before settingrunningtrue. Two concurrent date-filter starts can both pass first check; no recheck afterawait. Source potentialrace only, no originalrunner execution yet.",
+    "Initial emit and DeleteEngine construction occur before tryfinally. Throwingstatuslistener or constructor may leave runningtrue; emit iterates unguarded listeners. Settledlisteners separately catcherrors. Sourcefinding not reproduced.",
+    "PageRunner.exportCsv requires this.engine; finally clearsengine after run, while persistedsummaryholds onlycounts. Post-run export path therefore returns immediately absent a new activeengine. Actualpanelbuttoncallingpolicy notyetreviewed.",
+    "maybeRunPendingEmptyTrash rechecks running afterbatonI/O; this explicitly handles startduringbatonread, unlike date-licenseawaitstart path. No flow executed.",
+    "DeletionLog stores everypositivebatch,count totals reduceallentries,rate filters recententries with elapsed/windowdenominator. No storagecap/finitecountvalidation here; not a new observed performancebug.",
+    "Capabilities supported statuses are author declarations; live evidence must be checked separately, and no release record has been inspected."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 24,
+  "limits": [
+    "59/230wholeartifacts; complete project and all500reviews remain incomplete.",
+    "No production optimization; native pHash/ASAN deferred."
+  ]
+}
