@@ -1,0 +1,35 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/tree/radix.h": {
+      "sha256": "3382c56e1f2baeddce3e6111617f91cffa0623b955e90de99d14fdd10a575276",
+      "git_blob": "b3b13fa6a2e2f031e89dc65758540e5962dbd85f",
+      "bytes": 6706,
+      "lines": 231,
+      "method": "Whole pinned header read."
+    }
+  },
+  "cumulative_assessed_blobs": 34,
+  "tracked_blobs": 616,
+  "findings": [
+    "RadixMap indexOf selects bits after least significant bit; scalar search visits only exact bucket. Original header control with radix1,query0,threshold2 returns hash4 but misses equally distance-one hash2 in another bucket. Radix0 scalar reference returns both. This is an intentional approximate search tradeoff disclosed in header, not full metric-radius recall.",
+    "Eight-query overload chooses bucket from queryHashes[0] for every query. Synthetic mixed-bucket queries miss an exact match for second query that scalar search finds. Video caller grouping invariant still unread: do not claim this is necessarily a real application batching bug.",
+    "Search appends to supplied match vectors and does not sort or clear them. Caller owns result initialization/order; behavior differs from VP-tree wrapper. Threshold is exclusive and stored as char distance_t; public search-parameter validation/caller conversion still needs review.",
+    "Constructor bounds radix by estimated bucket memory around1GiB, allocates pointer table eagerly and shares an empty Bucket until insertion. This estimate is not a total-memory budget or measured performance guarantee.",
+    "Header addressOf uses member access on bucket pointer with dot rather than arrow; template method not instantiated by these controls. No full-build failure claim; callers still unreviewed.",
+    "Stats sums allocated bucket capacity; empty-bucket treatment differs between memory/mean and sigma calculations. No timing/memory qualification or benefit claimed."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-radix-controls-v14-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Original full RadixMap header with only hamm.h include replaced by builtin-popcount shim; clang++C++20 O2 and Qt macro/log shims. Bounded synthetic hashes/buckets; no native pHash, media, Qt runtime or ASAN."
+  },
+  "limits": [
+    "34/616 tracked artifacts assessed:33whole text/source and1PNGvisual. Twenty-four cumulative original-body/header controls plus one independent key counterexample.",
+    "Video caller mixed-bucket constraints not yet reviewed. No full-source/full upstream/media qualification or production optimization.",
+    "Deferred native pHash/ASAN remains skipped."
+  ]
+}
