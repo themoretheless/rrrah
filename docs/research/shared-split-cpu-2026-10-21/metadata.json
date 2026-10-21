@@ -1,0 +1,28 @@
+{
+  "cpu": "Apple M4 Max",
+  "rustc": "1.98.1 (48a229cea 2026-09-01)",
+  "initial_test_profile": {
+    "opt_level": 1,
+    "debug": 0
+  },
+  "release_profile": {
+    "opt_level": 3,
+    "codegen_units": 1,
+    "lto": "thin",
+    "strip": "symbols"
+  },
+  "seed": 20261021,
+  "bootstrap_resamples": 20000,
+  "control_pairs_per_workload": 6,
+  "candidate_pairs_per_workload": 16,
+  "order": "alternating AB and BA, single test thread, warmup before control",
+  "mode": "cfg(test) thread-local control selects the previous two clips for subtraction; non-test builds only use shared split",
+  "timer": "std::time::Instant elapsed time around CPU-only blocks",
+  "scope_limitations": [
+    "test harness, not viewer process",
+    "test-only branch exists in both dense comparison paths",
+    "no page I/O/startup/cache/GPU/display timing",
+    "admission callback uses zero-sized credits; no real budget bookkeeping in probe",
+    "single machine/session; intervals describe local paired measurements"
+  ]
+}

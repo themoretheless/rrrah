@@ -1,0 +1,78 @@
+{
+  "scope": "Local optimized-test-build elapsed CPU-kernel time; no page/display/GPU claim",
+  "estimator": "Mean paired percentage reduction; deterministic percentile bootstrap, 20000 resamples",
+  "workloads": {
+    "pair": {
+      "control": {
+        "pairs": 6,
+        "mean_percent_reduction": -0.18208220494905455,
+        "median_percent_reduction": 0.1495035870397416,
+        "bootstrap_mean_95_interval": [
+          -1.0988065286410256,
+          0.4810827558941769
+        ],
+        "first_median_ns": 39242041.5,
+        "second_median_ns": 39279958.5
+      },
+      "candidate": {
+        "pairs": 16,
+        "mean_percent_reduction": 0.2913401321028858,
+        "median_percent_reduction": 0.16447088365546236,
+        "bootstrap_mean_95_interval": [
+          -0.15391935776871554,
+          0.8079904371937768
+        ],
+        "first_median_ns": 39343625.0,
+        "second_median_ns": 39450083.0
+      }
+    },
+    "dense50": {
+      "control": {
+        "pairs": 6,
+        "mean_percent_reduction": 2.1723870327462445,
+        "median_percent_reduction": 0.41724942092327083,
+        "bootstrap_mean_95_interval": [
+          -0.44680315803821774,
+          6.588360687969598
+        ],
+        "first_median_ns": 82034104.0,
+        "second_median_ns": 81597041.5
+      },
+      "candidate": {
+        "pairs": 16,
+        "mean_percent_reduction": -0.025844505247580377,
+        "median_percent_reduction": -0.16956595043977032,
+        "bootstrap_mean_95_interval": [
+          -0.5545037414527161,
+          0.49338772404886233
+        ],
+        "first_median_ns": 82621854.0,
+        "second_median_ns": 82977521.0
+      }
+    },
+    "dense75": {
+      "control": {
+        "pairs": 6,
+        "mean_percent_reduction": -1.0121127189126016,
+        "median_percent_reduction": -0.7498443662204326,
+        "bootstrap_mean_95_interval": [
+          -2.712461293542058,
+          0.36358568257230095
+        ],
+        "first_median_ns": 70160271.0,
+        "second_median_ns": 70998208.0
+      },
+      "candidate": {
+        "pairs": 16,
+        "mean_percent_reduction": 2.263742249991873,
+        "median_percent_reduction": 0.5605979614359975,
+        "bootstrap_mean_95_interval": [
+          0.2258435824319138,
+          5.064074014523257
+        ],
+        "first_median_ns": 69888417.0,
+        "second_median_ns": 68878125.0
+      }
+    }
+  }
+}

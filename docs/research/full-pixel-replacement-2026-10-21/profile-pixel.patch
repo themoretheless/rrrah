@@ -1,0 +1,34 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-full-replace-profile-pixel.rs	2026-10-21 06:51:21
++++ vendor/hayro-interpret/src/encode/ordered_pixel.rs	2026-10-21 06:51:21
+@@ -6,6 +6,10 @@
+ type Credit = Box<dyn std::any::Any + Send + Sync>;
+ type Admitter<'a> = dyn Fn(usize) -> Option<Credit> + 'a;
+ const VERTICES: usize = 16;
++std::thread_local! { static REPLACE_COUNTS: std::cell::Cell<[u64;6]> = const {std::cell::Cell::new([0;6])}; }
++pub(super) fn replacement_profile_reset() {REPLACE_COUNTS.with(|v|v.set([0;6]));}
++pub(super) fn replacement_profile_report(patches:usize) { let c=REPLACE_COUNTS.with(|v|v.get());eprintln!("FULL_REPLACE_PROFILE patches={patches} queries={} successes={} old_regions={} failed_queries={} failed_scans={} max_old={}",c[0],c[1],c[2],c[3],c[4],c[5]); }
++
+ #[cfg(test)]
+ std::thread_local! {
+     static WALK_SPLIT_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+@@ -1393,9 +1397,12 @@
+         // fields follow the existing incoming-wins policy; sample IDs do not
+         // participate in priority. All allocation/debits remain transactional.
+         if triangle.is_unit_square() {
++            REPLACE_COUNTS.with(|v| {let mut c=v.get();c[0]+=1;v.set(c)});
++            let mut scanned=0u64;
+             let mut replaces_all = true;
+             for old in &self.regions.values {
+                 tick(work, cancelled)?;
++                scanned+=1;
+                 if !(owner.patch_index > old.owner.patch_index
+                     || (owner.patch_index == old.owner.patch_index
+                         && owner.u == old.owner.u && owner.v == old.owner.v)) {
+@@ -1403,6 +1410,7 @@
+                     break;
+                 }
+             }
++            REPLACE_COUNTS.with(|v| {let mut c=v.get();if replaces_all {c[1]+=1;c[2]+=self.regions.values.len() as u64;c[5]=c[5].max(self.regions.values.len() as u64);}else{c[3]+=1;c[4]+=scanned;}v.set(c)});
+             if replaces_all {
+                 tick(work, cancelled)?;
+                 self.regions = incoming;

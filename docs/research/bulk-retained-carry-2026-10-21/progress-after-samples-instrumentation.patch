@@ -1,0 +1,28 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-progress-current-samples.rs	2026-10-21 07:41:49
++++ vendor/hayro-interpret/src/encode/ordered_samples.rs	2026-10-21 07:51:48
+@@ -588,6 +588,9 @@
+     let mut guard = None;
+     let mut map = MeshMap::default();
+     let mut work = 100_000_000usize;
++    let mut progress_tiles=0u64;
++    let mut progress_last=(0u16,0u16);
++    super::ordered_pixel::progress_reset();
+     // The closure keeps every budget-phase return observable in opt-in traces.
+     let computed = (|| -> Option<()> {
+         let x0 = extent.x0.floor() as u16;
+@@ -599,6 +602,7 @@
+                 if cancelled() {
+                     return None;
+                 }
++                progress_tiles+=1;progress_last=(tx,ty);
+                 let mut pixels: [OrderedPixel<'_>; 16] =
+                     std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
+                 let mut dense = [false; 16];
+@@ -734,6 +738,7 @@
+     drop(record_credit);
+     let complete = computed.is_some() && !cancelled();
+     if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
++        eprintln!("PAINT_PROGRESS patches={} tiles={progress_tiles} last_x={} last_y={} calls={}",patches.len(),progress_last.0,progress_last.1,super::ordered_pixel::progress_calls());
+         eprintln!(
+             "ORDERED_SAMPLE_OUTCOME patches={} complete={} work_spent={} work_left={work}",
+             patches.len(),

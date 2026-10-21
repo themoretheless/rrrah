@@ -1,0 +1,18 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-full-replace-profile-samples.rs	2026-10-21 06:51:21
++++ vendor/hayro-interpret/src/encode/ordered_samples.rs	2026-10-21 06:51:21
+@@ -588,6 +588,7 @@
+     let mut guard = None;
+     let mut map = MeshMap::default();
+     let mut work = 100_000_000usize;
++    super::ordered_pixel::replacement_profile_reset();
+     // The closure keeps every budget-phase return observable in opt-in traces.
+     let computed = (|| -> Option<()> {
+         let x0 = extent.x0.floor() as u16;
+@@ -734,6 +735,7 @@
+     drop(record_credit);
+     let complete = computed.is_some() && !cancelled();
+     if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
++        super::ordered_pixel::replacement_profile_report(patches.len());
+         eprintln!(
+             "ORDERED_SAMPLE_OUTCOME patches={} complete={} work_spent={} work_left={work}",
+             patches.len(),

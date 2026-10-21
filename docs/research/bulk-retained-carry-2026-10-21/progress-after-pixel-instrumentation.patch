@@ -1,0 +1,21 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-progress-current-pixel.rs	2026-10-21 07:49:15
++++ vendor/hayro-interpret/src/encode/ordered_pixel.rs	2026-10-21 07:51:48
+@@ -6,6 +6,10 @@
+ type Credit = Box<dyn std::any::Any + Send + Sync>;
+ type Admitter<'a> = dyn Fn(usize) -> Option<Credit> + 'a;
+ const VERTICES: usize = 16;
++std::thread_local! {static PROGRESS_CALLS:std::cell::Cell<u64>=const{std::cell::Cell::new(0)};}
++pub(super) fn progress_reset(){PROGRESS_CALLS.with(|v|v.set(0));}
++pub(super) fn progress_calls()->u64{PROGRESS_CALLS.with(|v|v.get())}
++
+ #[cfg(test)]
+ std::thread_local! {
+     static NO_BATCH_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+@@ -1384,6 +1388,7 @@
+         work: &mut usize,
+         cancelled: &dyn Fn() -> bool,
+     ) -> Result<()> {
++        PROGRESS_CALLS.with(|v|v.set(v.get()+1));
+         #[cfg(test)]
+         if NO_BATCH_CONTROL.with(|v| v.get()) {
+             return self.paint_triangle_impl::<false>(points, owner, work, cancelled);

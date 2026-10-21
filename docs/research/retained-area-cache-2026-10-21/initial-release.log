@@ -1,0 +1,320 @@
+warning: constant `PNG_SIGNATURE` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling rrrah-ordered-sampler-validation v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-interpret-harness-20261020)
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2920:17
+     |
+2920 |                 kurbo::Affine::IDENTITY,
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+     |
+2920 -                 kurbo::Affine::IDENTITY,
+2920 +                 Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2921:17
+     |
+2921 |                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2921 -                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2921 +                 Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2922:17
+     |
+2922 |                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2922 -                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2922 +                 Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3023:26
+     |
+3023 |         source.inverse = kurbo::Affine::IDENTITY;
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3023 -         source.inverse = kurbo::Affine::IDENTITY;
+3023 +         source.inverse = Affine::IDENTITY;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3055:21
+     |
+3055 |         let polls = std::cell::Cell::new(0);
+     |                     ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3055 -         let polls = std::cell::Cell::new(0);
+3055 +         let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3068:25
+     |
+3068 |             let count = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3068 -             let count = std::cell::Cell::new(0);
+3068 +             let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3098:13
+     |
+3098 |             kurbo::Affine::IDENTITY,
+     |             ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3098 -             kurbo::Affine::IDENTITY,
+3098 +             Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3099:13
+     |
+3099 |             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3099 -             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+3099 +             Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3100:13
+     |
+3100 |             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3100 -             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+3100 +             Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3128:25
+     |
+3128 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3128 -             let polls = std::cell::Cell::new(0);
+3128 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3142:29
+     |
+3142 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3142 -                 let count = std::cell::Cell::new(0);
+3142 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3239:25
+     |
+3239 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3239 -             let polls = std::cell::Cell::new(0);
+3239 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3253:29
+     |
+3253 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3253 -                 let count = std::cell::Cell::new(0);
+3253 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3920:26
+     |
+3920 |                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3920 -                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+3920 +                 Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3991:22
+     |
+3991 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3991 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3991 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4128:22
+     |
+4128 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4128 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4128 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4177:22
+     |
+4177 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4177 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4177 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4267:22
+     |
+4267 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4267 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4267 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: `rrrah-ordered-sampler-validation` (lib test) generated 18 warnings (run `cargo fix --lib -p rrrah-ordered-sampler-validation --tests` to apply 18 suggestions)
+    Finished `release` profile [optimized] target(s) in 22.72s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/lib.rs (target/release/deps/hayro_interpret-3096a15d3a6323b3)
+
+running 1 test
+test encode::ordered_pixel::exact_orientation_tests::dense_subtraction_cpu_pairs ... DENSE_CPU pair control pair=0 first_ns=40027083 second_ns=39717584
+DENSE_CPU pair control pair=1 first_ns=39260958 second_ns=39405167
+DENSE_CPU pair control pair=2 first_ns=39041250 second_ns=39005625
+DENSE_CPU pair control pair=3 first_ns=39223125 second_ns=40132292
+DENSE_CPU pair control pair=4 first_ns=38787041 second_ns=38706458
+DENSE_CPU pair control pair=5 first_ns=39359625 second_ns=39154750
+DENSE_CPU pair candidate pair=0 before_ns=39042208 after_ns=38922041 repetitions=8192
+DENSE_CPU pair candidate pair=1 before_ns=40256958 after_ns=39493750 repetitions=8192
+DENSE_CPU pair candidate pair=2 before_ns=39369542 after_ns=39437625 repetitions=8192
+DENSE_CPU pair candidate pair=3 before_ns=39331750 after_ns=39528959 repetitions=8192
+DENSE_CPU pair candidate pair=4 before_ns=39220625 after_ns=39595042 repetitions=8192
+DENSE_CPU pair candidate pair=5 before_ns=39872333 after_ns=39897250 repetitions=8192
+DENSE_CPU pair candidate pair=6 before_ns=40549917 after_ns=39363833 repetitions=8192
+DENSE_CPU pair candidate pair=7 before_ns=39268542 after_ns=39252250 repetitions=8192
+DENSE_CPU pair candidate pair=8 before_ns=39226584 after_ns=39462541 repetitions=8192
+DENSE_CPU pair candidate pair=9 before_ns=39831584 after_ns=39667792 repetitions=8192
+DENSE_CPU pair candidate pair=10 before_ns=39700583 after_ns=39507667 repetitions=8192
+DENSE_CPU pair candidate pair=11 before_ns=39913292 after_ns=40107458 repetitions=8192
+DENSE_CPU pair candidate pair=12 before_ns=38675667 after_ns=38948542 repetitions=8192
+DENSE_CPU pair candidate pair=13 before_ns=39355500 after_ns=38829708 repetitions=8192
+DENSE_CPU pair candidate pair=14 before_ns=39295542 after_ns=39116458 repetitions=8192
+DENSE_CPU pair candidate pair=15 before_ns=39252666 after_ns=39139833 repetitions=8192
+DENSE_CPU dense50 control pair=0 first_ns=78835459 second_ns=79870833
+DENSE_CPU dense50 control pair=1 first_ns=95354958 second_ns=83087416
+DENSE_CPU dense50 control pair=2 first_ns=82118541 second_ns=81298084
+DENSE_CPU dense50 control pair=3 first_ns=82366208 second_ns=82208417
+DENSE_CPU dense50 control pair=4 first_ns=81949667 second_ns=81422791
+DENSE_CPU dense50 control pair=5 first_ns=81485208 second_ns=81771292
+DENSE_CPU dense50 candidate pair=0 before_ns=82563750 after_ns=81711875 repetitions=32
+DENSE_CPU dense50 candidate pair=1 before_ns=82455125 after_ns=81561125 repetitions=32
+DENSE_CPU dense50 candidate pair=2 before_ns=82013875 after_ns=84024125 repetitions=32
+DENSE_CPU dense50 candidate pair=3 before_ns=82172250 after_ns=82732833 repetitions=32
+DENSE_CPU dense50 candidate pair=4 before_ns=83990041 after_ns=83286125 repetitions=32
+DENSE_CPU dense50 candidate pair=5 before_ns=83707583 after_ns=83786709 repetitions=32
+DENSE_CPU dense50 candidate pair=6 before_ns=83928917 after_ns=82853083 repetitions=32
+DENSE_CPU dense50 candidate pair=7 before_ns=81075375 after_ns=81662750 repetitions=32
+DENSE_CPU dense50 candidate pair=8 before_ns=81994292 after_ns=82760041 repetitions=32
+DENSE_CPU dense50 candidate pair=9 before_ns=81118542 after_ns=81131791 repetitions=32
+DENSE_CPU dense50 candidate pair=10 before_ns=82574208 after_ns=83101959 repetitions=32
+DENSE_CPU dense50 candidate pair=11 before_ns=84018041 after_ns=83313583 repetitions=32
+DENSE_CPU dense50 candidate pair=12 before_ns=84084500 after_ns=84740250 repetitions=32
+DENSE_CPU dense50 candidate pair=13 before_ns=83978584 after_ns=84184000 repetitions=32
+DENSE_CPU dense50 candidate pair=14 before_ns=84235666 after_ns=82671791 repetitions=32
+DENSE_CPU dense50 candidate pair=15 before_ns=82669500 after_ns=83312917 repetitions=32
+DENSE_CPU dense75 control pair=0 first_ns=69887875 second_ns=70988625
+DENSE_CPU dense75 control pair=1 first_ns=70432667 second_ns=71381083
+DENSE_CPU dense75 control pair=2 first_ns=71336084 second_ns=74758666
+DENSE_CPU dense75 control pair=3 first_ns=71682083 second_ns=71007791
+DENSE_CPU dense75 control pair=4 first_ns=68610958 second_ns=68021458
+DENSE_CPU dense75 control pair=5 first_ns=68731667 second_ns=68836917
+DENSE_CPU dense75 candidate pair=0 before_ns=69518959 after_ns=68921375 repetitions=64
+DENSE_CPU dense75 candidate pair=1 before_ns=68476209 after_ns=67896917 repetitions=64
+DENSE_CPU dense75 candidate pair=2 before_ns=69243375 after_ns=67714084 repetitions=64
+DENSE_CPU dense75 candidate pair=3 before_ns=68498291 after_ns=68227625 repetitions=64
+DENSE_CPU dense75 candidate pair=4 before_ns=70805958 after_ns=67676500 repetitions=64
+DENSE_CPU dense75 candidate pair=5 before_ns=68248292 after_ns=68551625 repetitions=64
+DENSE_CPU dense75 candidate pair=6 before_ns=68863958 after_ns=68794500 repetitions=64
+DENSE_CPU dense75 candidate pair=7 before_ns=84465958 after_ns=76556292 repetitions=64
+DENSE_CPU dense75 candidate pair=8 before_ns=95483084 after_ns=77317459 repetitions=64
+DENSE_CPU dense75 candidate pair=9 before_ns=71105084 after_ns=71399833 repetitions=64
+DENSE_CPU dense75 candidate pair=10 before_ns=70953833 after_ns=71032459 repetitions=64
+DENSE_CPU dense75 candidate pair=11 before_ns=70257875 after_ns=69926625 repetitions=64
+DENSE_CPU dense75 candidate pair=12 before_ns=70396125 after_ns=70892333 repetitions=64
+DENSE_CPU dense75 candidate pair=13 before_ns=71543750 after_ns=69979041 repetitions=64
+DENSE_CPU dense75 candidate pair=14 before_ns=69247833 after_ns=68797917 repetitions=64
+DENSE_CPU dense75 candidate pair=15 before_ns=67069000 after_ns=68834875 repetitions=64
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 163 filtered out; finished in 8.89s
+

@@ -1,0 +1,85 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-retention-pixel-before.rs	2026-10-21 06:56:31
++++ vendor/hayro-interpret/src/encode/ordered_pixel.rs	2026-10-21 06:56:31
+@@ -6,6 +6,11 @@
+ type Credit = Box<dyn std::any::Any + Send + Sync>;
+ type Admitter<'a> = dyn Fn(usize) -> Option<Credit> + 'a;
+ const VERTICES: usize = 16;
++std::thread_local! {static RETENTION:std::cell::Cell<[u64;12]>=const{std::cell::Cell::new([0;12])};}
++fn retention_count(i:usize) {RETENTION.with(|v|{let mut c=v.get();c[i]+=1;v.set(c)});}
++pub(super) fn retention_reset() {RETENTION.with(|v|v.set([0;12]));}
++pub(super) fn retention_report(patches:usize) {let c=RETENTION.with(|v|v.get());eprintln!("RETENTION_PROFILE patches={patches} old={} incoming_empty={} disjoint={} dominant={} general={} keeps={} positive={} merge_attempts={} merges={} pushes={} subtracts={} subtract_disjoint={}",c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11]);}
++
+ #[cfg(test)]
+ std::thread_local! {
+     static WALK_SPLIT_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+@@ -1092,7 +1097,9 @@
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<()> {
++    retention_count(5);
+     if polygon.moments().is_some() {
++        retention_count(6);
+         loop {
+             tick(work, cancelled)?;
+             if out.values.len() <= out.merge_floor {
+@@ -1104,12 +1111,15 @@
+             if previous.owner != owner {
+                 break;
+             }
++            retention_count(7);
+             let Some(joined) = previous.polygon.convex_union(&polygon) else {
+                 break;
+             };
++            retention_count(8);
+             out.values.pop();
+             polygon = joined;
+         }
++        retention_count(9);
+         out.push(Fragment { polygon, owner })?;
+     }
+     Ok(())
+@@ -1124,8 +1134,10 @@
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<Polygon> {
++    retention_count(10);
+     tick(work, cancelled)?;
+     if !polygon.bounds_overlap(cut) {
++        retention_count(11);
+         keep(out, polygon, owner, work, cancelled)?;
+         return Ok(Polygon::empty());
+     }
+@@ -1380,7 +1392,9 @@
+         })?;
+         for old in &self.regions.values {
+             tick(work, cancelled)?;
++            retention_count(0);
+             if incoming.values.is_empty() {
++                retention_count(1);
+                 keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                 continue;
+             }
+@@ -1388,6 +1402,7 @@
+             // Disjoint bounds therefore preserve this old region without
+             // rebuilding the incoming list or comparing source priorities.
+             if !old.polygon.bounds_overlap(&triangle) {
++                retention_count(2);
+                 keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                 continue;
+             }
+@@ -1396,6 +1411,7 @@
+             // remainder, avoiding subdivision followed by restoration below.
+             // Crossing, tied or numerically ambiguous fields use the full path.
+             if dominates(&old.owner, &owner, &triangle, work, cancelled)? {
++                retention_count(3);
+                 keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                 let mut remaining = AdmittedVec::new(admit, maximum);
+                 for part in &incoming.values {
+@@ -1412,6 +1428,7 @@
+                 incoming = remaining;
+                 continue;
+             }
++            retention_count(4);
+             let prefix = next.values.len();
+             let previous_last = next.values.last().copied();
+             // The tentative subtraction may mutate only the saved last

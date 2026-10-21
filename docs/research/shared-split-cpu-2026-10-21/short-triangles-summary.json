@@ -1,0 +1,30 @@
+{
+  "scope": "Local optimized-test-build elapsed CPU-kernel time; no page/display/GPU claim",
+  "estimator": "Mean paired percentage reduction; deterministic percentile bootstrap, 20000 resamples",
+  "workloads": {
+    "triangles": {
+      "control": {
+        "pairs": 6,
+        "mean_percent_reduction": 0.17646665874608056,
+        "median_percent_reduction": 0.018723031890177783,
+        "bootstrap_mean_95_interval": [
+          -0.38277493544526814,
+          0.9515841654469519
+        ],
+        "first_median_ns": 15601333.5,
+        "second_median_ns": 15611520.5
+      },
+      "candidate": {
+        "pairs": 16,
+        "mean_percent_reduction": 0.0024430930298219135,
+        "median_percent_reduction": -0.08166065050407027,
+        "bootstrap_mean_95_interval": [
+          -0.4842825731463314,
+          0.5255894382718114
+        ],
+        "first_median_ns": 15540312.5,
+        "second_median_ns": 15531000.0
+      }
+    }
+  }
+}

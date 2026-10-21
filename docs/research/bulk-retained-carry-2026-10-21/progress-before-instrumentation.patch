@@ -1,0 +1,21 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-before-bulk-carry.rs	2026-10-21 07:24:09
++++ vendor/hayro-interpret/src/encode/ordered_pixel.rs	2026-10-21 07:41:49
+@@ -6,6 +6,10 @@
+ type Credit = Box<dyn std::any::Any + Send + Sync>;
+ type Admitter<'a> = dyn Fn(usize) -> Option<Credit> + 'a;
+ const VERTICES: usize = 16;
++std::thread_local! {static PROGRESS_CALLS:std::cell::Cell<u64>=const{std::cell::Cell::new(0)};}
++pub(super) fn progress_reset(){PROGRESS_CALLS.with(|v|v.set(0));}
++pub(super) fn progress_calls()->u64{PROGRESS_CALLS.with(|v|v.get())}
++
+ #[cfg(test)]
+ std::thread_local! {
+     static RECHECK_RETAINED_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+@@ -1357,6 +1361,7 @@
+         work: &mut usize,
+         cancelled: &dyn Fn() -> bool,
+     ) -> Result<()> {
++        PROGRESS_CALLS.with(|v|v.set(v.get()+1));
+         tick(work, cancelled)?;
+         if !owner.valid() || points.iter().any(|p| !p.x.is_finite() || !p.y.is_finite()) {
+             return Err(PixelPartitionError::Invalid);

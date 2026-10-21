@@ -1,0 +1,190 @@
+   Compiling unicode-ident v1.0.24
+   Compiling crc32fast v1.5.2
+   Compiling siphasher v1.0.4
+   Compiling alloc-no-stdlib v2.0.4
+   Compiling fearless_simd v0.4.1
+   Compiling adler2 v2.0.1
+   Compiling simd-adler32 v0.3.10
+   Compiling cfg-if v1.0.4
+   Compiling arrayvec v0.7.8
+   Compiling smallvec v1.15.2
+   Compiling hayro-ccitt v0.3.0
+   Compiling zune-core v0.5.3
+   Compiling allocator-api2 v0.2.21
+   Compiling pxfm v0.1.30
+   Compiling num-traits v0.2.19
+   Compiling foldhash v0.2.0
+   Compiling phf_shared v0.13.1
+   Compiling proc-macro2 v1.0.107
+   Compiling alloc-stdlib v0.2.4
+   Compiling hayro-postscript v0.1.0
+   Compiling polycool v0.4.0
+   Compiling rustc-hash v2.1.3
+   Compiling stable_deref_trait v1.2.1
+   Compiling miniz_oxide v0.9.1
+   Compiling equivalent v1.0.2
+   Compiling zune-jpeg v0.5.15
+   Compiling memchr v2.8.3
+   Compiling bitflags v2.13.1
+   Compiling moxcms v0.8.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/moxcms)
+   Compiling hayro-jbig2 v0.3.0
+   Compiling hayro-jpeg2000 v0.3.5
+   Compiling phf_generator v0.13.1
+   Compiling brotli-decompressor v5.0.3
+   Compiling hashbrown v0.16.1
+   Compiling kurbo v0.13.1
+   Compiling quote v1.0.47
+   Compiling flate2 v1.1.10
+   Compiling syn v2.0.119
+   Compiling syn v3.0.2
+   Compiling hayro-syntax v0.7.2
+   Compiling brotli v8.0.4
+   Compiling synstructure v0.14.0
+   Compiling bytemuck_derive v1.11.0
+   Compiling phf_macros v0.13.1
+   Compiling hayro-cmap v0.1.0
+   Compiling zerofrom-derive v0.1.8
+   Compiling yoke-derive v0.8.4
+   Compiling phf v0.13.1
+   Compiling bytemuck v1.25.2
+   Compiling zerofrom v0.1.8
+   Compiling font-types v0.11.3
+   Compiling read-fonts v0.39.2
+   Compiling yoke v0.8.3
+   Compiling skrifa v0.42.1
+   Compiling rrrah-ordered-sampler-validation v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-pixel102142-harness)
+warning: missing documentation for the crate
+  --> main.rs:1:1
+   |
+ 1 | / use hayro_interpret::encode::{OrderedPixel,PixelSourceOwner};
+ 2 | | use kurbo::Point;
+ 3 | | type Row=(usize,usize,usize,[[u64;2];3],[[u64;3];6]);
+ 4 | | const ROWS:&[Row]=include!("rows.rs");
+...  |
+44 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: `rrrah-ordered-sampler-validation` (bin "pixel_overlap") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 40.82s
+     Running `target/debug/pixel_overlap --reduce`
+PREFIX 0 area=0 overlap=0 fragments=0 work=17
+PREFIX 1 area=0 overlap=0 fragments=0 work=34
+PREFIX 2 area=0 overlap=0 fragments=0 work=51
+PREFIX 3 area=0 overlap=0 fragments=0 work=71
+PREFIX 4 area=0 overlap=0 fragments=0 work=88
+PREFIX 5 area=0 overlap=0 fragments=0 work=108
+PREFIX 6 area=0 overlap=0 fragments=0 work=125
+PREFIX 7 area=0 overlap=0 fragments=0 work=145
+PREFIX 8 area=0 overlap=0 fragments=0 work=162
+PREFIX 9 area=0 overlap=0 fragments=0 work=182
+PREFIX 10 area=0 overlap=0 fragments=0 work=199
+PREFIX 11 area=0 overlap=0 fragments=0 work=219
+PREFIX 12 area=0 overlap=0 fragments=0 work=236
+PREFIX 13 area=0 overlap=0 fragments=0 work=256
+PREFIX 14 area=0 overlap=0 fragments=0 work=273
+PREFIX 15 area=0 overlap=0 fragments=0 work=293
+PREFIX 16 area=0 overlap=0 fragments=0 work=310
+PREFIX 17 area=0 overlap=0 fragments=0 work=330
+PREFIX 18 area=0 overlap=0 fragments=0 work=347
+PREFIX 19 area=0 overlap=0 fragments=0 work=367
+PREFIX 20 area=0 overlap=0 fragments=0 work=384
+PREFIX 21 area=0 overlap=0 fragments=0 work=404
+PREFIX 22 area=0 overlap=0 fragments=0 work=421
+PREFIX 23 area=0 overlap=0 fragments=0 work=441
+PREFIX 24 area=0 overlap=0 fragments=0 work=458
+PREFIX 25 area=0 overlap=0 fragments=0 work=478
+PREFIX 26 area=0 overlap=0 fragments=0 work=495
+PREFIX 27 area=0 overlap=0 fragments=0 work=512
+PREFIX 28 area=0 overlap=0 fragments=0 work=529
+PREFIX 29 area=0 overlap=0 fragments=0 work=546
+PREFIX 30 area=0 overlap=0 fragments=0 work=566
+PREFIX 31 area=0 overlap=0 fragments=0 work=583
+PREFIX 32 area=0 overlap=0 fragments=0 work=603
+PREFIX 33 area=0 overlap=0 fragments=0 work=623
+PREFIX 34 area=0 overlap=0 fragments=0 work=640
+PREFIX 35 area=0 overlap=0 fragments=0 work=660
+PREFIX 36 area=0 overlap=0 fragments=0 work=677
+PREFIX 37 area=0 overlap=0 fragments=0 work=697
+PREFIX 38 area=0 overlap=0 fragments=0 work=714
+PREFIX 39 area=0 overlap=0 fragments=0 work=734
+PREFIX 40 area=0 overlap=0 fragments=0 work=751
+PREFIX 41 area=0 overlap=0 fragments=0 work=771
+PREFIX 42 area=0 overlap=0 fragments=0 work=788
+PREFIX 43 area=0 overlap=0 fragments=0 work=808
+PREFIX 44 area=0 overlap=0 fragments=0 work=825
+PREFIX 45 area=0 overlap=0 fragments=0 work=845
+PREFIX 46 area=0 overlap=0 fragments=0 work=862
+PREFIX 47 area=0 overlap=0 fragments=0 work=882
+PREFIX 48 area=0 overlap=0 fragments=0 work=899
+PREFIX 49 area=0 overlap=0 fragments=0 work=919
+PREFIX 50 area=0 overlap=0 fragments=0 work=936
+PREFIX 51 area=0 overlap=0 fragments=0 work=956
+PREFIX 52 area=0 overlap=0 fragments=0 work=973
+PREFIX 53 area=0 overlap=0 fragments=0 work=993
+PREFIX 54 area=0 overlap=0 fragments=0 work=1010
+PREFIX 55 area=0 overlap=0 fragments=0 work=1030
+PREFIX 56 area=0 overlap=0 fragments=0 work=1047
+PREFIX 57 area=0 overlap=0 fragments=0 work=1067
+PREFIX 58 area=0 overlap=0 fragments=0 work=1084
+PREFIX 59 area=0 overlap=0 fragments=0 work=1104
+PREFIX 60 area=0 overlap=0 fragments=0 work=1121
+PREFIX 61 area=0.000002422449605521413 overlap=0 fragments=1 work=1176
+PREFIX 62 area=0.000015993668482930236 overlap=0 fragments=2 work=1272
+PREFIX 63 area=0.000031799937558215984 overlap=0 fragments=3 work=1383
+PREFIX 64 area=0.00006475603687058413 overlap=0 fragments=4 work=1531
+PREFIX 65 area=0.00009451823297274554 overlap=0 fragments=5 work=1730
+PREFIX 66 area=0.00014627614132125833 overlap=0 fragments=6 work=1938
+PREFIX 67 area=0.0001905460306865704 overlap=0 fragments=7 work=2169
+PREFIX 68 area=0.00026050045681768507 overlap=0 fragments=8 work=2437
+PREFIX 69 area=0.0003198095044020102 overlap=0 fragments=9 work=2728
+PREFIX 70 area=0.0004073350498806891 overlap=0 fragments=10 work=3038
+PREFIX 71 area=0.0004821921663251444 overlap=0 fragments=11 work=3389
+PREFIX 72 area=0.0005866454547722153 overlap=0 fragments=12 work=3833
+PREFIX 73 area=0.0006775347621363941 overlap=0 fragments=13 work=4244
+PREFIX 74 area=0.000798256579172268 overlap=0 fragments=14 work=4692
+PREFIX 75 area=0.0009056352025033879 overlap=0 fragments=15 work=5163
+PREFIX 76 area=0.0010419526404169353 overlap=0 fragments=16 work=5671
+PREFIX 77 area=0.0011662485323205806 overlap=0 fragments=17 work=6202
+PREFIX 78 area=0.0013174771334147689 overlap=0 fragments=18 work=6752
+PREFIX 79 area=0.001459086938861425 overlap=0 fragments=19 work=7343
+PREFIX 80 area=0.001624532831378645 overlap=0 fragments=20 work=7974
+PREFIX 81 area=0.0017838198000475545 overlap=0 fragments=21 work=8628
+PREFIX 82 area=0.001962781820515957 overlap=0 fragments=22 work=9323
+PREFIX 83 area=0.002140073773988971 overlap=0 fragments=23 work=10041
+PREFIX 84 area=0.002331845569799318 overlap=0 fragments=24 work=10800
+PREFIX 85 area=0.0025274329310156344 overlap=0 fragments=25 work=11544
+PREFIX 86 area=0.0027313050369567886 overlap=0 fragments=26 work=12384
+PREFIX 87 area=0.00294543892927225 overlap=0 fragments=27 work=13092
+PREFIX 88 area=0.0031607008118327237 overlap=0 fragments=28 work=13842
+PREFIX 89 area=0.003393591235066641 overlap=0 fragments=29 work=14555
+PREFIX 90 area=0.0036195332982156578 overlap=0 fragments=30 work=15289
+PREFIX 91 area=0.003871347389082237 overlap=0 fragments=31 work=16044
+PREFIX 92 area=0.0041072629352947735 overlap=0 fragments=32 work=16838
+PREFIX 93 area=0.004378123319479384 overlap=0 fragments=33 work=17636
+PREFIX 94 area=0.004623310459829569 overlap=0.000000000000000001734723475976807 fragments=34 work=19053
+PREFIX 95 area=0.004623310459829569 overlap=0.000000000000000001734723475976807 fragments=34 work=20550
+PREFIX 96 area=0.004623310459829569 overlap=0.000000000000000001734723475976807 fragments=36 work=21521
+PREFIX 97 area=0.004623310459829571 overlap=0.0000000000000000026020852139652106 fragments=37 work=22533
+PREFIX 98 area=0.0046233104598295705 overlap=0.000000000000000005204170427930421 fragments=40 work=23644
+PREFIX 99 area=0.004638615613457767 overlap=0.000000000000000005204170427930421 fragments=43 work=25243
+PREFIX 100 area=0.004672413821432506 overlap=0.000000000000000005204170427930421 fragments=44 work=26473
+PREFIX 101 area=0.004696581007947923 overlap=0.000000000000000005204170427930421 fragments=45 work=27397
+PREFIX 102 area=0.004697326382661989 overlap=0.000000000000000005204170427930421 fragments=46 work=27781
+PREFIX 103 area=0.004697436249612599 overlap=0.000000000000000005204170427930421 fragments=47 work=28177
+PREFIX 104 area=0.004697649998660062 overlap=0.000000000000000003469446951953614 fragments=49 work=28604
+PREFIX 105 area=0.004709846580165123 overlap=0.000010805958675514423 fragments=66 work=31981
+BASELINE_BAD true
+REDUCE [69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137]
+REDUCE [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137]
+REDUCE [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136]
+REDUCE [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]
+REDUCE [103, 104, 105, 106, 107, 108, 109, 110, 119]
+REDUCE [103, 104, 105, 106, 107, 108, 109, 110]
+REDUCE [103, 104, 105, 106]
+REDUCE [103, 105, 106]
+REDUCE [103, 105]
+MINIMAL [103, 105]
+PREFIX 103 area=0.00000015176660880357864 overlap=0 fragments=1 work=49
+PREFIX 105 area=0.000015359495987247272 overlap=0.000000041899658193264465 fragments=5 work=232

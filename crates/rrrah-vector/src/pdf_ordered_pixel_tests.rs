@@ -2,44 +2,268 @@
 mod tests {
     use hayro::hayro_interpret::encode::{OrderedPixel, PixelPartitionError, PixelSourceOwner};
     use kurbo::Point;
+    fn overlap(mut p: Vec<Point>, cut: &[Point]) -> f64 {
+        for k in 0..cut.len() {
+            if p.is_empty() {
+                return 0.;
+            }
+            let a = cut[k];
+            let b = cut[(k + 1) % cut.len()];
+            let value = |q: Point| (b - a).cross(q - a);
+            let mut out = Vec::new();
+            let mut prev = *p.last().unwrap();
+            let mut f = value(prev);
+            for &q in &p {
+                let g = value(q);
+                if (f >= 0.) != (g >= 0.) {
+                    out.push(prev + (q - prev) * (f / (f - g)));
+                }
+                if g >= 0. {
+                    out.push(q);
+                }
+                prev = q;
+                f = g;
+            }
+            p = out;
+        }
+        if p.len() < 3 {
+            return 0.;
+        }
+        (1..p.len() - 1)
+            .map(|i| (p[i] - p[0]).cross(p[i + 1] - p[0]))
+            .sum::<f64>()
+            .abs()
+            * 0.5
+    }
+    #[test]
+    fn full_pixel_replacement_preserves_source_priority_and_partial_coverage() {
+        for mode in 0..7 {
+            let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            let admit = |bytes: usize| root.try_reserve(bytes as u64).ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>);
+            let mut pixel = OrderedPixel::new(&admit, 512);
+            for i in 0..32 {
+                let mut source = owner(if mode == 1 || mode == 4 { 100 } else { i + 1 }, [1., 0., 0.]);
+                source.sample_index = i;
+                if mode == 6 && i == 31 { source.patch_index = 102; }
+                if mode == 4 { source.v = [0.5, 0., 0.]; }
+                rectangle(&mut pixel, i as f64 / 32., (i + 1) as f64 / 32., source);
+            }
+            let mut source = owner(if mode == 2 { 0 } else { 100 }, [0., 0., 1.]);
+            source.sample_index = if mode == 1 { 0 } else { 999 };
+            if mode == 4 { source.v = [0., 1., 0.]; }
+            let points = if mode == 3 {
+                [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)]
+            } else if mode == 5 {
+                [Point::ZERO, Point::new(2., 0.), Point::new(0., 1.)]
+            } else {
+                [Point::new(-2., -2.), Point::new(4., -2.), Point::new(-2., 4.)]
+            };
+            let mut work = 100_000;
+            pixel.paint_triangle(points, source, &mut work, &|| false).unwrap();
+            let expected = if mode == 2 { [1., 0., 0., 1.] }
+                else if mode == 3 || mode == 4 { [0.5, 0., 0.5, 1.] }
+                else if mode == 5 { [0.25, 0., 0.75, 1.] }
+                else if mode == 6 { [1./32., 0., 31./32., 1.] } else { [0., 0., 1., 1.] };
+            close(integrated(&pixel), expected);
+            if mode < 2 { assert_eq!(pixel.fragments(), 1); }
+            eprintln!("FULL_PIXEL_REPLACE mode={mode} work={} fragments={}", 100_000-work, pixel.fragments());
+            drop(pixel); assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn full_pixel_replacement_all_failures_rollback_and_retry() {
+        use std::cell::Cell;
+        let exercise = |refuse: usize, cancel: usize, quota: usize| {
+            let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            let calls = Cell::new(0);
+            let reject = Cell::new(usize::MAX);
+            let admit = |bytes: usize| {
+                let at = calls.get(); calls.set(at + 1);
+                if at == reject.get() { return None; }
+                root.try_reserve(bytes as u64).ok()
+                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+            };
+            let mut pixel = OrderedPixel::new(&admit, 512);
+            for i in 0..32 {
+                rectangle(&mut pixel, i as f64 / 32., (i+1) as f64 / 32., owner(i+1, [1., 0., 0.]));
+            }
+            let before = integrated(&pixel);
+            let fragments = pixel.fragments();
+            let retained = root.used();
+            calls.set(0); reject.set(refuse);
+            let checks = Cell::new(0);
+            let mut work = quota;
+            let points = [Point::new(-2., -2.), Point::new(4., -2.), Point::new(-2., 4.)];
+            let source = owner(100, [0., 0., 1.]);
+            let result = pixel.paint_triangle(points, source, &mut work, &|| {
+                let at = checks.get(); checks.set(at+1); at == cancel
+            });
+            let counts = (calls.get(), checks.get(), quota-work);
+            if refuse != usize::MAX || cancel != usize::MAX || quota < 100_000 {
+                assert!(result.is_err(), "refuse={refuse} cancel={cancel} quota={quota}");
+                assert_eq!(integrated(&pixel), before);
+                assert_eq!(pixel.fragments(), fragments);
+                assert_eq!(root.used(), retained);
+                reject.set(usize::MAX);
+                pixel.paint_triangle(points, source, &mut 100_000, &|| false).unwrap();
+            } else { result.unwrap(); }
+            close(integrated(&pixel), [0., 0., 1., 1.]);
+            assert_eq!(pixel.fragments(), 1);
+            drop(pixel); assert_eq!(root.used(), 0);
+            counts
+        };
+        let (admissions, checks, work) = exercise(usize::MAX, usize::MAX, 100_000);
+        for at in 0..admissions { exercise(at, usize::MAX, 100_000); }
+        for at in 0..checks { exercise(usize::MAX, at, 100_000); }
+        for quota in 0..work { exercise(usize::MAX, usize::MAX, quota); }
+        eprintln!("FULL_PIXEL_ROLLBACK admissions={admissions} cancellations={checks} short_quotas={work}");
+    }
+    #[test]
+    fn bulk_carry_all_failures_rollback_and_retry() {
+        use std::cell::Cell;
+        let exercise = |refuse: usize, cancel: usize, quota: usize| {
+            let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            let calls = Cell::new(0);
+            let reject = Cell::new(usize::MAX);
+            let admit = |bytes: usize| {
+                let at = calls.get(); calls.set(at + 1);
+                if at == reject.get() { return None; }
+                root.try_reserve(bytes as u64).ok()
+                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+            };
+            let mut pixel = OrderedPixel::new(&admit, 512);
+            for i in 0..64 {
+                let x = (i % 8) as f64 / 8.; let y = (i / 8) as f64 / 8.;
+                pixel.paint_triangle([Point::new(x,y), Point::new(x+1./64.,y), Point::new(x,y+1./64.)],
+                    owner(i+1, [1.,0.,0.]), &mut 1_000_000, &|| false).unwrap();
+            }
+            let before = integrated(&pixel);
+            let fragments = pixel.fragments();
+            let retained = root.used();
+            calls.set(0); reject.set(refuse);
+            let checks = Cell::new(0);
+            let mut work = quota;
+            let points = [Point::new(0.9375,0.9375), Point::new(0.96875,0.9375), Point::new(0.9375,0.96875)];
+            let source = owner(100, [0.,0.,1.]);
+            let result = pixel.paint_triangle(points, source, &mut work, &|| {
+                let at = checks.get(); checks.set(at+1); at == cancel
+            });
+            let counts = (calls.get(), checks.get(), quota-work);
+            if refuse != usize::MAX || cancel != usize::MAX || quota < 100_000 {
+                assert!(result.is_err(), "refuse={refuse} cancel={cancel} quota={quota}");
+                assert_eq!(integrated(&pixel), before);
+                assert_eq!(pixel.fragments(), fragments);
+                assert_eq!(root.used(), retained);
+                reject.set(usize::MAX);
+                pixel.paint_triangle(points, source, &mut 100_000, &|| false).unwrap();
+            } else { result.unwrap(); }
+            close(integrated(&pixel), [1./128., 0., 1./2048., 1./128.+1./2048.]);
+            assert_eq!(pixel.fragments(), 65);
+            drop(pixel); assert_eq!(root.used(), 0);
+            counts
+        };
+        let (admissions, checks, work) = exercise(usize::MAX, usize::MAX, 100_000);
+        for at in 0..admissions { exercise(at, usize::MAX, 100_000); }
+        for at in 0..checks { exercise(usize::MAX, at, 100_000); }
+        for quota in 0..work { exercise(usize::MAX, usize::MAX, quota); }
+        eprintln!("BULK_CARRY_ROLLBACK admissions={admissions} cancellations={checks} short_quotas={work}");
+    }
+    #[test]
+    fn unit_border_triangle_pair_matches_exact_fraction_union() {
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (rows, expected): (&[Row], u64) =
+            include!("../../../tests/fixtures/geometry/unit-border-overlap.rs");
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| root.try_reserve(bytes as u64).ok()
+            .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>);
+        let mut pixel = OrderedPixel::new(&admit, 512);
+        let mut work = 100_000_000;
+        for &(patch, sample, count, points, fields) in rows {
+            let f = fields.map(|f| f.map(f64::from_bits));
+            let source = PixelSourceOwner { patch_index: patch, sample_index: sample,
+                component_count: count, u: f[0], v: f[1], components: [f[2], f[3], f[4], f[5]] };
+            let points = points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1])));
+            pixel.paint_triangle(points, source, &mut work, &|| false).unwrap();
+        }
+        let mut area = 0.;
+        let mut polygons = Vec::new();
+        pixel.visit(&mut work, &|| false, &mut |a, _, p, _| {
+            area += a;
+            polygons.push(p.to_vec());
+            Ok(())
+        }).unwrap();
+        for i in 0..polygons.len() {
+            for j in 0..i {
+                assert!(overlap(polygons[i].clone(), &polygons[j]) < 1e-14);
+            }
+        }
+        let expected = f64::from_bits(expected);
+        assert!((area - expected).abs() < 1e-14, "area={area} exact={expected}");
+        drop(pixel);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn rounded_boundary_order_failures_restore_partition_and_retry() {
+        use std::cell::Cell;
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (rows, expected): (&[Row], u64) =
+            include!("../../../tests/fixtures/geometry/unit-border-overlap.rs");
+        let decode = |row: Row| {
+            let (patch, sample, count, points, fields) = row;
+            let f = fields.map(|f| f.map(f64::from_bits));
+            (points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1]))),
+             PixelSourceOwner { patch_index: patch, sample_index: sample, component_count: count,
+                 u: f[0], v: f[1], components: [f[2], f[3], f[4], f[5]] })
+        };
+        let exercise = |refuse: usize, cancel: usize, quota: usize| {
+            let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            let calls = Cell::new(0);
+            let reject = Cell::new(usize::MAX);
+            let admit = |bytes: usize| {
+                let at = calls.get(); calls.set(at + 1);
+                if at == reject.get() { return None; }
+                root.try_reserve(bytes as u64).ok()
+                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+            };
+            let mut pixel = OrderedPixel::new(&admit, 512);
+            let (points, source) = decode(rows[0]);
+            pixel.paint_triangle(points, source, &mut 100_000, &|| false).unwrap();
+            let before = integrated(&pixel);
+            let fragments = pixel.fragments();
+            let retained = root.used();
+            calls.set(0); reject.set(refuse);
+            let polls = Cell::new(0);
+            let mut work = quota;
+            let (points, source) = decode(rows[1]);
+            let result = pixel.paint_triangle(points, source, &mut work, &|| {
+                let at = polls.get(); polls.set(at + 1); at == cancel
+            });
+            let counts = (calls.get(), polls.get(), quota - work);
+            if refuse != usize::MAX || cancel != usize::MAX || quota < 100_000 {
+                assert!(result.is_err(), "refuse={refuse} cancel={cancel} quota={quota}");
+                assert_eq!(integrated(&pixel), before);
+                assert_eq!(pixel.fragments(), fragments);
+                assert_eq!(root.used(), retained);
+                reject.set(usize::MAX);
+                pixel.paint_triangle(points, source, &mut 100_000, &|| false).unwrap();
+            } else { result.unwrap(); }
+            assert!((integrated(&pixel)[3] - f64::from_bits(expected)).abs() < 1e-14);
+            drop(pixel);
+            assert_eq!(root.used(), 0);
+            counts
+        };
+        let (admissions, polls, work) = exercise(usize::MAX, usize::MAX, 100_000);
+        for at in 0..admissions { exercise(at, usize::MAX, 100_000); }
+        for at in 0..polls { exercise(usize::MAX, at, 100_000); }
+        for quota in 0..work { exercise(usize::MAX, usize::MAX, quota); }
+        eprintln!("ROUNDED_BOUNDARY_ROLLBACK admissions={admissions} cancellations={polls} short_quotas={work}");
+    }
     #[test]
     fn original_clip_support_preserves_disjoint_regions_and_fraction_union() {
         type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
         let (rows, expected): (&[Row], [u64; 5]) =
             include!("../../../tests/fixtures/geometry/clip-support-five.rs");
-        fn overlap(mut p: Vec<Point>, cut: &[Point]) -> f64 {
-            for k in 0..cut.len() {
-                if p.is_empty() {
-                    return 0.;
-                }
-                let a = cut[k];
-                let b = cut[(k + 1) % cut.len()];
-                let value = |q: Point| (b - a).cross(q - a);
-                let mut out = Vec::new();
-                let mut prev = *p.last().unwrap();
-                let mut f = value(prev);
-                for &q in &p {
-                    let g = value(q);
-                    if (f >= 0.) != (g >= 0.) {
-                        out.push(prev + (q - prev) * (f / (f - g)));
-                    }
-                    if g >= 0. {
-                        out.push(q);
-                    }
-                    prev = q;
-                    f = g;
-                }
-                p = out;
-            }
-            if p.len() < 3 {
-                return 0.;
-            }
-            (1..p.len() - 1)
-                .map(|i| (p[i] - p[0]).cross(p[i + 1] - p[0]))
-                .sum::<f64>()
-                .abs()
-                * 0.5
-        }
         let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
         let admit = |bytes: usize| {
             root.try_reserve(bytes as u64)

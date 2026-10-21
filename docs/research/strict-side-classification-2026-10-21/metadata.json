@@ -1,0 +1,16 @@
+{
+  "benchmark_environment": {
+    "RRRAH_SPLIT_PROBE_WALK_CONTROL": "1",
+    "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "1",
+    "CARGO_PROFILE_RELEASE_LTO": "thin",
+    "CARGO_PROFILE_RELEASE_STRIP": "symbols"
+  },
+  "baseline": "previous shared single-walk split, not original double clip",
+  "candidate": "cached classification with strict whole-side return",
+  "old_source_sha256": "1f869a05dc8a3626c138229bd5f5fb5fb620de36cff6d6bca7b7ace15ddec27e",
+  "new_support_evaluations_square": 4,
+  "prior_support_evaluations_square": 5,
+  "work_debits_unchanged_on_138_replay": true,
+  "caps_changed": false,
+  "scope": "same-process serial CPU test harness, M4 Max, optimized release settings; no page/display inference"
+}

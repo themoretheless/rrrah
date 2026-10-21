@@ -1,0 +1,21 @@
+{
+  "baseline_mode": "RRRAH_KEEP_PROBE_RECHECK=1: before recomputes old polygon moments; after uses published has_area",
+  "release_profile": {
+    "opt_level": 3,
+    "codegen_units": 1,
+    "lto": "thin",
+    "strip": "symbols"
+  },
+  "fragment_bytes_before": 496,
+  "fragment_bytes_after": 504,
+  "additional_bytes_per_fragment": 8,
+  "benchmark_layout": "both paths use the new 504-byte Fragment; this isolates recheck removal, not net old-layout comparison",
+  "sparse_workload": "64 nonoverlapping dyadic triangles, 8x8 grid, side 1/64, distinct patches; selected to match dominant observed disjoint-carry branch",
+  "long_sparse_repetitions": 512,
+  "control_pairs": 6,
+  "alternating_candidate_pairs": 16,
+  "bootstrap_resamples": 20000,
+  "source_before_sha256": "8e99ca78eddbad1895827de003ac252e2bad09640d937395cab1c051ccf13ca8",
+  "work_limits_changed": false,
+  "cache_invalidation": "new geometry is checked; after merging final geometry is reclassified; immutable old fragments reuse their classification"
+}

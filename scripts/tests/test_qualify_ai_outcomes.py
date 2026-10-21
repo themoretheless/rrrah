@@ -1,11 +1,36 @@
 import importlib.util
 from pathlib import Path
 import unittest
+import tempfile
+import subprocess
 
 spec = importlib.util.spec_from_file_location(
     "qualify_ai_upstream", Path(__file__).resolve().parents[1] / "qualify-ai-upstream.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
+
+
+class FrozenDecoder(unittest.TestCase):
+    def test_rebuilding_source_does_not_change_executed_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "decoder"
+            frozen = Path(tmp) / "frozen"
+            original = b"#!/bin/sh\nprintf 'original'\n"
+            source.write_bytes(original)
+            source.chmod(0o700)
+            digest = module.freeze_decoder(source, frozen)
+            # Model both an in-place rewrite and the atomic replacement Cargo
+            # uses. Every page must still execute the original frozen version.
+            source.write_bytes(b"#!/bin/sh\nprintf 'rewritten'\n")
+            self.assertEqual(subprocess.check_output([str(frozen)]), b"original")
+            replacement = Path(tmp) / "replacement"
+            replacement.write_bytes(b"#!/bin/sh\nprintf 'replaced'\n")
+            replacement.chmod(0o700)
+            replacement.replace(source)
+            self.assertEqual(subprocess.check_output([str(frozen)]), b"original")
+            self.assertEqual(digest, module.sha256(frozen.read_bytes()))
+            self.assertEqual(digest, module.sha256(original))
+            self.assertNotEqual(digest, module.sha256(source.read_bytes()))
 
 
 class RendererOutcomes(unittest.TestCase):

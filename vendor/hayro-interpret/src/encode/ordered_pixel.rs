@@ -6,6 +6,13 @@ use kurbo::Point;
 type Credit = Box<dyn std::any::Any + Send + Sync>;
 type Admitter<'a> = dyn Fn(usize) -> Option<Credit> + 'a;
 const VERTICES: usize = 16;
+#[cfg(test)]
+std::thread_local! {
+    static NO_BATCH_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    static RECHECK_RETAINED_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    static WALK_SPLIT_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    static LEGACY_SPLIT_CONTROL: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
 
 /// Explicit failure leaves the previously published partition unchanged.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -320,6 +327,15 @@ impl LineKey {
         }
         let (a, b, _) = canonical_edge(a, b);
         Self::Edge([a.x, a.y, b.x, b.y].map(Self::bits))
+    }
+    fn contains_unit_pixel(self, a: Point, b: Point) -> bool {
+        match self {
+            Self::Axis(0, cut) if cut == 0 => b.y < a.y,
+            Self::Axis(0, cut) if cut == 1f64.to_bits() => b.y > a.y,
+            Self::Axis(1, cut) if cut == 0 => b.x > a.x,
+            Self::Axis(1, cut) if cut == 1f64.to_bits() => b.x < a.x,
+            _ => false,
+        }
     }
     // Reuse the original support, never a rounded subsegment of that support.
     // The local polygon edge supplies only the inward orientation.
@@ -773,11 +789,158 @@ impl Polygon {
             previous_on = current_on;
             a = b;
         }
+        Ok(out.finish_clip())
+    }
+    // Split complementary half-planes in one vertex walk. Distances and
+    // canonical intersections are shared; each side retains its own edge tags.
+    fn split_by_id(
+        &self,
+        evaluate: impl Fn(Point) -> f64,
+        snap: Option<(usize, f64)>,
+        line: u32,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<(Self, Self)> {
+        #[cfg(test)]
+        if WALK_SPLIT_CONTROL.with(|v| v.get()) {
+            return self.split_walk_by_id(evaluate, snap, line, work, cancelled);
+        }
+        tick(work, cancelled)?;
+        if self.len == 0 {
+            return Ok((Self::empty(), Self::empty()));
+        }
+        let mut distances = [0.; VERTICES];
+        let mut on = [false; VERTICES];
+        let mut positive = true;
+        let mut negative = true;
+        for i in 0..self.len {
+            tick(work, cancelled)?;
+            on[i] = self.on_line(i, line);
+            let value = if on[i] { 0. } else { evaluate(self.points[i]) };
+            if !value.is_finite() { return Err(PixelPartitionError::Invalid); }
+            distances[i] = value;
+            positive &= value > 0.;
+            negative &= value < 0.;
+        }
+        // Strict separation changes no boundary tags. Finalize exactly as the
+        // ordinary clipper does, including rounded-corner topology handling.
+        if positive { return Ok((Self::empty(), self.finish_clip())); }
+        if negative { return Ok((self.finish_clip(), Self::empty())); }
+        let mut sides = [Self::empty(); 2];
+        let mut previous = self.points[self.len - 1];
+        let mut previous_on = on[self.len - 1];
+        let mut a = distances[self.len - 1];
+        for (index, current) in self.points[..self.len].iter().copied().enumerate() {
+            let current_on = on[index];
+            let b = distances[index];
+            let crossing = if (a >= 0.) != (b >= 0.) || (a <= 0.) != (b <= 0.) {
+                Some(intersection(previous, current, a, b, snap)?)
+            } else { None };
+            for (side, positive) in sides.iter_mut().zip([false, true]) {
+                let fa = if positive { a } else { -a };
+                let fb = if positive { b } else { -b };
+                if (fa >= 0.) != (fb >= 0.) {
+                    let id = if fa >= 0. { self.incoming[index] } else { line };
+                    side.push_tagged(crossing.unwrap(), id)?;
+                }
+                if fb >= 0. {
+                    let id = if previous_on && current_on { line } else { self.incoming[index] };
+                    side.push_tagged(current, id)?;
+                }
+            }
+            previous = current;
+            previous_on = current_on;
+            a = b;
+        }
+        Ok((sides[0].finish_clip(), sides[1].finish_clip()))
+    }
+    #[cfg(test)]
+    fn split_walk_by_id(
+        &self,
+        evaluate: impl Fn(Point) -> f64,
+        snap: Option<(usize, f64)>,
+        line: u32,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<(Self, Self)> {
+        tick(work, cancelled)?;
+        let mut sides = [Self::empty(); 2]; // outside, inside
+        if self.len == 0 {
+            return Ok((sides[0], sides[1]));
+        }
+        let mut previous = self.points[self.len - 1];
+        let mut previous_on = self.on_line(self.len - 1, line);
+        let mut a = if previous_on { 0. } else { evaluate(previous) };
+        if !a.is_finite() {
+            return Err(PixelPartitionError::Invalid);
+        }
+        for (index, current) in self.points[..self.len].iter().copied().enumerate() {
+            tick(work, cancelled)?;
+            let current_on = self.on_line(index, line);
+            let b = if current_on { 0. } else { evaluate(current) };
+            if !b.is_finite() {
+                return Err(PixelPartitionError::Invalid);
+            }
+            let crossing = if (a >= 0.) != (b >= 0.) || (a <= 0.) != (b <= 0.) {
+                Some(intersection(previous, current, a, b, snap)?)
+            } else {
+                None
+            };
+            for (side, positive) in sides.iter_mut().zip([false, true]) {
+                let fa = if positive { a } else { -a };
+                let fb = if positive { b } else { -b };
+                if (fa >= 0.) != (fb >= 0.) {
+                    let id = if fa >= 0. { self.incoming[index] } else { line };
+                    side.push_tagged(crossing.unwrap(), id)?;
+                }
+                if fb >= 0. {
+                    let id = if previous_on && current_on { line } else { self.incoming[index] };
+                    side.push_tagged(current, id)?;
+                }
+            }
+            previous = current;
+            previous_on = current_on;
+            a = b;
+        }
+        Ok((sides[0].finish_clip(), sides[1].finish_clip()))
+    }
+    fn subtraction_split(
+        &self,
+        evaluate: impl Fn(Point) -> f64,
+        snap: Option<(usize, f64)>,
+        line: u32,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<(Self, Self)> {
+        #[cfg(test)]
+        if LEGACY_SPLIT_CONTROL.with(|v| v.get()) {
+            let outside = self.clip_by_id(|p| -evaluate(p), snap, line, work, cancelled)?;
+            let inside = self.clip_by_id(evaluate, snap, line, work, cancelled)?;
+            return Ok((outside, inside));
+        }
+        self.split_by_id(evaluate, snap, line, work, cancelled)
+    }
+    fn finish_clip(self) -> Self {
+        let mut out = self;
         if out.len > 1 && out.points[0] == out.points[out.len - 1] {
             out.incoming[0] = out.incoming[out.len - 1];
             out.len -= 1;
         }
-        Ok(out.convex_hull())
+        // Rounded intersections can exchange two adjacent vertices near a
+        // shared corner. Reordering them into a hull reverses their known
+        // support and loses the neighboring source edges. Preserve the
+        // clipping topology when every edge is known and no vertex is removed.
+        // Ordinary hull simplification still removes redundant vertex chains.
+        let hull = out.convex_hull();
+        if hull.len == out.len && out.incoming[..out.len].iter().all(|id| *id != 0) {
+            let start = hull.points[..hull.len].iter().position(|p| *p == out.points[0]);
+            if let Some(start) = start {
+                if (0..out.len).any(|i| out.points[i] != hull.points[(start + i) % hull.len]) {
+                    return out;
+                }
+            }
+        }
+        hull
     }
     // Join only identical-owner convex pieces sharing an exact reversed edge.
     // Never replace a concave union by its hull or merge across sampling IDs.
@@ -870,6 +1033,10 @@ impl Polygon {
 struct Fragment {
     polygon: Polygon,
     owner: PixelSourceOwner,
+    // Classification of the immutable represented polygon, including tags.
+    has_area: bool,
+    // True only when the previous published neighbor cannot merge with this.
+    no_merge_with_previous: bool,
 }
 struct AdmittedVec<'a, T> {
     values: Vec<T>,
@@ -888,7 +1055,7 @@ impl<'a, T> AdmittedVec<'a, T> {
             merge_floor: 0,
         }
     }
-    fn push(&mut self, item: T) -> Result<()> {
+    fn make_room(&mut self) -> Result<()> {
         if self.values.len() == self.maximum {
             if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
                 eprintln!(
@@ -920,38 +1087,92 @@ impl<'a, T> AdmittedVec<'a, T> {
             }
             self.credit = Some(next);
         }
+        Ok(())
+    }
+    fn push(&mut self, item: T) -> Result<()> {
+        self.make_room()?;
         self.values.push(item);
+        Ok(())
+    }
+    fn extend_copy(&mut self, mut items: &[T], work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<()>
+    where T: Copy {
+        while !items.is_empty() {
+            tick(work, cancelled)?;
+            self.make_room()?;
+            let count = (self.values.capacity() - self.values.len())
+                .min(self.maximum - self.values.len()).min(items.len());
+            self.values.extend_from_slice(&items[..count]);
+            items = &items[count..];
+        }
         Ok(())
     }
 }
 fn keep(
     out: &mut AdmittedVec<'_, Fragment>,
-    mut polygon: Polygon,
+    polygon: Polygon,
     owner: PixelSourceOwner,
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
 ) -> Result<()> {
     if polygon.moments().is_some() {
-        loop {
-            tick(work, cancelled)?;
-            if out.values.len() <= out.merge_floor {
-                break;
-            }
-            let Some(previous) = out.values.last() else {
-                break;
-            };
-            if previous.owner != owner {
-                break;
-            }
-            let Some(joined) = previous.polygon.convex_union(&polygon) else {
-                break;
-            };
-            out.values.pop();
-            polygon = joined;
-        }
-        out.push(Fragment { polygon, owner })?;
+        keep_positive(out, polygon, owner, work, cancelled)?;
     }
     Ok(())
+}
+// Reuse the publication-time area classification. Immutable coordinates and
+// support IDs preserve it, including any degenerate result of a merge.
+fn keep_existing(
+    out: &mut AdmittedVec<'_, Fragment>,
+    fragment: &Fragment,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<bool> {
+    #[cfg(test)]
+    if RECHECK_RETAINED_CONTROL.with(|v| v.get()) {
+        if fragment.polygon.moments().is_some() {
+            return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled);
+        }
+        return Ok(false);
+    }
+    if fragment.has_area {
+        return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled);
+    }
+    Ok(false)
+}
+fn keep_positive(
+    out: &mut AdmittedVec<'_, Fragment>,
+    mut polygon: Polygon,
+    owner: PixelSourceOwner,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<bool> {
+    let mut merged = false;
+    let no_merge_with_previous;
+    loop {
+        tick(work, cancelled)?;
+        if out.values.len() <= out.merge_floor {
+            no_merge_with_previous = out.values.is_empty();
+            break;
+        }
+        let Some(previous) = out.values.last() else {
+            no_merge_with_previous = true;
+            break;
+        };
+        if previous.owner != owner {
+            no_merge_with_previous = true;
+            break;
+        }
+        let Some(joined) = previous.polygon.convex_union(&polygon) else {
+            no_merge_with_previous = true;
+            break;
+        };
+        out.values.pop();
+        polygon = joined;
+        merged = true;
+    }
+    let has_area = !merged || polygon.moments().is_some();
+    out.push(Fragment { polygon, owner, has_area, no_merge_with_previous })?;
+    Ok(!merged)
 }
 // Emit convex pieces of `polygon \ cut`, returning the remaining intersection.
 fn subtract(
@@ -984,10 +1205,18 @@ fn subtract(
         } else {
             lines.intern(LineKey::edge(a, b), work, cancelled)?
         };
-        let (edge, snap) = lines.pool.keys[id as usize - 1].evaluator(a, b)?;
-        outside[count] = inside.clip_by_id(|p| -edge(p), snap, id, work, cancelled)?;
+        let key = lines.pool.keys[id as usize - 1];
+        // All subjects are clipped to the unit pixel before overlay. Original
+        // inward unit-border supports cannot remove any positive-area piece.
+        // Rounded descendant coordinates alone cannot justify this shortcut.
+        if key.contains_unit_pixel(a, b) {
+            continue;
+        }
+        let (edge, snap) = key.evaluator(a, b)?;
+        let (removed, retained) = inside.subtraction_split(edge, snap, id, work, cancelled)?;
+        outside[count] = removed;
         count += 1;
-        inside = inside.clip_by_id(edge, snap, id, work, cancelled)?;
+        inside = retained;
         if inside.moments().is_none() {
             keep(out, polygon, owner, work, cancelled)?;
             return Ok(Polygon::empty());
@@ -1150,6 +1379,19 @@ impl<'a> OrderedPixel<'a> {
     /// conditioning/certification against the original surface belongs to caller.
     pub fn paint_triangle(
         &mut self,
+        points: [Point; 3],
+        owner: PixelSourceOwner,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<()> {
+        #[cfg(test)]
+        if NO_BATCH_CONTROL.with(|v| v.get()) {
+            return self.paint_triangle_impl::<false>(points, owner, work, cancelled);
+        }
+        self.paint_triangle_impl::<true>(points, owner, work, cancelled)
+    }
+    fn paint_triangle_impl<const BATCH: bool>(
+        &mut self,
         mut points: [Point; 3],
         owner: PixelSourceOwner,
         work: &mut usize,
@@ -1208,18 +1450,44 @@ impl<'a> OrderedPixel<'a> {
         incoming.push(Fragment {
             polygon: triangle,
             owner,
+            has_area: true, // tagged.moments() was checked above.
+            no_merge_with_previous: true,
         })?;
-        for old in &self.regions.values {
+        let mut old_index = 0;
+        let mut tail_matches_old = false;
+        while old_index < self.regions.values.len() {
+            if BATCH && tail_matches_old {
+                let start = old_index;
+                let room = next.maximum - next.values.len();
+                // Do not pre-scan fragments that cannot fit. The ordinary
+                // path handles the next boundary and bounded Limit refusal.
+                while old_index < self.regions.values.len() && old_index - start < room {
+                    let old = &self.regions.values[old_index];
+                    if !old.has_area || !old.no_merge_with_previous
+                        || (!incoming.values.is_empty() && old.polygon.bounds_overlap(&triangle)) {
+                        break;
+                    }
+                    tick(work, cancelled)?;
+                    old_index += 1;
+                }
+                if old_index > start {
+                    next.extend_copy(&self.regions.values[start..old_index], work, cancelled)?;
+                    continue;
+                }
+            }
+            let old = &self.regions.values[old_index];
+            old_index += 1;
+            tail_matches_old = false;
             tick(work, cancelled)?;
             if incoming.values.is_empty() {
-                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
                 continue;
             }
             // Every remainder is contained in the clipped incoming triangle.
             // Disjoint bounds therefore preserve this old region without
             // rebuilding the incoming list or comparing source priorities.
             if !old.polygon.bounds_overlap(&triangle) {
-                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
                 continue;
             }
             // A source proved strictly dominant throughout the incoming
@@ -1227,7 +1495,7 @@ impl<'a> OrderedPixel<'a> {
             // remainder, avoiding subdivision followed by restoration below.
             // Crossing, tied or numerically ambiguous fields use the full path.
             if dominates(&old.owner, &owner, &triangle, work, cancelled)? {
-                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
                 let mut remaining = AdmittedVec::new(admit, maximum);
                 for part in &incoming.values {
                     subtract(
@@ -1291,7 +1559,7 @@ impl<'a> OrderedPixel<'a> {
                 if let Some(previous) = previous_last {
                     next.values[prefix - 1] = previous;
                 }
-                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
             } else {
                 keep(&mut next, old_wins, old.owner, work, cancelled)?;
             }
@@ -1323,6 +1591,365 @@ impl<'a> OrderedPixel<'a> {
 #[cfg(test)]
 mod exact_orientation_tests {
     use super::*;
+    #[test]
+    fn retained_boundary_cache_is_sound_after_generated_paints_and_refusals() {
+        let admit = |_: usize| Some(Box::new(()) as Credit);
+        let mut checked = 0;
+        let mut refused = 0;
+        for mut state in [1u64, 0x719a3c21, 0xa18bce42, 0x1763abcdef] {
+            let mut random = || {
+                state ^= state << 13; state ^= state >> 7; state ^= state << 17;
+                (state >> 11) as f64 / ((1u64 << 53) as f64)
+            };
+            let mut pixel = OrderedPixel::new(&admit, 64);
+            for i in 0..32 {
+                let points = std::array::from_fn(|_| Point::new(random()*1.5-0.25, random()*1.5-0.25));
+                let owner = PixelSourceOwner { patch_index: i%3, sample_index: 0,
+                    component_count: 3, u: [0.,1.,0.],
+                    v: if i%2==0 { [0.,0.,1.] } else { [0.1,0.,0.8] },
+                    components: [[0.25,0.,0.],[0.5,0.,0.],[0.75,0.,0.],[0.;3]] };
+                let before = pixel.regions.values.clone();
+                if pixel.paint_triangle(points,owner,&mut 1_000_000,&||false).is_err() {
+                    refused += 1;
+                    assert_eq!(before.len(),pixel.regions.values.len());
+                    for (a,b) in before.iter().zip(&pixel.regions.values) {
+                        assert_eq!(a.owner,b.owner);
+                        assert_eq!(a.polygon.len,b.polygon.len);
+                        assert_eq!(a.polygon.points[..a.polygon.len],b.polygon.points[..b.polygon.len]);
+                        assert_eq!(a.polygon.incoming[..a.polygon.len],b.polygon.incoming[..b.polygon.len]);
+                        assert_eq!(a.has_area,b.has_area);
+                        assert_eq!(a.no_merge_with_previous,b.no_merge_with_previous);
+                    }
+                }
+                for (index,fragment) in pixel.regions.values.iter().enumerate() {
+                    assert_eq!(fragment.has_area,fragment.polygon.moments().is_some());
+                    if index>0 && fragment.no_merge_with_previous {
+                        let previous=&pixel.regions.values[index-1];
+                        assert!(previous.owner!=fragment.owner || previous.polygon.convex_union(&fragment.polygon).is_none());
+                    }
+                    checked += 1;
+                }
+            }
+        }
+        eprintln!("BOUNDARY_CACHE_GENERATED checked={checked} refused={refused}");
+    }
+
+    #[test]
+    fn bulk_carry_overflow_does_not_scan_beyond_output_room() {
+        let admit = |_: usize| Some(Box::new(()) as Credit);
+        let source = |patch, blue| PixelSourceOwner { patch_index: patch, sample_index: 0,
+            component_count: 3, u: [0.;3], v: [0.;3],
+            components: [[if blue {0.} else {1.},0.,0.], [0.;3], [if blue {1.} else {0.},0.,0.], [0.;3]] };
+        let build = || {
+            let mut pixel = OrderedPixel::new(&admit, 64);
+            for i in 0..64 {
+                let a = i as f64 / 64.; let b = (i+1) as f64 / 64.;
+                let owner = source(i+1, false);
+                for triangle in [[Point::new(a,0.),Point::new(b,0.),Point::new(b,1.)],
+                    [Point::new(a,0.),Point::new(b,1.),Point::new(a,1.)]] {
+                    pixel.paint_triangle(triangle, owner, &mut 1_000_000, &|| false).unwrap();
+                }
+            }
+            assert_eq!(pixel.fragments(),64);
+            pixel
+        };
+        let triangle = [Point::new(0.,0.25),Point::new(31./64.,0.25),Point::new(31./128.,0.75)];
+        let mut before = build(); let mut after = build();
+        let mut a = 100_000; let mut b = 100_000;
+        assert_eq!(before.paint_triangle_impl::<false>(triangle,source(100,true),&mut a,&||false),Err(PixelPartitionError::Limit));
+        assert_eq!(after.paint_triangle_impl::<true>(triangle,source(100,true),&mut b,&||false),Err(PixelPartitionError::Limit));
+        eprintln!("BULK_OVERFLOW before_work={} after_work={}",100_000-a,100_000-b);
+        assert!(b>=a,"batch scan wasted work before fragment-limit refusal");
+        assert_eq!(before.fragments(),64); assert_eq!(after.fragments(),64);
+    }
+
+    #[test]
+    fn bulk_append_respects_count_limit_for_zero_sized_items() {
+        let admit = |_: usize| -> Option<Credit> { panic!("ZST vector must not allocate") };
+        let mut out = AdmittedVec::new(&admit, 3);
+        assert_eq!(out.extend_copy(&[(); 5], &mut 100, &|| false), Err(PixelPartitionError::Limit));
+        assert_eq!(out.values.len(), 3);
+    }
+
+    #[test]
+    fn retained_zero_area_cache_uses_no_credit_or_work() {
+        let admit = |_: usize| -> Option<Credit> { panic!("zero-area carry must not allocate") };
+        let mut polygon = Polygon::empty();
+        for p in [Point::ZERO, Point::new(0.5, 0.), Point::new(1., f64::EPSILON)] {
+            polygon.push_tagged(p, 7).unwrap();
+        }
+        assert!(polygon.moments().is_none());
+        let owner = PixelSourceOwner { patch_index: 0, sample_index: 0, component_count: 1,
+            u: [0.;3], v: [0.;3], components: [[0.;3];4] };
+        let fragment = Fragment { polygon, owner, has_area: false, no_merge_with_previous: false };
+        let mut out = AdmittedVec::new(&admit, 0);
+        let mut work = 0;
+        keep_existing(&mut out, &fragment, &mut work, &|| panic!("no tick on empty carry")).unwrap();
+        assert!(out.values.is_empty());
+        assert_eq!(work, 0);
+    }
+
+    #[test]
+    fn retained_area_cache_matches_direct_classification_after_dense_paints() {
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (fifty, _): (&[Row], u64) = include!("../../../../tests/fixtures/geometry/dense-lineage.rs");
+        let (seventy_five, _): (&[Row], u64) = include!("../../../../tests/fixtures/geometry/dense-lineage-138.rs");
+        let (pair, _): (&[Row], u64) = include!("../../../../tests/fixtures/geometry/unit-border-overlap.rs");
+        let admit = |_: usize| Some(Box::new(()) as Credit);
+        let mut checked = 0;
+        for rows in [fifty, seventy_five, pair] {
+            let mut pixel = OrderedPixel::new(&admit, 4096);
+            let mut work = 100_000_000;
+            for &(patch, sample, count, points, fields) in rows {
+                let f = fields.map(|v| v.map(f64::from_bits));
+                let points = points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1])));
+                let owner = PixelSourceOwner { patch_index: patch, sample_index: sample, component_count: count,
+                    u: f[0], v: f[1], components: [f[2], f[3], f[4], f[5]] };
+                pixel.paint_triangle(points, owner, &mut work, &|| false).unwrap();
+                for (index, fragment) in pixel.regions.values.iter().enumerate() {
+                    assert_eq!(fragment.has_area, fragment.polygon.moments().is_some());
+                    if index > 0 && fragment.no_merge_with_previous {
+                        let previous = &pixel.regions.values[index - 1];
+                        assert!(previous.owner != fragment.owner || previous.polygon.convex_union(&fragment.polygon).is_none());
+                    }
+                    checked += 1;
+                }
+            }
+        }
+        eprintln!("RETAINED_AREA_CACHE checked={checked} fragment_bytes={}", size_of::<Fragment>());
+    }
+
+    #[test]
+    #[ignore = "manual paired dense CPU measurement; not a page/display benchmark"]
+    fn dense_subtraction_cpu_pairs() {
+        use std::{hint::black_box, time::Instant};
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (fifty, _): (&[Row], u64) = include!("../../../../tests/fixtures/geometry/dense-lineage.rs");
+        let (seventy_five, _): (&[Row], u64) = include!("../../../../tests/fixtures/geometry/dense-lineage-138.rs");
+        let (pair, _): (&[Row], u64) = include!("../../../../tests/fixtures/geometry/unit-border-overlap.rs");
+        let sparse: Vec<Row> = (0..64).map(|i| {
+            let x = (i % 8) as f64 / 8.;
+            let y = (i / 8) as f64 / 8.;
+            let points = [[x, y], [x + 1./64., y], [x, y + 1./64.]].map(|p| p.map(f64::to_bits));
+            let mut fields = [[0u64; 3]; 6];
+            fields[2][0] = 0.25f64.to_bits();
+            fields[3][0] = 0.5f64.to_bits();
+            fields[4][0] = 0.75f64.to_bits();
+            (i + 1, i, 3, points, fields)
+        }).collect();
+        for (label, rows, repetitions) in [("pair", pair, 8192), ("dense50", fifty, 32), ("dense75", seventy_five, 64), ("sparse64", sparse.as_slice(), 512)] {
+            let inputs: Vec<_> = rows.iter().map(|&(patch, sample, count, points, fields)| {
+                let f = fields.map(|v| v.map(f64::from_bits));
+                (points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1]))),
+                 PixelSourceOwner { patch_index: patch, sample_index: sample, component_count: count,
+                    u: f[0], v: f[1], components: [f[2], f[3], f[4], f[5]] })
+            }).collect();
+            let run = |legacy: bool| {
+                let walk_control = std::env::var_os("RRRAH_SPLIT_PROBE_WALK_CONTROL").is_some();
+                let recheck_control = std::env::var_os("RRRAH_KEEP_PROBE_RECHECK").is_some();
+                let batch_control = std::env::var_os("RRRAH_CARRY_PROBE_NO_BATCH").is_some();
+                NO_BATCH_CONTROL.with(|v| v.set(legacy && batch_control));
+                LEGACY_SPLIT_CONTROL.with(|v| v.set(legacy && !walk_control && !recheck_control && !batch_control));
+                WALK_SPLIT_CONTROL.with(|v| v.set(legacy && walk_control && !recheck_control && !batch_control));
+                RECHECK_RETAINED_CONTROL.with(|v| v.set(legacy && recheck_control && !batch_control));
+                let start = Instant::now();
+                for _ in 0..repetitions {
+                    let admit = |_: usize| Some(Box::new(()) as Credit);
+                    let mut pixel = OrderedPixel::new(&admit, 4096);
+                    let mut work = 100_000_000;
+                    for &(points, owner) in &inputs {
+                        pixel.paint_triangle(black_box(points), black_box(owner), &mut work, &|| false).unwrap();
+                    }
+                    black_box(pixel.fragments());
+                }
+                let elapsed = start.elapsed().as_nanos();
+                LEGACY_SPLIT_CONTROL.with(|v| v.set(false));
+                WALK_SPLIT_CONTROL.with(|v| v.set(false));
+                RECHECK_RETAINED_CONTROL.with(|v| v.set(false));
+                NO_BATCH_CONTROL.with(|v| v.set(false));
+                elapsed
+            };
+            run(true); run(false);
+            for pair in 0..6 {
+                let first = run(true); let second = run(true);
+                println!("DENSE_CPU {label} control pair={pair} first_ns={first} second_ns={second}");
+            }
+            for pair in 0..16 {
+                let (before, after) = if pair % 2 == 0 { (run(true), run(false)) }
+                    else { let after = run(false); (run(true), after) };
+                println!("DENSE_CPU {label} candidate pair={pair} before_ns={before} after_ns={after} repetitions={repetitions}");
+            }
+        }
+    }
+    #[test]
+    #[ignore = "manual paired CPU measurement; not a page or display benchmark"]
+    fn shared_split_cpu_pairs() {
+        use std::{hint::black_box, time::Instant};
+        let cases: &[([u64; 4], usize, u64, [u64; 2])] =
+            &include!("../../../../tests/fixtures/geometry/clip-intersection-cases.rs");
+        let mut inputs = Vec::new();
+        for &(bits, axis, cut, _) in cases {
+            let v = bits.map(f64::from_bits);
+            let mut polygon = Polygon::empty();
+            for p in [Point::new(v[0], v[1]), Point::new(v[2], v[3]), Point::new(0.25, 0.75)] {
+                polygon.push(p).unwrap();
+            }
+            let cut = f64::from_bits(cut);
+            let mut axis_field = [-cut, 0., 0.];
+            axis_field[axis + 1] = 1.;
+            for field in [axis_field, [0., 1., 0.], [-0., 0., 1.], [0.125, -0.25, 0.75]] {
+                let snap = if field == axis_field { Some((axis, cut)) } else { None };
+                inputs.push((polygon, field, snap));
+            }
+        }
+        let run = |shared: bool, repetitions: usize| {
+            let start = Instant::now();
+            for _ in 0..repetitions {
+                for &(polygon, field, snap) in &inputs {
+                    let polygon = black_box(polygon);
+                    let field = black_box(field);
+                    let mut work = 1000;
+                    let result = if shared {
+                        polygon.split_by_id(|p| value(field, p), snap, 7, &mut work, &|| false).unwrap()
+                    } else {
+                        let outside = polygon.clip_by_id(|p| -value(field, p), snap, 7, &mut work, &|| false).unwrap();
+                        let inside = polygon.clip_by_id(|p| value(field, p), snap, 7, &mut work, &|| false).unwrap();
+                        (outside, inside)
+                    };
+                    black_box(result);
+                }
+            }
+            start.elapsed().as_nanos()
+        };
+        run(false, 4);
+        run(true, 4);
+        for pair in 0..6 {
+            let a = run(false, 256);
+            let b = run(false, 256);
+            println!("SPLIT_CPU control pair={pair} first_ns={a} second_ns={b}");
+        }
+        for pair in 0..16 {
+            let (before, after) = if pair % 2 == 0 {
+                (run(false, 256), run(true, 256))
+            } else {
+                let after = run(true, 256);
+                (run(false, 256), after)
+            };
+            println!("SPLIT_CPU candidate pair={pair} before_ns={before} after_ns={after} calls={}", inputs.len() * 256);
+        }
+    }
+
+    #[test]
+    fn shared_split_matches_both_legacy_clips_bit_for_bit() {
+        let cases: &[([u64; 4], usize, u64, [u64; 2])] =
+            &include!("../../../../tests/fixtures/geometry/clip-intersection-cases.rs");
+        let same = |a: Polygon, b: Polygon| {
+            assert_eq!(a.len, b.len);
+            for i in 0..a.len {
+                assert_eq!(a.points[i].x.to_bits(), b.points[i].x.to_bits());
+                assert_eq!(a.points[i].y.to_bits(), b.points[i].y.to_bits());
+                assert_eq!(a.incoming[i], b.incoming[i]);
+            }
+        };
+        let mut checked = 0;
+        for &(bits, axis, cut, _) in cases {
+            let v = bits.map(f64::from_bits);
+            let cut = f64::from_bits(cut);
+            let mut f = [-cut, 0., 0.];
+            f[axis + 1] = 1.;
+            let points = [Point::new(v[0], v[1]), Point::new(v[2], v[3]), Point::new(0.25, 0.75)];
+            for tagged in [false, true] {
+                let mut polygon = Polygon::empty();
+                for (i, point) in points.into_iter().enumerate() {
+                    polygon.push_tagged(point, if tagged { (i + 1) as u32 } else { 0 }).unwrap();
+                }
+                for field in [f, [0., 1., 0.], [-0., 0., 1.], [0.125, -0.25, 0.75]] {
+                    let snap = if field == f { Some((axis, cut)) } else { None };
+                    for line in [0, 1, 7] {
+                        let negative = polygon.clip_by_id(|p| -value(field, p), snap, line, &mut 1000, &|| false).unwrap();
+                        let positive = polygon.clip_by_id(|p| value(field, p), snap, line, &mut 1000, &|| false).unwrap();
+                        let (outside, inside) = polygon.split_by_id(|p| value(field, p), snap, line, &mut 1000, &|| false).unwrap();
+                        same(outside, negative);
+                        same(inside, positive);
+                        checked += 1;
+                    }
+                }
+            }
+        }
+        eprintln!("SHARED_SPLIT_EQUIVALENCE cases={checked}");
+    }
+    #[test]
+    fn shared_split_evaluates_once_and_keeps_both_boundary_sides() {
+        use std::cell::Cell;
+        let mut polygon = Polygon::empty();
+        for p in [Point::ZERO, Point::new(1., 0.), Point::new(1., 1.), Point::new(0., 1.)] {
+            polygon.push(p).unwrap();
+        }
+        let calls = Cell::new(0);
+        let evaluate = |p: Point| { calls.set(calls.get() + 1); p.x - 0.5 };
+        let mut before_work = 100;
+        polygon.clip_by_id(|p| -evaluate(p), Some((0, 0.5)), 5, &mut before_work, &|| false).unwrap();
+        polygon.clip_by_id(evaluate, Some((0, 0.5)), 5, &mut before_work, &|| false).unwrap();
+        let old_calls = calls.replace(0);
+        let mut after_work = 100;
+        let (outside, inside) = polygon.split_by_id(evaluate, Some((0, 0.5)), 5, &mut after_work, &|| false).unwrap();
+        assert_eq!(old_calls, 10);
+        assert_eq!(calls.get(), 4);
+        assert_eq!(outside.moments().unwrap().0, 0.5);
+        assert_eq!(inside.moments().unwrap().0, 0.5);
+        for side in [outside, inside] {
+            assert_eq!(side.points[..side.len].iter().filter(|p| p.x == 0.5).count(), 2);
+        }
+        assert!(after_work > before_work);
+        let new_calls = calls.get();
+        for mut quota in 0..(100 - after_work) {
+            assert!(matches!(polygon.split_by_id(evaluate, None, 5, &mut quota, &|| false), Err(PixelPartitionError::Limit)));
+        }
+        eprintln!("SHARED_SPLIT_WORK before={} after={} evaluations_before={old_calls} after={new_calls}", 100-before_work, 100-after_work);
+    }
+
+    #[test]
+    fn unit_domain_shortcut_requires_original_support_and_inward_direction() {
+        for (axis, cut, a, b) in [
+            (0, 0., Point::new(0., 1.), Point::ZERO),
+            (0, 1., Point::new(1., 0.), Point::new(1., 1.)),
+            (1, 0., Point::ZERO, Point::new(1., 0.)),
+            (1, 1., Point::new(1., 1.), Point::new(0., 1.)),
+        ] {
+            let key = LineKey::Axis(axis, f64::to_bits(cut));
+            assert!(key.contains_unit_pixel(a, b));
+            assert!(!key.contains_unit_pixel(b, a));
+            assert!(!key.contains_unit_pixel(a, a));
+            assert!(!LineKey::Axis(axis, 0.5f64.to_bits()).contains_unit_pixel(a, b));
+            assert!(!LineKey::Edge([0., 0., 1., f64::EPSILON].map(f64::to_bits)).contains_unit_pixel(a, b));
+            assert!(!LineKey::Field([0., 1., f64::EPSILON].map(f64::to_bits)).contains_unit_pixel(a, b));
+        }
+    }
+    #[test]
+    fn unit_square_subtraction_preserves_interior_polygon() {
+        let admit = |_: usize| -> Option<Credit> { Some(Box::new(())) };
+        let mut pool = LinePool::new(&admit);
+        let mut tx = pool.transaction();
+        let mut subject = Polygon::empty();
+        for p in [Point::new(0.25, 0.25), Point::new(0.75, 0.25), Point::new(0.25, 0.75)] {
+            subject.push(p).unwrap();
+        }
+        let mut cut = Polygon::empty();
+        for p in [Point::ZERO, Point::new(1., 0.), Point::new(1., 1.), Point::new(0., 1.)] {
+            cut.push(p).unwrap();
+        }
+        let owner = PixelSourceOwner { patch_index: 0, sample_index: 0, u: [0.;3], v: [0.;3], components: [[0.;3];4], component_count: 1 };
+        let mut out = AdmittedVec::new(&admit, 32);
+        let mut work = 1000;
+        let result = subtract(subject, &cut, owner, &mut out, &mut tx, &mut work, &||false).unwrap();
+        assert_eq!(result.len, subject.len);
+        assert_eq!(&result.points[..result.len], &subject.points[..subject.len]);
+        assert_eq!(result.moments(), subject.moments());
+        assert!(out.values.is_empty());
+        eprintln!("UNIT_DOMAIN_WORK {}", 1000-work);
+    }
+
+
     #[test]
     fn common_vertex_support_is_degenerate_even_with_another_incident_edge() {
         let points = [
@@ -1414,11 +2041,15 @@ mod exact_orientation_tests {
         out.push(Fragment {
             polygon: rect(0., 0.25),
             owner,
+            has_area: true,
+            no_merge_with_previous: false,
         })
         .unwrap();
         out.push(Fragment {
             polygon: rect(0.25, 0.5),
             owner,
+            has_area: true,
+            no_merge_with_previous: false,
         })
         .unwrap();
         let first = out.values[0];
@@ -1426,6 +2057,8 @@ mod exact_orientation_tests {
         out.merge_floor = 1;
         keep(&mut out, rect(0.5, 0.75), owner, &mut 1000, &|| false).unwrap();
         assert_eq!(out.values.len(), 2);
+        assert!(!out.values[1].no_merge_with_previous);
+        assert!(out.values[0].polygon.convex_union(&out.values[1].polygon).is_some());
         assert_eq!(
             out.values[0].polygon.points[..out.values[0].polygon.len],
             first.polygon.points[..first.polygon.len]

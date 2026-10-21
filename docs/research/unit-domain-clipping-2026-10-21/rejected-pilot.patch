@@ -1,0 +1,83 @@
+diff --git a/vendor/hayro-interpret/src/encode/ordered_pixel.rs b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+index a8e680337..99a3f7959 100644
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -321,6 +321,15 @@ impl LineKey {
+         let (a, b, _) = canonical_edge(a, b);
+         Self::Edge([a.x, a.y, b.x, b.y].map(Self::bits))
+     }
++    fn contains_unit_pixel(self, a: Point, b: Point) -> bool {
++        match self {
++            Self::Axis(0, cut) if cut == 0 => b.y < a.y,
++            Self::Axis(0, cut) if cut == 1f64.to_bits() => b.y > a.y,
++            Self::Axis(1, cut) if cut == 0 => b.x > a.x,
++            Self::Axis(1, cut) if cut == 1f64.to_bits() => b.x < a.x,
++            _ => false,
++        }
++    }
+     // Reuse the original support, never a rounded subsegment of that support.
+     // The local polygon edge supplies only the inward orientation.
+     fn evaluator(self, a: Point, b: Point) -> Result<(impl Fn(Point) -> f64, Option<(usize, f64)>)> {
+@@ -984,7 +993,14 @@ fn subtract(
+         } else {
+             lines.intern(LineKey::edge(a, b), work, cancelled)?
+         };
+-        let (edge, snap) = lines.pool.keys[id as usize - 1].evaluator(a, b)?;
++        let key = lines.pool.keys[id as usize - 1];
++        // Every subject in this private operation is clipped to the unit
++        // pixel. An inward unit-border half-plane cannot remove any of it.
++        // Use the original support key, never a rounded descendant edge.
++        if key.contains_unit_pixel(a, b) {
++            continue;
++        }
++        let (edge, snap) = key.evaluator(a, b)?;
+         outside[count] = inside.clip_by_id(|p| -edge(p), snap, id, work, cancelled)?;
+         count += 1;
+         inside = inside.clip_by_id(edge, snap, id, work, cancelled)?;
+@@ -1323,6 +1339,46 @@ impl<'a> OrderedPixel<'a> {
+ #[cfg(test)]
+ mod exact_orientation_tests {
+     use super::*;
++    #[test]
++    fn unit_domain_shortcut_requires_original_support_and_inward_direction() {
++        for (axis, cut, a, b) in [
++            (0, 0., Point::new(0.,1.), Point::ZERO),
++            (0, 1., Point::new(1.,0.), Point::new(1.,1.)),
++            (1, 0., Point::ZERO, Point::new(1.,0.)),
++            (1, 1., Point::new(1.,1.), Point::new(0.,1.)),
++        ] {
++            assert!(LineKey::Axis(axis, f64::to_bits(cut)).contains_unit_pixel(a,b));
++            assert!(!LineKey::Axis(axis, f64::to_bits(cut)).contains_unit_pixel(b,a));
++            assert!(!LineKey::Axis(axis, 0.5f64.to_bits()).contains_unit_pixel(a,b));
++            assert!(!LineKey::Axis(axis, f64::to_bits(cut)).contains_unit_pixel(a,a));
++            assert!(!LineKey::Edge([0.,0.,1.,f64::EPSILON].map(f64::to_bits)).contains_unit_pixel(a,b));
++            assert!(!LineKey::Field([0.,1.,f64::EPSILON].map(f64::to_bits)).contains_unit_pixel(a,b));
++        }
++    }
++    #[test]
++    fn unit_square_subtraction_preserves_interior_polygon() {
++        let admit = |_: usize| -> Option<Credit> { Some(Box::new(())) };
++        let mut pool = LinePool::new(&admit);
++        let mut tx = pool.transaction();
++        let mut subject = Polygon::empty();
++        for p in [Point::new(0.25, 0.25), Point::new(0.75, 0.25), Point::new(0.25, 0.75)] {
++            subject.push(p).unwrap();
++        }
++        let mut cut = Polygon::empty();
++        for p in [Point::ZERO, Point::new(1., 0.), Point::new(1., 1.), Point::new(0., 1.)] {
++            cut.push(p).unwrap();
++        }
++        let owner = PixelSourceOwner { patch_index: 0, sample_index: 0, u: [0.;3], v: [0.;3], components: [[0.;3];4], component_count: 1 };
++        let mut out = AdmittedVec::new(&admit, 32);
++        let mut work = 1000;
++        let result = subtract(subject, &cut, owner, &mut out, &mut tx, &mut work, &||false).unwrap();
++        assert_eq!(result.len, subject.len);
++        assert_eq!(&result.points[..result.len], &subject.points[..subject.len]);
++        assert_eq!(result.moments(), subject.moments());
++        assert!(out.values.is_empty());
++        eprintln!("UNIT_DOMAIN_WORK {}", 1000-work);
++    }
++
+     #[test]
+     fn common_vertex_support_is_degenerate_even_with_another_incident_edge() {
+         let points = [

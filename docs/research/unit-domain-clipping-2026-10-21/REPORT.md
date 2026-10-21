@@ -1,0 +1,9 @@
+# Unit-domain clipping elision: rejected pilot
+
+The prior exclusive budget-category profile identifies subtraction as the largest category in three VectorApple.ai attempts (41–55% of the shared 100M quota). This pilot skipped redundant inward unit-border clips, using original Axis line keys and descendant orientation rather than rounded descendant supports. Caps and tolerances were unchanged.
+
+An exact interior triangle/unit-square control retained identical vertices and moments, with 47 baseline versus 15 pilot work units. Classifier controls reject opposite direction, interior cuts, zero-length directions, oblique original edges and fields. Pilot checks passed: 13 kernel controls, vector 225/11 ignored, interpreter 158/1 ignored, native 319/13 ignored. These tests do not establish full-page equivalence.
+
+Pinned real-file requalification rejected the pilot. The 323-patch attempt reached pixel (102,142) and refused coverage 1.000012196581505 after 92,907,182 work units, with 7,092,818 remaining. The original normal version exhausts 100M before such a refusal; this observation cannot distinguish a newly introduced geometry error from a pre-existing error only newly reached. The other three attempts still exhaust 100M. one.ai remains unchanged (page 0: 2522 differing pixels/max58; page 1 exact). No full-page speed improvement is accepted.
+
+The complete candidate is preserved in rejected-pilot.patch, with raw controls and pilot-poppler.json. Production elision and classifier were removed. Only the baseline interior triangle regression remains. The next geometry step is a bit-exact local capture at the newly reached failing pixel and an independent overlap/union oracle, before considering any elision again. Full AI, 100 formats, long cache pressure and hardware gates remain incomplete.

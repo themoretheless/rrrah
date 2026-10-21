@@ -1,0 +1,23 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-ordered-sampler-validation v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-pixel102142-harness)
+warning: missing documentation for the crate
+  --> main.rs:1:1
+   |
+ 1 | / use hayro_interpret::encode::{OrderedPixel,PixelSourceOwner};
+ 2 | | use kurbo::Point;
+ 3 | | type Row=(usize,usize,usize,[[u64;2];3],[[u64;3];6]);
+ 4 | | const ROWS:&[Row]=include!("rows.rs");
+...  |
+45 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: `rrrah-ordered-sampler-validation` (bin "pixel_overlap") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 13.50s
+     Running `target/debug/pixel_overlap --pair`
+POLYGONS [[(0.1798467388056734, 1.0), (0.16749888836672255, 0.9966478384356208), (0.1799372873105046, 1.0)]]
+PREFIX 103 area=0.00000015176660880357861 overlap=0 fragments=1 work=49
+POLYGONS [[(0.1798467388056734, 1.0), (0.17441778741286812, 0.998526162728985), (0.17362737296323522, 0.9982994714637277), (0.1799372873105046, 1.0)], [(0.17441778741286812, 0.998526162728985), (0.16749888836672377, 0.9966478384356211), (0.1674988883667236, 0.9966478384356211), (0.17362737296323522, 0.9982994714637277)], [(0.17920873380366012, 1.0), (0.16749888836672255, 0.9966478384356208), (0.17441778741286915, 0.9985261627289852), (0.17955668093880647, 1.0)], [(0.16749888836672377, 0.9966478384356211), (0.16749888836672255, 0.9966478384356208), (0.16749888836671095, 0.9966478384356174)], [(0.16749888836672353, 0.996647838435621), (0.16749888836671095, 0.9966478384356174), (0.0, 0.9485640238245533), (0.0, 0.9485030527891612), (0.17362737296323982, 0.9982994714637289)]]
+PREFIX 105 area=0.000015317596329056785 overlap=0.00000000000000000000000000000010477058897466563 fragments=5 work=230
+BASELINE_BAD false

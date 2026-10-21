@@ -15,6 +15,15 @@ def sha256(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def freeze_decoder(source, destination):
+    # Execute the exact bytes hashed for this run. A concurrent build may
+    # replace the source path while pages are being rendered.
+    data = source.read_bytes()
+    destination.write_bytes(data)
+    destination.chmod(0o500)
+    return sha256(data)
+
+
 def stderr_text(detail):
     if isinstance(detail, bytes):
         return detail.decode("utf8", "replace")
@@ -74,6 +83,8 @@ def main():
             raise ValueError(f"source hash mismatch: {path.name}")
     rows = []
     with tempfile.TemporaryDirectory(prefix="rrrah-ai-compare-") as tmp:
+        decoder = Path(tmp) / "raster_fixture_dump"
+        decoder_sha256 = freeze_decoder(args.dump.resolve(), decoder)
         for source in manifest["sources"]:
             path = (args.corpus / source["name"]).resolve()
             info = subprocess.check_output(["pdfinfo", str(path)], text=True)
@@ -86,7 +97,7 @@ def main():
                 native_diagnostics_recorded = False
                 try:
                     rendered = subprocess.run(
-                        [str(args.dump.resolve()), str(path), str(index), str(native)],
+                        [str(decoder), str(path), str(index), str(native)],
                         text=True, capture_output=True, timeout=args.render_timeout)
                     attach_renderer_diagnostics(row, rendered.stderr)
                     native_diagnostics_recorded = True
@@ -153,7 +164,8 @@ def main():
                             row["reference_stderr_tail"] = stderr_text(error.stderr)[-16384:]
                 rows.append(row)
     report = {"revision": manifest["revision"], "sources": manifest["sources"],
-              "decoder_sha256": sha256(args.dump.read_bytes()),
+              "decoder_sha256": decoder_sha256,
+              "decoder_execution": "Private frozen copy; hash taken before any page render",
               "poppler_version": subprocess.run(["pdftoppm", "-v"], capture_output=True,
                                                  text=True, check=True).stderr.strip(),
               "scope": "Strict 72 dpi white-composite RGB comparison; no tolerance. No GPU, private AI data or full format qualification.",

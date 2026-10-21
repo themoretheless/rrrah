@@ -1,0 +1,48 @@
+--- /Users/themoretheless/.codex/tmp/rrrah-before-full-pixel-replacement.rs	2026-10-21 06:46:08
++++ vendor/hayro-interpret/src/encode/ordered_pixel.rs	2026-10-21 06:52:04
+@@ -543,6 +543,16 @@
+     len: usize,
+ }
+ impl Polygon {
++    fn is_unit_square(&self) -> bool {
++        if self.len != 4 { return false; }
++        let mut corners = 0u8;
++        for p in &self.points[..self.len] {
++            if !(p.x == 0. || p.x == 1.) || !(p.y == 0. || p.y == 1.) { return false; }
++            let corner = usize::from(p.x == 1.) + 2 * usize::from(p.y == 1.);
++            corners |= 1 << corner;
++        }
++        corners == 15
++    }
+     fn empty() -> Self {
+         Self {
+             points: [Point::ZERO; VERTICES],
+@@ -1378,6 +1388,28 @@
+             polygon: triangle,
+             owner,
+         })?;
++        // Exact full coverage with a later patch or identical source-UV fields
++        // makes every old region lose. Avoid clipping them individually. Tied
++        // fields follow the existing incoming-wins policy; sample IDs do not
++        // participate in priority. All allocation/debits remain transactional.
++        if triangle.is_unit_square() {
++            let mut replaces_all = true;
++            for old in &self.regions.values {
++                tick(work, cancelled)?;
++                if !(owner.patch_index > old.owner.patch_index
++                    || (owner.patch_index == old.owner.patch_index
++                        && owner.u == old.owner.u && owner.v == old.owner.v)) {
++                    replaces_all = false;
++                    break;
++                }
++            }
++            if replaces_all {
++                tick(work, cancelled)?;
++                self.regions = incoming;
++                lines.commit();
++                return Ok(());
++            }
++        }
+         for old in &self.regions.values {
+             tick(work, cancelled)?;
+             if incoming.values.is_empty() {
