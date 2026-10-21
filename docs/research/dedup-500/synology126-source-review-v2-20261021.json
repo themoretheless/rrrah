@@ -1,0 +1,43 @@
+{
+  "repository": "LowLevelLogic/synology-dedup-photos",
+  "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
+  "whole_repo_complete": false,
+  "tracked_blobs": 8,
+  "whole_artifacts_assessed": 4,
+  "partial_source_read": {
+    "path": "src/main.rs",
+    "sha256": "bcd643f41a4759cf404de44e1cd5d8630f9b22b753cfabe700a397c506004e81",
+    "lines_read": [
+      [
+        1,
+        760
+      ]
+    ],
+    "total_lines": 2160
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/synology126-controls-v2-20261021/controls.rs",
+    "log": "docs/research/dedup-500/synology126-controls-v2-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "method": "Unchanged original greedy clustering block, find_duplicates and sort_dup_groups functions; minimal synthetic FileEntry, injected hash callback; rustc 1.98.1. No image/NAS/cache/network/deletion execution."
+  },
+  "findings": [
+    "Original greedy radius-1 clustering hashes [0,1,3] yields pair [0,1]; order [1,0,3] yields all three. This is seed-star policy, not connected-component/all-pairs grouping.",
+    "Original largest-first sorting can replace seed hash1 by larger hash0 while hash3 remains in group at distance2, outside threshold1. This proves loss of representative-neighbor invariant after keeper sorting, not actual deletion outcome.",
+    "Original exact grouping trusts callback digest: injected same digest groups both entries. No claim of real SHA256 collision; no byte-confirmation call in inspected function.",
+    "A failing hash increments errors while healthy same-size pair remains grouped.",
+    "Local discovery skips empty files, extension-filters by default and discards WalkDir errors using filter_map(ok); no runtime discovery control executed yet.",
+    "Cache key uses path, size and second-resolution modification time, no algorithm/model revision or high-resolution freshness; consumer cache lifecycle still incomplete review."
+  ],
+  "remaining": [
+    "src/main.rs lines 761-2160",
+    "src/nas.rs",
+    "README.md",
+    "Cargo.lock"
+  ],
+  "limits": [
+    "Global full-source count remains 167/500; four whole files plus partial main source.",
+    "No production change or performance gain accepted. Native pHash/ASAN deferred."
+  ]
+}
