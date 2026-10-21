@@ -1,0 +1,25 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_assessed_blobs": 159,
+  "tracked_blobs": 616,
+  "findings": [
+    "Original unmodified Engine::commit method compiled with minimal batch container and Database stub. Successful-store control preserves item in store then clears batch.",
+    "Refusal stub models void Database::add early normal return: pending42 is cleared without persistence. After restoring successful storage, retry commit sees empty batch and never calls add again. This reproduces caller data-loss behavior under specified refusal; not actual lock contention, SQL or filesystem concurrency.",
+    "Source Database::add tryLock5000 failure logs then returns void. remove and other writers also have refusal branches; those are not automatically qualified by this isolated add/commit control.",
+    "Potential loss refers to pending index records, not deletion of original media. No production files or upstream DB touched."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-batch-controls-v51-20261021",
+    "passed": 2,
+    "failed": 0,
+    "method": "clang++ C++17 O2; source SHA1 asserted, original commit body, synthetic normal-return refusal and success store. Reproduction pass means upstream flaw observed, not fixed."
+  },
+  "limits": [
+    "Whole-read count unchanged159/616.31 original-body/header controls cumulative plus two independent counterexamples.",
+    "No real QLockFile, SQLite, Qt runtime or multi-process fault injection. No speedup/production port.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
