@@ -70,3 +70,27 @@ fn hdr_fingerprints_keep_highlight_structure_without_quantization() {
     assert!(fp.luminance_stddev > 2.0);
     assert_eq!(view.fingerprint(|| true), Err(PixelError::Cancelled));
 }
+
+#[test]
+fn every_sixteen_bit_byte_bucket_keeps_visible_channel_differences() {
+    for high in 0_u16..=255 {
+        let low = high << 8;
+        let upper = low | 255;
+        assert_eq!(low >> 8, upper >> 8);
+        for channel in 0..3 {
+            let mut left_samples = [0.25, 0.5, 0.75, 1.0];
+            let mut right_samples = left_samples;
+            left_samples[channel] = f32::from(low) / 65535.0;
+            right_samples[channel] = f32::from(upper) / 65535.0;
+            assert_ne!(left_samples[channel].to_bits(), right_samples[channel].to_bits());
+            let left = LinearRgbaView::new(1, 1, &left_samples, 1, || false).unwrap();
+            let right = LinearRgbaView::new(1, 1, &right_samples, 1, || false).unwrap();
+            assert_eq!(left.same_pixels(&right, || false), Ok(false));
+            assert_eq!(right.same_pixels(&left, || false), Ok(false));
+            assert_ne!(
+                left.pixel_digest(|| false).unwrap(),
+                right.pixel_digest(|| false).unwrap()
+            );
+        }
+    }
+}

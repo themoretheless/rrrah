@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "test": "every_sixteen_bit_byte_bucket_keeps_visible_channel_differences",
+  "file": "crates/rrrah-dedup/tests/linear.rs",
+  "cases": 768,
+  "oracle": "All256highbytes:low=high<<8,upper=low|255;bothsame8bittruncation,normalized16bitlinearvaluesdistinct. ForRGBchannelsindependently,exactcomparisonfalsebothdirectionsanddifferentdigests.",
+  "source_counterexample": "docs/research/dedup-500/zigimage422-png-depth-controls-20261021/result.json",
+  "validation": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --test linear",
+    "passed": 5,
+    "failed": 0,
+    "format": "rustfmt +1.98.1 --edition2024"
+  },
+  "limits": [
+    "AlreadydecodedlinearRGBAAPItest,notPNGdecode/end-to-end16bittransferqualification. No productionchanges;whole500researchstill216complete.NativepHash/ASANdeferred."
+  ]
+}
