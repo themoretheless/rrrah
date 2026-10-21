@@ -1,0 +1,66 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/pages/fetch.py": {
+      "sha256": "eb7711507101e9933357edb221fe5f3e3d71242f966727b5266c3ca9a7913dd8",
+      "git_blob": "c8c9b30a649e7ce2fe60577e7ddc942493d0ee2d",
+      "lines": 509,
+      "mode": "100644"
+    },
+    "src/pages/vector.py": {
+      "sha256": "a3532c43020ca9a37fd1be38ea9a74db775fc19e6237079b703a17581541b262",
+      "git_blob": "dc039b1bdb370d2d4d013ac1f8196a08a138db2a",
+      "lines": 430,
+      "mode": "100644"
+    },
+    "src/db/psql.py": {
+      "sha256": "8494e281a6ab1c2d1ca7ec66711f0db932607f37bb943e40adcd618b616d43d5",
+      "git_blob": "d88fd3fe3ee54f43079c1130e8a2a9ff6af941ec",
+      "lines": 876,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 92,
+  "tracked_blobs": 125,
+  "method": "Three complete source files read (psql split in contiguous1-420 and421-EOF). Original fetchAssets AST with mocked PG cursor, then original onFetchAssets AST using its filtered result and real stdlib SQLite in-memory owned fixture; vector deletion mocked. No real PG/vector/network/file assets.",
+  "executed_controls": {
+    "active_remote_assets": [
+      "A",
+      "B"
+    ],
+    "thumbnail_filtered_fetch_ids": [
+      "A"
+    ],
+    "local_ids_after_sync": [
+      "A"
+    ],
+    "deleted_vector_ids": [
+      2
+    ],
+    "cancel_checker_calls": 0,
+    "message": "success, user[ owned ] total[ 2 ] fetched[ 1 ] skipped[ 1 ] - new[ 0 ] updated[ 0 ] unchanged[ 1 ] removed[ 1 ]"
+  },
+  "control_source": "import ast,json,sqlite3,contextlib\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021');log=N(**{k:lambda *a,**kw:None for k in ['info','warn','error']})\ndef fn(file,name,env):\n t=ast.parse((B/file).read_text());t.body=[n for n in t.body if isinstance(n,ast.FunctionDef) and n.name==name]\n for n in t.body:n.decorator_list=[]\n t.body.insert(0,ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0));ast.fix_missing_locations(t);exec(compile(t,str(B/file),'exec'),env);return env[name]\nclass Pg:\n def __enter__(self):return self\n def __exit__(self,*a):pass\n def cursor(self,**kw):return self\n def execute(self,q,args=None):self.q=q;self.used=False\n def fetchone(self):return {'count':2}\n def fetchmany(self,n):\n  if self.used:return []\n  self.used=True;return [{'id':'A'},{'id':'B'}]\n def fetchall(self):\n  if 'Select \"assetId\", type, path' in self.q:return [{'assetId':'A','type':'thumbnail','path':'thumbs/A.jpg'}]\n  return []\nfetch=fn('src--db--psql.py','fetchAssets',dict(chk=lambda:True,mkConn=Pg,getSchema=lambda:N(asset='asset',assetFile='asset_file',assetExif='asset_exif',hasEncVidPath=True),Q=lambda q:q,dict_row=object(),ks=N(db=N(thumbnail='thumbnail',preview='preview')),rtm=N(pth=N(normalize=lambda p:p)),lg=log,mkErr=lambda msg,e=None:RuntimeError(msg)))\nusr=N(id='owner',name='owned');remote=fetch(usr,lambda *a:None);assert [a['id'] for a in remote]==['A']\nc=sqlite3.connect(':memory:');c.execute('CREATE TABLE assets (autoId INTEGER,id TEXT,ownerId TEXT)');c.executemany('INSERT INTO assets VALUES (?,?,?)',[(1,'A','owner'),(2,'B','owner')]);c.commit()\n@contextlib.contextmanager\ndef local():yield c\nvec_deleted=[];cancel_calls=[]\npics=N(mkConn=local,saveBy=lambda asset,cur:0,getAllByUsrId=lambda owner:[N(autoId=row[0],id=row[1]) for row in c.execute('SELECT autoId,id FROM assets')],count=lambda *a: c.execute('SELECT count(*) FROM assets').fetchone()[0])\npsql=N(chk=lambda:True,fetchUser=lambda uid:usr,count=lambda uid:2,fetchLibraries=lambda:[],fetchAssets=lambda *a,**kw:remote)\ndb=N(dto=N(usrId='owner'),pics=pics,psql=psql,vecs=N(deleteBy=lambda ids:vec_deleted.extend(ids)))\nnfy=N(error=lambda *a:None,info=lambda *a:None);sto=N(nfy=nfy,now=None,cnt=N(),isCancelled=lambda:cancel_calls.append(True) or True)\nrun=fn('src--pages--fetch.py','onFetchAssets',dict(db=db,lg=log));_,msg=run(lambda *a:None,sto)\nout={'active_remote_assets':['A','B'],'thumbnail_filtered_fetch_ids':[a['id'] for a in remote],'local_ids_after_sync':[row[0] for row in c.execute('SELECT id FROM assets')],'deleted_vector_ids':vec_deleted,'cancel_checker_calls':len(cancel_calls),'message':msg};assert out['local_ids_after_sync']==['A'] and vec_deleted==[2] and not cancel_calls;c.close()\n(B/'controls-v10-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Confirmed composed behavior: original fetchAssets sees active remote A,B but excludes B lacking thumbnail; original onFetchAssets computes local IDs minus filtered remote IDs and deletes B local row/vector despite B still active remotely. Own SQLite row removed and mock vector deletion recorded; no user file/server deletion.",
+    "onFetchAssets never calls sto.isCancelled; control cancellation checker deliberately true but called0 times. Remote fetching, local save and deletion sync can continue after manager marks cancelled.",
+    "onFetchAssets returns ordinary success-shaped tuple for DB connection/fetch failure or no assets; TskMgr treats tuple return as completed. UI error notification does not set failed task status. Source integration observation.",
+    "Fetch button disabled when remote count<=local count; equal-count changed metadata or replacement/deleted assets cannot be refreshed through normal enabled fetch action despite UI recommending re-fetch for changes. Source behavior, not UI rendered.",
+    "Sync deletion commits SQLite before vector deletion, catches vector-delete failure only in log yet retains success text. No transactional agreement between stores. Source finding; failure injection not included this control.",
+    "fetchAssets accumulates all active rows, all file metadata and EXIF maps before return; fetchmany batching does not bound total collection memory. Queries are not in explicit repeatable-read snapshot, so count/assets/files can represent changing DB state.",
+    "Asset-file entries keyed only by type overwrite previous rows with no edited-version selection or ORDER BY; thumbnail/preview choice can depend on DB row order. LivePhoto CID match similarly chooses final returned row without uniqueness/order requirement.",
+    "Schema detection caches globally, chooses legacy names when neither candidate found, fallback getSchema assumes defaults; init returns False on DB failure and read db.init does not check boolean return. Runtime connection alone not schema validation.",
+    "Safe timestamp loaders replace invalid/out-of-range years with 2000-01-01, potentially making unrelated unknown dates equal for metadata grouping. Source policy, not actual psycopg driver executed.",
+    "fetchExInfos creates default metadata objects even for nonexistent IDs; getUsrName cache refreshed only if user count changes, so renamed users with same count remain stale. Source findings.",
+    "Vector UI says CLIP but reviewed imgs.py uses ResNet152. Reconcile claims all orphans but only scans missing-uuid points before generation; UUID-bearing stale/orphan points remain outside this specific cleanup step.",
+    "vec_ToVec excludes every this-round requested asset from post-repair, not only successfully saved IDs; waitForGreen timeout leads warning and final success. vec_Clear does not clear old similarity relations/status, so stale simInfos may prevent future getAnyNonSim searches after regeneration. Source observations, integrated runtime unexecuted."
+  ],
+  "limits": [
+    "92/125 whole blobs read;33 remain.",
+    "PG cursor fixtures establish composition with thumbnail filtering; not actual PG SQL/version/corpus correctness.",
+    "Only synthetic in-memory SQLite and list mock mutated; no real asset content, vector DB, credentials or external services accessed.",
+    "No full upstream suite/model/device/browser/server run. No production code copied/changed. Native pHash/ASAN remains user-deferred; all500/full library goal incomplete."
+  ]
+}
