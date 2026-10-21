@@ -1,0 +1,65 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/text_dedup/data_sources/io.py": {
+      "sha256": "1469b43ccbc2ea4185ede8b290ffb87813af1725f94d75f7bba5c82186f82642",
+      "git_blob": "50a776348e33909fee9abd2acc5975710807c06c",
+      "lines": 96
+    },
+    "src/text_dedup/config/base.py": {
+      "sha256": "731319040995e495e4cbf5984b27163b059e7eea75e1cc3712e8c189c1fcbfdd",
+      "git_blob": "5ed1bdc7f64e2ef1fc654f3bc8761b2031992c3a",
+      "lines": 65
+    },
+    "src/text_dedup/config/io/input_configs.py": {
+      "sha256": "ec66380f9d93de301eee20b3eac63bb1b9d5744318cea2226cfbff159dd0fda0",
+      "git_blob": "a3a9059a6bb598ea8162567131c0e41b7f9ecff2",
+      "lines": 22
+    },
+    "src/text_dedup/config/io/output_configs.py": {
+      "sha256": "4234cd1c933d8071bc4915b54d2f0af5bf3fe0f5941a61b0138086848afa0e5b",
+      "git_blob": "7e5cca5ab7ddaff34b4997c8167b1b5fe3c97595",
+      "lines": 13
+    },
+    "src/text_dedup/bloom_filter.py": {
+      "sha256": "3563ac00865859c7359964394a781dbf2436310b56754228121242386a310f12",
+      "git_blob": "ecae9417e89d6ab9a97ff4c010d47e1f2f98eae3",
+      "lines": 110
+    },
+    "src/text_dedup/config/algorithms/bloom.py": {
+      "sha256": "dc5e2f7f3c62b53e0372e5ff3bed37d4bca6cde4bc0b360db717b32e90f5edec",
+      "git_blob": "492abd990d809748478c6151a52345c2ca130957",
+      "lines": 16
+    }
+  },
+  "cumulative_whole_files_read": 17,
+  "tracked_blobs": 75,
+  "method": "Six complete pinned files read. Original IO functions AST-extracted and run with minimal config/loader/Dataset substitutes and temporary local directory; injected read/write OSError, no actual HuggingFace execution.",
+  "findings": [
+    "load_dataset disables global progress bars before loader and re-enables only on success, not finally. Original-function control confirms loader OSError leaves progress disabled. Existing caller progress state is not restored explicitly.",
+    "save_dataset writes clusters.pickle before saving dataset and mutates keep_index_column to true. Injected dataset-save OSError leaves clusters.pickle present without successful dataset output; no atomic multi-artifact publication is implemented here.",
+    "Loader assigns row-position internal index through map, overwriting same-named existing column; configured index_column is not used by reviewed loader. No schema collision validation shown in these files.",
+    "save_dataset removes internal index/cluster columns according to flags, but does not remove __duplicate__ or Bloom duplicate flags. Extra markers can survive output unless other path removes them. Source-only observation.",
+    "Config settings sources return TOML source only; helper temporarily changes class-global model_config then restores in finally. Concurrent loads could share mutable configuration; no concurrency runtime test.",
+    "Bloom path processes one worker to preserve state, marks positive membership as duplicate and filters it without exact content confirmation. error_rate is explicitly configurable, so positive Bloom membership is not exact equality proof. No actual Bloom false-positive experiment executed.",
+    "Bloom map uses fresh UUID fingerprint to avoid reusing cached stateful map. Clearing dataset cache occurs only after successful save in main; no finally cleanup for failed processing shown."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/io-failure-control.py",
+    "sha256": "c6c6f33ec7befb8182b108995f46babdb3fc918f13119a7fb27645b65393474f",
+    "result": {
+      "progress_enabled_after_load_failure": false,
+      "files_after_failed_save": [
+        "clusters.pickle"
+      ],
+      "keep_index_mutated": true,
+      "scope": "Original IO functions with fake config/Dataset/loader and temporary local directory; no HuggingFace runtime execution."
+    }
+  },
+  "limits": [
+    "17/75 tracked blobs reviewed;152/500 complete repositories.",
+    "No full upstream tests, actual datasets/rbloom/Pydantic runtime or production changes. pHash/ASAN deferred."
+  ]
+}
