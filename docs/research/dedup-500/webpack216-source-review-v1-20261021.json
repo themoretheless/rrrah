@@ -1,0 +1,72 @@
+{
+  "repository": "RoboBurned/dedup-resolve-webpack-plugin",
+  "commit": "97276b700be8f907d01b594304c5a21e2a830876",
+  "whole_repo_complete": false,
+  "tracked_blobs": 8,
+  "cumulative_assessed_blobs": 7,
+  "files": {
+    ".eslintrc.json": {
+      "bytes": 206,
+      "sha256": "71af09b209fb1597af54b63f9582f3917e4674b4ec2dacf51eb54ae5b40c08ec",
+      "git_blob": "9cd4b619fcfb482e678415cb948365a0dc79bf3f",
+      "method": "Whole pinned text read without truncation"
+    },
+    ".gitignore": {
+      "bytes": 884,
+      "sha256": "0baee384d3ed44c2e523b0cdd21b878702cc10967f169a9607371b68588d8e35",
+      "git_blob": "00cbbdf53f6c487c8392d936ce7225824c11446e",
+      "method": "Whole pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1057,
+      "sha256": "afb11426e09da40a1ae4f8fa17ddcc6b6a52d14df04c29bc5bcd06eb8730624d",
+      "git_blob": "8864d4a39633c1bcb33a8983d146d0b6390ed3d0",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 1830,
+      "sha256": "76f4166713fbc2481453cbe46e856b35328faca5cd4e9347310211673e6c432c",
+      "git_blob": "b646b78f529557251e974aa96367d8786f452281",
+      "method": "Whole pinned text read without truncation"
+    },
+    "index.js": {
+      "bytes": 81,
+      "sha256": "553f10cf2ad38cfe827c0e09e8b06f98ad0befbe721c1a89f10bcbed937a6409",
+      "git_blob": "19712792afd7fe1b23b52da030d6a67e95a73bfc",
+      "method": "Whole pinned text read without truncation"
+    },
+    "package.json": {
+      "bytes": 831,
+      "sha256": "db9b447d537c16d3cf73ab411e052b15bae0327b84adbf916b69805392539c36",
+      "git_blob": "f41479692510c1cd9cf9a06d9dce3a5c9e77ea78",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/DedupPlugin.js": {
+      "bytes": 1216,
+      "sha256": "7f35604b559db9f953d9074d90c52471617b290b5a48aa625afb9d54daae78ea",
+      "git_blob": "5b8e60af78b0a65b1fa5f6613e93770a83dd95c1",
+      "method": "Whole pinned text read without truncation"
+    },
+    "yarn.lock": {
+      "bytes": 35266,
+      "sha256": "309bef411d89ecf22242840b8150d1c52df5a69ba78fe7fbf81bd3cba36f932e",
+      "git_blob": "f4ec6e95330920af1113ebcb60cabcd4a0a3ee69",
+      "method": "Downloaded and byte verified only; not read"
+    }
+  },
+  "unique_targeted_controls": 6,
+  "controls_script": "docs/research/dedup-500/webpack216-controls-20261021/run.cjs",
+  "controls_log": "docs/research/dedup-500/webpack216-controls-20261021/run.log",
+  "upstream_tests_run": false,
+  "findings": [
+    "Reject-domain retained: module resolution by package name/version, no byte/image equality. First-seen path reuse is explicit README behavior, not content confirmation.",
+    "Six original CommonJS plugin controls with authored resolver callback adapter verify same-version path reuse, different-version separation, subpath bypass, exclusion, shared cache between distinct default instances and missing identity fields collapsing to same serialized key.",
+    "Default options shallow-copy defaults.modules, sharing one object across instances. Actual adapter control creates two separate instances and second resolves to first instance path. Not a full webpack integration reproduction.",
+    "getCacheId JSON serialization omits undefined name/version, merging both missing fields into empty object key. No admission validation. Original malformed/missing descriptionFileData error path not executed.",
+    "Hook changes request.path only; other resolver metadata not refreshed in source. Actual enhanced-resolve behavior remains unqualified.",
+    "No test files or functional test script in pinned tree; lint command names absent lib/test directories. No lint or webpack package build executed.",
+    "All8cached original blobs Git-verified;7whole files read, full yarn.lock remains unread. Root MIT fully read, source author header preserved, no adoption.",
+    "No production code change or performance claim. Full reviewed count195/500 unchanged; native pHash/ASAN deferred."
+  ],
+  "remaining_scope": "Read yarn.lock before full artifact review; actual webpack/resolver/version environment unqualified."
+}

@@ -2,7 +2,7 @@
   "index": 216,
   "repository": "RoboBurned/dedup-resolve-webpack-plugin",
   "commit": "97276b700be8f907d01b594304c5a21e2a830876",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned7/8whole text artifacts read;6 original resolver hook controls with authored adapter. yarn.lock unread; actual webpack integration unqualified.",
   "decision": "reject-domain",
   "finding": "Webpack module-path resolver dedup; dependency identity.",
   "available_source_evidence": [
@@ -28,7 +28,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "RootMIT fully read, source author header observed; no production adoption.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -53,6 +53,11 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/webpack216-source-review-v1-20261021.json"
     }
   ]
 }
