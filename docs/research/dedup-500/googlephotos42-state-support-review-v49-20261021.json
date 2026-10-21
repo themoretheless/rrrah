@@ -1,0 +1,67 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/store-state.mjs": {
+      "sha256": "b574183f03212d797feccdcd656c04b62e271c69b89bc6867ecfa9154686f0bb",
+      "git_blob": "1093fc44535a3e38c077048e24f8ae415afefb12",
+      "bytes": 2492,
+      "lines": 64,
+      "method": "Whole pinned source read. Combined review-doc output truncated; missing middle recovered with explicit lines95-195 before count."
+    },
+    "scripts/lib/handoff.mjs": {
+      "sha256": "1d995aaf359c0f1cd827585fd8669f6555f116342933882d85b33885591cf35a",
+      "git_blob": "914f9d3ac46283adbe264b3038a8f8607d7c6aac",
+      "bytes": 1842,
+      "lines": 46,
+      "method": "Whole pinned source read. Combined review-doc output truncated; missing middle recovered with explicit lines95-195 before count."
+    },
+    "scripts/amo-jwt.mjs": {
+      "sha256": "1152f5d3029fd55493fa6c10fefc2afd5608cbcaf24051da4b6ee02fecdb91cd",
+      "git_blob": "1e2436d2a9eeff247f1c8ec2577f9eb9a945b5b2",
+      "bytes": 2378,
+      "lines": 57,
+      "method": "Whole pinned source read. Combined review-doc output truncated; missing middle recovered with explicit lines95-195 before count."
+    },
+    "docs/REVIEWS.md": {
+      "sha256": "dad5856305acfcb80bc2f749de98586e698091612c64231aaa1438a0ad994d9e",
+      "git_blob": "193cd762d1f6d50dc9da027cfc4bfa460fc7e878",
+      "bytes": 29295,
+      "lines": 256,
+      "method": "Whole pinned source read. Combined review-doc output truncated; missing middle recovered with explicit lines95-195 before count."
+    },
+    "docs/GROWTH.md": {
+      "sha256": "b092c610f22952c54c282514bc43ce1d594a00abeee92ebb7002ac3c461a4507",
+      "git_blob": "478d0bdf6388f099711ca80585152b385020a715",
+      "bytes": 3930,
+      "lines": 83,
+      "method": "Whole pinned source read. Combined review-doc output truncated; missing middle recovered with explicit lines95-195 before count."
+    }
+  },
+  "cumulative_assessed_blobs": 189,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-state-controls-v49-20261021/run.mjs",
+    "sha256": "c043f4eb0c01e36d8dc0111a339c4289d312dadec08dcebc02a29ccbcc795cc2",
+    "log": "docs/research/dedup-500/googlephotos42-state-controls-v49-20261021/run.log",
+    "passed": 6,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original store-state CLI body in VM, import declarations removed; explicit synthetic process/git-show/file-writer/console adapters. No original git, network, file writes or publishing executed."
+  },
+  "findings": [
+    "Exact tag equality only: same recorded tag up-to-date, older target pending, set accepts downgrade. No semantic version monotonicity despite workflow behind phrasing.",
+    "Read errors or invalid JSON try FETCH_HEAD then empty object; set can emit only updated store, losing prior store markers when both reads fail. Actual remote history loss not executed.",
+    "Parsed JSON null is accepted by readState then property access throws; object schema/version fields unvalidated.",
+    "Browser handoff source explicitly targets loopback CDP and existing first context, falls back newContext. This shares authenticated identity; no browser connection or session access performed.",
+    "AMO JWT source inspected only; no credential, token, auth endpoint or license verification execution. Selfcheck is local roundtrip, not evidence service accepts submission.",
+    "Review runbook has empty weekly log; targets100%answered/4.5rating not achieved evidence. GROWTH contains marketing plans and switch-dependent checkout claims, not measured conversion outcomes. Its Update CWS Listing workflow reference is not a tracked workflow in pinned tree.",
+    "Runbook Traditional Chinese report-button wording includes Simplified characters; not professional translation quality certification. Store retention/API/policy statements treated as historical upstream copy only."
+  ],
+  "cumulative_original_function_controls": 74,
+  "limits": [
+    "189/230whole artifacts;41remaining;global fullreview160/500unchanged.",
+    "No production implementation adopted, broad library qualification or performance improvement claimed. Native pHash/ASAN deferred."
+  ]
+}

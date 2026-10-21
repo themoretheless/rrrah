@@ -1,0 +1,7 @@
+PASS same tag is up-to-date
+PASS older target is pending (exact tag equality, no monotonic version ordering)
+PASS older target overwrites newer stored tag
+PASS unreadable state falls back to empty object before set
+PASS invalid primary uses FETCH_HEAD fallback
+PASS valid JSON null lacks schema validation and throws
+TOTAL 6 passed; original CLI body with explicit fake process/git-show/file-writer adapters; no git/filesystem writes by original
