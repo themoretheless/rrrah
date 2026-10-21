@@ -1,0 +1,36 @@
+{
+  "scope": "Explicit PNG gamma-only RGB primary-assumption declaration API, first implementation step; not yet decode integration.",
+  "source": "crates/rrrah-vector/src/png_color.rs",
+  "api": "declaration_with_assumed_rgb_primaries(bytes, xy)",
+  "changes": [
+    "Existing declaration remains strict and keeps gamma-only RGB unresolved.",
+    "New explicit API validates supplied chromaticities; only gamma-only non-gray RGB/palette without embedded coordinates/profile uses them.",
+    "Declaration.assumed_rgb_primaries records exact supplied coordinates when used.",
+    "Gamma1 produces LinearRgb; other supported gamma uses existing gamma/chroma profile constructor. Embedded cICP/sRGB/cHRM and ICC presence retain precedence."
+  ],
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-png-policy-target-20261022 cargo +1.98.1 test -p rrrah-vector --lib png_color::tests --offline",
+  "result": {
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 260
+  },
+  "tests": [
+    "Strict API remains unresolved for RGB gamma-only",
+    "Explicit gamma1 resolves to supplied LinearRgb; gamma0.5 resolves to ICC",
+    "Embedded sRGB/cICP/cHRM precedence and absent assumption provenance",
+    "Gray does not use RGB assumption; invalid coordinates rejected",
+    "Existing color CRC/declaration tests pass"
+  ],
+  "remaining": [
+    "Connect explicit policy to decode request and selected-frame API",
+    "Preserve policy/provenance in cache and comparison recipes",
+    "Independent pixel/color reference and complete161-file plus15-pair qualification"
+  ],
+  "limits": [
+    "Declaration tests only; does not fix default strict corpus failures yet.",
+    "No silent global sRGB fallback, no all-cases claim.",
+    "Other pre-existing dirty raster/develop files were not changed by this increment."
+  ]
+}

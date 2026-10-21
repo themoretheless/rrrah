@@ -8,6 +8,9 @@ pub struct Declaration {
     pub color: Option<RasterColorSpace>,
     pub override_icc: bool,
     pub pixel_aspect: Option<f32>,
+    /// Caller-supplied coordinates used only when RGB gAMA lacks cHRM.
+    /// Preserve this provenance when constructing a comparison/cache recipe.
+    pub assumed_rgb_primaries: Option<[f64; 8]>,
 }
 
 fn invalid(message: &'static str) -> RasterDecodeError {
@@ -74,6 +77,22 @@ pub fn crc32(bytes: &[u8]) -> u32 {
 }
 
 pub fn declaration(bytes: &[u8]) -> Result<Declaration, RasterDecodeError> {
+    declaration_inner(bytes, None)
+}
+
+/// Interpret gamma-only RGB PNGs using explicitly supplied primary/white coordinates.
+/// Embedded ICC, cICP, sRGB and cHRM declarations retain precedence. Grayscale
+/// needs no RGB-primary assumption. The strict `declaration()` API is unchanged.
+pub fn declaration_with_assumed_rgb_primaries(
+    bytes: &[u8],
+    xy: [f64; 8],
+) -> Result<Declaration, RasterDecodeError> {
+    rrrah_core::RgbChromaticities::new(xy)
+        .ok_or_else(|| invalid("invalid assumed RGB primary coordinates"))?;
+    declaration_inner(bytes, Some(xy))
+}
+
+fn declaration_inner(bytes: &[u8], assumed: Option<[f64; 8]>) -> Result<Declaration, RasterDecodeError> {
     if !bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
         return Ok(Declaration::default());
     }
@@ -101,6 +120,7 @@ pub fn declaration(bytes: &[u8]) -> Result<Declaration, RasterDecodeError> {
                     color: Some(color),
                     override_icc: true,
                     pixel_aspect,
+                    assumed_rgb_primaries: None,
                 }
             } else {
                 Declaration {
@@ -110,6 +130,9 @@ pub fn declaration(bytes: &[u8]) -> Result<Declaration, RasterDecodeError> {
                         gray_gamma_color(gamma.unwrap())?
                     } else if !iccp && gamma.is_some() && chroma.is_some() {
                         gamma_chroma_color(gamma, chroma)?
+                    } else if !iccp && !grayscale && gamma.is_some() && chroma.is_none() && assumed.is_some()
+                    {
+                        gamma_chroma_color(gamma, assumed)?
                     } else if !iccp && gamma.is_none() && chroma.is_none() {
                         Some(RasterColorSpace::AssumedSrgb)
                     } else {
@@ -117,6 +140,16 @@ pub fn declaration(bytes: &[u8]) -> Result<Declaration, RasterDecodeError> {
                     },
                     override_icc: false,
                     pixel_aspect,
+                    assumed_rgb_primaries: if !srgb
+                        && !iccp
+                        && !grayscale
+                        && gamma.is_some()
+                        && chroma.is_none()
+                    {
+                        assumed
+                    } else {
+                        None
+                    },
                 }
             });
         }
@@ -258,6 +291,47 @@ pub mod tests {
             &xy.into_iter().flat_map(u32::to_be_bytes).collect::<Vec<_>>(),
         )
     }
+    #[test]
+    fn assumed_rgb_primaries_are_explicit_and_do_not_override_declarations() {
+        let xy = [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290];
+        let mut rgb = [0u8; 13];
+        rgb[9] = 2;
+        let header = chunk(b"IHDR", &rgb);
+        for gamma in [50000u32, 100000] {
+            let bytes = png(&[header.clone(), chunk(b"gAMA", &gamma.to_be_bytes())]);
+            assert!(declaration(&bytes).unwrap().color.is_none());
+            let assumed = declaration_with_assumed_rgb_primaries(&bytes, xy).unwrap();
+            assert_eq!(assumed.assumed_rgb_primaries, Some(xy));
+            if gamma == 100000 {
+                assert_eq!(
+                    assumed.color,
+                    Some(RasterColorSpace::LinearRgb(
+                        rrrah_core::RgbChromaticities::new(xy).unwrap()
+                    ))
+                );
+            } else {
+                assert!(matches!(assumed.color, Some(RasterColorSpace::Icc(_))));
+            }
+        }
+        let gama = chunk(b"gAMA", &50000u32.to_be_bytes());
+        for extra in [chunk(b"sRGB", &[0]), chunk(b"cICP", &[1, 8, 0, 1]), chrm(false)] {
+            let bytes = png(&[header.clone(), gama.clone(), extra]);
+            let strict = declaration(&bytes).unwrap();
+            let assumed = declaration_with_assumed_rgb_primaries(&bytes, xy).unwrap();
+            assert_eq!(assumed.color, strict.color);
+            assert_eq!(assumed.assumed_rgb_primaries, None);
+        }
+        rgb[9] = 0;
+        let gray = png(&[chunk(b"IHDR", &rgb), gama]);
+        assert_eq!(
+            declaration_with_assumed_rgb_primaries(&gray, xy)
+                .unwrap()
+                .assumed_rgb_primaries,
+            None
+        );
+        assert!(declaration_with_assumed_rgb_primaries(&gray, [0.; 8]).is_err());
+    }
+
     #[test]
     fn gamma_only_requires_gray_ihdr_and_respects_srgb() {
         let gamma = chunk(b"gAMA", &50000u32.to_be_bytes());
