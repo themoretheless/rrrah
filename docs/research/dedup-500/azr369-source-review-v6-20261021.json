@@ -1,0 +1,46 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "whole_repo_complete": false,
+  "partial_text_read": {
+    "path": "cornerdetect/fast_9.c.go",
+    "new_line_ranges": [
+      [
+        701,
+        1400
+      ]
+    ],
+    "cumulative_line_ranges": [
+      [
+        1,
+        1400
+      ],
+      [
+        3835,
+        4035
+      ],
+      [
+        7710,
+        7737
+      ]
+    ],
+    "total_lines": 7737,
+    "read_lines": 1629,
+    "unread_lines": 6108,
+    "whole_file": false
+  },
+  "controls": "docs/research/dedup-500/azr369-nonmax-controls-20261021/result.json",
+  "findings": [
+    "Original nonmax_suppression matches independent all-pairs eight-neighbour oracle across2048cases:512pointsubsets andfour scorepatterns. Equaladjacent scores suppress eachother, consistentwith>=policy.",
+    "Generatedscoretree701..1400 continues cyclicbright/darkruns aroundcirclepositions2..15 andgoto terminalbranches. No newlyobserveddefect inreadrange.",
+    "Positive nonmax/control evidence doesnoterase public shifted-bounds panic, empty-cornerwrapper panic or triangle/rotationcounterexamples."
+  ],
+  "remaining": [
+    "Generatedsource1401..3834 and4036..7709"
+  ],
+  "limits": [
+    "227/500fullreviews; no incrementforpartialsource.",
+    "Finite3x3nonmax controls, no sorting contract forunordered input asserted.",
+    "NativepHash/ASAN remainsdeferred; no productioncodeadoption."
+  ]
+}

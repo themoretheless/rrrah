@@ -1,0 +1,16 @@
+{
+  "exit_code": 0,
+  "cases": 2048,
+  "positions": "All512subsets of3x3grid inrasterscanorder",
+  "score_patterns": [
+    "equal",
+    "ascending",
+    "descending",
+    "alternatingties"
+  ],
+  "oracle": "Independent all-pairs eight-neighbour rejection when adjacent score >= current",
+  "limits": [
+    "Finite3x3grid, no large-coordinate/unsortedinput/runtimeconcurrencyqualification.",
+    "GeneratedFASTwholefile review remains incomplete."
+  ]
+}
