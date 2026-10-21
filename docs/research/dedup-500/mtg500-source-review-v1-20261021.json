@@ -1,0 +1,81 @@
+{
+  "repository": "neotoxicfr/mtg-scanner-art-index",
+  "commit": "39c3cafe08b5991f621ad43ad72edddae00c8fd5",
+  "whole_repo_complete": false,
+  "tracked_blobs": 21,
+  "cumulative_assessed_blobs": 8,
+  "files": {
+    "image_hash.py": {
+      "bytes": 3473,
+      "sha256": "ba50d43f722d2aabc81b532d9d7063e4231d3920d7eecfcaef363e832cac9e0a",
+      "git_blob": "7fa93aba7a76e10d87089227af99023625a61f5f",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "embed.py": {
+      "bytes": 5140,
+      "sha256": "14da756e3fd908eaad615aac95ef13ac979f6d3a6bc7df62f4f0b55a9b8ba4ac",
+      "git_blob": "2c95e2ed981470bee416f6cf19d36f6e129711e4",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "tests/test_image_hash.py": {
+      "bytes": 2097,
+      "sha256": "2c2e44783092da16d8c334ade164f2486cf6f664317bd1f8b682e94808e5974c",
+      "git_blob": "29b384279351b105a81add403de65e223609b73b",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "tests/test_embed_golden.py": {
+      "bytes": 2742,
+      "sha256": "de6557a6d07b4c1d8637f2c419f77d2dda973ee400d053ca5edb42a9d45c7549",
+      "git_blob": "6a463cb55b0bed039659864fdd3af19c4c93cf2e",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "requirements.txt": {
+      "bytes": 336,
+      "sha256": "3dccd607c25d1a846264426c3511eaea0eaeceaf756bdbcd9f55ec5ca6818337",
+      "git_blob": "98977edb20c4adc95119acc636a59bd5e591a093",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "requirements-dev.txt": {
+      "bytes": 358,
+      "sha256": "b518a2906d9aee9eb978b471517595a569516ecb6d676d856034d77eb0b3d6e7",
+      "git_blob": "714f5becafeb246d479c4a388aeba62c8ea68803",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "pyproject.toml": {
+      "bytes": 337,
+      "sha256": "60c987a0fc52322606e0f5a1b44c38f383c2954f1ba38e577f02048802d1abc6",
+      "git_blob": "ad4348bb98cfa043d2da11a502f451406decf88e",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    },
+    "LICENSE": {
+      "bytes": 1067,
+      "sha256": "e015c2e2c03a5e1fb3e3d2080d64e2771b66a2072d1952dafe0c290ad02c337a",
+      "git_blob": "febb79a32c577efe6ef4b1a45d0e1a3930b0f02e",
+      "method": "Whole original pinned text read without truncation;Gitblobverified"
+    }
+  },
+  "original_tests": {
+    "passed": 8,
+    "failed": 0,
+    "scope": "Actual originaltest_image_hash.py5tests andtest_embed_golden.py3tests; noONNXinference/download needed."
+  },
+  "authored_controls": 4,
+  "controls_script": "docs/research/dedup-500/mtg500-hash-controls-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/mtg500-hash-controls-20261021/run.log",
+  "runtime": "IsolatedOpenCV-python-headless5.0.0.93(cv2reports5.0.0),NumPy2.5.4,pytest9.1.1,Python3.12.Actualcv2 resize/colourconversion,notadapters.NoONNXmodel/sessionloaded.",
+  "findings": [
+    "Hashartcrop relative0.16..0.50height,0.14..0.86width;gray+BGR planeseach256bit,total128bytes/1024bits. Sixoffsetqueryhashes elementwise minimum. Source docstring says768bitbutimplementation1024. Domaininteriorartcropnotwholeimageidentity.",
+    "Algorithmversion1 andgoldenbytesfixed;8originaltests passincludingrandomseed/determinism/positiveindependentimages,selfminimum,andpreprocess/quantizegoldens. Usefulexplicitrecipeparitypattern,notbroadcamera/semanticqualityproof.",
+    "Authoredcontrol:opaqueconstantredandbluewholecardsproduceidenticalallzero1024bitdHash. Per-channelgradienthashpreservesspatialchangesnotabsolutecolour. Candidatefeatureonly,notpixelidentity.",
+    "Authoredcontrol:8-bytequeryagainstN x128 matrix broadcastsoneuint64valueacrossall16words andreturnsvalidlookingdistanceswithoutlengthrefusal. Wrappercontainsnoquerylengthvalidation;whetherproductionindexcallerguardsneedbuild_indexreview.",
+    "Authoredcontrol:min_distancesemptyqueriesreturnsNone whiledeclarednp.ndarray. Emptycandidatequerypolicyshouldbeexplicit;normal6offsetgeneratorisnonempty.",
+    "Authoredcontrol:quantize384NaNs emits384zerobytes plusRuntimeWarning,noexception. No finite/dimensionvalidationinquantize;modeloutputguarantees/callerchecksnotyetreviewed. NotclaimingnormalmodelproducesNaNs.",
+    "Embedpreprocesssameartcrop,INTER_AREA224RGBImageNetnormalization/NCHW;DINOv2CLS384L2normthenmaxscaledint8. Modelrevision+SHA256pinned,CPUprovidersequential1threadsettings. Actualinferenceanddownloadintegritynotexecuted;weightsnottrackedin21blobs.",
+    "ensure_modelstreams88MBdownloadtopartial,hashcomparesandrenames;timeoutNone,nocancellation/sizebudgetinthereviewedhelper. No forcednetworkfailureorconcurrentdownloadtest.",
+    "Pinnedruff/devmajorboundsanddeclaredPython3.13linttargetnotfullruntimecompatibilitymatrix. MITrootlicensecopyright2026neotoxicfrwhole-read;no productioncopy. Keepgoldenrecipeandmodelversiondesignforcomparison."
+  ],
+  "remaining_scope": "13artifactsincludingbuild_index,index/storage/bulk/watermarktests,README,auditdoc,workflow/config/example/groupdata. Globalcompletecount210/500unchanged.NativepHash/ASANdeferred.",
+  "limits": [
+    "No actualONNXembeddinginference,fullindexbuild/searchquality,externalScryfallorHuggingFacedownload,cameraaccuracy,resourcebenchmarkorfullprojecttests. No productioncodecopiedorchanged."
+  ]
+}
