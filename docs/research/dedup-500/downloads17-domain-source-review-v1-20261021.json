@@ -1,0 +1,99 @@
+{
+  "repository": "VikasSukhija/Downloads",
+  "commit": "59b36dcb55ec25533c0278ea466d8bb278b5b43a",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.md": {
+      "sha256": "703d0c785ce34caf7581611b7288758725ce5ffe121d34120694ea3e66313879",
+      "git_blob": "ded4bc6349753d977a7491280ca3109e585105d8",
+      "mode": "100644",
+      "bytes": 32348,
+      "lines": 194,
+      "encoding": "utf-8-sig",
+      "method": "Whole decoded text read. README reread in two complete ranges 1-100 and 101-194 after an earlier combined tool output was truncated; no truncated view credited. PowerShell treated only as source data."
+    },
+    "LICENSE": {
+      "sha256": "39bf0596b0c70b9834a39ad0840b872d9713a6ee4a4d9c81f0733b1d116548d7",
+      "git_blob": "26c773baa61725000328adbfd048351d2f8d3783",
+      "mode": "100644",
+      "bytes": 1069,
+      "lines": 21,
+      "encoding": "utf-8-sig",
+      "method": "Whole decoded text read. README reread in two complete ranges 1-100 and 101-194 after an earlier combined tool output was truncated; no truncated view credited. PowerShell treated only as source data."
+    },
+    "CompareEmailPol.ps1": {
+      "sha256": "80b45a82c4b0a048801d6aa1ab77678db933e648966d45b22ac3771941845403",
+      "git_blob": "81527ee1ff6563ca8371a677d627ebbc1bf657fc",
+      "mode": "100644",
+      "bytes": 2106,
+      "lines": 76,
+      "encoding": "cp1252",
+      "method": "Whole decoded text read. README reread in two complete ranges 1-100 and 101-194 after an earlier combined tool output was truncated; no truncated view credited. PowerShell treated only as source data."
+    },
+    "findduplicateobjects.ps1": {
+      "sha256": "13a4086dc0cb36d604fefbf8a68470267ee77fc237516c00136ba696ad7822f6",
+      "git_blob": "bd464f9614a90abda93963de8eff643b54f648af",
+      "mode": "100644",
+      "bytes": 3969,
+      "lines": 97,
+      "encoding": "utf-8-sig",
+      "method": "Whole decoded text read. README reread in two complete ranges 1-100 and 101-194 after an earlier combined tool output was truncated; no truncated view credited. PowerShell treated only as source data."
+    },
+    "IntuneDuplicateDeviceCleanup.ps1": {
+      "sha256": "10c8b684430e97568357a26e89ae49a1b2fbd2f63aecbd13698c421fe6d33b94",
+      "git_blob": "64c1b92e6f421d4994447dceb31f6d91adec47c6",
+      "mode": "100644",
+      "bytes": 11332,
+      "lines": 265,
+      "encoding": "utf-8-sig",
+      "method": "Whole decoded text read. README reread in two complete ranges 1-100 and 101-194 after an earlier combined tool output was truncated; no truncated view credited. PowerShell treated only as source data."
+    },
+    "LicenseAssignmentDates.ps1": {
+      "sha256": "a4d299a3dc2ba6780e79d214aecf56304543bc85dabea17aeb2749e20d301bfb",
+      "git_blob": "e95271a92d4693cd29fc629ab838dde87fd5ac81",
+      "mode": "100644",
+      "bytes": 5909,
+      "lines": 175,
+      "encoding": "utf-8-sig",
+      "method": "Whole decoded text read. README reread in two complete ranges 1-100 and 101-194 after an earlier combined tool output was truncated; no truncated view credited. PowerShell treated only as source data."
+    }
+  },
+  "cumulative_whole_files_read": 6,
+  "tracked_blobs": 248,
+  "tree_inventory": {
+    "truncated": false,
+    "bytes": 12445191,
+    "extensions": {
+      ".ps1": 81,
+      ".zip": 160,
+      "[none]": 2,
+      ".exe": 1,
+      ".md": 1,
+      ".vbs": 2,
+      ".txt": 1
+    },
+    "scope": "All paths enumerated, not all contents or archives reviewed."
+  },
+  "license_scope": "Complete MIT license with 2020 VikasSukhija notice read; bundled archives/executables/transitive notices not yet inspected. No code adopted.",
+  "findings": [
+    "README describes a system-administration script collection and links separate documentation. This supports the existing reject-domain classification for a file/image-comparison engine; remaining 242 blobs still require actual review before full-repository completion.",
+    "findduplicateobjects.ps1 selects directory users/groups whose SamAccountName matches *DUPLICATE*. It detects a naming convention, not equal file contents or even complete equality of directory records. No live directory accessed or report/email sent.",
+    "IntuneDuplicateDeviceCleanup.ps1 groups nonblank serialNumber, keeps the latest lastSyncDateTime and classifies remaining records as old. Serial identity and recency do not prove duplicate file/image bytes. Source includes an explicit report-only input and count threshold; no managed-device operation executed.",
+    "Cleanup admission uses count < countofchanges and rejection uses count > countofchanges. Equality is not handled by either branch and execution still reaches finish logging. This is a static boundary/reporting observation, not a runtime assertion or a proposed operational change.",
+    "CompareEmailPol.ps1 removes spaces from first/last name to construct an expected SMTP address and reports mismatches. It is policy validation, not a content matcher. It uses CP1252 typographic quotes, so UTF8-only decoding fails.",
+    "LicenseAssignmentDates.ps1 reports enabled service-plan assignment timestamps. It provides no file/image similarity logic. Its report/export/cloud steps were not executed.",
+    "No production behavior from these administrative scripts is being adopted. In particular, naming-pattern matches, same serial or newest record must not be substituted for byte-confirmed file identity."
+  ],
+  "executed_controls": {
+    "runtime_tests": 0,
+    "power_shell_execution": false,
+    "cloud_directory_network_calls": false,
+    "mail_sent": false,
+    "data_modified_by_scripts": false
+  },
+  "limits": [
+    "6/248 whole files; archive contents, executable, remaining scripts and any visuals unreviewed. Domain rejection is not counted as full repository review.",
+    "157/500 full repository reviews unchanged. No local library change, new test result or accepted optimization.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
