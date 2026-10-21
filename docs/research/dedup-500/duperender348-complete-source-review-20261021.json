@@ -1,0 +1,113 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "samytichadou/dupe_render",
+  "commit": "ecbf7c6a54fb051cdcb9490d905abca19dab26b7",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 13,
+  "files": {
+    ".gitignore": {
+      "bytes": 1835,
+      "sha256": "e30eb1e83f86600990b7e2b0936754efcdb770242c5984a40a1b6708d4d1fe9f",
+      "git_blob": "ae12e905cac3145f9d07953fcf40df2bddc73fdc",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "LICENSE": {
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "method": "Byte-identical to previously assessed GPLv3 license; full byte equality and digest verified"
+    },
+    "README.md": {
+      "bytes": 71,
+      "sha256": "407d5d6311b3a77b16b780fddf924520e5b8301eaf6de629be34381b28d8efba",
+      "git_blob": "fb2943d6b9b35c08d5231184f42fc74585914647",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "__init__.py": {
+      "bytes": 2172,
+      "sha256": "1c952f2e5655181e56224c5f57130ff53348b0b042e8916fb227ae121ef3d127",
+      "git_blob": "c576847d1969660e87b6f98ac68c3de2a22d1774",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "create_placeholders_operator.py": {
+      "bytes": 1409,
+      "sha256": "73317329406624c0d1091810510520088b301f57037eafa32b255ea3543093df",
+      "git_blob": "bf88d95c928b2f01b4ee25162cdb91e0cd2ef8b4",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "duplicate_originals_operator.py": {
+      "bytes": 1474,
+      "sha256": "3b67b322273d5d43f31d898bba17cb98619576d1d13f43d7ff736a9acc04e27b",
+      "git_blob": "ff4ab9c596431834fc508d4994c60d319834025f",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "gui.py": {
+      "bytes": 7545,
+      "sha256": "e25504b15c9fac0f2d622a204f8eb4e073465477b7d9607fed7ff244626d4a84",
+      "git_blob": "3fe5f1d78ea643be2ac9680829ce6da88995547c",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "handler.py": {
+      "bytes": 4176,
+      "sha256": "cfd2cbef1f03e775f5903432f28ebe73b9c0d7132140bf022df693eaac1ec484",
+      "git_blob": "21cb99c7948189d88a9fcf30caec556d48f73a7e",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "hash_operator.py": {
+      "bytes": 17595,
+      "sha256": "d20285515ed3c2b955429c4b0c4fbb375ac5282289ca458dd4161b4223bfec42",
+      "git_blob": "3e087af233bbe0daf293549b6a6a17cd3581efd4",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "preferences.py": {
+      "bytes": 1043,
+      "sha256": "f9832d2e4c19c810105f4698a6c30b3cfab2d76b504984383d8f65d8dc9b447b",
+      "git_blob": "c1e75db3c5ff792cdcaff90cbcea98cc24fdb547",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "properties.py": {
+      "bytes": 2682,
+      "sha256": "520f6c931f63504558ea9178864e08bcefe2e32620e63e8a1811497ceb670ce8",
+      "git_blob": "155defcf4c994ea1937edfffd2756ac7fd00f563",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "remove_placeholders_operator.py": {
+      "bytes": 3430,
+      "sha256": "865fe941c325c3f974c0112f6cd3bdb408a78720e74ccca65027d124a3a23543",
+      "git_blob": "35067e51bc67e7f865caffda7bcdf0c7df493fb6",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "specific_frame_ranges_operators.py": {
+      "bytes": 3756,
+      "sha256": "0e834c69ad1ac9cabef113a4a69e24c3b4c201934f05845e631febbada99e3cf",
+      "git_blob": "cd53cd5b38cbb426eede85d3efe8f04c6450e5d2",
+      "method": "Whole pinned text read across v1 and final review"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/duperender348-source-review-v1-20261021.json"
+  ],
+  "additional_controls": {
+    "harness": "docs/research/dedup-500/duperender348-controls-v2-20261021/run.py",
+    "log": "docs/research/dedup-500/duperender348-controls-v2-20261021/run.log",
+    "passed": 5,
+    "method": "Unchanged original function AST with synthetic scene path adapters and real IO only in an owned TemporaryDirectory. No Blender, rendering or user files."
+  },
+  "unique_targeted_controls": 9,
+  "conclusions": [
+    "Delimiter-free matrix serialization ambiguity and exception state leakage confirmed by four earlier original-function adapter controls; no Blender image equivalence inferred.",
+    "replace_placeholders deletes an existing zero-byte destination before confirming original exists. Missing-original control leaves destination absent; nonempty destination preserved and normal positive copy passes.",
+    "remove_single_placeholder identifies files solely by zero size, without ownership record. Direct create_placeholders with empty dupelist reaches int(empty) ValueError; automatic render handler has an earlier empty-list guard.",
+    "Both render_complete and render_cancel register the same replacement handler. Actual Blender event scheduling and cancellation semantics remain unqualified.",
+    "GUI remove-range button does not set operator index per row; default-index behavior and Blender property runtime not executed.",
+    "Properties persist lists/range/date and processed flag; no source-content freshness certificate observed before render reuse. This is state-cache analysis, not proof of any particular changed texture/render failure.",
+    "README contains only addon description; tree contains no authored tests, rendered-image oracle or fixtures. Original plugin targets Blender3.0; no Blender executable or SDK exercised."
+  ],
+  "license": "Root GPLv3 verified equivalent to previously assessed text; __init__ declares GPLv3-or-later. No production code adopted.",
+  "limits": [
+    "Complete13artifact source review and nine function-level controls do not qualify Blender evaluation, rendering correctness, real cancellation, actual user files, image accuracy or performance.",
+    "Native pHash/ASAN deferred; all500 reviews/all-cases goal incomplete."
+  ]
+}

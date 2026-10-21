@@ -1,0 +1,10 @@
+Dupe Render --- failed to find original frame for dupe : 2
+PASS missing original is checked only after empty destination was removed
+Dupe Render --- frame 2 is not a placeholder, skipping
+PASS nonempty existing output is preserved
+Dupe Render --- duplicating frame 2 to /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/duperender-control-qm10z__o/0002.png
+PASS successful replacement copies original bytes
+PASS direct placeholder creation rejects empty list via unchecked int conversion
+Dupe Render --- frame 2 removed
+PASS zero-byte file accepted as placeholder without ownership metadata
+5 controls passed; only owned synthetic temporary files touched; no Blender or actual rendered images
