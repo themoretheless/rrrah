@@ -1,0 +1,51 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "core/renderer.py": {
+      "sha256": "2b50ef1b2b91b2a64f2d5852df2ab09017325afedf36b4393f7357f377011090",
+      "git_blob": "891fb7754f5ed643670251b16ca7a704ac7eb452",
+      "bytes": 26888,
+      "lines": 540,
+      "method": "Whole source read."
+    },
+    "core/scene_flow.py": {
+      "sha256": "65b764ce2b3efa1470db67cb5b8b3905fcbd4f3a6f27184aa90f55397650dfe8",
+      "git_blob": "80ae81d1fe10977fa7ddfa14ef0fd80709ca5c58",
+      "bytes": 3344,
+      "lines": 78,
+      "method": "Whole source read."
+    },
+    "core/utils.py": {
+      "sha256": "83892b88067dc051a99edf4f1e93bb86746f9b4334dd8bdaaaa210f9070bb3e4",
+      "git_blob": "a73c2d115bfe1582f38b5eed9aab6a0caa2e8940",
+      "bytes": 8395,
+      "lines": 230,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 73,
+  "findings": [
+    "SceneFlowEstimator uses RAFT forward/backward flow, in-bound endpoints and cycle residual norm < threshold (default2, renderer5 pixels). This is geometric consistency, not exact content equality or a corpus duplicate search. Returned coordinates flatten matches across batches.",
+    "Scene-flow computation asserts only image maximum <=1, not minimum/finiteness. Train-RAFT branch ignores return_np_array; static API difference.",
+    "render_pcd permits num_sides==1 or2, but accumulation always accesses global_out_list[1]. One-view path constructs only zero side IDs and calls render_pcd, so nonempty one-side rendering reaches inconsistent indexing if prior operations succeed. Not runtime-tested.",
+    "compute_scene_flow_one_side uses self.src_mask1/self.src_mask2 and self.intrinsic1/self.intrinsic2 despite reverse-direction second call swapping RGB/depth/features arguments; different masks/intrinsics need separate validation.",
+    "num_pts_2==0 leads all_side_ids[-0:]=1 assigning every point to side1. No explicit empty-side validation. Static edge case.",
+    "get_cropping_ids returns bad for insufficient coverage; both render branches compute bad but do not use it. Inclusive last coordinate is subsequently used as exclusive crop bound, dropping final row/column even for fully valid extent.",
+    "Renderer actually calls normalize_0_1 for depth decoding; original utility yields all NaN on constant input in isolated NumPy control. Real tensor/model execution not performed.",
+    "Utility float2uint8 does not clip: original body maps [1.1,-0.1] to [24,231]. crop_boundary with ratio0 preserves shape, ratio0.5 produces empty spatial dimensions; valid argument policy not enforced locally.",
+    "normalize_for_grid_sample divides by w-1,h-1 with no singleton-dimension guard. masked_median_blur uses global extrema substitutions for invalid entries; not qualified against a masked-neighborhood reference.",
+    "No flow smoothness or criterion min-max normalization call appears in these three additional files; repository-wide caller exclusion remains unproven."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/moments30-render-utils-controls-v7-20261021",
+    "passed": 4,
+    "method": "Unchanged original NumPy-compatible utility AST bodies, NumPy1.26.4. No Torch/model imports."
+  },
+  "limits": [
+    "No GPU, RAFT, DPT, model weights, full rendering or upstream suite execution.",
+    "31/73 tracked blobs read; production library unchanged."
+  ]
+}
