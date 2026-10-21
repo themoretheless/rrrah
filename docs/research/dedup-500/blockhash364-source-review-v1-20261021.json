@@ -1,0 +1,68 @@
+{
+  "repository": "commonsmachinery/blockhash-python",
+  "commit": "f28b741a1f6bfff25763ae42dc2190051079998c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 59,
+  "cumulative_assessed_blobs": 7,
+  "files": {
+    ".gitignore": {
+      "bytes": 547,
+      "sha256": "6cfbc98334a0e483b59a3785e16618d9300997d6cf62b7b0d37594bc7e3a4da8",
+      "git_blob": "8d17048797df72da2a4b414eabe797f4954045ed",
+      "method": "Whole pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1084,
+      "sha256": "c15b318ea5d66fb9c3fbdc6b046560279001c8da6d10d6c5ab1167a79362958c",
+      "git_blob": "4a6ffd5c8ab792fbd1a9b9ec3663d2cd04904be1",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 594,
+      "sha256": "fe47ccb8cdd34531a690a16cff3e4989234359730b8335d202c24293183b57ae",
+      "git_blob": "a2bb1074eef8ca8665bd8b29f9bb935dca3dc419",
+      "method": "Whole pinned text read without truncation"
+    },
+    "blockhash.py": {
+      "bytes": 7327,
+      "sha256": "dd61c61a3fbda7258f10593f88f2c0e2e34f04d4e16b9ceba4bdeabb222bc8c3",
+      "git_blob": "a2b0043059f6dbc64a6bfb3971861487f16b0747",
+      "method": "Whole pinned text read without truncation"
+    },
+    "setup.py": {
+      "bytes": 315,
+      "sha256": "5cf800d2102b0e15a73dddd1c0d2f8b5cce1219fd7cd853b55986ab7a3a9ee3c",
+      "git_blob": "89a1c4f27f0147df12d2794438c1d205f5aa8da8",
+      "method": "Whole pinned text read without truncation"
+    },
+    "test/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned text read without truncation"
+    },
+    "test/test_blockhash.py": {
+      "bytes": 1942,
+      "sha256": "ff9529d4e582ddee23c4f7b29da6f157d0e5860e34de6c79c9cb10f4dd449946",
+      "git_blob": "3be5056924c192da1e1729639bf1e87081403b80",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "unique_targeted_controls": 5,
+  "controls_script": "docs/research/dedup-500/blockhash364-controls-v1-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/blockhash364-controls-v1-20261021/run.log",
+  "upstream_tests_run": false,
+  "findings": [
+    "All implementation, original test loader, setup, README, license and gitignore fully read. Fixture images,34 golden hashes and sources manifest not yet fetched/read/viewed; no original golden suite execution.",
+    "Five finite original-function controls with Pillow: known median values; quick17x17 silently omits last row/column while weighted method detects authored border; alpha1and255 sameRGB collide; fully transparent hiddenRGB canonical; bits0raisesZeroDivisionError.",
+    "Quick path floor-divides dimensions into blocks and omits residual edges; weighted path integrates up to four blocks per pixel. Control verifies one finite border case, not arbitrary fractional area correctness.",
+    "Alpha treatment maps alpha0to white, otherwise uses unpremultipliedRGBsum independent of alpha. Synthetic alpha1/255collision not an exact-pixel identity claim. Local library already has separate alpha/canonical-pixel regressions; no production change justified yet.",
+    "Original test load_tests builds two16x16hash cases for everyjpg/png using checked-in expected text. Loader source read but images/goldens pending; do not count zero discovered fixtures as passing suite.",
+    "CLI converts grayscale/palette/LA modes; interpolation4usesImage.ANTIALIAS, unavailable in modern Pillow. Source-only compatibility observation; default original functions executed without aliases.",
+    "Root MIT fully read. No production source copied, no benchmark or performance claim. Native pHash/ASAN remains deferred."
+  ],
+  "remaining_scope": "Fetch and Git-verify alltest/data artifacts; read sources and golden hash files; visually inspect17images; run original golden suite and assess actual mismatches.",
+  "limits": [
+    "Partial source review,197/500full count unchanged. Finite5controls do not prove image corpus precision, all dimensions/modes or original suite success."
+  ]
+}
