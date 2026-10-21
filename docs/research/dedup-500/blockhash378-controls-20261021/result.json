@@ -1,0 +1,19 @@
+{
+  "repository": "jaehl/blockhash",
+  "commit": "b0598ca0d633858be024a49cb6e2d89404411f97",
+  "exit_code": 0,
+  "independent_area_cases": 1444,
+  "dimensions": "Every width and height from 1 through 19 inclusive",
+  "digest_bits": [
+    16,
+    64,
+    144,
+    256
+  ],
+  "oracle": "Integer overlap area for every pixel/block, independent from aligned/larger/generic dispatch",
+  "build": "Original unchanged lib.rs/hash.rs via Rust1.98.1 rustc, std enabled, image feature disabled",
+  "limits": [
+    "One deterministic asymmetric brightness pattern per dimension, not all pixel inputs.",
+    "No image decoder integration, original image fixture tests, benchmark or whole-repository completion claim."
+  ]
+}

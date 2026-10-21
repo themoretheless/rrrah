@@ -4,7 +4,7 @@
   "commit": "b0598ca0d633858be024a49cb6e2d89404411f97",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "shortlist",
-  "finding": "Rust blockhash plus count_ones distance and tests; small MIT core for independent comparison.",
+  "finding": "Partial full-source review: core/tests/adapter read; 1444 original-core hashes match independent area oracle. Assets/docs and original image runtime remain.",
   "available_source_evidence": [
     {
       "path": "src/hash.rs",
@@ -73,6 +73,13 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/blockhash378-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/blockhash378-controls-20261021/result.json",
+      "whole_repo_complete": false
     }
   ]
 }
