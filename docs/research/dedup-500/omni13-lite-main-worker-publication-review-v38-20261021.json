@@ -1,0 +1,69 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          1320,
+          1460
+        ],
+        [
+          2053,
+          2215
+        ],
+        [
+          3838,
+          3920
+        ],
+        [
+          5821,
+          6130
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1320,
+          1460
+        ],
+        [
+          2053,
+          2215
+        ],
+        [
+          3838,
+          3920
+        ],
+        [
+          5360,
+          6130
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read697 additional source lines across worker publication, message receivers and query dispatch. Static ordering/ownership analysis; no Windows runtime.",
+  "findings": [
+    "Narrowing v37: delivered search and AI payloads are reclaimed with Box::from_raw before state/query validation, and OCR reclaims its nonzero payload before state check. Discarding a delivered stale result therefore frees memory. Failed PostMessage publication still has no recovery in reviewed senders.",
+    "Fast and slow worker threads independently post results for same query id. Receiver accepts every nonempty nonfinal result even after final response for that id; no final-received generation state is checked. A late fast response can replace full content/OCR results. Static scheduling mechanism; not runtime-reproduced.",
+    "OCR result receiver has no query/request generation or active-operation guard: delivered result assigns s.query and triggers search. User edits or overlapping OCR operations can be overwritten by older completion. Sender wp is zero. No clipboard/OCR operations run.",
+    "Search receivers validate query id and discard after query cleared. Workers coalesce queued requests before each computation but do not cancel in-flight computation. This prevents stale-query publication but not wasted ongoing work or same-id fast/slow regression.",
+    "Search request sends ignore disconnected-channel errors after setting search_loading true. No recovery or loading reset on send failure appears in trigger_search. Prefix queries skip fast worker by design, narrowing earlier blank-result issue.",
+    "AI response filtering uses chat id and pending state rather than per-request generation; multiple outstanding requests in same chat can satisfy same acceptance test. Request serialization/cancellation elsewhere remains unread, so reachability is unqualified.",
+    "Payload packs query id into lower32bits and final marker above32bits; receiver compares unpacked id to full current_query_id. Long-run wrap behavior requires type/overflow/caller review; no wrap fixture run.",
+    "Animation code separates result-area invalidation from search-row invalidation and relaxes timer to80ms once growth finishes but loading remains. Useful responsiveness reference; no measured performance acceptance.",
+    "Lens launch hides launcher and calls DwmFlush before screen capture, so review must not claim it always captures visible launcher. Actual timing/hardware output remains untested."
+  ],
+  "limits": [
+    "85/268 whole files. main.rs partial ranges only; unreviewed gaps remain.",
+    "No new tests or local production edits; race mechanisms are source findings, not integrated reproductions.",
+    "155/500 complete repositories unchanged; pHash/ASAN deferred."
+  ]
+}
