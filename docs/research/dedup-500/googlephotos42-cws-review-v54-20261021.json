@@ -1,0 +1,46 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/cws-v2.mjs": {
+      "sha256": "52a45a17b15a7e6d326a1666233a9b7a23c8cd52d1a577e55dd185600c8e527b",
+      "git_blob": "e9bc8cbe841940011dd0efa5f6a11f04507808a6",
+      "bytes": 20667,
+      "lines": 411,
+      "method": "Whole pinned source read: script1-250/251-411;tests1-210/211-427. No output truncation."
+    },
+    "tests/cws-v2.test.ts": {
+      "sha256": "9e26fd0fe83e7cae890a2535084d50e86862925aeb807d593fcafb104073b145",
+      "git_blob": "2ebcda022b1eefb6d59b4772f8495bb77f8395be",
+      "bytes": 25435,
+      "lines": 427,
+      "method": "Whole pinned source read: script1-250/251-411;tests1-210/211-427. No output truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 209,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-cws-controls-v54-20261021/run.mjs",
+    "sha256": "35e984438ab64e9023a2c126df4fafd1006fd92d0753599090827d74a1d0245a",
+    "log": "docs/research/dedup-500/googlephotos42-cws-controls-v54-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Unmodified original publishV2 export; synthetic bytes/token and fake fetch responses. No actual token mint/sign/authentication/API/account/upload/publication."
+  },
+  "findings": [
+    "Normal acceptance trusts accepted submitted.state without verifying submitted distributionChannels version equals uploaded crxVersion. Synthetic upload3.6.1/readback0.0.1 PENDING_REVIEW accepted. Same mismatch accepted staged. This does not prove real service returns such inconsistent responses.",
+    "Negative controls confirm REJECTED readback refused and existing PENDING_REVIEW blocks after first GET before upload. Staged code additionally refuses uploaded version already in publishedVersions and requires waiting submitted state.",
+    "Outcome published means submission accepted, not live availability; command log explicitly says submission accepted. Existing tests intentionally accept pendingreadback without version, so version binding is unqualified by suite.",
+    "Upload polling30iterations sleep10s and one publish retry600s have no overall request deadline/AbortSignal. Network hangs not reproduced.",
+    "Async upload response may omit crxVersion; polling updates uploadState but not version. Existing test accepts staged state with missing version.",
+    "Status output whitelists expected fields and independently preserves one successful read when otherfails; malformed schema arrays can throw outside per-request catch, source-only observation.",
+    "Auth helpers and tests read, not credential/key workflows executed. Workflow wiring tests mostly substring/regex assertions, not actual Actions runtime. Historical API statements not verified current external facts."
+  ],
+  "cumulative_original_function_controls": 89,
+  "limits": [
+    "209/230whole artifacts;21remaining;globalfullreview160/500unchanged.",
+    "Full upstream Vitest/browser/live suite not run. No production optimization. Native pHash/ASAN deferred."
+  ]
+}
