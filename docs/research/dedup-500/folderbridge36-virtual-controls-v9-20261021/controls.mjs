@@ -1,0 +1,18 @@
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import assert from 'node:assert/strict';
+const root=process.argv[2],url=s=>`data:text/javascript;base64,${Buffer.from(s).toString('base64')}`;
+const mock=url(stripTypeScriptTypes(readFileSync(`${root}/tests/__mocks__/obsidian.ts`,'utf8'),{mode:'transform'}));
+const filter=url(stripTypeScriptTypes(readFileSync(`${root}/src/mountFileFilter.ts`,'utf8').replace(/^import .*\n/gm,'')));
+const source=readFileSync(`${root}/src/VirtualAdapter.ts`,'utf8').replace(/^import[\s\S]*?;\n/gm,'').replace(/^const (fs|path):.*\n/gm,'');
+const m=await import(url(`import path from 'node:path';import {normalizePath,Notice} from '${mock}';import {isVisibleFileInMount} from '${filter}';export const state={entries:[]};const fs={promises:{readdir:async()=>state.entries,readFile:async()=>'old'}};const logger={debug(){},warn(){},error(){}};const ensureLongPathPrefix=x=>x;const loadOptionalNodeModule=()=>null;\n${stripTypeScriptTypes(source)}`));
+const mount={id:'m',virtualPath:'Docs',realPath:'/synthetic',enabled:true};
+const mapper={getMountForPath:()=>mount,toRealPath:()=>'/synthetic'};
+const make=ignored=>new m.VirtualAdapter({},mapper,{isAllowed:()=>true},false,1024,async()=>'cancel',async()=>{},ignored);
+m.state.entries=Array.from({length:10001},(_,i)=>({name:`${i}.md`,isDirectory:()=>false,isFile:()=>true}));
+let a=make(()=>false);let result=await a.list('Docs');assert.equal(result.files.length,10000);assert.equal(result.files.includes('Docs/10000.md'),false);
+console.log(JSON.stringify({name:'local-directory-list-truncates10001-to10000',passed:true,count:result.files.length}));
+a=make(name=>name!=='10000.md');result=await a.list('Docs');assert.deepEqual(result,{files:[],folders:[]});
+console.log(JSON.stringify({name:'pre-filter-cap-hides-only-visible-final-entry',passed:true}));
+mount.readOnly=true;a=make(()=>false);assert.equal(await a.process('Docs/a.md',x=>x+'new'),'oldnew');
+console.log(JSON.stringify({name:'readonly-process-returns-transformed-unsaved-text',passed:true}));

@@ -1,0 +1,45 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/VirtualAdapter.ts": {
+      "sha256": "4c6bd7cafbee5ffc3f5cee5ac84d36d1868edc85a5c6a6443deaf3ff89190a32",
+      "git_blob": "e65e03fcd179bf7f1a9067d022dcb78305780dd0",
+      "bytes": 59123,
+      "lines": 1361,
+      "method": "Whole source read in contiguous ranges; truncated combined output repaired by separate source1240-end and tests1-160 reads."
+    },
+    "tests/VirtualAdapter.test.ts": {
+      "sha256": "60dc8dc9d8666a7f857b0056af54aa2026a5d39e645578a02b2d440bab474081",
+      "git_blob": "bebc89e3f201fbfb682ea029c41fef1be455b1d8",
+      "bytes": 25859,
+      "lines": 535,
+      "method": "Whole source read in contiguous ranges; truncated combined output repaired by separate source1240-end and tests1-160 reads."
+    }
+  },
+  "cumulative_whole_files_read": 40,
+  "tracked_blobs": 129,
+  "findings": [
+    "VirtualAdapter forwards registered remote list results with extension filtering; no completeness/error enrichment. Local list errors also become empty lists. Prior remote partial-list findings therefore survive this caller; main UI reporting still unread.",
+    "listRealDirectory caps first10000 raw entries before ignore/extension filtering, unsorted and without completeness flag. Original full adapter controls return10000of10001 and an empty list when first10000ignored but finalentryvisible. Readdir still materializes entire directory before cap.",
+    "Large directories>1000 classify symlinks as files without stat; smaller resolve target type and silently skip stat errors. Consequently coverage/type semantics depend on sibling count, not file identity. No visited-directory/cycle control in reviewed listing path.",
+    "isCloudPlaceholder caller in read/readBinary is indeed gated by initial ENOENT, resolving earlier missing-precondition uncertainty. This is heuristic, not actual cloud hydration detection.",
+    "Read-only writes resolve without persisting; process reads/applies callback/awaits write then returns transformed text. Original control returns oldnew from synthetic readonly sourceold, with no write executed. Product editor behavior not tested.",
+    "Read-only/dry-run enforced at mounted operation routing; mounted readBinary slices local Buffer correctly. Remote adapter missing from registry falls through to local fs path; no explicit cloud-unavailable error here. Main registration policy pending.",
+    "Same-mount S3 rename delegates directly to S3Adapter.rename, confirming previously noted folder copy/remove behavior not changed by this caller. S3 rmdir separately uses removePrefix. No mutation methods executed.",
+    "Cross-mount rename throws; cross-backend copy buffers whole source into memory and writes destination, not streaming or content-verifying. Local rename treats absent source plus existing destination as completed without checking identity; static only.",
+    "Root trash confirmation scoped by mountID/effective root and5secondTTL, local trash reserves unique recovery dir and EXDEV copy before source removal; upstream tests use tempfiles and injected errors. Read only, not runtime qualification or user-data operation.",
+    "Full upstream VirtualAdapter tests read: local writes/cache/delete/trash behavior, mock cloud backends and simulated EXDEV. No complete upstream suite executed."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-virtual-controls-v9-20261021",
+    "passed": 3,
+    "method": "Original full VirtualAdapter after TS stripping; original normalizePath/Notice and filter, synthetic mapper/fs and in-memory10001entries. Read-only process uses fake read and original write early return. No actual filesystem/network/write/delete operations."
+  },
+  "limits": [
+    "40/129trackedblobs read;29isolatedcontrols total.",
+    "SecurityManager/main plugin/mobile/real OS/backends and upstream suite not qualified.",
+    "Production library unchanged."
+  ]
+}
