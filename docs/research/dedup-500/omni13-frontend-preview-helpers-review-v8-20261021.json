@@ -1,0 +1,52 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "lines": 9598,
+      "new_read_line_ranges": [
+        [
+          1421,
+          2730
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          2730
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Contiguous frontend1310 additional lines read. Exact original toBytesFromMb and likelyUtf16Encoding through takeTextPreviewSnippet extracted to TypeScript with only type aliases/constants supplied; Node22 native type stripping, no function rewrites.",
+  "executed_controls": {
+    "ansi_e9_replacement": true,
+    "matched_snippet_omits_real_query": true,
+    "finite_mb_input_overflows_to_infinity": true,
+    "truncation_splits_surrogate_pair": true
+  },
+  "control_source": "type ContentSearchMode=\"auto\"|\"ansi\"|\"utf8\"|\"utf16\"|\"utf16be\";\ntype TextPreviewPayload={text:string,truncated:boolean,matched:boolean};\nconst CONTENT_SNIPPET_MAX_CHARS=220;\nfunction toBytesFromMb(value: string): number | undefined {\n  const trimmed = value.trim();\n  if (!trimmed) {\n    return undefined;\n  }\n  const parsed = Number(trimmed);\n  if (!Number.isFinite(parsed) || parsed < 0) {\n    return undefined;\n  }\n  return Math.floor(parsed * 1024 * 1024);\n}\n\nfunction likelyUtf16Encoding(bytes: Uint8Array): \"utf-16le\" | \"utf-16be\" | null {\n  if (bytes.length < 4) {\n    return null;\n  }\n\n  const unitCount = Math.floor(bytes.length / 2);\n  if (unitCount < 2) {\n    return null;\n  }\n\n  let evenNulls = 0;\n  let oddNulls = 0;\n  for (let index = 0; index < unitCount * 2; index += 2) {\n    if (bytes[index] === 0) {\n      evenNulls += 1;\n    }\n    if (bytes[index + 1] === 0) {\n      oddNulls += 1;\n    }\n  }\n\n  if (oddNulls * 3 >= unitCount && evenNulls * 16 <= unitCount) {\n    return \"utf-16le\";\n  }\n  if (evenNulls * 3 >= unitCount && oddNulls * 16 <= unitCount) {\n    return \"utf-16be\";\n  }\n  return null;\n}\n\nfunction decodeTextPreviewBytes(bytes: Uint8Array, contentMode: ContentSearchMode | null): string {\n  const mode = contentMode?.toLowerCase() ?? \"auto\";\n\n  const decodeWith = (encoding: string, sourceBytes: Uint8Array) => {\n    try {\n      return new TextDecoder(encoding, { fatal: false }).decode(sourceBytes);\n    } catch {\n      return new TextDecoder(\"utf-8\", { fatal: false }).decode(sourceBytes);\n    }\n  };\n\n  if (mode === \"utf8\") {\n    const trimmed = bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf ? bytes.slice(3) : bytes;\n    return decodeWith(\"utf-8\", trimmed);\n  }\n  if (mode === \"utf16\") {\n    const trimmed = bytes[0] === 0xff && bytes[1] === 0xfe ? bytes.slice(2) : bytes;\n    return decodeWith(\"utf-16le\", trimmed);\n  }\n  if (mode === \"utf16be\") {\n    const trimmed = bytes[0] === 0xfe && bytes[1] === 0xff ? bytes.slice(2) : bytes;\n    return decodeWith(\"utf-16be\", trimmed);\n  }\n\n  if (bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf) {\n    return decodeWith(\"utf-8\", bytes.slice(3));\n  }\n  if (bytes[0] === 0xff && bytes[1] === 0xfe) {\n    return decodeWith(\"utf-16le\", bytes.slice(2));\n  }\n  if (bytes[0] === 0xfe && bytes[1] === 0xff) {\n    return decodeWith(\"utf-16be\", bytes.slice(2));\n  }\n\n  const detectedUtf16 = likelyUtf16Encoding(bytes);\n  if (detectedUtf16) {\n    return decodeWith(detectedUtf16, bytes);\n  }\n\n  return decodeWith(\"utf-8\", bytes);\n}\n\nfunction normalizePreviewText(text: string): string {\n  return text.replace(/^\\uFEFF/, \"\").replace(/\\0/g, \"\").replace(/\\r\\n/g, \"\\n\").replace(/\\r/g, \"\\n\");\n}\n\nfunction takeTextPreviewSnippet(\n  text: string,\n  maxChars: number,\n  contentQuery: string,\n): TextPreviewPayload {\n  const normalizedText = normalizePreviewText(text);\n  const effectiveMaxChars = Math.min(Math.max(maxChars, 120), 12_000);\n  if (!normalizedText) {\n    return {\n      text: \"\",\n      truncated: false,\n      matched: false,\n    };\n  }\n\n  const trimmedQuery = contentQuery.trim();\n  if (trimmedQuery) {\n    const lowerText = normalizedText.toLowerCase();\n    const lowerQuery = trimmedQuery.toLowerCase();\n    const matchIndex = lowerText.indexOf(lowerQuery);\n\n    if (matchIndex >= 0) {\n      const focusMatchEarly = effectiveMaxChars <= CONTENT_SNIPPET_MAX_CHARS;\n      let start = matchIndex;\n      let end = Math.min(normalizedText.length, start + effectiveMaxChars);\n\n      if (!focusMatchEarly) {\n        const availableContext = Math.max(0, effectiveMaxChars - trimmedQuery.length);\n        const minimumLeadingContext = 24;\n        const contextBefore = Math.min(\n          availableContext,\n          Math.max(minimumLeadingContext, Math.floor(availableContext * 0.5)),\n        );\n        start = Math.max(0, matchIndex - contextBefore);\n        end = Math.min(normalizedText.length, start + effectiveMaxChars);\n        const preferredEnd = Math.min(\n          normalizedText.length,\n          matchIndex + trimmedQuery.length + (availableContext - contextBefore),\n        );\n        if (end < preferredEnd) {\n          end = preferredEnd;\n          start = Math.max(0, end - effectiveMaxChars);\n        }\n      }\n      const excerpt = `${start > 0 ? \"\u2026\" : \"\"}${normalizedText.slice(start, end)}${end < normalizedText.length ? \"\u2026\" : \"\"}`;\n      return {\n        text: excerpt,\n        truncated: start > 0 || end < normalizedText.length,\n        matched: true,\n      };\n    }\n  }\n\n  if (normalizedText.length <= effectiveMaxChars) {\n    return {\n      text: normalizedText,\n      truncated: false,\n      matched: false,\n    };\n  }\n\n  return {\n    text: `${normalizedText.slice(0, effectiveMaxChars)}\u2026`,\n    truncated: true,\n    matched: false,\n  };\n}\n\n\nconst ansi=decodeTextPreviewBytes(new Uint8Array([0xe9]),\"ansi\");if(ansi!==\"\\ufffd\")throw Error(\"ansi\");\nconst text=\"\u0130\"+\"x\".repeat(130)+\"a\";const snippet=takeTextPreviewSnippet(text,120,\"a\");if(!snippet.matched||snippet.text.includes(\"a\"))throw Error(\"offset\");\nconst overflow=toBytesFromMb(\"1e308\");if(overflow!==Infinity)throw Error(\"overflow\");\nconst astral=takeTextPreviewSnippet(\"x\".repeat(119)+\"\ud83d\ude00\",120,\"\");if(astral.text.charCodeAt(119)!==0xd83d)throw Error(\"surrogate\");\nconsole.log(JSON.stringify({ansi_e9_replacement:true,matched_snippet_omits_real_query:true,finite_mb_input_overflows_to_infinity:true,truncation_splits_surrogate_pair:true}));\n",
+  "findings": [
+    "Original frontend decoder has no ANSI branch and falls through UTF8; isolated byteE9 becomes replacement, independently of Rust decoder(v3).",
+    "Original snippet uses lowercase-expanded string index to slice original text. In \u0130+130x+a querya, matchedtrue excerpt omits actuala. Also highlightMatch uses lowercased index/original length and has same static offset mismatch. JSX highlighter not executed.",
+    "Original snippet truncates UTF16 code units:119 ASCII+emoji at120-unit limit leaves unpaired high surrogate. This is codepoint boundary failure, not original file corruption.",
+    "toBytesFromMb checks input finite before multiplication but not product: finite1e308 becomesInfinity. Normal numberinput max/reachability into command not yet qualified; injected robustness control only.",
+    "Frontend promiseWithTimeout rejects outer Promise but does not cancel underlying Tauri task. Fallback fetch consumes entire arrayBuffer with2500ms abort deadline and no byte bound, unlike Rust4MiB cap. No actual IO/timeout measured.",
+    "textPreviewCacheKey includes path/modifiedUnix, maxchars, mode, trimmed lowercasequery; excludes size/file identity. Second-granularity same-path mutation cache staleness requires later call-site/lifetime review.",
+    "Recent-activity normalization accepts unknown objects defensively, removes controlchars, coalesces lowercase paths, limits5. This is history identity, not verified file equality. Booleans use truthiness for malformed stored strings; reachability not proven normal data.",
+    "UI parser regex accepts empty quotedcontent and marks hasContentSearchtrue, while C++ parser requires nonempty trimmed value. Multiple clauses lastwins in both. Unclosed-quote and whitespace-after-colon parity not yet executed.",
+    "fileUrlFromPath UNC branch produces file:///server/share form; actual WindowsWebView UNC handling untested. Do not claim working network-path preview."
+  ],
+  "limits": [
+    "31/268 whole files; App.tsx1-2730 of9598 partial. No full-file credit.",
+    "No React/Tauri/browser/Windows, actual filesystemfetch, clipboard, network, updater or destructive actions executed.",
+    "No production code changes or new performance claim. Native pHash/ASAN deferred."
+  ]
+}
