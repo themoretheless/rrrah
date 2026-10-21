@@ -1,0 +1,57 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/videocontext.h": {
+      "sha256": "f6b297e7a294edd4e9bdb2ae12c3d7f3fedbc716f3e58b763bddf62cd293d2d5",
+      "git_blob": "9c2848ce768a5b9c461c70a2b1751d4f37c21d81",
+      "bytes": 7766,
+      "lines": 234,
+      "method": "Whole pinned header read."
+    }
+  },
+  "partial_source_files": {
+    "src/videocontext.cpp": {
+      "sha256": "f9aee6aaa0e8ba13d5c67c3fb8743244754124b955f81cefd3be7b3716f3c2cb",
+      "git_blob": "0b8c725149176b50ee6b155ccb1615348499182b",
+      "bytes": 76516,
+      "lines": 2337,
+      "read_ranges_inclusive": [
+        [
+          47,
+          49
+        ],
+        [
+          1630,
+          1645
+        ],
+        [
+          1775,
+          1905
+        ],
+        [
+          2264,
+          2337
+        ]
+      ],
+      "method": "Only listed ranges read; complete file excluded."
+    }
+  },
+  "cumulative_assessed_blobs": 109,
+  "tracked_blobs": 616,
+  "findings": [
+    "readPacket sets _eof=true for any negative av_read_frame result, logging non-EOF via macro that does not increment _errorCount. decodeFrame then sends null packet to drain. Thus demux failure can take same termination route as normal EOF without direct errorCount increment; not full decoder runtime reproduction.",
+    "nextFrame returns bool for decodeFrameFiltered failure and conversion failure alike; no typed EOF-versus-error return. Separate errorCount counts some codec send/receive failures but does not establish complete enumeration of demux/convert failures.",
+    "Successful receive computes estimated frame number from best_effort_timestamp and stream rate; equal prior estimate increments by1, backwards iframe numbers warn. These are estimates, not explicit presentation timestamp ledger or variable-rate frame identity guarantee.",
+    "ptsToFrame/frameToPts use floating rational conversion and nominal r_frame_rate; no validation visible in these helper bodies for zero/missing rates. Open/seek implementation not fully read, so no claim that missing-rate inputs necessarily reach them.",
+    "Header documents fast seek inaccurate, accurate seek decodes from I-frame, close retains metadata, lastFrameNumber useful iframe-only. Full implementations remain partial; interface comments alone not runtime accuracy proof.",
+    "Metadata stores duration integerseconds and frameRate float, renders QTime-based strings; textual duration is not a full long-clip/rational timing oracle. Audio metadata presence does not imply audio duplicate confirmation."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "109/616 assessed:108 whole text/source and one PNG visual. videocontext.cpp partial explicitly excluded along with main.cpp and qtutil.cpp.",
+    "27 prior original-body/header controls plus one independent counterexample unchanged. No FFmpeg decode, hardware decode, malformed-media, benchmark or production edits.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
