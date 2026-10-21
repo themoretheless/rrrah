@@ -1,0 +1,4 @@
+import hashlib,json,subprocess
+from pathlib import Path
+folder=Path(__file__).resolve().parent;root=Path('.dedup-work/zigimage422-20261021');header=root/'include/stb_image_resize.h';tree=json.loads(Path('docs/research/dedup-500/evidence/galactixx--imagehash/tree.json').read_text());entry=next(x for x in tree['tree'] if x['path']=='include/stb_image_resize.h');b=header.read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==entry['sha']
+binary=root/'resize-control';subprocess.run(['clang','-std=c99','-O2','-I',str(root/'include'),str(folder/'control.c'),'-lm','-o',str(binary)],check=True);p=subprocess.run([str(binary)],check=True,text=True,capture_output=True);result=json.loads(p.stdout);(folder/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(p.stdout)
