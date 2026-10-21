@@ -1,0 +1,61 @@
+{
+  "repository": "Noneyabizzy/BW-basic-dedupe",
+  "commit": "12f6e133a7d0fcc51169902984e1c614e4a7ad06",
+  "whole_repo_complete": true,
+  "scope": "All5tracked text blobs wholly read including complete singleHTML/CSS/JS. No tracked images, external resources or binaries. NodeVM logic controls are not actual browser/UI visual qualification.",
+  "manifest": [
+    {
+      "path": ".gitignore",
+      "sha256": "6c4bd71653684f37901d52b7c2260acd57730c550a60f3228a0b8ff6c5bb66fa",
+      "bytes": 621,
+      "review": "whole text read, HTML includes all CSS/markup/inlineJS"
+    },
+    {
+      "path": "BW-basic-dedupe.html",
+      "sha256": "bfb7bf4029761c14ae87c77f83f0e3fbf299b45f933d5d53a223dd0a4f2fc7f5",
+      "bytes": 37502,
+      "review": "whole text read, HTML includes all CSS/markup/inlineJS"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "1550c2aa7bb37dd7955a0d464dc1823b9f6416cbe2efbdb7fce856e42595712d",
+      "bytes": 1071,
+      "review": "whole text read, HTML includes all CSS/markup/inlineJS"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c8eeb2a838b46076e02100c02ae5952f2a55b19d99c6044208cfc5d16d061070",
+      "bytes": 5874,
+      "review": "whole text read, HTML includes all CSS/markup/inlineJS"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "35065314938ce4c6ddb46f7ccbfc27687e8cc1de7a386a296dd4bf316f441a22",
+      "bytes": 2142,
+      "review": "whole text read, HTML includes all CSS/markup/inlineJS"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/bw214-controls-20261021/result.json",
+  "findings": [
+    "Domain is local credential-record grouping, not bytefile/image duplicate detection. No code/data copied; all control records synthetic.",
+    "Null-prototype key/state maps avoid inherited-name collision seen in146; union-find connects records sharing any key.",
+    "Composite key uses rawNULdelimiters without field escaping/lengthprefix. Same domain with useralpha-NUL-beta,passwordgamma and useralpha,passwordbeta-NUL-gamma forms one group with auto-deletion recommendation although values differ. Original fullinlineJS executed with DOMtransportadapters.",
+    "Keeperpriority is additive passkey100000,authenticator10000,rawURIcount*100,etc.1002repeatedURIs outrank oneURIwithpasskey; original build marks syntheticpasskeyrecord for deletion withno reviewwarning. Larger attribute counts can violate intended lexicographic securitypriority.",
+    "Positivecontrols: ordinarysamevalues formsonegroup/one deletionrecommendation; ignore-password option groups differentvalues but selectsno deletions. No actual deletion/download invoked.",
+    "Domains use manualmultipart suffix list, stripswww evenhostname mode. README acknowledgesheuristic; not a PublicSuffixList oracle. Usernamecasefold/trim and namefallback are configurable-domain semantics, not exact-record equivalence.",
+    "Unionconnectedcomponents permit transitive groups without everymember sharingdomain. RankingdoesnotmergeURI/note/customfielddata. Extra metadata beyondranked flags not compared as identityproof.",
+    "Reviewguardscovermultiplepasskeyrows,splitpasskey/TOTP,differentTOTPstrings,andmixedpersonal/org. Two differentnonemptyorganization IDs bothrepresentedbooleanorg, so crossorgdistinction unreviewed. Sourceonly, no extra runtimeclaim.",
+    "MissingIDs replacedrandomly forgroup rows but cleanedJSONfiltersrawitem.id, so missingIDrecommendationscannotremove correspondingrawrecords. DuplicateIDsnotvalidated; no runtimecontrol.",
+    "Changingmatchingoptions rebuildsrecommendations and resetsmanualselections; no cancellation/work/memorybudget; wholefile/readJSON/clone/UIgroups retainedmemory.",
+    "HTMLescapefunctionused forrenderedtext/attributes; CSPblocksconnect-src anddefaultsrc bymarkup, noexternalresources incode. BrowserCSPenforcement, clipboard, memoryerasure and realvaultformat compatibility untested; no securitycertification.",
+    "CSVquotescomma/doublequote/LFbutnotCR; cleaningdownload clonesrawdataandfiltersselectedIDs withoutatomicexternalvaultoperation. Scriptneverdirectlyeditsvault.",
+    "READMEwarnsaboutpasskeyexportlimitations/reimportduplicatesandmanualreview. SECURITY.md requestsreporting flow; treatedasrepositorydocumentation, noexternalreport/message sent.",
+    "No trackedtestfixtures or test runner; .gitignore exceptionexample-vault.json doesnotmeanfixtureexists. MIT2026LouisDiMeglio whole-read."
+  ],
+  "adoption": "No production change. Preserve typed/length-delimited identity and explicit priority ordering lessons; current filelibrary doesnot adopt automaticcredential deletion semantics.",
+  "limits": [
+    "244/500 source reviews, not universal capability proof.",
+    "All controls use syntheticmetadata; no realcredentials/accounts/browserdownload/network requests.",
+    "Native pHash/ASAN remains explicitlydeferred."
+  ]
+}
