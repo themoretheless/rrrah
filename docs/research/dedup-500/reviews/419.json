@@ -2,7 +2,7 @@
   "index": 419,
   "repository": "shamazmazum/perceptual-hashes",
   "commit": "d485d33360b44ac35e36135510cff75c56c8adde",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned 16/16 artifact review including two original JPEGs; three independent resize/hash formula controls. Original Lisp/Imago and upstream suite not executed.",
   "decision": "reference",
   "finding": "Lisp dHash with grayscale/resize source and tests; independent oracle after backend policy comparison.",
   "available_source_evidence": [
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "BSD-2-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root BSD-2-Clause fully read; no production code adopted.",
   "tests_detected": 3,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/perceptual419-complete-source-review-20261021.json"
 }
