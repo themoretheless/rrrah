@@ -1,0 +1,68 @@
+{
+  "repository": "amasen02/dupehunter",
+  "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
+  "whole_repo_complete": false,
+  "tracked_blobs": 52,
+  "cumulative_assessed_blobs": 25,
+  "files": {
+    "src/cli-args.ts": {
+      "bytes": 4198,
+      "sha256": "0dcc429cb4816bf181fda747f97d85deea9e72a2eab568973b1afc5001ee5230",
+      "git_blob": "7630b265f30479f0d5a2231f6a9b99175876b4ad",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/cli.ts": {
+      "bytes": 5449,
+      "sha256": "7ef6db41b237317d6b31c8c051bfb2fa9132b236993a31356aeaf38cf118dcc9",
+      "git_blob": "e1023f95da1170c51eecb8986051edbf2cf475bb",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/parse-size.ts": {
+      "bytes": 825,
+      "sha256": "d8e1c0646882f3f673577dd3e47b09bd33aa77471b85cce146af831e18fa80bd",
+      "git_blob": "ba2953fd0de5f6d435aa6c318bb95b7598a94803",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/format.ts": {
+      "bytes": 1500,
+      "sha256": "3dc60bcad67a36f20963f45608d66e9415418b5958894560e95d2a540bbf7e34",
+      "git_blob": "38673d1a5a35da9b7f0de4faa44334e09eaaf0c7",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/render.ts": {
+      "bytes": 3067,
+      "sha256": "961ca87bd59b59cc85ebc1517ab43d0683aaef989b560d3a4ed10c886ff7d0d2",
+      "git_blob": "5b845698a2f35a196b5004a319674968d9841b29",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/index.ts": {
+      "bytes": 615,
+      "sha256": "f8f967e9e855ae3e43eec226afee7732d46189ddd0f7c7e4f14b7f77d7b66679",
+      "git_blob": "67e36e9b8af5305d3588a0df6ffd9624e84f1bbf",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "scripts/run-tests.mjs": {
+      "bytes": 821,
+      "sha256": "074abb28e9207ce37b7b2bc02efbb666cd89906899cd232dca2ec13e1bac4347",
+      "git_blob": "560265e1e362ee034edff75c056e5d3d0eecf6d4",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 3,
+  "cumulative_runtime_controls": 10,
+  "controls_script": "docs/research/dedup-500/dupehunter295-controls-v4-20261021/run.mjs",
+  "controls_log": "docs/research/dedup-500/dupehunter295-controls-v4-20261021/run.log",
+  "control_scope": "Original parser/CLI code via Node22 strip-types and recorded relative import loader, actual subprocess and own temporary missing-root fixture. No writes outside test directory.",
+  "findings": [
+    "parseCliArgs accepts concurrency2garbage as2,1.9 as1 due to parseInt; rejectsNaNtext, so prior library NaNholes not directly reachable through that CLI flag.",
+    "400digit min-size accepted asInfinity, without finite or safe-integer validation. No fullscan impact test for this flag.",
+    "Actual CLI nonexistent root with --json returns exit0,filesScanned0,onewarning. Help says filesystem/runtime failure preventing complete scan returns2; current warning policy does not distinguish root failure from successful scan.",
+    "CLI defaults scan-only,nonTTY destructive prompt aborts unless --yes, --dry-run avoids actions. --json only producesJSON in scan-only mode; action modes rendertext. Source read, no new destructive CLI execution.",
+    "Render reports logical size-based reclaimable bytes and warning paths; no allocated-block or external-hardlink verification. No atomic snapshot/freshness guard added at CLI.",
+    "Original run-tests script selects explicit sorted filenames for Node20compatibility, uses tsx; previous tests used strip-types loader instead, original launcher still pending."
+  ],
+  "remaining_scope": "27 artifacts including remaining CLI/helper tests,README,config/workflows/project docs and lock.",
+  "limits": [
+    "No production changes.41original tests passed earlier, no broad test rerun this increment. Global full count202/500 unchanged. pHash/ASAN deferred."
+  ]
+}
