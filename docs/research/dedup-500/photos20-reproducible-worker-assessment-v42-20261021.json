@@ -1,0 +1,41 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/embedder-worker.js": {
+      "sha256": "81b531a80f0222f54df17a45ffffd6f796a9640874f874694bdd4bb5d72d8c35",
+      "git_blob": "ababc8faae25512db19296562d352bee4bc61a4a",
+      "bytes": 200202,
+      "lines": 4177,
+      "method": "Complete artifact assessed by byte-identical isolated rebuild from whole-read first-party worker and lock-authenticated official MediaPipe module. First-party generated tail manually read previously; bundled third-party semantics not line-by-line audited."
+    }
+  },
+  "cumulative_whole_files_read": 84,
+  "tracked_blobs": 84,
+  "build": {
+    "command": "./esbuild workers/embedder.worker.ts --bundle --platform=browser --format=iife --target=es2020 --outfile=scripts/embedder-worker.js",
+    "esbuild_version": "0.28.0",
+    "esbuild_binary_sha256": "6f0e1237f63fa3bc03963e58f0b0be1b9bfacd8f2dc9a3f28483e8f97e4ef2d6",
+    "esbuild_tarball_url": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.28.0.tgz",
+    "esbuild_tarball_integrity": "sha512-0T+A9WZm+bZ84nZBtk1ckYsOvyA3x7e2Acj1KdVfV4/2tdG4fzUp91YHx+GArWLtwqp77pBXVCPn2We7Letr0Q==",
+    "tarball_sha512_matches_lock": true,
+    "mediapipe_version": "0.10.34",
+    "rebuilt_bytes": 200202,
+    "rebuilt_sha256": "81b531a80f0222f54df17a45ffffd6f796a9640874f874694bdd4bb5d72d8c35",
+    "byte_identical": true,
+    "exit_code": 0,
+    "warnings": [
+      "Parent tsconfig extends unavailable plasmo/templates/tsconfig.base; esbuild warning emitted. Exact byte match achieved despite missing inherited base."
+    ]
+  },
+  "findings": [
+    "All generated worker bytes reproduce from pinned first-party TS worker plus authenticated official ESM module with locked esbuild platform binary. No unexplained bundle byte difference.",
+    "This completes parent blob artifact assessment, not manual review of all MediaPipe implementation details or package transitive code.",
+    "Earlier four synthetic handler controls on tracked bundle remain applicable; exact rebuild is stronger provenance evidence than source comment/version inference."
+  ],
+  "limits": [
+    "No extension packaging/full build, model inference, WASM/GPU or browser execution.",
+    "84/84 parent blob assessment is not repository full review completion: external README demo still unviewed, submodule scope distinct, runtime suite unexecuted."
+  ]
+}
