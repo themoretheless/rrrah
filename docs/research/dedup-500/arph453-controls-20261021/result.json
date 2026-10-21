@@ -1,0 +1,30 @@
+{
+  "repository": "sambux1/arph",
+  "commit": "32ebc32c3572252573071b158f0bd81255b03d41",
+  "numpy": "2.3.5",
+  "controls": [
+    {
+      "name": "nonbyte_roundtrip",
+      "input_bits": 9,
+      "hex": "aa80",
+      "output_bits": 16,
+      "original_common_module": true
+    },
+    {
+      "name": "hex_string_evaluation",
+      "actual_accepts": true,
+      "true_bit_distance": 64,
+      "tau": 1,
+      "scope": "Unchanged original evaluate method extracted via Python AST; no full package import or cryptographic backend"
+    }
+  ],
+  "source_sha256": {
+    ".dedup-work/arph453-20261021/arph/common.py": "558274633b3cefed54c2b0ee168037938139000a9f5f9d4f72b7b83e0862aa8d",
+    ".dedup-work/arph453-20261021/arph/pph/nonrobust.py": "001561fed8eaaa2d8f9054a81c51693a691a88c9b037423770e682dc9b0ccc8e"
+  },
+  "limits": [
+    "No cryptographic strength or original full-suite claim.",
+    "Nine-bit roundtrip padding is normal NumPy packing; API fails to preserve logical bit length.",
+    "Method extraction isolates existing input-type behavior, not original random projection generation."
+  ]
+}
