@@ -2,7 +2,7 @@
   "index": 30,
   "repository": "google-research/3d-moments",
   "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
-  "review_scope": "Partial whole-source review: 9/73 tracked blobs. Inpainting, historical environment, download helper and train/render configs read without execution; numeric/bounding limits recorded statically.",
+  "review_scope": "Partial whole-source review: 21/73 tracked blobs. Dataset registry/Vimeo loader, contribution/ignore text and eight empty initializers assessed; temporal pair synthesis and alignment assumptions recorded statically.",
   "decision": "reject-domain",
   "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
   "license_metadata": "Apache-2.0",
@@ -101,6 +101,9 @@
     },
     {
       "audit": "docs/research/dedup-500/moments30-inpainting-environment-review-v2-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/moments30-dataset-and-initializers-review-v3-20261021.json"
     }
   ]
 }

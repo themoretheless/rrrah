@@ -1,0 +1,110 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".gitignore": {
+      "sha256": "dc7f1c4d56b4bbb3c46dc8c742b65289c2d020fa21965cedd76add55fd15f7f6",
+      "git_blob": "3655fdc527c5decca0fc89e4a28094f6ad5ae7eb",
+      "bytes": 112,
+      "lines": 9,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "CONTRIBUTING.md": {
+      "sha256": "4b427eb5ff82039c2ab0d834bdea39274ff8cfdd12d19fe46db79f4c2a556cec",
+      "git_blob": "e5c3b2868437f65d0d14f0411e9c2482bef576bf",
+      "bytes": 1103,
+      "lines": 29,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "data_loaders/__init__.py": {
+      "sha256": "1eef27b3c51be7190331e8d9907c5786294f12ed578d3bf8ffe2dc12895cfa92",
+      "git_blob": "6b4c5fb38a4ae5f584eb3a59e62706befb4dea54",
+      "bytes": 656,
+      "lines": 20,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "networks/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/DPT/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/DPT/dpt/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/DPT/util/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/RAFT/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/RAFT/core/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "third_party/RAFT/core/utils/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    },
+    "data_loaders/vimeo.py": {
+      "sha256": "4d0433b6214ad055c6a6693f1263db99f9e9d00d4b43d777eb8c6d674f54fd67",
+      "git_blob": "1aebeda05536fe6f379e1054974bbe6fe23351b0",
+      "bytes": 6052,
+      "lines": 155,
+      "method": "Whole source read; zero-byte initializers verified as empty."
+    }
+  },
+  "cumulative_whole_files_read": 21,
+  "tracked_blobs": 73,
+  "findings": [
+    "Eight selected package initializers are empty. data_loaders initializer imports VimeoDataset and registers only vimeo.",
+    "Vimeo training split is sorted scene directories excluding last100; all other subsets use last100. No explicit sample-identity/content-hash leakage check across scenes or splits.",
+    "Image and depth PNG lists sorted independently and checked only for equal count, not matching basenames/frame IDs. Equal counts can conceal misaligned frame pairs.",
+    "Dataset generates source/target time interpolation and synthetic camera intrinsics/identity poses. It consumes temporally related frames for synthesis, not duplicate search.",
+    "Black-boundary crop derives from first source and applies to all frames/depth maps; frame shape/alignment assumptions not independently validated here.",
+    "Main-block VimeoDataset() omits required args and subset constructor parameters; standalone invocation would fail before iteration. Static signature comparison only.",
+    "Ignore rules exclude model weights, logs/output and temp artifacts. Contribution document describes upstream CLA/review process; treated as reference text, no submission or agreement actions."
+  ],
+  "executed_controls": [
+    "All twelve pinned Git blobs verified."
+  ],
+  "limits": [
+    "No dataset/frame loading, network/model imports or runtime execution.",
+    "21/73 tracked blobs read; project remains partial domain review.",
+    "No production library changes."
+  ]
+}
