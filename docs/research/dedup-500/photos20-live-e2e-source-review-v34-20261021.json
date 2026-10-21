@@ -1,0 +1,37 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/e2e/full/scan-flow.test.ts": {
+      "sha256": "1f63c4cf23b33ee833fe1f1fcdac830fb4daf506c08b5dc307b07708f53e9c11",
+      "git_blob": "0f8dfe2228c0253f4028b2eddd589338995afc69",
+      "bytes": 2644,
+      "lines": 72,
+      "method": "Whole source read only; live scenarios not executed."
+    },
+    "tests/e2e/full/trash-flow.test.ts": {
+      "sha256": "fd125792feaf8ec2c8589c20fae56bf08b06544cf035dd77042cc2ebc5c0f428",
+      "git_blob": "9b49893d9f562968726bba85f5f9f4fa7ce53f88",
+      "bytes": 3268,
+      "lines": 86,
+      "method": "Whole source read only; live scenarios not executed."
+    }
+  },
+  "cumulative_whole_files_read": 70,
+  "tracked_blobs": 84,
+  "findings": [
+    "Live scan test waits for items scanned before checking results/no-duplicates. Current empty-result UI has no items-scanned label, so legitimate zero-group result cannot satisfy preceding wait.",
+    "Result heading regex uses plural Duplicate Groups Found; actual UI singular is Duplicate Group Found. One-group account can fail despite valid result.",
+    "If saved results exist, Re-scan callback resets to connecting and health-checks, rather than directly starting scan. Test clicks Re-scan once then expects fetching without clicking newly shown Scan Library.",
+    "Neither full scan scenario explicitly switches default smart mode to full; title full E2E denotes runtime scope, not proven all-photo comparison mode.",
+    "Trash test registers native page dialog handler, but app uses MUI Dialog and separate confirmation button. It clicks initial trash button but never explicit MUI confirmation before awaiting success.",
+    "Trash test assumes immediate undo leaves account unchanged. Actual undo updates UI optimistically and logs backend restore failure only; test checks UI group count, not backend restoration. It also lacks rollback in finally if assertions fail before undo.",
+    "Playwright waitForFunction passes timeout as second argument in source; supported installed API signature must be checked before treating it as options. No API compatibility claim made from source alone."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "No browser/CDP connection, account access, storage clearing or trash/restore execution. Upstream comment claiming safe for any account is not adopted as verified fact.",
+    "70/84 full files reviewed; real E2E tests remain unexecuted."
+  ]
+}
