@@ -1,0 +1,42 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/FileWatcher.ts": {
+      "sha256": "99490eebc4f0e803e3305194789a270e9bf8a10705f8faf9cb8fc83f0bafaa25",
+      "git_blob": "d9a2a06b5679c70829e8803e9e95f057d71d4ca2",
+      "bytes": 16748,
+      "lines": 350,
+      "method": "Whole source read; tests contiguous1-380 and381-end."
+    },
+    "tests/FileWatcher.test.ts": {
+      "sha256": "00ff53efacd59dbc7bd51fcc83dc7a684a24038c30b9a486beff1e3847679de8",
+      "git_blob": "fd2555c3b547e965f8faf3dbfdca8f7a6d98edcc",
+      "bytes": 31803,
+      "lines": 664,
+      "method": "Whole source read; tests contiguous1-380 and381-end."
+    }
+  },
+  "cumulative_whole_files_read": 22,
+  "tracked_blobs": 129,
+  "findings": [
+    "Watcher tokens bind callbacks to active mount ID and effective root; suppression epochs invalidate pending work even after immediate resume. Original module controls confirm stop and suppression drop inflight stat. Useful generation-check pattern; no production port.",
+    "Change debounce key is mountID+NUL+realPath, despite comments saying only real path. Distinct aliases/mounts do not coalesce each other; change debounce does not compare content.",
+    "Created events check existing vault object before awaiting stat but do not repeat existence check after await or reserve per-path pending creation. Two concurrent adds both notify under synthetic stale-vault state. Real Chokidar duplicate delivery and Obsidian mutation timing not tested, so product duplicate occurrence unproven.",
+    "stopWatching/stopAll clear tokens/timers before calling asynchronous close without await; callbacks are token-gated, but close rejection is not caught here. Start watch synchronous errors after loader are not wrapped. Static lifecycle assessment.",
+    "Mobile and WebDAV/S3/SFTP mounts skip native watching; no automatic full coverage guarantee from this watcher. Root setup uses ignoreInitial, followSymlinks=false, awaitWriteFinish500ms and disables native fsevents. Real OS backend untested.",
+    "Dispatch independently checks relative path boundary before PathMapper mapping; legal ..prefixed child still passes this check but mapper v2 bug can map it to root. Event consequence depends on vault object/stat responses. No deletion operations executed.",
+    "Read watcher tests cover restart/root replacement, suppression epochs, debounce, filters and pending stat cancellation using mocked Chokidar/vault/timers; no real filesystem notifications or actual Obsidian. Entire test file read, upstream Vitest not run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-watcher-controls-v4-20261021",
+    "passed": 3,
+    "method": "Original full watcher class and mapper/filter/logger after Node type transform; original Obsidian mock, real Node path, fake Chokidar and in-memory deferred stat/vault. No actual watching or user storage."
+  },
+  "limits": [
+    "22/129trackedblobs read; full plugin/main integration unverified.",
+    "No upstream Vitest or real filesystem event/backend execution.",
+    "Production library unchanged."
+  ]
+}

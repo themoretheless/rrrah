@@ -1,0 +1,30 @@
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import assert from 'node:assert/strict';
+const root=process.argv[2],url=s=>`data:text/javascript;base64,${Buffer.from(s).toString('base64')}`;
+const strip=s=>stripTypeScriptTypes(s,{mode:'transform'});
+const read=p=>readFileSync(`${root}/${p}`,'utf8');
+const mock=url(strip(read('tests/__mocks__/obsidian.ts')));
+const filter=url(strip(read('src/mountFileFilter.ts').replace(/^import .*\n/gm,'')));
+const mapper=url(`import path from 'node:path';import {normalizePath} from '${mock}';\n${strip(read('src/PathMapper.ts').replace(/^import .*\n/gm,'').replace(/^const path:.*\n/m,''))}`);
+const logger=url(strip(read('src/logger.ts')));
+const source=read('src/FileWatcher.ts').replace(/^import .*\n/gm,'').replace(/^const pathMod:.*\n/m,'');
+const {FileWatcher}=await import(url(`import pathMod from 'node:path';import {normalizePath,Platform} from '${mock}';import {isVisibleFileInMount,MARKDOWN_EXTENSIONS} from '${filter}';import {logger} from '${logger}';const loadOptionalNodeModule=()=>null;\n${strip(source)}`));
+const {PathMapper}=await import(mapper);
+const tick=()=>new Promise(resolve=>setImmediate(resolve));
+function setup() {
+ const handlers={},events=[],pending=[];
+ FileWatcher._loadChokidar=()=>({watch:()=>({on(name,fn){handlers[name]=fn;return this;},close:async()=>{}})});
+ const mount={id:'m',virtualPath:'Docs',realPath:'/data',enabled:true};
+ const map=new PathMapper();map.update([mount]);
+ const app={vault:{getAbstractFileByPath:()=>null,adapter:{stat:()=>new Promise(resolve=>pending.push(resolve))},onChange:async(...args)=>events.push(args)}};
+ const watcher=new FileWatcher(app,map,()=>false);watcher.startWatching(mount);
+ return {handlers,events,pending,watcher,mount};
+}
+const stat={type:'file',size:1,ctime:0,mtime:0};
+let a=setup();a.handlers.add('/data/a.md');a.handlers.add('/data/a.md');assert.equal(a.pending.length,2);a.pending.forEach(resolve=>resolve(stat));await tick();assert.equal(a.events.length,2);a.watcher.stopAll();
+console.log(JSON.stringify({name:'two-pending-adds-both-notify-with-stale-vault-state',passed:true,notifications:a.events.length}));
+a=setup();a.handlers.add('/data/a.md');a.watcher.stopWatching(a.mount);a.pending[0](stat);await tick();assert.equal(a.events.length,0);
+console.log(JSON.stringify({name:'stop-drops-inflight-stat',passed:true}));
+a=setup();a.handlers.add('/data/a.md');a.watcher.setSuppressed('m',true);a.watcher.setSuppressed('m',false);a.pending[0](stat);await tick();assert.equal(a.events.length,0);a.watcher.stopAll();
+console.log(JSON.stringify({name:'suppression-epoch-drops-inflight-stat-after-resume',passed:true}));
