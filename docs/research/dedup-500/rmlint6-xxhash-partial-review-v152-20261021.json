@@ -1,0 +1,48 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          4601,
+          5200
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          5200
+        ]
+      ],
+      "unread_ranges": [
+        [
+          5201,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated4601..5200 source reading. No execution or whole-file credit in this increment.",
+  "findings": [
+    "64-bit short input functions split0/1..3/4..8/9..16, using first/middle/last bytes or overlapping bounded4/8-byte reads. Empty input reads secret offsets56/64 without reading input; secret still required.",
+    "17..128 path processes overlapping16-byte samples from both ends, adding pairs at32/64/96 boundaries. Size-optimized path rerolls same sampling.129..240 path processes first128 bytes, final16 bytes and additional full16-byte chunks with offset3 secret sampling.",
+    "Pinned source explicitly documents seed-dependent multicollisions for64-bit lengths17..240 due to multiplication by zero;128-bit variant is separately described. No constructed collision executed; exact dedup must retain byte verification regardless of hash.",
+    "Long-key stripes are64 bytes with secret advancement8 bytes per stripe and eight64-bit accumulator lanes. Prefetch distance is compiler/backend-specific and is not a measured optimization here.",
+    "AVX512 and AVX2 accumulation mix original input pair-swapped into accumulator plus32x32 product of input xor secret halves. Scramble combines shifted accumulator/secret then multiplies modulo64 by32-bit prime.",
+    "AVX512 custom-secret initializer uses alternating plus/minus seed in aligned64-byte vectors; AVX2 uses six aligned32-byte stores totaling192. Input/secret loads are unaligned while accumulators/custom-secret use strict alignment.",
+    "SSE2 accumulation prefix read only; remaining SSE2/NEON/scalar backends and higher-level long-key/streaming code remain unread."
+  ],
+  "limits": [
+    "5200/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "No short-key runtime, SIMD parity, collision construction or throughput claim. pHash/ASAN remains deferred."
+  ]
+}
