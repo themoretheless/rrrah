@@ -1,0 +1,153 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "package-lock.json": {
+      "sha256": "84b7f133161ce575d14103df98c336a563089b6ce23749604548203cea98a8cc",
+      "git_blob": "c0f30056ecf7ebb941c5f3cc7efebf266f2d5d49",
+      "mode": "100644",
+      "lines": 2056,
+      "method": "Complete JSON interpreted and all 133 package records inspected in two complete outputs (0-66 and 67-132). Every metadata field retained in inspection except raw integrity digests, which were fully base64-decoded and checked for algorithm/digest length. This is dependency metadata review, not review of all external package implementations."
+    }
+  },
+  "cumulative_whole_files_read": 264,
+  "tracked_blobs": 268,
+  "executed_metadata_controls": {
+    "lockfile_version": 3,
+    "package_records_including_root": 133,
+    "registry_packages": 132,
+    "sri_tokens_syntax_and_length_validated": 132,
+    "sri_payload_tarballs_verified": false,
+    "dependency_edges_considered": 188,
+    "missing_dependency_records": [
+      {
+        "package": "node_modules/vite",
+        "dependency": "@types/node",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "jiti",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "less",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "lightningcss",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "sass",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "sass-embedded",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "stylus",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "sugarss",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "terser",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "tsx",
+        "kind": "peerDependencies",
+        "optional": true
+      },
+      {
+        "package": "node_modules/vite",
+        "dependency": "yaml",
+        "kind": "peerDependencies",
+        "optional": true
+      }
+    ],
+    "missing_required_edges_within_lock": 0,
+    "manifest_lock_root_differences": {
+      "dependencies": {
+        "@tauri-apps/plugin-process": "^2",
+        "@tauri-apps/plugin-updater": "^2"
+      },
+      "devDependencies": {}
+    },
+    "manifest_version": "0.1.16",
+    "lock_root_version": "0.1.14",
+    "missing_direct_manifest_packages": [
+      "@tauri-apps/plugin-process",
+      "@tauri-apps/plugin-updater"
+    ],
+    "install_script_flags": [
+      "node_modules/esbuild",
+      "node_modules/fsevents"
+    ],
+    "declared_license_counts": {
+      "root": 1,
+      "MIT": 109,
+      "Apache-2.0 OR MIT": 13,
+      "MIT OR Apache-2.0": 1,
+      "Apache-2.0": 2,
+      "CC-BY-4.0": 1,
+      "ISC": 5,
+      "BSD-3-Clause": 1
+    }
+  },
+  "cross_file_evidence": {
+    "package.json": {
+      "sha256": "c03a5f3e224533310ace1923c2df7d33be69aedbec2698f97c8468b0acc4d3f8",
+      "git_blob": "a4fc21bc2ff6934ebed896c57b83a370f1f830f9"
+    },
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "imports": [
+        {
+          "line": 11,
+          "module": "@tauri-apps/plugin-process"
+        },
+        {
+          "line": 12,
+          "module": "@tauri-apps/plugin-updater"
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Pinned package.json is version 0.1.16, but package-lock.json and its root package record are 0.1.14. Manifest runtime dependencies plugin-process and plugin-updater are absent from both root lock declarations and resolved package entries. App.tsx actually imports them on lines 11 and 12. This is a verified manifest/lock inconsistency; no installer or build failure executed in this batch.",
+    "Locked React and React DOM are both 19.2.4; TypeScript is 5.8.3, Vite 7.3.1, Tauri JS API 2.10.1 and CLI 2.10.0. These are pinned-file facts, not recommendations or claims about latest available releases.",
+    "All 132 resolved packages point to HTTPS registry.npmjs.org URLs and have syntactically valid SHA512 integrity values. No archive was fetched or matched to those digests; syntax is not supply-chain or package-content verification.",
+    "Eleven missing lock dependency records are Vite optional peers only. They are not counted as missing required dependencies; the two missing manifest runtime modules are a separate drift finding.",
+    "esbuild and fsevents declare install scripts. No package installation or install scripts executed. Platform-specific optional packages in the lock do not prove builds run on all listed operating systems.",
+    "Declared licenses include MIT, Apache alternatives, ISC, BSD-3-Clause and CC-BY-4.0 metadata. Lock labels do not replace source-license qualification for reused external code."
+  ],
+  "limits": [
+    "264/268 files; two Cargo.lock files, wrapper JAR and malformed test PNG remain incomplete.",
+    "No package install, network package download, build, UI runtime, vulnerability audit or external dependency implementation review performed.",
+    "No production-library edit or performance claim. 155/500 repository reviews complete; pHash/ASAN deferred."
+  ]
+}
