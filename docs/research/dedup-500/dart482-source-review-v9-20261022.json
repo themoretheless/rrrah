@@ -1,0 +1,43 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "assets_reviewed": [
+    {
+      "path": "sample_images/cat1.JPG",
+      "sha256": "7e7230b8ad6eabaf6a4e21eb952799ff73b94d30ccb87e05fffad95697e85610",
+      "git_blob_verified": true
+    },
+    {
+      "path": "sample_images/cat1-modified.JPG",
+      "sha256": "dc1688c7a492fcf621da50994f8f0272bfa3796b50a9ff4d69020af95dc6d9f2",
+      "git_blob_verified": true
+    },
+    {
+      "path": "sample_images/cat2.JPG",
+      "sha256": "7d4cf8530afdb8946b8e2b86a5fe2c110e5dc752a9c91beb2514867c75644521",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/static/favicon.png",
+      "sha256": "49f2b692cf9cbe6264821342545ad811f87742e2b54009251d4d24c8588da568",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/static/favicon.svg",
+      "sha256": "d7d9227f0fe5bfb4189fb6ba4dd9e2d524f6a1dfd02bd901c65330987675c0b3",
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Individually viewed all three tracked JPEGs and PNG favicon; SVG source read whole and QuickLook-rendered thumbnail individually viewed. cairosvg unavailable, QuickLook succeeded.",
+    "cat1 is indoor close-up calico cat; modified is near same composition with red Z-like mark on lower-left floor and changed framing. cat2 is a distinct outdoor photo among grass with blue leash; same apparent animal does not imply same image.",
+    "Both favicon formats show orange/white Svelte mark. Tracked graphics now visually reviewed; pinned assets differ in scope from floating main/master images referenced by dataset URLs.",
+    "All tracked text/source and structured data have previous review evidence; external dataset icon images remain unviewed and original Dart runtime remains unqualified, so repository not marked complete."
+  ],
+  "remaining": [
+    "External linked icon visual assets and rendered website review",
+    "Original Dart tests/independent vectors; dependency runtime scope"
+  ],
+  "full_review_count": 247
+}
