@@ -1,0 +1,64 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 86,
+  "files": {
+    "docs/_build/html/.doctrees/api/algorithms.doctree": {
+      "bytes": 72166,
+      "sha256": "48f6b3e55777209301d634a56cc512828672aa2af9bac12e42b973bbe66934d5",
+      "git_blob": "cb531fe5476fcf70f38f627b2d423ffac5006e47",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/api/core.doctree": {
+      "bytes": 39642,
+      "sha256": "3846cd31cf5ed1438b27ee2337bba37b008c50b67a482d69ef3a151bb54fdf39",
+      "git_blob": "fdcc9aa6c87202122e53774c7e560c240bd79bd6",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/api/index.doctree": {
+      "bytes": 2830,
+      "sha256": "8758c6706de2926979bd9da0463899f80f5beb7e6d4ff83c586361faf0310d48",
+      "git_blob": "6dd93dd024481d019d59b91d5eaac27ab4f73fec",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/api/tolerance.doctree": {
+      "bytes": 55189,
+      "sha256": "db4704b7b3d93dcbecd67eeed853a4de13aabe67398828eae70f8d0e1c245283",
+      "git_blob": "8df0718d98fc47876e2e44c7154b9f7438e20831",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/environment.pickle": {
+      "bytes": 88259,
+      "sha256": "4b1131d0f47f94808f9480229286abd9c4cb76a2428af667110de469a672cac0",
+      "git_blob": "a4495bb60dfcd7b36a0b9036c77fd5202bf45d9a",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/index.doctree": {
+      "bytes": 3781,
+      "sha256": "f7fd67b9c827df34bd691ea116dd8aebfc1f7b2f35b31cc381074a15ce566a29",
+      "git_blob": "9863f916d8282c9acfa48d0750fafb30cdaa7039",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/quickstart.doctree": {
+      "bytes": 9579,
+      "sha256": "e13db203711188d628cc59efc9c46560b9631bc631768c3e3ce3bbc389119c04",
+      "git_blob": "4aa41b5cd3555f1ed35962f5d77691c322e8e7f7",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    }
+  },
+  "structural_audit": "docs/research/dedup-500/vectors166-doctree-structural-audit-20261021.json",
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Seven protocol5 Sphinx/docutils pickle streams structurally parsed to STOP at exact EOF, no trailing bytes. No pickle.load or class imports performed.",
+    "All contain object reconstruction opcodes including STACK_GLOBAL/NEWOBJ/BUILD and REDUCE; empty GLOBAL opcode inventory does not mean absence of class references or prove safe deserialization.",
+    "Six doctrees reference original author absolute source paths and source/docstring records; environment records extension/build metadata and source links. Historical build cache, not current runtime proof.",
+    "Structural inspection is explicitly weaker than reconstructing document objects. Rendered/source documentation already assessed separately; cached serialized object graph not semantically executed or fully reconstructed."
+  ],
+  "remaining_scope": "16 static JS/CSS/source-map/search-index artifacts remain.",
+  "limits": [
+    "Seven binaries counted as structurally assessed only, not whole text read or runtime validated.100 original tests passed separately; global full repo count201/500 unchanged. No production changes; pHash/ASAN deferred."
+  ]
+}
