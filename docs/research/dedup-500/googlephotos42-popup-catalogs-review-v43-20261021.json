@@ -1,0 +1,60 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_four_complete_popup_catalogs_with_structural_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/popup/i18n/locales/nl.ts": {
+      "sha256": "dd0e78f0a9c3d0ec63e514873bc296d77f21d4768090fb6d7e41bde22f720add",
+      "git_blob": "f7fb7baa06111f8a88900a681ef387fa25af8cf8",
+      "bytes": 6491,
+      "lines": 183,
+      "method": "Whole pinned catalog read; type-stripped original data object structurally validated."
+    },
+    "src/extension/popup/i18n/locales/pt.ts": {
+      "sha256": "56a0057505e1ee98df44358747ef1cc60182024b224e40ce4aec5267014432e3",
+      "git_blob": "24441a4cb4089708c580f4e7d2783c441ec9bd70",
+      "bytes": 6505,
+      "lines": 183,
+      "method": "Whole pinned catalog read; type-stripped original data object structurally validated."
+    },
+    "src/extension/popup/i18n/locales/ja.ts": {
+      "sha256": "d159133437d02518388157f91cd66011c22f1f96cdd0256045d2adba2c74bdcc",
+      "git_blob": "c60d86726525de0aa46cb539f505b99152712127",
+      "bytes": 7560,
+      "lines": 183,
+      "method": "Whole pinned catalog read; type-stripped original data object structurally validated."
+    },
+    "src/extension/popup/i18n/locales/zh.ts": {
+      "sha256": "7a6f20224d03d6eac0f4bb02b76125753ffb780e99458a6b9dbeb70018d97e06",
+      "git_blob": "10c51367fa8cd0d11493d3ea3598953e4eba0a65",
+      "bytes": 6158,
+      "lines": 183,
+      "method": "Whole pinned catalog read; type-stripped original data object structurally validated."
+    }
+  },
+  "cumulative_assessed_blobs": 158,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-popup-catalog-controls-v43-20261021/run.mjs",
+    "harness_sha256": "4a74eb22cf3320995a664129ee060e60a1c3e27e16f9bf1e27d27d82b0e18dab",
+    "log": "docs/research/dedup-500/googlephotos42-popup-catalog-controls-v43-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "keys_each": 135,
+    "method": "Five original catalogobjects type-stripped andimported; fourlocalesvsEnglish exactleafkeysets,nonemptyvalues,placeholdermultisets. No DOM/fullVitest."
+  },
+  "findings": [
+    "nl/pt/ja/zh each135nonemptyleaves andexactEnglishplaceholdermultisets. Togetherwithv42all8nonEnglishcatalogsstructurallychecked andall9popupcatalogsread.",
+    "Portuguese catalogmixesregionalterms(lixeira/ecr\u00e3/guardadas),while storeusespt_BR; consistentregion/style notcertified. Structuralcheckdoesnotvalidateidiomatictranslation.",
+    "Japanese/Chinesereorderplaceholderpositionswhilepreservingmultisets;correctlyacceptedbyorderindependentcheck. Singular/pluralformsoftenidenticalbylanguage.",
+    "PopupChineseonezhcatalog,storehaszh_CNandzh_TWseparate; noTraditionalChinesepopupcatalogclaimed.",
+    "Noactualrenderingorlayoutcheckforlongstrings,fonts,multibytecharacters."
+  ],
+  "cumulative_original_function_controls": 42,
+  "limits": [
+    "158/230wholeartifacts; allcatalogreadsnotwholeprojectcompletion.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
