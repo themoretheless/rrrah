@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "site-l10n/de.json": {
+      "sha256": "cd81366b47ca64ad3f6a00807361bc3b358bbdb7980a6edd18dafd792fe03497",
+      "git_blob": "ba10c21894b3292974c15e3c69fb9eb00f4af1e9",
+      "bytes": 13646,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; original builder two-locale control."
+    },
+    "site-l10n/es.json": {
+      "sha256": "cafdc60343470f4a7b1543ac56257ff6662760e9180c9c69a813ad85abecf72c",
+      "git_blob": "dcc1169847765a6571fcaa151529915c877f7edd",
+      "bytes": 13410,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; original builder two-locale control."
+    }
+  },
+  "cumulative_assessed_blobs": 222,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-site-locale-controls-v57-20261021/run.mjs",
+    "sha256": "15a8dc5f9b69bf421813a9869bc28bf56d5197fa7b8430bfee6408e2d58024a8",
+    "log": "docs/research/dedup-500/googlephotos42-site-locale-controls-v57-20261021/run.log",
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0,
+    "keys_each": 96,
+    "method": "Unmodified original site builder runs against two cached locale catalogs and cached site into owned temporary directory. Checks nonempty/key parity/lang/rootstylesheet/generated-demo caption. Not full nine-locale build or asset/runtime qualification."
+  },
+  "findings": [
+    "Bothcatalogs96nonemptytranslationkeys;exactkeysets match. Originalbuilder succeeds for these2catalogs and generatedpages carry langde/es, root-relative stylesheet and localized generatedimage disclaimer.",
+    "Translations preserve source claims10UIlanguages,98%similarity,500batch,20presets,60days,price and tensofthousands; read/build success does not verify those claims or measuredspeed. Earlier source controls bound them.",
+    "German/Spanish legal links explicitly labelled English, accurately reflecting untranslated legalHTML. Linkdestinations/tags validated byoriginalbuilder only to its known bounded matching rules(v45counterexample retained).",
+    "No native-speaker certification, browser screenshots, longtextlayout, darktheme or accessibilitycontrast check performed."
+  ],
+  "cumulative_original_function_controls": 91,
+  "limits": [
+    "222/230whole artifacts;7sitecatalogs+bun.lockremain. Globalfullreview160/500unchanged.",
+    "No productionoptimization or fullupstreamtests. Native pHash/ASAN deferred."
+  ]
+}
