@@ -1,0 +1,71 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "matteounitn/iHashDNA",
+  "commit": "7886de42e9c53524df0305596549c1899cfa59d4",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 7,
+  "files": {
+    ".gitignore": {
+      "bytes": 1799,
+      "sha256": "79b6f8054f8ef5e9e78c18174bf57caf29b11410166b9268d6923e87520eb88f",
+      "git_blob": "b6e47617de110dea7ca47e087ff1347cc2646eda",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "LICENSE": {
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "method": "Byte-identical to previously fully assessed GPLv3 from perceptual418; exact comparison and SHA256 verified"
+    },
+    "README.assets/0*zfY4Co3OIXnuJ-96.": {
+      "bytes": 29724,
+      "sha256": "77984a5c3e8b0acfb2bce27ec4b3d426a791ffa71ecd0341161b1fd1a86a30d7",
+      "git_blob": "fe5aedef4b50c991c5d5560b1da5ba58e4a8eadf",
+      "method": "Original raster visually inspected: illustrative dog image to pixelated/grayscale/binary thumbnail and bits"
+    },
+    "README.md": {
+      "bytes": 4532,
+      "sha256": "e405875001853f0910386506da70320538c5a28e99486843fb43d0ab108752a1",
+      "git_blob": "94205d05224abb586aae75ada9abb813f6cfb375",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "example.py": {
+      "bytes": 1179,
+      "sha256": "56e4aab6b015cad61e732c5f06ed8a1037e8587c4dc56f312692a351efc18a0d",
+      "git_blob": "747da87bc514a9f1d434b2d9ee5aa4accd85c2cd",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "ihashdna.py": {
+      "bytes": 10338,
+      "sha256": "bcbce53d90710bb7531386c35f38920a45d654632f6c0ec6ae5b25caf8ed32fa",
+      "git_blob": "0ab81801b5c0fa73c2abf71bd5c5f914a221bd1a",
+      "method": "Whole pinned text read across v1 and final review"
+    },
+    "requirements.txt": {
+      "bytes": 84,
+      "sha256": "3c639f12654d307e74bddcbd27894cddccb2dd1f3b30695035911d045bbe244c",
+      "git_blob": "fdb4e9ed3a49f34784c4755d60ca9f6d93b7bdb4",
+      "method": "Whole pinned text read across v1 and final review"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/ihash390-source-review-v1-20261021.json"
+  ],
+  "unique_targeted_controls": 4,
+  "conclusions": [
+    "Original class adapter confirms threshold-stale clean cache: negative at threshold0 remains negative at threshold2; fresh control matches at1.56percent. Cache key excludes threshold, bias and source database generation.",
+    "First accepted match is returned rather than global minimum. Dict adapter distance varies with key order; no nearest-neighbour promise inferred.",
+    "Original loop invokes deletion repeatedly for multiple accepted rotations. Dict/synthetic identical-rotation adapter raises KeyError; actual Pottery RedisDict iteration and missing-key behavior remain unqualified.",
+    "Dependency requirements pin ImageHash4.0, numpy1.18.2, Pillow7.1.1, pottery0.71, redis3.4.1 and scipy1.4.1. Dependencies were not installed or executed.",
+    "README graphic illustrates dog-image reduction to binary bits, not a measured quality corpus. No tracked tests or image fixtures beyond that illustration.",
+    "Library rotates the already-computed hash matrix. Equivalence to hashing a rotated image is not established; image normalization, format/alpha/ICC/EXIF handling delegated to dependencies.",
+    "Local rrrah-dedup cache.rs inspected: cached values are fingerprints indexed by content/recipe/frame, not thresholded negative decisions. No production cache modification justified by this upstream decision-cache finding."
+  ],
+  "license": "GPLv3 root byte-identical to previously assessed perceptual418 license; no production code adopted.",
+  "limits": [
+    "Complete seven-artifact review and four authored original-class adapter controls do not qualify original image hashing, Redis persistence/concurrency, rotation invariance, accuracy or performance.",
+    "No images, Redis server or native pHash/ASAN executed. All500 reviews and all-cases library goal remain incomplete."
+  ]
+}
