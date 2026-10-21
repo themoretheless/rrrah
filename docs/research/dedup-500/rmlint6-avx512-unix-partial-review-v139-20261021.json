@@ -1,0 +1,51 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 285,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_unix.S": {
+      "sha256": "c641987dd82fabed59d527f1a3413c4a2ff3df919af6d13ff2788c95e4035c0d",
+      "git_blob": "9642e413a3ad0f959449e0089dfd672fbff9fb86",
+      "total_lines": 4824,
+      "new_read_ranges": [
+        [
+          1501,
+          2100
+        ],
+        [
+          2101,
+          2500
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          2500
+        ]
+      ],
+      "unread_ranges": [
+        [
+          2501,
+          4824
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated continued reading1501..2100/2101..2500 after v138. No whole-file credit.",
+  "findings": [
+    "Eight-input core ends in eight32-byte stores spanning256 bytes. Masked counter lane selection replaces first eight low/high values with second eight only when incrementing; output advances256, input pointers64, remainder decreases8.",
+    "Four-input path broadcasts four CV copies into ZMM registers, packs counters and block length using masks0x4444/0x8888, runs seven rounds and stores eight16-byte pieces spanning128 bytes. Remaining low/high counter vectors shift four lanes under increment mask.",
+    "Four-input message loads use unmasked64-byte vmovups at block offsets0,16,32,48 on first input, then overwrite upper128-bit lanes with other inputs. Source therefore requests up to48 bytes beyond current64-byte block; subsequent lane replacement does not reduce architectural load width. No runtime fault or caller padding qualification performed.",
+    "Two-input path similarly uses32-byte loads at0/16/32/48 on first input, followed by insertion from second input; maximum excess16 bytes. Stores64 output bytes then masked low/high counter selection shifts two lanes.",
+    "One-input path reads four16-byte vectors within full64-byte block and stores32 output bytes. Both2/1 paths still use AVX512VL rotations, not portable fallbacks.",
+    "Hash-many paths16/8/4/2/1 now read in full. compress_in_place entry/body/return also read: byte-extends length/flags, packs counter and writes32-byte CV from full64-byte padded input. compress_xof only prefix read through2500; rest and XOF-many remain unread."
+  ],
+  "limits": [
+    "2500/4824 lines read cumulatively; completion count285/289 files and150/500 repositories.",
+    "No x86 execution, guard-page fault reproduction, caller allocation audit, sanitizer or speed claim. pHash/ASAN remains deferred."
+  ]
+}
