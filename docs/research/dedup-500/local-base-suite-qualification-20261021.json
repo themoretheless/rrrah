@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --lib",
+  "passed": 49,
+  "failed": 0,
+  "ignored": 2,
+  "runtime_seconds": 2.39,
+  "ignored_cases": [
+    "gradient::batch_tests::alternating_matcher_timing",
+    "gradient::matching_tests::alternating_matcher_timing"
+  ],
+  "coverage": "All51 discovered no-default library cases: exact-byte collision/error/cancellation controls, index radii0..64 including equality, gradient scalar/batch/exhaustive comparisons, cache publication and worker process-group checks.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/lib.rs": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/src/visual.rs": "6352224709d8f52d5f071bdb320d9595c647b8662c009eca8893a4e99d111400",
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02"
+  },
+  "limits": [
+    "No integration tests, decode/model features, benchmarks, real corpus precision/recall or all-case proof.",
+    "Manual timing controls intentionally ignored; no speed claim."
+  ]
+}

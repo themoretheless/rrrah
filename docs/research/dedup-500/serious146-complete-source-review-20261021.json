@@ -1,0 +1,98 @@
+{
+  "repository": "seriousManual/dedupe",
+  "commit": "066cfed30a2ced48630f3e795e110a33a53c93bb",
+  "whole_repo_complete": true,
+  "scope": "All10 authored text/config/example/test files wholly read, one generated lock JSON structurally inventoried in full. No tracked media or binaries; external links not counted as source audits.",
+  "manifest": [
+    {
+      "path": ".gitignore",
+      "sha256": "aca115d76cada1991880f930efe54a3849e7c26c0eaab187297a653e6b4e1edb",
+      "bytes": 23,
+      "review": "whole authored text read"
+    },
+    {
+      "path": ".npmignore",
+      "sha256": "2a7361a423f12c08d0bcf1ac59ba7bac626df81eb3f5fac9aee01f67d1a01e13",
+      "bytes": 39,
+      "review": "whole authored text read"
+    },
+    {
+      "path": ".travis.yml",
+      "sha256": "d195d248ba64ddc08b9818c68f89536932d40b8486ad7a17c954957d9a41e6d7",
+      "bytes": 74,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "513b9d20252ce8afff4d02733b10c6868de29dc933df0be7df9f68018a8351d2",
+      "bytes": 1069,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e9f6d136031a2571d03ab99ac1ade56d56b21b4668636c280ab2d699c596cb7e",
+      "bytes": 928,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "examples/one.js",
+      "sha256": "8cbae76e4a0e58cf64797c8b77807c1887e8491c6bc0fdda40c48d5df5020af5",
+      "bytes": 598,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "index.ts",
+      "sha256": "bd810c18af86179301fce07460c67a0bace19cd9b0552eae6a1b5a82ffb6e0dc",
+      "bytes": 443,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "jest.config.js",
+      "sha256": "bfe6bf91b716055bfa9e909d06f0b29c27f915c5bdbd051d24b8d79bdc3665eb",
+      "bytes": 132,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0df9cde2b2b78332483242ab2d3595648400f4e06c0e44bc953626fd9e364d87",
+      "bytes": 556304,
+      "review": "whole JSON parsed; generated package/version/integrity/root metadata inventory, not dependency source audit"
+    },
+    {
+      "path": "package.json",
+      "sha256": "58a72bcc6f321efd54f5ba30d1915a90705ffe0cd176ccd36d1b23bb5ec7401c",
+      "bytes": 1058,
+      "review": "whole authored text read"
+    },
+    {
+      "path": "test.ts",
+      "sha256": "bf8ad406b5b968a62d3dd1c421912ba3f755cb5e27328828f1973c1bb6c32252",
+      "bytes": 1551,
+      "review": "whole authored text read"
+    }
+  ],
+  "lock_inventory": {
+    "version": 2,
+    "package_records": 620,
+    "all_nonroot_records_have_version_resolved_integrity": true,
+    "dependency_source_audit": false
+  },
+  "runtime_controls": "docs/research/dedup-500/serious146-controls-20261021/result.json",
+  "local_qualification": "docs/research/dedup-500/local-base-suite-qualification-20261021.json",
+  "findings": [
+    "Array deduplication by serialization/custom key, not file/image detector. O(n)lookup expected in JS object, retains both output references and unique keys; no explicit resource limit/cancellation or key recipe metadata.",
+    "lookup is ordinary{}; inherited Object.prototype names read as present. Identity custom hasher on constructor,toString,__proto__,safe returns onlysafe despite all input keys distinct. Original unchanged index.ts executed with Node type stripping.",
+    "Default JSON key maps null,NaN,+Infinity,-Infinity together; undefined,function,symbol together. Reordered object properties remain distinct; BigInt and cyclic object throwTypeError. These are limits of documented serialized-key semantics, not separate claimed bugs in that contract.",
+    "No secondary equality verification or collision buckets; custom hash/key equality defines grouping. Unsuitable for exact file identity without independent byte confirmation.",
+    "Seven upstream test bodies passed with synchronous describe/it/expect assertion adapter and only extension-resolution change. Actual Jest/ts-jest, microbundle build, CommonJS/ESM exports and published tarball not executed.",
+    "README example custom hasher returns numeric property despite Hasher<T> declaredstring; JS coercion runs but TS typing compatibility not qualified.",
+    "examples/one.js CommonJSrequire sits under type:module package; direct currentNode execution would not supplyrequire. Source-only packaging limitation, example not executed.",
+    "package saysNode>=4 while current source/toolchain usesTS,ESM and moderndevtools; legacy engine compatibility unqualified. TravisNode14/16/18 declared but no retrieved CI result.",
+    "MIT2013ManuelErnst wholly read; no source copied."
+  ],
+  "adoption": "No production change. Avoid inherited property lookup and distinguish key equivalence from confirmed content identity.",
+  "limits": [
+    "Native pHash/ASAN remains explicitly deferred.",
+    "243/500 source reviews and49passing local base tests do not prove universal coverage."
+  ]
+}
