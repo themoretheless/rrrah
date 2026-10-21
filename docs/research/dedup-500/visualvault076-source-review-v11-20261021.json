@@ -1,0 +1,54 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 39,
+  "files": {
+    "crates/app/src/actions.rs": {
+      "bytes": 28264,
+      "sha256": "8b97daf01fe83d965117cd78b6de7031a1f9773960e13ca1b3eca8e7932b32b7",
+      "git_blob": "dc606ebb9416d78b5bfe1287f6e03f1338bedbed",
+      "method": "Whole pinned original text read in complete chunks; Git blob verified"
+    },
+    "crates/app/src/handlers.rs": {
+      "bytes": 20158,
+      "sha256": "b809043172ce54d8d58cb1c277d1f5384650b1e90792ad4047d2ed9f5eb1e49a",
+      "git_blob": "38db8ca24bbca9b612db7ddbc243ac77dc93d6db",
+      "method": "Whole pinned original text read in complete chunks; Git blob verified"
+    },
+    "crates/app/src/navigation.rs": {
+      "bytes": 5356,
+      "sha256": "41152b5b9207401abde981538c03ae6ed3a572c0287f7b155a0433787e3a4fe1",
+      "git_blob": "1877f702663f64a4fa0424f97e46964286c5a938",
+      "method": "Whole pinned original text read in complete chunks; Git blob verified"
+    }
+  },
+  "new_unique_controls": 2,
+  "cumulative_unique_controls": 18,
+  "controls_script": "docs/research/dedup-500/visualvault076-folderstats-controls-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-folderstats-controls-20261021/run.log",
+  "runtime_scope": "Exact original is_media_extension and calculate_folder_stats_async functions extracted without changes; original FolderStats included by path; actual Tokio and WalkDir in authored isolated crate. Not full App/TUI.",
+  "findings": [
+    "Folder stats traversal drops WalkDir/metadata errors and spawn_blocking failure maps to default stats; original function on nonexistent root returns all-zero FolderStats, confirmed by authored control. FolderStats exposes no issues/completeness field.",
+    "Original folder stats counts two hardlinked paths as two files/8 logical bytes for one 4-byte object, confirmed. This is pathname/logical-byte accounting, not evidence of 8 physical bytes or independently reclaimable space.",
+    "update_folder_stats aborts/removes existing path tasks but does not clear corresponding folder_stats_in_progress before checking the same paths; a repeat refresh during active computation can leave a marked path with no replacement task. Static source sequence, not full App reproduction.",
+    "start_scan aborts previous scan task, resets state/progress, then validates source. Its extra detached progress observer exits only current==total and total>0; empty/error/aborted scans have no cancellation handle for this observer. Static only, no measured resource leak frequency.",
+    "handle_normal_mode directly awaits start_organize; start_organize awaits execute_organization, matching main on_key awaited under App write lock. Main cannot draw/process another key until handler returns. No live TUI timing measured.",
+    "Organization uses cached file list but recomputes duplicate stats through scanner.find_duplicates when rename_duplicates=false; rename=true supplies empty duplicate stats. Organizer/undo identity and movement semantics still require full source review; this layer alone proves neither action freshness nor stale deletion.",
+    "prepare_scan_state/prepare_organize_state set transient state before required source/destination validation. Missing source/destination can return error after state change. Main propagates handler error; static only.",
+    "apply_edited_value validates worker_threads in1..2*CPU and buffer1..1024MiB, while previously reviewed deserialization has no equivalent validation. Source directory checked exists/is_dir, destination simply accepted. Settings saved after replacing live settings, so save error need not roll back in-memory values.",
+    "Navigation search lowercases names and lossy displayed paths on each search update and clones matching MediaFile values. Matching is substring search, not duplicate detection. Page/selection assumes20 visible rows; no terminal-size proof.",
+    "Image metadata loading reads entire file then decodes in spawn_blocking without explicit input budget in this method. Format label comes from filename extension, while dimensions/color come from decoder. No decoder runtime or resource qualification performed."
+  ],
+  "original_module_test_counts_unchanged": {
+    "passed": 84,
+    "failed": 1,
+    "scope": "Prior isolated original modules; earlier Progress concurrent test failed. New controls are authored, not original tests."
+  },
+  "local_crosscheck": "Existing rrrah-dedup exact_files missing_input_and_overlap_do_not_lose_valid_results explicitly asserts Io issue for absent root, unlike FolderStats omission. Read current test references; no new local test or suite run claimed.",
+  "remaining_scope": "56 tracked artifacts remain. Global complete-repository count205/500 unchanged. Native pHash/ASAN remains deferred.",
+  "limits": [
+    "No full App initialization, default config writes, UI interaction, organizer operations, undo/redo or original workspace tests executed. No production code copied or modified."
+  ]
+}
