@@ -1,0 +1,66 @@
+{
+  "repository": "Intervention/imagehash",
+  "commit": "f66faf81b2b05ea26fe4fbbf7a896edfafbefebd",
+  "whole_repo_complete": false,
+  "tracked_blobs": 42,
+  "cumulative_assessed_blobs": 11,
+  "new_whole_files_read": {
+    "src/ImageHasher.php": {
+      "bytes": 2375,
+      "sha256": "8d63968af2e6dee70948350d10eba66785daa8838b729bc2a4441a52f026f0a9",
+      "git_blob": "5349f38e7c2e19e723ad35b97fa099f9e53d8044",
+      "method": "Whole pinned PHP file read without truncation"
+    },
+    "src/Analyzers/ImageHashAnalyzer.php": {
+      "bytes": 630,
+      "sha256": "d851855ae4198e65d446093eebdf2902dd96fd2d208c9af600a4e001c9cdbad5",
+      "git_blob": "e910a99194a2dce8f954672cf44395d7b1d64e88",
+      "method": "Whole pinned PHP file read without truncation"
+    },
+    "src/Strategies/PerceptualStrategy.php": {
+      "bytes": 4550,
+      "sha256": "9c466cb388c9010eaad21bc7daf53cb17c7e4e8ce2d665ec5e16af745bbf7e2c",
+      "git_blob": "6b3ad0f2c05f6f8072472e4cb7927826f7d1e57b",
+      "method": "Whole pinned PHP file read without truncation"
+    },
+    "src/Strategies/BlockStrategy.php": {
+      "bytes": 9062,
+      "sha256": "7cb8b14b661b99dd3793ad861b5dde5778ed4e047a83b275079b7125e3d1fb26",
+      "git_blob": "b7afa9d41973ea2554685b1bbb1bc06b4c9a8c69",
+      "method": "Whole pinned PHP file read without truncation"
+    },
+    "tests/Providers/HashDataProvider.php": {
+      "bytes": 6063,
+      "sha256": "ecee4e0d1894d7ec9e9c27c3a3bd1920be5a3ed9838e253c92010a1478467aab",
+      "git_blob": "83cb153c99905a8760a6ab5ae2a06cd9e79a3c8c",
+      "method": "Whole pinned PHP file read without truncation"
+    },
+    "tests/Unit/DistanceTest.php": {
+      "bytes": 3691,
+      "sha256": "6a997153e32e0c0c180ea1c351da5e0ee3de84bb8115e8c5ad35620d6d353654",
+      "git_blob": "8c11c1e757eb0b9b578b4dc901e19c65a4c721d0",
+      "method": "Whole pinned PHP file read without truncation"
+    },
+    "tests/Unit/HashTest.php": {
+      "bytes": 3036,
+      "sha256": "0939629972aeca066aa679ff4ea005dd0b6aec12597ae7edc838182b86c15bd6",
+      "git_blob": "1e0caa70ed79b833a0aead296ccff9de38433d6e",
+      "method": "Whole pinned PHP file read without truncation"
+    }
+  },
+  "runtime_controls_executed": 0,
+  "findings": [
+    "PerceptualStrategy uses normalized separable DCT, top8x8 coefficients, excludes DC from mean/median comparison statistic but retains DC output bit. Distinct from upstream implementations that discard DC entirely; no common hash recipe inferred.",
+    "Block QUICK uses floor-sized blocks and ignores residual right/bottom strips. If a dimension is smaller than size, corresponding block size is0 and no pixel samples occur. This is inspected source behavior, not original PHP execution.",
+    "Block PRECISE distributes each pixel among at most four blocks; adequacy for blocks smaller than one pixel not independently qualified. Treating transparent alpha as white requires rgb[3] strictly equal integer0; analyzer alpha contract pending.",
+    "HashTest::testBitRoundTrips uses fromBytes(bits)->toBytes rather than fromBits(bits)->toBits; does not prove bit representation roundtrip. Existing provider tests do check several known valid byte-aligned inputs.",
+    "Original DistanceTest asserts finite ranges for same/resolution/watermark/day-night/crop/different fixtures across provider combinations; providers/image fixtures not yet fully reviewed or executed.",
+    "ImageHashAnalyzer clones before invoking strategy, addressing mutation concern for public ImageHasher path. Direct strategy hash still receives supplied image.",
+    "HashDataProvider includes decimal generators not used in currently read HashTest; no decimal public conversion inferred from their presence."
+  ],
+  "remaining_scope": "31 artifacts: remaining analyzer/interface/exception, project/docs/license/configs, test providers/tests, support SVG and six JPEGs.",
+  "limits": [
+    "All42 cached artifacts downloaded and Gitblob-verified; download is not whole-file review. Only11 currently read.",
+    "No PHP executable on PATH; no original PHP/driver/GMP/upstream tests executed. Full-review count179/500 unchanged. Native pHash/ASAN deferred."
+  ]
+}

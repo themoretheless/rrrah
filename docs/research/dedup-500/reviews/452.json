@@ -2,7 +2,7 @@
   "index": 452,
   "repository": "Intervention/imagehash",
   "commit": "f66faf81b2b05ea26fe4fbbf7a896edfafbefebd",
-  "review_scope": "Partial pinned 4/42 whole PHP artifacts: Hash, BitParser, average/difference strategies. Constructor/minimum-bit mismatch observed statically; no PHP runtime controls.",
+  "review_scope": "Partial pinned 11/42 whole text artifacts: all four strategy bodies, hash representation, public hasher/analyzer and selected tests. Static test-bit-roundtrip gap identified; no PHP execution.",
   "decision": "reference",
   "finding": "PHP strategy/analyzer/hash bytes with test providers; independent oracle candidate, image backend normalization remains important.",
   "available_source_evidence": [
@@ -78,6 +78,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/imagehash452-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/imagehash452-source-review-v2-20261021.json"
     }
   ]
 }
