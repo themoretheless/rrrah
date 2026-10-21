@@ -1,0 +1,43 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "test/imagehash_test.dart",
+      "lines": 290,
+      "sha256": "5f86c7fc57ccf0d10ef2a42dd99926ca344a65f7d87447dfc314db4e2f94b966",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/main.dart",
+      "lines": 185,
+      "sha256": "a3de5a5045e9535743fed04be629c2ef4be5977e756da6a538bd187d01bdead2",
+      "git_blob_verified": true
+    },
+    {
+      "path": "README.md",
+      "lines": 103,
+      "sha256": "ea51895cc6a76895d18c4589371dc5dbec53f3eaaba02cf541ee4913a47039b1",
+      "git_blob_verified": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "lines": 67,
+      "sha256": "2aaeaf3a9bd57083b854d2576417a4819f0242498c78328d9af9c354a7f91cc6",
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Whole original test file read: 23 registered tests. Three representation/distance tests and four checks each for five hash variants (aHash, pHash, horizontal/vertical dHash, wHash). Not executed: Dart unavailable on PATH.",
+    "Algorithm checks cover deterministic repeat, modified-stripe distance below 35%, alternate-orientation stripe distance above 35%, and encoded PNG versus image path equality. These are relative/self-consistency checks rather than independent golden hash vectors.",
+    "Hex round-trip covers 4x4 only. No odd square sizes, caller mutation of bits, algorithm/recipe mismatch, invalid highFreqFactor/scale, alpha, color metadata or tiny-image cases are asserted. Previous source concerns remain unresolved.",
+    "Example uses 100*(1-Hamming/bitcount) as similarity and comments 100% identical; this only means equal hash bits, not equal pixels/files. Main catches errors and prints stack without setting a nonzero exit status. Source-only, no CLI execution.",
+    "README claims inspiration/implementation of Python imagehash; pin has no cross-language golden assertions in core tests, and changelog statements do not prove compatibility. External demo/linked articles not yet reviewed."
+  ],
+  "remaining": [
+    "Site and script source/config/data, tracked image assets and external visuals",
+    "Original runtime and independent algorithm oracles"
+  ],
+  "full_review_count": 247
+}
