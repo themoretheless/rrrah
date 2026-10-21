@@ -1,0 +1,38 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/markdown.rs": {
+      "sha256": "20547e859e56af31d8e90725bf59208e94d7e14ef05cb44d52ff7138b72dd3fa",
+      "git_blob": "3f7c2a41628ae3159284d694d0b3d38fef3cbc0e",
+      "mode": "100644",
+      "lines": 461
+    }
+  },
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "method": "Whole pinned module text read. Exact unchanged source compiled directly with rustc --test; all five original module tests executed. No Windows/UI dependencies.",
+  "executed_controls": {
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "output": "\nrunning 5 tests\ntest tests::parses_code_block ... ok\ntest tests::parses_headings_and_paragraph ... ok\ntest tests::inline_link_and_code ... ok\ntest tests::unmatched_markers_render_verbatim ... ok\ntest tests::parses_lists ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "command": "rustc --edition 2021 --test pinned markdown.rs, then isolated resulting binary"
+  },
+  "findings": [
+    "All five original moduletests pass: headings/paragraph, fencedcode, lists, inlinelink/code, unmatchedmarkers. They validate parser examples only, not renderer or upstreamwholecrate.",
+    "Module explicitly disclaims CommonMarkconformance, nestedlists and inlineHTML; do not report these as missing claimedfeatures. Flat AST intended for minimalchatpanel.",
+    "Links retainURL but comment says renderer currentlydrawslabel only; actual renderer outside module not yet reviewed. No remoteURLs opened.",
+    "Orderedlist indices regeneratedfrom1 regardless writtennumber. Fences close at any triplebacktickprefix without matchingopeninglength; behavior of minimalparser, not a dedup/inputidentity algorithm.",
+    "Paragraph comment says softwrapnewlines become spaces but parser retains newline in Plain strings; later renderer maynormalize, unreviewed. Sourcecontract observation, no renderedfailure claimed.",
+    "Inline parser advances by UTF8 charboundary for ordinarytext; ASCII markerpositions selected by byte search. No arbitrarybyte UTF8 slicing defect demonstrated.",
+    "Entireinput split intoVec lines and AST strings without explicitbudget; callerinputlimit pending. No memory/performancebenchmark or untrustedinputstress test.",
+    "No fileequality, grouping, dedupsearch, persistence or contenthashing in thismodule. No code adopted into production."
+  ],
+  "limits": [
+    "81/268 pinnedwholefiles reviewed; repository/all500 incomplete.",
+    "Fiveoriginalparser tests only; no chat/UIrender, Windows, model/network or fullupstreamtestbuild.",
+    "No production changes. Native pHash/ASAN remains deferred."
+  ]
+}
