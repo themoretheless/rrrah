@@ -1,0 +1,44 @@
+{
+  "header_sha256": "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+  "method": "Actual originalstb2.30public8/16memoryload API viactypes, priorunchangedsharedlibrary. OwnedvalidsyntheticPGM andPillow1-bitBMP. No malformedinput, fake decoder, GUI, deletion or ASAN.",
+  "host_byteorder": "little",
+  "pgm16": {
+    "input_hex": "50350a3420310a36353533350a000101001234ffff",
+    "expected_samples": [
+      1,
+      256,
+      4660,
+      65535
+    ],
+    "actual_samples": [
+      256,
+      1,
+      13330,
+      65535
+    ],
+    "matches": false,
+    "oracle": "NetpbmPGMspec: two-byte samples have most-significantbyte first; independently encoded withstruct.pack >H.",
+    "source": "https://netpbm.sourceforge.net/doc/pgm.html"
+  },
+  "bmp1bit": {
+    "cases": 15,
+    "widths": [
+      1,
+      7,
+      8,
+      9,
+      17
+    ],
+    "heights": [
+      1,
+      2,
+      3
+    ],
+    "exact_rgb_pixels": true
+  },
+  "limits": [
+    "PGM16byteorder failure observed onlittleendianmacOSarm64; not universalallplatformclaim.",
+    "Application459scannerdoesnotincludePGMextension, so helperformat defect not claimed reachablethroughdefaultscanner.",
+    "No GIFdisposal/allocator/corruptinputqualification."
+  ]
+}
