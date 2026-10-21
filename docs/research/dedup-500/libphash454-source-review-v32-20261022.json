@@ -1,0 +1,65 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_files_read": [
+    {
+      "path": "tests/README.md",
+      "sha256": "8464b27f61e1d1e70d414922b30a138f0983c3d41b816fb3f8a5942463d2455d"
+    },
+    {
+      "path": "tests/meson.build",
+      "sha256": "1bc8bad6d7e1691639cdaa31c5c378b59d6a1f9f411e96151a77e9df1784fd43"
+    },
+    {
+      "path": "meson.build",
+      "sha256": "c59fe049a342a5db21008edd022b0a0bd7dc4f943516b50899ec4ee7e82d872f"
+    },
+    {
+      "path": "meson_options.txt",
+      "sha256": "6a3f8b0f81ab7551f2a0a225a27e3b4ec02ef0fe7f0f13193d6bfd5e2eef2d0d"
+    },
+    {
+      "path": "subprojects/spngt.wrap",
+      "sha256": "1368c84f395581e29096f2e5845846738fcc70d3d8aebce6318f8ac91a23f135"
+    },
+    {
+      "path": "tests/test_spng.h",
+      "sha256": "a228b195c79aa0d99d28cf795ae9c2e3f273bf136e8d0901ecafa5b6529d8d65"
+    },
+    {
+      "path": "tests/test_png.h",
+      "sha256": "0494889481bb085487f8b852e6f3ee6af11619dfa30594f18aa4f5f4f073875c"
+    },
+    {
+      "path": "tests/spngt_common.h",
+      "sha256": "383ce146a60f3e4b95fce50b2b758a62326771df30e12fd973579889e408beb2"
+    }
+  ],
+  "partial_files": [
+    {
+      "path": "tests/testsuite.c",
+      "sha256": "04977efbce15158ab3b3648fc38c517b8ae88f5976fea9e18bf7a82899645133",
+      "read_ranges_inclusive": [
+        [
+          1,
+          360
+        ]
+      ]
+    }
+  ],
+  "findings": [
+    "Whole test adapters/source and first360 suite lines read. Both libpng and spng comparison loaders use zero-initialized output for packed unused bits; spng uses progressive row info, libpng interlace handling and explicit endian transforms.",
+    "Comparison demands exact alpha and non-gamma values; gamma color threshold is integer256/50=5 for8-bit and65536/50=1310 for16-bit. This is not strict color-managed equivalence.",
+    "spng test adapter sets image limits16000x16000, chunk size/cache66,000,000 bytes and keeps unknown chunks, unlike current libphash wrapper.",
+    "Meson dev_build enables tests and libpng dependency; benchmarks separately use spngt wrap revision=head, not a frozen revision. No benchmark speed evidence inferred.",
+    "Meson not found on PATH; pkg-config libpng1.6.59 available. Manual original suite compilation remains possible after source review; no test run claimed here."
+  ],
+  "remaining": [
+    "tests/testsuite.c lines361..end",
+    "Other dependency docs/build/tests/assets",
+    "Other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
