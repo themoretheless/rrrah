@@ -1,0 +1,86 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 83,
+  "tracked_blobs": 84,
+  "package_provenance": {
+    "name": "@mediapipe/tasks-vision",
+    "version": "0.10.34",
+    "tarball_url": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.34.tgz",
+    "lock_integrity": "sha512-KFGyhDsjJ+9WUMcMfjTOpcEp3LJNS3KwC7BfvKrCYELn/7G/5kmwnU7z6Spps+iWQoTGL8xW8i68r65OTa3DwA==",
+    "tarball_sha256": "074761536391855d89edbc6d8e811de0dee99cba8c2b6b5c0167250f11755979",
+    "sha512_matches_lock": true,
+    "members": [
+      {
+        "path": "package/vision_bundle.cjs",
+        "bytes": 137115
+      },
+      {
+        "path": "package/wasm/vision_wasm_internal.js",
+        "bytes": 323581
+      },
+      {
+        "path": "package/wasm/vision_wasm_module_internal.js",
+        "bytes": 323517
+      },
+      {
+        "path": "package/wasm/vision_wasm_nosimd_internal.js",
+        "bytes": 323384
+      },
+      {
+        "path": "package/package.json",
+        "bytes": 1084
+      },
+      {
+        "path": "package/vision_bundle.cjs.map",
+        "bytes": 344757
+      },
+      {
+        "path": "package/vision_bundle.mjs.map",
+        "bytes": 344756
+      },
+      {
+        "path": "package/README.md",
+        "bytes": 8403
+      },
+      {
+        "path": "package/vision_bundle.mjs",
+        "bytes": 136960
+      },
+      {
+        "path": "package/vision.d.ts",
+        "bytes": 116918
+      },
+      {
+        "path": "package/wasm/vision_wasm_internal.wasm",
+        "bytes": 11510753
+      },
+      {
+        "path": "package/wasm/vision_wasm_module_internal.wasm",
+        "bytes": 11510771
+      },
+      {
+        "path": "package/wasm/vision_wasm_nosimd_internal.wasm",
+        "bytes": 10706889
+      }
+    ],
+    "official_module_sha256": "8752b2d5cae22bb369ecf9f0a1a6737d4c5fddc8d1cf8b4b16178ae698494077",
+    "package_metadata_sha256": "874527a33537c84d01d465e754697ceb803c816cbdafdd328a8df98622f885b7"
+  },
+  "findings": [
+    "Downloaded locked registry tarball and verified complete SHA512 against pinned npm lock. Package metadata declares version 0.10.34 and Apache-2.0.",
+    "Tarball contains thirteen files including ESM/CJS modules, source maps, type definitions and three WASM variants. Only metadata and ESM module read as bytes; no package code executed.",
+    "Tracked generated worker declares bundled vision_bundle.mjs origin, but an origin comment plus matching package version is not byte/AST equivalence proof. Reproducible compilation or complete normalized comparison remains outstanding."
+  ],
+  "executed_controls": [
+    "Pinned registry tarball SHA512 verification passed.",
+    "Tar archive parsed in memory, member inventory recorded; no filesystem extraction of arbitrary members."
+  ],
+  "limits": [
+    "83/84 whole files assessed unchanged; generated worker third-party code remains partially read.",
+    "No model download/inference, WASM execution, package installation or browser runtime.",
+    "External demo still unviewed."
+  ]
+}

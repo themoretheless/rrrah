@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial file/artifact assessment: 83/84 unique tracked blobs. Both lockfiles fully parsed/structurally assessed; dependency package source not audited. Complete generated-bundle assessment and external demo still outstanding.",
+  "review_scope": "Partial file/artifact assessment: 83/84 tracked blobs. Locked MediaPipe 0.10.34 tarball SHA512 authenticated; generated bundle equivalence/complete third-party review and external demo remain outstanding.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -222,6 +222,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-lockfile-assessment-v40-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-mediapipe-package-provenance-v41-20261021.json"
     }
   ]
 }
