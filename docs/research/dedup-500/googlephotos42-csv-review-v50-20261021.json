@@ -1,0 +1,52 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/checkout-readout.ts": {
+      "sha256": "848556ce3c30e790a9a42cf6632d48df7b9296b90c35abea4351357fc8ec320e",
+      "git_blob": "0e00fbd8810502ae79c1c0687ba7538ba8f1bc8d",
+      "bytes": 4782,
+      "lines": 126,
+      "method": "Whole pinned source/fixture read without truncation."
+    },
+    "tests/checkout-readout.test.ts": {
+      "sha256": "b8c70a0793465418fb5945dd101eb3e35e421d5e64cf20264a523da3a275d543",
+      "git_blob": "a1ad96a3a3837ac643e5ec66ee3a06fbf771008f",
+      "bytes": 1814,
+      "lines": 36,
+      "method": "Whole pinned source/fixture read without truncation."
+    },
+    "tests/fixtures/checkout-sessions.csv": {
+      "sha256": "a5ced47e65cf9f2aa63db5ff19c164704407bc4caa07f242c8dedcfc87ccc521",
+      "git_blob": "af33e9da26c8bdcefe616eccc718cff2b885c94e",
+      "bytes": 522,
+      "lines": 9,
+      "method": "Whole pinned source/fixture read without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 192,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-csv-controls-v50-20261021/run.mjs",
+    "sha256": "6dd325d64df8a9326752c5efcdcec0a96369f5d32158add6b88f065f1af4c9a8",
+    "log": "docs/research/dedup-500/googlephotos42-csv-controls-v50-20261021/run.log",
+    "passed": 6,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original exported functions imported after TypeScript type stripping; original authored eight-row fixture plus synthetic malformed/boundary CSV. No real order/customer data, billing endpoint or network."
+  },
+  "findings": [
+    "Original fixture8sessions/6paid/1019.49USD expectedgroup reproduces. This is synthetic dashboard-shaped data, not current vendor export compatibility.",
+    "NUL-delimited grouping key merges triples (aNULb,c,d) and (a,bNULc,d). Original parser accepts NUL. Distinct-field identity not preserved for arbitrary parsed inputs.",
+    "Removing every comma makes comma decimal9,99 become999; blank amount Number(empty)=0. Source states major-unit export assumption, not general localized currency parser.",
+    "Unterminated quoted field accepted with no malformed-CSV diagnostic. Present empty Payment Status suppresses fallback Status complete.",
+    "Existing tests cover quoted commas/newlines/CRLF/metadata header variants and missing status header, not these boundary cases. Full Vitest not run.",
+    "Local groups.rs maps keyed byu64 and exact.rs digest maps keyed by(u64,[u8;32]) inspected by targeted source search; no concatenated-text identity key in those inspected paths. This is bounded source comparison, not all-module audit or production change."
+  ],
+  "cumulative_original_function_controls": 80,
+  "limits": [
+    "192/230whole artifacts;38remaining;globalfullreview160/500unchanged.",
+    "No new production implementation or throughput claim. Native pHash/ASAN deferred."
+  ]
+}

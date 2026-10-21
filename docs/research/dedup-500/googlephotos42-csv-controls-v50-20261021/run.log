@@ -1,0 +1,9 @@
+PASS original eight-session fixture preserves six paid and known revenue
+PASS synthetic delimiter collision merges distinct UTM triples
+PASS comma-decimal amount interpreted as999, not9.99 (format not validated)
+PASS missing amount becomes zero-valued revenue
+PASS unterminated quote accepted without parse error
+PASS present but empty Payment Status takes precedence over complete Status
+TOTAL6passed; original functions, authored synthetic CSV; no billing account or network
+(node:2994) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
