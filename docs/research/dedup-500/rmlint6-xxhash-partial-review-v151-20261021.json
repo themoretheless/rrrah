@@ -1,0 +1,63 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          4001,
+          4600
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          4600
+        ]
+      ],
+      "unread_ranges": [
+        [
+          4601,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated4001..4600 source read. Original portable64x64->128 helper executed against compiler128-bit arithmetic after disabling __SIZEOF_INT128__ selection macro in private translation unit.",
+  "findings": [
+    "Accumulator alignment varies8/16/32/64 with vector backend; x86-dispatch enforces64. Secret alignment follows x86/SVE accumulator requirements but otherwise8. User overrides must match actual selected instructions.",
+    "NEON uses may_alias vector typedef and compiler-specific loading helpers; Apple/32-bit defaults eight NEON lanes while non-Apple AArch64 speed configuration defaults six. Historical performance comments are not current local measurement.",
+    "VSX helpers preserve potentially conflicting header macros and address endian-dependent loads/multiply intrinsics. SVE macro uses masked loads. These platform paths source-read only, not executed.",
+    "Default secret192 bytes aligned64; constants and multiplication helpers inspected.64x64 portable path combines four32-bit partial products and carry through cross/upper sums; fold helper XORs low/high halves.",
+    "Portable multiply matches compiler128-bit arithmetic for1000036 tested pairs including36 cross-product edge pairs and1000000 deterministic xorshift pairs. This validates helper arithmetic on host, not full XXH3 algorithm or other backends."
+  ],
+  "executed_control": {
+    "cases": 1000036,
+    "failures": 0,
+    "exit_code": 0,
+    "compiler": "clang -O2",
+    "oracle": "compiler __uint128_t multiplication",
+    "forced_path": "Undefine __SIZEOF_INT128__ before pinned header to select portable helper on host; oracle still explicitly uses __uint128_t.",
+    "edge_values": [
+      "0",
+      "1",
+      "0xffffffff",
+      "0x100000000",
+      "0x8000000000000000",
+      "0xffffffffffffffff"
+    ],
+    "harness_sha256": "e0983d5a252b38b9b4e1614d25e0f8e3a7fcc496d669719ba7e8eb0652696227"
+  },
+  "limits": [
+    "4600/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "Short-key XXH3 implementation still unread after current range. No fullalgorithm, SIMD parity or throughput proof. pHash/ASAN deferred."
+  ]
+}
