@@ -1,0 +1,92 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "third_party/RAFT/core/corr.py": {
+      "sha256": "6fe3342b5aa03227e5c24c5dde143f8ea7a008d4e627f6b2f7dedf2b83b3f84d",
+      "git_blob": "06bdfc59505d2d23db3b8ee181b2dea250f42c0e",
+      "bytes": 3060,
+      "lines": 91,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/raft.py": {
+      "sha256": "0b73692ae78b4a3b97cc073e13ab6577be06f7219c503b696a4b64590311ac5f",
+      "git_blob": "53451a748993b12f92b2d44e50723781b7f697c4",
+      "bytes": 4922,
+      "lines": 143,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/update.py": {
+      "sha256": "7302f91ffc24c85cf739a25feb17d9d1e537f7344a2ddc331daf8ab9db6c3f74",
+      "git_blob": "f940497f9b5eb1c12091574fe9a0223a1b196d50",
+      "bytes": 5227,
+      "lines": 139,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/extractor.py": {
+      "sha256": "f6b65d4f4df27001d9c11194f71b84a9799de3231f9d1672cbcf3a052fec79dc",
+      "git_blob": "9a9c759d1243d4694e8656c2f6f8a37e53edd009",
+      "bytes": 8847,
+      "lines": 267,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/datasets.py": {
+      "sha256": "705c8eff818573795639213557be11f1ac97ed4a8c26583387a71e0ea76086f4",
+      "git_blob": "3411fdacfb900024005e8997d07c600e963a95ca",
+      "bytes": 9245,
+      "lines": 235,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/utils/utils.py": {
+      "sha256": "ecace25c75a9f43f3104cfbda4a34d6e5a366e9e7e30b5b5e1e7cf34521701ed",
+      "git_blob": "30291df2bb57a5f40b9143e835685a270e382a86",
+      "bytes": 2485,
+      "lines": 83,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/utils/frame_utils.py": {
+      "sha256": "ef3b214054e581700451215a72bb4fed202588c8d66483c90249127b6305d9d0",
+      "git_blob": "6c491135efaffc25bd61ec3ecde99d236f5deb12",
+      "bytes": 4024,
+      "lines": 137,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/utils/augmentor.py": {
+      "sha256": "0672da08db6c127ced5d8835381c294d6b7b5b90286916a8f72784bd0e0c8dca",
+      "git_blob": "e81c4f2b5c16c31c0ae236d744f299d430228a04",
+      "bytes": 9108,
+      "lines": 246,
+      "method": "Whole source read."
+    },
+    "third_party/RAFT/core/utils/flow_viz.py": {
+      "sha256": "72595c16479265fea80add4f1691b4e35321b898f3da0a0f2ee19f6f8d831d26",
+      "git_blob": "dcee65e89b91b07ee0496aeb4c7e7436abf99641",
+      "bytes": 4318,
+      "lines": 132,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 47,
+  "tracked_blobs": 73,
+  "findings": [
+    "RAFT all-pairs feature correlation is within one image pair (B x HW x HW), with a pooled pyramid and iterative local lookup; not corpus-level approximate neighbor search. Memory grows quadratically in feature pixel count; no measured throughput claim.",
+    "RAFT recurrent flow updates detach coordinate guesses each iteration and learn convex upsampling; upsample parameter in forward is unused. Zero iters with test_mode leaves flow_up undefined. Default callers use20 iterations.",
+    "Optional alternate CUDA correlation import failure is swallowed; selecting alternate path without extension lacks fallback. Parent get_raft_model explicitly sets alternate_corr=False.",
+    "Basic/Small encoders concatenate a pair along batch dimension then split into exactly two equal batches; no arbitrary list/cardinality support. GRU motion features are not image identity embeddings.",
+    "Original readFlow uses np.resize on payload: a2x2 flow containing only one vector is accepted by repeating that vector four times. Valid roundtrip and invalid magic controls also pass. No production parser copied.",
+    "Sparse resize rejects coordinates x==0 or y==0. Original scale1 control drops full top/left borders on a3x3 all-valid map. Duplicate destination coordinates overwrite; not a confidence aggregation.",
+    "Dense augmentation rescales/flips flow vectors with images but random crop upper bound excludes last possible origin; equal input/crop extent can cause randint(0,0) when resize is skipped. Static only, normal dataset assumptions unqualified.",
+    "Flow visualization optional clipping uses [0,clip_flow], erasing negative motion; per-image magnitude normalization makes colors unsuitable as exact motion identity.",
+    "Bundled dataset module uses top-level utils.frame_utils imports inconsistent with parent root utils.py layout unless standalone path is arranged. Parent model imports RAFT core only; no claim parent inference imports this training module. Dataset pairing commonly relies on independently sorted paths/zip, not identity-validated joins."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/moments30-raft-controls-v9-20261021",
+    "passed": 4,
+    "method": "Unchanged original readFlow/writeFlow and sparse-resize AST bodies, NumPy1.26.4; temporary small files. No Torch/OpenCV/model imports."
+  },
+  "limits": [
+    "47/73 tracked blobs read; no GPU, RAFT full inference, model weights or upstream training suite execution.",
+    "Production library unchanged; third-party license assessment still pending."
+  ]
+}
