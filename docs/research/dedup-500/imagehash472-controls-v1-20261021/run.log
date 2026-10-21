@@ -1,0 +1,5 @@
+PASS explicit LIMIT10 returns10of60equally distant candidates; capped result is API policy, not complete radius enumeration
+PASS sufficient LIMIT retains all60tied images
+PASS multiple matching frame points collapse to one image row; not timeline or full-video identity
+PASS empty candidate table returns empty query result
+RESULT 4 passed; unchanged original SQL via PythonSQLite3; synthetic point-query table, not original MVP C++ or image pipeline

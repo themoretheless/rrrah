@@ -1,0 +1,72 @@
+{
+  "repository": "s-bear/image-hash",
+  "commit": "cd7e52e566b240fe9294d1e695795c029ef7ac3c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 17,
+  "cumulative_assessed_blobs": 5,
+  "new_whole_files_read": {
+    "db.h": {
+      "bytes": 972,
+      "sha256": "f11e62289e7d14f501b2398f79c74376bc947f30d5dda186ed17235229c2010d",
+      "git_blob": "256767c6a3b92ca08a39c465dbd283ee04de05e8",
+      "method": "Whole pinned source/header/docs/license read without truncation"
+    },
+    "db.cpp": {
+      "bytes": 6752,
+      "sha256": "90a97e0695663e0390bf1dae42cbb1392c3be8bb3e74ec63b22953e27eb3eae0",
+      "git_blob": "5f2ece40445e3da0017b643923ef99c41955b0c2",
+      "method": "Whole pinned source/header/docs/license read without truncation"
+    },
+    "mvptable.h": {
+      "bytes": 6557,
+      "sha256": "2fba939daea1370193cafa6e6cd95c20f8e3212d17bbdb635ef05388e09a45b2",
+      "git_blob": "18735b1ed1eb310cd56619d329f49fc5fe542fa5",
+      "method": "Whole pinned source/header/docs/license read without truncation"
+    },
+    "README.md": {
+      "bytes": 3554,
+      "sha256": "8e7d751693e431e504a6eb84b4d8af56589a866109364cbff684bf8fa06746ae",
+      "git_blob": "429ff0dd5416d97bfb9539f05624498542ff90a2",
+      "method": "Whole pinned source/header/docs/license read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1075,
+      "sha256": "24a647e5c69100df39f50a8ddf1281c21dfc1d12b7e9282143433a66f0a87bc8",
+      "git_blob": "1d057ee120bd5605433faff8159feacf4bb1c6fe",
+      "method": "Whole pinned source/header/docs/license read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/imagehash472-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/imagehash472-controls-v1-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original concatenatedSQLquery extracted from db.cpp, PythonSQLite3inmemorydatabase andsynthetictemp.mvp_query; originalMVPtree/C++wrappernotexecuted."
+  },
+  "findings": [
+    "ExplicitAPIlimit defaults10;60tiedrowsreturn10atlimit10and60atlimit60. This is result-cap policy,not demonstratedrecallbug; no complete-radiusclaimfromcappedquery.",
+    "GROUPBYimage_id returnsonebestframerowforimagewithmultiplepoints; originalSQLcontrol confirms. Notwholevideotemporalidentity.",
+    "Emptycandidatequeryreturnsnorecords.",
+    "Hash-typemetadatapinnedperdatabaseviaread/check/set;nofullrecipe/frame/orientationversioncontractintheinspectedAPI.",
+    "Databaseinsertupdatespointindex,imagecountandmappingwithoutvisibletransactioninthesefunctions;crash/concurrencyqualificationpending.",
+    "MVPdistancecallbackdeclaredstatic(sharedacrossinstances);implementationreviewpendingbeforejudgingcrossdatabaseeffects."
+  ],
+  "remaining": [
+    ".github/workflows/build.yml",
+    ".gitignore",
+    "CMakeLists.txt",
+    "CMakePresets.json",
+    "imghash.cpp",
+    "imghash.h",
+    "jpeg.cpp",
+    "main.cpp",
+    "mvptable.cpp",
+    "png.cpp",
+    "test/brep_union.png",
+    "vcpkg.json"
+  ],
+  "license": "RootMITfullyread;noproductioncodeadopted.",
+  "limits": [
+    "Partial5/17artifacts;fullreviewcount174/500unchanged.",
+    "No originalC++MVP,imagepipeline,decoder,corpusqualityorperformancequalification.NativepHash/ASANdeferred."
+  ]
+}
