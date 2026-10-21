@@ -1,0 +1,32 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_main_engine_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/delete-engine.test.ts": {
+      "sha256": "4f2813dcac42f58a0f15cbcb2dd08fe57d3878f57652fc788d6a5a7956c00c9b",
+      "git_blob": "eb01b2a7279f98f320af685e7e21c43b3fa3ef13",
+      "bytes": 32753,
+      "lines": 909,
+      "method": "All909lines read in contiguous1-420,421-909ranges; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 124,
+  "tracked_blobs": 230,
+  "findings": [
+    "Idfilter testrequests2present+1missing andexpectsdone/deleted2; completion explicitlymeansavailablematchesprocessed,notallrequestedidsfound. Distinguishmissing/requested/processed in anylocaladaptation.",
+    "Dryrunidenticallabeltestexpectstotal1for3labelsbydesign. Earlieroriginalenginecontrolwithdistinctidsconfirms limitation,notcontradictionofthisspecifiedobservationsemantics.",
+    "InvalidmaxCounttests cover0,-1,NaNanddryrun0; notfractional1.5orzeropollDelay. v19controlscaseisoutsideupstreamcoverage.",
+    "Resetpreviousstoptestcallsstopbeforefirstactualrun; doesnotprovereusingengineafterfinished/partiallycompletedrealrunresetstrashedKeys/clickedIds.",
+    "Pause testsassertnoharvest/newtileclickswhilepaused andholdwaitbeyondactiontimeout; manualsleepgate/pumpsscriptcontrolledtiming. Notfullrealbrowserresponsivenessproof.",
+    "Maintestscovercounterflap/fallback,date/typefilters,finalflush,capbatch,selectiondrift,no-confirm/no-toolbar/errors,idselectionanddryrunnoclicks. No actualexecution or realPhotosqualification thisstep.",
+    "Full909linetestread completesmanualreview of thisfile only; noalltests/fullprojectclaim."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "124/230wholeartifacts; fullsuite/wholeprojectstillincomplete.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
