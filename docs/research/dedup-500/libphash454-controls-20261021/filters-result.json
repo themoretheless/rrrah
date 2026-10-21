@@ -1,0 +1,17 @@
+{
+  "images": 80,
+  "backend_variants": 2,
+  "checks_per_image_per_backend": [
+    "Gaussian out-of-place",
+    "Gaussian in-place",
+    "Laplacian out-of-place"
+  ],
+  "comparisons": 480,
+  "mismatches": 0,
+  "method": "Original source compiled unchanged; native ARM and explicitly disabled NEON scalar build, independent integer edge/rounding oracle. No ASAN.",
+  "limits": [
+    "No allocation-failure injection",
+    "No Laplacian in-place contract asserted",
+    "No performance comparison"
+  ]
+}

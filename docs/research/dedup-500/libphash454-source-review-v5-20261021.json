@@ -1,0 +1,59 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "All7additional texts wholly read; authored src tree and tracked docs now read. Remaining tests/assets/build/config/vendor/submodule review incomplete.",
+  "manifest": [
+    {
+      "path": "src/image/filters.c",
+      "sha256": "b3acda0cfdf347aaddca590c44a00a30fa5bf616eaa4eeb8f488be71da3fbf4b",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/image/resize.c",
+      "sha256": "7d673b5d6bd6fe79f3e550444fb8f77ad92fc713c16891ef4eb26d7371a52098",
+      "review": "whole text read"
+    },
+    {
+      "path": "docs/algorithms.md",
+      "sha256": "717138fd37dab44052d12f8d726adbef1efa82a00a3238d240204afe7d03eb80",
+      "review": "whole text read"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256": "3ce498d966183f8704226ef51c1bb8c1c1ca558a71c9d05cd98aacf86f737693",
+      "review": "whole text read"
+    },
+    {
+      "path": "docs/development.md",
+      "sha256": "9b096e832f47c19c5417ffe438210dbe0c1c76dca74e92831fb7c9c19d5c5ca2",
+      "review": "whole text read"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "1ec2cc43f334dae946d617a7027e631aec73eda7b618b374402c599ef2224d8c",
+      "review": "whole text read"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "sha256": "cb29df126b371fc4d85071dc82691c7c5da26fd20c6c322b990ed46e9e5b024a",
+      "review": "whole text read"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/libphash454-controls-20261021/filters-result.json",
+  "findings": [
+    "80synthetic images widths1,2,3,15,16,17,18,31,32,33 heights1,2,3,4 and2patterns each: original blur(out/in-place) andLaplacian(out-of-place) compiled unchanged inARMNEON andexplicitlydisabledNEONscalar variants. All480comparisons equal independent integer separablekernel/edge/rounding oracle. No timingclaim.",
+    "Gaussian allocationfailure silently copies input rather than propagating error; radialcaller may then produce a successful descriptor with altered preprocessing. No allocationfailure injection performed.",
+    "Gaussian uses horizontalrounding thenverticalrounding andcopiesboundary perpass, not one2Dconvolution roundedonce. Oracle preserves actual declared algorithm convention.",
+    "Resizebox callsstbir_resize withBOX andCLAMP; function namedlanczos callsgenericstbir_resize_uint8_linear without explicitLanczosfilter. Wholevendorresizer not yet read, no filtercompatibilityclaim.",
+    "Bothresize wrappers ignore returnvalue, so allocation/resizefailure cannot be reported to hashcaller. No faultinjection or uninitializedoutputexecution.",
+    "Algorithm docs claim configurablemHash via blockparams, but inspected implementation fixes18x18grid andstep2. pHashdocs allowlargerDCTsizes whilehelperearlyreturnsabove32. Claims are not acceptanceevidence.",
+    "Radialrotation360/flippingrobustness andspeedstar comparisons in docs have no retrieved quantitativevalidation; no accuracy/speedclaim adopted.",
+    "THIRD-PARTY-NOTICES wholly read, contains summary/excerpts. This doesnot substitute for fullsubmodulelicense/sourceaudit; no external code copied."
+  ],
+  "limits": [
+    "Minimal originalsource+stbcore used only for filtercontrols; not full upstreambuild or alltestqualification.",
+    "No allocationfault/ASAN/nativepHash.org run.",
+    "247/500full reviews unchanged; universalcoverage unproven."
+  ]
+}
