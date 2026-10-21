@@ -1,0 +1,49 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src-tauri/src/sync_server.rs": {
+      "sha256": "7ea02cca8cc1fc35b45614a0f0dd4e94bf6e4cc09709f4f6ebe0386429764e29",
+      "git_blob": "f73fc2c70483c404f330f7827caff1e5e6e88e6e",
+      "lines": 2176,
+      "mode": "100644",
+      "method": "Whole2176 lines read across1-900 and901-2176; pinned blob verified."
+    }
+  },
+  "cumulative_whole_files_read": 90,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "prior_audit": "docs/research/dedup-500/omni13-desktop-sync-path-review-v59-20261021.json",
+    "new_read_line_ranges": [
+      [
+        901,
+        2176
+      ]
+    ],
+    "union_read_line_ranges": [
+      [
+        1,
+        2176
+      ]
+    ]
+  },
+  "method": "Completed1276 remaining full-desktop sync lines. Static FFI result, transfer and preview lifecycle analysis only.",
+  "findings": [
+    "Remote duplicate request defaults50MiB and calls omni_find_duplicates_json(min_size,200,80). Explicit group/member caps mean this channel does not expose exhaustive duplicate corpus. Native zero-min behavior previously reviewed separately.",
+    "Scanner search/drives/duplicates nonnull JSON is copied then freed before serde parsing, correct FFI allocation ownership. serde parse failure unwrap_or_default returns success-shaped empty list. Malformed/native error JSON cannot be distinguished from valid no-results at client.",
+    "Native duplicate request passes through full group count/bytes while only returned files become issued paths. No extra per-file byte revalidation before later delete; delete always uses recycle bin, ignoring supplied recycle_bin flag. No deletion executed.",
+    "CString construction for search/extension falls back to empty on embedded NUL rather than returning invalid-input error; query can broaden unexpectedly. No actual scanner call made.",
+    "Full transfer read shares same pre-send Completed and any-inrange-index behavior as Lite; receiver acknowledgment/unique delivered chunk coverage absent. Disconnect requeues onlySending, so send failure afterCompleted is not retried.",
+    "Inbound validates order/count/decodedsize/done and uses create_new at manifest time. Partial final-path files remain after failed/disconnected uploads; no checksum/fsync/atomic rename. Outbound cap20 can drain active entries, inbound append uncapped.",
+    "Preview checks path metadata50MiB before open then read_to_end without bounded reader or post-read stamp. File growth/replacement can bypass intended memory bound. This is static concurrent-file lifecycle mechanism; no large user-file read.",
+    "Server repeated start has no running guard/generation and clears shared state before listener spawn. Stop clears transfer/token state immediately without joining handlers; restart can clear stop flag before old loops exit. No listeners or clients run.",
+    "Full snapshot list returns mostrecent8 and lowercase status strings; Lite returns all and title-case labels. Clients must follow correct contract; source similarity is not wire-equivalence proof.",
+    "No original test module exists. Primary native scanner byte-comparison pipeline remains separate evidence; this transport review adds no all-files/content identity guarantee."
+  ],
+  "limits": [
+    "90/268 whole files; repository013 incomplete.",
+    "No runtime tests/network/Windows/file-transfer actions or local production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
