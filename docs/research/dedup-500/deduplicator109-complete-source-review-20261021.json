@@ -1,0 +1,106 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "teran/deduplicator",
+  "commit": "ef24465a4982c33d5d992ab28eb7dc076f5f8928",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 12,
+  "files": {
+    ".gitignore": {
+      "bytes": 37,
+      "sha256": "c3d284408fd0b378857d20656376b2afbba61817d551ebed679a8216faf688bf",
+      "git_blob": "971d2e91116f1f679f9eb42865d81514e71540d6",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "LICENSE": {
+      "bytes": 18046,
+      "sha256": "db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73",
+      "git_blob": "23cb790338e191e29205d6f4123882c0583ef8eb",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "Makefile": {
+      "bytes": 1307,
+      "sha256": "baeb2624990be14354472ff4e515eb4c50e32ca8bf3aa9b90c416507a0ae0147",
+      "git_blob": "c77b1f0f2f8b934675298325893aebd3255c82c8",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "README.md": {
+      "bytes": 2292,
+      "sha256": "0301b34bd375fdc8a171c2bf4ac29157e4a19014d81111eca38a1a110279d014",
+      "git_blob": "10640fe248ccca356a6fe145b0265cdf11aca713",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "deduplicator.lrdevplugin/FindDuplicates.lua": {
+      "bytes": 5394,
+      "sha256": "21f191fe5772867eb50fadd4a8973b325448cbcc762cd8d9d8265f5fc0f61c33",
+      "git_blob": "e153f68eced93ebd7bbd9514c0ee40bc6577e8a6",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "deduplicator.lrdevplugin/GithubCheckUpdates.lua": {
+      "bytes": 1634,
+      "sha256": "9b2147252069427fc611d046cb6528cca7bb4a34e5f9c4dd63c830ef6731f41c",
+      "git_blob": "50bf6f89e53fedc67e5e30d6be9934e7450939df",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "deduplicator.lrdevplugin/ImportImgsumDatabase.lua": {
+      "bytes": 3444,
+      "sha256": "9b4f2975e1f15e4ef73154898a3fde3cb503e460d3dff00102b63597b438a7e6",
+      "git_blob": "df51dbfef55fe726822cbc376ab8c953364962be",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "deduplicator.lrdevplugin/Info.lua": {
+      "bytes": 1384,
+      "sha256": "2095994c56898c3ebec150d7e70270299fd28dbb213a9c9c4949a0e7767d7150",
+      "git_blob": "582e80af66d4460ee489f6dc390811f459d43348",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "deduplicator.lrdevplugin/JSON.lua": {
+      "bytes": 63243,
+      "sha256": "abea53010e9e6897095623967eee6b6d74b7f8da13442176dcef04e01160e4f2",
+      "git_blob": "4f8937208873ef201399a0b93183a70b9ef7c8f6",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "docs/_config.yml": {
+      "bytes": 26,
+      "sha256": "f8d38ca1a5f09e98e0f356832cb06122a5bbdc514ac422523074c4b10a6936fe",
+      "git_blob": "346aef9d826f87fc3b8f0bb12d28fac20f14a25c",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "docs/issue_template.md": {
+      "bytes": 701,
+      "sha256": "453826ee60f4240efe776c0fb3ba7269484e5c7784f44885f7751b73521b2515",
+      "git_blob": "6b63e05a12898cd298425ca7a285167b8c6c85e0",
+      "method": "Whole pinned text read across v1 and final review; JSON.lua all 1724 lines read in four contiguous chunks"
+    },
+    "docs/static/images/collections-screenshot.png": {
+      "bytes": 30786,
+      "sha256": "eda7ce69d461fa3b12ad5d57c39da40cac97fed0f300bc25c48b3ae5283318a4",
+      "git_blob": "1340572774df973e50a6d301964ee137471da166",
+      "method": "Original screenshot visually inspected"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/deduplicator109-source-review-v1-20261021.json"
+  ],
+  "additional_controls": {
+    "harness": "docs/research/dedup-500/deduplicator109-controls-v2-20261021/run.py",
+    "log": "docs/research/dedup-500/deduplicator109-controls-v2-20261021/run.log",
+    "passed": 6,
+    "method": "Unchanged full original JSON.lua in task-local Lupa Lua 5.1. Authored synthetic strings only; no Lightroom SDK or imgsum."
+  },
+  "unique_targeted_controls": 10,
+  "conclusions": [
+    "Original entry flow proceeds to search after cancellation or failed index subprocesses, confirmed with adapters in v1. This does not establish actual image matcher behavior.",
+    "Build clones teran/imgsum without commit/tag and compiles external binaries; actual perceptual hash and duplicate grouping implementations are outside the captured plugin tree and remain unqualified.",
+    "JSON strictTypes distinguishes empty objects/arrays, valid Unicode surrogate pair and escaped path roundtrip work, trailing garbage rejects under Lua 5.1.",
+    "Unknown JSON escapes are accepted, duplicate object keys retain last value, and unary minus on JSON number objects returns the positive operand. Last behavior follows __unm=getnum source. These malformed/unused numeric paths are not claimed normal imgsum output failures.",
+    "JSON.lua is Jeffrey Friedl version 20170927.26 with CC-BY 3.0 header retaining copyright, links and AUTHOR_NOTE. Root GPLv2 text fully read, plugin Lua headers declare GPLv2. No production code adopted.",
+    "Screenshot shows only Lightroom Collections panel and Duplicates collection with count three; it supplies no identity/precision/recall evidence.",
+    "Info.lua registers library/help commands and Lightroom SDK 6.0; no tests or full image fixtures in tracked tree. Build strips Lua using luac5.1 and produces macOS/Windows packages. Build/sign/SDK/image operations were not executed."
+  ],
+  "limits": [
+    "Full 12-artifact review and ten targeted controls do not qualify Lightroom scheduling, cancellation UI, catalog mutation, imgsum, decoder formats, actual release artifacts, precision/recall, performance or other OS.",
+    "Native pHash/ASAN deferred; all500 source review and all-cases library goal remain incomplete."
+  ]
+}

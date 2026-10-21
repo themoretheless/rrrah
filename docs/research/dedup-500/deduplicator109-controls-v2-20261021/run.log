@@ -1,0 +1,9 @@
+PASS strict empty containers preserve object/array identity
+PASS unicode surrogate and escaped path roundtrip
+PASS trailing garbage rejected
+PASS unknown escape accepted as literal character
+PASS duplicate object keys retain last value
+PASS number-object unary minus returns positive value
+6 controls passed; Lua runtime: Lua 5.1
+JSON source SHA256: abea53010e9e6897095623967eee6b6d74b7f8da13442176dcef04e01160e4f2
+Malformed JSON and number-object cases are not claimed normal imgsum output failures

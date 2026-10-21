@@ -2,7 +2,7 @@
   "index": 109,
   "repository": "teran/deduplicator",
   "commit": "ef24465a4982c33d5d992ab28eb7dc076f5f8928",
-  "review_scope": "Partial pinned 4/12 whole text artifacts, four original Lua control-flow adapter checks. Cancellation and failed indexing still launch search; actual imgsum/Lightroom runtime unqualified.",
+  "review_scope": "Complete pinned 12/12 artifact review including original screenshot and full nested JSON source; four original entry-flow adapter controls and six actual JSON controls. No Lightroom/imgsum full runtime.",
   "decision": "reference",
   "finding": "Lightroom image index/import plugin; perceptual hashing backend and GPL licensing need independent qualification.",
   "available_source_evidence": [
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "GPL-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root GPLv2 fully read; embedded JSON.lua CC-BY 3.0 notice fully read; no production source adopted.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -69,5 +69,8 @@
     {
       "audit": "docs/research/dedup-500/deduplicator109-source-review-v1-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/deduplicator109-complete-source-review-20261021.json"
 }
