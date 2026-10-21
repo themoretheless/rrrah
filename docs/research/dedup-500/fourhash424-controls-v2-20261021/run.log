@@ -1,0 +1,12 @@
+PASS original image filter lowercases actual filename spelling
+PASS substring .jpg admits non-image backup suffix
+PASS non-image filename raises uninitialized local error
+[INFO]
+ - Starting frames extraction
+[INFO]
+ - Done extracting frames
+PASS declared3frame video stops after2frames (last frame omitted)
+[INFO]
+ - Starting frames extraction
+PASS failed frame read still passed to resize; ret flag unchecked
+RESULT 5 controls passed; original AST classes and synthetic capture/resize adapters; no video decoder/database/writer threads executed

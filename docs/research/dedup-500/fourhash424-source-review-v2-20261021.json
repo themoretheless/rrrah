@@ -1,0 +1,67 @@
+{
+  "repository": "TorresAndy/4Hash",
+  "commit": "c1f2b7730b226797e1a0947e3ced5f566bd57cf9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 26,
+  "cumulative_assessed_blobs": 15,
+  "new_whole_files_read": {
+    "frames.py": {
+      "bytes": 2304,
+      "sha256": "0f3456de16f5a58df578b93cd93f1c10678e5c906be326b13461e94b367e613d",
+      "git_blob": "9f6a9e5693fb81e6dd3419fb40057753b10b0f08",
+      "method": "Whole pinned source text read without truncation"
+    },
+    "generate.py": {
+      "bytes": 5352,
+      "sha256": "141ff94552c2f1bdf8e5d44ca71bc7ef3ff7457f6042ea211997caf62a1ba519",
+      "git_blob": "f5065054165638e0ae776a73a2365762e0b6b00a",
+      "method": "Whole pinned source text read without truncation"
+    },
+    "collision.py": {
+      "bytes": 816,
+      "sha256": "9133f76630708f01e0ce77d5b414102a60418d6702f36738823063e904b8a1e0",
+      "git_blob": "f42db9d693a03dd23d0cce2c3a2b8645a099afba",
+      "method": "Whole pinned source text read without truncation"
+    },
+    "timing.py": {
+      "bytes": 975,
+      "sha256": "0a0a62c35a3e57b1a0626823a21631ac84142e2e520b4ed5a7e4f7c192a66ffd",
+      "git_blob": "7c326e127a6ec4044233bbacd0961048816cb535",
+      "method": "Whole pinned source text read without truncation"
+    },
+    "database/additems.py": {
+      "bytes": 2748,
+      "sha256": "61089f3b1840b61c2ee4ca25e958e3dfa017e4cd6130c036ef517b77487048e6",
+      "git_blob": "b17aee70ec862753596d5238601b7c08dd43caf6",
+      "method": "Whole pinned source text read without truncation"
+    },
+    "database/tables.py": {
+      "bytes": 2307,
+      "sha256": "d856f9b4aad3c4a09936fc916d8a7650c98ab1c5d8d5dcb29ce6fba4f111cda8",
+      "git_blob": "a55e6e4291c248a4ce87ba51f43f052d3bf0057e",
+      "method": "Whole pinned source text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/fourhash424-controls-v2-20261021/run.py",
+    "log": "docs/research/dedup-500/fourhash424-controls-v2-20261021/run.log",
+    "passed": 5,
+    "method": "Original generate/extraction AST classes with fake capture/resizer/save adapter; no video/database/network/writer threads executed."
+  },
+  "findings": [
+    "Three-frame capture counter stops after two reads; original loop subtracts1fromdeclaredcountthenusescount>length-1.",
+    "ret=False frame still reaches resize(None); synthetic failing resizer verifies unchecked read status.",
+    "is_image lowercases filename used in output path, accepts .jpg anywhere and returns uninitialized file for non-image input; three controls confirm.",
+    "generate.location hashes video argument, not content. Same-path rewrites keep identifier; source-only. Python3 string argument not accepted by hashlib.sha1 without encoding; full historical Python2 pipeline unqualified.",
+    "images walks nested roots but constructs paths using top frameslocation, ignoring current root.",
+    "saveImages launches one thread per frame and does not join; hashes snapshots filenames before fixed5second sleep, no completion handshake. No concurrency runtime experiment.",
+    "Schema has primary ids but no unique videohash constraint; check-then-insert separated and every insert separately committed. Source-only.",
+    "timing.py containsPython2printsyntax/time.clock; tables.py uses undeclared cursor/conn at moduleentry. Notrun."
+  ],
+  "remaining_scope": "Remaining11artifacts include4compiledpyc,LICENSE,threadcomparison,databasequery/config/connectionandemptyinitializers.",
+  "license": "GPL3metadata;rootLICENSEnotyetfullyread;noforeignproductioncodeadopted.",
+  "limits": [
+    "Fullreviewcount170/500unchanged;10targetedcontrolscumulative.",
+    "Not whole video pipeline, actual decoder/database/concurrency or performance qualification. NativepHash/ASANdeferred."
+  ]
+}
