@@ -1,0 +1,38 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/media.cpp": {
+      "sha256": "9d09e07b79e762a9445c6dccac522bcb84afb5d7fc19d13c8d0ae66512c46372",
+      "git_blob": "5cc30079c99bdae5a7ac27151c25382af6020f2c",
+      "bytes": 53806,
+      "lines": 1742,
+      "method": "Full cumulative source read: v4 lines1-360, v5 lines361-800,801-1240,1241-1742 without truncated outputs."
+    }
+  },
+  "cumulative_assessed_blobs": 13,
+  "tracked_blobs": 616,
+  "findings": [
+    "Metadata property cache key is path+field+requested keys, with no file stamp/content generation and static lifetime; useCache can be disabled by nocache. A changed file at same path can reuse a previous value. No real Exiv2 cache invalidation scenario executed.",
+    "Image load enables reader.setAutoTransform(true). Optional BUGGED_AUTOTRANSFORM branch only maps rotations1/3/6/8 and explicitly skips mirror orientations2/4/5/7; build macro configuration and Qt/Exiv2 behavior not qualified.",
+    "Custom-allocator reader.read failure only warns and leaves img available; reader.error warning does not force a null return. Cancellation does clear img except SVG/SVGZ disables the future wrapper to avoid a documented loader deadlock. Downstream scanner handling incomplete, so no full duplicate acceptance claim.",
+    "Original constrainedResize method with dimension-only Qt shims passes ordinary400x200->100x50, computes zero inferred width for1x1000->height1, and uses both requested positive axes with IgnoreAspectRatio. This checks integer sizing/control flow, not real Qt pixels or native decoding.",
+    "readScaled size selection rounds source axes down to multiples of8 before applying JPEG fraction. Very narrow dimensions need explicit downstream validity handling; no native decoder testcase executed.",
+    "Archive ioDevice reads entire selected member into a QBuffer; loader then readAlls compressed data. No explicit per-entry expansion/memory budget visible at this layer. External caller budgets and QuaZip limits remain unreviewed.",
+    "Archive markers include only lowercase/uppercase variants, not general case folding; final uppercase XPS marker lacks colon. parseArchivePath searches from colon positions, so that marker cannot match the same pattern as other variants. Static source finding, no Qt archive parsing execution.",
+    "makeKeyPointHashes uses keypoint coordinates as rectangle top-left and comments that centering may be intended; ROI must be strictly inside margins. Crop/rotation recall cannot be concluded from API feature labels.",
+    "makeVideoIndex applies autocrop and DCT hashes to selected frames, compresses near hashes and caps at MAX_FRAMES_PER_VIDEO. Progress finishes at100 even after cap; no all-frame temporal coverage or native video indexing proof.",
+    "recordMatch uses quoted paths without escaping embedded quotes and writes Latin1; report fidelity for Unicode/quotes is not established. No actual CSV writes or desktop launcher/network operations executed."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-resize-controls-v5-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Original complete constrainedResize body extracted unchanged, clang++C++17 O2 with dimension-only QSize/QImage/Qt shims. Shim scaled records requested dimensions; no raster allocation, Qt resampler, pHash, ASAN or decoder."
+  },
+  "limits": [
+    "13/616 pinned parent blobs fully read. Eleven cumulative original-body/header controls plus one independent concatenation counterexample; not full Qt/media/upstream test coverage.",
+    "No production changes or speedup claim. External dependency/source licenses and full media assets still incomplete; deferred native pHash/ASAN skipped."
+  ]
+}
