@@ -2,11 +2,11 @@
   "index": 15,
   "repository": "vale46n1/immich_duplicate_finder",
   "commit": "1ea4b7105e0ead1f231e7ca43ee3287e8d2e22c8",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 14 pinned text blobs read, including eight Python modules and UTF16 requirements; external README illustration visually reviewed. Seven isolated defect controls use actual FAISS 1.8.0/NumPy 1.26.4/Pillow 10.2.0; full model/UI/API runtime unqualified.",
   "decision": "reference",
-  "finding": "RGB feature extraction and FAISS index persistence; semantic feature candidates require false-positive calibration.",
+  "finding": "Reference only: ResNet/FAISS nearest-neighbor candidates, singleton sentinel/self-pair defect, incomplete all-pairs enumeration, stale persistence and metadata/display edge cases. No code adopted.",
   "license_metadata": "Apache-2.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Complete root Apache-2.0 LICENSE read. Third-party dependencies, model weights and external illustration rights not independently audited. Reference only; no production code adoption.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -41,7 +41,7 @@
       "test": false
     }
   ],
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tests_inventory_scope": "No test files found in the complete pinned tree; seven new isolated defect controls recorded separately.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -64,5 +64,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/immich15-complete-source-review-20261021.json",
+  "isolated_controls_run": true,
+  "full_upstream_suite_run": false
 }
