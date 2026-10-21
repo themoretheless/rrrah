@@ -1,0 +1,101 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_configuration_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".bun-version": {
+      "sha256": "78b591400c56b7b67b8cb3b2b8a8e65e9093897f02ce0878e6b5405c68620fa7",
+      "git_blob": "88c5fb891dcf1d1647d2b84bac0630cf9570d213",
+      "bytes": 6,
+      "lines": 1,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    ".github/actionlint.yaml": {
+      "sha256": "882dde038a40610d43203c3e800a04b7364f1bd507aa94a973ff2481a13d4565",
+      "git_blob": "ba03515e6ebf4b9436a009ce77225eee3ff22e15",
+      "bytes": 109,
+      "lines": 5,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    ".gitignore": {
+      "sha256": "eece8d9036e3bf999f68a6aea63fb21e00ab69973a2b311cf9f82c3de937d378",
+      "git_blob": "1c10f8944e220b56a32015b02160783bb97910bf",
+      "bytes": 75,
+      "lines": 8,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "eslint.config.js": {
+      "sha256": "b659f435620712743a35334b4d4ec055480b93fc05baacaae459ecc6d1f520e9",
+      "git_blob": "f0f07fd60cf54a38ae74ecd7392fa85bfc082288",
+      "bytes": 353,
+      "lines": 14,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "tsconfig.json": {
+      "sha256": "57d4485c2f451e72c1b4c56fb6677954ca3053dcf002ae371602240eb9bafcd8",
+      "git_blob": "cabf2f097787087affaf478a984d4071d8675774",
+      "bytes": 654,
+      "lines": 35,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "budgets/size.json": {
+      "sha256": "737724ce32dfbe0c28ebeab9dd799df2a33332eaac51256e64c12437ab5dc1ee",
+      "git_blob": "0043ed0d21065d3e431c8c373ef99535d8cca5ca",
+      "bytes": 130,
+      "lines": 7,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/extension/manifest.json": {
+      "sha256": "0b08e1538ead7ae888538d891ce1ee7712d6167a4eeb665996baaa8cf2ed4e19",
+      "git_blob": "389f57742d9f220ab1f321f3160ef11b0f0cd1e2",
+      "bytes": 904,
+      "lines": 43,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/standalone/inject.ts": {
+      "sha256": "b4339036db1219a5142b109d70f305e83d85f1b9509b30c4f7fd14447621f1b7",
+      "git_blob": "0b0a5e3d28b6066413ad8fc0fbcf09eef0e198bf",
+      "bytes": 628,
+      "lines": 17,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/userscript/google-photos-delete.user.ts": {
+      "sha256": "0b45bdb88fcb23bd91a0c69b2b95f258df947bc35cd2f95551094e1475437989",
+      "git_blob": "fac3106a7b2b17fc9f25b68b561c35624ec5634e",
+      "bytes": 697,
+      "lines": 18,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/extension/lifecycle.ts": {
+      "sha256": "bab081fb4053019eee51f703b49547c2df2b7b3059b2b7859ab25de2b84900f3",
+      "git_blob": "cf9346373d642c663ece427f5179119a591326ac",
+      "bytes": 1716,
+      "lines": 42,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "PRIVACY.md": {
+      "sha256": "36e662ffa9d094e2b3acd472a7bb018d83103283709a9a6a8fe1d8dea26a0970",
+      "git_blob": "b83a89f3bbd5c1fa7f9b1a7e535218b7c9067aa1",
+      "bytes": 4825,
+      "lines": 112,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    }
+  },
+  "cumulative_assessed_blobs": 73,
+  "tracked_blobs": 230,
+  "findings": [
+    "Manifest version3.6.0matchespackage; storagepermission andphotos.google.comhost/contentmatchesonly. No additionalthumbnailhostpermission declared; browserfetch behavior remains unexecuted.",
+    "Both standalone anduserscriptentrypoints activate exactsupportedURL then instantiate freshPageRunner, start bootpendingcheck and mountsharedpanel. No global singleton guard in entrypoint; repeatedinjectionconcurrency depends onpanelimplementationnotyetread.",
+    "Lifecycle openswelcome onlyfreshinstall and registersuninstallURLwithversion; no userlibraryidentifier in theseURLconstructors. Website network/tracking behavior not audited here.",
+    "TypeScript strict,noUnused,DOM/Node/Chrome libs,tests/scriptsincluded; skipLibChecktrue. ESLint recommendsTS rules but unused/anywarnings. Configuration not testresults.",
+    "Sizebudget onlycontent.jsandChromezip with5percent tolerance; this does not budget scanitems,hashmemory,latency,Firefoxartifacts or allmodulecomplexity. Sizecheckimplementationnotyetread.",
+    "Privacy prose distinguishes thumbnaildownloads,localsettings,optionaldiagnosticissue andsitepages; broadcollects/stores/transmitsnothingheadline is qualified by detailedsections. No legal/currentGooglepolicyverification implied."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 27,
+  "limits": [
+    "73/230wholeartifacts; no full build or browser/runtimeverification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}

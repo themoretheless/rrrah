@@ -1,0 +1,756 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "whole_artifacts_read": 73,
+  "tracked_artifacts": 230,
+  "remaining_artifacts": 157,
+  "reviewed": {
+    "src/core/dedup/phash.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "2bd41b74bb7b4736d10e7fa3710ee8dd70e15272db368a3ae6ee055959afda48",
+      "git_blob": "77caf3f084fd95dcfc1fb1278e9732a4311c2e41",
+      "bytes": 4247,
+      "lines": 124,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/group.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "b21291785c86869900394b72036ce6052ea6b6d66a0837dcad790bb11023da96",
+      "git_blob": "a85b7134ff348214d3c12e08bde5a1886707080c",
+      "bytes": 6697,
+      "lines": 180,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/selection.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "d6200f71a090d2d41105df4fb03e6b9f251476236801e29c88efe4e8ddb3ccee",
+      "git_blob": "743e4c68d80fe41b2bc2f8cbfa524c414d3f7d65",
+      "bytes": 2730,
+      "lines": 74,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/scan.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "145cda5162654fd9746324a05ea1def276e83aa1046bb46685b2954ffce0d9f8",
+      "git_blob": "4d77f2b7673a25009adc28a5504871e9f5936cb9",
+      "bytes": 6425,
+      "lines": 202,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "LICENSE": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "f0cefd0119a0b800383038d28547b4d0a004c58a91e42fc0add87cea88128e89",
+      "git_blob": "ee5db89b41d20674c803d34cc53720902b687ef6",
+      "bytes": 1064,
+      "lines": 21,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "docs/LICENSE_PROVENANCE.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "e29f9db6ceed2eec9eb79b57df44eec666386e64903b2d228ea08a0652cdf383",
+      "git_blob": "761d453853bc1815de1b456d5aa8a1c06c9b35db",
+      "bytes": 761,
+      "lines": 15,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "tests/fixtures/photo-dedup-phash.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "eee0161c824072bffb1ac0d57804c71512b1492215394ae588ee3c833475b572",
+      "git_blob": "4351a3c008527939d76a81bd68c9c445422492de",
+      "bytes": 934,
+      "lines": 42,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "tests/fixtures/photo-dedup-duplicate-groups.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "2e4921e5b839e1136209f5a16708ac8ff6dbe74da2ba270a07fc7af169cc66ea",
+      "git_blob": "1c8b1325fa16cac0e4a898e546a3fd1f06ebc30d",
+      "bytes": 5034,
+      "lines": 182,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "tests/dedup-hash-group.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-group-source-review-v1-20261021.json",
+      "sha256": "0081d9e6257c9bb7a6d53b2a04a0d065c71368795558b5425011f04fd630fb55",
+      "git_blob": "0bfc476a8be9374c9629fda0573d6b0f5d4724b0",
+      "bytes": 10380,
+      "lines": 253,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/browser-grid.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-browser-confidence-review-v2-20261021.json",
+      "sha256": "2817f44b3d5bb234055a82a587f3f535459b395b48c38eb807f7c4bf7212cc6b",
+      "git_blob": "0f5fd159db1e5777614b699c49ae9a7572a02f1c",
+      "bytes": 6173,
+      "lines": 154,
+      "method": "Complete pinned source read; Git blob verified; not executed."
+    },
+    "src/core/dedup/pro.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-browser-confidence-review-v2-20261021.json",
+      "sha256": "d991563d99125e62e1b113e41fb6a1943fc743b13389a327ab2e3101118abbfd",
+      "git_blob": "e4e61ca37e6d22355d02d7ba87c5bebdfd068858",
+      "bytes": 5397,
+      "lines": 128,
+      "method": "Complete pinned source read; Git blob verified; not executed."
+    },
+    "tests/dedup-finder-pro.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-confidence-review-v3-20261021.json",
+      "sha256": "f87e76142b4e620b992ef0ac33f8468aa405756032c57370bfcfc8feac7b6cd9",
+      "git_blob": "e89134587cba99b046b089cf4cbf9e9a2882b334",
+      "bytes": 9617,
+      "lines": 200,
+      "method": "Whole original UI test source read; test not executed."
+    },
+    "src/ui/dupes/finder.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-ui-scan-tests-review-v4-20261021.json",
+      "sha256": "415a03d3fcbf83dbf7656ff09e34fd28bcedea41ec22c30ecdbec518550a6255",
+      "git_blob": "9fb16723804f9880a3d5151ee5833fa1f6814579",
+      "bytes": 24101,
+      "lines": 474,
+      "method": "Whole pinned text read; not executed."
+    },
+    "tests/dedup-grid-dom.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-ui-scan-tests-review-v4-20261021.json",
+      "sha256": "bf1b45dd283e14642fe2e31aa799052101cda3f44c705a77d87404252c96a50b",
+      "git_blob": "c26144f0e8fc60193bfbaa382cff715323efbad8",
+      "bytes": 5029,
+      "lines": 114,
+      "method": "Whole pinned text read; not executed."
+    },
+    "tests/dedup-pro.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-ui-scan-tests-review-v4-20261021.json",
+      "sha256": "2e1c4bd37e1f9afe0f49bf78a0e314cf3437e945bb4b13b25372ba0d77064961",
+      "git_blob": "5fe110bb830ba3b34b2d08ffff509780a3c86e2f",
+      "bytes": 5489,
+      "lines": 126,
+      "method": "Whole pinned text read; not executed."
+    },
+    "tests/dedup-scan.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-ui-scan-tests-review-v4-20261021.json",
+      "sha256": "75d52b031b9607e7476f7e9a7201fae4406adc0ebd37c574699ca69eb4b3b7df",
+      "git_blob": "4158073504e7afcc3ec1ef483856b0702d2b6aba",
+      "bytes": 4829,
+      "lines": 124,
+      "method": "Whole pinned text read; not executed."
+    },
+    "package.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-ui-scan-tests-review-v4-20261021.json",
+      "sha256": "b21eba3cf2cab46f993c34eecdcdddf21d12aaafc039c5b9c1a2a7c1008626e3",
+      "git_blob": "d4082a8ae797d05b6cb85fc7af14cd6e396019b1",
+      "bytes": 1948,
+      "lines": 49,
+      "method": "Whole pinned text read; not executed."
+    },
+    "vitest.config.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-ui-scan-tests-review-v4-20261021.json",
+      "sha256": "c1252fec72e2627fcbded725078a5f3eadfec28638a920d751796476cf28ef1f",
+      "git_blob": "c2c24a2496a8ae04f418ad73429077c80ca8ad52",
+      "bytes": 176,
+      "lines": 9,
+      "method": "Whole pinned text read; not executed."
+    },
+    "src/core/browser-dom.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "3fd1deb38f40591a262e72f4c445a3ac830c208d5c472d9af9ac3c74a387a027",
+      "git_blob": "f21d01efab40eb0d8c79324c3206d3b0b876eccc",
+      "bytes": 4774,
+      "lines": 134,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/dom-adapter.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "b6b4444801ee11ebbb29fdfa821c4c4d148bcecc07d3613182b9c2c6680c1cb0",
+      "git_blob": "8b4127148599b8323903ac339003360f30e6cd9f",
+      "bytes": 2484,
+      "lines": 63,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/diagnostics.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "a90e58d2cc7addfa75f2b22630f0c9d2c51b093e6d3dda10725d07f665e35636",
+      "git_blob": "ad6c282d49a40d36fb6bba6b49ea0b1bec74e870",
+      "bytes": 3463,
+      "lines": 120,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/selector-pack.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "485d81de1cdb354d26b1e4d8a020b1c3ecf901b55e63ec2f2a3953d62b47d62b",
+      "git_blob": "887e93b6089a832adc8d0658fd5bca65ef290a6c",
+      "bytes": 1228,
+      "lines": 47,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/utils.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "9969d001cd04ede137b00c870cb818fdb884092c22f7976866dbf053fda7ef47",
+      "git_blob": "1b7bdbca475e07be74360740befead18f9ee3441",
+      "bytes": 1960,
+      "lines": 53,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/selectors.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "3b70bf3fa7fc6ababa2564870575d9b4768201e3e6a5554362d2644a2ab4ee45",
+      "git_blob": "9c7489319f25270a86006726da3a607544325d35",
+      "bytes": 12980,
+      "lines": 370,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/selector-packs/pack-v1.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-dom-diagnostics-review-v6-20261021.json",
+      "sha256": "40e5b0ca34187a1c5a6a03da59b8d6f17d99c7d7c0b1db8ef1b31bab91cc3b3a",
+      "git_blob": "f0c334a3f58556f59410b34ab33f5acf825f8533",
+      "bytes": 7545,
+      "lines": 311,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "docs/ARCHITECTURE.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-diagnostics-release-review-v7-20261021.json",
+      "sha256": "62dcd5d0c0c17863b82b5cc77faffbd5987d6a4c78813035b1637edff10912d5",
+      "git_blob": "55cc60bc67be52b9f3cf4f684fb5cc9780c4ad52",
+      "bytes": 3906,
+      "lines": 69,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    "docs/CANARY.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-diagnostics-release-review-v7-20261021.json",
+      "sha256": "bcfe8f3cf414b25b396f66e6534ba7400207ff877460ea23e860830dd0a31505",
+      "git_blob": "1ed75d5ac44480c212ae6dd21acfc0fecca30d7c",
+      "bytes": 2900,
+      "lines": 63,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    "docs/RELEASE_GATE.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-diagnostics-release-review-v7-20261021.json",
+      "sha256": "9b6575bd9816ded7fc2953ffb27098d2cb6b2b813bcd7183c24d65b9881f45e8",
+      "git_blob": "4b700c9257a911de2667791eee4c9738f62c6d23",
+      "bytes": 3658,
+      "lines": 76,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    "docs/vision.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-diagnostics-release-review-v7-20261021.json",
+      "sha256": "20c32dc8a1406f11ff458d348be2e21802ef3d7e4461e31f8229a1dccf06d6d6",
+      "git_blob": "78ae5a31bb379f8c7091065ac709fae3b9dcc420",
+      "bytes": 2970,
+      "lines": 62,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    ".github/workflows/canary.yml": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "6fb7e3466758268cd5571f9b8152c204851e4af2bf3cc8edd8696e8577103e56",
+      "git_blob": "95261b5d8d9806be5b8ca8449a791d5c81a73f22",
+      "bytes": 4297,
+      "lines": 106,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "scripts/canary/evaluate.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "e0cff04f23ffca259d7d47c3164a96f1aca8f007eafebdfe4f6435e585703deb",
+      "git_blob": "9d6eb40934893ec4e71f7cdd3faeffdd1877d699",
+      "bytes": 4113,
+      "lines": 105,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "scripts/canary/run.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "7a588282ec2ccabe5a0ec67c647141854786bb0382e1cc37847f12c35f3464d9",
+      "git_blob": "a7d9164139dc4f7856eaafea97260562b10e0c1d",
+      "bytes": 5092,
+      "lines": 120,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "scripts/canary/safety.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "be96cec7b27d093f86b673686974f8d524f4a7cf61eff046985f60ee2e1ad749",
+      "git_blob": "27bd916423238f58562bf2f31fe709fa7c4b0e44",
+      "bytes": 2013,
+      "lines": 43,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "tests/canary.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "0c04171484a8de51dffd9a5530e2c7dfb121407939eaef0abf975481ed38d75b",
+      "git_blob": "c90562e37313d2c126430b4cb1e85acdc3141017",
+      "bytes": 4875,
+      "lines": 100,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "tests/fixtures/canary-grid-drifted.html": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "5acca81bcfae393790ea778a965d95f9a88274b7122230eff13606df1f37351b",
+      "git_blob": "7026f5fe3fa9704d1bc2469d115013d7b9440205",
+      "bytes": 319,
+      "lines": 6,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "tests/fixtures/canary-grid-healthy.html": {
+      "audit": "docs/research/dedup-500/googlephotos42-canary-review-v8-20261021.json",
+      "sha256": "1ff4244d8e849db2e6116586768e6ef0171c605694909eecb24fe786936f18d6",
+      "git_blob": "df57efc87ddfd805997650e65681f1dbba96a7d5",
+      "bytes": 557,
+      "lines": 6,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    ".github/workflows/release.yml": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "05e56338edac3419d7ecbcf0b919d270dfa12271b3a0dc8d2a89fc6ab60e9819",
+      "git_blob": "5932b8988ee62e4086f042d92e695c030888f7c3",
+      "bytes": 2582,
+      "lines": 77,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "scripts/build.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "363f1534c4b8bf2dd0cf63b21c058c2dfbc68f0d076407c8d50a104e11c144d4",
+      "git_blob": "d0c1ddffa4613184a7bcef9ddc181985181ac791",
+      "bytes": 9823,
+      "lines": 247,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "scripts/verify.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "98b614f381fcae22545a94cd85fd57dee26902ca7fb1992f5ff15539f6a47d77",
+      "git_blob": "9a0a8f3005d7f3b20eb6e57ad4afc32e9d436ed7",
+      "bytes": 12041,
+      "lines": 205,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/.gitignore": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "3ea99b1d33022b3475e6c3ea324423e3d0899bda753907ad34d29e675a9e2e8e",
+      "git_blob": "020b2e2f24d23ebadf6be799146ab67470a9d1ed",
+      "bytes": 31,
+      "lines": 4,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/README.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "7c2286643c5b550c3e342e5bb130ef78a9ddc41eae7dd2dea52681b23e4b9e10",
+      "git_blob": "9c30174506b95573610e9ebb4f99be44d1bacb7a",
+      "bytes": 2823,
+      "lines": 60,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/generate.py": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "eff9580c14f6d243f43e4cccefd70b90d063bf6d3423ced7d3001cea356a02b4",
+      "git_blob": "fff9546681b99883b65b43edd2b5f0a195cbd587",
+      "bytes": 5732,
+      "lines": 146,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/requirements.txt": {
+      "audit": "docs/research/dedup-500/googlephotos42-artifact-library-review-v9-20261021.json",
+      "sha256": "41b54a6fb2918667ca47a61d73b522629d84490f3d78f0f20b21135faba10d35",
+      "git_blob": "e7cc6c178b542946a555ad07fa55b5dde3fca566",
+      "bytes": 15,
+      "lines": 1,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "src/core/index.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-run-surface-review-v10-20261021.json",
+      "sha256": "2615d1199963a533bcc64cc0c609549257b20ac71492bbdc6f9b4c1e8e0dac60",
+      "git_blob": "386471be13206642c1b99470cd7d85738947bc7e",
+      "bytes": 3090,
+      "lines": 132,
+      "method": "Whole pinned source read."
+    },
+    "src/core/status.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-run-surface-review-v10-20261021.json",
+      "sha256": "10ec1dc5921693e33ccefe73bf6c80662da99f1822403588ab8d6f4180c260d2",
+      "git_blob": "2b827216c784803990b009d2bbd82d18170287c9",
+      "bytes": 713,
+      "lines": 26,
+      "method": "Whole pinned source read."
+    },
+    "src/core/run-occupancy.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-run-surface-review-v10-20261021.json",
+      "sha256": "d23c7911771f13d6e949fc860a673fad1d82f1997df372acaf2c3ada350d4e74",
+      "git_blob": "e85bff74261084508e42e4e034f2f2977fcfb480",
+      "bytes": 1971,
+      "lines": 70,
+      "method": "Whole pinned source read."
+    },
+    "src/core/surface.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-run-surface-review-v10-20261021.json",
+      "sha256": "b9b18b96d5e0f879f08c660368ec039467b9a0eb335c9ad7977617cb4131165e",
+      "git_blob": "1c88d2bf25025ebc8f3e5ae7e7912352c443da13",
+      "bytes": 4454,
+      "lines": 157,
+      "method": "Whole pinned source read."
+    },
+    "src/core/config.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-run-surface-review-v10-20261021.json",
+      "sha256": "fc87f01675edb9320a4ca2afd9576dac7dfe419f25fb776afb7118761c4c3b6e",
+      "git_blob": "34b3672ba064c0c99712d658feead8f7f7666c6a",
+      "bytes": 1627,
+      "lines": 48,
+      "method": "Whole pinned source read."
+    },
+    "src/core/nothing-moved.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-run-surface-review-v10-20261021.json",
+      "sha256": "b742590b96516d94c6f21495aebb81e17337f9983e73ed65679a485908f157d9",
+      "git_blob": "d5e3b8a48645b9d4b96f3a56d5d99ddc7037a437",
+      "bytes": 849,
+      "lines": 16,
+      "method": "Whole pinned source read."
+    },
+    "src/core/photo-filter.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-preset-filter-review-v11-20261021.json",
+      "sha256": "9767e835f3adecfb30d1d10ce9edfb429ca09ffa289507d8d2806ebda1f72e77",
+      "git_blob": "2906137967e9fee8daec26fb917155deb19b1a65",
+      "bytes": 8852,
+      "lines": 225,
+      "method": "Whole pinned source read."
+    },
+    "src/core/presets.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-preset-filter-review-v11-20261021.json",
+      "sha256": "c7027176bfefc719ec32534394924c3ba897ac284bcec8722e3cbfcd63e8a878",
+      "git_blob": "fbeb1a4459c6b6d1adad5d2e81ff69e9d2719c58",
+      "bytes": 8711,
+      "lines": 221,
+      "method": "Whole pinned source read."
+    },
+    "src/core/consent.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-preset-filter-review-v11-20261021.json",
+      "sha256": "723da64e5bae4c999ca3f965edd30a053afb233de2b925c5723e282cdf1b9800",
+      "git_blob": "b486df35b83d00c7d0db21d70711ebdf38a28db9",
+      "bytes": 4275,
+      "lines": 146,
+      "method": "Whole pinned source read."
+    },
+    "tests/photo-filter.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-filter-test-coverage-review-v12-20261021.json",
+      "sha256": "ef35eac5c323eb01e3b2b8fde616d1ae07bd869fe51a6f66664a59bd4c43175d",
+      "git_blob": "01b123385f15653acb18955637231b958a0c000a",
+      "bytes": 8154,
+      "lines": 171,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/presets.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-filter-test-coverage-review-v12-20261021.json",
+      "sha256": "d18db72ef0dfe7d8dbac999128f273be7a71b263e53d596a215c52fdf0c388f2",
+      "git_blob": "5f78b616d723830450dde48e6771b163a37f7fd0",
+      "bytes": 5285,
+      "lines": 113,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/presets-panel.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-filter-test-coverage-review-v12-20261021.json",
+      "sha256": "bc4fb41ff1842ae4672976c83c1fa276dbd45bfbe03b59b194a7d7e42d88eb47",
+      "git_blob": "06449f213fafa5ec857a512c65acb91d0455b0fe",
+      "bytes": 4329,
+      "lines": 105,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/run-occupancy.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-filter-test-coverage-review-v12-20261021.json",
+      "sha256": "61e1eba0117ef7bef5d34e0e5ee82d68ac645117a49c6978bdaafe0f140b4e49",
+      "git_blob": "f8cfa0c4ff761017ba4d63ff169d4074a79082f8",
+      "bytes": 2121,
+      "lines": 69,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "src/core/page-runner.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-runner-capabilities-review-v13-20261021.json",
+      "sha256": "0317c176162c0fda4b2de81e54b30ffe5c2cbea59027a118fae6bdf56baabe8f",
+      "git_blob": "cc545d557cfedb00df387e9af014ea489134764c",
+      "bytes": 12779,
+      "lines": 398,
+      "method": "Whole pinned source/document read; no lifecycle execution."
+    },
+    "src/core/deletion-log.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-runner-capabilities-review-v13-20261021.json",
+      "sha256": "b9c1042857fa6feb137df4b7ea466bddccb09336a8260a142e36934ba6a1b1eb",
+      "git_blob": "1a48f1114bb50587383730c9d07c9cda10b5223c",
+      "bytes": 2214,
+      "lines": 70,
+      "method": "Whole pinned source/document read; no lifecycle execution."
+    },
+    "docs/capabilities.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-runner-capabilities-review-v13-20261021.json",
+      "sha256": "569c74df5da1abc3f14bb3fdb9cccd828176bad666b9934fdfe688e7648c5ced",
+      "git_blob": "f9cfad967ae9c37bd2b45be6f343ee5e78fceb7c",
+      "bytes": 9284,
+      "lines": 39,
+      "method": "Whole pinned source/document read; no lifecycle execution."
+    },
+    "src/core/empty-trash-baton.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-baton-prompt-review-v15-20261021.json",
+      "sha256": "3f6a8fa2092b4c86d127db0982c1213404cb82a81e1f3b984825d0fdf5719446",
+      "git_blob": "4a673dda26ed270a04bb7fd763ce3edfd3a457ee",
+      "bytes": 2767,
+      "lines": 80,
+      "method": "Whole pinned source/test read; not executed."
+    },
+    "src/core/post-run-prompt.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-baton-prompt-review-v15-20261021.json",
+      "sha256": "0dcc7395ba9c5eacc1c123f11b768d56cff82efbcc3c8669eb1f25af51cb6262",
+      "git_blob": "6fee2cf7edceac112808749faf84268d73975028",
+      "bytes": 4515,
+      "lines": 133,
+      "method": "Whole pinned source/test read; not executed."
+    },
+    "tests/surface.test.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-baton-prompt-review-v15-20261021.json",
+      "sha256": "92d3e8d74106588f97b312a06d846516d88fd6f86c2fb3313ea68ea0198d46fa",
+      "git_blob": "cf7a800e620b8371a7cd38fd88f513a3e1e65d78",
+      "bytes": 6703,
+      "lines": 153,
+      "method": "Whole pinned source/test read; not executed."
+    },
+    ".bun-version": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "78b591400c56b7b67b8cb3b2b8a8e65e9093897f02ce0878e6b5405c68620fa7",
+      "git_blob": "88c5fb891dcf1d1647d2b84bac0630cf9570d213",
+      "bytes": 6,
+      "lines": 1,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    ".github/actionlint.yaml": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "882dde038a40610d43203c3e800a04b7364f1bd507aa94a973ff2481a13d4565",
+      "git_blob": "ba03515e6ebf4b9436a009ce77225eee3ff22e15",
+      "bytes": 109,
+      "lines": 5,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    ".gitignore": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "eece8d9036e3bf999f68a6aea63fb21e00ab69973a2b311cf9f82c3de937d378",
+      "git_blob": "1c10f8944e220b56a32015b02160783bb97910bf",
+      "bytes": 75,
+      "lines": 8,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "eslint.config.js": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "b659f435620712743a35334b4d4ec055480b93fc05baacaae459ecc6d1f520e9",
+      "git_blob": "f0f07fd60cf54a38ae74ecd7392fa85bfc082288",
+      "bytes": 353,
+      "lines": 14,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "tsconfig.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "57d4485c2f451e72c1b4c56fb6677954ca3053dcf002ae371602240eb9bafcd8",
+      "git_blob": "cabf2f097787087affaf478a984d4071d8675774",
+      "bytes": 654,
+      "lines": 35,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "budgets/size.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "737724ce32dfbe0c28ebeab9dd799df2a33332eaac51256e64c12437ab5dc1ee",
+      "git_blob": "0043ed0d21065d3e431c8c373ef99535d8cca5ca",
+      "bytes": 130,
+      "lines": 7,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/extension/manifest.json": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "0b08e1538ead7ae888538d891ce1ee7712d6167a4eeb665996baaa8cf2ed4e19",
+      "git_blob": "389f57742d9f220ab1f321f3160ef11b0f0cd1e2",
+      "bytes": 904,
+      "lines": 43,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/standalone/inject.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "b4339036db1219a5142b109d70f305e83d85f1b9509b30c4f7fd14447621f1b7",
+      "git_blob": "0b0a5e3d28b6066413ad8fc0fbcf09eef0e198bf",
+      "bytes": 628,
+      "lines": 17,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/userscript/google-photos-delete.user.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "0b45bdb88fcb23bd91a0c69b2b95f258df947bc35cd2f95551094e1475437989",
+      "git_blob": "fac3106a7b2b17fc9f25b68b561c35624ec5634e",
+      "bytes": 697,
+      "lines": 18,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "src/extension/lifecycle.ts": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "bab081fb4053019eee51f703b49547c2df2b7b3059b2b7859ab25de2b84900f3",
+      "git_blob": "cf9346373d642c663ece427f5179119a591326ac",
+      "bytes": 1716,
+      "lines": 42,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    },
+    "PRIVACY.md": {
+      "audit": "docs/research/dedup-500/googlephotos42-config-entrypoints-review-v16-20261021.json",
+      "sha256": "36e662ffa9d094e2b3acd472a7bb018d83103283709a9a6a8fe1d8dea26a0970",
+      "git_blob": "b83a89f3bbd5c1fa7f9b1a7e535218b7c9067aa1",
+      "bytes": 4825,
+      "lines": 112,
+      "method": "Whole pinned source/configuration/document read; no mount or browser action."
+    }
+  },
+  "remaining_paths": [
+    ".github/workflows/bench-engine.yml",
+    ".github/workflows/bootstrap-amo.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/cws-status.yml",
+    ".github/workflows/pages.yml",
+    ".github/workflows/publish-cws.yml",
+    ".github/workflows/publish-stores.yml",
+    ".github/workflows/store-publish.yml",
+    ".github/workflows/store-retry.yml",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "README.md",
+    "_locales/de/messages.json",
+    "_locales/en/messages.json",
+    "_locales/es/messages.json",
+    "_locales/fr/messages.json",
+    "_locales/it/messages.json",
+    "_locales/ja/messages.json",
+    "_locales/nl/messages.json",
+    "_locales/pt_BR/messages.json",
+    "_locales/zh_CN/messages.json",
+    "_locales/zh_TW/messages.json",
+    "bench/engine-baseline.json",
+    "bun.lock",
+    "docs/CHROME_WEB_STORE_SETUP.md",
+    "docs/GROWTH.md",
+    "docs/PRO.md",
+    "docs/REVIEWS.md",
+    "docs/STORE_AUTOMATION.md",
+    "docs/images/find-duplicates.png",
+    "docs/translations.md",
+    "publisher/card.json",
+    "publisher/card.webp",
+    "scripts/amo-create.mjs",
+    "scripts/amo-jwt.mjs",
+    "scripts/bench/engine-entry.ts",
+    "scripts/bench/engine.ts",
+    "scripts/bench/mock-grid.ts",
+    "scripts/checkout-readout.ts",
+    "scripts/cws-listing.mjs",
+    "scripts/cws-screenshots.mjs",
+    "scripts/cws-v2.mjs",
+    "scripts/dupes-demo.mjs",
+    "scripts/edge-bootstrap.mjs",
+    "scripts/greasy-fork-upload.mjs",
+    "scripts/lib/handoff.mjs",
+    "scripts/lib/locales.ts",
+    "scripts/license-buyer.ts",
+    "scripts/license-keys.ts",
+    "scripts/license-payload.ts",
+    "scripts/license.ts",
+    "scripts/listing.ts",
+    "scripts/site-build.mjs",
+    "scripts/size-budget.ts",
+    "scripts/store-state.mjs",
+    "scripts/zip-content-digest.sh",
+    "scripts/zip.ts",
+    "site-l10n/de.json",
+    "site-l10n/es.json",
+    "site-l10n/fr.json",
+    "site-l10n/it.json",
+    "site-l10n/ja.json",
+    "site-l10n/nl.json",
+    "site-l10n/pt-br.json",
+    "site-l10n/zh-cn.json",
+    "site-l10n/zh-tw.json",
+    "site/404.html",
+    "site/bye.html",
+    "site/config.json",
+    "site/img/find-duplicates-1280.webp",
+    "site/img/find-duplicates-480.webp",
+    "site/img/find-duplicates.webp",
+    "site/img/icon-128.png",
+    "site/img/og.png",
+    "site/index.html",
+    "site/privacy.html",
+    "site/sitemap.xml",
+    "site/stats.js",
+    "site/stats.json",
+    "site/style.css",
+    "site/terms.html",
+    "site/thanks.html",
+    "site/tracking.js",
+    "src/core/delete-engine.ts",
+    "src/core/empty-trash.ts",
+    "src/core/license.ts",
+    "src/core/pro-moments.ts",
+    "src/extension/api.ts",
+    "src/extension/background.ts",
+    "src/extension/content.ts",
+    "src/extension/icons/icon-128.png",
+    "src/extension/icons/icon-16.png",
+    "src/extension/icons/icon-32.png",
+    "src/extension/icons/icon-48.png",
+    "src/extension/popup/i18n/index.ts",
+    "src/extension/popup/i18n/locales/de.ts",
+    "src/extension/popup/i18n/locales/en.ts",
+    "src/extension/popup/i18n/locales/es.ts",
+    "src/extension/popup/i18n/locales/fr.ts",
+    "src/extension/popup/i18n/locales/it.ts",
+    "src/extension/popup/i18n/locales/ja.ts",
+    "src/extension/popup/i18n/locales/nl.ts",
+    "src/extension/popup/i18n/locales/pt.ts",
+    "src/extension/popup/i18n/locales/zh.ts",
+    "src/extension/popup/i18n/types.ts",
+    "src/extension/popup/icons.ts",
+    "src/extension/popup/popup.css",
+    "src/extension/popup/popup.html",
+    "src/extension/popup/popup.ts",
+    "src/extension/popup/set-markup.ts",
+    "src/ui/panel/panel.ts",
+    "src/ui/post-run/prompt.ts",
+    "src/ui/pro-teaser/teaser.ts",
+    "storefront/PASTE-PACK.md",
+    "storefront/README.md",
+    "storefront/edge-logo-300.png",
+    "storefront/listing.json",
+    "storefront/posts/devto-article.md",
+    "storefront/posts/product-hunt.md",
+    "storefront/posts/reddit-r-googlephotos.md",
+    "storefront/posts/show-hn.md",
+    "tests/api.test.ts",
+    "tests/browser-dom.test.ts",
+    "tests/checkout-readout.test.ts",
+    "tests/config.test.ts",
+    "tests/consent.test.ts",
+    "tests/cws-v2.test.ts",
+    "tests/delete-engine-passes.test.ts",
+    "tests/delete-engine.test.ts",
+    "tests/deletion-log.test.ts",
+    "tests/diagnostics.test.ts",
+    "tests/empty-trash-baton.test.ts",
+    "tests/empty-trash.test.ts",
+    "tests/fixtures/checkout-sessions.csv",
+    "tests/fixtures/site-l10n-drift/x.json",
+    "tests/i18n-pro.test.ts",
+    "tests/i18n.test.ts",
+    "tests/license-buyer.test.ts",
+    "tests/license-scripts.test.ts",
+    "tests/license.test.ts",
+    "tests/lifecycle.test.ts",
+    "tests/nothing-moved.test.ts",
+    "tests/page-runner.test.ts",
+    "tests/post-run-prompt.test.ts",
+    "tests/pro-moments.test.ts",
+    "tests/readme-pro.test.ts",
+    "tests/selector-pack.test.ts",
+    "tests/selectors.test.ts",
+    "tests/set-markup.test.ts",
+    "tests/site-l10n.test.ts",
+    "tests/site.test.ts",
+    "tests/status.test.ts",
+    "tests/store-locales.test.ts",
+    "tests/store-workflows.test.ts",
+    "tests/ui-wiring.test.ts",
+    "tests/utils.test.ts",
+    "tests/zip-content-digest.test.ts"
+  ],
+  "limits": [
+    "Recorded source reading inventory, not application qualification."
+  ]
+}
