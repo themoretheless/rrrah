@@ -1,0 +1,44 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 70,
+  "files": {
+    "docs/_build/html/objects.inv": {
+      "bytes": 608,
+      "sha256": "07b7176c60c92cf498833faa7095f8bca019613533bd4588bff0e9329aa70863",
+      "git_blob": "577235698027b921bcf1da2f46ba4da6067cdad7",
+      "method": "Complete Sphinx inventory header and zlib-decompressed25 records read"
+    },
+    "docs/_build/html/_static/file.png": {
+      "bytes": 286,
+      "sha256": "5c4bc9a16aebf38c4b950f59b8e501ca36495328cb9eb622218bce9064a35e3e",
+      "git_blob": "a858a410e4faa62ce324d814e4b816fff83a6fb3",
+      "method": "Original image visually viewed"
+    },
+    "docs/_build/html/_static/minus.png": {
+      "bytes": 90,
+      "sha256": "47e7fc50db3699f1ca41ce9a2ffa202c00c5d1d5180c55f62ba859b1bd6cc008",
+      "git_blob": "d96755fdaf8bb2214971e0db9c1fd3077d7c419d",
+      "method": "Original image visually viewed"
+    },
+    "docs/_build/html/_static/plus.png": {
+      "bytes": 90,
+      "sha256": "54115199b96a130cba02147c47c0deb43dcc9b9f08b5162bba8642b34980ac63",
+      "git_blob": "7107cec93a979b9a5f64843235a16651d563ce2d",
+      "method": "Original image visually viewed"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Three original tiny documentation icons viewed: page icon, minus and plus controls. No dedup algorithm or quality evidence.",
+    "Sphinx inventory version2, project deduplicate_lib, empty version header,25 records. Includes documented class/method and page anchors.",
+    "Inventory exposes modindex and py-modindex labels targeting py-modindex.html, absent from pinned tree. Broken generated navigation target; source tree verified, no browser click executed."
+  ],
+  "remaining_scope": "32 generated HTML/JS/CSS/maps and binary doctree artifacts remain.",
+  "limits": [
+    "No additional test execution or runtime coverage added this increment. Original full suite100passed separately; global full count201/500 unchanged. pHash/ASAN deferred."
+  ]
+}
