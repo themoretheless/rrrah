@@ -1,0 +1,51 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 285,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_unix.S": {
+      "sha256": "c641987dd82fabed59d527f1a3413c4a2ff3df919af6d13ff2788c95e4035c0d",
+      "git_blob": "9642e413a3ad0f959449e0089dfd672fbff9fb86",
+      "total_lines": 4824,
+      "new_read_ranges": [
+        [
+          401,
+          1000
+        ],
+        [
+          1001,
+          1500
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          1500
+        ]
+      ],
+      "unread_ranges": [
+        [
+          1501,
+          4824
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Continued untruncated source reading401..1000/1001..1500 after v1371..400. No whole-file credit.",
+  "findings": [
+    "Sixteen-input core ends with eight CV-vector XORs. Block-loop jne uses flags from preceding byte-offset comparison preserved across SIMD arithmetic and movzx. No missing comparison defect inferred from long-distance flags dependency.",
+    "Output transpose uses dword/qword unpack and vshufi32x4 combinations, then eight64-byte unaligned stores spanning512 bytes:32 bytes per input. This is hash-many output, not sixteen64-byte XOF outputs.",
+    "Masked low-counter addition16 feeds unsigned comparison carry into high-counter vector; no-increment lanes preserve low words and produce no carry. Input array advances128 bytes and output512, remaining count decreases16.",
+    "Common return executes vzeroupper and restores RBP anchor plus six saved general registers. Nonempty remainder enters bit8 path; later remainder paths remain unread.",
+    "Eight-input setup uses four16-byte loads per input, assembled into YMM lanes and transposed into YMM16..31 message vectors. Native vprord on256-bit vectors and access to high vector registers still require AVX512; this is not an AVX2 fallback.",
+    "Eight-input core is only partly read through1500. Its stores/counter transition and scalar/XOF functions remain unqualified."
+  ],
+  "limits": [
+    "1500/4824 lines read cumulatively; count remains285/289 files and150/500 repositories.",
+    "Source-only review, no runtime/parity/speed claim. Deferred pHash/ASAN untouched."
+  ]
+}
