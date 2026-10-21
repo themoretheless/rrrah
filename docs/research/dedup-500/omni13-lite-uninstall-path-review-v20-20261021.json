@@ -1,0 +1,39 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/installer.iss": {
+      "sha256": "a5fa2472aeca225ec3e1f56a02a18a3525f5a715a0b87e9f3a8189fea9d97ccd",
+      "git_blob": "ae23ad29c6aed465614033836d1af8484bd5ff1d",
+      "mode": "100644",
+      "lines": 117
+    },
+    "omnisearch-lite/src/uninstall.rs": {
+      "sha256": "bfbf31fd80f936d8247046ab9eca73ef994169b9780b7e5bef03be561e9ed1da",
+      "git_blob": "e905d89f84435e87bc54af90249395aceb1ac49a",
+      "mode": "100644",
+      "lines": 227
+    }
+  },
+  "cumulative_whole_files_read": 79,
+  "tracked_blobs": 268,
+  "method": "Two pinned installer/uninstaller files whole source read and reconciled against previously reviewed settings_startup.rs. No installer/uninstaller/registry/process functions executed.",
+  "findings": [
+    "Installer defaultfolder localappdata/Programs/omnisearch-lite differs from customuninstaller localappdata/Programs/OmniSearchLite (hyphen matters, not case). Currentinstall path absent from legacylist. Thus defaultinstall may not runInno/unlockself/removeinstall through these pathbranches. Static exactliteral mismatch; no Windowsuninstall run.",
+    "settings_startup currentRunvalue omnisearch-lite absent cleanup_startup_entries list(protonsearch,omnisearch,OpenSearchOS); currentstartupentry canremain. Static crossfile mismatch.",
+    "Installer explicit customuninstallshortcut points uninstall.exe; customuninstaller returns successmessage regardless retryfalse, registry/subprocessstatus failures. UI success does not establish cleanupcomplete.",
+    "Customuninstall confirmation explicitly says allappfiles/databases/logs permanentlydeleted. It removes APPDATAcurrent plus legacydirs, not preservation-by-default. This is disclosed sourcebehavior; no deletion occurred.",
+    "Installer UninstallDelete also removes currentAPPDATA; upgradelegacycleanup preserves APPDATA/omnisearch but removes legacyinstalldir. No transaction/backupcopy around that removal in source.",
+    "Installer TerminateApp uses processimagenames globally, multipleExec/resultsignored; comment guaranteeexeunlocked stronger than checkedconditions. Renamebackupfail onlylogged, PrepareToInstall returns emptyerror always. No processes terminated.",
+    "Customuninstaller validates envfolders only after killprocesses/startupcleanup; abort for missingenv canfollow sideeffects. No such path executed.",
+    "Customuninstaller selfredirection uses stringprefix currentexe/installpath with no pathseparatorboundary and wrongdefaultinstallname; portable/temp/unusualpath behavior unqualified. No exploit or externalexecution attempted.",
+    "Installerdesktop/StartMenushortcut uses displayname OmniSearch Lite, customcleanup searches hyphenatednames. Inno normaluninstaller would remove declaredshortcuts if invoked, but mismatchedinstallpath canprevent it in customflow.",
+    "Uninstall/upgrade source concerns applicationlifecycle; not usable contentdedup algorithm. No upstreamcode copied or localproductionchanges."
+  ],
+  "limits": [
+    "79/268 pinnedwholefiles reviewed; fullrepo/all500 incomplete.",
+    "Static crossfile reconciliation only; no Windowsinstallerbuild/install/uninstall, userfiles, registry,processes or runtimeproof.",
+    "Native pHash/ASAN remains user-deferred."
+  ]
+}
