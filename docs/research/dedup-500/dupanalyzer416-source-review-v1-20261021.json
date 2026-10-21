@@ -1,0 +1,72 @@
+{
+  "repository": "Paulogb98/DupFile-Analyzer",
+  "commit": "6493e51481e5c495969ef1cf8b9a27d5e614ebf3",
+  "whole_repo_complete": false,
+  "tracked_blobs": 18,
+  "cumulative_assessed_blobs": 8,
+  "files": {
+    "Cargo.toml": {
+      "bytes": 588,
+      "sha256": "16928e313745cdd64a19b926b8f91f5bbe83fd33836e3693b3c397f064bf96a2",
+      "git_blob": "834fa812d953739a1dfb936c10bb7518085c8f5a",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "LICENSE": {
+      "bytes": 1065,
+      "sha256": "2a27775043fb4f52a55cf0db7d42eb1c10a3c34e8b722bb73cfd4575877a16cf",
+      "git_blob": "02a717be5b3a505a488a3eb3ccf9731b6481f0ad",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/dedupe.rs": {
+      "bytes": 5584,
+      "sha256": "059b36d4de6dabef45837004ee6d42a1acb7144c30e509a401646330a4240ced",
+      "git_blob": "8a418b75203f169cc30a0e9119cebfe063e1ca3f",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/hashing/content.rs": {
+      "bytes": 2145,
+      "sha256": "53816d00145e9ff7d9451de4956de2b29c001b56331b926bea05398865e38beb",
+      "git_blob": "ed4305de16ef8e55fb92aeddf2238103ffe81268",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/hashing/mod.rs": {
+      "bytes": 1887,
+      "sha256": "f40d810da3cf9723a9e2a229a142ee9f4c2e7f4be7082059086172d02ec4cc3e",
+      "git_blob": "250951cc99132d1a7b0cbe11c875f209722bdc3a",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "tests/scan.rs": {
+      "bytes": 3960,
+      "sha256": "dc546043702c0c8f63fd2622fef7f0489391b07e1b0f5f3fd1a50a0feb3873d6",
+      "git_blob": "ea62930242e354f82e952ccfa8d549d97315e85d",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/scanner.rs": {
+      "bytes": 10087,
+      "sha256": "e6de62b84ba8e21d558b442b78b60c23701f9881e21137e598342ef5abe03a83",
+      "git_blob": "644093eb693759c429bea0769aab22221b4fb4dc",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/config.rs": {
+      "bytes": 1871,
+      "sha256": "cebf6f3225a466186c9c55ecdbdc6e22c95b1037c26839a4855ee09cc767d52f",
+      "git_blob": "bdca44ead10e7b172907c0dd5172ef43d8588c72",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    }
+  },
+  "new_runtime_controls": 0,
+  "upstream_tests_run": false,
+  "findings": [
+    "Exact stages:size bucket,8KiBprefixSHA256,fullSHA25664KiBbuffer. Final grouping by hash only,without byte confirmation,identity/mtime revalidation or hardlink collapse. Static findings,no collision/mutation reproduction.",
+    "collect_files drops WalkDir errors through filter_map(res.ok()) and metadata failures through ok()?;these are absent from ScanResults.errors,which only receives hashing errors.",
+    "Plain-file symlink handling uses path.is_file after WalkDir;follow_linksfalse does not by itself prove symlink-to-file exclusion. Needs runtime control.",
+    "Perceptual clustering is all-pairs Hamming<=threshold then union-find connected components,not complete-link. Transitive chains may place distant members together by design; no runtime counterexample here.",
+    "Dedupe action gates exactmode,showsplanandconfirmation,but operates saved paths without freshness checks. move_file tries rename then falls back copy/remove on every error,not only cross-device. Destination exists check is not atomic reservation. Not executed.",
+    "Four original integrationtests read:exactpair/minsize/imagepattern/imageextension;no hardlink/mutation/permission/collision or partialprefixboundary tests present in this file.",
+    "MIT root whole-read. No production adoption;problematic nativepHash/ASAN remains deferred."
+  ],
+  "remaining_scope": "10 artifacts:app,error,export,perceptualhashing,lib/main,report,README,gitignore,Cargolock.",
+  "limits": [
+    "No upstream runtime tests/build or performance qualification. Full review count203/500 unchanged."
+  ]
+}
