@@ -2,11 +2,11 @@
   "index": 76,
   "repository": "mikeleppane/visualvault",
   "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
-  "review_scope": "Partial pinned91/95 artifacts assessed;39 unique controls.157 distinct original module tests pass;1 earlier Progress concurrency failure. AllUI source read;3 helper controls confirm2 Unicode slicing panics and video destination preview mismatch.4 artifacts remain.",
-  "decision": "shortlist",
+  "review_scope": "All95 pinned tracked blobs assessed:source/docs/config wholetext,5PNGviewed,Cargo.lock417packages structuralparse. All95Gitblob/SHA256pins reverified;external linked videos not reviewed.157original module passes,1Progress concurrency failure;39authored controls. Not full runtime.",
+  "decision": "retain-negative-cases-no-code-port",
   "finding": "Rust SHA256 quick/full detector and scanner/cache layer with integration tests; compare quick-hash policy against complete hashing.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Pinned root MIT read; no production code copied; dependency license inventory not audited.",
   "tests_detected": 10,
   "upstream_tests_run": true,
   "available_source_evidence": [
@@ -132,7 +132,13 @@
     },
     {
       "audit": "docs/research/dedup-500/visualvault076-source-review-v19-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/visualvault076-source-review-v20-20261021.json"
     }
   ],
-  "upstream_test_scope": "157 distinct original module tests pass,1 original Progress concurrency test fails across isolated modules; not full original workspace."
+  "upstream_test_scope": "157 distinct original module tests pass,1 original Progress concurrency test fails across isolated modules; not full original workspace.",
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/visualvault076-complete-source-review-20261021.json"
 }
