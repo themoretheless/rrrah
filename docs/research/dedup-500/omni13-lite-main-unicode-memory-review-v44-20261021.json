@@ -1,0 +1,56 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          3921,
+          4550
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          4550
+        ],
+        [
+          5165,
+          6130
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read630 additional lifecycle/conversation/memory-helper lines. Compiled unchanged extract_agent_memory_items with owned synthetic ASCII and Unicode inputs.",
+  "findings": [
+    "Confirmed Unicode panic in unchanged extract_agent_memory_items: it finds marker byte offset in lowercased copy then slices original string. Input \u0130remember \u044f causes non-char-boundary slicing, caught in isolated harness; remember tea control returns tea. No original application process launched.",
+    "This is the same general lowercase-offset hazard already noted in other preview helpers, but independently reproduced in this function. Local rrrah implementation not changed or declared defective from upstream result.",
+    "Remember Last Position persists monitor center rather than exact launcher pixel position; Custom Monitor chooses second enumeration entry. These source behaviors narrow feature wording; no multimonitor runtime test.",
+    "animate_window and do_show both trigger_search on common non-AI show path, incrementing generation and enqueueing twice. Workers coalesce queued requests, but duplicate work before second enqueue remains possible; no timing/performance measurement.",
+    "do_hide resets query/homepage and hides window but does not cancel AI workers. reset_visible_chat_view explicitly resets visible state while background DB updates continue; this is documented intended behavior, not proof of cancelled computation.",
+    "format_conversation splits prompt and response using unescaped text separator lines. Literal user/assistant content containing separators can be interpreted as additional turns. No conversation roundtrip fixture in this batch.",
+    "Local command runner uses output capture with no timeout/cancellation/output-size cap in read function. All command strings are reviewed source data; no command runner or source-provided action executed."
+  ],
+  "limits": [
+    "85/268 whole files; main.rs1-4550 and5165-6130 partial.",
+    "No production changes; no Windows integration or actual agent/clipboard/network actions.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ],
+  "control_source": "fn extract_agent_memory_items(input: &str) -> Vec<String> {\n    let text = input.trim();\n    let lower = text.to_lowercase();\n    let mut out = Vec::new();\n\n    for marker in [\"remember that \", \"remember \"] {\n        if let Some(rest) = lower\n            .find(marker)\n            .map(|idx| text[idx + marker.len()..].trim())\n        {\n            if !rest.is_empty() {\n                out.push(rest.trim_matches(['.', '!', '?']).to_string());\n                return out;\n            }\n        }\n    }\n\n    for marker in [\n        \"my name is \",\n        \"i am \",\n        \"i'm \",\n        \"i like \",\n        \"i love \",\n        \"i prefer \",\n        \"i use \",\n    ] {\n        if let Some(rest) = lower.find(marker).map(|idx| text[idx..].trim()) {\n            if rest.len() <= 160 {\n                out.push(format!(\"User said: {}\", rest.trim_matches(['.', '!', '?'])));\n                return out;\n            }\n        }\n    }\n\n    out\n}\n\n\nfn main() { std::panic::set_hook(Box::new(|_| {})); assert_eq!(extract_agent_memory_items(\"remember tea\"),vec![\"tea\"]); assert!(std::panic::catch_unwind(|| extract_agent_memory_items(\"\u0130remember \u044f\")).is_err()); println!(\"ASCII control passed; Unicode lowercase-offset panic reproduced\"); }\n",
+  "executed_controls": {
+    "compiler": "rustc --edition 2021",
+    "source_sha256": "d94aece4b3aaab14d738ff7584ef5351e0402e9b8ce13c335f5b58ce722b6238",
+    "ascii_control_passed": true,
+    "unicode_panic_caught": true,
+    "output": "ASCII control passed; Unicode lowercase-offset panic reproduced",
+    "scope": "Synthetic inputs against exact extracted original function, not upstream UI or full tests."
+  }
+}
