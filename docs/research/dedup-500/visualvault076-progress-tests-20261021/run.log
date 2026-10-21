@@ -1,0 +1,36 @@
+
+running 18 tests
+test control_completed_progress_stays_true_when_current_decreases ... ok
+test progress::tests::test_clone ... ok
+test control_completed_progress_stays_true_when_total_increases ... ok
+test progress::tests::test_default_progress ... ok
+test progress::tests::test_debug_impl ... ok
+test progress::tests::test_eta_edge_cases ... ok
+test progress::tests::test_new_progress ... ok
+test progress::tests::test_percentage_calculation ... ok
+test progress::tests::test_percentage_with_non_round_numbers ... ok
+test progress::tests::test_reset ... ok
+test progress::tests::test_set_current ... ok
+test progress::tests::test_set_current_with_zero_total ... ok
+test progress::tests::test_set_message ... ok
+test progress::tests::test_set_total ... ok
+test progress::tests::test_eta_with_fast_progress ... ok
+test progress::tests::test_concurrent_usage ... FAILED
+test progress::tests::test_elapsed ... ok
+test progress::tests::test_eta_calculation ... ok
+
+failures:
+
+---- progress::tests::test_concurrent_usage stdout ----
+
+thread 'progress::tests::test_concurrent_usage' (26589302) panicked at /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/utils/src/progress.rs:404:9:
+assertion `left == right` failed
+  left: 99
+ right: 100
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    progress::tests::test_concurrent_usage
+
+test result: FAILED. 17 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s

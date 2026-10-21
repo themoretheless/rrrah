@@ -1,0 +1,63 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 21,
+  "files": {
+    "crates/utils/src/media_types.rs": {
+      "bytes": 8061,
+      "sha256": "ec452d1dc702212612fab169e3ab155bda1df982a480a4c761f51c99302f13e9",
+      "git_blob": "b8c17da57eda87b54b93f934ab5ec71d777552de",
+      "method": "Whole pinned originalsource/tests textread without truncation;Gitblobverified"
+    },
+    "crates/utils/src/progress.rs": {
+      "bytes": 11637,
+      "sha256": "d7c22c79781ce5fc2638497f294fb29351c602ac3a2b04a21f08211c22c803fd",
+      "git_blob": "169cefa0b378dff0878a21a660ee4d5a6147373d",
+      "method": "Whole pinned originalsource/tests textread without truncation;Gitblobverified"
+    },
+    "crates/utils/src/lib.rs": {
+      "bytes": 221,
+      "sha256": "f9eda709766baa6bd138aaac0a0254ae03c7cbce5d1d8ce958386ae1728c2d53",
+      "git_blob": "2ec99c2ff99e9968eab0da66f57645fe17e73fdf",
+      "method": "Whole pinned originalsource/tests textread without truncation;Gitblobverified"
+    },
+    "crates/utils/src/folder_stats.rs": {
+      "bytes": 168,
+      "sha256": "683c2d137cb32ab1e8d2f3ef5866648beb4cb5ac2a079abd4c03da1b61d10377",
+      "git_blob": "126ec61a12c99f01ee635d97ff9cf4aae97d9e2e",
+      "method": "Whole pinned originalsource/tests textread without truncation;Gitblobverified"
+    }
+  },
+  "new_unique_controls": 2,
+  "cumulative_unique_controls": 14,
+  "tests_script": "docs/research/dedup-500/visualvault076-progress-tests-20261021/build.py",
+  "tests_log": "docs/research/dedup-500/visualvault076-progress-tests-20261021/run.log",
+  "runtime_scope": "Whole unchanged original Progressmodule via Rustpathinclude,standalone rustc+1.98.1 --test.16originaltests plus2authoredcontrols. NofullUI/scanner runtime.",
+  "original_tests": {
+    "progress_passed": 15,
+    "progress_failed": 1,
+    "failed_name": "test_concurrent_usage",
+    "observed_current": 99,
+    "expected": 100,
+    "prior_distinct_passed": 46,
+    "cumulative_distinct_passed": 61,
+    "distinct_executed": 62
+  },
+  "authored_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "findings": [
+    "Original concurrent testincrementsAtomicUsize beforeacquiringMutex;updatescanapplyoutoforder. Thisrunendedcurrent99 aftercounter100. Originaltestfailed,notclaimedstablefrequencyornewproductionracefrequency.",
+    "Originalset_total20aftercomplete10leavesis_completetrueat50percent;set_current1aftercomplete10leavestrueat10percent. TwofiniteoriginalAPIcontrols.",
+    "Percentage permits>100 andzero totalreturns0;eta basedInstantprogressrate. Thesearestatusmetrics,notfilesystemcompletenessguarantees.",
+    "Media classification usesextensionregexandcasefoldedextensiontable,notcontentdecoding.Audio classifiedOther;typeorganization scansallfiletypes. Originalclassificationtestcomments contradict actual case-insensitiveassertions;testbodiesreadnotrun.",
+    "FolderStats is4fieldcounterstruct;nocancellation/error/completenessrepresentation. Sourceonly."
+  ],
+  "remaining_scope": "74artifacts includingfilters/app/otherUI/integrationtests/docs/config/visualassets/lock.",
+  "limits": [
+    "Failedtestlogretained;no retrytohidefailure.No productionchanges or fullworkspacequalification. Globalfullcount205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}
