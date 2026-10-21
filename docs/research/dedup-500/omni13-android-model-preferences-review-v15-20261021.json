@@ -1,0 +1,44 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/data/PreferencesManager.kt": {
+      "sha256": "113ab50ae36c0ab1371b1606ced78539e956aa44ae47bf3498002f028412942b",
+      "git_blob": "d4c60a0843edca960a89bc0a7a697bb445c42fed",
+      "mode": "100644",
+      "lines": 297
+    },
+    "android/app/src/main/java/com/omnisearch/app/data/SyncModels.kt": {
+      "sha256": "57a1acfdb9d65fe90394266d649512ad21c7db3fc0f711777c53181864b03714",
+      "git_blob": "147f04594615e2f649dd8adeea4c35fc92cee0de",
+      "mode": "100644",
+      "lines": 149
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/SecurityViewModel.kt": {
+      "sha256": "efc3d20139351f3584e3528f855968c7f1573f7ddd07355d1359c0d03a27fbe8",
+      "git_blob": "3387417eef4145e7e1518c455505648ab0797d8f",
+      "mode": "100644",
+      "lines": 124
+    }
+  },
+  "cumulative_whole_files_read": 56,
+  "tracked_blobs": 268,
+  "method": "Three pinned Kotlin files whole text read. Static model/persistence/lifecycle review only; Android dependencies not executed.",
+  "findings": [
+    "SyncModels uses optString/optLong/optInt/optBoolean defaults for missing or invalid data. Arrays skip nonobject elements. This can turn malformed/partial payload into valid-looking smaller list without explicit error/completeness state. Actual incoming payload reachability not yet reviewed.",
+    "DuplicateGroup trusts fileCount,size,totalBytes separately from files; no nonnegative/count/arithmetic/groupidentity consistency validation in model. Truncated desktop list can legitimately differ from count, so inequality alone is not defect. Schema/provenance rather than blanket equality required.",
+    "SearchResult/DriveInfo/IndexStatus contain metadata and status only, no source snapshot/fileidentity/per-file-readerror observation. Data structure is not proof of content identity.",
+    "PreferencesManager stores settings in DataStore preferences, not SharedPreferences as AndroidREADME says. Most setters assign unvalidated strings for enumlike themes/sorts/drive; downstream handling pending review.",
+    "DataStore getOrCreateDeviceId checks and creates within singleedit transaction; avoids separate read/write interleaving at this helper. Not tested concurrently.",
+    "Settings getters default only on absentkey; no errorrecovery catch in these Flows. IO/corruption error handling must occur callers or DataStore configuration; not inferred from defaults.",
+    "SecurityViewModel collects preference flows and initially locks when savedPIN arrives, relocks on resume call, clears entry on success/error. Actual activity lifecycle/biometric integration still pending; no security bypass conclusion from standalone methods.",
+    "Setters launch persistence coroutines and returnwithout acknowledgment/error state in this ViewModel; visible saveconfirmation/error handling downstream unreviewed. Source observation only.",
+    "No duplicate matching, hashing, vector similarity or file move/delete implementation in these threefiles. No code adoption or performance claim."
+  ],
+  "limits": [
+    "56/268 pinnedwholefiles reviewed. Full repository and all500 remain incomplete.",
+    "No Android/Kotlin/Room/DataStore/runtime/upstream suite, userpreferences, credentials or network actions.",
+    "No production changes. Native pHash/ASAN remains deferred."
+  ]
+}
