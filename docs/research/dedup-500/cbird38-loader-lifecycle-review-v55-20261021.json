@@ -1,0 +1,54 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_source_files": {
+    "src/gui/mediagrouplistwidget.cpp": {
+      "sha256": "5005fb2282272972bf1e9c614a95e05395daaec9677ed41f10ec20cd45e46fd9",
+      "git_blob": "d4155ec4c559590360d953277ab19551636c4a51",
+      "bytes": 81816,
+      "lines": 2564,
+      "read_ranges_inclusive": [
+        [
+          1,
+          1040
+        ],
+        [
+          2273,
+          2564
+        ]
+      ],
+      "new_ranges_inclusive": [
+        [
+          331,
+          1040
+        ],
+        [
+          2273,
+          2564
+        ]
+      ],
+      "method": "Cumulative partial source read;1041-2272 remain unread."
+    }
+  },
+  "cumulative_assessed_blobs": 164,
+  "tracked_blobs": 616,
+  "findings": [
+    "waitLoaders cancels all tasks then repeatedly processes non-user events until watcher list empty, without deadline. Global counters assert completed+canceled equals started but do not distinguish decode failure from successful image. No actual hang/cancellation timing measured.",
+    "loadOne completion updates Media by path, not stale original index, which handles item rotation/deletion better. Noncanceled null-image result increments finished; finished count is not decoded-success count. OOM separately schedules retry.",
+    "OOM handler waits current loaders while canceling others, evicts one LRU page then retries/compacts. Global allocator/min-free heuristic and timer are not a hard per-window byte budget or guarantee of recovery. No memory pressure test.",
+    "Widget disables delete/delete-all/replace QAction when FlagDisableDelete set. This resolves earlier enforcement uncertainty for those action bindings; rename/move are distinct actions. No UI interaction or alternate slot invocation tested.",
+    "Opening window globally suppresses JPEG and ICC log categories, destructor reenables without reference counting multiple windows. Warnings can be hidden or restored while another viewer remains. Error logging is not a per-file complete ledger.",
+    "selectItem rejects rowIndex<=0, so requested media on first page cannot be selected by this method, although initial default selection may still pick it. No UI run.",
+    "removeSiblings mutates page groups before attempted trash operations and returns on first failure before final UI cleanup/DB removal; partial failure can leave different in-memory/filesystem state. No file mutation performed.",
+    "loadMedia evicts while count>5 before adding current page, permitting up to6 tracked pages after append. This is source-level count bound, not measured memory bound; each page variable size.",
+    "Benchmark timer waits page isLoaded and reports image count/wall-clock, but has no pixel/decoder oracle and nonreloadable failures can prevent completion. Its logs do not qualify complete-image correctness or production throughput."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Whole artifacts unchanged164/616;1002new source lines read but partial file not promoted.",
+    "31 prior original-body/header controls plus two independent counterexamples unchanged. No GUI, OOM, cancellation timing, deletion or benchmark run.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
