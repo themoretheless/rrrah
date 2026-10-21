@@ -2,7 +2,7 @@
   "index": 17,
   "repository": "VikasSukhija/Downloads",
   "commit": "59b36dcb55ec25533c0278ea466d8bb278b5b43a",
-  "review_scope": "Partial whole-source review: README, MIT LICENSE and four selected scripts fully read (6/248 blobs). Complete path inventory only for remainder; no administrative script executed.",
+  "review_scope": "Partial whole-source review: 12/248 blobs including complete contents of four small ZIP archives. Complete path inventory only for remainder; reviewed scripts not executed.",
   "decision": "reject-domain",
   "finding": "PowerShell compares mail policies, Intune devices and AD object identities; no file/image comparison engine.",
   "license_metadata": "MIT",
@@ -78,6 +78,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/downloads17-domain-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/downloads17-file-operations-review-v2-20261021.json"
     }
   ]
 }
