@@ -1,0 +1,43 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 7,
+  "tracked_blobs": 84,
+  "partial_artifact_assessment": {
+    "path": "scripts/embedder-worker.js",
+    "sha256": "81b531a80f0222f54df17a45ffffd6f796a9640874f874694bdd4bb5d72d8c35",
+    "git_blob": "ababc8faae25512db19296562d352bee4bc61a4a",
+    "bytes": 200202,
+    "lines": 4177,
+    "text_ranges_read": [
+      [
+        1,
+        35
+      ],
+      [
+        3970,
+        4177
+      ]
+    ],
+    "entire_file_evaluated_in_vm": true,
+    "whole_file_semantically_read": false
+  },
+  "executed_controls": {
+    "runner": "docs/research/dedup-500/photos20-worker-controls-v3-20261021/controls.mjs",
+    "log": "docs/research/dedup-500/photos20-built-worker-controls-v4-20261021/run.log",
+    "passed": 4,
+    "output_byte_identical_to_source_controls": true
+  },
+  "findings": [
+    "Pinned generated bundle successfully evaluates with the same VM transport harness. Original detection handlers reproduce all four source-worker outcomes.",
+    "The distributed bundle also misses ten of sixty identical unit vectors at threshold 1, and permits non-clique groups in full and smart modes.",
+    "The full bundled detector finds identical vectors separated by a different vector. The adjacent-only exported main helper is not representative of this full handler."
+  ],
+  "limits": [
+    "Execution uses synthetic vectors and stubbed self message transport; no browser process, GPU, WASM, MediaPipe init or image embedding.",
+    "Only first-party generated handler and helper tail manually read; bundled third-party MediaPipe implementation not completely read. Artifact does not increase whole-file completion count.",
+    "No full-source-versus-bundle equivalence proof beyond these four executed controls."
+  ]
+}
