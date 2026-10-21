@@ -1,0 +1,70 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_source_files": {
+    "src/lib/CImg.h": {
+      "sha256": "f13dfc3c427c4ea20c0052dcd8cdb882853cf8e45d70285dbcfceca630236eab",
+      "git_blob": "5e268dfc4bad5ad7b0992fde925869b19876bcb7",
+      "bytes": 3273953,
+      "total_lines": 66396,
+      "new_read_ranges_inclusive": [
+        [
+          431,
+          730
+        ]
+      ],
+      "cumulative_read_ranges_inclusive": [
+        [
+          1,
+          730
+        ],
+        [
+          32275,
+          32345
+        ],
+        [
+          37300,
+          37421
+        ]
+      ],
+      "method": "Whole new range read: optionalcodec/library configuration and beginning of neighborhood macros. Remainder not counted complete."
+    }
+  },
+  "cumulative_assessed_blobs": 615,
+  "tracked_blobs": 616,
+  "findings": [
+    "CImg optional OpenCV,PNG,JPEG,TIFF,HEIF,MINC,zlib,curl,Magick,FFTW,EXR,LAPACK interfaces are preprocessor-gated. A supported configuration name is not an enabled or tested decoder. cbird wrapper explicitly enables onlyPNG/JPEG and disablesdisplay; external build flags not requalified here.",
+    "Local exact crop implementation compares canonical linearRGBA pixels at every valid placement. New regression specifically prevents red-only matching,off-by-one loss at right/bottom and fictitious zero padding after the upstream discovery."
+  ],
+  "executed_controls": [
+    {
+      "scope": "local existing+new Rust regressions, separate from upstream controls",
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test crop --test pixels",
+      "exit_code": 0,
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "suites": {
+        "crop": 4,
+        "pixels": 9
+      },
+      "build_seconds": 11.73,
+      "test_seconds_reported": 0.0,
+      "new_test": "bottom_right_crop_checks_every_color_and_alpha_without_padding",
+      "observations": [
+        "Authored4x3HDRsource has constant red but distinctgreen/blue. Independent2x2needle has only placement(2,1),touching rightandbottomlimits.",
+        "All12single-sample green/blue/alpha mutations across4needle pixels refuse exact matches.",
+        "Whole-source needle returns exact4x3extent.5x4zero-paddedneedle returns no placements and0comparisons because largerthan source."
+      ],
+      "test_source_sha256": "e0dbf10531da357a5bc34e8b831e565c7edec80303680997effa2779506cb2ee",
+      "implementation_sha256": "98ac2f42ea6deb584f879bfa58f5e10c40ae6ff7548b6f618cae7706309130f3",
+      "formatting": "rustfmt1.98.1 applied to changed test file; only new test additions in diff."
+    }
+  ],
+  "limits": [
+    "615/616fullartifacts; CImg remains partial.37upstream original-body/header controls and3independent counterexamples unchanged.",
+    "New test qualifies exact unscaled linear pixel crops, not arbitrary geometric,lossy,format or full-dataset recall. No productionalgorithm change or speedup; native pHash/ASAN deferred."
+  ]
+}

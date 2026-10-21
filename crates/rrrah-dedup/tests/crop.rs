@@ -9,6 +9,64 @@ const BUDGET: CropBudget = CropBudget {
 };
 
 #[test]
+fn bottom_right_crop_checks_every_color_and_alpha_without_padding() {
+    let image: Vec<f32> = (1_u8..=12)
+        .flat_map(|i| [7.0, f32::from(i), f32::from(i) / 2.0, 1.0])
+        .collect();
+    let needle = [
+        7.0, 7.0, 3.5, 1.0, 7.0, 8.0, 4.0, 1.0, 7.0, 11.0, 5.5, 1.0, 7.0, 12.0, 6.0, 1.0,
+    ];
+    let source = LinearRgbaView::new(4, 3, &image, 12, || false).unwrap();
+    let crop = LinearRgbaView::new(2, 2, &needle, 4, || false).unwrap();
+    assert_eq!(
+        find_exact_crops(&source, &crop, BUDGET, || false)
+            .unwrap()
+            .placements,
+        [Region {
+            x: 2,
+            y: 1,
+            width: 2,
+            height: 2
+        }]
+    );
+    // Red is identical everywhere. Every green/blue/alpha sample still matters,
+    // including the bottom-right source pixel at both inclusive image limits.
+    for pixel in 0..4 {
+        for channel in [1, 2, 3] {
+            let mut changed = needle;
+            changed[pixel * 4 + channel] += if channel == 3 { -0.5 } else { 0.25 };
+            let changed = LinearRgbaView::new(2, 2, &changed, 4, || false).unwrap();
+            assert!(
+                find_exact_crops(&source, &changed, BUDGET, || false)
+                    .unwrap()
+                    .placements
+                    .is_empty(),
+                "pixel={pixel}, channel={channel}"
+            );
+        }
+    }
+    assert_eq!(
+        find_exact_crops(&source, &source, BUDGET, || false)
+            .unwrap()
+            .placements,
+        [Region {
+            x: 0,
+            y: 0,
+            width: 4,
+            height: 3
+        }]
+    );
+    let mut padded = vec![0.0; 5 * 4 * 4];
+    for y in 0..3 {
+        padded[y * 20..y * 20 + 16].copy_from_slice(&image[y * 16..y * 16 + 16]);
+    }
+    let padded = LinearRgbaView::new(5, 4, &padded, 20, || false).unwrap();
+    let absent = find_exact_crops(&source, &padded, BUDGET, || false).unwrap();
+    assert!(absent.placements.is_empty());
+    assert_eq!(absent.compared_pixels, 0);
+}
+
+#[test]
 fn bordered_hdr_image_matches_only_the_full_crop() {
     let image: Vec<f32> = (0_u16..30).flat_map(|i| [f32::from(i), 0.0, 0.0, 1.0]).collect();
     let needle: Vec<f32> = [8_usize, 9, 14, 15]
