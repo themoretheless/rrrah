@@ -2,7 +2,7 @@
   "index": 30,
   "repository": "google-research/3d-moments",
   "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
-  "review_scope": "Partial whole-source review: 4/73 tracked blobs. Configuration, depth binning, point renderer and empty core initializer fully read; pair-consumption domain and static numeric edges recorded. No runtime execution.",
+  "review_scope": "Partial whole-source review: 9/73 tracked blobs. Inpainting, historical environment, download helper and train/render configs read without execution; numeric/bounding limits recorded statically.",
   "decision": "reject-domain",
   "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
   "license_metadata": "Apache-2.0",
@@ -98,6 +98,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/moments30-depth-renderer-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/moments30-inpainting-environment-review-v2-20261021.json"
     }
   ]
 }

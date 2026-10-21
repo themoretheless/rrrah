@@ -1,0 +1,61 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "core/inpainter.py": {
+      "sha256": "35f0691f55edb40aee2b182fc4b0415640ae1bfea51b926b495f714c0ff97353",
+      "git_blob": "90623d71e9b764a4c0fa9e671b10f30d82e30bea",
+      "bytes": 8490,
+      "lines": 194,
+      "method": "Whole source/configuration read; not executed."
+    },
+    "environment.yml": {
+      "sha256": "d1cc9b81331e2110bce02b5a8eea3b55be897ceb9925ac9a589e40ff6f9f7d0f",
+      "git_blob": "37a932afdf99a791dd99ffa46c3260ca20becfe8",
+      "bytes": 3393,
+      "lines": 130,
+      "method": "Whole source/configuration read; not executed."
+    },
+    "download.sh": {
+      "sha256": "967515da520bb247fe452047c044a7e25993e696a92f10d09d7f5f9bebd2a3d9",
+      "git_blob": "1a8a75fe431cb0dc62afbb9b67e0d5e54f19976c",
+      "bytes": 1555,
+      "lines": 34,
+      "method": "Whole source/configuration read; not executed."
+    },
+    "configs/render.txt": {
+      "sha256": "736ea33a3387945c379c2c5662c10562d2d46fe3d0b5b6bb0c75e723f7407510",
+      "git_blob": "66390a9bb2e7ea92dfe2f9a1e08f72d8324cd43d",
+      "bytes": 291,
+      "lines": 14,
+      "method": "Whole source/configuration read; not executed."
+    },
+    "configs/train.txt": {
+      "sha256": "0662e791e6dc9a3bd01f90a78e754768cf6bd5bc78fab5d632ec87f9c519230e",
+      "git_blob": "67730f5f8b9369b7107f779bd66eb99c80c366d8",
+      "bytes": 287,
+      "lines": 17,
+      "method": "Whole source/configuration read; not executed."
+    }
+  },
+  "cumulative_whole_files_read": 9,
+  "tracked_blobs": 73,
+  "findings": [
+    "Inpainter constructs generated RGB/depth layers using pretrained networks, erosion/opening/blur and depth-order constraints. Generated similarity is not original-file duplicate correspondence.",
+    "define_inpainting_bbox uses exclusive slices but clamps x1/y1 to h-1/w-1. At right/bottom limits the last row/column is excluded; empty alpha reaches min/max on empty tensors. Static source finding only.",
+    "process_depth_for_network takes mean of context-selected log depths without empty-context check; empty context can produce nonfinite intermediate values. Actual sequential caller erodes/skips some layers; runtime reachability not proven.",
+    "Network initialization reads depth/color checkpoints via torch.load and defaults cuda. No checkpoints loaded or source imported.",
+    "Environment pins Python3.7.11, Torch1.7.1, CUDA10.1 and PyTorch3D0.6.0 with Linux build strings and an absolute historical conda prefix. It is not a verified macOS environment.",
+    "Download script fetches external pretrained weights/ZIP and moves files without explicit digest validation or set-e behavior; source read only, no downloads/script execution.",
+    "Training/render configs select synthesis features, optical-flow training, depth decoding and renderer radii; no content hash, duplicate search index or all-pairs confirmation exposed here."
+  ],
+  "executed_controls": [
+    "All five original Git blobs verified against pinned tree."
+  ],
+  "limits": [
+    "No Torch/Kornia/network/model/GPU/runtime execution.",
+    "9/73 tracked blobs completely read; domain decision remains partial until remaining code/assets reviewed.",
+    "No production library modification or measured optimization."
+  ]
+}
