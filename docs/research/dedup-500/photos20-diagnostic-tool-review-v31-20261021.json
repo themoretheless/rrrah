@@ -1,0 +1,29 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tools/cdp.py": {
+      "sha256": "4eec614742a44e7f42d8b5df3f4201fcb5c350b9b69f8d4d5e93f7a8c484faeb",
+      "git_blob": "74adefa77ad9ed50e4738d44ea1eb45bc0d41518",
+      "bytes": 6759,
+      "lines": 197,
+      "method": "Whole source read without import/execution."
+    }
+  },
+  "cumulative_whole_files_read": 67,
+  "tracked_blobs": 84,
+  "findings": [
+    "Diagnostic tool lists/evaluates/clicks/captures/navigates/reloads arbitrary CDP targets; it contains no file-duplicate algorithm or correctness verification.",
+    "Target matching accepts prefix in either direction and takes first match without ambiguity check; truncated IDs can select unintended target among matching candidates.",
+    "send_command uses a fresh websocket per command, correlates result by message ID and has a response deadline. Initial HTTP target enumeration uses blocking urlopen without explicit timeout inside async function.",
+    "Runtime.evaluate exceptionDetails are printed but do not explicitly cause nonzero exit; missing target/element also prints and returns. CLI success code therefore is not proof requested operation succeeded.",
+    "Click computes element center without visibility/obscuration/scroll checks. Query selector is JSON-encoded for lookup, but raw selector is also interpolated into a single-quoted error string, so quotes can break that generated expression.",
+    "Screenshot writes supplied path and CDP eval can execute arbitrary expressions; those capabilities were not invoked. No browser/user data inspected."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Read-only static review, no imports, websocket/HTTP connections, diagnostic commands or screenshots executed.",
+    "67/84 whole files reviewed. No production library change."
+  ]
+}
