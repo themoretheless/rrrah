@@ -1,0 +1,44 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/CredentialStore.ts": {
+      "sha256": "52bb2b3cca39025ad9364256c999efa71521e16af74536f5202afbe338182386",
+      "git_blob": "de72d178cb0900626f141bf22e7069c11d0704bc",
+      "bytes": 6137,
+      "lines": 178,
+      "method": "Whole source read, no host storage or protocol execution."
+    },
+    "src/ui/SFTPHostKeyModal.ts": {
+      "sha256": "620c59a5fc300a411e21d59b16b5828f78e2d3166f9defe9b1041fd5f7243627",
+      "git_blob": "e5d2898c009ba0e81c3acc3317d3184954e09a0a",
+      "bytes": 1535,
+      "lines": 39,
+      "method": "Whole source read, no host storage or protocol execution."
+    },
+    "tests/SFTPHostKeyHandshake.test.ts": {
+      "sha256": "a8d1f8f0ac2a8d64ff8fabddd2eb710afb0dcdc47afc62afe03e36254891521c",
+      "git_blob": "6af9af906199a3d8f5c196160d3cb8af0d515e47",
+      "bytes": 10324,
+      "lines": 203,
+      "method": "Whole source read, no host storage or protocol execution."
+    }
+  },
+  "cumulative_assessed_blobs": 91,
+  "tracked_blobs": 129,
+  "findings": [
+    "CredentialStore obtains Electron safeStorage through runtimeRequire, prefers remote.safeStorage, returns null/false on unavailable/encryption/decryption failure. enc prefix wraps base64. Source behavior only; actual OS encryption/keychain/storage portability not tested.",
+    "Session helpers use namespaced service+mountID string keys and silently ignore unavailable sessionStorage. Endpoint/account provenance and lifecycle clearing are caller responsibilities; main restoration/cleanup not yet read. No user credentials/storage accessed.",
+    "WebDAV aliases delegate generic session helpers; source comments about restart clearing and per-device OS keys are design claims, not actual host restart evidence. No external legal/security/platform guarantees inferred.",
+    "SFTPHostKeyModal uses settled latch, synchronous resolver then close, unresolvedclose=false. No actual modal/rendered interaction test performed; resolver synchronous throw could prevent close after latch set. Caller behavior pending.",
+    "Seven upstream handshake tests create real127.0.0.1SSH/TCPserver with generatedtemporaryRSA keys and test-only strings; cover approval-beforeauth/reconnect/refusal/21secondapprovalwait/keychange/cancellation/discoverytimeout/authenticationtimeout. These are protocol integration test implementations, unlike mock-only tests, but have not been executed here.",
+    "Handshake test cleanup disconnects adapters/closes serverclients/sockets. Real loopback test implementation does not establish native ObsidianUI, persistent trust after restart or remoteprovider behavior. Do not count source existence as passing results."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "91/129trackedblobs assessed(86wholetext/source,1structurallockfile,4PNGvisuals);36previousisolatedcontrols.",
+    "No keychain/sessionstorage/server/credential access or full upstreamsuite execution.",
+    "Mainentry/large modal/remaining source/docs/metadata still incomplete."
+  ]
+}
