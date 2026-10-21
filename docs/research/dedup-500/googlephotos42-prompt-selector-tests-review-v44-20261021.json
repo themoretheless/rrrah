@@ -1,0 +1,57 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/post-run-prompt.test.ts": {
+      "sha256": "6e7947d576ecdfb7b13a835b37bf614cb60a88a8def17fb8a1723c65c42162a9",
+      "git_blob": "2422765418f15f65babe0981ee4bab94f7c79e3c",
+      "bytes": 4978,
+      "lines": 113,
+      "method": "Whole pinned source read; no output truncation."
+    },
+    "tests/selector-pack.test.ts": {
+      "sha256": "fbe7904a3a4dfa990b29e6ec18858c8ba1f79e297333ec720ece954acf048549",
+      "git_blob": "732488007f5b2668e6d6320431fc43e63137ffc7",
+      "bytes": 1694,
+      "lines": 35,
+      "method": "Whole pinned source read; no output truncation."
+    },
+    "tests/selectors.test.ts": {
+      "sha256": "3a2056ccf8f6291b405f7b9f4fff7cdbca285b8c2d92b9b270cce89a5f8f9201",
+      "git_blob": "00a6868cf77b87d088124632c403434a13e5fe0a",
+      "bytes": 11407,
+      "lines": 320,
+      "method": "Whole pinned source read; no output truncation."
+    },
+    "src/extension/popup/icons.ts": {
+      "sha256": "5d6f5dd6e6f5e6aeaabc1a29e4a23742f5030224fb503e006f4e12715b538f56",
+      "git_blob": "03a2f69bb92653f36700178b40bd8aeed5392fc4",
+      "bytes": 4969,
+      "lines": 125,
+      "method": "Whole pinned source read; no output truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 162,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-prompt-controls-v44-20261021/run.mjs",
+    "harness_sha256": "bde4c756f449906e27e048a4c76abcc2527f89c79e97c579401fa5e7e2407c4d",
+    "log": "docs/research/dedup-500/googlephotos42-prompt-controls-v44-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original modules type-stripped with local ESM/JSON import adaptation; in-memory asynchronous storage; no browser/account actions. Initial harness missed transitive modules; included original dependencies before successful run."
+  },
+  "findings": [
+    "Post-run tests exercise sequential show-once and read failure, not concurrent claims or write failure. Original function concurrent Promise.all claims both return prompts and write twice; third sequential claim suppressed; write rejection suppresses prompt. Concurrency is a reproduced function-level counterexample, cross-surface browser occurrence unqualified.",
+    "Selector-pack test titled non-empty and distinct only asserts list lengths, not actual disjoint sets. selectors.test.ts separately checks finite well-known multilingual positive/negative labels; this is not exhaustive disjointness proof.",
+    "Selector tests cover fail-closed unlabelled confirmation, fallback scroll candidates and union deduplication using fake roots. No real DOM or current Google Photos compatibility claim.",
+    "Icon source consists of static SVG constants and setMarkup mount by ID; MIT Tabler attribution is a source comment, not independent license provenance verification. No visual render done for this SVG module."
+  ],
+  "cumulative_original_function_controls": 45,
+  "limits": [
+    "162/230 whole artifacts; global fully reviewed repository count unchanged at 160/500.",
+    "Full upstream Vitest/browser suite not run; native pHash/ASAN deferred. No production optimization."
+  ]
+}
