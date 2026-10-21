@@ -2,11 +2,11 @@
   "index": 38,
   "repository": "scrubbbbs/cbird",
   "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned whole-source review:6/616 tracked blobs (DCT index, wrappers, both tree headers, DCT test). Three isolated active-VP-tree controls; no full upstream/media runtime.",
   "decision": "shortlist-reference",
   "finding": "DCT Hamming index and local keypoint hashes provide crop-oriented candidates; GPL code stays a reference only.",
   "license_metadata": "GPL-2.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Selected source headers specify GPL-2.0-or-later; root and nested license texts not yet fully reviewed. No production source port.",
   "tests_detected": 4,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -103,6 +103,11 @@
       "lines": 19,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/cbird38-dct-tree-review-v1-20261021.json"
     }
   ]
 }

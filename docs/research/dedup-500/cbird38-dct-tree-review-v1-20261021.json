@@ -1,0 +1,73 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/dcthashindex.cpp": {
+      "sha256": "e25274a014adb8a035eabef08f1676a6dfdbb86df58cd3309d9df1a1afcadba8",
+      "git_blob": "5d2fb076fc7b228549c1b7f7e7e7ce2e91ec9a3b",
+      "bytes": 6681,
+      "lines": 250,
+      "method": "Whole pinned source read; hammingtree contiguous1-285,286-564."
+    },
+    "src/dcthashindex.h": {
+      "sha256": "4ce3e0d9cce733037cdeb3186c5ff323f12ecd4586448906b9b7a409019d8f7e",
+      "git_blob": "604e46ac17612e33d82ee126c5a86e929b26dc15",
+      "bytes": 2132,
+      "lines": 67,
+      "method": "Whole pinned source read; hammingtree contiguous1-285,286-564."
+    },
+    "src/tree/dcttree.h": {
+      "sha256": "c5ffcfdd1e42710b775f2d5af9d735ce832c7c8084f89f71bae460162a5aa318",
+      "git_blob": "f4d37f55ad7edd98423e946d2b671faf00bfd533",
+      "bytes": 4102,
+      "lines": 139,
+      "method": "Whole pinned source read; hammingtree contiguous1-285,286-564."
+    },
+    "src/tree/vptree.h": {
+      "sha256": "322a77d1521d463bf07881d18e36d5d43c34a019cb58df867c2752bb68cde7b9",
+      "git_blob": "704d5e8f173759f1f718a923334f507ef73f59ce",
+      "bytes": 8591,
+      "lines": 273,
+      "method": "Whole pinned source read; hammingtree contiguous1-285,286-564."
+    },
+    "src/tree/hammingtree.h": {
+      "sha256": "ae54e77a1ac05e52daaea4f6fc8c76fcde3b02657a7fbf71cc43c1d44905a143",
+      "git_blob": "aa4cccb7e22313763708112906fc30a3798098cf",
+      "bytes": 17495,
+      "lines": 564,
+      "method": "Whole pinned source read; hammingtree contiguous1-285,286-564."
+    },
+    "unit/testdcthashindex.cpp": {
+      "sha256": "e70c4ccf67c592cdc1a6893a65ee62e13fd7f27fde387bd9bd7f8a1ac94c5390",
+      "git_blob": "9293bb52d5f9cbebfeea9109fa20ccc0d8ad561d",
+      "bytes": 907,
+      "lines": 33,
+      "method": "Whole pinned source read; hammingtree contiguous1-285,286-564."
+    }
+  },
+  "cumulative_assessed_blobs": 6,
+  "tracked_blobs": 616,
+  "findings": [
+    "Active DctTree preprocessor branch defines VPTREE=1; HAMMINGTREE and LIBVPTREE are commented out. Alternative HammingTree approximate single-branch traversal must not be attributed to default DCT search.",
+    "Original VpTree header compiled with synthetic Value type, popcount distance and assert/log shims; 896 seeded query/threshold combinations over4096 values matched independent exhaustive reference exactly, with sorted verified distances and no repeated output IDs. This is scoped synthetic parity, not a proof for every input/build.",
+    "Original VP tree retained all60 identical values at threshold1 and none at threshold0: acceptance is distance < threshold, not <=. No top-50 cap at this layer. Tree build uses fixed split23; degenerate partitions become full leaves, preserving data at possible search-cost expense.",
+    "DctHashIndex rejects a zero target hash and mediaIds excludes zero hashes. A zero valid hash cannot be distinguished from missing hash at those gates; actual hash-generation range not yet read.",
+    "DctHashIndex remove nullifies ID/hash then rebuilds tree; active DctTree includes every entry. Original tree control returns the zero-ID tombstone for query1 at threshold2. DctHashIndex find active branch does not apply brute-branch id!=0 filter. Higher caller cleanup unreviewed, so no final user-visible bogus-match claim.",
+    "DctHashIndex memoryUsage counts12 bytes per entry and explicitly omits tree storage; upstream test asserts the same formula. Do not interpret it as total memory use. Rebuild on every add/remove; no benchmark performed.",
+    "DctHashIndex avoids constructing an empty VP tree; generic VpTree create/search assumes nonempty initialized data and has no empty guard. No crash or invalid-memory test executed.",
+    "Alternative HammingTree source fully read, including single-branch approximate search, native serialization and assertions around reads. It remains unexecuted; no ASAN or memory-safety probing.",
+    "DCT test file delegates to TestIndexBase and external40x5-sizes corpus; base helper/corpus not yet reviewed. Reading these test declarations is not a test-suite run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-vptree-controls-v1-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "clang++ C++17 O2, original pinned vptree.h with minimal Q_ASSERT/qInfo shims, synthetic values and builtin popcount. No Qt/SQL/media decoding/upstream pHash dependency or ASAN."
+  },
+  "limits": [
+    "6/616 tracked parent blobs fully read; README/root licenses, remaining code/tests, papers/spreadsheets and media incomplete.",
+    "GPL-2.0-or-later notices observed in these source headers. Root/nested licensing not yet fully assessed; no production code port.",
+    "No production optimization, native media/full upstream suite, or performance qualification. Deferred native pHash/ASAN remains skipped."
+  ]
+}
