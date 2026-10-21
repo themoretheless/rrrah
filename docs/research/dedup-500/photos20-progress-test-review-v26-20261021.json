@@ -1,0 +1,30 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/components/scan-progress.test.tsx": {
+      "sha256": "96d121fc6bfb7f0597c537ba72f57720a06b52a8d2c7588858660e1015d84b24",
+      "git_blob": "e3b441deb2560ced8ad2e4027127a49d03d5d4d3",
+      "bytes": 4079,
+      "lines": 118,
+      "method": "Whole test source read."
+    }
+  },
+  "cumulative_whole_files_read": 61,
+  "tracked_blobs": 84,
+  "generated_test_cases": 14,
+  "findings": [
+    "Five parameterized phase label/step cases, five progress display cases, three cancel cases and one heading case yield fourteen component cases.",
+    "Complete phase case checks label/step only with zero counts; it does not assert completion percentage or ETA clearing.",
+    "Each helper render creates a fresh component. No rerender transition between determinate phases tests cached ETA carry-over from previously reviewed source.",
+    "Cancel case asserts callback invocation only; it does not check actual detector abort, pending messages or stale completion suppression.",
+    "No timing controls test three-second ETA warmup, one-second refresh, rounding boundary, frozen/nonmonotonic clock, negative/over-total count or reordering of progress events.",
+    "Number formatting assertions hardcode comma separators while production uses runtime locale. No locale matrix in this file."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static test source review only; React/Vitest not executed.",
+    "61/84 complete tracked files read; no production library changes."
+  ]
+}
