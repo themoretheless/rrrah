@@ -1,0 +1,39 @@
+{
+  "rows": [
+    {
+      "requested": 1,
+      "before": 1000,
+      "set_return": 1,
+      "after": 1000
+    },
+    {
+      "requested": 100,
+      "before": 1000,
+      "set_return": 1,
+      "after": 1000
+    },
+    {
+      "requested": 1000,
+      "before": 1000,
+      "set_return": 1,
+      "after": 1000
+    },
+    {
+      "requested": 2000,
+      "before": 1000,
+      "set_return": 1,
+      "after": 1000
+    },
+    {
+      "requested": 0,
+      "before": 1000,
+      "set_return": 0,
+      "after": 0
+    }
+  ],
+  "finding": "Fresh contexts reject every tested positive chunk-count limit, including unchanged default1000; zero succeeds. Actual original public API, no image input.",
+  "limits": [
+    "Five option-only calls; no decoding/resource consumption effect measured.",
+    "Existing cached build from v23 pinned spng.c, AppleClang O2."
+  ]
+}

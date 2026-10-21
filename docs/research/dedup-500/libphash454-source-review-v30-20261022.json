@@ -1,0 +1,38 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": false,
+      "read_ranges_inclusive": [
+        [
+          1,
+          5680
+        ],
+        [
+          6120,
+          6200
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-chunk-option-result.json",
+  "findings": [
+    "Read encode loop completion, context init/free, buffer/file/stream callbacks, output ownership, image/chunk limit setters/getters, CRC controls/options, metadata getters and initial setters.",
+    "Confirmed actual public SPNG_CHUNK_COUNT_LIMIT setter rejects1/100/1000/2000 on fresh context, preserving default1000; setting0 succeeds. Source compares requested value > chunk_count_total and rejects positive values when total0. No input or resource stress executed.",
+    "Current libphash wrapper never calls chunk-count option, so this finding does not prove failure in current hash path.",
+    "spng_get_unknown_chunks source copies only sizeof(one struct) despite count API supporting multiple; source observation only, not yet reproduced.",
+    "spng_set_png_file dereferences ctx before delegating null guard; not called with null in controls. No crash qualification claimed.",
+    "No production changes or all-case claim; native pHash.org/ASAN skipped."
+  ],
+  "remaining": [
+    "spng.c lines5681..6119 and6201..6980",
+    "Remaining dependency docs/build/tests/assets and other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
