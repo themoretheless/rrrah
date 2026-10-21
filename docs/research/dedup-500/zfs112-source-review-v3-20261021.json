@@ -1,0 +1,37 @@
+{
+  "repository": "Mic92/zfs-dedup",
+  "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
+  "whole_repo_complete": false,
+  "tracked_blobs": 23,
+  "cumulative_assessed_blobs": 11,
+  "files": {
+    "src/walk.rs": {
+      "bytes": 14548,
+      "sha256": "c796c3324d6896ba0a13b00bfe66f1076d2a57e2683a3fd20ab1f15f80497ea3",
+      "git_blob": "d98e8ee0db24c3413a24a649739d55e0cd4b382e",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/main.rs": {
+      "bytes": 10759,
+      "sha256": "8882f143fc20544baa17d7cc60d5b479b76fbe1590290587f090404cf8ee84d6",
+      "git_blob": "345fd83fafc00ab00d64f72d1a265a74f85d72e2",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 3,
+  "controls_script": "docs/research/dedup-500/zfs112-path-controls-v3-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/zfs112-path-controls-v3-20261021/run.log",
+  "control_scope": "Whole original PathTable/Paths/FilePath implementation extracted before ZFS-specific code;anyhow Result alias replaced by boxed std error alias;authored finite Rusttests.No walk/ZFS/mount/clone execution.",
+  "findings": [
+    "NonUTF8path bytes roundtrip and7items mapped in3/3/1batches preservepaths/order. Third authored control confirms batch0 silentlyreturns emptyfiles without invokingstep.Production hash_files uses100000,so no normal-run failureclaimed.",
+    "Initial authored harness omittedOsStringExt import;addedtrait,no originalsourcefixrequired.",
+    "Walker collapses nlink>1 bydevice/inode,singlelinks skipseen set. Overlapping roots can therefore repeatnlink1files;needs runtimecontrol. Symlinks skipped byfile_type;childmountboundariespruned.",
+    "Walker errors onlystderr,Pathsreturnhasnoerrorstatus;main success depends hash_errors+dedupstats.errors. Walk omissions may not affect exitstatus. Static concern,no mounted runtimecontrol.",
+    "Main groups byfsid,dropsnonZFS/readonlydirs,excludescacheinode,requiresforce whenatomicdedupunavailable. Private namespace attempt occurs before Rayon;dryrunmaywritecache and remountinsideprivate namespace. Usage dontmodifyanything is broader than implemented cache behavior,sourceonly.",
+    "Prune limitedrootmountscope butwalkerror completeness not propagated;mayremove unseen cacheentries afterpartialwalk. Impact cache eviction/recomputation,not automaticfilelossclaim."
+  ],
+  "remaining_scope": "12artifacts includingremount,bench/example,Nix/config andlockfiles.",
+  "limits": [
+    "Only2originalBloomtests and3adaptedPathcontrols qualified.No fullcrate/Linux/ZFS/pathmutations executed.NativepHash/ASANdeferred;globalfullcount204/500unchanged."
+  ]
+}
