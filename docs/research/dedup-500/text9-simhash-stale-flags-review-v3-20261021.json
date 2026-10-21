@@ -1,0 +1,64 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/text_dedup/simhash.py": {
+      "sha256": "a2195a17d454b4c291df96bf014f0b27bb101f30523b00f35b36b5343209421e",
+      "git_blob": "6bc4b07427b574df8433934310024976551d3b6d",
+      "lines": 245
+    },
+    "src/text_dedup/config/algorithms/simhash.py": {
+      "sha256": "d5acbf4e146a12a6670c53071a3dff0f3dc96804b346f70233fdc05932f9648e",
+      "git_blob": "7a76e0c0972faab08f2c2f144d5f10aaae707e30",
+      "lines": 457
+    },
+    "tests/test_config/test_algorithms/test_simhash.py": {
+      "sha256": "dd8178a225a18affa6f9fb11c2aac8251a876a6f99b967ceb49cdbba7e09c4c3",
+      "git_blob": "af9c5cd0370332b8c0099be2f67f455003bf6af1",
+      "lines": 11
+    }
+  },
+  "cumulative_whole_files_read": 11,
+  "tracked_blobs": 75,
+  "method": "Three complete pinned files read. AST-extracted original check_false_positives/remove_duplicates functions executed with original Jaccard/UnionFind and minimal in-memory Dataset filter/map adapter; no fingerprint or full pipeline execution.",
+  "findings": [
+    "Verification updates cluster_column but never __duplicate__; removal filters stale __duplicate__. Three synthetic candidates with mutually disjoint token sets: verification emits no parents and singleton clusters, yet removal retains only original root and discards other2. Reproduced original function bodies, adapter scope explicit.",
+    "Initial SimHash cluster removes root self-assignments from parents. assign marks only nonroots duplicate; verification filters by duplicate flag and omits retained root. A two-member candidate cluster therefore presents only1member for verification, which cannot be compared to retained root. Source observation.",
+    "Both initial Hamming clustering and Jaccard verified-pair clustering use UnionFind connected components; transitive chains do not prove retained root matches every member. Local library all-pairs grouping requirement remains distinct.",
+    "Short/empty texts below token minimum get all-zero signatures rather than being filtered. Such unrelated texts become identical signature candidates; stale-flag defect can defeat optional verification. Full embedding runtime unexecuted.",
+    "Config validation explicitly checks num_bucket > bit_diff but lacks positive f/num_bucket/bit_diff constraints. model_post_init division by floor(f/num_bucket) can reach zero for f<num_bucket. Actual Pydantic lifecycle not executed.",
+    "create_permutations uses _x>0 without decrementing _x across masks; it emits ordered permutations of fixed blocks, potentially redundant candidates. No missed-neighbor claim without exhaustive real bitarray test.",
+    "Reviewed test_permute uses random fingerprint at default settings and checks inverse permutation; it does not exercise full assign/verify/filter pipeline or stale flags. Wider component test file remains unread."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/simhash-verification-control.py",
+    "sha256": "373e755a656245a4d28473f7fe44635372a5b332cba6ce3bcb56cee27475ee48",
+    "result": {
+      "input_ids": [
+        0,
+        1,
+        2
+      ],
+      "verified_parents": {},
+      "updated_clusters": [
+        0,
+        1,
+        2
+      ],
+      "duplicate_flags": [
+        false,
+        true,
+        true
+      ],
+      "retained_ids": [
+        0
+      ],
+      "scope": "Original two functions and original Jaccard/UnionFind; minimal in-memory filter/map adapter replaces HuggingFace Dataset, no fingerprint or full pipeline run."
+    }
+  },
+  "limits": [
+    "11/75 tracked blobs reviewed;152/500 repositories complete.",
+    "No full upstream pytest, actual HuggingFace Dataset, Pydantic config, NumPy/bitarray fingerprint run. No production changes. pHash/ASAN deferred."
+  ]
+}
