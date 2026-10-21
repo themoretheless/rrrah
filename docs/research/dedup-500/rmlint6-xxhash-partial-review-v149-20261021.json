@@ -1,0 +1,78 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          2801,
+          3400
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          3400
+        ]
+      ],
+      "unread_ranges": [
+        [
+          3401,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated2801..3400 read and original pinned XXH32 compiled with local clang -O2 into private test harness. XXH64 only memory-helper prefix read; no whole-file credit.",
+  "findings": [
+    "XXH32 consumes16-byte stripes and finalizes0..15 bytes through four-byte then single-byte tails; optional switch path is separate compile configuration. Size optimization2 may route single-shot via streaming.",
+    "Streaming completes buffered stripe before consuming remaining full stripes; large_len remains set across32-bit total-length wrap. This control does not exercise4GiB wrap.",
+    "NULL-input update returnsOK after asserting length0; it is a documented precondition, not supported nonzero-length error recovery. No invalid-pointer misuse executed.",
+    "Digest reads state without modifying it; copyState uses memcpy and requires nonoverlap. Canonical32-bit output swaps little-endian native hash then copies bytes; inverse reads big-endian."
+  ],
+  "executed_control": {
+    "cases": 172200,
+    "failures": 0,
+    "exit_code": 0,
+    "compiler": "clang -O2",
+    "scope": {
+      "lengths": "0..1024 inclusive",
+      "input_offsets": "0..7",
+      "seeds": [
+        "0",
+        "1",
+        "0xffffffff"
+      ],
+      "chunk_sizes": [
+        1,
+        15,
+        16,
+        17,
+        31,
+        64,
+        257
+      ],
+      "checks": [
+        "Each prefix streaming digest equals original single-shot.",
+        "Repeated digest and copied-state digest equal prefix.",
+        "Final digest equals single-shot.",
+        "Canonical roundtrip and exact big-endian bytes.",
+        "NULL+zero update and NULL+zero one-shot equivalence."
+      ]
+    },
+    "harness_sha256": "a72a07cab80203f0e8bb4df9d1c1bd624fcce1030ec7db1850f3e5d0b9cbc835",
+    "independent_oracle": false
+  },
+  "limits": [
+    "3400/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "Control validates consistency within same original implementation, not independent algorithm correctness, allfeatures, platforms or throughput. pHash/ASAN remains deferred."
+  ]
+}
