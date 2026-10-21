@@ -2,9 +2,9 @@
   "index": 393,
   "repository": "MichaelXavier/phash",
   "commit": "7ca85be786273bc4e7763b9b53d93010800eeea0",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All17 pinned blobs:13 whole text files and4 individually viewed JPEG fixtures. External native backend and Haskell runtime unqualified.",
   "decision": "wrapper",
-  "finding": "Haskell FFI bindings to native pHash; no independent image algorithm or permissive-backend conclusion.",
+  "finding": "Complete wrapper review: Maybe preserves failures, explicit successful test assertions; CULong/Word64 FFI width portability needs qualification. Four fixtures are one image family, including180-degree rotation.",
   "available_source_evidence": [
     {
       "path": "src/Data/PHash.hs",
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/michael393-complete-source-review-20261021.json"
 }
