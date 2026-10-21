@@ -1,0 +1,44 @@
+{
+  "repository": "Intervention/imagehash",
+  "commit": "f66faf81b2b05ea26fe4fbbf7a896edfafbefebd",
+  "whole_repo_complete": false,
+  "tracked_blobs": 42,
+  "cumulative_assessed_blobs": 4,
+  "files": {
+    "src/Hash.php": {
+      "bytes": 5584,
+      "sha256": "c20db411ae052e9e3a9d41f81341c33ba92d898bbbc23349aaa495a181dd3fbc",
+      "method": "Whole pinned PHP text read without truncation"
+    },
+    "src/BitParser.php": {
+      "bytes": 1758,
+      "sha256": "2ad317a2f023012d76b89dde7ea4cd150cf670ce71f6f5b8ecb38ee1b22236c8",
+      "method": "Whole pinned PHP text read without truncation"
+    },
+    "src/Strategies/AverageStrategy.php": {
+      "bytes": 2013,
+      "sha256": "4a8ca9451eedb91480ad76e410f6007679ae9aec365f6a730d9595c9bd02f177",
+      "method": "Whole pinned PHP text read without truncation"
+    },
+    "src/Strategies/DifferenceStrategy.php": {
+      "bytes": 2281,
+      "sha256": "0fc7e922878b456aa7febbf45c9f0181abadbe518ed92e91efbe57575db3775f",
+      "method": "Whole pinned PHP text read without truncation"
+    }
+  },
+  "runtime_controls_executed": 0,
+  "findings": [
+    "Hash::distance explicitly refuses unequal byte-derived bit lengths, uses GMP Hamming or associative bit-array difference. Both prepend the same sentinel1 for GMP. Backend equivalence not executed.",
+    "Hash::fromBits accepts at least8 bits but does not require divisibility by8. A short last group is interpreted as an integer then packed into a full byte; original bit count is not retained. This is representation behavior, not a claimed normal fixed64bit hash failure.",
+    "AverageStrategy and DifferenceStrategy constructors accept every positive size, while hash emits size squared bits. Sizes1and2 yield1and4bits and conflict with fromBits minimum8. Actual PHP/driver exception path not executed.",
+    "Average uses floor-weighted0.299/0.587/0.114 RGB and strict greater-than floored mean. Difference uses strict left-greater-than-right and size+1 wide bysize high. Different from local linear RGB/black-white/transform recipe; no byte-level equivalence assumed.",
+    "analyze clones input; direct hash resizes supplied image. Actual backend mutation/ownership behavior awaits Intervention Image dependency qualification.",
+    "BitParser distinguishes integer/string/boolean by type but uses non-strict in_array within integer/string validators. Runtime treatment of unusual strings remains unqualified."
+  ],
+  "remaining_scope": "38 artifacts including remaining implementation, upstream tests/providers, project configs/license/README, support SVG and six JPEG fixtures.",
+  "license": "Registry MIT screening metadata only; full root text pending. No production adoption.",
+  "limits": [
+    "No PHP executable found on current PATH; no PHP source, upstream suite, image driver or GMP executed.",
+    "Global full-review count remains179/500; native pHash/ASAN deferred."
+  ]
+}
