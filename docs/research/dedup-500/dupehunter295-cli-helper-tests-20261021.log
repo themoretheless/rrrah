@@ -1,0 +1,244 @@
+TAP version 13
+# Subtest: parseCliArgs: applies sensible defaults with no arguments
+ok 1 - parseCliArgs: applies sensible defaults with no arguments
+  ---
+  duration_ms: 1.562459
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: accepts a bare positional as the directory
+ok 2 - parseCliArgs: accepts a bare positional as the directory
+  ---
+  duration_ms: 0.162417
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --dir works when no positional is given
+ok 3 - parseCliArgs: --dir works when no positional is given
+  ---
+  duration_ms: 0.129208
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: a positional directory takes precedence over --dir
+ok 4 - parseCliArgs: a positional directory takes precedence over --dir
+  ---
+  duration_ms: 0.062417
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --min-size parses human sizes
+ok 5 - parseCliArgs: --min-size parses human sizes
+  ---
+  duration_ms: 0.243083
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --include-empty forces minSizeBytes to 0
+ok 6 - parseCliArgs: --include-empty forces minSizeBytes to 0
+  ---
+  duration_ms: 0.064375
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --exclude is additive to the always-on defaults
+ok 7 - parseCliArgs: --exclude is additive to the always-on defaults
+  ---
+  duration_ms: 0.111334
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --concurrency parses a positive integer
+ok 8 - parseCliArgs: --concurrency parses a positive integer
+  ---
+  duration_ms: 0.107333
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: rejects a non-positive --concurrency
+ok 9 - parseCliArgs: rejects a non-positive --concurrency
+  ---
+  duration_ms: 0.518459
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: rejects an invalid --keep policy
+ok 10 - parseCliArgs: rejects an invalid --keep policy
+  ---
+  duration_ms: 0.277166
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: accepts every valid --keep policy
+ok 11 - parseCliArgs: accepts every valid --keep policy
+  ---
+  duration_ms: 0.128541
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: rejects combining --delete and --hardlink
+ok 12 - parseCliArgs: rejects combining --delete and --hardlink
+  ---
+  duration_ms: 0.051083
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: rejects an invalid --min-size
+ok 13 - parseCliArgs: rejects an invalid --min-size
+  ---
+  duration_ms: 0.0905
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: rejects an unknown flag
+ok 14 - parseCliArgs: rejects an unknown flag
+  ---
+  duration_ms: 0.08375
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --help short-circuits other validation
+ok 15 - parseCliArgs: --help short-circuits other validation
+  ---
+  duration_ms: 0.05625
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: -h and -y short flags work
+ok 16 - parseCliArgs: -h and -y short flags work
+  ---
+  duration_ms: 0.066375
+  type: 'test'
+  ...
+# Subtest: parseCliArgs: --json, --delete, --hardlink, --dry-run, --follow-symlinks flags toggle on
+ok 17 - parseCliArgs: --json, --delete, --hardlink, --dry-run, --follow-symlinks flags toggle on
+  ---
+  duration_ms: 0.07075
+  type: 'test'
+  ...
+# Subtest: formatBytes: renders sub-kilobyte values as whole bytes
+ok 18 - formatBytes: renders sub-kilobyte values as whole bytes
+  ---
+  duration_ms: 0.722
+  type: 'test'
+  ...
+# Subtest: formatBytes: picks the largest unit that keeps the value >= 1
+ok 19 - formatBytes: picks the largest unit that keeps the value >= 1
+  ---
+  duration_ms: 0.055958
+  type: 'test'
+  ...
+# Subtest: formatBytes: shows one decimal place under 10 units, none at or above
+ok 20 - formatBytes: shows one decimal place under 10 units, none at or above
+  ---
+  duration_ms: 0.040666
+  type: 'test'
+  ...
+# Subtest: formatBytes: caps at petabytes for absurdly large inputs
+ok 21 - formatBytes: caps at petabytes for absurdly large inputs
+  ---
+  duration_ms: 0.082542
+  type: 'test'
+  ...
+# Subtest: colorsEnabled: NO_COLOR always disables, even on a TTY
+ok 22 - colorsEnabled: NO_COLOR always disables, even on a TTY
+  ---
+  duration_ms: 0.049125
+  type: 'test'
+  ...
+# Subtest: colorsEnabled: FORCE_COLOR enables even without a TTY
+ok 23 - colorsEnabled: FORCE_COLOR enables even without a TTY
+  ---
+  duration_ms: 0.038625
+  type: 'test'
+  ...
+# Subtest: colorsEnabled: FORCE_COLOR=0 does not force-enable
+ok 24 - colorsEnabled: FORCE_COLOR=0 does not force-enable
+  ---
+  duration_ms: 0.077833
+  type: 'test'
+  ...
+# Subtest: colorsEnabled: falls back to the stream's TTY-ness
+ok 25 - colorsEnabled: falls back to the stream's TTY-ness
+  ---
+  duration_ms: 0.033125
+  type: 'test'
+  ...
+# Subtest: createColors: disabled returns empty strings for every code
+ok 26 - createColors: disabled returns empty strings for every code
+  ---
+  duration_ms: 0.199667
+  type: 'test'
+  ...
+# Subtest: createColors: enabled returns non-empty escape codes
+ok 27 - createColors: enabled returns non-empty escape codes
+  ---
+  duration_ms: 0.2925
+  type: 'test'
+  ...
+# Subtest: parseSize: bare number is bytes
+ok 28 - parseSize: bare number is bytes
+  ---
+  duration_ms: 0.822542
+  type: 'test'
+  ...
+# Subtest: parseSize: recognizes each unit, case-insensitively
+ok 29 - parseSize: recognizes each unit, case-insensitively
+  ---
+  duration_ms: 0.087041
+  type: 'test'
+  ...
+# Subtest: parseSize: supports decimal magnitudes
+ok 30 - parseSize: supports decimal magnitudes
+  ---
+  duration_ms: 0.102875
+  type: 'test'
+  ...
+# Subtest: parseSize: tolerates whitespace between magnitude and unit, and surrounding
+ok 31 - parseSize: tolerates whitespace between magnitude and unit, and surrounding
+  ---
+  duration_ms: 0.046042
+  type: 'test'
+  ...
+# Subtest: parseSize: rejects malformed input
+ok 32 - parseSize: rejects malformed input
+  ---
+  duration_ms: 0.229167
+  type: 'test'
+  ...
+# Subtest: renderReportText: reports no duplicates found for an empty report
+ok 33 - renderReportText: reports no duplicates found for an empty report
+  ---
+  duration_ms: 0.671667
+  type: 'test'
+  ...
+# Subtest: renderReportText: lists every path in every group
+ok 34 - renderReportText: lists every path in every group
+  ---
+  duration_ms: 0.08425
+  type: 'test'
+  ...
+# Subtest: renderReportText: never emits raw ANSI escapes when colors are disabled
+ok 35 - renderReportText: never emits raw ANSI escapes when colors are disabled
+  ---
+  duration_ms: 0.064291
+  type: 'test'
+  ...
+# Subtest: renderReportText: emits ANSI escapes when colors are enabled
+ok 36 - renderReportText: emits ANSI escapes when colors are enabled
+  ---
+  duration_ms: 0.040333
+  type: 'test'
+  ...
+# Subtest: renderReportText: surfaces warnings with their path and message
+ok 37 - renderReportText: surfaces warnings with their path and message
+  ---
+  duration_ms: 0.090792
+  type: 'test'
+  ...
+# Subtest: renderPlanText: shows the kept file and every removed path with the given verb
+ok 38 - renderPlanText: shows the kept file and every removed path with the given verb
+  ---
+  duration_ms: 0.19875
+  type: 'test'
+  ...
+# Subtest: toJsonReport: serializes groups with reclaimable bytes and ISO timestamps
+ok 39 - toJsonReport: serializes groups with reclaimable bytes and ISO timestamps
+  ---
+  duration_ms: 0.690833
+  type: 'test'
+  ...
+1..39
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 126.730042

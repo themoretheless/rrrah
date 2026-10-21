@@ -1,0 +1,82 @@
+{
+  "repository": "amasen02/dupehunter",
+  "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
+  "whole_repo_complete": false,
+  "tracked_blobs": 52,
+  "cumulative_assessed_blobs": 33,
+  "files": {
+    "test/cli-args.test.ts": {
+      "bytes": 3944,
+      "sha256": "0b9abdccf274fd24c014dc9457db96df73878e07e3b3727796e0530c959ff2c7",
+      "git_blob": "df083ab1efb36332c3007b98d061644cc0c88cd1",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/cli.test.ts": {
+      "bytes": 5115,
+      "sha256": "796e02dccc8832e581a7ac14e75b13418328dfb0375eddcd850e7e2857eefec6",
+      "git_blob": "81bfcf55106df9bc4c38b276caf4ea5e15858c65",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/format.test.ts": {
+      "bytes": 2301,
+      "sha256": "715ebffc7833787defcb651b7c2dd3786c39378b215f4c1465e84f0b7a93a5d2",
+      "git_blob": "f1dd9b5e460623e7557005b52afe8be3b7188489",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/render.test.ts": {
+      "bytes": 3545,
+      "sha256": "1b3f05c840237486e52b4381ef9633b9e0babc68ce3ecb396561bebeb618bef8",
+      "git_blob": "2c85093fd04db35307b209a220f61b4076cb95a6",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/parse-size.test.ts": {
+      "bytes": 1157,
+      "sha256": "739220b478de68c49566eea86d36b2cc5e4c25634d7181478c0dc7c9d4db8971",
+      "git_blob": "a8195bcfe44a97604525230b09b6694b56381655",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tsconfig.json": {
+      "bytes": 558,
+      "sha256": "a0f7b6018617ba17322428874258d82ede8ecb5f71968f43096d9624df40e9c5",
+      "git_blob": "f61f7d94e7308758a4b9e6daf9367b6f4eb22e41",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tsconfig.test.json": {
+      "bytes": 182,
+      "sha256": "84a1067a76ede3a6623d0d37a91b6d3673e43e1e2a11fcf8c3827d3ef5c7c2e5",
+      "git_blob": "bc442ac058c16c49406ed8c4e0fe3ac44fbdd915",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "package-lock.json": {
+      "bytes": 63994,
+      "sha256": "0340e2bb5452a74015eb1aeb7795c1cb09a19b6af0c3415a33e14dfc5c50bbab",
+      "git_blob": "5c16223e9c2eaf0482cc5f1cf192fdfa2f899303",
+      "method": "Full JSON structural parse:129package entries,all nonroot version/resolved/integrity present; not dependency source review"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 10,
+  "upstream_tests": {
+    "new_helper_tests": 39,
+    "new_helper_failed": 0,
+    "new_helper_skipped": 0,
+    "cumulative_distinct_passed": 80,
+    "not_executed": "10CLI subprocess tests requiring original tsx loader"
+  },
+  "logs": [
+    "docs/research/dedup-500/dupehunter295-cli-helper-tests-20261021.log",
+    "docs/research/dedup-500/dupehunter295-locked-install-failure-20261021.log"
+  ],
+  "findings": [
+    "Remaining original test source fully read, including CLI subprocess implementation,nonTTY abort,destructive --yes and dryrun fixtures restricted to own temp dirs.39helper tests pass;previous41 disjoint tests yield80 distinct passes across runs, not one combined80run.",
+    "CLI missing-root test explicitly requires exit0 and warning. Previously reproduced behavior is intentional tested policy, conflicting with broad help exit2 description; not claimed accidental throw/crash.",
+    "Numeric parser tests reject0,-1,abc but omit fractional/prefix/overflow controls already reproduced.",
+    "Render no-ANSI assertion uses authored safe paths; it does not prove arbitrary filenames cannot themselves contain terminal escape sequences. No execution exploit claim.",
+    "Lock version3 contains129packages,all128nonroot have version/resolved/integrity; esbuild/fsevents install scripts recorded. npm ci --ignore-scripts fails404 on GitHub registry yocto-queue0.1.0 archive, before tests/build. Lock kept unchanged.",
+    "First fetch/install attempt used wrong working-directory-relative paths; corrected absolute paths then authoritative404 recorded. No upstream defect inferred from that harness mistake."
+  ],
+  "remaining_scope": "19 project documentation/config/workflow files remain; original locked install/full launcher/typecheck/build not qualified.",
+  "limits": [
+    "No production changes; original lock network failure does not block further source review. Global full count202/500 unchanged. pHash/ASAN deferred."
+  ]
+}
