@@ -1,0 +1,50 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/theme.cpp": {
+      "sha256": "1bb084b4a2517b658f89b44db4e06c6c8fdb3c372981c41aeaadede6fd41f931",
+      "git_blob": "df00fafe7215cfdc4a389d9fe47b20bb5741c0a8",
+      "bytes": 12382,
+      "lines": 390,
+      "method": "Whole pinned GUI source/header read; no UI launched."
+    },
+    "src/gui/theme.h": {
+      "sha256": "0b33d6e178f7a271da09231d545a3b356399080b153785df6031903d3ec48f86",
+      "git_blob": "21117e5db67b00168e45a23e1d38b4605cfbeae8",
+      "bytes": 4421,
+      "lines": 118,
+      "method": "Whole pinned GUI source/header read; no UI launched."
+    },
+    "src/gui/shadewidget.cpp": {
+      "sha256": "2d64e365f612359cabb7e23737d173811ceadb51651c51e3e1c5484acbeda708",
+      "git_blob": "4556f90fdf8d377dcabb4ec75214313c86a2b8c8",
+      "bytes": 1492,
+      "lines": 42,
+      "method": "Whole pinned GUI source/header read; no UI launched."
+    },
+    "src/gui/shadewidget.h": {
+      "sha256": "a8391275f82f38a906a6a82a9fc5828b92a84309b0e8e7c26ac3a0bfdb0ab100",
+      "git_blob": "828e9c70991eab4063976cfbad3b270e1187f64d",
+      "bytes": 1019,
+      "lines": 32,
+      "method": "Whole pinned GUI source/header read; no UI launched."
+    }
+  },
+  "cumulative_assessed_blobs": 158,
+  "tracked_blobs": 616,
+  "findings": [
+    "Theme setup requires GUI/main thread and checks exact application meta class name QApplication; headless path qFatal. wasSetup prevents later reapplication; style defaults depend on platform, environment and override. No cross-platform rendered parity claimed.",
+    "Rich text draws HTML using cached QTextDocument stylesheet, reloading only for toolbox mode. This handles labels and colors, not raw image normalization or perceptual hash; no new image-pixel modification inferred from theme.",
+    "Directory chooser explicitly disables symlink resolution and native dialog. Chosen directory still needs path identity/scope validation by mutation caller; chooser alone does not prove containment or transactional move.",
+    "Shade overlay covers parent geometry at creation, prevents duplicate stacking using parent shaded property, and uses distinct macOS sheet versus other-platform overlay handling. No image equivalence/visibility or accessibility test performed.",
+    "Theme/style resource dependencies still require separate source/visual review. Merely reading loader references does not count QSS/icon trees or render screenshots."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "158/616 assessed:157 whole text/source plus one PNG visual. qtutil.cpp remains partial.",
+    "29 prior original-body/header controls and two independent counterexamples unchanged. No visual runtime, production change or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
