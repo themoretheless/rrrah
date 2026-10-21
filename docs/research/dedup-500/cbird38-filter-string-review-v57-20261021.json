@@ -1,0 +1,47 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/mediafilterwidget.cpp": {
+      "sha256": "2b02285cca7e2985a1981298258d14de452dfca4171ab7fa3bd72d29fccba199",
+      "git_blob": "b65e7dcd492394554397dc93ffa14605147b8aba",
+      "bytes": 4225,
+      "lines": 141,
+      "method": "Whole pinned source/header read."
+    },
+    "src/gui/mediafilterwidget.h": {
+      "sha256": "5e7e1578db34393ef7addfdfba8c059df375f748a732aee4cc00d10f558f134a",
+      "git_blob": "e4f262b2aadc98f4c761c378334d29dcf5087e12",
+      "bytes": 1572,
+      "lines": 55,
+      "method": "Whole pinned source/header read."
+    },
+    "src/stringutil.h": {
+      "sha256": "cde039bd6e805ff1cda81ddaae62db8f3394cf8ec835e3d7a7b4db4225402d04",
+      "git_blob": "fdf28e8429f05cc0318f9b01039a880eea584a7e",
+      "bytes": 2187,
+      "lines": 61,
+      "method": "Whole pinned source/header read."
+    }
+  },
+  "cumulative_assessed_blobs": 168,
+  "tracked_blobs": 616,
+  "findings": [
+    "Original levenshteinDistance header directly compiled. strncmp over minimum length returningequal immediately returns0 for proper prefixes and empty/nonempty; reproduced abc/abcd0 instead1, empty/abc0 instead3, both directions. Standard kitten/sitting3 and equality0 controls pass.",
+    "Helper also repeats l_t==0 condition and uses variable-length arrays accepted as Clang extension with warnings preserved. Byte strings/lengths not Unicode character distance; no long-input stack or malformed-length test performed. Active caller impact unresolved until table widget read.",
+    "Filter widget persists match mask/minsize/path, emits initial state to connected model. No direct content comparison here; model filtering implementation remains unread. Labels Bigger/Smaller are not quality or equality proof.",
+    "Default size0 restoration calls findText(\"0\") though choices label None, not0, potentially leaves no selected combo entry. Numeric text conversion failure maps0. No GUI verification."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-string-controls-v57-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "clang++ C++17 O2; unmodified original header, independent known edit-distance cases; no Qt shim or ASAN. Reproduction pass means upstream disagreement observed."
+  },
+  "limits": [
+    "168/616 assessed:167 whole text/source and one PNG visual.34 isolated original-body/header controls cumulative plus two independent counterexamples.",
+    "No full table/GUI runtime, file matching impact claim, production port or performance measurement.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}

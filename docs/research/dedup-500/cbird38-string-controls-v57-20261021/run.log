@@ -1,0 +1,19 @@
+In file included from /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/cbird-string-jbrypv_w/control.cpp:5:
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/cbird38-20261021/src/stringutil.h:35:10: warning: variable length arrays in C++ are a Clang extension [-Wvla-cxx-extension]
+   35 |   int v0[l_v0];
+      |          ^~~~
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/cbird38-20261021/src/stringutil.h:35:10: note: read of non-const variable 'l_v0' is not allowed in a constant expression
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/cbird38-20261021/src/stringutil.h:33:7: note: declared here
+   33 |   int l_v0 = l_t + 1, l_v1 = l_t + 1;
+      |       ^
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/cbird38-20261021/src/stringutil.h:36:10: warning: variable length arrays in C++ are a Clang extension [-Wvla-cxx-extension]
+   36 |   int v1[l_v1];
+      |          ^~~~
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/cbird38-20261021/src/stringutil.h:36:10: note: read of non-const variable 'l_v1' is not allowed in a constant expression
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/cbird38-20261021/src/stringutil.h:33:23: note: declared here
+   33 |   int l_v0 = l_t + 1, l_v1 = l_t + 1;
+      |                       ^
+2 warnings generated.
+PASS standard substitution and equality controls
+PASS reproduced prefix extension/deletion distance0 instead of1
+PASS reproduced empty/nonempty distance0 instead of3
