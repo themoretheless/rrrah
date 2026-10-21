@@ -1,0 +1,15 @@
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const stored={};let wall=1000;
+const ctx=vm.createContext({console:{log(){}},Date:{now:()=>wall},performance:{now:()=>0},chrome:{storage:{local:{async get(k){return structuredClone({[k]:stored[k]})},async set(x){Object.assign(stored,structuredClone(x))},async remove(k){delete stored[k]}}}}});
+vm.runInContext(stripTypeScriptTypes(readFileSync(process.argv[2],'utf8'),{mode:'transform'}).replace(/\bexport /g,'')+'\nglobalThis.api={ScanLogger,StabilityTracker};',ctx);
+const {ScanLogger,StabilityTracker}=ctx.api;
+const report=(name,actual,expected)=>{assert.deepEqual(actual,expected);console.log(JSON.stringify({name,actual,passed:true}));};
+const logger=new ScanLogger();await logger.start(10);wall=2000;await logger.start(20);wall=3000;await logger.finalize('cancelled');
+report('overlapping-start-overwrites-active-scan',{count:stored.scanLogs[0].totalItems,status:stored.scanLogs[0].status},{count:20,status:'cancelled'});
+let fired;const tracker=new StabilityTracker(x=>{fired=x});tracker.update('phase',10,100);tracker.update('phase',20,100);tracker.update('phase',30,100);
+report('zero-clock-delta-accepted-as-stable-estimate',fired.estimatedMs,0);
+await logger.start(7);wall=1000000;await new ScanLogger().recoverStale();
+report('reload-recovery-includes-entire-wall-clock-gap',stored.scanLogs[1].totalMs,997000);

@@ -1,0 +1,40 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/scan-log.ts": {
+      "sha256": "dbf63330fe8cf2e4d20b9fdcccb33ff79ab38559f9bf77a9c84b1d8644d49973",
+      "git_blob": "4592cea4378d5eda0d20f5bb010fbe412a0cd560",
+      "bytes": 8785,
+      "lines": 265,
+      "method": "Whole source read."
+    },
+    "components/ScanProgress.tsx": {
+      "sha256": "b54b8bbc6da1b2e47ddf3687e279a20ab7666b7d9b392da885fa4c6c247c8309",
+      "git_blob": "bced7054bb1e347184597217fafd933936b97afb",
+      "bytes": 4232,
+      "lines": 130,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 16,
+  "tracked_blobs": 84,
+  "findings": [
+    "ScanLogger has one mutable active entry without operation ID. A second start overwrites the first; a subsequent finalize labels the new entry. Synthetic overlapping lifecycle confirmed, actual caller overlap not reproduced.",
+    "recoverStale computes wall-clock now minus original start, including downtime across reload/browser closure. This is not active scan CPU/GPU time or a completed-scan duration.",
+    "StabilityTracker initializes phase time at first positive progress event, excluding earlier phase work. Three zero-elapsed samples produce 0/0 in stability ratio; NaN comparison falls through and records stable estimatedMs=0. Confirmed with synthetic frozen clock, not a normal scan timing claim.",
+    "Logs contain total/candidates/cache hits and timings, but no failed-thumbnail/embedding count, input coverage proof, model digest or exact comparison evidence. Complete status is not exhaustive duplicate correctness proof.",
+    "ScanProgress does not reset cached ETA when changing between determinate phases and does not clear it on completion; previous ETA can remain until replaced. Percentage is not clamped.",
+    "formatEtr independently rounds seconds/minutes, permitting 60-second or 60-minute labels near boundaries. Message prop is accepted but not rendered by component."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-log-controls-v11-20261021",
+    "passed": 3,
+    "method": "Original logger/tracker transformed by Node TypeScript transform in VM, synthetic clocks and in-memory clone-on-write Chrome storage stub."
+  },
+  "limits": [
+    "No Chrome persistence, React component runtime, browser reload or actual scan performance measurement.",
+    "16/84 full files read. Production library unchanged."
+  ]
+}
