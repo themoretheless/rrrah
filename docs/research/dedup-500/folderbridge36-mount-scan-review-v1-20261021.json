@@ -1,0 +1,78 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "package.json": {
+      "sha256": "7dcde3527941a88178e97c8cc72c05424d904337d2d58c85f1c1aff6974ac38b",
+      "git_blob": "0aeebaeb42e76b7f46bbe05d9f66db0c839bee26",
+      "bytes": 1656,
+      "lines": 46,
+      "method": "Whole source/text read."
+    },
+    "manifest.json": {
+      "sha256": "7780064c44a6e344bb295a4ad79c9d156b1adf501a5d7579e285342ce8d1c7c2",
+      "git_blob": "89316491423bc3d3a312604a2c0f4d3565c91fc6",
+      "bytes": 376,
+      "lines": 10,
+      "method": "Whole source/text read."
+    },
+    "src/mountScan.ts": {
+      "sha256": "2723eff71980b48c94a2d26c2f61cc24526e9b61fd68bf4889b31f8c0059f000",
+      "git_blob": "637695e32a3d0f7f426694b4b604a59f7b429694",
+      "bytes": 5048,
+      "lines": 124,
+      "method": "Whole source/text read."
+    },
+    "src/mountFileFilter.ts": {
+      "sha256": "900667b941c266bb3f26519613a56bcce2dce6a79710a0d4989b8b4c69382d79",
+      "git_blob": "1ecc40ddda83b9a7f85ae49fb41b53ed4468d2ec",
+      "bytes": 928,
+      "lines": 28,
+      "method": "Whole source/text read."
+    },
+    "tests/mountScan.test.ts": {
+      "sha256": "e4662a2e16530bc98616d5b0ab13dec6bedb3053b598b7c6d92e857c9643999a",
+      "git_blob": "587326447521d3d3a45032a70edad7fdb6a76a1d",
+      "bytes": 17196,
+      "lines": 361,
+      "method": "Whole source/text read."
+    },
+    "tests/mountFileFilter.test.ts": {
+      "sha256": "0782d99927c1fd3204fedd845d6445b575946eaca6ab8ef4b7c322740fd25204",
+      "git_blob": "69c15cb4004ab1b7502ce942eda688a1efdaadc4",
+      "bytes": 988,
+      "lines": 20,
+      "method": "Whole source/text read."
+    },
+    "scripts/benchmark-mount-scan.mjs": {
+      "sha256": "3034539731937b4552f13970bee821c4ed86d8fea386fbfa072134e59b0dbfb5",
+      "git_blob": "cc4dabdd3cafa3661a151c7f9b7adb31930f365d",
+      "bytes": 5214,
+      "lines": 123,
+      "method": "Whole source/text read."
+    }
+  },
+  "cumulative_whole_files_read": 7,
+  "tracked_blobs": 129,
+  "findings": [
+    "FolderBridge mounts local/vault/WebDAV/S3/SFTP paths into Obsidian; hasAbstractFile prevents repeated virtual path notifications, not duplicate content. No content hashes or duplicate similarity decision in reviewed scanner.",
+    "Local/vault metadata batching uses concurrency8, remote1; allSettled waits for current batch, then file notifications are serial in listing order. Original function control confirms peak8 and24ordered notifications. Candidate pattern only, no Rust port or throughput claim.",
+    "First rejected stat result throws into folder-level catch; later successful entries in same batch and remaining files in that folder are abandoned. onError callback sees error, but returned result has no error/incomplete field. Synthetic control confirms zero-count result with scanLimitHit=false for first-entry failure. Callers not yet assessed.",
+    "maybeMarkHuge is called only in folder loop, not after file increments. Flat1001file control returns fileCount1001,isHuge=false. UI effects/caller behavior unverified.",
+    "Scan limit counts newly created folders and files together; existing items excluded. No cancellation token or visited-directory set in scanner. Adapter cycle/containment guarantees not yet assessed.",
+    "Reviewed upstream tests explicitly expect folder-level abort after stat failure, notification ordering and local8/remote1. Tests use synthetic dependencies/fake timers, not real Obsidian/remote storage. Test files read, Vitest not executed.",
+    "Benchmark alternates baseline/current over five repetitions of20kzero-bytefiles/100folders, checks notification equality, reports medians and admits warm OS caches/no-opnotifications. Default baselineHEAD may equal current source; no demonstrated improvement without distinct ref. Benchmark not executed.",
+    "Extension filter is case insensitive for last filename extension; markdown includes md/canvas/mdx and PDF pdf. No content or MIME validation. Manifest minimum app0.15.0 versus dev obsidian dependency^1.13.1 is not runtime compatibility proof."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-scan-controls-v1-20261021",
+    "passed": 3,
+    "method": "Original TS scanner/filter bodies after Node type stripping; import wiring replaced and normalizePath identity stub for canonical paths. Synthetic in-memory adapter; no user vault/storage touched."
+  },
+  "limits": [
+    "7/129trackedfiles fully read; whole repository incomplete.",
+    "No upstream Vitest/fullbuild/Obsidian/remote service execution.",
+    "Production library unchanged; license text and other modules pending."
+  ]
+}
