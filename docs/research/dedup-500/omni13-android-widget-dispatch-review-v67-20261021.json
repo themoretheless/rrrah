@@ -1,0 +1,54 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/widget/LocalExplorerWidgetProvider.kt": {
+      "sha256": "d984a6741951e96ea34141ec065d97837b0e4e22dbdfd93306d32da6e3d0eb06",
+      "git_blob": "e1953154ac20cff4246598fccdeeadefdef8d2c8",
+      "mode": "100644",
+      "lines": 55
+    },
+    "android/app/src/main/java/com/omnisearch/app/widget/MusicWidgetProvider.kt": {
+      "sha256": "cb4dfcb6becb1c54a865fbf50df7e8bf2fd6eda25f57e2654f81597ab9072af3",
+      "git_blob": "c7eaa03013325d2a8c0b0bf436e4d0300744c6c2",
+      "mode": "100644",
+      "lines": 212
+    },
+    "android/app/src/main/java/com/omnisearch/app/widget/MusicWidgetSmallProvider.kt": {
+      "sha256": "b7fa6c4607ea2bbd980665fca5f826eef71b7d254fb75d09445e4f780910886d",
+      "git_blob": "782c42c6457c976740810205ed60327e9293da89",
+      "mode": "100644",
+      "lines": 109
+    },
+    "android/app/src/main/java/com/omnisearch/app/widget/SearchWidgetProvider.kt": {
+      "sha256": "9372ae8474f6c533303a5b832685003c9061944787a658d675eb8cac8481f7cf",
+      "git_blob": "9f90981c9b9015be04921c2a6eccaffd2c76f70a",
+      "mode": "100644",
+      "lines": 123
+    }
+  },
+  "cumulative_whole_files_read": 106,
+  "tracked_blobs": 268,
+  "method": "Four new complete pinned provider files499 lines; ScanConnectWidgetProvider48 lines reread, already credited v1 and not counted again. Cross-read existing WidgetThemeUtil/SyncViewModel call sites and manifest music entries. Static review, no Android actions.",
+  "findings": [
+    "All providers build explicit component Intents and immutable/update-current PendingIntents. No new claim of implicit arbitrary action dispatch. LocalExplorer category request codes derived from fixed category hash; search PC/local request codes100/101 differ to avoid extras identity conflation. Scan action differs despite requestcode0. Actual Android PendingIntent delivery untested.",
+    "SearchWidgetProvider stores single is_pc_mode preference and toggle refreshes every search widget. Per-instance independent modes are absent, rather than instanceID collision bug. RemoteViews click actions target explicit MainActivity and defer gating to previously read activity/MainScreen.",
+    "Music update reads currentPlayingFile and isPlaying separately; no coherent state snapshot. Fallback last-played metadata checked exists only, not isFile/readability/content identity. Widget title derived filename and artist parent-directory, not extracted media tags. Manager/service semantics pending reading.",
+    "LocalAudioArtworkCache.get invoked synchronously inside each music update, including BroadcastReceiver callbacks and appearance refresh. Actual cache/decoder cost pending source and device measurement. No blocking-time magnitude claimed.",
+    "WidgetThemeUtil.updateAllWidgets calls MusicWidgetSmallProvider.updateAppWidget whereas compact companion declares updateAppWidgetSmall; SyncViewModel refresh correctly calls updateAppWidgetSmall. Companion-resolution/build behavior requires Kotlin compiler qualification, unavailable here. Record callsite mismatch, not a proven compilation result.",
+    "Base MusicWidgetProvider.private updateAllWidgets enumerates large-widgetIDs then invokes virtual onUpdate. Compact subtype overrides onUpdate to use compact layout. If inherited onReceive executes on compact instance for handled music action, that call path can send compact RemoteViews to large IDs. Manifest action routing and explicit current intents constrain reachability; no broadcast/device reproduction.",
+    "Explicit play/prev/next broadcasts target base provider, including compact control, which narrows virtual-dispatch concern for these button paths. Compact manifest receiver/source inheritance alone does not prove action delivered there.",
+    "play/prev/next calls sendActionToService with try fallback to opening app, then immediately refreshes widgets before service async state settles. Later service update protocol pending; cannot label final state stale from immediate refresh alone.",
+    "Favorite toggle parses preferences read-modify-write and starts service without exception wrapper used by play/prev/next. Malformed JSON silently treated as empty collection and replaced on toggle. No actual preference corruption or service start executed.",
+    "When manager current file null, all prev/play/next controls launch app with optional last-path autoplay rather than previous/next commands; intentional fallback source behavior, not demonstrated seek/navigation support.",
+    "Background open-app action flags differ from explorer/search/scan intents (no explicit NEW_TASK/CLEAR_TOP in music fallback templates); actual launch/task behavior unqualified. PendingIntents shared across widget instances for same global actions intentionally carry no instance settings.",
+    "Provider source confirms no content duplicate computation; file paths here identify navigation/playback targets. This dispatch review cannot certify rrrah grouping, file identity, Android build or actual widget visuals."
+  ],
+  "limits": [
+    "106/268 whole files, not107: ScanConnect already counted in v1. Repository013 remains incomplete.",
+    "No Android/Kotlin compilation, live broadcasts/services, preferences writes, widget pinning, playback, artwork decoding or UI rendering.",
+    "155/500 full repositories unchanged; no new production edits/tests.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
