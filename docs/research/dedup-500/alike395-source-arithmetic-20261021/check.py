@@ -1,0 +1,4 @@
+from pathlib import Path
+import math,re,json,hashlib
+root=Path.cwd();source=root/'.dedup-work/alike395-20261021/src/alikepkg/lib.nim';s=source.read_text();size=int(re.search(r'const HASH_SIZE .*?= (\d+)',s).group(1));assert 'col.r.uint16 + col.g.uint16 + col.g.uint16' in s
+side=int(math.sqrt(size*8));result={'scope':'Source-derived arithmetic only; not original Nim execution or Pixie resize qualification','hash_bytes':size,'array_positions':size*8,'resized_square_side':side,'filled_positions':side*side,'unfilled_positions':size*8-side*side,'source_formula':'(r + g + g) floorDiv3','blue_only_pixel_value':(0+0+0)//3,'green_only_pixel_value':(0+255+255)//3,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest()};assert result['unfilled_positions']==28;(root/'docs/research/dedup-500/alike395-source-arithmetic-20261021/result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
