@@ -2,7 +2,7 @@
   "index": 354,
   "repository": "corona10/goimagehash",
   "commit": "d8115886f3603fc5951521bf095d0c1ee73b9b47",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned10/33whole text artifacts read including hash APIs, imagehash tests, grayscale/flatten/statistics helpers andBSD2license. All33cached Git-verified;zero runtimecontrols.",
   "decision": "shortlist",
   "finding": "Go aHash/dHash/pHash and popcount with algorithm tests; small BSD visual hash oracle candidate.",
   "available_source_evidence": [
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "BSD-2-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "RootBSD2 fully read; no production adoption.",
   "tests_detected": 4,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -73,6 +73,11 @@
       "lines": 25,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/goimagehash354-source-review-v1-20261021.json"
     }
   ]
 }

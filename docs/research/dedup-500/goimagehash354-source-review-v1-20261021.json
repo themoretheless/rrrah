@@ -1,0 +1,87 @@
+{
+  "repository": "corona10/goimagehash",
+  "commit": "d8115886f3603fc5951521bf095d0c1ee73b9b47",
+  "whole_repo_complete": false,
+  "tracked_blobs": 33,
+  "cumulative_assessed_blobs": 10,
+  "files": {
+    "LICENSE": {
+      "bytes": 1316,
+      "sha256": "bf2244c9858f20900b2f85a024aabbe4a70d68128ceaf1da46151348cf528423",
+      "git_blob": "37b5a96098ebd17a2cc7f9d1c9a2d69132102736",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "etcs/utils.go": {
+      "bytes": 1652,
+      "sha256": "6ca73cdb8b5a43a69152c86a6b075b7119455c4b1160609fa7ba88ab446bc763",
+      "git_blob": "1d1cdcdc93f090f952adc321b981fa105e94d7fc",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "go.mod": {
+      "bytes": 115,
+      "sha256": "d40f529be06eb0b2b1301c1ba6a295edc61203d347b199d6f7fb788487b30412",
+      "git_blob": "94bd86e8f3d600ea1b69eef6e177fe9bb8fad278",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "go.sum": {
+      "bytes": 219,
+      "sha256": "e0614da3564c8ede8963512dcb9fb6217bc081ed0d747db7fd0054136deabf45",
+      "git_blob": "96adbed6646e17304cc730c5172126382293ca9c",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "hashcompute.go": {
+      "bytes": 5774,
+      "sha256": "7e079cccb8ff338a05737e182ef014be8f6d71b624f7a6718023a28c13df414c",
+      "git_blob": "f964285cdfd5d20c3673ccd27aca775555c4b842",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "imagehash.go": {
+      "bytes": 6582,
+      "sha256": "d40657bb4fef9d6508bf3360a71cdaeffe769be3cfc2166ba0c0152ed09c37c8",
+      "git_blob": "f6239f4f1a66b2290e48de8be7b494f32c3c589c",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "imagehash18.go": {
+      "bytes": 142,
+      "sha256": "cb044ef524ba52b9c7089293f12794fcea3964e4085687b1b0bc97011602ec1e",
+      "git_blob": "e8d3fd62a13fa4419a8d616d55832e0ff33aac52",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "imagehash19.go": {
+      "bytes": 120,
+      "sha256": "a8d0b329156b69f18393d44965df90309cc4c71af736297f23ef859e13908933",
+      "git_blob": "c1d47be3627c0ea85dfa865cc9c44f59d8e54713",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "imagehash_test.go": {
+      "bytes": 7134,
+      "sha256": "087f0c17fb8251cfbd00ae4add933bb574aed270cb5bca54a7da8b6c40ef2b48",
+      "git_blob": "2b1a8e1678359aabace4561150f1a1b6eb4ef8e6",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    },
+    "transforms/pixels.go": {
+      "bytes": 2692,
+      "sha256": "7d394ef08a071cdc1c9550557da3ed9d39bea903b9ec733e7e82fe0141352b4d",
+      "git_blob": "82bdb0d132d2857026820b0c3db8fbeeab21b5f7",
+      "method": "Whole pinned source/test/license/manifest text read without truncation"
+    }
+  },
+  "upstream_tests_run": false,
+  "new_runtime_controls": 0,
+  "findings": [
+    "All33 original cached blobs downloaded and Git-verified;10whole artifacts read including hash APIs, imagehash tests, grayscale/flatten helpers, statistics and license. Remaining algorithms/tests/docs/config and4images pending.",
+    "ExtImageHashFromString accepts decoded byte lengths not divisible by8, iterates floor(length/8), silently discarding remainder and deriving bits from retained wholewords. Static observation, no Go execution.",
+    "NewExtImageHash and GetHash retain/expose mutable slice rather than copying. Bits and slice length can be inconsistent through public constructor or decoded gob; Distance validates kind/bits/slice-count but not declared bits vs actual payload or padding. No runtime mutation counterexample here.",
+    "ImageHash.Distance handles nilother; ExtImageHash.Distance dereferences nilother without equivalent gate. Source-only difference.",
+    "FlattenPixels allocatesx*y but indexes destination y*i+j rather than x*i+j. Square golden/test cases do not establish rectangular correctness. FlattenPixelsFast64 uses same destination stride. No output or panic reproduced.",
+    "Rgb2Gray and fast helpers calculate dimensions from bounds but sampleAt(j,i) without bounds.Min offset. Blue uses b/256 while red/green use/257. Raw RGBA method returns premultiplied values and alpha omitted in scalar luminance. Actual resize/decoder path effects remain unqualified.",
+    "Extended pHash validates power-of-two product but unchecked width*height and resize(product,product) costs; other extended algorithms lack dimension/resource admission. No unsafe or oversized control run.",
+    "Full imagehash_test.go read: basic popcount/nil and square8/16serialization roundtrips; final invalid-hex parse call has no result assertion. No passing tests inferred. hashcompute/transforms/statistics tests still unread.",
+    "No Go executable onPATH or in checked common installation paths. No build/test attempt with alternate language counted as original behavior.",
+    "Root BSD2 fully read, no production code adopted. Native pHash/ASAN deferred; current fullreview count199/500 unchanged."
+  ],
+  "remaining_scope": "23artifacts including4images, remaining algorithm/test source, docs/buildmetadata; run original Go tests when runtime available.",
+  "limits": [
+    "Partial10/33review; zero new runtime controls. Current fullreview count199/500 unchanged."
+  ]
+}
