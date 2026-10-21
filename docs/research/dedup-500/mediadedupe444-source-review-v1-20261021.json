@@ -1,0 +1,31 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "files": {
+    "engine.py": {
+      "bytes": 51051,
+      "sha256": "3e2839ac8ea6b006132c38c5a1d7012e9f2b25bcb42c7a77a4c703ad7493cd39",
+      "git_blob": "b149100deabf9196c15e60b3d3af8714b2ae3484",
+      "scope": "Lines1-620 whole-read; remaining lines not yet reviewed"
+    },
+    "report_template.py": {
+      "bytes": 11056,
+      "sha256": "53c1a9c5faa0e5ee7b4d5d977effe8d6872e2800810a847b6fc96a7f8e6b6983",
+      "git_blob": "25d69d35faa70f760733b25fe549149a91b11d01",
+      "scope": "Pinned import dependency fetched, not yet whole-read"
+    }
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-controls-20261021/result.json",
+  "authored_controls": 3,
+  "upstream_tests_run": false,
+  "findings": [
+    "Real BMP rewrite preserving length and restored mtime causes original process_files cache to reuse stale MD5 and publish unequal bytes in exact group.",
+    "Injected same digest across two repeated sizes joins all four rows: size prefilter counts sizes but grouping key excludes size. Synthetic labels, not actual MD5 collision.",
+    "Visual anchor grouping accepts A-B-C as two or three members depending input order; B-anchor group includes A,C whose distance2 exceeds threshold1. Actual imagehash Hamming backend, supplied hash values.",
+    "Source threshold comment incorrectly describes pHash0 as pixel-identical; no production code adopted."
+  ],
+  "limits": [
+    "Engine review only lines1-620 of full file; report template fetched solely to import original engine. No full repository completion, web/video runtime, model accuracy, deletion or performance qualification. Existing rrrah exact stale-snapshot and complete-link grouping regressions checked separately. Native pHash/ASAN deferred."
+  ]
+}
