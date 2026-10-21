@@ -1,0 +1,84 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Nine additional source/test files wholly read. Actual unchanged core,loader,color sources compiled with original stb header for synthetic valid PPM context controls. No upstream full suite.",
+  "manifest": [
+    {
+      "path": "src/image/color.c",
+      "sha256": "f2bf3e333897ddd16c1a264614ddd5dad7ceceb91efef375e7c082bc9c5e54c5",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/loader.c",
+      "sha256": "a3433c2c4f0d5800ac56ca5fc7c23d33dbe49ddabee7cdeb9b78c7d3a051cd53",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/loader.h",
+      "sha256": "1317b6145f12f6e841d93080c4fc5a4e5f89660a6cbfedf10e4498844a67d776",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/loaders/internal.h",
+      "sha256": "87a54276026fc11263ba536f018b812eb8cad043bb278b1ddbf62ca13381d043",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/loaders/jpeg.c",
+      "sha256": "9ff5395e820344ad94ca72646cec0dac33b387ae0de20c63aba6187e5c8b7abe",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/loaders/png.c",
+      "sha256": "e10f3dfc2c0d203b39c8326b2d9450b4594247c93aa37dd99c1e6308c2bb7b6c",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/loaders/webp.c",
+      "sha256": "2ab1ce4fd9bed6d658e7d69fc6191c100ffa60de16121afe2453122b9c824199",
+      "review": "whole source read"
+    },
+    {
+      "path": "src/hashes/ahash.c",
+      "sha256": "afa96dfbb6f35c35bf79bf967c846bd1619fc009f985b314dce04f43b6396362",
+      "review": "whole source read"
+    },
+    {
+      "path": "tests/src/test_context_reuse.c",
+      "sha256": "7706e333e747e4f71284f1c3a76de566252f9d0c2cdc9ca84caf1bf82e3e411a",
+      "review": "whole source read"
+    }
+  ],
+  "runtime": {
+    "source_control": "docs/research/dedup-500/libphash454-controls-20261021/context-control.c",
+    "compile": "cc -O2 -I<cache>/include -I<cache>/src context-control.c <cache>/src/core.c <cache>/src/loader.c <cache>/src/image/color.c -o <cache-control>",
+    "exit_code": 0,
+    "stdout": [
+      "custom_gray=255 reset_cached=255 reset_recomputed=75",
+      "failed_reload_error=-2 public_loaded=0 internal_loaded=1"
+    ],
+    "method": "Real upstream public memory loading and setter APIs plus original internal grayscale functions; no fake decoder or overwritten upstream source. PH_TESTING and accelerated codec macros unset; actual bundled stb decodes1x1redP6.",
+    "stb_header_sha256": "f53ea8b6ed181beb245d4c43c97dca0bf03cd1408e4b6485afc605199bbc9d3f",
+    "stb_header_review": "Retrieved and Git blob verified for compile; not newly whole-read in this increment.",
+    "asan_run": false
+  },
+  "findings": [
+    "Confirmed stale grayscale cache when resetting weights via invalid-sum0,0,0: config returns default38,75,15 but ph_get_gray returns cached255 from priorred-only weights. Original ph_to_grayscale with current config returns75.",
+    "Confirmed internal is_loaded remains1 after malformed-memory reload, whereas raw_rgb becomesNULL and public ph_is_loaded returns0. Hash algorithm entry guards read internal flag; actual hash invocation after failure not executed, no crash claim.",
+    "Gamma does not enter ph_get_gray; the earlier gamma cache-invalidation suspicion is not established. ph_apply_gamma separately uses current LUT. Hash call sites still need review before gamma behavior conclusion.",
+    "Original context-reuse regression covers successful reload and three sentinel samples, not failed reload or weight-reset branch. Not executed.",
+    "PH_TESTING loader acceptsDEAD magic through malloc3 mock1x1RGB; API-guard mock_success is confirmed mock decode rather than real image evidence.",
+    "Color conversion handles1,3,4channels explicitly; grayscale+alpha2channel input falls intoRGB-reading fallback. No2channel runtime or memory fault test performed. Alpha ignored forRGBA.",
+    "Native libpng source strips16bits and alpha; tRNS expansion is decided before stripping based on original color_type, requiring separate palette/transparency qualification. Decoder backend output recipes may differ.",
+    "libpng error longjmp cleanup destroys structs but does not visibly reclaim postallocation data/row_ptrs on png_read_image error; source-only, no malformed-codec fault injection.",
+    "JPEG/WebP native decoders produce8bitRGB, no inspected ICC/EXIF/frame normalization recipe; optional native dependencies unbuilt and unaudited."
+  ],
+  "adoption": "No production source changes. These findings support recipe-aware caching and explicit failed-load state; remaining local implementation checks and external review continue.",
+  "remaining": [
+    "Unread hash/image/test sources and original test macros.",
+    "Tracked test images need visual inspection.",
+    "Vendored headers and gitlink codec implementations remain separate audit boundaries.",
+    "247full source reviews remain unchanged; universal case coverage unproven."
+  ]
+}
