@@ -1,0 +1,66 @@
+{
+  "repository": "amasen02/dupehunter",
+  "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
+  "whole_repo_complete": false,
+  "tracked_blobs": 52,
+  "cumulative_assessed_blobs": 7,
+  "files": {
+    "src/dedupe.ts": {
+      "bytes": 3431,
+      "sha256": "06bcb88d60baf99186a3650bc7868619feb2166857da64a8f935a90e2d5cdc1c",
+      "git_blob": "f703a3f2f309e7611e1e8b48a38200e282a7e9a5",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "src/hasher.ts": {
+      "bytes": 457,
+      "sha256": "f6d7837fda35e6f1cad30d2912bae0c3b1485e5e9ac2ad5f6b7029f7d174cc71",
+      "git_blob": "20c2ef131910c11d4e39fe8630fd3d1ff793bca5",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "src/scanner.ts": {
+      "bytes": 3816,
+      "sha256": "14442c99ab9a82f20ca3497ee14673ef0c71b0c95d89bdbbf676631a49b8c2cf",
+      "git_blob": "0f3ed02da310e8204c67d32b4855ea02ae6d4511",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "src/physical-file.ts": {
+      "bytes": 524,
+      "sha256": "45b2697aa0e228bc2a7140a791325e9171772992e57a2b509244f414f1f344a9",
+      "git_blob": "85235b34d1f547de368ccb888d99060d20b9771d",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "src/types.ts": {
+      "bytes": 973,
+      "sha256": "0b33c3c23861ad78e18841f18626c0e9e7d42f4e9e2ea7f51e1e0f83481e55c9",
+      "git_blob": "1b30704a20896dbfe17b788cc530b205848b11c0",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "package.json": {
+      "bytes": 1362,
+      "sha256": "9b643af77cdc5b0601758365df0a317f5fed807961d1c5a33a6601607647470c",
+      "git_blob": "ef06a09e275066a1191eda418e79e4ae9b963279",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "LICENSE": {
+      "bytes": 1073,
+      "sha256": "21316b641449303f5a9909ee5b8f6152161af5e591ad1af59d9d55d92afb6b37",
+      "git_blob": "5d61a78f713222897ea91bc32bdb525627233ff6",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 4,
+  "controls_script": "docs/research/dedup-500/dupehunter295-controls-v1-20261021/run.mjs",
+  "controls_log": "docs/research/dedup-500/dupehunter295-controls-v1-20261021/run.log",
+  "control_scope": "Unmodified original hasher.ts imported by Node22 experimental strip-types, actual filesystem/crypto streams. Own temporary directory only; full scanner/actions not executed.",
+  "findings": [
+    "Original SHA256 stream matches known empty and abc vectors,262151byte binary matches whole-buffer reference; missing file rejects ENOENT. Four finite controls, no upstream suite run.",
+    "Scanner collects regular files with size/dev/inode/mtime; follow-symlinks tracks resolved symlink directory targets, then hardlink collapse groups device:inode. Names/glob and concurrency helpers pending.",
+    "Detector groups by initial size then full SHA256, final hash grouping has no byte confirmation or metadata revalidation. Source-only mutation risk, no race/collision reproduction.",
+    "Hash failure propagates out of candidate map; handling at CLI/actions pending. Entire scan materializes files and physical groups, no cancellation/resource budget visible in these files.",
+    "MIT root whole-read, no production code copied. Node>=20,zero runtime dependencies,TypeScript development tooling."
+  ],
+  "remaining_scope": "45 artifacts including actions,CLI,helpers/tests,README/workflows and package lock.",
+  "limits": [
+    "Global full review count202/500 unchanged. No end-to-end dedup/deletion/runtime quality claim. Native pHash/ASAN deferred."
+  ]
+}
