@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_windows_gnu.S": {
+      "sha256": "b5c94f9201ab86dc1d5170b43aea440fe2a7cdbe2bec03fa1efd7c16dde1ddfb",
+      "git_blob": "ba4fc5fa984041554ceea24af0f58d2452a79e86",
+      "lines": 2615
+    }
+  },
+  "cumulative_whole_files_read": 287,
+  "tracked_blobs": 289,
+  "method": "Differential whole-file review against fully read Unix AVX512. Read unified diff1..340 and remaining non-deletion lines; large deletion consists of previously read Unix XOF-many implementation. All Windows added/replaced lines inspected; unchanged lines verified text-identical with SequenceMatcher autojunk disabled. No independent serial reread of identical lines.",
+  "equivalence_accounting": {
+    "identical_lines_to_reviewed_unix": 2501,
+    "new_or_replaced_windows_lines_read": 114,
+    "total_windows_lines": 2615
+  },
+  "findings": [
+    "This Windows source exports hash-many and two scalar compression functions, but lacks Unix xof_many symbol and implementation. Absence alone is not link failure: dispatcher/build platform gating must be checked separately. Unix zero-count XOF-many observation does not apply to an absent function here.",
+    "Hash-many adds RDI/RSI saves,304-byte reservation, stack64 alignment and XMM6..15 lower-half saves0x90..0x120 above counters/flags scratch. Common return restores all saved lower halves after vzeroupper and reverses general-register pushes.",
+    "Windows argument reshuffle and stacked counter/increment/flags/start/end/output offsets0x68/70/78/80/88/90 account for eight pushes. Hash-many group16/8/4/2/1 arithmetic, wider tail reads and output widths are unchanged apart from reviewed address spelling.",
+    "Scalar functions use72-byte frames preserving XMM6..9 only; native rotates eliminate higher scratch-register requirements. Both load flags at adjusted RSP+0x70, byte-extend lengthR8b, pack counterR9; XOF output from0x78 uses volatile R10. Balanced restores accompany32/64-byte output stores.",
+    "Constant tables are unchanged; section becomes .rdata. ELF GNU-stack/CET and Apple conditionals removed. No explicit unwind directives observed."
+  ],
+  "limits": [
+    "287/289 pinned blobs reviewed;150/500 complete repositories. Remaining MSVC AVX512 and xxhash.h.",
+    "No Windows/x86 assembly/runtime, caller padding, unwind or throughput proof; upstream reference-only. Deferred pHash/ASAN untouched."
+  ]
+}
