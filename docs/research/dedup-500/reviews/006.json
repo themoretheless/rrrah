@@ -2,11 +2,11 @@
   "index": 6,
   "repository": "sahib/rmlint",
   "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned289-blob source and visual review with differential assembly review; identity checked against pinned tree. Isolated original-code controls executed; full upstream/platform runtime remains partial.",
   "decision": "reference",
   "finding": "File hashing plus equality/hardlink/directory tests; GPL reference for filesystem edge cases rather than vendored code.",
   "license_metadata": "GPL-3.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Root and nested license texts reviewed; GPL project reference-only, no production source import.",
   "tests_detected": 69,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -558,5 +558,7 @@
     {
       "audit": "docs/research/dedup-500/rmlint6-coverage-verification-v156-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/rmlint6-full-review-reconciliation-20261021.json"
 }
