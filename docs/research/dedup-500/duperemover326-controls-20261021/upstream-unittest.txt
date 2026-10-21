@@ -1,0 +1,46 @@
+test_detect_encoding (test_duplicate_remover.TestFileOperations.test_detect_encoding)
+Test encoding detection. ... ok
+test_empty_file (test_duplicate_remover.TestFileOperations.test_empty_file)
+Test processing an empty file. ... WARNING:root:File /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/tmp6wymejsa/empty.txt is empty
+ok
+test_remove_duplicates_case_insensitive (test_duplicate_remover.TestFileOperations.test_remove_duplicates_case_insensitive)
+Test removing duplicates with case-insensitive comparison. ... ok
+test_remove_duplicates_case_sensitive (test_duplicate_remover.TestFileOperations.test_remove_duplicates_case_sensitive)
+Test removing duplicates with case-sensitive comparison. ... ok
+test_remove_duplicates_with_exclude (test_duplicate_remover.TestFileOperations.test_remove_duplicates_with_exclude)
+Test removing duplicates while excluding specific patterns. ... ok
+test_exact_match (test_duplicate_remover.TestFuzzyDuplicate.test_exact_match)
+Test fuzzy matching with exact matches. ... ok
+test_fuzzy_match_threshold (test_duplicate_remover.TestFuzzyDuplicate.test_fuzzy_match_threshold)
+Test fuzzy matching with different thresholds. ... ok
+test_alphanumeric_only (test_duplicate_remover.TestNormalizeFunction.test_alphanumeric_only)
+Test alphanumeric-only normalization. ... ok
+test_case_insensitive (test_duplicate_remover.TestNormalizeFunction.test_case_insensitive)
+Test case-insensitive normalization. ... ok
+test_case_sensitive (test_duplicate_remover.TestNormalizeFunction.test_case_sensitive)
+Test case-sensitive normalization. ... ok
+test_content_hash (test_duplicate_remover.TestNormalizeFunction.test_content_hash)
+Test content-hash normalization. ... ok
+test_whitespace_insensitive (test_duplicate_remover.TestNormalizeFunction.test_whitespace_insensitive)
+Test whitespace-insensitive normalization. ... ok
+test_colored_text_report (test_duplicate_remover.TestReportGeneration.test_colored_text_report)
+Test generating a colored text report. ... ok
+test_csv_report_generation (test_duplicate_remover.TestReportGeneration.test_csv_report_generation)
+Test generating a CSV report. ... ok
+test_json_report_generation (test_duplicate_remover.TestReportGeneration.test_json_report_generation)
+Test generating a JSON report. ... ok
+test_text_report_generation (test_duplicate_remover.TestReportGeneration.test_text_report_generation)
+Test generating a text report. ... ok
+test_different_strings (test_duplicate_remover.TestSimilarityFunction.test_different_strings)
+Test similarity between completely different strings. ... ok
+test_empty_strings (test_duplicate_remover.TestSimilarityFunction.test_empty_strings)
+Test similarity with empty strings. ... ok
+test_identical_strings (test_duplicate_remover.TestSimilarityFunction.test_identical_strings)
+Test similarity between identical strings. ... ok
+test_partial_similarity (test_duplicate_remover.TestSimilarityFunction.test_partial_similarity)
+Test similarity between partially similar strings. ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.004s
+
+OK

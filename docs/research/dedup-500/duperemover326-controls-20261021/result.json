@@ -1,0 +1,41 @@
+{
+  "source_sha256": "a1c1c3e0a1b03c0206da055854928dd77e56ca5d4a83c75312759aabb2062bf6",
+  "method": "Whole original main.py loaded unchanged by runpy, no fake functions or decoding adapters. File-write controls confined to owned TemporaryDirectory. Original upstream unittest module executed unchanged in subprocess. No streaming signals, GUI or external services.",
+  "python": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "upstream_suite": {
+    "passed": 20,
+    "failed": 0,
+    "exit_code": 0,
+    "limitations": "File operation tests use dry_run and do not inspect actual output bytes; streaming demo does not invoke the processor."
+  },
+  "controls": {
+    "blank_sentinel_collision": {
+      "input_hex": "0a5f5f424c414e4b5f5f0a6b6565700a",
+      "output_hex": "6b6565700a",
+      "stats": {
+        "total_lines": 3,
+        "unique_lines": 2,
+        "duplicates_removed": 1,
+        "dry_run": false
+      }
+    },
+    "invalid_utf8_collapses_distinct_lines": {
+      "input_hex": "ff410a410a",
+      "output_hex": "410a",
+      "duplicates_removed": 1,
+      "detected_encoding": "utf-8"
+    },
+    "dry_run_creates_output": {
+      "created": true,
+      "bytes": 0
+    },
+    "no_duplicate_still_changes_trailing_newline": {
+      "output_hex": "6c6173742d6e6f2d6e65776c696e650a"
+    },
+    "documented_jaccard_is_overlap_coefficient": {
+      "observed": 1.0,
+      "jaccard_oracle": 0.3333333333333333
+    }
+  },
+  "limits": "These are text-line normalization/publication controls, not image/video duplicate detection or local library end-to-end evidence."
+}

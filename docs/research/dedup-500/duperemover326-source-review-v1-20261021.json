@@ -1,0 +1,40 @@
+{
+  "repository": "Mahdiglm/DupeRemover",
+  "commit": "553f16ba4462a5f3eec16df5b4cb6c2d8228a8c1",
+  "whole_repo_complete": false,
+  "scope": "Whole test_duplicate_remover.py, test_streaming.py, LICENSE and .gitignore read. main.py lines1-866 and1632-end read; lines867-1631 and README/CHANGELOG/release_notes remain. All8 tracked blobs downloaded and Git blob SHA1 verified; download not counted as review.",
+  "runtime_controls": "docs/research/dedup-500/duperemover326-controls-20261021/result.json",
+  "upstream_suite": {
+    "run": true,
+    "passed": 20,
+    "failed": 0,
+    "log": "docs/research/dedup-500/duperemover326-controls-20261021/upstream-unittest.txt",
+    "scope": "Original unchanged tests, direct original whole-module import. File tests dry_run only; report tests in memory. test_streaming.py generates example log data and instructs another terminal, has no assertions or processor invocation; not run."
+  },
+  "executed_findings": [
+    "Blank input line reserves string __BLANK__ in seen_exact and contributes empty output fragment; literal __BLANK__ line is then removed as duplicate. Input3lines becomes output1line although statistics report2unique. Initial control expected surviving empty newline, observed it also disappeared; expectation corrected to exact observed bytes, upstream source unchanged.",
+    "chunk_reader opens UTF8 errors=ignore regardless of detect_encoding. Input bytes ff410a410a become single410a in output and1duplicate in case-sensitive mode; invalid bytes silently discarded. Runtime detected encodingUTF8 in this environment.",
+    "dry_run with output_file creates output file and parent directory in validation before any dry-run branch.",
+    "Even unique input without trailing newline acquires one.",
+    "calculate_similarity documented as Jaccard divides by smaller set size, so red vs red green blue returns1 while set Jaccard is1/3."
+  ],
+  "source_findings": [
+    "Streaming recent_lines capped but seen_lines unbounded; buffer_size does not bound duplicate history or total memory. Reads entire newly appended file content at once.",
+    "Streaming consumes partial final line immediately; follow mode has no pending-line buffer, inode/rotation identity check or same-size replacement detection. No runtime follow/rotation qualification.",
+    "Streaming exclude drops matching lines rather than retaining them as batch process does; signal handlers installed globally and not restored. Streaming runtime not executed.",
+    "Fuzzy match randomly samples at1000+seen values, lacks full recall guarantee and ignores RNG reproducibility. thresholdNaN passes range validation and numeric comparisons; source only.",
+    "Batch collects all unique_lines and unbounded seen_exact in memory despite chunked input. Output opens w directly, no atomic publication, stable input revalidation or rollback.",
+    "normalize_line language arguments accepted but not used. No image/audio/file-content duplicate algorithm; this is line normalization/removal.",
+    "MIT2025Mahdiglm wholly read, no code copied."
+  ],
+  "local_scope": {
+    "path": "crates/rrrah-dedup/src/exact.rs",
+    "sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "inspection": "Header and public policy/report definitions read; local API promises full byte-confirmed file groups and no removal. This inspection is not new runtime qualification or proof of the whole implementation."
+  },
+  "remaining": [
+    "main.py867-1631; README.md,CHANGELOG.md,release_notes.md; any external visual assets to be inventoried from remaining docs."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}
