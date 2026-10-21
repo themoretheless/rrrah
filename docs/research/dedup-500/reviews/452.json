@@ -2,7 +2,7 @@
   "index": 452,
   "repository": "Intervention/imagehash",
   "commit": "f66faf81b2b05ea26fe4fbbf7a896edfafbefebd",
-  "review_scope": "Partial pinned 11/42 whole text artifacts: all four strategy bodies, hash representation, public hasher/analyzer and selected tests. Static test-bit-roundtrip gap identified; no PHP execution.",
+  "review_scope": "Complete pinned 42/42 source/config/test/image artifacts; six JPEGs and rendered SVG viewed. Three independent arithmetic controls, no original PHP/runtime test.",
   "decision": "reference",
   "finding": "PHP strategy/analyzer/hash bytes with test providers; independent oracle candidate, image backend normalization remains important.",
   "available_source_evidence": [
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT fully read; no production code adopted.",
   "tests_detected": 7,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -82,5 +82,8 @@
     {
       "audit": "docs/research/dedup-500/imagehash452-source-review-v2-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/imagehash452-complete-source-review-20261021.json"
 }
