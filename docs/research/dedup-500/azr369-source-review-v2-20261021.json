@@ -1,0 +1,36 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "geometry/triangle/triangle.go",
+    "geometry/triangle/triangle_sort.go",
+    "geometry/triangle/triangle_transfo.go",
+    "geometry/triangle/possibilities.go",
+    "geometry/util.go",
+    "geometry/rotation_test.go",
+    "geometry/triangle/triangle_transfo_test.go",
+    "geometry/triangle/triangle_sort_test.go",
+    "geometry/triangle/possibilities_test.go"
+  ],
+  "controls": "docs/research/dedup-500/azr369-triangle-controls-20261021/result.json",
+  "findings": [
+    "Original Unique compacts entries but returns based on original loop index rather than compacted count; three equal triangles produce two, confirmed.",
+    "Triangles.Less fails to stop at first unequal vertex when comparison should returnfalse; finite sorted-vertex control has Less(a,b)=Less(b,a)=true, violating strict ordering.",
+    "ExtractEquilateralTriangleFrom constructs forward B*inverse(A), then uses it to sample destination points in source; shifted opaque-source control yields transparent interior. No original end-to-end extraction test exists.",
+    "Original matrix tests check algebraic arrays, determinant/cofactor and matrix-vector products but not rendered extraction. Rotation test checks only matrix multiplication, not pixel permutation.",
+    "AllPossibilities uses signed integer-truncated area before sorting vertices; negative winding is filtered when MinArea>=0, degenerate line triangles admitted at defaultMinArea0. Source observation, no separate winding control.",
+    "Possibilities expected results call production Unique, so shared deduplication defect may affect both actual and expected.",
+    "Triangle inverse has no singularity error; zero determinant skips normalization. Matrix.TransformPoint ignores homogeneous z. These are source observations, not independently executed projective/singular controls."
+  ],
+  "remaining": [
+    "Corner detector generated source andhelper whole-read",
+    "CLI/docs/CI/config/license/lock whole-read",
+    "Six original image fixtures visual review"
+  ],
+  "limits": [
+    "227/500 complete, entry369 remains partial.",
+    "No upstream code adoption or performance claim.",
+    "NativepHash/ASAN remains deferred."
+  ]
+}
