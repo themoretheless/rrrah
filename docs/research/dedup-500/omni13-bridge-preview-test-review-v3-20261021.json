@@ -1,0 +1,76 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src-tauri/src/lib.rs": {
+      "sha256": "b2be774a79dbe88a6f4a0a7085d16a7e2cc43e680c408400b7ed91664c9a3320",
+      "git_blob": "f94c51d725f53935d6e839afd9a4610466ae8530",
+      "mode": "100644",
+      "lines": 1551
+    },
+    "src-tauri/build.rs": {
+      "sha256": "9b4c4fe546bf12f37b8205a27c07b4ecf86415c95690f38abe1e5f72bb603836",
+      "git_blob": "0b3e9098b003febb8e0e912d8e96320480acdff8",
+      "mode": "100644",
+      "lines": 22
+    },
+    "src-tauri/Cargo.toml": {
+      "sha256": "c51cb7b8b2c95cb4bb735dcec70f3f3476f84e36184767297b5d454192ef6ba9",
+      "git_blob": "6dad0abefc2d14652148d9558afe11c43e01d967",
+      "mode": "100644",
+      "lines": 50
+    },
+    "android/app/src/test/java/com/omnisearch/app/ExampleUnitTest.kt": {
+      "sha256": "949bfa7e184c68c90a436a1e23ec58a33ceb5fa35fcacdd855ab17559a25de4b",
+      "git_blob": "3519d79a2af450a1060d45f5731225b8165b5d2e",
+      "mode": "100644",
+      "lines": 16
+    },
+    "android/app/src/androidTest/java/com/omnisearch/app/ExampleInstrumentedTest.kt": {
+      "sha256": "5be105a50501008338ab9715e13102179180bdbce7c6a716986c10ac48a27084",
+      "git_blob": "c37e28953a40ae28fd5490c6ad12cf2b761464d0",
+      "mode": "100644",
+      "lines": 22
+    },
+    "android/app/src/test/java/com/omnisearch/app/GreetingScreenshotTest.kt": {
+      "sha256": "696326c35316a9fc7600379a378299ef69f6ba49ce3f23139af04e3ff65c4473",
+      "git_blob": "544eb4cda3bdad1dd1dc8f204c784e7489806031",
+      "mode": "100644",
+      "lines": 33
+    },
+    "android/TestURI.java": {
+      "sha256": "868201f3f542d51dc0065f09dccc83f8cc2671fdd935eb8b0dd0660504e7d3d4",
+      "git_blob": "4683ff14b6abce9d329d35fd9525cd0c4ed45458",
+      "mode": "100644",
+      "lines": 11
+    }
+  },
+  "cumulative_whole_files_read": 14,
+  "tracked_blobs": 268,
+  "method": "Whole1551-line Rust bridge read in three contiguous ranges; six other files whole read. Original preview helpers extracted unchanged except removing Windows cfg, compiled standalone with rustc; owned in-memory data only.",
+  "executed_controls": {
+    "ansi_e9_becomes_replacement": true,
+    "unicode_query_a_selects_y_after_expanding_lowercase": true,
+    "ordinary_cyrillic_match_control": true,
+    "ordinary_preview_control": true
+  },
+  "control_source": "struct TextPreviewPayload { text: String, truncated: bool, matched: bool }\nenum TextPreviewEncoding {\n    Utf8,\n    Utf16Le,\n    Utf16Be,\n    Ansi,\n}\n\nfn likely_utf16_encoding(bytes: &[u8]) -> Option<TextPreviewEncoding> {\n    if bytes.len() < 4 {\n        return None;\n    }\n\n    let unit_count = bytes.len() / 2;\n    if unit_count < 2 {\n        return None;\n    }\n\n    let even_nulls = bytes\n        .iter()\n        .step_by(2)\n        .take(unit_count)\n        .filter(|byte| **byte == 0)\n        .count();\n    let odd_nulls = bytes\n        .iter()\n        .skip(1)\n        .step_by(2)\n        .take(unit_count)\n        .filter(|byte| **byte == 0)\n        .count();\n\n    if odd_nulls * 3 >= unit_count && even_nulls * 16 <= unit_count {\n        Some(TextPreviewEncoding::Utf16Le)\n    } else if even_nulls * 3 >= unit_count && odd_nulls * 16 <= unit_count {\n        Some(TextPreviewEncoding::Utf16Be)\n    } else {\n        None\n    }\n}\n\nfn resolve_text_preview_encoding(\n    bytes: &[u8],\n    requested_mode: Option<&str>,\n) -> TextPreviewEncoding {\n    match requested_mode.map(|value| value.trim().to_ascii_lowercase()) {\n        Some(mode) if mode == \"utf8\" => TextPreviewEncoding::Utf8,\n        Some(mode) if mode == \"utf16\" => TextPreviewEncoding::Utf16Le,\n        Some(mode) if mode == \"utf16be\" => TextPreviewEncoding::Utf16Be,\n        Some(mode) if mode == \"ansi\" => TextPreviewEncoding::Ansi,\n        _ => {\n            if bytes.starts_with(&[0xEF, 0xBB, 0xBF]) {\n                TextPreviewEncoding::Utf8\n            } else if bytes.starts_with(&[0xFF, 0xFE]) {\n                TextPreviewEncoding::Utf16Le\n            } else if bytes.starts_with(&[0xFE, 0xFF]) {\n                TextPreviewEncoding::Utf16Be\n            } else if let Some(encoding) = likely_utf16_encoding(bytes) {\n                encoding\n            } else if std::str::from_utf8(bytes).is_ok() {\n                TextPreviewEncoding::Utf8\n            } else {\n                TextPreviewEncoding::Ansi\n            }\n        }\n    }\n}\n\nfn decode_utf16_preview(bytes: &[u8], big_endian: bool) -> String {\n    let start_offset = if !big_endian && bytes.starts_with(&[0xFF, 0xFE]) {\n        2\n    } else if big_endian && bytes.starts_with(&[0xFE, 0xFF]) {\n        2\n    } else {\n        0\n    };\n\n    let units = bytes[start_offset..]\n        .chunks_exact(2)\n        .map(|chunk| {\n            if big_endian {\n                u16::from_be_bytes([chunk[0], chunk[1]])\n            } else {\n                u16::from_le_bytes([chunk[0], chunk[1]])\n            }\n        })\n        .collect::<Vec<_>>();\n\n    String::from_utf16_lossy(&units)\n}\n\nfn decode_text_preview(bytes: &[u8], requested_mode: Option<&str>) -> String {\n    match resolve_text_preview_encoding(bytes, requested_mode) {\n        TextPreviewEncoding::Utf16Le => decode_utf16_preview(bytes, false),\n        TextPreviewEncoding::Utf16Be => decode_utf16_preview(bytes, true),\n        TextPreviewEncoding::Utf8 => {\n            let trimmed = if bytes.starts_with(&[0xEF, 0xBB, 0xBF]) {\n                &bytes[3..]\n            } else {\n                bytes\n            };\n            String::from_utf8_lossy(trimmed).into_owned()\n        }\n        TextPreviewEncoding::Ansi => String::from_utf8_lossy(bytes).into_owned(),\n    }\n}\n\nfn normalize_preview_text(mut text: String) -> String {\n    if text.starts_with('\\u{feff}') {\n        text = text.trim_start_matches('\\u{feff}').to_string();\n    }\n    if text.contains('\\0') {\n        text = text.replace('\\0', \"\");\n    }\n    text.replace(\"\\r\\n\", \"\\n\").replace('\\r', \"\\n\")\n}\n\nfn char_boundaries(text: &str) -> Vec<usize> {\n    text.char_indices()\n        .map(|(index, _)| index)\n        .chain(std::iter::once(text.len()))\n        .collect()\n}\n\nfn take_text_chars(text: &str, max_chars: usize) -> (String, bool) {\n    let boundaries = char_boundaries(text);\n    let total_chars = boundaries.len().saturating_sub(1);\n    if total_chars <= max_chars {\n        return (text.to_string(), false);\n    }\n\n    let end_byte = boundaries[max_chars];\n    let mut preview = text[..end_byte].to_string();\n    preview.push('\u2026');\n    (preview, true)\n}\n\nfn find_case_insensitive_match(text: &str, query: &str) -> Option<(usize, usize)> {\n    let trimmed_query = query.trim();\n    if trimmed_query.is_empty() {\n        return None;\n    }\n\n    let lower_text = text.to_lowercase();\n    let lower_query = trimmed_query.to_lowercase();\n    let match_index = lower_text.find(&lower_query)?;\n\n    let start_char = lower_text[..match_index].chars().count();\n    let match_char_len = lower_query.chars().count();\n    let boundaries = char_boundaries(text);\n    let total_chars = boundaries.len().saturating_sub(1);\n    let start_byte = *boundaries.get(start_char)?;\n    let end_byte = boundaries[(start_char + match_char_len).min(total_chars)];\n    Some((start_byte, end_byte))\n}\n\nfn excerpt_around_match(\n    text: &str,\n    match_range: (usize, usize),\n    max_chars: usize,\n) -> (String, bool) {\n    let boundaries = char_boundaries(text);\n    let total_chars = boundaries.len().saturating_sub(1);\n    let start_char = boundaries.partition_point(|boundary| *boundary < match_range.0);\n    let end_char = boundaries.partition_point(|boundary| *boundary < match_range.1);\n    let match_len_chars = end_char.saturating_sub(start_char).max(1);\n    if total_chars <= max_chars {\n        return (text.to_string(), false);\n    }\n\n    let focus_match_early = max_chars <= 220;\n    let mut excerpt_start_char = start_char;\n    let mut excerpt_end_char = (excerpt_start_char + max_chars).min(total_chars);\n\n    if !focus_match_early {\n        let available_context = max_chars.saturating_sub(match_len_chars);\n        let minimum_leading_context = 24;\n        let context_before =\n            available_context.min((available_context / 2).max(minimum_leading_context));\n        excerpt_start_char = start_char.saturating_sub(context_before);\n        excerpt_end_char = (excerpt_start_char + max_chars).min(total_chars);\n        let preferred_end_char =\n            (end_char + available_context.saturating_sub(context_before)).min(total_chars);\n        if excerpt_end_char < preferred_end_char {\n            excerpt_end_char = preferred_end_char;\n            excerpt_start_char = excerpt_end_char.saturating_sub(max_chars);\n        }\n        if excerpt_end_char.saturating_sub(excerpt_start_char) < max_chars && excerpt_start_char > 0\n        {\n            excerpt_start_char = excerpt_end_char.saturating_sub(max_chars);\n        }\n    }\n\n    let excerpt_start_byte = boundaries[excerpt_start_char];\n    let excerpt_end_byte = boundaries[excerpt_end_char];\n    let mut excerpt = text[excerpt_start_byte..excerpt_end_byte].to_string();\n    let mut truncated = false;\n\n    if excerpt_start_char > 0 {\n        excerpt.insert(0, '\u2026');\n        truncated = true;\n    }\n    if excerpt_end_char < total_chars {\n        excerpt.push('\u2026');\n        truncated = true;\n    }\n\n    (excerpt, truncated)\n}\n\nfn build_text_preview_payload(\n    decoded_text: String,\n    max_chars: usize,\n    content_query: Option<&str>,\n) -> TextPreviewPayload {\n    let normalized_text = normalize_preview_text(decoded_text);\n    let effective_max_chars = max_chars.clamp(120, 12_000);\n\n    if normalized_text.is_empty() {\n        return TextPreviewPayload {\n            text: String::new(),\n            truncated: false,\n            matched: false,\n        };\n    }\n\n    if let Some(query) = content_query {\n        if let Some(match_range) = find_case_insensitive_match(&normalized_text, query) {\n            let (text, truncated) =\n                excerpt_around_match(&normalized_text, match_range, effective_max_chars);\n            return TextPreviewPayload {\n                text,\n                truncated,\n                matched: true,\n            };\n        }\n    }\n\n    let (text, truncated) = take_text_chars(&normalized_text, effective_max_chars);\n    TextPreviewPayload {\n        text,\n        truncated,\n        matched: false,\n    }\n}\n\n\nfn main() {\n let decoded=decode_text_preview(&[0xe9],Some(\"ansi\"));assert_eq!(decoded,\"\\u{fffd}\");\n let text=\"\u0130xay\";let range=find_case_insensitive_match(text,\"a\").unwrap();\n assert_eq!(&text[range.0..range.1],\"y\");\n let ordinary=\"\u041f\u0440\u0438\u0432\u0435\u0442 \u043c\u0438\u0440\";let range=find_case_insensitive_match(ordinary,\"\u041c\u0418\u0420\").unwrap();assert_eq!(&ordinary[range.0..range.1],\"\u043c\u0438\u0440\");\n let p=build_text_preview_payload(\"abc\".to_owned(),120,Some(\"b\"));assert!(p.matched);assert!(!p.truncated);assert_eq!(p.text,\"abc\");\n println!(\"{{\\\"ansi_e9_becomes_replacement\\\":true,\\\"unicode_query_a_selects_y_after_expanding_lowercase\\\":true,\\\"ordinary_cyrillic_match_control\\\":true,\\\"ordinary_preview_control\\\":true}}\");\n}\n",
+  "control_generator": "from pathlib import Path\nB=Path('.dedup-work/omni13-20261021');s=(B/'src-tauri--src--lib.rs').read_text();s=s[s.index('enum TextPreviewEncoding {'):s.index('#[tauri::command]\\nfn load_text_preview(')].replace('#[cfg(target_os = \"windows\")]\\n','');prefix='struct TextPreviewPayload { text: String, truncated: bool, matched: bool }\\n';tail=r'''\nfn main() {\n let decoded=decode_text_preview(&[0xe9],Some(\"ansi\"));assert_eq!(decoded,\"\\u{fffd}\");\n let text=\"\u0130xay\";let range=find_case_insensitive_match(text,\"a\").unwrap();\n assert_eq!(&text[range.0..range.1],\"y\");\n let ordinary=\"\u041f\u0440\u0438\u0432\u0435\u0442 \u043c\u0438\u0440\";let range=find_case_insensitive_match(ordinary,\"\u041c\u0418\u0420\").unwrap();assert_eq!(&ordinary[range.0..range.1],\"\u043c\u0438\u0440\");\n let p=build_text_preview_payload(\"abc\".to_owned(),120,Some(\"b\"));assert!(p.matched);assert!(!p.truncated);assert_eq!(p.text,\"abc\");\n println!(\"{{\\\"ansi_e9_becomes_replacement\\\":true,\\\"unicode_query_a_selects_y_after_expanding_lowercase\\\":true,\\\"ordinary_cyrillic_match_control\\\":true,\\\"ordinary_preview_control\\\":true}}\");\n}\n''';(B/'preview-control-v3.rs').write_text(prefix+s+tail)\n",
+  "findings": [
+    "Original ANSI preview uses UTF8-lossy decode, not Windows active codepage; byte E9 becomes replacement in executed control. C++ content-search ANSI path instead uses CP_ACP: search/preview encoding policies differ.",
+    "Original case-insensitive preview computes character offset in lowercased string, then indexes original characters; expanding lowercase \u0130 shifts offset. Query a in \u0130xay selects y. Ordinary Cyrillic case-insensitive and basic preview controls pass. No browser screenshot/highlighting run.",
+    "Rust FFI copies C strings then frees through C++ before deserializing; invalid JSON returns explicit error. Search cancellation C++ [] payload becomes Ok(empty), no cancellation distinction added by bridge.",
+    "Duplicate default is50MiB when omitted; explicit0 becomes1MiB in C++ rather than including empty files. Bridge adds no snapshot provenance, per-file skipped-error inventory or truncated-group metadata.",
+    "delete_path default recycle_bin false if caller omits both aliases. UI caller policy remains unreviewed. Rename uses fs::rename without direct index update; single-drive live journal is expected to reconcile, but multi-drive/fallback mode lacks watcher. No deletion/rename executed.",
+    "Text preview is bounded4MiB+1 and records byte truncation; binary preview metadata limit checked before unbounded fs::read of reopened path, so concurrent growth/replacement may exceed intended bound. Static race hypothesis, no real file mutation.",
+    "Android test sources assert2+2, package name, app-name string(previous review), and render constant OmniSearch Test text to a screenshot. TestURI only prints URI components. None of these establishes dedup/scan correctness. Screenshot asset not yet visually inspected.",
+    "Build compiles scanner only for Windows, requests C++20 and EHsc, and invokes Tauri build. No native matcher test command present in these build/manifests; repository-wide test absence not claimed.",
+    "Preview Unicode/encoding weaknesses are upstream findings, not demonstrated rrrah defects. No upstream code adopted."
+  ],
+  "limits": [
+    "14/268 pinned files whole reviewed. Other Rust modules, full frontend, nested manifests, assets and docs still pending.",
+    "No upstream full build/test suite, Windows API, Tauri GUI, Android emulator, network server, shell/registry or real user file operations executed.",
+    "No production optimization or performance evidence from this batch. Native pHash/ASAN deferred."
+  ]
+}
