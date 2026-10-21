@@ -4,7 +4,7 @@
   "commit": "809514f94b52c35d2fedf9433d06909267c8feff",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reject-domain",
-  "finding": "Video frame alteration/compositing utility rather than detection of duplicates; no comparison engine in selected sources.",
+  "finding": "Two-video frame mixing/transcoding application, no duplicate search; alltrackedsource/visualassets reviewed, externallinkeddemounviewed",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -73,6 +73,13 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "full_repository_read": false,
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/abvideo090-source-review-v1-20261021.json",
+      "whole_repo_complete": false
     }
   ]
 }
