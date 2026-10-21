@@ -1,0 +1,53 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_upstream_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/photo-filter.test.ts": {
+      "sha256": "ef35eac5c323eb01e3b2b8fde616d1ae07bd869fe51a6f66664a59bd4c43175d",
+      "git_blob": "01b123385f15653acb18955637231b958a0c000a",
+      "bytes": 8154,
+      "lines": 171,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/presets.test.ts": {
+      "sha256": "d18db72ef0dfe7d8dbac999128f273be7a71b263e53d596a215c52fdf0c388f2",
+      "git_blob": "5f78b616d723830450dde48e6771b163a37f7fd0",
+      "bytes": 5285,
+      "lines": 113,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/presets-panel.test.ts": {
+      "sha256": "bc4fb41ff1842ae4672976c83c1fa276dbd45bfbe03b59b194a7d7e42d88eb47",
+      "git_blob": "06449f213fafa5ec857a512c65acb91d0455b0fe",
+      "bytes": 4329,
+      "lines": 105,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/run-occupancy.test.ts": {
+      "sha256": "61e1eba0117ef7bef5d34e0e5ee82d68ac645117a49c6978bdaafe0f140b4e49",
+      "git_blob": "f8cfa0c4ff761017ba4d63ff169d4074a79082f8",
+      "bytes": 2121,
+      "lines": 69,
+      "method": "Whole pinned upstream test source read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 56,
+  "tracked_blobs": 230,
+  "findings": [
+    "Presets throwing-store test couples readthrow with writefalse, so does not cover temporary readthrow followed by successful replacement write reproducedv11.",
+    "Preset saves and mutations in tests are sequential, including20entrycap. No concurrent successfulsave lost-update scenario in these files.",
+    "Corrupt preset samples include unknown dateMode but not unknown type with validoffmode. Scope widening controlv11 remains uncovered.",
+    "Photo-filter tests cover English/French/ISOdates,invaliddates,exclusivebefore/after,inclusivebetween,type conjunction,valid control mappings. Unknown input type is not tested.",
+    "One substring test is titlednevermatchlongerword but contains only Video games folder andPhoto Editor positiveexamples; no videographernegativeassertion in that test. This is test-content observation, not a new classifier failure.",
+    "Occupancy tests cover staticflags,truthycondition,poll-sleepstop,andnevertrue timeout; missingstopduringawaitedtruthycondition reproducedv10.",
+    "Panel tests use mockedPageRunner/memorylocalStorage,verifyapplydoesnotstartandfreecontrolsdisabled; corruptJSONignored. They do not qualify actual browserstorageconcurrency."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 24,
+  "limits": [
+    "56/230wholeartifacts; tests read does not mean tests passed.",
+    "No production changes or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
