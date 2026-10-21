@@ -1,0 +1,18 @@
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import assert from 'node:assert/strict';
+const root=process.argv[2],url=s=>`data:text/javascript;base64,${Buffer.from(s).toString('base64')}`;
+const mock=url(stripTypeScriptTypes(readFileSync(`${root}/tests/__mocks__/obsidian.ts`,'utf8'),{mode:'transform'}));
+const source=readFileSync(`${root}/src/TocConfig.ts`,'utf8').replace(/^import .*\n/gm,'');
+const {parseTocConfig,serializeTocConfig}=await import(url(`import {normalizePath} from '${mock}';\n${stripTypeScriptTypes(source)}`));
+const parse=mounts=>parseTocConfig(JSON.stringify({mounts}),'/config.json','desktop');
+let a=parse([{virtualPath:'A',realPath:'/a',enabled:'false',readOnly:'false',maxFiles:'invalid'}]);
+assert.equal(a.warnings.length,0);assert.equal(a.mounts[0].enabled,'false');assert.equal(a.mounts[0].maxFiles,'invalid');
+console.log(JSON.stringify({name:'invalid-option-types-accepted-without-warning',passed:true}));
+const one={virtualPath:'A',realPath:'/a'},two={virtualPath:'B',realPath:'/b'};
+a=parse([one,two]);let b=parse([two,one]);assert.notEqual(a.mounts[0].id,b.mounts[1].id);
+console.log(JSON.stringify({name:'generated-id-changes-when-entry-reordered',passed:true}));
+a=parse([{...one,id:'duplicate'},{...two,id:'duplicate'}]);assert.equal(a.warnings.length,0);assert.equal(a.mounts[0].id,a.mounts[1].id);
+console.log(JSON.stringify({name:'explicit-duplicate-ids-accepted',passed:true}));
+const text=serializeTocConfig([{...one,id:'x',mountType:'s3',enabled:true,readOnly:true}]);a=parseTocConfig(text,'/config.json','desktop');assert.equal(a.mounts[0].mountType,'local');
+console.log(JSON.stringify({name:'serializer-coerces-remote-mount-to-local',passed:true}));

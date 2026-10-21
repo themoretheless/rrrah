@@ -1,0 +1,70 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/TocConfig.ts": {
+      "sha256": "0d87f0a185801a99fbbacfc4ba935938f1504a9c10affa683bcd63476f7f78c9",
+      "git_blob": "6aa2fe2b2cf2e5b179653d78e18c0ef70a4c02e5",
+      "bytes": 6209,
+      "lines": 168,
+      "method": "Whole source read."
+    },
+    "tests/TocConfig.test.ts": {
+      "sha256": "734a029718d6e967d515e28ade8bfe88536f34691867f8e274c9700816b373d9",
+      "git_blob": "1f46ae458e0392df6751838936a800be03a1d8b0",
+      "bytes": 5908,
+      "lines": 148,
+      "method": "Whole source read."
+    },
+    "src/ui/SubmitStateController.ts": {
+      "sha256": "a7aba436427e3e8f2e787d6d0b0fc8a9a02c17eec51bccccebf1f6c48c798a3a",
+      "git_blob": "8fe23e842a72ccd56b52488d77551679c4dd7ce7",
+      "bytes": 506,
+      "lines": 26,
+      "method": "Whole source read."
+    },
+    "tests/SubmitStateController.test.ts": {
+      "sha256": "f31adc27a561f6d4e08d3c63773974648961a2809eda420c13a23c04569896ae",
+      "git_blob": "70d94580b2e8994abeee090bb65f1036986e2586",
+      "bytes": 1817,
+      "lines": 46,
+      "method": "Whole source read."
+    },
+    "src/ui/mountLabel.ts": {
+      "sha256": "6fcf70b8a8d0747bd558cb2f794385dfbfda2bb6b66140ef6abde1673aeea3b9",
+      "git_blob": "74fb07cc4c713ca2636a948fd97154924eec2cf1",
+      "bytes": 338,
+      "lines": 6,
+      "method": "Whole source read."
+    },
+    "tests/mountLabel.test.ts": {
+      "sha256": "c9ed9a1a4199fbcb7755df7272effafc4c6b1ca12d869e2cf60eaf151d07acd5",
+      "git_blob": "6ea55a02493485645067e926db9642d52830e7e0",
+      "bytes": 2178,
+      "lines": 40,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 20,
+  "tracked_blobs": 129,
+  "findings": [
+    "TOC parser validates JSON/mount array/entry object/path strings/local-vault type, trims paths and ignore entries, and accumulates warnings while accepting valid entries. It is mount configuration, not content duplicate metadata.",
+    "Generated mount ID uses signed32-bit rolling hash plus Math.abs over source path, original virtual/real paths and array index. Reordering unchanged entries changes generated ID (original function control). Hash is not collision-resistant content identity; no collision exploit attempted.",
+    "Duplicate explicit IDs are accepted without warning in parser (control). Main caller collision policy not yet read.",
+    "enabled/readOnly/limits/watcher settings/deviceOverrides are copied without runtime type checks; control accepts string false and invalid maxFiles with no warning. Downstream validation not yet assessed.",
+    "Serializer maps every mount except vault to local; isolated S3 input roundtrips as local. TOC is documented local/vault only; main caller may filter unsupported inputs before serialization. No product-level data-loss claim.",
+    "Runtime-only tocSourcePath excluded from serialized output; generated on parse. TOC version is emitted1 but parser does not branch/reject unsupported version.",
+    "SubmitStateController is synchronous per-instance busy latch with explicit finish, not persistent operation deduplication or cancellation. Await/finally usage in modal/main pending.",
+    "Mount label helper compares trimmed label to lexical basename across slash/backslash/drive-prefix forms; no filesystem identity or URL decoding. Tests cover20label cases and no Node loader invocation. Read only, upstream Vitest not run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-toc-controls-v3-20261021",
+    "passed": 4,
+    "method": "Original TOC module after Node type stripping and original upstream normalizePath mock; synthetic JSON/in-memory objects, no filesystem or vault mutation."
+  },
+  "limits": [
+    "20/129trackedblobs read; whole plugin/main caller behavior still incomplete.",
+    "No full upstream Vitest, mobile/runtime qualification or production library change."
+  ]
+}
