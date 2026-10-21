@@ -1,0 +1,64 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "storefront/README.md": {
+      "sha256": "e890905184d40ffa18909dc281b1f5de6612e1dabf6fb7495bbbc498ee1c11e2",
+      "git_blob": "a34f29318feb94da424b66c2338a7205b0f85ad3",
+      "bytes": 2334,
+      "lines": 49,
+      "method": "Whole pinned text read. After combined output truncated, README and five remaining artifacts reread separately without truncation."
+    },
+    "publisher/card.json": {
+      "sha256": "3c44fdf5ddad6a6b2615ab188c657a5778b1d82357ba9ec7631865a2af3315ec",
+      "git_blob": "2a6493dcba0fe9b3fd59579e4061babd6cb356fe",
+      "bytes": 1024,
+      "lines": 28,
+      "method": "Whole pinned text read. After combined output truncated, README and five remaining artifacts reread separately without truncation."
+    },
+    "storefront/posts/product-hunt.md": {
+      "sha256": "b7553f826587c58b8ebdc9306c511587df875b9be57d610e9d15b134da9f02e1",
+      "git_blob": "b910f400bc508cc8d54f3e61e10108500933f85e",
+      "bytes": 1534,
+      "lines": 43,
+      "method": "Whole pinned text read. After combined output truncated, README and five remaining artifacts reread separately without truncation."
+    },
+    "storefront/posts/reddit-r-googlephotos.md": {
+      "sha256": "b91d036111018faeba4eedd9ac678f5f51ba5ffc6fd7bd77f0b23088994c037c",
+      "git_blob": "3e2e0e13422e4cb718f528609597ee65e2795830",
+      "bytes": 1643,
+      "lines": 35,
+      "method": "Whole pinned text read. After combined output truncated, README and five remaining artifacts reread separately without truncation."
+    },
+    "storefront/posts/show-hn.md": {
+      "sha256": "d9901d3db2e546c4bd5dda48610df4cf05028aa6ef740d9b9faa258df167b330",
+      "git_blob": "8db9ba63f1aede4f3ffee517a5a5619299912e2c",
+      "bytes": 1684,
+      "lines": 35,
+      "method": "Whole pinned text read. After combined output truncated, README and five remaining artifacts reread separately without truncation."
+    },
+    "storefront/posts/devto-article.md": {
+      "sha256": "16b6ac8ba49226098afde6c9fb47e086428eb73d67272a4e0df7d3ae76a3f042",
+      "git_blob": "ad6442363ed29cc6d2059584034c990907052ee6",
+      "bytes": 1612,
+      "lines": 37,
+      "method": "Whole pinned text read. After combined output truncated, README and five remaining artifacts reread separately without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 175,
+  "tracked_blobs": 230,
+  "findings": [
+    "Four posts are launch drafts, not deployment/test evidence. Product Hunt retains placeholder (link); no publication or communication performed.",
+    "dev.to outline claims byte-verified artifacts and 100% issue diagnostics. Prior original verifier regex and ZIP controls show bounded verifier limitations; drafts do not independently prove those claims.",
+    "Storefront README requires real signed-in screenshots. Only 12 tracked raster artifacts were inspected earlier; referenced uncommitted screenshots are not assumed reviewed or available.",
+    "Storefront metadata and drafts include service/API/retention/marketplace statements. These are pinned upstream claims, not checked current facts or recommendations.",
+    "Publisher card is metadata for original card.webp already visually inspected. Availability/license fields are declarations, not independent runtime/provenance certification.",
+    "Storefront/PASTE-PACK.md combined read was truncated; excluded from whole-file count. Listing.json remains partially read."
+  ],
+  "cumulative_original_function_controls": 48,
+  "limits": [
+    "175/230 whole artifacts; global full review total unchanged 160/500.",
+    "No production source adopted or optimization claimed. Native pHash/ASAN deferred."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "status": "passed_bounded_current_cargo_run",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test groups --test visual",
+  "exit_code": 0,
+  "results": {
+    "groups": {
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    "visual": {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "source_sha256_after_run": {
+    "crates/rrrah-dedup/tests/groups.rs": "ef314ad1441389ab947ff75a8f68cc7224773aa0da36751519c9bff4de5a1fba",
+    "crates/rrrah-dedup/tests/visual.rs": "3c7cfb2f385c52b9f690a72af3699342038443dde5dfe11c530a9a0fb02a93a8",
+    "crates/rrrah-dedup/src/groups.rs": "c5c5e0c1ba00a7ee1864caa8c484ff497bb9fa1236589c6ff38a1b8d05b6af03",
+    "crates/rrrah-dedup/src/visual.rs": "6352224709d8f52d5f071bdb320d9595c647b8662c009eca8893a4e99d111400"
+  },
+  "evidence": [
+    "Actual Cargo executed groups and visual integration targets successfully.",
+    "Groups include 64 four-node graphs, exhaustive six-node reference, cancellation checkpoints and 60-member evidence preservation (scope confirmed from test source and executed names).",
+    "Visual executed full-radius cancellation, inclusive boundaries, sixty tied candidates, index oracle, mutation rollback and resource cap controls."
+  ],
+  "limits": [
+    "Post-run source hashes only; no pre-run immutable source snapshot or compiler dependency/binary pin audit.",
+    "No full decode/native/ASAN/workspace/platform/corpus/performance qualification; no new production implementation."
+  ],
+  "related_review": "googlephotos42-storefront-drafts-review-v46-20261021.json"
+}
