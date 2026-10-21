@@ -1,0 +1,44 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 89,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "src-tauri/src/sync_server.rs": {
+      "sha256": "7ea02cca8cc1fc35b45614a0f0dd4e94bf6e4cc09709f4f6ebe0386429764e29",
+      "git_blob": "f73fc2c70483c404f330f7827caff1e5e6e88e6e",
+      "lines": 2176,
+      "new_read_line_ranges": [
+        [
+          1,
+          900
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          900
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "First900 pinned full-desktop sync source lines read; static comparison with already-reviewed Lite implementation.",
+  "findings": [
+    "Full version declares Windows FFI to native scanner duplicate/search/delete operations; callsite limits, errors and free handling remain unread. Declarations are not runtime proof.",
+    "Issued-path set records canonical paths from search results and each returned duplicate file member. Validation requires absolute existing path and membership after canonicalization. This is path-session tracking, not content/identity/stamp snapshot; same-path mutation remains a separate lifecycle question.",
+    "Path key normalizes separators and ASCII case only. This is not universal Unicode casefold or filesystem object identity; actual Windows path aliases/case behavior unqualified.",
+    "DuplicateGroup carries full count/bytes separately from rendered files. Only returned file member paths are remembered; omitted capped members are not automatically issued in this helper. No claim remote action can target every group member.",
+    "Full/Lite implementations differ in trimming, pairing host-key parsing and generated transfer IDs; source duplication does not justify assuming identical behavior. No server/pairing action or credentials accessed.",
+    "Content MIME classification is extension-only and unknown becomes octet-stream; destination categories use supplied content_type. Neither indicates decoder verification or byte-content identity.",
+    "Filename sanitizer and free-path scan follow same general mechanism as Lite, but this full-version creation callsite is still unread; Lite create_new qualification must not be silently transferred.",
+    "No local dedup production change justified from these transport wrappers alone. Native scanner algorithm already reviewed separately remains the content-comparison reference."
+  ],
+  "limits": [
+    "89/268 whole files; src-tauri sync_server.rs1-900 of2176 partial.",
+    "No tests, network/Windows/device/file operations or production changes.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
