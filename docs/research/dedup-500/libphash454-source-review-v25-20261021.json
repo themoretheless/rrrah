@@ -1,0 +1,50 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.h",
+      "sha256": "3f398e878a94c49ba8735ba1b410a904a3667ffdf6924f82d6cf5bee61a87cb6",
+      "whole_file_read": true,
+      "lines": 537
+    },
+    {
+      "path": "docs/decode.md",
+      "sha256": "9fd33d657e9a99d0fd3283899d26b0ed78edc9f32223a8f01e6e05289a20e125",
+      "whole_file_read": true,
+      "lines": 328
+    },
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": false,
+      "read_ranges_inclusive": [
+        [
+          1,
+          420
+        ],
+        [
+          6120,
+          6200
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "findings": [
+    "G8 output is explicitly documented as only grayscale PNG with bit depth 1/2/4/8. Prior RGB/GA/RGBA direct-backend failures are expected API rejection caused by libphash wrapper choosing incompatible format, not unexplained spng failure.",
+    "libphash wrapper does not set image limits, chunk cache limits or an application output-size ceiling. It checks decoded_image_size return and malloc but not a configured budget. Source observation only, no large-input or resource-exhaustion test.",
+    "Root BSD-2-Clause license is not sufficient to describe all source: spng.c SPDX is (BSD-2-Clause AND libpng-2.0); embedded full PNG Reference Library License version 2 at lines 6149..6181 was read. No copied production implementation.",
+    "Read full public header enums, allocator/IO/context/chunk/decode/encode APIs and complete decode documentation including progressive Adam7 row access, checksums, host-endian versus RAW and supported output combinations.",
+    "Implementation read includes architecture selection, state and context structures, memory-limit fields, palette/chunk metadata and allocation wrappers. Remaining implementation not claimed read."
+  ],
+  "runtime": "No new execution in this increment; previous 8 backend and 32 public load controls retained with their scope.",
+  "remaining": [
+    "spng.c lines 421..6119 and 6201..6980",
+    "Remaining dependency build/docs/tests/assets",
+    "Other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
