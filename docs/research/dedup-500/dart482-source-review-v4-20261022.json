@@ -1,0 +1,121 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".github/workflows/deploy-website.yml",
+      "lines": 54,
+      "sha256": "0474b3aa4341392c2b50e7d9ecf176821571d7c98fed87fbf8429ae30d2c357f",
+      "git_blob_verified": true
+    },
+    {
+      "path": ".github/workflows/publish.yml",
+      "lines": 15,
+      "sha256": "c62595ab82eea4d0f6e937d4c8f2934689ad3d2d3e2fb911c57e592e238cb78e",
+      "git_blob_verified": true
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "lines": 35,
+      "sha256": "1acfbebf5cff9b55339a3807d4b07ea80204157691706764d22f083b8a7bdf65",
+      "git_blob_verified": true
+    },
+    {
+      "path": ".gitignore",
+      "lines": 31,
+      "sha256": "6b89427516bc1036047cf9d18d82f3ffdc1a3ada0922ad150991a4e06fbd10f5",
+      "git_blob_verified": true
+    },
+    {
+      "path": ".metadata",
+      "lines": 10,
+      "sha256": "8384704438a3807da0f18ed37e2db7aacc38dc276de25c6333d695502f2e346d",
+      "git_blob_verified": true
+    },
+    {
+      "path": ".vscode/settings.json",
+      "lines": 3,
+      "sha256": "5651dae8000bf26d3d027927b11f9a9c436ab83cd0c7ed15ec311a0f1059c667",
+      "git_blob_verified": true
+    },
+    {
+      "path": "analysis_options.yaml",
+      "lines": 4,
+      "sha256": "93736dd210b45a36e60a0f1015df59012be57ba6d406af803609796c0f0b827a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/.gitignore",
+      "lines": 23,
+      "sha256": "d1aec8becdfa546cbb4ed193ffd576dd7f353c742cb9f361be4b2697ecefe992",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/.npmrc",
+      "lines": 1,
+      "sha256": "7151cf397def0c2cb0ab65643701d27d335a72c90f775675b5f826bc7005818a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/.prettierignore",
+      "lines": 9,
+      "sha256": "be260523ec91060e4c6124643f1ad3ce529b13219f9c1be12b1318bb25ea5f0a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/.prettierrc",
+      "lines": 15,
+      "sha256": "a9e65aec6e93dae1aca12a5fad9aaa5a26a27611ae3154d105d26d936b3bbba9",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/README.md",
+      "lines": 94,
+      "sha256": "58994b92c0132b754a380f0e95955d0ce2f56ea41d64f470e01878185d3ddd73",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/eslint.config.js",
+      "lines": 40,
+      "sha256": "11bd392b884be37533bd382669ca32059b0bb45ca1d8497161606a638d2bfe9f",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/package.json",
+      "lines": 39,
+      "sha256": "2693784e487252128d70aa42aab7997e8e5238b5a255b7a71bc3b3f495c5ac9d",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/svelte.config.js",
+      "lines": 23,
+      "sha256": "5c26347ea6f2b80963cea4db31a2425664390e7e02ba456ca9812ec84e67da2a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/tsconfig.json",
+      "lines": 19,
+      "sha256": "a8bc8321247d8e88eb2d42dd7c6ee07108cf1fbda1113f23618deee3920b3021",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/vite.config.ts",
+      "lines": 7,
+      "sha256": "f82621997912b40fcb66ed06b21adce1d4df184b1e39219e36321b7f0c5cc892",
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "All17 selected workflow/root/editor/site-config documents whole-read. CI test job uses floating stable Dart, pub get then dart test; no analyze/format or independent compatibility step. This is workflow inspection, not observed CI success.",
+    "Root intentionally ignores pubspec.lock; cache key hashes lockfiles, but none tracked in inspected pinned tree. Actual dependency resolution is not fixed by this checkout.",
+    "Website deploy uses Node20 and npm install then build; no explicit check/lint step in workflow. Separate package check/lint scripts exist, prepare suppresses sync failure via shell fallback.",
+    "Static adapter with fallback404.html, BASE_PATH conditional on dev command; deployment path trigger includes website changes only, not library/scripts/sample inputs. Generated website data can lag core changes unless regenerated.",
+    "Publish reusable workflow triggered by version-like tags; no release/publish invoked. README claims and .metadata are provenance/config, not current runtime proof."
+  ],
+  "remaining": [
+    "Website source, lockfile/data structural review and tracked image/vector assets",
+    "Dart execution/oracles and external visual assets"
+  ],
+  "full_review_count": 247
+}
