@@ -1,0 +1,18 @@
+{
+  "repository": "jian-qi-chen/KernelPHash",
+  "commit": "891bd8da3f6934bb03eb348a72d48201a899fa72",
+  "whole_repo_complete": false,
+  "scope": "Whole README.txt, example.py, pHash/src/text_hash.cpp and Makefile; KernelPHash.py lines1-240 and510-778 only. Remaining parser, header, licenses, fixtures and AST image not yet reviewed. All19 blobs downloaded and Git blob SHA1 verified; download is not review.",
+  "findings": [
+    "Domain is restricted C/C++ AST similarity, not file/image duplicate detection. README explicitly excludes declarations, structs, pointers and preprocessor.",
+    "Loop conditions and iteration statements discarded by SyntaxRule; semantic equality is not established.",
+    "Module top level calls os.system to remove pHash/text_ast, hash and hash.info and chmod executable; module was not imported.",
+    "TextHash64_real sums 8-character windows modulo256; swapping complete windows produces equal fingerprints in executed control.",
+    "HammingDist64_real does not enforce64-bit width; differing least-significant bits of65-bit values can be ignored. Empty list comparison raises ZeroDivisionError.",
+    "PHashGen doubles text until minimum length; empty generated text would not grow. Source-only finding, not executed.",
+    "Native wrapper writes fixed hash/hash.info filenames and lacks allocation checks/free; native execution deferred."
+  ],
+  "runtime_controls": "docs/research/dedup-500/kernel432-controls-20261021/result.json",
+  "adoption": "No code adopted; no production modification or performance claim.",
+  "remaining": "Continue unread authored parser sections, header/build metadata, licenses, five text fixtures, AST.png and binary metadata; native pHash/ASAN stays deferred."
+}
