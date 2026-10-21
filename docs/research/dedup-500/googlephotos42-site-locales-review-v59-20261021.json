@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "site-l10n/nl.json": {
+      "sha256": "315e0535cc9462ad7a6f99bbc37dd687920b45522b3da373eb4720d41349316e",
+      "git_blob": "08d18db6c0086853497bbdf13d5718e025a4e451",
+      "bytes": 13381,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; isolated original builder controls."
+    },
+    "site-l10n/pt-br.json": {
+      "sha256": "22905d26ab61e2c1b8856776aa2846817a7518391727a8312d04c0138b464fc7",
+      "git_blob": "1e325d2b61874cc28cf5998ea857365b2fcb3700",
+      "bytes": 13597,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; isolated original builder controls."
+    }
+  },
+  "cumulative_assessed_blobs": 226,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-site-locale-controls-v59-20261021/run.mjs",
+    "sha256": "8b52e215401411db6433c1348280b2dc4e0e430643ea5a3ee5de468c5d3982a7",
+    "log": "docs/research/dedup-500/googlephotos42-site-locale-controls-v59-20261021/run.log",
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0,
+    "keys_each": 96,
+    "method": "Original builder with copied nl/pt-br catalogs only and cached site into ownedtemporary output; exactkeys/nonempty/lang/rootstylesheet/generateddemocaption checks. Language check uses catalog htmlLang, not URLslug."
+  },
+  "findings": [
+    "Both96nonemptykeys andexactsets match; originalbuilder accepts both. PortugueseURLslugpt-br andhtmlLang/hreflangpt-BR are intentionally distinct, supported by catalogmetadata.",
+    "Sitept-br catalog explicitly Brazilian (usuários/celular/lixeira), distinct from genericptpopup; no professional regionalconsistency certification. Dutch/Portuguese legal links declare English.",
+    "Shared claims10UIlanguages/98%/60days/500/20presets andsource ratings remain historicalcopy; catalog/build checks do not certify algorithms, measuredperformance, legal/currentvendorfacts.",
+    "All6reviewed European sitecatalogs have96keys; full9catalogbuild andactualbrowservisuals not yetrun. Originalbuilder substring-completeness counterexample retained."
+  ],
+  "cumulative_original_function_controls": 95,
+  "limits": [
+    "226/230whole artifacts;ja,zh-cn,zh-tw,bun.lockremain. Globalfullreview160/500unchanged.",
+    "No productionimplementation/performancechange. NativepHash/ASANdeferred."
+  ]
+}
