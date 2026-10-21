@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 67/84 tracked blobs. CDP diagnostic tool fully read without running; operation status and target ambiguity limitations recorded. Remaining source/assets still outstanding.",
+  "review_scope": "Partial whole-file/artifact review: 74/84 tracked blobs. All seven tracked PNG/JPEG images decoded and visually inspected; JPEG duplicate pair is byte-identical. Remaining source/data/license/locks/bundle and external demo outstanding.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -195,6 +195,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-diagnostic-tool-review-v31-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-tracked-image-review-v32-20261021.json"
     }
   ]
 }

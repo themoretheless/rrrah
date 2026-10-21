@@ -1,0 +1,114 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "assets/icon.png": {
+      "sha256": "e21535c655f4e3d5915e1ebb02008f1ef05192184cd2535f7170dcd442d7fd3d",
+      "git_blob": "9eabdc46dc427885fabdd665e8576efab5103b48",
+      "bytes": 5487,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "3dcc7c21d31ea7d120b16576db29d756b811f95ececa8d34d91b70cb95f99968"
+    },
+    "assets/icon16.png": {
+      "sha256": "a0d64e538083f7a85164e020d7a8d8edcd54d7f01ad0bc0240596e59ef27683e",
+      "git_blob": "c03df7ad119dbd0bd950f90037da1bfdb2f74f16",
+      "bytes": 646,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "290e73fb7f6d5bf89855abb9295365e462068a67e9ac8e8889d9903fe6d0d562"
+    },
+    "assets/icon32.png": {
+      "sha256": "ba45d3491f50b10e3540ffb579a3604969a5f29b5263f57b24fbddb016329a37",
+      "git_blob": "3e5bbf0309ab1fb34e26249c6aab28a03fb0bad4",
+      "bytes": 1315,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "c41efdac69cc055a916cb12e2bfb10de075b9197125cc80c17dc4f546a992724"
+    },
+    "assets/icon48.png": {
+      "sha256": "a8a0dfd3546f61e655fa248540751a52cdffa1e08dbddde5a8e1bc897a485f5c",
+      "git_blob": "1bbad124a498e04a1811952052fcba82ad35ef11",
+      "bytes": 2050,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "bcca61d4974229e1b21d583ee9b967eb1a9a197ca2e560e533bcc5225c32090e"
+    },
+    "tests/images/test-image-2.jpg": {
+      "sha256": "aeddabae3b10851e136244cd369ee4f486e970510334b3bab474d220d3fedded",
+      "git_blob": "f0086f9575f858cf208474aeb46ac3287438692f",
+      "bytes": 14656,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        612,
+        432
+      ],
+      "mode": "RGB",
+      "format": "JPEG",
+      "decoded_pixel_sha256": "f9ad64a9c91148664fbeaaff3f4dbb17e247a13b779d978e81d5265ade47d1dd"
+    },
+    "tests/images/test-image-dup-1a.jpg": {
+      "sha256": "e83615b480d0635368567442a90bb88a4f8e8d8540dfd681a7845487fd5bbfa3",
+      "git_blob": "3b465d859408129f352fbdf24166b4cb7ef729f9",
+      "bytes": 7099,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGB",
+      "format": "JPEG",
+      "decoded_pixel_sha256": "912d3aad4dfc11dd53b6998428685659a9800cf75e8806d307919cce1160ce96"
+    },
+    "tests/images/test-image-dup-1b.jpg": {
+      "sha256": "e83615b480d0635368567442a90bb88a4f8e8d8540dfd681a7845487fd5bbfa3",
+      "git_blob": "3b465d859408129f352fbdf24166b4cb7ef729f9",
+      "bytes": 7099,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGB",
+      "format": "JPEG",
+      "decoded_pixel_sha256": "912d3aad4dfc11dd53b6998428685659a9800cf75e8806d307919cce1160ce96"
+    }
+  },
+  "cumulative_whole_files_read": 74,
+  "tracked_blobs": 84,
+  "findings": [
+    "All four PNG icon sizes visually inspected: blue photo-outline icon with a lighter overlapping photo and cross. Decode succeeded for all.",
+    "test-image-dup-1a.jpg and 1b are byte-identical 7099-byte JPEGs with same SHA256 and decoded pixels. They show identical cropped vertical colour bars.",
+    "test-image-2.jpg is a different colour-bar chart with a lower patch region, not an unrelated natural photograph. Visual similarity can be high despite distinct composition/bytes.",
+    "Three JPEG fixtures contain only one exact duplicate pair and one alternate chart. They cannot establish robustness for natural photos, reencoding, rotation, crops, metadata edits or video posters."
+  ],
+  "executed_controls": [
+    "Seven complete Pillow image decodes and Git blob identity checks passed.",
+    "All seven original images viewed; duplicate JPEG raw bytes confirmed equal."
+  ],
+  "limits": [
+    "No MediaPipe inference or full-image matching performance/correctness test.",
+    "74/84 tracked blobs fully read or visually assessed; external demo still outstanding."
+  ]
+}
