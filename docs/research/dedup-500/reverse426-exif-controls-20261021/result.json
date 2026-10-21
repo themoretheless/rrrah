@@ -1,0 +1,11 @@
+{
+  "exit_code": 0,
+  "authored_test": 1,
+  "fixtures": 2,
+  "command": "go test -mod=readonly -v -count=1 -run ^TestReviewZeroExposure ./internal/exif",
+  "observations": [
+    "Original Extract reads Pillow-generated JPEG EXIFExposureTime1/60 as1/60s.",
+    "Sameknownimage withExposureTime0/1causesintegerdivide-by-zeropanic,recoveredbyauthoredtest. Originalchecksdenominator!=0butnotnumeratorbeforedenom/num."
+  ],
+  "scope": "Actual original pinned EXIF implementation/dependency and two synthetic valid JPEG containers. Not server endpoint or broader metadata robustness qualification. No production code adopted."
+}
