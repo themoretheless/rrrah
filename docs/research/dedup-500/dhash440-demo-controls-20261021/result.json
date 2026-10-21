@@ -1,0 +1,12 @@
+{
+  "preaborted_request": {
+    "signal_aborted": true,
+    "status": 200,
+    "hash_calls": 1,
+    "body": {
+      "hash": "0123456789abcdef"
+    }
+  },
+  "limiter_duplicate_release_safe": true,
+  "scope": "Actual original createHandler/createConcurrencyLimiter imported under docs config; injected counting hash dependency, no real HTTP server or image decode. Pre-aborted Request still invokes hash; this qualifies cancellation boundary, not a broad security finding."
+}

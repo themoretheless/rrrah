@@ -1,0 +1,11 @@
+import {createHandler,createConcurrencyLimiter} from './docs/main.tsx';
+import assert from 'node:assert/strict';
+let calls=0;const hash=(_bytes:Uint8Array)=>{calls++;return Promise.resolve('0123456789abcdef')};
+const handler=createHandler({hash,onError:()=>{}});
+const controller=new AbortController();controller.abort('before dispatch');
+const request=new Request('https://demo.test/hash',{method:'POST',body:new Uint8Array([1,2,3]),signal:controller.signal});
+assert.equal(request.signal.aborted,true);const response=await handler(request);const body=await response.json();
+assert.equal(response.status,200);assert.equal(calls,1);
+const limiter=createConcurrencyLimiter(1);const release=limiter.tryAcquire();assert(release);assert.equal(limiter.tryAcquire(),null);release();release();const again=limiter.tryAcquire();assert(again);assert.equal(limiter.tryAcquire(),null);again();
+await Deno.writeTextFile('../../docs/research/dedup-500/dhash440-demo-controls-20261021/result.json',JSON.stringify({preaborted_request:{signal_aborted:request.signal.aborted,status:response.status,hash_calls:calls,body},limiter_duplicate_release_safe:true,scope:'Actual original createHandler/createConcurrencyLimiter imported under docs config; injected counting hash dependency, no real HTTP server or image decode. Pre-aborted Request still invokes hash; this qualifies cancellation boundary, not a broad security finding.'},null,2)+'\n');
+console.log('Pre-aborted request still hashes; limiter idempotent release control passes');

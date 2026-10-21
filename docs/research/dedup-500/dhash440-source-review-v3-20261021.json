@@ -1,0 +1,37 @@
+{
+  "repository": "ClaudiuCeia/dhash",
+  "commit": "9ae9b1daea9591d9cd477b0de58609059e5f1fab",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "docs/main.ts",
+    "docs/main.tsx",
+    "docs/client.js",
+    "docs/main.test.ts",
+    "docs/client.test.ts",
+    "docs/deno.json"
+  ],
+  "controls": "docs/research/dedup-500/dhash440-demo-controls-20261021/result.json",
+  "original_tests": {
+    "command": "NPM_CONFIG_REGISTRY=https://registry.npmjs.org deno test --frozen --config docs/deno.json --allow-read --allow-ffi --allow-env docs",
+    "exit_code": 0,
+    "passed": 8,
+    "failed": 0,
+    "scope": "Original7handler tests plus1HappyDOM client test. Handler tests inject hash; demo default imports publishedJSR^0.7.3 not current localmodule. No actual browser/server/networkupload or defaultdecode request qualification."
+  },
+  "findings": [
+    "Pre-aborted Request.signal istrue beforehandler call, but bounded reader onlyaddsabortlistener,noexisting-abortedcheck; actual handler withcountinghash invokeshash once andreturns200. Cancellation boundary control, not broad vulnerability claim.",
+    "ConcurrencyLimiter single-slot admission and double release remain consistent; repeatedrelease guarded. Realclient testusesmockfetch andHappyDOM,notrealbrowsercanvas/image decode.",
+    "Bodyboundedbytecheck,15sreadtimeout,cancellationandreleasesfinally,10MiBinput/16Mpixel/2concurrenthash defaults areexplicit. No hash-computation deadline/cancelparameter. Sourcelimits, no hugeinput execution.",
+    "Clientlimits20files,10MiB each,2concurrent;URLrevocation/runidguards/stalecompletion suppression andescapederror/name render present. Serverresponse onlyrequiresstringhash before BigInt use; malformed string couldthrow. Sourceobservation, not injectedclientresponse test.",
+    "Server422errorbody notleakingrawexception inoriginaltest; loggingonError retainsinternalerror. CustommaxBytes stillusesfixed10MiBerrortext. Sourceobservation."
+  ],
+  "remaining": [
+    "Build/release/smoke and fixture generation scripts",
+    "CIworkflows,otherconfiguration andCSS",
+    "Fourlockfiles structuredreview",
+    "Elevenimageassets visualreview"
+  ],
+  "limits": [
+    "Whole repo incomplete; count221/500. No production changes thisturn. NativepHash/ASANdeferred."
+  ]
+}
