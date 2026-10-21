@@ -1,0 +1,59 @@
+{
+  "repository": "LowLevelLogic/synology-dedup-photos",
+  "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
+  "whole_repo_complete": false,
+  "tracked_blobs": 8,
+  "cumulative_assessed_blobs": 4,
+  "new_whole_files_read": {
+    ".gitignore": {
+      "bytes": 144,
+      "git_blob": "c3287fe83737d39f959abb0035f34ce7ba464613",
+      "sha256": "37987476cd7453cd1cbb56e5aa059762991038368eff2d6a1256294522140fef",
+      "method": "Whole pinned text read without truncation"
+    },
+    "Cargo.toml": {
+      "bytes": 444,
+      "git_blob": "d5dcce889072c8ecdb092b6fb196280e86eb43c5",
+      "sha256": "a63c796544da323b322c529f227d690be3b1fbe32cacf806baedec7159ea5674",
+      "method": "Whole pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1064,
+      "git_blob": "76d79a6f2670112666e30372ea1126a0e7ec2786",
+      "sha256": "05770b19466c9940ff8235d476a61d72c7a0348481f09ce4bd9b816cef331336",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/semantic.rs": {
+      "bytes": 5957,
+      "git_blob": "27e49cf505135cffb19b3ccdd828e1711cf96ab0",
+      "sha256": "56701a393aa24193e07ec08f479449cfb1931ee33c958b0adbc717797409cb82",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/synology126-controls-v1-20261021/cosine.rs",
+    "log": "docs/research/dedup-500/synology126-controls-v1-20261021/run.log",
+    "method": "Unchanged original cosine_q function extracted and compiled with rustc 1.98.1; five authored tests; no ONNX/image/network/NAS execution.",
+    "passed": 5,
+    "failed": 0
+  },
+  "findings": [
+    "cosine_q explicitly returns zero for empty, mismatched or zero-norm vectors; positive parallel, orthogonal and opposite vectors passed original-function controls.",
+    "Embedder uses fixed 224 center crop after shortest-side resize, RGB8 and CLIP normalization; no explicit EXIF autorotation, alpha compositing, frame or ICC contract in this module.",
+    "Output uses image_embeds if present, otherwise first model output without explicit expected vector dimension validation. Zero norm rejected; no explicit finite-value validation. These are source observations, not runtime counterexamples.",
+    "Model URL resolves mutable main revision and downloaded model has no expected digest check. Cached existing path accepted; no model fetched in this review.",
+    "Quantization rounds/clamps to signed 8-bit and base64; dimension/finite value validity not encoded by the cache string itself. Cache consumer assessment remains pending."
+  ],
+  "license": "Root MIT fully read. Original cosine_q retained only in research control artifact; no production code adopted.",
+  "remaining": [
+    "README.md",
+    "Cargo.lock",
+    "src/main.rs",
+    "src/nas.rs"
+  ],
+  "limits": [
+    "Partial 4/8 artifacts; full-review count remains 167/500.",
+    "No whole application build, model run, image-corpus precision, NAS account operation or deletion.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
