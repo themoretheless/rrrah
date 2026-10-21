@@ -1,0 +1,48 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/duplicate-detector.ts": {
+      "sha256": "1209669763b81683a7940e101edef895908c80c77729f0605a63540818b86d94",
+      "git_blob": "19c519cf80d31aa66124711ef7c40554ac28cbd8",
+      "bytes": 36596,
+      "lines": 1163,
+      "method": "Whole source read in contiguous ranges 1-220,221-440,441-800,801-1163."
+    }
+  },
+  "cumulative_whole_files_read": 6,
+  "tracked_blobs": 84,
+  "findings": [
+    "The main detector uses an inline gpd-embeddings database, not the separately reviewed gpd-cache class. Both inline detection entry points key only on mediaKey. Version bump does not clear an existing store in onupgradeneeded. Model URL uses latest, without content hash in cached records.",
+    "communityDetection sorts by timestamp and compares only adjacent rows. Identical nonadjacent vectors can be missed; consecutive above-threshold edges form chains whose endpoints can fall below threshold.",
+    "withinGroupDuplicates uses union-find over above-threshold pairs, also permitting non-clique components. Its output similarity is the input threshold, not an average/minimum pair score.",
+    "Timestamp buckets use floor(timestamp/windowMs), so nearby timestamps crossing a boundary never meet in smart mode.",
+    "Cached key enumeration skips downloading before value validation; absent/corrupt values later have no downloaded fallback. Embedding dimensions/normalization/finiteness are not validated here.",
+    "Thumbnail failures and worker batch errors skip items; reported groups do not prove exhaustive input coverage. Video poster similarity does not establish full clip equality.",
+    "Initial model fetch and worker initialization lack cancellation forwarding in this source. No IndexedDB close is present in either main entry point.",
+    "Pure exported helper tests exercise source bodies after import removal and TypeScript stripping. Browser worker implementation equivalence remains unverified."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-algorithm-controls-v2-20261021",
+    "passed": 11,
+    "cases": [
+      "adjacency-misses-separated-identical-vectors",
+      "adjacent-chain-is-not-a-clique",
+      "union-find-chain-is-not-a-clique",
+      "window-boundary-misses-nearby-timestamps",
+      "dedup-key-keeps-first-even-if-later-quality-is-better",
+      "shorter-later-vector-silently-fails-comparison",
+      "finite-top-k-1",
+      "finite-top-k-3",
+      "finite-top-k-50",
+      "finite-top-k-51",
+      "finite-top-k-80"
+    ]
+  },
+  "limits": [
+    "No full upstream suite, model execution, browser workers or Google account operations.",
+    "No production library code changed.",
+    "Main source file fully reviewed; repository remains 6/84 partial."
+  ]
+}

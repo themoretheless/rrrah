@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 5/84 tracked blobs; cache, context, URL helpers, types and package inspected. Five isolated original-function controls passed; full upstream suite and remaining source unreviewed.",
+  "review_scope": "Partial whole-file review: 6/84 tracked blobs. Entire main detector read; 11 isolated pure-function controls reproduce adjacency, chaining and bucket-boundary behavior. Browser worker and remaining source unreviewed.",
   "decision": "reference",
   "finding": "Embedding database and cosine clustering; approximate group scores and union-find are not pairwise duplicate evidence.",
   "license_metadata": "AGPL-3.0",
@@ -108,6 +108,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/photos20-cache-and-context-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-detection-algorithm-review-v2-20261021.json"
     }
   ]
 }
