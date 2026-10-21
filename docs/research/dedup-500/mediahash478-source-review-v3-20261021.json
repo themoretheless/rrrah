@@ -1,0 +1,50 @@
+{
+  "repository": "studioph/mediahash",
+  "commit": "e14ff15a2b918a957c80082f586c14df501e8bcd",
+  "whole_repo_complete": false,
+  "files": {
+    "src/mediahash/image.py": {
+      "bytes": 2017,
+      "sha256": "289281934fa1e55c871a836b380ee9758a3dd0f99d49ce0f58f447fc80178136",
+      "git_blob": "09eb885af973e1f390753056a364d52efb57d8e9",
+      "method": "Pinned bytes reverified; original module executed or realvideo decoded; not new whole-text/visual review"
+    },
+    "src/mediahash/video.py": {
+      "bytes": 5507,
+      "sha256": "cc4852e524231b39307ebde8c9bb3172ead21469c73b9e0b428a480c7f3b444b",
+      "git_blob": "02916acdab89031eb06b0b52d5b2bceed4cc4d1c",
+      "method": "Pinned bytes reverified; original module executed or realvideo decoded; not new whole-text/visual review"
+    },
+    "src/mediahash/types.py": {
+      "bytes": 744,
+      "sha256": "e564dc1c557d3c749043a589407e5571b11685b4acbed7eac02fb374952bd23d",
+      "git_blob": "5886f79bb3d74853e3ceea7bcb72a1034b99362c",
+      "method": "Pinned bytes reverified; original module executed or realvideo decoded; not new whole-text/visual review"
+    },
+    "__test__/data/sample.mp4": {
+      "bytes": 98599,
+      "sha256": "d085630e19f76856a4559f288c6b5b0cda8961cc4a071081963de5d9aef86598",
+      "git_blob": "47c3f1fd7d624e8266e69471502d3fecca9bdce6",
+      "method": "Pinned bytes reverified; original module executed or realvideo decoded; not new whole-text/visual review"
+    }
+  },
+  "new_authored_controls": 2,
+  "earlier_authored_controls": 9,
+  "original_suite_previous_increment": {
+    "passed": 1,
+    "failed": 1,
+    "rerun_here": false
+  },
+  "controls_script": "docs/research/dedup-500/mediahash478-persistence-controls-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/mediahash478-persistence-controls-20261021/run.log",
+  "runtime_scope": "Unchanged original modules using real ImageHash,numpy,scipy,PyAV andcontext-utils.64authored one-hot descriptors test original image wrapper/parsewithoutcalling brokenimageanalyze/fingerprint. RealbundledMP4 decoded for originalvideo.fingerprint; no decoder mocks. Not fullPDMlock.",
+  "findings": [
+    "Positivecontrol:64single-bit8x8boolImageHashdescriptors serialize64bytes and originalimage.parse_fingerprint returnsflatuint8array;bytes andHammingdistance1againstzerobaseline remainidentical forfresh/fresh,parsed/parsedandcrosspairings. Do not claim imageparseisbrokenmerelybecause shapechanges.",
+    "Negativecontrol:realvideo.fingerprint returns8x8array;parse_fingerprint preserves256bytes but returns64element1Darray. Fresh-minus-parsedraisesValueError Input vector should be1-D; parsedselfdistance0. Previous20261013freshselfvsparsedself failureknown;thisincrementexplicitlytestsheterogeneouslive/cachecomparison.",
+    "Serializationbyteequalityalone doesnotestablishthatconsumerdistanceacceptsbothrepresentations. Conversely,imagewrapperflattensinsideImageHashdistance so crossrepresentationworks in64finitebasiscontrols.",
+    "Currentlocalrrrah-dedupcachetests alreadycheck576identitykeybits,2048variant/channelhashbitsandfloatbitswithindependentwireoracleandrestoredFingerprint equality. Readexistingtests/cache.rs;no newlocaltestexecutionorproductionchangeclaimed. Thisavoidssubstitutinganewmirrortestforalreadystrongerfieldcoverage."
+  ],
+  "limits": [
+    "No image fullfingerprintextraction qualification:originalImage shadowbugstillpresent. No semantic matching,alltransforms,fulloriginalworkspaceorPDMlock,video visualQA/GPLcomplete-reading claimed. Globalcompletecount207/500unchanged.NativepHash/ASANremainsdeferred."
+  ]
+}
