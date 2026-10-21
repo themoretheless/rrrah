@@ -1,0 +1,27 @@
+{
+  "original_hash_modules_executed_unchanged": true,
+  "adapter": "Synthetic image::GenericImageView and prepare_image; no real decoder/cache dependency execution.",
+  "rust": "1.98.1",
+  "command": "PIHASH_SOURCE=<absolute pinned source cache> rustc +1.98.1 --edition=2015 check.rs -o control; ./control",
+  "source_sha256": {
+    "src/hash/ahash.rs": "722dcf33a223cbbe0e44aa292ca882f1475845f4fdd7cff9c7993543749cdc8c",
+    "src/hash/dhash.rs": "0dbf81e9295c031e37c0522b0f6d69721e7d8651aa52e0a6da70191f709c8703"
+  },
+  "controls": {
+    "ahash_first_only_64_pixels": 0,
+    "ahash_last_only_64_pixels": 2,
+    "ahash_missing_image": 0,
+    "dhash_pixels": [
+      100,
+      200,
+      150,
+      50
+    ],
+    "dhash_actual": 13,
+    "adjacent_scan_with_wrap_reference": 9
+  },
+  "limits": [
+    "No end-to-end image decode or full upstream test run.",
+    "All-zero error aliases are reproduced at the hash module boundary, not from corrupt-file decode."
+  ]
+}
