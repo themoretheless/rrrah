@@ -1,0 +1,35 @@
+{
+  "repository": "davidfoerster/aptsources-cleanup",
+  "commit": "cf291129b351f4e126d53ed7382a61734052db99",
+  "whole_repo_complete": true,
+  "status": "pinned_whole_source_review_complete_runtime_partial",
+  "whole_files_read": 166,
+  "tracked_blobs": 166,
+  "all_credited_source_sha256_and_git_blobs_reverified": true,
+  "review_artifact_pins": {
+    "docs/research/dedup-500/apt11-component-overlap-review-v1-20261021.json": "ab14626195cd0ea71a4b6b7efef46bfa87e8305db29c1f5b5ab31d0b8319244c",
+    "docs/research/dedup-500/apt11-file-errors-relations-review-v2-20261021.json": "1328fa9a0de4d41c311f278ccece4fe9588ed2bc96742976448b315cc5eac77c",
+    "docs/research/dedup-500/apt11-helper-errors-review-v3-20261021.json": "9a875b91d2877d5f9388ae188ad0251f3db7fe41ba0db458ad78cfe8dc410fa3",
+    "docs/research/dedup-500/apt11-fixtures-review-v4-20261021.json": "81dfc96727a564852e1b951d670b3a876f8f4603ad8b7b683f3d0ad818c8049b",
+    "docs/research/dedup-500/apt11-packaging-version-review-v5-20261021.json": "4e5438c9b40420d2b28c2e88406d0cbd58f52eb8028a7c76016f15e69fc6c657",
+    "docs/research/dedup-500/apt11-terminal-localization-zip-review-v6-20261021.json": "978c2ec44a16e76aeb0e0c7d2f908c2dff5ead449b214e915b9e7abb11e0c50b"
+  },
+  "decision": "reject-domain",
+  "conclusions": [
+    "APT source-entry equivalence is outside file-content duplicate detection; do not adopt the cleanup algorithm.",
+    "Original isolated component overlap control loses unique universe component by disabling entire overlapping entries.",
+    "Original isolated controls confirm empty-file mmap failure, missing-file error NameError, prefix/suffix NameError, terminal fallback UnboundLocalError, empty terminal length IndexError, and ZIP byte-reader padding.",
+    "Transferable review rule: preserve nonduplicate members, distinguish identity/error states, and exercise empty/error/partial-write paths. Existing rrrah grouping regression covers all 64 four-vertex graphs; no duplicate regression added."
+  ],
+  "license": "Root MIT read; no production code copied.",
+  "review_methods": [
+    "All 166 tracked blobs read; 125 fixture paths grouped into 67 exact-byte contents with individual identities checked.",
+    "Symlink blobs reviewed as target text, never installed as symlinks.",
+    "All 166 credited local blobs checked against tree Git SHA and review SHA256 at reconciliation."
+  ],
+  "limits": [
+    "Full upstream CLI/python3-apt integration, system configuration changes, packaging and compiled translation runtime unexecuted.",
+    "Local rrrah tests previously 284 passed, 2 ignored manual timing tests; no production edits in this review batch.",
+    "Native pHash/ASAN remains user-deferred. All 500 reviews and all-case runtime coverage remain incomplete."
+  ]
+}

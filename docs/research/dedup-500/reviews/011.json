@@ -2,11 +2,11 @@
   "index": 11,
   "repository": "davidfoerster/aptsources-cleanup",
   "commit": "cf291129b351f4e126d53ed7382a61734052db99",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "all 166 pinned tracked blobs read and identities verified; isolated original-function controls; full upstream runtime unexecuted",
   "decision": "reject-domain",
   "finding": "APT source-entry equivalence and empty configuration cleanup; no image algorithm.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Root MIT whole text reviewed; no code adopted",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -90,6 +90,11 @@
     },
     {
       "audit": "docs/research/dedup-500/apt11-packaging-version-review-v5-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/apt11-terminal-localization-zip-review-v6-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/apt11-full-review-reconciliation-20261021.json"
 }

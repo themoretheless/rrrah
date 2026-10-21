@@ -1,0 +1,82 @@
+{
+  "repository": "davidfoerster/aptsources-cleanup",
+  "commit": "cf291129b351f4e126d53ed7382a61734052db99",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/aptsources_cleanup/util/terminal.py": {
+      "sha256": "0500ee9df6da064ffbe77a97174bb7efec3f66a4941c87ae18da64e193827d8b",
+      "git_blob": "45e9d3083f9dfc5c1cd38f7be1f85f197a4bd8dd",
+      "lines": 222,
+      "mode": "100644"
+    },
+    "src/aptsources_cleanup/util/zipfile.py": {
+      "sha256": "60d6a74552575ce0a58ae816bc7c5881d79fd601bc3e1e74b0fa7e88351c5224",
+      "git_blob": "60cd4aaf588b348c04a67d1e71e21d08efe5bf82",
+      "lines": 254,
+      "mode": "100644"
+    },
+    "src/aptsources_cleanup/util/gettext.py": {
+      "sha256": "af03a727b8758543e774ba74937e2b257427b5c4b231adf15c7aebac082e724b",
+      "git_blob": "17f45809bb8fe851d83918f10c02cb7f3c0fc75c",
+      "lines": 497,
+      "mode": "100644"
+    },
+    "tools/zip.py": {
+      "sha256": "c157de9b6a4fb6fbd9eff2f9f8071b135e87481e0eab5c54826332c694777a7f",
+      "git_blob": "004d8b05e9a2daed49615dd364d3bbb8c499c7b6",
+      "lines": 874,
+      "mode": "100755"
+    },
+    "po/de/LC_MESSAGES/messages.po": {
+      "sha256": "043e62a50e8c2d821104f81a767a18b156a2919b3fc2fdcbdc0fe6ade115f9d9",
+      "git_blob": "c4ebf90f0f37e0a4fe38fbb3728d1ddc541dd388",
+      "lines": 384,
+      "mode": "100644"
+    },
+    "po/en/LC_MESSAGES/messages.po": {
+      "sha256": "ca6ecec2abc49be43d32c486ee01efdbadcebebf7de9875cdbe27b737ec6f83e",
+      "git_blob": "97cb605199a6aec63da12629841ccb2b0b266388",
+      "lines": 377,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 166,
+  "tracked_blobs": 166,
+  "method": "Whole remaining six files read; original AST-extracted terminal and line-reader controls in isolated Python with stdlib only. No upstream build/hooks or system APT access.",
+  "executed_controls": {
+    "empty_wrapped_paragraph": {
+      "exception": "IndexError",
+      "message": "list index out of range"
+    },
+    "empty_paragraph_sequence": {
+      "exception": "IndexError",
+      "message": "tuple index out of range"
+    },
+    "short_final_chunk": {
+      "input_hex": "616263",
+      "chunk_size": 8,
+      "delimiter_hex": "00",
+      "actual_hex": [
+        "6162630000000000"
+      ],
+      "expected_hex": [
+        "616263"
+      ]
+    }
+  },
+  "control_source": "import ast,io,os,sys,textwrap,weakref,collections,itertools,contextlib,operator,json\nfrom pathlib import Path\nbase=Path('.dedup-work/apt11-20261021')\ndef extract(file,names,env):\n tree=ast.parse((base/file).read_text()); tree.body=[n for n in tree.body if isinstance(n,(ast.ClassDef,ast.FunctionDef)) and n.name in names]; exec(compile(tree,str(base/file),'exec'),env); return env\nterm=extract('src--aptsources_cleanup--util--terminal.py',{'termwrap'},dict(textwrap=textwrap,weakref=weakref,sys=sys,os=os,collections=collections,fpartial=__import__('functools').partial))\nresults={}\nfor name,action in [('empty_wrapped_paragraph',lambda:term['termwrap'](io.StringIO(),width=20).print('',return_last_line_len=True)),('empty_paragraph_sequence',lambda:term['termwrap'](io.StringIO(),width=20).print_all([],return_last_line_len=True))]:\n try: results[name]={'value':action()}\n except Exception as e: results[name]={'exception':type(e).__name__,'message':str(e)}\nenv=extract('tools--zip.py',{'attrs2dict','itercontextmanager','getlines','_getlines_impl_generic','_getlines_impl_bytes'},dict(io=io,operator=operator,contextlib=contextlib,fpartial=__import__('functools').partial))\nresults['short_final_chunk']={'input_hex':b'abc'.hex(),'chunk_size':8,'delimiter_hex':b'\\0'.hex(),'actual_hex':[bytes(x).hex() for x in env['getlines'](io.BytesIO(b'abc'),b'\\0',8)],'expected_hex':[b'abc'.hex()]}\nassert results['empty_wrapped_paragraph']['exception']=='IndexError'\nassert results['empty_paragraph_sequence']['exception']=='IndexError'\nassert results['short_final_chunk']['actual_hex']!=results['short_final_chunk']['expected_hex']\n(base/'final-controls-result.json').write_text(json.dumps(results,indent=2)+'\\n'); print(json.dumps(results,indent=2))\n",
+  "findings": [
+    "Original terminal print with positive width and empty paragraph raises IndexError when requesting last-line length; empty print_all sequence also raises IndexError.",
+    "Original ZIP packaging byte line-reader appends unread buffer bytes: abc with NUL delimiter and chunk_size=8 returns abc plus five NUL bytes. This isolated byte-reader result does not establish reachability through every CLI names-file path.",
+    "Packaging writer monkey-patches stdlib ZIP internals and relies on O_PATH for directory/symlink paths; portability and full build unqualified.",
+    "Packaging writes destination directly before processing all inputs, catches per-file EnvironmentError, and may leave partial archive on failures; source finding, not build execution.",
+    "Archive reader open resolves existing entries even in write mode; source-level incompatibility for new member names. Error filename joining assumes string archive filename.",
+    "gettext archive lookup takes first available catalog rather than composing fallback catalogs; source behavior.",
+    "German translation of disabled all but first says disabled latter entry; percent-format r/s presentation differs on several argparse strings; semantic/localization observations, not compiled MO runtime.",
+    "Choice shorthand availability checks raw grapheme against normalized shorthand keys; Unicode collision possible by source inspection, not reproduced here."
+  ],
+  "limits": [
+    "No full CLI/APT save/remove, compiled catalogs, package build or upstream test suite executed.",
+    "No production code copied; source completion is separate from runtime qualification."
+  ]
+}
