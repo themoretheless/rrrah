@@ -1,0 +1,18 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Actual original full authored sources compiled shared with/without pinned spng; no PH_TESTING. Observer shim only reads first stored byte.",
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-public-result.json",
+  "build_recipe": "cc -O2 -shared -fPIC -I<libphash>/include -I<libphash>/src <observer.c> <all src/**/*.c> [-DPH_USE_SPNG -DSPNG_STATIC -I<spng>/spng <spng>/spng/spng.c -lz] -lm -o <public-backend.dylib>",
+  "findings": [
+    "32 valid 1x1 PNG loads passed: four color types, grayscale enabled/disabled, memory/file, with/without spng. Width/height checked and all grayscale channel/first-byte values asserted.",
+    "Grayscale RGB/RGBA/GA inputs rejected by direct spng backend in v23 succeed via original public stb fallback, with red=76 and gray=128. Thus direct-backend failure is not public decode failure for these cases.",
+    "Default native-channel load differs: spng returns 3 channels for gray/GA/RGBA while stb preserves 1/2/4. Alpha dropped by original spng wrapper. No all-input equivalence or hash parity claim."
+  ],
+  "remaining": [
+    "Full optional codec source/tests/assets/license review",
+    "Broader native-channel and alpha recipe qualification"
+  ],
+  "full_review_count": 247
+}
