@@ -1,0 +1,28 @@
+{
+  "repository": "deveyNull/phistOfFury",
+  "commit": "96598bf78c4f33bfca68f4b3fc9c4b334f175644",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "phist.py"
+  ],
+  "controls": "docs/research/dedup-500/phist374-controls-20261021/result.json",
+  "findings": [
+    "Original serializer emits byte only onindex%8==7 and drops finalpartialbyte:100bitinputstores96bits,25bitinputstores24bits. ActualNumPy controls differingonlylast4/1bits serializeidentically.",
+    "Original hamming1 uses itertools.imap absentPython3;actualfunction raisesAttributeError despite sourcePython3claim.",
+    "directoryEater scansrequested directory but first renames allcurrentworkingdirectoryentries replacing spaceswithhyphens. Actualtemporaryfixture confirmsunrelatedparentfile rename. Only controlledownfilesused.",
+    "checkHashes returnsFalse insidefirstnonmatching bucketiteration instead of inspectinglaterentries; source-only becauseactualhamming1alreadyfailsPython3. Returnsfirstmatch ratherthanallmatches; exact hashmatch notbyteidentity.",
+    "average_hash usesImage.ANTIALIAS removedinmodernPillow andfloatsizeBig/sizeSmall inreshape underPython3; noimagepipelineexecution. Hardcoded10x10/5x5meanshash_sizeparameter notgeneral.",
+    "Flatfile parsing delimitercomma-space conflictswithfilenamescontainingthatsequence;databaseglobalpicklefileshardcodedtocwd,noatomicreplacement. Source observations.",
+    "delete builds shellrmcommandfromflatDbName; notexecuted. Wholemoduleimportnotneededforfunctioncontrols."
+  ],
+  "remaining": [
+    "phistTerminal.py,README/license/resourcesREADME whole-read",
+    "Siximageassets visualreview",
+    "TwoPDFdocuments whole-read/renderreview"
+  ],
+  "limits": [
+    "229/500fullreviews; currententrypartial.",
+    "OriginalfunctionsisolatedviaAST; no complete application orhistoricalenvironment test.",
+    "NativepHash/ASAN remainsdeferred; no productioncodeadoption."
+  ]
+}

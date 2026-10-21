@@ -1,0 +1,33 @@
+{
+  "repository": "deveyNull/phistOfFury",
+  "commit": "96598bf78c4f33bfca68f4b3fc9c4b334f175644",
+  "controls": [
+    {
+      "name": "truncated_tail",
+      "input_bits": 100,
+      "different_tail_bits": 4,
+      "serialized_hex_digits": 24,
+      "same_serialization": true
+    },
+    {
+      "name": "truncated_tail",
+      "input_bits": 25,
+      "different_tail_bits": 1,
+      "serialized_hex_digits": 6,
+      "same_serialization": true
+    },
+    {
+      "name": "python3_hamming",
+      "observed": "module 'itertools' has no attribute 'imap'"
+    },
+    {
+      "name": "directory_scan_renames_cwd",
+      "observed": "Scanning query subdirectory renamed controlled unrelated file in parent current directory"
+    }
+  ],
+  "scope": "Unchanged original functions extracted through AST, actual NumPy/Python3 and temporary filesystem; no whole module import or image decoder",
+  "limits": [
+    "No original tests exist in tracked tree inventory.",
+    "Full source/assets review still incomplete; no claim about historical Python/Pillow runtime."
+  ]
+}
