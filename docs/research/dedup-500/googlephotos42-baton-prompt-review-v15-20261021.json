@@ -1,0 +1,43 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/empty-trash-baton.ts": {
+      "sha256": "3f6a8fa2092b4c86d127db0982c1213404cb82a81e1f3b984825d0fdf5719446",
+      "git_blob": "4a673dda26ed270a04bb7fd763ce3edfd3a457ee",
+      "bytes": 2767,
+      "lines": 80,
+      "method": "Whole pinned source/test read; not executed."
+    },
+    "src/core/post-run-prompt.ts": {
+      "sha256": "0dcc7395ba9c5eacc1c123f11b768d56cff82efbcc3c8669eb1f25af51cb6262",
+      "git_blob": "6fee2cf7edceac112808749faf84268d73975028",
+      "bytes": 4515,
+      "lines": 133,
+      "method": "Whole pinned source/test read; not executed."
+    },
+    "tests/surface.test.ts": {
+      "sha256": "92d3e8d74106588f97b312a06d846516d88fd6f86c2fb3313ea68ea0198d46fa",
+      "git_blob": "cf7a800e620b8371a7cd38fd88f513a3e1e65d78",
+      "bytes": 6703,
+      "lines": 153,
+      "method": "Whole pinned source/test read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 62,
+  "tracked_blobs": 230,
+  "findings": [
+    "Baton expiry checks typeoftimestampnumber and age>TTL; no finite/futuretimestamp check. JSONstoragecannotrepresentNaNInfinityasnumbers, so API-level numeric edge cases must not be presented as persistedJSONcases. No flow executed.",
+    "Baton pathname check accepts/trashand/trash/...but not/u/n/trash, unlike surface normalization which recognizes accountprefix. Runner passesdom.pathname raw in reviewedsource; account-prefixedflow remains unqualified.",
+    "Postrunprompt claims once via separate awaitisShown/markShown without local atomicreservation; concurrency policy depends oncallers. No prompt created.",
+    "Surface tests thoroughly enumerate URLadmission and accountprefixpathfamilies, constants andmanifestversions. They do not test consistency with batonpathnormalization or midrunviewchanges. Tests read only."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 27,
+  "limits": [
+    "62/230wholeartifacts; upstreamtestexecution and wholeproject remain incomplete.",
+    "No production optimization; native pHash/ASAN deferred."
+  ]
+}
