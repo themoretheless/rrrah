@@ -1,0 +1,60 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Sevenadditionaltesttexts wholly read; actual original benchmark compiled with allauthoredCsource inminimalmode and checked failureexit semantics. Remainingtesttexts/assets/vendors incomplete.",
+  "manifest": [
+    {
+      "path": "tests/src/test_benchmark.c",
+      "sha256": "70d94dee9d4d70f9a1181e07f114c20078b53e3bbb7f0592df575651edf4e1f5",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_bmh.c",
+      "sha256": "96c0f77fe208bcdc56b98f51ade127ac3d2a5f2ff228ec0f20e69fe78e87a541",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_color.c",
+      "sha256": "b79f59fdcbed531c87921a641d4ef308bd347c0485ec01b473e08d03fcc3b8b6",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_color_hash.c",
+      "sha256": "23ed11ec9fbf26a165cacd891877991c74c88eb0ddb7ef7f7550c6438fc304f7",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_color_moments.c",
+      "sha256": "61f7c41ce6d0955755a029c94d928c2ffb1c50ea35cdf5b761bb9084948509d5",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_mhash.c",
+      "sha256": "19deb14915908c5557b3aa4977d6b8dd7a44587731b624162579e5f4b696687d",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_phash.c",
+      "sha256": "2a68f225e7fd2060c42b2d13151f89fd6d3a75bebf29b7caf9d524776631482a",
+      "review": "whole text read"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/libphash454-controls-20261021/benchmark-failures-result.json",
+  "findings": [
+    "Originalbenchmark load/full onabsentfile eachreturn0andJSONtimingwithoutrecordingfailure;hashreturns1butleavesinvalidpartialJSON{. Actualunchangedbenchmark/fullminimalCsourceexecuted, no testmacroorASAN.",
+    "benchmark_hashing ignores uint64algorithmreturncodesandradialfailures, so timingmayinclude unsuccessfulwork. No latency/throughput/speedup claim accepted.",
+    "Directory benchmark filterscase-sensitiveextensionsubstrings, silentlyskipsfaileddecodes,512bytepathbuffertruncationunchecked;JSON pathnamesnotescapedanddirkeysduplicatedbetweenmodes. Source-only for thesecases.",
+    "Iterationcount usesatoiwithoutpositivevalidation, zerocouldproduceinvalidaverages; notexecuted.",
+    "smokepath canreturn0afterfailedload, andcontextcreatedsuccessfullybutloadfailed isnotfreed inthatconditional. Source-only, noleakmeasurement.",
+    "test_color onlyprintsSUCCESS ifp_dist<5andc_dist>10;otherwise stillreturns0. Thuspassingstatusdoesnotassertclaimedcolor/structurequality.",
+    "BMHcopycomparison accepts<=20bits ratherthanexactequality;ColorHashandmomentscopytests enforce equality. mHashallows12bitsforcolorchange;originalphashtransposecase onlyassertsDCequality,notfulltransposedmatrix.",
+    "No new upstreamtestsexecuted inthisincrement; testsreadandbenchmarkfailurecontrolsare separate.",
+    "Vendorstb_image_resize2.h retrievedandGitblobSHA1verifiedforactualminimalbuild, butnotwhole-source-read. No productioncodecopied ormodified."
+  ],
+  "remaining": [
+    "Unreadtestcore_extended/hashlogic/imageprimitives/internal/imageinternal/imagecolor/radial/whash.",
+    "Testdataimagesandcorruptfixtureinspection.",
+    "Vendorheadersandcodecsubmodules remain separateauditboundaries;247fullreviewsunchanged."
+  ]
+}

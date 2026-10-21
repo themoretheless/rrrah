@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "mode": "load",
+      "exit_code": 0,
+      "stdout": "{\"loading_grayscale\": {\"image\": \"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/deliberately-absent-for-control.png\", \"iterations\": 1, \"total_s\": 0.000017, \"avg_ms\": 0.016875}, \"loading_rgb\": {\"image\": \"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/deliberately-absent-for-control.png\", \"iterations\": 1, \"total_s\": 0.000005, \"avg_ms\": 0.005083}}\n",
+      "stderr": ""
+    },
+    {
+      "mode": "full",
+      "exit_code": 0,
+      "stdout": "{\"full_pipeline\": {\"image\": \"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/deliberately-absent-for-control.png\", \"iterations\": 1, \"total_s\": 0.000005, \"avg_ms\": 0.004792}}\n",
+      "stderr": ""
+    },
+    {
+      "mode": "hash",
+      "exit_code": 1,
+      "stdout": "{",
+      "stderr": ""
+    }
+  ],
+  "method": "Actual unchanged benchmark and all authored source .c files compiled minimal original stb backends; noPH_TESTING, no native codec submodules, noASAN.",
+  "finding": "load andfull report success despite all image loads failing; hash correctlyreturns1.",
+  "limits": [
+    "Reported elapsed times not used as performance evidence",
+    "Vendor headers used forbuild but notwhole-source-reviewed here",
+    "Not full original testsuite"
+  ]
+}
