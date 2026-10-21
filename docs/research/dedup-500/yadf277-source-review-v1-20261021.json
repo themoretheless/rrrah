@@ -1,0 +1,81 @@
+{
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 9,
+  "files": {
+    "Cargo.toml": {
+      "bytes": 2235,
+      "sha256": "202a58c2b4ccfde2741f9556987b31c32b14339b95146a800785d095c29c3185",
+      "git_blob": "9acc39753d60dd22886db75a6a7a090e57d54acb",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1073,
+      "sha256": "946c11246cc6d67388473b847a7178b595079a27fb10d0ae3002d3c936570b3c",
+      "git_blob": "1ebf760022fdbf7f0fb6f3a1b368204906e6c206",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/fs.rs": {
+      "bytes": 13484,
+      "sha256": "921f03cbbc8c272d9136973bd76e3179c302e0345d24aef7e7ccc40f94f108e0",
+      "git_blob": "5d5248eaef918a3039db8c84507c51d795c735e1",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/fs/file.rs": {
+      "bytes": 3722,
+      "sha256": "b8b115f7e47ffa634feee807eff0cbcc8b332b6908b8c57936833840e012a1a4",
+      "git_blob": "e04a865daed3e427eb9ee19ba7c4e86476b1ab62",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/fs/filter.rs": {
+      "bytes": 4673,
+      "sha256": "7e6e4d89decd801fad450912387dfe159265d98689c4ceefe50037de5ff68b21",
+      "git_blob": "cc9769be677ab8856c7cd9bcbb7b9311c997a76e",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/fs/hash.rs": {
+      "bytes": 3845,
+      "sha256": "6f6ff68405a6c3807657bbecaf437f682a1dad1256461cf6b442b0e68cfa0c11",
+      "git_blob": "fcab943e2153ccfacd05ff2ceaa8b0a4c040b46d",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/fs/pipeline.rs": {
+      "bytes": 2478,
+      "sha256": "ecd631e33036cff918088dbeb97ae74bbe42d3d67f03c1a432375801f7d47534",
+      "git_blob": "4729b8de3ff91012f78d7ec9a53bdb6456d88d04",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/fs/pool.rs": {
+      "bytes": 1491,
+      "sha256": "e966f3f78b1a0790a8c1c9953265cccb7448a3fae0289760c9e11037e68555b5",
+      "git_blob": "c4fce925d9c43437140162c9718828ec159deeab",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    },
+    "src/hasher.rs": {
+      "bytes": 3474,
+      "sha256": "9a3e841949dcbf331cdd9d74c7f615343af5ea10259015941f9d677d4c3de2ed",
+      "git_blob": "dd90da7b87d0ed05b4e1b8b41c50ec90c74cbfad",
+      "method": "Whole pinned implementation/unit-test/manifest/license text read without truncation"
+    }
+  },
+  "upstream_tests_run": false,
+  "new_runtime_controls": 0,
+  "findings": [
+    "All44original artifacts fetched and Git-verified;9whole implementation/license/manifest artifacts read. Main/lib/bags/walker helpers/remaining IO modules/integration/docs/scripts/lock still pending.",
+    "Pipeline sizegroup then4KiBprefix, optional4KiBsuffix for>=64KiB, full read for unresolvedgroups. Hasher configurable, final duplicate verdict explicitly trusts hash equality; no final byte confirmation in inspected pipeline.",
+    "Candidate stores path and earlier size, no source identity or modification timestamp. partial/suffix trust earlier size without restat; full reads current path. Mutable source/freshness scope unqualified.",
+    "full_hash returns Verified without opening when earlier candidate size<4096. Disappearance/mutation after partial phase can escape final reread for small files by source inspection. Existing regression disappearing-file uses8192bytes and checks exclusion, so does not cover short-circuit small path. No original runtime reproduction yet.",
+    "Errors at partial/full/suffix are logged and failed candidates excluded; singleton buckets passed through. Returned result completeness/error propagation through publicAPI remains to inspect in main/lib.",
+    "Reader retries short/interrupted prefix reads; Unix positional suffix reads; full reads reuse256KiBthreadlocal scratch, explicitly nonreentrant. No cancellation callback in these lower-level signatures.",
+    "Bounded8192pairchannel collector runs separate scoped OSthread, preventing collector blocking single rayonworker by design. Unit/integration actual deadlock test still pending, no passing run inferred.",
+    "Unix hardlinkfilter uses(dev,ino),64mutexshards and first encountered path; includes test same inode on different devices. Regex matches filename UTF8 only and falls back true for unavailable match; glob usesOsStr. Metadata/resource behavior not run.",
+    "Manifest Rust1.88, multiple optional hash engines and pinned direct lower versions; buildscript and wholelock not yet read, so no build invoked this turn. RootMIT fully read; no production code copied.",
+    "Native pHash/ASAN deferred. Fullreview count200/500 unchanged; no measured optimization claimed."
+  ],
+  "remaining_scope": "35artifacts including full integration/particular-case tests, other implementations, build.rs/Cargo.lock/docs/scripts/fixtures. Reproduce freshness cases before implementation conclusions.",
+  "limits": [
+    "Partial9/44review and zero runtimecontrols; no actual hashing/backend/platform/performance qualification."
+  ]
+}
