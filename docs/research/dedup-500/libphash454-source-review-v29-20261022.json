@@ -1,0 +1,37 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": false,
+      "read_ranges_inclusive": [
+        [
+          1,
+          4850
+        ],
+        [
+          6120,
+          6200
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "findings": [
+    "Completed decode_image setup, scanline buffer allocation/padding, output layout/scaling flags, gamma LUT creation, sBIT checks, palette preprocess, tRNS preprocess, progressive initialization and whole-image row loop.",
+    "Decoder scanline allocation includes32 bytes padding; prior filter-control observer used64 and qualifies arithmetic only, not exact production boundaries.",
+    "Gamma/TRNS/sBIT controlled separately. Original libphash wrapper flags0 do not request these transformations; RGB8 also explicitly disables TRNS. Default palette alpha255 beyond listed tRNS confirmed source, while own palette regression independently passes.",
+    "Read encoder chunk serialization, compression/write/finish-IDAT, filtered scanline/Adam7 row processing, progressive APIs and encode_image setup through line4850.",
+    "encode_scanline calls encode_err on finish_idat failure without returning its error immediately. State invalidated but original ret may remain EOI; potential error propagation issue in encoder only, source observation not fault-injected or reproduced.",
+    "No new runtime tests or production code changes in this increment. Own tRNS regression from46a5599a retained with narrow scope; no entire PNG qualification claim."
+  ],
+  "remaining": [
+    "spng.c lines4851..6119 and6201..6980",
+    "Remaining dependency docs/build/tests/assets and other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
