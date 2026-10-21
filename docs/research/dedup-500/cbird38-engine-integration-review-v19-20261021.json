@@ -1,0 +1,40 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/engine.h": {
+      "sha256": "5d49cd2c4b4b9234a8e93612ad61315604a73c93acc20d337827c25b2bb970c1",
+      "git_blob": "c706ca8effc7f612c288a10ace7fab35649d090a",
+      "bytes": 2976,
+      "lines": 109,
+      "method": "Whole pinned source read; cpp contiguous1-360,361-452."
+    },
+    "src/engine.cpp": {
+      "sha256": "b0bb9ee07e79c31bdd9ea4e00808bfbc57f1cca525c3f09a649318e511ea31a4",
+      "git_blob": "189a15e4c5e115a6646dee51fad79c3076ebafea",
+      "bytes": 15154,
+      "lines": 452,
+      "method": "Whole pinned source read; cpp contiguous1-360,361-452."
+    }
+  },
+  "cumulative_assessed_blobs": 46,
+  "tracked_blobs": 616,
+  "findings": [
+    "Engine update passes expected indexed paths into scanner, then removes every surviving valid entry from database unless dryRun. There is no structured traversal-completeness gate before this reconciliation. Earlier readDirectory/readArchive early failures may leave entries expected. This is a complete source trace for potential index-record loss on partial traversal, not reproduced filesystem failure or original-media deletion.",
+    "Changed/new algorithm items may be removed for reindex before decoding succeeds. Failed replacements are not rolled back to old records by Engine. wait completion rewrites timestamp even with per-file errors; no success/error aggregate proof.",
+    "Engine commit calls void db.add then unconditionally clears batch. Database add returns normally on lock contention; that failure can discard pending batch in this caller. No real concurrent-write or lock-failure test run.",
+    "Engine header destructor says waits for update, but implementation flushes scanner, deletes it and database without explicit final commit. update documentation separately says waitfalse destruction discards pending items. Already processed uncommitted batch preservation is not established.",
+    "Subdirectory checks and selection use startsWith without explicit separator boundary. Earlier path-prefix concerns apply at caller too; no file move/delete or protected path operation performed.",
+    "query starts from copy of supplied MediaSearch; processing failure or unsupported/not-ready branches can return supplied matches without clearing. Reusing a nonempty search result can preserve old matches. Fresh default matches empty; no broad stale-result claim for every query.",
+    "Mirror variants append database results without deduplication or final maxMatches cap across variants. Each individual similarTo caps separately. Final total may contain repeated paths or exceed per-query maxMatches; full UI treatment unread.",
+    "query optionally uses TemplateMatcher after per-direction database caps; rejected candidates are not refilled. Temporary image loaded only if mirror/template requested and cleared at cleanup. Main query flags cannot repair candidate generation omissions.",
+    "Video verification in update uses VideoIndex::isValid, whose inaccessible-filetrue and quick verification scope were already established. Engine treats this result as enough not to reindex in that branch, not a full decoder/content verification."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "46/616 tracked artifacts assessed:45whole text/source and1PNGvisual. Twenty-four previous original-body/header controls plus one independent key counterexample; no new runtime tests.",
+    "Error/lock/reuse paths traced statically across full sources, not native fault-injection proof. No original media deletion, production changes or measured optimization.",
+    "Deferred native pHash/ASAN remains skipped."
+  ]
+}
