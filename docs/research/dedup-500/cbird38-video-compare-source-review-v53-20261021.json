@@ -1,0 +1,40 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/videocomparewidget.cpp": {
+      "sha256": "3e4f913232018a061cba2e524cd182d364ac9aa92558723a26d6c8e5c27b095a",
+      "git_blob": "89a64d29f780774ad0a4280f4b86fa9ad2a31883",
+      "bytes": 24771,
+      "lines": 754,
+      "method": "Whole pinned source/header read; cpp contiguous1-360,361-754; GUI not executed."
+    },
+    "src/gui/videocomparewidget.h": {
+      "sha256": "b8180e7b48260eba477720bb4c4064f91515b03a97292060e11e143e8f7c888c",
+      "git_blob": "1230fcdf0f8744d946f3823f40da19c14a260da0",
+      "bytes": 4189,
+      "lines": 116,
+      "method": "Whole pinned source/header read; cpp contiguous1-360,361-754; GUI not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 163,
+  "tracked_blobs": 616,
+  "findings": [
+    "Widget stores const MediaWidgetOptions reference while constructor supplies default temporary. Previously read main constructs VideoCompareWidget(left,right) using that default; options reference outlives temporary after construction expression. Static C++ lifetime trace, no use-after-lifetime/sanitizer runtime executed.",
+    "FrameCache maps normalized positions with float rateFactor and truncating int, duration*nominalfps bound. Slow video repeats frames. This is approximate frame-rate alignment, not timestamp/rational VFR sequence equivalence.",
+    "FrameCache fallback dummy images for open/decode failure are colored16x16 then used as error/OOB image. A nonnull displayed image may be placeholder rather than decoded source. No real media opened.",
+    "Cache nominally1GiB per video (overrides queried free memory) estimates per-frame bytes from first/error image. Actual image-size changes/sharing/analysis overhead are not complete cache accounting. If requested frames cannot be recycled enough, frames vector can remain insufficient. No memory pressure run.",
+    "Temporal alignment searches60 offsets around current with average SAD over5 frames resized128square. Spatial alignment searches17x17 offsets on256square images. Heuristic samples do not certify continuous clip coverage or audio match.",
+    "Widget out bound subtracts15frames and shortest-video duration; quality display calls previously unqualified edge score and adds auto-contrast analysis. Human visual aid does not provide precision/recall gate.",
+    "paintEvent launches two background frame jobs then synchronously waits on GUI thread; cursor switches after100ms but does not provide cancellation. Scrub schedules immediate updates without actual playback clock pacing; displayed playback is not throughput measurement.",
+    "writeThumbnail labels normalized frameNum directly in MatchRange even cache translates by rateFactor to native frame position. Stored frame reference may differ for unequal frame rates; no thumbnail UI runtime.",
+    "Kdenlive export uses fixed29.97templatefps and300frame excerpt, with150frameblank. This cannot prove full-clip equality or frame-accurate native timeline reproduction. No editor/temp file launched."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "163/616 assessed:162 whole text/source plus one PNG visual.",
+    "31 prior original-body/header controls plus two independent counterexamples unchanged. No GUI, decoder, timeline, ASAN or benchmark run.",
+    "No production port. Native pHash/ASAN remains deferred."
+  ]
+}
