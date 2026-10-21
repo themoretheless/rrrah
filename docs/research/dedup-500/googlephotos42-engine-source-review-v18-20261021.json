@@ -1,0 +1,33 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_repository_complete_engine_source_read",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/delete-engine.ts": {
+      "sha256": "e7dee7d9ffdc7ceac98d7f9def209d2badaaacd0abfc9fa4d0edced913b9a1f8",
+      "git_blob": "c836cadb106f979b42b8d5bea1a290a0301db961",
+      "bytes": 40580,
+      "lines": 1058,
+      "method": "All1058lines read in contiguous1-440,441-760,761-1058ranges; no originalengineexecution."
+    }
+  },
+  "cumulative_assessed_blobs": 75,
+  "tracked_blobs": 230,
+  "findings": [
+    "Batchlimit validatesfiniteand>=1but notinteger, despiteerror/contractpositiveinteger. Fractionalcapacitypasses toslice(0,remaining), which truncates. Runtimebehaviornotyetreproduced.",
+    "Config pollDelay,settletimes,endattempts mergedwithoutvalidation. finalDryRunSettle/scrollAndHarvest subtractpollMs directly; pollDelay0can preventbudgetdecrease. OtherpollWaitusesMath.max1. No infinite-looptest run.",
+    "Dryrun countslabels fornonidfilters evenwhentileidexists; same-labelleddistinctitemsdeduplicate. Dateobserved/unreadable trackidwhenavailable, so matchedcountandtotalcanuse differentidentities. Sourceconsistentwithdocumentedbrowserobservation, notactualfilecount.",
+    "Idfilterdryrun countsids and storesids in getDryRunLabels, so genericclassificationlabelsinthePageRunner summary becomeunknown foridpreviews.",
+    "run resetsstop/pauseflagsandclickedTiles but notclickedIds,trashedKeys/counterfallback/flap state. Reusingengineinstance may carrypreviousrunstate; PageRunner normallycreatesfreshengine. No callerreusequalification.",
+    "Realruns limit20passes and verifyselectedcounterreset, retaintrashedidentitykeys,failwhenstalealreadytrashedtilesremainafteremptydeletepass. DOMpostconditionsnotremoteidentityproof.",
+    "Idrunendswhenalltargetidsclicked orendheuristic, notanexplicitallrequestedidspresentcertificate. No wholechosenlistcompletionclaim justified solelybydone.",
+    "Progresscallbacks invokedoutside some try/finally boundaries, and per-wavecandidateclickloop hasnocontrolcheckbetweenindividualclicks. Reentrantcallbacks/adapterstopbehaviornotyetexecuted."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 27,
+  "limits": [
+    "75/230wholeartifacts; fullengineread is notengine-runtimequalification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
