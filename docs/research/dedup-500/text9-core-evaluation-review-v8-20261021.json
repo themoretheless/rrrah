@@ -1,0 +1,56 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "benchmarks/utils.py": {
+      "sha256": "f69e05c758e8e1ce179f45ff9465e14c90817e60d1bdbd0d1299688092390e2e",
+      "git_blob": "0ca773ce4f45cefae7182db8e5484a84414ba9a7",
+      "lines": 171
+    },
+    "tests/test_benchmarks/test_evaluation.py": {
+      "sha256": "9001652191356774558623e6413d34b121f35f6a053b7db86e223101749c5f42",
+      "git_blob": "84fadebf0192d422d0258731d0324988d790cc8b",
+      "lines": 284
+    },
+    "benchmarks/benchmark_core.py": {
+      "sha256": "34d428b31d53e3a575add5ffc46c6b0445ab0ab3bb74b71ef4953da11c2a5b16",
+      "git_blob": "a060fbe9dde471b39356ed8e419b5ccedf7951c3",
+      "lines": 262
+    }
+  },
+  "cumulative_whole_files_read": 32,
+  "tracked_blobs": 75,
+  "method": "Three whole pinned benchmark/test files read. Original dependency-free utilities and AST-extracted ground-truth function plus5 original test method bodies executed locally. pandas evaluation not executed.",
+  "findings": [
+    "classify_prediction labels a nonempty superset of all ground-truth duplicates asTP even with additional false matches; partial correct subsets becomeFP. Local101prediction/1truth control yieldsTP but pair precision1/101. This class metric differs from standard pair-confusion counting.",
+    "evaluate_predictions computes macro_f1 as mean duplicate/nonduplicate precisions, explicitly acknowledged by source comment and mirrored by test. It is not harmonic F1; table nonetheless labels Macro F1 Score.",
+    "Exact-match accuracy is calculated separately, so overinclusiveTP can coexist with failed exact match. Labels-empty whole-dataset handling builds no columns before df exact_match indexing; no full empty-data evaluation executed.",
+    "prepare_ground_truth coerces core_id tostr but leaves labelled_duplicates member types unchanged. Synthetic integer labels produce string keys with integer duplicate members, potentially mismatching string predictions. Five original ground-truth tests allpass with their existing string-only fixtures.",
+    "MinHash mapping converter assumes every member is explicitly present, while SimHash converter adds parent representatives; this matches reviewed mapping shapes. Missing/falsy core IDs skipped silently.",
+    "Benchmark wrappers with supplied dataset temporarily change read_arguments and create fixed temp_dataset under output. Restore/removal are not in finally; algorithm failure can retain changed config/temp data. Input config subtype is not replaced when switching argument shape.",
+    "When save_clusters false, wrappers assume empty predictions rather than distinguishing unavailable mapping. Full algorithm output quality cannot be inferred from such run.",
+    "Precision(empty,empty)=0 while recall(empty,empty)=1 in helper; zero-support convention must be stated when comparing benchmark scores."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/benchmark-metric-control.py",
+    "sha256": "afd2637a529bf3f61c77d68310e30ca165f2e055f2011228941d3f1d8c57aab4",
+    "result": {
+      "original_ground_truth_test_methods_passed": 5,
+      "superset_prediction_count": 101,
+      "superset_classification": "TP",
+      "pair_precision": 0.009900990099009901,
+      "numeric_label_member_types": [
+        "int"
+      ],
+      "core_id_type": "str",
+      "empty_input_precision": 0.0,
+      "empty_input_recall": 1.0,
+      "scope": "Original dependency-free benchmark helpers and original ground-truth function plus5original test method bodies; no pandas evaluation or dataset benchmark run."
+    }
+  },
+  "limits": [
+    "32/75 tracked blobs reviewed;152/500 complete repositories.",
+    "No full pandas/datasets benchmark execution or production changes. Upstream evaluation tests read, only5ground-truth methods executed. pHash/ASAN deferred."
+  ]
+}
