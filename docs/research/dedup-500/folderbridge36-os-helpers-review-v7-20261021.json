@@ -1,0 +1,43 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/OSHelpers.ts": {
+      "sha256": "30955cdd3e2edbe5dc8bf6b79ddf326aca973b4ae1fce1a249fc91dba01871dd",
+      "git_blob": "33ecb93c2d037bf319e2f0b293d87f99c92db2cf",
+      "bytes": 18673,
+      "lines": 461,
+      "method": "Whole source read."
+    },
+    "tests/OSHelpers.test.ts": {
+      "sha256": "ae5be872c834af99d8050f92a053f4d50c3038ca0bc39edf102f3f086435e2eb",
+      "git_blob": "28eb5166f0d9b7c173ef3cd030bd96834b5ba591",
+      "bytes": 12233,
+      "lines": 390,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 29,
+  "tracked_blobs": 129,
+  "findings": [
+    "OSHelpers implements path/access/media/platform helpers, not root fallback selection; fallback caller still unread. Windows drive/UNC comparison uses win32 normalization/lowercase across hosts, POSIX preserves case. Two original controls confirm lexical behavior, not filesystem equality.",
+    "Lexical normalized path does not prove inode or byte identity; Windows case sensitivity options and macOS volume behavior not queried. Extended Windows path parsing and long path utilities are string policies, not native Windows qualification.",
+    "isCloudPlaceholder only tests F_OK. Ordinary existing text file returns true (original actual-tempfile control). Function comment requires prior ENOENT read context; caller reachability/precondition enforcement not yet inspected. Not a standalone cloud-state detector.",
+    "areDifferentDevices returns false for missing/failed stat rather than unknown. Original tempfile/missing-path control confirms false, which cannot prove same device. No cross-device runtime executed.",
+    "checkPathAccessible checks existence and write permission, not read permission/directory type; isDirectory/isSymlink separately return false on errors. TOCTOU snapshot not guaranteed.",
+    "tryReadAsDataUri statSync then readFileSync on separate operations; concurrent growth/replacement can bypass size assumption. Reads full file synchronously; extension MIME does not establish decoder support or exact pixel equivalence. Static only.",
+    "Resource URL encoding escapes path segments; platform docs in comments are historical assertions, not verified current Obsidian behavior. MIME maps centralize embedding/streaming extension policy but do not test codecs.",
+    "Upstream tests simulate process.platform for Windows/WSL cases and use ordinary tempfile for placeholder true. This is not actual Windows/cloud-placeholder coverage. Entire tests read; upstream Vitest not run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-os-controls-v7-20261021",
+    "passed": 4,
+    "method": "Original OSHelpers after Node type stripping; real Node fs/path with desktop Platform stub. Two lexical checks and two actual temporary-file checks. Only created temporary directory removed; no user data touched."
+  },
+  "limits": [
+    "29/129trackedblobs read;26isolatedcontrols total.",
+    "No Windows/WSL/cloud filesystem/native Obsidian or full upstream suite qualification.",
+    "Production library unchanged."
+  ]
+}
