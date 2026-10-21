@@ -1,0 +1,41 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/indexer.rs": {
+      "sha256": "50b6350cd7d5e334cb0874610fe636c773fe3a1d0b1f940bfc20676fe7dc42f2",
+      "git_blob": "07b3ac124396c1e8735c5e8fd41bf9940ad72bbb",
+      "mode": "100644",
+      "lines": 1203
+    }
+  },
+  "cumulative_whole_files_read": 75,
+  "tracked_blobs": 268,
+  "method": "Whole1203-line indexer read in three contiguous ranges. Original two tests and their pure Rust helper functions extracted unchanged and executed with rustc --test, Windows/DB/OCR integration excluded.",
+  "executed_controls": {
+    "original_tests_passed": 2,
+    "failed": 0,
+    "output": "\nrunning 2 tests\ntest tests::normalize_ignored_folder_name_uses_leaf_name ... ok\ntest tests::configured_ignored_folder_matches_any_folder_name ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n"
+  },
+  "control_source": "fn normalize_ignored_dir_name(name: &str) -> Option<String> {\n    let trimmed = name.trim().trim_matches('\"').trim_matches('\\'');\n    if trimmed.is_empty() {\n        return None;\n    }\n    let trimmed = trimmed.trim_end_matches(['/', '\\\\']);\n    let leaf = trimmed.rsplit(['/', '\\\\']).next().unwrap_or(trimmed).trim();\n    if leaf.is_empty() {\n        None\n    } else {\n        Some(leaf.to_ascii_lowercase())\n    }\n}\n\nfn is_ignored_dir_with_config(name: &str, configured: &std::collections::HashSet<String>) -> bool {\n    is_builtin_ignored_dir(name)\n        || normalize_ignored_dir_name(name)\n            .map(|name| configured.contains(&name))\n            .unwrap_or(false)\n}\n\nfn is_builtin_ignored_dir(name: &str) -> bool {\n    let name_lower = name.to_lowercase();\n    if name_lower.starts_with('$') {\n        return true;\n    }\n    match name_lower.as_str() {\n        \"node_modules\"\n        | \"dist\"\n        | \"venv\"\n        | \".venv\"\n        | \".git\"\n        | \"appdata\"\n        | \"obj\"\n        | \"bin\"\n        | \"out\"\n        | \".next\"\n        | \".nuxt\"\n        | \".cache\"\n        | \"cache\"\n        | \".cargo\"\n        | \".rustup\"\n        | \".npm\"\n        | \".m2\"\n        | \".nuget\"\n        | \"vendor\"\n        | \"cmake-build-debug\"\n        | \"cmake-build-release\"\n        | \".yarn\"\n        | \"__pycache__\"\n        | \".idea\"\n        | \".vscode\"\n        | \".gradle\"\n        | \".metadata\"\n        | \"system volume information\"\n        | \"temp\"\n        | \"tmp\" => true,\n        _ => false,\n    }\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n    use std::collections::HashSet;\n\n    #[test]\n    fn normalize_ignored_folder_name_uses_leaf_name() {\n        assert_eq!(\n            normalize_ignored_dir_name(r\"C:\\work\\project\\node_modules\\\"),\n            Some(\"node_modules\".to_string())\n        );\n        assert_eq!(\n            normalize_ignored_dir_name(\"  .angular  \"),\n            Some(\".angular\".to_string())\n        );\n        assert_eq!(normalize_ignored_dir_name(\"  \"), None);\n    }\n\n    #[test]\n    fn configured_ignored_folder_matches_any_folder_name() {\n        let configured = HashSet::from([\".angular\".to_string()]);\n        assert!(is_ignored_dir_with_config(\".angular\", &configured));\n        assert!(is_ignored_dir_with_config(\"node_modules\", &configured));\n        assert!(!is_ignored_dir_with_config(\"src\", &configured));\n    }\n}\n",
+  "findings": [
+    "is_indexable_content alwaysfalse; extract_content returnsNone; subprocess extraction noop. File indexing is metadata-only here despite retained OCR/FTS comments and extractionpool code. Separate on-demand clipboard/file OCR remains implemented but not background-index capability.",
+    "Watcher collects onlyCreate/Modify, ignoresRemove and notifyerrors; index_one_file rejects missingpaths anddirectories. Rename oldpath not removed, directorycreate not recursively crawled. Crawl deletedfilecleanup explicitly skipped, so stale rows persist unless other module cleans them. Entire repo behavior not inferred.",
+    "Crawl changetest queries only second-granularity modifiedtimestamp, ignores changedsize/type when timestampsame. Watcher upsertsmetadata but eventloss/same-mtime crawl may leave oldrow. No actual filesystem mutation reproduced.",
+    "Walker filter_map(ok) discards traversalerrors; missingfolder loggedandskipped, metadatafail substitutes0, yet run can completeOk and updateslastsuccess time. Errorcoverage absent in returned API.",
+    "Crawl does not call is_ignored_file while watcher does: log/tmp/etc may be indexed by crawl but omitted by watcher. Builtin exclusions alwaysinclude node_modules even when configuredignoredlist removesit.",
+    "ensure_ignored_folders_table repopulates defaults whenever tableempty; removing lastconfiguredfolder followed by read reinstatesdefaults. Empty-user-policy cannotpersist under this initialization logic. Static SQLpath, not executed DBcontrol.",
+    "Lowpriority target/build updates accumulate wholeVec before chunkflush, so bounded batchwrites/resultchannel do not bound all crawlmemory. Extractionjobs alsoVec but currentlyunreachable becausecontentdisabled. No memorybenchmark.",
+    "flush_updates drains queue beforecommit; SQLerror/commitfailure loses in-memory pendingbatch though transactionrollsback. No retry/errorrecovery path in caller, no injectionexecuted.",
+    "Normalrun atomicflag skips overlappingrun withOk rather than busyerror; forcedrun bypasses guard entirely. No stop/cancellationtoken in crawl API. Backgroundpriority is schedulinghint, not throughput/frameproof.",
+    "Watcher.start comment delayswatchregistration but watch() calls occurbefore15ssleep; delayonlyconsumerthread. Channelunbounded, watcherwatch errorsignored. Droppedoldwatcher closesinput but oldconsumer maydrainqueuedwork; no join.",
+    "On-demand OCR dimensioncaps4000file/6000clipboard beforeSoftwareBitmap, errors/emptytextbothNone. No actualWinRT/decoder/modelexecution.",
+    "Originaltwo tests cover normalizationleaf and configuredname matching only. Passing isolatedtests is not indexfreshness/cancellation/SQLite/runtime qualification."
+  ],
+  "limits": [
+    "75/268 pinnedwholefiles reviewed; fullrepo/all500 incomplete.",
+    "No livewatcher, userprofile/drives, SQLiteindex, WinRT/COM/OCR or upstreamwholecratebuild. PureoriginalRust tests only.",
+    "No productionedits or acceptedoptimization. Native pHash/ASAN remains deferred."
+  ]
+}
