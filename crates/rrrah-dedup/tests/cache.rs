@@ -4,6 +4,49 @@ use rrrah_dedup::{
 };
 
 #[test]
+fn every_content_recipe_and_frame_key_bit_survives_persistence() {
+    let baseline = CacheKey {
+        content: [0; 32],
+        recipe: [0; 32],
+        frame_index: 0,
+    };
+    let first = Fingerprint {
+        variants: [[0; 4]; 8],
+        mean_linear_rgb: [0.; 3],
+        luminance_stddev: 0.,
+    };
+    let second = Fingerprint {
+        variants: [[1; 4]; 8],
+        ..first.clone()
+    };
+    for position in 0..576 {
+        let mut key = baseline;
+        if position < 256 {
+            key.content[position / 8] = 1 << (position % 8);
+        } else if position < 512 {
+            let bit = position - 256;
+            key.recipe[bit / 8] = 1 << (bit % 8);
+        } else {
+            key.frame_index = 1 << (position - 512);
+        }
+        let mut cache = FingerprintCache::default();
+        cache.insert(baseline, first.clone(), 2).unwrap();
+        cache.insert(key, second.clone(), 2).unwrap();
+        let mut bytes = Vec::new();
+        cache.write(&mut bytes, || false).unwrap();
+        // Independent wire oracle: header 16, each record 72-byte key +
+        // 288-byte fingerprint. The zero key sorts before every one-hot key.
+        let mut expected = [0_u8; 72];
+        expected[position / 8] = 1 << (position % 8);
+        assert_eq!(&bytes[16..88], &[0; 72]);
+        assert_eq!(&bytes[376..448], &expected, "key bit {position}");
+        let restored = FingerprintCache::read(bytes.as_slice(), 2, || false).unwrap();
+        assert_eq!(restored.get(&baseline), Some(&first), "baseline, bit {position}");
+        assert_eq!(restored.get(&key), Some(&second), "key bit {position}");
+    }
+}
+
+#[test]
 fn every_serialized_bit_corruption_is_rejected() {
     let key = CacheKey {
         content: [1; 32],

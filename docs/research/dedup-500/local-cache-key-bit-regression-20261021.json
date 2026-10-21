@@ -1,0 +1,29 @@
+{
+  "status": "new_local_regression_passed",
+  "motivation": "Btrfs137 persistedhash decoder repeats byte21 instead ofbyte31; ensure every bit of our complete cache identity survives independently. Existing tests cover fingerprint payload bits and corruption; new test covers valid distinct key bits.",
+  "test": {
+    "path": "crates/rrrah-dedup/tests/cache.rs",
+    "sha256": "aa535d5725dec1748f405c7e45791327c301e712809fc200aab79752e33b63f2",
+    "name": "every_content_recipe_and_frame_key_bit_survives_persistence",
+    "cases": 576,
+    "content_bits": 256,
+    "recipe_bits": 256,
+    "frame_bits": 64,
+    "oracle": "For every one-hot key, store baseline zero key with different fingerprint and verify both restored lookups; independently assert72keywirebytesatsecondrecordoffset376includinglittle-endianframebits.",
+    "limits": "Does not assert cryptographic collision resistance or full filesystem/decoder identity."
+  },
+  "validation": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test cache",
+    "log": "docs/research/dedup-500/local-cache-key-bit-regression-20261021.log",
+    "passed": 11,
+    "failed": 0,
+    "ignored": 0,
+    "duration_seconds": 0.75,
+    "scope": "Wholecacheintegrationtarget including publication child helper; process-cancellation/crash/concurrentwriter checks passed."
+  },
+  "production_change": false,
+  "limits": [
+    "No speed claim; regression adds evidence without changing valid production behavior.",
+    "Globalfullreviewcount173/500unchanged;allcasesgoalstillincomplete.NativepHash/ASANdeferred."
+  ]
+}
