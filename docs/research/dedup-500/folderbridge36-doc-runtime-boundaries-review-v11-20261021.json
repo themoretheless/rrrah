@@ -1,0 +1,66 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/NATIVE_TEST_RESULTS.md": {
+      "sha256": "b699f0b87c51f65b4b253a88b9da2f475a93f9d7f7a9032a05003334c5237613",
+      "git_blob": "a458ac84f78cd7a84100aaa53a01f558282bf67a",
+      "bytes": 5831,
+      "lines": 89,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/QUICKSTART.md": {
+      "sha256": "ac25996f7b1a157a0c8609ed61d83d4a4282ef96897e80b8b439f477ee69d7ef",
+      "git_blob": "216f2ed2225619539b3d38ee0bb5d895c69ff102",
+      "bytes": 2609,
+      "lines": 105,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/ANDROID_SETUP.md": {
+      "sha256": "de7cd7fee64e6300d6c04f6e3c91348b58600673c784d1ef4a4782e1988ea6c7",
+      "git_blob": "a2e51ad056d188c8db2404dd4fc7a8c9332f3307",
+      "bytes": 5590,
+      "lines": 135,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/EXAMPLE_CONFIG.md": {
+      "sha256": "e7b1b07d7cca155e9323e816fc6f3634f3faaa10a0fe7e0a46aec1ec8b47ccee",
+      "git_blob": "6b48b5a4ead75fa827600053f366e1be1315eb20",
+      "bytes": 2438,
+      "lines": 73,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/TOC_CONFIG.md": {
+      "sha256": "d988b7875c69ba65e4bcea30ca3820ac2bf0ead194d96d752613b114389f8e43",
+      "git_blob": "3585bf8035b1238d38aba7cf5ab599673ed284aa",
+      "bytes": 9548,
+      "lines": 367,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "LICENSE": {
+      "sha256": "d2e190e504b9f7be3882b00146d1ee75d018a6dbdb4917cb87ee7ed786d9bcc8",
+      "git_blob": "6e01322da824ddb37d0246de0d933d4569f35087",
+      "bytes": 1070,
+      "lines": 21,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    }
+  },
+  "cumulative_whole_files_read": 48,
+  "tracked_blobs": 129,
+  "findings": [
+    "Pinned NATIVE_TEST_RESULTS contains20resultrows all Not run and blank environment/evidence fields. It explicitly distinguishes automated/Ubuntu CI from native evidence. Therefore no native platform pass established by this file.",
+    "Android guide warns rc1 WebDAV unavailable and S3/B2mobile untested/native confirmation pending, despite later procedural language saying folders appear/changes save. Treat procedures as intended workflow, not observed success. Release/issue/store status statements are historical pinned text, not independently verified current status.",
+    "Quickstart build/install/hot-reload commands read only, not executed; claims fully configured strict checking do not prove upstream build success. tsconfig enables noImplicitAny/strictNullChecks but not whole strict flag.",
+    "TOC guide documents JSON local/vault only, managed writable versus external read-only, cloud mounts remaining in data.json. This supports serializer intended input domain; actual main caller filtering still unverified.",
+    "TOC guide says overlap/duplicates must be rejected/warned, while reviewed parser does not enforce them. Main integration may validate later; cannot assert global validation gap until caller read.",
+    "Example config omits required runtime MountPoint fieldsid/readOnly and describes advanced filters as future enhancements despite current filter implementation; examples are introductory/possibly stale, not full schema proof.",
+    "Root tracked MIT license text read, copyright2026TimEscolopio. Preserve notice when importing substantive source; transitive dependency/embedded cache licensing not certified. No source port made."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "48/129trackedblobs assessed;33previousisolatedcontrols, no new runtime tests in documentation step.",
+    "Main plugin, large UI, remaining modules/docs/artifacts/lockfile still incomplete.",
+    "No current external release/legal/service claims inferred from pinned docs."
+  ]
+}
