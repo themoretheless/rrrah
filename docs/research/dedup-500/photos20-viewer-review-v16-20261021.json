@@ -1,0 +1,30 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "components/PhotoViewerModal.tsx": {
+      "sha256": "f3b58d432e470f90987a5118fdd50b44e40cce400b445a7b93ebf15f2e1049af",
+      "git_blob": "dd04c052cbaf3d912c3d59bf720de2b439126708",
+      "bytes": 17116,
+      "lines": 518,
+      "method": "Whole source read in contiguous ranges 1-230 and 231-518."
+    }
+  },
+  "cumulative_whole_files_read": 26,
+  "tracked_blobs": 84,
+  "findings": [
+    "Viewer clamps index to last item, not to a matching mediaKey. Parent filters missing media items while passing raw group index, so selecting b at raw index 1 in [missing,b,c] displays c in filtered [b,c]. Static parent/child composition, not rendered reproduction.",
+    "Index resets to initialIndex when items array identity changes. Bounds clamp only upper side; negative externally supplied index can dereference undefined, though normal caller indices are nonnegative.",
+    "Image previews are viewport-sized thumbnails based on pixel ratio, not original resolution or full video playback; viewing them does not prove exact image/video equality.",
+    "useGroupBlobUrls fetches every group image concurrently and prefetches every next-group image. There is no explicit concurrency/memory budget or request timeout. Abort and created-URL revocation on cleanup are present.",
+    "Effect dependency thumbKey includes concatenated URLs but not mediaKey or viewport dimensions. Same ordered thumbs with changed media IDs leave mapping keyed to old IDs; resize alone does not refetch.",
+    "Failed preview fetch has no error state; FullResImage continues showing spinner when URL absent.",
+    "Keyboard Keep/Trash operations delegate to caller; last-kept protection remains caller responsibility. While nested shortcuts dialog is open, outer window listener remains installed. Runtime focus routing unverified."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static review; no rendered viewer, image downloads, video playback, keyboard event simulation or browser execution.",
+    "26/84 whole files read; no production library changes."
+  ]
+}
