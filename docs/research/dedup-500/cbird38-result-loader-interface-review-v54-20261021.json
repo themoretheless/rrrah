@@ -1,0 +1,45 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/mediagrouplistwidget.h": {
+      "sha256": "daf333909124433a0f978b09723ae72b7cd342b59fbfe7d4342353274a2703fa",
+      "git_blob": "6519604c72cc76896740f909cf2c21259d630d68",
+      "bytes": 11173,
+      "lines": 354,
+      "method": "Whole pinned header read."
+    }
+  },
+  "partial_source_files": {
+    "src/gui/mediagrouplistwidget.cpp": {
+      "sha256": "5005fb2282272972bf1e9c614a95e05395daaec9677ed41f10ec20cd45e46fd9",
+      "git_blob": "d4155ec4c559590360d953277ab19551636c4a51",
+      "bytes": 81816,
+      "lines": 2564,
+      "read_ranges_inclusive": [
+        [
+          1,
+          330
+        ]
+      ],
+      "method": "Only initial330lines read; full file not counted."
+    }
+  },
+  "cumulative_assessed_blobs": 164,
+  "tracked_blobs": 616,
+  "findings": [
+    "differenceImage converts inputs toRGB32, applies inverse template transform to right image, auto brightness/contrast with5percent clipping independently, then scales smaller-area image to larger before squaredRGB difference false-color mapping. It visualizes normalized/aligned appearance, not original pixel/alpha/encoded identity.",
+    "Transform output RGB32 buffer constructed without explicit fill before painting transformed source; uncovered regions need deterministic background qualification. Inversion success not checked here. No image rendering or memory-invalidity run.",
+    "Difference pipeline checks cancellation between preprocessing stages but not within per-line blockingMap kernel. Queued work and elapsed cancellation latency not measured.",
+    "Image loader handles explicit oom text marker by setting work.oom and clearing placeholder; otherwise accepts any nonnull image from Media load, converts toRGB32/ARGB32 and updates dimensions. Completeness/error ledger does not follow from nonnull image alone.",
+    "Video loader gets match dstIn via frameGrab, then opens separate VideoContext for metadata without checking return. Frame pixels and metadata come from separate observations; source mutation consistency not established.",
+    "Options in group-list widget copied by value, unlike previously observed VideoCompareWidget const reference. Do not generalize lifetime issue to this widget. Header declares many mutation actions; implementations after330 remain unread, so enforcement/transaction behavior unqualified."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "164/616 assessed:163 whole text/source and one PNG visual. mediagrouplistwidget.cpp partial explicitly excluded.",
+    "31 prior original-body/header controls and two independent counterexamples unchanged. No GUI, pixel comparison, production edit or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
