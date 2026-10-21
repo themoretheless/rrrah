@@ -1,0 +1,5 @@
+PASS separate prefix accepts actual child
+PASS equals prefix incorrectly rejects actual child (splits root= instead of prefix=)
+PASS lexical startswith accepts sibling path outside requested root
+PASS missing prefix value raises IndexError
+TOTAL4passed; original pure helper only, synthetic argv/paths; no bootstrap/download/install/extraction/deletion

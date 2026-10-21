@@ -1,0 +1,50 @@
+{
+  "repository": "quodlibetor/dedupe",
+  "commit": "ad5e0430a376285af26a22f2296d26323692767e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "COPYING": {
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "git_blob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "bytes": 35147,
+      "lines": 674,
+      "method": "Whole pinned textread;distribute1-250/251-494;GPL1-220/221-450/451-674;LGPLwhole136lines. No truncation."
+    },
+    "COPYING.LESSER": {
+      "sha256": "615c055e43cb9971347bc30a46317e0e3fe3b1ee3264e40e95bf0d3cc7fc2bbc",
+      "git_blob": "e5ef9695093fc88e7a85414ae89348ea6de7fdd6",
+      "bytes": 7597,
+      "lines": 136,
+      "method": "Whole pinned textread;distribute1-250/251-494;GPL1-220/221-450/451-674;LGPLwhole136lines. No truncation."
+    },
+    "distribute_setup.py": {
+      "sha256": "cd23ef59d5bda2b0995d6a41c8c7aba4d10374113c3dc794cf21bbbc51573826",
+      "git_blob": "3bc42fa1485f7595cd2923f8d8a58f851bf64980",
+      "bytes": 16122,
+      "lines": 494,
+      "method": "Whole pinned textread;distribute1-250/251-494;GPL1-220/221-450/451-674;LGPLwhole136lines. No truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 9,
+  "tracked_blobs": 9,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/quodlibetor234-prefix-controls-v2-20261021/run.py",
+    "sha256": "164e89018e3b66146c970784134e6af8c70b66ce5403a913cb5525ae955b91a3",
+    "log": "docs/research/dedup-500/quodlibetor234-prefix-controls-v2-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original pure_under_prefix ASTfunction withsynthetic sys.argv/USER_SITE/strings only;no fullmoduleimport/bootstrap/download/install/extract/delete."
+  },
+  "findings": [
+    "Originalhelper --prefix separated actualchild accepted;--prefix= form rejectsactualchild because splitroot= used;rootlexicalstartswith accepts sibling;missingprefixvalueIndexError.",
+    "Bootstrapdownloads distribute0.6.26 viahistoricalHTTPURL withoutcontenthash then executes setup. Sourceonly, no network/download/install executed.",
+    "Extractiondelegates tar.extract withoutlocalmemberpathcontainment validation; no archive adversary run or currentPythonbehavior claim.",
+    "GPL3andLGPL3texts fullyread. README explicitGPL3orlate conflicts setupLGPLv3classifier; preserveconflict, no foreignsourceadoption or legalcompatibility claim."
+  ],
+  "cumulative_original_helper_controls": 10,
+  "limits": [
+    "All9files read;separatecompletionaudit verifiescurrenthashcoverage. NoactualPython2/mutagen/audio/CLI/deletion/package/platform/performancequalification.",
+    "NativepHash/ASANdeferred."
+  ]
+}
