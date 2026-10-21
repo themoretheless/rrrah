@@ -1,0 +1,85 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "All10 selected files wholly read: README,CMake,submodules,license,public/internal headers,core,common-distance implementation,API guards and config tests. Remaining hash/loader/image sources,tests,vendor headers and images unreviewed.",
+  "manifest": [
+    {
+      "path": ".gitmodules",
+      "sha256": "9df9c12965c600f3b1ab795afcbe87b1093124c841a16eab0913783b63e4e09c",
+      "bytes": 413,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "abbaf97cfd25da9e54f5099b5c58799be89cb7162991ae6eeedae687409703a2",
+      "bytes": 5870,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "ad13de06720c3b9bd510900c5838bea40478fc00f789de96c031b4db35276334",
+      "bytes": 1069,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "README.md",
+      "sha256": "313b0a2d5204e75fe70e11937f127cd3ef9e3fe8055f7920f02453ac69da9b57",
+      "bytes": 3399,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "include/libphash.h",
+      "sha256": "add38ace9f9e45fcc29d6957ff3f7c14f0e0238509be696bc63a7d4b8fba089a",
+      "bytes": 8348,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "src/core.c",
+      "sha256": "7082cc5d23b5b8fcd182d44b46cc5c210f2410e273c0e303d86e96883156518a",
+      "bytes": 10134,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "src/hashes/common.c",
+      "sha256": "7ada3ab907db6bd584aaec1c69e1621ea492f3c7e42665aba6628cb8aae689f9",
+      "bytes": 3938,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "src/internal.h",
+      "sha256": "c9015a61408f49870399d130b0b533f9322a519f55c72df28e19eb9c2df59abd",
+      "bytes": 4684,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "tests/src/test_api_guards.c",
+      "sha256": "42559b1c4515fa231f7249377373d71114099b47a52cf29b992a0f2a66ab4318",
+      "bytes": 6277,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    },
+    {
+      "path": "tests/src/test_config.c",
+      "sha256": "aa71496a5fdea76b8f295dc4cc62578bb73ee769fde03a3846fc006dbbb4990d",
+      "bytes": 2656,
+      "review": "whole text read; pinned Git blob SHA1 verified at retrieval"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/libphash454-controls-20261021/result.json",
+  "findings": [
+    "Actual unchanged common.c compiled AppleClang-O2 dynamiclib onARM64;8320 valid digest-size0..64 input pairs agree with independent Python bit_count and squared-distance arithmetic. Null/mismatched sizes return-1. No decoder/hash algorithm or full upstream suite executed.",
+    "AVX2 branch advances i to byte offset after32byte loop; subsequent SSE branch compares this byte offset against len/8 word count then multiplies i by8. For33..63-byte digests, remaining bytes are skipped. Source-only finding; x86/AVX2 not executed and compiler/runtime dispatch behavior unqualified.",
+    "Digest comparison functions check equal sizes but do not reject size>64 despite fixed data[64]. Such calls were not executed; no sanitizer/oversized-memory test performed.",
+    "core gray-weight invalid-sum branch resets defaults and returns without clearing gray_cache, unlike successful custom-weight branch. Cache consumers remain unread, so downstream hash staleness not yet runtime-qualified.",
+    "Gamma setter rejects <=epsilon but does not explicitly reject NaN; integer weights compute r+g+b and r*128 with signed int without explicit bounds checks. Source-only, no undefined-conversion/overflow input executed.",
+    "Arena allocator can relocate/free prior scratchpad storage when growing; caller pointer lifetime and allocation overflow guards need remaining call-site review. No defect claim based solely on allocation strategy.",
+    "API guard test names include mock_success withDEADBEEF input; fixture handling/test macros and loader must be read before treating its pass as real image decode evidence. Tests here were only read, not run.",
+    "CMake version1.9.0 differs from ph_version1.10.4; x86 compiler flag detection enablesAVX2 forcommon.c without inspected runtime CPU dispatch. Packaging/legacyCPU compatibility unqualified.",
+    "MIT2026gudoshnikovn wholly read. Bundled/submodule licensing and implementations remain unaudited. No production code adopted."
+  ],
+  "limits": [
+    "Review remains partial;247of500 full available-source reviews unchanged.",
+    "Native pHash.org/ASAN remains deferred; only independent common-distance code executed.",
+    "No acceleration benchmark, all-format quality or clean upstream build claim."
+  ]
+}

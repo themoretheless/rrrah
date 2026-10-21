@@ -2,7 +2,7 @@
   "index": 454,
   "repository": "gudoshnikovn/libphash",
   "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All10 selected files wholly read: README,CMake,submodules,license,public/internal headers,core,common-distance implementation,API guards and config tests. Remaining hash/loader/image sources,tests,vendor headers and images unreviewed.",
   "decision": "shortlist",
   "finding": "Portable C aHash/dHash/mHash/pHash with explicit invalid-input guards and many tests; useful independent hash/calibration oracle.",
   "available_source_evidence": [
@@ -84,5 +84,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/libphash454-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/libphash454-controls-20261021/result.json",
+      "whole_repo_complete": false
+    }
+  ],
+  "full_repository_read": false
 }
