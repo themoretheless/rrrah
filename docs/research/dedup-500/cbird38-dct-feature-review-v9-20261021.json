@@ -1,0 +1,50 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/dctfeaturesindex.h": {
+      "sha256": "889f77384f4aa3661d92ee7cc68b7f52afd9d9d7b27c7b85c6ea48aade9f2827",
+      "git_blob": "c00a3351f7b950174b040133d59e9e2c690dbf4b",
+      "bytes": 2276,
+      "lines": 70,
+      "method": "Whole pinned source read; test declarations assessed, not run."
+    },
+    "src/dctfeaturesindex.cpp": {
+      "sha256": "7fb2403bd47bb49e0d649e90a59d81c952d34c65663245ecbd7629a85722d362",
+      "git_blob": "02fc5182ee5250974cd18a7cf81ca584351c6631",
+      "bytes": 11096,
+      "lines": 358,
+      "method": "Whole pinned source read; test declarations assessed, not run."
+    },
+    "unit/testdctfeaturesindex.cpp": {
+      "sha256": "c2d5600104f820b0b00426848df4000dfeb90abcb57c028714ca94c5f2ed1990",
+      "git_blob": "ca9b9d4b16a30a574d7e0817a872a543991fc818",
+      "bytes": 848,
+      "lines": 30,
+      "method": "Whole pinned source read; test declarations assessed, not run."
+    }
+  },
+  "cumulative_assessed_blobs": 25,
+  "tracked_blobs": 616,
+  "findings": [
+    "DctFeaturesIndex uses HammingTree directly; unlike default whole-image DctHashIndex, this active feature path inherits approximate single-branch tree search. Tree implementation was fully read in v1; no unsafe tree execution or ASAN in this pass.",
+    "find caps each feature candidate list at10 before excluding deleted IDs and before aggregating by media ID. Original complete method with synthetic ordered tree responses returns10 of60 equal-distance distinct file candidates, zero valid results when ten tombstones precede a valid eleventh, and only one file when its ten features precede another file.",
+    "Candidate multiplicity counts every feature match, without per-needle-feature deduplication by file. With maxMatches>1 score is maxCount-fileCount; counts can include several candidate features per one query feature. This is a ranking heuristic, not geometric or pixel equivalence.",
+    "Actual HammingTree equal-distance sort order and real corpus prevalence unqualified: controls provide deterministic sorted equal-distance candidate lists, isolating cap/aggregation behavior rather than measuring real-image recall.",
+    "Index count reports feature/hash count, not media count. SQL mediaIds includes each kphash row even if descriptor blob empty, while find may later have no hashes. Indexed presence does not guarantee useful descriptor coverage.",
+    "SQL blob load checks size is divisible by uint64 size, then reinterprets native uint64 values. Cache validity delegates to DBHelper and HammingTree read; cross-platform layout/alignment/version and stale-cache behavior not yet executed.",
+    "remove marks tree indices as deleted without compacting them, supporting retained-tombstone relevance. Cache save uses previously inspected writeFileAtomically helper, whose replacement crash-safety remains unqualified.",
+    "DCT feature test delegates to generic40x5-sizes tests and only checks memoryUsage>0. It does not establish large-crop/rotation corpus recall or saturation/tombstone behavior. Header explicitly says DCT features do not support rotation, narrowing README feature wording."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-feature-controls-v9-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Original full DctFeaturesIndex::find body extracted unchanged, clang++C++17 O2. std-backed Qt-container/Media shims and synthetic HammingTree candidate responses; no hash extraction/Qt/SQL/real corpus or pHash/ASAN."
+  },
+  "limits": [
+    "25/616 tracked artifacts assessed:24whole text/source and1PNGvisual. Seventeen cumulative original-body/header controls plus one independent key counterexample.",
+    "No production change or measured optimization; full cbird runtime and remaining source/artifacts incomplete. Deferred native pHash/ASAN skipped."
+  ]
+}
