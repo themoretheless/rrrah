@@ -2,9 +2,9 @@
   "index": 295,
   "repository": "amasen02/dupehunter",
   "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
-  "review_scope": "Partial pinned33/52 artifacts assessed;all source/test TS read,lock structurally parsed.80distinct original tests passed across runs;10CLI subprocess tests and original build pending locked dependency404.",
-  "decision": "shortlist",
-  "finding": "Hardlink-aware file scanner/SHA256 hasher and dedupe tests; MIT exact-stage design candidate.",
+  "review_scope": "All51text source/test/config/docs/license files whole-read;package-lock full JSON structural assessment of129entries. All52bytes verified against pinned tree.",
+  "decision": "reject-direct-adoption",
+  "finding": "Keep independent exact-file pipeline. Borrow conceptual separation and hardlink identity awareness only after independent implementation. Original actions operate on stale path plans, hash equality lacks byte confirmation/freshness. No code adopted.",
   "available_source_evidence": [
     {
       "path": "src/dedupe.ts",
@@ -100,7 +100,13 @@
     },
     {
       "audit": "docs/research/dedup-500/dupehunter295-source-review-v5-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/dupehunter295-source-review-v6-20261021.json"
     }
   ],
-  "upstream_test_scope": "80distinct tests pass across disjoint41+39runs via Node22 strip-types/import resolver.Original tsx launcher unavailable due locked dependency404."
+  "upstream_test_scope": "80distinct tests pass across disjoint41+39runs via Node22 strip-types/import resolver.Original tsx launcher unavailable due locked dependency404.",
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/dupehunter295-complete-source-review-20261021.json"
 }
