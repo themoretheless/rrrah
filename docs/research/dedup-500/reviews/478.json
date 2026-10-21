@@ -2,7 +2,7 @@
   "index": 478,
   "repository": "studioph/mediahash",
   "commit": "e14ff15a2b918a957c80082f586c14df501e8bcd",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Allimplementationandtestmoduleswhole-read;freshoriginalpytest1pass1fail,previous9authoredcontrolsretained;JPEGvisuallyviewed. Whole repository/media/license/lock review incomplete,notcountedfull.",
   "decision": "reject-current-implementation",
   "finding": "Image name shadowing breaks all three image operations; fresh video self-comparison fails on2D cosine; short video checksum raises StopIteration; component chaining exceeds endpoint threshold. Nine real dependency controls; no code adopted.",
   "available_source_evidence": [
@@ -60,7 +60,7 @@
   "license_metadata": "GPL-3.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -92,6 +92,12 @@
       "scope": "All five implementation modules and both test files fully read; all16 git blobs verified; nine real dependency controls; not upstream pytest or full lock reproduction",
       "whole_implementation_complete": true,
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediahash478-source-review-v2-20261021.json",
+      "scope": "Originalpytest1pass1fail;13pinnedblobs reread/visuallyassessed;partial repository.",
+      "whole_repo_complete": false
     }
-  ]
+  ],
+  "upstream_test_scope": "Originalunchangedpytestsuite:1video metadata pass,1image test failure(AttributeError Image.open shadowed). Actualdependencies,isolatedfreshpackages,notPDMlock."
 }

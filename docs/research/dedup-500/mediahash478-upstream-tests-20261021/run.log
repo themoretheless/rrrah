@@ -1,0 +1,44 @@
+{"pytest": "9.1.1", "av": "15.0.0", "Pillow": "13.0.0", "ImageHash": "4.3.2", "numpy": "2.5.4", "scipy": "1.18.1", "PyWavelets": "1.10.0", "context-utils": "0.1.0"}
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_____________________ test_image_info[filename0-expected0] _____________________
+
+filename = PosixPath('/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediahash478-20261021/__test__/data/frame.jpg')
+expected = ImageInfo(width=1280, height=720, size=93722, format='JPEG')
+
+    @pytest.mark.parametrize(
+        ("filename", "expected"),
+        [
+            (
+                TEST_DATA_FOLDER / "frame.jpg",
+                image.ImageInfo(size=93722, width=1280, height=720, format="JPEG"),
+            )
+        ],
+    )
+    def test_image_info(filename: PathLike, expected):
+        with open(filename, "rb") as fileobj:
+>           info = image.analyze(fileobj)
+                   ^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/mediahash478-20261021/__test__/image_test.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py:81: in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+media = <_io.BufferedReader name='/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediahash478-20261021/__test__/data/frame.jpg'>
+
+    @staticmethod
+    @rethrow
+    def analyze(media: IO) -> ImageInfo:
+        LOG.debug("Analyzing %s", media.name)
+>       with Image.open(media) as img:
+             ^^^^^^^^^^
+E       AttributeError: type object 'Image' has no attribute 'open'
+
+.dedup-work/mediahash478-20261021/src/mediahash/image.py:51: AttributeError
+=========================== short test summary info ============================
+FAILED .dedup-work/mediahash478-20261021/__test__/image_test.py::test_image_info[filename0-expected0]
+1 failed, 1 passed in 10.93s
+PYTEST_EXIT 1
