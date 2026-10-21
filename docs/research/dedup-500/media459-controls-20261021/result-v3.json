@@ -1,0 +1,42 @@
+{
+  "header_sha256": "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+  "method": "Original complete stb2.30 header compiled unchanged as sharedlibrary; actualstbi_load_from_memory publicAPI called viactypes with ownedvalid2x2Pillowencoded syntheticimages. No fake decoder or malformedinput, no ASAN.",
+  "cases": [
+    {
+      "format": "PNG",
+      "input_bytes": 79,
+      "input_sha256": "c1e36705644fbc6ceeae278079d5e760698eeaa9219eb66d82bdbacaebac0a71",
+      "decoded": true,
+      "width": 2,
+      "height": 2,
+      "channels_in_file": 3,
+      "pixels_hex": "0a141e28323c46505a646e78"
+    },
+    {
+      "format": "BMP",
+      "input_bytes": 70,
+      "input_sha256": "fc56dcce7e0e4360ddcb2e51aa5e117c1a279ed3274cb4908e19264145cf9eb1",
+      "decoded": true,
+      "width": 2,
+      "height": 2,
+      "channels_in_file": 3,
+      "pixels_hex": "0a141e28323c46505a646e78"
+    },
+    {
+      "format": "TIFF",
+      "input_bytes": 152,
+      "input_sha256": "557c42e9710dbdc586bb967af53dc2c07f860eeb4ccd63377ecfacd81f47338d",
+      "decoded": false,
+      "reason": "unknown image type"
+    },
+    {
+      "format": "WEBP",
+      "input_bytes": 64,
+      "input_sha256": "8d5dcc647fd6815503ac7e60794ec85340a8e3ae10d9f382ba76e4d19c47cb89",
+      "decoded": false,
+      "reason": "unknown image type"
+    }
+  ],
+  "finding": "PNG/BMPdecode, validTIFF/WebP rejected as unknown image type despite scannerallowlist/READMEadvertisement.",
+  "limits": "Headerreview incomplete, publicAPI format supportcontrols only; no allformatqualification, windowsbehavior, speed or productionchange."
+}

@@ -1,0 +1,41 @@
+{
+  "repository": "DimitriosPournarkas/MediaDuplicateFinder",
+  "commit": "8a0b62604dc6f361234ce2788b666c96e9b446dd",
+  "whole_repo_complete": false,
+  "runtime_controls": "docs/research/dedup-500/media459-controls-20261021/result-v3.json",
+  "vendor_incremental_review": {
+    "old_review": "docs/research/dedup-500/folks405-complete-source-review-20261021.json",
+    "old_header_sha256": "9c7cbeb101f51ac0169be523aef5cdebce2b95fcaa72ffb662eef26b45581329",
+    "old_lines": 7177,
+    "new_header_sha256": "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+    "new_lines": 7988,
+    "diff_generation": "difflib.unified_diff(old.read_text().splitlines(True),new.read_text().splitlines(True),fromfile=reviewed-stb2.15,tofile=media459-stb2.30)",
+    "diff_sha256": "9e84c915ce5fc27e7d1b6c742572e04ba1a74493e5948790fc0006e61b3ad2c6",
+    "diff_total_lines": 3558,
+    "diff_total_hunks": 170,
+    "diff_lines_wholly_read_this_turn": [
+      1,
+      940
+    ],
+    "reviewed_prefix_sha256": "0882f635d3bb562d6743309f93d206399c2b496e64f81e27d8f90558d3c48707",
+    "next_unread_diff_line": 941,
+    "method": "Unchanged oldtext previouslywhole-read; baselineSHA256revalidated. Onlychangedhunks1-940reviewednow, not fullnewheader.",
+    "findings": [
+      "Newstb2.30 publicAPIadds16bitmemory/callbackloads, GIFmemorymulti-frame/delayAPI, is16bitqueries, WindowsUTF8filenameopt-in and threadlocalfailure/flip/unpremultiply/iphoneflags. Applicationusesstbi_load8bitforcedgray, so APIsalone do not extend its frame/color/precision recipe.",
+      "STBI_MAX_DIMENSIONS default2^24 checksdimensions, not caller-specifiedpixel/byte/workbudget. No generalresourcequalification performed.",
+      "Loadformatdispatchtriesstrongmagicfirst, then JPEG/PNM andTGAfallback; noWebP/TIFFdispatcher observed. ActualvalidsyntheticWebP/TIFFbothrejected unknownimage type while PNG/BMPcorrectpixelbytes, originalheaderpublicAPI.",
+      "Genericverticalflipchangedfromindividualpixelswaps to2048-bytetemporarymemcpyrows, sharedby8/16/floatandGIFslices; no performanceclaim or fullflipcontrol.",
+      "IntegeroverflowhelpersandIOcallbackposition/EOFtracking expanded; additionalcodecdecoderchanges remainunread. No assumptionthatoldv2.15decoderdefects survive unchanged."
+    ]
+  },
+  "additional_runtime_findings": [
+    "Wholeoriginalstb2.30sharedlibrarycompiled unchanged AppleC++17; fourownedvalid2x2Pillowimages passedthroughactualstbi_load_from_memory. PNG/BMP RGBoutputmatches expected12bytes; WebP/TIFFreturnNULLandunknownimage type.",
+    "Scannerallowlistaccepts.webp/.tiffbutactualsimilaritydecoderunsupported. No conversionfallback exists inwhole-readmain_cli.cpp. Thisisformat-specific gap, not allimageformatfailure."
+  ],
+  "remaining": [
+    "Unifieddiff941-3559 includingdecoder changes/license/changelog",
+    "Windowsbinarysource/buildcorrespondencequalification remainsunproven"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred; stbpublicAPItestunrelatedtonativepHash."
+}
