@@ -1,0 +1,53 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 91,
+  "files": {
+    "crates/ui/src/settings.rs": {
+      "bytes": 30687,
+      "sha256": "4fe4a37242ad9d9959c2a01781799461a9382469a680e32a6d71f68055b05669",
+      "git_blob": "2f48db91a449b019e9f78b8aef7cd0930840dd31",
+      "method": "Whole pinned source read in complete untruncated chunks; settings898, dashboard981, UI lib672 lines; Git blob verified"
+    },
+    "crates/ui/src/dashboard.rs": {
+      "bytes": 36038,
+      "sha256": "4584166e50df2ebba2a33a872e9d6644562cde926f7e1985f0aa439e57fc90c0",
+      "git_blob": "5db006cf5ccb8537bd791ddf9552092142e8ceb7",
+      "method": "Whole pinned source read in complete untruncated chunks; settings898, dashboard981, UI lib672 lines; Git blob verified"
+    },
+    "crates/ui/src/lib.rs": {
+      "bytes": 26787,
+      "sha256": "61f02d2ed583439398f91748c324447dcd8d26560d5702f9b3fd6ac1a5c8a031",
+      "git_blob": "53450bbe128c6e0360bb14aabc02905b411b6e04",
+      "method": "Whole pinned source read in complete untruncated chunks; settings898, dashboard981, UI lib672 lines; Git blob verified"
+    }
+  },
+  "new_unique_controls": 3,
+  "cumulative_unique_controls": 39,
+  "controls_script": "docs/research/dedup-500/visualvault076-ui-helpers-controls-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-ui-helpers-controls-20261021/run.log",
+  "runtime_scope": "Extracted original Settings/dashboard path helper bodies, Settings preview builder, actual production Settings and MediaFile, original organizer target-directory body. Helper visibility widened only in authored harness; empty organizer/operation-record adapters inherited, no movement/UndoManager execution. No full UI draw or App run.",
+  "findings": [
+    "Settings truncate_path on long slash-prefixed Cyrillic path max60 panics slicing a UTF8 codepoint. Dashboard separate truncate_path on Cyrillic path max40 likewise panics. Both exact helper-body controls passed. These are distinct helpers from prior duplicate-view truncation defect.",
+    "Yearly video preview with separate_videos=true produces/destination/2024/video.mp4 while original organizer target directory yields/destination/Videos/2024/video.mp4 for2024 observedmtime. Control passed, no disk writes or action. Monthly analogous source logic; not another executed case.",
+    "Preview also formats daily/type-date modes that OrganizationMode parser does not accept; examples always use2024/03 independent of filemtime. These are illustrative UI paths, not executable plan verification. keep_original_structure shown in UI while earlier organizer source does not apply it.",
+    "Performance gauges clamp thread/buffer ratios, unlike earlier progress UI. Display allows numeric edit indicator, but earlier handle_settings_enter only starts editing source/destination fields; WorkerThreads/BufferSize apply handler exists without matching start-edit branch in reviewed source. Static comparison, no full interaction control.",
+    "General settings rendered indices0..4, organization0..6, performance0..5; previously reviewed navigation permits extra general5 and organization7, creating focused indices with no represented setting. Static only.",
+    "Dashboard uses current duplicate_groups for count/size if nonempty, falls back to Statistics count otherwise while wasted size falls to0. Thus direct Statistics stale counters can be partly masked when groups exist; do not equate prior model accumulation control with every visible card doubling.",
+    "UI lib draws version by area.x+area.width-VERSIONlen-2 without saturation; dashboard folder width subtract7 before truncating; mini-bar subtract filled from10 without clamp. Narrow terminal/inconsistent-statistics panic candidates remain source-only, not executed controls.",
+    "UI status mini Gauge.ratio receives raw current/total, a second unclamped display path. Earlier overlay panic control does not qualify full status path. Help saysv0.6 vs header0.8.0 and includes auto-save/search-detail promises not established by handlers.",
+    "Dashboard timeline groups cachedfiles bycreated year, while model Statistics files_by_year usesmodified year and organization usesmodified. Different time bases are implementation choices; no proof of date identity semantics.",
+    "Overview logical totals/cards/labels do not establish physical reclaimable allocation. Largest/recent/static charts render cached observations; no file revalidation in draw. WholeUI source review now complete but full application runtime qualification still absent."
+  ],
+  "original_module_test_counts_unchanged": {
+    "passed": 157,
+    "failed": 1,
+    "scope": "Prior isolated original modules;new3controls authored. Earlier Progress concurrency failure remains."
+  },
+  "remaining_scope": "4 artifacts:README.md,CONTRIBUTING.md,CODE_OF_CONDUCT.md,Cargo.lock. Global complete repository count205/500 unchanged. Native pHash/ASAN deferred.",
+  "limits": [
+    "No complete App/TUI, small-screen rendering, MSRV/workspace lock/lint or movement qualification in this increment. No production code copied or changed."
+  ]
+}
