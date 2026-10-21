@@ -1,0 +1,41 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/ImageEditorScreen.kt": {
+      "sha256": "b2db2e6f39c2e4c7694fb517988593ab003a63d43704d8761810a1ff4cf30dfe",
+      "git_blob": "3f38f9103c9ab60119607627cf458dc4d254be4d",
+      "mode": "100644",
+      "lines": 1249
+    }
+  },
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "method": "Complete pinned Kotlin image editor source read in six bounded chunks1-1249. Static preview/coordinate/save review only.",
+  "findings": [
+    "Save chooses PNG for png,WEBP for webp, otherwise JPEG while retaining original extension. GIF/BMP/etc edited output can have JPEG bytes under old suffix; static branch confirmed, no Android encoding run. Animated image/color metadata preservation not established.",
+    "Save calls Bitmap.compress but ignores Boolean; then recycles final bitmap, shows success and invokes onSaved. Stream close exceptions caught, false encoder result not. Partial destination cleanup absent on exception. No failed-write probe.",
+    "Original file not overwritten by intended naming: selects basename_edited then numbered suffix while exists. exists-check followed by FileOutputStream not exclusive creation/atomic publication; concurrent saver could race. No action against originals executed.",
+    "Save synchronous directly from Button.onClick; decodes source full resolution, transforms, allocates final ARGB8888, compresses/writes on calling UI thread. Preview Coil request Size.ORIGINAL. No pixel/memory cap or latency measurement; do not claim specific slowdown.",
+    "Crop uses coerceIn(0,tW-10)/coerceIn(10,tW-x) similarlyheight. When transformed width/height below10, bounds invalid. Exception surfaces Save failed, not fallback. Ordinary UI Transform tab click enables crop even if no explicit Crop Box toggle.",
+    "Fit mapping treats any nonzero rotation modulo180 as width/height swap, including fine rotation1degree. Actual rotated bounds depend on sin/cos. Preview rotates full-size fitted layer whereas save transforms source into new bounding bitmap, so crop/drawing mapping can diverge. No rendered geometry qualification.",
+    "Draw overlay points stored in screen coordinates. New image/container changes do not reset remember state; drawing gesture pointerInput keyed onlycategory while fitRect changes. Preview drawings remain screen overlay and save maps against latest fit dimensions. Orientation/resize/rotation parity requires device fixture.",
+    "Aspect lock uses entirecontainer not image visible rect, then save clips screen coordinates to transformed bitmap. Aspect ratio can change after clipping letterbox region. Minimum crop10pixels differs screen touch threshold36dp.",
+    "Crop may return same Bitmap object for full-region crop; code recycles transformed when transformed!=srcBitmap before assigning cropped. Bitmap alias behavior requires Android contract/runtime; do not claim definitive use-after-recycle. General exception cleanup lacks finally for allocated intermediate/final bitmaps.",
+    "HIGH_CONTRAST composes1.4scale/-30 then calls setToSaturation1.3 on same matrix; setter composition semantics need Compose implementation/runtime to establish whether prior contrast overwritten. No unchanged Kotlin control run.",
+    "EXIF orientation/color profile/animation/frame metadata are not explicitly read/copied in save; Coil preview decoding path may differ BitmapFactory raw save. No image file or private media inspected.",
+    "Undo/Redo limiteddrawPaths, not general edit history; reset clears drawing/filter/crop state. Save enabled even no changes and can reencode original. This creates a distinct encoded file, not byte duplicate proof."
+  ],
+  "candidate_requirements_for_library": [
+    "Infer file format from validated content as well as suffix; preserve explicit conversion identity.",
+    "Do not report successful save on false encoder result; publish output atomically with verified status.",
+    "Exercise tiny images, orientation, arbitrary rotations, animation and metadata when qualifying image equivalence."
+  ],
+  "limits": [
+    "114/268 whole files; repository013 incomplete.",
+    "No Android/Compose/Coil bitmap runtime, encoding, image rendering, user-file writes or Kotlin tests executed.",
+    "No production library changes;155/500 full repository count unchanged.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
