@@ -1,0 +1,40 @@
+{
+  "repository": "ramenhut/insight",
+  "commit": "3930e13998e8f0893ae6b2360b2ec75f4edcb969",
+  "whole_repo_complete": false,
+  "tracked_blobs": 22,
+  "cumulative_assessed_blobs": 2,
+  "files": {
+    "Source/vnInsight.cpp": {
+      "bytes": 11355,
+      "sha256": "62b984cf43113f4de1a6489ebe147f649d5c2bba289c9622e4ab12e987724c6b",
+      "method": "Whole pinned C++ source/header read without truncation"
+    },
+    "Source/vnInsight.h": {
+      "bytes": 4620,
+      "sha256": "1cc7430a455164fc91472031630bf140ca8f6e11c790dbe750fc39f1e321ac9a",
+      "method": "Whole pinned C++ source/header read without truncation"
+    }
+  },
+  "controls": {
+    "generator": "docs/research/dedup-500/insight368-controls-v1-20261021/build.py",
+    "source": "docs/research/dedup-500/insight368-controls-v1-20261021/extracted.cpp",
+    "log": "docs/research/dedup-500/insight368-controls-v1-20261021/run.log",
+    "passed": 3,
+    "method": "Unchanged extracted vnCompareImages64 function compiled clang++C++17 with exact-width scalar typedefs and authored CVImage/hash-return adapters. No original platform types or full hashing execution."
+  },
+  "findings": [
+    "Original vnCompareImages64 uses default hash size32bytes to normalize a64bit XOR count. Opposite64bit inputs yield0.75,one-bit difference255/256,identical1. Confirmed actual extracted function, conditional on synthetic64bit hashes.",
+    "Function vnCompareImages64 is defined in cpp but not declared in public header; ordinary vnCompareImages uses256bit streams and separate comparison. Scope not generalized to public path.",
+    "vnHashImage64 returns0onfailure, caller compares without explicit status. Reachable actual image failures and whole library behavior not tested.",
+    "vnPublishHashValue computes shifts before guarding bits-per-pixel0and>32; boundary UB risk source-only, no sanitizer or invalid shift execution.",
+    "vnHashImage cleanup occurs only after all stages succeed; earlier failure paths do not visibly destroy already-created images. Ownership helpers unread, no leak measurement.",
+    "Header default-size documentation says16,8while implementation defaults16,32; source clamps thumb upper bound2900and input requires>=32x32under parameter checks. Actual platform flags/types pending."
+  ],
+  "remaining_scope": "20 artifacts: Imagine/image implementation, platform/bitstream headers and sources, Windows projects, root license and README.",
+  "license": "Original header BSD-2-Clause notice fully read and preserved in extracted control; root license pending. No production adoption.",
+  "limits": [
+    "Partial2/22 review; global full count181/500 unchanged.",
+    "No encoded images, original image hash pipeline, original platform typedefs, ASAN, Windows or performance qualification. Native pHash/ASAN remains deferred."
+  ]
+}

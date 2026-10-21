@@ -2,7 +2,7 @@
   "index": 368,
   "repository": "ramenhut/insight",
   "commit": "3930e13998e8f0893ae6b2360b2ec75f4edcb969",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned2/22 whole source/header artifacts; three actual extracted64bit comparison controls with synthetic hashes. Normalization mismatch confirmed for internal cpp function; whole public image pipeline unqualified.",
   "decision": "reference",
   "finding": "C++ Insight perceptual engine and custom image desaturation; no detected tests and old platform types need care.",
   "available_source_evidence": [
@@ -73,6 +73,11 @@
       "lines": 24,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/insight368-source-review-v1-20261021.json"
     }
   ]
 }
