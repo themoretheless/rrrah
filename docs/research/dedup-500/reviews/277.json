@@ -2,7 +2,7 @@
   "index": 277,
   "repository": "jRimbault/yadf",
   "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
-  "review_scope": "Partial pinned24/44whole artifacts read;35original default-feature librarytests pass. No-default libtest compilefails due gatedSeaHasherimpl; CLIintegration/fullscanner mutation unqualified.",
+  "review_scope": "Partial pinned27/44whole artifacts read;35library+15CLI/particularoriginaltests pass with1ignored. Publicoriginalscanner controlled smallfile mutation returns stale duplicate group;no source modification.",
   "decision": "shortlist",
   "finding": "Rust pluggable hash and positioned head/tail file reads; relevant streaming/prefilter tests, confirmation still to examine.",
   "available_source_evidence": [
@@ -84,6 +84,9 @@
     },
     {
       "audit": "docs/research/dedup-500/yadf277-source-review-v3-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/yadf277-source-review-v4-20261021.json"
     }
   ]
 }

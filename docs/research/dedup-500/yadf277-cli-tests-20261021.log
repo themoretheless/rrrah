@@ -1,0 +1,29 @@
+   Compiling yadf v1.4.3 (/Users/themoretheless/.codex/tmp/rrrah-yadf277-20261021)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.86s
+     Running tests/integration.rs (.dedup-work/yadf277-target-20261021/debug/deps/integration-3ff6da3c646bdfcd)
+
+running 9 tests
+test dir_macro ... ok
+test function_name ... ok
+test hard_links_flag ... ok
+test min_file_size ... ok
+test trace_output ... ok
+test glob_pattern ... ok
+test max_file_size ... ok
+test regex ... ok
+test single_thread_does_not_deadlock ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests/particular_cases.rs (.dedup-work/yadf277-target-20261021/debug/deps/particular_cases-d47959f2c0258e02)
+
+running 7 tests
+test sanity_check ... ignored
+test files_differing_by_size ... ok
+test identical_small_files ... ok
+test files_differing_by_prefix ... ok
+test files_differing_by_middle ... ok
+test files_differing_by_suffix ... ok
+test identical_larger_files ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.10s

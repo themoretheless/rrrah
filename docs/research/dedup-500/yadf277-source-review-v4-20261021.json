@@ -1,0 +1,56 @@
+{
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 27,
+  "new_whole_files_read": {
+    "src/main.rs": {
+      "bytes": 9057,
+      "sha256": "f1bb448780ee1f8c4a55a4437fd9ea622cf58da98d0889dbd5f8032fb6b14c05",
+      "git_blob": "5018c78647a9a014ccd7f0e6af39ac845021c992",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/args.rs": {
+      "bytes": 5512,
+      "sha256": "b6b2ab8db7872fa4d5610f444d44504ae51e436e656ebae4cb614c0cff386e77",
+      "git_blob": "671aec410b82b7ae174a57448b4e05083ebfa854",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 7859,
+      "sha256": "959043d88f52e1834ab119238f9c6956fcf6b0793fa5b4b72d00165f5a095193",
+      "git_blob": "b77be8c09b2ca6b58874906d5aafb5cc81318e7b",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "fresh_upstream_tests": {
+    "passed": 15,
+    "failed": 0,
+    "ignored": 1,
+    "log": "docs/research/dedup-500/yadf277-cli-tests-20261021.log",
+    "command": "cargo +1.98.1 test --manifest-path /Users/themoretheless/.codex/tmp/rrrah-yadf277-20261021/Cargo.toml --locked --test integration --test particular_cases",
+    "scope": "9CLIintegration plus6particularcases; ignoredhome sanitytest not run"
+  },
+  "new_runtime_controls": 1,
+  "cumulative_targeted_controls": 4,
+  "public_scanner_control": {
+    "source": "docs/research/dedup-500/yadf277-controls-v4-20261021/scan_mutation.rs",
+    "log": "docs/research/dedup-500/yadf277-controls-v4-20261021/run.log",
+    "rlib_sha256": "37cb082d7ed4d0293f681999e3148683dde6cd91c9e8134d7ef2b4da56dc6a97",
+    "executable_sha256": "2a60a903613ba1221f23ab5c5695be7b8e10b36c0ad65eb08f30e24451b54c2e",
+    "scope": "Original compiled public Yadf.scan with authored Hasher using standard DefaultHasher; modifies own file at second hashfinish after actual input bytes hashed. No forced collision or source modification."
+  },
+  "findings": [
+    "Public original scanner returns one2fileduplicategroup after two3byteaaa files were hashed and second changed tobbb at secondfinish checkpoint. Final freshbytesdiffer and exactly2hashfinishes confirmed. Deterministic source-change checkpoint, not probabilistic concurrent race frequency or builtin-hasher execution.",
+    "All15originalCLI/particulartests passed, including meaningful singleIOthread timeout case. Earlier35librarypasses retained. Ignored actualhome scan stayedignored. Weak output assertions in some originaltests still limit proof.",
+    "CLI final output wraps BufWriter but no explicit flush for severalformats; generic output/diskfailure propagation unqualified. Replication factor parsing reads firsttwofields and ignores trailingsegments bysourceinspection.",
+    "README benchmark numbers target LinuxNVMe syntheticcorpus, not measurements here; no speedup claimed. Wholemain/args/readme read,27/44artifacts total.",
+    "Initial authored harness compile failed temporaryborrow E0716 beforeexecution; lifetimebinding corrected, rerun passed. Original source unaffected.",
+    "NativepHash/ASANdeferred;fullreviewcount200/500 unchanged."
+  ],
+  "remaining_scope": "17artifacts including lockfile/buildCI/release/benchmark/corpus/helper scripts and5tinyfixtures.",
+  "limits": [
+    "Original tests and controlled publicAPI mutation proof do not cover all filesystem races, physicalidentity, crossplatformprefetch or complete44artifact review."
+  ]
+}
