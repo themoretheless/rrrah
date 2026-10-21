@@ -1,0 +1,42 @@
+{
+  "repository": "SabrosoCuy/PlexDeDupe",
+  "commit": "8bf5a471756cb2b2fc39f88c6b3f865007637967",
+  "whole_repo_complete": false,
+  "tracked_blobs": 10,
+  "cumulative_assessed_blobs": 4,
+  "new_whole_file_completed": {
+    "path": "DupCleanup.py",
+    "bytes": 72077,
+    "sha256": "77e95d0df061417b5177643d877d145ce592fa50148f93a44531b33e32bf0fd0",
+    "git_blob": "5409e87368482cd909542e9cafbf5d06ef549f7a",
+    "method": "Lines1-830readv1;831-endreadv2withouttruncation"
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/plex352-controls-v2-20261021/run.py",
+    "log": "docs/research/dedup-500/plex352-controls-v2-20261021/run.log",
+    "passed": 4,
+    "method": "Original find_duplicate_media/get_media_size/_has_matching_children AST methods, synthetic Plex/filter objects; no GUI or account"
+  },
+  "findings": [
+    "Same movie titles overwrite previously collected distinct movie groups; distinct-title positive control retains both groups. Titles are identity keys rather than Plex rating keys/library identifiers.",
+    "Multipart media size aggregates both parts but file path stores first part only, demonstrated with10+20byte synthetic metadata.",
+    "Empty title filter causes _has_matching_children to return true before checking codec filter; demonstrated h264 child with h265 filter.",
+    "Hardlink-mode toggle updates interface but process_deletions calls _perform_deletions; no route to _perform_hardlinks found in fully read source. Source-only, not GUI execution.",
+    "Filters reconstruct Treeview from cached item dictionaries; manual KEEP/DELETE changes after snapshot can be overwritten by later filters. Runtime adapter not yet executed for this case.",
+    "Version text and parent display title resolve deletion targets; no stable identity stored directly on UI rows.",
+    "Physical-file delete exceptions are logged but do not increment outer error_count; full GUI outcome not executed."
+  ],
+  "remaining": [
+    "README.md",
+    "ChangeLog.txt",
+    "Screenshots/DebugConsole.png",
+    "Screenshots/MainWindowWresults.png",
+    "Screenshots/dryrun.png",
+    "Screenshots/fullrun.png"
+  ],
+  "license": "MIT rootfullyread;researchcontrolsretainlicense;noproductionadoption.",
+  "limits": [
+    "4/10wholeartifacts;10targetedcontrolscumulative;fullreviewcount168/500unchanged.",
+    "No whole GUI/Plex session/deletion/hardlink conversion or performance proof. Native pHash/ASAN deferred."
+  ]
+}

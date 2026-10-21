@@ -1,0 +1,5 @@
+PASS distinct Plex items with same movie title overwrite earlier duplicate group
+PASS distinct titles preserve two groups
+PASS multipart media aggregates all part sizes but retains first part path only
+PASS empty title filter admits parent via child even when child fails codec filter
+RESULT 4 passed; original AST methods with synthetic Plex metadata/filter variables; no GUI, account, deletion or filesystem conversion
