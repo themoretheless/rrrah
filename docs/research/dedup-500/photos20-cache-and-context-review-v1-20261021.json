@@ -1,0 +1,83 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "package.json": {
+      "sha256": "e86faa6ce170d9bf654ad6a792a25ecd543d670ce03c5318651edc8f6ad2e2c4",
+      "git_blob": "4821a56f24b111c219b6524c2abbe0c7e40e4140",
+      "bytes": 3669,
+      "lines": 95,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/photo-url.ts": {
+      "sha256": "ca626f530b16cc2409d4fe4a98e8b1e0c54558fcc8ce8fe3554080534fe54709",
+      "git_blob": "a91b6add1f4f052ff2b6d0b871968701797ed0b2",
+      "bytes": 623,
+      "lines": 14,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/scan-results.ts": {
+      "sha256": "5105d3df380ff5a30a7c43c421b78d7af500f3094d7a5b0c7ad9472b5303bf60",
+      "git_blob": "8b342b028fd7e9d457e7510225552fd6387a9a26",
+      "bytes": 551,
+      "lines": 14,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/types.ts": {
+      "sha256": "504d7ea7ab5e232ad50d3c3762cc7e3ebe4156347bd9f3a2484f36bee6b9cfc0",
+      "git_blob": "a59c59290a9fa493b27ffb39ad5ed143296e09bd",
+      "bytes": 6719,
+      "lines": 239,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/embedding-cache.ts": {
+      "sha256": "fa724f48031db55ad3e4ed978be0bdba528136ab8df05a38132fa444bb05e3c5",
+      "git_blob": "e7cbccec5085026416c1ebe9fa91ee4efd122b03",
+      "bytes": 3509,
+      "lines": 108,
+      "method": "Whole UTF-8 source read."
+    }
+  },
+  "cumulative_whole_files_read": 5,
+  "tracked_blobs": 84,
+  "findings": [
+    "EmbeddingCache uses one database/store keyed only by mediaKey. Record schema has no account, model, preprocessing or content generation. Caller invalidation remains to be inspected.",
+    "getMany converts individual request errors into null misses; no transaction abort handler. setMany/evictExcept handle complete/error but lack explicit onabort handlers; runtime behavior not qualified.",
+    "areScanResultsValid rejects mismatched accounts only when both are nonempty. Unknown current or stored account is accepted. Confirmed on unchanged original function.",
+    "buildThumbUrl assumes bare input URL and truthy width; existing suffix is appended again and width zero is omitted. These controls violate/edge its documented input assumptions, not proven normal call-site failures.",
+    "StoredState contains scanDate/settings, but the inspected validity helper compares only accountEmail. Caller invalidation remains unreviewed.",
+    "Package identifies AGPL-3.0-or-later. Build uses a toolkit submodule and separately generated worker/WASM assets; full build not attempted."
+  ],
+  "isolated_controls": {
+    "runtime": "Node 22 experimental TypeScript stripping, unchanged source modules",
+    "passed": 5,
+    "cases": [
+      {
+        "name": "different-known-account",
+        "actual": false
+      },
+      {
+        "name": "unknown-current-account",
+        "actual": true
+      },
+      {
+        "name": "unknown-stored-account",
+        "actual": true
+      },
+      {
+        "name": "existing-rendition-suffix",
+        "actual": "https://example.invalid/image=h100=h200"
+      },
+      {
+        "name": "zero-width-treated-as-absent",
+        "actual": "https://example.invalid/image=h200"
+      }
+    ]
+  },
+  "limits": [
+    "No browser, IndexedDB, model, Google Photos or upstream test suite executed.",
+    "5/84 complete tracked files read in this incremental audit; earlier excerpts not counted as whole reads.",
+    "No production library code copied or changed."
+  ]
+}
