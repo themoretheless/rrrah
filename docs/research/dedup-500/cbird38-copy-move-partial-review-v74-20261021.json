@@ -1,0 +1,50 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_artifacts": {
+    "doc/papers/An Evalulation of Popular Copy-Move Forgery Detection Approaches.pdf": {
+      "sha256": "80bbe9d95d950722425b48ba6b3afab45bb1992cb714674d6819121a45d1ca6a",
+      "git_blob": "d4d7195f2446d93ae9640d3a9329644a064e67f8",
+      "bytes": 9727628,
+      "total_pages": 26,
+      "text_pages_read_inclusive": [
+        [
+          1,
+          9
+        ]
+      ],
+      "visual_pages_reviewed_inclusive": [
+        [
+          1,
+          9
+        ]
+      ],
+      "method": "Entire text of pages1–9read; complete rendered pages1–5at95dpi and6–9at110dpi visually inspected, including figures1–10andtablesI–III. Remaining17pages not reviewed or counted complete.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-copy-move-partial-review-v74-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 614,
+  "tracked_blobs": 616,
+  "findings": [
+    "CMFD pipeline detects same-image copied regions. It is not an exact whole-file duplicate benchmark; self-neighbor suppression does not transfer to coordinates of separate files.",
+    "Keypoint extraction can miss low-structure copied regions; block methods trade dense coverage for much greater feature count. Missing descriptors cannot establish negative duplicate evidence.",
+    "Experiment sets minimum displacement50pixels and explicitly cannot detect smaller moves; keypoint output has1000pixel area threshold. These constraints exclude cases and must not be imported as universal duplicate filters.",
+    "Dataset described as48source scenes and87manual snippets; partially transparent boundary pixels excluded from pixel evaluation and occluded source/target regions adjusted. Copy provenance masks differ from direct pixel equality.",
+    "Feature thresholds manually fitted to benchmark; paper uses approximately4700generatedvariants, but this does not establish content-disjoint heldout calibration for our task.",
+    "Image-level and pixel-level precision/recall differ substantially; detecting a modified image does not prove all copied pixels or all candidate identities recovered. No winning algorithm accepted before remaining results are read."
+  ],
+  "executed_controls": [],
+  "next_review": {
+    "text_and_visual_pages_inclusive": [
+      10,
+      26
+    ]
+  },
+  "limits": [
+    "Full artifact assessment remains614/616. Remaining whole artifacts: this26page study and embedded CImg; no full-study or full-repository claim.",
+    "Poppler reported xref reconstruction warning for later render range; produced pages6–9were visually inspected successfully. No numerical curve digitization or source experiment rerun.",
+    "34upstream original-body/header controls and3independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
