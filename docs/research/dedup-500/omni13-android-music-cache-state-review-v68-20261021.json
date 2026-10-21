@@ -1,0 +1,53 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalAudioArtworkCache.kt": {
+      "sha256": "1bdbb0106ce1762d5ef4c2bd4aa4461203529f7081accfc43aa39f3bb9f80050",
+      "git_blob": "3008c5f22e0206d26ecb883ecfd2bfa2051cb67c",
+      "mode": "100644",
+      "lines": 39
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalMusicPlayerManager.kt": {
+      "sha256": "711dd3d0a0d04685a784d57fd88296deb3ae06140141afce181f1164a6398642",
+      "git_blob": "fcfd8c54cc372a740d32114270c9744195f6d2fd",
+      "mode": "100644",
+      "lines": 192
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalMusicPlaybackService.kt": {
+      "sha256": "d6818ad93eb338de3b9eaf2d21a4fd48c15822d262b4763445f9d8e1143b4bb8",
+      "git_blob": "fa7fa5fa977306fbc9dcb2cfc2fef8df46377056",
+      "mode": "100644",
+      "lines": 314
+    }
+  },
+  "cumulative_whole_files_read": 109,
+  "tracked_blobs": 268,
+  "method": "Complete source reading of three verified pinned Kotlin files545lines; cross-read music receiver filters in previously credited manifest. Static media state/cache review only.",
+  "findings": [
+    "Artwork cache key path:lastModified:length is metadata identity, not content identity. Same-size edit preserving timestamp reuses previous positive/negative entry. LruCache24 bounds entry count rather than bitmap bytes; full embeddedPicture decode has no sampling/pixel cap. missing set has no eviction and catches Throwable, caching transient failures too. No artwork/media/user files opened.",
+    "Artwork cache get performs MediaMetadataRetriever setDataSource/embeddedPicture/decode synchronously on miss; retriever uses use cleanup. Existing callers include widget receiver and service notification updates. Main-thread cost plausible from call path, but no latency/memory measurement. Separate missing mutableSet synchronization not present; actual concurrent callers unqualified.",
+    "Manager play stops/releases old player, sets new current file/queue before constructing/preparing MediaPlayer. prepare synchronous. Exceptions logged only, without normalizing isPlaying/duration/progress/file or notifying listener; failed new play can retain stale state from previous playback and incomplete new metadata. Player allocated inside apply is assigned to manager only after successful start; exceptional setup has no local release finally.",
+    "LoopONE completion seekTo/start calls notify but does not restart progressUpdater. Progress updater schedules itself only while isPlaying, so timing between completion callback and pending updater determines position-update continuation. Do not claim deterministic stopped progress without MediaPlayer runtime.",
+    "Manual next/previous wrap regardless loopOFF; completionOFF advances only until final index then stops state. This distinction appears intentional source policy, not evidence of wrong repeat semantics by itself. Queue argument omitting target file chooses index0 though currentPlayingFile target differs; caller invariants pending.",
+    "Seek clamps Int position to duration. MediaSession callback converts Long pos.toInt before clamp, so large values can wrap to negative/other Int rather than clamp original Long. No media-session action executed.",
+    "Service installs state listener in onCreate; manager notifications invoke updateForegroundNotification and package-scoped MUSIC_ACTION_UPDATE broadcast. This resolves v67 immediate-refresh uncertainty: later updates exist; no persistent stale widget claim from immediate refresh alone.",
+    "Manifest MUSIC_ACTION_UPDATE filter belongs base music provider; compact receiver only APPWIDGET_UPDATE. Normal service broadcast therefore reaches base which refreshes both sets, narrowing v67 virtual onUpdate compact-instance concern to alternate delivery paths, not normal service flow.",
+    "Service onCreate setStateListener immediately invokes update. If no current file it stops foreground/self; later cold action handling and startForegroundService requirements need Android lifecycle qualification. No actual service failure reproduced.",
+    "Service START_STICKY null-intent restart has no queue/player restoration; if current file null stopsSelf. Last path preference supports widget launch fallback but is not automatic playback resume. onDestroy removes listener/releases session but does not stop manager player; intended service/player lifetime and OS behavior unqualified.",
+    "Notification artwork get repeated in metadata/build but positive/negative cache avoids repeated decode for stable key. Notification public visibility exposes filename/parent metadata by configured design; no claim of unauthorized access. Service actions use explicit immutable PendingIntents.",
+    "Notification favorite read-modify-write duplicates widget helper, ignores malformed preferences by rebuilding from empty set. No transactional coordination among callers. No user favorites changed."
+  ],
+  "candidate_requirements_for_library": [
+    "Separate metadata cache key from verified content identity, including same-size/same-mtime edits.",
+    "Bound positive cache by memory cost and negative cache by size/lifetime; do not permanently cache transient failures.",
+    "Publish coherent state only after new resource setup succeeds; preserve explicit error state on failure."
+  ],
+  "limits": [
+    "109/268 whole files; repository013 incomplete.",
+    "No Kotlin/Android compile, MediaPlayer/metadata decode, actual service/broadcast/notification, playback or external actions.",
+    "No new library code/tests; global full repository count155/500 unchanged.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
