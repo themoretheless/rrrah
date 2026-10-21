@@ -1,0 +1,123 @@
+{
+  "repository": "vxst/dedup",
+  "commit": "0a29fe43fc2236c88cbb5cdb95e0f65081b4b617",
+  "whole_repo_complete": true,
+  "tracked_blobs": 14,
+  "assessed_blobs": 14,
+  "files": {
+    ".github/workflows/codeql-analysis.yml": {
+      "bytes": 1482,
+      "sha256": "7327a448dd706c085d6ee51d78539ce34707d82e716894ba473622284feb7e1d",
+      "git_blob": "b0ecd396cb4eadfc543a8d6b39386ae3f162a811",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    ".gitignore": {
+      "bytes": 28,
+      "sha256": "482f7b6f9cac507983b1fedafe4dda477c6c2ffe240f88efd8aade85cfae714d",
+      "git_blob": "71b13d00f7706a27a89ba2760554f658d822a563",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "LICENSE": {
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "Makefile": {
+      "bytes": 1093,
+      "sha256": "745ff67c4dc8d3a650490a67e8490635421139aa7b4e8acd75d9fe5ff4e279be",
+      "git_blob": "b1ffecd84da399bdb1a5a6f236a3c4b6931237f5",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "README.md": {
+      "bytes": 1045,
+      "sha256": "be6871cececcc5d4f7fbb09378839db2ac7e697a8a89f9b65a64c620b4f4b3db",
+      "git_blob": "4b1e6c2d3853a04bca6dd2c9da9d49840ea4aca3",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "coder.cpp": {
+      "bytes": 2812,
+      "sha256": "874325b5706d2801b3fb0da28fe6fde1adf9ee3595347a4c725a37b2b8477c1a",
+      "git_blob": "c244c8c41c78d7e84f06a4e1f01fb93e96245785",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "coder.h": {
+      "bytes": 707,
+      "sha256": "16a2ae214a6584bc462677ac7a560681030e0fc69f1956c9d4a5affce163c310",
+      "git_blob": "c2d5a26f1ceb08ff8cb8a95ea03d024f0a8fd19d",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "deduplicator.cpp": {
+      "bytes": 5607,
+      "sha256": "5c19852036d01166f1094c711e2e4c5d363160d32a30b45bb2e312c74a373d55",
+      "git_blob": "bc803c265bbabd9f58b632301a08354ef589b868",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "deduplicator.h": {
+      "bytes": 1765,
+      "sha256": "115cb8b772f8ed44364b36ba7eb1acd4c097f0d91c1bf05fde1ef1bf98acc26d",
+      "git_blob": "764ed3950cb3c67cb28b0ec368ba5663bdc740e0",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "define.h": {
+      "bytes": 794,
+      "sha256": "83be31a7be59b57cc26cb91e50a51f0ba0989b445d57a6fd568acdb88d008c29",
+      "git_blob": "98458898d09bfd3914f0878c4061d50c0d596c9d",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "hash.cpp": {
+      "bytes": 1361,
+      "sha256": "8c80599dba8dfcba3ee249d62da691c6ffc1a2ad103a35517a9b4b4c1be7adf1",
+      "git_blob": "e1663b0b4047f83bb10153d789b389cc781ace99",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "hash.h": {
+      "bytes": 707,
+      "sha256": "40a39104be22daf2f349587bb5486f2b88d45e94191f0abd5e9805c080c379fa",
+      "git_blob": "0a61f5825912b7efdb595edf536a5da861f63f77",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "main.cpp": {
+      "bytes": 1591,
+      "sha256": "2311eecd23e01e72d427d8aab951cc4e9bc58da60108132aed8f2e537823ad5d",
+      "git_blob": "02bcf3606b03faaf39d49a8e5194618e695c37ce",
+      "method": "Whole original pinned text read without truncation; Git blob verified"
+    },
+    "test_data.xz": {
+      "bytes": 291032,
+      "sha256": "c02996cfe9f3ec284b575799bf6bdd524b58557c362f155034f0853c7181829d",
+      "git_blob": "b8a92fc9e495e59984295511354c18508ccfc0f9",
+      "method": "Original XZ stream listed,CRC64 decoded fully and decompressed bytes roundtripped through original CLI smoke test; not prose reading"
+    }
+  },
+  "original_tests": {
+    "make_test_smoke_passed": 1,
+    "scope": "Unmodified Makefile builds original4C++translationunits withclang++-O3-C++17 then decompresses2.25MiBfixture,encodes,decodes,diffmatches. No unit test suite found."
+  },
+  "authored_controls": 3,
+  "controls_script": "docs/research/dedup-500/vxst228-controls-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vxst228-controls-20261021/run.log",
+  "upstream_test_log": "docs/research/dedup-500/vxst228-controls-20261021/upstream-test.log",
+  "fixture": {
+    "decoded_bytes": 2359296,
+    "decoded_sha256": "3f5daea257a0ee0265147f034506c35fa68515fc4896250ee67ef95de0784920",
+    "encoded_bytes": 869344
+  },
+  "findings": [
+    "This is aligned512-byte within-file block deduplication codec, not filesystem duplicate discovery or visual image matching. Dictionary up to256K entries;three seeked passes:frequency prescan,selecteddictionarybuild,outputencode. Needs seekable stable input.",
+    "Combines two seeded32-bit noncryptographic hashes into64-bit key. data_map stores one block per hash and dedupe_block replaces by key only, withoutmemcmp; hashcollision could silently substitutecontent. Source-onlycollision concern,no actualcollision constructed. Not adopted as exact identity proof.",
+    "Original smoke fixture roundtrip passed;7 authored CLI boundary lengths0,1,511,512,513,1024,1537 roundtrip exactly. These finite valid-input checks do not establish universal/malformed/unstable-input correctness.",
+    "Same owned input/output path encoded with exit0 and original bytes lost because output fopen wb truncates before scan. Authored control passed. No identity check for aliases or atomic replacement scheme.",
+    "Invalid-header decode catchesdomain_error andprintsmessage butmain returns0,leavingempty output. Authored control passed. CLI argc guardusesargc<3 althoughargv3required; fopen/fseek/fread/fwrite results notvalidated consistently. Missingargument/path failures notexecuted.",
+    "decode allocates~128MiB headerbuffer,readswithoutcheckingreceivedlength,constructorparsesdictionaryuntilmagic withoutlengthparameter,boundsorrecordcount. Recordmagiccheck/decode can inspect bytes beyondshortread. No malformedbounds/ASAN/fuzzing run; problematicASANpointstilldeferred.",
+    "Every duplicate record allocated withnewvector and encoder neverdeletes returnedpointer. Therefore repeateddata outputpath allocationsaccumulate; no measured memoryprofile or performanceclaim accepted. Decoderusesfixedheaderallocation notsmallinputadaptive.",
+    "Magicprefix usedforreference anddictionarytermination withoutescapingrawliteralblocks. Random256-bit magic makesaccidentalprefixrare butnotlogicalimpossibility; no constructedmagic collision control. Format hasnooverall length/checksum/integrity gate.",
+    "reduce_hash_map sorts frequency/hashpairs usinggreater<pair<uint32,uint32>> despite64-bithashsecondfield. Tieorderingtruncateshash;frequencycountsuint32canwraponverylargeinputs. Staticonly,no hugeworkload/control.",
+    "README1GB/s/core and<1GB/TB areunqualifiedhere:smokeonlyprovesfinitebyteparity,notthroughputorpeakmemory. CodeQLworkflowautobuild+make test declaration notfreshCIproof.",
+    "Apache2.0rootlicenseandsourcecopyright2022ChunqingShan readwhole. No production code copied. Useful retention:exactoracleboundaryroundtrips,refuseinput/outputalias,propagateIOfailures,andusehashasfilterbeforebyteconfirmation."
+  ],
+  "decision": "retain-negative-cases-reject-codec-as-file-search",
+  "limits": [
+    "All14pinnedblobsassessedwithexplicitbinaryfixturemethod;not everyuncompressedbyte visuallyinterpreted. No realhashcollision,resourcebenchmark,malformedbounds,streammutation,crossplatformorASANqualification. No production changes."
+  ]
+}

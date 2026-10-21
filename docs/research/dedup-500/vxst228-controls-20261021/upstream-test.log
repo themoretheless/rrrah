@@ -1,0 +1,14 @@
+rm -rf *.o dedup A B C
+clang++ -O3 -std=c++17 -Wall -c main.cpp
+clang++ -O3 -std=c++17 -Wall -c deduplicator.cpp
+clang++ -O3 -std=c++17 -Wall -c hash.cpp
+clang++ -O3 -std=c++17 -Wall -c coder.cpp
+clang++ -O3 -std=c++17 -Wall -o dedup main.o deduplicator.o hash.o coder.o
+xzcat test_data.xz > A
+./dedup -e A B
+./dedup -d B C
+ls -lh A B C
+-rw-r--r--  1 themoretheless  staff   2.3M Oct 21 17:49 A
+-rw-r--r--  1 themoretheless  staff   849K Oct 21 17:49 B
+-rw-r--r--  1 themoretheless  staff   2.3M Oct 21 17:49 C
+diff A C

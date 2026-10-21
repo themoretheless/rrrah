@@ -2,9 +2,9 @@
   "index": 228,
   "repository": "vxst/dedup",
   "commit": "0a29fe43fc2236c88cbb5cdb95e0f65081b4b617",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "C++ file-level hash_data deduplicator; need collision verification and resource tests before selecting.",
+  "review_scope": "All13source/docs/config/license files whole-read;XZfixture fully decoded and original smoke roundtrip verified.All14Gitblobpinschecked.1originalmake-test smoke pass;3authoredcontrols include7boundarycases. Not resource/collision/malformed qualification.",
+  "decision": "retain-negative-cases-reject-codec-as-file-search",
+  "finding": "512byte block codec,notfilesystemduplicate search;rejecthash-onlysubstitution andunvalidatedI/O;retainboundaryroundtrip/error/aliascontrols.",
   "available_source_evidence": [
     {
       "path": "deduplicator.cpp",
@@ -48,9 +48,9 @@
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "PinnedApache2.0root/sourceheaders read;no productioncopy.",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/vxst228-complete-source-review-20261021.json",
+  "upstream_test_scope": "Original make test build and bundled fixture encode/decode/diff smoke passed;no upstreamunit suite identified."
 }
