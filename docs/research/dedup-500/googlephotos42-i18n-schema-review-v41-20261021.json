@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_english_schema_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/popup/i18n/types.ts": {
+      "sha256": "193dcc23d43b990c25655d2aea5bf4e39a8329c1863704c0a8796c5140794d26",
+      "git_blob": "48d8b37d98396c671cab7611945804a16039a534",
+      "bytes": 4521,
+      "lines": 158,
+      "method": "Whole pinned source/catalog/test read; not executed."
+    },
+    "src/extension/popup/i18n/locales/en.ts": {
+      "sha256": "13ef6c9ffdf452b410ecf8da0745d725add206b391c9d655137f098fe30b6b8e",
+      "git_blob": "5bfb75625524112fe2a1dddff40c3182833d6ac2",
+      "bytes": 5801,
+      "lines": 178,
+      "method": "Whole pinned source/catalog/test read; not executed."
+    },
+    "tests/i18n.test.ts": {
+      "sha256": "89903b190a64d8e7dc53a33af8a8febe40263c61d888f1e8f950b30b62a992da",
+      "git_blob": "c098ae107bf9ccfb283f6583226a8f20a984f066",
+      "bytes": 7412,
+      "lines": 221,
+      "method": "Whole pinned source/catalog/test read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 150,
+  "tracked_blobs": 230,
+  "findings": [
+    "LocaleCodetypeandregistry9language setagree; typescommentFrenchreferencecontrastsEnglishruntimefallback; commentsnotauthorityovercode.",
+    "Englishcatalogcompleteobjectread,includesdynamicview/path/count/list placeholdersanddedupreviewwording. No actualbrowserrenderortranslationqualitycertificate.",
+    "tHTMLescaping explicitlyassertedforangles,ampersand,quotes; earlierobservation concernsescapedoutputusedwithtextContent,notfunctionviolatingitsdeclaredtests. No newruntimecontrol.",
+    "EverylocaleeveryUIstringtestusesexplicitrequiredsubset,notallTranslationsleaves; otheri18n-protestsuppliesfullEnglishleafcomparison. Neitheralone provestranslatedsemanticsorlayout.",
+    "Testschecklocalechange,unknowncodeEnglishfallback,missingkeyliteral,unknownplaceholdersremainliteral,verbatimHTMLinterpolation andscope/noteplaceholderpresence. applyTranslationsDOMintegrationnotexercisedinthisfile."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "150/230wholeartifacts; remaining8nonEnglishpopupcatalogsnotfullyread.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
