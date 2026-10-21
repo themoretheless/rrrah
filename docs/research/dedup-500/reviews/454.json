@@ -2,7 +2,7 @@
   "index": 454,
   "repository": "gudoshnikovn/libphash",
   "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
-  "review_scope": "All authored source/tests/docs/build text and assets reviewed; vendor resizer whole header reviewed. stb_image inactive-platform/comment comparison and optional codec gitlinks remain unqualified; full repository review not claimed.",
+  "review_scope": "All authored source/tests/docs/build text/assets and both vendor headers reviewed. Formatted stb_image reviewed through complete baseline token/comment/directive comparison. Optional codec gitlinks remain unqualified; repository full review not claimed.",
   "decision": "shortlist",
   "finding": "Portable C aHash/dHash/mHash/pHash with explicit invalid-input guards and many tests; useful independent hash/calibration oracle.",
   "available_source_evidence": [
@@ -174,6 +174,11 @@
     {
       "audit": "docs/research/dedup-500/libphash454-source-review-v20-20261021.json",
       "controls": "docs/research/dedup-500/libphash454-controls-20261021/stb-raw-tokens-result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/libphash454-source-review-v21-20261021.json",
+      "controls": "docs/research/dedup-500/libphash454-controls-20261021/stb-directives-result.json",
       "whole_repo_complete": false
     }
   ],

@@ -1,0 +1,21 @@
+{
+  "paths": [
+    ".dedup-work/media459-20261021/stb_image.h",
+    ".dedup-work/libphash454-20261021/vendor/stb_image.h"
+  ],
+  "sha256": [
+    "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+    "f53ea8b6ed181beb245d4c43c97dca0bf03cd1408e4b6485afc605199bbc9d3f"
+  ],
+  "directives_excluding_one_limits_include": [
+    487,
+    487
+  ],
+  "equal": true,
+  "function_macro_adjacency_compared": true,
+  "method": "Remove escaped-newline continuations, replace comments while preserving line boundaries and quoted strings, tokenize each directive; preserve define-name opening-parenthesis adjacency. All conditional branches included.",
+  "limits": [
+    "Whitespace within stringified macro arguments may alter diagnostic text; prior release-only compiler comparison remains scoped.",
+    "Not a compiler implementation or runtime cross-platform proof."
+  ]
+}
