@@ -1,0 +1,55 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 5,
+  "files": {
+    "LICENSE": {
+      "bytes": 1071,
+      "sha256": "81c6ce99d5bc2ac3284a89bb1605f932e3e8cc96de68ed3fc23fb4bd53823249",
+      "git_blob": "1d2cc86d4f29051ac75d2041addc26b7c0753d78",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "pyproject.toml": {
+      "bytes": 915,
+      "sha256": "efdf5feea44fffb796d9f257d1380df37963b356e2fc7aad071098e4f1ccb7d1",
+      "git_blob": "735d18d9f9fb19d57795e28177bff9a98c44ce4c",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "src/deduplicate_lib/core/plugin_registry.py": {
+      "bytes": 753,
+      "sha256": "d728dd50fd63b7f019384c351abfbd5a8fda8cb6ce6c7abaa54c715d179e22ce",
+      "git_blob": "0b6640827de5a2de4aa781cbe318eb9d67d65b68",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/duplicate_detection_algorithms/distance_matrix.py": {
+      "bytes": 3444,
+      "sha256": "5b063ea75a52aadb5007bdd5d6f9444ffa94ba822f869312bdec674f7d8f15bd",
+      "git_blob": "d599d1fd7bd5b3de0132b3ac374025dd80e1449e",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/duplicate_detection_algorithms/multi_hashing.py": {
+      "bytes": 12930,
+      "sha256": "9f84e22abf6725d0fd079c4aef03a124f3d369ed51d116a45167cd49246843a8",
+      "git_blob": "29816ba3c4e8be860c3059bae7bdd1dc02f5898e",
+      "method": "Whole original pinned text read without truncation"
+    }
+  },
+  "new_runtime_controls": 3,
+  "controls_script": "docs/research/dedup-500/vectors166-controls-v1-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vectors166-controls-v1-20261021/run.log",
+  "control_scope": "Original method ASTs with actualNumPy and authored base/state/hashcandidate adapters; no full package, metric computation, Numba or original test run",
+  "findings": [
+    "Domain clarified:numericalvector deduplication, not a filesystemscanner. Fivewhole artifacts including twoalgorithmclasses,registry,manifest,MITlicense read;97pending.",
+    "Original DistanceMatrix method on authored3x3matrix with isolatedfirst and lateridenticalpair retains only first, droppingboth representatives of laterpair. Reordered samepartition retains2. Deterministic originalmethod control, not end-to-end class initialization proof.",
+    "Original MultiHashing duplicate_check accepts fourhashpositions eachcollidingwithdifferentcandidateindex at75percent threshold although no onecandidate matchesmorethan25percent. Explicit synthetic hashcandidate dictionaries, no naturallygeneratedvector or actualhashcollision reproduced.",
+    "DistanceMatrix duplicate_check usesstrict<tolerance while unique marking uses>= and alwaysfirstunique; boundarypolicy and nontransitiveclustercontract need inspectbase/docs/tests before adoption.",
+    "MultiHashing uses Pythonhash(bytes) asdictionaryidentity without underlyingbytesconfirmation, stores firstindexTrue laterFalse; dtype/rawfloatbytehashing and randomizedhashruntime affect reproducibility. Source-only scope, no corpusclaim.",
+    "RootMIT fullyread; no production code adopted. Initial commentary calledprojectfilescanner incorrectly; correctedafter inspectingactualscope. NativepHash/ASANdeferred."
+  ],
+  "remaining_scope": "97artifacts including basealgorithm,toleranceplugins,tests,docs/notebooks/images/generatedassets/uvlock. Run actualclasscontrols before broad defectclaims.",
+  "limits": [
+    "Threefiniteadaptedoriginalmethodcontrols do not qualify fullpackage or approximatevectorquality. Fullcount201/500unchanged."
+  ]
+}
