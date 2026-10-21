@@ -1,0 +1,68 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Four remaining authored hash implementations and upstream Haar test wholly read. Entire src/hashes subtree now read; repository tests,images,vendors,docs/build files remain incomplete.",
+  "manifest": [
+    {
+      "path": "src/hashes/color_hsv.c",
+      "sha256": "78eb6f30786623fd655ab4613bb9ac53c5a83351949e54357c3e660ecca08a25",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/hashes/color_moments.c",
+      "sha256": "e21a6a1ea585eda34a17b546cfa631c44572ac61dd85da09832751660afb9699",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/hashes/radial.c",
+      "sha256": "5342ce1b1defa1414b1171bc00785ac63c645f5247527f31f472ec188289426d",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/hashes/whash.c",
+      "sha256": "8465f0137b629d24947d52b5e888b0d6a4e251d2551f12e804ed4f19cb219656",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_haar.c",
+      "sha256": "5f0ccef875addf174e4855819ad1e073b5fd3003e300e0ac8ae9ffac86593b7f",
+      "review": "whole text read"
+    }
+  ],
+  "runtime": {
+    "math_rigor": {
+      "original_test": "tests/src/test_math_rigor.c",
+      "passed": 4,
+      "method": "AppleClang-O2, original unchanged test and color_hsv.c plus original DCT helper bodies from prior control with unused public wrapper omitted. Orthogonality, scalar/SIMD parity,median,HSV tests executed.",
+      "full_library_build": false
+    },
+    "haar": {
+      "original_test": "tests/src/test_haar.c",
+      "passed": 6,
+      "method": "Standalone original test replicates Haar arithmetic locally; does not call actual library Haar functions. Distinct from actual implementation qualification."
+    },
+    "color_control": {
+      "source": "docs/research/dedup-500/libphash454-controls-20261021/color-control.c",
+      "method": "Original core,loader,color,HSV,moments sources compiled unchanged without PH_TESTING/nativecodec/ASAN; actualstb loads synthetic2x1P6red-green andgreen-red.",
+      "exit_code": 0,
+      "stdout": "different_spatial_pixels_colorhash_equal=1 moments_equal=1 moments_size=9"
+    }
+  },
+  "findings": [
+    "HSV42bitdistribution and9bytechannelmoments intentionally omit spatial arrangement. Actual public API returns equal results for swappedred-greenpixels; this is representational limitation, not an exact-image-equivalence proof or unexpected histogram defect.",
+    "Moments skew is cube root of thirdcentralmoment, not standardized dimensionless skewness; packing takesabsolutevalue and truncates tobyte, discarding sign andsubinteger information. Distances apply to quantized descriptor.",
+    "HSV ignoresalpha;lowintensitypureblue classifiedblack under32luminancethreshold, explicitlycovered by originalmathrigor test.",
+    "Radial digest samples ordered projection variances, normalized to max andsqrt; comparison API previously inspected uses directbyteL2/Hamming, not circularalignment. Rotation-robust marketing not qualified by source formula or current tests.",
+    "Radialprojections>64 computesall requested angles but outputs onlyfirst64; recipe/outputangularcoverage depends onrequestedprojections despite same64bytesize. Source-only, no hugeparameters executed.",
+    "Waveletfull reducesnativepoweroftwoimage to8x8LL with boxresize; unlike some ImageHashrecipes,noexplicitDCremoval inspected. Compatibility claim remains unverified.",
+    "Haarhelper assumes evenpositive lengths; public callsites usepoweroftwo sizes. Oddhelperinput nottested and notcounted as publicreachable defect.",
+    "Waveletfast16x16 andfullnativescale sharemedianpacking butdifferentrecipe;mode must be reflected incacheidentity.",
+    "No production changes or speedup claim. NativepHash.org/ASAN remains deferred."
+  ],
+  "remaining": [
+    "Image filter/resize code,remaining upstreamtests,docs/buildtext andnotices.",
+    "Nine testdata images/binarycorruptfixture require inspection.",
+    "Vendoredheaders and codecgitlinks remain unaudited; nofullreviewcountincrease."
+  ]
+}
