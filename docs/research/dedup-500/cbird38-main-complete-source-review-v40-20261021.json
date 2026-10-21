@@ -1,0 +1,36 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/main.cpp": {
+      "sha256": "0aa809c1a6637087e395d76228c9d2866d0ae938c25604132390f6ff4b6b63e5",
+      "git_blob": "8fbfd00d5196870449584a7eb1767e936513d7bc",
+      "bytes": 63646,
+      "lines": 1839,
+      "method": "Whole source cumulative: this step1-759 and941-1839, previous v21 range760-940."
+    }
+  },
+  "cumulative_assessed_blobs": 118,
+  "tracked_blobs": 616,
+  "findings": [
+    "sort-similar builds path-keyed map, starts at first item and attempts neighbor search, then replaces selection with sorted without appending remaining unsorted. Warns notFound query count, not exact omitted file count. Sort tests previously read do not cover this command. No CLI run.",
+    "similar-to unindexed video grabs nine positions10..90percent using fast seek, then queries those images independently. This does not prove continuous clip containment, full-frame count, audio equivalence or target-frame accuracy.",
+    "Saved global/local arguments automatically inserted unless disabled. readArgsFile returns one trimmed line per argument, not shell token parser; missing file silently empty. Program behavior requires effective args plus saved settings, not visible command text alone.",
+    "Default jpegFixPath is ~/bin/jpegfix.sh and verify passes it to repair-capable Commands::verify. Thus earlier optional repair is default-configured here, though invocation still requires recorded truncated JPEG errors. No repair or command executed.",
+    "nuke removes DB records before archive prompt and trash operation; declining archive trash can leave index entries removed while files remain. Trash failure exits after DB removal. This is source inspection, no deletion performed.",
+    "nuke-dups-in uses raw startsWith directory prefix without separator boundary, then normalized-MD5 groups; neither path scope nor byte identity should be assumed stronger than those operations. No file selection/deletion trial.",
+    "-with plus -or-with sequence explicitly collects OR alternatives into one filter call; separate -with calls apply successively. This resolves v37 union semantics as intended OR grouping, while mixed logical expression bug remains separate.",
+    "-similar-in and -slice mutate persistent params.set/inSet; later commands inherit state. -select-all appends rather than replaces. Order and duplicates in selection matter for later commands.",
+    "-rename consumes next argument as options if any, even if next switch; -compare-videos similarly may consume next switch as second path. Early saved-args insertion indexes following value without full missing-argument guard. Static parser concerns only.",
+    "No-index lazy Engine exits0 after explaining missing index; no actual operation performed. Process success alone insufficient completeness evidence. GUI headless functions may abort; -no-delete only passed widget option, not a global ban on later CLI mutations.",
+    "Merge uses sequential algorithm thresholds and inserts only matched setB entries; unmatched entries warn and are omitted from selection. Similarity-based order does not preserve all input files by contract here.",
+    "-test-image-loader dereferences selection.front then computes average after dropping first, without empty/singleton guards. Diagnostic timings not qualified; source only."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "118/616 assessed:117 whole text/source and one PNG visual. qtutil.cpp remains partial.",
+    "29 prior original-body/header controls and one independent counterexample unchanged; local visual10 tests separate.",
+    "No native CLI, saved-config execution, file mutation, production port or performance measurement. Deferred native pHash/ASAN skipped."
+  ]
+}
