@@ -1,0 +1,50 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 66,
+  "files": {
+    "docs/_build/html/_modules/deduplicate_lib/core/duplicate_detection_algorithm.html": {
+      "bytes": 63425,
+      "sha256": "f486b4d3020da6137bb8e239e88adc4848063f2c5f1d34d9ae2fe339bedff949",
+      "git_blob": "68e437054a360b8b8c1a62c47e47e9e4bf560c68",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/duplicate_detection_algorithms/distance_matrix.html": {
+      "bytes": 25969,
+      "sha256": "d1142a272e16078d7959db81a3f124832ba8cbc1c2b9d5638149931c7e7cc1aa",
+      "git_blob": "bb61d48b0aebf503b217778ebdf165f5812bc529",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/duplicate_detection_algorithms/multi_hashing.html": {
+      "bytes": 61710,
+      "sha256": "69fd2acfc2a2ac8ef630815e166dddf860356e6c6f0880e1ec350ff153d43fb2",
+      "git_blob": "769d38fb8558b7a0c7e2932f92df72f0f3c51fc7",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/tolerance_calculators/natural_tolerance_plateau_probe.html": {
+      "bytes": 45860,
+      "sha256": "0b0525bbfd0c2c5afaadaae7e94313f027dd4d0957730b5b5a9fcf21bd50cdfb",
+      "git_blob": "f8ac15b8ed6e3b042a4fae848033d51beecdcb3a",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/tolerance_calculators/perturbed_dataset_reclustering.html": {
+      "bytes": 27069,
+      "sha256": "02506579d56f92ceb7a255f1935a24f4a64ca1388c7facf3ed1922bdda1c8eeb",
+      "git_blob": "bae4433c57076642aaf79bc2985fa795e2a7b8f9",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Four generated module code payloads match current source except inserted blank lines after removing Sphinx [docs] backlinks: base DDA,DistanceMatrix,MultiHashing,PerturbedDatasetReclustering.",
+    "Generated NaturalTolerancePlateauProbe source is stale: calculate_tolerance lacks condition argument and minimum/maximum branches; returns midpoint of longest only. Full difference inspected against current source.",
+    "All wrapper prose inspected; common Sphinx/Furo navigation, light/dark controls and0.1.0 document version; external links only Sphinx/Furo attribution. Link inventories35..38 per page. No browser-rendered appearance qualification."
+  ],
+  "remaining_scope": "36 generated HTML/JS/CSS/maps/images/inventory and binary doctree artifacts remain.",
+  "limits": [
+    "Source equivalence is not runtime or UI proof. Full original suite100passed documented separately; global full repo count201/500 unchanged. No production changes; pHash/ASAN deferred."
+  ]
+}
