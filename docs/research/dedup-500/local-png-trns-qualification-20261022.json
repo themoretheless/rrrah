@@ -1,0 +1,26 @@
+{
+  "scope": "Own selected-frame PNG tRNS palette and grayscale/RGB color keys versus explicit RGBA.",
+  "test": "crates/rrrah-dedup/tests/png_alpha_channels.rs",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_alpha_channels",
+  "result": {
+    "exit_code": 0,
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "new_checks": [
+    "2-bit palette indices 0/1/2 with duplicate white entries and tRNS [0,128]; absent final alpha defaults to255; matches explicit RGBA.",
+    "Grayscale and RGB white transparency keys match explicit RGBA with two transparent white pixels and one opaque black pixel.",
+    "Dimensions, direct alpha and visible color assertions independent of equality implementation. Same selected frame and selected-frame digest equal for each equivalent encoding.",
+    "Budget returns to zero after each fixture group."
+  ],
+  "production_changes": false,
+  "source_sha256": {
+    "crates/rrrah-decode/src/raster.rs": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7"
+  },
+  "limits": [
+    "Current dirty worktree qualification, not clean HEAD.",
+    "Small synthetic noninterlaced 8-bit colors/2-bit indices only; no ICC/HDR/animation or all PNG modes.",
+    "No performance or all-cases claim. Full repository review remains247/500."
+  ]
+}
