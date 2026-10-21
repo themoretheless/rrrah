@@ -1,0 +1,620 @@
+# pydisasm version 6.3.0
+# CPython Python bytecode 3.5.2 (3351)
+#   Disassembled from CPython Python 3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]
+# Timestamp in code: 1538272692 (2018-09-30 05:58:12)
+# Source code size mod 2**32: 2631 bytes
+# Method Name:       <module>
+# Filename:          /home/labuser/4Hash/frameExtract.py
+# Argument count:    0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        3
+# Flags:             0x00000040 (NOFREE)
+# First Line:        2
+# Constants:
+#    0: 0
+#    1: None
+#    2: <Code3 code object frames at 0x1066e01a0, file /home/labuser/4Hash/frameExtract.py>, line 10
+#    3: 'frames'
+# Names:
+#    0: time
+#    1: cv2
+#    2: threading
+#    3: imutils
+#    4: json
+#    5: frames
+
+  2:           0 LOAD_CONST           (0)
+               3 LOAD_CONST           (None)
+               6 IMPORT_NAME          (time)
+               9 STORE_NAME           (time)
+
+  3:          12 LOAD_CONST           (0)
+              15 LOAD_CONST           (None)
+              18 IMPORT_NAME          (cv2)
+              21 STORE_NAME           (cv2)
+
+  4:          24 LOAD_CONST           (0)
+              27 LOAD_CONST           (None)
+              30 IMPORT_NAME          (threading)
+              33 STORE_NAME           (threading)
+
+  5:          36 LOAD_CONST           (0)
+              39 LOAD_CONST           (None)
+              42 IMPORT_NAME          (imutils)
+              45 STORE_NAME           (imutils)
+
+  6:          48 LOAD_CONST           (0)
+              51 LOAD_CONST           (None)
+              54 IMPORT_NAME          (json)
+              57 STORE_NAME           (json)
+
+ 10:          60 LOAD_BUILD_CLASS
+              61 LOAD_CONST           (<Code3 code object frames at 0x1066e01a0, file /home/labuser/4Hash/frameExtract.py>, line 10)
+              64 LOAD_CONST           ("frames")
+              67 MAKE_FUNCTION        (No arguments)
+              70 LOAD_CONST           ("frames")
+              73 CALL_FUNCTION        (2 positional, 0 named)
+              76 STORE_NAME           (frames)
+              79 LOAD_CONST           (None)
+              82 RETURN_VALUE
+
+
+# Method Name:       frames
+# Filename:          /home/labuser/4Hash/frameExtract.py
+# Argument count:    0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        10
+# Constants:
+#    0: 'frames'
+#    1: <Code3 code object __init__ at 0x1066c3b60, file /home/labuser/4Hash/frameExtract.py>, line 12
+#    2: 'frames.__init__'
+#    3: <Code3 code object saveImages at 0x1066c3cb0, file /home/labuser/4Hash/frameExtract.py>, line 22
+#    4: 'frames.saveImages'
+#    5: <Code3 code object info at 0x1066c3d10, file /home/labuser/4Hash/frameExtract.py>, line 27
+#    6: 'frames.info'
+#    7: <Code3 code object extract at 0x106265310, file /home/labuser/4Hash/frameExtract.py>, line 44
+#    8: 'frames.extract'
+#    9: None
+# Names:
+#    0: __name__
+#    1: __module__
+#    2: __qualname__
+#    3: __init__
+#    4: saveImages
+#    5: info
+#    6: extract
+
+ 10:           0 LOAD_NAME            (__name__)
+               3 STORE_NAME           (__module__)
+               6 LOAD_CONST           ("frames")
+               9 STORE_NAME           (__qualname__)
+
+ 12:          12 LOAD_CONST           (<Code3 code object __init__ at 0x1066c3b60, file /home/labuser/4Hash/frameExtract.py>, line 12)
+              15 LOAD_CONST           ("frames.__init__")
+              18 MAKE_FUNCTION        (No arguments)
+              21 STORE_NAME           (__init__)
+
+ 22:          24 LOAD_CONST           (<Code3 code object saveImages at 0x1066c3cb0, file /home/labuser/4Hash/frameExtract.py>, line 22)
+              27 LOAD_CONST           ("frames.saveImages")
+              30 MAKE_FUNCTION        (No arguments)
+              33 STORE_NAME           (saveImages)
+
+ 27:          36 LOAD_CONST           (<Code3 code object info at 0x1066c3d10, file /home/labuser/4Hash/frameExtract.py>, line 27)
+              39 LOAD_CONST           ("frames.info")
+              42 MAKE_FUNCTION        (No arguments)
+              45 STORE_NAME           (info)
+
+ 44:          48 LOAD_CONST           (<Code3 code object extract at 0x106265310, file /home/labuser/4Hash/frameExtract.py>, line 44)
+              51 LOAD_CONST           ("frames.extract")
+              54 MAKE_FUNCTION        (No arguments)
+              57 STORE_NAME           (extract)
+              60 LOAD_CONST           (None)
+              63 RETURN_VALUE
+
+
+# Method Name:       __init__
+# Filename:          /home/labuser/4Hash/frameExtract.py
+# Argument count:    3
+# Keyword-only arguments: 0
+# Number of locals:  3
+# Stack size:        4
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        12
+# Constants:
+#    0: None
+#    1: 1
+#    2: 2
+#    3: '/'
+# Names:
+#    0: location
+#    1: cv2
+#    2: VideoCapture
+#    3: cap
+#    4: int
+#    5: get
+#    6: CAP_PROP_FRAME_COUNT
+#    7: video_length
+#    8: round
+#    9: CAP_PROP_FPS
+#   10: video_fps
+#   11: video_time
+#   12: str
+#   13: CAP_PROP_FRAME_WIDTH
+#   14: CAP_PROP_FRAME_HEIGHT
+#   15: video_resolution
+#   16: metadata
+# Varnames:
+#	self, location, video
+# Positional arguments:
+#	self, location, video
+
+ 13:           0 LOAD_FAST            (location)
+               3 LOAD_FAST            (self)
+               6 STORE_ATTR           (location)
+
+ 14:           9 LOAD_GLOBAL          (cv2)
+              12 LOAD_ATTR            (VideoCapture)
+              15 LOAD_FAST            (video)
+              18 CALL_FUNCTION        (1 positional, 0 named)
+              21 LOAD_FAST            (self)
+              24 STORE_ATTR           (cap)
+
+ 15:          27 LOAD_GLOBAL          (int)
+              30 LOAD_FAST            (self)
+              33 LOAD_ATTR            (cap)
+              36 LOAD_ATTR            (get)
+              39 LOAD_GLOBAL          (cv2)
+              42 LOAD_ATTR            (CAP_PROP_FRAME_COUNT)
+              45 CALL_FUNCTION        (1 positional, 0 named)
+              48 CALL_FUNCTION        (1 positional, 0 named)
+              51 LOAD_CONST           (1)
+              54 BINARY_SUBTRACT
+              55 LOAD_FAST            (self)
+              58 STORE_ATTR           (video_length)
+
+ 16:          61 LOAD_GLOBAL          (round)
+              64 LOAD_FAST            (self)
+              67 LOAD_ATTR            (cap)
+              70 LOAD_ATTR            (get)
+              73 LOAD_GLOBAL          (cv2)
+              76 LOAD_ATTR            (CAP_PROP_FPS)
+              79 CALL_FUNCTION        (1 positional, 0 named)
+              82 LOAD_CONST           (2)
+              85 CALL_FUNCTION        (2 positional, 0 named)
+              88 LOAD_FAST            (self)
+              91 STORE_ATTR           (video_fps)
+
+ 17:          94 LOAD_GLOBAL          (round)
+              97 LOAD_FAST            (self)
+             100 LOAD_ATTR            (video_length)
+             103 LOAD_FAST            (self)
+             106 LOAD_ATTR            (video_fps)
+             109 BINARY_TRUE_DIVIDE
+             110 LOAD_CONST           (2)
+             113 CALL_FUNCTION        (2 positional, 0 named)
+             116 LOAD_FAST            (self)
+             119 STORE_ATTR           (video_time)
+
+ 18:         122 LOAD_GLOBAL          (str)
+             125 LOAD_FAST            (self)
+             128 LOAD_ATTR            (cap)
+             131 LOAD_ATTR            (get)
+             134 LOAD_GLOBAL          (cv2)
+             137 LOAD_ATTR            (CAP_PROP_FRAME_WIDTH)
+             140 CALL_FUNCTION        (1 positional, 0 named)
+             143 CALL_FUNCTION        (1 positional, 0 named)
+             146 LOAD_CONST           ("/")
+             149 BINARY_ADD
+             150 LOAD_GLOBAL          (str)
+             153 LOAD_FAST            (self)
+             156 LOAD_ATTR            (cap)
+             159 LOAD_ATTR            (get)
+             162 LOAD_GLOBAL          (cv2)
+             165 LOAD_ATTR            (CAP_PROP_FRAME_HEIGHT)
+             168 CALL_FUNCTION        (1 positional, 0 named)
+             171 CALL_FUNCTION        (1 positional, 0 named)
+             174 BINARY_ADD
+             175 LOAD_FAST            (self)
+             178 STORE_ATTR           (video_resolution)
+
+ 19:         181 BUILD_MAP            0
+             184 LOAD_FAST            (self)
+             187 STORE_ATTR           (metadata)
+             190 LOAD_CONST           (None)
+             193 RETURN_VALUE
+
+
+# Method Name:       saveImages
+# Filename:          /home/labuser/4Hash/frameExtract.py
+# Argument count:    3
+# Keyword-only arguments: 0
+# Number of locals:  4
+# Stack size:        6
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        22
+# Constants:
+#    0: None
+#    1: 'target'
+#    2: 'args'
+# Names:
+#    0: threading
+#    1: Thread
+#    2: cv2
+#    3: imwrite
+#    4: start
+# Varnames:
+#	self, imagename, frame, t
+# Positional arguments:
+#	self, imagename, frame
+# Local variables:
+#    3: t
+
+ 23:           0 LOAD_GLOBAL          (threading)
+               3 LOAD_ATTR            (Thread)
+               6 LOAD_CONST           ("target")
+               9 LOAD_GLOBAL          (cv2)
+              12 LOAD_ATTR            (imwrite)
+              15 LOAD_CONST           ("args")
+              18 LOAD_FAST            (imagename)
+              21 LOAD_FAST            (frame)
+              24 BUILD_TUPLE          2
+              27 CALL_FUNCTION        (0 positional, 2 named)
+              30 STORE_FAST           (t)
+
+ 24:          33 LOAD_FAST            (t)
+              36 LOAD_ATTR            (start)
+              39 CALL_FUNCTION        (0 positional, 0 named)
+              42 POP_TOP
+              43 LOAD_CONST           (None)
+              46 RETURN_VALUE
+
+
+# Method Name:       info
+# Filename:          /home/labuser/4Hash/frameExtract.py
+# Argument count:    1
+# Keyword-only arguments: 0
+# Number of locals:  1
+# Stack size:        11
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        27
+# Constants:
+#    0: None
+#    1: '[INFO]'
+#    2: ' - Video Reprodution time: %s seconds'
+#    3: ' - Frame Rate: %s/fps'
+#    4: ' - Number of frames: %s'
+#    5: ' - Video Resoltion: %s'
+#    6: 'video'
+#    7: 'frames'
+#    8: 'video_name'
+#    9: 'video_length'
+#   10: 'video_fps'
+#   11: 'video_time'
+#   12: 'video_resolution'
+# Names:
+#    0: print
+#    1: video_time
+#    2: video_fps
+#    3: video_length
+#    4: video_resolution
+#    5: metadata
+#    6: append
+# Varnames:
+#	self
+# Positional arguments:
+#	self
+
+ 28:           0 LOAD_GLOBAL          (print)
+               3 LOAD_CONST           ("[INFO]")
+               6 CALL_FUNCTION        (1 positional, 0 named)
+               9 POP_TOP
+
+ 29:          10 LOAD_GLOBAL          (print)
+              13 LOAD_CONST           (" - Video Reprodution time: %s seconds")
+              16 CALL_FUNCTION        (1 positional, 0 named)
+              19 LOAD_FAST            (self)
+              22 LOAD_ATTR            (video_time)
+              25 BINARY_MODULO
+              26 POP_TOP
+
+ 30:          27 LOAD_GLOBAL          (print)
+              30 LOAD_CONST           (" - Frame Rate: %s/fps")
+              33 CALL_FUNCTION        (1 positional, 0 named)
+              36 LOAD_FAST            (self)
+              39 LOAD_ATTR            (video_fps)
+              42 BINARY_MODULO
+              43 POP_TOP
+
+ 31:          44 LOAD_GLOBAL          (print)
+              47 LOAD_CONST           (" - Number of frames: %s")
+              50 CALL_FUNCTION        (1 positional, 0 named)
+              53 LOAD_FAST            (self)
+              56 LOAD_ATTR            (video_length)
+              59 BINARY_MODULO
+              60 POP_TOP
+
+ 32:          61 LOAD_GLOBAL          (print)
+              64 LOAD_CONST           (" - Video Resoltion: %s")
+              67 CALL_FUNCTION        (1 positional, 0 named)
+              70 LOAD_FAST            (self)
+              73 LOAD_ATTR            (video_resolution)
+              76 BINARY_MODULO
+              77 POP_TOP
+
+ 33:          78 BUILD_LIST           0
+              81 LOAD_FAST            (self)
+              84 LOAD_ATTR            (metadata)
+              87 LOAD_CONST           ("video")
+              90 STORE_SUBSCR
+
+ 34:          91 BUILD_LIST           0
+              94 LOAD_FAST            (self)
+              97 LOAD_ATTR            (metadata)
+             100 LOAD_CONST           ("frames")
+             103 STORE_SUBSCR
+
+ 35:         104 LOAD_FAST            (self)
+             107 LOAD_ATTR            (metadata)
+             110 LOAD_CONST           ("video")
+             113 BINARY_SUBSCR
+             114 LOAD_ATTR            (append)
+
+ 36:         117 LOAD_CONST           ("video_name")
+             120 LOAD_CONST           ("video")
+
+ 37:         123 LOAD_CONST           ("video_length")
+             126 LOAD_FAST            (self)
+             129 LOAD_ATTR            (video_length)
+
+ 38:         132 LOAD_CONST           ("video_fps")
+             135 LOAD_FAST            (self)
+             138 LOAD_ATTR            (video_fps)
+
+ 39:         141 LOAD_CONST           ("video_time")
+             144 LOAD_FAST            (self)
+             147 LOAD_ATTR            (video_time)
+
+ 40:         150 LOAD_CONST           ("video_resolution")
+             153 LOAD_FAST            (self)
+             156 LOAD_ATTR            (video_resolution)
+             159 BUILD_MAP            5
+             162 CALL_FUNCTION        (1 positional, 0 named)
+             165 POP_TOP
+             166 LOAD_CONST           (None)
+             169 RETURN_VALUE
+
+
+# Method Name:       extract
+# Filename:          /home/labuser/4Hash/frameExtract.py
+# Argument count:    1
+# Keyword-only arguments: 0
+# Number of locals:  11
+# Stack size:        10
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        44
+# Constants:
+#    0: None
+#    1: 0
+#    2: '[INFO] Collecting metadata..'
+#    3: '[INFO] Extracting frames..\n'
+#    4: 1000
+#    5: 2
+#    6: '/%#05d_%s.jpg'
+#    7: 1
+#    8: 'width'
+#    9: 640
+#   10: 'frames'
+#   11: 'framename'
+#   12: 'frametime'
+#   13: '[INFO] Done extracting frames'
+#   14: '[INFO] It took %d seconds forconversion.'
+#   15: 'metadata.json'
+#   16: 'w'
+# Names:
+#    0: time
+#    1: print
+#    2: cap
+#    3: isOpened
+#    4: read
+#    5: round
+#    6: get
+#    7: cv2
+#    8: CAP_PROP_POS_MSEC
+#    9: location
+#   10: imutils
+#   11: resize
+#   12: metadata
+#   13: append
+#   14: saveImages
+#   15: int
+#   16: CAP_PROP_FRAME_COUNT
+#   17: release
+#   18: open
+#   19: json
+#   20: dump
+#   21: close
+# Varnames:
+#	self, time_start, count, ret, frame, frame_time, frame_name, frame_small, video_length, time_end, f
+# Positional arguments:
+#	self
+# Local variables:
+#    1: time_start
+#    2: count
+#    3: ret
+#    4: frame
+#    5: frame_time
+#    6: frame_name
+#    7: frame_small
+#    8: video_length
+#    9: time_end
+#   10: f
+
+ 46:           0 LOAD_GLOBAL          (time)
+               3 LOAD_ATTR            (time)
+               6 CALL_FUNCTION        (0 positional, 0 named)
+               9 STORE_FAST           (time_start)
+
+ 47:          12 LOAD_CONST           (0)
+              15 STORE_FAST           (count)
+
+ 49:          18 LOAD_GLOBAL          (print)
+              21 LOAD_CONST           ("[INFO] Collecting metadata..")
+              24 CALL_FUNCTION        (1 positional, 0 named)
+              27 POP_TOP
+
+ 50:          28 LOAD_GLOBAL          (print)
+              31 LOAD_CONST           ("[INFO] Extracting frames..\n")
+              34 CALL_FUNCTION        (1 positional, 0 named)
+              37 POP_TOP
+
+ 51:          38 SETUP_LOOP           (to 322)
+         >>   41 LOAD_FAST            (self)
+              44 LOAD_ATTR            (cap)
+              47 LOAD_ATTR            (isOpened)
+              50 CALL_FUNCTION        (0 positional, 0 named)
+              53 POP_JUMP_IF_FALSE    (to 321)
+
+ 52:          56 LOAD_FAST            (self)
+              59 LOAD_ATTR            (cap)
+              62 LOAD_ATTR            (read)
+         >>   65 CALL_FUNCTION        (0 positional, 0 named)
+              68 UNPACK_SEQUENCE      2
+              71 STORE_FAST           (ret)
+              74 STORE_FAST           (frame)
+
+ 53:          77 LOAD_GLOBAL          (round)
+              80 LOAD_FAST            (self)
+              83 LOAD_ATTR            (cap)
+              86 LOAD_ATTR            (get)
+              89 LOAD_GLOBAL          (cv2)
+              92 LOAD_ATTR            (CAP_PROP_POS_MSEC)
+              95 CALL_FUNCTION        (1 positional, 0 named)
+              98 LOAD_CONST           (1000)
+             101 BINARY_TRUE_DIVIDE
+             102 LOAD_CONST           (2)
+             105 CALL_FUNCTION        (2 positional, 0 named)
+             108 STORE_FAST           (frame_time)
+
+ 54:         111 LOAD_FAST            (self)
+             114 LOAD_ATTR            (location)
+             117 LOAD_CONST           ("/%#05d_%s.jpg")
+             120 LOAD_FAST            (count)
+             123 LOAD_CONST           (1)
+             126 BINARY_ADD
+             127 LOAD_FAST            (frame_time)
+             130 BUILD_TUPLE          2
+             133 BINARY_MODULO
+             134 BINARY_ADD
+             135 STORE_FAST           (frame_name)
+
+ 55:         138 LOAD_GLOBAL          (imutils)
+             141 LOAD_ATTR            (resize)
+             144 LOAD_FAST            (frame)
+             147 LOAD_CONST           ("width")
+             150 LOAD_CONST           (640)
+             153 CALL_FUNCTION        (1 positional, 1 named)
+             156 STORE_FAST           (frame_small)
+
+ 57:         159 LOAD_FAST            (self)
+             162 LOAD_ATTR            (metadata)
+             165 LOAD_CONST           ("frames")
+             168 BINARY_SUBSCR
+             169 LOAD_ATTR            (append)
+             172 LOAD_CONST           ("framename")
+             175 LOAD_FAST            (frame_name)
+             178 LOAD_CONST           ("frametime")
+             181 LOAD_FAST            (frame_time)
+             184 BUILD_MAP            2
+             187 CALL_FUNCTION        (1 positional, 0 named)
+             190 POP_TOP
+
+ 58:         191 LOAD_FAST            (self)
+             194 LOAD_ATTR            (saveImages)
+             197 LOAD_FAST            (frame_name)
+             200 LOAD_FAST            (frame_small)
+             203 CALL_FUNCTION        (2 positional, 0 named)
+             206 POP_TOP
+
+ 59:         207 LOAD_FAST            (count)
+             210 LOAD_CONST           (1)
+             213 BINARY_ADD
+             214 STORE_FAST           (count)
+
+ 61:         217 LOAD_GLOBAL          (int)
+             220 LOAD_FAST            (self)
+             223 LOAD_ATTR            (cap)
+             226 LOAD_ATTR            (get)
+             229 LOAD_GLOBAL          (cv2)
+             232 LOAD_ATTR            (CAP_PROP_FRAME_COUNT)
+             235 CALL_FUNCTION        (1 positional, 0 named)
+             238 CALL_FUNCTION        (1 positional, 0 named)
+             241 LOAD_CONST           (1)
+             244 BINARY_SUBTRACT
+             245 STORE_FAST           (video_length)
+
+ 62:         248 LOAD_FAST            (count)
+             251 LOAD_FAST            (video_length)
+             254 LOAD_CONST           (1)
+             257 BINARY_SUBTRACT
+             258 COMPARE_OP           (>)
+             261 POP_JUMP_IF_FALSE    (to 41)
+
+ 64:         264 LOAD_GLOBAL          (time)
+             267 LOAD_ATTR            (time)
+             270 CALL_FUNCTION        (0 positional, 0 named)
+             273 STORE_FAST           (time_end)
+
+ 66:         276 LOAD_FAST            (self)
+             279 LOAD_ATTR            (cap)
+             282 LOAD_ATTR            (release)
+             285 CALL_FUNCTION        (0 positional, 0 named)
+             288 POP_TOP
+
+ 68:         289 LOAD_GLOBAL          (print)
+             292 LOAD_CONST           ("[INFO] Done extracting frames")
+             295 CALL_FUNCTION        (1 positional, 0 named)
+             298 POP_TOP
+
+ 69:         299 LOAD_GLOBAL          (print)
+             302 LOAD_CONST           ("[INFO] It took %d seconds forconversion.")
+             305 LOAD_FAST            (time_end)
+             308 LOAD_FAST            (time_start)
+             311 BINARY_SUBTRACT
+             312 BINARY_MODULO
+             313 CALL_FUNCTION        (1 positional, 0 named)
+             316 POP_TOP
+
+ 70:         317 BREAK_LOOP
+             318 JUMP_ABSOLUTE        (to 41)
+             321 POP_BLOCK
+
+ 71:         322 LOAD_GLOBAL          (open)
+             325 LOAD_CONST           ("metadata.json")
+             328 LOAD_CONST           ("w")
+             331 CALL_FUNCTION        (2 positional, 0 named)
+             334 SETUP_WITH           (to 373)
+             337 STORE_FAST           (f)
+
+ 72:         340 LOAD_GLOBAL          (json)
+             343 LOAD_ATTR            (dump)
+             346 LOAD_FAST            (self)
+             349 LOAD_ATTR            (metadata)
+             352 LOAD_FAST            (f)
+             355 CALL_FUNCTION        (2 positional, 0 named)
+             358 POP_TOP
+
+ 73:         359 LOAD_FAST            (f)
+             362 LOAD_ATTR            (close)
+             365 CALL_FUNCTION        (0 positional, 0 named)
+             368 POP_TOP
+             369 POP_BLOCK
+             370 LOAD_CONST           (None)
+         >>  373 WITH_CLEANUP_START
+             374 WITH_CLEANUP_FINISH
+             375 END_FINALLY
+             376 LOAD_CONST           (None)
+             379 RETURN_VALUE

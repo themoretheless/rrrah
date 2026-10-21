@@ -1,0 +1,270 @@
+# pydisasm version 6.3.0
+# CPython Python bytecode 2.7 (62211)
+#   Disassembled from CPython Python 3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]
+# Timestamp in code: 1547329301 (2019-01-13 01:41:41)
+# Method Name:       <module>
+# Filename:          /home/labuser/4Hash/timing.py
+# Argument count:    0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        3
+# Constants:
+#    0: -1
+#    1: None
+#    2: ('clock',)
+#    3: <Code2 code object secondsToStr at 0x1066e1dc0, file /home/labuser/4Hash/timing.py>, line 6
+#    4: '='
+#    5: 40
+#    6: <Code2 code object log at 0x1066e2030, file /home/labuser/4Hash/timing.py>, line 12
+#    7: <Code2 code object endlog at 0x1066e2240, file /home/labuser/4Hash/timing.py>, line 20
+#    8: <Code2 code object now at 0x1066e2390, file /home/labuser/4Hash/timing.py>, line 25
+#    9: 'Start Program'
+# Names:
+#    0: atexit
+#    1: time
+#    2: clock
+#    3: secondsToStr
+#    4: line
+#    5: None
+#    6: log
+#    7: endlog
+#    8: now
+#    9: start
+#   10: register
+
+  3:           0 LOAD_CONST           (-1)
+               3 LOAD_CONST           (None)
+               6 IMPORT_NAME          (atexit)
+               9 STORE_NAME           (atexit)
+
+  4:          12 LOAD_CONST           (-1)
+              15 LOAD_CONST           (('clock',))
+              18 IMPORT_NAME          (time)
+              21 IMPORT_FROM          (clock)
+              24 STORE_NAME           (clock)
+              27 POP_TOP
+
+  6:          28 LOAD_CONST           (<Code2 code object secondsToStr at 0x1066e1dc0, file /home/labuser/4Hash/timing.py>, line 6)
+              31 MAKE_FUNCTION        (0 default parameters)
+              34 STORE_NAME           (secondsToStr)
+
+ 11:          37 LOAD_CONST           ("=")
+              40 LOAD_CONST           (40)
+              43 BINARY_MULTIPLY
+              44 STORE_NAME           (line)
+
+ 12:          47 LOAD_CONST           (None)
+              50 LOAD_CONST           (<Code2 code object log at 0x1066e2030, file /home/labuser/4Hash/timing.py>, line 12)
+              53 MAKE_FUNCTION        (1 default parameters)
+              56 STORE_NAME           (log)
+
+ 20:          59 LOAD_CONST           (<Code2 code object endlog at 0x1066e2240, file /home/labuser/4Hash/timing.py>, line 20)
+              62 MAKE_FUNCTION        (0 default parameters)
+              65 STORE_NAME           (endlog)
+
+ 25:          68 LOAD_CONST           (<Code2 code object now at 0x1066e2390, file /home/labuser/4Hash/timing.py>, line 25)
+              71 MAKE_FUNCTION        (0 default parameters)
+              74 STORE_NAME           (now)
+
+ 28:          77 LOAD_NAME            (clock)
+              80 CALL_FUNCTION        (0 positional, 0 named)
+              83 STORE_NAME           (start)
+
+ 29:          86 LOAD_NAME            (atexit)
+              89 LOAD_ATTR            (register)
+              92 LOAD_NAME            (endlog)
+              95 CALL_FUNCTION        (1 positional, 0 named)
+              98 POP_TOP
+
+ 30:          99 LOAD_NAME            (log)
+             102 LOAD_CONST           ("Start Program")
+             105 CALL_FUNCTION        (1 positional, 0 named)
+             108 POP_TOP
+             109 LOAD_CONST           (None)
+             112 RETURN_VALUE
+
+
+# Method Name:       secondsToStr
+# Filename:          /home/labuser/4Hash/timing.py
+# Argument count:    1
+# Number of locals:  1
+# Stack size:        7
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        6
+# Constants:
+#    0: None
+#    1: '%d:%02d:%02d.%03d'
+#    2: <Code2 code object <lambda> at 0x1066e1be0, file /home/labuser/4Hash/timing.py>, line 8
+#    3: 1000
+#    4: 60
+# Names:
+#    0: reduce
+# Varnames:
+#	t
+# Positional arguments:
+#	t
+
+  7:           0 LOAD_CONST           ("%d:%02d:%02d.%03d")
+
+  8:           3 LOAD_GLOBAL          (reduce)
+               6 LOAD_CONST           (<Code2 code object <lambda> at 0x1066e1be0, file /home/labuser/4Hash/timing.py>, line 8)
+               9 MAKE_FUNCTION        (0 default parameters)
+
+  9:          12 LOAD_FAST            (t)
+              15 LOAD_CONST           (1000)
+              18 BINARY_MULTIPLY
+              19 BUILD_TUPLE          1
+              22 LOAD_CONST           (1000)
+              25 LOAD_CONST           (60)
+              28 LOAD_CONST           (60)
+              31 BUILD_LIST           4
+              34 CALL_FUNCTION        (2 positional, 0 named)
+              37 BINARY_MODULO
+              38 RETURN_VALUE
+
+
+# Method Name:       log
+# Filename:          /home/labuser/4Hash/timing.py
+# Argument count:    2
+# Number of locals:  2
+# Stack size:        2
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        12
+# Constants:
+#    0: None
+#    1: '-'
+#    2: 'Elapsed time:'
+# Names:
+#    0: line
+#    1: secondsToStr
+#    2: clock
+# Varnames:
+#	s, elapsed
+# Positional arguments:
+#	s, elapsed
+
+ 13:           0 LOAD_GLOBAL          (line)
+               3 PRINT_ITEM
+               4 PRINT_NEWLINE
+
+ 14:           5 LOAD_GLOBAL          (secondsToStr)
+               8 LOAD_GLOBAL          (clock)
+              11 CALL_FUNCTION        (0 positional, 0 named)
+              14 CALL_FUNCTION        (1 positional, 0 named)
+              17 PRINT_ITEM
+              18 LOAD_CONST           ("-")
+              21 PRINT_ITEM
+              22 LOAD_FAST            (s)
+              25 PRINT_ITEM
+              26 PRINT_NEWLINE
+
+ 15:          27 LOAD_FAST            (elapsed)
+              30 POP_JUMP_IF_FALSE    (to 45)
+
+ 16:          33 LOAD_CONST           ("Elapsed time:")
+              36 PRINT_ITEM
+              37 LOAD_FAST            (elapsed)
+              40 PRINT_ITEM
+              41 PRINT_NEWLINE
+              42 JUMP_FORWARD         (to 45)
+
+ 17:     >>   45 LOAD_GLOBAL          (line)
+              48 PRINT_ITEM
+              49 PRINT_NEWLINE
+
+ 18:          50 PRINT_NEWLINE
+              51 LOAD_CONST           (None)
+              54 RETURN_VALUE
+
+
+# Method Name:       endlog
+# Filename:          /home/labuser/4Hash/timing.py
+# Argument count:    0
+# Number of locals:  2
+# Stack size:        4
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        20
+# Constants:
+#    0: None
+#    1: 'End Program'
+# Names:
+#    0: clock
+#    1: start
+#    2: log
+#    3: secondsToStr
+# Varnames:
+#	end, elapsed
+# Local variables:
+#    0: end
+#    1: elapsed
+
+ 21:           0 LOAD_GLOBAL          (clock)
+               3 CALL_FUNCTION        (0 positional, 0 named)
+               6 STORE_FAST           (end)
+
+ 22:           9 LOAD_FAST            (end)
+              12 LOAD_GLOBAL          (start)
+              15 BINARY_SUBTRACT
+              16 STORE_FAST           (elapsed)
+
+ 23:          19 LOAD_GLOBAL          (log)
+              22 LOAD_CONST           ("End Program")
+              25 LOAD_GLOBAL          (secondsToStr)
+              28 LOAD_FAST            (elapsed)
+              31 CALL_FUNCTION        (1 positional, 0 named)
+              34 CALL_FUNCTION        (2 positional, 0 named)
+              37 POP_TOP
+              38 LOAD_CONST           (None)
+              41 RETURN_VALUE
+
+
+# Method Name:       now
+# Filename:          /home/labuser/4Hash/timing.py
+# Argument count:    0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        25
+# Constants:
+#    0: None
+# Names:
+#    0: secondsToStr
+#    1: clock
+
+ 26:           0 LOAD_GLOBAL          (secondsToStr)
+               3 LOAD_GLOBAL          (clock)
+               6 CALL_FUNCTION        (0 positional, 0 named)
+               9 CALL_FUNCTION        (1 positional, 0 named)
+              12 RETURN_VALUE
+
+
+# Method Name:       <lambda>
+# Filename:          /home/labuser/4Hash/timing.py
+# Argument count:    2
+# Number of locals:  2
+# Stack size:        3
+# Flags:             0x00000053 (NOFREE | NESTED | NEWLOCALS | OPTIMIZED)
+# First Line:        8
+# Constants:
+#    0: None
+#    1: 0
+#    2: 1
+# Names:
+#    0: divmod
+# Varnames:
+#	ll, b
+# Positional arguments:
+#	ll, b
+
+  8:           0 LOAD_GLOBAL          (divmod)
+               3 LOAD_FAST            (ll)
+               6 LOAD_CONST           (0)
+               9 BINARY_SUBSCR
+              10 LOAD_FAST            (b)
+              13 CALL_FUNCTION        (2 positional, 0 named)
+              16 LOAD_FAST            (ll)
+              19 LOAD_CONST           (1)
+              22 SLICE+1
+              23 BINARY_ADD
+              24 RETURN_VALUE

@@ -1,0 +1,220 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "TorresAndy/4Hash",
+  "commit": "c1f2b7730b226797e1a0947e3ced5f566bd57cf9",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 26,
+  "files": {
+    "LICENSE": {
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "git_blob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "method": "Full normalized byte equivalence to previously fully read GPLv3 text"
+    },
+    "README": {
+      "bytes": 120,
+      "sha256": "9400c99d52d4ff797a6c37ed999816279120bca3113d3b24b4d846270f69f1c3",
+      "git_blob": "ae6962079290fec21d2f722a26c43db3240ddab3",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "README.md": {
+      "bytes": 345,
+      "sha256": "def27ad022c8ccbdb3d1896cb048c499139bb79d0d13456b885221b8be51cff5",
+      "git_blob": "d6199304690bb0e8d5fc15038c6e3421f76276a6",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "__pycache__/frameExtract.cpython-35.pyc": {
+      "bytes": 2633,
+      "sha256": "5a1dfbc78f65b91c57a86375925d9f405bcfaeed7dcefaf4a66c7f32c5b71149",
+      "git_blob": "2b3890daa5017dcef5f4f17ca9466739dfbf304c",
+      "method": "Whole recursive xdis6.3.0 disassembly read, including all nested methods/constants/opcodes; not executed or proven equivalent to current source",
+      "disassembly": "docs/research/dedup-500/fourhash424-bytecode-review-20261021/frameExtract.cpython-35.pyc.dis.txt",
+      "disassembly_sha256": "edc9956a0a93e36ffa0097f77b924e6d8bb3b7cd9593145d393105a9aad277c3",
+      "lines": 620
+    },
+    "collision.py": {
+      "bytes": 816,
+      "sha256": "9133f76630708f01e0ce77d5b414102a60418d6702f36738823063e904b8a1e0",
+      "git_blob": "f42db9d693a03dd23d0cce2c3a2b8645a099afba",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "compare_database.py": {
+      "bytes": 1639,
+      "sha256": "1f1762241a6b9753248a865e144bf9a3ee4b9e63e980090664bab109d52d8938",
+      "git_blob": "6be37e4dc9736b5db40cd842b191916255ddd8d5",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "compare_linear.py": {
+      "bytes": 3627,
+      "sha256": "a63ec396df20e7aea0c7bcdd684f0036187c2b4070d317386ed865bb394280be",
+      "git_blob": "85538a34ab95c59630032befaec6ba2c4378ff92",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "compare_one.py": {
+      "bytes": 1666,
+      "sha256": "bf11cc8b3da4cadfc4a5079213a42f4279952eff6a72989a568f5301af7f533e",
+      "git_blob": "2bf5927711db79a6ad85d336f786c2cdbb4e0088",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "compare_thread.py": {
+      "bytes": 3860,
+      "sha256": "ec55b280699be740a31cb3afabd6387e04aa1a601e3b9c784fe0bb6cb99ea7d1",
+      "git_blob": "94d85b47ada332be32846ea46fe026472ef011c3",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "database/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "database/additems.py": {
+      "bytes": 2748,
+      "sha256": "61089f3b1840b61c2ee4ca25e958e3dfa017e4cd6130c036ef517b77487048e6",
+      "git_blob": "b17aee70ec862753596d5238601b7c08dd43caf6",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "database/config.yml": {
+      "bytes": 87,
+      "sha256": "25716f0180c3572f832c1e4896277c3960d4a7d0898bbc172b3941fd50fccf1e",
+      "git_blob": "d0b5d2a77391bc4d4541bbb126807479d3f129db",
+      "method": "Entire configuration parsed: mysql mapping and allfour scalar fields inspected structurally; credential values deliberately omitted from report"
+    },
+    "database/dbconnect.py": {
+      "bytes": 792,
+      "sha256": "bcdd8e06178a5c933c7900d816014411e43f96c046b59d7294ffc760f77c625c",
+      "git_blob": "ade64cc35c7a58058099ca3bee6af37845146091",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "database/finditems.py": {
+      "bytes": 5731,
+      "sha256": "75d54707e146ceaa1175ba7bd5802dd5416b9e6cc121340c67d0df55867a16da",
+      "git_blob": "70769e7836e8cd4ce1a109e4ef1454140885ad9a",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "database/tables.py": {
+      "bytes": 2307,
+      "sha256": "d856f9b4aad3c4a09936fc916d8a7650c98ab1c5d8d5dcb29ce6fba4f111cda8",
+      "git_blob": "a55e6e4291c248a4ce87ba51f43f052d3bf0057e",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "frames.py": {
+      "bytes": 2304,
+      "sha256": "0f3456de16f5a58df578b93cd93f1c10678e5c906be326b13461e94b367e613d",
+      "git_blob": "9f6a9e5693fb81e6dd3419fb40057753b10b0f08",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "frames.pyc": {
+      "bytes": 2442,
+      "sha256": "d8614938221232691b18e6df90c0117e13ce2a87083297091c411154e4d18964",
+      "git_blob": "92cae35f4c167615b9398a06bef5beac24dff913",
+      "method": "Whole recursive xdis6.3.0 disassembly read, including all nested methods/constants/opcodes; not executed or proven equivalent to current source",
+      "disassembly": "docs/research/dedup-500/fourhash424-bytecode-review-20261021/frames.pyc.dis.txt",
+      "disassembly_sha256": "1888290631ce5e7c80877e2e7219c02990e537453c4916a968eb8cf765185c55",
+      "lines": 485
+    },
+    "generate.py": {
+      "bytes": 5352,
+      "sha256": "141ff94552c2f1bdf8e5d44ca71bc7ef3ff7457f6042ea211997caf62a1ba519",
+      "git_blob": "f5065054165638e0ae776a73a2365762e0b6b00a",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "hamming.py": {
+      "bytes": 371,
+      "sha256": "701b4c5aaa0df095c053c5b407b553c361d7ed2e7bdfd81a9ba6902eb487703f",
+      "git_blob": "34d4d66124ae4b9d13f2fbcc0073d82fdcad3bd9",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "hamming/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "hamming/hamming.py": {
+      "bytes": 488,
+      "sha256": "7089c3813d5e7a40093fd5c9aa23458a8540f463c3e12114af60bab3577f6907",
+      "git_blob": "58d36f94cc1e28573e53f59afb52661b820d2351",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "perceptive.py": {
+      "bytes": 855,
+      "sha256": "e23fe24e44183aebcb1a17e534e1477823939ba66d68901dbee494bdcca2d8ad",
+      "git_blob": "5e7d9c574a7d07f6a0429891f5e83d52a7c0cc35",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "perceptive.pyc": {
+      "bytes": 1285,
+      "sha256": "dd9aa57a5e822f70ad8bd595c13dc4e72790f94f42d969321ddf8de8701335ea",
+      "git_blob": "33c73a2db8a9de7dda6387d6421e4d82e2994fbf",
+      "method": "Whole recursive xdis6.3.0 disassembly read, including all nested methods/constants/opcodes; not executed or proven equivalent to current source",
+      "disassembly": "docs/research/dedup-500/fourhash424-bytecode-review-20261021/perceptive.pyc.dis.txt",
+      "disassembly_sha256": "49d32dfba7431b22e7cf92a42a3b36f0be0aa3e80ad088d3764b5b833ae70ac0",
+      "lines": 247
+    },
+    "similarity.py": {
+      "bytes": 513,
+      "sha256": "2df3471af09a9aa1e930d3fd6523f411ba777ae4c89b423d2d68cee387c50ffa",
+      "git_blob": "d1b6d81a8934acf3d56212a3ef49832947c94929",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "timing.py": {
+      "bytes": 975,
+      "sha256": "0a0a62c35a3e57b1a0626823a21631ac84142e2e520b4ed5a7e4f7c192a66ffd",
+      "git_blob": "7c326e127a6ec4044233bbacd0961048816cb535",
+      "method": "Whole pinned text/source read across v1-v4, or verified empty initializer"
+    },
+    "timing.pyc": {
+      "bytes": 1289,
+      "sha256": "4a916ad532b300fe123c05699e1ddedd94d2045d098c9ad155fcffbae5f72226",
+      "git_blob": "4abac3a538bb0aa675b18ca5e13076f7ee4099b8",
+      "method": "Whole recursive xdis6.3.0 disassembly read, including all nested methods/constants/opcodes; not executed or proven equivalent to current source",
+      "disassembly": "docs/research/dedup-500/fourhash424-bytecode-review-20261021/timing.pyc.dis.txt",
+      "disassembly_sha256": "4a6347b142e94e9ca1735263f2c5212c2ba546594f01642ddc6e9a73f78f5c16",
+      "lines": 270
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/fourhash424-source-review-v1-20261021.json",
+    "docs/research/dedup-500/fourhash424-source-review-v2-20261021.json",
+    "docs/research/dedup-500/fourhash424-source-review-v3-20261021.json",
+    "docs/research/dedup-500/fourhash424-source-review-v4-20261021.json"
+  ],
+  "bytecode_review": {
+    "tool": "xdis6.3.0 installed into task-local ignored dependency directory; click8.5.0,six1.17.0",
+    "execution_runtime": "Bundled Python3.12.14 disassembler host; historic bytecode never executed",
+    "python27": [
+      "frames.pyc",
+      "perceptive.pyc",
+      "timing.pyc"
+    ],
+    "python35": [
+      "__pycache__/frameExtract.cpython-35.pyc"
+    ],
+    "findings": [
+      "frames.pyc imports time and logs additional walltime; currentframes.py imports timing. Do not claim identical source correspondence.",
+      "frameExtract3.5artifact has separate metadata dictionary, frame entries and metadata.json output, no tracked matching frameExtract.py source.",
+      "Both extraction artifacts have framecountminus1and count>lengthminus1 stop logic and ignore readretflag, consistent with source-level lastframe omission.",
+      "Perceptive2.7artifact wrapsPIL/imagehashfourmethods;timing2.7containsclock/reduce/print/atexit. Full dependency implementations not bundled or audited."
+    ]
+  },
+  "controls": {
+    "targeted_original_source_controls_passed": 14,
+    "local_sequence_tests_passed": 8,
+    "whole_video_database_pipeline_executed": false
+  },
+  "conclusions": [
+    "Malformed width mismatch returnsFalseand passes<=13, valid64distancepositivecontrolpassed.",
+    "Frame omission,uncheckedreadstatus,filenamecase/nonimagefailures reproduced with original AST and adapters.",
+    "Threadcomparison duplicatesallnonemptyCartesianpairs, noemptyinputprogress;emptyquerycontracts fail.",
+    "Path-derivedvideoidentifierand frame-write handshake/temporal alignment absent;seeincremental evidence."
+  ],
+  "license": "Root GPLv3 fully assessed; disassembly research folder includes license. No production code adopted.",
+  "limits": [
+    "Full source and compiled-artifact review is not originalPython2/3.5execution or bitwise source-rebuild correspondence.",
+    "No actual video decoder, database, full dependency/runtime/corpus/quality/performance qualification.",
+    "Native pHash/ASAN remains deferred; all500reviews/allcasesobjective incomplete."
+  ]
+}

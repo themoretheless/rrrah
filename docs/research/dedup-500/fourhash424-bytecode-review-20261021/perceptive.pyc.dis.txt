@@ -1,0 +1,247 @@
+# pydisasm version 6.3.0
+# CPython Python bytecode 2.7 (62211)
+#   Disassembled from CPython Python 3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]
+# Timestamp in code: 1547329301 (2019-01-13 01:41:41)
+# Method Name:       <module>
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    0
+# Number of locals:  0
+# Stack size:        3
+# Flags:             0x00000040 (NOFREE)
+# First Line:        3
+# Constants:
+#    0: -1
+#    1: ('Image',)
+#    2: None
+#    3: 'hash'
+#    4: <Code2 code object hash at 0x1066e18b0, file /home/labuser/4Hash/perceptive.py>, line 6
+#    5: ()
+# Names:
+#    0: PIL
+#    1: Image
+#    2: imagehash
+#    3: hash
+
+  3:           0 LOAD_CONST           (-1)
+               3 LOAD_CONST           (('Image',))
+               6 IMPORT_NAME          (PIL)
+               9 IMPORT_FROM          (Image)
+              12 STORE_NAME           (Image)
+              15 POP_TOP
+
+  4:          16 LOAD_CONST           (-1)
+              19 LOAD_CONST           (None)
+              22 IMPORT_NAME          (imagehash)
+              25 STORE_NAME           (imagehash)
+
+  6:          28 LOAD_CONST           ("hash")
+              31 LOAD_CONST           (())
+              34 LOAD_CONST           (<Code2 code object hash at 0x1066e18b0, file /home/labuser/4Hash/perceptive.py>, line 6)
+              37 MAKE_FUNCTION        (0 default parameters)
+              40 CALL_FUNCTION        (0 positional, 0 named)
+              43 BUILD_CLASS
+              44 STORE_NAME           (hash)
+              47 LOAD_CONST           (None)
+              50 RETURN_VALUE
+
+
+# Method Name:       hash
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    0
+# Number of locals:  0
+# Stack size:        1
+# Flags:             0x00000042 (NOFREE | NEWLOCALS)
+# First Line:        6
+# Constants:
+#    0: <Code2 code object __init__ at 0x1066e0e90, file /home/labuser/4Hash/perceptive.py>, line 7
+#    1: <Code2 code object ahash at 0x1066e1250, file /home/labuser/4Hash/perceptive.py>, line 10
+#    2: <Code2 code object dhash at 0x1066e1460, file /home/labuser/4Hash/perceptive.py>, line 14
+#    3: <Code2 code object phash at 0x1066e1610, file /home/labuser/4Hash/perceptive.py>, line 18
+#    4: <Code2 code object whash at 0x1066e16d0, file /home/labuser/4Hash/perceptive.py>, line 22
+# Names:
+#    0: __name__
+#    1: __module__
+#    2: __init__
+#    3: ahash
+#    4: dhash
+#    5: phash
+#    6: whash
+
+  6:           0 LOAD_NAME            (__name__)
+               3 STORE_NAME           (__module__)
+
+  7:           6 LOAD_CONST           (<Code2 code object __init__ at 0x1066e0e90, file /home/labuser/4Hash/perceptive.py>, line 7)
+               9 MAKE_FUNCTION        (0 default parameters)
+              12 STORE_NAME           (__init__)
+
+ 10:          15 LOAD_CONST           (<Code2 code object ahash at 0x1066e1250, file /home/labuser/4Hash/perceptive.py>, line 10)
+              18 MAKE_FUNCTION        (0 default parameters)
+              21 STORE_NAME           (ahash)
+
+ 14:          24 LOAD_CONST           (<Code2 code object dhash at 0x1066e1460, file /home/labuser/4Hash/perceptive.py>, line 14)
+              27 MAKE_FUNCTION        (0 default parameters)
+              30 STORE_NAME           (dhash)
+
+ 18:          33 LOAD_CONST           (<Code2 code object phash at 0x1066e1610, file /home/labuser/4Hash/perceptive.py>, line 18)
+              36 MAKE_FUNCTION        (0 default parameters)
+              39 STORE_NAME           (phash)
+
+ 22:          42 LOAD_CONST           (<Code2 code object whash at 0x1066e16d0, file /home/labuser/4Hash/perceptive.py>, line 22)
+              45 MAKE_FUNCTION        (0 default parameters)
+              48 STORE_NAME           (whash)
+              51 LOAD_LOCALS
+              52 RETURN_VALUE
+
+
+# Method Name:       __init__
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    1
+# Number of locals:  1
+# Stack size:        1
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        7
+# Constants:
+#    0: None
+# Varnames:
+#	self
+# Positional arguments:
+#	self
+
+  8:           0 LOAD_CONST           (None)
+               3 RETURN_VALUE
+
+
+# Method Name:       ahash
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    2
+# Number of locals:  3
+# Stack size:        3
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        10
+# Constants:
+#    0: None
+# Names:
+#    0: imagehash
+#    1: average_hash
+#    2: Image
+#    3: open
+# Varnames:
+#	self, image, h
+# Positional arguments:
+#	self, image
+# Local variables:
+#    2: h
+
+ 11:           0 LOAD_GLOBAL          (imagehash)
+               3 LOAD_ATTR            (average_hash)
+               6 LOAD_GLOBAL          (Image)
+               9 LOAD_ATTR            (open)
+              12 LOAD_FAST            (image)
+              15 CALL_FUNCTION        (1 positional, 0 named)
+              18 CALL_FUNCTION        (1 positional, 0 named)
+              21 STORE_FAST           (h)
+
+ 12:          24 LOAD_FAST            (h)
+              27 RETURN_VALUE
+
+
+# Method Name:       dhash
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    2
+# Number of locals:  3
+# Stack size:        3
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        14
+# Constants:
+#    0: None
+# Names:
+#    0: imagehash
+#    1: dhash
+#    2: Image
+#    3: open
+# Varnames:
+#	self, image, h
+# Positional arguments:
+#	self, image
+# Local variables:
+#    2: h
+
+ 15:           0 LOAD_GLOBAL          (imagehash)
+               3 LOAD_ATTR            (dhash)
+               6 LOAD_GLOBAL          (Image)
+               9 LOAD_ATTR            (open)
+              12 LOAD_FAST            (image)
+              15 CALL_FUNCTION        (1 positional, 0 named)
+              18 CALL_FUNCTION        (1 positional, 0 named)
+              21 STORE_FAST           (h)
+
+ 16:          24 LOAD_FAST            (h)
+              27 RETURN_VALUE
+
+
+# Method Name:       phash
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    2
+# Number of locals:  3
+# Stack size:        3
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        18
+# Constants:
+#    0: None
+# Names:
+#    0: imagehash
+#    1: phash
+#    2: Image
+#    3: open
+# Varnames:
+#	self, image, h
+# Positional arguments:
+#	self, image
+# Local variables:
+#    2: h
+
+ 19:           0 LOAD_GLOBAL          (imagehash)
+               3 LOAD_ATTR            (phash)
+               6 LOAD_GLOBAL          (Image)
+               9 LOAD_ATTR            (open)
+              12 LOAD_FAST            (image)
+              15 CALL_FUNCTION        (1 positional, 0 named)
+              18 CALL_FUNCTION        (1 positional, 0 named)
+              21 STORE_FAST           (h)
+
+ 20:          24 LOAD_FAST            (h)
+              27 RETURN_VALUE
+
+
+# Method Name:       whash
+# Filename:          /home/labuser/4Hash/perceptive.py
+# Argument count:    2
+# Number of locals:  3
+# Stack size:        3
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        22
+# Constants:
+#    0: None
+# Names:
+#    0: imagehash
+#    1: whash
+#    2: Image
+#    3: open
+# Varnames:
+#	self, image, h
+# Positional arguments:
+#	self, image
+# Local variables:
+#    2: h
+
+ 23:           0 LOAD_GLOBAL          (imagehash)
+               3 LOAD_ATTR            (whash)
+               6 LOAD_GLOBAL          (Image)
+               9 LOAD_ATTR            (open)
+              12 LOAD_FAST            (image)
+              15 CALL_FUNCTION        (1 positional, 0 named)
+              18 CALL_FUNCTION        (1 positional, 0 named)
+              21 STORE_FAST           (h)
+
+ 24:          24 LOAD_FAST            (h)
+              27 RETURN_VALUE
