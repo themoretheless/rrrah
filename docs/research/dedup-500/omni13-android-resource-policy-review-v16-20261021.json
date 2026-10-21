@@ -1,0 +1,96 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/AndroidManifest.xml": {
+      "sha256": "1b9396fac4e141a59ef4da9a3d9823a71d206ebfadac08cf272a126e31867d2f",
+      "git_blob": "d20406452a9b1882a4b188b920907eef8d6b78c5",
+      "mode": "100644",
+      "lines": 146
+    },
+    "android/app/src/main/res/xml/backup_rules.xml": {
+      "sha256": "2c5c697984f4c52b526337ab61113f5843e0bfc6af4722374916ffe6da38dd9a",
+      "git_blob": "ce0b32432a06d0978e0f0ba660c50b34c801d1e4",
+      "mode": "100644",
+      "lines": 8
+    },
+    "android/app/src/main/res/xml/data_extraction_rules.xml": {
+      "sha256": "eda9dddce1e895de1efd716fe75e244187bf8f91a3bb7444c6ea1731e51c74a8",
+      "git_blob": "224515d8b15faaaff5fbe052391b855b0429ceb2",
+      "mode": "100644",
+      "lines": 17
+    },
+    "android/app/src/main/res/xml/file_paths.xml": {
+      "sha256": "f8640ded8634d451c3383fe0ba772e89e4f82d6dbd2d2da98fb2efeef87f889a",
+      "git_blob": "6575b4da3397c7da7fa97e3c85f40aa2cc134d9f",
+      "mode": "100644",
+      "lines": 7
+    },
+    "android/app/src/main/res/xml/local_explorer_widget_info.xml": {
+      "sha256": "5a6d55e7c7ee418ee4931f004f513c736cae1cfe6d4394e5ddfd6f66067883a8",
+      "git_blob": "50ab72435e6ad140614d2c2c9f3e453bd91e2290",
+      "mode": "100644",
+      "lines": 14
+    },
+    "android/app/src/main/res/xml/music_widget_info.xml": {
+      "sha256": "ebf6616e1af25befd10737837cf5f3bf8f1be6a2e6678bac97beb71a563117cf",
+      "git_blob": "bfbf761aea03e05e6b09f53a1df0685fec27a882",
+      "mode": "100644",
+      "lines": 14
+    },
+    "android/app/src/main/res/xml/music_widget_small_info.xml": {
+      "sha256": "ed4ea2d036f9588e82ea12a6c12bf5d0906040eabaca67cbfa83361f01b5deb3",
+      "git_blob": "b061fa2828a06958388f117b4b77f3d1f80627eb",
+      "mode": "100644",
+      "lines": 14
+    },
+    "android/app/src/main/res/xml/network_security_config.xml": {
+      "sha256": "dbc726438a7e99c69fdfc39146cd51ef8300dacb236843bbce3ecd2a1712a80f",
+      "git_blob": "683208ffda765ff9d68c5dc665fc017fe9f5bbdc",
+      "mode": "100644",
+      "lines": 8
+    },
+    "android/app/src/main/res/xml/scan_connect_widget_info.xml": {
+      "sha256": "efeb5af09b9db4c6ba62471a6ef0564ba33435e4ccc0ed2e0994967639cb7e01",
+      "git_blob": "7a2ae21108b17e907d4042d2c3914a0fc36782bb",
+      "mode": "100644",
+      "lines": 14
+    },
+    "android/app/src/main/res/xml/search_widget_info.xml": {
+      "sha256": "5181330a7c300a096d0e0b4d7e35c3b2c7d24184d97e2cbec035ed669908871e",
+      "git_blob": "142d075df5bfb83394735967234eebe67158582a",
+      "mode": "100644",
+      "lines": 15
+    },
+    "android/gradle/libs.versions.toml": {
+      "sha256": "9cbbdb529e342e75b45cf2a027eee4e6a060c1994cd504a44bcc71d009d4480d",
+      "git_blob": "60c56085f748d250c325372de6546845528fc033",
+      "mode": "100644",
+      "lines": 99
+    }
+  },
+  "cumulative_whole_files_read": 67,
+  "tracked_blobs": 268,
+  "method": "All listed pinned files whole text read and GitSHA checked. XML wellformedness/TOML parsing verified using Python standard library, not Android resource/schema/runtime validation.",
+  "findings": [
+    "Manifest disablesallowBackup and XMLrules exclude root/file/database/sharedpref/external for cloudbackup anddevicetransfer. Local trashmetadata andpins therefore have no declared migration/export/backup path in these settings. This is preservation/lifecycle scope, not runtime proof of OSbackup behavior.",
+    "FileProvider nonexported with URI grants; configured root/external/cache/files paths broad. Actual sharing scope depends grantedURI callsites, not inferred from provider-path declarations. No thirdparty share or userfiles accessed.",
+    "Manifest requests broad filesystemmanagement with oldread/writeSDK bounds; runtimegrant/scopedstorage/media queries pending source review. Declarative permission does not prove access works across Android versions.",
+    "Activity singleTask and configChanges cover rotation/screen; external SEND/SEND_MULTIPLE routes to mainactivity alias. Actual URI lifecycle/streaming integration pending.",
+    "Five widget definitions updatePeriod0; updates depend app/provider events, no automatic periodic refresh established by XML. Layout sizes/previewresources read as references, not visual verification.",
+    "Network policy declares cleartextfalse and systemtrustanchors. Custom OkHttp/TLS implementation not yet reviewed; no transport guarantee inferred from XML alone.",
+    "Versioncatalog explicit plugins/dependency coordinates and testlibraries reviewed. Versionexistence/compatibility resolved artifacts and runtime not verified; no dependency safety or latestversion claims.",
+    "FirebaseBOM coordinate alone is not telemetry evidence; FirebaseAI dependency earliercommented. No networkcollection claim made from libraryinventory."
+  ],
+  "executed_checks": {
+    "all_xml_wellformed": true,
+    "version_catalog_toml_parsed": true,
+    "pinned_files": 11
+  },
+  "limits": [
+    "Whole files now67/268; runtime/fullrepo incomplete.",
+    "Parsing is syntax only, not Android resource linking, permission/device/backup/runtime test. No Gradle or externalservices executed.",
+    "No production changes. Native pHash/ASAN deferred; all500 remain incomplete."
+  ]
+}
