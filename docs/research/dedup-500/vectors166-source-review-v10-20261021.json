@@ -1,0 +1,51 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 51,
+  "files": {
+    "tests/unit/plugins/tolerance_calculators/plateau_detection.png": {
+      "bytes": 20627,
+      "sha256": "0593154df13ae8ac341afc334f482360020faba184c420250b93dc6c550939cf",
+      "git_blob": "a46a0b5268ed4672166e8242006fb90f9f8f4658",
+      "method": "Original image visually inspected at original resolution"
+    },
+    "tests/unit/plugins/tolerance_calculators/plateau_detection_DistanceMatrix.png": {
+      "bytes": 46198,
+      "sha256": "c37b7f5809500b3a1a23b690ccb0ed3d6d54f0df11bd2b929d1e05a181ee77fe",
+      "git_blob": "5d2ac619d7d2dd7e72ec5c554cf3b30170a029ef",
+      "method": "Original image visually inspected at original resolution"
+    },
+    "tests/unit/plugins/tolerance_calculators/plateau_detection_MultiHashing.png": {
+      "bytes": 34736,
+      "sha256": "ae27a05320ed3460bd5423e5cbcfbb60662763c2ba7a3e5706bf37560f0d3383",
+      "git_blob": "07a0995f13007cd38cf7171b728102bf257a4f5a",
+      "method": "Original image visually inspected at original resolution"
+    },
+    ".coverage": {
+      "bytes": 53248,
+      "sha256": "b4a9047d23fb0f8fecb1ace570d30f97824a051eb35ac5f361c9e0093dec734d",
+      "git_blob": "5b56333d864024ea02f4eadc18dbd57c410801e6",
+      "method": "Read-only SQLite integrity/schema/all rows inspected; no code or pickle execution"
+    },
+    "tests/unit/core/.coverage": {
+      "bytes": 53248,
+      "sha256": "92f10d026d010407869d161bf7ab9dd556491b49a39e2b610338fb45dd3af624",
+      "git_blob": "4aabd414273af7ac5c934da32d0efb14373b1893",
+      "method": "Read-only SQLite integrity/schema/all rows inspected; no code or pickle execution"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "All three original plateau plots viewed. First count curve drops180 to97 then nearly flat across0.60..0.66; legend says Gradient while vertical axis says Unique structures.",
+    "DistanceMatrix plot shows broad decreasing curve around180..23 over1.48..1.61 with colored gradient points. MultiHashing plot shows97-count plateau around0.60..0.66 and sharp shoulders. Neither plot proves final group membership or current execution.",
+    "Root coverage database integrity ok, schema7, coverage.py7.13.5,12 file records,12 line bitmaps,1 empty context,has_arcs0 and0 arc records. Absolute historical author paths; no execution timestamp or pinned-source hash provenance. Not accepted as fresh test or branch coverage.",
+    "Nested tests/unit/core/.coverage integrity ok and same schema/version, but no file/context/line/arc/tracer records. It provides no test execution coverage."
+  ],
+  "remaining_scope": "51 tracked artifacts remain: CLAUDE.md and generated documentation/assets, including binary doctrees.",
+  "limits": [
+    "Stored plots and coverage records are historical evidence only; no additional upstream runtime test passed this increment. Global full count201/500 unchanged. No production changes; pHash/ASAN deferred."
+  ]
+}
