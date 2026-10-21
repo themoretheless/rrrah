@@ -1,0 +1,72 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/fetcher.ts": {
+      "sha256": "7e5d3ba6eab7acd57b1f37fb05bd4056a69a74d1c22a1e97af592d7de3a807c3",
+      "git_blob": "6ff6f72e971c6108f50835fb6ef3e7c7f4c0e928",
+      "lines": 7
+    },
+    "lib/types.ts": {
+      "sha256": "a7c91a3191b0612fb5ef0da98b4d848076ddd471a4ad4d06cfe20f50d463aa4a",
+      "git_blob": "0050fe075ad15fb6cb16564efdfb5d7121657749",
+      "lines": 42
+    },
+    "lib/useIntersect.ts": {
+      "sha256": "4e1d875edcec65f944b60f5df915c9dad2bacf2f7621adf538407243a2770a67",
+      "git_blob": "975f8111abbc58134b48233238dff8b5e5bfc306",
+      "lines": 43
+    },
+    "lib/useMedia.ts": {
+      "sha256": "974e8c50be48f2ad4ed267a55a92358a7882a4988ebb08097c88ab01bd2ada99",
+      "git_blob": "ce0f411eafb80b49ff068902bfb6874daa509448",
+      "lines": 19
+    },
+    "lib/utils.ts": {
+      "sha256": "b18aa8a0cdbb5f7c79075ddf9cc5ead28535c29e75b8dcb420ae1986475d5633",
+      "git_blob": "ec79801fe9cdd7711f6dbef26678a134c634a8be",
+      "lines": 6
+    },
+    "components/ui/progress.tsx": {
+      "sha256": "fd25bcba572b7c28af99c6a61af8a92d74bec9811872883c7fb0f67884182b71",
+      "git_blob": "105fb650055b71797510142dfa041b5d80808041",
+      "lines": 26
+    },
+    "components/ui/card.tsx": {
+      "sha256": "8bad317eca5b74899d868688a339a16f54995e36810c0fdfe214c057755535e0",
+      "git_blob": "afa13ecfa3bd0f4a553a510b856c5800382e139b",
+      "lines": 79
+    },
+    "components/badge.tsx": {
+      "sha256": "9b123310d31193d6c1b421df5bc922595d8c540f9ecef25d245588dca0bfb666",
+      "git_blob": "a443850b964dc43b545ebea40e91a8a126bd76fe",
+      "lines": 9
+    }
+  },
+  "cumulative_whole_files_read": 30,
+  "tracked_blobs": 97,
+  "method": "Whole files read and pinned Git blobs verified; original fetcher executed after TypeScript-only signature erasure with local mocked HTTP500 JSON response.",
+  "findings": [
+    "fetcher never checks response.ok; local control confirmed HTTP500 JSON fulfills with error object. Generic JSON type does not validate the payload.",
+    "Progress consumes value but does not pass it to Radix Root; indicator transform uses value. Source shows visual/accessibility state can diverge; actual Radix render not executed. No explicit range clamp.",
+    "useMedia listens to window resize rather than MediaQueryList change; non-resize query updates may be missed. Listener cleanup exists. Browser behavior not executed.",
+    "useIntersect disconnects observer on cleanup and supports freeze-on-visible. Its dependencies track ref identity rather than current node; replacing node alone may not rerun effect.",
+    "Remaining files are statistical data declarations, class merging and presentation wrappers. CardTitle ref type names paragraph while rendered element is h3; no runtime defect asserted."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/spotify8-20261021/fetcher-http-control.js",
+    "sha256": "bc2d777de0d681d7c790ce72db78c545745f1287fe5bebe5405dfb056d93b8db",
+    "result": {
+      "fulfilled": true,
+      "value": {
+        "error": "upstream failed"
+      }
+    },
+    "network": "local mocked fetch only"
+  },
+  "limits": [
+    "30/97 tracked files;151/500 fully reviewed repositories.",
+    "No upstream Jest or browser execution. pHash/ASAN deferred."
+  ]
+}
