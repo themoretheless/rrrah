@@ -2,9 +2,9 @@
   "index": 425,
   "repository": "luludotdev/image-hash",
   "commit": "a58f1a2d41ee755bd25d608b813142177f8ae312",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "TS image hash median/distance errors with tests; candidate numerical oracle, PNG/JPEG-only adapter not universal.",
+  "review_scope": "All28pinnedblobs assessed:22wholetext,1lock structured/runtime,5images viewed incl1TIFFviewingderivative. Original10Vitest+typecheck and authored numeric controls.",
+  "decision": "reference-reject-even-median-and-fast-edge-policy",
+  "finding": "Complete pinned review;10originaltests pass but independent median and edge controls reproduce defects; no code adopted.",
   "available_source_evidence": [
     {
       "path": "src/distance.ts",
@@ -58,10 +58,10 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
-  "tests_detected": 3,
-  "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "license_scope": "Root MIT2022JackBaron whole-read; no production copy.",
+  "tests_detected": 10,
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "10originalVitesttests executed;typecheckpass;full lint/build notrun.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -84,5 +84,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/lulu425-complete-source-review-20261021.json"
 }

@@ -1,0 +1,25 @@
+
+> @luludev/image-hash@3.2.1 vitest
+> vitest run --threads=false
+
+
+ RUN  v0.33.0 /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/lulu425-20261021
+      Coverage enabled with v8
+
+ ✓ test/hash.test.ts  (8 tests) 1152ms
+ ✓ test/distance.test.ts  (2 tests) 1ms
+
+ Test Files  2 passed (2)
+      Tests  10 passed (10)
+   Start at  19:39:04
+   Duration  1.33s (transform 33ms, setup 0ms, collect 50ms, tests 1.15s, environment 0ms, prepare 37ms)
+
+ % Coverage report from v8
+-------------|---------|----------|---------|---------|-------------------------
+File         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------|---------|----------|---------|---------|-------------------------
+All files    |   89.61 |    90.19 |     100 |   89.61 |
+ distance.ts |     100 |      100 |     100 |     100 |
+ errors.ts   |     100 |      100 |     100 |     100 |
+ hash.ts     |    87.5 |    86.48 |     100 |    87.5 | ...,120-123,146,155-169
+-------------|---------|----------|---------|---------|-------------------------
