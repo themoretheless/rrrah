@@ -1,0 +1,79 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/main.tsx": {
+      "sha256": "bfcf131d8fb04a4dadcdd633c0bdbefea3f3a7af5bb35d34dc55588991887654",
+      "git_blob": "2be325ed2578821637e991b3c3f2eaaf47632f51",
+      "mode": "100644",
+      "lines": 9
+    },
+    "src/vite-env.d.ts": {
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "git_blob": "11f02fe2a0061d6e6e1f271b21da95423b448b32",
+      "mode": "100644",
+      "lines": 1
+    },
+    "index.html": {
+      "sha256": "d0ec40ebdf03bca91eb0ee1db16209a71adb05e154e1243260c453aaf26caf90",
+      "git_blob": "d43cd0733c3359e0148dc27e2f50c924e8cf9ce9",
+      "mode": "100644",
+      "lines": 128
+    }
+  },
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "mode": "100644",
+      "lines": 9598,
+      "read_line_ranges": [
+        [
+          1,
+          1420
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Three whole files; first1420 of9598 lines of full pinned App.tsx read. Earlier stored selected excerpt explicitly truncated, retained unchanged. Exact inline HTML script executed in NodeVM with synthetic DOM/localStorage only.",
+  "executed_controls": {
+    "unset": {
+      "preset": "slate",
+      "background": "#0b1117"
+    },
+    "slate-glass": {
+      "preset": "slate",
+      "background": "#0b1117"
+    },
+    "modern": {
+      "preset": "slate",
+      "background": "#0b1117"
+    },
+    "metro": {
+      "preset": "slate",
+      "background": "#0b1117"
+    },
+    "aurora": {
+      "preset": "aurora",
+      "background": "#0d1322"
+    }
+  },
+  "control_source": "const fs=require('fs'),vm=require('vm'),assert=require('assert');const html=fs.readFileSync('.dedup-work/omni13-20261021/index.html','utf8');const script=html.match(/<script>([\\s\\S]*?)<\\/script>/)[1];let out={};for(const preset of [null,'slate-glass','modern','metro','aurora']){const attrs={},styles={};vm.runInNewContext(script,{localStorage:{getItem:k=>k==='omnisearch_theme_preset'?preset:'dark'},document:{documentElement:{setAttribute:(k,v)=>attrs[k]=v,style:{setProperty:(k,v)=>styles[k]=v}}}});out[preset===null?'unset':preset]={preset:attrs['data-theme-preset'],background:styles['--bg-mid']};}assert.equal(out['slate-glass'].preset,'slate');assert.equal(out.modern.preset,'slate');assert.equal(out.metro.preset,'slate');assert.equal(out.aurora.preset,'aurora');fs.writeFileSync('.dedup-work/omni13-20261021/bootstrap-control-v7-result.json',JSON.stringify(out,null,2)+'\\n');console.log(JSON.stringify(out));\n",
+  "findings": [
+    "Full App.tsx downloaded and GitSHA verified; actual9598 lines. Previous selected evidence7656 lines is truncated and remains historical evidence, not whole source.",
+    "HTML bootstrap supports six presets and defaults slate; App constants list nine presets including slate-glass,modern,metro and defaults slate-glass. Original bootstrap control maps all three added presets to slate; aurora control retained. Source mismatch confirmed, actual visible flash/browser timing untested.",
+    "HTML slate dark bg-mid is#0b1117 while App slate palette specifies#262b32; startup/final palette divergence, rendering untested.",
+    "App declarations distinguish total duplicate fileCount from rendered files vector but handling/actions remain outside read range. Type definitions alone do not prove omission/truncation displayed correctly.",
+    "App limits define24 content snippets,220 snippet chars,3200 preview chars and2800ms command timeout; later call sites not yet read, so execution/boundedness not inferred.",
+    "React entry enables StrictMode; lifecycle cleanup and duplicate-effect robustness pending later file review. vite-env only Vite type reference."
+  ],
+  "limits": [
+    "31/268 whole reviewed, plus App.tsx1-1420 partial; full app excluded from whole count.",
+    "No React/browser/Tauri runtime, file mutations, Windows APIs, network/updates or benchmarks executed.",
+    "No production changes. Native pHash/ASAN deferred; all500/full goal incomplete."
+  ]
+}
