@@ -1,0 +1,45 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          6131,
+          6800
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          6800
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read670 additional contiguous lines: Markdown measure/paint, surrogate decoder and word navigation. Static layout callgraph analysis only.",
+  "findings": [
+    "Heading measurement selects font_h and measures joined plain text via wrap_text_height, adding level offset plus4. Heading paint selects font_h initially but calls paint_run_lines/layout_runs, which chooses font_c/font_n/font_code by inline kind, not heading font; paint also omits measured final4. Shared block parser does not guarantee matching measured/drawn heading geometry.",
+    "layout_runs selects MD_LINK for Link but discards _color, stores no link/color in MdFrag, and paint chooses only code-vs-body color. Links render as ordinary body-colored label; no link hit target in these helpers. Earlier markdown parser label-only limitation now traced to renderer.",
+    "Italic uses same body font; Bold uses result-title font, whose weight is user-configurable rather than guaranteed bold. These are source rendering choices; no screenshots or typography acceptance.",
+    "Inline wrapping splits only ASCII space, not newline or general Unicode whitespace. Long words are not split; renderer uses DT_SINGLELINE per fragment, so width/line-break behavior is limited. No actual GDI fixture.",
+    "Inline-code background adds10 pixels width but layout advancement reserves only text width, so chip padding can overlap neighbors. This is source geometry finding, not measured visual corruption.",
+    "wm_char_decode explicitly combines high/low UTF16 surrogates, drops lone low and clears pending on ordinary scalar. Correct implementation shape does not replace actual Windows WM_CHAR runtime or original tests.",
+    "word_left/right clamp to string length but assume char boundary before slicing; delete_word_before first floors boundary, while prior navigation callers rely on cursor invariant. No invalid-cursor reachability established.",
+    "Code block measurement and painting duplicate matching DrawText flags/minimum18 and padding arithmetic; ordinary paragraphs share layout_runs between measure/paint. Heading inconsistency must not be generalized to all blocks.",
+    "Repeated measure/paint parsing and allocation exist but no timing benchmark or accepted optimization. No local dedup production change justified from launcher drawing."
+  ],
+  "limits": [
+    "85/268 whole files; main.rs1-6800 of12573 read.",
+    "No new runtime tests, GDI rendering, browser, model or user-data actions.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
