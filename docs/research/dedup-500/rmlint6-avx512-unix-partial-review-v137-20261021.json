@@ -1,0 +1,41 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 285,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_unix.S": {
+      "sha256": "c641987dd82fabed59d527f1a3413c4a2ff3df919af6d13ff2788c95e4035c0d",
+      "git_blob": "9642e413a3ad0f959449e0089dfd672fbff9fb86",
+      "total_lines": 4824,
+      "read_ranges": [
+        [
+          1,
+          400
+        ]
+      ],
+      "unread_ranges": [
+        [
+          401,
+          4824
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Pinned Git blob verified then untruncated source lines1..400 read. Remaining4424 lines receive no completion credit.",
+  "findings": [
+    "Exports hash-many, compress-in-place, compress-XOF and XOF-many with plain/underscore aliases. ELF GNU-stack/CET and Apple section conditionals remain in this Unix variant. Only hash-many entry/core prefix read so far.",
+    "Hash-many saves six SysV nonvolatile general registers, reserves144 bytes and aligns stack64. Increment mask derives from negated R9 and kmovw K1; caller boolean contract matters.",
+    "Counter initialization computes two eight-lane low32 vectors for offsets0..15, uses unsigned mask comparisons to add carry to corresponding high32 lanes, then replaces lanes with original counter under inverse increment mask. Four32-byte vectors occupy first128 stack bytes.",
+    "Block count shifts6 to byte length stored at0x80; flags at0x88. Main branch requires16 inputs. First/start and final/end flags surround full64-byte block loop. Zero-block behavior for nonzero inputs remains a caller-precondition question pending rest.",
+    "Sixteen-input setup reads each64-byte block as two32-byte loads, combines input pairs into ZMM lanes and transposes via unpack/shuffle plus INDEX0/INDEX1-controlled vpermt2d/vpermi2d. Indices/constants themselves remain unread.",
+    "Round prefix uses ZMM0..31 and native vprord rotations16/12/8/7. Initial256-bit EVEX masking already needs AVX512VL-capable configuration; shorter vector widths do not imply an AVX2-safe path. Actual dispatch and runtime parity are separate gates."
+  ],
+  "limits": [
+    "Only400/4824 lines of this source inspected. Count remains285/289 files and150/500 repositories.",
+    "No x86 execution, ABI, speed or sanitizer claim. Deferred pHash/ASAN untouched."
+  ]
+}
