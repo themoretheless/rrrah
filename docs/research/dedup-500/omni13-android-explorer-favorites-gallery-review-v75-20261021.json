@@ -1,0 +1,48 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          2841,
+          4200
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          4200
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read1360 newlines2841-4200. Truncated original3281-3500 output not credited; reread all220lines with only leading indentation stripped and original line numbers, then3501-4200 same whitespace-only view. No code tokens removed.",
+  "findings": [
+    "Favorites list sortFileList uses default global sortType/sortAscending and remember keys global values, while header changes favorites-specific preferences via activeSortType/activeSortAscending. Header sort controls can therefore disagree with displayed favorites order; static source finding, no Compose run.",
+    "Favorites sorted remember also omits showHiddenFiles although sortFileList uses it; hidden-toggle may fail to invalidate list until another key changes. Category sorted remember similarly omits showHiddenFiles. Imagealbum builder separately includes hiddenkey, so not all gallery branches affected.",
+    "Favorites Images tab excludesbmp; Otherfiles treatsbmp asother. Main image category supportsbmp. UI classification uses suffix rather than decoded content; same bytes with different extension can appear different categories.",
+    "Trash permanent-delete only shows success and reloads on true; false branch gives no failure toast in this callback. EmptyTrash ignores peritem outcome and always announces Recycle Bin cleared, matching prior manager audit that metadata could clear despite failures. Child TrashViewer confirmation UI still unread, no assertion of absent confirmation.",
+    "Trash preview chooses type using original item.name extension then opens storedtrash path item.id, preserving original-name routing at entry. Downstream decoder extension assumptions pending; image/video only preview branches, no PDF/text here.",
+    "Imagealbum search filters album names, whereas audioalbum search filters song filenames before groupBy parent. Album counts/cover candidates therefore query-dependent for audio; image vs audio search semantics differ. No content duplicate grouping in album code.",
+    "Audioalbum sorter handles DATE specially, every other value asNAME. Header can save SIZE/TYPE through same FileSortType API; final displayed album sorting does not implement those modes here. Album helper definition/sorting UI qualification pending.",
+    "Flat image mode removes locked-parent files via withoutLockedAlbumFiles; selectedalbum branch filters exactparent instead. Opening selectedalbum routed previously through openAlbum/unlock. Sourcepath UI locking separate from encryption/global filesystem authorization; no bypass claim.",
+    "Gallery item keys absolutePath; drag selection click suppression tracks single path. If no associated click delivered, subsequent click on same path can be suppressed until cleared. Gesture helper implementation unread; no device repro or definitive interaction bug.",
+    "Video thumbnail state/effect keyed File (path equality), initialcachegetabsolutePath; samepath changed content may retain remembered bitmap without reentering. VideoThumbnailCache implementation later unread; do not yet claim cache itself lacks metadata validation. Fallback Coil on failed thumbnail exists.",
+    "Category grids provide async loading/error images and video IOthumbnailgeneration. Comments serializedconcurrency refer externalcache, not verified implementation. No measured memory, decode time or image/video format acceptance."
+  ],
+  "limits": [
+    "114/268 wholefiles unchanged; explorer4200/16837 read.",
+    "No Android/Kotlin compilation, Compose/device/gesture tests, actual trash/file/gallery/thumbnail actions.",
+    "155/500 full repositories unchanged; no production changes/new library test result.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
