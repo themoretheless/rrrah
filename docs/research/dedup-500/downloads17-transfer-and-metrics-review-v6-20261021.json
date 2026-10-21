@@ -1,0 +1,69 @@
+{
+  "repository": "VikasSukhija/Downloads",
+  "commit": "59b36dcb55ec25533c0278ea466d8bb278b5b43a",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "DownloadSPOFiles.ps1": {
+      "sha256": "d8370002becd4c64a44fad1cf454e4ba35382594e53e3318bfe22cf022e74f6c",
+      "git_blob": "a41fb1d6336c39d18a18c48429d31137fb5bd80a",
+      "mode": "100644",
+      "bytes": 2392,
+      "encoding": "utf-8-sig",
+      "lines": 75,
+      "method": "Entire text read, not executed."
+    },
+    "AssignO365Admin.ps1": {
+      "sha256": "21b796f414969e05e9ed9e89e51a4b8a91ea29edebdcb58edc50c96c2704da0c",
+      "git_blob": "c7072d1609276b3109e614a34cbd51a1dd4f892f",
+      "mode": "100644",
+      "bytes": 2595,
+      "encoding": "utf-8-sig",
+      "lines": 90,
+      "method": "Entire text read, not executed."
+    },
+    "getfailedscheduledtasks.ps1": {
+      "sha256": "327be0277769e60d25e32299888d0f47d0fab057d3f565003d4524f9241e96df",
+      "git_blob": "7b3c4739e5880ddc1b35849d633e26fb2aa671d5",
+      "mode": "100644",
+      "bytes": 2699,
+      "encoding": "utf-8-sig",
+      "lines": 88,
+      "method": "Entire text read, not executed."
+    },
+    "ExportAdattributes.ps1": {
+      "sha256": "4f0cc4df1b40674c5cecabe5b8bfa7ed1c53de2e38a7c164166409f4f36b0511",
+      "git_blob": "757cd22b174940e1e1eae200b6c441b5febc09db",
+      "mode": "100644",
+      "bytes": 3193,
+      "encoding": "utf-8-sig",
+      "lines": 130,
+      "method": "Entire text read, not executed."
+    },
+    "automationmetricsspo.ps1": {
+      "sha256": "1397c793fca4d02ab5fc56b204f87b1181b5c291b660ec69b54b06e574e6d7fd",
+      "git_blob": "ed382d48bd101c78dee37a5f958b4dd72a5046fb",
+      "mode": "100644",
+      "bytes": 3232,
+      "encoding": "utf-8-sig",
+      "lines": 120,
+      "method": "Entire text read, not executed."
+    }
+  },
+  "cumulative_whole_files_read": 41,
+  "tracked_blobs": 248,
+  "findings": [
+    "DownloadSPOFiles lists direct file children into a shared temp directory by filename, then moves every temp child. It has no invocation-specific isolation, digest verification, recursive traversal or explicit content-identity test; preexisting temp files are also eligible for the move.",
+    "AssignO365Admin assigns a selected role to every input UPN; no file deduplication.",
+    "getfailedscheduledtasks filters by status codes and TaskPath after stripping every backslash. Distinct hierarchical paths can normalize to the same string; it sends one notification per returned failed task. No notifications sent during review.",
+    "ExportAdattributes writes twelve user attributes to Excel. The explicit unlimited sizelimit option is commented; completeness depends on external Quest defaults. No file comparisons.",
+    "automationmetricsspo retrieves paged list items, filters Created strictly between dates, and appends one summary row; exact endpoints are excluded and repeated runs append repeated rows. Page size is not treated here as an overall result limit."
+  ],
+  "executed_controls": [
+    "Verified all five original Git blob IDs against pinned tree."
+  ],
+  "limits": [
+    "Static source review only; no downloaded scripts executed, no remote services or credentials used.",
+    "41/248 tracked blobs reviewed; repository remains partial.",
+    "These findings are not measured library optimizations or runtime regressions."
+  ]
+}
