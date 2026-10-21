@@ -1,0 +1,53 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "site-l10n/ja.json": {
+      "sha256": "e075bd49c4b177b8c4172dbd0035a426d8e4510166b21391b62af960c513acf6",
+      "git_blob": "8a269442b7cafdfefcc36cda78c25a33bc9e3e79",
+      "bytes": 15322,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; joint nine-locale original builder controls."
+    },
+    "site-l10n/zh-cn.json": {
+      "sha256": "69e423b093242907c4059b26f421df35f97ae6be0a88c66c17ba3cf7dac68531",
+      "git_blob": "abdbdc6651da184d1db478de36d42dc8435fe27f",
+      "bytes": 12993,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; joint nine-locale original builder controls."
+    },
+    "site-l10n/zh-tw.json": {
+      "sha256": "ae8c82ff1c5b4ad6c3ec73b94c7aac33155f07e3e0664343dbc7efbb5dfdd2a7",
+      "git_blob": "eaa5e623334b36774b3af6f75dbf1c7444bdf802",
+      "bytes": 13035,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; joint nine-locale original builder controls."
+    }
+  },
+  "cumulative_assessed_blobs": 229,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-site-locale-controls-v60-20261021/run.mjs",
+    "sha256": "6db061c349cca602522a426ed4833d101d5c9a7916950502d618fecd4d3dadba",
+    "log": "docs/research/dedup-500/googlephotos42-site-locale-controls-v60-20261021/run.log",
+    "passed": 9,
+    "new_locale_controls": 3,
+    "previous_locale_regressions": 6,
+    "failed": 0,
+    "exit_code": 0,
+    "keys_each": 96,
+    "method": "Unmodified original builder with allnine copied sitecatalogs and cachedsite into temporary output; exactkey/nonempty/lang/rootstylesheet/generateddemocaption checks. No browser/deployment/fullassetclaim. Six reruns not added again to cumulative count."
+  },
+  "findings": [
+    "Allninecatalogs96nonemptykeys with exactsets; jointoriginalbuild passes. Everygeneratedlocalizedpage carries configured htmlLang, rootstylesheet path andgenerateddemo disclaimer.",
+    "Chinese site has separatezh-CN/zh-TWcatalogs and pickerlabels简/繁; popup has onezhcatalog. Sitecatalogcoverage doesnotimply identicalpopupcoverage. Japanese siteclaims10UIlanguages, contrasting earlier9popupcataloginventory.",
+    "Legal links explicitlylabelEnglish acrossallthree; value/scale/accuracy/API/retentionclaims remain translatedupstreamcopy, not independentlyverified facts.",
+    "No native-speaker translationcertification, actualbrowservisual review, layout/font/contrast/keyboardqualification. Earlier originalbuilder substringcompleteness counterexample remains."
+  ],
+  "cumulative_original_function_controls": 98,
+  "limits": [
+    "229/230whole artifacts;onlybun.lockremains.Globalfullreview160/500unchanged.",
+    "No fullupstreamVitest/liveGooglePhotos/productionoptimization. NativepHash/ASANdeferred."
+  ]
+}
