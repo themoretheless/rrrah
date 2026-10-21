@@ -1,0 +1,65 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/kill-process.sh": {
+      "sha256": "b5cb9cf8b596045531ea311a49b76fda1a95e18bd7ab881fd0fe84d4253cee7c",
+      "git_blob": "636ecbdee90f5ec7f832316b27c956fe0d873825",
+      "bytes": 253,
+      "lines": 16,
+      "method": "Whole pinned script/build/header read; no instructions executed."
+    },
+    "tests/multiple-writers-removing.sh": {
+      "sha256": "0cbf489a3e62bdec0e14b79c9f621321c7ae233214e89ed79c20c8d8d7b586c0",
+      "git_blob": "e5364baaca5d34255dc267ce98591ca561052253",
+      "bytes": 197,
+      "lines": 14,
+      "method": "Whole pinned script/build/header read; no instructions executed."
+    },
+    "tests/multiple-writers-updating.sh": {
+      "sha256": "e4991bd5b5edf59286f7924b960bed86db8e4f084c4d97d5cce7a1ca85134379",
+      "git_blob": "4375672646025cfcf460a0912205fc777fb37fc2",
+      "bytes": 336,
+      "lines": 19,
+      "method": "Whole pinned script/build/header read; no instructions executed."
+    },
+    "cbird.pri": {
+      "sha256": "b5404a962fbcf4839aac97bda19f57743d5635286266e37d0ba33de1ba2f17c1",
+      "git_blob": "3b286d9013ef6ad83d7288b43b3de26b09b7014a",
+      "bytes": 6554,
+      "lines": 222,
+      "method": "Whole pinned script/build/header read; no instructions executed."
+    },
+    "cbird.pro": {
+      "sha256": "b8cfbd395c62487677e43161d75c25724e5ca59ed7edf6a3d4c6cd2062d0c54d",
+      "git_blob": "598ee0b0305d71f246c01236346036c12df8b132",
+      "bytes": 6245,
+      "lines": 211,
+      "method": "Whole pinned script/build/header read; no instructions executed."
+    },
+    "src/prefix.h": {
+      "sha256": "a8b7270437e6f9c85b0c521399fd6a22e108ab852fb4a9f97b1ccd3d3d7db002",
+      "git_blob": "0d86474960aad244ab30505ee0bb2daf5d19a3d6",
+      "bytes": 1399,
+      "lines": 52,
+      "method": "Whole pinned script/build/header read; no instructions executed."
+    }
+  },
+  "cumulative_assessed_blobs": 86,
+  "tracked_blobs": 616,
+  "findings": [
+    "kill-process.sh loops update with batchsize1, SIGKILL after2sec, waits then invokes first-record removal. No expected-record ledger, integrity assertion, exit-status gate or bounded completion. Stress procedure presence does not establish recovery correctness.",
+    "multiple-writers-removing starts five concurrent removers repeatedly; updating starts six updater processes and eleven removers, then invokes update/verify/similar/show. No expected identity/count oracle or explicit status checks; final GUI invocation is not a success assertion. Scripts read only, not executed.",
+    "cbird.pri requires Qt6, enables forced assertions and CImg, and links FFmpeg, Exiv2, QuaZip and selected OpenCV libraries. Linux pins OpenCV2.4.13.7; macOS references /opt/opencv2. This confirms substantial native dependency conditions; no installed-dependency or whole-build claim.",
+    "Release defaults O3, FASTBUILD O0, DEBUG variants override flags. Performance comparisons require actual resolved build flags and runtime; these definitions alone provide no measured improvement.",
+    "cbird.pro includes GUI/resources and platform packaging/install targets. Packaging commands and deletion/copy/install actions remain unexecuted research text, not agent instructions. Portable runtime dependency handling differs by platform.",
+    "prefix.h selects slim precompiled header, asserts Qt major6 and includes global.h. The original minimal-shim controls are explicitly narrower than this real application configuration."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "86/616 assessed:85 whole text/source and one PNG visual. Partial main.cpp and qtutil.cpp excluded.",
+    "Prior24 original-body/header controls plus one independent counterexample unchanged. Fresh54 local exact-file tests are separate.",
+    "No upstream stress execution, native media build, production changes or optimization measurement. Deferred native pHash/ASAN skipped."
+  ]
+}
