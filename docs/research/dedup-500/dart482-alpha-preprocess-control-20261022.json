@@ -1,0 +1,64 @@
+{
+  "source": ".dedup-work/dart482-20261022/example/scripts/basic_demo_hashes.py",
+  "source_sha256": "b4e8d7b955c3362509283bc0201cade74e908e1d0d3dad11ee45163facba122b",
+  "execution": "Original alpharemover function extracted via AST; Pillow real image, no imagehash import/stub or Dart execution.",
+  "input": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      128
+    ],
+    [
+      12,
+      34,
+      56,
+      255
+    ]
+  ],
+  "actual": [
+    [
+      255,
+      255,
+      255
+    ],
+    [
+      127,
+      127,
+      127
+    ],
+    [
+      12,
+      34,
+      56
+    ]
+  ],
+  "expected": [
+    [
+      255,
+      255,
+      255
+    ],
+    [
+      127,
+      127,
+      127
+    ],
+    [
+      12,
+      34,
+      56
+    ]
+  ],
+  "passed": true,
+  "limits": [
+    "Only Python alpha preprocessing executed; Dart discard-alpha behavior is source-derived.",
+    "No hash, resize, z-transform or inter-language runtime compatibility proved."
+  ]
+}

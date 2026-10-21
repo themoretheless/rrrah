@@ -1,0 +1,82 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "example/scripts/.gitignore",
+      "lines": 3,
+      "sha256": "5ad065b375c2d4dc2a6efb11fdb59bcb58947c6c3d8e89f85315f518ae0d0d3a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/basic_demo_hashes.dart",
+      "lines": 96,
+      "sha256": "400613ce273079003ac825e4546e4e17b8cffca36d97a00cd9b78ecf39953c45",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/basic_demo_hashes.py",
+      "lines": 82,
+      "sha256": "b4e8d7b955c3362509283bc0201cade74e908e1d0d3dad11ee45163facba122b",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/github-urls.txt",
+      "lines": 2,
+      "sha256": "6b8f10380dba3bf08f2664a3dee78c2f6b189f32a58d445e25ab92237b131a36",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/hashimages.dart",
+      "lines": 311,
+      "sha256": "c4c3458652e16913247b282c6a4b891ee21013b84dbd439564b37a2133dda9a6",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/hashimages.py",
+      "lines": 214,
+      "sha256": "6e95748802978f199e306c25a6d4ba4df0c1d29671baa75f5208731de7a82482",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/requirements.txt",
+      "lines": 3,
+      "sha256": "48432e3419250fb90c9cee441ac4a9b234483df529496cbe7f459ab90b9996c0",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/run_basic_demo.sh",
+      "lines": 27,
+      "sha256": "c0639c1534bfa15ee2791d68d186937afcea93ea0cc2845fcca6ea7815185624",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/run_icons.sh",
+      "lines": 146,
+      "sha256": "05670c909dcec2afc0142e82cac3d57e60bd3932107c0e8b8a1c4acdae743ca3",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/scripts/setup_python.sh",
+      "lines": 39,
+      "sha256": "9a9ab7793c5eed44d52751da4956fcc25958fe55eb605f3b1d3eae55c427463e",
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/dart482-alpha-preprocess-control-20261022.json"
+  ],
+  "findings": [
+    "All ten example/script files read whole. Original Python alpharemover executed on three independently specified RGBA pixels: transparent black becomes white, half-alpha black becomes 127 gray, opaque RGB unchanged.",
+    "Dart preprocessing explicitly copies raw RGB and discards alpha; Python composites RGBA against white. This gives different hash inputs for transparency; no original Dart runtime claim. Python non-RGBA modes bypass this helper.",
+    "Z preprocessing differs: Python uses LANCZOS then NumPy percentile/interpolation over 0..99; Dart default copyResize, rounded 0..99 rank samples, first matching interval mapped to i/99*255 without interpolation. Same z suffix does not establish same recipe.",
+    "Icon grouping excludes ERROR and all-zero hash, groups exact hash strings without file/pixel verification, filters unknown repository URL patterns, and can retain singleton visible groups after filtering.",
+    "Sources and generated URLs use floating main/master branches; requirements contain unpinned Pillow/NumPy/imagehash. Scripts swallow per-image/hash failures and print input-count processed even when errors occur. Setup/conversion/clone scripts inspected, not executed."
+  ],
+  "remaining": [
+    "Site source/config/data, tracked image assets and external visuals",
+    "Original Dart runtime and independent hash vectors"
+  ],
+  "full_review_count": 247
+}
