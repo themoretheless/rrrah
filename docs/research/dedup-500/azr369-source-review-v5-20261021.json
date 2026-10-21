@@ -1,0 +1,48 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "whole_repo_complete": false,
+  "partial_text_read": {
+    "path": "cornerdetect/fast_9.c.go",
+    "sha256": "a79139957418d8f59fce2217e7ee30e5dc2c560cc58e6e0ef04092fa8aec44ff",
+    "new_line_ranges": [
+      [
+        211,
+        700
+      ]
+    ],
+    "cumulative_line_ranges": [
+      [
+        1,
+        700
+      ],
+      [
+        3835,
+        4035
+      ],
+      [
+        7710,
+        7737
+      ]
+    ],
+    "total_lines": 7737,
+    "read_lines": 929,
+    "unread_lines": 6808,
+    "whole_file": false
+  },
+  "controls": "docs/research/dedup-500/azr369-fast-intensity-20261021/result.json",
+  "findings": [
+    "Additional16384mixedintensity/thresholdcontrols match directcycliccontrastoracle and7354validcorner scores match. Four thresholds0/30/127/254 exercise equalityandstrictcontrastboundaries; forcedbright/darkarcs ensurepositivecases.",
+    "Generated scoretree uses bright>center+b and dark<center-b comparisons with terminalgoto branches; controlscorecriterion maximum minimumarccontrast minus1 matches strictcomparison.",
+    "Newlyread211..700branches extend combinations ofwrappedbright/darkruns acrosscirclepositions4..15; no newdefectseenin thisrange.",
+    "Runtimepositiveevidence doesnotreplaceunreadsource or fix wrapper/geometrycounterexamples."
+  ],
+  "remaining": [
+    "Generatedsource lines701..3834 and4036..7709"
+  ],
+  "limits": [
+    "227/500fullreviews, entry369partial.",
+    "No nativepHash/ASAN work; deferreditemunchanged.",
+    "No productionchanges or performanceclaim."
+  ]
+}
