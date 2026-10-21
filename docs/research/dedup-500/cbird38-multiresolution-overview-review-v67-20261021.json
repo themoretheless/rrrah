@@ -1,0 +1,35 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/papers/Fast Multiresolution Image Querying.pdf": {
+      "sha256": "1165d488a71ab28912da4f516b3eab7689c976cea7973ce799f4d64d8b6612aa",
+      "git_blob": "7ccc7394f6dea14eabac37b2bf231bd6b0436f10",
+      "bytes": 172208,
+      "pages": 4,
+      "method": "Entire extracted text read; all4 pages rendered with Poppler85dpi and visually inspected, including diagrams, image reconstructions, application screenshot and author panel.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-multiresolution-overview-review-v67-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 605,
+  "tracked_blobs": 616,
+  "findings": [
+    "Pinned PDF is a four-page project overview, not the full SIGGRAPH1995 paper; it links to the actual paper. No full-paper review claim.",
+    "Overview describes keeping20 large wavelet coefficients per color channel as a short signature, scanning database signatures and showing20 most similar images for painted/scanned queries. This is approximate semantic/appearance ranking, not exact file/pixel identity or guaranteed duplicate recall.",
+    "Reported best-match outcomes51/87 painted and66/89 scanned queries against more than1000images demonstrate imperfect retrieval in this historical task; not an all-duplicates test. Full20-result recall, negatives, ties, mutation/cancellation and budget behavior unspecified.",
+    "Reported0.19sec/1000images and0.44sec/10000images are historical figures with insufficient experiment specification in this overview; no local speedup inference. Twenty-second interactive target retrieval includes user query workflow, distinct from search timing.",
+    "Visuals show painted/scanned vase examples, preprocessing/query wavelet diagram,20/100/400coefficient reconstruction and painted-person thumbnail UI. Coarse appearance similarity illustrated, not geometry/crop/HDR/alpha equivalence.",
+    "Current rrrah-dedup pyramid is area-downsampled local descriptors, not this wavelet method. Search found no wavelet/Haar implementation in src/tests. CompletePairSchedule explicitly emits proposal pairs then all remaining pairs, so any future wavelet proposal should be evaluated without discarding fallback coverage."
+  ],
+  "local_source_comparison": {
+    "crates/rrrah-dedup/src/pyramid.rs": "c1f6884de7fe50e643e5c6792b98f00d9278d3ee7089fc611e059ad2bbc6d8c6",
+    "crates/rrrah-dedup/src/pair_schedule.rs": "abac87f09608f072216974d50a640b14d65890a135476a44059773a1fd4f2c94"
+  },
+  "executed_controls": [],
+  "decision": "research-only candidate ranking; no implementation accepted from incomplete metric description",
+  "limits": [
+    "605/616 assessed:185 whole text/source,417 PNG visuals,2 structured spreadsheets and1 PDF.11 remain:5PDFs,CImg,2QSS,SVG,ICNS,ICO.",
+    "No production code, benchmark or full article implementation executed.34 original-body/header controls and2 independent counterexamples unchanged; native pHash/ASAN deferred."
+  ]
+}
