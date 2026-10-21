@@ -1,0 +1,53 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "dedup/process.ts": {
+      "sha256": "197d85827154fb3faeb46ab6fdb6da238b76bc91c46200419eef55041a2fbc1c",
+      "git_blob": "4fd5d5316f425577019d79d5e23d94f57f26818c",
+      "lines": 169
+    },
+    "dedup/playlistCache.ts": {
+      "sha256": "afde53eb96e462f82b7df32047eef81c795463f3a6bd740f337dbfb863172141",
+      "git_blob": "ae732c91f57b015fa192fa1d4e447b44991eb18c",
+      "lines": 24
+    },
+    "components/duplicateTrackList.tsx": {
+      "sha256": "939ea64cc3d75c5316e8f8c0c039652c4e1a72a839dc54e3030a74384a50931e",
+      "git_blob": "2d27eff2b704c46501934e926552dfc817d5d115",
+      "lines": 7
+    },
+    "components/duplicateTrackListItem.tsx": {
+      "sha256": "58c5d55162b5f17922f205190780d88a068e29f79afb28f495277d1c281ca51a",
+      "git_blob": "9799afd7d63a039fbd325143d8800cf6e5bff702",
+      "lines": 34
+    }
+  },
+  "cumulative_whole_files_read": 11,
+  "tracked_blobs": 97,
+  "method": "Full four source/UI files read and pinned Git blobs verified. Original onPlaylistProcessed function extracted with signature type erased and run under Node. Static inspection shows playlist error catch invokes this same completion handler.",
+  "findings": [
+    "Playlist fetch failure catch logs error then calls normal completion handler, with default duplicates[] and processed=true. No error status is set in this path. Original handler control with final failed10-track model produces progress100,toProcess0 and library_processed event. Full browser pipeline not executed.",
+    "Owned-playlist fetch catch logs but returnsundefined; subsequent .map assumes array. Saved-track first page is fetched twice and first total drives progress, so changing snapshots can change denominator. Empty-library total0 can produce NaN progress. Source-only observations.",
+    "Module-global cache stores snapshot_id->v1 in localStorage. Namespace/user/playlist/policy not part of key; entries never expire/evict in this class. Cache hit creates fresh empty duplicate model and marks processed without rereading tracks. Snapshot identity is domain-specific, not file content proof.",
+    "UI duplicate row distinguishes same-id from same-name-artist with localized badge. It displays track/artist through react-i18next Trans interpolation; pixel rendering, escaping behavior and translation resources not evaluated by source reading.",
+    "Duplicate list wrapper is plain children in ul; completion/error classification belongs elsewhere, so no claim of actual final user-visible warning without remaining components."
+  ],
+  "executed_control": {
+    "processed": true,
+    "duplicates": [],
+    "progress": 100,
+    "toProcess": 0,
+    "events": [
+      "library_processed"
+    ],
+    "exit_code": 0,
+    "external_requests": 0,
+    "harness_sha256": "f068b5ead9bbd8de752bd6f69415f081eb6e98b524e604b4ca7a6d7eaac0f54e"
+  },
+  "limits": [
+    "11/97 tracked blobs reviewed;151/500 complete repositories.",
+    "No renderedUI/fullapp/runtime/network/policy-currentness claim; pHash/ASAN deferred."
+  ]
+}
