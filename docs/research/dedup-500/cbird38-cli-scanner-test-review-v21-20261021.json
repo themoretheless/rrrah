@@ -1,0 +1,67 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/commands.h": {
+      "sha256": "998286eec7ff2569a9e565f20eb1e17fab20b02fac2b320e7d784f44edd97b92",
+      "git_blob": "51cd41ca995f31f8f5a57673580f0fb07ad60aff",
+      "bytes": 2123,
+      "lines": 61,
+      "method": "Whole pinned source read."
+    },
+    "unit/testscanner.cpp": {
+      "sha256": "2c0ebca4427d5102d77ab899f2ae9b545ab8a2a7f62ea1f84ff22b27894d7bb7",
+      "git_blob": "6b113ff779e004bebf4592dd3dd5940421ea4f89",
+      "bytes": 4991,
+      "lines": 193,
+      "method": "Whole pinned source read."
+    },
+    "unit/testbase.h": {
+      "sha256": "f4b94ee7311577dcd446d4efa1885a3513283b49f1cd227885527e1c54704601",
+      "git_blob": "d75f9d0d08f16cd0e3a2f0c3583af1f585e7988e",
+      "bytes": 763,
+      "lines": 25,
+      "method": "Whole pinned source read."
+    },
+    "unit/testbase.cpp": {
+      "sha256": "45051dfaddb6efe7a27b5a6b4717873560246d796ee39e69b1b41102cf4035ea",
+      "git_blob": "d48b34ec45ff6fb5ffd514532100bfe03e27e2be",
+      "bytes": 4820,
+      "lines": 164,
+      "method": "Whole pinned source read."
+    }
+  },
+  "partial_source_files": {
+    "src/main.cpp": {
+      "sha256": "0aa809c1a6637087e395d76228c9d2866d0ae938c25604132390f6ff4b6b63e5",
+      "git_blob": "8fbfd00d5196870449584a7eb1767e936513d7bc",
+      "bytes": 63646,
+      "lines": 1839,
+      "read_ranges_inclusive": [
+        [
+          760,
+          940
+        ]
+      ],
+      "method": "Only this contiguous range read; targeted search elsewhere does not count as whole file."
+    }
+  },
+  "cumulative_assessed_blobs": 53,
+  "tracked_blobs": 616,
+  "findings": [
+    "CLI main -p./-i. branches reject any value starting with minus before setValue. This narrows prior negative-input concerns: these CLI branches do not pass ordinary negative values. Positive out-of-range values reach the unvalidated integer setter; no native executable was run.",
+    "SearchParams binds dht range0..65, vradix1..24 and mm1..INT_MAX to SET_INT. The CLI branch has no numeric range check, so e.g. mm=0 and dht=66 are not rejected by this traced assignment path. Algorithm behavior on those values remains a separate obligation.",
+    "Scanner tests depend on external TEST_DATA_DIR. They assert unique emitted path counts:200,190 after ten skipped paths, one image/video, and one allowed truncated JPEG. QSet collection does not prove exactly one signal per file or descriptor correctness.",
+    "Scanner destructor test intentionally starts no event loop and expects zero emitted items. It proves neither completion nor preservation of active processed-but-uncommitted work. No unreadable-subtree/reconciliation error gate is asserted in this file.",
+    "Skip-list tests expect nonexistent paths to remain in skip. This supports skip-set semantics but does not establish that Engine may safely remove remaining index records after incomplete traversal.",
+    "TestBase reads full CSV into memory and splits commas, with &comma; substitution; no general quoted CSV parser. Numeric test fields convert without success flags. Data-row positive count required; dataset source existence and actual values remain unverified.",
+    "Commands header is declarations only. No command implementation, delete/rename behavior or native decoder test execution inferred."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "53/616 tracked artifacts assessed:52 whole text/source and one PNG visual. main.cpp remains partial and is excluded.",
+    "Previous 24 isolated original-body/header controls and one independent counterexample unchanged. No new native tests, production edits or benchmark.",
+    "Deferred native pHash/ASAN remains skipped."
+  ]
+}
