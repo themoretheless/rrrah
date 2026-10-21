@@ -1,0 +1,65 @@
+{
+  "repository": "SabrosoCuy/PlexDeDupe",
+  "commit": "8bf5a471756cb2b2fc39f88c6b3f865007637967",
+  "whole_repo_complete": false,
+  "tracked_blobs": 10,
+  "cumulative_assessed_blobs": 3,
+  "new_whole_files_read": {
+    ".gitattributes": {
+      "bytes": 66,
+      "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+      "git_blob": "dfe0770424b2a19faf507a501ebfc23be8f54e7b",
+      "method": "Whole pinned text read"
+    },
+    "Requirements.txt": {
+      "bytes": 87,
+      "sha256": "705e6e38ed5159a5357829d0d3ebd920bee8478244b7919b32fe952ce0856be2",
+      "git_blob": "7e400215a2d13b6f32d159736665f81e7f7681ca",
+      "method": "Whole pinned text read"
+    },
+    "LICENSE": {
+      "bytes": 1060,
+      "sha256": "47c5e83814adbbf957c08053f5e3644835c41474b69da9a016bed53f5139ee6b",
+      "git_blob": "d352e48be0116a10bf6d55d99f065d4cfab0fad2",
+      "method": "Whole pinned text read"
+    }
+  },
+  "partial_read": {
+    "path": "DupCleanup.py",
+    "lines_read": [
+      [
+        1,
+        830
+      ]
+    ],
+    "total_lines": 1528
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/plex352-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/plex352-controls-v1-20261021/run.log",
+    "passed": 6,
+    "method": "Original get_file_hash/can_hardlink AST methods; real temporary files, independent hashlib oracle; logging adapter; no main-module import, dependency install, GUI or Plex connection."
+  },
+  "findings": [
+    "Default hash matches independent SHA256; compatible equal-content separate files admitted, same-size unequal files and physical hardlink aliases refused; unavailable file returns None.",
+    "Public chunk_size=0 yields SHA256(empty) for nonempty file; tested API input is invalid but not rejected. Normal application calls use default and are not shown affected.",
+    "can_hardlink compares device/inode/size and hash, without final source freshness or byte confirmation. Actual replacement path read but not exercised.",
+    "create_hardlink uses fixed target.plexdedupe_backup name and move/link/remove/restore sequence; no production filesystem conversion run.",
+    "Source invokes dependency checker at import and may offer pip installation; research AST extraction avoids those side effects. Requirements.txt is prose, no exact versions.",
+    "Source claims Python3.6+, but get_file_hash uses assignment expression requiring Python3.8+; no Python3.6 run."
+  ],
+  "remaining": [
+    "DupCleanup.py lines831-end",
+    "README.md",
+    "ChangeLog.txt",
+    "Screenshots/DebugConsole.png",
+    "Screenshots/MainWindowWresults.png",
+    "Screenshots/dryrun.png",
+    "Screenshots/fullrun.png"
+  ],
+  "license": "Root MIT fully read; research controls retain copyright/license; no production adoption.",
+  "limits": [
+    "Global full-review count remains168/500.",
+    "No actual Plex, full GUI, media matching corpus, deletion/conversion or performance qualification. Native pHash/ASAN deferred."
+  ]
+}

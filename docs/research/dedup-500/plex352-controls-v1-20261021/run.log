@@ -1,0 +1,7 @@
+PASS original default chunk hash matches independent SHA256
+PASS separate equal-content files admitted
+PASS same-size unequal content refused
+PASS already-hardlinked inode refused
+PASS unavailable file returns None
+PASS chunk_size=0 returns empty digest for nonempty file; invalid configuration not rejected
+RESULT 6 passed; original AST methods, real owned temporary files; no import-time dependency installer, GUI, Plex connection or hardlink conversion
