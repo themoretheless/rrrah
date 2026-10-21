@@ -1,0 +1,52 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "files": {
+    "README.md": {
+      "bytes": 9119,
+      "sha256": "2b365ee79cf73938036d2a39052c56415a9347a28324ed3cc5b5dae4968de78c",
+      "git_blob": "3a3f28aa72dfce984901c0f6c4c18909515bed6e",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "report_template.py": {
+      "bytes": 11056,
+      "sha256": "53c1a9c5faa0e5ee7b4d5d977effe8d6872e2800810a847b6fc96a7f8e6b6983",
+      "git_blob": "25d69d35faa70f760733b25fe549149a91b11d01",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "docs/Setup_en.png": {
+      "bytes": 99680,
+      "sha256": "0f1d4b2b457f4448c5b017cfe116beeaef5316543d4a125eec8f30390c1eb0be",
+      "git_blob": "a1f71d91487ffeabf5585aebbcc1271cd3dd1f84",
+      "method": "Original PNG visually viewed through view_image"
+    },
+    "docs/scan_exact.png": {
+      "bytes": 87565,
+      "sha256": "83d55f7d0281fb5593e48d25c749d341f23a775dc3530faf2ec91ea931be40d8",
+      "git_blob": "445b2e4728bfcf20bd196fa0b30c4bd9d4d91f33",
+      "method": "Original PNG visually viewed through view_image"
+    },
+    "docs/scan_visual.png": {
+      "bytes": 80075,
+      "sha256": "9c4c372f23ffe40c31dca0f9712723d5294748ab55f42a3933663c37d9dc5583",
+      "git_blob": "1d1301335f6d7e78ad217f9d819413e67aad5695",
+      "method": "Original PNG visually viewed through view_image"
+    }
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-report-controls-20261021/result.json",
+  "new_authored_controls": 2,
+  "cumulative_authored_controls": 12,
+  "findings": [
+    "Original create_html_report computes wasted storage from group order before sort_group chooses keeper. Injected visual metadata10B/1px then100B/100px: HTML keeps100B item and marks10B candidate but summary claims100B waste. No deletion or browser rendering executed.",
+    "Default None video arguments immediately become empty lists; later is-not-None checks emit video sections even when not scanned. Actual original HTML generation reproduced.",
+    "README pHash0=pixel-identical is unsupported; earlier real solid and noisy hash controls contradict equality inference. README CLI feature is contradicted by reproduced invalid video_error keyword.",
+    "README promises only cross-directory matches in compare mode; app intensive source concatenates inputs and calls within-list comparator, so policy claim unproven/contradicted structurally. No new video runtime.",
+    "README bitrate says bps while engine ffprobe_metadata divides bit_rate by1000 and renderer labels kbps. Source inconsistency.",
+    "All3trackedPNGvisuallyviewed. Setup shows centered username/password creation form. Exact screenshot shows original/backup geometric scene pairs. Visual screenshot explicitly pairs forest/mountain and sunset/desert named scenes with same geometry and different colours, supporting weak demo semantics rather than independent precision. Screenshots are upstream UI evidence, not reproduced live app.",
+    "Report script text defaults candidate selection and generates commands from current selected paths without content observation revalidation; no generated commands executed and no production API adopted."
+  ],
+  "limits": [
+    "Remaining tracked frontend.html,styles.css,translations.js not yet whole-read. App not live-tested, original CLI still fails; two report controls invoke engine helper directly. Image pixels inspected, no external media assets fetched. Native pHash/ASAN deferred."
+  ]
+}
