@@ -1,0 +1,32 @@
+{
+  "scope": "Explicit PNG primary assumption on selected frames of synthetic two-frame APNG.",
+  "test": "crates/rrrah-dedup/tests/png_primary_policy.rs",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_primary_policy",
+  "result": {
+    "exit_code": 0,
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "checks": [
+    "Two1x1 SOURCE frames gray128 and gray64, alpha128, gAMA50000",
+    "Each strict selected-frame request rejects unspecified RGB primaries",
+    "Each explicit primary-policy frame matches independent(code/255)^2 within1e-4 and alpha128/255 within1e-6",
+    "Frame0 and1 each have separate cold/warm cache entries; switching toP3 yields cold cache for each",
+    "Memory budget released after decode and cache operations"
+  ],
+  "registry_audit": {
+    "artifact": "docs/research/dedup-500/registry-coverage-audit-v443-20261022.json",
+    "entries": 500,
+    "stored_pins_checked": 3067,
+    "errors": 0,
+    "entries_with_detailed_references": 257,
+    "full_reviews": 247
+  },
+  "limits": [
+    "Two synthetic SOURCE-blend frames, not every APNG blend/disposal/profile case.",
+    "JNG and embeddedSVG policy runtime remains unqualified.",
+    "Current dirty worktree qualification; unrelated work retained."
+  ],
+  "resource_coordination": "Build/test finished naturally before attempted SIGSTOP. Verified PID23635 missing; no signal delivered. No active owned heavy process, new heavy jobs deferred pending shared measurement-window completion."
+}
