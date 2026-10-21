@@ -1,0 +1,42 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/S3Adapter.ts": {
+      "sha256": "711260a08235106088ed57dcba862812b5b881da3b6487cf259aa734893722da",
+      "git_blob": "5186ef726cb6c0ac8e35909ff2d01dcc4c5fa132",
+      "bytes": 22955,
+      "lines": 594,
+      "method": "Whole source read."
+    },
+    "tests/S3Adapter.test.ts": {
+      "sha256": "56cd9712961e45a887033329e5dd008183e4eea6a5f46c6ea5ae3a5efded5512",
+      "git_blob": "3c16683c0fb4792d399ca20dccfeb6f5aaf9dc06",
+      "bytes": 12429,
+      "lines": 270,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 27,
+  "tracked_blobs": 129,
+  "findings": [
+    "ListObjectsV2 uses delimiter/,1000maxkeys and continuation loop; valid two-page control preserves both entries. Listing error is caught and accumulated entries returned without completeness flag; second-page error control returns only first entry.",
+    "IsTruncated without NextContinuationToken terminates loop silently; synthetic control confirms one request and partial-shaped result. No repeated-token guard or cancellation in loop. Real provider response behavior unverified.",
+    "streamToArrayBuffer fast path returns arr.buffer ignoring byteOffset/byteLength. Original readBinary control using subarray[1,2] from backing[9,1,2,8] returns allfourbytes. Fallback stream branch slices Buffer correctly; upstream test uses fresh whole Uint8Array, so misses subview case. Actual AWS SDK representation unverified.",
+    "S3 object keys/prefixes are lexical names, not content hashes. toKey strips leading slashes; configured prefix used for probe, while file paths expected pre-expanded by caller. No ETag/version consistency or snapshot guarantee in read/list.",
+    "stat/exists collapse nonmissing failures to null/false, prefix existence handled only after recognized404. readText missingBody yields empty string while binary missingBody fallback would fail iteration. Static assessment.",
+    "Append is read-modify-write without conditional object version; genuine404 accepted as empty, other errors propagate. No mutations invoked.",
+    "Rename uses copy then remove; folder copy enumerates contents but remove only exact key/placeholder. Whether caller chooses folder-aware removal separately remains unverified. Recursive deletion ignores possible per-object error payload because response interface lacks Errors; static only, not executed.",
+    "CopySource encodes each key segment preserving separators/literal percent distinction; upstream mocked tests cover encoding, prefixes, pagination and copy failure retaining source. Tests read fully; VirtualAdapter/SecurityManager integrations referenced there not yet assessed or run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-s3-controls-v6-20261021",
+    "passed": 4,
+    "method": "Original S3 adapter method bodies after Node type stripping, upstream normalizePath mock, synthetic list/get command classes and in-memory responses. Prototype instance avoids constructor/credentials. No AWS/network/mutation calls."
+  },
+  "limits": [
+    "27/129trackedblobs read;22isolatedcontrols total, no full upstream suite.",
+    "Actual AWS SDK/server, VirtualAdapter caller behavior and production library integration unverified."
+  ]
+}
