@@ -3,6 +3,9 @@ use rrrah_dedup::pixels::{PixelError, Rgba8View};
 #[test]
 fn area_fingerprint_preserves_last_row_and_column_contributions() {
     for (width, height) in [
+        (5, 5),
+        (5, 4),
+        (4, 5),
         (32, 32),
         (64, 64),
         (96, 96),
@@ -43,6 +46,7 @@ fn area_fingerprint_preserves_last_row_and_column_contributions() {
             assert!(signature.luminance_stddev > 0.0);
             assert_ne!(view.pixel_digest(|| false).unwrap(), baseline_digest);
             assert_eq!(baseline.same_pixels(&view, || false), Ok(false));
+            assert_eq!(view.same_pixels(&baseline, || false), Ok(false));
         }
     }
 }

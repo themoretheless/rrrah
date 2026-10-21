@@ -1,0 +1,9 @@
+{
+  "change": "Extend existing whole-image area/identity regression with5x5,5x4,4x5 and reverse same_pixels assertions. Five edge positions per dimension; independent single-white-pixel mean1/pixel_count, nonzero variance, different digest and inequality both directions.",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test pixels --no-default-features",
+  "exit_code": 0,
+  "passed": 13,
+  "failed": 0,
+  "source_case": "docs/research/dedup-500/lulu425-controls-20261021/result.json",
+  "scope": "Already decoded RGBA8 library API, not encoded-file decoder or upstream blockhash compatibility."
+}

@@ -1,0 +1,26 @@
+{
+  "repository": "ClaudiuCeia/dhash",
+  "commit": "9ae9b1daea9591d9cd477b0de58609059e5f1fab",
+  "whole_repo_complete": false,
+  "whole_text_read": [
+    "src/dhash.ts",
+    "mod.ts",
+    "scripts/check_manifests.ts",
+    "tests/dhash.test.ts",
+    "examples/compare.ts",
+    "examples/compare-bytes.ts",
+    "LICENSE"
+  ],
+  "controls": "docs/research/dedup-500/dhash440-helper-controls-20261021/result.json",
+  "findings": [
+    "64onehotpositions:compare distance1eachdirection, complementdistance64,doubleinvertidentity,ASCIIlength64/bitposition/popcount allpass withoriginal TS purehelpers. Sharp explicitly replacedthrowingstub,notused.",
+    "Hashparser bounds1..16hexcharactersandBigInt preserves64bits; compare rejects numericallyequal0/00 because textual lengths differ. This is representation policy, not byte identity qualification.",
+    "Inputbyte/pixel budgets validatedpositivesafeintegers; boundedpathreaderreadsmaximum+1foroverflowdetection and closesfinally. Retainschunks thenfinalcopy so encodedpeakmemoryexceedsnominalinputsize; sourceobservation.",
+    "EXIForientation1..8 manualSharp transforms,whiteflatten,grayscale,9x8fill,leftrightincreasingbits. UpstreamorientationtestcomparesagainstsameSharpoperations,notindependentpixelcoordinateoracle. Originaltestfirstanimatedframeexplicitpolicy.",
+    "Manifestchecker checksversions/metadata/documentedfixturethresholds but notruntimequality. Examplecompare-bytes readswholefilebeforelibrarybytebudget,soinputallocationalreadyoccurred. Sourceonly.",
+    "MIT2022ClaudiuCeia whole-read; no production source adopted."
+  ],
+  "limits": [
+    "Only7listedtexts whole-read; other48blobs notfullyassessed. NooriginalBun/Deno/Sharpimagepipeline tests,packagingorvisualfixture reviewyet. Globalcount221/500. NativepHash/ASANdeferred."
+  ]
+}
