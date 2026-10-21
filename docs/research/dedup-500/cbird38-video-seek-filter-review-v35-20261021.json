@@ -1,0 +1,54 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_source_files": {
+    "src/videocontext.cpp": {
+      "sha256": "f9aee6aaa0e8ba13d5c67c3fb8743244754124b955f81cefd3be7b3716f3c2cb",
+      "git_blob": "0b8c725149176b50ee6b155ccb1615348499182b",
+      "bytes": 76516,
+      "lines": 2337,
+      "read_ranges_inclusive": [
+        [
+          47,
+          49
+        ],
+        [
+          1630,
+          2337
+        ]
+      ],
+      "new_ranges_inclusive": [
+        [
+          1646,
+          1774
+        ],
+        [
+          1906,
+          2263
+        ]
+      ],
+      "method": "Cumulative read now contiguous1630-2337 plus logging macros47-49; rest unreviewed."
+    }
+  },
+  "cumulative_assessed_blobs": 109,
+  "tracked_blobs": 616,
+  "findings": [
+    "Accurate seek retries av_seek_frame/key packet up to more than10 attempts then closes/reopens and falls back seekDumb. Fallback ignores open result before seekDumb; negative frame and failed reopen need explicit caller/runtime qualification. No seek executed.",
+    "seek maxDecoded documented in/out limit is overwritten with framesLeft without reading caller limit. Intermediate storage actually bounded by decoded vector count; frameToQImg return ignored in storage loop. Do not infer all returned intermediates valid from seektrue.",
+    "seekFast returns true immediately for frame<=0 without rewinding an already advanced stream. Caller expectations/reuse determine impact; not a universal wrong-first-frame claim.",
+    "convertFrame initializes scaler/buffer only when scaler null, without checking new input dimensions/format on subsequent frames in this method; midstream changes require lifecycle validation. sws_scale return ignored before ConvertOK. No resolution-switch fixture run.",
+    "decodeFrameFiltered does not flush graph after decodeFramefalse (source FIXME). Delayed filter outputs may be dropped; complete filtered frame count not proven.",
+    "buffersink_get_frame handles EAGAIN and EOF specially but returns true for other values, including other negative failures, without checking err>=0. This is source-level false-success path; no malformed-media or decoder run.",
+    "Hardware filter builds rotation suffix inside maxW/maxH branch; if graph already exists, later software rotation branch skipped. Rotation treatment depends on options/path, not blanket consistent orientation guarantee.",
+    "avLogger static failedLogFile and firstTime read/write outside logger mutex; repeats protected but grows without clear/budget in this method. Failed destination can suppress subsequent log changes via sticky flag. No concurrent logging run.",
+    "readMetaData returns early when format metadata absent without closing opened format in this visible branch. Full library lifecycle not executed; separate metadata/helper resource issue, not duplicate match evidence."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Whole-artifact count unchanged109/616; partial source progress is not a completed-file credit.",
+    "27 prior isolated original-body/header controls plus one independent counterexample unchanged. No FFmpeg/filter/seek runtime qualification, production changes or speedup.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
