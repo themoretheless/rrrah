@@ -1,0 +1,37 @@
+{
+  "repository": "folksable/pHash.c",
+  "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": {
+    "stb_image.h": {
+      "lines": [
+        1701,
+        2400
+      ],
+      "sha256": "9c7cbeb101f51ac0169be523aef5cdebce2b95fcaa72ffb662eef26b45581329"
+    }
+  },
+  "executed_original_functions": {
+    "name": "stbi__idct_block",
+    "method": "Harness includes original bundled header unchanged; independent cosine inverse-DCT oracle.",
+    "harness": "docs/research/dedup-500/folks405-controls-20261021/jpeg-idct.c",
+    "cases": 384,
+    "dc_cases_exact": 256,
+    "signed_single_frequency_basis_cases": 128,
+    "maximum_absolute_byte_error": 1,
+    "exit_code": 0
+  },
+  "findings": [
+    "Baseline Huffman/fastAC decoding, progressive DC/AC scan/refinement and scalar integer IDCT read. x86SSE2 IDCT body whole-read; ARMNEON body begins after current range and remains unread.",
+    "DC-only scalar path checked at all256 output gray levels. Each64 frequency basis tested at positive/negative64 coefficient; all pixels within1 byte of direct cosine oracle.",
+    "This does not cover arbitrary mixed coefficients, all quantization tables, entropy input malformed cases, SIMD parity or complete JPEG decode conformance.",
+    "Existing phash8 NEON partial-output finding is separate from decoder scalar IDCT and unchanged."
+  ],
+  "remaining": [
+    "stb_image.h lines2401 through EOF."
+  ],
+  "limits": [
+    "235/500 complete;405 still partial.",
+    "No production changes, ASAN or deferred native pHash execution."
+  ]
+}
