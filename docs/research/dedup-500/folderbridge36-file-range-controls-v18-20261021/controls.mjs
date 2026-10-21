@@ -1,0 +1,14 @@
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import assert from 'node:assert/strict';
+const root=process.argv[2],url=s=>`data:text/javascript;base64,${Buffer.from(s).toString('base64')}`;
+const source=readFileSync(`${root}/src/FileServer.ts`,'utf8').replace(/^import .*\n/gm,'').replace(/^export \{ STREAMING_MIME \}.*\n/gm,'').replace(/^const (httpMod|fsMod|pathMod):.*\n/gm,'');
+const {FileServer}=await import(url(`import pathMod from 'node:path';const httpMod=null;const logger={error(){},debug(){}};const ALL_MEDIA_MIME={'.mp4':'video/mp4'};const fsMod={statSync:()=>({size:10,isDirectory:()=>false}),createReadStream:()=>({pipe(){}})};\n${stripTypeScriptTypes(source)}`));
+const server=new FileServer();server.token='synthetic';server.addAllowedPath('/fixture');
+const run=(name,range)=>{let status,headers;const res={headersSent:false,setHeader(){},writeHead(code,h){status=code;headers=h;},end(){}};server.handleRequest({url:server.getFileUrl(`/fixture/${name}`),headers:range?{range}:{}},res);return {status,headers};};
+let a=run('video.mp4','bytes=0-2');assert.equal(a.status,206);assert.equal(a.headers['Content-Range'],'bytes 0-2/10');assert.equal(a.headers['Content-Length'],3);
+console.log(JSON.stringify({name:'explicit-byte-range-correct',passed:true}));
+a=run('video.mp4','bytes=-3');assert.equal(a.status,416);
+console.log(JSON.stringify({name:'valid-suffix-range-rejected',actualStatus:a.status,passed:true}));
+a=run('100%.mp4');assert.equal(a.status,500);
+console.log(JSON.stringify({name:'literal-percent-filename-double-decode-error',actualStatus:a.status,passed:true}));

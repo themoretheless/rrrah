@@ -1,0 +1,42 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/FileServer.ts": {
+      "sha256": "bdaf6db960a6a2e52c73925f64e2dbec931bb8a72e967594488f279cc224f763",
+      "git_blob": "b7bbc248f62e4a59189bf395179a43e3feb804d5",
+      "bytes": 11554,
+      "lines": 281,
+      "method": "Whole source read."
+    },
+    "tests/FileServer.test.ts": {
+      "sha256": "4b1726c4ba66b57c49a4d2beaad6a52bf7e1bfd220f0e13dcc869805fd09d0b4",
+      "git_blob": "43c17df4615c47d707052c0e13946eee2a052474",
+      "bytes": 1741,
+      "lines": 56,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_assessed_blobs": 88,
+  "tracked_blobs": 129,
+  "findings": [
+    "FileServer serves local mounted media with explicit range and MIME metadata, not content duplicate decisions. Original handler control forbytes0-2/file10 emits206,length3,range0-2/10. Actual stream bytes/socket/player not executed.",
+    "Suffix bytes=-3 computes start7 but end3 for10bytefile, yielding416 instead of finalthreebytes. Original whole-class handler control confirms rejection. Open-ended start form handled separately; full multirange/HEAD behavior unqualified.",
+    "URLSearchParams already decodes p; subsequent decodeURIComponent decodesagain. Original generated URL for literal100%.mp4 triggers handler500, confirming ordinary percent filename failure. No user file or server used.",
+    "Range parser regex unanchored and single-range only; oversize end rejected rather than clamped, stream errors lack attached handling afterpipe. No throughput/seek/runtime quality claim.",
+    "start stores server only afterlisten callback, so overlapping starts have no shared inflightpromise; stopbeforelisten cannot stop not-yetrecordedserver. Lifecycle static only; no sockets opened.",
+    "Upstream file tests cover one whole-file success and lexical outside/dotdot rejection using temporary loopbackserver. They have no range/suffix/percentfilename test. Source read, full upstream tests not run.",
+    "Allowed roots/token/127.0.0.1 binding are application controls, not file identity or atomic snapshot guarantee; stat and stream occur separately. Scope remains media behavior assessment."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-file-range-controls-v18-20261021",
+    "passed": 3,
+    "method": "Original full FileServer class after TS stripping; fake fsstat/stream and response recorder, real Node path. No start/listen, network request, actual filesystem or user data access."
+  },
+  "limits": [
+    "88/129trackedblobs assessed(83wholetext/source,1structurallockfile,4PNGvisuals);36isolatedcontrols total.",
+    "Actual server streams, HTTP/player behavior and upstream suite not qualified.",
+    "Production library unchanged."
+  ]
+}
