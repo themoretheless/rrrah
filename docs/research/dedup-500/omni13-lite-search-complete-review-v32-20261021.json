@@ -1,0 +1,66 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "mode": "100644",
+      "method": "All 10272 lines read across linked incremental audits with exact contiguous coverage reconciliation and pinned Git blob verification."
+    }
+  },
+  "cumulative_whole_files_read": 82,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "prior_audits": [
+      "docs/research/dedup-500/omni13-lite-search-index-review-v23-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-sql-review-v24-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-scopes-review-v25-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-refresh-review-v26-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-routing-review-v27-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-merge-review-v28-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-original-tests-review-v29-20261021.json",
+      "docs/research/dedup-500/omni13-lite-search-test-quality-review-v30-20261021.json",
+      "docs/research/dedup-500/omni13-lite-calculator-review-v31-20261021.json"
+    ],
+    "new_read_line_ranges": [
+      [
+        9151,
+        10272
+      ]
+    ],
+    "union_read_line_ranges": [
+      [
+        1,
+        10272
+      ]
+    ],
+    "unique_lines_read": 10272
+  },
+  "method": "Completed remaining source; ran five unchanged dependency-free original tests against unchanged extracted helpers. No Windows/SQLite engine integration executed.",
+  "findings": [
+    "Five original tests passed: UTF-8 string shortening, local trust-line description, workday-query phrases, timestamp normalization fixtures and session source counts. These establish listed helper fixtures only.",
+    "Memory session selection orders and caps 200 database rows before timestamp normalization and stops at a >30minute adjacent gap. Mixed timestamp units, equal-time tie order and sessions longer than200 records remain unqualified.",
+    "Path extraction branch labeled Unix path actually searches colon-slash with a preceding alphanumeric character, so ordinary /home/user/file is not recognized by that branch. Explicit URL extraction terminates only at spaces/tabs, not newline. Meeting-domain path construction truncates at hyphen. Source observations; no full title capture runtime.",
+    "Process listing splits CSV with line.split(comma); quoted memory counts containing thousands commas therefore split across fields and can misstate memory/scoring. No tasklist or termination action invoked. Process listing subprocess has no timeout and does not check success exit status before parsing stdout.",
+    "Unit converter maps KB/MB/GB aliases to powers of1024 and formats non-finite results as empty strings while still returning Some. Decimal-vs-binary naming and overflow behavior require an explicit product contract, not inferred file-size equivalence.",
+    "Quicklink/snippet name-match SQL applies LIMIT5 before later score calculation with no ORDER BY relevance; exact keyword/name candidate outside firstfive may be absent. Queries bind values but LIKE wildcards remain active, a query-semantics issue rather than injection. No database engine tests run here.",
+    "Steam search inspects only three fixed library locations without libraryfolders discovery and emits every matching manifest without dedupe/sort in that helper. Notes search enumerates directory entries without checking regular-file type or requiring txt extension. These are launcher coverage limits, not content-duplicate logic.",
+    "Complete source review of this module does not complete the 268-blob repository. Main Rust/UI/sync modules, lockfiles and visual assets remain outstanding."
+  ],
+  "limits": [
+    "82/268 whole files in repository013; overall155/500 full repository reviews unchanged.",
+    "No local production modification or new performance claim. Native pHash/ASAN remains deferred."
+  ],
+  "control_source": "fn take_chars(s: &str, max: usize) -> String {\n    s.chars().take(max).collect()\n}\n\nfn take_last_chars(s: &str, max: usize) -> String {\n    let mut chars = s.chars().rev().take(max).collect::<Vec<_>>();\n    chars.reverse();\n    chars.into_iter().collect()\n}\n\nfn ellipsize_chars(s: &str, max: usize) -> String {\n    if s.chars().count() <= max {\n        s.to_string()\n    } else {\n        format!(\"{}...\", take_chars(s, max.saturating_sub(3)))\n    }\n}\n\nfn memory_home_description(today: i64, yesterday: i64, total: i64) -> String {\n    format!(\n        \"{} events today, {} yesterday, {} total. Stored locally on this PC.\",\n        today, yesterday, total\n    )\n}\n\nfn workday_memory_query_days(query: &str) -> Option<i64> {\n    let asks_work = query.contains(\"working on\")\n        || query.contains(\"worked on\")\n        || query.contains(\"what was i doing\")\n        || query.contains(\"what did i do\");\n    if !asks_work {\n        return None;\n    }\n    if query.contains(\"yesterday\") {\n        Some(1)\n    } else if query.contains(\"today\") {\n        Some(0)\n    } else {\n        None\n    }\n}\n\ntype MemoryEventRow = (\n    i64,\n    i64,\n    String,\n    String,\n    String,\n    String,\n    String,\n    Option<String>,\n    Option<String>,\n);\n\nfn session_source_summary(events: &[MemoryEventRow]) -> String {\n    let mut counts = std::collections::BTreeMap::<&str, usize>::new();\n    for event in events {\n        *counts.entry(event.2.as_str()).or_default() += 1;\n    }\n    if counts.is_empty() {\n        \"No captured events yet.\".to_string()\n    } else {\n        counts\n            .into_iter()\n            .map(|(source, count)| format!(\"{} {}\", source, count))\n            .collect::<Vec<_>>()\n            .join(\", \")\n    }\n}\n\nfn normalize_event_timestamp(timestamp: i64) -> i64 {\n    if timestamp > 11_644_473_600_000_000 {\n        (timestamp / 1_000_000) - 11_644_473_600\n    } else if timestamp > 10_000_000_000_000 {\n        timestamp / 1_000_000\n    } else if timestamp > 10_000_000_000 {\n        timestamp / 1_000\n    } else {\n        timestamp\n    }\n}\n\n#[test]\n    fn string_shortening_is_utf8_safe() {\n        assert_eq!(ellipsize_chars(\"abcdefg\", 6), \"abc...\");\n        assert_eq!(ellipsize_chars(\"\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\", 5), \"\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\");\n        assert_eq!(take_chars(\"\ud83d\ude00abcdef\", 2), \"\ud83d\ude00a\");\n        assert_eq!(take_last_chars(\"abcdef\ud83d\ude00\", 2), \"f\ud83d\ude00\");\n    }\n#[test]\n    fn memory_home_description_keeps_local_trust_line() {\n        assert_eq!(\n            memory_home_description(3, 2, 9),\n            \"3 events today, 2 yesterday, 9 total. Stored locally on this PC.\"\n        );\n    }\n#[test]\n    fn workday_memory_query_detects_mvp_phrasing() {\n        assert_eq!(\n            workday_memory_query_days(\"what was i working on yesterday\"),\n            Some(1)\n        );\n        assert_eq!(workday_memory_query_days(\"what did i do today\"), Some(0));\n        assert_eq!(workday_memory_query_days(\"open chrome yesterday\"), None);\n    }\n#[test]\n    fn memory_timestamps_are_normalized_to_unix_seconds() {\n        assert_eq!(normalize_event_timestamp(1_700_000_000), 1_700_000_000);\n        assert_eq!(normalize_event_timestamp(1_700_000_000_123), 1_700_000_000);\n        assert_eq!(\n            normalize_event_timestamp(1_700_000_000_123_456),\n            1_700_000_000\n        );\n        assert_eq!(\n            normalize_event_timestamp(11_644_473_600_000_000 + 1_700_000_000_000_000),\n            1_700_000_000\n        );\n    }\n#[test]\n    fn session_source_summary_counts_events() {\n        let event = |source: &str| {\n            (\n                1,\n                1_700_000_000,\n                source.to_string(),\n                \"Event\".to_string(),\n                \"Title\".to_string(),\n                String::new(),\n                String::new(),\n                None,\n                None,\n            )\n        };\n        assert_eq!(\n            session_source_summary(&[event(\"Browser\"), event(\"Git\"), event(\"Browser\")]),\n            \"Browser 2, Git 1\"\n        );\n    }\n",
+  "executed_controls": {
+    "compiler": "rustc --edition 2021 --test",
+    "source_sha256": "635fb7c39a97863ed96343495ebd272848c947a6dfd4b4746f0ec1231c357018",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "scope": "Exact extracted original helpers and five original test functions; no adapters or implementation changes."
+  }
+}
