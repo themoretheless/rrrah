@@ -1,0 +1,43 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 88,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/ui/settings.slint": {
+      "sha256": "6f8fefe18924d0b3dcca2c43c92846fe365805223b78549ee7f20bcdc3a07990",
+      "git_blob": "414fe2fea0b0a8b7374cd44949909a4c783552d1",
+      "lines": 2647,
+      "new_read_line_ranges": [
+        [
+          801,
+          1640
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          1640
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read840 additional contiguous markup lines and rechecked exact theme normalization in already-reviewed settings.rs. Static UI/backend contract comparison only.",
+  "findings": [
+    "Appearance Dark card saves theme-mode Dark. AppSettings.normalized_theme_mode recognizes Darker, not Dark, returning Omni for unknown values; main theme_from_setting likewise recognizes Darker. Card preview can showDark while actual launcher reload selectsOmni. Source mismatch, no visual runtime.",
+    "Search-bar-height slider minimum40 maximum80; query-font-size minimum14 maximum32. These controls constrain normal user editing and narrow prior blanket invalid-UI-value concern. Persisted item_height zero still has no validation in reviewed backend; its UI control remains pending.",
+    "AI key/endpoint LineEdit edited callbacks save all settings on each edit, so intermediate text is persisted per edit. Shared handler performs synchronous general save and SQLiteAI transaction plus launcher reload notification each time; no latency benchmark.",
+    "General help advertises Claude/Grok/Eyux prompt prefixes whereas previously reviewed Lite search intentionally suppresses nonChatGPT AI prefix results. Help text is not proof active feature support.",
+    "Appearance preview is fixed440x250 mockup with five hardcoded items, not native launcher renderer. It cannot qualify actual six-item homepage, dynamic width/fonts or measured GDI rendering.",
+    "Hotkey dropdowns invoke apply-hotkey on each change with backend uniqueness validation; normal invalid intermediate states show error. No actual global hotkey registration performed in review.",
+    "Agent card click calls launch-agent(id), which closes settings in Rust callback after posting. Pending setting text auto-saves per edit as above; no separate save acknowledgment in card flow."
+  ],
+  "limits": [
+    "88/268 whole files; settings.slint1-1640 of2647 partial.",
+    "No tests/Slint render/Windows actions or local production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
