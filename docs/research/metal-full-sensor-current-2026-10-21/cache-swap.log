@@ -1,0 +1,34 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.79s
+     Running tests/compute_cache_swap.rs (target/debug/deps/compute_cache_swap-c82483f9db23061d)
+
+running 2 tests
+test compute_hdr_result_preserves_float_bits_ram_swap_and_rendering ... compute cache adapter: Metal Apple M4 Max
+compute cache recovery: 164x50; full-budget refusal; admitted cancellation; exact SDR-HDR retry; final=0
+compute cache HDR: 164x50; finite signed HDR; computed-pinned-restored binary16 exact
+compute cache pipeline: 164x50; all component bits and 128x96 Metal frames exact; root=0; gpu=0; one swap write/read
+ok
+test large_compute_hdr_result_preserves_float_bits_ram_swap_and_rendering ... compute cache adapter: Metal Apple M4 Max
+compute cache recovery: 4000x3000; full-budget refusal; admitted cancellation; exact SDR-HDR retry; final=0
+compute cache HDR: 4000x3000; finite signed HDR; computed-pinned-restored binary16 exact
+compute cache pipeline: 4000x3000; all component bits and 4000x3000 Metal frames exact; root=0; gpu=0; one swap write/read
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.45s
+

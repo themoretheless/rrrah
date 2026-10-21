@@ -83,6 +83,22 @@ pub fn decode_eps_document<F: FnMut() -> bool>(
     budget: &MemoryBudget,
     mut cancelled: F,
 ) -> Result<DecodedRaster, EpsDocumentError> {
+    let prepared = prepare_eps_document(bytes, pixels_per_point, limits, budget, &mut cancelled)?;
+    render_eps_document(prepared, policy, limits, budget, &mut cancelled)
+}
+struct PreparedEpsDocument {
+    scene: EpsVectorScene,
+    width: u32,
+    height: u32,
+    viewport: [f64; 6],
+}
+fn prepare_eps_document<F: FnMut() -> bool>(
+    bytes: &[u8],
+    pixels_per_point: f64,
+    limits: EpsDocumentLimits,
+    budget: &MemoryBudget,
+    mut cancelled: F,
+) -> Result<PreparedEpsDocument, EpsDocumentError> {
     if cancelled() {
         return Err(EpsDocumentError::Cancelled);
     }
@@ -120,6 +136,26 @@ pub fn decode_eps_document<F: FnMut() -> bool>(
         evaluate_eps_vectors(&program, limits.vm, limits.graphics, budget, &mut cancelled)?;
     drop(evaluation);
     drop(program);
+    Ok(PreparedEpsDocument {
+        scene,
+        width,
+        height,
+        viewport,
+    })
+}
+fn render_eps_document<F: FnMut() -> bool>(
+    prepared: PreparedEpsDocument,
+    policy: EpsRasterColorPolicy,
+    limits: EpsDocumentLimits,
+    budget: &MemoryBudget,
+    mut cancelled: F,
+) -> Result<DecodedRaster, EpsDocumentError> {
+    let PreparedEpsDocument {
+        scene,
+        width,
+        height,
+        viewport,
+    } = prepared;
     let pixels = rasterize_eps_scene(
         &scene,
         width,
@@ -158,20 +194,52 @@ pub fn decode_eps_file_document(
         .into());
     }
     let source = crate::bounded_io::read_managed_capped(request, budget, limits.max_source_bytes as u64)?;
-    let cancelled = || {
+    let mut cancelled = || {
         request
             .cancellation
             .as_ref()
             .is_some_and(GenerationToken::is_cancelled)
     };
-    let raster = decode_eps_document(&source, pixels_per_point, policy, limits, budget, cancelled)?;
+    let prepared = prepare_eps_document(&source, pixels_per_point, limits, budget, &mut cancelled)?;
     drop(source);
+    let raster = render_eps_document(prepared, policy, limits, budget, &mut cancelled)?;
     request.check_cancelled()?;
     Ok(raster)
 }
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn file_source_is_released_before_pixel_admission() {
+        let mut code = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 512 512\n%%EndComments\n1 0 0 setrgbcolor 0 0 512 512 rectfill\n".to_vec();
+        for _ in 0..4096 {
+            code.extend_from_slice(b"% source padding with no paint or retained program objects........\n");
+        }
+        let path = std::env::temp_dir().join(format!("rrrah-eps-stage-{}.eps", std::process::id()));
+        std::fs::write(&path, &code).unwrap();
+        let policy = EpsRasterColorPolicy::DeviceGrayRgbAsSrgb;
+        let generous = MemoryBudget::new(8 * 1024 * 1024);
+        let reference = decode_eps_document(&code, 1., policy, limits(), &generous, || false).unwrap();
+        let peak = generous.peak();
+        let RasterPixels::Rgba8(expected) = reference.pixels() else {
+            panic!()
+        };
+        assert!(expected.chunks_exact(4).all(|p| p == [255, 0, 0, 255]));
+        let tight = MemoryBudget::new(peak);
+        let output =
+            decode_eps_file_document(&DecodeRequest::new(&path), 1., policy, limits(), &tight).unwrap();
+        let RasterPixels::Rgba8(actual) = output.pixels() else {
+            panic!()
+        };
+        assert_eq!(&actual[..], &expected[..]);
+        assert_eq!(tight.used(), 512 * 512 * 4);
+        assert!(tight.peak() <= peak);
+        drop(output);
+        drop(reference);
+        assert_eq!((tight.used(), generous.used()), (0, 0));
+        std::fs::remove_file(path).unwrap();
+    }
+
     #[test]
     fn bounded_file_source_cap_and_retained_output_share_root() {
         let path = std::env::temp_dir().join(format!(
@@ -248,6 +316,95 @@ mod tests {
         }
     }
     #[test]
+    fn for_loop_draws_exact_document_stripes_and_releases_memory() {
+        let code = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 4 4\n%%EndComments\n1 0 0 setrgbcolor 0 2 2 {0 1 4 rectfill} for\n%%EOF\n";
+        let root = MemoryBudget::new(100_000);
+        for density in [1., 2.] {
+            let raster = decode_eps_document(
+                code,
+                density,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            let width = (4. * density) as usize;
+            for (i, pixel) in pixels.chunks_exact(4).enumerate() {
+                assert_eq!(
+                    pixel,
+                    if (i % width / density as usize) % 2 == 0 {
+                        &[255, 0, 0, 255]
+                    } else {
+                        &[0, 0, 0, 0]
+                    }
+                );
+            }
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
+    fn initgraphics_clears_clip_and_path_but_keeps_document_mapping() {
+        let code = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: -2 -3 2 1\n%%EndComments\n-2 -3 2 4 rectclip 0.75 setgray 7 setlinewidth -2 -3 moveto 10 20 translate 0 0 scale initgraphics -2 -3 4 4 rectfill\n%%EOF\n";
+        let root = MemoryBudget::new(100_000);
+        for density in [1., 2.] {
+            let raster = decode_eps_document(
+                code,
+                density,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            assert!(pixels.chunks_exact(4).all(|p| p == [0, 0, 0, 255]));
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
+    fn initmatrix_keeps_document_origin_density_and_clip() {
+        let code = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: -2 -3 2 1\n%%EndComments\n-2 -3 2 4 rectclip 1 0 0 setrgbcolor 10 20 translate 0 0 scale initmatrix -2 -3 4 4 rectfill\n%%EOF\n";
+        let root = MemoryBudget::new(100_000);
+        for density in [1., 2.] {
+            let raster = decode_eps_document(
+                code,
+                density,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            let width = (4. * density) as usize;
+            for (i, pixel) in pixels.chunks_exact(4).enumerate() {
+                assert_eq!(
+                    pixel,
+                    if i % width < width / 2 {
+                        &[255, 0, 0, 255]
+                    } else {
+                        &[0, 0, 0, 0]
+                    }
+                );
+            }
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
     fn computed_numeric_coordinates_match_literal_document_pixels() {
         let computed = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: -2 -3 2 1\n%%EndComments\n1 0 0 setrgbcolor -5 2 idiv -7 4 mod moveto 4 sqrt -3 lineto 2 1.2 floor lineto -2 0.6 round lineto closepath fill\n%%EOF\n";
         let root = MemoryBudget::new(100_000);
@@ -275,7 +432,7 @@ mod tests {
         assert_eq!(root.used(), 0);
     }
     #[test]
-    fn rectangle_operator_pixels_match_explicit_paths_without_save_slots() {
+    fn rectangle_operator_pixels_and_device_point_without_save_slots() {
         let root = MemoryBudget::new(100_000);
         for (rect, path) in [
             (
@@ -315,7 +472,21 @@ mod tests {
             else {
                 panic!()
             };
-            assert_eq!(&a[..], &e[..], "{rect}");
+            if rect == "0 0 0 0 rectfill" {
+                assert!(e.iter().all(|v| *v == 0));
+                for (index, pixel) in a.chunks_exact(4).enumerate() {
+                    assert_eq!(
+                        pixel,
+                        if index == 2 {
+                            &[255, 0, 0, 255]
+                        } else {
+                            &[0, 0, 0, 0]
+                        }
+                    );
+                }
+            } else {
+                assert_eq!(&a[..], &e[..], "{rect}");
+            }
             drop(actual);
             drop(expected);
             assert_eq!(root.used(), 0);

@@ -82,7 +82,7 @@ Reference format inventory: https://imagemagick.org/formats/ (used only as a for
 | 70 | CAP | Pending: legacy Phase One / Capture One sensor format | Current native IIQ path is explicitly P20+ format3 with model-specific calibration; it does not establish CAP compatibility. Fresh raw.pixls.us snapshot contains 2016 rows, 43 Phase One rows and no CAP/CAPTURE download suffix. Original container/sensor/color oracle and native viewer route remain required; see research/cap-source-boundary-2026-10-12.json. |
 | 71 | EIP | Original RAW sensor subset through common viewer route | Bounded classic ZIP, native RAW extraction, shared budget, package-file cache fingerprint and inner decoder recipe. Authored EOS R8 packages pass actual forward/backward app prefetch, one-entry disk cache, RAM TTL/swap and Metal frame preservation against original CR3. Capture One-produced packages and settings/ICC/LCC appearance remain unqualified. See research/eip-common-route-2026-10-07.json, research/eip-app-prefetch-2026-10-07.json and research/eip-ttl-swap-metal-2026-10-07.json. |
 | 72 | DCS | Native Kodak DCS520C lossless-JPEG TIFF subset, strict WB/profile/response curve | CC0 object 2573: original TIFF routes to backend 22 revision 1; all 2,013,760 sensor samples match LibRaw; managed ownership, RAM lease, disk/swap restore and Metal frame readback pass. Exact observed extra JPEG tail accepted only in this camera path; other cameras/tails, physical navigation/color/display and full qualification remain. |
-| 73 | EPS | Native bounded Gray/RGB vector subset through common raster/viewer route; content-based framing and neighbour discovery | Managed source/compiler/VM/path/fill/stroke pipeline; numeric operators, rectangle forms and signed-radius arc/arcn cubic paths with bounded multi-turn sweeps; native clip/eoclip intersections and initclip retain paths and restore with gsave/grestore; numeric rectclip clears the active path with bounded rollback on failure; RAM size/count, visible pin/TTL, swap pressure/cancellation/restore and both neighbour directions tested. Actual Metal offscreen pixels match analytic references after swap restore. Selected arc pixels are qualified with explicit one-sample coverage and zero oracle fill adjustment; the ellipse boundary and default-coverage parity remain open. Strict independent grayscale quantization and diagonal stroke pixel gates remain unresolved; arrays/dictionaries, clippath and array/string rectangle forms, fonts/images, stroke adjustment and full EPS variants remain unsupported. CPU benchmark covers authored 512x512 cases only. See research/eps-updated-app-metal-2026-10-07.json and research/eps-alpha-fast-path-2026-10-07.json. |
+| 73 | EPS | Native bounded Gray/RGB vector subset through common raster/viewer route; content-based framing and neighbour discovery | Managed source/compiler/VM/path/fill/stroke pipeline; numeric operators, rectangle forms and signed-radius arc/arcn cubic paths with bounded multi-turn sweeps; native clip/eoclip intersections and initclip retain paths and restore with gsave/grestore; numeric rectclip clears the active path with bounded rollback on failure; RAM size/count, visible pin/TTL, swap pressure/cancellation/restore and both neighbour directions tested. Actual Metal offscreen pixels match analytic references after swap restore. Selected arc pixels are qualified with explicit one-sample coverage and zero oracle fill adjustment; the ellipse boundary and default-coverage parity remain open. Strict independent grayscale quantization and diagonal stroke pixel gates remain unresolved; full array/dictionary operations, clippath and array/string rectangle forms, fonts/images, stroke adjustment and full EPS variants remain unsupported. CPU benchmark covers authored 512x512 cases only. See research/eps-updated-app-metal-2026-10-07.json and research/eps-alpha-fast-path-2026-10-07.json. |
 | 74 | AI | Pending: `.ai` gallery candidate; PDF-compatible content uses the PDF renderer, including selected pages. PostScript AI remains unsupported. | Pinned PDF-compatible AI has RAM/page-key and swap/Metal preservation evidence; the 2026-10-08 strict Poppler comparison fails on two of three pages. Production fidelity and PostScript AI remain pending (research/ai-current-poppler-2026-10-08.json). Test-only native axial/radial, Type4 triangle and admitted Type7 tensor sources preserve original device components. The authored 512-pixel Type7 CMYK stream is exact. Dynamic capacity admission captures all five real Tensor sources (298,173 / 180,269 / 180,269 / 24,811 / 62,901 triangles) within 256 MiB without loosening error bounds. Shared curved clips and bounded original Separation/DeviceN tint functions now replay all 2,755 VectorApple events and both one.ai pages, with final admitted bytes zero. All 512 authored nonlinear DeviceN CMYK pixels match the independent float oracle (105 interpreter / 126 compositor tests). Strict native RGB comparison still fails on VectorApple (33,072 pixels) and one.ai page0 (2,494 pixels); page1 is exact. Completion of replay is not fidelity qualification. See research/pdf-native-devicen-calculator-2026-10-10.json and research/ai-native-devicen-poppler-2026-10-10.json. This is not production AI qualification. See research/pdf-adaptive-dynamic-admission-2026-10-10.json. |
 | 75 | STI | Native indexed8/ETRLE, RGB16/24/32 masks and bounded zlib; explicit subimage selection, managed output | Ten authored images and twenty external JA2 images agree with sample references; external parser plus original blitter resolves literal-zero coverage; native/prepared RAM/swap/Metal checks pass. Independent RGB/zlib producers, placement/application semantics, color and full qualification pending |
 | 76 | PDF | Hayro 0.7.1 selected page raster at one pixel per point, bounded geometry/page count, source/pixmap/final-buffer reservations and straight RGBA8 conversion | Two authored opaque 10x10 pages match Poppler and ordinary native routing exactly; managed ownership and insufficient budget/index refusals pass. Both selected opaque pages and a constant half-alpha page pass RAM leases, six native/prepared pressure-preserving streamed swap restores and actual Metal frame readback against mathematical colors. Fixed-profile DeviceCMYK float fills use native hybrid ICC stages: 4721 independent LittleCMS vectors stay within one RGB8 level, an opaque CMYK PDF matches exactly and passes RAM/swap/Metal. Parser/render scratch, interruptible rendering, broader transparency/fonts/color/profiles, independent producer breadth and physical presentation qualification pending |
@@ -1762,3 +1762,58 @@ Current native PSD/PSB RGB/grayscale8/16/32 merged-alpha conversion is implement
 ### Ordinary Tensor shading precision and streaming — 2026-10-19
 
 PDF-compatible AI/PDF one-to-four-component Tensor shading now streams admitted adaptive triangles into the ordinary sampler, preserving the shared-edge plan without retaining the complete mesh. The parabolic2048pixel analytic alpha control and actual Metal RAM/swap comparisons pass at8MiB; original three-page AI cache transport passes64MiB. AI remains Pending: strict Poppler still differs on2/3pages and PostScript support is unresolved. Warm CPU timing exposes a ~15% VectorApple slowdown despite faster flat shading; complex-mesh speed remains optimization work. [Exact scope and evidence](research/tensor-production-stream-2026-10-19/REPORT.md).
+
+
+### 2026-10-21 EPS transform reset
+
+Native EPS now supports `initmatrix`, preserving existing paths, clips, color/stroke style and saved transforms. Independent numeric Ghostscript control and authored document pixels at negative origins and two densities pass. This does not resolve the existing gray quantization or diagonal stroke compatibility gates. See [evidence](research/eps-initmatrix-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS graphics initialization
+
+Native `initgraphics` resets the supported current path, clipping, transformation and drawing style while retaining saved states for `grestore`. Independent Ghostscript state checks and authored pixel/ownership regressions pass. This expands the existing subset; full EPS and prior compatibility gates remain open. [Evidence](research/eps-initgraphics-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS reset pipeline qualification
+
+Five independent pixel references for `initmatrix`/`initgraphics` now pass public decode, RAM eviction, swap refusal/cancellation/retry and exact SDR/HDR Metal transport. The EPS hardware lifecycle suite passes10tests with0ignored; prior gray midpoint and ellipse exclusions remain. [Evidence](research/eps-reset-lifecycle-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS bounded numeric loops
+
+Native `for` supports bounded numeric iteration for authored geometry, with work/cancellation/frame admission and explicit refusal if an integer counter must leave the supported i32 range. Independent numeric controls and exact authored stripe pixels pass; this is subset progress, not full PostScript qualification. [Evidence](research/eps-for-loop-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS loop control
+
+Native `loop` and `exit` now use admitted VM continuations; exit leaves the nearest loop through nested procedures and preserves the operand stack. Empty loops remain work/cancellation bounded and outside-loop exit refuses explicitly. Independent stack traces and memory recovery checks pass. [Evidence](research/eps-loop-exit-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS loop pixel/transport qualification
+
+Eight independent Ghostscript references for numeric and indefinite loops with early/nested exit now pass common decode, RAM eviction, swap pressure/cancellation/retry and exact SDR/HDR Metal output. EPS lifecycle11pass/0ignored; prior compatibility exclusions remain. [Evidence](research/eps-loop-lifecycle-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS literal arrays
+
+Native literal arrays now support evaluated/nested elements, `length` and indexed `get`, with first-use managed storage, cumulative capacity/work limits and last-owner retention. Independent numeric/identity controls pass. Matrix operations and mutation remain unsupported; new-array final-pixel qualification is still pending. [Evidence](research/eps-literal-arrays-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS relative matrix composition — partial
+
+Native six-number array `concat` supports ordered relative CTM composition. Five selected independent pixel/Metal lifecycle cases pass, but the singular `rectfill` case fails default Ghostscript device-adjustment parity. The strict test remains failing and unfiltered; no full matrix/EPS qualification follows. [Evidence](research/eps-concat-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS device rectangles and matrix gate
+
+Axis-aligned `rectfill` retains its primitive device-pixel semantics, including zero extents and rectangular clipping. Eleven independent new cases and all six original strict matrix cases pass public storage/SDR/HDR Metal transport. The prior singular-fill failure is resolved; generic scan conversion, producer coverage and earlier compatibility gates remain open. [Evidence](research/eps-device-rectfill-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS allocated mutable arrays
+
+Native `array` and `put` support null initialization, aliases, nesting and cyclic handles under the fixed managed arena quota. Independent scalar and four pixel/Metal lifecycle controls pass. Broader array operations and arbitrary producer EPS remain incomplete. [Evidence](research/eps-array-mutation-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 EPS bulk array handling
+
+Native data arrays support `aload`, `astore`, shared interval views, overlap-safe `putinterval` and array `copy`. Independent scalar traces and six new pixel/storage/SDR-HDR Metal cases pass. This retains bounded arena/operand/work limits; broader EPS object/access semantics remain incomplete. [Evidence](research/eps-array-bulk-2026-10-21/REPORT.md).

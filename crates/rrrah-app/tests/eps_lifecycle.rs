@@ -79,6 +79,108 @@ fn independent_eps_clip_pixels_survive_swap_and_metal() {
     compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
 }
 
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_graphics_resets_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS graphics reset adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/reset-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 5);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+    eprintln!(
+        "EPS resets: 5 independent full-pixel cases; common decode/RAM/swap/pressure/cancel/Metal exact; final root=0"
+    );
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_loops_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS loop adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/loop-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 8);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+    eprintln!(
+        "EPS loops: 8 independent full-pixel cases; common decode/RAM/swap/pressure/cancel/SDR-HDR Metal exact; final root=0"
+    );
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_matrix_arrays_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS matrix adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/matrix-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 6);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+    eprintln!(
+        "EPS matrices: 6 independent full-pixel cases; common decode/RAM/swap/pressure/cancel/SDR-HDR Metal exact; final root=0"
+    );
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_device_rectfills_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS device rectangle adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/device-rect-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 11);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+    eprintln!(
+        "EPS device rectangles: 11 independent full-pixel cases; RAM/swap/pressure/cancel/SDR-HDR exact; final root=0"
+    );
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_array_writes_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS array mutation adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/array-write-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 4);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+    eprintln!(
+        "EPS array writes: 4 independent pixel cases; aliases/cycles/concat/RAM/swap/SDR-HDR exact; final root=0"
+    );
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_array_bulk_survives_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS bulk array adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/array-bulk-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 6);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+    eprintln!(
+        "EPS bulk arrays: 6 independent pixel cases; views/overlap/packing/RAM/swap/SDR-HDR exact; final root=0"
+    );
+}
+
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,
     cases: &[serde_json::Value],
@@ -193,6 +295,14 @@ fn compare_independent_eps_cases_with_sampling(
             gpu.render_raster(&prepared, view, [32, 32]).pixels,
             gpu.render_raster(&golden, view, [32, 32]).pixels,
             "{}",
+            case["name"]
+        );
+        let actual_hdr = gpu.render_raster_half(&prepared, view, [32, 32]);
+        assert!(actual_hdr.iter().all(|value| value & 0x7c00 != 0x7c00));
+        assert_eq!(
+            actual_hdr,
+            gpu.render_raster_half(&golden, view, [32, 32]),
+            "{} HDR",
             case["name"]
         );
         drop(prepared);

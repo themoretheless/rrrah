@@ -1,0 +1,50 @@
+{
+  "version": "10.05.1",
+  "cases": [
+    {
+      "name": "singular_rect_default",
+      "source": "[0 0 0 1 4 0] concat 0 0 3 8 rectfill",
+      "red_pixels": [
+        4,
+        12,
+        20,
+        28,
+        36,
+        44,
+        52,
+        60
+      ],
+      "rgb_sha256": "7003f6f50ddc0070c8047d925eb574d755fa54d4af10b57f2b34e024bdfadbe7"
+    },
+    {
+      "name": "singular_rect_zero",
+      "source": "0 0 .setfilladjust2 [0 0 0 1 4 0] concat 0 0 3 8 rectfill",
+      "red_pixels": [],
+      "rgb_sha256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "name": "line_fill_default",
+      "source": "4 0 moveto 4 8 lineto closepath fill",
+      "red_pixels": [],
+      "rgb_sha256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "name": "line_fill_zero",
+      "source": "0 0 .setfilladjust2 4 0 moveto 4 8 lineto closepath fill",
+      "red_pixels": [],
+      "rgb_sha256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "name": "zero_rect_default",
+      "source": "4 0 0 8 rectfill",
+      "red_pixels": [],
+      "rgb_sha256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "name": "zero_rect_zero",
+      "source": "0 0 .setfilladjust2 4 0 0 8 rectfill",
+      "red_pixels": [],
+      "rgb_sha256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    }
+  ]
+}

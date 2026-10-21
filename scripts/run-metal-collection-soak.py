@@ -87,6 +87,10 @@ def main():
                  io_delay_ms=None if metal else 2, max_io_request_bytes=None if metal else 65536,
                  rss_guard_bytes=args.rss_limit_mib * 1024 * 1024,
                  rss_guard_consecutive_samples=3, sample_seconds=args.sample_seconds,
+                 # Allocator diagnostics can materially change RSS without changing
+                 # the binary; preserve them so such a run cannot look like defaults.
+                 allocator_environment={key: value for key, value in env.items()
+                                        if key.startswith('Malloc')},
                  started_utc=datetime.now(timezone.utc).isoformat(), rss_samples=0)
     sources = [ROOT / 'Cargo.lock', ROOT / ('crates/rrrah-app/tests/ttl_swap_metal.rs' if metal
                                          else 'crates/rrrah-cache/tests/sustained_swap.rs'),

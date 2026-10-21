@@ -57,6 +57,7 @@ struct Node {
 pub enum EpsPaintKind {
     Stroke,
     FillNonZero,
+    RectFill,
     FillEvenOdd,
     ClipNonZero,
     ClipEvenOdd,
@@ -242,6 +243,17 @@ impl EpsGraphics {
     pub fn current_point(&self) -> Result<EpsPoint, EpsGraphicsError> {
         let p = self.state.point.ok_or(EpsGraphicsError::NoCurrentPoint)?;
         point(inverse(self.state.matrix)?, p)
+    }
+    /// Restore default EPS user coordinates. Device mapping (bounds, density,
+    /// and row direction) is applied separately by the document rasterizer.
+    /// Existing device-space paths, clipping, style and saved states survive.
+    pub fn init_matrix(&mut self) {
+        self.state.matrix = IDENTITY;
+    }
+    /// Reset the active supported graphics state, retaining the save stack and
+    /// immutable nodes/paint records still owned by saved states or the scene.
+    pub fn init_graphics(&mut self) {
+        self.state = State::default();
     }
     pub fn concat(&mut self, n: EpsMatrix) -> Result<(), EpsGraphicsError> {
         let n = finite(n)?;
@@ -547,6 +559,8 @@ impl EpsGraphics {
     ) -> Result<(), EpsGraphicsError> {
         finite([x, y, width, height, x + width, y + height])?;
         let saved = self.state;
+        let used_nodes = self.used_nodes;
+        let used_paints = self.used_paints;
         let result = (|| {
             self.new_path();
             self.move_to(x, y)?;
@@ -554,9 +568,19 @@ impl EpsGraphics {
             self.line_to(x + width, y + height)?;
             self.line_to(x, y + height)?;
             self.close_path()?;
-            self.paint(kind)
+            self.paint(if kind == EpsPaintKind::FillNonZero {
+                EpsPaintKind::RectFill
+            } else {
+                kind
+            })
         })();
         self.state = saved;
+        if result.is_err() {
+            // No new path or paint escaped: reclaim only this operation's
+            // unpublished arena suffix so a smaller retry can still fit.
+            self.used_nodes = used_nodes;
+            self.used_paints = used_paints;
+        }
         result
     }
     /// Numeric rectclip clears the current path on success. Failure restores it.
@@ -1135,6 +1159,112 @@ mod tests {
         drop(held);
         assert_eq!(root.used(), 0);
     }
+    #[test]
+    fn initgraphics_clears_current_path_and_clip_without_reclaiming_saved_nodes() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(limits(), &root, || false).unwrap();
+        g.clip_rectangle(0., 0., 4., 4.).unwrap();
+        g.move_to(6., 7.).unwrap();
+        g.gsave().unwrap();
+        let clip = g.state.clip;
+        let nodes = g.arena_nodes_used();
+        let used = root.used();
+        g.init_graphics();
+        assert_eq!(g.node_count(), 0);
+        assert!(matches!(g.current_point(), Err(EpsGraphicsError::NoCurrentPoint)));
+        assert!(g.state.clip.is_none());
+        assert_eq!(g.arena_nodes_used(), nodes);
+        assert_eq!(root.used(), used);
+        g.grestore().unwrap();
+        assert_eq!(g.current_point().unwrap(), [6., 7.]);
+        assert_eq!(g.state.clip, clip);
+        assert!(clip.is_some());
+        drop(g);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn failed_rectangle_restores_arena_frontier_for_later_operations() {
+        let root = MemoryBudget::new(100_000);
+        for max_nodes in 1..=5 {
+            let mut g = EpsGraphics::new(
+                EpsGraphicsLimits {
+                    max_nodes,
+                    max_paints: 1,
+                    max_saved_states: 0,
+                },
+                &root,
+                || false,
+            )
+            .unwrap();
+            g.move_to(7., 9.).unwrap();
+            let baseline = root.used();
+            assert!(
+                g.paint_rectangle(0., 0., 2., 2., EpsPaintKind::FillNonZero)
+                    .is_err()
+            );
+            assert_eq!(g.arena_nodes_used(), 1, "node cap {max_nodes}");
+            assert_eq!(g.current_point().unwrap(), [7., 9.]);
+            assert_eq!(g.node_count(), 1);
+            assert_eq!(root.used(), baseline);
+            if max_nodes >= 2 {
+                g.line_to(8., 10.).unwrap();
+            }
+            drop(g);
+            assert_eq!(root.used(), 0);
+        }
+        let mut g = EpsGraphics::new(
+            EpsGraphicsLimits {
+                max_nodes: 8,
+                max_paints: 0,
+                max_saved_states: 0,
+            },
+            &root,
+            || false,
+        )
+        .unwrap();
+        g.move_to(7., 9.).unwrap();
+        assert!(
+            g.paint_rectangle(0., 0., 2., 2., EpsPaintKind::FillNonZero)
+                .is_err()
+        );
+        assert_eq!(g.arena_nodes_used(), 1);
+        g.line_to(8., 10.).unwrap();
+        drop(g);
+        let mut g = EpsGraphics::new(
+            EpsGraphicsLimits {
+                max_nodes: 8,
+                max_paints: 1,
+                max_saved_states: 0,
+            },
+            &root,
+            || false,
+        )
+        .unwrap();
+        g.move_to(0., 0.).unwrap();
+        g.scale(f64::MAX / 4., 1.).unwrap();
+        assert!(
+            g.paint_rectangle(1., 0., 8., 1., EpsPaintKind::FillNonZero)
+                .is_err()
+        );
+        assert_eq!(g.arena_nodes_used(), 1);
+        g.init_matrix();
+        g.line_to(2., 3.).unwrap();
+        g.paint(EpsPaintKind::Stroke).unwrap();
+        let scene = g.finish();
+        let mut path = [EpsPathSegment::Move([0., 0.]); 2];
+        assert_eq!(scene.copy_path(0, &mut path, || false).unwrap(), 2);
+        assert_eq!(
+            path[1],
+            EpsPathSegment::Line {
+                start: [0., 0.],
+                end: [2., 3.]
+            }
+        );
+        drop(scene);
+        assert_eq!(root.used(), 0);
+    }
+
     #[test]
     fn limits_restore_forks_and_failed_operations_preserve_the_active_path() {
         let root = MemoryBudget::new(100_000);

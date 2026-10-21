@@ -1,0 +1,20 @@
+--- before/common/mod.rs
++++ diagnostic/common/mod.rs
+@@ -491,6 +491,8 @@
+             .collect();
+         drop(mapped);
+         readback.unmap();
++        readback.destroy();
++        target.destroy();
+         result
+     }
+ 
+@@ -1006,6 +1008,8 @@
+             }
+         }
+         buffer.unmap();
++        buffer.destroy();
++        target.destroy();
+         RgbaFrame {
+             width: size[0],
+             height: size[1],

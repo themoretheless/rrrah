@@ -34,6 +34,16 @@ pub enum EpsOperator {
     Pop,
     Clear,
     Count,
+    Mark,
+    ArrayEnd,
+    Array,
+    Put,
+    ALoad,
+    AStore,
+    GetInterval,
+    PutInterval,
+    Length,
+    Get,
     Index,
     Copy,
     Roll,
@@ -43,6 +53,9 @@ pub enum EpsOperator {
     If,
     IfElse,
     Repeat,
+    For,
+    Loop,
+    Exit,
     Eq,
     Ne,
     Lt,
@@ -84,6 +97,9 @@ pub enum EpsOperator {
     Translate,
     Scale,
     Rotate,
+    InitMatrix,
+    Concat,
+    InitGraphics,
     CurrentPoint,
     PathBBox,
     CurrentLineWidth,
@@ -97,6 +113,11 @@ pub enum EpsOperator {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum EpsValue<'a> {
     Null,
+    Mark,
+    Array {
+        begin: usize,
+        length: usize,
+    },
     Number(EpsNumber),
     Boolean(bool),
     LiteralName(&'a [u8]),
@@ -130,6 +151,8 @@ impl Default for EpsVmLimits {
 pub struct EpsEvaluation<'a> {
     operands: SharedBuffer<EpsValue<'a>>,
     length: usize,
+    // Array handles in operands borrow this retained arena.
+    _arrays: SharedBuffer<EpsValue<'a>>,
 }
 impl<'a> EpsEvaluation<'a> {
     pub fn values(&self) -> &[EpsValue<'a>] {
@@ -139,6 +162,7 @@ impl<'a> EpsEvaluation<'a> {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EpsVmLimit {
     Operands,
+    ArrayItems,
     Dictionary,
     ExecutionFrames,
     Work,
@@ -149,6 +173,10 @@ pub enum EpsVmError {
     Cancelled,
     #[error("PostScript execution limit: {0:?}")]
     Limit(EpsVmLimit),
+    #[error("PostScript unmatched array mark")]
+    UnmatchedMark,
+    #[error("PostScript exit outside a loop")]
+    InvalidExit,
     #[error("PostScript operand stack underflow")]
     StackUnderflow,
     #[error("PostScript operand type mismatch")]
@@ -188,15 +216,68 @@ struct Entry<'a> {
     value: EpsValue<'a>,
 }
 #[derive(Debug, Clone, Copy)]
+struct ForLoop {
+    current: EpsNumber,
+    increment: EpsNumber,
+    limit: EpsNumber,
+}
+impl ForLoop {
+    fn contains(self, value: EpsNumber) -> bool {
+        self.contains_double(as_double(value))
+    }
+    fn contains_double(self, value: f64) -> bool {
+        if as_double(self.increment) >= 0. {
+            value <= as_double(self.limit)
+        } else {
+            value >= as_double(self.limit)
+        }
+    }
+    fn next(self) -> Result<Option<EpsNumber>, EpsVmError> {
+        if let (EpsNumber::Integer(a), EpsNumber::Integer(b)) = (self.current, self.increment) {
+            if a.checked_add(b).is_none() {
+                // Test the exact next integer before f32 promotion can round it
+                // back onto i32::MIN and repeat an already completed endpoint.
+                let next = f64::from(a) + f64::from(b);
+                return if self.contains_double(next) {
+                    Err(EpsVmError::UndefinedResult)
+                } else {
+                    Ok(None)
+                };
+            }
+        }
+        let next = match arithmetic(EpsOperator::Add, self.current, self.increment) {
+            Ok(next) => next,
+            Err(error) => {
+                if !self.contains_double(as_double(self.current) + as_double(self.increment)) {
+                    return Ok(None);
+                }
+                return Err(error);
+            }
+        };
+        Ok(self.contains(next).then_some(next))
+    }
+}
+#[derive(Debug, Clone, Copy)]
+enum Continuation {
+    Once,
+    Repeat(usize),
+    For(ForLoop),
+    Loop,
+}
+#[derive(Debug, Clone, Copy)]
 struct Frame {
     begin: usize,
     pc: usize,
     end: usize,
-    remaining: usize,
+    continuation: Continuation,
 }
 struct Machine<'a, 'g> {
     graphics: Option<&'g mut EpsGraphics>,
     operands: MutableBuffer<EpsValue<'a>>,
+    arrays: MutableBuffer<EpsValue<'a>>,
+    array_used: usize,
+    array_capacity: usize,
+    array_budget: MemoryBudget,
     length: usize,
     dictionary: MutableBuffer<Entry<'a>>,
     frames: MutableBuffer<Frame>,
@@ -227,6 +308,47 @@ impl<'a> Machine<'a, '_> {
             _ => Err(EpsVmError::Type),
         }
     }
+    fn array_range<F: FnMut() -> bool>(
+        &mut self,
+        length: usize,
+        work: &mut Work<F>,
+    ) -> Result<(usize, usize), EpsVmError> {
+        let end = self
+            .array_used
+            .checked_add(length)
+            .and_then(|n| n.checked_add(1))
+            .filter(|n| *n <= self.array_capacity)
+            .ok_or(EpsVmError::Limit(EpsVmLimit::ArrayItems))?;
+        if self.arrays.is_empty() {
+            work.tick()?;
+            self.arrays = self
+                .array_budget
+                .try_buffer(self.array_capacity, EpsValue::Null)?;
+            work.tick()?;
+        }
+        Ok((self.array_used + 1, end))
+    }
+    fn array_handle(&mut self) -> Result<(usize, usize), EpsVmError> {
+        let EpsValue::Array { begin, length } = self.pop()? else {
+            return Err(EpsVmError::Type);
+        };
+        Ok((begin, length))
+    }
+    fn copy_array_items<F: FnMut() -> bool>(
+        &mut self,
+        source: usize,
+        destination: usize,
+        length: usize,
+        work: &mut Work<F>,
+    ) -> Result<(), EpsVmError> {
+        let backward = destination > source && destination < source + length;
+        for offset in 0..length {
+            work.tick()?;
+            let index = if backward { length - 1 - offset } else { offset };
+            self.arrays[destination + index] = self.arrays[source + index];
+        }
+        Ok(())
+    }
     fn boolean(&mut self) -> Result<bool, EpsVmError> {
         match self.pop()? {
             EpsValue::Boolean(n) => Ok(n),
@@ -253,7 +375,7 @@ impl<'a> Machine<'a, '_> {
             begin,
             pc: begin,
             end,
-            remaining,
+            continuation: Continuation::Once,
         };
         self.depth += 1;
         Ok(())
@@ -364,6 +486,9 @@ impl<'a> Machine<'a, '_> {
             | O::Translate
             | O::Scale
             | O::Rotate
+            | O::InitMatrix
+            | O::Concat
+            | O::InitGraphics
             | O::CurrentPoint
             | O::PathBBox
             | O::CurrentLineWidth
@@ -519,21 +644,38 @@ impl<'a> Machine<'a, '_> {
                     .ok_or(E::StackUnderflow)?;
                 self.push(self.operands[index])?;
             }
-            O::Copy => {
-                let n = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
-                let start = self.length.checked_sub(n).ok_or(E::StackUnderflow)?;
-                if self
-                    .length
-                    .checked_add(n)
-                    .is_none_or(|end| end > self.operands.len())
-                {
-                    return Err(E::Limit(EpsVmLimit::Operands));
+            O::Copy => match self.pop()? {
+                EpsValue::Array {
+                    begin: destination,
+                    length: capacity,
+                } => {
+                    let (source, length) = self.array_handle()?;
+                    if length > capacity {
+                        return Err(E::Range);
+                    }
+                    self.copy_array_items(source, destination, length, work)?;
+                    self.push(EpsValue::Array {
+                        begin: destination,
+                        length,
+                    })?;
                 }
-                for index in start..start + n {
-                    work.tick()?;
-                    self.push(self.operands[index])?;
+                EpsValue::Number(EpsNumber::Integer(n)) => {
+                    let n = usize::try_from(n).map_err(|_| E::Range)?;
+                    let start = self.length.checked_sub(n).ok_or(E::StackUnderflow)?;
+                    if self
+                        .length
+                        .checked_add(n)
+                        .is_none_or(|end| end > self.operands.len())
+                    {
+                        return Err(E::Limit(EpsVmLimit::Operands));
+                    }
+                    for index in start..start + n {
+                        work.tick()?;
+                        self.push(self.operands[index])?;
+                    }
                 }
-            }
+                _ => return Err(E::Type),
+            },
             O::Roll => {
                 let j = self.integer()?;
                 let n = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
@@ -583,10 +725,171 @@ impl<'a> Machine<'a, '_> {
                 let condition = self.boolean()?;
                 self.call(if condition { yes } else { no }, 1)?;
             }
+            O::Mark => self.push(EpsValue::Mark)?,
+            O::ArrayEnd => {
+                let mut mark = None;
+                for index in (0..self.length).rev() {
+                    work.tick()?;
+                    if self.operands[index] == EpsValue::Mark {
+                        mark = Some(index);
+                        break;
+                    }
+                }
+                let mark = mark.ok_or(E::UnmatchedMark)?;
+                let length = self.length - mark - 1;
+                let (begin, end) = self.array_range(length, work)?;
+                for index in 0..length {
+                    work.tick()?;
+                    self.arrays[begin + index] = self.operands[mark + 1 + index];
+                }
+                self.array_used = end;
+                self.length = mark;
+                self.push(EpsValue::Array { begin, length })?;
+            }
+            O::Array => {
+                let length = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                let (begin, end) = self.array_range(length, work)?;
+                for index in 0..length {
+                    work.tick()?;
+                    self.arrays[begin + index] = EpsValue::Null;
+                }
+                self.array_used = end;
+                self.push(EpsValue::Array { begin, length })?;
+            }
+            O::Put => {
+                let value = self.pop()?;
+                let index = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                let EpsValue::Array { begin, length } = self.pop()? else {
+                    return Err(E::Type);
+                };
+                if index >= length {
+                    return Err(E::Range);
+                }
+                work.tick()?;
+                self.arrays[begin + index] = value;
+            }
+            O::ALoad => {
+                let (begin, length) = self.array_handle()?;
+                if self
+                    .length
+                    .checked_add(length)
+                    .and_then(|n| n.checked_add(1))
+                    .is_none_or(|n| n > self.operands.len())
+                {
+                    return Err(E::Limit(EpsVmLimit::Operands));
+                }
+                for index in 0..length {
+                    work.tick()?;
+                    self.push(self.arrays[begin + index])?;
+                }
+                self.push(EpsValue::Array { begin, length })?;
+            }
+            O::AStore => {
+                let (begin, length) = self.array_handle()?;
+                let start = self.length.checked_sub(length).ok_or(E::StackUnderflow)?;
+                for index in 0..length {
+                    work.tick()?;
+                    self.arrays[begin + index] = self.operands[start + index];
+                }
+                self.length = start;
+                self.push(EpsValue::Array { begin, length })?;
+            }
+            O::GetInterval => {
+                let count = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                let index = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                let (begin, length) = self.array_handle()?;
+                if index.checked_add(count).is_none_or(|end| end > length) {
+                    return Err(E::Range);
+                }
+                self.push(EpsValue::Array {
+                    begin: begin + index,
+                    length: count,
+                })?;
+            }
+            O::PutInterval => {
+                let (source, count) = self.array_handle()?;
+                let index = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                let (begin, length) = self.array_handle()?;
+                if index.checked_add(count).is_none_or(|end| end > length) {
+                    return Err(E::Range);
+                }
+                self.copy_array_items(source, begin + index, count, work)?;
+            }
+            O::Length => {
+                let EpsValue::Array { length, .. } = self.pop()? else {
+                    return Err(E::Type);
+                };
+                let length = i32::try_from(length).map_err(|_| E::Range)?;
+                self.push(EpsValue::Number(EpsNumber::Integer(length)))?;
+            }
+            O::Get => {
+                let index = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                let EpsValue::Array { begin, length } = self.pop()? else {
+                    return Err(E::Type);
+                };
+                if index >= length {
+                    return Err(E::Range);
+                }
+                self.push(self.arrays[begin + index])?;
+            }
             O::Repeat => {
                 let proc = self.procedure()?;
                 let n = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
                 self.call(proc, n)?;
+                if n != 0 {
+                    self.frames[self.depth - 1].continuation = Continuation::Repeat(n);
+                }
+            }
+            O::Loop => {
+                let proc = self.procedure()?;
+                self.call(proc, 1)?;
+                self.frames[self.depth - 1].continuation = Continuation::Loop;
+            }
+            O::Exit => {
+                let mut target = None;
+                for index in (0..self.depth).rev() {
+                    work.tick()?;
+                    if !matches!(self.frames[index].continuation, Continuation::Once) {
+                        target = Some(index);
+                        break;
+                    }
+                }
+                self.depth = target.ok_or(E::InvalidExit)?;
+            }
+            O::For => {
+                let proc = self.procedure()?;
+                let mut limit = self.number()?;
+                let mut increment = self.number()?;
+                let mut current = self.number()?;
+                // Adobe/Ghostscript compatibility: zero initial plus zero step
+                // executes no body, including signed real zero.
+                if as_double(current) == 0. && as_double(increment) == 0. {
+                    return Ok(());
+                }
+                // Integer counters truncate a real limit toward zero. For a
+                // real counter all three operands use the same real precision.
+                if matches!(
+                    (current, increment),
+                    (EpsNumber::Integer(_), EpsNumber::Integer(_))
+                ) {
+                    if let EpsNumber::Real(value) = limit {
+                        limit = EpsNumber::Real(value.trunc());
+                    }
+                } else {
+                    current = EpsNumber::Real(as_real(current));
+                    increment = EpsNumber::Real(as_real(increment));
+                    limit = EpsNumber::Real(as_real(limit));
+                }
+                let range = ForLoop {
+                    current,
+                    increment,
+                    limit,
+                };
+                if range.contains(current) {
+                    self.call(proc, 1)?;
+                    self.frames[self.depth - 1].continuation = Continuation::For(range);
+                    self.push(EpsValue::Number(current))?;
+                }
             }
             O::Eq | O::Ne => {
                 let b = self.pop()?;
@@ -656,7 +959,21 @@ impl<'a> Machine<'a, '_> {
             _ => 0,
         };
         let mut args = [0f64; 6];
-        if matches!(op, O::SetLineCap | O::SetLineJoin) {
+        if op == O::Concat {
+            let EpsValue::Array { begin, length } = self.pop()? else {
+                return Err(EpsVmError::Type);
+            };
+            if length != 6 {
+                return Err(EpsVmError::Range);
+            }
+            for (index, value) in args.iter_mut().enumerate() {
+                work.tick()?;
+                let EpsValue::Number(number) = self.arrays[begin + index] else {
+                    return Err(EpsVmError::Type);
+                };
+                *value = as_double(number);
+            }
+        } else if matches!(op, O::SetLineCap | O::SetLineJoin) {
             args[0] = f64::from(u8::try_from(self.integer()?).map_err(|_| EpsVmError::Range)?);
         } else {
             for i in (0..count).rev() {
@@ -722,6 +1039,9 @@ impl<'a> Machine<'a, '_> {
             O::Translate => graphics.translate(args[0], args[1])?,
             O::Scale => graphics.scale(args[0], args[1])?,
             O::Rotate => graphics.rotate(args[0])?,
+            O::InitMatrix => graphics.init_matrix(),
+            O::Concat => graphics.concat(args)?,
+            O::InitGraphics => graphics.init_graphics(),
             O::CurrentPoint => {
                 output[..2].copy_from_slice(&graphics.current_point()?);
                 output_count = 2;
@@ -871,6 +1191,14 @@ fn arithmetic(op: EpsOperator, a: EpsNumber, b: EpsNumber) -> Result<EpsNumber, 
     Ok(EpsNumber::Real(n))
 }
 fn equal(a: EpsValue<'_>, b: EpsValue<'_>) -> bool {
+    let empty_array = |value| match value {
+        EpsValue::Array { length: 0, .. } => true,
+        EpsValue::Procedure { begin, end, .. } => begin == end,
+        _ => false,
+    };
+    if empty_array(a) && empty_array(b) {
+        return true;
+    }
     match (a, b) {
         (EpsValue::Number(a), EpsValue::Number(b)) => {
             let (a, b) = equality_pair(a, b);
@@ -909,6 +1237,16 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"pop" => O::Pop,
         b"clear" => O::Clear,
         b"count" => O::Count,
+        b"mark" | b"[" => O::Mark,
+        b"]" => O::ArrayEnd,
+        b"array" => O::Array,
+        b"put" => O::Put,
+        b"aload" => O::ALoad,
+        b"astore" => O::AStore,
+        b"getinterval" => O::GetInterval,
+        b"putinterval" => O::PutInterval,
+        b"length" => O::Length,
+        b"get" => O::Get,
         b"index" => O::Index,
         b"copy" => O::Copy,
         b"roll" => O::Roll,
@@ -918,6 +1256,9 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"if" => O::If,
         b"ifelse" => O::IfElse,
         b"repeat" => O::Repeat,
+        b"for" => O::For,
+        b"loop" => O::Loop,
+        b"exit" => O::Exit,
         b"eq" => O::Eq,
         b"ne" => O::Ne,
         b"lt" => O::Lt,
@@ -959,6 +1300,9 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"translate" => O::Translate,
         b"scale" => O::Scale,
         b"rotate" => O::Rotate,
+        b"initmatrix" => O::InitMatrix,
+        b"concat" => O::Concat,
+        b"initgraphics" => O::InitGraphics,
         b"currentpoint" => O::CurrentPoint,
         b"pathbbox" => O::PathBBox,
         b"currentlinewidth" => O::CurrentLineWidth,
@@ -1024,14 +1368,24 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
             begin: 0,
             pc: 0,
             end: 0,
-            remaining: 0,
+            continuation: Continuation::Once,
         },
     )?;
     if cancelled() {
         return Err(EpsVmError::Cancelled);
     }
+    // Admit the full bounded arena when the first array is constructed. Scalar
+    // programs keep their original storage cost; no incremental growth occurs.
+    let arrays = budget.try_buffer(0, EpsValue::Null)?;
+    if cancelled() {
+        return Err(EpsVmError::Cancelled);
+    }
     let mut machine = Machine {
         graphics,
+        arrays,
+        array_used: 0,
+        array_capacity: limits.max_operands,
+        array_budget: budget.clone(),
         operands,
         length: 0,
         dictionary,
@@ -1043,7 +1397,7 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
         begin: 0,
         pc: 0,
         end: tape.len(),
-        remaining: 1,
+        continuation: Continuation::Once,
     };
     let mut work = Work {
         remaining: limits.max_work,
@@ -1053,11 +1407,23 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
         work.tick()?;
         let frame = &mut machine.frames[machine.depth - 1];
         if frame.pc == frame.end {
-            if frame.remaining > 1 {
-                frame.remaining -= 1;
-                frame.pc = frame.begin;
-            } else {
-                machine.depth -= 1;
+            match frame.continuation {
+                Continuation::For(mut range) => {
+                    if let Some(next) = range.next()? {
+                        range.current = next;
+                        frame.continuation = Continuation::For(range);
+                        frame.pc = frame.begin;
+                        machine.push(EpsValue::Number(next))?;
+                    } else {
+                        machine.depth -= 1;
+                    }
+                }
+                Continuation::Repeat(n) if n > 1 => {
+                    frame.continuation = Continuation::Repeat(n - 1);
+                    frame.pc = frame.begin;
+                }
+                Continuation::Loop => frame.pc = frame.begin,
+                _ => machine.depth -= 1,
             }
             continue;
         }
@@ -1074,6 +1440,8 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
                 }
             }
             EpsToken::LiteralName(name) => machine.push(EpsValue::LiteralName(name))?,
+            EpsToken::ArrayStart => machine.operate(EpsOperator::Mark, at, &mut work)?,
+            EpsToken::ArrayEnd => machine.operate(EpsOperator::ArrayEnd, at, &mut work)?,
             EpsToken::ProcedureStart => {
                 let end = instruction.procedure_partner.ok_or(EpsVmError::Unsupported(at))?;
                 // Immediate names must resolve when scanning a procedure, not on
@@ -1104,6 +1472,7 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
     Ok(EpsEvaluation {
         operands: machine.operands.freeze(),
         length: machine.length,
+        _arrays: machine.arrays.freeze(),
     })
 }
 
@@ -1168,6 +1537,414 @@ mod tests {
     fn int(n: i32) -> EpsValue<'static> {
         EpsValue::Number(EpsNumber::Integer(n))
     }
+    #[test]
+    fn array_bulk_views_and_overlapping_copies_match_reference() {
+        assert_eq!(
+            run(b"1 2 3 3 array astore aload pop"),
+            vec![int(1), int(2), int(3)]
+        );
+        assert_eq!(
+            run(b"/a [0 1 2 3] def /v a 1 2 getinterval def v 0 9 put a aload pop"),
+            vec![int(0), int(9), int(2), int(3)]
+        );
+        assert_eq!(
+            run(b"/a [0 1 2 3 4] def a 1 a 0 4 getinterval putinterval a aload pop"),
+            vec![int(0), int(0), int(1), int(2), int(3)]
+        );
+        assert_eq!(
+            run(b"/a [0 1 2 3 4] def a 0 a 1 4 getinterval putinterval a aload pop"),
+            vec![int(1), int(2), int(3), int(4), int(4)]
+        );
+        assert_eq!(
+            run(b"/a [1 2] def /b 4 array def a b copy length b aload pop"),
+            vec![int(2), int(1), int(2), EpsValue::Null, EpsValue::Null]
+        );
+        assert_eq!(
+            run(b"/a [1 2] def /b 4 array def /r a b copy def r b 0 2 getinterval eq r 1 9 put b 1 get"),
+            vec![EpsValue::Boolean(true), int(9)]
+        );
+    }
+    #[test]
+    fn array_bulk_errors_and_partial_copy_cancellation_release_credit() {
+        let root = MemoryBudget::new(1_000_000);
+        for code in [
+            b"[1] 0 2 getinterval".as_slice(),
+            b"[1] -1 0 getinterval",
+            b"[1] 1 [2] putinterval",
+            b"[1 2] 1 array copy",
+            b"1 2 3 array astore",
+        ] {
+            let p = compile(code, &root);
+            let base = root.used();
+            assert!(evaluate_eps_program(&p, EpsVmLimits::default(), &root, || false).is_err());
+            assert_eq!(root.used(), base);
+            drop(p);
+        }
+        let p = compile(b"99 4 array aload", &root);
+        let base = root.used();
+        assert!(matches!(
+            evaluate_eps_program(
+                &p,
+                EpsVmLimits {
+                    max_operands: 5,
+                    ..EpsVmLimits::default()
+                },
+                &root,
+                || false
+            ),
+            Err(EpsVmError::Limit(EpsVmLimit::Operands))
+        ));
+        assert_eq!(root.used(), base);
+        drop(p);
+        let p = compile(
+            b"/a [0 1 2 3 4] def a 1 a 0 4 getinterval putinterval a aload pop",
+            &root,
+        );
+        let base = root.used();
+        let mut ticks = 0;
+        let result = evaluate_eps_program(&p, EpsVmLimits::default(), &root, || {
+            ticks += 1;
+            false
+        })
+        .unwrap();
+        assert_eq!(result.values(), &[int(0), int(0), int(1), int(2), int(3)]);
+        drop(result);
+        for stop in 1..=ticks {
+            let mut at = 0;
+            assert!(matches!(
+                evaluate_eps_program(&p, EpsVmLimits::default(), &root, || {
+                    at += 1;
+                    at == stop
+                }),
+                Err(EpsVmError::Cancelled)
+            ));
+            assert_eq!(root.used(), base);
+        }
+        let result = evaluate_eps_program(&p, EpsVmLimits::default(), &root, || false).unwrap();
+        drop(result);
+        drop(p);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn array_allocation_put_aliases_and_cycles_match_reference() {
+        assert_eq!(
+            run(b"3 array dup length exch 0 get"),
+            vec![int(3), EpsValue::Null]
+        );
+        assert_eq!(run(b"/a [1 2] def /b a def b 1 9 put a 1 get"), vec![int(9)]);
+        assert_eq!(run(b"/a 2 array def a 0 [3 4] put a 0 get 1 get"), vec![int(4)]);
+        assert_eq!(
+            run(b"/a 1 array def a 0 a put a 0 get a eq"),
+            vec![EpsValue::Boolean(true)]
+        );
+    }
+    #[test]
+    fn array_mutation_errors_cancellation_and_cycle_drop_preserve_credit() {
+        let root = MemoryBudget::new(1_000_000);
+        for code in [
+            b"-1 array".as_slice(),
+            b"true array",
+            b"[1] 1 9 put",
+            b"[1] -1 9 put",
+            b"false 0 1 put",
+        ] {
+            let p = compile(code, &root);
+            let base = root.used();
+            assert!(evaluate_eps_program(&p, EpsVmLimits::default(), &root, || false).is_err());
+            assert_eq!(root.used(), base);
+            drop(p);
+            assert_eq!(root.used(), 0);
+        }
+        let p = compile(b"/a 1 array def a 0 a put a", &root);
+        let base = root.used();
+        let mut ticks = 0;
+        let result = evaluate_eps_program(&p, EpsVmLimits::default(), &root, || {
+            ticks += 1;
+            false
+        })
+        .unwrap();
+        let last = result.clone();
+        drop(result);
+        assert!(root.used() > base);
+        drop(last);
+        assert_eq!(root.used(), base);
+        for stop in 1..=ticks {
+            let mut at = 0;
+            assert!(matches!(
+                evaluate_eps_program(&p, EpsVmLimits::default(), &root, || {
+                    at += 1;
+                    at == stop
+                }),
+                Err(EpsVmError::Cancelled)
+            ));
+            assert_eq!(root.used(), base);
+        }
+        let result = evaluate_eps_program(&p, EpsVmLimits::default(), &root, || false).unwrap();
+        drop(result);
+        drop(p);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn literal_arrays_evaluate_elements_and_retain_nested_identities() {
+        assert_eq!(
+            run(b"[1 2 add [4 5] true] dup length exch 0 get"),
+            vec![int(3), int(3)]
+        );
+        assert_eq!(
+            run(b"/a [1 [7 8]] def a 1 get 0 get a dup eq [] [] eq"),
+            vec![int(7), EpsValue::Boolean(true), EpsValue::Boolean(true)]
+        );
+        assert_eq!(
+            run(b"[] {} eq [1] [1] eq"),
+            vec![EpsValue::Boolean(true), EpsValue::Boolean(false)]
+        );
+        assert_eq!(run(b"[0 1 3 {} for] dup length exch 3 get"), vec![int(4), int(3)]);
+    }
+
+    #[test]
+    fn array_limits_errors_and_last_owner_release_the_admitted_arena() {
+        let root = MemoryBudget::new(1_000_000);
+        let good = compile(b"[1 [2 3]]", &root);
+        let bad = compile(b"]", &root);
+        let range = compile(b"[1] 1 get", &root);
+        let pressure = compile(b"3 {[] pop} repeat", &root);
+        let base = root.used();
+        for program in [&bad, &range] {
+            assert!(evaluate_eps_program(program, EpsVmLimits::default(), &root, || false).is_err());
+            assert_eq!(root.used(), base);
+        }
+        assert!(matches!(
+            evaluate_eps_program(
+                &pressure,
+                EpsVmLimits {
+                    max_operands: 2,
+                    ..EpsVmLimits::default()
+                },
+                &root,
+                || false
+            ),
+            Err(EpsVmError::Limit(EpsVmLimit::ArrayItems))
+        ));
+        assert_eq!(root.used(), base);
+        let mut admitted = false;
+        assert!(matches!(
+            evaluate_eps_program(&good, EpsVmLimits::default(), &root, || {
+                admitted |= root.used() > base;
+                admitted
+            }),
+            Err(EpsVmError::Cancelled)
+        ));
+        assert!(admitted);
+        assert_eq!(root.used(), base);
+        let limits = EpsVmLimits::default();
+        let before_arena = limits.max_operands * std::mem::size_of::<EpsValue<'_>>()
+            + limits.max_dictionary_entries * std::mem::size_of::<Entry<'_>>()
+            + limits.max_execution_frames * std::mem::size_of::<Frame>();
+        let mut arena_admitted = false;
+        assert!(matches!(
+            evaluate_eps_program(&good, limits, &root, || {
+                arena_admitted |= root.used() > base + before_arena as u64;
+                arena_admitted
+            }),
+            Err(EpsVmError::Cancelled)
+        ));
+        assert!(arena_admitted);
+        assert_eq!(root.used(), base);
+        let result = evaluate_eps_program(&good, EpsVmLimits::default(), &root, || false).unwrap();
+        let last = result.clone();
+        drop(result);
+        assert!(root.used() > base);
+        drop(last);
+        assert_eq!(root.used(), base);
+        drop((good, bad, range, pressure));
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn loop_exit_unwinds_only_the_nearest_loop_through_procedures() {
+        assert_eq!(run(b"0 {1 add dup 3 eq {exit} if} loop 9"), vec![int(3), int(9)]);
+        assert_eq!(run(b"0 2 {3 {1 add exit} repeat 10 add} repeat"), vec![int(22)]);
+        assert_eq!(
+            run(b"1 1 5 {dup 3 eq {exit} if} for 9"),
+            vec![int(1), int(2), int(3), int(9)]
+        );
+        assert_eq!(run(b"1 {{exit} exec 100} repeat 9"), vec![int(9)]);
+        assert_eq!(run(b"/leave {exit} def 5 {leave 100} repeat 9"), vec![int(9)]);
+    }
+
+    #[test]
+    fn loop_work_and_invalid_exit_failures_release_admission() {
+        let root = MemoryBudget::new(1_000_000);
+        let endless = compile(b"{} loop", &root);
+        let invalid = compile(b"{exit} exec", &root);
+        let finite = compile(b"0 {1 add dup 3 eq {exit} if} loop", &root);
+        let base = root.used();
+        let limits = EpsVmLimits {
+            max_work: 200,
+            ..EpsVmLimits::default()
+        };
+        assert!(matches!(
+            evaluate_eps_program(&endless, limits, &root, || false),
+            Err(EpsVmError::Limit(EpsVmLimit::Work))
+        ));
+        assert_eq!(root.used(), base);
+        assert!(matches!(
+            evaluate_eps_program(&invalid, limits, &root, || false),
+            Err(EpsVmError::InvalidExit)
+        ));
+        assert_eq!(root.used(), base);
+        let mut admitted = false;
+        assert!(matches!(
+            evaluate_eps_program(&endless, limits, &root, || {
+                admitted |= root.used() > base;
+                admitted
+            }),
+            Err(EpsVmError::Cancelled)
+        ));
+        assert!(admitted);
+        assert_eq!(root.used(), base);
+        let result = evaluate_eps_program(&finite, EpsVmLimits::default(), &root, || false).unwrap();
+        assert_eq!(result.values(), &[int(3)]);
+        drop(result);
+        assert_eq!(root.used(), base);
+        drop((endless, invalid, finite));
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn for_numeric_sequences_and_nested_procedures_match_reference() {
+        assert_eq!(run(b"1 1 3.5 {} for"), vec![int(1), int(2), int(3)]);
+        assert_eq!(run(b"3 -1 1 {} for"), vec![int(3), int(2), int(1)]);
+        assert_eq!(run(b"3 1 1 {} for 1 -1 3 {} for 9"), vec![int(9)]);
+        assert_eq!(
+            run(b"1 0.5 2 {} for"),
+            vec![
+                EpsValue::Number(EpsNumber::Real(1.)),
+                EpsValue::Number(EpsNumber::Real(1.5)),
+                EpsValue::Number(EpsNumber::Real(2.)),
+            ]
+        );
+        assert_eq!(
+            run(b"2147483646 1 2147483647 {} for"),
+            vec![int(2147483646), int(2147483647)]
+        );
+        assert_eq!(run(b"0 1 1 3 {2 {dup} repeat add add add} for"), vec![int(18)]);
+    }
+
+    #[test]
+    fn for_zero_initial_and_fractional_integer_limits_match_reference() {
+        assert_eq!(run(b"0 0 1 {100} for 9"), vec![int(9)]);
+        assert_eq!(run(b"-0.0 0.0 1 {100} for 9"), vec![int(9)]);
+        assert_eq!(run(b"0 1 -0.5 {} for"), vec![int(0)]);
+        assert_eq!(run(b"0 -1 0.5 {} for"), vec![int(0)]);
+    }
+
+    #[test]
+    fn for_fractional_steps_match_independent_real_trace() {
+        let expected = [
+            0.,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.700000048,
+            0.800000072,
+            0.900000095,
+        ];
+        assert_eq!(
+            run(b"0 0.1 1 {} for"),
+            expected.map(|n| EpsValue::Number(EpsNumber::Real(n))).to_vec()
+        );
+        let expected = [
+            1.,
+            0.9,
+            0.799999952,
+            0.699999928,
+            0.599999905,
+            0.499999911,
+            0.399999917,
+            0.299999923,
+            0.199999928,
+            0.099999927,
+        ];
+        assert_eq!(
+            run(b"1 -0.1 0 {} for"),
+            expected.map(|n| EpsValue::Number(EpsNumber::Real(n))).to_vec()
+        );
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(b"2147483647 0.5 2147483647 {pop} for", &root);
+        let base = root.used();
+        assert!(matches!(
+            evaluate_eps_program(
+                &program,
+                EpsVmLimits {
+                    max_work: 200,
+                    ..EpsVmLimits::default()
+                },
+                &root,
+                || false
+            ),
+            Err(EpsVmError::Limit(EpsVmLimit::Work))
+        ));
+        assert_eq!(root.used(), base);
+        drop(program);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn for_limits_cancellation_and_integer_endpoints_release_temporary_credit() {
+        assert_eq!(
+            run(b"-2147483647 -1 -2147483648 {} for"),
+            vec![int(-2147483647), int(i32::MIN)]
+        );
+        let root = MemoryBudget::new(1_000_000);
+        let finite = compile(b"0 1 5 {pop} for", &root);
+        let zero = compile(b"1 0 2 {pop} for", &root);
+        let base = root.used();
+        let limits = EpsVmLimits {
+            max_work: 200,
+            ..EpsVmLimits::default()
+        };
+        assert!(matches!(
+            evaluate_eps_program(&zero, limits, &root, || false),
+            Err(EpsVmError::Limit(EpsVmLimit::Work))
+        ));
+        assert_eq!(root.used(), base);
+        assert!(matches!(
+            evaluate_eps_program(
+                &finite,
+                EpsVmLimits {
+                    max_execution_frames: 1,
+                    ..limits
+                },
+                &root,
+                || false
+            ),
+            Err(EpsVmError::Limit(EpsVmLimit::ExecutionFrames))
+        ));
+        assert_eq!(root.used(), base);
+        let mut admitted = false;
+        assert!(matches!(
+            evaluate_eps_program(&finite, limits, &root, || {
+                admitted |= root.used() > base;
+                admitted
+            }),
+            Err(EpsVmError::Cancelled)
+        ));
+        assert!(admitted);
+        assert_eq!(root.used(), base);
+        let result = evaluate_eps_program(&finite, limits, &root, || false).unwrap();
+        assert!(result.values().is_empty());
+        drop(result);
+        assert_eq!(root.used(), base);
+        drop((finite, zero));
+        assert_eq!(root.used(), 0);
+    }
+
     #[test]
     fn definitions_procedures_aliases_and_conditionals_execute_native_values() {
         assert_eq!(
@@ -1608,7 +2385,7 @@ mod tests {
             b"1 true add",
             b"1 0 div",
             b"(text)",
-            b"[]",
+            b"]",
             b"not_defined",
             b"/x 1 def { //x }",
             b"1 -1 index",
@@ -1839,7 +2616,7 @@ mod vector_tests {
             ]
         );
         assert_eq!(result.scene.paints().len(), 3);
-        assert_eq!(result.scene.paints()[0].kind, EpsPaintKind::FillNonZero);
+        assert_eq!(result.scene.paints()[0].kind, EpsPaintKind::RectFill);
         assert_eq!(result.scene.paints()[1].kind, EpsPaintKind::Stroke);
         assert_eq!(result.scene.paints()[2].node_count, 2);
         assert!(result.scene.paints().iter().all(|p| p.style.width == 2.));
@@ -1857,6 +2634,113 @@ mod vector_tests {
         drop(program);
         assert_eq!(root.used(), 0);
     }
+    #[test]
+    fn array_concat_composes_in_order_and_rejects_invalid_matrices() {
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(
+            b"2 3 translate [2 0 0 4 1 2] concat 1 1 moveto 2 2 lineto stroke",
+            &root,
+        );
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(result.scene.paints()[0].matrix, [2., 0., 0., 4., 3., 5.]);
+        let mut path = [EpsPathSegment::Move([0., 0.]); 2];
+        result.scene.copy_path(0, &mut path, || false).unwrap();
+        assert_eq!(path[0], EpsPathSegment::Move([5., 9.]));
+        assert_eq!(
+            path[1],
+            EpsPathSegment::Line {
+                start: [5., 9.],
+                end: [7., 13.]
+            }
+        );
+        drop((result, program));
+        assert_eq!(root.used(), 0);
+        for source in [
+            b"[] concat".as_slice(),
+            b"[1 0 0 1 0 0 99] concat",
+            b"[1 0 0 1 true 0] concat",
+        ] {
+            let program = compile(source, &root);
+            let baseline = root.used();
+            assert!(evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).is_err());
+            assert_eq!(root.used(), baseline);
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
+    fn initgraphics_resets_defaults_without_destroying_saved_state() {
+        let code = b"10 20 translate 6 7 moveto 4 setlinewidth 2 setlinecap 1 setlinejoin 5 setmiterlimit 0.75 setgray gsave initgraphics currentlinewidth currentlinecap currentlinejoin currentmiterlimit currentgray 0 0 moveto 1 1 lineto stroke grestore currentpoint currentlinewidth currentgray 8 9 lineto stroke";
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(code, &root);
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(
+            result.evaluation.values(),
+            &[
+                EpsValue::Number(EpsNumber::Real(1.)),
+                EpsValue::Number(EpsNumber::Integer(0)),
+                EpsValue::Number(EpsNumber::Integer(0)),
+                EpsValue::Number(EpsNumber::Real(10.)),
+                EpsValue::Number(EpsNumber::Real(0.)),
+                EpsValue::Number(EpsNumber::Real(6.)),
+                EpsValue::Number(EpsNumber::Real(7.)),
+                EpsValue::Number(EpsNumber::Real(4.)),
+                EpsValue::Number(EpsNumber::Real(0.75)),
+            ]
+        );
+        let paints = result.scene.paints();
+        assert_eq!(paints.len(), 2);
+        assert_eq!(paints[0].matrix, [1., 0., 0., 1., 0., 0.]);
+        assert_eq!(paints[0].style, crate::EpsStrokeStyle::default());
+        assert_eq!(paints[1].matrix, [1., 0., 0., 1., 10., 20.]);
+        assert_eq!(paints[1].node_count, 2);
+        assert_eq!(paints[1].style.width, 4.);
+        assert_eq!(paints[1].style.color, EpsDeviceColor::Gray(0.75));
+        drop(result);
+        drop(program);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn initmatrix_preserves_built_path_style_and_saved_transform() {
+        let code = b"7 8 moveto 3 setlinewidth 0.25 setgray 10 20 translate 2 3 scale gsave initmatrix currentpoint currentlinewidth currentgray 1 2 lineto stroke grestore 0 0 moveto 1 1 lineto stroke";
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(code, &root);
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(
+            result.evaluation.values(),
+            &[
+                EpsValue::Number(EpsNumber::Real(7.)),
+                EpsValue::Number(EpsNumber::Real(8.)),
+                EpsValue::Number(EpsNumber::Real(3.)),
+                EpsValue::Number(EpsNumber::Real(0.25)),
+            ]
+        );
+        let paints = result.scene.paints();
+        assert_eq!(paints.len(), 2);
+        assert_eq!(paints[0].matrix, [1., 0., 0., 1., 0., 0.]);
+        assert_eq!(paints[1].matrix, [2., 0., 0., 3., 10., 20.]);
+        assert!(
+            paints
+                .iter()
+                .all(|p| p.style.width == 3. && p.style.color == EpsDeviceColor::Gray(0.25))
+        );
+        let mut path = [EpsPathSegment::Move([0., 0.]); 3];
+        assert_eq!(result.scene.copy_path(0, &mut path, || false).unwrap(), 2);
+        assert_eq!(path[0], EpsPathSegment::Move([7., 8.]));
+        assert_eq!(
+            path[1],
+            EpsPathSegment::Line {
+                start: [7., 8.],
+                end: [1., 2.]
+            }
+        );
+        drop(result);
+        drop(program);
+        assert_eq!(root.used(), 0);
+    }
+
     #[test]
     fn computed_procedures_operator_aliases_and_fill_stroke_build_one_shared_path() {
         let code=b"/M /moveto load def /box { M 10 0 rlineto 0 10 rlineto -10 0 rlineto closepath } def 1 1 add 9 3 div box 1 0 0 setrgbcolor gsave fill grestore 2 setlinewidth 2 3 scale stroke";
@@ -1956,6 +2840,10 @@ mod vector_tests {
             let mut machine = Machine {
                 graphics: Some(&mut g),
                 operands: root.try_buffer(8, EpsValue::Null).unwrap(),
+                arrays: root.try_buffer(0, EpsValue::Null).unwrap(),
+                array_used: 0,
+                array_capacity: 0,
+                array_budget: root.clone(),
                 length: 0,
                 dictionary: root
                     .try_buffer(
@@ -1973,7 +2861,7 @@ mod vector_tests {
                             begin: 0,
                             pc: 0,
                             end: 0,
-                            remaining: 0,
+                            continuation: Continuation::Once,
                         },
                     )
                     .unwrap(),

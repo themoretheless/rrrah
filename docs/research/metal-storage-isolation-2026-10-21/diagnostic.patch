@@ -1,0 +1,50 @@
+--- before/ttl_swap_metal.rs
++++ diagnostic/ttl_swap_metal.rs
+@@ -387,6 +387,7 @@
+ #[test]
+ #[ignore = "manual long-lived 12 MP collection cache and Metal qualification"]
+ fn long_lived_large_collection_cache_preserves_swap_and_metal_frames() {
++    let storage_only = std::env::var_os("RRRAH_METAL_STORAGE_ONLY_DIAGNOSTIC").is_some();
+     use rrrah_core::{DecodedRaster, RasterColorSpace, RasterPixels};
+     const WIDTH: u32 = 4000;
+     const HEIGHT: u32 = 3000;
+@@ -462,8 +463,10 @@
+         .unwrap()
+         .try_manage_pixels(&root)
+         .unwrap();
+-        expected.push(gpu.render_raster(&raster, params, [WIDTH, HEIGHT]).pixels);
+-        expected_half.push(gpu.render_raster_half(&raster, params, hdr_output));
++        if !storage_only {
++            expected.push(gpu.render_raster(&raster, params, [WIDTH, HEIGHT]).pixels);
++            expected_half.push(gpu.render_raster_half(&raster, params, hdr_output));
++        }
+         assert!(ram.insert_visible(key, raster));
+         ram.swap().unwrap().wait_idle().unwrap();
+         assert_eq!(queue.used(), 0);
+@@ -531,6 +534,7 @@
+                 );
+             }
+         }
++        if !storage_only {
+         assert_eq!(
+             gpu.render_raster(&frame, params, [WIDTH, HEIGHT]).pixels,
+             expected[key]
+@@ -539,6 +543,7 @@
+             gpu.render_raster_half(&frame, params, hdr_output),
+             expected_half[key]
+         );
++        }
+         assert!(ram.set_limits_and_spill(limits(Some(Duration::ZERO))));
+         // Policy TTL applies to new/replaced membership, not existing insertion timestamps.
+         assert!(ram.insert_visible(key, frame.clone()));
+@@ -574,6 +579,10 @@
+         stats.reads,
+         stats.writes
+     );
++    if storage_only {
++        eprintln!("STORAGE ONLY DIAGNOSTIC: no SDR/HDR rendering verified");
++        return;
++    }
+     eprintln!(
+         "parallel collection: accelerated={accelerated}; mid_batch_cancelled={mid_batch_cancelled}; exact_sdr_full_frames={cycles}; exact_hdr_half_frames={cycles}; hdr_output={hdr_output:?}; root=0; queue=0"
+     );

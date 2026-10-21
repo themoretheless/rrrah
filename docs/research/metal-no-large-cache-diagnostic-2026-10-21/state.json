@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "monitor_pid": 72375,
+  "binary": "/Users/themoretheless/.codex/tmp/rrrah-metal-soak-20261021/ttl_swap_metal",
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-metal-soak-20261021/ttl_swap_metal",
+    "long_lived_large_collection_cache_preserves_swap_and_metal_frames",
+    "--exact",
+    "--ignored",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "binary_sha256": "dbe3c16c28d4fd2a92bfa54abcb53287063871cc9ef97cb935d206cb15148176",
+  "monitor_sha256": "f6b5c1fed8c44760cbd8a491bda86b7a5f9624cf5cc36014bbdda7fc9f7e3d67",
+  "suite": "metal",
+  "requested_seconds": 60,
+  "full_hdr_output": [
+    4000,
+    3000
+  ],
+  "frames": 8,
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "managed_root_limit": 576000000,
+  "managed_queue_limit": 192000000,
+  "swap_limit": 1537048576,
+  "scratch": "/Users/themoretheless/.codex/tmp/rrrah-metal-soak-20261021/no-large-cache-scratch",
+  "io_delay_ms": null,
+  "max_io_request_bytes": null,
+  "rss_guard_bytes": 4294967296,
+  "rss_guard_consecutive_samples": 3,
+  "sample_seconds": 5.0,
+  "started_utc": "2026-10-21T04:56:37.142416+00:00",
+  "rss_samples": 14,
+  "child_pid": 72378,
+  "last_sample": {
+    "elapsed_seconds": 65.1778191669946,
+    "rss_bytes": 1539981312
+  },
+  "elapsed_seconds": 70.19174591699993,
+  "last_progress": {
+    "cycles": 144,
+    "test_elapsed_seconds": 60.012
+  },
+  "exit_code": 0,
+  "ended_utc": "2026-10-21T04:57:47.350447+00:00",
+  "workload_evidence_valid": true
+}

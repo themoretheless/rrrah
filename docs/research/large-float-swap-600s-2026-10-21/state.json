@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "monitor_pid": 7158,
+  "binary": "/Users/themoretheless/.codex/tmp/rrrah-float-soak-20261021/sustained_swap",
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-float-soak-20261021/sustained_swap",
+    "sustained_float_hdr_delayed_swap_pressure_cancel_and_retry",
+    "--exact",
+    "--ignored",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "binary_sha256": "de2d6e8e062dc9f7ba405f19ec798495bae022f845f20d3a319ba749eae11ade",
+  "monitor_sha256": "f6b5c1fed8c44760cbd8a491bda86b7a5f9624cf5cc36014bbdda7fc9f7e3d67",
+  "suite": "float-delayed",
+  "requested_seconds": 600,
+  "full_hdr_output": null,
+  "frames": null,
+  "dimensions": [
+    2048,
+    2048
+  ],
+  "managed_root_limit": 134217728,
+  "managed_queue_limit": 67108864,
+  "swap_limit": 134217856,
+  "scratch": "/Users/themoretheless/.codex/tmp/rrrah-float-soak-20261021/scratch",
+  "io_delay_ms": 2,
+  "max_io_request_bytes": 65536,
+  "rss_guard_bytes": 1073741824,
+  "rss_guard_consecutive_samples": 3,
+  "sample_seconds": 5.0,
+  "started_utc": "2026-10-21T04:40:38.615939+00:00",
+  "rss_samples": 123,
+  "child_pid": 7162,
+  "last_sample": {
+    "elapsed_seconds": 611.5675366660071,
+    "rss_bytes": 70205440
+  },
+  "elapsed_seconds": 616.578473833004,
+  "last_progress": {
+    "cycles": 20,
+    "test_elapsed_seconds": 612.069
+  },
+  "exit_code": 0,
+  "ended_utc": "2026-10-21T04:50:55.166542+00:00",
+  "workload_evidence_valid": true
+}

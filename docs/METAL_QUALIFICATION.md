@@ -1079,3 +1079,8 @@ Current combined recheck (2026-10-12), following successful live raster/RAW HDR 
 ### 2026-10-12: current Metal HDR render-pass timing
 
 Extended manual timestamp reporting with nearest-rank p95, maximum, warmup count and output format. Actual Apple M4 Max Metal, 4096x4096 float source to 2048x2048 RGBA16Float: 5 warmups, 30 samples, GPU pass median 0.108271 ms, p95 0.554042 ms, max 0.651125 ms. 1 passed, 0 failed; final managed GPU credit zero. Evidence: `research/metal-hdr-gpu-timestamps-current-2026-10-12.json`. Pass timestamps exclude decode/upload/CPU submission/readback/presentation; authored constant input and sequential completion do not establish whole-viewer latency or saturated throughput. No speedup claim.
+
+
+## 2026-10-21 full-frame collection follow-up
+
+The current eight-frame4000x3000 collection passes3088cycles over600.121seconds with full SDR and HDR readback, managed pressure/cancellation/retry and finalzero credit. Exact HDR output reservation in the shared readback harness avoids geometric temporary vector growth; the original RSS-guard failure is preserved. This is headless scenario qualification, not calibrated display or general viewer memory proof. See [complete evidence](research/metal-exact-readback-600s-2026-10-21/REPORT.md).

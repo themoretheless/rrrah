@@ -104,6 +104,111 @@ pub fn rasterize_eps_scene<F: FnMut() -> bool>(
         scene, width, height, viewport, policy, limits, budget, cancelled, true,
     )
 }
+// A rectfill remains a device primitive only while its transformed edges and
+// every active clip are explicitly closed axis-aligned rectangles. Other paths retain geometric
+// coverage. Test topology as well as bounds so a retraced L path is not a box.
+fn rectangle_bounds(path: &[crate::EpsPathSegment]) -> Option<([f64; 2], [f64; 2])> {
+    use crate::EpsPathSegment as S;
+    let [
+        S::Move(a),
+        S::Line { start: s1, end: b },
+        S::Line { start: s2, end: c },
+        S::Line { start: s3, end: d },
+        S::Close { start: s4, end: e },
+    ] = path
+    else {
+        return None;
+    };
+    if s1 != a || s2 != b || s3 != c || s4 != d || e != a {
+        return None;
+    }
+    let xy = a[1] == b[1] && b[0] == c[0] && c[1] == d[1] && d[0] == a[0];
+    let yx = a[0] == b[0] && b[1] == c[1] && c[0] == d[0] && d[1] == a[1];
+    if !xy && !yx {
+        return None;
+    }
+    Some(([a[0].min(c[0]), a[1].min(c[1])], [a[0].max(c[0]), a[1].max(c[1])]))
+}
+fn device_rectangle<F: FnMut() -> bool>(
+    flat: SharedBuffer<crate::EpsPathSegment>,
+    scene: &EpsVectorScene,
+    index: usize,
+    viewport: EpsMatrix,
+    width: u32,
+    height: u32,
+    budget: &MemoryBudget,
+    cancelled: &mut F,
+) -> Result<(SharedBuffer<crate::EpsPathSegment>, bool), EpsRasterError> {
+    use crate::EpsPathSegment as S;
+    let Some((mut low, mut high)) = rectangle_bounds(&flat) else {
+        return Ok((flat, false));
+    };
+    let mut clip = scene.paints()[index].clip;
+    let mut empty_clip = false;
+    let mut clip_low = [f64::NEG_INFINITY; 2];
+    let mut clip_high = [f64::INFINITY; 2];
+    while let Some(at) = clip {
+        if cancelled() {
+            return Err(EpsRasterError::Cancelled);
+        }
+        let path = scene.prepare_path(at, viewport, budget, &mut *cancelled)?;
+        let Some((a, b)) = rectangle_bounds(&path) else {
+            return Ok((flat, false));
+        };
+        for axis in 0..2 {
+            clip_low[axis] = clip_low[axis].max(a[axis]);
+            clip_high[axis] = clip_high[axis].min(b[axis]);
+            low[axis] = low[axis].max(a[axis]);
+            high[axis] = high[axis].min(b[axis]);
+        }
+        empty_clip |= a[0] >= b[0]
+            || a[1] >= b[1]
+            || clip_low[0] > clip_high[0]
+            || clip_low[1] > clip_high[1]
+            || (clip_low[0] == clip_high[0] && clip_low[1] == clip_high[1]);
+        clip = scene.paints()[at].clip;
+    }
+    // Reject disjoint geometry before minimum-device-extent selection. A zero
+    // paint extent can touch a nonempty clipping boundary; an empty clip cannot.
+    let empty = empty_clip || low[0] > high[0] || low[1] > high[1];
+    if empty {
+        low = [0.; 2];
+        high = [0.; 2];
+    } else {
+        for axis in 0..2 {
+            low[axis] = low[axis].floor();
+            high[axis] = high[axis].ceil();
+        }
+        if low[0] == high[0] {
+            high[0] += 1.;
+        }
+        if low[1] == high[1] {
+            low[1] -= 1.;
+        }
+    }
+    for (axis, bound) in [f64::from(width), f64::from(height)].into_iter().enumerate() {
+        low[axis] = low[axis].clamp(0., bound);
+        high[axis] = high[axis].clamp(0., bound);
+    }
+    drop(flat);
+    let a = low;
+    let b = [high[0], low[1]];
+    let c = high;
+    let d = [low[0], high[1]];
+    if cancelled() {
+        return Err(EpsRasterError::Cancelled);
+    }
+    let mut path = budget.try_buffer(5, S::Move(a))?;
+    path[1] = S::Line { start: a, end: b };
+    path[2] = S::Line { start: b, end: c };
+    path[3] = S::Line { start: c, end: d };
+    path[4] = S::Close { start: d, end: a };
+    if cancelled() {
+        return Err(EpsRasterError::Cancelled);
+    }
+    Ok((path.freeze(), true))
+}
+
 fn rasterize<F: FnMut() -> bool>(
     scene: &EpsVectorScene,
     width: u32,
@@ -181,7 +286,7 @@ fn rasterize<F: FnMut() -> bool>(
         if paint.clip.is_none() {
             cached_clip = None;
         }
-        let mut prepare = || -> Result<SharedBuffer<crate::EpsPathSegment>, EpsRasterError> {
+        let mut prepare = || -> Result<(SharedBuffer<crate::EpsPathSegment>, bool), EpsRasterError> {
             if paint.kind == EpsPaintKind::Stroke {
                 let prepared = crate::prepare_eps_stroke(
                     scene,
@@ -191,18 +296,31 @@ fn rasterize<F: FnMut() -> bool>(
                     budget,
                     &mut cancelled,
                 )?;
-                Ok(crate::outline_eps_prepared_stroke(
-                    &prepared,
-                    limits.stroke,
-                    budget,
-                    &mut cancelled,
-                )?)
+                Ok((
+                    crate::outline_eps_prepared_stroke(&prepared, limits.stroke, budget, &mut cancelled)?,
+                    false,
+                ))
             } else {
                 let path = scene.prepare_path(index, viewport, budget, &mut cancelled)?;
-                Ok(flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?)
+                let flat = flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?;
+                drop(path);
+                if paint.kind == EpsPaintKind::RectFill {
+                    device_rectangle(
+                        flat,
+                        scene,
+                        index,
+                        viewport,
+                        width,
+                        height,
+                        budget,
+                        &mut cancelled,
+                    )
+                } else {
+                    Ok((flat, false))
+                }
             }
         };
-        let flat = match prepare() {
+        let (flat, device_rect) = match prepare() {
             Err(error) if error.capacity_refused() && cached_clip.is_some() => {
                 drop(cached_clip.take());
                 prepare()?
@@ -214,7 +332,12 @@ fn rasterize<F: FnMut() -> bool>(
             // No segments can contribute pixels; avoid allocating a full mask.
             continue;
         }
-        let coverage = if paint.clip.is_some() {
+        if device_rect {
+            // Rectangle clipping is already resolved geometrically. A mask
+            // retained from an earlier general fill must yield its credit.
+            drop(cached_clip.take());
+        }
+        let coverage = if paint.clip.is_some() && !device_rect {
             let mut build_mask = || {
                 crate::eps_fill::fill_eps_path_sample_mask(
                     &flat,
@@ -340,6 +463,79 @@ fn rasterize<F: FnMut() -> bool>(
 mod tests {
     use super::*;
     use crate::{EpsGraphics, EpsGraphicsLimits};
+    #[test]
+    fn device_rectfill_cancel_and_all_admission_failures_release_credit() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(
+            EpsGraphicsLimits {
+                max_nodes: 10,
+                max_paints: 2,
+                max_saved_states: 0,
+            },
+            &root,
+            || false,
+        )
+        .unwrap();
+        g.clip_rectangle(0., 0., 4., 8.).unwrap();
+        g.paint_rectangle(4., 0., 0., 8., EpsPaintKind::FillNonZero)
+            .unwrap();
+        let scene = g.finish();
+        let baseline = root.used();
+        let draw = |budget: &MemoryBudget, cancel: &mut dyn FnMut() -> bool| {
+            rasterize_eps_fills(
+                &scene,
+                8,
+                8,
+                [1., 0., 0., 1., 0., 0.],
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                EpsRasterLimits::default(),
+                budget,
+                cancel,
+            )
+        };
+        let mut ticks = 0;
+        let output = draw(&root, &mut || {
+            ticks += 1;
+            false
+        })
+        .unwrap();
+        let expected = output.to_vec();
+        drop(output);
+        assert_eq!(root.used(), baseline);
+        for stop in 1..=ticks {
+            let mut at = 0;
+            assert!(
+                draw(&root, &mut || {
+                    at += 1;
+                    at == stop
+                })
+                .is_err()
+            );
+            assert_eq!(root.used(), baseline);
+        }
+        let probe = MemoryBudget::new(100_000);
+        drop(draw(&probe, &mut || false).unwrap());
+        let peak = probe.peak();
+        let mut refusals = 0;
+        for available in 0..peak {
+            let small = MemoryBudget::new(available);
+            match draw(&small, &mut || false) {
+                Ok(output) => assert_eq!(&*output, &expected),
+                Err(error) => {
+                    assert!(error.capacity_refused());
+                    refusals += 1;
+                }
+            }
+            assert_eq!(small.used(), 0);
+        }
+        assert!(refusals > 0);
+        let retried = draw(&root, &mut || false).unwrap();
+        assert_eq!(&*retried, &expected);
+        drop(retried);
+        drop(scene);
+        assert_eq!(root.used(), 0);
+    }
+
     #[test]
     fn device_hairline_width_survives_paint_scale_and_singular_matrix() {
         let root = MemoryBudget::new(100_000);
@@ -655,8 +851,14 @@ mod tests {
         )
         .unwrap();
         g.clip_rectangle(0., 0., 128., 128.).unwrap();
-        g.paint_rectangle(0., 0., 128., 128., EpsPaintKind::FillNonZero)
-            .unwrap();
+        // Seed a geometric clip mask explicitly. Device rectfill can satisfy
+        // this rectangle without materializing a sample-mask cache.
+        g.move_to(0., 0.).unwrap();
+        g.line_to(128., 0.).unwrap();
+        g.line_to(128., 128.).unwrap();
+        g.line_to(0., 128.).unwrap();
+        g.close_path().unwrap();
+        g.paint(EpsPaintKind::FillNonZero).unwrap();
         g.move_to(0., 0.).unwrap();
         for y in 1..512 {
             g.line_to(if y % 2 == 0 { 0. } else { 127. }, y as f64 / 4.)

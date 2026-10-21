@@ -1,0 +1,9 @@
+# Native EPS loops: independent pixels and cache/Metal transport
+
+The fixture generator now supports exclusive --loops mode. Eight8x8Ghostscript10.05.1 pixel references cover ascending/descending for stripes, nearest-loop repeat exit, conditional loop exit, early for exit, zero-initial/zero-step empty behavior, truncation of a fractional integer-counter limit and accumulated tenths iteration count. Each source, source hash, Ghostscript binary version/hash and full RGB output is retained in tests/fixtures/eps/loop-pixel-ghostscript-reference.json. Reproduce with python3 scripts/generate-eps-pixel-ghostscript-reference.py --loops. Ghostscript remains test-only.
+
+The new hardware test runs every case through public decode_image, RasterRamCache count eviction, RasterSwapCache full-memory refusal, cancellation and successful retry. All512new native pixels match the independent references exactly. Prepared32x32 SDR and binary16 HDR outputs match a separately built reference raster for all8192output pixels in each mode; HDR components remain finite. Final managed root is0 after each case.
+
+Current requiredMetal eps_lifecycle suite on M4Max:11passed/0failed/0ignored. Existing selected independent import/ramp/arc/clip/reset cases still run, bringing selected cases to99. Previously excluded fourgraymidpoint cases and ellipse are still excluded explicitly; this run does not resolve their compatibility discrepancies. Additional lifecycle tests cover TTL/unpin and empty-frame replacement.
+
+The new loop/exit feature now has independent selected final-pixel and common decode/storage/GPU evidence in addition to VM numeric/control tests. This is authored selected EPS coverage, not arbitrary producer EPS, fullPostScript arrays/dictionaries/fonts/images, liveGUI, physical HDR luminance/calibration, all100formats or NVIDIA qualification.

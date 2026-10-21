@@ -1,0 +1,11 @@
+# Native bounded EPS numeric for
+
+The regression first reproduced UndefinedName for for. Native operator execution now accepts initial,increment,limit,procedure and stores iteration state inside the pre-admitted execution frame array. Counter type follows initial/increment; an integer counter remains integer with a real limit. Inclusive ascending/descending ranges and empty ranges are supported, including nested procedure/repeat frames. No recursive Rust calls or heap-growing loop stack are introduced. Larger frame storage is charged by the existing generic frame-array admission.
+
+A tick is consumed before each frame step, including an empty body and a zero increment. Zero-step loops therefore stop at the caller work limit or cancellation instead of hanging. Checks prove work-limit refusal, execution-depth refusal, cancellation after managed allocation, same-root successful retry and finalzero credit. i32 endpoints are tested in both directions; the exact next integer is compared before a real conversion can round a past-endpoint value back onto i32::MIN. A loop requiring an integer counter outside the supported i32 range refuses explicitly with UndefinedResult; full unbounded PostScript numeric semantics are not claimed.
+
+Independent Ghostscript10.05.1 output confirms mixed-real-limit integer counters1,2,3; real-step counters1.0,1.5,2.0; positive integer endpoint2147483646,2147483647; and descending3,2,1. Output/version are retained in ghostscript.log. These numeric controls are separate from authored pixel expectations.
+
+Full vector suite after implementation/numeric/recovery tests:237passed/11ignored/0failed. A subsequently added document-only regression passes separately: two exact red rectangle stripes from for at densities1and2, transparent gaps and finalzero ownership. The full suite was not rerun merely to include that final test-only addition. Existing EPS compatibility limitations remain; no broad PostScript, independent producer, GPU/display or100-format completion claim.
+
+A first build exposed one existing test helper Frame initializer missing its new optional field; compile-initializer-failure.log and green.log preserve those failed attempts. The helper is corrected in the tested final source.

@@ -79,6 +79,82 @@ if clip_cases:
         ("zero_rectclip", "1 1 0 6 rectclip 0 0 8 8 rectfill"),
         ("reset_clip", "newpath clip initclip 0 0 8 8 rectfill"),
     ]
+reset_cases = "--resets" in sys.argv
+if reset_cases:
+    if sys.argv[1:] != ["--resets"]:
+        raise SystemExit("--resets must be used alone")
+    cases = [
+        ("initmatrix_retains_clip", "0 0 4 8 rectclip 1 0 0 setrgbcolor 10 20 translate 0 0 scale initmatrix 0 0 8 8 rectfill"),
+        ("initgraphics_resets_clip_color_matrix", "0 0 4 8 rectclip 1 0 0 setrgbcolor 10 20 translate 0 0 scale initgraphics 0 0 8 8 rectfill"),
+        ("grestore_recovers_clip_and_color", "0 0 4 8 rectclip 1 0 0 setrgbcolor gsave initgraphics 0 0 8 8 rectfill grestore 0 0 8 8 rectfill"),
+        ("initgraphics_clears_built_path", "1 0 0 setrgbcolor 0 0 moveto 8 0 lineto 8 8 lineto 0 8 lineto closepath initgraphics fill"),
+        ("initmatrix_retains_built_path", "1 0 0 setrgbcolor 0 0 moveto 4 0 lineto 4 8 lineto 0 8 lineto closepath 10 20 translate initmatrix fill"),
+    ]
+loop_cases = "--loops" in sys.argv
+if loop_cases:
+    if sys.argv[1:] != ["--loops"]:
+        raise SystemExit("--loops must be used alone")
+    cases = [
+        ("ascending_for_stripes", "0 2 6 {0 1 8 rectfill} for"),
+        ("descending_for_stripes", "6 -2 0 {0 1 8 rectfill} for"),
+        ("exit_from_nearest_repeat", "/x 0 def 4 {3 {x 0 1 8 rectfill exit} repeat /x x 2 add def} repeat"),
+        ("conditional_exit_from_loop", "0 {dup 0 1 8 rectfill 2 add dup 6 gt {pop exit} if} loop"),
+        ("early_exit_from_for", "0 1 7 {dup 3 eq {pop exit} if 0 1 8 rectfill} for"),
+        ("zero_initial_zero_step_empty", "0 0 1 {0 0 8 8 rectfill} for"),
+        ("integer_fractional_limit", "0 1 -0.5 {0 8 8 rectfill} for"),
+        ("rounded_tenths_iteration_count", "/n 0 def 0 0.1 1 {pop /n n 1 add def} for 0 0 n 8 sub 8 rectfill"),
+    ]
+matrix_cases = "--matrices" in sys.argv
+if matrix_cases:
+    if sys.argv[1:] != ["--matrices"]:
+        raise SystemExit("--matrices must be used alone")
+    cases = [
+        ("concat_order", "1 0 0 setrgbcolor [1 0 0 1 2 1] concat [2 0 0 3 0 0] concat 0 0 2 2 rectfill"),
+        ("reflection", "1 0 0 setrgbcolor [-1 0 0 1 8 0] concat 0 0 3 8 rectfill"),
+        ("shear_inverse_polygon", "1 0 0 setrgbcolor [1 0 1 1 0 0] concat 0 0 moveto 8 0 lineto 0 8 lineto -8 8 lineto closepath fill"),
+        ("computed_nested_array", "1 0 0 setrgbcolor [[1 2 add 0 0 2 1 1]] 0 get concat 0 0 1 3 rectfill"),
+        ("saved_matrix", "1 0 0 setrgbcolor gsave [1 0 0 1 4 0] concat 0 0 2 8 rectfill grestore 0 0 2 8 rectfill"),
+        ("singular_fill", "1 0 0 setrgbcolor [0 0 0 1 4 0] concat 0 0 3 8 rectfill"),
+    ]
+device_rect_cases = "--device-rects" in sys.argv
+if device_rect_cases:
+    if sys.argv[1:] != ["--device-rects"]:
+        raise SystemExit("--device-rects must be used alone")
+    cases = [
+        ("vertical_zero", "1 0 0 setrgbcolor 4 0 0 8 rectfill"),
+        ("horizontal_zero", "1 0 0 setrgbcolor 0 4 8 0 rectfill"),
+        ("point_zero", "1 0 0 setrgbcolor 4 4 0 0 rectfill"),
+        ("fractional_small", "1 0 0 setrgbcolor 4.25 1.25 0.25 0.25 rectfill"),
+        ("outside_zero", "1 0 0 setrgbcolor 8 0 0 8 rectfill"),
+        ("clipped_inside_zero", "0 0 4 8 rectclip 1 0 0 setrgbcolor 2 0 0 8 rectfill"),
+        ("clip_boundary_zero", "0 0 4 8 rectclip 1 0 0 setrgbcolor 4 0 0 8 rectfill"),
+        ("edge_touch_clip_intersection", "0 0 4 8 rectclip 4 0 4 8 rectclip 1 0 0 setrgbcolor 4 0 0 8 rectfill"),
+        ("disjoint_clips", "0 0 3 8 rectclip 4 0 4 8 rectclip 1 0 0 setrgbcolor 4 0 0 8 rectfill"),
+        ("point_touch_clips", "0 0 4 4 rectclip 4 4 4 4 rectclip 1 0 0 setrgbcolor 4 4 0 0 rectfill"),
+        ("ordinary_line_fill", "1 0 0 setrgbcolor 4 0 moveto 4 8 lineto closepath fill"),
+    ]
+array_write_cases = "--array-writes" in sys.argv
+if array_write_cases:
+    if sys.argv[1:] != ["--array-writes"]:
+        raise SystemExit("--array-writes must be used alone")
+    cases = [
+        ("allocated_matrix", "1 0 0 setrgbcolor /m 6 array def m 0 2 put m 1 0 put m 2 0 put m 3 2 put m 4 1 put m 5 1 put m concat 0 0 3 2 rectfill"),
+        ("aliased_matrix_update", "1 0 0 setrgbcolor /m [1 0 0 1 0 0] def /alias m def alias 4 4 put m concat 0 0 2 8 rectfill"),
+        ("nested_color_update", "/a 1 array def a 0 [0 0 0] put /c a 0 get def c 0 1 put c 0 get c 1 get c 2 get setrgbcolor 0 0 4 8 rectfill"),
+        ("cyclic_identity_controls_color", "/a 1 array def a 0 a put a 0 get a eq {1 0 0 setrgbcolor} {0 0 1 setrgbcolor} ifelse 0 0 8 8 rectfill"),
+    ]
+array_bulk_cases = "--array-bulk" in sys.argv
+if array_bulk_cases:
+    if sys.argv[1:] != ["--array-bulk"]:
+        raise SystemExit("--array-bulk must be used alone")
+    cases = [
+        ("astore_matrix", "1 0 0 setrgbcolor 2 0 0 2 1 1 6 array astore concat 0 0 3 3 rectfill"),
+        ("matrix_view_mutation", "1 0 0 setrgbcolor /a [99 99 1 0 0 1 0 0 99] def /v a 2 6 getinterval def v 4 4 put a 2 6 getinterval concat 0 0 2 8 rectfill"),
+        ("overlap_right_width", "1 0 0 setrgbcolor /a [0 1 2 3 4] def a 1 a 0 4 getinterval putinterval 0 0 a 4 get 8 rectfill"),
+        ("overlap_left_width", "1 0 0 setrgbcolor /a [0 1 2 3 4] def a 0 a 1 4 getinterval putinterval 0 0 a 0 get 8 rectfill"),
+        ("copy_prefix_matrix", "1 0 0 setrgbcolor /m [1 0 0 1 0 0] def /b 8 array def /v m b copy def v 4 4 put v concat 0 0 2 8 rectfill"),
+        ("aload_rectangle", "1 0 0 setrgbcolor [1 1 6 6] aload pop rectfill"),
+    ]
 background = "1 setgray 0 0 moveto 8 0 lineto 8 8 lineto 0 8 lineto closepath fill 0 setgray "
 if clip_cases:
     background = "initclip newpath " + background
@@ -136,6 +212,18 @@ if clip_cases:
     destination = "tests/fixtures/eps/clip-pixel-ghostscript-reference.json"
 if arc_cases:
     destination = "tests/fixtures/eps/arc-pixel-ghostscript-reference.json"
+if reset_cases:
+    destination = "tests/fixtures/eps/reset-pixel-ghostscript-reference.json"
+if loop_cases:
+    destination = "tests/fixtures/eps/loop-pixel-ghostscript-reference.json"
+if matrix_cases:
+    destination = "tests/fixtures/eps/matrix-pixel-ghostscript-reference.json"
+if device_rect_cases:
+    destination = "tests/fixtures/eps/device-rect-pixel-ghostscript-reference.json"
+if array_write_cases:
+    destination = "tests/fixtures/eps/array-write-pixel-ghostscript-reference.json"
+if array_bulk_cases:
+    destination = "tests/fixtures/eps/array-bulk-pixel-ghostscript-reference.json"
 if zero_fill_adjust:
     destination = destination.replace('-ghostscript-reference.json', '-zero-adjust-ghostscript-reference.json')
 Path(destination).write_text(json.dumps({

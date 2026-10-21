@@ -11216,3 +11216,108 @@ Event profiling shows 10.16M–32.12M disjoint old-region carries per attempt an
 ### 2026-10-21: bounded bulk carry with cached neighbor proofs
 
 Published fragments now cache a conservative unmergeable-previous-boundary bit in existing padding (504 bytes unchanged). After a normally retained unchanged old tail, positive proved-neighbor records disjoint from the original incoming triangle (or with incoming exhausted) transfer by admitted capacity chunks. Changed/protected/unknown boundaries use normal keep. Growth/cap/admission remain unchanged; work/cancellation cover preflight and copy chunks. A newly isolated overflow regression catches 806 versus baseline 775 ticks; bounded look-ahead restores 775→775 and leaves state unchanged. Cache properties hold on 4143 real-fixture and 4862 generated retained states, including 20 refusals; all reached 7-admission/113-cancel/113-short-quota bulk failures preserve/retry/release. Vector 230/11 ignored, interpreter 165/3, native 319/13, kernel 20 pass. Local 138-record geometry/fragment prefixes are identical; work 37108→35261. Final compile-time-specialized paired release probe gives sparse64 20.37% [19.95,20.84] elapsed reduction with AA [-0.78,1.22]; small/general speed is not claimed. Counter-only pinned-file comparison advances main tiles 1154→1337 and 15→19 in two attempts, with more paint invocations in all four; every attempt still returns incomplete at 100M. Frozen final qualification matches current normal decoder hash and one.ai is unchanged. [Implementation, soundness proof, overflow fix, all raw/noisy probes, real-file progress and remaining scope](research/bulk-retained-carry-2026-10-21/REPORT.md). The goal remains incomplete; per-record scanning/materialization and spatial indexing remain open.
+
+
+### 2026-10-21 — large float delayed swap, 600 seconds
+
+Current frozen cache binary passed 20 cycles / 612.069s with changing 2048x2048 RGBA32Float (64MiB). Every float bit, full managed-root pressure refusal, admitted-read cancellation and exact retry checked each cycle. Physical swap bounded at 134217856 bytes / 2 files; final root/queue0 and scratch empty. All123 RSS samples available; sampled peak 70205440 bytes. Library151pass/3ignored; cache_stress5pass; nonmanual sustained controls5pass/5ignored. Injected2ms I/O latency, not physical slow-drive, system-wide memory pressure, Metal or physical HDR qualification. [Report](research/large-float-swap-600s-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — full-frame Metal collection RSS failure
+
+Current headless eight12MP-frame soak requested600s but monitor terminated at25.147s after three samples above4GiB; RSS reached7548518400bytes.56exact SDR/full-HDR cycles preceded termination; tracked root/queue0 does not establish native resource release. This is a failed long-duration gate, not a pass. Preserve raw samples and isolate renderer/readback/backend lifetime before retrying. [Report](research/metal-collection-600s-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — Metal RSS isolation
+
+Explicit completed readback texture/buffer destruction failed the same4GiB RSS guard and was reverted. vmmap attributes2.5GiB resident to MALLOC_LARGE(empty), versus618MiB owned graphics. Original frozen binary with diagnostic MallocLargeCache=0 passed60s full12MP SDR/HDR workload; this supports significant allocator retention but is not a default-environment fix/pass. Monitor now records inherited Malloc* flags for provenance. [Diagnostic report](research/metal-no-large-cache-diagnostic-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — HDR readback allocation growth isolated
+
+Storage-only diagnostic683cycles/60.012s remains bounded and correctly fails the Metal evidence validator. Reserving exact HDR result capacity removes geometric Vec growth in the test harness; normal allocator pilot passes324cycles with324exact full12MP SDR/HDR frames and324admitted cancellation retries under unchanged4GiB RSS guard. This is a harness improvement, not a production-viewer memory claim. Same frozen candidate600s run started separately; completion pending. [Pilot](research/metal-exact-readback-capacity-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — full-frame Metal600s accepted scenario
+
+Exact HDR readback-capacity harness passed3088cycles/600.121s on M4Max:3088full4000x3000SDR/HDR comparisons,3088admitted parallel scratch cancellations and retries, every restoredfloatbit exact, TTL/visible-pin pressure paths,8writes/3088reads/finalrootqueue0. All121RSS samples available; sampledpeak2100854784bytes under unchanged4GiB guard; scratchempty/sourcehashes unchanged. NoLargeCache override. Gallery44pass/16ignored and smallHDRcontrol pass. Scope remains headless fixed-eight-frame integration, not liveGUI/physicalHDR/100formats/NVIDIA or production-viewer memory fix. [Report](research/metal-exact-readback-600s-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — real RAW directional worker refresh
+
+Current requiredMetal M4Max passes CR3blocked-forward reversal and sole-disk-slot forward/back changes with full6188x4120SDR/HDR exact frames; roots0. Separately behind1/ahead2 two plans produce3entries each,6fullsensorSDR/HDR comparisons across4decoded formats(CR2/NEF/ORF/PEF), sensors/metadata exact to fresh native decode, failures0/roots0. SelectedARWintentionally absent. DiskMosaicCache transport evidence, not independentRAWcolor or ImageSwapCache/GUI/physicalHDR/full100coverage. [Report](research/raw-navigation-metal-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — Metal full-sensor compute and cache transport refresh
+
+Current7compute+2compute-cache tests pass/0ignored on M4Max. Managed6188x4120case checks all25494560pixels across7distinct dispatches, exact array/interleaved results, CPU/GPUpressure/admitted cancellation/lastownerrelease final0. Compute→RAM→swap→Metal cases164x50and4000x3000 preserve everyfloatbit and signedfiniteSDR/HDR outputs; strictvalidatorpass. Separate timing case samples3pixels only; no pairedspeedclaim or fullRAWcolor/GUI/physicalHDR/NVIDIA qualification. [Report](research/metal-full-sensor-current-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — native EPS initmatrix
+
+Implemented missinginitmatrix after regression reproducedUndefinedName. Resets only abstractuserCTM; existingpath/clip/style/savedtransform survive; bounds/densitymapping stays downstream. Numeric behavior independently matchesGhostscript10.05.1. Authored negativeorigin/density1,2/clippedpixels and singularCTMrecovery pass; fullvectorsuite232pass/11ignored, finalmanaged0. Grayquantization/diagonaledges and broaderEPS remainopen. [Report](research/eps-initmatrix-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — native EPS initgraphics
+
+Implemented missinginitgraphics afterUndefinedName regression. ActiveCTM/path/clip/style reset; savedstates/nodes/priorpaints retained with unchangedarena credits and grestorerestoration. Ghostscript10.05.1 independentdefault/path/state oracle matches. Three regressions plus fullvectorsuite235pass/11ignored; negativeorigin/density1,2pixels exact/finalmemory0. Subset expansion only; broaderEPS and edge/color gates remainopen. [Report](research/eps-initgraphics-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — EPS reset public lifecycle and independent pixels
+
+Five new independentGhostscript8x8reset fixtures pass commondecode→RAMcount eviction→swap→pressure/cancel/retry→Metal. Every nativepixel exact;32x32SDR/HDRGPUgolden comparisons exact/finalroot0. Sharedhelper now checksHDR for91selectedoracle cases(total includes5new resets); requiredMetal eps_lifecycle10pass/0ignored. Fourgraymidpoint and ellipse exclusions remainexplicit; nofullEPS/GUI/physicalHDR/NVIDIA/all100claim. [Report](research/eps-reset-lifecycle-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — BAY source boundary and rejected unpack pilot
+
+Rechecked author BAY format page and targeted originalsample search; no camera-producedfile recovered in thispass(no globalabsence claim). Existingexplicitlayout API remainsappropriate; no size-only CFA/WBguess. Directu16shift unpack matchesall4973540QV5700storage samples but optimizedwarm pairedCPUprobe shows noacceptedgain; productionunchanged. MEF existingWBabsence remainsseparate. [Evidence](research/bay-unpack-direct-probe-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — native bounded EPS numeric for
+
+Implemented missingfor withpre-admitted frame state, inclusiveascending/descending/mixedlimit counters and nestedprocedures. Ghostscriptnumericcontrols match. Empty/zerostep bodies remainwork/cancel bounded; frame refusal/admittedcancel/samerootretry/final0 verified; exacti32endpoint handling prevents rounding into endlessloop. Widerintegercounter continuation explicitlyrefuses. Fullvector237pass/11ignored plussubsequentdocumentstripe-only1pass densities1,2. BroaderEPS/100formats remainopen. [Report](research/eps-for-loop-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — EPS for edge corrections
+
+IndependentGhostscript foundzero-initial+zerostep shouldexecute no body and integercounterfractionalbound truncates towardzero. Nativecorrections/regressions pass; realmode nowconvertslimit tof32 and positive/negative tenths traces matchexactly. Nonzeroinitialzerostep remainsworkbounded; admittedmemoryreleased. Fullvectorsuite240pass/11ignored includesdocumentstripe/nested/recoverychecks. Initialzero-stepgeneralization superseded. [Report](research/eps-for-loop-2026-10-21/EDGE_REPORT.md).
+
+
+### 2026-10-21 — native EPS loop/exit control
+
+Explicitframecontinuations separateprocedure/repeat/for/loop; exit unwindsnearestloopthroughnestedprocedures withcharged/cancellable search, preservesoperandvalues; outsideexit typedInvalidExit. IndependentGhostscript tracesmatch. Workexhaustion/admittedcancel/samerootretry/final0verified. Fullvector242pass/11ignored; decodepubliclibcheckpass. Finalpixels/GPUfornewcontrol stillseparate, broaderEPS/100formatsopen. [Report](research/eps-loop-exit-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — EPS loop independent pixels and public Metal lifecycle
+
+EightGhostscript loopcontrol fixtures coverfor/repeat/loop/exit plusnumericedgecases;512nativepixels exact. Commondecode→RAMcount eviction→swap fullpressure/cancel/retry→SDR/HDR Metal each8192outputpixels exact/finalroot0. RequiredMetal eps_lifecycle11pass/0ignored;99selectedindependentcases total, earlier4graymidpoint/ellipse exclusionsunchanged. BroaderEPS/GUI/physicalHDR/all100remainopen. [Report](research/eps-loop-lifecycle-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — bounded native EPS literal arrays
+
+Addedcomputed/nestedliteralarrays, length/get, alias/empty-object equality matchingGhostscript10.05.1. Fixedcapacityarena(max_operands slots includingheaders) admittedonfirstconstruction; scalarretainedpayloadunchanged. Mark/copyworkcharged, unmatchedclose/index/quota/admittedarenacancel/samerootretry/lastclone/final0tested. Fullvector244pass/11ignored; existingEPSMetal11pass/0ignored. Newarraypixel/matrix/mutation paths remainfuturework, notfullEPS/100formats. [Report](research/eps-literal-arrays-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — EPS concat partial, rectfill gate red
+
+Addedvalidatedsix-numberarray concat; orderedCTM/path andinvalidarray regressions pass(fullvector245pass/11ignored). Independent6matrixfixtures: first5completepubliccache/swap/SDR-HDRMetal/final0; singularrectfill strictnativepixelgatefails. Lifecycle11pass/1fail/0ignored, nofilteredcase. ExplicitGhostscript filladjust0.5vs0diagnostics isolate8vs0redpixels forsingular/zero-widthrectfill, ordinarycollinearfill0inboth. Matrixqualification remainspartial; nextrectfillprovenance/devicepolicy, noepsilonpatch. [Report](research/eps-concat-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — native rectfill device policy closes concat gate
+
+PreservedRectFillprovenance; explicitlyclosedaxisalignedrectangle/clips resolvebounds beforetoucheddevicepixel selection.11independentdevicecases plusunchanged6matrixcases pass publicdecode/RAM/swap/fullpressure/cancel/retry/SDR-HDRMetal; former singularfill gateclosed withoutfilter. Lifecycle13pass/0ignored(total116selectedoraclecases). Raster cancellation/budget sweeps/final0 andcachemask-yield regressions pass; fullvector246pass/11ignored. Generic/nonrectangularfallback andearliergray/ellipse/diagonal exclusions remain; notfullEPS/100/physicalHDR/NVIDIA. [Report](research/eps-device-rectfill-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — transactional EPS rectangle recording
+
+Reproducedfailedpaint_rectangle consumingunpublishednodefrontier(nodecap2left2instead1). Rollbacknowrestoresnode/paintfrontiers pluscurrentstate onErr; successfulrecords unchanged. Nodecaps1..5/paintcap0/lateCTMoverflow preservepathandallowlaterfittingoperation withoutlimitincrease; finalmanaged0. Fullvector247pass/11ignored. Logicaladmittedarena reuse, notRSS/performance/newformat claim. [Report](research/eps-rectangle-rollback-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — EPS allocated arrays and mutation
+
+Addednull-filledarray andindexedput via existingboundedfirst-usearena. Alias/nested/self-cycle semanticsmatchGhostscript; invalidbounds/types andallobservedcancelcheckpoints releasecredit, samerootretry/lastclone/final0 pass. Fourindependentpixelcases(matrixassembly/alias/nestedcolor/cyclecondition) passcommondecode/RAM/swap/pressure/cancel/SDR-HDRMetal. Fullvector249pass/11ignored; EPSMetal14pass/0ignored(total120selectedoraclecases). BroaderEPS/100/GUI/physicalHDRremainopen. [Report](research/eps-array-mutation-2026-10-21/REPORT.md).
+
+
+### 2026-10-21 — EPS bulk data arrays and views
+
+Addedaload/astore/getinterval/putinterval andarraycopy; sharedviews/noextrascratch, direction-awareoverlap andcopiedprefixviewsemantics matchGhostscript. Invalidranges/stackoverflow/underflow, everyobservedcopycancelcheckpoint, exactsamerootretry/final0verified. Sixindependentpixelcases passcommondecode/RAM/swap/SDR-HDRMetal. Fullvector251pass/11ignored; EPSMetal15pass/0ignored(total126selectedoraclecases). Generalstrings/dictionaries/procedurearraymutation/producerEPS/100/physicalHDRremainopen. [Report](research/eps-array-bulk-2026-10-21/REPORT.md).

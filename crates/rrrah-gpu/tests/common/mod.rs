@@ -481,14 +481,19 @@ impl GpuReadback {
             .unwrap();
         rx.recv().unwrap().unwrap();
         let mapped = readback.slice(..).get_mapped_range().unwrap();
-        let result = mapped
-            .chunks_exact(row_bytes as usize)
-            .flat_map(|row| {
+        // flat_map has no exact lower size hint: collecting a full HDR frame
+        // otherwise repeatedly reallocates and retires large backing stores.
+        let elements = usize::try_from(u64::from(size[0]) * u64::from(size[1]) * 4)
+            .expect("HDR readback element count fits address space");
+        let mut result = Vec::with_capacity(elements);
+        for row in mapped.chunks_exact(row_bytes as usize) {
+            result.extend(
                 row[..size[0] as usize * 8]
                     .chunks_exact(2)
-                    .map(|v| u16::from_le_bytes([v[0], v[1]]))
-            })
-            .collect();
+                    .map(|v| u16::from_le_bytes([v[0], v[1]])),
+            );
+        }
+        assert_eq!(result.len(), elements);
         drop(mapped);
         readback.unmap();
         result
