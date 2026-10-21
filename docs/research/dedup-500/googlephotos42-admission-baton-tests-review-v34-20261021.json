@@ -1,0 +1,37 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_admission_baton_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/consent.test.ts": {
+      "sha256": "ac9f26d4cab895465499631109c2a6e83fefbf5eb6f1cdd3add402e1511b9632",
+      "git_blob": "99c0fcfbf202935049a48b8ab08ca3bc3be95235",
+      "bytes": 7706,
+      "lines": 220,
+      "method": "Whole pinned upstream test source read; not executed."
+    },
+    "tests/empty-trash-baton.test.ts": {
+      "sha256": "5dfba3c2bc1853501596209e3ea592e5921584b0028be1e37406963b8e8d92ba",
+      "git_blob": "19552d5bbc725b134cbd4092c25edafc44c1652a",
+      "bytes": 5651,
+      "lines": 154,
+      "method": "Whole pinned upstream test source read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 126,
+  "tracked_blobs": 230,
+  "findings": [
+    "Baton test independentlyprovidesproperchrome.runtime.lastErrorcallbackstub,unlikebrokenstubidentifiedinapi.test.ts. ThereforedonotclaimlastErrorbranchuntestedacrossrepository.",
+    "Baton expirytests freshandTTL+1expired,missing/malformedtype,wrongpage/lookalike/trashslash; noexactTTLboundary,futuretimestamp,nonfinitenumericAPIinputoraccountprefixedtrash.",
+    "Localbatonroundtrip/corruptJSONandChromequeuedcallbackroundtrip/readerror/writeerrorcheckedinsource. Clearfailure-reconsume behavior nottestedhere.",
+    "Consenttestscoverreadable/acknowledgedcombinations,dryrunexemption,permanentackorder,negative/NaNdeleted,stableerrorstringsandthrowmapping,localstoragewrite/readfailure. No fullbrowseractionauthorizationqualificationimplied.",
+    "Concurrentadmissiontestonlybooleanoccupiedpredicate; noawaitboundary/freshreservationrace coverage inthisfile. Priororiginalclassconcurrencycontrolremainsseparate."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "126/230wholeartifacts; fullupstreamsuiteandprojectincomplete.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
