@@ -1,0 +1,513 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "tracked_blobs": 97,
+  "unique_whole_file_credits": 97,
+  "duplicate_credits": [],
+  "identity_errors": [],
+  "missing": [],
+  "unexpected": [],
+  "method": "Every reviewed file SHA256 and Git blob rechecked against pinned original tree; all incremental review artifacts pinned.",
+  "whole_repo_complete": true,
+  "runtime_qualification": "partial isolated controls only",
+  "review_artifact_pins": {
+    "docs/research/dedup-500/spotify8-core-review-v1-20261021.json": "6458b5526271133c4259868ba447844cdcee6bb9f9748f9028199fd26d7448b5",
+    "docs/research/dedup-500/spotify8-pagination-tests-review-v2-20261021.json": "765c17f31276b2f18bfcd629b8b6e7348436e94282cae5d2d6124734455bf519",
+    "docs/research/dedup-500/spotify8-process-cache-ui-review-v3-20261021.json": "c838237463af14e23d9122bcff0443528333333280cff4a5927c84624e09a2c7",
+    "docs/research/dedup-500/spotify8-main-ui-review-v4-20261021.json": "649150c359f04beaac36868c122ba97170982d2ed617fd71bd8939a2cf5055fd",
+    "docs/research/dedup-500/spotify8-config-docs-review-v5-20261021.json": "295ce89d33cd361922ae0af3698515589347366bd67f18d45e3ead421b7d1313",
+    "docs/research/dedup-500/spotify8-network-tests-review-v6-20261021.json": "e4e85e280c6c41f9683764ebda42ad7e331c09e67d1b1e7363a9aa58c4be973c",
+    "docs/research/dedup-500/spotify8-helpers-ui-review-v7-20261021.json": "6395a4869500ec82d7596ffca5779c868650e98306bc08cf459c7bd651d89678",
+    "docs/research/dedup-500/spotify8-project-metadata-review-v8-20261021.json": "e92da3d2524a55e7689d98de803407638fdc07f45bbf92c60f049d43b40b4941",
+    "docs/research/dedup-500/spotify8-pages-translations-review-v9-20261021.json": "36a4f621523afbe764a1a56f7feb1d91c3fe8e15024129af814451a07f82b7ec",
+    "docs/research/dedup-500/spotify8-lifecycle-presentation-review-v10-20261021.json": "9d1c3d4b555537f25bfda435f58b04bf899d6f0bf01e00812ad0bb2477f93c13",
+    "docs/research/dedup-500/spotify8-api-visual-review-v11-20261021.json": "f0e060932fe9d5457a250d8cfeabd1fc6cf35ff250c9406db55ead71f4e7526f",
+    "docs/research/dedup-500/spotify8-lock-graph-review-v12-20261021.json": "cbee9fa5d5759496448c46168105896a5a5176d6ba93d2e5a61fab655d88ec1e",
+    "docs/research/dedup-500/spotify8-lock-middle-review-v13-20261021.json": "fb606c0e8391efc7f8ea8dc40c1448511d10f70d38296233c3fcd46aa202a43f",
+    "docs/research/dedup-500/spotify8-lock-complete-review-v14-20261021.json": "b6f975a0bb92b674903da4e3db33b784c3c430616694d7c4fd13d978d53962cb"
+  },
+  "files": {
+    "dedup/deduplicator.ts": {
+      "sha256": "4417a879a49242ba0e400db47b564348b207637a0780a5b34906dacb10febe80",
+      "git_blob": "2ac9829f731690b8624bb805b061293f8fc28374",
+      "lines": 205
+    },
+    "dedup/customFetch.ts": {
+      "sha256": "38b85c295567f18cbcd62fe10743078c2ef37066e9f2ff47892e41788ba49945",
+      "git_blob": "43b239dee9b1ef2fbdba1d04dc026912a6021941",
+      "lines": 224
+    },
+    "dedup/library.ts": {
+      "sha256": "62bad24997dead78969b486ac02386904d8cf710b89f53c715609043560b651a",
+      "git_blob": "68d0f5ef18e55186355cfe7ad08642f57d193255",
+      "lines": 24
+    },
+    "dedup/promiseForPages.ts": {
+      "sha256": "35b71d03c2c3e834cca9b498acdd2af2904a87860aa2c9721c59c46d2a2aa9f6",
+      "git_blob": "15905fb6cfdc07eca89d33085bd0dcf500ef2a37",
+      "lines": 129
+    },
+    "dedup/spotifyApi.ts": {
+      "sha256": "38ed8bf6ff103eb7bac4ab30c907152433e1f2f9a87a48f7521e39c47feaf564",
+      "git_blob": "64242c7a88e5d630367a3aa0eee3684b7eb175c7",
+      "lines": 221
+    },
+    "dedup/types.ts": {
+      "sha256": "9a30919e25dbac4e48028871db4b9284bc358e96c0e1c9729da6c97dffb7584d",
+      "git_blob": "5c47cba5e0a6707874604ae2c01fe474a88f7875",
+      "lines": 15
+    },
+    "dedup/__tests__/deduplicator.test.ts": {
+      "sha256": "205d70c375c2ce4e1a09e9addd68de7cb9e57678173531a3250f0cae08dd178f",
+      "git_blob": "8b09cc066ecc914247743fcbcbabc25555c55155",
+      "lines": 213
+    },
+    "dedup/process.ts": {
+      "sha256": "197d85827154fb3faeb46ab6fdb6da238b76bc91c46200419eef55041a2fbc1c",
+      "git_blob": "4fd5d5316f425577019d79d5e23d94f57f26818c",
+      "lines": 169
+    },
+    "dedup/playlistCache.ts": {
+      "sha256": "afde53eb96e462f82b7df32047eef81c795463f3a6bd740f337dbfb863172141",
+      "git_blob": "ae732c91f57b015fa192fa1d4e447b44991eb18c",
+      "lines": 24
+    },
+    "components/duplicateTrackList.tsx": {
+      "sha256": "939ea64cc3d75c5316e8f8c0c039652c4e1a72a839dc54e3030a74384a50931e",
+      "git_blob": "2d27eff2b704c46501934e926552dfc817d5d115",
+      "lines": 7
+    },
+    "components/duplicateTrackListItem.tsx": {
+      "sha256": "58c5d55162b5f17922f205190780d88a068e29f79afb28f495277d1c281ca51a",
+      "git_blob": "9799afd7d63a039fbd325143d8800cf6e5bff702",
+      "lines": 34
+    },
+    "components/main.tsx": {
+      "sha256": "79205a26a7bf17681be73ed6815234cdc69c8df57dafc4590f7e6544a9b64190",
+      "git_blob": "e3bd2b72d425db41cb6232fb49efead3bb41e0a8",
+      "lines": 295
+    },
+    "components/panel.tsx": {
+      "sha256": "21c008717bc6d67d76079becbc3ff1070eab9901c1e942724131dc20fc87bc10",
+      "git_blob": "1e020846d93853de81b996c9fc0e38c402c666fc",
+      "lines": 7
+    },
+    "package.json": {
+      "sha256": "e0c9be026a500794b32c8fbb7bf5be49467a7996045b231b814fdfa7fcfeedea",
+      "git_blob": "205f8fa264ccbf1cd7cb02a560e2913f3c8448ad",
+      "lines": 51
+    },
+    "jest.config.js": {
+      "sha256": "d92520bedc701bd0c062d5899869ded3bbfee201cb3943c5efdff1df183f3c3d",
+      "git_blob": "83c11d30af3687f26d2267fbdbc177be0fe08520",
+      "lines": 12
+    },
+    "jest.setup.js": {
+      "sha256": "9fdaefc8da45838890f397aa1b5d8e849bb50d624fa2a2f8a3323fbd54d1ff7f",
+      "git_blob": "adee3c8304a0af816ee0d1bf2850684c08ca96b7",
+      "lines": 2
+    },
+    "jest-setup.d.ts": {
+      "sha256": "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068",
+      "git_blob": "0519ecba6ea913e21689ec692e81e9e4973fbf73",
+      "lines": 1
+    },
+    "tsconfig.json": {
+      "sha256": "4abc1f13d40685127cc2e4deb2a801d043d75f355632a92e962a72bdb5b20c17",
+      "git_blob": "81521ed836580a86b2b2c9b29253568aea52e5ed",
+      "lines": 45
+    },
+    "README.md": {
+      "sha256": "4f3d0b2410bb8b1b1815fd750595c3c1fb7bcda3e2b2e01dd21956705f19c976",
+      "git_blob": "c8fbb912d690eadad3b391b1c817796f59742330",
+      "lines": 35
+    },
+    "LICENSE": {
+      "sha256": "47f0c7c0231635359212b0730f4be6f47cade0643af33fd4a116c448c85e8cf8",
+      "git_blob": "ebea396a221f763223443bc303340a91001aaf38",
+      "lines": 21
+    },
+    "dedup/__tests__/customFetch.test.ts": {
+      "sha256": "e81d9f49819a8cac9c3a6f4937fb3a7c6114c60e4c2d1e969f8fa3e346889840",
+      "git_blob": "a374357c5c9814ff39009a520ef5718ab12a1520",
+      "lines": 272
+    },
+    "dedup/__tests__/spotifyApi.test.ts": {
+      "sha256": "8a78c3e248422dea78c39810fc6e1829ed1ab9e2ada90cf4e5d0fe196199b3a8",
+      "git_blob": "ad13c9ad3d6cb12fd263e691a41f928888ec405f",
+      "lines": 169
+    },
+    "lib/fetcher.ts": {
+      "sha256": "7e5d3ba6eab7acd57b1f37fb05bd4056a69a74d1c22a1e97af592d7de3a807c3",
+      "git_blob": "6ff6f72e971c6108f50835fb6ef3e7c7f4c0e928",
+      "lines": 7
+    },
+    "lib/types.ts": {
+      "sha256": "a7c91a3191b0612fb5ef0da98b4d848076ddd471a4ad4d06cfe20f50d463aa4a",
+      "git_blob": "0050fe075ad15fb6cb16564efdfb5d7121657749",
+      "lines": 42
+    },
+    "lib/useIntersect.ts": {
+      "sha256": "4e1d875edcec65f944b60f5df915c9dad2bacf2f7621adf538407243a2770a67",
+      "git_blob": "975f8111abbc58134b48233238dff8b5e5bfc306",
+      "lines": 43
+    },
+    "lib/useMedia.ts": {
+      "sha256": "974e8c50be48f2ad4ed267a55a92358a7882a4988ebb08097c88ab01bd2ada99",
+      "git_blob": "ce0f411eafb80b49ff068902bfb6874daa509448",
+      "lines": 19
+    },
+    "lib/utils.ts": {
+      "sha256": "b18aa8a0cdbb5f7c79075ddf9cc5ead28535c29e75b8dcb420ae1986475d5633",
+      "git_blob": "ec79801fe9cdd7711f6dbef26678a134c634a8be",
+      "lines": 6
+    },
+    "components/ui/progress.tsx": {
+      "sha256": "fd25bcba572b7c28af99c6a61af8a92d74bec9811872883c7fb0f67884182b71",
+      "git_blob": "105fb650055b71797510142dfa041b5d80808041",
+      "lines": 26
+    },
+    "components/ui/card.tsx": {
+      "sha256": "8bad317eca5b74899d868688a339a16f54995e36810c0fdfe214c057755535e0",
+      "git_blob": "afa13ecfa3bd0f4a553a510b856c5800382e139b",
+      "lines": 79
+    },
+    "components/badge.tsx": {
+      "sha256": "9b123310d31193d6c1b421df5bc922595d8c540f9ecef25d245588dca0bfb666",
+      "git_blob": "a443850b964dc43b545ebea40e91a8a126bd76fe",
+      "lines": 9
+    },
+    ".github/FUNDING.yml": {
+      "sha256": "eff2513ba1323c11b9e3c2e24e39f56e169cf792d9f0e6bc1f2ae6ebcd8706df",
+      "git_blob": "c1cf747295765ea5bb189c9661a10ecd66ea1880",
+      "lines": 13
+    },
+    ".github/ISSUE_TEMPLATE/bug_report.md": {
+      "sha256": "0c8d64f29fb4536513653bf8c97da30f3340e2041b91c8952db1515d6b23a7b3",
+      "git_blob": "dd84ea7824f11be1eeda22377549cbc1aec7f980",
+      "lines": 38
+    },
+    ".github/ISSUE_TEMPLATE/feature_request.md": {
+      "sha256": "1f48c52f209a971b8e7eae4120144d28fcf8ee38a7778a7b4d8cf1ab356617d2",
+      "git_blob": "bbcbbe7d61558adde3cbfd0c7a63a67c27ed6d30",
+      "lines": 20
+    },
+    ".gitignore": {
+      "sha256": "334e2ddc3583f1c6fc74e5a147fba13e25a82f027e588f6220c9d84f130edb67",
+      "git_blob": "ada4d04ca12b243ea837ef56edbcdf9ba79ecd8c",
+      "lines": 31
+    },
+    ".prettierrc": {
+      "sha256": "04a790f0c2d322fc1697bda0bb3c46ace22a894ee2ee638a58446350fbaee7e1",
+      "git_blob": "6a5577e4d2565defaa573c8862581cbe1dd71d07",
+      "lines": 4
+    },
+    ".vscode/settings.json": {
+      "sha256": "67da40d959aa7f6fad667f1a85c2bd3a673cc99173913a2ffe19857bc5c970c4",
+      "git_blob": "ad92582bd0913ca4c9a9a63eb44cdca5488bec09",
+      "lines": 3
+    },
+    "CNAME": {
+      "sha256": "17553453047b2b394cf98a5314fbf0785bcdd78ccc95be755fe1e6c05f0667b5",
+      "git_blob": "f79f7d9646b2a8caea9581e9f60365888d1a0b45",
+      "lines": 1
+    },
+    "components.json": {
+      "sha256": "1ebf8ffb9f4016e5d991b362538fd199fec58b7804d8e10baaec664973ba78e3",
+      "git_blob": "f2f99df74aa837ce4b4c7a729f74dfe785d7d681",
+      "lines": 16
+    },
+    "env.d.ts": {
+      "sha256": "499f59ea58948a5a6b7e6de46b70c08e7ca6aa138ce075cb817178d7f816ab06",
+      "git_blob": "cb94bbf4061b0eaa541debf8fcdebecd048ec540",
+      "lines": 7
+    },
+    "next-env.d.ts": {
+      "sha256": "1a7899b03ba28f519a1d53f166fdc0ebdaf4d220209e8cb212414fefa524290d",
+      "git_blob": "725dd6f245153034160edeb040f0846109714ce3",
+      "lines": 6
+    },
+    "postcss.config.cjs": {
+      "sha256": "893a36e0b526ab684d83b4bffa1c971cb3ba9e0a6ad0fad041e322357d1722f0",
+      "git_blob": "562d0f6682356e36f6a93d7a8a0848774633ac82",
+      "lines": 5
+    },
+    "app/robots.ts": {
+      "sha256": "53b204ee682f66b3f9a418acdc9540881ac398130715ded5cb396aa6d96c3389",
+      "git_blob": "ebee747719f8b0ddef7f9f2a06641a061b4e20b8",
+      "lines": 18
+    },
+    "app/sitemap.xml": {
+      "sha256": "aaa6ac6b81ad87c64fe51e8aa1037f44b84b70f33705d781ee126ef2432f6d87",
+      "git_blob": "48d2e12da5cb9f9ca30666d93b5572e44aa506ef",
+      "lines": 16
+    },
+    "pages/callback/index.tsx": {
+      "sha256": "a7a3c22a2d71be20294d88590758a81f1f11d8ff6ca2a3e7173a4003641c6b43",
+      "git_blob": "e4999c18ffaaea4a0cfd2faf72ebabec75979786",
+      "lines": 6
+    },
+    "pages/index.tsx": {
+      "sha256": "e7f0835116a1d0f28dad2a2932a211864ff136accb403d563d0ad8e8b4f47321",
+      "git_blob": "1c402132508a1a713e01525a893196f91022a75e",
+      "lines": 17
+    },
+    "pages/de/index.tsx": {
+      "sha256": "1924319fdd4212ccc98f61c81ea2e63ba9b3a1b1306f00237931e2310721a50f",
+      "git_blob": "7090309fa55a89c2233ef9305877cdd0de2c89b5",
+      "lines": 100
+    },
+    "pages/es/index.tsx": {
+      "sha256": "51c4862573230a99a5ea0443fa83b8d4b4ff3654ae06669d946cb035f33936be",
+      "git_blob": "3b588c2813a0cd7051431d7cf779d88844f0d7e9",
+      "lines": 99
+    },
+    "pages/fr/index.tsx": {
+      "sha256": "788f7875f15d1bdecde6fd3247b881036e9f80bc47aa6e0e5aba31734696eeab",
+      "git_blob": "a961ecf1a16f5426fadf0623e62e3837cc6c9c79",
+      "lines": 100
+    },
+    "pages/id/index.tsx": {
+      "sha256": "fe953f21a7bdd62590b003eb129a9c409ba583fb459c13358aa1067884af2e09",
+      "git_blob": "3312d05fc11b3886e9f73792e7d1b97560660a66",
+      "lines": 78
+    },
+    "pages/it/index.tsx": {
+      "sha256": "8ee3134fd96b36ae8e9b051906fc37c1174e83296e13d937415ca23466d00f04",
+      "git_blob": "526df232998328f39db7be88bd154659c4428adf",
+      "lines": 102
+    },
+    "pages/nl/index.tsx": {
+      "sha256": "f88a9abfeee6a0e2ad35ca18d8e8075f0ca05042a868f00b71ecb0ac33af3727",
+      "git_blob": "f69e45caf3afbcd1529580d186eed489d1aa17be",
+      "lines": 102
+    },
+    "pages/pl/index.tsx": {
+      "sha256": "80b2a301de78536bc335e9e978217b68732d8ad201213172ce7c828ae85a7c17",
+      "git_blob": "bff03b28082d51897109f653939d8dc3622c8f36",
+      "lines": 100
+    },
+    "pages/pt/index.tsx": {
+      "sha256": "62828549848203809742277822a9e835d10a03c14fa7e5bc00a0d68bfffc0d26",
+      "git_blob": "0cca8f0697e5d87134dc9b5786716b4be698d685",
+      "lines": 99
+    },
+    "pages/sv/index.tsx": {
+      "sha256": "0dccc00f966989ff2563c79924af5085c482c4f970a5ce4ea42a3898f91c46f8",
+      "git_blob": "72cbee2aea5bad01585d6b7080c75450efc1d853",
+      "lines": 96
+    },
+    "pages/tr/index.tsx": {
+      "sha256": "e000b356a822f40e8f618ecb8fe2fb44b004560619cc7e3bdb76c3793eceb859",
+      "git_blob": "ac5f18bfec195647a09962254293b0c1acc77a38",
+      "lines": 79
+    },
+    "i18n.ts": {
+      "sha256": "7d3d302d061d9c7972652661e25bdb13e7aa53f5bea047c24679778bcfc4070d",
+      "git_blob": "8e3381730dece2b60d39749cc2333d957ed1749e",
+      "lines": 115
+    },
+    "languages.ts": {
+      "sha256": "1fa83da225a3525eaff37ed8c85975799b6dde9dec64bc34af5d3e99a5e4d6be",
+      "git_blob": "24013f8895e5302fd543d2994b96ce5dc134ffae",
+      "lines": 14
+    },
+    "components/pages/index.tsx": {
+      "sha256": "276a8f1dd4ffce148ab5d983b3f64c49812fd96c0916f90141f68718bedba6f7",
+      "git_blob": "a1f4c978a8924132e9262f21b8d86c9e916c7637",
+      "lines": 157
+    },
+    "layouts/main.tsx": {
+      "sha256": "be471bb35f866fea1aa2fed8184b1824975da8c6bcf13efb67720ba783b7b77a",
+      "git_blob": "419d694053874ab3ef8737303f6cced6d533af14",
+      "lines": 15
+    },
+    "components/bmc.tsx": {
+      "sha256": "3615038cf42b510e59e57714f99f551a52a10ca1743b3a436e14cd42ac48c1f3",
+      "git_blob": "69719a689e471b12b99cfa201531b391adaff3db",
+      "lines": 31
+    },
+    "components/faq.tsx": {
+      "sha256": "701fd45a736f302691278756b2a3351e748af98b45aee0c1fe00c3fe0f07d8c4",
+      "git_blob": "b93fc91cef9d3a99f209ef9a196b8c4ee2a83303",
+      "lines": 22
+    },
+    "components/features.tsx": {
+      "sha256": "c9561faea8307e448d58970afedcff355841ba2e6c9d03648f104307bb5ec4cf",
+      "git_blob": "5c3654d4f5e5732864476761f0e91770496732a5",
+      "lines": 51
+    },
+    "components/footer.tsx": {
+      "sha256": "3af0ac438914b80b2222f5a6a265a05fbbc8bb5c686a77f7bd3c049883c3ec75",
+      "git_blob": "55223fb5360efdc4d289b497ec6f320ec4d3a945",
+      "lines": 64
+    },
+    "components/head.tsx": {
+      "sha256": "1ed9949d679ce8ee5c6bd470b32e003fd9733ada791d066095f8a41607181cf1",
+      "git_blob": "9be1214be50e370a216e4c692fc50be8c87ba70d",
+      "lines": 20
+    },
+    "components/intro.tsx": {
+      "sha256": "ab328b03a954e4ec2429042ff5572cfa17f02700bb5099bd31e04e647e9ce752",
+      "git_blob": "b7947477707030357dbfbe651f2bd11dbf0dcd4c",
+      "lines": 40
+    },
+    "components/languageSelector.tsx": {
+      "sha256": "6c92e052f161c70b025c84598a0f3901fc75f1ae09050f92b6582db151bd2949",
+      "git_blob": "b39a21d930a32ec3addf76ad5f107dcdb2687b44",
+      "lines": 56
+    },
+    "components/nav.tsx": {
+      "sha256": "163a86f122ebdcc0c83edce507154aa064e42ed2bacf768302ec59b85326dfbd",
+      "git_blob": "bf6ff2c596adf5f450d49a9221a864a58f150da7",
+      "lines": 27
+    },
+    "src/auth/AuthenticationManager.ts": {
+      "sha256": "dc4b4570ff18d929ffef101e97722b2fc21596d966d60c4dd4ab2fc8a0aac0fb",
+      "git_blob": "3f5a140ff1799634f0a7dca957847e3049bc610f",
+      "lines": 116
+    },
+    "src/auth/token/TokenManager.ts": {
+      "sha256": "8714e2a23eb7c951963722c689374f558e306ab65a259097d95acc549e27b796",
+      "git_blob": "21eda151c7c4de4837bc77aeccbdc7c4bf62647b",
+      "lines": 84
+    },
+    "src/auth/__tests__/AuthenticationManager.test.ts": {
+      "sha256": "341d7d95e4914d644ce786e26a69d893b2da45082f27ac1239431272e3b3432b",
+      "git_blob": "1166b1860225de13b9dc65ccd68c119f9c743f91",
+      "lines": 110
+    },
+    "src/auth/token/__tests__/TokenManager.test.ts": {
+      "sha256": "889f17150f5adb9d62fddc0de74474f96ab0808175ce4bd639a81072c7636647",
+      "git_blob": "bdb113bc2d47889526bfe76cde93b4d2b1f0a973",
+      "lines": 89
+    },
+    "src/auth/config.ts": {
+      "sha256": "3e2f0a5e54de8aa3a871ab9b8365f5d9564e226782d0236d3129fc22a659c4d2",
+      "git_blob": "7ef60c786bb6071390651ea99bee4df5134bccf8",
+      "lines": 4
+    },
+    "src/auth/index.ts": {
+      "sha256": "3679eeb6505babd54f9dab8a971631cf38c86d0d393fe0390452eaf22ad8e4f0",
+      "git_blob": "e80f46215a133adb9987b1c5cf1ec2a35c408321",
+      "lines": 4
+    },
+    "src/auth/oauth2window/constants.ts": {
+      "sha256": "e6c22b661c736315f4d2e93167da96e97a37729cda22fcd5fcb263545103dcbb",
+      "git_blob": "a7720521df4ddc981048e60d07c822d8c83c2369",
+      "lines": 13
+    },
+    "src/auth/oauth2window/index.ts": {
+      "sha256": "49b95b18f61ce729d3ba976080626a8b28be9a65cca9cdbd81fb1115f8391bf0",
+      "git_blob": "7f52b3f33e46c4d7ad05a3397bd274017e4f1b65",
+      "lines": 5
+    },
+    "src/auth/oauth2window/types.ts": {
+      "sha256": "b7ff9409904095486951dc3425f38babc07770cc320bca8f723e9010e9f1a975",
+      "git_blob": "006c6562bf4837921a86386820ada9e83f5ab1e5",
+      "lines": 11
+    },
+    "src/auth/oauth2window/utils.ts": {
+      "sha256": "ddd7bad54cbc77632040f788535e3c6de15b594cafb3964b9a37a4977b136d3a",
+      "git_blob": "e53ab6a81845314bd1fef4aa7b09e97c518f005a",
+      "lines": 29
+    },
+    "src/auth/types.ts": {
+      "sha256": "905b13e69aec4756f670cdd20652a43d7a60aa2030a4ac4d75ee041317b2f03e",
+      "git_blob": "9b71600a585af83bbe4bbe77d9de0a9fa89321ba",
+      "lines": 13
+    },
+    "dedup/oauthConfig.ts": {
+      "sha256": "4808bfb3f31b28c6899cf161faa18f48d40702b565e2643db37e969cc0b9fed9",
+      "git_blob": "6478825355acf3767ed8aba03017d85ec859eb55",
+      "lines": 15
+    },
+    "dedup/oauthSendBack.ts": {
+      "sha256": "cdb0aa071d578a00b2b81282ab4366b5de8685617d2aa2d680e21f7beaf703c0",
+      "git_blob": "44248dbf4846aa34d61bad4ff6d2f402b9067391",
+      "lines": 15
+    },
+    "pages/_app.tsx": {
+      "sha256": "6472e8ef6af5f53bce177c2342989562fd8f0d6afd571a73605dca95f9cef8ea",
+      "git_blob": "2f8f160d3cfbe76bd3625d1bd778bf7a29f3b377",
+      "lines": 24
+    },
+    "pages/_document.tsx": {
+      "sha256": "41e43f60457cd6885ab611a52b628af55cc18fc35d6d51261122a027b635809b",
+      "git_blob": "5631c2f3b24b04eb9ef990b4043b4a998057ff67",
+      "lines": 27
+    },
+    "pages/_error.js": {
+      "sha256": "7584168b4840ac498b07d4484765c18eb860fcd2fd3a4a4bc32093c80cc783ce",
+      "git_blob": "e0cd75bd1dcb8f4833f0627f24a15d04abe6a6b6",
+      "lines": 11
+    },
+    "pages/components.tsx": {
+      "sha256": "ac81538796f4e721007a0481e401e5d64be94d75d55892296fdb8f40e8e80a47",
+      "git_blob": "498ec1979190e147e120ae1a4874f5436e97e47c",
+      "lines": 33
+    },
+    "styles/globals.css": {
+      "sha256": "4d6efc4ff1e8a46b17095831bcfc8d1db0bb13c7258fadb67f96680b3100ca09",
+      "git_blob": "6a7572500d828bdd91f5038be403206726e93958",
+      "lines": 76
+    },
+    "tailwind.config.js": {
+      "sha256": "6d79ac31dd8ffedcb626a3f3ca248dfc2f96a9bdb119994ff432092884774fca",
+      "git_blob": "1bd37741c8bcda3f50747fd33d162d4dea7f7187",
+      "lines": 87
+    },
+    "utils/analytics.ts": {
+      "sha256": "0fe0fb74c77642b40d024d148c73b884afa7868a83e08662fe2536970fb0bf9b",
+      "git_blob": "68af765c2f1f0325884da5fb24c519c1af435464",
+      "lines": 5
+    },
+    "utils/__tests__/analytics.test.ts": {
+      "sha256": "ff2eac22bd033d1037a79f6a8b4f5fc591375d7371e694f12db87e56700a1135",
+      "git_blob": "54eb87de439886afeadc37e62586a7ee7b99f3ed",
+      "lines": 47
+    },
+    "app/api/auth/exchange/route.ts": {
+      "sha256": "5bf2d81b1299daab01cd5a7aaf3a5e3f1c1c32fb66d23f082029e5b2f2bd9ab3",
+      "git_blob": "285849b1d7f265111ac5441107abac006f8a7334",
+      "lines": 46
+    },
+    "app/api/auth/refresh/route.ts": {
+      "sha256": "665577032f65ab663bfa10690ad08c89b34b0570807a36873c280533c8ef8f9a",
+      "git_blob": "f7888559f15f862a758524be7ac513297a864c4a",
+      "lines": 41
+    },
+    "app/api/bmc/route.ts": {
+      "sha256": "a59c579bfa486f0993b5df34911cb38305fc4739d7701d9207be35406d5b07e6",
+      "git_blob": "2e945f705af4ee2fdd6d33a89c9be4a96d6303fc",
+      "lines": 24
+    },
+    "components/reviews.tsx": {
+      "sha256": "8de1395d7db7957ab6d7a6fb09fba7480fe6ccc3f16f0cfe9f3c0e2c5d1821d1",
+      "git_blob": "ca34a7ef9f749c65f455ca4b8d307af684d85474",
+      "lines": 233
+    },
+    "public/favicon.ico": {
+      "sha256": "d051046f603ca22dd4c7c49c24180aa6054b2456ff7ae15f899031ac587fbec9",
+      "git_blob": "36ab6d6218201197d69a99a758f69f899bfe9da2"
+    },
+    "public/logo.svg": {
+      "sha256": "d04adf47d3c756dfa6c6b2973f36888901e10895a9766499c2bf33a402985df9",
+      "git_blob": "833b2718913930985001a52660fbe279bc064740",
+      "lines": 17
+    },
+    "public/placeholder.png": {
+      "sha256": "52c8af5761377339deb627f3b9094aab69162db704453fcaeb50b3d864182b4a",
+      "git_blob": "49114ef46c03b71f6bb70c3f40406fc7f6906e36"
+    },
+    "public/spotify-dedup-meta.png": {
+      "sha256": "93cb6f4f0d1c6cbcfdd005df3874fcdd490e0e2a3d0ff9afb312f1875d8e05bd",
+      "git_blob": "99588f1263dd0ab8d66a52a85b886ed88ef61021"
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "c49677fe9205b74f909697d351aec7689c62726d334a5cbe2e82d53c1176ed2e",
+      "git_blob": "9109ebbe3178dae2557d64361912cfba8c5ceb1d",
+      "lines": 5876
+    }
+  }
+}

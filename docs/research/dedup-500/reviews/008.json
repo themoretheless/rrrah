@@ -2,7 +2,7 @@
   "index": 8,
   "repository": "JMPerez/spotify-dedup",
   "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned97-blob source and visual review; original-code isolated controls executed, full upstream/browser/runtime remains partial.",
   "decision": "reject-domain",
   "finding": "Spotify track identities and playlist operations; not content hashing.",
   "license_metadata": "MIT",
@@ -134,6 +134,11 @@
     },
     {
       "audit": "docs/research/dedup-500/spotify8-lock-middle-review-v13-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/spotify8-lock-complete-review-v14-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/spotify8-full-review-reconciliation-20261021.json"
 }

@@ -1,0 +1,27 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "pnpm-lock.yaml": {
+      "sha256": "c49677fe9205b74f909697d351aec7689c62726d334a5cbe2e82d53c1176ed2e",
+      "git_blob": "9109ebbe3178dae2557d64361912cfba8c5ceb1d",
+      "lines": 5876
+    }
+  },
+  "cumulative_whole_files_read": 97,
+  "tracked_blobs": 97,
+  "method": "Remaining original lines3101-5876 read in six bounded untruncated outputs; cumulative manual ranges1-5876. Complete graph structural check recorded in v12.",
+  "findings": [
+    "Jestconfig29.7.0 directly depends on babel-jest29.7.0; jsdom20.0.3 is a test dependency through jest-environment-jsdom. Mocked DOM tests do not qualify browser behavior.",
+    "Next15.0.3 dependency metadata allows React18.3.1, and ReactDOM18.3.1 requires matching React version. Explicit Next engine range starts18.18; actual builds and optional native loading untested.",
+    "Next pins PostCSS8.4.31 while root/Tailwind use8.4.49. These separate records alone do not establish failure.",
+    "Tailwind depends on object-hash3.0.0. A hash library in tooling dependencies is not evidence that this application performs file-content deduplication.",
+    "Lockfile records include deprecation notices for glob7 and inflight. These are pinned metadata, not a newly verified current vulnerability assessment.",
+    "ts-jest29.2.5 peer range includes TypeScript5.6.3 and Jest29.7.0. Compatibility metadata is weaker than executed tests."
+  ],
+  "limits": [
+    "All97 tracked blobs now have whole-file review credits; reconciliation verifies coverage independently.",
+    "External package implementation tarballs, full Jest, Next build, deployed browser and live API remain unqualified. pHash/ASAN deferred."
+  ]
+}

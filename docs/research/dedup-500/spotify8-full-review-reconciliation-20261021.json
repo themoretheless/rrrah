@@ -1,0 +1,38 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": true,
+  "status": "pinned_tree_source_and_visual_review_complete_runtime_partial",
+  "whole_files_read": 97,
+  "tracked_blobs": 97,
+  "identity_verification": "docs/research/dedup-500/spotify8-coverage-verification-v15-20261021.json",
+  "identity_verification_sha256": "8a0b919354367a9a3257ee5f07122be4596b4ebd9b229b067aa7410b63f65cb7",
+  "review_artifact_pins": {
+    "docs/research/dedup-500/spotify8-core-review-v1-20261021.json": "6458b5526271133c4259868ba447844cdcee6bb9f9748f9028199fd26d7448b5",
+    "docs/research/dedup-500/spotify8-pagination-tests-review-v2-20261021.json": "765c17f31276b2f18bfcd629b8b6e7348436e94282cae5d2d6124734455bf519",
+    "docs/research/dedup-500/spotify8-process-cache-ui-review-v3-20261021.json": "c838237463af14e23d9122bcff0443528333333280cff4a5927c84624e09a2c7",
+    "docs/research/dedup-500/spotify8-main-ui-review-v4-20261021.json": "649150c359f04beaac36868c122ba97170982d2ed617fd71bd8939a2cf5055fd",
+    "docs/research/dedup-500/spotify8-config-docs-review-v5-20261021.json": "295ce89d33cd361922ae0af3698515589347366bd67f18d45e3ead421b7d1313",
+    "docs/research/dedup-500/spotify8-network-tests-review-v6-20261021.json": "e4e85e280c6c41f9683764ebda42ad7e331c09e67d1b1e7363a9aa58c4be973c",
+    "docs/research/dedup-500/spotify8-helpers-ui-review-v7-20261021.json": "6395a4869500ec82d7596ffca5779c868650e98306bc08cf459c7bd651d89678",
+    "docs/research/dedup-500/spotify8-project-metadata-review-v8-20261021.json": "e92da3d2524a55e7689d98de803407638fdc07f45bbf92c60f049d43b40b4941",
+    "docs/research/dedup-500/spotify8-pages-translations-review-v9-20261021.json": "36a4f621523afbe764a1a56f7feb1d91c3fe8e15024129af814451a07f82b7ec",
+    "docs/research/dedup-500/spotify8-lifecycle-presentation-review-v10-20261021.json": "9d1c3d4b555537f25bfda435f58b04bf899d6f0bf01e00812ad0bb2477f93c13",
+    "docs/research/dedup-500/spotify8-api-visual-review-v11-20261021.json": "f0e060932fe9d5457a250d8cfeabd1fc6cf35ff250c9406db55ead71f4e7526f",
+    "docs/research/dedup-500/spotify8-lock-graph-review-v12-20261021.json": "cbee9fa5d5759496448c46168105896a5a5176d6ba93d2e5a61fab655d88ec1e",
+    "docs/research/dedup-500/spotify8-lock-middle-review-v13-20261021.json": "fb606c0e8391efc7f8ea8dc40c1448511d10f70d38296233c3fcd46aa202a43f",
+    "docs/research/dedup-500/spotify8-lock-complete-review-v14-20261021.json": "b6f975a0bb92b674903da4e3db33b784c3c430616694d7c4fd13d978d53962cb"
+  },
+  "decision": "reject-domain",
+  "conclusions": [
+    "Track identity and metadata similarity deduplication; no file-byte equality implementation to import.",
+    "Retain lessons about awaiting every mutation, separate failed/incomplete scans from success, namespace caches and cancel lifecycle work.",
+    "Original-code local controls reproduced premature saved-track removal completion, failed playlist reported complete, HTTP500 JSON fulfillment and refresh timer resurrection after cleanup.",
+    "Translation-object comparison and full lock graph reference resolution passed within their stated narrow scopes."
+  ],
+  "limits": [
+    "Full upstream Jest/Next build, real browser/account/deployed service execution not performed.",
+    "Reading complete tracked tree does not include implementation of all third-party dependency tarballs.",
+    "pHash/ASAN deferred; completing this repository does not prove all500 repos or all library cases."
+  ]
+}
