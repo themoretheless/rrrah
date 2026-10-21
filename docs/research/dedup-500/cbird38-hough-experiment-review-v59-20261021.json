@@ -1,0 +1,37 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/hough-segmentation/test-hough.cpp": {
+      "sha256": "3d087d49fe3e0ccc199db2c8d9d4361fa7b41ab49f8d9a024c2f5be0729ff06f",
+      "git_blob": "6bf07714f2e008620b42658f4f7851770a4e6003",
+      "bytes": 13341,
+      "lines": 386,
+      "method": "Whole pinned experimental source/build definition read; no program launched."
+    },
+    "tests/hough-segmentation/test-hough.pro": {
+      "sha256": "9c03e8b8de8014558b3ce448e6d11b948557e69d98e16efb4037963870229533",
+      "git_blob": "b393ed5e766440cc48f4a5f912bfa00958a74410",
+      "bytes": 977,
+      "lines": 44,
+      "method": "Whole pinned experimental source/build definition read; no program launched."
+    }
+  },
+  "cumulative_assessed_blobs": 172,
+  "tracked_blobs": 616,
+  "findings": [
+    "Hough segmentation test is interactive parameter-tuning application, not QTest assertions. It loads each external directory image, displays intermediate images/rectangles and runs event loop. No expected region count/geometry, precision/recall or source retention oracle.",
+    "Failed image decodes logged then skipped; after iterating source files program returns0 even if all decodes skipped. Exit0 cannot certify processed corpus. No executable run.",
+    "Directory recursion has no visited-identity set, cancellation, depth or entry budget here; separate Scanner guarantees not inherited. Input extension list restricted, no archive/video coverage claimed.",
+    "Odd integer control adjustment uses two independent ifs decrement then increment, restoring interior even value; callback returns without updating underlyingparameter. Qt signal reentrancy and effective setting require UI test; not reproduced.",
+    "rerun_actual returns if no intermediate images without clearing old label pixmaps; a failed/empty rerun can leave previous images visible. New rect list cleared separately. Human review must distinguish current source state; no screenshot taken.",
+    "Build defines DEBUG and links cvutil/ioutil against shared parent build definitions, no isolated headless test corpus integration. Does not qualify DemosaicParams defaults for general duplicate-crop discovery."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "172/616 assessed:171 whole text/source and one PNG visual. Embedded CImg source still unread; screenshots/assets/papers remain separately incomplete.",
+    "34 previous original-body/header controls and two independent counterexamples unchanged. No GUI, filesystem traversal, production code or benchmark run.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
