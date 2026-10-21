@@ -1,0 +1,34 @@
+{
+  "repository": "sambux1/arph",
+  "commit": "32ebc32c3572252573071b158f0bd81255b03d41",
+  "msgpack_version": "1.2.3",
+  "description": {
+    "sha256": "02c71ff31f0d910861366033c035776024bad5302efabcced9dfa14a8109c160",
+    "input_length": 20,
+    "threshold": 2,
+    "pedersen_points": 20,
+    "error_points": 800,
+    "expected_nonzero_signed_error_vectors": 800,
+    "all_points_on_secp256k1": true,
+    "unique_encoded_points": 800
+  },
+  "uniformity_control": {
+    "original_functions_via_AST": true,
+    "controlled_hash_weights": [
+      0,
+      8,
+      4
+    ],
+    "reported_mean_max_min": [
+      4.0,
+      8.0,
+      4.0
+    ],
+    "true_min": 0
+  },
+  "limits": [
+    "Curve equation checks establish valid encoded points, not origin, independence or cryptographic strength.",
+    "No ecpy/full package/original tests run; imagehash,cv2,pdqhash absent.",
+    "Uniformity uses controlled image/hash adapters; no TinyImageNet dataset evaluation."
+  ]
+}
