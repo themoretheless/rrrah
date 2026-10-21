@@ -2,7 +2,7 @@
   "index": 423,
   "repository": "SpangleLabs/vidhash",
   "commit": "c6f0a19c88a313536ed7736cd6f2cb31b8d3337f",
-  "review_scope": "Partial pinned5/24 whole implementation files; five original matching-module controls with synthetic frames/options. Unordered overlap and duration-clamp semantics confirmed, no video decode/runtime.",
+  "review_scope": "Complete pinned24/24 artifacts by explicit methods: all implementation/tests/config text read, lock fully structurally inspected, empty markers verified. Five original matching-module synthetic controls; original media suite not run.",
   "decision": "reference",
   "finding": "Video frame-hash/options separation; default Hamming threshold is policy, not proof of complete temporal equality.",
   "available_source_evidence": [
@@ -58,7 +58,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT fully read; no production adoption.",
   "tests_detected": 4,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -89,5 +89,8 @@
     {
       "audit": "docs/research/dedup-500/vidhash423-source-review-v1-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/vidhash423-complete-source-review-20261021.json"
 }
