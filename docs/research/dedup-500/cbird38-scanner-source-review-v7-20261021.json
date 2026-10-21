@@ -1,0 +1,41 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/scanner.h": {
+      "sha256": "fa1df47235da8f66c156326528048acaaad4bcc0fae47d0f9363c39c158395c7",
+      "git_blob": "9d9776d5cd8281581228bf88408a410085769f67",
+      "bytes": 11277,
+      "lines": 317,
+      "method": "Whole pinned source read; scanner.cpp contiguous1-460,461-920,921-1365."
+    },
+    "src/scanner.cpp": {
+      "sha256": "35f7f6bca35c2d00caa6b33ce65eb56123848bff63815f8f25f04e542e463e81",
+      "git_blob": "f13cc534a471b15b214171d46d8bbbee007c4719",
+      "bytes": 46712,
+      "lines": 1365,
+      "method": "Whole pinned source read; scanner.cpp contiguous1-460,461-920,921-1365."
+    }
+  },
+  "cumulative_assessed_blobs": 19,
+  "tracked_blobs": 616,
+  "findings": [
+    "findJpegMarker returns true for SOI-prefixed bytes even when EOI missing; truncation sets an error but does not change isJpeg=false. This contradicts header note that truncated JPEG returns false. processImageFile only rejects a null decoded image, not the recorded truncation itself; native decoder acceptance untested.",
+    "jpegPayload hashes bytes from the first SOS marker to end, excluding prior headers/tables as well as EXIF. Therefore the normalized checksum cannot be treated as byte-file identity. No decoder equivalence or safety conclusion; JPEG parser bounds not dynamically probed and deferred ASAN not run.",
+    "processImageFile reads compressed data once, computes normalized digest from that buffer and passes decoded QImage to processImage. With algos0 it can create ok Media without successful full decode. This is a checksum-only path, not a complete format validation.",
+    "Video decoder is opened before processVideo separately opens file for fullMd5; no source identity/stamp verification between checksum and frame indexing visible. Video processing sets oktrue after makeVideoIndex even if indexer capped/encountered errors; decoder-level error policy remains unread.",
+    "readDirectory enumerates current-level entries then recursively descends each collected directory before moving to the next sibling. README breadth-first duplicate-inode selection description is not a general match for this traversal. Default minFileSize1024 excludes smaller loose image/video files; archive member handling has different gates.",
+    "followSymlinks defaults false; POSIX dupInodesfalse enables visited FileId suppression, Windows dupInodestrue disables it by default. Enabling link following while permitting duplicate inodes lacks a separate directory-cycle guard here. No recursive link fixture executed.",
+    "resolveLinks containment uses startsWith(_topDirPath) without a path-separator boundary. Existing/freshness checks use earlier QFileInfo entry even when effective path changes. Runtime canonical/FileId behavior not qualified.",
+    "scanDirectory appends parsed include/exclude regexes without clearing existing vectors, so reusing a Scanner with changed params can retain old patterns. readArchive does not call includePath for individual member paths; current expected filtering and archive queues can differ. No Qt scanner run.",
+    "Missing directory/archive open failures return from that subtree while expected entries may remain; scanDirectory can still emit completed/no changes. Engine removal handling is unread, so no claim of actual database loss.",
+    "flush clears waiting queues but not _queuedWork; active cancellation cleanup skips context/thread accounting branches. Scheduler and error map lifetime need reuse/concurrency runtime checks. Source-only findings, no background process started."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "19/616 tracked artifacts assessed:18whole text/source and1PNGvisual. Eleven previous original-body/header controls plus one independent counterexample; no new test run.",
+    "Scanner changes/errors identified statically. Qt/SQL/decoder/full upstream corpus and end-to-end Engine behavior not executed or fully reviewed.",
+    "No production change, measured optimization or full-case claim; deferred native pHash/ASAN remains skipped."
+  ]
+}
