@@ -1,0 +1,18 @@
+{
+  "scope": "Own fingerprint-cache interpretation isolation",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test cache_interpretation",
+  "result": {
+    "exit_code": 0,
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "test_source_sha256": "36c8e97a168d183d780eeee628cc1102727fd0f53807c9e1056235b54b1bbfa9",
+  "binary_sha256": "89e6dfdd7060a5166a7c2298718c1eb2d624fad791cdca8cf92f7c256afd01b0",
+  "source_modified_before_test_binary": true,
+  "added_cases": "Explicit PNG primaries presence and each of eight independently perturbed coordinates. Existing loop requires cold miss, repeat hit, equal repeated fingerprint, released memory budget.",
+  "limits": [
+    "BMP fixture ignores PNG-specific settings: proves cache-key separation, not coordinate-dependent pixel transformation. Separate PNG/APNG policy tests cover real PNG interpretation.",
+    "Current dirty worktree with concurrent changes; no clean-HEAD or performance claim."
+  ]
+}

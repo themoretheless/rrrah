@@ -99,6 +99,13 @@ fn caller_interpretations_have_separate_repeatable_cache_entries() {
     variation!(assume_untagged_srgb, true);
     variation!(assume_untagged_linear_srgb, true);
     variation!(pfm_top_down, true);
+    let png_primaries = [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290];
+    variation!(png_assumed_rgb_primaries, Some(png_primaries));
+    for coordinate in 0..8 {
+        let mut changed = png_primaries;
+        changed[coordinate] += 0.000001;
+        variation!(png_assumed_rgb_primaries, Some(changed));
+    }
     for (rgb, matte, alpha_mode, color_space) in [
         (
             [0, 1, 2],
