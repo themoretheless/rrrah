@@ -1,0 +1,34 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/qtutil.cpp": {
+      "sha256": "431c50b3d9d012868c9e29866e87e6d91587f5bd282ec5b56917cf1a1b365820",
+      "git_blob": "47a0bcc2113aa2ef4d0c149f0f36221ad32432e8",
+      "bytes": 61641,
+      "lines": 1891,
+      "method": "Whole source cumulative: previously920-980,1018-1040; now1-919,981-1017,1041-1891."
+    }
+  },
+  "cumulative_assessed_blobs": 159,
+  "tracked_blobs": 616,
+  "findings": [
+    "Desktop runProgram waiting path ignores waitForFinished boolean and process exit status category before exitCode check; detached success only means process launch. External-viewer startup cannot prove full rendering or successful operation. No external programs run.",
+    "Archive viewer fallback buffers io.readAll and writes temporary file without full-write/error validation; early failure returns before deleting io in several branches. No extraction or resource-failure test executed.",
+    "moveToTrash may run configured external program, then uses !QFileInfo(path).exists as outcome. This proves absence at that later observation, not specific destination preservation or atomic coupling to earlier DB removal. No trash/move/delete performed.",
+    "Temporary file names use QTemporaryFile with autoRemovefalse, later parent/timer/app destruction cleanup. Timer/application lifetime governs cleanup; external consumer completion is not tracked by tempName. No temp lifecycle runtime test.",
+    "Logging queues QList records without explicit capacity budget, suppresses repeated same message text independent of context/type, and records to stdout. Text logs are not a complete structured per-file failure ledger. No stress logging/queue benchmark.",
+    "Log fatal handler flushes then _Exit255 without ordinary destructors; pending batch persistence cannot rely on destructor execution for such fatal path. No fatal process executed.",
+    "Numeric substring comparator fractional branch checks a[nb-2] where b[nb-2] expected by surrounding tests; also converts digit runs to quint64 without ok and can multiply while padding. Static ordering/input-bounds concerns; no malformed or sanitizer run.",
+    "qRotationAngle uses atan(deltaY/deltaX) rather than atan2, losing quadrant information; visual angle label alone not correct full rotation oracle. No rendered transform test.",
+    "ProgressLogger end substitutes maximum for zero supplied step and can print100percent for zero maximum. Explicitly presentation/timing only; not scanner completeness proof.",
+    "Window helpers and saved settings differ across platforms; headless/GUI and callback lifecycle assumptions remain separate runtime obligations. No locking guarantee newly established by these helpers."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "159/616 assessed:158 whole text/source and one PNG visual. qtutil.cpp now whole; previous partial credit not double-counted.",
+    "29 prior original-body/header controls plus two independent counterexamples unchanged. No native Qt runtime, filesystem mutation or production edit.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
