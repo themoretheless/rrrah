@@ -1,0 +1,56 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src-tauri/src/apps.rs": {
+      "sha256": "e56e54e67e3c8ddf955a60fd782fb7743249baeb2263844da048f1984a5df504",
+      "git_blob": "f9d5ad4965c07da41b1283740549947bad78b12d",
+      "mode": "100644",
+      "lines": 493
+    },
+    "src-tauri/src/main.rs": {
+      "sha256": "b65bd5099208cf50b73aedd8041004a47836a128e5516d98937c1d37ec12c971",
+      "git_blob": "c91ac6559a620400b88df05b8a240b9f8c1df2b8",
+      "mode": "100644",
+      "lines": 6
+    },
+    "src-tauri/capabilities/default.json": {
+      "sha256": "04f7e92bba426613310aebc60e0f2ac6bca4969651e255c7cb417880b388fb41",
+      "git_blob": "f37f5429116b13b6d13eeb8f887f874d323c363f",
+      "mode": "100644",
+      "lines": 14
+    },
+    "src-tauri/tauri.conf.json": {
+      "sha256": "ef9fb91b997203917d58f9d018161a7d9f2a2b64e60a41fc2e56cf2e1ddaea0e",
+      "git_blob": "45d623a3cf94f6c3b02e3ef3a28f2b16255a55b7",
+      "mode": "100644",
+      "lines": 109
+    },
+    "src-tauri/windows-app-manifest.xml": {
+      "sha256": "2375692a866ee3fe107d850e4556375c80cdb52ef3dbbc6435cc3eeccfbda017",
+      "git_blob": "fb5eafdcc7bf455c29d451743977585f60c21575",
+      "mode": "100644",
+      "lines": 29
+    }
+  },
+  "cumulative_whole_files_read": 19,
+  "tracked_blobs": 268,
+  "method": "Five pinned files whole text read; Git blob identity independently verified. Static source review only.",
+  "findings": [
+    "apps.rs discovers shell AppsFolder entries through fixed PowerShell script, checks exit status and parses JSON, then deduplicates launch targets using ASCII lowercase. This is app identity by launch target, not file-content duplicate detection. Non-ASCII equivalent paths and aliases remain unqualified.",
+    "Installed app metadata errors/default unavailable dates become zero; is_file_system remains separate but no metadata-error field. Missing reveal path does not remove entry.",
+    "Icon cache is process-global HashMap keyed by ASCII-lowercased shell parsing name; no eviction, bound, timestamp/version invalidation or negative cache in reviewed module. Static retention/staleness risk only, no memory or latency benchmark.",
+    "Icon conversion requests64x64 with BIGGERSIZEOK; allocates width*height*4 from returned bitmap without explicit maximum/checked multiply; GetDIBits checks only nonzero, not full requested scanline count. Source robustness observations, not demonstrated real shell failure.",
+    "COM initialization guard correctly balances successful initialization and avoids uninitializing RPC_E_CHANGED_MODE branch. Bitmap/DC normal and explicit error branches release handles; no real COM/GDI execution.",
+    "PowerShell discovery .output has no timeout/cancellation in reviewed helper. Icon command calls synchronous shell rendering; actual Tauri scheduling and UI latency unmeasured.",
+    "main.rs only launches library. Tauri config/Cargo version0.1.16 but Win32 assembly version0.2.0.0; packaging consistency observation, not proven installer failure.",
+    "Manifest explicitly requestsAdministrator as README states. Asset scope includes C through Z plus standard folders, not explicit A/B or UNC roots. Rendering behavior there unqualified.",
+    "Capability refers main window; updater config specifies public verification key and release endpoint. Public key is repository configuration, not user secret. No update endpoint requested or release executed."
+  ],
+  "limits": [
+    "19/268 pinned files reviewed. Whole repository/runtime remain incomplete.",
+    "No Powershell, application launch, shell/registry action, installer, updater, Windows COM/GDI, Tauri runtime or production dependency change.",
+    "No new implementation test justified for static research-only changes; previous source controls remain separate evidence. Native pHash/ASAN deferred."
+  ]
+}
