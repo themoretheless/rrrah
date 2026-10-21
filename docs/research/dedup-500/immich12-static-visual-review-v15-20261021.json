@@ -1,0 +1,50 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/intro.jpg": {
+      "sha256": "eceb1f0c5974eadc211996369f713905902e990c35f4b1ff4694703e8965b386",
+      "git_blob": "443533e27ff84e018e9396ec0167eaad9212bd87",
+      "mode": "100644",
+      "method": "Full static image visually inspected through view_image"
+    },
+    "docs/ausl.jpg": {
+      "sha256": "e1da3fb745d888f88d18e6bd5a38a1e9ec6885e3ed538f881c159b25f2fc586d",
+      "git_blob": "a38e4f937b2784b8dc650ddb5c002d4709b4a187",
+      "mode": "100644",
+      "method": "Full static image visually inspected through view_image"
+    },
+    "docs/metadata.jpg": {
+      "sha256": "1a30c166562bbf55650f872bcbd4e53620c2e34b2c601bdbb91ad68c91c74ffe",
+      "git_blob": "d8a9541d7410f30530d3360cd1337cff3d861fec",
+      "mode": "100644",
+      "method": "Full static image visually inspected through view_image"
+    },
+    "src/assets/logo.png": {
+      "sha256": "0728ef937ee8308956f8a18d30ac51aea065c51f033849663483973c4cb1ef55",
+      "git_blob": "033481460d1e77062d4cf67fca976889f2e63061",
+      "mode": "100644",
+      "method": "Full static image visually inspected through view_image"
+    },
+    "src/assets/noimg.png": {
+      "sha256": "76876764a3b9fe12d924593f35a720290bdbb5138ff5f35e4ea64ed9377c604b",
+      "git_blob": "68705882f76cd481443563f0aad98a8055408995",
+      "mode": "100644",
+      "method": "Full static image visually inspected through view_image"
+    }
+  },
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 125,
+  "findings": [
+    "Intro screenshot shows older0.1.4 UI, ARM device,50-item group, selected1, low scores around.895; screenshot is historical UI evidence not current matcher qualification.",
+    "Auto-selection screenshot shows group5 selecting all3 including scores.9568279 and.95637137, with low-similarity explanation and keeper option; confirms displayed intent, not executed selection correctness.",
+    "Metadata screenshot shows BETA, enable and all fields selected with direct-Immich-write warning; does not prove atomic rollback or the all-options-false case.",
+    "Logo is decorative photo/broom mark; noimg is gray missing-image placeholder. No algorithm or runtime evidence."
+  ],
+  "limits": [
+    "114/125 blobs reviewed;11 remain, including2GIFs,ICO,styles and Socket.IO.",
+    "GIF files not credited: Python default environment lacks Pillow; no frame inspection performed yet. This does not block other review work.",
+    "No fresh browser/server rendering, model or upstream-suite execution. Native pHash/ASAN deferred."
+  ]
+}
