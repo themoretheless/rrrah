@@ -1,0 +1,50 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 4,
+  "files": {
+    "crates/core/src/duplicate_detector.rs": {
+      "bytes": 22081,
+      "sha256": "583ad5f06ba94d2360aa010ec56dc02567ee3fce72a3f73ad1f5fecbe1f779d1",
+      "git_blob": "bdca72271cb661df9cc2ed375926aae90ce9925a",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "crates/models/src/duplicate.rs": {
+      "bytes": 1410,
+      "sha256": "7aec43df15f890c406f8ccd9cc57aec088b75ce7f97910cb7e6964e0036c5f74",
+      "git_blob": "b76d55e474a28128ea234e65955a83b218a8b25e",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "crates/core/Cargo.toml": {
+      "bytes": 916,
+      "sha256": "4fab97d7829ddde159029da8dfa79a2455fe187bbdbdc8746d19bf1d62976e1d",
+      "git_blob": "d40d9ba3e9cd8fa0cc54b8e223d0a0a16711a0f5",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "LICENSE": {
+      "bytes": 1072,
+      "sha256": "21fb5a5395f0f650feb3688f00c858e59eefa51c3c945a19da2c3ed2a4d8a3d2",
+      "git_blob": "134c7d9cb935683accc94e6cb5899964418d4e43",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    }
+  },
+  "new_runtime_controls": 4,
+  "controls_script": "docs/research/dedup-500/visualvault076-controls-v1-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-controls-v1-20261021/run.log",
+  "control_scope": "Original complete quick/full async methods extracted unchanged into authored minimal Rust harness;actual Tokio/SHA256/filesystem. Result alias anyhow instead of color-eyre;fresh harness dependencies not upstream lock. Full detector/model/UI not run.",
+  "findings": [
+    "Original quick hashes equal for authored unequal files length4097,8192,16384 differingbyte4096,while original full SHA256 distinguishes. Samplesdo notcoverallcontent;no cryptographiccollisionclaim.",
+    "Original quick function returns empty for observedsize0 evenmissingpath;fullhasherrors. Actual function control,not full detector phantomgroup reproduction.",
+    "detect_duplicates quick mode directly builds final groups from quickhashes,without fullhash/byteconfirmation. Sourceestablishes exposedpath;callerdefaults/UIpending.",
+    "calculate_hashes_for_groups logsanddrops failures;public detectreturnsOk with no completeness/errorlist. Existing missingfile test explicitlyexpects empty success.",
+    "Finalhashmap acrosssizegroups keyedonlyhash;fullSHA256contentmaygroupfiles withstale differentreportedsize,spacecalculationusesfirstsize. Sourceonly,no runtimecase.",
+    "Deletion API removesgivenpaths,logs errorsandreturnsOksuccesslist,no freshness/identitygroupguard;UIconfirmation pending.",
+    "MITrootwhole-read,no productionadoption.NativepHash/ASANdeferred."
+  ],
+  "remaining_scope": "91artifacts including models/scanner/cache/UI/callerpaths andtests/docs/visualassets/config/lock.",
+  "limits": [
+    "Fouradaptedfunctioncontrolsdo notqualifyfullworkspace/originalunittests/deletionflow/performance. Globalfullcount205/500unchanged."
+  ]
+}
