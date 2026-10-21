@@ -1,0 +1,28 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_repository_two_original_shell_digest_controls",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 97,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-zip-controls-v27-20261021/run.py",
+    "harness_sha256": "db7af3e158fd95861880450ac48a9464bfe857dad9892125e7537a3dc1de03a8",
+    "log": "docs/research/dedup-500/googlephotos42-zip-controls-v27-20261021/run.log",
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Synthetic ZIPs generated in ignoredcache; original gitblob-verified shellscript run via bash/unzip/sha256sum. Pythonzipfile reads each entrybyZipInfo forindependentpayloadverification. No extraction or externaldata."
+  },
+  "findings": [
+    "ArchiveAhas same.txt entriesAandBC;archiveBhas same.txt entriesABandC. Distinctarchivebytes anddistinctperentrypayloads,but originalcontentdigestidenticalb00d8ed9c7e975d222bd1f3b7d987dc7331678c4a7c0792a79b051bfc24f74ec. unzip-pbynameconcatenatesbothpayloadsABCforbothlistedoccurrences. Semanticcanonicalizationcollision,notSHA256collision.",
+    "Uniqueentrynamesa,bwithsamepayloadpartitionchange produce differentcontentdigests,asexpected.",
+    "Do notadoptasarchiveidentityproofwithoutduplicate-entryrejection orentryordinal/multiplicity-preservingcanonicalization and explicitmetadata policy. No productionportperformed."
+  ],
+  "cumulative_original_function_controls": 33,
+  "limits": [
+    "No new wholefiles;97/230,notwholeproject.",
+    "Authoredshellcontrols notupstreamVitest. Originalscriptwithlocalunzipbehaviorqualifiedonly.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
