@@ -1,0 +1,42 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 15,
+  "files": {
+    "tests/conftest.py": {
+      "bytes": 1749,
+      "sha256": "25e496c8b3789d793c438c7126e6fea56caf4be206c462999a0f14c3115c6af7",
+      "git_blob": "f7bc3301c5cbb1ba314c0ceb749d1e509baa4323",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/core/tolerance_calculator.py": {
+      "bytes": 7542,
+      "sha256": "c0ea1fd19697de1e096f88f687c1caef34900d047d20f8e1cffddd5b23704712",
+      "git_blob": "b31d5cc5986436024d4df543a9c138e6ac122716",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/plugins/tolerance_calculators/perturbed_dataset_reclustering.py": {
+      "bytes": 4776,
+      "sha256": "4d8e08d3da069d71796524431eb175dea218752771c4f0704a40009aaa81e2e0",
+      "git_blob": "f39cd1ac19b95afeb9a5a93ca6b4089b2d272668",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 2,
+  "cumulative_runtime_controls": 10,
+  "controls_script": "docs/research/dedup-500/vectors166-controls-v4-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vectors166-controls-v4-20261021/run.log",
+  "control_scope": "Full original classes with actual NumPy and identity numba.njit shim, capacity8. Explicit authored subclass injects count failure in second control. No upstream pytest/Numba compilation.",
+  "findings": [
+    "PerturbedDatasetReclustering default tolerance_dataset_array remains empty despite docstring saying current DDA dataset. calculate_tolerance reaches np.ptp(empty) and raises ValueError for a nonempty two-vector DDA.",
+    "binary_search_tolerance restores temporary scalar tolerance through context manager but dataset restoration is outside finally. Explicit injected count failure leaves three-vector temporary dataset installed instead of original two-vector dataset; scalar tolerance restored.",
+    "tests/conftest.py returns a shared global mutable DummyDDA object for each dummy_dda fixture, unlike other new-instance fixtures. Potential test order coupling is source-only, not runtime suite evidence.",
+    "Search range uses global ptp and mean per-coordinate std; no new mathematical validity claim. create_perturbed_dataset zero/negative perturbation counts lack explicit validation; not executed here."
+  ],
+  "remaining_scope": "87 tracked artifacts unassessed, including tolerance tests, plateau calculator, notebooks and generated visual/document assets.",
+  "limits": [
+    "Full repository count remains201/500. No production adoption, performance or complete coverage claim. Native pHash/ASAN remains deferred."
+  ]
+}

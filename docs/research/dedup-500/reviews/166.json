@@ -2,7 +2,7 @@
   "index": 166,
   "repository": "julianholland/deduplicate",
   "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
-  "review_scope": "Partial pinned12/102 whole artifacts read;8 controls cumulative, including5 full original class controls with NumPy and identity njit shim. Original pytest/Numba compilation unqualified.",
+  "review_scope": "Partial pinned15/102 whole artifacts read;10 finite controls cumulative with NumPy and explicit adapters, including identity njit and one injected count failure. Original pytest/Numba compilation unqualified.",
   "decision": "shortlist",
   "finding": "Pluggable distance-matrix and multi-hash candidate algorithms with integration tests; threshold semantics need deeper review.",
   "available_source_evidence": [
@@ -114,6 +114,9 @@
     },
     {
       "audit": "docs/research/dedup-500/vectors166-source-review-v3-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/vectors166-source-review-v4-20261021.json"
     }
   ]
 }
