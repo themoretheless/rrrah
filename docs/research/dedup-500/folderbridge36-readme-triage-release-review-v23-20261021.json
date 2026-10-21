@@ -1,0 +1,45 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.md": {
+      "sha256": "f813e2a74338d4cb8058fae2994363e4ee19a517dea24c9fe8092b83054c3164",
+      "git_blob": "5be4a137ee69d876f9ed7719ddceb46fd5a73c91",
+      "bytes": 31045,
+      "lines": 545,
+      "method": "Whole pinned text read; historical assertions assessed as source claims, external links not independently fetched."
+    },
+    "docs/ISSUE_TRIAGE.md": {
+      "sha256": "0ba587754863e6be4a9bb7a520c7202648b324304f9b622eb0ad3a39000172b7",
+      "git_blob": "0f97307784945bd8a899aa9c8a2f92ee7ee50a40",
+      "bytes": 16240,
+      "lines": 174,
+      "method": "Whole pinned text read; historical assertions assessed as source claims, external links not independently fetched."
+    },
+    "docs/NEXT_RELEASE.md": {
+      "sha256": "701daca3b4aa5b6e91b576d55ac4a13e19e81890da5ca2b94cb72c9ed92be373",
+      "git_blob": "4a486ee6c1dd54b92de980945cf84d5d8c967634",
+      "bytes": 17932,
+      "lines": 253,
+      "method": "Whole pinned text read; historical assertions assessed as source claims, external links not independently fetched."
+    }
+  },
+  "cumulative_assessed_blobs": 126,
+  "tracked_blobs": 129,
+  "findings": [
+    "README distinguishes stable 2.15.4, opt-in rc.4 and unpublished local rc.5; pinned manifest is rc.5. Automated counts are revision/platform-specific: stable 400/13 files, published rc.4 596/596, local Windows rc.5 615 passed plus four baseline failures, 619 total/20 files. These are upstream recorded results, not reruns in this audit.",
+    "ISSUE_TRIAGE is a September 20 snapshot with a later follow-up section: initial no-comments-changed scope is followed by a statement that approved comments were posted. Suggested replies and queue instructions are research data; no comments sent, issue state changed or external dashboard opened here.",
+    "README ordering description says mount list order determines path resolution, whereas inspected PathMapper pre-sorts by longest normalized virtual prefix. Reordering does not override longest-prefix selection; native UI ordering behavior not rerun.",
+    "README feature-level access/keychain/mobile claims must be bounded by implementation and release documents: safeStorage is optional, Android WebDAV unavailable, S3 mobile untested, validation does not establish complete descendant containment. NEXT_RELEASE explicitly records these exclusions.",
+    "NEXT_RELEASE corroborates known S3 recursive folder removal limitations and copy-before-delete scope, distinguishes injected EXDEV tests from physical cross-volume evidence, and retains four Windows baseline failures as unresolved rather than waived.",
+    "Historical zero-vulnerability September audit in triage differs from October release outline advisory entries. No new dependency audit performed; neither historical claim establishes current dependency status.",
+    "Transfer design calls for copy, verify, then delete with failure/cancellation handling; no implementation was ported. Scanner-only 20k/no-op timing does not establish native startup acceleration."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "126/129 blobs assessed:116 whole text/source, six structural artifacts, four PNG visuals. Existing 36 isolated controls remain distinct from upstream test suite execution.",
+    "Remaining CHANGELOG.md, main.ts and tests/mainFallback.test.ts incomplete. Full upstream validate, native Obsidian and live remote backends not run.",
+    "External links and release/issue state not refreshed; assessment applies only to pinned tracked documents. Production code unchanged."
+  ]
+}
