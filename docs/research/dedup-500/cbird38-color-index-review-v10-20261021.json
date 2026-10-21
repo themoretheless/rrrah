@@ -1,0 +1,46 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/colordescindex.h": {
+      "sha256": "ba9a65229bcc72508bdfe6d41b7b57ff30a8ee39b8af38de484f9fe63ac56fad",
+      "git_blob": "66116accfa9fd9dbcb5f67587f254b869fef3e77",
+      "bytes": 2153,
+      "lines": 66,
+      "method": "Whole pinned text/source read; test declarations not executed."
+    },
+    "src/colordescindex.cpp": {
+      "sha256": "46ade8f14b2eb3c6ca6c4de4fc2eedaf214b8cb4bd2e07945d3357bab8c6ebb3",
+      "git_blob": "3b16f1cfd1486732786f252b2594e0f30d9249b2",
+      "bytes": 7806,
+      "lines": 278,
+      "method": "Whole pinned text/source read; test declarations not executed."
+    },
+    "unit/testcolordescindex.cpp": {
+      "sha256": "fc9726814477f3e5f385e86a298229f9a2a9e66d60a783372c69e712443fe1dc",
+      "git_blob": "8ec6ac18b546d45f3d4983514f863c0b7ddc4a3f",
+      "bytes": 911,
+      "lines": 32,
+      "method": "Whole pinned text/source read; test declarations not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 28,
+  "tracked_blobs": 616,
+  "findings": [
+    "ColorDescIndex::find explicitly ignores SearchParams and scans every descriptor. It returns all nonzero-ID entries with distance<FLT_MAX, converts float distance to int score, and leaves downstream maxMatches/filtering to Database. This is nearest-color ranking, not an explicit color similarity acceptance threshold.",
+    "Float-to-int conversion discards fractional score distinctions before database sorting. No descriptor distance implementation or real-color ordering benchmark reviewed yet, so no quantified ranking impact.",
+    "If target.numColors<=0, find tries stored index data by ID, then returns empty if still absent. Grayscale/empty descriptors may be stored and represented by mediaIds yet remain unsearchable through this algorithm. Actual distance behavior for empty candidates still unread.",
+    "load preallocates rowCount descriptors/IDs and guards against more rows, but retains _count if fewer rows arrive. A concurrently shrinking table could leave uninitialized allocated tail; static source observation only, no malformed-memory or concurrency test run.",
+    "SQL addRecords filters TypeImage while in-memory add appends every Media supplied without a type check. Caller Database add can supply multiple types; actual nonimage ColorDescriptor initialization and resulting runtime behavior need further review.",
+    "isLoaded is _count>0, so an empty loaded SQL table remains logically unloaded. A nonempty tombstone-only allocation remains loaded after removals because count is unchanged. Count/memory reflect allocated entries rather than live searchable media.",
+    "SQL blobs require exact sizeof(ColorDescriptor), otherwise descriptor.clear is used. Native struct layout is persisted directly, no per-row schema/version portability proof at this layer.",
+    "Color-index tests use generic40x5-sizes and assert descriptor+ID memory formula; they do not establish a color-only acceptance threshold, grayscale recall, float-score ordering or concurrent load correctness. No upstream tests executed."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "28/616 tracked artifacts assessed:27whole text/source and1PNGvisual. Seventeen previous original-body/header controls and one independent key counterexample; no new runtime test.",
+    "ColorDescriptor::distance/create/clear implementation still unread. Full Qt/OpenCV/SQL/media workflow unqualified.",
+    "No production changes or optimization claim; deferred native pHash/ASAN skipped."
+  ]
+}
