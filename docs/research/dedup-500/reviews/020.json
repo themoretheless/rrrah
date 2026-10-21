@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 45/84 tracked blobs. Benchmark helper/checker/history scripts fully read; three original CLI synthetic controls establish real regression rejection and missing/duplicate benchmark gaps. No performance claim.",
+  "review_scope": "Partial whole-file review: 47/84 tracked blobs. Benchmark fixtures and all three uniquely named benchmarks read; initial thirty-group mounting and measurement exclusions recorded. No real performance run.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -159,6 +159,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-benchmark-gate-review-v19-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-benchmark-fixtures-review-v20-20261021.json"
     }
   ]
 }

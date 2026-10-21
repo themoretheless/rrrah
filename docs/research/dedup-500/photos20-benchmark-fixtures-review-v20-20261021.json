@@ -1,0 +1,37 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/perf/fixtures.ts": {
+      "sha256": "50fe00a0cace2f19e3e2c21b7b1d28b744eac19c60b5c59ebab9b329004d0df9",
+      "git_blob": "0bf26102f5fcd2bfcc1f709dc85c0e14f4186262",
+      "bytes": 1478,
+      "lines": 57,
+      "method": "Whole source read."
+    },
+    "tests/perf/duplicate-groups.bench.tsx": {
+      "sha256": "afb546254dc400b60ff8524ee1365f477e8bb4297ec1f754c08ea76c93810891",
+      "git_blob": "bb7a130950d9108e6f36868e3e87be39bf1e82c3",
+      "bytes": 3347,
+      "lines": 118,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 47,
+  "tracked_blobs": 84,
+  "findings": [
+    "Three benchmark names are distinct in the pinned benchmark file. Previously reproduced duplicate-name overwrite is a checker robustness limitation, not an observed name collision in current fixture.",
+    "Fixture contains 10000 groups and 20098 media records, but DuplicateGroups initially mounts only first thirty groups: 100 big-group items plus 29 pairs = 158 cards. It does not render every one of the 10000 groups.",
+    "Fixture construction, all-selected set and kept-map creation occur outside measured benchmark callbacks. Full application state construction/default keep computation is not included.",
+    "Initial-load callback measures mount plus unmount. Toggle callbacks measure initial mount, rerender and unmount, not isolated toggle latency. No actual pointer/keyboard interaction occurs.",
+    "Each render/rerender supplies new no-op callbacks, which change memoized row props. This differs from stable callbacks in app and complicates interpreting row memoization gains.",
+    "Thumbnail loader is mocked and viewer returns null. jsdom benchmark has no real image decoding/network, browser layout/paint/GPU, scroll traversal or embedding detection.",
+    "No performance results generated in this review; fixture scope must accompany any future numbers."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static benchmark source review; no benchmark execution or optimization speed claim.",
+    "47/84 full files read; no production code changes."
+  ]
+}
