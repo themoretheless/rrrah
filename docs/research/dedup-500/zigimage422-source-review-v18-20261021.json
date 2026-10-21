@@ -1,0 +1,21 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-4150",
+    "include/stb_image.h:7470-7655"
+  ],
+  "controls": "docs/research/dedup-500/zigimage422-jpeg-chroma-controls-20261021/result.json",
+  "control_source": "docs/research/dedup-500/zigimage422-jpeg-chroma-controls-20261021/control.c",
+  "findings": [
+    "ActualpinnedscalarJPEGhorizontal2xresamplerinput0,255gives0,64,64,255;reversed255,0gives255,191,191,0. Independentquarter-phaseclampedlinearoracle0,64,191,255;reflectionmismatch2positions. Numericcounterexampleretained,notpassingcorrectnessclaim.",
+    "Sourcefinalinteriorsampleformulauses3*input[w-2]+input[w-1]ratherthaninput[w-2]+3*input[w-1],explainingasymmetricrightedge. Callerselectsthishelperforhs2/vs1JPEGcomponents. No whole4:2:2JPEGfixtureorZigcallqualified.",
+    "WholeJPEGsectionnowreadincludinghorizontal/vertical/hv resampling,scalar/SIMDYCbCrconversion,kernelselection,componentlinebuffers,RGB/gray/CMYK/YCCKoutputandcleanup/test/infofunctions. InitialzlibHuffmantableprefixalsoreadthrough4150.",
+    "OtherJPEGresamplerhs/vsratiosusegenericnearestneighborfallbackexceptspecial1/2cases;sourcepolicy,notprecision/calibrationclaim.",
+    "HeaderJPEGoutputallocatesextra1byteandwritesopaquealphaevenwith3step,matchinginternalcomment;nobuffer-overrunclaimmadefromthatpatternalone."
+  ],
+  "limits": [
+    "OnehelpercounterexamplenotallJPEGcolourfailureproof. Wholeheaderreviewstillincomplete,zlib/PNG/otherformatsremain. No Zigtestsorproductionadoption.NativepHash/ASANdeferred."
+  ]
+}
