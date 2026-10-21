@@ -1,0 +1,38 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "files": {
+    "frontend.html": {
+      "bytes": 80166,
+      "sha256": "5386832036409fd322d8ed0d5bb8af1e6badc69cde7bd38c923e9d5e470739d4",
+      "git_blob": "c483bb37e944fb0392caefa36fbdfceea552de27",
+      "scope": "Lines1-940whole-read;remainingnotyetreviewed"
+    },
+    "styles.css": {
+      "bytes": 34111,
+      "sha256": "34f03ddd1ff4e5af7b3995b764ab7991b80c6873ffebce52be019db6fbd7932f",
+      "git_blob": "273dab11f08b6047266bc71265187a9004a500b3",
+      "scope": "FetchedandGitblobverified;notyetwhole-read"
+    },
+    "translations.js": {
+      "bytes": 27840,
+      "sha256": "cca4afda1d7087c06f943083f0fb006fefc09faf4e303474fd403eaf94fe16e0",
+      "git_blob": "d3e8182a22b69ca8246d5dc865c4469e5249d093",
+      "scope": "FetchedandGitblobverified;notyetwhole-read"
+    }
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-frontend-controls-20261021/result.json",
+  "new_authored_controls": 3,
+  "cumulative_authored_controls": 15,
+  "findings": [
+    "HTML pHash slider max20 conflicts with original ScanRequest Field max16; original startScan emits20 unchanged. Node function execution with stub fetch; no actual HTTP/Pydantic rejection run.",
+    "onTypeChange hides intensive options for both mode while startScan sends retained checked=true; server worker source honors video_intensive for both. Original functions executed, server source reviewed separately.",
+    "applyTranslations always writes marked_n(0) to delete counter without recomputing selection; simulated5selectiontextresetto0. Original function and translation callback adapter, no actual browser selection controls.",
+    "Tree lazily fetches subdirectories and retains state per path; EventSource closes on error with connection lost message and does not reconnect. Source review only.",
+    "startScan hardcodes video_frame_threshold10; workersslider1..16 narrower than backend1..32; frontend defaultpHash0 differs backend8. Source observations, no precision policy accepted."
+  ],
+  "limits": [
+    "Onlyfrontendlines1-940whole-readthisincrement;styles/translationsfetchedbutnotread. ThreeoriginalfunctionsruninNode22VMwithDOM/network/localizationadapters,notlivebrowser. No new production changes; full repository remains incomplete.NativepHash/ASANdeferred."
+  ]
+}
