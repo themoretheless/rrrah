@@ -1,0 +1,105 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/qdarkstyle/dark/darkstyle.qss": {
+      "sha256": "e67f6c2c6cd107398d6ec90ffcfe046ca236371df66ff68d44a8782113c93c90",
+      "git_blob": "aeb5969b640fc43532aeb21db78e55423840e4c9",
+      "bytes": 54289,
+      "lines": 2217,
+      "method": "All320 selector/declaration blocks read in whitespace-normalized full content; all dark comments read and entire light comment diff read. Light rules checked against dark with complete palette/path normalization; no nonpalette differences or unparsed rule residue."
+    },
+    "src/qdarkstyle/light/lightstyle.qss": {
+      "sha256": "255231f03debc1ec23ea38711ebcf74b6d2f0b89bff8fbb87da2f1c125ee9a67",
+      "git_blob": "1dc92064e60472b0fb06e63987e17c488f89ef95",
+      "bytes": 54385,
+      "lines": 2217,
+      "method": "All320 selector/declaration blocks read in whitespace-normalized full content; all dark comments read and entire light comment diff read. Light rules checked against dark with complete palette/path normalization; no nonpalette differences or unparsed rule residue."
+    }
+  },
+  "cumulative_assessed_blobs": 611,
+  "tracked_blobs": 616,
+  "findings": [
+    "Both generated qtsass styles have320rule blocks. Every selector and noncolor declaration agrees after dark/light resource-prefix normalization. All12color mappings inspected; no extra unmatched rule text.",
+    "Checkbox/radio/menu indicators distinguish checked, unchecked and indeterminate; hover/focus/pressed selectors commonly share focus assets. Styling does not establish input state or permission enforcement.",
+    "Item-view inactive selected background equals nonselected hover background in each theme. This is a static visual overlap, not evidence of wrong selection data or observed user confusion; requires actual Qt interaction to qualify.",
+    "Global outline reset and explicit widget-specific focus rules coexist. No keyboard-accessibility or platform/DPI rendering certification from stylesheet reading.",
+    "Header comment says Light Style in dark file and Dark Style in light file. Palette and resource references establish actual theme; cosmetic generated comment mismatch.",
+    "Progress bars and disabled styling are presentation only, not proof of complete scan, persistent transaction or deletion restriction. No matcher or index implementation present."
+  ],
+  "structural_checks": {
+    "rule_blocks_per_theme": 320,
+    "nonpalette_rule_differences": 0,
+    "unparsed_noncomment_residue": false,
+    "palette_correspondences": [
+      [
+        "#191919",
+        "#FAFAFA",
+        67
+      ],
+      [
+        "#454545",
+        "#C9C9C9",
+        107
+      ],
+      [
+        "#E0E0E0",
+        "#191919",
+        41
+      ],
+      [
+        "#346792",
+        "#9FCBFF",
+        40
+      ],
+      [
+        "#9D9D9D",
+        "#787878",
+        34
+      ],
+      [
+        "#26486B",
+        "#DAEDFF",
+        9
+      ],
+      [
+        "#1A72BB",
+        "#73C7FF",
+        29
+      ],
+      [
+        "#606060",
+        "#ACACAC",
+        16
+      ],
+      [
+        "#373737",
+        "#CECECE",
+        4
+      ],
+      [
+        "#545454",
+        "#B9B9B9",
+        7
+      ],
+      [
+        "#259AE9",
+        "#37AEFE",
+        4
+      ],
+      [
+        "#292929",
+        "#E0E0E0",
+        1
+      ]
+    ],
+    "prior_resource_reference_audit": "docs/research/dedup-500/cbird38-resource-reference-review-v65-20261021.json"
+  },
+  "executed_controls": [],
+  "limits": [
+    "611/616 assessed:187whole text/source,417PNGvisuals,2structured spreadsheets,2PDFs,3other graphics.5remain:4PDFs andembedded CImg.",
+    "No Qt renderer or UI interaction launched, no stylesheet edited or ported; this is source review.",
+    "34original-body/header controls and2independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
