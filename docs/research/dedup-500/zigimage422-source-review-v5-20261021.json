@@ -1,0 +1,22 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_read": {
+    "path": "include/stb_image_resize.h",
+    "lines": "1-1000cumulative",
+    "scope": "Prefixwhole-read;remainingimplementationnotreviewed"
+  },
+  "controls": "docs/research/dedup-500/zigimage422-transfer-controls-20261021/result.json",
+  "control_source": "docs/research/dedup-500/zigimage422-transfer-controls-20261021/control.c",
+  "reproduce": "clang -std=c99 -O2 -I .dedup-work/zigimage422-20261021/include docs/research/dedup-500/zigimage422-transfer-controls-20261021/control.c -lm -o .dedup-work/zigimage422-20261021/transfer-control; then execute binary",
+  "findings": [
+    "ActualpinnedCheaderIEEEfloatbranch:all256lookupvalueswithin1e-6ofindependentpiecewisesRGBdecodeformula,maxerror6.29561688004e-7;strictlyincreasingandall256roundtripviaoriginalencodefunction. NonIEEEfallbackbranchnotcompiled/tested.",
+    "ActualoriginalencodefunctionmapsNaN0,negativeInfinity0,positiveInfinity255;thisisconversionbehavior,notapprovalofnonfinitemodel/imageinput.",
+    "Readrestofdecode/encodetables,IEEEoptimizedfloatlookupandnonIEEEbinarysearchfallback,triangle/cubic/CatmullRom/Mitchell/trapezoidkernels,supportwidth/contributorcalculationsandedgewrappingthroughline1000. Noindependentfullfilterorboundaryoracleexecuted.",
+    "Trianglekernelpositive1-absxwithinunitradius;otherkernelsandedgeReflecthandlingneedseparatefixturevalidation. No source-onlysuspectededgeissuepromotedtoconfirmedruntimefailure."
+  ],
+  "limits": [
+    "Resizeheader1000linesreviewedonly;stb_image.hstillunread. Whole repository incomplete. ActualCunitcompiledwithoutmodificationexceptimplementationmacro,butnotZigtests/bindingsexecution. NonIEEE/otherplatform/precisionperformanceproofabsent. NativepHash/ASANdeferred."
+  ]
+}
