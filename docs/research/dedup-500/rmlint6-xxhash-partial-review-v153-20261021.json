@@ -1,0 +1,66 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          5201,
+          5800
+        ],
+        [
+          5801,
+          6000
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          6000
+        ]
+      ],
+      "unread_ranges": [
+        [
+          6001,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated5201..5800/5801..6000 read; original NEON accumulation/scramble compared to original scalar routines on local ARM host for four lane configurations.",
+  "findings": [
+    "Completed SSE2 scramble/custom secret, NEON accumulation/scramble, VSX,SVE,LSX and scalar routines. NEON handles2/4/6/8 vector lanes with remaining lanes scalar; four-lane batches unzip32-bit halves for widening products, pair remainder uses narrowing/shifting.",
+    "Scalar round adds original input into adjacent lane and low32*high32 keyed product into current lane. AArch64 helper uses umaddl for32-bit widening multiply-add. Scramble xors shift47/secret then multiplies by prime modulo64.",
+    "NEON and scalar complete eight-lane accumulator arrays match after accumulation and scramble for65536 total controls, including deliberately unaligned input/secret offsets. This is backend parity, not independent fullhash oracle.",
+    "VSX handles byte order via reviewed helpers; SVE adapts lane count with masked2/4/8-element loads and keeps accumulator across stripes. LSX uses128-bit widening products. Those backends not executed on ARM NEON host.",
+    "Backend bindings select scalar secret initializer for NEON/VSX/SVE/LSX. Size optimization>=1 forces scalar secret initialization even for other backends. Common long-key loop prefix uses secret-derived stripes per block; body remains unread."
+  ],
+  "executed_control": {
+    "compiler": "clang -O2",
+    "neon_lane_configurations": [
+      2,
+      4,
+      6,
+      8
+    ],
+    "cases_per_configuration": 16384,
+    "total_cases": 65536,
+    "failures": 0,
+    "all_exit_codes": 0,
+    "scope": "1024 deterministic datasets x16 input/secret offset combinations per lane configuration; compare all8 accumulator words after accumulate and scramble.",
+    "harness_sha256": "6871538ea74d759f35bdf183b9d7664e8e7fe7340a8323a9dc5783be064a12e9",
+    "independent_oracle": false
+  },
+  "limits": [
+    "6000/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "No fullhash independent oracle, otherplatform runtime or throughput proof. pHash/ASAN deferred."
+  ]
+}
