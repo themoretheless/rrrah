@@ -1,0 +1,51 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cvutil.h": {
+      "sha256": "012d87c05ee84cd29993fba9a33005bb3749a1a50c30e07a898617721f834b25",
+      "git_blob": "6f2195835746f565a8ffa29fe95ef70aab4025c4",
+      "bytes": 8661,
+      "lines": 259,
+      "method": "Whole pinned header read."
+    }
+  },
+  "partial_source_files": {
+    "src/cvutil.cpp": {
+      "sha256": "e5e789d4fb43a51d003aa9c06d5fae4c1f17630879f01c37cdf1b44e3201e776",
+      "git_blob": "0390edbc1202f6a575256c3ae75e16619d199cc1",
+      "bytes": 58544,
+      "lines": 1960,
+      "read_ranges_inclusive": [
+        [
+          640,
+          1115
+        ]
+      ],
+      "method": "Complete color distance/create implementation read plus adjacent code; remainder incomplete, not counted whole."
+    }
+  },
+  "cumulative_assessed_blobs": 29,
+  "tracked_blobs": 616,
+  "findings": [
+    "Original ColorDescriptor::distance controls confirm asymmetry for equal color counts, self-score1, ignored frequency weights and FLT_MAX for an empty input. This is a ranking dissimilarity, not a symmetric metric or exact identity predicate.",
+    "Distance rejects color-count differences greater than2 before comparing values. With equal counts it computes nearest-color distances only from first input toward second; when counts differ it uses larger-to-smaller direction.",
+    "create clears descriptor only near final formatting. Unsupported grayscale input or too few retained samples return before clear; reusing a populated output object can preserve old descriptor. Typical reviewed scanner creates fresh ColorDescriptor; no stale scanner output reproduced.",
+    "Final create loop assigns desc.numColors=descIndex before incrementing descIndex. One emitted color leaves count0, and N emitted colors are reported as N-1, omitting final slot from distance. This is a static original-source observation; full OpenCV kmeans/generator not executed.",
+    "Generator drops dark samples, masks edges with ellipse, uses kmeans32 and center-weighted frequency. Spatial arrangement and discarded areas are not represented by final palette. README transform claims cannot establish image identity.",
+    "Mask loop multiplies channel by255 then shifts8 even inside the mask, slightly reducing nonzero intensities; cv::Mat rgb=cvImg is shallow unless conversion/resize reallocates, so caller data mutation is possible for a3-channel unscaled input. Actual OpenCV alias/runtime behavior unqualified.",
+    "Descriptor creation notes randomness for identical input and uses kmeans++ one attempt; no seed/deterministic corpus proof. Colors store quantized LUV and weights in native struct; prior raw-blob storage remains layout-dependent."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-color-distance-controls-v11-20261021",
+    "passed": 4,
+    "failed": 0,
+    "method": "Original DescriptorColor/ColorDescriptor definitions and full distance body, clang++C++17 O2 with forward declarations only for unused Qt/OpenCV types. Synthetic bounded palette data; no OpenCV generation, real pixels, pHash or ASAN."
+  },
+  "limits": [
+    "29/616 tracked artifacts assessed:28whole text/source and1PNGvisual. cvutil.cpp only640-1115read, remainder incomplete.",
+    "Twenty-one cumulative original-body/header controls plus one independent key counterexample; not full upstream image/decoder/runtime qualification.",
+    "No production code port or measured optimization; deferred native pHash/ASAN skipped."
+  ]
+}
