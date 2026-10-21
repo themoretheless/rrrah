@@ -1,0 +1,53 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/amo-create.mjs": {
+      "sha256": "207cb9356feae400d3584f9e7bd6da89a1169c25c33ebe6bfd7589d38b7f57d2",
+      "git_blob": "4efe719c7413ae7a35f2030cae36570d78db793c",
+      "bytes": 6598,
+      "lines": 170,
+      "method": "Whole pinned source/document read without truncation."
+    },
+    "docs/CHROME_WEB_STORE_SETUP.md": {
+      "sha256": "a2eee0a19e578f9af2808450c0f5f69702864cff1f6dbb87f7286223e0f1b81b",
+      "git_blob": "376c7dd69f0e7975e14c5ad526349f543c5831d7",
+      "bytes": 2266,
+      "lines": 46,
+      "method": "Whole pinned source/document read without truncation."
+    },
+    "docs/STORE_AUTOMATION.md": {
+      "sha256": "db026f0dfc6c6e4420bfddeea6cf61c6a1c8eb0b898e0bebb958e53c3ce4105a",
+      "git_blob": "34060d53363e9df3e7b15b692a2f952ad0947be4",
+      "bytes": 13339,
+      "lines": 251,
+      "method": "Whole pinned source/document read without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 199,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-amo-controls-v52-20261021/run.mjs",
+    "sha256": "d3700e4415cd97d50630e1fc1152ccffc46519278a13f5b2ea7396b7af5c281a",
+    "log": "docs/research/dedup-500/googlephotos42-amo-controls-v52-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original top-level script in async VM; imports replaced by explicit synthetic filesystem/API/signing functions, main awaited. Real FormData/Blob only with one synthetic byte. No credentials, actual JWT signing, accounts, network or submission."
+  },
+  "findings": [
+    "Dryrun original script reads bytes/payloads and makes zero API calls in control. It does not validate ZIP or manifest/version.",
+    "Successful GET readback with different slug/version is accepted and logged LIVE; no expected identity/version comparison. Missing current_version also accepted and prints version undefined submitted. No actual store availability claim.",
+    "Upload-valid poll maximum60iterations with30srequesttimeout and10ssleep can exceed stated10minute wallclock bound; no elapseddeadline. Not timed here.",
+    "Partial success create then PATCH/readback failure has no rollback/resume artifact; rerun may encounter already-created addon. Static flow only.",
+    "STORE_AUTOMATION correctly distinguishes source/CI/deploy/submitted/live and explicitly says green workflow not liveproof. Its safe Pro filter screenshot claim contradicts v51 reproduced call sequence.",
+    "STORE_AUTOMATION concurrency group prevents overlapping workflows but does not by itself serialize independent cws/edge/amo jobs inside same reusable workflow; actual branch race not reproduced here.",
+    "CHROME_WEB_STORE_SETUP refers tagrelease uploading directly; STORE_AUTOMATION separates scheduled retry. Source docs not evidence actual workflow run. Historical API/credentials/setup/policy statements not verified current external facts."
+  ],
+  "cumulative_original_function_controls": 85,
+  "limits": [
+    "199/230whole artifacts;31remaining;globalfullreview160/500unchanged.",
+    "No production optimization or general library qualification. Native pHash/ASAN deferred."
+  ]
+}
