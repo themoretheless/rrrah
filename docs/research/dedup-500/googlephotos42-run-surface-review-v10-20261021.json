@@ -1,0 +1,75 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_three_original_helper_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/index.ts": {
+      "sha256": "2615d1199963a533bcc64cc0c609549257b20ac71492bbdc6f9b4c1e8e0dac60",
+      "git_blob": "386471be13206642c1b99470cd7d85738947bc7e",
+      "bytes": 3090,
+      "lines": 132,
+      "method": "Whole pinned source read."
+    },
+    "src/core/status.ts": {
+      "sha256": "10ec1dc5921693e33ccefe73bf6c80662da99f1822403588ab8d6f4180c260d2",
+      "git_blob": "2b827216c784803990b009d2bbd82d18170287c9",
+      "bytes": 713,
+      "lines": 26,
+      "method": "Whole pinned source read."
+    },
+    "src/core/run-occupancy.ts": {
+      "sha256": "d23c7911771f13d6e949fc860a673fad1d82f1997df372acaf2c3ada350d4e74",
+      "git_blob": "e85bff74261084508e42e4e034f2f2977fcfb480",
+      "bytes": 1971,
+      "lines": 70,
+      "method": "Whole pinned source read."
+    },
+    "src/core/surface.ts": {
+      "sha256": "b9b18b96d5e0f879f08c660368ec039467b9a0eb335c9ad7977617cb4131165e",
+      "git_blob": "1c88d2bf25025ebc8f3e5ae7e7912352c443da13",
+      "bytes": 4454,
+      "lines": 157,
+      "method": "Whole pinned source read."
+    },
+    "src/core/config.ts": {
+      "sha256": "fc87f01675edb9320a4ca2afd9576dac7dfe419f25fb776afb7118761c4c3b6e",
+      "git_blob": "34b3672ba064c0c99712d658feead8f7f7666c6a",
+      "bytes": 1627,
+      "lines": 48,
+      "method": "Whole pinned source read."
+    },
+    "src/core/nothing-moved.ts": {
+      "sha256": "b742590b96516d94c6f21495aebb81e17337f9983e73ed65679a485908f157d9",
+      "git_blob": "d5e3b8a48645b9d4b96f3a56d5d99ddc7037a437",
+      "bytes": 849,
+      "lines": 16,
+      "method": "Whole pinned source read."
+    }
+  },
+  "cumulative_assessed_blobs": 49,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-wait-controls-v10-20261021/run.mjs",
+    "harness_sha256": "74d088819dc68b0f64c54b3168444b67b3e3211fb0706430ab4a5335dd6d6c1c",
+    "log": "docs/research/dedup-500/googlephotos42-wait-controls-v10-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "method": "Original helper modules type-stripped, one local import suffix rewritten; synthetic async conditions and URL strings only."
+  },
+  "findings": [
+    "waitUntilAbortable checks stop before condition and after sleep, but not after awaited condition. Condition setting stoptrue then returningready is accepted. Preexisting stop correctly throwsStopRequested.",
+    "remaining timeout decreases by configuredpollDelay rather than elapsed condition time; helper does not impose strict wallclock deadline on asynchronous condition. Source finding, not measured timeout experiment.",
+    "Exact URL helper rejectshttp,lookalikehost,credentials,nondefaultport; account2albumabc%20def parsed correctly. This does not establish caller revalidation after navigation.",
+    "isRunOccupied is pure truthy flag aggregation, not atomic lock. Caller handshake/ownership remains to review.",
+    "Unified status sets separate active,paused,terminal states. Config documents empirical500batch ceiling; not independently validated.",
+    "Public core index reexports browser-specific modules as well as pure helpers. Importing pure named exports is not evidence all exported functions are environment independent."
+  ],
+  "cumulative_original_function_controls": 21,
+  "limits": [
+    "49/230wholeartifacts; no full repository tests or browser runtime.",
+    "No production optimization; native pHash/ASAN deferred."
+  ]
+}
