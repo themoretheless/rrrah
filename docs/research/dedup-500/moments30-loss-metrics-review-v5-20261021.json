@@ -1,0 +1,41 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "criterion.py": {
+      "sha256": "6d99a9ddd4227fc2b83011a62320d6d3cdc4a49fbf99f4d2c54bbcd8c0c7f657",
+      "git_blob": "0671d8cf19f7c998d2be0fd0c125c53753c72257",
+      "bytes": 7537,
+      "lines": 207,
+      "method": "Whole source read."
+    },
+    "utils.py": {
+      "sha256": "f63b8d2c94950022868f764412a8892a7b1c8f18c311870df42bf28b90f13ea7",
+      "git_blob": "798457187f264404b9048a2ce1a82bad880505f3",
+      "bytes": 2532,
+      "lines": 83,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 25,
+  "tracked_blobs": 73,
+  "findings": [
+    "Constant-input normalization divides by zero and produces NaN in isolated original-function control. Independent affine normalization erases scale and offset; this property alone is not a correctness bug.",
+    "Original flow smoothness subtracts the last row/column, not adjacent positions. Controlled input yields 1.6249997968750256 versus adjacent reference 1.1249998593750177. Caller reachability and training impact unverified.",
+    "Masked MSE/L1 return zero for an all-zero mask with finite inputs, regardless of image differences. A zero masked loss is not an identity certificate. Static assessment.",
+    "VGG16/19 and LPIPS losses train image synthesis; no exact duplicate classifier. VGGLoss preprocess size parameter does not resize images.",
+    "Criterion boundary crop changes prediction/target without cropping mask; L1 resizes mask while MSE does not. No full model execution.",
+    "cycle on an empty iterable loops without yielding; not executed. dict_to_device mutates shallow exact Tensor values and uses CUDA.",
+    "save_current_code copies a filtered directory snapshot without content hashes; not executed. mse2psnr epsilon caps zero-MSE output at 60 dB by formula."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/moments30-loss-controls-v5-20261021",
+    "passed": 3,
+    "method": "Unchanged original function AST bodies; NumPy arrays and minimal torch.norm adapter. No Torch/model runtime."
+  },
+  "limits": [
+    "No upstream test suite, GPU, model weights or training execution.",
+    "25/73 tracked files read; production library unchanged."
+  ]
+}

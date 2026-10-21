@@ -2,7 +2,7 @@
   "index": 30,
   "repository": "google-research/3d-moments",
   "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
-  "review_scope": "Partial whole-source review: 23/73 tracked blobs. Data utilities/training sampler read; three isolated Python wrapper controls reproduce zero/singleton cardinality behavior. Real Torch/distributed runtime unverified.",
+  "review_scope": "Partial whole-source review: 25/73 tracked blobs. Loss/utility functions read; three isolated numerical controls passed. Full Torch/model runtime unverified.",
   "decision": "reject-domain",
   "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
   "license_metadata": "Apache-2.0",
@@ -107,6 +107,9 @@
     },
     {
       "audit": "docs/research/dedup-500/moments30-training-sampler-review-v4-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/moments30-loss-metrics-review-v5-20261021.json"
     }
   ]
 }
