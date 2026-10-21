@@ -1,0 +1,33 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/lib/multi-keep.test.ts": {
+      "sha256": "374013bbdbbdaf45922f97971c4dc0de8f42680d78513d311582f0f60b8463d4",
+      "git_blob": "838b098a4d8d68d3c653be6617129202e9b92fdd",
+      "bytes": 6829,
+      "lines": 191,
+      "declared_it_calls": 15,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 19,
+  "tracked_blobs": 84,
+  "findings": [
+    "Tests define local copies of getKept/applyToggleKept/computeDuplicateCount rather than importing production callbacks. Defaults use originalMediaKey, omitting production defaultKeptSets recomputation. Passing local copies would not certify real callback equivalence.",
+    "Last-kept tests supply valid nonempty overrides. Missing/empty override sets and storage restoration membership validation are not covered in this file.",
+    "Executed actual handleTrash candidate-selection statements from app.tsx with injected synthetic state/getKept. A valid kept member protects it, but an empty set or absent-only set selects every member for the confirmation list. No confirmation/dispatch statements executed.",
+    "The prior app storage path filters overrides by group ID only. Thus malformed/legacy stored override membership is not repaired there; normal UI toggle maintains a nonempty set only if its input invariant already holds. Actual storage-to-render flow not executed.",
+    "Cross-group count fixture overlaps img3 in two groups. It exercises numerical aggregation, not unique physical media identity across groups."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-keep-controls-v13-20261021",
+    "passed": 3,
+    "method": "Exact production candidate selection statement slice, TypeScript stripping, synthetic in-memory inputs, no side effects."
+  },
+  "limits": [
+    "Upstream tests read but not executed. No user data, Google account, browser or actual trash operation.",
+    "19/84 files fully read; no production library code copied or changed."
+  ]
+}
