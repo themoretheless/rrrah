@@ -2,9 +2,9 @@
   "index": 381,
   "repository": "dsoprea/go-perceptualhash",
   "commit": "5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8",
-  "review_scope": "Partial7/13artifactsassessed:wholeproduction/docs/config/license;testlogicread,largeexpectedarraysstructural.23originaltestbodiespass1alphaassertionfails;3authoredcontrols.6fixturesnotyetvisuallyreviewed.",
-  "decision": "reference",
-  "finding": "Pure Go Blockhash API and test corpus; candidate independent oracle, resize/color semantics need checks.",
+  "review_scope": "All13pinnedblobsassessed:6imagesvisuallyviewed,production/docs/config/licensewholetext,testlogicread+numericfixturearraysstructurallyparsed.23originaltestbodiespass1alphafails;defaultvetfails3names;4authoredcontrols. Notgeneralaccuracyqualification.",
+  "decision": "retain-blockhash-reference-with-explicit-limits",
+  "finding": "Blockhashcandidateonly:solidcolourcollision,BoundsMaxsizeandstickyimagecacheissues;alphaexpectedrawRGBversusactualpremultipliedconversion independentlyconfirmedall6700fixturevalues.",
   "available_source_evidence": [
     {
       "path": "blockhash.go",
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "BSD-3-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "PinnedBSD3Clausewhole-read;no productioncopy.",
   "tests_detected": 1,
   "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -70,5 +70,8 @@
       "audit": "docs/research/dedup-500/goblock381-source-review-v1-20261021.json"
     }
   ],
-  "upstream_test_scope": "Go1.25defaultcommandvetfails3malformedtestnames;vetoff21discoveredoriginalpassespluswrapper3originalbodies2pass1fail. Not historicalenvironment."
+  "upstream_test_scope": "Go1.25defaultcommandvetfails3malformedtestnames;vetoff21discoveredoriginalpassespluswrapper3originalbodies2pass1fail. Not historicalenvironment.",
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/goblock381-complete-source-review-20261021.json"
 }

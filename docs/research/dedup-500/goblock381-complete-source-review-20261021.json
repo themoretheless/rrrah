@@ -1,0 +1,121 @@
+{
+  "repository": "dsoprea/go-perceptualhash",
+  "commit": "5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8",
+  "whole_repo_complete": true,
+  "tracked_blobs": 13,
+  "assessed_blobs": 13,
+  "files": {
+    ".travis.yml": {
+      "bytes": 257,
+      "sha256": "c2ea26c90d4fbed6f49f05f7c3b75a20a81b543bf1175966f5015f3e16c04547",
+      "git_blob": "3d2a68bba44867fd6f4ce2952856180b08bd48e5",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "LICENSE": {
+      "bytes": 1521,
+      "sha256": "0e35f113aa6ff3cf74de427bc2fd82eee86c238b1172a0946bf02e2a29606546",
+      "git_blob": "ca609a1caa1544decbbd20f91c8f4ea395d02ce2",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "README.md": {
+      "bytes": 2134,
+      "sha256": "65a9414a041fcfe1e74df97d67b6f15dde900bc895411e9920cd12cdcdd31923",
+      "git_blob": "11802d144f187af8157efd8a158da64ed766a184",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "blockhash.go": {
+      "bytes": 6363,
+      "sha256": "4ebd8c4a21e81af501c1458413edf88359fd51ffe257220b9dce1a443d32f674",
+      "git_blob": "e1c2179227660f22291005fc2859e1b8176c83c8",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "blockhash_test.go": {
+      "bytes": 107153,
+      "sha256": "245a654e5c894fde8faef7b111b9fbfaa69da0a86cfe8877b59cf4bc0f2c550c",
+      "git_blob": "d4a3b5e72ba4048380e0020196bb001e3f87284b",
+      "method": "All testlogic read;3numeric fixture arrays structurally parsed and executed,one longdigest executed;not every literal value manuallyread"
+    },
+    "command/go-perceptualhash/main.go": {
+      "bytes": 1294,
+      "sha256": "42838bfee49474d935dcd201ef04a09dba73c0dc6946315d787b713e091b92da",
+      "git_blob": "03ffa6145b6373cd88381f68156738fa1ba0edd2",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "go.mod": {
+      "bytes": 53,
+      "sha256": "68f866e632ff0f440f25e8c55dadacccfe0709562d6df50ee515a2c565a8a873",
+      "git_blob": "c9144e4fdd2184fa7c8b8bb7522bcf1cb76ccf23",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "test_assets/20170618_155330-grayscale.png": {
+      "bytes": 2644879,
+      "sha256": "c35985b6b5196cc3f49ab1d9564a87b434ad7e692461530f79775d6254637ac1",
+      "git_blob": "f6952d60e8aac39a509445ee6492999dc8b5ad4f",
+      "method": "Original PNG/JPEG visually viewed usingview_image;sourceassetdecodedbyoriginaltests;Gitblobverified"
+    },
+    "test_assets/20170618_155330-small-alpha.png": {
+      "bytes": 14447,
+      "sha256": "034387121b172dddceaf29248400a6340a1af9a3dcfe511863c27ffe73df37a1",
+      "git_blob": "2baf369a080dbc57006ba27221813a8609ad657c",
+      "method": "Original PNG/JPEG visually viewed usingview_image;sourceassetdecodedbyoriginaltests;Gitblobverified"
+    },
+    "test_assets/20170618_155330-small-even.png": {
+      "bytes": 11241,
+      "sha256": "bb0c0f2e656f3c092df49f781d12b8b1210a27176458e426bb19a33eb14fc14f",
+      "git_blob": "bdae164ae21154426d4112c3e600d7ea6a41167c",
+      "method": "Original PNG/JPEG visually viewed usingview_image;sourceassetdecodedbyoriginaltests;Gitblobverified"
+    },
+    "test_assets/20170618_155330-small.png": {
+      "bytes": 11923,
+      "sha256": "fd4d1e24affbb140f9cec5c027f38ee975543c67c56849b20a39399440f84e3e",
+      "git_blob": "4b695ef9d1a2dd68454372126243999fe68ed44a",
+      "method": "Original PNG/JPEG visually viewed usingview_image;sourceassetdecodedbyoriginaltests;Gitblobverified"
+    },
+    "test_assets/20170618_155330.jpg": {
+      "bytes": 864917,
+      "sha256": "4d02b4cfde69bbd66041acf42e3c430f35ba218c0a067da171c7edaca0083e3a",
+      "git_blob": "089c7639a428c9976dd316d52165dd707f78306f",
+      "method": "Original PNG/JPEG visually viewed usingview_image;sourceassetdecodedbyoriginaltests;Gitblobverified"
+    },
+    "test_assets/20170618_155330.png": {
+      "bytes": 5136057,
+      "sha256": "8f74fe38e919cd9d385c9d780f4d46ffa554cb23a58e86e20717344d96737730",
+      "git_blob": "bcd6f8bfd20af4fa63dcc48228e89cb63028fc9d",
+      "method": "Original PNG/JPEG visually viewed usingview_image;sourceassetdecodedbyoriginaltests;Gitblobverified"
+    }
+  },
+  "original_tests": {
+    "bodies_passed": 23,
+    "bodies_failed": 1,
+    "ordinary_discovered_passes": 21,
+    "lowercase_named_bodies_called_via_adapter": 3,
+    "failure": "AlphaAndOddSize original comparison reportsvalue6atposition3600",
+    "default_command": "go test-v ./... failsvet on3malformedlowercaseTestnames",
+    "second_command": "go test-vet=off-v ./... executes21discoveredoriginaltests pluswrapper3originalbodies and3authoredcontrols;exit1retained"
+  },
+  "authored_controls": {
+    "previous_Go": 3,
+    "new_independent_pixel_oracle": 1,
+    "total": 4
+  },
+  "alpha_oracle_script": "docs/research/dedup-500/goblock381-alpha-20261021/check.py",
+  "alpha_oracle_result": "docs/research/dedup-500/goblock381-alpha-20261021/result.json",
+  "prior_review": "docs/research/dedup-500/goblock381-source-review-v1-20261021.json",
+  "runtime_dependencies": [
+    "docs/research/dedup-500/goblock381-tests-20261021/runtime-go.mod",
+    "docs/research/dedup-500/goblock381-tests-20261021/runtime-go.sum"
+  ],
+  "findings": [
+    "All6fixtureimagesvisuallyviewed:singlemountainvalleyphoto withwaterfall/clouds,RGB/JPEG/grayscaleandsmallalpha/even/oddvariants. Fullsize2880x1920,small100x67,even96x64. Thisisoneorigin,notsemanticnegativebenchmark.",
+    "IndependentPillowdecode confirmsall6700expectedalphafixturnumericvalues equalrawRGBsum(exceptfullytransparentwhite rule). Atindex3600RGBA2,9,0,142expected11;originalGoobserved6 equalsfloorpremultipliedRGBsum. OriginaltotalValue convertsNRGBAtoRGBAModel,sofailurematchespremultiplicationsemanticmismatch. Notjustunexplainedhistoricaldecoderfailure.",
+    "No upstreamfixapplied:moderndefaultgo teststillvetfails3lowercaseTestnames;vetdisabledpluswrapperexecutesall24originaltestbodies23pass1alphafail. Originaltestassertionandgatefailuresretained.",
+    "Previous3Go controlsconfirmedBounds.MaxvsDx/Dy,stickyhashaftermutableimagerewrite,solidred/bluecollision. Treatblockhashasfinitecandidatefeature,notexactidentityproof.",
+    "Allsource/docs/license/configread;testcontrolflowreadand3largeexpectedarraysstructurallyparsed/executed,ratherthanclaimingeveryliteralmanuallyread. All13GitblobSHA1andsourceSHA256pinscheckedagain.",
+    "FreshresolvedruntimeGo.mod/go.sum savedasexecutionevidence. Originalmodulecontainsnodependencyrequirementsorlock;runtimeGo1.25.0notoriginalhistoricalenvironment. No fullplatformmatrixorperformancequalification.",
+    "BSD3Clauserootlicensepreviouslyread. No productioncodecopied. Retainindependentoraclerequirementandexplicitpixelalpha/bounds/freshnesscontract;do notporttheimplementationasexactmatcher."
+  ],
+  "decision": "retain-blockhash-reference-with-explicit-limits",
+  "limits": [
+    "Completepinnedrepositoryassessmentusesmixedmethods:6imageviews,wholeproductiontext,testlogicplusnumericfixturestructuralinspection. No per-pixelfullresolutionvisualQA,semanticnegativeprecision,broadtransformparity,resource/cancellationorcrossplatformqualification.1originalassertionfailsanddefaultvetgatefails.No productionchange.NativepHash/ASANstilldeferred."
+  ]
+}
