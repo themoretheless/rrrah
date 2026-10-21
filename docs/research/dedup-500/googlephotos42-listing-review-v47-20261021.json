@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "storefront/PASTE-PACK.md": {
+      "sha256": "8a709895d1eed7ac63b298927567a590f8c875efef8c1c638324bd4d1d1f396e",
+      "git_blob": "270384fa8ecc61049a1cba97beaa354a4ab26430",
+      "bytes": 38229,
+      "lines": 592,
+      "method": "Pack all592lines read in ranges1-180,181-360,361-592. Listing full parsed object structure read;200/208leaves exactly equal substrings of read pack,all8novel leaves read separately without truncation."
+    },
+    "storefront/listing.json": {
+      "sha256": "48d21eed69f2b884f78be2ab276ef37358d49d1ec246c44ea610c62d895dbdfb",
+      "git_blob": "1ffd6b4f73c54fa74446fe903b8bf4d273b286be",
+      "bytes": 47706,
+      "lines": 280,
+      "method": "Pack all592lines read in ranges1-180,181-360,361-592. Listing full parsed object structure read;200/208leaves exactly equal substrings of read pack,all8novel leaves read separately without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 177,
+  "tracked_blobs": 230,
+  "executed_document_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-listing-controls-v47-20261021/run.py",
+    "sha256": "a5e0de3e445b6b18db26568a2cb6dd0ccc028cf5fb302bcede9a4c0e43087de8",
+    "log": "docs/research/dedup-500/googlephotos42-listing-controls-v47-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "scope": "Authored structural and exact-copy consistency checks; not original-function runtime controls. Initial harness quoting and section-boundary mistakes corrected before successful run."
+  },
+  "findings": [
+    "All10CWS title/summary pairs exactly equal pack;9description bodies equal;Japanese JSON says9UIlanguages while pack says10. Actual popup catalogs9(v41-43),storecatalogs10(v30).",
+    "Edge short description exact;JSON longdescription shares current CWS English copy while pack retains older9language/freeProparagraphs. Ready-to-paste pack is not exact view of source-of-truth listing.",
+    "Pack explicitly requests native read for de/es/fr/it/nl/pt_BR. Its lead-reviewed declarations for Chinese/Japanese are not independent professional translation certification.",
+    "Listing declares4screenshots1280x800;pack explicitly states uncommitted and requires signed-in captures. Presence/dimensions/liveflow remain unqualified.",
+    "Retail API/retention/price/availability statements treated as pinned upstream copy, not verified current external facts. No store submission, publication or account actions."
+  ],
+  "cumulative_original_function_controls": 48,
+  "limits": [
+    "177/230whole artifacts;53remaining. Full review total160/500unchanged.",
+    "No new production implementation/performance result. Native pHash/ASAN deferred."
+  ]
+}
