@@ -1,0 +1,52 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_packaging_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/size-budget.ts": {
+      "sha256": "c82d9412cd54baab67af2a33ea9a56cc2d08939be9be74f37b8a12f7426c23d4",
+      "git_blob": "3518ae8c3a2819caa81abe3c3017982416005f24",
+      "bytes": 1941,
+      "lines": 41,
+      "method": "Whole pinned source/test read; no archive creation or shell execution."
+    },
+    "scripts/zip.ts": {
+      "sha256": "61db3ccc0c36e012ecafc2ac30dda211b737bc1eb8c60ac86b45743b51e49fbd",
+      "git_blob": "a09acb4054248910503b8b84e046f6ca50540aa4",
+      "bytes": 1768,
+      "lines": 51,
+      "method": "Whole pinned source/test read; no archive creation or shell execution."
+    },
+    "scripts/zip-content-digest.sh": {
+      "sha256": "5493c6469c0e3a8a690fdb11477142536a48bf758feb84d471e96d8d5b057ab6",
+      "git_blob": "195b5130907881cfcdca9377881018d906a5a94f",
+      "bytes": 791,
+      "lines": 12,
+      "method": "Whole pinned source/test read; no archive creation or shell execution."
+    },
+    "tests/zip-content-digest.test.ts": {
+      "sha256": "76dedf69e1cbd3ba13bf482220e1367748f99cf3ebc09b8441782b6172dc8840",
+      "git_blob": "a0ddda1fc1819a4f0ea04c5b89b38e83e5d13cce",
+      "bytes": 2138,
+      "lines": 41,
+      "method": "Whole pinned source/test read; no archive creation or shell execution."
+    }
+  },
+  "cumulative_assessed_blobs": 97,
+  "tracked_blobs": 230,
+  "findings": [
+    "Contentdigest hashes sortedpath+NUL+fileSHA256 ratherthanZIPbytes, intentionallyignoringentrymtime/compression/order. This is content-equivalencecandidateevidence, not byteidentity; archiveentrypolicy mustbeexplicit inanylocaladaptation.",
+    "Shell digest uses newlineentrylisting andunzip patternextraction; rejectsbrackets/star/question/backslash but noexplicitnewline/duplicateentrypolicy. Edgecasebehaviornotexecuted; do notclaimuniversalarchivecanonicalization.",
+    "Two authoredziptests compare differenttimestamps/order withsamecontent andonecontentchange; no repeatedentrynames,newlinepaths,emptyarchives ormetadata-semantic coverage. Testsreadnotrun.",
+    "Zip script directlywritesfinaldestination; archiverwarningENOENTwarnsonly,notfailure; outputstreamerrorhandlerabsent whilearchiveerrorshandled. No failureinjectionorpackagingrun.",
+    "Sizecheck --write updatesexistingbudgetentries andwritesbudgetevenwhenotherfilesmissing,thenexitsnonzero. Gate tracksfilesdefinedinbudgetonly; no globalartifact/runtimebudget.",
+    "Release/buildchecks remain independentfromactualdedupcorrectness andallpairrecall. No codeportedfromthisproject."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 31,
+  "limits": [
+    "97/230wholeartifacts; fullrepositoryqualificationincomplete.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
