@@ -1,0 +1,122 @@
+{
+  "repository": "DimitriosPournarkas/MediaDuplicateFinder",
+  "commit": "8a0b62604dc6f361234ce2788b666c96e9b446dd",
+  "whole_repo_complete": false,
+  "authored_text_blobs_complete": true,
+  "tracked_screenshots_complete": true,
+  "scope": "All7nonvendor text/config/license/source blobs wholly read, sevenPNG screenshots actuallyviewed. stb2.30 remains unread, twoWindowsPEexecutables metadataonly, source/binary correspondence unqualified.",
+  "manifest": [
+    {
+      "path": ".gitattributes",
+      "sha256": "bb941be15e15997185cfe5e3c994b4bbfc01aa61a0160c4d1764c8601b2ee542",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "d2078cf28c678225af16867f88a1372231a4663916058f652fd215e125247e99",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "3d2fc51b6a9610c9b2f783134a43d2444860b1641c4429dc762dd8858ac4e529",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": "README.md",
+      "sha256": "4b77203dca0aaba273038f2e257a4ec2653a5d0b1d0c5faedaf148ad31a64926",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": "duplicate_finder.exe",
+      "sha256": "ff66057672516aeb6f2b8fad214f160722f7c8f3f2320cbe0c7cae562808c409",
+      "review": "PE32+x86-64metadata only; not executed"
+    },
+    {
+      "path": "duplicate_gui.py",
+      "sha256": "17eaa3c6204e5e780e8c510e6e447cd721295fc9bbf5243923293caf1103dc75",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": "gui_pictures/gui_delete_duplicates_warning_window.png",
+      "sha256": "d3fa4e5e3564b4c79e0d65dda2731f26ea9d9b3ff6f41a010ee7177755bc0808",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "gui_pictures/gui_delete_file.png",
+      "sha256": "ba2123ddc8949ff3e6e26b53b0698c9449536a22e65281fd1faed9f674b98b2a",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "gui_pictures/gui_delete_group.png",
+      "sha256": "41fa63d3a880151425a7c28c70ee75bb205638a8f720bf6e739ef663d3214b1a",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "gui_pictures/gui_delete_similar_preview.png",
+      "sha256": "d7f714e481dae5ea24a0ca13a652e01d5f32d22b4cb4c0b2f185a503aa1249f8",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "gui_pictures/gui_finished.png",
+      "sha256": "492ee9ef279ba1485258a5457742e0e252a050ec986bf8a656755e033f4d2674",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "gui_pictures/gui_start.png",
+      "sha256": "cf8c993d1d8edf75718aa3d543f0004c10a41e48f813c3d5e30657eab199dcee",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "gui_pictures/gui_working.png",
+      "sha256": "7228510af927c54aed0b38aa3b7f375df8a38190d6986b67974026ccebf019af",
+      "review": "whole screenshot visually inspected"
+    },
+    {
+      "path": "main_cli.cpp",
+      "sha256": "eb9f605c582526f35c75729f44d1cbf941f72ef6519826bb7e5ac54c7f37ef32",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": "main_cli.exe",
+      "sha256": "f679ee127d3e896d14ba57de0c2755f17200f763ce911ff955369492115d6f48",
+      "review": "PE32+x86-64metadata only; not executed"
+    },
+    {
+      "path": "office_comparer_batch.py",
+      "sha256": "1649b00f3b1d8c1831faeceb8ccacb7cf6df921da676332e644a537a52da4d78",
+      "review": "whole text read across v1 andv2"
+    },
+    {
+      "path": "stb_image.h",
+      "sha256": "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+      "review": "unread vendor header (compiled only)"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/media459-controls-20261021/result-v2.json",
+  "screenshots": {
+    "gui_start": "Emptyresults, directorypicker, scan/cancel/delete/filter/statistics controls.",
+    "gui_working": "Windowsfolder scan,20/57scans35percent and4.6seconds, not a benchmarktrace.",
+    "gui_finished": "4exactgroups8files,7similargroups14files,141.01KBclaim; exampleWord/JPG/TXT/PPTXandExcel/Word/image similarities. Underlying files not tracked; no independentidentityproof.",
+    "gui_delete_duplicates_warning_window": "Permanentdelete4exactcopies confirmation and keepingdecisions; oneoriginalpergroup/similarfilesnotdeleted text.",
+    "gui_delete_file": "Filecontextmenu openlocation/deletefile.",
+    "gui_delete_group": "Groupcontextmenu deletegroup.",
+    "gui_delete_similar_preview": "KeepSelfie1A/deleteSelfie2A preview withfilepaths,sizesandseparateconfirmation; no image/contentpreview."
+  },
+  "additional_findings": [
+    "OriginalCLIprocess outputs actualsamecontentfilea|b.txt; originalparse_results with nonvisualtransportadapters raisesValueError parsingb.txtasfloat. Filenameprotocolusesunescapedpipe/newline, no lengthprefix/JSONschema.",
+    "OriginalCLInonexistentdirectory exit0emptystdout withError scanningdirectoryin stderr; GUIprogressparser ignoresgeneralerrorlines, scan_complete_final onlychecksnonzeroexit and parsesemptyresultsasno duplicates. GUIcontrolflow sourceonly beyondactualCLIresult.",
+    "read_stderr never appendsstderr_buffer, so backendfailurepopup lacksdetail. Queuecompletion usesprocess.poll without readerjoin/EOFdrainbarrier; possiblelate/missingoutput not stress-tested.",
+    "Cancelterminatesleaderonlywithoutwait/kill escalation, readerthreads/officechildrenunjoined, subsequentcancelledprocesscanreachfinalhandlerasfailure. Nolifecyclecontrolorconcurrencystressrun.",
+    "process_queues firstcalledfromworkerthreadrun_scan, whiledocstringclaimsmainGUIthread; directwidgetcallsinworkererrorpaths also sourceonly.",
+    "clear_results resetsgroups but doesnotclearqueues; oldreaderdata cancontaminatenextscan. Singlefile/groupdeletion removesviewitems but leavesduplicate_groups staleuntilrescan; sourceonly.",
+    "Scannerextensionallowlist contradictsREADMEanyfiletype; stb2.30 headerdoesnotbyitselfproveadvertisedWebP/TIFFsupport. No actualWebP/TIFFdecodercontrol.",
+    "READMEaudio metadata claim not implemented in actualareAudioSimilar; PDFplaintextread, .xlsgivenopenpyxl despiteformatcompatibilityunqualified.",
+    "PackagedWindowsEXEs bothPE32+x86-64; no buildmanifestorbytesourcecorrespondence. MIT2025DimitriosPournarkaswhole-read; vendoredstblicense/source stillremaining."
+  ],
+  "remaining": [
+    "stb_image.h2.30wholevendorreviewandlicense",
+    "PackagedWindowsbinarysource/buildcorrespondencequalification; metadatareviewalone not counted complete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}
