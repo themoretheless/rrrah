@@ -1,0 +1,63 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cbird.qrc": {
+      "sha256": "593671c935f78a82255527715a3675942029e18ca7d22eece8cd23420ff2916b",
+      "git_blob": "17c9669a5760bbd2b2fb7630ea5cf7ef873a64e0",
+      "bytes": 428,
+      "lines": 14,
+      "method": "Whole pinned resource text read; Git blob verified; embedded commands not executed."
+    },
+    "src/res/exif.txt": {
+      "sha256": "c591a363d747a6ee532ab649c55dcdcaeb3d187e3cd5342138b74ba9b8c4b18e",
+      "git_blob": "7aa6f9d58b135f4b6ba7bdf2c764e1458684476f",
+      "bytes": 7837,
+      "lines": 362,
+      "method": "Whole pinned resource text read; Git blob verified; embedded commands not executed."
+    },
+    "src/res/ffmeta.txt": {
+      "sha256": "f73b2ecefdd0d86d37368bf88bf653a9e858b8958af25ce321a706ebdd5785be",
+      "git_blob": "3e88ff19212e97ffae055517eace1a312373f1a4",
+      "bytes": 406,
+      "lines": 42,
+      "method": "Whole pinned resource text read; Git blob verified; embedded commands not executed."
+    },
+    "src/res/iptc.txt": {
+      "sha256": "506e2409fe9b601d23320c8f452e240d2ffd3b73052d23c75f6cf8e2f51b1c5b",
+      "git_blob": "b5f8c8efa35f13343d983f615aeba2f4531efdfc",
+      "bytes": 1714,
+      "lines": 71,
+      "method": "Whole pinned resource text read; Git blob verified; embedded commands not executed."
+    },
+    "src/res/textkeys.txt": {
+      "sha256": "7d3fd632e7317d789fd6ac4d41ec979e81f6dbdac51c07da80ba782db16ae5ee",
+      "git_blob": "448fba44b2e480b792d0ac0b68afad2c5ac95089",
+      "bytes": 41,
+      "lines": 5,
+      "method": "Whole pinned resource text read; Git blob verified; embedded commands not executed."
+    },
+    "src/res/usage.txt": {
+      "sha256": "e1bcaa1117e47836d7da2b6214edee320f1ac53a98334de684be71aa16722d7b",
+      "git_blob": "9cac4340534bdfe7f1d7d415bb7e20f8a0255bca",
+      "bytes": 15398,
+      "lines": 247,
+      "method": "Whole pinned resource text read; Git blob verified; embedded commands not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 178,
+  "tracked_blobs": 616,
+  "findings": [
+    "Resource manifest references assets but does not itself establish inspection of target assets. EXIF, IPTC, FFmpeg and text-key lists provide completion suggestions rather than verified extraction/format coverage.",
+    "Help describes -dups as exact MD5 duplicates. Previously inspected scanner normalizes JPEG digest input to scan payload and excludes headers/tables, so this label does not establish full-byte identity.",
+    "Help explicitly states -no-delete allows rename/move; matches reviewed GUI action boundaries. Move/rename preservation statements are not failure-atomicity tests.",
+    "Help lists -simtest, but fully reviewed main.cpp has no corresponding command branch. Static documentation/implementation mismatch; no executable launched.",
+    "Help describes -test-csv as CSV pairs; reviewed testCsv uses simple semicolon splitting and logs results without minimum accuracy acceptance gate. Documentation is not a passing matching test."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "178/616 assessed:177 whole text/source plus one PNG visual. 34 original-body/header controls and two independent counterexamples unchanged.",
+    "No full Qt/media runtime, benchmark or production modification. Native pHash/ASAN remains deferred."
+  ]
+}

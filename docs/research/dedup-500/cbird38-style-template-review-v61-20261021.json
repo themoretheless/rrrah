@@ -1,0 +1,60 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".clang-format": {
+      "sha256": "c18ad7abf2aa47b5a68fab980780b6ae29cf93e84851e786c4d1b3c41febfc50",
+      "git_blob": "c2430f5a6df4014b95581213a9a1327cbbd456d0",
+      "bytes": 6169,
+      "lines": 249,
+      "method": "Whole pinned text read; Git blob verified. No upstream script or application executed."
+    },
+    ".gitignore": {
+      "sha256": "6d167be2b6f92032af75d0ae636f5812e98819d898381956eccbfbd95cc8f72c",
+      "git_blob": "53eaacac2554e9ac6ee0864c41973c0919999b47",
+      "bytes": 115,
+      "lines": 12,
+      "method": "Whole pinned text read; Git blob verified. No upstream script or application executed."
+    },
+    "src/res/cbird-richtext.css": {
+      "sha256": "665b430b6c611f11b5fc15c75c4dd1c5e658ab4dc97fd775799435e9f60af758",
+      "git_blob": "a564a77dd9188ee1a5f5a9f6ee4d2832a0eac340",
+      "bytes": 1540,
+      "lines": 43,
+      "method": "Whole pinned text read; Git blob verified. No upstream script or application executed."
+    },
+    "src/res/cbird.qss": {
+      "sha256": "2c1d18ac70593fff3620f5bf2a2073af3abd3e7ceda814984e0db508d6723649",
+      "git_blob": "0ea2c041127579de55c30a0706f04c4c65d3ed3e",
+      "bytes": 2551,
+      "lines": 100,
+      "method": "Whole pinned text read; Git blob verified. No upstream script or application executed."
+    },
+    "src/res/template.kdenlive": {
+      "sha256": "d8c8e63d98b6831515ddb6481321fbefec90390bdc2456c671b031cfca89fbf2",
+      "git_blob": "99e2d68e6a2bbb6e6acd07fc0d1ba0a8fcdaa1e6",
+      "bytes": 11766,
+      "lines": 273,
+      "method": "Whole pinned text read; Git blob verified. No upstream script or application executed."
+    }
+  },
+  "cumulative_assessed_blobs": 183,
+  "tracked_blobs": 616,
+  "findings": [
+    "Root formatting and ignore files configure source presentation/build artifacts, not matching quality or test acceptance. No additional test invocation found there.",
+    "Richtext CSS and widget QSS both specify16px font and explicitly require equality for elided-text behavior. This supports coupling of display shortening to font configuration; it does not resolve previously demonstrated elided-key collision. No rendering performed.",
+    "Styles encode comparison direction/equality, media types and lock state using distinct theme colors. These are presentation rules, not evidence of metadata accuracy or enforcement of file locks.",
+    "Kdenlive XML template fixes1920x1080, colorspace709, progressive and30000/1001fps. Three audio and three video track tractors plus main tractor establish preset timeline structure. This agrees with earlier exporter inspection; arbitrary source fps, HDR and VFR preservation remain unqualified.",
+    "Template contains historical absolute project root and editor document/version settings, empty clip playlists and disabled audio filters. It is a template, not a completed media-export integration test."
+  ],
+  "executed_controls": [],
+  "structural_checks": {
+    "xml_parse": "passed",
+    "profile_rate": "30000/1001"
+  },
+  "limits": [
+    "183/616 assessed:182 whole text/source and one PNG visual. SVG, other visual assets, papers and embedded CImg remain incomplete.",
+    "34 original-body/header controls and two independent counterexamples unchanged. No new native tests or benchmark; pHash/ASAN deferred."
+  ]
+}
