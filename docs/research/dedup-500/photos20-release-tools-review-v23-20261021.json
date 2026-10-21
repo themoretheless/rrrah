@@ -1,0 +1,81 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tools/check-node-version.js": {
+      "sha256": "01eb5a2afe5ae0b687913d8c59e35b01951c1b0e9fbf69be933d2f1a83e2a2b0",
+      "git_blob": "697a6a6e5b2657ebc772637f3ac6d80a366a6e75",
+      "bytes": 299,
+      "lines": 10,
+      "method": "Whole source read; not executed."
+    },
+    "tools/release.sh": {
+      "sha256": "e3a9c0493b27f6e5dc0dedcb7ff7797c860fb0aa7a12e2b99db01786f0bb665e",
+      "git_blob": "f518173f744ef05005e34d1383ea6787d13502c8",
+      "bytes": 1122,
+      "lines": 50,
+      "method": "Whole source read; not executed."
+    },
+    "scripts/unsafewindow-shim.js": {
+      "sha256": "3f7ff59666765e47460bee873328dac7ca756b0567ee0789778ccabdc929c59e",
+      "git_blob": "b278cfdf3671521574c963f9017f47f20d9e6934",
+      "bytes": 296,
+      "lines": 7,
+      "method": "Whole source read; not executed."
+    }
+  },
+  "cumulative_whole_files_read": 56,
+  "tracked_blobs": 84,
+  "remaining_not_whole_read": [
+    "CLAUDE.md",
+    "LICENSE",
+    "README.md",
+    "assets/icon.png",
+    "assets/icon16.png",
+    "assets/icon32.png",
+    "assets/icon48.png",
+    "background/index.ts",
+    "contents/google-photos-bridge.ts",
+    "contents/google-photos-inject.ts",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "scripts/embedder-worker.js",
+    "scripts/google-photos-commands.js",
+    "tests/background/service-worker.test.ts",
+    "tests/commands/google-photos-commands.test.ts",
+    "tests/components/photo-viewer-modal.test.tsx",
+    "tests/components/scan-progress.test.tsx",
+    "tests/contents/google-photos-bridge.test.ts",
+    "tests/e2e/fixtures/real-scan-sample.json",
+    "tests/e2e/full/scan-flow.test.ts",
+    "tests/e2e/full/trash-flow.test.ts",
+    "tests/e2e/integration/trash-undo.test.ts",
+    "tests/images/test-image-2.jpg",
+    "tests/images/test-image-dup-1a.jpg",
+    "tests/images/test-image-dup-1b.jpg",
+    "tests/lib/app-reducer.test.ts",
+    "tools/cdp.py"
+  ],
+  "gitlinks": [
+    {
+      "path": "Google-Photos-Toolkit",
+      "mode": "160000",
+      "type": "commit",
+      "sha": "cd1db961c6eacc5a3bc20304b559770ea152d930"
+    }
+  ],
+  "findings": [
+    "Node preinstall check enforces minimum major 22, not exact .nvmrc major. Node 24 release setup passes this source-level condition; runtime build compatibility remains untested.",
+    "Release helper updates npm version and stages package.json/package-lock.json, leaving pnpm-lock.yaml outside explicit staging. Lockfile consistency needs separate review.",
+    "Release script does not itself run tests/build before tag and push. It does not verify current branch or clean staged index; local commit/tag can include preexisting staged work. Not executed.",
+    "Release code uses Bash lowercase expansion ${CONFIRM,,}, requiring newer Bash than stock macOS Bash 3.2. No shell runtime check performed.",
+    "Window shim only aliases unsafeWindow to page window when missing; no duplicate file algorithm."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "No release/version mutation, tag, push, install or window code execution.",
+    "Remaining list is exact complement of accumulated full-file read audits, not a statement that no partial evidence exists.",
+    "56/84 full files reviewed; bundled artifact previously only partially read remains in complement."
+  ]
+}
