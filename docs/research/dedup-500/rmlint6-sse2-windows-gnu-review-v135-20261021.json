@@ -1,0 +1,31 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse2_x86-64_windows_gnu.S": {
+      "sha256": "cf719d08059efee4bafecea32ef8fba46ed1f41f60782461f5047046c5e405ec",
+      "git_blob": "4facb50e75bbad1f34b20013fb1e722453b48e46",
+      "lines": 2332
+    }
+  },
+  "cumulative_whole_files_read": 284,
+  "tracked_blobs": 289,
+  "method": "Differential whole-source review: all337 unified-diff lines inspected without truncation against fully reviewed Unix SSE2 assembly; remaining lines text-identical with SequenceMatcher autojunk disabled. No independent serial reread of identical lines.",
+  "equivalence_accounting": {
+    "identical_lines_to_reviewed_unix": 2209,
+    "new_or_replaced_windows_lines_read": 123,
+    "total_windows_lines": 2332
+  },
+  "findings": [
+    "Hash-many adds RSI/RDI saves,528-byte stack reservation and XMM6..15 saves/restores at0x170..0x200. Incoming Windows registers are reshuffled and stacked counter/increment/flags/start/end/output are read at RBP+0x68/70/78/80/88/90 after eight pushes.",
+    "Both scalar functions reserve120 bytes and save XMM6,7,8,9,11,14,15. Windows-specific mask emulation uses XMM14 instead of Unix XMM10 for the upper-word blend temporary; this avoids modifying unsaved Windows-nonvolatile XMM10. This adaptation is present in both scalar functions.",
+    "Scalar pointers use RCX/RDX, length is zero-extended from R8b, flags from adjusted stack0xA0, counter R9. XOF output pointer from0xA8 goes to volatile R10; stores write64 bytes, in-place stores32 bytes. Restore sequences balance the frames.",
+    "Shared SSE2 rotations, mask constants, counter selection and groups4/2/1 remain text-identical except reviewed ABI changes. Constant section is .rdata and ELF/CET/Apple wrappers are removed.",
+    "No explicit unwind metadata directives observed. Balanced source saves and offsets do not establish Windows exception handling or runtime parity."
+  ],
+  "limits": [
+    "284/289 pinned blobs reviewed;150/500 complete repositories.",
+    "No x86/Windows run, assembly build, sanitizer or throughput measurement; upstream reference-only, pHash/ASAN deferred."
+  ]
+}
