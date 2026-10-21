@@ -1,0 +1,39 @@
+{
+  "repository": "starkdg/libpHashAudio",
+  "commit": "e95604aad537be51d30041a095fe9f76029b78f0",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": [
+    "kiss_fft.c",
+    "kiss_fftr.c",
+    "_kiss_fft_guts.h",
+    "kiss_fft.h",
+    "kiss_fftr.h"
+  ],
+  "sample_review": {
+    "path": "sample.txt",
+    "method": "All numeric tokens parsed, count and finite values checked; not line-by-line reading of generated samples.",
+    "sha256": "3a6ee187b96ce430231b0fe393413cdb0b4b75ac738b68b681b01513f1a0cf43",
+    "declared_samples": 4235,
+    "actual_samples": 4235,
+    "minimum": -0.327863,
+    "maximum": 0.300484,
+    "seconds_at_test_6000Hz": 0.7058333333333333,
+    "expected_frames": 35,
+    "expected_hashes": 33
+  },
+  "controls": "docs/research/dedup-500/audio399-controls-20261021/fft-result.json",
+  "findings": [
+    "23 actual original KissFFT transforms match independent double precision direct DFT within1e-4*N tolerance:14 complex lengths2..128 and9 even real lengths.",
+    "Default floating implementation only; no guarantee for fixed-point/SIMD/OpenMP branches.",
+    "KissFFT sources contain MarkBorgerding BSD3-style notices2003-2010/2003-2004; root license still requires whole review.",
+    "Original audio test asserts seven hash and seven toggle golden values plus shape; offset/confidence only printed. Passing hash extraction alone would not establish matching correctness."
+  ],
+  "remaining": [
+    "Full root license and generated Makefile review.",
+    "Original AudioHash pipeline runtime remains unqualified; native pHash/ASAN deferred."
+  ],
+  "limits": [
+    "234/500 whole repositories;399 remains partial.",
+    "No AudioHash.c full-module execution or production adoption."
+  ]
+}

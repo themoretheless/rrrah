@@ -1,0 +1,131 @@
+{
+  "status": "passed",
+  "oracle": "Independent direct complex exponential DFT in Python double precision",
+  "cases": [
+    {
+      "kind": "complex",
+      "n": 2,
+      "max_absolute_error": 2.243011404062721e-08
+    },
+    {
+      "kind": "real",
+      "n": 2,
+      "max_absolute_error": 2.2372372121548523e-08
+    },
+    {
+      "kind": "complex",
+      "n": 3,
+      "max_absolute_error": 1.4037457879152028e-07
+    },
+    {
+      "kind": "complex",
+      "n": 4,
+      "max_absolute_error": 4.4978879382650925e-08
+    },
+    {
+      "kind": "real",
+      "n": 4,
+      "max_absolute_error": 3.922583655441225e-08
+    },
+    {
+      "kind": "complex",
+      "n": 5,
+      "max_absolute_error": 1.3200716448328308e-07
+    },
+    {
+      "kind": "complex",
+      "n": 7,
+      "max_absolute_error": 1.6517979328948877e-07
+    },
+    {
+      "kind": "complex",
+      "n": 8,
+      "max_absolute_error": 1.7642249290515566e-07
+    },
+    {
+      "kind": "real",
+      "n": 8,
+      "max_absolute_error": 1.7603205787475318e-07
+    },
+    {
+      "kind": "complex",
+      "n": 9,
+      "max_absolute_error": 3.0353372115510467e-07
+    },
+    {
+      "kind": "complex",
+      "n": 10,
+      "max_absolute_error": 3.9878983725793607e-07
+    },
+    {
+      "kind": "real",
+      "n": 10,
+      "max_absolute_error": 3.2152881018340483e-07
+    },
+    {
+      "kind": "complex",
+      "n": 12,
+      "max_absolute_error": 3.4419343692630553e-07
+    },
+    {
+      "kind": "real",
+      "n": 12,
+      "max_absolute_error": 1.613921985447545e-07
+    },
+    {
+      "kind": "complex",
+      "n": 16,
+      "max_absolute_error": 5.924810327682741e-07
+    },
+    {
+      "kind": "real",
+      "n": 16,
+      "max_absolute_error": 2.8673183538860624e-07
+    },
+    {
+      "kind": "complex",
+      "n": 25,
+      "max_absolute_error": 6.496463005794196e-07
+    },
+    {
+      "kind": "complex",
+      "n": 32,
+      "max_absolute_error": 6.857295231180891e-07
+    },
+    {
+      "kind": "real",
+      "n": 32,
+      "max_absolute_error": 8.339156510057922e-07
+    },
+    {
+      "kind": "complex",
+      "n": 64,
+      "max_absolute_error": 1.5613603904844195e-06
+    },
+    {
+      "kind": "real",
+      "n": 64,
+      "max_absolute_error": 9.600077350913694e-07
+    },
+    {
+      "kind": "complex",
+      "n": 128,
+      "max_absolute_error": 2.4408903569782248e-06
+    },
+    {
+      "kind": "real",
+      "n": 128,
+      "max_absolute_error": 5.575527554527132e-06
+    }
+  ],
+  "source_sha256": {
+    "kiss_fft.c": "f5d910af5294857807174e4eec2b30da3ac37bea8cab4cf0f15dfd4ba933ff31",
+    "kiss_fftr.c": "2c487559e504d3c2a68bedefacfb74746c8728680d15f76dec4186bda0e9f3b3",
+    "_kiss_fft_guts.h": "6cb852500622172409927f3c1f7e83166aa94a842953a50c5be5af793913fd6c",
+    "kiss_fft.h": "9cb0822143fb16b421ebcfba6f2e967d2363fc20c4dd1287b81cb8b517eea607",
+    "kiss_fftr.h": "7e0b08c9e3238e06f63328973ebe0f1c2b620a77e8ef2a7e6ee9ba902e0bfa6e"
+  },
+  "limits": [
+    "Original vendored default floating-point KissFFT only; no AudioHash.c execution, native pHash/ASAN or fixed-point/SIMD/OpenMP qualification."
+  ]
+}
