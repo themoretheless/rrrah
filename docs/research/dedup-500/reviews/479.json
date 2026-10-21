@@ -2,9 +2,9 @@
   "index": 479,
   "repository": "KevinGliewe/imghash",
   "commit": "920106d6e4cb31bc2d075cd85823457823fc6181",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All14 pinned blobs assessed:9 whole text,1 structurally parsed lock,4 PNG visually inspected.28 distinct original-CLI controls cumulative; no upstream Rust tests.",
   "decision": "reference-candidate-generator-only",
-  "finding": "All implementation read; original locked build and ten real CLI controls: lowercase algorithm rejected, zero-width empty success, black/white distance0. Candidate generator only; no equality admission, no code adopted.",
+  "finding": "All5 algorithms exercised on original/noisy/occluded/unrelated fixtures; noise can retain distance0. Prior black/white collision and zero-width empty hash remain candidates-only findings.",
   "available_source_evidence": [
     {
       "path": "src/main.rs",
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Whole pinned MIT root read; no production code copied.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -72,5 +72,8 @@
       "whole_implementation_complete": true,
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/imghash479-complete-source-review-20261021.json"
 }

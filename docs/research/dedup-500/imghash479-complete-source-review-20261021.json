@@ -1,0 +1,116 @@
+{
+  "repository": "KevinGliewe/imghash",
+  "commit": "920106d6e4cb31bc2d075cd85823457823fc6181",
+  "whole_repo_complete": true,
+  "tracked_blobs": 14,
+  "assessed_blobs": 14,
+  "files": {
+    ".github/workflows/CD.yml": {
+      "git_blob": "20a06280191d0a0e47c46c8f17427b308773f9cc",
+      "sha256": "ea1d10caf96134043d4c46ef5dd811d77505754cbc2faa48452376bb606f4785",
+      "bytes": 1689,
+      "method": "Whole pinned text read in prior source review"
+    },
+    ".gitignore": {
+      "git_blob": "c41cc9e35e38efc7d080637859e6c72940b374a2",
+      "sha256": "937456f730114c410243b25f3587e29a6c608b3a79356adafeefb6b960e004b2",
+      "bytes": 7,
+      "method": "Whole pinned text read in prior source review"
+    },
+    ".vscode/launch.json": {
+      "git_blob": "b47ed27dc5453b4d614ef576dfbc4b28d87b22fa",
+      "sha256": "e1be92d4d7977eb1b29dc9fb4e8612064bcccd8e3bdbda0a7e11b273496f1ae6",
+      "bytes": 1379,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "Cargo.lock": {
+      "git_blob": "b11a53ebb9ba9256ba243ba305309a59e0322df5",
+      "sha256": "4d9604ae16802bff0d2de1ea0a4976680c27f97afed5b5f6539b16d511d97ce1",
+      "bytes": 19916,
+      "method": "Whole TOML structurally parsed in prior locked-build review"
+    },
+    "Cargo.toml": {
+      "git_blob": "cdfe7b14e8c1de83b0057b24d73bb789a48576d1",
+      "sha256": "70d7bddd9ff8601d5f9c55a250f404ef0beca3c4302528b9829153d95e244d88",
+      "bytes": 287,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "build.rs": {
+      "git_blob": "1723685917a02888c13b3a580d74a837c016e5d9",
+      "sha256": "38b0c1a3b00a3966bd1cd27aba4aa3ee56cc212c8676c1e66c4edb3da9832f4a",
+      "bytes": 95,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "license.txt": {
+      "git_blob": "3dac0257ff69071b5b6da58dc2823e86bcb20e05",
+      "sha256": "1a45857c7bb55b7948c5cdc13cf04314562db5aa2650348ff63dccc7da95bd69",
+      "bytes": 1055,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "readme.md": {
+      "git_blob": "066be37a1a4040d04b47d592d8aa81745cbde988",
+      "sha256": "d09f24085665f149a10ba5e08f54f4591eae6b2d62775592515d13d0dc67b42c",
+      "bytes": 4413,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "scripts/update_version.py": {
+      "git_blob": "655a52d4cfbdc043433ade28b5fdbb85d47ced7f",
+      "sha256": "797ca5f44429dd521aaf1e45d6cba2e6b13ded92e71b0a5e4d10aca4eef40b60",
+      "bytes": 594,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "src/main.rs": {
+      "git_blob": "428996dbda9a4bd09b48e7c056d6f10917c936bd",
+      "sha256": "faf93d5f3988145fef30faf87e0583de0d71501867288d28844d9a9b70ccfcf7",
+      "bytes": 6477,
+      "method": "Whole pinned text read in prior source review"
+    },
+    "testdata/Lenna.png": {
+      "git_blob": "59ef68aabd033341028ccd2b1f6c5871c02b9d7b",
+      "sha256": "7e497501a28bcf9a353ccadf6eb9216bf098ac32888fb542fb9bfe71d486761f",
+      "bytes": 473831,
+      "method": "Original PNG visually inspected in full through view_image; original CLI comparisons executed"
+    },
+    "testdata/Lenna_blocked.png": {
+      "git_blob": "db73f9b6511a9292e9df39872ac07d2b15a15892",
+      "sha256": "97d1618b73f03f9f45e5ae2db783b86d3d005b8add60e5cdd33e27b56993269a",
+      "bytes": 279377,
+      "method": "Original PNG visually inspected in full through view_image; original CLI comparisons executed"
+    },
+    "testdata/Lenna_noisy.png": {
+      "git_blob": "a8d0cafe21fe80abc44edcc7b61f8ce24873745f",
+      "sha256": "05d8d7282aa7193d83ad8c08b9292cbb6014b317d604607500e3bece75615103",
+      "bytes": 647864,
+      "method": "Original PNG visually inspected in full through view_image; original CLI comparisons executed"
+    },
+    "testdata/Peppers.png": {
+      "git_blob": "181777a5d90c25c8b4ad17bc632bbd43d31e79e9",
+      "sha256": "3be59a600d9c80f0c205e296a1f2a4ffeb5ee393165bdc698d8dae0e2d8dff55",
+      "bytes": 33739,
+      "method": "Original PNG visually inspected in full through view_image; original CLI comparisons executed"
+    }
+  },
+  "prior_source_review": "docs/research/dedup-500/kevingliewe-imghash-source-review-audit-20261013.json",
+  "prior_controls": "docs/research/dedup-500/kevingliewe-imghash-controls-20261013.json",
+  "new_controls": "docs/research/dedup-500/imghash479-fixture-controls-20261021/result.json",
+  "original_tests": {
+    "run": false,
+    "reason": "No upstream Rust test definitions in pinned implementation; real original CLI controls used"
+  },
+  "distinct_authored_controls": 28,
+  "findings": [
+    "Lowercase gradient passes clap accepted-value check but enum parse exits4",
+    "Zero width produces empty hash with exit0",
+    "Black and white actual RGB PNGs yield gradient distance0",
+    "Malformed numeric dimensions and missing first/second files return distinct nonzero codes",
+    "Raw hex output omits recipe/algorithm/dimensions provenance; no storage or duplicate admission layer",
+    "All four original PNG visually inspected: original portrait, lower half blacked out, visible colour noise, unrelated peppers. All five exposed algorithms executed against all four fixtures.",
+    "Noise distances Mean1,Gradient0,VertGradient0,DoubleGradient0,Blockhash2; lower-half occlusion distances29,9,18,11,15 respectively; unrelated peppers39,37,28,26,35. These four fixtures do not establish thresholds or broad precision.",
+    "The original CLI only computes image hashes/distances, not filesystem exact duplicate admission, resource budgets, cache identity, or safe deletion. Retain candidates-only boundary."
+  ],
+  "decision": "candidate-generator-only-no-code-adopted",
+  "license": "MIT Kevin Gliewe2021; whole root license reviewed",
+  "limits": [
+    "All14 pinned blobs assessed:9 whole text,1 structurally parsed lock,4 PNG visually viewed; dependency implementation and image licensing not independently audited. Prior locked build was not repeated; original executable SHA256 verified before20 fresh CLI comparisons,18 additional unique controls. No performance or broad accuracy qualification. Native pHash/ASAN remains deferred."
+  ]
+}
