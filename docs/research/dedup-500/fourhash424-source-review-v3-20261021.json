@@ -1,0 +1,56 @@
+{
+  "repository": "TorresAndy/4Hash",
+  "commit": "c1f2b7730b226797e1a0947e3ced5f566bd57cf9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 26,
+  "cumulative_assessed_blobs": 18,
+  "new_whole_files_read": {
+    "compare_thread.py": {
+      "bytes": 3860,
+      "sha256": "ec55b280699be740a31cb3afabd6387e04aa1a601e3b9c784fe0bb6cb99ea7d1",
+      "git_blob": "94d85b47ada332be32846ea46fe026472ef011c3",
+      "method": "Whole pinned source read without truncation"
+    },
+    "database/finditems.py": {
+      "bytes": 5731,
+      "sha256": "75d54707e146ceaa1175ba7bd5802dd5416b9e6cc121340c67d0df55867a16da",
+      "git_blob": "70769e7836e8cd4ce1a109e4ef1454140885ad9a",
+      "method": "Whole pinned source read without truncation"
+    },
+    "database/dbconnect.py": {
+      "bytes": 792,
+      "sha256": "bcdd8e06178a5c933c7900d816014411e43f96c046b59d7294ffc760f77c625c",
+      "git_blob": "ade64cc35c7a58058099ca3bee6af37845146091",
+      "method": "Whole pinned source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/fourhash424-controls-v3-20261021/run.py",
+    "log": "docs/research/dedup-500/fourhash424-controls-v3-20261021/run.log",
+    "passed": 4,
+    "method": "Original compare/finditems AST classes with fake progress widgets, job dispatch and empty cursor; no threads/database/network/video executed."
+  },
+  "findings": [
+    "Thread comparison outer while loop<=iterations dispatches every nonempty Cartesian pair twice;1x1=>2jobsand2x1=>4jobsverified.",
+    "Empty input leaves loop counter unchanged and while conditiontrue; source-level nontermination observation, no unboundedlooprun.",
+    "Empty hash query returnsNone, notemptylist; absent candidateID raisesUnboundLocalError. Both originalmethodcontrolsconfirm.",
+    "Database aggregate queries count all crossframe threshold matches without temporal alignment or duration normalization; not executed on MySQL.",
+    "Threaded entrypoint passes video names to query helpers filtering videohash; source-only argument-contract mismatch.",
+    "Database connector reads working-directory-relative YAML and opens MySQL; no connector import/realcredentials/networkused."
+  ],
+  "remaining": [
+    "LICENSE",
+    "database/config.yml",
+    "database/__init__.py",
+    "hamming/__init__.py",
+    "__pycache__/frameExtract.cpython-35.pyc",
+    "frames.pyc",
+    "perceptive.pyc",
+    "timing.pyc"
+  ],
+  "license": "GPL3metadata;rootLICENSEstillpendingfullread;noproductionsourceadopted.",
+  "limits": [
+    "Partial18/26artifacts;14targetedcontrolscumulative;fullreviewcount170/500unchanged.",
+    "No production optimization/performanceclaim or whole video/database qualification. NativepHash/ASANdeferred."
+  ]
+}

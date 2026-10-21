@@ -1,0 +1,5 @@
+PASS original threaded comparison dispatches sole frame pair twice
+PASS two candidate rows dispatch four jobs instead of two
+PASS empty query returns None rather than empty iterable
+PASS missing candidate ID raises uninitialized local error
+RESULT 4 passed; original AST classes, synthetic progress/cursor/dispatch adapters; no threads/database/video entrypoints
