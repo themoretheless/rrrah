@@ -1,0 +1,37 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 61,
+  "runtime_reference": "docs/research/dedup-500/vectors166-numba-runtime-review-20261021.json",
+  "source_integrity": {
+    "cached_tracked_blobs_verified": 61,
+    "all_match_pinned_tree": true
+  },
+  "original_tests": {
+    "entire_tests_directory": "100passed0failed in11.81seconds",
+    "tolerance_integration_file": "4passed",
+    "notebook_file": "2passed",
+    "distinct_passing_original_tests": 100
+  },
+  "logs": [
+    "docs/research/dedup-500/vectors166-numba-integration-tolerance-20261021.log",
+    "docs/research/dedup-500/vectors166-numba-notebook-tests-20261021.log",
+    "docs/research/dedup-500/vectors166-numba-full-suite-20261021.log"
+  ],
+  "kernel": {
+    "explicit_python3_spec": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-runtime-20261021/bin/python",
+    "backend": "Agg",
+    "note": "Full-suite run uses explicit task-local JUPYTER_PATH kernel spec; first notebook-only run used default resolution and is weaker provenance."
+  },
+  "findings": [
+    "Unmodified complete upstream tests directory passes100tests in one invocation with genuine Numba and isolated notebook kernel. Prior partial runs overlap and are not summed.",
+    "Notebook integration executes source notebook in memory, then separate test asserts expected representatives of20syntheticclusters. Stored output notebook not executed.",
+    "All cached tracked source/test blobs checked again against pinned Git blob identities after execution; no source/test edits.",
+    "Green original full suite coexists with12 actual-Numba defect controls and registry isolated-test failure; it does not establish all cases or broad accuracy."
+  ],
+  "limits": [
+    "Fresh dependencies satisfy unbounded manifest but differ from original uv.lock. Only current macOS arm64 Python3.12 environment tested; no performance qualification.",
+    "41 generated artifacts remain unassessed. Global full count201/500 unchanged; pHash/ASAN deferred."
+  ]
+}

@@ -2,7 +2,7 @@
   "index": 166,
   "repository": "julianholland/deduplicate",
   "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
-  "review_scope": "Partial pinned61/102 artifacts assessed;94 original unit tests pass combined under actual Numba;12 prior controls requalified. Registry test isolation failure documented.41 generated artifacts and integration/notebook qualification pending.",
+  "review_scope": "Partial pinned61/102 artifacts assessed;100 original tests pass combined,12 prior controls requalified with genuine Numba.41 generated artifacts remain unassessed.",
   "decision": "shortlist",
   "finding": "Pluggable distance-matrix and multi-hash candidate algorithms with integration tests; threshold semantics need deeper review.",
   "available_source_evidence": [
@@ -144,7 +144,10 @@
     },
     {
       "audit": "docs/research/dedup-500/vectors166-numba-unit-suite-review-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/vectors166-numba-full-suite-review-20261021.json"
     }
   ],
-  "upstream_test_scope": "Entire original unit directory94passed together with real Numba. Isolated registry creation test fails due to previous-test registration dependency; integration/notebook pending."
+  "upstream_test_scope": "Complete original tests directory100passed with genuine Numba and explicit isolated notebook kernel; current dependencies, not original lock. Registry test fails in isolation as documented."
 }
