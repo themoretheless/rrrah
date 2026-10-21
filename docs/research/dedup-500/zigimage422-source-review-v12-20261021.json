@@ -1,0 +1,21 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-760",
+    "include/stb_image.h:1190-1215",
+    "include/stb_image.h:7470-7655"
+  ],
+  "controls": "docs/research/dedup-500/zigimage422-gamma-controls-20261021/result.json",
+  "control_source": "docs/research/dedup-500/zigimage422-gamma-controls-20261021/control.c",
+  "findings": [
+    "ActualoriginalCdecoder8bitP6pixel128loadsfloat0.219519734defaultgamma2.2vs0.501960814afterstbi_ldr_to_hdr_gamma1;independentpow/valueoracleswithin1e-6. State restored aftercontrol.",
+    "Authoredvalid1x1RadianceRGBE128,64,32,129loads8bitRGB255,186,136defaultvs255,128,64afterhdr_to_ldr_gamma1. ThispublicCloadpathmatcheswrapperHDRbyteAPIrecipebutZigbinding/hashfunctionnotexecuted.",
+    "DocumentedglobalgammaAPIaffectsdecodeoutputforidenticalbytes;wrapperdoesnotfreezeorrecordgamma/scale. A caller sharingCsymbols could change state;no claim unrelatedindependentlylinkedmodulemustshareit.",
+    "Readpublic8/16/float/callback/GIF/info APIs,globalandthreadlocalflip/unpremultiply/iPhonecontrols,formatselectionmacros,allocatorhookconsistency,threadlocaltypeconfigandinitialSIMDdispatchthrough760. Unreadremainingimageimplementation."
+  ],
+  "limits": [
+    "No fullimageheaderread,allformats/gamma/metadataqualification,concurrentglobalstatecontrolorZigpipelineexecution. CgammaeffectsareexpectedAPIbehavior,notdecoderbug. PriorPNMendianandresizeassertioncounterexamplesretained.NativepHash/ASANdeferred."
+  ]
+}
