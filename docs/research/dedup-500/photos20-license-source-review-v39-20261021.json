@@ -1,0 +1,29 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "LICENSE": {
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "git_blob": "be3f7b28e564e7dd05eaf59d64adba1a4065ac0e",
+      "bytes": 34523,
+      "lines": 661,
+      "method": "Entire document read in contiguous ranges 1-220,221-450,451-661."
+    }
+  },
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 84,
+  "findings": [
+    "Pinned LICENSE contains GNU Affero General Public License version 3 dated 19 November 2007, sections 0-17 and application appendix.",
+    "Previously read package metadata says AGPL-3.0-or-later. LICENSE document itself is generic license text; application appendix includes template placeholders, not project-specific ownership provenance.",
+    "No additional project exception or permissive alternate grant appears in this file. Dependencies/submodule license scope is separate and not established by root license alone.",
+    "This is an inventory of upstream text, not a legal compatibility opinion. No upstream production code has been copied into rrrah-dedup as part of this review; independent synthetic regressions and evidence are separate artifacts."
+  ],
+  "executed_controls": [
+    "Verified complete original LICENSE Git blob against pinned tree."
+  ],
+  "limits": [
+    "No release/distribution or license compatibility decision made.",
+    "81/84 parent blobs reviewed; lockfiles and complete generated bundle assessment still outstanding, plus external demo."
+  ]
+}
