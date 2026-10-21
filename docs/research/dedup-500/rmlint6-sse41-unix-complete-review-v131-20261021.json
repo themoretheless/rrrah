@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse41_x86-64_unix.S": {
+      "sha256": "135048e4a81a6f9e86960b115141874a55954dbfd2cd1e8e9818837b46b498ad",
+      "git_blob": "a3ff64269caaba80b4d7a3b0668a7bdca9f0090a",
+      "lines": 2028
+    }
+  },
+  "cumulative_whole_files_read": 280,
+  "tracked_blobs": 289,
+  "method": "Completed source reading of431..980 and981..1529; combined with v130 ranges1..430 and1530..2028 covers all2028 lines. Full cached bytes reverified against pinned tree.",
+  "findings": [
+    "Four-input core unrolls compression rounds over transposed message words stored in stack offsets0..0xF0, with scratch0x100. Rotations16/8 use pshufb constants;12/7 use shifts/or. No arithmetic parity claim without execution.",
+    "Final block-loop jne depends on comparison before the vector core: intervening SIMD operations and mov preserve flags. This long-distance flag dependency is intentional source flow, not a demonstrated missing comparison.",
+    "Four-lane output is transposed back and stored as eight16-byte writes spanning128 bytes, then input pointer advances32 and output128. Counter low words add masked step4 and high words propagate unsigned carry via sign-bit xor/comparison.",
+    "After all complete groups, low remainder bits select2 then1. Two-input setup reads exactly four16-byte vectors from each64-byte block. Its seven-round loop and counter-lane shift connect to the previously read tail ending.",
+    "For zero inputs no output stores occur, though prologue still loads output pointer and prepares counters. For nonzero inputs block count must be positive and representable after shift6; full blocks and sufficient key/output buffers remain caller contracts.",
+    "Return restores RBP anchor and six callee-saved general registers. Source uses SSE4.1 pinsrd/pblendw/blendvps and SSSE3 pshufb; it is not SSE2-compatible merely because all vector registers are XMM.",
+    "Scalar32-byte in-place and64-byte XOF paths, full64-byte padded reads and constant sections were reviewed in v130. Windows variants still require separate ABI and source review."
+  ],
+  "limits": [
+    "280/289 pinned blobs reviewed; global complete repositories150/500.",
+    "Source reading only on ARM; no x86 execution, speedup, ABI or sanitizer qualification. pHash/ASAN remains deferred."
+  ]
+}
