@@ -1,0 +1,372 @@
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded predicates-core v1.0.10
+  Downloaded normalize-line-endings v0.3.0
+  Downloaded highway v1.3.0
+  Downloaded predicates-tree v1.0.13
+  Downloaded difflib v0.4.0
+  Downloaded float-cmp v0.10.0
+  Downloaded termtree v0.5.1
+  Downloaded predicates v3.1.4
+  Downloaded assert_cmd v2.2.2
+  Downloaded typed-builder v0.23.2
+  Downloaded typed-builder-macro v0.23.2
+  Downloaded globset v0.4.19
+  Downloaded ignore v0.4.31
+   Compiling memchr v2.8.3
+   Compiling libc v0.2.189
+   Compiling regex-syntax v0.8.11
+   Compiling crossbeam-utils v0.8.22
+   Compiling proc-macro2 v1.0.107
+   Compiling autocfg v1.5.1
+   Compiling crossbeam-epoch v0.9.20
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling crossbeam-deque v0.8.7
+   Compiling cfg-if v1.0.4
+   Compiling anstyle v1.0.14
+   Compiling getrandom v0.4.3
+   Compiling rand_core v0.10.1
+   Compiling log v0.4.33
+   Compiling serde_core v1.0.229
+   Compiling utf8parse v0.2.2
+   Compiling rayon-core v1.13.0
+   Compiling zmij v1.0.23
+   Compiling predicates-core v1.0.10
+   Compiling anstyle-parse v1.0.0
+   Compiling chacha20 v0.10.1
+   Compiling num-traits v0.2.19
+   Compiling termtree v0.5.1
+   Compiling colorchoice v1.0.5
+   Compiling serde_json v1.0.151
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling serde v1.0.229
+   Compiling aho-corasick v1.1.4
+   Compiling option-ext v0.2.0
+   Compiling anstyle-query v1.1.5
+   Compiling assert_cmd v2.2.2
+   Compiling normalize-line-endings v0.3.0
+   Compiling difflib v0.4.0
+   Compiling jiff-core v0.1.0
+   Compiling same-file v1.0.6
+   Compiling walkdir v2.5.0
+   Compiling regex-automata v0.4.16
+   Compiling jiff v0.2.35
+   Compiling anstream v1.0.0
+   Compiling regex v1.13.1
+   Compiling bstr v1.13.0
+   Compiling env_filter v2.0.0
+   Compiling predicates-tree v1.0.13
+   Compiling globset v0.4.19
+   Compiling yadf v1.4.3 (/Users/themoretheless/.codex/tmp/rrrah-yadf277-20261021)
+   Compiling itoa v1.0.18
+   Compiling either v1.17.0
+   Compiling env_logger v0.11.11
+   Compiling once_cell v1.21.4
+   Compiling dunce v1.0.5
+   Compiling seahash v4.1.0
+   Compiling highway v1.3.0
+   Compiling crossbeam-channel v0.5.16
+   Compiling ignore v0.4.31
+   Compiling syn v2.0.119
+   Compiling wait-timeout v0.2.1
+   Compiling dirs-sys v0.5.0
+   Compiling num_cpus v1.17.0
+   Compiling dirs v6.0.0
+   Compiling rand v0.10.2
+   Compiling twox-hash v2.1.3
+   Compiling typed-builder-macro v0.23.2
+   Compiling rayon v1.12.0
+   Compiling typed-builder v0.23.2
+   Compiling float-cmp v0.10.0
+   Compiling predicates v3.1.4
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+  --> src/fs/hash.rs:79:28
+   |
+79 |         let h1 = partial::<seahash::SeaHasher>(path, size).unwrap();
+   |                            ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+   |
+   = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+  --> src/hasher.rs:1:1
+   |
+ 1 | pub trait Hasher: Default {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::hash::partial`
+  --> src/fs/hash.rs:33:8
+   |
+31 | pub fn partial<H>(path: &Path, size: Bytes) -> io::Result<H::Hash>
+   |        ------- required by a bound in this function
+32 | where
+33 |     H: crate::hasher::Hasher,
+   |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `partial`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+  --> src/fs/hash.rs:80:25
+   |
+80 |         let h2 = full::<seahash::SeaHasher>(path).unwrap();
+   |                         ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+   |
+   = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+  --> src/hasher.rs:1:1
+   |
+ 1 | pub trait Hasher: Default {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::hash::full`
+  --> src/fs/hash.rs:63:8
+   |
+61 | pub fn full<H>(path: &Path) -> io::Result<H::Hash>
+   |        ---- required by a bound in this function
+62 | where
+63 |     H: crate::hasher::Hasher,
+   |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `full`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+  --> src/fs/hash.rs:79:18
+   |
+79 |         let h1 = partial::<seahash::SeaHasher>(path, size).unwrap();
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+   |
+   = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+  --> src/hasher.rs:1:1
+   |
+ 1 | pub trait Hasher: Default {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+  --> src/fs/hash.rs:90:32
+   |
+90 |         let h_all_a = suffix::<seahash::SeaHasher>(&path, size).unwrap();
+   |                                ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+   |
+   = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+  --> src/hasher.rs:1:1
+   |
+ 1 | pub trait Hasher: Default {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::hash::suffix`
+  --> src/fs/hash.rs:48:8
+   |
+46 | pub fn suffix<H>(path: &Path, size: Bytes) -> io::Result<H::Hash>
+   |        ------ required by a bound in this function
+47 | where
+48 |     H: crate::hasher::Hasher,
+   |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `suffix`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+  --> src/fs/hash.rs:94:44
+   |
+94 |         let h_last_byte_differs = suffix::<seahash::SeaHasher>(&path, size).unwrap();
+   |                                            ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+   |
+   = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+  --> src/hasher.rs:1:1
+   |
+ 1 | pub trait Hasher: Default {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::hash::suffix`
+  --> src/fs/hash.rs:48:8
+   |
+46 | pub fn suffix<H>(path: &Path, size: Bytes) -> io::Result<H::Hash>
+   |        ------ required by a bound in this function
+47 | where
+48 |     H: crate::hasher::Hasher,
+   |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `suffix`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs/hash.rs:100:45
+    |
+100 |         let h_first_byte_differs = suffix::<seahash::SeaHasher>(&path, size).unwrap();
+    |                                             ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::hash::suffix`
+   --> src/fs/hash.rs:48:8
+    |
+ 46 | pub fn suffix<H>(path: &Path, size: Bytes) -> io::Result<H::Hash>
+    |        ------ required by a bound in this function
+ 47 | where
+ 48 |     H: crate::hasher::Hasher,
+    |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `suffix`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+  --> src/fs/hash.rs:90:23
+   |
+90 |         let h_all_a = suffix::<seahash::SeaHasher>(&path, size).unwrap();
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+   |
+   = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+  --> src/hasher.rs:1:1
+   |
+ 1 | pub trait Hasher: Default {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:326:25
+    |
+326 |             full_hash::<seahash::SeaHasher>(&candidate),
+    |                         ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::full_hash`
+   --> src/fs.rs:268:8
+    |
+266 | fn full_hash<H>(candidate: &Candidate) -> HashUpdate<H::Hash>
+    |    --------- required by a bound in this function
+267 | where
+268 |     H: crate::hasher::Hasher,
+    |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `full_hash`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:326:13
+    |
+326 |             full_hash::<seahash::SeaHasher>(&candidate),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:339:25
+    |
+339 |             full_hash::<seahash::SeaHasher>(&candidate),
+    |                         ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::full_hash`
+   --> src/fs.rs:268:8
+    |
+266 | fn full_hash<H>(candidate: &Candidate) -> HashUpdate<H::Hash>
+    |    --------- required by a bound in this function
+267 | where
+268 |     H: crate::hasher::Hasher,
+    |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `full_hash`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:339:13
+    |
+339 |             full_hash::<seahash::SeaHasher>(&candidate),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:351:27
+    |
+351 |             suffix_hash::<seahash::SeaHasher>(&candidate),
+    |                           ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::suffix_hash`
+   --> src/fs.rs:292:8
+    |
+290 | fn suffix_hash<H>(candidate: &Candidate) -> HashUpdate<H::Hash>
+    |    ----------- required by a bound in this function
+291 | where
+292 |     H: crate::hasher::Hasher,
+    |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `suffix_hash`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:351:13
+    |
+351 |             suffix_hash::<seahash::SeaHasher>(&candidate),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:376:40
+    |
+376 |         let old_hash = hash::partial::<seahash::SeaHasher>(&survivor_path, size).unwrap();
+    |                                        ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::hash::partial`
+   --> src/fs/hash.rs:33:8
+    |
+ 31 | pub fn partial<H>(path: &Path, size: Bytes) -> io::Result<H::Hash>
+    |        ------- required by a bound in this function
+ 32 | where
+ 33 |     H: crate::hasher::Hasher,
+    |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `partial`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:389:30
+    |
+389 |             process_bucket::<seahash::SeaHasher>(&sink, (old_hash, bucket));
+    |                              ^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `fs::process_bucket`
+   --> src/fs.rs:190:8
+    |
+186 | fn process_bucket<H>(
+    |    -------------- required by a bound in this function
+...
+190 |     H: crate::hasher::Hasher,
+    |        ^^^^^^^^^^^^^^^^^^^^^ required by this bound in `process_bucket`
+
+error[E0277]: the trait bound `SeaHasher: hasher::Hasher` is not satisfied
+   --> src/fs.rs:376:24
+    |
+376 |         let old_hash = hash::partial::<seahash::SeaHasher>(&survivor_path, size).unwrap();
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `hasher::Hasher` is not implemented for `SeaHasher`
+    |
+    = note: `SeaHasher` implements similarly named trait `std::hash::Hasher`, but not `hasher::Hasher`
+help: this trait has no implementations, consider adding one
+   --> src/hasher.rs:1:1
+    |
+  1 | pub trait Hasher: Default {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `yadf` (lib test) due to 16 previous errors

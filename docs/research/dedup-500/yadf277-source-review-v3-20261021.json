@@ -1,0 +1,91 @@
+{
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 24,
+  "new_whole_files_read": {
+    "tests/integration.rs": {
+      "bytes": 7279,
+      "sha256": "32901e366c503aabc00ce735affeebd30205668855c1039fb657c8881cf59432",
+      "git_blob": "fb0f389f53f53dc2f950588d640762f3b34fd002",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/bag.rs": {
+      "bytes": 5619,
+      "sha256": "0b0e545df3c974e3e072c4dc94b38a4e135aee589c07e4083781744f251ee147",
+      "git_blob": "b6b4073004b70ba9154fb05a82f7cf0feba375d7",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/bag/replicates.rs": {
+      "bytes": 2610,
+      "sha256": "7d51d47d70700c39b9e0969fca075af02828ebcf1b0368fe5b3371c84152f7cb",
+      "git_blob": "37328115c2a862b77dd3b8b9f466023e5d8a56ee",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/bag/display.rs": {
+      "bytes": 2340,
+      "sha256": "e92eba3b6176db0c2601c31bc8e14e8ea4f5c79e36f50a9ff0195616f3674627",
+      "git_blob": "821400abc4c15c0deaafa0319497bf958490392e",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/bag/serialize.rs": {
+      "bytes": 1391,
+      "sha256": "640e9c8adc75a89d3895b18504af0374ef9cdb15e3c373cf30bd6edf103d8fb2",
+      "git_blob": "a80442ed671a4481d218533f9e9cda5065931898",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/path.rs": {
+      "bytes": 1290,
+      "sha256": "3abfa401da0d48f129901c14380011f67f7bfd5fb66092346b54c6b5a58ee6a7",
+      "git_blob": "47785e691d2c9925c27b51ded0fe3826be48495c",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/ext.rs": {
+      "bytes": 2556,
+      "sha256": "a546d7d728264f590a0a0fb1a29a6e16473f7a0cac9fc22c3bda455795a88cdd",
+      "git_blob": "fca4031e5c19b5c7872aed4c221352c9b88266f9",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/fs/advise.rs": {
+      "bytes": 4006,
+      "sha256": "5bdc406db9e01a4b4b123f3390462bd9eb497fe2770119ea52355990c2db3585",
+      "git_blob": "ba375d267b95e5059080727075446d75671a3aaa",
+      "method": "Whole pinned text read without truncation"
+    },
+    "src/fs/prefetch.rs": {
+      "bytes": 6449,
+      "sha256": "9112a5e99ab24a1a713908615070f2b82f6fb2777e7e6c453c64142032756201",
+      "git_blob": "9a56ef46974bfd2f2544bce0d27ebd528d7ea4b2",
+      "method": "Whole pinned text read without truncation"
+    },
+    ".cargo/config.toml": {
+      "bytes": 591,
+      "sha256": "1b7e37efb3cfed54dc46d47a75cc85a6b878c894eb92155e34938afa06a59ff8",
+      "git_blob": "ea9aad4c960b765aad6bb2a7377fb4a0959485af",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "upstream_tests_run": true,
+  "fresh_upstream_result": {
+    "passed": 35,
+    "failed": 0,
+    "ignored": 0,
+    "command": "cargo +1.98.1 test --manifest-path /Users/themoretheless/.codex/tmp/rrrah-yadf277-20261021/Cargo.toml --locked --lib",
+    "log": "docs/research/dedup-500/yadf277-build-default-20261021.log",
+    "scope": "Default-feature original library tests only; no CLI integration, docs or particular_cases run"
+  },
+  "findings": [
+    "Online resolution obtained original locked dependencies without source/manifest changes. All44external-copy source artifacts byte-equal to pinned cache after runs.",
+    "Original no-default-features library test attempt fails with16trait-bound errors because tests useSeaHasher while Hasherimpl gatedbuild-bin. Defaultfeature35librarytests pass. No-default productionlibrary compilation not assessed by failed test build.",
+    "Integration regex/glob/min/max/trace cases calculate _expected but never compare stdout. Several therefore assert success/stderr rather than correct filtered groups. single_thread_does_not_deadlock has30secondtimeout and meaningful filename inclusion/exclusion assertion; not executed yet.",
+    "Public result serialization usesPath.display and hence lossy UTF8fornonUTF8paths; existing test asserts serialization success, not reversible distinctpath identity. No actual destructive consumer executed.",
+    "Groups index plain hash key; display/serdeoperate existing vectors without fresh source validation. Source-only behavior review.",
+    "Prefetch Linuxonly,16hintthreads boundedwindow; macOS tests bypassactualLinuxprefetch path. Potential panic cleanup: finishedflag stored only afterworkreturns, so unwind while prefetchwaiting needs separate qualification. No panic/hangcontrol executed.",
+    "Read platformadvise and .cargo nativeCPUconfig. Current command invokedfromrrrah via explicitmanifest, so upstreamnested .cargo config not automatically assumedactive. Linux/nonUnix code unexecuted.",
+    "Current24/44artifact review;20remain includingmain/args/docs/buildCI/scripts/fullCargo.lock/fixtures. No speedgain claimed; nativepHash/ASANdeferred."
+  ],
+  "limits": [
+    "35 passing original library tests do not prove full scanner integration, mutablefile correctness, exactcollision confirmation, Linuxprefetch or fullrepository review. Fullcount200/500 unchanged."
+  ]
+}

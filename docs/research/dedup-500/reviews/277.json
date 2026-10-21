@@ -2,7 +2,7 @@
   "index": 277,
   "repository": "jRimbault/yadf",
   "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
-  "review_scope": "Partial pinned14/44whole artifacts read;3 exact extracted full_hash controls with explicit adapters reproduce small-file stale verification. OriginalCargo tests not built:offline dependency unavailable.",
+  "review_scope": "Partial pinned24/44whole artifacts read;35original default-feature librarytests pass. No-default libtest compilefails due gatedSeaHasherimpl; CLIintegration/fullscanner mutation unqualified.",
   "decision": "shortlist",
   "finding": "Rust pluggable hash and positioned head/tail file reads; relevant streaming/prefilter tests, confirmation still to examine.",
   "available_source_evidence": [
@@ -50,7 +50,7 @@
   "license_metadata": "MIT",
   "license_scope": "RootMIT fully read; no production adoption.",
   "tests_detected": 3,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -81,6 +81,9 @@
     },
     {
       "audit": "docs/research/dedup-500/yadf277-source-review-v2-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/yadf277-source-review-v3-20261021.json"
     }
   ]
 }
