@@ -1,0 +1,46 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "README.md",
+    "DOCKER.md",
+    "Makefile",
+    "Dockerfile",
+    ".dockerignore",
+    ".gitignore",
+    "go.sum",
+    "docs/feature-suggestions.md",
+    ".github/CODEOWNERS",
+    ".github/codeql/codeql-config.yml",
+    ".github/dependabot.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/codeql-analysis.yml",
+    ".github/workflows/docker-publish.yml",
+    "LICENSE",
+    "CLAUDE.md",
+    "specs/perceptual-image-search/spec.md"
+  ],
+  "controls": "docs/research/dedup-500/reverse426-doc-controls-20261021/result.json",
+  "findings": [
+    "README source build targets root with no Go files; actual original command fails. Makefile/Dockerfile/CLAUDE.md correctly target ./cmd/imgsearch.",
+    "README cache automatic-recompute claim assumes mtime changes, contradicted by restored-mtime control. Spec cache coherence property incorrectly says Get(oldMtime) must miss after file modification, but Get only looks up supplied key.",
+    "README 10-100x cache speedup and 10,000-image claims lack reproducible benchmark artifacts in pinned tree; not accepted as measured optimization evidence.",
+    "Feature suggestions claim WebP decoder already registered, but source imports only JPEG/PNG/GIF. Time estimates and 50% indexing increase are upstream suggestions, not verified facts.",
+    "CI defines vet, standard tests, race tests and coverage printing without minimum-coverage gate; workflow presence is not proof of a successful hosted run. Docker publish does not run tests in that workflow. No Docker or cross-platform execution performed.",
+    "Docker runtime uses non-root user with implicit home base; mounted /images is outside default home under source path validation. Deployment mismatch is source-only, not container-tested.",
+    "Spec requires 32MB upload limit, while ParseMultipartForm argument is a memory threshold rather than explicit request-size limit; no large allocation/control run.",
+    "Root LICENSE is Apache-2.0 template with unfilled appendix owner/year. Read completely; no upstream production code copied.",
+    "CLAUDE.md and spec reviewed as upstream source material; their workflow instructions are not instructions governing rrrah."
+  ],
+  "remaining": [
+    "internal/web/template.html whole-read and rendered UI review"
+  ],
+  "corrections": [
+    "Prior GPS-zero warning withdrawn: backend emits nonempty coordinate strings, including 0.000000; JavaScript truthiness preserves them."
+  ],
+  "limits": [
+    "223/500 fully reviewed; repository not yet complete.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}

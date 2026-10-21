@@ -11,7 +11,6 @@
     "Global eventSource is shared across runs and asynchronous callbacks lack a generation token. No broad concurrency claim: the specific delayed-response case is controlled.",
     "Cache scan UI distinguishes connection interruption from completion, unlike image search UI.",
     "UI accepts image/* but discovery is JPEG-only, and upload decoding is limited by Go decoder registration; MIME acceptance is not format coverage.",
-    "EXIF GPS display uses truthiness of latitude and longitude; valid zero coordinates are omitted by source inspection.",
     "Directory loads have no response-generation guard; cached directory count labels image versions as images. Source observations, not runtime controls."
   ],
   "remaining": [
@@ -23,5 +22,8 @@
     "223/500 complete; no full-repository completion increment.",
     "Minimal DOM/fetch/EventSource adapters, no real browser or HTTP server.",
     "No production code adoption; native pHash/ASAN remains deferred."
+  ],
+  "corrections": [
+    "GPS-zero finding withdrawn after backend type verification: GPSLatitude/GPSLongitude are formatted nonempty strings; numeric-zero truthiness concern does not apply to actual API."
   ]
 }
