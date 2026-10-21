@@ -1,0 +1,46 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tools/bench-lib.mjs": {
+      "sha256": "90d83e1db5d885113b883a9860c2d05116fff9616068c66a25f0c7c468503a1a",
+      "git_blob": "762664a8c4087ac69ca955fc498e4d2596148db8",
+      "bytes": 428,
+      "lines": 16,
+      "method": "Whole source read."
+    },
+    "tools/check-bench.mjs": {
+      "sha256": "756b20fc30528b7dc4c4fc3f07484e1f00551da7e3f90e6ffdd31602184cbb56",
+      "git_blob": "113b0bdbce0e9275ea38a904c5b356b48538ce8d",
+      "bytes": 2765,
+      "lines": 77,
+      "method": "Whole source read."
+    },
+    "tools/update-bench-history.mjs": {
+      "sha256": "2289e3b2a5b0015bbecf6be96a4bb2630010eda60a72a5f798b4fd0f81e58e1b",
+      "git_blob": "20829bc48f1e949d23cae677dd37f5d0f9fa545c",
+      "bytes": 1024,
+      "lines": 33,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 45,
+  "tracked_blobs": 84,
+  "findings": [
+    "Benchmark checker compares mean against median of at least three historical samples, rejecting ratios strictly greater than 1.2. Missing history or insufficient per-name history skips checking. History stores last five runs.",
+    "Only current benchmark names are visited. Empty benchmark output passes even when history contains expected render benchmark; confirmed using original CLI with synthetic input.",
+    "extractMeans keys only by bench.name, ignoring file/group identity. Duplicate names overwrite earlier means; a synthetic 1000ms regression overwritten by a later 100ms same-name entry passes. Actual fixture name uniqueness remains to be inspected.",
+    "Positive control: 121ms against three 100ms historical samples exits 1 as expected.",
+    "No environment/model/browser/hardware fingerprint in history beyond commit/timestamp. Shared-runner median is not alternating paired measurement or proof of real user performance."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-benchmark-controls-v19-20261021",
+    "passed": 3,
+    "method": "Original checker/helper Node CLI, synthetic JSON in isolated temporary directories."
+  },
+  "limits": [
+    "No actual benchmarks, extension build, model inference or production history modified.",
+    "45/84 complete files read; remaining performance fixtures and browser runtime unreviewed."
+  ]
+}
