@@ -1,0 +1,37 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": false,
+      "read_ranges_inclusive": [
+        [
+          1,
+          1100
+        ],
+        [
+          6120,
+          6200
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-sizes-result.json",
+  "findings": [
+    "Original static scanline/image size helpers exposed via include-only observer and compiled AppleClang O2. 540 valid small IHDR combinations match independent ceil(bits/8)+filter byte and RGB width*height*3 reference. No decoded-image or overflow-boundary claim.",
+    "Read endian helpers, packed sample iterator, Adam7 subimage sizing, output-format checks, cache counters, read/write/chunk framing and CRC dispatch up to line 1100.",
+    "check_decode_fmt confirms G8/GA8 only grayscale <=8 bits and GA16 only grayscale16; source matches prior actual backend rejection.",
+    "Encoder growth loop uses new_size / SIZE_MAX > 2 as guard before doubling. For size_t this predicate cannot trigger; source-level issue only, no huge allocation/overflow/infinite-loop input executed. Encoding path is separate from current hash decoding.",
+    "No production code adopted/changed; native pHash.org/ASAN remains skipped."
+  ],
+  "remaining": [
+    "spng.c lines 1101..6119 and 6201..6980",
+    "Remaining dependency docs/build/tests/assets and other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
