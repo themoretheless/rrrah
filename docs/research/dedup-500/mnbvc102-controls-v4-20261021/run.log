@@ -1,0 +1,4 @@
+PASS original normalization strips whitespace, marks repeated paragraph, hashes unique paragraphs equally despite different file bytes
+PASS blank-only input yields explicit None
+PASS invalid UTF8 explicitly raises
+3 original converter controls passed; no process pool, corpus or external dependencies beyond available NumPy
