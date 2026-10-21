@@ -1,0 +1,59 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/cws-listing.mjs": {
+      "sha256": "39958343dd10f0bf82fa35f222f8667d21e8e8f60102fbd5ab7ecc1d501f0f82",
+      "git_blob": "897d7c9dfdd91ffcae664a5bb137e47a0d151a58",
+      "bytes": 2531,
+      "lines": 58,
+      "method": "Whole pinned source read without truncation."
+    },
+    "scripts/cws-screenshots.mjs": {
+      "sha256": "df65673830a4e4549da5c8db5a6ec15141002cda93cd8907f59e0ae662b35bd4",
+      "git_blob": "1f6a9b389f5f3bae4b4fc3c48ba58c6bc33b2e54",
+      "bytes": 3898,
+      "lines": 97,
+      "method": "Whole pinned source read without truncation."
+    },
+    "scripts/edge-bootstrap.mjs": {
+      "sha256": "28c3e38cb3cd73e128e00528e918e86f8b740deac21989b39d50f336f3d92802",
+      "git_blob": "eab66e1893cd0498aad96eff0ccfec5a2bff846d",
+      "bytes": 3713,
+      "lines": 77,
+      "method": "Whole pinned source read without truncation."
+    },
+    "scripts/greasy-fork-upload.mjs": {
+      "sha256": "7d9ba423d8468840b85f0c858b87565858dc57307923ff79e501b20356404094",
+      "git_blob": "88923921bb086a93c152154d5bd633394d90d19d",
+      "bytes": 2001,
+      "lines": 40,
+      "method": "Whole pinned source read without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 196,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-screenshot-controls-v51-20261021/run.mjs",
+    "sha256": "94ce97c6237a9d160d960adc9002eab47f5f383d277a563c347ed193827597c0",
+    "log": "docs/research/dedup-500/googlephotos42-screenshot-controls-v51-20261021/run.log",
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original screenshots top-level body wrapped async in VM; imports replaced with complete synthetic filesystem/browser functions; import.meta.url synthetic. Evaluation callback never run. No actual browser, network, account, real clicks/deletion or upload."
+  },
+  "findings": [
+    "Default screenshot invocation with Pro enabled calls dryrun check/start, then dryrun uncheck/start despite absent allow-destructive. Fake call trace confirms [drytrue,dryfalse]; nonPro control confirms only[drytrue]. Actual content-engine deletion/consent/pause behavior not exercised.",
+    "Screenshot code never calls shot(empty-trash.png), despite document listing4captures; destructive branch waits for several terminal words including error/stopped then shots running.png. Image name is not outcome proof.",
+    "Listing update only fills current English summary/description; no iteration over localized copy, fixed wait then saved log without readback. Save selector fallback first matching button. No actual dashboard invoked.",
+    "Edge bootstrap creates new overview tab each command; upload/fill require expected form already on new tab but no persisted product target. Submit logs if-click-landed without certification/readback proof.",
+    "Greasy upload checks URL regex script_versions|scripts, not exact host/path contract; after submitting it treats numeric script URL as LIVE without content/version readback. Allbrowseruploadscripts inspected only, never connected.",
+    "Historical vendor API and automation claims are source comments, not verified current service facts."
+  ],
+  "cumulative_original_function_controls": 82,
+  "limits": [
+    "196/230whole artifacts;34remaining;globalfullreview160/500unchanged.",
+    "No production implementation adopted or performance improvement. Native pHash/ASAN deferred."
+  ]
+}
