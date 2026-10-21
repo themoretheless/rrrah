@@ -2,9 +2,9 @@
   "index": 489,
   "repository": "actuallydamo/dcthash",
   "commit": "d9d177d8f8c39892e7627f3c868b48bfda8b5df5",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 70 pinned blobs reviewed: 22 whole text files, 48 original images individually viewed; arithmetic controls separate from unexecuted RMagick/RSpec runtime.",
   "decision": "arithmetic-reference-input-validation-required",
-  "finding": "Ruby DCT recipe reviewed; 8x8 independent DCT oracle, 64 bit positions and 120 stored-hash pair distances verified. 48 fixtures remain unviewed; image/RSpec runtime unqualified.",
+  "finding": "Complete pinned source/assets review. Distinct DCT recipe, input validation and mutation contracts retained; 16 scene families only. Original image pipeline remains runtime-unqualified.",
   "available_source_evidence": [
     {
       "path": "lib/dcthash.rb",
@@ -69,5 +69,7 @@
     "docs/research/dedup-500/dcthash-selected-source-audit-20261013.json",
     "docs/research/dedup-500/dcthash-full-text-source-audit-20261013.json",
     "docs/research/dedup-500/dcthash489-matrix-review-20261021.json"
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/dcthash489-complete-source-review-20261021.json"
 }
