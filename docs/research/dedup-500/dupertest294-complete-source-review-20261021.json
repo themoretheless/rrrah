@@ -1,0 +1,95 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "TGOlson/dupertest",
+  "commit": "e11722dfd193908cc6d6f9c6eec55c5adb0cd786",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 11,
+  "files": {
+    ".gitignore": {
+      "bytes": 27,
+      "sha256": "403de3e1c73edcfaa2f46ff6146f414ddcaeed97717a02af53733b31c2dec963",
+      "git_blob": "0db216bfa4c14a4843c0cfe65885e0e8dce46876",
+      "method": "Whole pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1088,
+      "sha256": "21366ef752c0c7fbf91c46ff163212d3991c6f31cf5edd216467966c50783e7e",
+      "git_blob": "242132de52203869e284d3854085a272fd5cff85",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 7378,
+      "sha256": "69acecc55617588137e5cfb84651c960f7ef4e385011d576ced045ed5978d36f",
+      "git_blob": "c877602fa0541d2bd034a3cd7592d1e1937bcd55",
+      "method": "Whole pinned text read without truncation"
+    },
+    "examples/entities-controller.js": {
+      "bytes": 577,
+      "sha256": "eff35292d10e4c4c8ca6aec8d2fd7a4afd8ba5658f8cfeda7f7d924f4c6c97a9",
+      "git_blob": "c937b063012402a263d890ccfbeaf1d1b8addfc4",
+      "method": "Whole pinned text read without truncation"
+    },
+    "examples/entities-controller_spec.js": {
+      "bytes": 2699,
+      "sha256": "d39f5eecca76a9d1ebd1b814fc58bca1f6e122ebf1e0a3b7611a80661594ec4a",
+      "git_blob": "f79cde3b456c9ef31bf9de546283f4db15f95543",
+      "method": "Whole pinned text read without truncation"
+    },
+    "examples/entity.js": {
+      "bytes": 249,
+      "sha256": "d769e0319948a9058d7609206585471c45ad183e0b5b0cd12e5f69ca5c0c2254",
+      "git_blob": "35eb6383f517e4f791b69f0f5748f749fc4248b8",
+      "method": "Whole pinned text read without truncation"
+    },
+    "examples/mock-db.js": {
+      "bytes": 397,
+      "sha256": "1876ceafe27b3fb9128efe30bfd6bb2da98200832dd2e97ae8fc4fcdd63058c8",
+      "git_blob": "1993aac715f5faf1e06740530bf695adf5052846",
+      "method": "Whole pinned text read without truncation"
+    },
+    "lib/dupertest.js": {
+      "bytes": 106,
+      "sha256": "f767ba67be01a9482793074238907ce1e604c379fb358378552d9c2c11e6695f",
+      "git_blob": "a40b1c66992afaa83de3d42f89b9ad0d96dc240a",
+      "method": "Whole pinned text read without truncation"
+    },
+    "lib/request.js": {
+      "bytes": 1990,
+      "sha256": "e1766b75b05caadde417be19f804fcb08be688d0dfcccef2276fef90df4824ba",
+      "git_blob": "9ae80c25a9b5b93a60bc9893d091ae813832361f",
+      "method": "Whole pinned text read without truncation"
+    },
+    "package.json": {
+      "bytes": 693,
+      "sha256": "ebd37e538675a14aae0a995af52eca277407962fa15e0a00212f86c3358a9ade",
+      "git_blob": "afa2dd60daadaec42fed3e874ec1321826ef7038",
+      "method": "Whole pinned text read without truncation"
+    },
+    "spec/request_spec.js": {
+      "bytes": 6669,
+      "sha256": "658af108e455b4eb11069b44e0f62a116d9fa00292ebfd1ffd2a2c5651ae06ff",
+      "git_blob": "4c9f2636c0738d745e3cf98ef04947dc7486a3f6",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/dupertest294-controls-20261021/run.cjs",
+    "log": "docs/research/dedup-500/dupertest294-controls-20261021/run.log",
+    "passed": 4,
+    "method": "Authored Node controls directly require unchanged original CommonJS code. Original Jasmine suite not run."
+  },
+  "decision": "reject-domain",
+  "conclusions": [
+    "Entire implementation is mock request/response controller testing; no file, image, hash, or duplicate-record search. Name explicitly spoofs supertest. Excluded as domain mismatch.",
+    "Original request parameters, next routing, error-next routing and missing-action exception pass authored controls. No live server or database involved.",
+    "Two upstream specs intended to verify next/errNext callbacks place assertions in res.send callback even though actions only call next. Source read shows those assertions are not executed by that path; authored controls independently observe callbacks. Not claimed original Jasmine execution.",
+    "package.json declares jasmine-node ^1.14.5, has no pinned dependency lock. Examples use an in-memory mock database.",
+    "MIT root license fully read, copyright fields remain template placeholders. No production code adopted."
+  ],
+  "limits": [
+    "Complete 11 text artifacts read; original Jasmine suite, other Node versions and async frameworks unqualified.",
+    "All-500 source review and all-cases library goal incomplete; native pHash/ASAN deferred."
+  ]
+}
