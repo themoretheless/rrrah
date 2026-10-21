@@ -1,0 +1,50 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "model.py": {
+      "sha256": "8b8dac3b7f7be33a0d44d6b76dda282df34d40af7973dcf3c50b5009858bafee",
+      "git_blob": "6377417bf9da0c96777a9664faf92f567256da04",
+      "bytes": 7241,
+      "lines": 194,
+      "method": "Whole source read."
+    },
+    "train.py": {
+      "sha256": "97a8fe557c40d5ad31b2961ce1325dce8c909021f674434206a37b74847781ea",
+      "git_blob": "0c9d9a12fe6f96759fb14dd1124e85b5c91b05ef",
+      "bytes": 8225,
+      "lines": 211,
+      "method": "Whole source read."
+    },
+    "demo.py": {
+      "sha256": "40c649e89fd7a3ec502fddb842b77ab3ff4d3e4bbe4246a034cfe12cb5927bb2",
+      "git_blob": "eecc70faa5154ad8411813261c812a43c6a10661",
+      "bytes": 10896,
+      "lines": 248,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 28,
+  "tracked_blobs": 73,
+  "findings": [
+    "SpaceTimeModel selects checkpoints by lexicographically sorted .pth names, then parses six filename characters for step after loading. Original isolated method confirms missing explicit path falls back to directory checkpoint; arbitrary custom filename can fail step parsing after loader invocation; no_reload skips loading. Fake loader only, no weights deserialized.",
+    "Training inner break is global_step > start_step+n_iters+1 while outer loop is < that bound: a sufficiently long loader can execute one extra update. Static control-flow finding, not full training measurement.",
+    "Depth-invalid or renderer-skip batches do not advance global_step; an empty/all-skipped training set can repeat epochs indefinitely. Validation next(cycle(empty_loader)) can spin. Static assessment.",
+    "Training seeds NumPy from entropy each epoch and worker; declared deterministic worker_init_fn is not the DataLoader callback actually passed. No reproducibility gate established.",
+    "Training uses Criterion for synthesis plus unmasked image PSNR logging; no call to flow smoothness or independent min-max normalization appears in these three files. Other callers not yet exhaustively searched.",
+    "RAFT optimizer parameters are separate when train_raft, but explicit post-backward gradient sanitization loops only feature/decoder learnable_params. No runtime impact asserted.",
+    "Demo consumes exactly two lowercase png/jpg paths, estimates DPT disparity and optical flow, then RANSAC homography; no corpus search, duplicate classifier or exact-byte confirmation. PNG group precedes JPG group rather than joint basename sort.",
+    "Homography path has no explicit empty-valid-flow percentile guard or missing-H fallback. Depth outputs are paired by sorted index initially, then get_input_data expects image basename including extension for PNG disparity outputs; mixed/JPG inputs require further producer inspection.",
+    "Demo generates four camera trajectories, 60/60/60/90 frames, fixed 32-pixel crop and MP4 output; synthesis visual output does not certify duplicate equivalence."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/moments30-checkpoint-controls-v6-20261021",
+    "passed": 3,
+    "method": "Original load_from_ckpt function AST compiled unchanged; empty temporary checkpoint files and fake load_model recorder. No Torch import or weight deserialization."
+  },
+  "limits": [
+    "No full Torch/model/GPU/upstream suite execution. No model downloads.",
+    "28/73 tracked blobs read; production library unchanged."
+  ]
+}
