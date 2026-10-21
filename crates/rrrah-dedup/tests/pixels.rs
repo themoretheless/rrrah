@@ -2,7 +2,17 @@ use rrrah_dedup::pixels::{PixelError, Rgba8View};
 
 #[test]
 fn area_fingerprint_preserves_last_row_and_column_contributions() {
-    for (width, height) in [(32, 32), (64, 64), (96, 96), (128, 128), (31, 33)] {
+    for (width, height) in [
+        (32, 32),
+        (64, 64),
+        (96, 96),
+        (128, 128),
+        (31, 33),
+        (11, 1),
+        (13, 7),
+        (47, 51),
+        (97, 101),
+    ] {
         let count = width * height;
         let mut black = vec![0_u8; count * 4];
         for pixel in black.chunks_exact_mut(4) {

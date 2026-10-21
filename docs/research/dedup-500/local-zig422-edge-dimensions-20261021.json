@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "test": "area_fingerprint_preserves_last_row_and_column_contributions",
+  "added_dimensions": [
+    [
+      11,
+      1
+    ],
+    [
+      13,
+      7
+    ],
+    [
+      47,
+      51
+    ],
+    [
+      97,
+      101
+    ]
+  ],
+  "oracle": "Fiveedgepositionsperdimension;oneopaquewhitepixeloveropaqueblackgivesmean1/(width*height)within1e-12,positivevariance,differentpixelidentityanddigest.",
+  "upstream_counterexample": "docs/research/dedup-500/zigimage422-wrapper-dimensions-20261021/result.json",
+  "validation": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --test pixels",
+    "passed": 13,
+    "failed": 0
+  },
+  "scope": "Localarea-fingerprint/pixelidentitycoverageonly;notcross-libraryfingerprintparityorallgeometryqualification."
+}
