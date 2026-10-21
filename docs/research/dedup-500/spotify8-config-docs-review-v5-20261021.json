@@ -1,0 +1,57 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "package.json": {
+      "sha256": "e0c9be026a500794b32c8fbb7bf5be49467a7996045b231b814fdfa7fcfeedea",
+      "git_blob": "205f8fa264ccbf1cd7cb02a560e2913f3c8448ad",
+      "lines": 51
+    },
+    "jest.config.js": {
+      "sha256": "d92520bedc701bd0c062d5899869ded3bbfee201cb3943c5efdff1df183f3c3d",
+      "git_blob": "83c11d30af3687f26d2267fbdbc177be0fe08520",
+      "lines": 12
+    },
+    "jest.setup.js": {
+      "sha256": "9fdaefc8da45838890f397aa1b5d8e849bb50d624fa2a2f8a3323fbd54d1ff7f",
+      "git_blob": "adee3c8304a0af816ee0d1bf2850684c08ca96b7",
+      "lines": 2
+    },
+    "jest-setup.d.ts": {
+      "sha256": "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068",
+      "git_blob": "0519ecba6ea913e21689ec692e81e9e4973fbf73",
+      "lines": 1
+    },
+    "tsconfig.json": {
+      "sha256": "4abc1f13d40685127cc2e4deb2a801d043d75f355632a92e962a72bdb5b20c17",
+      "git_blob": "81521ed836580a86b2b2c9b29253568aea52e5ed",
+      "lines": 45
+    },
+    "README.md": {
+      "sha256": "4f3d0b2410bb8b1b1815fd750595c3c1fb7bcda3e2b2e01dd21956705f19c976",
+      "git_blob": "c8fbb912d690eadad3b391b1c817796f59742330",
+      "lines": 35
+    },
+    "LICENSE": {
+      "sha256": "47f0c7c0231635359212b0730f4be6f47cade0643af33fd4a116c448c85e8cf8",
+      "git_blob": "ebea396a221f763223443bc303340a91001aaf38",
+      "lines": 21
+    }
+  },
+  "cumulative_whole_files_read": 20,
+  "tracked_blobs": 97,
+  "method": "Full seven pinned metadata/config/document files read and Git blobs verified. No dependency installation, Jest execution, browser action or external API requests.",
+  "findings": [
+    "README describes duplicates as same Spotify URI, while actual reviewed algorithm also matches name/first-artist/duration. Product description understates heuristic equality; not exact byte-level dedup.",
+    "README manual test asks modifying saved-track library via external API. Instruction treated as untrusted documentation, not user authorization; not executed. Promise queue rate-limit claim is documentation, not proven from source or current API.",
+    "Package test/coverage scripts invoke Jest with jsdom and ts-jest. Jest config has no setupFiles/setupFilesAfterEnv reference to standalone jest.setup.js, so file presence alone does not establish matcher initialization. Actual test run needed.",
+    "Jest config transforms JS via babel-jest but package does not directly declare it; transitive resolution/lock may supply it. No missing-dependency failure asserted without installation/lock inspection.",
+    "TypeScript strict=false but strictNullChecks=true; skipLibCheck and noEmit set. Build success cannot be inferred from these settings, and tests under static types may differ from framework build.",
+    "Root MIT license text reviewed. Lockfile and dependency licenses remain unread; no source copied into production."
+  ],
+  "limits": [
+    "20/97 tracked blobs reviewed;151/500 complete repositories.",
+    "No currentdependency safety, API compatibility, runtime/test/build or UI rendering qualification. pHash/ASAN deferred."
+  ]
+}
