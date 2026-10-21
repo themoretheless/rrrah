@@ -1,0 +1,60 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/widget/ScanConnectWidgetProvider.kt": {
+      "sha256": "b511a8a4d73c24b04999d767da716042dc44c30536a955cf20d1371c9ac0268e",
+      "git_blob": "475f0a4235c08a2ccb4bba74ae2c74543d93ee5c",
+      "lines": 48,
+      "mode": "100644"
+    },
+    "src/desktop.ts": {
+      "sha256": "2195a44265697550e81b369f9b3e203f61e1de596e9f37b741347f8a1e7baa0d",
+      "git_blob": "c95ea40df474a8ac2da49bfd5dd96c3b0ecef9b9",
+      "lines": 96,
+      "mode": "100644"
+    },
+    "omnisearch-lite/src/inspect_db.rs": {
+      "sha256": "be322c76e7263ae867c3dca965820101264cf46d5d21ccb70336c41c7a98a3c0",
+      "git_blob": "b800463ede61942f7656eb54559d5456538a8199",
+      "lines": 218,
+      "mode": "100644"
+    },
+    "android/app/src/test/java/com/omnisearch/app/ExampleRobolectricTest.kt": {
+      "sha256": "602aec3658d6435c7e86cc3963909c2f2adcd9234d4135167ae2bed3d8e02357",
+      "git_blob": "13ec390b36b00bb0fc946ce33ec2309d98297a6e",
+      "lines": 21,
+      "mode": "100644"
+    },
+    "LICENSE": {
+      "sha256": "4e7f36c14246f7949a46949ba541b9132fa55d2e4f120c23c437d1630854c1bf",
+      "git_blob": "ac11866b611b81df5270a5a21003687ba4751a3a",
+      "lines": 21,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 5,
+  "tracked_blobs": 268,
+  "findings": [
+    "inspect_db is a diagnostic, not an indexer or duplicate matcher. Counts and printed FTS hits have no expected-result assertions; image OCR is explicitly not run, PDF/DOCX extraction skipped.",
+    "Diagnostic folder count uses unescaped LIKE folder-prefix percent without separator; owned SQLite control counts DesktopBackup as Desktop. This finding is confined to the diagnostic, not yet the production indexer.",
+    "indexer_state prepare failure is printed as absent/unqueryable; per-row conversion failures are silently skipped, count_folder query errors become zero. Diagnostic success does not establish complete index health.",
+    "Desktop settings normalization defaults missing backgroundModeEnabled and shortcutEnabled to false although declared defaults are true. Boolean string false would become true; backend typed contract/reachability not yet reviewed.",
+    "Only inspected Robolectric test asserts application name string OmniSearch; it provides no scanning/indexing/dedup coverage. Widget only dispatches scanner-opening intent, not scanner implementation.",
+    "Root MIT license fully read; nested/dependency licenses not yet audited. No production code copied."
+  ],
+  "executed_controls": {
+    "owned_in_memory_sqlite_original_diagnostic_query": {
+      "paths": 2,
+      "Desktop_prefix_count": 2,
+      "directory_boundary_false_positive": true
+    },
+    "scope": "Exact query semantics only, not original Rust binary or real user DB"
+  },
+  "limits": [
+    "Five pinned files whole read; remaining tree unreviewed. No full repository credit.",
+    "No Windows NTFS/USN, Tauri, Android, OCR, database inspection of user data or upstream suite executed.",
+    "No production optimization or performance claim; pHash/ASAN remains deferred."
+  ]
+}
