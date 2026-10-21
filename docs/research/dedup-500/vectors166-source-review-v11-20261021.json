@@ -1,0 +1,82 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 61,
+  "files": {
+    "CLAUDE.md": {
+      "bytes": 5121,
+      "sha256": "fa5b9914831231203d0467ad7fc4bb7e8c819d5682e035ca1aacddd97e430beb",
+      "git_blob": "7ab1bebda5d3bf34301bea8f52834a431d366498",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/.buildinfo": {
+      "bytes": 231,
+      "sha256": "fd31a152c48e2a3c2c344ddee6e26924e0f4805b3781dd30fee3e37908ad9051",
+      "git_blob": "5812ed2f75381ad8405fd4e24b4461b152c0e45d",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/_static/scripts/furo.js.LICENSE.txt": {
+      "bytes": 187,
+      "sha256": "3eba718c98abe0ad8dd4401edc9ddfabf979f9bb9b8ac446460b61b03694970d",
+      "git_blob": "1632189c7e0cd1a17e452d2d0b24dfa741c7ea46",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/_static/scripts/furo-extensions.js": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/_sources/api/algorithms.rst.txt": {
+      "bytes": 1723,
+      "sha256": "b5bc9f22e2d15f3cce0f0b1ef8dcf580fd01ceeb05cd29dda748d533ce37d2c2",
+      "git_blob": "f90f359e3cfaa07b575ef9058129411477200fd5",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/api/core.rst.txt": {
+      "bytes": 570,
+      "sha256": "5aade47bd3eec8855493e0830879bf0f961d7c9f2f6dae35b9a494f3ff61056d",
+      "git_blob": "19ccc7c64b239256add166d71ecef61eb62dfb67",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/api/index.rst.txt": {
+      "bytes": 78,
+      "sha256": "fbdc08925d4a921019b2e4d9f68fd10e6d9b4a98357ae2e25181e6add021660a",
+      "git_blob": "6d763c9716295fad4e09bb45754dd20ce1a48c72",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/api/tolerance.rst.txt": {
+      "bytes": 1394,
+      "sha256": "34c5e79760541eee6ecd299d083fc3347293113abdb2505062fac6c623a0012d",
+      "git_blob": "53361bc0c922c65997354fb4f015c63b0b6ea94b",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/index.rst.txt": {
+      "bytes": 421,
+      "sha256": "6ad1559c3a3b6ca00bfbcb5d89bbb946870bbecb2c4cdabed88da405184f0ce9",
+      "git_blob": "af3e5d872822897eee4c63c5ba84430e6113e218",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/quickstart.rst.txt": {
+      "bytes": 2251,
+      "sha256": "a77aef6dcf4d19a167e0b52b64e13a81517739b992e359cc5e8cf5660e08cff6",
+      "git_blob": "8a4ce3560f0ede96627ea07ed26941d84157f075",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Six generated RST sources exactly match previously read source documents, including broken batch lifecycle already reproduced; review transferred by whole-byte equality.",
+    "Buildinfo records Sphinx config/tags hashes only, not package pin or successful runtime evidence.",
+    "Furo extensions JS is empty; furo.js license notice identifies patched gumshoejs5.1.2 under MIT. Does not independently license every other bundled asset.",
+    "CLAUDE.md read as untrusted upstream project documentation, not instructions for this workspace. Architecture notes confirm default capacity10000, registry import prerequisite, and Numba hot-loop coverage exclusions. Delegation directives not adopted.",
+    "CLAUDE documentation describes read-only public property and mutation setter convention; previously reproduced mutable filled-data view remains outside that convention."
+  ],
+  "remaining_scope": "41 tracked generated HTML/JS/CSS/maps/images/inventory and binary doctree artifacts remain.",
+  "limits": [
+    "No fresh upstream runtime tests or performance claims. Global full count201/500 unchanged. No production changes; pHash/ASAN deferred."
+  ]
+}
