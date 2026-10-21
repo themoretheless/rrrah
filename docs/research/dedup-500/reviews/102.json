@@ -2,7 +2,7 @@
   "index": 102,
   "repository": "aplmikex/deduplication_mnbvc",
   "commit": "06fb9117c58289b5710870e94b47870024800de9",
-  "review_scope": "Partial pinned6/28 whole artifacts; seven original-module/function controls. Synthetic CSV witness confirms missed alternate candidate after Jaccard rejection and empty-set division failure; real corpus/multiprocess unqualified.",
+  "review_scope": "Partial pinned13/28 whole artifacts; ten original module/function controls including finite JSONL publication success/failures. Full corpus/multiprocess/Redis runtime unqualified.",
   "decision": "reference",
   "finding": "SHA256+size grouping and SimHash/LSH candidates followed by Jaccard validation; text-specific but staged verification useful.",
   "available_source_evidence": [
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT fully read; customSimhash attribution noted, nested provenance pending; no production adoption.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -71,6 +71,9 @@
     },
     {
       "audit": "docs/research/dedup-500/mnbvc102-source-review-v2-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/mnbvc102-source-review-v3-20261021.json"
     }
   ]
 }

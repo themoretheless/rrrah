@@ -1,0 +1,72 @@
+{
+  "repository": "aplmikex/deduplication_mnbvc",
+  "commit": "06fb9117c58289b5710870e94b47870024800de9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 28,
+  "cumulative_assessed_blobs": 13,
+  "new_whole_files_read": {
+    "parallel_dedup/reset_csv.py": {
+      "bytes": 696,
+      "sha256": "26c983b21cbf1bb9083c5dc53af47e77eed2cfd91231d64008341b2e2313c62e",
+      "git_blob": "3ea7df4d4ebebd10d0d7565fefa9f45c60bf556a",
+      "method": "Whole pinned text read without truncation"
+    },
+    "parallel_dedup/write_output_to_jsonl.py": {
+      "bytes": 1824,
+      "sha256": "a667b34c47ee38d10668eaab6684c6c3d665693f01f80e8998adafbef6065439",
+      "git_blob": "bb502e56a30c2d9541149800eda9afaa50ec7e17",
+      "method": "Whole pinned text read without truncation"
+    },
+    "words_dedup/add_jsonl_detailed_simhash.py": {
+      "bytes": 1697,
+      "sha256": "8579cc30ef1486639d2c7809324d48619ca47e2d282657734412183f5f52c9b5",
+      "git_blob": "6f0e1d206de61856d6ac5e0e4482e32eaec5afd8",
+      "method": "Whole pinned text read without truncation"
+    },
+    "words_dedup/alltext_simhash.py": {
+      "bytes": 2828,
+      "sha256": "4dfad45c57699a0bb775717538c2ed63e6704bc65c63c1a48092ecf13460dc69",
+      "git_blob": "bce0c8538475fd51210964be3fb437a04ba7dcec",
+      "method": "Whole pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1065,
+      "sha256": "12681b2c199bad6a1cbad8da6b6295feba3936f5bff9ac43dc82977ca3d2d438",
+      "git_blob": "318895adf671d5ba70a3055dd90bbce193045365",
+      "method": "Whole pinned text read without truncation"
+    },
+    "requirements.txt": {
+      "bytes": 113,
+      "sha256": "1f3127e34cfe104845ec4829ea9f4994ef2578d076e2411b4ee18beb1ba8a2e0",
+      "git_blob": "11dd70d6fa9ca1f569226421278d4862e2b9f49b",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 1529,
+      "sha256": "99b8b9b002e4eb6d744d2024c22b95b06614dd900582bbe0d8eb42b71212908f",
+      "git_blob": "e9f4b27d0944a6376aa6308f0d2a38720207105e",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/mnbvc102-controls-v3-20261021/run.py",
+    "log": "docs/research/dedup-500/mnbvc102-controls-v3-20261021/run.log",
+    "passed": 3,
+    "method": "Original write_output_to_jsonl function AST, authored JSON-lines reader adapter, actual owned temp files. Missing CSV and EXDEV injected separately; no full corpus."
+  },
+  "findings": [
+    "Output writer successful control changes duplicate flag and preserves all authored other fields. Missing CSV and injected cross-device replace failure propagate while original JSONL remains byte-identical. This is finite failure evidence, not complete atomic/durable publication qualification.",
+    "Writer creates delete=False temporary in system temp, then os.replace to corpus path. No finally cleanup on failure or fsync observed; actual different-filesystem operation not attempted.",
+    "alltext_simhash marks duplicateTrue on any near hash and does not reset oldTrue on no-match; also concatenates JSONL path+filename without delimiter for object ID. Source-only stale flag/ID boundary concerns, no corpus run.",
+    "calculate_simhash concatenates paragraph content without separators and uses CityHash64 through custom Simhash; corpus boundary normalization is policy, no byte identity equivalent.",
+    "add_jsonl detailed conversion materializes all jobs and uses imap_unordered, so output order may change. No multiprocessing execution/performance claim.",
+    "Requirements omit direct pandas,numpy,Redis imports used elsewhere and include unpinned CityHash plus ranged dependencies; actual dependency resolution pending. Root README says fileMD5 while exact helper usesSHA256.",
+    "Root MIT fully read; nested customSimhash attribution says created by1e0nin2013; broader nested provenance still pending. No production code adopted."
+  ],
+  "remaining_scope": "15artifacts: remaining conversion/corpus scripts, redisSimhash and docs/gitignore.",
+  "license": "Root MIT fully read; nested provenance not established by root metadata. No production adoption.",
+  "limits": [
+    "Partial13/28review with ten targeted controls cumulative; full count183/500 unchanged.",
+    "No corpus, pandas, actual JSON-lines package, CityHash, multiprocessing/Redis, true cross-device publication, decoder or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
