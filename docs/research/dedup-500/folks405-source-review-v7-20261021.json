@@ -1,0 +1,31 @@
+{
+  "repository": "folksable/pHash.c",
+  "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": {
+    "stb_image.h": {
+      "lines": [
+        4501,
+        5300
+      ]
+    }
+  },
+  "controls": "docs/research/dedup-500/folks405-controls-20261021/png-metadata-result.json",
+  "findings": [
+    "PNG chunk parser and Adam7 pass assembly,8/16bit color-key transparency, palette expansion, CgBI conversion, cleanup/info paths whole-read; BMP load/header and start TGA info also read.",
+    "Original decoder ignores gAMA: otherwise equivalent1x1 RGBA PNGs with values45455/100000 return identical raw bytes. No display-equivalence inference.",
+    "Mutated IHDR CRC accepted and pixels unchanged. Source explicitly reads/skips CRC, matching runtime result.",
+    "ForcedRGB from zero-alpha RGBA preserves hiddenRGB, now confirmed through original full PNG memory decoder rather than conversion helper alone.",
+    "Palette expansion does not validate index against actual palette length; source-only observation, no malformed palette execution.",
+    "Adam7 final allocation lacks null check before output scatter; source-only allocation failure gap.",
+    "BMP color space/profile fields discarded;1bit/RLE rejected, bottom-up corrected, default32bit allzero alpha may be promoted to opaque. No BMP runtime conformance in this step."
+  ],
+  "remaining": [
+    "stb_image.h lines5301 through EOF."
+  ],
+  "limits": [
+    "235/500 full repositories;405 partial.",
+    "Synthetic PNG observations do not qualify all bit depths/interlace/metadata or production pipeline.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
