@@ -1,0 +1,27 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "pnggroup/libpng@d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+  "whole_files_read": [
+    {
+      "path": "pngtrans.c",
+      "sha256": "38aa34b51567a06428b15be16c5819e6f2ae0d3bfce4e1f777ae6242f74eb6d4",
+      "lines": 895,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Whole shared row-transform module read: setters, significant-bit validation, interlace pass count, filler/add-alpha distinction, mono inversion, byte and packed-sample swaps, channel removal, BGR, palette-index tracking and user-transform state.",
+    "Filler and alpha are distinct flags; byte swapping is restricted to 16-bit components, packed sample reversal uses separate 1/2/4-bit tables. These operations are not interchangeable with color conversion or transparency compositing.",
+    "Strip-channel implementation removes initial channel for nonzero at_start, final channel otherwise; nearby format-example comment reverses these labels. Recorded as comment discrepancy, not a runtime defect.",
+    "User transform pointer is caller-owned and documented to be freed before read/write destruction; transformation-info updates after read-row initialization are rejected.",
+    "No new build, runtime test, production change or native pHash/ASAN execution. Existing PNG/APNG runtime evidence remains separately scoped."
+  ],
+  "remaining": [
+    "599 libpng tracked blobs remain for source/assets review",
+    "Pinned runtime and wrapper cleanup qualification",
+    "Other codec gitlinks and spng pending cases/external visuals"
+  ],
+  "full_review_count": 247
+}
