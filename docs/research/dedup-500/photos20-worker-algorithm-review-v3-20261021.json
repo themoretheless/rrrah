@@ -1,0 +1,33 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "workers/embedder.worker.ts": {
+      "sha256": "57944449ac21e8bdcb021f159d79b851e424ef1072aad9b1ca3604e3a75c050f",
+      "git_blob": "9e68ca95addd7972a689af6c92fa106749db0e24",
+      "bytes": 10153,
+      "lines": 307,
+      "method": "Whole source read, including message handler and all helpers."
+    }
+  },
+  "cumulative_whole_files_read": 7,
+  "tracked_blobs": 84,
+  "findings": [
+    "CORRECTION of scope: fullDetectDuplicates dispatches detect to this worker. Its full algorithm compares every row against all rows, unlike the adjacent-only exported communityDetection helper. Isolated worker handler finds separated identical vectors. Prior adjacent-only reproducer is not evidence of a full scan miss.",
+    "Full worker selects neighborhoods around a center, then greedily removes overlap. This is not pairwise-clique confirmation: three unit vectors at angles 0,0.1,0.2 join at threshold .99 although endpoints are below threshold. Smart worker union-find also joins this chain.",
+    "At threshold 1, sixty identical vectors yield only indices 0..49. sortMaxSize begins at 50; expansion uses strict > threshold but membership uses >=. Equal-boundary neighbors outside the first fifty are lost. Confirmed on original message handler.",
+    "Worker topK fully sorts object records for every call; it differs from main exported heap/quickselect helper. No performance measurement or optimization acceptance.",
+    "Image embedding enables l2Normalize. Per-image errors are swallowed and only successful embeddings returned. Bitmap close is reached only after successful processing; exceptional paths lack finally cleanup. No MediaPipe execution attempted."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-worker-controls-v3-20261021",
+    "passed": 4,
+    "method": "Original worker source with only external import removed and TypeScript stripped; VM self message transport stub, real typed arrays; detect and detectSmart original handlers executed."
+  },
+  "limits": [
+    "Browser process, model/WASM and prebuilt scripts/embedder-worker.js equivalence remain unverified.",
+    "No account, image download, user data or deletion operations.",
+    "7/84 whole files reviewed; repository remains partial."
+  ]
+}

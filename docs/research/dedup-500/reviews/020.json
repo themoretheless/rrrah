@@ -2,9 +2,9 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 6/84 tracked blobs. Entire main detector read; 11 isolated pure-function controls reproduce adjacency, chaining and bucket-boundary behavior. Browser worker and remaining source unreviewed.",
+  "review_scope": "Partial whole-file review: 7/84 tracked blobs. Main detector and worker source fully read. Worker handler controls distinguish actual full pairwise search from adjacent-only exported helper and reproduce exact-threshold truncation. Built worker artifact and browser runtime remain unverified.",
   "decision": "reference",
-  "finding": "Embedding database and cosine clustering; approximate group scores and union-find are not pairwise duplicate evidence.",
+  "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 24,
@@ -111,6 +111,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-detection-algorithm-review-v2-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-worker-algorithm-review-v3-20261021.json"
     }
   ]
 }
