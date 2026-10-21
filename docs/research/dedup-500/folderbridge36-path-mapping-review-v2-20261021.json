@@ -1,0 +1,79 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/PathMapper.ts": {
+      "sha256": "ba8c755ea10c226c7ddaa15c49515eae733a6f65978afaae44b35503e0206431",
+      "git_blob": "6369d9cce78061423d2022e12f8cc1ffd7a1f3e8",
+      "bytes": 7192,
+      "lines": 183,
+      "method": "Whole source read."
+    },
+    "tests/PathMapper.test.ts": {
+      "sha256": "80e3e675a1e3cc6ef57db7ac8cd3cd93398e0d92907d3b804d26c0ae96ce469b",
+      "git_blob": "42bb622728b4121e244acf0bfe76c3fea3a63a65",
+      "bytes": 7036,
+      "lines": 189,
+      "method": "Whole source read."
+    },
+    "src/types.ts": {
+      "sha256": "ac4de1b03a0047843765fb33cceb95e05d917515394946ff7def814c06238e12",
+      "git_blob": "8ea4aee0059ea576a342a31958ee02481c156ce6",
+      "bytes": 9406,
+      "lines": 209,
+      "method": "Whole source read."
+    },
+    "src/runtimeNode.ts": {
+      "sha256": "f737dd42ae27f0fdc983182e58e28617f387ee56017c9625dd8c0e9b8ccb92d7",
+      "git_blob": "bd85dec552e9962a766739d87c68d2069eb89b03",
+      "bytes": 1065,
+      "lines": 40,
+      "method": "Whole source read."
+    },
+    "src/optionalNodeModules.ts": {
+      "sha256": "d0487b98482c9937c0823403dfb8d1853444b641eb5be44cd8514140d5f22c05",
+      "git_blob": "8b66ce8f8a89b76a9b35adeda7b135f25d9ee0cd",
+      "bytes": 95,
+      "lines": 3,
+      "method": "Whole source read."
+    },
+    "src/logger.ts": {
+      "sha256": "576eb863e132b9c5a53526e2f82f9f8ac102688840c956e2195b8cadcd2f5e05",
+      "git_blob": "59eb769b59d9a9e7ba1a35859f616f8aad9b1256",
+      "bytes": 895,
+      "lines": 31,
+      "method": "Whole source read."
+    },
+    "tests/__mocks__/obsidian.ts": {
+      "sha256": "e87682d501c40a6131d5d56b86cd845ab50821a560738197a34b8a9293b91c39",
+      "git_blob": "d96257353ccda8250de257f78f19d27640d8e890",
+      "bytes": 974,
+      "lines": 39,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 14,
+  "tracked_blobs": 129,
+  "findings": [
+    "PathMapper caches normalized virtual mount paths sorted by descending length at update; selects most-specific enabled mount. This avoids repeated sorting on lookup; no performance measurement conducted.",
+    "Resolved root cache keyed by mount ID invalidates on device/root/fallback/current-device override/mount type changes, preserving unrelated settings updates. Original-body control confirms root invalidation and most-specific lookup.",
+    "toVirtualPath treats every relative string beginning with two dots as outside root, including legal child basename ..notes.md. Original control returns mount root instead of child path. Real Obsidian normalizer not loaded; original upstream mock used.",
+    "Different virtual mounts can resolve identical real file path; original control preserves two mount entries. No inode/content identity deduplication. Path equivalence is not byte equality.",
+    "toRealPath documents matching-mount precondition and slices prefix without validating it internally. PathMapper uses lexical Node path operations, no realpath/inode comparison; caller validation not yet assessed.",
+    "Mount objects are retained by reference and getMounts returns mutable array; settings mutation requires update to keep normalized lookup cache consistent. No immutable snapshot guarantee.",
+    "Reviewed tests cover nested specificity, root cache invalidation and direct-child deduplication; do not cover legal ..prefixed basename. Tests read only; isolated controls executed separately.",
+    "Mount types/defaults describe local/vault/remote sources, creation-event filters, read-only and dry-run settings. Type comments do not prove enforcement or persistence semantics; implementations pending.",
+    "Runtime Node loader falls back to window require and null on module failure; default bundled optional module stub always null. Build-time replacement and mobile behavior not yet inspected. Upstream Obsidian mock always desktop and simplistic slash normalization.",
+    "Logger normalizes a text prefix and forwards arguments; it does not establish scan completeness or structured error accounting."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-path-controls-v2-20261021",
+    "passed": 4,
+    "method": "Original PathMapper after Node type stripping; original upstream Obsidian mock, real Node path built-in wired for optional loader. In-memory mounts; no filesystem I/O or user vault."
+  },
+  "limits": [
+    "14/129trackedblobs fully read; full plugin/upstream Vitest not run.",
+    "No production library change or measured optimization."
+  ]
+}
