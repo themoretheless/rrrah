@@ -1,0 +1,11 @@
+=== RUN   TestReviewRowStride
+    review388_test.go:7: actual=ff00fe03f00fc07f correct row oracle=ff00ff00ff00ff00
+--- PASS: TestReviewRowStride (0.00s)
+=== RUN   TestReviewSubimage
+    review388_test.go:11: subimage grayscale panic: runtime error: index out of range [4] with length 4
+--- PASS: TestReviewSubimage (0.00s)
+=== RUN   TestReviewSmallHash
+    review388_test.go:16: 1x1 outcome panic=<nil> result= error=input size too small 1x1
+--- PASS: TestReviewSmallHash (0.00s)
+PASS
+ok  	github.com/brett-lempereur/ish	0.399s

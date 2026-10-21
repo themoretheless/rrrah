@@ -1,0 +1,11 @@
+{
+  "exit_code": 0,
+  "authored_controls": 3,
+  "command": "go test -v -count=1 -run ^TestReview .",
+  "scope": "Unchanged original Go implementation plus authored tests. Upstream has no go.mod/lock: local harness module added and exact resolved dependency versions/sums saved. Go1.26auto toolchain,rez20170731/hamming20180906/x-image0.47.0; not claimed historical upstream environment.",
+  "observations": [
+    "Original dHash outputff00fe03f00fc07f differsfromcorrectrowscanff00ff00ff00ff00 over identical original Resize output; coordinates checkedwithGrayAt not duplicatedbrokenlinearindex.",
+    "4x4RGBAparent2x2subimageGrayscale panicsindex4length4 because fastpathiteratesbackingPix withoutstride/bounds.",
+    "1x1averagehashconstructoracceptsbutHashreturns backenderror input size too small1x1. Initial hypothesispanicfailedandretained; correctedcontrolrecordsactualerror.No tinyhashpanicclaim."
+  ]
+}
