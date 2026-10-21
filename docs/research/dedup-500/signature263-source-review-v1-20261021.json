@@ -1,0 +1,81 @@
+{
+  "repository": "hamedrnik/dedup_signature",
+  "commit": "3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee",
+  "whole_repo_complete": false,
+  "tracked_blobs": 19,
+  "cumulative_assessed_blobs": 6,
+  "new_whole_files_read": {
+    "Cargo.toml": {
+      "bytes": 529,
+      "sha256": "86a985eaccfb877f5cd8be8f1fa296d73990d956da6f0ee679051386ba412414",
+      "git_blob": "114795e64ea272c3a483ed577863732b9ea37ffe",
+      "method": "Whole pinned source/manifest/test read without truncation"
+    },
+    "src/lib.rs": {
+      "bytes": 877,
+      "sha256": "ab273ea236c73d16e6bc5367cde4f4d68cb0e332db195077c0d1b593dad02be6",
+      "git_blob": "53dd5e1e612c677d87f26742051e1d11142b94f1",
+      "method": "Whole pinned source/manifest/test read without truncation"
+    },
+    "src/generator/mod.rs": {
+      "bytes": 851,
+      "sha256": "8173f72b06af80c03e7b990aac7ca252983dfe3193783f26ac41a756cdd1ebeb",
+      "git_blob": "23d55020a7975091b09f75dea6b7a8b76aeaada2",
+      "method": "Whole pinned source/manifest/test read without truncation"
+    },
+    "src/generator/lookup3_signature.rs": {
+      "bytes": 1685,
+      "sha256": "9ad9ff5b37fe8afa2948019cedd974df02dccbbe05cfd0479507d78aa30650e0",
+      "git_blob": "eec27c118cfff823b6cbc42757b328a5d409f4ad",
+      "method": "Whole pinned source/manifest/test read without truncation"
+    },
+    "src/hash.rs": {
+      "bytes": 6777,
+      "sha256": "d7b062346c8e8e64dfd07dda131940d600fb835524b8ec5d0b228f74e4f6c07f",
+      "git_blob": "9993954628f67d30d5e94c1c4b28ea7951405d8a",
+      "method": "Whole pinned source/manifest/test read without truncation"
+    },
+    "tests/test_lookup3_signature.rs": {
+      "bytes": 2400,
+      "sha256": "76ac1e6a07fd01f8a388084add3bd04f4c240654a821d58d82bbf6dfedea4e40",
+      "git_blob": "56dad1feecf3eb283b885798e0ca073ce5ecc47b",
+      "method": "Whole pinned source/manifest/test read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/signature263-controls-v1-20261021/controls.rs",
+    "debug_log": "docs/research/dedup-500/signature263-controls-v1-20261021/debug-run.log",
+    "release_log": "docs/research/dedup-500/signature263-controls-v1-20261021/release-run.log",
+    "passed_per_profile": 6,
+    "original_unit_tests_per_profile": 3,
+    "authored_tests_per_profile": 3,
+    "method": "Unchanged hash.rs/lookup3_signature.rs included by path;rustc1.98.1edition2015 debug and-O. Existing hash module unit tests executed; full crate/dependencies/integrationtests not executed."
+  },
+  "findings": [
+    "Originalthreehashunitvectorspassdebugandoptimizedprofiles.",
+    "lookup3_u64 only incorporates initval>>32; seed1and2generate same nonempty64bitsignature. Verifiedoriginalwrapper.",
+    "32bitwrapper truncatesu64seedto32bits;seed1and1+2^32agree. Intentnotexplicitlyqualified.",
+    "Tailusesplain+=instead ofwrapping_add;originallookup3([u32::MAX],0,1,0)panicsdebugandreturnsoptimized. Capturedpanicexpectedbyauthoredprofiletest,notanuncaughttestfailure.",
+    "Wrapper repeatedly hashes growingUnicodeprefixes,reusingprevioushashasseed; quadraticworkratherthansinglepasscontenthash. Source-only complexityobservation,notbenchmark."
+  ],
+  "remaining": [
+    ".editorconfig",
+    ".gitignore",
+    ".travis.yml",
+    "COPYING",
+    "README.md",
+    "src/generator/text_profile_signature.rs",
+    "tests/fixtures/liberty_article_from_de_wikipedia.yaml",
+    "tests/fixtures/liberty_article_from_en_wikipedia.yaml",
+    "tests/fixtures/liberty_article_from_es_wikipedia.yaml",
+    "tests/fixtures/liberty_article_from_fr_wikipedia.yaml",
+    "tests/fixtures/liberty_article_from_it_wikipedia.yaml",
+    "tests/fixtures/liberty_article_from_pt_wikipedia.yaml",
+    "tests/text_profile_signature_test.rs"
+  ],
+  "license": "LGPL3orlatersourceheadersread;fullCOPYINGstillpending.No foreignproductionsourceadopted.",
+  "limits": [
+    "Partial6/19artifacts;fullreviewcount171/500unchanged.",
+    "Notexactfileidentity/imagealgorithm or wholecrate/runtime/performancequalification.NativepHash/ASANdeferred."
+  ]
+}

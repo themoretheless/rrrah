@@ -2,7 +2,7 @@
   "index": 263,
   "repository": "hamedrnik/dedup_signature",
   "commit": "3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned6/19whole source/manifest/test artifacts. Three original unit tests plus three authored controls pass in both debug/optimized isolated builds; fullcrate/integration/fixtures/license pending.",
   "decision": "reference",
   "finding": "Rust lookup3 signatures with tests; general fingerprint primitive, not exact content or image normalization.",
   "available_source_evidence": [
@@ -73,6 +73,11 @@
       "lines": 166,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/signature263-source-review-v1-20261021.json"
     }
   ]
 }
