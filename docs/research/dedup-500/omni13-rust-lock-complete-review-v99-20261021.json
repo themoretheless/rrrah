@@ -1,0 +1,537 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src-tauri/Cargo.lock": {
+      "sha256": "da836a2a0b2c7fff764ee6526980580a1d70fb9fa422febd94949b494d084eef",
+      "git_blob": "1a889befbb32e8d5646f0d3e2b170159bfe1bdb3",
+      "mode": "100644",
+      "lines": 5958,
+      "method": "Whole TOML parsed and every package identity/source and dependency edge inspected in complete indexed graph outputs. All raw checksum strings syntactically validated as 64 lowercase hex characters; registry archives not fetched or byte-verified. Only the five expected lock-record fields occur."
+    },
+    "omnisearch-lite/Cargo.lock": {
+      "sha256": "f2681a487752814059b9372c1d4bef301cd86d072a42fb2fd84db1c7e879640a",
+      "git_blob": "7dea15141d15eb39a7116895e490d1a880ed6dba",
+      "mode": "100644",
+      "lines": 6870,
+      "method": "Whole TOML parsed and every package identity/source and dependency edge inspected in complete indexed graph outputs. All raw checksum strings syntactically validated as 64 lowercase hex characters; registry archives not fetched or byte-verified. Only the five expected lock-record fields occur."
+    }
+  },
+  "cumulative_whole_files_read": 266,
+  "tracked_blobs": 268,
+  "executed_metadata_controls": {
+    "src-tauri/Cargo.lock": {
+      "version": 4,
+      "packages": 559,
+      "sources": {
+        "registry+https://github.com/rust-lang/crates.io-index": 558,
+        "local": 1
+      },
+      "checksum_strings_validated": 558,
+      "edges": 1781,
+      "unresolved_or_ambiguous_edges": 0,
+      "direct_package_names_match_manifest": true,
+      "direct_package_names": [
+        "base64",
+        "cc",
+        "image",
+        "qrcode",
+        "rand_core",
+        "rcgen",
+        "rustls",
+        "serde",
+        "serde_json",
+        "sha2",
+        "tauri",
+        "tauri-build",
+        "tauri-plugin-global-shortcut",
+        "tauri-plugin-opener",
+        "tauri-plugin-process",
+        "tauri-plugin-single-instance",
+        "tauri-plugin-updater",
+        "tauri-plugin-window-state",
+        "tungstenite",
+        "windows",
+        "windows-core"
+      ],
+      "root_package": {
+        "name": "omni-search",
+        "version": "0.1.16"
+      },
+      "multi_version_package_names": {
+        "base64": [
+          "0.21.7",
+          "0.22.1"
+        ],
+        "bitflags": [
+          "1.3.2",
+          "2.11.0"
+        ],
+        "getrandom": [
+          "0.1.16",
+          "0.2.17",
+          "0.3.4",
+          "0.4.1"
+        ],
+        "hashbrown": [
+          "0.12.3",
+          "0.15.5",
+          "0.16.1"
+        ],
+        "heck": [
+          "0.4.1",
+          "0.5.0"
+        ],
+        "indexmap": [
+          "1.9.3",
+          "2.13.0"
+        ],
+        "phf": [
+          "0.8.0",
+          "0.10.1",
+          "0.11.3"
+        ],
+        "phf_codegen": [
+          "0.8.0",
+          "0.11.3"
+        ],
+        "phf_generator": [
+          "0.8.0",
+          "0.10.0",
+          "0.11.3"
+        ],
+        "phf_macros": [
+          "0.10.0",
+          "0.11.3"
+        ],
+        "phf_shared": [
+          "0.8.0",
+          "0.10.0",
+          "0.11.3"
+        ],
+        "png": [
+          "0.17.16",
+          "0.18.1"
+        ],
+        "proc-macro-crate": [
+          "1.3.1",
+          "2.0.2",
+          "3.4.0"
+        ],
+        "rand": [
+          "0.7.3",
+          "0.8.5",
+          "0.9.4"
+        ],
+        "rand_chacha": [
+          "0.2.2",
+          "0.3.1",
+          "0.9.0"
+        ],
+        "rand_core": [
+          "0.5.1",
+          "0.6.4",
+          "0.9.5"
+        ],
+        "schemars": [
+          "0.8.22",
+          "0.9.0",
+          "1.2.1"
+        ],
+        "serde_spanned": [
+          "0.6.9",
+          "1.0.4"
+        ],
+        "siphasher": [
+          "0.3.11",
+          "1.0.2"
+        ],
+        "syn": [
+          "1.0.109",
+          "2.0.115"
+        ],
+        "thiserror": [
+          "1.0.69",
+          "2.0.18"
+        ],
+        "thiserror-impl": [
+          "1.0.69",
+          "2.0.18"
+        ],
+        "toml": [
+          "0.8.2",
+          "0.9.12+spec-1.1.0"
+        ],
+        "toml_datetime": [
+          "0.6.3",
+          "0.7.5+spec-1.1.0"
+        ],
+        "toml_edit": [
+          "0.19.15",
+          "0.20.2",
+          "0.23.10+spec-1.0.0"
+        ],
+        "wasi": [
+          "0.9.0+wasi-snapshot-preview1",
+          "0.11.1+wasi-snapshot-preview1"
+        ],
+        "windows-core": [
+          "0.61.2",
+          "0.62.2"
+        ],
+        "windows-link": [
+          "0.1.3",
+          "0.2.1"
+        ],
+        "windows-result": [
+          "0.3.4",
+          "0.4.1"
+        ],
+        "windows-strings": [
+          "0.4.2",
+          "0.5.1"
+        ],
+        "windows-sys": [
+          "0.45.0",
+          "0.52.0",
+          "0.59.0",
+          "0.60.2",
+          "0.61.2"
+        ],
+        "windows-targets": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.5"
+        ],
+        "windows_aarch64_gnullvm": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_aarch64_msvc": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_i686_gnu": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_i686_gnullvm": [
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_i686_msvc": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_x86_64_gnu": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_x86_64_gnullvm": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "windows_x86_64_msvc": [
+          "0.42.2",
+          "0.52.6",
+          "0.53.1"
+        ],
+        "winnow": [
+          "0.5.40",
+          "0.7.14"
+        ]
+      },
+      "manifest": "src-tauri/Cargo.toml",
+      "manifest_sha256": "c51cb7b8b2c95cb4bb735dcec70f3f3476f84e36184767297b5d454192ef6ba9"
+    },
+    "omnisearch-lite/Cargo.lock": {
+      "version": 4,
+      "packages": 660,
+      "sources": {
+        "registry+https://github.com/rust-lang/crates.io-index": 659,
+        "local": 1
+      },
+      "checksum_strings_validated": 659,
+      "edges": 1969,
+      "unresolved_or_ambiguous_edges": 0,
+      "direct_package_names_match_manifest": true,
+      "direct_package_names": [
+        "anyhow",
+        "base64",
+        "image",
+        "notify",
+        "once_cell",
+        "qrcode",
+        "rand_core",
+        "rcgen",
+        "rfd",
+        "rusqlite",
+        "rustls",
+        "serde",
+        "serde_json",
+        "sha2",
+        "slint",
+        "slint-build",
+        "tungstenite",
+        "ureq",
+        "walkdir",
+        "windows",
+        "windows-core",
+        "windows-implement",
+        "winreg",
+        "winres",
+        "winvd"
+      ],
+      "root_package": {
+        "name": "omnisearch-lite",
+        "version": "1.0.0"
+      },
+      "multi_version_package_names": {
+        "bitflags": [
+          "1.3.2",
+          "2.13.0"
+        ],
+        "block2": [
+          "0.5.1",
+          "0.6.2"
+        ],
+        "calloop": [
+          "0.13.0",
+          "0.14.4"
+        ],
+        "calloop-wayland-source": [
+          "0.3.0",
+          "0.4.1"
+        ],
+        "core-foundation": [
+          "0.9.4",
+          "0.10.1"
+        ],
+        "getrandom": [
+          "0.2.17",
+          "0.3.4"
+        ],
+        "gif": [
+          "0.13.3",
+          "0.14.2"
+        ],
+        "hashbrown": [
+          "0.14.5",
+          "0.16.1",
+          "0.17.1"
+        ],
+        "hermit-abi": [
+          "0.3.9",
+          "0.5.2"
+        ],
+        "image": [
+          "0.24.9",
+          "0.25.10"
+        ],
+        "itertools": [
+          "0.12.1",
+          "0.14.0"
+        ],
+        "jni-sys": [
+          "0.3.1",
+          "0.4.1"
+        ],
+        "linux-raw-sys": [
+          "0.4.15",
+          "0.9.4",
+          "0.12.1"
+        ],
+        "nom": [
+          "7.1.3",
+          "8.0.0"
+        ],
+        "objc2": [
+          "0.5.2",
+          "0.6.4"
+        ],
+        "objc2-app-kit": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-cloud-kit": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-core-data": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-core-image": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-foundation": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-metal": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-quartz-core": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "objc2-ui-kit": [
+          "0.2.2",
+          "0.3.2"
+        ],
+        "pastey": [
+          "0.1.1",
+          "0.2.3"
+        ],
+        "png": [
+          "0.17.16",
+          "0.18.1"
+        ],
+        "rand_core": [
+          "0.6.4",
+          "0.9.5"
+        ],
+        "redox_syscall": [
+          "0.4.1",
+          "0.5.18",
+          "0.8.1"
+        ],
+        "rustc-hash": [
+          "1.1.0",
+          "2.1.2"
+        ],
+        "rustix": [
+          "0.38.44",
+          "1.1.4"
+        ],
+        "shlex": [
+          "1.3.0",
+          "2.0.1"
+        ],
+        "smithay-client-toolkit": [
+          "0.19.2",
+          "0.20.0"
+        ],
+        "smol_str": [
+          "0.2.2",
+          "0.3.6"
+        ],
+        "thiserror": [
+          "1.0.69",
+          "2.0.18"
+        ],
+        "thiserror-impl": [
+          "1.0.69",
+          "2.0.18"
+        ],
+        "tiff": [
+          "0.9.1",
+          "0.11.3"
+        ],
+        "tiny-skia": [
+          "0.11.4",
+          "0.12.0"
+        ],
+        "tiny-skia-path": [
+          "0.11.4",
+          "0.12.0"
+        ],
+        "toml": [
+          "0.5.11",
+          "1.1.2+spec-1.1.0"
+        ],
+        "webpki-roots": [
+          "0.26.11",
+          "1.0.8"
+        ],
+        "windows": [
+          "0.58.0",
+          "0.62.2"
+        ],
+        "windows-core": [
+          "0.58.0",
+          "0.62.2"
+        ],
+        "windows-implement": [
+          "0.58.0",
+          "0.60.2"
+        ],
+        "windows-interface": [
+          "0.58.0",
+          "0.59.3"
+        ],
+        "windows-result": [
+          "0.2.0",
+          "0.4.1"
+        ],
+        "windows-strings": [
+          "0.1.0",
+          "0.5.1"
+        ],
+        "windows-sys": [
+          "0.48.0",
+          "0.52.0",
+          "0.59.0",
+          "0.61.2"
+        ],
+        "windows-targets": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_aarch64_gnullvm": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_aarch64_msvc": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_i686_gnu": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_i686_msvc": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_x86_64_gnu": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_x86_64_gnullvm": [
+          "0.48.5",
+          "0.52.6"
+        ],
+        "windows_x86_64_msvc": [
+          "0.48.5",
+          "0.52.6"
+        ]
+      },
+      "manifest": "omnisearch-lite/Cargo.toml",
+      "manifest_sha256": "53c8eee25b9423194207d14162ef94fed299e099c2fa95c113ac6cdb687d1c7d"
+    }
+  },
+  "shared_registry_package_identities": 181,
+  "findings": [
+    "Both version-4 Rust locks have one local root and all other records from the crates.io registry source. All dependency references resolve uniquely within their respective file, including explicitly version-qualified names.",
+    "Desktop root omni-search 0.1.16 and Lite root omnisearch-lite 1.0.0 match their own Cargo manifests. Combined direct/build dependency names match exactly. No semver solver, feature resolution or compiler compatibility test was run.",
+    "Desktop Rust lock includes tauri-plugin-process 2.3.1 and tauri-plugin-updater 2.10.1, resolving the earlier npm finding scope: those packages are absent from npm lock, not from the Rust desktop lock.",
+    "Desktop pins Tauri 2.10.2 and Wry 0.54.2. Lite pins Slint/slint-build 1.17.0 and rusqlite 0.31.0. These are pinned metadata facts, not latest-version recommendations or runtime proof.",
+    "Lite contains image 0.24.9 and 0.25.10 and several Windows binding generations. Desktop also has multiple versions of libraries. Same package name with a different version is a distinct dependency identity; removing rows by name would not preserve this graph.",
+    "Platform-specific rows describe dependency resolution possibilities. Their presence does not prove builds, linking, installed GUI behavior or tests on those platforms. Checksums were inspected for valid representation only, not independently verified against downloaded archives."
+  ],
+  "limits": [
+    "266/268 whole files; wrapper JAR and malformed test PNG remain open.",
+    "No dependency installation, fetch, build script, compiler run, vulnerability or external-package implementation audit performed.",
+    "155/500 full repositories unchanged. No production-library change, new test or performance claim; native pHash/ASAN deferred."
+  ]
+}
