@@ -1,0 +1,40 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 46,
+  "files": {
+    "examples/multi_hashing_demo.ipynb": {
+      "bytes": 13191,
+      "sha256": "fe24465a23c5a11762c9fd8dc8a4a6e34d2d9e354bfdf2b760503295a4e7ee4b",
+      "git_blob": "fbd56aa07e99abf492503c2dd0989033f9e42e1f",
+      "method": "Full notebook cell sources and textual outputs read, embedded PNG visually inspected"
+    },
+    "examples/multi_hashing_demo_output.ipynb": {
+      "bytes": 60909,
+      "sha256": "2f1e156cd68d4da3a077482bfdb16d80d1d7ddcc041cec18952625a1c550d07a",
+      "git_blob": "a476edf8817d9d812228543cb6afb4a017841f59",
+      "method": "Full notebook cell sources and textual outputs read, embedded PNG visually inspected"
+    },
+    "uv.lock": {
+      "bytes": 1461066,
+      "sha256": "69b5202367f926baee01252b559f8fa08a3ea2f75fbbfa04960239c528386879",
+      "git_blob": "170edb35245125db9ef520a4157b63759ed7fdfc",
+      "method": "Full TOML structural parse, all274 package entries and4183 artifact hash/size fields inspected; not line-by-line dependency source review"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Both notebooks19cells; all cell sources read, differences independently printed after initial combined output truncation; all stored textual outputs read. Only embedded image is cell3 scatter, visually viewed at original resolution.",
+    "Scatter shows red original points and nearby blue noisy samples in first2dimensions; does not prove10D cluster membership. Markdown incorrectly says500vectors/100clusters; code creates100vectors/20clusters.",
+    "Output notebook cell7 uses obsolete target_structures keyword versus current target_unique_vectors; stored successful outputs cannot establish current execution. Source notebook uses current keyword.",
+    "Output final rerun uses10perturbations vs source notebook200; stored final24rows for20clusters includes extra representatives26,36,64,76. This is historical stored output, not fresh precision/recall evidence.",
+    "Lock version1 requires Python>=3.8 and contains274packages, including editable root with no version;4183 artifacts all SHA256-tagged with positive sizes. Multiple NumPy/Numba/SciPy versions reflect marker resolution. No artifacts downloaded or installed."
+  ],
+  "remaining_scope": "56 tracked artifacts remain, including policy document, generated docs/assets, three original plot images and two coverage databases.",
+  "limits": [
+    "No notebook execution, dependency install, upstream pytest or compiled Numba qualification. Global fully reviewed count201/500 unchanged. No production changes; pHash/ASAN deferred."
+  ]
+}
