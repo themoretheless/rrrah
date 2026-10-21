@@ -2,7 +2,7 @@
   "index": 131,
   "repository": "grosser/travis_dedup",
   "commit": "56fa29a06d52bf617981b50543607798ea9ee26f",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned18/18 artifacts assessed:17whole text files and original PNG viewed;5 offline original-module controls with rejecting HTTP adapter. Original mixed live/mocked suite not run.",
   "decision": "reject-domain",
   "finding": "Travis build cancellation by PR identity; no content hashing.",
   "available_source_evidence": [
@@ -58,7 +58,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT fully read; no production adoption.",
   "tests_detected": 2,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/travis131-complete-source-review-20261021.json"
 }
