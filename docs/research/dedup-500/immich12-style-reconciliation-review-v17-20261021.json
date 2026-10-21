@@ -1,0 +1,109 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/scss/main.base.scss": {
+      "sha256": "ae82316006bb5fbe2313c0eeacd4a3a34b132893a2ab002622748815cf8c041b",
+      "git_blob": "2e907eb73f03c27a9127173712d30955b403d324",
+      "mode": "100644",
+      "lines": 762,
+      "method": "Whole SCSS text read"
+    },
+    "src/scss/main.scss": {
+      "sha256": "6d36bc857a8a59ad9b18a3d7ad3c29385c54ce94f792e05caaa76a53ad29c5ea",
+      "git_blob": "c3438cf97e096843cb17b3d331eb2df458eb3944",
+      "mode": "100644",
+      "lines": 1065,
+      "method": "Whole SCSS text read"
+    },
+    "src/assets/base.css": {
+      "sha256": "97ad6ab105f8b9a718fa1f49a87b19b9c7ef807e69d22f65cf94dc44b04de8d6",
+      "git_blob": "bfff7bcf8ce1013fa400bd2571799ac4e0ae9d8d",
+      "mode": "100644",
+      "lines": 375,
+      "method": "Generated CSS reconciled by exact-byte recompilation from whole-reviewed pinned SCSS; complete parsed token tree comparison, not separate literal CSS line read"
+    },
+    "src/assets/bs5.css": {
+      "sha256": "c6590be8d201785a80177cc3dc669de8f45eaa9244888ababbb86403b80a54ec",
+      "git_blob": "fc2d9794e995a9cb7ea1fbf4ad777661576ca520",
+      "mode": "100644",
+      "lines": 633,
+      "method": "Generated CSS reconciled by exact-byte recompilation from whole-reviewed pinned SCSS; complete parsed token tree comparison, not separate literal CSS line read"
+    },
+    "src/assets/comp.css": {
+      "sha256": "5f441195d8055990e39887d8ca848be67302f2f8f56034c0f6df25686b76cb48",
+      "git_blob": "f75a630eca5fad5517c0863e0c190353c5d587aa",
+      "mode": "100644",
+      "lines": 463,
+      "method": "Generated CSS reconciled by exact-byte recompilation from whole-reviewed pinned SCSS; complete parsed token tree comparison, not separate literal CSS line read"
+    },
+    "src/assets/main.base.css": {
+      "sha256": "c0a09e3da4c81117446fbc9f210b1f9583d5bcf24465973338c1708a6ac84dbf",
+      "git_blob": "a75eade3be93c7274c8b7e1a03b5bae88f6d5923",
+      "mode": "100644",
+      "lines": 579,
+      "method": "Generated CSS reconciled by exact-byte recompilation from whole-reviewed pinned SCSS; complete parsed token tree comparison, not separate literal CSS line read"
+    },
+    "src/assets/main.css": {
+      "sha256": "ef5f51584c64bf876277f999ee196d4bdee9fe1256a0260110b5b51b92fe539b",
+      "git_blob": "a74493c5a57fa925a108765a88198b651a849ef4",
+      "mode": "100644",
+      "lines": 697,
+      "method": "Generated CSS reconciled by exact-byte recompilation from whole-reviewed pinned SCSS; complete parsed token tree comparison, not separate literal CSS line read"
+    }
+  },
+  "cumulative_whole_files_read": 124,
+  "tracked_blobs": 125,
+  "executed_controls": {
+    "base": {
+      "original_rules": 188,
+      "compiled_rules": 188,
+      "same_token_tree": true,
+      "byte_identical": true
+    },
+    "bs5": {
+      "original_rules": 317,
+      "compiled_rules": 317,
+      "same_token_tree": true,
+      "byte_identical": true
+    },
+    "comp": {
+      "original_rules": 227,
+      "compiled_rules": 227,
+      "same_token_tree": true,
+      "byte_identical": true
+    },
+    "main.base": {
+      "original_rules": 287,
+      "compiled_rules": 287,
+      "same_token_tree": true,
+      "byte_identical": true
+    },
+    "main": {
+      "original_rules": 346,
+      "compiled_rules": 346,
+      "same_token_tree": true,
+      "byte_identical": true
+    }
+  },
+  "control_source": "import sys,json,shutil,difflib\nfrom pathlib import Path\nB=Path('.dedup-work/immich12-20261021');sys.path.insert(0,str((B/'review-deps').resolve()));import sass,tinycss2\nS=B/'scss-review';S.mkdir(exist_ok=True)\nfor f in B.glob('src--scss--*.scss'):shutil.copyfile(f,S/f.name.removeprefix('src--scss--'))\ndef canonical(tokens):\n result=[]\n for t in tokens:\n  if t.type in ['whitespace','comment']:continue\n  if t.type=='error':raise ValueError(str(t))\n  if t.type in ['at-rule','qualified-rule']:\n   result.append([t.type,getattr(t,'at_keyword',None),canonical(t.prelude),canonical(t.content or [])])\n  elif hasattr(t,'content'):result.append([t.type,canonical(t.content)])\n  elif hasattr(t,'arguments'):result.append([t.type,t.name,canonical(t.arguments)])\n  else:result.append([t.type,getattr(t,'value',None),getattr(t,'unit',None)])\n return result\nout={}\nfor name in ['base','bs5','comp','main.base','main']:\n compiled=sass.compile(filename=str(S/(name+'.scss')),output_style='compact');original=(B/('src--assets--'+name+'.css')).read_text();a=canonical(tinycss2.parse_stylesheet(original));b=canonical(tinycss2.parse_stylesheet(compiled));out[name]={'original_rules':len(a),'compiled_rules':len(b),'same_token_tree':a==b,'byte_identical':original==compiled}\n if a!=b:\n  out[name]['first_differences']=list(difflib.unified_diff(json.dumps(a,indent=1).splitlines(),json.dumps(b,indent=1).splitlines()))[:100]\n(B/'style-compare-v17-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "tool_versions": {
+    "libsass": "0.23.0",
+    "tinycss2": "1.4.0",
+    "installation_scope": "Private ignored review-deps folder; no repository dependency changes"
+  },
+  "findings": [
+    "All six SCSS source files now whole read across v14/v17. Five generated CSS outputs exactly byte-identical to libsass0.23.0 compact output, including selector whitespace and declaration order.",
+    "Complete token-tree counts188/317/227/287/346; parsing reconciliation supplements exact byte check, no rendered-browser claim.",
+    "SCSS distinguishes main/related/checked via backgrounds/borders, hides grid metadata unless show-grid-info, uses object-fit contain for similarity but cover for ordinary view. Thumbnail visual crop may differ by view intentionally.",
+    "Selection styling reflects client checked class, not independently validated keeper identity. Hover/poptip/floating-action styles do not establish task state/cancellation correctness.",
+    "Main layout reserves250px sidebar and calc viewport width; empty mobile media block supplies no explicit small-screen override. Responsive usability remains untested.",
+    "Notifications and active navigation use animations/transitions; no explicit reduced-motion handling seen in whole-reviewed SCSS. Source observation only."
+  ],
+  "limits": [
+    "124/125 tracked blobs reviewed: whole source/visual or generated-artifact exact-source reconciliation; only bundled socket.io.min.js remains.",
+    "CSS outputs credited via exact compiled-source reconciliation, not claimed independently literal-read or browser QA.",
+    "No app/server/model/DB/full-suite or performance measurement executed. No production edits. Native pHash/ASAN deferred."
+  ]
+}
