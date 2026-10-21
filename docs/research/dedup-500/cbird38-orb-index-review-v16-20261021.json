@@ -1,0 +1,46 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cvfeaturesindex.h": {
+      "sha256": "b685085c0ea8f9ab23b415f140aec20538954276bcf24a090264260c1e29e081",
+      "git_blob": "f78bc51373b4e84e853fedb3f1a3fd59c51b7777",
+      "bytes": 2744,
+      "lines": 83,
+      "method": "Whole pinned source/test read; cpp contiguous1-310,311-end."
+    },
+    "src/cvfeaturesindex.cpp": {
+      "sha256": "0ca90e8fd4533b2091bb86bd306cb587626e108da3d302c02c3e7b068f4e30d8",
+      "git_blob": "641a9d123460d721782bc6dba1e0454653c133b1",
+      "bytes": 18651,
+      "lines": 604,
+      "method": "Whole pinned source/test read; cpp contiguous1-310,311-end."
+    },
+    "unit/testcvfeaturesindex.cpp": {
+      "sha256": "c5a59bf765e75261b9d039023f1e185f58b67f3d965cc33537201eb569c28344",
+      "git_blob": "adebd8e1db36076a4c808ea89871231aee28cb6e",
+      "bytes": 773,
+      "lines": 27,
+      "method": "Whole pinned source/test read; cpp contiguous1-310,311-end."
+    }
+  },
+  "cumulative_assessed_blobs": 40,
+  "tracked_blobs": 616,
+  "findings": [
+    "Active ORB find calls FLANN knnSearch with10neighbors per query descriptor, then filters negative indices, exclusive cvThresh and tombstone mediaId0. There is no refill of removed/bad candidates; candidate saturation affects distinct-file coverage independently of descriptor generation. Source trace only; actual FLANN behavior unexecuted.",
+    "Counts every accepted descriptor match, scores median distance times1000 divided by match count. Reverse matching is commented out; no ratio, mutual-consistency or geometry verification here. Optional template matching belongs to another layer still unread.",
+    "buildIndex uses one LSH table, keySize=int(log2(rows/128)) with integer division before log2 and multiprobe1. Small nonempty descriptor sets below128 produce log2(0); no clamp visible. No invalid-conversion/native crash test executed.",
+    "Incremental add and removal preserve descriptor storage; removal zeroes interval media ID while stale neighbors remain searchable. ID maps depend on ascending media IDs; descriptorsForMediaId uses next ID entry as interval end. SQL load orders IDs, slice sorts IDs; other update order assumptions incomplete.",
+    "load clears descriptor matrix and index but not_idMap/_indexMap before repopulating. loadMap inserts into existing maps without clearing. Reused object can retain stale mappings; real reload/runtime consequences not tested.",
+    "Cache consists of matrix, ID map, interval map and touch marker written separately. Previous IO helpers show no single generation transaction across those files; cache staleness implementation still unread. No crash injection or real cache mutation.",
+    "SQL descriptor load decompresses bytes then calls raw-pointer loadMatrix without explicit decompressed source-length validation at this call; dimensions/type/stride validation relies on downstream asserts. No malformed input/ASAN test.",
+    "memoryUsage estimates descriptor storage times2 and explicitly excludes lookup maps/uncertain LSH overhead. It is not measured heap usage. Empty descriptor SQL rows count as indexed but are omitted from searchable matrices.",
+    "Upstream ORB test delegates to40x5-sizes generic suite and only positive memory assertion. This does not establish crop/rotation/general-format coverage or exhaustive candidate recall; no tests run."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "40/616 tracked artifacts assessed:39whole text/source and1PNGvisual. Twenty-four previous original-body/header controls plus one independent key counterexample; no new runtime tests.",
+    "Full OpenCV/FLANN, template matcher, native media and upstream corpus remain unqualified. No production port/optimization; deferred native pHash/ASAN skipped."
+  ]
+}
