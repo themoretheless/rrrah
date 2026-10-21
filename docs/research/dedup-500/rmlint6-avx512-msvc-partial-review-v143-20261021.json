@@ -1,0 +1,27 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 287,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_windows_msvc.asm": {
+      "sha256": "10a46aee705ad10a41db286c56030e3aa2456d293272029f6e5a71b218d4aac3",
+      "git_blob": "b19efbaaeb362f6237c8bd220a4068e5ea1005ba",
+      "total_lines": 2634,
+      "whole_file_read": false,
+      "method": "Differential instruction preview, full directive inventory and final45 labeled constant lines inspected. Pending corrected comparison before whole-source credit."
+    }
+  },
+  "findings": [
+    "MSVC replaces unsigned-less alias vpcmpltud with vpcmpud immediate1. Initial carry additions explicitly broadcast ADD1 into YMM6 then masked register-add; sixteen-counter update broadcasts ADD16/ADD1 into ZMM4/5 then masked register-add. Source comments describe ml64 syntax workaround, not evidence of current compiler limitations.",
+    "Three entry points have PUBLIC and paired PROC/ENDP; XOF-many absent as in Windows GNU. Read-only constant tables INDEX0/1, ADD0/1/16, block-length and IV values inspected with labels.",
+    "Initial normalizer incorrectly retained semicolon comments as instruction records and GNU inline ADD1/ADD16 data definitions as executable records. Therefore counts2541/2548 and shifted branch indices are invalid as instruction/branch-equivalence evidence. No whole-file credit or branch-equivalence claim based on that output."
+  ],
+  "next_action": "Correct parser to strip comments and handle inline labels/data; resolve branches and compare through insertion mapping, then inspect remaining differences before whole-file credit.",
+  "limits": [
+    "287/289 whole files and150/500 repositories remain unchanged.",
+    "No MASM build/runtime, counter parity or speed proof. pHash/ASAN deferred."
+  ]
+}
