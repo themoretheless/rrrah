@@ -1,0 +1,78 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.md": {
+      "sha256": "852914f3f7a5f83c0c99ab4eeea363f994dd3cec894f8dd6f7894361db42bfaa",
+      "git_blob": "eabc07ea558b38506ff8df74e82bd6f63dc79faa",
+      "lines": 687,
+      "mode": "100644"
+    },
+    "LICENSE": {
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "lines": 674,
+      "mode": "100644"
+    },
+    "src/assets/fn.css": {
+      "sha256": "58590b2b933fd86c4331b3b9a6b9a0c532294c39c3a1ae41d7673d17cfa91bc8",
+      "git_blob": "167c573bb4506b25b119d2544e65e86dbbfd432c",
+      "lines": 3,
+      "mode": "100644"
+    },
+    "src/assets/ico.css": {
+      "sha256": "58590b2b933fd86c4331b3b9a6b9a0c532294c39c3a1ae41d7673d17cfa91bc8",
+      "git_blob": "167c573bb4506b25b119d2544e65e86dbbfd432c",
+      "lines": 3,
+      "mode": "100644"
+    },
+    "src/scss/base.scss": {
+      "sha256": "c3a4f829516ef4a451379297036cd43f9eed031618bb72007f685314713d58ba",
+      "git_blob": "f5efff3d95a81b831e219d3b97e3c2e2e21af9dc",
+      "lines": 144,
+      "mode": "100644"
+    },
+    "src/scss/bs5.scss": {
+      "sha256": "b1f901c0d895d1c740cdf977a9262eba666c12791f9f92f7fd285779e117d8b5",
+      "git_blob": "1063083635c3253ed426269dff3f1035c52d56c1",
+      "lines": 608,
+      "mode": "100644"
+    },
+    "src/scss/comp.scss": {
+      "sha256": "b350c7216df8babd39369992bb9f1fff5771f250cce01bd0f6891a98bcf4294a",
+      "git_blob": "850ee973be4b3cc8a7bb6a8bb9f8fee0cab7fd4f",
+      "lines": 261,
+      "mode": "100644"
+    },
+    "src/scss/ico.scss": {
+      "sha256": "138b7e5e6a83918933e925a6ed2c400d21cb6d7d23489787beff925e644db862",
+      "git_blob": "9f78fa002b1889df8605586dd81868583e063466",
+      "lines": 13,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 109,
+  "tracked_blobs": 125,
+  "method": "Eight whole text files read. README contiguous1-350,351-EOF; license1-340,341-EOF. Four whole SCSS plus two identical CSS files; individual SHA/Git identities verified. Docs commands/instructions treated as source material, never executed.",
+  "findings": [
+    "README explicitly defines Related Tree as connected similarity chain where endpoints may differ. Earlier chain control is intentional similarity semantics, not automatically a defect; unsuitable for verified all-pairs file duplicate identity.",
+    "README explicitly instructs Reset Records before threshold changes. This is documented manual mitigation; original settings callback still does not invalidate/reverify displayed groups automatically. Narrowed prior v11 conclusion accordingly.",
+    "README labels .97+ / .98-.999 as exact duplicates, but implementation is normalized ResNet152 cosine candidates, no byte equality proof. Threshold claims lack independently verified positive/negative corpus in read repository.",
+    "README describes atomic DB+XMP rollback. Earlier owned controls/source show backup-before-try loss and externally committed DB trash before later local failure; broad atomicity claim unsupported.",
+    "README Sync Behavior says re-fetch reconciles current state; earlier equal-count fetch-disable, stale vector flags on changed thumbnail and filtered-thumbnail deletion controls limit that claim.",
+    "README says higher resolution criterion; original JS metric sums width+height instead of pixel area. README criterion weight range0-5 differs options built with range(5),0-4.",
+    "README preferred GPU choice says default image tag while later tag table/compose state latest is CPU. Source tag matrix remains authoritative for pinned configuration.",
+    "README same-host database hostname initially container-name guidance, later env section says service-name. Compose example comments emphasize service name; actual runtime resolution not tested.",
+    "Root LICENSE whole text is GPL version3 with standard terms and application appendix. README identifies GPLv3. Recorded as source/license inventory, no legal compatibility conclusion; no upstream production code copied.",
+    "SCSS base establishes theme variables, widths10-100%, shared mixins. bs5 redefines btn-colors mixin and uses global input/disabled/control overrides; comp defines task panel/modal/selection cues and animated tooltips. Source review is not rendered UI acceptance.",
+    "fn.css and ico.css are exact-byte duplicate icon styles, both credited after identity check; duplicate selector load could be redundant but no measured runtime/performance claim. Inline SVG stack icon data is presentation source.",
+    "No styles or read documentation establish matcher quality, model/device parity, recoverability or end-to-end runtime proof."
+  ],
+  "limits": [
+    "109/125 whole blobs reviewed;16 remain: remainingCSS/SCSS, socket library, visual images/GIF/icon.",
+    "No media/frame or rendered interface review credited here; no model/DB/server/build/upstream-suite run.",
+    "No production source changed/copied; root GPL text read does not qualify third-party bundled/dependency licenses.",
+    "Native pHash/ASAN remains user-deferred; full500/all-case goal incomplete."
+  ]
+}
