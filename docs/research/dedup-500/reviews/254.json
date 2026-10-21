@@ -2,7 +2,7 @@
   "index": 254,
   "repository": "ambar/yarn-plugin-dedupe-on-install",
   "commit": "96ffd15fdb25310613f003a2c258dfd73eaa36a1",
-  "review_scope": "Partial pinned10/11whole text artifacts read; yarn.lock only lines1-430. Six original hook adapter controls, no actual Yarn commands.",
+  "review_scope": "Complete pinned11/11whole text artifacts read including1018line lockfile;6 original hook adapter controls retained; actual Yarn lifecycle and commands unqualified.",
   "decision": "reject-domain",
   "finding": "Yarn install dependency deduplication; no content scanner.",
   "available_source_evidence": [
@@ -49,5 +49,8 @@
     {
       "audit": "docs/research/dedup-500/yarn254-source-review-v1-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/yarn254-complete-source-review-20261021.json"
 }

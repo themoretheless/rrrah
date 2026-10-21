@@ -1,0 +1,96 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "ambar/yarn-plugin-dedupe-on-install",
+  "commit": "96ffd15fdb25310613f003a2c258dfd73eaa36a1",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 11,
+  "files": {
+    ".editorconfig": {
+      "bytes": 147,
+      "sha256": "a71035eea13b82779da4dd5c7de385f9ec3af700ebc1d623f44f81abf13e8ae8",
+      "git_blob": "c6c8b3621938a4691225a870a59bf382af1883dd",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    ".github/workflows/main.yml": {
+      "bytes": 414,
+      "sha256": "d098568257cd1541061fbc508d575547694b92ca1e3a69ab00d979f6f6446a7e",
+      "git_blob": "2e0d97104ddd2da9b2beab8b842b7f2a2b187df6",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    ".gitignore": {
+      "bytes": 23,
+      "sha256": "b1c925a6ab9e10e329008d736ce680fdefa26644deff1d2ae38547990897fa6a",
+      "git_blob": "e7bc7a0f87bf086653ddd495cba41cb88cf8a1b8",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    ".yarnrc.yml": {
+      "bytes": 80,
+      "sha256": "0e7b02cc3e1496af2c17f775703d432723483f91a67b32f95deb14d856a8ec03",
+      "git_blob": "4a2f46fea0f70d6cd189546b902c01c87790c2af",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "LICENSE": {
+      "bytes": 1067,
+      "sha256": "e6d0d6569e39a94d184ab2700a702b36a85b95baa5a1c44cfee21ed219134e87",
+      "git_blob": "832f349e0ff27e08001a9b70cec09182715951cb",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "README.md": {
+      "bytes": 202,
+      "sha256": "3debbec0f78d7bf9f8c1a52622e81d923664a2049680b5422c4f4d372229f3c1",
+      "git_blob": "347b840cc9b497c0dd0f0d1ecfc9886699b55951",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "biome.json": {
+      "bytes": 525,
+      "sha256": "833e62ea49f7af1b186f709c949935830a69cff9d2877b3fbf99fbe6138e5ab2",
+      "git_blob": "b54109871c40eac2e964ea2fe2de78e691df7c00",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "index.js": {
+      "bytes": 1005,
+      "sha256": "f2e0b5dee32f0c055ef922d5c65ad82ebb19a9083bed864d6d6e6bbfb796a9c5",
+      "git_blob": "68b83cee8666ce1d29be2a9fd1abdce962de4f56",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "package.json": {
+      "bytes": 542,
+      "sha256": "ff8acfdbf5b67d74c1d9b5880f930faadd39e6203a6969d5722c6224446933e6",
+      "git_blob": "7ed127d69fbd12efd994637ca63dcb199a4c588c",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "tsconfig.json": {
+      "bytes": 161,
+      "sha256": "716c2b97d8ba9f800a6bec9261b1decc7ef70a814b83f7112236bf7484cb93e8",
+      "git_blob": "e17582eff72f220c0d6499aff44541929f935080",
+      "method": "Prior whole pinned text reading retained after current byte verification"
+    },
+    "yarn.lock": {
+      "bytes": 35464,
+      "sha256": "3d629c1db101abbe0ae0142912d4f76eba91196a5b02004dde7e0feb752259f3",
+      "git_blob": "ff96d9444aed3d731f7e79bd00391b3a7554dea9",
+      "method": "Whole pinned text read without truncation; lockfile1018lines read in three consecutive chunks across v1 and completion"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/yarn254-source-review-v1-20261021.json"
+  ],
+  "unique_targeted_controls": 6,
+  "new_runtime_controls": 0,
+  "upstream_tests_run": false,
+  "conclusions": [
+    "Reject-domain retained: dependency-resolution hook rather than file/image identity. All11original text files read, including full1018line yarn.lock. No source copied into production.",
+    "Prior six original-hook controls retained: check0skips; check1dedupes; check2also dedupes; dedupe2return ignored; environment and argv guards suppress shell calls. Explicit execute adapter, no actual Yarn command executed.",
+    "Lockfile metadata version8/cache10c0, conditional Biome platform packages, Yarn core4.2.1/shell4.1.2 and optional builtin-patched TypeScript5.8.2 entries fully read. Manifest specifies Yarn4.8.1. Neither cached archive checksums nor installed dependency implementation qualified.",
+    "No upstream tests in tree/package scripts. CI invokes immutable install, Biome lint and tsc; no functional hook tests. YAML parser unavailable in both Python environments, so full text reading used instead; no parser substitution counted as validation.",
+    "Environment guard is process-global and persists even if check fails, potentially suppressing later same-process hooks. Source-only lifecycle concern; not a real Yarn install reproduction.",
+    "Root MIT full text reviewed. Fixed shell command strings observed; no external services, credentials, publishing or repository dependency mutation performed."
+  ],
+  "license": "Root MIT fully read; no production adoption.",
+  "limits": [
+    "Complete11artifact source review plus6 finite adapter controls do not establish real Yarn2+/4 integration, recursion handling, command failure propagation or platform compatibility.",
+    "Native pHash/ASAN deferred. All500 reviews and allcases objective incomplete."
+  ]
+}
