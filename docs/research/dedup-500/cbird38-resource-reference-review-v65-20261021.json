@@ -1,0 +1,64 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "unit/.gitignore": {
+      "sha256": "3024ca631578864fa0b31f1b1670ee302ffaefa505d9464cf6f1bcf736aa30cb",
+      "git_blob": "668bbbc29b934e25c0e8ce4f9b49e35174acedb8",
+      "bytes": 70,
+      "lines": 8,
+      "method": "Whole pinned text read and Git blob verified. QRC additionally parsed for all target paths."
+    },
+    "src/qdarkstyle/dark/darkstyle.qrc": {
+      "sha256": "ced4ef88ea649857b504c068786cf24dbd6331ef305fa3722cbd8a7ee78d194e",
+      "git_blob": "ce0d85be6070979249a5e7867feeab24c4acbcc1",
+      "bytes": 9964,
+      "lines": 216,
+      "method": "Whole pinned text read and Git blob verified. QRC additionally parsed for all target paths."
+    },
+    "src/qdarkstyle/light/lightstyle.qrc": {
+      "sha256": "e4e13129c53f52cc43969604eb637807a1fea2018eca42ec1ec6a4f6ec178b5f",
+      "git_blob": "04e9b5d89ee4dbe9095ff3e5ffe8f89c36b228cf",
+      "bytes": 9967,
+      "lines": 216,
+      "method": "Whole pinned text read and Git blob verified. QRC additionally parsed for all target paths."
+    }
+  },
+  "cumulative_assessed_blobs": 602,
+  "tracked_blobs": 616,
+  "findings": [
+    "Each theme QRC declares208 PNG entries plus its QSS, with separate qss_icons and qdarkstyle resource prefixes. All418 total manifest targets resolve to pinned tree blobs; no duplicate target within a manifest.",
+    "All45 distinct url() resource paths extracted from each theme QSS resolve to declared QRC resources. This is static reference integrity, not Qt resource compiler or runtime rendering proof.",
+    "Both manifests identify themselves as generated files. No regeneration instructions executed.",
+    "unit/.gitignore excludes build/coverage artifacts and all CSV/JSON files inside unit directory. Missing tracked output files therefore do not establish that upstream tests ran or passed."
+  ],
+  "structural_checks": {
+    "dark": {
+      "manifest_entries": 209,
+      "png_entries": 208,
+      "distinct_stylesheet_urls": 45,
+      "missing_tree_targets": [],
+      "unresolved_stylesheet_urls": [],
+      "qss_sha256": "e67f6c2c6cd107398d6ec90ffcfe046ca236371df66ff68d44a8782113c93c90",
+      "qss_git_blob": "aeb5969b640fc43532aeb21db78e55423840e4c9",
+      "qss_review_scope": "URL references checked structurally only; whole stylesheet NOT yet read or counted."
+    },
+    "light": {
+      "manifest_entries": 209,
+      "png_entries": 208,
+      "distinct_stylesheet_urls": 45,
+      "missing_tree_targets": [],
+      "unresolved_stylesheet_urls": [],
+      "qss_sha256": "255231f03debc1ec23ea38711ebcf74b6d2f0b89bff8fbb87da2f1c125ee9a67",
+      "qss_git_blob": "1dc92064e60472b0fb06e63987e17c488f89ef95",
+      "qss_review_scope": "URL references checked structurally only; whole stylesheet NOT yet read or counted."
+    }
+  },
+  "executed_controls": [],
+  "limits": [
+    "602/616 assessed:185 whole text/source and417 PNG visuals.14 remain:6 PDFs,2 spreadsheets, CImg,2QSS, SVG,ICNS,ICO.",
+    "Stylesheets only had references checked; not counted as whole reads. No runtime, production modification or new benchmark.",
+    "Previous34 original-body/header controls and2 independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
