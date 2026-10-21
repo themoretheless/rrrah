@@ -1,0 +1,44 @@
+{
+  "repository": "aplmikex/deduplication_mnbvc",
+  "commit": "06fb9117c58289b5710870e94b47870024800de9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 28,
+  "cumulative_assessed_blobs": 3,
+  "files": {
+    "basic_dedup/find_duplicates.py": {
+      "bytes": 759,
+      "sha256": "8ed962e284b83664a011bcf31412062393300c8c36e841393a72f2ffee1de275",
+      "method": "Whole pinned Python file read without truncation"
+    },
+    "parallel_dedup/multiprocess_deduplication.py": {
+      "bytes": 4348,
+      "sha256": "a7830769fad06ae6a68fd9a4a203910ef73d3d344100f94a36a2c770d7ecff90",
+      "method": "Whole pinned Python file read without truncation"
+    },
+    "utils/customSimhash.py": {
+      "bytes": 9638,
+      "sha256": "7f9937581dbd2ca0053447baaf3e3817f5e78d0a6bab92de56ded2a8cc4a1b9d",
+      "method": "Whole pinned Python file read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/mnbvc102-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/mnbvc102-controls-v1-20261021/run.log",
+    "passed": 4,
+    "method": "Original complete customSimhash module loaded with available bundled NumPy. Integer fingerprint/index paths executed; no text hashing/corpus/queue/pandas or original environment install."
+  },
+  "findings": [
+    "Plural get_near_dups returns exactly independent exhaustive sets for all256queries against2568bitvalues and k0..3:1024queries. All60tied IDs retained at radius0; all64onehotdistance checks pass.",
+    "Simhash permits integral values outside declared width, distance masks high bits; equality compares value without width. Confirmed synthetic public inputs, not claimed normal text-hash failure.",
+    "Pipeline add(return_similar=True) returns one accepted Simhash candidate, then check_similar_file applies Jaccard only to that pair. Other candidates are not retried after rejection in inspected flow; actual missed text match not yet reproduced.",
+    "basic find_duplicates groups existing SHA256+Size metadata, writes discarded paths, then rewrites input pickle after dropping duplicate records. It does not byte-confirm source files or verify metadata freshness. No pandas/pickle/file operations executed.",
+    "Worker completion flag set only at producer end; producer exceptions can bypass it and worker catch-all may continue. Process lifecycle and queue draining not qualified.",
+    "Simhash text tokenization lowercases, concatenates regex words and uses four-character windows. This is a text recipe, no direct image hash or byte equality replacement."
+  ],
+  "remaining_scope": "25artifacts: remaining utilities/corpus/convert scripts, docs/config/license/requirements.",
+  "license": "Registry MIT screening only; root/nested original license provenance pending. No production adoption.",
+  "limits": [
+    "Partial3/28review; full count183/500 unchanged.",
+    "No corpus, text precision/recall, multiprocess runtime, actual metadata/IO, platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
