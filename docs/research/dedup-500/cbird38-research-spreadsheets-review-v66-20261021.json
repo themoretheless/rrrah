@@ -1,0 +1,44 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/research/jpeg-decode-test.gnumeric": {
+      "sha256": "93efc2c1b6e1c59df9128b8b915702441a1e790cd6bfb9c58b31c7049eded325",
+      "git_blob": "6daca94a4ae6944543db047810b2030ace1b580e",
+      "bytes": 2691,
+      "method": "All populated cells/formulas and workbook structure extracted/read; archive repeated rows/columns respected; no workbook edits or native-engine recalculation."
+    },
+    "doc/research/lsh-tree-tuning.ods": {
+      "sha256": "bc45dad0d67112464a6620a804f7e969ab2bfa51573235f917be61ab69a9f684",
+      "git_blob": "ef684c4f9b341c7f3b8c52c0019598686a464e1b",
+      "bytes": 12701,
+      "method": "All populated cells/formulas and workbook structure extracted/read; archive repeated rows/columns respected; no workbook edits or native-engine recalculation."
+    }
+  },
+  "cumulative_assessed_blobs": 604,
+  "tracked_blobs": 616,
+  "findings": [
+    "Gnumeric has46 populated cells on Sheet1 and two empty sheets. Labels specify ms/image, approximately7000x10000px and zip sources. Table compares IDCT/scaling recipes; at1/8scale stored values509 vs114ms describe different paths, not our measured speedup. No repetitions, hardware inventory, confidence interval or matching-quality equivalence supplied.",
+    "Gnumeric print-area names contain#REF!; no cell arithmetic formulas found. This is a print-setting defect, not failed numeric computation.",
+    "ODS has one sheet,365 populated cells including64 MATCH formulas. Tuning table varies max hpn(kb)4 through256 with run time18.3–19; units for run time and good/bad not explicitly specified. At128 good67.7,bad2.1 differs markedly from64 good96.2,bad0.65. Do not choose parameters on time alone or assume current-production defaults from historical current config label.",
+    "J23:J86 is a bijection0..63; all64 cached H23:H86 values independently equal inverse indices for I23:I86. Source MATCH omits an explicit search type. Cached values checked, native formula semantics/recalculation not executed; no formula bug claimed.",
+    "ODS metadata dates2016–2018; Gnumeric creation2022/modification2023. Results are historical research snapshots, not reproducible current library benchmarks. ODS has no chart objects and its embedded thumbnail was visually viewed."
+  ],
+  "structural_checks": {
+    "gnumeric_populated_cells": 46,
+    "ods_populated_cells": 365,
+    "ods_formula_cells": 64,
+    "cached_inverse_values_checked": 64,
+    "cached_inverse_mismatches": 0,
+    "ods_embedded_thumbnail_viewed": true,
+    "native_recalculation": false
+  },
+  "executed_controls": [],
+  "evidence_directory": "docs/research/dedup-500/cbird38-research-spreadsheets-review-v66-20261021",
+  "limits": [
+    "604/616 assessed:185 whole text/source,417 PNG visuals and2 structured spreadsheets.12 remain:6 PDFs,CImg,2QSS,SVG,ICNS,ICO.",
+    "This is read-only structured/content review; workbook layout not rendered in native spreadsheet engine. No source workbook overwritten.",
+    "No production optimization accepted.34 previous original-body/header controls and2 independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
