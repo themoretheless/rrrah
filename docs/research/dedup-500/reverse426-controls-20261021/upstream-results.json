@@ -1,0 +1,398 @@
+{
+  "command": "go test -mod=readonly -json ./...",
+  "exit_code": 0,
+  "top_level_tests": [
+    {
+      "package": "imgsearch/cmd/imgsearch",
+      "test": "TestRunCLISearch",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/cmd/imgsearch",
+      "test": "TestRunErrors",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestIsImageFile",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestComputeSimilarity",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestGrayscale",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestLoadAndHash",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestLoadAndHashFromReader",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestFindImages",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "test": "TestGenerateThumbnail",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestNew",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestGetPut",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestMtimeInvalidation",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestPutSkipsErrors",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestClear",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestStats",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestHammingDistance",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestSimilarity",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestHistogramSimilarity",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestPerceptual",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestAverage",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestDifference",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "test": "TestComputeColorHistogram",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/exif",
+      "test": "TestExtract",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/exif",
+      "test": "TestOrientationMapping",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/search",
+      "test": "TestRun",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/search",
+      "test": "TestConfig",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/search",
+      "test": "TestResult",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestNew",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleIndex",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleAppJS",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestConcurrentAccess",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleBrowse",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleExif",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleThumbnail",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleDownload",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleSearch",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleResults",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestBrowseResponse",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestBrowseEntry",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestScan",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleBrowseSorting",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleSearchEdgeCases",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleDownloadEdgeCases",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleThumbnailEdgeCases",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestValidatePath",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestSanitizeFilename",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestGenerateSearchID",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestNewWithBasePath",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestNewWithOptions",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestNewDefaultsToLocalhost",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestPathTraversalPrevention",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestScanWithSubdirs",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleCacheStats",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestScanEmptyDirectory",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestDefaultPath",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestMakeKey",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestCloseIdempotent",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleCacheClear",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleCacheDirectories",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestListDirectories",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestListDirectoriesDepthLimit",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestTruncateDirPath",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestHandleCacheScan",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestIntegrationCachePersistence",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestNewWithCache",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestServerClose",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "test": "TestCacheStatsResponse",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestIntegrationScanThenSearch",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestIntegrationCacheInvalidationOnModify",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestIntegrationListDirectoriesAfterScan",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestIntegrationClearAndRescan",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "test": "TestIntegrationConcurrentScanAndGet",
+      "status": "pass"
+    }
+  ],
+  "packages": [
+    {
+      "package": "imgsearch/cmd/imgsearch",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/imgutil",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/hash",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/exif",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/search",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/web",
+      "status": "pass"
+    },
+    {
+      "package": "imgsearch/internal/cache",
+      "status": "pass"
+    }
+  ],
+  "raw_jsonl_sha256": "a6714ad9e4df17f3bb5d5f499e691b28795e27625ed6f93b64bad8111768485d",
+  "scope": "Executed before adding authored review tests. Original pinned packages,go.mod/go.sum unchanged. No race mode or external browser."
+}

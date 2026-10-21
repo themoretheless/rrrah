@@ -1,0 +1,8 @@
+=== RUN   TestReviewTopOneIsFirstNotBest
+    review426_test.go:4: TopN1 selected 29.028 while later candidate 100.000
+--- PASS: TestReviewTopOneIsFirstNotBest (0.03s)
+=== RUN   TestReviewRestoredMtimeStale
+    review426_test.go:5: mtime equal=true sizes 1147/1159 old=ffffffffffffffff fresh=0 cached=ffffffffffffffff
+--- PASS: TestReviewRestoredMtimeStale (0.07s)
+PASS
+ok  	imgsearch/internal/search	0.449s

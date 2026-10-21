@@ -4,7 +4,7 @@
   "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "shortlist",
-  "finding": "Go DCT cosine-table caching plus persisted pHash and tests; useful normalization/index/cache reference.",
+  "finding": "Partialreview:original72tests pass butTopNfirstmatch29percentmisseslater100percent,andrestoredmtimecache stale. Remainingrepositoryreviewunfinished.",
   "available_source_evidence": [
     {
       "path": "internal/hash/hash.go",
@@ -50,8 +50,8 @@
   "license_metadata": "Apache-2.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 7,
-  "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "72originaltopleveltests/7packagespass,2authoredcontrolsconfirmfirst-N/stalemtimecases. Other testfiles notyetwhole-read; no full-productqualification.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -73,6 +73,13 @@
       "lines": 201,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/reverse426-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/reverse426-controls-20261021/result.json",
+      "whole_repo_complete": false
     }
   ]
 }
