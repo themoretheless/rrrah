@@ -1,0 +1,79 @@
+{
+  "repository": "davidfoerster/aptsources-cleanup",
+  "commit": "cf291129b351f4e126d53ed7382a61734052db99",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/aptsources_cleanup/util/functools.py": {
+      "sha256": "068aa60bbda2fb8e519917763ff9fe3f1118bd903b2b9f37405ded9e92009cce",
+      "git_blob": "11b9c814d58f0b0d8e1b2f808987b6974cbb5ef5",
+      "lines": 144
+    },
+    "src/aptsources_cleanup/util/strings.py": {
+      "sha256": "6d2a843de33168f565e76baf9bd438d2640f654135dfb0ed856a60158270f346",
+      "git_blob": "f3ce68aeffdd4845b40baeec807bdc009c16fbde",
+      "lines": 168
+    },
+    "src/aptsources_cleanup/util/operator.py": {
+      "sha256": "6d9ea950c134cbd9e188e99877b80563aa6e52874e40bda98cc04d250d14daab",
+      "git_blob": "5c62302a820433a17f128b683a2e261ca8645c9a",
+      "lines": 61
+    },
+    "src/aptsources_cleanup/util/itertools.py": {
+      "sha256": "1b56c6d499868b03e3123b045d438137b0fd377157b78f1c15e525479c24687c",
+      "git_blob": "535a175c75824e09f31cf263ab272ead9d1f23be",
+      "lines": 66
+    },
+    "src/aptsources_cleanup/util/os.py": {
+      "sha256": "d50196e7e6236f424bc2bacf47fb036c5648ffc849d83b63712c8adeace35727",
+      "git_blob": "b7360ff4c078bb69f1a9ae555777b9e36d406d72",
+      "lines": 13
+    },
+    "src/aptsources_cleanup/util/pkg.py": {
+      "sha256": "de595c104417c98f0a81ef1d18a07afd99e4d9b9bb2843e18173d65a162c9ef8",
+      "git_blob": "e07dc0ea7151ad1e2fac7fcda6cb3cc964477772",
+      "lines": 37
+    },
+    "src/aptsources_cleanup/util/import_check.py": {
+      "sha256": "ba26253477690417a9521436f361b47dae01800c5a593be6f9068629cb1d7c75",
+      "git_blob": "8012d1c6770f527f613afabdd29750d2266c84f2",
+      "lines": 77
+    }
+  },
+  "cumulative_whole_files_read": 16,
+  "tracked_blobs": 166,
+  "method": "Seven complete pinned files read and blobs checked. Original string/helper diagnostic functions AST-extracted and executed on synthetic inputs; terminal/package integrity checks mocked, no external process.",
+  "findings": [
+    "lstrip accepts prefixes and rstrip accepts suffixes but both call _strip_impl with undefined xfixes. Direct original-function calls reproduce NameError. Generic strip passes xfixes correctly.",
+    "import_check terminal-size fallback catches EnvironmentError and prints warning but then uses local stderr that was never assigned. Synthetic terminal failure reproduces UnboundLocalError masking original import diagnostic.",
+    "pkg.check_integrity invokes md5sum with argv,cwdroot and wait; no timeout/cancellation shown. This diagnostic checks systempackage checksums, not file duplicate identity. It was not executed.",
+    "LazyInstance clears factory only after successful creation; factory exception permits retry despite at-most-once doc wording. Concurrent first access has no synchronization shown; no concurrent runtime control. Lazy bound method lambdas accept positional args only.",
+    "unique helper preserves first occurrence using ExtSet plus optional key; no byte comparison or collision verification beyond Python key equality. pairs/map_pairs use tee and shifted iterators, while foreach multiple inputs follows zip shortest semantics.",
+    "Function composition executes left-to-right and can return raw sole function; callable validation uses assert for multistage composition, disabled with optimized launcher. No failure claim for valid caller contracts.",
+    "Legacy fspath fallback accepts strings/bytes/bytearray and custom __fspath__ return without type validation. On modern Python native os.fspath takes precedence; fallback not executed."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/apt11-20261021/helper-error-control.py",
+    "sha256": "aa36cc3c245da79448f23ef7dea49228e75480b60372e173143e181ed4063f87",
+    "result": {
+      "errors": {
+        "lstrip": {
+          "type": "NameError",
+          "message": "name 'xfixes' is not defined"
+        },
+        "rstrip": {
+          "type": "NameError",
+          "message": "name 'xfixes' is not defined"
+        },
+        "terminal_fallback": {
+          "type": "UnboundLocalError",
+          "message": "cannot access local variable 'stderr' where it is not associated with a value"
+        }
+      },
+      "scope": "Original AST-extracted helper functions; string calls and mocked diagnostic fallback only. No package integrity process,APTimport or system files accessed."
+    }
+  },
+  "limits": [
+    "16/166tracked blobs reviewed;153/500complete repositories.",
+    "No system configuration,APT/Pythonpackage checksum process,fullCLI/tests or production changes. Native pHash/ASAN deferred."
+  ]
+}
