@@ -1,0 +1,48 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/theme/Color.kt": {
+      "sha256": "7d91d333feb8b02184d6b3138773b80dc5ab9dc050e118a089ed26a69b2ec8bb",
+      "git_blob": "78c7ab731fe5752d68bc7fdb553a2228830768c8",
+      "mode": "100644",
+      "lines": 11
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/theme/FluentTheme.kt": {
+      "sha256": "8c4d9bcb627688b5e684601ff58a9b6d1eec58382c5563d18328d0f7a9f33b7d",
+      "git_blob": "8e55baae66dcbd3e04aa5a1d8958f2acdb406603",
+      "mode": "100644",
+      "lines": 308
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/theme/Theme.kt": {
+      "sha256": "f18b588d6e50654191787801cf9f927eb32d899316c0eb9cdc46ac14a12b4c2c",
+      "git_blob": "761f160c5e04d92710d9d6e6cc7cd74e305ed474",
+      "mode": "100644",
+      "lines": 52
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/theme/Type.kt": {
+      "sha256": "9f4cdc3062a5d5075b3cddaabaf9aedd8857bc104e59075243817fe4d1461833",
+      "git_blob": "2959cfbb2792140afb4f8a4d607a22eb936d507a",
+      "mode": "100644",
+      "lines": 36
+    }
+  },
+  "cumulative_whole_files_read": 113,
+  "tracked_blobs": 268,
+  "method": "Four complete pinned Kotlin theme files407lines read. Registry union checked109 previous unique whole paths before adding four; no duplicate file credit. Static provider/constants review.",
+  "findings": [
+    "OmniSearchTheme recognizes six nondefault palette strings plus fallbackSlate and DARK/LIGHT else system. Confirms ordinary seven-palette selector mapping; unknown mode effective system while previously reviewed slider indicator falls backDark. Unknown palette fallback does not mark any selector row selected.",
+    "Material colorScheme sets background/surface/primary/onBackground/onSurface but does not supply FluentColors.onAccent as onPrimary. Fluent explicit controls may use onAccent while Material defaults use generated/default onPrimary; rendered contrast/parity not proven. No claim all components wrong.",
+    "Separate MyApplicationTheme provides purple/dynamic Android12 color scheme and Typography bodyLarge override. OmniSearchTheme does not pass Typography. Presence of second theme is not proof it wraps current activity; previously read activity uses OmniSearchTheme.",
+    "System bar icon appearance updated in SideEffect using view.context as? Activity; wrapped contexts can skip update. Actual edge-to-edge/system-bar appearance requires device rendering.",
+    "FluentDims fixed values12/8radius and8/12/16/20padding. Palette constructors immutable val fields and static composition locals provide defaults; no content/file identity behavior or dedup comparison in these files.",
+    "Reading theme constants does not count as visual review of resource images, GIF frames, layouts or screenshots; those remaining artifacts retain separate review requirement."
+  ],
+  "limits": [
+    "113/268 whole blobs; repository013 incomplete.",
+    "Only ImageEditorScreen and LocalExplorerScreen Kotlin files remain outside whole-source union; they are large and not credited by listing. Other languages/resources/assets also remain.",
+    "No Android/Kotlin build, Compose/device/rendering or contrast measurements executed.",
+    "No production changes/new runtime tests.155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
