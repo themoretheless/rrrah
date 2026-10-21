@@ -1,0 +1,43 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "dedup/promiseForPages.ts": {
+      "sha256": "35b71d03c2c3e834cca9b498acdd2af2904a87860aa2c9721c59c46d2a2aa9f6",
+      "git_blob": "15905fb6cfdc07eca89d33085bd0dcf500ef2a37",
+      "lines": 129
+    },
+    "dedup/spotifyApi.ts": {
+      "sha256": "38ed8bf6ff103eb7bac4ab30c907152433e1f2f9a87a48f7521e39c47feaf564",
+      "git_blob": "64242c7a88e5d630367a3aa0eee3684b7eb175c7",
+      "lines": 221
+    },
+    "dedup/types.ts": {
+      "sha256": "9a30919e25dbac4e48028871db4b9284bc358e96c0e1c9729da6c97dffb7584d",
+      "git_blob": "5c47cba5e0a6707874604ae2c01fe474a88f7875",
+      "lines": 15
+    },
+    "dedup/__tests__/deduplicator.test.ts": {
+      "sha256": "205d70c375c2ce4e1a09e9addd68de7cb9e57678173531a3250f0cae08dd178f",
+      "git_blob": "8b09cc066ecc914247743fcbcbabc25555c55155",
+      "lines": 213
+    }
+  },
+  "cumulative_whole_files_read": 7,
+  "tracked_blobs": 97,
+  "method": "Full four source/test files read, SHA256/Git blobs verified against pinned tree. Static review, no external requests or Jest execution.",
+  "findings": [
+    "Pagination returns resolved page objects, so library.ts direct reduction is consistent. Deduplicator redundant Promise.all on resolved page objects is harmless under that contract; prior potential mismatch resolved.",
+    "Pagination allocates ceil((total-limit-offset)/limit) slots without input validation. For a short final page (e.g.total1,limit25,offset0), ceil negative fraction gives0 and initial page still included. Negative whole counts/zero limit could throw; no malformed-metadata control executed.",
+    "Progress callback increments before awaiting current page, so100percent can precede last page success. onError=true can skip failed pages but returns ordinary pages without completeness marker; actual caller policies need review.",
+    "Pagination strips all original query parameters then rebuilds offset/limit, risking loss of filters. Fixed initial total/offset pagination has no snapshot/dedup guard against changing playlist.",
+    "API playlist deletion sends positions only, without snapshot_id despite type exposing it. Descending batches mitigate index shifts from own deletions but do not establish concurrent-edit safety. Current Spotify API acceptance not checked.",
+    "parseAPIResponse checks response.ok after customFetch refreshed retry, so unchecked raw refreshed response is subsequently rejected for these wrapper calls. Earlier customFetch finding is narrowed to direct callers/absence of retries, not unconditional false success.",
+    "Existing removal test uses immediately fulfilled saved-track API mocks and asserts call count only; it cannot detect pending completion issue reproduced in v1. Starred test asserts rejection but not zero API calls. No delayed-failure/cancellation snapshot checks seen here."
+  ],
+  "limits": [
+    "7/97 tracked blobs reviewed;151/500 repositories complete.",
+    "No upstream Jest/app runtime, external API changes, UI/media or fullplatform proof. pHash/ASAN remains deferred."
+  ]
+}
