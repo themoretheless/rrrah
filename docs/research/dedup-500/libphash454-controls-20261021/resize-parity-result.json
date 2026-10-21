@@ -1,0 +1,55 @@
+{
+  "backend_comparisons": 486,
+  "identity_cases": 54,
+  "mismatches": 0,
+  "dimensions": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      17
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      16,
+      16
+    ],
+    [
+      17,
+      19
+    ],
+    [
+      32,
+      33
+    ],
+    [
+      63,
+      65
+    ]
+  ],
+  "patterns": [
+    "black",
+    "white",
+    "random"
+  ],
+  "method": "Original resize.c and exact vendored header, nativeARM versus STBIR_NO_SIMD, O2 ffp-contract=off. Byte parity plus identity/constant invariants.",
+  "limits": [
+    "Gray uint8only, positive packedstrides",
+    "Not independent general-resampling oracle",
+    "No alpha/sRGB/float/multithread/allocfailure qualification",
+    "No timingclaim or ASAN"
+  ]
+}
