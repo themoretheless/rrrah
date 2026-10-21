@@ -1,0 +1,74 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 262,
+  "tracked_blobs": 268,
+  "partial_binary_semantic_reviews": {
+    "omnisearch-lite/assets/catalog.bin": {
+      "sha256": "0ee76b457784df3277f066c6a3899f4d867c6f7e15d6c2326b9dba6161454793",
+      "git_blob": "3e39a4a651a0c6b32113ba2a66d69534a3e3e5dc",
+      "new_metadata_record_ranges_zero_based": [
+        [
+          80,
+          279
+        ]
+      ],
+      "cumulative_metadata_record_ranges_zero_based": [
+        [
+          0,
+          279
+        ]
+      ],
+      "total_records": 952,
+      "all_seven_fields_read_for_record_range": true,
+      "new_records_canonical_json_sha256": "fce649c5681609462a44073d2cc46129df628f412e80a6fea1b9cad22964357f",
+      "whole_file_read": false
+    }
+  },
+  "executed_controls": {
+    "kind": "New isolated tests of unchanged original helpers with actual pinned catalog metadata; not original upstream tests or full app search execution.",
+    "command": "rustc +1.98.1 --edition 2024 --test .dedup-work/omni13-20261021/catalog-key-controls-v95.rs -o .dedup-work/omni13-20261021/catalog-key-controls-v95; then execute test binary",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "source": "docs/research/dedup-500/omni13-catalog-launch-keys-v95-20261021.rs",
+    "source_sha256": "ee98b0cdb1f67a76d83648ca8cb6d99a19b7069036ec4bde03517412e1e6b7b9",
+    "log": "docs/research/dedup-500/omni13-catalog-launch-keys-v95-20261021.log",
+    "log_sha256": "5b6f3a8e6c537e4efd00f86d1bb06968b148ee41659181ae0702571d01005fcd",
+    "upstream_helpers": [
+      "image_path_dedupe_key",
+      "result_launch_dedupe_key"
+    ],
+    "fixture_record_pairs_zero_based": [
+      [
+        139,
+        142
+      ],
+      [
+        141,
+        143
+      ],
+      [
+        194,
+        195
+      ]
+    ],
+    "source_license": "MIT; pinned upstream LICENSE already retained and reviewed in repository 013 evidence.",
+    "log_normalization": "Removed trailing blank line only; test output retained."
+  },
+  "findings": [
+    "Records 80-279 cover touchpad, keyboard, mouse, mobile devices, cameras, printers, Bluetooth, networking and personalization. All description, breadcrumb, name, command, source, synonyms and ID fields read; no launch command executed.",
+    "Record 125 embeds a particular USB2.0 HD UVC WebCam model in its label. This is bundled catalog text, not evidence that a target device exists on the current host or that enumeration occurred.",
+    "Different private/public Network discovery and File and printer sharing records have distinct IDs and breadcrumbs but the same ms-settings:network-advancedsharing launch target. Three isolated original-helper controls confirm equal launch keys, including a taskbar section versus its Search item.",
+    "Original final merge loop discards a result if its ID or nonempty launch key has already appeared. If both tested records reach that merge, only the first remains. This is launch-target deduplication; no full-query ranking, actual Windows navigation or incorrect content-identity behavior is claimed.",
+    "Descriptions often name individual state changes, while stored commands navigate to generic settings pages. Labels alone do not prove that toggles, resets, installation or system actions actually execute.",
+    "The current file-deduplication library keeps byte-confirmed content groups separate from aliases; the command-key policy is retained only as a research finding, not adopted as file identity."
+  ],
+  "limits": [
+    "Catalog semantic review 280/952 records; 262/268 completed files and 155/500 completed repositories unchanged.",
+    "No production edit or new performance claim. Previous asset-corpus public API controls remain separate evidence.",
+    "Native pHash/ASAN deferred."
+  ]
+}
