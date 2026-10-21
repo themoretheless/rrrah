@@ -1,0 +1,54 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 20,
+  "files": {
+    "tests/unit/core/test_tolerance_calculator.py": {
+      "bytes": 5823,
+      "sha256": "0ff198c3a91b5625a1d63350449ad2b2f163f2cf72ccc68a3b260257562e1d9b",
+      "git_blob": "45b173e30f7571f5acfd7389133749d109802236",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py": {
+      "bytes": 5559,
+      "sha256": "48303fbb3f7bc3254ac5e18f3f961ded628ca88baf4f4a1ede401df0852fa020",
+      "git_blob": "54270760654998fbb42652832ba55b67c769a89b",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/plugins/tolerance_calculators/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/tolerance_calculators/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/plugins/tolerance_calculators/natural_tolerance_plateau_probe.py": {
+      "bytes": 10723,
+      "sha256": "e6795a0f94951e5e944c9bee114d3a50f180ba71e185a296eff3739b2e0004e6",
+      "git_blob": "562d0f745ec5eec8b59ea8d34278ef99e1eb0e90",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 10,
+  "findings": [
+    "Tolerance base tests binary search using DummyDDA returning constant1, not actual distance clustering. The perturbation test checks 197 seeds, shape, original rows and standard deviation; source read, not executed.",
+    "Reclustering tests explicitly call create_perturbed_dataset before calculation, avoiding default empty-dataset failure. Successful restoration is exercised; exception restoration is not covered.",
+    "Reclustering integration-like unit tests cover DistanceMatrix and MultiHashing across average/loose/tight modes, positivity and recovered counts. Default fixtures allocate capacity10000; not executed here.",
+    "Plateau get_plateau_log requires window>1 and enough points but uses strict abs(gradient)<abs(relative threshold). Globally flat counts make threshold0 and reject flat windows. Static finding awaiting original-method control.",
+    "Plateau find_plateaus only detects transitions; an all-true plateau log yields neither starts nor ends and no interval. Static finding awaiting control.",
+    "Plateau tolerance_probe restores temporary dataset only after successful loop, without finally, paralleling already-reproduced binary-search restoration risk. Not independently executed.",
+    "Default plateau uses perturbations_per_vector1 and empty tolerance dataset; _ensure_perturbed_dataset regenerates only when perturbations>1. Static path agrees with previous empty default reduction evidence but plateau default itself not executed."
+  ],
+  "remaining_scope": "82 tracked artifacts, including plateau tests, other plugin tests, documentation, notebooks, visuals, generated assets and lockfile.",
+  "limits": [
+    "No new runtime tests in this increment. Full repository count201/500 unchanged. No production adoption; pHash/ASAN deferred."
+  ]
+}
