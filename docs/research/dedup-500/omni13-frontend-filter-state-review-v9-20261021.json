@@ -1,0 +1,54 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "lines": 9598,
+      "new_read_line_ranges": [
+        [
+          2731,
+          4760
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          4760
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "2030 additional contiguous frontend lines read; original useMemo filter callback executed with immediate useMemo adapter and synthetic result objects under Node native TS stripping.",
+  "executed_controls": {
+    "comma_extension_list_count": 0,
+    "single_extension_control": 1,
+    "folders_alias_count": 0,
+    "folder_alias_control": 1
+  },
+  "control_source": "type SearchResult=any;\nfunction toBytesFromMb(value: string): number | undefined {\n  const trimmed = value.trim();\n  if (!trimmed) {\n    return undefined;\n  }\n  const parsed = Number(trimmed);\n  if (!Number.isFinite(parsed) || parsed < 0) {\n    return undefined;\n  }\n  return Math.floor(parsed * 1024 * 1024);\n}\n\nfunction toUnixStart(dateValue: string): number | undefined {\n  if (!dateValue) {\n    return undefined;\n  }\n  const unix = Date.parse(`${dateValue}T00:00:00`);\n  if (Number.isNaN(unix)) {\n    return undefined;\n  }\n  return Math.floor(unix / 1000);\n}\n\nfunction toUnixEnd(dateValue: string): number | undefined {\n  if (!dateValue) {\n    return undefined;\n  }\n  const unix = Date.parse(`${dateValue}T23:59:59`);\n  if (Number.isNaN(unix)) {\n    return undefined;\n  }\n  return Math.floor(unix / 1000);\n}\n\nfunction isAppSearchResult(result: SearchResult): boolean {\n  return result.resultKind === \"app\";\n}\n\nfunction normalizedExtension(result: SearchResult): string {\n  if (isAppSearchResult(result)) {\n    return result.extension.trim().replace(/^\\./, \"\").toLowerCase();\n  }\n  if (result.isDirectory) {\n    return \"\";\n  }\n  const ext = result.extension.trim().replace(/^\\./, \"\").toLowerCase();\n  if (ext) {\n    return ext;\n  }\n  const dotIndex = result.name.lastIndexOf(\".\");\n  if (dotIndex < 0 || dotIndex === result.name.length - 1) {\n    return \"\";\n  }\n  return result.name.slice(dotIndex + 1).trim().toLowerCase();\n}\n\nfunction run(extension:string){\nconst minSizeMb=\"\",maxSizeMb=\"\",createdAfter=\"\",createdBefore=\"\";const combinedResults=[{name:\"a.jpg\",extension:\"jpg\",resultKind:\"file\",isDirectory:false,size:1,createdUnix:1},{name:\"b.png\",extension:\"png\",resultKind:\"file\",isDirectory:false,size:1,createdUnix:1},{name:\"folder\",extension:\"\",resultKind:\"file\",isDirectory:true,size:0,createdUnix:1}];const useMemo=(fn:()=>any,_deps:any[])=>fn();\n  const filteredCombinedResults = useMemo(() => {\n    const normalizedExtensionFilter = extension.trim().replace(/^\\./, \"\").toLowerCase();\n    const minSize = toBytesFromMb(minSizeMb);\n    const maxSize = toBytesFromMb(maxSizeMb);\n    const minCreatedUnix = toUnixStart(createdAfter);\n    const maxCreatedUnix = toUnixEnd(createdBefore);\n\n    return combinedResults.filter((result) => {\n      if (normalizedExtensionFilter) {\n        if (normalizedExtensionFilter === \"folder\") {\n          if (!result.isDirectory) {\n            return false;\n          }\n        } else if (normalizedExtension(result) !== normalizedExtensionFilter) {\n          return false;\n        }\n      }\n\n      if (minSize !== undefined || maxSize !== undefined) {\n        if (isAppSearchResult(result) && result.size <= 0) {\n          return false;\n        }\n        if (minSize !== undefined && result.size < minSize) {\n          return false;\n        }\n        if (maxSize !== undefined && result.size > maxSize) {\n          return false;\n        }\n      }\n\n      if (minCreatedUnix !== undefined || maxCreatedUnix !== undefined) {\n        if (result.createdUnix <= 0) {\n          return false;\n        }\n        if (minCreatedUnix !== undefined && result.createdUnix < minCreatedUnix) {\n          return false;\n        }\n        if (maxCreatedUnix !== undefined && result.createdUnix > maxCreatedUnix) {\n          return false;\n        }\n      }\n\n      return true;\n    });\n  }, [combinedResults, createdAfter, createdBefore, extension, maxSizeMb, minSizeMb]);\n\nreturn filteredCombinedResults.length;}\nif(run(\"jpg,png\")!==0||run(\"jpg\")!==1||run(\"folders\")!==0||run(\"folder\")!==1)throw Error(\"unexpected\");console.log(JSON.stringify({comma_extension_list_count:run(\"jpg,png\"),single_extension_control:run(\"jpg\"),folders_alias_count:run(\"folders\"),folder_alias_control:run(\"folder\")}));\n",
+  "findings": [
+    "Confirmed double-filter mismatch: C++ separate extension input splits comma list; frontend exact string filter rejects jpg,png against jpg and png results. Original callback count0; singlejpg count1. C++ supportsfolder/folders/dir/directory aliases; frontend onlyfolder special-cases directories. folders count0/folder1 in control. No actual Tauri command executed.",
+    "Ordinary search effect marks previous activefalse on cleanup, clears debounce, requests native cancellation, and checks active before result/error/loading updates. This limits stale ordinary-query publication; cancellation command is fire-and-forget, no acknowledgement ordering proven.",
+    "Ordinary search effect dependencies omit status.ready/indexedCount and requested/applied scope keys, so index replacement/update alone does not rerun same query in this effect. Reindex helper remainder/later callsites not yet read; repository-wide refresh absence not claimed.",
+    "Index-start effect depends on pendingIndexConfigKey while setting it inside effect; rerender cleanup can mark activefalse and next effect return early because requested==pending, potentially leaving pending/applied stale. Static React scheduling hypothesis, not mounted/confirmed.",
+    "Scope change clears duplicate UI state and duplicatesLoading but does not cancel native duplicate task in this effect. Later scan handler request provenance still pending review.",
+    "Text snippet loop has cancelled flag used only for publishing, not loop termination/request guard, so cleanup may continue remaining up-to24 requests. Selected-preview fallback catch also starts after cleanup without checking cancelled first. Static work-after-cancel paths, no IO executed.",
+    "Text preview errors become cached empty matchedfalse payload, indistinguishable from genuinely empty preview in that state. Loading mapfinally cleanup mutates state after effect cleanup.",
+    "Backend default deletefalse is confirmed UI default for single search/duplicate deletion: both false and resetfalse when candidate closes. Bulk deletion defaults recycletrue. Actual confirmation wording/actions later UI pending. No deletion executed.",
+    "Bulk rename performs serial actions and clears entire selection after partial failure; no-op increments renamedCount and success notice can say renamed without mutation. Bulk replace uses JS replacement string special syntax($&,etc), no literal replacement guarantee. Static source only.",
+    "Status/duplicate polling uses setInterval without in-flight serialization; delayed responses may overwrite newer status. Sync polling schedules next only afterfinally, avoiding same-loop overlap. No timer/browser runtime measurement.",
+    "Native preview cache reset on results or showPreviews narrows v8 concern: stale same-path cache not indefinite across any new results object. Mutation without refresh can still retain it; no mutation demonstrated."
+  ],
+  "limits": [
+    "31/268 whole files, App.tsx1-4760 of9598 partial. Full source/runtime incomplete.",
+    "Filter control evaluates original callback semantics only; no React lifecycle/Tauri/Windows/native integration or user filesystem operations.",
+    "No production changes or performance claim. Native pHash/ASAN deferred."
+  ]
+}
