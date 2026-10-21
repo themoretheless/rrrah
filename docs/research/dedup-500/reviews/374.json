@@ -2,9 +2,9 @@
   "index": 374,
   "repository": "deveyNull/phistOfFury",
   "commit": "96598bf78c4f33bfca68f4b3fc9c4b334f175644",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 13 pinned blobs: five whole text files, six individually viewed images, both PDFs whole text and all 51 rendered pages. Isolated function controls; full runtime unqualified.",
   "decision": "reference",
-  "finding": "Partial:allsource/docs/siximages and3pagepaperreviewed;48pagepresentation remains. Priorfunctiondefectsretained;constanttimeclaims unqualified.",
+  "finding": "Complete source/visual review. Serializer tail loss, Python 3 Hamming failure and unrelated cwd renaming reproduced; premature bucket return found in source. Performance claims unqualified.",
   "available_source_evidence": [
     {
       "path": "phist.py",
@@ -64,6 +64,12 @@
     {
       "audit": "docs/research/dedup-500/phist374-source-review-v2-20261021.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/phist374-slides-review-20261021.json",
+      "whole_repo_complete": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/phist374-complete-source-review-20261021.json"
 }
