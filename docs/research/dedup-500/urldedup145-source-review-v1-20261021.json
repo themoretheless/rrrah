@@ -1,0 +1,76 @@
+{
+  "repository": "cadencelabs/urldedup",
+  "commit": "6933fe99f3bf9c8ba5a1c34fd999a0681215373f",
+  "whole_repo_complete": false,
+  "tracked_blobs": 9,
+  "cumulative_assessed_blobs": 8,
+  "files": {
+    "Console/Command/AbstractCatalogUrlRewrites.php": {
+      "bytes": 11669,
+      "sha256": "9b624a6f8b40e133a83fe254c79271fd3cdf7f7d1cfc11d2df4f40c93becb4fd",
+      "git_blob": "97cd6f2ceec9c748fb0436d3a3b592c2f06f5b03",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "Console/Command/CategoryUrlRewrites.php": {
+      "bytes": 6442,
+      "sha256": "77c4400d1572313af37e693738cf7969b854261e96828b3be3f72f5579680984",
+      "git_blob": "88828a43ff688a6d8205db47ea0440db46bf03b6",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "Console/Command/ProductUrlRewrites.php": {
+      "bytes": 929,
+      "sha256": "e9ef89258a276b7896be434b96d60037c2bfff11ec8b562adf769b091c272d9f",
+      "git_blob": "8bc91c9216b4f9f771d9cd865846ed2c9d9dcb51",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 35141,
+      "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+      "git_blob": "9cecc1d4669ee8af2ca727a5d8cde10cd8b2d7cc",
+      "method": "Only first12 and last20lines read; middle pending"
+    },
+    "README.md": {
+      "bytes": 370,
+      "sha256": "e255100e6830d89c8e2a68e3ceb0d450cd536490672e4da75d9b45aede28a4f0",
+      "git_blob": "c8ee84bd07bac3530328b905b661cc650525e4ba",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "etc/config.xml": {
+      "bytes": 176,
+      "sha256": "91b778705aa8630b2b133d8f8bf6e1a433372002f572c80781bf256f97c85816",
+      "git_blob": "5670246754d0e7730f22777b57119a59324ea1f7",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "etc/di.xml": {
+      "bytes": 643,
+      "sha256": "c7359a39f5b137e468b8719448d80ae6ff8867efcb1a01c4d9d4b21cefad665b",
+      "git_blob": "3a6ba420d4ea390275b3cf26974fc5f30891aa9d",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "etc/module.xml": {
+      "bytes": 455,
+      "sha256": "1950574d20814deb019efe06c00c77781865078008723e7c8c75524b51f89c14",
+      "git_blob": "861c13b548e38bf89fd3d55097a608066c7f15a4",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    },
+    "registration.php": {
+      "bytes": 366,
+      "sha256": "871eb4b55e30fe5534de25947d5ff004bf9cdab02c2b6c564cf5f1b5c68db3c5",
+      "git_blob": "48072e18482508aa8bec732fc8bbb1ffeda28167",
+      "method": "Whole pinned source/config/readme text read without truncation"
+    }
+  },
+  "new_runtime_controls": 0,
+  "upstream_tests_run": false,
+  "findings": [
+    "Reject-domain confirmed: Magento2 product/category URL-key conflict rewriting via database SQL, no content hashes or file/image matcher. No production adoption.",
+    "All8non-license source/docs/config files fully read. No tests, package dependency manifest, database fixtures or standalone test runner in pinned tree. No PHP/Magento/database commands executed.",
+    "Explicit conflicts group attribute/store/value and retain min(entity_id), appending entity ID to others. Category grouping also includes url_path, with null collapsed to empty string in selection but update chooses IS NULL for falsy path. Possible empty-string group mismatch source-only, not executed.",
+    "Appended suffix uniqueness is not rechecked in same pass. Potential conflict with existing suffixed values is source-only; no actual database mutation/control.",
+    "Cascading category SQL rootPath join constrains leafPath.attribute_id again rather than rootPath.attribute_id. Unintended root attribute matches possible by static inspection, not a live SQL result.",
+    "execute wraps changes for all selected stores in a transaction, catches Throwable and rolls back, then exits. On successful commit it invokes reindex/cache shell commands without inspecting exit status. No atomicity, rollback, recovery or indexing qualification inferred.",
+    "Code and module/registration headers attribute OlegKoval and list OSL-3.0,AFL-3.0; README and root license identify GPL3. Different per-file declarations retained as unresolved provenance, not normalized to a single license. No source copying.",
+    "Root674line license only boundary excerpts read; middle remains pending. Full reviewed count194/500 unchanged. Native pHash/ASAN deferred."
+  ],
+  "remaining_scope": "Read LICENSE middle before complete artifact review; PHP/Magento/runtime and license provenance unresolved."
+}
