@@ -1,0 +1,34 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/google-photos-commands.js": {
+      "sha256": "44b9d183e0a2f096f81053c985d1b4b64464263ada5543e197f73202932e4bd7",
+      "git_blob": "0c51137703d3fa764e20d7e20bc4379826c38bfe",
+      "bytes": 10712,
+      "lines": 339,
+      "method": "Whole source read in contiguous ranges 1-240 and 241-339."
+    }
+  },
+  "cumulative_whole_files_read": 62,
+  "tracked_blobs": 84,
+  "findings": [
+    "getAllMediaItems ignores args.dateRange entirely. Synthetic out-of-range timestamp is returned despite requested 2025 bounds.",
+    "Incremental pagination stops at creationTimestamp <= watermark, without checking mediaKey membership. A newly seen item sharing cached maximum upload timestamp is excluded. Confirmed on original function with synthetic API.",
+    "Null page response breaks pagination and emits successful chunks from accumulated earlier pages, rather than incomplete/error indication. Confirmed on original function.",
+    "Pagination timeout races API promise but does not abort underlying operation. No repeated-page-token detection, cancel command or total item budget in this source.",
+    "postResultChunked caps item count at ten thousand, not serialized byte size; exceptionally large metadata can still exceed message size limits.",
+    "Trash/restore use sequential 250-key batches and count requested chunk length after API promise resolution, without validating response-level per-key outcomes here. On later failure only generic error is returned, without completed-key reconciliation. Source read only; these functions not executed.",
+    "Health check reads hasGptk/hasWizData and account email but does not verify callable APIs or account identity consistency across an operation."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-pagination-controls-v27-20261021",
+    "passed": 3,
+    "method": "Original read-only pagination function in VM, synthetic API pages and captured postMessage; no account or network."
+  },
+  "limits": [
+    "No trash/restore function invoked. No live service, credentials, browser or user data.",
+    "62/84 whole files read. No production library change."
+  ]
+}
