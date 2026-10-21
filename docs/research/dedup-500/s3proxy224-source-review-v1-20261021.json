@@ -1,0 +1,61 @@
+{
+  "repository": "Timshel/s3-dedup-proxy",
+  "commit": "6709807860db2357d4dbb8186504724d56bbe891",
+  "whole_repo_complete": false,
+  "tracked_blobs": 30,
+  "cumulative_assessed_blobs": 7,
+  "files": {
+    "src/main/scala/timshel/s3dedupproxy/Application.scala": {
+      "bytes": 3306,
+      "sha256": "ff2818c03b7370fd6682584425e3268174b46b3f7c9d2b94c10851baeb91fafc",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    },
+    "src/main/scala/timshel/s3dedupproxy/Cleanup.scala": {
+      "bytes": 2354,
+      "sha256": "8b2a7c4c6c6c7dc0098c14f45e6662569b16552c1ab450aa1d37ff525424194c",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    },
+    "src/main/scala/timshel/s3dedupproxy/Controllers.scala": {
+      "bytes": 1678,
+      "sha256": "5665a6fa84e37d0479ba8e74e5b89a661b14c92d8373e2cdc41027c15ea991d3",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    },
+    "src/main/scala/timshel/s3dedupproxy/ProxyBlobStore.scala": {
+      "bytes": 22588,
+      "sha256": "9d3d9c8e246091bda2d7758b68113bb7b97cb21263313290a610d83b9000a946",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    },
+    "src/main/scala/timshel/s3dedupproxy/ObjectStoreClient.scala": {
+      "bytes": 1409,
+      "sha256": "e4b5c9002ccee0d2a4d203877e79e26808c12e6b660c374222b1e802e099eeb8",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    },
+    "src/main/resources/db/migration/V01__init_schema.sql": {
+      "bytes": 1125,
+      "sha256": "d87c3eb5a205c0cc5edae5a45c4e95de09e9cd993066d5e7732525a86bc8e2d5",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    },
+    "src/main/resources/db/migration/V02__advisory_lock.sql": {
+      "bytes": 384,
+      "sha256": "62a8e6a61a88fb78143f647926dfb3edb36ae84e15124e537e8b13dd824bc781",
+      "method": "Whole pinned Scala/SQL file read without truncation; ProxyBlobStore in two contiguous chunks"
+    }
+  },
+  "runtime_controls_executed": 0,
+  "findings": [
+    "putBlob streams through SHA512 and MD5+size while buffering; processBufferDedup uses hash advisorylock, checks metadata, stores underlying object if absent, writes metadata then logical mapping and removes buffer. Actual DB transaction/lock lifecycle pending Database.scala.",
+    "Repeated SHA512 reuses existing metadata ETag without revalidating stored bytes/size/contentType. Metadata primarykeyhash and mappings contain no contentType override; identical bytes uploaded under distinct contentTypes share first stored type. Source-only behavior, no HTTP/backend execution.",
+    "Multipart upload first completes buffer, then rereads whole bufferedobject for SHA512/MD5/size and calls same dedup path. No content-size/hash completeness oracle run.",
+    "Cleanup gets at most1000dangling hashes, deletes backend keys, then deletes DBmetadata for reported successes. Correctness depends on locksReleaseBlock, getDangling and deletion SQL not yetread.",
+    "ObjectStoreClient derives successes by removing explicitly failed keys from requested map. Backend iterable/result exception semantics unqualified; no Minio call performed.",
+    "Schemas use cascading hashforeignkey and unique user/bucket/filekey mapping. Source deletion removes mapping first and backend garbage collection separately; no whole operation durability/rollback proof.",
+    "Public store stubs report directory/container existence true and accessPUBLIC_READ. These are observed proxy policy limitations, not full S3 semantic parity.",
+    "Redirect helper derives public hashkey from mapping; API binds and identity policy require config/registry review. No accounts, endpoints or actual service operations accessed."
+  ],
+  "remaining_scope": "23artifacts including Database/config/registry, full tests/build/docs/rootlicense and project resources.",
+  "license": "RegistryAGPL3 screening only; root/nestedlicense pending. No production adoption.",
+  "limits": [
+    "Partial7/30review; no new Scala/JVM/SQL/backend runtime tests. Full count186/500 unchanged.",
+    "No actual proxy, database, concurrency, payload storage/deletion, corpus/platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
