@@ -1,0 +1,30 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/components/photo-viewer-modal.test.tsx": {
+      "sha256": "92e593a81e4ac39ba6e888e99a751cc0b0c698d03f953a033dacf29effec6c7c",
+      "git_blob": "c5f2f6e4e863c5d0962d7c1fce39f9e378753611",
+      "bytes": 14489,
+      "lines": 439,
+      "declared_it_calls": 32,
+      "method": "Whole source read in contiguous ranges 1-260 and 261-439."
+    }
+  },
+  "cumulative_whole_files_read": 79,
+  "tracked_blobs": 84,
+  "findings": [
+    "Unlike group-level stub tests, these tests mount actual viewer and check navigation filename/counter, initial end states, item-array reset, metadata/link and keyboard callback routing.",
+    "Fetch always resolves synthetic JPEG-like Blob; createObjectURL always returns the same blob:mock string and revoke is no-op. Tests cannot distinguish different image payloads or verify correct URL revocation by identity.",
+    "No failed HTTP, rejected/stalled fetch, aborted request, mediaKey change with same thumb URLs, viewport resize or missing-parent-entry index scenario. Prior parent-filter/index issue remains uncovered.",
+    "ArrowDown on the only kept item expects callback invocation. Viewer delegates last-kept invariant to parent; this file does not mount parent to verify final state.",
+    "Prefetch tests verify requested viewport-size URL but not response processing, concurrency budget, timeout or resource reclamation.",
+    "No rendered image-decode or screenshot assertion; source-loaded blob mocks do not qualify actual visual correctness."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static upstream test review; no Vitest/React execution or image requests.",
+    "79/84 assessed parent blobs after union reconciliation; external demo and remaining five blobs still outstanding."
+  ]
+}
