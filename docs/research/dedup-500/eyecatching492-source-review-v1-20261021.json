@@ -1,0 +1,32 @@
+{
+  "repository": "touhidrahman/eyecatching",
+  "commit": "72da4de1845b4cdecc8f826bf756cead43bde507",
+  "whole_repo_complete": false,
+  "files": {
+    "comparative.py": {
+      "bytes": 1221,
+      "sha256": "576e7490c36f7f21bfaa680d2f6241f810d9c590b4c7c8863c9275929d11a594",
+      "git_blob": "a08e5e0c8ae1e97a1289623ad79d9f055552b943",
+      "method": "Wholepinnedtextreadwithouttruncation"
+    },
+    "eyecatchingutil.py": {
+      "bytes": 10415,
+      "sha256": "082e9c03b5825cfc59bba9dda4e0928c1e3fe814318748a9f46a22b8c9f38fe6",
+      "git_blob": "36398e4692f438151500b0e1cdb07c698d5e418a",
+      "method": "Wholepinnedtextreadwithouttruncation"
+    }
+  },
+  "controls": "docs/research/dedup-500/eyecatching492-controls-20261021/result.json",
+  "authored_controls": 5,
+  "findings": [
+    "Original MetaImage black RGB8x8 fails unpacking PillowgetbboxNone; no file corruption required.",
+    "Original MetaImage square8x8 first_half/second_half bothNone because landscape/portrait bothstrict. Coordinates class separately uses>=/<=,so class policies differ.",
+    "Original extension parsing splitdotindex1 mislabels a.b.png asb.",
+    "Original is_similar_by_color samplesfixedpixel1,1(notrandom despitecomment),raisesIndexErrorfor1x1images.",
+    "ActualoriginalImageComparator+ImageHash:solidredandblue16x16 have0distanceforahash/phash/dhash/whash;notpixelidentity.",
+    "Comparative demo opens3hardcodeduntrackedJPEGnames andprints8distances;noassertionsandnotrun. Browser screenshot code depends onexternalFirefox/Chrome/Node/ImageMagick andfixedoutputnames;notexecuted."
+  ],
+  "limits": [
+    "Twoimplementationfileswhole-read;remainingcontroller/CLI/docs/config/license/screenshotsnotyetwholeassessed. FiveauthoredcontrolswithrealPillow/ImageHash,butnooriginalupstreamsuiterun. InitialauthoredreportserializationfailedonNumPyint64aftercontrolassertions;fixedJSONserializationwithintcastandreranall5,notupstreamfailure. No productioncodeadopted.NativepHash/ASANdeferred."
+  ]
+}
