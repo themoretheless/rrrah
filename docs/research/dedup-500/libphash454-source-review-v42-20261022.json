@@ -1,0 +1,881 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "dependency_tracked_blob_review_complete": true,
+  "dependency_blob_count": 262,
+  "dependency_scope": "All58 text blobs and204 PNG blobs covered by whole-source reading, valid individual previews or malformed complete-byte/structure review across increments; externalREADMEURLs separate.",
+  "asset_reviews": [
+    {
+      "path": "tests/crashers/bad_iCCP.png",
+      "sha256": "0c1ec5ece28d8574e80a3842939e8939f3451c71e8b2e013dcf26a80d292168e",
+      "size": 321,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d49484452000020ab000000010800000000811067c50000011469434350296323000018d32b6060bcc600044c0a0c0cc5319245ee418e911191510aec173b321978805084812931b9b880010218bdfd1c5ddd835c231950c0b76b0c8c20eab9ae5780ab3a036940271919191919191919191939091919191919191999191a19191919191919191919191919191919191919191919191919192a191919191919191919081919191919191919191919191919191919191927191919191919193a191919191919191919191925336f19b54873c98d89735247beb34e470d00200d4969705243414427000000010ff6890319191a474219014e52197e73501919000019100000017703000a0a00191919191919191919191919191919191919191919191919191919191d1919191919196f19b558444154",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": false
+        },
+        {
+          "type": "iCCP",
+          "length": 276,
+          "crc_ok": false
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/badadler.png",
+      "sha256": "3614bbe9494f6374567cbf897e022a16abb8edd3f166745ce73a2f472eef6136",
+      "size": 67,
+      "preview": "Displayed1x1 dark pixel",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d4948445200000001000000010100000000376ef9240000000a4944415408d763600000abadad320e169bd80000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type": "IDAT",
+          "length": 10,
+          "crc_ok": true
+        },
+        {
+          "type": "IEND",
+          "length": 0,
+          "crc_ok": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/badcrc.png",
+      "sha256": "ec5b6a711ea2325404ea56575df2f8a28292e5ef15a950f42a1d39ce06a6a96a",
+      "size": 67,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d4948445200000001000000010100000000376ef9240000000a4944415408d76360000000020001abadcc320000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type": "IDAT",
+          "length": 10,
+          "crc_ok": false
+        },
+        {
+          "type": "IEND",
+          "length": 0,
+          "crc_ok": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/empty_ancillary_chunks.png",
+      "sha256": "bdc133d532c03cdaa6b6a8188a722c3845d4b2f76e89c63e1c70c1bf6a364be7",
+      "size": 730,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca00000000624b4744022ddefe000000006348524df6be59720000000065584966ca7997040000000067414d41b2e1b71f00000000684953545d0d2dc50000000069434350a589193e000000006954587429d58380000000006a754e6b937fb89b000000006a754e4ba8119853000000007043414caeaf3fe6000000007048597396876563000000007343414cbc1a90080000000073504c5404b86b3a0000000073524742101cd3ce00000000735445523b10dd9a00000000744558749642c5850000000074494d45f933dacf000000007a5458746b797bf100000003504c5445800080abf7a57a00000000624b4744022ddefe000000006348524df6be59720000000065584966ca7997040000000067414d41b2e1b71f00000000684953545d0d2dc50000000069434350a589193e000000006954587429d58380000000006a754e6b937fb89b000000006a754e4ba8119853000000007043414caeaf3fe6000000007048597396876563000000007343414cbc1a90080000000073504c5404b86b3a0000000073524742101cd3ce00000000735445523b10dd9a00000000744558749642c5850000000074494d45f933dacf000000007a5458746b797bf10000000a4944415408d76360000000020001e221bc3300000000624b4744022ddefe000000006348524df6be59720000000065584966ca7997040000000067414d41b2e1b71f00000000684953545d0d2dc50000000069434350a589193e000000006954587429d58380000000006a754e6b937fb89b000000006a754e4ba8119853000000007043414caeaf3fe6000000007048597396876563000000007343414cbc1a90080000000073504c5404b86b3a0000000073524742101cd3ce00000000735445523b10dd9a00000000744558749642c5850000000074494d45f933dacf000000007a5458746b797bf10000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type": "bKGD",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "cHRM",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "eXIf",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "gAMA",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "hIST",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "iCCP",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "iTXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "juNk",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "juNK",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "pCAL",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "pHYs",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sCAL",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sPLT",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sRGB",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sTER",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "tEXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "tIME",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "zTXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "PLTE",
+          "length": 3,
+          "crc_ok": true
+        },
+        {
+          "type": "bKGD",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "cHRM",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "eXIf",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "gAMA",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "hIST",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "iCCP",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "iTXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "juNk",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "juNK",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "pCAL",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "pHYs",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sCAL",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sPLT",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sRGB",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sTER",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "tEXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "tIME",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "zTXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "IDAT",
+          "length": 10,
+          "crc_ok": true
+        },
+        {
+          "type": "bKGD",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "cHRM",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "eXIf",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "gAMA",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "hIST",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "iCCP",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "iTXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "juNk",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "juNK",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "pCAL",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "pHYs",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sCAL",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sPLT",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sRGB",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "sTER",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "tEXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "tIME",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "zTXt",
+          "length": 0,
+          "crc_ok": true
+        },
+        {
+          "type": "IEND",
+          "length": 0,
+          "crc_ok": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_IDAT.png",
+      "sha256": "e5080baec5e30c020cc75a16534ffa906ac1130234c511d774e0305408021b9c",
+      "size": 79,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d4948445200000002000000020802000000fdd49a733fffffff4944415408d763fc7fe03403030313030303030303001ed6028eee7e062b0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "49444154",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_bKGD_chunk.png",
+      "sha256": "082aeb6b4ab247fef9ba5d4e45807942878326298d1df625b605d1da0801f454",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff624b4744022ddefe0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "624b4744",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_cHRM_chunk.png",
+      "sha256": "ac630e5172baede942f4b6129c8b12468b5c723e443cd8a470edea2a8efa1b5d",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff6348524df6be59720000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "6348524d",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_eXIf_chunk.png",
+      "sha256": "def32ebac5a7c25ae469c5eb228d71f78d746edbbc088bcab13e3aefcf92af23",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff65584966ca7997040000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "65584966",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_gAMA_chunk.png",
+      "sha256": "c645113de3ab585b92e0c0f626761f18271f65c60844230071f2632fe4f70895",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff67414d41b2e1b71f0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "67414d41",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_hIST_chunk.png",
+      "sha256": "132f6a3bef3964ff05bad7f35f585d18680fa21acd4f9b2e51b7fe665aabc713",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff684953545d0d2dc50000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "68495354",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_iCCP_chunk.png",
+      "sha256": "81efdcb97e6261332ee2d6d6c0761d3a51a22a5f432da87d2cdb579629fe98e5",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff69434350a589193e0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "69434350",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_iTXt_chunk.png",
+      "sha256": "cf52cbac99198baf5e72e0d1423de217aa9cff327981356ab20e9b47d32ab0fd",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff6954587429d583800000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "69545874",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_juNK_unsafe_to_copy.png",
+      "sha256": "8f9ef7f8931919fc8a73d896ff2e3bd5cf233141dc6b7801e4fbe7c0c7b4037b",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff6a754e4ba81198530000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "6a754e4b",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_juNk_safe_to_copy.png",
+      "sha256": "85325cb6bc93bf513aea184f610f856f306278ad6bedd98935a0a96d9416d5f0",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff6a754e6b937fb89b0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "6a754e6b",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_pCAL_chunk.png",
+      "sha256": "aa551af23f38a4477025a66a81c0d60a8cd5bbf20daed3526b1427c89ef7666b",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff7043414caeaf3fe60000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "7043414c",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_pHYs_chunk.png",
+      "sha256": "96057fe3351aafd59ba490c08edefce40a1f2d03b168973ad97a34d0be9d9ec3",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff70485973968765630000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "70485973",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_sCAL_chunk.png",
+      "sha256": "8c10f1d5cc9efa236a9a9ddc337ecca60d877c5d496ff0864bf044f446b88c3a",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff7343414cbc1a90080000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "7343414c",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_sPLT_chunk.png",
+      "sha256": "0e1b57826471471792d4f36fc5a6f14f0c91d3d2a3d96aaf4ef59af941ec838d",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff73504c5404b86b3a0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "73504c54",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_sRGB_chunk.png",
+      "sha256": "985df4412486a50b1738d0152e177cf6cb70063081c8475d0b72ca33f8e1c708",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff73524742101cd3ce0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "73524742",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_sTER_chunk.png",
+      "sha256": "10b7ebf8af5730f6886b433742bddab4949fa08188bb2e3cd5dea186839762c4",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff735445523b10dd9a0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "73544552",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_tEXt_chunk.png",
+      "sha256": "0c9f65ca8ff8e756b834e624af837b2c97cf91e42671c7042fc937c0ce677a14",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff744558749642c5850000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "74455874",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_tIME_chunk.png",
+      "sha256": "60cc784eeba739354001e1023de7553a78cc32d6c5554c297f12d74b6e458f67",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff74494d45f933dacf0000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "74494d45",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/huge_zTXt_chunk.png",
+      "sha256": "b5b9231e7464ffd30d681829baa032160137672c4d783885d765c4c87222917e",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000000100000001010300000025db56ca3fffffff7a5458746b797bf10000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type_hex": "7a545874",
+          "declared_length": 1073741823,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/invalid_gray_alpha_sbit.png",
+      "sha256": "c6386f8b89df9a937a2690664a24e6f9f6a04e25f27ecaac5dad0e82686e1e5d",
+      "size": 62,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d4948445200000020000000201004000001fee45eaa00000002734249540700010000000000000749444154789c631c0900f9",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type": "sBIT",
+          "length": 2,
+          "crc_ok": false
+        },
+        {
+          "type_hex": "49444154",
+          "declared_length": 7,
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/missing_plte.png",
+      "sha256": "15e185e352ce8b9092104f3941ce707f7181915d8f0b6dd52a724717b5a276ab",
+      "size": 112,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d494844520000002000000020010300000049b4e8b70000000467414d41000186a031e8965f0000000670707070eeff222266ff6c2504690000001549444154789c63e007020634e20310a01303a40e00bb1f3fc1938266590000000049454e44ae426082",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type": "gAMA",
+          "length": 4,
+          "crc_ok": true
+        },
+        {
+          "type": "pppp",
+          "length": 6,
+          "crc_ok": true
+        },
+        {
+          "type": "IDAT",
+          "length": 21,
+          "crc_ok": true
+        },
+        {
+          "type": "IEND",
+          "length": 0,
+          "crc_ok": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/zero_gama.png",
+      "sha256": "f58078b838ebd4879b0da888e8d4d19a008f1375ae023c3a2ad62bff90191da5",
+      "size": 57,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d4948445200002020000005200400000000474568590000000467414d41000000008b25604d2020202049444154",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        },
+        {
+          "type": "gAMA",
+          "length": 4,
+          "crc_ok": true
+        }
+      ]
+    },
+    {
+      "path": "tests/crashers/zero_width.png",
+      "sha256": "ac7b348b231b3a887f720c919a47e3caeb4c20bd1d33d05f07c976fa26c8fa0f",
+      "size": 41,
+      "preview": "view_image refused invalid/unsupported image data",
+      "whole_bytes_review": "Complete hex printed/read, plus bounded chunk structure/CRC scan",
+      "hex": "89504e470d0a1a0a0000000d49484452000000000000002010000000013edbca2d2020202049444154",
+      "chunks": [
+        {
+          "type": "IHDR",
+          "length": 13,
+          "crc_ok": true
+        }
+      ]
+    },
+    {
+      "path": "tests/misc/icc_profile.png",
+      "sha256": "817436bef984b0190cdb3149e9b8a108a86b5020e5c55e71d2a91dec4a8ec0a4",
+      "size": 661,
+      "preview": "Individually displayed native image, colored gradient"
+    },
+    {
+      "path": "tests/misc/unknown.png",
+      "sha256": "73ac5f7fcc035ee451f3b16f503d12c47ce6ac9480649678027b2f7e99b12820",
+      "size": 164,
+      "preview": "Individually displayed native image, colored gradient"
+    }
+  ],
+  "findings": [
+    "Remaining29 assets reviewed. Two miscellaneous colored gradients displayed; badadler displayed one dark pixel despite upstream expected rejection.26 other regression inputs refused by preview.",
+    "All27 regression bytes printed/read and bounded structure inspected. Huge-named cases mostly57-byte files declaring1073741823-byte chunks, not huge disk files. No trusting declared sizes or allocation of those lengths in inspection.",
+    "Other cases include absentPLTE, zero width/gamma, truncatedIDAT, corruptICC/sBIT/CRC and empty ancillary chunks.",
+    "Preview behavior is not checksum acceptance policy. Native testsuite27 expected-failure runs and2misc runs remain pending shared resource-window completion.",
+    "No new compiler, sanitizer, benchmark or GPU workload launched. Native pHash.org/ASAN skipped."
+  ],
+  "remaining": [
+    "Run27 regression and2misc upstream expectations after resource window",
+    "ExternalREADMEvisuals",
+    "Other3codecgitlinks"
+  ],
+  "full_review_count": 247
+}
