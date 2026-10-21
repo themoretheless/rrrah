@@ -1,0 +1,61 @@
+{
+  "repository": "coderhs/active_storage_dedup",
+  "commit": "dfd2303a72044369b19bc7d13cb8d4789c0a6041",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 14,
+  "new_whole_files_read": {
+    "lib/generators/active_storage_dedup/install_generator.rb": {
+      "bytes": 957,
+      "sha256": "28ccab02a580dc97eddf3543b1b880d5a7d44f70d831ebcf5126750516515478",
+      "git_blob": "3b09462fad9027943798a812120cbe582e4776fc",
+      "method": "Whole pinned Ruby/template/spec text read without truncation"
+    },
+    "lib/generators/active_storage_dedup/templates/add_active_storage_dedup.rb.erb": {
+      "bytes": 1639,
+      "sha256": "9594b72883d6311851f4986235a5a772887ccce6b5868d7dcfc7feaa7521267f",
+      "git_blob": "c106cf5336b634cc7786754caf3e8167ef10ff53",
+      "method": "Whole pinned Ruby/template/spec text read without truncation"
+    },
+    "lib/generators/active_storage_dedup/templates/initializer.rb": {
+      "bytes": 1561,
+      "sha256": "cf2872cb9f5590b717987d9c53b54cb2fbfcbe00fbd810caff3d6c20163657db",
+      "git_blob": "15ed97780472a31a0cb76ef5aec95ccbe13f7176",
+      "method": "Whole pinned Ruby/template/spec text read without truncation"
+    },
+    "lib/generators/active_storage_dedup/templates/README": {
+      "bytes": 1378,
+      "sha256": "ad592c28e858a89bc8df7ddf51eb7c158ac7f6ef5a3ac1b6fd2d7cf77d0cb03e",
+      "git_blob": "2390262443c4d1d12b6f748578be55276481e505",
+      "method": "Whole pinned Ruby/template/spec text read without truncation"
+    },
+    "lib/tasks/active_storage_dedup.rake": {
+      "bytes": 3242,
+      "sha256": "baf25dba89c68b654e9f0b2af60b73c3da14c95d7a24b694c90f88f718f493bf",
+      "git_blob": "da1f96737cb588294d91348d4faecd07fdd91808",
+      "method": "Whole pinned Ruby/template/spec text read without truncation"
+    },
+    "spec/jobs/deduplication_job_spec.rb": {
+      "bytes": 7416,
+      "sha256": "239d32cba85e8134a0d701e95f83f1d314f5959a1908994a0841bb64d13737ab",
+      "git_blob": "7a1ed2d516362a072dac685d3d30026161485ccd",
+      "method": "Whole pinned Ruby/template/spec text read without truncation"
+    }
+  },
+  "new_runtime_controls": 0,
+  "findings": [
+    "Original job specs labeled perform instead call process_duplicate_group helper; zero-group case calls no job method. Different-service case explicitly does not run job. Thus those tests do not prove grouped-query execution or service filtering end-to-end.",
+    "Spec titled reduces totalblobcount only checks keeper exists; comments waive actual deletion assertion. Existing source/spec inventory is not proof of deletion or full production correctness.",
+    "Initializer opt-in example says omitted deduplicate uses globalfalse, contradicting actual declaration defaulttrue confirmed in v2. This is a documented behavior mismatch, not merely inferred preference.",
+    "Migration adds nonunique composite index checksum/service and backfills count with correlated attachment count. No uniqueness or cross-store transaction introduced by this migration; no DB engine/migration run.",
+    "Migration down checks any checksum/service index but removes specific named index; preexisting differently named index handling unqualified.",
+    "Rake cleanup delegates to whole job; backfill counts then update_column outside explicit transaction/lock. Concurrency/freshness and largeDB runtime remain unqualified.",
+    "Report task labels duplicate row bytes as wastedstorage while merge helper deletes metadata only; physical storage recovery not proven. No storage operation or task run."
+  ],
+  "remaining_scope": "30artifacts: remaining specs/fixtures, docs/license/configs/lock/manifests/version.",
+  "license": "Root license review pending; no production adoption.",
+  "limits": [
+    "Partial14/44review; seven prior original-method adapter controls retained, no new test run this turn. Full count185/500 unchanged.",
+    "No original Rails/RSpec/DB migration/task/storage, concurrency or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
