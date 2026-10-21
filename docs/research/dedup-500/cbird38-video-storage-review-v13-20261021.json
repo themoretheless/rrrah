@@ -1,0 +1,45 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/videoindex.h": {
+      "sha256": "974d20d436107e98b923a553ae91e442c1e900fc49c668be7acb0bc7b0c82730",
+      "git_blob": "f900aab06020a61d0d78989082682cfe6c8c5365",
+      "bytes": 2204,
+      "lines": 67,
+      "method": "Whole pinned source/test implementation read; not executed."
+    },
+    "src/videoindex.cpp": {
+      "sha256": "86a195ed6c03fa51177be7ee43756c2a7ba66ce4f5e4f7aa9dd6856a0bbd0aab",
+      "git_blob": "bc05c8d3d1f5c6b9078ca3c6c3bfa67a24d1333b",
+      "bytes": 15497,
+      "lines": 541,
+      "method": "Whole pinned source/test implementation read; not executed."
+    },
+    "unit/testvideoindex.cpp": {
+      "sha256": "b8ff0b026e3d1dfe0a153270bf64d437470c707a0cb156d6338d0acbb35e6c55",
+      "git_blob": "2274d15f6cf806cbe72a8b071410264b316602b0",
+      "bytes": 5775,
+      "lines": 261,
+      "method": "Whole pinned source/test implementation read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 33,
+  "tracked_blobs": 616,
+  "findings": [
+    "VideoIndex::isValid returns true if open fails, explicitly treating inaccessible input as not an inspected error. It cannot be interpreted as successfully verified content. No unavailable-file runtime check performed.",
+    "verify_v2 checks header compatibility and trailing cbir marker for nonempty indexes, but does not parse frame deltas/hash payload. load_v2 parses frame/hash payload but does not read/check trailer. These are distinct evidence scopes; one does not prove the other.",
+    "V2 header checks endianness and scalar sizes, so opposite-endian storage is refused rather than translated. It stores delta-varints plus native64-bit hashes; no source-content fingerprint/version identity embedded beyond program version metadata.",
+    "load_v2 caps declared numFrames to MAX_FRAMES_PER_VIDEO but sizes packed buffer from packedLen and has no explicit shift-depth bound in varint loop. Structural bounds/corrupt-input behavior not executed; no malformed-memory or ASAN probing.",
+    "save_v1 limits count using INT16_MAX while warning says65k; frame values use uint16 and separately check UINT16_MAX. Old-format count and frame-number limits differ. V1 load repair inserts a zero-hash frame0 for nonzero first-frame history; these repaired values are not decoded frame observations.",
+    "save opens destination directly for writing and removes it on save_v2 failure, unlike separate temporary replacement utility. No failure/crash test or real cache overwrite performed.",
+    "Migration verifies converted count/data before replacement and attempts backup restoration on rename failure. Dry run uses fixed temp pathname and may inspect/write conversion artifacts; no migration command executed. Error removal counter has duplicate increment in load_v1 failure branch, so summary may differ from successful removals.",
+    "Unit tests cover legacy fixtures, empty/truncated files and synthetic small/large offset roundtrips. They require TEST_DATA_DIR and mutate temporary-named files within that corpus; read only here. They do not establish decoder temporal recall, every malformed format, opposite endianness, or crash durability."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "33/616 tracked artifacts assessed:32whole text/source and1PNGvisual. Twenty-one previous original-body/header controls plus one independent key counterexample; no new runtime test.",
+    "Video search tree/candidate matching and decoder implementations still incomplete. No native pHash/ASAN, real video index migration or production changes."
+  ]
+}
