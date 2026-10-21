@@ -1,0 +1,51 @@
+   Compiling image-worker v0.1.1 (/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/vgiimage490-20261021/crates/image-worker)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s
+     Running unittests src/lib.rs (/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/vgiimage490-target-20261021/debug/deps/image_worker-e4131536ce34e82f)
+
+running 37 tests
+test imaging::tests::accepted_list_stays_in_sync_with_parse ... ok
+test imaging::tests::hamming_distance_basics ... ok
+test imaging::tests::out_format_parse ... ok
+test imaging::tests::info_rejects_garbage ... ok
+test imaging::tests::exif_absent_is_empty_not_error ... ok
+test scalar::hash::tests::bind_declares_ubigint ... ok
+test scalar::exif::tests::exif_gps_bind_declares_struct ... ok
+test scalar::hash::tests::distance_rejects_non_integer_arg ... ok
+test scalar::info::tests::bind_declares_the_struct_the_process_builds ... ok
+test scalar::exif::tests::exif_gps_absent_is_null_struct ... ok
+test scalar::hash::tests::distance_basics_and_nulls ... ok
+test scalar::exif::tests::exif_bind_matches_built_map_type ... ok
+test scalar::exif::tests::exif_garbage_is_empty_map_not_error ... ok
+test scalar::exif::tests::exif_null_element_is_null_map ... ok
+test scalar::exif::tests::exif_on_png_is_empty_map_not_null ... ok
+test scalar::info::tests::garbage_bytes_surface_an_error ... ok
+test scalar::info::tests::empty_blob_errors ... ok
+test imaging::tests::info_reports_format_and_dimensions ... ok
+test scalar::info::tests::null_element_yields_null_struct_row ... ok
+test scalar::info::tests::truncated_image_errors ... ok
+test scalar::info::tests::process_decodes_a_png_into_struct_fields ... ok
+test imaging::tests::convert_changes_format_keeps_size ... ok
+test scalar::hash::tests::null_and_garbage_handling ... ok
+test scalar::transform::tests::thumbnail_and_convert_bind_binary ... ok
+test scalar::transform::tests::convert_bad_format_errors_at_bind ... ok
+test scalar::transform::tests::thumbnail_fit_non_positive_dimension_errors_at_bind ... ok
+test scalar::transform::tests::thumbnail_fit_bad_format_errors_at_bind ... ok
+test scalar::transform::tests::convert_null_and_garbage ... ok
+test scalar::transform::tests::convert_changes_format_and_keeps_dimensions ... ok
+test imaging::tests::thumbnail_preserves_aspect_and_reencodes ... ok
+test scalar::transform::tests::thumbnail_fit_null_and_garbage ... ok
+test imaging::tests::thumbnail_to_jpeg_works ... ok
+test scalar::hash::tests::phash_of_png_is_deterministic_and_u64 ... ok
+test scalar::transform::tests::thumbnail_null_and_garbage ... ok
+test scalar::transform::tests::thumbnail_fit_honors_size_and_format ... ok
+test scalar::transform::tests::thumbnail_produces_a_smaller_valid_image ... ok
+test imaging::tests::hashes_roundtrip_and_are_stable ... ok
+
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/exif_gps.rs (/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/vgiimage490-target-20261021/debug/deps/exif_gps-7b40346cb41aedd7)
+
+running 1 test
+test parses_gps_from_handbuilt_exif ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

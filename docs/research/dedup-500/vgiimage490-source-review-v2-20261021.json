@@ -1,0 +1,26 @@
+{
+  "repository": "Query-farm/vgi-image",
+  "commit": "91dcb7ffc11e1eb92f641361cc1bc60ab2730874",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "crates/image-worker/src/scalar/transform.rs",
+    "crates/image-worker/src/scalar/info.rs",
+    "crates/image-worker/src/scalar/exif.rs",
+    "crates/image-worker/src/scalar/mod.rs",
+    "crates/image-worker/src/meta.rs",
+    "crates/image-worker/src/main.rs",
+    "crates/image-wasm/src/lib.rs",
+    "crates/image-worker/tests/exif_gps.rs"
+  ],
+  "controls": "docs/research/dedup-500/vgiimage490-arrow-controls-20261021/result.json",
+  "findings": [
+    "All37original library tests plus1EXIF dependency integration pass. Adapter whole-batch error and directbind stringdimensiondefault reproduced with2authored controls.",
+    "Info adapter metadata explicitly promises without fully decoding pixels, contradicting original imaging decode and prior41byte control.",
+    "Dimension source validation allows1..u32MAX, no application output-byte budget. This is source observation; no huge allocations attempted.",
+    "json_string escapes quotes/backslashes but not controls; current literals do not contain controls. No malformed runtime metadata claim.",
+    "Wasm sharedstorageenv memory hook and SDKmacro entrypoints source-read; no wasm build or browser execution."
+  ],
+  "limits": [
+    "Whole repo remains incomplete; main lib registration/catalog, examples,docs,configs,lock and4images still require assessment. Count stays219/500. No native pHash/ASAN."
+  ]
+}

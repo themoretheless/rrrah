@@ -1,0 +1,21 @@
+{
+  "original_tests": {
+    "library_passed": 37,
+    "exif_dependency_integration_passed": 1,
+    "failed": 0,
+    "exit_code": 0,
+    "command": "cargo +1.98.1 test --locked -p image-worker --lib --test exif_gps",
+    "scope": "37 include earlier10imagingtests; do not sum as47. EXIF integration directly calls exif dependency and duplicates math, does not exercise worker function."
+  },
+  "authored_tests": {
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0,
+    "command": "cargo +1.98.1 test --locked -p image-worker --test review490arrow review_ -- --nocapture",
+    "scope": "Integration imports unchanged original imaging/arrow_io/meta/transform modules and actual locked SDK/Arrow dependencies. No actual DuckDB bind or RPC transport."
+  },
+  "observations": [
+    "Good/bad and bad/good thumbnail batches both return Err; no partial RecordBatch returned. This is whole-batch failure semantics, not inherently a bug.",
+    "Direct ThumbnailFit.on_bind/process with string width/height accepts and defaults128. const_i64 returnsNone for wrong type as for missing value. SDK discovery constraint layer may reject before this path; no end-to-end SQL bypass claim."
+  ]
+}
