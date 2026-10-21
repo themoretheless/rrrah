@@ -1,0 +1,77 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          6001,
+          6600
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          6600
+        ]
+      ],
+      "unread_ranges": [
+        [
+          6601,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated6001..6600 read. Original XXH3 seeded64 streaming exercised via local clang -O2 consistency harness with properly initialized stack state.",
+  "findings": [
+    "Long-key loop reserves final64-byte stripe using len-1 arithmetic and a distinct secret offset7; final merge uses offset11. This differs from ordinary stripe/scramble secret selection.",
+    "withSecretandSeed actual64-bit code uses seeded/default-secret path for length<=240 and external-secret long path for>240, resolving earlier documentation boundary ambiguity for64-bit implementation.",
+    "Aligned allocation overallocates by alignment and stores offset byte before returned pointer; createState requests64 alignment and initializes seed/extSecret. Free requires this allocation layout, not arbitrary malloc pointers.",
+    "reset_withSecret calls internal reset before checking secret pointer/size whereas reset_withSecretandSeed validates them first. Caller preconditions/assertion assumptions and post-error state must be considered; no invalid secret executed in this control.",
+    "Updates fill256-byte buffer then consume stripes across secret blocks, retaining previous stripe tail for final catch-up. Digest copies accumulators locally and reconstructs last stripe when buffered remainder<64, preserving update-after-digest semantics.",
+    "Seeded64 streaming matches one-shot at every tested prefix, including boundaries240/241 and256/257, under three seeds and seven chunk sizes.128-bit section remains unread."
+  ],
+  "executed_control": {
+    "cases": 172200,
+    "failures": 0,
+    "exit_code": 0,
+    "compiler": "clang -O2",
+    "lengths": "0..1024 inclusive",
+    "input_offsets": "0..7",
+    "seeds": [
+      "0",
+      "1",
+      "0xffffffffffffffff"
+    ],
+    "chunk_sizes": [
+      1,
+      15,
+      16,
+      17,
+      31,
+      64,
+      257
+    ],
+    "checks": [
+      "Prefix/final streaming versus one-shot.",
+      "Repeated digest and copy-state digest.",
+      "Canonical64 roundtrip and big-endian bytes.",
+      "NULL+zero update and one-shot empty equivalence."
+    ],
+    "harness_sha256": "58d40101e933aac93ea5a3869b3e5d7e4ea00788453cb818125f456901fb173f",
+    "independent_oracle": false
+  },
+  "limits": [
+    "6600/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "No independent fullhash oracle, custom-secret modes, allocation failures, otherplatform runtime or throughput proof. pHash/ASAN deferred."
+  ]
+}
