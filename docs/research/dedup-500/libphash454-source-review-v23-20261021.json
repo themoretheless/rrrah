@@ -1,0 +1,41 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": {
+    "repository": "randy408/libspng",
+    "commit": "fb768002d4288590083a476af628e51c3f1d47cd",
+    "tree_truncated": false,
+    "tracked_blobs": 262
+  },
+  "whole_files_read": [
+    {
+      "path": "LICENSE",
+      "sha256": "0622b0794d0fecde47d743f1bb70a03e6fdf082be8e71f39de672ed995d96ff9"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "57e7774c13ba67aae0fd5bed4eb720c424e1d9435da4879f884237e5e348d42b"
+    },
+    {
+      "path": "docs/context.md",
+      "sha256": "86d8e1184dbf48138c0ef41c27ecec8a4251f4cf4a5f110fc1dd66aef923530f"
+    }
+  ],
+  "source_fetched_not_wholly_read": [
+    "spng/spng.c",
+    "spng/spng.h"
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-backend-result.json",
+  "findings": [
+    "Pinned dependency license is BSD-2-Clause, copyright Randy 2018-2023; whole root license read. Source blobs fetched and Git blob SHA1 verified.",
+    "Pinned dependency CMake declares version 0.7.4 and requires zlib. Context documentation distinguishes SPNG_FMT_RAW big endian from other host-endian formats, straight alpha and configurable image/chunk limits.",
+    "Actual unmodified libphash spng wrapper compiled with pinned spng.c. Direct backend valid 1x1 PNG controls: all four gray/RGB/GA/RGBA formats decode into RGB; only plain gray succeeds for requested G8. Three G8 failures confirmed. No claim that public fallback fails.",
+    "No whole dependency review or all PNG qualification claim; malformed inputs, external codecs and platform variants remain open. Native pHash.org/ASAN skipped."
+  ],
+  "remaining": [
+    "Whole spng source/tests/assets review",
+    "Other three optional codec gitlinks source/license/runtime qualification"
+  ],
+  "full_review_count": 247
+}
