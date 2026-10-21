@@ -1,0 +1,8 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const html=fs.readFileSync('.dedup-work/mediadedupe444-20261021/frontend.html','utf8');
+const get=(a,b)=>html.slice(html.indexOf(a),html.indexOf(b,html.indexOf(a)));
+const nodes={};const ctx={document:{getElementById:id=>nodes[id]??={textContent:'',innerHTML:'',appendChild(){}}},el:()=>({style:{}}),_t:k=>n=>`${n} files`,_libraryData:[],_librarySorted:[{path:'/previous/photo.png'}],_libraryActiveIndex:-1};vm.createContext(ctx);
+vm.runInContext(get('function pathWithoutFilename(','function formatSize(')+get('function renderMediaLibrary()','// ===========================================================================\n// User Management'),ctx);
+const windows='C:\\photos\\file.png';const actual=ctx.pathWithoutFilename(windows);assert.equal(actual,'/');assert.equal(ctx.pathWithoutFilename('/photos/file.png'),'/photos/');
+ctx.renderMediaLibrary();assert.equal(ctx._librarySorted.length,1);assert.equal(nodes['library-count-label'].textContent,'0 files');
+const out={windows_parent_display:{input:windows,actual,expected:'C:/photos/',unix_control:'/photos/'},empty_library_stale_navigation:{displayed_count:nodes['library-count-label'].textContent,retained_navigation_paths:ctx._librarySorted.map(x=>x.path),scope:'Old sorted list retained although grid/count cleared; navigation impact requires later selection/modal path, not claimed reproduced live'},scope:'Two original functions in NodeVM, explicit DOM/localization adapters; no actual browser/filesystem/network operation'};fs.writeFileSync(__dirname+'/result.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));

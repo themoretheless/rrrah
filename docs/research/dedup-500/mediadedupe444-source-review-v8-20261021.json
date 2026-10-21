@@ -1,0 +1,25 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "frontend_review": {
+    "sha256": "5386832036409fd322d8ed0d5bb8af1e6badc69cde7bd38c923e9d5e470739d4",
+    "lines": 1950,
+    "scope": "Wholefrontend.htmlreadwithouttruncationcumulativev6-v8"
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-library-controls-20261021/result.json",
+  "new_authored_controls": 2,
+  "cumulative_authored_controls": 21,
+  "findings": [
+    "Original pathWithoutFilename regex replaces double backslash pairs, not ordinary Windows separators; C:\\photos\\file.png yields slash-only parent display. Unix positive control works. Actual original function NodeVM, no Windows runtime claim.",
+    "Original renderMediaLibrary empty-input branch clears grid/count but retains previous _librarySorted list. Actual function leaves old path while displaying0files. Consequential stale modal navigation not live reproduced; _libraryActiveIndex resets on showMediaLibrary.",
+    "renderMediaLibrary uses sorted.indexOf(d) inside sorted.forEach, creating quadratic item-index work even after sort; source observation, unbenchmarked.",
+    "renderScanHistory supports settings.dir2 display but original /api/scan/list SQL selects no settings column; second-directory metadata absent through that route. Source integration mismatch, no HTTP runtime.",
+    "loadLastScan fetches only latest5 jobs then seeks done; older successful result hidden if latest5 non-done. Source policy observation, not runtime test.",
+    "Original scan stop frontend ignores non-OK HTTP status and only resets disabled button on network exception. Source observation, no live request control.",
+    "History/database/library/user/help views and all remaining event/helper code fully read. No productioncodecopied and no destructiveoperationexecuted."
+  ],
+  "limits": [
+    "Wholefrontendread,butstyles.css/translations.jsstillnotwhole-read. NodeVMcontrolsuseDOM/localizationadapters,notlivebrowser. Complete repositoryreviewnotyetclaimed. NativepHash/ASANdeferred."
+  ]
+}
