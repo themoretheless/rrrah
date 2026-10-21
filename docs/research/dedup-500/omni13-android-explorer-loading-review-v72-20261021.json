@@ -1,0 +1,47 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          761,
+          1470
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          1470
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read new lines761-1470 in three bounded chunks; cumulative1-1470/16837. Static list loaders and query effect review.",
+  "findings": [
+    "Directory search is LaunchedEffect keyed currentView/currentDirectory/searchQuery/showHiddenFiles/permission, delay250 then withContextIO. Cancelling effect can prevent prior result publication on return from withContext. Narrows v71: cancellation-aware caller exists, but synchronous helper traversal has no cooperative check and can consume IO worker until completion. No coroutine runtime fixture.",
+    "Category loader launches in rememberCoroutineScope from keyed effect rather than executing within that effect; previous category jobs not explicitly cancelled. Reads mutable currentCategoryExtensions during work and unconditionally publishes categoryFilesList. Rapid switching/reload can publish older/mixed category snapshot; no reproduced Android race.",
+    "Category MediaStore query has extension predicates but no local hidden/locked filter in this loader. Empty/null cursor accepted as empty result, manual recursion only on exception. Fallback scans five major directories, excludes DCIM, primaryroot/SD and others; recursive walk no cycle/depth/cancellation guard. Subsequent UI filtering pending, so no album-lock bypass claim.",
+    "Recent loader combines MediaStore top200 with selected directories two-level filesystem scan, then distinctBy absolutePath, filters exists/isFile/non-dot/length>0/not direct locked parent, sortsmtime,take40. This is recent subset, not complete file index; zero-length files intentionally excluded here.",
+    "Filesystem recent scan listFiles not inside query try/catch, so filesystem exception can bypass normal isLoading=false. Shared loading flag also cleared by synchronous loadFavorites while recent coroutine continues, so it is not count of all pending work.",
+    "Category/recent jobs snapshot locked paths onlyrecent; separate loads unconditionally publish after state changes. Sorting/File stats repeated after IO filesystem changes, no stable content snapshot; appropriate for display but not dedup identity.",
+    "RefreshDirectory and loadTrash invoked directly in effect and perform synchronous listing/trash read; directory listFiles null becomesempty with no error state. No latency measurement or production traversal executed.",
+    "Favorites batch commit Boolean ignored, then clears selection/progress and announces target count. Concurrent favorites read-modify-write from widget/service/explorer has no transaction serialization shown. Invalid JSON batch starts empty, whereas single toggle catches and silently does nothing; error semantics differ.",
+    "Permission checked on resume; R+ uses external-storage-manager and older requires both read/write. Permission revocation effect can suppress search, but source shown does not clear every previously loaded list. UI permission gating pending.",
+    "Storage stats exceptions map initial totals/used to0; refreshed storage enumeration skips failedroots and usesgetExternalFilesDirs rootstripping. Not evidence allvolumes scanned. Rename initial helper checks dest.exists; remainder beyond1470 unread."
+  ],
+  "limits": [
+    "114/268 whole files unchanged; explorer1470/16837 read, not complete.",
+    "No Kotlin/Android/coroutine tests, MediaStore queries, filesystem scan, preference mutation or file operations executed.",
+    "155/500 full repositories unchanged; no production changes/new runtime test result.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
