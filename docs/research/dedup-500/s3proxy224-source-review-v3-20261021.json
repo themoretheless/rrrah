@@ -1,0 +1,50 @@
+{
+  "repository": "Timshel/s3-dedup-proxy",
+  "commit": "6709807860db2357d4dbb8186504724d56bbe891",
+  "whole_repo_complete": false,
+  "tracked_blobs": 30,
+  "cumulative_assessed_blobs": 14,
+  "new_whole_files_read": {
+    "src/test/scala/DbTest.scala": {
+      "bytes": 11861,
+      "sha256": "13ba589e6cb6bdf249a6b7239ecd6cd7bcf439a4c4e1a3d5d80eb55b4688fdba",
+      "git_blob": "cc8407a7298a8c4faac235d7a485f05d31152454",
+      "method": "Whole pinned test/helper/build source read without truncation"
+    },
+    "src/test/scala/TestDatabase.scala": {
+      "bytes": 2999,
+      "sha256": "aeae47a1dc53b48c6b3bd93c9f8851287b34660154d40c0fb8c4b02b45965607",
+      "git_blob": "f9a73890c60f287cb0cd0d5d7e17e4f417a92ffd",
+      "method": "Whole pinned test/helper/build source read without truncation"
+    },
+    "src/test/java/com/jortage/poolmgr/rivet/RivetTest.java": {
+      "bytes": 7192,
+      "sha256": "6b02581d362950319c0cfcc6c07d03bc3f20521ab3a984e7829596fdd90825f1",
+      "git_blob": "04497dca109823726d562f6b4df9260416b8beac",
+      "method": "Whole pinned test/helper/build source read without truncation"
+    },
+    "build.sbt": {
+      "bytes": 2640,
+      "sha256": "a7b60ae11e7c071c9e67be81de6e6f308adac96464919cd232f971f2dc4ad0ce",
+      "git_blob": "4f3231d097f7dded885654d4e833ea65204c3ef4",
+      "method": "Whole pinned test/helper/build source read without truncation"
+    }
+  },
+  "new_runtime_controls": 0,
+  "findings": [
+    "DbTest contains7named CatsEffect PostgreSQL integration tests:exclusive/shared advisorylocking,hash_key,metadata,danglinglock,checkedtimestamp and mapping/pagination. Source read only; no passing result inferred.",
+    "Dangling selection test selects/locks orphan first then starts writer; it does not model writer publishing mapping while cleanup query waits for lock. Earlier potential stale-selection race remains unconfirmed and uncovered by inspected tests.",
+    "Metadata tests explicitly expect first size10retained after later size12upsert updatesETag, so size-on-conflict retention is intentional test behavior. No claim of ordinary digestcollision.",
+    "Hash_key test compares SQLfunction to Scala first8byte lockKey on four values. This reduces concern about differing lock keys but is unexecuted here.",
+    "TestDatabase adds sharedlocks, artificial2houraging and pool convenience methods; it does not supply backend/object deletion simulation. Mapping pagination tests exercise file/dir markers containing#characters with finite expected results.",
+    "RivetTest.java is standalone localhost HTTPmanual client with external libraries and absentfastorange.pngfixture; not an automatic S3upload test and not executed.",
+    "build.sbt pins Scala3.8.3and direct versions includingSkunk0.6.5,CatsEffect3.7.0,Minio8.6.0,S3Proxy3.1.0,PostgreSQL42.7.10; transitive resolved environment and actual compiler remain unqualified.",
+    "All30cached pinned artifacts verified after download; only14whole artifacts read so far."
+  ],
+  "remaining_scope": "16artifacts: license/docs/workflows/Docker/config/resources/projectbuildsettings.",
+  "license": "RootAGPL3 full text review pending; no production adoption.",
+  "limits": [
+    "Partial14/30review; zero original Scala/PostgreSQL/backend runtime tests. Full count186/500 unchanged.",
+    "No actual lock/concurrency, object deletion, HTTPpayload, migration/build, platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
