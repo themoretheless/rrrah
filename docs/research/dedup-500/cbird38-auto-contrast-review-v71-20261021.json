@@ -1,0 +1,46 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/research/brightness-contrast-auto.pdf": {
+      "sha256": "5b80601e04e65c815287f2cc0031c0ee114d2cb796fd50b6ba395a260c3dfbaa",
+      "git_blob": "24ee3e4c00630bddc5a3a8de181c8e175d3de5d5",
+      "bytes": 1159935,
+      "pages": 5,
+      "method": "All extracted text read and all5pages visually inspected after Poppler95dpi rendering, including histogram diagrams, image comparisons and truncated code.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-auto-contrast-review-v71-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 612,
+  "tracked_blobs": 616,
+  "findings": [
+    "PDF is a2023printout of a2015OpenCV Answers discussion, not a peer-reviewed matching experiment. Main C++ snippet explicitly truncated behind more link; full alpha-restoration implementation is absent from this snapshot.",
+    "Describes8bit affine range expansion with optional histogram-tail clipping. Such normalization is not an invertible original-pixel identity proof; source fidelity and candidate similarity remain separate.",
+    "Pinned cbird cvutil.cpp578–667 bounds histogram searches and leaves source unchanged if minGray>=maxGray. Alpha restoration is commented out after convertTo; advertised BGRA transparency preservation cannot be imported as an implemented guarantee. No OpenCV execution here.",
+    "Footer declares CC BY-SA3.0 content; root cbird GPL does not replace source-specific attribution/terms. No code port.",
+    "Current local exposure tests independently pass for uniform dark/HDR calibration, inversion negative, typed unsupported pixels, resource refusal and cancellation/scratch boundaries. They do not validate this8bit histogram method."
+  ],
+  "source_comparison": {
+    "upstream_cvutil_sha256": "e5e789d4fb43a51d003aa9c06d5fae4c1f17630879f01c37cdf1b44e3201e776"
+  },
+  "executed_controls": [
+    {
+      "scope": "local rrrah-dedup existing exposure regression suite, not upstream original-body controls",
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exposure",
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "build_seconds": 3.58,
+      "test_seconds_reported": 0.0,
+      "source_sha256": "bb4837dbc1e895d17a1e8ff93611ebf4f63a96e05360f6828a8bfac9c8c7bac7",
+      "implementation_sha256": "f4bc91b55543801f4542ade7498f85a76a8604dcea9ea27c6551c47df29d5e8b"
+    }
+  ],
+  "limits": [
+    "612/616 assessed:187whole text/source,417PNGvisuals,2structured spreadsheets,3PDFs,3other graphics.4remain:3PDFs andembedded CImg.",
+    "No new code or measured speedup; no actual duplicate corpus or upstream normalization runtime.",
+    "34upstream original-body/header controls and2independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
