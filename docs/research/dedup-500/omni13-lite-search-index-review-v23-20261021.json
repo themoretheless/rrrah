@@ -1,0 +1,41 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "read_line_ranges": [
+        [
+          1,
+          1130
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Full pinned10272-line file downloaded/identity checked; only first1130lines whole contiguous text read. Download/hash not credited as whole review.",
+  "findings": [
+    "result_launch_dedupe_key merges imagepaths after slash/ASCIIcase normalization, othercommands exactstring; identityis launch/path, not contentduplicate. Same bytesatdifferentpaths not detected by helper.",
+    "build_file_index selects path/name/extension, excludesis_dir; in-memory classification assumes extensionfolder. Whole-reviewed indexer stores actual pathextension plus separateis_dir, so ordinaryfolder metadata losesdirectorytype inthis in-memorypath. Staticcrossfile mismatch; laterSQL/UIhandling stillpending.",
+    "Crawl metadata-only(v18) means backgroundFTSnotfilled fromcurrentextractor, though search supportsCODE_CONTENT/OCRlabels and existingFTSstructure. Searchsupport doesnotestablish freshcontentinventory.",
+    "insert_memory_event dedupcheck excludesdetail/appname, normalizestimestamp and performs SELECTcount thenINSERT withoutuniqueconstraint/transaction. Samekeyeventdetails cancollapse; concurrentcalls canduplicate. No actualdatabasecontrolhere.",
+    "MemoryeventFTSschema/triggerscreated IFNOTEXISTS without rebuildingpreexistingcontentrows. Migration/backfill verificationpending. Trigger existence alone notqueryparityproof.",
+    "ensure_settings_catalog_fts deletesall then insertsnewentrieswithout enclosingtransaction; failure leavespartialcatalog. Rebuildingon everyengineinit couldinterleavebetweenfast/slowengines, sourcehypothesis notconcurrencytested.",
+    "Catalog parser validatesonly8byteheader then usesuncheckedproducts/slices for dimension/vectormeta sizes. Embeddedtrustedcatalog limitsnormalinputsurface; corruptbundle robustness notdemonstrated, catalog.bin pendinginspection.",
+    "candidate_limit clamps2000..5000; OCRpreservation helper allocatesup to20slots by replacingnonOCRtopresults. This is curated searchranking, not exhaustivecandidate/all-pairsproof.",
+    "In-memoryfilenamescan returnslimitedrankedlist and matchesanyqueryword in fallback, notallwordrequired. Pathscoreexcludes tool/hiddenfolders byWindows-backslash substrings; behaviornotgeneralfilesystemmatcher.",
+    "settingscatalogFTSerrors/rowerrors becomeempty/skipped; build_file_index DBerrors becomeemptyindex. API conflates missingdata withDBfailure atthesehelpers.",
+    "Engineinit seedsdefaultswhen quicklink/snippet/focussettingsempty; userintentionalemptycollection mayrepopulate. Actualsettingsdeletecalls laterpending. No databasescreated byreview."
+  ],
+  "limits": [
+    "81/268 pinnedwholefiles; search.rs1-1130 of10272 partial, notcountedwhole.",
+    "No newruntimecontrol, Windows/catalogload/SQLite/FTS/clipboard/browserprofile/model/network/launchoperations or upstreamsuite.",
+    "No productionchanges or acceptedoptimization. Native pHash/ASAN remains deferred."
+  ]
+}
