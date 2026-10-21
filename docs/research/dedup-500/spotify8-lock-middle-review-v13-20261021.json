@@ -1,0 +1,39 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 96,
+  "tracked_blobs": 97,
+  "method": "Whole original lockfile lines1651-3100 read in three bounded untruncated outputs. Original blob identity rechecked. No package installation or runtime execution.",
+  "partial_file_read": {
+    "path": "pnpm-lock.yaml",
+    "sha256": "c49677fe9205b74f909697d351aec7689c62726d334a5cbe2e82d53c1176ed2e",
+    "git_blob": "9109ebbe3178dae2557d64361912cfba8c5ceb1d",
+    "new_line_ranges": [
+      [
+        1651,
+        3100
+      ]
+    ],
+    "cumulative_line_ranges": [
+      [
+        1,
+        3100
+      ]
+    ],
+    "total_lines": 5876,
+    "whole_file_credit": false
+  },
+  "findings": [
+    "babel-jest29.7.0 package pins Babelcore7.26.0, Jesttransform29.7.0 and Babelpresetjest29.6.3. Presence does not prove Jest transformer resolution under pnpm strict layout.",
+    "Axios1.7.7 record depends on follow-redirects1.15.6, form-data4.0.0 and proxy-from-env1.1.0. Cheerio1.0.0 record includes undici6.21.0, HTMLparser2 and parse5; these explain non-dedup networking/parser dependencies in BMC endpoint.",
+    "ESLint configuration is marked dev:false and resolves ESLint9.14.0 plus React/import/accessibility plugins. Manifest placement can retain tooling in production dependency graph; actual production install contents untested.",
+    "Several different major versions coexist for terminal formatting, DOM accessibility and parser helpers. Different records alone do not establish incompatibility; no runtime or vulnerability claim made.",
+    "Lock requiresBuild markers include core-js and color helpers as well as native dependencies. These markers do not expose actual lifecycle script bodies; package tarballs were not read."
+  ],
+  "limits": [
+    "Manual lock read3100/5876 lines;96/97 whole files;151/500 complete repositories.",
+    "Whole graph structural validation remains in v12; no upstream suite/build/dependency installation. pHash/ASAN deferred."
+  ]
+}
