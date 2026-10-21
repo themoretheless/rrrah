@@ -2,9 +2,9 @@
   "index": 405,
   "repository": "folksable/pHash.c",
   "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All18 pinned blobs:11 whole text files including7176line bundledstb and7 individually viewed assets. Original tests/CLI and selected numeric/decoder controls; full conformance unqualified.",
   "decision": "shortlist",
-  "finding": "Partial: six original test functions pass, but original ARM NEON control leaves48/64 coefficients unwritten; zero dimensions accepted. Bundled decoder and remaining assets pending.",
+  "finding": "Complete review: six original tests pass but ARM phash8 leaves48/64 coefficients unwritten. Original CLI/decoder checks distinguish recipe, alpha, precision, checksum and metadata limitations; no adoption.",
   "available_source_evidence": [
     {
       "path": "pHash.c",
@@ -107,5 +107,7 @@
       "controls": "docs/research/dedup-500/folks405-controls-20261021/png-metadata-result.json",
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/folks405-complete-source-review-20261021.json"
 }
