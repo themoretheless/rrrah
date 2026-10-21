@@ -1,0 +1,48 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/dctvideoindex.h": {
+      "sha256": "06b27d1638c50bffb28ee5908a1c040ef92d057dc5ccc0051966e3b2fab0b0a5",
+      "git_blob": "5e781f2f74076d510fa1e2cb72cf85281c2e69a3",
+      "bytes": 3703,
+      "lines": 118,
+      "method": "Whole pinned source/test read; cpp contiguous1-300 and301-end."
+    },
+    "src/dctvideoindex.cpp": {
+      "sha256": "931e85be391a4b3cec4f8a5d1e5fddd08c013cd4650beaed7302e15d5102dd14",
+      "git_blob": "15de2c2e7044a1fda2042c7c30660dbbeecea98d",
+      "bytes": 20951,
+      "lines": 657,
+      "method": "Whole pinned source/test read; cpp contiguous1-300 and301-end."
+    },
+    "unit/testdctvideoindex.cpp": {
+      "sha256": "1e6149e4a9b7002cbf76712c965194898df6a116f06ee901627b0200d5a1e302",
+      "git_blob": "b634d47e4a7e252a9314744d6520ed2188a75a45",
+      "bytes": 2551,
+      "lines": 81,
+      "method": "Whole pinned source/test read; cpp contiguous1-300 and301-end."
+    }
+  },
+  "cumulative_assessed_blobs": 37,
+  "tracked_blobs": 616,
+  "findings": [
+    "Eight-query vector experiment is under#if0; active findVideo loops scalar queries and clears matches. Mixed-bucket batch counterexample from v14 does not establish an active-video-call defect. Disabled experiment groups queries by bucket explicitly.",
+    "Active scalar radix path retains intentional cross-bucket misses confirmed in v14. Unit tests set videoRadix0, skipFrames0, minFramesMatched1/minFramesNear1 and exact hash threshold1; these do not validate default radix10, trim300 and30-frame/60percent acceptance. Tests only read.",
+    "insertHashes trims start/end only when video is long enough (lastFrame/2>skip); findVideo query filtering always applies skipFrames. A short query with lastFrame<2*skip can lose every query frame even though haystack insertion retains its frames. Static source trace, no real video reproduction.",
+    "Tree built once using first SearchParams radix/skip and cached until data change; buildTree returns when_treeexists. Single-video cache keyed only targetID, not relevant parameters. Later query parameter changes may reuse earlier tree choices; no multiquery runtime exercised.",
+    "findFrame target lookup uses lower_bound but checks only iterator!=end, not exact target equality. slice populates_mediaId from QSet without sorting, while lower_bound requires sorted order. Source-level target-selection concern; no native database query executed.",
+    "remove erases a std::map iterator then reads it->second for delete. Invalidated-iterator use is visible in original source; no crash/memory-safety/ASAN test performed.",
+    "VideoTreeIndex frame is signed int24-bit whereas MAX_FRAMES_PER_VIDEO uses1<<24 and advertised count16.7million. Positive signed representation and macro limits need reconciliation; no long-video fixture executed.",
+    "findVideo selects closest destination frame per candidate per query, then scores adjacency within15frames and minimum counts. It does not prove aligned whole-video equality; comments acknowledge static-frame compression undermines locality heuristic.",
+    "Short-clip adaptation code follows unconditional continue in too-few-matches branch, so it is unreachable. minFramesMatched remains decisive here. Range length is max endpoint span, not a verified continuous frame-by-frame overlap.",
+    "add appends every supplied media ID without TypeVideo guard, unlike initial SQL load. Database caller can supply mixed media; missing-vdx handling skips insertion but count/mediaIds may still include entries. Full Engine behavior incomplete."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "37/616 tracked artifacts assessed:36whole text/source and1PNGvisual. Twenty-four previous original-body/header controls plus one independent key counterexample; no new runtime tests.",
+    "Video decoder/Engine and real corpus incomplete. Source findings distinguished from active-path and native runtime reproduction.",
+    "No production changes, measured speedup, ASAN or native pHash execution; deferred item skipped."
+  ]
+}
