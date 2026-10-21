@@ -1,0 +1,602 @@
+Start testing: Oct 21 23:12 +04
+----------------------------------------------------------
+1/27 Testing: test_api_guards
+1/27 Test: test_api_guards
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_api_guards"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_api_guards" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_core_lifecycle_and_errors
+[PASS] test_core_setters_happy_and_edge
+[PASS] test_core_loading_mock_success
+[PASS] test_scratchpad_stress
+[PASS] test_hashes_extra_coverage
+
+All final push tests passed.
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_api_guards" end time: Oct 21 23:12 +04
+"test_api_guards" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/27 Testing: test_benchmark
+2/27 Test: test_benchmark
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_benchmark"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_benchmark" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+No command provided. Running default smoke test (hash /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo.jpeg 100)...
+
+--- Hashing Performance (100 iterations) ---
+Algorithm       | Total Time   | Avg (ms/op)
+----------------|--------------|--------------
+aHash           |     0.0038s |     0.0379ms
+dHash           |     0.0042s |     0.0425ms
+pHash           |     0.0020s |     0.0200ms
+wHash (Fast)    |     0.0018s |     0.0182ms
+wHash (Full)    |     0.0246s |     0.2459ms
+mHash           |     0.0019s |     0.0189ms
+ColorHash       |     0.0617s |     0.6167ms
+Radial          |     0.0006s |     0.0642ms (1/10 iter)
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"test_benchmark" end time: Oct 21 23:12 +04
+"test_benchmark" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/27 Testing: test_bmh
+3/27 Test: test_bmh
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_bmh"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_bmh" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[BMH] Distance: 0 bits
+test_bmh_logic: PASSED
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_bmh" end time: Oct 21 23:12 +04
+"test_bmh" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/27 Testing: test_color
+4/27 Test: test_color
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_color"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_color" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[pHash] Structural distance: 0 bits
+[ColorHash] L2 Color distance: 62.74
+Test Logic: Images are structurally similar but color-distinct. SUCCESS.
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_color" end time: Oct 21 23:12 +04
+"test_color" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/27 Testing: test_color_hash
+5/27 Test: test_color_hash
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_color_hash"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_color_hash" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_hsv_classify_unit
+[PASS] test_pack_3bit_unit
+[PASS] test_color_hash_e2e
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_color_hash" end time: Oct 21 23:12 +04
+"test_color_hash" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/27 Testing: test_color_moments
+6/27 Test: test_color_moments
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_color_moments"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_color_moments" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_moments_unit
+[PASS] test_color_moments_e2e
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_color_moments" end time: Oct 21 23:12 +04
+"test_color_moments" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/27 Testing: test_config
+7/27 Test: test_config
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_config"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_config" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+Running Configuration Tests...
+  [PASS] Custom Gray Weights
+  [PASS] pHash Parameters
+  [PASS] Radial Parameters
+  [PASS] Block Size (BMH)
+All Configuration Tests Passed!
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_config" end time: Oct 21 23:12 +04
+"test_config" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/27 Testing: test_context_reuse
+8/27 Test: test_context_reuse
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_context_reuse"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_context_reuse" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+test_context_reuse_clears_gray_data: PASSED
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_context_reuse" end time: Oct 21 23:12 +04
+"test_context_reuse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/27 Testing: test_core
+9/27 Test: test_core
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_core"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_core" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+test_lifecycle: PASSED
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_core" end time: Oct 21 23:12 +04
+"test_core" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/27 Testing: test_core_extended
+10/27 Test: test_core_extended
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_core_extended"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_core_extended" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_scratchpad_management
+[PASS] test_scratchpad_autotrim
+[PASS] test_parameter_validation
+[PASS] test_error_handling
+
+All extended core tests passed.
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_core_extended" end time: Oct 21 23:12 +04
+"test_core_extended" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/27 Testing: test_dct
+11/27 Test: test_dct
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_dct"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_dct" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_dct_row0_is_constant
+[PASS] test_dct_unit_norm
+[PASS] test_dct_orthogonality
+[PASS] test_dct_unit_norm_n32
+[PASS] test_dct_dc_component_largest
+
+All DCT tests passed.
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"test_dct" end time: Oct 21 23:12 +04
+"test_dct" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/27 Testing: test_haar
+12/27 Test: test_haar
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_haar"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_haar" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_haar_scale_precision
+[PASS] test_haar_known_pair
+[PASS] test_haar_constant_signal_zero_hh
+[PASS] test_haar_roundtrip_n4
+[PASS] test_haar_roundtrip_n16
+[PASS] test_haar_energy_preserved
+
+All Haar wavelet tests passed.
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"test_haar" end time: Oct 21 23:12 +04
+"test_haar" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/27 Testing: test_hash_logic
+13/27 Test: test_hash_logic
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_hash_logic"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_hash_logic" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_ahash_uniform_gray
+[PASS] test_ahash_all_black
+[PASS] test_ahash_deterministic
+[PASS] test_dhash_constant_is_zero
+[PASS] test_dhash_ascending_gradient
+[PASS] test_dhash_deterministic
+[PASS] test_bmh_uniform_all_bits_set
+[PASS] test_bmh_size_correct
+[PASS] test_bmh_deterministic
+[PASS] test_hamming_identical
+[PASS] test_hamming_all_bits_differ
+[PASS] test_hamming_single_bit
+[PASS] test_hamming_eight_bits
+[PASS] test_hamming_commutative
+[PASS] test_hamming_digest_identical
+[PASS] test_hamming_digest_known
+[PASS] test_hamming_digest_all_bytes
+[PASS] test_l2_same_digest
+[PASS] test_l2_known_value
+[PASS] test_l2_pythagorean
+[PASS] test_l2_commutative
+[PASS] test_invalid_null_ctx
+[PASS] test_invalid_null_out
+
+All hash logic and distance tests passed.
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_hash_logic" end time: Oct 21 23:12 +04
+"test_hash_logic" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/27 Testing: test_hashes
+14/27 Test: test_hashes
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_hashes"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_hashes" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+test_hamming: PASSED
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"test_hashes" end time: Oct 21 23:12 +04
+"test_hashes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/27 Testing: test_image_color_extended
+15/27 Test: test_image_color_extended
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_image_color_extended"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_image_color_extended" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_hsv_classification_edges
+[PASS] test_color_moments_edges
+[PASS] test_pack_3bit_clamping
+
+All image color extended tests passed.
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"test_image_color_extended" end time: Oct 21 23:12 +04
+"test_image_color_extended" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/27 Testing: test_image_hashes
+16/27 Test: test_image_hashes
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_image_hashes"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_image_hashes" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[aHash] Hash1: 3483668404502527, Hash2: 3483668404502527, Distance: 0
+test_aHash: PASSED
+[dHash] Hash1: 12779471683146686238, Hash2: 12779471683146686238, Distance: 0
+test_dHash: PASSED
+[pHash] Hash1: 9130592577391247943, Hash2: 9130592577391247943, Distance: 0
+test_pHash: PASSED
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_image_hashes" end time: Oct 21 23:12 +04
+"test_image_hashes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/27 Testing: test_image_internal
+17/27 Test: test_image_internal
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_image_internal"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_image_internal" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_color_small_fallback
+[PASS] test_color_simd_full
+[PASS] test_color_1ch_passthrough
+[PASS] test_gamma_nulls
+[PASS] test_get_gray_alloc
+[PASS] test_loader_exhaustion
+[PASS] test_loader_corrupted_backend
+
+All internal image tests passed.
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_image_internal" end time: Oct 21 23:12 +04
+"test_image_internal" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/27 Testing: test_image_primitives
+18/27 Test: test_image_primitives
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_image_primitives"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_image_primitives" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_gray_pure_red
+[PASS] test_gray_pure_green
+[PASS] test_gray_pure_blue
+[PASS] test_gray_white
+[PASS] test_gray_black
+[PASS] test_gray_passthrough_1ch
+[PASS] test_gray_rgba_ignores_alpha
+[PASS] test_gray_multi_pixel
+[PASS] test_gray_null_ctx_uses_defaults
+[PASS] test_gamma_identity_lut
+[PASS] test_gamma_2_2_midpoint
+[PASS] test_gamma_uniform_image
+[PASS] test_gamma_zero_stays_zero
+[PASS] test_gamma_255_stays_255
+[PASS] test_box_uniform
+[PASS] test_box_2x2_to_1x1_average
+[PASS] test_box_4x1_to_2x1
+[PASS] test_box_identity
+[PASS] test_box_black_white_halves
+[PASS] test_box_resize_count_zero
+[PASS] test_resize_zero_negative_dims
+[PASS] test_gaussian_uniform
+[PASS] test_gaussian_impulse_spreads
+[PASS] test_gaussian_horizontal_kernel
+[PASS] test_gaussian_alias_safe
+[PASS] test_gaussian_blur_edge_cases
+[PASS] test_laplacian_uniform
+[PASS] test_laplacian_center_amplified
+[PASS] test_laplacian_negative_clamped
+[PASS] test_laplacian_borders_copied
+[PASS] test_laplacian_edge_cases
+
+All image primitive tests passed.
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_image_primitives" end time: Oct 21 23:12 +04
+"test_image_primitives" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/27 Testing: test_internal
+19/27 Test: test_internal
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_internal"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_internal" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_grayscale_pure_red
+[PASS] test_grayscale_pure_green
+[PASS] test_grayscale_pure_blue
+[PASS] test_grayscale_white
+[PASS] test_grayscale_1ch_passthrough
+[PASS] test_digest_hamming_known
+[PASS] test_digest_hamming_self_zero
+[PASS] test_digest_hamming_full_flip
+[PASS] test_hamming_uint64_self
+[PASS] test_hamming_uint64_full_flip
+
+All internal tests passed.
+<end of output>
+Test time =   0.43 sec
+----------------------------------------------------------
+Test Passed.
+"test_internal" end time: Oct 21 23:12 +04
+"test_internal" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/27 Testing: test_loader
+20/27 Test: test_loader
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_loader"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_loader" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+JPEG Loader stats: w=400, h=400, ch=3, turbo_active=0
+test_jpeg_loading: PASSED
+PNG Loader stats: w=100, h=100, ch=3, png_active=0
+test_png_loading: PASSED
+test_corrupted_loading: PASSED
+test_grayscale_loading: PASSED
+test_memory_loading: PASSED
+test_loader_edge_cases: PASSED
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"test_loader" end time: Oct 21 23:12 +04
+"test_loader" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/27 Testing: test_math_rigor
+21/27 Test: test_math_rigor
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_math_rigor"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_math_rigor" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_dct_orthogonality
+[PASS] test_dct2_scalar_reference_parity
+[PASS] test_median_stability
+[PASS] test_hsv_singularities
+
+All Math Rigor tests passed!
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_math_rigor" end time: Oct 21 23:12 +04
+"test_math_rigor" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/27 Testing: test_mhash
+22/27 Test: test_mhash
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_mhash"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_mhash" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_laplacian_scan_unit
+[PASS] test_mhash_e2e
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_mhash" end time: Oct 21 23:12 +04
+"test_mhash" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/27 Testing: test_phash
+23/27 Test: test_phash
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_phash"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_phash" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_dct2_partial_unit
+[PASS] test_median_bitpack_unit
+[PASS] test_phash_e2e
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_phash" end time: Oct 21 23:12 +04
+"test_phash" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/27 Testing: test_radial
+24/27 Test: test_radial
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_radial"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_radial" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_bilinear_unit
+[PASS] test_projection_variance_unit
+[PASS] test_radial_with_real_rotation
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_radial" end time: Oct 21 23:12 +04
+"test_radial" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/27 Testing: test_stability
+25/27 Test: test_stability
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_stability"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_stability" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+--- Checking Consistency: RGB vs Decoder-Grayscale ---
+[aHash] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo.jpeg: Dist=1
+[aHash] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo_complex.png: Dist=0
+[pHash] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo.jpeg: Dist=0
+[pHash] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo_complex.png: Dist=20
+[dHash] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo.jpeg: Dist=1
+[dHash] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo_complex.png: Dist=0
+test_stability: PASSED
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_stability" end time: Oct 21 23:12 +04
+"test_stability" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/27 Testing: test_whash
+26/27 Test: test_whash
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_whash"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"test_whash" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+[PASS] test_haar_1d_unit
+[PASS] test_whash_e2e
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"test_whash" end time: Oct 21 23:12 +04
+"test_whash" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/27 Testing: benchmark_smoke
+27/27 Test: benchmark_smoke
+Command: "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021/test_benchmark" "hash" "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-20261021/tests/data/photo.jpeg" "10"
+Directory: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/libphash454-cmake-tests-20261021
+"benchmark_smoke" start time: Oct 21 23:12 +04
+Output:
+----------------------------------------------------------
+
+--- Hashing Performance (10 iterations) ---
+Algorithm       | Total Time   | Avg (ms/op)
+----------------|--------------|--------------
+aHash           |     0.0004s |     0.0392ms
+dHash           |     0.0004s |     0.0422ms
+pHash           |     0.0002s |     0.0211ms
+wHash (Fast)    |     0.0002s |     0.0179ms
+wHash (Full)    |     0.0025s |     0.2479ms
+mHash           |     0.0002s |     0.0187ms
+ColorHash       |     0.0069s |     0.6869ms
+Radial          |     0.0001s |     0.0651ms (1/10 iter)
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"benchmark_smoke" end time: Oct 21 23:12 +04
+"benchmark_smoke" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 21 23:12 +04

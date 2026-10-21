@@ -1,0 +1,52 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Actual upstream CMake release library and test-enabled builds on AppleClang arm64, external codecs disabled.",
+  "runtime": {
+    "configuration_flags": [
+      "PHASH_USE_TURBOJPEG=OFF",
+      "PHASH_USE_LIBPNG=OFF",
+      "PHASH_USE_WEBP=OFF"
+    ],
+    "production_library_build_exit": 0,
+    "test_library_build_exit": 0,
+    "ctest_passed": 27,
+    "ctest_total": 27,
+    "ctest_seconds": 7.43,
+    "logs": [
+      "docs/research/dedup-500/libphash454-controls-20261021/cmake-minimal-ctest.log",
+      "docs/research/dedup-500/libphash454-controls-20261021/cmake-minimal-last-test.log"
+    ],
+    "log_normalization": "Trailing whitespace removed from stored LastTest log; content otherwise retained."
+  },
+  "dependency_pins": [
+    {
+      "path": "vendor/libjpeg-turbo",
+      "commit": "e352b02f794f701407b39af08576035ba3360d60"
+    },
+    {
+      "path": "vendor/libpng",
+      "commit": "d5515b5b8be3901aac04e5bd8bd5c89f287bcd33"
+    },
+    {
+      "path": "vendor/libwebp",
+      "commit": "4fa21912338357f89e4fd51cf2368325b59e9bd9"
+    },
+    {
+      "path": "vendor/spng",
+      "commit": "fb768002d4288590083a476af628e51c3f1d47cd"
+    }
+  ],
+  "findings": [
+    "CMake defaults enable libpng/WebP; missing TurboJPEG falls back to stb. spng branch separately controlled via PHASH_USE_SPNG, absent an option declaration.",
+    "Both PHASH_BUILD_TESTS=OFF library and ON test executables built successfully through original CMake.",
+    "All 27 registered CTest processes exited successfully, including benchmark_smoke; detailed logs contain no skip or fail messages.",
+    "Test-enabled library defines PH_TESTING and includes synthetic mock decoder. Several source-reviewed tests duplicate formulas or weakly assert results. This run does not invalidate previously demonstrated stale-cache, API, benchmark-reporting and configuration defects.",
+    "No native external codec, x86, ASAN, performance or all-input qualification claimed."
+  ],
+  "remaining": [
+    "Optional codec gitlink source/license and runtime qualification"
+  ],
+  "full_review_count": 247
+}
