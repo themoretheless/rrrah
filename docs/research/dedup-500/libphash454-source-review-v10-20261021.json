@@ -1,0 +1,43 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Vendorreview begun. stb_image entire textdiff tooformat-heavy to whollyread; regexC-tokencomparison performed topreviouslyreviewedmedia459header. Resizerlines1..160 andexplicitdefaultfilterdefinition/calllocations read, notwholeheader.",
+  "vendor_pins": {
+    "vendor/stb_image.h": "f53ea8b6ed181beb245d4c43c97dca0bf03cd1408e4b6485afc605199bbc9d3f",
+    "vendor/stb_image_resize2.h": "173e654634f6ccaad98f603e686ea212eec1fe8ea6d2a5e5e8056efa10ae3880"
+  },
+  "prior_header": {
+    "path": ".dedup-work/media459-20261021/stb_image.h",
+    "sha256": "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+    "review": "Priorwholeheaderreview documented inmedia459completeartifact"
+  },
+  "token_comparison": {
+    "artifact": "docs/research/dedup-500/libphash454-controls-20261021/stb-token-diff.json",
+    "token_counts": [
+      50928,
+      50928
+    ],
+    "difference": "Onlylimits.hincluderelocation incomment/whitespaceignoredregexlexicaltokens.",
+    "limits": "Regexscanner notcompiler-equivalence proof; ignorescommentchanges/preprocesslineboundaries. Hugeformattedunifieddiff outputtruncated, notclaimedwhole-read. Additionalrobustpreprocessor/commentcheckneededbeforeclosingreview."
+  },
+  "runtime_control": {
+    "source": "docs/research/dedup-500/libphash454-controls-20261021/resize-filter-control.c",
+    "method": "Originalresize.c+vendoredresizercompiledunchanged AppleClang-O2. Synthetic33x17to8x8gray. Wrappernamedlanczos comparedexplicitMitchell andoriginalbox.",
+    "exit_code": 0,
+    "stdout": "named_lanczos_equals_mitchell=1 differs_from_box=1",
+    "limits": "Oneinput/filterselectioncontrol, notallresizerimplementation oraccuracy/runtimequalification. NoASAN."
+  },
+  "findings": [
+    "EasyresizerAPIcomment specifiesMitchelldownsample/CatmullRomupsample;actualdefaultmacros confirm. ph_resize_lanczos callsstbir_resize_uint8_lineardefaultfilter, soname misstatescurrentrecipe.",
+    "ExplicitcontrolproveswrapperoutputequalsMitchellforselecteddownsamplingcaseanddiffersBOX. NoLanczosimplementation observedinwrapper;donotusewrappernameasrecipeidentity.",
+    "stb_imagelicenseblockMIT2017SeanBarrett/Unlicensewhollyreadinthisincrement. Noadoption.",
+    "Resizermemory/alpha/SIMDintroread; claimsFMA/platformspeedupsarenotmeasurementsandnotadopted."
+  ],
+  "remaining": [
+    "Completevendorresizerimplementation~8klineaudit",
+    "Robustnormalizationcomparisonforformattedstb_image",
+    "Optionalnativecodecgitlinksource/licensequalifications"
+  ],
+  "full_review_count": 247
+}
