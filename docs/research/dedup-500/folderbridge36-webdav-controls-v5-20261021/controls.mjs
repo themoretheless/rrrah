@@ -1,0 +1,17 @@
+import {readFileSync} from 'node:fs';
+import {stripTypeScriptTypes} from 'node:module';
+import assert from 'node:assert/strict';
+const root=process.argv[2],url=s=>`data:text/javascript;base64,${Buffer.from(s).toString('base64')}`;
+const mock=url(stripTypeScriptTypes(readFileSync(`${root}/tests/__mocks__/obsidian.ts`,'utf8'),{mode:'transform'}));
+const source=readFileSync(`${root}/src/WebDAVAdapter.ts`,'utf8').replace(/^import .*\n/gm,'');
+const {WebDAVAdapter}=await import(url(`import {normalizePath} from '${mock}';const loadOptionalNodeModule=()=>null;const logger={error(){},warn(){}};const saveWebDAVPassword=()=>{};const loadWebDAVPassword=()=>null;const clearWebDAVPassword=()=>{};\n${stripTypeScriptTypes(source)}`));
+const make=client=>Object.assign(Object.create(WebDAVAdapter.prototype),{client});
+const failure=Object.assign(new Error('synthetic unavailable'),{status:503});
+let a=make({getDirectoryContents:async()=>{throw failure;}});assert.deepEqual(await a.list('/source','Remote',{}),{files:[],folders:[]});
+console.log(JSON.stringify({name:'listing-503-returns-empty-success-shape',passed:true}));
+a=make({stat:async()=>{throw failure;},exists:async()=>{throw failure;}});assert.equal(await a.stat('/source'),null);assert.equal(await a.exists('/source'),false);
+console.log(JSON.stringify({name:'metadata-503-indistinguishable-from-missing',passed:true}));
+let writes=0;a=make({getFileContents:async()=>{throw failure;},putFileContents:async()=>{writes++;}});await assert.rejects(()=>a.append('/note','x'),/synthetic unavailable/);assert.equal(writes,0);
+console.log(JSON.stringify({name:'append-503-aborts-before-write',passed:true}));
+const backing=Buffer.from([9,1,2,8]);a=make({getFileContents:async()=>backing.subarray(1,3)});assert.deepEqual(Array.from(new Uint8Array(await a.readBinary('/file'))),[1,2]);
+console.log(JSON.stringify({name:'binary-read-honors-buffer-view-boundaries',passed:true}));

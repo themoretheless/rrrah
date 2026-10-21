@@ -1,0 +1,50 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/WebDAVAdapter.ts": {
+      "sha256": "1044a3ad59a39b89703ea5a19a8fb61947b0991a8af61921d6ae119b9fb8b2b6",
+      "git_blob": "4b168159b6f4414b93965d7b4a9907a0d844a35d",
+      "bytes": 11039,
+      "lines": 261,
+      "method": "Whole source read."
+    },
+    "tests/WebDAVLazyLoad.test.ts": {
+      "sha256": "8357863245d370dd48c6501b0e8b409631fbf6ab86430091e7929f5bc792356b",
+      "git_blob": "0a508c371535f0f328126fc6c9bd308e5aea30a9",
+      "bytes": 2199,
+      "lines": 51,
+      "method": "Whole source read."
+    },
+    "tests/RemoteAppend.test.ts": {
+      "sha256": "1016ee347e2fca3cd3646a8f722fffeab1b0ee5d420649d5d8d3ec1e13a21a4d",
+      "git_blob": "9b24eb4fff7432c3bbeae6f5d7a6fb19c595ed07",
+      "bytes": 2171,
+      "lines": 56,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 25,
+  "tracked_blobs": 129,
+  "findings": [
+    "WebDAV lazy loader avoids eager runtime dependency evaluation; availability checks require createClient function. Build shim/mobile compatibility still unverified. Constructor/fromMount not executed in controls.",
+    "list catches client/iteration failures, logs and returns accumulated files/folders without completeness marker. Original method with503 failure returns empty arrays. Combined with prior scanner this can look like empty directory; main caller reporting not yet read.",
+    "stat catches all failures as null and exists catches all as false;503 indistinguishable from absence in these return values (control). No content identity or exhaustive traversal proof.",
+    "append only treats explicit404 as missing;503 propagates and no putFileContents call occurs (control). Read-modify-write uses overwrite without ETag/version compare, so concurrent writers need caller-side policy. No remote writes executed.",
+    "readBinary slices Buffer backing array using byteOffset/byteLength, preserving view boundaries in original control. Assumes binary response exposes Buffer-like fields; real client/browser representation untested.",
+    "mkdir ignores all per-component errors, not only already-exists, potentially resolving despite failure. remove/rename/copy delegate directly; read-only enforcement belongs to callers and remains unverified. None invoked.",
+    "List derives each child from basename only; no explicit dedup, special-entry guard or canonical parent relationship check. Client listing semantics unverified. Paths normalize backslashes only, content untouched.",
+    "Two read upstream test files cover lazy loading/availability/build-shim source regex and append success/404/503 with mocks. They do not qualify live WebDAV completeness or concurrency; full Vitest not run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-webdav-controls-v5-20261021",
+    "passed": 4,
+    "method": "Original adapter method bodies after Node type stripping; prototype instance with synthetic client, original normalizePath mock and stubbed loader/log/credential imports. No constructor/credentials/network/remote storage actions."
+  },
+  "limits": [
+    "25/129trackedblobs read; full plugin/main caller behavior unverified.",
+    "No real WebDAV client/server/mobile or upstream suite execution.",
+    "Production library unchanged."
+  ]
+}
