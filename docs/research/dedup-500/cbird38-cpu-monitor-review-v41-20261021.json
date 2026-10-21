@@ -1,0 +1,30 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cpu.h": {
+      "sha256": "132ee456a349d87822d44e5793e596af5da7dc9badfab82b6a4d8e8294acde13",
+      "git_blob": "6dd46dcac3ddc6d6d108553009068c798aafdae2",
+      "bytes": 8321,
+      "lines": 277,
+      "method": "Whole pinned header read; monitor not instantiated."
+    }
+  },
+  "cumulative_assessed_blobs": 119,
+  "tracked_blobs": 616,
+  "findings": [
+    "cpu.h implements utilization monitor, not SIMD feature detection or hash dispatch. Linux comment says task throttling idea abandoned in favor user thread count. Inclusion in main does not prove monitor is invoked.",
+    "Linux /proc/stat parser splits literal spaces without SkipEmptyParts while source example has double space after cpu; positional fields can shift. No count/conversion checks. A failed read resets counters before unsigned delta subtraction. No live Linux monitor run.",
+    "Linux waitUntilLower loops with100microsecond sleeps, no cancellation or timeout, and usage returns1 when totaldelta0. This is not a bounded resource admission guarantee. Reachability not established for current CLI.",
+    "Apple CPU constructor launches infinite QtConcurrent polling on this, discards future, has no visible stop/join/destructor, exposes plain float concurrent reads/writes and lacks totalAvailzero guard. Static lifecycle/concurrency concerns only; monitor not instantiated.",
+    "Apple polling iterates sysctl CPU count rather than returned numCPUsU, and uses numPrevCpuInfo for previous array release without assigning it after successful read. No system calls or resource leak measurements performed.",
+    "Fallback monitor returns0 and wait does nothing. Such zero is a stub, not measured idle CPU. Platform monitor differences do not establish descriptor mismatches or any performance result."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "119/616 assessed:118 whole text/source and one PNG visual. qtutil.cpp remains partial.",
+    "29 prior isolated original-body/header controls plus one independent counterexample unchanged. No native monitor, processor benchmark or production port.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
