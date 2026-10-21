@@ -1,0 +1,27 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "internal/web/server_test.go"
+  ],
+  "controls": "docs/research/dedup-500/reverse426-request-controls-20261021/result.json",
+  "findings": [
+    "Original handler accepts actual JPEG multipart request whose context is already cancelled, registers background search and emits completion. Tiny empty-directory control, not a transport or latency benchmark.",
+    "Original search endpoint tests assert searchId and successful status but do not consume actual matches or verify threshold/workers/topN semantics. Custom parameters test uses empty directory.",
+    "Original disconnect test asserts removal from search map but discards search context, so does not assert producer cancellation. SSE success uses manually populated channel rather than live search integration.",
+    "Original ServerClose tests assert only nil error with and without cache, no active state or shutdown behavior. This explains why prior lifecycle counterexample coexists with green suite.",
+    "Cache hit-rate-named test asserts two misses only, not computed hit rate. Cache-clear-success test clears empty database, not populated state. Cache-scan success asserts SSE and done:true, not cached count or persistence.",
+    "Thumbnail success checks JPEG magic, not decoded dimensions or pixel orientation. EXIF endpoint test checks dimensions keys exist rather than numerical correctness.",
+    "Most endpoint tests invoke handlers through httptest recorder; passing tests do not qualify actual network transport, browser UI, concurrent consumers or deployment lifecycle."
+  ],
+  "remaining": [
+    "template.html and rendered UI review",
+    "Docs/spec/config/license/go.sum whole-read"
+  ],
+  "limits": [
+    "223/500 complete; repository remains partial.",
+    "No fresh full-suite claim: original 72-test record is separate from this new control.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}

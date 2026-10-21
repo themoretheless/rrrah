@@ -1,0 +1,13 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "exit_code": 0,
+  "original_handler": true,
+  "fixture": "Actual generated JPEG, multipart upload, empty temporary directory, pre-cancelled request context",
+  "observed": "Search is registered and emits Done despite cancelled request",
+  "limits": [
+    "Direct httptest handler, no actual HTTP transport cancellation.",
+    "Tiny image and empty directory; no cancellation latency or large workload measurement.",
+    "Observed-behavior assertion, not desired-behavior pass."
+  ]
+}
