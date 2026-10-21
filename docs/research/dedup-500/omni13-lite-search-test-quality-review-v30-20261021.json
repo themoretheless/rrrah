@@ -1,0 +1,48 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "new_read_line_ranges": [
+        [
+          5751,
+          6750
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          6750
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read 1000 additional contiguous source lines; source-level qualification of upstream tests and Windows helper contracts. No runtime controls executed in this batch.",
+  "findings": [
+    "Hybrid accuracy test prints Rust Hit@3 but iterates every item returned by engine.search(q,3), without take(3). The already-read search implementation expands generic candidates to at least 2000 before further additions. Its >=70 percent assertion is therefore not proof of first-three ranking accuracy. No measured hit rate is reported here because the test was not executed.",
+    "Hybrid test sets global DISABLE_LIVE_RESULTS true without restoration; other parallel tests can observe that shared state. It also uses fixed test_db.db, shared with another test. Isolation requires further qualification before interpreting full-suite results.",
+    "Model path search in hybrid accuracy test discards model_path via let _ and does not load it there. The name hybrid and path lookup are not evidence of current embedding-model inference; previously reviewed ranking is lexical.",
+    "test_search_file opens APPDATA/omnisearch-lite/file_index.db or relative file_index.db, creates SearchEngine and prints resume search results without an expected-result assertion. It is an environment-dependent diagnostic, not a synthetic correctness regression. Not run against user data.",
+    "Windows AppsFolder enumeration test unwraps COM operations, prints at most ten entries and has no catalog-content assertion. It is not portable algorithm coverage and was not executed.",
+    "Live disk-space helper passes a null directory to GetDiskFreeSpaceExW while labeling result Disk Space (C:). Source does not select C explicitly. Exact platform semantics and observed drive mismatch remain unqualified; no Windows API was invoked.",
+    "Live IP helper binds a UDP socket and connects to a fixed destination to obtain local_addr; no such networking performed in review. Keyword matching uses substring ip rather than a word boundary, so unrelated queries may invoke this helper if live results are enabled.",
+    "Recent-file scan sorts shortcut modification times and truncates to 200 before target resolution/type filtering. It does not establish an exhaustive latest-200 useful-document set, verify target existence or dedupe targets in that helper. Enumeration/metadata failures silently drop entries.",
+    "Lite shortcut resolution uses a fixed 260-u16 buffer and trims surrounding whitespace from returned targets. Long-path and whitespace-bearing-path behavior need Windows fixtures, not assumed correct from string conversion.",
+    "Lite app scan sorts and dedupes by exact display name; distinct launch commands with the same display name collapse. Broad English substring exclusions such as help/manual/about can omit applications by label. This is launcher catalog curation, not file-content deduplication.",
+    "COM initialization results are ignored and no matching CoUninitialize appears in the reviewed scan_recent_files/scan_apps helper bodies. Caller/thread lifetime and practical leak impact remain unqualified.",
+    "Quick-action table in this batch contains command descriptors and external links only. No system action, browser navigation, clipboard operation or user-file mutation was performed."
+  ],
+  "limits": [
+    "81/268 whole files; search.rs 1-6750 of 10272 partial.",
+    "No new runtime tests. Original isolated NLP result remains 2 passed from v29; database/Windows test bodies read here are not counted as passes.",
+    "155/500 complete repository reviews unchanged. Native pHash/ASAN remains deferred; all-case goal incomplete."
+  ]
+}
