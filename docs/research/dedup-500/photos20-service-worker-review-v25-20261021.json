@@ -1,0 +1,33 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "background/index.ts": {
+      "sha256": "308b06cb48e413634f6dd514f8960ed7dc94f9be81c84bfa58476022bb1bf7e5",
+      "git_blob": "dd1802fb3b7a553b1a4fe2db65477be3d1410a24",
+      "bytes": 10843,
+      "lines": 372,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 60,
+  "tracked_blobs": 84,
+  "findings": [
+    "Chunk pending entry is deleted when chunkIndex >= totalChunks-1, rather than after all distinct indices. Original handlers relay [0,1,2] normally, but relay only [2] for arrival [2,0,1]. App index-based assembly cannot recover chunks discarded upstream.",
+    "Pending entries correlate only requestId, without storing source GP tab or expected command. Result/chunk handlers ignore sender identity. No adversarial messages or live services used in review.",
+    "Health command promise has no timeout; pending internal entry uses appTabId=0. Missing reply or GP tab closure can leave it unresolved; tab cleanup only deletes commands whose appTabId matches closed tab.",
+    "App-page sender resolution by URL chooses first matching tab. Multiple app tabs sharing URL can be conflated. Bidirectional map holds one reverse app mapping per GP tab, though multiple apps may target it.",
+    "Mapping and pending promises are memory-only, so service-worker restart loses correlation state. No restart recovery path in this source.",
+    "No-op ping selects reachable bridge, not verified GPTK readiness/account. On close, handler notifies mapped counterpart regardless of whether closed tab was app or GP."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-service-worker-controls-v25-20261021",
+    "passed": 2,
+    "method": "Original source handlers via TypeScript stripping/VM; in-memory Chrome query/sendMessage stubs, ordered and reordered three-chunk arrivals."
+  },
+  "limits": [
+    "No Chrome service worker/browser runtime or production message delivery; this proves handler behavior under supplied order, not frequency of actual reordering.",
+    "60/84 complete tracked files read; no production library change."
+  ]
+}
