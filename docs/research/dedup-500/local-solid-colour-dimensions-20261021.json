@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "test": "opaque_solid_colours_and_crossed_dimensions_keep_exact_identity_separate",
+  "file": "crates/rrrah-dedup/tests/pixels.rs",
+  "source_case": "docs/research/dedup-500/eyecatching492-complete-source-review-20261021.json",
+  "dimensions": [
+    [
+      1,
+      1
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      8,
+      4
+    ],
+    [
+      4,
+      8
+    ],
+    [
+      31,
+      33
+    ]
+  ],
+  "assertions": [
+    "Opaque red vsblue exactpixelcomparisonfalseinbothdirectionsanddifferentdigests",
+    "IndependentlyknownlinearRGBmeansred1,0,0andblue0,0,1with1e-12arithmetic tolerance",
+    "Samepixelbufferwithcrossedwidthheightdifferentexactidentityinbothdirectionsanddifferentdigests",
+    "Inputbuffersunchangedaftercomparison/digest/fingerprint"
+  ],
+  "validation": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --test pixels",
+    "passed": 13,
+    "failed": 0,
+    "format": "rustfmt +1.98.1 --edition2024"
+  },
+  "initial_failure": "Authored exactfloatmeanassertionfailedwith1.0000000000000022vs1.0; correctedoracleto1e-12toleranceandreranwholepixels suite. Notanexactpixelidentityfailure.",
+  "scope": "Local pixel API regression only; no new matching algorithm or production changes, broad decoder/visual accuracy not qualified. Researchcount216/500 unchanged.NativepHash/ASANdeferred."
+}

@@ -309,22 +309,19 @@ fn fractional_single_pixel_footprints_match_integer_overlap_oracle() {
             for sx in 0..width {
                 let mut bytes = [0_u8, 0, 0, 255].repeat(width * height);
                 bytes[(sy * width + sx) * 4..(sy * width + sx) * 4 + 3].fill(255);
-                let actual = Rgba8View::new(
-                    width as u32,
-                    height as u32,
-                    &bytes,
-                    (width * height) as u64,
-                )
-                .unwrap()
-                .fingerprint(|| false)
-                .unwrap();
+                let actual = Rgba8View::new(width as u32, height as u32, &bytes, (width * height) as u64)
+                    .unwrap()
+                    .fingerprint(|| false)
+                    .unwrap();
                 let mean = 1.0 / (width * height) as f64;
                 let mut variance = 0.0;
                 for y in 0..9 {
                     for x in 0..9 {
-                        let dx = ((sx + 1) * 9).min((x + 1) * width)
+                        let dx = ((sx + 1) * 9)
+                            .min((x + 1) * width)
                             .saturating_sub((sx * 9).max(x * width));
-                        let dy = ((sy + 1) * 9).min((y + 1) * height)
+                        let dy = ((sy + 1) * 9)
+                            .min((y + 1) * height)
                             .saturating_sub((sy * 9).max(y * height));
                         let intensity = (dx * dy) as f64 / (width * height) as f64;
                         variance += (intensity - mean).powi(2) / 81.0;
@@ -339,5 +336,43 @@ fn fractional_single_pixel_footprints_match_integer_overlap_oracle() {
                 );
             }
         }
+    }
+}
+
+#[test]
+fn opaque_solid_colours_and_crossed_dimensions_keep_exact_identity_separate() {
+    for (width, height) in [(1, 1), (3, 3), (8, 4), (4, 8), (31, 33)] {
+        let count = (width * height) as usize;
+        let red: Vec<_> = [255, 0, 0, 255].into_iter().cycle().take(count * 4).collect();
+        let blue: Vec<_> = [0, 0, 255, 255].into_iter().cycle().take(count * 4).collect();
+        let red_before = red.clone();
+        let blue_before = blue.clone();
+        let left = Rgba8View::new(width, height, &red, count as u64).unwrap();
+        let right = Rgba8View::new(width, height, &blue, count as u64).unwrap();
+        assert_eq!(left.same_pixels(&right, || false), Ok(false));
+        assert_eq!(right.same_pixels(&left, || false), Ok(false));
+        assert_ne!(
+            left.pixel_digest(|| false).unwrap(),
+            right.pixel_digest(|| false).unwrap()
+        );
+        let left_signature = left.fingerprint(|| false).unwrap();
+        let right_signature = right.fingerprint(|| false).unwrap();
+        for (actual, expected) in left_signature.mean_linear_rgb.into_iter().zip([1.0, 0.0, 0.0]) {
+            assert!((actual - expected).abs() < 1e-12);
+        }
+        for (actual, expected) in right_signature.mean_linear_rgb.into_iter().zip([0.0, 0.0, 1.0]) {
+            assert!((actual - expected).abs() < 1e-12);
+        }
+        if width != height {
+            let transposed = Rgba8View::new(height, width, &red, count as u64).unwrap();
+            assert_eq!(left.same_pixels(&transposed, || false), Ok(false));
+            assert_eq!(transposed.same_pixels(&left, || false), Ok(false));
+            assert_ne!(
+                left.pixel_digest(|| false).unwrap(),
+                transposed.pixel_digest(|| false).unwrap()
+            );
+        }
+        assert_eq!(red, red_before);
+        assert_eq!(blue, blue_before);
     }
 }
