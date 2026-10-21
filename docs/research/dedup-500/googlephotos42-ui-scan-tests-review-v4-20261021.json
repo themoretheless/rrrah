@@ -1,0 +1,67 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/ui/dupes/finder.ts": {
+      "sha256": "415a03d3fcbf83dbf7656ff09e34fd28bcedea41ec22c30ecdbec518550a6255",
+      "git_blob": "9fb16723804f9880a3d5151ee5833fa1f6814579",
+      "bytes": 24101,
+      "lines": 474,
+      "method": "Whole pinned text read; not executed."
+    },
+    "tests/dedup-grid-dom.test.ts": {
+      "sha256": "bf1b45dd283e14642fe2e31aa799052101cda3f44c705a77d87404252c96a50b",
+      "git_blob": "c26144f0e8fc60193bfbaa382cff715323efbad8",
+      "bytes": 5029,
+      "lines": 114,
+      "method": "Whole pinned text read; not executed."
+    },
+    "tests/dedup-pro.test.ts": {
+      "sha256": "2e1c4bd37e1f9afe0f49bf78a0e314cf3437e945bb4b13b25372ba0d77064961",
+      "git_blob": "5fe110bb830ba3b34b2d08ffff509780a3c86e2f",
+      "bytes": 5489,
+      "lines": 126,
+      "method": "Whole pinned text read; not executed."
+    },
+    "tests/dedup-scan.test.ts": {
+      "sha256": "75d52b031b9607e7476f7e9a7201fae4406adc0ebd37c574699ca69eb4b3b7df",
+      "git_blob": "4158073504e7afcc3ec1ef483856b0702d2b6aba",
+      "bytes": 4829,
+      "lines": 124,
+      "method": "Whole pinned text read; not executed."
+    },
+    "package.json": {
+      "sha256": "b21eba3cf2cab46f993c34eecdcdddf21d12aaafc039c5b9c1a2a7c1008626e3",
+      "git_blob": "d4082a8ae797d05b6cb85fc7af14cd6e396019b1",
+      "bytes": 1948,
+      "lines": 49,
+      "method": "Whole pinned text read; not executed."
+    },
+    "vitest.config.ts": {
+      "sha256": "c1252fec72e2627fcbded725078a5f3eadfec28638a920d751796476cf28ef1f",
+      "git_blob": "c2c24a2496a8ae04f418ad73429077c80ca8ad52",
+      "bytes": 176,
+      "lines": 9,
+      "method": "Whole pinned text read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 18,
+  "tracked_blobs": 230,
+  "findings": [
+    "regroup aborts previous controller before grouping but awaits consent/pro/variant without checking ctrl identity or abort before renderReview. A stale async continuation is possible by source inspection; concurrency reproduction not yet performed.",
+    "Close aborts scan/group and unsubscribes progress; replacing existing mount on open removes old element without invoking its Close cleanup. Old async work/subscription may survive. Source finding, not browser-runtime proof.",
+    "Slider debounce is local to renderReview and is not explicitly cleared on Close or rerender; pending callbacks can trigger regroup after detached render. No UI reproduction yet.",
+    "Unreadable count is displayed during scan; final review uses result.items and found but does not retain failed count as a qualification message. No lookalikes result therefore covers successful thumbnails rather than whole view.",
+    "Five dedup-related test files now read in full: hash/group, finder-pro, grid-dom, pro, scan. No original Vitest run. DOM tests use synthetic markup; scan tests use finite scripted203tile grid, unreadable thumbnails, cancellation, no-scroll and English dates. They do not prove changing-view or delayed remote-grid completeness.",
+    "Pro tests cover keeper dates/ties/fallback, confidence boundary on stored similarities, approvals, CSV quote escaping. No independent allpair confidence test or real media.",
+    "Root package scripts and Vitest configuration read. Build/upload/license scripts listed but not read or executed; dependencies not installed in this step."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 7,
+  "limits": [
+    "18/230whole artifacts; UI source review is not visual rendered review or full repository coverage.",
+    "No production optimization or browser/account action. Native pHash/ASAN deferred."
+  ]
+}
