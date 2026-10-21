@@ -1,0 +1,26 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_files_read": [
+    {
+      "path": "tests/images/meson.build",
+      "sha256": "56756b9d3bb8a8883ed012d60f6cf73f0a9495439a021116b2ff14bc3e792525"
+    }
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-corpus-result.json",
+  "findings": [
+    "Ran unchanged original testsuite on all175 images registered in pinned tests/images/meson.build. Every downloaded image Git blob SHA1 verified; per-image SHA256 and stdout/stderr log hashes recorded.",
+    "161 valid image processes exited0;14 expected-invalid image processes exited positive, all175 matched original declared expectations. No signal/timeout or unexpected acceptance recorded.",
+    "2975 registered scenario slots,832 explicitly skipped. Remaining2143 attempted slots include expected failures; do not describe2143 as passed comparisons.",
+    "Corpus includes interlaced/noninterlaced, packed/16-bit, transparency, filters and metadata but does not prove every PNG input or current own decoder behavior. Reference is available libpng1.6.59, original pinned spng compiled AppleClangO2 arm64.",
+    "Runtime execution is separate from visual inspection: images have not been individually viewed; whole dependency source/assets review remains incomplete. No production code adopted or speedup claim."
+  ],
+  "remaining": [
+    "Visual review of dependency image assets",
+    "Other dependency docs/build/fuzzer/regression sources",
+    "Other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
