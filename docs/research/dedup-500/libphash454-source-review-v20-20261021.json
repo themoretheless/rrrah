@@ -1,0 +1,17 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Actual Clang raw lexer comparison against previously reviewed MediaDuplicateFinder stb_image 2.30, including inactive source branches and complete normalized comment prose.",
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/stb-raw-tokens-result.json",
+  "findings": [
+    "Both headers contain 50928 non-comment raw tokens; after removing exactly one #include <limits.h> token sequence from each, all tokens match in order. Include placement difference previously inspected.",
+    "All comment prose matches after whitespace and line-comment prefix normalization; counts differ 1223 versus 1279 due wrapping.",
+    "Complements six prior release preprocessor configurations; raw comparison does not qualify directive whitespace, macro stringification, debug diagnostics, external codecs or runtime behavior."
+  ],
+  "remaining": [
+    "Preprocessor directive/whitespace structural comparison before claiming formatted-header full equivalence",
+    "Optional codec gitlinks qualification"
+  ],
+  "full_review_count": 247
+}
