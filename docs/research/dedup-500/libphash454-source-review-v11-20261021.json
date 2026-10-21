@@ -1,0 +1,36 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Vendorresizerlines161..690 whollyread inadditiontoprior1..160. Strongeractualcompiler-tokencomparisonforformattedstb_image releaseconfigurations,notwholevendorcompletion.",
+  "manifest": [
+    {
+      "path": "vendor/stb_image_resize2.h",
+      "sha256": "173e654634f6ccaad98f603e686ea212eec1fe8ea6d2a5e5e8056efa10ae3880",
+      "read_ranges_inclusive": [
+        [
+          1,
+          690
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/libphash454-controls-20261021/stb-clang-tokens-result.json",
+  "findings": [
+    "Originalstbheaders produceidenticalAppleClangpreprocessedlexertokens in6NDEBUGconfigurations:default,noSIMD,noSTDIO,PNGonly,JPEGonly,PNMonly. Thiscoversactivepreprocesssemantics, notmerelyregexwhitespace.",
+    "Initialdebugcompare differedatassertline1270vs1337 andexpressionstringification img_n+1vsimg_n + 1; notsilenttoken-equivalence. ReleaseNDEBUGspecifiedexplicitlyforfinalsuccessfulcomparison; debugdiagnostictextdiffsretainedaslimits.",
+    "Default/noSIMDtokenhashesidenticalinactualhostconfiguration; noexplicitSTBI_NEONflagselectedhere, so notseparatenativeNEONqualification.",
+    "ResizerpublicAPI supportsnegative stride, subrects,peraxisfilter/edgecallbacks,mixedpixeltypes andsamplerreuse. Samplerrebuildtriggeredbyfilter,edge,layout,subrectchanges; bufferpointer/datatype/userdatacanchange withoutrebuild perAPI. Implementationunread, noacceptanceclaim.",
+    "APIrequiresfree_samplersafterexplicitbuild; splitthreadedresize requirespriorbuild_with_splits. No threadingruntimeperformed.",
+    "Resizerdeterminismcontractrequiresnofastmath/fpcontracting andnotguaranteedforNaN. FMAmodediffersfromnonFMA byrounding. Negative-lobefloatfiltersmayovershootrange unlessconfiguredclamps.",
+    "Resizeralphalayouts distinguishstraight/premultiplied/genericchannels,sRGBalphalinearhandling;usinggeneric4channelsdoesnotmeanRGBAsemantics. Currentlibphashwrapperuses1channelandcannotinheritfullalpha/colorclaim.",
+    "License/revisionintroclaimsandperformancepercentages notruntimeevidence. No productioncodeadopted, noASAN or nativepHash.org."
+  ],
+  "remaining": [
+    "Resizerlines691onwardimplementationandlicense",
+    "stb_imageinactivebranches/commentprose reviewboundary",
+    "Optionalcodecgitlinks remainexternaldependencyqualification"
+  ],
+  "full_review_count": 247
+}
