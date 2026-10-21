@@ -1,0 +1,75 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".vscode/extensions.json": {
+      "sha256": "8988c707a30230dcaa815dc690caab61f43c57b13fb42e2d632e06a794b58454",
+      "git_blob": "24d7cc6de8e0b4d34e998fb0e0a195a20dc4b213",
+      "mode": "100644",
+      "lines": 3
+    },
+    "android/.gitignore": {
+      "sha256": "22066fc5a110b3550cca6c45d18af1a86d9d6811f46352a2595ef927e9a9df02",
+      "git_blob": "da773a00a786df9fbcd82d21d22e87a3deb0d0ba",
+      "mode": "100644",
+      "lines": 21
+    },
+    "android/app/.gitignore": {
+      "sha256": "5b46eb48d96e8571e8c93e4ef4f6ffbe6807b6d7350664a36a064e1167a32718",
+      "git_blob": "796b96d1c402326528b4ba3c12ee9d92d0e212e9",
+      "mode": "100644",
+      "lines": 1
+    },
+    "android/gradlew": {
+      "sha256": "63135287117a1e6d12c84580f1f49c61d1ba02218ecd28660605e97f976e7d65",
+      "git_blob": "4f906e0c811fc9e230eb44819f509cd0627f2600",
+      "mode": "100644",
+      "lines": 185
+    },
+    "android/gradlew.bat": {
+      "sha256": "c46a27c79007746de5922b17abb6230d64ad8b1ba3ad1585ee5c6543c2a9b129",
+      "git_blob": "107acd32c4e687021ef32db511e8a206129b88ec",
+      "mode": "100644",
+      "lines": 89
+    },
+    "docs/images/README.md": {
+      "sha256": "9f332178e7a896b5ce32944321a91ca71adebd48450d66c8d5e32b402380ab16",
+      "git_blob": "bca3d038f5e85d4d88e645431dd58e7365932b5a",
+      "mode": "100644",
+      "lines": 8
+    }
+  },
+  "cumulative_whole_files_read": 190,
+  "tracked_blobs": 268,
+  "method": "Six complete pinned text files307lines read. POSIX wrapper parsed with sh -n (no script execution); VSCode JSON parsed; docs named images checked against pinned tree.",
+  "executed_controls": {
+    "posix_shell_syntax": "sh -n exit0; script notexecuted",
+    "vscode_json_parse": "passed",
+    "docs_image_references": [
+      "omnisearch-architecture.svg",
+      "omnisearch-ui.png",
+      "duplicates-showcase.png",
+      "image.png",
+      "duplicates.png",
+      "all-drives-advanced.png"
+    ],
+    "missing_named_files": [
+      "omnisearch-ui.png",
+      "duplicates-showcase.png",
+      "all-drives-advanced.png"
+    ]
+  },
+  "findings": [
+    "POSIX/Windows wrappers select Java viaJAVA_HOME/PATH and invoke localgradle-wrapper.jar GradleWrapperMain, not an embeddedapp build/test proof. Environment JVM options intentionally supported. No wrapper orJARexecuted, noGradledownload/cachemodified.",
+    "POSIX shell syntax passes. Windowsbat read includes exitcode handling; no cmd.exe parser/runtime available used. Quoting/platformbranches staticallyread, not crossplatformacceptance.",
+    "Wrappers retain Apache2 licenseheader; repositoryMIT metadata doesnoterase perfilelicense. No bytecomparison with officialwrapperdistribution performed; no provenance/authenticityclaim beyondpinnedblob.",
+    "Androidgitignore excludes gradle/kotlin/localconfig/build/signing/env files; not evidence no secrets or all releaseartifacts preserved. Readonlyreview doesnotapplycleanup. VSCode recommendsTauri/Rustanalyzer, not installedbyreview.",
+    "docs/images/README names several absenttreefiles: omnisearch-ui.png, duplicates-showcase.png, all-drives-advanced.png. Some markedoptional/placeholder. This is staleillustrationinventory, not proof missingactualappfeature. RootREADME actualreferences previouslyread; noautomaticedits."
+  ],
+  "limits": [
+    "190/268 wholeblobs; repository013 incomplete.",
+    "No Android/Windows/Gradle/build/tests, networkservices, installers orproductionlibrarychanges.",
+    "155/500 fullrepositories unchanged; pHash/ASAN deferred."
+  ]
+}
