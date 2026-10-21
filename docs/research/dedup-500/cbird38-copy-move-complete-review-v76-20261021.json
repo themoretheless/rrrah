@@ -1,0 +1,50 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/papers/An Evalulation of Popular Copy-Move Forgery Detection Approaches.pdf": {
+      "sha256": "80bbe9d95d950722425b48ba6b3afab45bb1992cb714674d6819121a45d1ca6a",
+      "git_blob": "d4d7195f2446d93ae9640d3a9329644a064e67f8",
+      "bytes": 9727628,
+      "pages": 26,
+      "method": "Full26page text and visuals now reviewed cumulatively; thisstep pages17–26read in full and rendered110dpi, visually inspected including category curves,tablesIX–XII,48scene/ground-truth panels and biographies.",
+      "prior_visual_audits": [
+        "docs/research/dedup-500/cbird38-copy-move-partial-review-v74-20261021.json",
+        "docs/research/dedup-500/cbird38-copy-move-resources-review-v75-20261021.json"
+      ],
+      "new_visual_evidence_directory": "docs/research/dedup-500/cbird38-copy-move-complete-review-v76-20261021"
+    }
+  },
+  "partial_source_files": {
+    "src/lib/CImg.h": {
+      "sha256": "f13dfc3c427c4ea20c0052dcd8cdb882853cf8e45d70285dbcfceca630236eab",
+      "git_blob": "5e268dfc4bad5ad7b0992fde925869b19876bcb7",
+      "bytes": 3273953,
+      "total_lines": 66396,
+      "read_ranges_inclusive": [
+        [
+          1,
+          150
+        ]
+      ],
+      "method": "Header/version/license declaration/configuration preamble only; remaining66246lines NOT yet read or counted complete."
+    }
+  },
+  "cumulative_assessed_blobs": 615,
+  "tracked_blobs": 616,
+  "findings": [
+    "Supplement fixes keypoint clustering, affine/RANSAC refinement,correlation smoothing and mask filtering parameters; resulting masks remain postprocessed evidence, not exact-pixel certificates.",
+    "Single-linkage clusters join spatial correspondences within one image. Do not transfer transitive linkage directly to duplicate-file equivalence groups; local library complete-link evidence serves a different invariant.",
+    "Texture categories smooth/rough/structured are human-assigned17/16/15motifs; no numerical entropy cutoff or universal calibrated routing rule follows. Category-specific performance differs and aggregate metrics hide weaknesses.",
+    "All48reference scene/ground-truth previews viewed, including thin/disconnected regions,low texture,repeated architecture and small copied objects. They define research challenges, not local executed corpus coverage.",
+    "This completes all6bundled PDFs. Native duplicate recall,source-generation validity,cancellation,resource enforcement and filesystem policy still require their own tests.",
+    "Remaining CImg header declares cimg_version313and dual CeCILL-C orCeCILLv2.1 licensing; only header declaration read, not linked full license terms. No source port or full embedded-library qualification."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "615/616 assessed:187whole text/source,417PNGvisuals,2structured spreadsheets,6PDFs,3other graphics.Onlywholeartifactremaining:CImg.h(66396lines),ofwhich150linesread.",
+    "Poppler xref-reconstruction warning repeated; all requested page renders successfully produced and visually inspected. No published numerical experiments rerun or automated curve digitization.",
+    "34upstream original-body/header controls and3independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
