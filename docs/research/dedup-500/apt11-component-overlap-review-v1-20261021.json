@@ -1,0 +1,66 @@
+{
+  "repository": "davidfoerster/aptsources-cleanup",
+  "commit": "cf291129b351f4e126d53ed7382a61734052db99",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/__main__.py": {
+      "sha256": "4fd88626148b64a888379f2785bb52439ba9dafd70c8e91fb2ca35131bcce6cb",
+      "git_blob": "a38bc8240b18a5ed614f60f72756b9d7e584dd53",
+      "lines": 9
+    },
+    "src/aptsources_cleanup/__init__.py": {
+      "sha256": "fe16bc931ffb81cf94c18b983ca0365237c39a4f3a445398bcae98020968fdf4",
+      "git_blob": "9ec20e0b4b8e058a331f0de6bbed658da8f793f8",
+      "lines": 66
+    },
+    "src/aptsources_cleanup/__main__.py": {
+      "sha256": "2d441490c50293b800ea0d14f457dfcaec8283d9164de0dcce97e485574a15bb",
+      "git_blob": "8d28cbd17e1b07af60212a5c7686b8e9f8870fef",
+      "lines": 391
+    },
+    "src/aptsources_cleanup/util/filesystem.py": {
+      "sha256": "887f5407659349637ec40be4fcb1ede8e70d18d28d54aca5808d25f1ab5d4dce",
+      "git_blob": "d1b6182fa62fccef4a4b123c86e9d91b093dd10a",
+      "lines": 18
+    }
+  },
+  "cumulative_whole_files_read": 4,
+  "tracked_blobs": 166,
+  "method": "Four complete pinned files read and Git blobs verified. Original duplicate detector/handler AST-extracted with synthetic in-memory source entries, suppressed terminal and apply_changesFalse; noAPT module/system configuration execution.",
+  "findings": [
+    "get_duplicates keys each entry separately by component, normalized URI/dist and source type, but handle_duplicates disables whole source entry. Source entries with extra distinct components are not merged/split before disabling.",
+    "Synthetic3entries main;main+universe;universe produce disabled flagsFalse,True,True and lose universe entirely. Precomputed overlap groups can choose an already-disabled entry as representative. Original-function control confirmed in-memory loss; no system files saved.",
+    "Configured equivalent schemes default groups http/https/ftp; exact URI bytes/protocol distinction is intentionally collapsed. Path normpath changes syntactic identity; this is APT-entry equivalence, not file-content proof.",
+    "Dry-run apply_changesFalse suppresses save but still mutates in-memory disabled flags and prints disabled wording. main skips empty-file handling for dry-run; persistence was not executed.",
+    "Summary counts number of overlapping component groups, not unique newly disabled entries. Same entry may occur in multiple groups.",
+    "get_empty_files groups only filenames represented by source entries; truly empty files absent from parsed source list may not be visible. ActualAPT parser contract unqualified.",
+    "samefile helper returnsFalse on filesystem error, losing distinction between different identity and unknown identity; no caller safety conclusion until usage reviewed."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/apt11-20261021/component-overlap-control.py",
+    "sha256": "a9583ea76c5a96317043ba1af0eae5a0c0d6f543cdd37bde0f8ed5c9af81d374",
+    "result": {
+      "components_before": [
+        "main",
+        "universe"
+      ],
+      "disabled_entries": [
+        false,
+        true,
+        true
+      ],
+      "components_after": [
+        "main"
+      ],
+      "lost_components": [
+        "universe"
+      ],
+      "scope": "Original duplicate-detection/handler functions with synthetic in-memory source entries and suppressed terminal output; apply_changesFalse, noAPT imports or system files read/written."
+    }
+  },
+  "limits": [
+    "4tracked files reviewed;153/500complete repositories.",
+    "APT/Linux parser,fullCLI,source save/removal,upstream suite not executed. No productioncode copied or system configuration touched.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
