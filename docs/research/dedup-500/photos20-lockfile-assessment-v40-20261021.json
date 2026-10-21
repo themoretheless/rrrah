@@ -1,0 +1,186 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "package-lock.json": {
+      "sha256": "21911fec8a96b1ec9fb474d50b6daa0ee005608c103559af9351a5022aa770f5",
+      "git_blob": "0065fd57dcdd41ee10970c76e0cad05042b3a656",
+      "bytes": 460503,
+      "lines": 13066,
+      "method": "Complete declarative data parsed; every package record/integrity token structurally assessed and root importer compared with manifest. Not line-by-line semantic package-source review."
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "7c8e0b98bbd7fcae7de5659c229d1de51008d6f98ac84e0ddfbb0a57175ac9ee",
+      "git_blob": "18dbb566871f121c8c60a9f1b220bfd45489fac8",
+      "bytes": 207043,
+      "lines": 6422,
+      "method": "Complete declarative data parsed; every package record/integrity token structurally assessed and root importer compared with manifest. Not line-by-line semantic package-source review."
+    }
+  },
+  "cumulative_whole_files_read": 83,
+  "tracked_blobs": 84,
+  "findings": [
+    "npm lock v3 root version 2.2.3 and direct dependency maps equal current package manifest. All 907 package records consumed structurally.",
+    "pnpm v9 has 676 package records and 677 snapshots; root importer has 21 mismatched/missing declared dependency specifiers. It is not a synchronized current-install lock.",
+    "Root pnpm @types/node remains 20.11.5 while manifest requests ^24; UI, MediaPipe and test stack dependencies are missing from pnpm importer.",
+    "Integrity checks validate base64 algorithm/digest length syntax only; no registry tarball bytes authenticated. No install scripts run."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-lock-controls-v40-20261021",
+    "parser": "Python 3.12 with isolated PyYAML 6.0.3",
+    "summary": {
+      "npm_lockfile_version": 3,
+      "npm_root_version": "2.2.3",
+      "npm_package_records": 907,
+      "npm_direct_manifest_maps_equal": true,
+      "pnpm_lockfile_version": "9.0",
+      "pnpm_package_records": 676,
+      "pnpm_snapshot_records": 677,
+      "pnpm_direct_manifest_differences": [
+        {
+          "kind": "dependencies",
+          "name": "@emotion/react",
+          "manifest": "^11.14.0",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "@emotion/styled",
+          "manifest": "^11.14.1",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "@fontsource/dm-sans",
+          "manifest": "^5.2.8",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "@mediapipe/tasks-vision",
+          "manifest": "^0.10.18",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "@mui/icons-material",
+          "manifest": "^7.3.9",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "@mui/material",
+          "manifest": "^7.3.9",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "@types/canvas-confetti",
+          "manifest": "^1.9.0",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "canvas-confetti",
+          "manifest": "^1.9.4",
+          "pnpm": null
+        },
+        {
+          "kind": "dependencies",
+          "name": "react-window",
+          "manifest": "^1.8.10",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@playwright/test",
+          "manifest": "^1.59.1",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@testing-library/jest-dom",
+          "manifest": "^6.9.1",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@testing-library/react",
+          "manifest": "^16.3.2",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@types/node",
+          "manifest": "^24",
+          "pnpm": "20.11.5"
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@types/react-window",
+          "manifest": "^1.8.8",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@vitejs/plugin-react",
+          "manifest": "^6.0.1",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "@vitest/ui",
+          "manifest": "^4.1.2",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "fake-indexeddb",
+          "manifest": "^6.2.5",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "happy-dom",
+          "manifest": "^20.8.9",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "jsdom",
+          "manifest": "^29.0.1",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "vite",
+          "manifest": "^8.0.7",
+          "pnpm": null
+        },
+        {
+          "kind": "devDependencies",
+          "name": "vitest",
+          "manifest": "^4.1.2",
+          "pnpm": null
+        }
+      ],
+      "integrity_tokens_syntax_checked": 1582,
+      "errors": [],
+      "record_tables_sha256": {
+        "npm_packages": "6d65edd9deb295755828ff875893dc77e0f65a301059034e3df7895e54392d98",
+        "pnpm_packages": "329993009199093c3a4d5d78dbca4e46b6271573f2dd7e8df555dbb86c70b147",
+        "pnpm_snapshots": "aef27a4024958ae87d57dcf7e15ec8c9e01a372525ab249a6146e785211bfc3a"
+      },
+      "limits": [
+        "All records structurally consumed, not package source audit, tarball download/integrity authentication or installation test.",
+        "No dependency semver/peer closure solver run."
+      ]
+    }
+  },
+  "limits": [
+    "83/84 files read or structurally/visually assessed; full generated worker bundle assessment remains outstanding.",
+    "Lockfile structural assessment does not audit dependency source, peer/semver closure, platform installation or build reproducibility.",
+    "External demo still unviewed. No npm/pnpm installation or production code change."
+  ]
+}
