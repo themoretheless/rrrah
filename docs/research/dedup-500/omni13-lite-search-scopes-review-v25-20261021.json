@@ -1,0 +1,46 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "new_read_line_ranges": [
+        [
+          1821,
+          2950
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          2950
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "1130 additional contiguous source lines read; static SQL/callgraph review only. No runtime test in this batch.",
+  "findings": [
+    "Dedicated search_folders_only merely calls search_files_generic(query,false,50,false), withoutdirectorypredicate; nonemptySQLbranch lacksis_dirfilter whileemptybranch selectsis_dir0. Contrary to folderonlyname, helpercanreturnfiles andemptyqueryexcludesfolders. Latercallerfiltering stillunread, no UIproof.",
+    "search_clipboard_history is explicitstub returningemptyVec. SeparateOCRclipboardhelper remainsimplemented, so do notinfer no clipboardcapabilityelsewhere.",
+    "ClipboardOCRhelper searchesonlyfirst500 storedimageOCRrows orderedpinned/time beforetextmatching; matchingolderrow outside500 nevercandidate. limitparameter max10min500 boundsreturn but notexhaustive. No contentduplicateproof.",
+    "Imagefilenamebranch limit50 andFTS300; dedupe exactpath only. Sameimagecontentdifferentpaths remainsdistinct. Errorpaths silentlyreturnpartial/emptyresults; no freshOCRextractionhere.",
+    "Projectaggregate method returns accumulatedresults immediatelyifanylater tablepreparefails; missinggit_repostable preventsfile/browsercomponents altogether. Partialcompletion/status notsurfaced. StaticSQLpath, no DBfixture.",
+    "Project contextmin/max acrossallmatchingactivitytimestamps createsonebroadwindow ratherthanunionofeventneighborhoods; distantactivities canassociateunrelatedmiddlevisits. This is heuristiccontext, not verifiedrelationship/equality.",
+    "Projectrelatedfiles pathkeywordlimit20beforebuildpathfilter andbrowserlimit20beforesemanticlabel; candidatebudget omissions applyhereaswell. Source-label Figma check substring nothostparse, cosmeticclassificationonly.",
+    "search_ai_chats_only andsearch_agent_chats_only queries have noSQLLIMIT and readfullprompt/response for eachmatchedrow beforetruncatingdisplay. Caller/top-k budgeting laterpending; no memorymeasurement.",
+    "Chatdisplay lencheck bytes then chars.take canaddellipsis evenwhenallUnicodecharactersfit. Slicinguseschars notrawbytes, no panicclaimed.",
+    "Readsegment didnotyetreach globalfile-indexrefresh mechanism; freshness remainsunqualified ratherthanassertedabsent. No productiondedup changes."
+  ],
+  "limits": [
+    "81/268 wholefiles; search.rs1-2950 of10272 partial.",
+    "No SQLexecutioninthisbatch, userhistory/clipboard/profile access, model,network, Windows/UIruntime or upstreamsuite.",
+    "Native pHash/ASAN remains userdeferred. All500/fullgoal incomplete."
+  ]
+}
