@@ -1,0 +1,46 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "structured_files_reviewed": [
+    {
+      "path": "example/example-website/src/lib/data/basic-demo-dart.json",
+      "sha256": "94a0cbf5d0e04bbbd86836455d847ce29cc2619c9ef59f586a7853c0e0711743",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/lib/data/basic-demo-python.json",
+      "sha256": "c18575be2b9dcbbbd8236d5d5b9269daa01f6b890463ddb9c7ab8134685e711e",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/lib/data/github-icons-dart.json",
+      "sha256": "d6fd41ee4a0bc9ea8eb91fc13cafbf1265e0760d3bc160518701792f5b5e5b85",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/lib/data/github-icons-python.json",
+      "sha256": "8b7c1b4ce58a9368031849cacac5f2fe8568141f5b8e83291d5b8639b54d0d51",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/package-lock.json",
+      "sha256": "00657689576b9a12008e69e7817d7144c18c6815a0c3a7bafa97ec7e522bba5f",
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/dart482-data-inventory-20261022.json"
+  ],
+  "findings": [
+    "Both basic demo files whole-read: three images and12 hashes each. All12 same-image/same-algorithm Dart/Python stored hash pairs differ, bit distances4..40. This is stored-data comparison, not original runtime recomputation.",
+    "Both icon datasets traversed in full: every cluster hash validated16 lowercase hex, count matches image list, every image record fields/nonempty strings checked, duplicate hash group and singleton counts enumerated per algorithm. No malformed checked records found.",
+    "Dart747 versus Python861 icon clusters total across eight algorithms; datasets differ and cannot establish algorithm compatibility. Visual similarity/correctness of linked icons not proved by structural checks.",
+    "All304 package-lock package records traversed and version/resolution/integrity/engine/install-script inventory saved. This is structured data review, not third-party dependency source review or successful installation/build."
+  ],
+  "remaining": [
+    "Five tracked images/vector assets and external linked visuals",
+    "Original Dart runtime/oracles and rendered website qualification"
+  ],
+  "full_review_count": 247
+}
