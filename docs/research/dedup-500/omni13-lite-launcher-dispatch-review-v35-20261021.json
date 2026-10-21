@@ -1,0 +1,45 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 84,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/launcher.rs": {
+      "sha256": "1c6d14887b4b3ab1f3d38b827dad7e1faad14072c76d34847f10036b06b6d221",
+      "git_blob": "1c4089bbf7ec88fad8767158784fc78156adc071",
+      "lines": 1626,
+      "new_read_line_ranges": [
+        [
+          1,
+          560
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          560
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read first560 lines of pinned launcher; static dispatch, subprocess and resource-ownership review only. No command executed.",
+  "findings": [
+    "launch returns unit; spawn failures and most ShellExecute/Windows action results are discarded. Caller cannot receive a structured success/failure result from this interface. Some file opening retries openas then notepad but final status still not returned.",
+    "Generic command execution splits whitespace, without quoted-argument parsing; control.exe arguments similarly split. Existing exact full paths take earlier shell-open branch, so this observation does not imply all paths with spaces fail. Quoted executable-plus-arguments behavior remains unqualified at runtime.",
+    "Focus session workers share global AtomicBool without generation or worker handle. Repeated starts can spawn multiple workers; restarting while an old worker sleeps can let old worker continue under new true flag. No worker lifetime control or runtime reproduction in this batch.",
+    "Sequential clipboard paste manually transfers global allocation to clipboard. Failure branches after allocation have no GlobalFree in reviewed body; it sends paste/Enter even when allocation/open/set failed. Correct ownership on successful SetClipboardData must not be treated as a leak. No clipboard/process/keyboard actions run.",
+    "ChatGPT URL launch spawns title-based window activation and repeated Enter injection; target is selected by title/process filter rather than browser-tab identity. No browsing or keyboard simulation performed.",
+    "kill PID dispatch does not revalidate process identity; protected-name filtering exists in search producer, not this dispatcher. PID reuse between presentation and invocation remains an untested lifecycle limitation. No process termination invoked.",
+    "Quit-other/hide-other actions capture current foreground window at execution time; whether launcher has restored previous foreground before this call requires unread main/caller review. No foreground-selection bug asserted as reproduced.",
+    "Recycle action uses no-confirmation flag in dispatcher. Whether caller provides a separate confirmation is outside this read batch. This source observation is not an instruction to execute or bypass confirmation.",
+    "This module contains system-action implementation rather than duplicate-content comparison. No local production change follows from its static review alone."
+  ],
+  "limits": [
+    "84/268 whole files; launcher.rs1-560 of1626 partial.",
+    "No tests or Windows runtime executed in this batch; upstream/local test totals unchanged.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
