@@ -1,0 +1,67 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_source_files": {
+    "src/lib/CImg.h": {
+      "sha256": "f13dfc3c427c4ea20c0052dcd8cdb882853cf8e45d70285dbcfceca630236eab",
+      "git_blob": "5e268dfc4bad5ad7b0992fde925869b19876bcb7",
+      "bytes": 3273953,
+      "total_lines": 66396,
+      "new_read_ranges_inclusive": [
+        [
+          731,
+          860
+        ],
+        [
+          32160,
+          32420
+        ]
+      ],
+      "cumulative_read_ranges_inclusive": [
+        [
+          1,
+          860
+        ],
+        [
+          32160,
+          32420
+        ],
+        [
+          37300,
+          37421
+        ]
+      ],
+      "cumulative_unique_lines_read": 1243,
+      "method": "Whole stated ranges read: neighborhood macros, noise tail, complete normalization/get_norm implementations and cut, start of quantization. Partial header only."
+    }
+  },
+  "cumulative_assessed_blobs": 615,
+  "tracked_blobs": 616,
+  "findings": [
+    "CImg normalize(min,max) explicitly maps constant input to lower endpoint by default, with configurable constant-case ratio. This is documented lossy display processing, not a defect or identity proof.",
+    "Original-header control: constant0and137 produce equal allzero normalized copies while originals remain distinct and unchanged; constant-case ratio1selects255.",
+    "Original-header control: pure red and pure green both have L1norm1; negative single-channel value maps to absolute value. get_norm(1)is not perceptually weighted luminance or RGBidentity.",
+    "Pinned cbird addVisual copies source then optionally normalizes0..255and converts touint8for diagnostic visualization. This path does not itself modify qualityScoreinput; no quality-score failure inferred merely from normalization.",
+    "Earlier caller channel0crop problem remains independently reproduced. Preserving allchannels alone would not make subsequent L1norm a calibrated luminance metric."
+  ],
+  "executed_controls": [
+    {
+      "scope": "two new original-header in-memory semantic controls",
+      "source": "docs/research/dedup-500/cbird38-cimg-normalization-controls-v79-20261021/control.cpp",
+      "log": "docs/research/dedup-500/cbird38-cimg-normalization-controls-v79-20261021/run.log",
+      "compile_command": "clang++ -std=c++17 -O1 -Dcimg_display=0 -I .dedup-work/cbird38-20261021/src/lib docs/research/dedup-500/cbird38-cimg-normalization-controls-v79-20261021/control.cpp -o .dedup-work/cbird38-20261021/cimg-normalization-control",
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "warning": "Existing CImg vsprintf deprecation warning; compile and run succeeded.",
+      "harness_sha256": "10e46ccb8f4ea1672b206e29ea4e2941e18a0c2dc670f58a71d94bb8d03e0c5a",
+      "integration_source_sha256": "63e30f6db2dfceb336c84a53719d876463bf7646d94b122edb3e6c429d71a020"
+    }
+  ],
+  "limits": [
+    "615/616wholeartifacts unchanged. CImg1243/66396unique lines read; compilation is not whole-source assessment.39original-body/header controls cumulatively;3independent counterexamples unchanged.",
+    "No QtGUI, fullscore, filedecoder, productionalgorithm change or benchmark. Native pHash/ASAN deferred."
+  ]
+}
