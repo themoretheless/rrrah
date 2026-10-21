@@ -1,0 +1,39 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/ui/MountManagerModal.ts": {
+      "sha256": "67d0f43725a5a74c65c375af924b8f25980c6790dc7fd0bd85c1fa227f282a98",
+      "git_blob": "220630414958dedc9072c8080fc828a34ba5ed69",
+      "bytes": 55679,
+      "lines": 1385,
+      "method": "Whole source read; modal contiguous1-465,466-930,931-1385; whole tests."
+    },
+    "tests/MountManagerModal.test.ts": {
+      "sha256": "8b99702124871e0292a1b3d6140bebd41f36075f022c5c51f56f6d422a7c9b21",
+      "git_blob": "ca534b5aae4613d98e10de3838f1f57cfc6b2c52",
+      "bytes": 3035,
+      "lines": 66,
+      "method": "Whole source read; modal contiguous1-465,466-930,931-1385; whole tests."
+    }
+  },
+  "cumulative_assessed_blobs": 95,
+  "tracked_blobs": 129,
+  "findings": [
+    "Entire1385line modal read. Mobile onOpen forcibly sets any nonWebDAVtype toWebDAV before mobile dropdown/section selection, including existingS3mount; dropdown then offersS3but initialS3state already erased. Static finding, actual mobileGUI not run.",
+    "getMountStatus remote types alwaysreachabletrue placeholder; local checks mount.realPath only, not effective override/resolvedfallback. Healthchecks delegated to plugin separately; displayed status cannot alone prove actual source reachability.",
+    "Local handleSave calls SecurityManager.validateMount with emptyexistinglist and passes no mountType/overrides, comments full duplicate check in plugin callback. It checks directory/access primary thenfallback if pathschange, skips accessibilitycheck forunchangededit; full maincaller still unread.",
+    "SubmitStateController tryBegin blocks second submission; save/cancel disabled whilebusy but allinputfields remainmutable. Earlyvalidation failures finish state, rejection reset exists in buttonwrapper, success closes withoutfinish. Direct handleSave tests bypassbuttonwrapper; no full rendered/reopen/cancellation proof.",
+    "Remote save branches require backendfields/nonemptyvirtual but defer duplicate/path/connection validation tocallback. Editing allows blank secret regardless editedbackendtype. Actual callback credential handling pending.",
+    "Auto-label helper used oneditconstructor, syncAutoLabel uses hostpath.basename; virtualfolderpicker uses Nodepath even in mobileUI despite optionalpathnull. Main/mobile actualinteraction unverified.",
+    "Advancedsection hidden onmobile includesvisiblefilefilter/maxscan alongsidewatchersettings. Local serializers passwatcherfields; remoteS3/SFTP onlyfilter/maxlimit, WebDAV explicitlyclearswatcherfields. Mainmerge/persistence semantics pending.",
+    "Upstream modal tests five cases cover unavailableprimary+usablefallback, neither directory, primaryunreadable/fallbackunreadable, fallbackchanged. Mock directory/accesshelpers and no onOpen/renderedUI; no mobileswitch/doublesubmit tests in thisfile. Source read only."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "95/129trackedblobs assessed(90wholetext/source,1structurallockfile,4PNGvisuals);36previousisolatedcontrols.",
+    "No real UI/mobile/network/folderpicker/storageactions or upstreamsuite executed.",
+    "Mainentry/maintests/remainingdocs/metadata incomplete."
+  ]
+}
