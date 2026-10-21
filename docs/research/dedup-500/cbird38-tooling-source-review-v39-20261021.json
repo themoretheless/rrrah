@@ -1,0 +1,66 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tools/copystylesheet.sh": {
+      "sha256": "165d15771044b97b8cca246084402e902c4daf51209b6773df7ff57837f43bf4",
+      "git_blob": "b2cec4e7b8209119e6f45bdcfc1a8b31495d008c",
+      "bytes": 239,
+      "lines": 9,
+      "method": "Whole pinned script read; not executed."
+    },
+    "tools/deploy.sh": {
+      "sha256": "05363c8e8aab30d2670cb30b5470c3d3a265c3cc140564d8e78df82b5ea69ccf",
+      "git_blob": "6ab85f459b1ef331c47f79fcd08ef4d1e0654218",
+      "bytes": 2010,
+      "lines": 92,
+      "method": "Whole pinned script read; not executed."
+    },
+    "tools/ff-compare-audio": {
+      "sha256": "90afa0b8f72be0a7dd1d9eaa6579e755577ee0c14f87086f3f98a1eeb5510bf4",
+      "git_blob": "32e0a49c293cb225e0b679a8c62800b55e0cc427",
+      "bytes": 1306,
+      "lines": 52,
+      "method": "Whole pinned script read; not executed."
+    },
+    "tools/ffplay-sbs": {
+      "sha256": "d51b0423ff80286a5192f447a3076c1d9cba93d80d398e9345f5337feed5ef03",
+      "git_blob": "a1657f036f951576c109beb43618af66a38bf237",
+      "bytes": 7236,
+      "lines": 268,
+      "method": "Whole pinned script read; not executed."
+    },
+    "tools/gitversion.sh": {
+      "sha256": "8b6268d8d4841a5ac239253622453295f9bfc115638005defdc2499a1c6a87f7",
+      "git_blob": "acb15ae7e52665985d3e5c3f7f7444f34a353897",
+      "bytes": 556,
+      "lines": 28,
+      "method": "Whole pinned script read; not executed."
+    },
+    "tools/strip.sh": {
+      "sha256": "f60fe2f4335231773cbd8051177e24ae0fd073d51dab93c71b89e21873d7de77",
+      "git_blob": "46bb4514b60b6cf54262a322a0136b440f2d1649",
+      "bytes": 193,
+      "lines": 9,
+      "method": "Whole pinned script read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 117,
+  "tracked_blobs": 616,
+  "findings": [
+    "gitversion uses git branch verbose abbreviated commit and locale-dependent git status grep staged. Staged-only/untracked changes need not contain that word; generated dirty marker is not reliable source manifest. Header only updated when resulting firstline changes, with direct overwrite. No current build mislabeled claim.",
+    "ff-compare-audio extracts via external ffmpeg and opens editor for manual inspection; no automatic audio equality metric or assertion. Output path uses basename plus.wav in shared TMPDIR, so same basename from different directories collides. Wait does not validate each producer result before editor launch. No extraction or cleanup executed.",
+    "ffplay-sbs displays external FFmpeg-normalized8bitYUV420p video with optional seeks, audio switching and center crops. It is a review aid, not full-frame/HDR/audio equivalence proof. Cropping can conceal differences outside view.",
+    "ffplay-sbs uses fixed shared temporary names/FIFOs and cleanup rather than unique task directory/trap, affecting concurrent runs and interrupted cleanup. Manual process completion does not prove complete playback or compared frame coverage. No player or process launched.",
+    "width_for_height accepts height argument but computes using outer ih; currently visible calls pass ih, so no demonstrated wrong width from those callsites alone. Avoid labeling helper style as reproduced runtime defect.",
+    "deploy script labels portable packaging WIP and records host-specific issues. It copies/patches dependencies using external local paths and removes output directory; packaging success and dependency completeness not established by source. No deploy/install/remove actions performed.",
+    "copystylesheet copies from external sibling checkout without pinned revision in script. strip MIME check alone is not build/test verification. These helper scripts do not supply perceptual recall or recovery gates."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "117/616 assessed:116 whole text/source and one PNG visual. main.cpp/qtutil.cpp remain partial.",
+    "29 previous isolated original-body/header controls and one independent counterexample unchanged. No script runtime, production edit or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
