@@ -1,0 +1,59 @@
+{
+  "repository": "coderhs/active_storage_dedup",
+  "commit": "dfd2303a72044369b19bc7d13cb8d4789c0a6041",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 8,
+  "new_whole_files_read": {
+    "lib/active_storage_dedup/attachment_extension.rb": {
+      "bytes": 1278,
+      "sha256": "e839c5e58483d3b9eb3f6ee93f48dfac6731cf12f181f64704c13bac4e09ed48",
+      "git_blob": "e5f1d46ad51fdae3a56e924417d79341336f37e5",
+      "method": "Whole pinned Ruby source read without truncation"
+    },
+    "lib/active_storage_dedup/attachment_options.rb": {
+      "bytes": 825,
+      "sha256": "c699e32ba96077550c031add8e9a55fafd077ee8c973c925e8ec2297f2691f54",
+      "git_blob": "6d2a3cf39f9293e78f40440b6fcd28d675ea1169",
+      "method": "Whole pinned Ruby source read without truncation"
+    },
+    "lib/active_storage_dedup/changes_extension.rb": {
+      "bytes": 2397,
+      "sha256": "13c14be8a302cb647ff56b606742b1e3197b3c8fc4c3b66383da7eb8ae10e71e",
+      "git_blob": "1524b49f55fa9b295ea9d8f35994ceea2eee8502",
+      "method": "Whole pinned Ruby source read without truncation"
+    },
+    "lib/active_storage_dedup/configuration.rb": {
+      "bytes": 3067,
+      "sha256": "dc0b1bda97aaabe14586305b611d091ca6a039edd62d46c3869f2b693cd5ccff",
+      "git_blob": "2ef936d0b81a7c65b8d8024b5bd83ef9cfbaaaad",
+      "method": "Whole pinned Ruby source read without truncation"
+    },
+    "lib/active_storage_dedup/railtie.rb": {
+      "bytes": 2374,
+      "sha256": "2bfceb7d24812fa8392cf09bf2480ce34f79147a78a51c08e2faad6d59108c15",
+      "git_blob": "56521c2cc74704014a286b7557aab53188c60110",
+      "method": "Whole pinned Ruby source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/storage179-controls-v2-20261021/run.rb",
+    "log": "docs/research/dedup-500/storage179-controls-v2-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original configuration and attachment declaration modules; authored superclass callbacks and plain Ruby model/subclass, no Rails."
+  },
+  "findings": [
+    "Unregistered attachment respects globaldefaultfalse. has_one_attached with omitted deduplicate registers true and overrides that default; explicitfalse override works, globalmasterdisabled wins. Confirmed original methods, no promised intended-policy defect inferred.",
+    "Configuration keys exact record.class.name and attachmentname. Plain subclass does not inherit parentfalse registry entry and falls back globaltrue. RailsSTI/association registration behavior remains unqualified.",
+    "AttachmentExtension after_destroy reloads blob and purges when counter<=0, gated by deduplication policy/autopurge. No transaction, concurrent attach, purge ordering or actual storage tested.",
+    "ChangesExtension returns passedBlob and signedString results without recomputing content; file/path/uploads routed to build hook. Not claimed identity defect for intentionally preexisting blob references.",
+    "Railtie applies blob class-method prepend, attachment include, CreateOne prepend and ActiveRecord declaration extension afterinitialize/onload. Integration order/version compatibility not executed.",
+    "All44cached artifacts downloaded/Gitblobverified; only8actuallyread. Download is not completed review."
+  ],
+  "remaining_scope": "36artifacts: specs/generator/tasks, docs/license/project configs/lock and fixture app.",
+  "license": "Root license read still pending, no production adoption.",
+  "limits": [
+    "Partial8/44review and seven original-method controls cumulative; full count185/500 unchanged.",
+    "No real Rails lifecycle/inheritance/transaction/database, upload/purge, platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
