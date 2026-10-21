@@ -1,0 +1,138 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/rtm.py": {
+      "sha256": "19a2bea0207eabf9189d30336eba362222424d278d28c6aaad31912d1939c55e",
+      "git_blob": "10cae835448696845bacd4e0b1fb68c3e0ad37de",
+      "lines": 101,
+      "mode": "100644"
+    },
+    "src/dto.py": {
+      "sha256": "094dbaecd28777f5e93ae8e2766a713fca6d385d7ba861168ddb377ca0ee887a",
+      "git_blob": "d0b977e69d4e5c243954c847ffc8a58ecc935533",
+      "lines": 216,
+      "mode": "100644"
+    },
+    "tests/test_path.py": {
+      "sha256": "679edf1f139a0fd36763aa6693bc8c9900b54c099032ea849b4f8f6218f4f483",
+      "git_blob": "673d6cf3495361d3431e18419b39ded288768673",
+      "lines": 154,
+      "mode": "100644"
+    },
+    "src/conf.py": {
+      "sha256": "e8192a5b35bb5f594695fe06617e9e6dcad248556aa8f344a9a947c3096e8c58",
+      "git_blob": "03617b24d7bbae2f6a930e147f0d7d793344f2c0",
+      "lines": 320,
+      "mode": "100644"
+    },
+    "scripts/download-model.py": {
+      "sha256": "b374195a1783b7bf89b968973a17a60386da83a10e99d03ffcbbbef3d93749e7",
+      "git_blob": "d4b134653abbc6f1c3215ff26002bf027fff3368",
+      "lines": 32,
+      "mode": "100755"
+    },
+    "scripts/ci/verify-image-type.py": {
+      "sha256": "3cdabcaed56936fe04827284c0cf9ae227cd3c30f846aea8deef1b0f43c2742c",
+      "git_blob": "b8a9fade4a06715f1a28d4e507a36f50fe6e74cc",
+      "lines": 48,
+      "mode": "100644"
+    },
+    "Dockerfile": {
+      "sha256": "9a6a797f0f0ff7f0ac1317df181df8e0b3c6baa841c6a6240f403eb9691739a4",
+      "git_blob": "5eb26f64fd439baf9a5540af7c293df0553cff88",
+      "lines": 42,
+      "mode": "100644"
+    },
+    "run": {
+      "sha256": "037fbd4e51a9a704f2e4a6de97f67f8086d6fa25f9e54491f031ab7275a43c37",
+      "git_blob": "2091eb193a41bd329acf82472e4af789cc257936",
+      "lines": 5,
+      "mode": "100755"
+    },
+    ".dockerignore": {
+      "sha256": "4ae9c686fcac5cddee72458401668efcda4c98b0ab0715b21e04bae96add6a51",
+      "git_blob": "e30dc3d5e7d52dd6fef437ef51023f3d69ee4921",
+      "lines": 18,
+      "mode": "100644"
+    },
+    ".editorconfig": {
+      "sha256": "348bd6bfcd7c1b37b01b0a194fa7c64649badf627be5badae80564c148c639cb",
+      "git_blob": "7e10bcb9ed79d113ef0eda39b7ec90d98e3abe34",
+      "lines": 43,
+      "mode": "100644"
+    },
+    ".gitignore": {
+      "sha256": "7c93773df05d61b63a5e9d490587d90f482dd5f5f330ff94e530fdc408d70b30",
+      "git_blob": "47202cb4fe32f7daf0eb360afe1957d9094b57b0",
+      "lines": 28,
+      "mode": "100644"
+    },
+    ".ignore": {
+      "sha256": "8152027b4971fb25ba8a28ce5a092e1627d824804d66697e668a799a036ff079",
+      "git_blob": "959577033ee737ecd605b83230253d76b14ddfd0",
+      "lines": 3,
+      "mode": "100644"
+    },
+    "tests/test.py": {
+      "sha256": "b93bd47acd8ce9adee9cbdfe790306b8e7699d93cfeb0b930c09a64564a8dfb7",
+      "git_blob": "9695a1983efd07703040e4e7277250715dfda002",
+      "lines": 25,
+      "mode": "100644"
+    },
+    "tests/tester.py": {
+      "sha256": "5eb0ce1870bf76aa644a2b3019eb9ff433b565ace801689475087127613fdcbf",
+      "git_blob": "0126cd2fdd97272b7888c59f1e17ce333109512c",
+      "lines": 15,
+      "mode": "100644"
+    },
+    "src/pages/not_found_404.py": {
+      "sha256": "71c42833977b794d69fad705583b9859290637838925adc62f5e83bfb4e2a439",
+      "git_blob": "a8cf90fdbc2929afba161d17ca8c5d232c87b635",
+      "lines": 10,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 56,
+  "tracked_blobs": 125,
+  "method": "15 whole files read. AST-extracted original path/settings classes with explicit in-memory settings module adapters; no configured paths opened. All21 original path test methods executed with explicit legacy envs.pth -> current rtm.pth adapter.",
+  "executed_controls": {
+    "prefix_collision": "/mapped2/a.jpg",
+    "nested_mapping_order": "/general/nested/a.jpg",
+    "repeated_thumbs_component": "/thumbs/a.jpg",
+    "adapted_original_path_tests": {
+      "run": 21,
+      "errors": 0,
+      "failures": 0,
+      "log": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.000s\n\nOK\n"
+    },
+    "shared_default_dataclass": {
+      "other_instance_enabled": true
+    },
+    "failed_save_cache": {
+      "read_after_failed_save": 8
+    }
+  },
+  "control_source": "import ast,os,re,json,typing,dataclasses,types,sys,unittest,io\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021');out={}\ndef extract(file,names,env):\n t=ast.parse((B/file).read_text());t.body=[x for x in t.body if isinstance(x,(ast.ClassDef,ast.FunctionDef)) and x.name in names];exec(compile(t,str(B/file),'exec'),env);return env\nsettings=N(pathImmich='/immich',pathThumb='',pathLibs={})\nE=extract('src--rtm.py',{'pth'},dict(os=os,re=re,Optional=typing.Optional,dto=settings,ks=N(db=N(preview='preview')),pathHostMap={}))\npth=E['pth'];settings.pathLibs={'/photos':'/mapped'};out['prefix_collision']=pth.full('/photos2/a.jpg');assert out['prefix_collision']=='/mapped2/a.jpg'\nsettings.pathLibs={'/photos':'/general','/photos/nested':'/specific'};out['nested_mapping_order']=pth.full('/photos/nested/a.jpg');assert out['nested_mapping_order']=='/general/nested/a.jpg'\nsettings.pathLibs={};settings.pathThumb='/thumbs';out['repeated_thumbs_component']=pth.full('thumbs/user/thumbs/a.jpg');assert out['repeated_thumbs_component']=='/thumbs/a.jpg';settings.pathThumb=''\n# Original test methods, with explicit old envs.pth compatibility adapter to current rtm.pth.\nconf=types.ModuleType('conf');conf.envs=N(immichPath='/immich',pth=pth);conf.ks=N(db=N(preview='preview'));oldconf=sys.modules.get('conf');sys.modules['conf']=conf\ntry:\n T=extract('tests--test_path.py',{'TestPathProcessing'},dict(unittest=unittest,os=os,re=re,Optional=typing.Optional,envs=conf.envs))['TestPathProcessing'];stream=io.StringIO();result=unittest.TextTestRunner(stream=stream).run(unittest.defaultTestLoader.loadTestsFromTestCase(T));out['adapted_original_path_tests']={'run':result.testsRun,'errors':len(result.errors),'failures':len(result.failures),'log':stream.getvalue()};assert result.wasSuccessful()\nfinally:\n if oldconf is None:sys.modules.pop('conf',None)\n else:sys.modules['conf']=oldconf\n# Original descriptors, fake failing settings persistence; no user settings accessed.\nD=dict(vars(typing));D.update(vars(dataclasses));D.update(dc_fields=dataclasses.fields,json=json,_UNSET=object(),lg=N(error=lambda *a:None));extract('src--dto.py',{'fldDflt','cstv','cstd','DcProxy','AutoDbField'},D)\n@dataclasses.dataclass\nclass Config:\n enabled:bool=False\nclass Owner:\n config=D['AutoDbField']('owned-config',Config)\n value=D['AutoDbField']('owned-value',int,1)\nsets=types.ModuleType('db.sets');sets.get=lambda key,default=None:default;sets.save=lambda *a:False;db=types.ModuleType('db');db.__path__=[];db.sets=sets;old={k:sys.modules.get(k) for k in ['db','db.sets']};sys.modules.update({'db':db,'db.sets':sets})\ntry:\n a,b=Owner(),Owner();a.config.enabled=True;out['shared_default_dataclass']={'other_instance_enabled':b.config.enabled};assert b.config.enabled\n a.value=8;out['failed_save_cache']={'read_after_failed_save':a.value};assert a.value==8\nfinally:\n for k,v in old.items():\n  if v is None:sys.modules.pop(k,None)\n  else:sys.modules[k]=v\n(B/'controls-v5-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Original library mapping uses string prefix without component boundary: /photos rule maps /photos2/a.jpg to /mapped2/a.jpg. Mapping first insertion wins, so general /photos hides nested /photos/nested rule. Reproduced original pth.full without filesystem access.",
+    "Original greedy pth.base normalization selects last thumbs component: thumbs/user/thumbs/a.jpg becomes /thumbs/a.jpg, dropping user/thumbs segment. Source normalization is lexical, not identity verification.",
+    "21 original test_path methods pass under explicit compatibility adapter. As-written tests reference envs.pth, absent from read current conf.envs; adapted success is not unmodified upstream suite success.",
+    "Original AutoDbField default dataclass reused across owners: change to first owner default becomes visible in second owner, even with failing persistence adapter. Reproduced descriptor/proxy code.",
+    "Original _saveToDb ignores sets.save False and __set__ still caches new value. Injected failed persistence returns8 from readback despite no durable save. Cache state does not prove disk write.",
+    "DcProxy.raw and mutable dict getters expose underlying state; nested changes can bypass persistence until outer setter. clearCache iterates descriptor class access, which imports db.sets; no thread synchronization. Source behavior.",
+    "Original cstv float accepts NaN/infinity; co.vad.float bounds comparisons likewise do not reject NaN. Validation limits and downstream score handling remain unqualified, source finding only.",
+    "getDevice treats any nonempty ForceCpu value as true; isDev flags similarly bool(nonempty string), unlike OFFLINE explicit true parsing. Configuration behavior by source.",
+    "download-model script skips any existing target and downloads directly to final pathname without explicit checksum/atomic replacement; failed partial target can satisfy next exists check. No model download executed.",
+    "Docker excludes LICENSE via .dockerignore, does not copy root license; build and distribution compliance unqualified. Root license not yet credited as read.",
+    "CI image-type verifier checks wheel suffix/runtime metadata and prints cuda availability without requiring device availability; cuda126 vs cuda128 not exactly compared. Does not run model inference/parity tests.",
+    "tests/test.py logs legacy envs.pth call with no result assertion; tests/tester.py only assertion aliases. No new full-suite/runtime qualification."
+  ],
+  "limits": [
+    "56/125 tracked blobs read whole;69 remain.",
+    "Controls avoid importing Torch/dotenv/application/db/logger and do not access environment credentials, user image paths or persistent settings.",
+    "No model weights/install/build/publish/browser/live databases or full upstream suite executed.",
+    "No production code copied/changed. Native pHash/ASAN remains user-deferred; all500/full library objective incomplete."
+  ]
+}
