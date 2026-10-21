@@ -1,0 +1,37 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/components/duplicate-groups.test.tsx": {
+      "sha256": "e3387a6e4d5acfaa4ff703432df0f97a7b4f1be2cb75f83edd9231e4078041d4",
+      "git_blob": "4cda8ea11d1a7402cc06cfa50d854dcdd602b33d",
+      "bytes": 9836,
+      "lines": 283,
+      "declared_it_calls": 17,
+      "method": "Whole source read."
+    },
+    "tests/components/action-bar.test.tsx": {
+      "sha256": "b2eeb7b8b62ceb57fe586b9c4f504edf7b0c52fa4bf4312bbfc980cc1a0d45d3",
+      "git_blob": "10bece66c1dc858497b6f1e23eb8c84fac58d96f",
+      "bytes": 4921,
+      "lines": 140,
+      "declared_it_calls": 13,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 25,
+  "tracked_blobs": 84,
+  "findings": [
+    "Group tests assert Keep/Trash chip counts, group media-kind labels, callback routing, preview open/close, empty state and spacebar behavior. PhotoViewerModal and useBlobUrl are mocked, so their lifecycle/content correctness is excluded.",
+    "Test named opens viewer for correct item index only checks modal presence and three-item count. Mock omits initialIndex, so opening the wrong initial item would not fail that assertion.",
+    "No empty/stale kept-set case, missing media entry before viewer index, percentage semantics, pagination above thirty groups or failed-thumbnail handling is asserted in this group test file.",
+    "ActionBar tests verify fixed caller counts, pluralization, visibility, callback routing and zero-count button disable. They do not verify provenance of items-scanned count or any real confirmation/deletion flow.",
+    "Action bar expected 12,345 formatting assumes test locale; source uses environment toLocaleString. No locale matrix in this file."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static test review only; no Vitest/React or browser execution.",
+    "25/84 whole files read; no production library code changed."
+  ]
+}
