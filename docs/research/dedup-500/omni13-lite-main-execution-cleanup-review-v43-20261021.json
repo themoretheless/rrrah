@@ -1,0 +1,53 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          3151,
+          3837
+        ],
+        [
+          5165,
+          5359
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          3920
+        ],
+        [
+          5165,
+          6130
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read882 additional lines of input, destruction, settings reload and execution entry; static callgraph/ownership review only.",
+  "findings": [
+    "execute_selected checks results_stale first, kills debounce, triggers fresh search and returns. Thus old rows are not blindly executed after normal query edit; this narrows prior stale-result risk. Same-id late-fast replacement remains a separate issue because receiver marks results current.",
+    "Plugin execution is checked before general action dispatch; phone sync special case precedes that check. Full plugin_execution_allowed implementation remains unread; no global permission bypass inference.",
+    "Filter change clamps scroll offset but not selected index when nonempty smaller result set; execute_selected uses get(selected), safely yielding no action if out of range. Keyboard selected-row usability needs UI fixture, not memory-safety failure claim.",
+    "Result mouse hit-testing checks row y range but no x range in reviewed row loop; hover similarly uses y only. Clicks outside launcher content width could select a row if within receiving window. Actual client geometry/hit routing needs Windows test.",
+    "WM_DESTROY clears userdata before freeing State and destroys many fonts/icons and thumbnail objects. No destruction appears there for icon_phone_connect, icon_agent or icon_agent_chat declared/loaded earlier; class/tray icon ownership also needs separate qualification. No GDI leak counters measured.",
+    "WM_RELOAD_SETTINGS loads AppSettings directly, replaces fonts and watcher, re-registers hotkey; no item_height zero validation appears. Together with direct startup and visible_results division, invalid-config crash mechanism remains source-supported but not integrated reproduced.",
+    "Reload updates homepage only when query empty; nonempty-query result list is not re-searched in this handler. Plugin execution has a later check, so stale display is not proof disabled actions execute.",
+    "AI input length threshold tests bytes but truncates by chars, so multibyte input over30000 bytes can remain above that byte budget. No endpoint request made.",
+    "Reopening stored chat always sets ai_pending false and displays stored response; comment about reconnecting active runs not demonstrated by this branch. Other runtime reconciliation remains unread."
+  ],
+  "limits": [
+    "85/268 whole files; main.rs1-3920 and5165-6130 partial.",
+    "No new tests, UI actions or local production changes.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
