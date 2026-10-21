@@ -1,0 +1,46 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "new_read_line_ranges": [
+        [
+          4331,
+          5030
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          5030
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "700 additional contiguous source lines read; static ranking/merge/callgraph review only, no inputcommands executed.",
+  "findings": [
+    "Final merge sorts multiplecatalog/app/recent/file/projectsources then dedupes if EITHERsameid ORsamecomputedlaunchkey. This is launcherpresentationdedupe; distinctappssameidname cancollapse, and contentidenticalfilesdifferentpaths remainseparate. Not transferable as contentduplicatealgorithm.",
+    "get_live_results results prepend to sortedmerged ratherthan globallysortwiththem, so firstseenpriority dominatesdedupe. Quality/ranking intentionality needsfixtures, notassumedwrong.",
+    "Candidate cap occurs beforequickactions/calculator/webfallback additions; finalreturnedcount mayexceedcandidate_k, and outerlean/pluginfilter latercanreducewithoutrefill. top_k notstrictfinalcap insideengine. UIcallerlimit stillpending.",
+    "truncate_preserving_ocr helper reservesup to20OCRresults beforeleanfilter, but leanallowlist earlierexcludesOCR/CLIPBOARD directly. Suchreservedrows canbelaterremoved, consumingcandidatecapacity. ReviewdoesnotclaimallOCRlost becauseimagehelpers emitFILE.",
+    "Currentcatalogrank lexicalonly, comments explicitly embeddingsremoved; vectorsstillloaded fromembeddedcatalog but noquerymodel inthispath. get_conversational_results markeddeadcode andanchorvecsempty fromconstructor. Do notcreditembeddingsemanticmatching fromlegacycomment/binary.",
+    "Lexicalfallback computesLevenshtein forlimitedcatalogname lengthdiff<=8 but appfallback computesdistanceallnonmatchedappnames withoutlengthgate. No latency/CPUbenchmark or optimizationaccepted.",
+    "Crosssourceprojectmatching takesfirstsubstringname fromunorderedSQLlist; projectioncards/relatedresults areheuristic, not identityproof. SourcePROJECT laterleanfiltered, so costs maynotproducevisibleoutput.",
+    "get_quick_actions removesresults bylowercaseddisplayname beforeprependingactions; equaldisplaynames withdistinctcommands mayvanish. Staticlabelidentitychoice, no usercatalogfixture.",
+    "Systemkill/AIactions/clipboard descriptors appear inreadcode but noneinvoked duringreview. Textinrepositoryis materialbeingreviewed, not instructionstoruntools.",
+    "No localproductionchange justified from thislaunchermerge alone; rrrah contentidentity/grouping remainseparate acceptancegates."
+  ],
+  "limits": [
+    "81/268 wholefiles; search.rs1-5030 of10272 partial.",
+    "No newruntimecheck; no Windows/SQLite/process/model/network/clipboard/realuserdata or upstreamsuite.",
+    "Native pHash/ASAN remains deferred. All500/fullgoal unachieved."
+  ]
+}
