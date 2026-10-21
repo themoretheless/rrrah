@@ -1,0 +1,101 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/assets/catalog.bin": {
+      "sha256": "0ee76b457784df3277f066c6a3899f4d867c6f7e15d6c2326b9dba6161454793",
+      "git_blob": "3e39a4a651a0c6b32113ba2a66d69534a3e3e5dc",
+      "mode": "100644",
+      "bytes": 3326712,
+      "method": "Complete structured binary interpretation, all 731136 float32 components checked for finiteness and vector norms; all seven metadata fields of every record manually read over the reconciled ranges. No command executed.",
+      "metadata_records": 952,
+      "dimensions": 768
+    }
+  },
+  "cumulative_whole_files_read": 263,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "new_metadata_record_ranges_zero_based": [
+      [
+        480,
+        951
+      ]
+    ],
+    "complete_disjoint_contiguous_record_ranges_zero_based": [
+      [
+        0,
+        79
+      ],
+      [
+        80,
+        279
+      ],
+      [
+        280,
+        479
+      ],
+      [
+        480,
+        951
+      ]
+    ],
+    "total_metadata_records_read": 952,
+    "all_metadata_fields_read": [
+      "id",
+      "control_name",
+      "breadcrumb_path",
+      "launch_command",
+      "source",
+      "description",
+      "synonyms"
+    ],
+    "prior_reviews": [
+      {
+        "path": "docs/research/dedup-500/omni13-catalog-prefix-exact-crosscheck-review-v94-20261021.json",
+        "sha256": "0d4c357a6f659aac4d855938f63a29df06c07df6ff2edf9725d91f192972a118"
+      },
+      {
+        "path": "docs/research/dedup-500/omni13-catalog-settings-launch-review-v95-20261021.json",
+        "sha256": "6c3e6eab886e2a28cf3ffea696fe4790cd5d43b4a9dcb15a1b696d5982f90474"
+      },
+      {
+        "path": "docs/research/dedup-500/omni13-catalog-data-field-review-v96-20261021.json",
+        "sha256": "9e933855ca5d8a7f4983e78bec26b2154fa510728c1b855f3d7ba20724e9cc84"
+      }
+    ],
+    "original_structural_review": "docs/research/dedup-500/omni13-css-complete-catalog-structure-review-v93-20261021.json"
+  },
+  "binary_controls": {
+    "header_bytes": 8,
+    "vector_payload_bytes": 2924544,
+    "consumed_bytes": 3326712,
+    "trailing_bytes": 0,
+    "nonfinite_components": 0,
+    "vector_norm_min": 0.9999998919602407,
+    "vector_norm_max": 1.000000132684633,
+    "sources": {
+      "Vision": 807,
+      "Native": 53,
+      "Legacy": 92
+    },
+    "unique_ids": 952,
+    "distinct_raw_launch_commands": 235,
+    "commands_shared_by_multiple_records": 132
+  },
+  "findings": [
+    "All 952 metadata records now reviewed. The newly read 480-951 range covers accessibility, language and regional formatting, account settings, application settings, privacy permissions, classic settings and developer utilities. All outputs were complete; no truncated output credited.",
+    "Three source labels Vision/Native/Legacy are metadata categories (807/53/92), not evidence that the current machine executed or exposes each feature.",
+    "Entries 800-802 retain the literal [Page] placeholder in breadcrumbs. Entries 803-804 contain an empty breadcrumb segment (> >). Data quality findings do not imply a parser crash.",
+    "Many Native records have empty synonyms while Vision/Legacy records contain pipe-separated or comma-separated text. A label or source does not establish equivalent lexical search coverage for all records.",
+    "The tail contains both navigation targets and commands intended to perform an action; catalog contents cannot all be described as settings-page links. No command was followed, launched or used to change the current host.",
+    "Earlier four misplaced-field examples and command-key deduplication findings remain valid. Completing this metadata inspection does not repair those data or qualify actual Windows behavior.",
+    "The parser retains 2924544 bytes of embedding values even though the inspected ranking implementation states embeddings removed and uses lexical fields. This is an upstream optimization candidate only; no speedup, memory saving or local implementation change accepted."
+  ],
+  "limits": [
+    "263/268 files reviewed; malformed test PNG, wrapper JAR and three lockfiles remain open.",
+    "155/500 complete repositories unchanged; this is completion of one file, not repository/runtime qualification.",
+    "No new production implementation changes or test run. Previous current-library exact controls and upstream helper tests remain separate.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
