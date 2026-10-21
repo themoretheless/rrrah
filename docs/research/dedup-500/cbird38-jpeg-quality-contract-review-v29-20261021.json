@@ -1,0 +1,45 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cimgops.h": {
+      "sha256": "a6f766fde6f8b178c5b8ba95c26fdcfd8c3e43ed3e39f6dae8ea33d95afadec3",
+      "git_blob": "26a2bbc9bb5d9c081a884e74b3acaef45c65dbf6",
+      "bytes": 1042,
+      "lines": 29,
+      "method": "Whole pinned source/header read; parser not executed or ported."
+    },
+    "src/lib/jpegquality.h": {
+      "sha256": "f1105144278d9483ceb671dfa8f9b06db4917f412f6f98fbb9b0cebb82b841e8",
+      "git_blob": "faf3c882fd54374b55ac952dd3fdcd02d9a89777",
+      "bytes": 643,
+      "lines": 20,
+      "method": "Whole pinned source/header read; parser not executed or ported."
+    },
+    "src/lib/jpegquality.cpp": {
+      "sha256": "f822069d8a061cdfb577ebba9409cef6bb1dfb39aa00c7d04f9866d30f3f0b03",
+      "git_blob": "7d5f1dbe4e88f520a306407043685f7e74c407b7",
+      "bytes": 11205,
+      "lines": 332,
+      "method": "Whole pinned source/header read; parser not executed or ported."
+    }
+  },
+  "cumulative_assessed_blobs": 98,
+  "tracked_blobs": 616,
+  "findings": [
+    "jpegquality.cpp carries its own Hacker Factor license notice explicitly distinguishing it from GPL and prohibiting relicensing without permission, with attribution and other conditions. Root project GPL metadata does not certify every embedded file. No code copied into production.",
+    "Estimator averages AC quantization bytes and derives a compression-setting estimate, not visual fidelity or proof of preferable original. Header warns inaccurate below50; runtime reliability flag is cleared on malformed table size or QualityAvg<=0, not an explicit returned-quality>=50 check.",
+    "ProcessJPEG reads SOI then scans markers and quantization tables. Precision high nibble is not used to read16-bit table entries, despite header describing row-major table values. Stored values follow stream read order, with no visible zigzag-to-row-major conversion in this implementation.",
+    "result.ok becomes true only when a table with Index>0 is processed; a valid grayscale JPEG using only table0 may retain okfalse. No fixture executed, decoder support or general JPEG validity inferred.",
+    "I/O qgetc maps any read result other than1 to EOF. Truncated/error inputs are not consistently propagated as typed errors; prior oktrue state is not reset on later marker failure. No malformed-memory, float-conversion or ASAN test performed.",
+    "EstimateJpegQuality accepts QIODevice pointer, opens if needed and unconditionally deletes it before return. Callers must transfer ownership and provide correct initial position; header declaration does not document this ownership contract. Caller usage not inspected in this step.",
+    "cimgops.h only declares conversions and qualityScore. Its implementation remains unread and uncounted; no claim of native quality scoring validation."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "98/616 assessed:97 whole text/source and one PNG visual. Partial main.cpp/qtutil.cpp and cimgops.cpp not counted.",
+    "27 prior original-body/header controls and one independent counterexample unchanged. No native JPEG parser test, production port or speedup.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
