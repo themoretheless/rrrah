@@ -1,0 +1,80 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "LICENSE",
+      "lines": 25,
+      "sha256": "036741f8b0b21712baaddfcc17a01519667709e8f1c3cde62b13538760adcdb3",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/dart_imagehash.dart",
+      "lines": 34,
+      "sha256": "309309458a8469c593d3c8baa5d138449b6b19f4a129e75ec8cc615fa0e3e063",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/src/average_hash.dart",
+      "lines": 36,
+      "sha256": "5b347327243f1ded5ab4cd3b42c0fded1acad1012ddace1884a5d6dd420da290",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/src/difference_hash.dart",
+      "lines": 62,
+      "sha256": "ec44e0ce8fb39a079454f05ea793a5b5c555861d49e49f34e93a725c7ae0a510",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/src/image_hasher.dart",
+      "lines": 224,
+      "sha256": "43a4b1ffdea612d32fdc2197eef0c38190c532b7fbe0c0e600205910e743fe71",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/src/image_utils.dart",
+      "lines": 62,
+      "sha256": "cade921308f8dd9e994f22bf6e604fcd72813fed32b0ef7b4311d94a7f7ae59f",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/src/perceptual_hash.dart",
+      "lines": 99,
+      "sha256": "c2ec07ba38b620d8759604ef764812356793b4ba39f86fb5d4878607fae15ab9",
+      "git_blob_verified": true
+    },
+    {
+      "path": "lib/src/wavelet_hash.dart",
+      "lines": 123,
+      "sha256": "5395bce05570749194d660d7b98bf15b029b0419102c41cf048b02057f4ee8e1",
+      "git_blob_verified": true
+    },
+    {
+      "path": "pubspec.yaml",
+      "lines": 22,
+      "sha256": "3ea75341939aab935ca306c9cdfcdc8c5d75c8926d2dd2f147b18fdae7792cb1",
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "All seven library Dart files, pubspec and BSD-3-Clause license read whole; nine blobs verified against pinned Git tree.",
+    "aHash comment says >= mean, code uses >; uniform input therefore produces all-zero aHash. dHash comment says left > right, code uses left < right, with analogous vertical discrepancy. No Dart runtime execution.",
+    "pHash includes DC in median, uses strict >, naive four-loop DCT with alphaU*alphaV/4 normalization; highFreqFactor lacks explicit positive bounds. General compatibility needs vectors, not algorithm-name matching.",
+    "Wavelet decomposition changes size and calls helper with a reduced row stride while coefficients remain in the original-length buffer; final low-frequency extraction samples a spaced grid using original imageSize rather than contiguous top-left coefficients. Source-only concern requires original Dart execution/oracle.",
+    "Wavelet hash lacks explicit hashSize/scale validation; unsupported mode does throw. ImageHash exposes caller-mutable List<bool>, so hashCode/equality can change after insertion into hashed collections.",
+    "ImageHash permits arbitrary bit length in constructor/toHex but fromHex requires a square bit count; for 3x3 hash nine bits serialize to three hex digits (12 bits), which fromHex rejects. Mathematical/source-derived round-trip gap, not runtime-qualified.",
+    "Recipe must distinguish algorithm, resize, grayscale, threshold convention and hash size. Source exposes same-length Hamming comparison without algorithm identity. No code adopted."
+  ],
+  "runtime": {
+    "dart_available_on_path": false,
+    "original_tests_executed": false
+  },
+  "remaining": [
+    "Whole tests/examples/site/config/data review and four image/vector assets",
+    "Original Dart tests and independent pixel/hash oracles",
+    "External linked visual assets and dependency qualification"
+  ],
+  "full_review_count": 247
+}
