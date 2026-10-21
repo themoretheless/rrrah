@@ -1,0 +1,49 @@
+{
+  "status": "verified_current_local_cache_contract",
+  "head_before_report": "2d8e0932d7b1a56ec18fe7960b0af07393a36775",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-dedup/tests/cache.rs": "aa535d5725dec1748f405c7e45791327c301e712809fc200aab79752e33b63f2"
+  },
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test cache --no-default-features",
+  "exit_code": 0,
+  "test_result": {
+    "passed": 11,
+    "failed": 0,
+    "names": [
+      "cache_publication_child",
+      "roundtrip_requires_content_recipe_and_frame_identity",
+      "zero_budget_and_owned_values_preserve_previous_entry",
+      "disk_persistence_is_deterministic_and_rejects_invalid_values",
+      "every_serialized_bit_corruption_is_rejected",
+      "every_content_recipe_and_frame_key_bit_survives_persistence",
+      "cache_preserves_every_bit_of_all_transform_hash_channels",
+      "atomic_replacement_and_cancel_preserve_previous_cache",
+      "unwritable_parent_refuses_before_publication_and_preserves_retry",
+      "process_exit_during_temp_write_preserves_previous_publication_and_retry",
+      "concurrent_process_writers_publish_only_complete_single_writer_caches"
+    ],
+    "note": "Includes subprocess helper cache_publication_child; not11independentproductrequirements."
+  },
+  "source_checked_contract": [
+    "CacheKey fixed32byte content digest,32byte recipe digest,64bit frame index. Caller supplies fresh content and complete recipe identity.",
+    "360byte record, fixed-width little-endian hash words; no textual integer-chunk concatenation.",
+    "Version magic RRDUPC01, entry budget, BLAKE3 checksum, duplicate/trailing/truncated/invalid statistics rejection."
+  ],
+  "independent_wire_checks": {
+    "content_recipe_frame_one_hot_positions": 576,
+    "fingerprint_one_hot_positions": 2048,
+    "single_bit_corruptions_rejected": 3264
+  },
+  "related_upstream_reviews": [
+    "docs/research/dedup-500/php353-complete-source-review-20261021.json",
+    "docs/research/dedup-500/reverse426-complete-source-review-20261021.json"
+  ],
+  "decision": "Existing cache coverage addresses reviewed fixed-width serialization/content-recipe identity concerns. No redundant production change introduced.",
+  "limits": [
+    "No new image accuracy, decoder, file freshness integration, performance, power-loss durability or other-platform qualification.",
+    "No claim that caller-supplied recipe is semantically complete in every integration.",
+    "All500 repository review and full library objective remain incomplete.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
