@@ -1,0 +1,42 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_config/test_algorithms/test_simhash_components.py": {
+      "sha256": "51bf8bf5e5e678ef10f4137439b15f6e2a0631d3f014910691783b2a24203c7b",
+      "git_blob": "8973996420a36482cfc442ddd570cfe5765fee46",
+      "lines": 349
+    },
+    "README.md": {
+      "sha256": "88ad9452d769056c9f004cc802a0604027ee6b847790a3b9e515aa51bcde7b29",
+      "git_blob": "3721fd6218206822cd8ccf9312155896eca38348",
+      "lines": 288
+    },
+    "report/run.py": {
+      "sha256": "4f525ca3df131f12f4af12c1971bc41c09f933636b9b6ef9b1fef0c51a42954f",
+      "git_blob": "bcf6a941bc15985f41a1c18e3b213283a6b8fb62",
+      "lines": 33
+    },
+    "banner.png": {
+      "sha256": "afc3247ec8aa619c41cde8cd256f70a110e0404d52a54d09a66c913ee0224c9e",
+      "git_blob": "cb7250b48800d4c514591ffa313f6cf10445af55"
+    }
+  },
+  "cumulative_whole_files_read": 73,
+  "tracked_blobs": 75,
+  "method": "Three whole pinned text files read; original banner PNG viewed. Git blobs checked; test methods counted via AST only, no bitarray/NumPy execution.",
+  "findings": [
+    "SimHash component tests cover mask shifts/reversed masks, width error, basic permutation roundtrips, Hamming, unsigned hash lengths and vote/tie behavior. Several compute tests assert only type/length. No assign/verify/filter integration in this file.",
+    "README Bloom example uses expected_elements while reviewed BloomConfig requires max_elements. README SimHash example uses hash_bits while reviewed SimHashConfig uses f. Actual Pydantic error/extra-field behavior not executed.",
+    "README labels Bloom as exact dedup although implementation filters probabilistic membership without exact confirmation. Near-text and substring semantics differ from full-file byte equality.",
+    "README benchmark tables differ from approximate expected values in benchmarks/README; neither set is a reproduced current result. Referenced research papers and hosted documentation were not reviewed by reading this tracked README.",
+    "report.run sets defaults by matching component labels and only when configured output directory already exists, then launches share=False. Dependence on Gradio internal app.blocks/component attributes and labels is source-observed, not runtime-qualified.",
+    "Banner is static logo art with cabinet motif; original rendering viewed, no interactive UI inferred. Root tree source/visual read nearly complete, but report module,lockfile and external Gitlink remain."
+  ],
+  "test_method_inventory_count": 36,
+  "limits": [
+    "73/75 tracked blobs reviewed;152/500 complete repositories.",
+    "No full SimHash component suite, Gradio launch/browser, dependency install or production changes. pHash/ASAN deferred."
+  ]
+}
