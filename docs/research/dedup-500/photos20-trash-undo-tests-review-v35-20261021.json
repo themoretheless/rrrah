@@ -1,0 +1,31 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/e2e/integration/trash-undo.test.ts": {
+      "sha256": "4da704e4fb2eca8e62d51bc4661700bdb1f6d06c39489ca62b1df1f758ced40a",
+      "git_blob": "9d674ff69403c2e045d82b7be9281a53c2437359",
+      "bytes": 8591,
+      "lines": 234,
+      "declared_test_calls": 6,
+      "method": "Whole source read in contiguous ranges 1-230 and 231-234."
+    }
+  },
+  "cumulative_whole_files_read": 71,
+  "tracked_blobs": 84,
+  "findings": [
+    "Six scenarios cover baseline/multibatch UI trash, baseline/multibatch optimistic undo, immediate command failure and cancel confirmation. They use injected precomputed groups plus programmed GPTK stub.",
+    "Unlike live trash E2E, integration tests correctly click MUI confirmation button. This narrows prior missing-confirmation finding to the live test source.",
+    "Comment counts 3x101 items as 303 trash keys, but default one kept per group yields 300 selected trash keys, still two batches (250+50). No exact requested-key count assertion in these cases.",
+    "Test titled shows trashing state only awaits final snackbar/group disappearance; no assertion checks intermediate progress UI or batch values.",
+    "Undo assertions inspect restored groups only. No restore-failure override, delayed acknowledgement or partial restoration scenario establishes backend/UI agreement.",
+    "Cancel test asserts dialog/results state, not absence of command on stub/backend. It does not directly count outgoing calls.",
+    "Error scenario fails before any stub work; no successful first batch followed by later failure, account change or stale undo snapshot tested."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static test review, no browser launch or trash/restore actions.",
+    "71/84 tracked files completely reviewed; no production library changes."
+  ]
+}

@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 70/84 tracked blobs. Both live E2E sources fully read without execution; zero/singular results, rescan and confirmation inconsistencies recorded. No live-account qualification.",
+  "review_scope": "Partial whole-file review: 71/84 tracked blobs. Trash/undo integration source read; MUI confirmation exists here, but optimistic restore and partial failure guarantees remain untested. No browser execution.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -204,6 +204,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-live-e2e-source-review-v34-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-trash-undo-tests-review-v35-20261021.json"
     }
   ]
 }
