@@ -1,0 +1,20 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "controls": [
+    "docs/research/dedup-500/libphash454-controls-20261021/spng-extra-corpus-result.json"
+  ],
+  "findings": [
+    "Executed all remaining 27 regression PNGs and two miscellaneous PNGs using the already-built original pinned libspng testsuite. Expectations read directly from tests/crashers/meson.build and tests/misc/meson.build. Each invocation bounded by 10 seconds; no timeout or signal exit.",
+    "29/29 image-run expectations matched: 27 expected positive rejection exits and two successful miscellaneous decodes. Do not count rejected images as successful decodes.",
+    "Combined with previous 175 main image runs, all 204 tracked PNG assets now have runtime expectation evidence. This supplements completed source/visual review and does not establish all-format/all-platform correctness.",
+    "System reference libpng remains 1.6.59, distinct from libphash pinned libpng dependency. No ASAN/native pHash.org; no new production change."
+  ],
+  "remaining": [
+    "libspng external README visual assets",
+    "599 remaining libpng tracked blobs",
+    "Pinned libpng wrapper cleanup runtime and other codec gitlinks"
+  ],
+  "full_review_count": 247
+}

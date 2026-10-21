@@ -1,0 +1,245 @@
+{
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "image_runs": 29,
+  "expectations_met": 29,
+  "expected_rejections": 27,
+  "unexpected": [],
+  "rows": [
+    {
+      "path": "tests/crashers/badadler.png",
+      "sha256": "3614bbe9494f6374567cbf897e022a16abb8edd3f166745ce73a2f472eef6136",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "6b4cd7f7dd6ba5d610ae7024564ec89f88dff2f469fe8070b2338842afc3b322"
+    },
+    {
+      "path": "tests/crashers/badcrc.png",
+      "sha256": "ec5b6a711ea2325404ea56575df2f8a28292e5ef15a950f42a1d39ce06a6a96a",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "a74880a8d1117cc41e4e36e10320561e2ff5e3c7e81b3d40e695e687ef1452fd"
+    },
+    {
+      "path": "tests/crashers/bad_iCCP.png",
+      "sha256": "0c1ec5ece28d8574e80a3842939e8939f3451c71e8b2e013dcf26a80d292168e",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "2b918b8afd502419bd431352e278a66f57a28f97e7a160f54fc1c763543e0930"
+    },
+    {
+      "path": "tests/crashers/empty_ancillary_chunks.png",
+      "sha256": "bdc133d532c03cdaa6b6a8188a722c3845d4b2f76e89c63e1c70c1bf6a364be7",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "5880551d4a1bb889a712d82492060e579b61612048d1d0159a76784ebafb6058"
+    },
+    {
+      "path": "tests/crashers/huge_bKGD_chunk.png",
+      "sha256": "082aeb6b4ab247fef9ba5d4e45807942878326298d1df625b605d1da0801f454",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_cHRM_chunk.png",
+      "sha256": "ac630e5172baede942f4b6129c8b12468b5c723e443cd8a470edea2a8efa1b5d",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_eXIf_chunk.png",
+      "sha256": "def32ebac5a7c25ae469c5eb228d71f78d746edbbc088bcab13e3aefcf92af23",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_gAMA_chunk.png",
+      "sha256": "c645113de3ab585b92e0c0f626761f18271f65c60844230071f2632fe4f70895",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_hIST_chunk.png",
+      "sha256": "132f6a3bef3964ff05bad7f35f585d18680fa21acd4f9b2e51b7fe665aabc713",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_iCCP_chunk.png",
+      "sha256": "81efdcb97e6261332ee2d6d6c0761d3a51a22a5f432da87d2cdb579629fe98e5",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_IDAT.png",
+      "sha256": "e5080baec5e30c020cc75a16534ffa906ac1130234c511d774e0305408021b9c",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "6db7cdf3957cf4f5ef3face5276de0e4f70327a5a624d3cdcfa8ce0a5954789f"
+    },
+    {
+      "path": "tests/crashers/huge_iTXt_chunk.png",
+      "sha256": "cf52cbac99198baf5e72e0d1423de217aa9cff327981356ab20e9b47d32ab0fd",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_juNk_safe_to_copy.png",
+      "sha256": "85325cb6bc93bf513aea184f610f856f306278ad6bedd98935a0a96d9416d5f0",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_juNK_unsafe_to_copy.png",
+      "sha256": "8f9ef7f8931919fc8a73d896ff2e3bd5cf233141dc6b7801e4fbe7c0c7b4037b",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_pCAL_chunk.png",
+      "sha256": "aa551af23f38a4477025a66a81c0d60a8cd5bbf20daed3526b1427c89ef7666b",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_pHYs_chunk.png",
+      "sha256": "96057fe3351aafd59ba490c08edefce40a1f2d03b168973ad97a34d0be9d9ec3",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_sCAL_chunk.png",
+      "sha256": "8c10f1d5cc9efa236a9a9ddc337ecca60d877c5d496ff0864bf044f446b88c3a",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_sPLT_chunk.png",
+      "sha256": "0e1b57826471471792d4f36fc5a6f14f0c91d3d2a3d96aaf4ef59af941ec838d",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_sRGB_chunk.png",
+      "sha256": "985df4412486a50b1738d0152e177cf6cb70063081c8475d0b72ca33f8e1c708",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_sTER_chunk.png",
+      "sha256": "10b7ebf8af5730f6886b433742bddab4949fa08188bb2e3cd5dea186839762c4",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "98d064a4579a860921015bc827198051ea59b4c4288e865e5435fdb4a9d6b2a1"
+    },
+    {
+      "path": "tests/crashers/huge_tEXt_chunk.png",
+      "sha256": "0c9f65ca8ff8e756b834e624af837b2c97cf91e42671c7042fc937c0ce677a14",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_tIME_chunk.png",
+      "sha256": "60cc784eeba739354001e1023de7553a78cc32d6c5554c297f12d74b6e458f67",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/huge_zTXt_chunk.png",
+      "sha256": "b5b9231e7464ffd30d681829baa032160137672c4d783885d765c4c87222917e",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "43074e8e48c4964e7d0990658ea417169299242e2602644dec8702e217068763"
+    },
+    {
+      "path": "tests/crashers/zero_width.png",
+      "sha256": "ac7b348b231b3a887f720c919a47e3caeb4c20bd1d33d05f07c976fa26c8fa0f",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "ef80591fae8217ca4cb2edcb3050bbb551450311847032fda8980574c1823f36"
+    },
+    {
+      "path": "tests/crashers/zero_gama.png",
+      "sha256": "f58078b838ebd4879b0da888e8d4d19a008f1375ae023c3a2ad62bff90191da5",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "b8fe37121283dfaf2a233b6709f78664b9f640b9a7d8b89a7b9566b26fbf0422"
+    },
+    {
+      "path": "tests/crashers/invalid_gray_alpha_sbit.png",
+      "sha256": "c6386f8b89df9a937a2690664a24e6f9f6a04e25f27ecaac5dad0e82686e1e5d",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "a19531ece301179899b44c812984534065ffae4c52aea8f7a84d20c9a4fb0a4e"
+    },
+    {
+      "path": "tests/crashers/missing_plte.png",
+      "sha256": "15e185e352ce8b9092104f3941ce707f7181915d8f0b6dd52a724717b5a276ab",
+      "expected_failure": true,
+      "exit_code": 1,
+      "expectation_met": true,
+      "log_sha256": "702a79c4f5e222d84237eb7a0bdbb0d1260b9177c8a716ab759e7cf37c44f2ac"
+    },
+    {
+      "path": "tests/misc/unknown.png",
+      "sha256": "73ac5f7fcc035ee451f3b16f503d12c47ce6ac9480649678027b2f7e99b12820",
+      "expected_failure": false,
+      "exit_code": 0,
+      "expectation_met": true,
+      "log_sha256": "2296a397509e70d660876af654765f2c704720457732ddd1cf62ba595dd7d2d0"
+    },
+    {
+      "path": "tests/misc/icc_profile.png",
+      "sha256": "817436bef984b0190cdb3149e9b8a108a86b5020e5c55e71d2a91dec4a8ec0a4",
+      "expected_failure": false,
+      "exit_code": 0,
+      "expectation_met": true,
+      "log_sha256": "813174b43dbb6f2356017817c4b3283804d7e071d869b089c51878f55752fc34"
+    }
+  ],
+  "limits": [
+    "Original testsuite with system libpng 1.6.59, arm64; no sanitizer or native pHash.org.",
+    "Positive expected exit is rejection, not successful decode; suite assertion strength remains limited as previously reviewed."
+  ]
+}
