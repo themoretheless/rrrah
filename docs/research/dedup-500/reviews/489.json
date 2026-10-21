@@ -4,7 +4,7 @@
   "commit": "d9d177d8f8c39892e7627f3c868b48bfda8b5df5",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "arithmetic-reference-input-validation-required",
-  "finding": "Ruby DCT hash with specs; backend/math needs comparison against qualified vectors.",
+  "finding": "Ruby DCT recipe reviewed; 8x8 independent DCT oracle, 64 bit positions and 120 stored-hash pair distances verified. 48 fixtures remain unviewed; image/RSpec runtime unqualified.",
   "available_source_evidence": [
     {
       "path": "lib/dcthash.rb",
@@ -67,6 +67,7 @@
   ],
   "incremental_source_reviews": [
     "docs/research/dedup-500/dcthash-selected-source-audit-20261013.json",
-    "docs/research/dedup-500/dcthash-full-text-source-audit-20261013.json"
+    "docs/research/dedup-500/dcthash-full-text-source-audit-20261013.json",
+    "docs/research/dedup-500/dcthash489-matrix-review-20261021.json"
   ]
 }
