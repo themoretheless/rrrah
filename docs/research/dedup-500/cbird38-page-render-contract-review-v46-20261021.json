@@ -1,0 +1,53 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/mediapage.cpp": {
+      "sha256": "7bb0de240782c87d4ebe4fc82c7cf38d9c710c8df4d90c0959ed045263e90b01",
+      "git_blob": "e27cd80ba356780c721b544a1d422337aea2f228",
+      "bytes": 4651,
+      "lines": 153,
+      "method": "Whole pinned GUI source/header read; no rendering or filesystem action executed."
+    },
+    "src/gui/mediapage.h": {
+      "sha256": "5a3fe9c03d2d4cb6d84b0acfb9981f6fdd754b00a44273e978173a3ba7ffd5a3",
+      "git_blob": "d3036d954dd7c7e8fc8d24198aa04821d413ff31",
+      "bytes": 3914,
+      "lines": 133,
+      "method": "Whole pinned GUI source/header read; no rendering or filesystem action executed."
+    },
+    "src/gui/mediaitemdelegate.cpp": {
+      "sha256": "2b4e2ebb2fb04d0048d45a8194aaaed42cdad6b3681a6f6fb44b46301b359783",
+      "git_blob": "95365f1010c706249b0a57c355b3e7d4f70ad7d8",
+      "bytes": 14656,
+      "lines": 421,
+      "method": "Whole pinned GUI source/header read; no rendering or filesystem action executed."
+    },
+    "src/gui/mediaitemdelegate.h": {
+      "sha256": "7b796f2a6b9ef64ab0dc3b19646ddaf854772cb79adf3b601dc13c7a929d6226",
+      "git_blob": "a092d5ed3a9fcf084d3149a85b8c4f0442d16bca",
+      "bytes": 3743,
+      "lines": 104,
+      "method": "Whole pinned GUI source/header read; no rendering or filesystem action executed."
+    }
+  },
+  "cumulative_assessed_blobs": 146,
+  "tracked_blobs": 616,
+  "findings": [
+    "MediaPage identifies analysis items by path suffix***, difference by-diff***. Ordinary filenames with such suffix collide with marker semantics on systems permitting them. Analysis id uses wall-clock nanoTime with microsecond resolution; uniqueness asserted only as probablyfine comment, not guaranteed.",
+    "addDifferenceAnalysis appends third item to a two-image group; isPair counts nonanalysis items and remains true. Delegate ROI template selection uses(index.row()+1)%model.rowCount; with three rows, row1 chooses analysis row2 rather than original row0. Actual ROI state and UI reproduction not run.",
+    "MediaPage no-argument setNegativeMatch records adjacent nonanalysis indices only, not every pair. Assumes analysis last. Header removeAnalysis calls group.last without empty guard and removes at mostlast; callsite preconditions still need review.",
+    "default selection is last nonanalysis unless selectfirst; this positional choice is not automatic quality scoring or verified original identification.",
+    "replaceFile renames remaining partner then moves it to deleted location, ignores move result and has no rollback across operations. setParentPath raw startsWith lacks path-separator boundary. No rename/move/delete performed.",
+    "Delegate default scale-down with Qt smooth resampling, optional OpenCV affine filters and inverse ROI transform changes displayed pixels; visual similarity is not source-pixel equality. Inversion success not checked in this method.",
+    "setZoom accepts value directly and calculate divides byzoom/scale; dimensionzero handling not explicit. Layout tries quadratic row/column combinations, no measured bottleneck or optimization claim.",
+    "MediaPage isLoaded checks nonnull image only, not successful complete decode metadata; matches earlier loader result qualification concern. Unload can discard in-memory data when unloadAlltrue. No failed-loader UI test."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "146/616 assessed:145 whole text/source and one PNG visual. qtutil.cpp remains partial.",
+    "29 prior original-body/header controls and two independent counterexamples unchanged. No actual Qt GUI render, production edit or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
