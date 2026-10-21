@@ -1,0 +1,71 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "example/example-website/src/routes/demo/github-icons/+page.svelte",
+      "lines": 399,
+      "sha256": "6d6e0e5b9e59a2e905a4634a792b99ac0ac55e53460db85ff4d765ea7c0b7447",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/routes/demo/+page.svelte",
+      "lines": 74,
+      "sha256": "0f9766feeb154df7169abf4b60eba66230c3b280ebe462a202e0c1410bf4672e",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/routes/+error.svelte",
+      "lines": 17,
+      "sha256": "3464e5af6c2b263c66df30e08ba9226be2157227b8fef42cd326b199d0a82a56",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/routes/+layout.ts",
+      "lines": 1,
+      "sha256": "30eec0a0e67c08341a51c51fa019afb5f4815eec5a183501f2e39d5da1c4e67d",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/lib/types.ts",
+      "lines": 22,
+      "sha256": "b3c3cd469ac6a84cc8fdda59ead86fee569ea31fb51fd4f02c36c4f646e71d42",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/lib/index.ts",
+      "lines": 1,
+      "sha256": "4beec0ade3bea5be651939b305bccf69d48506c74eda0a1a50a0dd6c79c4e91a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/app.d.ts",
+      "lines": 13,
+      "sha256": "3d450fc2fc7b0f10b6a9493a682769aac34f8b612f0f5d1bc4845a7b0bfe9f0a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/app.html",
+      "lines": 12,
+      "sha256": "03a55e2dd70d5d68801e1828a9bebf2d88f14d56f906b280ab7fbbc6259b068b",
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/dart482-cluster-match-control-20261022.json"
+  ],
+  "findings": [
+    "Whole icon-clustering page and seven route/type/template support files read. Page imports precomputed clusters; 300ms loading is simulated, not hashing time.",
+    "Original matching helper executed on synthetic clusters: Dart hash0000 members[a,b] paired with Python hashffff members[a,c], because first URL a overlaps. This helper does not establish equal hashes or equal cluster membership.",
+    "Rendering iterates Dart clusters only, selecting first matching Python cluster. Python-only groups and additional overlaps are not enumerated; displayed side-by-side results are not complete partition comparison.",
+    "Error route Home link uses / rather than configured deployment base; source-only navigation concern. Prerender enabled, types carry hash/count/images but no pinned image digest or algorithm recipe.",
+    "No site build, browser rendering, original Dart test or production change."
+  ],
+  "remaining": [
+    "Three main site pages/layout plus CSS",
+    "Structured datasets/lockfile and images/external visuals",
+    "Original Dart runtime/oracles"
+  ],
+  "full_review_count": 247
+}
