@@ -2,7 +2,7 @@
   "index": 126,
   "repository": "LowLevelLogic/synology-dedup-photos",
   "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
-  "review_scope": "Partial pinned7/8whole artifacts; all three Rust source modules, README, manifest, ignore/license fully read. Fourteen targeted controls; full lockfile and actual application/NAS/model qualification pending.",
+  "review_scope": "Complete pinned8/8artifacts by explicit methods: allsource/text/license whole-read; entire lockfile parsed and all310package records/edges assessed. Fourteen targeted controls and two local freshness tests; whole application/NAS/model runtime unqualified.",
   "decision": "shortlist",
   "finding": "Rust SHA256 plus dHash and quantized cosine; complementary exact and visual stages, no detected tests.",
   "available_source_evidence": [
@@ -78,5 +78,7 @@
     {
       "audit": "docs/research/dedup-500/synology126-source-review-v4-20261021.json"
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/synology126-complete-source-review-20261021.json"
 }

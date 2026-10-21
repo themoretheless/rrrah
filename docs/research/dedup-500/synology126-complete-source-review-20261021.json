@@ -1,0 +1,94 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "LowLevelLogic/synology-dedup-photos",
+  "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 8,
+  "files": {
+    ".gitignore": {
+      "bytes": 144,
+      "git_blob": "c3287fe83737d39f959abb0035f34ce7ba464613",
+      "sha256": "37987476cd7453cd1cbb56e5aa059762991038368eff2d6a1256294522140fef",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    },
+    "Cargo.lock": {
+      "bytes": 74263,
+      "git_blob": "dbf9fdfae9e2801873b4ee0536225e749e5dc4be",
+      "sha256": "ca531b7851047a91a9de283af4eb6cf95598768919362cd9291e3e3dba74c33d",
+      "method": "Full structured TOML parse, all310 package names/versions/dependency lists inspected, all source/checksum fields and dependency references checked by retained script"
+    },
+    "Cargo.toml": {
+      "bytes": 444,
+      "git_blob": "d5dcce889072c8ecdb092b6fb196280e86eb43c5",
+      "sha256": "a63c796544da323b322c529f227d690be3b1fbe32cacf806baedec7159ea5674",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    },
+    "LICENSE": {
+      "bytes": 1064,
+      "git_blob": "76d79a6f2670112666e30372ea1126a0e7ec2786",
+      "sha256": "05770b19466c9940ff8235d476a61d72c7a0348481f09ce4bd9b816cef331336",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    },
+    "README.md": {
+      "bytes": 12308,
+      "git_blob": "c118c11db8d25d5d2d912029d0772cc3d416d69c",
+      "sha256": "5f5161b983d6acc1a8904f49bd2ad6b89c61c168578dfd347673c14e143adf02",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    },
+    "src/main.rs": {
+      "bytes": 84767,
+      "git_blob": "d392e2a83dd08df758a83b5351bc50f67e0e7e30",
+      "sha256": "bcd643f41a4759cf404de44e1cd5d8630f9b22b753cfabe700a397c506004e81",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    },
+    "src/nas.rs": {
+      "bytes": 18268,
+      "git_blob": "a46790182ff5c2d62813ba78f1f26370acf23ddd",
+      "sha256": "a1e88f6ca5252270eb2458d5397d34b10e5eeb0fa3e8da25cdceb2df78278591",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    },
+    "src/semantic.rs": {
+      "bytes": 5957,
+      "git_blob": "27e49cf505135cffb19b3ccdd828e1711cf96ab0",
+      "sha256": "56701a393aa24193e07ec08f479449cfb1931ee33c958b0adbc717797409cb82",
+      "method": "Whole pinned source/text/license read across v1-v4"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/synology126-source-review-v1-20261021.json",
+    "docs/research/dedup-500/synology126-source-review-v2-20261021.json",
+    "docs/research/dedup-500/synology126-source-review-v3-20261021.json",
+    "docs/research/dedup-500/synology126-source-review-v4-20261021.json"
+  ],
+  "lock_review": "docs/research/dedup-500/synology126-lock-review-20261021/inventory.json",
+  "lock_notes": [
+    "310 packages;309 registry-source/checksum-shape records;14direct dependencies;all dependency references resolve uniquely.",
+    "ort manifest allows rc.10 but lock resolves rc.12; image0.25.10. No dependency source audit or downloaded-crate checksum verification."
+  ],
+  "controls": {
+    "targeted_upstream_function_block_controls": 14,
+    "whole_upstream_application_executed": false,
+    "local_freshness_tests": {
+      "log": "docs/research/dedup-500/synology126-local-freshness-controls-20261021.log",
+      "passed": 2,
+      "failed": 0,
+      "scope": "Existing exact-file tests for restored-mtime same-length snapshot edits and same-inode mutation during scan; not new tests or complete freshness qualification."
+    }
+  },
+  "conclusions": [
+    "Exact SHA256 grouping has no byte confirmation in inspected pipeline.",
+    "Greedy seed-star visual groups depend on input order; keeper sorting can select a member outside threshold of another participant.",
+    "Saved keep-all empty draft is not restored; original callback control confirms.",
+    "Review Success is returned and saved state removed before actual deletion outcome; source-level observation.",
+    "NAS completion condition ignores overall success when finished=true; synthetic adapter control only, actual service reachability unqualified.",
+    "Traversal omissions, cache metadata identity and image/model preprocessing/version boundaries require explicit qualification; see incremental evidence."
+  ],
+  "license": "MIT root fully read; copied research controls retain license; no production adoption.",
+  "limits": [
+    "No actual NAS/model/whole image pipeline/browser/deletion run, precision corpus or performance claim.",
+    "Complete pinned repository review is not complete runtime qualification.",
+    "Native pHash/ASAN remains deferred; all500 reviews remain incomplete."
+  ]
+}
