@@ -1,0 +1,46 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "lines": 9598,
+      "new_read_line_ranges": [
+        [
+          6121,
+          8070
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          8070
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "1950 additional contiguous JSX source lines read; source-only, no rendering.",
+  "findings": [
+    "Narrowing v10: duplicate summary explicitly says files hidden for performance using fullcount minus listedfiles. Empty renderedgroup displays No files available and Try running scan again. Truncation is disclosed, but no member pagination/refill control in this reviewed group JSX.",
+    "Narrowing v10 clear-results race: Clear results button is only rendered when groupsnonempty AND notduplicatesLoading AND notstatusrunning. Direct helper lacks cancellation but normal button cannot clear during active scan. Scope-change stale publication concern remains separate.",
+    "Delete confirmation names file/path/size, offers Move to Recycle Bin unchecked by default, and button says Delete or Recycle accordingly. User confirmation exists; no claim silent deletion. No revalidation identity/content or last-copy keeper requirement added in reviewed flow.",
+    "Duplicate minimum-size numberinput accepts0; wrapper converts0 to1MiB. Thus visible0 means nonzero threshold, not all empty/smallfiles. No explanatory threshold note in reviewed duplicate controls.",
+    "Header scope/folder toggles remain enabled during duplicate scan; each changes state and triggers reindexWithConfig. This supplies reachable scope-change UI for static old-result publication concern, not a mounted interleaving reproduction.",
+    "Scope toggles call reindexWithConfig as well as changing state consumed by index-start effect. Duplicate start request possibility needs React ordering test; no count asserted.",
+    "Installed-app refresh clears frontend failure cache then reloads catalog; v10 no-retry statement narrowed: explicit refresh provides retry for failed icons. Positive frontend/backend icon caches not cleared by this handler.",
+    "Preview fallback labels missing/empty text preview as unsupported/unavailable; no separate IO-failure reason surfaced here. Rendering/status differences not screenshot-tested.",
+    "Result list maps every visible row with no virtualization in this JSX. Limit5000 caps rows, while image/video/PDF may each mount preview element. No performance/memory inference accepted.",
+    "Bulk selected paths persist across query/filter changes in read code; toolbar count uses full Set. Actual delete modal remainder still pending. Single actions confirmed intentionally default permanentdelete, bulktrue earlier source."
+  ],
+  "limits": [
+    "31/268 whole files; App.tsx1-8070 of9598 partial. Remaining JSX and whole repository still pending.",
+    "No new runtime controls in this batch, no browser rendering/user operations. Source observations only.",
+    "No production changes. Native pHash/ASAN deferred."
+  ]
+}
