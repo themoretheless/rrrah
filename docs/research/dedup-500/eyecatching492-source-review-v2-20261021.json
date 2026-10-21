@@ -1,0 +1,24 @@
+{
+  "repository": "touhidrahman/eyecatching",
+  "commit": "72da4de1845b4cdecc8f826bf756cead43bde507",
+  "whole_repo_complete": false,
+  "controller_review": {
+    "bytes": 12899,
+    "sha256": "84ff8de8892dbecbfe11acb2ed6089152858b2abc180ef3b6d5cb6a26d20c124",
+    "git_blob": "41aa21cd9e03ad619430b3872abd56e23e1b0e6d",
+    "method": "Wholepinnedcontroller.pyreadwithouttruncation"
+  },
+  "controls": "docs/research/dedup-500/eyecatching492-controller-controls-20261021/result.json",
+  "new_authored_controls": 2,
+  "cumulative_authored_controls": 7,
+  "findings": [
+    "Original normalize_images overwrites input path; crossedwidth/height8x4vs4x8 becomes8x8vs4x8 but logs both8x8. Actual unchanged ASTControllerclass withrealPillow andtemporaryfiles.",
+    "Original compare_linear counts full block area beyond image bounds;3x3whiteidenticalimages,block4,threshold0 gives177.78percentdissimilar area despite0hashdifference. This explicitly uses threshold0; no claim defaultthreshold8labelsidenticalimages.",
+    "Linear compares hash twice per tile viahash_diff/hash_diff_percent; recursive ignores configuredthreshold anddividesonanynonzerohashdifference. Source observation, unbenchmarked.",
+    "Recursive average weights marked blocks equally ratherthanpixelarea. Root traversal usesgetbboxnonzeroextent, not guaranteed full image. Source only.",
+    "Shift path writes/reopensfixedoutput_vid.avi andexpects3returncv2.findContoursAPI; currentOpenCVreturns2butthatbackendnotexecutedhere. No actualshift/video proof."
+  ],
+  "limits": [
+    "OriginalclassASTextractionbypassesunusedcv2/pandasimports;actualutility/Pillow/ImageHashused,noadapterformethodsundercheck. No upstream suite/browser/video/ImageMagickrun. RemainingCLI/docs/config/license/screenshotsnotwholeassessed. No productionchanges.NativepHash/ASANdeferred."
+  ]
+}
