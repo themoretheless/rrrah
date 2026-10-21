@@ -1,0 +1,60 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/mediafolderlistwidget.cpp": {
+      "sha256": "2c0ec6c31ff1c3960c7e8a59c35d27e7e4a6c8e545e7057b20dbdcd82cb9bf0f",
+      "git_blob": "082f26ee00af72939cef1c8c4fe8a5843458d779",
+      "bytes": 4347,
+      "lines": 130,
+      "method": "Whole pinned source/header read."
+    },
+    "src/gui/mediafolderlistwidget.h": {
+      "sha256": "b80df173c8cf920d747d47be0641664f04da4c006fae88db1107c0eac44154f6",
+      "git_blob": "181447090fb79a87f8e27a3c47b9317bdaced799",
+      "bytes": 1851,
+      "lines": 66,
+      "method": "Whole pinned source/header read."
+    }
+  },
+  "partial_source_files": {
+    "src/qtutil.cpp": {
+      "sha256": "431c50b3d9d012868c9e29866e87e6d91587f5bd282ec5b56917cf1a1b365820",
+      "git_blob": "47a0bcc2113aa2ef4d0c149f0f36221ad32432e8",
+      "bytes": 61641,
+      "lines": 1891,
+      "read_ranges_inclusive": [
+        [
+          920,
+          980
+        ],
+        [
+          1018,
+          1040
+        ]
+      ],
+      "method": "Only cumulative listed ranges read; whole file excluded."
+    }
+  },
+  "cumulative_assessed_blobs": 142,
+  "tracked_blobs": 616,
+  "findings": [
+    "Folder widget keeps copy of input Media list, assigns item type as positional index, and maps selected items back by that index. No distinct full group identity restored after browser shortened-key grouping. This confirms caller shortened-key collision is not repaired in widget.",
+    "qElide retains first/last floor((maxLen-3)/2) characters. Independent ASCII counterexample with two distinct middle components and same18char edges yields same39char label at default40. Combined with v44 map-key use, establishes lexical key collision; not native Qt/window reproduction.",
+    "Widget actions in these sources are close/choose; no delete or rename implementation here. Selected group emitted for browser handling. Does not qualify delete disabling in other unread widgets.",
+    "Hover timer starts after300ms mouse movement; when hovering, next move stops animation and does not restart timer on that same event. No leaveEvent override here; hover completion and widget-close timer behavior not visually tested.",
+    "Geometry saved on destruction; view layout based on thumbnail sizes/device ratio. Null thumbnails and actual pixel display not inspected this step."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-elided-key-counterexample-v45-20261021",
+    "passed": 1,
+    "failed": 0,
+    "method": "Independent Python ASCII model of read qElide rule and explicit distinct-path label equality; not original Qt body."
+  },
+  "limits": [
+    "142/616 assessed:141 whole text/source and one PNG visual. qtutil.cpp remains partial.",
+    "29 original-body/header controls plus two independent counterexample controls cumulative. No GUI launch or production code changes.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
