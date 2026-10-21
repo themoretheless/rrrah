@@ -1,0 +1,54 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          11201,
+          14000
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          14000
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read2800newlines11201-14000 in four bounded leading-whitespace-only views with original line numbers; cumulative1-14000/16837. Static media/text/cache review.",
+  "findings": [
+    "VideoThumbnailCache now fullyread13732-13804: LruCache40 entries keyed onlyabsolutePath; size/isMicro/mtime/length/content not key. First requestedthumbnail reused across120/240/320variants and samepath replacement until eviction. Semaphore1 serializes generation with doublecheck, confirming concurrencycomment. No actualthumbnailgeneration.",
+    "Cache no negativeentry means repeatedfailuresretry; catchesThrowable. Entrycount doesnotbound bitmapbytes. No sourcegenerationcheck arounddecode. This cache is weaker freshness than artworkcache pathmtime/size, distinct from fullcontent identity.",
+    "LocalPDF renders min(pageCount,15), labels PageNofpages.size, no truncationnotice; samepattern as separatePdfZoomView. Cleanupclose onlynormalpath, nofinally/pagepixelguard, loading/error notresetoninputchange. No PDF rendered.",
+    "VideoContinuePlaying switch modifies localrememberstate but doesnotcall earlierdefinedsetContinuePlayingEnabled; completeLocalVideoPlayerDialog through12603 confirms no persistencecall. Previouslysavedpreference remainsunchanged. No actualpreferencesmodified.",
+    "VideoSlider onValueChange modifies currentPosition while250msplayingpoll also writesit; no isSeekingguard unlike musicdialog. Seekfinishedcanusepoll-overwrittenposition. UIlatency/race untested. Captionfindlinearscan eachcomposition and inclusiveend means touchingboundary firstcuewins.",
+    "External subtitle selection clearsselectedEmbeddedTrack variable butdoesnotdeselectnativeMediaPlayertrack; rendering usesexternalcue else nativeTimedText, allowingnativefallbackduringexternalgaps. Imported subtitle setsselectedfile null and leavesselectedSubtitleNameImported; choosingembeddedlater mayleave importedcuearray becauseeffectonlyclearswhenname!=Imported. No actualtrackplayback.",
+    "Video start/preparation errors mostlycaught/logged inTextureVideoView; dialog hasno explicitdecodeerrorstate infullyreadbody. PlayUICanclaimplayingafterstartcallwithoutawaitingactualerrorcallback. No codeccompatibilityacceptance.",
+    "Textviewer readsentirefileUTF8 thenISO8859_1 onlyonexception, no lengthcap. Fallbacknotencodingdetection. Newtextdraft cannot saveblank/whitespaceonly (buttoncondition). No generictextedit existingcontent; plusbuttoncreatesnewdraft.",
+    "Text save checks target.exists and isSaving disablesduplicatebutton, writesUTF8onIO then successcallback. No exclusivecreation/atomictemp/fsync and partialcleanup, so externalcreationrace remains despiteUIguard. Draft notsnapshotted beforeIO/readagainforsuccess; disposalcancelscoroutine whileblockingwritecanfinish, filesystemoutcomevsUI needsqualification.",
+    "LocalFileDetails size/count rememberFilepath whileformattedDate keyedmtime; samepathmodification canupdateonefieldnotother. SynchronouslistFiles composition, unreadabledircount0. No actualfilepropertiesmeasurement.",
+    "Musicdialog volumeobserver properlyunregistersondispose; maxSystemVolume uncheckedzero division andrestore coerceIn1..max. Ordinarydevicecapabilitypending. Musicseek hasisSeekingguard andseeksonsliderupdates+finish, distinctfromvideo.",
+    "Gallery currentFile=imageFiles[pagerState.currentPage] directindex, noexplicitgetOrNull; listshrink/initialindex policy/finalviewerbehavior laterunread. Do notclaimruntimecrash fromlinealone."
+  ],
+  "candidate_requirements_for_library": [
+    "Cache key must include sourcegeneration and rendition parameters; pathalone is insufficient.",
+    "Explicitly mark partialdocument previews and boundpixelmemory.",
+    "Snapshot asyncsave inputs and publish success onlyforverifiedfinalstate."
+  ],
+  "limits": [
+    "114/268 wholefiles unchanged; explorer14000/16837 read.",
+    "No Android/Kotlin/Compose/media/PDF/texttests oractualfile/actions executed.",
+    "155/500 fullrepositories unchanged; no newproduction/librarytestresult.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
