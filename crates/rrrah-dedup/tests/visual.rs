@@ -4,6 +4,45 @@ use rrrah_dedup::{
 };
 
 #[test]
+fn sixty_tied_candidates_survive_with_inclusive_distance_boundaries() {
+    let query = Fingerprint {
+        variants: [[0; 4]; 8],
+        mean_linear_rgb: [0.5; 3],
+        luminance_stddev: 0.2,
+    };
+    let mut entries = (0..60_u64)
+        .map(|id| (id, query.clone()))
+        .collect::<Vec<_>>();
+    // Each of four channels contributes one or two differing bits.
+    entries.push((100, Fingerprint { variants: [[1; 4]; 8], ..query.clone() }));
+    entries.push((u64::MAX, Fingerprint { variants: [[3; 4]; 8], ..query.clone() }));
+    for reverse in [false, true] {
+        if reverse {
+            entries.reverse();
+        }
+        let index = VisualIndex::new(entries.clone(), entries.len(), || false).unwrap();
+        for transforms in [false, true] {
+            for radius in [0, 3, 4, 7, 8, 255, 256] {
+                let candidates = index.search(&query, radius, transforms, || false).unwrap();
+                let mut expected = (0..60_u64).map(|id| (id, 0)).collect::<Vec<_>>();
+                if radius >= 4 {
+                    expected.push((100, 4));
+                }
+                if radius >= 8 {
+                    expected.push((u64::MAX, 8));
+                }
+                assert_eq!(
+                    candidates.iter().map(|c| (c.id, c.evidence.distance)).collect::<Vec<_>>(),
+                    expected,
+                    "radius={radius}, transforms={transforms}, reverse={reverse}"
+                );
+                assert!(candidates.iter().all(|c| c.evidence.informative));
+            }
+        }
+    }
+}
+
+#[test]
 fn full_radius_direct_search_cancellation_never_returns_partial_matches() {
     let query = Fingerprint {
         variants: [[0; 4]; 8],

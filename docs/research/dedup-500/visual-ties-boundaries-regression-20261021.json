@@ -1,0 +1,24 @@
+{
+  "scope": "Local visual candidate completeness regression following reviewed top-k omissions",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test visual",
+  "exit_code": 0,
+  "passed": 10,
+  "failed": 0,
+  "ignored": 0,
+  "test_seconds_reported": 0.0,
+  "build_seconds": 9.03,
+  "test_source": "crates/rrrah-dedup/tests/visual.rs",
+  "source_sha256": "3c7cfb2f385c52b9f690a72af3699342038443dde5dfe11c530a9a0fb02a93a8",
+  "new_test": "sixty_tied_candidates_survive_with_inclusive_distance_boundaries",
+  "observations": [
+    "Sixty equal-distance candidates retained without top-k truncation. Independent authored expected ids/distances, not production compare helper as oracle.",
+    "Four-channel signatures with one/two bits per channel yield distances4/8 and are included at inclusive boundaries, excluded just below.",
+    "Seven radii, transforms on/off and two insertion orders:28 searches. All candidates retain informative flag for finite non-flat authored statistics.",
+    "Existing suite additionally tests exhaustive recipe oracle, dense fallback, explicit budget refusal and cancellation without partial outputs."
+  ],
+  "limits": [
+    "Synthetic fingerprints test retrieval semantics, not real-image descriptor quality, decoder support or universal duplicate recall.",
+    "No production algorithm change or measured speedup. 500-repository completion remains unproven; cbird117/616 unchanged.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
