@@ -1,0 +1,67 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 28,
+  "files": {
+    "Cargo.toml": {
+      "bytes": 3210,
+      "sha256": "9182eccbbcaf4a4f7b1d64a624449a9cf614548f240d906584c903cde7095435",
+      "git_blob": "3db739e8721c361fd12029e3db3603d9e1e399a7",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    },
+    "crates/core/src/lib.rs": {
+      "bytes": 358,
+      "sha256": "176a3696a6209303d544c64d63c770b801c831350e61cd7ba8678655a22ef8de",
+      "git_blob": "719b74225236719fb88d02de626a58fb58e51e41",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    },
+    "crates/app/src/lib.rs": {
+      "bytes": 2205,
+      "sha256": "c9e464b859178e1560e17cf21278978443ca390174a545e8add388ad145e78d6",
+      "git_blob": "01fa233e0fc8f482f0faa7d266b4925c772089aa",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    },
+    "crates/app/src/mod.rs": {
+      "bytes": 1859,
+      "sha256": "973f0c04009c6dd9c547eeab2331cf5aad9a546e306d5fff467e949599d242ad",
+      "git_blob": "f14d68157f6a91ef25d7d929be0676ab7ad23563",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    },
+    "crates/app/src/state.rs": {
+      "bytes": 7498,
+      "sha256": "11e2bbca3685a45dfba0a8e515a174a0c355ab6e55f14e8c70bf1a11f9e42cdd",
+      "git_blob": "b38cda8d3c940a7905518cbe606d007904397c79",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    },
+    "crates/models/src/state.rs": {
+      "bytes": 1128,
+      "sha256": "7e00fb5aa029a33e77f37d37e4e52673ae197be73bab2c0021031246d54edef4",
+      "git_blob": "aa90aaa803da0e4fd484dfa8bf23e260ae31ff08",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    },
+    "src/lib.rs": {
+      "bytes": 146,
+      "sha256": "59bf7426142de91555ae289a9e73c87b93233a117dc87b556dc4f7c83b8ab21f",
+      "git_blob": "30eb1f9874644555afe7c0d4d68a45de434655da",
+      "method": "Whole pinned originaltextread;truncatedAppstateprefixreread1..50;Gitblobverified"
+    }
+  },
+  "new_unique_controls": 1,
+  "cumulative_unique_controls": 15,
+  "controls_script": "docs/research/dedup-500/visualvault076-init-control-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-init-control-20261021/run.log",
+  "runtime_scope": "OriginalDatabaseCache+actualMediaFile modules inauthoredcrate;new_uninit andlen executedwithrealSQLite. NoAppinit/defaultconfig orTUIrun.",
+  "findings": [
+    "Appinit buildsScannerwithnew_uninit then spawnsrealcacheinitializationwithoutjoin,returningAppbefore ready. Actualplaceholderlenerrors confirmed;actualuser-triggeredscanracefrequency/pathnotreproduced.",
+    "Backgroundcachecreationusesexpect,sofailedtaskmaypanicwithoutreplacingplaceholderorsettingApperror. Awaitedorganizerinitprecedesbackgroundsecondorganizerload. Staticonly.",
+    "Appstate separates scan_taskhandle/starttime,progress,cachedfiles,lastScanResult. ScanResult hasfilesfound/duration/timestamp,noissues/completeflag;OrganizeResult haserrors/success. Corewarningsnotrepresentedinscanresult.",
+    "Appnew/on_tickliveinlib.rs;additionalappsrc/mod.rscontainsolderduplicatedimpl withdifferenttickcalls. Cargo defaultlibuseslib.rs;modfilebeingtrackeddoesnotprovecompiledsecondimplementation.",
+    "WorkspaceRust1.85/edition2024/version0.8.0,sixcrates.SQLiteTokiofullfeatures,rootnonWindowsjemallocator;earlierisolatedharnesseswerenotthisworkspaceprofile/lock. Sourceconfigurationread,not buildmatrixproof."
+  ],
+  "remaining_scope": "67artifacts includingfilters/actions/handlers/organizer/filemanager/undo/otherUI/integrationtests/docs/config/visuals/lock.",
+  "limits": [
+    "NofullAppinit/scannerraceorworkspacequalification;originalmodulepass/failurecountsunchanged.No productionchanges,globalfullcount205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}

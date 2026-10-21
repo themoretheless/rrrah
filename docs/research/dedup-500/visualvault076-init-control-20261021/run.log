@@ -1,0 +1,106 @@
+    Updating crates.io index
+     Locking 166 packages to latest compatible versions
+      Adding dirs v6.0.0 (available: v7.0.0)
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding sqlx v0.8.6 (available: v0.9.0)
+   Compiling visualvault076-init v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-init-20261021)
+warning: multiple associated items are never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:19:11
+    |
+ 18 | impl DatabaseCache {
+    | ------------------ associated items in this implementation
+ 19 |     const SCHEMA_VERSION: i32 = 1;
+    |           ^^^^^^^^^^^^^^
+ 20 |     const MAX_DB_SIZE_MB: u64 = 500; // Maximum database size in MB
+    |           ^^^^^^^^^^^^^^
+ 21 |     const MAX_ENTRIES: usize = 1_000_000; // Maximum number of entries
+    |           ^^^^^^^^^^^
+ 22 |     const CLEANUP_THRESHOLD_MB: u64 = 400; // Trigger cleanup when reaching this size
+    |           ^^^^^^^^^^^^^^^^^^^^
+ 23 |     const TARGET_SIZE_AFTER_CLEANUP_MB: u64 = 300; // Target size after cleanup
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 50 |     pub async fn new(cache_path: &str) -> Result<Self> {
+    |                  ^^^
+...
+ 74 |     async fn set_size_limits(&self) -> Result<()> {
+    |              ^^^^^^^^^^^^^^^
+...
+ 90 |     async fn init_schema(&self) -> Result<()> {
+    |              ^^^^^^^^^^^
+...
+192 |     pub async fn get(&self, path: &Path, size: u64, modified: &DateTime<Local>) -> Result<Option<CacheEntry>> {
+    |                  ^^^
+...
+246 |     pub async fn insert(&self, path: PathBuf, entry: CacheEntry) -> Result<()> {
+    |                  ^^^^^^
+...
+274 |     pub async fn update_hash(&self, path: &Path, hash: &str) -> Result<()> {
+    |                  ^^^^^^^^^^^
+...
+294 |     pub async fn remove_stale_entries(&self) -> Result<usize> {
+    |                  ^^^^^^^^^^^^^^^^^^^^
+...
+332 |     pub async fn get_stats(&self) -> Result<CacheStats> {
+    |                  ^^^^^^^^^
+...
+357 |     pub async fn cleanup_old_entries(&self, days: i64) -> Result<usize> {
+    |                  ^^^^^^^^^^^^^^^^^^^
+...
+388 |     pub async fn is_empty(&self) -> Result<bool> {
+    |                  ^^^^^^^^
+...
+397 |     pub async fn get_by_hashes(&self, hashes: &[String]) -> Result<Vec<CacheEntry>> {
+    |                  ^^^^^^^^^^^^^
+...
+441 |     fn get_cache_path() -> Result<PathBuf> {
+    |        ^^^^^^^^^^^^^^
+...
+456 |     pub async fn check_and_cleanup(&self) -> Result<()> {
+    |                  ^^^^^^^^^^^^^^^^^
+...
+478 |     pub async fn get_db_file_size(&self) -> Result<u64> {
+    |                  ^^^^^^^^^^^^^^^^
+...
+484 |     async fn perform_automatic_cleanup(&self) -> Result<()> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+521 |     async fn remove_old_entries_without_hash(&self, days: i64) -> Result<usize> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+536 |     async fn calculate_entries_to_remove(&self) -> Result<usize> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+557 |     async fn remove_least_recently_used(&self, count: usize) -> Result<usize> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+594 |     async fn vacuum(&self) -> Result<()> {
+    |              ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `CacheStats` is never constructed
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:601:12
+    |
+601 | pub struct CacheStats {
+    |            ^^^^^^^^^^
+
+warning: struct `CacheEntry` is never constructed
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:609:12
+    |
+609 | pub struct CacheEntry {
+    |            ^^^^^^^^^^
+
+warning: method `to_media_file` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:621:12
+    |
+619 | impl CacheEntry {
+    | --------------- method in this implementation
+620 |     /// Convert cache entry to `MediaFile`
+621 |     pub fn to_media_file(&self, file_type: FileType, created: DateTime<Local>) -> MediaFile {
+    |            ^^^^^^^^^^^^^
+
+warning: `visualvault076-init` (bin "visualvault076-init") generated 4 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.18s
+     Running `.dedup-work/visualvault076-cache-target-20261021/debug/visualvault076-init`
+PASS original lazy placeholder cache has no initialized schema; len returns error
