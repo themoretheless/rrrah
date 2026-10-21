@@ -1,0 +1,97 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/db/sets.py": {
+      "sha256": "cdb3147acd38f5ce8c98d9eefa9b211f3e421b956f7b564bf9af35ad53b2e1cc",
+      "git_blob": "fcf247f08ea9b7acef1525d3729ea1931bd14815",
+      "lines": 64,
+      "mode": "100644"
+    },
+    "src/mod/models/data.py": {
+      "sha256": "ab5796cea440ce1340fadea1c38ebaf4b3c1e637fb5297f9b2a307a38ec14604",
+      "git_blob": "a353a439057bf529d82386be7c7a008e8fa13f59",
+      "lines": 175,
+      "mode": "100644"
+    },
+    "src/mod/models/shared.py": {
+      "sha256": "97e137966d33616e6533932a63050e6cd6dbc16b5196e00594384d42646df011",
+      "git_blob": "5cb865c2a6b8049c6daf8f1ae0476c31df485b9f",
+      "lines": 68,
+      "mode": "100644"
+    },
+    "src/db/pics.py": {
+      "sha256": "e709a4eaf57e16253972d87e67d03164ed7ed814fddc3b8ba7b757822f006e6a",
+      "git_blob": "d10b45958107e84302dfad6928cfe9296a611e6e",
+      "lines": 1061,
+      "mode": "100644"
+    },
+    "src/mod/models/core.py": {
+      "sha256": "32f727514d59beaa3a015ef4135bcff2d3f8fa9fd602fb1fe6668b3980907d7e",
+      "git_blob": "2cf7ce10d1601e48ca56e4b2ef1b6adfbb789163",
+      "lines": 60,
+      "mode": "100644"
+    },
+    "src/util/err.py": {
+      "sha256": "cd7be4a4828121fcf38793bdab47febb5077386ef911079e6702c8d2d8d627ae",
+      "git_blob": "1371074ac584a869b308568fd5dd07176807119f",
+      "lines": 49,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 20,
+  "tracked_blobs": 125,
+  "partial_file_read": [
+    {
+      "path": "src/pages/similar.py",
+      "lines_read": [
+        1050,
+        1251
+      ],
+      "sha256": "9eae15e1a8c59e7de48e285e922dd8c897b71f0c4a9ee455672b74654a5197a3",
+      "credited_as_whole_file": false
+    }
+  ],
+  "method": "Six complete files read, plus explicit task-handler excerpt. Original AST-extracted saveBy and migration executed against real stdlib SQLite :memory:; original selected-delete handler executed with fully mocked services. No application imports/server/database/files touched.",
+  "executed_controls": {
+    "metadata_only_update": {
+      "result": 0,
+      "stored_date": "2020-01-01",
+      "stored_name": "a.jpg"
+    },
+    "changed_thumbnail_state": {
+      "isVectored": 1,
+      "simOk": 1,
+      "similarity_rows": 1
+    },
+    "legacy_migration_library_count": 0,
+    "injected_local_delete_failure": [
+      "external_trash_mock",
+      "external_commit",
+      "local_delete_failed",
+      "error_reported",
+      "view_cleared",
+      "selection_cleared"
+    ]
+  },
+  "control_source": "import ast,json,sqlite3,traceback,contextlib\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021')\nlog=N(**{k:lambda *a,**kw:None for k in ['info','warn','error']})\ndef extract(path,names,env,assigns=()):\n t=ast.parse((B/path).read_text());t.body=[ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0)]+[x for x in t.body if isinstance(x,ast.FunctionDef) and x.name in names or isinstance(x,ast.Assign) and any(isinstance(v,ast.Name) and v.id in assigns for v in x.targets)];ast.fix_missing_locations(t);exec(compile(t,str(B/path),'exec'),env);return env\nE=extract('src--db--pics.py',{'saveBy','_migrateSims'},dict(json=json,lg=log,BaseDictModel=N(jsonSerializer=str),mkErr=lambda msg,e=None:RuntimeError(f'{msg}: {e}')),['_SCHEMAS'])\nc=sqlite3.connect(':memory:');c.row_factory=sqlite3.Row\nfor table,schema in E['_SCHEMAS'].items(): c.execute(f'CREATE TABLE {table} ({schema})')\npayload=dict(id='owned-fixture',ownerId='owner',originalPath='a.jpg',thumbnail_path='thumb.jpg',fileCreatedAt='2020-01-01',originalFileName='a.jpg',isFavorite=0,exifInfo={'exifImageWidth':100})\nassert E['saveBy'](payload,c.cursor())==1\nc.execute('UPDATE assets SET isVectored=1,simOk=1');c.execute('INSERT INTO assetsSims VALUES (1,1,1,1)')\npayload['fileCreatedAt']='2021-02-02';payload['originalFileName']='renamed.jpg'\nrst=E['saveBy'](payload,c.cursor());row=c.execute('SELECT * FROM assets').fetchone();out={'metadata_only_update':{'result':rst,'stored_date':row['fileCreatedAt'],'stored_name':row['originalFileName']}}\nassert rst==0 and row['fileCreatedAt']=='2020-01-01'\npayload['thumbnail_path']='new-thumbnail.jpg';assert E['saveBy'](payload,c.cursor())==2\nrow=c.execute('SELECT * FROM assets').fetchone();out['changed_thumbnail_state']={'isVectored':row['isVectored'],'simOk':row['simOk'],'similarity_rows':c.execute('SELECT count(*) FROM assetsSims').fetchone()[0]};assert row['isVectored']==1 and row['simOk']==1\nc.execute(\"ALTER TABLE assets ADD COLUMN simGIDs TEXT DEFAULT '[]'\");c.execute(\"ALTER TABLE assets ADD COLUMN simInfos TEXT DEFAULT '[]'\");c.execute(\"INSERT INTO libraries (id,name,importPaths) VALUES ('lib','owned-library','[]')\");c.commit()\nE['_migrateSims'](c);out['legacy_migration_library_count']=c.execute('SELECT count(*) FROM libraries').fetchone()[0];assert out['legacy_migration_library_count']==0\nc.close()\n# Original task function, fully fake external services: no real delete or network calls.\nevents=[]\nclass Conn:\n def __enter__(self):return self\n def __exit__(self,*args):return False\n def cursor(self):return self\n def commit(self):events.append('external_commit')\ndef localfail(*args): events.append('local_delete_failed');raise RuntimeError('injected local write failure')\nassets=[N(autoId=1),N(autoId=2)]\nsto=N(nfy=N(error=lambda msg:events.append('error_reported'),success=lambda msg:None),now=N(sim=N(assCur=assets,clearAll=lambda:events.append('view_cleared'))),ste=N(getSelected=lambda all:[all[1]],clear=lambda:events.append('selection_cleared')))\nT=extract('src--pages--similar.py',{'sim_SelectedDelete'},dict(db=N(dto=N(mrg=N(on=False)),pics=N(deleteBy=localfail)),psql=N(mkConn=Conn),immich=N(trashByAssets=lambda a,cur:events.append('external_trash_mock'),restoreXmpBak=lambda a:None),lg=log,traceback=traceback))\ntry:T['sim_SelectedDelete'](lambda *a:None,sto)\nexcept RuntimeError:pass\nout['injected_local_delete_failure']=events;assert events[:3]==['external_trash_mock','external_commit','local_delete_failed']\n(B/'controls-v2-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Original saveBy returns unchanged for updates limited to fileCreatedAt/originalFileName: stored date/name remain old. Those fields are used by filtering/group conditions elsewhere.",
+    "Original saveBy updates thumbnail path but preserves isVectored=1,simOk=1 and old similarity relation rows. External caller invalidation remains to be inspected; this test establishes function boundary only.",
+    "Original _migrateSims drops/recreates libraries but never reads/restores their contents; owned in-memory legacy migration loses one library row. Asset migration itself executed with schemas from original source.",
+    "Original sim_SelectedDelete fake trace confirms external trash+commit before local delete failure; failure handler clears view and selection. No cross-store transaction/compensation for already committed external trash in this handler; only XMP backup restore if available.",
+    "SQLite mkConn enables FK and commits explicitly in callers. Local SQLite rollback cannot undo completed external vector/database writes. Source finding; not live service qualification.",
+    "setSimInfos rejects empty infos, deletes/reinserts relations in local transaction, then sets simOk; per-root group/infos updates use independent connections/commits. Entire traversal is not a single transaction.",
+    "getSimAssets incGroup computes root dot products for sorting but does not threshold-prune expanded members. On vector-processing exception it returns unsorted assets; no all-pairs duplicate proof.",
+    "countFiltered/getFiltered/getAssetsByGID/getPagedPending catch DB errors as zero/empty, collapsing errors into no results; settings get similarly returns default.",
+    "Cnt.reset omits simNo while clearing other counters; Gws.dtc uses time.time at class definition rather than per-instance factory. Source observations.",
+    "Asset.getImagePath relies on configured thumbnail/preview selection and raises if missing; originalPath content identity is not verified here."
+  ],
+  "limits": [
+    "20/125 blobs reviewed whole; 105 remain plus rest of partly read similar.py.",
+    "No full upstream test suite, real deletion, model inference, Postgres/Qdrant, UI rendering or full workflow executed.",
+    "GPL metadata retained, no production code copied or modified.",
+    "Native pHash/ASAN remains user-deferred; full500/all-case library qualification incomplete."
+  ]
+}
