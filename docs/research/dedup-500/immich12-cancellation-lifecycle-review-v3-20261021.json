@@ -1,0 +1,152 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/mod/mgr/tskMgr.py": {
+      "sha256": "3e5efa34ddadc27ebd279595b8537001b084e6848d71aed778b9973814591e6f",
+      "git_blob": "1a43a86c1c6f400ca9cd561d937f521e94d7f5d7",
+      "lines": 284,
+      "mode": "100644"
+    },
+    "src/mod/mgr/tskSvc.py": {
+      "sha256": "c78242809f73aa6d153eb372a655b1e1a6dc18d0694e4f933baf9422d88247ac",
+      "git_blob": "af5779bb3d46c3871c535f0d1d12335c4ac8de5e",
+      "lines": 100,
+      "mode": "100644"
+    },
+    "src/mod/tsk.py": {
+      "sha256": "ff7057956d1435acad908fea8b6a4128aa19ef40ed50e9c8471a1fe825355003",
+      "git_blob": "1136d3d3bb9f96dc6e025054b549c577fabf52f8",
+      "lines": 500,
+      "mode": "100644"
+    },
+    "src/mod/models/mods.py": {
+      "sha256": "16d3d9d6fad46576cdc248b296e085ccbb79f109b7b979b105229d6164425b7e",
+      "git_blob": "be73237ec371aa13978696a3ba9410162bc2000a",
+      "lines": 145,
+      "mode": "100644"
+    },
+    "src/mod/session.py": {
+      "sha256": "a0ac50b46510610eb009bd0659b65127dbd43c42a15b65ec9557165ceb3bd013",
+      "git_blob": "1971d5ca4922f41ac872030b27b47b2fc108acdf",
+      "lines": 61,
+      "mode": "100644"
+    },
+    "src/mod/models/page.py": {
+      "sha256": "47276ab1a3cc0289f89221e0852f8632ea9b780c57cbea7d37118df68bc4f95d",
+      "git_blob": "350ca3203a09ff972ccb5398fb6b66d4f39f5866",
+      "lines": 45,
+      "mode": "100644"
+    },
+    "src/mod/mgr/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "lines": 0,
+      "mode": "100644"
+    },
+    "src/mod/__init__.py": {
+      "sha256": "7ce330b2da2b695df836ed072b16abfd450e389989a88032338172b75df41593",
+      "git_blob": "0c969e5b0df384bce2a273402ab5370fc711eefe",
+      "lines": 6,
+      "mode": "100644"
+    },
+    "src/mod/models/__init__.py": {
+      "sha256": "73cd7a480d69857a8ecfe630374d4ec49a088aa95484c2f00978840c92638ce9",
+      "git_blob": "0f9edf7c481f907b50c98b0913d2c19620fafe50",
+      "lines": 40,
+      "mode": "100644"
+    },
+    "src/db/__init__.py": {
+      "sha256": "b6d9cf11d1e7cb316ccd14455f542103392736220f4ff1513cd3b1ec7f033d42",
+      "git_blob": "c092a3052d337c5b30568a383cf1eb2a5fa455c4",
+      "lines": 44,
+      "mode": "100644"
+    },
+    "src/ui/__init__.py": {
+      "sha256": "304faef9eff040549d494cebe5a591298a0772e140ebba5049f23ed8c1d1a9c3",
+      "git_blob": "bc8f6ba0118e318f1162121632934696a023d29b",
+      "lines": 5,
+      "mode": "100644"
+    },
+    "src/util/__init__.py": {
+      "sha256": "ed8060ced4d387609b60e46f7325b2cc14052a30ce09c153269c7e9fdca0f3bc",
+      "git_blob": "0df05916832bac8fdbfbdf39d27deeb02fcadd15",
+      "lines": 2,
+      "mode": "100644"
+    },
+    "src/dtom.py": {
+      "sha256": "4f12fde315748f53f8d567636487ff30e178de498222037081b561c29214943a",
+      "git_blob": "1aae5f08e9bc0d6b980cc132a578db86657bc81b",
+      "lines": 63,
+      "mode": "100644"
+    },
+    "src/mod/bsh.py": {
+      "sha256": "56495ab9bd56cf2d0d06901e51aeedd5f8b926646af3afa725dd94868e0f9e7a",
+      "git_blob": "8a50522780e06c048f0bfd75d022cfba682cf7fe",
+      "lines": 43,
+      "mode": "100644"
+    },
+    "src/mod/notify.py": {
+      "sha256": "6c9be0c0dfbbb0842b40a58454e7779399713eade8bdc447087428eb8e25d8b6",
+      "git_blob": "60083e4c6b3916dff1df3005fb6ef86232a23184",
+      "lines": 117,
+      "mode": "100644"
+    },
+    "src/util/log.py": {
+      "sha256": "30cddf03b55e87dd1d84b5775642d10ea03a5ab06ae550d0d8196875acea2d92",
+      "git_blob": "e893e6e2d2213bb6faffc44119be33ae4463bb1c",
+      "lines": 108,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 36,
+  "tracked_blobs": 125,
+  "method": "Sixteen complete files read. Original AST TskMgr/TskInfo/BseTsk classes run with original stdlib threading, dataclasses, time and UUID; explicit enum/message/log adapters avoid Flask/server imports. One bounded real thread synchronized by Events and joined before exit.",
+  "executed_controls": {
+    "cancel_before_execution": {
+      "task_calls": 1,
+      "final_status": "completed"
+    },
+    "completed_task_reexecution": {
+      "task_calls": 2,
+      "final_status": "completed"
+    },
+    "cancel_running": {
+      "status_after_cancel": "cancelled",
+      "hasRunning_after_cancel": false,
+      "worker_alive_after_cancel": true,
+      "effects_after_release": [
+        "post_cancel_side_effect"
+      ],
+      "final_status": "cancelled"
+    }
+  },
+  "control_source": "import ast,threading,time,uuid,json,dataclasses,typing\nfrom datetime import datetime\nfrom enum import Enum\nfrom abc import ABC,abstractmethod\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021')\nclass Status(Enum):\n PENDING='pending';RUNNING='running';COMPLETED='completed';FAILED='failed';CANCELLED='cancelled'\nclass Gws:\n @staticmethod\n def mk(*a):return N(typ=a[0],toDict=lambda:{})\nenv=dict(vars(typing),threading=threading,time=time,uuid=uuid,datetime=datetime,ABC=ABC,abstractmethod=abstractmethod,dataclass=dataclasses.dataclass,field=dataclasses.field,TskStatus=Status,Gws=Gws,lg=N(**{k:lambda *a,**kw:None for k in ['info','warning','error']}))\nt=ast.parse((B/'src--mod--mgr--tskMgr.py').read_text());t.body=[ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0)]+[x for x in t.body if isinstance(x,ast.ClassDef) and x.name in {'TskInfo','BseTsk','TskMgr'}];ast.fix_missing_locations(t);exec(compile(t,'upstream-tskMgr','exec'),env)\nM=env['TskMgr'];mgr=M();calls=[]\ntask=N(name='owned-control',run=lambda report:(calls.append('ran') or None,'done'))\nsn=mgr.regBy(task);assert mgr.cancel(sn);mgr._execOnThread(sn)\nout={'cancel_before_execution':{'task_calls':len(calls),'final_status':mgr.getInfo(sn).status.value}};assert calls==['ran'] and mgr.getInfo(sn).status==Status.COMPLETED\nmgr._execOnThread(sn);out['completed_task_reexecution']={'task_calls':len(calls),'final_status':mgr.getInfo(sn).status.value};assert len(calls)==2\nentered=threading.Event();release=threading.Event();effects=[]\ndef blocked(report):\n entered.set()\n if not release.wait(5):raise RuntimeError('control timeout')\n effects.append('post_cancel_side_effect');return None,'done'\nmgr=M();sn=mgr.regBy(N(name='blocked-owned-control',run=blocked));mgr.run(sn);assert entered.wait(3);worker=mgr.threads[sn]\ntry:\n assert mgr.cancel(sn)\n out['cancel_running']={'status_after_cancel':mgr.getInfo(sn).status.value,'hasRunning_after_cancel':mgr.hasRunning(),'worker_alive_after_cancel':worker.is_alive()};assert worker.is_alive() and not mgr.hasRunning()\nfinally:release.set();worker.join(3)\nassert not worker.is_alive();out['cancel_running']['effects_after_release']=effects;out['cancel_running']['final_status']=mgr.getInfo(sn).status.value\n(B/'controls-v3-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Original executor unconditionally sets RUNNING before checking cancellation. Register->cancel->execute runs task and ends COMPLETED, losing pre-execution cancellation.",
+    "Original cancellation marks CANCELLED and hasRunning returns false while controlled worker is still alive; releasing worker demonstrates post-cancel side effect. Task-body cooperative cancellation remains necessary; cancel status does not prove work stopped.",
+    "Completed executor can run same task again; public run prevents only entries currently in threads, not terminal task status. Direct executor replay reproduced; public run path source inspected.",
+    "UI concurrent-task guard checks pending/running statuses only and ignores cancelled-but-live threads; guard can allow new task while cancelled task still executes. Guard registration/start is not protected by manager lock. Source reachability, no browser test.",
+    "Manager task/info dictionaries retain completed tasks and result stores indefinitely; only threads entries are removed. No memory bound/cleanup policy in read manager.",
+    "tskSvc.stop drops global mgr without joining workers. Cancel checker lambda resolves mutable global mgr, so post-stop checker may dereference None or a different manager. Source observation, not executed.",
+    "Task completion callback advances queued nexts without checking completed/failed/cancelled status; cancelled/failed completion can schedule next task by source.",
+    "tsk_UpdUI intentionally skips task serial filtering; tsk_OnData accepts completion for message serial without checking current task serial. Stale/interleaved messages can apply other task state. Source observation, no UI runtime.",
+    "tsk_OnStatus reads message key type while Gws model uses typ; source mismatch with current model messages.",
+    "Tsk.reset does not clear nexts; completed manager tasks and stores can retain pending chain. Session render also resets shared dto photoQ and clamps thMin per render.",
+    "Exiftool wrapper uses subprocess with no timeout, write overwrites original and read collapses errors to None; no subprocess or metadata writes executed.",
+    "Logger module creates directories/configures root handlers on import; AST control avoids importing it. Notification rendering and session storage source read, no browser/media rendering qualification."
+  ],
+  "local_library_mapping": {
+    "finding": "rrrah synchronous cancellable APIs expose explicit cancellation errors; existing grouping tests enumerate every observed checkpoint for all64 four-vertex graphs. Async task-manager cancellation semantics are not an implementation to copy.",
+    "source": "crates/rrrah-dedup/tests/groups.rs",
+    "sha256": "37edc0479ec266fbe670d45fa6dbd82259a832781d777a8f824fe2dfb14c921a",
+    "test_run_this_batch": false
+  },
+  "limits": [
+    "36/125 whole blobs reviewed; no new whole repository completion credited.",
+    "No real image/model/database/server, browser/socket service, exiftool, deletion or upstream suite executed.",
+    "Controlled worker side effect is a Python list append only; no external writes.",
+    "No production code copied/changed; GPL metadata only so far. Native pHash/ASAN remains deferred."
+  ]
+}
