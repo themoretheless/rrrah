@@ -1,0 +1,43 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 40,
+  "files": {
+    "crates/core/src/organizer.rs": {
+      "bytes": 61086,
+      "sha256": "38ea5ecc143bda0cf901daa268152d6945b4efec50927e1c02f40449a5ff03c5",
+      "git_blob": "fa2ce802dc54992e07ec864a44b34f9b3e502889",
+      "method": "All1734 original lines read in complete chunks1..260,261..540,541..820,821..1110,1111..1410,1411..1720,1721..1734; Git blob verified"
+    }
+  },
+  "new_unique_controls": 3,
+  "cumulative_unique_controls": 21,
+  "controls_script": "docs/research/dedup-500/visualvault076-organizer-controls-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-organizer-controls-20261021/run.log",
+  "initial_harness_failure_log": "docs/research/dedup-500/visualvault076-organizer-controls-20261021/initial-harness-compile-failure.log",
+  "runtime_scope": "Unchanged extracted organize_file,determine_target_directory,get_type_folder,generate_unique_name methods; actual original MediaFile and production Settings/OrganizationMode. Authored empty FileOrganizer and MoveOperation/FileOperation record adapters; no UndoManager or full batch/App. Actual Tokio filesystem operations only within owned TempDir.",
+  "findings": [
+    "With Settings.dry_run=true, original organize_file moves source to destination and records Move; authored control passed. Whole public batch production source also contains no dry_run check. Full UI end-to-end invocation not run.",
+    "With rename_duplicates=false and distinct existing destination content, original organize_file renames source over destination: old bytes replaced by new bytes and source disappears, reproduced on macOS owned fixture. This is existing-name collision, not a concurrent race reproduction.",
+    "After creating MediaFile observation size4, rewrite physical file to changed longer bytes, then original organize_file moves changed bytes without refusal. Control passed; no identity/size/mtime/hash guard in this movement method. Not a claim that local rrrah-dedup performs such actions.",
+    "filter_files_for_organization keeps minimum modified timestamp member of supplied duplicate groups, then adds files whose paths are absent from groups. Skipped duplicates remain at source, not deleted. Supplied group members not cross-validated against input set; singleton group members are excluded from nonduplicates but not selected by process_duplicate_groups. Static only.",
+    "Unique naming checks exists on original spelling before lowercase extension transformation, then ordinary rename; no atomic no-replace reservation. Case-sensitive filesystem/lowercase collision and concurrent destination creation remain unexecuted hypotheses.",
+    "File move uses rename only; no cross-device fallback. Per-file errors collected while loop continues; public OrganizeResult.success reflects errors, but internal result stored as Some(Ok(moved_files)) even with errors. Undo record failure only logged, not added to OrganizeResult.errors. Static source findings.",
+    "is_organizing is initializedfalse and cleared on finalize but never settrue in reviewed organizer production implementation; is_complete alone is not evidence of active batch completion. No concurrent batch runtime control performed.",
+    "Original tests cover naming, date/type folders, duplicate skip/rename, progress counts, undo/redo and record suppression, but were read rather than executed. Date/type fixtures use synthetic contents and supplied timestamps/classification. Movement controls do not qualify UndoManager.",
+    "Settings keep_original_structure and preserve_metadata also not consulted in this organizer implementation. Rename generally retains same-filesystem object metadata; absence of explicit field handling is not a claim that rename destroys metadata."
+  ],
+  "test_counts": {
+    "new_authored_controls_passed": 3,
+    "new_original_tests_run": 0,
+    "prior_distinct_original_module_tests_passed": 84,
+    "prior_original_module_failures": 1
+  },
+  "harness_repair": "Initial authored extraction missed original tracing::error import; compile failed before tests. Added import only, retained initial failure log, then3 controls passed. No upstream source defect claimed from harness failure.",
+  "remaining_scope": "55 tracked artifacts remain; global full-review count205/500 unchanged. Native pHash/ASAN deferred.",
+  "limits": [
+    "No full workspace, organizer original tests, undo history, TUI actions, Linux/Windows or cross-device qualification. No production code copied or changed."
+  ]
+}
