@@ -1,0 +1,104 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_data_sources/test_io.py": {
+      "sha256": "8b4fcd5291fde07ac2f9ab8256cf57d1f8855cc3490d0b8a087d5e7b1d9e1aa9",
+      "git_blob": "f64bd6df613aa4a83dd367eb9b5ac0c75e3b5dbe",
+      "lines": 321
+    },
+    ".gitignore": {
+      "sha256": "adfddae32878d5522b2e4a3a4507913d771755670ddfa07e2ffe249cc6703f56",
+      "git_blob": "6d59198536261727b2840c9c0d93cd6a29e3a1f6",
+      "lines": 153
+    },
+    "config.toml": {
+      "sha256": "282eb67b86e9ace0749424f921991970be85df2f342c35842430253c0d3ba005",
+      "git_blob": "031c35e095dba177c9e369f4e7543f6a6ce56961",
+      "lines": 24
+    },
+    "configs/bloom_filter.toml": {
+      "sha256": "e75f5621459b801b73a1ff7798922b2f0ae42e3e2cb449a1d1de30026a5e0e5a",
+      "git_blob": "a2476c2be33c8ad27ff883a4afc8cc03cdf1f2bf",
+      "lines": 26
+    },
+    "configs/minhash.toml": {
+      "sha256": "21a6ad33bef32de30d074eabc600909e03157a0c2e65b4a1a4b89e0ef7ce2eef",
+      "git_blob": "be146446c890d3447887562e5317d9035af7ff44",
+      "lines": 31
+    },
+    "configs/simhash.toml": {
+      "sha256": "216c0d2facafdc457be5002e32efcef8650c88bcb72bac479610334142885983",
+      "git_blob": "dd76171b7473b33cf33af5eb755a3da3b539e54c",
+      "lines": 31
+    },
+    "configs/suffix_array.toml": {
+      "sha256": "c3d1e0cc37ae434d6d8b72e6298860fcb8be52b91c2780915acab2ce771bb4e3",
+      "git_blob": "af1e447633fbb8ce8ff07b19c080ed448b89eecd",
+      "lines": 24
+    }
+  },
+  "cumulative_whole_files_read": 66,
+  "tracked_blobs": 75,
+  "method": "Seven whole pinned files read; TOML configs parsed, IO test method names inventoried with AST. No actual dataset integration or full upstream test execution.",
+  "findings": [
+    "IO tests use unittest Mock specs for Config/AlgorithmConfig/LocalInput/Output/Dataset. They exercise argument forwarding, indexing lambda, invalid returned type, column-removal flags and cluster pickle content. This is not actual dataset serialization roundtrip.",
+    "No reviewed test injects loader OSError or save_to_disk failure after clusters.pickle write; prior progress-state leak/partial-output controls cover omitted failure paths. No LocalHFDataset branch test seen in this file.",
+    "Pathlib-path test actually assigns temporary directory string, so its name does not establish Path-valued config support. Pickle-protocol comment only checks loaded content, not protocol bytes.",
+    "MinHash,SimHash andBloom example configs all set skip_filtering true and retain annotations/clusters; successful example execution alone would not prove record-removal behavior. Suffix example lacks skip_filtering override.",
+    "Default config.toml selects suffix_array with clean_cache true and fixed external repo/cache/output paths. No default runner execution performed.",
+    "Bloom example saves clusters although reviewed main passes empty mapping; retained duplicate marker, rather than actual grouping, is the information-bearing output.",
+    "gitignore excludes generated output,data,caches and environments. Ignored artifacts do not supply execution evidence or change algorithm semantics."
+  ],
+  "test_methods_inventoried": [
+    "test_invalid_dataset_type_error_with_different_types",
+    "test_load_dataset_success",
+    "test_load_dataset_invalid_type",
+    "test_load_dataset_with_custom_internal_index_column",
+    "test_save_dataset_basic",
+    "test_save_dataset_with_clusters_save",
+    "test_save_dataset_clusters_without_index_column",
+    "test_save_dataset_clusters_save_forces_cluster_column_kept",
+    "test_save_dataset_keep_index_column",
+    "test_save_dataset_keep_cluster_column",
+    "test_save_dataset_keep_both_columns",
+    "test_save_dataset_no_columns_to_remove",
+    "test_save_dataset_with_custom_column_names",
+    "test_save_dataset_with_kwargs",
+    "test_save_dataset_pathlib_path",
+    "test_save_dataset_empty_clusters"
+  ],
+  "parsed_configs": {
+    "config.toml": {
+      "algorithm": "suffix_array",
+      "skip_filtering": false,
+      "save_clusters": false
+    },
+    "configs/bloom_filter.toml": {
+      "algorithm": "bloom_filter",
+      "skip_filtering": true,
+      "save_clusters": true
+    },
+    "configs/minhash.toml": {
+      "algorithm": "minhash",
+      "skip_filtering": true,
+      "save_clusters": true
+    },
+    "configs/simhash.toml": {
+      "algorithm": "simhash",
+      "skip_filtering": true,
+      "save_clusters": true
+    },
+    "configs/suffix_array.toml": {
+      "algorithm": "suffix_array",
+      "skip_filtering": false,
+      "save_clusters": false
+    }
+  },
+  "limits": [
+    "66/75 tracked blobs reviewed;152/500 complete repositories.",
+    "Remaining9blob files include large report,3test files,README,banner,report entrypoint,benchmark utility tests and lockfile; external submodule still unread.",
+    "No full upstream pytest/config instantiation/production changes. pHash/ASAN deferred."
+  ]
+}
