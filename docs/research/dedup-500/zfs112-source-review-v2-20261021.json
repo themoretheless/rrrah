@@ -1,0 +1,41 @@
+{
+  "repository": "Mic92/zfs-dedup",
+  "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
+  "whole_repo_complete": false,
+  "tracked_blobs": 23,
+  "cumulative_assessed_blobs": 9,
+  "files": {
+    "src/hasher.rs": {
+      "bytes": 11294,
+      "sha256": "da744f63e6a5b199489b2419b4e3dbd8e1e41984b77e6f6819a9c1860e58de21",
+      "git_blob": "084378a4a2deb3d40e480f5bc3c59efafae18e3a",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/cache.rs": {
+      "bytes": 10451,
+      "sha256": "b481fd8b1f59d36790acfb45ce78959b66d8ee6b18a3405e26a23f2fdb972a8c",
+      "git_blob": "c63cb52ed0ae19ed9a6933e551d7c04efe3b1102",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/dedup.rs": {
+      "bytes": 22185,
+      "sha256": "4270a2188f05fe58a6cdc7df9e8e305892aebe818cf634a5eabd0c1e2e6558e0",
+      "git_blob": "f9dba053123264d15e9f810826e6c9e0bf2ef7ad",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 0,
+  "findings": [
+    "Cache key(fsid,inode),entrysize/mtime_ns/ctime_ns/blksz/hashvector;matchesallfourfields. Decoder validates44byteheaderand16bytehashalignment,not hashcount consistency or content checksum. Stale/malformed-semantic cache constrained by downstream byte verification;no corruptionruntimecontrol.",
+    "Hasher opensNOFOLLOW|NONBLOCK and fstats cachemiss regularfile;cachehit lstats and matches stamps. No post-hash fstat check before persisting miss;mixed-generationhashes possible as source risk,but dedup verifies currentbytes,so no automaticdatacorruptionclaim.",
+    "ZERO_HASH skips all-zero chunks;chunks useXXH3-128noncrypto. Candidateindex first truncated64bit/Bloom then full128bit+blocksize;drop singleton falsepositives. Original dup_key_collision test read,notexecuted.",
+    "Dedup coalesces contiguoussource/dest chunks,cap16MiB. Workeropenssavedpaths withNOFOLLOW/NONBLOCK. Actualverification compare path reads bothranges and memcmp before fallbackclone;atomic path usesdedupeioctl statusandactualbytes. No syscall path run.",
+    "Hashed keepsfsid/inode/size/blksz butnotstamps;Worker.open doesnotfstat identity or regular-file afteropen,unlike hashercachemiss. Bytecompare safety still separate from file identity contract. Staticonly.",
+    "Missing/shrunk andbusyerrors counted/skippedseparately;permissionEACCES isrealerror;EPERM treatedbusy. No false all-complete claim derived here.",
+    "Original tests source covercache roundtrip/malformedlength/stamps/pruning/compaction,hashchunks/zero/symlink/alignment,collisionprefilter/blocksize/EOF/read-only source. Only2Bloomtests previouslyexecuted."
+  ],
+  "remaining_scope": "14artifacts includingwalk/main/remount,benches/example,Nix/config andlockfiles.",
+  "limits": [
+    "No newruntimeexecutionthisincrement,no LinuxZFSorperformancequalification. NativepHash/ASANdeferred;globalfullcount204/500unchanged."
+  ]
+}
