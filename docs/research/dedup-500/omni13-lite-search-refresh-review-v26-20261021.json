@@ -1,0 +1,46 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "new_read_line_ranges": [
+        [
+          2951,
+          3640
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          3640
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "690 additional contiguous source lines whole read, static crossfile state/callgraph analysis. No runtimecontrols added for source-only batch.",
+  "findings": [
+    "Refreshfound: search_raw_with_fts_inner reloads RAMfileindex onlywhen self.was_indexingtrue and currentatomicfalse, then storescurrentstate. It detectsobservedtransition, notgenerationchange. Crawl entirelybetweenqueries false\u2192false ismissed; watcherupdates do nottoggleIS_INDEXING(v18). Static stale-cache mechanism, actualWindows engineunexecuted.",
+    "Normalrun skip/forceguard differences(v18) compoundflagprovenance: forcedindex bypassesnormalflag, so this refreshmechanism cannotobserve it. Otherrefreshcalls laterfile/main pending; notclaim onlymechanism globally.",
+    "search_history_only selects sourceLIKEhistory; browserupsert(v19) preservesbookmarksource forURLoncebookmarked. AvisitedbookmarkedURL mayappearonlybookmarks, nothistory. This is modelcategorycollapse, not actualfileloss or duplicatecontent proof.",
+    "Historycandidate100 beforeRustscoring, SQLsubstringprefilter andUnicodeLIKElimits remain. Bookmarks sorts scoreaftercandidate100, history keepsrecency SQLorder whileassigningscores; callerfinalsort laterpending.",
+    "search_commits_only andsearch_todos_only returnemptyVec stubs. UIemptyfolderlabels alone not capability; outerempty_scope_result canmakeinformationalresult.",
+    "Outer search_with_fts filters rawresults throughleanallowed and pluginsettings afterretrieval, without refill inthiswrapper. Candidatescan beexcludedafterbudgetcut; exact laterrawbranches stillunread.",
+    "leanallowlist lacksMEMORY andPROJECT sources inearlierreadhelper; many memory/projectrawresults canbefilteredout. This is deliberatecuratedscope percomments, not automaticdefect. Commentsmentioncommits whileimplementationstub, so actualavailability mustqualify.",
+    "Fastsearch path ignores top_kdirectly exceptcandidate_limit floor2000/max5000; dedupe byids/launchkeys then truncatecandidate_k. UIexpectedtop_k finalcap needslatercallerreview.",
+    "Appsids builtfromappname; twoAppsFolderentries withsamename cancollapse byseen_ids evenwhendifferentlaunchpaths. Staticidentitychoice, no realcatalogrun.",
+    "Rawsystemactions return descriptors only; reading those strings doesnotexecute volume/mute/registry/media operations. No suchactions performed."
+  ],
+  "limits": [
+    "81/268 wholefiles; search.rs1-3640 of10272 partial. Fullrepo/all500/runtimegoal incomplete.",
+    "No Windowsengine/indexer/watchers or userbrowser/clipboard/catalog/DB operations; staticevidence only.",
+    "No productionchanges or performanceclaim. Native pHash/ASAN remains deferred."
+  ]
+}
