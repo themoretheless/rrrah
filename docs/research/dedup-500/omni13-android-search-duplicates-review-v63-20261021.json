@@ -1,0 +1,42 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/MainScreen.kt": {
+      "sha256": "48937f7ae736de3e3117c3fd2264d61137762f089ee330cbb95cab0fa2b110ae",
+      "git_blob": "4c80427cf63fb4e5547fb3f815f9ad0bae716929",
+      "mode": "100644",
+      "lines": 453
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/SearchScreen.kt": {
+      "sha256": "c7967daead4c589a4a2b248f6ccb226444b176642c7e60cdcf23ae86d409c2c0",
+      "git_blob": "81e4fe7257cc2bc1f9f85a23673f43a43e5d221d",
+      "mode": "100644",
+      "lines": 1689
+    }
+  },
+  "cumulative_whole_files_read": 95,
+  "tracked_blobs": 268,
+  "method": "Both complete pinned Kotlin files read in bounded, untruncated chunks (2142 lines). Cross-read confirmation handling in already reviewed SyncViewModel. Static Compose/flow review only.",
+  "findings": [
+    "DuplicateGroupItem delete icon immediately invokes deleteFileOnPC(path,recycleBin=true), with no confirmation in duplicate branch. Ordinary search result delete opens AlertDialog. Desktop implementation previously reviewed always uses recycle=true; wording Delete permanently in ordinary dialog conflicts with its own Recycle Bin explanation and actual request.",
+    "Duplicate dialog displays Run Scan only when groups empty; nonempty result branch has no rescan/clear command. Closing/reopening retains ViewModel groups. No per-delete busy disable or local group/member removal. Generic successful confirm only shows actionMessage, does not refresh search/duplicates. Repeated click can issue requests against already removed file; stale listing concern, no actual deletion performed.",
+    "Duplicate header uses fileCount while enumerating only group.files, without truncation disclosure here. Desktop previously caps visible members80 and groups200. Header can claim more copies than listed; no complete-corpus coverage promise justified by UI.",
+    "Duplicate help says all mapped NTFS drives and above50MB; actual native scanner scope/caps from previous audits govern. UI does not prove all drives, scan completeness, or stated under3s/million-files performance.",
+    "Search dispatches on every edit/filter with no debounce or per-request generation. Blank query main content shows volumes, so late search response after clearing is hidden there; nonempty query/filter changes remain able to display older responses. Narrowing v62: cleared-query late result is not automatically visible in results branch.",
+    "Load More adds100 indefinitely locally but desktop clamps requested limit to1000. At1000 rows, next click requests1100 and receives at most1000; currentSearchLimit1100 hides button. No cursor or total match count is shown, so remaining results inaccessible through this control.",
+    "Preview rendering and save action only require fileContent!=null, not fileContent.path==previewFile.path. Shared ViewModel requests (including compact image fetch/pinning) can receive out of order. Save names bytes using current selected file.name. Compact action-sheet image and result thumbnails do check path, narrowing affected branches.",
+    "Compact sheet decodes full image bitmap on composition without bounds sampling; result-row thumbnail branch does decode bounds/sample toward80px, so not all thumbnails full-size. Video preview Base64 decode and cache-file write also occur in remember on composition. No frame/memory measurement.",
+    "Video preview uses AndroidView factory without update/onRelease; attach listener removes Handler callbacks on detach, but source here has no stopPlayback/release or temp-file cleanup. Do not claim playback persists/leaks definitively without Android lifecycle run.",
+    "formatSize units end atTB but index derived from log1024 is not clamped. Sizes >=1024^5 would index beyond units; nonpositive handled. No unchanged Kotlin control executed because kotlinc absent; static boundary finding only.",
+    "MainScreen gates Search/Pinned/Settings/Explorer/Themes and transfer cards with !isLocked, then overlays AppLockScreen. This resolves earlier unread UI gating in v61; does not establish bypass. Entry share/background ViewModel work is separate and remains subject to intended lock policy.",
+    "MainScreen lifecycle locks after remembered ON_STOP then ON_RESUME; source review is not device lifecycle proof. Transfer dismiss effects run independently of lock and use outgoing name/status rather than transfer ID; zero-size Completed/Downloaded progress computes0percent. Drag offsets are unbounded and retained across transfer changes, potentially leaving later card off-screen."
+  ],
+  "limits": [
+    "95/268 complete files; repository013 not complete.",
+    "No Android build, Compose UI, device tests, live requests, delete, playback, or user-file access executed. kotlinc unavailable; no Kotlin runtime result claimed.",
+    "No rrrah production edits; previous284 passed/2 ignored full no-default run unchanged.",
+    "155/500 full repository count unchanged. pHash/ASAN remains deferred."
+  ]
+}
