@@ -1,0 +1,38 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/e2e/fixtures/real-scan-sample.json": {
+      "sha256": "95354426ecf0a5a0c224a6803640c57220766dd958d10cf47b2a632505d41b86",
+      "git_blob": "29294f803751473fa3816067144beff2904d561b",
+      "bytes": 7500,
+      "lines": 179,
+      "method": "Whole JSON read and every group/member/reference validated locally."
+    }
+  },
+  "cumulative_whole_files_read": 80,
+  "tracked_blobs": 84,
+  "executed_controls": {
+    "groups": 5,
+    "media_records": 10,
+    "all_references_resolve": true,
+    "no_cross_group_membership": true,
+    "originals_are_group_members": true,
+    "distinct_dedup_keys": 10,
+    "group_pair_timestamp_equal": 4
+  },
+  "findings": [
+    "Fixture claims historical live capture; capture provenance is upstream description, not independently authenticated runtime evidence.",
+    "Five disjoint two-member groups reference exactly ten records; every original belongs to its group and each record key equals mediaKey. All ten dedupKeys distinct.",
+    "All group similarities equal configured threshold .9, consistent with source assigning threshold rather than measured pair score. No embeddings or original bytes supplied to verify matches.",
+    "Four of five pairs have equal taken timestamp. One pair differs in taken time; this illustrates full-mode output shapes, not image equality proof.",
+    "fileName fields are null and isOriginalQuality absent in every record. Current types/defaults and UI fallback compatibility need runtime checks, not inferred from successful JSON parsing.",
+    "Sample is a shape/reference fixture, lacking scanResults envelope, totalItems and scanDate required by application persistence loader. Directly storing whole sample would not follow actual storage schema."
+  ],
+  "limits": [
+    "No embedded remote thumbnail/product URLs fetched; no account/session accessed.",
+    "No image truth labels, complete library corpus, model version or exhaustive scan guarantee.",
+    "80/84 parent blobs reviewed; four remaining blobs and external demo outstanding."
+  ]
+}

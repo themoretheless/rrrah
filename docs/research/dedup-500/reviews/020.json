@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file/artifact review: 79/84 unique tracked blobs. Viewer tests fully read; actual component assertions distinguished from mocked image identity/lifecycle. Five blobs and external demo outstanding.",
+  "review_scope": "Partial whole-file/artifact review: 80/84 tracked blobs. Historical JSON sample fully read and ten member references validated; sample is not duplicate truth ground truth or runtime proof. Four blobs/external demo outstanding.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -213,6 +213,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-viewer-tests-review-v37-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-captured-sample-review-v38-20261021.json"
     }
   ]
 }
