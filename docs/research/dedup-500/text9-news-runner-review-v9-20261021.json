@@ -1,0 +1,86 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "benchmarks/benchmark_news.py": {
+      "sha256": "9dce501fc84f759756ef1ba57cfc23c99f5faf20b0aaac66d429361ccf636331",
+      "git_blob": "ce9d58d2fada7a822f18362303b9bfb03857134c",
+      "lines": 189
+    },
+    "benchmarks/run_benchmark.py": {
+      "sha256": "3b5f6b55bc1ca1efc966680fcb4b9846492656733f31589b73acc95f1efc6e69",
+      "git_blob": "629c2787ef8da2d707584407020c12e9fa3d416a",
+      "lines": 134
+    },
+    "benchmarks/README.md": {
+      "sha256": "87819f3b8b349748c077b896cdc1d1bb31ec22c797e1a97fe21c3e48748f3073",
+      "git_blob": "99ed5162a775fc4f5d1b95fe2018d1835b6b66c1",
+      "lines": 118
+    },
+    "benchmarks/QUICKSTART.md": {
+      "sha256": "3438d77f129f2a7d493b5b2809dad3b3241c6d1f96fde17228c87fb4614459c0",
+      "git_blob": "a57bcf229f7d829ba83e50a15733f6074a1dd615",
+      "lines": 155
+    },
+    "configs/benchmark_core_minhash.toml": {
+      "sha256": "4b62770abec7c898da80ec6a48bec98573f36b93a0aaa7c619b9a5fc622817aa",
+      "git_blob": "6ed63fd83f1757ec1b20a6f5211dd424bd5886a6",
+      "lines": 30
+    },
+    "configs/benchmark_core_simhash.toml": {
+      "sha256": "8b8bf90e0a79d1482b807932af2dc56f755d0b43e47fd5434e0c1fb84568ef84",
+      "git_blob": "ff69e062259eb8945c27bdeae997e9e0397d3dc9",
+      "lines": 28
+    },
+    "configs/benchmark_news_minhash.toml": {
+      "sha256": "5fbacd9090efb18d6190854545c6978f439a1e0cb90d2e1b0322705c75c9b5c2",
+      "git_blob": "a174f6095529690655cf0f492a48e832ef7e994b",
+      "lines": 29
+    },
+    "configs/benchmark_news_simhash.toml": {
+      "sha256": "0c89b7cd77a750148a005a0e7aca08bbb45b4d396da0c930e4504f18b03873e5",
+      "git_blob": "9bbdbcaf6f8103613db711ae9e638fc503aba6a5",
+      "lines": 29
+    }
+  },
+  "cumulative_whole_files_read": 40,
+  "tracked_blobs": 75,
+  "method": "Eight complete pinned files read and verified. Four TOML files parsed with stdlib; no remote dataset download or benchmark execution.",
+  "findings": [
+    "NEWS evaluator aligns mapping by integer index and treats omitted IDs as singleton; it calls sklearn adjusted_rand_score. It evaluates clusters.pickle, not actual saved dataset or retained-record flags.",
+    "NEWS SimHash config explicitly enables Jaccard verification at0.45; reviewed stale __duplicate__ bug is on that execution path. Cluster mapping can show singleton/rejected candidates while actual filtering drops them, so cluster-only evaluation does not prove output retention. This is source-path composition, not full dataset reproduction.",
+    "Other3benchmark configs disable check_false_positive; all4use min_length0 and save_clusters true. CORE MinHash sets50bands*4rows=200permutations. All benchmarks use6processes.",
+    "Runner builds lowercase joined CORE title/abstract and applies lossy NEWS-COPY preprocessing to article before labels. Labels are prepared before algorithm filtering; internal row-position ID preservation matters.",
+    "NEWS wrapper uses datasets disable_progress_bars but huggingface_hub enable_progress_bars, unlike CORE wrapper using same datasets pair. Actual library state interaction unexecuted.",
+    "Docs describe MacroF1 as harmonic precision/recall although reviewed CORE implementation averages precisions. README expected scores are upstream claims, not reproduced acceptance measurements.",
+    "README multiple-dataset example passes core news to a single-string dataset option; main accepts only core/news/all. Quickstart example accesses timer.timings while reviewed Timer exposes elapsed_times. Documentation snippets are not executed instructions.",
+    "Runner config checks are relative to current working directory. Temporary dataset output/config mutation and cleanup share prior CORE failure/lifecycle limits; no run isolation or output content cross-check shown."
+  ],
+  "parsed_config_checks": {
+    "configs/benchmark_core_minhash.toml": {
+      "check_false_positive": false,
+      "save_clusters": true,
+      "min_length": 0
+    },
+    "configs/benchmark_core_simhash.toml": {
+      "check_false_positive": false,
+      "save_clusters": true,
+      "min_length": 0
+    },
+    "configs/benchmark_news_minhash.toml": {
+      "check_false_positive": false,
+      "save_clusters": true,
+      "min_length": 0
+    },
+    "configs/benchmark_news_simhash.toml": {
+      "check_false_positive": true,
+      "save_clusters": true,
+      "min_length": 0
+    }
+  },
+  "limits": [
+    "40/75 tracked blobs reviewed;152/500 complete repositories.",
+    "No external datasets, sklearn ARI runtime, full benchmark or production change. pHash/ASAN deferred."
+  ]
+}
