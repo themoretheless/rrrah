@@ -1,0 +1,52 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/database.h": {
+      "sha256": "d969f189b0727a4cbe1095e11f3bd4690672ff12162ceba3ca2caee3aa965196",
+      "git_blob": "25c09f18b472c63675a7ab415c0fc08a5f6119bd",
+      "bytes": 10465,
+      "lines": 313,
+      "method": "Whole pinned header read."
+    },
+    "src/qtutil.h": {
+      "sha256": "2566a3dd5413a53c4311f5c5775613659703d052426646eb3637263ceab6db84",
+      "git_blob": "c7033f96e410e542b9fe2133be61c6bf19d2b955",
+      "bytes": 9319,
+      "lines": 258,
+      "method": "Whole pinned header read."
+    }
+  },
+  "partial_source_files": {
+    "src/qtutil.cpp": {
+      "sha256": "431c50b3d9d012868c9e29866e87e6d91587f5bd282ec5b56917cf1a1b365820",
+      "git_blob": "47a0bcc2113aa2ef4d0c149f0f36221ad32432e8",
+      "bytes": 61641,
+      "lines": 1891,
+      "read_ranges_inclusive": [
+        [
+          920,
+          980
+        ]
+      ],
+      "method": "Targeted DBHelper implementation and adjacent code read; rest incomplete, not counted whole."
+    }
+  },
+  "cumulative_assessed_blobs": 44,
+  "tracked_blobs": 616,
+  "findings": [
+    "DBHelper::isCacheFileStale is only !cacheExists || databaseFileMtime>cacheMtime. Equal timestamps are accepted. There is no digest, generation, schema/algorithm settings or multi-component cache identity in this condition. This resolves prior staleness-helper uncertainty without validating runtime freshness.",
+    "lastModified reads only db.databaseName file mtime; missing database uses QDateTime from maximum seconds as intended sentinel. Qt date validity at that extreme, WAL sidecar handling, timestamp granularity and restored timestamps untested. No claim of actual stale production cache reproduced.",
+    "Database header describes add as all-or-nothing via transactions; full implementation already reviewed uses multiple databases/external video files and unchecked main transaction/commit returns. Header promise is broader than cross-store atomicity evidence.",
+    "Header identifies cachePath as disposable cache and videoPath as index data, separate from media databases. Cache recovery is not equivalent to reconstructing video descriptors without original decode; no cache cleanup performed.",
+    "Database connection API documents per-thread ownership and external lock file for writes. It does not itself establish all caller locking, cross-process cache concurrency or crash durability. Source references only.",
+    "Qt utility header contains desktop/program launching/trash declarations as external research data; none invoked. ProgressLogger final100percent display contract is presentation metadata, not verification of complete successful scan."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "44/616 tracked artifacts assessed:43whole text/source and1PNGvisual. qtutil.cpp only920-980read, not counted complete.",
+    "Twenty-four previous original-body/header controls plus one independent key counterexample; no new test run or native Qt/SQL/WAL qualification.",
+    "No production changes or optimization claim; deferred native pHash/ASAN skipped."
+  ]
+}
