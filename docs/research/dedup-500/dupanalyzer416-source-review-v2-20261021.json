@@ -1,0 +1,87 @@
+{
+  "repository": "Paulogb98/DupFile-Analyzer",
+  "commit": "6493e51481e5c495969ef1cf8b9a27d5e614ebf3",
+  "whole_repo_complete": false,
+  "tracked_blobs": 18,
+  "cumulative_assessed_blobs": 18,
+  "files": {
+    ".gitignore": {
+      "bytes": 8,
+      "sha256": "44c92e3a70ad3307b7056871c2bdb096d8bfa9373f5bf06a79bb6324a20ff2fb",
+      "git_blob": "ea8c4bf7f35f6f77f75d92ad8ce8349f6e81ddba",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "Cargo.lock": {
+      "bytes": 38895,
+      "sha256": "baf4b1fa1c3998932dfb717d8088708dfc8bd1fc53f9f40478bab967cf3be8f7",
+      "git_blob": "363fe17ca88e3666a15976f604da8df889b55df5",
+      "method": "Full TOML structural parse:168packages167registrychecksums;not dependency source review"
+    },
+    "README.md": {
+      "bytes": 13631,
+      "sha256": "3a0505da17ab76d7285b012953d06397fbf73291f08c148af470d52406231925",
+      "git_blob": "97d1195921f748e6401b4fa71e09ed063d11a726",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/app.rs": {
+      "bytes": 8591,
+      "sha256": "4d05883948e7494200112ecb00ce9f6633bfa583837dcdf303e86ee0fb15c5f2",
+      "git_blob": "bf1221e97a2311618f2538c3f2cce77209cc1e4d",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/error.rs": {
+      "bytes": 831,
+      "sha256": "651af145b69da3641e3539400c6b57ca3a330164f4a1aaa49e8ed81a70e79fbc",
+      "git_blob": "f74202f102e5800c606497c0240be3d1137a798e",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/export.rs": {
+      "bytes": 3016,
+      "sha256": "ba38a520effdc29b11abb1508f4e7774533c85e2763ef477aead3900f9f9ff8f",
+      "git_blob": "64a62c62bedd37d0fdb0d7afc77ac35078c6ec9b",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/hashing/perceptual.rs": {
+      "bytes": 4336,
+      "sha256": "fb657df012e88596d5028a7b59de76ca5719a30612bb84c8eda73e6bb6a2170b",
+      "git_blob": "c2d8cd7ccf8614dbb2dab7efd71a82bbbf5454d9",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/lib.rs": {
+      "bytes": 575,
+      "sha256": "492db8506add5c3ebddf5b276bbe1cf312fb2686db731698e3cb536809658158",
+      "git_blob": "55aa0a5b05c1e0cd7385e5c0932a97d6117830c6",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/main.rs": {
+      "bytes": 63,
+      "sha256": "965316fdb0b1a1d5d07a7f8b15014a58d18cfe732f50f0591c489b4f6cbdbdd2",
+      "git_blob": "1a4e109b0fa2f38128e4bac67432607135f718c9",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    },
+    "src/report.rs": {
+      "bytes": 2854,
+      "sha256": "8dbcb27d94a6c652c933714f239d5353dc071a7f221d49afe24b0b8ca8ed4be5",
+      "git_blob": "7facfe765e0256cfcb2d11749b8b60e5aa24f1a2",
+      "method": "Whole original pinned text read without truncation;Git blob verified"
+    }
+  },
+  "upstream_tests": "Original cargo+1.98.1test --locked:4integrationtests pass,0fail0ignored;lib/bin/doc targets0tests. External copy avoids parent workspace;isolated target directory.",
+  "upstream_log": "docs/research/dedup-500/dupanalyzer416-upstream-tests-20261021.log",
+  "new_runtime_controls": 3,
+  "controls_script": "docs/research/dedup-500/dupanalyzer416-controls-v2-20261021/run.rs",
+  "controls_log": "docs/research/dedup-500/dupanalyzer416-controls-v2-20261021/run.log",
+  "control_scope": "Authored Rust executable linked to unchanged original compiled library;real own temporary filesystem. Third case supplies authored ScanResults.errors to original exporter.",
+  "findings": [
+    "Original scanner groups a hardlinked pair plus independent copy as3duplicates,report8bytes reclaimable where only4logical duplicate bytes correspond to independent copy. No allocated-block assertion.",
+    "Original scanner with follow_symlinksfalse includes relative file symlink targetreal(4byte name) with4byte content and groups both paths. This is actual runtime policy discrepancy,not symlink-directory behavior.",
+    "JSON exporter drops explicit authored error string/list;all export formats source omit errors. OnlyJSON runtimechecked.",
+    "App filters multiplyKB by1024 without checked arithmetic;debug overflow/releasewrap source-only,notinteractive runtimechecked. Interactive config/default keeper and confirmation read,notlaunched.",
+    "Perceptual source usestriangle grayscale resize,aHashmean,dHashleft>right,DCTmedian excludesDCbut emitsDCbit. No numerical/qualityqualification;nativepHashASANdeferred.",
+    "README zero-false-positive/absoluteaccuracy/exactdiskclaim exceeds tested hash-only/alias model. Rust1.75 requirement nottested;testuses neweris_multiple_of.",
+    "Export paths use display() lossy fornonUTF8;CSV quotescomma/quote/LFbutnotstandaloneCR. Source-only,noextra reproductions."
+  ],
+  "limits": [
+    "No production adoption,interactiveactionsmutationtest,crossplatform/oldRustorbenchmarkqualification."
+  ]
+}
