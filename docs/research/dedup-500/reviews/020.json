@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "All 84/84 parent blobs assessed; WebP all287 frames viewed. Linked33-second YouTube demo opened and playback reached end; sampled scenes match WebP, remaining video intervals not fully visually inspected. Full-review flag unset.",
+  "review_scope": "Complete parent repository source/artifact assessment: all84 blobs reconciled; first-party source/tests/docs read, lock records structurally assessed, images viewed, generated worker reproduced byte-identically. WebP287frames viewed; YouTube scene/timeline overview only. Nested submodule/dependency semantic audit and full runtime qualification excluded explicitly.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -238,5 +238,7 @@
     {
       "audit": "docs/research/dedup-500/photos20-youtube-initial-review-v45-20261021.json"
     }
-  ]
+  ],
+  "complete_source_review": "docs/research/dedup-500/photos20-complete-source-review-20261021.json",
+  "full_repository_read": true
 }

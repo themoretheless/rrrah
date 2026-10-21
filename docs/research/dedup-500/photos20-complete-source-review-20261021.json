@@ -1,0 +1,898 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": true,
+  "completion_scope": "Parent repository source and artifact assessment, with explicit third-party/runtime/visual sampling limits; not end-to-end product qualification.",
+  "tracked_blobs": 84,
+  "assessed_blobs": 84,
+  "missing": [],
+  "file_assessments": {
+    "package.json": {
+      "sha256": "e86faa6ce170d9bf654ad6a792a25ecd543d670ce03c5318651edc8f6ad2e2c4",
+      "git_blob": "4821a56f24b111c219b6524c2abbe0c7e40e4140",
+      "bytes": 3669,
+      "lines": 95,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/photo-url.ts": {
+      "sha256": "ca626f530b16cc2409d4fe4a98e8b1e0c54558fcc8ce8fe3554080534fe54709",
+      "git_blob": "a91b6add1f4f052ff2b6d0b871968701797ed0b2",
+      "bytes": 623,
+      "lines": 14,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/scan-results.ts": {
+      "sha256": "5105d3df380ff5a30a7c43c421b78d7af500f3094d7a5b0c7ad9472b5303bf60",
+      "git_blob": "8b342b028fd7e9d457e7510225552fd6387a9a26",
+      "bytes": 551,
+      "lines": 14,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/types.ts": {
+      "sha256": "504d7ea7ab5e232ad50d3c3762cc7e3ebe4156347bd9f3a2484f36bee6b9cfc0",
+      "git_blob": "a59c59290a9fa493b27ffb39ad5ed143296e09bd",
+      "bytes": 6719,
+      "lines": 239,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/embedding-cache.ts": {
+      "sha256": "fa724f48031db55ad3e4ed978be0bdba528136ab8df05a38132fa444bb05e3c5",
+      "git_blob": "e7cbccec5085026416c1ebe9fa91ee4efd122b03",
+      "bytes": 3509,
+      "lines": 108,
+      "method": "Whole UTF-8 source read."
+    },
+    "lib/duplicate-detector.ts": {
+      "sha256": "1209669763b81683a7940e101edef895908c80c77729f0605a63540818b86d94",
+      "git_blob": "19c519cf80d31aa66124711ef7c40554ac28cbd8",
+      "bytes": 36596,
+      "lines": 1163,
+      "method": "Whole source read in contiguous ranges 1-220,221-440,441-800,801-1163."
+    },
+    "workers/embedder.worker.ts": {
+      "sha256": "57944449ac21e8bdcb021f159d79b851e424ef1072aad9b1ca3604e3a75c050f",
+      "git_blob": "9e68ca95addd7972a689af6c92fa106749db0e24",
+      "bytes": 10153,
+      "lines": 307,
+      "method": "Whole source read, including message handler and all helpers."
+    },
+    "tests/lib/duplicate-detector.test.ts": {
+      "sha256": "acecd8c64feeb86cae94b7eea204bff97d7ac788db2cefd7fed5fe5fe92ceab6",
+      "git_blob": "6390c42cb3e40de005a2547d7de6a1b5600fe4d6",
+      "bytes": 21850,
+      "lines": 573,
+      "method": "Complete source read in contiguous ranges 1-290 and 291-573."
+    },
+    "lib/app-reducer.ts": {
+      "sha256": "822f5a688cdd74bda597d891135bc7b20808eabdd1ae333b39ad82850f4ce3d9",
+      "git_blob": "9ee9dba58d1408b6253df442228837e4ce97b788",
+      "bytes": 7877,
+      "lines": 240,
+      "method": "Whole source read."
+    },
+    "tabs/app.tsx": {
+      "sha256": "9abf19ea4ca37b107c1d9932b79256894cd25a2fcd14340313754b78b037934b",
+      "git_blob": "918cbc7e9ad2acf65395ff1b83487e098cebb94e",
+      "bytes": 35910,
+      "lines": 994,
+      "method": "Whole source read in ranges 1-220,221-500,501-750,751-994."
+    },
+    "components/ScanConfig.tsx": {
+      "sha256": "0168188bc7ec5c07ebbcbcf2e09e910cfcb0c9cfaab3b68770b57534493794cb",
+      "git_blob": "6dc8db5151c4cc4e84a7d0a22d1f874bbc41fe64",
+      "bytes": 6295,
+      "lines": 168,
+      "method": "Whole source read."
+    },
+    "tests/components/scan-config.test.tsx": {
+      "sha256": "8077eaad91b25de989b5fe5e175a71cc01a2881d32f3f678c896602e6b0ded99",
+      "git_blob": "fd44e3e0c2e25604127409f17e3bcea795cb5bde",
+      "bytes": 3335,
+      "lines": 98,
+      "method": "Whole source read."
+    },
+    "components/DuplicateGroups.tsx": {
+      "sha256": "c813eaf87e40ebab30a1fc5e6b63c2d4783e74aeb35a2e428588570deeac6d51",
+      "git_blob": "a488af3e4c953c433f0b0d8bcda00e77aedfb137",
+      "bytes": 15528,
+      "lines": 451,
+      "method": "Whole source read; DuplicateGroups in contiguous 1-230 and 231-451 ranges."
+    },
+    "components/useBlobUrl.ts": {
+      "sha256": "556d956177bc70a2475dd2b659954091b8f7149d137c117d154cf38de784fb4e",
+      "git_blob": "397345375b7181d998cbfc3e7c63351d0e525242",
+      "bytes": 1245,
+      "lines": 47,
+      "method": "Whole source read; DuplicateGroups in contiguous 1-230 and 231-451 ranges."
+    },
+    "lib/scan-log.ts": {
+      "sha256": "dbf63330fe8cf2e4d20b9fdcccb33ff79ab38559f9bf77a9c84b1d8644d49973",
+      "git_blob": "4592cea4378d5eda0d20f5bb010fbe412a0cd560",
+      "bytes": 8785,
+      "lines": 265,
+      "method": "Whole source read."
+    },
+    "components/ScanProgress.tsx": {
+      "sha256": "b54b8bbc6da1b2e47ddf3687e279a20ab7666b7d9b392da885fa4c6c247c8309",
+      "git_blob": "bced7054bb1e347184597217fafd933936b97afb",
+      "bytes": 4232,
+      "lines": 130,
+      "method": "Whole source read."
+    },
+    "tests/lib/scan-results.test.ts": {
+      "sha256": "d93582813fbe57664d0b26142de2af03e3404481f286004af8a61d6213d79c81",
+      "git_blob": "81155f8835b1506be03e336c27b99178e6474b5b",
+      "bytes": 1575,
+      "lines": 56,
+      "declared_it_calls": 5,
+      "method": "Whole source read; scan-log test ranges 1-210 and 211-301."
+    },
+    "tests/lib/scan-log.test.ts": {
+      "sha256": "64f8a5ebd2cb96ae02e32777ff92703897c37f30f00c1b23d9a76bc163cefee6",
+      "git_blob": "0e56f181270d7e57ae8e3b579a5eac45e72e6134",
+      "bytes": 10501,
+      "lines": 301,
+      "declared_it_calls": 16,
+      "method": "Whole source read; scan-log test ranges 1-210 and 211-301."
+    },
+    "tests/lib/multi-keep.test.ts": {
+      "sha256": "374013bbdbbdaf45922f97971c4dc0de8f42680d78513d311582f0f60b8463d4",
+      "git_blob": "838b098a4d8d68d3c653be6617129202e9b92fdd",
+      "bytes": 6829,
+      "lines": 191,
+      "declared_it_calls": 15,
+      "method": "Whole source read."
+    },
+    "tests/lib/embedding-cache.test.ts": {
+      "sha256": "ac8d389dfe48a45fb02fa82b0ff23d229f3bf4c74e54a60cdd0782da0e620fe0",
+      "git_blob": "a87b33eb9d3eecfef3639ead426805b9cd109519",
+      "bytes": 5408,
+      "lines": 153,
+      "method": "Whole source read."
+    },
+    "lib/debug.ts": {
+      "sha256": "a1f35b5d68f9a4013ff214fb6fdaa9a2805f33da23e374cf8904f9f84110fa41",
+      "git_blob": "a2acebebcb68d98c7afa690d216b1c9566fcb105",
+      "bytes": 874,
+      "lines": 29,
+      "method": "Whole source read."
+    },
+    "lib/theme.ts": {
+      "sha256": "aabd7a02e36b780c3e357739eb3020c3242c7e31459cb292fbc86dbddb4e58fe",
+      "git_blob": "0ef2b3e94e3bcf1c5105f7acc854b6a9587be5f4",
+      "bytes": 1079,
+      "lines": 60,
+      "method": "Whole source read."
+    },
+    "components/ActionBar.tsx": {
+      "sha256": "3d937aba3bdb149d4bb32b0c03ec06be1f9888a1107336ed60a583dd67a575ba",
+      "git_blob": "70fe05f6ee7698c39c081140e529a4d47e9237d9",
+      "bytes": 2847,
+      "lines": 92,
+      "method": "Whole source read."
+    },
+    "tests/components/duplicate-groups.test.tsx": {
+      "sha256": "e3387a6e4d5acfaa4ff703432df0f97a7b4f1be2cb75f83edd9231e4078041d4",
+      "git_blob": "4cda8ea11d1a7402cc06cfa50d854dcdd602b33d",
+      "bytes": 9836,
+      "lines": 283,
+      "declared_it_calls": 17,
+      "method": "Whole source read."
+    },
+    "tests/components/action-bar.test.tsx": {
+      "sha256": "b2eeb7b8b62ceb57fe586b9c4f504edf7b0c52fa4bf4312bbfc980cc1a0d45d3",
+      "git_blob": "10bece66c1dc858497b6f1e23eb8c84fac58d96f",
+      "bytes": 4921,
+      "lines": 140,
+      "declared_it_calls": 13,
+      "method": "Whole source read."
+    },
+    "components/PhotoViewerModal.tsx": {
+      "sha256": "f3b58d432e470f90987a5118fdd50b44e40cce400b445a7b93ebf15f2e1049af",
+      "git_blob": "dd04c052cbaf3d912c3d59bf720de2b439126708",
+      "bytes": 17116,
+      "lines": 518,
+      "method": "Whole source read in contiguous ranges 1-230 and 231-518."
+    },
+    "vitest.config.ts": {
+      "sha256": "df1f0dcbbe983d6794047dd66d0b54020a4f2f5e353d80cb0a61492327219fc5",
+      "git_blob": "33b0a83a00140fa3e19158a26c9d28aac74a274a",
+      "bytes": 546,
+      "lines": 23,
+      "method": "Whole configuration text read; not sourced."
+    },
+    "tests/setup.ts": {
+      "sha256": "bc69d48ecf7ffb5369f84f673eed369c63aecca66dd9d1f710e725d79a5f19a7",
+      "git_blob": "df6631eeb47444457a5a083eb00b9dfc770f9031",
+      "bytes": 35,
+      "lines": 1,
+      "method": "Whole configuration text read; not sourced."
+    },
+    "tsconfig.test.json": {
+      "sha256": "325dcb622458e488c5fe4d14521a32c4545497c71f3d02c576f8c57bcdc9d37f",
+      "git_blob": "4fd5045d7dcc0426a0fd3d9612d29a6bb3ccd89f",
+      "bytes": 86,
+      "lines": 6,
+      "method": "Whole configuration text read; not sourced."
+    },
+    "tsconfig.json": {
+      "sha256": "eafae9fd300dbaa9d55317ed53816b83feb326fa420aefa41c048c31fc79597d",
+      "git_blob": "d68bf3708e089bb165aad04860c4a3e0435323a8",
+      "bytes": 332,
+      "lines": 22,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".env.test": {
+      "sha256": "387c367f234e23c53bb65ff276c6424119ca2bee3208de3e561528c87baa86cb",
+      "git_blob": "254749a3b3d7c5d0ccb942cfffc900f0cdb2891e",
+      "bytes": 373,
+      "lines": 11,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".nvmrc": {
+      "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56",
+      "git_blob": "2bd5a0a98a36cc08ada88b804d3be047e6aa5b8a",
+      "bytes": 3,
+      "lines": 1,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".python-version": {
+      "sha256": "3ec15f7f82d24dbcd050ce11c3994d981499b029772da41c37a2cd0acce87f6e",
+      "git_blob": "bd28b9c5c27e0dfa60da94179ec9b23f2be8be0c",
+      "bytes": 4,
+      "lines": 1,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".pytest.ini": {
+      "sha256": "db0928fc2d03871e59ae0a033548b1a1a884d6306390b9602eddb49e94a9c958",
+      "git_blob": "7c143049e6c8205019dc7f96bbad979efdc5bd6c",
+      "bytes": 74,
+      "lines": 5,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".github/workflows/ci.yml": {
+      "sha256": "a130836f3bf7a5a0bb0adef668b0f6a8108519418b76b0896fd227ed05f99006",
+      "git_blob": "49c128b2fd8a66e85b8116aab09851b0681e9ca5",
+      "bytes": 4471,
+      "lines": 135,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".github/workflows/e2e.yml": {
+      "sha256": "93db129d69642c5f7f0f6a11c714199da3e5b60a90f5edf53a44fbd3b5a954de",
+      "git_blob": "0bdcdaa6791f44c073b2532452a8a88751755ba1",
+      "bytes": 1742,
+      "lines": 64,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".github/workflows/release.yml": {
+      "sha256": "e5fe61d219d40265159c121473c2381ad78ef6a50db85272990b7f0acdd14604",
+      "git_blob": "c2c5d6cc819613c327cfc5fe95b347e819854f5f",
+      "bytes": 1060,
+      "lines": 44,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".github/workflows/submit.yml": {
+      "sha256": "e24746ee85a264998da19984d3a55bab22973ce6ea2bebc78227da5eafded89a",
+      "git_blob": "6f6d549dcd475e71f43895dcd91c45216065d78b",
+      "bytes": 770,
+      "lines": 38,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".gitmodules": {
+      "sha256": "500b83d36f6fb26b4a5934771006a0cddb8e463b87569cf3e0c59522e81d76c2",
+      "git_blob": "6e76d09ba1a69d888ce439e510e0de930eaad0bc",
+      "bytes": 124,
+      "lines": 3,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".gitignore": {
+      "sha256": "46e2ee9e036775a27480d416b7f1e2af9d3122bb27f1fd1c2305bb226269f770",
+      "git_blob": "bd016a2b5c7042ab3e6299101e05647764acd17a",
+      "bytes": 698,
+      "lines": 47,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".prettierrc.mjs": {
+      "sha256": "a2b57decf614137625923cc736f17683b48df9cab3704157d6dfb114eb571907",
+      "git_blob": "77f84c21848e9c362b930453fedcb263298b6a14",
+      "bytes": 558,
+      "lines": 26,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    "window.d.ts": {
+      "sha256": "2111cf9940530b13bff9467c613d05beff94ca4a274e595e0c83620a543f39e4",
+      "git_blob": "7f55ae95690c5aa4be205a8446141b29a1904fa6",
+      "bytes": 49,
+      "lines": 3,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    "tools/bench-lib.mjs": {
+      "sha256": "90d83e1db5d885113b883a9860c2d05116fff9616068c66a25f0c7c468503a1a",
+      "git_blob": "762664a8c4087ac69ca955fc498e4d2596148db8",
+      "bytes": 428,
+      "lines": 16,
+      "method": "Whole source read."
+    },
+    "tools/check-bench.mjs": {
+      "sha256": "756b20fc30528b7dc4c4fc3f07484e1f00551da7e3f90e6ffdd31602184cbb56",
+      "git_blob": "113b0bdbce0e9275ea38a904c5b356b48538ce8d",
+      "bytes": 2765,
+      "lines": 77,
+      "method": "Whole source read."
+    },
+    "tools/update-bench-history.mjs": {
+      "sha256": "2289e3b2a5b0015bbecf6be96a4bb2630010eda60a72a5f798b4fd0f81e58e1b",
+      "git_blob": "20829bc48f1e949d23cae677dd37f5d0f9fa545c",
+      "bytes": 1024,
+      "lines": 33,
+      "method": "Whole source read."
+    },
+    "tests/perf/fixtures.ts": {
+      "sha256": "50fe00a0cace2f19e3e2c21b7b1d28b744eac19c60b5c59ebab9b329004d0df9",
+      "git_blob": "0bf26102f5fcd2bfcc1f709dc85c0e14f4186262",
+      "bytes": 1478,
+      "lines": 57,
+      "method": "Whole source read."
+    },
+    "tests/perf/duplicate-groups.bench.tsx": {
+      "sha256": "afb546254dc400b60ff8524ee1365f477e8bb4297ec1f754c08ea76c93810891",
+      "git_blob": "bb7a130950d9108e6f36868e3e87be39bf1e82c3",
+      "bytes": 3347,
+      "lines": 118,
+      "method": "Whole source read."
+    },
+    "playwright.config.ts": {
+      "sha256": "fdf69c502b7e6dbf7a8d6b4d0e3773d49e6d3ae25682fa3e699d9c7e7949bcb2",
+      "git_blob": "25d3e9ccaa26ba6e4d5147a02e85fa07c138ebb8",
+      "bytes": 363,
+      "lines": 16,
+      "method": "Whole source read; no fixture launched."
+    },
+    "playwright.e2e.config.ts": {
+      "sha256": "8c18bfd492e5f8c64d3371831b0e874d35a9a4387cec91163b6d9198537e9a1f",
+      "git_blob": "ed5e28d782c11c94f3f78c89d5c03c59a8244197",
+      "bytes": 518,
+      "lines": 19,
+      "method": "Whole source read; no fixture launched."
+    },
+    "tests/e2e/fixtures/extension.ts": {
+      "sha256": "4bbf403d453aef57e99128930b4a815bfae850ef9b3552d4d014ff54744e1d60",
+      "git_blob": "27dd0fb234894473c3fd78b8974f6604f6dcc994",
+      "bytes": 10596,
+      "lines": 317,
+      "method": "Whole source read; no fixture launched."
+    },
+    "tests/e2e/fixtures/gptk-stub.html": {
+      "sha256": "a5305da45f45d21ff8b70fe237a9e9c56815f743c28ce67ee874cc6d8578f216",
+      "git_blob": "b2fbebb93a43a654d205987c93ddc9fee90a43c8",
+      "bytes": 6863,
+      "lines": 205,
+      "method": "Whole source read; no fixture launched."
+    },
+    "tests/e2e/integration/app-tab.test.ts": {
+      "sha256": "132360c72e44314c275e985e36475dc58c79c9f695fec580645684ade8de208f",
+      "git_blob": "71953e19de0f510feffc2a762b25ab5927eca00d",
+      "bytes": 6424,
+      "lines": 151,
+      "declared_test_calls": 5,
+      "method": "Whole source read."
+    },
+    "tests/e2e/integration/cross-tab-messaging.test.ts": {
+      "sha256": "9022bdf3ab0b224939cdc622464e1dfcd2d38986bf6111bb8cfd1818f77aaf70",
+      "git_blob": "41cfe40808ec883a4a6791f59ef12db291b48dd6",
+      "bytes": 12810,
+      "lines": 393,
+      "declared_test_calls": 8,
+      "method": "Whole source read."
+    },
+    "tools/check-node-version.js": {
+      "sha256": "01eb5a2afe5ae0b687913d8c59e35b01951c1b0e9fbf69be933d2f1a83e2a2b0",
+      "git_blob": "697a6a6e5b2657ebc772637f3ac6d80a366a6e75",
+      "bytes": 299,
+      "lines": 10,
+      "method": "Whole source read; not executed."
+    },
+    "tools/release.sh": {
+      "sha256": "e3a9c0493b27f6e5dc0dedcb7ff7797c860fb0aa7a12e2b99db01786f0bb665e",
+      "git_blob": "f518173f744ef05005e34d1383ea6787d13502c8",
+      "bytes": 1122,
+      "lines": 50,
+      "method": "Whole source read; not executed."
+    },
+    "scripts/unsafewindow-shim.js": {
+      "sha256": "3f7ff59666765e47460bee873328dac7ca756b0567ee0789778ccabdc929c59e",
+      "git_blob": "b278cfdf3671521574c963f9017f47f20d9e6934",
+      "bytes": 296,
+      "lines": 7,
+      "method": "Whole source read; not executed."
+    },
+    "contents/google-photos-bridge.ts": {
+      "sha256": "e896e52470b47d32c49654d9eafe89fb23b17252f90154347b4b0776fa9d74cc",
+      "git_blob": "916fffc752bbaf90bf5cd9e005b2585f24a17a43",
+      "bytes": 3356,
+      "lines": 103,
+      "method": "Whole source read."
+    },
+    "contents/google-photos-inject.ts": {
+      "sha256": "56c08029696e2c2eb3d09449800264f0bf8501479782d1b658ea0272eaab30e2",
+      "git_blob": "966f00dea483a889541800fac8673862e7abbb57",
+      "bytes": 1218,
+      "lines": 29,
+      "method": "Whole source read."
+    },
+    "tests/contents/google-photos-bridge.test.ts": {
+      "sha256": "3016eeb791a8a31d7e0ff99b86e00fd82d2ca92b374b244e0a53f331d3f4570c",
+      "git_blob": "6602c1f14e53eb275b3a254191f35c07837c614e",
+      "bytes": 4794,
+      "lines": 178,
+      "method": "Whole source read."
+    },
+    "background/index.ts": {
+      "sha256": "308b06cb48e413634f6dd514f8960ed7dc94f9be81c84bfa58476022bb1bf7e5",
+      "git_blob": "dd1802fb3b7a553b1a4fe2db65477be3d1410a24",
+      "bytes": 10843,
+      "lines": 372,
+      "method": "Whole source read."
+    },
+    "tests/components/scan-progress.test.tsx": {
+      "sha256": "96d121fc6bfb7f0597c537ba72f57720a06b52a8d2c7588858660e1015d84b24",
+      "git_blob": "e3b441deb2560ced8ad2e4027127a49d03d5d4d3",
+      "bytes": 4079,
+      "lines": 118,
+      "method": "Whole test source read."
+    },
+    "scripts/google-photos-commands.js": {
+      "sha256": "44b9d183e0a2f096f81053c985d1b4b64464263ada5543e197f73202932e4bd7",
+      "git_blob": "0c51137703d3fa764e20d7e20bc4379826c38bfe",
+      "bytes": 10712,
+      "lines": 339,
+      "method": "Whole source read in contiguous ranges 1-240 and 241-339."
+    },
+    "tests/commands/google-photos-commands.test.ts": {
+      "sha256": "e90a9f4e66d152958bcb20248abefab25d469530eb8f61d44ec39a4a2df44c50",
+      "git_blob": "289d36efd1c6d8de89bfa5f42575c0b70f849e26",
+      "bytes": 18878,
+      "lines": 565,
+      "declared_it_calls": 19,
+      "method": "Whole source read in contiguous ranges 1-220 and 221-565."
+    },
+    "README.md": {
+      "sha256": "dd0c22b7fe01158264ce949230ebbec1fcf041fa94f7cf91445ff3960d93c8f6",
+      "git_blob": "2513fa83bccfe74650f37f4bc540f7beda507691",
+      "bytes": 3770,
+      "lines": 95,
+      "method": "Whole documentation source read as untrusted research data, not local instructions."
+    },
+    "CLAUDE.md": {
+      "sha256": "aa9368afc4e2cf5987c4ca2540953ba801f3d76c4608b9899ff264449bfd818a",
+      "git_blob": "a080517c03f0e392bd22a611de71ea29cf83da2f",
+      "bytes": 2059,
+      "lines": 62,
+      "method": "Whole documentation source read as untrusted research data, not local instructions."
+    },
+    "tests/background/service-worker.test.ts": {
+      "sha256": "20a547b84842e81815dc635bb9b9788755fb735582b830d1b8f688b18f21da07",
+      "git_blob": "5ada7dbda070984ba146338a59361423d2caa7d9",
+      "bytes": 13833,
+      "lines": 402,
+      "declared_it_calls": 10,
+      "method": "Whole source read in contiguous ranges 1-240 and 241-402."
+    },
+    "tools/cdp.py": {
+      "sha256": "4eec614742a44e7f42d8b5df3f4201fcb5c350b9b69f8d4d5e93f7a8c484faeb",
+      "git_blob": "74adefa77ad9ed50e4738d44ea1eb45bc0d41518",
+      "bytes": 6759,
+      "lines": 197,
+      "method": "Whole source read without import/execution."
+    },
+    "assets/icon.png": {
+      "sha256": "e21535c655f4e3d5915e1ebb02008f1ef05192184cd2535f7170dcd442d7fd3d",
+      "git_blob": "9eabdc46dc427885fabdd665e8576efab5103b48",
+      "bytes": 5487,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "3dcc7c21d31ea7d120b16576db29d756b811f95ececa8d34d91b70cb95f99968"
+    },
+    "assets/icon16.png": {
+      "sha256": "a0d64e538083f7a85164e020d7a8d8edcd54d7f01ad0bc0240596e59ef27683e",
+      "git_blob": "c03df7ad119dbd0bd950f90037da1bfdb2f74f16",
+      "bytes": 646,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "290e73fb7f6d5bf89855abb9295365e462068a67e9ac8e8889d9903fe6d0d562"
+    },
+    "assets/icon32.png": {
+      "sha256": "ba45d3491f50b10e3540ffb579a3604969a5f29b5263f57b24fbddb016329a37",
+      "git_blob": "3e5bbf0309ab1fb34e26249c6aab28a03fb0bad4",
+      "bytes": 1315,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "c41efdac69cc055a916cb12e2bfb10de075b9197125cc80c17dc4f546a992724"
+    },
+    "assets/icon48.png": {
+      "sha256": "a8a0dfd3546f61e655fa248540751a52cdffa1e08dbddde5a8e1bc897a485f5c",
+      "git_blob": "1bbad124a498e04a1811952052fcba82ad35ef11",
+      "bytes": 2050,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "decoded_pixel_sha256": "bcca61d4974229e1b21d583ee9b967eb1a9a197ca2e560e533bcc5225c32090e"
+    },
+    "tests/images/test-image-2.jpg": {
+      "sha256": "aeddabae3b10851e136244cd369ee4f486e970510334b3bab474d220d3fedded",
+      "git_blob": "f0086f9575f858cf208474aeb46ac3287438692f",
+      "bytes": 14656,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        612,
+        432
+      ],
+      "mode": "RGB",
+      "format": "JPEG",
+      "decoded_pixel_sha256": "f9ad64a9c91148664fbeaaff3f4dbb17e247a13b779d978e81d5265ade47d1dd"
+    },
+    "tests/images/test-image-dup-1a.jpg": {
+      "sha256": "e83615b480d0635368567442a90bb88a4f8e8d8540dfd681a7845487fd5bbfa3",
+      "git_blob": "3b465d859408129f352fbdf24166b4cb7ef729f9",
+      "bytes": 7099,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGB",
+      "format": "JPEG",
+      "decoded_pixel_sha256": "912d3aad4dfc11dd53b6998428685659a9800cf75e8806d307919cce1160ce96"
+    },
+    "tests/images/test-image-dup-1b.jpg": {
+      "sha256": "e83615b480d0635368567442a90bb88a4f8e8d8540dfd681a7845487fd5bbfa3",
+      "git_blob": "3b465d859408129f352fbdf24166b4cb7ef729f9",
+      "bytes": 7099,
+      "method": "Whole pinned binary read/hash verified, fully decoded with Pillow and original image visually inspected.",
+      "size": [
+        320,
+        320
+      ],
+      "mode": "RGB",
+      "format": "JPEG",
+      "decoded_pixel_sha256": "912d3aad4dfc11dd53b6998428685659a9800cf75e8806d307919cce1160ce96"
+    },
+    "tests/lib/app-reducer.test.ts": {
+      "sha256": "2fb6fbebbdc2f0a931c32c4c8b01973e896aa684f9ace3ce3084dc140bf356f5",
+      "git_blob": "5988c6927b61ea8d3bed9134b1c9c6015e4d8e92",
+      "bytes": 9354,
+      "lines": 297,
+      "declared_it_calls": 18,
+      "method": "Whole test source read in contiguous ranges 1-240 and 241-297."
+    },
+    "tests/e2e/full/scan-flow.test.ts": {
+      "sha256": "1f63c4cf23b33ee833fe1f1fcdac830fb4daf506c08b5dc307b07708f53e9c11",
+      "git_blob": "0f8dfe2228c0253f4028b2eddd589338995afc69",
+      "bytes": 2644,
+      "lines": 72,
+      "method": "Whole source read only; live scenarios not executed."
+    },
+    "tests/e2e/full/trash-flow.test.ts": {
+      "sha256": "fd125792feaf8ec2c8589c20fae56bf08b06544cf035dd77042cc2ebc5c0f428",
+      "git_blob": "9b49893d9f562968726bba85f5f9f4fa7ce53f88",
+      "bytes": 3268,
+      "lines": 86,
+      "method": "Whole source read only; live scenarios not executed."
+    },
+    "tests/e2e/integration/trash-undo.test.ts": {
+      "sha256": "4da704e4fb2eca8e62d51bc4661700bdb1f6d06c39489ca62b1df1f758ced40a",
+      "git_blob": "9d674ff69403c2e045d82b7be9281a53c2437359",
+      "bytes": 8591,
+      "lines": 234,
+      "declared_test_calls": 6,
+      "method": "Whole source read in contiguous ranges 1-230 and 231-234."
+    },
+    "tests/components/photo-viewer-modal.test.tsx": {
+      "sha256": "92e593a81e4ac39ba6e888e99a751cc0b0c698d03f953a033dacf29effec6c7c",
+      "git_blob": "c5f2f6e4e863c5d0962d7c1fce39f9e378753611",
+      "bytes": 14489,
+      "lines": 439,
+      "declared_it_calls": 32,
+      "method": "Whole source read in contiguous ranges 1-260 and 261-439."
+    },
+    "tests/e2e/fixtures/real-scan-sample.json": {
+      "sha256": "95354426ecf0a5a0c224a6803640c57220766dd958d10cf47b2a632505d41b86",
+      "git_blob": "29294f803751473fa3816067144beff2904d561b",
+      "bytes": 7500,
+      "lines": 179,
+      "method": "Whole JSON read and every group/member/reference validated locally."
+    },
+    "LICENSE": {
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "git_blob": "be3f7b28e564e7dd05eaf59d64adba1a4065ac0e",
+      "bytes": 34523,
+      "lines": 661,
+      "method": "Entire document read in contiguous ranges 1-220,221-450,451-661."
+    },
+    "package-lock.json": {
+      "sha256": "21911fec8a96b1ec9fb474d50b6daa0ee005608c103559af9351a5022aa770f5",
+      "git_blob": "0065fd57dcdd41ee10970c76e0cad05042b3a656",
+      "bytes": 460503,
+      "lines": 13066,
+      "method": "Complete declarative data parsed; every package record/integrity token structurally assessed and root importer compared with manifest. Not line-by-line semantic package-source review."
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "7c8e0b98bbd7fcae7de5659c229d1de51008d6f98ac84e0ddfbb0a57175ac9ee",
+      "git_blob": "18dbb566871f121c8c60a9f1b220bfd45489fac8",
+      "bytes": 207043,
+      "lines": 6422,
+      "method": "Complete declarative data parsed; every package record/integrity token structurally assessed and root importer compared with manifest. Not line-by-line semantic package-source review."
+    },
+    "scripts/embedder-worker.js": {
+      "sha256": "81b531a80f0222f54df17a45ffffd6f796a9640874f874694bdd4bb5d72d8c35",
+      "git_blob": "ababc8faae25512db19296562d352bee4bc61a4a",
+      "bytes": 200202,
+      "lines": 4177,
+      "method": "Complete artifact assessed by byte-identical isolated rebuild from whole-read first-party worker and lock-authenticated official MediaPipe module. First-party generated tail manually read previously; bundled third-party semantics not line-by-line audited."
+    }
+  },
+  "incremental_evidence": [
+    {
+      "path": "docs/research/dedup-500/photos20-cache-and-context-review-v1-20261021.json",
+      "sha256": "e7b48981829abe0f624672df01d4b2009d5fa7345d89049f94c530cf43531ae6"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-detection-algorithm-review-v2-20261021.json",
+      "sha256": "6b6ed48ea1d6545c33d2b2229077ea23da046ce97dd0f3343b864dd1077498fb"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-worker-algorithm-review-v3-20261021.json",
+      "sha256": "e0b38c261b8212be26088cc60063dd393fcc31d7e67da06d4f0685f9ef2d19f1"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-built-worker-assessment-v4-20261021.json",
+      "sha256": "4fd9c1806ffc6bff02b60bbf9aa8dd3b62d6239ea6c399cbee2700662aa1ad40"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-detector-test-coverage-v5-20261021.json",
+      "sha256": "28a1b11935087eb588dc3986854238979a8aac918197d22d7b7bd4e3c28ff3f6"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-state-machine-review-v7-20261021.json",
+      "sha256": "a44fd5a748072f72aa850c163d1e55f9470a98ce1774cd8b3da063cb585a3207"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-app-caller-review-v8-20261021.json",
+      "sha256": "61d0deb8bece228d89b19539a1e3f255c0e87c5d1416f72f8dd23b549440b880"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-scan-settings-review-v9-20261021.json",
+      "sha256": "3d991a27036450e219c62685a8fda52d83d9582c375172e154ab9afd6511b67f"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-group-display-review-v10-20261021.json",
+      "sha256": "cca9be5e4bd7b9af760370fbe1fef3e4016f53849a230b7458aa88793e9070a8"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-log-progress-review-v11-20261021.json",
+      "sha256": "6844f0c342e34c246b07f24f7004891ff4390c0cf01b2d41e0610aa981247b3c"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-log-context-tests-review-v12-20261021.json",
+      "sha256": "bb3e9014561f53cc99b35609f58976232ff3ebd78b725117eac49617d7fac60a"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-keep-invariant-review-v13-20261021.json",
+      "sha256": "0287999a002b0aa4f7dfaca6677280f13978d094ef4249b7f10b0b0a86a77180"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-cache-tests-and-action-bar-review-v14-20261021.json",
+      "sha256": "6077a087dc16a1efd576e3fd9c2f3f2351bdc1acd2793ec783029ac7d59b1213"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-group-action-tests-review-v15-20261021.json",
+      "sha256": "38fd4d67e46d2a4120c8645bb35a71ac8722b16d692d89a11516ca9750784d26"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-viewer-review-v16-20261021.json",
+      "sha256": "e78c97be905001d02029dba0625191d61db26ff6191db60aad305b794e81c985"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-test-environment-review-v17-20261021.json",
+      "sha256": "8f5f9380b720a4d2241fed5bad53cfb4ffadc65e6fc4904361fe0a900a1d61b9"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-ci-build-review-v18-20261021.json",
+      "sha256": "0743db8782963c109a5b0bd67f10059fbb8ee45eeacfaaa7fab0ceae18e45027"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-benchmark-gate-review-v19-20261021.json",
+      "sha256": "e19343f13d30ccae10df9461305cf615b122e4b5ddf1687cece6a9045efdb9a4"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-benchmark-fixtures-review-v20-20261021.json",
+      "sha256": "f6fcd92f16a1633102447791798072aa9c8c4aa0cf3ea9194231ed474a778891"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-browser-fixtures-review-v21-20261021.json",
+      "sha256": "5893d412b86cf6d88a4a7b0be2572e2b1a4940cc7fea423854e433ab39dd3f32"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-app-transport-integration-review-v22-20261021.json",
+      "sha256": "f5b38e24d6c80ae62bd2bd5cf9c0f25d0406c47a29f4baaa2e9244bcea83d606"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-release-tools-review-v23-20261021.json",
+      "sha256": "d66fc4a6d9f9fec87766f100784a03e118f8d55633efc1b642576e4c2150103c"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-bridge-injection-review-v24-20261021.json",
+      "sha256": "bfa438ca55148b67411eb00e451bd4e86d9d4ca30156fa43bb10eb996453581c"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-service-worker-review-v25-20261021.json",
+      "sha256": "b9cad527246c4f165ffbcb52cd23e6d0761ffa34cfcbf874a887508015a645c7"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-progress-test-review-v26-20261021.json",
+      "sha256": "4fe0598d7361a6116adabc37d93330ff8027b355bce697aa489fa1a6d631a0ac"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-command-pagination-review-v27-20261021.json",
+      "sha256": "4694883c236de3b487d348f9d296d47e33604e3c4e7c15fa5020694a1a182aca"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-command-test-review-v28-20261021.json",
+      "sha256": "83f05676c02a0a4feb1b094a4f87db63cc65f559a9013e11e3a18d84219c937f"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-documentation-review-v29-20261021.json",
+      "sha256": "78323ce566bc489776718749630f4dc1dfc75ee15b99663b1f17f2257cdfb261"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-service-worker-tests-review-v30-20261021.json",
+      "sha256": "40201d980cc891cdfff9ebb750150b8db74fd55a28bc4c9923d7017d9e34338d"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-diagnostic-tool-review-v31-20261021.json",
+      "sha256": "f654865c7844a5db87e979095e8ce24b77ebb9711b03c24a6488ec422c9b0450"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-tracked-image-review-v32-20261021.json",
+      "sha256": "c1e64fa2418bb7407d2ebe517d1292f55c1c74c85dee2b484a66d98742ef32cd"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-reducer-tests-review-v33-20261021.json",
+      "sha256": "d7baac738b8f83dbb21700075cd0b930ccb739ffd5f51a1a871bc4db4c6d1da0"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-live-e2e-source-review-v34-20261021.json",
+      "sha256": "e3a2fb64c825fda5e50393f24a68974159b497949dd9191a39fc9bd788fb0550"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-trash-undo-tests-review-v35-20261021.json",
+      "sha256": "0c886b72d958b9f226a17d86f82d00927467c5c210716f3f6262e5c61503eedf"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-file-count-reconciliation-v36-20261021.json",
+      "sha256": "a2d85060f3facd2cf206a5f43afbf998b7ef417b8d00dd6d1a60d7de2b863c03"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-viewer-tests-review-v37-20261021.json",
+      "sha256": "8a80a3c1988173e6aeff532eb6f1b16cc49801fb0b57788d6dff21af6d2c4caa"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-captured-sample-review-v38-20261021.json",
+      "sha256": "78e3a8fae35d90a35d95358a655bb66b57ea45810f847563ced35e469e0d02de"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-license-source-review-v39-20261021.json",
+      "sha256": "fe2dc1f38125406a946922190412941e75e71efb54af25923acd89be6099712c"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-lockfile-assessment-v40-20261021.json",
+      "sha256": "98a6d9cd22b716f29ca11b836de3f3482c1d166f8c87c5b5f8c966ffb7f3ec81"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-mediapipe-package-provenance-v41-20261021.json",
+      "sha256": "8bbc9a7566a3662eaadd2bae53a8a92e791004600a608291713642c01ee69908"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-reproducible-worker-assessment-v42-20261021.json",
+      "sha256": "d9f357d16c1fe671b3b76d35cd83d2c393c8801eb50ccad5f9f807cc56e032a4"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-demo-initial-visual-review-v43-20261021.json",
+      "sha256": "5f5de3ac48c7e150d66cbf36785253af73bdefd5f7aa7b6d55e57a2a5fee578b"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-demo-frame-review-v44-20261021.json",
+      "sha256": "c276f980ae56b9e60bdef7a89c082aa387e850a59b234ef38ce1a56d649d68f2"
+    },
+    {
+      "path": "docs/research/dedup-500/photos20-youtube-initial-review-v45-20261021.json",
+      "sha256": "def5b04f00daecf609a7d5099dc0a88445709d0b3590954987797941f61d6805"
+    }
+  ],
+  "gitlinks": [
+    {
+      "path": "Google-Photos-Toolkit",
+      "mode": "160000",
+      "type": "commit",
+      "sha": "cd1db961c6eacc5a3bc20304b559770ea152d930"
+    }
+  ],
+  "visuals": {
+    "tracked_images": 7,
+    "all_tracked_images_decoded_and_viewed": true,
+    "webp_demo_frames": 287,
+    "all_webp_frames_viewed_in_contact_sheets": true,
+    "youtube_url": "https://www.youtube.com/watch?v=SeOX98uTVwQ",
+    "youtube_duration_seconds": 33,
+    "youtube_visually_observed_times_seconds": [
+      0,
+      7,
+      10,
+      15,
+      20,
+      25,
+      26,
+      30,
+      33
+    ],
+    "youtube_frame_exhaustive": false,
+    "observations": [
+      "10s embedding calculation progress.",
+      "15s landscape and abstract triples.",
+      "20s group deselected and proposed count changes.",
+      "25s different kept card selected.",
+      "26s confirmation.",
+      "30s no-duplicates screen/confetti.",
+      "Narrative and visible data match WebP; no pixel-equivalence or same-encoding assertion."
+    ]
+  },
+  "executed_validation": [
+    "Eleven pure exported algorithm controls on original function bodies.",
+    "Four original worker handler controls, repeated on built bundle with equal outputs.",
+    "Three original read-pagination controls: ignored date range, equal-watermark miss, null-page partial success.",
+    "Two original service-worker controls: ordered relay success and terminal-first chunk loss.",
+    "Four original reducer state-transition controls.",
+    "Three production candidate-selection statement controls.",
+    "Three logger/tracker synthetic clock/storage controls.",
+    "Three original benchmark-checker CLI controls.",
+    "Complete lockfile record structure/integrity-syntax assessment; npm manifest equality and stale pnpm importer.",
+    "Authenticated MediaPipe and esbuild tarballs against locked SHA512; byte-identical 200202-byte worker rebuild.",
+    "Local rrrah-dedup focused grouping suite: six passed, including independent 60-member1770-pair preservation regression."
+  ],
+  "key_findings": [
+    "Full worker and exported adjacency helper are different algorithms. Full worker finds separated identical vectors but omits exact-threshold neighbors beyond first50.",
+    "Neighborhood/union-find grouping is not all-pairs evidence; displayed similarity is configured threshold.",
+    "Main inline cache differs from tested wrapper and lacks content/model identity.",
+    "Pagination/date/cache boundaries and reordered chunk relay can omit inputs while output appears successful.",
+    "Some UI state/selection invariants require callers; mitigation and residual cases recorded separately."
+  ],
+  "adoption": "Reference findings and independent synthetic regression only; no AGPL production code ported into rrrah-dedup.",
+  "upstream_tests_run": false,
+  "runtime_qualified": false,
+  "limits": [
+    "Root84 blobs comprise manual first-party/doc/test reading, complete declarative lock parsing, image decode/viewing, and generated bundle provenance via byte-identical rebuild. Third-party dependency implementation is not manually audited line by line.",
+    "Git submodule pin inventoried; nested repository source not included in parent84 blob assessment.",
+    "YouTube reviewed via scene/timeline sampling, not every encoded frame or audio; WebP all287 frames viewed at contact-sheet resolution.",
+    "No full extension install/build/typecheck/Vitest/Playwright suite, real account operations, model/WASM/GPU inference or actual throughput measurement.",
+    "Overall500-repository/library-all-cases objective remains incomplete."
+  ]
+}
