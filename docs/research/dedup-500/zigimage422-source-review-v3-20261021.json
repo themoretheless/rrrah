@@ -1,0 +1,53 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "files": {
+    "docs/logo.png": {
+      "bytes": 139424,
+      "sha256": "4e4e5ecf13b21fbec98031d5e3210f0b2fbc55d73894d891a295f0deab41866b",
+      "git_blob": "94c48dd9403ff90d2068bbb94915e5ff90531970",
+      "method": "OriginalPNGvisuallyviewedthroughview_image"
+    },
+    "testdata/checkerboard.png": {
+      "bytes": 1100546,
+      "sha256": "fcf8607792623c2fca419e7d31d4a6b31de9651c630dc01dc3986a7e74e38076",
+      "git_blob": "131693f6a1360955afd04400ae6d55bb24f7a7a1",
+      "method": "OriginalPNGvisuallyviewedthroughview_image"
+    },
+    "testdata/gradient.png": {
+      "bytes": 1182486,
+      "sha256": "e123cd94ccbe3f8fc1d297434969e5186e10cad2f7b1d3b9ceb42d2e1f3bc0ea",
+      "git_blob": "f6357e860ac0810f50cfe736a04148dada24b9d7",
+      "method": "OriginalPNGvisuallyviewedthroughview_image"
+    },
+    "testdata/noise.png": {
+      "bytes": 3253561,
+      "sha256": "278e27890a4cbe2864d90bbb927e612a46a86ee7593ebcb0fb02458e735cc1b2",
+      "git_blob": "d65c8a7667994c97b6d9a5cc3d9e7291d6ab3dc3",
+      "method": "OriginalPNGvisuallyviewedthroughview_image"
+    },
+    "include/stb_image.h": {
+      "bytes": 283010,
+      "sha256": "594c2fe35d49488b4382dbfaec8f98366defca819d916ac95becf3e75f4200b3",
+      "git_blob": "9eedabedc45b3e6fd88fae6f14a160b4d53272ec",
+      "method": "WholeGitblobverified;headernotyetread"
+    },
+    "include/stb_image_resize.h": {
+      "bytes": 116068,
+      "sha256": "716967e520a6d1ff6e6eca7df8bad54f7dede952506a154c1bf3d1be7d855e3a",
+      "git_blob": "a176d212249f224bdc251e578eaf56d789465e22",
+      "method": "WholeGitblobverified;lines1-330whole-readonly"
+    }
+  },
+  "authored_runtime_controls": 0,
+  "findings": [
+    "All4trackedPNGvisuallyviewed:whitelogo/icononblack,checkerboardwithnonidealblack/whitebordersandtexture,colourgradientinroundedrectanglewithdarkouterframe,andnoisypatternwithlargebrightcentralcircle. Noiseisnotuniformunstructurednoise;goldenhashescaptureglobalshapes.",
+    "ThreeoriginaltestPNGsare1024x1024displayed;fixturelabelsalonedonotdescribeexactpixels. No quality/transformpositive-negativebenchmark accepted.",
+    "stb_image_resizev0.96documentation/APIlines1-330whole-read;oneallocationperresize,progressmacro,alphaweighting andlinear/sRGBrecipecontrolsdescribed. Wrappercalls1channelgrayscalelineartriangle/clampwithnoalpha,soRGBAresizerfeaturesarenotusedbywrapper. No runtimequalification.",
+    "All16trackedGitblobsnowfetchedandbyteverified,but2largeheadersnotwhole-reviewed. Fetch/verificationdoesnotcountascomplete source review."
+  ],
+  "limits": [
+    "stb_image.h0linesreviewed;stb_image_resize.h330linesreviewed. Backendimplementation/errorpaths andlicensesatheaderendsstillneedreview;noZig/compiler/upstreamtests/runtimecontrols. No productionchanges.NativepHash/ASANdeferred."
+  ]
+}
