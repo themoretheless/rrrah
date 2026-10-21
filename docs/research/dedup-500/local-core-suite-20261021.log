@@ -1,0 +1,116 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 23.69s
+     Running tests/cache.rs (target/debug/deps/cache-9b7ca22f8421d728)
+
+running 11 tests
+test cache_publication_child ... ok
+test zero_budget_and_owned_values_preserve_previous_entry ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test every_content_recipe_and_frame_key_bit_survives_persistence ... ok
+test every_serialized_bit_corruption_is_rejected ... ok
+test cache_preserves_every_bit_of_all_transform_hash_channels ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test unwritable_parent_refuses_before_publication_and_preserves_retry ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+
+     Running tests/exact_files.rs (target/debug/deps/exact_files-f2fc6b3325e0c5aa)
+
+running 34 tests
+test excess_root_admission_refuses_before_missing_source_io ... ok
+test duplicate_root_admission_retains_boundary_and_fresh_retry ... ok
+test duplicate_zip_entry_names_do_not_replace_encoded_byte_identity ... ok
+test ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok
+test repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth ... ok
+test reordered_middle_blocks_with_identical_sampled_edges_are_not_copies ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test hidden_directories_and_empty_files_remain_in_exact_partitions ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test verified_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test sibling_roots_with_a_shared_name_prefix_keep_both_file_sets ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test unique_sizes_skip_payload_reads_without_weakening_verified_observations ... ok
+test exact_content_partitions_ignore_extensions_and_check_unsampled_bytes ... ok
+test whitespace_path_names_preserve_all_authored_copy_partitions ... ok
+test late_exact_source_failures_preserve_healthy_members_and_other_groups ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test nested_overlapping_roots_match_the_full_authored_partition ... ok
+test block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes ... ok
+test restored_modified_time_does_not_hide_same_inode_edit_during_scan ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.77s
+
+     Running tests/groups.rs (target/debug/deps/groups-f0f222c24dd6f139)
+
+running 6 tests
+test invalid_input_budget_and_cancellation_are_explicit ... ok
+test nontransitive_chain_preserves_edge_without_inventing_pair ... ok
+test sixty_member_evidence_is_not_truncated_and_one_missing_edge_is_not_invented ... ok
+test every_emitted_group_has_all_pairs_for_all_small_graphs ... ok
+test isolated_and_sparse_entries_avoid_unrelated_group_checks ... ok
+test sparse_selection_matches_independent_exhaustive_reference_for_all_six_node_graphs ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/pixels.rs (target/debug/deps/pixels-dd7227e74ee02ce5)
+
+running 10 tests
+test gradient_has_independently_known_difference_bits ... ok
+test identical_pixels_honor_each_block_and_final_cancellation_checkpoint ... ok
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test informative_zero_distance_is_a_candidate_not_pixel_identity ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection ... ok
+test identical_and_transparent_pixel_equality_observe_late_cancellation ... ok
+test validates_layout_budget_and_cancellation ... ok
+test area_fingerprint_preserves_last_row_and_column_contributions ... ok
+test all_opaque_gray_levels_collide_only_as_uninformative_candidates ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/sequence.rs (target/debug/deps/sequence-e306d74b613a8e42)
+
+running 8 tests
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test complete_coverage_is_required ... ok
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test animation_requires_timing_and_compares_repetitions ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test ordered_subsets_do_not_establish_complete_sequence_or_timeline_identity ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual.rs (target/debug/deps/visual-60ad3c84d4afbf00)
+
+running 10 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test nonfinite_fingerprint_statistics_never_claim_informative_evidence ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test sixty_tied_candidates_survive_with_inclusive_distance_boundaries ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

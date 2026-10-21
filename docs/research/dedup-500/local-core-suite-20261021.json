@@ -1,0 +1,24 @@
+{
+  "status": "passed_selected_no_default_features_integrations",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test groups --test visual --test cache --test sequence --test pixels --test exact_files --locked",
+  "exit_code": 0,
+  "targets": {
+    "cache": 11,
+    "exact_files": 34,
+    "groups": 6,
+    "pixels": 10,
+    "sequence": 8,
+    "visual": 10
+  },
+  "total_passed": 79,
+  "failed": 0,
+  "ignored": 0,
+  "log": "docs/research/dedup-500/local-core-suite-20261021.log",
+  "log_sha256": "b4d3881bc7acc7a74de3e2834a8ca744535b4a586a00699512b4cb962d0b56a9",
+  "scope": [
+    "Actual Cargo execution of six complete integration targets. Cache total includes publication child helper.",
+    "Original MVP SQL failures do not imply these local paths fail: local index uses its own implementation and visual radius/exhaustive-reference tests pass.",
+    "No production changes or speedup claim. No decoder/raster/LoFTR features, full workspace, other OS, image quality corpus or native pHash/ASAN qualification.",
+    "Run-start source digest inventory was not captured; no immutable whole-source qualification inferred."
+  ]
+}
