@@ -1,0 +1,58 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 92,
+  "files": {
+    "docs/_build/html/_static/documentation_options.js": {
+      "bytes": 328,
+      "sha256": "9c5d5f3bfd2737f79c2d62184be58c75833ea1dfe9853db06344f3ac9d672e8f",
+      "git_blob": "13d90ff0b0af1b0c52379e6bb32b282468766542",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/doctools.js": {
+      "bytes": 4322,
+      "sha256": "2992c09df91826a8d33e3b48b645ee77e457adcf7c712d776a814e1e2c448b43",
+      "git_blob": "0398ebb9f03db6e89df8022033b81923c82112fa",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/sphinx_highlight.js": {
+      "bytes": 5123,
+      "sha256": "096231e9c87df80ec3273da9c5b71bc81503206726a07a4dd4de44c256ff859c",
+      "git_blob": "8a96c69a1942318413af68fd459122b56edd8d69",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/scripts/furo.js": {
+      "bytes": 5221,
+      "sha256": "0df6012bf9183882fc314d1eeaa66fe7705e8694cf27351c4be1f5dc32e9fe6f",
+      "git_blob": "87e1767fc63325c2b2aeab74791bce33c671eb1d",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/debug.css": {
+      "bytes": 1266,
+      "sha256": "0d05cd9e79d53234304667c08f02971de6196c0ffca593c3903b3667b4055ad6",
+      "git_blob": "74d4aec33e5ccd45b77c871a005d96f9f8ae1dc4",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/skeleton.css": {
+      "bytes": 6034,
+      "sha256": "e7702bcb03d3eb02e63681f753d88a28bee8f8ed13e50e58ac84a2bc31a5c71d",
+      "git_blob": "467c878c62025811f065562a1bcc5bf152d2d0c0",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Documentation options version0.1.0,English,HTML,search shortcuts enabled,arrow-key navigation disabled.",
+    "Doctools manages translations, expandable index rows, focus shortcut; plural expression compiled with new Function from translation catalog. No user-supplied catalog path established or vulnerability claim.",
+    "Sphinx highlight reads localStorage or URL terms, inserts text-node spans, clears query/localStorage state, handles SVG rect highlights and Escape. DOM interaction not tested.",
+    "Minified Furo bundle includes gumshoe scrollspy, theme cycling via localStorage and matchMedia, scroll/back-to-top and table-of-contents highlighting via requestAnimationFrame. No dedup runtime code.",
+    "Debug CSS provides colored skeleton diagnostics; skeleton CSS flex layout/sidebar overlay and responsive breakpoints32..88rem. Whole CSS read, no rendered-layout claim."
+  ],
+  "remaining_scope": "10 static assets remain: basic/pygments/Furo CSS, language/search JS, search index and3source maps.",
+  "limits": [
+    "No production changes or additional runtime coverage this increment.100 original tests passed separately; global fully reviewed count201/500 unchanged. pHash/ASAN deferred."
+  ]
+}
