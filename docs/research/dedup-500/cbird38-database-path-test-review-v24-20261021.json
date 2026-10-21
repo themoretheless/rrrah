@@ -1,0 +1,38 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "unit/testdatabase.cpp": {
+      "sha256": "b1748714b415e618743b33158fe7268ac94024c55a2ec75a9aa8901dbe5826c8",
+      "git_blob": "e81bd4b6b2de6d744adffadb487f5c575384a5f2",
+      "bytes": 12227,
+      "lines": 427,
+      "method": "Whole pinned test source read; tests not executed."
+    },
+    "unit/testpath.cpp": {
+      "sha256": "9b9df63339f1de9985309252868fb3d316b4fcba328ceba43d03ec3841133d85",
+      "git_blob": "61573948919523a752fcda23b6c13d873c14f57a",
+      "bytes": 7641,
+      "lines": 273,
+      "method": "Whole pinned test source read; tests not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 78,
+  "tracked_blobs": 616,
+  "findings": [
+    "Database tests mutate external rename fixtures: rename/move file/directory/archive and restore on normal success. They verify selected paths/counts and file ids, but do not inject SQL/commit failure after filesystem movement, transaction rollback or crash recovery. Do not execute on user media.",
+    "testMoveZipped actually calls rename, same as testRenameZipped, so its name is not proof of archive-member move coverage. existingPaths assumes fixtures provide two suitable paths; no explicit precondition assertion there.",
+    "Negative-match test deliberately asserts order-dependent filtering: group[a,b,c] becomes empty while[b,c,a] retains[b,c] with negative a-b/a-c relationships. It checks symmetry after reload, but this is not order-independent graph partitioning.",
+    "Weed tests assert directional relationships, rejection when original already weed, orphan invalidation after database removal and restoration after re-add, and reload after weed removal. No append/write failure, Unicode-map persistence or concurrent-writer test present.",
+    "Path tests explicitly expect file.ZiP not an archive while lower/uppercase ZIP are archives. Mixed-case exclusion is part of fixtures rather than a tested all-case extension invariant. Archive member strings are lexical examples, not actual archive load/CRC/decode tests.",
+    "testpath parseArchive_benchmark is declared ordinary private method, not private Q_SLOT, while data helper is slot. No inference that QTest invokes the benchmark body; source labels alone are not timing evidence.",
+    "Archive member data repeats identical ..zip:z tag. Whether Qt rejects duplicate tags was not executed. Windows-looking paths appear in benchmark data only, not proof of native Windows filesystem behavior."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "78/616 tracked artifacts assessed:77 whole text/source and one PNG visual. main.cpp and qtutil.cpp remain partial.",
+    "Prior24 original-body/header controls plus one independent counterexample unchanged. No new upstream test runtime, production edit or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
