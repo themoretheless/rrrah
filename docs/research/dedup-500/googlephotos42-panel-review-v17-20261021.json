@@ -1,0 +1,32 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_panel_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/ui/panel/panel.ts": {
+      "sha256": "512123ce982383b2950e2d1b1fcfd25e3a586c8635df2a4559987f1f7295bc34",
+      "git_blob": "aec6a26e94a4a6506e727d78d44ceed161787244",
+      "bytes": 29078,
+      "lines": 619,
+      "method": "Whole619linepanel source read; no renderedUIexecution."
+    }
+  },
+  "cumulative_assessed_blobs": 74,
+  "tracked_blobs": 230,
+  "findings": [
+    "Panel updateUI and refreshProState exposeExportCSVwhen summaryandpro; click callsrunner.exportCsv. Combined with originalclasscontrolv14 confirms source-wiredpostrunexportno-op. No actualDOMclick reproduced.",
+    "mountPanel returns immediately ifROOT_IDexists. Repeatedinjection freshRunner does not create secondpanel whileoldrootpresent; entrypoint bootpendingcheck already scheduledbeforemountguard. Avoid claiming repeatinjection inherentlystartssecondengine.",
+    "Close callsrunner.stop and removesroot/style, but discardedonUpdate/onRunSettledunsubscribehandles are not invoked. Oldrunnerlisteners may update detachednodes or displaypostrunprompt afterclosure. Sourcefinding,notheap/runtimeproof.",
+    "Panel preset handlers awaitsave/rename/remove without synchronously disablingcontrols or localpendingflag. Earlier originalmanagerconcurrentsavecase is not prevented by localhandlercode; browserdoubleclick reproduction remains absent.",
+    "Panel readOptions accepts anypositiveintegermaxCount without enforcingdeclaredinputmax2000. Enginevalidationnotyetread; no globalbudgetbypassclaim.",
+    "Action scope text setonceatmount; startoptions usecurrentcontrols but no panel-level URLscopecheck onstart. Runner/engine may separately check paths; endtoendscopebehavior notyetqualified.",
+    "Panel marksconst running fromrunner.running OR activeprogress; terminalelapsed usesDate.now-startedAt wheneverupdateUIruns, notfixedfinalduration. No new timingmeasurement."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 27,
+  "limits": [
+    "74/230wholeartifacts; no visualpanelreview or fullapplicationtest.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
