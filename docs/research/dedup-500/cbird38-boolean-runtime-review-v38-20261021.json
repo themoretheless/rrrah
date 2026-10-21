@@ -1,0 +1,27 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_assessed_blobs": 111,
+  "tracked_blobs": 616,
+  "findings": [
+    "Original unmodified boolean evaluator lambda extracted from pinned commands.cpp and compiled with bool QVariant and predicate-only Expression shims. Homogeneous three-term AND/OR truth tables match ordinary logic in16 cases.",
+    "Mixed (a AND b) OR c disagrees in2 of8 cases: false AND false OR true and false AND true OR true both returnfalse instead oftrue. Early return at firstfalse AND skips later OR. This reproduces evaluator behavior, not full Qt string parsing or native CLI execution.",
+    "No production source copied or changed. Local library accepted-pair grouping and exact-file qualification remain distinct; no inference this upstream expression implementation exists in rrrah-dedup."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-boolean-controls-v38-20261021",
+    "passed": 2,
+    "failed": 0,
+    "method": "clang++ C++17 O2, original lambda; synthetic boolean expression nodes, independent built-in logical reference. Counterexample success is successful reproduction of upstream disagreement, not corrected upstream behavior.",
+    "artifacts_sha256": {
+      "run.py": "107b359f1f9e12bb833ebdeec47d054eaa008354d99427c8227fb9d3f0ebbac1",
+      "run.log": "ed79821fafdcd51f6e63df7fc020705ab1b077699fb78c138186326c35b0fc56"
+    }
+  },
+  "limits": [
+    "111/616 whole artifacts unchanged.29 isolated original-body/header controls cumulative plus one independent earlier counterexample.",
+    "No full Qt/native CLI, media test or benchmark. Native pHash/ASAN remains deferred."
+  ]
+}
