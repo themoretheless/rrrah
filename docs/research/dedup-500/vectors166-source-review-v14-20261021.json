@@ -1,0 +1,77 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 79,
+  "files": {
+    "docs/_build/html/api/core.html": {
+      "bytes": 28897,
+      "sha256": "20f63e73eeb72526009a6088e83c74db8b30686fb2241f26698c82f16518bc8f",
+      "git_blob": "9a5531ef168ac9bc97b36b22e1ee045312d26816",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/api/algorithms.html": {
+      "bytes": 38303,
+      "sha256": "557e2504bb92d4ad89b3a124c87d52fcb5fc51a3a22b11438a0c9750cab42614",
+      "git_blob": "ae2a30b4ccd014f326f010d73d64f134750d504e",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/api/tolerance.html": {
+      "bytes": 32375,
+      "sha256": "982564876dd3be3f64e69036b210675260612ce4574c5a9cad4f017bd858be28",
+      "git_blob": "6983b8e6b914872845775236eb9e14c3fa21a857",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/api/index.html": {
+      "bytes": 19844,
+      "sha256": "e9fe89e21d23f916c5a2be9c41f3656be8dac92b0b70c58fcc42a0ffe9eacf7e",
+      "git_blob": "76a7d97ab6136aa57f8997f08e83528d3892696e",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/index.html": {
+      "bytes": 15553,
+      "sha256": "2bc2bc7617d239ca52380f652b7567ddc78df5b59f839f3a092962ed18ce8908",
+      "git_blob": "234a8f07605c33b2a4e894fdb6629b7c2110f52a",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/quickstart.html": {
+      "bytes": 22841,
+      "sha256": "621cdf275fb5927b9b667bbbf2f26610b8bc33785e8f29b95d6c44fd37ec4275",
+      "git_blob": "db93c92b2c67dc0aa3329f3223e0b56e64c6afab",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/genindex.html": {
+      "bytes": 19244,
+      "sha256": "7458d9dcc40c23d40172b8ef72f4123206078cf5b87b31dc458be4fc17d0066b",
+      "git_blob": "5047cb9f61c7279e69dd1aa8cb91719f434a0c54",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/search.html": {
+      "bytes": 13387,
+      "sha256": "98b80b824ce1bfa2b1fd007988174a5034723fd4c90e6fba42a2688022be00b4",
+      "git_blob": "4c3d45e9b9a7d26d92d57bcc7d5091921cd39d43",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/_modules/index.html": {
+      "bytes": 13987,
+      "sha256": "9dc566f97ca5cb3f25df975d6c9883a88303f329bded71bde65a304390961a87",
+      "git_blob": "88470f5677e3a12305b5a0cab4fe300ca3e2e59d",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "All nine remaining generated content/navigation HTML pages read as parsed text; no browser appearance or interactive search claim.",
+    "Core API explicitly says deduplicate calls unique computation via preprocessing; actual method and prior real-Numba controls contradict that lifecycle promise.",
+    "Tolerance API promises default current dataset; real-Numba default controls show empty-reduction failures. Plateau signature calculate_tolerance() lacks current condition option.",
+    "Quickstart HTML repeats batch call without mask computation and tolerance flow without explicit uniqueness refresh. Batch failure already reproduced separately, not newly executed here.",
+    "Generated algorithms page calls nearest-neighbor result exact and states speed/accuracy benefits; those statements are upstream documentation, not accepted correctness or performance evidence.",
+    "Index/module overview expose known classes; search page contains JavaScript-required fallback only. Interactive search not exercised."
+  ],
+  "remaining_scope": "23 artifacts remain: static JS/CSS/source maps/search index and7binary doctree/environment cache files.",
+  "limits": [
+    "HTML text inspection is not rendered visual UI qualification; embedded original images have been viewed separately. Original full suite100passed in one environment; global fully reviewed count201/500 unchanged. pHash/ASAN deferred."
+  ]
+}
