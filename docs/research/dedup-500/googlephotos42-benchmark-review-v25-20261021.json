@@ -1,0 +1,61 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_benchmark_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/bench/engine.ts": {
+      "sha256": "f367317b92960658c35d77b5e034e4df822924f4c8a17e154dc71d3f8f86e5c8",
+      "git_blob": "8777196c0dc7a4a87f2f73015f32b2ce28da61ef",
+      "bytes": 8470,
+      "lines": 181,
+      "method": "Whole pinned source/configuration/baseline read; benchmark not run."
+    },
+    "scripts/bench/engine-entry.ts": {
+      "sha256": "f08d9ce135a7ecc3223d032d19ace13860168dfa5ff0ab00e940ad8a23b05438",
+      "git_blob": "a4a9abd95afbbc419ccefca238cf1711bf597aa5",
+      "bytes": 2593,
+      "lines": 82,
+      "method": "Whole pinned source/configuration/baseline read; benchmark not run."
+    },
+    "scripts/bench/mock-grid.ts": {
+      "sha256": "90239c29c269c1e6500af86de67164c2ee5d57597038b80bfadeb209081c4e21",
+      "git_blob": "c3f3436fe829ec8eeffbc68489401b6b970953ec",
+      "bytes": 8092,
+      "lines": 172,
+      "method": "Whole pinned source/configuration/baseline read; benchmark not run."
+    },
+    "bench/engine-baseline.json": {
+      "sha256": "38ba641e895c8d6a60e5e947f1f4a51312de917e3b3c568118f83a8227303599",
+      "git_blob": "4db2116788f05bb35c295e54512a0d99d225a039",
+      "bytes": 4364,
+      "lines": 190,
+      "method": "Whole pinned source/configuration/baseline read; benchmark not run."
+    },
+    ".github/workflows/bench-engine.yml": {
+      "sha256": "dca3ad09c70680ab1b4db72f7072a3df5d01968c58670e2bc3b2c76a521819d3",
+      "git_blob": "4e571376e29d60462deb6ddefe254fbbd88c7d11",
+      "bytes": 1254,
+      "lines": 41,
+      "method": "Whole pinned source/configuration/baseline read; benchmark not run."
+    }
+  },
+  "cumulative_assessed_blobs": 93,
+  "tracked_blobs": 230,
+  "findings": [
+    "Harness benchmarks realDeleteEngine/browserDom on authoredheadlessmockgrid,notdedupscan/hash/group/realGoogle. Baseline numbers cannot justify localdeduplibraryperformance.",
+    "8storedrows default/busy\u00d7500/2000\u00d7dry/delete;5000hasnobaselineandcomparisoncontinueswhenrowmissing. Functionalstatus/count/remainingchecks stillapply. No currentCIartifactinspected.",
+    "--write-baselinecanwritebeforelaterfunctionalstatus/count/violationsvalidation setsfailed. Ratchetchecks onlythroughput/peakheap beforewrite; invalidrow canbe persisted beforeprocessreportsfailure. Sourcefinding,notexecuted.",
+    "Heap sampled50msplusinitial/final; peaktransientsbetweenpolls canbemissed. performance.memoryChrome-specific;browserprocess/RSS/GPUmemorynotmeasured.",
+    "sleepMs wrapsdom.sleep only; observerwaitForDomQuietnotincluded,so sleepSharePctdoesnotrepresentallwaiting. Longtaskobserverbufferedmayincludepre-enginepagework.",
+    "Onefixedorderingthroughscenarios/sizes/modes,onenewpageperrow,onebrowserlaunch; norepeatedpairedtrials,randomization,warmupdefinition,CIhardwaremetadata,confidenceintervals. Baselinehasroundedmetrics butnogeneratedAt/compiler/browserhardwarepin.",
+    "Mock modelsvirtualizedtiles,knownlatenciesandstalegap,checkszeroclickdryrun/exactremainingdelete. No thumbnailimageelements initsgeneratedtiles; notfixturefordeduphashpipeline.",
+    "Potentialcleanupgap: ifengine.runthrows,innerfinallyrestoresconsole butsampler/observercleanupaftertry is skipped. Browserpageclosefromouterrunneralso depends onsuccessfulrowpath; wholebrowserfinallycloses. No failureinjection."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 31,
+  "limits": [
+    "93/230wholeartifacts; historicalbaseline notcurrentperformanceevidence.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
