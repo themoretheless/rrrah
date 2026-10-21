@@ -1,0 +1,34 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse41_x86-64_windows_msvc.asm": {
+      "sha256": "c3e218899b6b52e22c1d552392bf972e7ac513addc2c247635cf60325dc39724",
+      "git_blob": "8966c7b84406e98792af7e63d53d9bb49a7ad8ef",
+      "lines": 2089
+    }
+  },
+  "cumulative_whole_files_read": 282,
+  "tracked_blobs": 289,
+  "method": "Differential whole-source review against reviewed Windows GNU SSE4.1: normalized all2006 instructions and resolved GNU numeric/MASM anonymous or named labels to instruction-index branch targets. Inspected all four residual instruction differences and full MASM directive/data inventory. Equivalent instructions not independently serial-reread.",
+  "equivalence_accounting": {
+    "gnu_instructions": 2006,
+    "msvc_instructions": 2006,
+    "normalized_identical_instructions": 2002,
+    "residual_differences_read": 4,
+    "branch_targets_identical": true,
+    "normalization": "Hex numbers converted to integer; whitespace collapsed; explicit +rip removed for text comparison only; prefetch byte ptr spelling normalized. Directives/data excluded and separately inspected."
+  },
+  "findings": [
+    "Both scalar compression functions spell movd xmm3,r9 and movd xmm4,r8 where GNU uses movq. These four r64 operand forms are preserved as actual source differences; MASM acceptance and64-bit transfer encoding require object/build verification. No counter truncation or build failure claimed from spelling alone.",
+    "All other2002 normalized instructions including stack argument offsets, register preservation and restores match Windows GNU. All conditional/unconditional branch destinations match after resolving anonymous @F/@B labels and named labels to instruction positions.",
+    "PUBLIC plus paired PROC/ENDP expose both symbol spellings for all three entry points. CODE segment/loop alignment16 and READONLY .rdata segment with ALIGN64 replace GNU directives. No FRAME/unwind annotations observed.",
+    "DUP declarations expand repeated IV/block-length/counter-step words. CMP_MSB_MASK allocates eight32-bit masks whereas GNU has four: inspected SSE loads consume16 bytes, so extra constant storage alone does not establish semantic error. Rotate byte masks and IV values match on source inspection.",
+    "Stack64 alignment for hash-many,528-byte reservation and XMM6..15 saves remain as GNU; scalar functions preserve seven actually used nonvolatile XMM registers in120-byte frames. Compile-time and runtime validation remain separate."
+  ],
+  "limits": [
+    "282/289 pinned blobs reviewed;150/500 complete repositories.",
+    "No MASM build, object disassembly, Windows execution, throughput or sanitizer proof. Upstream source not imported; pHash/ASAN deferred."
+  ]
+}
