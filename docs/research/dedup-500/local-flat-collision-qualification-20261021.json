@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "related_source_review": "docs/research/dedup-500/haskell470-complete-source-review-20261021.json",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test visual_publication flat_hash_collisions_remain_candidates_and_exact_pixel_groups_stay_separate",
+  "runtime": "Rust1.98.1, macOS arm64",
+  "passed": 1,
+  "failed": 0,
+  "filtered_out": 1,
+  "test_time_seconds": 0.01,
+  "build_time": "5m17s",
+  "initial_attempt": {
+    "command": "same test without --features decode",
+    "executed_tests": 0,
+    "qualification": false,
+    "reason": "Whole test file gated by cfg(feature=decode); zero tests not accepted."
+  },
+  "coverage": [
+    "Four owned synthetic1x1 BMP files, two black and two white, cold and warm cache.",
+    "All six pairs may remain hash candidates but none are informative; require_information excludes all.",
+    "Exact pixel comparison returns only black-black and white-white; all four cross-color pairs differ.",
+    "Memory budget returns to zero after scans."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/visual_publication.rs": "7b0723c536e8a6fcb3624ca592b610bf3873157eb1b4c6014c3dd01d1dcaf7fd",
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/src/scan.rs": "810b2b2a7c6e4f5fe7e6c77c05ea5b85562c54908c9a72606a4dc19334f7ddd9",
+    "crates/rrrah-decode/src/raster.rs": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7"
+  },
+  "limits": [
+    "Existing focused regression, no production changes or new test code.",
+    "Synthetic BMP qualification only; not execution of external JPEG corpus, Haskell wrapper or native pHash.",
+    "Current decode raster includes pre-existing uncommitted work, preserved; recorded SHA256 identifies tested state.",
+    "No claim of crop/logo robustness, precision/recall, all formats or universal case coverage."
+  ]
+}
