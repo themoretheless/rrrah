@@ -1,0 +1,46 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "dedup/deduplicator.ts": {
+      "sha256": "4417a879a49242ba0e400db47b564348b207637a0780a5b34906dacb10febe80",
+      "git_blob": "2ac9829f731690b8624bb805b061293f8fc28374",
+      "lines": 205
+    },
+    "dedup/customFetch.ts": {
+      "sha256": "38b85c295567f18cbcd62fe10743078c2ef37066e9f2ff47892e41788ba49945",
+      "git_blob": "43b239dee9b1ef2fbdba1d04dc026912a6021941",
+      "lines": 224
+    },
+    "dedup/library.ts": {
+      "sha256": "62bad24997dead78969b486ac02386904d8cf710b89f53c715609043560b651a",
+      "git_blob": "68d0f5ef18e55186355cfe7ad08642f57d193255",
+      "lines": 24
+    }
+  },
+  "cumulative_whole_files_read": 3,
+  "tracked_blobs": 97,
+  "method": "Full three cached source files read, SHA256/Git blobs checked against pinned tree. Original saved-track removal method body extracted with only TypeScript generic/type erasure and run in Node with pending mocked API promises.",
+  "findings": [
+    "Domain is Spotify track identity/metadata, not exact file-byte equality. Existing reject-domain decision retained; user requested all repositories so source review continues.",
+    "Saved-track removal launches async IIFEs without awaiting them, clears model duplicates and resolves before API work finishes. Local51-track control returns with0completed,2pending batches and0model duplicates. No external API used.",
+    "Playlist removal instead serially chains batches after sorting descending positions. Starred-playlist reject lacks immediate return so source continues preparing operations; no external execution.",
+    "Track equality uses ID or lowercased name:first-artist with duration difference<2000ms. Tracks deemed duplicates are not added to seen maps; representative/order semantics differ from transitive connected components. Plain objects/in-membership include prototype keys; artist-array preconditions unchecked.",
+    "customFetch token-refresh branch returns raw second fetch response without rechecking response.ok/status. Header mutation assumes object representation, not Headers/tuple forms. Retry-After parses integer seconds and delays lack abort support; source-only findings.",
+    "Library fetch reduces pagination output as pages directly; actual promisesForPages return contract must be read next before concluding mismatch."
+  ],
+  "executed_control": {
+    "requested_tracks": 51,
+    "completed_when_outer_resolved": 0,
+    "remaining_model_duplicates": 0,
+    "pending_batches": 2,
+    "exit_code": 0,
+    "external_requests": 0,
+    "harness_sha256": "e41bb2489ac98bc322d901da9bc0ec741527310724a0237a6f9fe2768e569d1f"
+  },
+  "limits": [
+    "3/97 tracked blobs reviewed;151/500 repositories complete.",
+    "No actual Spotify operation, fullapp runtime, UI/media or API-currentness claim. Deferred pHash/ASAN untouched."
+  ]
+}
