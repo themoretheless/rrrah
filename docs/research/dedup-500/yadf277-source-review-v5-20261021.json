@@ -1,0 +1,98 @@
+{
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 39,
+  "new_whole_files_read": {
+    "scripts/yadf.py": {
+      "bytes": 4131,
+      "sha256": "369b54a9089a161f6700f6495d5ab9e529ea5b27e58faddcf1bd50fd8f894376",
+      "git_blob": "c650fa141f5474505b27371a2a9261b4f39919b8",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    "examples/keep_oldest.py": {
+      "bytes": 1633,
+      "sha256": "86ccad5e271f8348f29d7360697335d9c8630cb2aa5001220d353801f6039c3e",
+      "git_blob": "6b444eb9a328123478a8031ef5215dab7176a046",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    ".github/workflows/ci.yml": {
+      "bytes": 2521,
+      "sha256": "48e64480d08ff145fe77171b85eaf396961c8b6050c373578b7483f406ae1f92",
+      "git_blob": "8f6e7d4b7504e261e26e7242f388d3aeab0d693f",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    ".github/actions/cargo-cache/action.yml": {
+      "bytes": 2343,
+      "sha256": "b4ef8306eae644a40d1ba3bfdf94252391c9d1e77e249718e2daeb77ed9a7b63",
+      "git_blob": "465af871a8253431b81ac855a5d21791b45ffbad",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    ".github/chglog/RELEASE.tpl.md": {
+      "bytes": 665,
+      "sha256": "59d3c3c8bf32f8626d91d87016c1506bb953e63e4850bf2bd1d82387bb44f6e1",
+      "git_blob": "bd76f9e7dba937dd18d96e2e54825677dee94631",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    ".github/chglog/release.yml": {
+      "bytes": 606,
+      "sha256": "24e4a01af96f063cac81e6cc01b63d0c842516abe14a5ceeca9eb24573cc69f5",
+      "git_blob": "073b71bec3257dcf1cc1be58e07903b161d3babe",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    ".gitignore": {
+      "bytes": 37,
+      "sha256": "458a9fdf25a0618c6d6378c14cfd06615629f2b93e5a642f8051cdb99aba6f9a",
+      "git_blob": "cd437a4850104451595f3cb9a0e4b7c70d222ee8",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    "tests/static/bar": {
+      "bytes": 3,
+      "sha256": "d9cd8155764c3543f10fad8a480d743137466f8d55213c8eaefcd12f06d43a80",
+      "git_blob": "e61ef7b965e17c62ca23b6ff5f0aaf09586e10e9",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    "tests/static/foo": {
+      "bytes": 3,
+      "sha256": "d9cd8155764c3543f10fad8a480d743137466f8d55213c8eaefcd12f06d43a80",
+      "git_blob": "e61ef7b965e17c62ca23b6ff5f0aaf09586e10e9",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    "tests/static/qax": {
+      "bytes": 2,
+      "sha256": "50c393f158c3de2db92fa9661bfb00eda5b67c3a777c88524ed3417509631625",
+      "git_blob": "0ddf2bae71d08623786db120996eea00b75f8237",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    "tests/static/qix": {
+      "bytes": 3,
+      "sha256": "d9cd8155764c3543f10fad8a480d743137466f8d55213c8eaefcd12f06d43a80",
+      "git_blob": "e61ef7b965e17c62ca23b6ff5f0aaf09586e10e9",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    },
+    "tests/static/qux": {
+      "bytes": 3,
+      "sha256": "a81c31ac62620b9215a14ff00544cb07a55b765594f3ab3be77e70923ae27cf1",
+      "git_blob": "e0b3f1b09bd1819ed1f7ce2e75fc7400809f5350",
+      "method": "Whole pinned text/fixture bytes read without truncation"
+    }
+  },
+  "new_runtime_controls": 2,
+  "cumulative_targeted_controls": 6,
+  "controls_script": "docs/research/dedup-500/yadf277-controls-v5-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/yadf277-controls-v5-20261021/run.log",
+  "findings": [
+    "Original auxiliary Python ldjson emits adjacent arrays without LF; two authored groups cannot be parsed as individual LDJSONrecords. Rust ldjson output is different code and not implicated.",
+    "Original auxiliary Python hash_file streams4KiBblocks; authored12KBbinarypayload SHA384 equals independent wholebuffer digest. No multiprocessing whole scanner qualification.",
+    "keep_oldest example currently never deletes: os.remove is commented and loop pass. It sorts oldestmtimefirst before filter; parallel helper leaves imap_unordered iterator unconsumed before pool exit, runtime completion unqualified. No cleaner launched.",
+    "CI separates cargo checkfeaturematrix from allfeaturetests, consistent with observed no-default libtest compile issue not covered by CI testmatrix. No live CI result inferred.",
+    "Cache key includes CPUfingerprint due target-cpu=native; source comments explain portability intent, no actualbinarycompatibility qualification.",
+    "Five tiny fixtures fully read:bar/foo/qix identical aaLF,quxbbLF,qaxiLF. Root/fullsource pins unchanged; no production copying.",
+    "39/44artifactreview; releaseworkflow,bench-versions.sh,bench.sh,gen-corpus.py,Cargo.lock remain. Prior35library+15CLIpasses and1ignored retained, no rerun needed this turn. NativepHash/ASANdeferred."
+  ],
+  "remaining_scope": "5whole artifacts: .github/workflows/release.yml, scripts/bench-versions.sh, scripts/bench.sh, scripts/gen-corpus.py, Cargo.lock.",
+  "limits": [
+    "Auxiliary Python finite controls do not qualify Rustscanmutation fixes or complete repo. Fullreview count200/500 unchanged."
+  ]
+}
