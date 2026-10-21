@@ -1,0 +1,37 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "components/ScanConfig.tsx": {
+      "sha256": "0168188bc7ec5c07ebbcbcf2e09e910cfcb0c9cfaab3b68770b57534493794cb",
+      "git_blob": "6dc8db5151c4cc4e84a7d0a22d1f874bbc41fe64",
+      "bytes": 6295,
+      "lines": 168,
+      "method": "Whole source read."
+    },
+    "tests/components/scan-config.test.tsx": {
+      "sha256": "8077eaad91b25de989b5fe5e175a71cc01a2881d32f3f678c896602e6b0ded99",
+      "git_blob": "fd44e3e0c2e25604127409f17e3bcea795cb5bde",
+      "bytes": 3335,
+      "lines": 98,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 12,
+  "tracked_blobs": 84,
+  "findings": [
+    "Similarity slider explicitly permits threshold 1.0, so the sixty-identical-vectors truncation control uses a value selectable through normal UI, not an out-of-range input. Real model outputs equal to exactly 1 remain a separate inference question.",
+    "Slider endpoint is labelled Exact only, but underlying decision is thumbnail embedding dot product, not original-file byte equality. Equal embeddings do not prove exact files or complete video identity.",
+    "Smart time-window explanatory text describes closeness, while actual floor buckets exclude arbitrarily close timestamps on opposite boundaries. The separate detector test explicitly expects this exclusion.",
+    "Full mode text promises all-photo comparison; worker pairwise scores support that narrow comparison claim, but retrieval is incremental and result grouping has previously reproduced threshold/overlap limitations.",
+    "This component has no dateRange editor, despite ScanSettings and app command supporting persisted date ranges. External/persisted settings validation remains unqualified.",
+    "Component tests define ten formatter cases, one undefined fallback and three toggle tests (14 generated cases); they do not test threshold-one detection or UI explanatory guarantees."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static source/test review only; React component tests not executed or visually rendered.",
+    "Threshold boundary defect is supported by separate original/generated worker controls, not this component review alone.",
+    "12/84 complete files read; no production library change."
+  ]
+}
