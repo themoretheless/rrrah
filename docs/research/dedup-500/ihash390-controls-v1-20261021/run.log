@@ -1,0 +1,5 @@
+PASS cached no-match survives a later relaxed threshold (original check_hash, synthetic hashes)
+PASS fresh positive control recognizes the same relaxed-threshold match
+PASS returned accepted distance depends on dictionary order; not a nearest-neighbour contract
+PASS symmetric rotation adapters cause repeated deletion KeyError after first delete
+4 authored controls passed; no original pHash/wHash, images, numpy, Redis, or locks executed

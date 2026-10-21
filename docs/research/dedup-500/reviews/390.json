@@ -2,7 +2,7 @@
   "index": 390,
   "repository": "matteounitn/iHashDNA",
   "commit": "7886de42e9c53524df0305596549c1899cfa59d4",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned 3/7 whole text artifacts and four original class controls with synthetic hash/store/rotation adapters. Negative-cache threshold staleness confirmed in adapter; image/Redis runtime unqualified.",
   "decision": "reference",
   "finding": "Redis pHash blacklist and general threshold/bias; no detected negatives or full pixel equality contract.",
   "available_source_evidence": [
@@ -53,6 +53,11 @@
       "lines": 674,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/ihash390-source-review-v1-20261021.json"
     }
   ]
 }

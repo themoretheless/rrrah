@@ -1,0 +1,42 @@
+{
+  "repository": "matteounitn/iHashDNA",
+  "commit": "7886de42e9c53524df0305596549c1899cfa59d4",
+  "whole_repo_complete": false,
+  "tracked_blobs": 7,
+  "cumulative_assessed_blobs": 3,
+  "files": {
+    "README.md": {
+      "bytes": 4532,
+      "sha256": "e405875001853f0910386506da70320538c5a28e99486843fb43d0ab108752a1",
+      "method": "Whole pinned text read without truncation"
+    },
+    "ihashdna.py": {
+      "bytes": 10338,
+      "sha256": "bcbce53d90710bb7531386c35f38920a45d654632f6c0ec6ae5b25caf8ed32fa",
+      "method": "Whole pinned text read without truncation"
+    },
+    "example.py": {
+      "bytes": 1179,
+      "sha256": "56e4aab6b015cad61e732c5f06ed8a1037e8587c4dc56f312692a351efc18a0d",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/ihash390-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/ihash390-controls-v1-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original class AST executed with authored scalar 64-bit Hamming adapter, dictionary stores, no-op locks and four identical rotation adapters. No upstream image hashes or Redis."
+  },
+  "findings": [
+    "Original check_hash caches no-match in clean DB by raw hash only. Query at threshold0 caches negative; later threshold2 remains negative, while fresh control returns positive at1.56percent. Cache omits threshold/bias/database generation.",
+    "calc_similar_hash returns first accepted match, not minimum distance over all matches. Adapter control returns12.5 or1.56percent depending on key order. No documented nearest-neighbour guarantee inferred.",
+    "exec_similar_hash repeats action for each matching rotation without breaking. With four identical synthetic rotations and Python dict deletion, second delete raises KeyError. Actual Pottery RedisDict missing-key/iteration semantics remain unqualified.",
+    "Rotating an already-computed hash matrix is not independently established equivalent to hashing rotated source images. No invariance or decoder quality claim."
+  ],
+  "remaining_scope": "4 artifacts: .gitignore, requirements, root license and original README raster asset.",
+  "license": "Registry GPLv3 screening metadata only; full license not read this turn. No production code adopted.",
+  "limits": [
+    "Partial3/7 source review; complete review count remains178/500.",
+    "No image files, original pHash/wHash, Redis server, real locking or persistent writes executed. Native pHash/ASAN deferred."
+  ]
+}
