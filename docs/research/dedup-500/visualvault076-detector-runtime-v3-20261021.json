@@ -1,0 +1,35 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 7,
+  "new_runtime_controls": 3,
+  "cumulative_runtime_controls": 9,
+  "controls_script": "docs/research/dedup-500/visualvault076-controls-v3-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-controls-v3-20261021/run.log",
+  "runtime_scope": "Complete unchanged original DuplicateDetector module and original DuplicateGroup/Stats module compiled by path includes. Explicit authored minimal MediaFile/FileType model replaces real workspace model;metadataOption<()> unusedinthismodule. Actual ahash/smallvec/Tokio/SHA256/filesystem. Fresh harness dependencies,not upstreamlock.",
+  "original_module_tests": {
+    "passed": 20,
+    "failed": 0,
+    "ignored": 0,
+    "qualification": "Original test bodies unchanged but run with minimal model adapter;not fullworkspace tests"
+  },
+  "authored_controls": {
+    "passed": 3,
+    "failed": 0
+  },
+  "source_integrity": {
+    "crates/core/src/duplicate_detector.rs": "583ad5f06ba94d2360aa010ec56dc02567ee3fce72a3f73ad1f5fecbe1f779d1",
+    "crates/models/src/duplicate.rs": "7aec43df15f890c406f8ccd9cc57aec088b75ce7f97910cb7e6964e0036c5f74"
+  },
+  "findings": [
+    "Public original detect_duplicates quicktrue reports1group for unequal8192bytefiles differingbyte4096;quickfalse reports0. Requalifies earlier function-only result at full detector API with modeladapter.",
+    "Original detector withquicktrue accepts two authored nonexistent paths observedsize0 as1group/1duplicate. This is full API phantomgroup control,not fresh scanner path reproduction.",
+    "Original fullmode reports hardlinkedtwo paths as1duplicate/4wastedbytes although samephysicalfile. Actualfilesystem hardlinkfixture,not allocated-space measurement.",
+    "All20originalmodule tests pass simultaneously with3authoredcontrols;original suite doesnotreject these cases.",
+    "NormalTUIexplicitlyusesfullmode,so quickfalsepositives not attributed to normalTUI. Hardlinkaccounting applies full detector API;TUIactualpath notexecuted."
+  ],
+  "limits": [
+    "No actualMediaFile/modelworkspace/TUI/db/scanner qualification or performance claim. No productionchanges;fullrepo count205/500unchanged. NativepHash/ASANdeferred."
+  ]
+}

@@ -2,13 +2,13 @@
   "index": 76,
   "repository": "mikeleppane/visualvault",
   "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
-  "review_scope": "Partial pinned7/95artifacts assessed,includingoriginalduplicateTUI screenshot viewed.6finitecontrols;normalUIusesfullhash;originaltruncatepanicsforCyrillicboundary.Fullworkspaceunqualified.",
+  "review_scope": "Partial pinned7/95artifacts assessed;9finitecontrols.20originaldetectormodule tests pass with explicitminimalMediaFileadapter;3fullAPIcases reproducequickfalsegroups/phantomzeros/hardlinkovercount. Fullworkspaceunqualified.",
   "decision": "shortlist",
   "finding": "Rust SHA256 quick/full detector and scanner/cache layer with integration tests; compare quick-hash policy against complete hashing.",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 10,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "crates/core/src/duplicate_detector.rs",
@@ -81,6 +81,10 @@
     },
     {
       "audit": "docs/research/dedup-500/visualvault076-source-review-v2-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/visualvault076-detector-runtime-v3-20261021.json"
     }
-  ]
+  ],
+  "upstream_test_scope": "20unchangedoriginalmodule test bodies with minimalMediaFileadapter;not upstreamworkspace/modelsuite."
 }
