@@ -1,0 +1,83 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_three_original_parser_evaluator_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/canary.yml": {
+      "sha256": "6fb7e3466758268cd5571f9b8152c204851e4af2bf3cc8edd8696e8577103e56",
+      "git_blob": "95261b5d8d9806be5b8ca8449a791d5c81a73f22",
+      "bytes": 4297,
+      "lines": 106,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "scripts/canary/evaluate.ts": {
+      "sha256": "e0cff04f23ffca259d7d47c3164a96f1aca8f007eafebdfe4f6435e585703deb",
+      "git_blob": "9d6eb40934893ec4e71f7cdd3faeffdd1877d699",
+      "bytes": 4113,
+      "lines": 105,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "scripts/canary/run.ts": {
+      "sha256": "7a588282ec2ccabe5a0ec67c647141854786bb0382e1cc37847f12c35f3464d9",
+      "git_blob": "a7d9164139dc4f7856eaafea97260562b10e0c1d",
+      "bytes": 5092,
+      "lines": 120,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "scripts/canary/safety.ts": {
+      "sha256": "be96cec7b27d093f86b673686974f8d524f4a7cf61eff046985f60ee2e1ad749",
+      "git_blob": "27bd916423238f58562bf2f31fe709fa7c4b0e44",
+      "bytes": 2013,
+      "lines": 43,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "tests/canary.test.ts": {
+      "sha256": "0c04171484a8de51dffd9a5530e2c7dfb121407939eaef0abf975481ed38d75b",
+      "git_blob": "c90562e37313d2c126430b4cb1e85acdc3141017",
+      "bytes": 4875,
+      "lines": 100,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "tests/fixtures/canary-grid-drifted.html": {
+      "sha256": "5acca81bcfae393790ea778a965d95f9a88274b7122230eff13606df1f37351b",
+      "git_blob": "7026f5fe3fa9704d1bc2469d115013d7b9440205",
+      "bytes": 319,
+      "lines": 6,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    },
+    "tests/fixtures/canary-grid-healthy.html": {
+      "sha256": "1ff4244d8e849db2e6116586768e6ef0171c605694909eecb24fe786936f18d6",
+      "git_blob": "df57efc87ddfd805997650e65681f1dbba96a7d5",
+      "bytes": 557,
+      "lines": 6,
+      "method": "Whole pinned source/configuration/HTML source read; fixtures not rendered."
+    }
+  },
+  "cumulative_assessed_blobs": 36,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-canary-controls-v8-20261021/run.mjs",
+    "harness_sha256": "64b613c9a4d6d06b8def7712224a2fea2c011c10bb84e07bf5c196e5a5a31a1e",
+    "log": "docs/research/dedup-500/googlephotos42-canary-controls-v8-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "method": "Six original modules type-stripped with import relocation and Node JSON attributes. Original parser/evaluator called. No browser runner,DOM mutation,network,session or issue creation."
+  },
+  "findings": [
+    "Healthy canary fixture has href idsAF1QipAandAF1QipB,length7; original mediaIdFromHref requires8and rejects both. Thus healthy selector-count fixture is not usable dedup item evidence.",
+    "Synthetic positive counts for every non-skipped check yieldok while dialog skipped. Count evidence does not check media id validity,thumbnail decode,hash/group correctness or recall.",
+    "mediaLinkprimary0andfallback1 also yieldsok. Video-link fallback presence does not establish photo-link compatibility.",
+    "Workflow exits successfully when session secret missing; actual drift issues step explicitly exits1 after issue handling, correcting any inference from intermediate rc normalization that final drift job passes. Workflow only read.",
+    "Runner uses first unchecked selector then first checked selector to undo, without tracking exact original element/id. With preexisting selections this is not proof that same checkbox was restored. No live reproduction.",
+    "Runner countAll checks presence only: scrollContainer need not scroll and counter need not contain numeric selection count. Fixtures static and tests read, not executed.",
+    "Safety helper is denylist of destructive selectors/words, not explicit checkbox allowlist despite comment. No unsupported-action experiment performed."
+  ],
+  "cumulative_original_function_controls": 17,
+  "limits": [
+    "36/230wholeartifacts; HTML source read is not rendered visual review.",
+    "No full upstream tests or live canary. Native pHash/ASAN deferred."
+  ]
+}
