@@ -1,6 +1,36 @@
 use rrrah_dedup::pixels::{PixelError, Rgba8View};
 
 #[test]
+fn informative_zero_distance_is_a_candidate_not_pixel_identity() {
+    let mut original = Vec::new();
+    let mut adjusted = Vec::new();
+    for _ in 0..9 {
+        for x in 0_u8..9 {
+            original.extend_from_slice(&[x * 28, x * 28, x * 28, 255]);
+            let value = x * 20 + 30;
+            adjusted.extend_from_slice(&[value, value, value, 255]);
+        }
+    }
+    let left = Rgba8View::new(9, 9, &original, 81).unwrap();
+    let right = Rgba8View::new(9, 9, &adjusted, 81).unwrap();
+    let query = left.fingerprint(|| false).unwrap();
+    let other = right.fingerprint(|| false).unwrap();
+    // Both ramps have the same ordering, but independently authored byte values.
+    // An information check must not promote their shared hash to exact identity.
+    assert_eq!(query.variants, other.variants);
+    assert_ne!(left.pixel_digest(|| false), right.pixel_digest(|| false));
+    assert_eq!(left.same_pixels(&right, || false), Ok(false));
+    let index = rrrah_dedup::visual::VisualIndex::new([(u64::MAX, other)], 1, || false).unwrap();
+    for transforms in [false, true] {
+        let candidates = index.search(&query, 0, transforms, || false).unwrap();
+        assert_eq!(candidates.len(), 1);
+        assert_eq!(candidates[0].id, u64::MAX);
+        assert_eq!(candidates[0].evidence.distance, 0);
+        assert!(candidates[0].evidence.informative);
+    }
+}
+
+#[test]
 fn validates_layout_budget_and_cancellation() {
     assert_eq!(Rgba8View::new(0, 1, &[], 10).unwrap_err(), PixelError::Layout);
     assert_eq!(Rgba8View::new(1, 1, &[0; 3], 10).unwrap_err(), PixelError::Layout);

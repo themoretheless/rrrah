@@ -1,0 +1,46 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/papers/Detecting similar and identical images using perseptual hashes - Hacker Labs.pdf": {
+      "sha256": "57337535f2b966b0d583ac5f540f296209853bd4c4929e8a396aa85fc7d8b414",
+      "git_blob": "e2de561fc836005c997cb058d3de969201194bfc",
+      "bytes": 414613,
+      "pages": 5,
+      "method": "All text read and all5pages rendered with Poppler95dpi and visually inspected, including image variants, comparison table, comments and footer.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-perceptual-overview-review-v72-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 613,
+  "tracked_blobs": 616,
+  "findings": [
+    "Historical blog overview compares histogram,average hash,DCT pHash andwavelet similarity on one scene with duplicate,resize,exposure,crop variants. This is not a corpus-wide accuracy or false-positive qualification.",
+    "Table and conclusion disagree on average-hash exposure score, and author notes possible histogram implementation issue. Proposed numerical thresholds are not calibrated for our recipe.",
+    "Metric properties establish distance between hashes, not injective identity of source images. Hash-zero candidates need independent confirmation, even if non-flat.",
+    "Blog references ImgSeek40wavelets perchannel versus earlier overview20coefficients; recipe descriptions differ and must not be conflated. No external linked implementation reviewed merely from mention."
+  ],
+  "executed_controls": [
+    {
+      "scope": "new local regression, not upstream body control",
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test pixels",
+      "exit_code": 0,
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "build_seconds": 4.87,
+      "test_seconds_reported": 0.0,
+      "new_test": "informative_zero_distance_is_a_candidate_not_pixel_identity",
+      "test_source_sha256": "5569060132a927e446233ea8bdd4cba260c696ee5b9872482447876156ba6d33",
+      "observations": [
+        "Two authored9x9opaque grayscale ramps have identical complete fingerprints and informative zero-distance candidates with transforms enabled/disabled.",
+        "Independent distinct byte ramps have unequal pixel digests and exact comparison returnsfalse. Candidate idu64::MAX retained; no identity inferred."
+      ]
+    }
+  ],
+  "limits": [
+    "613/616 assessed:187whole text/source,417PNGvisuals,2structured spreadsheets,4PDFs,3other graphics.3remain:2PDFs andembedded CImg.",
+    "pypdf reported odd-length hex strings while extracting; Poppler rendered all5pages. No native pHash/ASAN launched.",
+    "No production algorithm modification or speedup.34upstream original-body/header controls and2independent counterexamples unchanged."
+  ]
+}
