@@ -2,9 +2,9 @@
   "index": 388,
   "repository": "brett-lempereur/ish",
   "commit": "bbdc45bcf55de61b38b4108871199a117aecd1be",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Partialreview:all14texts read,originaldHashrowstrideerrorandRGBA subimagepanic runtimeconfirmed;9images visualreviewremaining.",
+  "review_scope": "All23pinnedblobs assessed:14wholetext,9originalimagesvisuallyviewed. Originalexample9goldens reproduced,3authoredruntimecontrols withrecordeddependencyharness.",
+  "decision": "reference-reject-row-index-and-strided-grayscale-backend",
+  "finding": "Completepinnedreview:rowindexerror/subimagepanic confirmed;README9goldensreproducedbutnotcorrectnessproof;CMYK/RGBAfilenamesactuallyRGBfixtures. No adoption.",
   "available_source_evidence": [
     {
       "path": "average.go",
@@ -58,7 +58,7 @@
     }
   ],
   "license_metadata": "BSD-2-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "WholeBSD2clause2016BrettLempereurread;no productioncopy.",
   "tests_detected": 5,
   "upstream_tests_run": false,
   "tests_inventory_scope": "Five upstream benchmark-only files,zero Test functions;threeauthoredcontrols executed with explicitly recorded dependency harness.",
@@ -91,5 +91,8 @@
       "controls": "docs/research/dedup-500/ish388-controls-20261021/result.json",
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/ish388-complete-source-review-20261021.json"
 }
