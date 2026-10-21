@@ -1,0 +1,40 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/circle_to_search.rs": {
+      "sha256": "b6529633ebdcd5707fb2ed1cae5ff214eea9012b9935d9de8bd35ede19fe3977",
+      "git_blob": "21caa32383efb9f297a9c941f01e29e6ebbee069",
+      "mode": "100644",
+      "lines": 500
+    }
+  },
+  "cumulative_whole_files_read": 84,
+  "tracked_blobs": 268,
+  "method": "All500 lines read; unchanged base64 helper extracted and verified against seven standard fixed vectors in a synthetic harness. No screen capture or upload executed.",
+  "findings": [
+    "Module implements external Google Lens upload, not local OCR or content deduplication. Lasso points determine an axis-aligned rectangle; no polygon mask is applied to the crop. This matters when describing selected-region behavior.",
+    "Temporary HTML name depends only on process id. Repeated invocation in same process shares the same file; older60second cleanup can delete a later invocation file. Static overlap mechanism, no browser/capture concurrency run.",
+    "Captured PNG is base64 embedded in temporary HTML, opened by ShellExecute; deletion is delayed best effort and open result ignored. Browser upload completion is not tracked. No user screen or file was captured or transmitted.",
+    "capture_screen and crop_bitmap ignore BitBlt results and can return a bitmap despite copy failure; multiple rendering/crop resource creations are not checked before use. Partial/failing Windows API paths unqualified.",
+    "bitmap_to_rgba uses unchecked u32 width*height*4 allocation arithmetic and accepts any nonzero GetDIBits scanline count rather than verifying full height. Dimensions originate from screen-crop bitmap in this module; no arbitrary-file reachability claimed.",
+    "Pixel conversion swaps blue/red but does not explicitly set alpha opaque for32bit BI_RGB. Actual alpha bytes and resulting PNG transparency need Windows fixtures; no visual result qualified.",
+    "WM_DESTROY clears userdata before freeing owned data and bitmap, explicitly protecting later messages. Successful capture/DC cleanup paths restore selected objects and release resources; error coverage is not inferred from those normal paths.",
+    "Overlay point count has a movement threshold but no hard count cap; full-screen compatible bitmaps are created per paint. No performance measurement or optimization acceptance.",
+    "Seven standard base64 vectors covering zero input and all padding lengths passed. This qualifies encoding helper only, not PNG fidelity, browser File/DataTransfer support, Lens availability or successful submission."
+  ],
+  "control_source": "fn base64_encode(data: &[u8]) -> String {\n    const CHARS: &[u8] = b\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n    let mut out = String::with_capacity(data.len().div_ceil(3) * 4);\n    for chunk in data.chunks(3) {\n        let b0 = chunk[0] as u32;\n        let b1 = chunk.get(1).copied().unwrap_or(0) as u32;\n        let b2 = chunk.get(2).copied().unwrap_or(0) as u32;\n        let triple = (b0 << 16) | (b1 << 8) | b2;\n        out.push(CHARS[((triple >> 18) & 0x3f) as usize] as char);\n        out.push(CHARS[((triple >> 12) & 0x3f) as usize] as char);\n        out.push(if chunk.len() > 1 {\n            CHARS[((triple >> 6) & 0x3f) as usize] as char\n        } else {\n            '='\n        });\n        out.push(if chunk.len() > 2 {\n            CHARS[(triple & 0x3f) as usize] as char\n        } else {\n            '='\n        });\n    }\n    out\n}\n\n\nfn main() { for (raw, want) in [(\"\", \"\"),(\"f\",\"Zg==\"),(\"fo\",\"Zm8=\"),(\"foo\",\"Zm9v\"),(\"foob\",\"Zm9vYg==\"),(\"fooba\",\"Zm9vYmE=\"),(\"foobar\",\"Zm9vYmFy\")] { assert_eq!(base64_encode(raw.as_bytes()),want); } println!(\"7 standard base64 vectors passed\"); }\n",
+  "executed_controls": {
+    "source_sha256": "bd54a7bbd13eff33fff0502f6f8d5d8fd28185bfd1150ccf5b8f160876fcddf6",
+    "command": "rustc --edition 2021 lens-base64-v34.rs -o lens-base64-v34; ./lens-base64-v34",
+    "assertions_passed": 7,
+    "output": "7 standard base64 vectors passed",
+    "scope": "Synthetic known-answer vectors against unchanged extracted original helper; upstream module has no test block."
+  },
+  "limits": [
+    "84/268 whole files;155/500 whole repositories unchanged.",
+    "Windows overlay/bitmap/browser/network integration unrun; no local production changes.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
