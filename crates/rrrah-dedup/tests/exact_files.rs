@@ -1237,3 +1237,41 @@ fn atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry() 
         assert_eq!(retry.groups, healthy.groups);
     }
 }
+
+#[test]
+fn duplicate_zip_entry_names_do_not_replace_encoded_byte_identity() {
+    // Both ZIPs contain two same.txt entries whose concatenation is ABC.
+    // Their separate payloads are [A, BC] and [AB, C], respectively.
+    let a = include_bytes!("fixtures/zip-identity/duplicate-name-a.zip");
+    let b = include_bytes!("fixtures/zip-identity/duplicate-name-b.zip");
+    assert_ne!(a.as_slice(), b.as_slice());
+    let root = tempfile::tempdir().unwrap();
+    let original = root.path().join("original.zip");
+    let copy = root.path().join("copy.zip");
+    let distinct = root.path().join("different.zip");
+    fs::write(&original, a).unwrap();
+    fs::write(&copy, a).unwrap();
+    fs::write(&distinct, b).unwrap();
+    let mut expected = vec![original.clone(), copy.clone()];
+    expected.sort();
+    for roots in [
+        vec![original.clone(), copy.clone(), distinct.clone()],
+        vec![distinct.clone(), copy.clone(), original.clone()],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, 3);
+            assert_eq!(report.groups.len(), 1);
+            let mut actual = report.groups[0].paths.clone();
+            actual.sort();
+            assert_eq!(actual, expected);
+            assert!(!actual.contains(&distinct));
+        }
+    }
+}

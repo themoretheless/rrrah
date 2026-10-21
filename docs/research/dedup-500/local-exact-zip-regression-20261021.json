@@ -1,0 +1,40 @@
+{
+  "scope": "Local exact-file regression derived from independently reproduced duplicate ZIP name canonicalization collision",
+  "production_behavior_changed": false,
+  "test_added": "duplicate_zip_entry_names_do_not_replace_encoded_byte_identity",
+  "requirements_verified": [
+    "Distinct ZIP byte streams remain distinct evenwhenduplicate-nameentrypayloadconcatenationmatches.",
+    "Actualbytecopy remains grouped in both scan/scan_verified andbothinputorders.",
+    "All3filesobserved,complete report,noissues/noaliases."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "3925e945eb2c4145911cb4f61abe531dbcdedce9e2e61c499a7dccefc7408063",
+    "crates/rrrah-dedup/tests/fixtures/zip-identity/duplicate-name-a.zip": "7759152fe711aca08c681b6ee23ab7715f68f27a8ce50646ab5c77652dfb2552",
+    "crates/rrrah-dedup/tests/fixtures/zip-identity/duplicate-name-b.zip": "f35f7dbdb255b9489d50502721039ae003bdc6e99588cb4723329149199e2a5c"
+  },
+  "runs": [
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files duplicate_zip_entry_names_do_not_replace_encoded_byte_identity",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0,
+      "build_seconds": 39.39
+    },
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files",
+      "passed": 34,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0,
+      "test_seconds": 1.12,
+      "log": "docs/research/dedup-500/local-exact-zip-regression-20261021.log"
+    }
+  ],
+  "upstream_counterexample": "docs/research/dedup-500/googlephotos42-zip-controls-review-v27-20261021.json",
+  "limits": [
+    "Exactencoded-fileidentity only; doesnotimplement ZIPmembersemanticcomparison.",
+    "No acceptednewoptimization/speedup. All500reviewanduniversalcaseobjectiveincomplete.",
+    "Native pHash/ASAN remainsdeferred."
+  ]
+}
