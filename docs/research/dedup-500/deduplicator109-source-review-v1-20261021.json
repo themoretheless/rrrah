@@ -1,0 +1,54 @@
+{
+  "repository": "teran/deduplicator",
+  "commit": "ef24465a4982c33d5d992ab28eb7dc076f5f8928",
+  "whole_repo_complete": false,
+  "tracked_blobs": 12,
+  "cumulative_assessed_blobs": 4,
+  "files": {
+    "README.md": {
+      "bytes": 2292,
+      "sha256": "0301b34bd375fdc8a171c2bf4ac29157e4a19014d81111eca38a1a110279d014",
+      "git_blob": "10640fe248ccca356a6fe145b0265cdf11aca713",
+      "method": "Whole pinned text read without truncation"
+    },
+    "deduplicator.lrdevplugin/FindDuplicates.lua": {
+      "bytes": 5394,
+      "sha256": "21f191fe5772867eb50fadd4a8973b325448cbcc762cd8d9d8265f5fc0f61c33",
+      "git_blob": "e153f68eced93ebd7bbd9514c0ee40bc6577e8a6",
+      "method": "Whole pinned text read without truncation"
+    },
+    "deduplicator.lrdevplugin/GithubCheckUpdates.lua": {
+      "bytes": 1634,
+      "sha256": "9b2147252069427fc611d046cb6528cca7bb4a34e5f9c4dd63c830ef6731f41c",
+      "git_blob": "50bf6f89e53fedc67e5e30d6be9934e7450939df",
+      "method": "Whole pinned text read without truncation"
+    },
+    "deduplicator.lrdevplugin/ImportImgsumDatabase.lua": {
+      "bytes": 3444,
+      "sha256": "9b4f2975e1f15e4ef73154898a3fde3cb503e460d3dff00102b63597b438a7e6",
+      "git_blob": "df51dbfef55fe726822cbc376ab8c953364962be",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/deduplicator109-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/deduplicator109-controls-v1-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original FindDuplicates.lua executed using task-local Lupa with authored Lightroom/logger/path/process/JSON adapters. Shell invocation replaced by counters; no real services executed."
+  },
+  "findings": [
+    "Cancellation breaks the indexing loop, marks progress done and proceeds to FindDuplicates. Confirmed even when cancelled before first photo. No complete/incomplete result marker observed in this entry flow.",
+    "Nonzero index subprocess exit shows error but iteration continues and search runs. Confirmed two failed synthetic index calls followed by one search.",
+    "Unavailable photos are skipped; database search still runs. Confirmed adapter control, not a claim that skip policy itself is defective.",
+    "Normal positive control indexes two authored photo records then searches once.",
+    "Plugin delegates actual perceptual hashing and grouping to imgsum binaries absent from captured 12-blob tree. Image format claims in README not qualified by this Lua adapter execution.",
+    "Source observes fixed temp imgsum.db and independent asynchronous collection creation/search tasks; cross-run or scheduling behavior remains unqualified.",
+    "Database import appends photos to named collection; no clear/reset observed. Update checker uses version inequality rather than ordering; no network invocation performed."
+  ],
+  "remaining_scope": "8 artifacts: LICENSE, Makefile, .gitignore, Info.lua, JSON.lua, docs config/issue template and original screenshot.",
+  "license": "Three Lua headers declare GPLv2; full root license and nested JSON license pending. No production code adopted.",
+  "limits": [
+    "Partial 4/12 review; global full-review count remains 176/500.",
+    "No Lightroom SDK, imgsum, actual photo/catalog/filesystem/process, decoder, platform or performance qualification. Native pHash/ASAN remains deferred."
+  ]
+}

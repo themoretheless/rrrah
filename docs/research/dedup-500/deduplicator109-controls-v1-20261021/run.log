@@ -1,0 +1,5 @@
+PASS cancellation still searches partial database : indexed= 0 searches= 1
+PASS index subprocess failures still proceed to search : indexed= 2 searches= 1
+PASS unavailable photos are skipped but search still runs : indexed= 0 searches= 1
+PASS normal positive control indexes both photos then searches : indexed= 2 searches= 1
+4 controls passed; no Lightroom SDK, imgsum binary, real catalog, shell, or image decoding executed

@@ -2,7 +2,7 @@
   "index": 109,
   "repository": "teran/deduplicator",
   "commit": "ef24465a4982c33d5d992ab28eb7dc076f5f8928",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned 4/12 whole text artifacts, four original Lua control-flow adapter checks. Cancellation and failed indexing still launch search; actual imgsum/Lightroom runtime unqualified.",
   "decision": "reference",
   "finding": "Lightroom image index/import plugin; perceptual hashing backend and GPL licensing need independent qualification.",
   "available_source_evidence": [
@@ -63,6 +63,11 @@
       "lines": 339,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/deduplicator109-source-review-v1-20261021.json"
     }
   ]
 }
