@@ -1,0 +1,70 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/images/PC_screenshot.png": {
+      "sha256": "c3d3f6983ba822b1e746abca153642965773d5c373e1aa5f047743a748827075",
+      "git_blob": "79ec76f4d08e82bbafb137dbb91e8821b1b52720",
+      "mode": "100644",
+      "width": 2000,
+      "height": 1169,
+      "frames": 1,
+      "method": "Complete single-frame PNG decoded and visually inspected directly at original dimensions."
+    },
+    "docs/images/main_view.png": {
+      "sha256": "c345168936f26fc01a2a25b77cfdb637c459b2bf9b53046794ccc5b0c7a98dfe",
+      "git_blob": "55c89485021d1c48f8a3a04bdc20d9e2063f7271",
+      "mode": "100644",
+      "width": 1053,
+      "height": 957,
+      "frames": 1,
+      "method": "Complete single-frame PNG decoded and visually inspected directly at original dimensions."
+    },
+    "docs/images/omnisearch-lite.png": {
+      "sha256": "ac266395539ab21b524a92aef4a55c3b2f9e2e61b267074ddc0013c89b12bdba",
+      "git_blob": "be54280e7792bdaee4a55f96c19faa424a05e1eb",
+      "mode": "100644",
+      "width": 1402,
+      "height": 849,
+      "frames": 1,
+      "method": "Complete single-frame PNG decoded and visually inspected directly at original dimensions."
+    },
+    "docs/images/quick-window2.png": {
+      "sha256": "bed319d7d8e71f8c5f7675be7dde73f0916b58d1856410e1d78eea0f6f8d0ca6",
+      "git_blob": "dc1738585320124a17c52074d1b0328aef282e01",
+      "mode": "100644",
+      "width": 1482,
+      "height": 992,
+      "frames": 1,
+      "method": "Complete single-frame PNG decoded and visually inspected directly at original dimensions."
+    },
+    "docs/images/search-page1.png": {
+      "sha256": "65f390054a3d9e7999ebfd75d0489eaa40fff9039341fce21dd7348199b5bed9",
+      "git_blob": "0e5e46a973e7ab53fe3331a224655e46b988deca",
+      "mode": "100644",
+      "width": 1043,
+      "height": 957,
+      "frames": 1,
+      "method": "Complete single-frame PNG decoded and visually inspected directly at original dimensions."
+    }
+  },
+  "cumulative_whole_files_read": 211,
+  "tracked_blobs": 268,
+  "visual_observations": {
+    "PC_screenshot.png": "Light desktop Sync view: server running, one phone connected, eight recent transfers; three fully visible JPEG rows display Completed with full progress bars. Screenshot does not establish receiver acknowledgement or durable writes.",
+    "main_view.png": "Dark main search: io, PNG, all drives on, folders off, 200 shown with limit 200, 6.3 MB and Load more (+200); indexed count 2243416.",
+    "omnisearch-lite.png": "Compact launcher with blank query, eight sources stated, six source rows visible including phone connection, browser bookmarks/history, local files and agents. Browser History highlighted. No browser data accessed.",
+    "quick-window2.png": "Light Quick Window: query win, MP4, all drives, 193 shown below limit 200, 544.2 MB; selected item has paused video at 0:00 of 0:01 and explicit Open file/Reveal folder actions. Static frame is not playback qualification.",
+    "search-page1.png": "Dark main search: io, PNG, all drives and folders on, 200 shown with limit 200, 6.1 MB and Load more (+200). Light mode button likely names an action; its label alone does not prove a theme failure."
+  },
+  "findings": [
+    "All five remaining documentation PNGs visually inspected. Historical screenshots support layout descriptions only.",
+    "Completed labels in PC_screenshot.png do not resolve the source findings about completion before send acknowledgement; source and runtime evidence remain separate.",
+    "The quick window exposes truncated names and separate detail preview; no claim about selection races, full matching coverage or video correctness follows from one static frame."
+  ],
+  "limits": [
+    "211/268 complete files; remaining SVG, CSS, lockfiles, icon containers and binary data still require review.",
+    "155/500 repository reviews complete; pHash/ASAN deferred. No production change or new runtime test in this batch."
+  ]
+}
