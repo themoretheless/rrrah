@@ -1,0 +1,57 @@
+{
+  "repository": "stavlocker/SpotifyNoDupes",
+  "commit": "d7ff87e7aaa356dbf3ec4c82080d8769874010e4",
+  "whole_repo_complete": false,
+  "tracked_blobs_complete": true,
+  "tracked_blobs": 6,
+  "manifest": [
+    {
+      "path": ".gitignore",
+      "sha256": "9d01a5ec0aa6c634d738e000a1489fc46554fd6abe7ea5ca232ee3c5ebf32cfd",
+      "review": "whole text read"
+    },
+    {
+      "path": "LICENSE.txt",
+      "sha256": "c53a65c2fd561c87eaabf1072ef5dcab8653042bc15308465f52413585eb6271",
+      "review": "Full-file diff against previously wholly read audio399 LICENSE; all hunks read: whitespace, http URLs, LGPL explanatory URL and trailing newline only."
+    },
+    {
+      "path": "README.md",
+      "sha256": "8172492064d076e962b198556dddae914b656f65780d4e9812156cb6123ea11a",
+      "review": "whole text read"
+    },
+    {
+      "path": "SpotifyNoDupes.png",
+      "sha256": "6687911e3fd0ba736e621e0f857d1025d8e2f084966b6d9bad35ea558f1c05cc",
+      "review": "visual logo inspected"
+    },
+    {
+      "path": "main.py",
+      "sha256": "3d0fba90a34cc6ec5cf5aea788bb286a6ebbff51bf8f0cf64a9590f46942a590",
+      "review": "whole text read"
+    },
+    {
+      "path": "spotifyauth.py",
+      "sha256": "0f6f9b07ab0f26e65d65ee1fa400da113cd387fc1e9635b5e561a64d9b3bace9",
+      "review": "whole text read"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/spotify351-controls-20261021/result.json",
+  "findings": [
+    "Domain is playlist metadata deduplication; no audio/file byte identity, image fingerprint or content similarity implementation. Same primary artist plus name or millisecond duration is heuristic only.",
+    "Original main function with fake service adapters nominates same original track position twice for A~B duration and C~B name; duplicate candidate list not deduplicated. Mutation path not executed.",
+    "Original validate_songs_to_remove with input1,1 thenCONTINUE removes two different entries from candidate list, so repeated choice is not idempotent. Synthetic local list only.",
+    "Comparison quadratic and depends on input order/first artist; null track, empty artists and absent fields unchecked.",
+    "Playlist mutation uses positions without snapshot/concurrent-edit guard; refetch assigns tracks but candidate positions remain based on original list; source-only limitations.",
+    "Empty input confirms deletion unless exactly n; no dry-run report export, rollback or mutation transaction. No actual deletions executed.",
+    "Auth starts local server thread before token request; cleanup absent on failure. FailedAuth requires message but raised without it; source-only TypeError path.",
+    "NotFound/FailedAuth inherit BaseException; set_playlist_by_id catches BaseException, including cancellation exceptions. Source only.",
+    "No tracked tests or pinned dependency manifest; README pip install spotipy not version-qualified. No live auth/API calls or original executable run.",
+    "Tracked PNG is green Spotify-style logo collage on black with title, no evidence of results. Root GPL3 wholly reviewed by exact full-file comparison."
+  ],
+  "remaining": [
+    "Three README-linked externally hosted screenshots inaccessible through web open in this run; their contents not claimed reviewed. Full-repository visual completion remains false despite all tracked blobs reviewed."
+  ],
+  "adoption": "No code copied or production changes; ordered unique candidate identity and stale-position validation retained as review lessons.",
+  "native_phash_asan": "Explicitly deferred"
+}

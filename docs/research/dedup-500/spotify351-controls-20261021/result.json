@@ -1,0 +1,22 @@
+{
+  "source_sha256": "3d0fba90a34cc6ec5cf5aea788bb286a6ebbff51bf8f0cf64a9590f46942a590",
+  "method": "Original classes/functions from main.py compiled unchanged. Fake auth/tool, synthetic metadata and scripted input; no imports of spotifyauth, HTTP, Spotify or playlist writes.",
+  "duplicate_nomination_of_same_position": {
+    "original_position_1_based": 2,
+    "times": 2,
+    "stdout": "\u001b[94m-=== SpotifyNoDupes by \u001b[96mstavlocker\u001b[94m v1.0.1 ===-\u001b[0m\n\u001b[92mSuccessfully authenticated user synthetic-user.\u001b[0m\n\u001b[94mPossible duplicates in Synthetic playlist: (Skipping songs that appear identical)\u001b[0m\n\u001b[94m1. \u001b[93mAlpha                        \u001b[95m(#1) vs \u001b[93mBeta                        \u001b[95m (#2) by Synthetic artist: \u001b[91mIdentical \u001b[94mduration\u001b[0m\n\u001b[94m2. \u001b[93mBeta                         \u001b[95m(#3) vs \u001b[93mBeta                        \u001b[95m (#2) by Synthetic artist: \u001b[91mIdentical \u001b[96mnames\u001b[0m\n"
+  },
+  "repeated_keep_selection_1_1": {
+    "expected_unique_keep_ids": [
+      "a"
+    ],
+    "actual_removed_from_candidate_list": [
+      "a",
+      "b"
+    ],
+    "remaining_candidates": [
+      "c"
+    ]
+  },
+  "limits": "Control-flow and list-selection counterexamples only; no Spotify API/version, deletion or audio-content qualification."
+}
