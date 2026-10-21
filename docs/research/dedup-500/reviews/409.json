@@ -2,9 +2,9 @@
   "index": 409,
   "repository": "NiciusB/node-image-hash",
   "commit": "094c36f75773f6344d93af7e6b03467005ee9868",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "wrapper",
-  "finding": "Node worker blockhash calculator with useSha256Fallback option; fallback could mix exact and visual evidence unless tagged explicitly.",
+  "review_scope": "All22 pinned blobs assessed:15 whole text,1 lock structural/runtime,6 images visually viewed including BMP lossless viewing derivative; original28Jest tests and authored fallback controls.",
+  "decision": "reference-tagged-fallback-but-reject-byte-digest-and-worker-contract",
+  "finding": "Complete pinned review; original28tests pass but real fallback hashes UTF8-transcoded bytes instead of file bytes. No upstream production code adopted.",
   "available_source_evidence": [
     {
       "path": "src/calculateHash.js",
@@ -68,10 +68,10 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
-  "tests_detected": 2,
-  "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "license_scope": "Root MIT2018NunoBalbona whole-read; no production code adopted.",
+  "tests_detected": 28,
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "Original Jest suite28tests executed onNode22; not worker fault/performance qualification.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -94,5 +94,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/nodeimage409-complete-source-review-20261021.json"
 }

@@ -1,0 +1,47 @@
+
+> node-image-hash@1.1.0 test
+> jest --runInBand
+
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+PASS test/main.test.js
+  Child processes hashing
+    ✓ should create hash for jpeg (94 ms)
+    ✓ should create hash for png (86 ms)
+    ✓ should create hash for bmp (73 ms)
+    ✓ should create close hashes for the same image but in a diffrent format (82 ms)
+    ✓ should create same hashes the same images (87 ms)
+    ✓ should create different hashes different images (93 ms)
+    ✓ should create close hashes similar images (89 ms)
+    ✓ should support binary output (98 ms)
+    ✓ should support validate output format (58 ms)
+    ✓ should support variable bits length (93 ms)
+    ✓ should validate bit lengths
+    ✓ should accept Buffer input (13 ms)
+    ✓ should match hash snapshots (71 ms)
+  Same process hashing
+    ✓ should create hash for jpeg (76 ms)
+    ✓ should create hash for png (121 ms)
+    ✓ should create hash for bmp (37 ms)
+    ✓ should create close hashes for the same image but in a diffrent format (88 ms)
+    ✓ should create same hashes the same images (172 ms)
+    ✓ should create different hashes different images (78 ms)
+    ✓ should create close hashes similar images (48 ms)
+    ✓ should support binary output (50 ms)
+    ✓ should support validate output format
+    ✓ should support variable bits length (48 ms)
+    ✓ should validate bit lengths
+    ✓ should accept Buffer input (27 ms)
+    ✓ should match hash snapshots (125 ms)
+  Other
+    ✓ Buffer input should be the same as file path input (12 ms)
+    ✓ Async should return the same result as sync (26 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       28 passed, 28 total
+Snapshots:   0 total
+Time:        2.416 s
+Ran all test suites.

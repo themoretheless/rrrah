@@ -1,0 +1,38 @@
+{
+  "rows": [
+    {
+      "bytes": [
+        0,
+        65,
+        127
+      ],
+      "observed": "620499aa32c21cde6aeb8835e196b4ed75c5375fa782b165e9a4f8bae26376ba",
+      "raw_byte_sha256": "620499aa32c21cde6aeb8835e196b4ed75c5375fa782b165e9a4f8bae26376ba",
+      "matches_raw_bytes": true
+    },
+    {
+      "bytes": [
+        128,
+        255
+      ],
+      "observed": "ab8d4ca7f7f34513224e9f146ad2ce34312270cbf5e571577491904839ba3dee",
+      "raw_byte_sha256": "d87d01642f47a0d1901b1dfd2331c9def1bcfc69d8835c6cd911fe4165b804e4",
+      "matches_raw_bytes": false
+    },
+    {
+      "bytes": [
+        0,
+        128,
+        255,
+        10
+      ],
+      "observed": "9fa0215a1b6e2503decd1433fb3758d256fe1917a7f17b18a9f6d985dc01cbde",
+      "raw_byte_sha256": "86c4664401a31696fce9f0ca20294f03cf9ce41664c19b5265cb23157ea02468",
+      "matches_raw_bytes": false
+    }
+  ],
+  "fallback_disabled_rethrows": true,
+  "base64_consistent_with_transformed_digest": true,
+  "binary_bits": 256,
+  "scope": "Original calculateHash source in Node VM; imghash dependency replaced with explicit rejecting adapter to reach fallback, real Node crypto/fs/Buffer. Not real image decoder or original Jest suite."
+}
