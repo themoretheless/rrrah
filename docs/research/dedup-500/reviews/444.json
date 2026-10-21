@@ -4,7 +4,7 @@
   "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "Whole engine read;6 actual function controls cumulative: stale exact cache, cross-size digest grouping, order-dependent image/video groups, malformed cached JSON and PNG signature splitting. Other files incomplete; no code adopted.",
+  "finding": "Whole engine,CLI,generator and deployment/license texts reviewed;8 controls cumulative. Original CLI crashes on report keyword; generated demo puts12nonexactimages in one visual group. Remaining UI/docs/media incomplete; no production adoption.",
   "available_source_evidence": [
     {
       "path": "app.py",
@@ -74,6 +74,11 @@
     {
       "audit": "docs/research/dedup-500/mediadedupe444-source-review-v2-20261021.json",
       "controls": "docs/research/dedup-500/mediadedupe444-video-controls-20261021/result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediadedupe444-source-review-v3-20261021.json",
+      "controls": "docs/research/dedup-500/mediadedupe444-cli-controls-20261021/result.json",
       "whole_repo_complete": false
     }
   ]

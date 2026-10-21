@@ -1,0 +1,46 @@
+{
+  "original_cli_empty_scan": {
+    "returncode": 1,
+    "stdout": "Note: pillow-heif not installed \u2014 HEIC/HEIF files will be skipped.\n      Install: pip install pillow-heif\nScanning directory: /private<temp>/empty (type: images)\nNo image files found.\nCreating HTML report...\n",
+    "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadedupe444-20261021/cli.py\", line 171, in <module>\n    main()\n  File \"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadedupe444-20261021/cli.py\", line 152, in main\n    eng.create_html_report(\nTypeError: create_html_report() got an unexpected keyword argument 'video_error'\n",
+    "report_exists": false
+  },
+  "original_demo_engine": {
+    "images": 20,
+    "exact_groups": [
+      [
+        "backup/forest_backup.jpg",
+        "photos/forest.jpg"
+      ],
+      [
+        "backup/ocean_backup.jpg",
+        "photos/ocean.jpg"
+      ],
+      [
+        "backup/old/mountain_copy.jpg",
+        "photos/mountain.jpg"
+      ],
+      [
+        "backup/sunset_backup.jpg",
+        "photos/sunset.jpg"
+      ]
+    ],
+    "visual_groups": [
+      [
+        "exports/city_lowquality.jpg",
+        "exports/forest_medium.jpg",
+        "exports/forest_original.png",
+        "exports/mountain_4k.jpg",
+        "exports/ocean_compressed.jpg",
+        "exports/sunset_edited.jpg",
+        "exports/sunset_web.jpg",
+        "misc/aurora.jpg",
+        "misc/tundra.jpg",
+        "misc/volcano.jpg",
+        "photos/trip/city.jpg",
+        "photos/trip/desert.jpg"
+      ]
+    ],
+    "scope": "Original generator and actual Pillow/ImageHash engine; generated demonstration corpus, not independent held-out accuracy benchmark. CLI bug not patched or bypassed to claim CLI success."
+  }
+}

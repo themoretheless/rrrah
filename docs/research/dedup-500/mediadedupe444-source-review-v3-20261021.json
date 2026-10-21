@@ -1,0 +1,64 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "files": {
+    "cli.py": {
+      "bytes": 5787,
+      "sha256": "5b8b1bdf1565e227a978132fb8604f4e657f8e86d61e361effc949a4093c4e1f",
+      "git_blob": "137686b72c34f9185cddb56a238d833198741b14",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "create_demo_library.py": {
+      "bytes": 10116,
+      "sha256": "05693be46e9f97aa2d2725d944f98d1da94732996cdb2550631383080919008e",
+      "git_blob": "ba6550c72b99cdcef27462faccf175c1d5ab28ea",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "requirements.txt": {
+      "bytes": 62,
+      "sha256": "a99d4a39dc6dff018676b32329818d1687f86885ed601e8e8c822d9378f130eb",
+      "git_blob": "5e94b6031f41813c4da7fbe85ae1c92e7d629911",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "Dockerfile": {
+      "bytes": 662,
+      "sha256": "ef878e9ffd74ee652fa4344cb40616063adf73c19f59f2dcae491485855f5e81",
+      "git_blob": "c9b7bcbe3900e83d12c45fd692dbecd2e445c9dc",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "docker-compose.yml": {
+      "bytes": 342,
+      "sha256": "e03571e7c21f0837fb228ea740563cf7600f21b7e2c0bb46ba083e42a7b0dbfd",
+      "git_blob": "de7b589077691a3b9ce17482a387f21a99c69787",
+      "method": "Whole original pinned text read without truncation"
+    },
+    ".github/workflows/docker.yml": {
+      "bytes": 1262,
+      "sha256": "fbeac194f1ee6ff5ecaf8bb583a81cbd587f0033d9bf4a0fe00cd14369fe3f04",
+      "git_blob": "d622addf1398983f871cec489ec31eb0d3595b72",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1067,
+      "sha256": "556ea1e83b8d2eaefbddfed3b21f80b17ecb3b8be86b1fb858ec5817205476ec",
+      "git_blob": "e74a37c2d595c2c4702c0e909f4eada7b60a956d",
+      "method": "Whole original pinned text read without truncation"
+    }
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-cli-controls-20261021/result.json",
+  "new_authored_controls": 2,
+  "cumulative_authored_controls": 8,
+  "findings": [
+    "Unchanged original CLI exits1 at report creation even for empty directory: passes video_error but actual function accepts video_errors. No HTML produced. Failure retained, not fixed upstream or counted as passing CLI.",
+    "Original demo generator creates20 images; engine actual Pillow/ImageHash finds4exactpairs. All12remaining images are grouped together at default threshold8, including misc aurora/tundra/volcano and different named source scenes. Synthetic geometry-shared demo is not held-out precision evidence.",
+    "CLI excludes all paths in exact groups from visual retrieval. Related exports cannot join those original members in the visual output; exact/visual relation integration remains separate. Source observation.",
+    "Generator build removes an existing output root with shutil.rmtree before regenerating. Control only ran against newly allocated temporary root; no user media touched.",
+    "Generator summary says6 exports but source creates7(3resizes,2recompressions,1crop,1PNG); total20 confirmed at runtime.",
+    "Requirements only Pillow>=9 explicit bound, remaining dependencies unpinned; Docker base python3.12-slim and compose image latest mutable. CI builds/pushes image but has no test step. Deployment not executed.",
+    "MIT2026parcival42rootlicense whole-read; no code copied into production."
+  ],
+  "limits": [
+    "Seven additional tracked text files whole-read; app.py/frontend/report_template/styles/translations/README/screenshots remain incomplete in cumulative review. Generated images processed but no visual inspection claimed. No original upstream suite detected or run, no Docker/live web/video qualification. Native pHash/ASAN deferred."
+  ]
+}
