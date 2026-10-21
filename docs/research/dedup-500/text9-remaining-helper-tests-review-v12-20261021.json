@@ -1,0 +1,60 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_utils/test_jaccard.py": {
+      "sha256": "9a549fef293946f7dcdc876eb8eb4321d67cda6fa99ff78c8ea0af09d4e44756",
+      "git_blob": "11d50f8493e55f4c9ebe9d1d2d707b6f9377ad48",
+      "lines": 235
+    },
+    "tests/test_config/test_algorithms/test_base.py": {
+      "sha256": "025dd10d8406e88eea94df606d41a62ee4d8eb32d4fb637367cb75580241ecc7",
+      "git_blob": "638c1813f6cbe9016d64e0fbee8a481649f939cf",
+      "lines": 160
+    },
+    "tests/test_benchmarks/test_utils.py": {
+      "sha256": "70b6f42d9485c9e2cd46874188642742891163ff19bd91dd266b6361e81d7f0f",
+      "git_blob": "32bc87deaa79a940caa7b2b59510be94f5842521",
+      "lines": 336
+    }
+  },
+  "cumulative_whole_files_read": 69,
+  "tracked_blobs": 75,
+  "method": "Three whole pinned files read. Executed original Jaccard/benchmark utilities and original test bodies/parameter cases via AST import/decorator removal; methods referencing pytest.approx skipped explicitly. Base Pydantic config tests inspected only.",
+  "findings": [
+    "71original helper test cases pass:22Jaccard and49benchmark utility cases. Seven approximate-comparison methods skipped; not a full pytest result.",
+    "Classifier tests explicitly expectTP when predictions include alltruth plus extras; even method named false_positive_partial_match expectsTP. Passing these tests preserves nonstandard class semantics already identified.",
+    "Jaccard cluster tests inspect best-neighbor similarities and empty/singleton conventions, not retained-representative/all-pairs validation. Repeated object test exercises distinct positions; comment about max ValueError handling is unsupported by implementation, which has no such exception handler.",
+    "SimHash converter test named chain_of_parents actually supplies flattened star mapping {1:0,2:0,3:0}; no multilevel-parent traversal is exercised. Reviewed production UnionFind mapping is flattened, so no production bug inferred from unsupported general-chain behavior.",
+    "Base config tests cover required fields/literals, defaults, custom values, RNG seed consistency and types. They do not exercise negative/zero process count or batch size, MinHash partial bands/rows, or repeated embedding factory RNG consumption.",
+    "Test named config_immutability_after_init only reads RNG/index property and does not attempt mutation; it provides no immutability guarantee. Base defaults CPU count calculated at class-definition time, test compares current os.cpu_count."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/remaining-helper-tests-control.py",
+    "sha256": "3bbc8dc331d026aaa02b8e3b3485eb3e470542b12b0cbb3704eb4af1cb8230b8",
+    "result": {
+      "passed_cases": 71,
+      "per_file": {
+        "tests--test_utils--test_jaccard.py": 22,
+        "tests--test_benchmarks--test_utils.py": 49
+      },
+      "skipped_pytest_approx_methods": [
+        "TestClusterJaccardSimilarity.test_cluster_jaccard_similarity_mixed_threshold_results",
+        "TestClusterJaccardSimilarity.test_cluster_jaccard_similarity_all_above_threshold",
+        "TestClusterJaccardSimilarity.test_cluster_jaccard_similarity_large_cluster",
+        "TestF1Score.test_high_precision_low_recall",
+        "TestF1Score.test_low_precision_high_recall",
+        "TestF1Score.test_harmonic_mean_property",
+        "TestF1Score.test_various_combinations"
+      ],
+      "failures": [],
+      "scope": "Original stdlib-only helper functions and unchanged test bodies/parameter values; AST removes imports/decorators. pytest.approx methods skipped, no full pytest run."
+    }
+  },
+  "limits": [
+    "69/75 tracked blobs reviewed;152/500 complete repositories.",
+    "SimHash component test fetched but not yet read/credited. Remaining6files and external submodule review unfinished.",
+    "No full pytest/Pydantic/NumPy runtime or production changes. pHash/ASAN deferred."
+  ]
+}
