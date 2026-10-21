@@ -1,0 +1,34 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cvutil.cpp": {
+      "sha256": "e5e789d4fb43a51d003aa9c06d5fae4c1f17630879f01c37cdf1b44e3201e776",
+      "git_blob": "0390edbc1202f6a575256c3ae75e16619d199cc1",
+      "bytes": 58544,
+      "lines": 1960,
+      "method": "Entire source cumulatively read: v11 lines640-1115; v12 lines1-320,321-639,1116-1500,1501-1960. No gaps or truncated outputs."
+    }
+  },
+  "cumulative_assessed_blobs": 30,
+  "tracked_blobs": 616,
+  "findings": [
+    "dctHash64 explicitly maps zero output to1. This resolves earlier producer-range uncertainty: normal generated hashes are nonzero by construction, so zero-target rejection is not proof of losing an ordinary valid generated zero hash. Tombstone handling remains a separate concern. Hash function inspected only, not executed.",
+    "DCT pipeline uses adaptive blur,32x32 resampling,9x9 zigzag frequencies subset6..69,mean threshold and bit positions1..63. Candidate signature intentionally discards information; cannot prove file/pixel identity. No native pHash/ASAN execution.",
+    "qImageToCvImg selects by depth and alpha flag; unhandled depths convert to RGB888. cvImgToQImage handles16-bit3channel by shifting samples8bits. These paths lose high-bit precision and need separate qualification for HDR/16-bit duplicate claims.",
+    "Copying32-bit QImage branches assume specific byte layout; alpha/premultiplication and format variants are not normalized explicitly in those branches. No-copy wrappers retain caller storage and do not swap RGB/BGR. Header warns lifetime/order constraints; actual Qt variants not executed.",
+    "sizeLongestSide rejects computed zero width/height with invalid_argument; this is a guard absent from previously reviewed Media::constrainedResize. Scanner catches std::exception, so extreme aspect ratios can become explicit rejected index work rather than successful fingerprints. Source trace only.",
+    "autocrop uses top-left grayscale as border reference,66percent coverage,5percent balance and keeps more than65percent of each dimension. This heuristic deliberately limits crop magnitude; no general crop-invariance proof or new image corpus run.",
+    "compare checks dimensions/depth/channels then elementwise inequality; both-empty same-shape Mats compare true. It compares supplied matrices, not source files, generation stability or canonical color/alpha interpretation.",
+    "Matrix load checks header/row byte counts but allocates based on native header dimensions/type and uses assertions for stride. Raw buffer load has no explicit source length argument. No malformed/cache-memory test performed.",
+    "Demosaic Hough uses selectLines helper with img.cols even for horizontal-grid spacing; small grids, recursive subdivisions and crop-margin output validity require runtime tests. No segmentation coverage claim.",
+    "CVErrorLogger installs process-wide callback and maps thread context; nested logger warning does not restore previous context on destruction. Diagnostic context quality is distinct from algorithm correctness."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "30/616 tracked artifacts assessed:29whole text/source and1PNGvisual. Twenty-one previous original-body/header controls plus one independent key counterexample; no new runtime tests.",
+    "Qt/OpenCV pixel layouts, real decoding/cropping/grid/higher-bit-depth behavior remain unqualified; no production port or measured optimization.",
+    "Native pHash/ASAN remains deferred; source reading of DCT is not a run of that item."
+  ]
+}
