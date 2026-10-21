@@ -1,0 +1,31 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/mainFallback.test.ts": {
+      "sha256": "f5750970cca4170e4f4730130563104c72e5d0867929bb801e17148e28ca47b3",
+      "git_blob": "21001b98bc0530728398c3566ec3a3d44c520019",
+      "bytes": 80413,
+      "lines": 1440,
+      "method": "Entire test source read in contiguous ranges1-360,361-720,721-1080,1081-1440; no truncated output. Test implementations assessed, not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 129,
+  "tracked_blobs": 129,
+  "findings": [
+    "makePlugin replaces validateMount with a null-return spy and path warnings with empty lists. Tests which explicitly restore validation exercise the real validator, but ordinary fallback and ownership tests do not establish complete admission/path policy.",
+    "Most filesystem writes/reads are independent spies; selected managed-TOC edit tests instead use a shared document string. The specific binding-destination test uses independent reads after writes, so previous stateful isolated overwrite controls are not contradicted.",
+    "Progress tests replace replayMountContentsToVault with a fixed result, and hides-notice-on-reject mocks a rejected top-level replay. They do not exercise the internally caught stat error and success-style partial completion reproduced by v25.",
+    "Pending-probe, pending-list, source-switch, Disable, unload and same-ID edit-queue tests assert concrete stale-state guards using deferred promises and mock file maps. They are useful unit contracts, not native Obsidian event ordering or filesystem transaction evidence.",
+    "Recorded private vault handler is evaluated under vm with synthetic TFile/TFolder and stat/cache/event state; host version provenance absent. Exact modify/raw assertions do not establish current/oldest-host editor, Outline, metadata or save compatibility.",
+    "SFTP trust persistence cases cover save-waiting, changed/reset/stale/concurrent keys, cancellation, abort, pin rollback and ordinary edits using synthetic fingerprints and modal buttons. These are separate from the seven real-loopback test implementations reviewed earlier; neither suite rerun here.",
+    "Remote root-trash cases cancel mocked dialogs before backend operations and assert no saved deletion choice. They cover UI exclusion/cancellation, not live provider deletion or native trash behavior.",
+    "Windows path expectations include POSIX write paths and /linux/custom.json after host path.join; this agrees with documented four Windows baseline failures. No new supported-platform run or waiver established."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Whole parent assessment now covers all129blobs:119whole text/source,6structural artifacts,4PNGvisuals. Completion rollup separately verifies tree coverage and byte pins.",
+    "42previous isolated controls only. Upstream full suite/build, native host and live remote providers not run. No production changes."
+  ]
+}

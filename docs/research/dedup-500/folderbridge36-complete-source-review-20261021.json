@@ -1,0 +1,961 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": true,
+  "completion_scope": "All pinned parent tracked text/source and artifacts assessed; not native runtime or external linked content qualification.",
+  "tracked_blobs": 129,
+  "assessed_blobs": 129,
+  "missing": [],
+  "source_text_files": 119,
+  "structural_artifacts": 6,
+  "visually_assessed_pngs": 4,
+  "file_assessments": {
+    "package.json": {
+      "sha256": "7dcde3527941a88178e97c8cc72c05424d904337d2d58c85f1c1aff6974ac38b",
+      "git_blob": "0aeebaeb42e76b7f46bbe05d9f66db0c839bee26",
+      "bytes": 1656,
+      "lines": 46,
+      "method": "Whole source/text read."
+    },
+    "manifest.json": {
+      "sha256": "7780064c44a6e344bb295a4ad79c9d156b1adf501a5d7579e285342ce8d1c7c2",
+      "git_blob": "89316491423bc3d3a312604a2c0f4d3565c91fc6",
+      "bytes": 376,
+      "lines": 10,
+      "method": "Whole source/text read."
+    },
+    "src/mountScan.ts": {
+      "sha256": "2723eff71980b48c94a2d26c2f61cc24526e9b61fd68bf4889b31f8c0059f000",
+      "git_blob": "637695e32a3d0f7f426694b4b604a59f7b429694",
+      "bytes": 5048,
+      "lines": 124,
+      "method": "Whole source/text read."
+    },
+    "src/mountFileFilter.ts": {
+      "sha256": "900667b941c266bb3f26519613a56bcce2dce6a79710a0d4989b8b4c69382d79",
+      "git_blob": "1ecc40ddda83b9a7f85ae49fb41b53ed4468d2ec",
+      "bytes": 928,
+      "lines": 28,
+      "method": "Whole source/text read."
+    },
+    "tests/mountScan.test.ts": {
+      "sha256": "e4662a2e16530bc98616d5b0ab13dec6bedb3053b598b7c6d92e857c9643999a",
+      "git_blob": "587326447521d3d3a45032a70edad7fdb6a76a1d",
+      "bytes": 17196,
+      "lines": 361,
+      "method": "Whole source/text read."
+    },
+    "tests/mountFileFilter.test.ts": {
+      "sha256": "0782d99927c1fd3204fedd845d6445b575946eaca6ab8ef4b7c322740fd25204",
+      "git_blob": "69c15cb4004ab1b7502ce942eda688a1efdaadc4",
+      "bytes": 988,
+      "lines": 20,
+      "method": "Whole source/text read."
+    },
+    "scripts/benchmark-mount-scan.mjs": {
+      "sha256": "3034539731937b4552f13970bee821c4ed86d8fea386fbfa072134e59b0dbfb5",
+      "git_blob": "cc4dabdd3cafa3661a151c7f9b7adb31930f365d",
+      "bytes": 5214,
+      "lines": 123,
+      "method": "Whole source/text read."
+    },
+    "src/PathMapper.ts": {
+      "sha256": "ba8c755ea10c226c7ddaa15c49515eae733a6f65978afaae44b35503e0206431",
+      "git_blob": "6369d9cce78061423d2022e12f8cc1ffd7a1f3e8",
+      "bytes": 7192,
+      "lines": 183,
+      "method": "Whole source read."
+    },
+    "tests/PathMapper.test.ts": {
+      "sha256": "80e3e675a1e3cc6ef57db7ac8cd3cd93398e0d92907d3b804d26c0ae96ce469b",
+      "git_blob": "42bb622728b4121e244acf0bfe76c3fea3a63a65",
+      "bytes": 7036,
+      "lines": 189,
+      "method": "Whole source read."
+    },
+    "src/types.ts": {
+      "sha256": "ac4de1b03a0047843765fb33cceb95e05d917515394946ff7def814c06238e12",
+      "git_blob": "8ea4aee0059ea576a342a31958ee02481c156ce6",
+      "bytes": 9406,
+      "lines": 209,
+      "method": "Whole source read."
+    },
+    "src/runtimeNode.ts": {
+      "sha256": "f737dd42ae27f0fdc983182e58e28617f387ee56017c9625dd8c0e9b8ccb92d7",
+      "git_blob": "bd85dec552e9962a766739d87c68d2069eb89b03",
+      "bytes": 1065,
+      "lines": 40,
+      "method": "Whole source read."
+    },
+    "src/optionalNodeModules.ts": {
+      "sha256": "d0487b98482c9937c0823403dfb8d1853444b641eb5be44cd8514140d5f22c05",
+      "git_blob": "8b66ce8f8a89b76a9b35adeda7b135f25d9ee0cd",
+      "bytes": 95,
+      "lines": 3,
+      "method": "Whole source read."
+    },
+    "src/logger.ts": {
+      "sha256": "576eb863e132b9c5a53526e2f82f9f8ac102688840c956e2195b8cadcd2f5e05",
+      "git_blob": "59eb769b59d9a9e7ba1a35859f616f8aad9b1256",
+      "bytes": 895,
+      "lines": 31,
+      "method": "Whole source read."
+    },
+    "tests/__mocks__/obsidian.ts": {
+      "sha256": "e87682d501c40a6131d5d56b86cd845ab50821a560738197a34b8a9293b91c39",
+      "git_blob": "d96257353ccda8250de257f78f19d27640d8e890",
+      "bytes": 974,
+      "lines": 39,
+      "method": "Whole source read."
+    },
+    "src/TocConfig.ts": {
+      "sha256": "0d87f0a185801a99fbbacfc4ba935938f1504a9c10affa683bcd63476f7f78c9",
+      "git_blob": "6aa2fe2b2cf2e5b179653d78e18c0ef70a4c02e5",
+      "bytes": 6209,
+      "lines": 168,
+      "method": "Whole source read."
+    },
+    "tests/TocConfig.test.ts": {
+      "sha256": "734a029718d6e967d515e28ade8bfe88536f34691867f8e274c9700816b373d9",
+      "git_blob": "1f46ae458e0392df6751838936a800be03a1d8b0",
+      "bytes": 5908,
+      "lines": 148,
+      "method": "Whole source read."
+    },
+    "src/ui/SubmitStateController.ts": {
+      "sha256": "a7aba436427e3e8f2e787d6d0b0fc8a9a02c17eec51bccccebf1f6c48c798a3a",
+      "git_blob": "8fe23e842a72ccd56b52488d77551679c4dd7ce7",
+      "bytes": 506,
+      "lines": 26,
+      "method": "Whole source read."
+    },
+    "tests/SubmitStateController.test.ts": {
+      "sha256": "f31adc27a561f6d4e08d3c63773974648961a2809eda420c13a23c04569896ae",
+      "git_blob": "70d94580b2e8994abeee090bb65f1036986e2586",
+      "bytes": 1817,
+      "lines": 46,
+      "method": "Whole source read."
+    },
+    "src/ui/mountLabel.ts": {
+      "sha256": "6fcf70b8a8d0747bd558cb2f794385dfbfda2bb6b66140ef6abde1673aeea3b9",
+      "git_blob": "74fb07cc4c713ca2636a948fd97154924eec2cf1",
+      "bytes": 338,
+      "lines": 6,
+      "method": "Whole source read."
+    },
+    "tests/mountLabel.test.ts": {
+      "sha256": "c9ed9a1a4199fbcb7755df7272effafc4c6b1ca12d869e2cf60eaf151d07acd5",
+      "git_blob": "6ea55a02493485645067e926db9642d52830e7e0",
+      "bytes": 2178,
+      "lines": 40,
+      "method": "Whole source read."
+    },
+    "src/FileWatcher.ts": {
+      "sha256": "99490eebc4f0e803e3305194789a270e9bf8a10705f8faf9cb8fc83f0bafaa25",
+      "git_blob": "d9a2a06b5679c70829e8803e9e95f057d71d4ca2",
+      "bytes": 16748,
+      "lines": 350,
+      "method": "Whole source read; tests contiguous1-380 and381-end."
+    },
+    "tests/FileWatcher.test.ts": {
+      "sha256": "00ff53efacd59dbc7bd51fcc83dc7a684a24038c30b9a486beff1e3847679de8",
+      "git_blob": "fd2555c3b547e965f8faf3dbfdca8f7a6d98edcc",
+      "bytes": 31803,
+      "lines": 664,
+      "method": "Whole source read; tests contiguous1-380 and381-end."
+    },
+    "src/WebDAVAdapter.ts": {
+      "sha256": "1044a3ad59a39b89703ea5a19a8fb61947b0991a8af61921d6ae119b9fb8b2b6",
+      "git_blob": "4b168159b6f4414b93965d7b4a9907a0d844a35d",
+      "bytes": 11039,
+      "lines": 261,
+      "method": "Whole source read."
+    },
+    "tests/WebDAVLazyLoad.test.ts": {
+      "sha256": "8357863245d370dd48c6501b0e8b409631fbf6ab86430091e7929f5bc792356b",
+      "git_blob": "0a508c371535f0f328126fc6c9bd308e5aea30a9",
+      "bytes": 2199,
+      "lines": 51,
+      "method": "Whole source read."
+    },
+    "tests/RemoteAppend.test.ts": {
+      "sha256": "1016ee347e2fca3cd3646a8f722fffeab1b0ee5d420649d5d8d3ec1e13a21a4d",
+      "git_blob": "9b24eb4fff7432c3bbeae6f5d7a6fb19c595ed07",
+      "bytes": 2171,
+      "lines": 56,
+      "method": "Whole source read."
+    },
+    "src/S3Adapter.ts": {
+      "sha256": "711260a08235106088ed57dcba862812b5b881da3b6487cf259aa734893722da",
+      "git_blob": "5186ef726cb6c0ac8e35909ff2d01dcc4c5fa132",
+      "bytes": 22955,
+      "lines": 594,
+      "method": "Whole source read."
+    },
+    "tests/S3Adapter.test.ts": {
+      "sha256": "56cd9712961e45a887033329e5dd008183e4eea6a5f46c6ea5ae3a5efded5512",
+      "git_blob": "3c16683c0fb4792d399ca20dccfeb6f5aaf9dc06",
+      "bytes": 12429,
+      "lines": 270,
+      "method": "Whole source read."
+    },
+    "src/OSHelpers.ts": {
+      "sha256": "30955cdd3e2edbe5dc8bf6b79ddf326aca973b4ae1fce1a249fc91dba01871dd",
+      "git_blob": "33ecb93c2d037bf319e2f0b293d87f99c92db2cf",
+      "bytes": 18673,
+      "lines": 461,
+      "method": "Whole source read."
+    },
+    "tests/OSHelpers.test.ts": {
+      "sha256": "ae5be872c834af99d8050f92a053f4d50c3038ca0bc39edf102f3f086435e2eb",
+      "git_blob": "28eb5166f0d9b7c173ef3cd030bd96834b5ba591",
+      "bytes": 12233,
+      "lines": 390,
+      "method": "Whole source read."
+    },
+    "src/ui/WelcomeModal.ts": {
+      "sha256": "68f6b0eeb113702278d93e3d21dba8a4f19a337cde6aec6b93611c445802aae8",
+      "git_blob": "65e09d1c9cc22cde121c0a5d013364dbd489222a",
+      "bytes": 2504,
+      "lines": 73,
+      "method": "Whole source/text read."
+    },
+    "src/ui/MountRootDeleteModal.ts": {
+      "sha256": "9ec2f1478c89bcd4a5eb8dcb4e274bdc9e943028f2c887cbcb9bd76c4762bc06",
+      "git_blob": "21e3e832f3006021776be1a0c6e2ad87608e77b2",
+      "bytes": 3386,
+      "lines": 89,
+      "method": "Whole source/text read."
+    },
+    "tests/MountRootDeleteModal.test.ts": {
+      "sha256": "dc6911d9b8abddacafbff6179c09c710bfbf887ed63e5cefca52433cb8ee5a33",
+      "git_blob": "a3e8ba45d3600304305723774719859a909c7dec",
+      "bytes": 4249,
+      "lines": 99,
+      "method": "Whole source/text read."
+    },
+    "esbuild.config.mjs": {
+      "sha256": "a0c45e106b2218bcb23570d977e56fde23b8a677dfabbe1111e1dfa2982c9fd7",
+      "git_blob": "e187b354389f1a5529b6404eb88fb9bcde4ccd4c",
+      "bytes": 3219,
+      "lines": 130,
+      "method": "Whole source/text read."
+    },
+    "tests/esbuildConfig.test.ts": {
+      "sha256": "277f36727b661c40ce757b3c42abaa0d669b2226da7bd5405766401625cbf066",
+      "git_blob": "bc3766302e5d6c54315051504e2dd7153f24428f",
+      "bytes": 1619,
+      "lines": 36,
+      "method": "Whole source/text read."
+    },
+    "vitest.config.ts": {
+      "sha256": "77142f8ab8ac8eecec3581009a168f716c37866adcee9fa8c9af3ad72627a244",
+      "git_blob": "804e64222ff66416fb7043d3bcd01eef4b64636b",
+      "bytes": 401,
+      "lines": 16,
+      "method": "Whole source/text read."
+    },
+    "tsconfig.json": {
+      "sha256": "feed8266e9cb252fdf40808ace33dffb36ac32a5b3c098d5d7888e1d05794cf8",
+      "git_blob": "d3fc3e98b527425b781aa9a87d3fcd7ca85d44e3",
+      "bytes": 442,
+      "lines": 25,
+      "method": "Whole source/text read."
+    },
+    "version-bump.mjs": {
+      "sha256": "ce41256c722fcb7a7e546e1378420d884a2f88f7c6438732818562c0213265bd",
+      "git_blob": "1378e9aa7028fad365d40fc4808fceb52a87929c",
+      "bytes": 946,
+      "lines": 26,
+      "method": "Whole source/text read."
+    },
+    "versions.json": {
+      "sha256": "89820c877de2a1bca65da206ed09dd042993815837e1f9a072b40c9e6071959c",
+      "git_blob": "63c3725cd98fc7e40da485f003ac4fccaba1e85f",
+      "bytes": 1143,
+      "lines": 56,
+      "method": "Whole source/text read."
+    },
+    "src/VirtualAdapter.ts": {
+      "sha256": "4c6bd7cafbee5ffc3f5cee5ac84d36d1868edc85a5c6a6443deaf3ff89190a32",
+      "git_blob": "e65e03fcd179bf7f1a9067d022dcb78305780dd0",
+      "bytes": 59123,
+      "lines": 1361,
+      "method": "Whole source read in contiguous ranges; truncated combined output repaired by separate source1240-end and tests1-160 reads."
+    },
+    "tests/VirtualAdapter.test.ts": {
+      "sha256": "60dc8dc9d8666a7f857b0056af54aa2026a5d39e645578a02b2d440bab474081",
+      "git_blob": "bebc89e3f201fbfb682ea029c41fef1be455b1d8",
+      "bytes": 25859,
+      "lines": 535,
+      "method": "Whole source read in contiguous ranges; truncated combined output repaired by separate source1240-end and tests1-160 reads."
+    },
+    "src/SFTPAdapter.ts": {
+      "sha256": "f8c2a4e185ac88a0057bbdc38b631f71c21c1ceb0edf2453f03792cd6248c908",
+      "git_blob": "53bfcddf752c5bce0d1442fb0cfacc097fd2b546",
+      "bytes": 20137,
+      "lines": 498,
+      "method": "Whole source read."
+    },
+    "tests/SFTPAdapter.test.ts": {
+      "sha256": "ef59381ca7ea9afc679b7afcb179fa3f427b168c044ec008d649db972a224eca",
+      "git_blob": "b19df36524142d879b2774713983d8030eacb2d9",
+      "bytes": 6646,
+      "lines": 135,
+      "method": "Whole source read."
+    },
+    "docs/NATIVE_TEST_RESULTS.md": {
+      "sha256": "b699f0b87c51f65b4b253a88b9da2f475a93f9d7f7a9032a05003334c5237613",
+      "git_blob": "a458ac84f78cd7a84100aaa53a01f558282bf67a",
+      "bytes": 5831,
+      "lines": 89,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/QUICKSTART.md": {
+      "sha256": "ac25996f7b1a157a0c8609ed61d83d4a4282ef96897e80b8b439f477ee69d7ef",
+      "git_blob": "216f2ed2225619539b3d38ee0bb5d895c69ff102",
+      "bytes": 2609,
+      "lines": 105,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/ANDROID_SETUP.md": {
+      "sha256": "de7cd7fee64e6300d6c04f6e3c91348b58600673c784d1ef4a4782e1988ea6c7",
+      "git_blob": "a2e51ad056d188c8db2404dd4fc7a8c9332f3307",
+      "bytes": 5590,
+      "lines": 135,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/EXAMPLE_CONFIG.md": {
+      "sha256": "e7b1b07d7cca155e9323e816fc6f3634f3faaa10a0fe7e0a46aec1ec8b47ccee",
+      "git_blob": "6b48b5a4ead75fa827600053f366e1be1315eb20",
+      "bytes": 2438,
+      "lines": 73,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "docs/TOC_CONFIG.md": {
+      "sha256": "d988b7875c69ba65e4bcea30ca3820ac2bf0ead194d96d752613b114389f8e43",
+      "git_blob": "3585bf8035b1238d38aba7cf5ab599673ed284aa",
+      "bytes": 9548,
+      "lines": 367,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    "LICENSE": {
+      "sha256": "d2e190e504b9f7be3882b00146d1ee75d018a6dbdb4917cb87ee7ed786d9bcc8",
+      "git_blob": "6e01322da824ddb37d0246de0d933d4569f35087",
+      "bytes": 1070,
+      "lines": 21,
+      "method": "Whole text read as repository evidence, not instructions to execute."
+    },
+    ".github/workflows/build-check.yml": {
+      "sha256": "58217be74e277e12e8aa8bdc650b056f0f98bf5c6e00409cc4445c19bf2e107c",
+      "git_blob": "1305e3b328a84a15a6cc952a8ba5580b6a752acf",
+      "bytes": 644,
+      "lines": 34,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".github/workflows/release.yml": {
+      "sha256": "df2041b007b9befd8b57513133f7dc8c11367eaa349f2b19a5b467908cb87484",
+      "git_blob": "fc0a6fe4ed406c5c5299b9c0c39c3738fcf83382",
+      "bytes": 1840,
+      "lines": 62,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "scripts/check-ui-text.mjs": {
+      "sha256": "3a31a9f3fa619cb55bd64df10ca4cb664d11a86f76559082a977b7a932f56259",
+      "git_blob": "2b770cb350717fe751a4d622a604d4fbb860b3cb",
+      "bytes": 8041,
+      "lines": 286,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "eslint.config.mjs": {
+      "sha256": "3c2ff861839d0ba36ba35d1f2099160f83fb4f9f4179ec5ce40d5f1660a9e4d5",
+      "git_blob": "99977e8a1aa0b2d9382128a52d634080e029ae56",
+      "bytes": 1339,
+      "lines": 58,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "archive/eslint.bot.mjs": {
+      "sha256": "fe4e9e622170ffab653867822f584977175d8f8352d078eb970b02f21abdfb1f",
+      "git_blob": "940d9941d18106939393e52aefc4c5fae6414831",
+      "bytes": 2092,
+      "lines": 51,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".npmrc": {
+      "sha256": "cf897ad7ad4b3d12abd6dc6f103da0923f2f80f077668abe20e78f17d1901db3",
+      "git_blob": "f0e99703f527fe47ff6ea52f12c2002ce75d6f55",
+      "bytes": 42,
+      "lines": 2,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".editorconfig": {
+      "sha256": "7f27467f663b02003049ecbfc031eb6c3e0c7826033398631f0d6a7247464b5b",
+      "git_blob": "4cee362e3522f9e6b349774efaa4b17f1d28e64b",
+      "bytes": 337,
+      "lines": 21,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".githooks/pre-commit": {
+      "sha256": "ac67cce07da7904da8e792b5cc24452684d6dd0340bd0c30e5ae91621e5a5661",
+      "git_blob": "216c3c59414fd5267a3d96d8361994c28b642e17",
+      "bytes": 86,
+      "lines": 5,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".gitignore": {
+      "sha256": "dc0b116719a4b528c9ee7f29aad5a09a24c1fd82be8a393628d78367a6a5fdf0",
+      "git_blob": "0a5bc0d161249fcc3761cac4eccc0202ec613577",
+      "bytes": 2484,
+      "lines": 153,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".hotreload": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "package-lock.json": {
+      "sha256": "ef4674ea5e4512cb359e985a77614921d9de047dd2707e7b417c54389d4df952",
+      "git_blob": "1f8a9d91af468dd55907e90b05be3f6070718db3",
+      "bytes": 369003,
+      "lines": 8789,
+      "method": "Complete JSON parse/all package records structurally inspected; dependency sources not read."
+    },
+    ".vscode/extensions.json": {
+      "sha256": "5855c8f5111841fe7a3e2a93e02b5aac76b7c1a78956428629f59b27e009a0f6",
+      "git_blob": "2d987ff43e08bdb663828aa0f2bd89800d59e084",
+      "bytes": 125,
+      "lines": 7,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/launch.json": {
+      "sha256": "c91a1f3e02f506e57b0ffe34bbb88472419cd5174c72605d3b18c60d3adbb2e5",
+      "git_blob": "7ab92835b4b6a04cd2e75cf1000014e2cdb49cda",
+      "bytes": 314,
+      "lines": 18,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/mcp.json": {
+      "sha256": "7311e5d0cba72c61562c35923e8fa7a01121ed575e620a75697495f03c59dbc2",
+      "git_blob": "79ae6e5c387575ab92ccd8a812cc32ddba63b62a",
+      "bytes": 223,
+      "lines": 11,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/settings.json": {
+      "sha256": "6a67f9815bc18c344ac7134bcc6245d487bac420854fcc9d046a3f7515ad250f",
+      "git_blob": "1ceb3e46ac9be0e94a2244484fd1ea622872a3d8",
+      "bytes": 663,
+      "lines": 26,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/settings.json.bak": {
+      "sha256": "0433cfca083e87c79bb25bdbed97ca7a029956e9f54ddb4f6234c5398c1168d7",
+      "git_blob": "899e5e66bbf5dc1f50930221439e08eee3adf79c",
+      "bytes": 429,
+      "lines": 18,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/tasks.json": {
+      "sha256": "1771f0eadc15b05a2d274e6a74a31a5095638a307275712dffe11269d4b02279",
+      "git_blob": "f162901103a68e6fd71cbb8fb313974c938c117d",
+      "bytes": 433,
+      "lines": 28,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    "styles.css": {
+      "sha256": "ebafce3184fb2903b57555bcfa3bfefdd56e3ff310bcfe87f651e62a0eff0f6a",
+      "git_blob": "e5249de8f5f8d9923debccaea00dcbef121c7d54",
+      "bytes": 8768,
+      "lines": 383,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    "docs/DEVELOPMENT.md": {
+      "sha256": "4b060ab033fee43f37a6a4ec17fd35131e573b26494eb9f112fb898d35cf2da9",
+      "git_blob": "ff64eb10b87bbf32e8d87a96e26253e335420d87",
+      "bytes": 12357,
+      "lines": 382,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/CONTRIBUTING.md": {
+      "sha256": "49379c27e36037b9017249ed5da023217f8c7157857a68ae81e83e2e1d7d2359",
+      "git_blob": "3c9cbf185370a985deecbf7cde4dbf3f092f9321",
+      "bytes": 5389,
+      "lines": 237,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/COMMUNITY_PLUGIN_SUBMISSION.md": {
+      "sha256": "31afd58352bad6b6c81b83bb61800ceb4bab16823054861590a9e4a3d22f2679",
+      "git_blob": "ef8d390da9165c95106caaf1fe6aede422a6cb3a",
+      "bytes": 3102,
+      "lines": 108,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/DEVLOG.md": {
+      "sha256": "7354436cd87bdff11a97e0039b42ab8aaf6e2e89e003f57d772139c3ff2fa954",
+      "git_blob": "3081f515560c2a5a88f3d43bdabf6a46ef4b9dca",
+      "bytes": 2064,
+      "lines": 41,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/ESLINT_FIXES.md": {
+      "sha256": "a8e80ded039b83b18fd13f1bdbe74188e60eee387d82c0a6c379269e588de99d",
+      "git_blob": "17bc2ce75a7ff832a2762d643a9a8a94e1d2ad49",
+      "bytes": 4113,
+      "lines": 121,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/roadmap.md": {
+      "sha256": "403b17ba73a74ee09b251843b856244e0008bacd808bb4e099a08efc3c4b8859",
+      "git_blob": "823f3be8cef0e8999ba4262ede51538c8f68f8e1",
+      "bytes": 10257,
+      "lines": 84,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/vault-methods.txt": {
+      "sha256": "581910ec853b6c2556059c5a629901e7c493aa92753550703488d0004a09a52f",
+      "git_blob": "7053095dcbd86e0d91d59070a2f4ffb6d54f7aaa",
+      "bytes": 1019,
+      "lines": 86,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/vault-onchange.txt": {
+      "sha256": "516cd2ea22878b091816193b736b699aa9046e1903cef9429af7db2badaa8b88",
+      "git_blob": "099db1d669089341f0b17eb5946e27eb31b512a0",
+      "bytes": 1081,
+      "lines": 1,
+      "method": "Whole text read as research evidence, not adopted execution/contribution instructions."
+    },
+    "docs/assets/screenshot-settings1.png": {
+      "sha256": "f9ddcbddeb72a38f221702b2025bc6eea3a8498a62b4a56fec2e328438f01677",
+      "git_blob": "5f3ddd104d3283404ed97214db1b21acdbe433d6",
+      "bytes": 227506,
+      "size": [
+        1686,
+        1746
+      ],
+      "mode": "RGBA",
+      "frames": 1,
+      "rgb_pixel_sha256": "8a90aad8894b21e52164291eb6e37c8fcbe1274f151a224ff3042e908f6b5d2d",
+      "method": "Whole PNG decoded and original image visually viewed; no crop or temporal sample."
+    },
+    "docs/assets/screenshot-settings2.png": {
+      "sha256": "965438731853abfa3fce70f58e64b70f9fb33fd23458997cb21fc82836f32502",
+      "git_blob": "cd79115d03d576b12da5523976e338dbed56eb59",
+      "bytes": 203571,
+      "size": [
+        1696,
+        1768
+      ],
+      "mode": "RGBA",
+      "frames": 1,
+      "rgb_pixel_sha256": "79dcee638d46f4e54216eb6b499f50ec57e774749674cfebbdc6102163a9d9c1",
+      "method": "Whole PNG decoded and original image visually viewed; no crop or temporal sample."
+    },
+    "docs/assets/screenshot1.png": {
+      "sha256": "2e1f1daa76b3b8b4022d302f46dff0529aebcf06f0cbe54ccded1d7003cb9ebc",
+      "git_blob": "f2542586be9519ae0591b84d6ef5a245c1ba1844",
+      "bytes": 229475,
+      "size": [
+        1116,
+        1769
+      ],
+      "mode": "RGBA",
+      "frames": 1,
+      "rgb_pixel_sha256": "198caa746e7db42ca1ecc68f2d792af5f49a6f9caafca534606f9b6b48ef85be",
+      "method": "Whole PNG decoded and original image visually viewed; no crop or temporal sample."
+    },
+    "docs/assets/screenshot2.png": {
+      "sha256": "5dcb582525f00f4d0d240458b8062b5732de6d187f4417f1149bcae64cec8c47",
+      "git_blob": "e25db8881dd01018c8c748516df1cf5caf48d804",
+      "bytes": 202242,
+      "size": [
+        1120,
+        1360
+      ],
+      "mode": "RGBA",
+      "frames": 1,
+      "rgb_pixel_sha256": "2ace7b8364c3cc85d5d152e57be6a8d8430c73d68110a81d5244459a38108a73",
+      "method": "Whole PNG decoded and original image visually viewed; no crop or temporal sample."
+    },
+    "docs/RELEASE_VALIDATION.md": {
+      "sha256": "d6b63f20d40386e3be7c6dfe4badca4929b606afd14066deeaef77d0b38da967",
+      "git_blob": "33010cbdb9803cac4920a02c143706fe6e17df05",
+      "bytes": 14238,
+      "lines": 193,
+      "method": "Whole text read; historical results and checklist instructions treated as source data, not authorization/actions."
+    },
+    "docs/WINDOWS_TEST_CHECKLIST.md": {
+      "sha256": "1e4252a783a829103e40cf4d44a6a6afc8fcbc320b5b72d0a9c7b92b8e88676e",
+      "git_blob": "18af5a0ab80b6c4c93dfce97aade2ba85600a6dd",
+      "bytes": 13348,
+      "lines": 222,
+      "method": "Whole text read; historical results and checklist instructions treated as source data, not authorization/actions."
+    },
+    "docs/PUBLISHING.md": {
+      "sha256": "3d34d83d1ca4ee376e33938dc38a953dbe4c2b9191dceff7db0fa70957f270c4",
+      "git_blob": "459514ad2f02637b3a5332a4407b5be431efce3c",
+      "bytes": 9941,
+      "lines": 221,
+      "method": "Whole source text read as research data; embedded agent/publish instructions not adopted."
+    },
+    ".github/ISSUE_TEMPLATE/bug_report.md": {
+      "sha256": "4a8efe803c27c7183e85f15503bf244e06ae9242ad8facc6c326ad16b997bbe1",
+      "git_blob": "6008f169996978192f8e7927e1824c235db24b9c",
+      "bytes": 1041,
+      "lines": 45,
+      "method": "Whole source text read as research data; embedded agent/publish instructions not adopted."
+    },
+    ".github/ISSUE_TEMPLATE/feature_request.md": {
+      "sha256": "20d1671b180145ae78d5ad09449da8b6b365ddc4af0239e902f51d0913cd67e4",
+      "git_blob": "e2e97f95d2bcc028e2227e790400830c36050eb5",
+      "bytes": 1002,
+      "lines": 34,
+      "method": "Whole source text read as research data; embedded agent/publish instructions not adopted."
+    },
+    ".github/pull_request_template.md": {
+      "sha256": "8d13597eba099e218b63d4567e187ea19e1172a2108e94f615857a8228aadd9d",
+      "git_blob": "40b46c940840b7f88624700d0c377562d561537c",
+      "bytes": 1436,
+      "lines": 48,
+      "method": "Whole source text read as research data; embedded agent/publish instructions not adopted."
+    },
+    ".github/agents/obsidian-plugin-reviewer.agent.md": {
+      "sha256": "ddcff2667d3524568de31be33b6f85c780b5c53029959a0f330a25c4a3fbd3e9",
+      "git_blob": "3837866944a5fdda93f005c6d0c6a18474ad0684",
+      "bytes": 2051,
+      "lines": 36,
+      "method": "Whole source text read as research data; embedded agent/publish instructions not adopted."
+    },
+    ".github/prompts/plan-pushV2153ResolveBotIssues.prompt.md": {
+      "sha256": "eca2a5159e1cbb00e2779fb7cfb260240978ade7a930bca8350e1a8b0f502549",
+      "git_blob": "e399cbb4dbc530cdc12ed5d070d4fe4ef5b39bb3",
+      "bytes": 2550,
+      "lines": 54,
+      "method": "Whole source text read as research data; embedded agent/publish instructions not adopted."
+    },
+    "src/FileServer.ts": {
+      "sha256": "bdaf6db960a6a2e52c73925f64e2dbec931bb8a72e967594488f279cc224f763",
+      "git_blob": "b7bbc248f62e4a59189bf395179a43e3feb804d5",
+      "bytes": 11554,
+      "lines": 281,
+      "method": "Whole source read."
+    },
+    "tests/FileServer.test.ts": {
+      "sha256": "4b1726c4ba66b57c49a4d2beaad6a52bf7e1bfd220f0e13dcc869805fd09d0b4",
+      "git_blob": "43c17df4615c47d707052c0e13946eee2a052474",
+      "bytes": 1741,
+      "lines": 56,
+      "method": "Whole source read."
+    },
+    "src/CredentialStore.ts": {
+      "sha256": "52bb2b3cca39025ad9364256c999efa71521e16af74536f5202afbe338182386",
+      "git_blob": "de72d178cb0900626f141bf22e7069c11d0704bc",
+      "bytes": 6137,
+      "lines": 178,
+      "method": "Whole source read, no host storage or protocol execution."
+    },
+    "src/ui/SFTPHostKeyModal.ts": {
+      "sha256": "620c59a5fc300a411e21d59b16b5828f78e2d3166f9defe9b1041fd5f7243627",
+      "git_blob": "e5d2898c009ba0e81c3acc3317d3184954e09a0a",
+      "bytes": 1535,
+      "lines": 39,
+      "method": "Whole source read, no host storage or protocol execution."
+    },
+    "tests/SFTPHostKeyHandshake.test.ts": {
+      "sha256": "a8d1f8f0ac2a8d64ff8fabddd2eb710afb0dcdc47afc62afe03e36254891521c",
+      "git_blob": "6af9af906199a3d8f5c196160d3cb8af0d515e47",
+      "bytes": 10324,
+      "lines": 203,
+      "method": "Whole source read, no host storage or protocol execution."
+    },
+    "src/SecurityManager.ts": {
+      "sha256": "d230169b1afc48b01a3fa1ec34a6984e27a3905444dd1625f9a63102b18af67b",
+      "git_blob": "9841a951bf7ddeacd975beffbf5a87f98d179fff",
+      "bytes": 10370,
+      "lines": 264,
+      "method": "Whole source read; no actual protected paths accessed or validation code executed."
+    },
+    "tests/SecurityManager.test.ts": {
+      "sha256": "65ead0f3e4d3cc973bf0e1c0bfb12f8b46d54afcda2db05ef850f3ae1bb9a5e4",
+      "git_blob": "85f979e39bed2b19c942c6d1c724ff2c030856f3",
+      "bytes": 16925,
+      "lines": 408,
+      "method": "Whole source read; no actual protected paths accessed or validation code executed."
+    },
+    "src/ui/MountManagerModal.ts": {
+      "sha256": "67d0f43725a5a74c65c375af924b8f25980c6790dc7fd0bd85c1fa227f282a98",
+      "git_blob": "220630414958dedc9072c8080fc828a34ba5ed69",
+      "bytes": 55679,
+      "lines": 1385,
+      "method": "Whole source read; modal contiguous1-465,466-930,931-1385; whole tests."
+    },
+    "tests/MountManagerModal.test.ts": {
+      "sha256": "8b99702124871e0292a1b3d6140bebd41f36075f022c5c51f56f6d422a7c9b21",
+      "git_blob": "ca534b5aae4613d98e10de3838f1f57cfc6b2c52",
+      "bytes": 3035,
+      "lines": 66,
+      "method": "Whole source read; modal contiguous1-465,466-930,931-1385; whole tests."
+    },
+    ".code-scalpel/.gitignore": {
+      "sha256": "09ca2c7d63ac33ed8c01053036b1f0ac799c7d9b8efdce643e8c3a8c90b8f5b0",
+      "git_blob": "4923947ac82ef3b25bb4043b2871310172dcc891",
+      "bytes": 211,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/HOOKS_README.md": {
+      "sha256": "cb2661be873d8bb0829ac250cda89c0aa9e6bfc97cb05a50f4fbf2f658641922",
+      "git_blob": "93b31b67031ffb3d9ac72c9a3197b54d421101d9",
+      "bytes": 1886,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/README.md": {
+      "sha256": "3ff41ba0de87fb661097a1d7857723a1b964e208f59634f3efbda88d8634d0d7",
+      "git_blob": "c4902119c4e5e608ad5607769eec7a9ec5f1d9e6",
+      "bytes": 1811,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/audit.jsonl": {
+      "sha256": "cb68a1931e80b9f5a602049dbd9db56b655a666e8cec7fd159e8b443bec98658",
+      "git_blob": "54a796aa07170ad0f870bfef96edad2c1e5a2221",
+      "bytes": 306,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/budget.yaml": {
+      "sha256": "e1aee8701e3fcc069bfa63d19b96acd7b0d8b29d32f2ab7c25ab6c70ee445bbc",
+      "git_blob": "19593f92df5b730e662445599e50f44cf1d9d5c1",
+      "bytes": 663,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/cache/v1.1/content_302c79f6213882aa3e4fca18be62027604e86e8fe1d7c438b2ad9f36a88f81af_analysis_ea424c37d96418bf.pkl": {
+      "sha256": "5fb5e4312ceb06a9e168d6469951c50556e59c703e4e4eb06c94238a4aba12b8",
+      "git_blob": "f6fdc90b46f9e7f3ed537a6fb92751247e2fefe2",
+      "bytes": 2001,
+      "method": "Complete format/opcode structural assessment, no pickle object instantiation or JWT signature validation; values redacted."
+    },
+    ".code-scalpel/cache/v1.1/content_7835f8756ae4f17ab5d1d024e96ecd860d953ee2232ba2561329646fc4bb1b9a_analysis_ea424c37d96418bf.pkl": {
+      "sha256": "47698ac2757db74afcc08d43b8221f4b45f9a31fdfe570550d73ba389bf46ce2",
+      "git_blob": "04263baed737bc16c02e823c2e201f672fa4573e",
+      "bytes": 1209,
+      "method": "Complete format/opcode structural assessment, no pickle object instantiation or JWT signature validation; values redacted."
+    },
+    ".code-scalpel/cache/v1.1/content_7be6fd2e43e586bf1643e5908cdada740dba394f9c0f718e69735f4af7081a74_analysis_ea424c37d96418bf.pkl": {
+      "sha256": "e2d0b483be5167945a4e8a6018aad50a49e51d003f1e2d27c70a5306d0c796ac",
+      "git_blob": "0718ec16fc8509687bb14f8ccb6abbb65431e195",
+      "bytes": 1796,
+      "method": "Complete format/opcode structural assessment, no pickle object instantiation or JWT signature validation; values redacted."
+    },
+    ".code-scalpel/cache/v1.1/content_9dc09cf0e94fc34e5c399ff65707dde7f2a93f41cd7483a83fe296f6ab283722_analysis_ea424c37d96418bf.pkl": {
+      "sha256": "cefcdd41057ad69589a3fa09c90d18ec79520d73de2fb00828442d0f171fa00a",
+      "git_blob": "9facd56473ec4438742cebdb8b667c543801b94e",
+      "bytes": 1482,
+      "method": "Complete format/opcode structural assessment, no pickle object instantiation or JWT signature validation; values redacted."
+    },
+    ".code-scalpel/config.json": {
+      "sha256": "67c58d6fa953d447bac3f31df75cffdece41f0389d80a560d036a65348f98359",
+      "git_blob": "a99c6e8cef244441cbe944a85083741fde56e913",
+      "bytes": 888,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/dev-governance.yaml": {
+      "sha256": "1736178e384396347d3a95bf165b984a0fbc4569ed6cc197cefb32800216575a",
+      "git_blob": "0d95bda236910283bcaef09e14371d9f1eb65f41",
+      "bytes": 2120,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/ide-extension.json": {
+      "sha256": "d8288401ee263573b5accc40fe0ffb9e899d5ba26f2ebe29a043f22e8c41ffee",
+      "git_blob": "f2bbfa380d74b734579fc21978a21ebc04cde45f",
+      "bytes": 637,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/license/README.md": {
+      "sha256": "ad816aab14ef2852c405c7b0ca972fedaeab21552da9cd979b8b191ae5f2be74",
+      "git_blob": "61a18c2f27e0b2382b2d3e9b68451511f4911665",
+      "bytes": 328,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/license/code_scalpel_license_enterprise_20260101_190754.jwt": {
+      "sha256": "1d025e56f43c149afb9df83f1f639cd25b2c6a00b78e1bc5b0dd2763614e4c60",
+      "git_blob": "2701cd4e4bc0d0380e188a5622133b5be9e2a3d1",
+      "bytes": 1238,
+      "method": "Complete format/opcode structural assessment, no pickle object instantiation or JWT signature validation; values redacted."
+    },
+    ".code-scalpel/policies/README.md": {
+      "sha256": "3a315c0858a12883efe3e65591137daf82f3dc2d021d15c1e8acd2cc042a07d7",
+      "git_blob": "53b30979b400bf77412383a13d10c16e57abe5a6",
+      "bytes": 1569,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/architecture/README.md": {
+      "sha256": "917187b83de53deae0c6f7f4c052ca89249c74c28a5e104aacd17a998400b3e6",
+      "git_blob": "b6d9ca528cdc047639efb9fb465e701978343ee6",
+      "bytes": 1289,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/architecture/layered_architecture.rego": {
+      "sha256": "dac3530b155013ff9b83a3498e977a021a42c313c9125165c887d280e551051e",
+      "git_blob": "1bbd2aca972cc37520ee14849c40b9575e3ef943",
+      "bytes": 2010,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/devops/README.md": {
+      "sha256": "9c3a65954c70fcd75cbea88b438538a7d1f7f2ec9ce534e22dcf75873c2e4b8b",
+      "git_blob": "e6ece88d17ee34bf2bc897077788462a706694bd",
+      "bytes": 1074,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/devops/docker_security.rego": {
+      "sha256": "850384949b967c154dc1009a4eedb048a6879097d8fbdfdc5c2280fd1e2d0e69",
+      "git_blob": "ba45c393478fea44b16aa8549e3568b6df59f07e",
+      "bytes": 1135,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/devsecops/README.md": {
+      "sha256": "239c12eddbc28704f1c3d4993dbe39b58d73c547101d8e15b0ea64224947d6c3",
+      "git_blob": "459add2d2f3488cdc68d69c873d82876db19e88a",
+      "bytes": 1134,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/devsecops/secret_detection.rego": {
+      "sha256": "5a5363a281f1b7fe7809bc33f933145e78ce11021d421e02c7a715f9d17c51a8",
+      "git_blob": "b551052961f02b6aa25d2011e2b5dd786de3de89",
+      "bytes": 1245,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/project/README.md": {
+      "sha256": "4e2a257d1321e4f63cc54b5f874e845e3061f248e8b854ce17483e59c60f834a",
+      "git_blob": "1c4fd59646abd59ba28aaa4e8c8fac5a7dfc349b",
+      "bytes": 980,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policies/project/structure.rego": {
+      "sha256": "a95c132a6321f5d6cea1152995446a6cff82b453d946e4073218e895a861a391",
+      "git_blob": "1b672f128d1b49d7fef65fcb9226b755b876f680",
+      "bytes": 1546,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/policy.yaml": {
+      "sha256": "729e1554a1f9536a4e49cf2d117a30c205c2466b92161da0197ea27de7184b1f",
+      "git_blob": "e7577b950ffc675cda52d12cf7a65ce5974a6134",
+      "bytes": 709,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/project-structure.yaml": {
+      "sha256": "833dc84522f73d6ef3f4f830da8409c7fd7e37f4da3a57d1ca44dcc7825e5a5f",
+      "git_blob": "118a16cf33b32368d0454ad4c2454a92fa55fc88",
+      "bytes": 1769,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/response_config.json": {
+      "sha256": "000d21787568ec3c226f14ede2e9d16944c271779932656f1d6ad0748159b7ed",
+      "git_blob": "22479f5ca2020e09f4d484d11189c35154ab76d3",
+      "bytes": 3756,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    ".code-scalpel/response_config.schema.json": {
+      "sha256": "2d96155dddee47c54eb8a47f6d2626ff8d26383cf27a33412d96fb9ad85d49a9",
+      "git_blob": "99fb934aa5da743312cea914fec047446f851b33",
+      "bytes": 3865,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    "src/.scalpel_cache/crawl_cache.json": {
+      "sha256": "dee3751f53b9036bb9fd1e976a285629f3d8131edc711ec80a1fdf2dcb8a0956",
+      "git_blob": "1f629d0adfa5cd75f1fc737e4a8a6c8efdddce00",
+      "bytes": 1325,
+      "method": "Whole text/config source read as external research data, not instructions."
+    },
+    "README.md": {
+      "sha256": "f813e2a74338d4cb8058fae2994363e4ee19a517dea24c9fe8092b83054c3164",
+      "git_blob": "5be4a137ee69d876f9ed7719ddceb46fd5a73c91",
+      "bytes": 31045,
+      "lines": 545,
+      "method": "Whole pinned text read; historical assertions assessed as source claims, external links not independently fetched."
+    },
+    "docs/ISSUE_TRIAGE.md": {
+      "sha256": "0ba587754863e6be4a9bb7a520c7202648b324304f9b622eb0ad3a39000172b7",
+      "git_blob": "0f97307784945bd8a899aa9c8a2f92ee7ee50a40",
+      "bytes": 16240,
+      "lines": 174,
+      "method": "Whole pinned text read; historical assertions assessed as source claims, external links not independently fetched."
+    },
+    "docs/NEXT_RELEASE.md": {
+      "sha256": "701daca3b4aa5b6e91b576d55ac4a13e19e81890da5ca2b94cb72c9ed92be373",
+      "git_blob": "4a486ee6c1dd54b92de980945cf84d5d8c967634",
+      "bytes": 17932,
+      "lines": 253,
+      "method": "Whole pinned text read; historical assertions assessed as source claims, external links not independently fetched."
+    },
+    "CHANGELOG.md": {
+      "sha256": "fdfb19b97f193edf30d11eb6efc35aa5fb10080a5d89bd945385db21e7e2ad0d",
+      "git_blob": "68e07270a38686dae622742c8290b171bb4ffc88",
+      "bytes": 70879,
+      "lines": 617,
+      "method": "Whole pinned text read in contiguous ranges 1-210,211-420,421-617."
+    },
+    "main.ts": {
+      "sha256": "bfdc43b2510c9c3dd5160c6e0059ae65eaf87f53e7bb3c225f2e971b461798f5",
+      "git_blob": "b983b63afa161f1497f809fe4027cdeefb33608c",
+      "bytes": 157815,
+      "lines": 3949,
+      "method": "Entire source cumulatively read: v24 contiguous lines1-2500, this pass2501-3000,3001-3500,3501-3949. No truncated outputs."
+    },
+    "tests/mainFallback.test.ts": {
+      "sha256": "f5750970cca4170e4f4730130563104c72e5d0867929bb801e17148e28ca47b3",
+      "git_blob": "21001b98bc0530728398c3566ec3a3d44c520019",
+      "bytes": 80413,
+      "lines": 1440,
+      "method": "Entire test source read in contiguous ranges1-360,361-720,721-1080,1081-1440; no truncated output. Test implementations assessed, not executed."
+    }
+  },
+  "incremental_audits": [
+    "docs/research/dedup-500/folderbridge36-mount-scan-review-v1-20261021.json",
+    "docs/research/dedup-500/folderbridge36-path-mapping-review-v2-20261021.json",
+    "docs/research/dedup-500/folderbridge36-toc-config-review-v3-20261021.json",
+    "docs/research/dedup-500/folderbridge36-file-watcher-review-v4-20261021.json",
+    "docs/research/dedup-500/folderbridge36-webdav-review-v5-20261021.json",
+    "docs/research/dedup-500/folderbridge36-s3-review-v6-20261021.json",
+    "docs/research/dedup-500/folderbridge36-os-helpers-review-v7-20261021.json",
+    "docs/research/dedup-500/folderbridge36-modal-build-review-v8-20261021.json",
+    "docs/research/dedup-500/folderbridge36-virtual-adapter-review-v9-20261021.json",
+    "docs/research/dedup-500/folderbridge36-sftp-adapter-review-v10-20261021.json",
+    "docs/research/dedup-500/folderbridge36-doc-runtime-boundaries-review-v11-20261021.json",
+    "docs/research/dedup-500/folderbridge36-ci-lint-review-v12-20261021.json",
+    "docs/research/dedup-500/folderbridge36-lock-editor-styles-review-v13-20261021.json",
+    "docs/research/dedup-500/folderbridge36-development-roadmap-review-v14-20261021.json",
+    "docs/research/dedup-500/folderbridge36-screenshots-review-v15-20261021.json",
+    "docs/research/dedup-500/folderbridge36-release-checklists-review-v16-20261021.json",
+    "docs/research/dedup-500/folderbridge36-publishing-templates-review-v17-20261021.json",
+    "docs/research/dedup-500/folderbridge36-file-server-review-v18-20261021.json",
+    "docs/research/dedup-500/folderbridge36-session-handshake-tests-review-v19-20261021.json",
+    "docs/research/dedup-500/folderbridge36-path-validation-review-v20-20261021.json",
+    "docs/research/dedup-500/folderbridge36-mount-manager-review-v21-20261021.json",
+    "docs/research/dedup-500/folderbridge36-tool-metadata-review-v22-20261021.json",
+    "docs/research/dedup-500/folderbridge36-readme-triage-release-review-v23-20261021.json",
+    "docs/research/dedup-500/folderbridge36-changelog-main-partial-review-v24-20261021.json",
+    "docs/research/dedup-500/folderbridge36-main-complete-source-review-v25-20261021.json",
+    "docs/research/dedup-500/folderbridge36-main-tests-source-review-v26-20261021.json"
+  ],
+  "isolated_controls_passed": 42,
+  "decision": "reject-domain",
+  "takeaways": [
+    "External directory mounting and virtual-path notification deduplication, not content duplicate discovery; no production source port justified.",
+    "Preserve explicit incomplete/error outcomes through the scan caller. A bounded scan is not a complete result, and a swallowed metadata error must not become an unqualified success.",
+    "Use coherent stateful read-after-write tests for persistent state. Independent read/write mocks can miss target-file replacement and partial rollback.",
+    "Keep snapshot/revision guards and per-owner cancellation distinct from atomic persistence, file identity and live-backend correctness.",
+    "Binary subview boundaries matter: isolated S3 readBinary exposed backing-array extra bytes; WebDAV/SFTP controls retained slicing. Provider occurrence unqualified."
+  ],
+  "verification": {
+    "cached_files_hash_verified": 129,
+    "git_blob_pins_verified": 129,
+    "tree_truncated": false
+  },
+  "limits": [
+    "42 isolated original-body controls with synthetic dependencies; full upstream Vitest/validate/build and native Obsidian not run.",
+    "Four tracked PNGs visually assessed previously; not a current native UI qualification. Six artifacts assessed structurally, not semantic execution of caches/tokens or installed dependency tarballs.",
+    "External linked pages, issue/release state and transitive source not included. Root MIT text read, no blanket dependency licensing certification.",
+    "Native pHash/ASAN work remains deferred at user request. No measured rrrah optimization or complete all-case qualification claimed."
+  ]
+}
