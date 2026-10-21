@@ -1,0 +1,20 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-5030",
+    "include/stb_image.h:7470-7655"
+  ],
+  "controls": "docs/research/dedup-500/zigimage422-png-filter-controls-20261021/result.json",
+  "script": "docs/research/dedup-500/zigimage422-png-filter-controls-20261021/run.py",
+  "findings": [
+    "ActualoriginalCfilenamePNGdecoderpasses15authoredknownpixelcases:4x3images,gray/RGB/RGBA8each5filtertypesnone/sub/up/average/Paeth. IndependentPythonfilterencoderandexplicitexpectedRGBAbytes;alloutputbytesexactmatch. Coversfirstrowsubstitutionandpriorrowcontext,notallformats.",
+    "ReadPNGsignature/chunkheader,Paethkernel,lowdepthscaling,rawimageunfilter/alphaexpansion,16bitbig-endianreassembly,Adam7passreassembly,8/16tRNScomparison,paletteexpansion,global/threadlocaliPhoneflags through5030. PNGouterchunkparserstillunread.",
+    "PNG16bitreassemblyexplicitcur0<<8|cur1contrastsPNMrawcopy;reinforcesseparatepreviousPNGpositivecontrolandPNMbyteorderdefect.",
+    "RawPNGdecompressedlengthallowslargerthanexpectedpayload(notshorter)byexplicitcompatibilitycomment;paletteexpanderignoreslenparameter. Thesearesourcepolicies,notnewmalformedinputruntimeclaims."
+  ],
+  "limits": [
+    "15positivefilterscasesdonotprovepalette/Adam7/sub8/16/CRC/transparency-canonicalpolicyorallPNGaccuracy. Wholeheader/repositoryreviewincomplete;originalZigtestsnotrun.NativepHash/ASANdeferred."
+  ]
+}
