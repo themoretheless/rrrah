@@ -1,0 +1,69 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "CHANGELOG.md": {
+      "sha256": "fdfb19b97f193edf30d11eb6efc35aa5fb10080a5d89bd945385db21e7e2ad0d",
+      "git_blob": "68e07270a38686dae622742c8290b171bb4ffc88",
+      "bytes": 70879,
+      "lines": 617,
+      "method": "Whole pinned text read in contiguous ranges 1-210,211-420,421-617."
+    }
+  },
+  "partial_source_files": {
+    "main.ts": {
+      "sha256": "bfdc43b2510c9c3dd5160c6e0059ae65eaf87f53e7bb3c225f2e971b461798f5",
+      "git_blob": "b983b63afa161f1497f809fe4027cdeefb33608c",
+      "bytes": 157815,
+      "lines": 3949,
+      "read_ranges_inclusive": [
+        [
+          1,
+          2500
+        ]
+      ],
+      "remaining_range_inclusive": [
+        2501,
+        3949
+      ],
+      "method": "Contiguous source read, not counted as a whole-file assessment."
+    },
+    "tests/mainFallback.test.ts": {
+      "sha256": "f5750970cca4170e4f4730130563104c72e5d0867929bb801e17148e28ca47b3",
+      "git_blob": "21001b98bc0530728398c3566ec3a3d44c520019",
+      "bytes": 80413,
+      "lines": 1440,
+      "read_ranges_inclusive": [
+        [
+          530,
+          640
+        ]
+      ],
+      "method": "Targeted TOC-binding tests read; remaining file incomplete, not counted as whole."
+    }
+  },
+  "cumulative_assessed_blobs": 127,
+  "tracked_blobs": 129,
+  "findings": [
+    "Full changelog confirms explicit policy changes rather than a single timeless suppression promise: 2.9 skipped startup replay; 2.15.5-rc.1 restores one-time indexing while later changes remain muted. Historical Android/full-media claims are narrowed by later native-pending disclosures and previously isolated range controls.",
+    "Main refreshTocMountSources validates parsed managed/external candidates against persisted and previously accepted mount paths. Earlier parser-only virtual-overlap gaps are mitigated at this caller. IDs and option-type validation remain separate questions; full main/test review incomplete.",
+    "Main saves hasSeenOnboarding before opening WelcomeModal, so closing the modal without the explicit dismissal callback does not by itself make onboarding repeat. This resolves the earlier modal-only uncertainty.",
+    "Original bindManagedTocSource and writeManagedTocMounts overwrite the target with the current draft before refresh/read. Stateful in-memory controls demonstrate that an empty current draft replaces existing destination mounts with an empty array, and a nonempty old draft replaces rather than merges destination entries. No real files modified.",
+    "On synthetic write failure, bind restores managed source fields but leaves the destination removed from settings.tocSources. Original-method isolated control confirms in-memory rollback is partial; subsequent persistence/native UI consequences not run.",
+    "Targeted upstream test waits for bound TOC loading before Add, but fs.readFile is independently mocked to return a destination even after fs.writeFile. This test does not model read-after-write coherence and cannot disprove observed replacement. Existing test source read, not executed.",
+    "The reviewed main section serializes updateMount operations per mount ID and uses revision checks for TOC resolution; this does not establish global atomicity for all add/migrate/bind operations. writeManagedTocMounts writes directly, without a temporary-file/rename transaction. No production code port."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-toc-binding-controls-v24-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Node22 TypeScript stripping of four complete original main methods and original TOC serializer; stateful in-memory write storage, synthetic refresh/save/Notice. No Obsidian, native filesystem writes or server.",
+    "harness_repair": "Initial wrapper placed return at TypeScript module scope and failed before controls. Fixed by stripping a class expression before adding function return; initial error log retained."
+  },
+  "limits": [
+    "127/129 tracked blobs assessed:117 whole text/source, six structural artifacts, four PNG visuals. main.ts read only through line2500; mainFallback.test.ts only targeted lines530-640, so neither counted complete.",
+    "39 isolated controls cumulative, not upstream full validation. Full native Obsidian, device, live provider and physical filesystem behavior remain unqualified.",
+    "Source findings apply to pinned third-party plugin; rrrah production unchanged. Native pHash/ASAN remains deferred."
+  ]
+}

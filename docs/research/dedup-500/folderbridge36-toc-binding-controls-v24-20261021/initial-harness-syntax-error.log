@@ -1,0 +1,96 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+:1
+  > return class Bound {    private getManagedTocSourcePath(): string | null {
+            if (this.resolvedManagedTocSource) return this.resolvedManagedTocSource;
+            const sourcePath = this.settings.managedTocSource?.trim();
+            return sourcePath ? sourcePath : null;
+        }
+    
+    
+        private getManagedTocDraftMounts(): MountPoint[] {
+            return this.managedTocMountPoints.map(mount => {
+                const copy = { ...mount };
+                delete copy.tocSourcePath;
+                return copy;
+            });
+        }
+    
+    
+        private async writeManagedTocMounts(mounts: MountPoint[]): Promise<boolean> {
+            const sourcePath = this.getManagedTocSourcePath();
+            if (!sourcePath) {
+                new Notice(`${this.manifest.name}: configure a managed TOC file first.`);
+                return false;
+            }
+            if (!fs?.promises || !path) {
+                new Notice(`${this.manifest.name}: writable TOC files are only supported on desktop builds with filesystem access.`);
+                return false;
+            }
+            const unsupportedMount = mounts.find(mount => this.isCloudMount(mount));
+            if (unsupportedMount) {
+                new Notice(`Folder Bridge: Managed TOC files currently support only local and vault mounts. "${unsupportedMount.label || unsupportedMount.virtualPath}" stays in data.json.`);
+                return false;
+            }
+    
+            await fs.promises.mkdir(path.dirname(sourcePath), { recursive: true });
+            await fs.promises.writeFile(sourcePath, serializeTocConfig(mounts), 'utf8');
+            return true;
+        }
+    
+    
+        async bindManagedTocSource(sourcePath: string): Promise<boolean> {
+            const trimmedPath = this.resolveManagedTocSourcePath(sourcePath);
+            if (!trimmedPath) {
+                new Notice(`${this.manifest.name}: managed TOC file path cannot be determined automatically. Enter an absolute path first.`);
+                return false;
+            }
+    
+            const previousSource = this.settings.managedTocSource;
+            const previousResolved = this.resolvedManagedTocSource;
+            const revision = ++this.managedTocRevision;
+            this.settings.managedTocSource = trimmedPath;
+            this.resolvedManagedTocSource = trimmedPath;
+            this.settings.tocSources = this.settings.tocSources.filter(item => item.trim() !== trimmedPath);
+    
+            const binding = (async () => {
+                try {
+                    if (!await this.writeManagedTocMounts(this.getManagedTocDraftMounts())) {
+                        if (revision === this.managedTocRevision) {
+                            this.settings.managedTocSource = previousSource;
+                            this.resolvedManagedTocSource = previousResolved;
+                        }
+                        return false;
+                    }
+                    if (revision !== this.managedTocRevision) return false;
+                    await this.refreshTocMountSources(true, trimmedPath, revision);
+                    if (revision !== this.managedTocRevision) return false;
+                    await this.saveSettings();
+                    return true;
+                } catch (error) {
+                    if (revision === this.managedTocRevision) {
+                        this.settings.managedTocSource = previousSource;
+                        this.resolvedManagedTocSource = previousResolved;
+                    }
+                    const message = error instanceof Error ? error.message : String(error);
+                    new Notice(`Folder Bridge: Failed to initialize managed TOC file (${message}).`);
+                    return false;
+                }
+            })();
+            this.pendingManagedTocResolution = binding.then(() => { });
+            return binding;
+        }
+    
+  > }
+
+SyntaxError [ERR_INVALID_TYPESCRIPT_SYNTAX]: Return statement is not allowed here
+    at parseTypeScript (node:internal/modules/typescript:67:36)
+    at processTypeScriptCode (node:internal/modules/typescript:133:42)
+    at stripTypeScriptTypes (node:internal/modules/typescript:118:10)
+    at file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/folderbridge36-toc-binding-controls-v24-20261021/controls.mjs:14:72 {
+  code: 'ERR_INVALID_TYPESCRIPT_SYNTAX'
+}
+
+Node.js v22.23.3
