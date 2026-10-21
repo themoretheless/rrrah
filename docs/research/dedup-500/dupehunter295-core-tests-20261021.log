@@ -1,0 +1,256 @@
+TAP version 13
+# Subtest: chooseFileToKeep: 'oldest' picks the file with the smallest mtime
+ok 1 - chooseFileToKeep: 'oldest' picks the file with the smallest mtime
+  ---
+  duration_ms: 1.133166
+  type: 'test'
+  ...
+# Subtest: chooseFileToKeep: 'newest' picks the file with the largest mtime
+ok 2 - chooseFileToKeep: 'newest' picks the file with the largest mtime
+  ---
+  duration_ms: 0.103208
+  type: 'test'
+  ...
+# Subtest: chooseFileToKeep: 'first' picks the alphabetically-first primary path
+ok 3 - chooseFileToKeep: 'first' picks the alphabetically-first primary path
+  ---
+  duration_ms: 5.917209
+  type: 'test'
+  ...
+# Subtest: chooseFileToKeep: throws on an empty group
+ok 4 - chooseFileToKeep: throws on an empty group
+  ---
+  duration_ms: 0.168625
+  type: 'test'
+  ...
+# Subtest: planActions: reclaimableBytes equals size times the number of removed files
+ok 5 - planActions: reclaimableBytes equals size times the number of removed files
+  ---
+  duration_ms: 0.11375
+  type: 'test'
+  ...
+# Subtest: deleteDuplicates: removes every path of every non-kept physical file, keeps the chosen one
+ok 6 - deleteDuplicates: removes every path of every non-kept physical file, keeps the chosen one
+  ---
+  duration_ms: 9.4315
+  type: 'test'
+  ...
+# Subtest: deleteDuplicates: records a failure outcome instead of throwing when unlink fails
+ok 7 - deleteDuplicates: records a failure outcome instead of throwing when unlink fails
+  ---
+  duration_ms: 0.849334
+  type: 'test'
+  ...
+# Subtest: hardlinkDuplicates: replaces duplicates with hardlinks that share the kept file's content and inode
+ok 8 - hardlinkDuplicates: replaces duplicates with hardlinks that share the kept file's content and inode
+  ---
+  duration_ms: 3.168083
+  type: 'test'
+  ...
+# Subtest: hardlinkDuplicates: leaves the original file untouched if linking fails
+ok 9 - hardlinkDuplicates: leaves the original file untouched if linking fails
+  ---
+  duration_ms: 2.174208
+  type: 'test'
+  ...
+# Subtest: runWithConcurrencyLimit: preserves input order regardless of completion order
+ok 10 - runWithConcurrencyLimit: preserves input order regardless of completion order
+  ---
+  duration_ms: 31.902417
+  type: 'test'
+  ...
+# Subtest: runWithConcurrencyLimit: never runs more than `limit` tasks at once
+ok 11 - runWithConcurrencyLimit: never runs more than `limit` tasks at once
+  ---
+  duration_ms: 22.407292
+  type: 'test'
+  ...
+# Subtest: runWithConcurrencyLimit: handles an empty input array
+ok 12 - runWithConcurrencyLimit: handles an empty input array
+  ---
+  duration_ms: 0.198
+  type: 'test'
+  ...
+# Subtest: runWithConcurrencyLimit: handles limit greater than item count
+ok 13 - runWithConcurrencyLimit: handles limit greater than item count
+  ---
+  duration_ms: 0.082542
+  type: 'test'
+  ...
+# Subtest: runWithConcurrencyLimit: rejects a non-positive limit
+ok 14 - runWithConcurrencyLimit: rejects a non-positive limit
+  ---
+  duration_ms: 0.264958
+  type: 'test'
+  ...
+# Subtest: runWithConcurrencyLimit: propagates a worker rejection
+ok 15 - runWithConcurrencyLimit: propagates a worker rejection
+  ---
+  duration_ms: 0.093166
+  type: 'test'
+  ...
+# Subtest: findDuplicates: groups files with identical content
+ok 16 - findDuplicates: groups files with identical content
+  ---
+  duration_ms: 13.44075
+  type: 'test'
+  ...
+# Subtest: findDuplicates: files with the same size but different content are not grouped
+ok 17 - findDuplicates: files with the same size but different content are not grouped
+  ---
+  duration_ms: 2.156458
+  type: 'test'
+  ...
+# Subtest: findDuplicates: excludes zero-byte files by default
+ok 18 - findDuplicates: excludes zero-byte files by default
+  ---
+  duration_ms: 1.949458
+  type: 'test'
+  ...
+# Subtest: findDuplicates: includes zero-byte files when minSizeBytes is 0
+ok 19 - findDuplicates: includes zero-byte files when minSizeBytes is 0
+  ---
+  duration_ms: 2.560708
+  type: 'test'
+  ...
+# Subtest: findDuplicates: respects minSizeBytes threshold
+ok 20 - findDuplicates: respects minSizeBytes threshold
+  ---
+  duration_ms: 3.704708
+  type: 'test'
+  ...
+# Subtest: findDuplicates: an already-hardlinked pair collapses into one physical file with two paths
+ok 21 - findDuplicates: an already-hardlinked pair collapses into one physical file with two paths
+  ---
+  duration_ms: 3.526167
+  type: 'test'
+  ...
+# Subtest: findDuplicates: reclaimable space accounts for existing hardlinks, not raw path count
+ok 22 - findDuplicates: reclaimable space accounts for existing hardlinks, not raw path count
+  ---
+  duration_ms: 2.6705
+  type: 'test'
+  ...
+# Subtest: findDuplicates: ignores excluded directories
+ok 23 - findDuplicates: ignores excluded directories
+  ---
+  duration_ms: 2.166542
+  type: 'test'
+  ...
+# Subtest: findDuplicates: three-way duplicate group and unrelated singletons
+ok 24 - findDuplicates: three-way duplicate group and unrelated singletons
+  ---
+  duration_ms: 3.568208
+  type: 'test'
+  ...
+# Subtest: findDuplicates: empty directory yields no groups and zero counts
+ok 25 - findDuplicates: empty directory yields no groups and zero counts
+  ---
+  duration_ms: 0.726084
+  type: 'test'
+  ...
+# Subtest: matchesAnyPattern: exact literal match is case-insensitive
+ok 26 - matchesAnyPattern: exact literal match is case-insensitive
+  ---
+  duration_ms: 1.4075
+  type: 'test'
+  ...
+# Subtest: matchesAnyPattern: * wildcard matches any run of characters
+ok 27 - matchesAnyPattern: * wildcard matches any run of characters
+  ---
+  duration_ms: 0.169709
+  type: 'test'
+  ...
+# Subtest: matchesAnyPattern: ? wildcard matches exactly one character
+ok 28 - matchesAnyPattern: ? wildcard matches exactly one character
+  ---
+  duration_ms: 0.113583
+  type: 'test'
+  ...
+# Subtest: matchesAnyPattern: returns false when patterns list is empty
+ok 29 - matchesAnyPattern: returns false when patterns list is empty
+  ---
+  duration_ms: 0.039709
+  type: 'test'
+  ...
+# Subtest: matchesAnyPattern: matches if any pattern in the list matches
+ok 30 - matchesAnyPattern: matches if any pattern in the list matches
+  ---
+  duration_ms: 0.087459
+  type: 'test'
+  ...
+# Subtest: hashFile: matches a direct sha256 digest of the same content
+ok 31 - hashFile: matches a direct sha256 digest of the same content
+  ---
+  duration_ms: 9.371125
+  type: 'test'
+  ...
+# Subtest: hashFile: identical content produces identical hashes
+ok 32 - hashFile: identical content produces identical hashes
+  ---
+  duration_ms: 4.829625
+  type: 'test'
+  ...
+# Subtest: hashFile: different content produces different hashes
+ok 33 - hashFile: different content produces different hashes
+  ---
+  duration_ms: 3.85425
+  type: 'test'
+  ...
+# Subtest: hashFile: hashes content spanning multiple stream chunks
+ok 34 - hashFile: hashes content spanning multiple stream chunks
+  ---
+  duration_ms: 18.292916
+  type: 'test'
+  ...
+# Subtest: hashFile: rejects when the file does not exist
+ok 35 - hashFile: rejects when the file does not exist
+  ---
+  duration_ms: 1.034291
+  type: 'test'
+  ...
+# Subtest: walkDirectory: finds files recursively across nested directories
+ok 36 - walkDirectory: finds files recursively across nested directories
+  ---
+  duration_ms: 11.413708
+  type: 'test'
+  ...
+# Subtest: walkDirectory: reports accurate size and mtime for each file
+ok 37 - walkDirectory: reports accurate size and mtime for each file
+  ---
+  duration_ms: 2.450583
+  type: 'test'
+  ...
+# Subtest: walkDirectory: excludes directories and files matching exclude patterns
+ok 38 - walkDirectory: excludes directories and files matching exclude patterns
+  ---
+  duration_ms: 3.139166
+  type: 'test'
+  ...
+# Subtest: walkDirectory: records a warning instead of throwing when a subdirectory is unreadable
+ok 39 - walkDirectory: records a warning instead of throwing when a subdirectory is unreadable
+  ---
+  duration_ms: 1.989625
+  type: 'test'
+  ...
+# Subtest: walkDirectory: does not follow symlinked directories by default
+ok 40 - walkDirectory: does not follow symlinked directories by default
+  ---
+  duration_ms: 2.432125
+  type: 'test'
+  ...
+# Subtest: walkDirectory: follows symlinked directories when enabled, without infinite looping
+ok 41 - walkDirectory: follows symlinked directories when enabled, without infinite looping
+  ---
+  duration_ms: 3.497125
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 175.824625

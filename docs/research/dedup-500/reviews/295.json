@@ -2,7 +2,7 @@
   "index": 295,
   "repository": "amasen02/dupehunter",
   "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
-  "review_scope": "Partial pinned13/52 artifacts whole-read;7 finite controls, original scan-to-action stale plan reproduced on own temp files;6 original concurrency tests pass via Node22 strip-types/import resolver.",
+  "review_scope": "Partial pinned18/52 artifacts whole-read;7 finite controls and41original tests passed combined,0skips. CLI/build/full suite still pending.",
   "decision": "shortlist",
   "finding": "Hardlink-aware file scanner/SHA256 hasher and dedupe tests; MIT exact-stage design candidate.",
   "available_source_evidence": [
@@ -91,7 +91,10 @@
     },
     {
       "audit": "docs/research/dedup-500/dupehunter295-source-review-v2-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/dupehunter295-source-review-v3-20261021.json"
     }
   ],
-  "upstream_test_scope": "Only6original concurrency tests executed, allpass; full suite pending."
+  "upstream_test_scope": "41original tests passed together using Node22 strip-types and .js-to-.ts resolver; original launcher/build/typecheck/full suite pending."
 }

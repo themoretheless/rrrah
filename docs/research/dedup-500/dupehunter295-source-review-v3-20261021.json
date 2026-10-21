@@ -1,0 +1,68 @@
+{
+  "repository": "amasen02/dupehunter",
+  "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
+  "whole_repo_complete": false,
+  "tracked_blobs": 52,
+  "cumulative_assessed_blobs": 18,
+  "files": {
+    "test/dedupe.test.ts": {
+      "bytes": 6279,
+      "sha256": "2bdbba2757d23c70d59087874c06a399fac6549abba33e7aa3cf2ed2774e19a7",
+      "git_blob": "9d06666ec8d5d469cc33e871ca1674cb00236ca2",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/scanner.test.ts": {
+      "bytes": 3941,
+      "sha256": "6a43ff801e8110e4440193c1f13554c5a30519420893ac0aa3292930dd3592ff",
+      "git_blob": "0d04fcdaafb9176cbe5e6acec2ca0e43350092b8",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/hasher.test.ts": {
+      "bytes": 1829,
+      "sha256": "0e80cb187d2c79d8393257c003b89a82ecbb0e2ec65c2d15d6d9938566bf9039",
+      "git_blob": "3896d876c0f03bba0428371c19f97d3be99f9819",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/helpers.ts": {
+      "bytes": 661,
+      "sha256": "b2da1f3f666b7a36a27501cb208511205b3acd0a8752f1a476c65724d2bf6478",
+      "git_blob": "40f48bf8f99564f2fb2d53ebd887a21066f09fc0",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/glob.test.ts": {
+      "bytes": 1155,
+      "sha256": "5dc9918dc489766efb57cf4ade2201995d00f5fbfea95954a61f936e2884a01f",
+      "git_blob": "f0b06da75d6d2f5af17758af7dc77baccbd5da06",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 7,
+  "upstream_tests": {
+    "combined_original_files": [
+      "actions",
+      "concurrency",
+      "dedupe",
+      "scanner",
+      "hasher",
+      "glob"
+    ],
+    "passed": 41,
+    "failed": 0,
+    "skipped": 0,
+    "prior6overlap": true
+  },
+  "upstream_log": "docs/research/dedup-500/dupehunter295-core-tests-20261021.log",
+  "runtime_scope": "Unmodified original TypeScript tests and code; Node22.23.3 strip-types plus previously recorded relative .js-to-.ts resolver. Not original tsx launcher/build/typecheck.",
+  "findings": [
+    "41 original tests pass together; includes actual temporary filesystem hardlinks and symlink cycle cases with0skips,5MiB stream hashing and same-size/different-content exclusion.",
+    "Hardlink dedupe test verifies2 physical files from3paths, and space test computes logical size*(physicalcount-1). It does not inspect external hardlinks or actual allocated disk blocks.",
+    "Scanner unreadable-subdirectory-named test actually supplies nonexistent root path. It proves missing-root warning handling, not permission denied on an existing subdirectory.",
+    "Symlink cycle test asserts normal and linked paths present and awaits termination; it does not bound traversal work or exact path multiplicity.",
+    "No original tests in these files mutate content/identity after scanning before actions. Existing fresh counterexamples remain valid despite suite success."
+  ],
+  "remaining_scope": "34 artifacts including CLI/options/render/format/size helpers andtests,README/project metadata/workflows and package lock.",
+  "limits": [
+    "Full upstream suite/build/typecheck pending. No production changes or performance claim. Global full count202/500 unchanged. pHash/ASAN deferred."
+  ]
+}
