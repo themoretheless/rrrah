@@ -1,0 +1,54 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          1471,
+          2180
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          2180
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read new lines1471-2180 in three bounded chunks; cumulative1-2180/16837. Static move/copy/archive/rename helper review only.",
+  "findings": [
+    "moveFileOrDirectory deletes existing destination before rename/copy, ignoring destination removal Boolean. Failed source read/copy can therefore leave preexisting destination removed. Not an atomic replace/rollback operation. No real move/delete or failing filesystem probe executed.",
+    "Move fallback copies recursively/file overwrite then deletes source based on copied Boolean/destination existence, no byte/content verification or stable source observation. Partial source deletion returnsfalse despite some files removed; partial destination not rolled back. Same absolute-path string guard is not canonical/inode equality and no subtree-cycle guard shown.",
+    "Paste copies overwrite existing paths without conflict resolution in helper. Dialog/menu callers still unread, so do not assert globally absent overwrite warning. copiedFiles snapshotted inside coroutine, isMoveOperation read repeatedly rather than captured; clipboard may change if UI allows concurrent actions. On move it clears copiedFiles even with failures.",
+    "Generic renameFile only calls renameTo then refresh/load lists; stored favorites path not updated, so old path can disappear when loadFavorites checks exists. Image/audio album rename migrates pinned path, image also locked path; child favorites and last-played path not migrated here. Same path is location reference, not durable object identity.",
+    "performDelete counts actual LocalTrashManager successes and reports movedCount, rather than all targets as success. Entry deleteFiles stages filesToDelete; confirmation UI still unread. Progress/selection cleared and loaders refreshed; exception/finally handling outside perfile manager remains unqualified.",
+    "Compression writes directly to currentDirectory/zipName, opens FileOutputStream before walking inputs; existing target can be truncated, partialarchive retained on exception. Output inside selected directory can become input without explicit exclusion here. No archive produced.",
+    "Compression recursive empty/null children both represented as emptydirectory entry; unreadable directory may be represented as empty, silently losing coverage. No symlink/cycle/depth/work cap in zip walker. Duplicate entry names across selected roots can fail after partial write.",
+    "Extraction combines output folder with entry name without canonical containment validation, explicit no-overwrite policy or total-byte/entry-count bounds. Defensive requirement is validated destination containment and bounded output before publishing. No crafted archive, payload, or extraction executed.",
+    "shareFiles uses explicit FileProvider content URIs plus read-grant flag and ClipData for every URI; triggers chooser only on user action. No outgoing share/message or external app invoked in review.",
+    "Permission gate renders guide rather than mainviews when permission absent, narrowing v72 concern: loaded lists retained in state are not directly mainview-visible in this branch. Actual dialog/overlay gating later source pending.",
+    "Album lock path management is UI-path based; rename migrates known markers. Request unlock handles biometric success/PIN fallback. Storage/encryption/global action policy not certified by this fragment; no bypass claim or test."
+  ],
+  "candidate_requirements_for_library": [
+    "Preserve preexisting destination until verified replacement is ready; support atomic publication and clear partial failure outcomes.",
+    "Verify copied content before destructive source removal, with explicit policy for concurrent source mutation.",
+    "Track dependent references across rename and distinguish path location from content/object identity.",
+    "Archive traversal/output must have containment and work bounds and must report skipped/unreadable inputs."
+  ],
+  "limits": [
+    "114/268 whole files unchanged; explorer2180/16837 read.",
+    "No Android/Kotlin runtime, filesystem move/copy/delete/share/compress/extract or user data actions executed.",
+    "155/500 full repositories unchanged; no new library implementation or runtime test result.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
