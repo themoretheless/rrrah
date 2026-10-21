@@ -1,0 +1,41 @@
+    Updating crates.io index
+     Locking 93 packages to latest compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding sha2 v0.10.9 (available: v0.11.1)
+   Compiling visualvault076-storage v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-storage-20261021)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.26s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_storage-03aa59e359f41236)
+
+running 10 tests
+test file_manager::tests::test_default_file_manager ... ok
+test file_manager::tests::test_get_files_with_empty_manager ... ok
+test file_manager::tests::test_get_file_count_with_empty_manager ... ok
+test file_manager::tests::test_new_file_manager ... ok
+test file_manager::tests::test_filter_active_behavior ... ok
+test file_manager::tests::test_get_files_returns_arc ... ok
+test file_manager::tests::test_set_files ... ok
+test file_manager::tests::test_set_files_overwrites_existing ... ok
+test file_manager::tests::test_set_files_resets_filter ... ok
+test file_manager::tests::test_arc_cloning_efficiency ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 51 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_storage-03aa59e359f41236)
+
+running 13 tests
+test bytes::tests::test_format_bytes_bytes ... ok
+test bytes::tests::test_format_bytes_edge_cases ... ok
+test bytes::tests::test_format_bytes_gigabytes ... ok
+test bytes::tests::test_format_bytes_common_file_sizes ... ok
+test bytes::tests::test_format_bytes_kilobytes ... ok
+test bytes::tests::test_format_bytes_large_terabytes ... ok
+test bytes::tests::test_format_bytes_precision ... ok
+test bytes::tests::test_format_bytes_maximum_u64 ... ok
+test bytes::tests::test_format_bytes_terabytes ... ok
+test bytes::tests::test_format_bytes_megabytes ... ok
+test bytes::tests::test_format_bytes_rounding ... ok
+test bytes::tests::test_format_bytes_incremental ... ok
+test bytes::tests::test_format_bytes_zero ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 48 filtered out; finished in 0.00s

@@ -1,0 +1,95 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 36,
+  "files": {
+    "tests/integration/scanner.rs": {
+      "bytes": 7683,
+      "sha256": "156be26e7cfacdc68010486b2e219e32f5488835e4c318aea895060fe7495f75",
+      "git_blob": "17e6d4d2b7cf7d76bdccc43dad4996aad05d9eb4",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/system/workflow.rs": {
+      "bytes": 12313,
+      "sha256": "7683f1927744906a65701b2178aaa02d522669448303e56922cd8ff06326d5c0",
+      "git_blob": "11fd672a7d99463ddbff2fbcc0da896a56265b78",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "benches/duplicate_benchmark.rs": {
+      "bytes": 4009,
+      "sha256": "fb642711bf92bfaad69ccdf3dd0a3e02caf50a7522be13eb57c0eb0cbd1ae73a",
+      "git_blob": "0da50667f53d64248db72ee4af11768bb74b904c",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "benches/scanner_benchmark.rs": {
+      "bytes": 4220,
+      "sha256": "9ba4046cf168c5bed4072c15b08f5d09ca11a875c85465dc58990f1cee891c8a",
+      "git_blob": "e9f6b9cf92c330176227334c355cbfda0d27a5ad",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "benches/organizer_benchmark.rs": {
+      "bytes": 4779,
+      "sha256": "82429c7417fce1e646f90d9386154e7fbe29b61d2cf3acf70e06668816df0a18",
+      "git_blob": "2725f56e2764364a440f697446584f7a250d8bcf",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/main.rs": {
+      "bytes": 4436,
+      "sha256": "074c1d2fd7c423fd773e07007f0881730d6a51c017942cc7e8916029383d9024",
+      "git_blob": "5f2ecfd4526ef489e08862e1f654f7eb3ad6790d",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "crates/core/src/file_manager.rs": {
+      "bytes": 6546,
+      "sha256": "d4b7fa05ea95959f67aefe6df49cfb590e454467ee418f41739b303fe25bcd22",
+      "git_blob": "99336df3da87061497bfe03937cb03da195b2abc",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "crates/utils/src/bytes.rs": {
+      "bytes": 4864,
+      "sha256": "4e036d8eba480413db106ac5ad3f0f6cd6af5f2c354139ac5bad9f835d76ecea",
+      "git_blob": "0d618738774d0c0cac3fe30f3680b7e47512d017",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_unique_controls": 1,
+  "cumulative_unique_controls": 16,
+  "controls_script": "docs/research/dedup-500/visualvault076-benchmark-control-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-benchmark-control-20261021/run.log",
+  "original_tests_this_increment": {
+    "file_manager": 10,
+    "bytes": 13,
+    "passed": 23,
+    "failed": 0,
+    "ignored": 0
+  },
+  "original_test_scripts": [
+    "docs/research/dedup-500/visualvault076-storage-tests-20261021/build.py"
+  ],
+  "original_test_logs": [
+    "docs/research/dedup-500/visualvault076-storage-tests-20261021/run.log"
+  ],
+  "cumulative_distinct_original_module_tests": {
+    "passed": 84,
+    "failed": 1,
+    "scope": "Separate isolated original modules; earlier Progress concurrent test failed current=99 expected=100. Not full workspace."
+  },
+  "findings": [
+    "Duplicate benchmark uses b.iter returning detect_duplicates future without await/block_on; the async function body is not executed. Source also uses identical duplicate_detection group/input IDs for quick and full functions. No Criterion benchmark run or timing accepted.",
+    "Authored actual-detector control: await on equal files yields group1; construct another future while files exist, remove both before polling, then await yields group0. Establishes deferred hashing with actual unchanged detector/models, not a measurement of Criterion itself.",
+    "Duplicate benchmark creates only synthetic MediaFile records and supplied hash strings for /tmp paths, no physical files. Detector unconditionally rehashes eligible paths rather than trusting supplied hashes. Await alone would not turn this fixture into a valid disk-throughput benchmark.",
+    "Scanner benchmark does create real temporary files and block_on scan_directory; setup is iter_batched. It measures metadata/media scanning with identical short fake image bytes, not duplicate hashing or decoding. No result-count assertions or benchmark execution here.",
+    "Organizer benchmark synthesizes /tmp source paths without creating source files; TempDir destination owner is dropped before the timed closure because omitted from setup return tuple. Thus it does not establish successful movement throughput. Not executed against arbitrary /tmp paths.",
+    "Scanner integration tests use in-memory DB, synthetic extension-tagged files and happy-path counts; hidden-files test explicitly expects zero because temporary root has hidden ancestor. Does not demonstrate exclusion limited to hidden descendants. Source reviewed; integration tests not executed.",
+    "System workflow creates synthetic media by byte labels/zero padding, calls FileOrganizer::new with dirs::config_dir(), and checks several weak conditions: lowercase exists rather than all extensions, year-or-Videos after Videos already asserted. Cache checks compare counts without validating stored hashes. Not run because global config scope needs isolation.",
+    "FileManager simply replaces an Arc slice and clones shared handles; 10 original tests passed. Tests named filter behavior do not implement filtering, one reset test has no post-operation assertion. Timing assertion under100ms is not a throughput qualification.",
+    "format_bytes uses binary1024 scaling with labels KB through TB and f64 display; all13 original tests passed. Display utility only, no physical freed-space proof.",
+    "main initializes logs in current directory and truncates log each launch; enables raw terminal before awaiting App::new. An App::new error returns before explicit cleanup, absent a terminal guard in main. Static review only; no terminal or full TUI launch."
+  ],
+  "remaining_scope": "59 tracked artifacts remain; global full-review count remains205/500. Native pHash/ASAN skipped as requested. No production code copied or changed.",
+  "limits": [
+    "No full workspace, integration, system workflow, Criterion or TUI execution. Authored test harness uses actual unchanged detector and real model modules with new manifest/dependency resolution."
+  ]
+}

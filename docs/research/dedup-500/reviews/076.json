@@ -2,7 +2,7 @@
   "index": 76,
   "repository": "mikeleppane/visualvault",
   "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
-  "review_scope": "Partial pinned28/95artifacts assessed;15uniquecontrols.Originalplaceholdercacheerrorreproduced;Appbackgroundreadinessstatic,notfullUIrace.61originaltests pass1progressracefailureacrossisolatedmodules.",
+  "review_scope": "Partial pinned36/95 artifacts assessed;16 unique controls. 84 distinct original module tests pass;1 earlier Progress concurrent test fails. Duplicate benchmark returns unpolled futures; integration/system reviewed, not executed.",
   "decision": "shortlist",
   "finding": "Rust SHA256 quick/full detector and scanner/cache layer with integration tests; compare quick-hash policy against complete hashing.",
   "license_metadata": "MIT",
@@ -102,7 +102,10 @@
     },
     {
       "audit": "docs/research/dedup-500/visualvault076-source-review-v9-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/visualvault076-source-review-v10-20261021.json"
     }
   ],
-  "upstream_test_scope": "61distinctoriginalmodule testspass,1originalprogressconcurrenttestfails;source modulesisolated,notfullworkspace."
+  "upstream_test_scope": "84 distinct original module tests pass,1 original Progress concurrency test fails across isolated modules; not full workspace."
 }
