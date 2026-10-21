@@ -1,0 +1,37 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/images/omnisearch-architecture.svg": {
+      "sha256": "fc67b4729c175e46dfaec8a5863a417c0c22c63f484158051e614f8e644c3dad",
+      "git_blob": "0b908dec2fbdd3231ca9e25ff755e64ce54f577d",
+      "mode": "100644",
+      "lines": 51,
+      "width": 1280,
+      "height": 720,
+      "method": "Complete SVG source read, XML parsed and complete CairoSVG 2.9.1 raster viewed at native dimensions. No external references or scripts."
+    },
+    "docs/images/quick-window-placeholder.svg": {
+      "sha256": "7243588c2cd98fe0b41f80c381e3a966856c3694f9774b540f7f27e6c249e49f",
+      "git_blob": "b672151c527a18dc1e473e218b73de5029b31717",
+      "mode": "100644",
+      "lines": 69,
+      "width": 1600,
+      "height": 980,
+      "method": "Complete SVG source read, XML parsed and complete CairoSVG 2.9.1 raster viewed at native dimensions. No external references or scripts."
+    }
+  },
+  "cumulative_whole_files_read": 213,
+  "tracked_blobs": 268,
+  "findings": [
+    "Architecture diagram shows React/TypeScript UI, Rust/Tauri FFI and JSON commands, C++17/20 scanner and NTFS MFT/USN volume access. Administrator requirement describes raw volume access, not all application features.",
+    "Quick-window-placeholder.svg is explicitly placeholder artwork in title, description and visible text; it is not a captured running application or evidence of feature completion.",
+    "Both complete source texts and complete rendered diagrams reviewed. Initial Quick Look thumbnails cropped the SVG canvas; they were rejected as incomplete evidence and replaced with native-dimension CairoSVG renders."
+  ],
+  "limits": [
+    "213/268 whole files; repository incomplete.",
+    "No application execution or integration qualification. Renderer font fallback may differ from Segoe UI.",
+    "155/500 full reviews unchanged; native pHash/ASAN deferred."
+  ]
+}

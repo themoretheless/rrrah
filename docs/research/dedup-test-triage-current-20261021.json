@@ -1,0 +1,38 @@
+{
+  "status": "analysis_of_existing_runs_not_a_new_test_run",
+  "local_run": {
+    "report": "docs/research/dedup-current-no-default-full-run-20261021.json",
+    "log_sha256_verified": true,
+    "passed": 284,
+    "failed": 0,
+    "ignored": 2,
+    "interpretation": "No failing tests in the executed no-default-features host configuration. Two ignored tests are manual alternating timing controls; ignored does not mean failed or a speedup.",
+    "open_gates": [
+      "Optional-feature coverage",
+      "Platform matrix",
+      "Controlled before/after performance measurements",
+      "All-cases correctness"
+    ]
+  },
+  "upstream_isolated_run": {
+    "report": "docs/research/dedup-500/omni13-lite-main-complete-review-v52-20261021.json",
+    "passed": 11,
+    "failed": 1,
+    "failure": "default_agent_prompt_includes_pc_control_skills",
+    "classification": "Original upstream test expects open browser pages in a general-assistant prompt. Source/test contract mismatch in isolated pure helper tests; not a local rrrah-dedup failure.",
+    "action": "Retain as upstream finding; do not add unrelated PC-control functionality to the deduplication library.",
+    "source_only_mismatch": "A separate filter-count test constructs seven rows but expects six. It was not executed in this batch and is not counted as a second runtime failure."
+  },
+  "review_progress": {
+    "complete_repositories": 155,
+    "total_repositories": 500,
+    "active_repository": "Eul45/omni-search",
+    "active_complete_files": 213,
+    "active_total_files": 268
+  },
+  "deferred": "native pHash/ASAN",
+  "limits": [
+    "No production implementation change or newly measured optimization in this batch.",
+    "Screenshots and placeholder diagrams are not runtime or algorithm correctness tests."
+  ]
+}
