@@ -1,0 +1,30 @@
+{
+  "original_python_modules_executed": true,
+  "native_backend_run": false,
+  "controls": {
+    "same_one_bit_difference_low": 1.0,
+    "same_one_bit_difference_high": 0.125,
+    "expected_fixed_byte_bit_error": 0.125,
+    "empty_vs_zero_byte": 0.0,
+    "video_one_byte_inputs_forwarded": [
+      {
+        "length_a": 0,
+        "length_b": 0,
+        "threshold": 21
+      }
+    ]
+  },
+  "findings": [
+    "hamming_bytes normalizes by XOR bit_length, not fixed8*length; same one-bit error yields1 or0.125 depending bit position.",
+    "hamming_bytes accepts mismatched widths and equates empty and zero byte. Docstring calls result match fraction but zero means identical.",
+    "video wrapper floors byte lengths by8, silently drops incomplete trailing bytes; stub confirms one-byte inputs forwarded as zero native elements."
+  ],
+  "source_sha256": {
+    "pHashPy/helpers.py": "a37b4b4810bfae71678fedacc89e60cf254106abf00e38cf81ef081ac6aa63bc",
+    "pHashPy/video.py": "57fd96e681c98dbdef22cff3216c5fa93e3067ec27cab032bc19771b0e315ed3"
+  },
+  "limits": [
+    "Helper runs unchanged; video wrapper unchanged with fake cppyy dispatch only.",
+    "No native pHash, allocation/free or ASAN execution."
+  ]
+}
