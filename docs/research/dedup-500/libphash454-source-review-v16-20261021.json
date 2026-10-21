@@ -1,0 +1,35 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Vendorresizerlines3901..5550whollyread; runningtotal1..5550. Sourceincrementonly, no newruntimeorperformanceclaim.",
+  "manifest": [
+    {
+      "path": "vendor/stb_image_resize2.h",
+      "sha256": "173e654634f6ccaad98f603e686ea212eec1fe8ea6d2a5e5e8056efa10ae3880",
+      "read_ranges_inclusive": [
+        [
+          1,
+          5550
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Completedcoefficientpackingroutineandfiltercalculationincludinggather/scatterpivot; re-includedcoderlayoutswizzles,fancy/simplealphaweight/unweight,RGBBGRflip,scanlinedecoding,1/2/3channelhorizontalmacrosandpart4channelmacrosread. Templatesre-includedlatermuststillberead.",
+    "FancyRGBA expands4inputchannelsinto7internal valuesRGB,A,RGBpremult;fancyRA expands2into3. Unweightusesfilterednonpremultcolorswhenalphasmallerthanepsilonandpremult/alphaotherwise. Thesearegeneralresizerfeatures,notcurrent1channelhashwrapperqualification.",
+    "ScalargatherreductionusesexplicitgroupedadditionmatchingSIMDorder; replacingwithsequentialsumcouldchangefloatroundingandfingerprints. Nooptimizationcopied.",
+    "Scanlinedecodeusesinputcallbackreturnedpointerandoptionalrightalignedbufferthenzeros2extraendfloats toavoidmaskedNaNreads. Declaredpadding3floats; allocationcode/codertemplatesnotyetreviewed, nomemorysafetyacceptance.",
+    "Horizontal3channelSIMDstorewrites4floatsfornonfinalpixeland2+1floatsforlastpixel; macrocontrolflowdependsincludingtemplate. No newx86/ARMtailruntimeclaimbeyondpreviousbyteparity.",
+    "Scatterpivotcanreuseotheraxisgatherweightswhenconfigurationmatches; skipzero/denormalcontributorsandclearunsetranges. Correctdispatchpredicateandallocationremainingtoreview.",
+    "No new defects established by thissourceincrement. Existingcontrolsremainlimitedtotheirrecordedpaths; noalpha/callback/threadingqualityclaim.",
+    "No productioncodechanges,ASAN ornativepHash.orgexecution."
+  ],
+  "remaining": [
+    "Vendorresizerlines5551onwardincludingtemplates/allocation/APIimplementation/license",
+    "stb_imageinactiveplatform/commentreviewboundary",
+    "Optionalcodecgitlinkqualification"
+  ],
+  "full_review_count": 247
+}
