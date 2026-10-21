@@ -1,0 +1,64 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          2521,
+          3150
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          3150
+        ],
+        [
+          3838,
+          3920
+        ],
+        [
+          5360,
+          6130
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read630 additional keyboard/clipboard operation lines. Ran exact timestamp predicates against owned synthetic SQLite data; no upstream UI execution.",
+  "findings": [
+    "Pin/delete/edit operations use timestamp extracted from clip presentation id rather than clipboard_history primary id. Earlier writer records millisecond timestamps without uniqueness check. Synthetic two-row same-timestamp fixture: exact UPDATE predicate pinned2 rows and DELETE predicate removed2, while different-timestamp control survived. Does not measure actual collision rate or execute upstream application.",
+    "Clipboard edit/copy SELECT by timestamp uses query_row without deterministic tie selection; when timestamps collide, selecting one displayed record can read a different matching row. Same timestamp also underlies selection normalization and visual IDs, so identity conflation occurs before SQL.",
+    "Pin UI updates optimistically before database success and treats execute.is_ok as changed even for0 rows; write failure has no rollback shown. Delete removes displayed results before detached database outcome. No integrated persistence-failure fixture run.",
+    "Both Enter-confirm and second-Delete paths issue history DELETE, not file removal. Saved image content paths are not deleted in reviewed branch; lifecycle elsewhere remains unread. No image-file deletion performed.",
+    "Delete confirmation requires explicit second Delete or Enter and Escape clears selection/confirmation; review must not characterize this branch as unconditional immediate deletion.",
+    "Clipboard edit copies proposed new content even if asynchronous SQL update fails, then closes edit state and refreshes. Unique-content conflicts can therefore leave database old while clipboard holds new; source-level finding, constraint fixture not run.",
+    "Form key handler calls handle_form_enter; persistence implementation is outside current read range. This batch does not qualify note/snippet creation save behavior.",
+    "Multi-selection copy sorts unique timestamps ascending; HashSet click order is not preserved. Images in mixed copy become textual image paths rather than image payload. This is explicit source behavior, not file-content grouping."
+  ],
+  "limits": [
+    "85/268 whole files; main.rs partial ranges only.",
+    "Synthetic SQLite predicate control, not complete upstream schema/Windows integration; no production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ],
+  "executed_controls": {
+    "fixture": "Owned in-memory SQLite, two distinct contents sharing one millisecond timestamp plus different-timestamp control",
+    "pin_rows_changed": 2,
+    "delete_rows_changed": 2,
+    "remaining": [
+      [
+        "control"
+      ]
+    ],
+    "scope": "Exact reviewed WHERE timestamp SQL predicate mechanism; not upstream Windows application or actual event collision frequency."
+  },
+  "control_source": "CREATE TABLE clipboard_history(id INTEGER PRIMARY KEY, content TEXT UNIQUE, timestamp INTEGER, pinned INTEGER DEFAULT 0); INSERT distinct first/second with timestamp1700000000123 and control1700000000124; UPDATE clipboard_history SET pinned = ? WHERE timestamp = ?; DELETE FROM clipboard_history WHERE timestamp = ?; assert changed2/deleted2/control survives."
+}
