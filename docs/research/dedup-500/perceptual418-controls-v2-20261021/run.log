@@ -1,0 +1,6 @@
+PASS all256 scalar one-hot hash distances and byte roundtrips
+PASS scalar full256bit distance
+PASS nine coefficient inputs silently truncate final bit
+PASS empty coefficient array throws without validation
+PASS original integer image pipeline returns deterministic32bytes for synthetic fixture
+RESULT 5 controls passed; original C# sources; no encoded image decoding or corpus qualification
