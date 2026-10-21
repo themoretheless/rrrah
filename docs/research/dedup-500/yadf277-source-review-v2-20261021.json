@@ -1,0 +1,53 @@
+{
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 14,
+  "new_whole_files_read": {
+    "src/lib.rs": {
+      "bytes": 4374,
+      "sha256": "b4f2a78b47967ae8a7981fbfb43041a827a1da341447075568b00da35d4efd59",
+      "git_blob": "682a7da3486b99a8db73b701cdf06e87c803fb19",
+      "method": "Whole pinned source/build/test/helper text read without truncation"
+    },
+    "build.rs": {
+      "bytes": 2192,
+      "sha256": "f314c9859bdd029ed4c7fad77d13d95debe91f2822fd95ca884fd19894d9e700",
+      "git_blob": "25079985b853bbccf411b33aa55b8a998d0ed0ed",
+      "method": "Whole pinned source/build/test/helper text read without truncation"
+    },
+    "tests/particular_cases.rs": {
+      "bytes": 3579,
+      "sha256": "aac5b79b9a8a4feeee8658c17913355a355eb5a5fdb82d87e3191a1be2c1dcde",
+      "git_blob": "2d018c504e4ac109dc62f963486bba3d458dfc0e",
+      "method": "Whole pinned source/build/test/helper text read without truncation"
+    },
+    "tests/common/mod.rs": {
+      "bytes": 2557,
+      "sha256": "f4c84944bccdc8a23490cf9f531cade53f9dfaf719529736b4062afad68113a7",
+      "git_blob": "5fab20633cddfa5bc0780711d923ec0120512d5f",
+      "method": "Whole pinned source/build/test/helper text read without truncation"
+    },
+    "src/units.rs": {
+      "bytes": 2512,
+      "sha256": "125cc2622e4c6bc5ddb6754c1a905d280ca794bacd1694f9153e13d2f47ecd11",
+      "git_blob": "df5855f37e3f5c713854eb63d846dedb3fec801c",
+      "method": "Whole pinned source/build/test/helper text read without truncation"
+    }
+  },
+  "unique_targeted_controls": 3,
+  "controls": "docs/research/dedup-500/yadf277-controls-v2-20261021",
+  "control_scope": "Exact original full_hash function extracted with original Bytes and Hasher source; explicit std::fs::read hash adapter and logging macro. Own temporary files. Not original full scanner or dependency runtime.",
+  "upstream_tests_run": false,
+  "findings": [
+    "Three extracted-function controls reproduce changed3byte and missing3byte candidate returningVerified; missing4096byte candidate returnsUnreadable. Candidate initially represents prior captured size. No claim actual end-to-end scanner run or mutation timing reproduction.",
+    "Public scan API returns FileCounter rather than Result and logs excluded paths; result alone does not supply per-file failure completeness certificate. Source-only API assessment.",
+    "particular_cases tests include stable identical small/larger, size/prefix/suffix/middle differences. Ignored sanity_check scans actual home and bytechecks groups; not executed and not enabled.",
+    "build.rs runs read-only gitrevision plus CPUfeature reporting. First Cargo attempt refused nested workspace; source then copied unchanged outside rrrah. Second lockedoffline attempt failed missingclap-verbosity-flag before compilation. No source manifest/dependency changes made.",
+    "Read units/helper/current publicAPI fully.14/44review,30artifactsremain. No production changes or measured performance claim; nativepHash/ASANdeferred."
+  ],
+  "limits": [
+    "Extracted function controls qualify finite branch behavior with adapters, not whole upstream scanner. Fullreview count200/500 unchanged."
+  ]
+}

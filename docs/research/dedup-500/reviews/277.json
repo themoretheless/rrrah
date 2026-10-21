@@ -2,7 +2,7 @@
   "index": 277,
   "repository": "jRimbault/yadf",
   "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
-  "review_scope": "Partial pinned9/44whole artifacts read including stagedhash/read/pipeline/filter/core andMITlicense;all44cached Git-verified;zero runtime tests.",
+  "review_scope": "Partial pinned14/44whole artifacts read;3 exact extracted full_hash controls with explicit adapters reproduce small-file stale verification. OriginalCargo tests not built:offline dependency unavailable.",
   "decision": "shortlist",
   "finding": "Rust pluggable hash and positioned head/tail file reads; relevant streaming/prefilter tests, confirmation still to examine.",
   "available_source_evidence": [
@@ -78,6 +78,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/yadf277-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/yadf277-source-review-v2-20261021.json"
     }
   ]
 }
