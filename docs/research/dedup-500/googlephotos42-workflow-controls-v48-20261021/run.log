@@ -1,0 +1,21 @@
+PASS store-publish.yml tail1 commit_failure rc=42
+PASS store-publish.yml tail1 clean rc=0
+PASS store-publish.yml tail1 changed rc=0
+PASS store-publish.yml tail1 diff_error rc=2
+PASS store-publish.yml tail1 push_failure rc=43
+PASS store-publish.yml tail2 commit_failure rc=42
+PASS store-publish.yml tail2 clean rc=0
+PASS store-publish.yml tail2 changed rc=0
+PASS store-publish.yml tail2 diff_error rc=2
+PASS store-publish.yml tail2 push_failure rc=43
+PASS store-publish.yml tail3 commit_failure rc=42
+PASS store-publish.yml tail3 clean rc=0
+PASS store-publish.yml tail3 changed rc=0
+PASS store-publish.yml tail3 diff_error rc=2
+PASS store-publish.yml tail3 push_failure rc=43
+PASS bootstrap-amo.yml tail1 commit_failure rc=42
+PASS bootstrap-amo.yml tail1 clean rc=0
+PASS bootstrap-amo.yml tail1 changed rc=0
+PASS bootstrap-amo.yml tail1 diff_error rc=2
+PASS bootstrap-amo.yml tail1 push_failure rc=43
+TOTAL 20 passed; original recording tails only, git replaced by inert shell function; no network or repository mutations

@@ -1,0 +1,80 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/cws-status.yml": {
+      "sha256": "e12a83dd32c6d859fbed4d5c7abc655f97eddb4126db54c1fa9a9b16adb02376",
+      "git_blob": "ef93768fee76f33e2a49c3ab548279730174f6cc",
+      "bytes": 1542,
+      "lines": 43,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    },
+    ".github/workflows/publish-cws.yml": {
+      "sha256": "2153472ba2fbb6cc46ea3fb0477ba57c5c9e25fd7164f449008fa4bfd4a3704e",
+      "git_blob": "4360f27f5cac44f999bb9f98594314ef3bb7f2a4",
+      "bytes": 2403,
+      "lines": 62,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    },
+    ".github/workflows/store-retry.yml": {
+      "sha256": "8ad1388f35af999ddb3ca8dcf8ce3e17c74e1572b993a41d0dc9b5a7f1f4e48f",
+      "git_blob": "c16ca761f99d0bf21e0340c51a7686c996f61b25",
+      "bytes": 666,
+      "lines": 27,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    },
+    "tests/store-workflows.test.ts": {
+      "sha256": "bc8fbaacedfa775e4904927c746b5512f6dabfb914b3d5178bff6a3cf0715ef4",
+      "git_blob": "233b4620e47cfa683e0af564f9824ad0984dc8f6",
+      "bytes": 4077,
+      "lines": 100,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    },
+    ".github/workflows/bootstrap-amo.yml": {
+      "sha256": "763e32cda29c63b396051e2ce8d3404215c23a88c98fd096c53e885272929a99",
+      "git_blob": "5dd45d60e7670dd6764a56888740b5f08664863c",
+      "bytes": 3223,
+      "lines": 87,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    },
+    ".github/workflows/publish-stores.yml": {
+      "sha256": "16c5dd4fd687ae688c4e7944ad34f7cd262d49e32fda0b870b7e30861e9362ac",
+      "git_blob": "9c1747b7c63494a597b7e6533d3cb61a7d602c16",
+      "bytes": 962,
+      "lines": 37,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    },
+    ".github/workflows/store-publish.yml": {
+      "sha256": "c52bfe1d1443a4122d2e0fb2c4513079cc06a07bd552eacabb5e9a278b2b93cb",
+      "git_blob": "c6e3b6aa8b21067afa975016438e070c69de033b",
+      "bytes": 27566,
+      "lines": 623,
+      "method": "Whole pinned source read; reusable623line workflow read in ranges1-210,211-420,421-623."
+    }
+  },
+  "cumulative_assessed_blobs": 184,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-workflow-controls-v48-20261021/run.py",
+    "sha256": "9bd89021ac0f3fe43bc610f23535300bace8d61cba7ff7f6b8b5b77684d5ed5d",
+    "log": "docs/research/dedup-500/googlephotos42-workflow-controls-v48-20261021/run.log",
+    "passed": 20,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Four original recording shell tails, five scenarios each. Git replaced by inert shell function; no actual git commit/push, checkout, credentials, API or workflow dispatch. Authored Python runner reproduces upstream test scenarios, not full Vitest."
+  },
+  "findings": [
+    "All20recording-tail controls propagate diff/commit/push failures and suppress premature success notices. They do not exercise build, upload, review, deployed version or state concurrency.",
+    "AMO bootstrap blanktag checks out github.sha but later resolves latest release tag for state. No check binds built version/source to recorded tag on this path. permissions contents:read while recording pushes store-state; successful push depends on additional effective credentials/permissions, not qualified here.",
+    "Reusable normal build checks resolved tag against package version but runs build/verify/zip without tests in this workflow. Publisher jobs check out workflow-context source, not the built tag; tool/artifact revision distinction is explicit on staged path, implicit normal path.",
+    "Staged path checks full commit and expected content digest, and refuses existing version tag; zip digest remains content equivalence with earlier duplicate-name ambiguity counterexample, not universal archive byte identity.",
+    "Credential absence and known review queue blocks may be successful skipped jobs. Recorded state explicitly says public version unverified; green workflow not release/live-runtime proof. AMO external action implementation not inspected here.",
+    "Edge Location parsing expects no whitespace after colon and cuts at next colon; conventional Location: operation-id or absolute URL may be mishandled. Static finding only, no API assumptions or network execution."
+  ],
+  "cumulative_original_function_controls": 68,
+  "limits": [
+    "184/230whole artifacts;46remaining. Globalfullreview160/500unchanged.",
+    "No production implementation adopted/performance result. Native pHash/ASAN deferred."
+  ]
+}
