@@ -1,0 +1,80 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/site-l10n.test.ts": {
+      "sha256": "d7bae473c3ff5a145d17986ad9b22b21b64ae8c0c6b0b39227874b247f055ad5",
+      "git_blob": "73b78007789b6f4b742e22369ad173556ce014a2",
+      "bytes": 3569,
+      "lines": 62,
+      "method": "Whole pinned source read without output truncation."
+    },
+    "tests/site.test.ts": {
+      "sha256": "efb10b0b173b36685567bdc9e28257384fc3dbbae669f6da00583d72f35af500",
+      "git_blob": "8d3f974303148580d29f94db39cae5e6ed5f27f8",
+      "bytes": 13594,
+      "lines": 260,
+      "method": "Whole pinned source read without output truncation."
+    },
+    "tests/fixtures/site-l10n-drift/x.json": {
+      "sha256": "15ae571c381efaa651290254390cbef725332573c3a10fa15ff852cbaa9131a8",
+      "git_blob": "e82129c7bbc61b56561b2bf902be80d98d22d1fb",
+      "bytes": 134,
+      "lines": 1,
+      "method": "Whole pinned source read without output truncation."
+    },
+    "site/stats.js": {
+      "sha256": "d0073208debd25c86da9b5268881e033537084f35c387444063fe1e3bfa8953c",
+      "git_blob": "ac0745defbe223d16c549caa5386570ec9845837",
+      "bytes": 1233,
+      "lines": 20,
+      "method": "Whole pinned source read without output truncation."
+    },
+    "site/tracking.js": {
+      "sha256": "076282c4e27f0ced750d777a83274e193f751327541122dfe0dbe24618a01297",
+      "git_blob": "188eb0c483195b65a0352d46923b6b839d98e2ed",
+      "bytes": 8572,
+      "lines": 165,
+      "method": "Whole pinned source read without output truncation."
+    },
+    "scripts/site-build.mjs": {
+      "sha256": "2bbbb1ff0c679f795f40d3dab370b1f77e567b65eb471e8482b616dc038d8eaf",
+      "git_blob": "80cf89b51bf48855ad3414a462dffcfb3507bbe1",
+      "bytes": 7978,
+      "lines": 133,
+      "method": "Whole pinned source read without output truncation."
+    },
+    "site/stats.json": {
+      "sha256": "056e0763297ff9c6d5f7d75a22931f3eedb04448326ac76678a22fdb54a5f49d",
+      "git_blob": "1add5444c5ec896b0d8fe48a4a51ffe817a68463",
+      "bytes": 118,
+      "lines": 1,
+      "method": "Whole pinned source read without output truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 169,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-site-controls-v45-20261021/run.mjs",
+    "harness_sha256": "c1a908a72575953a3552279bd951f67dade6c65e49ebdb36c7af766f43c3d15e",
+    "log": "docs/research/dedup-500/googlephotos42-site-controls-v45-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Unmodified original build export, synthetic temporary site and locale only; no deployment/network/account actions."
+  },
+  "findings": [
+    "Completeness checks allKeys.includes(unit), whereas translation replaces exact delimited fragments. Synthetic Hello + Hello world with only Hello world key builds successfully while standalone Hello remains English. Positive complete-key and negative unrelated-uncovered controls pass. No claim shipped locale currently contains this counterexample.",
+    "site-l10n tests check generated pages, exact external href multiset preservation, fixed claims, alternates and stale-key rejection. This does not establish translation accuracy or browser rendering; numerical claim presence uses broad substring checks.",
+    "site.test tracking harness uses VM fake document/storage/fetch; stats test reads stats.json and static trademark text, does not execute stats.js despite renders title. Stored stats dated 2026-10-01 are historical marketing data, not live verified statistics.",
+    "tracking purchase-once depends on localStorage marker; failed writes are swallowed. Source alone does not qualify once behavior with unavailable storage or concurrent documents. No tracking requests executed.",
+    "Site build removes configured output recursively after validation, then copies/writes non-atomically. Only controlled temporary output used; no upstream publish scripts run.",
+    "Tracking script header says any placeholder prevents tags, but implementation independently enables GA and Ads; existing mixed-ID test matches implementation. No current vendor behavior or legal compliance inference."
+  ],
+  "cumulative_original_function_controls": 48,
+  "limits": [
+    "169/230 whole artifacts; full upstream suite and live/browser checks not run.",
+    "Fully reviewed repository total remains 160/500. Native pHash/ASAN deferred. No production optimization."
+  ]
+}
