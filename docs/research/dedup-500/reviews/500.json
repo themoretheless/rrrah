@@ -2,9 +2,9 @@
   "index": 500,
   "repository": "neotoxicfr/mtg-scanner-art-index",
   "commit": "39c3cafe08b5991f621ad43ad72edddae00c8fd5",
-  "review_scope": "Partial12/21pinnedartifactsassessed.30distinctoriginaltestspass(8hash/golden+22index/bulk/watermark);7authoredcontrols.Wholebuilderread;9docs/config/example artifactsremain.",
-  "decision": "shortlist",
-  "finding": "Multi-plane 256-bit dHash trading-card index with hash tests and pinned model checksum; useful color/local-region evidence, domain calibration required.",
+  "review_scope": "All21pinnedtrackedtextartifactswhole-read/Gitblobverified.30originaltestspass;8authoredcontrols includingactualmain/SQLitefalseaborton500refreshesin1000groups. No liveONNX/Scryfall/releasequalification.",
+  "decision": "retain-recipe-versioning-and-regression-cases",
+  "finding": "Retainversionedrecipe/golden/modelpinandrefreshqueuepatterns;confirmedrow-flooroverlapfalseabortplusquerylength/nonfinite/storagevalidationgaps. Domaincardartcandidateindex,notgeneralfilesamecontentproof.",
   "available_source_evidence": [
     {
       "path": "image_hash.py",
@@ -58,7 +58,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "PinnedMITrootwhole-read;no productioncopy,upstreamdata/legalclaimsnotindependentlyverified.",
   "tests_detected": 5,
   "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -93,5 +93,8 @@
       "audit": "docs/research/dedup-500/mtg500-source-review-v2-20261021.json"
     }
   ],
-  "upstream_test_scope": "All5trackedoriginalpytestmodulesrunintwoincrements:30pass total. HTTP/model mocked inupstreamworkflowtests;realOpenCV/SQLite,goldens;noONNXinference/livebuild."
+  "upstream_test_scope": "All5trackedoriginalpytestmodulesrunintwoincrements:30pass total. HTTP/model mocked inupstreamworkflowtests;realOpenCV/SQLite,goldens;noONNXinference/livebuild.",
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/mtg500-complete-source-review-20261021.json"
 }
