@@ -1,0 +1,77 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "networks/img_decoder.py": {
+      "sha256": "7ff4422e544a76b1d26e567a2169f70642b4b09a1701ed5de1468fdc584a1fd8",
+      "git_blob": "64b3549a367a2192fc7c409afbca08d57f7c9d40",
+      "bytes": 6605,
+      "lines": 179,
+      "method": "Whole source read."
+    },
+    "networks/resunet.py": {
+      "sha256": "af86a81ec49103b188c97369eb00db6c00fe7258ee64d2cd1b27afc48eb69357",
+      "git_blob": "6630ef1cacfbf08f7357cd824cd132ab43b7061e",
+      "bytes": 10577,
+      "lines": 279,
+      "method": "Whole source read."
+    },
+    "networks/inpainting_nets.py": {
+      "sha256": "431bf2c349855185a23f15d086d095772fb0451c9d8638d431475f172e276a41",
+      "git_blob": "e0d99692a7870fd1719dc4a635ba251162c54cc3",
+      "bytes": 22559,
+      "lines": 522,
+      "method": "Whole source read."
+    },
+    "third_party/DPT/run_monodepth.py": {
+      "sha256": "95b9b4a73055b3efde84b86e6f3e60e7efa560afd63099b9ed45f55ff36e72ff",
+      "git_blob": "bc2fab3099016ca2bd6936fd7b3cc6bb96a67e1c",
+      "bytes": 7208,
+      "lines": 238,
+      "method": "Whole source read."
+    },
+    "third_party/DPT/setup.py": {
+      "sha256": "2364ff07e09b422d1896038e684797707782fa427b8396e329d94155b96320db",
+      "git_blob": "504e3feacbccd5b5598377073819d1972d79eb29",
+      "bytes": 243,
+      "lines": 11,
+      "method": "Whole source read."
+    },
+    "third_party/DPT/requirements.txt": {
+      "sha256": "99ab36786a6eb213862b3ce6dc31fea134cc097e633ee2dc48e406dfd0b67ba0",
+      "git_blob": "75896eb40425ff36f49f1c08e148332ba7e41e0d",
+      "bytes": 68,
+      "lines": 4,
+      "method": "Whole source read."
+    },
+    "third_party/DPT/util/io.py": {
+      "sha256": "81b6edf09cf6664507a07d2f529c27d7eaae2848f0c661a9bd14a5c606a076e1",
+      "git_blob": "19559da53d9ff88405e7c1dd026477c7e3953f1a",
+      "bytes": 5310,
+      "lines": 219,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 38,
+  "tracked_blobs": 73,
+  "findings": [
+    "ImgDecoder blends two feature images using alpha/disparity exponential weights and a learned U-Net; output sigmoid RGB. No hashing/index/search or identity certificate. Exponential weights lack explicit finite/overflow handling.",
+    "ResUNet accepts encoder names18/34/50/101/152, but always builds BasicBlock layers[3,4,6,3] through layer3. Filters switch to bottleneck-sized channels for50/101/152 without changing blocks, so advertised alternatives are not implemented consistently. Default resnet34 path not implicated by this static finding.",
+    "ResUNet BatchNorm disables running statistics, so eval retains per-input statistics. Inpainting partial convolution explicitly propagates support masks and fills zero-support outputs with zero; generated pixels remain synthesis rather than evidence of source equality.",
+    "Depth inpainting forward unconditionally copies input/mask to CPU NumPy into unused visualization variables. This can add synchronization/copy overhead; not benchmarked. Edge forward_3P divides by disp.max without zero guard.",
+    "DPT runner strips image extension before write_depth, whose writer always appends .png. Demo get_input_data seeks disparity using original basename extension; ordinary JPG inputs therefore seek a different path. Shared PNG/JPG stems can also overwrite outputs. Static producer-consumer trace plus intercepted writer control, no end-to-end demo.",
+    "Original write_pfm grayscale float32 roundtrip succeeds; color float32 branch passes a string to binary write because only else header is encoded, reproducing TypeError. Active depth path is grayscale; no claim this breaks ordinary depth generation.",
+    "Original write_depth emits all-zero uint16 PNG values for constant depth in controlled writer interception. It independently normalizes nonconstant images, so depth PNG bytes do not certify original image identity.",
+    "DPT requirements pin Torch1.8.1/torchvision0.9.1, differing from root historical environment Torch1.7.1. setup declares only unpinned timm. No combined installation/runtime qualification."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/moments30-dpt-io-controls-v8-20261021",
+    "passed": 3,
+    "method": "Unchanged original read_pfm/write_pfm/write_depth AST functions, NumPy1.26.4, real temporary PFM files, intercepted cv2.imwrite (no PNG codec execution)."
+  },
+  "limits": [
+    "No model weights, GPU, full architecture or upstream suite execution.",
+    "38/73 tracked blobs read; production library unchanged."
+  ]
+}
