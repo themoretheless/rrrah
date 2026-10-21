@@ -2,11 +2,11 @@
   "index": 30,
   "repository": "google-research/3d-moments",
   "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
-  "review_scope": "Partial whole-source review: 47/73 tracked blobs. Nine RAFT source files read; four isolated flow parser/resize controls passed. Full model runtime unverified.",
+  "review_scope": "Partial review: all62 tracked text/source blobs read out of73 total; ten PNGs and teaser GIF still require visual assessment. Three isolated DPT transform controls passed; full model runtime unverified.",
   "decision": "reject-domain",
   "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
   "license_metadata": "Apache-2.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Tracked root Apache-2.0, DPT MIT and RAFT BSD-3-Clause license texts read; file-specific notices recorded in v10 audit. External weights/dependencies not certified.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -122,6 +122,9 @@
     },
     {
       "audit": "docs/research/dedup-500/moments30-raft-source-review-v9-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/moments30-dpt-text-completion-review-v10-20261021.json"
     }
   ]
 }
