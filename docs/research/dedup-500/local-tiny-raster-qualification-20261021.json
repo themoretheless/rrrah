@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "scope": "Real local encoded P3/P6 boundary-image decode, fingerprint construction and selected-frame equality; not all formats, scan pipeline, full suite or performance qualification.",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test tiny_raster",
+  "tests_passed": 2,
+  "tests_failed": 0,
+  "tests_ignored": 0,
+  "nonzero_dimensions": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      17
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      2,
+      2
+    ]
+  ],
+  "zero_dimensions": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      2,
+      0
+    ]
+  ],
+  "checks": [
+    "Two valid PPM encodings per nonzero dimension decode with expected independent green/magenta endpoint pixels and alpha1.",
+    "Fingerprint construction and zero self distance complete without panic.",
+    "Equivalent P3/P6 selected frames have directly equal normalized pixels and equal digests.",
+    "Six zero-axis P3/P6 headers return errors rather than panics.",
+    "MemoryBudget used returns0 after every valid pair and every invalid input."
+  ],
+  "production_change": false,
+  "reason": "Upstream #396 public API panics on dimensions0/1. New local regression confirms existing local behavior on six valid boundary sizes and explicit zero-size failures.",
+  "limits": [
+    "Existing unrelated dirty raster.rs is included in tested tree; this is not clean-HEAD qualification.",
+    "No broader runtime, cache, scan, retrieval quality or speedup claim.",
+    "Native pHash/ASAN remains deferred."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/tiny_raster.rs": "2cec74e3d6f3d6800660141e8d82404f545be345e81dee9b896c02f4faa983cf",
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-decode/src/raster.rs": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7"
+  }
+}
