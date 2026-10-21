@@ -1,0 +1,79 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/ci.yml": {
+      "sha256": "a130836f3bf7a5a0bb0adef668b0f6a8108519418b76b0896fd227ed05f99006",
+      "git_blob": "49c128b2fd8a66e85b8116aab09851b0681e9ca5",
+      "bytes": 4471,
+      "lines": 135,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".github/workflows/e2e.yml": {
+      "sha256": "93db129d69642c5f7f0f6a11c714199da3e5b60a90f5edf53a44fbd3b5a954de",
+      "git_blob": "0bdcdaa6791f44c073b2532452a8a88751755ba1",
+      "bytes": 1742,
+      "lines": 64,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".github/workflows/release.yml": {
+      "sha256": "e5fe61d219d40265159c121473c2381ad78ef6a50db85272990b7f0acdd14604",
+      "git_blob": "c2c5d6cc819613c327cfc5fe95b347e819854f5f",
+      "bytes": 1060,
+      "lines": 44,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".github/workflows/submit.yml": {
+      "sha256": "e24746ee85a264998da19984d3a55bab22973ce6ea2bebc78227da5eafded89a",
+      "git_blob": "6f6d549dcd475e71f43895dcd91c45216065d78b",
+      "bytes": 770,
+      "lines": 38,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".gitmodules": {
+      "sha256": "500b83d36f6fb26b4a5934771006a0cddb8e463b87569cf3e0c59522e81d76c2",
+      "git_blob": "6e76d09ba1a69d888ce439e510e0de930eaad0bc",
+      "bytes": 124,
+      "lines": 3,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".gitignore": {
+      "sha256": "46e2ee9e036775a27480d416b7f1e2af9d3122bb27f1fd1c2305bb226269f770",
+      "git_blob": "bd016a2b5c7042ab3e6299101e05647764acd17a",
+      "bytes": 698,
+      "lines": 47,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    ".prettierrc.mjs": {
+      "sha256": "a2b57decf614137625923cc736f17683b48df9cab3704157d6dfb114eb571907",
+      "git_blob": "77f84c21848e9c362b930453fedcb263298b6a14",
+      "bytes": 558,
+      "lines": 26,
+      "method": "Whole configuration source read, no workflows executed."
+    },
+    "window.d.ts": {
+      "sha256": "2111cf9940530b13bff9467c613d05beff94ca4a274e595e0c83620a543f39e4",
+      "git_blob": "7f55ae95690c5aa4be205a8446141b29a1904fa6",
+      "bytes": 49,
+      "lines": 3,
+      "method": "Whole configuration source read, no workflows executed."
+    }
+  },
+  "cumulative_whole_files_read": 42,
+  "tracked_blobs": 84,
+  "findings": [
+    "CI configuration runs npm unit tests, extension build, headed Playwright integration under Xvfb and a separate benchmark job. Prior unit exclusion does not imply integration is absent from CI. Actual CI outcomes not fetched or inferred.",
+    "Live-account full E2E workflow is manual and requires a running CDP browser/session; default localhost URL alone does not provision one on hosted runner. No live session contacted.",
+    "Unit/integration CI uses Node 22; release/store submission use Node 24. Tested and release runtime majors differ. No failure inferred without running respective builds.",
+    "Release packages tag pushes without an explicit test step in that workflow. Separate branch CI may exist, but tag workflow does not itself certify tests of its tag.",
+    "Build relies on Google-Photos-Toolkit Git submodule plus generated toolkit/WASM files excluded from source tree. .gitmodules records URL; exact gitlink commit must be read from pinned tree separately.",
+    "CI benchmark uses rolling main history and regression scripts; interpreting tolerance/history requires reviewing those scripts, not workflow name alone.",
+    "Formatting and Window declaration carry no duplicate-equality algorithm; ignore rules exclude local auth artifacts, browser profile and build outputs."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static pinned workflow/config review only; no workflows, package publication, browser sessions, builds or CI result queries executed.",
+    "42/84 complete tracked blobs read; submodule content not included in parent-blob count."
+  ]
+}
