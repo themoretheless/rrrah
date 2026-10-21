@@ -1,0 +1,38 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/MainActivity.kt": {
+      "sha256": "6f0cb51c4df466f81e7a4d16dc955aecda28f77a75550ee58d1e9e6085269f08",
+      "git_blob": "573e997ae8b0d11a078fa225da0de8b413bdc3eb",
+      "mode": "100644",
+      "lines": 242
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/AppLockScreen.kt": {
+      "sha256": "ecf90af36e9b456388911004e25b19902f77f083af148980572f8bcadc10c8d6",
+      "git_blob": "7a76bf176f50a1875f64b1cc3170f29ce8dfe701",
+      "mode": "100644",
+      "lines": 276
+    }
+  },
+  "cumulative_whole_files_read": 92,
+  "tracked_blobs": 268,
+  "method": "Both pinned Kotlin files read completely,518 total lines. Static Android intent/cache/lifecycle review only.",
+  "findings": [
+    "MainActivity copies shared URI to cacheDir/File(displayName).name without unique temp suffix/exclusive creation. Two distinct shared sources with same basename write same path; tempFiles can contain same File path twice and later source overwrites earlier content before sending. No real URI/user file accessed.",
+    "openInputStream(uri)?.use can skip copy on null yet function returns tempFile. It can queue nonexistent path or earlier cached same-name data, depending on prior cache contents. Backend send validation remains unread.",
+    "Connection checked before background copying but not again before UI send callback; disconnection during copy may make initial status stale. Actual sendFilesToDesktop implementation pending.",
+    "copyTo has no explicit byte limit or metadata-size check in this entry helper. It copies to cache before downstream manifest2GiB enforcement; storage/cancellation/cleanup behavior needs Android runtime. No disk fill probe.",
+    "Share handler runs after content setup regardless SecurityViewModel lock state in this activity. MainScreen gating and background transfer policy remain unread; do not infer an authentication bypass or execute any share.",
+    "OnNewIntent sets requested target flags true but does not globally reset unrelated pending flags; handling callbacks clear each one later. Rapid intent navigation ordering needs Compose fixture.",
+    "AppLockScreen invokes biometric success callback only from onAuthenticationSucceeded, with errors falling back to PIN. Method name bypassWithBiometrics is source naming, not evidence of bypass. Lifecycle/gating/cooldown correctness remains outside this view file.",
+    "AppLockScreen automatic biometric effect is conditional on locked/enabled/activity and uses LaunchedEffect(Unit); no explicit prompt cancellation hook on dispose in view. Device lifecycle and fallback behavior not tested.",
+    "Both files provide no file-content duplicate comparison; entry/share cache identity must remain separate from duplicate grouping semantics."
+  ],
+  "limits": [
+    "92/268 whole files; repository013 incomplete.",
+    "No Android/Compose/build/tests/biometric/share/network actions or production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
