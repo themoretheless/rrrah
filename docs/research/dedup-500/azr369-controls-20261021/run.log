@@ -1,0 +1,8 @@
+=== RUN   TestReviewEmptyCornersPanics
+    review369_test.go:5: Observed: runtime error: slice bounds out of range [:-1]
+--- PASS: TestReviewEmptyCornersPanics (0.00s)
+=== RUN   TestReviewRotationLosesColumn
+    review369_test.go:12: Original opaque2x3 loses one source column, three output pixels transparent
+--- PASS: TestReviewRotationLosesColumn (0.00s)
+PASS
+ok  	github.com/azr/phash/geometry	0.308s

@@ -1,0 +1,14 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "exit_code": 0,
+  "controls": [
+    "Actual DetectCorners on16x16zero image panics when no corners",
+    "Actual rotation of opaque2x3 image creates3transparent output pixels"
+  ],
+  "original_suite": "go test -mod=readonly ./... passed before authored controls, three packages with tests, five packages without tests",
+  "limits": [
+    "Observed defect assertions, not desired behavior passes.",
+    "No race detector, image corpus accuracy or whole repository qualification."
+  ]
+}
