@@ -1,0 +1,35 @@
+{
+  "status": "passed_finite_local_regression",
+  "test": "stale_small_file_observations_reject_rewrite_and_disappearance",
+  "test_source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "source_sha256": "105f35f309fb0ddf169b6e1abecc52d71d39b6be1a567c8cfb69e4dbe63ff7b6",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_files --locked",
+  "log": "docs/research/dedup-500/local-small-file-freshness-20261021.log",
+  "cases": 12,
+  "lengths": [
+    0,
+    1,
+    3,
+    4095,
+    4096,
+    4097
+  ],
+  "mutations": [
+    "same-length finalbytechange;empty growsonebyte",
+    "removefile"
+  ],
+  "assertions": [
+    "Initial3member exactgroup present",
+    "ContentSnapshot.verify rejects stale observation withChangedorIo",
+    "Freshscan returns exactly healthy2membergroup;removedrootexcludedfromfreshinput"
+  ],
+  "suite_passed": 35,
+  "suite_failed": 0,
+  "suite_ignored": 0,
+  "motivation": "yadf277 originalpublicscanner smallfileverification shortcut counterexample",
+  "implementation_changed": false,
+  "limits": [
+    "Finite API observation/reverification and freshscan test, not atomicfilesystemsnapshot or all mutation interleavings",
+    "No decoder,otherOS,fullworkspace,performance or nativepHash/ASAN qualification;fullreviewcount201/500 unchanged"
+  ]
+}

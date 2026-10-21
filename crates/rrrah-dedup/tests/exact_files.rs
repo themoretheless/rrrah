@@ -1275,3 +1275,52 @@ fn duplicate_zip_entry_names_do_not_replace_encoded_byte_identity() {
         }
     }
 }
+
+#[test]
+fn stale_small_file_observations_reject_rewrite_and_disappearance() {
+    use rrrah_dedup::exact::{ContentSnapshot, SnapshotError};
+    for length in [0_usize, 1, 3, 4095, 4096, 4097] {
+        for remove in [false, true] {
+            let root = tempfile::tempdir().unwrap();
+            let paths = ["a", "b", "changed"].map(|name| root.path().join(name));
+            let original = vec![17; length];
+            for path in &paths {
+                fs::write(path, &original).unwrap();
+            }
+            let before = scan(&paths, &Options::default(), || false);
+            assert!(before.complete());
+            assert_eq!(before.groups.len(), 1);
+            assert_eq!(before.groups[0].paths.len(), 3);
+            let observed = ContentSnapshot::read(&paths[2], 8192, || false).unwrap();
+            if remove {
+                fs::remove_file(&paths[2]).unwrap();
+            } else {
+                let mut changed = original.clone();
+                if let Some(last) = changed.last_mut() {
+                    *last = 29;
+                } else {
+                    changed.push(29);
+                }
+                fs::write(&paths[2], changed).unwrap();
+            }
+            assert!(
+                matches!(
+                    observed.verify(|| false),
+                    Err(SnapshotError::Changed | SnapshotError::Io(_))
+                ),
+                "length={length}, remove={remove}"
+            );
+            // A fresh scan still reports the healthy pair, never the stale
+            // three-member group. Omit the deleted root from the fresh input.
+            let roots = if remove { &paths[..2] } else { &paths[..] };
+            let after = scan(roots, &Options::default(), || false);
+            assert!(after.complete(), "{after:?}");
+            assert_eq!(after.groups.len(), 1);
+            let mut actual = after.groups[0].paths.clone();
+            actual.sort();
+            let mut expected = paths[..2].to_vec();
+            expected.sort();
+            assert_eq!(actual, expected, "length={length}, remove={remove}");
+        }
+    }
+}
