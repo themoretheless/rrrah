@@ -1,0 +1,11 @@
+{
+  "hash_cases": 1024,
+  "seed_missing_cases": 1024,
+  "mean_below_marked": 10,
+  "mean_above_marked": 0,
+  "source_sha256": "afa5c7ae4df883d2d20729e8489e3f66c71e12eace5c48af8b1fcbe62ba39cab",
+  "method": "Three original unchanged C++ function bodies brace-extracted and compiled with Apple C++ compiler; no OpenCV/image pipeline, pHash library, binary archive, camera or ASAN execution.",
+  "oracle": "All256 seed values, radii0..3, all256 query values compared with independent XOR builtin popcount for nonzero distances; exact seed separately checked.",
+  "finding": "All nonzero-distance neighbors correct in8-bit controls, but seed never included. Mean100 noise10 marks lower90..99 only; upper101..110 all absent.",
+  "limits": "No invalid dimensions/bit widths, float-image pointer reinterpretation or full detector runtime executed."
+}
