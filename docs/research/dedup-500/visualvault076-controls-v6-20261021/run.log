@@ -1,0 +1,79 @@
+   Compiling visualvault076-cache v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-cache-20261021)
+warning: multiple associated items are never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:22:11
+    |
+ 18 | impl DatabaseCache {
+    | ------------------ associated items in this implementation
+...
+ 22 |     const CLEANUP_THRESHOLD_MB: u64 = 400; // Trigger cleanup when reaching this size
+    |           ^^^^^^^^^^^^^^^^^^^^
+ 23 |     const TARGET_SIZE_AFTER_CLEANUP_MB: u64 = 300; // Target size after cleanup
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 34 |     pub fn new_uninit() -> Self {
+    |            ^^^^^^^^^^
+...
+274 |     pub async fn update_hash(&self, path: &Path, hash: &str) -> Result<()> {
+    |                  ^^^^^^^^^^^
+...
+294 |     pub async fn remove_stale_entries(&self) -> Result<usize> {
+    |                  ^^^^^^^^^^^^^^^^^^^^
+...
+332 |     pub async fn get_stats(&self) -> Result<CacheStats> {
+    |                  ^^^^^^^^^
+...
+357 |     pub async fn cleanup_old_entries(&self, days: i64) -> Result<usize> {
+    |                  ^^^^^^^^^^^^^^^^^^^
+...
+388 |     pub async fn is_empty(&self) -> Result<bool> {
+    |                  ^^^^^^^^
+...
+397 |     pub async fn get_by_hashes(&self, hashes: &[String]) -> Result<Vec<CacheEntry>> {
+    |                  ^^^^^^^^^^^^^
+...
+441 |     fn get_cache_path() -> Result<PathBuf> {
+    |        ^^^^^^^^^^^^^^
+...
+456 |     pub async fn check_and_cleanup(&self) -> Result<()> {
+    |                  ^^^^^^^^^^^^^^^^^
+...
+478 |     pub async fn get_db_file_size(&self) -> Result<u64> {
+    |                  ^^^^^^^^^^^^^^^^
+...
+484 |     async fn perform_automatic_cleanup(&self) -> Result<()> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+521 |     async fn remove_old_entries_without_hash(&self, days: i64) -> Result<usize> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+536 |     async fn calculate_entries_to_remove(&self) -> Result<usize> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+557 |     async fn remove_least_recently_used(&self, count: usize) -> Result<usize> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+594 |     async fn vacuum(&self) -> Result<()> {
+    |              ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `CacheStats` is never constructed
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:601:12
+    |
+601 | pub struct CacheStats {
+    |            ^^^^^^^^^^
+
+warning: method `to_media_file` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/core/src/database_cache.rs:621:12
+    |
+619 | impl CacheEntry {
+    | --------------- method in this implementation
+620 |     /// Convert cache entry to `MediaFile`
+621 |     pub fn to_media_file(&self, file_type: FileType, created: DateTime<Local>) -> MediaFile {
+    |            ^^^^^^^^^^^^^
+
+warning: `visualvault076-cache` (bin "visualvault076-cache") generated 3 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.96s
+     Running `.dedup-work/visualvault076-cache-target-20261021/debug/visualvault076-cache`
+PASS original cache accepts different subsecond modified time and returns old hash
+PASS original SQLite cache merges two distinct nonUTF8 paths and returns other hash with lossy path

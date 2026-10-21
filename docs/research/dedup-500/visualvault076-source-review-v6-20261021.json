@@ -1,0 +1,33 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 13,
+  "files": {
+    "crates/core/src/database_cache.rs": {
+      "bytes": 37195,
+      "sha256": "baf8912545c9a75926ffd718171d2b732b1e154ee2fe52df43588a3f0f78f712",
+      "git_blob": "db8c084cca25cc42a1227305dc469245f87b681b",
+      "method": "Whole1109line originalsource/tests read;truncatedproductionchunk reread240..410;Gitblobverified"
+    }
+  },
+  "new_unique_controls": 2,
+  "cumulative_unique_controls": 12,
+  "controls_script": "docs/research/dedup-500/visualvault076-controls-v6-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-controls-v6-20261021/run.log",
+  "runtime_scope": "Complete unchanged original DatabaseCache and actualMediaFilemodules includedby path;real SQLx SQLite memorydatabase,authoredfreshcrate/deps. No modelstub;no fullworkspace ororiginaldbunit tests.",
+  "findings": [
+    "Original cache insert withmodified1700000000s+100ns then get+900000000ns returnsoldhash atsamepath/size. Timestampstoredwholeseconds;no filewrite or downstreamfalsegroupclaim.",
+    "Two authored distinctnonUTF8PathBufs differing0xff/0xfe merge toone SQLiteTEXTkeyviaRustto_string_lossy;secondinsertreplacesfirst,getfirstreturnssecondhash andlossypathmatchingneitheroriginal. CacheAPI-only input;notactualscannerruntime.",
+    "Initial attempt createactualinvalidUTF8filenames failedmacOSIllegalbytesequence;logretained,removedonlyfixturefilewrites. No claimthosetwonamesexistonscannedfilesystem.",
+    "get_db_file_size derivesglobaldefaultcachepathratherthanconstructorpath;check_and_cleanup mayinspectwrongDBsize. Sourceonly,notexecuted globalpath.",
+    "schema init usesnontransactionaldrop/recreate onversionmismatch;PRAGMAcache/page/auto-vacuumsetperpoolconnections scopepending. No atomicityorcapacityguarantee accepted.",
+    "remove_stale_entries treats try_existserrorsfalse;hashupdatesfilterpathonly,notgenerationmetadata. Sourceonlyadditionalinvalidationrisk.",
+    "Originaldbtest_check_and_cleanup touchesdefaultusercachepath despitecommentmemoryDB;notrun toavoidunscopedcachefixture. OtheroriginalDBtestbodiesreadbutnotexecuted."
+  ],
+  "remaining_scope": "82artifacts includingsettings/filter/progress/app/otherUI/integrationtests/docs/config/visualassets/lock.",
+  "limits": [
+    "Normaldeduplicatedetectionrecomputesfullhash,so staleDBhash alone notproven falsegroup. CacheSQLbehavior qualifiedonly withauthoredinputs/currentdeps. No productionchanges;fullcount205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}
