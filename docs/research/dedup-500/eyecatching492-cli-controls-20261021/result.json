@@ -1,0 +1,22 @@
+{
+  "invalid_url_accepted": {
+    "input": "not-a-url",
+    "predicate_result": "",
+    "validator_returns": null
+  },
+  "threshold_above_hash_bits_accepted": {
+    "value": 3000,
+    "documented_max": 63
+  },
+  "block_larger_than_image_accepted": {
+    "block": 3000,
+    "image_width": 8
+  },
+  "invalid_width_success_exit": {
+    "value": 0,
+    "SystemExit_code": null,
+    "effective_process_exit": 0,
+    "stdout": "Error: \tWidth is too small! Please use a value between 0 - 3000.\nError:\tExiting...\n"
+  },
+  "scope": "Four controls call unchanged original validation functions extracted via AST; no Click CLI/backend/browser execution. Explicit exit adapter raises normal SystemExit(None)."
+}
