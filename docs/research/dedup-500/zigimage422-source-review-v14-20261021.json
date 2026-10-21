@@ -1,0 +1,16 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "controls": "docs/research/dedup-500/zigimage422-png-depth-controls-20261021/result.json",
+  "script": "docs/research/dedup-500/zigimage422-png-depth-controls-20261021/run.py",
+  "findings": [
+    "ActualpinnedCfilenameAPIsdecodeauthored1x1grayscale16PNGvalues0x1200/0x12ffas4608/4863via16bitAPI;byteAPIboth18,floatAPIbothexactly0.00293231825. Initialsource-onlynonHDRfloatprecisionlimitationnowreproduced.",
+    "PNGfixturesauthoredwithstdlibstruct/zlib,explicitnetwork-order16bitsamples,correctIHDRbitdepth16/color0andchunkCRC. Wholeinputvaluesindependentknownoracle;16bitpositivecontrolprovesdecoderseesdifferencebeforefloatconversion.",
+    "UnlikePNMendianfailure,PNG16bitpathpreservescorrectendianvalues;donotgeneralizePNMbytereversaldefecttoPNG. Lossinfloatpathisdocumented/sharedpostprocessrecipe,notclaimallPNGdecodebroken.",
+    "WrapperusesbyteRGBAPI,soitsperceptualfingerprintcannotdistinguishsomeoriginal16bitimagesbeforehashing;thismakesitevenlesssuitableforexactdecodedpixelidentity. Zighashnotexecutedhere."
+  ],
+  "limits": [
+    "No additionalheaderreadingthisincrement;prefix1510plusPNMsectiononly. Complete repository still not claimed. No runtimeaccuracy/batch/allbitdepth/colourmetadataqualification. No production changes.NativepHash/ASANdeferred."
+  ]
+}
