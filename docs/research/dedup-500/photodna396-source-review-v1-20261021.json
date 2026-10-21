@@ -1,0 +1,60 @@
+{
+  "repository": "ail-project/photo-dna",
+  "commit": "142833af45281c39206a3c2fab73b4075cf43627",
+  "whole_repo_complete": false,
+  "scope": "Incremental review: complete Rust hash source and embedded tests, root and crate README/manifests, benchmark; three image fixtures visually inspected. Python bridge/reference/tests, workflows, license and generated locks remain for later review.",
+  "source_sha256": "6017c36443e26c7bbad11ee3635a8af1d81201ee7ce8b23d3223d33b40cadd1e",
+  "upstream_tests": {
+    "command": "cargo +1.98.1 test --manifest-path .dedup-work/photodna396-20261021/Cargo.toml -p photo-dna --all-features --lib --locked",
+    "passed": 8,
+    "failed": 0,
+    "ignored": 0,
+    "initial_offline_attempt": "Dependency resolution failed because pyo3 index entry was absent; online locked retry succeeded."
+  },
+  "controls": {
+    "method": "Added standalone example calls unchanged public API; catch_unwind classifies panic without changing library. No native pHash or ASAN.",
+    "panic_dimensions": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "ok_dimensions": [
+      [
+        2,
+        2
+      ],
+      [
+        8,
+        8
+      ]
+    ],
+    "black_white_8x8_equal_hash": false,
+    "command": "cargo +1.98.1 run --manifest-path .dedup-work/photodna396-20261021/Cargo.toml -p photo-dna --all-features --example dimension_control --locked --offline"
+  },
+  "findings": [
+    "No minimum-dimension validation before pixel summation/interpolation; malformed/small dimensions panic rather than return typed Error. Confirmed via public API.",
+    "test_distance only prints similarities: passing status does not assert near/far ordering or a retrieval threshold.",
+    "Criterion from_image benchmark invokes from_image_path per iteration, including file read and decode; no timings executed or optimization accepted.",
+    "144-byte gradient descriptor and normalized distance scores are candidate evidence, not proof of byte equality or calibrated probability.",
+    "No production code copied or altered. Python and packaging validation remain open."
+  ],
+  "full_review_count": 245,
+  "remaining_full_reviews": 255
+}

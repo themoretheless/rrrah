@@ -2,7 +2,7 @@
   "index": 396,
   "repository": "ail-project/photo-dna",
   "commit": "142833af45281c39206a3c2fab73b4075cf43627",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Incremental full Rust hash-source and embedded-test review with actual upstream tests and public-API dimension controls; Python/reference/packaging files remain unread",
   "decision": "reference",
   "finding": "Rust PhotoDNA-style hash, benches and Python bridge; GPL and algorithm restrictions require separate decision.",
   "available_source_evidence": [
@@ -50,7 +50,7 @@
   "license_metadata": "GPL-3.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/photodna396-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/photodna396-controls-20261021/dimension_control.rs",
+      "whole_repo_complete": false
+    }
+  ],
+  "full_repository_read": false
 }
