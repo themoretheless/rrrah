@@ -1,0 +1,32 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse41_x86-64_windows_gnu.S": {
+      "sha256": "f41da21f411bbf3920feb9e5e34e3fcc66274b02edb930882eeae2d0aba74a08",
+      "git_blob": "02083f9d59231abddd5fda2f2af19983069e01f9",
+      "lines": 2069
+    }
+  },
+  "cumulative_whole_files_read": 281,
+  "tracked_blobs": 289,
+  "method": "Differential whole-file review against fully read Unix SSE4.1 assembly: full321-line unified diff inspected without truncation; remaining lines verified text-identical with SequenceMatcher autojunk disabled. Not an independent serial reread of identical lines.",
+  "equivalence_accounting": {
+    "identical_lines_to_reviewed_unix": 1956,
+    "new_or_replaced_windows_lines_read": 113,
+    "total_windows_lines": 2069
+  },
+  "findings": [
+    "Hash-many adds RSI/RDI preservation,528-byte reservation and saves XMM6..15 at aligned offsets0x170..0x200. Existing message/counter scratch remains below those saves. All saves are restored at common return.",
+    "Windows four register arguments are reshuffled to internal SysV-style register layout; stacked counter/increment/flags/start/end/output use RBP offsets0x68/70/78/80/88/90 after eight pushes. Tail flag reads adjusted too; jnz versus jne is equivalent.",
+    "Both scalar entry points subtract120 bytes, aligning entry stack for seven16-byte saves: XMM6,7,8,9,11,14,15. Registers XMM10/12/13 are not used in these scalar cores. Restore sequences and stack additions balance on inspected returns.",
+    "Scalar Windows CV/block pointers use RCX/RDX, length R8b, counter R9, flags at adjusted RSP+0xA0. Both explicitly zero-extend byte length and flags. XOF output pointer at RSP+0xA8 goes to volatile R10, and four16-byte stores produce64 output bytes.",
+    "Shared SIMD round arithmetic, batch4/2/1 decomposition and constants remain unchanged apart from address/register adaptations. Read-only section becomes .rdata; ELF CET/GNU-stack and Apple conditionals disappear.",
+    "No explicit Windows unwind metadata directives appear. Source adaptation is not proof of assembly, ABI correctness during exceptions, CPU dispatch or runtime parity."
+  ],
+  "limits": [
+    "281/289 pinned blobs reviewed; global complete repositories150/500.",
+    "No Windows/x86 execution, sanitizer or speed measurements. Upstream remains reference-only; pHash/ASAN deferred."
+  ]
+}
