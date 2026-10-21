@@ -1,0 +1,47 @@
+{
+  "repository": "wellbehavedsoftware/btrfs-dedupe",
+  "commit": "bf8d1a82fee2ff8635d00865acc1033707957c9e",
+  "whole_repo_complete": false,
+  "tracked_blobs": 27,
+  "cumulative_assessed_blobs": 13,
+  "new_whole_files_read": {
+    "src/operations/file_deduper.rs": {
+      "bytes": 3182,
+      "sha256": "a59517abd1441662082934956325e510816172e73efaa79dcd191d6a8f7248b3",
+      "git_blob": "0ee131ecd06134cdbd7384e0f4fe74fe5789a214",
+      "method": "Whole pinned source read without truncation"
+    },
+    "src/operations/extent_hasher.rs": {
+      "bytes": 3800,
+      "sha256": "2fa9005fece0d82f5b55c0b904de28eaae184dab727399c133d59f6c9167235e",
+      "git_blob": "0ce5e56f2201b0d578e85c9db9c6d70838a5df42",
+      "method": "Whole pinned source read without truncation"
+    },
+    "src/commands/dedupe_command.rs": {
+      "bytes": 11829,
+      "sha256": "5baf88daa0ebc7264c20d7c79e58198a30a7733c9459ba439f3d93bac5abcfe0",
+      "git_blob": "10b4bfe3f9f1ca11ae18f3cabfa1f1e6acb1c7c7",
+      "method": "Whole pinned source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/btrfs137-controls-v3-20261021/grouping.rs",
+    "log": "docs/research/dedup-500/btrfs137-controls-v3-20261021/run.log",
+    "passed": 3,
+    "method": "Unchanged build_dedupe_map/group_deduplication_candidates functions; syntheticArguments/FileData/Output and pathIDs, rustc1.98.1; no Btrfs/storageoperation."
+  },
+  "findings": [
+    "ZERO_HASHcontentrecordswithdifferentnonzeroextenthashesentermap;twoentries10and20bytesproduce2planentries. Originalgroupingcontrolconfirms,notkernelacceptance/datacorruption.",
+    "Equalextenthashgroupsfilterout;differentcontenthashesremainseparate.Positivecontrolsconfirm.",
+    "FileDeduperremovesplanentryandsetsdeduplicate_timeevenwhenBtrfscallreturnsErr;source-only,notexecuted.",
+    "Batchguards use num_updated>0, so all-failure runs may ignore intendedbytebudget;source-only.",
+    "ExtentHasher hashesnative FileExtent structbytes via unsafe slice;padding/layoutdeterminism notqualified, no nativeexecution.",
+    "Databasewrite usesfixed.temppath,gzipfinish,sync_dataandrename;no concurrentwriter/directoryfsyncqualification."
+  ],
+  "remaining_scope": "14wholeartifacts:arguments,build/main/modules/serde/README/etc/Cargo.lock.",
+  "license": "RootMITread;copiedresearchgroupingretainslicense;noproductionadoption.",
+  "limits": [
+    "Fullreviewcount172/500unchanged;11selectedoriginalcontrolscumulative.",
+    "No fullcrate/Btrfs/kernel/freshness/performancequalification.NativepHash/ASANdeferred."
+  ]
+}
