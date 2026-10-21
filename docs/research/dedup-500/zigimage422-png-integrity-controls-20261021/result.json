@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "variant": "valid",
+      "loaded_rgba": [
+        23,
+        45,
+        67,
+        255
+      ],
+      "fixture_sha256": "9506c2cac229cee3a204944416b31a63314daaaabca3b9cb989af6849237f5af",
+      "known_invalid": false
+    },
+    {
+      "variant": "bad_IHDR_crc",
+      "loaded_rgba": [
+        23,
+        45,
+        67,
+        255
+      ],
+      "fixture_sha256": "23e6b22f650201bf82b493a43f41fbf92b63b45c5b2951dbf2dee2d94d7a5d57",
+      "known_invalid": true
+    },
+    {
+      "variant": "bad_IDAT_crc",
+      "loaded_rgba": [
+        23,
+        45,
+        67,
+        255
+      ],
+      "fixture_sha256": "920f8fdbd918efa55d935c10a7689e2c98b9b7de6bcc4461d232dede0b81a1b1",
+      "known_invalid": true
+    },
+    {
+      "variant": "bad_IEND_crc",
+      "loaded_rgba": [
+        23,
+        45,
+        67,
+        255
+      ],
+      "fixture_sha256": "210b36460467fc641c4ef38449a7aa44e30e46a748908a6e8c41fb0e6fdbe06e",
+      "known_invalid": true
+    },
+    {
+      "variant": "bad_adler_valid_crc",
+      "loaded_rgba": [
+        23,
+        45,
+        67,
+        255
+      ],
+      "fixture_sha256": "ab588482ea569cafe20ba90948dfe2435acd5ef63bbb3bda15082e5f55c1e918",
+      "known_invalid": true
+    }
+  ],
+  "scope": "Actual original C PNG filename API,1x1knownRGBpixel; controlledCRCbitfliporAdlermismatchwithcorrectouterCRC. Positivepixeloracleonly; no broad malformedformat or security assessment."
+}

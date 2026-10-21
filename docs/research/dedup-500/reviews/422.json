@@ -4,7 +4,7 @@
   "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "Decoderthrough5030+PNMread;15actualPNG8bitfiltercasesbyteexactagainstknownRGBAoracle. Priorcounterexamplesretained;remainingvendorreview/Zigtestsunfinished;noadoption.",
+  "finding": "PNGsectionwhole-readthrough5480;wholePNGloaderaccepts4controlledCRC/Adlermismatches. Priorcounterexamplesretained;remainingBMP/otherheaderreviewandZigtestsunfinished;noadoption.",
   "available_source_evidence": [
     {
       "path": "src/imagehash.zig",
@@ -159,6 +159,11 @@
     {
       "audit": "docs/research/dedup-500/zigimage422-source-review-v20-20261021.json",
       "controls": "docs/research/dedup-500/zigimage422-png-filter-controls-20261021/result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/zigimage422-source-review-v21-20261021.json",
+      "controls": "docs/research/dedup-500/zigimage422-png-integrity-controls-20261021/result.json",
       "whole_repo_complete": false
     }
   ]
