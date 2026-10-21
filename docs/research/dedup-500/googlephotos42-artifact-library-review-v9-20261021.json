@@ -1,0 +1,82 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_artifact_counter_control",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/release.yml": {
+      "sha256": "05e56338edac3419d7ecbcf0b919d270dfa12271b3a0dc8d2a89fc6ab60e9819",
+      "git_blob": "5932b8988ee62e4086f042d92e695c030888f7c3",
+      "bytes": 2582,
+      "lines": 77,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "scripts/build.ts": {
+      "sha256": "363f1534c4b8bf2dd0cf63b21c058c2dfbc68f0d076407c8d50a104e11c144d4",
+      "git_blob": "d0c1ddffa4613184a7bcef9ddc181985181ac791",
+      "bytes": 9823,
+      "lines": 247,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "scripts/verify.ts": {
+      "sha256": "98b614f381fcae22545a94cd85fd57dee26902ca7fb1992f5ff15539f6a47d77",
+      "git_blob": "9a0a8f3005d7f3b20eb6e57ad4afc32e9d436ed7",
+      "bytes": 12041,
+      "lines": 205,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/.gitignore": {
+      "sha256": "3ea99b1d33022b3475e6c3ea324423e3d0899bda753907ad34d29e675a9e2e8e",
+      "git_blob": "020b2e2f24d23ebadf6be799146ab67470a9d1ed",
+      "bytes": 31,
+      "lines": 4,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/README.md": {
+      "sha256": "7c2286643c5b550c3e342e5bb130ef78a9ddc41eae7dd2dea52681b23e4b9e10",
+      "git_blob": "9c30174506b95573610e9ebb4f99be44d1bacb7a",
+      "bytes": 2823,
+      "lines": 60,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/generate.py": {
+      "sha256": "eff9580c14f6d243f43e4cccefd70b90d063bf6d3423ced7d3001cea356a02b4",
+      "git_blob": "fff9546681b99883b65b43edd2b5f0a195cbd587",
+      "bytes": 5732,
+      "lines": 146,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    },
+    "test-library/requirements.txt": {
+      "sha256": "41b54a6fb2918667ca47a61d73b522629d84490f3d78f0f20b21135faba10d35",
+      "git_blob": "e7cc6c178b542946a555ad07fa55b5dde3fca566",
+      "bytes": 15,
+      "lines": 1,
+      "method": "Whole pinned source/configuration text read; no release/build/generator execution."
+    }
+  },
+  "cumulative_assessed_blobs": 43,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-artifact-controls-v9-20261021/run.mjs",
+    "harness_sha256": "bf2b8e6f76021836d94e6cfb0b99a752d30b51199cc94a1d40689393a9fd8350",
+    "log": "docs/research/dedup-500/googlephotos42-artifact-controls-v9-20261021/run.log",
+    "passed": 1,
+    "subcases": 13,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original RAW_CHROME_MAX array and exact counting expression extracted after type stripping;13synthetic3callstrings; independent global regex count. Full verifier/build not executed."
+  },
+  "findings": [
+    "All13non-global regex counters return1for3matches, satisfying max1incorrectly. Thus rawchrome wrapper-only occurrence gate does not establish its advertised count invariant. No claim about actual built artifacts.",
+    "Release workflow performs typecheck/lint/tests/build/verify/zip/attestation/release, but contains no explicit live-evidence check. Manual protocol may occur externally; its completion unverified. Stores are decoupled from this workflow, unlike earlier architecture prose.",
+    "Synthetic library generator creates40baseJPEG,12variants,6screenshots,and2optionalvideos;40+12+6=58withoutffmpeg,60withit. Eight original groups, resize/q60/2percentcrop only; no independent real-world recall corpus.",
+    "Generator global seeded RNG is not reset inside main; font choice depends on installedLinuxfontpaths and fallback; naive datetime.timestamp depends on timezone; video path depends on externalffmpeg/libx264. README samePillow+ffmpeg reproducibility claim does not capture all environment dependencies. Source observation, no comparative generation.",
+    "Build derivesChrome/Edge/Firefox outputs and standalone/userscript. Firefox shallow manifest copy mutates nestedbackgroundfield; current execution writesChrome/Edgebeforethat mutation, so no current artifact defect inferred.",
+    "Verifier structural regex/manifest/asset checks are smoke gates, not browser compatibility or duplicate correctness. No generatedmedia or visualassets inspected this step."
+  ],
+  "cumulative_original_function_controls": 18,
+  "limits": [
+    "43/230wholeartifacts; no complete repository review or full upstream test/build.",
+    "No new production optimization. Native pHash/ASAN deferred."
+  ]
+}
