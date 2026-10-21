@@ -1,0 +1,19 @@
+{
+  "original_binary": true,
+  "url": "http://127.0.0.1:19326/",
+  "browser": "IAB",
+  "viewport": "1280x720 screenshots",
+  "observed": [
+    "Search screen with initial disabled Start Search, directory and threshold/worker/max controls",
+    "Settings tab shows Cache Not Enabled after actual local stats request"
+  ],
+  "screenshots_sha256": {
+    "settings.png": "5e2af131a64b043b1f4a193a8a21a7e22a8c5dc835a5da23045503f5ceb24060",
+    "search.png": "d2ea6cfd4ac2546592b03e03e0763563cd2b875dfd28ea25b22464ad05e2255c"
+  },
+  "limits": [
+    "Desktop initial/search and cache-disabled settings only.",
+    "No real browser upload/result cards, mobile, keyboard or enabled-cache workflow qualification."
+  ],
+  "cleanup": "Temporary tab closed; own server session64837 interrupted and returned exit130."
+}
