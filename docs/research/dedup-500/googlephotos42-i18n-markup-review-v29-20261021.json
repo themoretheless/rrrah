@@ -1,0 +1,52 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_i18n_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/popup/set-markup.ts": {
+      "sha256": "323495796061038ecb64608d53a5a420b32b2e63aa06daae85ee6709054b7286",
+      "git_blob": "6caaa52740491166c42bbe53a714edf38ef0bc1b",
+      "bytes": 710,
+      "lines": 13,
+      "method": "Whole pinned text/source/test read; not executed."
+    },
+    "tests/set-markup.test.ts": {
+      "sha256": "cd205832bb8d56e2ebc44eb86462a368122999218e311e23ed7b57bb744eb5a6",
+      "git_blob": "0ef3a72cf79c0357b9313506970a85dbbf3d9c9a",
+      "bytes": 574,
+      "lines": 14,
+      "method": "Whole pinned text/source/test read; not executed."
+    },
+    "src/extension/popup/i18n/index.ts": {
+      "sha256": "fd860730b6b1a136623ba79edaea6b755bd901d7ca298f77d32b6ae8e5ade074",
+      "git_blob": "abd7c8ee21978ca9054cf352b8ce6fedd077f313",
+      "bytes": 9706,
+      "lines": 264,
+      "method": "Whole pinned text/source/test read; not executed."
+    },
+    "docs/translations.md": {
+      "sha256": "5766093e14f5bd3cae5bf6fb00cbf9f5ec38219655289d6f04be27897ff3a185",
+      "git_blob": "0fa8f6ee87da5509b1e92f260b3685f003af45ab",
+      "bytes": 4181,
+      "lines": 113,
+      "method": "Whole pinned text/source/test read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 104,
+  "tracked_blobs": 230,
+  "findings": [
+    "PopupLOCALEScontains9entriesen,de,es,fr,it,nl,pt,zh,ja;READMEclaims10languages. Storelocale count isdifferent namespace andnotpopupregistryproof.",
+    "t interpolatesHTMLescapedvalues thenapplyTranslationswritesresulttotextContent; specialcharactersmayappearliteralentities. Sourceobservation,notDOMruntimecontrol.",
+    "UnknownlocalecodefallbackEnglish; missingkeyreturnskeywithboundedwarning64, notEnglishperkeyfallback. Compiletimecompletenessdependsactualtypes/localefilesnotyetallread.",
+    "detectBrowserLocale prioritizeschromeUIthen navigatorlanguage/languages; splitsregionaltagsandcombinesallzhintoonelocale. No regionaltranslationparityqualified.",
+    "setMarkup parsesHTMLandreplaceChildren; explicitlytrustedbundledmarkuphelper,notgeneral sanitizer. TestcoversSVG/boldreplacementonly. No untrustedinput/actiontestperformed.",
+    "TranslationguideEnglishfallback andlocale-registrationinstructionspartlystale: LocaleCodetypeisimportedfromtypesratherthandeclaredinindex. Greenstringcoveragedoesnotestablishtranslationaccuracy,layoutorrealPhotoslabelcompatibility."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 33,
+  "limits": [
+    "104/230wholeartifacts; no localizationvisualorfullsuitequalification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
