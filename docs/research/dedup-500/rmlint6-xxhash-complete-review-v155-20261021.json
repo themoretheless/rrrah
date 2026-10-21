@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "lines": 7238
+    }
+  },
+  "cumulative_whole_files_read": 289,
+  "tracked_blobs": 289,
+  "method": "Completed7238-line pinned header reading: v145..154 cover1..6600; untruncated6601..6950 and6951..7238 finish all remaining lines. Whole-repository reconciliation pending; source count alone does not update global completion.",
+  "findings": [
+    "128-bit short-key paths use distinct low/high mixing.17..240 mix32B preserves cross-input sums in addition to folded products.129..240 loop intentionally duplicates last32-byte block on exact multiples for hash stability; removing duplication would change algorithm.",
+    "Long128 output reuses same accumulators and low64 merge as long64, with distinct high64 secret offset and complemented length start. Equality of low64 across long variants must not be generalized to shorter inputs.",
+    "128-bit seeded/unseeded/custom-secret entry routing mirrors64 thresholds <=16/128/240, then long path. withSecretandSeed uses seed-based short path through240 inclusive.",
+    "128-bit reset/update delegate64 implementations; digest independently finalizes128 and honors useSeed, including forced useSeed for secret-and-seed seed0. Historical fix is source-present; custom-secret regression still needs runtime control.",
+    "XXH128_isEqual compares compact struct bytes; comparator orders high64 then low64 using comparisons rather than subtracting possibly overflowing integers. Canonical encoding writes high64 big-endian then low64 big-endian; struct native layout is different.",
+    "Secret generation validates output pointer/minimum size in nondebug mode, fills from repeated seed, mixes16-byte chunks and final overlapping segment. Empty custom seed substitutes default secret. fromSeed generates aligned192-byte temporary and copies to caller buffer.",
+    "All tracked file source/visual reviews now have289 unique file credits; final identity/repository/global registry reconciliation still required before claiming rmlint full review. No runtime allcases claim from source coverage."
+  ],
+  "limits": [
+    "289/289 source/visual blob credits; global complete repositories still150/500 until reconciliation.",
+    "128-bit/custom-secret runtime checks, x86/Windows qualification and fullproject runtime remain separate. Upstream reference-only; pHash/ASAN deferred."
+  ]
+}
