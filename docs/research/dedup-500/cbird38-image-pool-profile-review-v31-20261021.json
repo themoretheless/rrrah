@@ -1,0 +1,46 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/pooledimageallocator.cpp": {
+      "sha256": "a4ab6d7b91bc017849d1f7f0480d7c55f45d5431eae2e03cd33b634a86612701",
+      "git_blob": "4c75f28f608a2eb1d6354b4a8570062f98a13f17",
+      "bytes": 3954,
+      "lines": 138,
+      "method": "Whole pinned source/header read; no allocation failure injected."
+    },
+    "src/gui/pooledimageallocator.h": {
+      "sha256": "f369d459c7621c5aa423d27646a1764b3c7fb2bc3a3624cb800b95e6a3779223",
+      "git_blob": "fdf44f123ed2f4c7b9a4375c0e52e40e9b17402c",
+      "bytes": 2063,
+      "lines": 70,
+      "method": "Whole pinned source/header read; no allocation failure injected."
+    },
+    "src/profile.h": {
+      "sha256": "63ce9e7567e5cfbec20174766570cd86705521dc3bfe997ad70df59adab257af",
+      "git_blob": "08bde80c5e4003381001897df1a37b4118fdce54",
+      "bytes": 1078,
+      "lines": 30,
+      "method": "Whole pinned source/header read; no allocation failure injected."
+    }
+  },
+  "cumulative_assessed_blobs": 104,
+  "tracked_blobs": 616,
+  "findings": [
+    "Pool keys by allocated byte size and recycles free buffers under mutex. Contents are not zeroed on reuse; decoder failure handling previously read in Media matters before trusting returned pixels. No actual stale-pixel reproduction.",
+    "bytesPerLine arithmetic uses int width times bitsPerPixel before promotion to size_t; no checked overflow or invalid-dimension/format return visible here. Caller checks and real Qt dimension limits not fully qualified. No huge allocation or malformed-memory run.",
+    "malloc result is checked through alignment remainder rather than explicit null; null has zero remainder and may be appended to pool before returned. This is static failure-path inspection, not a reproduced OOM.",
+    "System free-memory check is advisory and separate from actual malloc success; float freeKb minus size_t reserve and integer kilobyte rounding do not provide a hard process memory budget. No claim that allocator prevents all OOM despite header wording.",
+    "_compactOnFail is set by unlocked setCompactFlag and reset outside lock after allocation, while read/reset also occurs under lock. Thread-safety of this flag requires callsite/thread confinement evidence; no data-race runtime claim.",
+    "free callback marks pointer free; no ownership/pool-membership or duplicate callback validation besides pointer assertion. Deleted destructor explicitly assumes process-lifetime allocator because QImage callbacks may outlive owner. No new ownership bug claimed without callsite evidence.",
+    "compact returns bool while compactInternal returns bytesFreed size_t, collapsing count to boolean. freeKb separately reports reusable pool size.",
+    "profile nanoTime uses gettimeofday wall clock with microsecond resolution, not monotonic nanosecond clock. Wall-clock jumps and unsigned duration subtraction can affect reported times; no performance measurement derived from logs."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "104/616 assessed:103 whole text/source and one PNG visual. main.cpp and qtutil.cpp remain partial.",
+    "27 previous original-body/header controls plus one independent counterexample unchanged. No upstream image decoder, OOM, thread-race, ASAN or benchmark run.",
+    "No production source port. Native pHash/ASAN remains deferred."
+  ]
+}
