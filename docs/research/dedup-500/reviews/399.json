@@ -4,7 +4,7 @@
   "commit": "e95604aad537be51d30041a095fe9f76029b78f0",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reject-domain",
-  "finding": "Audio FFT/perceptual hash; HammingWindow is DSP windowing rather than image Hamming matching.",
+  "finding": "Partial: original distance controls prove bit-length instead of popcount and zero-lengthNaN. FFT, sample and remaining source review pending; full audio runtime unqualified.",
   "available_source_evidence": [
     {
       "path": "AudioHash.c",
@@ -73,6 +73,13 @@
       "lines": 675,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/audio399-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/audio399-controls-20261021/result.json",
+      "whole_repo_complete": false
     }
   ]
 }

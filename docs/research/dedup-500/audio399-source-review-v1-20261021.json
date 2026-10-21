@@ -1,0 +1,106 @@
+{
+  "repository": "starkdg/libpHashAudio",
+  "commit": "e95604aad537be51d30041a095fe9f76029b78f0",
+  "whole_repo_complete": false,
+  "verified_blobs": {
+    "AudioHash.c": {
+      "sha256": "223c98adc06c1fffdb42f6f738b70e109c0f728da2b3c9dfa95613c9ec0490b0",
+      "git_blob": "e482bfa6e8b2c526c319732b9d978702e10ff5eb",
+      "bytes": 9931
+    },
+    "AudioHash.h": {
+      "sha256": "720f92d009dbfd1d4570189edbac71e8514580af69f42f44711095a9a637404a",
+      "git_blob": "876cd5851d6b625db12d56bf74ee4bd9a68610b8",
+      "bytes": 2887
+    },
+    "CMakeLists.txt": {
+      "sha256": "1b9a91234a54f776d3c16436203739278d0c8523a1716f0e05c796cdd51f68ec",
+      "git_blob": "787cd34a25f1008dd3045ed34a99596caa3f892e",
+      "bytes": 858
+    },
+    "GNUmakefile": {
+      "sha256": "bfe1e0cd1dd8f69f72b75d7ef85f7a24b58fa3ea7101c3e777a28e91aa9fc4c3",
+      "git_blob": "befc8a6fb3ba6bf1830c6c123142dc5d379b24d5",
+      "bytes": 462
+    },
+    "LICENSE": {
+      "sha256": "1f6a97050fc82e0bbe9a6de1b9e4f1ade738f282c5c6d5671a5139f837cc971d",
+      "git_blob": "789250e63d076c0401b0d50e5699049000180456",
+      "bytes": 35132
+    },
+    "Makefile": {
+      "sha256": "3c0f46cc801c6c92895e0e5b290114a312727cb97a212a9f6811f930fe19c6ea",
+      "git_blob": "4fb3c77112b0a16658791ef006e4740bf46ebecf",
+      "bytes": 9874
+    },
+    "README.md": {
+      "sha256": "ea6ae1412e2f7de94cbd57d41b5c42b56cf18e95724f7d8f7e829824c4ca12be",
+      "git_blob": "97d31650e5730d4acbf969fee7607468e934a2c8",
+      "bytes": 1426
+    },
+    "TestAudioHash.c": {
+      "sha256": "f6eda14c7a02263948729c01883b3f624da5876311291d549ec81a12c409e153",
+      "git_blob": "4a7b897e7234a571ecd1914b3b65da936f629f22",
+      "bytes": 1757
+    },
+    "_kiss_fft_guts.h": {
+      "sha256": "6cb852500622172409927f3c1f7e83166aa94a842953a50c5be5af793913fd6c",
+      "git_blob": "ba661444039d60b110b6a3ea3495c1699b9e42da",
+      "bytes": 5798
+    },
+    "kiss_fft.c": {
+      "sha256": "f5d910af5294857807174e4eec2b30da3ac37bea8cab4cf0f15dfd4ba933ff31",
+      "git_blob": "465d6c97a08104315deb80269ddbf5fc049aa2e2",
+      "bytes": 12660
+    },
+    "kiss_fft.h": {
+      "sha256": "9cb0822143fb16b421ebcfba6f2e967d2363fc20c4dd1287b81cb8b517eea607",
+      "git_blob": "64c50f4aae5900b7aba196803d8bdbced8e0685e",
+      "bytes": 3301
+    },
+    "kiss_fftr.c": {
+      "sha256": "2c487559e504d3c2a68bedefacfb74746c8728680d15f76dec4186bda0e9f3b3",
+      "git_blob": "f389770bd9213ee90f5fea2a700f53106a1f529b",
+      "bytes": 5947
+    },
+    "kiss_fftr.h": {
+      "sha256": "7e0b08c9e3238e06f63328973ebe0f1c2b620a77e8ef2a7e6ee9ba902e0bfa6e",
+      "git_blob": "72e5a57714df11f15a78640bfd8701f00c85dc77",
+      "bytes": 858
+    },
+    "sample.txt": {
+      "sha256": "3a6ee187b96ce430231b0fe393413cdb0b4b75ac738b68b681b01513f1a0cf43",
+      "git_blob": "7b36100a8e41c5d0babfc06564543610743519c3",
+      "bytes": 44459
+    }
+  },
+  "whole_text_read": [
+    "AudioHash.c",
+    "AudioHash.h",
+    "TestAudioHash.c",
+    "README.md",
+    "CMakeLists.txt",
+    "GNUmakefile"
+  ],
+  "controls": "docs/research/dedup-500/audio399-controls-20261021/result.json",
+  "findings": [
+    "Original ph_bitcount computes bit length, not popcount. Single high bit0x80000000 returns32, normalized error1 rather than1/32. Exact source function controls reproduce.",
+    "Original ph_compare_blocks length0 returnsNaN; no length validation.",
+    "Audio matching test asserts successful status but prints position/confidence without asserting either; missing distance oracle allows bitcount defect.",
+    "ph_init_hashst only writes framelength, leaves pointer fields uninitialized; wrapped early error calls free_hashst. Source finding, not executed.",
+    "No p<=32 bound before indexing32 toggle entries; short/negative buffer length lacks proper frame count qualification. Source findings only.",
+    "Apple branch contains fftSeteupData/fftSetupData spelling mismatch and malformed destroy call, no compilation claim.",
+    "State stores frame length but not sample rate, so reusing state across sr values can retain incompatible weights.",
+    "No audio files in tree: sample.txt numeric input remains to be structurally reviewed."
+  ],
+  "remaining": [
+    "Vendored KissFFT sources and headers whole review.",
+    "Generated Makefile, full license and sample.txt review.",
+    "Full original tests/runtime qualification, excluding deferred problematic native pHash/ASAN."
+  ],
+  "limits": [
+    "234/500 full repositories;399 partial.",
+    "Only selected original distance functions executed; no audio pipeline or FFT execution.",
+    "No production code adopted."
+  ]
+}
