@@ -1,0 +1,111 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/ui/gv.py": {
+      "sha256": "60a45b80e8e6d761e59f046fe653a0ea40d9d66e341e59e5a86b13aea2c886b6",
+      "git_blob": "49329473418703ff8e21757da825be3e24a411c4",
+      "lines": 147,
+      "mode": "100644"
+    },
+    "src/ui/gvEx.py": {
+      "sha256": "b1c781e22fa717343a0cc8b243b8caba49dfd04961328b7793784bb88196f863",
+      "git_blob": "bf8f57e3471fcc2c0822a6a56feffe26254d4de8",
+      "lines": 73,
+      "mode": "100644"
+    },
+    "src/immich.py": {
+      "sha256": "852bde513df7deacff56ccb6f697d24adfbc4e63399eb4bf8f8e19ed963bec70",
+      "git_blob": "431147b980d3c962b828f1c491d45811895e7298",
+      "lines": 414,
+      "mode": "100644"
+    },
+    "src/assets/mod/ste.js": {
+      "sha256": "85ba8628bb27cbcd6e67c0b690be7b08fd1c86c694aa40b737d747eb8ad7873f",
+      "git_blob": "caca80948d33f0199b4ab890114a4d411752bc10",
+      "lines": 362,
+      "mode": "100644"
+    },
+    "src/assets/mod/sim.js": {
+      "sha256": "430fa3c10ddee2399e1cec4081124a35723f63851e55cd9872783bde466f1477",
+      "git_blob": "0de7026b284c6f012dd65db8b28230408eeec6a8",
+      "lines": 897,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 41,
+  "tracked_blobs": 125,
+  "partial_file_read": [
+    {
+      "path": "src/ui/cardSets.py",
+      "lines_read": [
+        [
+          132,
+          181
+        ],
+        [
+          675,
+          694
+        ]
+      ],
+      "credited_as_whole_file": false,
+      "sha256": "c5f67a31c24bbec6d0b02898f918fc5c431a1dec63275fb70622a03ed626e8f0"
+    }
+  ],
+  "method": "Five complete files read. Whole original sim.js executed in Node VM with fake document/window and mocked fetch (no DOM callbacks invoked). Original mergeMetadata/cleanupXmpBak AST executed with real filesystem operations restricted to owned TemporaryDirectory and fake model/DB/Exiftool adapters.",
+  "executed_controls": {
+    "javascript": {
+      "zero_score_low_guard": {
+        "skip": false,
+        "lowScoreAssets": []
+      },
+      "before_selection": [
+        1
+      ],
+      "after_selection": [
+        2
+      ],
+      "same_refresh_signature": true,
+      "tie_keep": [
+        1,
+        2
+      ],
+      "tie_empty": [],
+      "dimensions": [
+        2000,
+        2100
+      ]
+    },
+    "python": {
+      "all_merge_options_disabled": true,
+      "sidecar_exists_after_merge": false,
+      "backup_exists_after_merge": true,
+      "sidecar_exists_after_cleanup": false,
+      "backup_exists_after_cleanup": false
+    }
+  },
+  "control_source": {
+    "javascript": "const fs=require('fs'),vm=require('vm'),assert=require('assert');\nconst base='.dedup-work/immich12-20261021/';\nconst ctx={window:{dash_clientside:{}},document:{addEventListener(){}},console:{log(){},error(){},debug(){}},fetch:()=>Promise.resolve({})};vm.createContext(ctx);vm.runInContext(fs.readFileSync(base+'src--assets--mod--sim.js','utf8'),ctx);\nconst out=vm.runInContext(`(()=>{\n const ausl={on:true,earlier:1,skipLow:true,kpCands:true};\n const original=[{autoId:1,fileCreatedAt:'2020-01-01',vw:{muodId:0,score:0}},{autoId:2,fileCreatedAt:'2021-01-01',vw:{muodId:0,score:0}}];\n const changed=JSON.parse(JSON.stringify(original));changed[0].fileCreatedAt='2022-01-01';\n return {zero_score_low_guard:_shouldSkipLowSim(original,ausl),before_selection:getAutoSelectAuids(original,ausl),after_selection:getAutoSelectAuids(changed,ausl),same_refresh_signature:getAutoSelSig(original,ausl)===getAutoSelSig(changed,ausl),tie_keep:_selectBestAsset([{autoId:1},{autoId:2}],{kpCands:true}).aids,tie_empty:_selectBestAsset([{autoId:1},{autoId:2}],{kpCands:false}).aids,dimensions:[_extractMetric({autoId:1,jsonExif:{exifImageWidth:1000,exifImageHeight:1000}}).dim,_extractMetric({autoId:2,jsonExif:{exifImageWidth:1900,exifImageHeight:200}}).dim]};\n})()`,ctx);\nassert.equal(out.zero_score_low_guard.skip,false);assert.equal(out.same_refresh_signature,true);assert.equal(out.before_selection[0],1);assert.equal(out.after_selection[0],2);assert.equal(out.tie_keep.length,2);assert.equal(out.tie_empty.length,0);\nfs.writeFileSync(base+'controls-v4-js-result.json',JSON.stringify(out,null,2)+'\\n');process.stdout.write(JSON.stringify(out,null,2)+'\\n');\n",
+    "python": "import ast,json,os,shutil,tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021')\ndef exinfo():return N(albs=[],tags=[],rating=0,description=None,latitude=None,longitude=None,city=None,state=None,country=None,visibility='timeline')\nenv=dict(os=os,shutil=shutil,lg=N(info=lambda *a:None,error=lambda *a:None),psql=N(fetchExInfos=lambda ids:{},getSchema=lambda:N()),models=N(AssetExInfo=exinfo),rtm=N(pth=N(full=lambda p:p)),bsh=N(read=lambda p:{},write=lambda *a:True))\nt=ast.parse((B/'src--immich.py').read_text());t.body=[ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0)]+[x for x in t.body if isinstance(x,ast.FunctionDef) and x.name in {'mergeMetadata','cleanupXmpBak'}];ast.fix_missing_locations(t);exec(compile(t,'original-immich-merge','exec'),env)\nwith tempfile.TemporaryDirectory(prefix='rrrah-owned-merge-control-') as tmp:\n p=Path(tmp)/'synthetic-image';p.write_bytes(b'owned fixture');xmp=Path(str(p)+'.xmp');xmp.write_text('owned original sidecar');asset=N(id='owned-keep',originalPath=str(p),isFavorite=False);trash=N(id='owned-trash',isFavorite=False)\n opts=N(**{k:False for k in ['albums','favorites','tags','rating','description','location','visibility']})\n result=env['mergeMetadata']([asset],[trash],opts,None);out={'all_merge_options_disabled':True,'sidecar_exists_after_merge':xmp.exists(),'backup_exists_after_merge':Path(str(xmp)+'.bak').exists()};env['cleanupXmpBak'](result['xmpInfos']);out['sidecar_exists_after_cleanup']=xmp.exists();out['backup_exists_after_cleanup']=Path(str(xmp)+'.bak').exists();assert out['backup_exists_after_merge'] and not out['sidecar_exists_after_cleanup'] and not out['backup_exists_after_cleanup']\n(B/'controls-v4-py-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n"
+  },
+  "findings": [
+    "Original metadata merge backs up all existing keeper .xmp files before checking whether any XMP tags will be written. All merge field options false -> no replacement sidecar written -> cleanup deletes .bak, losing original sidecar. Reproduced with one owned synthetic sidecar. The read settings excerpt independently permits Enable with all field checkboxes false; no live UI test.",
+    "Album/favorite/visibility-only merge also has no xmpTags, so same backup-without-replacement branch by source. Existing nonselected XMP tags preservation when writing selected tags remains unqualified.",
+    "Backup loop runs before merge try/rollback block; later backup failure can leave earlier sidecars moved without function returning xmpInfos to caller. Source-only finding, not failure-injected.",
+    "Original getAutoSelSig hashes only sorted autoIds and settings, excluding dates, dimensions, scores, group assignments and paths. Date change reverses best asset but signature unchanged, enabling stale selection through onSimJs skip guard. Reproduced original helpers.",
+    "Zero or missing score bypasses skipLow condition due truthiness guard; original synthetic zero-score group still selects earlier photo. Missing/unknown score is not explicitly distinguished from trusted main score.",
+    "Tie behavior qualified: kpCands true keeps all top scorers; false yields no keeper, with no arbitrary first-winner selection.",
+    "Dimensions preference uses width+height instead of pixel area: 1900x200 ranks above 1000x1000 by this metric. Dates compare normalized strings lexically, not UTC instants. No image quality proof.",
+    "LivePhoto branch precedes low-similarity guard, selects live members then continues, bypassing scoring/low guard. Group keys default to vw.muodId which has model default zero. Source behavior, no model/browser workflow run.",
+    "Ste selected IDs parse using regex expecting compact numeric JSON id; formatting/spaces/large JS numeric identity and nested click-target behavior remain source-level concerns, not reproduced here.",
+    "trashBy returns cursor rowcount without validating requested count; source excerpt callers commit then proceed with local deletion. No actual external SQL executed.",
+    "getGithubRaw/check logic uses live upstream main text snippets rather than installed server version/schema; checks are heuristic and network calls have no timeout. No network calls executed in controls."
+  ],
+  "limits": [
+    "41/125 blobs reviewed whole; remaining84 and partial settings/page files not credited.",
+    "No whole-repository completion, real upstream tests, Torch model/browser/DOM/rendered media/Postgres/Qdrant/Exiftool runtime qualification.",
+    "Actual test file operations only inside owned temporary directory; no user images or sidecars read or changed.",
+    "GPL metadata only; no upstream production code adopted. Native pHash/ASAN remains user-deferred."
+  ]
+}
