@@ -1,0 +1,61 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "files": {
+    "src/imagehash.zig": {
+      "bytes": 20885,
+      "sha256": "5ae6f50567acebed5c28e6d498099379c3697d078e443368277977abbd05ac06",
+      "git_blob": "68736c411908d04e96f44d11fc3b2cd886fff7df",
+      "method": "Wholeoriginalpinnedtextreadwithouttruncation"
+    },
+    "src/lib.zig": {
+      "bytes": 364,
+      "sha256": "70fd654f2f96e7e084c4595ed33977d20f00814f8c4484861203cc040d06882e",
+      "git_blob": "e15e87c2ecceffc8d7628450eca0212be4b51295",
+      "method": "Wholeoriginalpinnedtextreadwithouttruncation"
+    },
+    "build.zig": {
+      "bytes": 1411,
+      "sha256": "258a90239988d43119f7359cccdba7624773579ceca40eef724a544c6f8e70c2",
+      "git_blob": "a80c304ef1666b4d1deb96981b17ae3f92a34616",
+      "method": "Wholeoriginalpinnedtextreadwithouttruncation"
+    },
+    "build.zig.zon": {
+      "bytes": 253,
+      "sha256": "a51bd8eec0d807264d26959f482372c2c4199d7dfc47c4dfdd63105a2fbcbc72",
+      "git_blob": "f06bda03e012b0c49aabe5a6a31763fe5e16e124",
+      "method": "Wholeoriginalpinnedtextreadwithouttruncation"
+    },
+    ".github/workflows/zig-test.yml": {
+      "bytes": 565,
+      "sha256": "ae20c19b2f6caa0f4f971353aaf5de397a93f06c6e4f7d8fca869288a0204a60",
+      "git_blob": "54725bead9bb5fce2294fc9b7d618883d7eeeb74",
+      "method": "Wholeoriginalpinnedtextreadwithouttruncation"
+    }
+  },
+  "original_tests": {
+    "discovered": [
+      "hamming distance",
+      "parse image hash from JSON",
+      "image hash equals"
+    ],
+    "hash_golden_rows": 12,
+    "run": false,
+    "reason": "zig executable not found; no compiler install or external CI run claimed"
+  },
+  "authored_runtime_controls": 0,
+  "findings": [
+    "Source has3Zigtestblocks:distanceexpects27,JSONroundtrip,and12algorithm/imageinteger+hexgoldens. Previouspath-nameinventory0wasincomplete;goldensnotexecuted.",
+    "build.zig.zonpathsincludeonlybuild.zig/build.zig.zon/src/LICENSE/README. build.zigrequiresc_src/stb_impl.candincludeheaderswhichareexcludedfrompackagepaths. Sourcepackaginginconsistency,notactualpackagebuildfailurecontrol.",
+    "preprocessImageregistersdeferimage.freeMemoryandgraybuffreeonlyafterresize-successcheck. grayallocationfailureleaksloadedimage;resizefailureleaksboth. Sourcecontrolflowproof,notallocatorfailureinjection.",
+    "fromJSONreturnparsed.valueafterparsed.deinit;hashTypeisstring slice. Escaped/allocatedstringcase mayreferencefreedparsearena;borrowedinputcasehasinputlifetimeobligation. NoZigruntime/memorysanitizercontrol,do notgeneralizeallstringcasesasfreed.",
+    "ImageHash.distanceXORpopcountignoresalgorithm/bitsrecipe;hexDigestunpaddedhex. fromJSONlackssemanticvalidationofbits/hashType. SourceAPIobservations.",
+    "All4hashesforce3channelRGBdecode,thenroundluminositygrayscaleandtrianglelinearesize;alphaisnotexplicitlycompositedandRGBtransfernotlinearizedbeforegrayscaling. Exactbackendbehaviornotexecuted.",
+    "dHashsetsbitsforcur>=next,equalityincluded;aHashintegerfloormeanand>=;pHashmedianincludesDC;wavelet3levelsHaar. Preservealgorithmrecipedifferences,noautomaticcrosslibrarycompatibilityassumed.",
+    "CIdeclaresZig0.14.0Windows/Linux/macOSmatrixbutnotrunhere;setupactionusesmutablemain. NativepHash/ASANdeferred."
+  ],
+  "limits": [
+    "AllZigimplementation/build/config/CItextread;vendorCheaders/Cimplementation,README/license/configand4PNGnotyetfullyassessed. No Zigtests/runtimecontrolorproductioncopy. Thispartialreviewdoesnotincreasecompletedrepocount216."
+  ]
+}
