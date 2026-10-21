@@ -1,0 +1,32 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "components/main.tsx": {
+      "sha256": "79205a26a7bf17681be73ed6815234cdc69c8df57dafc4590f7e6544a9b64190",
+      "git_blob": "e3bd2b72d425db41cb6232fb49efead3bb41e0a8",
+      "lines": 295
+    },
+    "components/panel.tsx": {
+      "sha256": "21c008717bc6d67d76079becbc3ff1070eab9901c1e942724131dc20fc87bc10",
+      "git_blob": "1e020846d93853de81b996c9fc0e38c402c666fc",
+      "lines": 7
+    }
+  },
+  "cumulative_whole_files_read": 13,
+  "tracked_blobs": 97,
+  "method": "Full main/panel source read and pinned Git blobs checked. Static UI state/control-flow review; no rendered-browser claim.",
+  "findings": [
+    "Status marks complete solely on toProcess===0. Failed-playlist completion state from v3 therefore selects complete status; playlists with duplicates[] and empty status are filtered out. No incomplete/error aggregate shown in this component.",
+    "totalDuplicates is forced0 when playlist list is empty, ignoring saved-track duplicates even if present. Thus zero-owned-playlist library can select no-duplicates summary while saved-track duplicate list remains rendered. Source-only UI contradiction, no screenshot/runtime reproduction.",
+    "Saved-track removal awaits early-resolving method reproduced in v1, then clears duplicates and assigns removed status and success analytics. The outer list item itself renders only while duplicates.length>0, so success badge disappears with list.",
+    "Playlist delete errors only optionally report to Raven; no status or error message update. Buttons have no in-flight disable/progress flag, allowing repeated clicks in source flow; concurrent API behavior unexecuted.",
+    "componentDidMount invokes process promise without awaiting/catching and stores no cancellation/unsubscribe handle. Listener may update component after unmount; actual React runtime warning/resource effects unqualified.",
+    "Translations injected via dangerouslySetInnerHTML for completed summary; constant strong wrappers supplied but translation sources not yet reviewed. No injection vulnerability inferred without provenance/configuration evidence."
+  ],
+  "limits": [
+    "13/97 tracked blobs reviewed;151/500 complete repositories.",
+    "No browser render, fullapp/runtime/network or production change. pHash/ASAN deferred."
+  ]
+}
