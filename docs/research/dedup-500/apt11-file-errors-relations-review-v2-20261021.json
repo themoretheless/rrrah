@@ -1,0 +1,72 @@
+{
+  "repository": "davidfoerster/aptsources-cleanup",
+  "commit": "cf291129b351f4e126d53ed7382a61734052db99",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/aptsources_cleanup/util/fileutils.py": {
+      "sha256": "2397ad52a0089741f3f4e88b295088d17b281eb17da3b0e0f73bb6f5c4968bb9",
+      "git_blob": "afd3c743bed3fc392814e17aa2056581fa0e0f24",
+      "lines": 54
+    },
+    "src/aptsources_cleanup/util/io.py": {
+      "sha256": "219393a325386ae746e49a7479e5fa5e29d3443d476d9e6b7f95b25b4124cb19",
+      "git_blob": "2395c75e782982e6cf911226323cc1c2dea11057",
+      "lines": 75
+    },
+    "src/aptsources_cleanup/util/relations.py": {
+      "sha256": "a488531384b100b1e4344d885a600fa8708cabc9766285e806296c6d6d807534",
+      "git_blob": "7135853d4cf43cfa6886289a5517bfad615faf20",
+      "lines": 185
+    },
+    "src/aptsources_cleanup/util/collections/abc.py": {
+      "sha256": "788fa04217e2bad22d5780581a165cce1c8891a339f83f117e4bf2ebf9ecff55",
+      "git_blob": "694475751dc41d853cdf6cd8aed0b7b382c39187",
+      "lines": 44
+    },
+    "src/aptsources_cleanup/util/collections/__init__.py": {
+      "sha256": "7c7a85dc420ceabc8c432b6d9c13194c4f5a27d272a74cfb17fae94f282e1bc3",
+      "git_blob": "f964509d5c2dd9e1bc6dbe5a0a56bac673dce5c4",
+      "lines": 43
+    }
+  },
+  "cumulative_whole_files_read": 9,
+  "tracked_blobs": 166,
+  "method": "Five complete pinned files read and blobs verified. Original file helper functions AST-extracted, original IO module loaded; display controls only owned temp empty/missing paths, remove entirely mocked.",
+  "findings": [
+    "display_file mmap length0 on empty file raises ValueError before empty marker path; only EnvironmentError caught. Original-function control confirms unhandled empty-file exception.",
+    "display_file exception handler refers to terminal.termwrap although only termwrap imported. Missing owned temp path triggers NameError masking initial filesystem error.",
+    "remove_sources_files continues to .save companion even when primary remove raises PermissionError. Mock control confirms both removal attempts and status1/primarycount0. No filesystem deletion executed.",
+    "Doc says companion failures disregarded, but code sets rv1 for nonENOENT companion failure. Main counters count primary only; status and count semantics differ.",
+    "FileDescriptor context closes fd and release transfers ownership explicitly. No destructor cleanup if not used/closed; close failure leaves _fd set. TextIO replacement detaches old wrapper after constructing new; caller ownership changes.",
+    "EquivalenceRelation validates overlapping classes via __debug__ assertions only. Optimized launcher -O disables overlap checks; conflicting scheme classes can yield ambiguous representative selection. No fullCLI proof yet.",
+    "OrderedFrozenset retains dict order and index preference; duplicate input items overwrite their last positional index. IndexedEquivalenceRelation creates index from classes; initialization behavior not executed in this turn.",
+    "Collection helpers backport protocol checks; ExtSet methods return mutation booleans used by discard_first_of. These utilities do not compare file bytes."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/apt11-20261021/file-error-control.py",
+    "sha256": "64b7ce6b2cee1ee4a5bb9e0c0c2dad4bb33f3dd39bc20dd6f44e09226601bfae",
+    "result": {
+      "display_errors": {
+        "empty": {
+          "type": "ValueError",
+          "message": "cannot mmap an empty file"
+        },
+        "missing": {
+          "type": "NameError",
+          "message": "name 'terminal' is not defined"
+        }
+      },
+      "remove_calls": [
+        "synthetic.list",
+        "synthetic.list.save"
+      ],
+      "remove_status": 1,
+      "primary_removed_count": 0,
+      "scope": "Original functions; display only owned empty/missing temporary paths. Removal fully mocked; no APT/system configuration accessed."
+    }
+  },
+  "limits": [
+    "9/166tracked blobs reviewed;153/500complete repositories.",
+    "No APT parser/fullCLI/system configuration or production changes. Deletion mocked. Native pHash/ASAN deferred."
+  ]
+}
