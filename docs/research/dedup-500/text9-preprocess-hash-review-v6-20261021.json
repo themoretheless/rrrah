@@ -1,0 +1,62 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/text_dedup/utils/preprocess.py": {
+      "sha256": "101a2cee7ce8346da86a25031ad5e9ef766954afc8572f6d0b79113de7b02a03",
+      "git_blob": "48cba54af108091d8153ae8c0343d72852cde81b",
+      "lines": 59
+    },
+    "src/text_dedup/utils/ftfy_utils.py": {
+      "sha256": "0f1ffb425bb1f7d2fadf48e7ccab3050b07ef6f02bfa4039ce374193d075edd7",
+      "git_blob": "39d0e00c4df065d629acba58f34185c851d60498",
+      "lines": 8
+    },
+    "tests/test_utils/test_preprocess.py": {
+      "sha256": "b15ccad8b84c86dd7a7594d832fb25f41db61bc5a195f3b4a995d515a3d7dfd2",
+      "git_blob": "737766ad8cb08e6bfd59ba383de2de0ee63f7218",
+      "lines": 151
+    },
+    "src/text_dedup/utils/hashfunc.py": {
+      "sha256": "00ecbc35b3a0ba833753d80afc620ab3c766f225a32c8ca69fd3de7ffc6effee",
+      "git_blob": "6224a816d3a334e2964d0513c3750450680d2c18",
+      "lines": 105
+    },
+    "tests/test_utils/test_hashfunc.py": {
+      "sha256": "d40ccd82cb8f2aca810b3b4f80224134c7b566c1002dd178d9dfaa24238795df",
+      "git_blob": "7b4081c105b8c342656fb4ef159c5bf92e0163a3",
+      "lines": 216
+    }
+  },
+  "cumulative_whole_files_read": 24,
+  "tracked_blobs": 75,
+  "method": "Five complete pinned files read. Original NEWS-COPY preprocessing function and20 original test method bodies AST-extracted and executed without imports. Targeted nonASCII examples also executed.",
+  "findings": [
+    "All20original NEWS-COPY method bodies pass locally. Function strips selected punctuation, joins hyphen-newline, replaces newline by space then removes all nonASCII bytes. Russian Привет and Chinese 世界 both become empty; café becomes caf. Intentional lossy benchmark normalization cannot establish file equality.",
+    "normalize lowercases, replaces Unicode digits with0 and removes punctuation/control/symbol categories without inserting boundaries. Distinct numeric values and punctuation-separated words can collapse; spaces are not collapsed. regex-based function tests were read but not executed.",
+    "ftfy_utils only reexports external fix_encoding/fix_text; no owned implementation or runtime proof in this file.",
+    "sha1_hash arbitrary d uses digest[:d//8], so nonbyte widths round down, values beyond160 do not increase entropy and negative d uses Python negative slicing. No explicit range validation shown.",
+    "xxh3_hash arbitrary-width fallback calls xxh3_128_digest(data) without seed; unlike32/64/128branches it ignores supplied seed and truncates whole bytes. Source verified, actual xxhash fallback not executed.",
+    "Hash tests use known MD5 vectors and SHA1 examples plus width/range and consistency assertions. Arbitrary xxh3 width tests only24/40 with default seed; no fallback seed distinction or nonbyte/negative-width contract coverage. Cryptographic hash wrappers use usedforsecurity=False."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/preprocess-control.py",
+    "sha256": "c96b6391cb59bfc342bbd704170d20c7003bf999f91f16ec3ef1da389f370a25",
+    "result": {
+      "original_test_bodies_passed": 20,
+      "failures": [],
+      "nonascii_outputs": {
+        "russian": "",
+        "chinese": "",
+        "accented": "caf"
+      },
+      "distinct_inputs_same_output": true,
+      "scope": "Original news_copy_preprocessing and20 original test method bodies, imports omitted through AST extraction. normalize/regex/ftfy and full pytest not executed."
+    }
+  },
+  "limits": [
+    "24/75 tracked blobs reviewed;152/500 complete repositories.",
+    "No full pytest, regex/ftfy/xxhash runtime or production changes. Local20-method result is not full upstream suite. pHash/ASAN deferred."
+  ]
+}
