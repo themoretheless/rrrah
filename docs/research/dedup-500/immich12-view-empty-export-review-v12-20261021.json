@@ -1,0 +1,65 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/pages/view.py": {
+      "sha256": "f98b5a923cc7e637694d35b6053ad3ccf5f80483bef9b044c14fa68d7de7a59f",
+      "git_blob": "8ac484674098e2c83f96484f35c3533559c5b93d",
+      "lines": 320,
+      "mode": "100644"
+    },
+    "src/ui/pager.py": {
+      "sha256": "327a83bee7f66603479be07a5be5299c584668f1256b12b2033e5f5ac516d6f1",
+      "git_blob": "8a5e99507cb44710c4bcac3cf11f7366907e2e23",
+      "lines": 388,
+      "mode": "100644"
+    },
+    "src/mod/mdl.py": {
+      "sha256": "5711009fde511b691e6e0588e4d08cea5234601996c52734588aa23db2fb6c8a",
+      "git_blob": "104240b996be1bd3a0b241dd1904dd9e8f519f66",
+      "lines": 103,
+      "mode": "100644"
+    },
+    "src/ui/cards.py": {
+      "sha256": "49ccd7b3396b16c6846e0fe46eb881ec34984a286ff265befd4734365c6b4413",
+      "git_blob": "fb9850718c6e458b0d223ec48b4674b143ce1389",
+      "lines": 332,
+      "mode": "100644"
+    },
+    "src/mod/mdlImg.py": {
+      "sha256": "45ec0c0d411d92134bd4054125cdca28bf9a110e6a9c78fd8551e5b284e98c5c",
+      "git_blob": "0c7b1c004a71aac96292ff172e851edc0ff5d8b2",
+      "lines": 402,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 99,
+  "tracked_blobs": 125,
+  "method": "Five whole files read. Original mk card AST executed with synthetic asset and generic component factory adapters, actual stdlib json parses emitted data-meta. Original _buildUI AST invoked only zero-size error boundary. No Dash/browser/UI rendering or persistent data.",
+  "executed_controls": {
+    "card_metadata": "{\"id\":\"owned-id\",\"autoId\":1,\"originalFileName\":\"photo\"quoted.jpg\",\"originalPath\":\"/owned/path/photo\"quoted.jpg\"}",
+    "quoted_filename_metadata_exception": "JSONDecodeError",
+    "missing_exif_exception": "'NoneType' object has no attribute 'exifImageWidth'",
+    "zero_page_size_exception": "ZeroDivisionError"
+  },
+  "control_source": "import ast,json,os\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021')\ndef load(file,name,env):\n t=ast.parse((B/file).read_text());t.body=[n for n in t.body if isinstance(n,ast.FunctionDef) and n.name==name];t.body.insert(0,ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0));ast.fix_missing_locations(t);exec(compile(t,str(B/file),'exec'),env);return env[name]\nmeta=[]\nclass Components:\n def __getattr__(self,name):\n  def mk(*args,**kw):\n   if 'data-meta' in kw:meta.append(kw['data-meta'])\n   return {'component':name,'children':args,'props':kw}\n  return mk\nui=Components();env=dict(htm=ui,dbc=ui,dcc=ui,path=os.path,gvEx=N(mkTipExif=lambda *a:None),co=N(fmt=N(size=str)),db=N(psql=N(getUsrName=lambda uid:'owner')),ks=N(pg=N(similar='similar')))\nmk=load('src--ui--cards.py','mk',env)\na=N(isFavorite=0,autoId=1,id='owned-id',originalFileName='photo\"quoted.jpg',originalPath='/owned/path/photo\"quoted.jpg',jsonExif=N(exifImageWidth=10,exifImageHeight=20,fileSizeInByte=30),ex=None,vw=N(isMain=True,isRelats=False,score=1),vdoId=None,simOk=0,isVectored=1,ownerId='owner',deviceId=None,fileCreatedAt=None,fileModifiedAt=None,libId=None)\nmk(a);out={'card_metadata':meta[0]}\ntry:json.loads(meta[0]);raise AssertionError('expected malformed JSON')\nexcept json.JSONDecodeError as e:out['quoted_filename_metadata_exception']=type(e).__name__\na.jsonExif=None\ntry:mk(a);raise AssertionError('expected missing EXIF failure')\nexcept AttributeError as e:out['missing_exif_exception']=str(e)\nfn=load('src--ui--pager.py','_buildUI',{})\ntry:fn('owned',0,1,0,1);raise AssertionError('expected zero page-size failure')\nexcept ZeroDivisionError as e:out['zero_page_size_exception']=type(e).__name__\n(B/'controls-v12-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Original card mk builds data-meta using raw JSON-shaped f-string, without json.dumps escaping. Filename/path with quote emits invalid JSON; original JS export/group parsing uses JSON.parse and catches/skips errors. Reproduced Python emitted metadata parsing failure; no browser export run.",
+    "Original main card assumes jsonExif model nonnull and accesses width/height before checking; synthetic absent EXIF raises AttributeError. Pending card handles absent EXIF, so behavior differs between view paths. Earlier model null acceptance and fetch no-EXIF path make integrated absence relevant, but full app runtime unexecuted.",
+    "Original _buildUI divides by size for total>0 with no positive-size validation; size0 throws ZeroDivisionError. UI select ordinary values positive; malformed/stale session-store reachability not proven.",
+    "Pager clamps page for visual rendering but does not normalize session store direct page click values. Size change keeps numeric page instead of first visible item. These are source behavior, not matcher correctness proof.",
+    "vw_Load turns empty getFiltered result into no matching photos; getFiltered already maps DB/extended-info failure to empty. UI can present retrieval errors as clean empty results.",
+    "onAssetDel commits external trash then calls pics.deleteBy, which already deletes vectors, then calls vecs.deleteBy again. Second vector deletion failure can report overall failure after prior stores changed. Source observation; no live or injected double-delete runtime this batch.",
+    "Asset card supplies same pattern imgPopId to live video and still img elements for LivePhoto, potentially duplicate Dash IDs in one card. No real Dash validation/browser media run.",
+    "Modal confirmation checks Gws.dtc, whose original default is class-time timestamp; absence of explicit current connection state can still pass this guard by source. Task guards reviewed elsewhere remain separate.",
+    "Single image popup loads preview URL but does not populate multi current metadata; multi popup uses current list positional index and falls back0 if clicked ID absent, potentially selecting wrong first image under stale list. Source behavior, JavaScript navigation next review pending.",
+    "Persisted preview settings are global dto field, session model contains presentation state; multi-user/concurrent changes and stale selection identity need actual workflow qualification."
+  ],
+  "limits": [
+    "99/125 whole blobs reviewed;26 remain.",
+    "Generic component factory proves source evaluated fields/data only, not real Dash serialized layout or browser rendering.",
+    "No user image/metadata/selection writes, actual deletion, database/server/network/model or full upstream suite.",
+    "No production source modified/copied; native pHash/ASAN remains deferred and full500/all-case goal incomplete."
+  ]
+}
