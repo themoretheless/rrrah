@@ -1,0 +1,27 @@
+{
+  "scope": "Own rrrah-dedup public selected-frame decode, exact equality and digest for PNG gray+alpha versus RGBA and opaque RGB.",
+  "test": "crates/rrrah-dedup/tests/png_alpha_channels.rs",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_alpha_channels",
+  "result": {
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "test_seconds": 0.02
+  },
+  "checks": [
+    "Three independent embedded synthetic 3x1 PNG containers, gray-alpha, RGBA and opaque RGB; no new dependency.",
+    "Decoded alpha 0,128/255,1 within 1e-6; visible white channels within 1e-6; dimensions 3x1.",
+    "Gray-alpha/RGBA selected-frame equality and exact digest match; removing alpha changes equality and digest.",
+    "MemoryBudget used returns to zero after all frames dropped."
+  ],
+  "production_changes": false,
+  "source_state": {
+    "crates/rrrah-decode/src/raster.rs": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7"
+  },
+  "limits": [
+    "Current worktree includes pre-existing raster.rs modifications; not clean-HEAD qualification.",
+    "Three pixels per fixture; not arbitrary colors, ICC/HDR, animation, hidden-RGB policy or every PNG mode.",
+    "Upstream libphash/spng source review remains partial; full repository count unchanged at 247/500."
+  ]
+}
