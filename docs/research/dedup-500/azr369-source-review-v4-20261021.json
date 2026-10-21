@@ -1,0 +1,113 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "whole_repo_complete": false,
+  "image_review": [
+    {
+      "path": "testdata/cats/cat_medium.jpg",
+      "sha256": "8f122ddaa95fab8a6c478288b505475fa760b17381b6b54d1b201888b460eab8",
+      "size": [
+        550,
+        412
+      ],
+      "mode": "RGB",
+      "frames": 1,
+      "viewed": true,
+      "view_method": "OriginalJPEG"
+    },
+    {
+      "path": "testdata/cats/cat_sky.jpg",
+      "sha256": "da4daaf7c1fcecaf013d62ee1be40779e19a34d3647117195b6fec699090f74b",
+      "size": [
+        800,
+        600
+      ],
+      "mode": "RGB",
+      "frames": 1,
+      "viewed": true,
+      "view_method": "OriginalJPEG"
+    },
+    {
+      "path": "testdata/cats/smiling.jpg",
+      "sha256": "592caeae469e1e77debafa579c8c2426bde56de0dcdfccc2eff619a675eb034d",
+      "size": [
+        1317,
+        1536
+      ],
+      "mode": "RGB",
+      "frames": 1,
+      "viewed": true,
+      "view_method": "OriginalJPEG"
+    },
+    {
+      "path": "testdata/lena/l_hires.jpg",
+      "sha256": "820eae76e4639a059a1bc799763ad82961ffbc8d41b58920a3f7ac622455ed46",
+      "size": [
+        1084,
+        2318
+      ],
+      "mode": "RGB",
+      "frames": 1,
+      "viewed": true,
+      "view_method": "OriginalJPEG"
+    },
+    {
+      "path": "testdata/lena/lena.bmp",
+      "sha256": "1a9177d46a4c3a6366be20315b50a5c45decff51b34e8e577f9fcce208970bd4",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "frames": 1,
+      "viewed": true,
+      "view_method": "Pillow-decoded lossless PNG preview"
+    },
+    {
+      "path": "testdata/lena/lena_std.tiff",
+      "sha256": "c056da23302d2fb0d946e7ffa11e0d94618224193ff6e2f78ef8097bb8a3569b",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "frames": 1,
+      "viewed": true,
+      "view_method": "Pillow-decoded lossless PNG preview"
+    }
+  ],
+  "partial_text_read": {
+    "path": "cornerdetect/fast_9.c.go",
+    "line_ranges": [
+      [
+        1,
+        210
+      ],
+      [
+        3835,
+        4035
+      ],
+      [
+        7710,
+        7737
+      ]
+    ],
+    "whole_file": false
+  },
+  "controls": "docs/research/dedup-500/azr369-fast-oracle-20261021/result.json",
+  "findings": [
+    "Actual generatedFAST detector matches independent9-contiguouspredicate on65536binaryrings;2050detectedcorner scores match direct intensity difference thresholds.",
+    "make_offsets encodes16radius3circle positions; score binarysearch returns greatest strictcontrastthreshold. Single-center controls do not qualify nonmax suppression or variedstride.",
+    "Sixfixturefiles individuallyviewed: originalkitten, samekitten/backgroundreplacement, different smilingcat, fullportraitJPEG andtwo512squarecrop encodings. BMP/TIFF visually differ in colour; not assumeddecodedpixelequal.",
+    "Corpus includes localforegroundreuse afterbackgroundreplacement and largecrop, useful regional-similarity cases; no original test asserts those matches.",
+    "Generatedbody7737lines remains only partiallyread. Positivefiniteoracle evidence is separate from whole-source review."
+  ],
+  "remaining": [
+    "Unread portions ofcornerdetect/fast_9.c.go"
+  ],
+  "limits": [
+    "227/500complete; entry369stillpartial.",
+    "No newproductioncode or accuracy/performance generalization.",
+    "NativepHash/ASAN remainsdeferred."
+  ]
+}
