@@ -1,0 +1,27 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "app_review": {
+    "path": "app.py",
+    "sha256": "99e5ecc4bcfc5f3ee38700412d2a1b7713dc573cee633953ad499386749fd0be",
+    "git_blob": "0c11f83ac702a5c216717e509c7b7c1429ba86ee",
+    "lines": 1335,
+    "method": "Whole pinned app text read without truncation"
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-worker-controls-20261021/result.json",
+  "new_authored_controls": 2,
+  "cumulative_authored_controls": 10,
+  "findings": [
+    "Original scan_worker comparing same directory twice emits one image twice as exact duplicate group; actual engine,SQLite,Pillow; AST-extracted unchanged worker plus request adapter and disabled queue dispatch. No HTTP runtime claim.",
+    "Unknown media_type string skips both pipelines and publishes done with empty results. Worker control only; original ScanRequest source declares unconstrained str so source model has no enum restriction. FastAPI/Pydantic model not executed.",
+    "Cross-directory intensive mode concatenates both directory row lists then calls within-list intensive comparator; source permits same-directory-only matches in cross-directory output. Not newly runtime tested.",
+    "Cancellation checked at stage boundaries and completed-file callbacks; original engine thread-pool context waits outstanding futures and inner hash/frame operations do not receive cancellation. Source observation, no bounded-latency proof.",
+    "Original thumbnail image cache lookup uses path only and can return cached preview without stat/content revalidation; source observation.",
+    "Job completion writes directory timestamp before durable job result; DB-write failure logged but memory status still done. Source observation, no persistence fault injection.",
+    "Full app source read including routes/startup; no destructive operation invoked, no authentication/security runtime assessment or production code adoption."
+  ],
+  "limits": [
+    "FastAPI/uvicorn missing from bundled Python; recorded as environment limitation, not upstream test failure. Worker controls use AST extraction and explicit request/queue adapters, not full web service. Remaining frontend/report/styles/translations/README/screenshots review incomplete. Native pHash/ASAN deferred."
+  ]
+}
