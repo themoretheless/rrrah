@@ -1,0 +1,60 @@
+{
+  "repository": "ecolesthecreator/VisualKeyKit",
+  "commit": "d6b31c689ff3011f154335098d208e6e165205cc",
+  "whole_repo_complete": false,
+  "tracked_blobs": 13,
+  "cumulative_assessed_blobs": 8,
+  "new_whole_files_read": {
+    "Sources/VisualKeyKit/VisualKey.swift": {
+      "bytes": 21964,
+      "sha256": "a510208f4351c8425b28da18efa3621149cc3b8467801d0d2ccb9b0c5cfd9389",
+      "git_blob": "af039859d8a37ab4c86bbcb554f70ea65d8ad44d",
+      "method": "Whole pinned source/test text read without truncation"
+    },
+    "Sources/VisualKeyKit/VisualKeyKit.swift": {
+      "bytes": 4390,
+      "sha256": "0c8ce213a6305db9b7e4f4d479026175dfda5a40101c230d07b82809ec4a5063",
+      "git_blob": "3c5f44095d22c40cf6a427b3190767bf0c651a42",
+      "method": "Whole pinned source/test text read without truncation"
+    },
+    "Sources/VisualKeyKit/FuzzyTemplate.swift": {
+      "bytes": 3165,
+      "sha256": "f57dbb90da0914e98ebff548256f5432499bae8fe5ea07114dc97dd709b64e1c",
+      "git_blob": "ca34ed287fb6c1117ce1a51948cc1a25372764c2",
+      "method": "Whole pinned source/test text read without truncation"
+    },
+    "Tests/VisualKeyKitTests/VisualKeyKitTests.swift": {
+      "bytes": 6272,
+      "sha256": "ea9d694beacfb3c888caeef52d5f4dea42b5dd2d3e9f36c349319aeaa6a44e2f",
+      "git_blob": "7980405a3ad44164628bb2350ae3a8e4cd4608d3",
+      "method": "Whole pinned source/test text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/visualkey476-controls-v2-20261021/main.swift",
+    "extracted_source": "docs/research/dedup-500/visualkey476-controls-v2-20261021/Probe.swift",
+    "log": "docs/research/dedup-500/visualkey476-controls-v2-20261021/run.log",
+    "passed": 4,
+    "method": "Original CLAHE function body with private access removed and unchanged Bitset256/FuzzyTemplate compiled using Swift; synthetic Float arrays and bitsets, no whole CGImage pipeline."
+  },
+  "findings": [
+    "Default size32 uses tileSize4,16pixels,64bins and clipLimit2 => Int(0.5)=0; tested17-level0.4..0.8input maps entirely to1. Original size64positive control preserves multiple levels. Not proof that every original image collapses after entire tone-map pipeline.",
+    "FuzzyTemplate documented ties resolve1, verified for256tiedbits. Unanimouszero votes reportconfidence0: code countssetbits rather than consensusagreement; test explicitly expectszero. Documentation termconfidence should not be read as symmetric agreement.",
+    "Original tests cover bitsets/templates/password helpers but contain no CGImage signature/preprocessing test. Whole XCTest suite not run.",
+    "VisualKey grayscale traverses dest pixels by flat i*4 without dest.rowBytes; stride risk source-only, no actual paddedbuffer control yet.",
+    "dHashH/V use floor cell widths and can omit right/bottom strips; aHash ignoresremaindersfornonmultiple8. Resolution API not validated; documented32/64/96/128so omittedstrips evendefault32dHash need further qualification.",
+    "VisualKeyKit.swift license comment says TBD GPL/commercial while root LICENSE is MIT; retain conflict, no production source port."
+  ],
+  "remaining": [
+    "README.md",
+    "OPEN_SOURCE_ROADMAP.md",
+    "Sources/VisualKeyKit/BiometricPassword.swift",
+    "Sources/VisualKeyKit/PasswordPolicy.swift",
+    "Sources/VisualKeyKit/SecureRandom.swift"
+  ],
+  "license": "RootMITfullyread;isolatedoriginalresearchfunctionretainslicense;noproductionadoption.",
+  "limits": [
+    "Fullreviewcount169/500unchanged;8/13wholeartifacts;8targetedcontrolscumulative.",
+    "No full upstream XCTest,CGImage,platform,corpusquality or performance proof. NativepHash/ASANdeferred."
+  ]
+}
