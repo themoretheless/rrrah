@@ -1,0 +1,18 @@
+{
+  "repository": "science-periodicals/phash-imagemagick",
+  "commit": "400512e20a8a763609bec77e76f609f63108b578",
+  "whole_repo_complete": false,
+  "status": "additional_original_serializer_controls",
+  "controls": "docs/research/dedup-500/imagemagick386-controls-20261021/serializer-result.json",
+  "findings": [
+    "Original lib/phash.js executed unchanged in VM with synthetic child/readline adapter. Coefficient0 and100 serialize identically because decimal representation is truncated to last4 characters.",
+    "Negative coefficient-10 expands encoded field to5 characters, violating compare parser fixed groups of4;42 coefficients produce210 rather than168 characters.",
+    "100 pixels/cm becomes39.3701 pixels/inch in original postprocessing; correct unit conversion yields254."
+  ],
+  "limits": [
+    "Synthetic identify stdout only; actual ImageMagick moment ranges and fixture occurrence not established.",
+    "Whole repository source/visual review previously completed; this follow-up adds executed boundary evidence, not backend runtime qualification.",
+    "No production code adopted; current local fixed-width fingerprint representation was separately qualified.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
