@@ -1,0 +1,28 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_unix.S": {
+      "sha256": "c641987dd82fabed59d527f1a3413c4a2ff3df919af6d13ff2788c95e4035c0d",
+      "git_blob": "9642e413a3ad0f959449e0089dfd672fbff9fb86",
+      "lines": 4824
+    }
+  },
+  "cumulative_whole_files_read": 286,
+  "tracked_blobs": 289,
+  "method": "Completed full4824-line source reading: prior v137..140 cover1..3100; current untruncated3101..3700/3701..4300/4301..4824 completes remaining source. Full bytes reverified against pinned tree.",
+  "findings": [
+    "XOF16 transposes all16 output-word vectors and writes16 unaligned64-byte stores spanning1024 bytes. Counter advances16 with unsigned low32 carry; output pointer advances1024, block count decreases16 and repeats while sufficient blocks remain.",
+    "XOF8 emits16 unaligned32-byte stores spanning512 bytes, then chooses next counter lanes from second eight values already initialized on stack. XOF4 emits16 pieces of16 bytes spanning256; XOF2 emits eight pieces spanning128; XOF1 emits four pieces spanning64.",
+    "XOF remainder paths4/2/1 broadcast the same message16-byte segments rather than the wide overlapping loads used by hash-many4/2. Hash-many input-contract finding therefore must not be generalized to XOF remainder loads.",
+    "For XOF16/8, upper output-state vectors XOR original CV words before full16-word transpose. Remainder4/2/1 also XOR original CV into upper half before stores. Same-message multiple output blocks use distinct counters.",
+    "XOF vector return restores RBP stack anchor and vzeroupper; scalar fast path has no frame. Entry count0 follows scalar count1 path and stores64 bytes as recorded in v140; caller reachability remains unverified.",
+    "INDEX0/1 tables select complementary four-word groups across two sources; ADD0 enumerates0..15, ADD1=1, ADD16=16, block length64. IV aliases share four contiguous32-bit words aligned64. No unexpected extra constants beyond inspected tables.",
+    "Full hash-many16/8/4/2/1, scalar compression and XOF paths now read. Previously recorded hash-many4 maximum48-byte excess load and hash-many2 maximum16-byte excess load remain source observations without guard-page reproduction."
+  ],
+  "limits": [
+    "286/289 pinned blobs reviewed;150/500 complete repositories. Remaining rmlint files: two Windows AVX512 variants and xxhash.h.",
+    "No x86 runtime parity, caller allocation audit, public zero-count reproduction, ABI/sanitizer or speed proof. pHash/ASAN remains deferred."
+  ]
+}
