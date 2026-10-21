@@ -1,0 +1,73 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "doc/cbird-devel.md": {
+      "sha256": "ee7bd8326f65a4b20b9b41a6c1cf2a164cddc61c2c0ac8e59446426dd0a728cc",
+      "git_blob": "406ab0096dad71016c684f5945c348b100692872",
+      "bytes": 8123,
+      "lines": 188,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    },
+    "doc/cbird-compile.md": {
+      "sha256": "20f804464e90b7ee8e2b065b77a5a67eff845e89f15c8e3af3afd56b8aa59dee",
+      "git_blob": "c97931578252c4d13c75089793c5ed1bf115016d",
+      "bytes": 3382,
+      "lines": 147,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    },
+    "doc/cbird-links.md": {
+      "sha256": "6470ff7bcd613f0510a66265f9a64f1dce9d3a01d62183f21e591c7c07553920",
+      "git_blob": "822f74d650b181339d501a0ae86dbd31f05a452f",
+      "bytes": 226,
+      "lines": 5,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    },
+    "doc/ffmpeg-compile.txt": {
+      "sha256": "af5d4b2c2d7ecec3f175e008610b7451ab565bd700d568b876dccdf6e20d6308",
+      "git_blob": "a9de0e93e777969ff3b2434435a3188d58ded788",
+      "bytes": 807,
+      "lines": 18,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    },
+    "doc/qt6-compile.txt": {
+      "sha256": "17f473a52638c1c9612a36ee585867e25cae7ce1902de4016a4df30349237ed9",
+      "git_blob": "e0c3d6f49bf024ee8ac35e597204e82731a6fd07",
+      "bytes": 869,
+      "lines": 51,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    },
+    "doc/references.txt": {
+      "sha256": "9616d34a98f2af58186fa4bedad63ada75ce9cb480e961a4e0b0fd32d44861fe",
+      "git_blob": "4c83e7946fa1a201f22f41243e006c08f8b2f9e9",
+      "bytes": 1202,
+      "lines": 35,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    },
+    "doc/research/auto-delete.md": {
+      "sha256": "b4161e4af357f7d5bd32fcc5e218fe1c654f4298f0abaa9259381812e40a1ab1",
+      "git_blob": "69e315f5ef400f927f1122088a62780268551470",
+      "bytes": 1440,
+      "lines": 49,
+      "method": "Whole pinned document read; embedded commands and links not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 95,
+  "tracked_blobs": 616,
+  "findings": [
+    "Developer wish list includes parameter type checking, storing modified date/size, histogram search tree, low-detail hash policy and video coverage map. These are upstream notes, not proof of current implemented features or verified omissions across unread source. Parameter setter gap separately traced in v20/v21.",
+    "Developer notes list possible remove/interrupt database corruption, decoder overflow and GPU decode issues. They are historical/unconfirmed upstream statements; no reproduction or new vulnerability claim made. They strengthen need for actual recovery oracles rather than accepting stress script presence.",
+    "Developer notes separately flag color descriptor nondeterminism and DCT-feature logic needing analysis, consistent with already examined source concerns. No full decoder or perceptual accuracy gate supplied here.",
+    "Compile document specifies Qt6.9-or-later tested and OpenCV2.4.13.7; older Qt compile scratchpad references6.5/6.6 and FFmpeg scratchpad unpinned source builds. Documentation is not a frozen reproducible toolchain or current host verification.",
+    "Auto-delete research proposes confidence and retention heuristics including larger size, less compression, metadata and model quality. It is a proposal, not evidence of file equivalence, verified keeper selection or authorization to delete anything. No deletion performed.",
+    "Reference/link lists identify external research, demos and projects; merely reading links does not count linked repositories, videos or papers as assessed. Local PDF and spreadsheet artifacts remain unread and excluded.",
+    "Unit-test documentation requires separate compatible test dataset. Its examples and claims do not supersede observed disabled/skipped/benchmark-only test bodies; no commands installed or run."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "95/616 tracked artifacts assessed:94 whole text/source plus one PNG visual. main.cpp and qtutil.cpp remain partial.",
+    "Cumulative27 isolated original-body/header controls and one independent counterexample unchanged. No new runtime or production changes.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
