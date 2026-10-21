@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_extension_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/api.test.ts": {
+      "sha256": "c9a563bfcf2976b185d77b17dfd38cb4366a0c2e10ee3cd561f77f321e024f68",
+      "git_blob": "b8b200094c3979f4201851f9fb73e44d0ee2a685",
+      "bytes": 5241,
+      "lines": 141,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/lifecycle.test.ts": {
+      "sha256": "23fa5430d82de4b086400f39c5700958654b18a2d86b7f478164e912679ec05f",
+      "git_blob": "1f9994651ef18e369e9f515e44422f8902874257",
+      "bytes": 2237,
+      "lines": 58,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/ui-wiring.test.ts": {
+      "sha256": "cd43f272bcc27eda24d205f60aa32a34d1d87cedd2d19ee9b1dc617ad365ce6c",
+      "git_blob": "1abed116f6b6bb631a1a183b7d9af9e9789ae4c2",
+      "bytes": 2831,
+      "lines": 67,
+      "method": "Whole pinned test source read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 87,
+  "tracked_blobs": 230,
+  "findings": [
+    "API readfailuretest stubs globalchromeemptyobject then accesses c.runtime.lastError; runtimeabsentcausesexception beforecallback. Batoncatchesit andreturnsnull,so assertedoutcome can passwithout exercising intendedruntime.lastErrorcallbackbranch. Staticobservation,Vitestnotrun.",
+    "APItests coverbatonroundtrip/writeerror andlocal/syncpriority/migration/quotaabsenceusingcallbackstubs. No completed-reportlifetime test here.",
+    "Lifecycle tests stubinstall/updateevents,tabscreationanduninstallURL; assertstorageonlypermissionandbyepagemarker. Notlivebrowserinstallationproof.",
+    "UIwiring tests compare sourcelexicalIDsets/messageactionsets andwarningcopy. These are explicitlytextbindingcontracts; notinteractiveflow,postrunexport,concurrentstart orcleanuporacles.",
+    "No badgeschedulerordering test in these files; originalfakeclockcounterexamplev21remainsindependentlyauthoredcontrol."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 31,
+  "limits": [
+    "87/230wholeartifacts; no upstreamsuiteexecution.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
