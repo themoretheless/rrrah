@@ -2,9 +2,9 @@
   "index": 396,
   "repository": "ail-project/photo-dna",
   "commit": "142833af45281c39206a3c2fab73b4075cf43627",
-  "review_scope": "Incremental full Rust hash-source and embedded-test review with actual upstream tests and public-API dimension controls; Python/reference/packaging files remain unread",
+  "review_scope": "All available authored text, source, Python reference and tests read; all three image fixtures visually inspected; generated Cargo/uv locks parsed in full. Not dependency-source, official algorithm compatibility, published-wheel or multi-platform runtime qualification.",
   "decision": "reference",
-  "finding": "Rust PhotoDNA-style hash, benches and Python bridge; GPL and algorithm restrictions require separate decision.",
+  "finding": "All available sources/assets reviewed;8 Rust and18 real-binding Python tests pass. Public small-image calls panic and documented stub keyword names fail. No algorithm adopted.",
   "available_source_evidence": [
     {
       "path": "photo-dna/benches/hash_bench.rs",
@@ -78,9 +78,9 @@
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/photodna396-source-review-v1-20261021.json",
-      "controls": "docs/research/dedup-500/photodna396-controls-20261021/dimension_control.rs",
       "whole_repo_complete": false
     }
   ],
-  "full_repository_read": false
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/photodna396-complete-source-review-20261021.json"
 }

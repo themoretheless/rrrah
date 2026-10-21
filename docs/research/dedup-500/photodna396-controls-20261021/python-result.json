@@ -1,0 +1,53 @@
+{
+  "dimension_cases": [
+    {
+      "width": 0,
+      "height": 0,
+      "outcome": "PanicException"
+    },
+    {
+      "width": 0,
+      "height": 2,
+      "outcome": "PanicException"
+    },
+    {
+      "width": 1,
+      "height": 1,
+      "outcome": "PanicException"
+    },
+    {
+      "width": 1,
+      "height": 2,
+      "outcome": "PanicException"
+    },
+    {
+      "width": 2,
+      "height": 1,
+      "outcome": "PanicException"
+    },
+    {
+      "width": 2,
+      "height": 2,
+      "outcome": "ok"
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "outcome": "ok"
+    }
+  ],
+  "stub_keyword_cases": [
+    {
+      "stub_keyword": "rgb_pixels",
+      "outcome": "TypeError: Hash.from_rgb_pixels() got an unexpected keyword argument 'pixels'"
+    },
+    {
+      "stub_keyword": "hex_string",
+      "outcome": "TypeError: Hash.from_hex_str() got an unexpected keyword argument 'hex_string'"
+    },
+    {
+      "stub_keyword": "byte_data",
+      "outcome": "TypeError: Hash.from_bytes() got an unexpected keyword argument 'byte_data'"
+    }
+  ]
+}
