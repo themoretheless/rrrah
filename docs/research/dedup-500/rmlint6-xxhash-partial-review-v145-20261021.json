@@ -1,0 +1,41 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "read_ranges": [
+        [
+          1,
+          500
+        ]
+      ],
+      "unread_ranges": [
+        [
+          501,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Pinned blob verified then untruncated first500 source lines read. Remaining implementation receives no whole-file credit.",
+  "findings": [
+    "Header identifies noncryptographic XXH32/64 and XXH3 64/128 families. Hash equality alone is not byte equality; performance table describes historical i7-9700K/Ubuntu20.04/clang10 setup and is not current local measurement.",
+    "API overview permits null input only for zero length and requires readable input range; C++ byte access requires trivially-copyable objects. Implementation-specific null behavior remains unread.",
+    "Streaming lifecycle requires create/reset/update/digest/free; digest documented as nonmutating and updates may continue afterward. XXH3 state allocation/alignment must use dedicated allocator rather than arbitrary malloc/new.",
+    "Documented FILE example stops on fread returning0 but does not inspect ferror, and ignores reset/update/free statuses. It is an illustrative snippet, not evidence of production rmlint IO handling; copying it unmodified could finalize a truncated read.",
+    "Canonical output mandates big-endian representation instead of dumping host-endian integer bytes. This is relevant to portable cache/result persistence and distinct from in-memory comparison.",
+    "Inline/private mode enables internal state, emits private API and undefines/remaps symbols/types under XXH_INLINE_ to handle prior noninline includes. Namespace prefixing avoids symbol collisions; static internal-state ABI is explicitly unsuitable for dynamic linking."
+  ],
+  "limits": [
+    "Only500/7238 lines read;288/289 whole files and150/500 complete repositories.",
+    "No xxHash implementation correctness/runtime, allocator failure, IO error or speed verification in this audit. No upstream code imported; pHash/ASAN deferred."
+  ]
+}
