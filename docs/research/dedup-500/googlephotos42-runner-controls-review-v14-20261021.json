@@ -1,0 +1,34 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_three_isolated_original_class_controls",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 59,
+  "tracked_blobs": 230,
+  "source_sha256": "0317c176162c0fda4b2de81e54b30ffe5c2cbea59027a118fae6bdf56baabe8f",
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-runner-controls-v14-20261021/run.mjs",
+    "harness_sha256": "f70c37deafa278da4406091df93e55437fb0014ae52a4123dd724d8b3438d42b",
+    "log": "docs/research/dedup-500/googlephotos42-runner-controls-v14-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "method": "Full original PageRunner class extracted after type stripping and exportkeyword removal. VM supplies explicit fakeengine,admission,classification and injectedconstructor dependencies; isPro replaced with controlledpromise. Original lifecycle/emit/export methods unchanged. No realengine,DOM,storage or action."
+  },
+  "findings": [
+    "Two startcalls both wait on controlledisPro before running flagset; releasingboth creates2fakeengines,confirming class-local concurrency hole fordatefilteredstart.",
+    "After fake dryrun completes with1label, getSummary.total1; engineclearedbyfinally; exportCsvreturnswithoutconstructingBlob. CallerUIpolicy remains unreviewed.",
+    "onUpdate initialcallback succeeds, subsequentemit throws; start rejectslistenererror while getStatus.running remains true. Failure occursbeforetryfinally."
+  ],
+  "harness_notes": [
+    "Initial harness awaited insufficientmicrotaskturns acrossVMcontexts,observed0enginesbeforecontinuation. Replaced with one setImmediate eventloopturn and reran; this was harness synchronization, not productresult.",
+    "Exportcontrol strengthened to nonempty1labelsummary beforefinalsuccessfulrun."
+  ],
+  "cumulative_original_function_controls": 27,
+  "limits": [
+    "Isolated originalclass with substituteddependencies,not fullapplication or upstream tests.",
+    "No new wholefiles;59/230,all500reviews incomplete.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
