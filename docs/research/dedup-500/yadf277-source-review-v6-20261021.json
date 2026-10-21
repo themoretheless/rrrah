@@ -1,0 +1,38 @@
+{
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 41,
+  "new_whole_files_read": {
+    "scripts/gen-corpus.py": {
+      "bytes": 11435,
+      "sha256": "efe97861c0e8763a48cbc6e53d548b4b14d7b5650d80018f5a07bbb5561d006f",
+      "git_blob": "8e4f9cad2747e5f6c922a3611264a83dd11c666e",
+      "method": "Whole pinned generator/benchmark script read without truncation"
+    },
+    "scripts/bench-versions.sh": {
+      "bytes": 6770,
+      "sha256": "f96a7ea4986e122ba9005b2f7fb96075dbbf6fd2446cbfea6ef43d42f5cdfe16",
+      "git_blob": "f19bf1a5e5e868711ac3c8dba5ab1c1a7e65d726",
+      "method": "Whole pinned generator/benchmark script read without truncation"
+    }
+  },
+  "new_runtime_controls": 2,
+  "cumulative_targeted_controls": 8,
+  "controls_script": "docs/research/dedup-500/yadf277-controls-v6-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/yadf277-controls-v6-20261021/run.log",
+  "findings": [
+    "Original generator executed twice on own temporary100file smallsize corpus seed42,.3duplicatebudget,.2prefixcollisions,fanout2depth2. Exact relativepath/byte dictionaries inclmanifest match; no shell cache dropping, worktrees or destructive external corpus operation.",
+    "Original compiled yadf CLI withBLAKE3 on100generatedfiles plusmanifest returns8duplicategroups exactly equal independent Python grouping by fullfilebytes. Twentyplannedprefixcollisionfiles included. No digest-only oracle, no expectedoutput substitution.",
+    "bench-versions validates normalized groups acrossrevisions and checks groupcount againstmanifest, stronger than timingalone but groupcount itself is not membershiporacle; newlyauthored finitecontrol validates exactmemberships.",
+    "Benchmarkbinarycache keyed12charSHA, not compiler/CPU/flags/dependencyhash; .cargo nativeCPUconfiguration requiresmachineconsistency. Existingcachedbinaryfreshness not verified. No script launch/benchmark/speedclaim.",
+    "Generator removes existingconfiguredoutputbefore validatingcombinedratios; only nonexistingownedtempoutputs used. Negativefiles/fanout/depth lackpositivevalidation; no destructiveedgeexecution.",
+    "Generator content uses deterministicPythonRandom seededstr and32MiBchunks; reproducibility shown only currentPython runtime/smallcorpus. Not guaranteedcrossPythonversion, largecorpusorfilesystemfailure behavior.",
+    "41/44artifactsassessed;releaseworkflow,bench.sh,Cargo.lockremain. Prior50originalpasses+1ignored retained. NativepHash/ASANdeferred."
+  ],
+  "remaining_scope": "Read .github/workflows/release.yml, scripts/bench.sh and full Cargo.lock before complete artifact review.",
+  "limits": [
+    "Finite100filepositive and publicAPImutationcounterexample coexist; neither proves allfilesystemcases. Fullreviewcount200/500unchanged."
+  ]
+}
