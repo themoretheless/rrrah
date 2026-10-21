@@ -2,9 +2,9 @@
   "index": 166,
   "repository": "julianholland/deduplicate",
   "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
-  "review_scope": "Partial pinned98/102 artifacts assessed, with3 source maps structurally inspected only.100 original tests pass combined;4 CSS files remain.",
-  "decision": "shortlist",
-  "finding": "Pluggable distance-matrix and multi-hash candidate algorithms with integration tests; threshold semantics need deeper review.",
+  "review_scope": "All tracked artifacts assessed; source/tests/docs read, images viewed, notebook code/output inspected, generated HTML parsed/compared. Lock,binary caches,coverage databases,source maps and final four CSS assets assessed structurally. Not every generated source byte read as prose; browser UI not exercised.",
+  "decision": "reject-domain",
+  "finding": "Do not adopt production code. Numerical-vector algorithms are outside filesystem exact-identity domain; representative loss, stale matrix/mask, default tuning and failure restoration defects demonstrated. Useful lessons: independently validate group membership, state invalidation and exception restoration; green upstream tests insufficient.",
   "available_source_evidence": [
     {
       "path": "src/deduplicate_lib/core/duplicate_detection_algorithm.py",
@@ -165,7 +165,13 @@
     },
     {
       "audit": "docs/research/dedup-500/vectors166-source-review-v17-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/vectors166-source-review-v18-20261021.json"
     }
   ],
-  "upstream_test_scope": "Complete original tests directory100passed with genuine Numba and explicit isolated notebook kernel; current dependencies, not original lock. Registry test fails in isolation as documented."
+  "upstream_test_scope": "Complete original tests directory100passed with genuine Numba and explicit isolated notebook kernel; current dependencies, not original lock. Registry test fails in isolation as documented.",
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/vectors166-complete-source-review-20261021.json"
 }

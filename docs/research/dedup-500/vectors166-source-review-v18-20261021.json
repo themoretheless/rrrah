@@ -1,0 +1,41 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 102,
+  "files": {
+    "docs/_build/html/_static/basic.css": {
+      "bytes": 14815,
+      "sha256": "064a10609771d71578e935c97c15a32b1b14cabb5f2b97bb9cfe71969fa3192b",
+      "git_blob": "7ebbd6d07bbab6a35b1389b0c7b4939985e12cf2",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "docs/_build/html/_static/pygments.css": {
+      "bytes": 20190,
+      "sha256": "175552429a0952117a332f75fd6cb601f11e7d88dbf80083afcb8482f963f7e1",
+      "git_blob": "9d1083bfc0ac58b63693be61225b35d34ce52c95",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "docs/_build/html/_static/styles/furo.css": {
+      "bytes": 50789,
+      "sha256": "177f1163121440086f701bf6cb9d2b2ab8fc29fcb754466465edf7b9f60b5aa0",
+      "git_blob": "a5b614d2cd035a53132e6ea956a1b7aaecb1569b",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "docs/_build/html/_static/styles/furo-extensions.css": {
+      "bytes": 5518,
+      "sha256": "3d2b0207711a07313dfb6c8b272295f5f931169e4b2b784c61d00be9d871f8fd",
+      "git_blob": "2d74267fe1a7020e3f9836c22da4e6f5a5a5b327",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    }
+  },
+  "structural_audit": "docs/research/dedup-500/vectors166-css-structural-audit-20261021.json",
+  "findings": [
+    "Four CSS assets structurally parsed without parser errors:basic171selectors301declarations;pygments246/335;Furo402/1136;extensions38/99.",
+    "Print,dark-mode,responsive media and theme variables inventoried. URL-token inventory empty does not exclude quoted url() function arguments or establish no external resource usage. No rendered visual/layout qualification."
+  ],
+  "limits": [
+    "All102 tracked artifacts now assessed using explicitly mixed methods; generated binary/maps/CSS/lock structural inspection is not whole-source text reading."
+  ]
+}

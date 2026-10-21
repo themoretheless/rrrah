@@ -1,0 +1,653 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": true,
+  "tracked_blobs": 102,
+  "assessed_blobs": 102,
+  "files": {
+    "LICENSE": {
+      "bytes": 1071,
+      "sha256": "81c6ce99d5bc2ac3284a89bb1605f932e3e8cc96de68ed3fc23fb4bd53823249",
+      "git_blob": "1d2cc86d4f29051ac75d2041addc26b7c0753d78",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "pyproject.toml": {
+      "bytes": 915,
+      "sha256": "efdf5feea44fffb796d9f257d1380df37963b356e2fc7aad071098e4f1ccb7d1",
+      "git_blob": "735d18d9f9fb19d57795e28177bff9a98c44ce4c",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "src/deduplicate_lib/core/plugin_registry.py": {
+      "bytes": 753,
+      "sha256": "d728dd50fd63b7f019384c351abfbd5a8fda8cb6ce6c7abaa54c715d179e22ce",
+      "git_blob": "0b6640827de5a2de4aa781cbe318eb9d67d65b68",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/duplicate_detection_algorithms/distance_matrix.py": {
+      "bytes": 3444,
+      "sha256": "5b063ea75a52aadb5007bdd5d6f9444ffa94ba822f869312bdec674f7d8f15bd",
+      "git_blob": "d599d1fd7bd5b3de0132b3ac374025dd80e1449e",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/duplicate_detection_algorithms/multi_hashing.py": {
+      "bytes": 12930,
+      "sha256": "9f84e22abf6725d0fd079c4aef03a124f3d369ed51d116a45167cd49246843a8",
+      "git_blob": "29816ba3c4e8be860c3059bae7bdd1dc02f5898e",
+      "method": "Whole original pinned text read without truncation"
+    },
+    "tests/unit/plugins/tolerance_calculators/plateau_detection.png": {
+      "bytes": 20627,
+      "sha256": "0593154df13ae8ac341afc334f482360020faba184c420250b93dc6c550939cf",
+      "git_blob": "a46a0b5268ed4672166e8242006fb90f9f8f4658",
+      "method": "Original image visually inspected at original resolution"
+    },
+    "tests/unit/plugins/tolerance_calculators/plateau_detection_DistanceMatrix.png": {
+      "bytes": 46198,
+      "sha256": "c37b7f5809500b3a1a23b690ccb0ed3d6d54f0df11bd2b929d1e05a181ee77fe",
+      "git_blob": "5d2ac619d7d2dd7e72ec5c554cf3b30170a029ef",
+      "method": "Original image visually inspected at original resolution"
+    },
+    "tests/unit/plugins/tolerance_calculators/plateau_detection_MultiHashing.png": {
+      "bytes": 34736,
+      "sha256": "ae27a05320ed3460bd5423e5cbcfbb60662763c2ba7a3e5706bf37560f0d3383",
+      "git_blob": "07a0995f13007cd38cf7171b728102bf257a4f5a",
+      "method": "Original image visually inspected at original resolution"
+    },
+    ".coverage": {
+      "bytes": 53248,
+      "sha256": "b4a9047d23fb0f8fecb1ace570d30f97824a051eb35ac5f361c9e0093dec734d",
+      "git_blob": "5b56333d864024ea02f4eadc18dbd57c410801e6",
+      "method": "Read-only SQLite integrity/schema/all rows inspected; no code or pickle execution"
+    },
+    "tests/unit/core/.coverage": {
+      "bytes": 53248,
+      "sha256": "92f10d026d010407869d161bf7ab9dd556491b49a39e2b610338fb45dd3af624",
+      "git_blob": "4aabd414273af7ac5c934da32d0efb14373b1893",
+      "method": "Read-only SQLite integrity/schema/all rows inspected; no code or pickle execution"
+    },
+    "CLAUDE.md": {
+      "bytes": 5121,
+      "sha256": "fa5b9914831231203d0467ad7fc4bb7e8c819d5682e035ca1aacddd97e430beb",
+      "git_blob": "7ab1bebda5d3bf34301bea8f52834a431d366498",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/.buildinfo": {
+      "bytes": 231,
+      "sha256": "fd31a152c48e2a3c2c344ddee6e26924e0f4805b3781dd30fee3e37908ad9051",
+      "git_blob": "5812ed2f75381ad8405fd4e24b4461b152c0e45d",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/_static/scripts/furo.js.LICENSE.txt": {
+      "bytes": 187,
+      "sha256": "3eba718c98abe0ad8dd4401edc9ddfabf979f9bb9b8ac446460b61b03694970d",
+      "git_blob": "1632189c7e0cd1a17e452d2d0b24dfa741c7ea46",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/_static/scripts/furo-extensions.js": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "docs/_build/html/_sources/api/algorithms.rst.txt": {
+      "bytes": 1723,
+      "sha256": "b5bc9f22e2d15f3cce0f0b1ef8dcf580fd01ceeb05cd29dda748d533ce37d2c2",
+      "git_blob": "f90f359e3cfaa07b575ef9058129411477200fd5",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/api/core.rst.txt": {
+      "bytes": 570,
+      "sha256": "5aade47bd3eec8855493e0830879bf0f961d7c9f2f6dae35b9a494f3ff61056d",
+      "git_blob": "19ccc7c64b239256add166d71ecef61eb62dfb67",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/api/index.rst.txt": {
+      "bytes": 78,
+      "sha256": "fbdc08925d4a921019b2e4d9f68fd10e6d9b4a98357ae2e25181e6add021660a",
+      "git_blob": "6d763c9716295fad4e09bb45754dd20ce1a48c72",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/api/tolerance.rst.txt": {
+      "bytes": 1394,
+      "sha256": "34c5e79760541eee6ecd299d083fc3347293113abdb2505062fac6c623a0012d",
+      "git_blob": "53361bc0c922c65997354fb4f015c63b0b6ea94b",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/index.rst.txt": {
+      "bytes": 421,
+      "sha256": "6ad1559c3a3b6ca00bfbcb5d89bbb946870bbecb2c4cdabed88da405184f0ce9",
+      "git_blob": "af3e5d872822897eee4c63c5ba84430e6113e218",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_sources/quickstart.rst.txt": {
+      "bytes": 2251,
+      "sha256": "a77aef6dcf4d19a167e0b52b64e13a81517739b992e359cc5e8cf5660e08cff6",
+      "git_blob": "8a4ce3560f0ede96627ea07ed26941d84157f075",
+      "method": "Whole-file exact byte comparison to previously whole-read original RST"
+    },
+    "docs/_build/html/_modules/deduplicate_lib/core/duplicate_detection_algorithm.html": {
+      "bytes": 63425,
+      "sha256": "f486b4d3020da6137bb8e239e88adc4848063f2c5f1d34d9ae2fe339bedff949",
+      "git_blob": "68e437054a360b8b8c1a62c47e47e9e4bf560c68",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/duplicate_detection_algorithms/distance_matrix.html": {
+      "bytes": 25969,
+      "sha256": "d1142a272e16078d7959db81a3f124832ba8cbc1c2b9d5638149931c7e7cc1aa",
+      "git_blob": "bb61d48b0aebf503b217778ebdf165f5812bc529",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/duplicate_detection_algorithms/multi_hashing.html": {
+      "bytes": 61710,
+      "sha256": "69fd2acfc2a2ac8ef630815e166dddf860356e6c6f0880e1ec350ff153d43fb2",
+      "git_blob": "769d38fb8558b7a0c7e2932f92df72f0f3c51fc7",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/tolerance_calculators/natural_tolerance_plateau_probe.html": {
+      "bytes": 45860,
+      "sha256": "0b0525bbfd0c2c5afaadaae7e94313f027dd4d0957730b5b5a9fcf21bd50cdfb",
+      "git_blob": "f8ac15b8ed6e3b042a4fae848033d51beecdcb3a",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/_modules/deduplicate_lib/plugins/tolerance_calculators/perturbed_dataset_reclustering.html": {
+      "bytes": 27069,
+      "sha256": "02506579d56f92ceb7a255f1935a24f4a64ca1388c7facf3ed1922bdda1c8eeb",
+      "git_blob": "bae4433c57076642aaf79bc2985fa795e2a7b8f9",
+      "method": "Full HTML parsed; complete code payload compared to previously whole-read Python source; all differences read; wrapper prose and link inventory read. No browser rendering."
+    },
+    "docs/_build/html/objects.inv": {
+      "bytes": 608,
+      "sha256": "07b7176c60c92cf498833faa7095f8bca019613533bd4588bff0e9329aa70863",
+      "git_blob": "577235698027b921bcf1da2f46ba4da6067cdad7",
+      "method": "Complete Sphinx inventory header and zlib-decompressed25 records read"
+    },
+    "docs/_build/html/_static/file.png": {
+      "bytes": 286,
+      "sha256": "5c4bc9a16aebf38c4b950f59b8e501ca36495328cb9eb622218bce9064a35e3e",
+      "git_blob": "a858a410e4faa62ce324d814e4b816fff83a6fb3",
+      "method": "Original image visually viewed"
+    },
+    "docs/_build/html/_static/minus.png": {
+      "bytes": 90,
+      "sha256": "47e7fc50db3699f1ca41ce9a2ffa202c00c5d1d5180c55f62ba859b1bd6cc008",
+      "git_blob": "d96755fdaf8bb2214971e0db9c1fd3077d7c419d",
+      "method": "Original image visually viewed"
+    },
+    "docs/_build/html/_static/plus.png": {
+      "bytes": 90,
+      "sha256": "54115199b96a130cba02147c47c0deb43dcc9b9f08b5162bba8642b34980ac63",
+      "git_blob": "7107cec93a979b9a5f64843235a16651d563ce2d",
+      "method": "Original image visually viewed"
+    },
+    "docs/_build/html/api/core.html": {
+      "bytes": 28897,
+      "sha256": "20f63e73eeb72526009a6088e83c74db8b30686fb2241f26698c82f16518bc8f",
+      "git_blob": "9a5531ef168ac9bc97b36b22e1ee045312d26816",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/api/algorithms.html": {
+      "bytes": 38303,
+      "sha256": "557e2504bb92d4ad89b3a124c87d52fcb5fc51a3a22b11438a0c9750cab42614",
+      "git_blob": "ae2a30b4ccd014f326f010d73d64f134750d504e",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/api/tolerance.html": {
+      "bytes": 32375,
+      "sha256": "982564876dd3be3f64e69036b210675260612ce4574c5a9cad4f017bd858be28",
+      "git_blob": "6983b8e6b914872845775236eb9e14c3fa21a857",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/api/index.html": {
+      "bytes": 19844,
+      "sha256": "e9fe89e21d23f916c5a2be9c41f3656be8dac92b0b70c58fcc42a0ffe9eacf7e",
+      "git_blob": "76a7d97ab6136aa57f8997f08e83528d3892696e",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/index.html": {
+      "bytes": 15553,
+      "sha256": "2bc2bc7617d239ca52380f652b7567ddc78df5b59f839f3a092962ed18ce8908",
+      "git_blob": "234a8f07605c33b2a4e894fdb6629b7c2110f52a",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/quickstart.html": {
+      "bytes": 22841,
+      "sha256": "621cdf275fb5927b9b667bbbf2f26610b8bc33785e8f29b95d6c44fd37ec4275",
+      "git_blob": "db93c92b2c67dc0aa3329f3223e0b56e64c6afab",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/genindex.html": {
+      "bytes": 19244,
+      "sha256": "7458d9dcc40c23d40172b8ef72f4123206078cf5b87b31dc458be4fc17d0066b",
+      "git_blob": "5047cb9f61c7279e69dd1aa8cb91719f434a0c54",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/search.html": {
+      "bytes": 13387,
+      "sha256": "98b80b824ce1bfa2b1fd007988174a5034723fd4c90e6fba42a2688022be00b4",
+      "git_blob": "4c3d45e9b9a7d26d92d57bcc7d5091921cd39d43",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/_modules/index.html": {
+      "bytes": 13987,
+      "sha256": "9dc566f97ca5cb3f25df975d6c9883a88303f329bded71bde65a304390961a87",
+      "git_blob": "88470f5677e3a12305b5a0cab4fe300ca3e2e59d",
+      "method": "Whole HTML parsed and all visible prose/signatures/code text read without truncation. Script/style/SVG excluded from prose extraction; no browser rendering."
+    },
+    "docs/_build/html/.doctrees/api/algorithms.doctree": {
+      "bytes": 72166,
+      "sha256": "48f6b3e55777209301d634a56cc512828672aa2af9bac12e42b973bbe66934d5",
+      "git_blob": "cb531fe5476fcf70f38f627b2d423ffac5006e47",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/api/core.doctree": {
+      "bytes": 39642,
+      "sha256": "3846cd31cf5ed1438b27ee2337bba37b008c50b67a482d69ef3a151bb54fdf39",
+      "git_blob": "fdcc9aa6c87202122e53774c7e560c240bd79bd6",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/api/index.doctree": {
+      "bytes": 2830,
+      "sha256": "8758c6706de2926979bd9da0463899f80f5beb7e6d4ff83c586361faf0310d48",
+      "git_blob": "6dd93dd024481d019d59b91d5eaac27ab4f73fec",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/api/tolerance.doctree": {
+      "bytes": 55189,
+      "sha256": "db4704b7b3d93dcbecd67eeed853a4de13aabe67398828eae70f8d0e1c245283",
+      "git_blob": "8df0718d98fc47876e2e44c7154b9f7438e20831",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/environment.pickle": {
+      "bytes": 88259,
+      "sha256": "4b1131d0f47f94808f9480229286abd9c4cb76a2428af667110de469a672cac0",
+      "git_blob": "a4495bb60dfcd7b36a0b9036c77fd5202bf45d9a",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/index.doctree": {
+      "bytes": 3781,
+      "sha256": "f7fd67b9c827df34bd691ea116dd8aebfc1f7b2f35b31cc381074a15ce566a29",
+      "git_blob": "9863f916d8282c9acfa48d0750fafb30cdaa7039",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/.doctrees/quickstart.doctree": {
+      "bytes": 9579,
+      "sha256": "e13db203711188d628cc59efc9c46560b9631bc631768c3e3ce3bbc389119c04",
+      "git_blob": "4aa41b5cd3555f1ed35962f5d77691c322e8e7f7",
+      "method": "Whole pickle byte stream parsed via pickletools.genops through STOP at exact EOF; opcode inventory/string counts/path references inspected. Structural assessment only, no object reconstruction or execution."
+    },
+    "docs/_build/html/_static/documentation_options.js": {
+      "bytes": 328,
+      "sha256": "9c5d5f3bfd2737f79c2d62184be58c75833ea1dfe9853db06344f3ac9d672e8f",
+      "git_blob": "13d90ff0b0af1b0c52379e6bb32b282468766542",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/doctools.js": {
+      "bytes": 4322,
+      "sha256": "2992c09df91826a8d33e3b48b645ee77e457adcf7c712d776a814e1e2c448b43",
+      "git_blob": "0398ebb9f03db6e89df8022033b81923c82112fa",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/sphinx_highlight.js": {
+      "bytes": 5123,
+      "sha256": "096231e9c87df80ec3273da9c5b71bc81503206726a07a4dd4de44c256ff859c",
+      "git_blob": "8a96c69a1942318413af68fd459122b56edd8d69",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/scripts/furo.js": {
+      "bytes": 5221,
+      "sha256": "0df6012bf9183882fc314d1eeaa66fe7705e8694cf27351c4be1f5dc32e9fe6f",
+      "git_blob": "87e1767fc63325c2b2aeab74791bce33c671eb1d",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/debug.css": {
+      "bytes": 1266,
+      "sha256": "0d05cd9e79d53234304667c08f02971de6196c0ffca593c3903b3667b4055ad6",
+      "git_blob": "74d4aec33e5ccd45b77c871a005d96f9f8ae1dc4",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/skeleton.css": {
+      "bytes": 6034,
+      "sha256": "e7702bcb03d3eb02e63681f753d88a28bee8f8ed13e50e58ac84a2bc31a5c71d",
+      "git_blob": "467c878c62025811f065562a1bcc5bf152d2d0c0",
+      "method": "Whole original pinned JS/CSS text read without truncation; Git blob verified, no browser execution"
+    },
+    "docs/_build/html/_static/language_data.js": {
+      "bytes": 4598,
+      "sha256": "3bc311563b7fc5e80fcab2f8629774bf3cb6b30202000df36dff8e695a9023b7",
+      "git_blob": "c7fe6c6fafad656c3aa8bea99e39386ad603b964",
+      "method": "Whole original JS text read without truncation"
+    },
+    "docs/_build/html/_static/searchtools.js": {
+      "bytes": 21463,
+      "sha256": "2a6b65cf29a1832713d508c471d64325312bb9b5672b81ed5595fa68333a65b5",
+      "git_blob": "2c774d17aff4b1efe084b91c7feea0c5e88acf4f",
+      "method": "Whole original JS text read without truncation"
+    },
+    "docs/_build/html/_static/scripts/furo.js.map": {
+      "bytes": 28571,
+      "sha256": "049d8e3c297854c9e7defecbf64bc92c375b4d94c7bef119ba11c8e8fc723ca2",
+      "git_blob": "3b316f3a34393a5e46e24bdb507e49eaa3a4c542",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/_static/styles/furo.css.map": {
+      "bytes": 76029,
+      "sha256": "b7d40df8a2d2c5cc7727929dce7a482be4506f905ec42588fdbd0571bb1e9a45",
+      "git_blob": "db1dec16557f8cff37b356ee87e42bd6205048f0",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/_static/styles/furo-extensions.css.map": {
+      "bytes": 7762,
+      "sha256": "0b35b6ebb81f2aa1fcaee325c096d683e32c1808a9220670a1a3f88300c6915c",
+      "git_blob": "68fb7fd0d7cb0bcdfb97d531c9a887b01b5f4c9a",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/searchindex.js": {
+      "bytes": 10156,
+      "sha256": "660788a926de24f0309b44e563469961431023882a973b7acbe2f74f713ff3ef",
+      "git_blob": "9f652232032be27c8d3ac8db66dabac9ff370ae2",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/_static/basic.css": {
+      "bytes": 14815,
+      "sha256": "064a10609771d71578e935c97c15a32b1b14cabb5f2b97bb9cfe71969fa3192b",
+      "git_blob": "7ebbd6d07bbab6a35b1389b0c7b4939985e12cf2",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "docs/_build/html/_static/pygments.css": {
+      "bytes": 20190,
+      "sha256": "175552429a0952117a332f75fd6cb601f11e7d88dbf80083afcb8482f963f7e1",
+      "git_blob": "9d1083bfc0ac58b63693be61225b35d34ce52c95",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "docs/_build/html/_static/styles/furo.css": {
+      "bytes": 50789,
+      "sha256": "177f1163121440086f701bf6cb9d2b2ab8fc29fcb754466465edf7b9f60b5aa0",
+      "git_blob": "a5b614d2cd035a53132e6ea956a1b7aaecb1569b",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "docs/_build/html/_static/styles/furo-extensions.css": {
+      "bytes": 5518,
+      "sha256": "3d2b0207711a07313dfb6c8b272295f5f931169e4b2b784c61d00be9d871f8fd",
+      "git_blob": "2d74267fe1a7020e3f9836c22da4e6f5a5a5b327",
+      "method": "Whole CSS parsed via tinycss2; recursive rules/declarations, selectors/property inventory/media rules/errors inspected. Structural assessment, not line-by-line read or rendered UI verification."
+    },
+    "src/deduplicate_lib/__init__.py": {
+      "bytes": 22,
+      "sha256": "ae739b3e3b817044ada923b44ba82c752fe8b7c2133908d58fff8fd4b5146298",
+      "git_blob": "485f44ac21b2ee78a2ee1ed0ea584114a1c957c3",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/core/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/core/duplicate_detection_algorithm.py": {
+      "bytes": 13898,
+      "sha256": "7e6b9166e5b94e05c0a0923ecd22615c273a7708c9923ffa3b6df2ebfe4e8763",
+      "git_blob": "4565a71ed787c27afccf0724a1c8aaa8a0c5fc80",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/duplicate_detection_algorithms/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "tests/unit/plugins/duplicate_detection_algoirthms/test_distance_matrix.py": {
+      "bytes": 3931,
+      "sha256": "5116cffb6590857c3085fb7db696d565a77cb3fd530dd27422f53e29336f0ebb",
+      "git_blob": "7ffdc0bc0f1cd7950daef302f8eac2d59c19790e",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "tests/unit/core/test_duplicate_detection_algorithm.py": {
+      "bytes": 13580,
+      "sha256": "7d17e2b09d12a7ec6262e9f0402618bfd40feeef560394d74273fed5dc37b2e3",
+      "git_blob": "301adba506bbc7c32c2e852418fa7bfc9bd9875c",
+      "method": "Whole original pinned text read without truncation; Git blob verified against pinned tree"
+    },
+    "tests/conftest.py": {
+      "bytes": 1749,
+      "sha256": "25e496c8b3789d793c438c7126e6fea56caf4be206c462999a0f14c3115c6af7",
+      "git_blob": "f7bc3301c5cbb1ba314c0ceb749d1e509baa4323",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/core/tolerance_calculator.py": {
+      "bytes": 7542,
+      "sha256": "c0ea1fd19697de1e096f88f687c1caef34900d047d20f8e1cffddd5b23704712",
+      "git_blob": "b31d5cc5986436024d4df543a9c138e6ac122716",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/plugins/tolerance_calculators/perturbed_dataset_reclustering.py": {
+      "bytes": 4776,
+      "sha256": "4d8e08d3da069d71796524431eb175dea218752771c4f0704a40009aaa81e2e0",
+      "git_blob": "f39cd1ac19b95afeb9a5a93ca6b4089b2d272668",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/core/test_tolerance_calculator.py": {
+      "bytes": 5823,
+      "sha256": "0ff198c3a91b5625a1d63350449ad2b2f163f2cf72ccc68a3b260257562e1d9b",
+      "git_blob": "45b173e30f7571f5acfd7389133749d109802236",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py": {
+      "bytes": 5559,
+      "sha256": "48303fbb3f7bc3254ac5e18f3f961ded628ca88baf4f4a1ede401df0852fa020",
+      "git_blob": "54270760654998fbb42652832ba55b67c769a89b",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/plugins/tolerance_calculators/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/tolerance_calculators/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/deduplicate_lib/plugins/tolerance_calculators/natural_tolerance_plateau_probe.py": {
+      "bytes": 10723,
+      "sha256": "e6795a0f94951e5e944c9bee114d3a50f180ba71e185a296eff3739b2e0004e6",
+      "git_blob": "562d0f745ec5eec8b59ea8d34278ef99e1eb0e90",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py": {
+      "bytes": 7970,
+      "sha256": "595eac052dc6da4cac942d798a09314d4dcebe327ae0d24bcf07a33d99652773",
+      "git_blob": "d66b30b228a29334639aaa491a80cfac376ff081",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    ".github/workflows/ci.yml": {
+      "bytes": 813,
+      "sha256": "793bb76d5760f2ecae91f7a58a9b2e73de97be0a620ad28b6d77eab4acf35fa6",
+      "git_blob": "36c19a20c953733d5e5f7a7c22ca46bf09fc1dfd",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    ".gitignore": {
+      "bytes": 78,
+      "sha256": "db7fef66c9a269ea518d73878916eab8ee366b850a6de61bd5baac7b49033ea5",
+      "git_blob": "55ce08726853d655e57bd4c01cd4855bfc7a046c",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    ".readthedocs.yaml": {
+      "bytes": 187,
+      "sha256": "6ff0a56e798becdc18485667ea00a4d8262861a12094aee0865310f644d64450",
+      "git_blob": "4be813cecb5033bda974d6ee052d170c732484c8",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "CHANGELOG.md": {
+      "bytes": 2960,
+      "sha256": "b4828da3c7f72257558c70ae56a8c879f9047556eb12858d1865abd5c57585e8",
+      "git_blob": "8cd2959c7eb7e88d1f0efbb058e3ccb2aac1e28e",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "README.md": {
+      "bytes": 4236,
+      "sha256": "8c9346037b54bba3f55d41ac8568c332ade7379805dc07faf947cb52639eab38",
+      "git_blob": "0c9d8f469ff4a8138f778b3e06d7e727df2270b4",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/conf.py": {
+      "bytes": 461,
+      "sha256": "f202a4bcd4fd4dce460af193bb748737a07db3732d5515c88b5151833f235ebf",
+      "git_blob": "74bd3f6cf499cfd58fd54deb6dc3f1673db1a1fb",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/index.rst": {
+      "bytes": 421,
+      "sha256": "6ad1559c3a3b6ca00bfbcb5d89bbb946870bbecb2c4cdabed88da405184f0ce9",
+      "git_blob": "af3e5d872822897eee4c63c5ba84430e6113e218",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/quickstart.rst": {
+      "bytes": 2251,
+      "sha256": "a77aef6dcf4d19a167e0b52b64e13a81517739b992e359cc5e8cf5660e08cff6",
+      "git_blob": "8a4ce3560f0ede96627ea07ed26941d84157f075",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/requirements.txt": {
+      "bytes": 40,
+      "sha256": "edc3f18092cf1ab9c158f536ae7c4b8c158a01c9ad54eb3e65a9883e1a80e564",
+      "git_blob": "8583d4d39c389b1012409751416f1543fea93e13",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "mission_statement.md": {
+      "bytes": 2029,
+      "sha256": "97d32df539b0cd4e4c6d638c0615cd9e77fe6b73bc04e08b596aceed731a6bbb",
+      "git_blob": "66b284706d7b614f895d6fe2019f3cb9292d72f0",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/api/algorithms.rst": {
+      "bytes": 1723,
+      "sha256": "b5bc9f22e2d15f3cce0f0b1ef8dcf580fd01ceeb05cd29dda748d533ce37d2c2",
+      "git_blob": "f90f359e3cfaa07b575ef9058129411477200fd5",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/api/core.rst": {
+      "bytes": 570,
+      "sha256": "5aade47bd3eec8855493e0830879bf0f961d7c9f2f6dae35b9a494f3ff61056d",
+      "git_blob": "19ccc7c64b239256add166d71ecef61eb62dfb67",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/api/index.rst": {
+      "bytes": 78,
+      "sha256": "fbdc08925d4a921019b2e4d9f68fd10e6d9b4a98357ae2e25181e6add021660a",
+      "git_blob": "6d763c9716295fad4e09bb45754dd20ce1a48c72",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "docs/api/tolerance.rst": {
+      "bytes": 1394,
+      "sha256": "34c5e79760541eee6ecd299d083fc3347293113abdb2505062fac6c623a0012d",
+      "git_blob": "53361bc0c922c65997354fb4f015c63b0b6ea94b",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/integration/test_example_notebook.py": {
+      "bytes": 2946,
+      "sha256": "926ebe34da8dd6a4a77bec76d022592c7ca68d5242e7042f25fd6cfda9319180",
+      "git_blob": "3a215b386ba78427edd5e51d2bdec2b11168640b",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/integration/test_tol_find_and_deduplicate.py": {
+      "bytes": 2916,
+      "sha256": "0f32d808a9acefa23db177f458c0669d121aea7f6e820f2575d0f90a2dab9f10",
+      "git_blob": "11f4debeae1f9d503018324d03164a2c2d4c4e29",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/core/test_registry.py": {
+      "bytes": 1243,
+      "sha256": "813f3400486c51ebee19cf55a4019087adcbc4acbd2455213f51a2a005905ccd",
+      "git_blob": "7ed6843cbe14c551ddcb06e234da36195b012445",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py": {
+      "bytes": 11745,
+      "sha256": "ad42929a58f815e1f641d724573ca6142a7d97fb06a2b8fe9da2348b250de6f7",
+      "git_blob": "9dcd47e9058789868ed0167a34887c969eed8bc0",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/core/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "tests/unit/plugins/duplicate_detection_algoirthms/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "examples/multi_hashing_demo.ipynb": {
+      "bytes": 13191,
+      "sha256": "fe24465a23c5a11762c9fd8dc8a4a6e34d2d9e354bfdf2b760503295a4e7ee4b",
+      "git_blob": "fbd56aa07e99abf492503c2dd0989033f9e42e1f",
+      "method": "Full notebook cell sources and textual outputs read, embedded PNG visually inspected"
+    },
+    "examples/multi_hashing_demo_output.ipynb": {
+      "bytes": 60909,
+      "sha256": "2f1e156cd68d4da3a077482bfdb16d80d1d7ddcc041cec18952625a1c550d07a",
+      "git_blob": "a476edf8817d9d812228543cb6afb4a017841f59",
+      "method": "Full notebook cell sources and textual outputs read, embedded PNG visually inspected"
+    },
+    "uv.lock": {
+      "bytes": 1461066,
+      "sha256": "69b5202367f926baee01252b559f8fa08a3ea2f75fbbfa04960239c528386879",
+      "git_blob": "170edb35245125db9ef520a4157b63759ed7fdfc",
+      "method": "Full TOML structural parse, all274 package entries and4183 artifact hash/size fields inspected; not line-by-line dependency source review"
+    }
+  },
+  "review_scope": "All tracked artifacts assessed; source/tests/docs read, images viewed, notebook code/output inspected, generated HTML parsed/compared. Lock,binary caches,coverage databases,source maps and final four CSS assets assessed structurally. Not every generated source byte read as prose; browser UI not exercised.",
+  "incremental_reports": [
+    "docs/research/dedup-500/vectors166-source-review-v1-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v10-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v11-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v12-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v13-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v14-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v15-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v16-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v17-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v18-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v2-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v3-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v4-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v5-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v6-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v7-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v8-20261021.json",
+    "docs/research/dedup-500/vectors166-source-review-v9-20261021.json"
+  ],
+  "upstream_runtime_review": "docs/research/dedup-500/vectors166-numba-full-suite-review-20261021.json",
+  "controls_runtime_review": "docs/research/dedup-500/vectors166-numba-runtime-review-20261021.json",
+  "upstream_tests": "100 original tests passed in one run, including original notebook execution and membership integration; genuine Numba JIT enabled. Isolated registry creation test fails due to setup dependency.",
+  "controls": "15 unique finite cases cumulative;12 full-class cases repeated with genuine Numba. Remaining3 original AST/adapted controls retain earlier scope.",
+  "decision": "Do not adopt production code. Numerical-vector algorithms are outside filesystem exact-identity domain; representative loss, stale matrix/mask, default tuning and failure restoration defects demonstrated. Useful lessons: independently validate group membership, state invalidation and exception restoration; green upstream tests insufficient.",
+  "license": "Root MIT whole read; generated third-party theme notices retained, no code copied.",
+  "limits": [
+    "Only macOS arm64 Python3.12 fresh dependency environment, not original lock/lower-version matrix.",
+    "No approximate quality, broad data coverage, filesystem correctness or speed claim.",
+    "Complete repository review is not completion of all500 or all cases. Native pHash/ASAN deferred."
+  ]
+}
