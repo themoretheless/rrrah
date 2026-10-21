@@ -1,0 +1,103 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "mode": "100644",
+      "lines": 16837
+    }
+  },
+  "cumulative_whole_files_read": 115,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "prior_partial_audits": [
+      "docs/research/dedup-500/omni13-android-explorer-search-start-review-v71-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-loading-review-v72-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-file-operations-review-v73-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-search-ui-review-v74-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-favorites-gallery-review-v75-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-selection-dialogs-review-v76-20261021.json",
+      "docs/research/dedup-500/omni13-android-storage-accounting-review-v77-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-rows-trash-video-review-v78-20261021.json",
+      "docs/research/dedup-500/omni13-android-explorer-media-text-review-v79-20261021.json"
+    ],
+    "new_read_line_ranges": [
+      [
+        14001,
+        16837
+      ]
+    ],
+    "verified_disjoint_contiguous_ranges": [
+      [
+        1,
+        760
+      ],
+      [
+        761,
+        1470
+      ],
+      [
+        1471,
+        2180
+      ],
+      [
+        2181,
+        2840
+      ],
+      [
+        2841,
+        4200
+      ],
+      [
+        4201,
+        6300
+      ],
+      [
+        6301,
+        8400
+      ],
+      [
+        8401,
+        11200
+      ],
+      [
+        11201,
+        14000
+      ],
+      [
+        14001,
+        16837
+      ]
+    ],
+    "whole_file_read": true,
+    "covered_lines": 16837
+  },
+  "method": "Final2837lines read in four bounded leading-whitespace-only views preserving every code token/original line number. Reconciled prior actual-read incrementalranges: no gaps/overlaps, same SHA256/Git blob. Wholefile credit once. Source review, not runtime qualification.",
+  "findings": [
+    "Gallery image prefetch previewdimensions then4096squarevariant for current/nearby pages usesmetadata+variantcachekey; enqueuedrequests not explicitlydisposed wheneffectcancelled. ActualCoilcache/decodeallocation/lifetime pendingruntime. Currentfile directpagerindex remainsuncapped; callers currently retainpreviewlist ondeletion.",
+    "Gallery delete callsparentstagingcallback, dismissesonlysize<=1. Multilistpreview doesnotremoveitem afterconfirmeddelete in reviewedparent/viewerchain; cancelledsingledelete cancloseviewer despiteoriginalretained. Noactualdeleteexecuted.",
+    "showEditBar initializedfalse and assignments onlyfalse; textshowEditBar=true appearscommentonly. OldSaveCopy/cropoverlay unreachablethroughnormalcurrentcontrols. Itsfixed editednameoverwrite/uncheckedcompress/cropbounds issues must not be presented as activeSavepath. ActiveEdit setsisEditingMode\u2192AdvancedImageEditor reviewedv70 withuniqueexistence-loopname butnonatomiccreation.",
+    "Gallery perpage scale/rotation reset onpagechange; details bounds produceStatekeyFilepath. Samepath mutation canretainbounds/state whilecachekeymetadatachanges. onImageSavedinsertscopybutdoesnotnavigate automatically; actualpagerindices afterlistchange needsComposefixture.",
+    "mediaGridDragSelection usespasseddisplayfiles withlayoutvisibleitemindex/getOrNull, touchedPaths ensuresoneoperationperpathperdrag. Autoscroll26dpstep/16msnear72dpedges; onend/cancelclear. This is narrower andmorecoherentthanSelectAll rebuiltscope previouslyreported. Runtimegesture/tapsuppression ordering untested.",
+    "formatSize herebase1000, otherAndroidscreensbase1024 withsameKB/MBlabels. unitsendTBindexunclamped means>=1000^5 outofrange. Inconsistentdisplayunitsnotcontentcomparisonbug. NoKotlinruntimecontrol.",
+    "ImagealbumSortSize usescount, Type usesdirectorypath; headerSortSize/Type withoutqualifiercanmisleadaboutbyte/typeordering. Audio standalonehelperssamecount/path butvisibleinlineaudiosorter fromv75 stillonlyDate/Name; helperpresence doesnotfixactivecaller.",
+    "openLocalFile explicitlyfiltersprovidedplaybackqueue toregularaudiofiles anddistinctpath, resolvesearlierunreadqueuefilteruncertainty. Fallbackparentsortedlist, managersynchronousplaythenservicestart; nocontentdedup. Textinternalonlytxt, othertext/codeexternalviewerMIMEmap; distinctfrompinnedlocalMIME.",
+    "launchExternalViewer FileProviderURI/readgrant/ClipData/chooser, fallbackwildcardonActivityNotFound. installApk explicitAndroidACTION_VIEWinstallerrequest, notsilentinstallation. Noapps/choosersopened.",
+    "FastScrollbar andGrid fixed64dp handle; coerceIn0..containerHeight-handle hasinvalidrange ifshortviewport, divisionzeroatequalheight. Requiresactuallayout/gesturetrigger, noUIcrashreproduced. Usesitemindicesnotpixelaccuratevariableheightmapping.",
+    "Breadcrumb recognizesSDrootseparatelywhileheaderdirectorytitleInternalStoragefixed; pathreferenceslexicalnotcontentidentity. Placeholderanimations/layoutsourcefullyreadbutnotvisualassetsreview."
+  ],
+  "candidate_requirements_for_library": [
+    "Keep active implementation separate from unreachablelegacy code in issue claims.",
+    "Use samevisible-selection snapshot for bulkoperations and gestureselection.",
+    "Validate cachegeneration, renditionvariants and explicitdisplayunits consistently."
+  ],
+  "limits": [
+    "115/268 wholefiles; repository013 stillincomplete. AllKotlinblobs nowcovered bywholefileunion, otherlanguages/resources/assetsremain.",
+    "No Android/Kotlin/Compose/runtime tests, actual media/gesture/installation/fileoperations or production edits.",
+    "155/500 fullrepositories unchanged; original objective notcomplete.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
