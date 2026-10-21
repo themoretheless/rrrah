@@ -2,7 +2,7 @@
   "index": 461,
   "repository": "hwvs/SteamSleuth",
   "commit": "00dfa75336a02dedeff3538c5c36937d4bf14b7a",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All20 tracked text blobs whole-read; original two cache classes compiled unchanged in isolated net10 controls, upstream net7/Mongo/HTTP unrun",
   "decision": "reject-domain",
   "finding": "Steam catalog/game similarity scraper and Mongo object caches; no general image duplicate library in selected source.",
   "available_source_evidence": [
@@ -84,5 +84,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/steam461-complete-source-review-20261021.json"
 }
