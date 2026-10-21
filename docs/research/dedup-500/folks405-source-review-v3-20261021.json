@@ -1,0 +1,44 @@
+{
+  "repository": "folksable/pHash.c",
+  "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": {
+    "stb_image.h": {
+      "lines": [
+        291,
+        1700
+      ],
+      "sha256": "9c7cbeb101f51ac0169be523aef5cdebce2b95fcaa72ffb662eef26b45581329"
+    }
+  },
+  "executed_original_decoder_functions": {
+    "adapter": "Harness includes unchanged stb_image.h and calls static conversion functions directly; no patched implementation.",
+    "all_16bit_values_checked": 65536,
+    "all_8bit_values_checked": 256,
+    "16_to_8": "upper byte retained, low byte discarded",
+    "8_to_16": "byte multiplied by257",
+    "transparent_red_rgba_to_rgb": [
+      255,
+      0,
+      0
+    ],
+    "exit_code": 0,
+    "harness": "docs/research/dedup-500/folks405-controls-20261021/decoder-conversion.c"
+  },
+  "findings": [
+    "Primary API offers8bit,16bit andfloat entrypoints, but upstream CLI calls only8bit forcedRGB. No automatic fidelity preservation inferred from decoder capabilities.",
+    "RGBA->RGB copies hidden RGB and drops alpha, does not composite. Direct original function confirms transparent red becomes RGB red. This is decoder conversion semantics, not an implementation defect by itself; CLI recipe must account for it.",
+    "16to8 discards low byte for all65536 inputs;8to16 maps all256 values to replicated bytes. Conversion is not invertible for arbitrary16bit pixels.",
+    "loadf non-HDR route first calls8bit postprocessing, then gamma expansion;16bit LDR precision not established through that API. Source finding, no16bit file decode in this step.",
+    "Allocation helpers check many products against INT_MAX; this is not proof of complete resource-budget/cancellation behavior across later decoders.",
+    "Failure reason and load/gamma/flip flags are global in this version; no concurrent mutation qualification."
+  ],
+  "remaining": [
+    "stb_image.h lines1701 through EOF."
+  ],
+  "limits": [
+    "235/500 full repositories;405 remains partial.",
+    "Conversion controls are not full file-decode conformance, memory safety audit or production change.",
+    "Deferred native pHash/ASAN not executed."
+  ]
+}
