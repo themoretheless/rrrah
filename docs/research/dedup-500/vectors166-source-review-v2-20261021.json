@@ -1,0 +1,62 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 11,
+  "files": {
+    "src/deduplicate_lib/__init__.py": {
+      "bytes": 22,
+      "sha256": "ae739b3e3b817044ada923b44ba82c752fe8b7c2133908d58fff8fd4b5146298",
+      "git_blob": "485f44ac21b2ee78a2ee1ed0ea584114a1c957c3",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/core/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/core/duplicate_detection_algorithm.py": {
+      "bytes": 13898,
+      "sha256": "7e6b9166e5b94e05c0a0923ecd22615c273a7708c9923ffa3b6df2ebfe4e8763",
+      "git_blob": "4565a71ed787c27afccf0724a1c8aaa8a0c5fc80",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "src/deduplicate_lib/plugins/duplicate_detection_algorithms/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Whole pinned original text read without truncation"
+    },
+    "tests/unit/plugins/duplicate_detection_algoirthms/test_distance_matrix.py": {
+      "bytes": 3931,
+      "sha256": "5116cffb6590857c3085fb7db696d565a77cb3fd530dd27422f53e29336f0ebb",
+      "git_blob": "7ffdc0bc0f1cd7950daef302f8eac2d59c19790e",
+      "method": "Whole pinned original text read without truncation"
+    }
+  },
+  "new_runtime_controls": 3,
+  "cumulative_runtime_controls": 6,
+  "controls_script": "docs/research/dedup-500/vectors166-controls-v2-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vectors166-controls-v2-20261021/run.log",
+  "control_scope": "Full unchanged original base and DistanceMatrix classes imported with actual NumPy and explicit identity numba.njit shim; capacity8. No Numba compilation or original pytest execution.",
+  "findings": [
+    "Full class initialization reproduces loss of both representatives of a later identical pair: [0,10,10] tolerance0.5 retains only0; reordered [10,10,0] retains10 and0.",
+    "Changing Euclidean to Manhattan leaves cached Euclidean matrix: [0,0] and [1,1], tolerance1.5, retain count1 although direct Manhattan distance2; fresh Manhattan instance retains2.",
+    "Original representative test puts duplicate pair first and misses adverse ordering. Wrong-shape test calls pytest.warns without context manager or tested callable; no warning assertion covers subsequent call. Source-only test assessment.",
+    "Base class exposes mutable filled-data/matrix views and metric setter does not dirty cache. deduplicate() itself does not preprocess despite docstring. Additional behaviors not runtime qualified.",
+    "Root MIT previously read; no code adopted. Native pHash/ASAN remains deferred."
+  ],
+  "remaining_scope": "91 artifacts including other tests, tolerance plugins, documentation, notebooks, images, generated assets and lockfile.",
+  "limits": [
+    "NumPy controls do not qualify compiled Numba behavior or supported dependency environments.",
+    "Full repository count remains201/500."
+  ]
+}
