@@ -1,0 +1,16 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1215,13 +1215,6 @@
+                 keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                 continue;
+             }
+-            // Every remainder is contained in the clipped incoming triangle.
+-            // Disjoint bounds therefore preserve this old region without
+-            // rebuilding the incoming list or comparing source priorities.
+-            if !old.polygon.bounds_overlap(&triangle) {
+-                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+-                continue;
+-            }
+             // A source proved strictly dominant throughout the incoming
+             // triangle retains its whole region. Cut only the incoming
+             // remainder, avoiding subdivision followed by restoration below.

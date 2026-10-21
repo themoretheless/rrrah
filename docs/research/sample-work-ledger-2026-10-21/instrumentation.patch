@@ -1,0 +1,82 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_samples.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_samples.rs
+@@ -588,6 +588,7 @@
+     let mut guard = None;
+     let mut map = MeshMap::default();
+     let mut work = 100_000_000usize;
++    let (mut scan_ticks,mut paint_ticks,mut replay_ticks,mut visit_ticks)=(0usize,0usize,0usize,0usize);
+     // The closure keeps every budget-phase return observable in opt-in traces.
+     let computed = (|| -> Option<()> {
+         let x0 = extent.x0.floor() as u16;
+@@ -612,13 +613,13 @@
+                     if cancelled() {
+                         return None;
+                     }
+-                    work = work.checked_sub(1)?;
++                    work = work.checked_sub(1)?; scan_ticks+=1;
+                     let overlap = block.bounds.intersect(tile);
+                     if overlap.width() <= 0. || overlap.height() <= 0. {
+                         continue;
+                     }
+                     for record in &block.records {
+-                        work = work.checked_sub(1)?;
++                        work = work.checked_sub(1)?; scan_ticks+=1;
+                         if cancelled() {
+                             return None;
+                         }
+@@ -647,7 +648,10 @@
+                                     identity.apply(&mut owner, origin).ok()?;
+                                 }
+                                 let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
+-                                match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
++                                let before=work;
++                                let painted=pixels[slot].paint_triangle(local,owner,&mut work,cancelled);
++                                paint_ticks+=before-work;
++                                match painted {
+                                     Ok(()) => {}
+                                     Err(super::PixelPartitionError::Limit) if work > 0 => {
+                                         pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
+@@ -667,7 +671,8 @@
+                         let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
+                         let mut sum = [0.; 4];
+                         let mut coverage = 0.;
+-                        pixel
++                        let before=work;
++                        let visited=pixel
+                             .visit(&mut work, cancelled, &mut |area, center, _, owner| {
+                                 let values = owner
+                                     .evaluate(center)
+@@ -677,9 +682,11 @@
+                                 }
+                                 coverage += area;
+                                 Ok(())
+-                            })
+-                            .ok()?;
++                            });
++                        visit_ticks+=before-work;
++                        visited.ok()?;
+                         if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
++                            let before=work;
+                             let value = integrate_children(
+                                 &records,
+                                 patches,
+@@ -692,7 +699,9 @@
+                                 &mut work,
+                                 cancelled,
+                                 admit,
+-                            )?;
++                            );
++                            replay_ticks+=before-work;
++                            let value=value?;
+                             coverage = value[0];
+                             sum.copy_from_slice(&value[1..]);
+                         }
+@@ -734,6 +743,8 @@
+     drop(record_credit);
+     let complete = computed.is_some() && !cancelled();
+     if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
++        let misc=100_000_000-work-scan_ticks-paint_ticks-replay_ticks-visit_ticks;
++        eprintln!("ORDERED_SAMPLE_PHASE patches={} scan={scan_ticks} paint={paint_ticks} replay={replay_ticks} visit={visit_ticks} misc={misc}",patches.len());
+         eprintln!(
+             "ORDERED_SAMPLE_OUTCOME patches={} complete={} work_spent={} work_left={work}",
+             patches.len(),

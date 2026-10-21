@@ -1,0 +1,95 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -6,6 +6,28 @@
+ type Credit = Box<dyn std::any::Any + Send + Sync>;
+ type Admitter<'a> = dyn Fn(usize) -> Option<Credit> + 'a;
+ const VERTICES: usize = 16;
++std::thread_local! {
++    static TRACE_ENABLED: std::cell::Cell<bool> = const {std::cell::Cell::new(false)};
++    static TRACE_CATEGORY: std::cell::Cell<usize> = const {std::cell::Cell::new(0)};
++    static TRACE_COUNTS: [std::cell::Cell<usize>;7] = const {[const {std::cell::Cell::new(0)};7]};
++}
++struct TraceScope(Option<usize>);
++impl TraceScope {
++    fn enter(category:usize)->Self {
++        Self(TRACE_ENABLED.with(|v|v.get()).then(||TRACE_CATEGORY.with(|v|v.replace(category))))
++    }
++}
++impl Drop for TraceScope {fn drop(&mut self) {if let Some(old)=self.0 {TRACE_CATEGORY.with(|v|v.set(old));}}}
++pub(super) fn trace_reset() {
++    TRACE_COUNTS.with(|v|for c in v {c.set(0)});
++    TRACE_CATEGORY.with(|v|v.set(0));TRACE_ENABLED.with(|v|v.set(true));
++}
++pub(super) fn trace_report(patches:usize) {
++    TRACE_ENABLED.with(|v|v.set(false));
++    let values=TRACE_COUNTS.with(|v|std::array::from_fn::<_,7,_>(|i|v[i].get()));
++    eprintln!("PIXEL_WORK patches={patches} other={} setup={} old={} priority={} subtract={} keep={} lines={}",values[0],values[1],values[2],values[3],values[4],values[5],values[6]);
++}
++
+ 
+ /// Explicit failure leaves the previously published partition unchanged.
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+@@ -148,6 +170,7 @@
+         return Err(PixelPartitionError::Cancelled);
+     }
+     *work = work.checked_sub(1).ok_or(PixelPartitionError::Limit)?;
++    if TRACE_ENABLED.with(|v|v.get()) {let i=TRACE_CATEGORY.with(|v|v.get());TRACE_COUNTS.with(|v|v[i].set(v[i].get()+1));}
+     Ok(())
+ }
+ 
+@@ -427,6 +450,7 @@
+ }
+ impl LineTransaction<'_, '_> {
+     fn intern(&mut self, key: LineKey, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<u32> {
++        let _trace_scope=TraceScope::enter(6);
+         tick(work, cancelled)?;
+         if let Some(&id) = self.pool.map.get(&key) {
+             return Ok(id);
+@@ -931,6 +955,7 @@
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<()> {
++        let _trace_scope=TraceScope::enter(5);
+     if polygon.moments().is_some() {
+         loop {
+             tick(work, cancelled)?;
+@@ -963,6 +988,7 @@
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<Polygon> {
++        let _trace_scope=TraceScope::enter(4);
+     tick(work, cancelled)?;
+     if !polygon.bounds_overlap(cut) {
+         keep(out, polygon, owner, work, cancelled)?;
+@@ -1014,6 +1040,7 @@
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<bool> {
++        let _trace_scope=TraceScope::enter(3);
+     tick(work, cancelled)?;
+     if old.patch_index != incoming.patch_index {
+         return Ok(old.patch_index > incoming.patch_index);
+@@ -1155,6 +1182,7 @@
+         work: &mut usize,
+         cancelled: &dyn Fn() -> bool,
+     ) -> Result<()> {
++        let _trace_scope=TraceScope::enter(1);
+         tick(work, cancelled)?;
+         if !owner.valid() || points.iter().any(|p| !p.x.is_finite() || !p.y.is_finite()) {
+             return Err(PixelPartitionError::Invalid);
+@@ -1209,6 +1237,7 @@
+             polygon: triangle,
+             owner,
+         })?;
++        let _old_scope=TraceScope::enter(2);
+         for old in &self.regions.values {
+             tick(work, cancelled)?;
+             if incoming.values.is_empty() {
+@@ -1275,6 +1304,7 @@
+                     Polygon::empty()
+                 } else {
+                     let id = lines.intern(LineKey::field(difference)?, work, cancelled)?;
++                    let _uv_scope=TraceScope::enter(3);
+                     overlap.clip_id(difference, id, work, cancelled)?
+                 }
+             };

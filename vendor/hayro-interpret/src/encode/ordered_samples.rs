@@ -588,148 +588,164 @@ pub(super) fn sample_patches(
     let mut guard = None;
     let mut map = MeshMap::default();
     let mut work = 100_000_000usize;
-    let x0 = extent.x0.floor() as u16;
-    let x1 = extent.x1.ceil() as u16;
-    let y0 = extent.y0.floor() as u16;
-    let y1 = extent.y1.ceil() as u16;
-    for ty in (y0..y1).step_by(4) {
-        for tx in (x0..x1).step_by(4) {
-            if cancelled() {
-                return None;
-            }
-            let mut pixels: [OrderedPixel<'_>; 16] =
-                std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
-            let mut dense = [false; 16];
-            let tile = Rect::new(
-                tx as f64,
-                ty as f64,
-                (u32::from(tx) + 4).min(u32::from(x1)) as f64,
-                (u32::from(ty) + 4).min(u32::from(y1)) as f64,
-            );
-            for block in &records {
+    // The closure keeps every budget-phase return observable in opt-in traces.
+    let computed = (|| -> Option<()> {
+        let x0 = extent.x0.floor() as u16;
+        let x1 = extent.x1.ceil() as u16;
+        let y0 = extent.y0.floor() as u16;
+        let y1 = extent.y1.ceil() as u16;
+        for ty in (y0..y1).step_by(4) {
+            for tx in (x0..x1).step_by(4) {
                 if cancelled() {
                     return None;
                 }
-                work = work.checked_sub(1)?;
-                let overlap = block.bounds.intersect(tile);
-                if overlap.width() <= 0. || overlap.height() <= 0. {
-                    continue;
-                }
-                for record in &block.records {
-                    work = work.checked_sub(1)?;
+                let mut pixels: [OrderedPixel<'_>; 16] =
+                    std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
+                let mut dense = [false; 16];
+                let tile = Rect::new(
+                    tx as f64,
+                    ty as f64,
+                    (u32::from(tx) + 4).min(u32::from(x1)) as f64,
+                    (u32::from(ty) + 4).min(u32::from(y1)) as f64,
+                );
+                for block in &records {
                     if cancelled() {
                         return None;
                     }
-                    let points = record.points;
-                    let bbox = Rect::from_points(points[0], points[1])
-                        .union_pt(points[2])
-                        .intersect(tile);
-                    if bbox.width() <= 0. || bbox.height() <= 0. {
+                    work = work.checked_sub(1)?;
+                    let overlap = block.bounds.intersect(tile);
+                    if overlap.width() <= 0. || overlap.height() <= 0. {
                         continue;
                     }
-                    let triangle = record.triangle(patches, &parameters_pool);
-                    for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
-                        for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
-                            let slot = usize::from(y - ty) * 4 + usize::from(x - tx);
-                            if dense[slot] {
-                                continue;
-                            }
-                            let origin = Point::new(x as f64, y as f64);
-                            let mut owner = PixelSourceOwner::from_triangle(
-                                &triangle,
-                                record.source(&parameters_pool),
-                                origin,
-                            )
-                            .ok()?;
-                            if let Some(identity) = identities[record.patch_index as usize] {
-                                identity.apply(&mut owner, origin).ok()?;
-                            }
-                            let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
-                            match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
-                                Ok(()) => {}
-                                Err(super::PixelPartitionError::Limit) if work > 0 => {
-                                    pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
-                                    dense[slot] = true;
-                                    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
-                                        eprintln!("ORDERED_SAMPLE_SUBDIVIDE pixel={x},{y} work={work}");
-                                    }
+                    for record in &block.records {
+                        work = work.checked_sub(1)?;
+                        if cancelled() {
+                            return None;
+                        }
+                        let points = record.points;
+                        let bbox = Rect::from_points(points[0], points[1])
+                            .union_pt(points[2])
+                            .intersect(tile);
+                        if bbox.width() <= 0. || bbox.height() <= 0. {
+                            continue;
+                        }
+                        let triangle = record.triangle(patches, &parameters_pool);
+                        for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+                            for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
+                                let slot = usize::from(y - ty) * 4 + usize::from(x - tx);
+                                if dense[slot] {
+                                    continue;
                                 }
-                                Err(_) => return None,
+                                let origin = Point::new(x as f64, y as f64);
+                                let mut owner = PixelSourceOwner::from_triangle(
+                                    &triangle,
+                                    record.source(&parameters_pool),
+                                    origin,
+                                )
+                                .ok()?;
+                                if let Some(identity) = identities[record.patch_index as usize] {
+                                    identity.apply(&mut owner, origin).ok()?;
+                                }
+                                let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
+                                match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
+                                    Ok(()) => {}
+                                    Err(super::PixelPartitionError::Limit) if work > 0 => {
+                                        pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
+                                        dense[slot] = true;
+                                        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                                            eprintln!("ORDERED_SAMPLE_SUBDIVIDE pixel={x},{y} work={work}");
+                                        }
+                                    }
+                                    Err(_) => return None,
+                                }
                             }
                         }
                     }
                 }
-            }
-            for y in ty..y1.min(ty.saturating_add(4)) {
-                for x in tx..x1.min(tx.saturating_add(4)) {
-                    let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
-                    let mut sum = [0.; 4];
-                    let mut coverage = 0.;
-                    pixel
-                        .visit(&mut work, cancelled, &mut |area, center, _, owner| {
-                            let values = owner
-                                .evaluate(center)
-                                .ok_or(super::PixelPartitionError::Invalid)?;
-                            for i in 0..components {
-                                sum[i] += area * values[i];
-                            }
-                            coverage += area;
-                            Ok(())
-                        })
-                        .ok()?;
-                    if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
-                        let value = integrate_children(
-                            &records,
-                            patches,
-                            &parameters_pool,
-                            &identities,
-                            Point::new(x as f64, y as f64),
-                            1.,
-                            0,
-                            WORKING_FRAGMENTS,
-                            &mut work,
-                            cancelled,
-                            admit,
-                        )?;
-                        coverage = value[0];
-                        sum.copy_from_slice(&value[1..]);
-                    }
-                    if coverage <= 0. {
-                        continue;
-                    }
-                    if !coverage.is_finite() || coverage > 1. + 1e-10 {
-                        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
-                            eprintln!("ORDERED_COVERAGE_REFUSAL pixel={x},{y} coverage={coverage}");
+                for y in ty..y1.min(ty.saturating_add(4)) {
+                    for x in tx..x1.min(tx.saturating_add(4)) {
+                        let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
+                        let mut sum = [0.; 4];
+                        let mut coverage = 0.;
+                        pixel
+                            .visit(&mut work, cancelled, &mut |area, center, _, owner| {
+                                let values = owner
+                                    .evaluate(center)
+                                    .ok_or(super::PixelPartitionError::Invalid)?;
+                                for i in 0..components {
+                                    sum[i] += area * values[i];
+                                }
+                                coverage += area;
+                                Ok(())
+                            })
+                            .ok()?;
+                        if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
+                            let value = integrate_children(
+                                &records,
+                                patches,
+                                &parameters_pool,
+                                &identities,
+                                Point::new(x as f64, y as f64),
+                                1.,
+                                0,
+                                WORKING_FRAGMENTS,
+                                &mut work,
+                                cancelled,
+                                admit,
+                            )?;
+                            coverage = value[0];
+                            sum.copy_from_slice(&value[1..]);
                         }
-                        return None;
-                    }
-                    if map.len() == map.capacity() {
-                        let capacity = map.capacity().checked_mul(2)?.max(3);
-                        let bytes = super::mesh_table_bound(capacity, components)?;
-                        let next = admit(bytes)?;
-                        map.try_reserve(capacity - map.len()).ok()?;
-                        if map.allocation_size() > bytes {
+                        if coverage <= 0. {
+                            continue;
+                        }
+                        if !coverage.is_finite() || coverage > 1. + 1e-10 {
+                            if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                                eprintln!("ORDERED_COVERAGE_REFUSAL pixel={x},{y} coverage={coverage}");
+                            }
                             return None;
                         }
-                        guard = Some(next);
+                        if map.len() == map.capacity() {
+                            let capacity = map.capacity().checked_mul(2)?.max(3);
+                            let bytes = super::mesh_table_bound(capacity, components)?;
+                            let next = admit(bytes)?;
+                            map.try_reserve(capacity - map.len()).ok()?;
+                            if map.allocation_size() > bytes {
+                                return None;
+                            }
+                            guard = Some(next);
+                        }
+                        map.insert(
+                            (x, y),
+                            MeshSample {
+                                colors: sum[..components].iter().map(|v| (v / coverage) as f32).collect(),
+                                coverage: coverage.min(1.) as f32,
+                            },
+                        );
                     }
-                    map.insert(
-                        (x, y),
-                        MeshSample {
-                            colors: sum[..components].iter().map(|v| (v / coverage) as f32).collect(),
-                            coverage: coverage.min(1.) as f32,
-                        },
-                    );
                 }
             }
         }
-    }
+        Some(())
+    })();
+    // Keep storage and credits in their original ownership scope. The tracing
+    // closure borrows them and cannot reorder their destruction on early exits.
     drop(records);
     drop(record_credit);
-    if cancelled() {
-        return None;
+    let complete = computed.is_some() && !cancelled();
+    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+        eprintln!(
+            "ORDERED_SAMPLE_OUTCOME patches={} complete={} work_spent={} work_left={work}",
+            patches.len(),
+            complete,
+            100_000_000 - work
+        );
     }
-    Some(MeshSamples { map, _guard: guard })
+    if complete {
+        Some(MeshSamples { map, _guard: guard })
+    } else {
+        None
+    }
 }
 
 #[cfg(test)]

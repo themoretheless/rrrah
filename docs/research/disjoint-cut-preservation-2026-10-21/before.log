@@ -1,0 +1,48 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: constant `PNG_SIGNATURE` is never used
+  --> vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+    Finished `test` profile [optimized + debuginfo] target(s) in 28.86s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_vector-14d3b109a0c844ed)
+
+running 1 test
+
+thread 'pdf_ordered_pixel_tests::tests::captured_dense138_partition_stays_within_original_fragment_bound' (2955971) panicked at crates/rrrah-vector/src/pdf_ordered_pixel_tests.rs:164:13:
+record=74 fragments=855 result=Err(Limit)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test pdf_ordered_pixel_tests::tests::captured_dense138_partition_stays_within_original_fragment_bound ... FAILED
+
+failures:
+
+failures:
+    pdf_ordered_pixel_tests::tests::captured_dense138_partition_stays_within_original_fragment_bound
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 233 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `-p rrrah-vector --lib`

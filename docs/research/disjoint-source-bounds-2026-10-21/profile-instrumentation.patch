@@ -1,0 +1,80 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_samples.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_samples.rs
+@@ -334,6 +334,8 @@
+     cancelled: &dyn Fn() -> bool,
+     admit: &dyn Fn(usize) -> Option<Credit>,
+ ) -> Option<[f64; 5]> {
++    let trace_cost=std::env::var_os("RRRAH_TRACE_CELL_COST").is_some();
++    let entry_work=*work;
+     let mut pixel = OrderedPixel::new(admit, fragment_limit);
+     let rect = Rect::new(origin.x, origin.y, origin.x + side, origin.y + side);
+     let mut candidate_credit: Option<Credit> = None;
+@@ -382,6 +384,7 @@
+     // The center key orders work only. Exact UV comparisons still select the
+     // owner at each overlap. Identical UV fields share a key, with original
+     // ordinal preserving the existing tie behavior (including signed zero).
++    let paint_start=*work;
+     for index in 0..candidates.len() {
+         if cancelled() {
+             return None;
+@@ -394,6 +397,7 @@
+         match pixel.paint_triangle(local, owner, work, cancelled) {
+             Ok(()) => {}
+             Err(super::PixelPartitionError::Limit) if *work > 0 => {
++                if trace_cost { eprintln!("CELL_COST_SPLIT origin={origin:?} side={side} depth={depth} candidates={} processed={index} fragments={} total={} paint={}",candidates.len(),pixel.fragments(),entry_work-*work,paint_start-*work); }
+                 if depth >= 8
+                     && fragment_limit == MAX_LEAF_FRAGMENTS
+                     && std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some()
+@@ -435,6 +439,7 @@
+                 );
+             }
+             Err(error) => {
++                if trace_cost { eprintln!("CELL_COST_FAIL origin={origin:?} side={side} depth={depth} candidates={} processed={index} fragments={} total={} paint={}",candidates.len(),pixel.fragments(),entry_work-*work,paint_start-*work); }
+                 if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                     if depth >= 8 || *work == 0 {
+                         trace_dense_regions(&pixel, origin, side, candidates.len(), index);
+@@ -445,6 +450,7 @@
+             }
+         }
+     }
++    if trace_cost && paint_start-*work>=100_000 {eprintln!("CELL_COST_OK origin={origin:?} side={side} depth={depth} candidates={} fragments={} total={} paint={}",candidates.len(),pixel.fragments(),entry_work-*work,paint_start-*work);}
+     drop(candidates);
+     drop(candidate_credit);
+     let mut sum = [0.; 5];
+@@ -587,7 +593,10 @@
+     .ok()?;
+     let mut guard = None;
+     let mut map = MeshMap::default();
++    let trace_cost=std::env::var_os("RRRAH_TRACE_CELL_COST").is_some();
++    if trace_cost {eprintln!("SAMPLE_COST_BEGIN patches={} blocks={} extent={extent:?}",patches.len(),records.len());}
+     let mut work = 100_000_000usize;
++    let outcome=(|| -> Option<MeshSamples> {
+     let x0 = extent.x0.floor() as u16;
+     let x1 = extent.x1.ceil() as u16;
+     let y0 = extent.y0.floor() as u16;
+@@ -606,6 +615,7 @@
+                 (u32::from(tx) + 4).min(u32::from(x1)) as f64,
+                 (u32::from(ty) + 4).min(u32::from(y1)) as f64,
+             );
++            let tile_start=work;
+             for block in &records {
+                 if cancelled() {
+                     return None;
+@@ -660,6 +670,7 @@
+                     }
+                 }
+             }
++            if trace_cost && tile_start-work>=1_000_000 {eprintln!("TILE_COST tile={tx},{ty} work={} remaining={work}",tile_start-work);}
+             for y in ty..y1.min(ty.saturating_add(4)) {
+                 for x in tx..x1.min(tx.saturating_add(4)) {
+                     let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
+@@ -730,6 +741,9 @@
+         return None;
+     }
+     Some(MeshSamples { map, _guard: guard })
++    })();
++    if trace_cost {eprintln!("SAMPLE_COST_END patches={} complete={} spent={} remaining={work}",patches.len(),outcome.is_some(),100_000_000-work);}
++    outcome
+ }
+ 
+ #[cfg(test)]

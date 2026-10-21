@@ -1,0 +1,21 @@
+            // A source proved strictly dominant throughout the incoming
+            // triangle retains its whole region. Cut only the incoming
+            // remainder, avoiding subdivision followed by restoration below.
+            // Crossing, tied or numerically ambiguous fields use the full path.
+            if dominates(&old.owner, &owner, &triangle, work, cancelled)? {
+                keep(&mut next, old.polygon, old.owner)?;
+                let mut remaining = AdmittedVec::new(admit, maximum);
+                for part in &incoming.values {
+                    subtract(
+                        part.polygon,
+                        &old.polygon,
+                        owner,
+                        &mut remaining,
+                        &mut lines,
+                        work,
+                        cancelled,
+                    )?;
+                }
+                incoming = remaining;
+                continue;
+            }

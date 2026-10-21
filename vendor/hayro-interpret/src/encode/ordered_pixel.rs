@@ -321,6 +321,60 @@ impl LineKey {
         let (a, b, _) = canonical_edge(a, b);
         Self::Edge([a.x, a.y, b.x, b.y].map(Self::bits))
     }
+    // Reuse the original support, never a rounded subsegment of that support.
+    // The local polygon edge supplies only the inward orientation.
+    fn evaluator(self, a: Point, b: Point) -> Result<(impl Fn(Point) -> f64, Option<(usize, f64)>)> {
+        let (normal, snap) = match self {
+            Self::Edge(bits) => {
+                let v = bits.map(f64::from_bits);
+                (Point::new(-(v[3] - v[1]), v[2] - v[0]), None)
+            }
+            Self::Field(bits) => {
+                let f = bits.map(f64::from_bits);
+                (Point::new(f[1], f[2]), None)
+            }
+            Self::Axis(axis, cut) => (
+                if axis == 0 {
+                    Point::new(1., 0.)
+                } else {
+                    Point::new(0., 1.)
+                },
+                Some((axis, f64::from_bits(cut))),
+            ),
+        };
+        let d = b - a;
+        let n = Point::new(-d.y, d.x);
+        let ns = n.x.abs().max(n.y.abs());
+        let fs = normal.x.abs().max(normal.y.abs());
+        if ns == 0. || fs == 0. || !ns.is_finite() || !fs.is_finite() {
+            return Err(PixelPartitionError::Conditioning);
+        }
+        let direction = (n.x / ns).mul_add(normal.x / fs, (n.y / ns) * (normal.y / fs));
+        if direction == 0. || !direction.is_finite() {
+            return Err(PixelPartitionError::Conditioning);
+        }
+        let sign = if direction > 0. { 1. } else { -1. };
+        Ok((
+            move |p| {
+                let v = match self {
+                    Self::Edge(bits) => {
+                        let v = bits.map(f64::from_bits);
+                        edge_function(Point::new(v[0], v[1]), Point::new(v[2], v[3]))(p)
+                    }
+                    Self::Field(bits) => value(bits.map(f64::from_bits), p),
+                    Self::Axis(axis, cut) => {
+                        if axis == 0 {
+                            p.x - f64::from_bits(cut)
+                        } else {
+                            p.y - f64::from_bits(cut)
+                        }
+                    }
+                };
+                sign * v
+            },
+            snap,
+        ))
+    }
     fn field(mut f: [f64; 3]) -> Result<Self> {
         if f.iter().any(|v| !v.is_finite()) {
             return Err(PixelPartitionError::Invalid);
@@ -340,6 +394,7 @@ impl LineKey {
 type LineMap = hashbrown::HashMap<LineKey, u32, rustc_hash::FxBuildHasher>;
 struct LinePool<'a> {
     map: LineMap,
+    keys: Vec<LineKey>,
     credit: Option<Credit>,
     next: u32,
     admit: &'a Admitter<'a>,
@@ -347,13 +402,14 @@ struct LinePool<'a> {
 struct LineTransaction<'p, 'a> {
     pool: &'p mut LinePool<'a>,
     baseline: u32,
-    original: Option<(LineMap, Option<Credit>)>,
+    original: Option<(LineMap, Vec<LineKey>, Option<Credit>)>,
     committed: bool,
 }
 impl<'a> LinePool<'a> {
     fn new(admit: &'a Admitter<'a>) -> Self {
         Self {
             map: Default::default(),
+            keys: Vec::new(),
             credit: None,
             next: 1,
             admit,
@@ -396,7 +452,7 @@ impl LineTransaction<'_, '_> {
                     .ok_or(PixelPartitionError::Limit)?
             };
             let bytes = buckets
-                .checked_mul(size_of::<(LineKey, u32)>() + 1)
+                .checked_mul(size_of::<(LineKey, u32)>() + 1 + size_of::<LineKey>())
                 .and_then(|v| v.checked_add(128))
                 .ok_or(PixelPartitionError::Limit)?;
             let next = (self.pool.admit)(bytes).ok_or(PixelPartitionError::Admission)?;
@@ -404,25 +460,40 @@ impl LineTransaction<'_, '_> {
             replacement
                 .try_reserve(capacity)
                 .map_err(|_| PixelPartitionError::Admission)?;
-            if replacement.allocation_size() > bytes {
+            let mut keys = Vec::new();
+            keys.try_reserve_exact(replacement.capacity())
+                .map_err(|_| PixelPartitionError::Admission)?;
+            if replacement
+                .allocation_size()
+                .checked_add(keys.capacity() * size_of::<LineKey>())
+                .is_none_or(|actual| actual > bytes)
+            {
                 return Err(PixelPartitionError::Admission);
+            }
+            for &key in &self.pool.keys {
+                tick(work, cancelled)?;
+                keys.push(key);
             }
             for (&key, &id) in &self.pool.map {
                 tick(work, cancelled)?;
                 replacement.insert(key, id);
             }
             let mut previous = std::mem::replace(&mut self.pool.map, replacement);
+            let mut previous_keys = std::mem::replace(&mut self.pool.keys, keys);
             let previous_credit = self.pool.credit.replace(next);
             if self.original.is_none() {
                 previous.retain(|_, id| *id < self.baseline);
-                self.original = Some((previous, previous_credit));
+                previous_keys.truncate(self.baseline as usize - 1);
+                self.original = Some((previous, previous_keys, previous_credit));
             } else {
                 drop(previous);
+                drop(previous_keys);
                 drop(previous_credit);
             }
         }
         let id = self.pool.next;
         self.pool.next = id.checked_add(1).ok_or(PixelPartitionError::Limit)?;
+        self.pool.keys.push(key);
         self.pool.map.insert(key, id);
         Ok(id)
     }
@@ -435,13 +506,16 @@ impl Drop for LineTransaction<'_, '_> {
         if self.committed {
             return;
         }
-        if let Some((map, credit)) = self.original.take() {
+        if let Some((map, keys, credit)) = self.original.take() {
             let current = std::mem::replace(&mut self.pool.map, map);
+            let current_keys = std::mem::replace(&mut self.pool.keys, keys);
             let current_credit = std::mem::replace(&mut self.pool.credit, credit);
             drop(current);
+            drop(current_keys);
             drop(current_credit);
         } else {
             self.pool.map.retain(|_, id| *id < self.baseline);
+            self.pool.keys.truncate(self.baseline as usize - 1);
         }
         self.pool.next = self.baseline;
     }
@@ -473,6 +547,9 @@ impl Polygon {
             return Ok(());
         }
         if self.len == VERTICES {
+            if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                eprintln!("ORDERED_VERTEX_LIMIT retained={} next={point:?}", self.len);
+            }
             return Err(PixelPartitionError::Limit);
         }
         self.points[self.len] = point;
@@ -544,26 +621,33 @@ impl Polygon {
         }
     }
     fn chain_line(&self, from: Point, to: Point, reverse: bool) -> Option<u32> {
-        let mut index = self.points[..self.len].iter().position(|p| *p == from)?;
-        let mut line = 0;
-        for _ in 0..self.len {
-            let next = if reverse {
-                (index + self.len - 1) % self.len
-            } else {
-                (index + 1) % self.len
-            };
-            let id = if reverse {
-                self.incoming[index]
-            } else {
-                self.incoming[next]
-            };
-            if id == 0 || (line != 0 && id != line) {
-                return None;
+        let start = self.points[..self.len].iter().position(|p| *p == from)?;
+        let outgoing = self.incoming[(start + 1) % self.len];
+        // Prefer the traversed edge's original ID, but another incident
+        // support may prove the entire chain collinear even with mixed labels.
+        let candidates = if reverse {
+            [self.incoming[start], outgoing]
+        } else {
+            [outgoing, self.incoming[start]]
+        };
+        for line in candidates {
+            if line == 0 {
+                continue;
             }
-            line = id;
-            index = next;
-            if self.points[index] == to {
-                return Some(line);
+            let mut index = start;
+            for _ in 0..self.len {
+                let next = if reverse {
+                    (index + self.len - 1) % self.len
+                } else {
+                    (index + 1) % self.len
+                };
+                if !self.on_line(next, line) {
+                    break;
+                }
+                if self.points[next] == to {
+                    return Some(line);
+                }
+                index = next;
             }
         }
         None
@@ -572,8 +656,14 @@ impl Polygon {
         if self.len < 3 {
             return None;
         }
-        if self.incoming[0] != 0 && self.incoming[..self.len].iter().all(|id| *id == self.incoming[0]) {
-            return None;
+        // Every vertex can lie on one known support even when an incident
+        // edge carries a second constraint. Rounded coordinates must not turn
+        // that symbolic line into a positive-area sliver. Candidate supports
+        // are precisely the two incident to vertex zero; no area epsilon.
+        for line in [self.incoming[0], self.incoming[1]] {
+            if line != 0 && (0..self.len).all(|index| self.on_line(index, line)) {
+                return None;
+            }
         }
         let mut area = 0.;
         let mut x = 0.;
@@ -723,12 +813,26 @@ impl Polygon {
                     let cross = a.x.mul_add(b.y, -product) - a.y.mul_add(b.x, -product);
                     let scale = (a.x * b.y).abs() + (a.y * b.x).abs();
                     let roundoff = 32. * f64::EPSILON * scale + 32. * f64::from_bits(1);
-                    // Optional merging must not classify a numerically ambiguous
-                    // turn. Retain both original pieces in that case.
                     if !cross.is_finite() || !roundoff.is_finite() || cross <= roundoff {
-                        return None;
+                        let p = joined.points[k];
+                        let q = joined.points[(k + 1) % joined.len];
+                        let r = joined.points[(k + 2) % joined.len];
+                        match orientation(p, q, r) {
+                            -1 => return None,
+                            0 if !(q.x >= p.x.min(r.x)
+                                && q.x <= p.x.max(r.x)
+                                && q.y >= p.y.min(r.y)
+                                && q.y <= p.y.max(r.y)) =>
+                            {
+                                return None;
+                            }
+                            _ => {}
+                        }
                     }
                 }
+                // Convexity was proved before removing collinear vertices;
+                // taking a hull must never fill a reflex boundary.
+                joined = joined.convex_hull();
                 let first = (0..joined.len).min_by(|&i, &j| {
                     joined.points[i]
                         .x
@@ -772,6 +876,7 @@ struct AdmittedVec<'a, T> {
     credit: Option<Credit>,
     admit: &'a Admitter<'a>,
     maximum: usize,
+    merge_floor: usize,
 }
 impl<'a, T> AdmittedVec<'a, T> {
     fn new(admit: &'a Admitter<'a>, maximum: usize) -> Self {
@@ -780,10 +885,18 @@ impl<'a, T> AdmittedVec<'a, T> {
             credit: None,
             admit,
             maximum,
+            merge_floor: 0,
         }
     }
     fn push(&mut self, item: T) -> Result<()> {
         if self.values.len() == self.maximum {
+            if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                eprintln!(
+                    "ORDERED_FRAGMENT_LIMIT retained={} maximum={}",
+                    self.values.len(),
+                    self.maximum
+                );
+            }
             return Err(PixelPartitionError::Limit);
         }
         if self.values.len() == self.values.capacity() {
@@ -811,15 +924,30 @@ impl<'a, T> AdmittedVec<'a, T> {
         Ok(())
     }
 }
-fn keep(out: &mut AdmittedVec<'_, Fragment>, polygon: Polygon, owner: PixelSourceOwner) -> Result<()> {
+fn keep(
+    out: &mut AdmittedVec<'_, Fragment>,
+    mut polygon: Polygon,
+    owner: PixelSourceOwner,
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<()> {
     if polygon.moments().is_some() {
-        if let Some(previous) = out.values.last_mut() {
-            if previous.owner == owner {
-                if let Some(joined) = previous.polygon.convex_union(&polygon) {
-                    previous.polygon = joined;
-                    return Ok(());
-                }
+        loop {
+            tick(work, cancelled)?;
+            if out.values.len() <= out.merge_floor {
+                break;
             }
+            let Some(previous) = out.values.last() else {
+                break;
+            };
+            if previous.owner != owner {
+                break;
+            }
+            let Some(joined) = previous.polygon.convex_union(&polygon) else {
+                break;
+            };
+            out.values.pop();
+            polygon = joined;
         }
         out.push(Fragment { polygon, owner })?;
     }
@@ -837,31 +965,36 @@ fn subtract(
 ) -> Result<Polygon> {
     tick(work, cancelled)?;
     if !polygon.bounds_overlap(cut) {
-        keep(out, polygon, owner)?;
+        keep(out, polygon, owner, work, cancelled)?;
         return Ok(Polygon::empty());
     }
     let mut inside = polygon;
+    // A convex cut has at most VERTICES edges. Delay publishing outside
+    // pieces: if a later edge proves the intersection empty, the original
+    // polygon must be retained whole instead of an artificial subdivision.
+    let mut outside = [Polygon::empty(); VERTICES];
+    let mut count = 0;
     for (index, [a, b]) in cut.edges().enumerate() {
         tick(work, cancelled)?;
         // Local anchor avoids cancellation in ax*by-bx*ay for very short
         // edges near a unit-pixel boundary. Preserve orientation with FMA.
-        let edge = edge_function(a, b);
-        let snap = edge_snap(a, b);
         let known = cut.incoming[(index + 1) % cut.len];
         let id = if known != 0 {
             known
         } else {
             lines.intern(LineKey::edge(a, b), work, cancelled)?
         };
-        keep(
-            out,
-            inside.clip_by_id(|p| -edge(p), snap, id, work, cancelled)?,
-            owner,
-        )?;
+        let (edge, snap) = lines.pool.keys[id as usize - 1].evaluator(a, b)?;
+        outside[count] = inside.clip_by_id(|p| -edge(p), snap, id, work, cancelled)?;
+        count += 1;
         inside = inside.clip_by_id(edge, snap, id, work, cancelled)?;
         if inside.moments().is_none() {
-            break;
+            keep(out, polygon, owner, work, cancelled)?;
+            return Ok(Polygon::empty());
         }
+    }
+    for piece in &outside[..count] {
+        keep(out, *piece, owner, work, cancelled)?;
     }
     Ok(inside)
 }
@@ -1079,11 +1212,42 @@ impl<'a> OrderedPixel<'a> {
         for old in &self.regions.values {
             tick(work, cancelled)?;
             if incoming.values.is_empty() {
-                keep(&mut next, old.polygon, old.owner)?;
+                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                continue;
+            }
+            // Every remainder is contained in the clipped incoming triangle.
+            // Disjoint bounds therefore preserve this old region without
+            // rebuilding the incoming list or comparing source priorities.
+            if !old.polygon.bounds_overlap(&triangle) {
+                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                continue;
+            }
+            // A source proved strictly dominant throughout the incoming
+            // triangle retains its whole region. Cut only the incoming
+            // remainder, avoiding subdivision followed by restoration below.
+            // Crossing, tied or numerically ambiguous fields use the full path.
+            if dominates(&old.owner, &owner, &triangle, work, cancelled)? {
+                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
+                let mut remaining = AdmittedVec::new(admit, maximum);
+                for part in &incoming.values {
+                    subtract(
+                        part.polygon,
+                        &old.polygon,
+                        owner,
+                        &mut remaining,
+                        &mut lines,
+                        work,
+                        cancelled,
+                    )?;
+                }
+                incoming = remaining;
                 continue;
             }
             let prefix = next.values.len();
             let previous_last = next.values.last().copied();
+            // The tentative subtraction may mutate only the saved last
+            // prefix item; preserve earlier items for whole-old restoration.
+            next.merge_floor = prefix.saturating_sub(1);
             let overlap = subtract(
                 old.polygon,
                 &triangle,
@@ -1092,7 +1256,9 @@ impl<'a> OrderedPixel<'a> {
                 &mut lines,
                 work,
                 cancelled,
-            )?;
+            );
+            next.merge_floor = 0;
+            let overlap = overlap?;
             if overlap.moments().is_none() {
                 continue;
             }
@@ -1125,9 +1291,9 @@ impl<'a> OrderedPixel<'a> {
                 if let Some(previous) = previous_last {
                     next.values[prefix - 1] = previous;
                 }
-                keep(&mut next, old.polygon, old.owner)?;
+                keep(&mut next, old.polygon, old.owner, work, cancelled)?;
             } else {
-                keep(&mut next, old_wins, old.owner)?;
+                keep(&mut next, old_wins, old.owner, work, cancelled)?;
             }
             let mut remaining = AdmittedVec::new(admit, maximum);
             for part in &incoming.values {
@@ -1145,7 +1311,7 @@ impl<'a> OrderedPixel<'a> {
             incoming = remaining;
         }
         for part in incoming.values.iter().copied() {
-            keep(&mut next, part.polygon, owner)?;
+            keep(&mut next, part.polygon, owner, work, cancelled)?;
         }
         tick(work, cancelled)?;
         self.regions = next;
@@ -1157,6 +1323,283 @@ impl<'a> OrderedPixel<'a> {
 #[cfg(test)]
 mod exact_orientation_tests {
     use super::*;
+    #[test]
+    fn common_vertex_support_is_degenerate_even_with_another_incident_edge() {
+        let points = [
+            Point::new(0.125, 0.25),
+            Point::new(0.25, 0.5),
+            Point::new(0.375, f64::from_bits(0.75f64.to_bits() + 1)),
+        ];
+        for shift in 0..3 {
+            let mut polygon = Polygon::empty();
+            for i in 0..3 {
+                polygon.push_tagged(points[i], [7, 7, 8][i]).unwrap();
+            }
+            polygon.points[..3].rotate_left(shift);
+            polygon.incoming[..3].rotate_left(shift);
+            assert!(polygon.moments().is_none());
+            polygon.incoming = [0; VERTICES];
+            assert!(polygon.moments().is_some());
+        }
+    }
+    #[test]
+    fn hull_keeps_common_vertex_support_across_mixed_collinear_edge_labels() {
+        let mut polygon = Polygon::empty();
+        let points = [
+            Point::ZERO,
+            Point::new(0.25, 0.25),
+            Point::new(0.5, 0.5),
+            Point::new(1., 1.),
+            Point::new(0.5, 1.5),
+            Point::new(-0.5, 0.5),
+        ];
+        for (p, id) in points.into_iter().zip([3, 1, 8, 1, 2, 4]) {
+            polygon.push_tagged(p, id).unwrap();
+        }
+        let hull = polygon.convex_hull();
+        assert_eq!(hull.len, 4);
+        let from = hull.points[..hull.len]
+            .iter()
+            .position(|p| *p == Point::ZERO)
+            .unwrap();
+        let to = (from + 1) % hull.len;
+        assert_eq!(hull.points[to], Point::new(1., 1.));
+        assert_eq!(hull.incoming[to], 1);
+        assert!(hull.on_line(from, 1) && hull.on_line(to, 1));
+        for shift in 0..polygon.len {
+            let mut rotated = polygon;
+            rotated.points[..rotated.len].rotate_left(shift);
+            rotated.incoming[..rotated.len].rotate_left(shift);
+            let hull = rotated.convex_hull();
+            let from = hull.points[..hull.len]
+                .iter()
+                .position(|p| *p == Point::ZERO)
+                .unwrap();
+            assert_eq!(hull.incoming[(from + 1) % hull.len], 1);
+        }
+        // Collinear coordinates alone must not manufacture a missing support.
+        let mut uncertain = polygon;
+        uncertain.incoming[3] = 9;
+        let hull = uncertain.convex_hull();
+        let from = hull.points[..hull.len]
+            .iter()
+            .position(|p| *p == Point::ZERO)
+            .unwrap();
+        assert_eq!(hull.incoming[(from + 1) % hull.len], 0);
+    }
+    #[test]
+    fn cascade_merge_respects_saved_partition_prefix() {
+        let admit = |_| Some(Box::new(()) as Credit);
+        let owner = PixelSourceOwner {
+            patch_index: 0,
+            sample_index: 0,
+            u: [0.; 3],
+            v: [0.; 3],
+            components: [[0.; 3]; 4],
+            component_count: 1,
+        };
+        let rect = |a, b| {
+            let mut p = Polygon::empty();
+            for v in [
+                Point::new(a, 0.),
+                Point::new(b, 0.),
+                Point::new(b, 1.),
+                Point::new(a, 1.),
+            ] {
+                p.push(v).unwrap();
+            }
+            p
+        };
+        let mut out = AdmittedVec::new(&admit, 16);
+        out.push(Fragment {
+            polygon: rect(0., 0.25),
+            owner,
+        })
+        .unwrap();
+        out.push(Fragment {
+            polygon: rect(0.25, 0.5),
+            owner,
+        })
+        .unwrap();
+        let first = out.values[0];
+        let saved = out.values[1];
+        out.merge_floor = 1;
+        keep(&mut out, rect(0.5, 0.75), owner, &mut 1000, &|| false).unwrap();
+        assert_eq!(out.values.len(), 2);
+        assert_eq!(
+            out.values[0].polygon.points[..out.values[0].polygon.len],
+            first.polygon.points[..first.polygon.len]
+        );
+        assert_eq!(out.values[1].polygon.moments().unwrap().0, 0.5);
+        // The saved tail restores the complete prefix after a tentative cut.
+        out.values.truncate(2);
+        out.values[1] = saved;
+        assert_eq!(
+            out.values
+                .iter()
+                .map(|f| f.polygon.moments().unwrap().0)
+                .sum::<f64>(),
+            0.5
+        );
+        out.merge_floor = 0;
+        keep(&mut out, rect(0.5, 0.75), owner, &mut 1000, &|| false).unwrap();
+        assert_eq!(out.values.len(), 1);
+        assert_eq!(out.values[0].polygon.moments().unwrap().0, 0.75);
+    }
+    fn unit_triangle() -> Polygon {
+        let mut p = Polygon::empty();
+        for v in [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)] {
+            p.push(v).unwrap();
+        }
+        p
+    }
+    #[test]
+    fn known_cut_is_idempotent_and_distinct_thin_band_survives() {
+        let mut work = 100_000;
+        let cut = [-0.25, 1., 1.];
+        let p = unit_triangle().clip_id(cut, 17, &mut work, &|| false).unwrap();
+        let again = p.clip_id(cut, 17, &mut work, &|| false).unwrap();
+        assert_eq!(p.points[..p.len], again.points[..again.len]);
+        assert_eq!(p.moments(), again.moments());
+        let opposite = p.clip_id(cut.map(|v| -v), 17, &mut work, &|| false).unwrap();
+        assert!(opposite.moments().is_none());
+        let delta = 2f64.powi(-20);
+        let band = p
+            .clip_id([0.25 + delta, -1., -1.], 18, &mut work, &|| false)
+            .unwrap();
+        let expected = 0.25 * delta + 0.5 * delta * delta;
+        let area = band.moments().unwrap().0;
+        assert!(area > 0.);
+        assert!((area - expected).abs() < 1e-20, "{area} != {expected}");
+    }
+    #[test]
+    fn non_dyadic_repeated_cuts_keep_boundary_bits_and_zero_opposite_area() {
+        for i in 0..128 {
+            let f = [-0.123456789 - i as f64 * 0.00123456789, 0.987654321, 0.345678901];
+            let mut work = 100_000;
+            let clipped = unit_triangle().clip_id(f, 1, &mut work, &|| false).unwrap();
+            assert!(clipped.moments().is_some());
+            let repeated = clipped.clip_id(f, 1, &mut work, &|| false).unwrap();
+            assert_eq!(clipped.points[..clipped.len], repeated.points[..repeated.len]);
+            assert_eq!(clipped.moments(), repeated.moments());
+            let opposite = clipped.clip_id(f.map(|v| -v), 1, &mut work, &|| false).unwrap();
+            assert!(opposite.moments().is_none(), "case {i}");
+        }
+    }
+    #[test]
+    fn line_keys_preserve_exact_identity_without_merging_nearby_cuts() {
+        let a = Point::new(0.125, 0.25);
+        let b = Point::new(0.75, 0.875);
+        assert!(LineKey::edge(a, b) == LineKey::edge(b, a));
+        assert!(LineKey::field([-0., 1., 0.]).unwrap() == LineKey::edge(Point::ZERO, Point::new(0., 1.)));
+        let f = [-0.25, 1., 1.];
+        assert!(LineKey::field(f).unwrap() == LineKey::field(f.map(|v| -v)).unwrap());
+        assert!(LineKey::field(f).unwrap() != LineKey::field([-0.25 - 2f64.powi(-50), 1., 1.]).unwrap());
+    }
+    #[test]
+    fn line_pool_every_refusal_cancel_and_short_work_restore_allocation_and_ids() {
+        use std::sync::{
+            Arc,
+            atomic::{AtomicUsize, Ordering},
+        };
+        struct Held(Arc<AtomicUsize>, usize);
+        impl Drop for Held {
+            fn drop(&mut self) {
+                self.0.fetch_sub(self.1, Ordering::SeqCst);
+            }
+        }
+        let exercise = |refuse: usize, cancel: usize, quota: usize| {
+            let live = Arc::new(AtomicUsize::new(0));
+            let calls = AtomicUsize::new(0);
+            let admit = |bytes| -> Option<Credit> {
+                let n = calls.fetch_add(1, Ordering::SeqCst);
+                if n == refuse {
+                    return None;
+                }
+                live.fetch_add(bytes, Ordering::SeqCst);
+                Some(Box::new(Held(live.clone(), bytes)))
+            };
+            let mut pool = LinePool::new(&admit);
+            {
+                let mut tx = pool.transaction();
+                for i in 0..2 {
+                    tx.intern(LineKey::Axis(0, i), &mut 1000, &|| false).unwrap();
+                }
+                tx.commit();
+            }
+            let baseline_calls = calls.load(Ordering::SeqCst);
+            let baseline_live = live.load(Ordering::SeqCst);
+            let baseline_size = pool.map.allocation_size() + pool.keys.capacity() * size_of::<LineKey>();
+            let baseline_next = pool.next;
+            let checks = AtomicUsize::new(0);
+            let mut work = quota;
+            let result = (|| -> Result<()> {
+                let mut tx = pool.transaction();
+                for i in 2..66 {
+                    tx.intern(LineKey::Axis(0, i), &mut work, &|| {
+                        checks.fetch_add(1, Ordering::SeqCst) == cancel
+                    })?;
+                }
+                Ok(()) // Intentional rollback even after all insertions succeed.
+            })();
+            assert_eq!(pool.map.len(), 2);
+            assert_eq!(pool.next, baseline_next);
+            assert_eq!(
+                pool.map.allocation_size() + pool.keys.capacity() * size_of::<LineKey>(),
+                baseline_size
+            );
+            assert_eq!(pool.keys.len(), 2);
+            for (&key, &id) in &pool.map {
+                assert!(pool.keys[id as usize - 1] == key);
+            }
+            assert_eq!(live.load(Ordering::SeqCst), baseline_live);
+            for i in 0..2 {
+                assert_eq!(pool.map.get(&LineKey::Axis(0, i)), Some(&(i as u32 + 1)));
+            }
+            // Reuse the pool after a rollback, with its original IDs intact.
+            {
+                let mut tx = pool.transaction();
+                assert_eq!(tx.intern(LineKey::Axis(0, 0), &mut 1000, &|| false).unwrap(), 1);
+                tx.commit();
+            }
+            let admissions = calls.load(Ordering::SeqCst);
+            let checkpoints = checks.load(Ordering::SeqCst);
+            {
+                let mut tx = pool.transaction();
+                for i in 2..66 {
+                    assert_eq!(
+                        tx.intern(LineKey::Axis(0, i), &mut 100_000, &|| false).unwrap(),
+                        i as u32 + 1
+                    );
+                }
+                tx.commit();
+            }
+            assert_eq!(pool.map.len(), 66);
+            drop(pool);
+            assert_eq!(live.load(Ordering::SeqCst), 0);
+            (result, baseline_calls, admissions, checkpoints, quota - work)
+        };
+        let (ok, first, end, checkpoints, ticks) = exercise(usize::MAX, usize::MAX, 100_000);
+        assert_eq!(ok, Ok(()));
+        for n in first..end {
+            assert_eq!(
+                exercise(n, usize::MAX, 100_000).0,
+                Err(PixelPartitionError::Admission)
+            );
+        }
+        for n in 0..checkpoints {
+            assert_eq!(
+                exercise(usize::MAX, n, 100_000).0,
+                Err(PixelPartitionError::Cancelled)
+            );
+        }
+        for n in 0..ticks {
+            assert_eq!(
+                exercise(usize::MAX, usize::MAX, n).0,
+                Err(PixelPartitionError::Limit)
+            );
+        }
+    }
     #[test]
     fn canonical_intersections_match_fraction_oracle_and_reversal_bits() {
         let cases: &[([u64; 4], usize, u64, [u64; 2])] =

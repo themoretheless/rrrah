@@ -3,6 +3,254 @@ mod tests {
     use hayro::hayro_interpret::encode::{OrderedPixel, PixelPartitionError, PixelSourceOwner};
     use kurbo::Point;
     #[test]
+    fn original_clip_support_preserves_disjoint_regions_and_fraction_union() {
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (rows, expected): (&[Row], [u64; 5]) =
+            include!("../../../tests/fixtures/geometry/clip-support-five.rs");
+        fn overlap(mut p: Vec<Point>, cut: &[Point]) -> f64 {
+            for k in 0..cut.len() {
+                if p.is_empty() {
+                    return 0.;
+                }
+                let a = cut[k];
+                let b = cut[(k + 1) % cut.len()];
+                let value = |q: Point| (b - a).cross(q - a);
+                let mut out = Vec::new();
+                let mut prev = *p.last().unwrap();
+                let mut f = value(prev);
+                for &q in &p {
+                    let g = value(q);
+                    if (f >= 0.) != (g >= 0.) {
+                        out.push(prev + (q - prev) * (f / (f - g)));
+                    }
+                    if g >= 0. {
+                        out.push(q);
+                    }
+                    prev = q;
+                    f = g;
+                }
+                p = out;
+            }
+            if p.len() < 3 {
+                return 0.;
+            }
+            (1..p.len() - 1)
+                .map(|i| (p[i] - p[0]).cross(p[i + 1] - p[0]))
+                .sum::<f64>()
+                .abs()
+                * 0.5
+        }
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut pixel = OrderedPixel::new(&admit, 512);
+        let mut work = 100_000_000;
+        for (index, &(patch, sample, count, points, fields)) in rows.iter().enumerate() {
+            let points = points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1])));
+            let f = fields.map(|f| f.map(f64::from_bits));
+            let source = PixelSourceOwner {
+                patch_index: patch,
+                sample_index: sample,
+                component_count: count,
+                u: f[0],
+                v: f[1],
+                components: [f[2], f[3], f[4], f[5]],
+            };
+            pixel
+                .paint_triangle(points, source, &mut work, &|| false)
+                .unwrap();
+            let mut polygons = Vec::new();
+            let mut area = 0.;
+            pixel
+                .visit(&mut work, &|| false, &mut |a, _, p, _| {
+                    area += a;
+                    polygons.push(p.to_vec());
+                    Ok(())
+                })
+                .unwrap();
+            let union = f64::from_bits(expected[index]);
+            assert!(
+                (area - union).abs() < 1e-14,
+                "prefix={index} area={area} exact_union={union}"
+            );
+            let mut max_overlap: f64 = 0.;
+            for i in 0..polygons.len() {
+                for j in 0..i {
+                    max_overlap = max_overlap.max(overlap(polygons[i].clone(), &polygons[j]));
+                }
+            }
+            assert!(max_overlap < 1e-14, "prefix={index} overlap={max_overlap}");
+            eprintln!(
+                "ORIGINAL_CLIP_SUPPORT prefix={index} union={area} max_overlap={max_overlap} fragments={}",
+                pixel.fragments()
+            );
+        }
+        drop(pixel);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn captured_dense_lineage_partition_stays_within_original_fragment_bound() {
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (rows, expected): (&[Row], u64) = include!("../../../tests/fixtures/geometry/dense-lineage.rs");
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut pixel = OrderedPixel::new(&admit, 4096);
+        let mut work = 100_000_000;
+        for (i, &(patch, sample, count, points, fields)) in rows.iter().enumerate() {
+            let points = points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1])));
+            let f = fields.map(|f| f.map(f64::from_bits));
+            let source = PixelSourceOwner {
+                patch_index: patch,
+                sample_index: sample,
+                component_count: count,
+                u: f[0],
+                v: f[1],
+                components: [f[2], f[3], f[4], f[5]],
+            };
+            let result = pixel.paint_triangle(points, source, &mut work, &|| false);
+            assert!(
+                result.is_ok(),
+                "record={i} fragments={} result={result:?}",
+                pixel.fragments()
+            );
+        }
+        let result = integrated(&pixel);
+        assert!(
+            (result[3] - f64::from_bits(expected)).abs() < 1e-13,
+            "area={} exact={}",
+            result[3],
+            f64::from_bits(expected)
+        );
+        eprintln!(
+            "DENSE_LINEAGE records={} fragments={} work={} integral={result:?}",
+            rows.len(),
+            pixel.fragments(),
+            100_000_000 - work
+        );
+        drop(pixel);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn captured_dense138_partition_stays_within_original_fragment_bound() {
+        type Row = (usize, usize, usize, [[u64; 2]; 3], [[u64; 3]; 6]);
+        let (rows, expected): (&[Row], u64) =
+            include!("../../../tests/fixtures/geometry/dense-lineage-138.rs");
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut pixel = OrderedPixel::new(&admit, 4096);
+        let mut work = 100_000_000;
+        for (i, &(patch, sample, count, points, fields)) in rows.iter().enumerate() {
+            let points = points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1])));
+            let f = fields.map(|f| f.map(f64::from_bits));
+            let source = PixelSourceOwner {
+                patch_index: patch,
+                sample_index: sample,
+                component_count: count,
+                u: f[0],
+                v: f[1],
+                components: [f[2], f[3], f[4], f[5]],
+            };
+            let result = pixel.paint_triangle(points, source, &mut work, &|| false);
+            assert!(
+                result.is_ok(),
+                "record={i} fragments={} result={result:?}",
+                pixel.fragments()
+            );
+        }
+        let result = integrated(&pixel);
+        assert!(
+            (result[3] - f64::from_bits(expected)).abs() < 1e-13,
+            "area={} exact={}",
+            result[3],
+            f64::from_bits(expected)
+        );
+        eprintln!(
+            "DENSE138 records={} fragments={} work={} integral={result:?}",
+            rows.len(),
+            pixel.fragments(),
+            100_000_000 - work
+        );
+        drop(pixel);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn identical_owner_rectangles_merge_across_collinear_stitches() {
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let admit = |bytes: usize| {
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut pixel = OrderedPixel::new(&admit, 256);
+        for i in 0..32 {
+            rectangle(
+                &mut pixel,
+                i as f64 / 32.,
+                (i + 1) as f64 / 32.,
+                owner(0, [1., 0., 0.]),
+            );
+            assert_eq!(pixel.fragments(), 1, "strip {i}");
+            close(
+                integrated(&pixel),
+                [(i + 1) as f64 / 32., 0., 0., (i + 1) as f64 / 32.],
+            );
+        }
+        drop(pixel);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn disjoint_retained_sources_preserve_area_and_bound_work() {
+        use std::cell::Cell;
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let calls = Cell::new(0);
+        let admit = |bytes: usize| {
+            calls.set(calls.get() + 1);
+            root.try_reserve(bytes as u64)
+                .ok()
+                .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+        };
+        let mut pixel = OrderedPixel::new(&admit, 256);
+        for i in 0..32 {
+            rectangle(
+                &mut pixel,
+                i as f64 / 64.,
+                (i + 1) as f64 / 64.,
+                owner(i + 1, [1., 0., 0.]),
+            );
+        }
+        calls.set(0);
+        let mut work = 100_000;
+        pixel
+            .paint_triangle(
+                [Point::new(0.75, 0.), Point::new(1., 0.), Point::new(0.75, 1.)],
+                owner(0, [0., 1., 0.]),
+                &mut work,
+                &|| false,
+            )
+            .unwrap();
+        close(integrated(&pixel), [0.5, 0.125, 0., 0.625]);
+        assert_eq!(pixel.fragments(), 33);
+        eprintln!(
+            "DISJOINT_SOURCE_CONTROL ticks={} admissions={} fragments={}",
+            100_000 - work,
+            calls.get(),
+            pixel.fragments()
+        );
+        drop(pixel);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn coons_affine_identity_checks_original_boundary_controls() {
         use hayro::hayro_interpret::{encode::PatchParameterIdentity, shading::CoonsPatch};
         let uv = [
@@ -109,6 +357,131 @@ mod tests {
         assert!(pixel.fragments() >= 2);
     }
 
+    #[test]
+    fn opaque_strip_partition_preserves_partial_incoming_coverage() {
+        for gaps in [false, true] {
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let admit = |bytes: usize| {
+                root.try_reserve(bytes as u64)
+                    .ok()
+                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+            };
+            let mut pixel = OrderedPixel::new(&admit, 256);
+            for i in 0..16 {
+                let low = i as f64 / 16.;
+                let high = low + if gaps { 1. / 32. } else { 1. / 16. };
+                rectangle(&mut pixel, low, high, owner(i + 1, [1., 0., 0.]));
+            }
+            let mut work = 1_000_000;
+            for points in [
+                [Point::ZERO, Point::new(1., 0.), Point::new(1., 1.)],
+                [Point::ZERO, Point::new(1., 1.), Point::new(0., 1.)],
+            ] {
+                pixel
+                    .paint_triangle(points, owner(0, [0., 1., 0.]), &mut work, &|| false)
+                    .unwrap();
+            }
+            close(
+                integrated(&pixel),
+                if gaps {
+                    [0.5, 0.5, 0., 1.]
+                } else {
+                    [1., 0., 0., 1.]
+                },
+            );
+            eprintln!(
+                "OPAQUE_STRIPS gaps={gaps} ticks={} fragments={}",
+                1_000_000 - work,
+                pixel.fragments()
+            );
+            drop(pixel);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn dominant_strip_shortcut_rolls_back_every_failure_and_retries() {
+        for disjoint in [false, true] {
+            use std::cell::Cell;
+            let exercise = |refuse: usize, cancel: usize, quota: usize| {
+                let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+                let calls = Cell::new(0);
+                let deny = Cell::new(usize::MAX);
+                let admit = |bytes: usize| {
+                    calls.set(calls.get() + 1);
+                    if calls.get() == deny.get() {
+                        return None;
+                    }
+                    root.try_reserve(bytes as u64)
+                        .ok()
+                        .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
+                };
+                let mut pixel = OrderedPixel::new(&admit, 256);
+                for i in 0..4 {
+                    let low = if disjoint { i as f64 / 8. } else { i as f64 / 4. };
+                    rectangle(&mut pixel, low, low + 0.125, owner(i + 1, [1., 0., 0.]));
+                }
+                let before = integrated(&pixel);
+                let bytes = root.used();
+                calls.set(0);
+                deny.set(refuse);
+                let polls = Cell::new(0);
+                let mut work = quota;
+                let points = if disjoint {
+                    [Point::new(0.75, 0.), Point::new(1., 0.), Point::new(0.75, 1.)]
+                } else {
+                    [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)]
+                };
+                let source = owner(0, [0., 1., 0.]);
+                let result = pixel.paint_triangle(points, source, &mut work, &|| {
+                    polls.set(polls.get() + 1);
+                    polls.get() == cancel
+                });
+                let counts = (calls.get(), polls.get(), quota - work);
+                if result.is_err() {
+                    assert_eq!(integrated(&pixel), before);
+                    assert_eq!(root.used(), bytes);
+                    deny.set(usize::MAX);
+                    pixel
+                        .paint_triangle(points, source, &mut 100_000, &|| false)
+                        .unwrap();
+                }
+                close(
+                    integrated(&pixel),
+                    if disjoint {
+                        [0.5, 0.125, 0., 0.625]
+                    } else {
+                        [0.5, 7. / 32., 0., 23. / 32.]
+                    },
+                );
+                drop(pixel);
+                assert_eq!(root.used(), 0);
+                (result, counts)
+            };
+            let (result, (admissions, polls, ticks)) = exercise(usize::MAX, usize::MAX, 100_000);
+            assert_eq!(result, Ok(()));
+            for n in 1..=admissions {
+                assert_eq!(
+                    exercise(n, usize::MAX, 100_000).0,
+                    Err(PixelPartitionError::Admission)
+                );
+            }
+            for n in 1..=polls {
+                assert_eq!(
+                    exercise(usize::MAX, n, 100_000).0,
+                    Err(PixelPartitionError::Cancelled)
+                );
+            }
+            for n in 0..ticks {
+                assert_eq!(
+                    exercise(usize::MAX, usize::MAX, n).0,
+                    Err(PixelPartitionError::Limit)
+                );
+            }
+            eprintln!(
+                "DOMINANT_STRIP_ROLLBACK disjoint={disjoint} admissions={admissions} cancellation_points={polls} short_quotas={ticks}"
+            );
+        }
+    }
     #[test]
     fn losing_triangles_do_not_fragment_a_wholly_winning_owner() {
         let admit = |_| Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>);

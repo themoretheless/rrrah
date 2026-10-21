@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -12,6 +13,35 @@ import urllib.request
 
 def sha256(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def stderr_text(detail):
+    if isinstance(detail, bytes):
+        return detail.decode("utf8", "replace")
+    return detail if isinstance(detail, str) else ""
+
+
+def attach_renderer_diagnostics(row, detail):
+    detail = stderr_text(detail)
+    if not detail:
+        return
+    row["renderer_stderr_tail"] = detail[-16384:]
+    outcomes = []
+    truncated = False
+    pattern = (r"ORDERED_SAMPLE_OUTCOME patches=([0-9]{1,20}) complete=(true|false) "
+               r"work_spent=([0-9]{1,20}) work_left=([0-9]{1,20})")
+    for line in detail.splitlines():
+        match = re.fullmatch(pattern, line)
+        if match:
+            if len(outcomes) == 64:
+                truncated = True
+                continue
+            outcomes.append({"patches": int(match[1]), "complete": match[2] == "true",
+                             "work_spent": int(match[3]), "work_left": int(match[4])})
+    if outcomes:
+        row["renderer_outcomes"] = outcomes
+    if truncated:
+        row["renderer_outcomes_truncated"] = True
 
 
 def main():
@@ -53,10 +83,15 @@ def main():
                 row = {"file": path.name, "index": index, "exact": False}
                 prefix = Path(tmp) / f"{path.stem}-{index}"
                 native = prefix.with_suffix(".rgba")
+                native_diagnostics_recorded = False
                 try:
-                    metadata = json.loads(subprocess.check_output(
+                    rendered = subprocess.run(
                         [str(args.dump.resolve()), str(path), str(index), str(native)],
-                        text=True, stderr=subprocess.PIPE, timeout=args.render_timeout))
+                        text=True, capture_output=True, timeout=args.render_timeout)
+                    attach_renderer_diagnostics(row, rendered.stderr)
+                    native_diagnostics_recorded = True
+                    rendered.check_returncode()
+                    metadata = json.loads(rendered.stdout)
                     row["native"] = metadata
                     if metadata["image_index"] != index or metadata["image_count"] != count:
                         raise ValueError("selected page metadata mismatch")
@@ -111,11 +146,11 @@ def main():
                                rgba_sha256=sha256(rgba), exact=different == 0)
                 except (ValueError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
                     row["error"] = str(error)
-                    if isinstance(error, (subprocess.CalledProcessError, subprocess.TimeoutExpired)) and error.stderr:
-                        detail = error.stderr
-                        if isinstance(detail, bytes):
-                            detail = detail.decode("utf-8", errors="replace")
-                        row["renderer_stderr_tail"] = detail[-16384:]
+                    if isinstance(error, (subprocess.CalledProcessError, subprocess.TimeoutExpired)):
+                        if not native_diagnostics_recorded:
+                            attach_renderer_diagnostics(row, error.stderr)
+                        elif "native" in row and error.stderr:
+                            row["reference_stderr_tail"] = stderr_text(error.stderr)[-16384:]
                 rows.append(row)
     report = {"revision": manifest["revision"], "sources": manifest["sources"],
               "decoder_sha256": sha256(args.dump.read_bytes()),

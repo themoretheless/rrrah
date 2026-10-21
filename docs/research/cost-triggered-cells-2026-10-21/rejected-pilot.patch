@@ -1,0 +1,503 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_samples.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_samples.rs
+@@ -9,6 +9,9 @@
+ // Split dense cells before quadratic partition work consumes the shared quota.
+ const WORKING_FRAGMENTS: usize = 512;
+ const MAX_LEAF_FRAGMENTS: usize = 4096;
++// A failed coarse attempt may refine, but all spent work stays charged to the
++// original shared quota. Deepest leaves retain that complete shared allowance.
++const CELL_PAINT_WORK: usize = 128 * 1024;
+ 
+ struct ParamPool {
+     index: hashbrown::HashMap<u64, u16, rustc_hash::FxBuildHasher>,
+@@ -334,6 +337,35 @@
+     cancelled: &dyn Fn() -> bool,
+     admit: &dyn Fn(usize) -> Option<Credit>,
+ ) -> Option<[f64; 5]> {
++    integrate_cell_with_paint_limit(
++        records,
++        patches,
++        pool,
++        identities,
++        origin,
++        side,
++        depth,
++        fragment_limit,
++        work,
++        cancelled,
++        admit,
++        CELL_PAINT_WORK,
++    )
++}
++fn integrate_cell_with_paint_limit(
++    records: &[Block],
++    patches: &[AdaptivePatchRef<'_>],
++    pool: &ParamPool,
++    identities: &[Option<PatchParameterIdentity>],
++    origin: Point,
++    side: f64,
++    depth: u8,
++    fragment_limit: usize,
++    work: &mut usize,
++    cancelled: &dyn Fn() -> bool,
++    admit: &dyn Fn(usize) -> Option<Credit>,
++    paint_limit: usize,
++) -> Option<[f64; 5]> {
+     let mut pixel = OrderedPixel::new(admit, fragment_limit);
+     let rect = Rect::new(origin.x, origin.y, origin.x + side, origin.y + side);
+     let mut candidate_credit: Option<Credit> = None;
+@@ -382,6 +414,7 @@
+     // The center key orders work only. Exact UV comparisons still select the
+     // owner at each overlap. Identical UV fields share a key, with original
+     // ordinal preserving the existing tie behavior (including signed zero).
++    let paint_entry = *work;
+     for index in 0..candidates.len() {
+         if cancelled() {
+             return None;
+@@ -391,9 +424,30 @@
+         let points = record.points;
+         let owner = cell_owner(record, patches, pool, identities, origin, side)?;
+         let local = points.map(|p| Point::new((p.x - origin.x) / side, (p.y - origin.y) / side));
+-        match pixel.paint_triangle(local, owner, work, cancelled) {
++        let allowance = if depth < 8 {
++            paint_limit.saturating_sub(paint_entry - *work)
++        } else {
++            *work
++        };
++        let initial = (*work).min(allowance);
++        let mut local_work = initial;
++        let painted = pixel.paint_triangle(local, owner, &mut local_work, cancelled);
++        // Always debit failed/cancelled coarse attempts before refining.
++        *work = work.checked_sub(initial.checked_sub(local_work)?)?;
++        match painted {
+             Ok(()) => {}
+             Err(super::PixelPartitionError::Limit) if *work > 0 => {
++                if depth < 8
++                    && initial == allowance
++                    && local_work == 0
++                    && std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some()
++                {
++                    eprintln!(
++                        "DENSE_CELL_COST origin={origin:?} side={side} processed={index} spent={} work={work}",
++                        paint_entry - *work
++                    );
++                }
++
+                 if depth >= 8
+                     && fragment_limit == MAX_LEAF_FRAGMENTS
+                     && std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some()
+@@ -588,148 +642,161 @@
+     let mut guard = None;
+     let mut map = MeshMap::default();
+     let mut work = 100_000_000usize;
+-    let x0 = extent.x0.floor() as u16;
+-    let x1 = extent.x1.ceil() as u16;
+-    let y0 = extent.y0.floor() as u16;
+-    let y1 = extent.y1.ceil() as u16;
+-    for ty in (y0..y1).step_by(4) {
+-        for tx in (x0..x1).step_by(4) {
+-            if cancelled() {
+-                return None;
+-            }
+-            let mut pixels: [OrderedPixel<'_>; 16] =
+-                std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
+-            let mut dense = [false; 16];
+-            let tile = Rect::new(
+-                tx as f64,
+-                ty as f64,
+-                (u32::from(tx) + 4).min(u32::from(x1)) as f64,
+-                (u32::from(ty) + 4).min(u32::from(y1)) as f64,
+-            );
+-            for block in &records {
++    // Keep the ledger outside the attempt so every work-phase exit is visible
++    // in opt-in diagnostics, including early returns from the tiled pass.
++    let outcome = (|| -> Option<MeshSamples> {
++        let x0 = extent.x0.floor() as u16;
++        let x1 = extent.x1.ceil() as u16;
++        let y0 = extent.y0.floor() as u16;
++        let y1 = extent.y1.ceil() as u16;
++        for ty in (y0..y1).step_by(4) {
++            for tx in (x0..x1).step_by(4) {
+                 if cancelled() {
+                     return None;
+                 }
+-                work = work.checked_sub(1)?;
+-                let overlap = block.bounds.intersect(tile);
+-                if overlap.width() <= 0. || overlap.height() <= 0. {
+-                    continue;
+-                }
+-                for record in &block.records {
+-                    work = work.checked_sub(1)?;
++                let mut pixels: [OrderedPixel<'_>; 16] =
++                    std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
++                let mut dense = [false; 16];
++                let tile = Rect::new(
++                    tx as f64,
++                    ty as f64,
++                    (u32::from(tx) + 4).min(u32::from(x1)) as f64,
++                    (u32::from(ty) + 4).min(u32::from(y1)) as f64,
++                );
++                for block in &records {
+                     if cancelled() {
+                         return None;
+                     }
+-                    let points = record.points;
+-                    let bbox = Rect::from_points(points[0], points[1])
+-                        .union_pt(points[2])
+-                        .intersect(tile);
+-                    if bbox.width() <= 0. || bbox.height() <= 0. {
++                    work = work.checked_sub(1)?;
++                    let overlap = block.bounds.intersect(tile);
++                    if overlap.width() <= 0. || overlap.height() <= 0. {
+                         continue;
+                     }
+-                    let triangle = record.triangle(patches, &parameters_pool);
+-                    for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+-                        for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
+-                            let slot = usize::from(y - ty) * 4 + usize::from(x - tx);
+-                            if dense[slot] {
+-                                continue;
+-                            }
+-                            let origin = Point::new(x as f64, y as f64);
+-                            let mut owner = PixelSourceOwner::from_triangle(
+-                                &triangle,
+-                                record.source(&parameters_pool),
+-                                origin,
+-                            )
+-                            .ok()?;
+-                            if let Some(identity) = identities[record.patch_index as usize] {
+-                                identity.apply(&mut owner, origin).ok()?;
+-                            }
+-                            let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
+-                            match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
+-                                Ok(()) => {}
+-                                Err(super::PixelPartitionError::Limit) if work > 0 => {
+-                                    pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
+-                                    dense[slot] = true;
+-                                    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+-                                        eprintln!("ORDERED_SAMPLE_SUBDIVIDE pixel={x},{y} work={work}");
++                    for record in &block.records {
++                        work = work.checked_sub(1)?;
++                        if cancelled() {
++                            return None;
++                        }
++                        let points = record.points;
++                        let bbox = Rect::from_points(points[0], points[1])
++                            .union_pt(points[2])
++                            .intersect(tile);
++                        if bbox.width() <= 0. || bbox.height() <= 0. {
++                            continue;
++                        }
++                        let triangle = record.triangle(patches, &parameters_pool);
++                        for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
++                            for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
++                                let slot = usize::from(y - ty) * 4 + usize::from(x - tx);
++                                if dense[slot] {
++                                    continue;
++                                }
++                                let origin = Point::new(x as f64, y as f64);
++                                let mut owner = PixelSourceOwner::from_triangle(
++                                    &triangle,
++                                    record.source(&parameters_pool),
++                                    origin,
++                                )
++                                .ok()?;
++                                if let Some(identity) = identities[record.patch_index as usize] {
++                                    identity.apply(&mut owner, origin).ok()?;
++                                }
++                                let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
++                                match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
++                                    Ok(()) => {}
++                                    Err(super::PixelPartitionError::Limit) if work > 0 => {
++                                        pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
++                                        dense[slot] = true;
++                                        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
++                                            eprintln!("ORDERED_SAMPLE_SUBDIVIDE pixel={x},{y} work={work}");
++                                        }
+                                     }
++                                    Err(_) => return None,
+                                 }
+-                                Err(_) => return None,
+                             }
+                         }
+                     }
+                 }
+-            }
+-            for y in ty..y1.min(ty.saturating_add(4)) {
+-                for x in tx..x1.min(tx.saturating_add(4)) {
+-                    let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
+-                    let mut sum = [0.; 4];
+-                    let mut coverage = 0.;
+-                    pixel
+-                        .visit(&mut work, cancelled, &mut |area, center, _, owner| {
+-                            let values = owner
+-                                .evaluate(center)
+-                                .ok_or(super::PixelPartitionError::Invalid)?;
+-                            for i in 0..components {
+-                                sum[i] += area * values[i];
++                for y in ty..y1.min(ty.saturating_add(4)) {
++                    for x in tx..x1.min(tx.saturating_add(4)) {
++                        let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
++                        let mut sum = [0.; 4];
++                        let mut coverage = 0.;
++                        pixel
++                            .visit(&mut work, cancelled, &mut |area, center, _, owner| {
++                                let values = owner
++                                    .evaluate(center)
++                                    .ok_or(super::PixelPartitionError::Invalid)?;
++                                for i in 0..components {
++                                    sum[i] += area * values[i];
++                                }
++                                coverage += area;
++                                Ok(())
++                            })
++                            .ok()?;
++                        if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
++                            let value = integrate_children(
++                                &records,
++                                patches,
++                                &parameters_pool,
++                                &identities,
++                                Point::new(x as f64, y as f64),
++                                1.,
++                                0,
++                                WORKING_FRAGMENTS,
++                                &mut work,
++                                cancelled,
++                                admit,
++                            )?;
++                            coverage = value[0];
++                            sum.copy_from_slice(&value[1..]);
++                        }
++                        if coverage <= 0. {
++                            continue;
++                        }
++                        if !coverage.is_finite() || coverage > 1. + 1e-10 {
++                            if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
++                                eprintln!("ORDERED_COVERAGE_REFUSAL pixel={x},{y} coverage={coverage}");
+                             }
+-                            coverage += area;
+-                            Ok(())
+-                        })
+-                        .ok()?;
+-                    if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
+-                        let value = integrate_children(
+-                            &records,
+-                            patches,
+-                            &parameters_pool,
+-                            &identities,
+-                            Point::new(x as f64, y as f64),
+-                            1.,
+-                            0,
+-                            WORKING_FRAGMENTS,
+-                            &mut work,
+-                            cancelled,
+-                            admit,
+-                        )?;
+-                        coverage = value[0];
+-                        sum.copy_from_slice(&value[1..]);
+-                    }
+-                    if coverage <= 0. {
+-                        continue;
+-                    }
+-                    if !coverage.is_finite() || coverage > 1. + 1e-10 {
+-                        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+-                            eprintln!("ORDERED_COVERAGE_REFUSAL pixel={x},{y} coverage={coverage}");
+-                        }
+-                        return None;
+-                    }
+-                    if map.len() == map.capacity() {
+-                        let capacity = map.capacity().checked_mul(2)?.max(3);
+-                        let bytes = super::mesh_table_bound(capacity, components)?;
+-                        let next = admit(bytes)?;
+-                        map.try_reserve(capacity - map.len()).ok()?;
+-                        if map.allocation_size() > bytes {
+                             return None;
+                         }
+-                        guard = Some(next);
++                        if map.len() == map.capacity() {
++                            let capacity = map.capacity().checked_mul(2)?.max(3);
++                            let bytes = super::mesh_table_bound(capacity, components)?;
++                            let next = admit(bytes)?;
++                            map.try_reserve(capacity - map.len()).ok()?;
++                            if map.allocation_size() > bytes {
++                                return None;
++                            }
++                            guard = Some(next);
++                        }
++                        map.insert(
++                            (x, y),
++                            MeshSample {
++                                colors: sum[..components].iter().map(|v| (v / coverage) as f32).collect(),
++                                coverage: coverage.min(1.) as f32,
++                            },
++                        );
+                     }
+-                    map.insert(
+-                        (x, y),
+-                        MeshSample {
+-                            colors: sum[..components].iter().map(|v| (v / coverage) as f32).collect(),
+-                            coverage: coverage.min(1.) as f32,
+-                        },
+-                    );
+                 }
+             }
+         }
+-    }
+-    drop(records);
+-    drop(record_credit);
+-    if cancelled() {
+-        return None;
+-    }
+-    Some(MeshSamples { map, _guard: guard })
++        drop(records);
++        drop(record_credit);
++        if cancelled() {
++            return None;
++        }
++        Some(MeshSamples { map, _guard: guard })
++    })();
++    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
++        eprintln!(
++            "ORDERED_SAMPLE_OUTCOME patches={} complete={} work_spent={} work_left={work}",
++            patches.len(),
++            outcome.is_some(),
++            100_000_000 - work
++        );
++    }
++    outcome
+ }
+ 
+ #[cfg(test)]
+@@ -867,6 +934,131 @@
+         }
+     }
+     #[test]
++    fn cost_refinement_preserves_integrals_and_charges_every_failed_attempt() {
++        let used = Arc::new(AtomicUsize::new(0));
++        let calls = Cell::new(0usize);
++        let deny = Cell::new(usize::MAX);
++        let admit = |bytes: usize| -> Option<Credit> {
++            calls.set(calls.get() + 1);
++            if calls.get() == deny.get() {
++                return None;
++            }
++            let total = used.load(Ordering::SeqCst).checked_add(bytes)?;
++            if total > 8 * 1024 * 1024 {
++                return None;
++            }
++            used.store(total, Ordering::SeqCst);
++            Some(Box::new(Reservation(used.clone(), bytes)))
++        };
++        let patch = source(0., 1., [0.25; 3]);
++        let refs = [AdaptivePatchRef::Tensor(&patch)];
++        let mut pool = ParamPool::new();
++        let mut records = Vec::new();
++        let mut credit = None;
++        for points in [
++            [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)],
++            [Point::new(1., 0.), Point::new(1., 1.), Point::new(0., 1.)],
++        ] {
++            let mut parameters = [[0; 2]; 3];
++            for (i, p) in points.iter().enumerate() {
++                parameters[i] = [
++                    pool.intern(p.x, &admit).unwrap(),
++                    pool.intern(p.y, &admit).unwrap(),
++                ];
++            }
++            push_record(
++                &mut records,
++                &mut credit,
++                Record {
++                    points,
++                    parameters,
++                    patch_index: 0,
++                },
++                &admit,
++            )
++            .unwrap();
++        }
++        let resident = used.load(Ordering::SeqCst);
++        let run = |depth, limit, work: &mut usize, cancelled: &dyn Fn() -> bool| {
++            integrate_cell_with_paint_limit(
++                &records,
++                &refs,
++                &pool,
++                &[None],
++                Point::ZERO,
++                1.,
++                depth,
++                512,
++                work,
++                cancelled,
++                &admit,
++                limit,
++            )
++        };
++        let expected = [1., 0.25, 0.25, 0.25, 0.];
++        let mut baseline_work = 100_000;
++        assert_eq!(
++            run(0, CELL_PAINT_WORK, &mut baseline_work, &|| false),
++            Some(expected)
++        );
++        calls.set(0);
++        let polls = Cell::new(0);
++        let mut refined_work = 100_000;
++        assert_eq!(
++            run(0, 0, &mut refined_work, &|| {
++                polls.set(polls.get() + 1);
++                false
++            }),
++            Some(expected)
++        );
++        let reservations = calls.get();
++        let checkpoints = polls.get();
++        let spent = 100_000 - refined_work;
++        assert!(
++            refined_work < baseline_work,
++            "coarse retries must not refund their work"
++        );
++        assert_eq!(used.load(Ordering::SeqCst), resident);
++        // The deepest leaf must use the original shared allowance, not retry
++        // the exhausted local budget or recurse beyond the existing depth.
++        let mut deepest_work = 100_000;
++        assert_eq!(run(8, 0, &mut deepest_work, &|| false), Some(expected));
++        assert_eq!(deepest_work, baseline_work);
++        for n in 1..=reservations {
++            calls.set(0);
++            deny.set(n);
++            assert!(run(0, 0, &mut 100_000, &|| false).is_none());
++            assert_eq!(used.load(Ordering::SeqCst), resident);
++            deny.set(usize::MAX);
++            assert_eq!(run(0, 0, &mut 100_000, &|| false), Some(expected));
++        }
++        for n in 1..=checkpoints {
++            polls.set(0);
++            assert!(
++                run(0, 0, &mut 100_000, &|| {
++                    polls.set(polls.get() + 1);
++                    polls.get() == n
++                })
++                .is_none()
++            );
++            assert_eq!(used.load(Ordering::SeqCst), resident);
++        }
++        for n in 0..spent {
++            let mut work = n;
++            assert!(run(0, 0, &mut work, &|| false).is_none());
++            assert!(work <= n);
++            assert_eq!(used.load(Ordering::SeqCst), resident);
++        }
++        assert_eq!(run(0, 0, &mut 100_000, &|| false), Some(expected));
++        eprintln!(
++            "CELL_COST_CONTROL admissions={reservations} cancel_points={checkpoints} short_quotas={spent}"
++        );
++        drop(records);
++        drop(credit);
++        drop(pool);
++        assert_eq!(used.load(Ordering::SeqCst), 0);
++    }
++    #[test]
+     fn ranked_dense_occlusion_preserves_integrals_with_less_shared_work() {
+         let used = Arc::new(AtomicUsize::new(0));
+         let admit = |bytes: usize| -> Option<Credit> {

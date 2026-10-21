@@ -1,0 +1,54 @@
+    Blocking waiting for file lock on build directory
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: constant `PNG_SIGNATURE` is never used
+  --> vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 02s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_vector-14d3b109a0c844ed)
+
+running 13 tests
+test pdf_ordered_pixel_tests::tests::ordered_pixel_convex_clip_preserves_sampling_ids_and_shared_work ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_unions_coverage_and_preserves_later_patch_components ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_every_admission_failure_cancel_and_work_limit_are_transactional ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_folded_priority_uses_v_then_u_and_not_multiplicity ... ok
+test pdf_ordered_pixel_tests::tests::wholly_occluded_triangles_need_no_new_admission_but_crossing_owners_do ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_affine_components_integrate_over_winning_fragments ... OPAQUE_STRIPS gaps=false ticks=2584 fragments=16
+ok
+test pdf_ordered_pixel_tests::tests::coons_affine_identity_checks_original_boundary_controls ... ok
+test pdf_ordered_pixel_tests::tests::losing_triangles_do_not_fragment_a_wholly_winning_owner ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_fragment_limits_and_invalid_input_preserve_previous_source ... ok
+test pdf_ordered_pixel_tests::tests::convex_piece_merge_never_fills_a_concave_union ... ok
+test pdf_ordered_pixel_tests::tests::ordered_pixel_every_mid_partition_cancel_preserves_published_regions ... ok
+OPAQUE_STRIPS gaps=true ticks=2995 fragments=48
+test pdf_ordered_pixel_tests::tests::opaque_strip_partition_preserves_partial_incoming_coverage ... ok
+DOMINANT_STRIP_ROLLBACK admissions=7 cancellation_points=354 short_quotas=354
+test pdf_ordered_pixel_tests::tests::dominant_strip_shortcut_rolls_back_every_failure_and_retries ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 218 filtered out; finished in 0.02s
+

@@ -1,0 +1,313 @@
+diff --git a/crates/rrrah-vector/src/pdf_ordered_pixel_tests.rs b/crates/rrrah-vector/src/pdf_ordered_pixel_tests.rs
+index c18d2f303..6f705d990 100644
+--- a/crates/rrrah-vector/src/pdf_ordered_pixel_tests.rs
++++ b/crates/rrrah-vector/src/pdf_ordered_pixel_tests.rs
+@@ -109,6 +109,122 @@ mod tests {
+         assert!(pixel.fragments() >= 2);
+     }
+ 
++    #[test]
++    fn opaque_strip_partition_preserves_partial_incoming_coverage() {
++        for gaps in [false, true] {
++            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
++            let admit = |bytes: usize| {
++                root.try_reserve(bytes as u64)
++                    .ok()
++                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
++            };
++            let mut pixel = OrderedPixel::new(&admit, 256);
++            for i in 0..16 {
++                let low = i as f64 / 16.;
++                let high = low + if gaps { 1. / 32. } else { 1. / 16. };
++                rectangle(&mut pixel, low, high, owner(i + 1, [1., 0., 0.]));
++            }
++            let mut work = 1_000_000;
++            for points in [
++                [Point::ZERO, Point::new(1., 0.), Point::new(1., 1.)],
++                [Point::ZERO, Point::new(1., 1.), Point::new(0., 1.)],
++            ] {
++                pixel
++                    .paint_triangle(points, owner(0, [0., 1., 0.]), &mut work, &|| false)
++                    .unwrap();
++            }
++            close(
++                integrated(&pixel),
++                if gaps {
++                    [0.5, 0.5, 0., 1.]
++                } else {
++                    [1., 0., 0., 1.]
++                },
++            );
++            eprintln!(
++                "OPAQUE_STRIPS gaps={gaps} ticks={} fragments={}",
++                1_000_000 - work,
++                pixel.fragments()
++            );
++            drop(pixel);
++            assert_eq!(root.used(), 0);
++        }
++    }
++    #[test]
++    fn dominant_strip_shortcut_rolls_back_every_failure_and_retries() {
++        use std::cell::Cell;
++        let exercise = |refuse: usize, cancel: usize, quota: usize| {
++            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
++            let calls = Cell::new(0);
++            let deny = Cell::new(usize::MAX);
++            let admit = |bytes: usize| {
++                calls.set(calls.get() + 1);
++                if calls.get() == deny.get() {
++                    return None;
++                }
++                root.try_reserve(bytes as u64)
++                    .ok()
++                    .map(|r| Box::new(r) as Box<dyn std::any::Any + Send + Sync>)
++            };
++            let mut pixel = OrderedPixel::new(&admit, 256);
++            for i in 0..4 {
++                rectangle(
++                    &mut pixel,
++                    i as f64 / 4.,
++                    i as f64 / 4. + 0.125,
++                    owner(i + 1, [1., 0., 0.]),
++                );
++            }
++            let before = integrated(&pixel);
++            let bytes = root.used();
++            calls.set(0);
++            deny.set(refuse);
++            let polls = Cell::new(0);
++            let mut work = quota;
++            let points = [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)];
++            let source = owner(0, [0., 1., 0.]);
++            let result = pixel.paint_triangle(points, source, &mut work, &|| {
++                polls.set(polls.get() + 1);
++                polls.get() == cancel
++            });
++            let counts = (calls.get(), polls.get(), quota - work);
++            if result.is_err() {
++                assert_eq!(integrated(&pixel), before);
++                assert_eq!(root.used(), bytes);
++                deny.set(usize::MAX);
++                pixel
++                    .paint_triangle(points, source, &mut 100_000, &|| false)
++                    .unwrap();
++            }
++            close(integrated(&pixel), [0.5, 7. / 32., 0., 23. / 32.]);
++            drop(pixel);
++            assert_eq!(root.used(), 0);
++            (result, counts)
++        };
++        let (result, (admissions, polls, ticks)) = exercise(usize::MAX, usize::MAX, 100_000);
++        assert_eq!(result, Ok(()));
++        for n in 1..=admissions {
++            assert_eq!(
++                exercise(n, usize::MAX, 100_000).0,
++                Err(PixelPartitionError::Admission)
++            );
++        }
++        for n in 1..=polls {
++            assert_eq!(
++                exercise(usize::MAX, n, 100_000).0,
++                Err(PixelPartitionError::Cancelled)
++            );
++        }
++        for n in 0..ticks {
++            assert_eq!(
++                exercise(usize::MAX, usize::MAX, n).0,
++                Err(PixelPartitionError::Limit)
++            );
++        }
++        eprintln!(
++            "DOMINANT_STRIP_ROLLBACK admissions={admissions} cancellation_points={polls} short_quotas={ticks}"
++        );
++    }
+     #[test]
+     fn losing_triangles_do_not_fragment_a_wholly_winning_owner() {
+         let admit = |_| Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>);
+diff --git a/vendor/hayro-interpret/src/encode/ordered_pixel.rs b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+index 3eca4bd5b..7acddca31 100644
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1082,6 +1082,27 @@ impl<'a> OrderedPixel<'a> {
+                 keep(&mut next, old.polygon, old.owner)?;
+                 continue;
+             }
++            // A source proved strictly dominant throughout the incoming
++            // triangle retains its whole region. Cut only the incoming
++            // remainder, avoiding subdivision followed by restoration below.
++            // Crossing, tied or numerically ambiguous fields use the full path.
++            if dominates(&old.owner, &owner, &triangle, work, cancelled)? {
++                keep(&mut next, old.polygon, old.owner)?;
++                let mut remaining = AdmittedVec::new(admit, maximum);
++                for part in &incoming.values {
++                    subtract(
++                        part.polygon,
++                        &old.polygon,
++                        owner,
++                        &mut remaining,
++                        &mut lines,
++                        work,
++                        cancelled,
++                    )?;
++                }
++                incoming = remaining;
++                continue;
++            }
+             let prefix = next.values.len();
+             let previous_last = next.values.last().copied();
+             let overlap = subtract(
+@@ -1157,6 +1178,153 @@ impl<'a> OrderedPixel<'a> {
+ #[cfg(test)]
+ mod exact_orientation_tests {
+     use super::*;
++    fn unit_triangle() -> Polygon {
++        let mut p = Polygon::empty();
++        for v in [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)] {
++            p.push(v).unwrap();
++        }
++        p
++    }
++    #[test]
++    fn known_cut_is_idempotent_and_distinct_thin_band_survives() {
++        let mut work = 100_000;
++        let cut = [-0.25, 1., 1.];
++        let p = unit_triangle().clip_id(cut, 17, &mut work, &|| false).unwrap();
++        let again = p.clip_id(cut, 17, &mut work, &|| false).unwrap();
++        assert_eq!(p.points[..p.len], again.points[..again.len]);
++        assert_eq!(p.moments(), again.moments());
++        let opposite = p.clip_id(cut.map(|v| -v), 17, &mut work, &|| false).unwrap();
++        assert!(opposite.moments().is_none());
++        let delta = 2f64.powi(-20);
++        let band = p
++            .clip_id([0.25 + delta, -1., -1.], 18, &mut work, &|| false)
++            .unwrap();
++        let expected = 0.25 * delta + 0.5 * delta * delta;
++        let area = band.moments().unwrap().0;
++        assert!(area > 0.);
++        assert!((area - expected).abs() < 1e-20, "{area} != {expected}");
++    }
++    #[test]
++    fn non_dyadic_repeated_cuts_keep_boundary_bits_and_zero_opposite_area() {
++        for i in 0..128 {
++            let f = [-0.123456789 - i as f64 * 0.00123456789, 0.987654321, 0.345678901];
++            let mut work = 100_000;
++            let clipped = unit_triangle().clip_id(f, 1, &mut work, &|| false).unwrap();
++            assert!(clipped.moments().is_some());
++            let repeated = clipped.clip_id(f, 1, &mut work, &|| false).unwrap();
++            assert_eq!(clipped.points[..clipped.len], repeated.points[..repeated.len]);
++            assert_eq!(clipped.moments(), repeated.moments());
++            let opposite = clipped.clip_id(f.map(|v| -v), 1, &mut work, &|| false).unwrap();
++            assert!(opposite.moments().is_none(), "case {i}");
++        }
++    }
++    #[test]
++    fn line_keys_preserve_exact_identity_without_merging_nearby_cuts() {
++        let a = Point::new(0.125, 0.25);
++        let b = Point::new(0.75, 0.875);
++        assert!(LineKey::edge(a, b) == LineKey::edge(b, a));
++        assert!(LineKey::field([-0., 1., 0.]).unwrap() == LineKey::edge(Point::ZERO, Point::new(0., 1.)));
++        let f = [-0.25, 1., 1.];
++        assert!(LineKey::field(f).unwrap() == LineKey::field(f.map(|v| -v)).unwrap());
++        assert!(LineKey::field(f).unwrap() != LineKey::field([-0.25 - 2f64.powi(-50), 1., 1.]).unwrap());
++    }
++    #[test]
++    fn line_pool_every_refusal_cancel_and_short_work_restore_allocation_and_ids() {
++        use std::sync::{
++            Arc,
++            atomic::{AtomicUsize, Ordering},
++        };
++        struct Held(Arc<AtomicUsize>, usize);
++        impl Drop for Held {
++            fn drop(&mut self) {
++                self.0.fetch_sub(self.1, Ordering::SeqCst);
++            }
++        }
++        let exercise = |refuse: usize, cancel: usize, quota: usize| {
++            let live = Arc::new(AtomicUsize::new(0));
++            let calls = AtomicUsize::new(0);
++            let admit = |bytes| -> Option<Credit> {
++                let n = calls.fetch_add(1, Ordering::SeqCst);
++                if n == refuse {
++                    return None;
++                }
++                live.fetch_add(bytes, Ordering::SeqCst);
++                Some(Box::new(Held(live.clone(), bytes)))
++            };
++            let mut pool = LinePool::new(&admit);
++            {
++                let mut tx = pool.transaction();
++                for i in 0..2 {
++                    tx.intern(LineKey::Axis(0, i), &mut 1000, &|| false).unwrap();
++                }
++                tx.commit();
++            }
++            let baseline_calls = calls.load(Ordering::SeqCst);
++            let baseline_live = live.load(Ordering::SeqCst);
++            let baseline_size = pool.map.allocation_size();
++            let baseline_next = pool.next;
++            let checks = AtomicUsize::new(0);
++            let mut work = quota;
++            let result = (|| -> Result<()> {
++                let mut tx = pool.transaction();
++                for i in 2..66 {
++                    tx.intern(LineKey::Axis(0, i), &mut work, &|| {
++                        checks.fetch_add(1, Ordering::SeqCst) == cancel
++                    })?;
++                }
++                Ok(()) // Intentional rollback even after all insertions succeed.
++            })();
++            assert_eq!(pool.map.len(), 2);
++            assert_eq!(pool.next, baseline_next);
++            assert_eq!(pool.map.allocation_size(), baseline_size);
++            assert_eq!(live.load(Ordering::SeqCst), baseline_live);
++            for i in 0..2 {
++                assert_eq!(pool.map.get(&LineKey::Axis(0, i)), Some(&(i as u32 + 1)));
++            }
++            // Reuse the pool after a rollback, with its original IDs intact.
++            {
++                let mut tx = pool.transaction();
++                assert_eq!(tx.intern(LineKey::Axis(0, 0), &mut 1000, &|| false).unwrap(), 1);
++                tx.commit();
++            }
++            let admissions = calls.load(Ordering::SeqCst);
++            let checkpoints = checks.load(Ordering::SeqCst);
++            {
++                let mut tx = pool.transaction();
++                for i in 2..66 {
++                    assert_eq!(
++                        tx.intern(LineKey::Axis(0, i), &mut 100_000, &|| false).unwrap(),
++                        i as u32 + 1
++                    );
++                }
++                tx.commit();
++            }
++            assert_eq!(pool.map.len(), 66);
++            drop(pool);
++            assert_eq!(live.load(Ordering::SeqCst), 0);
++            (result, baseline_calls, admissions, checkpoints, quota - work)
++        };
++        let (ok, first, end, checkpoints, ticks) = exercise(usize::MAX, usize::MAX, 100_000);
++        assert_eq!(ok, Ok(()));
++        for n in first..end {
++            assert_eq!(
++                exercise(n, usize::MAX, 100_000).0,
++                Err(PixelPartitionError::Admission)
++            );
++        }
++        for n in 0..checkpoints {
++            assert_eq!(
++                exercise(usize::MAX, n, 100_000).0,
++                Err(PixelPartitionError::Cancelled)
++            );
++        }
++        for n in 0..ticks {
++            assert_eq!(
++                exercise(usize::MAX, usize::MAX, n).0,
++                Err(PixelPartitionError::Limit)
++            );
++        }
++    }
+     #[test]
+     fn canonical_intersections_match_fraction_oracle_and_reversal_bits() {
+         let cases: &[([u64; 4], usize, u64, [u64; 2])] =
