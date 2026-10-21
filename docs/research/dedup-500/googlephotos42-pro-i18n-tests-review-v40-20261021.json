@@ -1,0 +1,37 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_teaser_translation_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/pro-moments.test.ts": {
+      "sha256": "a90d5e7e858ed3804613b604b9fcae893028a3c806bddee5d8766336a8b004f6",
+      "git_blob": "35daa02234c1e24cad693df39d72585c2dd9aa7c",
+      "bytes": 8302,
+      "lines": 176,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/i18n-pro.test.ts": {
+      "sha256": "eaf9f5f3de8d04dc45bdfc88fa1c644b3bdbdd3a621c425da46d34a070daf75b",
+      "git_blob": "79475e9bb6fcf3445258beb1ae070da834a7b655",
+      "bytes": 4404,
+      "lines": 88,
+      "method": "Whole pinned test source read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 147,
+  "tracked_blobs": 230,
+  "findings": [
+    "Teasertests covertypecounts,free/pro/empty,miscunknownfallback,dismisssamecountsandshowdifferentcounts,linkparameters andvariantpersist/error. No distinctrunidentityrequirement; behavioragreescountkeyimplementation.",
+    "Varianttests sequentialread/write,notconcurrentemptyread. Earliercopyvariantraceobservationremainsunexecuted.",
+    "Translationtests flattenallregisteredlocales andcompareEnglishdifferencewithexceptions,placeholder/tagmultisetsandliteralprice. Theydo notestablishtranslationaccuracy/layoutorrealPhotoslocalematching.",
+    "Atleast60Prokeys assertion is structuralcount,notcompleteproductcapabilitycoverage. Fullpopup9locale registrydifferentfromstore10catalogs alreadyrecorded.",
+    "DOMteasercasesusehappy-dom; no realmultiwindowbrowserorpopupvisualtestsperformedthisstep."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "147/230wholeartifacts; upstreamsuite/applicationremainincomplete.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
