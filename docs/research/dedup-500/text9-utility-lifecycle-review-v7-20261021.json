@@ -1,0 +1,60 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/test_utils/test_union_find.py": {
+      "sha256": "c9ccffedad72ea1a876fbaf1b6b072991d879ba84011dd5d1e7be2c9623f2c8b",
+      "git_blob": "c0045e2166a13d1122940bcd359a3d7760ca7535",
+      "lines": 203
+    },
+    "src/text_dedup/utils/timer.py": {
+      "sha256": "e070124f833b36ad74fdf518a25b73209f8410818f73550071fac57415590362",
+      "git_blob": "df0ecde6874dc660fc3cb6281c0c8acfde0a48d4",
+      "lines": 76
+    },
+    "src/text_dedup/utils/progress.py": {
+      "sha256": "9a501ee0e85d59f7823e3b732d87f7288a28dc122bffc1b37cf0d15e352ba54d",
+      "git_blob": "ac39a8c995ea06bfce2694403154b2dbd5e58b75",
+      "lines": 71
+    },
+    "src/text_dedup/utils/logger.py": {
+      "sha256": "0c356a526452c3c4d6f2f40f89d4b59c2ba7f53976de0c47e7d56e7e6cb310ba",
+      "git_blob": "9b3a02500b2040130abe82094bab9b1d60f8befa",
+      "lines": 9
+    },
+    "src/text_dedup/utils/env.py": {
+      "sha256": "9648916f459d79b55e5eba624c454de03b7c3c04b87d6b2c6e8e171f8a339fd7",
+      "git_blob": "2aa1e1c841177f71b101bf4e22ac4c930689e06e",
+      "lines": 10
+    }
+  },
+  "cumulative_whole_files_read": 29,
+  "tracked_blobs": 75,
+  "method": "Five whole pinned files read;19 original UnionFind test methods executed directly against original UnionFind. Original timer classes AST-extracted with local Progress/clock/logger doubles; injected exception and empty/zero reports.",
+  "findings": [
+    "All19UnionFind test methods pass locally. Covers rank, path compression, reset, disjoint components and100-element chain; does not establish semantic validity of dedup component merging.",
+    "TimerContext.__exit__ raises received exception before spinner.stop and elapsed recording. Original-class control confirms started spinner remains unstopped and failed phase unrecorded. Real rich terminal behavior untested.",
+    "Timer.report on empty elapsed_times raises ValueError from max(empty); zero-duration non-total phase raises ZeroDivisionError while formatting percentages. Both reproduced with original method bodies.",
+    "Timer total is sum of all named non-total measurements, which can double-count nested phases; elapsed dictionary overwrites repeated phase names. Runtime timing interpretation requires explicit nesting/repetition contract.",
+    "CustomProgressBar tracks initial progress and guards update before task creation. Context managers patch two datasets progress globals under with, so patch restoration follows context exit; parallel/nested framework compatibility untested.",
+    "Logger configures root basicConfig at ERROR and sets text_dedup logger DEBUG; this is global logging setup, not per-run configuration. env helper logs Polars pool, CPU and available memory; no environment validation/constraint enforcement in that helper."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/utility-lifecycle-control.py",
+    "sha256": "72a49af437d9ea2efb3f5e73ae3abe6ea692f760fdd8f3acf2f6d3c879f46276",
+    "result": {
+      "original_union_find_test_methods_passed": 19,
+      "timer_spinner_started": true,
+      "timer_spinner_stopped_after_error": false,
+      "failure_elapsed_recorded": false,
+      "empty_report_error": "ValueError",
+      "zero_duration_report_error": "ZeroDivisionError",
+      "scope": "Original UnionFind test bodies; original timer classes with local Progress/clock/logger doubles. No rich rendering/full pytest."
+    }
+  },
+  "limits": [
+    "29/75 tracked blobs reviewed;152/500 complete repositories.",
+    "No full pytest, actual rich rendering/datasets monkeypatch integration, or production changes. pHash/ASAN deferred."
+  ]
+}
