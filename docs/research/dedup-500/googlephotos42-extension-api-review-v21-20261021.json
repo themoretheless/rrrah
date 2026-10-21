@@ -1,0 +1,46 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_extension_source_review_with_original_scheduler_control",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/api.ts": {
+      "sha256": "930b533f7aad750f276831182109a83a888e295bf5b6621cf5fdcc60f2e6dd18",
+      "git_blob": "cff302e52b06a852a484157f669ff0e7e70439f7",
+      "bytes": 8081,
+      "lines": 264,
+      "method": "Whole pinned source read."
+    },
+    "src/extension/background.ts": {
+      "sha256": "904941e3c196c8c7025162612b6abf808061300cd22cbef891ed4dec02639bf1",
+      "git_blob": "1e4e625ff9dcf3a53386c35e824dd15eed1863e8",
+      "bytes": 2928,
+      "lines": 83,
+      "method": "Whole pinned source read."
+    }
+  },
+  "cumulative_assessed_blobs": 83,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-badge-controls-v21-20261021/run.mjs",
+    "harness_sha256": "35ae186d165ea148638155dc5e38cfc43da46fdb8ada313ae8651e6b81810e26",
+    "log": "docs/research/dedup-500/googlephotos42-badge-controls-v21-20261021/run.log",
+    "passed": 1,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Full original background module type-stripped; two imports replaced by explicit VM dependencybindings. FakeDate/timers/listeners/API writes; no extensionbrowser/network calls."
+  },
+  "findings": [
+    "Immediatebadgepathdoesnotcancel pendingtimer. Simulated initialprogress t1000,pendingoldprogress t1050,newdone t1200beforetimerdispatch yields badge writes1,empty,5. Oldpendingmessageoverwritesnewterminalstate.",
+    "Tabclosedhandlerclears pendingtimerandlasttimestamp; no stale-entryleakclaim fornormal tabremoval.",
+    "Callbackwrappersinspectruntime.lastError; tabsSendMessage rejects rawerrorobject whileothersmostlywrapError. No callbacktimeoutwhenAPInevercallsback.",
+    "createChromePresetStore readerrorreturnsnull,write can subsequentlysucceed. This preserves earlier managerreadfailure-asemptyoverwrite possibility. No actualextensionstoragecontrolperformed.",
+    "readProToken localfirst pusheslocaltosync onreadwhen mismatch; storedtokenverifiedelsewhere. No licenseverificationorpolicybypassworkperformed.",
+    "Background listensprogressmessages withouttrackingrunidentity ormonotonicsequence; schedulercontrol proves localstaleordering only,notcrossrunapplicationbehavior."
+  ],
+  "cumulative_original_function_controls": 31,
+  "limits": [
+    "83/230wholeartifacts; no fullapplication or extensionruntimequalification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
