@@ -1,0 +1,51 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "readme.md": {
+      "sha256": "b5764b8c5df5a9e3ae1038247c14027fbfbc48c27fd15091cb6facb03a82c648",
+      "git_blob": "5816a7d962ecc7def99fb2b778557d9564da8150",
+      "bytes": 18472,
+      "method": "Whole pinned text read; external instructions/examples treated as research data, not executed."
+    },
+    "COPYING.md": {
+      "sha256": "310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af",
+      "git_blob": "b017086e9cc85586256dafcecd04c8caf13239ab",
+      "bytes": 15174,
+      "method": "Whole pinned text read; external instructions/examples treated as research data, not executed."
+    },
+    "src/res/license.txt": {
+      "sha256": "fef836384e1308ed4b275db7e7d620df6d6a89e98c6bbc806b36cd9112479630",
+      "git_blob": "bef96d8428f111c35804cfd0af5c999c302ce9d6",
+      "bytes": 988,
+      "method": "Whole pinned text read; external instructions/examples treated as research data, not executed."
+    }
+  },
+  "new_artifacts_assessed": {
+    "screenshot.png": {
+      "sha256": "2068fc16ff2f1e82b236bc28c2ba83cf7eb2f0da37bd60c6c122c61e922dbef4",
+      "git_blob": "5a4040e9ea3ae61fca54f223dc7efd1bc91180f4",
+      "bytes": 1352722,
+      "method": "Original pinned PNG opened and visually assessed in full using view_image; no application launch."
+    }
+  },
+  "cumulative_assessed_blobs": 17,
+  "tracked_blobs": 616,
+  "findings": [
+    "README positions cbird as perceptual content-based candidate discovery plus manual evaluation, including crop/rotation/video workflows. File format availability explicitly depends on Qt/FFmpeg build; listed video extensions are not checked against FFmpeg runtime. Do not convert feature list into universal codec coverage.",
+    "README calls MD5 groups exact duplicates, while reviewed Media header explicitly permits JPEG metadata exclusion. Producer implementation still unread; byte-file identity remains unproven.",
+    "DCT features described as centered on invariant features, while reviewed makeKeyPointHashes uses feature coordinates as top-left with a centering FIXME. Actual crop/rotation recall requires corpus/runtime evidence.",
+    "Performance tables describe specific1000image and500k archive/NAS workloads, and release notes claim5-10x video speedup. No binary/dataset/timing reproduction or paired control performed in this review; these are upstream historical claims.",
+    "Link/inode defaults and flags are documented: skip links/duplicate inodes unless enabled; resolved links constrained under root. Scanner implementation remains incomplete, so this is documented behavior rather than newly validated source/runtime guarantee.",
+    "README screenshot visually shows two distinct viewpoints of the same bathroom in a two-item ORB result, with file dimensions/size/compression/score and694groups. It demonstrates a visual comparison workflow, not pixel identity, exhaustive recall or verified quality ranking. Build provenance not tied to pinned commit.",
+    "Root COPYING full GPLv2 text and resource license notice read. Source headers previously read permit GPLv2-or-later; resource lists dependencies and jpegquality attribution. Embedded/dependency licenses still need individual assessment; no production source port.",
+    "README trash/weed/installation/shell commands read only. No deletion, application launch, environment configuration change, package installation or external account action performed."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "17/616 tracked artifacts assessed:16whole text/source,1PNG visual. Eleven previous original-body/header controls plus one independent counterexample; no new runtime test.",
+    "External release/wiki/gist/build documentation links not refreshed or counted. Remaining616-tree files and other visual/document artifacts incomplete.",
+    "No optimization or full-library coverage claim. Deferred native pHash/ASAN skipped."
+  ]
+}
