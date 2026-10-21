@@ -1,0 +1,47 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "whole_repo_complete": false,
+  "partial_text_read": {
+    "path": "cornerdetect/fast_9.c.go",
+    "sha256": "a79139957418d8f59fce2217e7ee30e5dc2c560cc58e6e0ef04092fa8aec44ff",
+    "new_line_ranges": [
+      [
+        1401,
+        3834
+      ]
+    ],
+    "cumulative_line_ranges": [
+      [
+        1,
+        4035
+      ],
+      [
+        7710,
+        7737
+      ]
+    ],
+    "total_lines": 7737,
+    "read_lines": 4063,
+    "unread_lines": 3674,
+    "whole_file": false
+  },
+  "completed_functions_read": [
+    "fast9_corner_score",
+    "make_offsets",
+    "fast9_score"
+  ],
+  "findings": [
+    "Entire fast9_corner_score decisiontree nowread, includingwrappedbright/darkarccombinationbranches throughpositions0..15 andterminalbinarysearch. Onlyreadsimagebytes/offsets,updateslocalbounds andreturnsbmin; no newdefectfoundbyreading.",
+    "Positive scoreoracle evidence remains finite:2050binaryscores and7354mixedintensityscores. No fresh tests run because no implementationchanged ornewconcernrequiringrerun.",
+    "Generatedfast9_detect loop/setup andinitialtree plus finalappend alreadyread; middle4036..7709 remainsunread."
+  ],
+  "remaining": [
+    "cornerdetect/fast_9.c.go lines4036..7709"
+  ],
+  "limits": [
+    "227/500complete, currentrepo notfullyread.",
+    "NativepHash/ASAN remainsdeferred.",
+    "No productioncode or newperformanceclaim."
+  ]
+}
