@@ -1,0 +1,33 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": true,
+      "read_ranges_inclusive": [
+        [
+          1,
+          6980
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-unknown-result.json",
+  "findings": [
+    "Completed entire spng.c source review including setters, ownership semantics, errors, SSE2/SSSE3/SSE4 filter variants, NEON filters and palette expansion.",
+    "Confirmed public unknown-chunk getter reports count2 but copies first structure only, leaving second zeroed. Setter/query/getter all succeed. Current libphash does not call this metadata API.",
+    "SSE source comment says modulo255 but byte intrinsic arithmetic wraps256; comment discrepancy, not demonstrated arithmetic defect. x86 code source-reviewed, not run on arm64.",
+    "NEON RGB/RGBA palette expansion processes8/4 indices per batch with scalar remainder in caller; filters use padded row lookahead. Earlier1080 independent filter comparisons qualify only their valid small padded cases.",
+    "Whole spng.c/header and selected docs/license read does not mean whole dependency repository reviewed; tests/assets/build/doc remainder remains. No production code adopted or changed."
+  ],
+  "remaining": [
+    "Remaining spng docs/build/tests/assets",
+    "Other three codec gitlinks"
+  ],
+  "full_review_count": 247
+}
