@@ -2,7 +2,7 @@
   "index": 423,
   "repository": "SpangleLabs/vidhash",
   "commit": "c6f0a19c88a313536ed7736cd6f2cb31b8d3337f",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned5/24 whole implementation files; five original matching-module controls with synthetic frames/options. Unordered overlap and duration-clamp semantics confirmed, no video decode/runtime.",
   "decision": "reference",
   "finding": "Video frame-hash/options separation; default Hamming threshold is policy, not proof of complete temporal equality.",
   "available_source_evidence": [
@@ -83,6 +83,11 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/vidhash423-source-review-v1-20261021.json"
     }
   ]
 }

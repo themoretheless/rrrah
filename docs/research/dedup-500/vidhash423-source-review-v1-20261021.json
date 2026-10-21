@@ -1,0 +1,55 @@
+{
+  "repository": "SpangleLabs/vidhash",
+  "commit": "c6f0a19c88a313536ed7736cd6f2cb31b8d3337f",
+  "whole_repo_complete": false,
+  "tracked_blobs": 24,
+  "cumulative_assessed_blobs": 5,
+  "files": {
+    "vidhash/frame_hash.py": {
+      "bytes": 1079,
+      "sha256": "70418735856172ebe0e5453ab64113910aecb8a7ce4cc9aceb1753db0f445367",
+      "method": "Whole pinned Python source read without truncation"
+    },
+    "vidhash/hash_options.py": {
+      "bytes": 1329,
+      "sha256": "2a38ac9b215d6f3493e77295f847118fc1bc2998073c20ce6a33ab783656347a",
+      "method": "Whole pinned Python source read without truncation"
+    },
+    "vidhash/match_options.py": {
+      "bytes": 4855,
+      "sha256": "19076cefc22e903be33753301aefc63ce4d54e596ee1974d3f82858d4e218597",
+      "method": "Whole pinned Python source read without truncation"
+    },
+    "vidhash/video_hash.py": {
+      "bytes": 1522,
+      "sha256": "d29b6805c9cb6d86a8870bfaee12e485db398557d00faa85f8853e98f6586028",
+      "method": "Whole pinned Python source read without truncation"
+    },
+    "vidhash/func.py": {
+      "bytes": 5723,
+      "sha256": "27bf40a40ccc8d11357de93169715b13c5419b7247850faafecc750154f5dadc",
+      "method": "Whole pinned Python source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/vidhash423-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/vidhash423-controls-v1-20261021/run.log",
+    "passed": 5,
+    "method": "Unchanged original match_options and video_hash modules loaded directly; authored scalar frame-hash and equal options objects. No original imagehash/video/FFmpeg."
+  },
+  "findings": [
+    "PercentageMatch checks membership in other frame hash set; original100percent control accepts reversed sequence. This matches unordered-overlap method scope, not a claimed policy bug.",
+    "DurationMatch checks consecutive offsets and rejects reversed three-frame control at requested3seconds/fps1. It clamps requested frame count to smaller sequence, so one matching frame satisfies requested3seconds when both videos have only one sample. Actual duration boundary/API intent pending README/tests.",
+    "Options mismatch raises MatchException; empty sequences do not match under both tested modes.",
+    "HashOptions contains fps and settings and compared for equality; frame records carry no per-frame timestamps. Video length used to select shorter sequence, sample count used for required overlap. Whole timeline equivalence not established.",
+    "hash_video sorts outN.png numerically and hashes via ThreadPool after FFmpeg downscale/transcode and FPS extraction. Pool close/join and image file context managers not observed. No real process/resource behavior tested.",
+    "_decompose_video cleanup is in finally and preserves fractional FPS string, but image pipeline strips into sampled frame hashes without independent timestamp or full-frame validation.",
+    "SimpleImageHash uses inclusive Hamming threshold; DHash blank zero signature derived from synthetic allzero matrix. Flat-frame interpretation/alpha/ICC/rotation left to dependency and corpus qualification."
+  ],
+  "remaining_scope": "19 artifacts: configs/docs/license/poetrylock, tests/providers, package init/stubs/marker and main entry.",
+  "license": "Registry MIT screening metadata only; full root license pending. No production adoption.",
+  "limits": [
+    "Partial5/24 review; global full count182/500 unchanged.",
+    "No original image hash, video decoder/FFmpeg, media corpus, actual timestamps, platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
