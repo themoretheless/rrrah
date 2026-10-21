@@ -1,0 +1,28 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "dependency": "pnggroup/libpng@d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "pngget.c",
+      "lines": 1369,
+      "sha256": "3098a692f096c58b9c0f039fbfd38c29b0a86c464a498a9c775c22698a2bec95",
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Whole retrieval module read: dimensions, transformed row layout, physical density/aspect/offset conversions, color declarations, HDR metadata, ICC/Exif, palette/transparency, text/unknown chunks and user limits.",
+    "Pinned PNGv3 getters for gAMA/cHRM report actual stored chunks; missing declarations must not be inferred from a getter failure. cICP and sRGB have separate presence checks; this module does not itself perform color transformation or define overall precedence.",
+    "Several getters return borrowed info pointers; caller must honor owning png/info lifetime. Required output pointer contracts differ: cICP requires all four, ICC requires name/profile/length, while gAMA/cHRM permit optional output pointers. Not every getter accepts null outputs.",
+    "Physical pixel aspect returns y_pixels_per_unit/x_pixels_per_unit. Meter density getter additionally requires meter units; combined isotropic getter returns zero for unequal x/y density. Missing metadata and a zero value can share convenience return values.",
+    "tRNS validity query specially suppresses a canceled transparency chunk when num_trans is zero; raw retrieval behavior and presence query are distinct APIs. Existing own-library transparency tests remain separate evidence.",
+    "No production code changed, no additional runtime claim or native pHash.org/ASAN."
+  ],
+  "remaining": [
+    "598 remaining libpng tracked blobs",
+    "Pinned libpng runtime and wrapper cleanup qualification",
+    "Other codec gitlinks and external visual assets"
+  ],
+  "full_review_count": 247
+}
