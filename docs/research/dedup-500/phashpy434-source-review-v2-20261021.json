@@ -1,0 +1,32 @@
+{
+  "repository": "dries007/pHashPy",
+  "commit": "3fefabf71a64bed151e44d2d045cd27f68a5d698",
+  "whole_repo_complete": false,
+  "wrapper_blobs_complete": true,
+  "wrapper_blobs": 15,
+  "license_review": {
+    "path": "COPYING",
+    "method": "Full-file diff against previously whole-read .dedup-work/audio399-20261021/LICENSE; all diff hunks read. Differences limited to heading whitespace, http/https URLs, LGPL explanatory URL and trailing blank line. All unchanged text previously whole-read.",
+    "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+  },
+  "submodule_remaining": {
+    "path": "pHash",
+    "commit": "887d07b9bdd9e2fb082c932002cefbcb1c8c20a1",
+    "reason": "Explicitly deferred native pHash scope; not claimed reviewed."
+  },
+  "local_qualification": {
+    "source": "crates/rrrah-dedup/src/lib.rs",
+    "source_sha256": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1",
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --lib every_byte_pattern_in_low_and_high_bits_matches_full_scan_at_every_radius",
+    "passed": 1,
+    "failed": 0,
+    "coverage": "512 values (all256 bytes in low and high8 bits),512 queries,65 radii0..64; ordered index result compared with full XOR popcount scan. Includes duplicate zero values under distinct IDs.",
+    "query_radius_checks": 33280,
+    "limits": "Index traversal oracle shares standard popcount primitive; not an independent machine instruction correctness proof or arbitrary external byte-string parser qualification."
+  },
+  "limits": [
+    "236/500 whole repositories;434 remains partial despite wrapper completion.",
+    "No production implementation change needed for fixed-width local Hamming metric.",
+    "Native pHash/ASAN remains deferred; no submodule execution."
+  ]
+}
