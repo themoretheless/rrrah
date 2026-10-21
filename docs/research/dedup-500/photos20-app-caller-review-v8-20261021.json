@@ -1,0 +1,33 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tabs/app.tsx": {
+      "sha256": "9abf19ea4ca37b107c1d9932b79256894cd25a2fcd14340313754b78b037934b",
+      "git_blob": "918cbc7e9ad2acf65395ff1b83487e098cebb94e",
+      "bytes": 35910,
+      "lines": 994,
+      "method": "Whole source read in ranges 1-220,221-500,501-750,751-994."
+    }
+  },
+  "cumulative_whole_files_read": 10,
+  "tracked_blobs": 84,
+  "findings": [
+    "Caller mitigation: getAllMediaItems result/chunk requestId must equal active request ID. Cancel clears active ID, chunk buffers and watchdog, and aborts detector signal. Reducer-only stale fetch outcome is not direct proof of a normal UI failure.",
+    "Residual completion window: runDuplicateDetection awaits logger.finalize after detection then clears active ID and dispatches SCAN_COMPLETE without checking signal or operation identity again. Cancellation/new operation during that await can publish stale completion; static ordering, not browser race reproduction.",
+    "Caller mitigation: defaultKeptSets recomputes selectDefaultKeep from remaining group members. A stale originalMediaKey alone does not establish deletion of every remaining member.",
+    "Restored override keys are filtered by valid group ID only, not membership. A nonempty kept override containing only absent keys can make handleTrash select every present member. Stored-data reachability not runtime-qualified.",
+    "Incremental fetch loads previous mediaItems using account-only validity and newest creation timestamp. Merge retains all cached-only items, with no deletion reconciliation or refilter against changed dateRange in this source. Full scanMode still uses this incremental media fetch.",
+    "Saved results load independently of mount health check and are not validated against current state in the storage callback. Unknown-account results may later be relabelled by reducer.",
+    "Health results dispatch unconditionally regardless of scanning/trashing state. Trash/restore results do not use active request correlation in this listener. No live messages sent.",
+    "Undo restores UI snapshot optimistically before server acknowledgement; restore failure is console-only here. Snapshot lacks account identity.",
+    "Chunks deduplicate repeated indices, but count/index bounds and consistent totalChunks are not validated in this source. A 150-second fetch-silence watchdog exists and resets on progress."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static caller analysis; no React mounting, browser message delivery, account connection or trash/restore executed.",
+    "Earlier reducer controls remain scoped to synthetic transitions; caller mitigations recorded explicitly.",
+    "10/84 complete source files read; UI screenshots and remaining sources not assessed."
+  ]
+}

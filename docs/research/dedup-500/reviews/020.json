@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 9/84 tracked blobs. Main algorithm, worker, main test file and reducer read; synthetic reducer transitions reproduced. Caller dispatch guards and browser runtime unverified.",
+  "review_scope": "Partial whole-file review: 10/84 tracked blobs. App caller fully read; fetch request correlation and default-keep recomputation mitigate some reducer-only cases. Static completion/storage/incremental-cache concerns remain without browser runtime proof.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -123,6 +123,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-state-machine-review-v7-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-app-caller-review-v8-20261021.json"
     }
   ]
 }
