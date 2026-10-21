@@ -1,0 +1,52 @@
+{
+  "status": "local_regression_passed",
+  "motivation": "Reviewed VisualKey floor-cell hashes omit remainder strips; qualify our independent area-average border coverage without adopting CLAHE.",
+  "production_inspection": {
+    "path": "crates/rrrah-dedup/src/pixels.rs",
+    "sha256": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "finding": "Area-weighted9x9linear-light projection over black/white backgrounds, no CLAHE in this fingerprint path."
+  },
+  "regression": {
+    "path": "crates/rrrah-dedup/tests/pixels.rs",
+    "sha256": "40f230077a5725a5140dda316abde3947d018108d1c319408fa8a22e720449e1",
+    "name": "area_fingerprint_preserves_last_row_and_column_contributions",
+    "dimensions": [
+      [
+        32,
+        32
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        96,
+        96
+      ],
+      [
+        128,
+        128
+      ],
+      [
+        31,
+        33
+      ]
+    ],
+    "positions_per_dimension": 5,
+    "oracle": "One opaque white pixel on black contributes exactly1/(width*height) to every linear RGB mean; require nonzero luminance variation, distinct pixel digest and explicit pixel inequality.",
+    "not_claimed": "Perceptual hash must differ for every border edit; fingerprints remain candidates."
+  },
+  "validation": {
+    "before_log": "docs/research/dedup-500/visualkey476-local-pixels-rerun-20261021.log",
+    "before_passed": 9,
+    "after_log": "docs/research/dedup-500/visualkey476-local-border-regression-20261021.log",
+    "after_passed": 10,
+    "failed": 0,
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test pixels"
+  },
+  "limits": [
+    "New regression, no production optimization or behavior change.",
+    "No full decoder/platform/corpus qualification; full repository review total170/500unchanged.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}

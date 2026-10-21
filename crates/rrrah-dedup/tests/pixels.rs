@@ -1,6 +1,43 @@
 use rrrah_dedup::pixels::{PixelError, Rgba8View};
 
 #[test]
+fn area_fingerprint_preserves_last_row_and_column_contributions() {
+    for (width, height) in [(32, 32), (64, 64), (96, 96), (128, 128), (31, 33)] {
+        let count = width * height;
+        let mut black = vec![0_u8; count * 4];
+        for pixel in black.chunks_exact_mut(4) {
+            pixel[3] = 255;
+        }
+        let baseline = Rgba8View::new(width as u32, height as u32, &black, count as u64).unwrap();
+        let baseline_digest = baseline.pixel_digest(|| false).unwrap();
+        for (x, y) in [
+            (width - 1, 0),
+            (width - 1, height / 2),
+            (0, height - 1),
+            (width / 2, height - 1),
+            (width - 1, height - 1),
+        ] {
+            let mut changed = black.clone();
+            changed[(y * width + x) * 4..(y * width + x) * 4 + 3].fill(255);
+            let view = Rgba8View::new(width as u32, height as u32, &changed, count as u64).unwrap();
+            let signature = view.fingerprint(|| false).unwrap();
+            // Equal-area cells cover the whole image. One opaque white pixel
+            // contributes exactly 1 / pixel_count to each linear RGB mean.
+            let expected_mean = 1.0 / count as f64;
+            for mean in signature.mean_linear_rgb {
+                assert!(
+                    (mean - expected_mean).abs() < 1e-12,
+                    "{width}x{height}, white pixel at ({x},{y}), mean={mean}"
+                );
+            }
+            assert!(signature.luminance_stddev > 0.0);
+            assert_ne!(view.pixel_digest(|| false).unwrap(), baseline_digest);
+            assert_eq!(baseline.same_pixels(&view, || false), Ok(false));
+        }
+    }
+}
+
+#[test]
 fn informative_zero_distance_is_a_candidate_not_pixel_identity() {
     let mut original = Vec::new();
     let mut adjusted = Vec::new();

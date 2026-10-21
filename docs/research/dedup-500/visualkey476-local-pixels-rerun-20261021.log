@@ -1,0 +1,16 @@
+Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.95s
+     Running tests/pixels.rs (target/debug/deps/pixels-dd7227e74ee02ce5)
+
+running 9 tests
+test identical_pixels_honor_each_block_and_final_cancellation_checkpoint ... ok
+test gradient_has_independently_known_difference_bits ... ok
+test informative_zero_distance_is_a_candidate_not_pixel_identity ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection ... ok
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test validates_layout_budget_and_cancellation ... ok
+test identical_and_transparent_pixel_equality_observe_late_cancellation ... ok
+test all_opaque_gray_levels_collide_only_as_uninformative_candidates ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
