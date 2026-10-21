@@ -1,0 +1,65 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Seven additional source/test texts wholly read; actual original DCT/median helpers and standalone upstream replicated-formula DCT test executed. Remaining source/vendor/assets incomplete.",
+  "manifest": [
+    {
+      "path": "src/hashes/dhash.c",
+      "sha256": "879ee264aa886619bf023ea209239a4787314988f72710cdf0b1779aa97c93f1",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/hashes/mhash.c",
+      "sha256": "50310b93f857bd8a0adf2e94a2fb3001e005b07b4657e98d503e83b2d6bbfeff",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/hashes/bmh.c",
+      "sha256": "7a58e4b635ff0e89677cab23ff6ed17497289626b15c3673c4411bbc56544eef",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/hashes/phash.c",
+      "sha256": "c30fb9154f4bb61c6a9281e7126c0ab50fdef48899ec0611565c3d4e1def67bb",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_dct.c",
+      "sha256": "fe30cfb99f38fceca6ec09c54e61de261b5e222e446777946a56cdfa599bebf7",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_math_rigor.c",
+      "sha256": "8fce105733ba57f2422dd1bcfde9dc60865d16a24322f2c62efd1db52bd34070",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_macros.h",
+      "sha256": "d0b6cde2c9f7df4d9f8d022947b466a19ab3ae15fcd1f6c38050485703ff65f9",
+      "review": "whole text read"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/libphash454-controls-20261021/dct-result.json",
+  "upstream_test": {
+    "path": "tests/src/test_dct.c",
+    "checks_passed": 5,
+    "compile": "cc -O2 -I<cache>/tests/src <cache>/tests/src/test_dct.c -o <test-dct>",
+    "limit": "Standalone test reimplements coefficient formula; does not call library DCT helpers. Not full upstream suite."
+  },
+  "findings": [
+    "Original DCT32 helpers NEON path checked on32synthetic images includingzero andwhite;2048coefficients agree with independently generated doubleprecision DCT-II reference within.05,maximumerror.0004882812509094947. No speedup or image matching accuracy claim.",
+    "Original median_bitpack agrees on2048tie-rich integer-valued vectors length1..64 with independent sorted-median and bitposition reference. FloatNaN/Inf not tested.",
+    "Public phash setter acceptsDCTsize>32; ph_dct2_partial silently returns for>32 without writingout, then public wrapper median_bitpack reads output scratch. Source-only; public oversized configuration not executed. Existing APIguards callNULL33fallback but do not assert public result forDCT>32.",
+    "OddDCTsizes accepted, scratchfloatmatrix starts at offsetdct_size\u00b2 which may not be float-aligned. Source-only; no unaligned parameter runtime test.",
+    "BMH public block_size is unbounded positive; signed block_size\u00b2 and size calculations not explicitly bounded. Output clamps digest to64bytes and silently truncates higher spatial bits; no huge/overflow runtime.",
+    "mHash fixed18x18step2Laplacian64bits, regardless configurable block_size; source/API consistency remains tocompare docs.",
+    "dHash horizontal increasingneighbor threshold uses highbitfirst;median pHash andLaplacian use lowbitfirst. Fingerprint recipe must include algorithm/packing; no crossalgorithm interchangeability assumption.",
+    "ASSERT_FLOAT_EQ uses fabs(expected-actual)>tol without explicitfinite check, so NaN differences do notfail. Source-only test-framework limitation.",
+    "No production code copied or changed. Native pHash.org/ASAN remains deferred."
+  ],
+  "remaining": [
+    "Color/radial/wavelet hashes, remaining tests/imageprocessing, docs/build text,images,vendor sources/gitlinks.",
+    "Full review count247/500unchanged; universal coverage remains unproven."
+  ]
+}
