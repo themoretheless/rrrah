@@ -1,0 +1,94 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/README.md": {
+      "sha256": "2496293280d52a7b1a7fec2180dd03e4f5b2f1a8781d8bee5408c758f2979f76",
+      "git_blob": "16344ce1f8be37a4dc2719ceea4f80f4671e935a",
+      "mode": "100644",
+      "lines": 133
+    },
+    "android/app/build.gradle.kts": {
+      "sha256": "85cb4403bef8296b23dbb78a4236e1b2d2472e2c3fbbe9e87cc3d55e6d196941",
+      "git_blob": "08f2f2defbb8cee93bbda7c980522a00a27c06b9",
+      "mode": "100644",
+      "lines": 143
+    },
+    "android/app/proguard-rules.pro": {
+      "sha256": "62ab3751a3c178fea4070290708825219ebce0241d158132acf2e5e4bf7a5641",
+      "git_blob": "fd6376718f245ecf34ac3bbf80df092cb96a6683",
+      "mode": "100644",
+      "lines": 25
+    },
+    "android/build.gradle.kts": {
+      "sha256": "71a325324526b83f32b37433f07fc5777b745eaf8a79b116fb50ecb309675038",
+      "git_blob": "25f01aa0f3995ae70b071e842e2b16dc594e25c7",
+      "mode": "100644",
+      "lines": 7
+    },
+    "android/gradle.properties": {
+      "sha256": "b01f7ffaa16558a580634db4820bcff0119f10dad4e752fea948010ebbcd9fcc",
+      "git_blob": "b3ba1a013b5487d5e2627bdb1a8716c924e85ea4",
+      "mode": "100644",
+      "lines": 26
+    },
+    "android/gradle/wrapper/gradle-wrapper.properties": {
+      "sha256": "0929675aa34d1915058137a955692406badb2d9db4408b6954d9d7ecd32ca8ef",
+      "git_blob": "bca1d3cd289c754211f70beaea28310b33a95048",
+      "mode": "100644",
+      "lines": 6
+    },
+    "android/settings.gradle.kts": {
+      "sha256": "7f966e68df2a7e2c04771136213a9d88da786d1f54c9ea05c174d21d75a3e28c",
+      "git_blob": "a9f44fe8a74c113f1a3d4f8d5f55d22e92f0f706",
+      "mode": "100644",
+      "lines": 27
+    },
+    "android/app/src/main/java/com/omnisearch/app/data/AppDatabase.kt": {
+      "sha256": "8bbb76813c679c13473d6a1855bd4bd6f58a141997b34863d51be633c7cb2acc",
+      "git_blob": "94363dad9349f9cf1e64221f98c41fb974918030",
+      "mode": "100644",
+      "lines": 30
+    },
+    "android/app/src/main/java/com/omnisearch/app/data/PinnedFileDao.kt": {
+      "sha256": "4b0bb454b6cfb6a3b9b32bd0e353285a44792b3e82a0107971e66fde2b33cde6",
+      "git_blob": "a0940dc8be5b73643deb8a275329319763cee66a",
+      "mode": "100644",
+      "lines": 22
+    },
+    "android/app/src/main/java/com/omnisearch/app/data/PinnedFileEntity.kt": {
+      "sha256": "c88d3b9cdcc9c657e730cff680042fb7d1ac341185615818d29207b58b7eb0ac",
+      "git_blob": "939de5b4d225bc797e85c648a10b4d3c438ab5d3",
+      "mode": "100644",
+      "lines": 17
+    },
+    "android/app/src/main/java/com/omnisearch/app/data/LocalTrashManager.kt": {
+      "sha256": "8e3e7f0bd04a502b68fc3728b5ca64b0b9c4cc151856e927d290b835f9e16149",
+      "git_blob": "385cf374b359e40b2c11f30df82c9446d8bd8581",
+      "mode": "100644",
+      "lines": 220
+    }
+  },
+  "cumulative_whole_files_read": 53,
+  "tracked_blobs": 268,
+  "method": "Eleven pinned files whole text read, identities independently checked. Static Kotlin/Gradle source review only, not Android/JVM execution. README linked images remain pending visual review.",
+  "findings": [
+    "LocalTrashManager.moveToTrash reads sourceFile.length/isDirectory/getFolderSize only after successful rename or copy+delete. Under ordinary moved-away source path, metadata records size0 and directoryfalse; source-order defect, not yet reproduced Android runtime. Destination type is used on restore so storedfalse does not itself prove failed restoration.",
+    "saveTrashItems catches all exceptions and returnsUnit; move/restore/permanentdelete may returntrue despite failed metadata update. Filewrites are direct overwrite, no atomic temp+rename. getTrashItems parse/read error returns empty, permitting later update to overwrite formerly recoverable inventory.",
+    "Restore has no destination-conflict rejection; fallback copyTo/copyRecursively overwrite=true can replace existing destination. Rename behavior platformdependent. No files restored/deleted in review.",
+    "emptyTrash unconditionally saves empty metadata even when deleteRecursivelyfalse. Partial deletion failure can orphan remainingtrash entries from inventory. No failure injection performed.",
+    "Crossvolume directory copy then recursive delete can partially remove source and returnfalse without adding inventory; partialcopy destination may remain. Static nontransactional failure paths, no actual user mutation.",
+    "Room pinnedfile identity primarykey is path; insertREPLACE overwrites samepath metadata; not content identity or snapshot. Database version2 fallbackToDestructiveMigration permits schema migration losing pinned data; no migration/persistence tests run.",
+    "Room singleton checks INSTANCE outside synchronized but does not recheck inside; concurrent firstcall can build multiple instances. Static concurrency hypothesis, not multithread reproduced.",
+    "Android build minSdk24 contradicts README legacyAPI21-28 support range at21-23; compile36 target35 match README. Explicit screenshot/test dependencies exist but assembleRelease task is not an explicit unit/instrumentation invocation.",
+    "Release signing fallback points rootdebug.keystore when no productionkey; preview uses standard debug config then. CI secretabsence does not prove releaseAPK success because fallbackfile availability not yet qualified. No keys read.",
+    "Proguard keeps broad MLKit/OkHttp/coroutines classes; buildresource shrink/minify enabled. No release behavior or size/throughput comparison.",
+    "Android README calls filetransfer chunked/local/pinned/encrypted; sync implementation still pending, no qualification from documentation alone. Gradle wrapper/property files declare dependencies/runtime settings, not behavioral proof."
+  ],
+  "limits": [
+    "53/268 pinnedwhole files reviewed. Full Android/Lite/sync/CSS/assets/locks still pending.",
+    "No Gradle/download/install, Android emulator/device, JVM regression, actual DB/trash/restore, keys, network or Windows operations.",
+    "No production changes or performance claim. Native pHash/ASAN user-deferred; all500 incomplete."
+  ]
+}
