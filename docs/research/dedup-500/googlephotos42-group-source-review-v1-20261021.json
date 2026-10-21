@@ -1,0 +1,100 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/dedup/phash.ts": {
+      "sha256": "2bd41b74bb7b4736d10e7fa3710ee8dd70e15272db368a3ae6ee055959afda48",
+      "git_blob": "77caf3f084fd95dcfc1fb1278e9732a4311c2e41",
+      "bytes": 4247,
+      "lines": 124,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/group.ts": {
+      "sha256": "b21291785c86869900394b72036ce6052ea6b6d66a0837dcad790bb11023da96",
+      "git_blob": "a85b7134ff348214d3c12e08bde5a1886707080c",
+      "bytes": 6697,
+      "lines": 180,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/selection.ts": {
+      "sha256": "d6200f71a090d2d41105df4fb03e6b9f251476236801e29c88efe4e8ddb3ccee",
+      "git_blob": "743e4c68d80fe41b2bc2f8cbfa524c414d3f7d65",
+      "bytes": 2730,
+      "lines": 74,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "src/core/dedup/scan.ts": {
+      "sha256": "145cda5162654fd9746324a05ea1def276e83aa1046bb46685b2954ffce0d9f8",
+      "git_blob": "4d77f2b7673a25009adc28a5504871e9f5936cb9",
+      "bytes": 6425,
+      "lines": 202,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "LICENSE": {
+      "sha256": "f0cefd0119a0b800383038d28547b4d0a004c58a91e42fc0add87cea88128e89",
+      "git_blob": "ee5db89b41d20674c803d34cc53720902b687ef6",
+      "bytes": 1064,
+      "lines": 21,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "docs/LICENSE_PROVENANCE.md": {
+      "sha256": "e29f9db6ceed2eec9eb79b57df44eec666386e64903b2d228ea08a0652cdf383",
+      "git_blob": "761d453853bc1815de1b456d5aa8a1c06c9b35db",
+      "bytes": 761,
+      "lines": 15,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "tests/fixtures/photo-dedup-phash.json": {
+      "sha256": "eee0161c824072bffb1ac0d57804c71512b1492215394ae588ee3c833475b572",
+      "git_blob": "4351a3c008527939d76a81bd68c9c445422492de",
+      "bytes": 934,
+      "lines": 42,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "tests/fixtures/photo-dedup-duplicate-groups.json": {
+      "sha256": "2e4921e5b839e1136209f5a16708ac8ff6dbe74da2ba270a07fc7af169cc66ea",
+      "git_blob": "1c8b1325fa16cac0e4a898e546a3fd1f06ebc30d",
+      "bytes": 5034,
+      "lines": 182,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    },
+    "tests/dedup-hash-group.test.ts": {
+      "sha256": "0081d9e6257c9bb7a6d53b2a04a0d065c71368795558b5425011f04fd630fb55",
+      "git_blob": "0bfc476a8be9374c9629fda0573d6b0f5d4724b0",
+      "bytes": 10380,
+      "lines": 253,
+      "method": "Whole pinned text/source read and Git blob verified; no browser account interaction."
+    }
+  },
+  "cumulative_assessed_blobs": 9,
+  "tracked_blobs": 230,
+  "findings": [
+    "groupDuplicates uses an order-dependent seed/star grouping, not all-pair equivalence. Original-function control with distancesAB=AC=1,BC=2producesABCunder distance1whenAfirst; reorderedBfirst producesBAandnoCgroup. Distances are to seed only.",
+    "At threshold0,maxDistanceForreturns64but bandCount caps at64. All-complement64bitpair shares no exact band and is omitted even though everyhashpair meets the stated distance. Default0.95case not contradicted.",
+    "Pre-aborted signal examined only after index construction. Two items are read8times across4bands before GroupingAborted. Final onProgress callback can abort signal and original function still returns computed group. No cloud data changed.",
+    "Hash function checks input length but not numerical range/finiteness; RGBAconversion ignores alpha. Browser composition/normalization not yet reviewed, so no wholepipeline transparency defect asserted.",
+    "scanView records hashfailures and cancellation separately, but end-of-view uses finite idle/settle heuristics and no whole-library completeness certificate. Its behavior not executed in this step.",
+    "Golden fixture metadata identifies frozen legacy TypeScript baseline, whereas comments claim parity with Rust. Stored four synthetic hashes/two distances and two applicable image-group cases are not independent Rust regeneration or real-image recall proof. Video-frame scenario explicitly excluded from this upstream test.",
+    "Brute-force grouping test uses same seed policy and five thresholds1,0.95,0.9,0.85,0.8; it does not test threshold0or require all member pairs. Large30000item test countsplanted groups without exactallpairidentityoracle. Tests read, not executed.",
+    "Root MIT and provenance document read. Document claims code rewrite but identifies retained upstreampanel appearance without upstreamlicense. Provenance claims not independently verified; no source port."
+  ],
+  "executed_controls": [
+    {
+      "path": "docs/research/dedup-500/googlephotos42-group-controls-v1-20261021/run.mjs",
+      "log": "docs/research/dedup-500/googlephotos42-group-controls-v1-20261021/run.log",
+      "runtime": "Node24.19.0",
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "method": "Nodebuilt-in TypeScript type stripping, one exact local import suffix rewrite, original pure group/hash helper bodies called with synthetic hashes. No perceptualHash,DOM,network,selection/deletionfunction called.",
+      "warning": "stripTypeScriptTypes experimental runtime warning retained in log",
+      "harness_sha256": "3d5d6478c8e5b13afee61fa4792e69881f837b05dbfba0de4c9ce7736eebf7ad"
+    }
+  ],
+  "limits": [
+    "9/230wholeblobs; no complete repository review,Vitest,extensionbuild,visualassetreview,GooglePhotosUI or actualmedia decode/hash run.",
+    "All500fullreview remains incomplete; current fullcount not incremented by this partial project. Cbird CImg remains separately partial.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
