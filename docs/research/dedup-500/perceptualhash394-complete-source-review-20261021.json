@@ -1,0 +1,67 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "vmchale/perceptual-hash",
+  "commit": "b8263cd527fb3e1acd2dd3006decec7ef7c88827",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 6,
+  "files": {
+    "LICENSE": {
+      "bytes": 1463,
+      "git_blob": "771c4b011770a8eb8de6268e6d094d59315dfa87",
+      "sha256": "d757ce11b1ad6131c2daa4fcbb03eb194cebd33cc5ccecf7c7dd16d1fa7e6803",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 671,
+      "git_blob": "50ebc3184bf30cb12e58303296ef6ad0f3f97021",
+      "sha256": "a97bdf4f2cf01fd17500e7e57d116d2f3cd26000b4415b8ee1334875fb7e2231",
+      "method": "Whole pinned text read without truncation"
+    },
+    "demo-data/cat.png": {
+      "bytes": 276416,
+      "git_blob": "b974679ed2e5f155b26da37d445f7d47c59e2ccb",
+      "sha256": "7a27e09e3335d45e861ae94ca19acaabf2c8e499b729adbb66e9160f39bb7776",
+      "method": "Original image visually inspected"
+    },
+    "demo-data/frog.jpeg": {
+      "bytes": 17361,
+      "git_blob": "4e47dc3f87ab007f6fbe98e6c04be7b07de5f3f5",
+      "sha256": "73c7b2bb36941902002561269bc23eb60be85280bcb5ef223eb6c50a6ea1e2f7",
+      "method": "Original image visually inspected"
+    },
+    "demo-data/frog.png": {
+      "bytes": 134922,
+      "git_blob": "d3fa7e968ba5f045b4e8847ccf0b9dbc8be16c91",
+      "sha256": "49962a23c9e7768bb8f8f475c2bb85af7700679d50174a448ca061e255dd75ad",
+      "method": "Original image visually inspected"
+    },
+    "phash.ijs": {
+      "bytes": 712,
+      "git_blob": "044f17ccfcfedc7b3eeecf8c6a3bed42dc12c8d1",
+      "sha256": "a4422c9b98f802c2548c3294e0bd98e4969b9b2d567af15aa0ee3d947c309a4b",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "findings": [
+    "Thirty-line J composition: RGB_to_YUV first channel, 7 medianf, floor-index resize to 32x32, DCT matrix multiplication, 8x8 crop, flattened median threshold.",
+    "DC coefficient formula has same sqrt(2/N) factor as AC; independent scalar rows have squared norms 2 versus 1 and remain orthogonal. This observation alone is not a demonstrated hash defect.",
+    "Source contains no explicit DC omission from cropped median, runtime input validation, file discovery, cancellation, budgets, pair matching or grouping.",
+    "README supplies two identical 64-bit frog vectors and cat at distance 30; JPEG and PNG bytes are distinct. This checks documented examples only, not generated runtime hashes.",
+    "Three original image assets visually inspected: cat and two encodings of the same frog scene. No transforms, labeled negatives corpus or benchmark suite supplied.",
+    "Required imagekit/stats addons are not vendored or version-pinned; their image/color/filter behavior was not qualified."
+  ],
+  "controls": {
+    "harness": "docs/research/dedup-500/perceptualhash394-controls-20261021/run.py",
+    "log": "docs/research/dedup-500/perceptualhash394-controls-20261021/run.log",
+    "passed": 2,
+    "original_J_executed": false
+  },
+  "license": "Root BSD-3-Clause fully read; no production source copied.",
+  "limits": [
+    "No original J/addon execution; ijconsole not found on PATH. Independent scalar formula check does not qualify J array orientation or image pipeline.",
+    "README linked thesis is background reference, not reviewed as a tracked repository artifact.",
+    "No speed or broad image matching quality claim. Native pHash/ASAN remains deferred."
+  ]
+}

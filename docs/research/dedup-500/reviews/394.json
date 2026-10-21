@@ -2,7 +2,7 @@
   "index": 394,
   "repository": "vmchale/perceptual-hash",
   "commit": "b8263cd527fb3e1acd2dd3006decec7ef7c88827",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned 6/6 tracked artifacts: 3 text/source/license and 3 original images visually inspected. Two independent README/math controls; original J runtime and external addons unqualified.",
   "decision": "reference",
   "finding": "J source composes grayscale, median filter, resize32, DCT, crop8 and median threshold; useful compact numerical oracle, no test suite established.",
   "available_source_evidence": [
@@ -18,7 +18,7 @@
     }
   ],
   "license_metadata": "BSD-3-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root BSD-3-Clause fully read; external addon licenses not qualified; no source copied.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +44,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/perceptualhash394-complete-source-review-20261021.json"
 }
