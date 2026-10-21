@@ -1,0 +1,45 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          6801,
+          7490
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          7490
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read690 additional contiguous source lines: shell icons, eviction and paint back-buffer. Static resource-lifecycle analysis only.",
+  "findings": [
+    "Owned icon cache limit is implemented: while count exceeds256 remove an arbitrary HashSet key excluding keep, remove map entry and DestroyIcon. This resolves earlier declaration-only uncertainty. It is not LRU; receiver passes empty keep, so freshly inserted icon can be evicted. No cache-hit benchmark.",
+    "Failed icon channel send leaves key in pending_icons because insert precedes unchecked send; subsequent requests skip pending key. Successful null icon response removes pending and does not negative-cache, allowing future retry.",
+    "WINDOW icons are cached separately without marking owned; borrowed-versus-owned lifetime depends on unread get_window_icon helper. Do not free all cached icons indiscriminately or claim all are leaks.",
+    "Back-buffer growth deletes previous bitmap while it remains selected into previous memory DC, then deletes DC and loses bitmap handle. Actual DeleteObject result ignored; Windows selected-object deletion behavior needs platform fixture. Source ordering risks resource leak on grow.",
+    "Back-buffer records requested size and new handles without checking compatible DC/bitmap creation. Failed bitmap allocation with nonnull DC can leave cache considered large enough for reuse. No fault-injection runtime control.",
+    "Back-buffer intentionally grows but never shrinks and has no explicit Drop cleanup or display-format invalidation; source comments disclose retained exit resources. No process memory/GDI counts measured.",
+    "App-path registry helper uses fixed256UTF16 buffer and no retry on larger values; supported type only REG_SZ. Successful query closes handle before type/path validation; failed query closes too. No registry handles accessed in review.",
+    "App-icon modern path releases image bitmap and mask after CreateIconIndirect; legacy PIDL path releases PIDL. This normal ownership handling must be distinguished from independent back-buffer issue.",
+    "Filesystem existence checks happen in icon classification on UI request path and again worker path. No latency or performance improvement claim from reading alone."
+  ],
+  "limits": [
+    "85/268 whole files; main.rs1-7490 of12573 read.",
+    "No tests/GDI/registry/runtime actions or local production changes.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
