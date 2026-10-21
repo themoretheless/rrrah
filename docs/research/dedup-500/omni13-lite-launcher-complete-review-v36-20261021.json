@@ -1,0 +1,49 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/launcher.rs": {
+      "sha256": "1c6d14887b4b3ab1f3d38b827dad7e1faad14072c76d34847f10036b06b6d221",
+      "git_blob": "1c4089bbf7ec88fad8767158784fc78156adc071",
+      "lines": 1626,
+      "mode": "100644",
+      "method": "Whole file read in ranges1-560 and561-1626; pinned Git blob verified."
+    }
+  },
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "prior_audit": "docs/research/dedup-500/omni13-lite-launcher-dispatch-review-v35-20261021.json",
+    "new_read_line_ranges": [
+      [
+        561,
+        1626
+      ]
+    ],
+    "union_read_line_ranges": [
+      [
+        1,
+        1626
+      ]
+    ]
+  },
+  "method": "Remaining1066 lines read; static dispatch/table comparison and Windows state/resource review. No native action executed.",
+  "findings": [
+    "Search QuickAction table includes create_snippet/create_quicklink/create_note, theme-switch and screenshot actions absent from this launcher handle_action match, whose default silently ignores unknown actions. Main caller may intercept them; no global unimplemented-feature claim until main.rs review.",
+    "All handle_window_action paths first require get_target_window before desktop switching/closing/renaming. Thus missing target window returns before otherwise desktop-wide operation. Source-order finding, Windows reproduction unrun.",
+    "Desktop close uses first desktop as fallback even when current is first. Rename resolves current desktop only after asynchronous input dialog returns, rather than capturing initial target. Actual winvd failures and switching behavior unqualified.",
+    "get_target_window uses current foreground or next visible suitable z-order window, not stored previous user target. This narrows target identity to heuristic; caller focus restoration remains pending.",
+    "Cross-monitor move ignores GetMonitorInfoW results and divides by work-area dimensions without checking positive width/height. Geometry keeps original dimensions without DPI scaling or clamping. Real monitors/DPI not tested.",
+    "Volume preset conversion does not clamp supplied percent before scalar API, which returns errors discarded in dispatcher. COM audio helpers do not initialize COM themselves; calling-thread initialization must be checked in main.",
+    "Window tiling uses integer fractional sizes/offsets; exact full work-area coverage on indivisible dimensions not guaranteed. Enlarging/shrinking has no work-area/minimum clamp in helper. No UI quality or layout acceptance claimed.",
+    "toggle_hidden_files closes registry handle after attempted write and returns write error, but query failure falls back to show rather than propagating original read error. Caller discards result.",
+    "sleep_displays deliberately uses asynchronous SendNotifyMessageW instead of synchronous broadcast; this is a relevant responsiveness design reference, not measured local dedup performance improvement.",
+    "No test module exists in this1626-line launcher. No compile/run pass credited; Windows APIs, keyboard/clipboard, processes, registry and user files untouched."
+  ],
+  "limits": [
+    "85/268 whole files; complete repository count remains155/500.",
+    "No local production change; main/caller integration still unreviewed.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
