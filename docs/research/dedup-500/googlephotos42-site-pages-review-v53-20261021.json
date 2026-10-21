@@ -1,0 +1,79 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "site/thanks.html": {
+      "sha256": "34cb8afdadd7689df4e45edcdefad03f73ca5213f49d2e342256d4a3f97b9778",
+      "git_blob": "3c3f82f107be3b2360e0547e78ba7a73517eb48b",
+      "bytes": 3012,
+      "lines": 43,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/bye.html": {
+      "sha256": "88af9a7e7ef35ce50a952b52667beae622f95e0f6f6153bb3164d0fbc319de66",
+      "git_blob": "3d479f415c8249f4d370d99e4a823d5302bf690c",
+      "bytes": 3393,
+      "lines": 45,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/404.html": {
+      "sha256": "44e95cd6f8ba970643d8e0d9e575e2e94288ef34cb6194277c5d3e14124bc101",
+      "git_blob": "3fceee31e0aa35042a0bf05ba54941f8981f5bd9",
+      "bytes": 2862,
+      "lines": 32,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/sitemap.xml": {
+      "sha256": "b89496d06b8fd052a553c3a6bb88f3bed08fc4821972af15ab6fe70f02b5eb93",
+      "git_blob": "c8ac3e20399d16f51b970337c8ece013fe245c53",
+      "bytes": 447,
+      "lines": 6,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/privacy.html": {
+      "sha256": "ad6326de719e44c0c3ef05e5f9e7457e00d66792cf3c8c82fbcf214b0ac00854",
+      "git_blob": "a6f78e56254140b2bc117522637c39db678f2b77",
+      "bytes": 5913,
+      "lines": 74,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/terms.html": {
+      "sha256": "e0befb296053bc3b6a41002b8e67213e3adefa9f66eb06ca9f93aaca3962345f",
+      "git_blob": "b8874712230f63f6a3b7b0080ece7250617cb8d9",
+      "bytes": 5124,
+      "lines": 63,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/style.css": {
+      "sha256": "d101c6533d0b469ec01a776b79fc246b5ae369a7b6209f23aefabd571455ace7",
+      "git_blob": "9cd56f1fbb04d6f538815f9acad2af7d0136579a",
+      "bytes": 8569,
+      "lines": 119,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    },
+    "site/index.html": {
+      "sha256": "018609176c09257ea08006322d1c9b1b81b4a8c22c71d5ae995c1d9aeb38d576",
+      "git_blob": "295cc3da80756256a0e0065ca4b68a2ab60202c7",
+      "bytes": 13248,
+      "lines": 165,
+      "method": "Whole pinned HTML/CSS/XML source read without truncation; not browser render."
+    }
+  },
+  "cumulative_assessed_blobs": 207,
+  "tracked_blobs": 230,
+  "findings": [
+    "Homepage hero caption explicitly identifies generated test-page image. Earlier12original tracked raster reviews do not certify real Google Photos screenshot/runtime.",
+    "Homepage claims10UIlanguages while popup catalogs9; stores10. Tens-of-thousands copy not measured performance evidence. Seed similarity98% not all-pair guarantee as earlier controls demonstrate.",
+    "Privacy page statement links PRIVACY.md anchor text to privacy.html itself, not extension policy source. Source-level self-link, not livewebsite fetch.",
+    "Thanks page statically thanks buyer and describes manual token email; no order validation code in HTML. Earlier tracking handles session query; page text alone proves no purchase. Bye page statically asserts uninstall and untouched photos without checking run history.",
+    "CSS includes dark theme, responsive layout, skip focus link, focus-visible and reduced-motion smooth-scroll override; no rendering, accessibility contrast, keyboard or narrow-viewport qualification inferred.",
+    "404uses fixed repository-base asset paths; ordinary pages relative paths. Sitemapcontains root/privacy/terms with2026-10-01dates;localized sitemap generated separately by reviewed builder.",
+    "Legal/vendor/price/retention/privacy statements are pinned upstream copy; no legal or currentexternal-fact validation. No pages published, browser opened or messages sent."
+  ],
+  "cumulative_original_function_controls": 85,
+  "limits": [
+    "207/230whole artifacts;23remaining;globalfullreview160/500unchanged.",
+    "Static source review only this block; no new tests/runtime/productionoptimization. Native pHash/ASAN deferred."
+  ]
+}
