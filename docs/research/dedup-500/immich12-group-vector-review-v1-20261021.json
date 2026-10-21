@@ -1,0 +1,173 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/api.py": {
+      "sha256": "249f0d9e43bc9928338eaa15b5ae3026c9610032bee60c7052b523e485d6d3a7",
+      "git_blob": "e702cf6774eb482668715d916dc5ba7ebb16d443",
+      "lines": 185,
+      "mode": "100644"
+    },
+    "src/db/sim.py": {
+      "sha256": "3322f7174a2f2577bc24eb4b542c974e04d785694869115a4a1baffcb1823400",
+      "git_blob": "8eb99c76c9c17a7bdf8ed69574ca28e3282374b0",
+      "lines": 326,
+      "mode": "100644"
+    },
+    "src/db/vecs.py": {
+      "sha256": "739a0b6cb700104ffe6b4f0913896a88c60c4342b062f8d85d701459af431219",
+      "git_blob": "937bc881ee7e13d016b3e81936d41a17633fc91e",
+      "lines": 405,
+      "mode": "100644"
+    },
+    "src/imgs.py": {
+      "sha256": "37885a6737f3f9862782421e82ce2dcbc30fc6e8b670e157431c044cf3bf60d2",
+      "git_blob": "e6b3d8fc6f9159e9d6ffa88b825dafb5beee5f66",
+      "lines": 588,
+      "mode": "100644"
+    },
+    "tests/test_vec.py": {
+      "sha256": "459467631dadd8589da43a1b71be6c5f5597ac3e802abb6f605d0f26d377bfe4",
+      "git_blob": "f53121d29dfccfe9cac7c3fbc5682bbcf176eab4",
+      "lines": 105,
+      "mode": "100644"
+    },
+    "docs/about-vector.md": {
+      "sha256": "74d69e246b4153dc39467873fc4dd8f0ece23b7590c7bbe1291ab539f2569d2e",
+      "git_blob": "50afa04f171ab0db82fe4e55bc213c6226780f8e",
+      "lines": 33,
+      "mode": "100644"
+    },
+    "docs/data-flow.md": {
+      "sha256": "7c19ceb9fdcaed2f9b977c422bad0959d81979f7317e3216e1b147462c4ba704",
+      "git_blob": "2d52b8f9b4c1567b1e63b882b6b2efc6d9281959",
+      "lines": 14,
+      "mode": "100644"
+    },
+    "docs/module-task.md": {
+      "sha256": "18fc9984ed260d126ec7193f3677d6e99533b9166c5f42254a31b3f209e9e4aa",
+      "git_blob": "2ed8d08b016c549b3ae63caef144df79b942adb9",
+      "lines": 31,
+      "mode": "100644"
+    },
+    "requirements-base.txt": {
+      "sha256": "2914d94d1cac262a57f53ab1737488be499cb3f6948e36c0314d3826123b6c09",
+      "git_blob": "f88f87f6b114362e67c53da0f46ae0f7fdda8585",
+      "lines": 19,
+      "mode": "100644"
+    },
+    "requirements-cpu.txt": {
+      "sha256": "c439325992fdf0c534914f96793bb998f6f6ca1524fb716cbd96c4bad9c9e79a",
+      "git_blob": "09b46fef8c3deab54a5fe65edadb334a33c83a6d",
+      "lines": 9,
+      "mode": "100644"
+    },
+    "requirements-cuda.txt": {
+      "sha256": "e40af0291bb3d7f067106dd57c809f6437013eea6bfeaa6373484ede1fe272d5",
+      "git_blob": "03a23b2d2a3a0f66ca4680f0242b442477b20b78",
+      "lines": 9,
+      "mode": "100644"
+    },
+    "requirements-cuda128.txt": {
+      "sha256": "40dd74be2e8d70a2433ce4cc690db132bcc7ec2565e40cc087fc6b4e93c459a7",
+      "git_blob": "b77b8d67807db36dbbaf0626e1bfceb3cd89deae",
+      "lines": 9,
+      "mode": "100644"
+    },
+    "requirements.txt": {
+      "sha256": "a620f636d79220b93188b3fe723566e2e242e5f548ade8761094469015c910d8",
+      "git_blob": "a0fc9fed5e5e8fd915aa73bb5c14fafd26479535",
+      "lines": 9,
+      "mode": "100644"
+    },
+    "pyproject.toml": {
+      "sha256": "94b6b89108790e22132c0d714d2ebc1fdde180508fd7b154527e8958f7a32146",
+      "git_blob": "d5529b72e99586dbd06795c403afd6857514e192",
+      "lines": 8,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 14,
+  "tracked_blobs": 125,
+  "acquisition": {
+    "method": "Pinned codeload tar read in memory; all tracked blob Git SHA identities checked; flat local cache, no archive paths extracted or upstream imports executed",
+    "verified_blobs": 125,
+    "reviewed_blobs": 14
+  },
+  "method": "Whole text source reading and isolated original AST function execution with explicit fake DB/vector-result adapters; source acquisition is not source review.",
+  "executed_controls": {
+    "chain_group": {
+      "edges": {
+        "1": [
+          1,
+          2
+        ],
+        "2": [
+          1,
+          2,
+          3
+        ],
+        "3": [
+          2,
+          3
+        ]
+      },
+      "assigned_group_by_asset": {
+        "1": 1,
+        "2": 1,
+        "3": 1
+      },
+      "visited": [
+        1,
+        2,
+        3
+      ],
+      "pair_1_3_in_candidate_graph": false
+    },
+    "missing_width_condition": [
+      true,
+      ""
+    ],
+    "short_vector_batch": {
+      "input_assets": [
+        1,
+        2
+      ],
+      "returned_asset_ids": [
+        1
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "errors": [
+        null
+      ]
+    }
+  },
+  "control_source": "import ast,json,typing\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021')\ndef original(file,names,env):\n t=ast.parse((B/file).read_text());t.body=[ast.ImportFrom(module='__future__',names=[ast.alias(name='annotations')],level=0)]+[n for n in t.body if isinstance(n,ast.FunctionDef) and n.name in names];ast.fix_missing_locations(t);exec(compile(t,str(B/file),'exec'),env);return env\nlog=N(**{k:lambda *a,**kw:None for k in ['warn','warning','info','error']})\nassets={i:N(autoId=i,id=str(i),simOk=False,jsonExif=N(exifImageWidth=None,exifImageHeight=None,fileSizeInByte=None),fileCreatedAt=None) for i in range(1,4)}\nedges={1:[1,2],2:[1,2,3],3:[2,3]}; assigned={};queries=[]\ndef neighbors(ids,threshold):\n queries.extend(ids);return {i:[N(aid=j,isSelf=i==j) for j in edges[i]] for i in ids}\npics=N(getByAutoId=assets.get,setSimGIDs=lambda aid,gid:assigned.update({aid:gid}),setSimInfos=lambda *a,**kw:None)\ndb=N(pics=pics,vecs=N(findSimiliar=neighbors),dto=N(thMin=.95,rtreeMax=100,gpsk=N(eqDt=False,eqW=True,eqH=False,eqFsz=False)))\ne=original('src--db--sim.py',{'processChildren','checkGroupConds'},dict(db=db,lg=log))\ndone=e['processChildren'](assets[1],neighbors([1],.95)[1],[2],lambda *a:None)\nresult={'chain_group':{'edges':edges,'assigned_group_by_asset':assigned,'visited':sorted(done),'pair_1_3_in_candidate_graph':3 in edges[1]},'missing_width_condition':list(e['checkGroupConds']([assets[1],assets[2]]))}\nassert assigned=={1:1,2:1,3:1};assert result['missing_width_condition']==[True,'']\nsaved=[]\nenv=original('src--imgs.py',{'saveVectorBatch'},dict(db=N(vecs=N(save=lambda aid,vec,uid:saved.append(aid))),lg=log,extractFeaturesBatch=lambda images:[[1.0]],extractFeatures=lambda image:[1.0]))\nreturned=env['saveVectorBatch']([assets[1],assets[2]],'thumbnail',preloaded=(['image1','image2'],[assets[1],assets[2]],[]))\nresult['short_vector_batch']={'input_assets':[1,2],'returned_asset_ids':[a.autoId for a,error in returned],'saved_asset_ids':saved,'errors':[error for _,error in returned]};assert len(returned)==1\n# This adapter intentionally violates normal extractor cardinality to test the save boundary's error handling.\n(B/'controls-v1-result.json').write_text(json.dumps(result,indent=2)+'\\n');print(json.dumps(result,indent=2))\n",
+  "findings": [
+    "Original processChildren groups a synthetic A-B-C similarity chain under A despite absent A-C candidate edge; groups describe connected similarity, not all-pairs verified duplicate identity.",
+    "Original checkGroupConds with width equality enabled accepts two present EXIF records whose widths are both None; missing values are treated as equal.",
+    "Original saveVectorBatch with a deliberately shortened extractor result saves/reports only first of two assets with no error for omitted asset: zip truncation at boundary. Normal extractFeaturesBatch aims to preserve cardinality, so this is an injected robustness case, not evidence that normal model returns short batches.",
+    "processChildren expands descendants without reapplying checkGroupConds or filename-exclusion checks; first-level findGroupBy checks do not establish all descendant metadata equivalence. Static scope.",
+    "Qdrant candidate requests default limit=100 and do not request exhaustive exact search; no all-neighbor recall proof. Non-self scores above 1 are dropped even if produced by floating point overshoot.",
+    "Empty vector query results trigger clearing vectorized flags/deleting points in callers; missing data and index/repair states need separate qualification. No live delete executed.",
+    "imgs converts RGBA only; grayscale/palette/CMYK are not converted to RGB by that function. EXIF orientation/transparency composition policies and real model behavior unqualified.",
+    "CPU automatic worker count min(cpuCnt//2,cpuCnt) is zero for one CPU; model initialization has no lock under CPU threading; cancellation can leave submitted work executing. Source-level observations only.",
+    "src/api.py explicitly marked currently unused; active wrappers catch request errors and return None. No network requests or credentials used.",
+    "tests/test_vec.py depends on configured data and fixed asset IDs, imports old top-level vecs before path insertion, uses removed getBy calls and old save signature in some tests. Not a hermetic regression suite; not executed.",
+    "Qdrant/FAISS memory and reliability statements in docs are project claims, not measurements validated in this review."
+  ],
+  "local_library_mapping": {
+    "path": "crates/rrrah-dedup/tests/groups.rs",
+    "sha256": "37edc0479ec266fbe670d45fa6dbd82259a832781d777a8f824fe2dfb14c921a",
+    "finding": "Existing named nontransitive_chain_preserves_edge_without_inventing_pair and all64graph regression assert no invented within-group edges and preserved members/pairs. Source read, not rerun this batch."
+  },
+  "limits": [
+    "111 tracked blobs remain unread, including UI/media/model tests and database/application details.",
+    "Root license GPL-3.0 metadata only in this batch; no production code copied.",
+    "No Torch/PIL/Qdrant/Postgres/model weights/server/browser/upstream test runtime executed.",
+    "Native pHash/ASAN remains explicitly deferred; all500/full library cases remain incomplete."
+  ]
+}
