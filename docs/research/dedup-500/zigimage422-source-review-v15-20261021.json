@@ -1,0 +1,21 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-1910",
+    "include/stb_image.h:7470-7655"
+  ],
+  "controls": "docs/research/dedup-500/zigimage422-hidden-rgb-controls-20261021/result.json",
+  "script": "docs/research/dedup-500/zigimage422-hidden-rgb-controls-20261021/run.py",
+  "findings": [
+    "Actualoriginalstbi_loadfilenameAPIwithdesired3returnsredandblueRGBfortwofullytransparentPNGpixels. desired4positivecontrolverifiesbothalpha0;sourcecompstill4whileoutput3. AuthoredPNGexplicitRGBA8chunk/CRCfixture.",
+    "Source4to3convertercopiesRGBanddropsalpha,nocompositing;samepathcontractusedbyZigwrapper,thenRGBgrayscalecanretainhiddenRGBdifferences. NoactualZighashassertionperformed;donotclaimarbitraryfinalhashdiffguaranteed.",
+    "Readrefill/get8/EOF/skip/getn,endianhelpers,8/16channelconversionandHDR/LDRconversionthrough1910. getnrequiresrequestedremainingbytesinonecallbackread ratherthanlooping;callbackshort-readsemanticsnotnewlytested.",
+    "Default8/16grayscaleconversion77/150/29integerweightsdifferswrapper299/587/114roundedfloat. No crossrecipehashcompatibilityassumed.",
+    "ExistingrrrahpixelsinvisibleRGBcanonicaltestandlinearcanonicaltestcoverlocalpolicy;notrerunthisincrementandnotdecoderend-to-endproof."
+  ],
+  "limits": [
+    "Imageheader1910prefix+PNMsectiononly;JPEG/PNG/etcimplementationmostlyunread. FullrepositoryincompleteandZigtestsnotrun. CcontrolonlyPNGchannelcontract;no broadalpha/format/metadataqualification.NativepHash/ASANdeferred."
+  ]
+}

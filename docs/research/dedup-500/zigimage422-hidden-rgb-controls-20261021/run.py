@@ -1,0 +1,5 @@
+import json,struct,zlib,subprocess,hashlib
+from pathlib import Path
+folder=Path(__file__).resolve().parent;root=Path('.dedup-work/zigimage422-20261021');p=root/'hidden-rgb.png'
+def chunk(t,b):return struct.pack('>I',len(b))+t+b+struct.pack('>I',zlib.crc32(t+b)&0xffffffff)
+b=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',2,1,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(bytes([0,255,0,0,0,0,0,255,0])))+chunk(b'IEND',b'');p.write_bytes(b);binary=root/'hidden-rgb-control';subprocess.run(['clang','-std=c99','-O2','-I',str(root/'include'),str(folder/'control.c'),'-lm','-o',str(binary)],check=True);r=subprocess.run([str(binary),str(p)],capture_output=True,text=True,check=True);out=dict(result=json.loads(r.stdout),fixture_sha256=hashlib.sha256(b).hexdigest(),scope='Original C stbi_load desired3 as wrapper uses; originalRGBA positivecontrol verifiesbothfullytransparent. No compositing or Zig hash execution.');(folder/'result.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
