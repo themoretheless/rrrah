@@ -2,7 +2,7 @@
   "index": 9,
   "repository": "ChenghaoMou/text-dedup",
   "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned75-blob source/visual review incl structured full lock review and exact-pin15-blob Gitlink evidence reconciliation; isolated original-code controls, integrated upstream runtime remains partial.",
   "decision": "reference",
   "finding": "MinHash/SimHash text candidates and separate Jaccard validation; useful candidate-versus-proof distinction, no image normalizer.",
   "license_metadata": "Apache-2.0",
@@ -120,6 +120,11 @@
     },
     {
       "audit": "docs/research/dedup-500/text9-submodule-reconciliation-v15-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/text9-lock-review-v16-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/text9-full-review-reconciliation-20261021.json"
 }

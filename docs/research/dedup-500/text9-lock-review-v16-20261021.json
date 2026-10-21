@@ -1,0 +1,48 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "uv.lock": {
+      "sha256": "15523d4a0bc4624fbd21f0ba1faddd45fe0efb3855d40ba79b62ca30d63ebd2e",
+      "git_blob": "ac3d4aa8456f98685f764f59ebc2dcb348a51010",
+      "lines": 2369,
+      "review_method": "complete structured record review; not literal line-by-line manual reading"
+    }
+  },
+  "cumulative_whole_files_read": 75,
+  "tracked_blobs": 75,
+  "method": "Entire TOML parsed; top/root metadata and all119semantic package records reviewed in3bounded outputs. All1171artifact rows validated for schema,HTTPS URL,SHA256 shape,size; every207dependency reference/extra resolved. Raw repetitive wheel URL/hash lines handled by machine validation, not claimed manually read.",
+  "findings": [
+    "119unique package records,207dependency references,1171artifacts pass structural checks; root15runtime dependencies match manifest names. Only root has metadata, which was read separately.",
+    "pandas2.3.1 exists transitively through datasets4.0.0 and Gradio5.39.0. Earlier absence of direct manifest declaration is not proof of missing installation; runtime import remains unexecuted.",
+    "Lock pins NumPy2.3.2,Polars1.32.3,polars-grouper0.3.0,Pydantic2.11.7,settings2.10.1,bitarray3.7.1,rbloom1.5.2,xxhash3.5.0. These identify snapshot dependencies, not current recommendations.",
+    "Lock resolution splits Python below3.13 vs>=3.13; conditional dependencies include typing-extensions and audioop-lts. Marker/platform satisfiability and native wheel compatibility were not installed/tested.",
+    "All artifact URLs use files.pythonhosted.org. Hash shape validation does not compare package tarball bytes or audit third-party source."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/lock-validation-control.py",
+    "sha256": "34a788767001b5a403a07af3d0bcf434de600c75237c1a3fba008e2453492e45",
+    "result": {
+      "lock_sha256": "15523d4a0bc4624fbd21f0ba1faddd45fe0efb3855d40ba79b62ca30d63ebd2e",
+      "package_records": 119,
+      "dependency_references_checked": 207,
+      "artifact_records_checked": 1171,
+      "artifact_hosts": [
+        "files.pythonhosted.org"
+      ],
+      "metadata_owners": [
+        "text-dedup"
+      ],
+      "root_runtime_manifest_match": true,
+      "errors": [],
+      "limits": [
+        "Metadata structure and graph checks only; tarballs not downloaded or hashed against actual bytes. Marker satisfaction, interpreter/platform install and upstream tests not executed."
+      ]
+    }
+  },
+  "limits": [
+    "75/75tracked root blobs reviewed with structured lockfile review clearly distinguished. Full external Gitlink review reused and hash-verified in v15.",
+    "No full upstream pytest/integrated algorithm or dependency installation, production changes. pHash/ASAN deferred."
+  ]
+}

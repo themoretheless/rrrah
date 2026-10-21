@@ -1,0 +1,46 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": true,
+  "status": "pinned_source_visual_and_structured_lock_review_complete_runtime_partial",
+  "whole_files_read": 75,
+  "tracked_blobs": 75,
+  "identity_verification": "docs/research/dedup-500/text9-coverage-verification-v17-20261021.json",
+  "identity_verification_sha256": "fc437320abd0ae977a490f7c14ab9ed9c68952e6ff4a9f65f13f88f5661d2e77",
+  "review_artifact_pins": {
+    "docs/research/dedup-500/text9-minhash-cluster-review-v1-20261021.json": "8118cced573138f56e9fcd2c5ae33ecde2606cd018078f859b2a649eaf3380f5",
+    "docs/research/dedup-500/text9-tokenization-config-review-v2-20261021.json": "106f22b8d1197dee782b0eef6ca327473aebd40a6901c5ccf63ff0d9713d478d",
+    "docs/research/dedup-500/text9-simhash-stale-flags-review-v3-20261021.json": "cf11d9255ad3f6d269b88650ff48fe24cc9151d94761c14ff1a98766defa9eb6",
+    "docs/research/dedup-500/text9-io-bloom-review-v4-20261021.json": "69bdeef288eb22983da7183cd8748fe63e102834c21aa443a93b6be30280196b",
+    "docs/research/dedup-500/text9-suffix-boundaries-review-v5-20261021.json": "a84de185fc3de8c866ef16385b1ffbeaadf2c26e0f5c8c26f423f3f6bbee1bd4",
+    "docs/research/dedup-500/text9-preprocess-hash-review-v6-20261021.json": "2c29ef8ebe8362b8b60ba468c9c10f4c31fce140152a82808b54fcb6d42fac5c",
+    "docs/research/dedup-500/text9-utility-lifecycle-review-v7-20261021.json": "e22fae3aff65442bb1dbe57188d5ea69e63bfb7cd7189fa97b701ca5dccf7afa",
+    "docs/research/dedup-500/text9-core-evaluation-review-v8-20261021.json": "3d63e93e1d8392820bed9a517758857aa20b7d6b1c176ed2b080f7d428470e66",
+    "docs/research/dedup-500/text9-news-runner-review-v9-20261021.json": "20fc4d0ef19d5c795b21ee3c30ed4b4545135baf0f50c034b62065713700dd02",
+    "docs/research/dedup-500/text9-project-ci-review-v10-20261021.json": "7c9b6ca7d99dc77b5a6cdb96ad458e4b078470b6bdf9488e3d0702643257280e",
+    "docs/research/dedup-500/text9-io-tests-configs-review-v11-20261021.json": "0d7a487b48933a5ff6cacb1d68d39700c65039d2dee145b2c03b1615a5b568ad",
+    "docs/research/dedup-500/text9-remaining-helper-tests-review-v12-20261021.json": "b65fdca6056236d5f7e2a1b26d47855f3524ce39e7be96ad0be42bb03214b605",
+    "docs/research/dedup-500/text9-components-docs-visual-review-v13-20261021.json": "ce69febf41da0cb666525d8740eaf4a1d12cfcaae89c9197495a925397e10c7e",
+    "docs/research/dedup-500/text9-report-review-v14-20261021.json": "60370c6a2f6648a1d1098ea221d972b52406ff8f0fb1a5699da53781a33bb935",
+    "docs/research/dedup-500/text9-submodule-reconciliation-v15-20261021.json": "87ac27c20e5c37b15535ea3a9a41b0e29d32a2b037521e0125d4e0be724477ff",
+    "docs/research/dedup-500/text9-lock-review-v16-20261021.json": "dc8e2d089a0553c3b87e2def4f325148e94b791e7e5546ba5d1334c26e053dd2"
+  },
+  "submodule_reconciliation": "docs/research/dedup-500/text9-submodule-reconciliation-v15-20261021.json",
+  "decision": "reference",
+  "conclusions": [
+    "Useful distinction between approximate candidate generation and direct verification; no production code copied.",
+    "Confirmed isolated controls: stale SimHash duplicate flags after rejected verification, IO partial artifacts/progress leak, timer exception lifecycle, singleton report failure.",
+    "Metric limitations: best-neighbor cluster quality is not all-pairs proof, classTP permits extra matches, macro_f1 is mean precision.",
+    "Existing local complete-link grouping regression already covers nontransitive/disjoint small graphs; no duplicate regression added."
+  ],
+  "review_methods": [
+    "74root files whole text/visual review; remaining uv.lock all119package records semantically inspected and1171artifacts machine-validated.",
+    "External15blob Gitlink exact-pin complete review reused from085 with all source and3native report hashes rechecked."
+  ],
+  "limits": [
+    "Full upstream pytest, dependency install,integrated full datasets/Gradio/browser/benchmark runtime unexecuted.",
+    "Isolated controls use explicit AST extraction/adapters where stated, not full pipeline proof.",
+    "Third-party dependency tarball source/paperdatasets/performance/adoption unqualified.",
+    "pHash/ASAN remains user-deferred; all500 repositories and all library cases remain incomplete."
+  ]
+}
