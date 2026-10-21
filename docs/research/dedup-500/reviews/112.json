@@ -2,7 +2,7 @@
   "index": 112,
   "repository": "Mic92/zfs-dedup",
   "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned6/23whole artifacts read;2original standalone Bloom tests passed. ZFS/ioctl/fullcrate unqualified.",
   "decision": "shortlist",
   "finding": "Rust ZFS offline dedup separates chunk-hash collision filter from byte memcmp and metadata identity; useful exact verification architecture.",
   "available_source_evidence": [
@@ -40,7 +40,7 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -63,6 +63,12 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "upstream_test_scope": "Only2original bloom.rs tests via standalone rustc;fullcrate/clone tests notrun.",
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/zfs112-source-review-v1-20261021.json"
     }
   ]
 }

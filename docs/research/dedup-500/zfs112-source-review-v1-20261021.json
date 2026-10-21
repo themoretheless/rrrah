@@ -1,0 +1,59 @@
+{
+  "repository": "Mic92/zfs-dedup",
+  "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
+  "whole_repo_complete": false,
+  "tracked_blobs": 23,
+  "cumulative_assessed_blobs": 6,
+  "files": {
+    "Cargo.toml": {
+      "bytes": 475,
+      "sha256": "a5d0b2d1590764fac8a04ee361a825f15cbc636c43d51eea51f6558175e51df3",
+      "git_blob": "cc52541c35e9accafb39f5cc4641a6c6485bf5f5",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "LICENSE": {
+      "bytes": 1071,
+      "sha256": "5f8c27fe9f2b5749f41008840b86f9170c49de05d7008155bf82db81236820d1",
+      "git_blob": "cae1a2b1694478cbef6f6d3e975e478e487a9705",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "README.md": {
+      "bytes": 4377,
+      "sha256": "814cd62b7b75dccd861aea1fbe2e2822a9f397174a7cb06be73acb86e0e93957",
+      "git_blob": "8d8ad18f162380c4e9eff0e4d7d2e8e8d78d710f",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/lib.rs": {
+      "bytes": 107,
+      "sha256": "bd4d8ba1a741d38fbfdd95bb12c408e398772ebd723137ab0c81f492e44a7227",
+      "git_blob": "3dd6283fb637529d28cfb24f7e8bde767bc6babc",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/bloom.rs": {
+      "bytes": 2513,
+      "sha256": "9459b4c12cc1ba4ecd0be9e453b4d3c18335458ddd0e65604f5a2f7be253bc8f",
+      "git_blob": "cb7dcbbcd26a167e04acb10000838b4785ce17b8",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/clone.rs": {
+      "bytes": 6260,
+      "sha256": "aeaa01fbdc5bc6bc097b3c0c8743f0d9439054f9dd052f716921de38cff9a8e3",
+      "git_blob": "edc3949b4e5773172ffb81f9baf5e8cbb6beb58b",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "upstream_tests": "2 unmodified original bloom.rs tests passed standalone rustc+1.98.1 --test;no fullcrate/ZFS/ioctl tests executed",
+  "upstream_log": "docs/research/dedup-500/zfs112-bloom-tests-20261021.log",
+  "findings": [
+    "Linux/ZFS block-level offline dedup;README explicitly distinguishes atomic in-kernel verify+clone from racy userspace compare+clone gatedbyforce. Current kernel/release claims not independently verified.",
+    "Bloom uses7double-hash probes,power-of-two bits,~10bits/key.Original finite1000-key no-false-negative and100kquery FPbound tests passed;not universalqualityproof.",
+    "Bloom capacity arithmetic nkeys*10/next_power_of_two lacks checkedresourcebound;hugeinputs notexecuted. Callerbounds pending.",
+    "clone.rs maps ioctlper-target status toSame(actualbytes)/Differs/Unsupported and exposes clonefallback. Probe uses2real128KiBtemporary files and sync;no ioctls/probes run here.",
+    "probe_dedupe treats any supported result includingDiffers as supported;semantics adequatecapabilitypresencebutnotdata correctness proof. Sourceassessment only.",
+    "MIT rootwhole-read,no productionadoption. NativepHash/ASANdeferred."
+  ],
+  "remaining_scope": "17artifacts includingwalk/cache/hasher/dedup/main/remount,bench/example,Nix/CI,lockfiles.",
+  "limits": [
+    "Only standalone Bloom tests qualified;no Linux/ZFS filesystem or clone correctness/performance claims. Globalfullcount204/500unchanged."
+  ]
+}
