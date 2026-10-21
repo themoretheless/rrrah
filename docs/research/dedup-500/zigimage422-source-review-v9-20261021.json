@@ -1,0 +1,25 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_review": {
+    "path": "include/stb_image_resize.h",
+    "sha256": "716967e520a6d1ff6e6eca7df8bad54f7dede952506a154c1bf3d1be7d855e3a",
+    "git_blob": "a176d212249f224bdc251e578eaf56d789465e22",
+    "lines": 2630,
+    "whole_file_read": true,
+    "method": "Wholepinnedtextreadwithouttruncationcumulativev3-v9;lookupcontentsalsoindependentlyvalidated"
+  },
+  "findings": [
+    "Resizerentirefilecompletedincludingverticalringloops,transform/defaultfilterchoice,memorycalculation,allocation/executioncleanup,allpublicwrappersandduallicense. stb_image.hremainingunread.",
+    "Memorysizefieldsmostlyint;calculate_memoryreturnsstbir_uint32sum,size_tusedonlyaftercalculation. Arithmeticusesuncheckedproductsandsums. No extreme-dimensionoverflow/allocationruntimecontrolorsecurityclaim.",
+    "stbir__resize_arbitrarycalculatestransform,filter,requiredmemoryandallocatesbeforestbir__resize_allocatedvalidateschannels/filter/alpha. Dimensions/stride/totalbytebudgetsnotexplicitcaller-admissioncontracthere. Sourceobservation,notinvalidinputfailureinjection.",
+    "OneSTBIR_MALLOCthenSTBIR_FREEaroundresize_allocatedsuccess/normalfailure;earlierforcedallocationfailurereturns0withoutwrite. ZigwrapperdefercleanupissuedistinctandremainsunqualifiedbythisCcheck.",
+    "Progressmacrocalled0,perrow,and1afterfiltering;notcancellableandnotusedbyZigwrapper. Allocation/filtercoefficientcalculationnotcoveredbycallbacks.",
+    "Headerduallicensewhole-read:MIT2017SeanBarrettorpublicdomain/Unlicense. RootMITNicholasWlezienonlynotentirevendorlicenseattribution;no productioncopy.",
+    "Prioractualbackendchecksand4wrapper-targetcoefficientassertionfailuresretained. Fulltextreviewdoesnotturnthemintoall-pathmemory/precisionqualification."
+  ],
+  "limits": [
+    "15of16trackedblobsnowassessedbywholetext/visualmethods;stb_image.h283010bytesstillunread. Zigtestsnotrun,backendotherplatform/large-memory/cancellation/throughputnotqualified.NativepHash/ASANdeferred."
+  ]
+}
