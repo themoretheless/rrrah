@@ -1,0 +1,80 @@
+{
+  "archive_sha256": "b97d3a1ed42dbd399ef32fe4df53dd8016c71acc78f32b817f53d4502d257e57",
+  "files": [
+    {
+      "path": "package/LICENSE",
+      "bytes": 1069,
+      "sha256": "464022067fa7cf085f7829694aa40c9ff5d070a2e7c9e3b0539c1d0bb2ebe597"
+    },
+    {
+      "path": "package/src/dhash.js",
+      "bytes": 21099,
+      "sha256": "e95c55ff0776b00741be3a76891505c14d22ebce2a4db46b0e355875e3171e3a"
+    },
+    {
+      "path": "package/mod.js",
+      "bytes": 651,
+      "sha256": "3a8d8a0acba2c779219e7a7c69203959d58ddc1bc75fbc5d026e7b8381a00cac"
+    },
+    {
+      "path": "package/package.json",
+      "bytes": 1084,
+      "sha256": "58f730825a31f838022c9e6f5e809b70628286ca54774ec582d57178525d8973"
+    },
+    {
+      "path": "package/docs/readme/README.md",
+      "bytes": 593,
+      "sha256": "7688aaad158ab930f5dc1f7b7697c064ef9206ee9d053102208d1d7c737324f1"
+    },
+    {
+      "path": "package/README.md",
+      "bytes": 10565,
+      "sha256": "730a637a94eb99077c42337b95a916ede865de8bc5f471d6d872d4e38119ac56"
+    },
+    {
+      "path": "package/src/dhash.d.ts",
+      "bytes": 2251,
+      "sha256": "b16cf3983639d34d266588b6f5266114fc0c3d9d235f7f0f3f7e3f0bf72e9744"
+    },
+    {
+      "path": "package/mod.d.ts",
+      "bytes": 141,
+      "sha256": "7b5f94a953c86c8b63fcea1a8a3522934eae113e0099c2e3b80fad3131e5eadb"
+    },
+    {
+      "path": "package/docs/readme/crop.webp",
+      "bytes": 1786,
+      "sha256": "8f8498d0db14ac4aec87e98b9fd8a1fa0ecb7ef78a6e9828c556f80998ae6545"
+    },
+    {
+      "path": "package/docs/readme/heavy-watermark.webp",
+      "bytes": 5000,
+      "sha256": "b9d291b938799768da3c951f3a6c95b3769a18a28ab48a9178c620b77ed5bbff"
+    },
+    {
+      "path": "package/docs/readme/original.webp",
+      "bytes": 3194,
+      "sha256": "10e8f5bdb9cd76c0d1f5f3eb04cb41a8184ea03ab5a9170ef9f2a4bc8ea470be"
+    },
+    {
+      "path": "package/docs/readme/stickers.webp",
+      "bytes": 4528,
+      "sha256": "fc119309678357792a277d9f2baa915a4c1b633bf534075cb4509ada68208975"
+    },
+    {
+      "path": "package/docs/readme/watermark.webp",
+      "bytes": 3492,
+      "sha256": "1b2a96ecea4fff59cfef97678a60fe0b945ceace3b59fbcb13a00f29f319241a"
+    }
+  ],
+  "installed_name": "@claudiu-ceia/dhash",
+  "installed_version": "0.7.3",
+  "sharp": "0.35.4",
+  "metadata_matches": true,
+  "pack_command": "deno run -A scripts/pack_npm.ts review-package.tgz",
+  "pack_exit_code": 0,
+  "consumer_install": "npm install --registry=https://registry.npmjs.org --ignore-scripts --no-audit --no-fund ../dhash440-20261021/review-package.tgz",
+  "consumer_runtime": "DHASH_FIXTURES=<pinned tests> node22 integration.mjs",
+  "runtime_exit_code": 0,
+  "scope": "Actual original packaging script, separate npm consumer, unchanged original npm_integration.mjs. Full test_npm.ts not run because Bun absent; no npm audit/TypeScript7/multi-Node/platform matrix or publication."
+}

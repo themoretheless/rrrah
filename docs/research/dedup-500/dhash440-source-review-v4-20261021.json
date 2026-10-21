@@ -1,0 +1,36 @@
+{
+  "repository": "ClaudiuCeia/dhash",
+  "commit": "9ae9b1daea9591d9cd477b0de58609059e5f1fab",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "scripts/pack_npm.ts",
+    "scripts/package_metadata.ts",
+    "scripts/test_npm.ts",
+    "scripts/npm_integration.mjs",
+    "scripts/verify_jsr.ts",
+    "scripts/generate_fixtures.ts",
+    "scripts/smoke_demo.ts",
+    "docs/readme/README.md",
+    "docs/README.md",
+    ".github/workflows/ci.yml",
+    ".github/workflows/deploy-demo.yml",
+    ".github/workflows/publish-npm.yml"
+  ],
+  "controls": "docs/research/dedup-500/dhash440-package-controls-20261021/result.json",
+  "findings": [
+    "Original pack_npm.ts succeeds withDeno2.9.7;archiveinstalledisolatedconsumer,originalnpm_integration.mjs succeedsNode22. Fivefixturepath/byteshashes+distances0/2/9/15/22,inversion,ASCII,raw/savePNGsignature,missingpathrejectionpass.",
+    "InstalledmetadatamatchesdevelopmentpackageandSharp0.35.4;outputarchivefilehashesrecorded. Nopublishinvoked;fulltest_npm.ts includesBun/typescript7/audit/multiNodechecksnotexecuted.",
+    "Publishworkflow uploads validatedarchiveandlaterdownloads sameartifact;afterpublish comparesregistrysha512againstlocalarchive. JSRverifycomparesmanifestfilenames/size/SHA256 withlocallyrewrittenimports. Sourcereview,noremotepublicationverification.",
+    "Demo imports publishedJSRversionrange;deploymentchecksdisplayedbaseversionbutfrozenlock mayresolveexactversion. Do not equatescreenversionwithcurrentcheckoutidentity.",
+    "FixturegeneratorpinsEarthrisesourceSHA256,SVGoverlaysdependonArial/systemfontfallback,andSharpcodecversions. No generatorrerunoruniversaldeterminismclaim. NASAprovenanceisupstreamdocumentation,notindependentlyverifiedthisturn.",
+    "CIactionrefscommitpinned;runtimeversionssomefloatinglatest/v2.x. Releasegatesstablematchingtag/mainancestry,testedarchive,registryverificationbeforeGitHubrelease. Workflownotexecuted."
+  ],
+  "remaining": [
+    "Otherconfigurationfiles andCSS structuralassessment",
+    "Fourlockfiles structuralassessment",
+    "Elevenimageassets visualreview"
+  ],
+  "limits": [
+    "Whole repo incomplete; count221/500. No Bun/Node24/26/windows/Linuxmatrix/deploy/browser orfullqualitycalibration. NativepHash/ASANdeferred."
+  ]
+}
