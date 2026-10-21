@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test cache_reload",
+  "tests_passed": 1,
+  "tests_failed": 0,
+  "tests_ignored": 0,
+  "scope": "Actual public file fingerprint/cache adapter with encoded synthetic P6 and real decoder. Warm cache failure and recovery sequence at one path.",
+  "checks": [
+    "Initialredpixel decode misses; second call hits cache.",
+    "Same-length allzero malformed file fails twice without returning old cached pixels.",
+    "TruncatedP6 fails twice; missing file also errors.",
+    "Repair to green pixels is cache miss and differs in mean_linear_rgb; subsequent same content hits with identical fingerprint.",
+    "Restoration of originalred bytes reuses original content cache entry and original fingerprint.",
+    "MemoryBudget used0 after failures and at end; no retained decoded image allocation."
+  ],
+  "production_change": false,
+  "limits": [
+    "No full suite, other codecs, persistence/restart, concurrent writer or crash-durability qualification.",
+    "Existing unrelated dirty raster.rs part of tested source tree, not clean-HEAD proof.",
+    "Does not address external libphash implementation; no third-party code copied.",
+    "247/500full source reviews unchanged; universal coverage remains unproven."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/cache_reload.rs": "707f697492c29ed317bef542458619297474afc0335e2c01099144b5ae3d77ad",
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-decode/src/raster.rs": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7"
+  }
+}
