@@ -1,0 +1,39 @@
+{
+  "specification": "https://netpbm.sourceforge.net/doc/ppm.html",
+  "rule": "Two-byte PPM samples store most significant byte first.",
+  "expected16_a": [
+    4608,
+    13312,
+    22016
+  ],
+  "expected16_b": [
+    4863,
+    13567,
+    22271
+  ],
+  "observed": {
+    "decoded8_a": [
+      0,
+      0,
+      0
+    ],
+    "decoded8_b": [
+      255,
+      255,
+      255
+    ],
+    "decoded16_a": [
+      18,
+      52,
+      86
+    ],
+    "decoded16_b": [
+      65298,
+      65332,
+      65366
+    ]
+  },
+  "host_byteorder": "little",
+  "diagnosis": "Raw PNM bytes copied by stbi__getn into allocation; uint16 interpretation follows host order with no byte swap in stbi__pnm_load. convert16to8 uses decoded value >>8.",
+  "scope": "Independent explicit big-endian byte oracle against recorded actual C loader output; pinned PNM function reviewed. No full Zig end-to-end or all PNM variants qualification."
+}

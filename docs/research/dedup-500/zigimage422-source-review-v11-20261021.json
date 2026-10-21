@@ -1,0 +1,21 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-370",
+    "include/stb_image.h:1190-1215",
+    "include/stb_image.h:7470-7655"
+  ],
+  "independent_oracle": "docs/research/dedup-500/zigimage422-pnm-oracle-20261021/result.json",
+  "specification": "https://netpbm.sourceforge.net/doc/ppm.html",
+  "findings": [
+    "Confirmedpinned16bitPPMbyte-orderdefectonlittle-endianhost:officialNetpbmPPMrequiresmost-significantbytefirst;independentint.from_bytesbigoracleexpects4608/13312/22016and4863/13567/22271,actualoriginalCdecode16produces18/52/86and65298/65332/65366.",
+    "WholePNMloader/test/headerwhitespace/comment/integerparse/info/is16sectionread. stbi__getncopiesrawrasterthenreturnsuint16datawithoutbyteswap;convert16to8rightshiftsnativevalue8. Explainspriorunexpectedblackvswhitebyteoutput;notjustfixtureassumption.",
+    "PNMcommenttextclaimsheadercommentsunsupportedbutactualskip_whitespaceincludes#commentloop;commentstalenessnotruntimefailureclaim. ASCII P2/P3explicitlynotaccepted bymagiccheck.",
+    "Maxvalonlyselects8/16bitandupper65535bound;othermaxvalscaling/zero-checkneedsseparatecontrols,notqualifiedthisturn."
+  ],
+  "limits": [
+    "Imageheadernoncontiguousselectedsectionsreviewedonly,notwholefile;vendorreviewincomplete. No fullZigpipeline/compiler/upstreamtests. Read/referencePPMspecnotexternalmodelorcodeadoption. NativepHash/ASANdeferred."
+  ]
+}
