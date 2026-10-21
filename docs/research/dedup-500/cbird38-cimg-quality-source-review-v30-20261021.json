@@ -1,0 +1,45 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/cimgops.cpp": {
+      "sha256": "63e30f6db2dfceb336c84a53719d876463bf7646d94b122edb3e6c429d71a020",
+      "git_blob": "4258617e5a505bb5783919aa7979992a8dff6a6a",
+      "bytes": 17842,
+      "lines": 596,
+      "method": "Whole pinned source/header read; no image pipeline executed."
+    },
+    "src/cimg_fwd.h": {
+      "sha256": "1a86cd1a5327677cf5f21cf6604616e7ef5b9ade6455875f380b23cf8cce720a",
+      "git_blob": "785332b30804c114b6c5696795caa3731aef0632",
+      "bytes": 919,
+      "lines": 27,
+      "method": "Whole pinned source/header read; no image pipeline executed."
+    },
+    "src/cimg_lib.h": {
+      "sha256": "c4930af1a685f294e36836f87f7b5634f6b16779b2222a3947b16f18fb94854f",
+      "git_blob": "c6a57474668a0345e1f7661d97ea4a3b9a5c1fce",
+      "bytes": 943,
+      "lines": 28,
+      "method": "Whole pinned source/header read; no image pipeline executed."
+    }
+  },
+  "cumulative_assessed_blobs": 101,
+  "tracked_blobs": 616,
+  "findings": [
+    "qualityScore uses edge density plus long-edge ratio, with comments admitting failures and pending evaluation on blur/noise/rescale/sharpening. This is heuristic no-reference scoring, not a verified keeper-quality ordering. Disabled testQuality does not validate it.",
+    "After10percent crop, dimensions below64 merely warn and continue. Helper calculations assume width sufficient, and workRanges divides by stride; no explicit structured invalid-size result. No tiny-image, memory-invalidity or ASAN execution performed.",
+    "edgeLengthRatio divides by numEdges without zero-edge guard. A constant image can lack detected edges; final float-to-int score has no finite check. This static path is not a reproduced full-CImg result.",
+    "longEdgeCount only flushes a run on encountering zero inside loop; a run reaching the last interior pixel is not flushed at row end. Boundary treatment can alter score; no native image fixture run.",
+    "qImageToCImg constructs3channel8bit RGB using QColor and discards alpha. cImgToQImage emitsRGB888, repeating channel0 for non3-channel inputs. No color-space/profile preservation contract or high-depth fidelity supplied.",
+    "MT_QUALITYSCORE fixed1 selects nested QtConcurrent row jobs for horizontal/vertical passes and waits. No separate pool/work budget or cancellation parameter visible in qualityScore. No concurrency failure or thread saturation reproduction.",
+    "cimg_lib wrapper enables JPEG/PNG and disables CImg display; embedded lib/CImg.h remains unread. Wrapper configuration does not certify complete decoder behavior or dependency licensing."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "101/616 assessed:100 whole text/source and one PNG visual. main.cpp and qtutil.cpp remain partial.",
+    "Prior27 original-body/header controls plus one independent counterexample unchanged. No new runtime, production code port or speedup.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
