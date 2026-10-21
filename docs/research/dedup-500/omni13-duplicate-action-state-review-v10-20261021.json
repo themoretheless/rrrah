@@ -1,0 +1,53 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 31,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "lines": 9598,
+      "new_read_line_ranges": [
+        [
+          4761,
+          6120
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          6120
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "1360 additional contiguous frontend lines read. Original removeDuplicateFromState executed with synthetic state-setter callback and group fixture under Node22 TypeScript stripping. No delete command called.",
+  "executed_controls": {
+    "remaining_group_count": 1,
+    "reported_files": 40,
+    "rendered_files": 0,
+    "total_bytes": 400
+  },
+  "control_source": "type DuplicateGroup=any;let groups:any[]=[{groupId:\"g\",fileCount:42,size:10,totalBytes:420,files:[{path:\"a\"},{path:\"b\"}]}];const setDuplicateGroups=(fn:(p:any[])=>any[])=>groups=fn(groups);\nfunction stripInvisibleText(value: string): string {\n  return value.replace(/[\\u0000-\\u001f\\u007f-\\u009f]/g, \"\");\n}\n\n  function removeDuplicateFromState(groupId: string, path: string): void {\n    setDuplicateGroups((previous) =>\n      previous\n        .map((group) => {\n          if (group.groupId !== groupId) {\n            return group;\n          }\n          const nextFiles = group.files.filter(\n            (file) => stripInvisibleText(file.path).trim() !== path,\n          );\n          if (nextFiles.length === group.files.length) {\n            return group;\n          }\n          const nextFileCount = Math.max(0, group.fileCount - 1);\n          const nextTotalBytes =\n            group.totalBytes >= group.size ? group.totalBytes - group.size : group.totalBytes;\n          return {\n            ...group,\n            fileCount: nextFileCount,\n            totalBytes: nextTotalBytes,\n            files: nextFiles,\n          };\n        })\n        .filter((group) => group.fileCount >= 2),\n    );\n  }\n\n\nremoveDuplicateFromState(\"g\",\"a\");removeDuplicateFromState(\"g\",\"b\");if(groups.length!==1||groups[0].fileCount!==40||groups[0].files.length!==0)throw Error(\"unexpected\");console.log(JSON.stringify({remaining_group_count:groups.length,reported_files:groups[0].fileCount,rendered_files:groups[0].files.length,total_bytes:groups[0].totalBytes}));\n",
+  "findings": [
+    "Original group updater retains group with fileCount40,totalBytes400 but rendered filesempty after removing two exposed paths from synthetic42-member group with onlytwo exposed. No refill of capped member list in updater. Actual scan caps40 visiblemembers; same mechanism applies after exposed members exhausted. Not file loss; presentation/action completeness issue.",
+    "findDuplicates publishes awaited groups unconditionally without active/request/scope token; scope-change clearing(v9) does not invalidate handler. Old scan may repopulate old-scope groups; static async interleaving, not mounted React proof.",
+    "UI requests max250 groups and40 members each; stats sum full fileCount and listedFiles separately. Later JSX whether truncation explained remains unreviewed.",
+    "ClearDuplicateResults resets visible state only, does not cancel task; handler may later restore groups. Button availability/callsite pending JSX review.",
+    "Single duplicate delete updates duplicate groups only, not normal search state/history. Normal search delete/rename updates normal results only, not duplicate groups/history. Filesystem index watcher does not automatically refresh these existing JS objects in read handlers. No actual filesystem action performed.",
+    "renameSearchResultInState changes outer nextSelectedKey inside React functional updater then immediately reads it outside. Deferred updater evaluation may skip selected-key update; static React scheduling concern, not executed. Directory rename only exact result path updated, not descendant paths in current UI list.",
+    "Deletion passes path and recycle flag with no scan observation stamp to backend; earlier byte equality is not revalidated here. No operation demonstrated on replaced files.",
+    "findDuplicates catches any error containingcancel as cancellation; finally awaits status before loadingfalse, without per-request guard. Failure classification/provenance remains string-based.",
+    "Preview/source and keyboard handlers provide cleanup and bounds checks; app-icon loader checks cancellation before each request unlike text-snippet loop(v9). Frontend negative iconcache retained unless component recreated; no retry invalidation found in this loader.",
+    "Search pagination expands limit and reruns query rather than cursor snapshot. Changes between runs can reorder results; no stable page contract. No runtime benchmark."
+  ],
+  "limits": [
+    "31/268 whole files; App.tsx1-6120 of9598 partial. Repository not complete.",
+    "Only original state updater executed; no actual deletion/rename, React/Tauri/Windows/browser/network/updater or upstream suite run.",
+    "No production changes. Native pHash/ASAN remains deferred."
+  ]
+}
