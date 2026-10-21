@@ -2,7 +2,7 @@
   "index": 470,
   "repository": "slon1024/haskell_phash",
   "commit": "b1b8e40721d9c7cf2b1ff6ec071f0aec6b29a1b6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All4 text blobs wholly read and all20 tracked JPEGs visually inspected; upstream Haskell/native runtime unrun",
   "decision": "wrapper",
   "finding": "Haskell compares Maybe PHash values; backend rather than independent algorithm must be reviewed.",
   "available_source_evidence": [
@@ -44,5 +44,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/haskell470-complete-source-review-20261021.json"
 }
