@@ -1,0 +1,39 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/cropwidget.cpp": {
+      "sha256": "d0a99d494c3de81041f22df2c694063fb65de95285a78706387a51b229d7842d",
+      "git_blob": "9f2ec3ee385a21a340b5907576af0422d0fd7ae3",
+      "bytes": 12284,
+      "lines": 382,
+      "method": "Whole pinned source/header read; no crop, save or cache cleanup executed."
+    },
+    "src/gui/cropwidget.h": {
+      "sha256": "6cb246f75b9c333d9dd14b605bf5613f0c99462c4142cf59bf8254b4eac662f8",
+      "git_blob": "48a1458cbf5b11bf0724a7cacd67eb1172d101ea",
+      "bytes": 3807,
+      "lines": 109,
+      "method": "Whole pinned source/header read; no crop, save or cache cleanup executed."
+    }
+  },
+  "cumulative_assessed_blobs": 161,
+  "tracked_blobs": 616,
+  "findings": [
+    "CropWidget applies brightnessAndContrastAuto to mutable no-copy view of display image, optionally resizes to screen and paints into background. Mouse-release result copied from that display background; not a pixel-faithful crop of original. Further thumbnail save reduces to max1024. No display/pixel runtime test.",
+    "repaintSelection adjusts selection by1pixel border and computes cropRect with imageScale, while release copies unadjusted selection. Stored crop metadata and saved pixels may describe different extents; no DPR/crop fixture run.",
+    "setIndexThumbnail saves image directly to destination, then writes Exiv2 metadata. Exceptions warn but returned ok remains initial img.save result; successful return does not certify metadata linkage. No atomic image-plus-metadata publication.",
+    "Preserve-comment branch checks existing thumbnail path but reads property from supplied media, not separately loaded old thumbnail object. Existing cbird thumbnail comment retained wholesale rather than refreshing crop/path; actual recrop provenance needs fixture test.",
+    "async function returns true after scheduling, not completed save. after(ok) callback exists only inside Q_OS_UNIX branch; Windows does not invoke it in this source. No async runtime executed.",
+    "Unix save flushes thumbnail caches with configured shell command and wildcards. That is a filesystem-changing operation, not passive preview. No command or cache deletion performed.",
+    "Stored relative path uses raw startsWith index prefix without separator. MD5/DCT/frame comments are references to media record, not independent proof of current source identity or requested-frame accuracy.",
+    "Aspect ratio setter divides by supplied numerator without validation; null image/dimension and click-without-motion crop metadata need callsite/UI checks. No malformed-memory or sanitizer run."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "161/616 assessed:160 whole text/source and one PNG visual. Distinct from160 fully reviewed repositories globally.",
+    "31 prior original-body/header controls plus two independent counterexamples unchanged. No GUI, metadata save, production changes or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
