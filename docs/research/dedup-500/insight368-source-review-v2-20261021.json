@@ -1,0 +1,60 @@
+{
+  "repository": "ramenhut/insight",
+  "commit": "3930e13998e8f0893ae6b2360b2ec75f4edcb969",
+  "whole_repo_complete": false,
+  "tracked_blobs": 22,
+  "cumulative_assessed_blobs": 7,
+  "new_whole_files_read": {
+    "Source/Imagine/vnImage.cpp": {
+      "bytes": 3667,
+      "sha256": "0d28f15986a6db55d8ed4939f3135d413bce0a67f2a42525356a3c6a59f85e94",
+      "git_blob": "ea2a299971ba7d8ae20d7d196b01298d3efae442",
+      "method": "Whole pinned C++ file read without truncation"
+    },
+    "Source/Imagine/vnImageDesaturate.cpp": {
+      "bytes": 2006,
+      "sha256": "4936bcc8069be953a4c5245ea27dcb481fdad01363760bb23ebfaf6956f17bfb",
+      "git_blob": "9cef7cd6fe9147d3fb48196263ef1a62da32b735",
+      "method": "Whole pinned C++ file read without truncation"
+    },
+    "Source/Imagine/vnImageTransform.cpp": {
+      "bytes": 3556,
+      "sha256": "99285d947e52d656b564836ea5755ad98aa2f0cd4cb4efb94a8c95ec343caab7",
+      "git_blob": "926afe56422d78f15defc5efd90b9e59e7e6e165",
+      "method": "Whole pinned C++ file read without truncation"
+    },
+    "Source/Imagine/vnImageResize.cpp": {
+      "bytes": 6311,
+      "sha256": "a6c2c39263d3f34e4502a26ce3c753650c48b69c7079e76d68c34d64a25425a8",
+      "git_blob": "0861bc9f02394d4d2ec27269e994f5edcf19971d",
+      "method": "Whole pinned C++ file read without truncation"
+    },
+    "Source/Platform/vnPlatform.h": {
+      "bytes": 5080,
+      "sha256": "5752687c0dceab1b2b82f29124a7db172a264f49110f2b2403b475839593cbcf",
+      "git_blob": "2d688ac413d3591ba18263698c877dc867fbc264",
+      "method": "Whole pinned C++ file read without truncation"
+    }
+  },
+  "controls": {
+    "generator": "docs/research/dedup-500/insight368-controls-v2-20261021/build.py",
+    "source": "docs/research/dedup-500/insight368-controls-v2-20261021/extracted.cpp",
+    "log": "docs/research/dedup-500/insight368-controls-v2-20261021/run.log",
+    "passed": 3,
+    "method": "Unchanged vnDesaturateLine extracted and compiled with authored exact-width integer/status adapters; original body with no sanitizer or full platform build."
+  },
+  "findings": [
+    "Original vnDesaturateLine coefficients1228+2416+450 sum4094, then shift12. All256neutral input levels tested:0->0,every1..255->v-1. White255->254. Does not alone prove image-search recall failure.",
+    "Null input/output pointers and zero pixel count are refused with parameter checking enabled in extracted adapter.",
+    "Both vnTransformLine overloads use UINT8 i/k loops against UINT32 count. Count256 cannot be reached by incrementing8bit counter; no count>=256 loop executed. Default target64 remains below this boundary, larger accepted thumb>=64 reaches256sourcewidth.",
+    "vnPlatform.h explicitly #errors on __APPLE__; only Windows platform/types configured in this compact source. No original macOS build attempted. Prior and current controls use explicit adapters, not original Windows ABI.",
+    "Resize accumulates weighted float contributions into integer result at each addition, then divides by weight sum. Precision behavior source-only, no resampling oracle run.",
+    "CVImage::SetDimension multiplies dimensions and bits in UINT32 before shifting/allocation; checked overflow not observed. CVImage::SetFormat changes layout metadata without reallocating existing storage. Invalid-size access not executed."
+  ],
+  "remaining_scope": "15artifacts including Imagine API/interface, bitstream, remaining platform headers, Windows projects and README/rootlicense.",
+  "license": "BSD2 notices read in original headers and retained in extracted controls; root license pending. No production adoption.",
+  "limits": [
+    "Partial7/22review; six targeted extracted-function controls cumulative. Full-review count181/500 unchanged.",
+    "No original full hash/image/Windows ABI/build, decoder, DCT boundary/hang, ASAN, accuracy or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
