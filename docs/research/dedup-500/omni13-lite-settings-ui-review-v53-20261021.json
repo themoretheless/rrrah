@@ -1,0 +1,33 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/settings_ui.rs": {
+      "sha256": "0fa1da5ed6ff3c091b403af8988561495bffc108bab44455821334248318b7ec",
+      "git_blob": "db01daed57f9562d5044326b7e024e46774cb71c",
+      "mode": "100644",
+      "lines": 1117
+    }
+  },
+  "cumulative_whole_files_read": 87,
+  "tracked_blobs": 268,
+  "method": "All1117 lines read, pinned Git blob verified. Static settings persistence/UI callbacks review; no Windows/Slint runtime.",
+  "findings": [
+    "Save callback casts signed UI dimensions/font sizes to u32 without range validation; then calls void AppSettings.save and announces hotkey available and saved. Slint control bounds remain unread; invalid persisted settings are not protected by this callback.",
+    "Snippet save logs DB failure but clears input fields regardless. Data input can be lost on failed write; delete errors ignored. No real database/inputs modified.",
+    "Removing final scan folder saves empty Vec. Previously reviewed get_scan_folders treats empty as defaults, so no-folders cannot be represented this way and UI empty model can disagree with actual scan scope.",
+    "AI settings writes use a transaction, narrowing previous separate-write observation for main preset flow. Individual SQL errors and commit errors ignored, so transaction existence alone does not guarantee all fields saved; no failure fixture.",
+    "Settings status thread reads each field independently and falls back to Idle/0/Never on errors, conflating DB errors with valid empty/idle state. Persistent DB-open failure exits thread with no retry.",
+    "Status thread refreshes every500ms, regenerates and overwrites same QR SVG while server active even if pairing URI unchanged. has_qr true set despite create/write failure; UI later load can fail. No performance or QR rendering test.",
+    "Pairing status displays first pending device from map, while approve/reject callbacks snapshot all pending ids and apply to every one. Scope mismatch between displayed single pending record and action target set; sync server implementation and actual UI text remain unread. No pairing action executed.",
+    "Settings instance mutex successful handle is not stored or closed in function, intentionally surviving process life but no explicit ownership guard; duplicate settings launch returns without focusing existing window.",
+    "Folder picker spawns thread then blocks calling UI thread on recv; dialog uses no owner. COM uninitialization unconditional despite ignored init result, and returned display-name allocation is not freed in read code. No dialog run.",
+    "DISPLAY_VERSION hardcoded1.0.0 rather than package version, an explicit compact label choice; not evidence of installed version or update state. No original test block exists in this module."
+  ],
+  "limits": [
+    "87/268 whole files; repository013 incomplete, Slint markup and sync modules remain unread.",
+    "No new tests or production modifications.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
