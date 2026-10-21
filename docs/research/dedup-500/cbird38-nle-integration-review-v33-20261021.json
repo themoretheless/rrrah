@@ -1,0 +1,38 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/nleutil.h": {
+      "sha256": "fe048d29dc0c411fa844d77dbc396ff28b3bcf88bc521c7dc90beb1922a36d28",
+      "git_blob": "ca129af8621d648a0ad072a164a68b5e17725ab2",
+      "bytes": 8683,
+      "lines": 267,
+      "method": "Whole pinned source/header read; no project exported or editor launched."
+    },
+    "src/nleutil.cpp": {
+      "sha256": "f9ce2080c594cb1df0d1be2d39ca9196c8603bc93b78dcee785d0bb508ee6cd0",
+      "git_blob": "bf7e917bc086f3f0554250b51b89bbe7068b7398",
+      "bytes": 12230,
+      "lines": 359,
+      "method": "Whole pinned source/header read; no project exported or editor launched."
+    }
+  },
+  "cumulative_assessed_blobs": 108,
+  "tracked_blobs": 616,
+  "findings": [
+    "NLE helper implements template-specific Kdenlive XML construction, not video duplicate confirmation. FinalCut class and saveEDL body are #if0; do not attribute those inactive branches to supported runtime export.",
+    "findPlaylist/findTractor hardcode three names Video1/2/3 to fixed playlist/tractor ids. addTrack only checks template and initializes end1; it does not create a general arbitrary track. Missing elements lead qFatal/assert rather than structured errors.",
+    "addClip documents one-past-end out and writes out-1; default out=-1 has no duration lookup in active implementation, and updates _end by out-in. Default arguments alone are not proof of correct full-clip export. Caller arguments not traced here.",
+    "insertBlank iterates audio/video playlists but invokes addBlank and addClip which each modify both playlists; potential duplicate changes in this method need fixture/editor validation. oldOut>=pos guard rejects positions inside normal clip interval; no export control run.",
+    "framesToTimeCode fixed30fps, no rational rate/dropframe input. Its visible saveEDL use is inactive; do not infer active search or variable-frame-rate decoding uses30fps from this helper.",
+    "saveXml opens destination WriteOnly and writes once without checking full write or durable/atomic publication. It may overwrite existing output; no output written during assessment.",
+    "XML project construction and timeline markers cannot prove continuous clip coverage, audio equivalence or native decoder correctness. Those remain separate requirements."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "108/616 assessed:107 whole text/source plus one PNG visual. main.cpp and qtutil.cpp partial; videocontext implementation not newly assessed.",
+    "Prior27 isolated original-body/header controls and one independent counterexample unchanged. No full GUI/editor/runtime test or production edits.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
