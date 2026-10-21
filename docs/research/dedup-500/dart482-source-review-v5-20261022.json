@@ -1,0 +1,27 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "example/example-website/src/routes/demo/basic/+page.svelte",
+      "lines": 417,
+      "sha256": "05afad5e61fa4011e7618c5c33cfa2b6080a9f32e3b8e5be50ab996d26382106",
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/dart482-site-distance-control-20261022.json"
+  ],
+  "findings": [
+    "Whole basic-demo page read including all controls/results/code/example markup. Uses precomputed JSON hashes, not live Dart/Python computation in browser.",
+    "Actual original distance helper executed under Node after only removing TS parameter/return types. 0/f gives1 vs independent bit-popcount4; 00/ff gives2 vs8; a/A gives1 vs0. It measures character mismatches.",
+    "UI divides character distance by hexadecimal string length and labels this length bits. This differs from library bit distance and can materially distort similarity percentages. Equal-length ERROR strings are not rejected here; mismatch sentinel -1 can produce similarity above100%.",
+    "Library ImageHash subtraction remains a bit-list comparison as read previously; site helper defect must not be attributed to that API. Algorithm robustness descriptions (e.g. dHash crops/rotations) are promotional claims without a page-specific validation corpus."
+  ],
+  "remaining": [
+    "Other website pages/layout/CSS and structured data/lockfile review",
+    "Tracked images/vector assets, external visuals and Dart runtime oracles"
+  ],
+  "full_review_count": 247
+}

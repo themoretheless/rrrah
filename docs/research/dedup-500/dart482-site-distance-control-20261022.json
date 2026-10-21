@@ -1,0 +1,39 @@
+{
+  "source": ".dedup-work/dart482-20261022/example/example-website/src/routes/demo/basic/+page.svelte",
+  "source_sha256": "05afad5e61fa4011e7618c5c33cfa2b6080a9f32e3b8e5be50ab996d26382106",
+  "execution": "Original function extracted and type annotations removed; Node vm, no Svelte rendering.",
+  "rows": [
+    {
+      "a": "0",
+      "b": "f",
+      "actual": 1,
+      "bit_oracle": 4
+    },
+    {
+      "a": "00",
+      "b": "ff",
+      "actual": 2,
+      "bit_oracle": 8
+    },
+    {
+      "a": "a",
+      "b": "A",
+      "actual": 1,
+      "bit_oracle": 0
+    },
+    {
+      "a": "0",
+      "b": "00",
+      "actual": -1,
+      "bit_oracle": null
+    }
+  ],
+  "findings": [
+    "Counts unequal hex characters, not differing bits. 0 versus f returns1 rather than4.",
+    "Mixed-case same value a/A returns1 rather than0; length mismatch returns-1, fed to similarity without error guard.",
+    "UI labels hexadecimal character length as bits."
+  ],
+  "limits": [
+    "Helper-only execution; no browser/site build or Dart hashing."
+  ]
+}
