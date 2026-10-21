@@ -1,0 +1,79 @@
+{
+  "repository": "VikasSukhija/Downloads",
+  "commit": "59b36dcb55ec25533c0278ea466d8bb278b5b43a",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "EmailFunction.ps1": {
+      "sha256": "36bbe9641e8f9bf92e8071eb16e27b958d51c2f8ed56a9c9d6df24cb8e4d50eb",
+      "git_blob": "e0c0c32bec59a327d063e273bd749b539ab188fd",
+      "mode": "100644",
+      "bytes": 1569,
+      "encoding": "utf-8-sig",
+      "lines": 73,
+      "method": "Entire text read, not executed."
+    },
+    "excelping.vbs": {
+      "sha256": "08ab9164bc5117a6d1642bbf8ac7a83593584d6c44ee3b51245694e42a1fc5ee",
+      "git_blob": "da6662d31f14e46fa5985d25418e49d5cf10e83a",
+      "mode": "100644",
+      "bytes": 1760,
+      "encoding": "utf-8-sig",
+      "lines": 76,
+      "method": "Entire text read, not executed."
+    },
+    "printersreport.ps1": {
+      "sha256": "6e6344a516a39a516cc190886c9aed9c7006645d358f6b9be4d208df3400dc02",
+      "git_blob": "2e295a273a20d29cef8327fba7a9affba3b6db6b",
+      "mode": "100644",
+      "bytes": 1855,
+      "encoding": "utf-8-sig",
+      "lines": 65,
+      "method": "Entire text read, not executed."
+    },
+    "BulkRestoreOnedriveFiles.ps1": {
+      "sha256": "bd53ce0ec914476fa7d538d2c48ceadc97612b347f7b800c743a783fa37e5c67",
+      "git_blob": "b49f148ff84e6459f511059f60c49c925914c2fb",
+      "mode": "100644",
+      "bytes": 1949,
+      "encoding": "utf-8-sig",
+      "lines": 76,
+      "method": "Entire text read, not executed."
+    },
+    "itemslevelperm.ps1": {
+      "sha256": "49e548a2cff86a2cc55ea33f67c6177423dbb310906e0af022a6b4d269a81b7f",
+      "git_blob": "df2e9d086c0e7e0904c455aff97e33ef6d6d40b6",
+      "mode": "100644",
+      "bytes": 2123,
+      "encoding": "utf-8-sig",
+      "lines": 72,
+      "method": "Entire text read, not executed."
+    },
+    "ConvertCSV2XL.ps1": {
+      "sha256": "bfe02d855dc44778a6cea28e3bfba801f073a7e86be96301d512338e7b06f967",
+      "git_blob": "61e8ae97f15e2cb5b996d2ed479807d98eb74542",
+      "mode": "100644",
+      "bytes": 2269,
+      "encoding": "utf-8-sig",
+      "lines": 70,
+      "method": "Entire text read, not executed."
+    }
+  },
+  "cumulative_whole_files_read": 36,
+  "tracked_blobs": 248,
+  "findings": [
+    "EmailFunction constructs and sends HTML email/attachment; no content equality or explicit disposal of message/client/attachment in source. No email sent during review.",
+    "excelping invokes ping for each input hostname and reports exit status to Excel; no duplicate handling.",
+    "printersreport exports AD printQueue metadata using an externally supplied Write-Log function; not file deduplication.",
+    "BulkRestoreOnedriveFiles filters recycle-bin deletion timestamps inclusively and restores each ID. Date-only upper bound parses at midnight, rather than covering the entire final calendar day. No duplicate-content confirmation.",
+    "itemslevelperm adds a role only when the user has no assignment; an existing user assignment without the requested role has no update branch. It operates only on items already having unique assignments.",
+    "ConvertCSV2XL converts/formats through Excel COM. The source refers to plural $Workbooks while assigning singular $Workbook; column count is obtained from imported row properties, so header-only CSV lacks row-derived columns. No Excel runtime proof."
+  ],
+  "executed_controls": [
+    "Verified all six original Git blob IDs against pinned tree."
+  ],
+  "limits": [
+    "Static source review only; no email, ping, AD, SharePoint, OneDrive restoration or Excel operations executed.",
+    "36/248 tracked blobs reviewed; repository remains partial.",
+    "No production library change or optimization claim follows from these administrative scripts."
+  ]
+}
