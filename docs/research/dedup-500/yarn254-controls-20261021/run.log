@@ -1,0 +1,6 @@
+PASS no duplicates ["yarn dedupe --check"]
+PASS duplicates ["yarn dedupe --check","yarn dedupe"]
+PASS check generic failure also invokes dedupe ["yarn dedupe --check","yarn dedupe"]
+PASS dedupe failure return ignored ["yarn dedupe --check","yarn dedupe"]
+PASS environment guard []
+PASS argv guard []

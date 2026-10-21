@@ -1,0 +1,93 @@
+{
+  "repository": "ambar/yarn-plugin-dedupe-on-install",
+  "commit": "96ffd15fdb25310613f003a2c258dfd73eaa36a1",
+  "whole_repo_complete": false,
+  "tracked_blobs": 11,
+  "cumulative_assessed_blobs": 10,
+  "files": {
+    ".editorconfig": {
+      "bytes": 147,
+      "sha256": "a71035eea13b82779da4dd5c7de385f9ec3af700ebc1d623f44f81abf13e8ae8",
+      "git_blob": "c6c8b3621938a4691225a870a59bf382af1883dd",
+      "method": "Whole pinned text read without truncation"
+    },
+    ".github/workflows/main.yml": {
+      "bytes": 414,
+      "sha256": "d098568257cd1541061fbc508d575547694b92ca1e3a69ab00d979f6f6446a7e",
+      "git_blob": "2e0d97104ddd2da9b2beab8b842b7f2a2b187df6",
+      "method": "Whole pinned text read without truncation"
+    },
+    ".gitignore": {
+      "bytes": 23,
+      "sha256": "b1c925a6ab9e10e329008d736ce680fdefa26644deff1d2ae38547990897fa6a",
+      "git_blob": "e7bc7a0f87bf086653ddd495cba41cb88cf8a1b8",
+      "method": "Whole pinned text read without truncation"
+    },
+    ".yarnrc.yml": {
+      "bytes": 80,
+      "sha256": "0e7b02cc3e1496af2c17f775703d432723483f91a67b32f95deb14d856a8ec03",
+      "git_blob": "4a2f46fea0f70d6cd189546b902c01c87790c2af",
+      "method": "Whole pinned text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1067,
+      "sha256": "e6d0d6569e39a94d184ab2700a702b36a85b95baa5a1c44cfee21ed219134e87",
+      "git_blob": "832f349e0ff27e08001a9b70cec09182715951cb",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 202,
+      "sha256": "3debbec0f78d7bf9f8c1a52622e81d923664a2049680b5422c4f4d372229f3c1",
+      "git_blob": "347b840cc9b497c0dd0f0d1ecfc9886699b55951",
+      "method": "Whole pinned text read without truncation"
+    },
+    "biome.json": {
+      "bytes": 525,
+      "sha256": "833e62ea49f7af1b186f709c949935830a69cff9d2877b3fbf99fbe6138e5ab2",
+      "git_blob": "b54109871c40eac2e964ea2fe2de78e691df7c00",
+      "method": "Whole pinned text read without truncation"
+    },
+    "index.js": {
+      "bytes": 1005,
+      "sha256": "f2e0b5dee32f0c055ef922d5c65ad82ebb19a9083bed864d6d6e6bbfb796a9c5",
+      "git_blob": "68b83cee8666ce1d29be2a9fd1abdce962de4f56",
+      "method": "Whole pinned text read without truncation"
+    },
+    "package.json": {
+      "bytes": 542,
+      "sha256": "ff8acfdbf5b67d74c1d9b5880f930faadd39e6203a6969d5722c6224446933e6",
+      "git_blob": "7ed127d69fbd12efd994637ca63dcb199a4c588c",
+      "method": "Whole pinned text read without truncation"
+    },
+    "tsconfig.json": {
+      "bytes": 161,
+      "sha256": "716c2b97d8ba9f800a6bec9261b1decc7ef70a814b83f7112236bf7484cb93e8",
+      "git_blob": "e17582eff72f220c0d6499aff44541929f935080",
+      "method": "Whole pinned text read without truncation"
+    },
+    "yarn.lock": {
+      "bytes": 35464,
+      "sha256": "3d629c1db101abbe0ae0142912d4f76eba91196a5b02004dde7e0feb752259f3",
+      "git_blob": "ff96d9444aed3d731f7e79bd00391b3a7554dea9",
+      "method": "Only lines1-430 read; remaining lines not assessed"
+    }
+  },
+  "unique_targeted_controls": 6,
+  "controls_script": "docs/research/dedup-500/yarn254-controls-20261021/run.cjs",
+  "controls_log": "docs/research/dedup-500/yarn254-controls-20261021/run.log",
+  "findings": [
+    "Reject-domain: Yarn dependency resolution hook, no file/image comparison.",
+    "Six original CommonJS hook controls with explicit execute adapter: check0 skips dedupe; check1 runs dedupe; generic check2 also runs dedupe; actual dedupe2 return ignored; environment and argv guards suppress commands. No actual shell command or Yarn installation executed.",
+    "Guard sets process.env.DEDUPED before check and never resets; subsequent same-process hooks skipped by source inspection. No complete Yarn lifecycle behavior verified.",
+    "No test script or source tests in pinned tree. CI runs immutable install, lint and typecheck; those are not functional regression tests.",
+    "Yarn4.8.1 and dev TypeScript5.8.2 pinned; Node22.23.3 executed original hook controls only.",
+    "All11 original cached blobs Git-verified;10whole files read, lockfile only lines1-430. System and bundled Python lack yaml module; parser attempts failed without installations or source changes.",
+    "First control invocation failed because authored relative source path missed one parent directory; harness corrected and all6controls rerun successfully.",
+    "Root MIT fully read, no production adoption."
+  ],
+  "remaining_scope": "Read remaining yarn.lock lines431-end before whole-repository completion.",
+  "limits": [
+    "Partial10/11 assessment;193/500 full-review count unchanged. No upstream runtime, dependency-source, install or shell integration qualification.",
+    "Native pHash/ASAN deferred."
+  ]
+}
