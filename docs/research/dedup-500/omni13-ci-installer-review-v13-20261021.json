@@ -1,0 +1,86 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/FUNDING.yml": {
+      "sha256": "da1f965cc1e49f607f9cd6d27ccf8f38819ec79c8f887e6615ed35ce98854869",
+      "git_blob": "7e1100deddff47ea5086c6e5aaefdfe1e177ad51",
+      "mode": "100644",
+      "lines": 1
+    },
+    ".github/workflows/android.yml": {
+      "sha256": "f6c0f5b962f30b950a970b2c80fc7fc5751291b545efd54860506c245968d72e",
+      "git_blob": "957edec381c9014ad33072867605a58afd7050b3",
+      "mode": "100644",
+      "lines": 72
+    },
+    ".github/workflows/main.yml": {
+      "sha256": "1251d5bd58a507ff58496db2f1a4ec6ed05a3f52afda4b6a8f704965855d92ae",
+      "git_blob": "62f52fbe4709656826f327c182225d8cc8d14bef",
+      "mode": "100644",
+      "lines": 161
+    },
+    ".github/workflows/signpath-origin-test.yml": {
+      "sha256": "b4f7a77c4061449efaae39cd1e9b32ce84cc8894d71d06ce84709704848c88aa",
+      "git_blob": "6c73a02b83bab7a21bc8527737949ccc63476d8f",
+      "mode": "100644",
+      "lines": 77
+    },
+    ".github/workflows/signpath-production-signing.yml": {
+      "sha256": "1b3b2fa1e380ceb42a8f0aa0eed1d957864a6f8c193c59efca533ec9d382a02b",
+      "git_blob": "f02e52c5c4f25a7ae38b58c8cf9a680f250e76c6",
+      "mode": "100644",
+      "lines": 393
+    },
+    ".signpath/policies/omni-search/release-signing.yml": {
+      "sha256": "85d3e7d899d0bc63a5bb64ae31c3a4b226a9e28aa136eee3e914178d7068c64a",
+      "git_blob": "fced62cc56d831ec49b78c2780db66c884e05922",
+      "mode": "100644",
+      "lines": 5
+    },
+    ".signpath/policies/omni-search/test-signing.yml": {
+      "sha256": "3510f8ef3405f8f8879373c0f00421818b60540c51ff6d0963443cf6adbdbcb0",
+      "git_blob": "3ba78aea5a7646d0fe72d8c75f29f927df925d9c",
+      "mode": "100644",
+      "lines": 5
+    },
+    "src-tauri/.gitignore": {
+      "sha256": "88707cda7ba4226eda3ffa91d8284f1a0d12b827f06fb9bc48425cc0d4af04af",
+      "git_blob": "b21bd681d99748c046b14202ab79bd8da0143302",
+      "mode": "100644",
+      "lines": 7
+    },
+    "src-tauri/windows/fragments/shell-verb-cleanup.wxs": {
+      "sha256": "6ad807a400db3d65f6e854f8cbf6414a37dc28cee76e5bcdff77c2c329a026c2",
+      "git_blob": "1087270e3f92bb94012168a6c5ccbc9029e24e34",
+      "mode": "100644",
+      "lines": 36
+    },
+    "src-tauri/windows/nsis-hooks.nsh": {
+      "sha256": "b5588ff515a995647b09452aa0935bec76d89281ef1f588811e0f95649deb900",
+      "git_blob": "cf078dbe24b9cbbed88694ce886a78d3745868af",
+      "mode": "100644",
+      "lines": 6
+    }
+  },
+  "cumulative_whole_files_read": 42,
+  "tracked_blobs": 268,
+  "method": "Ten pinned files whole text read including all four tracked .github/workflows files. Workflow/installer source inspection only; no dispatch, shell execution, credentials or releases accessed.",
+  "findings": [
+    "All four workflows explicitly build/package/sign but contain no cargo test, scanner regression, Android test/connected test or browser behavior invocation. assembleRelease and npm build are not behavior qualification. Gradle lifecycle internals still pending review, no claim no implicit tasks.",
+    "main installer build includes cargo build/iscc for Lite but push paths omit omnisearch-lite/**; Lite-only change does not trigger this workflow under its declared path filter. It also lacks pull_request event; separate Android workflow has PR trigger for Android paths only.",
+    "Windows matrix x64 andARM64 build targets; artifact existence alone does not prove NTFS/journal/cancellation behavior. No actual CI run fetched.",
+    "Signing workflows manualdispatch; signing provenance/policies require hosted runners and disallowreruns, and production summary mentions SignPath approval. These are upstream workflow constraints, not instructions/approval requirements for our read-only research.",
+    "Production updater manifest job depends on signing matrix, requires three bundle platform entries, signs post-SignPath installer and retains oldNSIS compatibility keys. It checks file existence/platform inventory, not signature verification or application runtime tests in this source.",
+    "Updater manifest uses latest/download URLs and draftrelease uploads; published availability requires later releasepublication, not proven here. Androidpublish independent of desktop matrix, so partial artifacts possible before all jobs succeed; no execution evidence.",
+    "Installer selection first wildcard result rather than explicit artifact identity; clean CIcheckout usually bounds candidates but exactartifact uniqueness not asserted. No packaging failure demonstrated.",
+    "Installer MSI andNSIS cleanup remove same four HKCU shellverb subtrees; matches lib.rs registration mainfileverb and historical variants. No registryoperations performed, no uninstall-runtime success claimed.",
+    "Signing secret names and public organizationID are source references only; no secret values fetched, printed or used. RootFUNDING merely sponsorconfiguration, not dedup capability."
+  ],
+  "limits": [
+    "42/268 pinned wholefiles reviewed; sync/Lite/Android/assets/CSS/lockfiles still pending.",
+    "No CI dispatch or logs, installs, signing, credentials, networking services, updater, Windows registry or production edits.",
+    "No new runtime tests warranted for static research records. Existing isolated controls and prior local tests remain separate evidence. Native pHash/ASAN deferred."
+  ]
+}
