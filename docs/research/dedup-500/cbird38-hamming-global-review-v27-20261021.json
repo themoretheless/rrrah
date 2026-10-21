@@ -1,0 +1,41 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/global.h": {
+      "sha256": "7b8c9403e29797adc46f0cf9b42fff1a48cdc720bee7ce1cd2ec608e918e2df6",
+      "git_blob": "dfe90c3ddad41e7469a313a4204e788766b3e2dd",
+      "bytes": 2892,
+      "lines": 82,
+      "method": "Whole pinned header read."
+    },
+    "src/hamm.h": {
+      "sha256": "3a3e6f3d776d7d25bda620f6fd3a1f72b7f748c6f276813e71a886664bd6e8ee",
+      "git_blob": "25ab839fa04fd2926f494395f0bc2b9b1cd413ee",
+      "bytes": 1006,
+      "lines": 26,
+      "method": "Whole pinned header read."
+    }
+  },
+  "cumulative_assessed_blobs": 88,
+  "tracked_blobs": 616,
+  "findings": [
+    "hamm64 returns char from __builtin_popcountll(a xor b). Actual range0..64 fits signed and unsigned char on this host. Header comment mentions x86 but code uses compiler builtin, not explicit x86 intrinsic. Host compilation does not qualify every target/compiler.",
+    "Original unmodified hamm.h directly included by C++17 control: endpoints,4096 single-bit pairs,10000 deterministic general pairs match independent shift-and-count reference; symmetry checked. No Qt/OpenCV shim needed for this header.",
+    "global.h defines uint64_t dcthash_t and uint32_t mediaid_t, requires Qt assertions and standard assert enabled. Fatal/assert branches are process termination, not structured recoverable error handling.",
+    "strict_malloc/strict_realloc cast count to uint before multiplying element size. Large counts may narrow before allocation; caller bounds must be established separately. No oversized allocation, malformed cache or sanitizer execution performed.",
+    "Global SimpleIO alias selects QFile implementation. Alternative stdio declarations commented; do not conflate unused implementation with active I/O."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-hamming-controls-v27-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Unmodified original header, clang++ C++17 O2; standard integer I/O harness and independent bit-by-bit reference; own temporary build directory cleaned."
+  },
+  "limits": [
+    "88/616 assessed:87 whole text/source plus one PNG visual.27 isolated original-body/header controls cumulative and one independent counterexample.",
+    "Hamming primitive correctness does not qualify hash extraction, approximate candidate completeness, index persistence or media decoder. No benchmark or production port.",
+    "Deferred native pHash/ASAN remains skipped; this control does not invoke pHash."
+  ]
+}
