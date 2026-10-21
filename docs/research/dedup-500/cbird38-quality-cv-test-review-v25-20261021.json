@@ -1,0 +1,39 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "unit/testquality.cpp": {
+      "sha256": "cc2a1bf1bf4649c4951a93eceae89266d6d2c899de2e49d112703412c4ab75c6",
+      "git_blob": "c705ba942704cfaaa765076db12390e06982c7e7",
+      "bytes": 7390,
+      "lines": 270,
+      "method": "Whole pinned source read; no decoder/native pHash executed."
+    },
+    "unit/testcvutil.cpp": {
+      "sha256": "04160f6aa44f53e621b71822de74220a00fb84bba83e016e30a7b689492237a4",
+      "git_blob": "3c19f02afcc3580c2563e80f6327d97f9bd41a43",
+      "bytes": 13636,
+      "lines": 533,
+      "method": "Whole pinned source read; no decoder/native pHash executed."
+    }
+  },
+  "cumulative_assessed_blobs": 80,
+  "tracked_blobs": 616,
+  "findings": [
+    "TestQuality::testQuality immediately executes QVERIFY(true) then return. Remaining JPEG/blockiness experiment unreachable; a passed slot provides no quality ranking evidence. Even unreachable experiment logs failure percentage rather than enforcing accuracy threshold.",
+    "testGrayscale declares empty cv::Mat color,gray and never loads source before if(color.rows<=0) QSKIP. Therefore each reached dataset row skips without invoking grayscale conversion; do not claim conversion coverage from slot presence.",
+    "testDctHashCv fetches file only; expected hash fetch commented, QBENCHMARK computes result then Q_UNUSED. It times hash computation without asserting a reference signature. Deprecated pHash branch similarly benchmark-only, remains unexecuted and deferred.",
+    "DCT similarity computes and writes distances for original plus eight scaled copies over100 external fixtures, with nonempty image checks but no distance/recall threshold assertion. Dissimilarity logs pairwise distances with no separation/false-positive assertion. External CSV values/results unavailable; no performance claim.",
+    "Autocrop test compares DCT hash equality against expected image instead of exact pixels/dimensions. This supports signature equivalence for supplied fixtures, not exact crop geometry or byte/pixel equality. Failure path writes derived image into external fixture tree; not run.",
+    "Qt/OpenCV conversion tests assert various depths/channels and pixel comparisons, but explicitly skip unsupported decodes and Windows JPEG discrepancies. Indexed/mono handling tests formats separately; not complete color-management, HDR, EXIF or all-codec qualification.",
+    "Color descriptor tests compare integer-truncated floating distance to external expected integer, not full float, symmetry, weight behavior or off-by-one descriptor construction. Previous original-distance controls remain separate stronger evidence on those specific cases.",
+    "DEADCODE matrix roundtrip compares array[i] with itself rather than array_after[i], if enabled. It is conditional source and does not establish active storage integrity coverage."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "80/616 assessed:79 whole text/source plus one PNG visual. main.cpp and qtutil.cpp still partial.",
+    "No new upstream runtime or local code change. Prior24 original-body/header controls and one independent counterexample unchanged; fresh54 local exact-file passes are separate.",
+    "Native pHash/ASAN remains skipped."
+  ]
+}
