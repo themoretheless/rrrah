@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "related_external_finding": "docs/research/dedup-500/media459-controls-20261021/result-v5.json",
+  "test": "pgm16_sample_order_and_low_bits_survive_selected_frame_normalization",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test pnm_precision",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "test_seconds": 0.01,
+  "build_seconds": 83,
+  "validation": "Initialtestpassed; testfileformatted withrustfmt1.98.1 thenfinalformattedsource rerunpassed. One test counted, not two independent testcases. rustfmt--check andgitdiff--check passed.",
+  "coverage": [
+    "Eight16bitPGM samples1,2,256,257,4660,4661,65534,65535 explicitlyencodedbigendian inP5.",
+    "Actual decode_selected_frame includesrouting/decoder/normalization andstable-source guard; dimensions8x1 andRGBAcheckedagainst independentfull-rangeBT709inversetransfer,notan8bitproxy.",
+    "P2ASCII withcomment andsameeightvalues equalsP5selectedpixelsanddigest despite differentcontainerbytes.",
+    "P5littleendianwrittenpayload differsfromproperbigendianselectedpixelsanddigest.",
+    "Singlelow-bitvaluechange65535to65534 retainedasdifferentselectedpixelsanddigest.",
+    "MemoryBudget returnsused0afterallfourdecodedframesdropped."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/pnm_precision.rs": "c4d7f6afcd9c3f33839c4800df1a3810b95662ffaa558fd7d79667f56c24617a",
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-dedup/src/raster.rs": "f1225873a1c642bbf9bc36c4c0a4e418f2afe5a176cdb775a2f18815461b9b20",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-decode/src/raster.rs": "1053f6f618c168b5d7bbe3733c427f3fd1c10b8431fb4073f34574d9178094a7",
+    "Cargo.lock": "4a797a48e17a579a093dd59ebd7f6146c0dec493bd4dcc3eff5660face8deff6"
+  },
+  "changes": "Newregressiontestonly; no productionimplementationchange needed for reproducedexternalPGM16case.",
+  "limits": [
+    "Currentworktreeincludespre-existinguncommitted rrrah-decode/src/raster.rs changes,preserved;testedsourceSHA256recorded. Not a cleanHEAD/CIorpackagereleasequalification.",
+    "Selectedframenormalizedpixelequality, not whole-filebyteidentityorallPNMvariants.",
+    "No malformed/truncatedPGM,inputbudget/cancellationfaultmatrix,arbitraryMaxvalvalues,fullintegration suiteorperformanceclaim.",
+    "Repositoryreviewcountunchanged245/500;allcasegoalremainsunproven.",
+    "Native pHash/ASAN remainsexplicitlydeferred."
+  ]
+}
