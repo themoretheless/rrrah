@@ -1,0 +1,84 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "cadencelabs/urldedup",
+  "commit": "6933fe99f3bf9c8ba5a1c34fd999a0681215373f",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 9,
+  "files": {
+    "Console/Command/AbstractCatalogUrlRewrites.php": {
+      "bytes": 11669,
+      "sha256": "9b624a6f8b40e133a83fe254c79271fd3cdf7f7d1cfc11d2df4f40c93becb4fd",
+      "git_blob": "97cd6f2ceec9c748fb0436d3a3b592c2f06f5b03",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "Console/Command/CategoryUrlRewrites.php": {
+      "bytes": 6442,
+      "sha256": "77c4400d1572313af37e693738cf7969b854261e96828b3be3f72f5579680984",
+      "git_blob": "88828a43ff688a6d8205db47ea0440db46bf03b6",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "Console/Command/ProductUrlRewrites.php": {
+      "bytes": 929,
+      "sha256": "e9ef89258a276b7896be434b96d60037c2bfff11ec8b562adf769b091c272d9f",
+      "git_blob": "8bc91c9216b4f9f771d9cd865846ed2c9d9dcb51",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "LICENSE": {
+      "bytes": 35141,
+      "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+      "git_blob": "9cecc1d4669ee8af2ca727a5d8cde10cd8b2d7cc",
+      "method": "Whole674line GPL3 text read without truncation, including sections0-17 and application instructions"
+    },
+    "README.md": {
+      "bytes": 370,
+      "sha256": "e255100e6830d89c8e2a68e3ceb0d450cd536490672e4da75d9b45aede28a4f0",
+      "git_blob": "c8ee84bd07bac3530328b905b661cc650525e4ba",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "etc/config.xml": {
+      "bytes": 176,
+      "sha256": "91b778705aa8630b2b133d8f8bf6e1a433372002f572c80781bf256f97c85816",
+      "git_blob": "5670246754d0e7730f22777b57119a59324ea1f7",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "etc/di.xml": {
+      "bytes": 643,
+      "sha256": "c7359a39f5b137e468b8719448d80ae6ff8867efcb1a01c4d9d4b21cefad665b",
+      "git_blob": "3a6ba420d4ea390275b3cf26974fc5f30891aa9d",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "etc/module.xml": {
+      "bytes": 455,
+      "sha256": "1950574d20814deb019efe06c00c77781865078008723e7c8c75524b51f89c14",
+      "git_blob": "861c13b548e38bf89fd3d55097a608066c7f15a4",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    },
+    "registration.php": {
+      "bytes": 366,
+      "sha256": "871eb4b55e30fe5534de25947d5ff004bf9cdab02c2b6c564cf5f1b5c68db3c5",
+      "git_blob": "48072e18482508aa8bec732fc8bbb1ffeda28167",
+      "method": "Prior whole pinned PHP/XML/readme reading retained after current byte verification"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/urldedup145-source-review-v1-20261021.json"
+  ],
+  "unique_targeted_controls": 0,
+  "upstream_tests_run": false,
+  "conclusions": [
+    "Reject-domain confirmed: Magento2 database product/category URL-key conflict rewriting; no file/image/content comparison. All9tracked text artifacts fully read. No production adoption.",
+    "No tests or standalone package/runtime definition in pinned tree. Original PHP, Magento, database migration/rewrite, reindex and cache commands not executed. No passing integration result or performance claim.",
+    "Prior source findings retained: explicit duplicates choose min entity ID and suffix others; generated suffix uniqueness not rechecked. Category selector folds null path into empty string but updater chooses IS NULL for falsy path, creating possible mismatch. These are static observations, not reproduced database failures.",
+    "Category cascading join repeats leafPath.attribute_id condition rather than constraining rootPath.attribute_id. Possible unintended root attribute match remains source-only. No live SQL or arbitrary database content tested.",
+    "Transaction surrounds store mutations; successful commit followed by external reindex/cache commands without exit-status verification. No rollback/failure/concurrency/recovery qualification inferred.",
+    "Root GPL3 full text now read including numbered sections and application guidance. README saysGPL3; PHP/XML source headers list OSL3,AFL3 and original OlegKoval attribution. Per-file provenance discrepancy preserved as unresolved; complete reading does not settle license applicability.",
+    "No user data accessed or changed, no database/shell side effects or production source copying. License discrepancy does not block reviewing remaining repositories."
+  ],
+  "license": "Root GPL3 and README GPL3; code/header OSL3/AFL3 discrepancy unresolved; all tracked license text read; no adoption.",
+  "limits": [
+    "Complete9artifact source review is not Magento/PHP/database/runtime qualification. Zero runtime controls.",
+    "Native pHash/ASAN deferred. All500 full review and allcases goal remain incomplete."
+  ]
+}

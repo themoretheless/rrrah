@@ -2,7 +2,7 @@
   "index": 145,
   "repository": "cadencelabs/urldedup",
   "commit": "6933fe99f3bf9c8ba5a1c34fd999a0681215373f",
-  "review_scope": "Partial pinned8/9whole text artifacts read:complete PHP implementation/XML/readme;rootLICENSE middle pending. Zero runtime tests.",
+  "review_scope": "Complete pinned9/9whole text artifacts read including complete GPL3 text;per-file OSL3/AFL3 headers retained as unresolved provenance;zero runtime tests.",
   "decision": "reject-domain",
   "finding": "Magento URL rewrite deduplication; database URL identities.",
   "available_source_evidence": [
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "GPL-3.0",
-  "license_scope": "README/rootGPL3; per-file source headersOSL3/AFL3 unresolved; root full text pending; no production adoption.",
+  "license_scope": "Root GPL3 and README GPL3; code/header OSL3/AFL3 discrepancy unresolved; all tracked license text read; no adoption.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -69,5 +69,8 @@
     {
       "audit": "docs/research/dedup-500/urldedup145-source-review-v1-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/urldedup145-complete-source-review-20261021.json"
 }
