@@ -1,0 +1,39 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/templatematcher.h": {
+      "sha256": "4adc0effd5200d8dcc14028083f9bcc1c918c9b56747e294d6b4c990fa8f57a7",
+      "git_blob": "5de7bf74afb35ea22ee66321907fff10491b3326",
+      "bytes": 2017,
+      "lines": 62,
+      "method": "Whole pinned source read; cpp contiguous1-300,301-436."
+    },
+    "src/templatematcher.cpp": {
+      "sha256": "258cc5a666e826843ab909461f748aacc4384c69b9c38485e88c040411d1141c",
+      "git_blob": "772c341289205bf82091c9a5d8c845d624a29b3f",
+      "bytes": 13701,
+      "lines": 436,
+      "method": "Whole pinned source read; cpp contiguous1-300,301-436."
+    }
+  },
+  "cumulative_assessed_blobs": 42,
+  "tracked_blobs": 616,
+  "findings": [
+    "TemplateMatcher estimates a restricted affine/rigid transform from at least3 ORB correspondences, inverse-warps candidate to template size and accepts exclusive DCT Hamming threshold. It is secondary perceptual evidence, not pixel/file identity or full occlusion/perspective proof. Header explicitly excludes mirror/warp/perspective.",
+    "Cache stores only integer distance under concatenated MD5pair and accepts either direction. It omits feature counts, cvThresh, tmScalePct, generation/algorithm version and transform/ROI. Changing those parameters or reversing asymmetric template/candidate roles can reuse earlier decisions; actual application cache-lifetime impact untested.",
+    "Cache hits set score but do not restore ROI/transform. Thus header promise that matches have roi/transform set is not established for fresh Media objects on cached path; no native UI reproduction.",
+    "After collecting cached good candidates, group.clear occurs before template image load/descriptor extraction. If uncached candidates exist and template load or feature extraction fails, early return leaves group empty and discards cached successes too. Static control-flow finding, not runtime tested.",
+    "Mask treats every zero grayscale candidate pixel as unsupported warp border, so genuine black image content also masks template. Alpha path scales by255 via shift8 and fills alpha255. There is no explicit minimum overlap/support fraction check at final hash acceptance. Actual image false-positive/negative prevalence unqualified.",
+    "Hash cache assumes supplied MD5 identities; previously reviewed Scanner normalizes JPEG header region out of checksum. Different metadata-dependent decoding may share a checksum key; no real EXIF pair test executed.",
+    "Failure paths may write cache even when useCachefalse via constant invalid-cache-key; lookups are disabled in that mode. This is not evidence of cross-file false cache hits while caching is disabled.",
+    "Matcher is instantiated in Database::similar and invoked only with templateMatch option; default SearchParams templateMatchfalse. Therefore geometry validation cannot be assumed for default ORB/DCT candidate searches.",
+    "No distinct template matcher test file identified by this pass; this does not prove absence of all indirect tests. Full Qt/OpenCV native matching and upstream suite not run."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "42/616 tracked artifacts assessed:41whole text/source and1PNGvisual. Twenty-four previous original-body/header controls plus one independent key counterexample; no new runtime tests.",
+    "No production port or performance claim. Deferred native pHash/ASAN remains skipped; DCT code inspected only."
+  ]
+}
