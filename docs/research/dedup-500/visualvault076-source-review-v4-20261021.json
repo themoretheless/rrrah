@@ -1,0 +1,61 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 11,
+  "files": {
+    "crates/models/src/media_file.rs": {
+      "bytes": 11560,
+      "sha256": "01fd8446d21e208211846e063a90ab187826f7777a28a227d16545acb2764d8f",
+      "git_blob": "5c1b901db1c0dabda1c086bc0f73f4aba34df9de",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "crates/models/Cargo.toml": {
+      "bytes": 337,
+      "sha256": "54077456fdbd2ceaf5140dd7578d341226c5ffb67d57a5fbac769903a035f2a4",
+      "git_blob": "8cfb31b6d1316eee7c566f2463dd388c5465439b",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "crates/models/src/lib.rs": {
+      "bytes": 371,
+      "sha256": "c4774d29bb38f893cebbef1c027c4e7e19ff5102b81498cef1240facfa454254",
+      "git_blob": "dd403bae5907e096261c566bc01e7ec75ccb96b8",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "crates/core/src/cache.rs": {
+      "bytes": 1611,
+      "sha256": "fba36eec00188608d356a6234b5e1e50ee9ede40385681c09f2c8c4bb564ea1e",
+      "git_blob": "63d9ed63c771f0dced1eeb6712d962c58de3940b",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    }
+  },
+  "new_unique_controls": 0,
+  "cumulative_unique_controls": 9,
+  "requalified_controls": 3,
+  "controls_script": "docs/research/dedup-500/visualvault076-controls-v4-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-controls-v4-20261021/run.log",
+  "runtime_scope": "Unchanged original full detector,DuplicateGroup/Stats and actual MediaFile/FileType/MediaMetadata modules includedby path.No modelstub. Authoredminimalcrate wiresoriginalmoduleswithcrateselfalias andfreshdependencies,not originalworkspace/lock.",
+  "original_tests": {
+    "detector": 20,
+    "media_file": 15,
+    "total_distinct": 35,
+    "failed": 0,
+    "ignored": 0
+  },
+  "authored_tests": {
+    "repeated": 3,
+    "passed": 3
+  },
+  "findings": [
+    "OriginalactualMediaFilemodel confirms priorquickfalsegroup/phantomzero/hardlinkovercount cases;all3 passwithrealmodel. No newuniquecasescounted.",
+    "MediaFile holds path,size,created,modified,hash andoptionalimage/video metadata,no device/inode/ctime/contentgeneration fields. Thatmodelalonecannotexpressphysicalidentity/freshnessguards.",
+    "Originalmodel tests coverJSONroundtrip/metadata/clone/types/path/dates;none hereassert arbitrarynonUTF8PathBufserialization or byteidentity.",
+    "Cachetraitget takespath,size,modifiedonly;underlyingdatabaseimplementationnotyetread,so nocacheinvalidationdefectclaimed.",
+    "35originaltestbodiespasscombinedwith3controls=38tests. Prior20overlap;not55distinct. Fullmodelscrate modulesfilters/state/statisticsnotincluded."
+  ],
+  "remaining_scope": "84artifacts,includingscanner/databasecache/app/othermodels/UI/tests/docs/config/visualassets/lock.",
+  "limits": [
+    "No fullworkspaceruntime,noscanner/db/TUIorperformancequalification.No productionchanges;globalfullcount205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}
