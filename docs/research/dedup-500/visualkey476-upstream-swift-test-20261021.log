@@ -1,0 +1,31 @@
+Building for debugging...
+[Planning deferred tasks]
+[28 / 52]
+[29 / 53] VisualKeyKit
+[42 / 133]
+[50 / 133]
+[53 / 133]
+[58 / 133]
+[62 / 133]
+[66 / 133]
+[69 / 133]
+[70 / 133]
+[74 / 133]
+[76 / 133]
+[83 / 133]
+[84 / 133]
+[90 / 133]
+[91 / 133]
+[93 / 133]
+[95 / 133]
+[99 / 133]
+[100 / 133]
+[101 / 133]
+[117 / 133] VisualKeyKit
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-20261021/Package.swift: VisualKeyKit: ld: warning: search path '/Library/Developer/CommandLineTools/Developer/Library/Frameworks' not found
+error: clang dependency scanning failure:
+error: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-20261021/Tests/VisualKeyKitTests/VisualKeyKitTests.swift:1:8 unable to resolve module dependency: 'XCTest'
+error: SwiftDriver VisualKeyKitTests normal arm64 com.apple.xcode.tools.swift.compiler failed with a nonzero exit code. Command line:     cd /Users/themoretheless/Documents/Sources/rrrah/.dedup-work
+    builtin-SwiftDriver -- /Library/Developer/CommandLineTools/usr/bin/swiftc -parse-as-library -module-name VisualKeyKitTests -Onone @/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/Objects-normal/arm64/VisualKeyKitTests.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DXcode -enable-experimental-feature DebugDescriptionMacro -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk -target arm64-apple-macos12.0 -g -module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Products/Debug -Isystem /Library/Developer/CommandLineTools/Developer/usr/lib -F /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Products/Debug/PackageFrameworks -F /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Products/Debug -F /Library/Developer/CommandLineTools/Library/Developer/Frameworks -F /Library/Developer/CommandLineTools/Developer/Library/Frameworks -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/SDKStatCaches.noindex/macosx27.0-26A425-a0facfad118c1a7a18f0aad9463f6549ffd68ff603bdaacc80b00cb8898de72d.sdkstatcache -output-file-map /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/Objects-normal/arm64/VisualKeyKitTests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/ModuleCache.noindex -sdk-module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/Objects-normal/arm64/VisualKeyKitTests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/Objects-normal/arm64/VisualKeyKitTests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -package-name visualkey476_20261021 -emit-const-values -const-gather-protocols-list /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/Objects-normal/arm64/VisualKeyKitTests_const_extract_protocols.json -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Products/Debug/include -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/DerivedSources-normal/arm64 -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/DerivedSources/arm64 -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualkey476-build-20261021/out/Intermediates.noindex/VisualKeyKit.build/Debug/VisualKeyKitTests-p.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -working-directory /Users/themoretheless/Documents/Sources/rrrah/.dedup-work -experimental-emit-module-separately -disable-cmo
+error: Build failed
+error: fatalError
