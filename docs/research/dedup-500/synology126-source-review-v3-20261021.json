@@ -1,0 +1,39 @@
+{
+  "repository": "LowLevelLogic/synology-dedup-photos",
+  "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
+  "whole_repo_complete": false,
+  "tracked_blobs": 8,
+  "cumulative_assessed_blobs": 5,
+  "new_whole_file_completed": {
+    "path": "src/main.rs",
+    "sha256": "bcd643f41a4759cf404de44e1cd5d8630f9b22b753cfabe700a397c506004e81",
+    "git_blob": "d392e2a83dd08df758a83b5351bc50f67e0e7e30",
+    "bytes": 84767,
+    "lines": 2160,
+    "method": "Lines 1-760 read in v2, 761-end read without truncation in v3; whole source now read"
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/synology126-controls-v3-20261021/run.mjs",
+    "log": "docs/research/dedup-500/synology126-controls-v3-20261021/run.log",
+    "passed": 2,
+    "method": "Original draft-restoration callback extracted unchanged into Node VM with minimal synthetic two-card DOM adapter; no actual browser or network"
+  },
+  "findings": [
+    "Saved [] selection returns early, leaving default DELETE cards. Therefore keep-all draft is not restored. Nonempty draft positive control restores matching/delete and other/keep states.",
+    "Server sends Success and removes saved session files before returning selected paths for actual deletion. Local/NAS callers may subsequently fail or abort; UI success is not confirmed deletion. Source-only, no deletion run.",
+    "Session metadata persists allowed paths and preview paths only, not file identity/content stamps. Resume and local deletion code do not revalidate content against original scan.",
+    "UI allows toggling every card to DELETE; server filters by allowed path only and carries no group/keeper invariant. Source-only observation, not a performed removal.",
+    "Per-user directories, thumbnails, browser routes, autosave, CLI, local/NAS pipeline and resume branches fully read. No end-to-end platform/account behavior qualified."
+  ],
+  "remaining": [
+    "src/nas.rs",
+    "README.md",
+    "Cargo.lock"
+  ],
+  "license": "MIT root previously fully read; no production code adopted.",
+  "limits": [
+    "Full-source total remains 167/500; this repository is 5/8 whole artifacts.",
+    "Eleven targeted controls cumulative (5 cosine,4 grouping,2 draft), not full upstream tests.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
