@@ -1,0 +1,80 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "mac/mac-pkg.sh": {
+      "sha256": "fa36866c112fa1a32d1be5418ce48794b2d6985dad8e9fb1a4c0015e9c434cff",
+      "git_blob": "0a6ecd6d076c171ce63fd4f7dbb96dfceb749e66",
+      "bytes": 5667,
+      "lines": 165,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "mac/mac.qrc": {
+      "sha256": "6c2ea44ae3cd06c24495a744520ab18c7fa97ec43d63828debfbc8832d74a8ed",
+      "git_blob": "3e6bcc442b91c19ad18ac48f777718bd51abff86",
+      "bytes": 92,
+      "lines": 5,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "mac/make-icons.sh": {
+      "sha256": "38f03ab2d76af4f9b5dfa07e764988831fda87ab0ae3bf6043f74f181f9675a5",
+      "git_blob": "16f070a622724448f6e1b4b192273a7e546c6523",
+      "bytes": 715,
+      "lines": 24,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "mac/opencv.diff": {
+      "sha256": "32ad0a6022157c63c9eeaa095853c4e57237d48399cb0d81727c2abb8d703482",
+      "git_blob": "448834972426d86c657d9174536f841775c5370c",
+      "bytes": 1109,
+      "lines": 23,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "unix/cbird.desktop": {
+      "sha256": "38e0a827bb88689bd7c5239360dd4bbee4d3ba4b37e24c652f9460a9f52e76f7",
+      "git_blob": "90e5666c6bd76a30b23c47bbb7558f1199dc299b",
+      "bytes": 137,
+      "lines": 8,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "windows/make-ico.sh": {
+      "sha256": "c8c5e84ad6f884c02004d96b89fb2edf6a3d02ec5549b875a386b793b8820784",
+      "git_blob": "ccb38f2ecaf342c6dcf61d55eeda91a1d747d193",
+      "bytes": 271,
+      "lines": 14,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "windows/mxe-pkg.sh": {
+      "sha256": "210855969fdc1bca7b0006fdb8df58bc8dbc828aeac7bdfd29aa7c8bb78668b7",
+      "git_blob": "b71b514a58bd57b42b1e517009cc902a9df209c7",
+      "bytes": 2665,
+      "lines": 89,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    },
+    "windows/mxe.env": {
+      "sha256": "57343a121574aa14815d91becc6248f54202acf658486cd70146e2bd1deda50c",
+      "git_blob": "eafe82557764b3e1edd9e500c1fc923edfd52836",
+      "bytes": 584,
+      "lines": 23,
+      "method": "Whole pinned packaging/resource/patch text read; commands not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 154,
+  "tracked_blobs": 616,
+  "findings": [
+    "mac packaging probes source executable -headless -create -about, captures loaded libraries and rewrites paths/signs copied binaries. This exercises startup/about, not actual image-format decoding, all lazy dependencies or matching accuracy. No package built.",
+    "mac test_exe reports unpackaged libraries by text grep but does not fail explicitly on each one or assert codec operation. Last cbird command combines PKG_DIR with CBIRD already containing _mac path, yielding nested path rather than basename. Actual package run not performed.",
+    "mac packaging copies plugins into Qt install directory before packaging, and uses timestamps to decide updates, not content manifest. No plugin installed or timestamp-based cache correctness verified here.",
+    "Windows packaging discovers DLLs from Wine import errors running each executable with-about. Absence of matching import error does not prove process success or decoded corpus support; no final native test oracle. CROSS_BIN switches to EXTRA_PREFIX/bin when that directory does not exist, a static inverted-condition concern.",
+    "Windows package includes imageformat/SQL/platform plugins and external ffmpeg/ffprobe/ffplay. Plugin inclusion alone does not qualify every supported suffix or native HDR/RAW behavior. No Wine or cross compiler run.",
+    "Icon generation scripts reference res/cbird paths while current reviewed tree uses src/res; no icon source resolution or regenerated visual assets claimed. mac resource declaration references ICNS still unread/excluded.",
+    "mac OpenCV patch modifies old highgui ObjC import compatibility; mere stored patch does not prove applied in current minimal build. Desktop launcher simply invokes cbird and does not run a scan/test by itself."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "154/616 assessed:153 whole text/source and one PNG visual. Binary icon artifacts not counted. qtutil.cpp remains partial.",
+    "29 prior original-body/header controls and two independent counterexamples unchanged. No installation, signing, GUI/media runtime, production port or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
