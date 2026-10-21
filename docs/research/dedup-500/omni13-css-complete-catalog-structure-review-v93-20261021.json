@@ -1,0 +1,58 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/App.css": {
+      "sha256": "4eb4c5afb2b712672373b9edda0086137ecc49849278524c7206d6912715a278",
+      "git_blob": "bf7e2a84732f376eca5dafea86b96b6ff47dff9d",
+      "mode": "100644",
+      "lines": 5727,
+      "method": "Complete contiguous text read in line ranges 1-180, 180-560, 561-1180, 1181-2000, 2001-2800, 2801-3600, 3601-4400, 4401-5100 and 5101-5727; no omitted range. Stylesheet parsed with tinycss2 as a structural control only."
+    }
+  },
+  "cumulative_whole_files_read": 262,
+  "tracked_blobs": 268,
+  "structural_binary_reviews": {
+    "omnisearch-lite/assets/catalog.bin": {
+      "sha256": "0ee76b457784df3277f066c6a3899f4d867c6f7e15d6c2326b9dba6161454793",
+      "git_blob": "3e39a4a651a0c6b32113ba2a66d69534a3e3e5dc",
+      "records": 952,
+      "dimensions": 768,
+      "float_count": 731136,
+      "vector_payload_bytes": 2924544,
+      "bytes_consumed": 3326712,
+      "total_bytes": 3326712,
+      "nonfinite_floats": 0,
+      "vector_norm_min": 0.9999998919602407,
+      "vector_norm_max": 1.000000132684633,
+      "unique_ids": 952,
+      "sources": {
+        "Vision": 807,
+        "Native": 53,
+        "Legacy": 92
+      },
+      "all_metadata_schema_valid": true,
+      "whole_file_read": false,
+      "review_limit": "Complete byte-structural interpretation and schema/finite-vector checks; semantic text and launch targets of all 952 metadata records have not been manually reviewed. Not credited as a completed file."
+    }
+  },
+  "executed_controls": {
+    "css_top_level_rules": 708,
+    "css_structural_errors": [],
+    "css_parser_limit": "No browser declaration support, visual output, computed style, accessibility or platform compatibility qualification."
+  },
+  "findings": [
+    "Duplicate file names and paths use normal whitespace plus overflow-wrap:anywhere. Flat duplicate rows use a more specific selector than later general result-main rules, so later ellipsis styles do not simply override this wrapping.",
+    "Reduced-motion media query affects only #root; status-dot.live pulse and bulk-action-bar slideUpFade remain enabled in the source. This is a static accessibility gap, not a reproduced UI measurement.",
+    "Bulk action bar contains WebkitBackdropFilter, a JS-style property spelling in CSS; standard backdrop-filter is also present. No browser failure is claimed.",
+    "Media query max-width 980px follows the max-width 720px query; shared quick-results-stage gap resolves to 14px where both apply. A source-order detail, not itself a layout defect.",
+    "catalog.bin structurally contains 952 records of 768 float32 values, all finite and near unit norm, with unique IDs and fully consumed metadata. Textual ranking code says embeddings removed; vecs are still parsed and stored at construction. No optimization benchmark or edit made.",
+    "Catalog semantic review is incomplete; decoding every record is not being substituted for manually reviewing every metadata entry or launch target."
+  ],
+  "limits": [
+    "262/268 whole files; malformed test PNG, wrapper JAR, three lockfiles and catalog semantic review remain open.",
+    "No new local dedup runtime test, production change or accepted optimization.",
+    "155/500 complete repositories; native pHash/ASAN deferred."
+  ]
+}
