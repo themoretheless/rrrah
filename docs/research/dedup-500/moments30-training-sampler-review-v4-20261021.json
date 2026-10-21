@@ -1,0 +1,40 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "data_loaders/data_utils.py": {
+      "sha256": "909173819ab8f0d1fae87eaa6ef4881fa99ae906c95c63419c8c12be2fa39a7f",
+      "git_blob": "d204913c5e3a6ea09afc258d2fe7fda47dda1eec",
+      "bytes": 3290,
+      "lines": 104,
+      "method": "Whole source read."
+    },
+    "data_loaders/create_training_dataset.py": {
+      "sha256": "3724a8e5f71c0e46e51a5e847a4476e9054b15b92191f0c97abadbecdfbd67e1",
+      "git_blob": "6bc7ea392280cb597bc685f24fdd691adfff3bad",
+      "bytes": 4846,
+      "lines": 130,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 23,
+  "tracked_blobs": 73,
+  "findings": [
+    "DistributedSamplerWrapper returns iter(itemgetter(*indexes)(dataset)); itemgetter returns scalar for exactly one index and rejects zero indices. Original class bodies reproduced TypeError for empty/singleton sampler, valid result for two entries under deterministic base stub.",
+    "This control isolates Python wrapper behavior; real Torch distributed padding/partition can affect whether those cardinalities occur. No distributed runtime executed.",
+    "Multi-dataset weights assert count and sum only, without explicit nonnegative/finiteness or zero-length dataset check before division.",
+    "get_src_tgt_ids chooses interior target and source separation from2 through max_interval+1, not adjacent source frames. It requires num_frames > max_interval+1. No duplicate identity comparison.",
+    "Resize functions scale/crop images and mutate intrinsics in place. Explicit-output branch requires both dimensions despite optional parameters; mixed width/height scaling chooses interpolation from width only.",
+    "parse_pose_file overwrites repeated timestamp IDs in dictionary and strips final character of first line as newline; no close context manager. These are pose parsing assumptions, not file deduplication."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/moments30-sampler-controls-v4-20261021",
+    "passed": 3,
+    "method": "Original two sampler class ASTs compiled unchanged; deterministic Dataset/DistributedSampler base stubs, actual Python operator.itemgetter."
+  },
+  "limits": [
+    "No Torch/OpenCV/dataset/GPU execution; no model downloads.",
+    "23/73 full tracked files read; production library unchanged."
+  ]
+}
