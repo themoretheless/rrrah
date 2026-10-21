@@ -1,0 +1,37 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/env.cpp": {
+      "sha256": "8faea57daf09400682509358329a73301e45dad64ce7bdaa915bd9b7e3f12231",
+      "git_blob": "be9008a7dc1da5276069c2cc5179d86ce00f0554",
+      "bytes": 5502,
+      "lines": 190,
+      "method": "Whole pinned source/header read; system APIs not invoked."
+    },
+    "src/env.h": {
+      "sha256": "fd9fcaeb9ed56fedc9fb475ff017fd2fd3457c022c40638d79339ed6b32727c4",
+      "git_blob": "34aeb654092d335b6ee17f351bddde0fa9564cdd",
+      "bytes": 1529,
+      "lines": 48,
+      "method": "Whole pinned source/header read; system APIs not invoked."
+    }
+  },
+  "cumulative_assessed_blobs": 106,
+  "tracked_blobs": 616,
+  "findings": [
+    "macOS systemMemory estimates available pages as free_count plus0.75*inactive_count. Source explicitly calls this a guess; it is not a process allocation reservation or memory-pressure guarantee. Earlier pooled allocator advisory limit should be described accordingly.",
+    "macOS memoryUsage always returns two zero values. Zero observations cannot be interpreted as measured zero resident/virtual memory; no actual host memory benchmark run.",
+    "Linux systemMemory uses MemAvailable from /proc/meminfo and initializes values to0 on open failure. It parses each line numeric token without shape/conversion validation. No cgroup/process quota integration visible in this helper.",
+    "Linux memoryUsage tokenizes /proc/self/stat by whitespace, including comm field, and does not check stream extraction success; vsize/rss are uninitialized before extraction. Names containing spaces or failed reads require separate handling. No process mutation, invalid-read or sanitizer test run.",
+    "Windows systemMemory initializes0 on GlobalMemoryStatusEx failure; memoryUsage similarly initializes0 on failure. API success not exposed in return type, so unknown and genuine zero are conflated to caller.",
+    "Env setIdleProcessPriority changes scheduling only; no proof of bounded CPU/memory or cancellation responsiveness. Platform-specific allocator size macros have different underlying APIs; cross-platform byte counts not qualified here."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "106/616 assessed:105 whole text/source and one PNG visual. main.cpp and qtutil.cpp remain partial.",
+    "27 prior original-body/header controls and one independent counterexample unchanged; no new runtime or production changes.",
+    "No OS priority changes, memory pressure probe or allocation experiment performed. Native pHash/ASAN remains deferred."
+  ]
+}
