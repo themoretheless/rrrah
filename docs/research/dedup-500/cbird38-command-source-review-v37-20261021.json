@@ -1,0 +1,34 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/commands.cpp": {
+      "sha256": "db46a94b5a267cfb0531bb8653b258fd26093092da5776d719365bf51af6375a",
+      "git_blob": "13ac2a0573b0cb35d129a0b2923e58f4b56b4c70",
+      "bytes": 39688,
+      "lines": 1211,
+      "method": "Whole pinned source read contiguous1-370,371-550,551-880,881-1211."
+    }
+  },
+  "cumulative_assessed_blobs": 111,
+  "tracked_blobs": 616,
+  "findings": [
+    "verify compares Scanner stored-normalization hash rather than full byte equality, logs count and exits status1 if all match, otherwise0. It never returns. Stress script trailing -similar -show after -verify cannot execute in same process; conventional zero-success interpretation inverted. Source traced, not native command run.",
+    "verify optionally invokes configured JPEG repair command via system for accumulated truncation errors. Therefore it is not intrinsically read-only when repair configured; no repair or external command executed.",
+    "verify divides selection by current filesize into sequential and parallel passes; mutation across16MiB cutoff could make an item counted twice or skipped. No stable snapshot/cutoff mutation fixture executed.",
+    "Expression boolean evaluator returns early on a false AND or true OR before seeing later chain. Mixed logical chains are not a general precedence-aware expression tree. No native Qt expression test run.",
+    "filter marks matching entries across filters then retains marked entries; selection skips already marked, result groups preserve needle and union marked matches. It is not successive intersection unless separately invoked. Empty first result group can be indexed during type inference before per-group empty guard.",
+    "rename constructs plan and checks current collisions, applies only options containing x, then clears selection. This is not transactional rename across files; failure can leave earlier renames done. No filename or filesystem mutations performed.",
+    "selectFiles expands directory entries without explicit visited identity set, traversal budget or cancellation in this function. Symlink-cycle behavior needs actual QDir/caller qualification; do not conflate with separately reviewed Scanner traversal.",
+    "testVideoIndex queues futures and consumes only finished prefix during decode loop, with no final drain after EOF. Report may omit pending tail frames. It also indexes median without empty rangeError guard and logs ratios without zero-denominator handling; no run.",
+    "testImageSearch reports hit/miss statistics with no accuracy acceptance threshold; per-selection futures may grow. testCsv reports accuracy only, parses simplistic semicolon rows, and has no numImageszero guard. These commands are diagnostics, not automated passing quality gates.",
+    "testVideoDecoder stops after totalFrames>maxFrames, admitting one extra; has no pixel/frame oracle and prints wall-clock rates. testUpdate is an interactive dialog without persistence assertions. None executed."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "111/616 assessed:110 whole text/source and one PNG visual. main.cpp/qtutil.cpp remain partial.",
+    "27 prior isolated original-body/header controls and one independent counterexample unchanged. No upstream commands, repairs, GUI or native runtime run.",
+    "No production edit or speedup. Native pHash/ASAN remains deferred."
+  ]
+}
