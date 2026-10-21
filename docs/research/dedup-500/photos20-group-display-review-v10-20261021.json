@@ -1,0 +1,37 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "components/DuplicateGroups.tsx": {
+      "sha256": "c813eaf87e40ebab30a1fc5e6b63c2d4783e74aeb35a2e428588570deeac6d51",
+      "git_blob": "a488af3e4c953c433f0b0d8bcda00e77aedfb137",
+      "bytes": 15528,
+      "lines": 451,
+      "method": "Whole source read; DuplicateGroups in contiguous 1-230 and 231-451 ranges."
+    },
+    "components/useBlobUrl.ts": {
+      "sha256": "556d956177bc70a2475dd2b659954091b8f7149d137c117d154cf38de784fb4e",
+      "git_blob": "397345375b7181d998cbfc3e7c63351d0e525242",
+      "bytes": 1245,
+      "lines": 47,
+      "method": "Whole source read; DuplicateGroups in contiguous 1-230 and 231-451 ranges."
+    }
+  },
+  "cumulative_whole_files_read": 14,
+  "tracked_blobs": 84,
+  "findings": [
+    "Group header renders round(group.similarity*100) percent similar. Detector supplies configured threshold rather than measured group minimum/average, so this displayed number is not an observed group similarity.",
+    "Each row marks an item Keep only if present in caller-provided keptSet; selected other members are labelled Trash. Row does not independently enforce at least one valid kept member. Caller last-kept guard was previously reviewed.",
+    "Group labels distinguish photos/videos via truthy duration; mixed groups are labelled items, acknowledging poster/still matches. No video-content confirmation here.",
+    "List adds thirty groups at a time with IntersectionObserver; this is incremental mounting, not row recycling. Per-group thumbnails all mount; no runtime performance measurement.",
+    "Viewer stores a group object/index and filters missing media records when constructing items. Missing entries before the selected raw index can shift preview index; group object is not refreshed when groups change. Viewer implementation still needs review before asserting rendered outcome.",
+    "useBlobUrl suppresses post-cleanup asynchronous state updates and revokes object URL, but does not clear blobUrl on URL changes, undefined URL, or failed fetch. Returned state can retain a previous/revoked object URL.",
+    "ThumbnailImage displays Skeleton whenever blobUrl absent and ignores loading/error state. Failed fetch can leave indefinite skeleton. Requests have no abort or timeout in this hook."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static source review; no UI rendering, React hook runtime, network/image downloads, screenshots or performance claims.",
+    "14/84 tracked files completely read; no production library code changed."
+  ]
+}
