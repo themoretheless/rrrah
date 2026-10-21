@@ -1,0 +1,85 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/FUNDING.yml": {
+      "sha256": "eff2513ba1323c11b9e3c2e24e39f56e169cf792d9f0e6bc1f2ae6ebcd8706df",
+      "git_blob": "c1cf747295765ea5bb189c9661a10ecd66ea1880",
+      "lines": 13
+    },
+    ".github/ISSUE_TEMPLATE/bug_report.md": {
+      "sha256": "0c8d64f29fb4536513653bf8c97da30f3340e2041b91c8952db1515d6b23a7b3",
+      "git_blob": "dd84ea7824f11be1eeda22377549cbc1aec7f980",
+      "lines": 38
+    },
+    ".github/ISSUE_TEMPLATE/feature_request.md": {
+      "sha256": "1f48c52f209a971b8e7eae4120144d28fcf8ee38a7778a7b4d8cf1ab356617d2",
+      "git_blob": "bbcbbe7d61558adde3cbfd0c7a63a67c27ed6d30",
+      "lines": 20
+    },
+    ".gitignore": {
+      "sha256": "334e2ddc3583f1c6fc74e5a147fba13e25a82f027e588f6220c9d84f130edb67",
+      "git_blob": "ada4d04ca12b243ea837ef56edbcdf9ba79ecd8c",
+      "lines": 31
+    },
+    ".prettierrc": {
+      "sha256": "04a790f0c2d322fc1697bda0bb3c46ace22a894ee2ee638a58446350fbaee7e1",
+      "git_blob": "6a5577e4d2565defaa573c8862581cbe1dd71d07",
+      "lines": 4
+    },
+    ".vscode/settings.json": {
+      "sha256": "67da40d959aa7f6fad667f1a85c2bd3a673cc99173913a2ffe19857bc5c970c4",
+      "git_blob": "ad92582bd0913ca4c9a9a63eb44cdca5488bec09",
+      "lines": 3
+    },
+    "CNAME": {
+      "sha256": "17553453047b2b394cf98a5314fbf0785bcdd78ccc95be755fe1e6c05f0667b5",
+      "git_blob": "f79f7d9646b2a8caea9581e9f60365888d1a0b45",
+      "lines": 1
+    },
+    "components.json": {
+      "sha256": "1ebf8ffb9f4016e5d991b362538fd199fec58b7804d8e10baaec664973ba78e3",
+      "git_blob": "f2f99df74aa837ce4b4c7a729f74dfe785d7d681",
+      "lines": 16
+    },
+    "env.d.ts": {
+      "sha256": "499f59ea58948a5a6b7e6de46b70c08e7ca6aa138ce075cb817178d7f816ab06",
+      "git_blob": "cb94bbf4061b0eaa541debf8fcdebecd048ec540",
+      "lines": 7
+    },
+    "next-env.d.ts": {
+      "sha256": "1a7899b03ba28f519a1d53f166fdc0ebdaf4d220209e8cb212414fefa524290d",
+      "git_blob": "725dd6f245153034160edeb040f0846109714ce3",
+      "lines": 6
+    },
+    "postcss.config.cjs": {
+      "sha256": "893a36e0b526ab684d83b4bffa1c971cb3ba9e0a6ad0fad041e322357d1722f0",
+      "git_blob": "562d0f6682356e36f6a93d7a8a0848774633ac82",
+      "lines": 5
+    },
+    "app/robots.ts": {
+      "sha256": "53b204ee682f66b3f9a418acdc9540881ac398130715ded5cb396aa6d96c3389",
+      "git_blob": "ebee747719f8b0ddef7f9f2a06641a061b4e20b8",
+      "lines": 18
+    },
+    "app/sitemap.xml": {
+      "sha256": "aaa6ac6b81ad87c64fe51e8aa1037f44b84b70f33705d781ee126ef2432f6d87",
+      "git_blob": "48d2e12da5cb9f9ca30666d93b5572e44aa506ef",
+      "lines": 16
+    }
+  },
+  "cumulative_whole_files_read": 43,
+  "tracked_blobs": 97,
+  "method": "Complete pinned text files read; raw bytes checked against original Git blobs. Static review only.",
+  "findings": [
+    "Environment declarations specify redirect URI, public client ID and server client secret types; declarations do not establish runtime presence or validation. No environment values inspected.",
+    "robots metadata allows general crawlers and blocks two named agents; sitemap lists root with ten alternate language links. Runtime routing and deployment output untested.",
+    "shadcn configuration uses TSX, rsc false, Tailwind CSS variables and existing aliases. PostCSS enables Tailwind. No content hashing implementation in these files.",
+    "Funding and issue templates are project metadata. Formatting/editor settings and ignore rules do not affect duplicate matching. CNAME names deployment host; no deployment action performed."
+  ],
+  "limits": [
+    "43/97 tracked files reviewed;151/500 repositories complete.",
+    "No Next build, deployed-site validation or upstream tests executed. pHash/ASAN deferred."
+  ]
+}
