@@ -1,0 +1,32 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { stripTypeScriptTypes } from 'node:module';
+import { pathToFileURL } from 'node:url';
+const source=path.resolve('.dedup-work/googlephotos42-20261021/src/core/dedup');
+const runtime=path.resolve('.dedup-work/googlephotos42-20261021/confidence-runtime');
+await fs.mkdir(runtime,{recursive:true});
+for(const name of ['phash','group','selection','pro']) {
+ let code=stripTypeScriptTypes(await fs.readFile(path.join(source,name+'.ts'),'utf8'));
+ for(const dep of ['phash','selection']) code=code.replaceAll("from './"+dep+"'", "from './"+dep+".mjs'");
+ await fs.writeFile(path.join(runtime,name+'.mjs'),code);
+}
+const {groupDuplicates}=await import(pathToFileURL(path.join(runtime,'group.mjs')));
+const {hammingDistance}=await import(pathToFileURL(path.join(runtime,'phash.mjs')));
+const {isConfident,keeperFor,applyKeepRule}=await import(pathToFileURL(path.join(runtime,'pro.mjs')));
+const {groupChoices}=await import(pathToFileURL(path.join(runtime,'selection.mjs')));
+const items=[{id:'seed',hash:{lo:0,hi:0}}, {id:'best',hash:{lo:1,hi:0},width:100,height:100}, {id:'other',hash:{lo:2,hi:0}}];
+const [g]=await groupDuplicates(items,{threshold:0.98,now:()=>0,sliceMs:1e9});
+assert.equal(g.bestItemId,'best'); assert.equal(isConfident(g),true);
+assert.equal(hammingDistance(items[1].hash,items[2].hash),2);
+assert.ok(1-2/64<0.98);
+assert.deepEqual(groupChoices(g,new Map()),['delete','keep','delete']);
+console.log('PASS 1: confident seed-star group includes member below0.98 similarity to selected keeper');
+const overrides=new Map(g.itemIds.map(id=>[id,'delete']));
+assert.deepEqual(groupChoices(g,overrides),['delete','keep','delete']);
+console.log('PASS 2: all-delete overrides restore valid group best keeper');
+const lookup=id=>items.find(x=>x.id===id);
+assert.equal(keeperFor(g,lookup,'newest'),'best');
+assert.deepEqual(applyKeepRule([g],lookup,'newest',overrides),{applied:0,fellBack:1});
+assert.equal(groupChoices(g,overrides).filter(x=>x==='keep').length,1);
+console.log('PASS 3: missing-date rule falls back to best and preserves one keeper');

@@ -1,0 +1,42 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_three_original_function_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/dedup-finder-pro.test.ts": {
+      "sha256": "f87e76142b4e620b992ef0ac33f8468aa405756032c57370bfcfc8feac7b6cd9",
+      "git_blob": "e89134587cba99b046b089cf4cbf9e9a2882b334",
+      "bytes": 9617,
+      "lines": 200,
+      "method": "Whole original UI test source read; test not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 12,
+  "tracked_blobs": 230,
+  "findings": [
+    "Original group/pro/selection functions: seed hash0, best hash1 with larger pixel count, other hash2; threshold0.98 yields confident group, but distance best-other2means96.875percent similarity. Evidence of seed-confidence limitation; not a real-image identity test.",
+    "All-delete overrides restore the valid best keeper. Missing-date newest rule falls back to best and reports fellBack1. These two invariants passed for well-formed generated group.",
+    "Upstream UI tests use mocked host and synthetic hashes, check free/pro behavior, rule/regroup persistence, CSV output and explicit final action callback. They do not establish real browser account operation or independent perceptual correctness. These tests were read, not run.",
+    "Local complete_link_groups source requires accepted edge to every group member and final cancellation check. Existing groups.rs tests enumerate all64four-node graphs for all-pair invariants/cancellation checkpoints and32768six-node graphs against exhaustive reference. Sources read; no new local test execution this step."
+  ],
+  "executed_controls": {
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "harness": "docs/research/dedup-500/googlephotos42-confidence-controls-v3-20261021/run.mjs",
+    "harness_sha256": "f5d7d8e0a9d445295072315136529712c9670805f1004c18341bb1268a4997db",
+    "log": "docs/research/dedup-500/googlephotos42-confidence-controls-v3-20261021/run.log",
+    "method": "Original four modules type-stripped with local import suffix substitutions only; synthetic hashes; pure planner functions only."
+  },
+  "local_source_evidence": {
+    "crates/rrrah-dedup/src/groups.rs": "c5c5e0c1ba00a7ee1864caa8c484ff497bb9fa1236589c6ff38a1b8d05b6af03",
+    "crates/rrrah-dedup/tests/groups.rs": "ef314ad1441389ab947ff75a8f68cc7224773aa0da36751519c9bff4de5a1fba"
+  },
+  "limits": [
+    "12/230blobs,7cumulativeoriginal-functioncontrols; not complete repository review or upstream suite.",
+    "No new production optimization, real media decode, browser operation or deletion.",
+    "Native pHash/ASAN deferred; all500fullreviews incomplete."
+  ]
+}
