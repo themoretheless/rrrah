@@ -1,0 +1,42 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "contents/google-photos-bridge.ts": {
+      "sha256": "e896e52470b47d32c49654d9eafe89fb23b17252f90154347b4b0776fa9d74cc",
+      "git_blob": "916fffc752bbaf90bf5cd9e005b2585f24a17a43",
+      "bytes": 3356,
+      "lines": 103,
+      "method": "Whole source read."
+    },
+    "contents/google-photos-inject.ts": {
+      "sha256": "56c08029696e2c2eb3d09449800264f0bf8501479782d1b658ea0272eaab30e2",
+      "git_blob": "966f00dea483a889541800fac8673862e7abbb57",
+      "bytes": 1218,
+      "lines": 29,
+      "method": "Whole source read."
+    },
+    "tests/contents/google-photos-bridge.test.ts": {
+      "sha256": "3016eeb791a8a31d7e0ff99b86e00fd82d2ca92b374b244e0a53f331d3f4570c",
+      "git_blob": "6602c1f14e53eb275b3a254191f35c07837c614e",
+      "bytes": 4794,
+      "lines": 178,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 59,
+  "tracked_blobs": 84,
+  "findings": [
+    "Bridge forwards only result/chunk/progress/log actions from same-window messages bearing app ID; service-worker commands are relayed back to page. There is no duplicate-message suppression or chunk bounds validation in this layer.",
+    "Primary relay catches synchronous throw and asynchronous promise rejection. Result/chunk failure generates a small failed result correlated by command/requestId; advisory failure only logs.",
+    "Secondary failure-report send is wrapped only in synchronous try/catch; returned promise rejection is not handled. Tests cover repeated synchronous throws, not asynchronous rejection of secondary report.",
+    "Injection appends three dynamic external script elements in desired order but sets neither async=false nor onload sequencing/error recovery. DOM append order alone does not establish execution dependency order. Actual timing race not reproduced.",
+    "Bridge tests cover four parameterized actions, other-app/action filtering, synchronous oversize result/chunk failure, asynchronous primary rejection, advisory failure and repeated synchronous throws. No injection-order, duplicate event or invalid chunk metadata controls."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static source/test review only; no browser script injection or runtime messaging executed.",
+    "59/84 complete tracked files read; main command/service-worker code remains unreviewed."
+  ]
+}
