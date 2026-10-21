@@ -1,0 +1,73 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/text_dedup/config/algorithms/base.py": {
+      "sha256": "49322bec37407dd885fac1ffe132fcd96984d1a298c86aaa1540f00893230237",
+      "git_blob": "3f029f755dcd0f71b97bb06a60636210c8167420",
+      "lines": 36
+    },
+    "src/text_dedup/utils/tokenization.py": {
+      "sha256": "e7740ee863944b6a14ee52b61a9904e7b431bc06d7e3d4686a35099adcfd9771",
+      "git_blob": "ac8e3131de60249eb65d90d76d33be1fe870620d",
+      "lines": 33
+    },
+    "tests/test_config/test_algorithms/test_minhash_components.py": {
+      "sha256": "e37fa272cc98d2b14d5812883070184eff048a163b6dcacfcf2ebb7891b83575",
+      "git_blob": "bd20fa99eeccb70574341b0bb7505dee655b11cd",
+      "lines": 191
+    },
+    "tests/test_utils/test_tokenization.py": {
+      "sha256": "5e180f9a826831cbb66f61b4ca2a7876fc01c500f4ab69719279d77889f723c6",
+      "git_blob": "a7077c346883d5bf6f74c17ddaf21e2a20c4c00e",
+      "lines": 299
+    }
+  },
+  "cumulative_whole_files_read": 8,
+  "tracked_blobs": 75,
+  "method": "Four complete pinned files read; blob identities verified. Original dependency-free ngrams executed in51084 cases vs independent sliding-window reference with documented fallback semantics. Isolated original hash_ranges AST method also executed with SimpleNamespace.",
+  "findings": [
+    "ngrams returns empty below min_length, whole sequence when n exceeds length, normal sliding windows otherwise and empty zip for n0. Negative n raises only after minimum-length check; a short input suppresses invalid-n error. With empty input,min_length0,n3 it returns one empty tuple.",
+    "51084 combinations length0..32,n-2..40,min_length0..35 match independent reference including raised-error categories. This qualifies helper behavior, not its suitability as a byte-equality proof.",
+    "AlgorithmConfig supplies typed fields and RNG initialization but no explicit numeric constraints or cross-field bands/rows checks. MinHash initialization computes defaults only when both absent. Original hash_ranges with bands4,rowsNone yields four(0,0)ranges. Pydantic object creation was not executed, so full-path acceptance is not claimed.",
+    "Repeated permutation property access consumes mutable RNG; embeddings may differ if config reused for repeated embedding factory creation. Original full config path not executed.",
+    "MinHash optimal parameter tests assert bounds/determinism but different-thresholds-different-results assertion is tautological: result1 != result2 or result1 == result2. No quality regression coverage from that assertion.",
+    "Tokenization tests cover normal windows, short/fallback inputs, zero and negative n, tuple/iterator shape and100-token sequence. Comment about memory efficiency only checks iterator interface; no peak-memory measurement."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/tokenization-control.py",
+    "sha256": "5d7f0cd0edb8136761a99c6e03fe177fd26757305ea8c98ab674e44185066bf0",
+    "result": {
+      "cases_checked": 51084,
+      "errors": [],
+      "partial_config_hash_ranges": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "short_invalid_n": [],
+      "empty_with_zero_minimum": [
+        []
+      ],
+      "scope": "Original ngrams exhaustive comparison; original hash_ranges method isolated with SimpleNamespace, not instantiated Pydantic config."
+    }
+  },
+  "limits": [
+    "8/75 tracked blobs reviewed;152/500 repositories complete.",
+    "No full upstream pytest/Pydantic/NumPy/SciPy/Polars pipeline execution. Local helper control is not full-suite result. pHash/ASAN deferred."
+  ]
+}
