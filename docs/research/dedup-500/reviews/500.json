@@ -2,7 +2,7 @@
   "index": 500,
   "repository": "neotoxicfr/mtg-scanner-art-index",
   "commit": "39c3cafe08b5991f621ad43ad72edddae00c8fd5",
-  "review_scope": "Partial8/21pinnedartifactswhole-read;8originaltestsand4authoredcontrolspass.DHash1024bit,recipe/modelversioningreviewed;indexbuilder/remainingtests/docsnotyetread.",
+  "review_scope": "Partial12/21pinnedartifactsassessed.30distinctoriginaltestspass(8hash/golden+22index/bulk/watermark);7authoredcontrols.Wholebuilderread;9docs/config/example artifactsremain.",
   "decision": "shortlist",
   "finding": "Multi-plane 256-bit dHash trading-card index with hash tests and pinned model checksum; useful color/local-region evidence, domain calibration required.",
   "available_source_evidence": [
@@ -88,7 +88,10 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/mtg500-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/mtg500-source-review-v2-20261021.json"
     }
   ],
-  "upstream_test_scope": "8originalhash/preprocess/quantizegoldentests pass withrealOpenCV5/NumPy2.5.4,withoutONNXmodel. Otheroriginaltestsnotrun."
+  "upstream_test_scope": "All5trackedoriginalpytestmodulesrunintwoincrements:30pass total. HTTP/model mocked inupstreamworkflowtests;realOpenCV/SQLite,goldens;noONNXinference/livebuild."
 }

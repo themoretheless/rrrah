@@ -1,0 +1,59 @@
+{
+  "repository": "neotoxicfr/mtg-scanner-art-index",
+  "commit": "39c3cafe08b5991f621ad43ad72edddae00c8fd5",
+  "whole_repo_complete": false,
+  "tracked_blobs": 21,
+  "cumulative_assessed_blobs": 12,
+  "files": {
+    "build_index.py": {
+      "bytes": 25801,
+      "sha256": "58ad29d1355f0662ede8602e29ded74d473a1005964dacec803ba4df59373f67",
+      "git_blob": "e3750eb65dd5780659113b36a1184f373aa9c509",
+      "method": "Whole pinned original text read without truncation;builder627lines chunks1..250,251..520,521..627;Gitblobverified"
+    },
+    "tests/test_index_store.py": {
+      "bytes": 3097,
+      "sha256": "22fa84096134198626d9be1a23d8e63b9f85faf63005a0a4dc17c74165307ba1",
+      "git_blob": "e0155e03536d0d51c688836aec10f05a7897bd47",
+      "method": "Whole pinned original text read without truncation;builder627lines chunks1..250,251..520,521..627;Gitblobverified"
+    },
+    "tests/test_bulk_reader.py": {
+      "bytes": 8979,
+      "sha256": "57404401b6930380ddf0d565f72d1ef824ddc35c606e93c22163214a62300b53",
+      "git_blob": "9302f4a7b33a7b30708f49a7420d97bed565666b",
+      "method": "Whole pinned original text read without truncation;builder627lines chunks1..250,251..520,521..627;Gitblobverified"
+    },
+    "tests/test_manifest_watermark.py": {
+      "bytes": 4274,
+      "sha256": "429d7332c9a717528cf0c80e18ebbef226c14b9d8bd4f373d1a9e6e23cc41fd2",
+      "git_blob": "5fc61337d044c3363ed55c4e4eefc2e114d5a62e",
+      "method": "Whole pinned original text read without truncation;builder627lines chunks1..250,251..520,521..627;Gitblobverified"
+    }
+  },
+  "new_original_tests": {
+    "passed": 22,
+    "failed": 0,
+    "scope": "Original3remainingtestmodules use actualSQLite/gzip/threads;HTTPandmodelactions scripted/monkeypatched as authored upstream. Noexternalnetwork/inference."
+  },
+  "cumulative_original_tests_passed": 30,
+  "new_authored_controls": 3,
+  "cumulative_authored_controls": 7,
+  "test_script": "docs/research/dedup-500/mtg500-index-tests-20261021/run.py",
+  "test_log": "docs/research/dedup-500/mtg500-index-tests-20261021/run.log",
+  "initial_environment_log": "docs/research/dedup-500/mtg500-index-tests-20261021/initial-environment-failure.log",
+  "findings": [
+    "Builderwhole-read:paperillustrationgroups,firstcardfacefallback,smallimageURIs;manifestnewer-thanwatermarkrefresh,5pagecapresumeandfailed-imagequeue,bulkstampcache,batched100SQLitewrites. Indexnotgeneralfileduplicatefinder.",
+    "22neworiginaltests pass includinggz/plainJSONL,brokenlineskipping,watermark/resume/queuedfailures,threadthrottle,quantization,andcoupledtablewrites.30originaltests cumulative includingprior8goldens;nofullONNX/networkbuild.",
+    "AuthoredactualSQLitecontrol:matchingcrop/embedmeta butmissingalgo_versionretainsrows;orphanhashwithoutembeddingalso retained. open_indexonlyversionchecksdoesnotvalidateper-rowpaircompleteness. Normalmainhave deriveshashIDs only,soorphanrepairnotassured;actualfullmainrepairnotrun.",
+    "Authoredwrite_batchaccepts1-bytehashand1-byteembeddingdespiteexpected128/384. SQLitecolumnsNOTNULLbutnobyteslengthconstraint;callerresponsibilitynotvalidatedinhelper.",
+    "InjectedSQLiteBEFOREINSERTtriggerrejectsembedding:write_batchraisesafterhashinsertand leavespartialpendingtransaction. Authoredcallerexplicitlyrollsback,notcommitted. Doesnotprovepersistedpartialpublicationinmain:unhandledCLIexitcanrollback. Helperdoesnotownrollbackonexception.",
+    "cards_ofsilentlyskipsJSONDecodeErrorlines,originaltestexplicitlyexpectsomission;maincanstillstampbulkupdated_at. NetworkContent-Lengthguarddoesnotestablishsemanticrecordcompleteness. No malformedbulkmainpublicationcontrolrun.",
+    "Publicationrowfloor expected=len(have)+len(todo),buttodoalsoincludesreillustratedIDs alreadyinhave. Sourceformula maydoublecountrefreshesandrefusehealthylarge refresh. Requiresdedicatedmaincontrol;notclaimedruntimeconfirmed.",
+    "Throttlehasmin/maxcontrollerlimits butconstructor/set_limitacceptunvalidatedzero;normalcallerminpositive. hash_imagesholdsalltodoitems,64workerexecutororderedmap,serializedembeddinglock;reportedcommentspeed notbenchmarkevidence. Workerfailuresqueued;on_resultcallbackfailurepropagates.",
+    "Initialpytestcollectionfailedmissinghttpx,savedsetupfailure;installedhttpx0.28compatibleisolatedtargetthen22actualtestsran.No upstreamalgorithmfailurecountedfromsetup."
+  ],
+  "remaining_scope": "9artifacts:README,CONTRIBUTING,docs/AUDIT,example,extra_groups,2workflows,dependabot,gitignore. Globalcompletecount210/500unchanged.NativepHash/ASANdeferred.",
+  "limits": [
+    "No liveScryfallrequests,modeldownload/inference,indexpublishing,cameraquality,fullproductionbuildorresourcequalification.No productioncodecopiedorchanged."
+  ]
+}
