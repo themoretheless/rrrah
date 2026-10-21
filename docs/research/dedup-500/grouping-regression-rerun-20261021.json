@@ -1,0 +1,21 @@
+{
+  "scope": "Focused local accepted-pair grouping regression; no production changes",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test groups",
+  "exit_code": 0,
+  "tests_passed": 6,
+  "tests_failed": 0,
+  "tests_ignored": 0,
+  "execution_seconds": 0.07,
+  "build_and_lock_wait_seconds": 57.27,
+  "test_source": "crates/rrrah-dedup/tests/groups.rs",
+  "test_source_sha256": "ef314ad1441389ab947ff75a8f68cc7224773aa0da36751519c9bff4de5a1fba",
+  "observations": [
+    "All six grouping tests passed again, including exhaustive six-node reference comparisons, non-transitive chain preservation, cancellation/budget handling and 60-member edge retention.",
+    "A full 60-member accepted-pair graph forms one group; deleting one edge does not invent that missing relationship and preserves supplied cross-group evidence."
+  ],
+  "limits": [
+    "Accepted-pair grouping only: no new file decoding, candidate-generation, similarity-model or full-library runtime qualification.",
+    "No speedup claim: initial cargo lock/build wait is separate from 0.07-second test execution.",
+    "Native pHash/ASAN item remains deferred at user request."
+  ]
+}
