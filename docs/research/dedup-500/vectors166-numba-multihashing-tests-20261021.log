@@ -1,0 +1,34 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-runtime-20261021/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-20261021
+configfile: pyproject.toml
+collecting ... collected 25 items
+
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_fast_round_and_perturb_numba PASSED [  4%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_str_representation PASSED [  8%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_set_perturbation_array PASSED [ 12%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_round_to_tolerance PASSED [ 16%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_dictionary PASSED [ 20%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_without_setting_perturbation_array PASSED [ 24%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_dict_consistency PASSED [ 28%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_dictionary_different_seeds PASSED [ 32%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_dictionary_different_perturbations PASSED [ 36%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_dictionary_different_input_vectors PASSED [ 40%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_compute_hash_vector_dictionary_different_dataset_arrays PASSED [ 44%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_initialize_hash_vector_dictionary PASSED [ 48%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_duplicate_check PASSED [ 52%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_duplicate_check_if_hash_vector_array_wrong_shape PASSED [ 56%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_set_acceptance_threshold PASSED [ 60%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_set_acceptance_threshold_bad_sigma PASSED [ 64%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_set_acceptance_threshold_warning PASSED [ 68%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_get_dataset_unique_structures PASSED [ 72%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_pre_dda_processing PASSED [ 76%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_add_input_vector_to_dda PASSED [ 80%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_add_input_vector_to_dda_without_prior_pre_dda_processing PASSED [ 84%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_get_uniqueness_score PASSED [ 88%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_duplicate_check_rebuilds_hash_dict_on_tolerance_change PASSED [ 92%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_duplicate_check_regenerates_perturbation_array_on_seed_change PASSED [ 96%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/duplicate_detection_algoirthms/test_multi_hashing.py::test_add_input_vector_hashes_to_dictionary_without_input_vector PASSED [100%]
+
+============================== 25 passed in 0.34s ==============================

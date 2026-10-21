@@ -1,0 +1,28 @@
+VERSION numpy 2.5.4
+VERSION numba 0.68.0
+VERSION llvmlite 0.50.0
+VERSION scipy 1.18.1
+VERSION pytest 9.1.1
+CONTROL VERSION 2
+PASS full original class representative mask [True, False, False]
+PASS full original class representative mask [True, False, True]
+PASS metric change retains stale Euclidean matrix; fresh Manhattan yields2
+CONTROL VERSION 3
+PASS mutable filled dataset changes bytes without invalidating distance matrix; stale count2 versus fresh1
+PASS deduplicate after same-shape dataset replacement uses old mask until explicit recomputation
+CONTROL VERSION 4
+2
+PASS default tolerance dataset stays empty and raises zero-size reduction: zero-size array to reduction operation maximum which has no identity
+PASS injected count failure restores scalar tolerance but leaves temporary dataset and vector count installed
+CONTROL VERSION 6
+plateau log: [False False False False]
+PASS constant count curve has zero gradient but detects no plateau (strict zero threshold)
+plateau log: [ True  True  True  True]
+PASS explicitly injected all-true plateau mask is lost by original interval extraction
+PASS default plateau calculator with nonempty DDA fails empty tolerance dataset reduction
+PASS injected probe failure restores scalar tolerance but leaves temporary dataset installed
+CONTROL VERSION 7
+PASS documented fresh batch deduplicate call raises stale/uninitialized mask ValueError
+PASS explicit unique-mask computation repairs documented batch flow on this dataset
+PASS 12 prior full-class controls repeated with genuine Numba; no new unique cases
+PASS JIT enabled, CPUDispatcher has native nopython signature [(Array(float64, 1, 'C', True, aligned=True), Array(float64, 1, 'C', True, aligned=True)) -> float64, (Array(float64, 1, 'C', False, aligned=True), Array(float64, 1, 'C', False, aligned=True)) -> float64]

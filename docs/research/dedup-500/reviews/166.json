@@ -2,7 +2,7 @@
   "index": 166,
   "repository": "julianholland/deduplicate",
   "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
-  "review_scope": "Partial pinned61/102 artifacts assessed; generated RST verified byte-identical to reviewed originals, upstream project notes treated as data.15 finite controls cumulative; pytest/Numba unqualified.",
+  "review_scope": "Partial pinned61/102 artifacts assessed;30 distinct original tests passed with real Numba and12 prior controls requalified. Full suite, notebook, original lock and remaining generated artifacts pending.",
   "decision": "shortlist",
   "finding": "Pluggable distance-matrix and multi-hash candidate algorithms with integration tests; threshold semantics need deeper review.",
   "available_source_evidence": [
@@ -80,7 +80,7 @@
   "license_metadata": "MIT",
   "license_scope": "RootMIT fullyread; no production adoption.",
   "tests_detected": 15,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -138,6 +138,10 @@
     },
     {
       "audit": "docs/research/dedup-500/vectors166-source-review-v11-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/vectors166-numba-runtime-review-20261021.json"
     }
-  ]
+  ],
+  "upstream_test_scope": "30 distinct original tests passed in isolated Python3.12 actual Numba environment; full suite not run.12 prior controls repeated with JIT enabled and native signature verified."
 }

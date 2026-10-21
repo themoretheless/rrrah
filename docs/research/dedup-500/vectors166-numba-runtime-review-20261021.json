@@ -1,0 +1,31 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 61,
+  "runtime": "Isolated venv Python3.12.14 macOS arm64; numpy2.5.4 numba0.68.0 llvmlite0.50.0 scipy1.18.1 pytest9.1.1. Manifest dependencies unbounded; this is not original uv.lock environment.",
+  "upstream_tests": {
+    "selected_distance_and_rounding": "6passed54deselected",
+    "entire_multihashing_test_file": "25passed",
+    "distinct_tests_passed": 30,
+    "overlap": "fast_round_and_perturb test appears in both runs",
+    "logs": [
+      "docs/research/dedup-500/vectors166-numba-original-tests-20261021.log",
+      "docs/research/dedup-500/vectors166-numba-multihashing-tests-20261021.log"
+    ]
+  },
+  "new_unique_controls": 0,
+  "cumulative_unique_controls": 15,
+  "requalified_controls": 12,
+  "controls_script": "docs/research/dedup-500/vectors166-numba-controls-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vectors166-numba-controls-20261021/run.log",
+  "findings": [
+    "Prior full-class controls versions2,3,4,6,7 repeated after removing only identity shim line. All12 reproduce with genuine Numba imported. Existing authored mask/failure injections retained explicitly.",
+    "JIT config DISABLE_JIT0; euclidean_distance is CPUDispatcher with actual nopython compiled signature after call, asserted in runner.",
+    "25 original MultiHashing tests pass despite separately reproduced defects. This shows current suite does not reject those demonstrated edge cases.",
+    "Six original metric/rounding tests pass;30 distinct original tests total, not31. Tests/source unchanged.",
+    "No full package suite, notebook, original lock, lower Python versions, performance or broad approximate accuracy qualification. Native pHash/ASAN deferred."
+  ],
+  "remaining_scope": "41 generated artifacts remain; global full count201/500 unchanged."
+}
