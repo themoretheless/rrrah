@@ -2,7 +2,7 @@
   "index": 454,
   "repository": "gudoshnikovn/libphash",
   "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
-  "review_scope": "Partial source review with8320actual ARM distance controls and real PPM context tests confirming stale grayscale-cache reset and failed-load flag inconsistency; remaining sources/vendors/assets unreviewed.",
+  "review_scope": "Allauthored source,tests,docs/build text and8validimages pluscorruptfixture reviewed. Actualtargetedtests/controlsruns recorded. Two vendorheader implementations remain unread; repositoryfullreview notclaimed.",
   "decision": "shortlist",
   "finding": "Portable C aHash/dHash/mHash/pHash with explicit invalid-input guards and many tests; useful independent hash/calibration oracle.",
   "available_source_evidence": [
@@ -120,6 +120,11 @@
     },
     {
       "audit": "docs/research/dedup-500/libphash454-source-review-v8-20261021.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/libphash454-source-review-v9-20261021.json",
+      "controls": "docs/research/dedup-500/libphash454-controls-20261021/final-tests-result.json",
       "whole_repo_complete": false
     }
   ],

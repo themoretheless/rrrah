@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "test": "test_hash_logic",
+      "exit_code": 0,
+      "named_checks_passed": 23,
+      "stdout": "[PASS] test_ahash_uniform_gray\n[PASS] test_ahash_all_black\n[PASS] test_ahash_deterministic\n[PASS] test_dhash_constant_is_zero\n[PASS] test_dhash_ascending_gradient\n[PASS] test_dhash_deterministic\n[PASS] test_bmh_uniform_all_bits_set\n[PASS] test_bmh_size_correct\n[PASS] test_bmh_deterministic\n[PASS] test_hamming_identical\n[PASS] test_hamming_all_bits_differ\n[PASS] test_hamming_single_bit\n[PASS] test_hamming_eight_bits\n[PASS] test_hamming_commutative\n[PASS] test_hamming_digest_identical\n[PASS] test_hamming_digest_known\n[PASS] test_hamming_digest_all_bytes\n[PASS] test_l2_same_digest\n[PASS] test_l2_known_value\n[PASS] test_l2_pythagorean\n[PASS] test_l2_commutative\n[PASS] test_invalid_null_ctx\n[PASS] test_invalid_null_out\n\nAll hash logic and distance tests passed.\n",
+      "stderr": ""
+    },
+    {
+      "test": "test_image_primitives",
+      "exit_code": 0,
+      "named_checks_passed": 31,
+      "stdout": "[PASS] test_gray_pure_red\n[PASS] test_gray_pure_green\n[PASS] test_gray_pure_blue\n[PASS] test_gray_white\n[PASS] test_gray_black\n[PASS] test_gray_passthrough_1ch\n[PASS] test_gray_rgba_ignores_alpha\n[PASS] test_gray_multi_pixel\n[PASS] test_gray_null_ctx_uses_defaults\n[PASS] test_gamma_identity_lut\n[PASS] test_gamma_2_2_midpoint\n[PASS] test_gamma_uniform_image\n[PASS] test_gamma_zero_stays_zero\n[PASS] test_gamma_255_stays_255\n[PASS] test_box_uniform\n[PASS] test_box_2x2_to_1x1_average\n[PASS] test_box_4x1_to_2x1\n[PASS] test_box_identity\n[PASS] test_box_black_white_halves\n[PASS] test_box_resize_count_zero\n[PASS] test_resize_zero_negative_dims\n[PASS] test_gaussian_uniform\n[PASS] test_gaussian_impulse_spreads\n[PASS] test_gaussian_horizontal_kernel\n[PASS] test_gaussian_alias_safe\n[PASS] test_gaussian_blur_edge_cases\n[PASS] test_laplacian_uniform\n[PASS] test_laplacian_center_amplified\n[PASS] test_laplacian_negative_clamped\n[PASS] test_laplacian_borders_copied\n[PASS] test_laplacian_edge_cases\n\nAll image primitive tests passed.\n",
+      "stderr": ""
+    }
+  ],
+  "method": "Unchanged original tests and complete authored .c sources; AppleClang-O2 minimalstb backend; noPH_TESTING,noASAN.",
+  "limits": [
+    "Not all upstream testexecutables",
+    "Someedge tests onlycheck completion and use uninitializedsynthetic source arrays; no pixelcorrectness claim from thosecases",
+    "No codecsubmodule or speedqualification"
+  ]
+}

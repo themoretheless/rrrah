@@ -1,0 +1,108 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Remainingtwoauthoredtesttexts wholly read; all8validimagefixtures individually viewed;120bytecorruptJPEGfixture byteinventory inspected. Allauthoredtext/test/assets nowreviewed, two vendorheader implementations remain unread.",
+  "manifest": [
+    {
+      "path": "tests/src/test_hash_logic.c",
+      "sha256": "3aecf96a5eaca48f8c0bf853aa72b9b0d450521407d3fb04642f8f21f4c7eaa7",
+      "bytes": 15245,
+      "review": "whole test source read"
+    },
+    {
+      "path": "tests/src/test_image_primitives.c",
+      "sha256": "1fe86bd6c4b25dc71595a64ba6fe6f739519b01e4d47c857adfd0f8e6e92b632",
+      "bytes": 15202,
+      "review": "whole test source read"
+    },
+    {
+      "path": "tests/data/corrupted.jpg",
+      "sha256": "1bd4b504e62fb0eda350e86a876b772d4db2d50afd4ecc238256dec74107d99b",
+      "bytes": 120,
+      "review": "raw120bytes viewed ashex; JPEG/JFIF prefix with invalid/truncated remainder"
+    },
+    {
+      "path": "tests/data/photo.jpeg",
+      "sha256": "5ad7b6316a0552b2eeb75691316743d81fc68dab9e3e247eec1160bb45488480",
+      "bytes": 25620,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo.png",
+      "sha256": "d485d63486aa352c760ff6d9ddda692189ad533c5d506d3dcdbe6db482941b02",
+      "bytes": 286,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo.webp",
+      "sha256": "4a5afeaff8483923da964bc7896f02d0283e8bff99b5b8f82a31ae3214dab1d0",
+      "bytes": 30320,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo_color_changed.jpeg",
+      "sha256": "c13642b30b50794f75959724a3ff78b73b2c77e3abf2ac19fe4ea0b1ca822659",
+      "bytes": 43046,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo_complex.png",
+      "sha256": "ab77dc94ffb06ee21d954b350ae96064fcf4d17cf215625244497af469138980",
+      "bytes": 308566,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo_complex.webp",
+      "sha256": "193fc979da493532c4fba8775c8fff480ed95f51b5938e91c621a14fd70c5708",
+      "bytes": 5324,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo_copy.jpeg",
+      "sha256": "5ad7b6316a0552b2eeb75691316743d81fc68dab9e3e247eec1160bb45488480",
+      "bytes": 25620,
+      "review": "individually visually inspected"
+    },
+    {
+      "path": "tests/data/photo_rotated_90.jpeg",
+      "sha256": "d20412fd598cd5ab88ee6534bb824b771a5160848e0e7e71fa9db6bc7a22f508",
+      "bytes": 40684,
+      "review": "individually visually inspected"
+    }
+  ],
+  "runtime_controls": "docs/research/dedup-500/libphash454-controls-20261021/final-tests-result.json",
+  "runtime_summary": {
+    "test_hash_logic_named_passes": 23,
+    "test_image_primitives_named_passes": 31,
+    "exit_codes": [
+      0,
+      0
+    ],
+    "actual_original_sources": true,
+    "test_macro": false,
+    "asan": false,
+    "full_upstream_suite": false
+  },
+  "asset_findings": [
+    "photo.jpeg/copy.jpeg same400x400cactusinpot andbyteequalverified.",
+    "photo_color_changed.jpeg samecactuswarmer/yellowgrading;photo_rotated_90.jpeg cactusrotatedquarterturn.",
+    "photo.png100x100solidred.",
+    "photo.webp550x368mountainvalley/riverlandscape,notJPEGcactusrecoding. Crossformatcorpusdoesnotrepresentidenticalsceneacrossallformats.",
+    "photo_complex.pngand.webp400x400coloredgradient/noise;WebPvisiblysmootherlossy. Noexactpixelorhashqualityclaim fromvisualinspection."
+  ],
+  "test_findings": [
+    "HashlogicactualPGMdecodingandpublicaHash/dHash/BMHplusdistance/errorchecks passed.",
+    "AscendingdHashcommentexpectseverybitsetbutassertiononlyrequires>=32of64; passingdoesnotproveallbitsgradientorder.",
+    "BMHuniformbitsloopdoesnotassertsizeinthatfunction, butseparatesizecheckasserts32.",
+    "Primitiveedgecasesincludecompletion-onlypathsanduninitializedsrcarrays; reportdoesnotturntheseintoindependentpixelcorrectnessproof.",
+    "Resizecountzero testcommentsdescribeoldfixedpointimplementation, notcurrentstbwrapper. Usefulexecutionprobe,butcommentedbranchcoverageclaimnotcurrent-sourceevidence.",
+    "No productioncodecopiedorchanged. NativepHash.org/ASAN remainsdeferred."
+  ],
+  "remaining": [
+    "vendor/stb_image.h292022bytes wholeimplementationreview",
+    "vendor/stb_image_resize2.h457839bytes wholeimplementationreview",
+    "Optionalcodecgitlinks areexternaldependencyimplementation/licensequalification, nottrackedauthoredsource"
+  ],
+  "full_review_count": 247
+}
