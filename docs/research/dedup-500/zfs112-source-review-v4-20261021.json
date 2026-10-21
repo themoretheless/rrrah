@@ -1,0 +1,93 @@
+{
+  "repository": "Mic92/zfs-dedup",
+  "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
+  "whole_repo_complete": false,
+  "tracked_blobs": 23,
+  "cumulative_assessed_blobs": 23,
+  "files": {
+    ".github/dependabot.yml": {
+      "bytes": 294,
+      "sha256": "1c008e49158493a16908bd72ae718db94f4efadc7cbd243d014fec7a32b6952d",
+      "git_blob": "c5affc1ca87f091be12fba437aeaadcedd965e68",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    ".github/workflows/auto-merge.yaml": {
+      "bytes": 338,
+      "sha256": "d676af99550c28ee4b07732547932f36bfec71c2520d9ac171ae9cc5bfd529f0",
+      "git_blob": "e7e04a07cfc357d4381f34b4992547f088f70e91",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    ".gitignore": {
+      "bytes": 16,
+      "sha256": "70d08139d8637de2667423740f331f9ad9a8765db0856d4bf83c42c1486bd5a7",
+      "git_blob": "d787b7061eb0738161763e3bf7c8d04a93a24505",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "Cargo.lock": {
+      "bytes": 16678,
+      "sha256": "608356cc13bdad1f05178c164bea218bffd84436804273cc99ce8af6c5ce83b3",
+      "git_blob": "18aa392088ef8668ab890774554659556a8dcc03",
+      "method": "Full TOML structural parse73packages72registrychecksums;notdependency source review"
+    },
+    "benches/throughput.rs": {
+      "bytes": 4284,
+      "sha256": "db44493c6ad04d1193be232613a28a628f996d648fa61e35601945ac5dc261dd",
+      "git_blob": "55983f0a5eb42580800efaeec8be47ee228c6f20",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "examples/walkmem.rs": {
+      "bytes": 815,
+      "sha256": "0b836fa0e4a3d0429759f51ce28ebeb92a4cb587996e8f14e8c2dd0cb8a67745",
+      "git_blob": "a20231c783fbc284d9074573028dc8fbf3b929a3",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "flake.lock": {
+      "bytes": 1103,
+      "sha256": "5b54efb41583a7262548c9ebbe42fe5a30008f49251939a7d4b0344d74a92d38",
+      "git_blob": "e10f11d3c107234a1b4b5eaf97ee4d5467fff057",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "flake.nix": {
+      "bytes": 1620,
+      "sha256": "8d912b7dadb34c41a67acd8b676fd208e1d8780c4d8af23c4f3f2eb69761c30d",
+      "git_blob": "563a32678efd4a214ad54f3aa54c0085999f2dcf",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "nix/fmt.nix": {
+      "bytes": 159,
+      "sha256": "0da4f2c25ede9902e549ecf49e08b811fa035b3ed7b6a3bcf8d990bd0b537e24",
+      "git_blob": "f83ea17a0db858766c5c85fc2849899d77f45c58",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "nix/package.nix": {
+      "bytes": 148,
+      "sha256": "7c88d30cd543f1c88853d125d017806322a83f4cc2ed23608bb95f93f17c0995",
+      "git_blob": "8d4ceec71242c1d17520bb8a27fbdc1310234b26",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "nix/shell.nix": {
+      "bytes": 263,
+      "sha256": "3982c6ffa9505c5f40efda060ab5f63708948e589c1c3cca43239c4463216edf",
+      "git_blob": "ef7186358df1337ad8d3edafceeba82d0ca57fc9",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/remount.rs": {
+      "bytes": 6134,
+      "sha256": "7232177cca54f89305ff7d17700d24c20592d6550caa4ddc89ab426541e8e14a",
+      "git_blob": "1f1754898bbb4c5d4039a94db5c0bfd99ecae618",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    }
+  },
+  "new_runtime_controls": 0,
+  "findings": [
+    "Mount namespace unshare beforeworkers;recursive downstream propagation prevents changes leakingback;remount selectedroZFS/rwsuperblockmounts whilepreservingknownflags. Codeexamined,not executed.",
+    "mountinfo unescape assumes validoctaltriples;malformedinput may underflow/panic ortruncate escape. /proc trustedformat normally provides valid escapes;not vulnerabilityclaim/runtimecontrol.",
+    "Bench file_mb uses sparsefiles explicitlybest-caseIO. Pipeline creates syntheticfixedpatterns,flatread_dir,cachedeletedbetweeniterations,dryrun verification;no walk or realkernelclone benchmark.",
+    "Indexbench alluniquehashes exercisespre-filter/readcache path;not worst-case duplicate-richfinalindex. No measurementsrunorupstreamspeedclaimsadopted.",
+    "Examplewalkmem reads LinuxprocRSS/malloc_trim;Nixsupport onlyx86_64/aarch64Linux. No macOS fullcrate qualificationexpected or attempted.",
+    "Cargo lock4with73entries72registrychecksums andflake lock7with2pinnedGitHubinputs inspected. Nix evaluation/remoteactions notexecuted."
+  ],
+  "limits": [
+    "Only2standaloneoriginalBloomtests and3adaptedoriginalPathcontrols passed;no Linux/ZFS/mount/clone/fullcrate/benchmark runtime qualification."
+  ]
+}

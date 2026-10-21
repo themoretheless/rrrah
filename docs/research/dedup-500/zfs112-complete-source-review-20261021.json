@@ -1,0 +1,162 @@
+{
+  "repository": "Mic92/zfs-dedup",
+  "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
+  "whole_repo_complete": true,
+  "tracked_blobs": 23,
+  "assessed_blobs": 23,
+  "files": {
+    "Cargo.toml": {
+      "bytes": 475,
+      "sha256": "a5d0b2d1590764fac8a04ee361a825f15cbc636c43d51eea51f6558175e51df3",
+      "git_blob": "cc52541c35e9accafb39f5cc4641a6c6485bf5f5",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "LICENSE": {
+      "bytes": 1071,
+      "sha256": "5f8c27fe9f2b5749f41008840b86f9170c49de05d7008155bf82db81236820d1",
+      "git_blob": "cae1a2b1694478cbef6f6d3e975e478e487a9705",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "README.md": {
+      "bytes": 4377,
+      "sha256": "814cd62b7b75dccd861aea1fbe2e2822a9f397174a7cb06be73acb86e0e93957",
+      "git_blob": "8d8ad18f162380c4e9eff0e4d7d2e8e8d78d710f",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/lib.rs": {
+      "bytes": 107,
+      "sha256": "bd4d8ba1a741d38fbfdd95bb12c408e398772ebd723137ab0c81f492e44a7227",
+      "git_blob": "3dd6283fb637529d28cfb24f7e8bde767bc6babc",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/bloom.rs": {
+      "bytes": 2513,
+      "sha256": "9459b4c12cc1ba4ecd0be9e453b4d3c18335458ddd0e65604f5a2f7be253bc8f",
+      "git_blob": "cb7dcbbcd26a167e04acb10000838b4785ce17b8",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/clone.rs": {
+      "bytes": 6260,
+      "sha256": "aeaa01fbdc5bc6bc097b3c0c8743f0d9439054f9dd052f716921de38cff9a8e3",
+      "git_blob": "edc3949b4e5773172ffb81f9baf5e8cbb6beb58b",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/hasher.rs": {
+      "bytes": 11294,
+      "sha256": "da744f63e6a5b199489b2419b4e3dbd8e1e41984b77e6f6819a9c1860e58de21",
+      "git_blob": "084378a4a2deb3d40e480f5bc3c59efafae18e3a",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/cache.rs": {
+      "bytes": 10451,
+      "sha256": "b481fd8b1f59d36790acfb45ce78959b66d8ee6b18a3405e26a23f2fdb972a8c",
+      "git_blob": "c63cb52ed0ae19ed9a6933e551d7c04efe3b1102",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/dedup.rs": {
+      "bytes": 22185,
+      "sha256": "4270a2188f05fe58a6cdc7df9e8e305892aebe818cf634a5eabd0c1e2e6558e0",
+      "git_blob": "f9dba053123264d15e9f810826e6c9e0bf2ef7ad",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/walk.rs": {
+      "bytes": 14548,
+      "sha256": "c796c3324d6896ba0a13b00bfe66f1076d2a57e2683a3fd20ab1f15f80497ea3",
+      "git_blob": "d98e8ee0db24c3413a24a649739d55e0cd4b382e",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/main.rs": {
+      "bytes": 10759,
+      "sha256": "8882f143fc20544baa17d7cc60d5b479b76fbe1590290587f090404cf8ee84d6",
+      "git_blob": "345fd83fafc00ab00d64f72d1a265a74f85d72e2",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    ".github/dependabot.yml": {
+      "bytes": 294,
+      "sha256": "1c008e49158493a16908bd72ae718db94f4efadc7cbd243d014fec7a32b6952d",
+      "git_blob": "c5affc1ca87f091be12fba437aeaadcedd965e68",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    ".github/workflows/auto-merge.yaml": {
+      "bytes": 338,
+      "sha256": "d676af99550c28ee4b07732547932f36bfec71c2520d9ac171ae9cc5bfd529f0",
+      "git_blob": "e7e04a07cfc357d4381f34b4992547f088f70e91",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    ".gitignore": {
+      "bytes": 16,
+      "sha256": "70d08139d8637de2667423740f331f9ad9a8765db0856d4bf83c42c1486bd5a7",
+      "git_blob": "d787b7061eb0738161763e3bf7c8d04a93a24505",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "Cargo.lock": {
+      "bytes": 16678,
+      "sha256": "608356cc13bdad1f05178c164bea218bffd84436804273cc99ce8af6c5ce83b3",
+      "git_blob": "18aa392088ef8668ab890774554659556a8dcc03",
+      "method": "Full TOML structural parse73packages72registrychecksums;notdependency source review"
+    },
+    "benches/throughput.rs": {
+      "bytes": 4284,
+      "sha256": "db44493c6ad04d1193be232613a28a628f996d648fa61e35601945ac5dc261dd",
+      "git_blob": "55983f0a5eb42580800efaeec8be47ee228c6f20",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "examples/walkmem.rs": {
+      "bytes": 815,
+      "sha256": "0b836fa0e4a3d0429759f51ce28ebeb92a4cb587996e8f14e8c2dd0cb8a67745",
+      "git_blob": "a20231c783fbc284d9074573028dc8fbf3b929a3",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "flake.lock": {
+      "bytes": 1103,
+      "sha256": "5b54efb41583a7262548c9ebbe42fe5a30008f49251939a7d4b0344d74a92d38",
+      "git_blob": "e10f11d3c107234a1b4b5eaf97ee4d5467fff057",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "flake.nix": {
+      "bytes": 1620,
+      "sha256": "8d912b7dadb34c41a67acd8b676fd208e1d8780c4d8af23c4f3f2eb69761c30d",
+      "git_blob": "563a32678efd4a214ad54f3aa54c0085999f2dcf",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "nix/fmt.nix": {
+      "bytes": 159,
+      "sha256": "0da4f2c25ede9902e549ecf49e08b811fa035b3ed7b6a3bcf8d990bd0b537e24",
+      "git_blob": "f83ea17a0db858766c5c85fc2849899d77f45c58",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "nix/package.nix": {
+      "bytes": 148,
+      "sha256": "7c88d30cd543f1c88853d125d017806322a83f4cc2ed23608bb95f93f17c0995",
+      "git_blob": "8d4ceec71242c1d17520bb8a27fbdc1310234b26",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "nix/shell.nix": {
+      "bytes": 263,
+      "sha256": "3982c6ffa9505c5f40efda060ab5f63708948e589c1c3cca43239c4463216edf",
+      "git_blob": "ef7186358df1337ad8d3edafceeba82d0ca57fc9",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "src/remount.rs": {
+      "bytes": 6134,
+      "sha256": "7232177cca54f89305ff7d17700d24c20592d6550caa4ddc89ab426541e8e14a",
+      "git_blob": "1f1754898bbb4c5d4039a94db5c0bfd99ecae618",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    }
+  },
+  "incremental_reports": [
+    "docs/research/dedup-500/zfs112-source-review-v1-20261021.json",
+    "docs/research/dedup-500/zfs112-source-review-v2-20261021.json",
+    "docs/research/dedup-500/zfs112-source-review-v3-20261021.json",
+    "docs/research/dedup-500/zfs112-source-review-v4-20261021.json"
+  ],
+  "review_scope": "All22source/docs/config/license files whole-read,Cargo.lock structurallyparsed.All23Gitblobpins verified.",
+  "runtime": "2unmodifiedoriginalBloomtests passed standalone;3authoredPathcontrols with originalextractedimplementation and explicitResultaliasadapter passed. No Linux/ZFS/mount/clone/fullcrate execution.",
+  "decision": "retain-verification-pattern",
+  "finding": "Useful reference:hashes onlycandidatefilter,byteverify beforefallbackclone oratomickernelverify+clone,explicitforcegateforracyfallback,hardlinkcollapse,cachectime+blocksize. Do notadoptcode blindly:walkerrorcompletenessnotpropagated,identity/stampfreshness/zero-batch andresourceboundsgaps.",
+  "license": "MITrootwhole-read;noproductioncodeadopted.",
+  "limits": [
+    "FullsourcereviewdoesnotqualifyZFSbehavior,platformsyscalls,memoryorperformance.",
+    "All500/allcasesunfinished;nativepHash/ASANdeferred."
+  ]
+}

@@ -2,9 +2,9 @@
   "index": 112,
   "repository": "Mic92/zfs-dedup",
   "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
-  "review_scope": "Partial pinned11/23whole artifacts read;2original standaloneBloomtests and3adaptedoriginalPathcontrols passed. Walk/main staticassessment;Linux/ZFS/fullcrate unqualified.",
-  "decision": "shortlist",
-  "finding": "Rust ZFS offline dedup separates chunk-hash collision filter from byte memcmp and metadata identity; useful exact verification architecture.",
+  "review_scope": "All22source/docs/config/license files whole-read,Cargo.lock structurallyparsed.All23Gitblobpins verified.",
+  "decision": "retain-verification-pattern",
+  "finding": "Useful reference:hashes onlycandidatefilter,byteverify beforefallbackclone oratomickernelverify+clone,explicitforcegateforracyfallback,hardlinkcollapse,cachectime+blocksize. Do notadoptcode blindly:walkerrorcompletenessnotpropagated,identity/stampfreshness/zero-batch andresourceboundsgaps.",
   "available_source_evidence": [
     {
       "path": "src/dedup.rs",
@@ -75,6 +75,12 @@
     },
     {
       "audit": "docs/research/dedup-500/zfs112-source-review-v3-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/zfs112-source-review-v4-20261021.json"
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/zfs112-complete-source-review-20261021.json"
 }
