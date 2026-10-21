@@ -1,0 +1,34 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/papers/No-Reference Image Quality Assessment using Blur and Noise.pdf": {
+      "sha256": "867b4e43f1a24c38e2cfb9e80680ba25486981e6d0c26a99c8e5f85cc6654558",
+      "git_blob": "1c688511f047ba35bbfe5163243a5b7c9f5b61a5",
+      "bytes": 502485,
+      "pages": 5,
+      "method": "All extracted text read; all5 complete pages rendered with Poppler110dpi and visually inspected, including equations1–16, framework diagram, reference thumbnails, tables and scatter plots.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-quality-paper-review-v68-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 606,
+  "tracked_blobs": 616,
+  "findings": [
+    "2009 no-reference quality study combines luminance blur/noise features for perception prediction. It does not establish duplicate identity or a universal best-copy ordering.",
+    "Reported training30distorted images and testing207images cover JPEG2000 and white-noise subsets. Correlation with subjective scores is not pairwise keeper-choice accuracy; no HDR/alpha/palette/animation or content-disjoint evaluation established here.",
+    "Equations divide by detected edge, blur and noise counts; empty detections and boundary treatment need explicit implementation policy. Narrative neighbor-average blur description differs from printed equation5 based on absolute difference; do not silently resolve this when porting.",
+    "Pinned cbird cimgops.cpp295–311 explicitly declares inspiration but substitutes edge/long-edge ratios for the paper blur/noise combination. Paper accuracy therefore cannot validate cbird score. Previously reviewed disabled quality test supplies no independent acceptance.",
+    "For our library, quality ranking requires separate qualification after duplicate/pixel/geometry evidence; this paper alone does not justify automatic keeper selection or discarding files. No algorithm port accepted."
+  ],
+  "source_comparison": {
+    "upstream_cimgops_sha256": "63e30f6db2dfceb336c84a53719d876463bf7646d94b122edb3e6c429d71a020",
+    "upstream_testquality_sha256": "cc2a1bf1bf4649c4951a93eceae89266d6d2c899de2e49d112703412c4ab75c6"
+  },
+  "executed_controls": [],
+  "limits": [
+    "606/616 assessed:185 whole text/source,417 PNG visuals,2 structured spreadsheets and2 PDFs.10 remain:4PDFs,CImg,2QSS,SVG,ICNS,ICO.",
+    "pypdf repaired an incorrect startxref pointer while extracting; Poppler successfully rendered all5pages. No native quality implementation or published experiment rerun.",
+    "34 original-body/header controls and2 independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
