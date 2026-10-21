@@ -1,0 +1,40 @@
+{
+  "checks": 216,
+  "mismatches": 0,
+  "sizes": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      17
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      17,
+      19
+    ],
+    [
+      33,
+      32
+    ]
+  ],
+  "backends": [
+    "nativeARM",
+    "STBIR_NO_SIMD"
+  ],
+  "method": "Actual original stbir_resize_uint8_linear, valid allocated buffers, row reversal independently constructs reference. RebuiltO2ffp-contractoff libraries.",
+  "limits": [
+    "Grayuint8only, noalpha/sRGB",
+    "Backendpatterns independentlyseeded, notcrossbackendbyteparity claim",
+    "No speed or memorysanitizer qualification"
+  ]
+}
