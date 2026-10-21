@@ -1,0 +1,118 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "package-lock.json": {
+      "sha256": "ef4674ea5e4512cb359e985a77614921d9de047dd2707e7b417c54389d4df952",
+      "git_blob": "1f8a9d91af468dd55907e90b05be3f6070718db3",
+      "bytes": 369003,
+      "lines": 8789,
+      "method": "Complete JSON parse/all package records structurally inspected; dependency sources not read."
+    },
+    ".vscode/extensions.json": {
+      "sha256": "5855c8f5111841fe7a3e2a93e02b5aac76b7c1a78956428629f59b27e009a0f6",
+      "git_blob": "2d987ff43e08bdb663828aa0f2bd89800d59e084",
+      "bytes": 125,
+      "lines": 7,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/launch.json": {
+      "sha256": "c91a1f3e02f506e57b0ffe34bbb88472419cd5174c72605d3b18c60d3adbb2e5",
+      "git_blob": "7ab92835b4b6a04cd2e75cf1000014e2cdb49cda",
+      "bytes": 314,
+      "lines": 18,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/mcp.json": {
+      "sha256": "7311e5d0cba72c61562c35923e8fa7a01121ed575e620a75697495f03c59dbc2",
+      "git_blob": "79ae6e5c387575ab92ccd8a812cc32ddba63b62a",
+      "bytes": 223,
+      "lines": 11,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/settings.json": {
+      "sha256": "6a67f9815bc18c344ac7134bcc6245d487bac420854fcc9d046a3f7515ad250f",
+      "git_blob": "1ceb3e46ac9be0e94a2244484fd1ea622872a3d8",
+      "bytes": 663,
+      "lines": 26,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/settings.json.bak": {
+      "sha256": "0433cfca083e87c79bb25bdbed97ca7a029956e9f54ddb4f6234c5398c1168d7",
+      "git_blob": "899e5e66bbf5dc1f50930221439e08eee3adf79c",
+      "bytes": 429,
+      "lines": 18,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    ".vscode/tasks.json": {
+      "sha256": "1771f0eadc15b05a2d274e6a74a31a5095638a307275712dffe11269d4b02279",
+      "git_blob": "f162901103a68e6fd71cbb8fb313974c938c117d",
+      "bytes": 433,
+      "lines": 28,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    },
+    "styles.css": {
+      "sha256": "ebafce3184fb2903b57555bcfa3bfefdd56e3ff310bcfe87f651e62a0eff0f6a",
+      "git_blob": "e5249de8f5f8d9923debccaea00dcbef121c7d54",
+      "bytes": 8768,
+      "lines": 383,
+      "method": "Whole text/source read; configuration treated as data, not instructions."
+    }
+  },
+  "cumulative_assessed_blobs": 66,
+  "tracked_blobs": 129,
+  "lockfile_assessment": {
+    "lockfile_version": 3,
+    "records_including_root": 588,
+    "nonroot_records": 587,
+    "root_direct_dependencies_equal_manifest": true,
+    "all_nonroot_have_version_resolved_integrity": true,
+    "resolved_hosts": {
+      "registry.npmjs.org": 587
+    },
+    "install_script_packages": [
+      "node_modules/cpu-features",
+      "node_modules/esbuild",
+      "node_modules/fsevents",
+      "node_modules/ssh2"
+    ],
+    "globals_parents": [
+      {
+        "path": "node_modules/@eslint/eslintrc",
+        "range": "^14.0.0"
+      },
+      {
+        "path": "node_modules/eslint-plugin-n",
+        "range": "^15.8.0"
+      },
+      {
+        "path": "node_modules/eslint-plugin-obsidianmd",
+        "range": "14.0.0"
+      }
+    ],
+    "selected_versions": {
+      "globals": "14.0.0",
+      "vitest": "4.1.11",
+      "esbuild": "0.28.2",
+      "@aws-sdk/client-s3": "3.1024.0",
+      "webdav": "5.9.0",
+      "ssh2-sftp-client": "11.0.0",
+      "typescript": "5.3.3"
+    }
+  },
+  "findings": [
+    "Complete npm lockJSON parsed, all588records including root structurally inspected.587nonrootrecords have version/resolved/integrity; direct dependency/devdependency maps equal manifest. Integrity metadata is not downloaded tarball verification or dependency source review.",
+    "globals14.0.0 is root-hoisted transitive dependency from eslint-plugin-obsidianmd and @eslint/eslintrc; additional eslint-plugin-n range differs. Earlier undeclared-direct-import uncertainty resolved at locked package metadata level, not install/runtime.",
+    "Selected lockedAWS3.1024.0requiresNode>=20;SFTP11requires>=18.20.4;Vitest4.1.11 supports20/22/>=24. CI20.x plausible at metadata level, embedded Obsidian runtime compatibility unverified. Four hasInstallScript records inventoried, none executed.",
+    "VSCode MCP config invokes codescalpel@latest with workspace-relative license directory. Read as source configuration only; no MCP process launched, license file accessed or external instruction adopted. Other editor files configure formatting/TSsdk/build tasks, not runtime qualification.",
+    "Styles use host theme variables, flex settings/path controls and clipped tooltip lines; no render performed. Mount modal path control min-width min(240px,100%) addresses narrow widths structurally, not verified visible layout. CSS pseudo-elements add icons outside TS UI-text scanner scope.",
+    "Versioned settings backup and blank/hotreload context are development artifacts, not duplicate content engine. Remaining screenshot artifacts still pending visual review."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "66/129trackedblobs assessed:65wholetext/source files plus one structurally assessedlockfile;33previousisolatedcontrols.",
+    "No dependency installation/tarball execution, full build/upstream suite, real UI/platform qualification.",
+    "Production library unchanged."
+  ]
+}
