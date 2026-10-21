@@ -1,0 +1,54 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_three_original_preset_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/photo-filter.ts": {
+      "sha256": "9767e835f3adecfb30d1d10ce9edfb429ca09ffa289507d8d2806ebda1f72e77",
+      "git_blob": "2906137967e9fee8daec26fb917155deb19b1a65",
+      "bytes": 8852,
+      "lines": 225,
+      "method": "Whole pinned source read."
+    },
+    "src/core/presets.ts": {
+      "sha256": "c7027176bfefc719ec32534394924c3ba897ac284bcec8722e3cbfcd63e8a878",
+      "git_blob": "fbeb1a4459c6b6d1adad5d2e81ff69e9d2719c58",
+      "bytes": 8711,
+      "lines": 221,
+      "method": "Whole pinned source read."
+    },
+    "src/core/consent.ts": {
+      "sha256": "723da64e5bae4c999ca3f965edd30a053afb233de2b925c5723e282cdf1b9800",
+      "git_blob": "b486df35b83d00c7d0db21d70711ebdf38a28db9",
+      "bytes": 4275,
+      "lines": 146,
+      "method": "Whole pinned source read."
+    }
+  },
+  "cumulative_assessed_blobs": 52,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-preset-controls-v11-20261021/run.mjs",
+    "harness_sha256": "d8b35cc294ab22643f0ff13b41b00dd893f51fe8fe2e3e31846740365de0ff2c",
+    "log": "docs/research/dedup-500/googlephotos42-preset-controls-v11-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "method": "Six original modules type-stripped with import suffix/JSON attributes adapted; in-memory store only; no browser persistence,network or action."
+  },
+  "findings": [
+    "Unknown typephoot,datemodeoff is accepted asall; sanitizePresets preserves it as normalizedall rather than rejects malformedtype. ValidUIchoices unaffected; malformed-input scope widening reproduced.",
+    "Manager load catches read error as empty; save then writes singletonnewlist successfully. In-memory store previously heldold preset; it is replaced despite transient read failure.",
+    "Two concurrent save calls both reportok but final injectedstore containsonepreset. Read-modify-write has no serialization/CAS in manager; actual UI may serialize callers and was not executed.",
+    "parseLabelDay supportsEnglish/Frenchmonths andISOdates; rejectsunknownlocalizedforms. This date path differs from scan parseLabelDate Date.parse helper. No cross-locale runtime corpus qualified.",
+    "Date controls reject invalid or inverted ranges; type/id filters exclude unknown labels ormissingids. Caller-providedidSet overridesfilter.ids membership, so consistency remains caller responsibility.",
+    "Consent module read in full; pure admission and local acknowledgement helpers, not executed. Reading its protocol does not establish callerhandshake or actualdestructiveflow qualification."
+  ],
+  "cumulative_original_function_controls": 24,
+  "limits": [
+    "52/230wholeartifacts; no full suite or repository completion.",
+    "No production optimization; native pHash/ASAN deferred."
+  ]
+}
