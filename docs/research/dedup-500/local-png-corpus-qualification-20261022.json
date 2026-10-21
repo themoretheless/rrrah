@@ -1,0 +1,28 @@
+{
+  "scope": "Own selected-frame corpus qualification attempt, not accepted coverage.",
+  "test": "crates/rrrah-dedup/tests/png_pinned_corpus.rs",
+  "command": "RRR_PNG_CORPUS=$PWD/.dedup-work/spng454-20261021/tests/images CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_pinned_corpus -- --ignored",
+  "result": {
+    "exit_code": 101,
+    "passed": 0,
+    "failed": 1,
+    "first_failure": "basi2c08.png: raster needs an ICC or source-primary transform before display"
+  },
+  "fixture": {
+    "sha256": "b2690d4475cdc39faf5a7d2de20de4e14eb96c6360fa791ec2003b4085ecacde",
+    "gAMA": 100000,
+    "meaning": "Gamma1 declaration without explicit chromaticity; exact profile/default-primary treatment requires investigation."
+  },
+  "verified_fixture_hashes": 161,
+  "planned_checks": [
+    "161 valid image dimensions, finiteRGBA and normalized alpha, selected-frame digest and released budget",
+    "15 interlaced/noninterlaced basic pairs exact pixels and digest"
+  ],
+  "limits": [
+    "Test stops at first failure, so complete corpus and15 pairs unverified.",
+    "No skipping or weakened assertion added for failure; ignored annotation requires external pinned corpus, and explicit ignored run failed.",
+    "Current worktree includes unrelated existing raster/color changes. No production fix claimed."
+  ],
+  "next_action": "Trace PNG gamma-only color declaration into normalization; choose and qualify explicit color policy without discarding metadata.",
+  "full_review_count": 247
+}
