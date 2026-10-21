@@ -2,11 +2,11 @@
   "index": 12,
   "repository": "RazgrizHsu/immich-deduper",
   "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 125 pinned blobs reviewed by whole text/visual inspection or exact generated-source reconciliation; isolated controls only, full runtime partial",
   "decision": "reference",
-  "finding": "Immich similarity-page/API code; server/application dependencies and selected excerpts leave actual matcher qualification open.",
+  "finding": "Documented connected-chain similarity; isolated original-code controls identify sync, cancellation, persistence, sidecar and UI state weaknesses. Reference principles only; no production code adopted.",
   "license_metadata": "GPL-3.0",
-  "license_scope": "Root GPLv3 whole LICENSE and README read; bundled/dependency license inventory incomplete; no production code adopted",
+  "license_scope": "Root GPLv3 text read; bundled Socket.IO MIT header read; full transitive license/compatibility audit not claimed.",
   "tests_detected": 7,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -126,6 +126,11 @@
     },
     {
       "audit": "docs/research/dedup-500/immich12-style-reconciliation-review-v17-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/immich12-socket-lifecycle-review-v18-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/immich12-full-review-reconciliation-20261021.json"
 }

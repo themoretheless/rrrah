@@ -1,0 +1,48 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": true,
+  "status": "pinned_whole_source_review_complete_runtime_partial",
+  "whole_files_read": 125,
+  "tracked_blobs": 125,
+  "all_credited_source_sha256_and_git_blobs_reverified": true,
+  "review_artifact_pins": {
+    "docs/research/dedup-500/immich12-group-vector-review-v1-20261021.json": "b360e5b1fa09ab96532a51c49d701f07f58fc14d56636ddca242f8d07193ea60",
+    "docs/research/dedup-500/immich12-persistence-task-review-v2-20261021.json": "ecc980168aa83efbfccf11f5f397f6bc28672c0c2926ff5a5841a9806a80f792",
+    "docs/research/dedup-500/immich12-cancellation-lifecycle-review-v3-20261021.json": "9dd86119bfb35f0209c6d87ff56418231964fd38fb3c4f08405d2ae934bae71e",
+    "docs/research/dedup-500/immich12-selection-sidecar-review-v4-20261021.json": "427331b88fd0834f17a54e0e4fbfcfcc465a7e682374ce913d8be448618becc5",
+    "docs/research/dedup-500/immich12-path-settings-review-v5-20261021.json": "182c45bdbef7a7f405059498811caf4532f686eaad59754aee09799469912596",
+    "docs/research/dedup-500/immich12-model-types-tests-review-v6-20261021.json": "5454ee60dcda1aab4c8743d74c739126180b94bdf268b256577b638d56f99435",
+    "docs/research/dedup-500/immich12-serving-health-review-v7-20261021.json": "eca5826bb9f869692606a985cfabb12836b40865f754d49a53bf4fc4a93b1085",
+    "docs/research/dedup-500/immich12-client-state-review-v8-20261021.json": "c409692e86f94e31483eacf51794b1b82ec9e1ccd79734e96a330bf43779dd34",
+    "docs/research/dedup-500/immich12-ci-deployment-review-v9-20261021.json": "2803c33f143fd33b5125dd81e323168802eb8240783fc33efd26032d8a900237",
+    "docs/research/dedup-500/immich12-fetch-reconciliation-review-v10-20261021.json": "1af0ccdc0ac7a463711490ac3d38fe60d6d73b4d8e6d404da376e900bab09e16",
+    "docs/research/dedup-500/immich12-settings-result-provenance-review-v11-20261021.json": "b319703d2f5c517a823587d62da3ab41d6ad75c61e8cbdb39088fe7bbd226977",
+    "docs/research/dedup-500/immich12-view-empty-export-review-v12-20261021.json": "04bd196ba33369183f0045b44186b5a1decfdc7685dfae4e97589fc4703cc52d",
+    "docs/research/dedup-500/immich12-preview-state-build-tool-review-v13-20261021.json": "cd6bd6b563aae28cf9f8386d8e2f77b129e09264ac10a1189adec903419b52e5",
+    "docs/research/dedup-500/immich12-docs-license-style-review-v14-20261021.json": "ab78c77b5a2afdc957512f252c6205b11c2ab6a4a5e0d1a32b925afb5c2bac3b",
+    "docs/research/dedup-500/immich12-static-visual-review-v15-20261021.json": "d470d080c849b81d49332634cafb1ca509c60eb751f4f0519fca129de7ab4c30",
+    "docs/research/dedup-500/immich12-animation-visual-review-v16-20261021.json": "94ea92e532ae460c97447d135ae1016c772b5b629b6626fbfbecc8cb1df8cd16",
+    "docs/research/dedup-500/immich12-style-reconciliation-review-v17-20261021.json": "61a6b4d4fc0785e0639a135543655df258dbe5fa3af9e6bdfa098547581608ec",
+    "docs/research/dedup-500/immich12-socket-lifecycle-review-v18-20261021.json": "6c4e96ed5d6fff269231f95278eb8ce4d6fa03521e3939835013c866be36f808"
+  },
+  "decision": "reference",
+  "review_methods": [
+    "All 125 tracked blobs reconciled to pinned Git tree and per-file SHA256.",
+    "Whole text review, static images and all 186 GIF frames visually reviewed; five generated CSS files exact-byte recompiled from whole-reviewed SCSS.",
+    "Bundled minified Socket.IO entirely read via formatted rendering; isolated original-code controls use explicit adapters."
+  ],
+  "conclusions": [
+    "Connected-chain grouping is documented intent, not a defect under its stated semantics; it does not prove all-pairs duplicate identity.",
+    "Owned SQLite and tempfile controls exposed filtered-fetch local record loss, sidecar backup loss with all metadata fields disabled, ignored persistence errors, stale type/default values and cancellation lifecycle gaps. These are upstream findings, not demonstrated rrrah failures.",
+    "Client original-code controls exposed wrapper reconnect timers, stale selection signatures and closed-preview output cardinality mismatch.",
+    "Local regression principles: preserve unique members, distinguish errors from empty success, validate vector cardinality, make cancellation final, require transactional sidecar updates and explicit result provenance. No upstream production code copied."
+  ],
+  "license": "Root GPLv3 text read; bundled Socket.IO MIT header read; full transitive license/compatibility audit not claimed.",
+  "limits": [
+    "25 original base-model methods and 21 path methods passed only under explicit isolated adapters; three live-DB methods excluded. This is not full upstream test-suite success.",
+    "No real Torch model/weights inference, PostgreSQL, Qdrant, server/browser integration, user file mutation or production performance benchmark.",
+    "Local rrrah previously 284 passed, 2 ignored manual timings; no new production changes require rerun in this batch.",
+    "All500 source reviews and all-case runtime coverage incomplete; native pHash/ASAN user-deferred."
+  ]
+}

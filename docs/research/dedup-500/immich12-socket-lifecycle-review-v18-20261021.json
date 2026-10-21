@@ -1,0 +1,38 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/assets/socket.io.min.js": {
+      "sha256": "b0e735814f8dcfecd6cdb8a7ce95a297a7e1e5f2727a29e6f5901801d52fa0c5",
+      "git_blob": "c72110d7fa4ed539768ccf66182eb372bba3d68e",
+      "mode": "100644",
+      "lines": 7,
+      "method": "Entire 1697-line jsbeautifier rendering read in three ranges; truncated manager-open region reread separately"
+    }
+  },
+  "cumulative_whole_files_read": 125,
+  "tracked_blobs": 125,
+  "executed_controls": {
+    "module_loaded_without_transport_or_network": true,
+    "reconnect_timers_after_schedule": 1,
+    "reconnect_timers_after_manager_disconnect": 0,
+    "skipReconnect": true,
+    "unsent_buffer_retained_after_socket_disconnect": 1,
+    "reserved_disconnect_event_rejected": true,
+    "limits": "Isolated VM, fake timers, autoConnect false; no real transport or server"
+  },
+  "control_source": "const fs=require('fs'),vm=require('vm'),assert=require('assert');\nconst pending=new Map(); let next=1;\nconst context={exports:{},module:{exports:{}},setTimeout:(f,ms)=>{let id=next++;pending.set(id,{f,ms});return id},clearTimeout:id=>pending.delete(id),console,Promise,ArrayBuffer,Uint8Array,DataView,TextEncoder,TextDecoder};\nvm.runInNewContext(fs.readFileSync('.dedup-work/immich12-20261021/src--assets--socket.io.min.js','utf8'),context);\nconst io=context.module.exports;const m=new io.Manager('http://localhost',{autoConnect:false});\nassert.equal(pending.size,0);m.reconnect();assert.equal(pending.size,1);m.disconnect();assert.equal(pending.size,0);assert.equal(m.skipReconnect,true);\nconst s=m.socket('/');assert.equal(s.active,false);s.emit('work',{id:1});assert.equal(s.sendBuffer.length,1);s.disconnect();assert.equal(s.sendBuffer.length,1);\nlet reserved=false;try{s.emit('disconnect')}catch(e){reserved=true}assert(reserved);\nconst out={module_loaded_without_transport_or_network:true,reconnect_timers_after_schedule:1,reconnect_timers_after_manager_disconnect:pending.size,skipReconnect:m.skipReconnect,unsent_buffer_retained_after_socket_disconnect:s.sendBuffer.length,reserved_disconnect_event_rejected:reserved,limits:'Isolated VM, fake timers, autoConnect false; no real transport or server'};\nfs.writeFileSync('.dedup-work/immich12-20261021/socket-control-v18-result.json',JSON.stringify(out,null,2)+'\\n');console.log(JSON.stringify(out));\n",
+  "findings": [
+    "Header identifies Socket.IO v4.8.1, Guillermo Rauch copyright and MIT license. This is header attribution, not an independent official-release byte comparison or complete transitive license audit.",
+    "Whole bundle includes Engine.IO framing/polling/WebSocket/WebTransport, parser, emitter, acknowledgements, retry queue, socket and manager lifecycle, URL parsing and manager multiplex cache.",
+    "Original bundled Manager with autoConnect false and fake timers schedules one reconnect timer; disconnect clears it and sets skipReconnect. App-wrapper independent timers from v8 remain a separate issue.",
+    "Disconnected socket retains unsent sendBuffer entry in isolated control. Future connection may flush buffered work; applications must define replay/idempotency semantics. No destructive operation replay demonstrated.",
+    "Source supports ack timeouts and retries but does not establish durable delivery or transactional file operations. Not a duplicate-matching algorithm."
+  ],
+  "limits": [
+    "No real browser/network/server or upstream test suite run.",
+    "Header version/license attribution only; no claim of official byte identity, current dependency safety or legal compatibility.",
+    "Native pHash/ASAN remains deferred; no production edits."
+  ]
+}
