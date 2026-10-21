@@ -1,0 +1,42 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/SFTPAdapter.ts": {
+      "sha256": "f8c2a4e185ac88a0057bbdc38b631f71c21c1ceb0edf2453f03792cd6248c908",
+      "git_blob": "53bfcddf752c5bce0d1442fb0cfacc097fd2b546",
+      "bytes": 20137,
+      "lines": 498,
+      "method": "Whole source read."
+    },
+    "tests/SFTPAdapter.test.ts": {
+      "sha256": "ef59381ca7ea9afc679b7afcb179fa3f427b168c044ec008d649db972a224eca",
+      "git_blob": "b19df36524142d879b2774713983d8030eacb2d9",
+      "bytes": 6646,
+      "lines": 135,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 42,
+  "tracked_blobs": 129,
+  "findings": [
+    "SFTP adapter lists remote directory entries, skips dot/dotdot, marks d as folder and all other types including symlinks as files. Original post-connect method control confirms behavior; no content hashes/deduplication.",
+    "Connection awaits outside list/stat/exists catch. Connect failure propagates, while post-connect list failure logs and returns accumulated empty/partial arrays, stat null and exists false. Two isolated list controls confirm distinction. No completeness flag added by VirtualAdapter.",
+    "Original binary read slices byteOffset/byteLength correctly on Buffer subview, unlike S3 fast path. Text read decodesUTF8. Real protocol/chunking/fullfile integration untested.",
+    "Append uses client exists and then read/write; client existence/read failures propagate instead of silently replacing file. Still read-modify-write, no concurrent version/atomic append guarantee. copy buffers whole file. No mutation methods invoked.",
+    "Connection lifecycle shares inflight connect promise, checks channel readiness, uses revision/abort around reconnect and closes clients on failure. Upstream tests mock protocol callbacks and authentication; reviewed only, not live connection qualification.",
+    "Adapter stat maps atime toctime and mtime tomtime, ignores modifyTime interface field; creation time is not established by access time. Directory detection with bit040000 rather than full mode type mask may misclassify special modes; provider values unverified.",
+    "remove falls back to recursive rmdir on any delete error, not just directory classification. Static only; no removal execution or reproduction. Main UI choices remain separately unqualified.",
+    "Full upstream SFTPAdapter tests read: fingerprint formatting, approval before authentication, cancellation, channel loss and shared concurrent connection under synthetic client. No real SSH/SFTP server, key file or credentials accessed."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-sftp-io-controls-v10-20261021",
+    "passed": 4,
+    "method": "Original SFTP adapter I/O methods after Node type stripping and original normalizePath mock. Prototype fake client and overridden no-op/failing connect isolate post-connect semantics; lifecycle/authentication not executed."
+  },
+  "limits": [
+    "42/129trackedblobs read;33isolatedcontrols total.",
+    "No network/server/credentials/private key access, no full upstream suite or production changes."
+  ]
+}
