@@ -18,7 +18,7 @@
       "method": "Whole source read only; live scenarios not executed."
     }
   },
-  "cumulative_whole_files_read": 70,
+  "cumulative_whole_files_read": 77,
   "tracked_blobs": 84,
   "findings": [
     "Live scan test waits for items scanned before checking results/no-duplicates. Current empty-result UI has no items-scanned label, so legitimate zero-group result cannot satisfy preceding wait.",
@@ -32,6 +32,6 @@
   "executed_controls": [],
   "limits": [
     "No browser/CDP connection, account access, storage clearing or trash/restore execution. Upstream comment claiming safe for any account is not adopted as verified fact.",
-    "70/84 full files reviewed; real E2E tests remain unexecuted."
+    "77/84 full files reviewed; real E2E tests remain unexecuted."
   ]
 }
