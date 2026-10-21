@@ -1,0 +1,74 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/browser-dom.ts": {
+      "sha256": "3fd1deb38f40591a262e72f4c445a3ac830c208d5c472d9af9ac3c74a387a027",
+      "git_blob": "f21d01efab40eb0d8c79324c3206d3b0b876eccc",
+      "bytes": 4774,
+      "lines": 134,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/dom-adapter.ts": {
+      "sha256": "b6b4444801ee11ebbb29fdfa821c4c4d148bcecc07d3613182b9c2c6680c1cb0",
+      "git_blob": "8b4127148599b8323903ac339003360f30e6cd9f",
+      "bytes": 2484,
+      "lines": 63,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/diagnostics.ts": {
+      "sha256": "a90e58d2cc7addfa75f2b22630f0c9d2c51b093e6d3dda10725d07f665e35636",
+      "git_blob": "ad6c282d49a40d36fb6bba6b49ea0b1bec74e870",
+      "bytes": 3463,
+      "lines": 120,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/selector-pack.ts": {
+      "sha256": "485d81de1cdb354d26b1e4d8a020b1c3ecf901b55e63ec2f2a3953d62b47d62b",
+      "git_blob": "887e93b6089a832adc8d0658fd5bca65ef290a6c",
+      "bytes": 1228,
+      "lines": 47,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/utils.ts": {
+      "sha256": "9969d001cd04ede137b00c870cb818fdb884092c22f7976866dbf053fda7ef47",
+      "git_blob": "1b7bdbca475e07be74360740befead18f9ee3441",
+      "bytes": 1960,
+      "lines": 53,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/core/selectors.ts": {
+      "sha256": "3b70bf3fa7fc6ababa2564870575d9b4768201e3e6a5554362d2644a2ab4ee45",
+      "git_blob": "9c7489319f25270a86006726da3a607544325d35",
+      "bytes": 12980,
+      "lines": 370,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    },
+    "src/selector-packs/pack-v1.json": {
+      "sha256": "40e5b0ca34187a1c5a6a03da59b8d6f17d99c7d7c0b1db8ef1b31bab91cc3b3a",
+      "git_blob": "f0c334a3f58556f59410b34ab33f5acf825f8533",
+      "bytes": 7545,
+      "lines": 311,
+      "method": "Whole pinned source/configuration read; no browser actions executed."
+    }
+  },
+  "cumulative_assessed_blobs": 25,
+  "tracked_blobs": 230,
+  "findings": [
+    "Diagnostics.recordSelector stores first matched/fallback fields for a name and increments count only on later observations. Success-to-none transition is not reflected in selectorMatches. Source finding, not runtime reproduction.",
+    "browserDom finds first pack-matched element that actually scrolls, then document scroller fallback. scanView captures target once; no later target replacement or source generation check. harvestGridTiles default root remains document rather than captured scroll container. Changing-view mixing risk unqualified.",
+    "queryAll uses primary-or-first-fallback; queryAllUnion gathers every selector with identity deduplication. browser-grid constructs selector union directly but records mediaLink/thumbnail as primary based on aggregate result, so it does not identify actual fallback usage.",
+    "waitForDomQuiet observes whole document and requires at least one mutation before quiet success, with max timer. Dedup scan interface does not use this optional engine observer; its settling remains fixed polling.",
+    "Diagnostic collector caps20labels64selector entries, but individual sample string lengths are not bounded here. Issue URL builder truncates serialized JSON at8000characters; output may cease to be valid JSON and URL escaping can expand length. No issue was created.",
+    "Pack filenamev1containsversion5 and empirical release-validation claims. Entire current pack read including selectors and keyword arrays; those claims not independently validated against liveUI.",
+    "Utils waitUntil awaits arbitrary async condition before timeout reconsideration; timeout is not strict ceiling on condition duration. This helper is not used by the reviewed scan loop."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 11,
+  "limits": [
+    "25/230whole artifacts; no full repository or browser runtime qualification.",
+    "No production changes or speedup claims. Native pHash/ASAN remains deferred."
+  ]
+}
