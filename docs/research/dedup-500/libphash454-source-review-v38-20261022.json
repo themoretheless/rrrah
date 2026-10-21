@@ -1,0 +1,106 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_files_read": [
+    {
+      "path": "cmake/Config.cmake.in",
+      "sha256": "5595275d0b6fd507d77e59c0ec33842c5a7ec9918c8bad3ea7c8f6cee98d21f5"
+    },
+    {
+      "path": "cmake/libspng.pc.in",
+      "sha256": "1a1c414c10895b8b814fa121fac7692ecd4d2599a7dc434e649a8875649d66d0"
+    },
+    {
+      "path": "mkdocs.yml",
+      "sha256": "d4cf0d5225dcf06ba7a5f8352b6ee27236c1b19c2a8de91d97fab2f35fd2355b"
+    },
+    {
+      "path": "subprojects/benchmark_images.wrap",
+      "sha256": "bfd8fd8db0eebaf89ddd114af07df6bf67dd8cbc5f6845b18a67e5b1e6854770"
+    },
+    {
+      "path": "subprojects/fuzzing_corpora.wrap",
+      "sha256": "dcd4a748cc79e8e600ff43edb9acb86c837b59e07da726952f08d6ccabfcde89"
+    },
+    {
+      "path": "subprojects/libpng.wrap",
+      "sha256": "f77c6f5a505e3f91a40fc4e252fa91daa0b51dd09c2e725c558312bc7e5265bb"
+    },
+    {
+      "path": "subprojects/miniz.wrap",
+      "sha256": "7c0748876f203ce48118a7a40ba8411cd8f74c20587d653f8da7471bf64c3fd1"
+    },
+    {
+      "path": "subprojects/zlib.wrap",
+      "sha256": "533eeda6375fef242232db6ebf29efaaaaa310424e0c84de40b25f4eeecfaad3"
+    },
+    {
+      "path": "tests/crashers/meson.build",
+      "sha256": "a0d6a25f2bae18258ea1e424551bdad35a6308855ff7e336ad70f033f04fe478"
+    },
+    {
+      "path": "tests/images/PngSuite.LICENSE",
+      "sha256": "71e1f5bf865131b5d9996e76a78372146283e5089e50f900ae927a6458b62101"
+    },
+    {
+      "path": "tests/images/PngSuite.README",
+      "sha256": "a2853f2be68e460dcb9992819125b74503a01383e79f79a04b971ffa9d248544"
+    },
+    {
+      "path": "tests/ossfuzz.sh",
+      "sha256": "39dcfd61d79a2bc04bd0d2a7821b009aab693d9d76167a7b936406aa4f1e230e"
+    },
+    {
+      "path": "tests/spng.dict",
+      "sha256": "4acb87d2219841612e1b2c5dae7bfae0f8565c30b75f81e33de7fe2313e5d142"
+    },
+    {
+      "path": ".circleci/config.yml",
+      "sha256": "5cf27487342de5ce91ef09fae18cec63aa406e962d85972a5047bac0b4332872"
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "sha256": "2f85707c5fe09b7df6e54be71f5af720096847bd0103f21c8b9102267cd69708"
+    },
+    {
+      "path": ".github/workflows/ci-fuzz.yml",
+      "sha256": "3f5108e9a68c468ee25d32e609a4d97f33b33a78fa0ad4a69c8c8b9b4d2399e8"
+    },
+    {
+      "path": ".github/workflows/codeql-analysis.yml",
+      "sha256": "558041b48c3443db0311f19f87a0fd82b61201a41d43c4d800c004a87867eac3"
+    },
+    {
+      "path": ".github/workflows/on_PR_meson.yaml",
+      "sha256": "15c6090f3b9c3577c43c76fb78f292ff695b91d903cfda2e5a6bd212617accd4"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "c2fe0c098d9f5d72ba890b7d7333ca804b2b5d8ba57045e1367cf2e1ed0c61d8"
+    },
+    {
+      "path": ".gitlab-ci.yml",
+      "sha256": "269362c67a48c60c97ceecde1fe0100dc67c1f24883df36f4955460a50126fdf"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "df99ba25197a4028c1fdbb5473a03bd68b5e7a0ff80c5bf83c40a9dd204c0f13"
+    }
+  ],
+  "findings": [
+    "Read regression registry27 should_fail cases, seed dictionary, build/integration/CI/wrap configuration and PngSuite license/readme. No commands from these files executed.",
+    "PngSuite image permission notice permits use/copy/modify/distribution, copyright Willem van Schaik1996/2011; distinct from code BSD/libpng notices.",
+    "libpng1.6.37 and zlib1.2.13 archive/patch wraps record hashes; miniz2.2.0 tag. Benchmark and fuzzing corpora wraps revision=head, not frozen source identity.",
+    "CI defines Linux GCC/Clang, Windows MSVC/MSYS2, macOS/BSD and ARM jobs; presence is source intent, not observed passing jobs.",
+    "CI action branch/master references and external dependencies need separate reproducibility qualification. Secret environment variable names are templates, not retrieved credentials.",
+    "No new build/test/benchmark during shared resource window. Runtime27 regression cases and individual assets remain unqualified."
+  ],
+  "remaining": [
+    "Individual image and externalREADMEvisual review",
+    "Run27 regression and2misc expectations after resource window",
+    "Other three codec gitlinks"
+  ],
+  "full_review_count": 247
+}
