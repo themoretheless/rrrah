@@ -1,0 +1,77 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          3401,
+          4000
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          4000
+        ]
+      ],
+      "unread_ranges": [
+        [
+          4001,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated3401..4000 read, covering complete XXH64 and XXH3 vector selection. Compiled original pinned header with local clang -O2 for XXH64 consistency control.",
+  "findings": [
+    "XXH64 consumes32-byte stripes then8/4/1-byte tail pieces, adds total length and avalanches. Four accumulator lanes merge through additional round operations, unlike XXH32 merge.32-bit targets use rerolled loops; not executed here.",
+    "Streaming fills buffered stripe then consumes remaining full stripes and retains tail. Digest selects large-input merge at total_len>=32 and finalizes modulo32. Total64-bit length wrap is not exercised.",
+    "NULL+zero update returnsOK; reset zeroes state then initializes seed lanes. Canonical64 output swaps on little-endian then copies8 bytes; inverse reads big-endian.",
+    "XXH3 vector detection prefers SVE, then little-endian NEON, AVX512F, AVX2, SSE2, VSX/ZVector, LSX, scalar. Selection derives from build macros, not runtime CPU probing in this block.",
+    "Anti-autovectorization compiler guard in XXH64 is AVX512-specific and comments acknowledge platform dependence. No speed improvement inferred from optimization annotations."
+  ],
+  "executed_control": {
+    "cases": 172200,
+    "failures": 0,
+    "exit_code": 0,
+    "compiler": "clang -O2",
+    "lengths": "0..1024 inclusive",
+    "input_offsets": "0..7",
+    "seeds": [
+      "0",
+      "1",
+      "0xffffffffffffffff"
+    ],
+    "chunk_sizes": [
+      1,
+      15,
+      16,
+      17,
+      31,
+      64,
+      257
+    ],
+    "checks": [
+      "Every prefix stream digest equals single-shot.",
+      "Repeated digest and copied-state digest equal prefix.",
+      "Final digest equals single-shot.",
+      "Canonical roundtrip and exact8-byte big-endian representation.",
+      "NULL+zero update and NULL+zero one-shot equivalence."
+    ],
+    "harness_sha256": "c20bd70f7a4e8d4e83e3092c1878b263d71514ed90b7e3cbc9aac42e00ace229",
+    "independent_oracle": false
+  },
+  "limits": [
+    "4000/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "Same-implementation consistency is not independent correctness, allplatform, overflow, allocator failure or throughput proof. pHash/ASAN deferred."
+  ]
+}
