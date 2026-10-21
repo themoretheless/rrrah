@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import { readFile, mkdtemp, mkdir, writeFile, symlink, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join, relative, isAbsolute, basename } from 'node:path';
+import { stripTypeScriptTypes } from 'node:module';
+import { parseArgs } from 'node:util';
+const source = await readFile('.dedup-work/phashdedupe439-20261021/src/scan.ts','utf8');
+const { scanImages } = await import('data:text/javascript;base64,' + Buffer.from(stripTypeScriptTypes(source)).toString('base64'));
+const root = await mkdtemp(join(tmpdir(),'rrrah-scan439-'));
+try {
+ const scan = join(root,'scan'); await mkdir(scan); await mkdir(join(scan,'sub'));
+ await writeFile(join(scan,'image.PNG'),'synthetic bytes'); await writeFile(join(scan,'sub','nested.jpg'),'nested');
+ await writeFile(join(root,'outside.png'),'outside');
+ await symlink(join(root,'outside.png'),join(scan,'external.png'));
+ await symlink(join(root,'missing'),join(scan,'dangling.jpg'));
+ await symlink(join(scan,'sub'),join(scan,'linked-directory.png'));
+ const result = await scanImages(relative(process.cwd(),scan));
+ assert(result.length === 5 && result.every(p => !isAbsolute(p)));
+ console.log('PASS relative input returns relative paths, contrary to absolute-path documentation');
+ const names = result.map(p => basename(p));
+ for (const name of ['external.png','dangling.jpg','linked-directory.png']) assert(names.includes(name));
+ console.log('PASS extension filter includes external, dangling and directory symlinks');
+ const shallow = await scanImages(scan,{recursive:false});
+ assert.equal(shallow.length,4); assert(!shallow.some(p=>basename(p)==='nested.jpg'));
+ console.log('PASS recursive:false excludes actual child-directory contents');
+ const cli = await readFile('.dedup-work/phashdedupe439-20261021/src/cli.ts','utf8');
+ const start = cli.indexOf('parseArgs({') + 'parseArgs('.length;
+ const end = cli.indexOf('\n  });',start)+4;
+ const options = Function('return ('+cli.slice(start,end)+')')();
+ assert.throws(()=>parseArgs({...options,args:['folder','--no-recursive']}),{code:'ERR_PARSE_ARGS_UNKNOWN_OPTION'});
+ console.log('PASS documented --no-recursive rejected by original CLI parseArgs configuration on Node 24.19');
+ console.log('RESULT 4 passed; original scanner and extracted unchanged parse options; no CLI deletion executed');
+} finally { await rm(root,{recursive:true,force:true}); }

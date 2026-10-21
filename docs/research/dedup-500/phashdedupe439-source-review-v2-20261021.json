@@ -1,0 +1,37 @@
+{
+  "repository": "Pikatchu99/phash-dedupe",
+  "commit": "24d5426c5936ed5f7f59a4d79b883069cef8f8c9",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 17,
+  "tracked_blobs": 18,
+  "new_whole_files_read": {
+    "docs/index.html": {
+      "bytes": 12055,
+      "sha256": "8cf41acf237acef9287e57ed476457e01db28a4addf269cc074602206e57381e",
+      "git_blob": "d4008492d5b8921e165a0dab3f85fcd1c6e33caf",
+      "method": "Whole HTML source read; static French documentation; no browser rendering claimed"
+    }
+  },
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/phashdedupe439-scan-controls-20261021/run.mjs",
+    "log": "docs/research/dedup-500/phashdedupe439-scan-controls-20261021/run.log",
+    "passed": 4,
+    "failed_final": 0,
+    "method": "Original scanner after Node TypeScript stripping; real owned temporary filesystem; unchanged CLI parseArgs options extracted without executing CLI. Node 24.19.0."
+  },
+  "findings": [
+    "Relative root returns relative results despite absolute-path contract.",
+    "Extension-only scanner includes external-file symlink, dangling symlink, and directory symlink with an image extension; actual directory recursion is disabled correctly by recursive:false.",
+    "Documented --no-recursive rejected with ERR_PARSE_ARGS_UNKNOWN_OPTION by original CLI configuration on tested Node.",
+    "French HTML repeats unqualified low-threshold false-positive claim; flat-image counterexample already retained in v1.",
+    "Lockfile importer pins Sharp 0.35.3; earlier controls used bundled Sharp 0.35.5. Do not describe them as execution on exact locked dependencies."
+  ],
+  "remaining": [
+    "pnpm-lock.yaml (only first 65 lines inspected; full dependency inventory pending)"
+  ],
+  "limits": [
+    "Full source-review count remains 165/500. No production optimization accepted, full upstream tests or corpus qualification claimed.",
+    "Native pHash/ASAN remains deferred at user request.",
+    "Harness development corrected map(basename) callback arity and an extraction end offset before final passing run; these were harness errors, not upstream findings."
+  ]
+}
