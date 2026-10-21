@@ -1,0 +1,31 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/commands/google-photos-commands.test.ts": {
+      "sha256": "e90a9f4e66d152958bcb20248abefab25d469530eb8f61d44ec39a4a2df44c50",
+      "git_blob": "289d36efd1c6d8de89bfa5f42575c0b70f849e26",
+      "bytes": 18878,
+      "lines": 565,
+      "declared_it_calls": 19,
+      "method": "Whole source read in contiguous ranges 1-220 and 221-565."
+    }
+  },
+  "cumulative_whole_files_read": 63,
+  "tracked_blobs": 84,
+  "findings": [
+    "Tests import actual command script and drive registered message listener; unlike multi-keep local copies, command body is original. API calls and postMessage are mocked.",
+    "Pagination coverage includes quality field mapping, account URL prefix, empty/small/20137-item chunking, request IDs and timeout success/failure. No dateRange filter, equal watermark/new key or null-page partial-result test.",
+    "Large result assertion constrains data.length <=10000 but does not measure serialized message bytes despite comment about 64MiB. Synthetic short metadata does not prove arbitrary payload-size safety.",
+    "findMediaItemsResult constructs success true from any observed chunks, without verifying every index present or consistent totals. ordered.flat drops holes, so helper alone is not complete assembly validation.",
+    "Trash tests verify sequential batch calls, counts/progress and failure on first API call. They omit failure after prior successful batches and response-level partial success; no completed-key reconciliation proof.",
+    "Restore tests cover batching/progress only, not failure paths. The test labelled full trash integration still uses mocked API and captured window messages, not backend/browser transport.",
+    "Timeout fake timer test proves error response after 60 seconds, not underlying request cancellation."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Test source read only, not Vitest execution. No mutation functions or API calls executed in this step.",
+    "63/84 full tracked files read; no production library changes."
+  ]
+}
