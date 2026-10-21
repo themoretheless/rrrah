@@ -1,0 +1,45 @@
+{
+  "cases": {
+    "original": {
+      "loaded": true,
+      "width": 32,
+      "height": 24,
+      "rgb_fnv64": "a998ec264bb8b4bf",
+      "fixture": {
+        "bytes": 1301,
+        "sha256": "fa31ae4fbfdd05c952a237fde01f78c8f1e7a50740a908abd196767e7625ff13"
+      }
+    },
+    "missing_eoi": {
+      "loaded": true,
+      "width": 32,
+      "height": 24,
+      "rgb_fnv64": "a998ec264bb8b4bf",
+      "fixture": {
+        "bytes": 1299,
+        "sha256": "99ce1812873bdc52cd5f55caf8f4e4aced4f53c55f7bed347f13333ae1e8f1c8"
+      }
+    },
+    "missing_last10": {
+      "loaded": true,
+      "width": 32,
+      "height": 24,
+      "rgb_fnv64": "71c1810e257deff6",
+      "fixture": {
+        "bytes": 1291,
+        "sha256": "f0b045965d50dea885775867f5e2b6d1891b2edf1fca5d5c74c1fa13f5cd1bbe"
+      }
+    },
+    "header20": {
+      "loaded": false,
+      "width": 0,
+      "height": 0,
+      "rgb_fnv64": "cbf29ce484222325",
+      "fixture": {
+        "bytes": 20,
+        "sha256": "a30f31a6a61325012e8c25deb3bd9b59dc9a2b4350b2b18e3c02dca9a87fea0b"
+      }
+    }
+  },
+  "scope": "Original C stbi_load on authored Pillow JPEG and controlled tail truncations. FNV64 is only diagnostic RGB checksum, not exact duplicate admission or collision proof. No Zig hashes or decoder integrity guarantee."
+}
