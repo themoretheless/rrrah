@@ -1,0 +1,51 @@
+{
+  "scope": "Own duplicate-library selected-frame PNG decoding with explicit RGB primaries and gAMA=50000",
+  "test_source": "crates/rrrah-dedup/tests/png_primary_policy.rs",
+  "test_source_sha256": "75f952448ca101387d82149cb0a6ced3edcbb54aeaa26433f081e41c7e2b1728",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_primary_policy",
+  "result": {
+    "exit_code": 0,
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0
+  },
+  "new_case": {
+    "fixture_sha256": "ffac78da31bd3cb096cd1ca96263464a0ca19b5f9471059e74de39b52ee793fe",
+    "dimensions": [
+      2,
+      1
+    ],
+    "bit_depth": 16,
+    "color_type": 6,
+    "samples": [
+      [
+        4660,
+        32769,
+        65534,
+        16385
+      ],
+      [
+        4661,
+        32770,
+        65535,
+        16386
+      ]
+    ],
+    "oracle": "Each RGB channel (sample/65535)^2 within 1e-4, alpha sample/65535 within 1e-7; second pixel strictly greater in all four channels; strict missing-primary request fails; budget usage returns to zero. Fixture CRC and zlib decoded samples independently checked with Python."
+  },
+  "limits": [
+    "Current worktree includes concurrent uncommitted decoder/develop changes; not clean-HEAD qualification.",
+    "No all-platform or all-color-space claim; synthetic two-pixel PNG only.",
+    "No performance claim, ASAN or native pHash.org execution."
+  ],
+  "runtime_sources": [
+    {
+      "path": "crates/rrrah-decode/src/raster.rs",
+      "sha256": "0fbc16a2d5b782154146f38637b29b9848a30605643ea161adf0bec63ba29266"
+    },
+    {
+      "path": "crates/rrrah-develop/src/raster.rs",
+      "sha256": "1f92de172a3d4dee7456b0f446a36bbc78fced05f3aaa0645b307d5950f65afc"
+    }
+  ]
+}

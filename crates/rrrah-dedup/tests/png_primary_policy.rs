@@ -130,3 +130,50 @@ fn explicit_png_policy_applies_to_each_apng_selected_frame() {
         assert_eq!(budget.used(), 0);
     }
 }
+
+const PNG_RGBA16_GAMMA: &[u8] = &[
+    137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 2, 0, 0, 0, 1, 16, 6, 0, 0, 0,
+    164, 178, 163, 201, 0, 0, 0, 4, 103, 65, 77, 65, 0, 0, 195, 80, 0, 153, 181, 52, 0, 0, 0, 25, 73, 68, 65,
+    84, 120, 156, 99, 16, 50, 105, 96, 252, 255, 207, 129, 81, 200, 180, 129, 233, 255, 127, 7, 38, 0, 49,
+    57, 6, 15, 235, 226, 245, 33, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
+];
+
+#[test]
+fn explicit_png_policy_preserves_16_bit_color_and_alpha_precision() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("gamma16.png");
+    std::fs::write(&path, PNG_RGBA16_GAMMA).unwrap();
+    let budget = MemoryBudget::new(4 * 1024 * 1024);
+    let mut request = DecodeRequest::new(&path);
+    assert!(decode_selected_frame(&request, 2, &budget, || false).is_err());
+    request.png_assumed_rgb_primaries = Some([0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290]);
+    {
+        let frame = decode_selected_frame(&request, 2, &budget, || false).unwrap();
+        let view = frame.view(|| false).unwrap();
+        let samples = [
+            [0x1234_u16, 0x8001, 0xfffe, 0x4001],
+            [0x1235, 0x8002, 0xffff, 0x4002],
+        ];
+        let mut pixels = Vec::new();
+        for (x, sample) in samples.iter().enumerate() {
+            let rgba = view.rgba(x as u32, 0).unwrap();
+            for channel in 0..3 {
+                let expected = (f64::from(sample[channel]) / 65535.).powi(2);
+                assert!(
+                    (f64::from(rgba[channel]) - expected).abs() < 1e-4,
+                    "{x}: {rgba:?}, {sample:?}"
+                );
+            }
+            assert!((f64::from(rgba[3]) - f64::from(sample[3]) / 65535.).abs() < 1e-7);
+            pixels.push(rgba);
+        }
+        // These samples differ only in low bits: an 8-bit intermediate loses them.
+        for channel in 0..4 {
+            assert!(
+                pixels[1][channel] > pixels[0][channel],
+                "channel {channel}: {pixels:?}"
+            );
+        }
+    }
+    assert_eq!(budget.used(), 0);
+}
