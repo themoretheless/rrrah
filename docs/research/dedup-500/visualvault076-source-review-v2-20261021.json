@@ -1,0 +1,44 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 7,
+  "files": {
+    "crates/app/src/duplicates.rs": {
+      "bytes": 10312,
+      "sha256": "76633fecf82939db354616a0a86c3dc552f0452b8d7c7207181eac6f2667f034",
+      "git_blob": "9c01d4e8d23cf49ba4b63adb08aa1e092fa2da88",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "crates/ui/src/duplicate_detector.rs": {
+      "bytes": 8979,
+      "sha256": "9598b134151fc8d951989fd751b6a7891bf75538f086e0b0e320d9b7861edc31",
+      "git_blob": "e91b04b7cc3607ed2a7888a966d89d2f247fbeac",
+      "method": "Whole pinned original text read without truncation;Git blob verified"
+    },
+    "images/duplicate-detector-page.png": {
+      "bytes": 60877,
+      "sha256": "9590e74d47ebd3a211c10327e01449768fdd3b28f569a7d092c32713f5c1b80f",
+      "git_blob": "b68ea98f46f5536efbbc9db2301a72a185ce026c",
+      "method": "Original screenshot visually inspected at original resolution"
+    }
+  },
+  "new_runtime_controls": 2,
+  "cumulative_runtime_controls": 6,
+  "controls_script": "docs/research/dedup-500/visualvault076-controls-v2-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-controls-v2-20261021/run.log",
+  "control_scope": "Original complete truncate_path function extracted unchanged;authoredRustASCII/Cyrillicinput controls.No TUI/app runtime.",
+  "findings": [
+    "Normal start_duplicate_scan explicitlypassesfalse(fullhash),so prior quickhashblindspots are not normalTUIscan claims. Othercallerspending.",
+    "Selecteddelete allowsanyselectedindicesincludingfirst/all;bulkdelete skipsfirstpergroupandrequiresYconfirmation. Bothpasssavedpaths todelete_files withoutfreshness/keeperrevalidation. Staticflows,notTUIdeletionexecuted.",
+    "Bulkdeletefreedspacemessageusesentireoldwastedspaceevenpartialsuccess,andrescanthenreplacesmessage;sourceonly no realfreedblockclaim.",
+    "Original UItruncate_path computesbytecutandusesstrslice. ASCII80bytes shortens40;pathslash+30Cyrilliccharacters panicswithwidth40. Originalfunctionruntime,notfullUIlaunch.",
+    "Screenshot viewed:splitgroup/filepanes,one2filegroup,3.88MBwasted,checkboxes/keyboardhelp;bottomhelp visiblyclippedright. Stored screenshotdoesnotprovefreshTUIbehavior.",
+    "UI/modelindexgroup.files[0] assumesnonemptygroups;publicconstructorcancreateemptygroup. No malformedmodelruntimecontrol yet."
+  ],
+  "remaining_scope": "88artifacts includingscanner/cache/models/otherUI/tests/docs/config/visuals/lock.",
+  "limits": [
+    "6finitecontrols cumulative;originalworkspace/tests notrun. No productionchanges;globalfullcount205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}
