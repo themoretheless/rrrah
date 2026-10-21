@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_postrun_ui_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/ui/post-run/prompt.ts": {
+      "sha256": "d4cd2775bffa338bcc3cb4a7194e5a388b3d3832b10a5a89cd228eee4b069f0d",
+      "git_blob": "4306a2b842ad3ac4190565580295cf7e9eed3e86",
+      "bytes": 2963,
+      "lines": 74,
+      "method": "Whole pinned source read; no UIrender/network/storageactions."
+    },
+    "src/ui/pro-teaser/teaser.ts": {
+      "sha256": "a47f901beb31a9613f3d5d10a019e81b4b7aa5ba0bb306be8045424d0b4753db",
+      "git_blob": "6ecc651eea8feef3eef42e460d94689240d11f3b",
+      "bytes": 2359,
+      "lines": 54,
+      "method": "Whole pinned source read; no UIrender/network/storageactions."
+    },
+    "src/core/pro-moments.ts": {
+      "sha256": "46558fee93a661dd40c50336bc951b98f9672c35206cb4b006bba3da877d8858",
+      "git_blob": "913e6874ee7ab411ccf434f60f14873abea1edf4",
+      "bytes": 5943,
+      "lines": 137,
+      "method": "Whole pinned source read; no UIrender/network/storageactions."
+    }
+  },
+  "cumulative_assessed_blobs": 131,
+  "tracked_blobs": 230,
+  "findings": [
+    "PostrunpromptglobalDOMid prevents duplicatevisiblecards; dismissalremovesnode. Shareusesnavigator.sharethenclipboardfallback,AbortErrorreturnsquietly. No sharing/networkactionperformed.",
+    "Dryrunteaserdismissal keyedbyEnglishcountsLine,notrunidentity. Newrunwithsamecountsremainsdismissed; intentionalcomment saysdifferentcountsreshow. Do notadoptcountsascompletion/runidentity.",
+    "Provariantread-then-write canchooseconcurrently whenstoreempty; no serialization. Onlycopyvariant,notdedupcorrectness; notexecuted.",
+    "Date report plainEnglishhelperformatsen-US regardlessactivepopupLocale; callersmaylocalizeseparately. Thisfilealone notwholeUIlocalizationproof.",
+    "pro-moments marksSELF_SERVECHECKOUTfalseconsistentreadsiteconfig; URLconstructorsonly,notcheckoutavailability/correctnessproof."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "131/230wholeartifacts; no fullprojectapplicationqualification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
