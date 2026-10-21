@@ -1,0 +1,31 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_four_original_scan_controls",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 18,
+  "tracked_blobs": 230,
+  "source_sha256": "145cda5162654fd9746324a05ea1def276e83aa1046bb46685b2954ffce0d9f8",
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-scan-controls-v5-20261021/run.mjs",
+    "harness_sha256": "e4368a31281f559ee06fe3773a5ab8aa7e7fdfc4cc9166ed11133edaaebc5e24",
+    "log": "docs/research/dedup-500/googlephotos42-scan-controls-v5-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "method": "Original scan/phash modules type-stripped; one exact import suffix rewrite; injected synthetic ScanDeps, no DOM/network/deletion."
+  },
+  "observations": [
+    "With pollMs1,settleMs1,endAttempts3 fixed-bottom grid terminates at tick4 with cancelledfalse; second tile available at tick5 is omitted. Demonstrates finite observation boundary, not wrong configured idle termination.",
+    "Initial expired URL returnsnull; subsequent harvests expose fresh URL for sameid; only expired requested,failed1,items0. Seen-by-id state suppresses refreshed URL retry.",
+    "Final done progress callback aborts signal, but cached cancelledfalse and one item are returned.",
+    "Pre-aborted call harvests once and reports found1,cancelledtrue,items0; hash function never invoked."
+  ],
+  "cumulative_original_function_controls": 11,
+  "limits": [
+    "These are authored synthetic controls against original functions, not upstream Vitest tests or real browser qualification.",
+    "No extra whole files read; repository remains18/230.",
+    "No production optimization or speedup accepted. Native pHash/ASAN remains deferred."
+  ]
+}
