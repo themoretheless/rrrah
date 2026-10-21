@@ -1,0 +1,71 @@
+{
+  "repository": "TorresAndy/4Hash",
+  "commit": "c1f2b7730b226797e1a0947e3ced5f566bd57cf9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 26,
+  "cumulative_assessed_blobs": 21,
+  "new_whole_files_assessed": {
+    "LICENSE": {
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "git_blob": "94a9ed024d3859793618152ea559a168bbcbb5e2",
+      "method": "Whole normalized-byte equivalence to previously fully read GPLv3 COPYING from pinned quodlibetor234; no new license interpretation"
+    },
+    "database/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Verified zero-byte tracked initializer"
+    },
+    "hamming/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "method": "Verified zero-byte tracked initializer"
+    }
+  },
+  "compiled_inventory": {
+    "__pycache__/frameExtract.cpython-35.pyc": {
+      "bytes": 2633,
+      "sha256": "5a1dfbc78f65b91c57a86375925d9f405bcfaeed7dcefaf4a66c7f32c5b71149",
+      "magic_hex": "170d0d0a",
+      "semantic_review_complete": false
+    },
+    "frames.pyc": {
+      "bytes": 2442,
+      "sha256": "d8614938221232691b18e6df90c0117e13ce2a87083297091c411154e4d18964",
+      "magic_hex": "03f30d0a",
+      "semantic_review_complete": false
+    },
+    "perceptive.pyc": {
+      "bytes": 1285,
+      "sha256": "dd9aa57a5e822f70ad8bd595c13dc4e72790f94f42d969321ddf8de8701335ea",
+      "magic_hex": "03f30d0a",
+      "semantic_review_complete": false
+    },
+    "timing.pyc": {
+      "bytes": 1289,
+      "sha256": "4a916ad532b300fe123c05699e1ddedd94d2045d098c9ad155fcffbae5f72226",
+      "magic_hex": "03f30d0a",
+      "semantic_review_complete": false
+    }
+  },
+  "config_inventory": "mysql mapping with host,user,password,database fields; values not echoed, no connection attempted. Structural inventory only, not counted whole artifact assessment.",
+  "local_validation": {
+    "log": "docs/research/dedup-500/fourhash424-local-sequence-rerun-20261021.log",
+    "passed": 8,
+    "failed": 0,
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test sequence",
+    "scope": "Existing original sequence suite; changed lastframe, completeordinalcoverage, all orderedsubsets, cancellation, rationaltiming and independent timelineoracle. No new tests needed for already-covered cases."
+  },
+  "remaining": [
+    "database/config.yml (structure inventoried only)",
+    "four incompatible historic pyc semantic/correspondence reviews"
+  ],
+  "license": "GPLv3 whole text verified by normalized equivalence; no foreign production code adopted.",
+  "limits": [
+    "21/26whole artifacts assessed; fullreviewcount170/500unchanged.",
+    "Compiled headers/hashes do not prove correspondence to source or complete binary review. xdis not installed in inspected Python environment.",
+    "Eight local tests are sequence abstraction validation, not video-decoder/runtime/corpus proof. NativepHash/ASANdeferred."
+  ]
+}
