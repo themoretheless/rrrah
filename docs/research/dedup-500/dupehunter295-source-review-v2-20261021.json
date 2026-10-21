@@ -1,0 +1,63 @@
+{
+  "repository": "amasen02/dupehunter",
+  "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
+  "whole_repo_complete": false,
+  "tracked_blobs": 52,
+  "cumulative_assessed_blobs": 13,
+  "files": {
+    "src/actions.ts": {
+      "bytes": 3378,
+      "sha256": "0e1d56070213ce1215766ff00cdd4d8df6e653fde8ec7d86492d8bc9aecbc65c",
+      "git_blob": "3c1ecfdd7356e090993170b7aef1ecc1adbfa5c7",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/concurrency.ts": {
+      "bytes": 877,
+      "sha256": "c269d88119b7099a402882b57aaaf2bfe0811a65454191f2964a8346e0469c9a",
+      "git_blob": "5f1d7b086870a4ab48cd77ee22a8f9044b48ae51",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/array-utils.ts": {
+      "bytes": 386,
+      "sha256": "7499ceaf2a880b9b549840084aacc0ad600e185ba7a5723ae7100d6b7f64e989",
+      "git_blob": "add62012629ac637a5714be71adec94567a1b120",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "src/glob.ts": {
+      "bytes": 1078,
+      "sha256": "1f85fd40a3889d1a0218adca7fcecbe623c906f8d225190b68529ab10a509559",
+      "git_blob": "a53e15ae4a618e7a9a06185f5b54cca61a4a72f2",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/actions.test.ts": {
+      "bytes": 5435,
+      "sha256": "8c9c16af8f17eef2892a8129d9afc9b82cd9e6aa13e67264dd11cbe87551dff2",
+      "git_blob": "9431dab144d52e85551b8ea2cc73466caa9cffd2",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    },
+    "test/concurrency.test.ts": {
+      "bytes": 1950,
+      "sha256": "024da98c078ba23172720a15fc58b2a7e16019dfc1f769ec129412cd305efa06",
+      "git_blob": "a625b9e731fbb1acbc18a4fb7db4db9eb08d8c42",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 3,
+  "cumulative_runtime_controls": 7,
+  "controls_script": "docs/research/dedup-500/dupehunter295-controls-v2-20261021/run.mjs",
+  "controls_log": "docs/research/dedup-500/dupehunter295-controls-v2-20261021/run.log",
+  "upstream_tests": "6 original concurrency tests pass,0fail0skip",
+  "upstream_log": "docs/research/dedup-500/dupehunter295-concurrency-tests-20261021.log",
+  "control_scope": "Original source modules execute with Node22 strip-types and explicit loader mapping relative .js imports to original .ts within pinned cache. Real crypto/filesystem, owned temporary dirs. No source algorithm changes.",
+  "findings": [
+    "Original findDuplicates detects two4byte equal files; planActions keepsa. Rewriteb to different4bytes after plan; deleteDuplicates removesb with no error; separate hardlinkDuplicates run replaces rewrittenb witha bytes/inode with no error. Deterministic post-scan freshness counterexample, not mutation during hashing or probabilistic race frequency.",
+    "hardlink action first creates temporary link then renames, preserving original when link fails; it does not validate current content/identity of target or keeper. Original tests cover success/missing-keeper preservation but not post-scan content changes.",
+    "NaN concurrency limit passes limit<1 check, launches0workers and returns length2 sparse array for2inputs; authored finite control. CLI parser validation still pending.",
+    "Initial harness incorrectly expected0.5 accepted; actual source rejects it with RangeError as designed. Failure log retained and harness narrowed toNaN, no0.5 defect claim.",
+    "Wildcard matching is case-insensitive single-segment regex with global unbounded pattern cache; source-only policy/resource assessment."
+  ],
+  "remaining_scope": "39 artifacts including scanner/dedupe tests,CLI,README,workflows and lock.",
+  "limits": [
+    "No production adoption; local library fixes still require mapping against existing guarantees. Global full count202/500 unchanged. Native pHash/ASAN deferred."
+  ]
+}

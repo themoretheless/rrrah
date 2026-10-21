@@ -2,7 +2,7 @@
   "index": 295,
   "repository": "amasen02/dupehunter",
   "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
-  "review_scope": "Partial pinned7/52 whole artifacts read;4 actual original hasher controls with Node22 strip-types. Full scanner/actions/upstream tests pending.",
+  "review_scope": "Partial pinned13/52 artifacts whole-read;7 finite controls, original scan-to-action stale plan reproduced on own temp files;6 original concurrency tests pass via Node22 strip-types/import resolver.",
   "decision": "shortlist",
   "finding": "Hardlink-aware file scanner/SHA256 hasher and dedupe tests; MIT exact-stage design candidate.",
   "available_source_evidence": [
@@ -60,7 +60,7 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 12,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -88,6 +88,10 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/dupehunter295-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/dupehunter295-source-review-v2-20261021.json"
     }
-  ]
+  ],
+  "upstream_test_scope": "Only6original concurrency tests executed, allpass; full suite pending."
 }

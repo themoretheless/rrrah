@@ -1,0 +1,10 @@
+PASS invalid concurrency silently returns holes without work NaN
+file:///Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupehunter295-20261021/src/concurrency.ts:11
+    throw new RangeError(`concurrency limit must be >= 1, got ${limit}`);
+          ^
+
+RangeError: concurrency limit must be >= 1, got 0.5
+    at runWithConcurrencyLimit (file:///Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupehunter295-20261021/src/concurrency.ts:11:11)
+    at file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupehunter295-controls-v2-20261021/run.mjs:12:33
+
+Node.js v22.23.3
