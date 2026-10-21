@@ -1,0 +1,35 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/videocontext.cpp": {
+      "sha256": "f9aee6aaa0e8ba13d5c67c3fb8743244754124b955f81cefd3be7b3716f3c2cb",
+      "git_blob": "0b8c725149176b50ee6b155ccb1615348499182b",
+      "bytes": 76516,
+      "lines": 2337,
+      "method": "Whole pinned source cumulatively read: v34/v35 covered1630-2337; this step1-1629. Previously partial file now counts once."
+    }
+  },
+  "cumulative_assessed_blobs": 110,
+  "tracked_blobs": 616,
+  "findings": [
+    "frameGrab cancellation checked after open and after seek, not passed into blocking open/seek/read internals. Missing requested frame beyond estimated fps*integerduration falls back auto position, so returned image is not unconditional requested-frame proof.",
+    "Formats/codecs listing explicitly warns entries may not be available for indexing. Static hardware family tables and preflight check without device creation cannot certify physical decode support or throughput.",
+    "initAccel bool function returns -3 on avcodec_parameters_to_context error, which converts to true. Caller can treat this error as successful acceleration setup with outCodec unset. Source-level failure trace, no native device/error injection.",
+    "Accelerator option parser indexes kv[1] after split without checking two elements; malformed options require validation before this helper. No invalid-memory/ASAN tests performed.",
+    "Software avcodec_open2 failure frees codec+format but does not return there, continuing frame allocation and videoStream access. Potential false-open/invalid-lifetime path traced statically, not executed.",
+    "FirstPTS probing scans up to5 video packets across streams before selected stream chosen; first chosen video stream need not match all sampled packet timestamps. Frame rate is nominal r_frame_rate; no VFR/timing correctness proof.",
+    "Missing nb_frames estimate divides duration seconds by frame rate, instead of multiplying; source value appears dimensionally inconsistent. No caller use or actual frame-count effect newly demonstrated.",
+    "Software fast mode enables skip_loop_filter all, iframe mode skips frames by codec list, hardware success forces threads1/iframesfalse/lowresfalse. Decoder recipes differ; no software/hardware descriptor parity or universal recall established.",
+    "Pixel wrappers produce8bit grayscale or BGR/RGB24, copy data using supplied strides, and assume compatible upstream formats. No HDR/color-management/full-presentation equivalence inferred.",
+    "initFilters has cleanup guard for partial graph failure, but allocations of graph/inout/parameters/frame are not uniformly null checked before dereference/use. No allocation fault reproduction.",
+    "Hardware initial decode followed by rewind flushes codec buffers, but filter graph state/reset needs runtime parity controls. Error assignment in rewind condition captures boolean comparison rather than original negative code, reducing diagnostic detail."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "110/616 assessed:109 whole text/source plus one PNG visual. main.cpp and qtutil.cpp remain partial.",
+    "27 previous isolated original-body/header controls and one independent counterexample unchanged; no complete cbird/FFmpeg/hardware test.",
+    "No production changes or speedup claim. Native pHash/ASAN remains deferred."
+  ]
+}
