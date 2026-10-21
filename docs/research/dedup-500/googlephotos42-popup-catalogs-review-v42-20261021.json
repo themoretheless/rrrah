@@ -1,0 +1,59 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_four_complete_popup_catalogs_with_structural_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/popup/i18n/locales/de.ts": {
+      "sha256": "77b5ae505cdcae8d4e497fac09137294d306a7403135276994b5a30ada9af233",
+      "git_blob": "da1eb8ea002353704c0481a51f88f691db71ac30",
+      "bytes": 6694,
+      "lines": 183,
+      "method": "Whole pinned catalog text read; type-stripped original data object loaded for structural check."
+    },
+    "src/extension/popup/i18n/locales/es.ts": {
+      "sha256": "1d4769c4b6f76d18c4b37a249167f3f23c861924820cc992611dc968030aa1c7",
+      "git_blob": "4bdb968af15f04159390c32db867167cf8180352",
+      "bytes": 6561,
+      "lines": 183,
+      "method": "Whole pinned catalog text read; type-stripped original data object loaded for structural check."
+    },
+    "src/extension/popup/i18n/locales/fr.ts": {
+      "sha256": "6300af0cb9996e247f2b386034288c5528c611b5dc9fc81628fd54997260135c",
+      "git_blob": "7b31c75664a0be312b07d18833f4571727cbdb46",
+      "bytes": 6841,
+      "lines": 183,
+      "method": "Whole pinned catalog text read; type-stripped original data object loaded for structural check."
+    },
+    "src/extension/popup/i18n/locales/it.ts": {
+      "sha256": "5787a3a0cc6e6a8665b1b08393ef38daa13ac498f8e2bfa6ec82850b308acf89",
+      "git_blob": "1458566a5964c58d3208d1522c217e025545ea96",
+      "bytes": 6420,
+      "lines": 183,
+      "method": "Whole pinned catalog text read; type-stripped original data object loaded for structural check."
+    }
+  },
+  "cumulative_assessed_blobs": 154,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-popup-catalog-controls-v42-20261021/run.mjs",
+    "harness_sha256": "de0ac46c8309e65ef256f626e457e4de633d9f65b4d501308b5d544fdb3ae722",
+    "log": "docs/research/dedup-500/googlephotos42-popup-catalog-controls-v42-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "keys_each": 135,
+    "method": "Five original catalogobjects type-stripped andimported; fourlocalesvsEnglish exactleafkeysets,nonemptyvalues,placeholdermultisets. No DOM/fullVitest."
+  },
+  "findings": [
+    "de/es/fr/it each135nonemptyleaves andexactEnglishplaceholdermultisets. This confirmsstructuralcoverageoftheseobjects,nottranslationaccuracy/functionalclaims.",
+    "Longpresethints/reviewnotes/procopy presentinallfour; fixedwidthpopuprequiresrenderedlayoutverification. No newvisualqualification.",
+    "Translations repeatconfidence/completecopywording fromoriginal; localallpair/sourceidentityrequirementsstillindependentofcopy.",
+    "Remainingnl/pt/ja/zhcatalogsnotcountedreadorvalidatedyet."
+  ],
+  "cumulative_original_function_controls": 38,
+  "limits": [
+    "154/230wholeartifacts; fourcatalogchecks areauthoredstructuralcontrols,notupstreamsuite.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
