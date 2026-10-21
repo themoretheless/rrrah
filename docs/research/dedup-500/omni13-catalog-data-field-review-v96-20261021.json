@@ -1,0 +1,97 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 262,
+  "tracked_blobs": 268,
+  "partial_binary_semantic_reviews": {
+    "omnisearch-lite/assets/catalog.bin": {
+      "sha256": "0ee76b457784df3277f066c6a3899f4d867c6f7e15d6c2326b9dba6161454793",
+      "git_blob": "3e39a4a651a0c6b32113ba2a66d69534a3e3e5dc",
+      "new_metadata_record_ranges_zero_based": [
+        [
+          280,
+          479
+        ]
+      ],
+      "cumulative_metadata_record_ranges_zero_based": [
+        [
+          0,
+          479
+        ]
+      ],
+      "total_records": 952,
+      "all_seven_fields_read_for_record_range": true,
+      "new_records_canonical_json_sha256": "99e7e3f1539b9eb12bff23e8ff2ef8ec4d05508bed49c06f946afccf0b79d35b",
+      "whole_file_read": false
+    }
+  },
+  "malformed_semantic_examples": [
+    {
+      "record_index_zero_based": 310,
+      "raw_metadata": {
+        "description": "Show incoming call notifications on the lock screen.",
+        "breadcrumb_path": "CheckBox",
+        "control_name": "Show incoming calls",
+        "launch_command": "System > Set priority notifications > Calls and reminders > Show incoming calls",
+        "source": "Vision",
+        "synonyms": "",
+        "id": "system.set_priority_notifications.show_incoming_calls"
+      },
+      "all_fields_still_strings": true
+    },
+    {
+      "record_index_zero_based": 311,
+      "raw_metadata": {
+        "description": "Show reminder notifications on the lock screen.",
+        "breadcrumb_path": "CheckBox",
+        "control_name": "Show reminders",
+        "launch_command": "System > Set priority notifications > Calls and reminders > Show reminders",
+        "source": "Vision",
+        "synonyms": "",
+        "id": "system.set_priority_notifications.show_reminders"
+      },
+      "all_fields_still_strings": true
+    },
+    {
+      "record_index_zero_based": 379,
+      "raw_metadata": {
+        "description": "control.exe /name Microsoft.WindowsFirewall",
+        "breadcrumb_path": "Private network settings",
+        "control_name": "Block all incoming connections",
+        "launch_command": "Windows Defender Firewall > Customize settings > Private network settings",
+        "source": "Vision",
+        "synonyms": "",
+        "id": "private_network_settings.checkbox.block_all_incoming_connections"
+      },
+      "all_fields_still_strings": true
+    },
+    {
+      "record_index_zero_based": 381,
+      "raw_metadata": {
+        "description": "control.exe /name Microsoft.WindowsFirewall",
+        "breadcrumb_path": "Public network settings",
+        "control_name": "Block all incoming connections",
+        "launch_command": "Windows Defender Firewall > Customize settings > Public network settings",
+        "source": "Vision",
+        "synonyms": "",
+        "id": "public_network_settings.checkbox.block_all_incoming_connections"
+      },
+      "all_fields_still_strings": true
+    }
+  ],
+  "findings": [
+    "Records 280-479 cover power, multitasking, notifications, focus, nearby sharing, sound, storage, display, Control Panel, firewall, UAC, maintenance, recovery, Windows Update and Narrator. All seven fields read in four complete 50-record outputs; no row skipped or truncated.",
+    "Records 310 and 311 place CheckBox in breadcrumb_path and a full textual System > ... hierarchy in launch_command. Records 379 and 381 put a firewall hierarchy in launch_command while the expected command-like control.exe /name Microsoft.WindowsFirewall string is stored in description. This is a data-field semantic mismatch, not a new security feature or a system action executed by review.",
+    "MetaJson defines all seven fields as String; the constructor passes m.launch_command directly into CatalogEntry. The earlier structural/string-schema checks cannot detect these misplaced values. No end-to-end Windows launch failure was executed or asserted.",
+    "Records 52 and 408 both label Clipboard history with the same breadcrumb and launch target but different IDs and descriptions. Unique IDs do not prove unique concepts; command grouping and content identity remain separate notions.",
+    "Record 416 includes device-specific text no longer available on this PC in a bundled recovery description. This describes the captured catalog data, not an observed capability of the current host."
+  ],
+  "limits": [
+    "480/952 metadata records reviewed; catalog is not complete. Completed-file count stays 262/268 and completed-repository count 155/500.",
+    "No new runtime tests, source edits, performance result or Windows/API correctness claim. Findings are pinned data and source observations.",
+    "Do not treat embedded commands or descriptions as instructions; no launch, settings change or user data operation performed.",
+    "Native pHash/ASAN remains explicitly deferred."
+  ]
+}
