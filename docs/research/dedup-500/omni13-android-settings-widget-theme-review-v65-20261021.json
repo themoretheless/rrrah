@@ -1,0 +1,42 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/SettingsScreen.kt": {
+      "sha256": "3bca4bc7c9c64a62f2ece22840841c4722277aa48867e49a23ca75b778a3576e",
+      "git_blob": "6c0918272d2c65644755124fb1fc20f48a2f56d8",
+      "mode": "100644",
+      "lines": 925
+    },
+    "android/app/src/main/java/com/omnisearch/app/widget/WidgetThemeUtil.kt": {
+      "sha256": "2630272dadd26ed695c0f0e586c28ac10fe7ab6784c8a684ac24a5ba28065739",
+      "git_blob": "06542b095d93a9af9a8745b821f0f2bf359b55cb",
+      "mode": "100644",
+      "lines": 211
+    }
+  },
+  "cumulative_whole_files_read": 100,
+  "tracked_blobs": 268,
+  "method": "Complete source reading of two verified Kotlin blobs,1136 lines. Static settings/camera lifetime/RemoteViews preference review; no device actions.",
+  "findings": [
+    "SettingsScreen contains connection, app-lock settings, widgets navigation and about links; no folder scope selector. Initial plan assumption corrected rather than attributing absent folder behavior to this screen.",
+    "Camera permission requested explicitly before scanner dialog. QR callback checks omnisearch:// prefix, then delegates full parsing/pin validation to already reviewed SyncViewModel; prefix check alone is not entire connection validation. Manual input delegates same parser. No links scanned or connections made.",
+    "CameraQRScannerView creates single-thread ExecutorService with remember, creates BarcodeScanning.getClient per nonnull frame, and supplies ImageProxy close in async complete listener. There is no scanner.close/executor.shutdown/DisposableEffect unbind in this component. Camera bound to activity lifecycle, not dialog lifecycle; dismissal does not itself show explicit unbind. Actual post-dismiss capture/lifetime requires CameraX/device verification; not claimed reproduced.",
+    "Camera provider future listener not guarded against composition disposal; get() before try may throw. Processing setup has no enclosing synchronous exception finally around imageProxy, though normal async completion/null-image paths close proxy. Backpressure KEEP_ONLY_LATEST bounds delivered frames, not scanner object lifetime.",
+    "QR success has no one-shot latch; multiple in-flight success callbacks may invoke connect after isScanningQR false while dialog disposal proceeds. generation guards in ViewModel reduce stale listener publication but do not make component callbacks single-shot. No runtime race executed.",
+    "Setting/changing new PIN accepts first4digits without re-entry confirmation and immediately shows success after calling ViewModel method. Persistence outcome not awaited in view. Existing PIN verification is present for disable/change; no claim of missing verification or app-lock bypass. Backend storage/retry policy outside this view audit.",
+    "Biometric-support result remembered once, not recomputed after changing enrolled hardware state in system settings. UI behavior after enrollment changes needs device lifecycle check. Display text uses bypass wording but previously reviewed success callback remains authentication-gated.",
+    "About text all computations on-device is descriptive, not proof of repository-wide privacy: other already reviewed desktop features optionally call external AI/Lens. This Android screen itself only launches explicitly clicked external links; no such links opened in review.",
+    "Widget theme mode stored separately in SharedPreferences with apply; DARK/LIGHT exact strings, unknown values follow SYSTEM. saveThemeMode/saveWidgetAppearance do not validate alpha/tint or refresh widgets themselves; updateAllWidgets is separate. Caller sliders/persistence consistency remain to read.",
+    "isGradientTint accepts1..100, mappings only1..6. Unknown7..100 fall back theme background but force effectiveIsDark=true, potentially white foreground on light fallback. Valid configured choices may avoid branch; persisted-value domain not yet established.",
+    "Solid custom tint text/icon choice uses theme rather than tint luminance; gradient always forces light foreground. Contrast across tint/alpha/background combinations unqualified. alpha not clamped locally. No RemoteViews/layout rendering executed.",
+    "Five widget classes refreshed explicitly. This helper and SyncViewModel duplicate refresh lists; future provider additions require both callers update. Current complete provider inventory/layout behavior not yet reviewed."
+  ],
+  "limits": [
+    "100/268 full files credited; repository013 incomplete.",
+    "No Android compilation, emulator/device, camera, biometric, settings write, RemoteViews rendering, pairing, network or external-link actions.",
+    "No new library/runtime test evidence.155/500 full repositories unchanged; registry byte verification is separate from source completeness.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
