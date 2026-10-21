@@ -1,0 +1,44 @@
+{
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "example/example-website/src/routes/+page.svelte",
+      "lines": 245,
+      "sha256": "971f894372af3ad11bc603061c2eac755a98fb9a07c02e5175561b97ed89c47a",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/routes/features/+page.svelte",
+      "lines": 344,
+      "sha256": "826b1fdeae36a83efa6457dc1bad3082221acc6a1014fa13d49ee817a501a113",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/routes/+layout.svelte",
+      "lines": 510,
+      "sha256": "92611a20cf9f07171a63bbf3bdb080a38752ffca89813a194ec2d98d02e440eb",
+      "git_blob_verified": true
+    },
+    {
+      "path": "example/example-website/src/app.css",
+      "lines": 378,
+      "sha256": "888fb9e864d1da4a77f76ef7ab07790a7d8ea3f9e06f9be78510ec227a6d6fd6",
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "All remaining main/layout/features pages and CSS read whole; all tracked site source now read. Visual browser rendering still unqualified.",
+    "Performance comparison displays hardcoded speed/accuracy/memory/robustness scores (e.g. pHash95 accuracy); no benchmark or dataset is computed by this page. Do not treat scores as measured evidence or import recommendations as validated policy.",
+    "Features page pHash complexity O(n log n) does not describe pinned four-nested-loop DCT as image side grows; rotation/crop robustness and 1-10 distance advice lack recipe-specific corpus evidence here.",
+    "Layout continuously updates decorative curves through requestAnimationFrame; CSS reduced-motion suppresses selected transforms/animations but does not stop JS curve update loop. Source observation, not measured performance claim.",
+    "Page examples and decoration contain illustrative hashes, percentages and DCT intensity constants; these are not golden vectors or runtime output. No production code copied or changed."
+  ],
+  "remaining": [
+    "Four structured demo datasets and package lockfile review",
+    "Five tracked image/vector assets plus external visuals",
+    "Original Dart runtime and independent algorithm vectors"
+  ],
+  "full_review_count": 247
+}
