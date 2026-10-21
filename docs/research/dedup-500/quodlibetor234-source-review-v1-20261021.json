@@ -1,0 +1,77 @@
+{
+  "repository": "quodlibetor/dedupe",
+  "commit": "ad5e0430a376285af26a22f2296d26323692767e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".gitignore": {
+      "sha256": "5379717758697cf0969f91673c26abbd980d56c7bf11cc21567955feee7c19cc",
+      "git_blob": "35b2cfe173c841551505170340d6a219fa9dcfa5",
+      "bytes": 62,
+      "lines": 7,
+      "method": "Whole pinned text/source read without truncation."
+    },
+    "MANIFEST.in": {
+      "sha256": "cce4c349a6af002df602d2494b26a8d295673f69eed56013a18b77f7f506e839",
+      "git_blob": "4a204275a34ec001df35d48ac13aecaf943b2f38",
+      "bytes": 65,
+      "lines": 3,
+      "method": "Whole pinned text/source read without truncation."
+    },
+    "README.rst": {
+      "sha256": "153cdafde2f12069d58840e080d02d4ab7259694813a5310c393dfe41e2ae696",
+      "git_blob": "fda50d163a3277f898e1a3b0038f803131b35283",
+      "bytes": 4885,
+      "lines": 139,
+      "method": "Whole pinned text/source read without truncation."
+    },
+    "TODO": {
+      "sha256": "b0aa273842e25bf29fa5b3c5e90270c19c0fd71ee821abbdff4dc9be15f692d4",
+      "git_blob": "c6c7f66cc49fa2f9e2cba7ae1814e7f1b28379b6",
+      "bytes": 454,
+      "lines": 17,
+      "method": "Whole pinned text/source read without truncation."
+    },
+    "dedupe.py": {
+      "sha256": "4d6fb16b3d19dcd0501b9b3f4e20c0d7c8976119e6f260f93d23e160a8dca0bd",
+      "git_blob": "f7efacdf0ac1259790561e55d1b420bfc37a0b03",
+      "bytes": 7587,
+      "lines": 243,
+      "method": "Whole pinned text/source read without truncation."
+    },
+    "setup.py": {
+      "sha256": "ccba3df33555261d1a99ea83c3038e389f40ac7cea3c745cc6926cb8a7f361f1",
+      "git_blob": "80aab4fe877e2bf0106270a2aa552e25afc32d38",
+      "bytes": 1174,
+      "lines": 36,
+      "method": "Whole pinned text/source read without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 6,
+  "tracked_blobs": 9,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/quodlibetor234-controls-v1-20261021/run.py",
+    "sha256": "704eae5543beb72036bdc4ba77934868cc243a3295c6b5723faa231895837a1d",
+    "log": "docs/research/dedup-500/quodlibetor234-controls-v1-20261021/run.log",
+    "passed": 6,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Python2source converted via Python3.9lib2to3; selected originalSong/NotASong/add_song AST plusconstants. Explicit Python2bytes-to-Python3str returnboundary adaptation, syntheticmutagen/path/files predicates. DefaultPython3.15lacks2to3; firstadaptermissedisfile corrected. No originalwalk/main/editor/delete/setup executed."
+  },
+  "findings": [
+    "Formatted firstartist-album-title key collides for(A - B,C,D)vs(A,B - C,D); originaladd_song merges. Different paths/types withsame tagsgroup withoutcontentcomparison; secondaryartistvaluesignored.",
+    "Repeatedsamepathcountsduplicate; missingartistomitted. No physicalaliasdedupe or audio/pixel identity proof.",
+    "READMEdocuments duplicates.m3u butactualmainwritesduplicates.txt. setupentrypointdedupe:main expectsargsobject butconsoleentrypointnormallycallswithnoargs; source-level mismatch, notinstalledCLIexecution.",
+    "MANIFEST.in references COPYING.LESSER.LESSER absentfromtree. READMEclaimsGPL3orlate whereas setupclassifierLGPLv3; fulllicensefilesnotyetread, no settledcopyingpermission inference.",
+    "Deletebranch readsusereditablepathlist, rstrip changestrailingwhitespace, usesos.unlinkfordirectorycleanup. Staticobservationsonly; no deletion, realfilesystem, editor or shellcommands executed.",
+    "Projectexplicitlyexcludescontentmatching; algorithmnotappropriateasexactfile/audioidentity authority. Preserveasmetadatareference only, noforeignsourceadoption."
+  ],
+  "remaining": [
+    "COPYING",
+    "COPYING.LESSER",
+    "distribute_setup.py"
+  ],
+  "limits": [
+    "6/9wholefiles;notfullrepositoryreview yet;globalfullreview161/500unchanged.",
+    "No actualmutagen/media/Python2/packaging/CLI/platformqualification or productionoptimization. NativepHash/ASANdeferred."
+  ]
+}
