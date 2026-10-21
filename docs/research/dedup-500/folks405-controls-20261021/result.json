@@ -1,0 +1,20 @@
+{
+  "source_sha256": "f4711bd12620fc540a33852b08a77775c77a4b57c5dd6616a90b3113648a92e9",
+  "original_upstream_suite": {
+    "compiler": "cc -std=gnu11",
+    "test_functions_passed": 6,
+    "exit_code": 0,
+    "scope": "Original pHash.c and test_phash.c compiled unchanged, Apple ARM64."
+  },
+  "additional_controls": {
+    "zero_dimension_create_status": 0,
+    "hash_size_one_validate": 0,
+    "hash_size_one_compute": 5,
+    "neon_unwritten_coefficients": 48
+  },
+  "method": "Harness includes original pHash.c, preinitializes all64 output coefficients to sentinel and invokes original static NEON transform on zero input. No uninitialized-memory read needed in control.",
+  "limits": [
+    "No ASAN, original aetilius/pHash or deferred native backend execution.",
+    "Default32 transform used by upstream tests differs from8 NEON control."
+  ]
+}
