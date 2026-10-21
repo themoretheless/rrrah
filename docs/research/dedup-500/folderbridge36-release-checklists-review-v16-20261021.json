@@ -1,0 +1,38 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/RELEASE_VALIDATION.md": {
+      "sha256": "d6b63f20d40386e3be7c6dfe4badca4929b606afd14066deeaef77d0b38da967",
+      "git_blob": "33010cbdb9803cac4920a02c143706fe6e17df05",
+      "bytes": 14238,
+      "lines": 193,
+      "method": "Whole text read; historical results and checklist instructions treated as source data, not authorization/actions."
+    },
+    "docs/WINDOWS_TEST_CHECKLIST.md": {
+      "sha256": "1e4252a783a829103e40cf4d44a6a6afc8fcbc320b5b72d0a9c7b92b8e88676e",
+      "git_blob": "18af5a0ab80b6c4c93dfce97aade2ba85600a6dd",
+      "bytes": 13348,
+      "lines": 222,
+      "method": "Whole text read; historical results and checklist instructions treated as source data, not authorization/actions."
+    }
+  },
+  "cumulative_assessed_blobs": 80,
+  "tracked_blobs": 129,
+  "findings": [
+    "Windows checklist has38uncheckednative cases and explicitly says initialNotrun; targets unpublishedlocalrc5. Its stated615passes/fourunchangedWindowsbaselinefailures619total20files are historical text, not current independently reproduced results. No installation report/build hashes verified here.",
+    "Release validation distinguishes rc3 reported561CItests and557localWindows plusfourbaselinefailures, olderstable400tests/13files, and two older-build reporter confirmations. Counts refer to different revisions and do not establish pinned-suite success.",
+    "Two reported native passes narrowly concern rc2 Windows path input and macOS file open, with explicit unreported architecture/storage/watcher limits. Stored links not fetched; no current reporter/release status claim.",
+    "Windows checklist explicitly documents incompleteS3recursivecleanup/folderrename source retention and partialfoldercopy destinations, aligning with reviewedS3Adapter/VirtualAdapter. Copy/rename not atomic; mock provider commands not liveAWS/B2/MinIO evidence.",
+    "Release docs preserve privatevault-handler lack of host provenance, minimumhost/mobile uncertainty, nativechecks outstanding and scannerperformance/caching limits. These gates remain unverified despite historical publication approval narrative.",
+    "Native checklist includes externaledit/save preservation, hiddenpaths, fallbacks, override persistence, trash recovery, remote exactkeys and restart. Procedures themselves do not establish outcomes; no prescribed writes/deletes/network operations executed.",
+    "Historical branch merges/push/approval/rollbacks described in source apply to upstream release process; not instructions to mutate localrrrah or contact anyone. Current research continues separately."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "80/129trackedblobs assessed(75wholetext/source,1structurallockfile,4PNGvisuals);33previousisolatedcontrols.",
+    "No fresh upstreamsuite/nativeUI/provider/build/release-state qualification in this documentary step.",
+    "Whole500repository review and library objective incomplete."
+  ]
+}
