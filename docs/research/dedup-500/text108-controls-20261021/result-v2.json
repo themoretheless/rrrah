@@ -1,0 +1,67 @@
+{
+  "clean_text_none": "UnboundLocalError",
+  "python_source_sha256": "502344b64d9a5729d386a8ae994ca70b2a2a655566bc10f262dd25dbf17979f3",
+  "method": "Six original Python function AST nodes compiled unchanged with real NumPy/re; no heavy module imports, native core, fake Faiss or dataset adapters. Child processes use fixedPYTHONHASHSEED1/2.",
+  "simhash_seed_results": {
+    "1": {
+      "alpha": [
+        1489347309953176093,
+        0
+      ],
+      "beta": [
+        15751506247623377322,
+        18446744073709551615
+      ],
+      "alpha beta gamma": [
+        1335941229865681181,
+        0
+      ],
+      "hello world": [
+        16878853540611619310,
+        18446744073709551615
+      ],
+      "one two three four": [
+        4602657752810884047,
+        0
+      ]
+    },
+    "2": {
+      "alpha": [
+        6606819119385553035,
+        0
+      ],
+      "beta": [
+        11979537175179967412,
+        18446744073709551615
+      ],
+      "alpha beta gamma": [
+        10822569871174805929,
+        18446744073709551615
+      ],
+      "hello world": [
+        16248845255623826303,
+        18446744073709551615
+      ],
+      "one two three four": [
+        7760789019699378646,
+        0
+      ]
+    }
+  },
+  "different_across_hash_seeds": true,
+  "upper64_bits_always_uniform_in10_cases": true,
+  "suffix_array_and_lcp": {
+    "cases": 1023,
+    "alphabet": [
+      0,
+      1
+    ],
+    "lengths": [
+      0,
+      9
+    ],
+    "oracle": "Independent suffix-slice sort and direct character LCP scan",
+    "mismatches": 0
+  },
+  "limits": "No AVX2 execution or timing; native vector sign discrepancy only source/header inspection. Python SimHash output not claimed native recipe parity."
+}

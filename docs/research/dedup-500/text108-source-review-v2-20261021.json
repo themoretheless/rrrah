@@ -1,0 +1,37 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "whole_repo_complete": false,
+  "authored_root_sources_complete": true,
+  "scope": "Completed all dedup_cpp/dedup.cpp and dedup_toolkit.py reading. Together with v1 all9nonvendor text blobs whole-read. Bundledxxhash.h and pinnedAbseilsubmodule remain incomplete.",
+  "runtime_controls": "docs/research/dedup-500/text108-controls-20261021/result-v2.json",
+  "findings": [
+    "PythonSimHash uses process-randomized builtinhash: five texts at fixedseeds1and2 yield different fingerprints. All10observed128-bit signatures upper64bits all0 or all1, because signed64-bit builtinhash is modulo2^128 sign-extended; not independent added hash entropy.",
+    "Six original Pythonfunctions compiled unchanged with realNumPy/re. Suffixarray andLCP match independent direct-suffix-sort/direct-LCP oracles for all1023binarystrings lengths0..9. Positive bounded result, not full dataset deduplication proof.",
+    "clean_text(None) raisesUnboundLocalError, despite C++workflow comment promising None->empty handling; executed originalhelper.",
+    "AVX2delta uses blendv_epi8(weights_add,weights_sub,mask) with mask1for hashbit1, selecting negativeweight. Scalarpath adds positiveweight forbit1. NativeAVX2 not executed; source discrepancy independently checked against installed Clang intrinsic documentation lines563-566. Reversing all signs may complement nontie bits; ties unchanged, so not claimed uniform-distance parity or actual failure for every dataset.",
+    "Optimized C++usesXXH3featurehash and seeded bit derivation while basicC++usesstd::hash+xorshift and Python usesbuiltinhash; no shared fingerprint recipe/version or cross-runtime cache contract.",
+    "C++emptyCDCdocuments inserted as emptystring finalresults rather thanNone unless separately clustered; empty results excluded fromsignaturegeneration, source-only.",
+    "PythonCDC counts Unicodecharacters and usesSHA256, C++CDC countsbytes and usesXXH3; shared min_length parameter does not imply same chunk boundaries.",
+    "PythonLSH queries are grouped greedily rather than exhaustive transitiveclosure. HNSW usesfloat32cosine proxy and fixedk50, then MinHashverification; no allpair recall, smallN<50 behavior unqualified.",
+    "PythonFaiss constructs allfourindexes eagerly regardless of selectedtype, no exception narrowing. ExternalAPI behavior not executed.",
+    "PythonC++path hardcodes removingcolumntext/renamingtext despite configurabletext_column. ftfy imported but absentrequirements; startup dependencies eager evenunused selectedmethods.",
+    "README480s/1GB/linear claims still lack measured artifacts or controlled parity gates; no optimization adopted."
+  ],
+  "intrinsic_documentation": {
+    "local_path": "/Library/Developer/CommandLineTools/usr/lib/clang/21/include/avx2intrin.h",
+    "sha256": "eb2a35ae03975e937db2be1c6f162c7172bf8e782cfe66296129585e7e619853",
+    "lines": [
+      563,
+      566
+    ],
+    "semantics": "Maskbyte highbit0 selectsfirst argument,1 selectssecond. Local compiler header inspected; no emulatedAVX2 or x86 execution."
+  },
+  "remaining": [
+    "Bundleddedup_cpp/xxhash.h whole source/license review",
+    "third_party/abseil-cpp pinnedf363711b4077f3c4558f17c74e5941c8e71f15c5 source/dependency qualification",
+    "Full Faiss/OpenMP/pybind11/native pipeline runtime, optional future capability gates; not considered completed"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}
