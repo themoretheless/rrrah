@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "color_type": 0,
+      "exit_code": 0,
+      "scenario_line": "17 test cases (skipping 4)",
+      "printed_skips": 4,
+      "tail": "  FLAGS: (NONE)\nDecode and compare GA8,    FLAGS: TRNS \nDecode and compare GA16,   FLAGS: [SKIPPED]\nDecode and compare GA16,   FLAGS: TRNS [SKIPPED]\nDecode and compare VIPS,   FLAGS: TRNS \nVIPS format: PNG\nDecode and compare PNG,    FLAGS: EXTENDED \n"
+    },
+    {
+      "color_type": 2,
+      "exit_code": 0,
+      "scenario_line": "17 test cases (skipping 5)",
+      "printed_skips": 5,
+      "tail": "IPPED]\nDecode and compare GA8,    FLAGS: TRNS [SKIPPED]\nDecode and compare GA16,   FLAGS: [SKIPPED]\nDecode and compare GA16,   FLAGS: TRNS [SKIPPED]\nDecode and compare VIPS,   FLAGS: TRNS \nVIPS format: PNG\nDecode and compare PNG,    FLAGS: EXTENDED \n"
+    },
+    {
+      "color_type": 4,
+      "exit_code": 0,
+      "scenario_line": "17 test cases (skipping 5)",
+      "printed_skips": 5,
+      "tail": "IPPED]\nDecode and compare GA8,    FLAGS: TRNS [SKIPPED]\nDecode and compare GA16,   FLAGS: [SKIPPED]\nDecode and compare GA16,   FLAGS: TRNS [SKIPPED]\nDecode and compare VIPS,   FLAGS: TRNS \nVIPS format: PNG\nDecode and compare PNG,    FLAGS: EXTENDED \n"
+    },
+    {
+      "color_type": 6,
+      "exit_code": 0,
+      "scenario_line": "17 test cases (skipping 5)",
+      "printed_skips": 5,
+      "tail": "IPPED]\nDecode and compare GA8,    FLAGS: TRNS [SKIPPED]\nDecode and compare GA16,   FLAGS: [SKIPPED]\nDecode and compare GA16,   FLAGS: TRNS [SKIPPED]\nDecode and compare VIPS,   FLAGS: TRNS \nVIPS format: PNG\nDecode and compare PNG,    FLAGS: EXTENDED \n"
+    }
+  ],
+  "executed_scenarios": 49,
+  "skipped_scenarios": 19,
+  "image_runs_passed": 4,
+  "logs": [
+    "docs/research/dedup-500/libphash454-controls-20261021/upstream-suite-color0.log",
+    "docs/research/dedup-500/libphash454-controls-20261021/upstream-suite-color2.log",
+    "docs/research/dedup-500/libphash454-controls-20261021/upstream-suite-color4.log",
+    "docs/research/dedup-500/libphash454-controls-20261021/upstream-suite-color6.log"
+  ],
+  "log_normalization": "Trailing whitespace stripped.",
+  "build": "Original testsuite.c + spng.c, AppleClang O2, SPNG_STATIC, pkg-config libpng1.6.59, zlib and libm.",
+  "limits": [
+    "Four valid synthetic1x1 PNGs only, opaque alpha; no PngSuite corpus or full metadata/gamma/interlace qualification.",
+    "49 scenario executions include encode-roundtrip/extended combinations, not49 independent images."
+  ]
+}

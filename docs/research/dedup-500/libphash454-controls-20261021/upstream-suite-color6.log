@@ -1,0 +1,44 @@
+RGBA 8-bit, 1x1 non-interlaced
+17 test cases (skipping 5)
+Decode and compare PNG,    FLAGS: COMPARE_CHUNKS
+[before IDAT] spng chunks:
+[before IDAT] libpng chunks:
+[ after IDAT] spng chunks:
+[ after IDAT] libpng chunks:
+Encode and compare PNG,    FLAGS:
+           compare (reencoded, original)...
+[before IDAT] spng chunks:
+[before IDAT] libpng chunks:
+[ after IDAT] spng chunks:
+[ after IDAT] libpng chunks:
+           compare (reencoded, reencoded)...
+[before IDAT] spng chunks:
+[before IDAT] libpng chunks:
+[ after IDAT] spng chunks:
+[ after IDAT] libpng chunks:
+Encode and compare RAW,    FLAGS:
+           compare (reencoded, original)...
+[before IDAT] spng chunks:
+[before IDAT] libpng chunks:
+[ after IDAT] spng chunks:
+[ after IDAT] libpng chunks:
+           compare (reencoded, reencoded)...
+[before IDAT] spng chunks:
+[before IDAT] libpng chunks:
+[ after IDAT] spng chunks:
+[ after IDAT] libpng chunks:
+Decode and compare RAW,    FLAGS: (NONE)
+Decode and compare RGBA8,  FLAGS: TRNS
+Decode and compare RGBA8,  FLAGS: TRNS GAMMA
+Decode and compare RGBA16, FLAGS: TRNS
+Decode and compare RGBA16, FLAGS: TRNS GAMMA
+Decode and compare RGB8,   FLAGS: (NONE)
+Decode and compare RGB8,   FLAGS: GAMMA
+Decode and compare G8,     FLAGS: [SKIPPED]
+Decode and compare GA8,    FLAGS: [SKIPPED]
+Decode and compare GA8,    FLAGS: TRNS [SKIPPED]
+Decode and compare GA16,   FLAGS: [SKIPPED]
+Decode and compare GA16,   FLAGS: TRNS [SKIPPED]
+Decode and compare VIPS,   FLAGS: TRNS
+VIPS format: PNG
+Decode and compare PNG,    FLAGS: EXTENDED

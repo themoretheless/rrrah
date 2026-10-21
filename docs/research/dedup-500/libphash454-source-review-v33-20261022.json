@@ -1,0 +1,27 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "tests/testsuite.c",
+      "sha256": "04977efbce15158ab3b3648fc38c517b8ae88f5976fea9e18bf7a82899645133",
+      "whole_file_read": true,
+      "lines": 1583
+    }
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/upstream-suite-result.json",
+  "findings": [
+    "Completed full upstream suite source review and compiled unchanged source with actual pinned spng.c and available libpng1.6.59.",
+    "Four valid1x1 PNG inputs gray/RGB/GA/RGBA each exited0:49 executed scenarios and19 explicitly skipped from68 registered. Includes decode/reference, roundtrip and extended buffer/stream cases.",
+    "Suite has no tests omitting transparency for expand formats due libpng transform coupling; selected grayscale gamma cases skipped. Compression size limit assertion commented out, so no output-size efficiency gate.",
+    "Unknown chunk comparison checks length/location but not name/data; getter returns ignored in several metadata collection calls. set_chunks checks IHDR setter but ignores later setter statuses. These limit metadata proof.",
+    "No full corpus, malformed parser, x86 SIMD, performance or all-cases claim. No production code adopted."
+  ],
+  "remaining": [
+    "Remaining dependency docs/build/tests/assets",
+    "Other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
