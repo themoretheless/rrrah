@@ -1,0 +1,44 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          7491,
+          8450
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          8450
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read960 additional contiguous paint lines for query, notes, AI panel and start of result header. Static interaction/layout comparison only.",
+  "findings": [
+    "AI paint chooses max_scroll whenever ai_pending OR ai_follow_bottom. Thus ai_scroll_up setting follow_bottom false does not change painted offset while pending, despite keyboard/wheel handlers allowing scroll. Source-level conflict, no live UI reproduction.",
+    "Pending footer says Esc: cancel but Escape closes/reset panel; earlier workers keep executing/updating database and completion API has no cancellation parameter. This is cancellation-label contract mismatch, not claim provider supports cancellation.",
+    "Long query paint extends text rectangle right by2000 and computes caret scroll against w-80 rather than actual reduced text width after buttons/loading reserves. Clip remains outer rounded shape, so query/caret can overlap right-side controls. Need screenshots at actual widths before visual acceptance.",
+    "Chat input is ellipsized but caret x uses full prefix width without horizontal scroll or input rectangle clamp. Long editable text may hide caret or draw it over hint; no GDI fixture.",
+    "Note content measurement includes caret block only when blink visible; measured height and bottom-follow scroll can change at wrap boundary on blink. Whole text cloned/converted for every paint; no performance benchmark.",
+    "AI measure/paint reparse separator-delimited history independently. Literal separator content remains ambiguous as earlier source finding; no structured message identity is retained in displayed string.",
+    "AI body applies explicit SaveDC/IntersectClipRect/RestoreDC to viewport. Note body relies on outer window clip and paints footer over overflow; must not generalize AI clipping behavior to notes.",
+    "Ordinary result rendering is suppressed for AI/note/chat modes. Homepage source-count label is fixed8 even though homepage settings can change entries; remaining homepage generation must be checked before count-mismatch conclusion."
+  ],
+  "limits": [
+    "85/268 whole files; main.rs1-8450 of12573 read.",
+    "No new runtime/tests, screenshots or local production changes.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
