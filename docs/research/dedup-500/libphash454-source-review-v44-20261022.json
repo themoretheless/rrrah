@@ -1,0 +1,38 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "pnggroup/libpng@d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+  "whole_files_read": [
+    {
+      "path": "pngmem.c",
+      "sha256": "2dcf91e5f7d4aaa11c53cdac246223f405e5cc3e1c7ccccb7a40650c41465b56",
+      "lines": 287
+    },
+    {
+      "path": "pngrio.c",
+      "sha256": "3c710643f274fd2b4aa2bc154c9dc53a512edae773dda1434f205fb005f2e93e",
+      "lines": 119
+    },
+    {
+      "path": "pngwio.c",
+      "sha256": "a25def3351807ed3f2e12a02a7801d4208f0033516185f4ad524d804d2f00ce3",
+      "lines": 167
+    }
+  ],
+  "findings": [
+    "Whole pinned allocation and read/write IO modules read. Allocator base checks representability/optional64KiB legacy limit; internal array growth checks count/product and copies old data plus zeros added elements.",
+    "png_malloc failure calls png_error; png_malloc_warn warns and returnsNULL. Callers must preserve different error contracts. No aggregate application memory-budget policy inferred from these size guards.",
+    "Custom allocator callbacks configured via png_set_mem_fn/create_struct_2. libphash creates regular read struct and separately mallocs decoded data/row pointers; those external buffers are not automatically owned by png_destroy_read_struct.",
+    "Default IO requires exact fread/fwrite byte count, short IO calls png_error. Setting read/write callbacks clears conflicting callback and flush state. Null read/write callback is fatal at dispatch when no fallback configured.",
+    "Previously source-observed libphash longjmp cleanup still requires actual failure-path qualification; no leak/crash reproduced here.",
+    "No source copied/modified and no compilation/benchmark during shared resource window."
+  ],
+  "remaining": [
+    "Libpng601 tracked blobs remain source/assets review",
+    "Pinned libpng runtime qualification",
+    "libjpeg-turbo/libwebp gitlinks",
+    "Spng29 runtime cases and externalvisuals"
+  ],
+  "full_review_count": 247
+}
