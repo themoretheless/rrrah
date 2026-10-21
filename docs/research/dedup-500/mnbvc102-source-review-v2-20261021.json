@@ -1,0 +1,46 @@
+{
+  "repository": "aplmikex/deduplication_mnbvc",
+  "commit": "06fb9117c58289b5710870e94b47870024800de9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 28,
+  "cumulative_assessed_blobs": 6,
+  "new_whole_files_read": {
+    "utils/utils.py": {
+      "bytes": 4098,
+      "sha256": "766e91e02ed8c9400e72d30db412230271f8b9d3ea2ee3bb92f72291e78bbd05",
+      "git_blob": "ad7b600bdd532a19333aca37b19edfd11583f93b",
+      "method": "Whole pinned Python source read without truncation"
+    },
+    "basic_dedup/write_meta_data_pkl.py": {
+      "bytes": 1856,
+      "sha256": "bf42539ca1fbf9818d79381c4867a46db5ecd3d20b27040b0ca99254b9bdddcb",
+      "git_blob": "35837b061b88c3cafd6a5c563daa7c193d60e045",
+      "method": "Whole pinned Python source read without truncation"
+    },
+    "parallel_dedup/convert_jsonl_to_csv.py": {
+      "bytes": 2066,
+      "sha256": "9fb336ea326482e816d8e3188b3b7c693dd895e9d4e0ec65a1c38f136798cd05",
+      "git_blob": "ae0a86f3822b1ddd4557508cb608b37e47ebd055",
+      "method": "Whole pinned Python source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/mnbvc102-controls-v2-20261021/run.py",
+    "log": "docs/research/dedup-500/mnbvc102-controls-v2-20261021/run.log",
+    "passed": 3,
+    "method": "Original producer/validator function AST and full original Simhash/utility modules; queue.Queue synchronous adapter and synthetic CSV files in owned TemporaryDirectory. Preset equal integer fingerprints, token sets assigned to selected/alternate witness after queue capture. No full multiprocess or natural text hashing."
+  },
+  "findings": [
+    "Single-candidate missed-alternate path confirmed: three equal synthetic64bitfingerprints produce one queue candidate for query; selected token set Jaccard0 rejects, alternate Jaccard1 is never tried. Explicit alternate queue pair marks same query. This is intermediate-stage witness, not claimed naturally generated full-text collision or corpus miss rate.",
+    "Original jaccard_distance(empty,empty) divides by0and raises ZeroDivisionError. Validator has no catch around this comparison; actual process termination/lifecycle not run.",
+    "Metadata writer excludes all previously recorded paths before hashing, without checking changed content, removed files or timestamp freshness. Source-only stale-cache concern, pandas not executed.",
+    "sha256 helper reads wholefileintoRAM; no streaming/budget/cancellation path observed. Source-only memory behavior, no large files or benchmarks.",
+    "CSV converter stores original Simhash scalar and paragraph MD5 strings sliced[8:-8], yielding truncated middle digest. No real cryptographic collision or metadata trust claim established."
+  ],
+  "remaining_scope": "22artifacts: corpus/conversion helpers, redistribution/license/docs/requirements and remaining hash modules.",
+  "license": "Full root/nested license review pending; no production adoption.",
+  "limits": [
+    "Partial6/28review and seven targeted controls cumulative; full count183/500 unchanged.",
+    "No corpus, natural fingerprints, pandas metadata execution, multiprocessing/Redis runtime, platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}

@@ -2,7 +2,7 @@
   "index": 102,
   "repository": "aplmikex/deduplication_mnbvc",
   "commit": "06fb9117c58289b5710870e94b47870024800de9",
-  "review_scope": "Partial pinned3/28 whole Python implementation files; four original Simhash/index controls including1024exhaustive-query comparisons. Corpus/metadata/Jaccard pipeline not qualified.",
+  "review_scope": "Partial pinned6/28 whole artifacts; seven original-module/function controls. Synthetic CSV witness confirms missed alternate candidate after Jaccard rejection and empty-set division failure; real corpus/multiprocess unqualified.",
   "decision": "reference",
   "finding": "SHA256+size grouping and SimHash/LSH candidates followed by Jaccard validation; text-specific but staged verification useful.",
   "available_source_evidence": [
@@ -68,6 +68,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/mnbvc102-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/mnbvc102-source-review-v2-20261021.json"
     }
   ]
 }
