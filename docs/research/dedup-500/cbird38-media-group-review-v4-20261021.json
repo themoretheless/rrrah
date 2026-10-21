@@ -1,0 +1,55 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/media.h": {
+      "sha256": "4c0df3ff36f6fcdfd9cc2beba7b1e03d89e7193198314ea1b25220807ed57fcb",
+      "git_blob": "8282813484859d8ae963f79cfc7c5ba6c7c2263b",
+      "bytes": 23023,
+      "lines": 660,
+      "method": "Whole header read in contiguous1-330 and331-660 ranges."
+    }
+  },
+  "partial_source_files": {
+    "src/media.cpp": {
+      "sha256": "9d09e07b79e762a9445c6dccac522bcb84afb5d7fc19d13c8d0ae66512c46372",
+      "git_blob": "5cc30079c99bdae5a7ac27151c25382af6020f2c",
+      "bytes": 53806,
+      "lines": 1742,
+      "read_ranges_inclusive": [
+        [
+          1,
+          360
+        ]
+      ],
+      "remaining_range_inclusive": [
+        361,
+        1742
+      ],
+      "method": "First360lines read including complete grouping methods, defaults and constructors; not counted whole."
+    }
+  },
+  "cumulative_assessed_blobs": 12,
+  "tracked_blobs": 616,
+  "findings": [
+    "Original mergeGroupList merges a group only if its first element is contained in the destination group. Synthetic A-B,B-C merges allthree without checking A-C; A-B,C-B remains two groups despite common B. It is anchor-dependent merging, not pairwise clique proof or guaranteed general connected-component computation.",
+    "Original expandGroupList emits query-to-member pairs only: A,B,C becomes A-B and A-C, not B-C. This matches needle-first group representation.",
+    "Original groupCompareByContents first checks equal lengths, makes a set only for the first group, then tests membership of every second-group path. It returns true for [A,B] vs[A,A], false in reverse. This qualifies generic test comparisons; no assertion that real scanner fixtures contain repeated paths.",
+    "Original Media operator< returns true for a< a when exactly MatchExact is set, violating irreflexivity expected by std::sort. Control invokes comparator directly; does not sort with that invalid relation or claim a reproduced crash. With combined flags exact-bit behavior differs because expression checks flags==MatchExact, not bit presence.",
+    "Media::setDefaults sets id0 and isValid checks id!=0. This closes previous default-Media uncertainty: a missing SQL row produces invalid Media and is excluded by Database::searchIndex. Tree-level tombstone control does not imply a displayed bogus item.",
+    "Header explicitly says md5 may exclude embedded JPEG metadata/tags. Database MD5 grouping therefore cannot be assumed byte-file equality even apart from hash-collision concerns. Actual checksum producer remains unread.",
+    "Media equality compares paths, not IDs/hashes/inode/content. Group merge membership and comparison inherit path identity; group naming does not establish duplicate-content identity."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-group-controls-v4-20261021",
+    "passed": 5,
+    "failed": 0,
+    "method": "Complete original groupCompareByContents/indexInGroupByPath/mergeGroupList/expandGroupList and original operator< extracted unchanged; clang++C++17 O2 with synthetic Media and std-backed Qt container/string shims. No Qt/SQL/media decoder or pHash execution."
+  },
+  "limits": [
+    "12/616 pinned parent blobs fully read. media.cpp read1-360only; remainder incomplete.",
+    "Eight cumulative original-body/header controls plus one separate independent concatenation counterexample. Not full upstream suite or real UI/database/runtime proof.",
+    "No production source port or optimization; root/nested licensing incomplete. Deferred native pHash/ASAN remains skipped."
+  ]
+}
