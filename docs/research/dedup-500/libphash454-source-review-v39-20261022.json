@@ -1,0 +1,463 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_dependency_text_read": true,
+  "dependency_text_inventory": [
+    {
+      "path": ".circleci/config.yml",
+      "sha256": "5cf27487342de5ce91ef09fae18cec63aa406e962d85972a5047bac0b4332872",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "sha256": "2f85707c5fe09b7df6e54be71f5af720096847bd0103f21c8b9102267cd69708",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "df99ba25197a4028c1fdbb5473a03bd68b5e7a0ff80c5bf83c40a9dd204c0f13",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".github/workflows/ci-fuzz.yml",
+      "sha256": "3f5108e9a68c468ee25d32e609a4d97f33b33a78fa0ad4a69c8c8b9b4d2399e8",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".github/workflows/codeql-analysis.yml",
+      "sha256": "558041b48c3443db0311f19f87a0fd82b61201a41d43c4d800c004a87867eac3",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".github/workflows/on_PR_meson.yaml",
+      "sha256": "15c6090f3b9c3577c43c76fb78f292ff695b91d903cfda2e5a6bd212617accd4",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "c2fe0c098d9f5d72ba890b7d7333ca804b2b5d8ba57045e1367cf2e1ed0c61d8",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": ".gitlab-ci.yml",
+      "sha256": "269362c67a48c60c97ceecde1fe0100dc67c1f24883df36f4955460a50126fdf",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "57e7774c13ba67aae0fd5bed4eb720c424e1d9435da4879f884237e5e348d42b",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v23-20261021.json"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "155ca252464144d242988f997a2a59540410d0cc2e890b739c6a62d055bcdc95",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "0622b0794d0fecde47d743f1bb70a03e6fdf082be8e71f39de672ed995d96ff9",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v23-20261021.json"
+    },
+    {
+      "path": "README.md",
+      "sha256": "517c820ede8ddafeabefbfa00ca3bf38a6ff2a6290a3d09d55d7853ccb7ed929",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "998ffd534610a26af27832ff02b8baa49450791c804dda371f81e79bd3ff72ee",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "cmake/Config.cmake.in",
+      "sha256": "5595275d0b6fd507d77e59c0ec33842c5a7ec9918c8bad3ea7c8f6cee98d21f5",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "cmake/libspng.pc.in",
+      "sha256": "1a1c414c10895b8b814fa121fac7692ecd4d2599a7dc434e649a8875649d66d0",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "docs/api.md",
+      "sha256": "7ee63d277beb43910c28e19252d5b145037a53be348d922d4d85faf101ec0026",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "docs/build.md",
+      "sha256": "5ca6ab24f33115f54875cc40340618df949d2da70d2c743feb414fc2c754d87a",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "docs/chunk.md",
+      "sha256": "1f7ddb7d36a3869ed0bde8e35fbcbfe6387d48d3b803535bde27e4a60de89039",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v36-20261022.json"
+    },
+    {
+      "path": "docs/context.md",
+      "sha256": "86d8e1184dbf48138c0ef41c27ecec8a4251f4cf4a5f110fc1dd66aef923530f",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v23-20261021.json"
+    },
+    {
+      "path": "docs/decode.md",
+      "sha256": "9fd33d657e9a99d0fd3283899d26b0ed78edc9f32223a8f01e6e05289a20e125",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v25-20261021.json"
+    },
+    {
+      "path": "docs/encode.md",
+      "sha256": "bfcc9e266c850e991ead307b4024fd66aeff58c66834bdf0813c69b4920643a4",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v36-20261022.json"
+    },
+    {
+      "path": "docs/errors.md",
+      "sha256": "64894473bd192a1bfa4effee128598c23333c56ef6505719cafc1be90ffa8c94",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "docs/index.md",
+      "sha256": "5dce7717da7a03bce5e86cc77fc73c80d3af750b2aaee32b23c5c9e3bfd7a642",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "docs/migrate-libpng.md",
+      "sha256": "291104ea01e460786cf2f6e6d35f1375d132123a615c12030b03709777aa3320",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v36-20261022.json"
+    },
+    {
+      "path": "docs/usage.md",
+      "sha256": "031e3493144ac574f27600654d0742c627c2144c633a2188bd43ef141553830a",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "docs/version.md",
+      "sha256": "a0c2ad845478497746a9a19cdbb6874652f0986a00540218c7d8c7f154071038",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v35-20261022.json"
+    },
+    {
+      "path": "examples/example.c",
+      "sha256": "fbb5347a03aa75b3fe3f85139ef0ba8145b1c7ee046d7cda89be2820d3a08e7f",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "examples/meson.build",
+      "sha256": "b7b43c4f336b9cbc1dccea1d4ccb348006cd33d9237e11fbd3768336b19de384",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "meson.build",
+      "sha256": "c59fe049a342a5db21008edd022b0a0bd7dc4f943516b50899ec4ee7e82d872f",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "meson_options.txt",
+      "sha256": "6a3f8b0f81ab7551f2a0a225a27e3b4ec02ef0fe7f0f13193d6bfd5e2eef2d0d",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "mkdocs.yml",
+      "sha256": "d4cf0d5225dcf06ba7a5f8352b6ee27236c1b19c2a8de91d97fab2f35fd2355b",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v31-20261022.json"
+    },
+    {
+      "path": "spng/spng.h",
+      "sha256": "3f398e878a94c49ba8735ba1b410a904a3667ffdf6924f82d6cf5bee61a87cb6",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v25-20261021.json"
+    },
+    {
+      "path": "subprojects/benchmark_images.wrap",
+      "sha256": "bfd8fd8db0eebaf89ddd114af07df6bf67dd8cbc5f6845b18a67e5b1e6854770",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "subprojects/fuzzing_corpora.wrap",
+      "sha256": "dcd4a748cc79e8e600ff43edb9acb86c837b59e07da726952f08d6ccabfcde89",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "subprojects/libpng.wrap",
+      "sha256": "f77c6f5a505e3f91a40fc4e252fa91daa0b51dd09c2e725c558312bc7e5265bb",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "subprojects/miniz.wrap",
+      "sha256": "7c0748876f203ce48118a7a40ba8411cd8f74c20587d653f8da7471bf64c3fd1",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "subprojects/spngt.wrap",
+      "sha256": "1368c84f395581e29096f2e5845846738fcc70d3d8aebce6318f8ac91a23f135",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "subprojects/zlib.wrap",
+      "sha256": "533eeda6375fef242232db6ebf29efaaaaa310424e0c84de40b25f4eeecfaad3",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "8464b27f61e1d1e70d414922b30a138f0983c3d41b816fb3f8a5942463d2455d",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "tests/crashers/meson.build",
+      "sha256": "a0d6a25f2bae18258ea1e424551bdad35a6308855ff7e336ad70f033f04fe478",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "tests/framac_stubs.h",
+      "sha256": "f18f12fc731fbb206dd7182c8eaf119bee987501cb94096b302cfc624ea86ba3",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/fuzz_main.c",
+      "sha256": "a13f7b8f111a9e1ba1b3fa142a574da2dcfaefdaff4cbc0985e3dcc428c32783",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/images/PngSuite.LICENSE",
+      "sha256": "71e1f5bf865131b5d9996e76a78372146283e5089e50f900ae927a6458b62101",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "tests/images/PngSuite.README",
+      "sha256": "a2853f2be68e460dcb9992819125b74503a01383e79f79a04b971ffa9d248544",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "tests/images/meson.build",
+      "sha256": "56756b9d3bb8a8883ed012d60f6cf73f0a9495439a021116b2ff14bc3e792525",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v34-20261022.json"
+    },
+    {
+      "path": "tests/meson.build",
+      "sha256": "1bc8bad6d7e1691639cdaa31c5c378b59d6a1f9f411e96151a77e9df1784fd43",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "tests/misc/meson.build",
+      "sha256": "a020856ccfd3e615a3ad218b61738872a48e567805025a0d206eab13a203a865",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/ossfuzz.sh",
+      "sha256": "39dcfd61d79a2bc04bd0d2a7821b009aab693d9d76167a7b936406aa4f1e230e",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "tests/spng.dict",
+      "sha256": "4acb87d2219841612e1b2c5dae7bfae0f8565c30b75f81e33de7fe2313e5d142",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v38-20261022.json"
+    },
+    {
+      "path": "tests/spng_read_fuzzer.c",
+      "sha256": "3ed658e5b3dab357d1e9078d3cdd930fe0e4e4965755bd2ee2b06b5074a4d122",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/spng_write_fuzzer.c",
+      "sha256": "a5919dd96622cdb861454a2a2b3efb9357d685028f1cf9c66de5078ff9448951",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/spngt_common.h",
+      "sha256": "383ce146a60f3e4b95fce50b2b758a62326771df30e12fd973579889e408beb2",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "tests/target_clones.c",
+      "sha256": "fa25462c7300407d32e5faa22fb14195b76d0b167aa3debdb7ad620c33443c0d",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/test.cpp",
+      "sha256": "81c08db862c65d410d01e975d59fd4e66272f0c4473d36d5057495cb6ef9a0e7",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v37-20261022.json"
+    },
+    {
+      "path": "tests/test_png.h",
+      "sha256": "0494889481bb085487f8b852e6f3ee6af11619dfa30594f18aa4f5f4f073875c",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "tests/test_spng.h",
+      "sha256": "a228b195c79aa0d99d28cf795ae9c2e3f273bf136e8d0901ecafa5b6529d8d65",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v32-20261022.json"
+    },
+    {
+      "path": "tests/testsuite.c",
+      "sha256": "04977efbce15158ab3b3648fc38c517b8ae88f5976fea9e18bf7a82899645133",
+      "whole_read_audit": "docs/research/dedup-500/libphash454-source-review-v33-20261022.json"
+    }
+  ],
+  "visual_reviews": [
+    {
+      "path": "tests/images/basi0g01.png",
+      "sha256": "9bf1c4610280efecc291361e2b7b026d602d03a7137f476ff84af626bb7b3a62",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi0g02.png",
+      "sha256": "50ed4ff9c1c80578ae58ead6fb28ea2e44016b5b56a7b3e95c235ec86f97c0d8",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi0g04.png",
+      "sha256": "0cce4212157dae7c0f71f5f72cef39cecab3347de455da0ace7de83eebd47849",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi0g08.png",
+      "sha256": "b9300750e7414c9fed68cc7f4f531f5e2cdd2724f50142e8aa3a0070836bece9",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi0g16.png",
+      "sha256": "d354026bdd0aa6ed7bedea7c92e5eef2ebbd4854848b8a0a48f562cc71bfe80f",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi2c08.png",
+      "sha256": "b2690d4475cdc39faf5a7d2de20de4e14eb96c6360fa791ec2003b4085ecacde",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi2c16.png",
+      "sha256": "ae13eba5fabbf7cbe8c01ec4458cdaa7e6bfdfcbd5109e831efaac9f39096027",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi3p01.png",
+      "sha256": "8e1edfbc0382e0b545c70209271cedead2d530df1ce40f5296f0749226b36006",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi3p02.png",
+      "sha256": "85f304eaaf6831b2bcc2c08892b947fef52f06337aaf23312d6326e367d73f77",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi3p04.png",
+      "sha256": "78890ee2c4da71e460b5a1527efe7dc17d673ebe997f49ca1b4dcd7347d21e56",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi3p08.png",
+      "sha256": "ca103eef7a7c50abc7af9d5ec0dc9fdc07668e2f030adbce226e050dcec9eea3",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi4a08.png",
+      "sha256": "dfae01a4548e30519157bb51ce29d4de3b35b74288e9568b4d5911de01c6048b",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi4a16.png",
+      "sha256": "ef7df23ccd912309a4f89ca3c3094bf5ab55add25218e571e51cc6cb11cfad9e",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi6a08.png",
+      "sha256": "fe70ea20c8447e82abb7bc9dd05344a61a4631cc69e0974378df8f6263af0337",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basi6a16.png",
+      "sha256": "7fdd6bf08f04692bcf06b5c4262e7f76c49d8adb992789fd3f05aa0435645cd8",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn0g01.png",
+      "sha256": "c8b1364d7771dd2f5a1b2d7d633abcf3f48dafee608558ecd2e5fc98f61894cd",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn0g02.png",
+      "sha256": "ca172e92d179c77b3d321ad501e452a59bdaafafde8ebd74fd0669c4eae58efc",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn0g04.png",
+      "sha256": "fb2d42c4c8f5c51590e675994a9b0c718fbf71c80e28142f231cfa7c5b0e26e8",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn0g08.png",
+      "sha256": "268d061075d1dd2eeec62b31303d09f6998549e1bfb447a5f09c80a2b0978ac3",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn0g16.png",
+      "sha256": "1a1fe155f40c11d79350b3f84c7eb2b29719037e57073cb7ae2ab9e8323f9360",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn2c08.png",
+      "sha256": "c90e86090a625661b19960cafdde6e347d6e32d73837aaae533f66dd3f099506",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn2c16.png",
+      "sha256": "1e1c28ec0ee5da6224404b4005076dd30e2335a1a80c0ca722046a245c4a2b3b",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn3p01.png",
+      "sha256": "c2d7cd682df5f74506b33a5d70c344aaee248fda79fdfef8e873426fd6f2b75b",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn3p02.png",
+      "sha256": "0466bb7ed9984cf03b70704564bcffab1df8ec0e8167473ba0f75e4fedce5a8f",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn3p04.png",
+      "sha256": "e1fc7be978d3149b98533d0076245ae64353b7967290f4204c1282ecb4ec1aba",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn3p08.png",
+      "sha256": "d58256cd2eb16b5740d4c1403d25ce43d8dd03e270627ab709d2fb141e3d904c",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn4a08.png",
+      "sha256": "7be24b618bfd437b921ae0caf9341d112338c6290cc62466deb19d2c7a512968",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn4a16.png",
+      "sha256": "1c92ffd11d2fc89a36f170d0239668436407f5c8e3f8d93483fb3fc6bca361d7",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn6a08.png",
+      "sha256": "559c594166eb156f461c9beff0f053196730dc998fdb0d2b801c89e6680860a5",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    },
+    {
+      "path": "tests/images/basn6a16.png",
+      "sha256": "8f9d81060aebf4576461403c5057de7f23f73157016b659402b906df805845aa",
+      "review": "Individually displayed native local image with view_image; preview only, not independent colorimetric oracle."
+    }
+  ],
+  "findings": [
+    "All pinned non-PNG blobs accounted as whole-read across recorded increments; inventory is crosschecked against completeGit tree. This does not count unread images as reviewed.",
+    "Individually viewed30 basic images:15 Adam7 and15 plain counterparts. Visible patterns agree pairwise: BW lettering, diagonal/linear gray ramps, RGB bands/wedges, indexed patterns and alpha gradients.",
+    "Native previews are visual asset review only; prior own selected-frame15 exact pair tests are separate numeric evidence.16-bit preview is not proof of low-bit preservation or color precision.",
+    "No heavy job launched; resource window respected."
+  ],
+  "remaining": [
+    "145 additional tests/images PNG assets,27 regression assets and2misc assets",
+    "ExternalREADMEvisuals",
+    "Other three codec gitlinks"
+  ],
+  "full_review_count": 247
+}
