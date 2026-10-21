@@ -1,0 +1,38 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_postcondition_module_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/core/empty-trash.ts": {
+      "sha256": "d19f54ed6d6a8df651dda06bd0798a4d2709fce9a28cc5e8da6d6341868bdb79",
+      "git_blob": "31994c1621dda96e425d7ecf95eeb314283fb053",
+      "bytes": 4882,
+      "lines": 125,
+      "method": "Whole pinned source/test read only; flow not executed."
+    },
+    "tests/empty-trash.test.ts": {
+      "sha256": "fb5361a8fae826d1f386a6cf3bd67ebbc5cc1053319f424a30f8f658857f4f27",
+      "git_blob": "4528f3be74a5b5e121c3add35c8546b269fbc0db",
+      "bytes": 11248,
+      "lines": 292,
+      "method": "Whole pinned source/test read only; flow not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 128,
+  "tracked_blobs": 230,
+  "findings": [
+    "Completionpredicate afterconfirm isbothbutton/dialogabsentORisTrashEmpty; thisisobservedDOMstate,notindependentserver/itemidentitycertificate. Sourceclaimedpostconditionmustbeinterpretedatthatboundary.",
+    "Alreadyemptyfallback checksisTrashEmptyafterfirstbuttonwaitfailure,notbeforewaiting; defaultcouldwait20seconds. No latencymeasurement.",
+    "InjectedwaitForownsstop/timeouts; flow itselfhasnosignal/independentpre-clickstopcheck. PriorwaitUntilAbortabletruthyconditionstopboundary remains relevant tohostintegration,notnewexecutedflowfailure.",
+    "Tests useone-shotfakewaitFor,assertorderedfakeclicks,timeoutparameterforwarding,missingdialog/confirm/postconditionerrors,alreadyempty,optionalcallbacks,StopRequestedbeforefirststepandafterconfirm. Notlivebrowserorserververification.",
+    "Timeoutoverridesmergedwithoutfinite/nonnegativevalidation; actualwaithelperbehavior dependsinjectedhost. Notexecuted.",
+    "log/onStatusemptying callbacks occurbeforetry; throwingcallbackmaybypassterminalerrorreport. Earliercallbackissuepattern,source-onlyhere."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "128/230wholeartifacts; no actualactionorupstreamtestexecution.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
