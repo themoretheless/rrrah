@@ -1,0 +1,30 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {stripTypeScriptTypes} from 'node:module';
+import {pathToFileURL} from 'node:url';
+const root=path.resolve('.dedup-work/googlephotos42-20261021');
+const out=path.join(root,'engine-runtime');await fs.mkdir(out,{recursive:true});
+await fs.copyFile(path.join(root,'src/selector-packs/pack-v1.json'),path.join(out,'pack.json'));
+for(const name of ['selector-pack','diagnostics','selectors','photo-filter','utils','run-occupancy','config','deletion-log','delete-engine']) {
+ let code=stripTypeScriptTypes(await fs.readFile(path.join(root,'src/core',name+'.ts'),'utf8'));
+ code=code.replace(/from '\.\/([^']+)'/g,(_,dep)=>"from './"+dep+".mjs'");
+ code=code.replace("from '../selector-packs/pack-v1.json'","from './pack.json' with { type: 'json' }");
+ await fs.writeFile(path.join(out,name+'.mjs'),code);
+}
+const {DeleteEngine}=await import(pathToFileURL(path.join(out,'delete-engine.mjs')));
+let clicks=0;
+const tiles=['first','second'].map(id=>({id:()=>id,label:()=> 'Photo - Mar 1, 2024',click:()=>{throw Error('unexpected')}}));
+const dom={pathname:'/',uncheckedTiles:()=>tiles,checkedTiles:()=>[],findScrollTarget:()=>null,counterText:()=>null,sleep:async()=>{},click:()=>{clicks++;throw Error('unexpected')}};
+const config={dryRun:true,pollDelay:200,scrollSettleMs:1,endOfListAttempts:1};
+const engine=new DeleteEngine({dom,config});
+const preview=await engine.run();assert.equal(preview.status,'done');assert.equal(preview.total,1);assert.equal(preview.deleted,0);assert.equal(clicks,0);
+console.log('PASS 1: two distinct ids with same label counted as1in ordinary dryrun');
+const fractional=new DeleteEngine({dom,config:{...config,maxCount:1.5}});
+const accepted=await fractional.run();assert.equal(accepted.status,'done');assert.equal(accepted.error,undefined);
+console.log('PASS 2: maxCount1.5passes constructor/run validation in dryrun');
+let sleeps=0;let zero;
+const zeroDom={...dom,sleep:async ms=>{assert.equal(ms,0);if(++sleeps===50)zero.stop();}};
+zero=new DeleteEngine({dom:zeroDom,config:{...config,pollDelay:0}});
+const stopped=await zero.run();assert.equal(sleeps,50);assert.equal(stopped.status,'idle');assert.equal(clicks,0);
+console.log('PASS 3: zero-poll dryrun remains in finalsettle until explicit stop after50zero waits; no clicks');

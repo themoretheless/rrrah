@@ -1,0 +1,40 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_repository_three_original_engine_dryrun_controls",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 75,
+  "tracked_blobs": 230,
+  "source_sha256": {
+    "selector-pack": "485d81de1cdb354d26b1e4d8a020b1c3ecf901b55e63ec2f2a3953d62b47d62b",
+    "diagnostics": "a90e58d2cc7addfa75f2b22630f0c9d2c51b093e6d3dda10725d07f665e35636",
+    "selectors": "3b70bf3fa7fc6ababa2564870575d9b4768201e3e6a5554362d2644a2ab4ee45",
+    "photo-filter": "9767e835f3adecfb30d1d10ce9edfb429ca09ffa289507d8d2806ebda1f72e77",
+    "utils": "9969d001cd04ede137b00c870cb818fdb884092c22f7976866dbf053fda7ef47",
+    "run-occupancy": "d23c7911771f13d6e949fc860a673fad1d82f1997df372acaf2c3ada350d4e74",
+    "config": "fc87f01675edb9320a4ca2afd9576dac7dfe419f25fb776afb7118761c4c3b6e",
+    "deletion-log": "b9c1042857fa6feb137df4b7ea466bddccb09336a8260a142e36934ba6a1b1eb",
+    "delete-engine": "e7dee7d9ffdc7ceac98d7f9def209d2badaaacd0abfc9fa4d0edced913b9a1f8"
+  },
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-engine-controls-v19-20261021/run.mjs",
+    "harness_sha256": "f96fc21d40014211b2aab04ba4b64a3d755233ce1e7b016532cd58069cfa9dd7",
+    "log": "docs/research/dedup-500/googlephotos42-engine-controls-v19-20261021/run.log",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "runtime": "Node24.19.0",
+    "method": "Nine original modules type-stripped with localimportsuffix/NodeJSONattributes adaptation. Full original engine.run dryrun path on synthetic EngineDom; no real browser/network; clicktrapcount0."
+  },
+  "findings": [
+    "Two distinctidsfirst/second,samePhoto label,ordinaryallfilterdryrun returnsdone,total1,deleted0. Confirms documentedlabelobservation limitation rather than actualfilecount.",
+    "maxCount1.5 accepted in dryrun,resultdone,noerror. Does not establish fractional realbatchbehavior; no action path executed.",
+    "pollDelay0 no-scroll dryrun entersfinalsettle and executes50zero-duration sleeps without naturalbudgetexpiry; injected adapter invokesengine.stop on50th,engine returnsidle. Source subtracts0fromremaining; boundedcontrol avoids unboundedtest."
+  ],
+  "cumulative_original_function_controls": 30,
+  "limits": [
+    "No new wholefiles;75/230. Authored controls not upstreamsuite.",
+    "No destructive path, realmedia or performancequalification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}

@@ -1,0 +1,17 @@
+(node:80845) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[gpdt] run() start (dry-run scan) — url=/ filter={"kind":"all"}
+[gpdt] [dry-run] no progress (1/1) — total so far: 1
+[gpdt] [dry-run] end of gallery — final count: 1
+[gpdt] run() finished (dry-run scan) — status=done, counted=1
+PASS 1: two distinct ids with same label counted as1in ordinary dryrun
+[gpdt] run() start (dry-run scan) — url=/ filter={"kind":"all"}
+[gpdt] [dry-run] no progress (1/1) — total so far: 1
+[gpdt] [dry-run] end of gallery — final count: 1
+[gpdt] run() finished (dry-run scan) — status=done, counted=1
+PASS 2: maxCount1.5passes constructor/run validation in dryrun
+[gpdt] run() start (dry-run scan) — url=/ filter={"kind":"all"}
+[gpdt] [dry-run] no progress (1/1) — total so far: 1
+[gpdt] [dry-run] stopped by user
+[gpdt] run() finished (dry-run scan) — status=idle, counted=1
+PASS 3: zero-poll dryrun remains in finalsettle until explicit stop after50zero waits; no clicks
