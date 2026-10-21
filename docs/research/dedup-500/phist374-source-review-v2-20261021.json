@@ -1,0 +1,119 @@
+{
+  "repository": "deveyNull/phistOfFury",
+  "commit": "96598bf78c4f33bfca68f4b3fc9c4b334f175644",
+  "whole_repo_complete": false,
+  "verified_blobs": {
+    "LICENSE": {
+      "git_blob": "603033944dd2fed2605c67bd6547dd9ceb49aa43",
+      "sha256": "6a4d0ff116f3af3f33b6235fee90e8f5609b4e39575212d4670d5942790c482a",
+      "bytes": 1335
+    },
+    "README.md": {
+      "git_blob": "fcf6266654940184e9c7a38f0532d8194a97e0e3",
+      "sha256": "425a1fff89a52f6e2d12282d32e7df7e360eca061b81cdf87557127c38da1785",
+      "bytes": 6617
+    },
+    "phist.py": {
+      "git_blob": "bd996bbbef2290101027e49234c91faaee4488be",
+      "sha256": "be4e85a63ef456c94fea0a54c749cc38cc6698deabc69d95e8ac5968430c6606",
+      "bytes": 15154
+    },
+    "phistTerminal.py": {
+      "git_blob": "b426bd99111b1a2b9be4824f133ebbe50cf2a941",
+      "sha256": "e2b611c8498963a548d0b96fc5ac61c2a16ec1c11c7ce212d5a8b4dfd3edb797",
+      "bytes": 2342
+    },
+    "resources/README.md": {
+      "git_blob": "1988e929ff1787fac364bc014674d949625d9a99",
+      "sha256": "8afe7ca53eaaab073622a35cdac1174b0c34579016c8e1df4de82c57d0a23df9",
+      "bytes": 56
+    },
+    "resources/a11.jpg": {
+      "git_blob": "1e9f632087a315ad61e04fb1f05dd9eb9ad5f1df",
+      "sha256": "a69f1618dad822054a10cf25817f1d493e99da6da4e2567e60362dd275c2ed91",
+      "bytes": 155348
+    },
+    "resources/a20.jpg": {
+      "git_blob": "4911f5d82a8675277f2ff16daf92b73077b86a45",
+      "sha256": "c9a830e1374662c594115831e9176c22d2121e14fb072d633419521fe7f5eb12",
+      "bytes": 149748
+    },
+    "resources/bills.JPG": {
+      "git_blob": "71a6074554002f28d03f2552f57991a6af099964",
+      "sha256": "9288779a8c488a71a2b0dfc15f274ce4c80d0437f5c80712ecd0bf44cc5244e6",
+      "bytes": 93303
+    },
+    "resources/goat.jpg": {
+      "git_blob": "8292a6b44b3e444b6b442fe2723d3d729e19ea89",
+      "sha256": "12ff38f990e3fb6df0f4aecf9525dc2a9d8f7b61c3d454eea0360b0f01899f3e",
+      "bytes": 29583
+    },
+    "resources/perceptualHashingFinal.pdf": {
+      "git_blob": "62479329db7cc914b893a84204b3560cd5ec26b3",
+      "sha256": "904724c13e8ca5dad268ba40b1e0dab998064d6cc4f557a701301a4cae16f88d",
+      "bytes": 7856547
+    },
+    "resources/phistBlueRibbon.png": {
+      "git_blob": "fc41fcfe8d46fe41ae03c1689bd8dc7989adf404",
+      "sha256": "2d96445d0233f29fcb8811f18fa9ad7509bdb688cadcf9efeee8b2e6f7798b2f",
+      "bytes": 173655
+    },
+    "resources/phistIsis.png": {
+      "git_blob": "7c2d3163c315cce4aea59f8e1b3eb0a08c2c1b34",
+      "sha256": "0dc3f45d4df65112ca112f0839fd7bb7275159ed2dcb462073380ce8ac1b7522",
+      "bytes": 72594
+    },
+    "resources/phistPaper.pdf": {
+      "git_blob": "f7d5456b65fb06e99e54d32eaac338268edc9ec4",
+      "sha256": "dcc4b056931c27575287a21779fb37fe4849dedb79e3dce13ea970172f31b066",
+      "bytes": 103443
+    }
+  },
+  "whole_text_read_this_turn": [
+    "README.md",
+    "LICENSE",
+    "phistTerminal.py",
+    "resources/README.md"
+  ],
+  "images_individually_viewed": [
+    "resources/a11.jpg",
+    "resources/a20.jpg",
+    "resources/bills.JPG",
+    "resources/goat.jpg",
+    "resources/phistBlueRibbon.png",
+    "resources/phistIsis.png"
+  ],
+  "pdf_review": {
+    "resources/phistPaper.pdf": {
+      "pages": 3,
+      "text_whole_read": true,
+      "rendered_pages_viewed": [
+        1,
+        2,
+        3
+      ]
+    },
+    "resources/perceptualHashingFinal.pdf": {
+      "pages": 48,
+      "metadata_only": true,
+      "text_whole_read": false,
+      "rendered_pages_viewed": []
+    }
+  },
+  "findings": [
+    "README constanttime17M/170Mclaim lacksreproduciblebenchmarkharness/results in trackedtree;bucketlineariteration anddensity matter. Notaccepted asmeasuredspeedup.",
+    "Shortpaper pseudocode also returnsFalse afterfirstnonmatchingbucketentry;paper recipe16x16->4x4/8x8 differs pinnedcode10x10->5x5+redundantoriginalhash. No binarycompatibilityinferred.",
+    "Shortpaper byte/hash labels mixhexstringlength andactualbitcapacity:4hexcharacters mean16bits,not4bytes. Codeactualserializerdropsnonbytealignedtail,priorcontrolretained.",
+    "Sixassets includeeditedtextoverlaypair,mascot andcomparisoncollage,twoillustrations;not sixindependentaccuracyfixtures. No sourceimage extraction fromcollage performed.",
+    "Terminal indexesargv[1]withoutlengthcheck; advertisedflatDbNameargumentignoredbyquerymethods,whichloadhardcodedcwdpicklefiles. Commandnotexecuted.",
+    "RootBSD2clausetextcreditsDennisDevey2016andJohannesBuchner2013-2015. Noproductioncodeadopted."
+  ],
+  "remaining": [
+    "48pagepresentation wholetext andvisualreview"
+  ],
+  "limits": [
+    "229/500complete; entry374partial.",
+    "PDFskillusedread-only,originalPDFs unchanged.",
+    "NativepHash/ASAN remainsdeferred."
+  ]
+}
