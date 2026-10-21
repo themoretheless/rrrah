@@ -1,0 +1,41 @@
+{
+  "repository": "s-bear/image-hash",
+  "commit": "cd7e52e566b240fe9294d1e695795c029ef7ac3c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 17,
+  "cumulative_assessed_blobs": 7,
+  "new_whole_files_read": {
+    "imghash.h": {
+      "bytes": 12312,
+      "sha256": "8f2647718416b2445a953848474cfe3d2295b2efbc2ec552432e1339da157750",
+      "git_blob": "c86b7e3eab00b094e5bb390fcaa3a81edce49b53",
+      "method": "Whole pinned C++ source/header read without truncation"
+    },
+    "imghash.cpp": {
+      "bytes": 14613,
+      "sha256": "a1a83c6dd5ca993ab13b7f68d1d8c0535f4658d6ee3261fa055d9ba174de5fa2",
+      "git_blob": "9f03684a16d543f907a5ac6497e62e55a9f89c8f",
+      "method": "Whole pinned C++ source/header read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/imagehash472-controls-v2-20261021/run.cpp",
+    "log": "docs/research/dedup-500/imagehash472-controls-v2-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original imghash.cpp/header compiled clang++C++17, authored synthetic bytehash/1x1RGBfixtures. No encoded decoder,MVPdatabase,sanitizerorfullCLI."
+  },
+  "findings": [
+    "Hasher::match explicitlycommon-prefixpolicy;empty/nonempty matches whileequalrejects. Not claimedpolicydefect.",
+    "distanceonlycommonprefix;[0],empty,[255]triangle0+0<8showsnotmetriconunrestrictedmixedlengths. Databasehash_typecheckmayexcludeordinarymixedhashes;actualMVPworkflowimpactpending.",
+    "Equal32bytezero/allFFdistance256positivecontrolpasses.",
+    "OriginalPreprocess32x32andBlockHashermap1x1solidblack/whiteRGBtoidenticaloutput/signature. Hashcannotprovecontentidentity.",
+    "DCTusesselectedevenfrequenciesforsymmetryandprefixlengthpolicy;inputM/emptydimensionsvalidationrequiresfurtherboundaryreview.",
+    "PPMloaderhandlesinputheadersand16bitbytesdirectly;maxvalrescaling/char-signextension/checkedsizearithmeticnotqualifiedbycurrentcontrols."
+  ],
+  "remaining_scope": "10wholeartifacts:MVPimplementation,CLI,PNG/JPEGdecoders,buildconfigs/workflow,originalPNGfixture.",
+  "license": "RootMITfullyread;noproductioncodeadopted.",
+  "limits": [
+    "Fullreviewcount174/500unchanged;8targetedcontrolscumulative.",
+    "No full imagecorpus/decoders/database/platform/performancequalification.NativepHash/ASANdeferred."
+  ]
+}

@@ -1,0 +1,5 @@
+PASS empty hash prefix matches nonempty by documented prefix policy, strict equal rejects
+PASS variable-length prefix distance violates triangle inequality; not a metric for unrestricted mixed lengths
+PASS equal-length full256bit Hamming distance
+PASS original preprocessing and block hash collapse solid black/white; not content identity
+RESULT 4 original C++ controls passed; no encoded decoder, MVP database or sanitizer run
