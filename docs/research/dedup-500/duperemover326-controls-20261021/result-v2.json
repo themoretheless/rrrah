@@ -1,0 +1,29 @@
+{
+  "source_sha256": "a1c1c3e0a1b03c0206da055854928dd77e56ca5d4a83c75312759aabb2062bf6",
+  "method": "Original whole main.py unchanged via runpy and actual CLI subprocess. No mocked functions. All file effects inside owned TemporaryDirectory.",
+  "same_basename_outputs": {
+    "reported_successes": 2,
+    "output_files": 1,
+    "final_output": "beta\n",
+    "first_result_overwritten": true
+  },
+  "csv_comma_filename": {
+    "expected_columns": 6,
+    "actual_columns": 7,
+    "parsed_row": [
+      "a",
+      "b.txt",
+      "2",
+      "1",
+      "1",
+      "50.00%",
+      "Success"
+    ]
+  },
+  "missing_input_cli": {
+    "exit_code": 0,
+    "reported_files_failed": 1,
+    "stderr": "2026-10-21 21:55:22 - ERROR - An error occurred: File not found: /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-duperemover326-batch-yw7rpxiw/missing.txt\n2026-10-21 21:55:22 - ERROR - Failed to process /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-duperemover326-batch-yw7rpxiw/missing.txt: File not found: /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-duperemover326-batch-yw7rpxiw/missing.txt\n"
+  },
+  "limits": "Sequential output collision and structured report/exit status controls only; no parallel-race or streaming qualification."
+}

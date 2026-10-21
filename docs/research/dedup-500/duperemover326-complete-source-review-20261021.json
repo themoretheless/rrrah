@@ -1,0 +1,89 @@
+{
+  "repository": "Mahdiglm/DupeRemover",
+  "commit": "553f16ba4462a5f3eec16df5b4cb6c2d8228a8c1",
+  "whole_repo_complete": true,
+  "scope": "All8 tracked text blobs wholly read; no tracked media, binaries or submodules. External shields.io badge markup/alt text inventoried as presentation metadata, dynamic badges not visually fetched or used as capability evidence. No external source references counted as reviewed.",
+  "manifest": [
+    {
+      "path": ".gitignore",
+      "sha256": "faef2b432a532cc80efd757a3991929264f5f93c2e588e47e08bc40e0d6ed203",
+      "bytes": 639,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "e2efe4ce8bd2da3cd6c876acc70bc868e0ec277a440ffbaf879f40d746bad46b",
+      "bytes": 6839,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "4b62c845592f4e41ba4702810907ad0dcce6437ca56d85e6a8950a18444b07cb",
+      "bytes": 1065,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "README.md",
+      "sha256": "4c178758236a949be28a63d237f7f9bc87351712eca74dd67ac0685dd4ad8458",
+      "bytes": 15317,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "main.py",
+      "sha256": "a1c1c3e0a1b03c0206da055854928dd77e56ca5d4a83c75312759aabb2062bf6",
+      "bytes": 66962,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "release_notes.md",
+      "sha256": "f65ac971de79bbdc9ae7230daee985894acfef0964ac7e3d094bf1a103903416",
+      "bytes": 3358,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "test_duplicate_remover.py",
+      "sha256": "877b73ac0712dc27eae81534b5648223b54a623eb306c06022353ab458496dd9",
+      "bytes": 10671,
+      "review": "whole text read across v1 and completion"
+    },
+    {
+      "path": "test_streaming.py",
+      "sha256": "8e9485a8ece28abdfb357fcc650716d576a94ecdf73b7311b9d7be3b39299734",
+      "bytes": 5397,
+      "review": "whole text read across v1 and completion"
+    }
+  ],
+  "previous_review": "docs/research/dedup-500/duperemover326-source-review-v1-20261021.json",
+  "controls": [
+    "docs/research/dedup-500/duperemover326-controls-20261021/result.json",
+    "docs/research/dedup-500/duperemover326-controls-20261021/result-v2.json"
+  ],
+  "upstream_suite": {
+    "passed": 20,
+    "failed": 0,
+    "scope": "Original unchanged unittest run in v1, not rerun for documentation reading. No GUI/streaming demonstration execution."
+  },
+  "additional_executed_findings": [
+    "Sequential two inputs a/same.txt and b/same.txt into output_dir both report success but only one output survives containing second input. Original process_multiple_files unchanged, owned temp files.",
+    "Original CSV generator interpolates filename without quoting: a,b.txt produces7columns under standard csv.reader for6column header.",
+    "Actual original CLI for missing input returns exit0 despite JSON summary files_failed1. No fake filesystem or function adapter."
+  ],
+  "additional_source_findings": [
+    "README and release notes advertise pyside_gui.py, app.py, requirements.txt, duperemover.spec and build_exe.ps1, none present in exact tracked tree. GUI/packaging delivery unproven.",
+    "README constant-memory claim contradicts all-unique output accumulation and unbounded seen_exact; streaming seen_lines also unbounded. Benchmark numbers have no tracked harness, raw samples or repeat protocol; not accepted as performance evidence.",
+    "process_multiple_files deduplicates lines inside each file independently, not across files; README merge/consolidation use case not an implemented cross-file merge.",
+    "Parallel exceptions lose original message in returned Unknown error record. Parallel same-basename destinations share output path; race behavior not executed.",
+    "generate_report suppresses report write failures and returns content; cli_main ignores failed result statuses and returns0. Structured success reporting is not publication acknowledgement.",
+    "CSV/Markdown do not escape delimiters; HTML uses html.escape and XML ElementTree escapes text. YAML handcrafted subset has no roundtrip tests; no report renderer QA claimed.",
+    "CLI stdin path prints deduplicated content and default report into same stdout; --stream stdin explicitly unimplemented. --dry-run bypassed by streaming branch, source-only finding.",
+    "Input normalization rules, approximate random fuzzy search and encoding loss remain unsuitable for exact file identity.",
+    "MIT2025Mahdiglm wholly read; no source copied."
+  ],
+  "decision": "reject-domain",
+  "adoption": "No production change; retain byte preservation, dry-run, collision-free output and error acknowledgement counterexamples as review lessons.",
+  "limits": [
+    "Full available repository source review is not end-to-end qualification of all advertised options.",
+    "No native pHash/ASAN, GUI, Windows package, large-file performance, parallel race or follow-mode runtime work.",
+    "242/500 source reviews does not establish all cases covered."
+  ]
+}
