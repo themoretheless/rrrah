@@ -1,0 +1,52 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          501,
+          1100
+        ],
+        [
+          1101,
+          1600
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "unread_ranges": [
+        [
+          1601,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated continuation501..1100/1101..1600 after v145. API declarations/documentation only, implementations still unread.",
+  "findings": [
+    "Pinned header declares version0.8.3. Header version macros and dynamically linked XXH_versionNumber are distinct sources of version truth; no claim about current upstream release.",
+    "XXH_NO_STREAM excludes streaming state APIs; XXH_NO_LONG_LONG removes64-bit families and XXH_NO_XXH3 controls newer family. Compile configuration determines API availability.",
+    "XXH32/64 reset/update/digest require nonnull state; copyState additionally forbids overlap. Allocation may returnNULL. Digest is documented nonmutating and repeatable before further updates. Caller wrappers must uphold these contracts.",
+    "XXH3 secret size minimum136 bytes. Reset-with-secret references external memory that must outlive entire streaming session; one-shot secret also must be sufficiently large/readable. Secret quality affects dispersion, but this remains noncryptographic hashing.",
+    "XXH3 selects SIMD according to compile-time predefined macros; x86 runtime dispatcher is a separately named source file. Presence of scalar implementation does not prove automatic runtime fallback in this header.",
+    "XXH128_hash_t stores low64 then high64 fields in native endianness; canonical representation remains separate. Equality/comparator helpers compare hash values, not original file bytes.",
+    "Documentation for XXH3_128bits_withSeed incorrectly references64-bit unseeded function in seed0 equivalence note, while unseeded128 documentation states128-bit equivalence. Treat as documentation inconsistency; verify actual implementation before any behavior claim."
+  ],
+  "limits": [
+    "1600/7238 lines cumulatively read;288/289 whole files and150/500 repositories unchanged.",
+    "No execution, SIMD parity, lifetime misuse reproduction or performance proof. Upstream reference-only; pHash/ASAN deferred."
+  ]
+}
