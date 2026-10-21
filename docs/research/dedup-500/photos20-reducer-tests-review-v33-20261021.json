@@ -1,0 +1,30 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/lib/app-reducer.test.ts": {
+      "sha256": "2fb6fbebbdc2f0a931c32c4c8b01973e896aa684f9ace3ce3084dc140bf356f5",
+      "git_blob": "5988c6927b61ea8d3bed9134b1c9c6015e4d8e92",
+      "bytes": 9354,
+      "lines": 297,
+      "declared_it_calls": 18,
+      "method": "Whole test source read in contiguous ranges 1-240 and 241-297."
+    }
+  },
+  "cumulative_whole_files_read": 68,
+  "tracked_blobs": 84,
+  "findings": [
+    "Tests import actual reducer and explicitly cover clearing known different-account results while preserving known same-account results. Unknown account relabel case is not tested here.",
+    "No SCAN_CANCELLED case, delayed SCAN_COMPLETE after cancellation/new request, scan progress request mismatch or health check during scanning/trashing in this file. Earlier isolated original-reducer controls remain separate evidence.",
+    "Trash group-retention fixture removes img3 while original img1 remains; it does not test removed original with two surviving members. Caller recomputation mitigation was separately recorded.",
+    "Some trash assertions run only if returned status is results without separately asserting that status, allowing unintended non-results transitions to evade those checks.",
+    "GP_TAB_CLOSED test title says any state but iterates only connecting/connected/results; scanning/trashing are not included. RESET any-state title supplies only results.",
+    "Snapshot test verifies group count and total, not account provenance, original identity, server restore acknowledgement or stale snapshot correlation."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Upstream test source reviewed, no Vitest execution in this step.",
+    "68/84 whole files reviewed; no production library changes."
+  ]
+}
