@@ -19,14 +19,29 @@ fn pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels() {
         .collect();
     paths.sort();
     assert_eq!(paths.len(), 161, "expected the pinned valid PNG corpus");
+    let mut failures = Vec::new();
     for path in &paths {
         {
             let bytes = std::fs::read(path).unwrap();
             assert_eq!(&bytes[..8], b"\x89PNG\r\n\x1a\n");
             let width = u32::from_be_bytes(bytes[16..20].try_into().unwrap());
             let height = u32::from_be_bytes(bytes[20..24].try_into().unwrap());
-            let frame = decode_selected_frame(&DecodeRequest::new(path), 1_000_000, &budget, || false)
-                .unwrap_or_else(|error| panic!("{}: {error}", path.display()));
+            let frame = match decode_selected_frame(&DecodeRequest::new(path), 1_000_000, &budget, || false) {
+                Ok(frame) => frame,
+                Err(error) => {
+                    failures.push(format!(
+                        "{}: {error}",
+                        path.file_name().unwrap().to_string_lossy()
+                    ));
+                    assert_eq!(
+                        budget.used(),
+                        0,
+                        "failed decode retained budget: {}",
+                        path.display()
+                    );
+                    continue;
+                }
+            };
             let view = frame.view(|| false).unwrap();
             assert_eq!(view.dimensions(), (width, height), "{}", path.display());
             for y in 0..height {
@@ -49,6 +64,11 @@ fn pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels() {
         }
         assert_eq!(budget.used(), 0, "{}", path.display());
     }
+    eprintln!(
+        "valid corpus decoded: {}/161; failures: {failures:#?}",
+        161 - failures.len()
+    );
+    assert!(failures.is_empty(), "valid PNG decode failures: {failures:#?}");
     let mut pairs = 0;
     for path in paths
         .iter()

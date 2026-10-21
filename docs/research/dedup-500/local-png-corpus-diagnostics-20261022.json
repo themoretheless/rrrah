@@ -1,0 +1,816 @@
+{
+  "test": "crates/rrrah-dedup/tests/png_pinned_corpus.rs",
+  "result": {
+    "exit_code": 101,
+    "valid_images_attempted": 161,
+    "decoded_and_checked": 63,
+    "decode_failures": 98,
+    "pairs_not_reached": 15,
+    "test_passed": false
+  },
+  "failure_metadata_groups": {
+    "gAMA": 98
+  },
+  "failures": [
+    {
+      "image": "basi2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "b2690d4475cdc39faf5a7d2de20de4e14eb96c6360fa791ec2003b4085ecacde",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "ae13eba5fabbf7cbe8c01ec4458cdaa7e6bfdfcbd5109e831efaac9f39096027",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "8e1edfbc0382e0b545c70209271cedead2d530df1ce40f5296f0749226b36006",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "85f304eaaf6831b2bcc2c08892b947fef52f06337aaf23312d6326e367d73f77",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "78890ee2c4da71e460b5a1527efe7dc17d673ebe997f49ca1b4dcd7347d21e56",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "ca103eef7a7c50abc7af9d5ec0dc9fdc07668e2f030adbce226e050dcec9eea3",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi6a08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "fe70ea20c8447e82abb7bc9dd05344a61a4631cc69e0974378df8f6263af0337",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basi6a16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "7fdd6bf08f04692bcf06b5c4262e7f76c49d8adb992789fd3f05aa0435645cd8",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "c90e86090a625661b19960cafdde6e347d6e32d73837aaae533f66dd3f099506",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "1e1c28ec0ee5da6224404b4005076dd30e2335a1a80c0ca722046a245c4a2b3b",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "c2d7cd682df5f74506b33a5d70c344aaee248fda79fdfef8e873426fd6f2b75b",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "0466bb7ed9984cf03b70704564bcffab1df8ec0e8167473ba0f75e4fedce5a8f",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "e1fc7be978d3149b98533d0076245ae64353b7967290f4204c1282ecb4ec1aba",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "d58256cd2eb16b5740d4c1403d25ce43d8dd03e270627ab709d2fb141e3d904c",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn6a08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "559c594166eb156f461c9beff0f053196730dc998fdb0d2b801c89e6680860a5",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "basn6a16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "8f9d81060aebf4576461403c5057de7f23f73157016b659402b906df805845aa",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "bgan6a08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "559c594166eb156f461c9beff0f053196730dc998fdb0d2b801c89e6680860a5",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "bgan6a16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "8f9d81060aebf4576461403c5057de7f23f73157016b659402b906df805845aa",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "bgwn6a08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "2da3c3efa01bf166958852a104ece92daaede8ffb5e0452a55d40526258a8bf5",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "bgyn6a16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "875bc2b44a4355551c51260def9664da68be1af8c14b82f76173aaf01ddb1929",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cdfn2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "438018f19c85e582cb586ac7cca2220008ecb7fc70ce50e8f2a76b494c128a20",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cdhn2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "a068eaf1f7040490e08eda3259befb6689849dd0ff8bb4cc03c705d117cb2b9f",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cdsn2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "ee08dfa303a3c09171280fc1821180dc0a4c3591af7e9077e8ce0435642c76d2",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cdun2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "a849d89ba3d92146940d7c56d2fe74c9c3ec96725c7f24eefaf44160a6304de2",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "ch1n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "587a8624228d3f605f475bd751a1f3a97f0bbab590c0ff518bce5da3abcb6f2b",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "ch2n3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "e3cace549047c6e5e693b9b135d53f7f9ca5b1088bf30cc408634598ba53758a",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cs3n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "bc812de2b83abc9ae2a6d1ae01e91f9090214b9ed8fee1d56cdfea58f4f259d0",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cs3n3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "267104dced0858dd828cdd41edc0e87042c7094c77191565192a67045064b23f",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cs5n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "028fa49fbba3954c2eba27a4c3607196e87c1dae74192df3b3ad7afe5e0a3f0c",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cs5n3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "a7a4021983d6b22685529cbafb65cd087c9e1af1c5d205c2e13e3efc4ae87b6a",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cs8n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "d90ddab7313e4e1fd7f20f16a6c546b449697fbcac1a7776298a74896f4662da",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "cs8n3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "5bffdb88e307a851f8e85b137a69c59e557a881db816e990061934c0155c894c",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "g03n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "abce774b9624952c2d0c57ff681790ba620cf5616fe7e0ef0600600cdce3c22a",
+      "color_metadata": {
+        "gAMA": "000088b8"
+      }
+    },
+    {
+      "image": "g03n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "541389db0c72721c6c49501e1dbf6e32df41b4fcfa318676955e278f3f4332b3",
+      "color_metadata": {
+        "gAMA": "000088b8"
+      }
+    },
+    {
+      "image": "g04n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "bfd3edfc4d85a43383556a51023533fa3888184aa53a6b43769910782beebfce",
+      "color_metadata": {
+        "gAMA": "0000afc8"
+      }
+    },
+    {
+      "image": "g04n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "5ea85ebefb58b2ab113fc05bf1cb79ffb068359e3a5620843590a0a7b59bd49a",
+      "color_metadata": {
+        "gAMA": "0000afc8"
+      }
+    },
+    {
+      "image": "g05n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "74ab5b8477992d65e220eeaff8df466522c1b392fa90c6f9935da5bdb7113c9d",
+      "color_metadata": {
+        "gAMA": "0000d6d8"
+      }
+    },
+    {
+      "image": "g05n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "2f46afd7ec15836b523cbce6965f34d89833b8d777afffaf0f53bce620d5f65e",
+      "color_metadata": {
+        "gAMA": "0000d6d8"
+      }
+    },
+    {
+      "image": "g07n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "ca4cd32d222f65fb7beb7c9f40d8b6833b36d552b830ff1a1d67dae73b8ed0d8",
+      "color_metadata": {
+        "gAMA": "00011170"
+      }
+    },
+    {
+      "image": "g07n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "b8e7abeabcfd50b71cca78b6cdff7372310cfc179cd63304c3e904f469b333cb",
+      "color_metadata": {
+        "gAMA": "00011170"
+      }
+    },
+    {
+      "image": "g10n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "4ac23729aea109e8f6b1e831448115cf02dcd97559e9403847cbe6dd7e5c7347",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "g10n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "36cc2ea4b5b33cd18e0a01c7de85dbcaf7161d258cd0f2265a90cd835b15cf6d",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "g25n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "9b128cfa1bb417dd99251914d729062621fcea9f346168549b16a75fe030b0f6",
+      "color_metadata": {
+        "gAMA": "0003d090"
+      }
+    },
+    {
+      "image": "g25n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "4197a0a25c4f74d42c2285d75b9fabe1eedbed45bc224ff1ec1784f5797e9dbf",
+      "color_metadata": {
+        "gAMA": "0003d090"
+      }
+    },
+    {
+      "image": "oi1n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "1e1c28ec0ee5da6224404b4005076dd30e2335a1a80c0ca722046a245c4a2b3b",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "oi2n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "2c523f138e0ade1bed8f31d59ec0f34b82660b192d6af8b8f395f82b9ba9dabb",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "oi4n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "661220a0ed03ca6d63ec8dcaac738d4a9fd089b491c40dd896267ffb6cf5015d",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "oi9n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "fef98e9bebe6c4046c29f2568f7a735305c8661aa01f9c37a718135e5bc4f941",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "pp0n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "72406b6173ec20dd059e8cea594ef5bc8f81bac5e416e2b53058d2debd51d195",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "pp0n6a08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "d5a6f964a601a5e1815525117c12c32b61e2aa09fd6040776d35f2f7115b7110",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "ps1n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "6c59d673032fe2d04dbd2ea91cc9bc7bebe7d5ab84911f00e36fb28994793576",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "ps2n2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "120c62ce9d014f7772c4b38a446991b5bbe6a22ef5ea59239d32e023bc167585",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s01i3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "235eb82f1337e3fcefbdca566a53af3d3523db7588ba3cd7fa5dab19afe48a41",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s01n3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "6a4f6da9fe36d195219ad2beeac1a0423e2ee6de03dfb064a3b6fa31623eb230",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s02i3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "e7d26ab4b31e7066b0674a4374c093967a9f1761b96836aa3dbe624acd73ab52",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s02n3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "f4b324f2b1d013ee77f632e42129c7cd3eca55da846e775e744a1f224ad1efcd",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s03i3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "4513dec80f54ffd04a28834b114254d6e6d66e52e32e0059174474f2fb15d6bc",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s03n3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "4dee297bd7f747f87488509af11a1e1e0531fa67e6e8d0f8ab7f4df7940f0ff3",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s04i3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "918f94f3557e10de91efa680df507c8eafc347fa5023af43037701398128ad0f",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s04n3p01.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "e73c52f764b684ec5133cce11f7f18cc60065acdd308e2c3d871e0a792a1080e",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s05i3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "77fe040e17167f9656afe46cf0031832e635745e4e7f19ba12dee32f5ec03d96",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s05n3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "1b9e244a5c1d6cc9830391fff4eac565ada026d000e60faf7525c8add6bdc726",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s06i3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "cf8d5fdb34c0afd38b1b4745bed6167771767ccdfe847c4d8766f7fcc5c41176",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s06n3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "5caabfc4b147fad5e49e558143faaab91888324240acf45e5db8fc49f7a7f667",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s07i3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "d9874bfad10353a9ea2876ee388c3e7f81f697ed141d0d79c5c2019d62a7a698",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s07n3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "e7d447394f5fa64c27353216af387352a77a1fb534922a2d974e60d965d4e414",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s08i3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "62adf855c6b1e3a007f9dcf3ce2ba244616c089269a511dd939e89a4b0853453",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s08n3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "544fdd476e566e8aef4c98604124ae05acef48be20d1aebb9b6674b08b2abbb6",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s09i3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "f2cf5b3109690704d106a0b22ea079e36064cc6077e1fb9a1ba87397d0bbcca1",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s09n3p02.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "6be8f58b638e7f7114750f5796f66f650db8fb7242a36183850f02117f4eaa65",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s32i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "a27e0dbf923ef868e7399560b76c23a50b2d8926cddd9775e2bc4e050273f205",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s32n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "c80d9fc7ded0b7834ec11d0e324540c7be74016b61bc302a1d167218fa35fbf9",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s33i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "cc6ad98dcf686d92f1165d951f90fac70e568cedb1fcbba33e8890d0e6cdad4d",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s33n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "998d08e084e3eea288984475bfed0d48ee2d8250e20b96755898b59152e36a34",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s34i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "83eb2e82eb14ae3c608833ef371a6f472c4c6e63b7e9f4f92f5472f975793b97",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s34n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "a25451168c0b03ab8f52dcc60c6b9c12bc5df5d55afabe1892b87d0a856bb4a0",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s35i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "db5988c27ad577de1e494cb50229dc2772678531adde2db84493907eae003e54",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s35n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "cd99fc4cc69bda1ff8e8697d8b423ae8d9e84a58ba1d2b480751953b6869e3b3",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s36i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "a36b40927b730a31d60c7818fb4a32e67ace06393cdaa26edc09520b6cee066d",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s36n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "ebc08f6a1e0918c5d3a9a08e184c23019a3cf90d8843e4b71bf2ae16040b1a84",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s37i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "565c79404c4b9e46c27edb2f93d7b26b93ec0a0481ab7a21fc405152a21f53ba",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s37n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "964078b1f3f472268b8ac97a8976b4d1cdb6a47e6243d67eddcb0205e65b9f61",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s38i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "b107f120ffaffcb949ac4547e0f91555ac681f78c7e68c724e7ceddfd8e5387b",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s38n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "045b0f5ea35874741bf6cac40f2e63ec8726450ab241475df4b7e9303c39e339",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s39i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "4b5a6d8c04c8c70e1de3bcb6f7b5cc3ba359b13e28de6f52e21a291d4bc8a937",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s39n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "2115b6cad0140ea97fe6ec056b47307ef1e8b5c00db5f08707a0572b165e5f08",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s40i3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "48a3f19b5c3b2f7eca17fd34765a2a3e385d770f24c357bc66bd74417eb60a5a",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "s40n3p04.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "c4598ea73b1ec015bef7dcfd7f67bc7bfc41546619953d1a92cd9b8657a7033a",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbbn2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "8fcfd031a5b716201854fdab25691feed6cd3ed7b713a51b94e1f43fc63fe0c1",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbbn3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "8eb43a6020fda8ed7c8c9b88b974ef794ee8452db29212ae7e5c11003bfd76a3",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbgn2c16.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "49711ee271f96099521b83b75d58ed2f76d42ed46cb3c06656fde2cad697cf59",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbgn3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "6f798628935a021fe446dce3d62861d1f7369aaf01bad10daa4917c5abccad7d",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbrn2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "8223d8b0c5f84b149f0c1f0e1f658346e07fcbd03ffc02b2e9eeea1481eb19bf",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbwn3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "978b28cec43bd219517083b63661bb30a7b9cdf9fd4476ab4e70844565980d51",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tbyn3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "7b4eb64b4bd7eb36417752873ddaca027ce77a07f474b2af569f4eea1e984111",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tp0n2c08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "5dced3fde56b950e61ce86f4ad54458336f66389ce8ca68524d4fd8ec546ff5b",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tp0n3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "da40ddb18bd45db32ed03dc89e2250b096d808efe975a88477e4f5a91a4677c9",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    },
+    {
+      "image": "tp1n3p08.png",
+      "error": "raster needs an ICC or source-primary transform before display",
+      "sha256": "50bc927fe6cf1816454a7c27f8c743734be8db45e37e5ee3ede540f4e895e6c5",
+      "color_metadata": {
+        "gAMA": "000186a0"
+      }
+    }
+  ],
+  "checks_on_success": [
+    "IHDR dimensions",
+    "AllRGBA finite; alpha in0..1",
+    "Selected-frame digest constructs",
+    "Budget released after successful and failed decode"
+  ],
+  "source_policy_evidence": [
+    "crates/rrrah-vector/src/png_color.rs::tests::gamma_only_requires_gray_ihdr_and_respects_srgb explicitly expects RGB gamma-only declaration without assigned color space",
+    "crates/rrrah-develop/src/raster.rs::to_linear_srgb_with_budget_and_cancel rejects unsupported/unknown source color transform"
+  ],
+  "limits": [
+    "63 successes are structural/normalization checks, not independent pixel reference for each image.",
+    "Test still requires zero failures and stops before15 pair comparisons when any decode fails.",
+    "No production fix or color policy change; pre-existing dirty raster/develop files retained."
+  ],
+  "next_work": "Add explicit provenance-preserving handling for incomplete source color declarations; never silently reinterpret gamma-only RGB as declared sRGB. Then requalify complete corpus and15 Adam7 pairs."
+}
