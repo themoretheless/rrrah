@@ -1,0 +1,58 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 98,
+  "files": {
+    "docs/_build/html/_static/language_data.js": {
+      "bytes": 4598,
+      "sha256": "3bc311563b7fc5e80fcab2f8629774bf3cb6b30202000df36dff8e695a9023b7",
+      "git_blob": "c7fe6c6fafad656c3aa8bea99e39386ad603b964",
+      "method": "Whole original JS text read without truncation"
+    },
+    "docs/_build/html/_static/searchtools.js": {
+      "bytes": 21463,
+      "sha256": "2a6b65cf29a1832713d508c471d64325312bb9b5672b81ed5595fa68333a65b5",
+      "git_blob": "2c774d17aff4b1efe084b91c7feea0c5e88acf4f",
+      "method": "Whole original JS text read without truncation"
+    },
+    "docs/_build/html/_static/scripts/furo.js.map": {
+      "bytes": 28571,
+      "sha256": "049d8e3c297854c9e7defecbf64bc92c375b4d94c7bef119ba11c8e8fc723ca2",
+      "git_blob": "3b316f3a34393a5e46e24bdb507e49eaa3a4c542",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/_static/styles/furo.css.map": {
+      "bytes": 76029,
+      "sha256": "b7d40df8a2d2c5cc7727929dce7a482be4506f905ec42588fdbd0571bb1e9a45",
+      "git_blob": "db1dec16557f8cff37b356ee87e42bd6205048f0",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/_static/styles/furo-extensions.css.map": {
+      "bytes": 7762,
+      "sha256": "0b35b6ebb81f2aa1fcaee325c096d683e32c1808a9220670a1a3f88300c6915c",
+      "git_blob": "68fb7fd0d7cb0bcdfb97d531c9a887b01b5f4c9a",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    },
+    "docs/_build/html/searchindex.js": {
+      "bytes": 10156,
+      "sha256": "660788a926de24f0309b44e563469961431023882a973b7acbe2f74f713ff3ef",
+      "git_blob": "9f652232032be27c8d3ac8db66dabac9ff370ae2",
+      "method": "Full JSON payload structurally parsed; source/name/mapping inventory or all term document IDs inspected. Embedded sourceContent not separately whole-read; source-map generated correspondence not validated"
+    }
+  },
+  "structural_audit": "docs/research/dedup-500/vectors166-static-index-map-audit-20261021.json",
+  "new_runtime_controls": 0,
+  "cumulative_runtime_controls": 15,
+  "findings": [
+    "Language script contains English stopwords and Porter stemmer. Search script handles object/title/term scoring, Unicode token splitting, asynchronous summaries and deduplicates results by comma-joined fields; no browser execution.",
+    "Search index six documents all exist,403content terms27title terms,all term postings within document range. API object records inspected; no interactive relevance qualification.",
+    "Three maps version3, embedded sourceContent counts match sources:7JSsources31FuroCSSsources5extensionCSSsources. Inventories and segment counts saved. Not evidence of exact generated mapping correspondence or whole embedded source review.",
+    "Search _parseQuery splits on non-word punctuation before checking leading minus; exclusion support needs runtime control before calling it broken. performTermsSearch excludes with break rather than continue, source-only concern. These are documentation UI issues, not dedup library defects."
+  ],
+  "remaining_scope": "Four CSS assets remain:basic.css,pygments.css,Furo CSS andextensions CSS.",
+  "limits": [
+    "Source maps assessed structurally only; not embedded-source line-by-line review.100 original library tests passed separately; global fully reviewed count201/500 unchanged. pHash/ASAN deferred."
+  ]
+}

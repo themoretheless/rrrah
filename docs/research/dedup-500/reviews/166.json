@@ -2,7 +2,7 @@
   "index": 166,
   "repository": "julianholland/deduplicate",
   "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
-  "review_scope": "Partial pinned92/102 artifacts assessed;6 static JS/CSS assets whole-read.100 original tests passed combined;10 generated assets remain.",
+  "review_scope": "Partial pinned98/102 artifacts assessed, with3 source maps structurally inspected only.100 original tests pass combined;4 CSS files remain.",
   "decision": "shortlist",
   "finding": "Pluggable distance-matrix and multi-hash candidate algorithms with integration tests; threshold semantics need deeper review.",
   "available_source_evidence": [
@@ -162,6 +162,9 @@
     },
     {
       "audit": "docs/research/dedup-500/vectors166-source-review-v16-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/vectors166-source-review-v17-20261021.json"
     }
   ],
   "upstream_test_scope": "Complete original tests directory100passed with genuine Numba and explicit isolated notebook kernel; current dependencies, not original lock. Registry test fails in isolation as documented."
