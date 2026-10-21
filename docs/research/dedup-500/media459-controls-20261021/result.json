@@ -1,0 +1,35 @@
+{
+  "method": "Whole original main_cli.cpp and originalstb_image.h compiled unchanged with AppleC++17 on macOSarm64, nonWindows hash path. Actual CLI process on owned tempfile files only, no GUI, deletions, office subprocess or packaged executables.",
+  "source_sha256": {
+    "main_cli.cpp": "eb9f605c582526f35c75729f44d1cbf941f72ef6519826bb7e5ac54c7f37ef32",
+    "stb_image.h": "1f8c1b6b408f26e3b20cbfbbd4758afb3dc9b837ff1e17c258928f406148a87c",
+    "office_comparer_batch.py": "1649b00f3b1d8c1831faeceb8ccacb7cf6df921da676332e644a537a52da4d78"
+  },
+  "controls": {
+    "distinct_bytes_reported_exact": {
+      "inputs_hex": [
+        "4161",
+        "4242"
+      ],
+      "same_size": true,
+      "stdout": "EXACT|1.0\n/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-media459-6sbkj5om/exact/b.txt\n/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-media459-6sbkj5om/exact/a.txt\n---GROUP---\n"
+    },
+    "audio_filename_score_exceeds_one": {
+      "stdout": "SIMILAR|2.58\n/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-media459-6sbkj5om/audio/aaaaab.mp3|1.00\n/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-media459-6sbkj5om/audio/aaaaac.mp3|4.17\n---GROUP---\n",
+      "audio_decoder_used": false
+    },
+    "same_pixels_gradient_rejected": {
+      "stdout": "",
+      "recipe": "Two8x8 ascending grayscale ramps, identical pixel bytes, only BMPreserved headerbyte differs. Differencehash0 rejected before distance comparison; no decoder error injected."
+    },
+    "excel_ignores_extra_rows_and_sheets": {
+      "score": 1.0,
+      "method": "Two original Python function nodes unchanged; synthetic in-memory row arrays, no fake workbook parser."
+    }
+  },
+  "limits": [
+    "NonWindows polynomial hash collision does not qualify WindowsCryptoAPIbranch.",
+    "stb header compiled but not wholly reviewed; source/package provenance and all decoder cases remain open.",
+    "No claim that arbitrary MP3bytes are valid audio; filename-only classification demonstrated."
+  ]
+}

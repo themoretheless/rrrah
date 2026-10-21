@@ -1,0 +1,36 @@
+{
+  "repository": "DimitriosPournarkas/MediaDuplicateFinder",
+  "commit": "8a0b62604dc6f361234ce2788b666c96e9b446dd",
+  "whole_repo_complete": false,
+  "scope": "Whole main_cli.cpp and office_comparer_batch.py read; duplicate_gui.py delete_selected_group/delete_all_duplicates lines738-913 read. All17trackedblobs downloaded and GitSHA1verified; restGUI,README,licenses,stbheader,screenshots,binarymetadata remain unread.",
+  "runtime_controls": "docs/research/dedup-500/media459-controls-20261021/result.json",
+  "findings": [
+    "Whole unchanged originalCLI/stbcompiled AppleC++17 and executed actualfilesystemscan. Two distinct same-size filesAa/BB reportedEXACT|1.0 because nonWindows polynomialhash collides and no byteverification. Not a synthetic replacement hash; WindowsCryptoAPIbranch unrun.",
+    "No sizepartition or stable file identity before hash grouping; no post-read stream error check, final metadata/content revalidation or alias distinction. Errors returnempty hash or are printed/skipped, no structured completeness. Sourceonly beyond specific collisioncontrol.",
+    "OriginalCLI rejects identical-pixel8x8gradientBMP pair with differentreservedheader byte: valid differencehash0 rejected before metric. No fake image loader, two owned valid BMPfiles decoded by originalstb.",
+    "Audio is filename-only: synthetic .mp3 files with distinct single-bytecontents namedaaaaab/aaaaac yield similarity4.17and group2.58. Payloads not valid audio, no decoder used; detector never inspects audio content. Stringmetriccounts Cartesian matching characterpairs, can exceed1.",
+    "OriginalExcelcomparison functions return1 for sharedsinglecell although secondworkbook has extra rows and entirely extra sheet; compared-overlap semantics ignores unmatchedcontent. PythonASTfunctions original, no workbook parser runtime.",
+    "areImagesSimilar returns early without freeing successfully decoded image if other decode fails. No leakfaultinjection.",
+    "Images redecoded/resized for each pair, O(n squared) repeatedwork; no boundedindex/cache or measuredbeforeafter speeddata. Grayscale nearestneighbor hashes have no orientation/color/alpha/frame recipe.",
+    "Textcomparison reads first50lines as plaintext includingPDF; archive and Officefallbacksimilarity use names/sizes rather than content. Failurefallback not distinguished as weaker evidence.",
+    "Office batch tempfilenames only second-resolution in sharedcwd; ad-hocJSONparser maps sequentialsimilar fields, no structured validation/recipe/status. No office subprocess executed.",
+    "Similaritygroupsgreedy with processedfiles, not exhaustiveallpairs; exactfalsepositive alsoremovesfiles fromlater similaritystage.",
+    "GUIgroupdeletion uses currentpathos.remove after confirmation without independent byteproof or stableidentity check; groupremovedfromview evenpartialfailure. Both deletionmethods source-read only, no GUI or deletion executed."
+  ],
+  "local_collision_gate": {
+    "qualification": "docs/research/dedup-500/local-base-suite-qualification-20261021.json",
+    "test": "exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes",
+    "source": "crates/rrrah-dedup/src/exact.rs",
+    "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "verification": "Existingprevious-run49passed suite includes this test. Current sourcehash rechecked identical. Whole test body read: injected constantdigest across15files oflength0,1,2*BLOCK+1, correctgroupscomparedwith expectedbytepartition. No redundant rerun and no claim this is externalCLIcase execution.",
+    "limits": "No new decodeintegration or benchmark gate."
+  },
+  "remaining": [
+    "Remainingduplicate_gui.py,README.md,LICENSE,.gitignore,.gitattributes",
+    "stb_image.h2.30wholevendor source/license review",
+    "Seven trackedGUI screenshots visualinspection",
+    "Two Windows executables metadata/provenance qualification"
+  ],
+  "adoption": "No productionchange. Exactbyteconfirmation alreadycovered locally; do not copy digest-only equality, filename-only audio score or zero-hash error alias.",
+  "native_phash_asan": "Explicitlydeferred; this originalCLIusesstb not nativepHash."
+}
