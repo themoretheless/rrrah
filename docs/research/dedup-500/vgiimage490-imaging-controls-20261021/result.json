@@ -1,0 +1,17 @@
+{
+  "original_imaging_tests": {
+    "passed": 10,
+    "failed": 0,
+    "exit_code": 0,
+    "command": "cargo +1.98.1 test --locked -p image-worker imaging::tests --lib"
+  },
+  "authored_controls": {
+    "passed": 1,
+    "failed": 1,
+    "exit_code": 101,
+    "thumbnail": "Desired never-upscale assertion fails:2x1 becomes20x10 for20x20 box. Pinned source unchanged.",
+    "info": "41-byte PNG through IDAT header: image ImageReader.into_dimensions succeeds2x1 while original image_info rejects missing payload. Full decode required.",
+    "initial_control_correction": "Initial33byte PNG prefix was too short even for into_dimensions; initial failing control and log retained. Corrected41byte prefix distinguishes header-only dimensions from full decode."
+  },
+  "scope": "Authored integration test imports unmodified original imaging.rs via path and uses exact locked dependencies. Not complete Arrow/RPC/DuckDB test; no sanitizers/native pHash."
+}

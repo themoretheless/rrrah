@@ -4,7 +4,7 @@
   "commit": "91dcb7ffc11e1eb92f641361cc1bc60ab2730874",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "Rust DuckDB image-worker pHash/EXIF/GPS/Arrow pipeline; useful metadata handling but source-library and budget behavior unqualified.",
+  "finding": "Partial pinned review;10original imagingtests pass but authored2x1 thumbnail no-upscale requirement fails20x10; image_info fully decodes. Remaining source review unfinished.",
   "available_source_evidence": [
     {
       "path": "crates/image-worker/src/scalar/hash.rs",
@@ -70,8 +70,8 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 1,
-  "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "10original imaging unit tests executed;1authored control passes and1fails documented no-upscale behavior. Other tests unrun.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -93,6 +93,13 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/vgiimage490-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/vgiimage490-imaging-controls-20261021/result.json",
+      "whole_repo_complete": false
     }
   ]
 }
