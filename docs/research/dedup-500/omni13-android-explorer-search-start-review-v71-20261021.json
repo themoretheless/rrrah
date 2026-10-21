@@ -1,0 +1,51 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          1,
+          760
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          760
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Pinned full blob verified, but only lines1-760 actually read in three bounded chunks. Remaining760+ not credited by download or listing. Static explorer helper/initial state review.",
+  "findings": [
+    "recursiveDirectorySearch breadth-first queue capped by500 returned matches, not directories/entries/time. No visited/canonical-file set, depth guard, symlink rejection or cooperative cancellation inside helper. Symbolic-link cycle/no matches can keep traversal pending where filesystem permits; no live cycle or user-tree scan executed. Caller cancellation/dispatch/result publication still unread.",
+    "Directory listFiles exception/null skipped silently; no skipped count/error outcome/completeness flag returned. Search returns List<File> only, so inaccessible subtrees indistinguishable from no matches through this helper result. UI disclosure still unread.",
+    "Search matching trimmed lowercase name substring, not content. Includes directory matches and optionally dotnames; showHidden false only name.startsWith dot rather than other platform hidden attributes. Native filesystem listing order before limit makes subset nondeterministic across filesystem orders; no global top500 claim justified.",
+    "viewerImageCacheKey path/mtime/length/variant; no content identity/freshness proof for same-size preserved-mtime edits. File stats queried separately. Image request dimensions coerced>=1 with no explicit upper cap in helper; callsites pending.",
+    "decodeFastViewerPlaceholder target256..1200, platform ThumbnailUtils then bounds/sample fallback. Fallback bounds failures returnnull and sample loop reduces both dimensions against2xtarget; this differs original-size editor behavior. EXIF/orientation/actual codec parity untested.",
+    "Immersive window snapshot restores flags/barcolors/cutout but not backgrounds/dimAmount/contrast-enforced/previous decor-fits or bar behavior. Restore explicitly shows bars. Snapshot keepScreenOn field unused directly but savedflags includesbit; do not claim lostkeepScreenOn solely from unusedfield. Device visual/lifetime behavior unqualified.",
+    "Initial navigation category lists audio, while widget sends music. Later LaunchedEffect explicitly handles music and switchesAudio, so initial mismatch transient rather than missing music deeplink. Selected initial categories videos/archives/apks recognized in initializer but effect only internal/downloads/images/documents/music; later operations pending.",
+    "openMusicPlayerRequest effect runs parent directory listFiles/filter/sort and synchronous Manager.play without explicit IO context in shown block. Actual file readability only exists checked. Source path and media preparation costs unmeasured.",
+    "Most explorer state remember without file/navigation saveable keys; many DataStore flows collected with initial defaults. Lifecycle/persistence and deep-link races need remaining source. Album state/locking helper definitions unread; do not infer app-lock bypass."
+  ],
+  "candidate_requirements_for_library": [
+    "Search/scan outcome should distinguish completed-empty from partial/error/cancelled.",
+    "Traversal must bound work and handle cycles independently of match-count cap.",
+    "Path plus metadata is a cache hint, not verified content identity."
+  ],
+  "limits": [
+    "114/268 whole files unchanged; LocalExplorer only1-760/16837 read. Repository013 incomplete.",
+    "No Kotlin/Android build or source helper execution, local-tree traversal, image decode, window changes or file actions.",
+    "155/500 full repositories unchanged; no new production/runtime test claim.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
