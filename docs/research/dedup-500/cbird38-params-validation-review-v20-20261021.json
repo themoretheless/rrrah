@@ -1,0 +1,42 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/params.h": {
+      "sha256": "7d3e372be0f1ef0384f41c2af5c5059e11c28d0ce40e6c5d226e1fb8d84a4d11",
+      "git_blob": "73d18b16793ffbd4782bebc9020b6b0dc26d2408",
+      "bytes": 2955,
+      "lines": 92,
+      "method": "Whole pinned source read."
+    },
+    "src/params.cpp": {
+      "sha256": "0e640f7bcb012f1805a1dec8740731a9a6eaa5888957663b465ffb353236e71d",
+      "git_blob": "ec38b40aaaf2868d247cfdb36eaeda807c6d8127",
+      "bytes": 6734,
+      "lines": 239,
+      "method": "Whole pinned source read."
+    },
+    "src/paramsdefs.h": {
+      "sha256": "37052a686524aca0d804abac5aedc75a3cfb78ac904d1d0850cc84d450132382",
+      "git_blob": "64619af4b287b5095789a3270185ce5be5c21098",
+      "bytes": 2182,
+      "lines": 68,
+      "method": "Whole pinned source read."
+    }
+  },
+  "cumulative_assessed_blobs": 49,
+  "tracked_blobs": 616,
+  "findings": [
+    "SET_INT directly assigns QVariant::toInt() and returns true without conversion status or declared range checks. Params::setValue delegates directly to setter; range is used in help output. Outer CLI parsing remains unread, so no end-to-end invalid-command acceptance is asserted.",
+    "Separate Value::setInt initializes inRange=false and never sets it true, rejecting even valid integer inputs if called. SET_INT bypasses this helper; do not attribute helper rejection to normal integer bindings.",
+    "SET_BOOL also returns true unconditionally after QVariant conversion. Enum and flags setters separately check named values or allowed bit mask.",
+    "Linked parameter failure returns false after primary member assignment and _wasSet insertion; no rollback of prior mutations.",
+    "Out-of-range search thresholds and limits therefore require explicit validation at library boundaries; existing algorithm findings are static concerns, not newly reproduced native runtime failures."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "49/616 tracked artifacts assessed:48 whole text/source and one PNG visual. Prior 24 isolated original-body/header controls and one independent counterexample unchanged.",
+    "No new runtime tests, production edits, Qt build or performance measurement. Deferred native pHash/ASAN remains skipped."
+  ]
+}
