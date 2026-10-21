@@ -1,0 +1,72 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "app/api/auth/exchange/route.ts": {
+      "sha256": "5bf2d81b1299daab01cd5a7aaf3a5e3f1c1c32fb66d23f082029e5b2f2bd9ab3",
+      "git_blob": "285849b1d7f265111ac5441107abac006f8a7334",
+      "lines": 46
+    },
+    "app/api/auth/refresh/route.ts": {
+      "sha256": "665577032f65ab663bfa10690ad08c89b34b0570807a36873c280533c8ef8f9a",
+      "git_blob": "f7888559f15f862a758524be7ac513297a864c4a",
+      "lines": 41
+    },
+    "app/api/bmc/route.ts": {
+      "sha256": "a59c579bfa486f0993b5df34911cb38305fc4739d7701d9207be35406d5b07e6",
+      "git_blob": "2e945f705af4ee2fdd6d33a89c9be4a96d6303fc",
+      "lines": 24
+    },
+    "components/reviews.tsx": {
+      "sha256": "8de1395d7db7957ab6d7a6fb09fba7480fe6ccc3f16f0cfe9f3c0e2c5d1821d1",
+      "git_blob": "ca34a7ef9f749c65f455ca4b8d307af684d85474",
+      "lines": 233
+    },
+    "public/favicon.ico": {
+      "sha256": "d051046f603ca22dd4c7c49c24180aa6054b2456ff7ae15f899031ac587fbec9",
+      "git_blob": "36ab6d6218201197d69a99a758f69f899bfe9da2"
+    },
+    "public/logo.svg": {
+      "sha256": "d04adf47d3c756dfa6c6b2973f36888901e10895a9766499c2bf33a402985df9",
+      "git_blob": "833b2718913930985001a52660fbe279bc064740",
+      "lines": 17
+    },
+    "public/placeholder.png": {
+      "sha256": "52c8af5761377339deb627f3b9094aab69162db704453fcaeb50b3d864182b4a",
+      "git_blob": "49114ef46c03b71f6bb70c3f40406fc7f6906e36"
+    },
+    "public/spotify-dedup-meta.png": {
+      "sha256": "93cb6f4f0d1c6cbcfdd005df3874fcdd490e0e2a3d0ff9afb312f1875d8e05bd",
+      "git_blob": "99588f1263dd0ab8d66a52a85b886ed88ef61021"
+    }
+  },
+  "cumulative_whole_files_read": 96,
+  "tracked_blobs": 97,
+  "method": "All text in4 files and SVG read; original PNGs viewed; SVG rendered with QuickLook and viewed; all3 ICO directory entries extracted without pixel changes, rendered independently and viewed. Source Git blobs verified.",
+  "findings": [
+    "Exchange route returns400 for missing code and forwards upstream failure status. Refresh route returns401 without cookie and forwards failed refresh status; successful refresh rotates cookie only when new token supplied. No explicit catches for malformed JSON/network errors; actual Next response behavior unexecuted.",
+    "Both token routes set HTTP-only, strict same-site, root-path cookie with30-day maxAge and production secure flag. Full token JSON is returned to client. No runtime deployment, credentials or account access involved.",
+    "BMC handler scrapes a fixed URL with fragile CSS selector and strips all nondigits from combined matching text; empty selection yields empty string. JSON total is string, whereas Reviews declares number. Missing/falsy data falls back to1400; no visible loading/error state. Static observation only.",
+    "Reviews contains hardcoded testimonials, not test evidence. Per-review link fields are unused; all avatar links target common project page. Names encoded into avatar URL. Review text rendered as React text; count formatted via Number before HTML interpolation.",
+    "Placeholder is gray music note; metadata image is Spotify Dedup logo/title on white; SVG two overlapping blue play triangles. All3favicon entries appear black/nearblack at their native small sizes in QuickLook. No browser icon rendering qualified."
+  ],
+  "partial_file_read": {
+    "path": "pnpm-lock.yaml",
+    "line_ranges": [
+      [
+        1,
+        400
+      ]
+    ],
+    "total_lines": 5876,
+    "whole_file_credit": false,
+    "observations": [
+      "Lock schema6.0 with autoInstallPeers true. Root resolutions include Next15.0.3, React18.3.1, Jest29.7.0 and ts-jest29.2.5. Remaining package graph not yet read."
+    ]
+  },
+  "limits": [
+    "96/97 tracked files reviewed;151/500 repositories complete.",
+    "pnpm-lock.yaml still incomplete. No upstream suite, dependency install/build, live API or browser execution. pHash/ASAN deferred."
+  ]
+}
