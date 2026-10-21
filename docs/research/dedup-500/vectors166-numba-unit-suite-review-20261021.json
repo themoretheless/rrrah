@@ -1,0 +1,28 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "cumulative_assessed_blobs": 61,
+  "runtime_reference": "docs/research/dedup-500/vectors166-numba-runtime-review-20261021.json",
+  "original_tests": {
+    "combined_entire_unit_directory": "94passed0failed in3.23seconds",
+    "core_and_distance_file": "53passed",
+    "tolerance_plugins": "16passed",
+    "isolated_test_create_plugin": "1failed KeyError missing test_dummy"
+  },
+  "logs": [
+    "docs/research/dedup-500/vectors166-numba-core-distance-tests-20261021.log",
+    "docs/research/dedup-500/vectors166-numba-tolerance-tests-20261021.log",
+    "docs/research/dedup-500/vectors166-isolated-registry-test-20261021.log",
+    "docs/research/dedup-500/vectors166-numba-all-unit-tests-20261021.log"
+  ],
+  "findings": [
+    "Unmodified entire original unit directory passes94tests together under actual Numba isolated environment. Prior30tests overlap; cumulative distinct passing original unit cases94, not sum of runs.",
+    "Isolated original registry creation test fails because preceding registration test is not executed. Confirms order-dependent test setup, not a production factory bug when prerequisites met.",
+    "Full unit success coexists with12 previously requalified defect controls. Missing representative, lifecycle, mutable-view/default/exception/plateau cases remain demonstrated.",
+    "Original integration and notebook tests still pending, lower Python versions and original lock unqualified. No benchmark performance claim; elapsed time recorded only as test-run metadata."
+  ],
+  "new_unique_controls": 0,
+  "cumulative_unique_controls": 15,
+  "remaining_scope": "41 generated repository artifacts remain; global full count201/500 unchanged. Native pHash/ASAN deferred."
+}

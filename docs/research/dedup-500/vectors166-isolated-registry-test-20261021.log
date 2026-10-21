@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-runtime-20261021/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-20261021
+configfile: pyproject.toml
+collecting ... collected 1 item
+
+.dedup-work/deduplicate166-20261021/tests/unit/core/test_registry.py::test_create_plugin FAILED [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_create_plugin ______________________________
+
+kind = 'duplicate_detection_algorithm', name = 'test_dummy'
+
+    def get_plugin_class(kind: str, name: str):
+        try:
+>           return _REGISTRY[kind][name]
+                   ^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'test_dummy'
+
+.dedup-work/deduplicate166-20261021/src/deduplicate_lib/core/plugin_registry.py:23: KeyError
+
+The above exception was the direct cause of the following exception:
+
+    def test_create_plugin():
+        kwargs_dict = {
+            "tolerance": 0.1,
+            "input_vector": np.array([1.0, 2.0]),
+            "dataset_array": np.array([[1.0, 2.0]]),
+        }
+>       instance = create_plugin("duplicate_detection_algorithm", "test_dummy", **kwargs_dict)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/deduplicate166-20261021/tests/unit/core/test_registry.py:22:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.dedup-work/deduplicate166-20261021/src/deduplicate_lib/core/plugin_registry.py:29: in create_plugin
+    cls = get_plugin_class(kind, name)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+kind = 'duplicate_detection_algorithm', name = 'test_dummy'
+
+    def get_plugin_class(kind: str, name: str):
+        try:
+            return _REGISTRY[kind][name]
+        except KeyError as e:
+>           raise KeyError(f"No plugin '{name}' registered for kind '{kind}'") from e
+E           KeyError: "No plugin 'test_dummy' registered for kind 'duplicate_detection_algorithm'"
+
+.dedup-work/deduplicate166-20261021/src/deduplicate_lib/core/plugin_registry.py:25: KeyError
+=========================== short test summary info ============================
+FAILED .dedup-work/deduplicate166-20261021/tests/unit/core/test_registry.py::test_create_plugin
+============================== 1 failed in 0.03s ===============================

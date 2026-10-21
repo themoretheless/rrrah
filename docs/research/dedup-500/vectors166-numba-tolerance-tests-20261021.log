@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-runtime-20261021/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/deduplicate166-20261021
+configfile: pyproject.toml
+collecting ... collected 16 items
+
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_str_representation PASSED [  6%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_tolerance_probe PASSED [ 12%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_tolerance_probe_rebuilds_distance_matrix_for_swapped_dataset PASSED [ 18%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_find_plateaus PASSED [ 25%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_find_plateaus_handles_wraparound_start_end PASSED [ 31%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_calculate_tolerance[distance_matrix_dda] PASSED [ 37%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_calculate_tolerance[multi_hashing_dda] PASSED [ 43%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_get_plateau_log[distance_matrix_dda] PASSED [ 50%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py::test_get_plateau_log[multi_hashing_dda] PASSED [ 56%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_str_representation PASSED [ 62%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_calculate_tolerance[distance_matrix_dda] PASSED [ 68%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_calculate_tolerance[multi_hashing_dda] PASSED [ 75%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_initialize_with_target_unique_vectors PASSED [ 81%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_calculate_tolerance_with_insufficient_binary_search_steps[distance_matrix_dda] PASSED [ 87%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_calculate_tolerance_with_insufficient_binary_search_steps[multi_hashing_dda] PASSED [ 93%]
+.dedup-work/deduplicate166-20261021/tests/unit/plugins/tolerance_calculators/test_perturbed_dataset_reclustering.py::test_calculate_tolerance_raises_for_invalid_target_unique_vectors_threshold PASSED [100%]
+
+============================== 16 passed in 1.90s ==============================
