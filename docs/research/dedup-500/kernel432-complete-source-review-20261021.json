@@ -1,0 +1,137 @@
+{
+  "repository": "jian-qi-chen/KernelPHash",
+  "commit": "891bd8da3f6934bb03eb348a72d48201a899fa72",
+  "whole_repo_complete": true,
+  "scope": "All14 text blobs wholly read across v1 and this continuation; AST.png visually inspected; four binary blobs metadata reviewed only. Full source review of available text, not decompilation or missing native implementation qualification.",
+  "manifest": [
+    {
+      "path": ".gitignore",
+      "sha256": "2c44c07fe93051cfc797df5b8d995ae9edcb9c826d463bafae8bfe6a9b607fc2",
+      "bytes": 59,
+      "review": "whole text read"
+    },
+    {
+      "path": "AST.png",
+      "sha256": "db0522bc0d9dee42ac5cd0e9f55f886595bf0fa6f99f06e478a5e5ac9d7a0418",
+      "bytes": 265683,
+      "review": "visual AST diagram"
+    },
+    {
+      "path": "KernelPHash.py",
+      "sha256": "c395d8919cfeae844c3e3f93b572ec13e09b756d17194076fd2eecb335e37991",
+      "bytes": 28621,
+      "review": "whole text read"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "35842833a5068e32801a8f00ba4520df3ceb8c7dcd01c48239ca24428dcceb6e",
+      "bytes": 1084,
+      "review": "whole text read"
+    },
+    {
+      "path": "README.txt",
+      "sha256": "f4368c4afd8cc85ba24f99d57af49b8b61cf6e6d89b9bbcdb9b4d175e20e096c",
+      "bytes": 1240,
+      "review": "whole text read"
+    },
+    {
+      "path": "example.py",
+      "sha256": "9fa01088cf6109c6f13240ea1bc288f13e3b9bebfc06d5dd2c318b778fa4e1e1",
+      "bytes": 2006,
+      "review": "whole text read"
+    },
+    {
+      "path": "pHash/src/Makefile",
+      "sha256": "f7857aa3df0404fd789ce6a64653c2eeff5abaf01a6c64143b441d965032ad3b",
+      "bytes": 110,
+      "review": "whole text read"
+    },
+    {
+      "path": "pHash/src/libpHash.so",
+      "sha256": "c8f0c23e17dc9220579efc4891395975a78fadfb7eca27ccaaa9998c5ddb2358",
+      "bytes": 19168,
+      "review": "ELF metadata only; implementation provenance and behavior unqualified"
+    },
+    {
+      "path": "pHash/src/libpHash.so.0",
+      "sha256": "c8f0c23e17dc9220579efc4891395975a78fadfb7eca27ccaaa9998c5ddb2358",
+      "bytes": 19168,
+      "review": "ELF metadata only; implementation provenance and behavior unqualified"
+    },
+    {
+      "path": "pHash/src/libpHash.so.0.0.0",
+      "sha256": "c8f0c23e17dc9220579efc4891395975a78fadfb7eca27ccaaa9998c5ddb2358",
+      "bytes": 19168,
+      "review": "ELF metadata only; implementation provenance and behavior unqualified"
+    },
+    {
+      "path": "pHash/src/pHash-config.h",
+      "sha256": "4d5c8235daf0fbcca7f856493fafc9db15f3c0d66f12c704e4d51a5f6514e8de",
+      "bytes": 317,
+      "review": "whole text read"
+    },
+    {
+      "path": "pHash/src/pHash.h",
+      "sha256": "8386fef875b9f8b6f0d8c8ac7f2a249d9728d1f1049157dc4f7d388da52ed224",
+      "bytes": 19721,
+      "review": "whole text read"
+    },
+    {
+      "path": "pHash/src/text_hash.cpp",
+      "sha256": "7cf6bd3e037ec71c7051effad854a1718cc3fe439e50d1ffb99496304637aedc",
+      "bytes": 2000,
+      "review": "whole text read"
+    },
+    {
+      "path": "pHash/text_hash.exe",
+      "sha256": "808c76891d97ab0ac72f871db994cace26c8975be62c7f50427d66ab6e55c11e",
+      "bytes": 150464,
+      "review": "ELF metadata only; implementation provenance and behavior unqualified"
+    },
+    {
+      "path": "test_cases/test.txt",
+      "sha256": "ac2f7fab668197877f3fe7352e889b6b600c3345009729c8636d34a94574b571",
+      "bytes": 325,
+      "review": "whole text read"
+    },
+    {
+      "path": "test_cases/test1.txt",
+      "sha256": "c55af2faa606233a38eb49e9c0d4c2f927f4bd122f48f98920c0cc7889c0774e",
+      "bytes": 324,
+      "review": "whole text read"
+    },
+    {
+      "path": "test_cases/test2.txt",
+      "sha256": "1da6a26679faea7579bca805cae4a59f2bc8f21f12bd489d14a44b26faa120bd",
+      "bytes": 312,
+      "review": "whole text read"
+    },
+    {
+      "path": "test_cases/test3.txt",
+      "sha256": "90487dc187e736af9fe18b62d30d2e0394314618b05c7b4ca05b56549fa2f0ab",
+      "bytes": 335,
+      "review": "whole text read"
+    },
+    {
+      "path": "test_cases/test4.txt",
+      "sha256": "8e8f82a780c2a8eb1bf9fb5e79b78c3d7e7a97841df41fce449d95f6d684901a",
+      "bytes": 50,
+      "review": "whole text read"
+    }
+  ],
+  "prior_review": "docs/research/dedup-500/kernel432-source-review-v1-20261021.json",
+  "additional_findings": [
+    "AST image shows single for/BLOCK and six assignments matching FFT sample, not a UI or accuracy result.",
+    "Five test_cases files are example snippets without expected hashes, assertions or test runner. No benchmark/corpus qualification.",
+    "AssignSyntaxRule unary minus of literal1 returns a None child; ConvertNodeList subscripts each child, so negative literal conversion is unsupported. Executed original AssignSyntaxRule AST node with real re, not full parser.",
+    "Assignment and ternary splits do not check parenthesis depth; source-only limitation. Parser assumes balanced delimiters and terminating semicolons without bounds checks.",
+    "SyntaxRule if branch accesses text_list[j] after statement without checking end of list. Source only.",
+    "NodeName global dictionary grows across calls; BFS repeatedly deletes index0, quadratic queue work; VarList/ArrList and UnifyNaming lack scale qualification.",
+    "Root MIT2019 Jianqi wholly read; nested pHash.h GPLv3-or-later2008-2009 Aetilius wholly read. Bundled ELF behavior/provenance not established by root license.",
+    "Three shared libraries identical SHA256c8f0c23e17dc9220579efc4891395975a78fadfb7eca27ccaaa9998c5ddb2358; all four binaries LinuxELF x86-64, not executed.",
+    "Available runtime lacks anytree. Full example.py/AST pipeline not run; no synthetic replacement Node used."
+  ],
+  "native_phash_asan": "Explicitly deferred",
+  "production_changes": false,
+  "adoption": "Reject-domain for current file/image library; preserve validation lessons, no code copied."
+}

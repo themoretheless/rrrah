@@ -2,7 +2,7 @@
   "index": 432,
   "repository": "jian-qi-chen/KernelPHash",
   "commit": "891bd8da3f6934bb03eb348a72d48201a899fa72",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All available text blobs whole-read, AST diagram visually reviewed; four bundled ELF files metadata only, no native implementation or runtime qualification",
   "decision": "reject-domain",
   "finding": "C-code TextHash64 plus bundled pHash; source-code domain and nested GPL license need care.",
   "available_source_evidence": [
@@ -81,5 +81,7 @@
       "controls": "docs/research/dedup-500/kernel432-controls-20261021/result.json",
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/kernel432-complete-source-review-20261021.json"
 }
