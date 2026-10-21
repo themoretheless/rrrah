@@ -2,7 +2,7 @@
   "index": 30,
   "repository": "google-research/3d-moments",
   "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
-  "review_scope": "Partial review: all62 tracked text/source blobs read out of73 total; ten PNGs and teaser GIF still require visual assessment. Three isolated DPT transform controls passed; full model runtime unverified.",
+  "review_scope": "Complete pinned73-blob parent source/artifact assessment:62text/source files, ten PNGs, all200teaser GIF frames.23isolated controls passed; full GPU/model/upstream runtime not run. External linked materials excluded.",
   "decision": "reject-domain",
   "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
   "license_metadata": "Apache-2.0",
@@ -125,6 +125,11 @@
     },
     {
       "audit": "docs/research/dedup-500/moments30-dpt-text-completion-review-v10-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/moments30-visual-review-v11-20261021.json"
     }
-  ]
+  ],
+  "complete_source_review": "docs/research/dedup-500/moments30-complete-source-review-20261021.json",
+  "full_repository_read": true
 }
