@@ -1,0 +1,28 @@
+{
+  "repository": "n24q02m/modhash",
+  "commit": "3968350080e87dec1ea04ca87ca6cf54629a6e34",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "modhash-index/src/bktree.rs",
+      "sha256": "9f4ab20439e42872afbce21c85e7d73b6b5821d2588a0edf635897f8c2b9d209",
+      "git_blob_verified": true,
+      "lines": 164
+    }
+  ],
+  "findings": [
+    "Whole BK-tree module read from previously captured verified source; raw pinned GitHub retrieval now404, captured bytes remain available and match Git blob.",
+    "Original verified BK-tree module compiled standalone with Rust1.98.1 and executed: query0/radius1 with hash0/id9 and hash1/id1 returns[(1,1),(9,0)], contradicting documented distance/id order[(9,0),(1,1)]. Derived Ord follows id-first struct field order.",
+    "Iterative arena traversal, distance-zero chains retained, triangle-inequality pruning uses abs_diff; no source copying into own library. Potential quadratic insertion for equal hashes requires measurement, not inferred speed claim."
+  ],
+  "remaining": [
+    "Other662 tracked blobs and dependencies/assets",
+    "Full index correctness/ordering/runtime controls"
+  ],
+  "full_review_count": 247,
+  "runtime": {
+    "exit_code": 0,
+    "scope": "Two-entry original-module ordering control; no full package qualification"
+  },
+  "source_control": "docs/research/dedup-500/modhash496-order-control-20261022.rs"
+}
