@@ -1,0 +1,60 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_files_read": [
+    {
+      "path": "docs/build.md",
+      "sha256": "5ca6ab24f33115f54875cc40340618df949d2da70d2c743feb414fc2c754d87a"
+    },
+    {
+      "path": "docs/errors.md",
+      "sha256": "64894473bd192a1bfa4effee128598c23333c56ef6505719cafc1be90ffa8c94"
+    },
+    {
+      "path": "docs/version.md",
+      "sha256": "a0c2ad845478497746a9a19cdbb6874652f0986a00540218c7d8c7f154071038"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "998ffd534610a26af27832ff02b8baa49450791c804dda371f81e79bd3ff72ee"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "155ca252464144d242988f997a2a59540410d0cc2e890b739c6a62d055bcdc95"
+    },
+    {
+      "path": "README.md",
+      "sha256": "517c820ede8ddafeabefbfa00ca3bf38a6ff2a6290a3d09d55d7853ccb7ed929"
+    },
+    {
+      "path": "docs/usage.md",
+      "sha256": "031e3493144ac574f27600654d0742c627c2144c633a2188bd43ef141553830a"
+    },
+    {
+      "path": "docs/api.md",
+      "sha256": "7ee63d277beb43910c28e19252d5b145037a53be348d922d4d85faf101ec0026"
+    },
+    {
+      "path": "docs/index.md",
+      "sha256": "5dce7717da7a03bce5e86cc77fc73c80d3af750b2aaee32b23c5c9e3bfd7a642"
+    }
+  ],
+  "findings": [
+    "Pinned build documentation defines two-complement8-bit-byte32-bit-size minimums, zlib/miniz variants and SIMD configuration. It states only SSE2 tested; no current x86 run inferred.",
+    "docs/usage.md sample calls spng_decode_image(ctx,SPNG_FMT_RGBA8,out,out_size,0), contrary to actual public signature(ctx,out,len,fmt,flags). Wrong argument order confirmed by comparing whole-read header/README, not compiled in this increment.",
+    "README explicitly records limited G8/GA8/GA16 input compatibility, absent gamma transforms for these/PNG formats, and APNG planned in this pin. These are upstream0.7.4 statements, not present-day status.",
+    "Root license description explicitly includes libpng-derived optimizations and test images; nested license whole-read earlier.",
+    "Performance chart and badges/sponsorSVG external URLs present inREADME but not viewed; no visual or external performance evidence claim.",
+    "Contributing recommends sanitizer/log inspection; that text is repository guidance, not user authorization to restart skipped native pHash.org/ASAN. No heavy process started during resource coordination window."
+  ],
+  "remaining": [
+    "docs/chunk.md, docs/encode.md, docs/migrate-libpng.md",
+    "Other dependency config/examples/fuzzer/regression sources",
+    "Visual/source asset review including externalREADMEperformance image",
+    "Other codec gitlinks"
+  ],
+  "runtime": "No new build or test; lightweight source/doc review only.",
+  "full_review_count": 247
+}
