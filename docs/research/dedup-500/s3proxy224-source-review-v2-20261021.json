@@ -1,0 +1,44 @@
+{
+  "repository": "Timshel/s3-dedup-proxy",
+  "commit": "6709807860db2357d4dbb8186504724d56bbe891",
+  "whole_repo_complete": false,
+  "tracked_blobs": 30,
+  "cumulative_assessed_blobs": 10,
+  "new_whole_files_read": {
+    "src/main/scala/timshel/s3dedupproxy/Database.scala": {
+      "bytes": 16851,
+      "sha256": "52ab651029078d691c183a874ef2a45596d1385aee3297ade38020887909c47e",
+      "git_blob": "7ee529f86af7f9bffb1219c993840836b7960f41",
+      "method": "Whole pinned Scala source read without truncation"
+    },
+    "src/main/scala/timshel/s3dedupproxy/GlobalConfig.scala": {
+      "bytes": 2050,
+      "sha256": "4a9f23faa4a96b8172689f93bb0a409f5548d33057746f4e8bdec73e47d5e464",
+      "git_blob": "b3fe6ed6652d7c57277998a170303cec3f223152",
+      "method": "Whole pinned Scala source read without truncation"
+    },
+    "src/main/scala/timshel/s3dedupproxy/UserRegistry.scala": {
+      "bytes": 3721,
+      "sha256": "d274f9b2dff3bc54c9fad4a83875774c1ed2408a6dae46fc3745b965fa716de4",
+      "git_blob": "5cbc098ef28324c6543e2113868454bf744c8d50",
+      "method": "Whole pinned Scala source read without truncation"
+    }
+  },
+  "new_runtime_controls": 0,
+  "findings": [
+    "withAdvisoryLock acquires session lock from first8hashbytes, runs body on same session and guarantees unlock; locksReleaseBlock guarantees unlock_all. No explicit SQL transaction encloses content metadata and mapping writes. Actual Cats/Skunk cancellation/pool semantics unqualified.",
+    "getDangling selects unmapped metadata older than1hour then acquires advisorylock per selectedhash. Cleanup deletes backend before delDanglingMetadatas rechecks mapping absence. Potential stale-selection concurrency window if uploader publishes mapping while cleanup waits; not confirmed without PostgreSQL scheduling/snapshot execution.",
+    "Final metadata deletion rechecks no mappings; this prevents that SQL row deletion but does not itself verify backend object still needed before earlier deleteKeys. Source-level distinction, no actual data loss claimed.",
+    "putMetadata on conflict updates ETag/contentType/timestamps but not size/MD5; checkMetadata updates checked timestamp. Samehash consistency assumes upstream digest/metadata invariant, not byte confirmation.",
+    "Key-based copyBlob from earlier review uses independent putMapping path with no hash advisorylock. Concurrent garbage collection interplay remains source-only.",
+    "GetMappings paginates by lexical filekey, equality to limit sets continuation marker even possibly final page. Delimited mode encodes marker root plus file/dir suffix; full delimiter/marker tests pending.",
+    "User registry merges config and watched file; missing file removes fileusers, parse failure retains previous map. Watch service closes on normal loop exit; exception/finalizer behavior unqualified. No account/network/watch operations executed.",
+    "No psql,scala or sbt executable found on PATH; no original Scala/PostgreSQL service test attempted."
+  ],
+  "remaining_scope": "20artifacts: full DB/Java test code and harness, rootlicense/docs/build/resources/demo.",
+  "license": "RootAGPL3 review pending; no production adoption.",
+  "limits": [
+    "Partial10/30review; zero runtime tests. Full count186/500 unchanged.",
+    "No database lock/snapshot/concurrency validation, actual backend/object lifecycle, supported platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}

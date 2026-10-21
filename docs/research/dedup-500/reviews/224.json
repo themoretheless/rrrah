@@ -2,7 +2,7 @@
   "index": 224,
   "repository": "Timshel/s3-dedup-proxy",
   "commit": "6709807860db2357d4dbb8186504724d56bbe891",
-  "review_scope": "Partial pinned7/30 whole Scala/SQL artifacts: proxy upload/multipart/logical metadata and cleanup flow read. DB lock/transaction implementation and whole service runtime pending; no tests executed.",
+  "review_scope": "Partial pinned10/30whole Scala/SQL artifacts including complete Database/config/registry. Lock/cleanup publication window identified statically; no Scala/PostgreSQL/backend execution.",
   "decision": "reference",
   "finding": "S3 object-store proxy and DB tests; exact blob persistence design, no image pipeline.",
   "available_source_evidence": [
@@ -78,6 +78,9 @@
   "incremental_source_reviews": [
     {
       "audit": "docs/research/dedup-500/s3proxy224-source-review-v1-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/s3proxy224-source-review-v2-20261021.json"
     }
   ]
 }
