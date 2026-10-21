@@ -1,0 +1,79 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "scripts/license-buyer.ts": {
+      "sha256": "ad2db2d222a9ac7e231fdac3196b5dee81982d3073a3c344c2ef4e268213129b",
+      "git_blob": "8c7ee2124b7d7b6f14f366d3477b01d784bcf7b6",
+      "bytes": 4950,
+      "lines": 119,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "scripts/license-keys.ts": {
+      "sha256": "f605f4936ac9949e269305cb2c37dc00cebdc52bd550daa27cc068b8f184fcde",
+      "git_blob": "10b88265c328481eab01575c936a9d2da226425e",
+      "bytes": 2057,
+      "lines": 44,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "scripts/license-payload.ts": {
+      "sha256": "6b2f24a9d37b07f0709dc1b27952d2ddd3bf52c9c632247604fa6b6b02b6adc2",
+      "git_blob": "3bc898ce1cf8677b528e219f50fa3999c490e355",
+      "bytes": 816,
+      "lines": 21,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "scripts/license.ts": {
+      "sha256": "fa3b2ada47882572f6f0508a091a591b8b50df175f14f98211d0059988eccb2a",
+      "git_blob": "75b25c760d3dcba60052d69cdd7f45658607838e",
+      "bytes": 5425,
+      "lines": 131,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "src/core/license.ts": {
+      "sha256": "1efbe28c0df6387c6923e13f780ef30ba273d42459779a018e368e2cdd00be0e",
+      "git_blob": "c725f31c7b0ec097b4168611f1b9c50e869bdef1",
+      "bytes": 5205,
+      "lines": 136,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "tests/license-buyer.test.ts": {
+      "sha256": "3ce5c5a6c9c915b7ebc97e1ea5d183fe902e184488192894ff509a361e037605",
+      "git_blob": "1d402edbfa54633905614b46ace58ab729fd06e5",
+      "bytes": 7268,
+      "lines": 152,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "tests/license-scripts.test.ts": {
+      "sha256": "5edf76d58079b1b213dba184b46a2632704448c990fcfa168cba22ab0909a883",
+      "git_blob": "40a8305fa1356df2e5992d7338a41dfbbb8260df",
+      "bytes": 3556,
+      "lines": 67,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    },
+    "tests/license.test.ts": {
+      "sha256": "b3663d5c3a7420af8be7269ee0bb24ca625721db57b764fd73bed72e00afd85d",
+      "git_blob": "d4cf1dae20cd536856c437c524c53dd793f4610d",
+      "bytes": 6432,
+      "lines": 146,
+      "method": "Whole pinned source/test read without truncation. No seller commands or token/key operations executed."
+    }
+  },
+  "cumulative_assessed_blobs": 220,
+  "tracked_blobs": 230,
+  "findings": [
+    "Licensing is separate paid convenience gating, not duplicate retrieval/comparison evidence. No license implementation adopted into rrrah-dedup.",
+    "verifyLicense checks object/plan/time-field type/product when present and signature under embedded list or injected key. expiresAt/order/seats explicitly informational by product policy; not claimed entitlement expiry enforcement.",
+    "Original tests use temporary generated keys for roundtrip, malformed JSON values, wrong plan/product/signature, whitespace, key list, seller path/content loading, buyer input/output and CLI refusal. Read only, not run in this block; no seller/private production key accessed.",
+    "Buyer new/existing depends on key index and product, not actual payment service readback. Missing email with expected email returns not-in-token, not invalid, explicitly covered by tests. No real buyer/order/issuance/delivery qualification.",
+    "buildIssuePayload requires trimmed nonempty email containing@ only; order optional in code though operational docs request both. Finite timestamp validation not performed beyond verifier typeofnumber. Source observations, not demonstrated external inputs.",
+    "privateKeyWritePath treats configured value as destination path while read helper accepts path/content. CLI comment clarifies keygen env must be path; previous changelog same-meaning claim is broader than this implementation. No file/keygeneration attempted.",
+    "Regular verify CLI prints payload, whereas verify-buyer prints restricted verdict/emailcheck only. Tests for no-token-output apply buyer path, not allsellercommands."
+  ],
+  "cumulative_original_function_controls": 89,
+  "limits": [
+    "220/230whole artifacts;only9site-l10nJSONandbun.lockremain. Globalfullreview160/500unchanged.",
+    "Static review only;fullupstreamtests/notactualpurchase. No productionoptimization. Native pHash/ASAN deferred."
+  ]
+}
