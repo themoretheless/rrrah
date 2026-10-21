@@ -1,0 +1,40 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "report/gradio_app.py": {
+      "sha256": "c6f4e527bcdcd4eabb73e97e35d7ab624bded49c6fcc00ee0bddb175f370dd61",
+      "git_blob": "43a4a4498d0a458be2b9fd906de838b62af0f12a",
+      "lines": 583
+    }
+  },
+  "cumulative_whole_files_read": 74,
+  "tracked_blobs": 75,
+  "method": "Whole583-line pinned report module read in3bounded outputs. Original init/explore methods executed with original Jaccard helper plus minimal config/Dataset/DataFrame doubles. No UI runtime.",
+  "findings": [
+    "Singleton cluster or max_samples1 makes cluster_jaccard_similarity return[]; explorer then calls max/min without guard. Original method control reproduces ValueError max() iterable argument is empty. Slider permits1 and dataset includes singletons.",
+    "Label90Percentile uses np.percentile(similarities,0.9), i.e.0.9th percentile parameter rather than90. Source call inspected; NumPy runtime not executed.",
+    "load_dataset checks output_path.parent/config.toml existence but instantiates Config() using configured global current TOML source; it does not load the checked path. Report tokenization may use settings different from generating run.",
+    "load_dataset assigns self.config,self.dataset and column names before validating pickle/columns; early failures do not clear previous cluster2ids/cluster_sizes. Source can retain mixed old/new state after failed reload; browser sequence unexecuted.",
+    "Report grouping derives parents mapping and dataset internal IDs; required cluster column is checked but not used for grouping. search_text instead reads stored cluster column, so disagreement with mapping can affect lookup. No artifact consistency validation shown.",
+    "Detailed distribution uses pd.cut bins starting1 with default lower endpoint excluded; singleton sizes can be omitted from range histogram. Dataframe/Plotly execution unqualified.",
+    "create_gradio_app closes over one mutable ClusterVisualizer instance for all event handlers; session isolation not shown. Sample Jaccard quality limited to firstNmembers and best-neighbor metric, not all-member representative proof.",
+    "Module builds multiple charts and previews; reading source does not qualify rendered layout or interaction. Original banner previously viewed; no report browser launch performed."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/report-singleton-control.py",
+    "sha256": "964591787adbb0f60ebdd0503ea412edb53b96812f9c6446a2a8aed2d8ff138e",
+    "result": {
+      "singleton_explore_error": {
+        "type": "ValueError",
+        "message": "max() iterable argument is empty"
+      },
+      "scope": "Original explorer/init methods plus original Jaccard helper; minimal Dataset,config and DataFrame doubles. No Gradio/pandas/browser execution."
+    }
+  },
+  "limits": [
+    "74/75tracked blobs reviewed;152/500complete repositories. uv.lock and external submodule remain unread.",
+    "No full upstream suite, Gradio/pandas/NumPy rendering or production changes. pHash/ASAN deferred."
+  ]
+}
