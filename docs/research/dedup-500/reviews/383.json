@@ -2,9 +2,9 @@
   "index": 383,
   "repository": "vmchale/phash",
   "commit": "cefa17a6ee70518c102bdcf0f31230f5d1b887f1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "wrapper",
-  "finding": "Haskell foreign-hash endpoint plus median helper; nested native backend must be audited separately.",
+  "review_scope": "All pinned text whole-read and nine images individually viewed; original Haskell/FFI runtime unqualified.",
+  "decision": "reference",
+  "finding": "Own Haskell hash plus optional native binding. Source shows C failure/zero alias, tests lack successful-decode assertions, exact-hash CLI grouping and traversal limitations; no code adopted.",
   "available_source_evidence": [
     {
       "path": "src/ForeignHash.hs",
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/vmchale383-complete-source-review-20261021.json"
 }
