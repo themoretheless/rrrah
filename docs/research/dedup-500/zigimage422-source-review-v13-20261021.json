@@ -1,0 +1,21 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-1510",
+    "include/stb_image.h:7470-7655"
+  ],
+  "authored_runtime_controls_this_increment": 0,
+  "findings": [
+    "Commoncontext/file/callbackinitializationwhole-read:128byteinitialbufferandrewindwithininitialbuffer,formatdispatchorderwithPNG/BMP/GIF/PSD/PICbeforeJPEG/PNM/HDR/TGA. Sourceobservation,notallformatruntimequalification.",
+    "Dimensionhelperfunctionscheckintmultiplication/additionbeforeselecteddecoderallocations. Thisisdistinctfromresizeruncheckedsizecalculation;donotgeneralizeresizerissuetoallloaderallocations. Fullallocationcoverageunproven.",
+    "stbi__loadf_mainHDRusesfloatdirectpath;nonHDRalwayscallsload_and_postprocess_8bitthenldr_to_hdr. Thus16bitnonHDRprecisionnotpreservedbyfloatloadpath. Sourcecontrolflowproof;no new16bitPNGoraclethisincrement.",
+    "8bitloadpostprocess16->8rightshift8;16bitload8->16replicatesbyte(v<<8)+v. Optionalverticalflipappliesafterdepthconversion. Thesearedeclarativeconversionrecipes,notexactoriginalpixelidentity.",
+    "Filenamewrapperopensrb,callsload_from_file,closesfile;successfulfileloadrewindsunconsumedinternalbufferbyteswithfseekwithoutcheckedreturn. Filehandleposition/seekfailurebehaviornotruntimequalified.",
+    "Global/threadlocalverticalflipselectionhaslocalsetflag;wrapperdoesnotfreezefliporgammastate. Prioractualgammaresultprovidesruntimeevidenceforstatefulrecipeconcernbutflipstate/threadtestnotrun."
+  ],
+  "limits": [
+    "Continuousimageheaderprefix1510plusPNMsectionreviewed;remainingdecoderimplementationsandheaderlicenseendnotread. Whole repository incomplete. No newruntimeexecutionclaimed,originalZigtestsnotrun.NativepHash/ASANdeferred."
+  ]
+}
