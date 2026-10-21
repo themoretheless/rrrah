@@ -2,7 +2,7 @@
   "index": 30,
   "repository": "google-research/3d-moments",
   "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial whole-source review: 4/73 tracked blobs. Configuration, depth binning, point renderer and empty core initializer fully read; pair-consumption domain and static numeric edges recorded. No runtime execution.",
   "decision": "reject-domain",
   "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
   "license_metadata": "Apache-2.0",
@@ -93,6 +93,11 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/moments30-depth-renderer-review-v1-20261021.json"
     }
   ]
 }

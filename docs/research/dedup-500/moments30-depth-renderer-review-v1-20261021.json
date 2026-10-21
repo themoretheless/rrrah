@@ -1,0 +1,53 @@
+{
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "config.py": {
+      "sha256": "63c1d34d6611750a0223a704551d74042c9783ea108d7952eeecfc6c7254e9c7",
+      "git_blob": "cfecf06dae263c6496420a81b6885f2f246bd9e1",
+      "bytes": 5441,
+      "lines": 91,
+      "method": "Whole source text read; empty initializer verified as zero bytes."
+    },
+    "core/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source text read; empty initializer verified as zero bytes."
+    },
+    "core/depth_layering.py": {
+      "sha256": "40d42ef8bf8682a9b266e0f685b64511734d4798f72d0b0f81c5f1566dea4b02",
+      "git_blob": "e3d0f97ae2a67e8510ff74b922567f8a7cc57850",
+      "bytes": 2077,
+      "lines": 59,
+      "method": "Whole source text read; empty initializer verified as zero bytes."
+    },
+    "core/pcd.py": {
+      "sha256": "0f427ed2643b76f64f13c24f3ee391c2e51e97ee970e1c9ec659cbb39ec3c6f9",
+      "git_blob": "272f895a255f953b0494ef790fd5782228be8907",
+      "bytes": 4301,
+      "lines": 124,
+      "method": "Whole source text read; empty initializer verified as zero bytes."
+    }
+  },
+  "cumulative_whole_files_read": 4,
+  "tracked_blobs": 73,
+  "findings": [
+    "Config input_dir explicitly consumes a folder containing an image pair. Training/evaluation flags govern depth/features/inpainting/rendering, not duplicate-file discovery.",
+    "get_depth_bins subsamples disparity every ten pixels, normalizes by global max-min and applies agglomerative clustering. Constant disparity makes normalization denominator zero; no constant fallback in inspected function. Static observation, not a Torch/sklearn run.",
+    "Depth bins combine Python scalar boundaries with tensor endpoints. No finite-value, minimum-sample or requested-cluster-count validation beyond input presence/shape/depth assertions.",
+    "PointsRenderer rasterizes point clouds and alpha-composites distance-derived weights. This is geometry synthesis, not exact byte or visual duplicate evidence.",
+    "core/pcd parses process command line at module import and defaults renderer device to cuda. Full import/runtime is not isolated pure matching code.",
+    "Point-radius augmentation draws random choices; no seed control in this file. Performance/fidelity cannot be inferred from configuration alone."
+  ],
+  "executed_controls": [
+    "All four original Git blob IDs match pinned tree."
+  ],
+  "limits": [
+    "No Python source imported/executed, no Torch/sklearn/PyTorch3D/model/GPU execution.",
+    "4/73 tracked blobs fully read; reject-domain decision remains scoped to reviewed evidence until remaining sources/artifacts read.",
+    "No production rrrah-dedup code changed."
+  ]
+}
