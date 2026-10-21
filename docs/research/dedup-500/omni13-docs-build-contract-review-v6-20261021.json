@@ -1,0 +1,73 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "CONTENT_SEARCH_GUIDE.md": {
+      "sha256": "6c5a5b9687687e95e1156aa7feefce0811abab9c0e0849402165fe7a75144aff",
+      "git_blob": "c7ef42a7072455ab7c2f38728504ba3af78194df",
+      "mode": "100644",
+      "lines": 228
+    },
+    "PRIVACY.md": {
+      "sha256": "e8152b0af36dfaabfae62b25e84ccebebf353f980d4377409e3e83f465ccc958",
+      "git_blob": "f19339f5464280cf19d0abcd781d851ee7d7ba46",
+      "mode": "100644",
+      "lines": 41
+    },
+    "RELEASE_NOTES.md": {
+      "sha256": "83e155864456808ec7ac34fa2b23fefcf03daa412b428f1695875a0296d36a6e",
+      "git_blob": "6eef6b0c3b04f85b1134c030a40f264703d8c486",
+      "mode": "100644",
+      "lines": 47
+    },
+    "package.json": {
+      "sha256": "c03a5f3e224533310ace1923c2df7d33be69aedbec2698f97c8468b0acc4d3f8",
+      "git_blob": "a4fc21bc2ff6934ebed896c57b83a370f1f830f9",
+      "mode": "100644",
+      "lines": 28
+    },
+    "tsconfig.json": {
+      "sha256": "980d6cbe977ddfb52d3ab1bdd3fba30f8c1db9371b3b14aa4557d32bb00ce54b",
+      "git_blob": "a7fc6fbf23de2a53e36754bc4a2c306d0291d7b2",
+      "mode": "100644",
+      "lines": 25
+    },
+    "tsconfig.node.json": {
+      "sha256": "9e2abb169ea87b7190613a1d4da57ca608463a453bd4231fa3aeee5e308370dd",
+      "git_blob": "42872c59f5b01c9155864572bc2fbd5833a7406c",
+      "mode": "100644",
+      "lines": 10
+    },
+    "vite.config.ts": {
+      "sha256": "984a7dc46a9ce7323a84297e755a7b93ced451917c05b0481e684fde32ed090f",
+      "git_blob": "ddad22a3e2f787396217486bec78f03be955a138",
+      "mode": "100644",
+      "lines": 32
+    },
+    ".gitignore": {
+      "sha256": "ccdc17215be130bd06e19248a0166bf8e80d548091f54ab98bddefcbf6e3d59d",
+      "git_blob": "5a8e7d354c3b5965dd903b0ee7a3b9f0f02742ad",
+      "mode": "100644",
+      "lines": 65
+    }
+  },
+  "cumulative_whole_files_read": 28,
+  "tracked_blobs": 268,
+  "method": "Eight pinned files whole text read, identities verified; guide compared with previously whole-reviewed scanner and bridge. No commands from documents executed.",
+  "findings": [
+    "Content guide explicitly restricts extraction to text-like files and disclaims reliable PDF/DOCX/XLSX deep extraction, content ranking and line snippets; do not transfer full document-content capability from syntax support.",
+    "Guide recommends one content clause; scanner overwrites earlier content clause with last. Repeated ext clauses accumulate semicolon-separated values, while separate extension input splits commas and intersects inline filter. This matches guide single-clause/intersection caveats.",
+    "Guide content case-insensitive claim uses C++ towlower code-unit transformation for matching; Rust preview Unicode to_lowercase has different semantics and confirmed offset issue(v3). Full Unicode/casefold parity not established.",
+    "Guide performance examples are qualitative advice, not benchmark results. Entire-content IO and shared index-lock duration remain unmeasured.",
+    "Root package scripts build with tsc then vite; no test/lint/benchmark script in this manifest. Strict/noUnused flags are compile checks, not behavioral regression coverage. Repository-wide tests not inferred absent.",
+    "Privacy text dated2026-02-18 lists local metadata/settings but does not describe optional phone transfer/companion features shown in README/release notes. Documentation scope lag, not evidence of data exfiltration; sync implementation not yet reviewed.",
+    "Release notes list desktop0.1.15/Lite1.0.0/mobile1.1 while root manifest0.1.16; historical notes do not prove current release/runtime feature completion. Bulk transfer/memory stability claims unverified.",
+    "Vite strict port1420 and ignored native tree concern dev rebuild behavior only. No servers started. Gitignore excludes private key/local environment/build directories, but ignored patterns are not a secret inventory or preservation guarantee."
+  ],
+  "limits": [
+    "28/268 tracked blobs reviewed; assets/lockfiles/other sources still pending.",
+    "No npm install/build/test, external services, network listener, user data access, production optimization or new runtime measurements.",
+    "Native pHash/ASAN remains user-deferred. All500 and full goal not complete."
+  ]
+}
