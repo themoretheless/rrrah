@@ -1,0 +1,54 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          8401,
+          11200
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          11200
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read2800newlines8401-11200 in four bounded leading-whitespace-only views, original line numbers. Cumulative1-11200/16837. Static list/trash/media helper review.",
+  "findings": [
+    "DirectoryViewer grid passes searchRoot to tile, list branch omits it when invoking LocalFileRow despite row supporting relativeFolder. Recursive results in default list may show identical names/date/size without parentcontext; grid provides relativepath. No UIrendering.",
+    "DirectoryViewer empty branch simply displays suppliedemptyTitle, no error/skipped/cap indication. Confirms earlier hiddenpartial semantics through actualviewer, not just callerstrings.",
+    "TrashViewer complete: EmptyRecycleBin directly onEmptyTrash; DeletePermanently directlycallback; no confirmationstate/dialog. Parent callbacks directly callmanager as earlierread. Ordinary move-to-trash has separateconfirmation, so scope of missingconfirmation now specifically finaltrashdelete/empty.",
+    "BatchFileProgressDialog onDismissRequest empty, no confirm/cancelbutton. It blocksdismissal while parent retainsprogress. Earlier exception paths withoutfinally can leaveprogress persistent; actualAndroidmodalbehavior untested. Paste/compress do notsetthisprogress.",
+    "AudioArtworkOrIcon does cacheget onIO; narrowing earlier concerns: composableartload asynchronous, widget/service cacheget calls synchronous. Remember/effect keyFilepath rather thanstat, so samepathreplacement needreentry/keychange torefresh even if cachehelperstatkeyvalid.",
+    "Rows formattedDate keyed lastModified; detailsText rememberedFilepath but unusedinshownrow. Renderedsize/count readlive, so do notclaimdisplayedsize stale merely from unuseddetailsText. DirectorylistFiles called duringcomposition, nullcount becomes0. No listinglatencymeasurement.",
+    "Video tile/row effects keyedFilepath with cachegetabsolutePath; cacheimplementation stillunread. Differentrequested120/240/320dimensions passedgetOrCreate, variantkeybehaviorpending. No cache-level conclusion beyondcallerkeys.",
+    "LocalApkDetailsDialog isValidApk initiallytrue and metadata async, so Install visiblebeforevalidation completes. Button delegatesinstallApk laterhelper; no packageinstalled orinstalleropened. Unknownpackage/loaderror disablesafterupdate; no signature/contentverificationclaimed.",
+    "TextureVideoView initPlayer assigns newSurface on repeatedinit without releasingoldsurfacefirst; stopPlayback releasesplayer inside sametry asstop, so stopthrowcan skiprelease. SurfaceTextureDestroyed releasescurrentsurface but retainsplayer. Dialogdispose explicitlystopPlayback exists; no categorical missingcleanupclaim.",
+    "parseSubtitleFile readLines wholefile, no byte/cue cap, catchespartialerrorreturnslist. parseTimeMs invalid returns0; cueend>=start/ranges notvalidated. WEBVTT settings appendedtotime causeparsefailure0; no originalKotlinruntimecontrol.",
+    "Videoautodetect chooses matchingbasename else first .srt/.vtt infolder, so unrelatedsubtitle canautoselect. Importuses fixedcachefilename and synchronouscopy/parsecallback, noexplicitlimits/tempcleanup. No documentpicked.",
+    "Video progress keyedpath only and periodicallypersisted250mswhileplaying; replacementfile caninheritoldposition. Dispose capturesfile with Unitkey; actualpropchange/disposalbehaviorneedsComposefixture. Mediaretrieverdetailcleanup hasfinally."
+  ],
+  "candidate_requirements_for_library": [
+    "Display parent/provenance when names can collide across recursive results.",
+    "Distinguish final destructive actions and verify their actual outcomes.",
+    "Invalidate view state and derived media caches on filegeneration changes, not path alone."
+  ],
+  "limits": [
+    "114/268 wholefiles unchanged; explorer11200/16837 read.",
+    "No Android/Kotlin/runtime/codec tests, actualmedia/APK/thumbnail/userfiles/actions.",
+    "155/500 fullrepositories unchanged; no productionchanges/newlibrarytestresult.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
