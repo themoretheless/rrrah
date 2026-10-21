@@ -1,0 +1,51 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/docker.yml": {
+      "sha256": "e6a5768bdc0440e756bee75312fd5e887d7475525280cf20686e53f63a66989c",
+      "git_blob": "822074f94e032ccdb4ed7a5294c51a61f54bf4d9",
+      "bytes": 3267,
+      "lines": 109,
+      "method": "Whole pinned workflow source read; no workflow dispatched or remote state mutated."
+    },
+    ".github/workflows/linux.yml": {
+      "sha256": "8857ad1e05f193bfa9750442d0a638f82c45799a3e0bd3069584e27057baae15",
+      "git_blob": "d8da104b1a16880ad82f9e0f61e8eae40859b757",
+      "bytes": 2963,
+      "lines": 106,
+      "method": "Whole pinned workflow source read; no workflow dispatched or remote state mutated."
+    },
+    ".github/workflows/macos.yml": {
+      "sha256": "985935a2ea2846dcc472773f34c76a43298d3fcedbaf2e03c8416cabf5f1634e",
+      "git_blob": "efaa97a24963ab6c2c6fde82b85f590d9607d8dd",
+      "bytes": 5108,
+      "lines": 153,
+      "method": "Whole pinned workflow source read; no workflow dispatched or remote state mutated."
+    },
+    ".github/workflows/windows.yml": {
+      "sha256": "7907fb404360e02ae3e09d3a06c5047ad60515f699982288910a106ec106b542",
+      "git_blob": "0a81e5a961a96e5c9430e1302f1a4a7e4e0b41e8",
+      "bytes": 2703,
+      "lines": 99,
+      "method": "Whole pinned workflow source read; no workflow dispatched or remote state mutated."
+    }
+  },
+  "cumulative_assessed_blobs": 137,
+  "tracked_blobs": 616,
+  "findings": [
+    "All four pinned workflows read. Linux/macOS/Windows jobs configure/build/package/upload, with no TEST_DATA_DIR corpus setup or unit.sh/QTest execution step. Build green would not prove perceptual recall, recovery or full native tests. Actual run status not fetched.",
+    "Linux matrix covers x86_64 and aarch64 build hosts; macOS Intel/arm64 compile and portable bundles. Windows cross compiles in Ubuntu MXE container; no native Windows matching tests or Wine unit suite specified.",
+    "Linux and Windows consume latest-tag containers rather than pinned digests in these workflows. Container-image workflow publishes digests but downstream build definitions do not bind them, so parent source pin alone does not freeze dependency build.",
+    "macOS cache key hashes compiler/SDK string and build scripts; installed Homebrew dependency versions and resolved floating external source revisions not explicitly in key. This does not prove cache corruption, only incomplete identity for repeatable dependency evidence.",
+    "Docker workflow builds/pushes images and merges manifests, with MXE build matrix commented. Its success is image packaging evidence, not cbird test execution. No image built or pushed during review.",
+    "Workflow scripts include credentials references, global config and environment changes as source text only. No secrets read, values expanded, workflows dispatched, artifacts published or system state modified."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "137/616 assessed:136 whole text/source plus one PNG visual. qtutil.cpp remains partial.",
+    "29 prior isolated original-body/header controls plus one independent counterexample unchanged. No live CI status, native runtime or benchmark claim.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
