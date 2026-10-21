@@ -1,0 +1,57 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 85,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/main.rs": {
+      "sha256": "1a4f1da1c81f24501a76745c2064acf8e7770819f958fe36b5908836d3426ff4",
+      "git_blob": "57e3daad545bb76c0d9cac72dc0f64c3ebf403b4",
+      "lines": 12573,
+      "new_read_line_ranges": [
+        [
+          901,
+          1319
+        ],
+        [
+          1461,
+          2052
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          2215
+        ],
+        [
+          3838,
+          3920
+        ],
+        [
+          5360,
+          6130
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read1011 additional lines, closing main.rs gaps through2215. Static startup, icon worker/receiver and clipboard-event review.",
+  "findings": [
+    "Icon loader checks PostMessage failure and frees boxed key plus nonnull HICON. This narrows earlier publication-leak findings to specific unchecked search/AI/OCR senders; not every asynchronous sender leaks on failure.",
+    "Icon receiver on null State frees boxed key but returns without destroying nonnull icon passed in wparam. Normal receiver replaces/destroys owned old icons and invokes prune_owned_icon_cache; actual prune function remains unread.",
+    "Icon worker retries after caught panic using same channel; current dequeued request is not recovered or pending key cleared on that panic. COM initialization repeats after restart without matching uninitialization in reviewed worker. No shell-extension panic fixture run.",
+    "Startup directly stores loaded AppSettings and creates fonts from cast sizes; no item_height validation before State use in this initialization. Prior division-by-zero path is not prevented here; further reload paths unread.",
+    "Window message wrapper uses catch_unwind but invokes wnd_proc_inner declared unsafe extern system too. Catching panics across that inner ABI boundary needs dedicated compiler/runtime proof; comment alone does not establish recovery. No panic survival claim.",
+    "Clipboard text events trim content before unique-content upsert and keep at most500 entries counting pinned rows; pinned entries are exempt from deletion. This is text-history identity/retention, not byte-identical-file deduplication.",
+    "Clipboard text storage and memory-event insertion run in detached thread without transaction; rapid changes have independently scheduled database writes and timestamps obtained inside worker. No ordering or atomicity guarantee inferred.",
+    "Preview caches can call synchronous shell thumbnail loading on UI path and place preview to right of parent without work-area clamp in reviewed function. No latency/monitor fixture or visual acceptance.",
+    "Animation loop flag is set before unchecked PostMessage and remains true if publication fails; next trigger may not repost. Source error path only, no live window teardown reproduction."
+  ],
+  "limits": [
+    "85/268 whole files. main.rs read1-2215,3838-3920,5360-6130 only.",
+    "No new runtime tests or local production edits; helper/Windows failures remain source findings.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
