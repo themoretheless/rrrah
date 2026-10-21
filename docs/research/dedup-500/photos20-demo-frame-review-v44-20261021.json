@@ -1,0 +1,142 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 84,
+  "tracked_blobs": 84,
+  "demo_sha256": "34cf2e7f75c72221d8814c8e4bf0627be22281e68c0d54977d703324d57908ed",
+  "visual_review": {
+    "frames_reviewed": 287,
+    "frame_range": [
+      0,
+      286
+    ],
+    "contact_sheets": [
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/000-023.png",
+        "sha256": "c67b9a2873cdc521e76ea97179f38d606b452bbd51c70c1a888c7ca5af1dcc8b"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/024-047.png",
+        "sha256": "558deadb9153d35f874092dc8e639b31418452b238a01b58e75e03bac67fe3a1"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/048-071.png",
+        "sha256": "37c064d3bc16342dede1e2ff92fa3cc7d2d5f0b15644c10382c5da18832d6431"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/072-095.png",
+        "sha256": "481926579a304ecb5d1acbaf3b6247e06475aa7984e9cada29e65392be9e509f"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/096-119.png",
+        "sha256": "a9039abf5343c8da37d8bbcc4f0da79d50f79a8eda0610c5fbd879da65fa9472"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/120-143.png",
+        "sha256": "a86d8a669453068601c8303606a83d8d8dc5e925f42272a1dbe6d3441bfaac4f"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/144-167.png",
+        "sha256": "94231917941874cdd2251ddb2678a7d4096db0922ab69966419c7e94945452b2"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/168-191.png",
+        "sha256": "0ceb41e3d689360d5898b751384bad257d8da8a0279dbad3f683c774beb1b083"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/192-215.png",
+        "sha256": "109882b0f5844599f9fb1d1c95eaf6053fa81f6d1aa6964eb5ad2b50035254d2"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/216-239.png",
+        "sha256": "19f685ea9f106c2db82e143cbdc2d9c2a84aad13687c34e0ce52dc3982bb3fd8"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/240-263.png",
+        "sha256": "f6737e4be205ab439e58fb883244ee9c629b41ce5baaf4b5805603c0b318698c"
+      },
+      {
+        "path": ".dedup-work/photos20-20261021/demo-sheets/264-286.png",
+        "sha256": "ef9eed548d087933c011aa780a975b7ce48c2e274769031ab4086884c5e2ab09"
+      }
+    ],
+    "method": "Every frame visually inspected in chronological 4x6 contact sheets at 320x180 per frame, no temporal subsampling. Two original-resolution browser screenshots previously viewed. Fine text not independently read at every thumbnail."
+  },
+  "sequence": [
+    {
+      "frames": [
+        0,
+        19
+      ],
+      "observation": "Recorded Google Photos library, extension menu opened."
+    },
+    {
+      "frames": [
+        20,
+        40
+      ],
+      "observation": "Deduper scan configuration with similarity slider visible and scan button selected."
+    },
+    {
+      "frames": [
+        41,
+        73
+      ],
+      "observation": "Fetch then thumbnail download progress."
+    },
+    {
+      "frames": [
+        74,
+        112
+      ],
+      "observation": "Embedding computation progress."
+    },
+    {
+      "frames": [
+        113,
+        167
+      ],
+      "observation": "Results show 143 groups, scroll across dark astronomy-like, landscape and abstract photo pairs/triples."
+    },
+    {
+      "frames": [
+        168,
+        219
+      ],
+      "observation": "Group selection toggled; kept item changed among four dark photo cards; proposed trash count updates."
+    },
+    {
+      "frames": [
+        220,
+        236
+      ],
+      "observation": "Recorded Move to Trash confirmation dialog opened and confirmed."
+    },
+    {
+      "frames": [
+        237,
+        247
+      ],
+      "observation": "Moving to trash progress shown."
+    },
+    {
+      "frames": [
+        248,
+        286
+      ],
+      "observation": "No duplicates found screen and confetti; no undo or backend restoration evidence shown."
+    }
+  ],
+  "findings": [
+    "All 287 frames of README WebP visually covered without skipped frames at contact-sheet resolution.",
+    "Recording demonstrates one successful-looking UI path. It does not show original bytes, ground truth, complete candidate coverage, partial failures or final Google backend state.",
+    "Demo scan configuration layout differs from pinned current ScanConfig; recording is historical UI evidence rather than proof of current commit. No runtime version authenticated.",
+    "Animation duration is presentation time, not a controlled current performance benchmark."
+  ],
+  "limits": [
+    "YouTube linked video remains unviewed; do not mark repository full review from WebP alone.",
+    "No deletion or browser account interaction by reviewer; the actions described occur inside published recording."
+  ]
+}
