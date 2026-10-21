@@ -1,0 +1,36 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/SyncViewModel.kt": {
+      "sha256": "421ce5c44a4ff4502b3a08213033fd94c71b966db0fcb32371ab611409279c36",
+      "git_blob": "8dca218b111a0f818b1949e1a89006f334198b96",
+      "mode": "100644",
+      "lines": 1356
+    }
+  },
+  "cumulative_whole_files_read": 93,
+  "tracked_blobs": 268,
+  "method": "Pinned Kotlin source read completely in bounded chunks. Truncated 551-850 output was not credited; 551-700 and 701-950 were reread successfully. Static review, no Android execution.",
+  "findings": [
+    "Incoming transfer checks matching transfer ID, but does not track expected chunk index or actual byte count. It appends each decoded chunk, uses peer bytesSent for progress, and treats done as sufficient to flush/close/finalize and pin metadata. totalChunks is stored but not used to verify completion. No digest verification. Normal sequential requests do not prove resilience to duplicate/reordered/incomplete responses.",
+    "Preview-buffer eligibility uses declared size <=1MiB, without enforcing that bound while appending actual data. File stream also has no local declared-size enforcement. No resource-exhaustion probe executed.",
+    "On download error/disconnect the stream is closed but created MediaStore row/legacy partial file is not deleted here. Output URI can also remain after openOutputStream returns null. Finalization clears IS_PENDING before DAO insert; DAO failure can display Failed despite already published file.",
+    "finishIncomingTransfer launches an IO coroutine without connection/transfer generation check. Its later success/failure unconditionally clears activeIncomingTransfer and publishes state; disconnect/replacement before completion can affect newer state. No runtime race reproduced.",
+    "Upload loop breaks on early EOF but encodes entire zero-initialized buffer, rather than bytes actually read. A file shortened after initial length snapshot can therefore send zero padding and still show Completed if desktop accepts declared chunk lengths. Growth after initial length is omitted. No before/after identity/stamp check.",
+    "Upload confirmation channel is shared across transfers and recognizes generic English confirmation text; consumers only check success, not transfer/chunk ID. Drain occurs once per batch. Delayed confirms after timeout can be consumed by later files. isUploading check occurs before coroutine sets flag, leaving a launch race; source concern only.",
+    "Uploads have manifest10s and per-chunk15s timeouts, but sendMsg ignores WebSocket.send Boolean. uploadSingleFile input/open/read exceptions have no enclosing catch in batch, only finally resets uploading flag; progress can remain Uploading. Per-file rejection returns to batch, which proceeds to next file.",
+    "Search and duplicate responses have no per-request correlation. Blank query clears current results but does not invalidate prior in-flight response. Connection callbacks guard connectionGeneration; that does not distinguish requests on same connection.",
+    "onFailure clears search/duplicate loading flags; onClosing/onClosed do not. Generic confirmation failure can leave those flags pending. sendMsg does not surface false send/absent socket to caller.",
+    "saveFileToDisk can show Saved when openOutputStream returns null through safe-call use. Unlike createDownloadUri, non-image branch uses MediaStore.Downloads without pre-Q fallback. Device API behavior untested.",
+    "Earlier entry/share findings now qualified: sendFilesToDesktop checks connection again at entry and each file, so initial activity-only stale check is not sole guard. Basename cache overwrite/null-input concerns from v61 remain; this method does not restore original shared-source identity.",
+    "TLS uses pinned SHA256 certificate verification; hostname verifier true must be interpreted with that pinning, not labeled trust-all. No credentials or live connections accessed."
+  ],
+  "limits": [
+    "93/268 whole files; repository013 incomplete.",
+    "No upstream tests, Android build/device/Compose/network/transfer actions executed. Source findings are not integrated reproduction.",
+    "Existing local rrrah-dedup full no-default offline run:284 passed,0 failed,2 ignored manual timings; no production edit or rerun this batch.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred by user."
+  ]
+}
