@@ -1,0 +1,52 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/fsutil.h": {
+      "sha256": "9f8fb449e323cd557070a91e4309afeb56a068588e54ca15db22a871581c46e9",
+      "git_blob": "6164c1171d4964f0148323f557249bb46549775f",
+      "bytes": 4392,
+      "lines": 137,
+      "method": "Whole pinned source read, including platform branches and inactive sections."
+    },
+    "src/ioutil.h": {
+      "sha256": "4fd6f37964f9af9f23d5b82cb5f20e4bfee23e5ed082dcce4ffd52d49f4e03de",
+      "git_blob": "0b7d57cde17eb2dbeb118966e7f492ca5b715651",
+      "bytes": 6649,
+      "lines": 232,
+      "method": "Whole pinned source read, including platform branches and inactive sections."
+    },
+    "src/ioutil.cpp": {
+      "sha256": "29a627611d56e67421cc944813c7e9391ca38987dca4785573e8c843c71129c9",
+      "git_blob": "58ce8147f2086fea33f89b07e5ecd113ce526f23",
+      "bytes": 10199,
+      "lines": 387,
+      "method": "Whole pinned source read, including platform branches and inactive sections."
+    }
+  },
+  "cumulative_assessed_blobs": 22,
+  "tracked_blobs": 616,
+  "findings": [
+    "Original POSIX FileId header uses stat and device+inode equality. Native macOS synthetic temporary-file controls verify hardlink equality, symlink target equality and missing-path invalidity. This supports scanner visited-ID behavior only when duplicate-inode suppression is enabled; no directory-cycle traversal tested.",
+    "Windows FileId compares volume serial and high/low file index, opens with GENERIC_READ and FILE_SHARE_READ, closes handle. Open failure yields invalid ID, which scanner does not insert in visited set. Windows behavior and junction resolution not executed.",
+    "writeFileAtomically writes a temporary file, removes existing destination and then renames temporary to destination. A crash/rename failure after removal can lose the original target; no fsync or verified replacement transaction visible. Name/doc promise alone does not prove crash safety. No real destination deletion/fault injection performed.",
+    "fullMd5 uses a dedicated producer pool, queue depth2 and128KiB chunks. It checks atEnd but does not propagate explicit read-error status/byte-total/source-stamp; stalled/error device behavior not executed. Scanner calling this helper is not proof of a stable full snapshot.",
+    "QCancelableIODevice readData returns-1 on cancellation; wrapped reads/seeks are delegated. Caller policy remains important because EOF/error/cancellation may otherwise be collapsed. SVG exclusion previously noted. No real decoder cancellation run.",
+    "loadMap reads key/value without checking read counts before insertion, so truncated records are not explicitly rejected at this helper. loadBinaryData compressed path returns qUncompress output without distinct decompression-error state; uncompressed path checks full size. No malformed native input executed.",
+    "SimpleIO_QFile readline copies returned bytes without adding a null terminator, contradicting always-null-terminated header contract. Stdio readline only writes null at maxLen-1, not immediately after an earlier newline. Source contract observations; call-site consequences incomplete.",
+    "saveBinaryData narrows uint64 len to int for fromRawData; admissible producer limits not yet audited. No huge allocation attempted.",
+    "Initial fetch guessed fsutil.cpp and received404; pinned tree confirmed this component exists only as fsutil.h. No absent file counted."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/cbird38-fileid-controls-v8-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Original full fsutil.h POSIX branch compiled with standard QString/Qt-hash macro shims; actual macOS stat on own temporary original/hardlink/symlink/missing paths, cleaned by TemporaryDirectory. No user-file mutation, Qt runtime, pHash or ASAN."
+  },
+  "limits": [
+    "22/616 pinned artifacts assessed:21whole text/source and1PNGvisual. Fourteen cumulative original-body/header controls plus one independent key counterexample.",
+    "No Windows, full Qt IO, crash-atomic persistence, all-source/full upstream runtime qualification.",
+    "No production changes or performance claim; deferred native pHash/ASAN skipped."
+  ]
+}
