@@ -226,3 +226,30 @@ fn isolated_and_sparse_entries_avoid_unrelated_group_checks() {
         calls.get()
     );
 }
+
+#[test]
+fn sixty_member_evidence_is_not_truncated_and_one_missing_edge_is_not_invented() {
+    // Regression from the Photos worker's 50-neighbour cutoff. This layer
+    // receives accepted evidence, rather than computing embedding thresholds.
+    let ids = (0..60).collect::<Vec<u64>>();
+    let pairs = (0..60)
+        .flat_map(|left| (left + 1..60).map(move |right| Pair { left, right }))
+        .collect::<Vec<_>>();
+    let budget = GroupBudget {
+        max_entries: 60,
+        max_pairs: pairs.len(),
+        max_pair_checks: 4000,
+    };
+    let complete = complete_link_groups(ids.iter().copied().rev(), pairs.clone(), budget, || false).unwrap();
+    assert_eq!(complete.groups, vec![ids.clone()]);
+    assert_eq!(complete.pairs, pairs);
+
+    let missing = Pair { left: 0, right: 59 };
+    let evidence = pairs
+        .into_iter()
+        .filter(|pair| *pair != missing)
+        .collect::<Vec<_>>();
+    let incomplete = complete_link_groups(ids, evidence.clone(), budget, || false).unwrap();
+    assert_eq!(incomplete.groups, vec![(0..59).collect::<Vec<_>>(), vec![59]]);
+    assert_eq!(incomplete.pairs, evidence);
+}
