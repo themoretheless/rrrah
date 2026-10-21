@@ -2,9 +2,9 @@
   "index": 399,
   "repository": "starkdg/libpHashAudio",
   "commit": "e95604aad537be51d30041a095fe9f76029b78f0",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All14 pinned blobs:13 whole text files and4235 numeric samples structurally reviewed. Selected original distance controls and23 FFT oracle cases; full audio runtime unqualified.",
   "decision": "reject-domain",
-  "finding": "Partial: original distance controls prove bit-length instead of popcount and zero-lengthNaN. FFT, sample and remaining source review pending; full audio runtime unqualified.",
+  "finding": "Complete source review: bit length mistaken for popcount and zero-lengthNaN reproduced.23 default KissFFT cases pass independent DFT oracle. State/input/Apple/build/test gaps recorded; no adoption.",
   "available_source_evidence": [
     {
       "path": "AudioHash.c",
@@ -86,5 +86,7 @@
       "controls": "docs/research/dedup-500/audio399-controls-20261021/fft-result.json",
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/audio399-complete-source-review-20261021.json"
 }
