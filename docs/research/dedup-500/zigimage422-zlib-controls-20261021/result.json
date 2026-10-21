@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "level": 0,
+      "variant": "valid",
+      "reference_zlib": "accepted",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "7ec0c3e121812a9fc542dd3981de8f2952c6152022f7114585707c6b4130a185"
+    },
+    {
+      "level": 0,
+      "variant": "bad_adler",
+      "reference_zlib": "rejected",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "a81b83d7afe7a7034b08379f4830f3118b8d3907c5f73692fd939251eb367fae"
+    },
+    {
+      "level": 0,
+      "variant": "missing_adler",
+      "reference_zlib": "rejected",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "c34be9e74471c4e53114ce7037cc525b5b7abb1b093190eb93de97e286abf5a3"
+    },
+    {
+      "level": 1,
+      "variant": "valid",
+      "reference_zlib": "accepted",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "e0dabee4edb844515e5bfdb01c1e889d193d0a267143ecb2de4f007958113c1d"
+    },
+    {
+      "level": 1,
+      "variant": "bad_adler",
+      "reference_zlib": "rejected",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "23d151572d1214e3f81411363cdc1a66c29ff22b99834eb5754e0fe4e9e67ace"
+    },
+    {
+      "level": 1,
+      "variant": "missing_adler",
+      "reference_zlib": "rejected",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "07a7232ed456ed17c37e641387f5ad144b5e362dbba8bc5bad4b73b0ad6e54b1"
+    },
+    {
+      "level": 9,
+      "variant": "valid",
+      "reference_zlib": "accepted",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "390761cdaea5e5fbaa4bf56d38e0de804530f99690ef3981d0b4b3d9a6a404b6"
+    },
+    {
+      "level": 9,
+      "variant": "bad_adler",
+      "reference_zlib": "rejected",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "e8a99639e40b5b43ffb29339069473e65c78725e9dcece70172206272821ec57"
+    },
+    {
+      "level": 9,
+      "variant": "missing_adler",
+      "reference_zlib": "rejected",
+      "stb_returncode": 0,
+      "output_matches_payload": true,
+      "stream_sha256": "22e8d88edd13a25307c516d592670a2e70f34067714fec618b3bf1ee27d3589d"
+    }
+  ],
+  "scope": "Original C fixed-buffer zlib API with8192byteoutputcap; 4096byteauthoredpayload; Pythonzlibindependentdecoder comparison. ChecksumhandlingnotwholePNGCRC/JPEG/integrityqualification; no arbitrary amplification input."
+}
