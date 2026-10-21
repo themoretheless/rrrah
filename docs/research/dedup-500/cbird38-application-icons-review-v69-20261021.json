@@ -1,0 +1,201 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "src/res/cbird.svg": {
+      "sha256": "243536c38276ad365f3208c72d099a6055df7ceccbf62358b46e7fd2b3994d6e",
+      "git_blob": "762a921306a599ff4f08cd58b4f31704b54f3005",
+      "bytes": 390185,
+      "method": "SVG XML structure inspected and macOS sips rasterization visually viewed; ICO/ICNS all8variants each decoded and visually viewed at native dimensions in labeled sheets.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-application-icons-review-v69-20261021"
+    },
+    "mac/cbird.icns": {
+      "sha256": "5dcb719cae493cf97e9c4e1fae6587abbd6062fbcd8d64497f821af5460e81f8",
+      "git_blob": "d2517dd6f751687e674f2eb5b94e0433d4ceec0a",
+      "bytes": 1404552,
+      "method": "SVG XML structure inspected and macOS sips rasterization visually viewed; ICO/ICNS all8variants each decoded and visually viewed at native dimensions in labeled sheets.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-application-icons-review-v69-20261021"
+    },
+    "windows/cbird.ico": {
+      "sha256": "8795c1a0024ccc4bf42d6ed789e761821c51b5ead08e4a0f9bf8d1cc037197bc",
+      "git_blob": "6763a18abef53388f3e7e272fed0b5b642221c99",
+      "bytes": 366640,
+      "method": "SVG XML structure inspected and macOS sips rasterization visually viewed; ICO/ICNS all8variants each decoded and visually viewed at native dimensions in labeled sheets.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-application-icons-review-v69-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 609,
+  "tracked_blobs": 616,
+  "findings": [
+    "ICNS contains8logical size/scale variants decoded to32,64,128,256,512 and1024pixel images, including duplicate physical sizes with different logical scales. ICO contains8sizes16,32,48,64,96,128,192,256. All16decoded and visually inspected, not only default largest frame.",
+    "Icon variants show colorful owl with central shield; white border and fine detail become size dependent. No desktop packaging/runtime icon selection tested.",
+    "SVG1500x1500viewBox has375paths,2filters and a clipping path; no embedded raster image elements. Its macOS sips rendering shows left empty region and cropped/shifted owl relative to ICO/ICNS. XML includes translated group and clipping rectangle; without independent SVG renderer this is an observation, not an attributed rendering/product defect.",
+    "All remaining repository graphic files now assessed as visuals. No duplicate-search output, quality benchmark or algorithm supplied by these assets."
+  ],
+  "decoded_variants": {
+    "mac/cbird.icns": [
+      {
+        "requested": [
+          512,
+          512,
+          2
+        ],
+        "decoded": [
+          1024,
+          1024
+        ],
+        "file": "icns-0.png"
+      },
+      {
+        "requested": [
+          512,
+          512,
+          1
+        ],
+        "decoded": [
+          512,
+          512
+        ],
+        "file": "icns-1.png"
+      },
+      {
+        "requested": [
+          256,
+          256,
+          2
+        ],
+        "decoded": [
+          512,
+          512
+        ],
+        "file": "icns-2.png"
+      },
+      {
+        "requested": [
+          256,
+          256,
+          1
+        ],
+        "decoded": [
+          256,
+          256
+        ],
+        "file": "icns-3.png"
+      },
+      {
+        "requested": [
+          128,
+          128,
+          2
+        ],
+        "decoded": [
+          256,
+          256
+        ],
+        "file": "icns-4.png"
+      },
+      {
+        "requested": [
+          128,
+          128,
+          1
+        ],
+        "decoded": [
+          128,
+          128
+        ],
+        "file": "icns-5.png"
+      },
+      {
+        "requested": [
+          32,
+          32,
+          2
+        ],
+        "decoded": [
+          64,
+          64
+        ],
+        "file": "icns-6.png"
+      },
+      {
+        "requested": [
+          16,
+          16,
+          2
+        ],
+        "decoded": [
+          32,
+          32
+        ],
+        "file": "icns-7.png"
+      }
+    ],
+    "windows/cbird.ico": [
+      {
+        "decoded": [
+          16,
+          16
+        ],
+        "file": "ico-0.png"
+      },
+      {
+        "decoded": [
+          32,
+          32
+        ],
+        "file": "ico-1.png"
+      },
+      {
+        "decoded": [
+          48,
+          48
+        ],
+        "file": "ico-2.png"
+      },
+      {
+        "decoded": [
+          64,
+          64
+        ],
+        "file": "ico-3.png"
+      },
+      {
+        "decoded": [
+          96,
+          96
+        ],
+        "file": "ico-4.png"
+      },
+      {
+        "decoded": [
+          128,
+          128
+        ],
+        "file": "ico-5.png"
+      },
+      {
+        "decoded": [
+          192,
+          192
+        ],
+        "file": "ico-6.png"
+      },
+      {
+        "decoded": [
+          256,
+          256
+        ],
+        "file": "ico-7.png"
+      }
+    ]
+  },
+  "executed_controls": [],
+  "limits": [
+    "609/616 assessed:185whole text/source,417PNGvisuals,2structured spreadsheets,2PDFs and3other graphics.7remain:4PDFs,embedded CImg and2QSS.",
+    "SVG source path coordinates were not read as whole source code; assessment is structural plus rendered visual. No universal SVG-fidelity claim.",
+    "Initial PIL3tuple size assignment failed; supported ICNS getimage(size/scale) decoded all variants successfully. No original artifact modified.",
+    "34original-body/header controls and2independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
