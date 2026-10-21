@@ -1,0 +1,38 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/database.cpp": {
+      "sha256": "88db5550c543082ef1cc85258a89802d088c4f1c94ccf86e079a0269b3625786",
+      "git_blob": "efbb42e51bba41c7738258643838fb67236c037a",
+      "bytes": 59743,
+      "lines": 1979,
+      "method": "Entire source cumulatively read: v2 ranges1050-1095,1450-1530,1660-1785; v3 ranges1-350,351-700,701-1050,1096-1189,1190-1450,1531-1659,1786-1979. No source-reading gaps."
+    }
+  },
+  "cumulative_assessed_blobs": 11,
+  "tracked_blobs": 616,
+  "findings": [
+    "filterMatches sorts each group by path, concatenates path strings without separators/lengths, hashes the concatenation to uint, and retains only the first group per hash without equality verification. Synthetic distinct two-path groups yield identical preimage /root/a/root/b/root/c, so ambiguity exists independently of qHash collision behavior. Full Qt application result not executed.",
+    "Search caps precede negative/path/parent filtering and template matching. A capped shortlist can shrink below minMatches without replacement from lower-ranked candidates; no completeness guarantee at this layer. filterMatch requires group.count()>minMatches because group includes the query.",
+    "Path selection uses QString.startsWith(prefix) without explicit separator boundary. A prefix /root/a also lexically matches /root/ab; filesystem normalization/caller policy not enough reviewed to claim actual unintended file mutation. No protected paths accessed.",
+    "mergeGroups is tested as a boolean here before calling Media::mergeGroupList with no numeric argument; actual merging implementation unread. Do not equate its connected-group feature with pairwise duplicate proof. expandGroups applies only when mergeGroups is false.",
+    "dupsByMd5 groups by stored MD5 values, without byte confirmation in this function. Stored empty hashes are not excluded in its inSet grouping branch. Scanner hash production and source stability not reviewed, so no exact-identity acceptance claim.",
+    "Database add/update and multi-index transactions span separate commits and external video-index files. add ignores transaction/commit return values; remove commits main metadata before index-specific transactions. This is not a single cross-store atomic transaction; no crash/failure injection performed.",
+    "Move/rename mutate filesystem before updatePaths commits metadata, with no compensating filesystem rollback visible on DB failure. updatePaths canonical-path check calls newPaths.contains(\"//\") on the list rather than path.contains(\"//\"). Static observations only, no move/rename executed.",
+    "Negative/weed maps update in memory before append/write success; readMap parses max256-byte lines and asserts two comma fields. appendMap uses UTF8 whereas writeMap uses Latin1. Values intended as hashes; arbitrary-data corruption not demonstrated.",
+    "indexedItems removes orphaned records from algorithms under write lock, whereas memoryUsage sums per-index estimates already known to omit DCT tree storage. No performance/memory benchmark."
+  ],
+  "executed_controls": [],
+  "executed_counterexample": {
+    "path": "docs/research/dedup-500/cbird38-group-key-counterexample-v3-20261021",
+    "passed": 1,
+    "scope": "Source-shape assertion and independent ASCII concatenation counterexample only; not original Qt function execution. Kept separate from three original-header runtime controls."
+  },
+  "limits": [
+    "11/616 tracked parent blobs fully read. Three prior original-VP-tree controls plus one independent key counterexample; no Qt/database/native/media/full upstream suite.",
+    "Media::mergeGroupList/expandGroupList and Engine::query still unread; final group semantics not established.",
+    "No production changes or optimization claim; deferred native pHash/ASAN skipped."
+  ]
+}
