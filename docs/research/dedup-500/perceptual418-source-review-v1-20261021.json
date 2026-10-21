@@ -1,0 +1,97 @@
+{
+  "repository": "maxpiva/NutzCode.Libraries.PerceptualImage",
+  "commit": "ff7977078f4061102b3a9285081453aee0ea019c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 17,
+  "cumulative_assessed_blobs": 10,
+  "new_whole_files_read": {
+    "Tree/VantagePoint/DynamicVPTree.cs": {
+      "bytes": 2252,
+      "sha256": "d7421a8da335786b9305086394a6b924746629ceda878921e2c208199ad542db",
+      "git_blob": "633f9df955fbe60278e77bb295fb67962eccb9c6",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Tree/VantagePoint/Node.cs": {
+      "bytes": 273,
+      "sha256": "23ba437956ecf27ce6353321826e6ffabc50684aa5b9ebc7b4ccfcdb438b4372",
+      "git_blob": "52ba4e7273ad8f5306793e81767a17bbbe652952",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Tree/VantagePoint/VPTree.cs": {
+      "bytes": 3232,
+      "sha256": "db60dce155a3326a81b10089bbace2115e98a51ac2098133b7c1c0855157bf42",
+      "git_blob": "5f729287da0a3fd5544380c7302203315b8fea00",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Tree/ITree.cs": {
+      "bytes": 213,
+      "sha256": "bdba8c5e5a289a134c0739d25fdee33a3919e24566d7dbfea4ffd350c56c4c07",
+      "git_blob": "71c69eaeadda3832718ecda7e69b6b4b18c93f47",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Tree/IDynamicTree.cs": {
+      "bytes": 239,
+      "sha256": "1dfb8a6dae87ecc09539be02c1528f90e6d1e45480c921c123046c020911f2ea",
+      "git_blob": "7273ae2a411188d16126ef7d5fd39fcbf7beca72",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Hash/Hash256Item.cs": {
+      "bytes": 5872,
+      "sha256": "e7adba26ddc312597f8340bb3be89599db80bbcd9c71ad4e955d3cc1ff5fc65b",
+      "git_blob": "443b0b3f6f4828d9ab2b5454d4e64880115acf4d",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Hash/Hash256LookupItem.cs": {
+      "bytes": 3531,
+      "sha256": "f326cedfdc34e03eb6ef8782d454df3b3985a635b7a546067a1942ca24d6fe57",
+      "git_blob": "1e70e9774fa8ee6e706b8c2e9c7222edb934fe4c",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Hash/HashList.cs": {
+      "bytes": 583,
+      "sha256": "cfc360276acb75cf40b8d7c50195f97bf430c5dc2f372f84abf416d5686c6ce3",
+      "git_blob": "e3abdb3e0f4dbe671236b94fa2225c39848d857c",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "Hash/IHashItem.cs": {
+      "bytes": 366,
+      "sha256": "891e98216acaea3a1ce21c0bc3bac14fc8109eba38347a8779460461870d7f76",
+      "git_blob": "6a183af636ada10ddbd190c58ebac7f52803d5c0",
+      "method": "Whole pinned source/project text read without truncation"
+    },
+    "NutzCode.Libraries.PerceptualImage.csproj": {
+      "bytes": 1142,
+      "sha256": "1eb22668c528df85b0e588cf32ad5bec23d0dbe5fd30aaf225b628960d1ed882",
+      "git_blob": "147403b63199ef6368898b897648aee5dbb9f4d9",
+      "method": "Whole pinned source/project text read without truncation"
+    }
+  },
+  "controls": {
+    "project": "docs/research/dedup-500/perceptual418-controls-v1-20261021/Controls.csproj",
+    "harness": "docs/research/dedup-500/perceptual418-controls-v1-20261021/Program.cs",
+    "log": "docs/research/dedup-500/perceptual418-controls-v1-20261021/run.log",
+    "passed": 5,
+    "method": "Unchanged original eight C# tree/hash sourcefiles compiled in isolatednet8executable underinstalleddotnetSDK, authored controls; no original multitarget package/imagepipeline."
+  },
+  "findings": [
+    "AddNode(begin==end)returnsnull:singletonpopulationdropsonlyitem;twopopulationfullradiusreturnsone;emptylistindexes0andthrows. Originalcontrolsconfirm.",
+    "LookupTableinitialization x<65535 skips65535entry;distancezero-to-allFFreturns0ratherthan256. Originalcontrolconfirms.",
+    "DefaultDynamicVPTreeconstructorleaves_lookupnull;AddthrowsNullReferenceException.",
+    "Rangeusesdistance<range(exclusive), not<=;thresholdpolicyundocumentedintheinspectedinterface,notassertedcontractviolation.",
+    "SearchmutatesSortDistanceonshareditems;thread-safety/concurrentsearchnotqualified."
+  ],
+  "remaining": [
+    ".gitattributes",
+    ".gitignore",
+    "Hash/Hash64Item.cs",
+    "LICENSE",
+    "NutzCode.Libraries.PerceptualImage.sln",
+    "PerceptualImageHash.cs",
+    "Properties/AssemblyInfo.cs"
+  ],
+  "license": "RegistryGPL3metadata;rootLICENSEstillpendingfullread.No foreignproductioncodeadopted;controlreferencescachedoriginalsource.",
+  "limits": [
+    "Partial10/17artifacts;fullreviewcount173/500unchanged.",
+    "FiveisolatedC#controlsnotfullimage/runtime/platform/corpusqualification.NativepHash/ASANdeferred."
+  ]
+}
