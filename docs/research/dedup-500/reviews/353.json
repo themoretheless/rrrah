@@ -2,9 +2,9 @@
   "index": 353,
   "repository": "jenssegers/imagehash",
   "commit": "87ba7051d2fca2edc718091f052424474dedfeae",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All31pinnedblobs reviewed:23wholetextfiles,8originalJPEGs individuallyviewed. Static/source-derived controls; originalPHP runtime unqualified.",
   "decision": "reference",
-  "finding": "Partial source review: hash width/recipe and serialization issues derived from source; PHP runtime unavailable, docs/assets remain.",
+  "finding": "Complete source/assets review: serialization/width/recipe issues, stale README API and PHP version mismatch recorded. No PHP runtime claim.",
   "available_source_evidence": [
     {
       "path": "src/Hash.php",
@@ -81,5 +81,7 @@
       "controls": "docs/research/dedup-500/php353-serialization-controls-20261021/result.json",
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/php353-complete-source-review-20261021.json"
 }
