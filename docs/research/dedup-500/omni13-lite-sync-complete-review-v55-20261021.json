@@ -1,0 +1,50 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/src/sync_server.rs": {
+      "sha256": "1d2b274df639190fa8abe3d3633127342588673239579daf70a6113220e01f43",
+      "git_blob": "00c7614358924963a0e04493411e252f944fe76d",
+      "lines": 1787,
+      "mode": "100644",
+      "method": "Whole module read across1-840 and841-1787, pinned blob verified."
+    }
+  },
+  "cumulative_whole_files_read": 88,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "prior_audit": "docs/research/dedup-500/omni13-lite-sync-transfer-setup-review-v54-20261021.json",
+    "new_read_line_ranges": [
+      [
+        841,
+        1787
+      ]
+    ],
+    "union_read_line_ranges": [
+      [
+        1,
+        1787
+      ]
+    ]
+  },
+  "method": "Completed947 remaining source lines. Static transfer state, file creation and disconnect lifecycle analysis; no server executed.",
+  "findings": [
+    "Narrowing v54 path reservation: upload creation uses create_new(true), preventing overwrite when two clients choose same unused path. Race can yield manifest error without retry, not silent existing-file replacement.",
+    "Outbound read_transfer_chunk marksCompleted as soon as requested index is final, before websocket send and without receiver acknowledgment. Send failure then disconnect cleanup only requeuesSending, leavingCompleted. UI completion is not proof remote file saved.",
+    "Outbound permits any in-range chunk index and computes progress from requested offset, not unique delivered chunks. Requesting final first can markCompleted and block earlier requests. No actual phone/protocol execution in this batch.",
+    "Inbound enforces in-order chunks, duplicate rejection, exact decoded size and correct done flag, and tracks received count beforeCompleted. This is stronger local byte coverage than outbound; no file checksum/fsync/atomic staging rename before completion.",
+    "Inbound writes directly to final visible destination, leaves partial file on failure/disconnect, and has no resume/requeue transition forReceiving. Duplicate transfer id remains in memory, hindering restart until state cleared. No user files created.",
+    "Outbound disconnect requeuesSending but preserves assigned_device_id, allowing same device selection after reconnect. Start resets all transfer state; no persistent queue. Completed/failed entries retained until outbound cap drain or restart.",
+    "Outbound queue cap20 drains oldest entries regardless status, potentially forgetting active inbound/outbound entries. Incoming manifest append has no corresponding cap; count limit not universal.",
+    "Upload duplicate-id check and push are under separate mutex acquisitions, allowing concurrent manifests sameid before insertion. Initial create_new still protects samepath, but different paths can share transfer identity. Static interleaving only.",
+    "Start has no running guard/generation, resets shared state then spawns listener, so repeated start can create multiple listeners on successive ports sharing state. Stop flag cleared on start can race older shutdown. No listener started.",
+    "Lite explicitly rejects remote duplicate scanning/search/indexing/file preview/actions; shared DuplicateGroup types are compatibility declarations, not Lite feature implementation.",
+    "Module has no original test block. No successful runtime or end-to-end transfer claim; file authenticity, platform IO and pairing behavior remain unqualified."
+  ],
+  "limits": [
+    "88/268 whole files; repository013 incomplete.",
+    "No runtime tests or network/device/file-transfer actions; no local production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
