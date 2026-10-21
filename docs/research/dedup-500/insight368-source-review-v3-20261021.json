@@ -1,0 +1,42 @@
+{
+  "repository": "ramenhut/insight",
+  "commit": "3930e13998e8f0893ae6b2360b2ec75f4edcb969",
+  "whole_repo_complete": false,
+  "tracked_blobs": 22,
+  "cumulative_assessed_blobs": 9,
+  "new_whole_files_read": {
+    "Source/Platform/vnBitStream.h": {
+      "bytes": 4103,
+      "sha256": "9e9b1ec05501c19b8166b9fb0acdc51c249bc9e848b80150a5b56220cfbfadac",
+      "git_blob": "ae2e9f939e3f2af6fb3702523b4090f9dfbe391c",
+      "method": "Whole pinned header/implementation read without truncation"
+    },
+    "Source/Platform/vnBitStream.cpp": {
+      "bytes": 13670,
+      "sha256": "fd3358abbdbec916c53a18a7f921fe9021325407356207b26002d873a797a33a",
+      "git_blob": "d880f1dfd00215d2800994e081aba9952a8e6b0d",
+      "method": "Whole pinned header/implementation read without truncation"
+    }
+  },
+  "controls": {
+    "generator": "docs/research/dedup-500/insight368-controls-v3-20261021/build.py",
+    "source": "docs/research/dedup-500/insight368-controls-v3-20261021/extracted.cpp",
+    "log": "docs/research/dedup-500/insight368-controls-v3-20261021/run.log",
+    "passed": 4,
+    "method": "Whole original class declaration/implementation with dependency includes omitted and authored exact-width/status/memory/alignment adapters; clang++C++17. Default constructors only, small valid capacities; no sanitizer."
+  },
+  "findings": [
+    "For all256 byte values, aligned WriteByte/ReadByte roundtrips correctly. After1prefixbit, ReadByte returns bit-reversed byte; ReadBytes at same unaligned offset preserves all256 original values. Confirmed original class behavior under stated adapters.",
+    "WriteBit beyond full8bitcapacity explicitly refuses while existing19byte and occupancy remain intact.",
+    "Normal vnCompareImages reads via ReadBit; vnHashImage64 uses aligned ReadBytes. Unaligned ReadByte defect is not automatically a normal hash-comparison failure.",
+    "Copy/raw-buffer constructors call Assign without initializing m_DataStore; Assign calls Clear which deletes that pointer. Source-only uninitialized-pointer concern; those constructors not executed.",
+    "Assign(self) clears before reading/copying own storage; deep equality compares capacity bytes including unwritten bits. Neither path exercised, no memory-safety or determinism claim.",
+    "ResizeCapacity clears previous data and rounds actual capacity to whole bytes while returning requested bit count; this is explicit inspected behavior rather than preservation contract violation."
+  ],
+  "remaining_scope": "13 artifacts: Imagine header/interface, remaining platform/math/error headers, Windows projects, rootlicense/README.",
+  "license": "Original BSD2 notices retained with copied research class; no production adoption.",
+  "limits": [
+    "Partial9/22review and ten targeted original extracted-function/class controls cumulative; full count181/500 unchanged.",
+    "No original platform ABI/full image pipeline, unsafe constructor paths, ASAN, Windows execution or performance qualification. Native pHash/ASAN deferred."
+  ]
+}
