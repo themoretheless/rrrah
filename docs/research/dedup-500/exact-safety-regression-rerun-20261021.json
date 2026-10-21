@@ -1,0 +1,43 @@
+{
+  "scope": "Fresh focused exact-file qualification following cbird scanner findings",
+  "runs": [
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --lib exact::",
+      "exit_code": 0,
+      "passed": 21,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 30,
+      "test_seconds": 0.03,
+      "build_seconds": 10.79
+    },
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files",
+      "exit_code": 0,
+      "passed": 33,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 0,
+      "test_seconds": 1.13,
+      "build_seconds": 18.84
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "2d6fb8e7c2e126e37f1334426bf94f8403caff32ca512b4156ab597bb00c4d1f"
+  },
+  "permission_prerequisite": {
+    "own_temporary_file_mode_zero_read_denied": true
+  },
+  "observations": [
+    "Report.complete explicitly rejects cancellation and Io/Changed/Limit issues. Policy exclusions remain separate.",
+    "Focused tests cover missing inputs and healthy copies, traversal/size limits, physical hardlink aliases and symlink cycles, cancellation, stale same-size content and full-byte confirmation under forced hash collisions.",
+    "Unreadable fixture has early return for privileged readers; independent own-temporary-file permission probe on this host confirmed read denial.",
+    "No library source changes required for these already implemented safeguards."
+  ],
+  "limits": [
+    "54 passing tests qualify exact-file paths only, not complete media/model matching, upstream cbird, 500-repository completion or performance gains.",
+    "No atomic filesystem snapshot guarantee; post-observation changes remain possible.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
