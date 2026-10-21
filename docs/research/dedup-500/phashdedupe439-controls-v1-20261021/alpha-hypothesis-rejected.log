@@ -1,0 +1,24 @@
+PASS original transitive policy groups A/B/C although A/C distance2 exceeds1 (documented policy, not contract violation)
+PASS negative bigint input returns distance0 without rejection
+PASS NaN threshold silently omits identical pair
+(node:15401) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS actualSharp solid black/white bothhash0 atstrictthreshold0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 2
+
+    at file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/phashdedupe439-controls-v1-20261021/run.mjs:33:9 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 2,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
