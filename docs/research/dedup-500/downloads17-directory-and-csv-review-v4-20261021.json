@@ -1,0 +1,96 @@
+{
+  "repository": "VikasSukhija/Downloads",
+  "commit": "59b36dcb55ec25533c0278ea466d8bb278b5b43a",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "CNAME": {
+      "sha256": "eeda31bb7260f48f80491bd2744c0d955e3fd6c689a65bdd9c04bc365dfe3f0e",
+      "git_blob": "ecbf09c825fff3ab5b562a2d55c05b2e2b6a57f1",
+      "mode": "100644",
+      "bytes": 20,
+      "encoding": "utf-8-sig",
+      "lines": 1,
+      "method": "Entire text read, not executed."
+    },
+    "iframe.txt": {
+      "sha256": "d8a27a985d3bfbbeb01b3a58b2dce8f4a9a45c1d47e9e94da2284609452a9f8b",
+      "git_blob": "eec7fc41af2f828fe59ab87f2dac1a08b9afc1b1",
+      "mode": "100644",
+      "bytes": 231,
+      "encoding": "utf-8-sig",
+      "lines": 1,
+      "method": "Entire text read, not executed."
+    },
+    "o365_EOL.ps1": {
+      "sha256": "223ed057e4d2fceba173ed329fbd11a04a135414c5a9ac00f8a4fa551be459f1",
+      "git_blob": "d828ab0061428cedf6d03b7377a4a68d56bc0dd5",
+      "mode": "100644",
+      "bytes": 430,
+      "encoding": "utf-8-sig",
+      "lines": 16,
+      "method": "Entire text read, not executed."
+    },
+    "chkusrdn.ps1": {
+      "sha256": "9ba3cc9da28a316a5f355dfe1da97e31e01e1c69eafd517bef23a31ef98f705c",
+      "git_blob": "012b66b3a8820abd3fbe9b5b6d27c614138fa56a",
+      "mode": "100644",
+      "bytes": 992,
+      "encoding": "utf-8-sig",
+      "lines": 45,
+      "method": "Entire text read, not executed."
+    },
+    "checkgroupDN.ps1": {
+      "sha256": "b79fb122d2b62e27a906ffdbfb0ee1d64c374925f29f36f1efd8b3a4b842b907",
+      "git_blob": "958e6b745c42d1ced821138ad2b1b568efdf656a",
+      "mode": "100644",
+      "bytes": 1004,
+      "encoding": "utf-8-sig",
+      "lines": 45,
+      "method": "Entire text read, not executed."
+    },
+    "setacceptmessagesonlyfrom.ps1": {
+      "sha256": "42b744c4eca96c12be37e930b5b9fa81b362b9e0217bf8d0fd41d39e58a05843",
+      "git_blob": "66333b9e90fca7f112f0312664118a87ebfc121e",
+      "mode": "100644",
+      "bytes": 1047,
+      "encoding": "utf-8-sig",
+      "lines": 32,
+      "method": "Entire text read, not executed."
+    },
+    "ExpcsvSQL.ps1": {
+      "sha256": "c06825d9ada56031c361418ad78a1ca9f953a3f6deaf333befcd24853fb29298",
+      "git_blob": "58c350b201695f91586f0f7c6e7cbeff2dca5706",
+      "mode": "100644",
+      "bytes": 1305,
+      "encoding": "cp1252",
+      "lines": 46,
+      "method": "Entire text read, not executed."
+    },
+    "csvparser.vbs": {
+      "sha256": "f7c59b44d2e083c5a02e9d97aee209c1016e47824d852187e74ed34324cf54b6",
+      "git_blob": "6837aeb85299ed6b244167c57d51b86eb307ff38",
+      "mode": "100644",
+      "bytes": 1318,
+      "encoding": "utf-8-sig",
+      "lines": 41,
+      "method": "Entire text read, not executed."
+    }
+  },
+  "cumulative_whole_files_read": 30,
+  "tracked_blobs": 248,
+  "findings": [
+    "CNAME and iframe are website configuration/embedded PowerApps reference; no deduplication.",
+    "o365_EOL defines Exchange session creation/removal helpers; not invoked.",
+    "chkusrdn and checkgroupDN enumerate LDAP account-name matches and explicitly stop on ambiguous multiple matches; directory identity, not byte equality.",
+    "setacceptmessagesonlyfrom appends each CSV name to current distribution-group permissions without source-level membership deduplication.",
+    "ExpcsvSQL exports a table using a historical snap-in; no duplicate detection or snapshot qualification.",
+    "csvparser searches raw lines for substring 1054 and splits on comma; quoted CSV fields and exact event-ID column matching are not handled. It skips the first line as a header."
+  ],
+  "executed_controls": [
+    "All eight original Git blob IDs verified against pinned tree."
+  ],
+  "limits": [
+    "Static review only; no directory, Exchange, SQL, browser, or VBScript operations executed.",
+    "30/248 tracked blobs reviewed; repository remains partial."
+  ]
+}
