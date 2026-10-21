@@ -1,0 +1,94 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/assets/appws.js": {
+      "sha256": "ba15c5f9307fa856ec7a9e85d25353c5c63203cfba75bc693eb18921822b7dfd",
+      "git_blob": "54ac6be309e95044d8ed38e605e7cdea74f0d448",
+      "lines": 174,
+      "mode": "100644"
+    },
+    "src/assets/app.js": {
+      "sha256": "68017e7bc18b58bdd9879f0a6899e9fb9809a80e51c8cc36de904c2c5b8a1835",
+      "git_blob": "762cdbefd92eb108b7d26ae0dc838f4c098db27b",
+      "lines": 205,
+      "mode": "100644"
+    },
+    "src/assets/appui.js": {
+      "sha256": "1af9ca1e9a6b034d3638da7b116e91d7cf3a3d0ce2498573dcfc0b5c2b9c2774",
+      "git_blob": "e03277c488c091745371ecdfdc38a3b4ece05eb4",
+      "lines": 336,
+      "mode": "100644"
+    },
+    "src/assets/mod/base.js": {
+      "sha256": "8504c31f7a53ee1d9491054d2b3a5fd9094ec9433f752ae2acd7bf8fc46a5f06",
+      "git_blob": "e6f42157f89ee5955fb22b9f56810b68db9c6996",
+      "lines": 125,
+      "mode": "100644"
+    },
+    "src/assets/mod/nfy.js": {
+      "sha256": "8d19302c995bbc18c109ade4d9506509d546f737c80176f468819026d705a405",
+      "git_blob": "b7cd5af78a388ebfa45948e07264744461626181",
+      "lines": 122,
+      "mode": "100644"
+    },
+    "src/assets/mod/tsk.js": {
+      "sha256": "979ee3a277adebb94606c98fed1f04de60f1bafec76e4fb7ed4aebf9fec478b6",
+      "git_blob": "81fdd9fb146b6532ad15d6924087d66a1f02ffd5",
+      "lines": 20,
+      "mode": "100644"
+    },
+    "src/assets/mod/livePhoto.js": {
+      "sha256": "38a81dcc47c05fb5439312cc4ec6a71fd885783ab461b6eaadaba4350dde2a8b",
+      "git_blob": "c8e598da07700ec783be60aeefb8106778c2511e",
+      "lines": 172,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 74,
+  "tracked_blobs": 125,
+  "method": "Seven complete JavaScript files read. Original appws.js/app.js executed in isolated Node VM with explicit fake timer queue, state stores and DOM interfaces. No real DOM callbacks, network/socket connections, browser or timers started.",
+  "executed_controls": {
+    "reconnect_after_explicit_disconnect": {
+      "remaining_scheduled_callbacks": 2,
+      "connect_calls_after_callbacks": 2
+    },
+    "stale_task_message_forwarded": {
+      "id": "global-ws",
+      "value": {
+        "typ": "complete",
+        "tsn": "old-owned-task",
+        "ste": "completed"
+      }
+    },
+    "failed_system_check_without_settings_container": [
+      {
+        "id": "store-sys",
+        "value": {
+          "data": {
+            "ok": true
+          }
+        }
+      }
+    ]
+  },
+  "control_source": "const fs=require('fs'),vm=require('vm'),assert=require('assert');const B='.dedup-work/immich12-20261021/';\nconst quiet={log(){},info(){},warn(){},error(){},debug(){}};\nconst timers=new Map(),stores=[];let serial=0;\nconst ctx={console:quiet,window:{},dsh:{syncStore:(id,value)=>stores.push({id,value})},setTimeout:fn=>{timers.set(++serial,fn);return serial},clearTimeout:id=>timers.delete(id)};vm.createContext(ctx);vm.runInContext(fs.readFileSync(B+'src--assets--appws.js','utf8'),ctx);\nvm.runInContext(`TskWS.fnErroed=()=>{};TskWS.onError('owned error');TskWS.onClose('owned close');TskWS.disconnect();globalThis.connectCalls=0;TskWS.connect=()=>{connectCalls++}`,ctx);\nconst scheduled=timers.size;for(const fn of timers.values())fn();assert.equal(scheduled,2);assert.equal(ctx.connectCalls,2);\nvm.runInContext(`TskWS.onMsg({typ:'complete',tsn:'old-owned-task',ste:'completed'})`,ctx);assert.equal(stores.at(-1).value.tsn,'old-owned-task');\nconst updates=[];const span={classList:{add(){},remove(){}},innerText:''};const ctx2={console:quiet,window:{dash_clientside:{set_props:(id,value)=>updates.push({id,value})}},document:{querySelector:()=>null,addEventListener(){}},ui:{mob:{waitFor:(selector,cb)=>cb(span)}},TskWS:{init:ok=>ok()},Nfy:{info(){},warn(){},error(){}},notify:{erro(){}},Date};vm.createContext(ctx2);vm.runInContext(fs.readFileSync(B+'src--assets--app.js','utf8'),ctx2);vm.runInContext(`onFetchedChk({close(){},closeNo(){}},[{key:'vec',ok:false,msg:['owned failing vector check']}])`,ctx2);assert(updates.some(x=>x.id==='store-sys'&&x.value.data.ok===true));\nconst out={reconnect_after_explicit_disconnect:{remaining_scheduled_callbacks:scheduled,connect_calls_after_callbacks:ctx.connectCalls},stale_task_message_forwarded:stores.at(-1),failed_system_check_without_settings_container:updates};fs.writeFileSync(B+'controls-v8-result.json',JSON.stringify(out,null,2)+'\\n');process.stdout.write(JSON.stringify(out,null,2)+'\\n');\n",
+  "findings": [
+    "Original onError and onClose each schedule reconnect timer; explicit disconnect only clears connection timeout, not reconnect timers. Two queued callbacks survive disconnect and call connect. Real connect guard may coalesce actual sockets; reproduction establishes surviving callbacks, not two real network sockets.",
+    "Original onMsg forwards old task complete message into global-ws store with no task serial or connection generation validation; original backend callback lack of current-task filter reviewed separately. Reproduced state-forwarding boundary only.",
+    "Original onFetchedChk checks item.ok only inside if document.querySelector(.card-system-cfgs). Without that settings page container, failing vector check never sets errK, and successful mocked connection writes store-sys ok:true. Reproduced exact callback with failing item and absent container.",
+    "Connection init clears global message store and adds beforeunload handler on each init; reconnect schedule handles not retained. StartupID detects server restart only after new connected message, not task message freshness. Source behavior.",
+    "System check fetch parses response.json without checking HTTP status or array schema; non-array error JSON fails iteration when settings container present, yet absent container can skip content checking. Source observation, invalid-schema variant not executed.",
+    "App console.error wrapper suppresses all messages containing Callback error updating, potentially hiding unrelated callback failures. Observer waitFor has no timeout; waitAll stops at first nonempty result rather than complete expected card set. Source observations.",
+    "LivePhoto modal controls query first .livephoto video across document, not scoped to modal; can control list video while updating modal button. Playback promises/errors and timeline range/NaN checks incomplete by source, no actual media run.",
+    "Notice close depends on transitionend for removal; no fallback. Notification store updates read-modify-write state and can interleave with server callbacks. No concurrency/browser qualification.",
+    "UI helper refreshSize sets position/left/top/visibility without restoring prior styles; poptip timers can act after visibility toggles. Source observations only."
+  ],
+  "limits": [
+    "74/125 tracked blobs whole read;51 remain including media, CSS, docs, full settings/similar and database/fetch code.",
+    "No rendered visual, image/GIF/video inspection credited this batch.",
+    "No real socket/server/browser/DB/model run or full upstream suite; fake timer callbacks are manually invoked controls.",
+    "No production source changed/copied; native pHash/ASAN remains deferred and full500/all-case objective incomplete."
+  ]
+}
