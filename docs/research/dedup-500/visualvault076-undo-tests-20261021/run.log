@@ -1,0 +1,79 @@
+    Updating crates.io index
+     Locking 112 packages to latest compatible versions
+      Adding dirs v6.0.0 (available: v7.0.0)
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding sha2 v0.10.9 (available: v0.11.1)
+      Adding toml v0.8.23 (available: v1.1.8+spec-1.1.0)
+ Downloading crates ...
+  Downloaded uuid v1.28.0
+   Compiling thiserror v2.0.21
+   Compiling thiserror-impl v2.0.21
+   Compiling tokio v1.54.0
+   Compiling uuid v1.28.0
+   Compiling visualvault076-undo v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-undo-20261021)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.43s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_undo-8ab6fd650b88cec9)
+
+running 19 tests
+test undo_manager::tests::test_new_undo_manager ... ok
+test undo_manager::tests::test_record_organize_operation ... ok
+test undo_manager::tests::test_undo_nonexistent_file ... ok
+test undo_manager::tests::test_record_move_operation ... ok
+test undo_manager::tests::test_operation_metadata ... ok
+test undo_manager::tests::test_redo_stack_cleared_on_new_operation ... ok
+test undo_manager::tests::test_undo_move_operation ... ok
+test undo_manager::tests::test_concurrent_operations ... ok
+test undo_manager::tests::test_redo_operation ... ok
+test undo_manager::tests::test_undo_organize_operation ... ok
+test undo_manager::tests::test_undo_cleans_up_empty_directories ... ok
+test undo_manager::tests::test_undo_preserves_non_empty_directories ... ok
+test undo_manager::tests::test_undo_partial_type_directories ... ok
+test undo_manager::tests::test_save_and_load_history ... ok
+test undo_manager::tests::test_get_undoable_operations ... ok
+test undo_manager::tests::test_multiple_undo_redo ... ok
+test undo_manager::tests::test_undo_type_directories_with_date_organization ... ok
+test undo_manager::tests::test_undo_removes_type_directories ... ok
+test undo_manager::tests::test_max_history_limit ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 58 filtered out; finished in 0.11s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_undo-8ab6fd650b88cec9)
+
+running 24 tests
+test organizer::tests::test_get_type_folder ... ok
+test organizer::tests::test_get_type_folder_all_types ... ok
+test organizer::tests::test_determine_target_directory_by_type ... ok
+test organizer::tests::test_determine_target_directory_separate_videos ... ok
+test organizer::tests::test_file_organizer_creation ... ok
+test organizer::tests::test_determine_target_directory_monthly ... ok
+test organizer::tests::test_determine_target_directory_yearly ... ok
+test organizer::tests::test_organize_files_invalid_mode ... ok
+test organizer::tests::test_organize_files_no_destination ... ok
+test organizer::tests::test_generate_unique_name ... ok
+test organizer::tests::test_organize_file_basic ... ok
+test organizer::tests::test_organize_file_lowercase_extension ... ok
+test organizer::tests::test_organize_no_operations_recorded_when_undo_disabled ... ok
+test organizer::tests::test_organize_file_rename_duplicates ... ok
+test organizer::tests::test_organize_by_type_with_separate_videos_disabled ... ok
+test organizer::tests::test_organize_files_with_duplicates_rename ... ok
+test organizer::tests::test_organize_files_with_duplicates_skip ... ok
+test organizer::tests::test_organize_by_type_empty_extension ... ok
+test organizer::tests::test_organize_by_type_with_lowercase_extensions ... ok
+test organizer::tests::test_organize_by_type_with_duplicates ... ok
+test organizer::tests::test_progress_tracking ... ok
+test organizer::tests::test_organize_records_move_operations ... ok
+test organizer::tests::test_organize_mixed_modes ... ok
+test organizer::tests::test_organize_by_type_all_file_types ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 53 filtered out; finished in 0.02s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_undo-8ab6fd650b88cec9)
+
+running 3 tests
+test controls::control_reload_does_not_restore_redo_stack ... ok
+test controls::control_undo_replaces_new_file_at_original_path ... ok
+test controls::control_failed_redo_discards_retry_entry ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 74 filtered out; finished in 0.00s

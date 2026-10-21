@@ -1,0 +1,48 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 41,
+  "files": {
+    "crates/core/src/undo_manager.rs": {
+      "bytes": 48748,
+      "sha256": "728cfca6a0b15f798ae4fd9794c340b80c7b3ea56729e2807a47cfdee0efd5e5",
+      "git_blob": "07ac64fff9e23db23d6077e9ecdb34381d6df0ea",
+      "method": "All1393 lines read in complete chunks1..280,281..560,561..840,841..1130,1131..1393; Git blob verified"
+    }
+  },
+  "new_unique_controls": 3,
+  "cumulative_unique_controls": 24,
+  "controls_script": "docs/research/dedup-500/visualvault076-undo-tests-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-undo-tests-20261021/run.log",
+  "new_original_tests": {
+    "undo_manager": 19,
+    "organizer": 24,
+    "passed": 43,
+    "failed": 0,
+    "ignored": 0
+  },
+  "cumulative_distinct_original_module_tests": {
+    "passed": 127,
+    "failed": 1,
+    "scope": "Separate isolated unchanged original modules; earlier Progress concurrency failure remains. Not full original workspace."
+  },
+  "runtime_scope": "Whole unchanged original UndoManager and FileOrganizer modules, actual original MediaFile/DuplicateStats/OrganizeResult/Progress and production Settings, reexported through authored crate aliases. Actual filesystem/history JSON in owned TempDir. Fresh manifest/dependency resolution, not original workspace lock. No fake operation record adapters in this harness.",
+  "findings": [
+    "Public undo of recorded move overwrites new unrelated content subsequently placed at original source path, confirmed with original full UndoManager. History has paths/description/optional metadata, no required file identity/content observation guards.",
+    "redo pops redo_stack before executing operation. Remove restored source, redo returnsErr, recreate source then retry returnsNone; history still undone. Confirmed deterministic public API control.",
+    "History persists undone flags but load_history does not rebuild redo_stack. After successful undo and reload, history says undone while redo returnsNone. Confirmed; this is restart capability limit, not data deletion.",
+    "undo drops history lock while applying filesystem operations, then reacquires and indexes original pos; concurrent history mutation can invalidate positional assumptions. Concurrent original test only records operations; no adversarial undo/history race executed.",
+    "BatchMove/OrganizeFiles undo and redo aggregate individual errors into Ok(String), silently skip missing paths and allow public wrapper to mark whole history operation undone/redone. BatchDelete can stop after partial effects on propagated error. Static review; partial failure control not yet run.",
+    "Copy undo deletes current destination path without content/identity match; delete redo can back up and remove current path regardless of identity. Source-only, no destructive operations outside authored temporary move controls.",
+    "Save writes complete JSON directly with fs::write, no atomic temp/rename/fsync. record_operation mutates memory before save; save errors do not roll back history. redo_stack only memory. No power-loss or concurrent corruption qualification.",
+    "cleanup_empty_directories traverses up to4 empty ancestors, no explicit organization-root boundary; stops at nonempty/unreadable directory. Original cleanup tests passed inside owned temporary fixtures; no external-directory removal test.",
+    "Original test_max_history_limit records100 operations, whereas MAX_UNDO_HISTORY=10000. Passing test does not exercise overflow. Original concurrent_operations checks in-memory length10 without reopening saved JSON; not disk-concurrency integrity proof.",
+    "All19 original undo tests and24 organizer tests passed in isolated shared harness. This strengthens previous organizer source/extracted-method evidence, but does not rerun the three earlier movement controls through full batch entry point or qualify original application workspace."
+  ],
+  "remaining_scope": "54 tracked artifacts remain; global complete repository count205/500 unchanged. Native pHash/ASAN skipped.",
+  "limits": [
+    "No App/TUI, original lockfile, cross-platform, cross-device, fault-injection or crash durability qualification. No production code copied or modified."
+  ]
+}
