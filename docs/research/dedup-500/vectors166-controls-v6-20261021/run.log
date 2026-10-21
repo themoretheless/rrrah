@@ -1,0 +1,6 @@
+plateau log: [False False False False]
+PASS constant count curve has zero gradient but detects no plateau (strict zero threshold)
+plateau log: [ True  True  True  True]
+PASS explicitly injected all-true plateau mask is lost by original interval extraction
+PASS default plateau calculator with nonempty DDA fails empty tolerance dataset reduction
+PASS injected probe failure restores scalar tolerance but leaves temporary dataset installed

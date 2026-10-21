@@ -1,0 +1,32 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 21,
+  "files": {
+    "tests/unit/plugins/tolerance_calculators/test_natural_tolerance_plateau_probe.py": {
+      "bytes": 7970,
+      "sha256": "595eac052dc6da4cac942d798a09314d4dcebe327ae0d24bcf07a33d99652773",
+      "git_blob": "d66b30b228a29334639aaa491a80cfac376ff081",
+      "method": "Whole pinned original text read without truncation; Git blob verified"
+    }
+  },
+  "new_runtime_controls": 4,
+  "cumulative_runtime_controls": 14,
+  "controls_script": "docs/research/dedup-500/vectors166-controls-v6-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vectors166-controls-v6-20261021/run.log",
+  "control_scope": "Full original plateau/base/DistanceMatrix classes, NumPy and identity njit shim. Constant count dictionary is authored input; all-true mask and failure subclass are explicit injections. No original pytest or Numba machine code.",
+  "findings": [
+    "Constant counts3 over6 tolerances produce all-false4-window mask and no interval: strict gradient<threshold rejects0<0.",
+    "Original find_plateaus on explicitly injected all-true4-window mask returns no interval: no transition means starts/ends both empty. Does not establish natural generation of this mask.",
+    "Original default calculate_tolerance with nonempty two-vector DDA fails on empty tolerance data.",
+    "Explicit count failure during tolerance_probe leaves temporary three-vector dataset installed; scalar tolerance is restored.",
+    "Original tests cover three plateau regions, linear nonplateau, invalid window, insufficient steps and a swapped-dataset distance rebuild regression. Wraparound regression only asserts list type for injected [False,True], not interval endpoints or all-true mask.",
+    "Original final tolerance test only asserts count>0 and <=dataset length, not expected cluster membership/count. Tests explicitly create tolerance datasets and do not cover defaults or exceptions. Source assessment only."
+  ],
+  "remaining_scope": "81 tracked artifacts remain unassessed; global fully reviewed count201/500 unchanged.",
+  "limits": [
+    "Four finite controls do not qualify full package, supported dependency combinations, approximate accuracy or performance. No production changes; pHash/ASAN deferred."
+  ]
+}

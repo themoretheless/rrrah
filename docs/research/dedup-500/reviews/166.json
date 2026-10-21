@@ -2,7 +2,7 @@
   "index": 166,
   "repository": "julianholland/deduplicate",
   "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
-  "review_scope": "Partial pinned20/102 whole artifacts read;10 finite runtime controls cumulative with explicit adapters. Tolerance test coverage and plateau source assessed; newly identified plateau edge cases remain static. Original pytest/Numba compilation unqualified.",
+  "review_scope": "Partial pinned21/102 whole artifacts read;14 finite runtime controls cumulative, with actual NumPy and explicit identity njit/state/failure adapters. Plateau edge cases reproduced; original pytest and compiled Numba unqualified.",
   "decision": "shortlist",
   "finding": "Pluggable distance-matrix and multi-hash candidate algorithms with integration tests; threshold semantics need deeper review.",
   "available_source_evidence": [
@@ -120,6 +120,9 @@
     },
     {
       "audit": "docs/research/dedup-500/vectors166-source-review-v5-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/vectors166-source-review-v6-20261021.json"
     }
   ]
 }
