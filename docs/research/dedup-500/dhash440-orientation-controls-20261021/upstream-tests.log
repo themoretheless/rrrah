@@ -1,0 +1,36 @@
+Download https://registry.npmjs.org/sharp/-/sharp-0.35.4.tgz
+Download https://registry.npmjs.org/@img/colour/-/colour-1.1.0.tgz
+Download https://registry.npmjs.org/semver/-/semver-7.8.5.tgz
+Download https://registry.npmjs.org/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.35.4.tgz
+Download https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz
+Download https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.3.3.tgz
+Download https://registry.npmjs.org/sharp
+Initialize semver@7.8.5
+Initialize detect-libc@2.1.2
+Initialize @img/colour@1.1.0
+Initialize @img/sharp-darwin-arm64@0.35.4
+Initialize sharp@0.35.4
+Initialize @img/sharp-libvips-darwin-arm64@1.3.3
+Check examples/readme.test.ts
+Check tests/dhash.test.ts
+running 1 test from ./examples/readme.test.ts
+README image comparison ... ok (16ms)
+running 16 tests from ./tests/dhash.test.ts
+sample ... ok (17ms)
+dhash invert matches invertHash() ... ok (9ms)
+dhash throws for missing files ... ok (591µs)
+dhash bounds encoded and decoded image sizes ... ok (4ms)
+dhash validates image limits ... ok (115µs)
+dhash includes non-square image edges ... ok (2ms)
+dhash respects every EXIF orientation ... ok (31ms)
+dhash composites transparent pixels on white ... ok (3ms)
+dhash uses the first animated image frame ... ok (2ms)
+toAscii renders full 64 bits ... ok (154µs)
+toAscii supports custom characters ... ok (40µs)
+compare throws on different length hashes ... ok (111µs)
+hash APIs reject invalid 64-bit hex values ... ok (235µs)
+hash APIs accept short uppercase values ... ok (2ms)
+raw renders hash bits to a PNG buffer ... ok (1ms)
+save appends .png and writes the fingerprint ... ok (8ms)
+
+ok | 17 passed | 0 failed (173ms)

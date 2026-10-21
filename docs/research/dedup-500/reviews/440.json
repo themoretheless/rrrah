@@ -4,7 +4,7 @@
   "commit": "9ae9b1daea9591d9cd477b0de58609059e5f1fab",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "Partial whole implementation/test/helper review;64onehot purehelpercontrols pass;Sharp/Bun/Deno pipeline andremainingrepo unreviewed.",
+  "finding": "Partial review:17originalDeno tests,64onehothelpers and8independent EXIForientation controls pass; remaining demo/scripts/lock/media review unfinished.",
   "available_source_evidence": [
     {
       "path": "src/dhash.ts",
@@ -70,8 +70,8 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 3,
-  "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "Original17Deno sharedtests/example executed; independent8orientation hashcontrols pass. Other demo/package/runtime tests unrun.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -99,6 +99,11 @@
     {
       "audit": "docs/research/dedup-500/dhash440-source-review-v1-20261021.json",
       "controls": "docs/research/dedup-500/dhash440-helper-controls-20261021/result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/dhash440-source-review-v2-20261021.json",
+      "controls": "docs/research/dedup-500/dhash440-orientation-controls-20261021/result.json",
       "whole_repo_complete": false
     }
   ]
