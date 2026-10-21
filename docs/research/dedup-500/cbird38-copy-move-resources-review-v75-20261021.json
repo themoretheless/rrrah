@@ -1,0 +1,57 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_artifacts": {
+    "doc/papers/An Evalulation of Popular Copy-Move Forgery Detection Approaches.pdf": {
+      "sha256": "80bbe9d95d950722425b48ba6b3afab45bb1992cb714674d6819121a45d1ca6a",
+      "git_blob": "d4d7195f2446d93ae9640d3a9329644a064e67f8",
+      "bytes": 9727628,
+      "total_pages": 26,
+      "new_text_pages_read_inclusive": [
+        [
+          10,
+          16
+        ]
+      ],
+      "new_visual_pages_reviewed_inclusive": [
+        [
+          10,
+          16
+        ]
+      ],
+      "cumulative_text_and_visual_pages_inclusive": [
+        [
+          1,
+          16
+        ]
+      ],
+      "method": "All new page text read, truncated tool output repaired by separate page13 read. All7new pages rendered at110dpi and visually inspected, including figures11–15,tablesIV–VIII and references.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-copy-move-resources-review-v75-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 614,
+  "tracked_blobs": 616,
+  "findings": [
+    "Multiple-copy experiment replaces single nearest neighbor with g2NN; many dense features improve but still miss copies. This supports explicit multiplicity/completeness qualification, not merely finding one match or imposing fixed small top-k.",
+    "Random64x64regions copied five times expose low-keypoint failures. The authors speculate high-entropy regions would improve SIFT/SURF but did not evaluate that alternative here; do not treat speculation as measured coverage.",
+    "Downsampling reduces detection with fixed thresholds; it changes signal and copied-region size. Reduced image success/performance cannot certify original-resolution recall.",
+    "TableV memory is feature-size-derived theoretical lower bound. Authors report actual implementation more than twice that amount and DCT/DWT peaks above20GB. Do not equate payload allocation estimates with measured peak RSS or total memory budget.",
+    "Feature,matching,postprocessing timings are distinct historical unoptimized measurements; no hardware-equivalent local comparison or speedup asserted.",
+    "Supplement chooses per-feature thresholds with clean+JPEGvariants using every base scene. Thresholds that improve clean-only F1 can degrade combined-transform F1. Robustness across distortions still does not establish content-disjoint heldout evaluation.",
+    "Main-paper recommendations combine cheap sparse and expensive dense examination, but permit remaining false positives/misses. Our all-case goal cannot be marked achieved from these recommendations."
+  ],
+  "executed_controls": [],
+  "next_review": {
+    "text_and_visual_pages_inclusive": [
+      17,
+      26
+    ]
+  },
+  "limits": [
+    "Full artifacts remain614/616; study text/visual progress16/26pages. Remaining full artifacts: thisstudy and CImg.",
+    "Poppler again reported xref reconstruction warning and successfully rendered all7requested pages. No curve digitization, original experiment rerun or production change.",
+    "34upstream original-body/header controls and3independent counterexamples unchanged. Native pHash/ASAN deferred."
+  ]
+}
