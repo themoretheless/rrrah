@@ -1,0 +1,61 @@
+{
+  "status": "focused_current_code_qualification_passed",
+  "head": "9759d9edbe17bc5df216caf16f04f8c780fc4f70",
+  "trigger": "Repository 386 malformed and unequal-width hash comparison failures",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/src/visual.rs": "6352224709d8f52d5f071bdb320d9595c647b8662c009eca8893a4e99d111400",
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-dedup/src/scan.rs": "810b2b2a7c6e4f5fe7e6c77c05ea5b85562c54908c9a72606a4dc19334f7ddd9",
+    "crates/rrrah-dedup/tests/pixels.rs": "c8f8f9f2421daec95af85c15e61bff5573e298169679d76c916367c6d7efbe37",
+    "crates/rrrah-dedup/tests/visual.rs": "3c7cfb2f385c52b9f690a72af3699342038443dde5dfe11c530a9a0fb02a93a8",
+    "crates/rrrah-dedup/tests/cache.rs": "aa535d5725dec1748f405c7e45791327c301e712809fc200aab79752e33b63f2"
+  },
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --test visual --test pixels --test cache",
+  "results": {
+    "cache": {
+      "passed": 11,
+      "failed": 0,
+      "note": "Includes cache_publication_child helper; not 11 independent product requirements."
+    },
+    "pixels": {
+      "passed": 13,
+      "failed": 0
+    },
+    "visual": {
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "evidence": [
+    {
+      "requirement": "No variable-width truncation in this fingerprint API",
+      "implementation": "Fingerprint.variants has compile-time type [[u64; 4]; 8]; comparison XORs all four channels. No external decimal string parser used."
+    },
+    {
+      "requirement": "Nonfinite statistics cannot become informative evidence",
+      "test": "nonfinite_fingerprint_statistics_never_claim_informative_evidence",
+      "coverage": "NaN, positive infinity, negative infinity in each of three RGB fields or standard deviation; both operand directions and transform modes, direct comparison and indexed stored candidate."
+    },
+    {
+      "requirement": "Equal hashes are insufficient to prove pixel identity",
+      "test": "informative_zero_distance_is_a_candidate_not_pixel_identity",
+      "note": "Candidate API deliberately retains zero-distance candidates; consumers must qualify identity separately."
+    },
+    {
+      "requirement": "Persisted fingerprints reject invalid statistics and separate content/recipe/frame identity",
+      "tests": [
+        "disk_persistence_is_deterministic_and_rejects_invalid_values",
+        "roundtrip_requires_content_recipe_and_frame_identity",
+        "every_content_recipe_and_frame_key_bit_survives_persistence",
+        "every_serialized_bit_corruption_is_rejected"
+      ]
+    }
+  ],
+  "limits": [
+    "No implementation change necessary for these already covered cases.",
+    "Focused default-free tests only; not full decoder/model integration or all-library completion.",
+    "No assertion that recipe semantics can be inferred from arbitrary manually constructed Fingerprint values.",
+    "231/500 repositories fully reviewed; native pHash/ASAN remains deferred."
+  ]
+}
