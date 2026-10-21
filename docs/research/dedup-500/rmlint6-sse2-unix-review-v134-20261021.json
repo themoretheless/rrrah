@@ -1,0 +1,32 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_sse2_x86-64_unix.S": {
+      "sha256": "94baa998f4114bf57b99e1791a21e9f0bcdc4bd5803864eb30a2477440b7380c",
+      "git_blob": "99f033fefb41ded0abbc5b5c51012d11e511fc56",
+      "lines": 2291
+    }
+  },
+  "cumulative_whole_files_read": 283,
+  "tracked_blobs": 289,
+  "method": "Differential whole-file source review against fully read Unix SSE4.1 assembly. All1083 unified-diff lines inspected in1..400/401..800/801..1083 without truncation; unchanged source verified text-identical using SequenceMatcher autojunk disabled. Equivalent lines not independently serial-reread.",
+  "equivalence_accounting": {
+    "identical_lines_to_reviewed_sse41": 1814,
+    "new_or_replaced_sse2_lines_read": 477,
+    "total_sse2_lines": 2291
+  },
+  "findings": [
+    "Rotate16 replaces pshufb masks with pshuflw/pshufhw immediate0xB1, swapping16-bit halves inside each32-bit word. Rotate8 uses right8/left24 plus XOR of nonoverlapping bit fields. Temporary registers are explicit across unrolled four-input and scalar/two-input loops.",
+    "PBLENDW masks replace SSE4.1 word blending using AND/OR:33/CC choose alternating32-bit words,3F/C0 select lower96 versus upper32 bits. Extra spills preserve active XMM2 and intermediate message vectors in two-input permutation.",
+    "Counter low/high words are packed via movd and punpckldq instead of pinsrd. Full-block length64 and flags are combined into64-bit scalar then punpcklqdq into compression state. Flags are refreshed each block before packing.",
+    "After two-input output, increment mask is loaded then negated from0/-1 to0/1, selecting lane0 or lane2 via scale8 in low/high counter arrays. This replaces blendvps; source assumes boolean increment_counter supplied by caller.",
+    "Common group4/2/1 structure,128/64/32-byte output sizes, unaligned16-byte input loads, SysV register saves, stack alignment, first/end flags and full-block caller preconditions remain as previously read SSE4.1 source.",
+    "Scalar compression32/64-byte outputs retain full64-byte padded reads. Rotate byte constants are removed, new blend masks appended. Source substitutions alone do not prove parity on SSE2 hardware or establish speed."
+  ],
+  "limits": [
+    "283/289 pinned blobs reviewed;150/500 complete repositories.",
+    "No x86 execution, Windows ABI, sanitizer or throughput proof; no upstream production import. Deferred pHash/ASAN untouched."
+  ]
+}
