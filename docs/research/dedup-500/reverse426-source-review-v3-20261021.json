@@ -1,0 +1,29 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "cmd/imgsearch/main.go",
+    "cmd/imgsearch/main_test.go",
+    "internal/exif/exif_test.go",
+    "internal/imgutil/imgutil_test.go"
+  ],
+  "controls": "docs/research/dedup-500/reverse426-cli-controls-20261021/result.json",
+  "findings": [
+    "Original CLI, real synthetic JPEG files: source sorts first, top=1 consumes source slot before exclusion and returns zero; unlimited search finds the exact duplicate. Existing CLI top test only checks successful return.",
+    "Missing search directory and corrupt JPEG candidate both return exit 0 and zero matches. Original FindImages test explicitly expects missing directory to succeed with empty results; this policy does not communicate incomplete scans to callers.",
+    "PNG-only search directory returns zero despite PNG decoder registration: JPEG-only discovery policy, not decoder failure.",
+    "EXIF orientation mapping test checks only local map length, not Extract. Metadata dimensions mismatch is logged rather than asserted.",
+    "CLI output sorts matches after early TopN truncation; sorting cannot recover omitted candidates. File writes and deferred close errors are unchecked by source inspection, not fault injection."
+  ],
+  "remaining": [
+    "internal/testutil/testutil.go",
+    "Web server, UI and server tests",
+    "Docs, spec, config, license and dependency lock whole-read"
+  ],
+  "limits": [
+    "Five CLI controls assert observed behavior, not desired correctness.",
+    "No production changes or performance claim; 223/500 complete, 277 remaining.",
+    "Native pHash/ASAN item remains deferred."
+  ]
+}

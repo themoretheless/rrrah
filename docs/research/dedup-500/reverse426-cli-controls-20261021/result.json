@@ -1,0 +1,49 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "binary_sha256": "ad8ced1ebac71aba5c6cbd9b0cf51d8064488946b076a50e409ce1c8feadceb5",
+  "original_cli": true,
+  "synthetic_fixtures": true,
+  "controls": [
+    {
+      "name": "top_one_self_exclusion",
+      "exit_code": 0,
+      "matches": 0,
+      "stdout": "Loading source image: <fixture>/images/a-source.jpg\nScanning directory: <fixture>/images\n\n=== Results (as found) ===\n\n=== Total matches found: 0 ===\n",
+      "stderr": ""
+    },
+    {
+      "name": "unlimited_positive",
+      "exit_code": 0,
+      "matches": 1,
+      "stdout": "Loading source image: <fixture>/images/a-source.jpg\nScanning directory: <fixture>/images\n\n=== Results (as found) ===\n1. [100.0%] <fixture>/images/z-duplicate.jpg\n\n=== Total matches found: 1 ===\n",
+      "stderr": ""
+    },
+    {
+      "name": "missing_directory",
+      "exit_code": 0,
+      "matches": 0,
+      "stdout": "Loading source image: <fixture>/images/a-source.jpg\nScanning directory: <fixture>/missing\n\n=== Results (as found) ===\n\n=== Total matches found: 0 ===\n",
+      "stderr": "Warning: cannot access <fixture>/missing: lstat <fixture>/missing: no such file or directory\n"
+    },
+    {
+      "name": "corrupt_candidate",
+      "exit_code": 0,
+      "matches": 0,
+      "stdout": "Loading source image: <fixture>/images/a-source.jpg\nScanning directory: <fixture>/corrupt\n\n=== Results (as found) ===\n\n=== Total matches found: 0 ===\n",
+      "stderr": ""
+    },
+    {
+      "name": "png_discovery",
+      "exit_code": 0,
+      "matches": 0,
+      "stdout": "Loading source image: <fixture>/images/a-source.jpg\nScanning directory: <fixture>/png\n\n=== Results (as found) ===\n\n=== Total matches found: 0 ===\n",
+      "stderr": ""
+    }
+  ],
+  "limits": [
+    "Observed behavior controls; passing assertions do not mean desired behavior.",
+    "PNG is excluded by discovery policy; no claim that its decoder fails.",
+    "Missing root behavior is explicitly expected by original FindImages test."
+  ]
+}
