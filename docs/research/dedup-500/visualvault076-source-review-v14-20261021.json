@@ -1,0 +1,53 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 43,
+  "files": {
+    "crates/models/src/filters.rs": {
+      "bytes": 23725,
+      "sha256": "5d0c56b7ebe85d61217a74da77f460667bdc52394bc95d615002cb598abcba6d",
+      "git_blob": "6554e62f5b16cb3f0ae8adecfbe65c16bcbbdbee",
+      "method": "Whole pinned source and tests read without truncation; Git blob verified"
+    },
+    "crates/app/src/filters.rs": {
+      "bytes": 13713,
+      "sha256": "ef2b03e76967ef6e9934b528ab1b31e603febedafbdddb31c2a5eac699a62223",
+      "git_blob": "ad023df73810565b2d79732a58e260a6fb8e09fb",
+      "method": "Whole pinned source and tests read without truncation; Git blob verified"
+    }
+  },
+  "new_unique_controls": 4,
+  "cumulative_unique_controls": 28,
+  "controls_script": "docs/research/dedup-500/visualvault076-filter-tests-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-filter-tests-20261021/run.log",
+  "new_original_tests": {
+    "filter_model": 18,
+    "passed": 18,
+    "failed": 0,
+    "ignored": 0
+  },
+  "cumulative_distinct_original_module_tests": {
+    "passed": 145,
+    "failed": 1,
+    "scope": "Isolated unchanged original modules; prior Progress concurrency failure remains. Not full original workspace."
+  },
+  "runtime_scope": "Unchanged whole original FilterSet/MediaFile modules; exact extracted App parse_date_range/parse_size_range/parse_size functions on authored empty App. Actual chrono/regex. Four authored controls distinct from18 original model tests. No full App/scanner/TUI execution.",
+  "findings": [
+    "UI size parser uses0.001 MB per KB while FilterSet multiplies by1024*1024. >1KB becomes min1048bytes and rejects1024-byte file; actual parser/model control passed. B factor0.000001 similarly differs from binary MB conversion. No product-local unit parser changed.",
+    "<NaN parses as Some(NaN) and is converted by Rust float-to-u64 cast to max0; a1-byte jpg then fails. Actual parser/model control passed. Negative/infinite values also unvalidated in source, but not separate executed controls.",
+    "Explicit date range2024-01-01 to nonsense returns valid lower bound and unbounded upper bound rather than validation refusal. Control passed. Similarly source accepts one valid endpoint and invalid other endpoint; no order check for reversed ranges.",
+    "Single-day upper bound is23:59:59 exact; file modified at23:59:59.500 same date is rejected. Actual parser/model control passed. Inclusive date comparisons alone do not cover final fractional second.",
+    "Date parsing unwraps Local.from_local_datetime for midnight/end-of-day; ambiguous/nonexistent local times may panic depending timezone/date. Static only, no timezone mutation or DST control executed.",
+    "FilterSet inactive accepts all. Active combines date OR ranges, size OR ranges, enabled-media OR extensions, and enabled regex AND. No enabled media types means no type restriction, explicitly tested upstream. Invalid regex skipped as true, explicitly tested upstream; these are source policies, not newly discovered test failures.",
+    "Regex compiled per pattern per file, including repeated invalid pattern compilation; no precompiled validation/cache in model. Filename/path/extension targets differ: invalid UTF8 full path becomes empty string for FilePath. No performance or nonUTF8 filter control run.",
+    "Default active type filters only Images/Videos. Add date/size/regex activates those default extension restrictions too; image default list omits tif/heif while earlier scanner media support includes them. Filtering domain differs from scanner discovery domain. Source review only.",
+    "App apply_filters only counts matches and updates message; it does not replace cached_files or recalculate duplicate groups. Subsequent start_scan passes active filter set to scanner. This source distinction is not a full UI behavior reproduction.",
+    "Scanner sequential and parallel source reconfirmed: filters applied after process_file_with_cache and before collecting files/detecting duplicates; excluded files are not candidates. Sequential skip can leave progress stale; parallel counter only advances accepted files. Prior scanner review covers core, no new scanner runtime run here."
+  ],
+  "remaining_scope": "52 tracked artifacts remain; global complete repository count205/500 unchanged. Native pHash/ASAN remains deferred.",
+  "limits": [
+    "No original workspace/lock, full App, UI, scanner integration, timezone/DST matrix or filtering throughput measurement. No production code copied or modified."
+  ]
+}

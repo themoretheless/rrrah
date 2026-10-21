@@ -1,0 +1,62 @@
+    Updating crates.io index
+     Locking 97 packages to latest compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding sha2 v0.10.9 (available: v0.11.1)
+   Compiling aho-corasick v1.1.5
+   Compiling regex-syntax v0.8.11
+   Compiling regex-automata v0.4.18
+   Compiling regex v1.13.1
+   Compiling visualvault076-filters v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-filters-20261021)
+warning: unused import: `RegexTarget`
+ --> src/lib.rs:5:25
+  |
+5 | use filters::{FilterSet,RegexTarget};
+  |                         ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `visualvault076-filters` (lib test) generated 1 warning (run `cargo fix --lib -p visualvault076-filters --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.15s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_filters-27ffc90fcd31f9f5)
+
+running 18 tests
+test filters::tests::test_regex_target_display ... ok
+test filters::tests::test_media_type_display ... ok
+test filters::tests::test_active_filter_count ... ok
+test filters::tests::test_filter_set_new ... ok
+test filters::tests::test_default_media_types ... ok
+test filters::tests::test_filter_set_default ... ok
+test filters::tests::test_clear_all ... ok
+test filters::tests::test_matches_file_date_range ... ok
+test filters::tests::test_file_with_no_extension ... ok
+test filters::tests::test_matches_file_inactive_filter ... ok
+test filters::tests::test_matches_file_media_types ... ok
+test filters::tests::test_matches_file_size_range ... ok
+test filters::tests::test_size_range_conversion ... ok
+test filters::tests::test_serialization ... ok
+test filters::tests::test_invalid_regex_pattern ... ok
+test filters::tests::test_edge_cases ... ok
+test filters::tests::test_matches_file_combined_filters ... ok
+test filters::tests::test_matches_file_regex_patterns ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.00s
+
+warning: unused import: `RegexTarget`
+ --> src/lib.rs:5:25
+  |
+5 | use filters::{FilterSet,RegexTarget};
+  |                         ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `visualvault076-filters` (lib test) generated 1 warning (run `cargo fix --lib -p visualvault076-filters --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_filters-27ffc90fcd31f9f5)
+
+running 4 tests
+test control_invalid_date_endpoint_becomes_unbounded ... ok
+test control_nan_size_bound_is_accepted_then_cast_to_zero ... ok
+test control_kilobyte_filter_mixes_unit_factors ... ok
+test control_day_filter_excludes_fractional_final_second ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 33 filtered out; finished in 0.00s
