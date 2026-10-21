@@ -1,0 +1,38 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_files_read": [
+    {
+      "path": "docs/chunk.md",
+      "sha256": "1f7ddb7d36a3869ed0bde8e35fbcbfe6387d48d3b803535bde27e4a60de89039",
+      "lines": 365
+    },
+    {
+      "path": "docs/encode.md",
+      "sha256": "bfcc9e266c850e991ead307b4024fd66aeff58c66834bdf0813c69b4920643a4",
+      "lines": 226
+    },
+    {
+      "path": "docs/migrate-libpng.md",
+      "sha256": "291104ea01e460786cf2f6e6d35f1375d132123a615c12030b03709777aa3320",
+      "lines": 391
+    }
+  ],
+  "findings": [
+    "Completed remaining chunk/encode/migration docs. Unknown-chunk getter contract explicitly copies a list sized by queried count; this confirms v31 observed single-structure copy violates documented behavior.",
+    "Arbitrary-length metadata borrows context/user storage; copying list structures does not extend pointed-data lifetime. Encoder output transfers ownership only on successful get_png_buffer after finalization.",
+    "Migration maps RGB-to-gray transforms to unsupported; output layouts explicit, no source-dependent automatic alpha/channel transforms. This explains why libphash cannot request generic grayscale by choosing G8 alone.",
+    "Gamma mapping assumes screen gamma2.2; it is not equivalent to independent linear-RGB normalization. Migration table typo SPNG_DECODE_GAMA differs from actual SPNG_DECODE_GAMMA enum.",
+    "Encoder documentation performance percentages are upstream claims; no speed/compression evidence adopted. Existing suite has compression-size assertion disabled as recorded earlier.",
+    "Docs/chunk.md notes ICC payloads are not validated by spng; own color-management path and sourceprofile handling must be qualified separately.",
+    "No new compilation/test/benchmark during shared resource window; work limited to pinned text retrieval and review."
+  ],
+  "remaining": [
+    "Dependency config/examples/fuzzer/regression sources",
+    "Individual visual review of image assets and externalREADMEvisuals",
+    "Other three codec gitlinks"
+  ],
+  "full_review_count": 247
+}
