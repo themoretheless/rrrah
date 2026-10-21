@@ -1,0 +1,46 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "main.ts": {
+      "sha256": "bfdc43b2510c9c3dd5160c6e0059ae65eaf87f53e7bb3c225f2e971b461798f5",
+      "git_blob": "b983b63afa161f1497f809fe4027cdeefb33608c",
+      "bytes": 157815,
+      "lines": 3949,
+      "method": "Entire source cumulatively read: v24 contiguous lines1-2500, this pass2501-3000,3001-3500,3501-3949. No truncated outputs."
+    }
+  },
+  "cumulative_assessed_blobs": 128,
+  "tracked_blobs": 129,
+  "findings": [
+    "notifyVaultMountAdded consumes only scanner fileCount/folderCount/scanLimitHit; scanner errors go to debug logging. Original caller+scanner controls show one stat failure leaves two of ten files announced and then emits Mounted 0 folders and 2 files without an incomplete/error notice; watcher still starts. Explicit cap has its own warning. Failure visibility is not equivalent to completeness.",
+    "Mount injection uses per-ID token checks before notification and final watcher startup, and unload clears tokens. Removal batches 32 in-memory entries, files first then folders deepest-first, identity checks before removal; no source filesystem deletion in this method. Native private-vault event behavior unqualified.",
+    "Health checks construct remote adapters; SFTP probes disconnect in finally. Background loop uses setInterval without an in-flight guard or unload/revision checks after asynchronous probes. Possible overlapping/stale health updates are a static observation, not a reproduced native race. Initial failure does not trigger the transitioned-offline Notice unless previous state was true.",
+    "reconnectMount returns normally when still unreachable; reconnect-all increments its reconnected count after any normal return. Thus its summary is not intrinsically proof of successful reconnection. Not exercised dynamically here.",
+    "saveSettings persists raw persistedMountPoints, stripping transient password/secret/reset/TOC-source fields. It does not serialize the effective settings.mountPoints array ordering: settings drag-drop mutates that effective array, then saveSettings writes raw ordering. Persistence consequence is a source-level finding, not a full UI run.",
+    "Import UI increments added after addMount normal return, while addMount can reject validation with a Notice and return normally. Imported count therefore need not equal successful admissions. No import or real file writes performed.",
+    "Global ignore UI changes rebuild cache but do not call applyIgnoreListToVault; per-mount Add does. Context-menu ignore mutates the runtime mount then saveSettings instead of the managed-TOC persistence helper; ownership consequences need runtime qualification.",
+    "Reviewed rrrah scan.rs VisualReport exposes analysed and issues separately, and ScanError covers budget/cancellation/source failure. This is API/source evidence only, not a new end-to-end proof that every consuming UI surfaces all incomplete work."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/folderbridge36-scan-caller-controls-v25-20261021",
+    "passed": 3,
+    "failed": 0,
+    "method": "Original complete notifyVaultMountAdded method, original full scanner and visible-file filter after Node22 TypeScript stripping. Synthetic ten-file vault/stat/Notice/watcher and disabled caller timers; original scanner event-loop yield remains real. No Obsidian, servers or file mutations."
+  },
+  "local_source_crosscheck": {
+    "path": "crates/rrrah-dedup/src/scan.rs",
+    "lines_read": [
+      1,
+      100
+    ],
+    "sha256": "810b2b2a7c6e4f5fe7e6c77c05ea5b85562c54908c9a72606a4dc19334f7ddd9",
+    "runtime_tested": false
+  },
+  "limits": [
+    "128/129 tracked blobs assessed:118 whole text/source, six structural artifacts, four PNG visuals. Remaining tests/mainFallback.test.ts not yet fully read.",
+    "42 isolated controls cumulative. Upstream validate/native host/backend tests not run; mainFallback test implementation still requires complete assessment.",
+    "No production code optimization or speedup claim. Deferred native pHash/ASAN remains skipped."
+  ]
+}
