@@ -1,0 +1,88 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/ui/WelcomeModal.ts": {
+      "sha256": "68f6b0eeb113702278d93e3d21dba8a4f19a337cde6aec6b93611c445802aae8",
+      "git_blob": "65e09d1c9cc22cde121c0a5d013364dbd489222a",
+      "bytes": 2504,
+      "lines": 73,
+      "method": "Whole source/text read."
+    },
+    "src/ui/MountRootDeleteModal.ts": {
+      "sha256": "9ec2f1478c89bcd4a5eb8dcb4e274bdc9e943028f2c887cbcb9bd76c4762bc06",
+      "git_blob": "21e3e832f3006021776be1a0c6e2ad87608e77b2",
+      "bytes": 3386,
+      "lines": 89,
+      "method": "Whole source/text read."
+    },
+    "tests/MountRootDeleteModal.test.ts": {
+      "sha256": "dc6911d9b8abddacafbff6179c09c710bfbf887ed63e5cefca52433cb8ee5a33",
+      "git_blob": "a3e8ba45d3600304305723774719859a909c7dec",
+      "bytes": 4249,
+      "lines": 99,
+      "method": "Whole source/text read."
+    },
+    "esbuild.config.mjs": {
+      "sha256": "a0c45e106b2218bcb23570d977e56fde23b8a677dfabbe1111e1dfa2982c9fd7",
+      "git_blob": "e187b354389f1a5529b6404eb88fb9bcde4ccd4c",
+      "bytes": 3219,
+      "lines": 130,
+      "method": "Whole source/text read."
+    },
+    "tests/esbuildConfig.test.ts": {
+      "sha256": "277f36727b661c40ce757b3c42abaa0d669b2226da7bd5405766401625cbf066",
+      "git_blob": "bc3766302e5d6c54315051504e2dd7153f24428f",
+      "bytes": 1619,
+      "lines": 36,
+      "method": "Whole source/text read."
+    },
+    "vitest.config.ts": {
+      "sha256": "77142f8ab8ac8eecec3581009a168f716c37866adcee9fa8c9af3ad72627a244",
+      "git_blob": "804e64222ff66416fb7043d3bcd01eef4b64636b",
+      "bytes": 401,
+      "lines": 16,
+      "method": "Whole source/text read."
+    },
+    "tsconfig.json": {
+      "sha256": "feed8266e9cb252fdf40808ace33dffb36ac32a5b3c098d5d7888e1d05794cf8",
+      "git_blob": "d3fc3e98b527425b781aa9a87d3fcd7ca85d44e3",
+      "bytes": 442,
+      "lines": 25,
+      "method": "Whole source/text read."
+    },
+    "version-bump.mjs": {
+      "sha256": "ce41256c722fcb7a7e546e1378420d884a2f88f7c6438732818562c0213265bd",
+      "git_blob": "1378e9aa7028fad365d40fc4808fceb52a87929c",
+      "bytes": 946,
+      "lines": 26,
+      "method": "Whole source/text read."
+    },
+    "versions.json": {
+      "sha256": "89820c877de2a1bca65da206ed09dd042993815837e1f9a072b40c9e6071959c",
+      "git_blob": "63c3725cd98fc7e40da485f003ac4fccaba1e85f",
+      "bytes": 1143,
+      "lines": 56,
+      "method": "Whole source/text read."
+    }
+  },
+  "cumulative_whole_files_read": 38,
+  "tracked_blobs": 129,
+  "findings": [
+    "Build optional-node-modules plugin intercepts ./optionalNodeModules only from src/runtimeNode.ts (normalizing importer backslashes) and generates lazy require switch for chokidar/AWS/SFTP/WebDAV, catching unavailable modules as null. This resolves earlier static stub uncertainty, not real bundled-mobile execution.",
+    "Native .node imports replaced with Proxy returning throwing functions; claimed pure-JS fallback in dependency is not verified by these sources. Build platform node,CJS,targetes2018; production source maps disabled. No build executed.",
+    "Build config unit tests mock esbuild.context, inspect onResolve forfour importer styles, and never produce/run a real bundle. Vitest alias replaces Obsidian with desktop-only lightweight stub. Passing these would not prove application/mobile compatibility.",
+    "MountRootDeleteModal uses resolved latch before callback/close, cancellation on unresolved close, distinguishes trash/permanent copy and hides unsupported remote trash option. Inspected only, no dialogs opened or storage operations run.",
+    "settle wraps Promise.resolve(this.resolve(value)).catch; asynchronous rejection handled, but synchronous callback throw occurs before Promise.resolve and escapes. UI caller normally promise-based may avoid this; actual caller not yet read.",
+    "Modal tests use synthetic Element/Setting and fake close; they assert text/button/choice values, not actual DOM rendering or real filesystem effects. Whole file read, suite not run.",
+    "Welcome modal add/dismiss buttons explicitly invoke callbacks after close; X/escape onClose only empties content, so onDismiss callback not invoked there. Main onboarding persistence/caller behavior still unread.",
+    "version-bump writes manifest then versions sequentially with no rollback if second write fails; target from npm environment and existing minAppVersion required. Current package/manifest/versions entry2.15.5-rc.5 align. All recorded minAppVersion0.15.0, not compatibility proof. Version script read only, not executed."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "38/129trackedblobs read;26previousisolatedcontrols, no new runtime checks in this source-review step.",
+    "Main plugin, large mount manager modal, dependency lock and remaining source/docs/assets incomplete.",
+    "No real UI/build/upstream suite or production library modifications."
+  ]
+}
