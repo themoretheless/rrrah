@@ -1,0 +1,95 @@
+{
+  "repository": "vmchale/phash-fut",
+  "commit": "941dfc891077253ff550d16438b3b416c1d6b1c4",
+  "whole_repo_complete": false,
+  "scope": "All11 root/authored source/config/license files wholly read. Three data images and generated documentation remain unreviewed. Imported statistics/sort package sources absent and not audited.",
+  "manifest": [
+    {
+      "path": ".gitattributes",
+      "sha256": "9f7f1ab45be9f861dd8866176df74162abca4b357dcaf93a416fd8a5c2870603",
+      "bytes": 30,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "ef25e3f30cce8a199fc2f1a838ff493f99fb50a1a41a981378d656d4b1e32f78",
+      "bytes": 61,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "a31396e87b51bcf029b9ebe96a2acacf41471de0725e3b040eedc7d675c5579f",
+      "bytes": 1468,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "Makefile",
+      "sha256": "803403d6b7bec2aa7b820d2f864a4b2ce156da301c06878c55dbade3e751d688",
+      "bytes": 106,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "Pipfile",
+      "sha256": "71d4733d36826b8a6ca4fe1dd5b237534d66f8df55343084dfbde6e3c4d783d0",
+      "bytes": 193,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "README.md",
+      "sha256": "38c3315bfd3392d871c2f5c125d8cc88f0716835c084e86e4fbacd84eed764f7",
+      "bytes": 275,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "TODO.md",
+      "sha256": "0c259c8fdc112a4a3aa73b076484805e07259fb2f601bdeafbb752a495094bc4",
+      "bytes": 102,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "futhark.pkg",
+      "sha256": "1b7781494398d2725253b157013cf1340823da2c6cd0499806ecb101a616f790",
+      "bytes": 168,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "harness.py",
+      "sha256": "9e38f5b66568f114a61d205003418677b7f96d4379cfebd546a2e444df31fcc8",
+      "bytes": 527,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "phash.fut",
+      "sha256": "a021704860fbbb0262fff1019724d13873b28148653b25ee7f3acd1ca4709bbf",
+      "bytes": 3509,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    },
+    {
+      "path": "test-harness.py",
+      "sha256": "611c4f4816a3918461306eaa30b00fb12e1abb53b12e545f3052c68e217bde59",
+      "bytes": 347,
+      "review": "whole text read; pinned Git blob SHA1 verified on retrieval"
+    }
+  ],
+  "findings": [
+    "Pipeline:7x7 mean filter, shrink32x32, matrix transform, crop8x8, median threshold,64bit pack. Candidate descriptor only; no byte equality confirmation, scan/index/cache/error completeness API.",
+    "shrink source uses i*(rows/m),j*(cols/n). Below32, division step becomes0 and repeats original row/column0. Nonmultiples discard tails; no interpolation or antialiasing in shrink itself. Source arithmetic finding, no Futhark execution.",
+    "mean_filter extended-coordinate upper-edge condition i+3>=x_rows compares padded index with original dimension. For10rows, extended index7 selects original9, whereas ordinary edge extension selects4. Same issue columns. Source arithmetic finding; output impact not runtime-qualified.",
+    "Transform matrix formula cos((2*i*j+1)*pi/64) differs from DCT-II cos((2*j+1)*i*pi/64), including DC normalization. Not accepted as compatible pHash/DCT oracle; no original runtime or numerical library comparison claimed.",
+    "test-harness.py prints three hash values with no assertions, distances, expected values or retrieval threshold. Futhark inline crop/shrink examples specify two expected outputs, while400x400 hash benchmark uses auto output. None executed.",
+    "Benchmark compares imageio grayscale loading+numpy+f32 hash against Pillow open+imagehash.phash including different conversion/resize/DCT recipes;100 iterations summed seconds times10 is average milliseconds. No timings collected or speedup accepted.",
+    "BSD3Clause2019-2020VanessaMcHale license wholly read. No source copied into production."
+  ],
+  "runtime": {
+    "futhark_on_path": false,
+    "upstream_tests_run": false,
+    "native_phash_or_asan_run": false
+  },
+  "remaining": [
+    "Three tracked data images require visual inspection.",
+    "Generated HTML documentation/CSS require review with dependency attribution boundary.",
+    "Futhark compiler/backend and imported pinned packages required for original runtime qualification."
+  ],
+  "full_review_count": 246,
+  "remaining_full_reviews": 254
+}
