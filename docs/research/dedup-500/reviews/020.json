@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 19/84 tracked blobs. Multi-keep tests read; three isolated production selection controls distinguish valid kept membership from empty/stale overrides. Browser/storage-to-render flow unverified.",
+  "review_scope": "Partial whole-file review: 23/84 tracked blobs. Separate cache tests, debug/theme and action bar read. Main inline cache is not covered by the separate wrapper tests; browser runtime unverified.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -141,6 +141,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-keep-invariant-review-v13-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-cache-tests-and-action-bar-review-v14-20261021.json"
     }
   ]
 }

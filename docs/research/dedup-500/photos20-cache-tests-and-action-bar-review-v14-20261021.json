@@ -1,0 +1,50 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/lib/embedding-cache.test.ts": {
+      "sha256": "ac8d389dfe48a45fb02fa82b0ff23d229f3bf4c74e54a60cdd0782da0e620fe0",
+      "git_blob": "a87b33eb9d3eecfef3639ead426805b9cd109519",
+      "bytes": 5408,
+      "lines": 153,
+      "method": "Whole source read."
+    },
+    "lib/debug.ts": {
+      "sha256": "a1f35b5d68f9a4013ff214fb6fdaa9a2805f33da23e374cf8904f9f84110fa41",
+      "git_blob": "a2acebebcb68d98c7afa690d216b1c9566fcb105",
+      "bytes": 874,
+      "lines": 29,
+      "method": "Whole source read."
+    },
+    "lib/theme.ts": {
+      "sha256": "aabd7a02e36b780c3e357739eb3020c3242c7e31459cb292fbc86dbddb4e58fe",
+      "git_blob": "0ef2b3e94e3bcf1c5105f7acc854b6a9587be5f4",
+      "bytes": 1079,
+      "lines": 60,
+      "method": "Whole source read."
+    },
+    "components/ActionBar.tsx": {
+      "sha256": "3d937aba3bdb149d4bb32b0c03ec06be1f9888a1107336ed60a583dd67a575ba",
+      "git_blob": "70fe05f6ee7698c39c081140e529a4d47e9237d9",
+      "bytes": 2847,
+      "lines": 92,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 23,
+  "tracked_blobs": 84,
+  "findings": [
+    "EmbeddingCache test file defines ten tests for round-trip, misses/order, overwrite, count and eviction using fresh fake-indexeddb per test. No quota/abort/upgrade/corrupt record scenarios.",
+    "These tests import separate lib/embedding-cache.ts (gpd-cache database), not main detector inline cache (gpd-embeddings). They do not certify main detector cache lookup/fallback or model invalidation.",
+    "Fresh factory per test prevents exercising close/reopen persistence across independent cache instances or migration from old schema.",
+    "ActionBar displays caller totalItems as items scanned and duplicateCount as duplicate files; it has no successfully embedded/compared count. Caller total covers fetched/cached metadata, so label does not prove successful detection coverage.",
+    "Trash button disables only for duplicateCount === 0; no local kept-membership evidence validation. Actual candidate selection remains caller responsibility.",
+    "Debug logging is opt-in via truthy localStorage value or window flag. localStorage exception causes false even if window flag might be set. Theme is static appearance configuration; no deduplication algorithm."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static source and test review only; no fake-indexeddb/Vitest test run, browser rendering or actual deletion.",
+    "23/84 whole tracked files read; no production library code changed."
+  ]
+}
