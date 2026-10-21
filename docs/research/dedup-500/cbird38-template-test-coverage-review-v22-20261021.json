@@ -1,0 +1,58 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "unit/testtemplatematcher.cpp": {
+      "sha256": "58c139260d5bcb03629c12dc2c24bc8d32d3a5268274acf0489596ed4baef512",
+      "git_blob": "b6fa0325e881cca5a78b62b2f649d7a1ece6baae",
+      "bytes": 6031,
+      "lines": 178,
+      "method": "Whole pinned source/script read; scripts not executed."
+    },
+    "unit/templatematcher/multitest.sh": {
+      "sha256": "96fb9da940d5069b36476157b6f91cd3a0da1d73b9977e44a6a96d2c2394a669",
+      "git_blob": "be3fc38ea428dac4b05719748e66edda62637775",
+      "bytes": 249,
+      "lines": 12,
+      "method": "Whole pinned source/script read; scripts not executed."
+    },
+    "unit/templatematcher/parselog.sh": {
+      "sha256": "096d8ebdab27e3bb8b7f7d37d37af1a073d2d7f4d4061572b1f58e290a4f3dab",
+      "git_blob": "e35aec42f6626a73f3c159d3fc21c73da8aa25d0",
+      "bytes": 443,
+      "lines": 11,
+      "method": "Whole pinned source/script read; scripts not executed."
+    },
+    "unit/unit.sh": {
+      "sha256": "16af96b25079e6f4e7bdd3cf97114042fdeba7c268c1e1e8d2960cd5697e568c",
+      "git_blob": "4a6afb4b1a200c8d1be5b5d998dbee31f811aec8",
+      "bytes": 2503,
+      "lines": 98,
+      "method": "Whole pinned source/script read; scripts not executed."
+    },
+    "unit/coverage.sh": {
+      "sha256": "f9502af55275e8caaf33c71c8b38f0e9fee7f6535f0e241fb5ac142c434090c7",
+      "git_blob": "a13e987c69c54fba66c5796ac685ffa3875a1c45",
+      "bytes": 281,
+      "lines": 17,
+      "method": "Whole pinned source/script read; scripts not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 58,
+  "tracked_blobs": 616,
+  "findings": [
+    "Template matcher tests generate eleven positive variants per fixture: resized original, four axis crops, center crop, and center crop rotated10/30/60/90/135 degrees. They directly pass a singleton original candidate to matcher, so do not establish upstream candidate retrieval recall.",
+    "Only modified-to-original direction is active; reverse direction is commented as generally not working. No unrelated-image negative examples, precision evaluation, minimum overlap acceptance, or multi-candidate cache reuse test appears in this file.",
+    "Test explicitly adjusts parameters to pass: haystackFeatures1000, needleFeatures200, cvThresh25, maxMatches5, tmScalePct150, tmThresh7. Each case creates fresh matcher and fixed bogus MD5 values. This does not qualify defaults, long-lived cache invalidation or symmetric matching.",
+    "centerCrop uses copy(dx,dy,minDim-dx,minDim-dy), rather than minDim by minDim. For sufficiently elongated fixtures a dimension can be nonpositive; fixture shapes and Qt handling were not executed. Do not count labels as proof of centered square crops.",
+    "multitest script exports ORB_THRESH15..70, but this test source sets cvThresh25 explicitly. Whether another unseen runner consumes environment is unresolved; script iteration alone is not evidence of parameter coverage. Redirection 2>&1 > log sends stderr to original stdout rather than log; parselog counts diagnostic strings and does not itself assert test success.",
+    "unit.sh distinguishes build error1, absent/invalid TEST_DATA_DIR exit2 with execution skipped, and failed test exit3. Build or coverage-report generation alone must not be counted as upstream tests passed. No runner, cleanup, GUI/browser, build or coverage commands executed."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "58/616 tracked artifacts assessed:57 whole text/source and one PNG visual. main.cpp and qtutil.cpp remain partial and excluded.",
+    "Prior24 original-body/header controls plus one independent counterexample unchanged; no new runtime test or optimization claim.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
