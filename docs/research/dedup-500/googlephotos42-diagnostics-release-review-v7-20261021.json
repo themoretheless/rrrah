@@ -1,0 +1,62 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_source_review_with_three_original_diagnostics_controls",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/ARCHITECTURE.md": {
+      "sha256": "62dcd5d0c0c17863b82b5cc77faffbd5987d6a4c78813035b1637edff10912d5",
+      "git_blob": "55cc60bc67be52b9f3cf4f684fb5cc9780c4ad52",
+      "bytes": 3906,
+      "lines": 69,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    "docs/CANARY.md": {
+      "sha256": "bcfe8f3cf414b25b396f66e6534ba7400207ff877460ea23e860830dd0a31505",
+      "git_blob": "1ed75d5ac44480c212ae6dd21acfc0fecca30d7c",
+      "bytes": 2900,
+      "lines": 63,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    "docs/RELEASE_GATE.md": {
+      "sha256": "9b6575bd9816ded7fc2953ffb27098d2cb6b2b813bcd7183c24d65b9881f45e8",
+      "git_blob": "4b700c9257a911de2667791eee4c9738f62c6d23",
+      "bytes": 3658,
+      "lines": 76,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    },
+    "docs/vision.md": {
+      "sha256": "20c32dc8a1406f11ff458d348be2e21802ef3d7e4461e31f8229a1dccf06d6d6",
+      "git_blob": "78ae5a31bb379f8c7091065ac709fae3b9dcc420",
+      "bytes": 2970,
+      "lines": 62,
+      "method": "Whole pinned text read; instructions treated as source documentation only."
+    }
+  },
+  "cumulative_assessed_blobs": 29,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-diagnostics-controls-v7-20261021/run.mjs",
+    "harness_sha256": "02be132ac922a526aab941e41ce209229c39b07802ada51241450fbd6c3f7084",
+    "log": "docs/research/dedup-500/googlephotos42-diagnostics-controls-v7-20261021/run.log",
+    "runtime": "Node24.19.0",
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original diagnostics/selector-pack bodies type-stripped; import paths and Node JSON import attributes adapted only; original pack bytes copied. No network or issue creation."
+  },
+  "findings": [
+    "Primary,none,fallback observations for same selector produce matchedprimary,count3; fallback transition not retained.",
+    "One9000character label yields truncated invalid JSON in generated issue URL body. URL constructed in memory only.",
+    "64distinctselector/20distinctlabel cardinality caps hold in100-entry controls.",
+    "Architecture pure-core diagram is approximate: selectors/browser-grid read DOM directly. Injected adapter boundary does not mean all core files are environment independent.",
+    "Release protocol requires disposable-account live evidence including seededKduplicatepairs95percent,zero unrelated groups,scan timing and kept-copy verification. No actual release record examined; protocol text is not gate completion.",
+    "Canary documentation explicitly skips dialogs/empty-trash, allows pass when session secret missing, and fallback verdict passes. Therefore a green canary alone would not qualify dedup recall or all action flows. Runner source not yet read.",
+    "Vision distinguishes observed DOM postconditions from Google server state and lists product targets. No claim these targets achieved by this audit."
+  ],
+  "cumulative_original_function_controls": 14,
+  "limits": [
+    "29/230artifacts; no full repository review or upstream Vitest execution.",
+    "No production optimization; native pHash/ASAN deferred."
+  ]
+}

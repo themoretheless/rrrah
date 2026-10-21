@@ -1,0 +1,28 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {stripTypeScriptTypes} from 'node:module';
+import {pathToFileURL} from 'node:url';
+const src=path.resolve('.dedup-work/googlephotos42-20261021/src');
+const out=path.resolve('.dedup-work/googlephotos42-20261021/diagnostics-runtime');
+await fs.mkdir(out,{recursive:true});
+await fs.copyFile(path.join(src,'selector-packs/pack-v1.json'),path.join(out,'pack.json'));
+let pack=stripTypeScriptTypes(await fs.readFile(path.join(src,'core/selector-pack.ts'),'utf8'));
+assert.equal(pack.split("from '../selector-packs/pack-v1.json'").length-1,1);
+pack=pack.replace("from '../selector-packs/pack-v1.json'", "from './pack.json' with { type: 'json' }");
+await fs.writeFile(path.join(out,'selector-pack.mjs'),pack);
+let code=stripTypeScriptTypes(await fs.readFile(path.join(src,'core/diagnostics.ts'),'utf8'));
+assert.equal(code.split("from './selector-pack'").length-1,1);
+await fs.writeFile(path.join(out,'diagnostics.mjs'),code.replace("from './selector-pack'","from './selector-pack.mjs'"));
+const {diagnostics,buildDiagnosticIssueUrl}=await import(pathToFileURL(path.join(out,'diagnostics.mjs')));
+diagnostics.reset();diagnostics.recordSelector('grid','primary');diagnostics.recordSelector('grid','none');diagnostics.recordSelector('grid','fallback','.new');
+assert.deepEqual(diagnostics.blob().selectorMatches,[{name:'grid',matched:'primary',fallback:undefined,count:3}]);
+console.log('PASS 1: primary-to-none-to-fallback sequence retains primary with count3');
+diagnostics.addLabelSample('x'.repeat(9000));
+const issue=new URL(buildDiagnosticIssueUrl(diagnostics.blob()));
+const payload=issue.searchParams.get('body').split('```json\n')[1].split('\n```')[0];
+assert.throws(()=>JSON.parse(payload),SyntaxError);assert.ok(payload.includes('(truncated)'));
+console.log('PASS 2: one long label causes JSON diagnostic payload to be truncated into invalid JSON');
+diagnostics.reset();for(let i=0;i<100;i++){diagnostics.recordSelector('s'+i,'none');diagnostics.addLabelSample('l'+i)}
+assert.equal(diagnostics.blob().selectorMatches.length,64);assert.equal(diagnostics.blob().labelsSample.length,20);
+console.log('PASS 3: distinct selector and label cardinality caps64and20hold');
