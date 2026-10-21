@@ -1,0 +1,38 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_popup_template_style_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/popup/popup.html": {
+      "sha256": "b23bc6e1eb3012f088f4d5e65d7f354b4aeba10012105acb4b8d7d775c408625",
+      "git_blob": "e6f541b75bdced77b0789dd66c15276d6c6f176b",
+      "bytes": 16511,
+      "lines": 305,
+      "method": "Whole pinned source read; initialcombinedoutput omittedearlyCSSportion, rereadCSS1-155tofillgap. No renderedUIreview."
+    },
+    "src/extension/popup/popup.css": {
+      "sha256": "1e07065928b2bc7f371f766663ca5174f8ec1c2d4e3cf28fcdaadeb13f0a245a",
+      "git_blob": "6c4091403b071d4cce6f28051ffcb5e4ff2bb07b",
+      "bytes": 23942,
+      "lines": 908,
+      "method": "Whole pinned source read; initialcombinedoutput omittedearlyCSSportion, rereadCSS1-155tofillgap. No renderedUIreview."
+    }
+  },
+  "cumulative_assessed_blobs": 145,
+  "tracked_blobs": 230,
+  "findings": [
+    "HTML separateserrorrolealert/scoperolestatus,labelsforcontrols,keyboardlocale-menuattributes andtranslatedbuttonlabels; dateinputsariaDate/EnddatehardcodedEnglishwithouti18nattribute. Sourceonlynotaccessibilitycertification.",
+    "CSSbodywidth320px,apphorizontalpadding18px; daterowtwo130pxinputsplus12pxgap within260pxsettingscontentcanoverflow. Needsactualrender/layoutmeasurementbeforedefectacceptance.",
+    "Reducedmotion disablesrunningdot/progressshineandparksindeterminatefillatstart; explicitfocusringsforbuttons/toggles/menupresent. Notbrowser/a11yverified.",
+    "Laterghost/consent/licensestylesusehardcodedlight-on-darkfallbackcolorsandundefined--text-secondary; possiblelightthemecontrastproblem,nomeasuredcontrastorvisualrender.",
+    "Settingsdisabled usespointer-eventsnone plusJS disablesknowncontrols. CSS aloneisnotkeyboardsemanticlock; actualselectedfieldsneedinteractivecheck.",
+    "Utilityrowcontainscopy/export/trash/report andshownfrompopupJSdone; markupdoesnotretainreportdataorfixreportownership."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "145/230wholeartifacts; HTML/CSSsource !=visualpopupreview.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
