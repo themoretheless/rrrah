@@ -1,0 +1,48 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          1601,
+          2200
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          2200
+        ]
+      ],
+      "unread_ranges": [
+        [
+          2201,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated source1601..2200 read after v146. No whole-file credit.",
+  "findings": [
+    "XXH3 state requires64-byte alignment for accumulators,192-byte custom secret and256-byte buffer. Stack allocation must preserve declared alignment; dedicated create/free handle dynamic state. Internal state declarations explicitly unstable and static-link-only.",
+    "XXH3_INITSTATE initializes seed/extSecret only and still requires reset before updates. Stack state whose first reset uses seeded mode must initialize these fields; default/withSecret first reset documented separately. XXH32 state tracks length modulo2^32 plus large_len bit to preserve size-class behavior across wrap.",
+    "withSecretandSeed documentation splits short/large inputs around240 bytes, but neighboring descriptions disagree on strict/equal boundary; implementation and boundary cases240/241 must determine actual behavior. Cached secret can match seeded variant only when derived from corresponding seed.",
+    "Pinned documentation records historical <=0.8.2 bug for128-bit reset-withSecretandSeed when seed0 and short input/custom secret. This header labels0.8.3; fix behavior still needs implementation/runtime verification, not acceptance from changelog text.",
+    "Two illustrative snippets contain source errors: main compares argv to3 instead of argc, and HashFast constructor passes undeclared seed instead of parameter s. These are documentation examples, not demonstrated defects in rmlint production calls.",
+    "128-bit withSecretandSeed declaration returns XXH128_hash_t despite documentation listing error-code returns. Wrapper error handling must follow actual type and implementation.",
+    "Tuning documentation distinguishes memcpy-safe/default, portable byte shifts, compiler-specific aligned1 and unsafe direct-cast memory access. Size optimization may change one-shot implementation to streaming; speed claims require actual build configuration and measurements."
+  ],
+  "limits": [
+    "2200/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "No runtime alignment, boundary or previous-version regression control yet. pHash/ASAN deferred; no upstream production import."
+  ]
+}
