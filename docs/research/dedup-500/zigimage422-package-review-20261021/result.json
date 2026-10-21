@@ -1,0 +1,34 @@
+{
+  "package_paths": [
+    "build.zig",
+    "build.zig.zon",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "included_tracked_files": [
+    "LICENSE",
+    "README.md",
+    "build.zig",
+    "build.zig.zon",
+    "src/imagehash.zig",
+    "src/lib.zig"
+  ],
+  "excluded_required_native_files": [
+    "c_src/stb_impl.c",
+    "include/stb_image.h",
+    "include/stb_image_resize.h"
+  ],
+  "excluded_test_fixtures": [
+    "testdata/checkerboard.png",
+    "testdata/gradient.png",
+    "testdata/noise.png"
+  ],
+  "readme_wavelet_levels": 4,
+  "implementation_wavelet_levels": [
+    1,
+    2,
+    3
+  ],
+  "scope": "Structural membership check of pinned manifest and build/source references. No Zig fetch/build/package extraction or C header semantic audit performed."
+}
