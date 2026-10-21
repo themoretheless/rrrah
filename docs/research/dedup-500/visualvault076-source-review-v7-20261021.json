@@ -1,0 +1,55 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 17,
+  "files": {
+    "crates/config/src/settings.rs": {
+      "bytes": 16700,
+      "sha256": "92797d41e90fddcec1613588563fef9746a04ffd648ce11bf10355d9b0085c97",
+      "git_blob": "c3e22cd593ee70e9af453d7c79bad0fda93b67c9",
+      "method": "Whole pinned originaltext/source/tests read without truncation;Gitblobverified"
+    },
+    "crates/config/src/lib.rs": {
+      "bytes": 79,
+      "sha256": "3de9f4995537ef528ce0814438ded86febba26f887508ecb58fbdf7fc50ac3d1",
+      "git_blob": "ab0c7aef3e10375d32fda849b3e160b2d047f51d",
+      "method": "Whole pinned originaltext/source/tests read without truncation;Gitblobverified"
+    },
+    "crates/utils/src/datetime.rs": {
+      "bytes": 6592,
+      "sha256": "f14fc7f76dad5db5a23b1c9698ce47af23551d1a0cb9b7636c3ecc6fd8a02c27",
+      "git_blob": "f7ecc032c7747dd2eacb2c10b3a4f335541c6c56",
+      "method": "Whole pinned originaltext/source/tests read without truncation;Gitblobverified"
+    },
+    "crates/utils/src/path.rs": {
+      "bytes": 904,
+      "sha256": "c5c79aee54f2da265f1bb79d06796ac7dc2bd33b0528bcced32bee1f8d9fb0c3",
+      "git_blob": "9958632d223d93e0f1c99844c6c1b2ab4252a022",
+      "method": "Whole pinned originaltext/source/tests read without truncation;Gitblobverified"
+    }
+  },
+  "new_unique_controls": 0,
+  "cumulative_unique_controls": 12,
+  "original_tests": {
+    "new_datetime": 11,
+    "failed": 0,
+    "ignored": 0,
+    "distinct_original_module_tests_cumulative": 46,
+    "scope": "11unchangedoriginaldatetimetests via pathinclude/currentChrono,notfullworkspace;previous35disjoint detector/model testsnotrerun"
+  },
+  "tests_script": "docs/research/dedup-500/visualvault076-datetime-tests-20261021/build.py",
+  "tests_log": "docs/research/dedup-500/visualvault076-datetime-tests-20261021/run.log",
+  "findings": [
+    "Original datetime helper preservesnanoseconds forpostepoch times;11tests pass includingepoch/beforeepochNone/subseconds/error cases. SQLiteloss occurslater via timestamp()storage,notthishelper.",
+    "Beforeepoch andmetadatareaderrors yieldNone;scannerreplaces modifiedwithLocalnow andcreatedwithmodified. Source behavior,notdeterministiccachefreshnessproof.",
+    "Settingsserde acceptsworkerthreads0and1024 peroriginaltestsource;load/save do notcallrangevalidation. Scannerusesparallelonlyworkerthreads>1,so0selectssequentialratherthanzerochunkpanic. Extremeusize multiplicationoverflow remainsstatic/unexecuted.",
+    "Settingssave writesglobalconfigpathnonatomically;loaddoesnotfallbackonparseerror. Originalsettingsenvtests mutateXDG_CONFIG_HOMEwithoutrestore/serialization;notexecuted,nomodificationstouserconfig.",
+    "create_cache_path docmentionsinmemoryflagabsentfromsignature;alwayscreatesparentunderplatformcachedir. No memorymodeargument implemented. Functionnotexecutedhere."
+  ],
+  "remaining_scope": "78artifacts includingscannerdependenciesfilters/progress/mediautils,app/otherUI/integrationtests/docs/config/visualassets/lock.",
+  "limits": [
+    "No settings/scannerfullapp/dbunitruntime qualification. No productionchanges;globalfullcount205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}
