@@ -1,0 +1,114 @@
+{
+  "repository": "dsoprea/go-perceptualhash",
+  "commit": "5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8",
+  "whole_repo_complete": false,
+  "tracked_blobs": 13,
+  "assessed_blobs": 7,
+  "files": {
+    ".travis.yml": {
+      "bytes": 257,
+      "sha256": "c2ea26c90d4fbed6f49f05f7c3b75a20a81b543bf1175966f5015f3e16c04547",
+      "git_blob": "3d2a68bba44867fd6f4ce2952856180b08bd48e5",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "LICENSE": {
+      "bytes": 1521,
+      "sha256": "0e35f113aa6ff3cf74de427bc2fd82eee86c238b1172a0946bf02e2a29606546",
+      "git_blob": "ca609a1caa1544decbbd20f91c8f4ea395d02ce2",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "README.md": {
+      "bytes": 2134,
+      "sha256": "65a9414a041fcfe1e74df97d67b6f15dde900bc895411e9920cd12cdcdd31923",
+      "git_blob": "11802d144f187af8157efd8a158da64ed766a184",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "blockhash.go": {
+      "bytes": 6363,
+      "sha256": "4ebd8c4a21e81af501c1458413edf88359fd51ffe257220b9dce1a443d32f674",
+      "git_blob": "e1c2179227660f22291005fc2859e1b8176c83c8",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "blockhash_test.go": {
+      "bytes": 107153,
+      "sha256": "245a654e5c894fde8faef7b111b9fbfaa69da0a86cfe8877b59cf4bc0f2c550c",
+      "git_blob": "d4a3b5e72ba4048380e0020196bb001e3f87284b",
+      "method": "All testlogic read;3numeric fixture arrays structurally parsed and executed,one longdigest executed;not every literal value manuallyread"
+    },
+    "command/go-perceptualhash/main.go": {
+      "bytes": 1294,
+      "sha256": "42838bfee49474d935dcd201ef04a09dba73c0dc6946315d787b713e091b92da",
+      "git_blob": "03ffa6145b6373cd88381f68156738fa1ba0edd2",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    },
+    "go.mod": {
+      "bytes": 53,
+      "sha256": "68f866e632ff0f440f25e8c55dadacccfe0709562d6df50ee515a2c565a8a873",
+      "git_blob": "c9144e4fdd2184fa7c8b8bb7522bcf1cb76ccf23",
+      "method": "Whole pinned original text read without truncation;Gitblobverified"
+    }
+  },
+  "fixture_arrays": [
+    {
+      "line": 149,
+      "values": 6700,
+      "min": 24,
+      "max": 765,
+      "sha256": "ee65dc32ed9dcb4bfa9172ed6faec3d42b660f341172cf5fc5e1ba32fe8b73cc"
+    },
+    {
+      "line": 174,
+      "values": 6700,
+      "min": 10,
+      "max": 765,
+      "sha256": "fb09d84bc0b247956cce2629444f43b141c96390e5b44e157f6a0f06c7798123"
+    },
+    {
+      "line": 199,
+      "values": 6144,
+      "min": 21,
+      "max": 765,
+      "sha256": "07177982edd12161b088899263961ee8d84223b82cb86a71d8b44c432d898f2e"
+    }
+  ],
+  "original_tests": {
+    "bodies_passed": 23,
+    "bodies_failed": 1,
+    "ordinary_discovered_passes": 21,
+    "lowercase_named_bodies_called_via_adapter": 3,
+    "failure": "AlphaAndOddSize original comparison reportsvalue6atposition3600",
+    "default_command": "go test-v ./... failsvet on3malformedlowercaseTestnames",
+    "second_command": "go test-vet=off-v ./... executes21discoveredoriginaltests pluswrapper3originalbodies and3authoredcontrols;exit1retained"
+  },
+  "authored_controls": 3,
+  "test_runner": "docs/research/dedup-500/goblock381-tests-20261021/run.py",
+  "authored_tests": "docs/research/dedup-500/goblock381-tests-20261021/controls_test.go",
+  "logs": [
+    "docs/research/dedup-500/goblock381-tests-20261021/run.log",
+    "docs/research/dedup-500/goblock381-tests-20261021/vet-disabled.log"
+  ],
+  "toolchain": {
+    "filename": "go1.25.0.darwin-arm64.tar.gz",
+    "os": "darwin",
+    "arch": "arm64",
+    "version": "go1.25.0",
+    "sha256": "544932844156d8172f7a28f77f2ac9c15a23046698b6243f633b0a0b00c0749c",
+    "size": 57906112,
+    "kind": "archive"
+  },
+  "runtime_scope": "OfficialSHA256-verifiedGo1.25.0 isolatedignoredruntime;originalmodulecopiedoutsideworkspace,dependenciesfreshresolved inexternalcopywithx/imagev0.30.0,nooriginalgo.sum. Original6fixturebytesverifiedanddecodedbytests,notyetvisuallyreviewed. No upstream source edits.",
+  "findings": [
+    "Image size usesBounds.Max ratherthanDx/Dy andloopscoordinatesfrom0. AuthorednonzeroBounds16x16at11,13reports27x29;confirmed viaoriginalsize method. No yet measuredcrossimage digest difference control.",
+    "Blockhash cacheshexdigest forever. Mutate sameRGBAimageblacktowhite:oldinstancekeepsoldhash,newinstancechangeshash. Confirmed. APIownsimageinterface reference,nosnapshot/freshnesscontract.",
+    "Opaque solidred andsolidblue16x16 yieldidenticaldigest,confirmed. AlgorithmreducesRGBtosumthenbandmedian;notexactpixelidentity orcolour-sensitiveproof.",
+    "Originalalpha numericfixturetestfails value6atposition3600 underGo1.25.0;causecouldincludehistoricaldecoder/coloursemantics,notattributedwithoutfurtheroracle. Originaltwoothernumericfixturearrayspass. Failure retained.",
+    "Constructor validateshashbitsmultiple4 only,nopositive/upperbound;processmedianempty/boundary andnil inputsremainuntested. Noresource/cancellationlimitsinAPI. Source-only observations.",
+    "README16defaultmeans256hashbits=64hexcharacters,notclaimed256bytehexoutput. WarnsJPEGdecodercolourconversionvariationandcolour/grayscalehashdifferences;passingPNGresizefixturedoesnotestablishgeneralinvariance.",
+    "CLIopensallfileswithdeferCloseinsideiteration,keepsdescriptorsuntilmainexit;noiterativeissue/completenessreportorpartialfailurehandling. HistoricalTravisconfigurationnotcurrentCIproof.",
+    "BSD3Clauserootlicensecopyright2018DustinOprearead;no productioncopy. Candidateforindependentblockhashreferenceonly,notlocalexactidentityimplementation."
+  ],
+  "remaining_scope": "6imagefixturesstillneedvisualassessmentbeforewholepinnedrepositoryreview. Globalcompletecount208/500unchanged.NativepHash/ASANdeferred.",
+  "limits": [
+    "No full dependencylock/originalhistoricalGoenvironment,visualfixtureQA,resourcebenchmarkoralltransformqualification.3lowercasetestbodiesinvokedviaauthoredwrapper,notrenamed.Originaldefaultvetfailureandalphaassertionfailurebothretained."
+  ]
+}

@@ -1,0 +1,62 @@
+=== RUN   TestBitsToHex__11010010
+--- PASS: TestBitsToHex__11010010 (0.06s)
+=== RUN   TestBitsToHex__1
+--- PASS: TestBitsToHex__1 (0.06s)
+=== RUN   TestBitsToHex__101
+--- PASS: TestBitsToHex__101 (0.05s)
+=== RUN   TestBitsToHex__10101
+--- PASS: TestBitsToHex__10101 (0.06s)
+=== RUN   TestBitsToHex__10111111111111111
+--- PASS: TestBitsToHex__10111111111111111 (0.06s)
+=== RUN   TestBitsToHex__1101111111011111
+--- PASS: TestBitsToHex__1101111111011111 (0.06s)
+=== RUN   TestMedian__PresortedOdd
+--- PASS: TestMedian__PresortedOdd (0.00s)
+=== RUN   TestMedian__UnsortedOdd
+--- PASS: TestMedian__UnsortedOdd (0.00s)
+=== RUN   TestMedian__PresortedEven
+--- PASS: TestMedian__PresortedEven (0.00s)
+=== RUN   TestMedian__UnsortedEven
+--- PASS: TestMedian__UnsortedEven (0.00s)
+=== RUN   TestBitsToHex__32
+--- PASS: TestBitsToHex__32 (0.00s)
+=== RUN   TestBitsToHex__16
+--- PASS: TestBitsToHex__16 (0.00s)
+=== RUN   TestBitsToHex__8
+--- PASS: TestBitsToHex__8 (0.00s)
+=== RUN   TestBitsToHex__4
+--- PASS: TestBitsToHex__4 (0.00s)
+=== RUN   TestProcess
+--- PASS: TestProcess (0.00s)
+=== RUN   TestHash
+--- PASS: TestHash (0.00s)
+=== RUN   TestHash__Size_16
+--- PASS: TestHash__Size_16 (0.00s)
+=== RUN   TestHash__Size_32_Grayscale
+--- PASS: TestHash__Size_32_Grayscale (0.14s)
+=== RUN   TestHash__Size_64
+--- PASS: TestHash__Size_64 (0.00s)
+=== RUN   TestHash__Equivalence__Resize
+--- PASS: TestHash__Equivalence__Resize (1.10s)
+=== RUN   TestTotalValue__WithAlpha
+--- PASS: TestTotalValue__WithAlpha (0.06s)
+=== RUN   TestOriginalLowercaseBodies
+=== RUN   TestOriginalLowercaseBodies/odd
+=== RUN   TestOriginalLowercaseBodies/alpha
+    blockhash_test.go:178: colors were not read correctly: value (6) at position (3600)
+=== RUN   TestOriginalLowercaseBodies/even
+--- FAIL: TestOriginalLowercaseBodies (0.00s)
+    --- PASS: TestOriginalLowercaseBodies/odd (0.00s)
+    --- FAIL: TestOriginalLowercaseBodies/alpha (0.00s)
+    --- PASS: TestOriginalLowercaseBodies/even (0.00s)
+=== RUN   TestControlNonzeroBounds
+    controls_test.go:4: actual16x16 image is treated as27x29
+--- PASS: TestControlNonzeroBounds (0.00s)
+=== RUN   TestControlCachedDigestIgnoresMutation
+--- PASS: TestControlCachedDigestIgnoresMutation (0.00s)
+=== RUN   TestControlDifferentSolidColorsCollide
+--- PASS: TestControlDifferentSolidColorsCollide (0.00s)
+FAIL
+FAIL	github.com/dsoprea/go-perceptualhash	1.950s
+?   	github.com/dsoprea/go-perceptualhash/command/go-perceptualhash	[no test files]
+FAIL

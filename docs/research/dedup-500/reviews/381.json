@@ -2,7 +2,7 @@
   "index": 381,
   "repository": "dsoprea/go-perceptualhash",
   "commit": "5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial7/13artifactsassessed:wholeproduction/docs/config/license;testlogicread,largeexpectedarraysstructural.23originaltestbodiespass1alphaassertionfails;3authoredcontrols.6fixturesnotyetvisuallyreviewed.",
   "decision": "reference",
   "finding": "Pure Go Blockhash API and test corpus; candidate independent oracle, resize/color semantics need checks.",
   "available_source_evidence": [
@@ -40,7 +40,7 @@
   "license_metadata": "BSD-3-Clause",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 1,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -64,5 +64,11 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/goblock381-source-review-v1-20261021.json"
+    }
+  ],
+  "upstream_test_scope": "Go1.25defaultcommandvetfails3malformedtestnames;vetoff21discoveredoriginalpassespluswrapper3originalbodies2pass1fail. Not historicalenvironment."
 }

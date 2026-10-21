@@ -1,0 +1,6 @@
+package blockhash
+import("image";"image/color";"testing")
+func TestOriginalLowercaseBodies(t *testing.T){t.Run("odd",TesttotalValueAt__NonAlphaAndOddSize);t.Run("alpha",TesttotalValueAt__AlphaAndOddSize);t.Run("even",TesttotalValueAt__NonAlphaAndEvenSize)}
+func TestControlNonzeroBounds(t *testing.T){im:=image.NewRGBA(image.Rect(11,13,27,29));bh:=NewBlockhash(im,16);w,h:=bh.size();if w!=27||h!=29{t.Fatal(w,h)};if im.Bounds().Dx()!=16||im.Bounds().Dy()!=16{t.Fatal("fixture")};t.Log("actual16x16 image is treated as27x29")}
+func TestControlCachedDigestIgnoresMutation(t *testing.T){im:=image.NewRGBA(image.Rect(0,0,16,16));for y:=0;y<16;y++{for x:=0;x<16;x++{im.SetRGBA(x,y,color.RGBA{0,0,0,255})}};bh:=NewBlockhash(im,16);before:=bh.Hexdigest();for y:=0;y<16;y++{for x:=0;x<16;x++{im.SetRGBA(x,y,color.RGBA{255,255,255,255})}};if bh.Hexdigest()!=before{t.Fatal("expected cached digest")};if NewBlockhash(im,16).Hexdigest()==before{t.Fatal("new observation should differ")}}
+func TestControlDifferentSolidColorsCollide(t *testing.T){a:=image.NewRGBA(image.Rect(0,0,16,16));b:=image.NewRGBA(image.Rect(0,0,16,16));for y:=0;y<16;y++{for x:=0;x<16;x++{a.SetRGBA(x,y,color.RGBA{255,0,0,255});b.SetRGBA(x,y,color.RGBA{0,0,255,255})}};if NewBlockhash(a,16).Hexdigest()!=NewBlockhash(b,16).Hexdigest(){t.Fatal("expected same sum-of-RGB digest")}}
