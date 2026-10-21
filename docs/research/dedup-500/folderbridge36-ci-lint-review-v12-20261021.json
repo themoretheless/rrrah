@@ -1,0 +1,94 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/build-check.yml": {
+      "sha256": "58217be74e277e12e8aa8bdc650b056f0f98bf5c6e00409cc4445c19bf2e107c",
+      "git_blob": "1305e3b328a84a15a6cc952a8ba5580b6a752acf",
+      "bytes": 644,
+      "lines": 34,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".github/workflows/release.yml": {
+      "sha256": "df2041b007b9befd8b57513133f7dc8c11367eaa349f2b19a5b467908cb87484",
+      "git_blob": "fc0a6fe4ed406c5c5299b9c0c39c3738fcf83382",
+      "bytes": 1840,
+      "lines": 62,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "scripts/check-ui-text.mjs": {
+      "sha256": "3a31a9f3fa619cb55bd64df10ca4cb664d11a86f76559082a977b7a932f56259",
+      "git_blob": "2b770cb350717fe751a4d622a604d4fbb860b3cb",
+      "bytes": 8041,
+      "lines": 286,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "eslint.config.mjs": {
+      "sha256": "3c2ff861839d0ba36ba35d1f2099160f83fb4f9f4179ec5ce40d5f1660a9e4d5",
+      "git_blob": "99977e8a1aa0b2d9382128a52d634080e029ae56",
+      "bytes": 1339,
+      "lines": 58,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    "archive/eslint.bot.mjs": {
+      "sha256": "fe4e9e622170ffab653867822f584977175d8f8352d078eb970b02f21abdfb1f",
+      "git_blob": "940d9941d18106939393e52aefc4c5fae6414831",
+      "bytes": 2092,
+      "lines": 51,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".npmrc": {
+      "sha256": "cf897ad7ad4b3d12abd6dc6f103da0923f2f80f077668abe20e78f17d1901db3",
+      "git_blob": "f0e99703f527fe47ff6ea52f12c2002ce75d6f55",
+      "bytes": 42,
+      "lines": 2,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".editorconfig": {
+      "sha256": "7f27467f663b02003049ecbfc031eb6c3e0c7826033398631f0d6a7247464b5b",
+      "git_blob": "4cee362e3522f9e6b349774efaa4b17f1d28e64b",
+      "bytes": 337,
+      "lines": 21,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".githooks/pre-commit": {
+      "sha256": "ac67cce07da7904da8e792b5cc24452684d6dd0340bd0c30e5ae91621e5a5661",
+      "git_blob": "216c3c59414fd5267a3d96d8361994c28b642e17",
+      "bytes": 86,
+      "lines": 5,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".gitignore": {
+      "sha256": "dc0b116719a4b528c9ee7f29aad5a09a24c1fd82be8a393628d78367a6a5fdf0",
+      "git_blob": "0a5bc0d161249fcc3761cac4eccc0202ec613577",
+      "bytes": 2484,
+      "lines": 153,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    },
+    ".hotreload": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0,
+      "method": "Whole source/configuration read as evidence; no workflow/hook executed."
+    }
+  },
+  "cumulative_whole_files_read": 58,
+  "tracked_blobs": 129,
+  "findings": [
+    "Build CI runs npmci and npmrunvalidate on Ubuntu Node20, checks main.js exists; no Windows/macOS/Android/native Obsidian job. Workflow definition read, no remote run/status independently verified.",
+    "Release task repeats validate, checks tag==manifestversion, extracts changelog section with fallbacknotes and publishes main.js/manifest/styles. Tag hyphen marks prerelease. Package/versions agreement, native testing and artifact digests not explicit release gates here. No release/publish invoked.",
+    "UI text script recursively scans main.ts/src TS AST, selected fluent UI methods, Notice,addOption,ribbon and createEl/createSpan text object. Literal/template/conditional/concatenation fragments examined without symbol resolution; identifiers/function-return strings are skipped. Not full UI copy coverage or rendered UI test.",
+    "Sentence-case checker is heuristic (two capitalized words after first, stop/acronym/properphrase lists); decorative icon check limited regex. Passing cannot certify accessibility/layout/interactions or runtime correctness.",
+    "Git precommit hook invokes only UI copy check, not fullvalidate; installing hook remains separate npm script. Archived bot ESLint disables broad non-copy rules and is not active package lint config.",
+    "Active ESLint typed TS project with sentencecasewarn, imports globals package not directly declared in reviewed package manifest; resolution may rely on transitive lock/tree. Lockfile/dependency installation not yet assessed. No build failure asserted.",
+    "npmrc enables legacy-peer-deps and empty tag prefix. gitignore excludes generatedmain.js/localdata/node_modules/cache while already tracked .code-scalpel artifacts still exist in pinned tree. Ignore rules do not establish absence of tracked artifacts. Empty .hotreload is marker only."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "58/129trackedblobs assessed;33previousisolatedcontrols.",
+    "No CI run, dependency installation, UI checker/build/lint/upstream suite executed in this step.",
+    "Production library unchanged; complete500review still incomplete."
+  ]
+}
