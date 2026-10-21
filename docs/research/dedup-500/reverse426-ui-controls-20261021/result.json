@@ -1,0 +1,28 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "source_sha256": "7eb91ecee292e1430b8e6c9ae38484501159df428031df4b551ca674e49e01c4",
+  "controls": [
+    {
+      "name": "stop_before_response",
+      "observed": "Stop shows complete, but delayed response opens a live results stream"
+    },
+    {
+      "name": "stream_disconnect",
+      "observed": "Connection failure displayed as Search complete / 100%"
+    },
+    {
+      "name": "server_rejects_search",
+      "observed": "Error text remains, search button stays hidden until Stop"
+    },
+    {
+      "name": "request_rejected",
+      "observed": "Network error text immediately overwritten by Search complete"
+    }
+  ],
+  "limits": [
+    "Original whole app.js evaluated with minimal DOM, deferred fetch and EventSource adapters.",
+    "No real browser, network, image decode, CSS layout or server worker exercised.",
+    "Assertions preserve observed faults rather than validate desired behavior."
+  ]
+}

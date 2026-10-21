@@ -1,0 +1,27 @@
+{
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "internal/web/app.js"
+  ],
+  "controls": "docs/research/dedup-500/reverse426-ui-controls-20261021/result.json",
+  "findings": [
+    "Four original-JavaScript controls confirm ambiguous completion and delayed-start behavior: Stop before POST response opens SSE later; SSE error shows complete/100%; rejected fetch overwrites error with complete; server error leaves Search hidden.",
+    "Global eventSource is shared across runs and asynchronous callbacks lack a generation token. No broad concurrency claim: the specific delayed-response case is controlled.",
+    "Cache scan UI distinguishes connection interruption from completion, unlike image search UI.",
+    "UI accepts image/* but discovery is JPEG-only, and upload decoding is limited by Go decoder registration; MIME acceptance is not format coverage.",
+    "EXIF GPS display uses truthiness of latitude and longitude; valid zero coordinates are omitted by source inspection.",
+    "Directory loads have no response-generation guard; cached directory count labels image versions as images. Source observations, not runtime controls."
+  ],
+  "remaining": [
+    "template.html whole-read and UI render review",
+    "internal/web/server_test.go whole-read",
+    "Docs/spec/config/license/go.sum whole-read"
+  ],
+  "limits": [
+    "223/500 complete; no full-repository completion increment.",
+    "Minimal DOM/fetch/EventSource adapters, no real browser or HTTP server.",
+    "No production code adoption; native pHash/ASAN remains deferred."
+  ]
+}
