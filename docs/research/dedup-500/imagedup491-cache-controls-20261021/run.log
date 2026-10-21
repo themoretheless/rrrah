@@ -1,0 +1,11 @@
+=== RUN   TestReview491DeletedPathStillCached
+    review491_test.go:20: Deleted path accepted from cache: dimensions=640x426
+--- PASS: TestReview491DeletedPathStillCached (0.00s)
+=== RUN   TestReview491ReloadLosesDimensions
+    review491_test.go:33: Persisted cache restores dimensions 0x0 from 640x426
+--- PASS: TestReview491ReloadLosesDimensions (0.00s)
+=== RUN   TestReview491PngDecodeRejected
+    review491_test.go:43: HashCache error decoding jpeg file: /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/TestReview491PngDecodeRejected4230574288/001/valid.png, err: invalid JPEG format: missing SOI marker
+--- PASS: TestReview491PngDecodeRejected (0.00s)
+PASS
+ok  	github.com/kmulvey/imagedup/v2/internal/app/imagedup/hash	0.444s
