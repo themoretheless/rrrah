@@ -1,0 +1,103 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/serve.py": {
+      "sha256": "36515dc87ea48f4798adb4fb4bb2abae512461a565d487c9177c68f7f8f72346",
+      "git_blob": "b0ac4f296976ec4a76be8d8947b452ee4a0a96e1",
+      "lines": 259,
+      "mode": "100644"
+    },
+    "src/chk.py": {
+      "sha256": "02cdac144fd3461c1438f0f180944ad9d5babd2de665b42ef703d7fbcb5fbe74",
+      "git_blob": "90f7d5bcff47ce608912a199b27163ae0af31391",
+      "lines": 208,
+      "mode": "100644"
+    },
+    "src/app.py": {
+      "sha256": "11ef035bc31f9119a9e99eda5364cc9a1764c76a9a4884a0d532de80e559af44",
+      "git_blob": "3b0cd7afbd6236039c82cc2c4f46d6acdd04e76e",
+      "lines": 138,
+      "mode": "100644"
+    },
+    "src/pages/settings.py": {
+      "sha256": "f3856f42e28336f1e37aae5c48a1c9ee1a48063771c9f1cb27ec69a87016a9b5",
+      "git_blob": "4f77f4e0f066790be5eb136dc3eb977675b30457",
+      "lines": 95,
+      "mode": "100644"
+    },
+    "src/dsh.py": {
+      "sha256": "6766761fae101030af06f90f298b452458fd27fef30f204c0b6cf995c9e41b9c",
+      "git_blob": "5234614261c4944389824c0932d90c612d36911c",
+      "lines": 165,
+      "mode": "100644"
+    },
+    "src/ui/nav.py": {
+      "sha256": "79e68aee8a9994248ebf4aa9cb0caf3610453298e0b10a5cd0c04deebc4e4ad1",
+      "git_blob": "a042e712e9fb59e72158d6f2ad33aab280b85ee5",
+      "lines": 105,
+      "mode": "100644"
+    },
+    "src/ui/sidebar.py": {
+      "sha256": "f4a68f98a12eb368cff5274f5456714097350f3c5166b6aa56a11fd1d2dd1a7b",
+      "git_blob": "b1a307d815e1ec50ea92c50d6cdfe4434767b9de",
+      "lines": 128,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 67,
+  "tracked_blobs": 125,
+  "method": "Seven whole files read. AST original testVec with fake numpy/vector service, no network. AST original getCache with real stdlib filesystem reads/writes only in owned temporary directory, fake cache and response adapters.",
+  "executed_controls": {
+    "existing_id": {
+      "ok": true,
+      "events": [
+        "save",
+        "delete"
+      ],
+      "remaining_points": {},
+      "messages": [
+        "Vector write/read/delete test passed"
+      ]
+    },
+    "empty_retrieval": {
+      "ok": false,
+      "events": [
+        "save"
+      ],
+      "remaining_points": {
+        "999999999": "__healthcheck__"
+      },
+      "messages": [
+        "Vector retrieval failed after save"
+      ]
+    },
+    "cache_enabled_mutation": {
+      "first": "first",
+      "after_file_change": "first",
+      "cache_enabled_by_default": false
+    }
+  },
+  "control_source": "import ast,sys,types,json,os,tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021');log=N(**{k:lambda *a,**kw:None for k in ['info','warn','error']})\ndef original(file,name,env):\n t=ast.parse((B/file).read_text());t.body=[n for n in t.body if isinstance(n,ast.FunctionDef) and n.name==name];exec(compile(t,str(B/file),'exec'),env);return env[name]\nclass Vec:\n def astype(self,t):return self\n def __truediv__(self,v):return self\nnp=types.ModuleType('numpy');np.random=N(rand=lambda n:Vec());np.float32='float32';np.linalg=N(norm=lambda v:1);prior=sys.modules.get('numpy');sys.modules['numpy']=np\nout={}\ntry:\n for scenario in ['existing_id','empty_retrieval']:\n  points={999999999:'owned-existing-point'} if scenario=='existing_id' else {};events=[]\n  def save(aid,vec,uid,confirm=True):points[aid]=uid;events.append('save')\n  def delete(ids):\n   for aid in ids:points.pop(aid,None)\n   events.append('delete')\n  svc=N(conn=True,init=lambda:None,save=save,getVec=lambda aid:[1] if scenario=='existing_id' else [],deleteBy=delete)\n  fn=original('src--chk.py','testVec',dict(envs=N(qdrantUrl='mock'),db=N(vecs=svc)))\n  ok,msg=fn();out[scenario]={'ok':ok,'events':events,'remaining_points':points,'messages':msg}\n assert not out['existing_id']['remaining_points'] and out['existing_id']['ok'];assert out['empty_retrieval']['remaining_points'] and not out['empty_retrieval']['ok']\nfinally:\n if prior is None:sys.modules.pop('numpy',None)\n else:sys.modules['numpy']=prior\nclass Cache:\n def __init__(self):self.data={}\n def get(self,key):return self.data.get(key)\n def set(self,key,value):self.data[key]=value\nwith tempfile.TemporaryDirectory(prefix='rrrah-owned-serve-control-') as tmp:\n p=Path(tmp)/'synthetic';p.write_bytes(b'first')\n def sendfile(file,mimetype=None):return file.read() if hasattr(file,'read') else Path(file).read_bytes()\n fn=original('src--serve.py','getCache',dict(os=os,lg=log,enableCache=True,cache=Cache(),rtm=N(pth=N(full=lambda p:p)),make_response=lambda x:x,send_file=sendfile))\n first=fn('owned-id',lambda:str(p));p.write_bytes(b'second');second=fn('owned-id',lambda:str(p));out['cache_enabled_mutation']={'first':first.decode(),'after_file_change':second.decode(),'cache_enabled_by_default':False};assert second==b'first'\n(B/'controls-v7-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Original testVec uses fixed numeric point ID999999999, overwrites then deletes it without checking prior existence. Mock dictionary control starts with existing point and ends empty while health returns success. No real database touched.",
+    "Original testVec returns early on empty retrieval before cleanup; injected empty getVec leaves __healthcheck__ point. Exception branch cleanup does not cover early-return branch.",
+    "GET /api/chk invokes checkSystem including vector init/save/read/delete, data-directory creation and possible model download; endpoint is not purely observational by source. No endpoint requested here.",
+    "Cached image bytes keyed by asset ID/quality, without file size/mtime/content/config provenance. With enableCache=True, owned file change returns previous bytes. enableCache=False by default, so no default-path stale-cache claim.",
+    "Image handler failures/missing paths return PNG placeholder with ordinary response rather than explicit failed decode status; LivePhoto handler distinguishes404/500. This can hide missing images from status-only checking.",
+    "Image send MIME hardcoded image/jpeg even if stored thumbnail/preview path points to other formats; LivePhoto hardcoded video/quicktime. No browser compatibility/runtime image decode qualification.",
+    "Image route preview selection lacks thumbnail fallback when preview missing, unlike pth.forImg helper. Serving and vectorization input selection can differ.",
+    "Model check trusts existing weight pathname without hash/load inference; exiftool check reports true even when command returns nonzero, labeling version unknown. Source behavior, no subprocess executed.",
+    "App imports db.init before main try/finally; failed initial setup may skip intended cleanup. Initial layout also renders session and shared dto changes. No app startup executed.",
+    "Version/logic offline checks return true while explicitly skipped, so pass does not mean remote compatibility verified. Live-main code substring checks retained as heuristic only.",
+    "NoUpdList.upd calls list.copy, returning plain list, so documented chaining loses subclass method. Index range only upper-bound checked. Source finding, callback runtime unexecuted.",
+    "SCSS observer starts without returned handle/shutdown lifecycle in helper; UI navigation depends on aggregate sys.ok and counts, not direct matcher/corpus qualification."
+  ],
+  "limits": [
+    "67/125 whole blobs reviewed;58 remain.",
+    "No Flask/Dash server/browser/socket/UI rendering, model/PIL/Torch inference, Qdrant/Postgres or upstream suite executed.",
+    "Health overwrite/delete actions used only a Python dict; cache control used own temporary synthetic bytes.",
+    "No production source adopted/changed. Native pHash/ASAN remains deferred; all500/full library goal incomplete."
+  ]
+}
