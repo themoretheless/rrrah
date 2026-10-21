@@ -1,0 +1,53 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/text_dedup/suffix_array.py": {
+      "sha256": "182fecbb79d64636be1f43ff0fe3e6aa2849a2cbfa18c89ac531ba63b5e943b7",
+      "git_blob": "777dadfd000e359a39659c64e6a9f693452cc5d0",
+      "lines": 125
+    },
+    "src/text_dedup/config/algorithms/suffix_array.py": {
+      "sha256": "46c034ce1ca53594ade12e155f2edeb1d92d4c737d087c28180fd46924b5f7f0",
+      "git_blob": "4ec0499d0fef07974906e1a2f2a28d974a61570f",
+      "lines": 290
+    }
+  },
+  "cumulative_whole_files_read": 19,
+  "tracked_blobs": 75,
+  "method": "Two complete pinned files read. Four original helper methods AST-extracted with class base removed; stdlib control executed3216 single-range boundary cases and targeted overlap/order/UTF8 cases. No external tool execution.",
+  "findings": [
+    "Single valid segment restoration across2nonempty adjacent documents matches independent intersection reference in3216cases. This does not cover arbitrary overlapping multi-segment ordering or empty documents.",
+    "longest merge preserves overlapping ranges not contained in previous. duplicate_size sums individual lengths and overcounts overlap: ranges0..10 and1..11 report20duplicate bytes while cleanup removes11. Exact cleanup output lmnopqrst from20ASCIIbytes confirmed.",
+    "restore assumes ascending segment order without sorting/validation. Segments15..18 then0..5 across documents0..10 and10..20 restore only latter-document5..8 and lose first-document0..5. Real external collector ordering remains unverified.",
+    "clean_up works in UTF8byte offsets then decode(errors=ignore); removing first byte of \u00e9X yields X, silently dropping remaining partial character byte. Actual external ranges may or may not align to character boundaries; no full pipeline claim.",
+    "main concatenates documents without separators and clips returned ranges to document boundaries before length-threshold filtering. Cross-document repeat matches are possible in concatenated source; correctness depends on external collector contract not yet reviewed.",
+    "main unconditionally removes/recreates configured cache directory plus output/tmp under external repo before loading data; these are shared fixed paths and no run isolation or finally cleanup is shown. Review only: no removal/external command executed.",
+    "run_command captures stdout/stderr, checks return code and raises diagnostic error. No timeout or cancellation is passed, and full stdout/stderr buffered. These are lifecycle/scalability observations, not measured failure."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/text9-20261021/suffix-boundary-control.py",
+    "sha256": "052f43492554017e0f23bd5d9163900280dbca2eb68992a6965518e1799e1a6a",
+    "result": {
+      "single_segment_cases": 3216,
+      "errors": [],
+      "overlapping_longest_reported_duplicate_bytes": 20,
+      "actual_removed_bytes": 11,
+      "cleaned_text": "lmnopqrst",
+      "unsorted_segments_restored": [
+        [
+          1,
+          5,
+          8
+        ]
+      ],
+      "partial_utf8_removal": "X",
+      "scope": "Original four helper methods AST-extracted, class base removed to avoid Pydantic; no external suffix-array binary or dataset execution."
+    }
+  },
+  "limits": [
+    "19/75 tracked blobs reviewed;152/500 repositories complete.",
+    "No external suffix-array submodule source review or binary run, full upstream tests, datasets/Pydantic runtime, or production changes. pHash/ASAN deferred."
+  ]
+}
