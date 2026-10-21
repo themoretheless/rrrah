@@ -1,0 +1,52 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          2181,
+          2840
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          2840
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read lines2181-2840 in three bounded chunks,660 new lines. Cumulative1-2840/16837; static search/results/action binding review.",
+  "findings": [
+    "Directory result status displays sorted.size matches in this folder tree, with no cap/partial/skipped error disclosure in this branch; helper previously limits500 and silently skips unreadable directories. Empty title No matching files found also does not distinguish partial traversal. DirectoryViewer own rendering still unread; only supplied status/empty strings verified.",
+    "Search helper/caller trim query, then sortFileList postfilters raw searchQuery without trim. With query containing surrounding spaces, matching candidates for trimmed name can be removed by raw substring postfilter. Example space-padded report matches helper name report.txt but not raw-space substring; source mechanism only, no unchanged Kotlin test.",
+    "localSorted remember keys directoryFiles/showHidden/sort/order omit searchQuery though sortFileList closes over it. Search mode uses separate keyed searchSorted, but changes to sort/order/files during nonempty search can cache raw-query-filtered localSorted then reuse after clear. Source-reachable stale local listing concern, no Compose reproduction.",
+    "Recursive results cap applied before sort/groupfolders in UI; sorted displayed subset not global best500. Directory navigation clears query on clicked child; breadcrumb callback clears files/currentdirectory but does not clear query, so can retain recursive search across breadcrumb move. May be intentional policy, not assumed bug.",
+    "Header send snapshots selected regular files and calls sendFilesToDesktop then immediately clears selection/multiselect without transfer success result. Backend may reject disconnected/alreadyuploading; original selection not retained here. Individual row send checks connected/isFile before call; ViewModel rechecks connection.",
+    "Rename/delete/compress wired to dialogs/staging; extraction direct helper callback and share directchooser. This narrows prior v73: rename/compress parameter entry exists; actual validation/overwrite warnings in dialogs remain unread. Delete callback invokes deleteFiles which stages filesToDelete, so not directperformDelete.",
+    "Directory row playback passes entire sorted list to openLocalFile; actual audio filtering/queue semantics defined later and unread. Image pager candidates jpg/jpeg/png/webp/gif omitbmp despite imagecategoryincludesbmp; selected bmp fallbackonefile if openLocalFile treats image.",
+    "Home/analysis navigation clears current visible lists/query before switching but independently launched earlier loaders can still publish later as v72. No filesystem snapshots or concurrency tests.",
+    "Directory visibility controls hardcode white70percent rather than theme foreground, unlike status text FluentTheme.textMuted. Light-mode contrast needs rendered verification, no screenshot claim.",
+    "Trash restore handler tests Boolean and reports either success/failure; only successprefix through2840 read, rest nextchunk. No trash operation executed."
+  ],
+  "candidate_requirements_for_library": [
+    "Expose truncation/skips and distinguish empty-complete from partial result.",
+    "Normalize query once and use same normalized semantics at candidate and final filter stages.",
+    "Invalidate derived caches on every closed-over query input."
+  ],
+  "limits": [
+    "114/268 whole files unchanged; explorer2840/16837 read.",
+    "No Android/Kotlin/Compose tests, local file traversal, transfer/delete/share or UI actions executed.",
+    "155/500 full repositories unchanged; no new production code/test claim.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
