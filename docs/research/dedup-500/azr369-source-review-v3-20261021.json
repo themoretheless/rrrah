@@ -1,0 +1,38 @@
+{
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "whole_repo_complete": false,
+  "whole_text_read_this_turn": [
+    "cornerdetect/fast_9.go",
+    "cornerdetect/nonmax.go",
+    "cmd/utils.go",
+    "cmd/dtc/main.go",
+    "cmd/rotate90/main.go",
+    "cmd/tii/main.go",
+    "README.md",
+    "LICENSE",
+    ".github/workflows/ci.yml",
+    ".gitignore",
+    ".vscode/launch.json",
+    "go.sum"
+  ],
+  "controls": "docs/research/dedup-500/azr369-corner-controls-20261021/result.json",
+  "findings": [
+    "Fast9 passes Bounds.Max rather than Dx/Dy into zero-origin detector over Pix. Actual16x16flatpositive passes while shifted same-size image panics at index256/len256.",
+    "CLItii starts net/http defaultmux includingpprof on:6060, writes debug JPEG next to source, enumerates triangles before retaining first500. Source read only; command not launched.",
+    "CLI image helper log.Fatal terminates process on open/decode errors rather than returning error. Writes JPEG with appended.jpg and direct os.Create, no atomic publication/close-error handling.",
+    "Nonmax suppresses corners with adjacent>=score, sorts remaining descending score; no independent detectoraccuracy control yet.",
+    "CI matrix definesgo-version but setup referencesmatrix.version; coveragebadge54.3% is static README badge, not current measuredcoverage. CI definesrace but current originalsuites were notrace runs.",
+    "Root MIT2020AdrienDelorme read in full. fast detector upstream provenance points to transpiledC; generated header/license still requires reading, no adoption.",
+    "go.sum all12records parsed/checksum shapes validated, not independent downloaded archive verification."
+  ],
+  "remaining": [
+    "cornerdetect/fast_9.c.go234167bytes whole-read",
+    "Six image fixtures actual visual review"
+  ],
+  "limits": [
+    "227/500 complete; current entrypartial.",
+    "Six actual syntheticcounterexamples acrossrecorded reviews; no universalcorrectness or speed claim.",
+    "NativepHash/ASAN remainsdeferred."
+  ]
+}

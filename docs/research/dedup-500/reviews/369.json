@@ -4,7 +4,7 @@
   "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "Partial review: five actual controls confirm corner panic, pixel rotation loss, duplicate retention, invalid triangle ordering and wrong extraction sampling. Detector/docs/assets remain.",
+  "finding": "Partial: docs/CLI/detectorwrappers read; sixth actualcontrol confirms shiftedGraybounds panic. Generated detector body andsiximages remain.",
   "available_source_evidence": [
     {
       "path": "distance.go",
@@ -84,6 +84,11 @@
     {
       "audit": "docs/research/dedup-500/azr369-source-review-v2-20261021.json",
       "controls": "docs/research/dedup-500/azr369-triangle-controls-20261021/result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/azr369-source-review-v3-20261021.json",
+      "controls": "docs/research/dedup-500/azr369-corner-controls-20261021/result.json",
       "whole_repo_complete": false
     }
   ]
