@@ -299,3 +299,45 @@ fn uniform_tiny_and_thin_images_have_no_empty_resample_cells() {
         }
     }
 }
+
+#[test]
+fn fractional_single_pixel_footprints_match_integer_overlap_oracle() {
+    // Scale both coordinate systems by nine: overlap lengths are integers,
+    // independent of the implementation's floating-point cell boundaries.
+    for (width, height) in [(8_usize, 10_usize), (10, 11), (13, 7)] {
+        for sy in 0..height {
+            for sx in 0..width {
+                let mut bytes = [0_u8, 0, 0, 255].repeat(width * height);
+                bytes[(sy * width + sx) * 4..(sy * width + sx) * 4 + 3].fill(255);
+                let actual = Rgba8View::new(
+                    width as u32,
+                    height as u32,
+                    &bytes,
+                    (width * height) as u64,
+                )
+                .unwrap()
+                .fingerprint(|| false)
+                .unwrap();
+                let mean = 1.0 / (width * height) as f64;
+                let mut variance = 0.0;
+                for y in 0..9 {
+                    for x in 0..9 {
+                        let dx = ((sx + 1) * 9).min((x + 1) * width)
+                            .saturating_sub((sx * 9).max(x * width));
+                        let dy = ((sy + 1) * 9).min((y + 1) * height)
+                            .saturating_sub((sy * 9).max(y * height));
+                        let intensity = (dx * dy) as f64 / (width * height) as f64;
+                        variance += (intensity - mean).powi(2) / 81.0;
+                    }
+                }
+                for channel in actual.mean_linear_rgb {
+                    assert!((channel - mean).abs() < 1e-12);
+                }
+                assert!(
+                    (actual.luminance_stddev - variance.sqrt()).abs() < 1e-12,
+                    "{width}x{height}, pixel=({sx},{sy})"
+                );
+            }
+        }
+    }
+}
