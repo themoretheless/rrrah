@@ -1,0 +1,61 @@
+{
+  "cases": [
+    {
+      "name": "24bit_bottom_up",
+      "rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ],
+      "fixture_sha256": "50e6770b2d5ca67fdce0329cdedd9964e3e7a403f897f3d28c140c297797b627"
+    },
+    {
+      "name": "24bit_top_down",
+      "rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ],
+      "fixture_sha256": "bedee1d897cd0f22da0ad733019e71a95ecdcadecf89296e57c4e51d4d326175"
+    },
+    {
+      "name": "32bit_all_zero_alpha_becomes_opaque",
+      "rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ],
+      "fixture_sha256": "526c34c3ddfa284df423c9292212ecbca578d2317f73e3d612b5bd39f662043f"
+    },
+    {
+      "name": "32bit_mixed_alpha_retains_zero",
+      "rgba": [
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        128
+      ],
+      "fixture_sha256": "a2f282afbec5eef33a3905b6db1e32d999946bbd224c68c263d396e18e493696"
+    }
+  ],
+  "scope": "Actual pinned original C filename decoder, desired RGBA4. Four hand-authored BMP known-pixel controls; not Zig runtime, masks, indexed BMP, or full format qualification."
+}

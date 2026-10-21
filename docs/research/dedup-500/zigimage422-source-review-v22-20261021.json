@@ -1,0 +1,19 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": false,
+  "header_ranges_read": [
+    "include/stb_image.h:1-6280",
+    "include/stb_image.h:7470-7655"
+  ],
+  "controls": "docs/research/dedup-500/zigimage422-bmp-controls-20261021/result.json",
+  "findings": [
+    "Four actual original C decoder known-pixel BMP controls passed: 24-bit top-down and bottom-up produce the same expected red/blue rows; 32-bit BI_RGB all-zero alpha becomes opaque, while mixed zero/128 alpha retains zero. This confirms a compatibility heuristic, not a blanket alpha defect.",
+    "Whole BMP section read, including masks, palette, padding and orientation; no runtime mask/indexed qualification.",
+    "Whole TGA loader now read: vertical-origin flag handled, horizontal-origin flag not applied; RGB16 treated as RGB without alpha; palette indices outside length fall back to entry zero. These are source observations, not executed TGA controls.",
+    "Initial PSD loader read through raw channel decoding: RGB only, depth 8/16, compression raw or RLE; resource sections skipped. Remaining PSD and later formats unfinished."
+  ],
+  "limits": [
+    "Zig is unavailable; these controls exercise its pinned C backend, not the original Zig tests. Native pHash/ASAN deferred. No production implementation change. Global complete count remains 216/500."
+  ]
+}
