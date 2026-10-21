@@ -1,0 +1,32 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "dedup/__tests__/customFetch.test.ts": {
+      "sha256": "e81d9f49819a8cac9c3a6f4937fb3a7c6114c60e4c2d1e969f8fa3e346889840",
+      "git_blob": "a374357c5c9814ff39009a520ef5718ab12a1520",
+      "lines": 272
+    },
+    "dedup/__tests__/spotifyApi.test.ts": {
+      "sha256": "8a78c3e248422dea78c39810fc6e1829ed1ab9e2ada90cf4e5d0fe196199b3a8",
+      "git_blob": "ad13c9ad3d6cb12fd263e691a41f928888ec405f",
+      "lines": 169
+    }
+  },
+  "cumulative_whole_files_read": 22,
+  "tracked_blobs": 97,
+  "method": "Full441 lines across two pinned test files read, SHA256/Git blobs verified. Static test-to-implementation comparison; Jest suite not executed.",
+  "findings": [
+    "customFetch tests cover initial success,429 then success,expired401 then success,network retry,400 failure,backoff and malformed/nonJSON500. They do not test failure of immediate post-refresh retry,Headers objects,aborts or ambiguous write completion.",
+    "400 alert test expects generic message while reviewed handleFinalError chooses Error: Bad Request when structured Spotify error exists. This is a source-level expected/actual mismatch; no Jest failure asserted without running suite.",
+    "400 handling invokes handleFinalError inside makeAttempt catch and again in outer retryFetch catch, potentially duplicating final analytics. First explicitly suppresses alert; outer may show structured alert. Test only checks alert and does not assert analytics call count.",
+    "Rate-limit test uses real2-second delay; several retry tests use real default delays, only explicit backoff test uses fake timers. Passing timing tests do not establish cancellation or deadline behavior.",
+    "Spotify API tests mock customFetch and check request shapes plus parsing/error categories. Delete responses are immediately fulfilled; no pending mutation or concurrency/snapshot conflict tests shown.",
+    "Empty successful response parsesnull in wrapper, but corresponding test uses JSON object. No interrupted/failed body read control seen in these files. Mock isolation does not qualify live API compatibility."
+  ],
+  "limits": [
+    "22/97 tracked blobs reviewed;151/500 complete repositories.",
+    "No upstream Jest execution, external requests, liveAPI or browser runtime proof. pHash/ASAN deferred."
+  ]
+}
