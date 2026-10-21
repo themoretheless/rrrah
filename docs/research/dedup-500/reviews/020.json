@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 7/84 tracked blobs. Main detector and worker source fully read. Four synthetic detection controls also pass on pinned generated worker bundle; bundled third-party internals partially read, browser/model runtime unverified.",
+  "review_scope": "Partial whole-file review: 8/84 tracked blobs. Main detector tests completely reviewed; early-return and exported-helper scope distinguished from actual worker detection. Upstream Vitest suite not executed.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -117,6 +117,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-built-worker-assessment-v4-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-detector-test-coverage-v5-20261021.json"
     }
   ]
 }

@@ -1,0 +1,33 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/lib/duplicate-detector.test.ts": {
+      "sha256": "acecd8c64feeb86cae94b7eea204bff97d7ac788db2cefd7fed5fe5fe92ceab6",
+      "git_blob": "6390c42cb3e40de005a2547d7de6a1b5600fe4d6",
+      "bytes": 21850,
+      "lines": 573,
+      "method": "Complete source read in contiguous ranges 1-290 and 291-573."
+    }
+  },
+  "cumulative_whole_files_read": 8,
+  "tracked_blobs": 84,
+  "declared_it_calls_in_this_file": 46,
+  "findings": [
+    "communityDetection cases invoke the adjacent-only exported helper, not the full worker handler. Duplicate pairs are adjacent in input fixtures. No separated-identical regression in this file.",
+    "Full detection tests use fewer than two candidates to exercise early-return filtering only; they do not initialize IndexedDB, workers, models or detection.",
+    "No threshold-1 population above fifty tests the generated/source full worker expansion boundary in this file.",
+    "withinGroupDuplicates test labelled transitive uses three independently tiny perturbations of a shared base, so all three pairs are likely above threshold. It does not construct a deliberately below-threshold A-C pair.",
+    "Timestamp boundary test explicitly expects 999 and 1001 ms to remain separate at 1000 ms bucket size. The boundary limitation is an intentional tested policy, not an unexpected failure of that upstream test.",
+    "Largest-first assertions are conditional on at least two returned groups, so can pass without establishing that fixture produced two groups.",
+    "Randomized embeddings use unseeded Math.random; no deterministic seed or retained vectors in this file.",
+    "Main topK tests exercise only small heap-path inputs. They do not cover the k>50 quickselect branch, which our separate synthetic controls exercised."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Test source review only; upstream Vitest suite not executed in this step.",
+    "Findings limited to this file; other test files remain unreviewed.",
+    "Existing isolated synthetic worker controls are separate evidence, not an upstream-suite pass."
+  ]
+}
