@@ -1,0 +1,52 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "omnisearch-lite/ui/settings.slint": {
+      "sha256": "6f8fefe18924d0b3dcca2c43c92846fe365805223b78549ee7f20bcdc3a07990",
+      "git_blob": "414fe2fea0b0a8b7374cd44949909a4c783552d1",
+      "lines": 2647,
+      "mode": "100644",
+      "method": "All2647 lines read across1-800,801-1640,1641-2647; pinned Git blob verified."
+    }
+  },
+  "cumulative_whole_files_read": 89,
+  "tracked_blobs": 268,
+  "completion_reconciliation": {
+    "prior_audits": [
+      "docs/research/dedup-500/omni13-lite-settings-markup-review-v56-20261021.json",
+      "docs/research/dedup-500/omni13-lite-settings-controls-review-v57-20261021.json"
+    ],
+    "new_read_line_ranges": [
+      [
+        1641,
+        2647
+      ]
+    ],
+    "union_read_line_ranges": [
+      [
+        1,
+        2647
+      ]
+    ]
+  },
+  "method": "Completed1007 remaining Slint lines and compared display/callbacks with already-reviewed Rust settings/sync code. No compile/render or UI actions.",
+  "findings": [
+    "Phone status string hardcodes9876, while server binds first available among20 ports and pairing URI uses active_port. Displayed address can disagree with actual URI/port; source-resolved, no network bind run.",
+    "Pending card displays one pending-device-name and labels buttons Approve/Reject; callbacks snapshot and act on allpending IDs. Confirms display/action-scope mismatch previously pending markup review. No device action performed.",
+    "Database UI maps nonindexing Idle to Ready (Up to date). Settings reader defaults statusIdle/indexingfalse after query failure, so readiness label does not establish successful/current scan. This is active Database page, distinct from dead main guidance footer.",
+    "Empty folders message says No indexed directories configured, but removing last folder stores empty interpreted as defaults. UI/backend scope disagreement confirmed.",
+    "Open received-files folder callback opens Downloads root, whereas card labels Downloads/OmniSearch/category. Missing USERPROFILE Downloads falls back to temp, also absent from static label.",
+    "Text expansions help promises copied and pasted; main copy_snippet branch only copies, updates message and returns without paste. Named keyword and browse use same descriptor. Source mismatch, no clipboard UI runtime.",
+    "Snippet required-field frontend checks exactempty, backend trims; whitespace-only fields pass frontend and silently return backend. Delete button directly invokes delete callback, no confirmation markup.",
+    "Complete markup has no controls editing item-height/window-width/result-title/subtitle font sizes despite bound properties and save callback. Normal exposed slider ranges do not validate manually persisted hidden values.",
+    "Partial transfer progress displays only status/percentage, not snapshot.error detail. Completed UI is server state from already-reviewed pre-send completion, not remote-save proof.",
+    "No syntax/build/visual acceptance inferred from source reading. Fixed-size mockup and all image assets remain separate visual review requirements."
+  ],
+  "limits": [
+    "89/268 whole files; repository013 incomplete.",
+    "No new tests/Slint render/Windows actions or local production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
