@@ -1,0 +1,64 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_windows_msvc.asm": {
+      "sha256": "10a46aee705ad10a41db286c56030e3aa2456d293272029f6e5a71b218d4aac3",
+      "git_blob": "b19efbaaeb362f6237c8bd220a4068e5ea1005ba",
+      "lines": 2634
+    }
+  },
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "method": "Completed differential source review against reviewed Windows GNU AVX512. Corrected parser strips semicolon comments and splits inline labels before excluding data/directives. Normalizes numeric spelling, whitespace, prefetch byte-ptr and explicit RIP syntax. Branches resolved to instruction positions and checked through SequenceMatcher equal-block insertion mapping; all residual blocks inspected. Directives and labeled constants inspected in v143. Equivalent instructions not independently serial-reread.",
+  "equivalence_control": {
+    "gnu_instructions": 2539,
+    "msvc_instructions": 2542,
+    "equal_instructions": 2532,
+    "branch_checks": 23,
+    "branch_mismatches": 0,
+    "residual_blocks": [
+      {
+        "gnu": [
+          "vpcmpltud k2, ymm2, ymm0",
+          "vpcmpltud k3, ymm3, ymm0",
+          "vpaddd ymm4 {k2}, ymm4, dword ptr [add1] {1to8}",
+          "vpaddd ymm5 {k3}, ymm5, dword ptr [add1] {1to8}"
+        ],
+        "msvc": [
+          "vpcmpud k2, ymm2, ymm0, 1",
+          "vpcmpud k3, ymm3, ymm0, 1",
+          "vpbroadcastd ymm6, dword ptr [add1]",
+          "vpaddd ymm4 {k2}, ymm4, ymm6",
+          "vpaddd ymm5 {k3}, ymm5, ymm6"
+        ]
+      },
+      {
+        "gnu": [
+          "vpaddd zmm2{k1}, zmm0, dword ptr [add16] {1to16}",
+          "vpcmpltud k2, zmm2, zmm0",
+          "vpaddd zmm1 {k2}, zmm1, dword ptr [add1] {1to16}"
+        ],
+        "msvc": [
+          "vpbroadcastd zmm4, dword ptr [add16]",
+          "vpbroadcastd zmm5, dword ptr [add1]",
+          "vpaddd zmm2{k1}, zmm0, zmm4",
+          "vpcmpud k2, zmm2, zmm0, 1",
+          "vpaddd zmm1 {k2}, zmm1, zmm5"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    "Corrected comparison counts2539 GNU and2542 MSVC executable instruction records,2532 identical normalized instructions and23 matching branch targets. Earlier2541/2548 counts are superseded invalid previews, not additional instructions.",
+    "Only two residual blocks remain. Initial counter carry uses explicit unsigned vpcmpud predicate1 instead of vpcmpltud alias; ADD1 broadcasts into YMM6 before masked additions. YMM6 is overwritten by key broadcast before use as compression state, so source scratch lifetime is consistent.",
+    "Sixteen-counter update explicitly broadcasts ADD16/ADD1 into ZMM4/5 then masked register additions and unsigned comparison. These compression registers have already been stored as output; next outer iteration reinitializes them. No live CV preservation defect inferred from temporary reuse.",
+    "All23 control-flow targets land at corresponding unchanged instructions after accounting for three additional instructions. Hash-many and scalar Windows register/frame adaptations match GNU apart from these reviewed blocks.",
+    "PUBLIC/PROC aliases,16-byte code alignment and64-byte read-only constant alignment reviewed separately. Constant INDEX0/1,ADD0/1/16,block length and IV declarations match source values. XOF-many remains absent in this Windows variant."
+  ],
+  "limits": [
+    "288/289 pinned blobs reviewed;150/500 complete repositories. Remaining rmlint file xxhash.h.",
+    "Text/control-flow equivalence is not MASM build, relocation, unwind, x86 runtime, guard-page or performance proof. pHash/ASAN remains deferred."
+  ]
+}
