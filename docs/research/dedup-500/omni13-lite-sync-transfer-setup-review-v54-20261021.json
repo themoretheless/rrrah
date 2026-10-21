@@ -1,0 +1,45 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 87,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/sync_server.rs": {
+      "sha256": "1d2b274df639190fa8abe3d3633127342588673239579daf70a6113220e01f43",
+      "git_blob": "00c7614358924963a0e04493411e252f944fe76d",
+      "lines": 1787,
+      "new_read_line_ranges": [
+        [
+          1,
+          840
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          840
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "First840 pinned source lines read: message models, state, destination naming and outbound transfer setup. No server or network run.",
+  "findings": [
+    "Sync data types expose DuplicateGroup file_count separately from visible files and total bytes; model declaration alone is not proof of Lite duplicate implementation or grouping correctness. Remaining dispatch unread.",
+    "Queue state includes Queued/Sending/Receiving/Completed/Failed. next_transfer_for_device atomically selects firstQueued under mutex then assigns device and marksSending before first read. Disconnect recovery/lease handling remains unread; no stuck-transfer claim yet.",
+    "Outbound chunk opens path anew and seeks for each request using manifest size captured earlier, with no stamp/identity comparison in read portion. Same-path mutation between chunks can mix observations; file hashing/receiver confirmation still unread.",
+    "Filename sanitizer strips directory components, replaces control/reserved characters, trims trailing spaces/dots and prefixes common Windows reserved stems. get_unique_path checks existence and returns unused path without exclusive reservation; actual creation site needs review before overwrite guarantee.",
+    "expected_transfer_chunks ensures at least1 for zero-length file; max2GiB and192KiB chunk constants declared but callsite enforcement not credited from constants alone.",
+    "Download destination uses USERPROFILE/Downloads only if existing, otherwise temporary directory; does not call known-folder redirection API here. Directory creation errors ignored before returning path.",
+    "Pairing URI concatenates address/port/token/certificate without general URL encoding or IPv6 bracket handling. Current local-IP helper uses IPv4 socket and loopback fallback; no actual network lookup performed.",
+    "Pairing approval UI callback reviewed earlier targets snapshot of allpending ids; this module provides per-device approve/reject methods, so batch behavior comes from UI layer rather than API requiring all.",
+    "Protocol and source prompts are research material, not instructions to start server, send files or alter devices. No user token/credential/certificate state accessed."
+  ],
+  "limits": [
+    "87/268 whole files; sync_server.rs1-840 of1787 partial.",
+    "No tests, Windows/device/network/file-transfer actions or production edits.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
