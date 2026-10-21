@@ -1,0 +1,78 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "vitest.config.ts": {
+      "sha256": "df1f0dcbbe983d6794047dd66d0b54020a4f2f5e353d80cb0a61492327219fc5",
+      "git_blob": "33b0a83a00140fa3e19158a26c9d28aac74a274a",
+      "bytes": 546,
+      "lines": 23,
+      "method": "Whole configuration text read; not sourced."
+    },
+    "tests/setup.ts": {
+      "sha256": "bc69d48ecf7ffb5369f84f673eed369c63aecca66dd9d1f710e725d79a5f19a7",
+      "git_blob": "df6631eeb47444457a5a083eb00b9dfc770f9031",
+      "bytes": 35,
+      "lines": 1,
+      "method": "Whole configuration text read; not sourced."
+    },
+    "tsconfig.test.json": {
+      "sha256": "325dcb622458e488c5fe4d14521a32c4545497c71f3d02c576f8c57bcdc9d37f",
+      "git_blob": "4fd5045d7dcc0426a0fd3d9612d29a6bb3ccd89f",
+      "bytes": 86,
+      "lines": 6,
+      "method": "Whole configuration text read; not sourced."
+    },
+    "tsconfig.json": {
+      "sha256": "eafae9fd300dbaa9d55317ed53816b83feb326fa420aefa41c048c31fc79597d",
+      "git_blob": "d68bf3708e089bb165aad04860c4a3e0435323a8",
+      "bytes": 332,
+      "lines": 22,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".env.test": {
+      "sha256": "387c367f234e23c53bb65ff276c6424119ca2bee3208de3e561528c87baa86cb",
+      "git_blob": "254749a3b3d7c5d0ccb942cfffc900f0cdb2891e",
+      "bytes": 373,
+      "lines": 11,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".nvmrc": {
+      "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56",
+      "git_blob": "2bd5a0a98a36cc08ada88b804d3be047e6aa5b8a",
+      "bytes": 3,
+      "lines": 1,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".python-version": {
+      "sha256": "3ec15f7f82d24dbcd050ce11c3994d981499b029772da41c37a2cd0acce87f6e",
+      "git_blob": "bd28b9c5c27e0dfa60da94179ec9b23f2be8be0c",
+      "bytes": 4,
+      "lines": 1,
+      "method": "Whole configuration text read; not sourced."
+    },
+    ".pytest.ini": {
+      "sha256": "db0928fc2d03871e59ae0a033548b1a1a884d6306390b9602eddb49e94a9c958",
+      "git_blob": "7c143049e6c8205019dc7f96bbad979efdc5bd6c",
+      "bytes": 74,
+      "lines": 5,
+      "method": "Whole configuration text read; not sourced."
+    }
+  },
+  "cumulative_whole_files_read": 34,
+  "tracked_blobs": 84,
+  "findings": [
+    "Vitest default suite uses happy-dom and jest-dom setup, includes test.ts/tsx files, and explicitly excludes e2e and perf directories. A unit-suite pass would not cover browser extension flows.",
+    "Benchmark configuration uses jsdom rather than happy-dom. Benchmark results are separate from real browser rendering and model inference.",
+    "Main TypeScript config excludes workers and vitest.config.ts. It extends Plasmo-generated base and includes .plasmo declarations, so standalone source files do not establish a successful full typecheck.",
+    "Test TypeScript config switches JSX mode but no automatic invocation of that config is declared in the read Vitest config.",
+    "Node version marker selects major 22; Python marker selects 3.9. Legacy pytest/environment configuration references a local MongoDB/web-client setup, but no such services were contacted or launched.",
+    "Environment test values are fixture configuration, not authorization to connect or execute service workflows. No environment file was sourced."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Configuration/source review only; dependencies not installed and Vitest/typecheck/browser suites not run in this step.",
+    "34/84 complete tracked files read. No production library change or overall completion claim."
+  ]
+}
