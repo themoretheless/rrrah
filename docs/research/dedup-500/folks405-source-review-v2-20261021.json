@@ -1,0 +1,79 @@
+{
+  "repository": "folksable/pHash.c",
+  "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": [
+    "main.c",
+    "CMakeLists.txt",
+    "Config.cmake.in",
+    "README.md",
+    "LICENSE",
+    ".github/workflows/cmake-single-platform.yml",
+    ".gitignore"
+  ],
+  "partial_text_read": {
+    "stb_image.h": {
+      "lines": [
+        1,
+        290
+      ],
+      "remaining": "291 through EOF"
+    }
+  },
+  "images_individually_viewed": [
+    "assets/architecture.png",
+    "assets/img.jpg",
+    "assets/img_resized.jpg",
+    "assets/pic1-neg.png",
+    "assets/pic1.png",
+    "assets/pic2.png",
+    "assets/pic3.png"
+  ],
+  "original_cli_run": {
+    "compiler": "cc -std=gnu11 main.c pHash.c -lm",
+    "cases": [
+      {
+        "left": "img.jpg",
+        "right": "img_resized.jpg",
+        "distance": 1,
+        "hash_a": "390b03d4d67e44a9",
+        "hash_b": "390b03d6d67e44a9",
+        "exit_code": 0
+      },
+      {
+        "left": "pic1.png",
+        "right": "pic1-neg.png",
+        "distance": 63,
+        "hash_a": "618a05fb61d9a9cc",
+        "hash_b": "1e75fa049e265633",
+        "exit_code": 0
+      },
+      {
+        "left": "pic2.png",
+        "right": "pic3.png",
+        "distance": 28,
+        "hash_a": "7fce6dcf833c187a",
+        "hash_b": "59b4d9cd66673918",
+        "exit_code": 0
+      }
+    ],
+    "scope": "Unchanged CLI and bundled decoder, default32 DCT ARM64; not8x8 NEON path."
+  },
+  "findings": [
+    "Architecture figure labels AVX/SSE/NEON/fallback, but actual flags do not control backend selection and generic fallback missing on other architecture branches. Diagram is not implementation proof.",
+    "README precision switch and SIMD toggle not implemented by fields. Loeffler enum is validated but no distinct Loeffler implementation.",
+    "README example passes NULL config, which actual phash_compute rejects; example cannot compute claimed hash as written. Data buffer in example also left unfilled; not executed.",
+    "README Rec2100 coefficient option operates on8-bit gamma-encoded RGB, not HDR transfer/color normalization. CLI forces3-channel8-bit decode and discards alpha.",
+    "CMake defaults shared library OFF while executable/test target link against pHash by name; README/CI explicitly enable shared build. Build-system matrix not run.",
+    "MIT2025Folksable whole-read; embedded stb v2.15 source/terminal license still incomplete.",
+    "Seven visual assets consist of architecture diagram, resize pair, food negative pair and two distinct food photos, not comprehensive accuracy corpus."
+  ],
+  "remaining": [
+    "stb_image.h lines291 through EOF full review."
+  ],
+  "limits": [
+    "235/500 complete;405 remains partial.",
+    "CLI3 pair observations are not calibrated thresholds or cross-platform parity.",
+    "Native pHash/ASAN remains deferred; no production code adopted."
+  ]
+}
