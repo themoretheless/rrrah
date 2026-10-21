@@ -1,0 +1,52 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "playwright.config.ts": {
+      "sha256": "fdf69c502b7e6dbf7a8d6b4d0e3773d49e6d3ae25682fa3e699d9c7e7949bcb2",
+      "git_blob": "25d3e9ccaa26ba6e4d5147a02e85fa07c138ebb8",
+      "bytes": 363,
+      "lines": 16,
+      "method": "Whole source read; no fixture launched."
+    },
+    "playwright.e2e.config.ts": {
+      "sha256": "8c18bfd492e5f8c64d3371831b0e874d35a9a4387cec91163b6d9198537e9a1f",
+      "git_blob": "ed5e28d782c11c94f3f78c89d5c03c59a8244197",
+      "bytes": 518,
+      "lines": 19,
+      "method": "Whole source read; no fixture launched."
+    },
+    "tests/e2e/fixtures/extension.ts": {
+      "sha256": "4bbf403d453aef57e99128930b4a815bfae850ef9b3552d4d014ff54744e1d60",
+      "git_blob": "27dd0fb234894473c3fd78b8974f6604f6dcc994",
+      "bytes": 10596,
+      "lines": 317,
+      "method": "Whole source read; no fixture launched."
+    },
+    "tests/e2e/fixtures/gptk-stub.html": {
+      "sha256": "a5305da45f45d21ff8b70fe237a9e9c56815f743c28ce67ee874cc6d8578f216",
+      "git_blob": "b2fbebb93a43a654d205987c93ddc9fee90a43c8",
+      "bytes": 6863,
+      "lines": 205,
+      "method": "Whole source read; no fixture launched."
+    }
+  },
+  "cumulative_whole_files_read": 51,
+  "tracked_blobs": 84,
+  "findings": [
+    "Integration configuration targets only integration directory with headed Chromium and zero retries. Full configuration targets full directory, one worker, one retry and ten-minute timeout.",
+    "Integration fixture loads actual built development extension in fresh persistent browser context but intercepts photos.google.com with a stub. It exercises transport/UI against programmed results, not Google backend semantics.",
+    "Stub synthetic scan items share timestamps and use example.invalid thumbnails. Stub trash returns caller mediaKeysToTrash with requested count; restore always succeeds unless explicitly overridden. Backend partial success/identity validity is not inferred from this fixture.",
+    "Chunk stub sends sequential chunks of ten thousand records, with a single empty chunk for empty input. It does not inherently simulate reordering, missing/invalid indices or inconsistent totals. Tests may inject more scenarios separately.",
+    "connectToChrome selects service worker whose URL contains background or any open extension page with 32-character host; it does not verify extension identity against a manifest. Only source inspected, no browser connected.",
+    "clearStorage silently returns if no service worker appears within five seconds. This can leave state in live-context tests; helper does not assert clean storage.",
+    "waitForAppState comment promises reload fallback but function only waits for a selector; no reload implementation.",
+    "Auth helper mentions npm auth:export, but previously read package scripts do not declare it. Historical setup instructions alone do not prove runnable setup."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "No browser launched, remote debug endpoint contacted, cookies read/injected, storage changed or trash/restore performed.",
+    "51/84 whole files read. Browser test files themselves remain to be reviewed."
+  ]
+}
