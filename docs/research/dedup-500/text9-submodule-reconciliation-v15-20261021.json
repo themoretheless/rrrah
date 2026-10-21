@@ -1,0 +1,46 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 74,
+  "tracked_blobs": 75,
+  "method": "Reuse existing complete review of exact Gitlink pin from registry085, independently verifying all15embedded original text blobs against fresh pinned tree and their SHA256/GitSHA1; recheck3native report hashes. Newly reread original collector lines1410-1530 and4small full wrapper/config files for integration contract. No duplicate repository completion credit.",
+  "submodule": {
+    "repository": "google-research/deduplicate-text-datasets",
+    "commit": "4e9888ac3f95dc4f6169867a04c4c19df02dafe3",
+    "tracked_blobs_verified": 15,
+    "existing_complete_review": "docs/research/dedup-500/text85-complete-source-review-20261016.json",
+    "existing_complete_review_sha256": "f2a3c1a21e2ac6676b62db897f3908e738d905b4386e50f1bc6175b50e882703",
+    "source_acquisition": "docs/research/dedup-500/text85-complete-source-pins-20261016.json",
+    "source_acquisition_sha256": "bafaaaf05727712098ba92befb7181e24df9ebebb2798abe8661773db90b1ce9",
+    "native_report_pins": [
+      {
+        "path": "docs/research/dedup-500/text85-whole-cli-controls-20261016.json",
+        "sha256": "7e86fe57cde478aea2b28a024eca49df322189bec1cd8c5ffa6473b828b374cb"
+      },
+      {
+        "path": "docs/research/dedup-500/text85-finish-controls-20261016.json",
+        "sha256": "d4c8e0c67ec5f540469d138d1862569df4790d7f45a4bb70ba6bf043814225d9"
+      },
+      {
+        "path": "docs/research/dedup-500/text85-suffix-controls-audit-20261016.json",
+        "sha256": "f069589ce56e22ed55849745ae7b31994a129bac0fd8c133cc0ddd046de182b8"
+      }
+    ],
+    "source_review_complete": true,
+    "runtime_scope": "Existing isolated wholeCLI/finisher controls; not full text-dedup integration."
+  },
+  "findings": [
+    "Exact same external repository already has complete pinned source review in085; no need to claim it unread or redo entire source. Current verification confirms evidence matches Gitlink pin.",
+    "Collector cmd_collect sorts each duplicate position array, heap-merges ascending and combines touching/overlapping fixed-length ranges before printing out marker and start/end lines. Thus sorted range order is producer contract for this integration.",
+    "Earlier unsorted-range loss control qualifies public helper robustness, not demonstrated reachability from current collector. longest merging duplicate_size overcount control likewise uses overlapping input already merged by collector; standard producer emits merged disjoint ranges.",
+    "Collector explicitly notes combined range may not itself repeat as a whole; only each constituent byte belongs to some threshold-length repeated substring. Longest wrapper cannot reconstruct individual original matches after collector merging.",
+    "Existing085reports retain native small-input multithread false-negative and acrossEOF/singleton panic findings, plus finisher IO boundary failures. Evidence reused, not newly executed in this turn.",
+    "Submodule make_suffix_array wrapper uses fixed tmp/output names and retry loop, not cancellation/timeout handling. Four small files reread confirm previous lifecycle concerns. No shellpipeline launched."
+  ],
+  "limits": [
+    "Root text-dedup still74/75files: uv.lock unread. External pinned source boundary now reconciled; full integrated pipeline remains unqualified.",
+    "152/500complete repositories unchanged; external repo085 already counted. pHash/ASAN deferred."
+  ]
+}
