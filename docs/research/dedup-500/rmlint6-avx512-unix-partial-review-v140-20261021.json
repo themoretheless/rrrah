@@ -1,0 +1,46 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 285,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/blake3/blake3_avx512_x86-64_unix.S": {
+      "sha256": "c641987dd82fabed59d527f1a3413c4a2ff3df919af6d13ff2788c95e4035c0d",
+      "git_blob": "9642e413a3ad0f959449e0089dfd672fbff9fb86",
+      "total_lines": 4824,
+      "new_read_ranges": [
+        [
+          2501,
+          3100
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          3100
+        ]
+      ],
+      "unread_ranges": [
+        [
+          3101,
+          4824
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated source2501..3100 read after v139; no whole-file credit.",
+  "findings": [
+    "Single compress_xof completes seven-round compression, XORs upper state with original CV, and writes four16-byte pieces spanning64 bytes to output R9. Original CV reads precede output stores.",
+    "xof_many reads output-block count from SysV stacked seventh argument at RSP+8. Unsigned count>1 branches to vector setup; count0 and1 both enter scalar path and write64 bytes. Source establishes zero-count behavior at this entry, but public reachability and allocation contract require caller audit; no runtime overwrite reproduced.",
+    "For count>1, function saves RBP, reserves0x90 bytes and aligns stack64. Sixteen counters start from scalar counter plus offsets0..15, with unsigned low32 carry into high32 words. No increment-disable mask: output-block counters always advance across lanes.",
+    "Sixteen-output-block core broadcasts one common64-byte message into ZMM16..31 and CV into ZMM0..7, rather than reading16 distinct messages as hash-many does. Length and flags broadcast from EDX/R8d in this path. Caller extension contract remains separate from scalar byte-extension behavior.",
+    "Vector XOF core only partially read through3100: output transpose/stores, counter advances, smaller groups and constant tables remain unread."
+  ],
+  "limits": [
+    "3100/4824 lines cumulatively read;285/289 whole files and150/500 complete repositories unchanged.",
+    "No x86 runtime, zero-count public API reproduction, ABI/sanitizer/performance proof. Deferred pHash/ASAN untouched."
+  ]
+}
