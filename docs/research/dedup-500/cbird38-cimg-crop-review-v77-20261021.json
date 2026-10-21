@@ -1,0 +1,69 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "partial_source_files": {
+    "src/lib/CImg.h": {
+      "sha256": "f13dfc3c427c4ea20c0052dcd8cdb882853cf8e45d70285dbcfceca630236eab",
+      "git_blob": "5e268dfc4bad5ad7b0992fde925869b19876bcb7",
+      "bytes": 3273953,
+      "total_lines": 66396,
+      "new_read_ranges_inclusive": [
+        [
+          151,
+          430
+        ],
+        [
+          32275,
+          32345
+        ],
+        [
+          37300,
+          37421
+        ]
+      ],
+      "cumulative_read_ranges_inclusive": [
+        [
+          1,
+          430
+        ],
+        [
+          32275,
+          32345
+        ],
+        [
+          37300,
+          37421
+        ]
+      ],
+      "method": "Full text of these ranges read: configuration defaults, get_norm entry/L1case, complete crop overload family. Rest of header remains unread; compiled header is not full review."
+    }
+  },
+  "cumulative_assessed_blobs": 615,
+  "tracked_blobs": 616,
+  "findings": [
+    "qualityScore calls8coordinate crop with c0=c1=0. Original CImg API interprets those as inclusive channel indices; RGB input becomes channel0only before get_norm(1). Two RGBimages with equal red and different green/blue produce identical norm inputs in actual header control. No full numeric qualityScore executed.",
+    "CImg crop endpoint coordinates are inclusive. Caller100x100tenpercent margins yield81x81rather than80x80. For9x9computed zero margins, endpoint(width,height) is outside valid source; default boundary fills added right/bottom with zeros. This is caller/API mismatch, not evidence of an intrinsic zero-width CImg defect.",
+    "Cb globally enablesJPEG/PNGand disables CImg display in cimg_lib.h. Controls use in-memory images with display0and do not qualify enabled file decoders.",
+    "Inspected defaults expose configurable cimg_max_buf_size and no-op abort macros unless overridden. A configuration value is not an end-to-end allocation budget; no cancellation guarantee inferred from header support alone."
+  ],
+  "executed_controls": [
+    {
+      "scope": "three new original-header semantic controls, in-memory only",
+      "source": "docs/research/dedup-500/cbird38-cimg-crop-controls-v77-20261021/control.cpp",
+      "log": "docs/research/dedup-500/cbird38-cimg-crop-controls-v77-20261021/run.log",
+      "compile_command": "clang++ -std=c++17 -O1 -Dcimg_display=0 -I .dedup-work/cbird38-20261021/src/lib docs/research/dedup-500/cbird38-cimg-crop-controls-v77-20261021/control.cpp -o .dedup-work/cbird38-20261021/cimg-crop-control",
+      "exit_code": 0,
+      "passed": 3,
+      "failed": 0,
+      "warning": "Existing CImg vsprintf deprecation warning; compilation and all3controls succeeded.",
+      "harness_sha256": "3b7de0e85b96e9026f0f5691d20257593dcb10e67563ac8ca279f3b5c20c843e",
+      "integration_source_sha256": "63e30f6db2dfceb336c84a53719d876463bf7646d94b122edb3e6c429d71a020"
+    }
+  ],
+  "limits": [
+    "615/616wholeartifacts unchanged; CImg partially reviewed only. Original-header controls now37; independent counterexamples remain3.",
+    "No QtGUI, full quality score, filedecoder, production port or benchmark. Native pHash/ASAN deferred."
+  ]
+}
