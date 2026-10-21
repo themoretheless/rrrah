@@ -1,0 +1,53 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          4201,
+          6300
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          6300
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read2100 newlines4201-6300 in three bounded whitespace-only lstrip views with original line numbers. No code tokens omitted. Cumulative1-6300/16837.",
+  "findings": [
+    "Multiselect visibleFiles rebuilt from directoryFiles/categoryFilesList/favoritesList via generic sortFileList, not actual recursive search result/selected album/favorites tab. SelectAll can omit displayed nested search matches and include files outside displayed album/tab. DeselectAll only removes this rebuilt subset, leaving other selections. Actual operation uses selectedFiles, making selection-scope discrepancy material. No file action executed.",
+    "Album action files come from albumFiles/audioAlbumFiles helpers based on known category list and exact parent; not directory recursive enumeration. Action count therefore category snapshot subset, not all filesystem children. Shared lock-sensitive image album actions disabled when albumCanAccess false; source gating present.",
+    "Paste Here button directly invokes pasteFiles when target exists in navigation state, without name-conflict confirmation or busy flag in this panel. Combined with v73 helper overwrite/delete-before-move concern now has UI callpath. Concurrent repeated clicks possible before coroutine clipboard clearing; no reproduction.",
+    "Delete confirmation Move to Recycle Bin explicitly present at5750-5793 for staged snapshot; narrows previous pending confirmation audit. User approves item name/count, then performDelete. Do not label normal local deletion unconfirmed.",
+    "Compression dialog takes archive name and checks nonempty only, then directly compressFiles; no existing-destination confirmation in caller. Folder/create/rename dialogs similarly check nonempty, dismiss irrespective operation outcome. Album rename helpers trimblank, ordinary rename does not.",
+    "Batch progress dialog shown for deletion/favorites; actual dialog cancellation/blocking definition later unread. Paste/compression code does not set batchFileProgress in reviewed helpers, so progressdialog cannot be assumed to prevent repeated paste/compress.",
+    "Image album copy/share/delete/compress operate filesInAlbum rather than directory itself; menu labels CopyAlbumPhotos/DeleteAlbumPhotos accurate subset intent. RenameAlbum renames directory, broader object than photo operations.",
+    "Image edited-save callback inserts saved file next to original into preview/directory/category/recent arrays if original present. No content verification, filesystem refresh, format inference, favorites mutation or searchresults update in callback. Duplicate insertion/generation consistency needs runtime.",
+    "Musiccollapsedbar bottom offset accounts imagealbum selection/multiselect/clipboard but omits selectedAudioAlbumForActions while floatingbar visibility includes it; potential overlap in audioalbum-selection state. No rendered validation.",
+    "PIN enable/change stores preference then announces outcome; disable/remove verify currentPIN source comparisons present. Biometric success callback gated. No broad app-lock bypass claim; storage policy/authentication runtime outside review.",
+    "Fullscreen image deletion stages general delete confirmation without clearingpreviewlist in callback. General delete reloads directory/category/recent/favorites but previewImageFiles remains separately held; actualviewer removal behavior later unread."
+  ],
+  "candidate_requirements_for_library": [
+    "Bulk operation scope must be exactly the displayed and approved selection snapshot.",
+    "Resolve destination conflicts before mutation and serialize duplicate operation submission.",
+    "Keep derived lists and previews coherent after verified filesystem changes."
+  ],
+  "limits": [
+    "114/268 whole files unchanged; explorer6300/16837 read.",
+    "No Android/Kotlin/Compose/runtime tests, live authentication, file operation or external action.",
+    "155/500 full repositories unchanged; no new production changes/library test result.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
