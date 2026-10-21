@@ -1,0 +1,39 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/mediagrouptablewidget.cpp": {
+      "sha256": "146d49ee4663ec618a270993b55200c1202db6e16f223282a54bf15a77fa2caf",
+      "git_blob": "a318fbd1fa8ed908a55005bce47ca2d259f56027",
+      "bytes": 21362,
+      "lines": 721,
+      "method": "Whole pinned source/header read; cpp1-360,361-721."
+    },
+    "src/gui/mediagrouptablewidget.h": {
+      "sha256": "d485c07cd44dcdb4eaeabb06d56e98fc3fb89c75b449da7da36c2193a890a699",
+      "git_blob": "5349c31889d3b1b2f784e625a9957b7035d3c13b",
+      "bytes": 5707,
+      "lines": 170,
+      "method": "Whole pinned source/header read; cpp1-360,361-721."
+    }
+  },
+  "cumulative_assessed_blobs": 170,
+  "tracked_blobs": 616,
+  "findings": [
+    "Table does not include or call levenshteinDistance; search across reviewed cached src/source shows only helper definition. No demonstrated duplicate-retrieval impact from v57 string defect; embedded/unreviewed sources not covered by this search.",
+    "ColPath DisplayRole replaces data: URLs with literal<data-url>. selectedPaths reads same DisplayRole and uses it for download/open/search lookup; opaque display label can replace real underlying URL in actions. No actual URL/network action performed.",
+    "ShowAll filter with positive minsize ignores nonempty path (explicit FIXME); combined size/path filtering behaves differently than other match-mask branch. Invalid regex not explicitly rejected here. No GUI filtering run.",
+    "updateMedia changes record and position but does not rerun filter or sort, leaving membership/order stale if updated fields affect them. Icon cache keyedpath not regenerated on update. Samepath new content not independently invalidated.",
+    "setMark invokes updateMedia and therefore changes insertion/order position while only changing mark. dataChanged finalcolumn uses columnCount rather than last validcolumn; no model-test runtime.",
+    "addMedia detects existing entry by filtered list rather than entire data map; previously hidden record overwritten via add path with new position. Defaultcompare falls back Media::operator< whose nonstrict MatchExact concern was separately reproduced. No invalid comparator sort run.",
+    "Delete action here removes model rows only, not original media. Download/move/open are emitted signals to external application hooks, not implemented network/file effects in this widget. Their completion and failure propagation remain unqualified.",
+    "Table memoryUsage counts Media memSize but excludes icon cache as noted in source. It is not complete heap/process measurement."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "170/616 assessed:169 whole text/source plus one PNG visual.",
+    "34 prior original-body/header controls and two independent counterexamples unchanged. No GUI/network/download/clipboard/file action, production port or benchmark.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
