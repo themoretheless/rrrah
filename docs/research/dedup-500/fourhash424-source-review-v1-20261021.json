@@ -1,0 +1,101 @@
+{
+  "repository": "TorresAndy/4Hash",
+  "commit": "c1f2b7730b226797e1a0947e3ced5f566bd57cf9",
+  "whole_repo_complete": false,
+  "tracked_blobs": 26,
+  "cumulative_assessed_blobs": 9,
+  "new_whole_files_read": {
+    "hamming.py": {
+      "bytes": 371,
+      "sha256": "701b4c5aaa0df095c053c5b407b553c361d7ed2e7bdfd81a9ba6902eb487703f",
+      "git_blob": "34d4d66124ae4b9d13f2fbcc0073d82fdcad3bd9",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "hamming/hamming.py": {
+      "bytes": 488,
+      "sha256": "7089c3813d5e7a40093fd5c9aa23458a8540f463c3e12114af60bab3577f6907",
+      "git_blob": "58d36f94cc1e28573e53f59afb52661b820d2351",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "perceptive.py": {
+      "bytes": 855,
+      "sha256": "e23fe24e44183aebcb1a17e534e1477823939ba66d68901dbee494bdcca2d8ad",
+      "git_blob": "5e7d9c574a7d07f6a0429891f5e83d52a7c0cc35",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "similarity.py": {
+      "bytes": 513,
+      "sha256": "2df3471af09a9aa1e930d3fd6523f411ba777ae4c89b423d2d68cee387c50ffa",
+      "git_blob": "d1b6d81a8934acf3d56212a3ef49832947c94929",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "compare_linear.py": {
+      "bytes": 3627,
+      "sha256": "a63ec396df20e7aea0c7bcdd684f0036187c2b4070d317386ed865bb394280be",
+      "git_blob": "85538a34ab95c59630032befaec6ba2c4378ff92",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "compare_one.py": {
+      "bytes": 1666,
+      "sha256": "bf11cc8b3da4cadfc4a5079213a42f4279952eff6a72989a568f5301af7f533e",
+      "git_blob": "2bf5927711db79a6ad85d336f786c2cdbb4e0088",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "compare_database.py": {
+      "bytes": 1639,
+      "sha256": "1f1762241a6b9753248a865e144bf9a3ee4b9e63e980090664bab109d52d8938",
+      "git_blob": "6be37e4dc9736b5db40cd842b191916255ddd8d5",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "README": {
+      "bytes": 120,
+      "sha256": "9400c99d52d4ff797a6c37ed999816279120bca3113d3b24b4d846270f69f1c3",
+      "git_blob": "ae6962079290fec21d2f722a26c43db3240ddab3",
+      "method": "Whole pinned text/source read without truncation"
+    },
+    "README.md": {
+      "bytes": 345,
+      "sha256": "def27ad022c8ccbdb3d1896cb048c499139bb79d0d13456b885221b8be51cff5",
+      "git_blob": "d6199304690bb0e8d5fc15038c6e3421f76276a6",
+      "method": "Whole pinned text/source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/fourhash424-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/fourhash424-controls-v1-20261021/run.log",
+    "passed": 5,
+    "method": "Selected original Hamming classes via AST plus original similarity.py syntax parse; no database/Pillow/video/script-entrypoint execution."
+  },
+  "findings": [
+    "Packaged hamming computes valid64bit full distance64.",
+    "Length mismatch returnsFalse;PythonFalse<=13true, matching original compare_linear threshold. Oversizedhextransformdoesnotlimit64bits and reproduces65vs64mismatch. Real database contentsunqualified.",
+    "Alternate root hamming class references barea/b,notself.a/self.b; equal-lengthcallraisesNameError.",
+    "similarity.pyhasemptyfunctionbodiesandcannotparse.",
+    "compare_database.getValuesusesundefinedcandiIDforwHashcallandbroadexcept;source-only,notexecuted.",
+    "Linearcomparisoncomparesallframepairsandwritesperalgorithmrows independently; temporalorder/video-leveldecision/corpuscalibrationnotestablished."
+  ],
+  "remaining": [
+    "LICENSE",
+    "__pycache__/frameExtract.cpython-35.pyc",
+    "collision.py",
+    "compare_thread.py",
+    "database/__init__.py",
+    "database/additems.py",
+    "database/config.yml",
+    "database/dbconnect.py",
+    "database/finditems.py",
+    "database/tables.py",
+    "frames.py",
+    "frames.pyc",
+    "generate.py",
+    "hamming/__init__.py",
+    "perceptive.pyc",
+    "timing.py",
+    "timing.pyc"
+  ],
+  "license": "RegistrymetadataGPL3;rootLICENSEdownloaded/pinnedbutnotfullyreadthisstep.No foreignproductioncodeadopted.",
+  "limits": [
+    "Partial9/26artifacts;4trackedpycfilesnotsemanticallyassessed;fullreviewcount170/500unchanged.",
+    "Fivecontrolsnotwholevideo/database/runtimeproof. NativepHash/ASANdeferred."
+  ]
+}
