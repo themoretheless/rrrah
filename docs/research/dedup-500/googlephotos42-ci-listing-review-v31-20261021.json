@@ -1,0 +1,62 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_workflow_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    ".github/workflows/ci.yml": {
+      "sha256": "88befb41853b81f9de8aed8a51e4ca5e084efb32b04f61be3289b82c8816d315",
+      "git_blob": "1f39714c6ce8640451139f2f3bde66979ef7bc99",
+      "bytes": 1192,
+      "lines": 50,
+      "method": "Whole pinned source/config/test text read; not executed."
+    },
+    ".github/workflows/pages.yml": {
+      "sha256": "27da6331f7fc9fd8457f1335644facb3136d500aba68f069fa0f5e112101cf6b",
+      "git_blob": "fdbbee967ff7207b88a3cfd9c2414120ddb02e49",
+      "bytes": 889,
+      "lines": 32,
+      "method": "Whole pinned source/config/test text read; not executed."
+    },
+    "tests/readme-pro.test.ts": {
+      "sha256": "a098f5171058222c3db21063ac76c32b078fcce997af76bffa1b0176e80237dc",
+      "git_blob": "731b6985199759909b315fe3029bc6fd96193b6a",
+      "bytes": 1544,
+      "lines": 38,
+      "method": "Whole pinned source/config/test text read; not executed."
+    },
+    "scripts/listing.ts": {
+      "sha256": "c9de43041503da4c50778bdf5fe86ea77cbafb3592370be00443206711c536d3",
+      "git_blob": "ca20a227cbba6f9a21daca4bdfecdb9a3e9710cb",
+      "bytes": 6929,
+      "lines": 130,
+      "method": "Whole pinned source/config/test text read; not executed."
+    },
+    "site/config.json": {
+      "sha256": "0c1cef90d3cdcd7a125e681ac986843bb34222d91f664df75b15a23b0c648b37",
+      "git_blob": "e69b70a27663863711e2430a0d951eeeb990287e",
+      "bytes": 289,
+      "lines": 9,
+      "method": "Whole pinned source/config/test text read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 121,
+  "tracked_blobs": 230,
+  "findings": [
+    "CI teststep precedesbuild,so conditionalbuiltmanifesttests canbeskipped; postbuildrunsdemocheck,listingcheck,verify,zip,sizecheck. This is configuredworkflow,notcurrentgreenrun evidence.",
+    "Earlierreadreleaseworkflowlacksseparatedemostep,listingcheck,sizecheck; itdoesrununit/build/verify/zip. CIandtagreleasegatesnotidentical. Noexternalstatusqueried.",
+    "Pagesworkflowpushtrigger masteronlyandpathfiltered,manualdispatchavailable; noactionrunorwebsitepublicationperformed.",
+    "Listingvalidatorchecksversions,lengths,locale-keycoverage/titlematching,disclosurewords,URLsregexandmetadata shape. Screenshotscheckonlyarraylength>=3,notfileexistence/dimensions/renderedcontent.",
+    "Listing content claimslivestorelimits are sourceconstants,notindependentlyverifiedcurrentstorepolicy. Validationwouldnotprovefunctionalpromise orliveproductcapability.",
+    "Siteconfighasplaceholderanalytics IDsandselfServeCheckoutfalse; sourcevalueonly,notdeployedsitebehavior. READMEProtestcomparescheckout/recoveryURLs andliteralpriceentry,notactualpurchaseflow."
+  ],
+  "partial_reads_excluded": [
+    "storefront/listing.json fetchedandGitblobverified,butoutputtruncated; notcountedwholeartifact."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "121/230wholeartifacts; workflow/sourcechecksnotexecutionorreleasecertificate.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
