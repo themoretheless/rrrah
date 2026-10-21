@@ -1,0 +1,24 @@
+const fs = require('fs');
+const crypto = require('crypto');
+const assert = require('assert');
+const path = require('path');
+const source = path.resolve('docs/research/dedup-500/evidence/science-periodicals--phash-imagemagick/02-compare.js');
+const api = require(source);
+const obj = pHash => ({pHash,colorType:'TrueColor'});
+const a=obj('0000'), b=obj('00000001');
+const forward=api.compare(a,b), reverse=api.compare(b,a);
+assert.strictEqual(forward,0);
+assert(Number.isNaN(reverse));
+assert.strictEqual(api.eq(a,b),true);
+assert.strictEqual(api.eq(b,a),true);
+const invalid=obj('----');
+assert(Number.isNaN(api.compare(invalid,a)));
+assert.strictEqual(api.eq(invalid,a),true);
+let emptyError;
+try {api.compare(obj(''),a);} catch(e) {emptyError=e.name;}
+assert.strictEqual(emptyError,'TypeError');
+assert.strictEqual(api.compare(obj('0000'),obj('0100')),1);
+assert.strictEqual(api.compare(obj('0100'),obj('0000')),1);
+const result={source_sha256:crypto.createHash('sha256').update(fs.readFileSync(source)).digest('hex'),original_module_executed:true,controls:{unequal_width:{forward,reverse:String(reverse),eq_forward:api.eq(a,b),eq_reverse:api.eq(b,a)},malformed_numeric:{distance:String(api.compare(invalid,a)),accepted_equal:api.eq(invalid,a)},empty_input_error:emptyError,valid_symmetric_distance:1},limits:['Original compare.js executed unchanged; no ImageMagick backend or upstream suite executed.','Malformed and unequal-width public compare inputs; not evidence that normal backend output always has malformed width.']};
+fs.writeFileSync(path.join(__dirname,'result.json'),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result));

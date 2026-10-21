@@ -1,0 +1,31 @@
+{
+  "repository": "science-periodicals/phash-imagemagick",
+  "commit": "400512e20a8a763609bec77e76f609f63108b578",
+  "whole_repo_complete": false,
+  "whole_text_read": [
+    "lib/compare.js",
+    "lib/phash.js",
+    "test/test.js",
+    "README.md"
+  ],
+  "controls": "docs/research/dedup-500/imagemagick386-controls-20261021/result.json",
+  "findings": [
+    "Unchanged compare.js accepts malformed numeric fields: NaN > threshold is false, so eq returns true.",
+    "Unequal widths yield asymmetric distance: 0000 vs 00000001 gives 0, reverse gives NaN; both accepted by eq.",
+    "Empty hash throws TypeError before comparison; no explicit shape or finite-number validation.",
+    "Backend source has no child spawn error handler or input stream error handler; no execution performed to qualify those paths.",
+    "PixelsPerCentimeter conversion multiplies by 0.393701 although pixels per inch requires factor 2.54; source finding, backend unexecuted.",
+    "Upstream suite has four tests; first fixes one golden hash, two pair matrices check encoded fixture variants, last rejects group equality. It does not exercise malformed fields or unequal widths.",
+    "PNG/JPEG variants are described as differing resolutions but source test selects by extension, not asserted dimensions. Dimensions and actual assets still require review."
+  ],
+  "remaining": [
+    "Whole remaining metadata, license, entrypoints and lockfile review.",
+    "Fetch and Git-verify all tracked blobs; individually view all 32 fixture images.",
+    "Backend and original suite runtime qualification."
+  ],
+  "limits": [
+    "230/500 full repositories; entry 386 remains partial.",
+    "No production code adopted or speedup claimed.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
