@@ -1,0 +1,33 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "lib/app-reducer.ts": {
+      "sha256": "822f5a688cdd74bda597d891135bc7b20808eabdd1ae333b39ad82850f4ce3d9",
+      "git_blob": "9ee9dba58d1408b6253df442228837e4ce97b788",
+      "bytes": 7877,
+      "lines": 240,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 9,
+  "tracked_blobs": 84,
+  "findings": [
+    "Results lacking accountEmail are retained and relabelled when health check discovers an account. Known mismatches clear results; unknown provenance is not equivalently invalidated.",
+    "SCAN_COMPLETE has neither scanning-status guard nor request-ID/account correlation. Reducer accepts completion after cancellation. Caller suppression remains to be reviewed before claiming an actual UI race.",
+    "Successful health check while scanning/trashing returns connected state, replacing operation state. Caller dispatch timing remains unreviewed.",
+    "TRASH_COMPLETE filters removed media keys but does not recompute originalMediaKey. If the removed key was original and two members remain, resulting group refers to absent original. UI selection guards remain unreviewed.",
+    "SCAN_PROGRESS checks phase but not stored requestId in this reducer. Separate message routing may protect it; not yet qualified."
+  ],
+  "executed_controls": {
+    "path": "docs/research/dedup-500/photos20-state-controls-v7-20261021",
+    "passed": 4,
+    "method": "Unchanged reducer and validity helper bodies, import removal and TypeScript stripping, synthetic state/actions only."
+  },
+  "limits": [
+    "No real deletion, account connection, browser event flow or upstream suite run.",
+    "Reducer transition reproductions are not proof callers emit these action sequences.",
+    "No production library changes in this step; 9/84 whole files reviewed."
+  ]
+}
