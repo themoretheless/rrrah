@@ -1,0 +1,43 @@
+{
+  "repository": "LowLevelLogic/synology-dedup-photos",
+  "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
+  "whole_repo_complete": false,
+  "tracked_blobs": 8,
+  "cumulative_assessed_blobs": 7,
+  "new_whole_files_read": {
+    "src/nas.rs": {
+      "bytes": 18268,
+      "git_blob": "a46790182ff5c2d62813ba78f1f26370acf23ddd",
+      "sha256": "a1e88f6ca5252270eb2458d5397d34b10e5eeb0fa3e8da25cdceb2df78278591",
+      "method": "Whole pinned text read without truncation"
+    },
+    "README.md": {
+      "bytes": 12308,
+      "git_blob": "c118c11db8d25d5d2d912029d0772cc3d416d69c",
+      "sha256": "5f5161b983d6acc1a8904f49bd2ad6b89c61c168578dfd347673c14e143adf02",
+      "method": "Whole pinned text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/synology126-controls-v4-20261021/status.rs",
+    "log": "docs/research/dedup-500/synology126-controls-v4-20261021/run.log",
+    "passed": 3,
+    "method": "Unchanged original status-decision block, synthetic DsmResp/Value adapter; successful finished, failed-envelope finished, unfinished controls. Not entire delete_files function or service execution."
+  },
+  "findings": [
+    "Status block returns empty errors on data.finished=true without checking response success or any per-file failures. A synthetic failed envelope with finished=true also returns empty errors; actual DSM response-schema reachability unproven.",
+    "list_inner maps DSM codes408/1 to warning and Ok, skips absent metadata and zero sizes; result lacks completeness diagnostics. Other listing errors propagate.",
+    "Pagination increments offset by returned count and stops empty/count reaches declared total; no depth/entry bound or visited-directory identity set in module.",
+    "hash_file streams response body into SHA256 without error_for_status, expected-size or explicit DSM error-envelope validation. No network counterexample executed.",
+    "README promises exact preservation of selections, contradicted by retained empty-draft control; largest byte size is used as keeper criterion rather than measured resolution.",
+    "README calibration/throughput assertions have no tracked dataset or benchmark evidence in reviewed source/README; not independently qualified."
+  ],
+  "remaining": [
+    "Cargo.lock (not yet read)"
+  ],
+  "limits": [
+    "Global full-review count remains167/500; current repository7/8 artifacts.",
+    "Fourteen targeted controls cumulatively; no real NAS/account/model/network/deletion executed.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}
