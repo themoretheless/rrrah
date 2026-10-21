@@ -1,0 +1,96 @@
+{
+  "status": "complete_pinned_repository_review_by_explicit_methods",
+  "repository": "SabrosoCuy/PlexDeDupe",
+  "commit": "8bf5a471756cb2b2fc39f88c6b3f865007637967",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "whole_runtime_qualified": false,
+  "tracked_blobs": 10,
+  "files": {
+    ".gitattributes": {
+      "bytes": 66,
+      "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+      "git_blob": "dfe0770424b2a19faf507a501ebfc23be8f54e7b",
+      "method": "Whole pinned text/source/license read across v1,v2 and final documentation review"
+    },
+    "ChangeLog.txt": {
+      "bytes": 1755,
+      "sha256": "103073c34acbb71446657ea3772c6d9f857afaee802449a130da202972433efb",
+      "git_blob": "48dd917c165cfcda43a744e2dd6a16b18778d930",
+      "method": "Whole pinned text/source/license read across v1,v2 and final documentation review"
+    },
+    "DupCleanup.py": {
+      "bytes": 72077,
+      "sha256": "77e95d0df061417b5177643d877d145ce592fa50148f93a44531b33e32bf0fd0",
+      "git_blob": "5409e87368482cd909542e9cafbf5d06ef549f7a",
+      "method": "Whole pinned text/source/license read across v1,v2 and final documentation review"
+    },
+    "LICENSE": {
+      "bytes": 1060,
+      "sha256": "47c5e83814adbbf957c08053f5e3644835c41474b69da9a016bed53f5139ee6b",
+      "git_blob": "d352e48be0116a10bf6d55d99f065d4cfab0fad2",
+      "method": "Whole pinned text/source/license read across v1,v2 and final documentation review"
+    },
+    "README.md": {
+      "bytes": 10523,
+      "sha256": "107faedabbe3f9f349d1cf7edd0f13428f2580d59ba73ba02169c5d509dbf955",
+      "git_blob": "259f930913bf35130408c602d3cd126ed0809d76",
+      "method": "Whole pinned text/source/license read across v1,v2 and final documentation review"
+    },
+    "Requirements.txt": {
+      "bytes": 87,
+      "sha256": "705e6e38ed5159a5357829d0d3ebd920bee8478244b7919b32fe952ce0856be2",
+      "git_blob": "7e400215a2d13b6f32d159736665f81e7f7681ca",
+      "method": "Whole pinned text/source/license read across v1,v2 and final documentation review"
+    },
+    "Screenshots/DebugConsole.png": {
+      "bytes": 59385,
+      "sha256": "cde63188948497ab3da2d35c85df24abfbb18fd4a0504040f904c58e310013bf",
+      "git_blob": "918b7ce909b6528a92ce4cca6d7bb394692641a9",
+      "method": "Original PNG visually inspected with view_image"
+    },
+    "Screenshots/MainWindowWresults.png": {
+      "bytes": 47662,
+      "sha256": "43370c6f2bdf9f61dba9b26b6bbac65b5a4ff3b8c546febe6286dcd020cb1d94",
+      "git_blob": "eaea1a529cba4efdf5cffe88d164178c45573d80",
+      "method": "Original PNG visually inspected with view_image"
+    },
+    "Screenshots/dryrun.png": {
+      "bytes": 8978,
+      "sha256": "139692fc2f3c9b9ef5b7ad5a60ef7a8c8f1fae47adcb12f7210515048e7b8ea0",
+      "git_blob": "437d5290ceab9404a0df5fe005d0261854b33cc2",
+      "method": "Original PNG visually inspected with view_image"
+    },
+    "Screenshots/fullrun.png": {
+      "bytes": 11505,
+      "sha256": "d16435f67961aec41a33547bf8ed712c932ee81736764f03e138e0bdb70b1584",
+      "git_blob": "ed144e3ec0ecda1fd9320b37c7f6c5252340fde4",
+      "method": "Original PNG visually inspected with view_image"
+    }
+  },
+  "incremental_evidence": [
+    "docs/research/dedup-500/plex352-source-review-v1-20261021.json",
+    "docs/research/dedup-500/plex352-source-review-v2-20261021.json"
+  ],
+  "targeted_original_method_controls": 10,
+  "visual_observations": [
+    "DebugConsole screenshot shows historical Windows/Python3.12.4/PlexAPI4.17.0 scan log; not current execution evidence.",
+    "Main screenshot shows historical interface without filters/advanced hardlink section visible in pinned source; cannot validate later features.",
+    "Dry-run screenshot reports28files/12.18GB; confirmation screenshot describes separate Plex-only/physical deletion choice. These are author-provided historical examples, not our operation."
+  ],
+  "conclusions": [
+    "Duplicate discovery uses Plex multi-version metadata, not an image/content matching algorithm. Movie-title keys overwrite distinct same-title groups; positive distinct-title control preserves groups.",
+    "Multipart size aggregation retains first part path only.",
+    "Default SHA256 helper and hardlink physical-alias checks passed controlled temporary-file tests; invalid chunk_size0returns empty digest.",
+    "Hardlink toggle changes labels but process handler calls deletion path; full source has no caller routing to conversion handler. Source observation, no GUI run.",
+    "README command names absent plexdedupe.py; actual tracked executable is DupCleanup.py. Python3.6claim conflicts with assignment-expression syntax requiring3.8+.",
+    "README local trash guarantee does not match explicit os.remove physical-file path. Plex server-side deletion semantics remain unverified.",
+    "Child filter shortcut ignores other active filters; captured item snapshots can discard later manual action edits, latter source-only."
+  ],
+  "license": "Root MIT fully read; research controls retain license; no production source adopted.",
+  "limits": [
+    "No actual Plex connection, GUI run, dependency install, deletion/conversion, broad media corpus or performance measurement.",
+    "All10tracked artifacts reviewed does not establish full runtime/platform/quality qualification.",
+    "Native pHash/ASAN remains deferred; all500reviews and all-case objective incomplete."
+  ]
+}
