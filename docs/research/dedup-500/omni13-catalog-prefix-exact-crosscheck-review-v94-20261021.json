@@ -1,0 +1,41 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 262,
+  "tracked_blobs": 268,
+  "partial_binary_semantic_reviews": {
+    "omnisearch-lite/assets/catalog.bin": {
+      "sha256": "0ee76b457784df3277f066c6a3899f4d867c6f7e15d6c2326b9dba6161454793",
+      "git_blob": "3e39a4a651a0c6b32113ba2a66d69534a3e3e5dc",
+      "new_metadata_record_ranges_zero_based": [
+        [
+          0,
+          79
+        ]
+      ],
+      "cumulative_metadata_record_ranges_zero_based": [
+        [
+          0,
+          79
+        ]
+      ],
+      "total_records": 952,
+      "all_seven_fields_read_for_record_range": true,
+      "records_canonical_json_sha256": "9f1c1c315ad6fc57562280241ceedc657109b20cd245120f16c30d974969a73a",
+      "whole_file_read": false
+    }
+  },
+  "findings": [
+    "Metadata records 0-79 cover Windows optional features, developer options, activation, troubleshooting, clipboard, USB, autoplay, pen and touchpad settings. All fields read as data; no commands, settings changes, services or actions executed.",
+    "Many distinct setting labels share a generic launch target (optionalfeatures.exe, control.exe folders, ms-settings:developers or ms-settings:troubleshoot). A result label describing an individual action does not prove that launch_command directly performs it; actual Windows action semantics remain unverified.",
+    "Four known exact-byte groups from the reviewed assets were reproduced by the current local public rrrah-dedup exact scanner with exact membership assertions. Hardlink aliases, empty files and equal-sampled-ends unequal-middle controls also passed; see linked control audit."
+  ],
+  "control_audit": "docs/research/dedup-500/omni13-asset-exact-crosscheck-v94-20261021/audit.json",
+  "limits": [
+    "262/268 whole-file reviews and 155/500 whole-repository reviews unchanged. Catalog metadata 80/952 records, not full semantic completion.",
+    "No source changes, accepted optimization, performance result, Windows settings execution or full-library qualification.",
+    "Native pHash/ASAN explicitly deferred."
+  ]
+}

@@ -1,0 +1,11 @@
+[package]
+name = "dedup-asset-crosscheck"
+version = "0.0.0"
+edition = "2024"
+[[bin]]
+name = "dedup-asset-crosscheck"
+path = "main.rs"
+[workspace]
+[dependencies]
+rrrah-dedup = { path = "../../../../crates/rrrah-dedup", default-features = false }
+tempfile = "3"

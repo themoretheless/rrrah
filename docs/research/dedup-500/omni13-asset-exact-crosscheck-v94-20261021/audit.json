@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "method": "Standalone Cargo executable linked against the actual local rrrah-dedup crate with default features disabled; public exact::scan_verified called four times on owned temporary files. No mock scanner or copied production module.",
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "run",
+    "--manifest-path",
+    ".dedup-work/asset-exact-v94/Cargo.toml",
+    "--offline",
+    "--jobs",
+    "2",
+    "--",
+    ".dedup-work/asset-exact-v94/source-paths.list"
+  ],
+  "evidence_files": {
+    "docs/research/dedup-500/omni13-asset-exact-crosscheck-v94-20261021/main.rs": "46410cc89d70df6055f42310075a2e396f92fd61a25ce9279e9b753e6701da43",
+    "docs/research/dedup-500/omni13-asset-exact-crosscheck-v94-20261021/Cargo.lock": "ecd33c52505bc2f2f8b10fbbfca0eb3f1b7090d017ba2e2e62b80f2f6545e8af",
+    "docs/research/dedup-500/omni13-asset-exact-crosscheck-v94-20261021/Cargo.toml": "1f1c5e4c74d820aa01b0736ea60744480eec8bc3bc09dbad9d6c92bd17892415",
+    "docs/research/dedup-500/omni13-asset-exact-crosscheck-v94-20261021/run.log": "441da7ad69f89c6cb476ab83ee7e3859b28d0b47ab6b269c4092973ab0bd3ca7",
+    "docs/research/dedup-500/omni13-asset-exact-crosscheck-v94-20261021/inputs.json": "da3d3466dc3ed3e82ca15e6f961ca7a69af680c5dd9bec17ee5234c6636c1cca",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d"
+  },
+  "controls": {
+    "asset_inputs": 41,
+    "known_exact_groups": [
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        22,
+        40
+      ],
+      [
+        7,
+        20,
+        29
+      ],
+      [
+        8,
+        27,
+        28
+      ]
+    ],
+    "group_membership_exactly_equal_to_expected": true,
+    "every_group_independently_byte_equal": true,
+    "hardlink_to_otherwise_unique_file": "one alias set with two paths, no extra duplicate group",
+    "empty_files": "one two-member zero-byte group added",
+    "equal_size_same_first_last_samples_different_middle": "not grouped",
+    "final_group_count": 5,
+    "final_issues": 0,
+    "final_cancelled": false,
+    "reported_bytes_read": 15915499
+  },
+  "reproduction": "inputs.json lists original pinned paths and hashes in stable order. Verify/download these to the documented flat cache; write their absolute cache paths, one per line, to a list; pass that list to this Cargo executable. Retained manifest adjusts only the dependency/source locations for this evidence directory.",
+  "limits": [
+    "Mac ARM host only; public exact-file behavior, not visual matching, all-feature suite, native pHash/ASAN, platform matrix or performance qualification.",
+    "Image resources are opaque bytes to this exact-file probe. Different resolutions and formats are not asserted to be visual negatives.",
+    "No user files modified; fixtures owned and removed by tempfile. No production implementation change."
+  ]
+}
