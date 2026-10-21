@@ -1,0 +1,30 @@
+{
+  "repository": "folksable/pHash.c",
+  "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": {
+    "stb_image.h": {
+      "lines": [
+        3781,
+        4500
+      ]
+    }
+  },
+  "controls": "docs/research/dedup-500/folks405-controls-20261021/zlib-result.json",
+  "findings": [
+    "Entire zlib inflate implementation read: fixed/dynamic Huffman, stored blocks, growable/fixed output API; beginning PNG scanline reconstruction through packed1/2/4bit and16bit endian conversion read.",
+    "Original zlib API decoded16 valid Python-zlib-generated streams exactly at levels0/1/6/9, payload lengths11,256,3072,4096.",
+    "Changing final Adler32 byte leaves original decoder successful and identical output; Python zlib rejects. Source parse_zlib returns after final block without checksum validation. No general file validity guarantee follows from decoded output.",
+    "PNG source comment explicitly disclaims CRC checking; complete chunk loop remains unread, so no new runtime CRC conclusion.",
+    "Growable zlib buffers double int capacity without an explicit caller output budget; fixed-buffer API can return limit error. Huge-stream behavior not exercised.",
+    "PNG raw reconstruction requires exact decompressed length for noninterlaced full image and minimum per-pass length for interlaced path; later interlace/chunk logic pending."
+  ],
+  "remaining": [
+    "stb_image.h lines4501 through EOF."
+  ],
+  "limits": [
+    "235/500 full repositories;405 remains partial.",
+    "Small synthetic valid streams plus one checksum mutation only; no malformed-stream memory safety, complete PNG conformance or production change.",
+    "Native pHash/ASAN remains deferred."
+  ]
+}

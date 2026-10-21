@@ -1,0 +1,78 @@
+{
+  "original_stb_header_unchanged": true,
+  "valid_cases": [
+    {
+      "length": 11,
+      "level": 0
+    },
+    {
+      "length": 11,
+      "level": 1
+    },
+    {
+      "length": 11,
+      "level": 6
+    },
+    {
+      "length": 11,
+      "level": 9
+    },
+    {
+      "length": 256,
+      "level": 0
+    },
+    {
+      "length": 256,
+      "level": 1
+    },
+    {
+      "length": 256,
+      "level": 6
+    },
+    {
+      "length": 256,
+      "level": 9
+    },
+    {
+      "length": 3072,
+      "level": 0
+    },
+    {
+      "length": 3072,
+      "level": 1
+    },
+    {
+      "length": 3072,
+      "level": 6
+    },
+    {
+      "length": 3072,
+      "level": 9
+    },
+    {
+      "length": 4096,
+      "level": 0
+    },
+    {
+      "length": 4096,
+      "level": 1
+    },
+    {
+      "length": 4096,
+      "level": 6
+    },
+    {
+      "length": 4096,
+      "level": 9
+    }
+  ],
+  "valid_cases_passed": 16,
+  "bad_adler32": {
+    "stb_accepted_payload": true,
+    "python_zlib_rejected": true
+  },
+  "limits": [
+    "Small synthetic zlib streams only; checksum contract observation, not PNG file conformance or exploit.",
+    "No ASAN or deferred native pHash execution."
+  ]
+}
