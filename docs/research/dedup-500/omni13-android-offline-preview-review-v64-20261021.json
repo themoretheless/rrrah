@@ -1,0 +1,54 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/java/com/omnisearch/app/ui/PinnedScreen.kt": {
+      "sha256": "170eef90c8d82cc6fae2f15aca10735c2d67f429cb119cb5ec7400d6307bddb8",
+      "git_blob": "583e2e1b7a32772a3c8a16d55e921eb0ba503b24",
+      "mode": "100644",
+      "lines": 840
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/ImageZoomView.kt": {
+      "sha256": "80739722ffdd3669d5a8117d566111bea0d8ca2c71a13ea92129dc102cca6caa",
+      "git_blob": "81734258ef8b0eb0bcbd487ad42bbc9aef291f26",
+      "mode": "100644",
+      "lines": 101
+    },
+    "android/app/src/main/java/com/omnisearch/app/ui/PdfZoomView.kt": {
+      "sha256": "0c0642ab77e84de8f1c75179b144a1b9c4a50499b1e4a85d018c4205f031b288",
+      "git_blob": "84da78a1cfc6f340a22692828bcdcd5ac8b1dcf1",
+      "mode": "100644",
+      "lines": 172
+    }
+  },
+  "cumulative_whole_files_read": 98,
+  "tracked_blobs": 268,
+  "method": "Complete bounded source reading of three pinned Kotlin files,1113 lines. Cross-read already credited Room entity/DAO and previously read SyncViewModel. Static behavior and lifecycle review only.",
+  "findings": [
+    "Pinned header counts every Room row as offline pinned files although fileData nullable. Empty-state text more accurately says access paths disconnected, and preview explicitly tells user when content absent and PC disconnected. Therefore metadata pin is not complete offline-content guarantee.",
+    "PinnedFileEntity primary key only desktop path, with nullable Base64 fileData, no downloaded content URI, device identity, hash or generation. Download finalization in SyncViewModel stores metadata and at most small image/document preview, so a downloaded large file can be present in MediaStore yet not previewable via this offline hub; hub has no local URI fallback. Different paired desktops sharing a path can replace one row. Schema/source concern, no real databases inspected.",
+    "pinFile uses Room REPLACE with default null data, even for already pinned path, before requesting content again. Re-pinning can discard existing cache if fetch fails/disconnects. Previously reviewed content handler only writes fileData when null, so repeated successful request for existing cached content does not update cached bytes after desktop file change. No content-stamp verification.",
+    "Pinned preview whitelist includes md/code/svg/3gp/mov but getMimeTypeForExtension maps only smaller subset and defaults application/octet-stream. Locally cached md/rs etc choose binary preview, whereas connected server text MIME may render text. Cached MIME not persisted, so reconnect-independent renderer parity unproven.",
+    "Pinned full preview and save use shared fileContent without checking path against selected previewFile, mirroring search screen stale response risk. Compact sheet has hasContent path guard when no cached data; do not generalize missing check to compact branch.",
+    "Pinned list thumbnails use decode bounds/sample; compact image and ImageZoomView full Base64 decode have no explicit pixel cap or sampling and run in remember on composition. Base64 bytes also retained as String in Room/list and decoded copy. No memory/performance measurement.",
+    "ImageZoomView scale bounded1..5 but pan unbounded; scale/offset remembered without imageUrl key, so replacement retains transform. Base64 detection accepts ;base64 but extraction specifically base64,; invalid data falls back AsyncImage. Codec support/fallback including SVG unqualified without actual Android/Coil runtime.",
+    "PdfZoomView renders min(pageCount,15), but label denominator pages.size rather than actual pageCount and no truncation notice. A PDF with more than15 pages can appear complete at Page15of15. This is preview truncation, not PDF file loss.",
+    "PDF page dimensions multiplied2 and ARGB8888 allocations have no explicit dimension/pixel/aggregate byte guard.15-page count alone does not bound memory. Renderer/page/descriptor/tempfile cleanup occurs only success path, without use/finally; exception can leave resources/tempfile. No malformed/large PDF executed.",
+    "PDF input changes restart LaunchedEffect but loading/error/pages/zoom not reset at start. Successful next render does not clear previous error; existing error branch takes precedence over new pages. Synchronous render work inside IO has no explicit cancellation checks between pages; stale work/resource cleanup requires lifecycle testing.",
+    "Video preview duplicates search implementation: Handler callbacks removed on detach, no source explicit stopPlayback/tempfile deletion or AndroidView update for changed content. Decode/cache writes during composition. Runtime playback/resource outcome not proven.",
+    "Size formatter duplicates unclamped log1024 index against units endingTB; >=1024^5 out-of-range boundary. No Kotlin compiler available; no unchanged runtime control claimed."
+  ],
+  "candidate_requirements_for_library": [
+    "Metadata/path identity must be distinct from content identity and offline availability.",
+    "Cached content must retain provenance and freshness stamp; same path on different sources is not identity.",
+    "Preview limits must be explicit and must not imply full document coverage.",
+    "Late async publication must match selected object and generation."
+  ],
+  "limits": [
+    "98/268 full files; repository013 still incomplete.",
+    "No Android/Kotlin compilation, Compose/device/codec/PDF rendering, live requests or file actions executed.",
+    "No production-library changes or new runtime test claims. Global full repository count remains155/500.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
