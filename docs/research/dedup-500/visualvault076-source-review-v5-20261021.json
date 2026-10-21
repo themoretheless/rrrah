@@ -1,0 +1,33 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 12,
+  "files": {
+    "crates/core/src/scanner.rs": {
+      "bytes": 45194,
+      "sha256": "484c8700ed8df1e4f712f97ca09e191c9a5b7ba84269b75e76bb3da787a0a6dd",
+      "git_blob": "1308b1db8e35b2150163e57141d2820db2eb51d7",
+      "method": "Whole1249line original source/testfile read in chunks;truncated productionchunk reread255..305;Gitblobverified"
+    }
+  },
+  "new_unique_controls": 1,
+  "cumulative_unique_controls": 10,
+  "controls_script": "docs/research/dedup-500/visualvault076-controls-v5-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-controls-v5-20261021/run.log",
+  "runtime_scope": "Original full detector and actual MediaFilemodels from priorharness;single authored test asserts inputArcmetadata unchanged versus returnedhashedobjects. Scanner/cacheimplementation notexecuted.",
+  "findings": [
+    "Recursive WalkDir errors discarded;nonrecursive perentry errors/filetypeerrorsdiscarded;perfileprocessingerrorslogged;JoinSet failuresignored. ReturnsVec without completenessstatus. Staticassessment,notpermissionruntimeproof.",
+    "Scannerfind_duplicates usesfullmode. OriginalAPIcontrol confirms resultgroupshavehashes whileincomingfilesremainhashNone. Scannerthen loopsincomingfiles forcachehashupdate;startinghashNone preventsupdates. Fullscanner/cachecounter notexecuted.",
+    "Hiddenpathfilter checksallpathcomponents,notrelative root. Originaltestwithskip_hidden expects0visiblefilesin tempdir;mayencodehidden-temp-root behavior.Sourceonly,notportableexpectation.",
+    "is_media_file requiresfullPath.to_str,so nonUTF8component can exclude recognizedextension inmediaonlymode;typeorganization bypassesthis gate. process_file name/extension fall backemptystring onnonUTF8,PathBufretained.",
+    "Parallelism launchesworker_threads*10tasksperbatch,notworker_threads tasks;JoinSetcompletionorder determinesfileorder. Winnerselectionfirstmayvary. No measuredperformanceoridentityproof.",
+    "is_scanning AtomicBool reportsidleflag,notproofscancompleteorerrorfree;scan_directory itselfdoesnotestablishcomplete-stateprotocol.No cancellationchecks inprocessloops.",
+    "Originalscannerunit source testscoverempty/missingroot,recursive/types/filter/cache/count/progress/parallelcounts. Nooriginalscannertestsrun;mediafixturesarenamedrawbytes ratherthan actualdecodedimages."
+  ],
+  "remaining_scope": "83artifacts includingdatabasecache/settings/filter/progress/app/UI/integrationtests/docs/config/visualassets/lock.",
+  "limits": [
+    "35originaldetector/model testsqualifiedpreviously;not scannerruntime. No productionchanges,fullrepo count205/500unchanged.NativepHash/ASANdeferred."
+  ]
+}
