@@ -1,0 +1,95 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/App.tsx": {
+      "sha256": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+      "git_blob": "ba778238836a57ff1a20049dbc331da94951e91a",
+      "mode": "100644",
+      "lines": 9598,
+      "method": "Whole9598-line text read over v7-v12; contiguous range union verified1-9598, original pinned GitSHA verified"
+    }
+  },
+  "cumulative_whole_files_read": 32,
+  "tracked_blobs": 268,
+  "completed_partial_review": {
+    "path": "src/App.tsx",
+    "new_read_line_ranges": [
+      [
+        8071,
+        9598
+      ]
+    ],
+    "prior_range_evidence": [
+      {
+        "path": "docs/research/dedup-500/omni13-frontend-bootstrap-review-v7-20261021.json",
+        "sha256": "ae19f3caa146a3fc0aac516c407a71d425b27004cd8d3dc4458ef57775b3ee9c",
+        "ranges": [
+          [
+            1,
+            1420
+          ]
+        ]
+      },
+      {
+        "path": "docs/research/dedup-500/omni13-frontend-preview-helpers-review-v8-20261021.json",
+        "sha256": "06bcb1f8f69fa5717df502d0d465f2b8da0fdc725e9f651f587ebe26cd0ab03e",
+        "ranges": [
+          [
+            1421,
+            2730
+          ]
+        ]
+      },
+      {
+        "path": "docs/research/dedup-500/omni13-frontend-filter-state-review-v9-20261021.json",
+        "sha256": "46e83366ec547e3533516baa81d05dd8707f683092f634803640d59b491c96c2",
+        "ranges": [
+          [
+            2731,
+            4760
+          ]
+        ]
+      },
+      {
+        "path": "docs/research/dedup-500/omni13-duplicate-action-state-review-v10-20261021.json",
+        "sha256": "8dc08f6b1e152afc6b3a7f03257d83a4e0a9ee41d1221a325492c327aab1c1db",
+        "ranges": [
+          [
+            4761,
+            6120
+          ]
+        ]
+      },
+      {
+        "path": "docs/research/dedup-500/omni13-duplicate-ui-contract-review-v11-20261021.json",
+        "sha256": "6d7dd8182bb4908d0e77d3240dd8f7fe4ea7ae3a9bd1b7bf2feaf50941ea758f",
+        "ranges": [
+          [
+            6121,
+            8070
+          ]
+        ]
+      }
+    ],
+    "no_unread_gaps": true
+  },
+  "findings": [
+    "Entire frontend source now reviewed; this completes one file, not repository/runtime.",
+    "Bulk delete confirmation shows count only, uses entireselectedPathsSet; rename confirmation count uses sameSet while action intersects visibleResults. Selection not automatically cleared/intersected on query change in whole file. Hidden selections can therefore be included in delete but excluded in rename; code-path observation, no real file actions.",
+    "Bulk rename StartNumber input min0 but parseInt(value)||1 maps0 to1. Digits min1max10 is HTML hint; callback onlyparseInt||3, while padding whileloop has noexplicit upperbound. No huge input run; normal UI and invalidmanual value reachability unqualified.",
+    "Bulk rename mode tabs remain enabled while busy, though text fields/submit/cancel disabled. Running async handler captures prior render variables, so tab switch need not change in-flight naming; confusing UI possible, not proven data corruption.",
+    "Single deletion confirmation names exactpath; bulk has count only; no complete list of affected paths or keeper guarantee in reviewed modals. Explicit userconfirmation exists.",
+    "Clipboard pairingURI button sets Copied immediately after voidwriteText, without await/catch, unlike general copy helper. May show success when clipboard fails; static rejection path only.",
+    "Sync QR uses backend-provided qrSvg via innerHTML. Generator/source provenance in sync_server.rs not yet reviewed; no trust/safety defect asserted from this usage alone.",
+    "Phone transfer progress displays status and errors, but bytesSent andcompleted label are backend claims; whole transferimplementation not yet reviewed or executed.",
+    "Update download/install/relaunch requires UpdateNow action; Skip/Later guards disabled duringwork. No updates requested or installed.",
+    "QuickLook has focus/keyboard cleanup source mechanisms, but modal focus trapping and nesting accessibility remain runtime-unverified. No browser screenshots/rendered QA."
+  ],
+  "limits": [
+    "32/268 pinned whole files reviewed; others including CSS, sync module, Lite, Android, assets and lockfiles pending.",
+    "Original isolated controls v8-v10 remain limited to helpers/state. No full frontend build, React mount, Tauri/Windows/Android/runtime suite.",
+    "No production changes. Native pHash/ASAN remains deferred; all500 goal incomplete."
+  ]
+}
