@@ -1,0 +1,33 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_complete_popup_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/extension/popup/popup.ts": {
+      "sha256": "a4e07ae0d321e5f6d3fb072ceeb3d003a32ea5881cb2189844b413d19d01c168",
+      "git_blob": "7e5e2d5eba66d1f954b2ae24d5e250a523d4a412",
+      "bytes": 36130,
+      "lines": 956,
+      "method": "All956lines pinned source read in contiguous1-420,421-700,701-956ranges; no browserpopup execution."
+    }
+  },
+  "cumulative_assessed_blobs": 143,
+  "tracked_blobs": 230,
+  "findings": [
+    "Progresslisteneracceptsallruntimeprogressmessageswithoutsender.tab/runidfilter; sendToContentqueriesactivecurrentwindowtabfor eachrequest. Cross-tabprogress/reportmixing possiblebysource,notreproduced.",
+    "refreshReport sets lastReport onlywhen nonemptysummary; null/emptyresponsehidesteaserbutdoesnotclearoldlastReport/exportbutton. Newactiverunalsodoesnotclearit. Stalereportpossible; noUIruntimecontrol.",
+    "Popupreportrequestedwhen done received,contentreportdependsliveenginewhilefinallyclearsit. Reportavailabilitytimingdependent; unlikePageRunnerlocalclasscontrol, popupIPCtimingnotyetexecuted.",
+    "Popup setUIStateidle stopselapsedtimer; terminalquery usesprogressAsOf whenavailable. ThisisbetterthanpanelDate.nowrerenderbehavior; separateUIimplementationsneedseparateverification.",
+    "Pause/resume/stopbuttonhandlers updateUIstateafterawaitsend evennullresponse. Can displayrequestedstatewithoutacceptedruntransition; sourcefinding.",
+    "Startbuttondisabledsynchronouslyandcontentslotreservedearly; popuplocalbuttonguarddoesnotreplicatePageRunnerlicenseboundaryrace.",
+    "Presetasyncsavehandlersdo notdisablependingoperation; managerconcurrencycase remainspossible. Locale t escaping affects scopeview/userpathtextContent pipeline.",
+    "Popuplicenseactivation catchesstoragewritefailurebutstillsetsproActive/activewordinglocally; latercontentrevalidatesstoredtoken. No licensebypass/actionexperiment orkeyworkperformed."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 34,
+  "limits": [
+    "143/230wholeartifacts; popupsource notvisualorinteractivequalification.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
