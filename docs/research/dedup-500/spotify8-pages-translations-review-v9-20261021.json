@@ -1,0 +1,202 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "pages/callback/index.tsx": {
+      "sha256": "a7a3c22a2d71be20294d88590758a81f1f11d8ff6ca2a3e7173a4003641c6b43",
+      "git_blob": "e4999c18ffaaea4a0cfd2faf72ebabec75979786",
+      "lines": 6
+    },
+    "pages/index.tsx": {
+      "sha256": "e7f0835116a1d0f28dad2a2932a211864ff136accb403d563d0ad8e8b4f47321",
+      "git_blob": "1c402132508a1a713e01525a893196f91022a75e",
+      "lines": 17
+    },
+    "pages/de/index.tsx": {
+      "sha256": "1924319fdd4212ccc98f61c81ea2e63ba9b3a1b1306f00237931e2310721a50f",
+      "git_blob": "7090309fa55a89c2233ef9305877cdd0de2c89b5",
+      "lines": 100
+    },
+    "pages/es/index.tsx": {
+      "sha256": "51c4862573230a99a5ea0443fa83b8d4b4ff3654ae06669d946cb035f33936be",
+      "git_blob": "3b588c2813a0cd7051431d7cf779d88844f0d7e9",
+      "lines": 99
+    },
+    "pages/fr/index.tsx": {
+      "sha256": "788f7875f15d1bdecde6fd3247b881036e9f80bc47aa6e0e5aba31734696eeab",
+      "git_blob": "a961ecf1a16f5426fadf0623e62e3837cc6c9c79",
+      "lines": 100
+    },
+    "pages/id/index.tsx": {
+      "sha256": "fe953f21a7bdd62590b003eb129a9c409ba583fb459c13358aa1067884af2e09",
+      "git_blob": "3312d05fc11b3886e9f73792e7d1b97560660a66",
+      "lines": 78
+    },
+    "pages/it/index.tsx": {
+      "sha256": "8ee3134fd96b36ae8e9b051906fc37c1174e83296e13d937415ca23466d00f04",
+      "git_blob": "526df232998328f39db7be88bd154659c4428adf",
+      "lines": 102
+    },
+    "pages/nl/index.tsx": {
+      "sha256": "f88a9abfeee6a0e2ad35ca18d8e8075f0ca05042a868f00b71ecb0ac33af3727",
+      "git_blob": "f69e45caf3afbcd1529580d186eed489d1aa17be",
+      "lines": 102
+    },
+    "pages/pl/index.tsx": {
+      "sha256": "80b2a301de78536bc335e9e978217b68732d8ad201213172ce7c828ae85a7c17",
+      "git_blob": "bff03b28082d51897109f653939d8dc3622c8f36",
+      "lines": 100
+    },
+    "pages/pt/index.tsx": {
+      "sha256": "62828549848203809742277822a9e835d10a03c14fa7e5bc00a0d68bfffc0d26",
+      "git_blob": "0cca8f0697e5d87134dc9b5786716b4be698d685",
+      "lines": 99
+    },
+    "pages/sv/index.tsx": {
+      "sha256": "0dccc00f966989ff2563c79924af5085c482c4f970a5ce4ea42a3898f91c46f8",
+      "git_blob": "72cbee2aea5bad01585d6b7080c75450efc1d853",
+      "lines": 96
+    },
+    "pages/tr/index.tsx": {
+      "sha256": "e000b356a822f40e8f618ecb8fe2fb44b004560619cc7e3bdb76c3793eceb859",
+      "git_blob": "ac5f18bfec195647a09962254293b0c1acc77a38",
+      "lines": 79
+    },
+    "i18n.ts": {
+      "sha256": "7d3d302d061d9c7972652661e25bdb13e7aa53f5bea047c24679778bcfc4070d",
+      "git_blob": "8e3381730dece2b60d39749cc2333d957ed1749e",
+      "lines": 115
+    },
+    "languages.ts": {
+      "sha256": "1fa83da225a3525eaff37ed8c85975799b6dde9dec64bc34af5d3e99a5e4d6be",
+      "git_blob": "24013f8895e5302fd543d2994b96ce5dc134ffae",
+      "lines": 14
+    },
+    "components/pages/index.tsx": {
+      "sha256": "276a8f1dd4ffce148ab5d983b3f64c49812fd96c0916f90141f68718bedba6f7",
+      "git_blob": "a1f4c978a8924132e9262f21b8d86c9e916c7637",
+      "lines": 157
+    },
+    "layouts/main.tsx": {
+      "sha256": "be471bb35f866fea1aa2fed8184b1824975da8c6bcf13efb67720ba783b7b77a",
+      "git_blob": "419d694053874ab3ef8737303f6cced6d533af14",
+      "lines": 15
+    }
+  },
+  "cumulative_whole_files_read": 59,
+  "tracked_blobs": 97,
+  "method": "Sixteen whole pinned files read. Local VM evaluates original translation objects only, without React, i18next or external requests; compares keys and normalized interpolation placeholders.",
+  "findings": [
+    "Ten nonEnglish bundles each contain60 keys vs59 English keys; none missing and no normalized interpolation placeholder mismatches. All add footer.musicalyst absent from English. This does not prove translated semantics or rendered HTML correctness.",
+    "Italian process.saved.title is Spanish text. Labels say same duration while core matcher accepts duration difference below2000ms; FAQ correctly describes duration similarity.",
+    "Locale components mutate singleton i18n resources and language during component render, including English page language change. Cross-request rendering isolation and rerender behavior remain unqualified.",
+    "FAQs document first-retained behavior and within-playlist rather than cross-playlist matching. Usage-history and privacy claims are project text, not verified evidence.",
+    "Login obtainToken errors are caught, but subsequent getMe awaits outside that catch. Token-refresh listener updates API and state and is removed on cleanup. No pending-login guard is present here.",
+    "Callback invokes OAuthSendBack during component render; helper behavior awaits later source review. Layout is a presentation wrapper; metadata canonical and alternate URLs derive from singleton current language."
+  ],
+  "executed_control": {
+    "path": ".dedup-work/spotify8-20261021/translation-control.cjs",
+    "sha256": "09851548ae5b931b455d0f2d7eb4a0f419d9c143666359776bbd7ac23f8ac4c4",
+    "result": {
+      "baseline_keys": 59,
+      "results": [
+        {
+          "language": "de",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "es",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "fr",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "id",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "it",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "nl",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "pl",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "pt",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "sv",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        },
+        {
+          "language": "tr",
+          "keys": 60,
+          "missing": [],
+          "extra": [
+            "footer.musicalyst"
+          ],
+          "placeholder_mismatches": []
+        }
+      ]
+    },
+    "runtime_scope": "translation object evaluation only"
+  },
+  "limits": [
+    "59/97 tracked files reviewed;151/500 repositories complete.",
+    "No React SSR/browser render, i18next integration, upstream Jest or live API execution. pHash/ASAN deferred."
+  ]
+}
