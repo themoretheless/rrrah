@@ -1,0 +1,59 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "whole_files_read": [
+    {
+      "path": "examples/example.c",
+      "sha256": "fbb5347a03aa75b3fe3f85139ef0ba8145b1c7ee046d7cda89be2820d3a08e7f"
+    },
+    {
+      "path": "tests/spng_read_fuzzer.c",
+      "sha256": "3ed658e5b3dab357d1e9078d3cdd930fe0e4e4965755bd2ee2b06b5074a4d122"
+    },
+    {
+      "path": "tests/spng_write_fuzzer.c",
+      "sha256": "a5919dd96622cdb861454a2a2b3efb9357d685028f1cf9c66de5078ff9448951"
+    },
+    {
+      "path": "tests/fuzz_main.c",
+      "sha256": "a13f7b8f111a9e1ba1b3fa142a574da2dcfaefdaff4cbc0985e3dcc428c32783"
+    },
+    {
+      "path": "tests/framac_stubs.h",
+      "sha256": "f18f12fc731fbb206dd7182c8eaf119bee987501cb94096b302cfc624ea86ba3"
+    },
+    {
+      "path": "tests/target_clones.c",
+      "sha256": "fa25462c7300407d32e5faa22fb14195b76d0b167aa3debdb7ad620c33443c0d"
+    },
+    {
+      "path": "tests/test.cpp",
+      "sha256": "81c08db862c65d410d01e975d59fd4e66272f0c4473d36d5057495cb6ef9a0e7"
+    },
+    {
+      "path": "examples/meson.build",
+      "sha256": "b7b43c4f336b9cbc1dccea1d4ccb348006cd33d9237e11fbd3768336b19de384"
+    },
+    {
+      "path": "tests/misc/meson.build",
+      "sha256": "a020856ccfd3e615a3ad218b61738872a48e567805025a0d206eab13a203a865"
+    }
+  ],
+  "findings": [
+    "Example uses progressive row-info and64MiB chunk limit, disables CRC and does not assert independent pixel output. Some early errors leave ret0; file is not fclose-d. Source observations, not new execution.",
+    "Read fuzzer selects flags/format and input mode from trailing4bytes, sets output80MB and metadata limits. It ignores many getter statuses and returns1 for some invariants. No fuzz campaign run inferred from source.",
+    "Write fuzzer uses native-ABI memcpy structs and casts, compression1 and80MB input cap; not portable encoded fixture format or reference-image oracle.",
+    "Standalone fuzz_main discards LLVMFuzzerTestOneInput return and exits0 even on input/open/read failures, so successful standalone exit is insufficient proof that invariants passed.",
+    "Frama-C stubs fake zlib/CRC behavior; crc32 returns crc+len. Static stub execution is not real decompression/checksum qualification.",
+    "C++ test prints an error for30zero bytes and returns0; target_clones test checks compiler support, not image correctness.",
+    "misc registry identifies unknown.png and icc_profile.png, not yet viewed/run as that registry. No new build/test during resource coordination."
+  ],
+  "remaining": [
+    "Remaining root/config/CI/wrap files, regression registry/dictionary/ossfuzz script",
+    "Individual image and externalREADMEvisual review",
+    "Other three codec gitlinks"
+  ],
+  "full_review_count": 247
+}
