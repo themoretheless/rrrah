@@ -1,0 +1,39 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/lib/scan-results.test.ts": {
+      "sha256": "d93582813fbe57664d0b26142de2af03e3404481f286004af8a61d6213d79c81",
+      "git_blob": "81155f8835b1506be03e336c27b99178e6474b5b",
+      "bytes": 1575,
+      "lines": 56,
+      "declared_it_calls": 5,
+      "method": "Whole source read; scan-log test ranges 1-210 and 211-301."
+    },
+    "tests/lib/scan-log.test.ts": {
+      "sha256": "64f8a5ebd2cb96ae02e32777ff92703897c37f30f00c1b23d9a76bc163cefee6",
+      "git_blob": "0e56f181270d7e57ae8e3b579a5eac45e72e6134",
+      "bytes": 10501,
+      "lines": 301,
+      "declared_it_calls": 16,
+      "method": "Whole source read; scan-log test ranges 1-210 and 211-301."
+    }
+  },
+  "cumulative_whole_files_read": 18,
+  "tracked_blobs": 84,
+  "findings": [
+    "scan-results tests explicitly accept absent stored email, absent current email and both absent. Unknown-account acceptance is intentional compatibility policy in upstream tests, not a contradiction with its unit contract. It still does not establish account provenance.",
+    "Logger tests cover active write, finalize complete/error/no-start, updateInfo, phase time, stale recovery, fifty-entry rotation and stable estimates. No overlapping start/finalize or cross-tab storage race scenario in this file.",
+    "Storage mock retains object references via Object.assign rather than Chrome structured serialization. Some mutation/persistence ordering behavior therefore differs from actual browser storage; this does not itself prove a test failure.",
+    "Stale recovery checks status and count, not duration semantics or idempotence/concurrent new scan removal.",
+    "Stability tests use increasing performance.now schedule and cover convergence, minimum progress, once-per-phase, phase transition and zero total. They omit frozen clock, invalid ratios and zero elapsed estimate scenario reproduced separately.",
+    "Phase-transition test checks callback count and phase identity but does not assert the numeric estimate for the new phase; it does not qualify real scan timing."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Both upstream test files read, not executed.",
+    "Earlier custom logger controls are separate synthetic evidence, not a Vitest suite pass.",
+    "18/84 complete tracked blobs reviewed; no production code changes."
+  ]
+}
