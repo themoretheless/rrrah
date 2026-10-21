@@ -1324,3 +1324,52 @@ fn stale_small_file_observations_reject_rewrite_and_disappearance() {
         }
     }
 }
+
+#[test]
+fn replacing_a_duplicate_with_a_hardlink_invalidates_its_old_observation() {
+    use rrrah_dedup::exact::{ContentSnapshot, SnapshotError};
+    for length in [1, 4096, 65_537] {
+        let root = tempfile::tempdir().unwrap();
+        let a = root.path().join("a");
+        let b = root.path().join("b");
+        let c = root.path().join("c");
+        let retained = root.path().join("retained-old-b");
+        for path in [&a, &b, &c] {
+            fs::write(path, vec![7; length]).unwrap();
+        }
+        let modified = fs::metadata(&a).unwrap().modified().unwrap();
+        for path in [&b, &c] {
+            fs::File::options()
+                .write(true)
+                .open(path)
+                .unwrap()
+                .set_times(fs::FileTimes::new().set_modified(modified))
+                .unwrap();
+        }
+        let before = ContentSnapshot::read(&b, 128 * 1024, || false).unwrap();
+        let roots = [a.clone(), b.clone(), c.clone()];
+        let initial = scan(&roots, &Options::default(), || false);
+        assert!(initial.complete(), "{length}: {:?}", initial.issues);
+        assert_eq!(initial.groups[0].paths.len(), 3);
+
+        // Keep the old inode alive so the replacement cannot reuse its identity.
+        fs::rename(&b, &retained).unwrap();
+        fs::hard_link(&a, &b).unwrap();
+        assert_eq!(fs::metadata(&b).unwrap().modified().unwrap(), modified);
+        assert_eq!(fs::read(&retained).unwrap(), fs::read(&b).unwrap());
+        assert!(matches!(before.verify(|| false), Err(SnapshotError::Changed)));
+        ContentSnapshot::read(&b, 128 * 1024, || false)
+            .unwrap()
+            .verify(|| false)
+            .unwrap();
+
+        let after = scan(&roots, &Options::default(), || false);
+        assert!(after.complete(), "{length}: {:?}", after.issues);
+        assert_eq!(after.files_observed, 2);
+        assert_eq!(after.aliases.len(), 1);
+        assert_eq!(after.aliases[0].paths, vec![a, b]);
+        assert_eq!(after.groups.len(), 1);
+        assert_eq!(after.groups[0].paths.len(), 2);
+        assert!(after.groups[0].paths.contains(&c));
+    }
+}

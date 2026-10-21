@@ -1,0 +1,31 @@
+{
+  "status": "validated_local_regression",
+  "source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "source_sha256": "67a8ed744944a64b695a673764dd4dfb6a8414bb3ca96c15eb2e67324419a1d7",
+  "test": "replacing_a_duplicate_with_a_hardlink_invalidates_its_old_observation",
+  "cases": 3,
+  "lengths": [
+    1,
+    4096,
+    65537
+  ],
+  "invariants": [
+    "Initial three independent equal files form one3member group.",
+    "Replaceb with hardlinktoa while retaining oldb inode elsewhere, preserve bytes/mtime. Old ContentSnapshot rejectsChanged.",
+    "Fresh snapshot verifies. Rescan explicit original roots yields2physical files,onealiaspair[a,b],one2member duplicate group containingc."
+  ],
+  "validation": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_files --locked",
+    "passed": 36,
+    "failed": 0,
+    "ignored": 0,
+    "format": "rustfmt +1.98.1 --edition2024 --check passed"
+  },
+  "log": "docs/research/dedup-500/local-hardlink-replacement-freshness-20261021.log",
+  "motivation": "dupehunter295 stale scan-to-action observations: independently verify local hardlink replacement identity and rescan alias accounting.",
+  "limits": [
+    "Regression test only; no production behavior change.",
+    "No deletion/hardlink action API or atomic filesystem snapshot claim. Verification cannot prevent changes after its final check.",
+    "All500review and complete case coverage remain unfinished;nativepHash/ASAN deferred."
+  ]
+}
