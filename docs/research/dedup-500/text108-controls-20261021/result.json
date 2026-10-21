@@ -1,0 +1,57 @@
+{
+  "source_sha256": "4e12833d851a376f073a2034524d94611305cba35272aae15103ec6bfd928039",
+  "method": "Original clean_utf8 function brace-extracted unchanged, compiled AppleC++17. No pybind11, Abseil, Faiss, xxhash, OpenMP, pHash or ASAN execution. Python strict UTF8 decoder used as independent validity oracle.",
+  "cases": [
+    {
+      "input_hex": "d09fd180d0b8d0b2d0b5d182f09f9982",
+      "strict_utf8_valid": true,
+      "output_hex": "d09fd180d0b8d0b2d0b5d182f09f9982",
+      "unchanged": true
+    },
+    {
+      "input_hex": "4153434949",
+      "strict_utf8_valid": true,
+      "output_hex": "4153434949",
+      "unchanged": true
+    },
+    {
+      "input_hex": "c0af",
+      "strict_utf8_valid": false,
+      "output_hex": "c0af",
+      "unchanged": true
+    },
+    {
+      "input_hex": "eda080",
+      "strict_utf8_valid": false,
+      "output_hex": "eda080",
+      "unchanged": true
+    },
+    {
+      "input_hex": "f4908080",
+      "strict_utf8_valid": false,
+      "output_hex": "f4908080",
+      "unchanged": true
+    },
+    {
+      "input_hex": "f5808080",
+      "strict_utf8_valid": false,
+      "output_hex": "f5808080",
+      "unchanged": true
+    },
+    {
+      "input_hex": "ff41",
+      "strict_utf8_valid": false,
+      "output_hex": "41",
+      "unchanged": false
+    },
+    {
+      "input_hex": "41",
+      "strict_utf8_valid": true,
+      "output_hex": "41",
+      "unchanged": true
+    }
+  ],
+  "invalid_sequences_retained_unchanged": 4,
+  "distinct_input_bytes_collapse": true,
+  "limits": "UTF8 helper only; no claim that Python-str boundary can supply these invalid sequences to full extension. Native string helper contract and internal cleaning behavior controlled."
+}

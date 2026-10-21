@@ -1,0 +1,33 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "whole_repo_complete": false,
+  "scope": "Whole README.md,.gitmodules,CMakeLists.txt,setup.py,requirements.txt,src/dedup_cpp_core/__init__.py,LICENSE read. dedup_cpp/dedup.cpp selected lines60-250,390-840 read; not whole implementation. All10tracked blobs GitSHA1verified, download not review.",
+  "runtime_controls": "docs/research/dedup-500/text108-controls-20261021/result.json",
+  "findings": [
+    "Pipeline CDC removes globally repeated chunk hashes before near-document clustering, reconstructing potentially shortened documents; this is dataset content transformation, not exact-file duplicate discovery.",
+    "Global seen set keyed only by64-bitXXH3 without byte equality confirmation. Colliding distinct chunks would be dropped; no collision injection or full runtime performed.",
+    "Original clean_utf8 function compiled unchanged,8cases controlled. Four strict-invalid sequences retained unchanged: overlongC0AF,surrogateEDA080,out-of-rangeF4908080,F5808080. FF41 becomes41, aliasing distinct inputA. UTF8 helper only; Pythonstrbinding may reject invalid bytes earlier, so no end-to-end binding reachability claim.",
+    "Faiss range_search receives hamming_threshold directly, followed by UnionFind connected components and keep-smallest-ID. Endpoint closeness to representative not rechecked. Radius inclusivity and index recall require externalFaiss/native runtime verification, not inferred here.",
+    "IndexBinaryIVF nprobe capped16, hash index fixed64 hashbits; no calibrated all-pair recall gate. Source-only qualification gap, no Faiss execution.",
+    "find_duplicates_cpp copies simhash_bits/8bytes from supplied signature vector without validating its length. Parameters/signature budgets not validated in inspected functions. No invalid-memory control executed.",
+    "process_texts_for_signatures_cpp receives min_length_dedup but does not use it in inspected body; zero-vector rejected while all-one empty-token signature handling not yet reviewed.",
+    "CMake adds native Abseil gitlink and hardrequiresOpenMP/Faiss; tries-mavx2 then enables-march=native, no portable binary target contract.",
+    "setup.py rewrites tracked__init__.py and importsclassic skbuild, while README claims scikit-build-core; no pyproject in trackedtree. Requirements pinbothfaiss-cpu1.12andfaiss-gpu1.7.2; installation/runtime conflict not executed.",
+    "README480s/1GB and almost-linear scaling lack trackedbenchmark harness/rawresults inspected so far; not accepted as performance qualification.",
+    "MIT2025conanhujinming wholly read; bundledxxhashlicense/source and Abseildependency remain unread, no code copied."
+  ],
+  "submodule_remaining": {
+    "path": "third_party/abseil-cpp",
+    "commit": "f363711b4077f3c4558f17c74e5941c8e71f15c5",
+    "read": false
+  },
+  "remaining": [
+    "dedup_cpp/dedup.cpp1-59,251-389,841-end",
+    "dedup_cpp/xxhash.h whole authored/vendor header",
+    "dedup_toolkit.py whole module",
+    "Abseil pinned submodule and applicable licenses/runtime dependencies"
+  ],
+  "adoption": "No production modification. Preserve separate chunk-key/candidate identity and UTF8 validity contracts; no automatic content cleanup copied.",
+  "native_phash_asan": "Explicitly deferred; isolated UTF8helper is unrelated to pHash."
+}
