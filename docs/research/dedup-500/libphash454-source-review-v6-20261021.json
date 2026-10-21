@@ -1,0 +1,83 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Nineadditional build/config/testtexts wholly read. All remaining nonvendor text downloaded but download is not reading; unreviewed tests remain.",
+  "manifest": [
+    {
+      "path": "Makefile",
+      "sha256": "f465bc9a7a7da7fb70a8a55d05cd9d7a9d6f7a5730609e6c1a266b9ab05e3c8e",
+      "review": "whole text read"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "b2baf4b8400c1558c90394f892de5e544702f99c80c603981e931b8a65a7f83b",
+      "review": "whole text read"
+    },
+    {
+      "path": ".clang-format",
+      "sha256": "0fde8d22521cf8970431d47e3aa803231c4c9b5dacf99a0e9086ed359d9cc5bd",
+      "review": "whole text read"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "d56c7520e1be7766d248e0d8d0dc3f1a447268159e59f738ee5b61f3a83b3b38",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_stability.c",
+      "sha256": "6a80118943ff463ff6a33b21855c8acb2b31c6a4fc0376fd43fbb4c91f8cc61c",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_loader.c",
+      "sha256": "633cc185eae7a336f1b8e951d755e4f6c6e65a668b5c7d36d758e5ff6e42755a",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_core.c",
+      "sha256": "02999dd4471be95028e45c07f89198960e4f4085b757fc505f1106fa58f0c406",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_hashes.c",
+      "sha256": "34fe5717b32868c18bce48be50402a7a6b0eba8401acaf1faa90af581930426c",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_image_hashes.c",
+      "sha256": "c6c206467d20d515ce3cbf3618e25617fa936d979f36c04221109ba4ab209443",
+      "review": "whole text read"
+    }
+  ],
+  "runtime": {
+    "source": "docs/research/dedup-500/libphash454-controls-20261021/mock-build-control.c",
+    "method": "Original core.c andloader.c compiledunchanged twice withbundledstb, once-DPH_TESTING,oncewithout. OnlyPH_TESTING differs; no fake source, no pixelread fromuninitializedmockbuffer.",
+    "test_macro_stdout": "invalid_four_byte_input_result=0 loaded=1",
+    "production_macro_stdout": "invalid_four_byte_input_result=-2 loaded=0",
+    "exit_codes": [
+      0,
+      0
+    ],
+    "limits": [
+      "Explicitminimalcompiler commands, not completeMakefile/CMakebuilds.",
+      "No publishedarchive/package examined.",
+      "No sanitizer or nativepHash.org runtime."
+    ]
+  },
+  "findings": [
+    "Makefileunconditionallyadds-DPH_TESTING to sharedCFLAGS usedforlibphash.a andtests. CMakePHASH_BUILD_TESTS defaultsON andaddsPH_TESTING tophash target. Test-enabledlibrary thereforeacceptsDEADmarker viamockdecoder; actualvariantcontrolconfirms behavioral difference. Do not countmocksuccess asvalidimagecodec evidence.",
+    "Mockbackendignoresreq_comp andreturnsmalloc3uninitializedbytes whileclaiming1x1RGB. Control didnotread thosepixels. No downstreamhash or memoryerrorclaim.",
+    "test_stability permitsHammingdistance<=20of64betweenRGBanddecodergray. Passingit doesnotprovebitexactbackendcompatibility; document claimofbitexactornearexactmustretainactualthreshold.",
+    "test_image_hashes accepts<=10bitdistance forphoto/photo_copy, ratherthanassertingexacthash equality. Fixturebytesnotyetinspected, so no identicalfileassumption fromnames.",
+    "Loaderoriginaltests validatebasic dimensions/channel/loadingerrors; failureafterprevioussuccessfulload andgraycachebranchstillnotcoveredbythese assertions. Previouslyaddedexternalcontrol demonstratesgap.",
+    "CIdeclaresbuildandctest butretrievedworkflowtextisnotanexecutedresult. PRbenchmarkstepinvokessmoke; benchmarkimplementationremainsunread, notperformancequalification.",
+    "Development/debug/coveragecommandswerereadonly; no cleanup,sanitizer,formatrewrite,externalmessage orpackagepublish executed."
+  ],
+  "remaining": [
+    "Remainingupstreamtestfilesincludingbenchmark/hashlogic/primitives.",
+    "Alltestdata visualinspection/corruptfixtureanalysis.",
+    "Vendorheaders andcodecgitlinks source/licenseaudit.",
+    "Fullreviewcount247/500unchanged; universalcoverage unproven."
+  ]
+}
