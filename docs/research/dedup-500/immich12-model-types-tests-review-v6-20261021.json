@@ -1,0 +1,71 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/mod/models/base.py": {
+      "sha256": "428fcd22b6cb29ca5382111cf03b5e34cc76105449eb0e1508814f92a43d747b",
+      "git_blob": "a9a93d03fc1f9cb103228f4992866d171dbe066b",
+      "lines": 330,
+      "mode": "100644"
+    },
+    "tests/test_fetchExInfo.py": {
+      "sha256": "d6bb4760bc3ff6794c6447c84428d4f2610a00363c183a1f24825b431ae33fab",
+      "git_blob": "f770d599e833eb10550e552baa39be1f52973040",
+      "lines": 58,
+      "mode": "100644"
+    },
+    "tests/model.py": {
+      "sha256": "8e9ec3c4d9b903ced8d83489aadb154352f375c20202b801c232ddadd29d6ca9",
+      "git_blob": "986105e95651bb1c9e7cde44603ecf1e89adbeee",
+      "lines": 1156,
+      "mode": "100644"
+    },
+    "tests/model_speed.py": {
+      "sha256": "385d9abe6565412af989da07bf4fa5166dd0e96cfbe819caa7e65a05c5bd7e97",
+      "git_blob": "5a86ec1be682d9ff61c4603831fc07e0de31dc37",
+      "lines": 485,
+      "mode": "100644"
+    }
+  },
+  "cumulative_whole_files_read": 60,
+  "tracked_blobs": 125,
+  "method": "Four complete files read; model.py initial output truncated in middle, missing section reread lines500-720 before credit. Original AST model classes and25 original TestBaseDictModel methods run with original stdlib/dataclasses/type reflection and explicit logging/UI/config adapters. Three live DB methods excluded, not passed.",
+  "executed_controls": {
+    "false_string_bool": true,
+    "invalid_integer_retained": "bad-int",
+    "malformed_exif_retained": "not-json",
+    "db_basic_type_retained": "123",
+    "original_model_test_methods": {
+      "run": 25,
+      "failures": 0,
+      "errors": 0,
+      "excluded_live_db_methods": [
+        "test_db_assets_exif_conversion",
+        "test_db_simInfos_functionality",
+        "test_specific_asset_exif_conversion"
+      ],
+      "log": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.002s\n\nOK\n"
+    }
+  },
+  "control_source": "import ast,types,sys,json,unittest,io,typing,dataclasses,time,uuid,inspect\nfrom pathlib import Path\nfrom datetime import datetime\nfrom enum import Enum\nfrom types import SimpleNamespace as N\nB=Path('.dedup-work/immich12-20261021');mod=types.ModuleType('owned_immich_model_control');sys.modules[mod.__name__]=mod;E=mod.__dict__;E.update(vars(typing));E.update(vars(dataclasses));E.update(json=json,inspect=inspect,datetime=datetime,Enum=Enum,time=time,uuid=uuid,lg=N(**{k:lambda *a,**kw:None for k in ['info','warn','warning','error','exception']}),co=N(tit=str,timeId=lambda:str(uuid.uuid4())),htm=N(Br=lambda:'<br>'),ks=N(db=N(thumbnail='thumbnail')))\nE['__name__']='owned_immich_model_control'\nE['log']=N(get=lambda name:E['lg']);E['unittest']=unittest\ndef load(file,only=None,exclude=()):\n t=ast.parse((B/file).read_text());t.body=[n for n in t.body if isinstance(n,(ast.ClassDef,ast.FunctionDef,ast.Assign)) and (only is None or getattr(n,'name',None) in only)]\n for n in t.body:\n  if isinstance(n,ast.ClassDef):n.body=[f for f in n.body if not(isinstance(f,ast.FunctionDef) and f.name in exclude)]\n exec(compile(t,str(B/file),'exec'),E)\nload('src--mod--models--base.py');load('src--mod--models--data.py');load('src--mod--models--core.py');load('src--mod--models--mods.py');load('src--mod--models--page.py');load('tests--tester.py');E['unittest']=unittest\n# type namespace names remain original types; these controls use module globals for get_type_hints.\nBase=E['BaseDictModel'];Sim=E['SimInfo'];Asset=E['Asset'];out={}\nout['false_string_bool']=Sim.fromDic({'isSelf':'false'}).isSelf;assert out['false_string_bool'] is True\nout['invalid_integer_retained']=Asset.fromDic({'autoId':'bad-int'}).autoId;assert out['invalid_integer_retained']=='bad-int'\nout['malformed_exif_retained']=Asset.fromDic({'jsonExif':'not-json'}).jsonExif;assert out['malformed_exif_retained']=='not-json'\nout['db_basic_type_retained']=Asset.fromDB(N(description=[('autoId',)]),('123',)).autoId;assert out['db_basic_type_retained']=='123'\nexcluded=['test_db_assets_exif_conversion','test_db_simInfos_functionality','test_specific_asset_exif_conversion']\nload('tests--model.py',{'MockCursor','TestBaseDictModel'},excluded)\nstream=io.StringIO();result=unittest.TextTestRunner(stream=stream).run(unittest.defaultTestLoader.loadTestsFromTestCase(E['TestBaseDictModel']));out['original_model_test_methods']={'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'excluded_live_db_methods':excluded,'log':stream.getvalue()};assert result.wasSuccessful(),stream.getvalue()\n(B/'controls-v6-result.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n",
+  "findings": [
+    "Original SimInfo.fromDic converts isSelf string false into boolean true via bool(nonempty string); a non-self hit can become self when wrong-type serialized input reaches model boundary. Reproduced boundary only, not server input reachability.",
+    "Original integer conversion failure is swallowed and retains bad-int as Asset.autoId. Malformed JSON EXIF remains not-json string rather than raising. Downstream code expects model attributes; successful construction does not prove valid schema.",
+    "Original fromDB skips basic scalar conversion in fast path: string 123 remains string for integer autoId. Real SQLite INTEGER rows usually give int; this control injects wrong-type row to establish boundary behavior.",
+    "25 original model methods pass with explicit module namespace and adapters; include nested models/list numeric conversions/JSON/enum/error cases. They do not cover false-string bool, invalid scalar retention or malformed nested JSON boundaries.",
+    "Three DB methods in original tests catch all Exception and turn failure into skip; assertions also raise Exception. Such skips cannot prove DB schema/EXIF/relation correctness. No DB method run here.",
+    "test_fetchExInfo uses fixed asset ID and catches all failures, printing failure without rethrow; missing batch asset merely prints. Script exit success does not imply successful metadata retrieval. Source finding, script unexecuted.",
+    "TestAutoDbField class whole source read, including nested defaults/string conversion/proxy persistence checks; this class not executed this batch. Prior failing-persistence/default-sharing controls remain separate.",
+    "model_speed.py setup_simple_test_db creates12 columns but Insert Values has13 placeholders for12 supplied values; run_all_tests first calls nonexistent log.setLog from reviewed util/log.py. Source defects, benchmark unexecuted.",
+    "Benchmark always runs dict path before model path, compares dictionaries vs richer typed models without output-parity assertions, uses time.time and means; no controlled alternating performance evidence. No speedup accepted.",
+    "Json converts literal string null values to None; enum unknown strings and unrecognized field shapes remain permissive. Scalar/list semantics require explicit downstream qualification."
+  ],
+  "limits": [
+    "60/125 whole tracked blobs reviewed;65 remain.",
+    "Isolated model tests are not full upstream suite or full application/db/browser/model workflow.",
+    "Early harness failures were adapter issues (missing logger and module namespace), fixed before passing run; not upstream defects.",
+    "No persistent settings, user files, DB credentials, model weights, network or production code edits used.",
+    "Native pHash/ASAN remains user-deferred; full500/all-case goal incomplete."
+  ]
+}
