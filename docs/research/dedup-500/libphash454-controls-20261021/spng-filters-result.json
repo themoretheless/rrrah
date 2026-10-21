@@ -1,0 +1,19 @@
+{
+  "rows": [
+    {
+      "backend": "arm64",
+      "cases": 540,
+      "mismatches": 0
+    },
+    {
+      "backend": "scalar",
+      "cases": 540,
+      "mismatches": 0
+    }
+  ],
+  "method": "Independent Python PNG filter encoder including Paeth tie order, original static defilter called through padded observer. Same inputs both backends.",
+  "limits": [
+    "Valid small rows only; observer adds 64 bytes of padding, so not a buffer boundary safety test.",
+    "Not full PNG parser, all SIMD targets or performance qualification."
+  ]
+}

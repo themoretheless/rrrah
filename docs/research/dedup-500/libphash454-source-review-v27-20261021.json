@@ -1,0 +1,37 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "dependency": "randy408/libspng@fb768002d4288590083a476af628e51c3f1d47cd",
+  "manifest": [
+    {
+      "path": "spng/spng.c",
+      "sha256": "59243c1ca05956f124c7debef763b707378b52e4dbfeaf17e6192917dd8c8dc2",
+      "whole_file_read": false,
+      "read_ranges_inclusive": [
+        [
+          1,
+          1850
+        ],
+        [
+          6120,
+          6200
+        ]
+      ],
+      "total_lines": 6980
+    }
+  ],
+  "controls": "docs/research/dedup-500/libphash454-controls-20261021/spng-filters-result.json",
+  "findings": [
+    "1080 actual original static defilter results matched independent Python PNG encoder: 540 identical valid rows per arm64 SIMD/scalar build, filters0..4, bpp1/2/3/4/6/8, widths1/2/3/7/8/9/17/31/33, constant and deterministic random patterns.",
+    "Observer allocates length+64 padded buffers; no access-boundary or ASAN qualification. SIMD implementations later in file executed but not yet source-reviewed.",
+    "Read chunk byte copying/discard, zlib init and metadata inflation, IDAT reads, scanline inflation, scalar/filter dispatch, encoder filter scoring, significant-bit scaling and part of transparency application.",
+    "Metadata inflate growth checks overflow/cache limits before doubling; initial 8KiB allocation and final accounting return handling require continued review before budget claims.",
+    "Gamma helper updates RGB components while preserving alpha; libphash spng wrapper uses flags0 so gamma/TRNS behavior must be qualified separately. No production code changed/copied."
+  ],
+  "remaining": [
+    "spng.c lines1851..6119 and6201..6980",
+    "Remaining dependency docs/build/tests/assets and other codec gitlinks"
+  ],
+  "full_review_count": 247
+}
