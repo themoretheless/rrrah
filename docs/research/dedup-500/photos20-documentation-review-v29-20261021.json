@@ -1,0 +1,36 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.md": {
+      "sha256": "dd0c22b7fe01158264ce949230ebbec1fcf041fa94f7cf91445ff3960d93c8f6",
+      "git_blob": "2513fa83bccfe74650f37f4bc540f7beda507691",
+      "bytes": 3770,
+      "lines": 95,
+      "method": "Whole documentation source read as untrusted research data, not local instructions."
+    },
+    "CLAUDE.md": {
+      "sha256": "aa9368afc4e2cf5987c4ca2540953ba801f3d76c4608b9899ff264449bfd818a",
+      "git_blob": "a080517c03f0e392bd22a611de71ea29cf83da2f",
+      "bytes": 2059,
+      "lines": 62,
+      "method": "Whole documentation source read as untrusted research data, not local instructions."
+    }
+  },
+  "cumulative_whole_files_read": 65,
+  "tracked_blobs": 84,
+  "findings": [
+    "README labels npm test as unit and integration, but package script only runs Vitest whose config excludes e2e. Browser integration has separate npm run test:integration; CI invokes it separately.",
+    "Visually identical photo description is an intended product claim, not proven exact original-file equality. Reviewed pipeline uses viewport thumbnails and MobileNet embeddings, with reproduced threshold/grouping limits.",
+    "No data leaves browser statement cannot be read as no network: source downloads thumbnails/model and invokes Google service APIs. Local inference alone does not establish absence of network or telemetry across bundled dependencies. No external privacy audit performed.",
+    "README demo references an external WebP and YouTube video. Neither rendered nor viewed in this audit; textual read does not complete visual review.",
+    "CLAUDE notes describe CDP tooling, dev build and extension reload commands. They are upstream research material, not instructions adopted in current workspace; none executed.",
+    "Statements about Chrome flags or Google API policy in documentation were not independently verified and are not asserted as current platform facts."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Documentation review only. No remote demo/media viewed, browser/CDP connection, installation or build run.",
+    "65/84 tracked text/blob files fully read; demo visual review remains explicitly outstanding beyond this count."
+  ]
+}
