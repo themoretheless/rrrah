@@ -1,0 +1,59 @@
+{
+  "repository": "sahib/rmlint",
+  "commit": "3a44e632b1b902effb6349a5e7e9378b920bd0a5",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 288,
+  "tracked_blobs": 289,
+  "partial_source_read": {
+    "lib/checksums/xxhash/xxhash.h": {
+      "sha256": "17973c0dc49d9854ca26caa191f0e12f7a424b68858d9a78de3860d959d85e4b",
+      "git_blob": "78fc2e8dbf6db809650fbb59762c5566a71677ca",
+      "total_lines": 7238,
+      "new_read_ranges": [
+        [
+          2201,
+          2800
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          2800
+        ]
+      ],
+      "unread_ranges": [
+        [
+          2801,
+          7238
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Untruncated2201..2800 source reading plus actual local clang preprocessor macro dump with XXH_IMPLEMENTATION and no optimization flag. Preprocessing full file is not credited as reading unread implementation.",
+  "findings": [
+    "Actual default-selection code differs from broad memcpy-default documentation: GNU-compatible compilers generally select memory-access1 unless excluded older ARM condition. Method1 dereferences aligned1 typedef; method2 direct-casts; fallback memcpy. Configuration must be inspected before portability conclusions.",
+    "Local clang preprocessing confirms XXH_FORCE_MEMORY_ACCESS=1, XXH_FORCE_ALIGN_CHECK=0, XXH_SIZE_OPT=0, XXH_DEBUGLEVEL=0, XXH_NO_INLINE_HINTS=1 and XXH_VECTOR=XXH_NEON for this no-optimization translation unit. This is not a production-build configuration measurement.",
+    "XXH_NO_STDLIB makes allocation helper always returnNULL while free becomes no-op; it does not eliminate memcpy dependency. State allocation failure is expected under that mode.",
+    "Debuglevel0 maps assertions to assumptions/unreachable where supported; debuglevel>=1 uses assert which NDEBUG may disable. Invalid internal preconditions cannot be treated as cleanly returned errors just because assertion text exists.",
+    "Alignment checks default off on x86/aarch64 and size-optimized builds. Endian macro uses compiler target definitions or union-byte fallback; force overrides and cross-target behavior require separate tests.",
+    "Rotate fallback macros require nonzero count below word width and can evaluate arguments repeatedly. Compiler guards constrain optimization, not thread synchronization or runtime correctness."
+  ],
+  "executed_control": {
+    "kind": "clang preprocessing",
+    "exit_code": 0,
+    "defines": {
+      "XXH_FORCE_MEMORY_ACCESS": "1",
+      "XXH_FORCE_ALIGN_CHECK": "0",
+      "XXH_SIZE_OPT": "0",
+      "XXH_DEBUGLEVEL": "0",
+      "XXH_NO_INLINE_HINTS": "1",
+      "XXH_VECTOR": "XXH_NEON"
+    }
+  },
+  "limits": [
+    "2800/7238 lines read;288/289 whole files and150/500 repositories unchanged.",
+    "Preprocessing does not establish runtime hashing parity, successful linking, memory safety or speed. pHash/ASAN remains deferred."
+  ]
+}
