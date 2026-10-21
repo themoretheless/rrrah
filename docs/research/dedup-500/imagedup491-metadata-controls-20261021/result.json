@@ -1,0 +1,120 @@
+{
+  "lock_records": 121,
+  "lock_modules": 60,
+  "lock_scope": "Every line structurally parsed, SHA256-sized h1 digest decoded; not independent dependency source or checksum-server audit.",
+  "dashboard_panels": 19,
+  "dashboard_node_types": {
+    "dict": 322,
+    "list": 97,
+    "int": 167,
+    "str": 572,
+    "bool": 141,
+    "NoneType": 10,
+    "float": 2
+  },
+  "dashboard_leaf_count": 892,
+  "dashboard_queries": [
+    {
+      "panel": "Percent Complete",
+      "expression": "(imagedup_comparisons_completed/imagedup_total_comparisons)*100"
+    },
+    {
+      "panel": "Time Remaining",
+      "expression": "(imagedup_total_comparisons-imagedup_comparisons_completed)/rate(imagedup_pair_total[5m])"
+    },
+    {
+      "panel": "Diff Time",
+      "expression": "imagedup_diff_time_nano"
+    },
+    {
+      "panel": "Diff Rate",
+      "expression": "rate(imagedup_pair_total[5m])"
+    },
+    {
+      "panel": "Images in Cache",
+      "expression": "imagedup_image_cache_num_images"
+    },
+    {
+      "panel": "Size of Image Cache",
+      "expression": "imagedup_image_cache_size_bytes"
+    },
+    {
+      "panel": "Image Cache Hits/Miss Rate",
+      "expression": "rate(imagedup_image_hash_cache_hits[5m])"
+    },
+    {
+      "panel": "Image Cache Hits/Miss Rate",
+      "expression": "rate(imagedup_image_hash_cache_misses[5m])"
+    },
+    {
+      "panel": "File dedup Map Entries",
+      "expression": "imagedup_file_map_entries{job=\"imagedup\"}"
+    },
+    {
+      "panel": "File dedup Map Entries",
+      "expression": "imagedup_total_comparisons{job=\"imagedup\"}"
+    },
+    {
+      "panel": "File dedup Map Entries",
+      "expression": "imagedup_pair_total{job=\"imagedup\"}"
+    },
+    {
+      "panel": "File Map Hits/Misses",
+      "expression": "rate(imagedup_file_map_hits{job=\"imagedup\"}[1m])"
+    },
+    {
+      "panel": "File Map Hits/Misses",
+      "expression": "rate(imagedup_file_map_misses{job=\"imagedup\"}[1m])"
+    },
+    {
+      "panel": "File Dedup Map Size",
+      "expression": "imagedup_file_map_bytes{job=\"imagedup\"}"
+    },
+    {
+      "panel": "Heap vs Stack",
+      "expression": "go_memstats_heap_inuse_bytes{job=\"imagedup\"}"
+    },
+    {
+      "panel": "Heap vs Stack",
+      "expression": "go_memstats_stack_inuse_bytes{job=\"imagedup\"}"
+    },
+    {
+      "panel": "Heap Alloc / Free Rate",
+      "expression": "rate(go_memstats_mallocs_total{job=\"imagedup\"}[1m])"
+    },
+    {
+      "panel": "Heap Alloc / Free Rate",
+      "expression": "rate(go_memstats_frees_total{job=\"imagedup\"}[1m])"
+    },
+    {
+      "panel": "Memory Overview",
+      "expression": "process_resident_memory_bytes{job=\"imagedup\"}"
+    },
+    {
+      "panel": "Memory Overview",
+      "expression": "rate(go_memstats_alloc_bytes_total{job=\"imagedup\"}[1m])"
+    },
+    {
+      "panel": "GC Time",
+      "expression": "rate(imagedup_gc_time_nano[1m])"
+    },
+    {
+      "panel": "GoRoutines",
+      "expression": "go_goroutines{job=\"imagedup\"}"
+    },
+    {
+      "panel": "GoRoutines",
+      "expression": "go_threads{job=\"imagedup\"}"
+    },
+    {
+      "panel": "GC Timing Histogram",
+      "expression": "go_gc_duration_seconds{job=\"imagedup\"}"
+    },
+    {
+      "panel": "GC Histogram over time",
+      "expression": "go_gc_duration_seconds{job=\"imagedup\"}"
+    }
+  ],
+  "selected_instance_referenced": false,
+  "dashboard_scope": "Every JSON node traversed; all query expressions and top-level settings manually inspected; presentation leaf values structurally assessed, not a running Grafana import."
+}

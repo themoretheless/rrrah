@@ -2,9 +2,9 @@
   "index": 491,
   "repository": "kmulvey/imagedup",
   "commit": "385bd25bc2a4536f6a7374783a61b0305237e066",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference-cache-and-cancellation-limitations",
-  "finding": "Runtime confirms stale deleted-path cache, lost persisted dimensions and JPEG-only PNG rejection; remaining license/lock/dashboard review incomplete.",
+  "review_scope": "All34 pinned blobs assessed:28 whole text,4 original images visually viewed,go.sum/dashboard structurally assessed with explicit semantic limits;3 original package suites and3 authored controls executed.",
+  "decision": "reference-cache-and-cancellation-limitations-no-code-adoption",
+  "finding": "Complete pinned review. Runtime confirms stale path cache, lost dimensions and PNG rejection; retain cache/cancellation lessons, no upstream equality/deletion adoption.",
   "available_source_evidence": [
     {
       "path": "internal/app/imagedup/imagedup.go",
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "GPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Whole root GPL3 read; release metadata MIT inconsistency recorded; no production code adopted.",
   "tests_detected": 5,
   "upstream_tests_run": true,
   "tests_inventory_scope": "Three original package suites executed onGo1.26darwin/arm64; no race/CLI qualification.",
@@ -87,5 +87,8 @@
       "controls": "docs/research/dedup-500/imagedup491-cache-controls-20261021/result.json",
       "whole_repo_complete": false
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/imagedup491-complete-source-review-20261021.json"
 }
