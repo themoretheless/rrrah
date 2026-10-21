@@ -1,0 +1,44 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 88,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/ui/settings.slint": {
+      "sha256": "6f8fefe18924d0b3dcca2c43c92846fe365805223b78549ee7f20bcdc3a07990",
+      "git_blob": "414fe2fea0b0a8b7374cd44949909a4c783552d1",
+      "lines": 2647,
+      "new_read_line_ranges": [
+        [
+          1,
+          800
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          800
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read first800 Slint source lines; independently unioned prior whole-file audit paths and confirmed88 unique paths against tree. No UI renderer executed.",
+  "findings": [
+    "Behavior switches bind value then invoke shared save-settings. Previously reviewed Rust callback saves all general/font/plugin/AI fields, not only switched field. Unsaved intermediate values on other pages can therefore be persisted by unrelated toggle; no live UI fixture.",
+    "ToggleSwitch is custom Rectangle/TouchArea with click callback; no explicit keyboard/accessibility role handling in this component. Framework default behavior remains unqualified, so no definitive accessibility failure claim.",
+    "Settings window minimum720x500 and preferred900x580; sidebar fixed230 wide with fixed-height rows outside scroll view. Main content is scrollable. Small-screen behavior needs actual rendering, not source-only acceptance.",
+    "Dark settings theme is explicitly locked independently of launcher theme. This is deliberate comment/property choice, not lost theme persistence inferred from appearance.",
+    "Hotkey slot3/4 defaults contain mojibake dash string, but reviewed Rust initialization overwrites all four from saved setting. Visible corrupted default is therefore not established in normal startup.",
+    "Page navigation clears snippet error flags but does not clear snippet draft values in these callbacks. Draft preservation and actual save semantics need later page markup review.",
+    "Property declarations expose signed dimensions and callbacks but do not establish UI control ranges. Numerical bounds remain pending remaining markup; earlier malformed persisted-settings path unaffected by declaration alone.",
+    "Full remaining-file inventory includes Android source/resources, visuals/GIF, CSS, lockfiles, binary catalog, full desktop sync and this markup. Downloading or listing these is not source/visual review credit."
+  ],
+  "limits": [
+    "88/268 whole files; settings.slint1-800 of2647 partial.",
+    "No runtime tests, screenshots or production changes.",
+    "155/500 full repositories unchanged; pHash/ASAN deferred."
+  ]
+}
