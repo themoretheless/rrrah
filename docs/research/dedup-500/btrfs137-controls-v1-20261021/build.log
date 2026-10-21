@@ -1,0 +1,15 @@
+warning: methods `parent` and `to_string_lossy` are never used
+  --> docs/research/dedup-500/btrfs137-controls-v1-20261021/../../../../.dedup-work/btrfs137-20261021/src/database/recursive_path.rs:27:9
+   |
+25 | impl RecursivePath {
+   | ------------------ methods in this implementation
+26 |
+27 |     pub fn parent (
+   |            ^^^^^^
+...
+82 |     pub fn to_string_lossy (
+   |            ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted

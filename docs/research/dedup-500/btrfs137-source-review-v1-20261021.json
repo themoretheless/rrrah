@@ -1,0 +1,88 @@
+{
+  "repository": "wellbehavedsoftware/btrfs-dedupe",
+  "commit": "bf8d1a82fee2ff8635d00865acc1033707957c9e",
+  "whole_repo_complete": false,
+  "tracked_blobs": 27,
+  "cumulative_assessed_blobs": 6,
+  "new_whole_files_read": {
+    "src/operations/content_hasher.rs": {
+      "bytes": 3773,
+      "sha256": "067fdc0bd9cd106de5407e0a47b830c8e02b7d320337f75ff170ebff813c40d5",
+      "git_blob": "574a2df2368cca0ad7526c0f10a8ea61683c8d58",
+      "method": "Whole pinned source/manifest/license text read without truncation"
+    },
+    "src/database/recursive_path.rs": {
+      "bytes": 3474,
+      "sha256": "bc8a2c35a15a6ac73296633c92a13e179cfc16980767a27bec085123f22d2c5b",
+      "git_blob": "ca1fc31d092455f30d901d2e8997b70634cccf19",
+      "method": "Whole pinned source/manifest/license text read without truncation"
+    },
+    "src/database/file_database.rs": {
+      "bytes": 4794,
+      "sha256": "2929a4fd8b350328835039badc5f770be71691a3c050aeee0b8c7bbd269c80ef",
+      "git_blob": "67e29b90d1e7d25a5d7f449b394b2b2fc2d76b64",
+      "method": "Whole pinned source/manifest/license text read without truncation"
+    },
+    "src/database/file_data.rs": {
+      "bytes": 466,
+      "sha256": "bbf011bfb1899a2c2008adb94c513d760cc12c856f9c774200733b8acf861414",
+      "git_blob": "cd675939621455b8067dd384771d4d31b1f42dad",
+      "method": "Whole pinned source/manifest/license text read without truncation"
+    },
+    "Cargo.toml": {
+      "bytes": 766,
+      "sha256": "21c4209538976046f5ed4605cbe39427d46af55fbe75c75690997e8a90f4e789",
+      "git_blob": "56edd861dd88ebd60f1bdab38d5522c7ee6b0420",
+      "method": "Whole pinned source/manifest/license text read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1101,
+      "sha256": "9533e568f65fe9ebb43191873b34077d4331c490e7235c9125d51539d66d7db7",
+      "git_blob": "7ce6d73bf006ee817e39c87bf8e99f58df12d8db",
+      "method": "Whole pinned source/manifest/license text read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/btrfs137-controls-v1-20261021/paths.rs",
+    "log": "docs/research/dedup-500/btrfs137-controls-v1-20261021/run.log",
+    "passed": 4,
+    "rejected_assumption_log": "docs/research/dedup-500/btrfs137-controls-v1-20261021/rejected-set-cardinality-assumption.log",
+    "method": "Unchanged RecursivePath source module via path, rustc1.98.1edition2015; authored pure path/interning tests; no scanner/hash/Btrfs filesystem operations."
+  },
+  "findings": [
+    "Ancestor and descendant compareOrdEqualbothwaysbutEqfalse;originalmodulecontrolconfirms.",
+    "InitialharnesspredictedBTreeSetfromiteratorwouldcollapsepair;actualcardinality2rejectedthatassumption. Failed assertionretained;noclaimofruntimefilelossorcollectioncollapse.",
+    "Absolute pathroundtrip/interning, siblingsordering and explicitrelativepathrefusalpositivecontrolspass.",
+    "ContentHasher skipsnonzeroexistinghashesandemptysize, reliesonprior scannerfreshness;scannerreviewpending.",
+    "Streamhasherreads4096byteblockswithoutfinalmetadataidentitycheckinfunction;needsfullworkflowreview.",
+    "DatabaseJSONreadunwrapsnonabsolutepathadmission; malformedpathmaypanic,sourceonly."
+  ],
+  "remaining": [
+    ".gitignore",
+    "Cargo.lock",
+    "README.md",
+    "build.rs",
+    "etc/build-binary-release",
+    "etc/project-data",
+    "src/arguments.rs",
+    "src/commands/dedupe_command.rs",
+    "src/commands/mod.rs",
+    "src/commands/print_extents_command.rs",
+    "src/database/file_database_builder.rs",
+    "src/database/mod.rs",
+    "src/database/serde_types.in.rs",
+    "src/database/serde_types.rs",
+    "src/main.rs",
+    "src/misc.rs",
+    "src/operations/directory_scanner.rs",
+    "src/operations/extent_hasher.rs",
+    "src/operations/file_deduper.rs",
+    "src/operations/mod.rs",
+    "src/types.rs"
+  ],
+  "license": "RootMITfullyread;noproductioncodeadopted.",
+  "limits": [
+    "Partial6/27artifacts;fullreviewcount172/500unchanged.",
+    "No realBtrfsoperation,fullcrate/scanner/runtime/performancequalification.NativepHash/ASANdeferred."
+  ]
+}

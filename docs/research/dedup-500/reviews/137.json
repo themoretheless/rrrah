@@ -2,7 +2,7 @@
   "index": 137,
   "repository": "wellbehavedsoftware/btrfs-dedupe",
   "commit": "bf8d1a82fee2ff8635d00865acc1033707957c9e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned6/27whole source/manifest/licensefiles;four original pathmodule controls. Rejected collection-cardinality hypothesis retained; full scanner/hash/Btrfs workflow unqualified.",
   "decision": "reference",
   "finding": "Rust SHA256 content hasher and root-path scanner; Btrfs dedupe command is filesystem-specific.",
   "available_source_evidence": [
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "RootMITfullyread;noproductionsourceadopted.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -63,6 +63,11 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/btrfs137-source-review-v1-20261021.json"
     }
   ]
 }
