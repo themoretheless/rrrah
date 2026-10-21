@@ -1,0 +1,30 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/background/service-worker.test.ts": {
+      "sha256": "20a547b84842e81815dc635bb9b9788755fb735582b830d1b8f688b18f21da07",
+      "git_blob": "5ada7dbda070984ba146338a59361423d2caa7d9",
+      "bytes": 13833,
+      "lines": 402,
+      "declared_it_calls": 10,
+      "method": "Whole source read in contiguous ranges 1-240 and 241-402."
+    }
+  },
+  "cumulative_whole_files_read": 66,
+  "tracked_blobs": 84,
+  "findings": [
+    "Tests import original background module with mocked Chrome and captured listeners. They cover health success/failure, reachable-tab selection, active-tab preference, command/result routing and app-ID filter.",
+    "No gptkResultChunk dispatch appears in this file, so neither ordered nor reordered chunk completion behavior is tested here. Prior reproduced terminal-index loss remains uncovered.",
+    "Multiple GP candidates are tested, but not multiple application tabs sharing one URL/GP mapping, account switching, request collision or sender/result mismatch.",
+    "Module-level tabMap/pending state persists across cases; beforeEach clears mock call history only. Test comment explicitly uses unique app ID to avoid an existing mapping. This is not fresh-worker isolation.",
+    "Some tests leave health promises unresolved when mock sendMessage resolves without producing result. No timeout assertion or tab-close cleanup invocation exercises these pending entries.",
+    "Fixed real waits of 10-30ms synchronize handlers; no explicit awaited completion barrier in helper. Timing stability on different hosts unqualified."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static test review; no Vitest run or Chrome operations.",
+    "66/84 complete tracked files read; no production library changes."
+  ]
+}
