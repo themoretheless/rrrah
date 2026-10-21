@@ -1,0 +1,66 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "status": "partial_test_source_review",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/config.test.ts": {
+      "sha256": "90c7d71da305b632b1cc8ea9487d74e8f50334ac068f1cdcbc0c784e09c0ced5",
+      "git_blob": "b437a472d084f4ee039aa3026171cefd427e8a1c",
+      "bytes": 1055,
+      "lines": 28,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/deletion-log.test.ts": {
+      "sha256": "ea7ef8766e23c760473d0f45a1d8f587e59ac2e40bda9dcaa54da41a3759738f",
+      "git_blob": "817a9246617cf7a884924063fc1e1dad2dc3124e",
+      "bytes": 2490,
+      "lines": 101,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/diagnostics.test.ts": {
+      "sha256": "1a86185e8734a3513a4663ad90a87669250c65d3d1e6d068d7ba91023faafd85",
+      "git_blob": "528884cfd6a91e85c67e6174b856579508173330",
+      "bytes": 2063,
+      "lines": 58,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/status.test.ts": {
+      "sha256": "c3724c118cc0576e8be11c81b4ce9115530951129b2ff61e51d18687a7970e21",
+      "git_blob": "69238eecb8cf35d7e2e029b7aefcf91d47eaf291",
+      "bytes": 1158,
+      "lines": 33,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/nothing-moved.test.ts": {
+      "sha256": "5a063407a17524661bc92bd4e2fb73360b62b0c42a620b51cf86e6292ac030b0",
+      "git_blob": "7226d45d95f88649bd0da347fa8bfe5b3f1bfa5a",
+      "bytes": 1467,
+      "lines": 33,
+      "method": "Whole pinned test source read; not executed."
+    },
+    "tests/utils.test.ts": {
+      "sha256": "f3277b019ad7c3db40e198f1bac892d4ea1aa272146acedbbba2c81fe47ca6c1",
+      "git_blob": "5779340e671b1309be932a8145ba177b6c12b6c8",
+      "bytes": 2804,
+      "lines": 96,
+      "method": "Whole pinned test source read; not executed."
+    }
+  },
+  "cumulative_assessed_blobs": 81,
+  "tracked_blobs": 230,
+  "findings": [
+    "Configtests assertdefaultconstants andobjectspread,notenginevalidation ofmaxCountfractional/pollDelayzero. These files do not coverv19controls.",
+    "Diagnostics tests repeatprimaryforcounter andfallbackforanothername, nevertransitionstatesforsamename; labelcap20verifiedbutnotlonglabelserialization orselectorcap64inthisfile.",
+    "Status test terminalstatusesfreezeelapsed assertssetmembershiponly; it doesnotmeasure elapsedtimeaftercompletion or renderpanel.",
+    "DeletionLog rate example saysabout60perminute but onlyassertspositivevalue, while laterfirstbatchtestasserts broad50to120band. Fakeepochzero doesnotexercisesame startTime>0branch asrealepoch. No tests runthisstep.",
+    "Utils asyncconditiontest finisheswellwithin1000mstimeout; doesnotcheckasyncconditiondurationexceedingtimeout. DescribeButtonlengthcap andformattingexamples areexplicit.",
+    "Nothing-moved tests checkmarkerpredicate anddistinctnonemptylocaletranslations,notreal selection/trashpostconditions."
+  ],
+  "tests_run_this_step": 0,
+  "cumulative_original_function_controls": 30,
+  "limits": [
+    "81/230wholeartifacts; no upstreamsuiteexecution thisstep.",
+    "Native pHash/ASAN deferred; no production optimization."
+  ]
+}
