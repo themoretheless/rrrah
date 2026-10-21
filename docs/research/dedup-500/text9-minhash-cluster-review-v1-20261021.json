@@ -1,0 +1,77 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/text_dedup/minhash.py": {
+      "sha256": "4b53ae7a7d220a1901062a421592d5f0d2ea143bda1e7aeeb92dfb550279c5fa",
+      "git_blob": "5bb4c7d715af9cde502e30033a0ae7b2ffa0f7ab",
+      "lines": 244
+    },
+    "src/text_dedup/utils/jaccard.py": {
+      "sha256": "f0e57ff3de071f78e7cb338c8b4e817fd81ab1f7804307de5054e15e795eb382",
+      "git_blob": "425b6d8adbc004eb51ed0f285f31fbeda70fc674",
+      "lines": 47
+    },
+    "src/text_dedup/utils/union_find.py": {
+      "sha256": "21a208e6d01be0b03d03aef2fc7c42e2ed84e591b66ecd6d345d649ed0ab634e",
+      "git_blob": "610c7392b0681ebbace8b2a422cee5b744f0fe62",
+      "lines": 81
+    },
+    "src/text_dedup/config/algorithms/minhash.py": {
+      "sha256": "d9b986a4aa32a09c3cdefa52c1fd81eda9f92fc7de5c5625fc8a7b16b6cca3d6",
+      "git_blob": "f156b9df53b367d64f2b65782e9442ca95af534d",
+      "lines": 238
+    }
+  },
+  "cumulative_whole_files_read": 4,
+  "tracked_blobs": 75,
+  "method": "Four complete pinned files read and Git blobs verified. Executed original dependency-free jaccard module using runpy with synthetic disjoint groups; no upstream install/full algorithm run.",
+  "findings": [
+    "MinHash LSH bands generate candidate edges and super_merger initial components. Optional Jaccard verification defaults false in MinHashAlgorithmConfig; initial cluster is not content equality proof.",
+    "check_false_positives filters all pairs within candidate component by Jaccard then aggregates surviving endpoints by ORIGINAL cluster column and assigns one minimum id. Source shows disjoint surviving edge components can retain one shared cluster; complete Polars/Datasets path not executed.",
+    "Original cluster_jaccard_similarity uses best neighbor for each item. Four documents {a},{a},{b},{b} yield scores1 each and false-positive fraction0 although cross-group similarity0. This metric does not prove all cluster members match their retained representative.",
+    "get_ngrams_func normalizes lowercase token sets; order/multiplicity distinctions outside shingles are not byte equality. Empty token sets compare1.0 in Jaccard helper. min_length filtering excludes short texts.",
+    "bands/rows compute optimally only if BOTH absent; explicit partial/invalid parameter validation depends on base class not yet reviewed. 64bit mode retains32bit maxhash, explicitly compatibility behavior.",
+    "UnionFind uses rank plus path compression, with roots dependent on union order rather than always minimum. No defect asserted where callers choose their own canonical minimum."
+  ],
+  "executed_control": {
+    "module": "src/text_dedup/utils/jaccard.py",
+    "method": "runpy.run_path then cluster_jaccard_similarity on two internally-identical disjoint pairs",
+    "result": {
+      "cluster": [
+        [
+          "a"
+        ],
+        [
+          "a"
+        ],
+        [
+          "b"
+        ],
+        [
+          "b"
+        ]
+      ],
+      "threshold": 0.8,
+      "best_neighbor_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reported_false_positive_fraction": 0.0,
+      "cross_component_similarity": 0.0,
+      "empty_vs_empty": 1.0
+    }
+  },
+  "local_library_comparison": {
+    "path": "crates/rrrah-dedup/tests/groups.rs",
+    "evidence": "Existing exhaustive4-vertex graph regression checks all64graphs, requires every group pair be supplied and all members preserved; includes disjoint pairs. Existing nontransitive-chain test separately checks pair evidence remains. No redundant regression added or tests rerun without production changes.",
+    "scope": "Source inspection of existing test only, not a new test run."
+  },
+  "limits": [
+    "4/75 tracked blobs reviewed;152/500 repositories complete.",
+    "No full upstream tests, Polars/Datasets execution, package installation or source import into production. Root/nested license review still pending; pHash/ASAN deferred."
+  ]
+}
