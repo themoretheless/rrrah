@@ -1,0 +1,51 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 114,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "android/app/src/main/java/com/omnisearch/app/ui/LocalExplorerScreen.kt": {
+      "sha256": "f3e0656318d5a18cc19a8f95872c529caf059f44366c19888300a5662c2513d7",
+      "git_blob": "6bb5ad7a516e595225762bdb70f61b3f9128ec61",
+      "lines": 16837,
+      "new_read_line_ranges": [
+        [
+          6301,
+          8400
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          8400
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "Read2100newlines6301-8400 in three bounded whitespace-only lstrip views with original line numbers; cumulative1-8400/16837. Static storage accounting/header/gallery source review.",
+  "findings": [
+    "StorageAnalysis selectedvolume total/free from selectedStorage path, but media/images/video/audio/external extension queries and localtrash unscoped to selectedvolume. SD tab can therefore mix globalexternal categorybytes/internal apptrash with selectedSD usage. Click navigation likewise passes category extensions without selectedvolume scope. No actual storage query executed.",
+    "System size fallback18percent oftotal when total-dataPartitionTotal notpositive; Apps fallback92percent ofremainingused withoutpermission or queryexception. UI rows show formattedbytes without estimateflag. Permissioncard says grant access for exactappsize, but caught queryfailure withpermission still estimates silently. Not measured sizes.",
+    "Apps expression appBytes+dataBytes+cacheBytes may involve overlapping Android accounting domains; exact API semantics not established here. No claim of proven doublecount without platform reference/runtime. Categorized sums and Other clamp0 lack invariant sumcategories<=used, so inconsistent source scopes are not reconciled.",
+    "queryCategorySize/queryFilesSizeByExtension return accumulatedsize after caught exception/nullcursor/missingcolumn rather than error/completeness result. UI analysis completed displays elapsedwallclock regardless partialqueries. Elapsed query time not full filesystem benchmark.",
+    "StatFs setup atstart analysisIO not insidetry; thrownexception can bypass isLoading=false. Cancellation/newvolume effect with synchronousqueries can still do work; state assignments insideIO unconditionally use computedresult. No race/device reproduction.",
+    "Header SortSize/Type actually exposed, confirms v75 AudioAlbums sorter fallbackName matters for reachable options. Directory title hardcodedInternalStorage even whenSDpath selected. SearchcanSearch excludesHome/Trash; BackHandler closessearch before navigation.",
+    "Storage details weightedbar normalizes segments from potentially nonconservedsums with freeweight based selectedtotal, so chartnotproof byteconservation. Empty storages currentStorage null leavesinitialloading true. Selectedindex notclamped iflistshrinks; UIruntime pending.",
+    "Home aggregate sums suppliedstorage totals, not actual scan bytes. Categories show six manuallychosen extensiongroups, not allformats. Recentempty No recentfiles doesnotdisclosequeryerrors/subsets from priorloader.",
+    "Locked imagealbum tiles showlockicon instead of decodingcover; confirms coverhidden here. Other action/globalfilesystem policy separate, no bypassclaim. Remainingalbumlayout after8400 unread."
+  ],
+  "candidate_requirements_for_library": [
+    "Keep every metric/result bound to same selected source scope.",
+    "Represent measured, estimated, partial and failed accounting explicitly.",
+    "Validate conservation/invariants before displaying aggregate savings or storage charts."
+  ],
+  "limits": [
+    "114/268 wholefiles unchanged; explorer8400/16837 read.",
+    "No Android/Kotlin/Compose tests, MediaStore/storagestats calls, device rendering, permission/settings action or production edit.",
+    "155/500 fullrepositories unchanged; no new runtime/library test result.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
