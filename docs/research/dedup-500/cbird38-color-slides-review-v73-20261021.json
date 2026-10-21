@@ -1,0 +1,43 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_artifacts_assessed": {
+    "doc/papers/Color Similarity Search In Images - Fuhr.pdf": {
+      "sha256": "dfca13f3ba2605c02117db465b6c0610acda02371d27764f28f9a57816911692",
+      "git_blob": "888cc21e6f1b82671b2fd2d2b5a2051dcdcbd279",
+      "bytes": 4229395,
+      "pages": 26,
+      "method": "All26slides extracted text read; all26rendered at160dpi and visually viewed in7native-size four-slide sheets, including formulas, examples and diagrams.",
+      "visual_evidence_directory": "docs/research/dedup-500/cbird38-color-slides-review-v73-20261021"
+    }
+  },
+  "cumulative_assessed_blobs": 614,
+  "tracked_blobs": 616,
+  "findings": [
+    "Lecture presentation covers retrieval levels, perceptual color spaces, quantization,histogram distances,coarse spatial layout and color cooccurrence. Illustrative retrieval examples are not duplicate identity or full-corpus validation.",
+    "Slide25 intersection-only difference numerator gives zero distance for disjoint nonempty descriptors. Independent exact-rational counterexample yields similarity1 for both identical and disjoint cases. Reject literal formula as standalone reliable similarity; no cbird implementation defect claimed.",
+    "Slide18 histogram intersection denominator uses target mass; unequal unnormalized masses can yield asymmetric comparisons. A symmetric metric/tree requires separately established normalization/metric properties.",
+    "Slide19 color-similarity quadratic form does not itself establish nonnegative metric/triangle inequality for arbitrary supplied color distances. No direct metric-index port accepted.",
+    "Layout slides explicitly discuss scaling/rotation/reflection/translation invariance limits; these are distinct from source pixel identity. Color-profile/alpha/HDR handling and duplicate recall thresholds not specified."
+  ],
+  "executed_controls": [
+    {
+      "scope": "third independent counterexample; not upstream original-body execution",
+      "path": "docs/research/dedup-500/cbird38-color-slides-review-v73-20261021/formula_counterexample.py",
+      "log": "docs/research/dedup-500/cbird38-color-slides-review-v73-20261021/control.log",
+      "exit_code": 0,
+      "assertions": 3,
+      "method": "Python Fraction exact arithmetic applied literally to printed slide25 formula."
+    }
+  ],
+  "partial_artifacts": {
+    "doc/papers/An Evalulation of Popular Copy-Move Forgery Detection Approaches.pdf": {
+      "method": "Pinned bytes fetched and verified, page count26 and page1text read only; remaining pages NOT counted complete."
+    }
+  },
+  "limits": [
+    "614/616 assessed:187whole text/source,417PNGvisuals,2structured spreadsheets,5PDFs,3other graphics.2remain:26page copy-move study andembedded CImg.",
+    "No new production algorithm, native test or benchmark.34upstream original-body/header controls unchanged; independent counterexamples now3. Native pHash/ASAN deferred."
+  ]
+}
