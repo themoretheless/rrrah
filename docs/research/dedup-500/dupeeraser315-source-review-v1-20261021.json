@@ -1,0 +1,85 @@
+{
+  "repository": "NicolasBizzozzero/dupe_eraser",
+  "commit": "ca84482756092a84c3874e2bf78f21d06632664f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "README.md": {
+      "sha256": "4f4e514ca79061916d859c9e4a9d3124def335c99518d0acb7cf138d38df6e3f",
+      "git_blob": "d0b3260bf645dc3c2287e5bb5aeefc14eba1f774",
+      "bytes": 413,
+      "lines": 7,
+      "method": "Whole pinned source read without truncation."
+    },
+    "requirements.txt": {
+      "sha256": "8f7d9f3ad2ddcf2bdba6858c65e7d8797ceea25d48360766f2827b23fd1c9af8",
+      "git_blob": "54f6c5e07604c3fe5f28dca0559e9b522033783c",
+      "bytes": 67,
+      "lines": 8,
+      "method": "Whole pinned source read without truncation."
+    },
+    "dupe_eraser/__main__.py": {
+      "sha256": "0fd6ddf9c70b2dcd370af8ada561c5fbfa2a7f2fc6482c153e3fdad405a87a46",
+      "git_blob": "dd0d9003104127382ee4d69d7859f99eddcaac13",
+      "bytes": 3645,
+      "lines": 117,
+      "method": "Whole pinned source read without truncation."
+    },
+    "dupe_eraser/core/comparison_method.py": {
+      "sha256": "28545d59f6dc61d2f8290801e4d7f484eb12e0ac12bbf84548f17834366e096d",
+      "git_blob": "bd01a6bfb25ec21303785e968233a26dfe9ef84a",
+      "bytes": 123,
+      "lines": 5,
+      "method": "Whole pinned source read without truncation."
+    },
+    "dupe_eraser/core/hash_performance.py": {
+      "sha256": "55a4055ad8ec103a49b9508aa27f9d7f54cc2dc31383dd2a539c26dd63ba275f",
+      "git_blob": "95e776929bb688d87f24125f845c8f9dae2ca9f6",
+      "bytes": 817,
+      "lines": 27,
+      "method": "Whole pinned source read without truncation."
+    },
+    "dupe_eraser/core/duplicate_remover.py": {
+      "sha256": "9341ca18f89689653f6bfff198870287d92f43b12b67f45e0831f10a53c72fa4",
+      "git_blob": "93424462cbc7cc2a6d8ac0f43c09c8f7886bd35c",
+      "bytes": 15624,
+      "lines": 390,
+      "method": "Whole pinned source read without truncation."
+    }
+  },
+  "cumulative_assessed_blobs": 6,
+  "tracked_blobs": 9,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/dupeeraser315-controls-v1-20261021/run.py",
+    "sha256": "560d9efd68a0c70af4dc8f2dc0874d2af761eb509f1dbc65a3de51bc0968aa3a",
+    "log": "docs/research/dedup-500/dupeeraser315-controls-v1-20261021/run.log",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "method": "Original3classes compiledfromAST; realtemporaryfiles/read/SHA256, print_onlyTrue andshow_progressFalse. Explicitoptional-libraryadapters, imageopenraisesforinvalidimages;os.removeforbidden. No actualPIL/ImageHash/fast-hash/deletion/wholeCLI."
+  },
+  "findings": [
+    "BYTESmodeonlyfirstreferencepersizebucket misses b/csamecontent whenafirstdiffers. RealSHA256modefindssamefixtureb/c correctly.",
+    "Perceptualmode returnsnon_imageforallnonimages andinvalid_imageforallimageopenfailures, thenordinarydigestgrouping mergesunequalfilesofsamesize. Reproducednondestructively;invalidimagecaseusesexplicitthrowingImageadapter.",
+    "phashnameactuallymapsimagehash.average_hash;perceptual_thresholdstoredbutneverusedininspectedgrouping. Sizebucketrestrictsreencoded/resizecandidatesbeforehash, notgeneralvisualsimilarity.",
+    "Hashgroups acceptedwithoutbyteconfirmation; no sourcefreshness/physicalidentity/cancellation/resourcepolicy. Crypto collisionnotactuallyconstructed.",
+    "Murmurreadswholefile;performance counters countonefileperbytecomparison whileactualreads2,earlymismatchnotcounted. No throughputclaim.",
+    "CLI defaultdeletesandprint_onlystillincrementsremoved/savedcounters. No originaldeletion/mainexecuted. Requirementsunpinned;licensefulltextnotyetread."
+  ],
+  "local_library_control": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --test exact_files exact_content_partitions_ignore_extensions_and_check_unsampled_bytes",
+    "passed": 1,
+    "failed": 0,
+    "exit_code": 0,
+    "log": "docs/research/dedup-500/dupeeraser315-local-exact-control-20261021.log",
+    "scope": "Existing14file fixture3sizepartitions/extensionvariants/same-sizeinteriornegatives,forwardreverse roots,bothscanmodes. Fresh bounded Cargo execution;notfullsuite orimmutablepre/postsourceaudit."
+  },
+  "remaining": [
+    ".gitignore",
+    "LICENSE",
+    "dupe_eraser/core/__init__.py"
+  ],
+  "limits": [
+    "6/9wholefiles;globalfullreview162/500unchanged. No newproductioncode/testadded;existingregressionreused.",
+    "NativepHash/ASANdeferred."
+  ]
+}
