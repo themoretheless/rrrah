@@ -1,0 +1,134 @@
+{
+  "repository": "mominul/dinohash-onnx",
+  "commit": "7d87d54b837ceb14b553ffc51147e20a2ed1b85d",
+  "whole_repo_complete": true,
+  "tracked_blobs": 12,
+  "assessed_blobs": 12,
+  "files": {
+    ".gitignore": {
+      "bytes": 404,
+      "sha256": "ce0d641dbcca901abc938640ceca4767b6354a4ba7b2df9dba77a3bf38f4356d",
+      "git_blob": "ded3967f79c396a0afefe8eca50a21981af43106",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    ".python-version": {
+      "bytes": 5,
+      "sha256": "7a41a41354ab8049091ef1a00253ca00567f5a1d3f9aef5502c0b4b5ce9ae707",
+      "git_blob": "c8cfe3959183f8e9a50f83f54cd723f2dc9c252d",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "LICENSE": {
+      "bytes": 1079,
+      "sha256": "787a4417ac6330cd2167cc6481f7c20e1afe3699744a2cfe45041e321da6e8ba",
+      "git_blob": "925b8c06f0ec6d2a68a2f43649ecb5ef02b9f2b7",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "README.md": {
+      "bytes": 747,
+      "sha256": "c2d35d602009ebdf53df7401b497405aaecc0ff644b267fdb299c319a0c93749",
+      "git_blob": "f283a669ea25bc75c6f89a247c358d0471a19714",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "examples/example.py": {
+      "bytes": 440,
+      "sha256": "e129d3e780d0f14cb17be80f143e7fb67e25b3c7354affd10ca7a3c6c8885036",
+      "git_blob": "9779ca41da204717a1b784a1aaa2ccd43a109ae4",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "pyproject.toml": {
+      "bytes": 1293,
+      "sha256": "4993f19319df7255562df445ff367addaf5560f006cbac13d1448554b4468ebb",
+      "git_blob": "fe8255a59dfa6da6258be5c82751a18d11d4b833",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "src/dinohash_onnx/__init__.py": {
+      "bytes": 213,
+      "sha256": "972e7d376f6d5e35d4f07e36842b79f16821d970a8b01b76d33e4a52c426759a",
+      "git_blob": "d4439fb633d99b4e6718dda4a84845e79d311dc6",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "src/dinohash_onnx/downloader.py": {
+      "bytes": 1730,
+      "sha256": "09a03f15d279b0e30fbd32db831d3ff9f81585046429cd15073edf160c3193cb",
+      "git_blob": "07d68025f6ebfbcdbae39a0fb8eddb4905017a7d",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "src/dinohash_onnx/hash.py": {
+      "bytes": 1225,
+      "sha256": "6d36ba667e470cc3f460091f22523410169540c83aa5d711e0185fa053089a96",
+      "git_blob": "97a68156f9181de66f552a091af6c8821a25ef06",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "src/dinohash_onnx/inference.py": {
+      "bytes": 2616,
+      "sha256": "f8611ccaaa45ddf32780fa2582f87d186e468cc3112d27a919dfc8a1a242d2e7",
+      "git_blob": "f54e8bf91ef85b4384d802b854446b463f5185aa",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "src/dinohash_onnx/model.py": {
+      "bytes": 1949,
+      "sha256": "96e0ca3ef33bbbf09d289f988fe6d317edaf03f0111c64ceb6b671c3e84d7e52",
+      "git_blob": "4140c9ff6a14005638d4bce5045403944e8dd9c3",
+      "method": "Wholepinnedtextread;priorreviewforimplementation/docs/config/example/license,currentreviewfor.gitignore"
+    },
+    "uv.lock": {
+      "bytes": 154849,
+      "sha256": "1e3e0ed168dba93ab3f34ff9729e1030dd1a5bf1c805f71e0c65a6f8bd4b9835",
+      "git_blob": "4d6695f6e569a872eef283a443629662565a341f",
+      "method": "WholegeneratedTOMLstructuralparseallpackages/dependencies/artifacthashes"
+    }
+  },
+  "prior_source_review": "docs/research/dedup-500/dinohash-selected-source-audit-20261013.json",
+  "prior_controls": {
+    "status": "verified10_selected_python_controls_with_explicit_adapters",
+    "controls": [
+      "normalization_shape_and_red_channel",
+      "empty_preprocess_batch_not_refused",
+      "transparent_hidden_rgb_changes_tensor",
+      "nonfinite_model_logits_are_thresholded",
+      "batch_output_mismatch_not_refused",
+      "rank3_output_is_split_into_two_hashes",
+      "512_zero_bits_serialize_without_width",
+      "existing_invalid_model_file_trusted_without_download",
+      "global_session_cache_ignores_model_and_device",
+      "cache_false_loads_requested_model_provider"
+    ],
+    "passed": 10,
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "numpy": "2.2.6",
+    "pillow": "11.3.0",
+    "scope": "Actual unchanged Python preprocessing/parsing/cache branches; ONNX session/provider and requests/tqdm import adapters explicit. No ONNX Runtime/model downloaded, no actual learned inference/provider execution/network stream test or precision measurement."
+  },
+  "findings": {
+    "runtime_with_adapters": [
+      "Global Python session cache ignores requested path/device; cache=False control requests correct new instance",
+      "Nonfinite supplied logits thresholded without rejection",
+      "Wrong batch/rank output accepted and split incorrectly",
+      "512 zero bits format as0x0 without fixed width",
+      "Existing invalid model file trusted without network access"
+    ],
+    "real_preprocessing": [
+      "Authored fully transparent red/blue produce different RGB tensors",
+      "ImageNet red-channel normalization positive control",
+      "Empty batch returned shape0x3x224x224"
+    ],
+    "static_only": [
+      "Mutable main model URL, no digest/size verification",
+      "Download to final path, no timeout/cancel/byte cap/atomic publication",
+      "File-open handles lack explicit context-manager cleanup; EXIF orientation not applied",
+      "No actual ONNX Runtime/model quality or memory/latency qualification"
+    ]
+  },
+  "lock_review": "docs/research/dedup-500/dinohash480-lock-review-20261021/result.json",
+  "completion_findings": [
+    "All12pinnedblobsverified:11textwhole-read,1generatedlockstructurallyparsed. No tracked image/model binaries.",
+    "Lock has CPU and GPU optional backend packages,conditional NumPy versions forPythonenvironments;manifest minimum bounds alone differfromlockedresolution. Lock structural validity does not prove installation/provider compatibility.",
+    "Gitignore excludes *.onnx/models aswellasimages andtest_*;no originaltests tracked. OmittedmodelbinaryandmutablemainURL prevent full model/content provenance qualification.",
+    "Prior actual NumPy/Pillow preprocessing controls do not qualify learned inference. Session/provider/network branches were tested with explicit adapters; preserve those limitations.",
+    "MITrootwhole-read,no productioncopy. Retain recipe-aware session cache,strict output/finite validation,transparentRGB and modelprovenance cases; no equality/accuracy policy accepted."
+  ],
+  "decision": "reference-only-no-model-quality-claim",
+  "limits": [
+    "Complete pinned repository artifact review, not model/runtime/quality qualification. No actual ONNX Runtime/provider/modeldownload/inference, external linkedmodelcontents, networkstream, GPU, memory/latency or held-outprecision run. Tenpreviousadaptedcontrolsnotrerunthiscompletion. NativepHash/ASANdeferred."
+  ]
+}

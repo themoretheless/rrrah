@@ -2,8 +2,8 @@
   "index": 480,
   "repository": "mominul/dinohash-onnx",
   "commit": "7d87d54b837ceb14b553ffc51147e20a2ed1b85d",
-  "review_scope": "All5 implementation modules,example/config/README/license fully read;12 pinned blobs verified.10 selected controls with explicit ONNX/network adapters; real NumPy/Pillow preprocessing. uv.lock/.gitignore inventory only.",
-  "decision": "reference_only_not_adopted",
+  "review_scope": "All12pinnedblobsassessed:11wholetext,1generatedlockstructuralparse;prior10controlswithONNX/networkadapters. Noactualmodelinference.",
+  "decision": "reference-only-no-model-quality-claim",
   "finding": "Global session cache ignores model/device; unvalidated output shape/nonfinite logits; transparent RGB leaks into preprocessing; mutable unverified model download. Actual model/runtime quality untested.",
   "available_source_evidence": [
     {
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "WholepinnedMITrootread;no productioncopy.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -76,11 +76,13 @@
     }
   ],
   "whole_implementation_read": true,
-  "whole_repo_complete": false,
+  "whole_repo_complete": true,
   "selected_controls_passed": 10,
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/dinohash-selected-source-audit-20261013.json"
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/dinohash480-complete-source-review-20261021.json"
 }
