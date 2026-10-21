@@ -2,7 +2,7 @@
   "index": 263,
   "repository": "hamedrnik/dedup_signature",
   "commit": "3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee",
-  "review_scope": "Partial pinned6/19whole source/manifest/test artifacts. Three original unit tests plus three authored controls pass in both debug/optimized isolated builds; fullcrate/integration/fixtures/license pending.",
+  "review_scope": "Complete pinned19/19source/test/config/license/textfixtures. Twelve original tests passed in standalone workspace-adapted build, four profile controls plus earlier seed/overflow controls; full input/platform/quality/performance qualification open.",
   "decision": "reference",
   "finding": "Rust lookup3 signatures with tests; general fingerprint primitive, not exact content or image normalization.",
   "available_source_evidence": [
@@ -48,9 +48,9 @@
     }
   ],
   "license_metadata": "LGPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "LGPLv3orlatersourceheadersandCOPYINGfullyread;no foreignproductionadoption.",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -79,5 +79,7 @@
     {
       "audit": "docs/research/dedup-500/signature263-source-review-v1-20261021.json"
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/signature263-complete-source-review-20261021.json"
 }
