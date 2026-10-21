@@ -1,0 +1,53 @@
+{
+  "repository": "wellbehavedsoftware/btrfs-dedupe",
+  "commit": "bf8d1a82fee2ff8635d00865acc1033707957c9e",
+  "whole_repo_complete": false,
+  "tracked_blobs": 27,
+  "cumulative_assessed_blobs": 10,
+  "new_whole_files_read": {
+    "src/operations/directory_scanner.rs": {
+      "bytes": 7627,
+      "sha256": "1f21b2176eab00ed3c08bc8a6dacb9553d85f13765d3b975ccca263d14f78d7b",
+      "git_blob": "90cf587ac010957e89323f022302d23aca42c8a2",
+      "method": "Whole pinned source read without truncation"
+    },
+    "src/database/file_database_builder.rs": {
+      "bytes": 2035,
+      "sha256": "5211227e61b50140ec1ce7ef631aa0758e964bdec4dded03734aac008ebb3c8e",
+      "git_blob": "1e8be20605d3e7f1bb8fbc92582a3962175e7cf6",
+      "method": "Whole pinned source read without truncation"
+    },
+    "src/misc.rs": {
+      "bytes": 896,
+      "sha256": "43302f3f16e1684abede11a0e9e7b4d49664054a56d8ffc69980cadbc7f5ef72",
+      "git_blob": "98e019bc13dd426dd871e8fa45d83185afcad106",
+      "method": "Whole pinned source read without truncation"
+    },
+    "src/types.rs": {
+      "bytes": 341,
+      "sha256": "7fc64f84a6d198ef4e01b8ae9041f77f825fbde07497639af7e1a2751a4762b3",
+      "git_blob": "3b5638f39ef98de7c3602e593e4ce52fc38840b3",
+      "method": "Whole pinned source read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/btrfs137-controls-v2-20261021/hash_decode.rs",
+    "log": "docs/research/dedup-500/btrfs137-controls-v2-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged misc.rs/types.rs included bypath, actualrustc-serialize0.3.25 rlib from isolatedpriorbuild; rustc1.98.1. No database roundtrip/filesystemmodification/Btrfsoperation."
+  },
+  "findings": [
+    "decode_hash constructs output[31]frominput[21]ratherthaninput[31];distinctlast-bytehexvaluesdecodeidentically. Originalfunctioncontrolconfirms corruption,notcryptographicSHA256collision.",
+    "AbsenthashreturnsZERO_HASH;shorthexpanicsindexing;both originalcontrolsconfirm.",
+    "Scannerfreshness comparesonlylen andmtime seconds;ctimeupdatedonlywhenchangedconditiontrue. No inode/nanosecondcomparison inthisbranch;runtimefreshnesscontrolpending.",
+    "Scanneruses symlink_metadata andexplicitlyskipslinksandcross-deviceentries;errorspropagate, no structuredpartialreport.",
+    "Builderrequires strictlyascendingRecursivePath order; ancestor/descendantOrdEqinconsistencyfromv1needsworkflowqualification.",
+    "find_rootwalksparentswithmemoizedmap;no lexicalstartswithrootclassification inthisfunction."
+  ],
+  "remaining_scope": "17remainingwholeartifacts:command/arguments/extents/dedupe/build/docs/lockfileandmoduleconfig.",
+  "license": "RootMITfullyread;noproductioncodeadopted.",
+  "limits": [
+    "Fullreviewcount172/500unchanged;8selectedoriginalcontrolscumulative.",
+    "No wholecrate/platform/corpus/performancequalification.NativepHash/ASANdeferred."
+  ]
+}
