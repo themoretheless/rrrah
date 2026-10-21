@@ -1,0 +1,23 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "frontend_review": {
+    "sha256": "5386832036409fd322d8ed0d5bb8af1e6badc69cde7bd38c923e9d5e470739d4",
+    "scope": "Lines1-1280whole-readcumulative; remainingnotyetreviewed"
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-card-controls-20261021/result.json",
+  "new_authored_controls": 4,
+  "cumulative_authored_controls": 19,
+  "findings": [
+    "Original renderImageCard/renderVideoCard classify compare-side membership with path.startsWith(dir2); /media/backup-old/photo.png becomes Dir2 candidate for dir2=/media/backup. Actual original image-card invocation confirms classcardto-delete despite callerisOriginaltrue. Supplied metadata, not live scan/deletion.",
+    "Engine emits _phash_distanz but renderImageCard reads _phash_distance; actual original renderer with backend field emits no badge, positivecontrol with UIfield emits1.",
+    "Engine emits _intensive_start/end_treffer and _intensive_start/end_n; renderVideoCard reads _intensiv_ fields. Original renderer drops supplied block counts from metadata.",
+    "Malformed frames_b64 raises SyntaxError in renderVideoCard and is not isolated per card. ActualNodeVM invocation, not wholebrowser.",
+    "renderSection reuses checkbox ID k_groupindex_memberindex acrosssections; path dataset remains operation selector. Source observation, not browser duplicate-ID impact qualification.",
+    "Visual candidates defaultnotselected in renderResults; exact candidates defaultselected. This differs self-contained CLIreport candidate defaultselection. Source read; no deletion commands run."
+  ],
+  "limits": [
+    "Frontend throughline1280 only; remainder and styles/translations unread. NodeVM original-functions tests useexplicitDOM/format/checkbox/localizationadapters. No live browser/http/frontend full-flow proof.No productionchanges.NativepHash/ASANdeferred."
+  ]
+}

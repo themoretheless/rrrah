@@ -1,0 +1,11 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const html=fs.readFileSync('.dedup-work/mediadedupe444-20261021/frontend.html','utf8');
+const code=html.slice(html.indexOf('function renderImageCard('),html.indexOf('function createCheckbox('));
+function el(tag,className=''){return {tag,className,children:[],style:{},appendChild(c){this.children.push(c)},addEventListener(){}};}
+let badges=0;const ctx={el,document:{createElement:el},_t:x=>x,pathWithoutFilename:p=>p.slice(0,p.lastIndexOf('/')),formatSize:n=>String(n),formatDuration:n=>String(n),phashBadge:()=>{badges++;return el('badge')},createCheckbox:()=>el('checkbox')};vm.createContext(ctx);vm.runInContext(code,ctx);
+const row={path:'/media/backup-old/photo.png',filename:'photo.png',size:10,width:1,height:1,_phash_distanz:4};
+const card=ctx.renderImageCard(row,true,'x',false,'/media/backup');assert.equal(card.className,'card to-delete');assert.equal(badges,0);
+const control=ctx.renderImageCard({...row,_phash_distance:4},true,'x',false,null);assert.equal(badges,1);
+const video=ctx.renderVideoCard({path:'/media/a.mp4',filename:'a.mp4',size:10,_intensive_start_treffer:4,_intensive_start_n:5,_intensive_end_treffer:3,_intensive_end_n:5},false,'v',false);const meta=video.children.find(x=>x.className==='meta');assert(!meta.textContent.includes('Start:'));assert(!meta.textContent.includes('End:'));
+let malformed;try{ctx.renderVideoCard({path:'/media/a.mp4',filename:'a.mp4',size:10,frames_b64:'{bad'},false,'v',false)}catch(e){malformed=e.name}assert.equal(malformed,'SyntaxError');
+const out={directory_prefix_collision:{path:row.path,dir2:'/media/backup',actual_class:card.className,scope:'String-prefix classification treats sibling backup-old as inside backup'},image_distance_field:{backend_field:'_phash_distanz',renderer_field:'_phash_distance',badges_for_backend_row:0,positive_control_badges:badges},intensive_counts_field:{backend_prefix:'_intensive_',renderer_prefix:'_intensiv_',displayed_meta:meta.textContent},malformed_preview_json:{result:malformed},scope:'Four controls invoke unchanged original card functions in Node VM with explicit DOM/translation/format/checkbox adapters. No browser or network/deletion operation.'};fs.writeFileSync(__dirname+'/result.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));

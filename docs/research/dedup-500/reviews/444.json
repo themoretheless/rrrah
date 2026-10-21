@@ -4,7 +4,7 @@
   "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "Partial frontend review throughline940 pluspriorbackend/docs/media;15controls cumulative. Frontend threshold bounds disagree with server, hidden intensive flag persists, translation resets selection counter. RemainingUIincomplete; no production adoption.",
+  "finding": "Frontendthrough1280plusbackend/docs/media;19controls cumulative. Cards lose hash/block evidence from field mismatches and misclassify sibling path prefixes. RemainingUIincomplete; no production adoption.",
   "available_source_evidence": [
     {
       "path": "app.py",
@@ -94,6 +94,11 @@
     {
       "audit": "docs/research/dedup-500/mediadedupe444-source-review-v6-20261021.json",
       "controls": "docs/research/dedup-500/mediadedupe444-frontend-controls-20261021/result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediadedupe444-source-review-v7-20261021.json",
+      "controls": "docs/research/dedup-500/mediadedupe444-card-controls-20261021/result.json",
       "whole_repo_complete": false
     }
   ]
