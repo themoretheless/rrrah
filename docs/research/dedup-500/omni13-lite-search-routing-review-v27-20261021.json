@@ -1,0 +1,46 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "new_read_line_ranges": [
+        [
+          3641,
+          4330
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          4330
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "690 additional contiguous source lines read; static prefix-routing/crossfile reconciliation, no runtime execution.",
+  "findings": [
+    "folder: routes directly to search_folders_only then outergeneric lean/pluginfilter. Previouslyreviewed lean_allowed acceptsFILE/CODE, notonlyFOLDER; this narrows pendingcallerquestion: withinpublicSearchEngine::search routing, nofolderonlypredicate added. UIoutsideengine unreviewed.",
+    "file/code/image/bookmark/history/commits/clipboardprefixes returndedicatedmethods early; no sharedcandidate_k/finalranking appliedtothosebranches beforeouterleanfilter. Perhelpercaps/empty/error semantics apply.",
+    "Image/OCR results sourceFILE orOCR; outerleanacceptsFILE but notOCR directly, while is_native override canallowcommands. Currentsearch_images_only emitsFILE evenwithOCRsnippet. No missingallOCRclaim; sourceclassification matters.",
+    "Quicklinkkeyword branchreturnsaQUICKLINKdescriptor thenouterleanrejectsQUICKLINK/non-AIURLdescriptor; querythatmatcheskeyword canproduceemptypostfilterinstead of fallingthroughfilematching. Deliberateleanfeaturecuration, but no fallback/refill. No actualbrowseropen.",
+    "AIproviderprefixes constructsURLonly; pressEnter/launcherexecution outsidethissource. No userprompts/keys read, no providerscalled. Gemini baseURL hasnoqueryseparator beforeencodedprompt inthisbranch, likelywrongprefillroute; actualprovider URLbehavior notverified/neededforstaticreview.",
+    "Sourceconfigdescriptors carry values in launchcommands and maskskey display; no actual secret values accessed. These are repositorycodepaths, not instructionsforouractions.",
+    "AIprovider/model/freeavailability text historicalsourceclaims; not verifiedrecommendations/currentservicefacts. No useforlibrarycapabilityorqualitycredit.",
+    "Casepreserving rawinput recoveredafterASCIIcommandprefix, preservingprompttext ondescriptors. Otherlowercasedsearchprefixes intentionallydiscardcase forlookup, not identitycomparison.",
+    "Control-center emptyquery entries describe future/stub scopes; availability determinedoutergate anddedicatedimplementation, not presenceoflabel.",
+    "No contentduplicatealgorithm inthisreadsegment. Whole500scope still requires remainingcode/assets; no productionchanges."
+  ],
+  "limits": [
+    "81/268 pinnedwholefiles; search.rs1-4330 of10272 partial.",
+    "No newtests or Windows/UI/SQLite/launcher/network/provider/credentialactions. Source-onlyreviewbatch.",
+    "Native pHash/ASAN remains deferred; fullgoal not achieved."
+  ]
+}
