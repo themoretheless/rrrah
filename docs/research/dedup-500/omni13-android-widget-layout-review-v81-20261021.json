@@ -1,0 +1,133 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "android/app/src/main/res/layout/preview_widget_search.xml": {
+      "sha256": "3c053f629f30974328a5ae226493e1194410b165da18ebaa82a9cf706c91529d",
+      "git_blob": "091f76933ef772efef83956d257b8aad316f9f6e",
+      "mode": "100644",
+      "lines": 32
+    },
+    "android/app/src/main/res/layout/widget_local_explorer.xml": {
+      "sha256": "e9c587a760911323f3c14823d21ef4d360871705f6bd150ff24fd35ec73691d3",
+      "git_blob": "358cbd8a8f5197650fc6fc974e3d35c5d8f4756a",
+      "mode": "100644",
+      "lines": 122
+    },
+    "android/app/src/main/res/layout/widget_music_player.xml": {
+      "sha256": "95fa813688751c13d347d2f74ac30d57b77d705204d0f6c5dd00ca67d9d1436c",
+      "git_blob": "5fc514b44d6441d3fa93c43ff0cb44c9d2d28a78",
+      "mode": "100644",
+      "lines": 118
+    },
+    "android/app/src/main/res/layout/widget_music_player_small.xml": {
+      "sha256": "f6b62fc0e17c5bc7e304543b5ca0bb68fb607c7bda3e7e61b4ed532424e2a21d",
+      "git_blob": "a70aecb596f000015991f98c202efdc2d06b94e9",
+      "mode": "100644",
+      "lines": 110
+    },
+    "android/app/src/main/res/layout/widget_scan_connect.xml": {
+      "sha256": "b3cf0b83e37c0a63e16f985595bd38c7cb9712f2761fa6edfcf46b2ed7084d8b",
+      "git_blob": "6f8526d0eef4a71a443513040442538cf5b1b6aa",
+      "mode": "100644",
+      "lines": 41
+    },
+    "android/app/src/main/res/layout/widget_search.xml": {
+      "sha256": "4cb6cdd71ed79f6546a1361d57cfde7aedac16253744cf84a13f8837a5f04101",
+      "git_blob": "5fb1ca9168bb12c4354d7fc69e3fadaed697b03f",
+      "mode": "100644",
+      "lines": 63
+    },
+    "android/app/src/main/res/values-night/colors.xml": {
+      "sha256": "a42174ac4a4ef1b32be0b760129182bd1a1e272f2c853116f677e1624c9144e0",
+      "git_blob": "df4916052b968601ade87c055b554f72bdc9b3ab",
+      "mode": "100644",
+      "lines": 8
+    },
+    "android/app/src/main/res/values-v29/themes.xml": {
+      "sha256": "79e8b5b1cc2405c95c3c6d677b541a47aa2fb83315803b9f40cd8cae9f46a455",
+      "git_blob": "61b4f1a6b3c5314bbda33d6d66e2ee862b38670c",
+      "mode": "100644",
+      "lines": 13
+    },
+    "android/app/src/main/res/values/colors.xml": {
+      "sha256": "4d2841395155ff0e860fb58b0c9ef9b263c5f47c7cafdaac858ab349167907ec",
+      "git_blob": "617f4b0d2d90001534744da4d39797626c2ff088",
+      "mode": "100644",
+      "lines": 16
+    },
+    "android/app/src/main/res/values/strings.xml": {
+      "sha256": "274a4a7b3fd2ff68bfe61b95446203b5a9e8346982891dacf8df253990da5289",
+      "git_blob": "76329301543b7e0ceb51aeb5144c196b62902ff4",
+      "mode": "100644",
+      "lines": 3
+    },
+    "android/app/src/main/res/values/themes.xml": {
+      "sha256": "df4c222e7b536c5b90e245fd9958c0cb1d42b9f1a466bebb8ce4284c07b118cb",
+      "git_blob": "eee01a313a1c8fcf72f449649784c8aea336eadc",
+      "mode": "100644",
+      "lines": 11
+    }
+  },
+  "cumulative_whole_files_read": 126,
+  "tracked_blobs": 268,
+  "method": "Eleven complete pinned XML source files read,537 lines. All11 parsed as XML. Five direct provider R.id references compared with corresponding layout declared IDs. Structural source check, not Android resource compilation/rendering.",
+  "executed_controls": {
+    "xml_files_parsed": 11,
+    "provider_layout_id_checks": [
+      {
+        "provider": "LocalExplorerWidgetProvider",
+        "layout": "widget_local_explorer",
+        "referenced_ids": 11,
+        "layout_ids": 17,
+        "missing": []
+      },
+      {
+        "provider": "MusicWidgetProvider",
+        "layout": "widget_music_player",
+        "referenced_ids": 9,
+        "layout_ids": 9,
+        "missing": []
+      },
+      {
+        "provider": "MusicWidgetSmallProvider",
+        "layout": "widget_music_player_small",
+        "referenced_ids": 8,
+        "layout_ids": 10,
+        "missing": []
+      },
+      {
+        "provider": "ScanConnectWidgetProvider",
+        "layout": "widget_scan_connect",
+        "referenced_ids": 3,
+        "layout_ids": 4,
+        "missing": []
+      },
+      {
+        "provider": "SearchWidgetProvider",
+        "layout": "widget_search",
+        "referenced_ids": 5,
+        "layout_ids": 5,
+        "missing": []
+      }
+    ],
+    "method": "ElementTree parses layout; regex R.id.name gathers direct references in each pinned provider source; set difference must be empty. Does not resolve inherited methods, drawable/style resources, RemoteViews action support or framework IDs."
+  },
+  "findings": [
+    "All five direct provider/layout ID sets resolve, no missing target ID in these pairs. This narrows failures to behavior/build/RemoteViews qualification rather than inventing nonexistent IDs. Compact layout deliberately contains hidden favorite/progress views.",
+    "Explorer actual layout five equally weighted categories Internal/Down/Images/Docs/Music, while Compose widget preview showed onlythreeicons. Large music actual layout horizontalart+title/artist then fourcontrols; Compose preview simplified layout. Source preview not pixel/runtime parity.",
+    "Music controls ImageViews without contentDescription in XML, search toggle also no contentDescription; provider code does not set descriptions. Text may label some navigation, but accessibility outcome needs TalkBack/device qualification; no certification.",
+    "Searchcapsule fixed56dp inside8dp rootpadding; 24dp toggle icon with1dppadding. Musiccompact controls32/36dp; minimum host size/fontscale/resizing need rendered review, not assumed usable from XML.",
+    "Night widget colors follow resource qualifier while provider helper chooses app preference DARK/LIGHT/SYSTEM and overrides text/bg. Not all icons overridden (explorer intentionally leavesicons); actual light/dark compositecontrast pending drawable/visual review.",
+    "Theme XML systembars transparent/lightflagsfalse; API29contrastdisable overridespresent. Later Compose theme adjusts iconappearance. Startup/window transition appearance cannot be judged from either source alone.",
+    "Only app_name string resource; widget labels hardcodedEnglish in XML and prior Kotlin. Localization absent for these labels, not proof of all locale behavior.",
+    "Preview_widget_search layout uses launcherforegound/defaultgallery icon instead of runtime search/computericons; preview is decorative approximation. Source drawablepreview files remain unread separately."
+  ],
+  "limits": [
+    "126/268 whole blobs; repository013 incomplete.",
+    "XML read/parse and ID crosscheck do not establish Android build, actual widget rendering, accessibility, resource-image visual review or runtime behavior.",
+    "No device, widget installation/pinning, preference change or production-library edit.155/500 full repositories unchanged.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
