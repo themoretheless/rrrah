@@ -1,0 +1,5 @@
+PASS original SQL branch 0 fails: near "mvp_points": syntax error
+PASS original SQL branch 1 fails: near "sampled_points": syntax error
+PASS separator-only adaptation makes full-pair branch execute
+PASS separator-only sampled adaptation exposes missing p.id: no such column: p.id
+4 controls passed; no original C++ MVP/SQLiteCpp or decoder runtime qualification
