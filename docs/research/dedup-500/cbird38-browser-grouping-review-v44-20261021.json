@@ -1,0 +1,45 @@
+{
+  "repository": "scrubbbbs/cbird",
+  "commit": "fd96b375da3defdf460505c34e4f954fcc98601f",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/gui/mediabrowser.cpp": {
+      "sha256": "2663aa05ebb6b7dca3974e29d0bb9925e6eeb666d5114abc9d20efc3146a922e",
+      "git_blob": "123a38c9225c898346ee695670e230b44bf72ade",
+      "bytes": 12015,
+      "lines": 382,
+      "method": "Whole pinned GUI source/header read; no window launched."
+    },
+    "src/gui/mediabrowser.h": {
+      "sha256": "56c7a3e87a4dccd60c14295bd37512fb2451a70858c1c46d4cc173b9d9643a70",
+      "git_blob": "f87e4f9b82196afc7b047f67a5c2c83533d56a53",
+      "bytes": 2154,
+      "lines": 60,
+      "method": "Whole pinned GUI source/header read; no window launched."
+    },
+    "src/gui/mediawidget.h": {
+      "sha256": "6a26ca99fea54589023e42bfdf46bfa6909c08da96c6ee3776763b8432629665",
+      "git_blob": "9faff1236a5b598f70a843698445e4a03f3f642b",
+      "bytes": 2043,
+      "lines": 51,
+      "method": "Whole pinned GUI source/header read; no window launched."
+    }
+  },
+  "cumulative_assessed_blobs": 140,
+  "tracked_blobs": 616,
+  "findings": [
+    "showFolders uses qElide shortened display key as identity for stats/folder map. Different full directory/group labels may share display label; original full key not separately retained here. No Qt-specific truncation collision runtime test.",
+    "showSets similarly constructs shortened directory-pair key; requires exactly2 unique parent paths, puts others in unpaired, and moves singleton sets there. This is navigation grouping, not all-pairs equivalence or complete-link confirmation.",
+    "Default thumbnail aspect3/4 causes center cropping; video thumbnail uses automatic fast frameGrab. Display may omit content regions and does not certify requested matching frame or entire video equality.",
+    "show rejects any empty group by returning0; empty result also returns0. Return code does not distinguish no results from invalid group input or completed review. Modal qApp exec caveat explicitly noted; no GUI verification.",
+    "showIndex stores pointer to caller-local folders map while event loop active. Hover copies group list and checks only first group length before animation indexes later groups. Lifetime and empty later-group behavior need actual UI tests; no blanket dangling pointer claim.",
+    "mediaSelected can instantiate temporary Engine with default IndexParams and query copied search settings, then apply filters. GUI follow-up search is a fresh query, not just presentation of original candidate evidence.",
+    "FlagDisableDelete only declared in options here; enforcement resides in unread widgets. trackWeeds defaults true. No delete action or user selection performed."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "140/616 assessed:139 whole text/source and one PNG visual. qtutil.cpp remains partial.",
+    "29 previous isolated original-body/header controls and one independent counterexample unchanged. No visual GUI runtime, screenshot review or performance claim in this step.",
+    "No production port; native pHash/ASAN remains deferred."
+  ]
+}
