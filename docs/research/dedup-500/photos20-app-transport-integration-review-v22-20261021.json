@@ -1,0 +1,38 @@
+{
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "tests/e2e/integration/app-tab.test.ts": {
+      "sha256": "132360c72e44314c275e985e36475dc58c79c9f695fec580645684ade8de208f",
+      "git_blob": "71953e19de0f510feffc2a762b25ab5927eca00d",
+      "bytes": 6424,
+      "lines": 151,
+      "declared_test_calls": 5,
+      "method": "Whole source read."
+    },
+    "tests/e2e/integration/cross-tab-messaging.test.ts": {
+      "sha256": "9022bdf3ab0b224939cdc622464e1dfcd2d38986bf6111bb8cfd1818f77aaf70",
+      "git_blob": "41cfe40808ec883a4a6791f59ef12db291b48dd6",
+      "bytes": 12810,
+      "lines": 393,
+      "declared_test_calls": 8,
+      "method": "Whole source read."
+    }
+  },
+  "cumulative_whole_files_read": 53,
+  "tracked_blobs": 84,
+  "findings": [
+    "App-tab tests inject precomputed groups/metadata and valid selections, then check restoration, empty state, disconnected state and reload persistence. They do not compute duplicate evidence or test empty/stale kept override repair.",
+    "Test labelled accountEmail returned by stub only asserts Scan Library button visible; it does not assert custom email display, mismatch invalidation or unknown-account relabel behavior.",
+    "Chunk relay test requests 25000 synthetic items and checks three chunks, total/unique counts, first/last keys. It reassembles in a test-local listener; active application scan request ID is not set by direct command, so this does not exercise application chunk assembly/detection.",
+    "The custom chunk listener does not filter sender.tab direct delivery, unlike application. Set/count checks can tolerate repeated index notifications and do not establish exactly-once relay.",
+    "Progress test validates set of 250/500/600 events, allowing out-of-order arrival. Application reducer assigns each received value directly, so this test does not establish monotonic displayed progress.",
+    "Both files reuse a browser context per file. Many per-test cleanup actions occur after assertions rather than finally; failed assertions can leave pages/stubs/state for later tests. No failure injection run here."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "Static test source review only; no browser, extension, network/account or trash command executed.",
+    "53/84 complete tracked blobs read; browser suite outcomes unverified."
+  ]
+}

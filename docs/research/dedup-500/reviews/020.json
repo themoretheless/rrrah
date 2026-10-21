@@ -2,7 +2,7 @@
   "index": 20,
   "repository": "mtalcott/google-photos-deduper",
   "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
-  "review_scope": "Partial whole-file review: 51/84 tracked blobs. Browser configs and shared extension/stub fixtures completely read; simulated backend scope and live-context setup limits recorded. No browser tests executed.",
+  "review_scope": "Partial whole-file review: 53/84 tracked blobs. App-tab and cross-tab integration source read; transport-local assertions distinguished from application assembly/model semantics. No browser suite execution.",
   "decision": "reference",
   "finding": "Full worker computes pairwise neighborhoods but does not guarantee all-pairs group similarity; exact-threshold expansion can omit equal-score neighbors. Exported adjacency helper differs from actual full worker.",
   "license_metadata": "AGPL-3.0",
@@ -165,6 +165,9 @@
     },
     {
       "audit": "docs/research/dedup-500/photos20-browser-fixtures-review-v21-20261021.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/photos20-app-transport-integration-review-v22-20261021.json"
     }
   ]
 }
