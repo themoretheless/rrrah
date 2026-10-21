@@ -1,0 +1,75 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 49,
+  "files": {
+    "crates/models/src/statistics.rs": {
+      "bytes": 16281,
+      "sha256": "e16f97c0bf330d2a051ab4f06f592dfcd16618c1a14c68860a14ea3de25a296e",
+      "git_blob": "c980e3cbf3ecf0d569c80c44209c44d1454d3ec0",
+      "method": "Whole pinned text including tests/config read without truncation; Git blob verified"
+    },
+    "crates/app/Cargo.toml": {
+      "bytes": 894,
+      "sha256": "d66fc42d6643f673731cf2d11b9809294e771b898306a0748f5aca9eb8bd8f44",
+      "git_blob": "3cfbcc066b61907bd3e930affcf6af01d0d7207a",
+      "method": "Whole pinned text including tests/config read without truncation; Git blob verified"
+    },
+    "crates/ui/Cargo.toml": {
+      "bytes": 562,
+      "sha256": "5296cfbd61b358aedb6077edf4ebf55cd9996bcf808b1c23b9b44519bcd2a6c4",
+      "git_blob": "ffe0f1c53a8f2a88810bd195143eac473b5d53b1",
+      "method": "Whole pinned text including tests/config read without truncation; Git blob verified"
+    },
+    "crates/utils/Cargo.toml": {
+      "bytes": 376,
+      "sha256": "43f798f9b966835fbda88f5c6f638f4b3e1d7b538dc8b0ba73479c9667ca4d5d",
+      "git_blob": "7be33d530627a29d64f709056f0d2a8e07f6b498",
+      "method": "Whole pinned text including tests/config read without truncation; Git blob verified"
+    },
+    "crates/config/Cargo.toml": {
+      "bytes": 403,
+      "sha256": "1cb58e50b1bb983afd7dbced10adf1d11938b648aa7e88c8b3f373052959785e",
+      "git_blob": "856384f70a5a59bd2f78a94021c741f5b32f4035",
+      "method": "Whole pinned text including tests/config read without truncation; Git blob verified"
+    },
+    ".cargo/config.toml": {
+      "bytes": 2521,
+      "sha256": "3c298cdeff04758f85c5c6538b8f694f5a11cba0a6ee1708519d22d1cb75e5ce",
+      "git_blob": "c4ae8eab65980423a6c048de503f1bacdedfc8fa",
+      "method": "Whole pinned text including tests/config read without truncation; Git blob verified"
+    }
+  },
+  "new_unique_controls": 3,
+  "cumulative_unique_controls": 31,
+  "controls_script": "docs/research/dedup-500/visualvault076-statistics-tests-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-statistics-tests-20261021/run.log",
+  "new_original_tests": {
+    "statistics": 12,
+    "passed": 12,
+    "failed": 0,
+    "ignored": 0
+  },
+  "cumulative_distinct_original_module_tests": {
+    "passed": 157,
+    "failed": 1,
+    "scope": "Separate isolated unchanged modules, earlier Progress concurrency failure retained. Not original workspace qualification."
+  },
+  "runtime_scope": "Whole unchanged original Statistics, actual MediaFile and DuplicateStats modules in authored isolated manifest.12 original Statistics tests and3 authored controls selected separately; synthetic model records, no actual scanner/UI execution.",
+  "findings": [
+    "update_from_scan_results resets file totals/type maps but not duplicate_count/duplicate_size. Two identical2-file4-byte-group updates leave total_files2,total_size8 but duplicate_count2,duplicate_size8. Original full module control passed.",
+    "After nonempty duplicate scan, update_from_scan_results(empty,empty) leaves total_files0,total_size0 but duplicate_count1,duplicate_size4. Original full module control passed. Existing original no_duplicates test starts from fresh Statistics and does not catch this sequence.",
+    "update_from_files clears date/extension/top lists but not file_types or duplicate totals; update_from_scan_results clears type maps but not dates/extensions/top lists. Switching methods retains mutually stale fields, confirmed by authored control. App action source previously invokes both methods on same instance.",
+    "Duplicate size is recomputed using first member size times extra path count, ignores provided group wasted_space and actual physical allocation/hardlink identity. It assumes valid same-size groups. No new physical storage measurement claimed.",
+    "Largest/recent lists allocate/sort all files then retain10; classification counts supplied model type, extension counts lossy lowercase path extension. Date year casts signedyear to u32. No overflow/extreme date/performance controls run.",
+    "All12 original tests pass, including reset_on_update, but that test only checks selected update_from_files counters; does not establish reset across both methods or duplicate reset.",
+    "App/UI/utils/config manifests inherit workspace package identity and shared dependencies; app dev dependencies include codspeed-criterion-compat and proptest, but availability alone does not show property tests or valid benchmarking.",
+    ".cargo/config.toml sets broad warnings/clippy deny flags, Linux clang/lld/native CPU and release panic abort/LTO, plus nextest alias. Prior isolated harnesses outside this directory use fresh manifests and do not validate these original configuration gates. No full original build/Clippy/platform matrix run."
+  ],
+  "remaining_scope": "46 tracked artifacts remain; complete repository count205/500 unchanged. Native pHash/ASAN deferred.",
+  "limits": [
+    "No actual scan repetition/App/TUI, original workspace/lock/strict lint, cross-platform or storage-allocation qualification. No production code copied or changed."
+  ]
+}

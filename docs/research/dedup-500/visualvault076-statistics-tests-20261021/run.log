@@ -1,0 +1,33 @@
+    Updating crates.io index
+     Locking 93 packages to latest compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding sha2 v0.10.9 (available: v0.11.1)
+   Compiling visualvault076-statistics v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-statistics-20261021)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.19s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_statistics-49b4b16342add3aa)
+
+running 12 tests
+test statistics::tests::test_new_statistics ... ok
+test statistics::tests::test_empty_files ... ok
+test statistics::tests::test_duplicate_groups_edge_cases ... ok
+test statistics::tests::test_update_from_scan_results_with_duplicates ... ok
+test statistics::tests::test_update_from_scan_results_no_duplicates ... ok
+test statistics::tests::test_files_without_extension ... ok
+test statistics::tests::test_case_insensitive_extensions ... ok
+test statistics::tests::test_most_recent_files ... ok
+test statistics::tests::test_largest_files ... ok
+test statistics::tests::test_reset_on_update ... ok
+test statistics::tests::test_update_from_files ... ok
+test statistics::tests::test_more_than_10_files ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 41 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_statistics-49b4b16342add3aa)
+
+running 3 tests
+test controls::control_repeated_scan_accumulates_duplicate_totals ... ok
+test controls::control_empty_scan_retains_duplicate_totals ... ok
+test controls::control_switching_update_methods_retains_incompatible_fields ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.00s
