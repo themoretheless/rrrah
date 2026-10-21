@@ -4,7 +4,7 @@
   "commit": "83faaebea6b9e04003ca3a33d67bea2d649d02c9",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
   "decision": "reference",
-  "finding": "pHash command uses threshold zero as exact label; important caution: equal perceptual hash does not prove image equality.",
+  "finding": "Partial: original controls confirm stale path cache, transitive grouping beyond threshold and9999 best-distance sentinel failure. Remaining commands/docs/assets pending.",
   "available_source_evidence": [
     {
       "path": "hashing.py",
@@ -63,6 +63,13 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/phasher415-source-review-v1-20261021.json",
+      "controls": "docs/research/dedup-500/phasher415-controls-20261021/result.json",
+      "whole_repo_complete": false
     }
   ]
 }
