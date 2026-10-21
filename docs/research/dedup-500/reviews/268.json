@@ -2,7 +2,7 @@
   "index": 268,
   "repository": "kornelski/dupe-krill",
   "commit": "0e813b83c08543d4052523e05ca170bb1d155e91",
-  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
+  "review_scope": "Complete pinned17/17 review via verified prior12Rust whole-file readings plus current5 docs/config/license/lock readings; fresh original8 tests pass. Scanner/link mutation and other platforms unqualified.",
   "decision": "shortlist",
   "finding": "Rust BLAKE3 hasher and inode-aware scanner with scan tests; strong exact-stage reference to benchmark.",
   "available_source_evidence": [
@@ -48,9 +48,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT fully read; no production adoption.",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -85,5 +85,8 @@
     }
   ],
   "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
-  "prior_registry_review": "prior-registry-268-unlinked-reconciliation-20261013.json"
+  "prior_registry_review": "prior-registry-268-unlinked-reconciliation-20261013.json",
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/dupekrill268-complete-review-reconciliation-20261021.json"
 }
