@@ -1,0 +1,44 @@
+{
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "site-l10n/fr.json": {
+      "sha256": "37aaa3c3f7b00d70472a54ed00586d0b973e58a77a7849d9da776143c18c9ffe",
+      "git_blob": "de64c4173a538b4e4101524b3681ebdc3fc7a67e",
+      "bytes": 14094,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; original builder isolated two-locale control."
+    },
+    "site-l10n/it.json": {
+      "sha256": "50bfc807afb5f863c239f045f55ede47b55df6c4b5c165fd0e2c5536f406f0af",
+      "git_blob": "53ee94879b05c6664a1b55bac0b5d78cd3ff30d3",
+      "bytes": 13315,
+      "lines": 106,
+      "method": "Whole pinned JSON catalog read without truncation; original builder isolated two-locale control."
+    }
+  },
+  "cumulative_assessed_blobs": 224,
+  "tracked_blobs": 230,
+  "executed_controls": {
+    "harness": "docs/research/dedup-500/googlephotos42-site-locale-controls-v58-20261021/run.mjs",
+    "sha256": "7d27c31158d769fb45ac553c7b1ee802883100d0cdaec6605ff7bfc7edc821f0",
+    "log": "docs/research/dedup-500/googlephotos42-site-locale-controls-v58-20261021/run.log",
+    "passed": 2,
+    "failed": 0,
+    "exit_code": 0,
+    "keys_each": 96,
+    "method": "Original site builder runs with copied fr/it locale catalogs only and cached site into owned temporary directory; nonempty/exactkeyparity/lang/rootstylesheet/generated-demo-caption. No browser or deployment."
+  },
+  "findings": [
+    "French/Italiancatalogs96nonemptykeys each;exactsets match. Bothbuild andgeneratedpage checks pass. Originalbuildercompleteness limitation v45 remains, not erased by successful build.",
+    "Localised legal links explicitly state English. French quasi-identical wording does not certify any new precision beyond earlierpHash/starpolicy controls. Italian/English repeatedclaims do not establish corpus recall.",
+    "Bothpreserve10languages/98%/500/20presets andstaticratings/source-date assumptions. These are translations of pinnedcopy, not independent facts or benchmark results.",
+    "No native-speaker review, actual browserlayout, font/contrast/keyboard or fullninecatalogbuild qualification."
+  ],
+  "cumulative_original_function_controls": 93,
+  "limits": [
+    "224/230wholeartifacts;5sitecatalogs+bun.lockremain.Globalfullreview160/500unchanged.",
+    "No productionoptimization/fullupstreamsuite. NativepHash/ASANdeferred."
+  ]
+}
