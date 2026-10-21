@@ -1,0 +1,30 @@
+{
+  "repository": "julianholland/deduplicate",
+  "commit": "11bb260a864e3fad9f9b0054444ba7093139218c",
+  "whole_repo_complete": false,
+  "tracked_blobs": 102,
+  "cumulative_assessed_blobs": 12,
+  "files": {
+    "tests/unit/core/test_duplicate_detection_algorithm.py": {
+      "bytes": 13580,
+      "sha256": "7d17e2b09d12a7ec6262e9f0402618bfd40feeef560394d74273fed5dc37b2e3",
+      "git_blob": "301adba506bbc7c32c2e852418fa7bfc9bd9875c",
+      "method": "Whole original pinned text read without truncation; Git blob verified against pinned tree"
+    }
+  },
+  "new_runtime_controls": 2,
+  "cumulative_runtime_controls": 8,
+  "controls_script": "docs/research/dedup-500/vectors166-controls-v3-20261021/run.py",
+  "controls_log": "docs/research/dedup-500/vectors166-controls-v3-20261021/run.log",
+  "control_scope": "Full original base and DistanceMatrix imported, actual NumPy, identity numba.njit shim, capacity8. No original pytest or compiled Numba execution.",
+  "findings": [
+    "get_filled_dataset_array returns mutable backing view. After initial count2 for [0,10], overwrite second value0 through view; dirty remains false, subsequent count2 stale versus fresh instance count1.",
+    "After initial [0,0] count1, replace dataset with same-shape [0,10]. dirty=true but deduplicate directly returns only [0] from old mask. Explicit get_dataset_unique_structures recomputation repairs output to [0,10].",
+    "Base tests only inspect metric setter string and direct distances, not already-built metric invalidation. deduplicate test manually supplies mask; it does not exercise post-replacement freshness.",
+    "Other tests cover dirty flag on set_dataset_array, unchanged-array no-op, several capacity and dimension checks and direct metric examples. These are source assessment, not test execution."
+  ],
+  "remaining_scope": "90 tracked artifacts remain unassessed. Full repository count201/500 unchanged.",
+  "limits": [
+    "No production code adopted or changed. No approximate recall or performance claim. Native pHash/ASAN deferred."
+  ]
+}
