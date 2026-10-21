@@ -1,0 +1,86 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Sixadditionaltesttexts wholly read. Three originaltestexecutables compiledunchanged andrun onARM;17namedchecks passed. Remainingtwoauthoredtesttexts,assets,vendorheaders unreviewed.",
+  "manifest": [
+    {
+      "path": "tests/src/test_radial.c",
+      "sha256": "0f2b6f6f0166fcfddd4eff9df4242d8aa9dacb2b8ae5b883541147653fdb2227",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_whash.c",
+      "sha256": "fa1a11efccb556fa1fbf57d80549b880f771139a430e27bb67d819adec0f341c",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_core_extended.c",
+      "sha256": "7e0cf223272319f44c992ebc67cadef74c6237084f13a69913e6726485b3cc9a",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_image_color_extended.c",
+      "sha256": "6597edc736a1400a3574502dff8fea97ae9c427dd587df57536041be8c7c4e4f",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_internal.c",
+      "sha256": "f6cb3fb319360b681ffff339e6e24b0b5c0018bc8dc33a9492fe899995fc368b",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/src/test_image_internal.c",
+      "sha256": "1876113895d6f48670902b594c8aa5a2e2f57b396244234e67bb56ea46377585",
+      "review": "whole text read"
+    }
+  ],
+  "runtime": {
+    "method": "AppleClang cc-O2,originaltest andsource bodies unchanged,include src/include/tests-src;noPH_TESTING,nativecodec,ASAN. Eachbinaryexecutesitsoriginalmain.",
+    "executables": [
+      {
+        "test": "tests/src/test_internal.c",
+        "sources": [
+          "src/image/color.c",
+          "src/hashes/common.c"
+        ],
+        "named_checks_passed": 10,
+        "exit_code": 0
+      },
+      {
+        "test": "tests/src/test_core_extended.c",
+        "sources": [
+          "src/core.c",
+          "src/loader.c"
+        ],
+        "named_checks_passed": 4,
+        "exit_code": 0
+      },
+      {
+        "test": "tests/src/test_image_color_extended.c",
+        "sources": [
+          "src/hashes/color_hsv.c",
+          "src/hashes/color_moments.c"
+        ],
+        "named_checks_passed": 3,
+        "exit_code": 0
+      }
+    ],
+    "limit": "Partialtargetedupstreamtests,notcompleteCMake/Makefiletestsuite; nofilteredfailureorhiddenignoredcount."
+  },
+  "findings": [
+    "Radialoriginalrotationtest performs extra circularshiftminL2 helperdefinedonlyinthetest, notpublicph_l2_distance. Thisqualifiespriorrotationconcern:descriptorequivariancemaybemeasuredwithtest-specificalignment,ordinarycomparisonAPIhasnotsamecontract. Realrotationtestnotexecuted.",
+    "Radialimage-loadfailureprintsSkipandreturnsnormally. Successfultestexitcouldomitrotationqualification;fixtureavailabilitymustbeverifiedwithruntimeoutput.",
+    "test_scratchpad_autotrimprintsFAILifcapacitynotshrunk,butdoesnotexit/assert;reportedPASSdoesnotbyitselfenforcebound. CurrentrunprintedonlyPASS, nofailmessage.",
+    "test_image_internalallocatesuninitialized12byteRGBforph_get_gray;itsSIMDzeroinputtestcallsconversionswithoutcheckingoutputbytes. Notexecutedhere;independentpriorfilter/graycontrolsareseparate.",
+    "Originalwhash_e2eassertsexactcopyhashesbothmodesbutdoesnotcomparewithindependentlyexpectedPyWavelets/ImageHashresults. Notexecutedhere.",
+    "No productioncodechangesorspeedupclaim. NativepHash.org/ASAN remainsdeferred."
+  ],
+  "remaining": [
+    "tests/src/test_hash_logic.c",
+    "tests/src/test_image_primitives.c",
+    "Nineimage/corrupttestdatafiles",
+    "Twohugevendorheaders andgitlinkdependencyimplementationboundary"
+  ],
+  "full_review_count": 247
+}
