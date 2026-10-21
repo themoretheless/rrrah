@@ -1,0 +1,128 @@
+    Updating crates.io index
+     Locking 148 packages to latest compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding ratatui v0.29.0 (available: v0.30.2)
+      Adding sha2 v0.10.9 (available: v0.11.1)
+      Adding unicode-width v0.2.0 (available: v0.2.2)
+ Downloading crates ...
+  Downloaded instability v0.3.14
+  Downloaded cassowary v0.3.0
+  Downloaded unicode-truncate v1.1.0
+  Downloaded compact_str v0.8.2
+  Downloaded indoc v2.0.8
+  Downloaded ratatui v0.29.0
+   Compiling libc v0.2.191
+   Compiling rustversion v1.0.23
+   Compiling parking_lot_core v0.9.12
+   Compiling ident_case v1.0.1
+   Compiling signal-hook v0.3.18
+   Compiling strsim v0.11.1
+   Compiling log v0.4.34
+   Compiling scopeguard v1.2.0
+   Compiling rustix v0.38.44
+   Compiling syn v3.0.9
+   Compiling syn v2.0.119
+   Compiling either v1.19.0
+   Compiling paste v1.0.15
+   Compiling heck v0.5.0
+   Compiling foldhash v0.1.5
+   Compiling allocator-api2 v0.2.21
+   Compiling lock_api v0.4.14
+   Compiling ryu v1.0.23
+   Compiling indoc v2.0.8
+   Compiling itertools v0.13.0
+   Compiling unicode-segmentation v1.13.3
+   Compiling unicode-width v0.1.14
+   Compiling static_assertions v1.1.0
+   Compiling cassowary v0.3.0
+   Compiling hashbrown v0.15.5
+   Compiling unicode-width v0.2.0
+   Compiling lru v0.12.5
+   Compiling unicode-truncate v1.1.0
+   Compiling darling_core v0.24.1
+   Compiling serde_derive v1.0.229
+   Compiling tokio-macros v2.7.2
+   Compiling castaway v0.2.4
+   Compiling tracing-attributes v0.1.31
+   Compiling strum_macros v0.26.4
+   Compiling tokio v1.54.0
+   Compiling tracing v0.1.44
+   Compiling darling_macro v0.24.1
+   Compiling darling v0.24.1
+   Compiling serde v1.0.229
+   Compiling compact_str v0.8.2
+   Compiling errno v0.3.14
+   Compiling mio v1.2.4
+   Compiling backtrace v0.3.76
+   Compiling cpufeatures v0.2.17
+   Compiling getrandom v0.4.3
+   Compiling getrandom v0.3.4
+   Compiling sha2 v0.10.9
+   Compiling signal-hook-registry v1.4.8
+   Compiling rustix v1.1.5
+   Compiling ahash v0.8.12
+   Compiling parking_lot v0.12.5
+   Compiling signal-hook-mio v0.2.5
+   Compiling strum v0.26.3
+   Compiling crossterm v0.28.1
+   Compiling tracing-error v0.2.1
+   Compiling tempfile v3.27.0
+   Compiling color-spantrace v0.3.0
+   Compiling color-eyre v0.6.5
+   Compiling instability v0.3.14
+   Compiling chrono v0.4.45
+   Compiling ratatui v0.29.0
+   Compiling visualvault076-render v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-visualvault076-render-20261021)
+warning: enum `EditingField` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/models/src/state.rs:25:10
+   |
+25 | pub enum EditingField {
+   |          ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: enum `DuplicateFocus` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/models/src/state.rs:33:10
+   |
+33 | pub enum DuplicateFocus {
+   |          ^^^^^^^^^^^^^^
+
+warning: struct `ScanResult` is never constructed
+  --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/models/src/state.rs:39:12
+   |
+39 | pub struct ScanResult {
+   |            ^^^^^^^^^^
+
+warning: struct `OrganizeResult` is never constructed
+  --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/models/src/state.rs:46:12
+   |
+46 | pub struct OrganizeResult {
+   |            ^^^^^^^^^^^^^^
+
+warning: enum `FilterFocus` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/models/src/state.rs:57:10
+   |
+57 | pub enum FilterFocus {
+   |          ^^^^^^^^^^^
+
+warning: function `draw_modal` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/ui/src/file_details.rs:13:8
+   |
+13 | pub fn draw_modal(f: &mut Frame, file: &MediaFile) {
+   |        ^^^^^^^^^^
+
+warning: function `centered_rect` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/visualvault076-20261021/crates/ui/src/file_details.rs:194:4
+    |
+194 | fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
+    |    ^^^^^^^^^^^^^
+
+warning: `visualvault076-render` (lib test) generated 7 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.69s
+     Running unittests src/lib.rs (.dedup-work/visualvault076-detector-target-20261021/debug/deps/visualvault076_render-e3f8e73062916c53)
+
+running 2 tests
+test controls::control_search_cursor_uses_utf8_bytes_instead_of_columns ... ok
+test controls::control_progress_over_total_panics_in_original_gauge_draw ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 44 filtered out; finished in 0.00s

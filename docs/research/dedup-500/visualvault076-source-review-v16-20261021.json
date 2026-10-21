@@ -1,0 +1,50 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "whole_repo_complete": false,
+  "tracked_blobs": 95,
+  "cumulative_assessed_blobs": 52,
+  "files": {
+    "crates/ui/src/progress.rs": {
+      "bytes": 4855,
+      "sha256": "0a8fd295d393515d60ced9e0273f357d79698862ca02251cac5183336072b840",
+      "git_blob": "c63f01f43fa9dbd31a63c3270955cd1b9b82564d",
+      "method": "Whole pinned source read without truncation; Git blob verified"
+    },
+    "crates/ui/src/search.rs": {
+      "bytes": 6447,
+      "sha256": "8c73187799e30e6a85ef5d4d1c68b90a7ab5c0b79a961075126aa0652e7618f4",
+      "git_blob": "0580038cac9f1e3810184e1619afd148d5e68e19",
+      "method": "Whole pinned source read without truncation; Git blob verified"
+    },
+    "crates/ui/src/file_details.rs": {
+      "bytes": 7369,
+      "sha256": "d30486f4369df1b69a84fac1b4c3b5214080cb2c5ba99692e8aae200de2b6d2b",
+      "git_blob": "c358a70d5ee8e4ea1b6d4d330d4aa5ea69387b3c",
+      "method": "Whole pinned source read without truncation; Git blob verified"
+    }
+  },
+  "new_unique_controls": 2,
+  "cumulative_unique_controls": 33,
+  "controls_script": "docs/research/dedup-500/visualvault076-ui-render-controls-20261021/build.py",
+  "controls_log": "docs/research/dedup-500/visualvault076-ui-render-controls-20261021/run.log",
+  "runtime_scope": "Unchanged whole progress/search drawing modules rendered through Ratatui0.29.0 TestBackend; actual original Progress,MediaFile,AppState,InputMode,format_bytes. Authored minimal App fields adapter. File details module compiled but not rendered. No full App/config/TUI launch, screenshot or visual layout QA.",
+  "findings": [
+    "Normal50percent progress draws successfully, then current20/total10 draws via original progress overlay panic, caught by authored control. Progress.percentage allows200 and Gauge.percent receives200 without clamp. Public model edge case reproduced; normal scanner path exceeding total not demonstrated.",
+    "Search input containing one Cyrillic character renders cursor atx3,y1 fromUTF8 length2; correct single-column endpoint in same border geometry isx2. Actual original drawing through TestBackend control passed. No grapheme/wide-character matrix qualified.",
+    "Search status for nonempty results advertises Enter:View details, while previously reviewed navigation handler Enter in normal search mode switches toInsert. Table rows do not apply selected_file_index highlight in reviewed draw module. Static comparison, no full interaction test.",
+    "Cursor position uses unbounded input byte length convertedu16 with fallbackzero; long/narrow field scrolling and viewport clamp absent in this source. Overflow/out-of-bounds cases not executed.",
+    "Progress overlay uses60percent width30percent height with fixed row constraints and2 margin; no issues/completeness indicator or explicit cancellation control in this drawing module. No small-terminal visual qualification.",
+    "File details displays stored name/size/timestamps/metadata but queries current filesystem permissions synchronously during draw. It can combine observations from different times; no identity/freshness verification in modal. Compiled only, no changed-path modal runtime control.",
+    "Full paths are display-converted, timestamps shown only toseconds, image format label is existing model metadata. These are display properties, not normalized pixel equality or exact byte identity evidence. Metadata availability logged on each draw. No decoder or match algorithm run."
+  ],
+  "original_module_test_counts_unchanged": {
+    "passed": 157,
+    "failed": 1,
+    "scope": "Earlier isolated original modules. New2 tests authored; original tests compiled as dependencies but filtered out."
+  },
+  "remaining_scope": "43 tracked artifacts remain; global complete repository count205/500 unchanged. Native pHash/ASAN deferred.",
+  "limits": [
+    "No original workspace/lock/strict lint or live terminal interaction. Rendering controls use minimal App adapter, not full application. No production code copied or changed."
+  ]
+}
