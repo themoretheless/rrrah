@@ -123,7 +123,7 @@ pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Ra
         let (data, _) = url
             .decode_to_vec()
             .map_err(|e| RasterDecodeError::InvalidSvg(e.to_string()))?;
-        let declaration = crate::png_color::declaration(&data)?;
+        let declaration = crate::png_color::declaration_for_request(&data, request)?;
         if !matches!(
             declaration.color,
             Some(RasterColorSpace::Srgb | RasterColorSpace::AssumedSrgb)

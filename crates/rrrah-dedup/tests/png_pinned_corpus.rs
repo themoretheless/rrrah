@@ -8,6 +8,11 @@ use rrrah_dedup::decode::decode_selected_frame;
 #[ignore = "requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS"]
 fn pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels() {
     let directory = std::path::PathBuf::from(std::env::var_os("RRR_PNG_CORPUS").expect("RRR_PNG_CORPUS"));
+    let request = |path: &std::path::Path| {
+        let mut request = DecodeRequest::new(path);
+        request.png_assumed_rgb_primaries = Some([0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290]);
+        request
+    };
     let budget = MemoryBudget::new(64 * 1024 * 1024);
     let mut paths: Vec<_> = std::fs::read_dir(&directory)
         .unwrap()
@@ -26,7 +31,7 @@ fn pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels() {
             assert_eq!(&bytes[..8], b"\x89PNG\r\n\x1a\n");
             let width = u32::from_be_bytes(bytes[16..20].try_into().unwrap());
             let height = u32::from_be_bytes(bytes[20..24].try_into().unwrap());
-            let frame = match decode_selected_frame(&DecodeRequest::new(path), 1_000_000, &budget, || false) {
+            let frame = match decode_selected_frame(&request(path), 1_000_000, &budget, || false) {
                 Ok(frame) => frame,
                 Err(error) => {
                     failures.push(format!(
@@ -81,9 +86,7 @@ fn pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels() {
                 .to_string_lossy()
                 .replacen("basi", "basn", 1);
             let counterpart = directory.join(name);
-            let load = |path| {
-                decode_selected_frame(&DecodeRequest::new(path), 1_000_000, &budget, || false).unwrap()
-            };
+            let load = |path| decode_selected_frame(&request(path), 1_000_000, &budget, || false).unwrap();
             let interlaced = load(path);
             let plain = load(&counterpart);
             assert!(

@@ -1,0 +1,45 @@
+{
+  "scope": "Explicit caller-supplied PNG gamma-only RGB coordinates integrated into request, decoder and cache recipe; strict default unchanged.",
+  "changes": [
+    "DecodeRequest.png_assumed_rgb_primaries optional xy coordinates, defaultNone",
+    "PNG/APNG/JNG and SVG embedded PNG declaration call uses request-aware helper; embedded declarations retain precedence",
+    "Cache interpretation recipe v2 includes presence and exact f64 coordinate bits, validates coordinates",
+    "Corpus test explicitly chooses sRGB primary/white xy; this does not assert source declared sRGB transfer"
+  ],
+  "results": {
+    "corpus": {
+      "passed": 1,
+      "valid_png_decodes": 161,
+      "adam7_exact_pairs": 15,
+      "failed": 0
+    },
+    "independent_policy_test": {
+      "passed": 1,
+      "failed": 0,
+      "checks": [
+        "Strict decode rejected",
+        "Gamma0.5 gray128 matches independent (128/255)^2 within1e-4",
+        "Alpha128 remains128/255 within1e-6",
+        "sRGB assumption cache cold/warm",
+        "P3 assumption cache miss",
+        "Strict and invalid-coordinate requests cannot reuse warm assumption cache",
+        "Original assumption remains warm",
+        "Memory budget released"
+      ]
+    }
+  },
+  "commands": [
+    "RRR_PNG_CORPUS=$PWD/.dedup-work/spng454-20261021/tests/images CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_pinned_corpus --test png_primary_policy -- --ignored",
+    "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --no-default-features --features decode --test png_primary_policy"
+  ],
+  "limits": [
+    "First command filters nonignored policy test; second explicitly runs it.",
+    "All161 structural/normalization checks and15 exact pairs pass only with explicitly supplied primary policy. Does not establish unknown source primaries as fact.",
+    "APNG/JNG/SVG paths compiled but not runtime-qualified by these tests.",
+    "Current worktree includes pre-existing dirty raster/develop changes. Only request-aware declaration line in raster.rs belongs to this change; other edits excluded from commit.",
+    "Full source/assets review remains247/500; no all-cases or performance claim."
+  ],
+  "worktree_dependency_sha256": {
+    "crates/rrrah-develop/src/raster.rs": "1f92de172a3d4dee7456b0f446a36bbc78fced05f3aaa0645b307d5950f65afc"
+  }
+}

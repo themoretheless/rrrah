@@ -242,7 +242,7 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, Raster
         chunk(&mut metadata, kind, data);
     }
     metadata.extend_from_slice(&carrier[33..]);
-    let declaration = crate::png_color::declaration(&metadata)?;
+    let declaration = crate::png_color::declaration_for_request(&metadata, request)?;
     let mut d = PngDecoder::new(Cursor::new(metadata))?;
     let icc = d.icc_profile()?;
     let color = if declaration.override_icc {

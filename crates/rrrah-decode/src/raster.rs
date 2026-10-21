@@ -760,7 +760,7 @@ fn decode_raster_bytes_inner(
     for &offset in &avif_properties.handled_aperture_associations {
         bytes[offset] &= 0x7f;
     }
-    let png_color = crate::png_color::declaration(&bytes)?;
+    let png_color = crate::png_color::declaration_for_request(&bytes, request)?;
     let exr_metadata = crate::exr_color::metadata(&bytes)?;
     let hdr_color = crate::hdr_color::declaration(&bytes)?;
     // QOI validates framing while decoding under the output reservation.

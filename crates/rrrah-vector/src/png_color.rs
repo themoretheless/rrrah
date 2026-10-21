@@ -92,6 +92,17 @@ pub fn declaration_with_assumed_rgb_primaries(
     declaration_inner(bytes, Some(xy))
 }
 
+/// Apply the explicit request policy through the same declaration precedence.
+pub fn declaration_for_request(
+    bytes: &[u8],
+    request: &rrrah_raw::DecodeRequest,
+) -> Result<Declaration, RasterDecodeError> {
+    match request.png_assumed_rgb_primaries {
+        Some(xy) => declaration_with_assumed_rgb_primaries(bytes, xy),
+        None => declaration(bytes),
+    }
+}
+
 fn declaration_inner(bytes: &[u8], assumed: Option<[f64; 8]>) -> Result<Declaration, RasterDecodeError> {
     if !bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
         return Ok(Declaration::default());

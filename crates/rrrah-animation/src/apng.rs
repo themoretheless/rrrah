@@ -149,7 +149,7 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<ApngImage, RasterDeco
         return Err(bad("invalid/excessive frame count"));
     }
     // PNG validates legal depth/color combinations and expands packed samples.
-    let declaration = crate::png_color::declaration(b)?;
+    let declaration = crate::png_color::declaration_for_request(b, request)?;
     let mut limits = Limits::default();
     limits.max_alloc = Some(MAX_RASTER_BYTES);
     let mut decoder = PngDecoder::with_limits(Cursor::new(b), limits)?;

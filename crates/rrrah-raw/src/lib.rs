@@ -156,6 +156,10 @@ pub struct DecodeRequest {
     pub assume_untagged_linear_srgb: bool,
     /// Explicit Adobe-style PFM storage order. Default is bottom-up.
     pub pfm_top_down: bool,
+    /// Explicit RGB primary/white xy coordinates for PNG gAMA without cHRM.
+    /// None keeps the strict unknown-primary policy. Embedded color metadata
+    /// takes priority; the gamma curve is retained rather than assumed sRGB.
+    pub png_assumed_rgb_primaries: Option<[f64; 8]>,
     pub cancellation: Option<GenerationToken>,
     /// Optional admission for supported native decoder output allocations.
     pub memory_budget: Option<rrrah_core::MemoryBudget>,
@@ -175,6 +179,7 @@ impl DecodeRequest {
             assume_untagged_srgb: false,
             assume_untagged_linear_srgb: false,
             pfm_top_down: false,
+            png_assumed_rgb_primaries: None,
             cancellation: None,
             memory_budget: None,
         }

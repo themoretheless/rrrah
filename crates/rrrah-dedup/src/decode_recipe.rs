@@ -80,10 +80,23 @@ pub(crate) fn update_interpretation(
         assume_untagged_srgb,
         assume_untagged_linear_srgb,
         pfm_top_down,
+        png_assumed_rgb_primaries,
         cancellation: _,
         memory_budget: _,
     } = request;
-    hash.update(b"caller-pixel-interpretation-v1");
+    hash.update(b"caller-pixel-interpretation-v2");
+    match png_assumed_rgb_primaries {
+        None => {
+            hash.update(&[0]);
+        }
+        Some(xy) => {
+            rrrah_core::RgbChromaticities::new(*xy).ok_or(CacheError::Invalid)?;
+            hash.update(&[1]);
+            for value in xy {
+                hash.update(&value.to_bits().to_le_bytes());
+            }
+        }
+    }
     match rpf_interpretation {
         None => {
             hash.update(&[0]);
