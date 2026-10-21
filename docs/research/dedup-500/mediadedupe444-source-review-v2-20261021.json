@@ -1,0 +1,27 @@
+{
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "engine_review": {
+    "path": "engine.py",
+    "lines": 1409,
+    "sha256": "3e2839ac8ea6b006132c38c5a1d7012e9f2b25bcb42c7a77a4c703ad7493cd39",
+    "scope": "Whole engine read, lines1-1409 cumulative across v1/v2; other implementation files not yet whole reviewed"
+  },
+  "controls": "docs/research/dedup-500/mediadedupe444-video-controls-20261021/result.json",
+  "new_authored_controls": 3,
+  "cumulative_authored_controls": 6,
+  "findings": [
+    "Intensive matching counts any counterpart per source frame without one-to-one or reciprocal coverage. One zero hash versus ten hashes(1zero,9far): AB accepted at fraction1,BA rejected at0.1 with threshold0/defaultmin_fraction0.3. Actual original function and ImageHash backend; supplied hashes, not decoded media.",
+    "Original _split_png_stream searches signature bytes without PNG chunk parsing. One real Pillow-decoded valid PNG with embedded signature in ancillary tEXt splits into two fragments. This helper control does not prove such metadata in actual ffmpeg output.",
+    "Malformed frame_hashes JSON raises JSONDecodeError out of whole visual-video operation, rather than isolating row.",
+    "Video process cache keyed on path/size/mtime and intensive_n; recipe/version or content observation not included. Source review only, no new video cache runtime.",
+    "Both ordinary and intensive video grouping retain greedy anchor/visited semantics; default5-frame matching requires4 matches within3sec duration. Intensive mode explicitly accepts start OR end and has no duration filter. These heuristics are not whole-video identity.",
+    "process_files/process_videos stat preparation catches PermissionError only; FileNotFoundError during scan-to-stat can abort. Source observation, not runtime control.",
+    "Reporting sorts best-quality candidate by pixel count, size then mtime; matching metadata does not establish perceptual quality or safe deletion."
+  ],
+  "limits": [
+    "Whole engine text reviewed; remaining app/CLI/frontend/report/deployment/fixtures not yet fully reviewed. No upstream suite run, ffmpeg execution, live video decoding or broad precision qualification. Native pHash/ASAN remains deferred. No production code adopted."
+  ]
+}
