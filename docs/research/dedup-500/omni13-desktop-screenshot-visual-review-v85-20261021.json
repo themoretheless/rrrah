@@ -1,0 +1,70 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "docs/images/duplicates.png": {
+      "sha256": "dc6b33ff990cce717afc81ee8d52e8b924e086cf210d8590dd2286f02980782f",
+      "git_blob": "829a4baccf18f8f1867de92310b2f2b1e365a4b0",
+      "mode": "100644",
+      "width": 1117,
+      "height": 910,
+      "frames": 1,
+      "method": "Full PNG decoded and viewed directly at original dimensions via view_image."
+    },
+    "docs/images/dub.png": {
+      "sha256": "a9416f83b1bb050033cf6dacc1692ed4da10230527fda74208b4237c08cddf19",
+      "git_blob": "d1a261c2752ea5562c454728c2f9f6997014ab9a",
+      "mode": "100644",
+      "width": 1062,
+      "height": 957,
+      "frames": 1,
+      "method": "Full PNG decoded and viewed directly at original dimensions via view_image."
+    },
+    "docs/images/all-drives.png": {
+      "sha256": "574d4a216f30cce314f9c6b8cfde16991104d61f887ffb03e9c2e78042b3176a",
+      "git_blob": "195be5b6aa27425f6028a7f30b6ffc7a89b278b0",
+      "mode": "100644",
+      "width": 1037,
+      "height": 823,
+      "frames": 1,
+      "method": "Full PNG decoded and viewed directly at original dimensions via view_image."
+    },
+    "docs/images/image.png": {
+      "sha256": "4126c2f55ee0a55c40939da976608a49eb7b2539e954b2dda480911af3d341f8",
+      "git_blob": "7696ab347855c84970a2b02ee8b0e8858137f4c1",
+      "mode": "100644",
+      "width": 1061,
+      "height": 863,
+      "frames": 1,
+      "method": "Full PNG decoded and viewed directly at original dimensions via view_image."
+    }
+  },
+  "cumulative_whole_files_read": 194,
+  "tracked_blobs": 268,
+  "method": "Four complete pinned screenshots visually inspected directly, not OCR-only. Single-frame PNG decode succeeded. UI/source comparison only; screenshots depict historical states not current runtime.",
+  "visual_observations": {
+    "docs/images/duplicates.png": "Older three-tab desktop view; min1MB;21groups61files and Reclaimable6.7GB; progress100percent;11-filegroup187.1MBeach withallfiles-shownlabel. One shownpathinRecycleBin. No deleteicons visible on inspectedrows.",
+    "docs/images/dub.png": "Expandedtabs/settings/themes/syntax;min50MB;12groups32files1.6GBreclaimable. Two-membergroup ld.exe and ld.lld.exe, anothernode.exepair; eachgroupstatesallfiles-shown; trashicons perrow.",
+    "docs/images/all-drives.png": "SearchwithScanAllDrivesenabled/IncludeFolderschecked; querylabel extensionfolder;64shown(limit200);directoriesfromDandC, highlightednames/pathsnippets. No proof allvolumes/indexcomplete.",
+    "docs/images/image.png": "OldersearchviewonlySearch/Abouttabs; queryKson, categorycountsAll7/Apps1/Media6; videoresultsandlnkshortcut; thumbnails and path/namehighlight. Extension.mp4 appearsgray and mayplaceholder, notproof activefilterfailure."
+  },
+  "findings": [
+    "Differentfile names in displayedduplicategroup demonstrate filename-independent UX scenario; actualbyteidentity/alias/hardlinkrelation notestablished by screenshot. Need comparatorruntime evidence, notvisualgroupappearance.",
+    "Reclaimable labels computedUI/logicalbytes not proofphysicaldiskspacefreed; filesystemhardlinks/sparse/compressed/recyclebin allocation maydiffer. No filedeletion orallocationmeasurement.",
+    "Allfiles-shownlabel exists in picturedgroups; doesnotprove behavior when fullgroup truncated. PriorAppsource explicitlyhandlescountvsvisible. Screenshotgroup11 doesnotexercise80membercap.",
+    "Searchall-drives picture explicitlyshowslimit200 and64results; unlikeAndroidlimitdisclosuregap. PicturedC/Dpaths support displayedcrossdriveexamples only, notcompletescan.",
+    "Interfaceversions differ; no dates/buildhash embedded linkingpictures to actualbinary. Currentpinnedsource review remains authoritative forbehavior. Placeholder/filtergray styling cannot inferactiveinputsemantics withoutsource/runtime."
+  ],
+  "candidate_requirements_for_library": [
+    "Exact duplicate grouping independent of filename, preserving path/object identity metadata.",
+    "Separate logicalduplicatebytes from actual reclaimableallocation and destructiveaction outcome.",
+    "Explicit resultlimit and truncatedgroup disclosure with reproducible counts."
+  ],
+  "limits": [
+    "194/268 wholeblobs; repository013 incomplete. Remainingdocs screenshots/GIF/otherassets notcredited.",
+    "No app/device/build/runtime comparison, screenshottest oractualdesktopfilesinspected.",
+    "155/500 fullrepositories unchanged; no productionedit/newlibrarytestresult.",
+    "pHash/ASAN remains deferred by user."
+  ]
+}
