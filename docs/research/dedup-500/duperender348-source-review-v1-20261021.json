@@ -1,0 +1,54 @@
+{
+  "repository": "samytichadou/dupe_render",
+  "commit": "ecbf7c6a54fb051cdcb9490d905abca19dab26b7",
+  "whole_repo_complete": false,
+  "tracked_blobs": 13,
+  "cumulative_assessed_blobs": 5,
+  "files": {
+    "duplicate_originals_operator.py": {
+      "bytes": 1474,
+      "sha256": "3b67b322273d5d43f31d898bba17cb98619576d1d13f43d7ff736a9acc04e27b",
+      "method": "Whole pinned Python file read without truncation; hash_operator read in two contiguous chunks"
+    },
+    "hash_operator.py": {
+      "bytes": 17595,
+      "sha256": "d20285515ed3c2b955429c4b0c4fbb375ac5282289ca458dd4161b4223bfec42",
+      "method": "Whole pinned Python file read without truncation; hash_operator read in two contiguous chunks"
+    },
+    "__init__.py": {
+      "bytes": 2172,
+      "sha256": "1c952f2e5655181e56224c5f57130ff53348b0b042e8916fb227ae121ef3d127",
+      "method": "Whole pinned Python file read without truncation; hash_operator read in two contiguous chunks"
+    },
+    "specific_frame_ranges_operators.py": {
+      "bytes": 3756,
+      "sha256": "0e834c69ad1ac9cabef113a4a69e24c3b4c201934f05845e631febbada99e3cf",
+      "method": "Whole pinned Python file read without truncation; hash_operator read in two contiguous chunks"
+    },
+    "create_placeholders_operator.py": {
+      "bytes": 1409,
+      "sha256": "73317329406624c0d1091810510520088b301f57037eafa32b255ea3543093df",
+      "method": "Whole pinned Python file read without truncation; hash_operator read in two contiguous chunks"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/duperender348-controls-v1-20261021/run.py",
+    "log": "docs/research/dedup-500/duperender348-controls-v1-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original function AST compiled with authored synthetic matrix/evaluated-object/frame/progress adapters. Hash failure injected explicitly. No bpy/Blender/render/IO execution."
+  },
+  "findings": [
+    "world_matrix_to_hash concatenates str(float) without delimiters. Matrices differing at first row [1.0,23.0] versus[1.02,3.0] serialize identically and return equal hash. Ambiguous serialization, NOT a cryptographic MD5 collision. Positive ordinary changed-matrix control differs.",
+    "get_frames_to_render lacks try/finally. Injected failure at frame2 leaves current frame2 rather than7, audio scrub disabled and progress not ended. Successful A,A,B control yields originals1,3/duplicate2 and restores state.",
+    "Frame loop compares against latest distinct hash, classifying consecutive repeats; nonconsecutive repeated states are not globally grouped. This is inspected algorithm scope, not necessarily policy defect.",
+    "get_nodetree_hash reads node properties and input defaults; explicit link topology traversal not observed. Full Blender property string behavior and render impact unqualified.",
+    "Plugin hashes scene state rather than encoded output bytes or normalized pixels. Whole render equality does not follow from these source adapters.",
+    "Specific range operator can increment DUPE start beyond end after prevalidation for singleton range; downstream behavior unqualified. Actual placeholder creation/replacement helpers remain unread and were not invoked."
+  ],
+  "remaining_scope": "8 artifacts: root README/license/gitignore, GUI, handler, preferences, properties, remove-placeholder operator.",
+  "license": "__init__.py declares GPLv3-or-later; root GPLv3 screening metadata pending full assessment. No production adoption.",
+  "limits": [
+    "Partial5/13 review; global full count180/500 unchanged.",
+    "No Blender SDK, scene evaluation, actual render, image corpus, filesystem placeholders or performance validation. Native pHash/ASAN deferred."
+  ]
+}

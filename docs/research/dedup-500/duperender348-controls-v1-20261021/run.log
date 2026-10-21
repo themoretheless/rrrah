@@ -1,0 +1,9 @@
+PASS different synthetic finite matrices share delimiter-free serialization and hash (not MD5 collision)
+PASS ordinary matrix change positive control differs
+Dupe Render --- frame 00001 : a
+PASS original frame loop leaves changed frame/audio/progress after injected hash exception
+Dupe Render --- frame 00001 : a
+Dupe Render --- frame 00002 : a
+Dupe Render --- frame 00003 : b
+PASS successful loop classifies consecutive duplicate and restores state
+4 original-function controls passed; Blender scene evaluation, actual renders and filesystem writes NOT executed
