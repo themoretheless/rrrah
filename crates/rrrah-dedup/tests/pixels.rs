@@ -255,3 +255,47 @@ fn transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection
     assert_eq!(ff.variants[0], [0, 0, u64::MAX, 0]);
     assert_eq!(fr.compare(&ff, false).distance, 64);
 }
+
+#[test]
+fn uniform_tiny_and_thin_images_have_no_empty_resample_cells() {
+    // Independent constant-field oracle: every normalized footprint has the
+    // same intensity, even when it is smaller than one source pixel.
+    for (width, height) in [
+        (1, 1),
+        (1, 2),
+        (2, 1),
+        (2, 3),
+        (3, 2),
+        (8, 9),
+        (9, 8),
+        (1, 33),
+        (33, 1),
+        (32, 32),
+    ] {
+        for shade in [0_u8, 17, 128, 255] {
+            for alpha in [0_u8, 1, 128, 255] {
+                let bytes = [shade, shade, shade, alpha].repeat(width * height);
+                let view =
+                    Rgba8View::new(width as u32, height as u32, &bytes, (width * height) as u64).unwrap();
+                let fingerprint = view.fingerprint(|| false).unwrap();
+                let srgb = f64::from(shade) / 255.0;
+                let expected = if srgb <= 0.04045 {
+                    srgb / 12.92
+                } else {
+                    ((srgb + 0.055) / 1.055).powf(2.4)
+                } * (f64::from(alpha) / 255.0);
+                for mean in fingerprint.mean_linear_rgb {
+                    assert!(
+                        (mean - expected).abs() < 1e-12,
+                        "{width}x{height}, shade={shade}, alpha={alpha}, mean={mean}, expected={expected}"
+                    );
+                }
+                assert!(
+                    fingerprint.luminance_stddev < 1e-12,
+                    "{width}x{height}, shade={shade}, alpha={alpha}"
+                );
+                assert!(!fingerprint.compare(&fingerprint, true).informative);
+            }
+        }
+    }
+}
