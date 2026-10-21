@@ -1,0 +1,53 @@
+{
+  "repository": "Eul45/omni-search",
+  "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {},
+  "cumulative_whole_files_read": 81,
+  "tracked_blobs": 268,
+  "partial_file_reviews": {
+    "omnisearch-lite/src/search.rs": {
+      "sha256": "e6579f8103b7f32a68fa287ca9fd9d07f4c42bc90cf52a8422a1aed822150b4d",
+      "git_blob": "236b2bf3ecc2ac5cf324164cc383a64e05298b0d",
+      "lines": 10272,
+      "new_read_line_ranges": [
+        [
+          1131,
+          1820
+        ]
+      ],
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          1820
+        ]
+      ],
+      "whole_file_read": false
+    }
+  },
+  "method": "690 additional contiguous source lines read. Exact filename SQL executed on owned in-memory SQLite; limited synthetic postfilter, not original Rust engine.",
+  "executed_controls": {
+    "unicode_lowercase_like_rows": 0,
+    "limit_before_path_filter_visible_rows": 0,
+    "matching_rows_without_limit": 2,
+    "scope": "Exact SQL query on owned in-memory SQLite; postfilter limited to synthetic target path, not original Rust engine"
+  },
+  "control_source": "import sqlite3,json\nfrom pathlib import Path\nc=sqlite3.connect(':memory:');c.execute('CREATE TABLE files(path TEXT,name TEXT,extension TEXT)');c.execute('INSERT INTO files VALUES(?,?,?)',('C:\\\\Docs\\\\\u00c4.txt','\u00c4.txt','txt'))\nquery='SELECT path, name, extension FROM files WHERE name LIKE ? LIMIT ?'\nu=c.execute(query,('%\u00e4%',10)).fetchall();assert u==[]\nc.execute('DELETE FROM files');c.executemany('INSERT INTO files VALUES(?,?,?)',[('C:\\\\target\\\\report.txt','report.txt','txt'),('C:\\\\Docs\\\\report.txt','report.txt','txt')]);limited=c.execute(query,('%report%',1)).fetchall();valid=[r for r in limited if '\\\\target\\\\' not in r[0].lower()];assert valid==[];allrows=c.execute(query,('%report%',10)).fetchall();assert len(allrows)==2\nout={'unicode_lowercase_like_rows':len(u),'limit_before_path_filter_visible_rows':len(valid),'matching_rows_without_limit':len(allrows),'scope':'Exact SQL query on owned in-memory SQLite; postfilter limited to synthetic target path, not original Rust engine'}\nPath('.dedup-work/omni13-20261021/search-sql-v24-result.json').write_text(json.dumps(out)+'\\n')\n",
+  "findings": [
+    "SQL filenamequery nameLIKElowercasequery defaultSQLite casehandling differs from RustUnicode to_lowercase: own \u00c4.txt vs\u00e4 queryreturns0. No customcollation/ICU pragma in reviewedengineinit; full app setup laterpending, ordinaryrusqlitebundled expectedscope not runtimeparityproof.",
+    "SQL LIMIT beforeRust pathscore/namefilter canstarve validmatches afterexcludedrows. Own2rowfixturelimit1 chooses targetpath thenpostfilterempty despiteDocsmatch. Actualcandidatebudget usually2000, not1; scale boundary relevant onlywhenmatches exceedbudget.",
+    "Fastin-memorywordfallback acceptsindividualqueryword, SQLprefilter requirescontiguousquery LIKEpattern. Multiterm filenames canmatchfast butneverreachSQLscore_name. Staticphaseparity difference, no fullenginecomparison.",
+    "FTScontentresults canupgrade existingfilename score/source withoutaddingcontentsnippet onthatbranch. Resultsreturn filename+FTS unions without finalsort/truncate in generichelper; callerfinalranking pending.",
+    "Prepare/query/rowerrors becomeempty/skippedthroughiflet/ok; returnedVec lacks errorinventory. SQLerror canlooklikenomatches acrossfiles/timeline/memorymethods.",
+    "Nonemptyfilenamequery againomitsis_dir and usesextensionfolder toclassify, confirmingv23 limitation appliesSQLbranch too. Emptyquery explicitlyis_dir0 excludesfolders.",
+    "FTSprefix cleanup removesnonalphanumericpunctuation and joinswords; this is tokenprefix retrieval, not bytesubstringidentity. Currentindexerbackgroundcontentdisabled(v18), existinglegacycontent maystillreturn.",
+    "Timelineeventids generatedtimestampalone cancollide forrowsatsecondsame; sequentialsearchalsoidtimestamp. Memoryevents useuniqueid. UIeffectofidentitycollision pendinglaterreview.",
+    "Sequentialtimeline anchor constrainedbyrequestedtimebounds, butneighborwindow anchor\u00b1600 notclampedtooriginalstart/end; canreturneventsoutside requestedbounds. Staticquerycomparison, no userdataread.",
+    "This segment concerns filemetadata/contentretrieval and activityhistory; doesnotprove contentduplicate grouping or allcases. No codeadopted."
+  ],
+  "limits": [
+    "81/268 wholefiles; search.rs1-1820 of10272 partial.",
+    "SQLmechanism checks only; no full Rust/Tauri/Windows/runtime, browserprofiles, clipboard, actualindex or upstreamsuite.",
+    "No productionchanges or performanceclaim. Native pHash/ASAN deferred."
+  ]
+}
