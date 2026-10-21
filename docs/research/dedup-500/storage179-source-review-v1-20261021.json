@@ -1,0 +1,44 @@
+{
+  "repository": "coderhs/active_storage_dedup",
+  "commit": "dfd2303a72044369b19bc7d13cb8d4789c0a6041",
+  "whole_repo_complete": false,
+  "tracked_blobs": 44,
+  "cumulative_assessed_blobs": 3,
+  "files": {
+    "lib/active_storage_dedup.rb": {
+      "bytes": 623,
+      "sha256": "d3394afc2641fe5cb6dc92d47e9b2b65134083400d6ab0807f7dcb2f2794bc2f",
+      "method": "Whole pinned Ruby file read without truncation"
+    },
+    "lib/active_storage_dedup/blob_deduplication.rb": {
+      "bytes": 7063,
+      "sha256": "71c16bfe16242201ea5eea3f265ce53190bab9b230821e62f44479268f86dde5",
+      "method": "Whole pinned Ruby file read without truncation"
+    },
+    "lib/active_storage_dedup/deduplication_job.rb": {
+      "bytes": 4224,
+      "sha256": "37fcbcd45f6ac82b09adeff2998d92fa6a9d17e26b01034e1e9b0f563f3a8f11",
+      "method": "Whole pinned Ruby file read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/storage179-controls-v1-20261021/run.rb",
+    "log": "docs/research/dedup-500/storage179-controls-v1-20261021/run.log",
+    "passed": 3,
+    "method": "Original Ruby module/job loaded unchanged with authored Concern/ActiveJob/logger/model adapters under Ruby2.6.10. Only direct-upload metadata branch and merge helper executed; no Rails/DB/storage."
+  },
+  "findings": [
+    "Direct-upload method reuses find_by(checksum,service_name) result without byte_size predicate. Authored checksum metadata and size999 returns synthetic existing size1. This is metadata-path witness, not a real checksum collision, HTTP upload or actual ActiveStorage behavior.",
+    "merge_duplicate updates attachments before keeper counter and duplicate deletion, without transaction in inspected helper. Injected increment failure is rescued, leaves moved references, old counter and duplicate record retained. Actual DB/transaction behavior unqualified.",
+    "Successful positive merge control moves2attachments, increments counter and deletes duplicate record. No physical file deletion performed.",
+    "Job groups by checksum/service and returns duplicates.size even when merge helper rescues errors. Reported merged count can include attempted failures by source flow; full job not executed.",
+    "Duplicate record uses delete rather than physical purge; source comment assumes same file. Storage keys and service object lifetime/garbage collection remain unread/unqualified.",
+    "Form/programmatic hooks build checksum then reuse existing blob; no full byte confirmation observed. Actual checksum algorithm/version defined by external ActiveStorage, not established here."
+  ],
+  "remaining_scope": "41artifacts: extensions/config/railtie/generator/tasks, fullspecs, docs/license/manifest/lock and fixture app.",
+  "license": "RegistryMIT screening only; root/license text pending. No production adoption.",
+  "limits": [
+    "Partial3/44review; global full count185/500 unchanged.",
+    "No Rails original suite, actual transaction/attachment lifecycle, file upload/deletion, multiuser concurrency, platform or performance qualification. Native pHash/ASAN deferred."
+  ]
+}

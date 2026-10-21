@@ -1,0 +1,4 @@
+PASS original direct-upload hook reuses metadata match despite differing supplied byte_size; no actual digest collision
+PASS injected counter failure leaves moved attachments with duplicate record retained; error swallowed
+PASS successful control moves attachments, updates counter and deletes duplicate record
+3 original-method controls passed; no Rails, transaction engine, database, uploads or stored file operations

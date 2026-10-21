@@ -2,7 +2,7 @@
   "index": 179,
   "repository": "coderhs/active_storage_dedup",
   "commit": "dfd2303a72044369b19bc7d13cb8d4789c0a6041",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Partial pinned3/44whole Ruby source files; three original-method adapter controls confirm metadata-only reuse and partially completed merge on counter failure. Rails/DB/storage runtime unqualified.",
   "decision": "reference",
   "finding": "Rails blob dedup jobs and attachment lifecycle; persistent blob identity reference, not native decoding.",
   "available_source_evidence": [
@@ -73,6 +73,11 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_source_reviews": [
+    {
+      "audit": "docs/research/dedup-500/storage179-source-review-v1-20261021.json"
     }
   ]
 }
