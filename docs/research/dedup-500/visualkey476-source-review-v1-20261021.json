@@ -1,0 +1,62 @@
+{
+  "repository": "ecolesthecreator/VisualKeyKit",
+  "commit": "d6b31c689ff3011f154335098d208e6e165205cc",
+  "whole_repo_complete": false,
+  "tracked_blobs": 13,
+  "cumulative_assessed_blobs": 4,
+  "new_whole_files_read": {
+    ".gitignore": {
+      "bytes": 159,
+      "sha256": "957cebaaa7373271bc6bb90bcfc1fb04c26e9130bd87df7e5be843c5d80f6e41",
+      "git_blob": "47ee05e4e38ea2c516b80581a6968912b3475237",
+      "method": "Whole pinned text/source/license read without truncation"
+    },
+    "LICENSE": {
+      "bytes": 1082,
+      "sha256": "4db1aad216c2299e5ab825420b08d543ab4a89ad902b2a8317c218a3fc8533ad",
+      "git_blob": "4fb81656ed3eeabb72f80df18710194cad35165c",
+      "method": "Whole pinned text/source/license read without truncation"
+    },
+    "Package.swift": {
+      "bytes": 521,
+      "sha256": "a65e3c34af61364ab86bc74de786a7fb9ce1588f8b26be6665e1d86f108633fe",
+      "git_blob": "bcb4424b549025b72d735f9fea394c3e4adb7129",
+      "method": "Whole pinned text/source/license read without truncation"
+    },
+    "Sources/VisualKeyKit/Bitset256.swift": {
+      "bytes": 4315,
+      "sha256": "bacb8423f6d5497d685590f6f4b2e8ef996856f8421661c77105b5a6c4918d48",
+      "git_blob": "47722b59688fcfeca73ac5e9ef6028473c263ccb",
+      "method": "Whole pinned text/source/license read without truncation"
+    }
+  },
+  "controls": {
+    "harness": "docs/research/dedup-500/visualkey476-controls-v1-20261021/main.swift",
+    "log": "docs/research/dedup-500/visualkey476-controls-v1-20261021/run.log",
+    "passed": 4,
+    "method": "Unchanged original Bitset256.swift compiled with authored Swift executable; all256one-hot roundtrips, maxdistance, trailing JSON word and invalid positive index checks. No package/image/authentication pipeline run."
+  },
+  "findings": [
+    "All256single-bit positions roundtrip and have unit Hamming distance; zero-to-allones distance256.",
+    "Codable decoder reads firstfourUInt64withoutcheckingunkeyedcontainerend;fifthwordignored. Permissiveformatobservation,notprovenconsumerdefect.",
+    "bit(at:256)readsword3bit0ratherthanrejectinginvalidindex;API documents0-255. No crash/negative-index controlrun.",
+    "fromBits uses exact256 precondition; original length contract explicit.",
+    "Package has no third-party dependencies and declares Swift5.9,iOS15,macOS12. Full platform/package build not executed."
+  ],
+  "remaining": [
+    "OPEN_SOURCE_ROADMAP.md",
+    "README.md",
+    "Sources/VisualKeyKit/BiometricPassword.swift",
+    "Sources/VisualKeyKit/FuzzyTemplate.swift",
+    "Sources/VisualKeyKit/PasswordPolicy.swift",
+    "Sources/VisualKeyKit/SecureRandom.swift",
+    "Sources/VisualKeyKit/VisualKey.swift",
+    "Sources/VisualKeyKit/VisualKeyKit.swift",
+    "Tests/VisualKeyKitTests/VisualKeyKitTests.swift"
+  ],
+  "license": "Root MIT fully read; no production source adopted; control compiles original cached source in place.",
+  "limits": [
+    "Full-review count remains169/500;4/13whole artifacts.",
+    "Hamming primitive qualification is not image hash precision or broad corpus/runtime evidence. Native pHash/ASAN remains deferred."
+  ]
+}

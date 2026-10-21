@@ -1,0 +1,5 @@
+PASS all 256 one-hot signatures round-trip with unit Hamming distance
+PASS full-radius distance 256
+PASS decoder accepts trailing fifth word and ignores it; strict wire-length validation absent
+PASS index256 reads fourth-word bit0; documented index range not runtime validated
+RESULT 4 controls passed; unchanged original Bitset256 compiled with Swift, no image or authentication pipeline execution
