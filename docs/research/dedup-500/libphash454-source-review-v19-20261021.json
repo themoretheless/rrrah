@@ -1,0 +1,31 @@
+{
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "whole_repo_complete": false,
+  "scope": "Completed vendor resizer lines 8451..10679; whole header 1..10679 read across incremental reviews.",
+  "manifest": [
+    {
+      "path": "vendor/stb_image_resize2.h",
+      "sha256": "173e654634f6ccaad98f603e686ea212eec1fe8ea6d2a5e5e8056efa10ae3880",
+      "read_ranges_inclusive": [
+        [
+          1,
+          10679
+        ]
+      ],
+      "whole_file_read": true
+    }
+  ],
+  "findings": [
+    "Completed uint8/uint16 linear scaled and unscaled coders, sRGB color with separate linear alpha, Float16/float coders, vertical scatter/gather initialization and continuation templates, horizontal 1..12 and modulo-four general coefficient templates, dispatch and license.",
+    "Vertical single-weight gather copies input when weight is within 1e-6 of unity. This is an explicit numerical shortcut; no arbitrary-float exactness or performance claim.",
+    "Float output optional clamps and SIMD/scalar arithmetic need recipe-specific qualification. Prior gray uint8 parity, negative stride and half-conversion controls do not qualify all color/alpha/filter/platform configurations.",
+    "License block wholly read: alternative MIT copyright 2017 Sean Barrett or Unlicense. No vendor code adopted.",
+    "Prior confirmed repeat split-count API inconsistency remains separate from current one-shot hash wrapper. No new runtime tests in this increment; native pHash.org/ASAN remains skipped."
+  ],
+  "remaining": [
+    "stb_image inactive platform/comment review boundary",
+    "Optional codec gitlink qualification"
+  ],
+  "full_review_count": 247
+}
