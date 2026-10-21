@@ -1,0 +1,10 @@
+{
+  "package": "rrrah-dedup",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test sequence --no-default-features",
+  "exit_code": 0,
+  "passed": 8,
+  "failed": 0,
+  "relevant_test": "first_frame_match_does_not_hide_changed_last_frame",
+  "scope": "Existing sequence API regression suite rerun after original upstream C GIF filename-path counterexample. Already decoded linear frames; does not prove local GIF decoding integration.",
+  "upstream_controls": "docs/research/dedup-500/zigimage422-tga-gif-controls-20261021/result.json"
+}

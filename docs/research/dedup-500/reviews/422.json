@@ -2,9 +2,9 @@
   "index": 422,
   "repository": "galactixx/imagehash",
   "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "PNGsectionwhole-readthrough5480;wholePNGloaderaccepts4controlledCRC/Adlermismatches. Priorcounterexamplesretained;remainingBMP/otherheaderreviewandZigtestsunfinished;noadoption.",
+  "review_scope": "All16 pinned blobs assessed:12 whole text including both bundled STB headers,4 PNG visually viewed; authored C backend controls, original Zig tests unrun.",
+  "decision": "reference-only-no-backend-adoption",
+  "finding": "Complete pinned source review; retain reproducible resize, precision, orientation, integrity and first-frame-only counterexamples. No production adoption.",
   "available_source_evidence": [
     {
       "path": "src/imagehash.zig",
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT and both STB dual MIT/Unlicense notices whole-read; no production code copied.",
   "tests_detected": 3,
   "upstream_tests_run": false,
   "tests_inventory_scope": "WholeZigsourceinspection:3testblocks,12hashgoldenrows;notexecutedbecauseZigunavailable.",
@@ -165,6 +165,19 @@
       "audit": "docs/research/dedup-500/zigimage422-source-review-v21-20261021.json",
       "controls": "docs/research/dedup-500/zigimage422-png-integrity-controls-20261021/result.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/zigimage422-source-review-v22-20261021.json",
+      "controls": "docs/research/dedup-500/zigimage422-bmp-controls-20261021/result.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/zigimage422-source-review-v23-20261021.json",
+      "controls": "docs/research/dedup-500/zigimage422-tga-gif-controls-20261021/result.json",
+      "whole_repo_complete": true
     }
-  ]
+  ],
+  "whole_repo_complete": true,
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/zigimage422-complete-source-review-20261021.json"
 }

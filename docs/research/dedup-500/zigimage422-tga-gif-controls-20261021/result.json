@@ -1,0 +1,133 @@
+{
+  "cases": [
+    {
+      "name": "tga_top_origin",
+      "fixture_sha256": "0fc89827e29d51e6851b3c0287f6b59b521530209ba1d72c15088f442a12ba31",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ]
+    },
+    {
+      "name": "tga_bottom_origin",
+      "fixture_sha256": "50711a914313fb64ca674387c264356149b1b9e4dab294616175ecce7f4b1011",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ]
+    },
+    {
+      "name": "tga_rle_literal",
+      "fixture_sha256": "7dbbaf9c0c8ab8e71d23db26ce0b63426c09777957e6b2daa8d424e64b80b2c7",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ]
+    },
+    {
+      "name": "tga_left_origin",
+      "fixture_sha256": "f2c2cf166390f6be0031a3b3c812de66685a16dc07d40a4130aa10a2f4ee5840",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ]
+    },
+    {
+      "name": "tga_right_origin_same_storage",
+      "fixture_sha256": "298249e581d15bc6f14d1995215a0666c18bbe0ba694b5e765d446ac8e7b7001",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255
+      ],
+      "observation": "Horizontal descriptor bit does not change output; source ignores this bit. No independent external TGA conformance suite."
+    },
+    {
+      "name": "gif_second_frame_(0, 255, 0)",
+      "fixture_sha256": "b5aeb235cdb73c264c461bb5a6b8526fa24dc142bfcd41238eab9df618b40849",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        255
+      ],
+      "independent_pillow_frames": 2,
+      "second_frame_rgb": [
+        0,
+        255,
+        0
+      ]
+    },
+    {
+      "name": "gif_second_frame_(0, 0, 255)",
+      "fixture_sha256": "26c7efbb6f2b81c7359e44e5fec16d2c96bafbc8d3e6ae00f4ccb4637a836ed7",
+      "decoded_rgba": [
+        255,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        255
+      ],
+      "independent_pillow_frames": 2,
+      "second_frame_rgb": [
+        0,
+        0,
+        255
+      ]
+    }
+  ],
+  "animation_observation": "Distinct two-frame animations with identical first frame decode to byte-identical RGBA through original C filename API. This supports first-frame-only limitation; original Zig hashes not executed.",
+  "scope": "Five authored TGA and two Pillow-generated GIF fixtures; pinned original C backend, no sanitizers or native pHash."
+}

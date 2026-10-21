@@ -1,0 +1,21 @@
+{
+  "repository": "galactixx/imagehash",
+  "commit": "33cffb1063124d1cec5e961439f216b698f36cdf",
+  "whole_repo_complete": true,
+  "header_ranges_read": [
+    "include/stb_image.h:1-7988"
+  ],
+  "new_ranges_read": [
+    "include/stb_image.h:6281-7470",
+    "include/stb_image.h:7656-7988"
+  ],
+  "controls": "docs/research/dedup-500/zigimage422-tga-gif-controls-20261021/result.json",
+  "findings": [
+    "Whole remaining PSD/PIC/GIF/HDR and information API, revision history and dual license read.",
+    "Five TGA and two GIF original C decoder controls passed; distinct GIF continuations hidden by first-frame filename API.",
+    "Animated GIF all-frames API has source expression two_back = out - 2 * stride; not exercised or adopted. Wrapper calls single-frame path. This is a source observation only."
+  ],
+  "limits": [
+    "Original Zig tests not run; C backend controls not full Zig or format qualification. No native pHash/ASAN."
+  ]
+}
