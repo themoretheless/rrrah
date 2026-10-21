@@ -1,0 +1,45 @@
+{
+  "repository": "folksable/pHash.c",
+  "commit": "1d7c056b980811d2d1138b9392fee9a03abf37e2",
+  "whole_repo_complete": false,
+  "whole_text_read_this_step": {
+    "stb_image.h": {
+      "lines": [
+        2401,
+        3780
+      ]
+    }
+  },
+  "executed_control": {
+    "harness": "docs/research/dedup-500/folks405-controls-20261021/jpeg-neon.c",
+    "original_functions": [
+      "stbi__idct_block",
+      "stbi__idct_simd"
+    ],
+    "configuration": "Apple ARM64, STBI_NEON explicitly enabled, unchanged bundled header",
+    "cases": 2560,
+    "dc_cases": 256,
+    "single_basis_cases": 256,
+    "seeded_mixed_cases": 2048,
+    "seed": 405,
+    "row_stride": 13,
+    "differing_bytes": 0,
+    "exit_code": 0
+  },
+  "findings": [
+    "Entire decoder NEON IDCT, scan/restart loop, marker/frame parsing, upsampling, scalar/SIMD color conversion and final JPEG load/free paths read; start of zlib header/table setup read.",
+    "Decoder scalar/NEON IDCT exactly agree for2560 controlled blocks including output row padding; bounded coefficients only, not full valid coefficient space or x86 parity.",
+    "APP marker path retains JFIF and Adobe transform hints, skips other segments; no EXIF orientation or ICC profile color normalization in this JPEG path.",
+    "Some restart mismatch cases return success to retain partial decoded data; strict corrupt-input rejection cannot be inferred from source. No malformed corpus run here.",
+    "JPEG load/test/info allocate stbi__jpeg then dereference without checking allocation result; source-only allocation failure gap, no injected failure.",
+    "RGB/CMYK/YCCK output branches implement conversion approximations without color-profile processing; byte consistency with another decoder is not established."
+  ],
+  "remaining": [
+    "stb_image.h lines3781 through EOF."
+  ],
+  "limits": [
+    "235/500 complete;405 partial.",
+    "Bundled decoder NEON differs from erroneous phash8 NEON transform; decoder parity does not qualify hash transform.",
+    "No production adoption, full JPEG conformance, ASAN or deferred native pHash execution."
+  ]
+}
