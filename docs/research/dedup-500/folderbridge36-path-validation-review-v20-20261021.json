@@ -1,0 +1,37 @@
+{
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/SecurityManager.ts": {
+      "sha256": "d230169b1afc48b01a3fa1ec34a6984e27a3905444dd1625f9a63102b18af67b",
+      "git_blob": "9841a951bf7ddeacd975beffbf5a87f98d179fff",
+      "bytes": 10370,
+      "lines": 264,
+      "method": "Whole source read; no actual protected paths accessed or validation code executed."
+    },
+    "tests/SecurityManager.test.ts": {
+      "sha256": "65ead0f3e4d3cc973bf0e1c0bfb12f8b46d54afcda2db05ef850f3ae1bb9a5e4",
+      "git_blob": "85f979e39bed2b19c942c6d1c724ff2c030856f3",
+      "bytes": 16925,
+      "lines": 408,
+      "method": "Whole source read; no actual protected paths accessed or validation code executed."
+    }
+  },
+  "cumulative_assessed_blobs": 93,
+  "tracked_blobs": 129,
+  "findings": [
+    "Separate validateMount checks local primary/fallback/deviceoverride paths and virtual duplicate/parent-child overlaps; this resolves existence of a validation implementation omitted by TOC parser, but main caller use remains unverified. Cloud mounts skip local-path checks by type.",
+    "Realpath overlaps are advisory, not rejected; exact equal real paths skip overlap warning. Different virtual mounts can expose identical source entries, confirming namespace identity distinct from physical/content identity. No filesystem access needed for assessment.",
+    "Virtual path comparison trims whitespace/trailing separators, while PathMapper separately calls normalizePath. Cross-host separators/canonicalization policy differs; no full runtime/platform normalization qualification.",
+    "Allowlist uses normalized lexical strings with separator-aware descendant matching; no inode/realpath/content identity. Root allowlist entries treated exact-only by trailing slash construction and explicitly tested. Do not reuse as physical deduplication logic.",
+    "Tests simulate process.platform across Linux/darwin/win32, assert ordinary Windows/UNC/path boundaries and invalid override shapes. They document deliberate whole non-C-drive policy limit; no native drive/filesystem certification. Entire file read, tests not run.",
+    "Validation checks path syntax/policy but not actual existence/readability, which other helpers perform separately. Same path across devices/roots is configuration relationship, not proof of same bytes."
+  ],
+  "executed_controls": [],
+  "limits": [
+    "93/129trackedblobs assessed(88wholetext/source,1structurallockfile,4PNGvisuals);36previousisolatedcontrols.",
+    "No policy penetration tests, protected path access, native Windows filesystem or upstream suite execution.",
+    "Mainentry/largeUI/remaining docs and metadata artifacts incomplete."
+  ]
+}
