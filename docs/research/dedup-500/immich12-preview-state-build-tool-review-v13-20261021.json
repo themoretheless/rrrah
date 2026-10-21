@@ -1,0 +1,48 @@
+{
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "whole_repo_complete": false,
+  "new_whole_files_read": {
+    "src/assets/mod/mdlImg.js": {
+      "sha256": "4746fe5ba6b92a385d594a3b4c598e532e33610f17b6a7c993c31622d2790191",
+      "git_blob": "88251711ba7a39ec3fb6693ac44c7fdcb931a433",
+      "lines": 503,
+      "mode": "100644"
+    },
+    "bu": {
+      "sha256": "5f459e9c64ee046ca172fcd9566513da43a328cddadf62fd274577458f5d0d69",
+      "git_blob": "602ba2d9b4a00ed9367a2a7448a6fd398b1b3bdf",
+      "lines": 577,
+      "mode": "100755"
+    }
+  },
+  "cumulative_whole_files_read": 101,
+  "tracked_blobs": 125,
+  "method": "Two whole source files read. Original complete mdlImg.js executed in Node VM with explicit fake window/document/no_update/React factory; no event handlers or browser/network fired. bu read as source only, never imported or executed.",
+  "executed_controls": {
+    "closed_output_count": 12,
+    "open_output_count": 14,
+    "mode_input": true,
+    "mode_output": true,
+    "hotkey_id_after_empty_list": 1
+  },
+  "control_source": "const fs=require('fs'),vm=require('vm'),assert=require('assert');const B='.dedup-work/immich12-20261021/';const dash={no_update:'NO_UPDATE'};const ctx={window:{dash_clientside:dash},dash_clientside:dash,document:{addEventListener(){}},console:{log(){},info(){}},R:{mk:(...args)=>args}};vm.createContext(ctx);vm.runInContext(fs.readFileSync(B+'src--assets--mod--mdlImg.js','utf8'),ctx);\nconst out=vm.runInContext(`(()=>{const api=window.dash_clientside.mdlImg;const closed=api.onUpdMdl(null,null,null);const open=api.onUpdMdl({open:true,isMulti:false,modeH:false},null,null);const toggled=api.onModeToggle(1,{open:true,isMulti:false,modeH:true});api.onStoreToDummy({isMulti:true,curIdx:0},{sim:{assCur:[{autoId:1}]}});api.onStoreToDummy({isMulti:true,curIdx:0},{sim:{assCur:[]}});return {closed_output_count:closed.length,open_output_count:open.length,mode_input:true,mode_output:toggled[0].modeH,hotkey_id_after_empty_list:window.currentMdlImgAutoId}})()`,ctx);\nassert.equal(out.closed_output_count,12);assert.equal(out.open_output_count,14);assert.equal(out.mode_output,true);assert.equal(out.hotkey_id_after_empty_list,1);fs.writeFileSync(B+'controls-v13-result.json',JSON.stringify(out,null,2)+'\\n');process.stdout.write(JSON.stringify(out,null,2)+'\\n');\n",
+  "findings": [
+    "Original updMdl closed/null branch returns12 outputs while open branch returns14 and reviewed Python callback declares14. Reproduced original callback arrays; no actual Dash callback validation.",
+    "Original onModeToggle ignores provided mdl parameter and toggles manager cached state. Input modeH=true following cached false returns true, failing to toggle input state. Reproduced stale-store boundary.",
+    "Original onStoreToDummy retains previous currentMdlImgAutoId when multi list exists but current index invalid/empty. Valid asset1 -> empty list keeps1. Space handler can target retained ID. No actual selection event run.",
+    "Navigation indexes list position rather than versioned asset identity and builds preview URL from new list; out-of-range and reordered lists can mismatch old imgUrl/current data. Source observation only.",
+    "Preview EXIF renders zero-valued location fields as false and skips some rows; image score/metadata tables are presentation helpers, not quality evidence.",
+    "bu build helper does not run matcher/model/unit tests before build/push/publish. updateConfVer imports application configuration as a syntax/version check, potentially loading runtime dependencies/side effects rather than syntax-only validation. Source only.",
+    "bu publish deletes existing local/remote tag/release after confirmation, ignores several subprocess return values and prints created/pushed messages unconditionally. No tags/releases/branches or external services touched.",
+    "bu del protects tag names/version groups but gathers candidate manifest digests without explicit cross-reference against protected tag digests. Shared manifests need separate protection; source concern, no registry calls.",
+    "bu interprets HTTP500 manifest-delete response as pending without polling evidence. Deletes can be partially completed with only printed summary, not structured resumable state. No deletion executed.",
+    "bu supports credential retrieval; reviewed source only. No credentials/environment/keychain/config files read. Custom tags enter shell command strings; no shell inputs or publishing commands executed."
+  ],
+  "limits": [
+    "101/125 whole tracked blobs reviewed;24 remain (README/LICENSE, CSS/SCSS, socket library and visual assets).",
+    "No rendered UI/media/browser, server/model/DB or full upstream suite qualification.",
+    "No production code modified/copied, no build/publish/prune/deletion/credential actions.",
+    "Native pHash/ASAN remains deferred; full500/all-case library goal remains incomplete."
+  ]
+}
