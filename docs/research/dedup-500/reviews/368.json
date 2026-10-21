@@ -2,7 +2,7 @@
   "index": 368,
   "repository": "ramenhut/insight",
   "commit": "3930e13998e8f0893ae6b2360b2ec75f4edcb969",
-  "review_scope": "Partial pinned9/22 whole artifacts, ten extracted function/class controls total. Unaligned ReadByte bit reversal versus bulk read confirmed across all256bytes. Full original image/platform runtime unqualified.",
+  "review_scope": "Complete pinned22/22 artifact review and ten extracted original function/class controls with explicit adapters. Full Windows/public image pipeline and unsafe boundary execution unqualified.",
   "decision": "reference",
   "finding": "C++ Insight perceptual engine and custom image desaturation; no detected tests and old platform types need care.",
   "available_source_evidence": [
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "BSD-2-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root BSD2 fully read; vnBase.h adds author-notification condition. Per-file notices inspected; no production adoption.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -85,5 +85,8 @@
     {
       "audit": "docs/research/dedup-500/insight368-source-review-v3-20261021.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "docs/research/dedup-500/insight368-complete-source-review-20261021.json"
 }
