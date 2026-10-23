@@ -261,6 +261,38 @@ fn exact_content_partitions_ignore_extensions_and_check_unsampled_bytes() {
 }
 
 #[test]
+fn matching_video_prefix_and_size_do_not_establish_exact_equality() {
+    let root = tempfile::tempdir().unwrap();
+    // Encoded-byte fixtures: no video decoding or valid-container claim.
+    let original = vec![43_u8; 1024 * 1024];
+    let mut changed = original.clone();
+    changed[300 * 1024] ^= 1;
+    assert_eq!(&original[..256 * 1024], &changed[..256 * 1024]);
+    assert_eq!(original.len(), changed.len());
+    let mut expected = vec![root.path().join("original.mp4"), root.path().join("copy.mp4")];
+    for path in &expected {
+        fs::write(path, &original).unwrap();
+    }
+    fs::write(root.path().join("different.mp4"), changed).unwrap();
+    expected.sort();
+    for verified in [false, true] {
+        let roots = [root.path().to_path_buf()];
+        let report = if verified {
+            rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+        } else {
+            scan(&roots, &Options::default(), || false)
+        };
+        assert!(report.complete(), "{report:?}");
+        assert!(report.issues.is_empty());
+        assert_eq!(report.files_observed, 3);
+        assert_eq!(report.groups.len(), 1);
+        let mut actual = report.groups[0].paths.clone();
+        actual.sort();
+        assert_eq!(actual, expected);
+    }
+}
+
+#[test]
 fn reordered_middle_blocks_with_identical_sampled_edges_are_not_copies() {
     let root = tempfile::tempdir().unwrap();
     let paths = ["left.bin", "copy.bin", "permuted.bin"].map(|name| root.path().join(name));
