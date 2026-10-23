@@ -1,0 +1,24 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "controls": {
+    "source": "docs/research/dedup-500/filemorrow046-archive-content-control-20261023.swift",
+    "kind": "custom XCTest against unchanged upstream archive scanner",
+    "exit_code": 0,
+    "assertions": "one false-positive extracted archive returned for hello ZIP entry versus world filesystem bytes, both five bytes",
+    "build_seconds": 0.72,
+    "test_seconds": 0.083,
+    "trash_invoked": false,
+    "fixtures": "real ZIP and extracted file in UUID temporary directory, deferred cleanup"
+  },
+  "findings": [
+    "Actual original archive scanner classifies equal-size different content as already extracted. The original ZIP holds hello while the corresponding disk file contains world; one result with extractedSize=5 is returned.",
+    "Control passing confirms reproduction of the defect, not correct archive equality. No cleanup method or system Trash was called. Original 14 passing archive tests do not cover this condition."
+  ],
+  "whole_files_read_total": 17,
+  "remaining_tracked_blobs": 41,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
