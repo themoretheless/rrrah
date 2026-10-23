@@ -1,0 +1,72 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v17-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "inspection_partition": {
+    "whole_text_read": 95,
+    "visual_reviewed": 2,
+    "whole_csv_structural": 4,
+    "whole_vendor_syntax_parse": 3,
+    "tracked_blobs": 104,
+    "uninspected": 0
+  },
+  "manual_text_or_visual_remaining": [
+    "benchmarks/benchmarks/datasets/restaurant-1.csv",
+    "benchmarks/benchmarks/datasets/restaurant-2.csv",
+    "benchmarks/benchmarks/datasets/restaurant-nophone-training.csv",
+    "benchmarks/benchmarks/datasets/restaurant-nophone.csv",
+    "docs/_static/css/bootstrap.css",
+    "docs/_static/js/bootstrap.min.js",
+    "docs/_static/js/jquery.min.js"
+  ],
+  "vendor_controls": {
+    "assets": [
+      {
+        "path": "docs/_static/js/bootstrap.min.js",
+        "bytes": 37045,
+        "sha256": "53964478a7c634e8dad34ecc303dd8048d00dce4993906de1bacf67f663486ef",
+        "manual_full_text_read": false,
+        "method": "Entire original JS parsed with node --check; no execution",
+        "exit_code": 0
+      },
+      {
+        "path": "docs/_static/js/jquery.min.js",
+        "bytes": 86659,
+        "sha256": "87083882cc6015984eb0411a99d3981817f5dc5c90ba24f0940420c5548d82de",
+        "manual_full_text_read": false,
+        "method": "Entire original JS parsed with node --check; no execution",
+        "exit_code": 0
+      },
+      {
+        "path": "docs/_static/css/bootstrap.css",
+        "bytes": 33828,
+        "sha256": "a152a2824de3b9d1eb36fadabf759e07e04b969aa8980402ee09baa0c179ac07",
+        "manual_full_text_read": false,
+        "method": "Entire CSS tokenized and stylesheet parsed with tinycss2, recursive syntax token walk",
+        "top_level_rules": 266,
+        "tokens_walked": 9951,
+        "syntax_errors": []
+      }
+    ],
+    "limits": [
+      "Parsing is not manual whole-source review, runtime behavior, CSS semantic validation or browser rendering.",
+      "No asset copied into production or run against a live DOM."
+    ]
+  },
+  "runtime_evidence": {
+    "original_dependencies": "68 passed,9 failed; preserved",
+    "compatible_dependencies": "77 passed,0 failed",
+    "canonical": "training and static both102 TP,9 FP,10 FN",
+    "record_link": "one-to-one/many-to-one both102 TP,1 FP,10 FN in training/static script invocations",
+    "gazetteer": "training/static both110 TP,2 FP,2 FN"
+  },
+  "limits": [
+    "No full-repository-read completion flag:7 files have structural inspection only.",
+    "All local inspection categories cover104 pinned blobs without overlap; does not prove universal library correctness.",
+    "No whole500 counter increment for this repository.",
+    "Native pHash/ASAN remains skipped.",
+    "Tinycss2 added only to isolated research environment after original-test freeze; prior frozen dependency evidence unchanged."
+  ]
+}
