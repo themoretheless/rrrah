@@ -1,0 +1,74 @@
+{
+  "repository": "math2001/FileManager",
+  "commit": "40c452353384566da275ae9a4b73692385d3413f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "FileManager.sublime-settings",
+      "sha256": "d9bce42037f79608b66952cac7dafc391a5455376fcc856c361746cece1e1cc6",
+      "lines": 118,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/LICENSE",
+      "sha256": "ada3bd7c4dd84c43d4773d8f3b8f3360b9a6b8555c64394719491ff4970d5408",
+      "lines": 10,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/__init__.py",
+      "sha256": "bac582532a5d96c34bb314b2b69c2af2419e4aa7241ea1fec9648e4fd4d2b7bb",
+      "lines": 21,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/compat.py",
+      "sha256": "244c48804f7b48fd278aaa765ac69fe6aca39de5ff7b4d4a18ad95c00926c533",
+      "lines": 20,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/exceptions.py",
+      "sha256": "750c4a5da474e6d227b64729514c86325266cd2f938f99980e8fec73b6b110be",
+      "lines": 25,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/plat_osx.py",
+      "sha256": "b3a1e31cf09576c323bb51c2dc126be7be385e7b3da1946f94b649ccbd6881aa",
+      "lines": 48,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/plat_other.py",
+      "sha256": "988daed1f5f2ee81be96f2233cea9f67de0dca0abd4de7dad7638ce3b6fa9f28",
+      "lines": 192,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/send2trash/plat_win.py",
+      "sha256": "b6db8badee57f8c5d06b0f520959cfdc502cfc399b5a60e1b1f68a0eea178783",
+      "lines": 86,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/filemanager052-trash-control-20261023.py",
+  "runtime": {
+    "unchanged_upstream_functions_extracted": true,
+    "filesystem_mutations": false,
+    "checks_passed": 2,
+    "native_platform_apis_run": false
+  },
+  "findings": [
+    "Freedesktop is_parent uses realpath followed by startswith without a component boundary. /tmp/volume-other/a is considered under /tmp/volume; actual info_for emits Path=../volume-other/a despite its comment forbidding parent traversal. Reproduced using unchanged functions.",
+    "trash_move renames the source before opening and writing .trashinfo. A controlled metadata-open failure records rename first and no rollback. No actual file was moved. Destination-name allocation also uses check-then-rename without exclusive reservation; concurrency not exercised.",
+    "send2trash checks exists and writable source before lstat/device handling; dangling symlinks are rejected by exists. Home-trash device is inferred from the home directory rather than XDG_DATA_HOME, so a separately mounted XDG location can lead to cross-device rename failure. Source observations only.",
+    "Windows implementation checks SHFileOperationW result but does not inspect fAnyOperationsAborted after the call. Structure layout and native API compatibility remain unqualified; no Windows API executed.",
+    "macOS implementation uses FSRef/CoreServices functions; error comment pointer is decoded without checking for None. No native library import or trash operation executed.",
+    "Linux dispatcher attempts absent plat_gio then falls back to the bundled Freedesktop implementation. Vendor license is BSD three-clause, distinct from the root MIT license.",
+    "Default settings confirm terminal command lists containing $cwd on macOS, case-insensitive completion, confirmation before deletion, and saving newly created snippets disabled by default. Shared settings-object mutation still requires Sublime runtime verification."
+  ],
+  "whole_files_read_total": 33,
+  "remaining_tracked_blobs": 37,
+  "full_review_count": 249
+}
