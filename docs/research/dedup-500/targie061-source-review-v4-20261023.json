@@ -1,0 +1,52 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/SimilarityGrouper.swift",
+      "git_blob": "4361c2914b40c6ccd67f95bc399c691b8355d237",
+      "sha256": "765f748076b94ed3833b973ea32f2326b2875330c67021c0cf027646a0dc4eda",
+      "bytes": 5662,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Services/SimilarityScoring.swift",
+      "git_blob": "38164d04cbb9f9a8aa9177fa3aa8eedb516b7fea",
+      "sha256": "79a37f647bca72cb12d4cc2ca2944bb88d79fe5c533a701285c2d4a919643177",
+      "bytes": 6035,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Models/MediaModels.swift",
+      "git_blob": "10ffaaaa83300f22def1840ee739ee674edeff65",
+      "sha256": "eba4094117363a5614c5597fe9d5d5c8fc4b65daddc4909bad033f91b087baa1",
+      "bytes": 8734,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 7,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 114,
+  "control": "targie061-group-scoring-control-20261023.swift",
+  "runtime_scope": "Three whole unchanged pinned Swift modules (real MediaModels/SimilarityGrouper/SimilarityScoring), Foundation, authored unused thumbnail/localization adapters. Seven authored model/pair controls, no actual image/video/GUI/deletion/cache pipeline.",
+  "results": {
+    "connected_chain_three_items_two_edges": true,
+    "unknown_endpoint_bridge_kept": true,
+    "cross_media_group_rejected": true,
+    "vision_score_ceiling_preserved": true,
+    "unverified_visual_score_ceiling_preserved": true,
+    "nan_content_scores_ignored": true,
+    "hash_identity_priority": true
+  },
+  "findings": [
+    "Connected-component grouping is transitive membership, not complete-link or wholefile identity. A-B/B-C yields3member group with2relations, no fabricated A-Cedge, and no proof A-Csimilarity.",
+    "Malformed relation graph A-unknown-Cwithitems[A,C] produces2itemgroup and retains relations mentioning unknownID. Primitive does not enforce endpointmembership; normal pipeline production of such input not demonstrated.",
+    "Groupfactory rejects mixedmedia; scorer treats hashesMatch as definitive externalboolean and only ranking otherwise. Actual correctness of suppliedhashidentity remains upstream responsibility.",
+    "Native scorer retains Vision+0.05cap and requiredverification0.85cap; nonfiniteperceptual/frameinputs become absent, finite metadata-onlyscore<=0.05. No learned similarity accuracy/calibration claimed.",
+    "Modelgroup uses maximum incident score/evidenceunion and reclaimablebytes based on sizes, not pairwise content confirmation. Deletion/userflow not reviewed in this pass.",
+    "First fetch script pinlookup used wrong local mapshape and stopped before review; corrected verify performed before all newwholefile/native results. No upstream source changed."
+  ],
+  "binary_sha256": "c05d146eabc5559d632efc9868ace527fe8cb62490c7946402892692d0715901",
+  "full_review_count": 249
+}
