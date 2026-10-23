@@ -1,0 +1,347 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Newly available pinned PDF fixture added to existing independent hash/header-parity/adaptive-track controls; original fixture Git blobs verified; no decoder or repair execution.",
+  "controls": [
+    "pyfilefixity044-header-db-hash-control-20261023.py",
+    "pyfilefixity044-independent-parity-control-20261023.py",
+    "pyfilefixity044-adaptive-parity-control-20261023.py"
+  ],
+  "control_results": {
+    "hash": {
+      "scope": "Independent hashlib MD5 versus original pinned database chunks, header defaults1024/message159/hash32/ecc96 derived from reviewed source; no ECC decoding or original integration suite",
+      "records": [
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/alice.pdf",
+          "verified_md5_chunks": 7,
+          "mutated_chunks_detected": 7
+        },
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/testaa.txt",
+          "verified_md5_chunks": 1,
+          "mutated_chunks_detected": 1
+        },
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+          "verified_md5_chunks": 1,
+          "mutated_chunks_detected": 1
+        },
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+          "verified_md5_chunks": 7,
+          "mutated_chunks_detected": 7
+        },
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+          "verified_md5_chunks": 2,
+          "mutated_chunks_detected": 2
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/alice.pdf",
+          "verified_md5_chunks": 7,
+          "mutated_chunks_detected": 7
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/testaa.txt",
+          "verified_md5_chunks": 1,
+          "mutated_chunks_detected": 1
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+          "verified_md5_chunks": 1,
+          "mutated_chunks_detected": 1
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+          "verified_md5_chunks": 7,
+          "mutated_chunks_detected": 7
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+          "verified_md5_chunks": 2,
+          "mutated_chunks_detected": 2
+        }
+      ],
+      "total_verified_md5_chunks": 36,
+      "skipped_missing_local_fixtures": [
+        {
+          "database": "test_header_ecc_test_algo.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/tux.jpg"
+        },
+        {
+          "database": "test_header_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_header_ecc_test_one_file.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_header_ecc_test_one_file_tamper.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/tux.jpg"
+        },
+        {
+          "database": "test_repair_ecc_check.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        }
+      ]
+    },
+    "parity": {
+      "scope": "Authored independent bitwise GF(256) polynomial encoder, prim0x11b/generator3/fcr1/left-padding from reviewed source; no imported ECC package or decoding",
+      "metadata_parity_comparisons": 68,
+      "available_header_parity_comparisons": 36,
+      "single_byte_mutation_negative_controls": 104,
+      "distinct_cached_message_k_pairs_including_mutations": 64,
+      "result": "PASS",
+      "remaining": "Unavailable source payloads and adaptive data tracks not verified in this control; no recovery decoding or all-cases proof"
+    },
+    "adaptive": {
+      "scope": "Independent exact MD5+ECC reconstruction of adaptive tracks for available original fixtures, source-defined defaults and explicit complete track consumption; no imported decoder or repair",
+      "records": [
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/alice.pdf",
+          "bytes_covered": 67254,
+          "track_bytes_covered": 31599,
+          "verified_blocks": 345,
+          "message_size_counts": {
+            "159": 7,
+            "182": 5,
+            "183": 14,
+            "184": 13,
+            "185": 14,
+            "186": 13,
+            "187": 13,
+            "188": 12,
+            "189": 13,
+            "190": 12,
+            "191": 12,
+            "192": 12,
+            "193": 12,
+            "194": 12,
+            "195": 11,
+            "196": 11,
+            "197": 11,
+            "198": 11,
+            "199": 11,
+            "200": 10,
+            "201": 11,
+            "202": 10,
+            "203": 10,
+            "204": 10,
+            "205": 10,
+            "206": 10,
+            "207": 9,
+            "208": 10,
+            "209": 9,
+            "210": 9,
+            "211": 9,
+            "212": 9
+          }
+        },
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/testaa.txt",
+          "bytes_covered": 8,
+          "track_bytes_covered": 128,
+          "verified_blocks": 1,
+          "message_size_counts": {
+            "159": 1
+          }
+        },
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+          "bytes_covered": 6,
+          "track_bytes_covered": 128,
+          "verified_blocks": 1,
+          "message_size_counts": {
+            "159": 1
+          }
+        },
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+          "bytes_covered": 2048,
+          "track_bytes_covered": 1355,
+          "verified_blocks": 12,
+          "message_size_counts": {
+            "159": 7,
+            "184": 1,
+            "189": 1,
+            "195": 1,
+            "201": 1,
+            "207": 1
+          }
+        },
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+          "bytes_covered": 253,
+          "track_bytes_covered": 256,
+          "verified_blocks": 2,
+          "message_size_counts": {
+            "159": 2
+          }
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/alice.pdf",
+          "bytes_covered": 67254,
+          "track_bytes_covered": 31599,
+          "verified_blocks": 345,
+          "message_size_counts": {
+            "159": 7,
+            "182": 5,
+            "183": 14,
+            "184": 13,
+            "185": 14,
+            "186": 13,
+            "187": 13,
+            "188": 12,
+            "189": 13,
+            "190": 12,
+            "191": 12,
+            "192": 12,
+            "193": 12,
+            "194": 12,
+            "195": 11,
+            "196": 11,
+            "197": 11,
+            "198": 11,
+            "199": 11,
+            "200": 10,
+            "201": 11,
+            "202": 10,
+            "203": 10,
+            "204": 10,
+            "205": 10,
+            "206": 10,
+            "207": 9,
+            "208": 10,
+            "209": 9,
+            "210": 9,
+            "211": 9,
+            "212": 9
+          }
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/testaa.txt",
+          "bytes_covered": 8,
+          "track_bytes_covered": 128,
+          "verified_blocks": 1,
+          "message_size_counts": {
+            "159": 1
+          }
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+          "bytes_covered": 6,
+          "track_bytes_covered": 128,
+          "verified_blocks": 1,
+          "message_size_counts": {
+            "159": 1
+          }
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+          "bytes_covered": 2048,
+          "track_bytes_covered": 1355,
+          "verified_blocks": 12,
+          "message_size_counts": {
+            "159": 7,
+            "184": 1,
+            "189": 1,
+            "195": 1,
+            "201": 1,
+            "207": 1
+          }
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+          "bytes_covered": 253,
+          "track_bytes_covered": 256,
+          "verified_blocks": 2,
+          "message_size_counts": {
+            "159": 2
+          }
+        }
+      ],
+      "verified_blocks": 722,
+      "single_byte_parity_negative_controls": 722,
+      "skipped_missing_local_fixtures": [
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/tux.jpg"
+        },
+        {
+          "database": "test_repair_ecc_sa_check.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_algo.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/tux.jpg"
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_dir.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_one_file.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        },
+        {
+          "database": "test_structural_adaptive_ecc_test_one_file_tamper.db",
+          "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+        }
+      ],
+      "result": "PASS"
+    }
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "pdf_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 129,
+    "remaining_without_full_text_binary_visual_or_pdf_review": 15
+  },
+  "findings": [
+    "PDF67254 bytes independently reconstructs345 adaptive MD5/ECC blocks and consumes31599 track bytes exactly in each of2 duplicate databases. Single-byte parity negative controls pass per block.",
+    "With text/ZIP/PDF fixtures, adaptive comparisons now722 over10 records in2 identical databases:361 unique source blocks, not722 independent scenarios.",
+    "Header hashes/parity comparisons now36 each; metadata parity68 unchanged.104 negative parity controls pass in constant-rate control.",
+    "Only missing JPEG source bytes remain skipped by these controls. Browser images are visual evidence, not local original byte sources.",
+    "PDF page-content reading is still separate and incomplete for this fixture; byte-level ECC validation does not substitute for its6-page review.",
+    "Updated independent parity control wording to avoid stale JPEG/PDF blanket skip description as available fixtures evolve. No production changes or full repository completion claim."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
