@@ -1,0 +1,46 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Whole hasher.py, test_hasher.py, root MIT license and pinned _compat.py read. Original hasher imported unchanged with original compatibility helper into isolated namespace.",
+  "findings": [
+    "Short modes base64-encode ASCII hex digest then truncate; mini modes retain three hex digits (12 bits), short modes six hex digits (24 bits), not 24/48 bits suggested by base64 character count.",
+    "Original test_hasher checks known vectors for all six algorithms and unknown algorithm errors, but has no collision or file-byte equality assertion.",
+    "Compatibility helper encodes Python str using Latin-1, not UTF-8; non-Latin-1 Unicode raises rather than being hashed. Bytes remain unchanged.",
+    "none returns empty str while active algorithms return bytes. API does not itself provide exact-file comparison."
+  ],
+  "control": {
+    "path": "pyfilefixity044-hasher-collision-control-20261023.py",
+    "result": "PASS: distinct byte payloads collide under all four truncated modes; full SHA256 differs for each pair. This reproduces weak-key behavior, not an upstream correctness test pass.",
+    "exit_code": 0,
+    "results": {
+      "minimd5": {
+        "collision_key": "NmI3",
+        "first": "file-content-35",
+        "second": "file-content-171",
+        "attempts": 172
+      },
+      "minisha256": {
+        "collision_key": "NTNm",
+        "first": "file-content-48",
+        "second": "file-content-97",
+        "attempts": 98
+      },
+      "shortmd5": {
+        "collision_key": "NmQ1YWUw",
+        "first": "file-content-3150",
+        "second": "file-content-4554",
+        "attempts": 4555
+      },
+      "shortsha256": {
+        "collision_key": "MzkwMmVk",
+        "first": "file-content-1212",
+        "second": "file-content-5060",
+        "attempts": 5061
+      }
+    }
+  },
+  "upstream_tests_run": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
