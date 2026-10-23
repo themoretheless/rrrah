@@ -1,0 +1,55 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "retained_tree": "5b08dadbf3ae6c033423ba61646ee5b1c0d9f29b",
+  "pin_scope": "Retained screening commit/tree binding; whole current bytes match retained Git blob identities; no fresh remote commit verification",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupJob.java",
+      "local": "02-DedupJob.java",
+      "sha256": "a3b910de78e1ed65f74036fb48b33e5c1817791ec1c176f8ff2495babcef00f2",
+      "git_blob": "1394cbfcde8750dd5b9004d4ced6c50ded7752e8",
+      "whole_text_read": true,
+      "lines": 235
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyMapper.java",
+      "local": "03-DedupKeyMapper.java",
+      "sha256": "feefba67feca49141434d8ced1b8468a7f5bfcaa77fb4d8e0d67fec6fed1f3be",
+      "git_blob": "0ceee96d02615d8ec4292581b6ca6b06ee85a065",
+      "whole_text_read": true,
+      "lines": 43
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyReducer.java",
+      "local": "04-DedupKeyReducer.java",
+      "sha256": "a4a0ed3e62c7e5196bd3e4e9967c57f419869c7c6e27118c6b77e1a5b6c8586a",
+      "git_blob": "f86938230d78db08f85443bcbd05c06db4ab9e64",
+      "whole_text_read": true,
+      "lines": 45
+    }
+  ],
+  "whole_files_read_total": 3,
+  "remaining_without_whole_review": 167,
+  "findings": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyReducer.java",
+      "finding": "run ignores waitForCompletion(false) boolean and returns0 after job-side caught Exception; failure can appear as success to caller",
+      "qualification": "source-only; Hadoop runtime not executed"
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyMapper.java",
+      "finding": "values.equals(null) cannot handle null Iterable: null dereference; empty Iterable reaches next() without availability check",
+      "qualification": "source-only boundary; Hadoop standard nonempty reducer group may avoid both cases"
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyMapper.java",
+      "finding": "Keeps first reducer value for grouped key; this is key-level consolidation, not byte-level file identity",
+      "qualification": "source-only; order/stability not measured"
+    }
+  ],
+  "upstream_tests_run": false,
+  "adopted_code": false
+}

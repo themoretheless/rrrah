@@ -1,0 +1,20 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v25-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [],
+  "whole_files_read_total": 124,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 30,
+  "control": "docs/research/dedup-500/intra095-row-fixture-control-20261024.json",
+  "result": "69/69 active CONTENTS rows match:13 archive-envelope MD5 plus56 member MD5,pHash,dimensions;69uniqueIDs;no fixture import or DB",
+  "scope": "Independent replay, not new upstream tests; baseArchiveTestSetup and Issue1 datasets remain partial source reads; kind None not MIME verification",
+  "original_tests_cumulative": {
+    "total": 25,
+    "passed": 18,
+    "failed": 1,
+    "errors": 6
+  },
+  "skipped": "native pHash.org/ASAN"
+}
