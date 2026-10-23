@@ -1,0 +1,28 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "profilehooks.py lines1-440 read with pinned Git blob verification; static review only, no decorator installation, atexit registration or tracing",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/profilehooks.py",
+    "lines": [
+      1,
+      440
+    ],
+    "sha256": "3efb070ef5e27ecb4476722403237131bdc365bc18e9db3ddcc276405b9ee04f"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 114,
+    "remaining_not_whole_reviewed": 30
+  },
+  "findings": [
+    "FuncProfile preserves target return through profiler.runcall and clears in_profiler in finally. However stats.add and immediate report/reset are in same finally, so reporting exceptions may replace the target exception. Static finding.",
+    "FuncProfile.in_profiler is one shared class flag, not thread-local; recursive and nested decorated calls intentionally bypass new profiling. Concurrent independent calls may also bypass it, unqualified without runtime.",
+    "profile() passes immediate/dirs/sort/entries to every backend constructor, but legacy HotShotFuncProfile constructor accepts only fn/skip/filename in viewed lines. Fallback backend selection can raise unexpected-keyword TypeError; static only.",
+    "Wrappers assign new_fn.__dict__ = fn.__dict__, sharing mutable metadata instead of copying it. No wrapper execution performed.",
+    "Intro explicitly warns about nested profiling support, inaccurate hotshot timing/coverage, and retained temporary files. These historical warnings are not blanket runtime findings for cProfile.",
+    "Embedded license is MIT since2006, earlier GPL mentioned for historical versions. No implementation copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
