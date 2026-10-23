@@ -1,0 +1,43 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/cluster/hierarchical.cpp",
+      "sha256": "95ee31ba9031a768c7f6e12328513389d4fd0d6698a1c4b0bc36ffc39a0c4d44",
+      "lines": 152,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-hierarchical-control-20261023.cpp",
+  "runtime": {
+    "exit_code": 0,
+    "thread_parity_cases": 30,
+    "threads": [
+      1,
+      4
+    ],
+    "parity_matrix_size": 32,
+    "chain_cut": 1,
+    "chain_group_counts": {
+      "single": 1,
+      "complete": 2,
+      "average": 1
+    },
+    "average_exact_reference": 1.5,
+    "average_actual": 1
+  },
+  "findings": [
+    "Whole original hierarchical module read and compiled with actual parallel/group helpers. Three-node Hamming chain confirms single linkage connectivity vs complete linkage pairwisebound at cut1.",
+    "Average linkage uses integer sum/count, truncates1.5to1, merges3-nodechain atcut1; no fractional metric preserved. Caller must not assume real-valued average criterion.",
+    "Ten deterministic32-node matrices across three linkages:30 comparisons groups and every dendrogram step identical under1/4threads; this covers actual parallelbranch grain8. Threadparity is not independent correctness oracle.",
+    "Unknownlinkage string silently fallsbackcomplete, actual typo control confirms. No CLIerror expected from currentcodepath.",
+    "Bestpair sentinel INT_MAX couldleaveindices-1 for pathological importedmatrices where allavailable distancesINT_MAX; sourceonly, notexecuted. Ordinary boundedHamming controls avoid invalidmemory scenarios."
+  ],
+  "remaining": [
+    "Other83 tracked blobs/assets anddependencies",
+    "HDBSCAN, fullCLI and broader runtime/oracle qualification"
+  ],
+  "full_review_count": 248
+}
