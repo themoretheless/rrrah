@@ -1,0 +1,41 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "six.py whole read and pinned blob verified; original complete module imported under unique name in disposable Python3.15 process, selected helpers and moves import tested",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/six.py",
+    "sha256": "03a85d259563237b7f81e79b67d07352fc11ac85e8d257f0cd094cd8b70ac9ab"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 117,
+    "remaining_not_whole_reviewed": 27
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-six-import-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "190c0239cd7d7af82a6e0cbc8d68053fa2e3dfaf",
+    "source_sha256": "03a85d259563237b7f81e79b67d07352fc11ac85e8d257f0cd094cd8b70ac9ab",
+    "scope": "Original full module imported from verified file in disposable interpreter under unique name; no dependency installs or network",
+    "python": "3.15.0",
+    "six_version": "1.10.0",
+    "base_import": "PASS",
+    "latin1_byte_literal": "PASS",
+    "iteritems": "PASS",
+    "direct_moves_range": "PASS",
+    "import_moves_submodule": {
+      "result": "ModuleNotFoundError",
+      "message": "No module named 'dedup_legacy_six.moves'"
+    }
+  },
+  "findings": [
+    "Bundled six version1.10.0 base import and direct module.moves.range, iteritems and Latin1 b helper passed under Python3.15. This is finite helper qualification only.",
+    "Importing uniquely named module.moves submodule failed ModuleNotFoundError despite direct moves attribute working. Legacy meta path importer implements find_module/load_module but no find_spec; source compatibility claim for all Python3 versions is historical. No package replaced or port applied.",
+    "b(str) encodes Latin1 rather than UTF8. Binary literal compatibility helper is not general Unicode filename/content encoding.",
+    "Lazy moved modules and attributes resolve on first access and cache on instances/classes; optional modules such as tkinter need independent installed-platform qualification. No GUI/network modules exercised.",
+    "Full module installs a meta path importer at import time; executed only in disposable control process. This was not an import of installed external six.",
+    "with_metaclass/add_metaclass and exception reraising branches read but not independently executed; Python2 branches and platform-specific moved modules remain untested.",
+    "Embedded copyright and permission text MIT; code not copied into production."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
