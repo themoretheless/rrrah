@@ -1,0 +1,53 @@
+{
+  "repository": "Danialsamadi/v2go",
+  "commit": "fcf4e1f1143ef32ddb4673aa176c8ab0a54c4c9e",
+  "scope": "main.go now read in full across v1 and v4: lines 1-554,555-660,661-774,775-898,899-1162. Static review only.",
+  "evidence": {
+    "path": "main.go",
+    "sha256": "1e2a3057998f22215be4c94bf4615d479eee7e6230cbb11a94305602176ef2cb",
+    "whole_file_read": true
+  },
+  "findings": [
+    {
+      "id": "empty-output-success",
+      "detail": "run rejects empty initial allConfigs only. Zero protocol candidates or zero successful live tests still clean existing outputs, write empty/header-only results and return nil if the main/split writes report success. This contradicts the run comment that producing nothing is a failure."
+    },
+    {
+      "id": "flush-failures-hidden",
+      "detail": "writeMainConfigFile and writeSubFile return errors from buffered WriteString but discard deferred Flush and Close errors; short content may report success despite its final write failing. Country files, summary and streaming writes also ignore write/flush errors."
+    },
+    {
+      "id": "nontransactional-publication",
+      "detail": "cleanExistingFiles deletes old output before writing replacements. Failure can lose previous usable output and leave a mixed generation. Cleanup only visits Sub0 through Sub19, while splitting supports arbitrarily many files and writes Sub20 and higher."
+    },
+    {
+      "id": "mislabelled-reduction",
+      "detail": "originalCount minus candidates includes invalid protocols and unreachable ports, not only duplicates. Summary originalTotal minus live-passing total also includes all test failures. Both label the reduction as duplicate removal."
+    },
+    {
+      "id": "cancellation-outside-test",
+      "detail": "Input fetches use independent Background contexts, filter TCP checks have no caller context and GeoIP download uses http.Get without explicit timeout. Signal context is not a pipeline-wide cancellation boundary."
+    },
+    {
+      "id": "resource-bounds",
+      "detail": "Local input uses ReadFile and remote subscription bodies use unbounded ReadAll. Worker count limits simultaneous requests, not total input bytes, decoded size, retained candidate count or elapsed GeoIP download time."
+    },
+    {
+      "id": "live-stream-durability",
+      "detail": "working-live.txt is truncated at each nonempty live test. fmt.Fprintln errors are ignored and no fsync is performed. A positive delay controls streaming while final filtering accepts delay zero as well, refining v2 latency-zero finding: zero-ms successes remain in final output but not the live checkpoint."
+    },
+    {
+      "id": "protocol-set-mismatch",
+      "detail": "The aggregation filter includes SSR, TUIC and warp, but ConvertLink supports none of them. ConvertLink accepts hysteria2:// but the aggregation protocol list only recognizes hy2://. Acceptance stages have inconsistent protocol sets."
+    },
+    {
+      "id": "ordering-not-freshness",
+      "detail": "splitIntoFiles reverses configs with comment newest first, but order comes from concurrent filtering completion and then retained TestAll input order. It does not establish configuration age."
+    }
+  ],
+  "upstream_tests_run": false,
+  "network_probes_run": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
