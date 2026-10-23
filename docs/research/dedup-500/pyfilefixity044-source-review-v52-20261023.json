@@ -1,0 +1,38 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "mprof whole read with pinned blob verification; original AST helper controls with in-memory records, no processes, plotting or removal",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/memory_profiler/mprof",
+    "sha256": "27cda31d7e5f6121bec0cb49d42816cf9255f3b78be055a482d69d22532505fa"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 106,
+    "remaining_not_whole_reviewed": 38
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-mprof-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "d8e0b3caf140a71e7849725aaebc9b407dcacf36",
+    "source_sha256": "27cda31d7e5f6121bec0cb49d42816cf9255f3b78be055a482d69d22532505fa",
+    "scope": "Exact AST helpers; synthetic glob and StringIO open seams",
+    "equal_dynamic_all_selection_error": "File a not found",
+    "nonfinite_memory_samples_accepted": 2,
+    "double_space_record_failed": true
+  },
+  "control_attempts": [
+    "First harness attempt lacked osp.isdir seam and failed AttributeError; seam corrected, original helper unchanged, final exit0."
+  ],
+  "findings": [
+    "get_profile_filenames compares args is literal all. Dynamically assembled equal string is iterated as characters and raises File a not found; reproduced. Normal internal literal calls may work, so not a claim that every CLI list fails.",
+    "Parser accepts NaN and infinity samples without validation, and splits on literal single spaces; repeated-space numeric record raises ValueError. Reproduced in-memory authored records, not observed upstream-generated records.",
+    "Parser has no record limits, finite-value/order checks, or finally/context-managed close on parse errors. Static source finding.",
+    "run_action filenames use local timestamp to one second and append; same-second runs can combine CMDLINE and measurements. No colliding processes launched.",
+    "run_action does not propagate target return code or explicitly wait after sampling; errors in sampler have no target cleanup finally. Static finding, no external process launched.",
+    "plot_file merges function entry/exit samples into MEM samples before calculating maximum, including when brackets are hidden. Graph maximum has mixed sample provenance. No plotting executed.",
+    "plot_action missing nonnumeric filename prints error then continues to profiles[n], where n may be unset or stale. Static finding.",
+    "Removal functions have dry-run mode but no removal performed in this review. No implementation copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
