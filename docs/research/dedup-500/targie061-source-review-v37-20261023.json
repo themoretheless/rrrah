@@ -1,0 +1,55 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Views/BrowseTableView.swift",
+      "git_blob": "3d6829ec751864bc9309e9ab84f25fbc460b9d46",
+      "sha256": "ab9bc37959cd4b8af5f38c63e80e76c94d3a3cd3f4f62b91de693489d34ec941",
+      "bytes": 18224,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/VideoPreviewTests.swift",
+      "git_blob": "fa6043aaecdd8054ae1612c1f700f2a8bacf74f2",
+      "sha256": "e012b669a87d72e5200dac3fd95500a15bb8450cc802a500fcc683db864a37df",
+      "bytes": 10535,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 100,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 21,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter VideoPreviewTests",
+    "executed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "VideoPreviewTests testCoordinatorDetachesPlayerWhenReleasingCurrentPlayer",
+      "VideoPreviewTests testCoordinatorDoesNotLoadPlayerItemUntilPlaybackStarts",
+      "VideoPreviewTests testCoordinatorReusesAttachedPlayerWhenSwitchingPlayingURLs",
+      "VideoPreviewTests testCoordinatorRunsTeardownBeforeDetachingPlayer",
+      "VideoPreviewTests testDefaultTeardownClearsCurrentItem",
+      "VideoPreviewTests testNativePlayerViewConfiguredWithInlineControlsAndFullScreen",
+      "VideoPreviewTests testPlayingURLChangePausesBeforeReplacingAndStartingOnce",
+      "VideoPreviewTests testRepeatedPlayingUpdateForSameURLIssuesOnePlayCommand",
+      "VideoPreviewTests testRepeatedStoppedUpdatePausesAndClearsOnlyOnce",
+      "VideoPreviewTests testVolumeSyncIgnoresEffectivelyUnchangedValues",
+      "VideoPreviewTests testVolumeUpdateDoesNotResumeNativePausedPlayer"
+    ],
+    "log_sha256": "44b440a37a0d730c8a4353df135653543e4092a0eb396cb5a1686bf4326b16ae",
+    "scope": "Full unchanged original package. Native AVPlayer/AVPlayerView configuration and coordinator commands; most mediaURLs contain onebyte or injected commandrecorder. No validmedia playback frames/audio, UI fullscreen/PiP or GPU/RAM measurements."
+  },
+  "findings": [
+    "BrowseTableView enumerates displayedItems withstableIDs, observes selection/model and recreatesScrollView on sortVersion. Earlier stale-model values(v34) remain displayinputs; view does not independently refresh metadata.",
+    "Tablecontext uses MediaContextSelection and disables actionwhilebusy/empty. Rowclick andarrow routing reviewed; existing helper/model tests separate, no native key/mouse/hitbox routing executed thisstep.",
+    "Widthfit scales fourfixedcolumns but retains nameMin60 plus24horizontalpadding,18dividers andoptionalcheckbox26. At verynarrowcontainers totalminimum can exceedavailable; .clipped may hidecells. Arithmetic/source observation, not renderedmeasurement.",
+    "ColumnResizeHandle tracks cursorpush and has onDisappear cleanup, unlike parentBrowseView divider source(v35). Pointerlifecycle runtime notqualified.",
+    "11preview tests establish configuredcontrols/PiP/fullscreen flags, player detach/teardown, commandreuse/order andvolumeepsilon. Flags andrecordedplaycommand are not actual playback success.",
+    "temporaryPlayableURL writes Data([0]); name does not implyvalidcontainer. URLswitch/nativeAVPlayerItem tests canpass before assetready/decodefailure, so no codec/seek/framequality evidence credited.",
+    "Twofiles fully read and pinnedverified; wholeTargie stillnotcomplete21blobs remain. Global249/500 unchanged; no sourceadoption or performancegain."
+  ]
+}
