@@ -1,0 +1,930 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Per-file ledger reconciled with pinned complete tree; all whole-read entries additionally Git-object verified. Whole-read classification is manual evidence across v1-v19, not inferred from fetch or hashes.",
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 41,
+    "remaining_not_whole_reviewed": 103
+  },
+  "new_whole_reads": [
+    "pyFileFixity/tests/aux_tests.py",
+    "pycleaner.py",
+    "pyFileFixity/lib/profilers/pyinstrument/LICENSE"
+  ],
+  "findings": [
+    "Aux test output lives under pyFileFixity/tests/out; root gitignore /tests/out does not cover it.",
+    "Test find_next_entry reads nonoverlapping blocks, with no marker-length overlap; marker spanning a read boundary can be missed. Static finding.",
+    "pycleaner.py retains Python 2 print statements and recursive removal behavior; read only, never executed.",
+    "Nested pyinstrument license is BSD three-clause, different from root MIT; repository license metadata is insufficient for copying vendored code."
+  ],
+  "files": [
+    {
+      "path": ".coveragerc",
+      "git_blob_sha1": "99124546501f6e4c47ac1037268a18d1ce1896ee",
+      "bytes": 603,
+      "review": "whole-text-reviewed",
+      "sha256": "3c3a36e8f93b5e681d4953c24d8dec47c9722503a981cc9198e7c1618daf7934"
+    },
+    {
+      "path": ".gitattributes",
+      "git_blob_sha1": "674323075453260f20838f63376002aa48ed7ecb",
+      "bytes": 361,
+      "review": "whole-text-reviewed",
+      "sha256": "88d4b62e9b7b446064c1f4e4481baf27b65b0dc3ddd8f16c1d066672041f3d78"
+    },
+    {
+      "path": ".github/workflows/ci-build-downstream.yml",
+      "git_blob_sha1": "b9cd8ed64eba52db073165ccef275ad2ec929294",
+      "bytes": 3293,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": ".github/workflows/ci-build.yml",
+      "git_blob_sha1": "cd237642f518b30575c2f5ed1da228994a374068",
+      "bytes": 4081,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": ".github/workflows/ci-cd.yml",
+      "git_blob_sha1": "4e98d28f0b2de6b2583d4fbecac3d64a523b0083",
+      "bytes": 5626,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "git_blob_sha1": "7cdddd26234a4fd6342aa160abfe442fe3e0f346",
+      "bytes": 2950,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": ".gitignore",
+      "git_blob_sha1": "955df399275e5bc2b78d908a46a5572e9dbef2f2",
+      "bytes": 712,
+      "review": "whole-text-reviewed",
+      "sha256": "4f705f0e94d4028ed546f6024bb4b8c216f8ab71b29a7c9719f8dc968b1b8e14"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob_sha1": "bd787068acbb4fe95908ac01cc3d805c7c15c6dd",
+      "bytes": 1089,
+      "review": "whole-text-reviewed",
+      "sha256": "7f90d6567205387fe62ddf2b03d31a33550431fb39300f0586bf4caef5fa3f90"
+    },
+    {
+      "path": "MANIFEST.in",
+      "git_blob_sha1": "4f96aae5e55f2a151358ddb82e2148f45f40c25e",
+      "bytes": 1132,
+      "review": "whole-text-reviewed",
+      "sha256": "f7329cff2447d450df2aa92b6d385890eec33d29e348d08d3ffd46067a4d3954"
+    },
+    {
+      "path": "Makefile",
+      "git_blob_sha1": "d3e674f77406b55757ea477980f1252400d4898b",
+      "bytes": 3295,
+      "review": "whole-text-reviewed",
+      "sha256": "22bbdade615e7adf2932cb6bdec380bd090085468c3ce975b71b1cf29548f7a9"
+    },
+    {
+      "path": "README.rst",
+      "git_blob_sha1": "f5028a24b56f12ddaf6e5759199558da43b6a30d",
+      "bytes": 80504,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "TODO.md",
+      "git_blob_sha1": "0e34b163b0f98fa7b9a07031fae62b0a30c779aa",
+      "bytes": 52130,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "appveyor.yml",
+      "git_blob_sha1": "b7eed81f8237ff4c41b44b3e2d66c89b51137698",
+      "bytes": 1342,
+      "review": "whole-text-reviewed",
+      "sha256": "804a97694cdcc1d5a532c92171ddbda52530d99fbd9b283057d21c9ad2645ee2"
+    },
+    {
+      "path": "codecov.yml",
+      "git_blob_sha1": "1303d09a1a63b9a0b8a5724d774951a8843c312c",
+      "bytes": 887,
+      "review": "whole-text-reviewed",
+      "sha256": "f6e91769f779cded34cb15d8e7aefab009cdecd340aeca64a30fdf45b7d0d03d"
+    },
+    {
+      "path": "pyFileFixity/__init__.py",
+      "git_blob_sha1": "46bd229e5ec3591477538c753dde183a3d4a9566",
+      "bytes": 171,
+      "review": "whole-text-reviewed",
+      "sha256": "e617de47d83b97a99f103fdeefc94f408c7aaabce3108c23a35bc3d842c9ba85"
+    },
+    {
+      "path": "pyFileFixity/easy_profiler.py",
+      "git_blob_sha1": "330ae1ba5a0d3c62a09928994cbbd87b1f66c96e",
+      "bytes": 7271,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/ecc_specification.txt",
+      "git_blob_sha1": "9d8bd6b76ab8f32a824d578145526ae0845045a2",
+      "bytes": 1026,
+      "review": "whole-text-reviewed",
+      "sha256": "b9a2b56a9bd671ceb78c530bac1223a5aa9dcd1b4d6b5533a2fc053c3eb71f04"
+    },
+    {
+      "path": "pyFileFixity/ecc_speedtest.py",
+      "git_blob_sha1": "015522e8f8c0679b81683d00a7aff22ff224e92b",
+      "bytes": 12938,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/filetamper.py",
+      "git_blob_sha1": "bc4664a8e039b5522583f94b8bf5ef87d0496ff5",
+      "bytes": 18366,
+      "review": "whole-text-reviewed",
+      "sha256": "200213041806e6509071ad7a528fd310f1d6b9e22bf1b0c6e940f5012e228b4e"
+    },
+    {
+      "path": "pyFileFixity/header_ecc.py",
+      "git_blob_sha1": "d1fe4675dd8bb934b85dbaedf3eed3f79d52075b",
+      "bytes": 60142,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/__init__.py",
+      "git_blob_sha1": "792d6005489ebee62cde02066f19c5521e620451",
+      "bytes": 2,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/_compat.py",
+      "git_blob_sha1": "d725be1689eb2e2d39596067a176c56b2b7be448",
+      "bytes": 1693,
+      "review": "whole-text-reviewed",
+      "sha256": "5d9de3026eb20d45f27582f679767c1b6f2ff4b355b1cfbf0b15e45779ec533a"
+    },
+    {
+      "path": "pyFileFixity/lib/aux_funcs.py",
+      "git_blob_sha1": "ed509dbaeb40055f03c0c758c1f0494f9d220e80",
+      "bytes": 22124,
+      "review": "whole-text-reviewed",
+      "sha256": "8f19e0f8bb9a76e8544c46983f6f1230245a0168bcbefe3f95181c7b6e20eb3a"
+    },
+    {
+      "path": "pyFileFixity/lib/docs/Initialization of errata evaluator polynomial for simultaneous computation in Berlekamp-Massey for Reed-Solomon.pdf",
+      "git_blob_sha1": "0faf010b2c5ecc40089e85ca14ab3444a21d06d6",
+      "bytes": 452976,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/docs/Richard E. Blahut - Algebraic Codes for Data Transmission 2003 - Excerpt on errata decoder.pdf",
+      "git_blob_sha1": "fca97af88cb3655727cda6485dc3f9f6cbe094a4",
+      "bytes": 1011593,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/docs/python - Errata (erasures+errors) Berlekamp-Massey for Reed-Solomon decoding - Stack Overflow.pdf",
+      "git_blob_sha1": "e7c23c877671f0a01b6b285b17b01703ed945f8b",
+      "bytes": 474307,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/docs/python - Optimizing a reed-solomon encoder (polynomial division) - Stack Overflow.pdf",
+      "git_blob_sha1": "7a9f88c1ac75f29a01f068c9d7d1b1333c3848bc",
+      "bytes": 293347,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/eccman.py",
+      "git_blob_sha1": "9ab044160eb98a5b181adcbb92591782f1038426",
+      "bytes": 17101,
+      "review": "whole-text-reviewed",
+      "sha256": "58acb043e5b57e564eaf70667d4ba6e0f22673a8d940e7c3314daadca086d3e5"
+    },
+    {
+      "path": "pyFileFixity/lib/hasher.py",
+      "git_blob_sha1": "e8cc542d5642bd5ce5b7453a61580a6b98cb64bd",
+      "bytes": 3385,
+      "review": "whole-text-reviewed",
+      "sha256": "32c68f08c2a89f8441c661d92bbd5169d5e3070ea70a706e5b14df9bcc6a39ee"
+    },
+    {
+      "path": "pyFileFixity/lib/md5py.py",
+      "git_blob_sha1": "917785afd82c2577cd284213505fba7031db8af8",
+      "bytes": 14183,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/__init__.py",
+      "git_blob_sha1": "4287ca8617970fa8fc025b75cb319c7032706910",
+      "bytes": 1,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/memory_profiler/README.rst",
+      "git_blob_sha1": "10becc3d65d967f7aa9aa4d6d171719ad2361e34",
+      "bytes": 11494,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/memory_profiler/README_DEV.rst",
+      "git_blob_sha1": "3e66e51163430f62d8b2a251d7f01aa3125e3abc",
+      "bytes": 275,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/memory_profiler/__init__.py",
+      "git_blob_sha1": "4287ca8617970fa8fc025b75cb319c7032706910",
+      "bytes": 1,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/memory_profiler/memory_profiler.py",
+      "git_blob_sha1": "4cc661e258c4876af700faa1e61f09d7bcde9b9c",
+      "bytes": 28865,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/memory_profiler/mprof",
+      "git_blob_sha1": "d8e0b3caf140a71e7849725aaebc9b407dcacf36",
+      "bytes": 15574,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pprofile/README.rst",
+      "git_blob_sha1": "585d4599e6edf503ab662c3001a016e8b301dc21",
+      "bytes": 18290,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pprofile/__init__.py",
+      "git_blob_sha1": "4287ca8617970fa8fc025b75cb319c7032706910",
+      "bytes": 1,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pprofile/pprofile.py",
+      "git_blob_sha1": "72fd8002c7b0d0f513e9eadabbf1e8adb49b3368",
+      "bytes": 29125,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/LICENSE",
+      "git_blob_sha1": "1a4343a6c5e302cbe4e41e16329f66f9e67c2d23",
+      "bytes": 1485,
+      "review": "whole-text-reviewed",
+      "sha256": "ebeb74e9946e70f0d9fe01a742653221ad7aa8b274e924fa3f173d03eef0f712"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/README.md",
+      "git_blob_sha1": "52841749cdff2575c4f0d0d866ced3c8277696fd",
+      "bytes": 8095,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/__init__.py",
+      "git_blob_sha1": "02976e1c85b0cec6bea711e5c0b24347dc3e4842",
+      "bytes": 30,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/__main__.py",
+      "git_blob_sha1": "95fee11c5ac945ba3d5446cee78df6ccbf3a8158",
+      "bytes": 4960,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/middleware.py",
+      "git_blob_sha1": "4f5ad0c9c77e155a274523f54cc5635f9acae4a7",
+      "bytes": 2503,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/profiler.py",
+      "git_blob_sha1": "dd8adee81cac313a54413a361c14c855b7eea886",
+      "bytes": 13448,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/jquery-1.11.0.min.js",
+      "git_blob_sha1": "73f33fb3aa529308d1f3f2f4fc253c4abed95374",
+      "bytes": 96381,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/profile.js",
+      "git_blob_sha1": "3a8f9081d7f67b0dd49c639b3a7f9d096950617e",
+      "bytes": 339,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/style.css",
+      "git_blob_sha1": "0aafd8b5fbda213c8bc1898a8235a3e7b8f5d423",
+      "bytes": 1629,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/triangle_hide.png",
+      "git_blob_sha1": "29b0215eb8d19b3c7ab1486637a6bc33cd4cd7b2",
+      "bytes": 232,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/triangle_show.png",
+      "git_blob_sha1": "92bf0049222248a899dc43c6119ebb1233a90fe6",
+      "bytes": 240,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/__init__.py",
+      "git_blob_sha1": "4287ca8617970fa8fc025b75cb319c7032706910",
+      "bytes": 1,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/debug.py",
+      "git_blob_sha1": "7a4fa7b36f5105e0d3a82a420fa755e1ad10fb1c",
+      "bytes": 5261,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/functionprofiler.py",
+      "git_blob_sha1": "e938f14b7a730cfd94254b69e5efda1af8ecb02b",
+      "bytes": 6535,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/kthread.py",
+      "git_blob_sha1": "1ba8845607f0d2fc18163bf870e0c4ed1ad40261",
+      "bytes": 2365,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/memory_profiler.py",
+      "git_blob_sha1": "630c101f0e1372b139eae9818c250bfd9085d5b8",
+      "bytes": 18471,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/profilebrowser.py",
+      "git_blob_sha1": "64f507001f7a890da6c19ef8634ae66cc08991d5",
+      "bytes": 4813,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/profilehooks.py",
+      "git_blob_sha1": "6dacda5b96b5245d11200aa35a9ea69d8aa8c453",
+      "bytes": 24812,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pycallgraph.py",
+      "git_blob_sha1": "c499407fcfa8242e3f930f87f5242544ba9fce64",
+      "bytes": 15436,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/__init__.py",
+      "git_blob_sha1": "2ea158cb60a7075f8f73bca7480fb6b396f531e6",
+      "bytes": 314,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+      "git_blob_sha1": "12c820e1ea7b8254ad44dd8855fb078003bb5344",
+      "bytes": 90345,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/charts.py",
+      "git_blob_sha1": "a239191053c33adc3c2e025b66a353ead4a8b904",
+      "bytes": 1974,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/classtracker.py",
+      "git_blob_sha1": "9d6a0a971bb211f2b4cdd95d2f49e6dd79b0a785",
+      "bytes": 19665,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/classtracker_stats.py",
+      "git_blob_sha1": "507c0408e61be8bd6098b29bec1204f7b99c1092",
+      "bytes": 27011,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/garbagegraph.py",
+      "git_blob_sha1": "3cebcc08d9891af6aa81d94e74085dbfc889c064",
+      "bytes": 2464,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/metadata.py",
+      "git_blob_sha1": "93985dc97e370febfbf8e66099d1ea712ba05d30",
+      "bytes": 1544,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/mprofile.py",
+      "git_blob_sha1": "f0512a0c6124c94bcc212a4ac8baabe33bfbab01",
+      "bytes": 3414,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/muppy.py",
+      "git_blob_sha1": "61c89d36e350dec604d484f83708af1d8c3c7093",
+      "bytes": 8459,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/process.py",
+      "git_blob_sha1": "169d7d8c77a47295d18d96997d39f0f8d659a076",
+      "bytes": 8562,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/refbrowser.py",
+      "git_blob_sha1": "64900c473474b8d51b6b85fd9d347263cab4dbf0",
+      "bytes": 15213,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/refgraph.py",
+      "git_blob_sha1": "5d7205209980850e14b78b4646aeb0565f6858ed",
+      "bytes": 11959,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/summary.py",
+      "git_blob_sha1": "b86ccb7459b5031399cd3890aa2fdff6765fc0d7",
+      "bytes": 10351,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/tracker.py",
+      "git_blob_sha1": "b95199296002c980cbcc2cedb590b87098c2fa9f",
+      "bytes": 9788,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/__init__.py",
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/bottle2.py",
+      "git_blob_sha1": "d3bf6d57dfaa30a3229ba6c67987b8f0929ef147",
+      "bytes": 63021,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/bottle3.py",
+      "git_blob_sha1": "104839baf8c9596f61cd5d3981964fea29abdaf0",
+      "bytes": 63069,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/compat.py",
+      "git_blob_sha1": "5d892e1985adad25fc946345257a5fc218d92480",
+      "bytes": 1689,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/stringutils.py",
+      "git_blob_sha1": "ee4884e6b5d7717fa4361828307d2bc4211f2398",
+      "bytes": 1865,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/web.py",
+      "git_blob_sha1": "27fe0cdb2d9ca377aaf4d0c28835c293578d047e",
+      "bytes": 10247,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/__init__.py",
+      "git_blob_sha1": "5099274d6cea226a290ac591604f893202691b1e",
+      "bytes": 65,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/_meliaejson.py",
+      "git_blob_sha1": "5144670753e2594041e7c678fcbb7eb4abeeba10",
+      "bytes": 3042,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/coldshotadapter.py",
+      "git_blob_sha1": "f50b5baa96cd8cf8a13c4a63b59223fe0546274b",
+      "bytes": 5580,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/homedirectory.py",
+      "git_blob_sha1": "ef089b3c07583e593d88fa4768bf466ceddc7f34",
+      "bytes": 2694,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/listviews.py",
+      "git_blob_sha1": "8b004b6fc4ff98eefaa1e61fe2b62a98b6943daa",
+      "bytes": 11133,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/macshim.py",
+      "git_blob_sha1": "f0c1f15b949fc03e430516b378053da6ac666c66",
+      "bytes": 231,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/meliaeadapter.py",
+      "git_blob_sha1": "76d3196626068a4efb2983d7eb4a949ced9e23cf",
+      "bytes": 5979,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/meliaeloader.py",
+      "git_blob_sha1": "96be15c2a80cdd1611a346d310d5dc949112b9ee",
+      "bytes": 20210,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/pstatsadapter.py",
+      "git_blob_sha1": "73fcbea91475026b82a4924d3325571a892bff21",
+      "bytes": 2826,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/pstatsloader.py",
+      "git_blob_sha1": "44d80218996b46c88a4056f22be91f894d427180",
+      "bytes": 11445,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/runsnake.py",
+      "git_blob_sha1": "d0ebf9e6ed044033f0f06949ce7e8417e494d2bf",
+      "bytes": 32046,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/squaremap/__init__.py",
+      "git_blob_sha1": "da7d9775fffc8003798a84a5c7d094cc360985de",
+      "bytes": 72,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/squaremap/squaremap.py",
+      "git_blob_sha1": "c0c728aba42911686f8ee16ed44c1c339858fcaf",
+      "bytes": 21515,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/six.py",
+      "git_blob_sha1": "190c0239cd7d7af82a6e0cbc8d68053fa2e3dfaf",
+      "bytes": 30098,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/lib/tee.py",
+      "git_blob_sha1": "159602389913bf0203ca8c4ccdd3da4c94289465",
+      "bytes": 3066,
+      "review": "whole-text-reviewed",
+      "sha256": "9d16d40c2d23063f551611a2cc91f28fc3a95ec5789ed5c4d11e998d8f8cf0ca"
+    },
+    {
+      "path": "pyFileFixity/pff.py",
+      "git_blob_sha1": "b682920bd3e41cc9a62417cbbf8d69125dc136d5",
+      "bytes": 7503,
+      "review": "whole-text-reviewed",
+      "sha256": "2983c8dafc6b47be147a0b02bd7d1b45f923a31b9504f326bb31d5a2669be447"
+    },
+    {
+      "path": "pyFileFixity/repair_ecc.py",
+      "git_blob_sha1": "952726be029694ec418e8c89526597ae48446333",
+      "bytes": 27551,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/replication_repair.py",
+      "git_blob_sha1": "d1129c150bffaaa3b4b10f243ebf12a6f09c26cb",
+      "bytes": 37685,
+      "review": "whole-text-reviewed",
+      "sha256": "c4b7747bedefa7b3c2a39ec94bc2eae95f1f3ed66ec849aa34daea4bd14bb5b8"
+    },
+    {
+      "path": "pyFileFixity/resiliency_tester.py",
+      "git_blob_sha1": "05c91988b61a184648a7c6f66adfebc92145b85c",
+      "bytes": 27123,
+      "review": "whole-text-reviewed",
+      "sha256": "5f14cde863b79741f69df3a10c72870aebed72dae67fae3df7633f20487e39a6"
+    },
+    {
+      "path": "pyFileFixity/resiliency_tester_config.txt",
+      "git_blob_sha1": "500f4057daf95e64de3e89e6171be93ec90ceee9",
+      "bytes": 1946,
+      "review": "whole-text-reviewed",
+      "sha256": "01dd44a869a650772e3ac59e8caff539fde035302cd945d8837fdcbac603aaa0"
+    },
+    {
+      "path": "pyFileFixity/rfigc.py",
+      "git_blob_sha1": "62cf96f5fac928e8d1cc5f7c5030a9e952cf4616",
+      "bytes": 36845,
+      "review": "whole-text-reviewed",
+      "sha256": "589f5b78b8676776e8e0a384432e4504c8e84c8847fd25f88bc3d074de981efd"
+    },
+    {
+      "path": "pyFileFixity/structural_adaptive_ecc.py",
+      "git_blob_sha1": "67858815234c4b7a8b375226006c8f870246d508",
+      "bytes": 69265,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/__init__.py",
+      "git_blob_sha1": "4287ca8617970fa8fc025b75cb319c7032706910",
+      "bytes": 1,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/aux_tests.py",
+      "git_blob_sha1": "89cd667b798ae5250c34708f11fc6002206573fc",
+      "bytes": 6590,
+      "review": "whole-text-reviewed",
+      "sha256": "2b61cf4966126585c7995c1b4db4beec168eb784c36256a7c9a4e0f0cdd51fcc"
+    },
+    {
+      "path": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+      "git_blob_sha1": "d96dc95707c20a371b14928ee42071f00e00b645",
+      "bytes": 6,
+      "review": "whole-text-reviewed",
+      "sha256": "bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"
+    },
+    {
+      "path": "pyFileFixity/tests/files/alice.pdf",
+      "git_blob_sha1": "7fef0a8661cd212046f06b22bad4069730aefece",
+      "bytes": 67254,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/files/sub/Snark.zip",
+      "git_blob_sha1": "a988bfefbba2e08525cdc8dceb88dfbbda97932e",
+      "bytes": 2048,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/files/sub/testsub.txt",
+      "git_blob_sha1": "97501d23a127338a07e4eb83747abd94d48818db",
+      "bytes": 253,
+      "review": "whole-text-reviewed",
+      "sha256": "63fa3026c737793b5821f1ab89a10738f848f6308259e478724cbb68e4f62f77"
+    },
+    {
+      "path": "pyFileFixity/tests/files/testaa.txt",
+      "git_blob_sha1": "f0c29ac5ebf8b35d976bec986dc1105b6a50538c",
+      "bytes": 8,
+      "review": "whole-text-reviewed",
+      "sha256": "d1cb59f7968561b7bd9db5dcc6483587ec0d861471b24d48333e52dfd8bcdcd8"
+    },
+    {
+      "path": "pyFileFixity/tests/files/tux.jpg",
+      "git_blob_sha1": "46206629324d05d279656ec0a06b73d726c71679",
+      "bytes": 19719,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/files/tuxsmall.jpg",
+      "git_blob_sha1": "dd5d021a34ae95b6f27081dcf540259a1c125f22",
+      "bytes": 3667,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/resiliency_tester_config_easy.cfg",
+      "git_blob_sha1": "488708c97a34f06915ecc5a075a9295d2190b767",
+      "bytes": 2050,
+      "review": "whole-text-reviewed",
+      "sha256": "cb445db0be5eb1b5b945b0af66f6f5246b85996ce40b5249ee8bf393334ee17f"
+    },
+    {
+      "path": "pyFileFixity/tests/results/resiliency_tester_config_hard.cfg",
+      "git_blob_sha1": "62bb36a2c249fe1f14bafb764f531cc8d5e79752",
+      "bytes": 1627,
+      "review": "whole-text-reviewed",
+      "sha256": "1e88b086b8c752366bb90781cb170f3fb48f6496a55f7fda4bfe85429a583009"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_algo.db",
+      "git_blob_sha1": "d26e40b4d7870ed304a1f314f67f749bcaac7ccf",
+      "bytes": 1614,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_dir.db",
+      "git_blob_sha1": "e23970dd536f5ab28fbcc9facb3e027b9a76cdc9",
+      "bytes": 6473,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_one_file.db",
+      "git_blob_sha1": "d26e40b4d7870ed304a1f314f67f749bcaac7ccf",
+      "bytes": 1614,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_one_file_tamper.db",
+      "git_blob_sha1": "d26e40b4d7870ed304a1f314f67f749bcaac7ccf",
+      "bytes": 1614,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_repair_ecc_check.db",
+      "git_blob_sha1": "e23970dd536f5ab28fbcc9facb3e027b9a76cdc9",
+      "bytes": 6473,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_repair_ecc_sa_check.db",
+      "git_blob_sha1": "a97d1ccc66d44b392207d9f29410457d3de74d3c",
+      "bytes": 47542,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_rfigc_test_dir.csv",
+      "git_blob_sha1": "9aef8ffb0e4ab945e3550feb9b92f5d85a56a9fa",
+      "bytes": 689,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_rfigc_test_error_file.log",
+      "git_blob_sha1": "b4c5a1360bc03041214b93a5a98f165d30cc8cd0",
+      "bytes": 131,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_rfigc_test_one_file.csv",
+      "git_blob_sha1": "4984946f9a158ce97c871cbca4fde7ef11a63942",
+      "bytes": 161,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_rfigc_test_update_append.csv",
+      "git_blob_sha1": "f2e0c691ecb8ba59e113b44a145ad9240e2caa55",
+      "bytes": 686,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_rfigc_test_update_remove.csv",
+      "git_blob_sha1": "4987adbfb6c6ee0977314f300167b75a3797a6fd",
+      "bytes": 164,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_algo.db",
+      "git_blob_sha1": "2bb81b2893286f62b409e687754066abe7a911a0",
+      "bytes": 2883,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_dir.db",
+      "git_blob_sha1": "a97d1ccc66d44b392207d9f29410457d3de74d3c",
+      "bytes": 47542,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_one_file.db",
+      "git_blob_sha1": "2bb81b2893286f62b409e687754066abe7a911a0",
+      "bytes": 2883,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_one_file_tamper.db",
+      "git_blob_sha1": "2bb81b2893286f62b409e687754066abe7a911a0",
+      "bytes": 2883,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/test_aux_funcs.py",
+      "git_blob_sha1": "5bcf5cf9c1dad85afb887084fe908e61d410d37d",
+      "bytes": 6626,
+      "review": "whole-text-reviewed",
+      "sha256": "bb231d40e970ce92f28cebc879118eea704ea3e065ee295657ee8854615600b7"
+    },
+    {
+      "path": "pyFileFixity/tests/test_eccman.py",
+      "git_blob_sha1": "fb6036c391ab97cc7c43e5c9e9bc4f3091718f50",
+      "bytes": 6916,
+      "review": "whole-text-reviewed",
+      "sha256": "34b6a6976bb93921d264199a44491071f48674e18ebb1be4213b43811fdd22d1"
+    },
+    {
+      "path": "pyFileFixity/tests/test_hasher.py",
+      "git_blob_sha1": "db24506a5d65bff4b7c4f62f24b1cecdef24cf73",
+      "bytes": 1713,
+      "review": "whole-text-reviewed",
+      "sha256": "e15710c251797d068d63329c77eb6e3d47497c651711c0b36f644410cfd631a3"
+    },
+    {
+      "path": "pyFileFixity/tests/test_header_ecc.py",
+      "git_blob_sha1": "fdc84e572c77cd953a2b67d1e8feed2892081d97",
+      "bytes": 8111,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/test_repair_ecc.py",
+      "git_blob_sha1": "421941518b1750a3c48f7d8ef0ef0a042d66e2e9",
+      "bytes": 8229,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/test_replication_repair.py",
+      "git_blob_sha1": "92d8e12ae8229248e2b6a7f373355b2e6a00969d",
+      "bytes": 12865,
+      "review": "whole-text-reviewed",
+      "sha256": "5111671f54bb7d755e35f7aae7e1f8474ff677936995d27f6fe009f8c44f0b8e"
+    },
+    {
+      "path": "pyFileFixity/tests/test_resiliency_tester.py",
+      "git_blob_sha1": "a87dd5dc4ab5c771a5ebeaf4f9535332a221ecf9",
+      "bytes": 8511,
+      "review": "whole-text-reviewed",
+      "sha256": "dca4cbccc02e343fed2fc6183c896ea6f71d2ba242fce1f8dc922f660dce849c"
+    },
+    {
+      "path": "pyFileFixity/tests/test_rfigc.py",
+      "git_blob_sha1": "2f7af2e5a6a526c6e051f3347e1f12063f874b4f",
+      "bytes": 6959,
+      "review": "whole-text-reviewed",
+      "sha256": "13f363dab0f1a5dc67adf7b795b1c82a3e1ec26e7e8629f173168e48b0b0a41b"
+    },
+    {
+      "path": "pyFileFixity/tests/test_structural_adaptive_ecc.py",
+      "git_blob_sha1": "48769a2d3c448474e618b8019db89db39486a8c6",
+      "bytes": 10510,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "pyFileFixity/tests/test_tee.py",
+      "git_blob_sha1": "3fc9523ce2e1fdadd12f942a850caea4db910e19",
+      "bytes": 2240,
+      "review": "whole-text-reviewed",
+      "sha256": "33671b928693bbef5e5a1f57281d73c35aecf0171687f7f2edf44fcb7fffe425"
+    },
+    {
+      "path": "pycleaner.py",
+      "git_blob_sha1": "4ce6e85e19faaef4787ed5e5a3e70f3d9cc3ff78",
+      "bytes": 1762,
+      "review": "whole-text-reviewed",
+      "sha256": "b41f250d10b058d681af7c7a83b914e047f61f13fddc9c31d2fe48e4db0ad9c3"
+    },
+    {
+      "path": "pyproject.toml",
+      "git_blob_sha1": "f34308371b7eb3d1db59247da717a36e79fa6ecf",
+      "bytes": 10407,
+      "review": "whole-text-reviewed",
+      "sha256": "3b34eb69f01095d347480eee05e8b3ad8b0aeefe378a9a35e748789396f6cde9"
+    },
+    {
+      "path": "requirements.txt",
+      "git_blob_sha1": "3b810502c679932d671b3800615e8be71d61ae83",
+      "bytes": 81,
+      "review": "whole-text-reviewed",
+      "sha256": "845cf7ba80b9d155bbb49c68494d9eedfd9944f9d7fb5374a1ac93949f20989f"
+    },
+    {
+      "path": "setup.cfg.bak",
+      "git_blob_sha1": "d874923fe3ca276877d6f678af25eaea579b8403",
+      "bytes": 3648,
+      "review": "not-whole-reviewed"
+    },
+    {
+      "path": "setup.py",
+      "git_blob_sha1": "0e9b0e171dbaf06fba5f097d78f8832c149173ba",
+      "bytes": 455,
+      "review": "whole-text-reviewed",
+      "sha256": "ff6946ee3032e346dab5eb9abd99ee4ac71ef191eb0e95cbb5b5183b2acb14c9"
+    },
+    {
+      "path": "setup.py.bak",
+      "git_blob_sha1": "634950f5da3ffdce1dd1b6f1fae7a39a22ac99c8",
+      "bytes": 522,
+      "review": "whole-text-reviewed",
+      "sha256": "04f6e8789249e0e1aa75f66526eea2f38b6646d42c99616281fb460708938b82"
+    },
+    {
+      "path": "tox.ini",
+      "git_blob_sha1": "859043a6af42cec4ae78fdb672c545c3dc0207c9",
+      "bytes": 1712,
+      "review": "whole-text-reviewed",
+      "sha256": "5573dddd5233cb68688e2c19e6021ced970f686b7f343218bf430245760322ef"
+    },
+    {
+      "path": "tux-example.jpg",
+      "git_blob_sha1": "2a2eb59b20bb2c3b3cecb9eb3b688c2a2f6b9fcf",
+      "bytes": 78034,
+      "review": "not-whole-reviewed"
+    }
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
