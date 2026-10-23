@@ -1,0 +1,76 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/DeepVerificationTests.swift",
+      "git_blob": "1d8a5663baf47c224adf34a0630e6fd1329a0861",
+      "sha256": "fbc11355767fee47213c5f6e6afeda503795e3715b3e0a38fb44c41b7463e783",
+      "bytes": 3164,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/MediaIntegrationTests.swift",
+      "git_blob": "2b1c47e115d2646a43aa512c92443c1f7bee7baa",
+      "sha256": "638e17a5e73ab93fb2f70779d5710e751aea0f89a1436ea861b5365a38ca539d",
+      "bytes": 2450,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 35,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 86,
+  "full_review_count": 249,
+  "runs": [
+    {
+      "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter VisionSimilarityRegressionTests",
+      "executed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "names": [
+        "VisionSimilarityRegressionTests testCompressionAndResizingRemainImageMatches",
+        "VisionSimilarityRegressionTests testDifferentImageContentDoesNotRegainInflatedScoresFromOldCaches",
+        "VisionSimilarityRegressionTests testDifferentImageContentsStayBelowTheRecommendedThreshold",
+        "VisionSimilarityRegressionTests testDistanceScoreHasUsefulRangeAndRejectsInvalidMeasurements",
+        "VisionSimilarityRegressionTests testExtractionPinsRevisionAndRejectsIncompatibleObservations",
+        "VisionSimilarityRegressionTests testImageFeatureCacheReextractsPreviousAlgorithmVersion",
+        "VisionSimilarityRegressionTests testReencodedVideoRetainsFrameSimilarityAndPipelineMatch",
+        "VisionSimilarityRegressionTests testVideoFrameVerificationRejectsDifferentContentAndOldRelations"
+      ],
+      "log_sha256": "5509c6e5d646b3de830b110ca4d1fb4d91f375739e77be85c681448abf2be87b"
+    },
+    {
+      "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter MediaIntegrationTests|DeepVerificationTests|DisplayThresholdEditingTests",
+      "executed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "names": [
+        "DeepVerificationTests testDefaultPipelineUsesPerceptualAlgorithmVersion",
+        "DeepVerificationTests testDisablingRestoresPerceptualAlgorithmVersion",
+        "DeepVerificationTests testEnablingSwitchesToFrameAlgorithmVersion",
+        "DeepVerificationTests testInjectedPipelineIsNotRebuiltOnToggle",
+        "DisplayThresholdEditingTests testInitialScanThresholdMatchesRecommendedThreshold",
+        "DisplayThresholdEditingTests testManualInputDoesNotSnapInsideSliderMagnetRange",
+        "DisplayThresholdEditingTests testOutsideClickCommitsCurrentTextAndLeavesEditing",
+        "DisplayThresholdEditingTests testSliderValueSnapsToRecommendedThresholdFromEightyFourToEightyEightPercent",
+        "DisplayThresholdEditingTests testTextInputParsesPercentValuesAndClampsToAllowedRange",
+        "DisplayThresholdEditingTests testTextInputRejectsInvalidValuesAndFormatsCurrentThreshold",
+        "DisplayThresholdEditingTests testTextInputStartsReadOnlyAndOnlyEditsAfterClick",
+        "DisplayThresholdEditingTests testThresholdHelpUsesRecommendedValueInEveryLanguage",
+        "MediaIntegrationTests testRealVideoScanAndExactDuplicateGrouping"
+      ],
+      "log_sha256": "8dc72eb1f537b1f6c3ebae635ea1c52a7cd3059ebd0b10939a0060130621c58f"
+    }
+  ],
+  "runtime_scope": "Full unchanged original Swift6 package and pinned real GRDB; native ImageIO/Vision/AVFoundation with actual installed FFmpeg. No authored adapters or test-body extraction. Original tests may use their own injected stubs/InMemoryHashCache. 98 original captured files reverified against pinned Git blobs after runs. No app window launched.",
+  "findings": [
+    "All8 original Vision regressions run now, replacing selected2-only evidence fromv13. Includes two generated-video tests, six compression/resize image variants, three distinct-scene negative pairs and old-algorithm cache invalidation using original InMemoryHashCache. Not a real disk GRDB persistence qualification.",
+    "Measured positive image scores range0.913518..0.999807 for three authored scenes; negative image final scores0.415538..0.524748. These are small synthetic fixture outcomes, not heldout natural corpus precision/recall.",
+    "Reencoded video finalscore0.999852, resized/renamed0.989963, negative video0.688350. Deep-mode injected pHash collision still reaches native frame verification and rejects mismatched frames at0.72 grouping threshold in original test.",
+    "All13 additional tests pass:4deepverification configuration tests,8displaythreshold tests and1realvideo scanner/exactduplicate pipeline test. Exact encoded copy produces one group of2 withmaximumScore1 in finite fixture.",
+    "Default deep verification is false; original toggle tests verify algorithm-version changes and injected pipeline branch, not universal content quality. Source lines402/431/850-860 of ScanViewModel inspected partially; full file not manually credited.",
+    "Prior percent parsing edge cases remain uncovered by original8 threshold tests and still valid; no upstream code patched.",
+    "Full pipeline synthetic success does not close broad corpus false positives, formats/platforms, all500repositories or remaining image review requirements. No optimization speedup claimed."
+  ]
+}

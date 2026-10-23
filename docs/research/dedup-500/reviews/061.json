@@ -159,7 +159,11 @@
     {
       "audit": "docs/research/dedup-500/targie061-source-review-v16-20261023.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/targie061-source-review-v17-20261023.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "Full original package with pinned GRDB: all6 ImageScannerTests pass(v16). Prior isolated runs:10 FileHasher,3 ImagePerceptualHasher,25 PerceptualHasher,4 ScanIntensity,3 ImageFeatureExtractor,2 selected Vision regressions. Whole app UI/pipeline/database/video suite not executed."
+  "upstream_tests_scope": "Full original package:6ImageScanner(v16),8VisionRegression and13deepverification/displaythreshold/media integration(v17) pass, no skips. Prior isolated hasher/feature tests retained separately. Full entire suite and broad corpus not executed."
 }
