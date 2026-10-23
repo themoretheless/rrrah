@@ -449,16 +449,42 @@ fn missing_input_and_overlap_do_not_lose_valid_results() {
     fs::write(&a, b"same").unwrap();
     fs::write(child.join("b"), b"same").unwrap();
     let missing = root.path().join("missing");
-    let report = scan(
-        &[root.path().into(), child, a.clone(), a, missing.clone()],
-        &Options::default(),
-        || false,
-    );
-    assert_eq!(report.groups.len(), 1);
-    assert_eq!(report.files_observed, 2);
-    assert!(!report.complete());
-    assert_eq!(report.issues[0].path, missing);
-    assert!(matches!(report.issues[0].kind, IssueKind::Io(_)));
+    for verified in [false, true] {
+        let run = |inputs: &[std::path::PathBuf]| {
+            if verified {
+                rrrah_dedup::exact::scan_verified(inputs, &Options::default(), || false)
+            } else {
+                scan(inputs, &Options::default(), || false)
+            }
+        };
+        let mut inputs = vec![root.path().into(), child.clone(), a.clone(), a.clone()];
+        for missing_first in [false, true] {
+            if missing_first {
+                inputs.insert(0, missing.clone());
+            } else {
+                inputs.push(missing.clone());
+            }
+            let report = run(&inputs);
+            assert_eq!(report.groups.len(), 1, "{report:?}");
+            assert_eq!(report.groups[0].paths.len(), 2);
+            assert_eq!(report.groups[0].bytes, 4);
+            assert_eq!(report.files_observed, 2);
+            assert!(!report.complete());
+            assert!(!report.cancelled);
+            assert_eq!(report.issues.len(), 1, "{report:?}");
+            assert_eq!(report.issues[0].path, missing);
+            assert!(matches!(report.issues[0].kind, IssueKind::Io(_)));
+            inputs.retain(|path| path != &missing);
+        }
+        let report = run(std::slice::from_ref(&missing));
+        assert!(!report.complete());
+        assert!(!report.cancelled);
+        assert!(report.groups.is_empty());
+        assert_eq!(report.files_observed, 0);
+        assert_eq!(report.issues.len(), 1);
+        assert_eq!(report.issues[0].path, missing);
+        assert!(matches!(report.issues[0].kind, IssueKind::Io(_)));
+    }
 }
 
 #[test]

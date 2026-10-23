@@ -1,0 +1,41 @@
+{
+  "requirement": "Missing or overlapping input roots must not hide valid exact groups or falsely report scan completeness in either public exact scan mode.",
+  "date": "2026-10-23",
+  "test": "missing_input_and_overlap_do_not_lose_valid_results",
+  "test_file": "crates/rrrah-dedup/tests/exact_files.rs",
+  "change": "Expanded existing real-filesystem regression from ordinary scan/missing-last only to both scan and scan_verified, missing-first and missing-last, plus missing-only inputs.",
+  "filesystem_cases": 6,
+  "assertions": [
+    "Mixed valid/missing inputs with overlapping parent/child/file roots and duplicateexplicitpath yield exactly1group of2files of4bytes and exactly2physicalfilesobserved.",
+    "Both missing-first and missing-last yield exactly1Ioissue for the missingpath, completefalse and cancelledfalse.",
+    "Missing-only input yields nogroups,0filesobserved,exactly1Ioissue,completefalse andcancelledfalse."
+  ],
+  "runs": [
+    {
+      "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files missing_input_and_overlap_do_not_lose_valid_results",
+      "exit_code": 0,
+      "executed": 1,
+      "failed": 0,
+      "log_sha256": "c57f6dc95c3b27164b0930f8dc26c8331d6e6e9869c9f286dad210954cd960ab"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files",
+      "exit_code": 0,
+      "executed": 38,
+      "failed": 0,
+      "log_sha256": "c7d3a853fd245f26bd6cacef7a9ca2d589664b58e0d08557077fa90b40132693"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "2a4b27dddaeded012ab403f484e7f563ad1efd536af2cc39026728387994ab3c",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "Cargo.lock": "b7cd9d8d509658bd5bcc7eba804f804e3697d1d0e51965c96ead4015fcabf04d"
+  },
+  "other_checks": [
+    "rustfmt +1.98.1 --check --edition 2024 crates/rrrah-dedup/tests/exact_files.rs",
+    "git diff --check"
+  ],
+  "scope": "Native macOS current checkout. Existing production algorithm required no change. Exact scan mode was previously covered, scan_verified/order/missing-only cases were not in this regression. Not an atomic snapshot, nativeWindows or allformat/500repo qualification. Cargo.lock and unrelated application/decode work were already dirty; no clean release snapshot claimed.",
+  "research_reference": "nextcloud068-source-review-v1-20261023.json: missing requested paths can be skipped without explicit scan completion status. This cross-check validates our library contract; it does not execute Nextcloud.",
+  "goal_complete": false
+}
