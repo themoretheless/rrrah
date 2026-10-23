@@ -1,0 +1,128 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v8-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "cross_link/DbRoot.py",
+      "local": "43-cross_link--DbRoot.py",
+      "sha256": "3e1fd588d2c0dfcc6b0777f7ed3e5f00a7b38c4dfb8295f95c4012ca8f6cee50",
+      "whole_text_read": true,
+      "lines": 97
+    },
+    {
+      "path": "cross_link/RetreivalDbBase.py",
+      "local": "44-cross_link--RetreivalDbBase.py",
+      "sha256": "dca25d3f0352c1344206342a7045ffdace5115e6c83900876d9c1125d11e0bac",
+      "whole_text_read": true,
+      "lines": 706
+    }
+  ],
+  "whole_text_files_read_total": 44,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 110,
+  "authored_control": {
+    "result": {
+      "destructor_returned_thread_key_instead_of_connection": true,
+      "remove_tags": [
+        {
+          "error": null,
+          "existing": "one two",
+          "updates": [
+            {
+              "tags": ""
+            }
+          ]
+        },
+        {
+          "error": "AttributeError",
+          "existing": null,
+          "updates": []
+        }
+      ],
+      "scope": "Exact AST-selected original methods with command-recording cursor/pool/row adapters;no database,filesystem changes,network or actual interrupt signal",
+      "transaction_cases": [
+        {
+          "case": "success",
+          "commands": [
+            "BEGIN;",
+            "COMMIT;"
+          ],
+          "error": null,
+          "released": 1
+        },
+        {
+          "case": "body_error",
+          "commands": [
+            "BEGIN;",
+            "ROLLBACK;",
+            "COMMIT;"
+          ],
+          "error": "ValueError:owned body",
+          "released": 1
+        },
+        {
+          "case": "begin_error",
+          "commands": [
+            "BEGIN;"
+          ],
+          "error": "OSError:owned BEGIN; failed",
+          "released": 0
+        },
+        {
+          "case": "commit_error",
+          "commands": [
+            "BEGIN;",
+            "COMMIT;"
+          ],
+          "error": "OSError:owned COMMIT; failed",
+          "released": 0
+        },
+        {
+          "case": "body_and_commit_error",
+          "commands": [
+            "BEGIN;",
+            "ROLLBACK;",
+            "COMMIT;"
+          ],
+          "error": "OSError:owned COMMIT; failed",
+          "released": 0
+        },
+        {
+          "case": "keyboard_interrupt",
+          "commands": [
+            "BEGIN;",
+            "COMMIT;"
+          ],
+          "error": "KeyboardInterrupt:owned interrupt",
+          "released": 1
+        },
+        {
+          "case": "unmanaged",
+          "commands": [],
+          "error": "ValueError:owned body",
+          "released": 1
+        }
+      ]
+    },
+    "exit_code": 0
+  },
+  "findings": [
+    "TransactionMixin issuesBEGINbeforetry,soBEGINexception skipsrelease_cursor. COMMITinf inallyprecedesrelease_cursor,socommitexceptionalsoskipsrelease. Commandadapterconfirmsbothzero releases.",
+    "BodyValueError producesBEGIN,ROLLBACK,COMMITandoriginalerror;injectCOMMITfailureinsteadmasksoriginalerrorwithOSErrorandnorelease. No actual committedrows/durabilityclaim.",
+    "KeyboardInterruptnotcaughtbyexceptException;finallyissuesCOMMITthenreleasescursorbeforepropagatinginterrupt. Controlled raisedPythonexception,notrealprocesssignal.",
+    "Positivecontrols:successfulmanagedtransactionBEGIN,COMMITandreleaseonce;commitFalsebodyerrorhasnoSQLcommandsandreleaseonce.",
+    "DbBase destructoriteratesconnectionsdictkeysandputconn(key),notconnectionvalues;synthetic{123:ownedconnection}returns123topooladapter. Actualpoolerrornotexecuted.",
+    "ScraperDbBase.removeTagsconditioninverted:existingone two removingonewritesemptytags;existingNonecallsNone.splitandraisesAttributeError. Pureoriginalmethodwithrow/updateadapters,notdatabasewrites.",
+    "RetreivalDbBase modulewouldstartdirectoryobserverswithoutnativeobserversatimportandimportnameTools/DBhelpers. Whole source readwithoutimport;nohostfilesystemwatchers/databaseconnections.",
+    "Cross-linkdataretrievalhelpersareoutsidecorefingerprintsearch;theseissuesareupstreamfindings,notestablishedrrrahbugs."
+  ],
+  "transfer_decision": "Treat releaseguarantees and preservedprimaryerrorsaspartoftransactioncontract;commitsmustfollowexplicit successfulcompletion. No foreignproductioncodeadopted.",
+  "limits": [
+    "44of154whole files;110remain.",
+    "Seven transactioncases plusdestructor/twotagcases are authoredcontrols,notoriginaltests.",
+    "Originalupstream17testsremain13pass4errors;noadditionalupstreamtestsrun.",
+    "No real PostgreSQL/pool/observerintegration and no nativepHash.org/ASAN run."
+  ]
+}
