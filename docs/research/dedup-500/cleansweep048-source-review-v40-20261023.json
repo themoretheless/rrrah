@@ -1,0 +1,93 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/res/drawable/ic_cancel.xml",
+      "sha256": "013d7ffbbf5ec786549600bb3a08153b916dc462f8babac00d2a5326ba2ef0ea",
+      "lines": 15,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_duplicates_scan.xml",
+      "sha256": "71c270825ba40cd30614acef31ba35dd858b8a0e9b0dfe12c65659864ccd1a15",
+      "lines": 15,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/mipmap-anydpi/ic_launcher.xml",
+      "sha256": "274de093d63b5c3c2c8ebcd2bc9f65db48de63c74b74fe77691092b0047f1f5e",
+      "lines": 6,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/mipmap-anydpi/ic_launcher_round.xml",
+      "sha256": "274de093d63b5c3c2c8ebcd2bc9f65db48de63c74b74fe77691092b0047f1f5e",
+      "lines": 6,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/values-night/colors.xml",
+      "sha256": "885205611e6d363799a78fe29471765b9c3dd362b68c6ece2eeb2d8a5dbcad75",
+      "lines": 21,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/values/colors.xml",
+      "sha256": "696de2ce0cbb2e552b7225c79e176c1a65a0cb99bcf19b3005a57b931de585bc",
+      "lines": 21,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/values/ic_launcher_background.xml",
+      "sha256": "d80a637240092d84a76bf66fdff7a711f43fba8b25088c6d6d7ea2600aaf0df7",
+      "lines": 4,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/values/themes.xml",
+      "sha256": "abd5acd0c38d706bcfaca97525bd4471bfbd664056debe87f246e702395c7a7c",
+      "lines": 40,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/xml/backup_rules.xml",
+      "sha256": "cb131658a1786ee15c0a50c8a352254f7ef9454bfe4d82707c48f66f4cd6f137",
+      "lines": 5,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/xml/data_extraction_rules.xml",
+      "sha256": "ddba736ba791f4da64a8b4527265b42fcb9f8f972a64d264223e62388267288d",
+      "lines": 11,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/res/xml/file_paths.xml",
+      "sha256": "fcbefe4711267dc49c2504d705bc956dba200fc200f3d90e0bec6894ee1e8361",
+      "lines": 4,
+      "git_blob_verified": true
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "sha256": "ca9362b4c92d75f71415b0d9d9307b7f363819e88fd56ade09a3d711fea43062",
+      "lines": 7,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "FileProvider paths permit external-path root dot, covering shared external storage; actual sharing still uses explicit selected URIs and read grants in reviewed ViewModel. XML breadth alone is not proof of unintended sharing.",
+    "Backup XML excludes root dot and file no_backup, but does not explicitly enumerate database/sharedpref domains. Effective backup behavior depends on manifest allowBackup and platform rules; no backup/restore runtime was executed.",
+    "Adaptive and round launcher definitions are identical and use foreground for monochrome. The referenced WebP assets remain visually unreviewed; XML parsing is not visual qualification.",
+    "Launch theme forces windowLightStatusBar true before Compose theme side effects adjust it, including system dark-mode launch. Visual impact is unrendered.",
+    "Wrapper pins Gradle 9.0-milestone-1 and validates URL with 10-second network timeout, but contains no distributionSha256Sum. No distribution was fetched or build executed in this review."
+  ],
+  "checks": {
+    "xml_parse_passed": 11
+  },
+  "whole_files_read_total": 95,
+  "remaining_tracked_blobs": 35,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
