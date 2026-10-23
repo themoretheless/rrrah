@@ -1,0 +1,69 @@
+{
+  "repository": "math2001/FileManager",
+  "commit": "40c452353384566da275ae9a4b73692385d3413f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "commands/duplicate.py",
+      "sha256": "c7f4689980323c03f807996fddfd41c6cb2f184d8aab53c32b43e3bff7412535",
+      "lines": 106,
+      "git_blob_verified": true
+    },
+    {
+      "path": "libs/pathhelper.py",
+      "sha256": "e4da2be6d2642aff8f7d675b01fc6b518be97efbc263efc2d2c8efbbbfbd8d05",
+      "lines": 66,
+      "git_blob_verified": true
+    },
+    {
+      "path": "tests/test_path_helper.py",
+      "sha256": "0ba19ce1174bfbb82d9823634e7fa24c653bce10a25430c95205edcbebd95669",
+      "lines": 46,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "f883afc06c0581b8682a11eb862d1a9a3655181a64435d3d7b2f4901cc61ccc6",
+      "lines": 18,
+      "git_blob_verified": true
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "2fface3255d6bb61cdca075d535c0444fa91f4f657b92a40d2dcab3c52ce9c0d",
+      "lines": 4,
+      "git_blob_verified": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "3626664d1d114bd6186b11b17c36658da0d892e19f4c6b25fb20e1d67e6f80bc",
+      "lines": 7,
+      "git_blob_verified": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "7a3d522fa6e499eb2240ea1143348c8c12ddcaa16bd13fb39acee2bb113631fc",
+      "lines": 83,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/filemanager052-path-control-20261023.py",
+  "runtime": {
+    "original_unittest_methods_passed": 2,
+    "sublime_started": false,
+    "controls": 2
+  },
+  "findings": [
+    "Sevenpinnedfileswhole-read/Gitblobverified; duplicate.py readprecedingturn and currentcacheverified. Projectcreatescopies ratherthan discoversduplicatefiles, reject-domain decisionretained.",
+    "Actualoriginal2unittestmethods pass usingnamespacepackage injection toavoidSublimeplugin startup; helper/test bodiesunchanged. No SublimeGUI/runtimeexecution.",
+    "Actualcommonpath lowercasesallinputcomponents onPOSIX too: /tmp/A/file and/tmp/a/other yield/tmp/A despite differentcase-sensitivefolders. Independentcase-sensitive expectation is/tmp.",
+    "Actualcomputer_friendly /tmp/report:final.txt rewrites t:final.txt by treatinglastcolon asdrive delimiter. ValidPOSIXfilenameidentity lost.",
+    "user_friendly replaceshome substring anywhere ratherthananchoredprefix; source-only. computer_friendly similarly treats anytilde asreset and replacesalltildeoccurrences. These are editornavigationheuristics, unsuitablecanonical file identity.",
+    "Duplicatecommand protects onlyabspathstring equality; no samefile/inodecheck beforecopy/overwrite and destinationtrashedbeforecopy. No copy/trashoperation executed. Runtimefilesystemalias behaviorunqualified.",
+    "CIworkflow onlyblackformatcheck, not unittest invocation. MITrootlicense read; vendoredsend2trashlicense remainsseparate."
+  ],
+  "remaining": [
+    "63 other tracked blobs/assets",
+    "Othercommands/docs/vendortrashbackends/media and fullplugin runtime"
+  ],
+  "full_review_count": 249
+}
