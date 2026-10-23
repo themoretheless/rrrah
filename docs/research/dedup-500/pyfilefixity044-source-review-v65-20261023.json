@@ -1,0 +1,35 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "runsnake.py whole read and pinned blob verified; two exact method excerpts exercised with UI seams, no wx or profile loading",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/runsnakerun/runsnake.py",
+    "sha256": "6e45c6802611cc59bd82cbb686605493514b60a3b627da593de26ca6ff23a497"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 118,
+    "remaining_not_whole_reviewed": 26
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-view-navigation-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "d0ebf9e6ed044033f0f06949ce7e8417e494d2bf",
+    "source_sha256": "6e45c6802611cc59bd82cbb686605493514b60a3b627da593de26ca6ff23a497",
+    "scope": "Exact two method excerpts; synthetic adapter/UI callbacks, no GUI",
+    "best_parent_available_but_activation_count": 0,
+    "reported_status": "No parents for the currently selected node: authored",
+    "shallower_from_seen_depth5_actual_limit": 5
+  },
+  "findings": [
+    "OnUpView best_parent branch sets selected_parent but leaves parents empty, then gates activation on parents. Valid best_parent is ignored and no-parents status displayed; reproduced.",
+    "OnShallowerView expression max_depth_seen or 0 - 1 leaves positive max_depth_seen unchanged on first invocation. Seen5 produces limit5, not4; reproduced.",
+    "SetPercentageView dereferences loader without checking initial no-profile state. Percentage denominator comes from root adapter value, not selected subtree. Static finding.",
+    "SourceShowFile reads live local source rather than captured profile source and does not update sourceFileShown after successful read. Source/measurement correspondence unqualified.",
+    "All Callees/All Callers tabs are created but update calls are commented out. UI labels do not prove transitive relation coverage. Static finding.",
+    "SetModel passes rows.values() to DataView.integrateRecords, which slices functions[:]; Python3 dict view would not support this even after syntax port. Current original module fails Python2 syntax and legacy imports.",
+    "OnCloseWindow writes config to suffix~ then rename, but does not explicitly close/flush handle before replacement; no config path written in review.",
+    "Column definitions shared among controls receive mutable index values; load error handlers cover selected exception types only. No runtime or app compatibility claim, no production code copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
