@@ -1,0 +1,46 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Package.swift",
+      "sha256": "9c3a9e685d3d10466edd53e398571043022f3dc93d781ed502d511a6fa53d370",
+      "lines": 18,
+      "git_blob_verified": true
+    }
+  ],
+  "partial_files_read": [
+    {
+      "path": "Sources/FileMorrow/Models.swift",
+      "ranges": [
+        [
+          144,
+          184
+        ]
+      ],
+      "scope": "original DuplicateGroup and DuplicateScanProgress declarations used unchanged"
+    }
+  ],
+  "controls": {
+    "source": "docs/research/dedup-500/filemorrow046-keeper-control-20261023.swift",
+    "compiler": "Apple Swift 6.4 arm64-apple-macosx26.0",
+    "original_scanner_unchanged": true,
+    "original_model_declarations_unchanged": true,
+    "compile_exit_code": 0,
+    "run_exit_code": 0,
+    "basic_pair_grouped": true,
+    "changed_keeper_accepted": true,
+    "simulated_trash_callback_count": 1,
+    "actual_trash_executed": false,
+    "fixtures": "two files in UUID temporary directory, removed by deferred cleanup"
+  },
+  "findings": [
+    "Actual original scanner accepted a changed keeper and invoked the injected trash callback for the unchanged extra. The callback only recorded its argument; no production files or OS Trash were touched. This confirms the source-level keeper-content gap.",
+    "Package declares macOS 14 executable/test targets and Swift tools 6.2, with no external package dependencies. This isolated control is not a full application build or execution of upstream XCTest suite."
+  ],
+  "whole_files_read_total": 5,
+  "remaining_tracked_blobs": 53,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
