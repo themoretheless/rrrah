@@ -1,0 +1,51 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v17-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DataDrivenDBInputFormat.java",
+      "local": "112-DataDrivenDBInputFormat.java",
+      "sha256": "4a80eb59b31e30194d088533a32e754ba86cfebcfd47ff209aefe17c67c9b213",
+      "git_blob": "2e9c1663eea03200188704734558a3f90899d110",
+      "lines": 329,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/MRJobConfig.java",
+      "local": "113-MRJobConfig.java",
+      "sha256": "fe95a694f8c3bab2fc9be044133c05b26c23216203f98284964774a90c4f6980",
+      "git_blob": "80ebb80956616b8af7e88e8fccb68a3f13b7c688",
+      "lines": 270,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 108,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 114,
+  "remaining_without_whole_review": 56,
+  "original_tests": {
+    "new": 1,
+    "new_passed": 1,
+    "cumulative_distinct": 70,
+    "cumulative_passed": 70,
+    "report": "docs/research/dedup-500/hiho098-record-selective-original-test-20261024.json",
+    "scope": "Only TestGenericDBWritable.testSetColumns selected viaRequest.method; testPopulateColumnInfo requires configured MySQL and was not executed;19files cumulatively with this file partially executed"
+  },
+  "author_native_controls_cumulative": 69,
+  "scope_clarification": [
+    "DataDrivenDBInputFormat.getSplits returns1=1single split when configured NUM_MAPS is exactly1, bypassing bounds query and splitters. Earlier direct helper/splitter one-map counterexamples do NOT prove single-map import omission or OOM.",
+    "Float2map case and decimal3map case are not excluded by that branch; actual JDBC/shuffle/cluster behavior remains unexecuted.",
+    "DataDrivenDBInputSplit constructor/getters match the previously authored recording-host string semantics. Full class source now reviewed, but previous native controls still used isolated hosts; they are not retrospectively upgraded to full-class executions."
+  ],
+  "source_only_findings": [
+    "SQL type dispatch selects FloatSplitter for REAL/FLOAT/DOUBLE, BigDecimalSplitter forNUMERIC/DECIMAL; unsupportedtypes returnnull then getSplits throwsIOException.",
+    "getSplits does not check boundingResultSet.next boolean before reading metadata and values; actual driver response unqualified.",
+    "setBoundingQuery only warns when substitute token absent and stores suppliedquery.",
+    "getSplits finally closes result/statement and attempts connection.commit thenclose; if commit throws, closeConnection in same try is skipped. Source-only lifecycle path, no DB connection attempted."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
