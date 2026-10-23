@@ -1,0 +1,57 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "resiliency_tester.py lines 37-237 and 520-585 reviewed. Original diff/stat functions called unchanged on authored temporary binary files. Not whole module or whole-repository review.",
+  "source_sha256": "5f14cde863b79741f69df3a10c72870aebed72dae67fae3df7633f20487e39a6",
+  "control": "pyfilefixity044-diff-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "same_block_inputs": [
+      "a",
+      "ab"
+    ],
+    "diff_bytes_files": [
+      0,
+      1
+    ],
+    "byte_error_percent": 0.0,
+    "file_diff_count": [
+      1,
+      1
+    ],
+    "extra_output_file_diff_count": [
+      0,
+      1
+    ],
+    "cross_block_unequal_length_exception": "AttributeError: BufferedReader has no attribute fstat"
+  },
+  "findings": [
+    {
+      "id": "same-block-suffix-ignored",
+      "detail": "Diff loops over zip of nonempty blocks, discarding unmatched suffix bytes. If both reads then reach EOF, byte error is zero despite unequal lengths. Reproduced; file-count helper correctly reports inequality for that pair."
+    },
+    {
+      "id": "cross-block-length-failure",
+      "detail": "When one side reaches EOF before another nonempty block, code calls f1.fstat or f2.fstat, which BufferedReader does not provide. Reproduced with blocksize four, lengths nine and one. Remaining-byte formula also subtracts current block instead of including it; not separately executed beyond exception."
+    },
+    {
+      "id": "extra-results-ignored",
+      "detail": "Directory comparators traverse only first directory and never enumerate extra second-directory paths. Extra output file is ignored by byte and file accounting; file-count behavior reproduced."
+    },
+    {
+      "id": "false-success-gate",
+      "detail": "Main return checks only stats final error (byte percentage), not file-difference count. Same-block length counterexample yields byte error zero with file count one, so the chosen success predicate is insufficient. Full configured main not run."
+    },
+    {
+      "id": "command-status-loss",
+      "detail": "execute_command discards imported module.main return value, unlike subprocess.check_call failure behavior. Configured Python commands may report failure numerically without stopping the harness."
+    },
+    {
+      "id": "zero-byte-denominator",
+      "detail": "compute_diff_stats divides by total compared byte count without zero guard; empty corpus or zero-byte corpus needs explicit policy. Static finding."
+    }
+  ],
+  "upstream_suite_run": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
