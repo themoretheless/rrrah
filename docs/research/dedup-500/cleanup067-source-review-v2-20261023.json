@@ -1,0 +1,44 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 1,
+  "partial_text_review": [
+    {
+      "path": "code-cleanup-helper/scripts/audit_core.py",
+      "new_lines_read": [
+        [
+          281,
+          574
+        ],
+        [
+          663,
+          772
+        ]
+      ],
+      "cumulative_complete_ranges": [
+        [
+          1,
+          574
+        ],
+        [
+          663,
+          772
+        ]
+      ]
+    }
+  ],
+  "control": "cleanup067-function-control-20261023.py",
+  "controls_passed": 6,
+  "runtime_scope": "One unchanged AST function selected from Git-verified pinned source; authored Python functions executed only for default/global behavior and coroutine classification. Full original module/architecture pipeline/test suite not run.",
+  "findings": [
+    "Fingerprint serializes function body AST after removing leading docstring; signature, defaults, decorators, function name, async marker and surrounding context are absent. Same fingerprint can have different callable behavior.",
+    "Native synthetic functions with defaults1versus2 return different values yet fingerprint matches. Sync and async return-body fingerprints match although callable types differ.",
+    "Decorator names omitted; name/docstring changes preserve key while variable renaming changes key. Not a semantic clone detector.",
+    "Identical return TOKEN bodies in different global contexts return1versus2. Context not represented by body hash.",
+    "Actual duplicate-function findings additionally require minimum8lines/24nodes by default and at least2distinctpaths; small primitive controls do not assert they would be reported under those thresholds.",
+    "Source parser walks nested functions/imports as module-level evidence; graph analysis is static and cannot prove dynamic execution/import equivalence. Full dependency-finding implementation lines575\u2013662 remains unread."
+  ],
+  "full_review_count": 249
+}
