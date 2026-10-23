@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-23",
+  "head": "2506c0e633e389010aca54f280785c63cdc65f48",
+  "scope": "Fresh native macOS ARM64 exact-file integration suite on current working tree; no decode features and no other-platform runtime qualification.",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files --no-default-features",
+  "result": {
+    "exit_code": 0,
+    "passed": 36,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 0,
+    "test_seconds": 1.12
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "67a8ed744944a64b695a673764dd4dfb6a8414bb3ca96c15eb2e67324419a1d7"
+  },
+  "verified_cases": [
+    "Physical hardlinks are aliases while copied bytes remain independent physical files",
+    "Replacing a duplicate with a hardlink invalidates its prior observation",
+    "Same inode edits remain detectable even with restored modification time",
+    "Sibling root names sharing a prefix preserve both file sets",
+    "Non-UTF8 and whitespace path names preserve exact content partitions",
+    "Cancellation and limits remain explicit; healthy duplicate groups survive other member failures"
+  ],
+  "limitations": [
+    "Finite regression suite, not all filesystem interleavings",
+    "Windows volume/file-index implementation not executed",
+    "No destructive duplicate-removal API was added or tested",
+    "No production code change justified by this passing run"
+  ]
+}
