@@ -1,0 +1,57 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/Helpers/JpegPatcher.cs",
+      "sha256": "3896e439cb69594490f006cc3f400a2e66401d582b7bd4d10dd11fcf16a66614",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/DuplicateFile.cs",
+      "sha256": "72b768a0c1a7f09357b72149e9da0aa24dcd32dd8bcf5a6ee969d1b689ee26d8",
+      "lines": 211,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/SearchDirectory.cs",
+      "sha256": "78ba4f90232ecc2a21e0a40994a7a422eff8f901fed2c77a0b875169ef779925",
+      "lines": 76,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Helpers/Extensions.cs",
+      "sha256": "fd9457f6ef1ccf404c5f045711a73fbd8af72c00395a3ab6f2ba68bbf61b8a74",
+      "lines": 220,
+      "git_blob_verified": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "716587cb04124136162c4033df502cb7a01be88ef7d0ff19caadb204874d6033",
+      "lines": 30,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/DupeClear.csproj",
+      "sha256": "046310de925d547abcb69d58f208f622ac839b9f7db87ee9bf4be705654c57d5",
+      "lines": 49,
+      "git_blob_verified": true
+    }
+  ],
+  "upstream_runtime_run": false,
+  "findings": [
+    "JpegPatcher removes all contiguous leading APP0..APP15 segments, not only EXIF. This also removes leading ICC APP2, Adobe APP14 and other application metadata. Consequently SameContents hashes a transformed JPEG byte stream, not exact encoded bytes or decoded color-managed pixels. No JPEG runtime comparison was executed.",
+    "APP segments after a non-APP marker are retained, making normalized output depend on marker ordering. Segment lengths and read EOF are not validated; malformed declarations are consumed with repeated ReadByte calls. Source observations only.",
+    "GetFileHash allocates an entire patched JPEG in MemoryStream, with no input-size cap or cancellation during transformation/hash. It opens the file once for signature detection and again for hashing without a stable identity stamp.",
+    "DuplicateFile stores immutable length/creation/modification observations but caches a mutable hash. Refresh only checks File.Exists and mark/lock state; it does not refresh size/timestamps/hash or distinguish file replacement. No physical file identity or equality override is defined in this class.",
+    "SearchDirectory preserves caller-supplied FullName without canonicalization. Extensions.IsSameAsOrSubdirectoryOf does append a directory separator, avoiding the simple sibling-prefix bug, but uses OrdinalIgnoreCase on all platforms and does not resolve symlinks.",
+    "README explicitly presents a duplicate file cleaner with optional filters; no perceptual-image semantics or normalized-JPEG recipe is described there. Main UI defaults and option naming remain to inspect.",
+    "Project targets net8.0 and references Avalonia packages plus a bundled AppUpdater DLL; its source is absent from this project file. No third-party package or opaque binary executed."
+  ],
+  "whole_files_read_total": 10,
+  "remaining_tracked_blobs": 82,
+  "full_review_count": 249,
+  "adoption": "No upstream code adopted. Preserve separation of encoded-byte equality, normalized-container equality, and color-managed pixel equality."
+}
