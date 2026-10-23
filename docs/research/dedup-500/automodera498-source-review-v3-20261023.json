@@ -1,0 +1,62 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "bash-scripts/build-run.sh",
+      "sha256": "8b809119601950ec0baca2c189574f2472a9561eda9a0a64eac41db7dc5dd3ea",
+      "lines": 61,
+      "git_blob_verified": true
+    },
+    {
+      "path": "bash-scripts/build.sh",
+      "sha256": "77eb3a09ed97fd7f3c81e52da2747ef0279a25da104890f12748a6b200e6b614",
+      "lines": 23,
+      "git_blob_verified": true
+    },
+    {
+      "path": "bash-scripts/download-dist.sh",
+      "sha256": "545850ea597ad0d62c32af0429a8d10551153cd3ad9afb4c977b144364e88360",
+      "lines": 27,
+      "git_blob_verified": true
+    },
+    {
+      "path": "bash-scripts/download-static.sh",
+      "sha256": "6e5f4b23c9a129c9bbcdffc50c8a7e7ffea6eb0e8745b769c33b188b65a20c04",
+      "lines": 28,
+      "git_blob_verified": true
+    },
+    {
+      "path": "bash-scripts/generate-keystores.sh",
+      "sha256": "83e87d51b38a5d0d2d6558313bb54e826af256ea8ee286ff7e4ed81e9ba5f37e",
+      "lines": 55,
+      "git_blob_verified": true
+    },
+    {
+      "path": "bash-scripts/run-all.sh",
+      "sha256": "f630296fdb27bfc4bee20830ab61482ec4bc64a56d08d690cbb37476aa923ddb",
+      "lines": 56,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "shell_syntax_checks": 6,
+    "all_pass": true,
+    "scripts_executed": false,
+    "native_binaries_executed": false
+  },
+  "findings": [
+    "All6scripts whole-read and bash-n checked without execution. No keys generated, download/extraction performed, application launched or process terminated.",
+    "Pinned tree contains lib/libphash.dylib3298811bytes and lib/phash.dll3485184bytes; native Rust implementation source absent from tree. These binaries remain unreviewed opaque artifacts; Java JNI declarations do not prove native algorithm behavior.",
+    "Run scripts pass-Djava.library.path=./lib to archive/integrator. Build script only mvn clean install; none of these scripts build native binaries. Linux.so absent from pinned tree; external installation not established.",
+    "build-run sources Maven build without checking return status or set-e, then attempts launching jars; could run older artifacts after failed build. Source-only, not executed.",
+    "download-dist and download-static fetch versioned release ZIP without content digest verification. Static copy uses cp on directory without recursive flag; actual behavior not executed.",
+    "mkdir without-p reports preexisting directory errors but script continues. Exit trap pkill child processes belongs to script lifecycle; no cleanup script run."
+  ],
+  "remaining": [
+    "144 other tracked blobs/assets including2opaque native binaries",
+    "Native implementation provenance/reproducible build and Java runtime qualification"
+  ],
+  "full_review_count": 249
+}
