@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "setup.cfg.bak read whole and pin verified; README.rst1-225 read only, not whole documentation. Config/doc commands treated as data.",
+  "new_whole_read": {
+    "path": "setup.cfg.bak",
+    "sha256": "1035269aacea11b35e8674ba1e96ec50144de37203786e8611d1fd115c34f255"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 65,
+    "remaining_not_whole_reviewed": 79
+  },
+  "findings": [
+    {
+      "id": "legacy-not-current-install",
+      "detail": "Backup config explicitly documents dropped Python2 support and old-version installation strategy. Its >=2.7 metadata is archived config, not evidence current package supports Python2."
+    },
+    {
+      "id": "quickstart-recovery-name",
+      "detail": "README quickstart uses pff recovery twice, while actual pff facade registers recover plus repair_ecc/recc aliases, not recovery. Examples do not match registered commands."
+    },
+    {
+      "id": "quickstart-quoting",
+      "detail": "Monitoring database append example lacks closing quote around your_folder. It is not a directly runnable shell example as printed."
+    },
+    {
+      "id": "header-visual-vs-exact",
+      "detail": "README example explicitly repairs only three header bytes and leaves two corrupted body bytes while describing visually indistinguishable output. This is visual recovery, not byte identity; no visual assessment performed this review."
+    },
+    {
+      "id": "scope-explicit",
+      "detail": "Package description is archival fixity/error correction, and pff dup means majority-vote repair from replicas. It is not a file-duplicate discovery operation despite candidate search keyword."
+    }
+  ],
+  "whole_readme_review": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
