@@ -1,0 +1,78 @@
+{
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "previous_audit": "docs/research/dedup-500/async086-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "test/cache.test.js",
+      "local": "20-test--cache.test.js",
+      "sha256": "d43a0beacfc03d2ff72aeea1e0d148e10214a65611c8ecb7d26817960257b8e8",
+      "whole_text_read": true
+    },
+    {
+      "path": "types/index.d.ts",
+      "local": "21-types--index.d.ts",
+      "sha256": "8809056960513644691a480a42fbca6da2ac0c0781b256017a16f7923ebc56dc",
+      "whole_text_read": true
+    },
+    {
+      "path": "eslint.config.js",
+      "local": "22-eslint.config.js",
+      "sha256": "84abc71c6775e003e893648811d6081077b957173632ad1cd0a4e4eff8a2f2ed",
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "23-.gitignore",
+      "sha256": "e9f11b0988c3b4e2162e95ecd08cfc99e20fc7c2700d1c24b6a9716b7434436a",
+      "whole_text_read": true
+    },
+    {
+      "path": "examples/basic.mjs",
+      "local": "24-examples--basic.mjs",
+      "sha256": "38dc7bb3083082ab303f9e84a107d8299e62c4fc44f76e64ccd08e080307e953",
+      "whole_text_read": true
+    },
+    {
+      "path": "examples/redis.js",
+      "local": "25-examples--redis.js",
+      "sha256": "d57c6e2fa87fed8df5c18b13f7dd98f818595e47fbc3b02279d67c5a7778b9c7",
+      "whole_text_read": true
+    },
+    {
+      "path": "bench/bench.sh",
+      "local": "26-bench--bench.sh",
+      "sha256": "b9cce55860f3b4b8eb1b72b1526ae5ab122fea9f279ada0f810bc0254b84b333",
+      "whole_text_read": true
+    },
+    {
+      "path": "utils/docker-compose.yml",
+      "local": "27-utils--docker-compose.yml",
+      "sha256": "0e34ae2c1a8fe749e472237b5058165d6ef7635bd93ec083d1fc9005263e9a75",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 26,
+  "tracked_blobs": 50,
+  "remaining_without_whole_review": 24,
+  "native_original_tests": {
+    "new_passed": 21,
+    "new_failed": 0,
+    "cumulative_distinct_subset_passed": 98,
+    "exit_code": 0,
+    "raw_log": "docs/research/dedup-500/async086-cache-original-20261024.log",
+    "sha256": "b9a25c06ec0e70296f3aea8487bcf2770b8919c013f3d70e99ad672960526df3"
+  },
+  "findings": [
+    "Original cache management tests cover raw get/set/exists forwarding, TTL bypass/refusal and named storage invalidation; all21 pass.",
+    "Type declaration StorageInterface.getTTL returns Promise<void>, while real memory returns a number and Redis resolves a number; source-only contract mismatch.",
+    "invalidateAll types restrict storage to type names, runtime selects map keys for defined function names. Original runtime test selects f.",
+    "Redis example/default compose target6379 and benchmark include Redis; neither script nor compose executed."
+  ],
+  "limits": [
+    "No original type suite execution, lint or coverage gate.",
+    "Redis and browser runtime open.",
+    "No production changes/adoption."
+  ]
+}

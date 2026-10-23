@@ -1,0 +1,192 @@
+TAP version 13
+# Subtest: Cache
+    # Subtest: should get an instance with default options
+    ok 1 - should get an instance with default options
+      ---
+      duration_ms: 0.603666
+      type: 'test'
+      ...
+    # Subtest: define
+        # Subtest: should define an instance with storage options
+        ok 1 - should define an instance with storage options
+          ---
+          duration_ms: 0.196417
+          type: 'test'
+          ...
+        1..1
+    ok 2 - define
+      ---
+      duration_ms: 0.249959
+      type: 'suite'
+      ...
+    # Subtest: get
+        # Subtest: should use storage to get a value
+        ok 1 - should use storage to get a value
+          ---
+          duration_ms: 0.325958
+          type: 'test'
+          ...
+        # Subtest: should get an error trying to use get of not defined name
+        ok 2 - should get an error trying to use get of not defined name
+          ---
+          duration_ms: 0.281792
+          type: 'test'
+          ...
+        # Subtest: should bypass storage when ttl is 0
+        ok 3 - should bypass storage when ttl is 0
+          ---
+          duration_ms: 0.30375
+          type: 'test'
+          ...
+        1..3
+    ok 3 - get
+      ---
+      duration_ms: 0.982458
+      type: 'suite'
+      ...
+    # Subtest: exists
+        # Subtest: should use storage to check if a value exists
+        ok 1 - should use storage to check if a value exists
+          ---
+          duration_ms: 0.539459
+          type: 'test'
+          ...
+        # Subtest: should get an error trying to use exists of not defined name
+        ok 2 - should get an error trying to use exists of not defined name
+          ---
+          duration_ms: 0.184875
+          type: 'test'
+          ...
+        1..2
+    ok 4 - exists
+      ---
+      duration_ms: 0.783167
+      type: 'suite'
+      ...
+    # Subtest: should bypass setting value in storage if ttl function returns 0
+    ok 5 - should bypass setting value in storage if ttl function returns 0
+      ---
+      duration_ms: 0.114583
+      type: 'test'
+      ...
+    # Subtest: should set value in storage if ttl function returns > 0
+    ok 6 - should set value in storage if ttl function returns > 0
+      ---
+      duration_ms: 0.223625
+      type: 'test'
+      ...
+    # Subtest: should call onError and bypass storage if ttl fn returns non-integer
+    ok 7 - should call onError and bypass storage if ttl fn returns non-integer
+      ---
+      duration_ms: 0.166333
+      type: 'test'
+      ...
+    # Subtest: should call onError and bypass storage if ttl fn returns undefined
+    ok 8 - should call onError and bypass storage if ttl fn returns undefined
+      ---
+      duration_ms: 0.129
+      type: 'test'
+      ...
+    # Subtest: should call onError and bypass storage if ttl fn returns non-number
+    ok 9 - should call onError and bypass storage if ttl fn returns non-number
+      ---
+      duration_ms: 0.09225
+      type: 'test'
+      ...
+    # Subtest: set
+        # Subtest: should use storage to set a value
+        ok 1 - should use storage to set a value
+          ---
+          duration_ms: 0.594292
+          type: 'test'
+          ...
+        # Subtest: should get an error trying to use set of not defined name
+        ok 2 - should get an error trying to use set of not defined name
+          ---
+          duration_ms: 0.077583
+          type: 'test'
+          ...
+        1..2
+    ok 10 - set
+      ---
+      duration_ms: 0.702375
+      type: 'suite'
+      ...
+    # Subtest: invalidate
+        # Subtest: should use storage to get a value
+        ok 1 - should use storage to get a value
+          ---
+          duration_ms: 0.085791
+          type: 'test'
+          ...
+        # Subtest: should get an error trying to invalidate of not defined name
+        ok 2 - should get an error trying to invalidate of not defined name
+          ---
+          duration_ms: 0.069292
+          type: 'test'
+          ...
+        1..2
+    ok 11 - invalidate
+      ---
+      duration_ms: 0.180125
+      type: 'suite'
+      ...
+    # Subtest: invalidateAll
+        # Subtest: should call invalidate on default storage
+        ok 1 - should call invalidate on default storage
+          ---
+          duration_ms: 0.086291
+          type: 'test'
+          ...
+        # Subtest: should call invalidate on specific storage
+        ok 2 - should call invalidate on specific storage
+          ---
+          duration_ms: 0.094
+          type: 'test'
+          ...
+        # Subtest: should rejects invalidating on non-existing storage
+        ok 3 - should rejects invalidating on non-existing storage
+          ---
+          duration_ms: 0.216208
+          type: 'test'
+          ...
+        1..3
+    ok 12 - invalidateAll
+      ---
+      duration_ms: 0.426708
+      type: 'suite'
+      ...
+    # Subtest: clear
+        # Subtest: should use storage to clear a value by name
+        ok 1 - should use storage to clear a value by name
+          ---
+          duration_ms: 0.090708
+          type: 'test'
+          ...
+        # Subtest: should get an error trying to clear of not defined name
+        ok 2 - should get an error trying to clear of not defined name
+          ---
+          duration_ms: 0.071375
+          type: 'test'
+          ...
+        1..2
+    ok 13 - clear
+      ---
+      duration_ms: 0.197667
+      type: 'suite'
+      ...
+    1..13
+ok 1 - Cache
+  ---
+  duration_ms: 5.483
+  type: 'suite'
+  ...
+1..1
+# tests 21
+# suites 8
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 75.86
