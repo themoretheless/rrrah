@@ -1,0 +1,64 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v15-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/economy/calibrate.rs",
+      "local": "68-src--economy--calibrate.rs",
+      "sha256": "03abd7d2ec1a22f496c463a458f7d9f0a6f56240287ed7afec10c1462fda7645",
+      "whole_text_read": true,
+      "lines": 446
+    },
+    {
+      "path": "src/economy/budget.rs",
+      "local": "69-src--economy--budget.rs",
+      "sha256": "fbb4cac23049c1917693f95429544e31d0b0809a93c5944b187e83abb3b4e04f",
+      "whole_text_read": true,
+      "lines": 80
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 68,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 69,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 258,
+  "native_original_tests_added": {
+    "passed": 11,
+    "failed": 0,
+    "ignored": 0,
+    "groups": {
+      "calibrate_lib": 6,
+      "budget_lib": 5
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 401,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "zero_scenario_high_average_selects_aggressive": true,
+    "zero_quality_passes_selects_balanced": true,
+    "balanced_after_aggressive_keeps_read_limit": 300,
+    "balanced_after_aggressive_keeps_grep_limit": 100,
+    "fresh_balanced_omits_limits": true,
+    "user_key_and_backup_preserved": true,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-calibrate-155anctd"
+  },
+  "findings": [
+    "write_config aggressive then balanced retains read_max_lines300 and grep_max_results100 because zero-valued profile limits are omitted from owned pairs. Fresh balanced serialization omits both keys. This demonstrates history-dependent configuration text, not downstream unlimited behavior: runtime defaults were not reinterpreted in this control.",
+    "Public select_profile accepts an inconsistent zero-scenario/high-average analysis and selects aggressive because0==0. High average60 with zero quality passes of10 selects balanced; only aggressive selection requires all-pass. Synthetic analysis controls, not observed normal quick_analysis outputs.",
+    "quick_analysis uses one synthetic git-status sample and line-count reduction, with a single modified/Changes substring quality check. It does not execute a multi-repository quality benchmark.",
+    "budget_params creates Read/Grep JSON limit patches but receives no existing caller limit. Actual patch merging and enforcement require separately reviewed callers; no claim that this function alone preserves stricter requested limits.",
+    "write_config ignores backup-copy errors and treats read_to_string errors as empty before overwriting. These remain source observations; current owned valid-text control preserves user persona and exact previous bytes in backup."
+  ],
+  "transfer_decision": "Configuration transitions need explicit reset semantics and validation before calibration. Do not treat one synthetic quality signal as duplicate recall qualification. No foreign production code copied.",
+  "limits": [
+    "258 tracked files remain without whole review.",
+    "No host language detector, actual CLI calibrate or user configuration invoked; public functions ran only in an owned SQUEEZ_DIR.",
+    "401 focused original tests do not qualify full package or all profile transitions.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
