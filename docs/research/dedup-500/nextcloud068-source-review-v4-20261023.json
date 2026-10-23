@@ -1,0 +1,114 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "lib/Controller/FilterApiController.php",
+      "local": "31-FilterApiController.php",
+      "git_blob": "e5b501d6854bc34768ff23f1fb482d45e14074c4",
+      "sha256": "011f57bc8ff1cd522930d264ff4cee93366d3e9f60506eff509c6994079ffd2d",
+      "bytes": 1883,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Controller/SettingsApiController.php",
+      "local": "32-SettingsApiController.php",
+      "git_blob": "c9d783effc23b4215729ecdf09ff1078f2321f27",
+      "sha256": "18f0ac9ce375fbd86c5ebbf7394307356d5a7284162a0384bca31d74cba0bc2f",
+      "bytes": 2791,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Controller/AbstractAPIController.php",
+      "local": "33-AbstractAPIController.php",
+      "git_blob": "8fbb4b9a20a85b400d7603fe2d226c50bad83b62",
+      "sha256": "a59ba323e3dcdc14047e0c933f3aa41d419f7b9231187ef7bcf88c6158a6d44c",
+      "bytes": 1711,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Controller/FilterApiControllerTest.php",
+      "local": "34-FilterApiControllerTest.php",
+      "git_blob": "e48e0b45587b0f1c129eee6e51caaaa5dfd242df",
+      "sha256": "335b64c77252df2288cb1f443fd4514debe71e5c449b30c47ee66c2703170cc0",
+      "bytes": 2972,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Controller/SettingsApiControllerTest.php",
+      "local": "35-SettingsApiControllerTest.php",
+      "git_blob": "5d131145848c05c7be9c37e32e14178606c32151",
+      "sha256": "2e4885f460e0ba3b45face453f3fcdb2132328404debbed54726de922101a29c",
+      "bytes": 3551,
+      "whole_text_read": true
+    },
+    {
+      "path": "js-src/settings/AppProivder.js",
+      "local": "36-AppProivder.js",
+      "git_blob": "6047d68ce194369a97b171e0736ad41a07a6273e",
+      "sha256": "aee6aa11e24b44b3178b118499f0976de53a985288ac0d3dc4ca06232066ffa7",
+      "bytes": 2805,
+      "whole_text_read": true
+    },
+    {
+      "path": "js-src/settings/sagas/settingsSagas.js",
+      "local": "37-settingsSagas.js",
+      "git_blob": "06a96de04656f194ed146d03da8f7ff192e74c3d",
+      "sha256": "22bf163372f56b8dc9e90799e36690bdec21eea8d9786f58571958bf2fbcfd7f",
+      "bytes": 4451,
+      "whole_text_read": true
+    },
+    {
+      "path": "cypress/integration/settings.spec.js",
+      "local": "38-settings.spec.js",
+      "git_blob": "6d3f3ed94f356966dacf7d5762098e5576708254",
+      "sha256": "16e2a051283d1f6c7c34c3fa73f3ca58ec0ddcc3bba249d2633d5f3af614708d",
+      "bytes": 2404,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 38,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 127,
+  "full_review_count": 249,
+  "partial_files": [
+    {
+      "path": "js/settings.js",
+      "git_blob": "41be56bfe4344f371b0b11dd1ce79fffc019cbc7",
+      "sha256": "f419112d1f95f502ff2315ebec90fffac19460268db5a6480d9fda956bffc8a0",
+      "bytes": 1712558,
+      "whole_text_read": false,
+      "scope": "Only bounded REGEX occurrence contexts searched/read, not1.7MBwholebundle.",
+      "filter_operator_excerpt": "lue:\"size\",children:ht(\"Size\")}),On(\"option\",{value:\"path\",children:ht(\"Path\")})]}),On(\"select\",{value:c,onChange:function(e){return p(\"operator\",e.target.value)},children:(\"filename\"===n||\"path\"===n?[\"=\",\"GLOB\",\"REGEX\"]:[\">\",\">=\",\"<\",\"<=\",\"=\"]).map((function(e,t){return On(\"option\",{value:e,children:e},t)}))}),\"filename\"===n||\"path\"===n?On(\"input\",{style:{flexGrow:1},type:\"text\",onBlur:function(e){return p(\"value\",e.target.value)},onChange:function(e){return f(e.target.value)},value:l}):On(Wi,{style:{flexGrow:1},value:l,subject:\"bit\",unit:\"byt"
+    }
+  ],
+  "native_control": {
+    "command": "node docs/research/dedup-500/nextcloud068-settings-control-20261023.cjs docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/37-settingsSagas.js",
+    "exit_code": 0,
+    "result": {
+      "source_sha256": "22bf163372f56b8dc9e90799e36690bdec21eea8d9786f58571958bf2fbcfd7f",
+      "controls": 4,
+      "passed": 4,
+      "failed_save_editor_filter_retained": true,
+      "failed_save_settings_received_editor_group_shape": true,
+      "http200_error_body_not_inspected": true,
+      "new_group_condition_has_only_id": true,
+      "missing_group_throws_typeerror": true,
+      "scope": "Original full saga body with effect/import adapters; manually driven generator failure/success paths. No Redux scheduler, React render, HTTP or Nextcloud runtime."
+    },
+    "harness_sha256": "c49ab30af2159e3426599e73058ffc09b5d61d3c73062a81c91aba5f6b3792bb"
+  },
+  "findings": [
+    "Admin editor titled IgnoredFiles uses external nextcloud-react FilterBuilder. Captured pinned bundle onlypartiallyread shows operators=,GLOB,REGEX withrawlabels. No inverseREGEX wording in examinedexcerpt; full externalcomponent/UIcontract notqualified.",
+    "Adminignored_files is appconfig via SettingsApiController; FilterApiController instead stores per-userfilter underuserkeyfilter. These separate paths must not be conflated. Neither controller validates nestedconditionattribute/operator/value semantics.",
+    "Native originalwhole saga body with import/effect adapters confirms failedignored_files save leavesviewData.filter edited while writesoldeditorgroupshape into viewData.settings.ignored_files. Fourcontrols pass as counterexample assertions, not bugfix. Actual Reduxscheduler/React/UI/server notrun.",
+    "Samecontrol confirms HTTP200 response leads success toast without parsingbody; hypothetical200successfalse tested atgeneratorboundary. ActualNextcloudJSONerrorstatus unknown here, not claimed observed HTTPfailure.",
+    "Newgroup containsconditionwithonlyid; savingmapsconditionsas-is. Nativecontrol confirmsmissingattribute/operator/value innewcondition primitive. Whethercomponentdefaultactions populate it beforeactualsave remainsunqualified.",
+    "Unknown/deletedgroup action throwsTypeError innativehandleFilter. No scheduler-delivery reproduction; shouldnotclaimnormalUIcrash.",
+    "SettingsApiController validateskeynames then applies sequentialsetters withouttransaction/rollback. CatchonlyException doesnotestablishhandling PHPTypeError; PHPnotexecuted.",
+    "Cypress6testbodies read:settingsrender,twotoggles,twointervals,filterediting. They asserttoasts/UIlabels but notbackenddecisionsemantics,regexmatching,failedsave/reload/races orpost-saveconfigcontents. NoCypressrun.",
+    "PHPcontrollertests3filter+2settings usemockConfigService. Savesuccessreturnpreseededgetters lacks persistence/readbackguarantee; originalPHPunitnotrun.",
+    "8newwholefiles;38/165. No localproductioncodeadoption, regression inlocalrrrah, optimizationmeasurement orcompleterepocredit."
+  ]
+}

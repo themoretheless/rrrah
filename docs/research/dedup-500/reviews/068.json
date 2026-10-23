@@ -2,7 +2,7 @@
   "index": 68,
   "repository": "PaulLereverend/NextcloudDuplicateFinder",
   "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
-  "review_scope": "30/165 pinned blobs whole-read through v3:scan/config/mapper/events/filter/path/share source traces. Two local regressions passed in v2; no upstream PHP/Nextcloud runtime tests.",
+  "review_scope": "38/165 pinned blobs whole-read through v4; bundledJS onlypartial.4nativewhole-saga generator controls pass with import/effect adapters. No PHP/Nextcloud/ReactUI/Cypress runtime qualification.",
   "decision": "reference",
   "finding": "Nextcloud background/CLI duplicate jobs and controller tests; server integration not directly reusable in native rrrah.",
   "license_metadata": "AGPL-3.0",
@@ -86,6 +86,10 @@
     },
     {
       "audit": "docs/research/dedup-500/nextcloud068-source-review-v3-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/nextcloud068-source-review-v4-20261023.json",
       "whole_repo_complete": false
     }
   ]
