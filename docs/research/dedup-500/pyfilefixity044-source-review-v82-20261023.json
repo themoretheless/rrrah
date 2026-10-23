@@ -1,0 +1,34 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Independent bitwise polynomial parity encoder versus original pinned database fields. All10 databases metadata verified; available header tracks verified. No external ECC packages, decoder or original integration suite.",
+  "control": "docs/research/dedup-500/pyfilefixity044-independent-parity-control-20261023.py",
+  "control_result": {
+    "scope": "Authored independent bitwise GF(256) polynomial encoder, prim0x11b/generator3/fcr1/left-padding from reviewed source; no imported ECC package or decoding",
+    "metadata_parity_comparisons": 68,
+    "available_header_parity_comparisons": 22,
+    "single_byte_mutation_negative_controls": 90,
+    "distinct_cached_message_k_pairs_including_mutations": 50,
+    "result": "PASS",
+    "remaining": "Unavailable JPEG/PDF payloads and adaptive data tracks not verified; no recovery decoding or all-cases proof"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 128,
+    "remaining_without_full_text_binary_or_visual_review": 16
+  },
+  "findings": [
+    "Independent encoder uses bitwise GF multiplication with polynomial0x11b, roots3**(1+i), systematic polynomial remainder and original left-zero-padding. Parameters derived from reviewed ECCMan constructor/encode/pad.",
+    "68 metadata parity comparisons passed across34 records, k128/parity127;22 available header parity comparisons passed,k159/parity96.",
+    "Single-byte mutation of each original message changed parity in90 negative controls. Repeated fixture/DB fields reduce to25 unique message/k pairs; do not report90 independent codeword scenarios.",
+    "This independently qualifies stored parity for metadata and available header messages, stronger than length/hash-only inventory. It does not qualify decoder correction capability, arbitrary corruption or successful recovered-output identity.",
+    "Adaptive payload tracks, unavailable JPEG/PDF messages, parameter4 interoperability, index repair and integration runtime remain unverified. Database complete-review status not promoted.",
+    "Authored encoder exists only as research control; no production ECC feature or duplicate finder optimization added."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
