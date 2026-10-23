@@ -1,0 +1,32 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/audit_core.py",
+      "git_blob": "c21709c33bb2a6d358746ea912a2c17b3ca4c262",
+      "sha256": "ded4e1f2c910384a195093b8ffda28cc212f0dc96a034e193b833bae60e00ef4",
+      "bytes": 63127,
+      "lines": 1434,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 2,
+  "new_text_range_read": [
+    982,
+    1434
+  ],
+  "control": "cleanup067-sync-control-20261023.py",
+  "controls_passed": 6,
+  "runtime_scope": "Whole unchanged original audit_core.py imported under dedicated module name. Real owned synthetic temp roots. Direct sync checks plus run_audit(all) on authored invalid Python fixture; local Git metadata lookup only, no external projects/network or skill invocation. Original test suite not run.",
+  "findings": [
+    "Sync iterates private/root admitted text files only. Public-only extra text file does not change PASS; not a bidirectional tree equivalence check.",
+    "Text synchronization normalizes line endings through text IO and replaces invalidUTF8. Different FF versus FE byte payloads compare equal under default text mode; byte mode detects difference.",
+    "Missing sync root returns NOT_CHECKED. Whole run_audit retains architecture syntax FAIL and unmeasured/update NOT_CHECKED; no blanket downstream correctness inference.",
+    "Inventory/text/hash reads occur separately without source-stability validation across full audit; report metadata is not a single atomic source snapshot. No mutation race executed in these controls.",
+    "run_command has15second timeout and returns one chosen output stream; release check compares recognizable declarations with highest numeric tag, not actual build/test/artifact behavior. Read only; no real release check or network run.",
+    "Complete main engine source reviewed but remaining repository docs/scripts/configs still unreviewed; no complete repository promotion."
+  ],
+  "full_review_count": 249
+}
