@@ -1,0 +1,39 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/EvidenceClassifier.swift",
+      "sha256": "6d1f105ff92a68c60af06283fb2bcebb08967d01a123c5864e40d830348a9774",
+      "lines": 29,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/EvidenceClassifierTests.swift",
+      "sha256": "a615791af91179b394e8d64edff18a4969a5ccffdad94c6a1497220777caa46b",
+      "lines": 24,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suite": "EvidenceClassifierTests",
+    "tests_passed": 4,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "build_seconds": 1.21,
+    "test_seconds": 0.008,
+    "original_source_and_tests_unchanged": true,
+    "model_inference_run": false
+  },
+  "findings": [
+    "Local classifier requires score >=4 and a margin >=2 over runner-up; weak/mixed signals return nil. This is a useful explicit ambiguity boundary for classification, not a duplicate-equality criterion.",
+    "Matches are case-insensitive substring presence, with 3 points for phrases and 2 otherwise. Duplicate keywords and empty strings are not rejected here and can inflate score; profile import previously had no keyword validation.",
+    "Confidence is arithmetic min(96,84+score), not a calibrated probability. Reason exposes only first three matched keywords.",
+    "All four original tests pass for authored finance/medical and ambiguous examples. Test named ambiguous evidence uses Apple Intelligence actually asserts nil only; it executes no Apple model or caller fallback. Total distinct original tests passed across focused runs is 59."
+  ],
+  "whole_files_read_total": 28,
+  "remaining_tracked_blobs": 30,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
