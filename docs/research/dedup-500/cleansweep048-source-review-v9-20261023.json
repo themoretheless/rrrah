@@ -1,0 +1,58 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "structured_files": [
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/1.json",
+      "sha256": "107733a22ea1611d3cebe5a386abd1bf4973f4e41c9784622496fd9e05cbca7b",
+      "git_blob_verified": true,
+      "method": "Parsed full JSON; inspected every entity table and field metadata; executed v1 createSql tables in SQLite then authored migration SQL."
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/2.json",
+      "sha256": "dd71de17e598366456a9173b7e93f4e98c3372dbd5034aef6b9fd4ffe0ed04cd",
+      "git_blob_verified": true,
+      "method": "Parsed full JSON; inspected every entity table and field metadata; executed v1 createSql tables in SQLite then authored migration SQL."
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/3.json",
+      "sha256": "9870699a9163d9b74a18e8d596e4d3409faeaf879f88524828451ba8a39caa1f",
+      "git_blob_verified": true,
+      "method": "Parsed full JSON; inspected every entity table and field metadata; executed v1 createSql tables in SQLite then authored migration SQL."
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/5.json",
+      "sha256": "56aeca87f7d9c5b6a9408388a18e011fe27b436b1aa738f0a9c58eca62ea7e87",
+      "git_blob_verified": true,
+      "method": "Parsed full JSON; inspected every entity table and field metadata; executed v1 createSql tables in SQLite then authored migration SQL."
+    }
+  ],
+  "migration_control": {
+    "sqlite_version": "3.54.1",
+    "extra_tables": [
+      "similar_group_cache"
+    ],
+    "missing_tables": [],
+    "column_checks": {
+      "file_signature_cache": true,
+      "folder_details_cache": true,
+      "phash_cache": true,
+      "scan_result_groups": true,
+      "media_item_refs": true,
+      "unreadable_file_cache": true,
+      "similarity_denials": true
+    }
+  },
+  "findings": [
+    "Expected version-3 seven tables all exist after 1->2->3, and ordered column name/type/not-null/primary-key metadata matches for all seven. Index/foreign-key/default validation not complete, so this is not a Room migration pass.",
+    "Old schema table is similar_group_cache, while migration DROP names similar_groups. Old table remains as extra data; no claim that this alone makes Room validation fail.",
+    "Tracked version-5 schema describes file_hash_cache and lacks the current scan-result tables/denial table. Its numeric version is not proof of a valid upgrade/downgrade path from the current version-3 code.",
+    "Initial exploratory checker required optional-schema-key handling for indices/notNull; corrected comparisons completed without modifying upstream schemas."
+  ],
+  "whole_files_read_total": 23,
+  "remaining_tracked_blobs": 107,
+  "full_review_count": 249,
+  "android_runtime_run": false
+}
