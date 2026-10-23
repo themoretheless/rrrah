@@ -1,0 +1,87 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/bats/outputs/8_shared_files.bats_1.out",
+      "local": "153-8_shared_files.bats_1.out",
+      "git_blob": "c43740cd87bd6b8baccc94430227c951f181dfae",
+      "sha256": "562bd78dfba70907c5bf475bf0e3e37ea29bf43d42da5a8756c93ebcb16267d1",
+      "bytes": 7926,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/bats/outputs/2_list.bats_1.out",
+      "local": "154-2_list.bats_1.out",
+      "git_blob": "1e7ed1ae30589e9952d528edf35ebf7b5517d912",
+      "sha256": "09b3313b32052449beba3f5746a59bd622ce3afd5e7715816b6c58f091af92ce",
+      "bytes": 13566,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 154,
+  "whole_binary_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 155,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 10,
+  "full_review_count": 249,
+  "read_coverage": {
+    "8_shared_files.bats_1.out": [
+      "1-110",
+      "111-EOF"
+    ],
+    "2_list.bats_1.out": [
+      "1-140",
+      "141-260",
+      "261-376"
+    ]
+  },
+  "independent_snapshot_check": [
+    {
+      "snapshot": "153-8_shared_files.bats_1.out",
+      "groups": 4,
+      "visible_paths": 70,
+      "content_hash_mismatches": [],
+      "sorted_output_sha256": "2ca5c9505456931ec0d6a8ba6f241da615c46b73bf4bdf3b8c925c588149b952"
+    },
+    {
+      "snapshot": "154-2_list.bats_1.out",
+      "groups": 25,
+      "visible_paths": 350,
+      "content_hash_mismatches": [],
+      "sorted_output_sha256": "8cd80ef1a6646606b7103aaefc8bb6da30a153d48d377daf87f34001948a0f8b"
+    }
+  ],
+  "local_library_regression": {
+    "test": "nested_overlapping_roots_match_the_full_authored_partition",
+    "change": "Existing192file48family fixture expanded from scan-only to both scan and scan_verified. Independent expected fullpathpartition retained.",
+    "test_file": "crates/rrrah-dedup/tests/exact_files.rs",
+    "test_sha256": "70646d7be0f272bb5d978456f5bd951ebc840a99d77b4d7f6fbadb8c6cb0bdb6",
+    "exact_source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "runs": [
+      {
+        "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files nested_overlapping_roots_match_the_full_authored_partition",
+        "exit_code": 0,
+        "passed": 1,
+        "failed": 0,
+        "log_sha256": "043070032e37513cbd2c1f2ce18a2d54e2db7ddbe285ed5bd0eef4677f815e69"
+      },
+      {
+        "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files",
+        "exit_code": 0,
+        "passed": 38,
+        "failed": 0,
+        "log_sha256": "b11fe2a2f4d8f0fa7ce7e3119af276536a24871610210eccd4316e9a7edc4252"
+      }
+    ],
+    "scope": "Current macOS native realfilesystem. PerAPI:full, reversed overlappingroots,2limitedruns,one-shotcancel,retry=6runs;12total.48families3copiesplus48distinct equal-sized interior-byte negatives. No productionalgorithmchange, atomic snapshot, nativeWindows or scaleperformance claim."
+  },
+  "findings": [
+    "Shared-file snapshot whole-read:4groups,70visiblepaths,onehiddenpathnotice. Visiblepathfilenamefamily integer i reconstructs originalhelper content i followednewline; all SHA256 groupheaders matchthis independentcontent oracle. No actualsharedstorage/permissionruntime executed.",
+    "Single-user list snapshot whole-read:25groups,350visiblepaths. Independent expectedset forfamily1..25 andcopynames0..i exactlymatchesallpathmembers; eachheaderSHA256 matchesbytes i newline. Zero-family singleton omitted as expected foruser-onlyview.",
+    "Bothsortedtext hashes equal exactexpectedconstants in originalBATSscenario bodies. This strengthenssavedfixtureconsistency, not evidence of a freshupstreamBATSrun.",
+    "Existinglocal authoredpartition fixture alreadycovers similar multigroup retrieval but onlyordinaryAPI; expandedexistingtest instead ofduplicatinganothertriangularfixture. BothAPIs preserveexpectedpartition, boundedomissiondiagnostics,cancellationstatus andretry onthisfinitefixture;38originalintegrationtests passafterchange.",
+    "Two additionalwholetextfiles:154text+1binary=155/165. Tenremaining include5largeoutputs,PNGpreview,settingsbundle,2maps,andlockfile. No repositorycompletecredit or universalcoverageclaim."
+  ]
+}

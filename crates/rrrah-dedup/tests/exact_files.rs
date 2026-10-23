@@ -366,41 +366,50 @@ fn nested_overlapping_roots_match_the_full_authored_partition() {
             })
             .collect::<BTreeSet<_>>()
     };
-    let full = scan(&roots, &Options::default(), || false);
-    assert!(full.complete(), "{:?}", full.issues);
-    assert_eq!(full.files_observed, 192);
-    assert_eq!(full.groups.len(), 48);
-    assert_eq!(partition(&full), expected);
-    roots.reverse();
-    let reversed = scan(&roots, &Options::default(), || false);
-    assert!(reversed.complete());
-    assert_eq!(reversed.files_observed, 192);
-    assert_eq!(partition(&reversed), expected);
-    for options in [
-        Options {
-            max_entries: 20,
-            ..Options::default()
-        },
-        Options {
-            max_depth: 1,
-            ..Options::default()
-        },
-    ] {
-        let limited = scan(&[root.path().to_path_buf()], &options, || false);
-        assert!(!limited.complete());
-        assert!(limited.issues.iter().any(|issue| issue.kind == IssueKind::Limit));
-        assert!(partition(&limited).is_subset(&expected));
+    for verified in [false, true] {
+        let run = |roots: &[std::path::PathBuf], options: &Options, cancel: &dyn Fn() -> bool| {
+            if verified {
+                rrrah_dedup::exact::scan_verified(roots, options, cancel)
+            } else {
+                scan(roots, options, cancel)
+            }
+        };
+        let full = run(&roots, &Options::default(), &|| false);
+        assert!(full.complete(), "{:?}", full.issues);
+        assert_eq!(full.files_observed, 192);
+        assert_eq!(full.groups.len(), 48);
+        assert_eq!(partition(&full), expected);
+        roots.reverse();
+        let reversed = run(&roots, &Options::default(), &|| false);
+        assert!(reversed.complete());
+        assert_eq!(reversed.files_observed, 192);
+        assert_eq!(partition(&reversed), expected);
+        for options in [
+            Options {
+                max_entries: 20,
+                ..Options::default()
+            },
+            Options {
+                max_depth: 1,
+                ..Options::default()
+            },
+        ] {
+            let limited = run(&[root.path().to_path_buf()], &options, &|| false);
+            assert!(!limited.complete());
+            assert!(limited.issues.iter().any(|issue| issue.kind == IssueKind::Limit));
+            assert!(partition(&limited).is_subset(&expected));
+        }
+        let checks = Cell::new(0);
+        let cancelled = run(&roots, &Options::default(), &|| {
+            checks.set(checks.get() + 1);
+            checks.get() == 150
+        });
+        assert!(cancelled.cancelled);
+        assert!(!cancelled.complete());
+        let retry = run(&roots, &Options::default(), &|| false);
+        assert!(retry.complete());
+        assert_eq!(partition(&retry), expected);
     }
-    let checks = Cell::new(0);
-    let cancelled = scan(&roots, &Options::default(), || {
-        checks.set(checks.get() + 1);
-        checks.get() == 150
-    });
-    assert!(cancelled.cancelled);
-    assert!(!cancelled.complete());
-    let retry = scan(&roots, &Options::default(), || false);
-    assert!(retry.complete());
-    assert_eq!(partition(&retry), expected);
 }
 
 #[test]
