@@ -1,0 +1,896 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/profiles/context-budget.json",
+      "git_blob": "0093c162e11d8ba31c82de32f87fe4622b476ecd",
+      "sha256": "e0081a64f96017e60c884f7fd0fe2f28ac39ec9b39d5e92ed49d3355a1c08081",
+      "bytes": 4866,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/profiles/context-budget.json",
+      "git_blob": "ba50509cb2cce40e9fc034ff21768d2e8d7223cf",
+      "sha256": "b00451e8e77f09e2a6ebd303d57ebddc2e3069931feaa4a6056ac33c84b61ce0",
+      "bytes": 9834,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 59,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 62,
+  "runtime_scope": "Original check_context_budget.py CLI, Python3.12.14, isolated binary-wheel tiktoken0.11.0/o200k_base. Both complete original manifests;39pinned payloads verified before and after. No skills invoked.",
+  "results": [
+    {
+      "prefix": "code-cleanup-helper",
+      "status": "GREEN",
+      "summary": {
+        "configuredRoutes": 16,
+        "greenRoutes": 16,
+        "blockedRoutes": 0,
+        "notCheckedRoutes": 0,
+        "routeFileEntries": 35,
+        "uniqueFiles": 17
+      },
+      "tokenizer": {
+        "id": "tiktoken:o200k_base",
+        "encoding": "o200k_base",
+        "implementation": "tiktoken",
+        "version": "0.11.0",
+        "available": true,
+        "exact": true,
+        "reason": null
+      },
+      "raw_report": ".dedup-work/cleanup067-20261023/cleanup-real-context.json",
+      "raw_report_sha256": "73e8c1310e34e30b17c1ed3dffe56f0395b19ba8b5057c2382c77f5e734f962e",
+      "routes": [
+        {
+          "id": "cleanup-disk-hygiene",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5683,
+            "chars": 3489,
+            "tokens": 1617,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 7000,
+            "maxTokens": 2100
+          }
+        },
+        {
+          "id": "cleanup-entry",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 3488,
+            "chars": 2526,
+            "tokens": 963,
+            "files": 1
+          },
+          "budgets": {
+            "maxBytes": 3500,
+            "maxTokens": 1000
+          }
+        },
+        {
+          "id": "cleanup-architecture",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 7048,
+            "chars": 4580,
+            "tokens": 2063,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 7500,
+            "maxTokens": 2200
+          }
+        },
+        {
+          "id": "cleanup-sync-release",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5566,
+            "chars": 3778,
+            "tokens": 1569,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 6000,
+            "maxTokens": 1700
+          }
+        },
+        {
+          "id": "cleanup-config-assets",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 12390,
+            "chars": 8958,
+            "tokens": 3535,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 12700,
+            "maxTokens": 3700
+          }
+        },
+        {
+          "id": "cleanup-rd-integration",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 11452,
+            "chars": 8366,
+            "tokens": 2920,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 12000,
+            "maxTokens": 3100
+          }
+        },
+        {
+          "id": "cleanup-completion",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 8093,
+            "chars": 5394,
+            "tokens": 2177,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 8700,
+            "maxTokens": 2400
+          }
+        },
+        {
+          "id": "cleanup-build",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 8252,
+            "chars": 7278,
+            "tokens": 1871,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 8700,
+            "maxTokens": 2100
+          }
+        },
+        {
+          "id": "cleanup-security",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 20207,
+            "chars": 15073,
+            "tokens": 5125,
+            "files": 3
+          },
+          "budgets": {
+            "maxBytes": 21000,
+            "maxTokens": 5500
+          }
+        },
+        {
+          "id": "cleanup-model-context",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 8026,
+            "chars": 6407,
+            "tokens": 1971,
+            "files": 3
+          },
+          "budgets": {
+            "maxBytes": 8800,
+            "maxTokens": 2200
+          }
+        },
+        {
+          "id": "cleanup-cross-system",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 4663,
+            "chars": 3701,
+            "tokens": 1205,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 5000,
+            "maxTokens": 1400
+          }
+        },
+        {
+          "id": "cleanup-media",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5440,
+            "chars": 4462,
+            "tokens": 1331,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 6000,
+            "maxTokens": 1500
+          }
+        },
+        {
+          "id": "cleanup-desktop",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 4812,
+            "chars": 3850,
+            "tokens": 1206,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 5300,
+            "maxTokens": 1400
+          }
+        },
+        {
+          "id": "cleanup-session-ai",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 4698,
+            "chars": 3736,
+            "tokens": 1203,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 5200,
+            "maxTokens": 1400
+          }
+        },
+        {
+          "id": "cleanup-secure-updater",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 7030,
+            "chars": 5858,
+            "tokens": 1701,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 7300,
+            "maxTokens": 1850
+          }
+        },
+        {
+          "id": "cleanup-secure-updater-delivered",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 20023,
+            "chars": 16215,
+            "tokens": 4647,
+            "files": 4
+          },
+          "budgets": {
+            "maxBytes": 21500,
+            "maxTokens": 4900
+          }
+        }
+      ],
+      "measured_inventory": [
+        {
+          "path": "references/build-receipt-audit.md",
+          "bytes": 4764,
+          "chars": 4752,
+          "tokens": 908,
+          "sha256": "a77ca81bccedf065e7e870b24ee6579c42ce274446e6d605e9ddc40d371d1967"
+        },
+        {
+          "path": "references/capability-obligations.md",
+          "bytes": 4605,
+          "chars": 2868,
+          "tokens": 1214,
+          "sha256": "0c51a56537082a9d7a5b7692a909ec224068df65b2059d193ea02bf6892b3806"
+        },
+        {
+          "path": "references/config-and-report.md",
+          "bytes": 8902,
+          "chars": 6432,
+          "tokens": 2572,
+          "sha256": "05fe5e70741ea9d23ab46fb1e6616c9df8fb8608160312735af71a515c81ea0d"
+        },
+        {
+          "path": "references/disk-hygiene.md",
+          "bytes": 2195,
+          "chars": 963,
+          "tokens": 654,
+          "sha256": "6e6b0e86bf0ba2cd31f422905c7e23e79e228856bf0ae64b983d0941ed4137a2"
+        },
+        {
+          "path": "references/mode-a.md",
+          "bytes": 3560,
+          "chars": 2054,
+          "tokens": 1100,
+          "sha256": "b0e6847cead7a131e0f3bb4540448319846e0f0eea01324e0d1b510c889f6601"
+        },
+        {
+          "path": "references/mode-b.md",
+          "bytes": 2078,
+          "chars": 1252,
+          "tokens": 606,
+          "sha256": "5a45e6aeda97651297a0b8e8c930a8bbcbbf4624745fccad918512f17edcb005"
+        },
+        {
+          "path": "references/model-context-contract-audit.md",
+          "bytes": 1849,
+          "chars": 1192,
+          "tokens": 479,
+          "sha256": "e65d8c0860cf9ec09523776b35d5bdf47093446efbf89119dab215112dea25cc"
+        },
+        {
+          "path": "references/rd-integration.md",
+          "bytes": 7964,
+          "chars": 5840,
+          "tokens": 1957,
+          "sha256": "55e77b7a1e32fbe28c8a37515809ad867303778ee96f51eb5811d9c7a425cdd0"
+        },
+        {
+          "path": "references/security-and-release-hygiene.md",
+          "bytes": 8229,
+          "chars": 5605,
+          "tokens": 2038,
+          "sha256": "80094dcbb7ad7ded1d5eee896116d24b970dcdc54b9efb262099ecc5d00e93c2"
+        },
+        {
+          "path": "references/security-assessment-contract.md",
+          "bytes": 8490,
+          "chars": 6942,
+          "tokens": 2124,
+          "sha256": "58499faf1db478a7d453e8fbd462b637597ca39af51322d4274046ce248fae70"
+        },
+        {
+          "path": "references/topics/context-routing-and-memory.md",
+          "bytes": 2689,
+          "chars": 2689,
+          "tokens": 529,
+          "sha256": "d2c03630be6ca5c10d6244eb57d473bfb5751b3fbb23122aa47d0e17a22e61fe"
+        },
+        {
+          "path": "references/topics/cross-system-core.md",
+          "bytes": 1175,
+          "chars": 1175,
+          "tokens": 242,
+          "sha256": "4b3715d0d5a7f66ae5123ce72bf0841a0bd7dfcbf3a87c1027e52f1b1264256c"
+        },
+        {
+          "path": "references/topics/desktop-runtime.md",
+          "bytes": 1324,
+          "chars": 1324,
+          "tokens": 243,
+          "sha256": "fbd67397f37b46c1b9dae7d55da036dbd8de5ac0a7c479a6b9cb77ba83d5fd96"
+        },
+        {
+          "path": "references/topics/media-workstation.md",
+          "bytes": 1952,
+          "chars": 1936,
+          "tokens": 368,
+          "sha256": "0a189dca17e3f029cf8bcde4b5ccb57a233605118c195b9f690e2623247d2169"
+        },
+        {
+          "path": "references/topics/secure-self-update.md",
+          "bytes": 3542,
+          "chars": 3332,
+          "tokens": 738,
+          "sha256": "d0d5a72393594965022f26eb8dca77fd020a4d178f2c5e4237a6a708bf48334a"
+        },
+        {
+          "path": "references/topics/session-native-ai.md",
+          "bytes": 1210,
+          "chars": 1210,
+          "tokens": 240,
+          "sha256": "44a665385ddb3e5e31cd190aae3fbbbe9bceaa08fd477ca3f661c3b34aa6acbc"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 3488,
+          "chars": 2526,
+          "tokens": 963,
+          "sha256": "195788c38f2381136cff1c37d6e9acaef329eda45a12bf4475a659e83c332da2"
+        }
+      ],
+      "post_run_all_inventory_git_and_sha256_match": true
+    },
+    {
+      "prefix": "run-benchmark-driven-rd",
+      "status": "GREEN",
+      "summary": {
+        "configuredRoutes": 22,
+        "greenRoutes": 22,
+        "blockedRoutes": 0,
+        "notCheckedRoutes": 0,
+        "routeFileEntries": 80,
+        "uniqueFiles": 22
+      },
+      "tokenizer": {
+        "id": "tiktoken:o200k_base",
+        "encoding": "o200k_base",
+        "implementation": "tiktoken",
+        "version": "0.11.0",
+        "available": true,
+        "exact": true,
+        "reason": null
+      },
+      "raw_report": ".dedup-work/cleanup067-20261023/rd-real-context.json",
+      "raw_report_sha256": "6c4588968a2dfe26e02f46a471d68eb9bf44670480cd2f614f250b7df6094137",
+      "routes": [
+        {
+          "id": "rd-disk-hygiene",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 6009,
+            "chars": 3727,
+            "tokens": 1674,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 8000,
+            "maxTokens": 2200
+          }
+        },
+        {
+          "id": "rd-entry",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 3803,
+            "chars": 2775,
+            "tokens": 991,
+            "files": 1
+          },
+          "budgets": {
+            "maxBytes": 4000,
+            "maxTokens": 1000
+          }
+        },
+        {
+          "id": "rd-core-experiment",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5165,
+            "chars": 4137,
+            "tokens": 1271,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 5800,
+            "maxTokens": 1400
+          }
+        },
+        {
+          "id": "rd-architecture",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5167,
+            "chars": 4131,
+            "tokens": 1264,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 5800,
+            "maxTokens": 1400
+          }
+        },
+        {
+          "id": "rd-context-learning",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5878,
+            "chars": 4850,
+            "tokens": 1406,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 6500,
+            "maxTokens": 1600
+          }
+        },
+        {
+          "id": "rd-completion-external",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5459,
+            "chars": 4431,
+            "tokens": 1319,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 6000,
+            "maxTokens": 1500
+          }
+        },
+        {
+          "id": "rd-completion-detail",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 7293,
+            "chars": 6261,
+            "tokens": 1671,
+            "files": 3
+          },
+          "budgets": {
+            "maxBytes": 8100,
+            "maxTokens": 1950
+          }
+        },
+        {
+          "id": "rd-external-detail",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 7377,
+            "chars": 6349,
+            "tokens": 1670,
+            "files": 3
+          },
+          "budgets": {
+            "maxBytes": 8200,
+            "maxTokens": 1950
+          }
+        },
+        {
+          "id": "rd-secure-updater-design",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 6704,
+            "chars": 5676,
+            "tokens": 1586,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 7300,
+            "maxTokens": 1700
+          }
+        },
+        {
+          "id": "rd-secure-updater-high-risk",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 13798,
+            "chars": 12266,
+            "tokens": 3092,
+            "files": 5
+          },
+          "budgets": {
+            "maxBytes": 15200,
+            "maxTokens": 3300
+          }
+        },
+        {
+          "id": "rd-secure-updater-promotion",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 20255,
+            "chars": 18715,
+            "tokens": 4388,
+            "files": 9
+          },
+          "budgets": {
+            "maxBytes": 23300,
+            "maxTokens": 5200
+          }
+        },
+        {
+          "id": "rd-secure-updater-completion",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 22089,
+            "chars": 20545,
+            "tokens": 4740,
+            "files": 10
+          },
+          "budgets": {
+            "maxBytes": 25400,
+            "maxTokens": 5650
+          }
+        },
+        {
+          "id": "rd-external-release-high-risk",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 19742,
+            "chars": 18206,
+            "tokens": 4223,
+            "files": 9
+          },
+          "budgets": {
+            "maxBytes": 22500,
+            "maxTokens": 5100
+          }
+        },
+        {
+          "id": "rd-legacy-public-release-special",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 47882,
+            "chars": 46155,
+            "tokens": 9435,
+            "files": 7
+          },
+          "budgets": {
+            "maxBytes": 49000,
+            "maxTokens": 9700
+          }
+        },
+        {
+          "id": "rd-delivery",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 5888,
+            "chars": 4856,
+            "tokens": 1397,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 6400,
+            "maxTokens": 1500
+          }
+        },
+        {
+          "id": "rd-security",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 8812,
+            "chars": 7284,
+            "tokens": 2091,
+            "files": 3
+          },
+          "budgets": {
+            "maxBytes": 9500,
+            "maxTokens": 2200
+          }
+        },
+        {
+          "id": "rd-web",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 11690,
+            "chars": 10654,
+            "tokens": 2469,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 12500,
+            "maxTokens": 2700
+          }
+        },
+        {
+          "id": "rd-mobile",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 26272,
+            "chars": 25220,
+            "tokens": 5411,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 28000,
+            "maxTokens": 5800
+          }
+        },
+        {
+          "id": "rd-media",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 8121,
+            "chars": 7087,
+            "tokens": 1833,
+            "files": 3
+          },
+          "budgets": {
+            "maxBytes": 8900,
+            "maxTokens": 2000
+          }
+        },
+        {
+          "id": "rd-game-delivery-media",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 11558,
+            "chars": 10524,
+            "tokens": 2528,
+            "files": 5
+          },
+          "budgets": {
+            "maxBytes": 13200,
+            "maxTokens": 3000
+          }
+        },
+        {
+          "id": "rd-model",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 6556,
+            "chars": 5505,
+            "tokens": 1510,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 7300,
+            "maxTokens": 1700
+          }
+        },
+        {
+          "id": "rd-cross-system",
+          "status": "GREEN",
+          "totals": {
+            "bytes": 12949,
+            "chars": 11855,
+            "tokens": 2689,
+            "files": 2
+          },
+          "budgets": {
+            "maxBytes": 14000,
+            "maxTokens": 3000
+          }
+        }
+      ],
+      "measured_inventory": [
+        {
+          "path": "references/capability-obligations.md",
+          "bytes": 7524,
+          "chars": 7475,
+          "tokens": 1426,
+          "sha256": "fc3e375eeb619ecb7ef14339f3fe683ae7aeb6de452dcea56240af219166c782"
+        },
+        {
+          "path": "references/completion-closure.md",
+          "bytes": 5720,
+          "chars": 5684,
+          "tokens": 1132,
+          "sha256": "458a8ea708cd8b6715759e83077088fa0fa01f7ebd1959534c8f911128ecb68d"
+        },
+        {
+          "path": "references/cross-system-and-market-claims.md",
+          "bytes": 9146,
+          "chars": 9080,
+          "tokens": 1698,
+          "sha256": "d3b21f7a6ef9e428395cd2d43a671a2f10df0cfc7023f4bb55ddc6189adeb2f7"
+        },
+        {
+          "path": "references/delivery-artifact-gates.md",
+          "bytes": 9830,
+          "chars": 9792,
+          "tokens": 1779,
+          "sha256": "b09db374b3e6f537cd507852f70b5d2a4f0027a67184620e61f205bbc8d72163"
+        },
+        {
+          "path": "references/disk-hygiene.md",
+          "bytes": 2206,
+          "chars": 952,
+          "tokens": 683,
+          "sha256": "4b1602ae9e0c928aca3e9367901eca570a528600be43286854ee81a71eeb5a8d"
+        },
+        {
+          "path": "references/external-change-gates.md",
+          "bytes": 9042,
+          "chars": 9022,
+          "tokens": 1797,
+          "sha256": "8adb7adc5d9f17834c897dc1dcd169e531292c8d8700d88a26c1c94ab97c58a0"
+        },
+        {
+          "path": "references/mobile-product-engineering.md",
+          "bytes": 22469,
+          "chars": 22445,
+          "tokens": 4420,
+          "sha256": "35b60d77e0d7c424598b581d8b3247d435d9881bc151f2bd6013d59b2e1aec6a"
+        },
+        {
+          "path": "references/model-and-reasoning-gates.md",
+          "bytes": 2753,
+          "chars": 2730,
+          "tokens": 519,
+          "sha256": "267dc886bbb27889424ea69b5426be531a1ea64caa373f6ed9975273b93e1fd6"
+        },
+        {
+          "path": "references/security-hardening-gates.md",
+          "bytes": 9233,
+          "chars": 9173,
+          "tokens": 1647,
+          "sha256": "6624da16d6c526d16199a5ae4277debd7d5c91bbb0822ad535de457e3d1659e8"
+        },
+        {
+          "path": "references/topics/architecture-and-evaluator.md",
+          "bytes": 1364,
+          "chars": 1356,
+          "tokens": 273,
+          "sha256": "e7064d00ee514b4e321650002e46b95464d24452ef90cd1d7a0197b0634285ac"
+        },
+        {
+          "path": "references/topics/completion-and-external.md",
+          "bytes": 1656,
+          "chars": 1656,
+          "tokens": 328,
+          "sha256": "bc939d34370a621806a991781f8cdc8252c78317ce09d99de9968e013364d6c8"
+        },
+        {
+          "path": "references/topics/completion-detail.md",
+          "bytes": 1834,
+          "chars": 1830,
+          "tokens": 352,
+          "sha256": "fa10973cbd09f79843ee28438036b16a46955054bc186e70a70eab5cdfc5b3cd"
+        },
+        {
+          "path": "references/topics/context-and-learning.md",
+          "bytes": 2075,
+          "chars": 2075,
+          "tokens": 415,
+          "sha256": "02b1d83a3e546e3af189de8b98a62f2a8983d57592f1828846fd1e4208d6ba5b"
+        },
+        {
+          "path": "references/topics/core-experiment.md",
+          "bytes": 1362,
+          "chars": 1362,
+          "tokens": 280,
+          "sha256": "ea53eb879a8663b6e99c00058ae7edbb7cdf9c7b6f0c35a2113af11b18cadf14"
+        },
+        {
+          "path": "references/topics/delivery-artifact.md",
+          "bytes": 2085,
+          "chars": 2081,
+          "tokens": 406,
+          "sha256": "3b986242e90e6bb0e37779d54a8d5d4a89393a19a13edae86f0ae06d24d734f9"
+        },
+        {
+          "path": "references/topics/external-detail.md",
+          "bytes": 1918,
+          "chars": 1918,
+          "tokens": 351,
+          "sha256": "4ffb90b4f53e372ff380e9aa0948ced77bbdd0590b50efb16f683237fe0bb7cd"
+        },
+        {
+          "path": "references/topics/media-evidence.md",
+          "bytes": 2233,
+          "chars": 2231,
+          "tokens": 436,
+          "sha256": "86bded0ac612a598a983b1217448409acb083e5dba23bbff69c41fdee7183baf"
+        },
+        {
+          "path": "references/topics/secure-self-update.md",
+          "bytes": 2901,
+          "chars": 2901,
+          "tokens": 595,
+          "sha256": "62dcee1a3118d2601d0f9acbf652188433e8027b2fbb7533f128fa3edc01f6a3"
+        },
+        {
+          "path": "references/topics/security-assessment.md",
+          "bytes": 2730,
+          "chars": 2234,
+          "tokens": 663,
+          "sha256": "e330ec0609da6ce526e86f795758477b71c51fc47fd9f384e9807e7539b67ca6"
+        },
+        {
+          "path": "references/topics/security-hardening.md",
+          "bytes": 2279,
+          "chars": 2275,
+          "tokens": 437,
+          "sha256": "ba39d30b6ead4c88cf95fb8666c909a91a22a99c6c8ae929bad852acdcf6e162"
+        },
+        {
+          "path": "references/web-commerce-acceptance.md",
+          "bytes": 7887,
+          "chars": 7879,
+          "tokens": 1478,
+          "sha256": "776bf988e3a26150b94028170552d82c89073432b8735d92d7db97b65416c7be"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 3803,
+          "chars": 2775,
+          "tokens": 991,
+          "sha256": "8740e15f71e62a72953c804878e12fc0fa8b3c71e2e06b9ca62bd8c4bedccdab"
+        }
+      ],
+      "post_run_all_inventory_git_and_sha256_match": true
+    }
+  ],
+  "findings": [
+    "All38routes (16Cleanup/22RD) GREEN with0blocked/0notchecked;115fileentries/39unique payloads. Actual tokenizer, not synthetic estimate.",
+    "All manifest paths exist in pinned tree; file and aggregate byte budgets checked. All39payloadGitidentities and measuredSHA256match afterrun.",
+    "Fetched/measured payloads not manually read remain outside source-review counts. Only2manifest files newly promoted to whole-text review.",
+    "Root and perfile context budgets do not prove token/task quality, whole gate runtime, safe updates, product security or all500source review.",
+    "Tokenizer/dependencies installed only in owned .dedup-work cache; no global packages or installed skills modified."
+  ],
+  "full_review_count": 249
+}
