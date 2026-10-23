@@ -1,0 +1,42 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "README whole read and memory_profiler.py lines 1-340 read; exact AST functions executed with deterministic seams, not original process sampler",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/memory_profiler/README.rst",
+    "sha256": "681d22fca608d11562d4c90cce73ee11080042758dc7022b63607a6e6f6c04d6"
+  },
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/memory_profiler/memory_profiler.py",
+    "lines": [
+      1,
+      340
+    ],
+    "sha256": "a3479ed4a56f9e658e4c3a3b46551c723530db65521d0b971474785596b5cd9a"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 104,
+    "remaining_not_whole_reviewed": 40
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-memory-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "4cc661e258c4876af700faa1e61f09d7bcde9b9c",
+    "source_sha256": "a3479ed4a56f9e658e4c3a3b46551c723530db65521d0b971474785596b5cd9a",
+    "scope": "Exact AST _get_memory and memory_usage; synthetic modern psutil process and timer/pipe only; no process, real sampler or sleep",
+    "modern_psutil_interface_error": "'ModernProcess' object has no attribute 'get_memory_info'",
+    "single_request_callable_executions": 2,
+    "returned_value_from_final_execution": 2,
+    "callable_exception_skips_join": true
+  },
+  "findings": [
+    "memory_usage callable branch reruns work when sample count is at most four, reducing interval. One request caused two executions in a deterministic timer seam. Return value belongs to final execution; side effects need not be idempotent.",
+    "Callable exception bypasses sampler stop/send, receive and join because invocation lacks finally. Join omission reproduced without starting a process; live orphan duration not measured.",
+    "getattr(process, memory_info, process.get_memory_info) eagerly evaluates obsolete default attribute. Modern-interface seam raises AttributeError despite a valid memory_info method. No installed psutil version qualification.",
+    "README says OS process memory varies by platform and garbage collection; sampled process RSS is not a complete allocation or peak-memory proof. MiB units used by code should be distinguished from MB label examples.",
+    "README declares Simplified BSD. External images and linked issue/benchmark examples were not opened by this text review.",
+    "Integer PID with no timeout takes a single sample; Popen/callable branches have different stopping semantics. Callable timeout does not bound target function execution. Static review through line 340 only."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
