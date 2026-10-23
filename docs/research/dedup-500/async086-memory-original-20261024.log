@@ -1,0 +1,416 @@
+TAP version 13
+# Subtest: clear the full cache
+ok 1 - clear the full cache
+  ---
+  duration_ms: 1.913125
+  type: 'test'
+  ...
+# Subtest: clears only one method
+ok 2 - clears only one method
+  ---
+  duration_ms: 0.463291
+  type: 'test'
+  ...
+# Subtest: clears only one method with one value
+ok 3 - clears only one method with one value
+  ---
+  duration_ms: 0.250083
+  type: 'test'
+  ...
+# Subtest: clear should cleanup dedupes and staleDedupes
+    # Subtest: should clear dedupes and staleDedupes for specific function and key
+    ok 1 - should clear dedupes and staleDedupes for specific function and key
+      ---
+      duration_ms: 0.1895
+      type: 'test'
+      ...
+    # Subtest: should clear all dedupes and staleDedupes when called without parameters
+    ok 2 - should clear all dedupes and staleDedupes when called without parameters
+      ---
+      duration_ms: 0.303625
+      type: 'test'
+      ...
+    1..2
+ok 4 - clear should cleanup dedupes and staleDedupes
+  ---
+  duration_ms: 0.584625
+  type: 'suite'
+  ...
+# Subtest: storage memory
+    # Subtest: should get an instance with default options
+    ok 1 - should get an instance with default options
+      ---
+      duration_ms: 0.557125
+      type: 'test'
+      ...
+    # Subtest: should get an error on invalid options
+    ok 2 - should get an error on invalid options
+      ---
+      duration_ms: 0.13075
+      type: 'test'
+      ...
+    # Subtest: should not initialize references containeres on invalidation disabled
+    ok 3 - should not initialize references containeres on invalidation disabled
+      ---
+      duration_ms: 0.044208
+      type: 'test'
+      ...
+    # Subtest: should initialize references containeres on invalidation enabled
+    ok 4 - should initialize references containeres on invalidation enabled
+      ---
+      duration_ms: 0.077125
+      type: 'test'
+      ...
+    # Subtest: get
+        # Subtest: should get a value by a key previously stored
+        ok 1 - should get a value by a key previously stored
+          ---
+          duration_ms: 0.268125
+          type: 'test'
+          ...
+        # Subtest: should get undefined retrieving a non stored key
+        ok 2 - should get undefined retrieving a non stored key
+          ---
+          duration_ms: 0.03975
+          type: 'test'
+          ...
+        # Subtest: should get undefined retrieving an expired value
+        ok 3 - should get undefined retrieving an expired value
+          ---
+          duration_ms: 2001.565125
+          type: 'test'
+          ...
+        1..3
+    ok 5 - get
+      ---
+      duration_ms: 2002.274792
+      type: 'suite'
+      ...
+    # Subtest: exists
+        # Subtest: should get true by a key previously stored
+        ok 1 - should get true by a key previously stored
+          ---
+          duration_ms: 0.509708
+          type: 'test'
+          ...
+        # Subtest: should get false retrieving a non stored key
+        ok 2 - should get false retrieving a non stored key
+          ---
+          duration_ms: 0.647625
+          type: 'test'
+          ...
+        # Subtest: should get false retrieving an expired value
+        ok 3 - should get false retrieving an expired value
+          ---
+          duration_ms: 2002.297125
+          type: 'test'
+          ...
+        1..3
+    ok 6 - exists
+      ---
+      duration_ms: 2004.155083
+      type: 'suite'
+      ...
+    # Subtest: getTTL
+        # Subtest: should get the TTL of a previously key stored
+        ok 1 - should get the TTL of a previously key stored
+          ---
+          duration_ms: 999.707666
+          type: 'test'
+          ...
+        # Subtest: should get the TTL of a a key without TTL
+        ok 2 - should get the TTL of a a key without TTL
+          ---
+          duration_ms: 0.278125
+          type: 'test'
+          ...
+        # Subtest: should get the TTL of a previously key stored
+        ok 3 - should get the TTL of a previously key stored
+          ---
+          duration_ms: 1001.690375
+          type: 'test'
+          ...
+        # Subtest: no key
+        ok 4 - no key
+          ---
+          duration_ms: 0.458417
+          type: 'test'
+          ...
+        # Subtest: should get the TTL of a previously key stored
+        ok 5 - should get the TTL of a previously key stored
+          ---
+          duration_ms: 2000.765
+          type: 'test'
+          ...
+        1..5
+    ok 7 - getTTL
+      ---
+      duration_ms: 4003.628041
+      type: 'suite'
+      ...
+    # Subtest: set
+        # Subtest: should set a value, with ttl
+        ok 1 - should set a value, with ttl
+          ---
+          duration_ms: 0.541875
+          type: 'test'
+          ...
+        # Subtest: should not set a value with ttl < 1
+        ok 2 - should not set a value with ttl < 1
+          ---
+          duration_ms: 0.220958
+          type: 'test'
+          ...
+        # Subtest: should set a value with references
+        ok 3 - should set a value with references
+          ---
+          duration_ms: 3.357916
+          type: 'test'
+          ...
+        # Subtest: should not set an empty references
+        ok 4 - should not set an empty references
+          ---
+          duration_ms: 0.661458
+          type: 'test'
+          ...
+        # Subtest: should get a warning setting references with invalidation disabled
+        ok 5 - should get a warning setting references with invalidation disabled
+          ---
+          duration_ms: 5.344667
+          type: 'test'
+          ...
+        # Subtest: should not set a references twice
+        ok 6 - should not set a references twice
+          ---
+          duration_ms: 0.258208
+          type: 'test'
+          ...
+        # Subtest: should add a key to an existing reference
+        ok 7 - should add a key to an existing reference
+          ---
+          duration_ms: 0.430042
+          type: 'test'
+          ...
+        # Subtest: should update the key references, full replace
+        ok 8 - should update the key references, full replace
+          ---
+          duration_ms: 0.284333
+          type: 'test'
+          ...
+        # Subtest: should update the key references, partial replace
+        ok 9 - should update the key references, partial replace
+          ---
+          duration_ms: 0.10025
+          type: 'test'
+          ...
+        # Subtest: should update the key references, partial replace adding more references
+        ok 10 - should update the key references, partial replace adding more references
+          ---
+          duration_ms: 0.095375
+          type: 'test'
+          ...
+        # Subtest: should update the key references, partial replace with shared reference
+        ok 11 - should update the key references, partial replace with shared reference
+          ---
+          duration_ms: 0.108792
+          type: 'test'
+          ...
+        # Subtest: should update the key references, add reference to existing key without them
+        ok 12 - should update the key references, add reference to existing key without them
+          ---
+          duration_ms: 0.0915
+          type: 'test'
+          ...
+        # Subtest: should update references of evicted keys (removed by size)
+        ok 13 - should update references of evicted keys (removed by size)
+          ---
+          duration_ms: 0.441958
+          type: 'test'
+          ...
+        1..13
+    ok 8 - set
+      ---
+      duration_ms: 12.409625
+      type: 'suite'
+      ...
+    # Subtest: remove
+        # Subtest: should remove an existing key
+        ok 1 - should remove an existing key
+          ---
+          duration_ms: 0.175292
+          type: 'test'
+          ...
+        # Subtest: should remove an non existing key
+        ok 2 - should remove an non existing key
+          ---
+          duration_ms: 0.107833
+          type: 'test'
+          ...
+        # Subtest: should remove an existing key and references
+        ok 3 - should remove an existing key and references
+          ---
+          duration_ms: 0.105125
+          type: 'test'
+          ...
+        # Subtest: should remove an non existing key (and references)
+        ok 4 - should remove an non existing key (and references)
+          ---
+          duration_ms: 0.259709
+          type: 'test'
+          ...
+        # Subtest: should remove a key but not references if still active
+        ok 5 - should remove a key but not references if still active
+          ---
+          duration_ms: 0.20625
+          type: 'test'
+          ...
+        1..5
+    ok 9 - remove
+      ---
+      duration_ms: 0.999542
+      type: 'suite'
+      ...
+    # Subtest: invalidate
+        # Subtest: should remove storage keys by references
+        ok 1 - should remove storage keys by references
+          ---
+          duration_ms: 0.37675
+          type: 'test'
+          ...
+        # Subtest: should not remove storage keys by not existing reference
+        ok 2 - should not remove storage keys by not existing reference
+          ---
+          duration_ms: 0.2055
+          type: 'test'
+          ...
+        # Subtest: should invalide more than one reference at once
+        ok 3 - should invalide more than one reference at once
+          ---
+          duration_ms: 0.103958
+          type: 'test'
+          ...
+        # Subtest: should remove storage keys by references, but not the ones still alive
+        ok 4 - should remove storage keys by references, but not the ones still alive
+          ---
+          duration_ms: 0.323625
+          type: 'test'
+          ...
+        # Subtest: should remove a keys and references and also linked ones
+        ok 5 - should remove a keys and references and also linked ones
+          ---
+          duration_ms: 0.115166
+          type: 'test'
+          ...
+        # Subtest: should invalidate by a string
+        ok 6 - should invalidate by a string
+          ---
+          duration_ms: 0.15725
+          type: 'test'
+          ...
+        # Subtest: should invalidate by an array of strings
+        ok 7 - should invalidate by an array of strings
+          ---
+          duration_ms: 0.089917
+          type: 'test'
+          ...
+        # Subtest: should invalidate with wildcard one asterisk
+        ok 8 - should invalidate with wildcard one asterisk
+          ---
+          duration_ms: 0.124875
+          type: 'test'
+          ...
+        # Subtest: should invalidate with wildcard two asterisk
+        ok 9 - should invalidate with wildcard two asterisk
+          ---
+          duration_ms: 0.611458
+          type: 'test'
+          ...
+        # Subtest: should invalidate all with wildcard
+        ok 10 - should invalidate all with wildcard
+          ---
+          duration_ms: 0.181083
+          type: 'test'
+          ...
+        # Subtest: should not invalidate anything with a non-existing reference
+        ok 11 - should not invalidate anything with a non-existing reference
+          ---
+          duration_ms: 0.114917
+          type: 'test'
+          ...
+        # Subtest: should get a warning with invalidation disabled
+        ok 12 - should get a warning with invalidation disabled
+          ---
+          duration_ms: 0.27525
+          type: 'test'
+          ...
+        1..12
+    ok 10 - invalidate
+      ---
+      duration_ms: 2.894958
+      type: 'suite'
+      ...
+    # Subtest: clear
+        # Subtest: should clear the whole storage (invalidation disabled)
+        ok 1 - should clear the whole storage (invalidation disabled)
+          ---
+          duration_ms: 0.205125
+          type: 'test'
+          ...
+        # Subtest: should clear the whole storage (invalidation enabled)
+        ok 2 - should clear the whole storage (invalidation enabled)
+          ---
+          duration_ms: 0.084583
+          type: 'test'
+          ...
+        # Subtest: should clear only keys with common name
+        ok 3 - should clear only keys with common name
+          ---
+          duration_ms: 0.139125
+          type: 'test'
+          ...
+        # Subtest: should clear a keys and their references
+        ok 4 - should clear a keys and their references
+          ---
+          duration_ms: 0.161875
+          type: 'test'
+          ...
+        1..4
+    ok 11 - clear
+      ---
+      duration_ms: 0.694833
+      type: 'suite'
+      ...
+    # Subtest: refresh
+        # Subtest: should start a new storage
+        ok 1 - should start a new storage
+          ---
+          duration_ms: 0.180333
+          type: 'test'
+          ...
+        # Subtest: should start a new storage (invalidation enabled)
+        ok 2 - should start a new storage (invalidation enabled)
+          ---
+          duration_ms: 0.068292
+          type: 'test'
+          ...
+        1..2
+    ok 12 - refresh
+      ---
+      duration_ms: 0.299375
+      type: 'suite'
+      ...
+    1..12
+ok 5 - storage memory
+  ---
+  duration_ms: 8029.186333
+  type: 'suite'
+  ...
+1..5
+# tests 56
+# suites 10
+# pass 56
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8104.531875

@@ -1,0 +1,77 @@
+{
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "previous_audit": "docs/research/dedup-500/async086-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/storage/redis.js",
+      "local": "13-src--storage--redis.js",
+      "sha256": "de43e58dcd116a4bc19323fb5a94fdb452f37893a756069118337d8cd0ba2cf9",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/util.test.js",
+      "local": "14-test--util.test.js",
+      "sha256": "729b89f35455aac7d1109000808266bb998997cc65395589fc86f2eb809d087f",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/clear.test.js",
+      "local": "15-test--clear.test.js",
+      "sha256": "2a37cf2a2ebb906533d2eedf9bcd461eea0e13b17282740eb94e768ace93e8ba",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 14,
+  "tracked_blobs": 50,
+  "remaining_without_whole_review": 36,
+  "native_original_tests": {
+    "files": [
+      "test/util.test.js",
+      "test/storage-memory.test.js",
+      "test/clear.test.js"
+    ],
+    "passed": 59,
+    "failed": 0,
+    "raw_logs": [
+      {
+        "path": "docs/research/dedup-500/async086-util-original-20261024.log",
+        "sha256": "2ef82afcc2da5fc58b4575060ffe58890d287978852d46bdcb8fe648954ccac4",
+        "exit_code": 0,
+        "passed": 3
+      },
+      {
+        "path": "docs/research/dedup-500/async086-memory-original-20261024.log",
+        "sha256": "6954cf4542c46441207090a48c987a1b9287941319ba08c80ab5f3bae41ff0fc",
+        "exit_code": 0,
+        "passed": 56
+      }
+    ],
+    "test_helper": "@matteo.collina/tspl installed in separate research dependency prefix via NODE_PATH"
+  },
+  "partial_files": [
+    {
+      "path": "test/storage-memory.test.js",
+      "read_ranges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "whole_text_read": false,
+      "original_tests_executed": true
+    }
+  ],
+  "findings": [
+    "Original util test omits findNotMatching and findMatchingIndexes; owned finite oracle evidence remains separate.",
+    "Redis clear/refresh call flushall when no name; no Redis runtime or original Redis suite executed.",
+    "Redis GC strict scan loop also depends on lastRemoved>0; source-only potential early termination requires private server/injected scan control.",
+    "Clear tests artificially populate in-flight sets with resolved promises; this differs from real pending work completing after clear."
+  ],
+  "limits": [
+    "59 original subset tests are not full npm test, coverage, type or browser gate.",
+    "Memory test file execution is not whole-source read credit.",
+    "No production adoption or source changes."
+  ]
+}
