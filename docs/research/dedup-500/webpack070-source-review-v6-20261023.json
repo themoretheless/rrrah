@@ -1,0 +1,115 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 22,
+  "control": "webpack070-real-dependencies-control-20261023.cjs",
+  "results": {
+    "node": "v22.23.4",
+    "versions": {
+      "app-root-path": "3.0.0",
+      "enhanced-resolve": "5.7.0",
+      "fast-glob": "3.2.2",
+      "find-package-json": "1.2.0",
+      "lodash": "4.17.19",
+      "mkdirp": "1.0.3"
+    },
+    "shared_cache_wrong_root": true,
+    "different_source_bytes_redirected": true,
+    "memo_key_collision": true,
+    "negative_result_stale": true,
+    "fresh_instance_sees_file": true,
+    "corrupt_cache_throws": true,
+    "error_globals_restored": true,
+    "webpack_compiler_run": false,
+    "original_jest_suite_run": false
+  },
+  "installed_versions": {
+    "@nodelib/fs.scandir": [
+      "2.1.5"
+    ],
+    "@nodelib/fs.stat": [
+      "2.0.5"
+    ],
+    "@nodelib/fs.walk": [
+      "1.2.8"
+    ],
+    "app-root-path": [
+      "3.0.0"
+    ],
+    "braces": [
+      "3.0.3"
+    ],
+    "enhanced-resolve": [
+      "5.7.0"
+    ],
+    "fast-glob": [
+      "3.2.2"
+    ],
+    "fastq": [
+      "1.20.3"
+    ],
+    "fill-range": [
+      "7.1.1"
+    ],
+    "find-package-json": [
+      "1.2.0"
+    ],
+    "glob-parent": [
+      "5.1.2"
+    ],
+    "graceful-fs": [
+      "4.2.11"
+    ],
+    "is-extglob": [
+      "2.1.1"
+    ],
+    "is-glob": [
+      "4.0.3"
+    ],
+    "is-number": [
+      "7.0.0"
+    ],
+    "lodash": [
+      "4.17.19"
+    ],
+    "merge2": [
+      "1.4.1"
+    ],
+    "micromatch": [
+      "4.0.8"
+    ],
+    "mkdirp": [
+      "1.0.3"
+    ],
+    "picomatch": [
+      "2.3.2"
+    ],
+    "queue-microtask": [
+      "1.2.3"
+    ],
+    "reusify": [
+      "1.1.0"
+    ],
+    "run-parallel": [
+      "1.2.0"
+    ],
+    "tapable": [
+      "2.3.3"
+    ],
+    "to-regex-range": [
+      "5.0.1"
+    ]
+  },
+  "runtime_scope": "Original three Git-verified source modules copied unchanged into isolated runtime directory, loaded with real six direct dependencies pinned to lock versions. Actual native filesystem and resolver/glob/memoization. No adapters. Transitive install resolves current versions allowed by direct package constraints, recorded here; not full historical lock reproduction.",
+  "findings": [
+    "Real-dependency confirmation strengthens prior adapter controls: shared cache returns previous-root paths, different index.js bytes redirected by deduplicate, memo-key collision, negative result remains stale until fresh resolver and corrupt JSON propagates error.",
+    "Temporary path canonicalized to realpath after first harness assertion exposed macOS /var vs /private/var representation difference. Original module unchanged; final controls pass twice.",
+    "Default configured registry returned404 for app-root-path; isolated retry explicitly used registry.npmjs.org. No project or user registry settings modified.",
+    "Install ignored lifecycle scripts. No Webpack compiler, original Jest suite, package tarball publication, Node12 or full historical transitive tree qualification."
+  ],
+  "full_review_count": 249,
+  "upstream_runtime_run": true,
+  "upstream_runtime_boundary": "Original functions with actual direct dependencies; not whole application or original test suite."
+}
