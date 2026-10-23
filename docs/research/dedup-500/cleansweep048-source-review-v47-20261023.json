@@ -1,0 +1,32 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/SwiperScreen.kt",
+      "sha256": "2c59ae2b45076c06625d046f8d3b67dd36b7c34d38d414fb6e4c02040741fea5",
+      "ranges": [
+        [
+          1,
+          620
+        ]
+      ],
+      "total_lines": 1734
+    }
+  ],
+  "findings": [
+    "Caller refinement: SummarySheet onConfirm checks !uiState.isApplyingChanges before invoking applyChanges. This narrows the prior repeated-apply finding to missing handler admission and possible state-propagation timing; ordinary visible callback has a guard.",
+    "Summary reset/revert callbacks and ModalBottomSheet dismiss remain unguarded during applying. Main screen navigation and swipe callbacks also receive no applying gate in these ranges.",
+    "Volume up/down ACTION_DOWN events are always consumed by the screen; when muted they attempt unmute, otherwise no volume action is forwarded. Device keyboard/focus behavior is untested.",
+    "Video player is shared per screen composition, paused on lifecycle pause and released on disposal. Resume always plays a video, even if the user paused it before backgrounding; user pause intent is not tracked.",
+    "Video source changes stop and clear the previous item before preparing the new URI. Player error handling is not present in the read lifecycle block; no playback runtime qualification.",
+    "BackHandler uses onNavigateUpAndReset for completed empty sessions while toolbar back always calls ViewModel.onNavigateUp. These navigation paths have different reset behavior.",
+    "Already-organized Close directly finishes the Activity. This is whole-app closure rather than only leaving the session; no action was executed."
+  ],
+  "whole_files_read_total": 99,
+  "remaining_tracked_blobs": 31,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
