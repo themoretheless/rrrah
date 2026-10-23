@@ -1,0 +1,37 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "pycallgraph.py whole read and pinned blob verified; original AST helpers tested with synthetic frames, no import side effects or process tracing",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pycallgraph.py",
+    "sha256": "a439c84645758d1f19570a639d8e88d518acd98e7f9ed9546a3ffaa3e0206f75"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 112,
+    "remaining_not_whole_reviewed": 32
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-callgraph-identity-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "c499407fcfa8242e3f930f87f5242544ba9fce64",
+    "source_sha256": "a439c84645758d1f19570a639d8e88d518acd98e7f9ed9546a3ffaa3e0206f75",
+    "scope": "Exact AST tracer and DOT helper; synthetic frames/module resolution/clock, no sys tracing, filesystem, renderer or monkeypatch of inspect",
+    "distinct_code_locations": 2,
+    "reported_function_nodes": {
+      "authored.work": 2
+    },
+    "get_dot_stop_true_calls_stop": 0
+  },
+  "findings": [
+    "Function identity uses module/class/co_name only, omitting filename/definition line/code identity. Two different code locations named work in one module merge into one count2 node; reproduced with synthetic frames.",
+    "get_dot(stop=True) ignores stop parameter. Stop spy receives zero calls; reproduced. get_gdf has same unused argument by source inspection.",
+    "Module import globally replaces inspect.getmodule with an unbounded memoizing wrapper without restoration. Not imported as a full module in control.",
+    "start/stop_trace overwrite sys tracing rather than preserve earlier handler; global stack/maps are not thread-local. No real hooks enabled or multithread claim tested.",
+    "Time totals are inclusive elapsed intervals from time.time and can include nested calls; graph colors normalize to largest node, not total CPU fraction.",
+    "is_module_stdlib uses lowercase string prefix rather than normalized component containment. Static finding, not a dedup file-path policy implementation.",
+    "Graph renderer builds a single unquoted os.system command; ordinary paths containing whitespace may be split. No command execution or renderer test.",
+    "Source declares GPL version2 or later; root MIT metadata does not authorize copying this nested module under MIT. No implementation copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
