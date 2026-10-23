@@ -1,0 +1,83 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v22-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/DBInputDelimMapper.java",
+      "local": "127-DBInputDelimMapper.java",
+      "sha256": "eb7bc8fe8ccdd524b46c90da7c8d89ac10e6a1123cd370d4445341ea19e72b36",
+      "git_blob": "63884c27d5b2cc9eed30418f8b51734e2403bc29",
+      "lines": 60,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/DelimitedLoadMapper.java",
+      "local": "128-DelimitedLoadMapper.java",
+      "sha256": "9554d2fb09cdf8386f8e5060e01f07dc8e2c365ddd2d1b89f812f5e5c1476c0f",
+      "git_blob": "e3ca859b4a88238144fd46e2b3bd40da68a5ec46",
+      "lines": 114,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/MySQLLoadDataMapper.java",
+      "local": "129-MySQLLoadDataMapper.java",
+      "sha256": "d9aa8d50dec3d048af97c496abd1d0933ff028073992ac3779525d4b7c469e55",
+      "git_blob": "9dd4d40e5ee25f6bce853bafa1231a00445661f4",
+      "lines": 114,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/OracleLoadMapper.java",
+      "local": "130-OracleLoadMapper.java",
+      "sha256": "5347f2e55e9ca3463e63fad027efe1dbccc79616b0d27167cb0ad35284bee46c",
+      "git_blob": "9a76d5ca6cea1744ee71197f9542a093f7200bd4",
+      "lines": 85,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/TestDBInputDelimMapper.java",
+      "local": "131-TestDBInputDelimMapper.java",
+      "sha256": "c05e97c8c5bdb3fbf50df8d5f832afee14880864c786b48e0340fab3a1511a75",
+      "git_blob": "41c4cd347baff6588048754d99f7eb63b9371998",
+      "lines": 188,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 126,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 132,
+  "remaining_without_whole_review": 38,
+  "original_tests": {
+    "new": 3,
+    "new_passed": 3,
+    "cumulative_distinct": 78,
+    "cumulative_passed": 76,
+    "cumulative_failed": 2,
+    "report": "docs/research/dedup-500/hiho098-delimited-native-controls-20261024.json",
+    "scope": "3unchangedDBInputDelimMapper originals;22testfiles cumulatively,2partial; finite currentrun only, time-dependent fixture stability not qualified"
+  },
+  "author_controls": {
+    "new": 4,
+    "cumulative": 98,
+    "report": "docs/research/dedup-500/hiho098-delimited-native-controls-20261024.json",
+    "confirmed": [
+      "Multi-character delimiter DELIM correctly retained in ordinary2field control.",
+      "Field lists[a,b;c] and[a;b,c] both serialize to a,b,c with comma delimiter; actual native control supplies distinct2elementlists.",
+      "Null value and literal string null both serialize to same text.",
+      "Missing delimiter configuration throws NullPointerException."
+    ],
+    "scope": "Original DBInputDelimMapper executed with realHadooptypes/Mockito contexts; no database/SQL/FTP/network orcluster; outputformat not claimed to promise lossless roundtrip"
+  },
+  "source_only_findings": [
+    "DelimitedLoadMapper setup declares localstmt shadowing member, map hardcodes first4ordinaltypeconversions and ignores latercolumns; metadataSQLException printed before continued use. No runtimeverification inthispass.",
+    "MySQLLoadDataMapper map exception handler setsstmt=null beforefinally, skippingexplicitstatementclose onfailure; source-only, no MySQL driver/network executed.",
+    "OracleLoadMapper ignores boolean appendFile result and closes input onlyafterappendreturns; source-only, no FTP executed.",
+    "Original delimited tests construct separate currentDate/timeobjects for inputandexpectedoutput; could be timeboundary-sensitive, not reproduced or counted as failure here."
+  ],
+  "adoption_decision": "Delimitedserialization without escaping/null framing is not suitable as an exact record identity canonical form; no production code adopted",
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

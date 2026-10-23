@@ -1,0 +1,45 @@
+{
+  "scope": "3originalJUnitmethods and4authorcontrols of unchanged DBInputDelimMapper; realHadoop types/Mockito; no DB/network/cluster; original test failures if any preserved",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBInputDelimMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DelimitedBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:76: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tvalues.add(new Integer(12));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:79: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\tvalues.add(new Long(26564l));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:85: warning: [removal] Float(float) in Float has been deprecated and marked for removal\n\t\tvalues.add(new Float(1.0f));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:94: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tbuilder.append(new Integer(12) + \",\" + new String(\"sam\") + \",\"\n\t\t               ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:95: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\t\t\t+ new Date() + \",\" + new Long(26564l) + \",\" + true + \",\"\n\t\t\t\t                     ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:97: warning: [removal] Float(float) in Float has been deprecated and marked for removal\n\t\t\t\t+ \",\" + new Time(new Date().getTime()) + \",\" + new Float(1.0f));\n\t\t\t\t                                               ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:142: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tvalues.add(new Integer(12));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:145: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\tvalues.add(new Long(26564l));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:151: warning: [removal] Float(float) in Float has been deprecated and marked for removal\n\t\tvalues.add(new Float(1.0f));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:160: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tbuilder.append(new Integer(12) + delimiter + new String(\"sam\") + delimiter\n\t\t               ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:161: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\t\t\t+ new Date() + delimiter + new Long(26564l) + delimiter + true + delimiter\n\t\t\t\t                           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputDelimMapper.java:163: warning: [removal] Float(float) in Float has been deprecated and marked for removal\n\t\t\t\t+ delimiter + new Time(new Date().getTime()) + delimiter + new Float(1.0f));\n\t\t\t\t                                                           ^\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n12 warnings\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "org.junit.runner.JUnitCore",
+        "co.nubetech.hiho.mapreduce.TestDBInputDelimMapper"
+      ],
+      "returncode": 0,
+      "stdout": "JUnit version 4.5\n...\nTime: 0.136\n\nOK (3 tests)\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "DelimitedBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS multi-character delimiter control\nOBSERVED distinct field lists serialize identically when field contains delimiter\nOBSERVED null and literal null string serialize identically\nOBSERVED missing delimiter configuration throws NullPointerException\ndelimited checks=4\n",
+      "stderr": ""
+    }
+  ]
+}
