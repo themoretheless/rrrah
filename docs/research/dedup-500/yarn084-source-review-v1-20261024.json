@@ -1,0 +1,73 @@
+{
+  "repository": "scinos/yarn-deduplicate",
+  "commit": "8a3cfc168cbd43eb09261f05a9ce514ced52b4c0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/cli.ts",
+      "local": "02-cli.ts",
+      "sha256": "20a23c992a667d17df2dd346fa4bbee5a4dbfefd0254af08eab026adb99eb67e",
+      "lines": 112,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/index.ts",
+      "local": "03-index.ts",
+      "sha256": "e412e59ccf474ea7489934a3df535ba7e6a7b31eb64daaac1816665bfbfd3352",
+      "lines": 209,
+      "whole_text_read": true
+    },
+    {
+      "path": ".eslintrc.js",
+      "local": "04-.eslintrc.js",
+      "sha256": "98fc106ec7250dac2d490b70bdc8b469c08ff0f717568d3390831872afc50fe6",
+      "lines": 37,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/cli.ts",
+      "local": "05-cli.ts",
+      "sha256": "8f9e65b0ec54f1ddf0573ca72199dbf3d031695ff57cebad98417a7c76a248b1",
+      "lines": 335,
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "f41a9f6b5f4351bd51bea333c49633b1327efa57a0f35031504b7f50b5916527",
+      "lines": 276,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 5,
+  "tracked_blobs": 24,
+  "remaining_without_whole_review": 19,
+  "findings": [
+    {
+      "scope": "source only",
+      "finding": "Package-version coalescing for Yarn v1, not duplicate file/image detection; decision reject-domain retained."
+    },
+    {
+      "scope": "source only",
+      "finding": "Unique candidate versions keyed by version string; differing resolved sources at same version use first package object. This is not content identity proof."
+    },
+    {
+      "scope": "source only",
+      "finding": "CLI writes deduplicated lockfile before reporting --fail exit1. Failure exit status does not imply no modification."
+    },
+    {
+      "scope": "source only",
+      "finding": "Some original CLI tests register close-event assertions without awaiting close, and one no-fail case returns without awaiting child completion. Tests not run yet; no counted native passes."
+    },
+    {
+      "scope": "source only",
+      "finding": "Most-common strategy counts satisfied requested ranges, not a globally proven minimum set cover."
+    }
+  ],
+  "limits": [
+    "No original tests, build or dependency installation performed.",
+    "Root lockfiles untouched.",
+    "No source code adopted into rrrah.",
+    "No whole500 completion increment."
+  ]
+}
