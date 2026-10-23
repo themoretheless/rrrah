@@ -1,0 +1,159 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "All5 tracked PDFs downloaded and Git-blob verified for review; first4-page PDF fully text-read and all4 rendered pages visually inspected. Other PDFs structure inventory only. No linked external papers opened.",
+  "new_full_pdf_review": {
+    "path": "pyFileFixity/lib/docs/Initialization of errata evaluator polynomial for simultaneous computation in Berlekamp-Massey for Reed-Solomon.pdf",
+    "sha256": "7585e49c3f1578e7872f1f2485ba1bf689b1519f68122721604207c9a55e0b18",
+    "bytes": 452976,
+    "pages": 4,
+    "encrypted": false,
+    "metadata": {},
+    "text_characters_by_page": [
+      1717,
+      80,
+      1091,
+      484
+    ]
+  },
+  "rendering": {
+    "tool": "Poppler pdftoppm",
+    "dpi": 100,
+    "pages_visually_reviewed": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "text_extraction": "pypdf; equations/figures also inspected in rendered pages"
+  },
+  "remaining_pdf_structure_inventory": [
+    {
+      "path": "pyFileFixity/lib/docs/Richard E. Blahut - Algebraic Codes for Data Transmission 2003 - Excerpt on errata decoder.pdf",
+      "sha256": "9feaabf701164b001857df28d01f08e42c0356bdc0f79f72ec25fface1459dd4",
+      "bytes": 1011593,
+      "pages": 34,
+      "encrypted": false,
+      "metadata": {
+        "/Producer": "PDFCreator 2.0.1.0; modified using iTextSharp 5.2.1 (c) 1T3XT BVBA",
+        "/CreationDate": "D:20150528153957+02'00'",
+        "/ModDate": "D:20150528154001+02'00'",
+        "/Title": "Richard E. Blahut - Algebraic Codes for Data Transmission 2003 - Excerpt on errata decoder",
+        "/Author": "Richard E. Blahut",
+        "/Subject": "",
+        "/Keywords": "",
+        "/Creator": "PDFCreator 2.0.1.0"
+      },
+      "text_characters_by_page": [
+        0,
+        4692,
+        6435,
+        6529,
+        6608,
+        3762,
+        8227,
+        4768,
+        8457,
+        1643,
+        4233,
+        7844,
+        6410,
+        4516,
+        6587,
+        3214,
+        7141,
+        3996,
+        4843,
+        3779,
+        4888,
+        2128,
+        1023,
+        3428,
+        7076,
+        1997,
+        6363,
+        6423,
+        2862,
+        7099,
+        2733,
+        3181,
+        1002,
+        9318
+      ]
+    },
+    {
+      "path": "pyFileFixity/lib/docs/python - Errata (erasures+errors) Berlekamp-Massey for Reed-Solomon decoding - Stack Overflow.pdf",
+      "sha256": "5a16e93e12952ebc1fc143e4c39c1106081765abc8c617fbfefb7d2f5540b673",
+      "bytes": 474307,
+      "pages": 8,
+      "encrypted": false,
+      "metadata": {},
+      "text_characters_by_page": [
+        3460,
+        4630,
+        3690,
+        474,
+        5257,
+        5499,
+        5592,
+        2486
+      ]
+    },
+    {
+      "path": "pyFileFixity/lib/docs/python - Optimizing a reed-solomon encoder (polynomial division) - Stack Overflow.pdf",
+      "sha256": "1f18df8fc2389a70e2636d8b046086247dfd81fef20eb2b5a900cf9c266bf3f1",
+      "bytes": 293347,
+      "pages": 7,
+      "encrypted": false,
+      "metadata": {},
+      "text_characters_by_page": [
+        4940,
+        3701,
+        3576,
+        3348,
+        4653,
+        4334,
+        2209
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/files/alice.pdf",
+      "sha256": "4726bf9c8524af919917b601b08ef8d258eb129302e297f149b53ffde0bd1bc0",
+      "bytes": 67254,
+      "pages": 6,
+      "encrypted": false,
+      "metadata": {
+        "/ModDate": "D:20151113131434-05'00'",
+        "/CreationDate": "D:20151113131434-05'00'",
+        "/Producer": "iText\u00ae 5.5.2 \u00a92000-2014 iText Group NV (ONLINE PDF SERVICES; licensed version)"
+      },
+      "text_characters_by_page": [
+        3633,
+        3722,
+        3246,
+        3264,
+        3571,
+        3795
+      ]
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "pdf_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 129,
+    "remaining_without_full_text_binary_visual_or_pdf_review": 15
+  },
+  "findings": [
+    "Four-page saved TCS StackExchange question discusses combined errors/erasures evaluator initialization and illustrates several locator/evaluator flowcharts. All figures reviewed, not just extractable text.",
+    "Document ends with an unresolved initialization question, not a supplied answer or executable proof. Its placement in repository docs does not validate decoder correctness.",
+    "Equations/flowcharts are cited research material from other works; their theoretical validity and implementation equivalence not independently established in this review. No algorithms copied.",
+    "Other pinned PDFs have34,8,7,6 pages respectively; page counts and text presence are inventory only and do not count as full review.",
+    "Now local alice.pdf bytes available for subsequent independent digest/parity controls, but its6-page content not yet fully reviewed and no such control run in this pass."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
