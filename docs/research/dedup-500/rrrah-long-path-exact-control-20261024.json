@@ -1,0 +1,19 @@
+{
+  "test": "paths_sharing_more_than_256_characters_preserve_copy_partitions",
+  "source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "source_sha256": "4529f1e9956c6e08bd946e7a63815e6371607f77b81db3999d4be4509f9bf70a",
+  "trigger": "dedupe083 original scoring truncates string IDs at width256; verify rrrah full path preservation independently",
+  "fixture": "Five physical 12-byte files under five shared directory components, prefix longer than256; two true copy families plus same-size negative. Overlapping explicit file/directory roots, two input orders, scan and scan_verified.",
+  "focused_test_exit_code": 0,
+  "whole_exact_files_target_exit_code": 0,
+  "whole_target_result": {
+    "passed": 39,
+    "failed": 0,
+    "ignored": 0
+  },
+  "raw_log": "docs/research/dedup-500/rrrah-long-path-exact-tests-20261024.log",
+  "raw_log_sha256": "d07fc8826f1ac54c526c59ce8792a2d0c11f2d97ccfe6103ed9e93f2ceeb1fc6",
+  "scope": "Native macOS arm64 current exact file target; no Windows/Linux runtime claim. Non-UTF8 copy partition tests are cfg-disabled on macOS, so their source existence does not qualify execution here.",
+  "prior_suite_boundary": "Previous all-features1073-pass result precedes this new regression; not relabelled as a current complete-suite run.",
+  "production_change": false
+}

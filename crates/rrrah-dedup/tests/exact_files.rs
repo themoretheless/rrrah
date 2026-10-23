@@ -1470,3 +1470,58 @@ fn replacing_a_duplicate_with_a_hardlink_invalidates_its_old_observation() {
         assert!(after.groups[0].paths.contains(&c));
     }
 }
+
+#[test]
+fn paths_sharing_more_than_256_characters_preserve_copy_partitions() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let mut shared = root.path().to_path_buf();
+    for _ in 0..5 {
+        shared.push("shared-prefix-component-abcdefghijklmnopqrstuvwxyz-0123456789");
+    }
+    fs::create_dir_all(&shared).unwrap();
+    let paths: Vec<_> = ["a", "a-copy", "b", "b-copy", "different"]
+        .map(|name| shared.join(name))
+        .into();
+    assert!(shared.as_os_str().len() > 256);
+    for path in &paths[..2] {
+        fs::write(path, b"first family").unwrap();
+    }
+    for path in &paths[2..4] {
+        fs::write(path, b"other family").unwrap();
+    }
+    fs::write(&paths[4], b"third family").unwrap();
+    let partition = |groups: Vec<Vec<std::path::PathBuf>>| {
+        groups
+            .into_iter()
+            .map(|mut paths| {
+                paths.sort();
+                paths
+            })
+            .collect::<BTreeSet<_>>()
+    };
+    let expected = partition(vec![paths[..2].to_vec(), paths[2..4].to_vec()]);
+    for reverse in [false, true] {
+        let mut roots = paths.clone();
+        roots.push(root.path().to_path_buf());
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty(), "{report:?}");
+            assert!(report.aliases.is_empty(), "{report:?}");
+            assert_eq!(report.files_observed, 5);
+            assert!(report.groups.iter().all(|group| group.bytes == 12));
+            assert_eq!(
+                partition(report.groups.into_iter().map(|group| group.paths).collect()),
+                expected
+            );
+        }
+    }
+}
