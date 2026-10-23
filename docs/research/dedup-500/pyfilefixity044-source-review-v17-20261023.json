@@ -1,0 +1,38 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "resiliency_tester.py now read whole across v16/v17: 1-36,37-237,238-519,520-end. Static remainder review; no configured commands, destructive output setup, or benchmark run executed.",
+  "findings": [
+    {
+      "id": "last-run-exit",
+      "detail": "Main computes averaged fstats over multiple runs but final return consults only last run stats final error. Earlier failed runs can coexist with successful exit if last byte metric is zero. Source-level finding, not full-main runtime reproduction."
+    },
+    {
+      "id": "parallel-statistics",
+      "detail": "Parallel mode feeds every repair command the same tampered input; compute_all_diff_stats has no parallel argument and still compares each stage to previous repair output and calculates relative repair power against it. Reported incremental effects do not match parallel execution provenance."
+    },
+    {
+      "id": "averaging-shape",
+      "detail": "stats_running_average retains only stages/keys present in both inputs and zip-truncates vector lengths. Missing metrics vanish rather than producing an explicit incompatible-measurement diagnostic. No corpus-size weighting for averaged error percentages."
+    },
+    {
+      "id": "output-overlap",
+      "detail": "--force path setup removes output before checking relation to original input; no same-path or ancestor/descendant exclusion visible. Not executed. Fixture workflows must use dedicated nonoverlapping paths."
+    },
+    {
+      "id": "original-data-promise",
+      "detail": "Description says original files are never tampered, but before_tamper command templates receive original input directory and arbitrary configured commands execute against it. This promise depends on configuration behavior, not enforced read-only input ownership."
+    },
+    {
+      "id": "empty-repair",
+      "detail": "finalrepairdir starts as empty string and updates only inside repair command loop. An empty configured repair sequence leaves no valid final repair path, without explicit configuration rejection before run setup."
+    },
+    {
+      "id": "import-error-handling",
+      "detail": "import_module uses raise(exc_type, exc_value, tb_root), a tuple-style raise expression invalid as an exception object under Python 3, in its internal-import-failure branch. Source-level finding."
+    }
+  ],
+  "upstream_tests_run_this_review": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
