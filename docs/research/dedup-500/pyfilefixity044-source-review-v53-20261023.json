@@ -1,0 +1,46 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "pprofile README whole read; pprofile.py lines 1-240 read; original prefix classes tested with synthetic frames only",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/pprofile/README.rst",
+    "sha256": "79ada4c039241a765fa42406bf2f1589ada5e21b72decfbc8e69a60fa8ff13f1"
+  },
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/pprofile/pprofile.py",
+    "lines": [
+      1,
+      240
+    ],
+    "sha256": "b718ff48650bf6f09afcc9033bd4bd2841e5ad7b94ed369b4dea0116cf127bdc",
+    "python3_parse": {
+      "result": "SyntaxError",
+      "line": 391,
+      "message": "Missing parentheses in call to exec"
+    }
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 107,
+    "remaining_not_whole_reviewed": 37
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-pprofile-file-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "72fd8002c7b0d0f513e9eadabbf1e8adb49b3368",
+    "source_sha256": "b718ff48650bf6f09afcc9033bd4bd2841e5ad7b94ed369b4dea0116cf127bdc",
+    "scope": "Exact prefix AST classes, ProfileBase ends before callgrind; synthetic frames with shared globals and different code filenames",
+    "second_file_expected": "second.py",
+    "second_file_actual": "first.py",
+    "distinct_source_files_merged": true
+  },
+  "findings": [
+    "ProfileBase caches file timing solely by id(frame.f_globals). Two distinct code filenames sharing one globals dictionary resolve to the first filename. Reproduced using exact prefix class methods, not a full original profiler execution.",
+    "Python3 full module parse fails at Python2 exec syntax; prefix also imports thread and uses iteritems/itervalues/basestring in runtime methods. No port or tracing hook used as proof.",
+    "README explicitly says statistical mode lacks timing information and may miss executed lines. Sample hit counts are not exact invocation counts or per-line latency.",
+    "README documents time from other threads is not discounted, and sums can exceed 100 percent. Historical samples are wall elapsed attribution, not CPU usage or an optimization measurement of this library.",
+    "ThreadProfile is documented to propagate tracing to threads started after enabling; preexisting thread coverage not promised. Implementation beyond line240 remains unread in this pass.",
+    "Callgrind relative paths/source archive are useful provenance ideas but source correspondence, export correctness and ZIP behavior remain unqualified. No code copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
