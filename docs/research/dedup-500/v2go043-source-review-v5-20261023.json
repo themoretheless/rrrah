@@ -1,0 +1,75 @@
+{
+  "repository": "Danialsamadi/v2go",
+  "commit": "fcf4e1f1143ef32ddb4673aa176c8ab0a54c4c9e",
+  "scope": "Six additional pinned files read whole and verified against captured tree. Workflows inspected as data, not executed.",
+  "evidence": [
+    {
+      "path": ".github/workflows/test.yml",
+      "sha256": "e41bb8f10302952402591017fd71f38527be532cdd16859c1d89a5583135d591",
+      "git_blob_sha1": "d45e2b7c1ce1a49bf157c1f44c728830af2bd842",
+      "whole_file_read": true
+    },
+    {
+      "path": ".github/workflows/update-configs.yml",
+      "sha256": "16a664058285f9626200ef7d97fc1ea5ba49304efff2248a7bdfb986f2f68ccb",
+      "git_blob_sha1": "0f0bc32c13ffc021e54bf20d3069eccd422976db",
+      "whole_file_read": true
+    },
+    {
+      "path": "Makefile",
+      "sha256": "a31c24170e8f85e5d6b78c28c423ed06c74f952d9fe327eee37f9516ba4da071",
+      "git_blob_sha1": "36f3c1559d6b7e5806953e431a29325ef0ade67f",
+      "whole_file_read": true
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "9d1ab4bf68220beb3ed7de2b11c544b6aaf8b9da6e054a51ff8f0f9865fac5e1",
+      "git_blob_sha1": "4e083cd758af333ac307ddcd833dbc3d379fc392",
+      "whole_file_read": true
+    },
+    {
+      "path": "skills-lock.json",
+      "sha256": "d932852efcf819dd7a1f9160429526a80bdc6141248352ca26281aa776925bb4",
+      "git_blob_sha1": "49a564db4f12c6b70a1820e0aa15f9b950b01d79",
+      "whole_file_read": true
+    },
+    {
+      "path": "UPDATE_SUMMARY.md",
+      "sha256": "cf373e68e3407d3b334bbfa0e1835daa4ae1d49327740b897dfeb80e59f44a55",
+      "git_blob_sha1": "cc66ef3cd88309d4c977a9418627e67e9d705ebc",
+      "whole_file_read": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "update-build-glob",
+      "detail": "Update workflow invokes go build ... *.go, which expands to cli_test.go and cloudflare_test.go as well as production files. Explicit test files are not valid go build input. Test workflow and Makefile instead build package dot. This is a static command incompatibility; no Go executable available for runtime reproduction."
+    },
+    {
+      "id": "release-not-test-gated",
+      "detail": "Update job builds/runs without depending on Test workflow completion. It executes go mod tidy, and later stages all changes with add dot; dependency changes can be published with generated output."
+    },
+    {
+      "id": "verification-not-gate",
+      "detail": "Verify output files step logs missing files using fallback echo and counts lines without asserting a nonzero configuration count or decoding base64. Header lines count as configurations; base64 lines do not correspond to individual entries."
+    },
+    {
+      "id": "staleness-not-freshness",
+      "detail": "Cleanup uses last Git content-change timestamp as freshness, so unchanged but freshly regenerated valid content can be deleted after 24 hours. This is not equivalent to last successful verification time."
+    },
+    {
+      "id": "historical-summary-not-benchmark",
+      "detail": "Captured UPDATE_SUMMARY reports 119.26 seconds, 195065 input entries and 566 final entries as 99.7 percent duplicate removal. That reduction includes validation/live-test failures by main.go implementation; it is not a deduplication accuracy result or a controlled benchmark."
+    },
+    {
+      "id": "test-definition-not-result",
+      "detail": "Test workflow defines formatting, vet, go test with ten-minute timeout, package build and CLI smoke checks. Captured YAML proves intended checks, not their successful execution. Cancellation test source still conflicts with implementation as v2 records."
+    }
+  ],
+  "upstream_tests_run": false,
+  "workflows_run": false,
+  "external_messages_sent": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
