@@ -1,0 +1,30 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 22,
+  "tracked_blobs": 24,
+  "remaining_without_whole_review": [
+    "package-lock.json",
+    "yarn.lock"
+  ],
+  "control": "webpack070-resolver-control-20261023.cjs",
+  "runtime_scope": "Unchanged original resolver module in Node VM, verified Git blob. Explicit Map-based memoize adapter and deterministic resolveSync adapter; native fs used for owned missing-then-created file case. Real enhanced-resolve/lodash and Webpack not run.",
+  "control_results": {
+    "node": "v22.23.4",
+    "distinct_pairs_share_cached_result": true,
+    "failed_lookup_survives_file_creation": true,
+    "new_resolver_sees_file": true,
+    "ordinary_distinct_keys_separate": true,
+    "error_globals_restored": true
+  },
+  "findings": [
+    "Exact key expression concatenates unescaped request/context delimiter. Pairs (a _____ /root/b, /root/c) and (a, /root/b _____ /root/c) collide and second lookup reuses first result under explicit memoization adapter. Authored path strings demonstrate key ambiguity, not observed real build input.",
+    "An exception from underlying resolver becomes original request string and is memoized. Creating the missing file afterwards does not invoke resolver again for that pair; a newly created resolver sees file. This is lifetime-of-instance behavior, not proof all builds/watch modes reuse an instance.",
+    "Error.captureStackTrace and stackTraceLimit restored after success and injected failure in native Node VM controls. No performance speedup inferred.",
+    "No change to production rrrah-dedup from this research pass. Fresh content identity and complete recipe remain required for its cache."
+  ],
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
