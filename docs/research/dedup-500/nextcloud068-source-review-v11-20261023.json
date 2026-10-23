@@ -1,0 +1,138 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "img/app-dark.svg",
+      "local": "149-app-dark.svg",
+      "git_blob": "664d85a71e39b1804bbf36df1c53740a769ddb46",
+      "sha256": "b7af821018cebe2be352e0e2efa4ab0fdd9fe51a953fbb3fea3daf91bd8ed6c4",
+      "bytes": 1228,
+      "whole_text_read": true
+    },
+    {
+      "path": "img/app.svg",
+      "local": "150-app.svg",
+      "git_blob": "51e7e7f103a4139ac8186bcd4dc6ba441d912829",
+      "sha256": "ebd1ddfca196af697b49552a91d5cf8f13f611c314a0caef795dfe64a6e53a1a",
+      "bytes": 1280,
+      "whole_text_read": true
+    },
+    {
+      "path": "img/duplicatefinder.svg",
+      "local": "151-duplicatefinder.svg",
+      "git_blob": "51e7e7f103a4139ac8186bcd4dc6ba441d912829",
+      "sha256": "ebd1ddfca196af697b49552a91d5cf8f13f611c314a0caef795dfe64a6e53a1a",
+      "bytes": 1280,
+      "whole_text_read": true
+    },
+    {
+      "path": "js/script.js",
+      "local": "152-script.js",
+      "git_blob": "7768898bfe095321dc1e578058272bab3e2fa8e8",
+      "sha256": "74771a32cac16958a19116d58e972b3bf17ba4a45e04ba00dd5f72137f5f5d29",
+      "bytes": 10755,
+      "whole_text_read": true
+    },
+    {
+      "path": "translationfiles/de.mo",
+      "local": "128-de.mo",
+      "git_blob": "1be22bbb8ceaa2ec8d096762e6cac3df0bd026f8",
+      "sha256": "9599db158dd89c2916f7a8a916a6c6da620a4dbf1fec4343517fb36deac1dba3",
+      "bytes": 649,
+      "whole_text_read": false,
+      "whole_binary_layout_and_catalog_read": true
+    }
+  ],
+  "whole_text_files_read_total": 151,
+  "whole_binary_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 152,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 13,
+  "full_review_count": 249,
+  "mo_layout": {
+    "magic": "0x950412de",
+    "revision": 0,
+    "messages": 4,
+    "original_table_offset": 28,
+    "translated_table_offset": 60,
+    "hash_table_offset": 92,
+    "hash_slots": [
+      1,
+      3,
+      0,
+      2,
+      4
+    ],
+    "string_records": [
+      {
+        "table": "original",
+        "index": 0,
+        "length": 0,
+        "offset": 112,
+        "text": ""
+      },
+      {
+        "table": "original",
+        "index": 1,
+        "length": 73,
+        "offset": 113,
+        "text": "Adjust these settings to make the process of finding duplicates your own."
+      },
+      {
+        "table": "original",
+        "index": 2,
+        "length": 16,
+        "offset": 187,
+        "text": "Duplicate Finder"
+      },
+      {
+        "table": "original",
+        "index": 3,
+        "length": 9,
+        "offset": 204,
+        "text": "Version: "
+      },
+      {
+        "table": "translated",
+        "index": 0,
+        "length": 330,
+        "offset": 214,
+        "text": "Project-Id-Version: Nextcloud 3.14159\nReport-Msgid-Bugs-To: translations\\@example.com\nPO-Revision-Date: 2021-11-05 05:29+0100\nLanguage-Team: \nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nX-Generator: Poedit 3.0\nLast-Translator: \nPlural-Forms: nplurals=2; plural=(n != 1);\nLanguage: de\n"
+      },
+      {
+        "table": "translated",
+        "index": 1,
+        "length": 76,
+        "offset": 545,
+        "text": "Passe die Einstellungen an, damit die Erkennung von Duplikaten zu dir passt."
+      },
+      {
+        "table": "translated",
+        "index": 2,
+        "length": 16,
+        "offset": 622,
+        "text": "Duplicate Finder"
+      },
+      {
+        "table": "translated",
+        "index": 3,
+        "length": 9,
+        "offset": 639,
+        "text": "Version: "
+      }
+    ],
+    "bytes_accounted": 649,
+    "unaccounted_bytes": 0,
+    "scope": "All649bytes accounted as header, descriptor tables, hash slots and8terminatedstrings. Entire decoded catalog inspected. Does not qualify GNUhash lookup distribution, malformedcatalog handling or actualUIlocalization."
+  },
+  "runtime_tests_added_or_run": false,
+  "findings": [
+    "Three SVG source files each contain a single path in512squareviewBox(-56,0,512,512). White app.svg andduplicatefinder.svg are byteidentical; dark variant sharespathgeometry with blackfill and fewerattributes. Complete sourceXML read, no rasterized visual/UI/themequalification claimed.",
+    "Entire tracked resultsbundle js/script.js whole-read. It containswebpackbootstrap,Babel async helpers andregeneratorRuntime.mark/wrap references, but doesnotdefine/importregeneratorRuntime withinthisfile. AmbientNextcloudruntimeavailability untested; no deployedstartupfailure claim.",
+    "Trackedbundle preserves Math.abs sortcomparator, hiddenretryafterfetchfailure, and nullmatch indexingpathnormalization seen in originalsource. Prior3nativecontrols targetjs-src original, notthiscompiledbundle; no newexecution/parityqualification claimed.",
+    "MOupgrade frompartialcatalogreview:header0revision,4messagepairs,5hashslots and8terminatedstrings allinspected with offsets/lengths. NativePython parser reproduces catalog, and full649byteaccounting has no gaps. Binaryfile receiveswholelayout/catalogreview credit only, not UI/dependency or allgettextformat support.",
+    "Wholefile counts now151text+1binary=152/165. Remaining13areCOPYING,PNGpreview,7largeCLIoutputs,settingsbundle,2sourcemaps,andpackage-lock. No sourceadoption, measuredoptimization orcomplete-repositorycredit."
+  ]
+}
