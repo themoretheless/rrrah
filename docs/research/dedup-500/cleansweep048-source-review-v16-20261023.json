@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "app/src/main/java/com/cleansweep/data/repository/DirectMediaRepositoryImpl.kt",
+      "sha256": "d8b9bc0fc202b1faead4d850a8f9121c9c10e8a82bcffc16a02948da3ce36c74",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          341,
+          680
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "MediaStore bucket lookup hashes lowercased paths to 32-bit IDs with no parent-path postfilter in this method; collisions can select unrelated rows. Android bucket semantics not independently qualified.",
+    "MediaStore-backed items retain cached size/date rather than fresh file metadata, allowing stale metadata to reach signature-cache validation.",
+    "Unindexed image dimensions use ImageLoader Size.ORIGINAL rather than a bounds-only decoder; actual allocation cost unmeasured. Dimension errors still yield a MediaItem with zero dimensions.",
+    "deleteMedia returns one aggregate boolean after potentially partial indexed/direct deletion. No deletion API invoked.",
+    "moveMedia ignores IDs beyond targetFolders length and requests scans through nested helpers twice. createNewFolder treats any existing destination as success without checking directory type."
+  ],
+  "whole_files_read_total": 42,
+  "remaining_tracked_blobs": 88,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
