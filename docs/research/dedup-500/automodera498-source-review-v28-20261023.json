@@ -1,0 +1,31 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/web/gui/OperatorWebController.java",
+      "sha256": "380f43018ad9c296cedc81df88b420031e651cf4e66fc8c646dae569b2a1fa20",
+      "lines": 329,
+      "git_blob_verified": true
+    }
+  ],
+  "all_tracked_java_source_reviewed": 85,
+  "runtime": {
+    "java_run": false,
+    "http_or_admin_actions": false
+  },
+  "findings": [
+    "FinalOperatorGUIcontrollerwhole-read/Gitblobverified. Tree-to-reviewed-path check confirms everytracked.javafile has whole-source review reference; this is source completeness, not successful compilation or runtime qualification.",
+    "Shutdown branch invokes OperatorServer.exit before saveNode and facade.shutDown; earlier exitimplementation callsSystem.exit0, so followingexplicit save normally unreachable. No processshutdown performed.",
+    "SetupPOST unconditionally callsinit, unlike archive/integrator existingnodeguards. Existingwrapperreplacement concern fromv10 requires runtime persistence test. No setuprequest submitted.",
+    "Collectionroute repeatsarchive/collection repositoryID contract; no simplecollection/ID route here, confirming commonnode linkpattern mismatch across reviewed modulecontrollers.",
+    "Certificate decision Optional.get without missingrequesthandling; frameworkerrorstatus notqualified. No decisionaction executed.",
+    "Networkview fetchesallnodes through statuspollingservice; large/networkofflineUIlatency unmeasured. No additional fingerprintrecipe/scorevalidation introduced."
+  ],
+  "remaining": [
+    "30 non-Java tracked blobs/assets",
+    "Remainingtemplates/demos/license/IDE/media/native artifacts and full runtime qualification"
+  ],
+  "full_review_count": 249
+}
