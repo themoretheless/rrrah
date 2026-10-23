@@ -1,0 +1,80 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/message/Message.java",
+      "sha256": "eb448e1285315505d8809db4920562a39e32cdc33ab231b03f75f93fe8acceb2",
+      "lines": 57,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/message/MessageFactory.java",
+      "sha256": "7991216e40fbd91cb95fae24fddbc11198137dbff2eb2dccad3ec39d0ce1aa1f",
+      "lines": 28,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/message/MessageFactoryImpl.java",
+      "sha256": "1c7dbf6d3d0dd01c9fabad52d567cee883ead228947f0dec8da1bcdad94218b4",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/messages/AddressListMessage.java",
+      "sha256": "d5e2ab52e9650b613715a755dcdd9b17ea71b272761ca7dd8189346dc796ba3b",
+      "lines": 40,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/messages/CollectionRepertoire.java",
+      "sha256": "33adcf55754b8d12c9e1f181da16c3f54bd8f6f67fd6889253f1806620f6fcf2",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/node/LocalNode.java",
+      "sha256": "77e1d4bb449a623c8e35baec9a38455e2ba0f46a1b584b66921085de6b78f75e",
+      "lines": 47,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/node/Node.java",
+      "sha256": "a23a95122d855bf868d494838bd5440ff3da88e824e3f5cefd968d697d365ac6",
+      "lines": 142,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/node/NodeStatus.java",
+      "sha256": "24465b6f8057a1fdc3b8d60fd2c1965f2810ec5c916b99f521301288bf2591b3",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/node/NodeType.java",
+      "sha256": "d6bc657d7d2de8bb8d9744a223a735f52e12b7290cf2c1f71fd856db9ab09c22",
+      "lines": 30,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "jaxb_run": false,
+    "database_run": false
+  },
+  "findings": [
+    "Nine message/node model files whole-read and Gitblobverified. Message contains timestamp, certificate,Objectcontent; no explicit message schema/algorithm recipe field. CollectionRepertoire wraps existing Collection model, adding no fingerprint compatibility contract.",
+    "MessageFactory assigns current epochmilliseconds and local certificate reference, not a defensive copy. No serialized snapshot or immutability established.",
+    "Node.equals/hashCode include id,name,nodeType,host,createdAt; name/host have generated setters, so hashCode changes after edits. Identity comparisons are not ID-only. Actual HashSet/Map usage and mutation behavior not runtime tested.",
+    "Node.active/online comments claim nonpersistent/local, but Transient annotations commented out; source mapping leaves fields persistent/serializable. Actual Hibernate/JAXB behavior not run.",
+    "Node.nodeType uses Enumerated without explicitSTRING; persistence ordinal coupling follows annotation default, but schema migration not qualified.",
+    "LocalNode fixes ID0 and cascades node; getters/setters and mutable lists permit shared state. No defensive concurrency snapshot in these models.",
+    "AddressListMessage and CollectionRepertoire rely on NonNull list annotation without length/cardinality/recipe limits. Message XmlSeeAlso lists CertificateRequest/CollectionRepertoire/Date but notAddressListMessage; actual JAXBcontext registration remains to inspect before asserting serialization failure."
+  ],
+  "remaining": [
+    "105 other tracked blobs/assets",
+    "Remaining services/callers/resources and native/runtime qualification"
+  ],
+  "full_review_count": 249
+}
