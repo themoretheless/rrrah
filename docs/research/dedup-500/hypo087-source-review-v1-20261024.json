@@ -1,0 +1,113 @@
+{
+  "repository": "OpSafari/hypoarena",
+  "commit": "09b8dd0b93f8cef273bb412e288f942dad1de03e",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/hypoarena/dedup.py",
+      "local": "02-dedup.py",
+      "sha256": "f0e2f4465264a8a579a3c414f2480066c398032bed6d298ff3ee5c27c10b91cc",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hypoarena/__init__.py",
+      "local": "03-__init__.py",
+      "sha256": "95a737c0bba55c74433f7996ae29c1fd6b5b1d56cc8dd6d9a22fa4281a2db642",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hypoarena/__main__.py",
+      "local": "04-__main__.py",
+      "sha256": "5eccb99a252e8c60f32ff50b8c5b2f02393ef4bbfa5dc1ceeda9b58679a79008",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_dedup_clustering.py",
+      "local": "05-test_dedup_clustering.py",
+      "sha256": "53312e2dfc71a261b2ffd74fedb559cd32857b72c1f17bb1bb8c6a64c0f8b7e2",
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "10d2f290d4a01dd7eb2cb1a99b9ed9494e4db828652d96ee7a200221dfa85f3e",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "c4b5ca3f91dc5d56035ba03d6c78d6d809010149c8bb378fd3fd376a8b5dc007",
+      "whole_text_read": true
+    },
+    {
+      "path": "pyproject.toml",
+      "local": "07-pyproject.toml",
+      "sha256": "0acf56a88f82d1553f24f4f39a9c7bebf0e2e81c6ddbfad5a5a727714e75163a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 7,
+  "tracked_blobs": 311,
+  "remaining_without_whole_review": 304,
+  "native_original_tests": {
+    "passed": 11,
+    "failed": 0,
+    "exit_code": 0,
+    "file": "tests/test_dedup_clustering.py"
+  },
+  "pure_controls": {
+    "zero_pair_cosine": 1.0,
+    "zero_matrix_entries": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "chain_edges_group_all_three": true,
+    "orthogonal_pair_cosine": 0.0,
+    "scope": "Original pure function definitions with NumPy, no full package imports or upstream tests. Group connectivity is not proof of all-pairs similarity."
+  },
+  "whole_api_chain_control": {
+    "cluster": {
+      "representative": "a",
+      "method": "jaccard",
+      "size": 3,
+      "members": [
+        "a",
+        "b",
+        "c"
+      ],
+      "similarities": [
+        {
+          "left": "a",
+          "right": "b",
+          "score": 0.666667
+        },
+        {
+          "left": "b",
+          "right": "c",
+          "score": 0.666667
+        }
+      ]
+    },
+    "a_c_similarity": 0.3333333333333333,
+    "threshold": 0.6,
+    "scope": "Full original DuplicateFinder finite word-Jaccard chain; connectivity does not establish all member pairs meet threshold."
+  },
+  "findings": [
+    "Exact normalized matching groups on content_hash digest alone; it does not byte-confirm normalized content equality in exact_duplicates.",
+    "MinHash candidate pairs are verified using MinHash estimate, not exact Jaccard, per implementation.",
+    "Union-find clusters can include pairs below configured threshold; verified edge list is preserved separately.",
+    "Module header reverses false-positive/negative labels in explanatory parentheticals; implementation/formula govern behavior."
+  ],
+  "limits": [
+    "Original package core test run only, not entire234-path test inventory.",
+    "Helper modules partially read through imports, no whole-file credit.",
+    "No code adopted into rrrah or universal similarity guarantee."
+  ],
+  "acquisition_note": "Initial clone did not include pinned commit; explicit fetch by commit succeeded before native test run."
+}
