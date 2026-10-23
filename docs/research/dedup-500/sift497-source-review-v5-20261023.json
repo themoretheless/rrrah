@@ -1,0 +1,31 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/main.cpp",
+      "lines": 1254,
+      "sha256": "f938cb0a8ff3b6300df9c65728b248b5acaf41ffe11ec1eb57d2f4db396131b8",
+      "git_blob_verified": true,
+      "completion": "Prior1..380 plus current381..1254"
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/sift497-stats-result-20261023.json"
+  ],
+  "source_control": "docs/research/dedup-500/sift497-stats-control-20261023.cpp",
+  "findings": [
+    "Whole main now read: hash/cluster/project/remove/find dispatch and serializers. Importedhash lengths/size are notvalidated incluster/find before Hamming use. FullCLI end-to-end stillnotexecuted.",
+    "Originalclusterwriter runtime: onefile singleton filteredout givesungrouped[0] butstats.total_ungrouped2. Writerprecollects members thenstatscounts below-filtergroups again.",
+    "Hashcommand drops empty failedhashes andcanreturn0 withemptyoutputdataset; no allfailedinput runtimeyet. Projectchecks dims>=1 butnotfinitelearning/perplexityorhashshapes here.",
+    "Remove rewrites hashes before optional cluster/projectionparse/update, directlytruncates files withofstream andhasnoatomicmulti-artifacttransaction. Source-only consistencyrisk, no removal/filemutationexecuted.",
+    "Findusesstoredhashsize directly, hardcodes evenly_spaced videoquery strategy, framecountnotpersistedin hashJSON. Recipe/reproducibility concerns needvideopathreview.",
+    "No byte/pixel verification stage in observed hashmatching/clusteringcommands; treat outputascandidates."
+  ],
+  "remaining": [
+    "Other85 tracked blobs/assets anddependencies",
+    "FullCLI validation/runtime, clustering algorithms, video/decoderqualification"
+  ],
+  "full_review_count": 248
+}
