@@ -1,0 +1,47 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/common-index.html",
+      "sha256": "9cc3df02e490acfbb539f033b102900edd6a0aa5ec25377aeeb44c59d21c744d",
+      "lines": 257,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_entire_diff_from_whole_read_baseline"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-index.html",
+      "sha256": "d1c8340dca3dd5dec1f07fd993705471ccd540078eecf6d72186416f564a9d77",
+      "lines": 257,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_entire_diff_from_whole_read_baseline"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/index.html",
+      "sha256": "a1238682564481833026435c86a18ab06b33a7ba575442d8d9957093c08c408a",
+      "lines": 284,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_entire_diff_from_whole_read_baseline"
+    }
+  ],
+  "runtime": {
+    "thymeleaf_render": false,
+    "browser_run": false,
+    "forms_submitted": false
+  },
+  "findings": [
+    "Three dashboard templatesassessed:archive/integratorwholetext,operatorentirediff fromarchivebaseline. AllGitblobverified. No liveUI actions.",
+    "Dashboard headings dereference node.nodeType before inner node!=null guard; controller normallyredirects missingnode but exceptional renderingcontext remainsunqualified.",
+    "Connect/statusbuttons adddisabled CSSclass ratherthan native disabledattribute. Actual Bootstrap behavior and keyboard submission nottested; no servervalidation inferred fromappearance.",
+    "Integrator owninfolink uses/info/ID instead of reviewed/admin/info/ID; source route mismatch. Externalhostlinks hardcodehttp andBootstrapJSuseshrefinsteadofsrc.",
+    "Communicationsactive andIntegrationactive shown separately but no pipelinejobstatus, failurecount, source freshness or calibratedmatch quality. Dashboard readiness doesnotprovehashruntime availability.",
+    "connectionStatus.equalsJoined assumes nonnullmodelvalue when rendered; normalcontrollers populate exceptspecificoperatorcontext wherepanelexcludedforORIGIN. Thymeleaf shortcircuit/evaluation notqualified.",
+    "Operatorbaseline differsnetworkform actionrelative andwhitespace; no newhashworkflow implementation."
+  ],
+  "remaining": [
+    "13 other tracked blobs/assets",
+    "Remainingtemplates/license/media/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
