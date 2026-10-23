@@ -1,0 +1,71 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "viz/sift_viz/cache.py",
+      "sha256": "8c455c2b944f2c670366a946495ce99c39e7908536664cbaf72c0a38a5a6e923",
+      "lines": 101,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/sift_viz/models.py",
+      "sha256": "1d402b0c8cdc7110119c9728be22b9c3d5b99f20d0a5e3e97f3599fba7d9752f",
+      "lines": 90,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/sift_viz/constants.py",
+      "sha256": "ec03697799c1a99e94d3c786692619f82d7e0416b59484de6ecdc4c5a4d42741",
+      "lines": 52,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/sift_viz/__init__.py",
+      "sha256": "17c2b306dfb25afefbe6962880f8c7a014f15eaa22355e3a61865210eb461d32",
+      "lines": 17,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/visualize.py",
+      "sha256": "aa9e090a139aea38b3cdd6d9ee68bdf4513c12519305d324fee5d3a30ce27a26",
+      "lines": 4,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/pyproject.toml",
+      "sha256": "d39f77be2360f4d0b545ae2a2e2c1344dedc2940edbd840ee465391e53875321",
+      "lines": 36,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/.python-version",
+      "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398",
+      "lines": 1,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-cache-control-20261023.py",
+  "runtime": {
+    "exit_code": 0,
+    "pydantic_version": "2.14.1",
+    "original_modules": true,
+    "ui_started": false,
+    "temporary_directory_only": true
+  },
+  "findings": [
+    "Original cache/models loaded through a package namespace without executing GUI-importing __init__. CacheManager subclass overrides only cache_dir to isolate writes in TemporaryDirectory. Installed pydantic2.14.1, not pinned upstream dependency environment.",
+    "After valid save, removing hashes_src then saving new phash settings retains old hashes.json while metadata changes to phash. Confirmed directly; caller pipeline behavior still needs review.",
+    "Replacing cached hashes.json with malformed text does not invalidate load or load_results, which check existence and parse other files only. copy_hashes_to copies corrupt text successfully.",
+    "ProjectionResult accepts two file paths with one one-dimensional point. ClusterResult accepts out-of-range member99 for one file. Semantic shape/index validation absent from these models.",
+    "Cache identity uses raw folder string MD5; no file content, size, modification time, recipe version or source manifest validation inside CacheManager. Writes are separate direct overwrites without transaction.",
+    "GUI constants include ppm/pgm/hdr/pic and mpg/mpeg that C++ scanner omits; visible format lists differ from scan behavior.",
+    "HashSettings constrains size4..32, unlike CLI2..1024. Console entry points to visualize:main while wheel packages list only sift_viz; packaging concern source-only, wheel not built."
+  ],
+  "remaining": [
+    "64 other tracked blobs/assets and dependencies",
+    "Pipeline caller validation, full UI and package runtime qualification"
+  ],
+  "full_review_count": 248
+}
