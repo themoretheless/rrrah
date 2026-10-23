@@ -1,0 +1,26 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running tests/test_json_util.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_json_util-7ec9b676b021c24d)
+
+running 18 tests
+test test_escape_str_other_control_chars_use_u_escape ... ok
+test test_escape_str_tab ... ok
+test test_escape_str_all_named_escapes ... ok
+test test_escape_str_quotes_and_newlines ... ok
+test test_extract_bool_true_false ... ok
+test test_extract_u64_basic ... ok
+test test_escape_str_carriage_return_is_preserved_not_dropped ... ok
+test test_extract_str_array_basic ... ok
+test test_extract_str_array_empty ... ok
+test test_escape_str_leaves_printable_and_unicode_alone ... ok
+test test_escape_then_extract_is_a_fixed_point ... ok
+test test_escaped_control_chars_reparse_as_json ... ok
+test test_extract_str_basic ... ok
+test test_extract_str_missing_key ... ok
+test test_str_array_empty ... ok
+test test_extractors_decode_escapes ... ok
+test test_extract_u64_missing ... ok
+test test_str_array_serialization ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

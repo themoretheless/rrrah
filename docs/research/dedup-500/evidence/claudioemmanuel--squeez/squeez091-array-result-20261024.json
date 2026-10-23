@@ -1,0 +1,22 @@
+{
+  "scope": "Original record/check and SessionContext JSON roundtrip; synthetic two-line unrelated text and thirty-line candidate, equal byte lengths",
+  "output_bytes": 1389,
+  "before_call": 2,
+  "after_call": 1,
+  "before_label": "long-actual",
+  "after_label": "short-unrelated",
+  "shingle_arrays_before": 2,
+  "shingle_arrays_after": 1,
+  "unrelated_actual_shingle_similarity": 0.0,
+  "direct_bracket_array": [
+    "a"
+  ],
+  "map_bracket_array": [
+    "a]b",
+    "second"
+  ],
+  "empty_array_items_after_map": [
+    "alpha"
+  ],
+  "independent_python_json_check": "Valid complete JSON contains both shingle positions, first empty and second nonempty."
+}

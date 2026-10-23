@@ -1,0 +1,14 @@
+{
+  "scope": "Original public recursive JSON parser and exact integer extractor, finite scalar inputs",
+  "valid_surrogate_pair_expected_codepoint": 128512,
+  "actual_codepoints": [
+    65533,
+    65533
+  ],
+  "integer_input": 9007199254740993,
+  "recursive_parser_as_u64": 9007199254740992,
+  "flat_integer_extractor": 9007199254740993,
+  "trailing_non_json_accepted": true,
+  "unknown_string_escape_accepted": true,
+  "important_scope": "SessionContext uses integer extractors, so recursive f64 rounding is not evidence that its hash arrays lose precision."
+}

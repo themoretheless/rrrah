@@ -1,0 +1,91 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/json_util.rs",
+      "local": "21-src--json_util.rs",
+      "sha256": "f9f1867791af37481ab4d444cd703a3b30c2dffcc6712ab04825d90ff7803093",
+      "whole_text_read": true,
+      "lines": 892
+    },
+    {
+      "path": "tests/test_json_util.rs",
+      "local": "22-tests--test_json_util.rs",
+      "sha256": "cfc3b0f17f5e19bc147758d349eacc7cca8e3bcee4c3ecedb3ba8c08ecbf2f6b",
+      "whole_text_read": true,
+      "lines": 148
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 21,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 306,
+  "native_original_tests_added": {
+    "passed": 29,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "json_util::": 11,
+      "test_json_util": 18
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 144,
+    "failed": 0,
+    "scope": "Focused groups only, full upstream suite unrun."
+  },
+  "array_roundtrip_control": {
+    "scope": "Original record/check and SessionContext JSON roundtrip; synthetic two-line unrelated text and thirty-line candidate, equal byte lengths",
+    "output_bytes": 1389,
+    "before_call": 2,
+    "after_call": 1,
+    "before_label": "long-actual",
+    "after_label": "short-unrelated",
+    "shingle_arrays_before": 2,
+    "shingle_arrays_after": 1,
+    "unrelated_actual_shingle_similarity": 0.0,
+    "direct_bracket_array": [
+      "a"
+    ],
+    "map_bracket_array": [
+      "a]b",
+      "second"
+    ],
+    "empty_array_items_after_map": [
+      "alpha"
+    ],
+    "independent_python_json_check": "Valid complete JSON contains both shingle positions, first empty and second nonempty."
+  },
+  "scalar_parser_controls": {
+    "scope": "Original public recursive JSON parser and exact integer extractor, finite scalar inputs",
+    "valid_surrogate_pair_expected_codepoint": 128512,
+    "actual_codepoints": [
+      65533,
+      65533
+    ],
+    "integer_input": 9007199254740993,
+    "recursive_parser_as_u64": 9007199254740992,
+    "flat_integer_extractor": 9007199254740993,
+    "trailing_non_json_accepted": true,
+    "unknown_string_escape_accepted": true,
+    "important_scope": "SessionContext uses integer extractors, so recursive f64 rounding is not evidence that its hash arrays lose precision."
+  },
+  "findings": [
+    "decode_str_items drops empty string elements. In valid JSON with call_log_shingles[0] empty and[1] nonempty, from_json shifts sketch1 to position0 instead of preserving positional association.",
+    "Original record/check control with equal1389-byte outputs: before JSON roundtrip a fuzzy query matches long-actual call2; after roundtrip it matches unrelated two-line call1 with actual shingle similarity0. This is a false candidate citation caused by storage misalignment, not a hash collision.",
+    "Python json independently validates saved complete context and confirms both original array positions; serialized bytes are not corrupt.",
+    "Legacy extract_str_array stops at the first closing bracket even inside a quoted item: a]b becomes a and remaining element is lost. The extract_all/map_str_array route preserves bracket-containing strings in the same control, while still dropping empty items.",
+    "Recursive parser converts a valid UTF-16 surrogate pair for U+1F600 into two U+FFFD replacements. It also accepts trailing non-JSON text and an unknown escape in finite controls.",
+    "Recursive numeric representation f64 rounds9007199254740993 to9007199254740992. Flat integer extractor preserves exact value. SessionContext uses flat integer extraction, so this is not evidence of hash-array numeric rounding there."
+  ],
+  "transfer_decision": "Do not reuse these JSON extraction helpers or parallel-array persistence. Preserve empty positions, exact integer values and explicit record-to-fingerprint association. No foreign source copied into production.",
+  "limits": [
+    "21/327 whole-file reviews; repository still partial.",
+    "Finite memory/public API/JSON controls and144 original tests do not prove general parser robustness, all host behavior or full matching quality.",
+    "No rrrah production or test changes this turn. Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Original Cargo logs retain trailing blank lines."
+}
