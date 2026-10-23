@@ -1,0 +1,91 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "lib/BackgroundJob/CleanUpDB.php",
+      "local": "39-CleanUpDB.php",
+      "git_blob": "e1e05decca162f04e8015c1d2b8c92c73ec69c7c",
+      "sha256": "a1ce2b8547f1fc4de8361ad593348a9a912c1c7cfca00651a0e208411bdfde1b",
+      "bytes": 1657,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Command/ListDuplicates.php",
+      "local": "40-ListDuplicates.php",
+      "git_blob": "63e273a8a609d14ee488694f6af384ae268e71a3",
+      "sha256": "cce9ae720ff39c85cfa8e0082586ad84d397acbd1ae1c6402940f70751c2e18c",
+      "bytes": 3474,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Utils/CMDUtils.php",
+      "local": "41-CMDUtils.php",
+      "git_blob": "d24d9b29434d52d4bcff4b88a1a1ed1ddeaf3296",
+      "sha256": "56a228e75b8dcecf5223d62cdf7608412bf833e38c9b54dddc574a02f51a70e2",
+      "bytes": 2536,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Migration/RepairFileInfos.php",
+      "local": "42-RepairFileInfos.php",
+      "git_blob": "154a0adfedb75d90acd7c56bcaa928c0c14da473",
+      "sha256": "3df5eb3d42175bcadc9f2b31cbf71a5eb3ec38681a27eeaba1fbdbae2fda418c",
+      "bytes": 4108,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Controller/DuplicateApiController.php",
+      "local": "43-DuplicateApiController.php",
+      "git_blob": "4250b3c4f15661afd04740415c097003426fb6df",
+      "sha256": "d687e2dc3beaa2cf4bf2a52f8833be5c7337154376cac5e9623e4e9695e3618f",
+      "bytes": 1637,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Utils/JSONResponseTrait.php",
+      "local": "44-JSONResponseTrait.php",
+      "git_blob": "0a6fb2ff3a2b7ff3b54b3b93e6ad9eb2ddd3e7a2",
+      "sha256": "ede86cc0d89931b93e09f04f2c1703ad6ed9a166d0034a7996de9582063f8e46",
+      "bytes": 1168,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Utils/CMDUtilsTest.php",
+      "local": "45-CMDUtilsTest.php",
+      "git_blob": "452243437eda1f71c3cb90651468f4b01bbf7e04",
+      "sha256": "3b1e216a3d3be83e275fc074d25297d4c313f3fb64a347723f4efc31680be8c2",
+      "bytes": 2615,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 45,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 120,
+  "full_review_count": 249,
+  "upstream_runtime_executed": false,
+  "local_regression": {
+    "test": "rescans_follow_renames_removal_and_recreated_paths",
+    "file": "crates/rrrah-dedup/tests/exact_repeated_metadata.rs",
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_repeated_metadata",
+    "exit_code": 0,
+    "executed": 2,
+    "failed": 0,
+    "new_regression_scan_runs": 8,
+    "scope": "Four actual filesystem states per scan and scan_verified on macOS:initial2equal,rename+differentbytesrecreatedoldpath,rename+removal,no stalegroup,thennewmatchingcontentatremovedpath. Both APIs mustreportcomplete,noissues,exactobservedcount andexpectedgroup. Existing restored-metadata test also passed. No productionchange or atomic-snapshot guarantee.",
+    "log_sha256": "12975a3d72e3cd61e6469d8f0d187244f631d8990a8d46d833b1f50eef4b43a5",
+    "test_sha256": "c6d2e3662a6729114ca745869267c63aaf3f532a12364607014b6ac3ee8b9828",
+    "exact_source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d"
+  },
+  "findings": [
+    "CleanUpDB materializesallFileInfo thenchecksnodeexistence, deletingrecordonlyforNotFound. It doesnotrecalculatecontenthash orremoveobsoleteFileDuplicate rows inthismethod. Othererrorsescape andnoresume/cancel/pagination shown. No nativeNextcloud cleanup execution.",
+    "RepairFileInfos runsforinstalledversion>0.0.9, repairsnull/emptypathhash only,then deletes laterduplicate(hash,owner) records basedonfindAll iterationorder. Not contentduplicate byteverification; no transaction or survivorfreshnessrank shown. Sourceonly, no datamutationexecuted.",
+    "CMDUtils paginates20groups withidcursor andchecksabortaftereachpage. Duplicatepaths suppressedbyexactstring only, notphysicalfileidentity. Hardlinks/symlinkaliases notindependentlyconfirmed bythisdisplayprimitive. Threeoriginaltests coveronepage,emptyfileswithuser,andoptionaloutput; notmultipage/cancellation/pathaliasbehavior.",
+    "ListDuplicates abortsonencryptionenabled;unknownexplicituserstopsremainingusers. No freshfileread inlistingpath; servicehydratesexistingmetadata/filteraccess. This is cachedmetadatareporting, notsamecontractasfreshbyteverifiedrrrahexactscan.",
+    "JSONResponseTrait confirms errordefaultHTTP500 andsettingssave explicitlyHTTP400 forknowncaughtfailures. Therefore v4HTTP200successfalse nativecontrol remainshypotheticalboundaryinput, notactualnormalerrorenvelope fromthesecontrollers. ThefailedHTTP500editorrollback counterexample remainsseparate.",
+    "DuplicateApiController getUserId perrequest, delegateslimit/offset directly toservice withoutnonnegativevalidation. Nativeframework/querybuilderbehavior fornegativeorzerolimits untested.",
+    "Localnewregressionaddressesactualpathlifecycle, notcachemock/statefixture. BothcurrentAPIs fullhashandbyteconfirmgroups; scan_verified additionallyobservesalladmittedfiles. No staleequalityaftercrosscallrename/recreation found.",
+    "7newwholefiles,45/165. No newcomplete repositorycredit or allcasescompletionclaim. RootCOPYING,bundle/lockfiles/frontend/build/migrations/tests/assets remainpartial/unread."
+  ]
+}

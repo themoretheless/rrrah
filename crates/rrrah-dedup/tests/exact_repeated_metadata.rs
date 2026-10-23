@@ -57,3 +57,48 @@ fn repeated_comparisons_reread_content_when_size_and_modified_time_are_restored(
         }
     }
 }
+
+#[test]
+fn rescans_follow_renames_removal_and_recreated_paths() {
+    for verified in [false, true] {
+        let directory = tempfile::tempdir().unwrap();
+        let root = directory.path();
+        let a = root.join("a");
+        let b = root.join("b");
+        let moved = root.join("moved");
+        fs::create_dir(&moved).unwrap();
+        let moved_a = moved.join("a");
+        let moved_b = moved.join("b");
+        fs::write(&a, b"same-a").unwrap();
+        fs::write(&b, b"same-a").unwrap();
+        let check = |expected: &[std::path::PathBuf], observed| {
+            let inputs = [root.to_path_buf()];
+            let report = if verified {
+                scan_verified(&inputs, &Options::default(), || false)
+            } else {
+                scan(&inputs, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty(), "{report:?}");
+            assert_eq!(report.files_observed, observed);
+            if expected.is_empty() {
+                assert!(report.groups.is_empty(), "{report:?}");
+            } else {
+                assert_eq!(report.groups.len(), 1, "{report:?}");
+                let mut expected = expected.to_vec();
+                expected.sort();
+                assert_eq!(report.groups[0].paths, expected);
+                assert_eq!(report.groups[0].bytes, 6);
+            }
+        };
+        check(&[a.clone(), b.clone()], 2);
+        fs::rename(&b, &moved_b).unwrap();
+        fs::write(&b, b"same-b").unwrap();
+        check(&[a.clone(), moved_b.clone()], 3);
+        fs::rename(&a, &moved_a).unwrap();
+        fs::remove_file(&moved_b).unwrap();
+        check(&[], 2);
+        fs::write(&moved_b, b"same-b").unwrap();
+        check(&[b, moved_b], 3);
+    }
+}
