@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/Views.swift",
+      "sha256": "eb9aafaeaeda2e37e21ceb070f3c6fe11c46859aa6a452a6d94a616b755d24bf",
+      "lines": 1423,
+      "git_blob_verified": true,
+      "cumulative_prior_reviews": [
+        27,
+        28
+      ]
+    }
+  ],
+  "findings": [
+    "Category editor only disables Save for a blank category name; destination folder can be blank or contain path components. This makes the previously reviewed missing folder containment validation reachable through ordinary UI, not just imported JSON.",
+    "Extensions/keywords/examples use unescaped comma-join/split in the editor. A filename example containing commas is split into multiple entries on saving even if the user did not intend to edit examples.",
+    "Settings classification mode is disabled while working, but category import/edit/toggle/remove and age/confidence changes remain enabled. They can alter current plan and scan state while async work is suspended.",
+    "Teach sheet disables Save only for Needs Review, not busy state; it dismisses after awaited state.teach even when that handler records a save error, without returning success/failure to the sheet.",
+    "ConfidenceView renders raw percentage as width without clamping to 0...100; imported profile confidence has no reviewed range enforcement. Ordinary editor Stepper bounds its own value.",
+    "QuickLook preview autostarts and displays URL content via system preview, without explicit teardown in this wrapper. Actual preview behavior and resource use were not executed.",
+    "Complete Views.swift now read across three sequential ranges, without claiming rendered UI or complete app qualification."
+  ],
+  "whole_files_read_total": 52,
+  "remaining_tracked_blobs": 6,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
