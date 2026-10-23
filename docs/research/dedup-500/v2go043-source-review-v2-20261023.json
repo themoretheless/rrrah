@@ -1,0 +1,62 @@
+{
+  "repository": "Danialsamadi/v2go",
+  "commit": "fcf4e1f1143ef32ddb4673aa176c8ab0a54c4c9e",
+  "scope": "Four additional whole files fetched from pinned raw GitHub source; Git blob SHA1 verified against captured tree. cloudflare.go also read whole from captured evidence. Static review only.",
+  "evidence": [
+    {
+      "path": "internal/tester/tester.go",
+      "sha256": "cc23ee6c8ceeaf0e277644941d235ff9e94436a3fe545c9c94d534d447327ca9",
+      "git_blob_sha1": "9e13a8cf463b27455a59c79b2ed468c141857c70",
+      "whole_file_read": true
+    },
+    {
+      "path": "internal/tester/cancel_test.go",
+      "sha256": "0fc35de8890208a6033b5dde2517f080de063dba6a9586de9ed595aadb1bd28c",
+      "git_blob_sha1": "1d3e57a7ece4a2fd1b3825066a1800269e52df70",
+      "whole_file_read": true
+    },
+    {
+      "path": "internal/tester/bench_test.go",
+      "sha256": "2a21f2c2090cb1c3544efe5fbb9499234c6c33955615a7679ed142cf76d2e802",
+      "git_blob_sha1": "155bf139cd809315b0f770a4b7ac892bb803a2e5",
+      "whole_file_read": true
+    },
+    {
+      "path": "cloudflare_test.go",
+      "sha256": "56787c1c3a3a9b22ccefc6523aa105f2c3622617a515cba7ddb5df74be116b78",
+      "git_blob_sha1": "8c143cc271a757abf725f9c8b7abafe4c9a4dd49",
+      "whole_file_read": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "cancellation-disabled",
+      "detail": "TestAll dispatch loop uses if false instead of a context cancellation check. Semaphore send has no cancellation select. testOne creates its main HTTP request with context.WithTimeout(context.Background(), timeout), so caller cancellation does not cancel that request. fetchExitIP does inherit caller context. The original cancellation test requires 2000 links with concurrency 5 and timeout 10 to return in eight seconds after cancel; this contract is contradicted by source, not verified by execution."
+    },
+    {
+      "id": "zero-concurrency",
+      "detail": "TestAll itself accepts concurrent=0 and blocks on its semaphore for nonempty input. CLI validation does not make the exported function safe for other callers."
+    },
+    {
+      "id": "latency-zero",
+      "detail": "A successful sub-millisecond request returns DelayMs=0; TestAll uses delay>0 for onPass and working count, excluding that success."
+    },
+    {
+      "id": "benchmark-empty-input",
+      "detail": "BenchmarkConvert indexes links[i%len(links)] without a nonempty guard; BenchmarkLoadJSONConfig similarly indexes raws. Existing empty or all-invalid fixtures may panic. Scanner errors in loadLinks are not reported."
+    },
+    {
+      "id": "fallback-test-network",
+      "detail": "TestWriteCloudflareFile seeds a local fallback with comment claiming no network is needed, but loadCloudflareRanges still attempts a 30-second HTTP fetch before using fallback, and a nonempty response overwrites it. This is not an isolated offline test."
+    },
+    {
+      "id": "cache-validation-order",
+      "detail": "loadCloudflareRanges writes downloaded nonempty data before parsing CIDRs, ignores read/write errors and applies no response size cap. Invalid downloaded content can replace a usable cache."
+    }
+  ],
+  "upstream_tests_run": false,
+  "network_probes_run": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
