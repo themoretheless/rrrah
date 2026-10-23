@@ -1,0 +1,38 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/service/OperatorServiceFacade.java",
+      "sha256": "6370f2776119e216588815cd4ad02afeaac920c909037f3aea1c5d5adb0b2da9",
+      "lines": 93,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/service/OperatorServiceFacadeImpl.java",
+      "sha256": "25fc41274776340605fb091e9b2dddd61ed4d5c592abf05e150b824f2761a4ff",
+      "lines": 259,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "network_requests": false,
+    "state_changes": false
+  },
+  "findings": [
+    "Operator facade interface/implementation whole-read/Gitblobverified. Collection retrieval delegates unchanged to previously reviewed collection/network services; no fingerprint algorithm/version compatibility layer or collection content digest introduced.",
+    "Address list creation filters role only and maps hosts; no deduplication/online filtering in this method. Discovery availability must be checked by callers.",
+    "Operator init passes NodeType.ORIGIN unconditionally; no ordinary OPERATOR option exposed through this facade method. Role lifecycle not runtime tested.",
+    "Request processing returns true even for branches without save/notification, explicitlyTODO. No runtime state-transition guarantee inferred from booleanreturn.",
+    "Local persistence and remote notification performed sequentially without explicit transaction/rollback in facade. Network failure may interrupt workflow; actual managed-entity persistence timing unqualified.",
+    "Reissue method throwsUnsupportedOperationException. Source review does not count an interface declaration as implemented behavior.",
+    "All archive/integrator/operator service facades now whole-reviewed. Remaining common networking/REST transport and web/template layers still unreviewed. No live network or administrative action executed."
+  ],
+  "remaining": [
+    "77 other tracked blobs/assets",
+    "Common transport services, models/web/templates/assets/native binaries and runtime qualification"
+  ],
+  "full_review_count": 249
+}
