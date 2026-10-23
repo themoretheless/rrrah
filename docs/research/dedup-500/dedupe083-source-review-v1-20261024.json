@@ -1,0 +1,99 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "benchmarks/benchmarks/canonical_matching.py",
+      "local": "02-canonical_matching.py",
+      "sha256": "84d39e48a9b8a5c728c5457a4f9d7b0b19e4c09545b7f68c139a4814c3c2474d",
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/__init__.py",
+      "local": "03-__init__.py",
+      "sha256": "e78b4855b9330768885a4564cd8ca3f22689dcdebd8b53164180ec16fb6f7d13",
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/_typing.py",
+      "local": "04-_typing.py",
+      "sha256": "d3b898e0f44cba8aab4ef14e6f85ebd26d7e60298e91eb6b03c67e78b310dbb3",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/duplicateCluster_memory_case.py",
+      "local": "05-duplicateCluster_memory_case.py",
+      "sha256": "0faa30b29029c963185e59e1a1a7ded445aab3159c9f0d8e1d5989637486bbc3",
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "1f39b139cc8faa44450495da4a49c8c12065d6c2804da34d6a5c31ebfa5b863a",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "b56e9035c9831249ff8684b87f5875be815fbdfe5527430beeb9a8baaec6a82b",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 6,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 98,
+  "partial_files": [
+    {
+      "path": "dedupe/api.py",
+      "lines_read": [
+        [
+          1,
+          380
+        ]
+      ],
+      "total_lines": 1566,
+      "sha256": "15d527f0762820388df94ee710735b10772b6986724782853d2f18effa7dde06"
+    }
+  ],
+  "controls": {
+    "controls": [
+      {
+        "in_memory": true,
+        "id_kind": "int",
+        "unique_pairs": 3,
+        "passed": true
+      },
+      {
+        "in_memory": true,
+        "id_kind": "str",
+        "unique_pairs": 3,
+        "passed": true
+      },
+      {
+        "in_memory": false,
+        "id_kind": "int",
+        "unique_pairs": 3,
+        "passed": true
+      },
+      {
+        "in_memory": false,
+        "id_kind": "str",
+        "unique_pairs": 3,
+        "passed": true
+      }
+    ],
+    "scope": "Unchanged original pairs method body with synthetic fingerprinter and SQLite ID-type adapter. Original learner, predicates, core, package imports and upstream tests not executed."
+  },
+  "findings": [
+    "Structured-record learned entity resolution; candidate blocking is transferable as a search idea but no file identity proof.",
+    "Original pairs method joins shared blocks with DISTINCT and ordered IDs; four finite adapter cases agree with independent set-intersection oracle.",
+    "Source comment says WAL but actual pragma journal_mode=off. No durability or concurrent-writer benchmark inferred.",
+    "Memory-case script requires injected profile decorator and imports dedupe.dedupe; not a current executed upstream test."
+  ],
+  "limits": [
+    "No whole package import, native dependency installation, model training or original test run.",
+    "Synthetic fingerprinter adapter does not qualify original predicates.",
+    "No foreign production code adopted."
+  ]
+}
