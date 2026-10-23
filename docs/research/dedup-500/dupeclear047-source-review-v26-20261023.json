@@ -1,0 +1,35 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "source_control": "docs/research/dedup-500/dupeclear047-finder-control-20261023.cs",
+  "runtime": {
+    "command": "dotnet run --project .dedup-work/dupeclear047-20261023/finder-control/Control.csproj --configuration Release",
+    "exit_code": 0,
+    "checks_passed": 6,
+    "target_framework": "net8.0",
+    "platform": "macOS ARM64",
+    "original_sources_unchanged": {
+      "FinderResult.cs": "c52f28a8f69cc33f3780ed48867cad6c6c30b845138b65696ee13b11cc8053a5",
+      "DuplicateFile.cs": "72b768a0c1a7f09357b72149e9da0aa24dcd32dd8bcf5a6ee969d1b689ee26d8",
+      "SerializableDuplicateFile.cs": "9ec6358c8377ff49e6622a58007e3ea91334a8e49cfdf94cdee461a8f41d9f31",
+      "FinderProgress.cs": "4219f76c0ee39a82935e55df9de001e5737e5dbdc9a2ccbcda3b1af7d4d5f2c7",
+      "SearchDirectory.cs": "78ba4f90232ecc2a21e0a40994a7a422eff8f901fed2c77a0b875169ef779925",
+      "FinderOption.cs": "6abfb562a8cfa19c2f3256d3e3625f51dbbd0ed8680379bf1d3c5df723700059",
+      "JpegPatcher.cs": "3896e439cb69594490f006cc3f400a2e66401d582b7bd4d10dd11fcf16a66614",
+      "FinderService.cs": "f03f8cd60ab3f2ea7decefebbe85a6f03a27c9109dae681a6e52a19169920c24"
+    },
+    "adapters": "Bitmap type, IFileService interface, silent Log.Debug, HasOption=>HasFlag. Actual original FinderService, models and JpegPatcher compiled unchanged.",
+    "deletion_service_invoked": false,
+    "filesystem_scope": "Created GUID-named temporary fixture directory; removed own fixtures in finally."
+  },
+  "findings": [
+    "Byte-equal positive pair returned two members. With a modified-date upper bound between their timestamps, original service still returned both files; after-bound file was the source anchor and before-bound file its target.",
+    "Two empty files returned no group with minimum size zero.",
+    "Two hardlinked paths to one physical file returned two members and DuplicateCount=1, confirming alias/copy conflation in original service.",
+    "Controls qualify isolated actual service behavior on macOS, not supported Windows/Linux UI or platform trash/preview services."
+  ],
+  "whole_text_files_read_total": 84,
+  "full_review_count": 249
+}
