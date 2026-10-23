@@ -1,0 +1,99 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v20-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "dbApi.py",
+      "local": "94-dbApi.py",
+      "sha256": "e1200a67f26a528dd532f88a1f758613ab1f3c37c07944f0b430b4c59131d569",
+      "whole_text_read": true,
+      "lines": 799
+    },
+    {
+      "path": "Tests/Test_PhashDbApi_PHashStuff.py",
+      "local": "95-Tests--Test_PhashDbApi_PHashStuff.py",
+      "sha256": "6ba0e3583ac865ccb96485316cb7ec65855fe0004965b696c68902ffd6162a12",
+      "whole_text_read": true,
+      "lines": 144
+    },
+    {
+      "path": "Tests/Test_db_BKTree_2.py",
+      "local": "96-Tests--Test_db_BKTree_2.py",
+      "sha256": "e9b07e58dcd0adf69390308378e26ef5c6a2693723c464b915b7eedd07e86537",
+      "whole_text_read": true,
+      "lines": 316,
+      "read_method": "Previously fully read Test_BKTree_2.py plus complete nontruncated unified diff"
+    }
+  ],
+  "whole_text_files_read_total": 96,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 102,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 52,
+  "authored_control": {
+    "result": {
+      "failed_begin_leaves_large_transaction_flag": true,
+      "link_retry_cases": [
+        {
+          "saved": [
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              2,
+              3,
+              4
+            ],
+            [
+              3,
+              4,
+              4
+            ]
+          ],
+          "single_pass_input": false
+        },
+        {
+          "saved": [
+            [
+              2,
+              3,
+              4
+            ],
+            [
+              3,
+              4,
+              4
+            ]
+          ],
+          "single_pass_input": true
+        }
+      ],
+      "scope": "Exact original DB method bodies with owned cursor/transaction/error adapters;no PostgreSQL connection,query execution or persistence",
+      "subsequent_transaction_commands": [
+        "BEGIN;",
+        "BODY"
+      ]
+    },
+    "exit_code": 0
+  },
+  "findings": [
+    "Original DbApi.begin sets inLargeTransactionTrue before issuingBEGIN. InjectedBEGINfailure leaves flagTrue; subsequent original transaction body executes without its ownBEGIN/COMMIT because it interprets the stale flag as an existing outer transaction. Native cursor adapter confirms command sequenceBEGIN,BODY. No actual PostgreSQL state claimed.",
+    "Original insert_phash_link_many retries by iterating its input again after a bulk failure. With a list, all3links are replayed; with a single-pass iterator, already-consumed failed firstlink is lost and only2are saved by the recording adapter. Current loader passes a set, so this control establishes an iterable-domain boundary rather than loss on that reviewed loader path.",
+    "Whole799lineDbApi read:unique database key is(fsPath,internalPath);stored digests/perceptual hashes do not store current file metadata or byte snapshots. Persistence of a row alone is not freshness or exact identity evidence.",
+    "Source-only: transaction commits in finally even after rollback; ordinary getters such as getItemsOnBasePath call connection.commit directly regardless of inLargeTransaction. No new durability or concurrent transaction test performed.",
+    "Source-only: LIKE helpers append percent without escaping user percent/underscore characters. They expose SQL pattern behavior, not literal path comparison; contract and database semantics not additionally qualified here.",
+    "Two additional DB test sources reviewed, including whole reference plus exactdelta for flat/narrowtree adaptation. These fixtures connect to configured PostgreSQL and perform teardown;not executed.",
+    "The nowfullyread DbApi defines no getWithinDistance_db or dynamic attribute fallback, supporting the earlier source-level API mismatch finding."
+  ],
+  "transfer_decision": "Change transaction state only after successful acquisition; make retry inputs replayable or retain consumed operations. Keep persisted hashes separate from current source verification. No foreign production code adopted.",
+  "limits": [
+    "102of154 whole tracked files:96text,6visual;52remain.",
+    "No new original test results;24originalfocusedtests remain18passes,1failure,5errors.",
+    "Cursor/transaction adapters prove control flow, not actual database rollback/durability or full service behavior.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
