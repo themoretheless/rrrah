@@ -1,0 +1,52 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Fixers/DuplicateFixer.cs",
+      "local": "02-DuplicateFixer.cs",
+      "git_blob": "13fe1914a135834d6007bcdd895f306205ec2e19",
+      "sha256": "0dc4ec0d4892d606409a2afca912504a5b65a4b4c65375ccbd04129a6a889a10",
+      "bytes": 11359,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Probing/FileHasher.cs",
+      "local": "03-FileHasher.cs",
+      "git_blob": "fcecf0ef3a85563969e88e726baafd7525463ee3",
+      "sha256": "c6a86389da5bbe35b7c30ddafe81535712b3381c0bd3a09b30680d4bdb348e1b",
+      "bytes": 4632,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Scanners/ArtworkScanner.cs",
+      "local": "04-ArtworkScanner.cs",
+      "git_blob": "2aa19d92b043ce0e6129b8301386d9ffeb4d363b",
+      "sha256": "48443c343e6eb053da847a5cfcdb59da856b23bb04f129177ca7167f7b659506",
+      "bytes": 6260,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/ArtworkScannerTests.cs",
+      "local": "05-ArtworkScannerTests.cs",
+      "git_blob": "fbb418fc29452a397904c9cb93ee2f82c264b7eb",
+      "sha256": "db95aa1d6deb3900b3ac2d351a6fd0311f2cdb2002fafd76feeabcd86933318f",
+      "bytes": 3517,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 4,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 579,
+  "upstream_tests_run": false,
+  "findings": [
+    "FileHasher whole body: pre-hash FileInfo size/mtime cache lookup, async SHA256 stream with ReadWrite/Delete sharing, cache store under original metadata. No post-read stat or fresh-byte comparison here; restored same-size mtime and concurrent mutation need runtime assessment, not claimed reproduced.",
+    "FileHasher propagates OperationCanceledException from hashing, but cache-hit path returns without explicit cancellation check. Cache exceptions fall through or log; surrounding scanner cancellation policy not fully read.",
+    "ArtworkScanner whole body: absent SkiaSharp bridge returns null for nonempty size-matching files, merging unverified with acceptable result at this API boundary. Five authored xUnit tests read but not run; bridge host availability unqualified.",
+    "DuplicateFixer whole body: checks keeper existence/path/library and confidence gate, but does not rehash or compare keeper/content before disposal. No disposal or fixer runtime invoked.",
+    "Dedicated-folder sidecar sweep skips other audio/video, subdirectories, library roots and keeper folder; otherwise iterates every remaining file, not a sidecar extension allow-list. Source-only policy observation, no deletion executed.",
+    "Four complete files only; DuplicateScanner 672 lines remains pending whole reading. No full repo credit or copied GPL implementation."
+  ],
+  "local_action": "Existing rrrah repeated-metadata, lifecycle and undecodable-file exact identity regressions remain relevant; joint decode suite currently compiling, no new production change justified by source reading alone."
+}
