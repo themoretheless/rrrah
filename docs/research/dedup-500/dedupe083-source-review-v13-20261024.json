@@ -1,0 +1,97 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v12-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "benchmarks/benchmarks/common.py",
+      "local": "68-benchmarks--benchmarks--common.py",
+      "sha256": "abaa81fe81f91175e3ef3f522e489b7d94b27acfba63053b9dec8d8225960852",
+      "lines": 81,
+      "whole_text_read": true
+    },
+    {
+      "path": "benchmarks/benchmarks/canonical.py",
+      "local": "69-benchmarks--benchmarks--canonical.py",
+      "sha256": "a456cc7cc94974cde72fe3e683688839285c6b5c7f110b679de5fe35210b207b",
+      "lines": 88,
+      "whole_text_read": true
+    },
+    {
+      "path": "benchmarks/benchmarks/canonical_gazetteer.py",
+      "local": "70-benchmarks--benchmarks--canonical_gazetteer.py",
+      "sha256": "8efcf9965758a78aabbb97b21b7c1e3cf979c04c9028c8919400c8380f23bde4",
+      "lines": 75,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/how-it-works/Choosing-a-good-threshold.rst",
+      "local": "71-docs--how-it-works--Choosing-a-good-threshold.rst",
+      "sha256": "90a037b45d8543a72411e804e9cc357b8e0649c586bee9f2d0a8c52f4feb9042",
+      "lines": 36,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/how-it-works/Grouping-duplicates.rst",
+      "local": "72-docs--how-it-works--Grouping-duplicates.rst",
+      "sha256": "515ba2aa2fde6e04c87fe8ebeab7ac6b422fecd8036397ed7eb2e8a6b5e855ee",
+      "lines": 51,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/how-it-works/How-it-works.rst",
+      "local": "73-docs--how-it-works--How-it-works.rst",
+      "sha256": "3d959ba92aed15f1694a52acbc2d3d0a0b9e67efc5a85de6ce69aa28906c6cbb",
+      "lines": 47,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/how-it-works/Special-Cases.rst",
+      "local": "74-docs--how-it-works--Special-Cases.rst",
+      "sha256": "a15249825505c86efb0354d89458721cea492c07b87ca841dd854f88c7c4438b",
+      "lines": 19,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 75,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 29,
+  "native_canonical_runs": {
+    "training_and_static_exit_codes": [
+      0,
+      0
+    ],
+    "reported_true_pairs": 112,
+    "reported_found_pairs": 111,
+    "true_positives": 102,
+    "false_positives": 9,
+    "missed_pairs": 10,
+    "precision": 0.918918918918919,
+    "recall": 0.9107142857142857,
+    "dataset_sha256": "19f2fcbe40494af8367374c15b2a0d2c664ffda737ecfacc951152bd7e060f4e",
+    "generated_model_sha256": "649b2ed68613465b37719827e0ff29a75c3c2e0636fbe5bdec5c133cee3b5bb0",
+    "raw_logs": [
+      {
+        "path": "docs/research/dedup-500/dedupe083-canonical-training-20261024.log",
+        "sha256": "278f2ecf4e7218cf57593bef96ff2f12fa5abc04fcad97bb663869d6e93ec56f",
+        "exit_code": 0
+      },
+      {
+        "path": "docs/research/dedup-500/dedupe083-canonical-static-20261024.log",
+        "sha256": "7dc32d80ed6b93d9c7688ef8041a77372dfc1d64c32cf43039198a934d96c99a",
+        "exit_code": 0
+      }
+    ]
+  },
+  "findings": [
+    "Original benchmark trainer then saved-settings loader complete successfully with same rounded aggregate metrics. Full output partitions were not separately persisted/compared.",
+    "Report truth helper only includes unique_id groups containing exactly two records; no arbitrary multi-record ground truth guarantee.",
+    "Measured elapsed times include different training/load work and are not controlled optimization benchmarks."
+  ],
+  "limits": [
+    "Dataset bytes verified but CSV not yet whole manually reviewed; no dataset whole-file credit.",
+    "No canonical record-link or gazetteer runtime yet.",
+    "No production code adopted."
+  ]
+}
