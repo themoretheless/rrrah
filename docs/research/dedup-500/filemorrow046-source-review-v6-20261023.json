@@ -1,0 +1,33 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/OrganizerService.swift",
+      "sha256": "8253f6a63682d6fd8dcd70c81b1a957d6b59f452e360a186ec87df713c58d440",
+      "lines": 92,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/PersistenceStore.swift",
+      "sha256": "7580cce8d83a57de307d76773be2cf6bfed140b676d8fc0d11c4f8e7aab7d8a6",
+      "lines": 75,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Organizer continues after per-file failures and returns successful move count with skippedCount, preserving healthy work. However skippedCount is assigned only after persistence and the all-failed throw, so failed runs can retain the previous count.",
+    "Moves happen before store.append. Persistence failure throws after filesystem effects without rollback or durable write-ahead intent, leaving moves without recorded undo history.",
+    "Undo verifies destination existence and original-path absence only, not physical identity or content. A replacement file at the recorded destination can be moved as if it were the original.",
+    "Missing undo sources are silently dropped from history, whereas conflicting original paths and move failures are retained for retry. History persistence happens after undo effects and can fail separately.",
+    "uniqueDestination probes sequential suffixes without bound or atomic reservation. moveItem itself can refuse a race collision; no overwrite guarantee beyond Foundation behavior was tested.",
+    "Profile folder names are appended directly and existing folders get a managed marker before movement. Containment and profile validation remain to be reviewed.",
+    "Persistence uses atomic whole-file JSON writes and caps move batches at 50; decisions are batched and explicitly prunable. Invalid/unreadable stored JSON silently becomes empty state and later writes may replace it. No corruption diagnostic or schema-version field is supplied here.",
+    "Actor methods serialize local mutation until awaiting store calls, but cross-actor organization/undo calls can interleave at those suspension points. No concurrency or file operation control was executed in this batch."
+  ],
+  "whole_files_read_total": 10,
+  "remaining_tracked_blobs": 48,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
