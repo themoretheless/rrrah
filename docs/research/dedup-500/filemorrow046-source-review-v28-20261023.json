@@ -1,0 +1,32 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "Sources/FileMorrow/Views.swift",
+      "sha256": "eb9aafaeaeda2e37e21ceb070f3c6fe11c46859aa6a452a6d94a616b755d24bf",
+      "ranges": [
+        [
+          321,
+          950
+        ]
+      ],
+      "total_lines": 1423
+    }
+  ],
+  "findings": [
+    "Duplicate confirmation captures a PendingGroup value including keeper and member URLs, and displays full keeper path plus intentional-nested-copy caution. This is stronger plan presentation than the aggregate organization proposal, but does not fix stale content/identity validation.",
+    "Archive/installer confirmation derives selected objects at click time, not dialog opening; selection is intersected with result IDs on updates. Content identity remains unchecked by those UI bindings.",
+    "Empty installer results assert every installer is uninstalled or newer despite scanner exclusions, unreadable metadata and omitted components. Empty array cannot justify that exhaustive statement.",
+    "Archive UI uses phrase byte-for-byte in size and files verified; original scanner actually compares sizes only, with confirmed equal-size content false positive.",
+    "Organization plan buttons have no disabled(isWorking), although handler refuses work when busy and interactive dismissal is disabled. Not Now can clear proposal and replace status while another task is running.",
+    "Inspector category correction and Teach controls remain enabled during work. Picker callback calls correctSelected using selection at asynchronous execution time rather than frozen displayed file ID.",
+    "Cleanup-center lists do not apply global query filtering in these ranges, so Search Downloads has no corresponding cleanup-result scope. No UI or cleanup was executed."
+  ],
+  "whole_files_read_total": 51,
+  "remaining_tracked_blobs": 7,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
