@@ -1,0 +1,50 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "8bebb5b4b63e2cfb615e9c018bd2aa5982162fbe",
+      "sha256": "5d2123c28b9962ed1442d9b29b940f70ac17afabe9cb2417b8c669c6815ca998",
+      "bytes": 15064,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/FileHasherTests.cs",
+      "local": "07-FileHasherTests.cs",
+      "git_blob": "dadd7a5bcf3d595e6ec65ddfa212d9768ee6a6e7",
+      "sha256": "ada3129aeb0274db8b825ff46ee7c1cc0a7b9a4f9cfb8657d90eb76e83d6199d",
+      "bytes": 4329,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/Jellyfin.Plugin.MediaDash.Tests.csproj",
+      "local": "08-Jellyfin.Plugin.MediaDash.Tests.csproj",
+      "git_blob": "7089288d46afb1c808fe4724cbc32181e7815868",
+      "sha256": "9d3aa5859a1111c0a8b813281181227bbba8087cc2db42e2f8ebf3c374e350fa",
+      "bytes": 1454,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Jellyfin.Plugin.MediaDash.csproj",
+      "local": "09-Jellyfin.Plugin.MediaDash.csproj",
+      "git_blob": "4867ee8f760663a8c931d711f7e557a8dcf29965",
+      "sha256": "a84b0c9bde3689699f81321ea97b77169eecfd90b1308280fb1390721347994d",
+      "bytes": 4646,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 9,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 574,
+  "upstream_tests_run": false,
+  "findings": [
+    "Whole README read as upstream documentation; installation, telemetry and safety claims not executed or verified. Embedded screenshot references are text only, not visual credit.",
+    "Three original FileHasher xUnit tests now whole-read: baseline/cache roundtrip, changed size plus advanced mtime, missing file. None exercises same-size restored mtime or a cancelled cache hit. Original xUnit/SQLite suite not run.",
+    "Plugin and tests target net9.0. Plugin compiles against Jellyfin 10.11.0, tests use runtime 10.11.8; test manifest includes SkiaSharp Win32/Linux native assets, not explicit macOS native assets. No host/platform failure inferred or measured.",
+    "Prior finite native FileHasher probe used net10.0 and cache/logger adapters. This differs from original net9/xUnit/SQLite setup and is not an original-suite pass.",
+    "Local rrrah already has exhaustive authored warm-hit cancellation checkpoints plus multiblock cancellation/retry tests in tests/decode.rs and restored-metadata persisted-cache test in tests/cache_reload.rs. No duplicate tests or source changes added; running broad decode gate still awaiting compiler."
+  ]
+}

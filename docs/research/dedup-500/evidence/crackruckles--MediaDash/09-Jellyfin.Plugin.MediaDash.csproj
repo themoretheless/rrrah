@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Jellyfin.Plugin.MediaDash</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <CodeAnalysisRuleSet>../jellyfin.ruleset</CodeAnalysisRuleSet>
+    <!-- Force NuGet dependencies (System.Diagnostics.PerformanceCounter) to be copied into the plugin output.
+         Jellyfin already ships the standard framework, but Windows-only System packages aren't part of it. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Compile against the LOWEST 10.11.x package we claim to support (targetAbi=10.11.0.0 in
+         manifest.json). Any API added between 10.11.0 → 10.11.8 would MissingMethodException at
+         load on a 10.11.5 host and Jellyfin marks the plugin NotSupported (GitHub issue #8). If we
+         need something only newer 10.11.x exposes, bridge via reflection like Compat/SkiaSharpBridge. -->
+    <PackageReference Include="Jellyfin.Controller" Version="10.11.0">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Jellyfin.Model" Version="10.11.0">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <!-- ponytail: compile-only reference; the server ships this exact assembly, bundling it would duplicate native sqlite binaries -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.11">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <!-- Windows-only. Referenced everywhere at compile time; runtime code gates by OS so Linux/macOS don't load it. -->
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.0" />
+    <!-- Windows-only. WMI queries against MSFT_PhysicalDisk / MSStorageDriver_FailurePredictStatus for SMART
+         health without needing smartmontools installed. Gated by RuntimeInformation.IsOSPlatform at runtime. -->
+    <PackageReference Include="System.Management" Version="9.0.0" />
+    <!-- CBR/CB7 archive reading for comic integrity probes. -->
+    <PackageReference Include="SharpCompress" Version="0.50.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SerilogAnalyzer" Version="0.15.0" PrivateAssets="All" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
+    <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Configuration\configPage.html" />
+    <EmbeddedResource Include="Configuration\configPage.html" />
+    <None Remove="Configuration\logo.png" />
+    <EmbeddedResource Include="Configuration\logo.png" />
+    <None Remove="Configuration\i18n\*.json" />
+    <EmbeddedResource Include="Configuration\i18n\*.json" />
+  </ItemGroup>
+
+  <!-- Jellyfin's plugin loader scans every subfolder of the plugin directory and tries to load each .dll it
+       finds as a managed assembly. That means we can't ship anything under runtimes/ — native SQLite DLLs
+       (win-arm/native/e_sqlite3.dll) fail with BadImageFormatException, and the Windows-specific
+       PerformanceCounter DLL (runtimes/win/lib/net9.0/System.Diagnostics.PerformanceCounter.dll) fails
+       because it's a duplicate of the reference assembly already loaded from the plugin root.
+       Solution: hoist runtimes/win/lib/net9.0/*.dll to the plugin root (overwriting the reference-only
+       assembly so the real Windows implementation ships), then wipe the whole runtimes/ tree. -->
+  <Target Name="FlattenWindowsRuntime" AfterTargets="Build;Publish">
+    <ItemGroup>
+      <_WinRuntimeDlls Include="$(OutputPath)runtimes\win\lib\net9.0\*.dll" Condition="Exists('$(OutputPath)runtimes\win\lib\net9.0')" />
+      <_WinRuntimePubDlls Include="$(PublishDir)runtimes\win\lib\net9.0\*.dll" Condition="Exists('$(PublishDir)runtimes\win\lib\net9.0')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_WinRuntimeDlls)" DestinationFolder="$(OutputPath)" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="@(_WinRuntimePubDlls)" DestinationFolder="$(PublishDir)" OverwriteReadOnlyFiles="true" />
+    <RemoveDir Directories="$(OutputPath)runtimes" ContinueOnError="true" />
+    <RemoveDir Directories="$(PublishDir)runtimes" ContinueOnError="true" />
+  </Target>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Jellyfin.Plugin.MediaDash.Tests" />
+  </ItemGroup>
+
+</Project>
