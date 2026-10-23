@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "Sources/FileMorrow/Views.swift",
+      "sha256": "eb9aafaeaeda2e37e21ceb070f3c6fe11c46859aa6a452a6d94a616b755d24bf",
+      "ranges": [
+        [
+          1,
+          320
+        ]
+      ],
+      "total_lines": 1423
+    }
+  ],
+  "findings": [
+    "RootView initial task scans before showing onboarding. Automatic move/registration remains separately guarded in reviewed AppState, but initial scan can read Downloads and brand marked folders before onboarding completion.",
+    "Main toolbar disables scan, organization and undo while isWorking. Analysis exposes stop while running. This confirms ordinary visible admission protection for these entry points.",
+    "WindowGroup uses shared AppState but each RootView owns hasPerformedInitialScan and runs its initial task, so additional windows can invoke raw scan independently; actual multiwindow behavior remains untested.",
+    "Duplicate header claims every accessible folder is checked and SHA256 verifies identical bytes, while reviewed scanner excludes hidden/packages/cloud placeholders and has confirmed stale-cache false positives. The visible assurance is broader than verified behavior.",
+    "Global search binds state.query, but duplicate/archive/installer center selection bypasses ordinary visibleFiles filtering. Search scope in these cleanup centers remains to be checked in unread ranges."
+  ],
+  "whole_files_read_total": 51,
+  "remaining_tracked_blobs": 7,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
