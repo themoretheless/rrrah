@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/FolderSearchManager.kt",
+      "sha256": "c6f91e0612653da164ec44414f2ce771297c883d3fa8358f5af1b89a6b72d70c",
+      "lines": 183,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/FolderSearchDialog.kt",
+      "sha256": "91ab8d10818ce2dd4aabe8c238d5c2982da565b42d874670635315756ff2cf08",
+      "lines": 221,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "prepareForSearch launches caller-scope work without retaining a Job or generation token. Overlapping preparations or reset can be followed by an older result overwriting state. This is a source-level race; no Android scheduling reproduction was run.",
+    "prepareForSearch and prepareWithPreFilteredList calculate for an empty query but preserve existing searchQuery in copied state, allowing displayed query and results to disagree when the manager is reused.",
+    "observeAllFolders().first() takes one snapshot without observing later folder changes. No freshness or failure handling surrounds preparation; an exception can leave isLoading true.",
+    "updateSearchQuery filters and sorts the complete folder list synchronously in StateFlow.update; the calculationContext dispatcher is used only for initial preparation. Large-list typing latency is unmeasured.",
+    "FolderSearchDialog eagerly composes all results in a scrolling Column rather than a lazy list. Confirmation is enabled solely by non-null browsePath, including while loading; caller validation remains to be checked.",
+    "Browse direct-child comparison ignores case while root-parent membership and exclusion sets use exact case. Selection label truncates to the last 35 characters; several strings are hardcoded English."
+  ],
+  "whole_files_read_total": 64,
+  "remaining_tracked_blobs": 66,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
