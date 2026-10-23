@@ -1,0 +1,67 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/App.axaml",
+      "sha256": "1af09c5da46ba9585b25edd20deb25b7193640a63f225c5bfb163abdfdd490ab",
+      "lines": 21,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Events/FindWithinSearchResultsSearchPerformedEventArgs.cs",
+      "sha256": "70cb04237a0c7f35e93397df0241c62b3212980ffa19d09728331859c8b31988",
+      "lines": 18,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Resources/FontAwesome.axaml",
+      "sha256": "ce04e7cb9e7d4057b2c08f50198f57de6fd13cf16f26fa90593f59ddd885a7e8",
+      "lines": 46,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Resources/Resources.Designer.cs",
+      "sha256": "adaecf10712af5a7c24f780cce8123d3c377e9bc993668bfcad33fb7c27e059e",
+      "lines": 136,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Resources/Resources.resx",
+      "sha256": "8bcd3c34e0e0d3e3409a001de3ea9cc302b260e6aab7e2b2121eeefb7e1de6e0",
+      "lines": 151,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Views/MainWindow.axaml",
+      "sha256": "45624bd0dac08aa014dcbd24744bea2f454aed7a911c1c9e0cff53b0fe137fda",
+      "lines": 23,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "149909eb26a230ac9d4354bfab01d039daf57eb8e0552610c8606e3595afc128",
+      "lines": 28,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".gitmodules",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Resource tooltip explicitly describes SameContents as MD5 checksum matching and same-size dependent. It does not explain leading JPEG APP-segment removal, so the normalized-byte recipe remains undisclosed in this tooltip.",
+    "Date tooltips promise files within the selected range, supporting the earlier upper-modification-bound mismatch and raising the distinction between filtering all matches versus anchor-only source filtering.",
+    "Lock tooltip correctly describes automatic marking exception when all relevant files are locked. Generated resource accessors agree with the seven string resources.",
+    "FontAwesome resource dictionary maps named icons to codepoints; two bundled OTF font binaries remain unreviewed. No font rendering or package provenance claim.",
+    "App styles include two FluentTheme instances, one compact; actual precedence/rendering unqualified. MainWindow has fixed initial 1200x800 size and hides generated title text through a template selector.",
+    "Issue template requests reproduction/version details; it was read as documentation, not followed as an instruction. .gitmodules is empty."
+  ],
+  "whole_files_read_total": 77,
+  "remaining_tracked_blobs": 15,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
