@@ -1,0 +1,113 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v17-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "main.py",
+      "local": "78-main.py",
+      "sha256": "be47ee58d75a34f010d1078ad68c198b6e12191b048e205e9983df89538c53c6",
+      "whole_text_read": true,
+      "lines": 65
+    },
+    {
+      "path": "mainWeb.py",
+      "local": "79-mainWeb.py",
+      "sha256": "303705c62396e4ff9bde6b5a9edf7c74f80f46897a6e63096c59724cfab168c0",
+      "whole_text_read": true,
+      "lines": 102
+    },
+    {
+      "path": "cross_link/processDownload.py",
+      "local": "80-cross_link--processDownload.py",
+      "sha256": "7a1996eff0fef3483739d4c10ab10189969b83b6a1f2ffa40c2475577f47e464",
+      "whole_text_read": true,
+      "lines": 65
+    },
+    {
+      "path": "interactive_tests/test_interface.py",
+      "local": "81-interactive_tests--test_interface.py",
+      "sha256": "38a9efa978d2cd7042cc38f5317930ea48e9a84893e8a2d09f39e1ff66fea5d6",
+      "whole_text_read": true,
+      "lines": 105
+    },
+    {
+      "path": "interactive_tests/__init__.py",
+      "local": "82-interactive_tests--__init__.py",
+      "sha256": "bf6ee4b3349ad818f936984565276a787f0e89ce31e790fc532b949f98c794e6",
+      "whole_text_read": true,
+      "lines": 1
+    },
+    {
+      "path": "Tests/Test_DbHashingSystem.py",
+      "local": "83-Tests--Test_DbHashingSystem.py",
+      "sha256": "546032dc5ba9164496c53a1ef9845862300a445d84c7d4235d8f01c53b5c3f82",
+      "whole_text_read": true,
+      "lines": 130
+    }
+  ],
+  "whole_text_files_read_total": 83,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 89,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 65,
+  "authored_control": {
+    "result": {
+      "cli_no_phash_changes_forwarded_request": false,
+      "crosslink_tags": [
+        {
+          "dbId": 7,
+          "limitByKey": false,
+          "tags": "deleted was-duplicate"
+        },
+        {
+          "dbId": 7,
+          "limitByKey": false,
+          "tags": "crosslink-9"
+        },
+        {
+          "dbId": 9,
+          "limitByKey": false,
+          "tags": "crosslink-9"
+        }
+      ],
+      "destination_links_to_itself": true,
+      "forwarded_policies": [
+        {
+          "distance": 6,
+          "has_noPhash_option": false,
+          "locked": true,
+          "moveToPath": null
+        },
+        {
+          "distance": 6,
+          "has_noPhash_option": false,
+          "locked": true,
+          "moveToPath": null
+        }
+      ],
+      "receiver_binding_error": "got an unexpected keyword argument 'locked'",
+      "scope": "Exact original commandLineProcess and crossLink bodies;owned temporary file,RPClocal stub and row/update/tag adapters;no network,realDB,archive processing,move or delete"
+    },
+    "exit_code": 0
+  },
+  "harness_setup_failures": [
+    "Initial runner omitted scanner import stub, then its initLogging method, then positional filePath in RPC stub. Corrected adapters; these three runner failures are not upstream test results."
+  ],
+  "findings": [
+    "main.py defines arch-process --nophash. Original commandLineProcess invoked with noPhashFalse andTrue emits identical RPC policies:distance6,lockedTrue,moveToPathNone; noPhash is not forwarded. The control calls the original command method with owned config objects, not the whole CLI dependency graph.",
+    "The same command forwards lockedTrue. inspect.signature on the exact original processDownload definition rejects that request with unexpected keyword locked. Reviewed RPC forwarding wrapper passes args/kwargs unchanged; no live RPC integration claimed.",
+    "Original crossLink for source7 and destination9 tags source with crosslink-9 and also tags destination with crosslink-9, a self-link. Native row/update/tag adapters confirm; no real database writes.",
+    "Source-only: doSingleSearch assumes row tuples (item[1],item[4]), but reviewed single_phash_search returns a set of IDs from getWithinDistance. Current client/server result shapes differ; not invoked against a server.",
+    "Whole Test_DbHashingSystem read:five tests use database fixtures and cleanup that drops test data. Not executed or counted as passing. Whole interactive interface read without import or service calls.",
+    "mainWeb source configures Flask/CherryPy runtime. Source read only; no HTTP listener, background thread or host configuration changed."
+  ],
+  "transfer_decision": "Verify configuration propagation and caller/receiver contracts together; preserve symmetric source/destination identifiers in cross-links. No foreign production code adopted.",
+  "limits": [
+    "89of154 whole tracked files:83text,6visual;65remain.",
+    "No new original tests this turn; cumulative24 remains18passes,1failure,5errors.",
+    "RPC and row adapters plus signature binding do not establish end-to-end network/service behavior.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
