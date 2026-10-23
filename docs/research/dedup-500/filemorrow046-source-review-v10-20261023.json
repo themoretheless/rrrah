@@ -1,0 +1,32 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/FileMorrowTests/ExtractedArchiveScannerTests.swift",
+      "sha256": "a997d1cda08882d87deb621ed888f301c3c545a599e84b5205f5bf0439c0500b",
+      "lines": 305,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suite": "ExtractedArchiveScannerTests",
+    "tests_passed": 14,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "build_seconds": 1.16,
+    "test_seconds": 0.715,
+    "original_source_and_tests_unchanged": true,
+    "system_trash_invoked": false,
+    "fixture_operations": "upstream tests create ZIPs and remove only UUID temporary fixture files via injected callbacks/deferred cleanup"
+  },
+  "findings": [
+    "Fourteen original archive tests pass for flat/wrapped/managed extraction layouts, repeated internal spaces, missing entries, changed sizes, metadata, dot-dot entry rejection, progress and injected cleanup. There is no same-size changed-content test.",
+    "Thirty-eight distinct original tests have passed across focused runs. They do not establish complete content equality, bounded subprocess execution or all ZIP filename cases."
+  ],
+  "whole_files_read_total": 17,
+  "remaining_tracked_blobs": 41,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
