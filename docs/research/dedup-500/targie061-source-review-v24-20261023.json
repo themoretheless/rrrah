@@ -1,0 +1,54 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Views/BrowseFilterPopover.swift",
+      "git_blob": "383e96bc86bb5934e1e0410f64e2ae95d800b8a3",
+      "sha256": "13747854fa83691004ba43a0421462e33402e44372eff435eb450b22b8336ad0",
+      "bytes": 5484,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/BrowseFilterPopoverTests.swift",
+      "git_blob": "0bbc9b73c887a70793093b284d408b3731de678b",
+      "sha256": "cf5d783d09ea7c5773f9bec05c934fcea6c81a4e477f72ad55fbd6faf773134c",
+      "bytes": 3902,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/InspectorView.swift",
+      "git_blob": "63120c2431a078d9b7e3193d67989ef01f1ff68a",
+      "sha256": "7f1cdd1b75e5beac725c90684fbc0216fedfc2fe01c2bc4fb14c82494287ae3a",
+      "bytes": 5660,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/DeleteConfirmationView.swift",
+      "git_blob": "29e24e4b02df5512b594883c7edc6b67b47c866c",
+      "sha256": "fe936a28eb3f9d399776676361b053da66f7821dc8141a259f4a0a1244c6b567",
+      "bytes": 4217,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 68,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 53,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter BrowseFilterPopoverTests",
+    "executed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "f35936f736cc08ec43b129c117b1ffa7d4e390ab9e26dcf151638477057c08fd",
+    "scope": "Full unchanged original package; original NSHostingView/NSWindow test creates native view tree without ordering a visible window. Waits for actual SwiftUI onChange notifications. No screenshots, user interaction or deletion actions."
+  },
+  "findings": [
+    "Original regression begins with manual1920x1080 filter, renders it, then selects720p short-edge preset. Both text fields clear, preset remains selected,640x480 item remains and1920x1080 is filtered, recompute count increases exactlyonce. This proves one finite native SwiftUI/model interaction.",
+    "Popover binds media type, comparator, preset and positive integer manualdimensions; excludeSubfolders disabled while scanning. Folder traversal changes and all comparator/boundary combinations not established by this single test.",
+    "InspectorView presents selected media metadata, thumbnail/video preview, Finder/player and deletion-request buttons. Read whole only; no external app/file operations executed. Image aspect ratio uses positive dimensions, otherwise16:9.",
+    "DeleteConfirmationView shows paths/count, explicit Trash/permanent method choice, separate permanent-confirmation step and disables controls while deleting. Source structure only, no actual deletion or full prompt/state-machine qualification.",
+    "Four files whole-read and Git verified. No new library algorithm, optimization gain, full corpus claim or complete repository credit."
+  ]
+}
