@@ -1,0 +1,43 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "repair_ecc.py read whole in two nontruncated ranges1-229 and230-end; pinned blob verified. Syntax parse only, no repair execution or ECC backend installation.",
+  "new_whole_read": {
+    "path": "pyFileFixity/repair_ecc.py",
+    "sha256": "d6f1daa29746e3af22c7c596bdd7ee5ee495b17effbc8cec68c46fdb3cbb83f4"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 63,
+    "remaining_not_whole_reviewed": 81
+  },
+  "findings": [
+    {
+      "id": "window-final-position",
+      "detail": "Heuristic iterates range(len(buf)-max_marker_length), omitting the final legal start offset and all starts when buffer length equals marker length. Shorter field markers near EOF are also excluded by longest-marker bound."
+    },
+    {
+      "id": "relative-skip-across-buffers",
+      "detail": "skip_until is a buffer-relative offset but persists across read iterations. A valid marker found late in previous buffer can cause leading region of next buffer to be skipped. Source-level finding, no end-to-end reproduction."
+    },
+    {
+      "id": "heuristic-not-proof",
+      "detail": "Candidate marker list stores one local minimum per close neighborhood; equal-distance alternatives are dropped. Nearby matching payload may be rewritten as marker without whole-entry verification. The tool explicitly warns it may miss markers."
+    },
+    {
+      "id": "index-bounds",
+      "detail": "Index marker type and decoded position are used without explicit type1..2, monotonicity, overlap or file-length checks. A decoded offset beyond EOF can cause sparse extension on write. No such write executed."
+    },
+    {
+      "id": "index-repair-exceptions",
+      "detail": "Index decode call is not enclosed in per-record ECC exception handling. An uncorrectable record can abort rather than continue as diagnostic. Short trailing record is passed into codec without explicit length refusal."
+    },
+    {
+      "id": "success-boundary",
+      "detail": "Return is zero after heuristic pass regardless of lost indexes, remaining corrupt markers or reparsed ECC validity. Output is copied then modified directly without final structural verification transaction."
+    }
+  ],
+  "syntax_parse": "PASS",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
