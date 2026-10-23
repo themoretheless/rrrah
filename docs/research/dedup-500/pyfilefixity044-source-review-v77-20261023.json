@@ -1,0 +1,41 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "bottle3.py lines1-430 read and pinned blob verified; selected original add_filter method controlled with inert callbacks, no server or requests",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/util/bottle3.py",
+    "lines": [
+      1,
+      430
+    ],
+    "total_lines": 1714,
+    "sha256": "b43ce02c370dc2c051d3256d2e9ccbbfc853afd6df0ded75c37500ad5cf75481"
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-bottle-filter-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "104839baf8c9596f61cd5d3981964fea29abdaf0",
+    "source_sha256": "b43ce02c370dc2c051d3256d2e9ccbbfc853afd6df0ded75c37500ad5cf75481",
+    "scope": "Exact AST add_filter, inert authored callbacks, no Bottle import/listener/request",
+    "second_filter_error": "'<' not supported between instances of 'type' and 'type'",
+    "filters_retained_after_failure": 2
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 120,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 126,
+    "remaining_without_full_text_binary_or_visual_review": 18
+  },
+  "findings": [
+    "add_filter sorts (type,function) tuples; registering int then str filters raises TypeError comparing type objects on Python3. Exact method control reproduced; both registrations remain in list after failure.",
+    "Bundled version0.8.0 imports cgi and collections.MutableMapping with UserDict fallback; legacy dependency compatibility needs separate full import qualification, not inferred from filename bottle3.",
+    "Router static routes are cached by literal route and overwrite matching static key, while dynamic routes are matched by registration sequence. Route registration order is part of behavior; no application routing qualification here.",
+    "Named route construction uses string interpolation, and missing format argument is reported as missing route. URL parameter encoding and error specificity remain unqualified. Static observation.",
+    "Bottle.mount checks string prefixes rather than path components and only one direction of overlap; no network or mount execution.",
+    "Source license MIT. This is nested legacy report infrastructure, not the production duplicate finder. No implementation copied; remaining source unread in this pass."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
