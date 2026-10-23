@@ -1,0 +1,32 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/duplicates/DuplicatesScreen.kt",
+      "sha256": "59b2d611c8518c3546e40105d9c7a6d259ff4ba3983661810830fd9153fffc17",
+      "ranges": [
+        [
+          651,
+          1300
+        ]
+      ],
+      "total_lines": 1891
+    }
+  ],
+  "findings": [
+    "ScanningView disables cancel by comparing phase text to a localized preparing string rather than an explicit cancellable state. UI availability therefore depends on presentation text.",
+    "ResultsView used for scans with old results contains a progress strip but no cancel callback or button. The initial-scan ScanningView has cancel; the old-results branch does not expose it in these read ranges.",
+    "Old results remain interactive during background scanning: selection, hide-group, incorrect-match flagging and group navigation callbacks are passed without a scan-state guard at ResultsView/ListView/GridView.",
+    "If result groups are empty and unreadable summary is hidden, ResultsView shows a no-results message even with unreadable files. The warning can be dismissed; empty results alone are not evidence of complete successful coverage.",
+    "Scan scope summary shows at most five paths truncated to final 35 characters and does not explain the previously reviewed empty-include broadening behavior.",
+    "Stale warning relative time is remembered by timestamp alone, so it does not age with wall time while mounted. Rescan affordance and persisted-result warning exist, but do not revalidate equality.",
+    "Group collections are lazy and keyed by uniqueId. Collision properties depend on the previously reviewed hash/group-ID model; UI keys do not add identity validation."
+  ],
+  "whole_files_read_total": 97,
+  "remaining_tracked_blobs": 33,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
