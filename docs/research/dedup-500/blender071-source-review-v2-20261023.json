@@ -1,0 +1,60 @@
+{
+  "repository": "Cornerback24/Blender-NLA-Midi-Copier",
+  "commit": "957c779f29e574190b11bf4611f4934cfd6fd2f9",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "midi_analysis/MidiParser.py",
+      "local": "12-MidiParser.py",
+      "git_blob": "65f8701f35d792ada61a82c8ee9dd4e6842fd47e",
+      "sha256": "5a6b5bbfab4bcfcc40330a3c01b8fb11bb6fb98b5a15b67b72eeb59014733d99",
+      "bytes": 4519,
+      "whole_text_read": true
+    },
+    {
+      "path": "midi_analysis/MidiEventDecoder.py",
+      "local": "13-MidiEventDecoder.py",
+      "git_blob": "87c818bde30dff7ee877937bc4792a9a3cdc0674",
+      "sha256": "de48d482b54d91e4dd5f95f277a26dc39423c3559c87d8ad8396a09ae7a7f481",
+      "bytes": 3179,
+      "whole_text_read": true
+    },
+    {
+      "path": "midi_analysis/Util.py",
+      "local": "14-Util.py",
+      "git_blob": "a7e65c926191f557c8eb57655de01961d7f7e28a",
+      "sha256": "6adcf478c87e0014c847ed6ca1f7648c53a16d791f1b043d7c98a72bce03802d",
+      "bytes": 5879,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 14,
+  "tracked_blobs": 60,
+  "remaining_without_whole_review": 46,
+  "full_review_count": 249,
+  "native_control": {
+    "command": "python3 docs/research/dedup-500/blender071-midi-parser-control-20261023.py docs/research/dedup-500/evidence/Cornerback24--Blender-NLA-Midi-Copier",
+    "exit_code": 0,
+    "controls": 3,
+    "passed": 3,
+    "valid_file_pieces": 4,
+    "declared_header_bytes": 6,
+    "truncated_header_returned_bytes": 2,
+    "unterminated_variable_length_result": "IndexError",
+    "source_sha256": {
+      "midi_analysis/MidiParser.py": "5a6b5bbfab4bcfcc40330a3c01b8fb11bb6fb98b5a15b67b72eeb59014733d99",
+      "midi_analysis/Util.py": "6adcf478c87e0014c847ed6ca1f7648c53a16d791f1b043d7c98a72bce03802d"
+    },
+    "harness_sha256": "cfacc3cae70771b31636d7509dd09e266ec05485d9027af9ff7b832b1cb1780b",
+    "scope": "Complete original MidiParser/Util loaded through synthetic package binding only; no code rewriting, Blender, MidiEvents adapter or network. Only bounded owned temporary files. Counterexample assertions do not mean bugs fixed."
+  },
+  "findings": [
+    "Valid authored MIDI header/body/track/end-event roundtrips as4originalparserpieces. Finite parserbaseline only, not allMIDIformats or Blenderanimation import.",
+    "Native declared6byteheader withonly2bodybytes returns2bytes without parsererror; has_more_data false. read_next_bytes performsrequestediterations and concatenatesemptyEOFreads. Caller mayrejectlater inunreadMidiEvents/HeaderData; no fullpipelineacceptance claim.",
+    "Native1bytetrack containingcontinuation0x80 causesIndexError inUtil.msb_is_one(emptybytes), notMidiParserException. Originalparser/utility genuine code, noextracted replacement. Resource/error handling not adopted.",
+    "read_variable_length hasno explicitencodedlengthcap, read_next_bytes concatenatesimmutablebytes periteration. Potentialworkallocationgrowth sourceonly; no large/maliciouspayload benchmarking or exhaustiontest.",
+    "Decoder maintainslast_channel_status_byte but calls lowlevelparser first; parser itselfdeterminesone/twodatabyte counts without previousstatus. Running-status ordering concern notexecuted, no MIDIstandards compliance claim. MidiEvents.py andcompleteMidiData pipeline remainunread.",
+    "Useful localprinciple is to distinguish readablebytes from decodability and preserve exactidentity independently. Existinglocalundecodableexactintegration addresses thatboundary; notrerunthisstep andnot generalizedto thisMIDI parser.",
+    "Threeadditionalwholetextfiles;14/60covered46remain. Projectstillreject-domain forfile/image dedup, no implementationadopted, no upstreamtests/BlenderUI/deletionactions."
+  ]
+}
