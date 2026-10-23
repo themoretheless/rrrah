@@ -1,0 +1,30 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/settings/SettingsScreen.kt",
+      "sha256": "54bdabee432c0f5b524e45d38ac078c8fdc6ffffb0331abace083c1cf6e533c5",
+      "lines": 1853,
+      "git_blob_verified": true,
+      "cumulative_prior_reviews": [
+        45
+      ]
+    }
+  ],
+  "findings": [
+    "MediaIndexingStatusItem disables refresh/scan while loading or indexing. This narrows ordinary UI reentry, but does not provide ViewModel job serialization previously found absent.",
+    "Missing imported folders dialog calls createAndImportMissingFolders without a busy flag or disabling Create, allowing repeated UI submissions while asynchronous folder creation runs.",
+    "AccentColorDialog uses isSystemInDarkTheme rather than selected AppTheme for palette and hex preview; forced application light/dark settings can show a palette variant different from the applied one.",
+    "Organized-history reset button is visible only when rememberProcessedMedia is enabled, adding another UI condition to the previously reviewed permanent-only-history guard.",
+    "Settings search matches localized section/title and English keyword hints, not descriptions. UI uses an eager scrolling Column; no long-list performance benchmark was run.",
+    "Import accepts JSON and plain-text MIME types but both reach the same JSONArray parser. MIME selection is not format/schema validation.",
+    "Scope management truncates each path to its last 35 characters and removes entries without confirmation. Independent booleans allow scope management and folder-search dialogs to coexist; actual modal layout remains unrendered.",
+    "Unindexed-files dialog distinguishes hidden-only files from no unindexed files and offers a hidden-file toggle. An ideal-state message is presentation policy, not evidence that every media format was discovered."
+  ],
+  "whole_files_read_total": 99,
+  "remaining_tracked_blobs": 31,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
