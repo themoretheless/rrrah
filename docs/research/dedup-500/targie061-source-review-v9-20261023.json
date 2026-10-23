@@ -1,0 +1,43 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/ImageScanner.swift",
+      "git_blob": "6d82a5af62c6cdc39924a39b294b621752bce12c",
+      "sha256": "9959134053fb9f735e7e0df6388c462dd21c1db3e085307e3b1ec3d2cb631b5d",
+      "bytes": 16589,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 14,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 107,
+  "full_review_count": 249,
+  "control": "targie061-discovery-control-20261023.swift",
+  "runtime_scope": "Exact supportedExtensions declaration and discoverImageURLs function extracted unchanged from pinned full scanner into Foundation-only struct. Full scanner loaders/cache/thumbnail/progress task group not compiled. Temporary fixtures contain invalid image bytes intentionally; discovery does not decode.",
+  "results": {
+    "fixture_files": 7,
+    "discovered": [
+      "corrupt.jpg",
+      "nested/inner.webp",
+      "valid-name.PNG"
+    ],
+    "not_discovered": [
+      "unsupported.avif",
+      "extensionless",
+      ".hidden.png",
+      ".hidden-dir/inside.png"
+    ]
+  },
+  "findings": [
+    "Ten supported filename extensions are a discovery whitelist, not content validation or full platform codec support. Uppercase PNG included; AVIF and extensionless excluded.",
+    "FileManager enumeration uses skipsHiddenFiles/skipsPackageDescendants; errorHandler returns true without recording errors, and resourceValues failures silently skip entries. Error reporting limitation read statically; permission-error scenario not executed.",
+    "Metadata cache key uses path/size/mtime, and prefetched cache can return item/thumbnail without post-await fresh file identity check. Race/stale-metadata concern is source-derived, not reproduced in this control.",
+    "Default image loader reads first image index only, swaps width/height for orientations5-8 and creates max720 JPEG thumbnail. Animated/multipage full-content coverage is not established.",
+    "Task group starts at most concurrency limit children, adds replacement after completion, sorts by discovery index, reports unreadableImage for noncancellation load errors and propagates cancellation. No full loader runtime test yet."
+  ],
+  "harness_corrections": "Initial assertions used character-prefix slicing for relative paths and failed because Foundation enumerator canonicalized /var to /private/var. Corrected authored control to derive suffix by unique temporary directory path component; no upstream modification. Failed assertions are not product defects.",
+  "binary_sha256": "ceaccce4b7668a0303a0a7ad8f9cb7609a666e41adc50d03866a7a65d2cdc6f0"
+}
