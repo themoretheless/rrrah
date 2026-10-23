@@ -1,0 +1,107 @@
+{
+  "repository": "Cornerback24/Blender-NLA-Midi-Copier",
+  "commit": "957c779f29e574190b11bf4611f4934cfd6fd2f9",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "midi_analysis/MidiData.py",
+      "local": "15-MidiData.py",
+      "git_blob": "796e4bcf591a34b858d9bd23f343179481774252",
+      "sha256": "56e6e01cdaaa937735acb87fa7c41bfd14a43655de738010aade88a8f0c8b7e9",
+      "bytes": 4104,
+      "whole_text_read": true
+    },
+    {
+      "path": "midi_analysis/TrackData.py",
+      "local": "16-TrackData.py",
+      "git_blob": "8dfbaa547579c2ea4d262b4003c4d222f31b75c3",
+      "sha256": "20710d8df11f0d2dd9e7c9326fad98f0c0574abee0b66262dc70a7f39f3a8485",
+      "bytes": 5082,
+      "whole_text_read": true
+    },
+    {
+      "path": "midi_analysis/Note.py",
+      "local": "17-Note.py",
+      "git_blob": "b18e0fc81883dc417fb2e9e48f438b8402ed0c86",
+      "sha256": "176ee8e925d0309601e9011fa2920c699f50ab4d454c600c86c8b2996517356c",
+      "bytes": 7338,
+      "whole_text_read": true
+    },
+    {
+      "path": "midi_analysis/MidiEvents.py",
+      "local": "18-MidiEvents.py",
+      "git_blob": "eacd6f4a5d6425a906714af077986ef430e03c54",
+      "sha256": "518be315459f2c76c2bf930fc453992b4ab4bb5eb3dc071640ac9936f6b3d36c",
+      "bytes": 21410,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 18,
+  "tracked_blobs": 60,
+  "remaining_without_whole_review": 42,
+  "full_review_count": 249,
+  "module_boundary": {
+    "all_midi_analysis_blobs_whole_read": true,
+    "blobs": 8,
+    "scope": "Seven original Python code modules plus empty initializer; not surrounding Blender operators/UI."
+  },
+  "read_coverage": {
+    "MidiData.py": "whole",
+    "TrackData.py": "whole",
+    "Note.py": "whole",
+    "MidiEvents.py": [
+      "1-210",
+      "211-440",
+      "441-EOF"
+    ]
+  },
+  "native_control": {
+    "command": "python3 docs/research/dedup-500/blender071-midi-analysis-control-20261023.py docs/research/dedup-500/evidence/Cornerback24--Blender-NLA-Midi-Copier",
+    "exit_code": 0,
+    "result": {
+      "source_sha256": {
+        "Util": "6adcf478c87e0014c847ed6ca1f7648c53a16d791f1b043d7c98a72bce03802d",
+        "MidiParser": "5a6b5bbfab4bcfcc40330a3c01b8fb11bb6fb98b5a15b67b72eeb59014733d99",
+        "MidiEvents": "518be315459f2c76c2bf930fc453992b4ab4bb5eb3dc071640ac9936f6b3d36c",
+        "MidiEventDecoder": "de48d482b54d91e4dd5f95f277a26dc39423c3559c87d8ad8396a09ae7a7f481",
+        "Note": "176ee8e925d0309601e9011fa2920c699f50ab4d454c600c86c8b2996517356c",
+        "TrackData": "20710d8df11f0d2dd9e7c9326fad98f0c0574abee0b66262dc70a7f39f3a8485",
+        "MidiData": "56e6e01cdaaa937735acb87fa7c41bfd14a43655de738010aade88a8f0c8b7e9"
+      },
+      "controls": 4,
+      "passed": 4,
+      "valid": {
+        "format": 0,
+        "declared_tracks": 1,
+        "parsed_tracks": 1,
+        "ticks_per_beat": 96
+      },
+      "short_header_accepted": {
+        "format": 0,
+        "declared_tracks": 0,
+        "parsed_tracks": 0,
+        "ticks_per_beat": 0
+      },
+      "missing_declared_track_accepted": {
+        "format": 0,
+        "declared_tracks": 1,
+        "parsed_tracks": 0,
+        "ticks_per_beat": 96
+      },
+      "unterminated_variable_length": "IndexError",
+      "scope": "All seven original complete MIDI-analysis module bodies, no stubs or rewritten parsing. Bounded owned temporary inputs. Harness closes decoder in finally; does not qualify original resource cleanup, Blender/UI or all MIDI behavior."
+    },
+    "harness_sha256": "931a19c98aceab2bd3d21028c830bd7ea7790ef3772d5755f472996a79d3d4f5"
+  },
+  "findings": [
+    "Entire original MIDIanalysis chain nowloaded with real7modules and no parser/event stubs. Nativevalidminimalfile givesformat0,declared1/parsed1track,ticks96. No Blenderaddonexecution.",
+    "Previouslypartial conclusion strengthened:shortdeclared6byteheader with2bodybytes isacceptedbyMidiData asformat0,0declared/parsedtracks,ticks0. No downstreamvalidationinsideMidiData rejects thisfinitecase.",
+    "Completeheaderdeclares1track but EOFimmediatelyafterheader accepted withparsed0tracks. This is observedanalysis behavior, not a statementabout BlenderUIacceptance or allmalformedfiles.",
+    "Unterminatedcontinuationfield stillpropagatesIndexError throughfulloriginalMidiData pipeline. Fourcounterexample/baselinecontrols pass; upstreamcodeunchanged andfailurehandlingnotfixed.",
+    "MidiData __init__ doesnotcall decoder.close orusefinally; harness explicitlyclosespartiallyinitializeddecoder aftereachfixture. Thus observedtests donotqualify originalfilehandlelifecycle or exceptionalcleanup.",
+    "TrackData incomplete_notes/skipped_note_on_events keyedbypitch only, Note objects alsoholdchannel. Potentialcross-channeloverlap concern sourceonly, notexecuted. No MIDIstandardscompliance/generalizationclaim.",
+    "Note comparator usesweightedfloat scalar (start+1)*1000+pitch*.001, notlexicographic tuple. Tinytime differences couldinteractwithpitch; no localvisualmatchingpolicy adoption orsortfailuretest.",
+    "No localrrrahsourcechange orrerunneededforunrelatedMIDIdecoder. Keep readablefileidentity separatefromsuccessfulanalysis; previouslocalundecodableexactregression remainsfiniteexistingevidence.",
+    "Fournewwholefiles:18/60,all8midi_analysisblobsreviewed.42othercode/docs/translations/graphics remain; no fullrepoor500completioncredit."
+  ]
+}
