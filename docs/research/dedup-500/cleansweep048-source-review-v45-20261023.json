@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/settings/SettingsScreen.kt",
+      "sha256": "54bdabee432c0f5b524e45d38ac078c8fdc6ffffb0331abace083c1cf6e533c5",
+      "ranges": [
+        [
+          1,
+          600
+        ]
+      ],
+      "total_lines": 1853
+    }
+  ],
+  "findings": [
+    "Export uses CreateDocument(application/json), import uses OpenDocument and immediately delegates returned URIs to reviewed ViewModel routines. Picker callbacks do not add byte/item limits or transaction validation.",
+    "UI constrains screenshot JPEG quality to 95/90/85/75 and default speed to 1/1.5/2. This bounds ordinary menu input but does not establish validation of persisted values in the repository API.",
+    "Settings explicitly exposes screenshot-deletes-video, so the previously identified failed-conversion deletion branch is reachable through an ordinary user setting.",
+    "Duplicate scan scope offers ALL_FILES, INCLUDE_LIST and EXCLUDE_LIST; list management is hidden only for ALL_FILES. No active-scan restriction is passed to these controls in these ranges.",
+    "SettingsItem uses pointerInput(Unit) with optional click/long-click callbacks rather than clickable/combinedClickable semantics. Keyboard/accessibility activation and callback freshness need runtime assessment.",
+    "Setting section definitions are remembered once and contain composable lambdas using delegated state values; no stale-state defect is inferred without checking actual Kotlin/Compose capture behavior."
+  ],
+  "whole_files_read_total": 98,
+  "remaining_tracked_blobs": 32,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
