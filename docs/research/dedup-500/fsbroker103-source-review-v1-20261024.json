@@ -1,0 +1,97 @@
+{
+  "repository": "helshabini/fsbroker",
+  "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
+  "tracked_blobs": 30,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "eventstack.go",
+      "local": "06-eventstack.go",
+      "git_blob": "e5810233e28d94fdc2da55d30e20351bf55f75d0",
+      "sha256": "9b2eefacfdaddbf009e95312fdaa4e6a0509c3defa237c1e2655c07b6216cab4",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsaction.go",
+      "local": "07-fsaction.go",
+      "git_blob": "e8ec8550bf0c74460f6d7a88ce3d6d29c88176bf",
+      "sha256": "86cc546770cb8e930b912bcdaf4ba506298facf7002b58afdb8d6d7cfce6d054",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsevent.go",
+      "local": "08-fsevent.go",
+      "git_blob": "1e8ea0f2f52543b172212fbbdaf27efef1658589",
+      "sha256": "f5b4b6ae9fb17ae7f9b2d490d65f891f40b3a2c14a9b6735aa346c6a63ada661",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsinfo.go",
+      "local": "09-fsinfo.go",
+      "git_blob": "cffed205d57a711ee346e13bc488abb4573ccb1d",
+      "sha256": "ca6b38c47981b6591ec378013269b127eb0292e2ce9ab847bc3a6ed84ff3f283",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsconfig.go",
+      "local": "10-fsconfig.go",
+      "git_blob": "778ad1a11a914a33121354d6cec8b01fd2b6280a",
+      "sha256": "5d99338ccecd321a44da5e2a7d0f208041e8c092ea35267e6aacdeae41826afd",
+      "whole_text_read": true
+    },
+    {
+      "path": "go.mod",
+      "local": "11-go.mod",
+      "git_blob": "b4c50120a9a4be0088baa3e127193211759f5356",
+      "sha256": "ad7bd23bc9062c27178e8a33280dc9eedef445ad47877fe5eb7cc0f88b2da78b",
+      "whole_text_read": true
+    },
+    {
+      "path": "go.sum",
+      "local": "12-go.sum",
+      "git_blob": "f968f9124c539074c4e751b739cd11ca9f75337d",
+      "sha256": "36f680db81beb700ca3f209cb4e0add175f09131b6281926d2356a62525de0f7",
+      "whole_text_read": true
+    },
+    {
+      "path": "optype_string.go",
+      "local": "13-optype_string.go",
+      "git_blob": "e5144bf548bc8f681a43ec922f3e24dd726b18eb",
+      "sha256": "71deea3e49f183056f8176d2b9571cfd63cee69d7a950bafc2fdac7abb5c9d43",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "3fbe12c234ce9b08f00a94d11c5b8b89d34741a0",
+      "sha256": "e58648a3973fa8e4d1630d6aa74e7daab6e99bd9ed36cf997945ff52ef512e12",
+      "whole_text_read": true
+    },
+    {
+      "path": "eventstack_test.go",
+      "local": "05-eventstack_test.go",
+      "git_blob": "d2f0edb7b4d924323c7e08d2d37ca760ec8738fb",
+      "sha256": "659adadca1f1d5ec98b72ad29d55da36674e7399312fd1696fcd42f8aedd9405",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 10,
+  "remaining_without_whole_review": 20,
+  "original_tests": {
+    "passed": 7,
+    "failed": 0,
+    "race_detector": true,
+    "report": "docs/research/dedup-500/fsbroker103-stack-original-tests-20261024.jsonl",
+    "scope": "Isolated unchanged eventstack test file with original event/action/info/config/generated enum files and original go.mod/go.sum; no platform watcher or full repository tests.",
+    "toolchain": "Previously retained Go1.25.0 darwin/arm64; original go.mod requires1.24.2; fsnotify1.9.0 and x/sys0.31.0 downloaded using original checksums."
+  },
+  "findings": [
+    "EventStack Map retains last pointer for equal event signature; stack itself retains all pushed events until Pop/Delete/Clear. Grouping is not content equality.",
+    "List copies slice only, sharing mutable event pointers; mutex protects container operations, not externally mutated event fields. Existing race test does not mutate event objects.",
+    "Delete compares pointer identity, not signature. Original seven tests pass including concurrent container operations.",
+    "NewFSAction ignores path parameter and initializes Subject=nil; Signature dereferences Subject.Path. Full lifecycle through broker not yet reviewed; no claim this necessarily fails in normal broker flow."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "license_scope": "Root BSD3 license completely read; dependency licensing not fully reviewed; no production adoption."
+}
