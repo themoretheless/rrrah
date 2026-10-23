@@ -1,0 +1,70 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v23-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/TestMySQLLoadMapper.java",
+      "local": "132-TestMySQLLoadMapper.java",
+      "sha256": "83a2b0bab85d470e2f9a3d00355a64326bed7dc57fef98abbb3eae2bd466ffea",
+      "git_blob": "9746f91e643449b83343bbecb003bdf5b15b0416",
+      "lines": 77,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/TestOracleLoadMapper.java",
+      "local": "133-TestOracleLoadMapper.java",
+      "sha256": "dc58a0abcd40f8387957a938563c1bd100adf600d73dd19d6457faf71823aaf9",
+      "git_blob": "488eb13d1fa428ae2148ba9d2e985b712d791e72",
+      "lines": 68,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 128,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 134,
+  "remaining_without_whole_review": 36,
+  "original_tests": {
+    "new": 3,
+    "new_passed": 3,
+    "cumulative_distinct": 81,
+    "cumulative_passed": 79,
+    "cumulative_failed": 2,
+    "report": "docs/research/dedup-500/hiho098-loaders-native-controls-20261024.json",
+    "scope": "Only TestMySQLLoadMapper.testMapper plus bothTestOracleLoadMapper methods;24testfiles cumulatively,3partial. TestMySQLLoadMapper.testSetup opens configured realMySQL and was NOT invoked."
+  },
+  "author_controls": {
+    "new": 4,
+    "cumulative": 102,
+    "report": "docs/research/dedup-500/hiho098-loaders-native-controls-20261024.json",
+    "confirmed": [
+      "OracleLoadMapper.map ignores mocked appendFile false, returns normally and closes input stream.",
+      "OracleLoadMapper.map propagates mocked appendFile IOException but does not close inputstream.",
+      "MySQLLoadDataMapper.map healthy mocked update closesstatement.",
+      "MySQLLoadDataMapper.map updateSQLException propagates asIOException but stmt=null handler skips explicitstatementclose."
+    ],
+    "scope": "Original unchanged loader methods, realMySQL5.1.13/commonsnet1.4.1 API types and Mockito recordingobjects; no actualdriver connect/SQL or FTP. ChildJava21 SecurityManager deniesconnect/listen and observes0attempts. Deprecated guard used only inside owned childtestJVM; not productionconfiguration."
+  },
+  "new_runtime_dependencies": [
+    {
+      "url": "https://repo.maven.apache.org/maven2/mysql/mysql-connector-java/5.1.13/mysql-connector-java-5.1.13.jar",
+      "bytes": 767492,
+      "sha256": "90492c85fad7301740e2aa2c0c86d9473b04baab3cd2870f99f8955c569f671d"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/commons-net/commons-net/1.4.1/commons-net-1.4.1.jar",
+      "bytes": 180792,
+      "sha256": "05a3611dedf90d0ab3e8ed83dec4ee49200148c09425437eb9348562fde7d83c"
+    }
+  ],
+  "dependency_scope": "Versions match pinnedpom properties; fullresolveddependency/license cohort unqualified, no productioncodeadoption",
+  "source_findings": [
+    "Oracle setup test supplies mockFTPclient; login/change directory default false returnvalues are ignored and not asserted.",
+    "Oracle mapper test verifies append invocation only, not returnedstatus or inputstream cleanup onerror.",
+    "MySQL mapper test uses mockedconnection andvendorstatement; configuredconnection setupmethod kept unexecuted."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

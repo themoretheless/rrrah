@@ -1,0 +1,35 @@
+{
+  "scope": "Exactly3originalmethods:MySQL.testMapper only+2Oracleloadtests;configuredMySQL.testSetup NOT invoked.4authorfailurecontrols with mockedFTP/JDBC/streams;childJVM denies socketconnect/listen and observes0attempts;no externalservices orcluster.",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MySQLLoadDataMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/OracleLoadMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestMySQLLoadMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestOracleLoadMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/LoaderSubsetControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/LoaderSubsetControl.java:3: warning: [removal] SecurityManager in java.lang has been deprecated and marked for removal\n static class NoNetwork extends SecurityManager{int attempts;public void checkPermission(java.security.Permission p){}public void checkConnect(String h,int p){attempts++;throw new SecurityException(\"owned child denies socket connect\");}public void checkListen(int p){attempts++;throw new SecurityException(\"owned child denies socket listen\");}}\n                                ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/LoaderSubsetControl.java:5: warning: [removal] setSecurityManager(SecurityManager) in System has been deprecated and marked for removal\n  NoNetwork gate=new NoNetwork();System.setSecurityManager(gate);\n                                       ^\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MySQLLoadDataMapper.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n2 warnings\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-Djava.security.manager=allow",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "LoaderSubsetControl"
+      ],
+      "returncode": 0,
+      "stdout": "ORIGINAL run=3 failures=0\nOBSERVED false FTP append status ignored and input closed\nOBSERVED append IOException propagates but input close skipped\nPASS successful mocked MySQL map closesstatement\nOBSERVED MySQL update failure propagated but statementclose skipped\nauthorchecks=4; socketconnect/listenattempts=0; MySQL testSetup not invoked\n",
+      "stderr": "WARNING: A terminally deprecated method in java.lang.System has been called\nWARNING: System::setSecurityManager has been called by LoaderSubsetControl (file:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes/)\nWARNING: Please consider reporting this to the maintainers of LoaderSubsetControl\nWARNING: System::setSecurityManager will be removed in a future release\njava.sql.SQLException: owned update failure\n\tat co.nubetech.hiho.mapreduce.MySQLLoadDataMapper.map(MySQLLoadDataMapper.java:86)\n\tat LoaderSubsetControl.main(LoaderSubsetControl.java:9)\n"
+    }
+  ]
+}
