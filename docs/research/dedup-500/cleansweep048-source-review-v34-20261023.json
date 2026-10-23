@@ -1,0 +1,25 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/AddTargetFolderDialog.kt",
+      "sha256": "d78c4451800a371b971ea3cce40cc4e1e0f40448ab7b67d0217c02e9488f2221",
+      "lines": 402,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Existing-name hints compare allFolderPaths snapshot case-insensitively and are advisory only. They do not query filesystem existence at confirmation or block an exact match; caller behavior remains to be reviewed.",
+    "Location validity checks only a nonnull browsePath or nonblank new name plus nonblank query. It does not verify directory existence, writability, loading completion or folder-name path components. No file creation or move was executed.",
+    "Current-folder move prevention compares parent and browsePath lexically and only when no new name is entered; canonical aliases and dot components are not resolved here.",
+    "Favorites checkbox enablement checks the selected parent against favorites even when creating a new child. A favorite parent disables changing the checkbox for its new child; checked state is not reset when disabled.",
+    "Name suggestions run Levenshtein synchronously during composition for matching-parent entries, with a cloned cost array per character and no name/candidate bound here. Large-input latency is not measured.",
+    "As with RenameFolderDialog, the whole content is supplied to the trailing AppDialog buttons slot. Layout, focus timing and accessibility are unrendered. Results are eagerly composed in a scrollable Column, and strings are hardcoded English."
+  ],
+  "whole_files_read_total": 73,
+  "remaining_tracked_blobs": 57,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
