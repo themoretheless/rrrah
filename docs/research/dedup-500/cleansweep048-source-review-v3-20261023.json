@@ -1,0 +1,27 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/usecase/SimilarFinderUseCase.kt",
+      "sha256": "2f3ba5b55b75d8a4fa425289ac3d29f955257e7b01ac2957875f229acbdec333",
+      "lines": 466,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Grouping searches only the current first-byte hash bucket and its two lexical neighbors among occupied buckets. Lexical adjacency is not a complete Hamming-radius search; low-distance hashes can be missed across other buckets.",
+    "Image predicate accepts hammingDistance <= threshold without rejecting -1, so malformed hashes can pass the hash gate if histogram comparison succeeds. Video any-frame predicate has the same invalid-distance issue.",
+    "fullHashMap begins as all cached entries. If a changed item fails rehash, its old entry is not removed before grouping, and current paths still include it; stale hashes can therefore be used despite a failed refresh. Source-only finding.",
+    "Greedy grouping compares candidates only to each anchor and marks group members visited. It is order dependent and neither all-pairs clique validation nor full connected-component traversal. Pairwise denial checks only anchor/candidate, not every member pair.",
+    "Groups sharing an anchor pHash are merged by string group ID, potentially joining separately denied/incompatible sets. For videos the ID uses only first-frame hash while comparison accepts any frame pair.",
+    "Video sampling uses nearest sync frames at 10% and 50% duration; any similar frame pair qualifies, without duration/order/coverage validation. Source does not establish full-video equivalence.",
+    "Parallel worker coroutines append failures to a shared mutableList without synchronization. Null hash results are omitted without adding skipped-path diagnostics. Cancellation and actual race effects require runtime qualification.",
+    "Image histogram is 64-bin RGB from 16x16 scaled bitmap, alpha ignored. Malformed counts parse to zero and all-zero histograms compare equal. Bitmap scaling may alias originals; recycling ownership depends on Android scale semantics and remains unqualified."
+  ],
+  "whole_files_read_total": 10,
+  "remaining_tracked_blobs": 120,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
