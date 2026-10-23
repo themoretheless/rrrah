@@ -1,0 +1,40 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "CONTRIBUTING.md",
+      "git_blob": "e9386f12a4a98d02992117fd5b67394b4eb49447",
+      "sha256": "14f0be3226bb6bf3250ea482c93ae60dc6455cb5a42cf9abc6e1653e739eb68e",
+      "bytes": 2416,
+      "whole_text_read": true
+    },
+    {
+      "path": "DCO",
+      "git_blob": "49b8cb0549267a8176467738b172a63d86eff436",
+      "sha256": "f7ac75b443f4ca16b503241344b41aeff9503b0c30bedc2b119551d83cb0fa90",
+      "bytes": 1366,
+      "whole_text_read": true
+    },
+    {
+      "path": "script/build_and_run.sh",
+      "git_blob": "6817a537bab308d9c324b96a5c3cb2cc7342d380",
+      "sha256": "1c4d8b632b7cf649b2e78f9451900a4de1d0645235169d385d01a1814569c57d",
+      "bytes": 936,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 79,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 42,
+  "full_review_count": 249,
+  "runtime_scope": "Documentation and launchscript read only, no commands from these external documents executed.",
+  "findings": [
+    "Contribution policy requests GPL3or later, DCO signoff, local tests/app bundle and localization additions. Source policy does not authorize changing local rrrah Git settings, signing commits on behalf of user, rebasing or submitting upstream. None performed.",
+    "DCO1.1 read whole; separate from root GPL license which remains not whole-read. No code adoption or legal compatibility clearance inferred.",
+    "build_and_run.sh unconditionally pkill exactprocessname and invokes appbuild before mode dispatch. Even invalid argument performs these actions before usageerror. Script read only, no process stop/app launch requested or performed.",
+    "verify mode opens app then checks process existence after2seconds. Such check cannot establish visual correctness, scan completion or dedup quality. No delivery qualification credited.",
+    "Three additional wholefiles pinned verified. New local exact/decode integration regression is being validated separately; not counted as external test or repository review completion."
+  ]
+}
