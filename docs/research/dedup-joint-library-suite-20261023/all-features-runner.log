@@ -1,0 +1,2143 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+warning: variable does not need to be mutable
+   --> vendor/loftr/src/coarse_matching.rs:169:9
+    |
+169 |     let mut column = sim.f_softmax(1, Kind::Float)?;
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+  --> vendor/loftr/src/coarse_matching.rs:48:12
+   |
+39 | impl CoarseMatching {
+   | ------------------- method in this implementation
+...
+48 |     pub fn forward(
+   |            ^^^^^^^
+
+warning: method `forward` is never used
+   --> vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+warning: `loftr` (lib) generated 5 warnings (run `cargo fix --lib -p loftr` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.48s
+     Running unittests src/lib.rs (.dedup-work/local-sequence-target-20261021/debug/deps/rrrah_dedup-6380373eec1150a5)
+
+running 138 tests
+test animated::frame_slot_tests::frame_table_is_fallible_admitted_and_retained ... ok
+test collection::tests::final_generation_observation_stays_cancelled_if_owner_resets_counter ... ok
+test cache::publication_tests::every_stream_write_failure_is_reported_and_short_writes_preserve_bytes ... ok
+test animated::frame_slot_tests::decoded_animation_retains_actual_frame_table_credit ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test animated::timeline_key_tests::large_reducible_adjacent_frame_durations_produce_a_timeline_key ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test animated::timeline_scratch_tests::every_timeline_scratch_cancel_checkpoint_releases_both_tables ... ok
+test animated::timeline_scratch_tests::timeline_scratch_refuses_early_and_late_releases_and_retries ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test exact::cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test exact::cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt ... ok
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test exact::cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes ... ok
+test exact::cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test collection::scheduled_guard_tests::proposal_order_and_final_idle_file_guards_remain_authoritative ... ok
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test container::reuse_tests::signature_preparation_errors_remain_pair_issues_without_unique_classification ... ok
+test container::reuse_tests::indexed_groups_remove_changed_sources_without_losing_healthy_edges ... ok
+test exact::interrupted_read_tests::every_partial_read_failure_preserves_typed_error_and_unread_tail ... ok
+test exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+test exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry ... ok
+test exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader ... ok
+test exact::collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches ... ok
+test exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors ... ok
+test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+test gradient::batch_tests::real_photo_matcher_timing ... ignored, manual real-photo exact matcher timing and parity
+test gradient::cache_tests::cache_capacity_and_overflow_keep_exhaustive_fallback_available ... ok
+test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test exact::collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers ... ok
+test exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+test gradient::cache_tests::malformed_suffix_and_work_refusal_do_not_allocate_optional_cache ... ok
+test exact::cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller ... ok
+test gradient::cache_tests::cached_matching_keeps_positive_negative_and_distinct_ties_under_both_budget_paths ... ok
+test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+test gradient::cache_tests::managed_cache_releases_before_output_and_respects_ancestor_pressure ... ok
+test gradient::matching_tests::real_photo_matcher_timing ... ignored, manual real-photo exact matcher timing and parity
+test gradient::cache_tests::cached_checkpoints_and_cancellation_match_recomputation_without_credit_leaks ... ok
+test gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes ... ok
+test gradient_index::row_major_tests::row_major_index_build_latency_probe ... ignored, explicit alternating index construction measurement
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test gradient_scale::zero_candidate_tests::identity_validation_is_bitwise_owned_zero_radius_for_hdr_and_shapes ... ok
+test gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle ... ok
+test gradient_scale::zero_candidate_tests::identity_validation_work_alpha_and_every_cancel_checkpoint_are_explicit ... ok
+test local_collection::compact_portfolio_tests::compaction_admits_overlap_preserves_order_and_rolls_back ... ok
+test gradient::matching_tests::sixteen_descriptor_lanes_preserve_scalar_bits_and_every_tail ... ok
+test local_collection::compact_portfolio_tests::incremental_batches_admit_overlap_and_preserve_previous_batch_on_failure ... ok
+test local_collection::gradient_metadata_tests::gradient_id_scratch_exact_limit_cancellation_and_ownership ... ok
+test local_collection::zero_collection_candidate_tests::zero_collection_refusals_release_original_feature_credit ... ok
+test local_index::managed_owner_slots_tests::binary_owner_table_parity_credit_lifetime_and_refusals ... ok
+test local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test local_collection::feature_release_tests::fresh_confirmation_reuses_feature_credit_and_prechecks_keep_their_banks ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test gradient_index::row_major_tests::row_major_preserves_axis_order_search_credit_and_every_cancellation_checkpoint ... ok
+test managed_metric::tests::managed_tree_equals_exhaustive_and_retains_results_credit ... ok
+test managed_pair_counts::tests::collision_chain_cancellation_preserves_counts_at_every_checkpoint ... ok
+test managed_pair_counts::tests::pair_table_matches_independent_counts_and_admits_before_allocating ... ok
+test managed_pair_counts::tests::sparse_growth_admission_and_every_transfer_cancellation_are_atomic ... ok
+test managed_targets::tests::targets_reuse_credit_and_preserve_unique_sorted_opaque_ids ... ok
+test managed_descriptor_union::tests::sparse_union_equals_independent_minimum_distance_and_releases ... ok
+test managed_visual::tests::managed_complete_recipe_matches_independent_comparison_and_cancellation ... ok
+test model_loftr::tests::adoption_retains_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test model_loftr::tests::every_adoption_checkpoint_cancels_without_publication ... ok
+test model_loftr::tests::malformed_results_are_errors_and_release_credit ... ok
+test model_projection::tests::extreme_finite_parameters_remain_bounded ... ok
+test model_projection::tests::invalid_configuration_is_refused ... ok
+test model_projection::tests::invisible_rgb_is_ignored_and_background_is_explicit ... ok
+test model_projection::tests::neutral_reinhard_and_linear_alpha_compositing ... ok
+test model_projection::tests::opaque_sdr_preserves_values_and_refuses_alpha_hdr ... ok
+test model_projection::tests::projected_equality_can_hide_alpha_and_hdr_differences ... ok
+test model_projection::tests::visible_nonfinite_channels_and_invalid_alpha_are_refused ... ok
+test model_tiles::tests::observed_final_request_cancellation_is_sticky_after_counter_reset ... ok
+test model_tiles::tests::odd_tiny_and_maximum_domains_partition_without_empty_or_duplicate_rectangles ... ok
+test model_worker::tests::bad_provider_results_never_write_a_response_header ... ok
+test model_worker::tests::binary_roundtrip_preserves_pixels_crop_domains_and_proposal_bits ... ok
+test model_worker::tests::empty_provider_is_a_valid_empty_bank_not_an_execution_failure ... ok
+test model_worker::tests::invalid_input_policy_and_low_credit_refuse_before_worker_io ... ok
+test model_worker::tests::linux_stat_parser_preserves_command_parentheses_and_rejects_missing_state ... ok
+test model_worker::tests::malformed_requests_never_invoke_provider_and_release_credit ... ok
+test model_worker::tests::malformed_response_count_truncation_and_trailing_bytes_are_not_empty_banks ... ok
+test model_worker::tests::nonfinite_coordinates_and_invalid_confidence_discard_partial_response ... ok
+test model_worker::tests::response_budget_refusal_and_cancellation_release_all_credit ... ok
+test model_worker::tests::response_write_and_flush_failures_release_all_worker_credit ... ok
+test model_loftr::tests::double_results_preserve_qualified_float32_conversion ... ok
+test model_worker::tests::native_owned_pid_observation_detects_live_and_reaped_worker ... ok
+test container::reuse_tests::indexed_groups_keep_labels_under_collisions_failure_and_candidate_caps ... ok
+test exact::fused_pair_controls::fused_pair_matches_independent_bytes_across_block_edges_and_mismatch_positions ... ok
+test model_worker::tests::successful_child_with_no_protocol_is_an_error_not_an_empty_bank ... ok
+test sequence::duration_sum_tests::large_shared_denominator_reduces_before_overflow ... ok
+test sequence::duration_sum_tests::sum_retains_exact_time_and_refuses_unrepresentable_result ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test model_worker::tests::retained_failed_child_diagnostics_keep_capture_credit_until_dropped ... ok
+test model_worker::tests::successful_worker_response_does_not_leave_background_process ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+test local_collection::zero_collection_candidate_tests::zero_collection_features_equal_owned_recipe_for_base_and_portfolio ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test container::reuse_tests::indexed_groups_keep_selected_pages_and_animation_scopes_separate ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test worker::group_quiescence_tests::quiescence_refuses_live_leader_and_live_descendant_after_leader_exit ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::cache_tests::linear_runner_dense_banks_do_not_allocate_optional_indices ... ok
+test collection::scheduled_guard_tests::every_scheduled_collection_cancel_checkpoint_discards_and_retries ... ok
+test tests::every_byte_pattern_in_low_and_high_bits_matches_full_scan_at_every_radius ... ok
+test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+test gradient::cache_tests::linear_runner_large_banks_preserve_results_checkpoints_and_budget_fallback ... ok
+test container::reuse_tests::whole_signature_pipeline_cancels_at_every_checkpoint_without_report_or_leaks ... ok
+test container::reuse_tests::indexed_groups_cancel_without_partial_output_at_every_normal_checkpoint ... ok
+
+test result: ok. 133 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 2.49s
+
+     Running unittests src/bin/rrrah-loftr-worker.rs (.dedup-work/local-sequence-target-20261021/debug/deps/rrrah_loftr_worker-0b048f59740fcf93)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_candidate_search.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_candidate_search-079f37b88dca59c6)
+
+running 1 test
+test native_geometry_drives_guarded_affine_grid_without_manual_model ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+
+     Running tests/affine_color.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_color-8632dd2eadce21a1)
+
+running 4 tests
+test coefficient_offset_range_and_preflight_work_bounds ... ok
+test independent_mixed_channel_transform_and_disjoint_validation ... ok
+test uniform_rank_deficient_and_target_singular_inputs_refuse ... ok
+test every_fit_and_validation_checkpoint_cancels_without_partial_evidence ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_color_heldout_negative.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_color_heldout_negative-83d1ec6c14e222ce)
+
+running 1 test
+test fitted_color_does_not_accept_unrelated_heldout_samples ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_region.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_region-2b0cd359d825a73c)
+
+running 8 tests
+test source_footprint_mid_tap_cancel_releases_all_managed_credit ... ok
+test preflight_and_mid_sampling_cancel_release_credit ... ok
+test identity_is_heldout_verified_and_memory_released ... ok
+test training_diagnostic_distinguishes_heldout_damage_without_extra_pixels ... ok
+test source_footprint_preserves_analytic_anisotropic_pair_and_accounts_eight_reads ... ok
+test diagnostic_training_pass_cancels_and_releases_samples ... ok
+test saturated_uniform_filter_refuses_as_uninformative_not_invalid ... ok
+test radius24_is_admitted_by_work_budget_and_refused_before_allocation_when_short ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/affine_region_file.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_region_file-b0dc45e1c5fb64b4)
+
+running 5 tests
+test cancellation_and_cumulative_work_refuse_before_missing_source_io ... ok
+test common_footprint_files_preserve_mutation_replacement_and_sticky_cancel ... ok
+test diagnostic_files_preserve_mutation_replacement_and_sticky_cancel ... ok
+test stable_files_verify_and_mutation_or_replacement_discards_evidence ... ok
+test automatic_file_grid_guards_source_and_retains_managed_regions ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/affine_region_grid.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_region_grid-5403e1c15b7f9bf7)
+
+running 2 tests
+test automatic_grid_retains_both_direction_results_and_managed_ownership ... ok
+test uniform_regions_are_retained_as_refusals_and_cancel_discards_partial_grid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_region_input_contract.rs (.dedup-work/local-sequence-target-20261021/debug/deps/affine_region_input_contract-b702727d30731caf)
+
+running 2 tests
+test overflowed_domains_and_radius_refuse_before_allocation ... ok
+test unsupported_alpha_and_scene_range_refuse_in_either_direction_without_clipping ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_candidate_search.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_candidate_search-2385f136aba0ba18)
+
+running 1 test
+test automatic_candidates_drive_guarded_anchor_pixels_with_complete_points ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.34s
+
+     Running tests/anchor_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_collection-ab4454a2d59b3e89)
+
+running 1 test
+test indexed_anchor_collection_retains_all_identical_edges_and_releases_memory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 34.01s
+
+     Running tests/anchor_collection_preflight.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_collection_preflight-f917f1a11d432e79)
+
+running 1 test
+test malformed_anchor_policies_and_work_refuse_before_file_iteration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_collection_scaled.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_collection_scaled-53e311de4b97d378)
+
+running 1 test
+test scaled_indexed_collection_matches_all_direct_pair_support ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.73s
+
+     Running tests/anchor_fallback_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_fallback_collection-2c8f6c1ea2116786)
+
+running 1 test
+test fallback_indexed_collection_matches_all_direct_points_and_recipe_metadata ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.27s
+
+     Running tests/anchor_fallback_collection_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_fallback_collection_lifecycle-4658a9a936cdd092)
+
+running 1 test
+test fallback_anchor_collection_mutation_cancel_and_restored_retry has been running for over 60 seconds
+test fallback_anchor_collection_mutation_cancel_and_restored_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 77.19s
+
+     Running tests/anchor_fallback_collection_preflight.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_fallback_collection_preflight-195566fbae7eaddd)
+
+running 1 test
+test fallback_anchor_collection_rejects_policy_before_iteration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_fallback_search.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_fallback_search-e04e0e2b56166983)
+
+running 1 test
+test fallback_metadata_and_complete_points_drive_guarded_anchor_files ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+     Running tests/anchor_file_search_preflight.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_file_search_preflight-409ec1cd593c6e9d)
+
+running 1 test
+test all_anchor_file_searches_reject_invalid_policy_before_io ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_geometry_collection-272d901b8c18962d)
+
+running 1 test
+test geometry_only_indexed_collection_matches_all_direct_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.48s
+
+     Running tests/anchor_geometry_collection_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_geometry_collection_lifecycle-0a4a5109febea41d)
+
+running 1 test
+test geometry_collection_mutation_cancel_restore_preserves_valid_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.50s
+
+     Running tests/anchor_geometry_collection_preflight.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_geometry_collection_preflight-6662628f6d0ce204)
+
+running 1 test
+test geometry_collection_policies_refuse_before_file_iteration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_geometry_rank_fallback.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_geometry_rank_fallback-56308885aaf980fb)
+
+running 1 test
+test rank_driven_fallback_admission_selection_cancel_and_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+
+     Running tests/anchor_geometry_search.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_geometry_search-92dde7b11b4edc7d)
+
+running 1 test
+test geometry_only_anchor_pipeline_equals_legacy_anchor_confirmation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.42s
+
+     Running tests/anchor_geometry_smoothing.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_geometry_smoothing-4dbcb3f63d18470f)
+
+running 1 test
+test explicit_smoothing_geometry_anchors_match_legacy_direct_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.06s
+
+     Running tests/anchor_rank.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_rank-ab35c7997018e464)
+
+running 5 tests
+test overlap_bounds_aliases_and_inconsistent_geometry_are_not_hidden ... ok
+test published_bounds_follow_selected_original_windows_and_exclude_bad_geometry ... ok
+test geometry_selected_windows_aggregate_information_and_reject_inverted_or_flat_pixels ... ok
+test independent_textures_reject_even_with_exact_bidirectional_geometry ... ok
+test exact_aggregate_limits_and_every_observed_cancellation_release_credits ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/anchor_rank_driven_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_rank_driven_collection-85941888b33ee12f)
+
+running 1 test
+test rank_driven_indexed_collection_matches_all_direct_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.16s
+
+     Running tests/anchor_rank_driven_collection_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_rank_driven_collection_lifecycle-62f6a8b1a2d7c9e4)
+
+running 1 test
+test rank_driven_collection_mutation_cancel_and_restored_retry has been running for over 60 seconds
+test rank_driven_collection_mutation_cancel_and_restored_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 68.22s
+
+     Running tests/anchor_rank_driven_collection_preflight.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_rank_driven_collection_preflight-8659dd0dc3c1ec05)
+
+running 1 test
+test rank_driven_collection_caps_refuse_before_iteration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_rank_file.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_rank_file-5f37562df6ae7478)
+
+running 3 tests
+test aggregate_work_refuses_before_missing_source_io ... ok
+test invalid_anchor_policy_refuses_before_missing_source_io ... ok
+test files_match_views_and_cancel_or_mutation_discard_evidence ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflected_geometry.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_reflected_geometry-48b515e36b4f4b54)
+
+running 1 test
+test reflected_file_search_common_lifecycle_and_original_pixel_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.75s
+
+     Running tests/anchor_reflection_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_reflection_collection-71ffa9aa9306eebe)
+
+running 3 tests
+test six_phase_collection_caps_refuse_before_iteration_and_cancel_wins ... ok
+test indexed_mirror_equals_direct_original_pixel_confirmation ... ok
+test foreign_pairs_are_rejected_by_indexed_and_all_direct_reflected_searches ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.86s
+
+     Running tests/anchor_reflection_collection_cancel.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_reflection_collection_cancel-0ca529ba562946de)
+
+running 1 test
+test reflected_collection_early_and_extraction_cancellation_releases_all_memory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/anchor_reflection_collection_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_reflection_collection_lifecycle-0822b259fc83f4db)
+
+running 1 test
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges has been running for over 60 seconds
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 116.17s
+
+     Running tests/anchor_reflection_collection_tokens.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_reflection_collection_tokens-ec3bc2ce25277e4e)
+
+running 2 tests
+test either_request_generation_cancels_collection_and_releases_all_credits ... ok
+test either_request_generation_cancels_mid_and_final_collection_checkpoints ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 48.51s
+
+     Running tests/anchor_reflection_fallback.rs (.dedup-work/local-sequence-target-20261021/debug/deps/anchor_reflection_fallback-917d086f5ba4fff3)
+
+running 12 tests
+test all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins ... ok
+test standalone_rank_final_callback_guards_source ... ok
+test standalone_geometry_final_callback_guards_source ... ok
+test standalone_reflected_geometry_final_callback_guards_source ... ok
+test standalone_color_candidate_final_callback_guards_source ... ok
+test standalone_color_fallback_final_callback_guards_source ... ok
+test three_recipe_final_callback_cannot_publish_mutated_source ... ok
+test six_recipe_final_callback_cannot_publish_mutated_source ... ok
+test insufficient_anchor_geometry_continues_remaining_native_recipes ... ok
+test ordinary_mirror_and_foreign_select_correct_six_phase_recipes ... ok
+test final_callback_source_mutation_precedes_native_inconclusive_error ... ok
+test six_phase_cancellation_and_both_source_mutations_release_memory ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.87s
+
+     Running tests/animated.rs (.dedup-work/local-sequence-target-20261021/debug/deps/animated-034f4aa5add02a3f)
+
+running 7 tests
+test changed_gif_timing_prevents_whole_animation_equality ... ok
+test gif_disposal_modes_match_independently_composited_full_canvas_apng ... ok
+test complete_existing_composition_fixtures_decode_and_compare ... ok
+test independent_cross_container_timeline_splits_and_negatives ... ok
+test every_observed_animation_cancellation_checkpoint_releases_and_allows_retry ... ok
+test every_apng_truncation_and_crc_damage_refuses_without_leaking_then_retries ... ok
+test every_gif_and_webp_truncation_refuses_releases_memory_and_recovers ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+     Running tests/bank_geometry.rs (.dedup-work/local-sequence-target-20261021/debug/deps/bank_geometry-157df55420716464)
+
+running 7 tests
+test validation_cannot_select_or_replace_training_model ... ok
+test insufficient_components_do_not_invent_a_model_or_validation ... ok
+test different_members_cannot_combine_forward_and_reverse_component_support ... ok
+test budget_and_malformed_suffix_refuse_atomically_and_recover ... ok
+test repeated_heldout_alternatives_are_points_but_only_one_component_vote ... ok
+test every_one_shot_cancellation_releases_all_credit_and_identical_retry_succeeds ... ok
+test alternatives_remain_but_duplicate_votes_cannot_outweigh_more_components ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/bank_partition.rs (.dedup-work/local-sequence-target-20261021/debug/deps/bank_partition-bc0caaeeaaba7370)
+
+running 6 tests
+test cross_bank_transitive_chains_keep_all_conflicting_alternatives_and_origins ... ok
+test all_work_and_payload_are_prepaid_and_output_credit_follows_last_owner ... ok
+test a_single_component_is_not_split_to_manufacture_validation_and_empty_ids_survive ... ok
+test malformed_suffixes_and_policy_release_every_reservation ... ok
+test every_one_shot_cancel_checkpoint_discards_assignments_and_retry_is_identical ... ok
+test connected_components_match_independent_graph_flood_fill_on_seeded_banks ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/build_context.rs (.dedup-work/local-sequence-target-20261021/debug/deps/build_context-77a727ec65b40195)
+
+running 2 tests
+test context_is_order_independent_and_excludes_unrelated_environment ... ok
+test native_build_inputs_and_previously_absent_target_overrides_change_context ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cache.rs (.dedup-work/local-sequence-target-20261021/debug/deps/cache-cceca982e9ef8a32)
+
+running 17 tests
+test cache_publication_child ... ok
+test checksummed_wire_rejects_invalid_statistics_and_duplicate_keys ... ok
+test every_cache_truncation_is_unexpected_eof_and_complete_stream_retries ... ok
+test repeated_interruption_at_cache_end_remains_cancellable ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test zero_budget_and_owned_values_preserve_previous_entry ... ok
+test cancellation_during_repeated_interruption_is_observed_at_every_cache_byte ... ok
+test interrupted_reads_at_every_wire_boundary_retry_without_accepting_trailing_bytes ... ok
+test interrupted_writes_retry_or_cancel_at_every_wire_byte ... ok
+test every_content_recipe_and_frame_key_bit_survives_persistence ... ok
+test every_serialized_bit_corruption_is_rejected ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test cache_preserves_every_bit_of_all_transform_hash_channels ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test unwritable_parent_refuses_before_publication_and_preserves_retry ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.91s
+
+     Running tests/cache_interpretation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/cache_interpretation-926a92cbfe75305d)
+
+running 2 tests
+test pfm_storage_order_cannot_reuse_the_opposite_interpretation ... ok
+test caller_interpretations_have_separate_repeatable_cache_entries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/cache_reload.rs (.dedup-work/local-sequence-target-20261021/debug/deps/cache_reload-fdf17b220b5c1255)
+
+running 2 tests
+test failed_reload_never_returns_warm_fingerprint_and_repair_retries ... ok
+test persisted_cache_rechecks_content_and_preserves_previous_publication_on_cancel ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/cache_rla_interpretation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/cache_rla_interpretation-4c29a02babba34f0)
+
+running 1 test
+test cached_rla_success_cannot_bypass_missing_alpha_or_color_interpretation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/candidate_geometry_only.rs (.dedup-work/local-sequence-target-20261021/debug/deps/candidate_geometry_only-523e69f1111ab79c)
+
+running 1 test
+test geometry_only_proposals_equal_original_confirmed_geometry_and_all_points ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.98s
+
+     Running tests/candidate_reflected_geometry.rs (.dedup-work/local-sequence-target-20261021/debug/deps/candidate_reflected_geometry-60a261d86d8c7a20)
+
+running 1 test
+test reflected_geometry_recovers_original_coordinate_mirror_and_refuses_before_io ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+     Running tests/candidate_union_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/candidate_union_files-40f4d935e7cecc9b)
+
+running 10 tests
+test fresh_union_regions_match_supplied_model_and_refuse_unrelated ... ok
+test asymmetric_smoothing_keeps_original_pixel_confirmation_and_terminal_release ... ok
+test asymmetric_smoothing_late_cancellation_and_source_replacement_are_atomic ... ok
+test common_source_guard_cancellation_and_preio_aggregate_admission ... ok
+test union_collection_retains_every_fresh_positive_and_exact_pair_evidence ... ok
+test fallback_preserves_symmetric_positive_and_runs_all_misses_with_atomic_refusal ... ok
+test zero_radius_collection_matches_fresh_pair_evidence_both_orders ... ok
+test fallback_collection_preserves_fresh_pair_evidence_and_preiteration_admission ... ok
+test union_collection_removes_all_changed_source_edges_and_restores_reversed_retry ... ok
+test fallback_collection_cancellation_source_change_and_restored_retry has been running for over 60 seconds
+test fallback_collection_cancellation_source_change_and_restored_retry ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 70.04s
+
+     Running tests/competitive_rank.rs (.dedup-work/local-sequence-target-20261021/debug/deps/competitive_rank-7fab836bdc88acda)
+
+running 6 tests
+test common_edges_skip_only_one_site_and_never_publish_partial_support ... ok
+test aggregate_budgets_offsets_and_unsupported_competitor_pixels_refuse ... ok
+test flat_target_pairs_are_disagreement_without_shrinking_denominator ... ok
+test smooth_plane_agrees_with_every_competitor_so_has_no_specificity_margin ... ok
+test textured_identity_beats_translations_on_the_same_source_defined_pairs ... ok
+test every_one_shot_cancel_checkpoint_discards_evidence_and_identical_retry_succeeds ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/container.rs (.dedup-work/local-sequence-target-20261021/debug/deps/container-586adb070dc8801e)
+
+running 14 tests
+test selected_frame_does_not_establish_whole_animation_identity ... ok
+test exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok
+test dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok
+test generation_change_at_final_group_admission_returns_no_result ... ok
+test recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok
+test batch_full_presentations_preserve_negative_and_error_evidence ... ok
+test automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok
+test complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok
+test complete_page_comparison_rejects_last_page_changes_and_limits ... ok
+test indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges ... ok
+test indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them ... ok
+test indexed_recursive_corrupt_animation_is_inconclusive_and_preserves_healthy_edges ... ok
+test mixed_recursive_indexed_presentations_cover_all_three_scope_classes ... ok
+test indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.98s
+
+     Running tests/content_snapshot.rs (.dedup-work/local-sequence-target-20261021/debug/deps/content_snapshot-8d7a76bc23b7f07a)
+
+running 1 test
+test full_digest_rejects_equal_length_mutation_and_budget_excess ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/correspondence_union.rs (.dedup-work/local-sequence-target-20261021/debug/deps/correspondence_union-2072480f248cafcd)
+
+running 2 tests
+test checked_admission_invalid_inputs_every_cancellation_and_retry ... ok
+test union_matches_independent_greedy_oracle_including_boundaries_duplicates_and_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/crop.rs (.dedup-work/local-sequence-target-20261021/debug/deps/crop-119d76b7e563da9e)
+
+running 4 tests
+test bordered_hdr_image_matches_only_the_full_crop ... ok
+test work_budget_and_mid_search_cancel_are_inconclusive ... ok
+test uniform_transparent_matches_expose_ambiguity_and_result_limits ... ok
+test bottom_right_crop_checks_every_color_and_alpha_without_padding ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/decode.rs (.dedup-work/local-sequence-target-20261021/debug/deps/decode-24c5e8851b41e50b)
+
+running 17 tests
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... ok
+test cached_wal_tracks_external_palette_changes_and_removal ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test actual_pfm_retains_hdr_precision_and_refuses_nonfinite_samples ... ok
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+test undecodable_files_keep_exact_identity_before_and_after_decode_errors ... ok
+test memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.01s
+
+     Running tests/diagonal_proposals.rs (.dedup-work/local-sequence-target-20261021/debug/deps/diagonal_proposals-1bf1d36472eda72d)
+
+running 2 tests
+test diagonal_proposal_preserves_landmarks_and_passes_complete_mesh_validation ... ok
+test cancellation_budgets_and_invalid_indices_have_no_partial_output ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/encoded_srgb.rs (.dedup-work/local-sequence-target-20261021/debug/deps/encoded_srgb-4da504e31a51c4ee)
+
+running 2 tests
+test encoded_affine_changes_match_independent_decimal_fixtures_and_preserve_linear_identity ... ok
+test seven_by_seven_encoded_windows_retain_broad_color_and_alpha_edits ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/exact_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/exact_files-68dc97748023e6dd)
+
+running 38 tests
+test excess_root_admission_refuses_before_missing_source_io ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test duplicate_root_admission_retains_boundary_and_fresh_retry ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok
+test reordered_middle_blocks_with_identical_sampled_edges_are_not_copies ... ok
+test duplicate_zip_entry_names_do_not_replace_encoded_byte_identity ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test matching_video_prefix_and_size_do_not_establish_exact_equality ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test verified_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+test selecting_one_directory_does_not_admit_sibling_prefix_matches ... ok
+test hidden_directories_and_empty_files_remain_in_exact_partitions ... ok
+test sibling_roots_with_a_shared_name_prefix_keep_both_file_sets ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test unique_sizes_skip_payload_reads_without_weakening_verified_observations ... ok
+test replacing_a_duplicate_with_a_hardlink_invalidates_its_old_observation ... ok
+test exact_content_partitions_ignore_extensions_and_check_unsampled_bytes ... ok
+test stale_small_file_observations_reject_rewrite_and_disappearance ... ok
+test late_exact_source_failures_preserve_healthy_members_and_other_groups ... ok
+test whitespace_path_names_preserve_all_authored_copy_partitions ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes ... ok
+test nested_overlapping_roots_match_the_full_authored_partition ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+test restored_modified_time_does_not_hide_same_inode_edit_during_scan ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.13s
+
+     Running tests/exact_large_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/exact_large_files-8f0f38102ebfea57)
+
+running 4 tests
+test large_file_discovery_keeps_u64_lengths_and_reports_limit_omissions ... ok
+test large_logical_lengths_cannot_wrap_byte_admission ... ok
+test large_sparse_reads_cancel_without_publishing_an_unread_group ... ok
+test dense_large_files_distinguish_changes_outside_spaced_samples ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.44s
+
+     Running tests/exact_repeated_metadata.rs (.dedup-work/local-sequence-target-20261021/debug/deps/exact_repeated_metadata-f7b970f95433795e)
+
+running 2 tests
+test rescans_follow_renames_removal_and_recreated_paths ... ok
+test repeated_comparisons_reread_content_when_size_and_modified_time_are_restored ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/exposure.rs (.dedup-work/local-sequence-target-20261021/debug/deps/exposure-ac93ff8ff323a6e9)
+
+running 5 tests
+test calibration_scratch_and_all_cancellation_boundaries_are_guarded ... ok
+test budget_precedes_reads_and_late_cancellation_discards_measurement ... ok
+test uniform_exposure_calibrates_dark_and_hdr_without_clipping ... ok
+test zero_negative_and_transparent_inputs_refuse_calibration ... ok
+test calibrated_rank_recovers_uniform_darkening_and_rejects_inversion ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/exposure_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/exposure_files-5ea415d9f0c286b3)
+
+running 6 tests
+test file_calibration_budget_overflow_and_cancel_precede_missing_sources ... ok
+test zero_exposure_file_is_explicitly_uninformative_and_releases_scratch ... ok
+test calibrated_scratch_admission_fails_after_successful_legacy_decode_and_releases_credit ... ok
+test late_file_calibration_cancellation_and_source_mutation_discard_evidence ... ok
+test explicit_file_calibration_recovers_dark_rank_and_rejects_inversion ... ok
+test both_request_owners_cancel_mid_calibration_and_at_final_publication ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/filtered.rs (.dedup-work/local-sequence-target-20261021/debug/deps/filtered-c7eacd9509a3ef9b)
+
+running 4 tests
+test complete_work_is_admitted_before_sampling_and_cancellation_has_no_partial_evidence ... ok
+test independently_known_box_mean_retains_strict_high_frequency_differences ... ok
+test broad_content_edits_and_alpha_changes_remain_visible_after_filtering ... ok
+test reflected_filter_retains_color_space_alpha_work_and_cancel_policy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/five_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/five_collection-99cfaec2236c7920)
+
+running 1 test
+test five_search_collection_matches_direct_and_source_lifecycle has been running for over 60 seconds
+test five_search_collection_matches_direct_and_source_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 257.64s
+
+     Running tests/five_gradient_region_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/five_gradient_region_lifecycle-c732e251d1f68e0c)
+
+running 1 test
+test gradient_region_phase_cancellation_and_source_guard has been running for over 60 seconds
+test gradient_region_phase_cancellation_and_source_guard ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 102.76s
+
+     Running tests/five_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/five_lifecycle-4d6b78230c3693c9)
+
+running 1 test
+test five_search_source_replacement_discards_prior_positives ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 44.60s
+
+     Running tests/five_region_admission.rs (.dedup-work/local-sequence-target-20261021/debug/deps/five_region_admission-8027d04a7025a6d3)
+
+running 1 test
+test joined_cumulative_caps_refuse_before_source_io ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/five_region_lifecycle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/five_region_lifecycle-19d49da4fcaea6c3)
+
+running 1 test
+test joined_regions_cancel_mutation_and_retry_are_atomic has been running for over 60 seconds
+test joined_regions_cancel_mutation_and_retry_are_atomic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 70.11s
+
+     Running tests/geometry.rs (.dedup-work/local-sequence-target-20261021/debug/deps/geometry-c53e39aa3e24859e)
+
+running 9 tests
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/geometry_validation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/geometry_validation-2bfd9670621b4b38)
+
+running 10 tests
+test exact_work_limits_are_prepaid_and_one_less_refuses ... ok
+test aliases_in_either_domain_and_either_set_are_refused ... ok
+test every_one_shot_cancellation_checkpoint_refuses_and_retry_is_identical ... ok
+test invalid_endpoints_domains_models_and_policy_never_publish_evidence ... ok
+test scale_exposes_distinct_forward_reverse_and_joint_evidence ... ok
+test unchanged_model_scores_only_declared_validation_and_retains_outliers ... ok
+test coupled_fit_and_validation_enforce_both_work_budgets ... ok
+test malformed_validation_is_refused_even_when_training_has_no_model ... ok
+test fitting_never_uses_validation_to_select_refine_or_replace_the_training_model ... ok
+test coupled_fit_one_shot_cancellation_covers_training_and_validation_then_retry ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient-00f52ac52a1ddeee)
+
+running 9 tests
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/gradient_candidate_smoothing.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_candidate_smoothing-55f697695d5f8ac3)
+
+running 6 tests
+test row_ring_admits_only_window_scratch_and_refuses_one_byte_short ... ok
+test smoothing_matches_independent_footprints_and_exact_last_owner_credit ... ok
+test zero_radius_exact_bits_half_memory_and_all_cancellation_points ... ok
+test work_memory_opacity_and_every_cancellation_refuse_without_retained_output ... ok
+test row_ring_wrap_cancellation_and_late_alpha_never_retain_partial_output ... ok
+test row_ring_is_bitwise_full_two_pass_for_wraps_borders_and_hdr ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_collection-ab4e7b8be9a1039f)
+
+running 1 test
+test gradient_collection_matches_direct_pairs_and_atomic_admission ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.32s
+
+     Running tests/gradient_distinct_locations.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_distinct_locations-e96cd181bd651667)
+
+running 4 tests
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test managed_distinct_match_admission_last_owner_and_cancellation ... ok
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_empty.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_empty-ed21260b69b5e6d9)
+
+running 1 test
+test empty_gradient_inputs_honor_terminal_cancellation_and_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_index.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_index-210b35df858f2b5b)
+
+running 13 tests
+test admission_cancel_recipe_and_owned_reservation ... ok
+test invalid_vectors_exact_memory_and_build_cancellation ... ok
+test actual_work_preserves_reflected_hits_and_transform_admission ... ok
+test actual_work_minimum_self_work_and_late_refusal ... ok
+test proposal_scratch_and_retained_report_admit_exact_peak ... ok
+test actual_work_counts_rejected_coordinate_candidates_and_never_returns_partial_pairs ... ok
+test actual_work_admits_sparse_pairs_without_quadratic_prepayment ... ok
+test actual_work_every_cancel_checkpoint_discards_even_previous_pairs ... ok
+test file_proposal_cancellation_never_returns_partial_pairs ... ok
+test file_proposals_equal_exhaustive_without_ambiguity_loss ... ok
+test repeated_descriptor_hits_retain_one_pair_with_bounded_memory ... ok
+test actual_work_pair_union_matches_independent_exhaustive_oracle ... ok
+test retrieval_equals_exhaustive_including_boundaries_and_collisions ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/gradient_index_reflection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_index_reflection-2e64af15b4269983)
+
+running 2 tests
+test reflected_pair_union_prepays_both_domains_and_keeps_all_hits ... ok
+test reflected_query_matches_independent_permutation_and_releases_index ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_interpolated.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_interpolated-158b526fd68a9a94)
+
+running 4 tests
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/gradient_reflection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_reflection-0f2f74ba28fb4b29)
+
+running 1 test
+test canonical_reflection_matches_independently_mirrored_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_scale.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_scale-ebb7f38df994535b)
+
+running 6 tests
+test scale_admission_can_cancel_before_allocating ... ok
+test area_scale_matches_independent_box_reference_and_managed_lifecycle ... ok
+test admission_and_cancellation_return_no_partial_features ... ok
+test managed_scales_exact_peak_last_owner_and_cancellation ... ok
+test spatial_scale_selection_recipe_limits_and_owned_memory ... ok
+test intermediate_scale_recovers_authored_reduction_without_acceptance_relaxation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/gradient_scale_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/gradient_scale_files-7681e9deca00959a)
+
+running 19 tests
+test scale_list_cancellation_precedes_file_and_iterator_access ... ok
+test scaled_files_confirm_pixels_and_refuse_unrelated ... ok
+test scale_file_admission_and_cancellation_are_atomic ... ok
+test distinct_managed_file_results_preserve_copy_refusal_and_last_owner ... ok
+test changed_source_refuses_scale_evidence_and_restored_retry_succeeds ... ok
+test area_distinct_file_keeps_original_confirmation_and_preio_admission ... ok
+test area_distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test spatial_collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test distinct_managed_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test area_distinct_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test intermediate_scale_files_retain_authored_rotations_and_enlargements ... ok
+test collection_scale_mutation_and_cancellation_remove_partial_results ... ok
+test area_distinct_regions_common_source_lifecycle_and_admission ... ok
+test distinct_managed_regions_common_source_lifecycle_and_admission ... ok
+test spatial_scale_regions_match_fresh_supplied_model_confirmation ... ok
+test distinct_managed_collection_cancel_changed_source_and_restored_retry ... ok
+test area_distinct_collection_cancel_changed_source_and_restored_retry ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.41s
+
+     Running tests/groups.rs (.dedup-work/local-sequence-target-20261021/debug/deps/groups-4105370b7fa9ace3)
+
+running 6 tests
+test invalid_input_budget_and_cancellation_are_explicit ... ok
+test nontransitive_chain_preserves_edge_without_inventing_pair ... ok
+test sixty_member_evidence_is_not_truncated_and_one_missing_edge_is_not_invented ... ok
+test every_emitted_group_has_all_pairs_for_all_small_graphs ... ok
+test isolated_and_sparse_entries_avoid_unrelated_group_checks ... ok
+test sparse_selection_matches_independent_exhaustive_reference_for_all_six_node_graphs ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/hamming_image_corpus.rs (.dedup-work/local-sequence-target-20261021/debug/deps/hamming_image_corpus-0d5752b522b2d05e)
+
+running 1 test
+test image_hash_corpus_matches_full_scan_without_top_k_truncation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/icc_oracle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/icc_oracle-036b6a350b4cfb7d)
+
+running 3 tests
+test camera_gamma_profile_preserves_exact_black_and_unfitted_alpha ... ok
+test independent_lcms_boundary_samples_preserve_black_channel_endpoints ... ok
+test independent_lcms_camera_render_grid_preserves_profiled_linear_samples ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/information.rs (.dedup-work/local-sequence-target-20261021/debug/deps/information-2898deefecfd3cae)
+
+running 5 tests
+test informative_hash_collision_remains_candidate_and_fails_full_resolution_confirmation ... ok
+test uniform_candidates_and_invisible_rgb_never_invent_visible_pixel_equality ... ok
+test standalone_pixel_search_recovers_equal_transparent_files_without_visual_candidates ... ok
+test indexed_candidates_match_exhaustive_pixel_equality_and_avoid_unrelated_pairs ... ok
+test uniform_local_search_cannot_invent_geometry_or_color_fit ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/joint_projective.rs (.dedup-work/local-sequence-target-20261021/debug/deps/joint_projective-15bbe8aad3a8be4a)
+
+running 4 tests
+test joint_projection_caps_overflow_invalid_and_cancellation_refuse ... ok
+test joint_first_middle_last_cancellation_and_retry_are_deterministic ... ok
+test real_reverse_points_select_joint_support_instead_of_target_only_winner ... ok
+test real_207700_recovers_with_explicit_larger_sampling_and_projection_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.88s
+
+     Running tests/joint_witnesses.rs (.dedup-work/local-sequence-target-20261021/debug/deps/joint_witnesses-46ba2213c858dee9)
+
+running 10 tests
+test invalid_policy_domain_and_empty_input_do_not_prove_nonidentity ... ok
+test bank_preflight_and_invalid_suffix_refuse_before_returning_candidate ... ok
+test candidate_qualifier_errors_are_atomic_and_callback_cancellation_wins ... ok
+test preflight_work_capacity_and_invalid_suffix_refuse_atomically ... ok
+test every_cancellation_checkpoint_releases_credit ... ok
+test real_cross_window_669_points_recover_exact_ten_witnesses ... ok
+test rejects_both_endpoint_aliases_and_filters_both_residuals ... ok
+test bank_cancellation_is_atomic_and_output_ownership_is_managed ... ok
+test rejected_larger_candidate_does_not_prune_smaller_confirmed_candidate ... ok
+test real_bank_search_generates_h_without_supplied_transform ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.63s
+
+     Running tests/jpeg_orientation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/jpeg_orientation-b351efaeaf705f3e)
+
+running 1 test
+test all_jpeg_exif_orientations_preserve_normalized_profiled_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/linear.rs (.dedup-work/local-sequence-target-20261021/debug/deps/linear-3be2446a2f15da21)
+
+running 5 tests
+test invalid_samples_budget_and_cancel_are_explicit ... ok
+test hdr_and_sub_byte_differences_are_retained ... ok
+test hdr_fingerprints_keep_highlight_structure_without_quantization ... ok
+test invisible_rgb_and_signed_zero_are_canonical ... ok
+test every_sixteen_bit_byte_bucket_keeps_visible_channel_differences ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local.rs (.dedup-work/local-sequence-target-20261021/debug/deps/local-21453370b877d5f5)
+
+running 4 tests
+test one_shot_matching_cancellation_discards_every_partial_result_and_retries ... ok
+test flat_images_ambiguous_descriptors_budgets_and_cancel_are_explicit ... ok
+test quarter_turn_crops_are_found_without_manual_correspondences ... ok
+test extracted_crop_matches_drive_geometry_and_pixel_verification ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/local_collection-b64ee0a90cab1395)
+
+running 20 tests
+test recursive_collection_preserves_aliases_errors_and_request_settings ... ok
+test reflected_ranged_modes_validate_before_consuming_sources ... ok
+test reflected_collection_discards_changed_sources_batch_wide ... ok
+test indexed_collection_changed_before_decode_is_invalidated_without_losing_healthy_pair ... ok
+test recursive_spatial_collection_preserves_requests_and_rejects_substitution ... ok
+test indexed_collection_reports_bad_and_insufficient_sources_and_admission_errors ... ok
+test display_projection_collection_matches_pairs_and_preserves_strict_evidence ... ok
+test reflected_file_pair_confirms_pixels_and_releases_managed_features ... ok
+test ranged_fit_collection_matches_pair_results_and_exposes_selected_domain ... ok
+test spatial_collection_matches_exhaustive_spatial_pair_acceptance ... ok
+test indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair ... ok
+test reflected_spatial_collection_matches_spatial_file_oracle ... ok
+test final_callback_mutation_cannot_publish_incident_local_pairs ... ok
+test final_directory_callback_mutation_cannot_publish_incident_local_pairs ... ok
+test indexed_watermark_and_large_edit_preserve_pixel_policy ... ok
+test reflected_recursive_collection_keeps_aliases_paths_and_request_policy ... ok
+test indexed_arbitrary_angles_and_intermediate_scales_keep_labelled_pairs ... ok
+test early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication ... ok
+test indexed_collection_final_generation_and_one_shot_cancel_discard_report ... ok
+test reflected_collection_retrieves_labelled_pairs_and_cancels_without_report ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.07s
+
+     Running tests/local_index.rs (.dedup-work/local-sequence-target-20261021/debug/deps/local_index-2863acd11b2c0044)
+
+running 7 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+test extracted_rotation_and_scale_features_keep_exhaustive_correspondences ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/local_rank.rs (.dedup-work/local-sequence-target-20261021/debug/deps/local_rank-09ee7f69f3ac7cfc)
+
+running 5 tests
+test inverse_residual_is_required_even_when_forward_error_is_small ... ok
+test points_outside_selected_regions_do_not_count_and_aliases_are_not_hidden ... ok
+test unsupported_pixels_uninformative_regions_and_overflow_refuse_explicitly ... ok
+test bidirectional_support_requires_geometry_and_pixel_order ... ok
+test aggregate_work_and_each_cancellation_refuse ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests/local_rank_cached.rs (.dedup-work/local-sequence-target-20261021/debug/deps/local_rank_cached-411f49830e6e5bd1)
+
+running 3 tests
+test all_1016_original_points_require_prepaid_checks_without_truncation ... ok
+test cached_bidirectional_local_support_matches_direct_for_identity_and_perspective ... ok
+test cached_aggregate_context_limits_and_every_cancel_release_all_credits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/local_scan.rs (.dedup-work/local-sequence-target-20261021/debug/deps/local_scan-69c1fcb0f5250388)
+
+running 11 tests
+test fitted_scan_validates_policy_before_consuming_input ... ok
+test file_pair_limits_cancel_and_invalid_acceptance_are_inconclusive ... ok
+test recursive_local_search_preserves_paths_aliases_and_decode_errors ... ok
+test spatial_file_policy_preserves_pixel_proof_errors_and_source_guards ... ok
+test full_file_search_finds_crop_scale_rotation_and_rejects_unrelated_and_corrupt_sources ... ok
+test unfiltered_photometric_batch_uses_fitted_residuals_and_retains_strict_pixels ... ok
+test batch_source_mutation_discards_all_stale_pairs_and_keeps_healthy_evidence ... ok
+test constrained_batch_mutation_discards_stale_pairs ... ok
+test final_generation_change_and_one_shot_cancellation_return_no_partial_report ... ok
+test constrained_batch_final_generation_and_cancellation_discard_report ... ok
+test fitted_batch_and_roots_preserve_signal_selection_and_corrupt_file_diagnostics ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.92s
+
+     Running tests/managed_evidence.rs (.dedup-work/local-sequence-target-20261021/debug/deps/managed_evidence-f5feaae768c563cd)
+
+running 2 tests
+test evidence_adoption_preserves_allocations_capacity_and_independent_last_owners ... ok
+test evidence_adoption_cancellation_discards_all_stages_and_handles_absent_geometry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_deformation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/mesh_deformation-aaf3be5797135556)
+
+running 3 tests
+test analytic_translation_and_shear_have_distinct_displacement_and_slope_bounds ... ok
+test preflight_refusal_and_every_cancellation_checkpoint_are_atomic ... ok
+test exact_perspective_and_asymmetric_axis_normalization ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_grid.rs (.dedup-work/local-sequence-target-20261021/debug/deps/mesh_grid-55a6b75dbd9b7c9e)
+
+running 2 tests
+test both_directions_match_point_queries_and_preserve_holes_and_credit ... ok
+test every_cancel_and_one_short_memory_work_refuse_without_partial_grid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_landmark_admission.rs (.dedup-work/local-sequence-target-20261021/debug/deps/mesh_landmark_admission-78416e73fe2d9547)
+
+running 3 tests
+test aliases_and_malformed_scored_evidence_are_invalid ... ok
+test original_points_are_preserved_and_duplicate_proposals_are_explicit ... ok
+test every_cancel_and_budget_refusal_return_no_partial_landmarks ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_rank.rs (.dedup-work/local-sequence-target-20261021/debug/deps/mesh_rank-65e636fe0fb66da6)
+
+running 2 tests
+test summed_mesh_windows_match_direct_projective_windows_and_reject_inversion ... ok
+test cancellation_memory_reads_and_overflow_refuse_without_retaining_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/mesh_rank_regions.rs (.dedup-work/local-sequence-target-20261021/debug/deps/mesh_rank_regions-01a91d9879cd00e8)
+
+running 4 tests
+test centers_outside_atlas_invalid_rectangles_and_unsupported_context_are_explicit ... ok
+test contrast_domain_matches_direct_comparison_before_scratch_admission ... ok
+test selected_centers_keep_whole_image_window_context_and_source_clip ... ok
+test every_observed_cancel_and_full_atlas_budget_refuse_without_scratch_leaks ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/mesh_refine.rs (.dedup-work/local-sequence-target-20261021/debug/deps/mesh_refine-cf18d6160490852a)
+
+running 4 tests
+test flat_support_and_invalid_visible_samples_are_explicit ... ok
+test contrast_domain_refuses_above_one_before_scratch_admission ... ok
+test known_translation_is_recovered_without_using_validation_for_selection ... ok
+test cancellation_and_prepaid_read_limits_leave_no_partial_proposals ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/model_compare.rs (.dedup-work/local-sequence-target-20261021/debug/deps/model_compare-0e7b8d430f3b873b)
+
+running 47 tests
+test exposure_collection_admits_all_totals_suffix_and_storage_before_iteration ... ok
+test bidirectional_exposure_collection_prepays_reverse_before_input ... ok
+test exposure_recovery_validates_suffix_cumulative_caps_and_overflow_before_io ... ok
+test file_bank_coverage_admits_all_radii_before_io_and_cancel_has_priority ... ok
+test extracted_crop_bank_retains_mapped_points_and_last_clone_credit_without_geometry ... ok
+test both_generations_and_ignored_provider_cancellation_are_sticky ... ok
+test extracted_bank_refuses_changed_source_or_weights_after_provider ... ok
+test either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers ... ok
+test exposure_recovery_preserves_primary_support_and_skips_secondary_provider ... ok
+test file_bank_pixel_context_preflight_rejects_overflow_work_and_cancel_before_io ... ok
+test file_bank_empty_is_inconclusive_and_cancelled_provider_discards_retained_prefix ... ok
+test exposure_recovery_advances_only_after_primary_miss_with_one_shared_provider ... ok
+test file_bank_multiple_contexts_discard_last_provider_source_change_and_cancel ... ok
+test file_bank_search_extracts_all_windows_and_confirms_original_pixels ... ok
+test final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test exposure_collection_keeps_unknown_pairs_and_recovers_with_shared_provider ... ok
+test file_bank_work_refuses_before_io_and_late_source_change_discards_banks ... ok
+test joint_model_keeps_original_pixel_confirmation_and_releases_on_cancelled_retry ... ok
+test joint_model_projection_admission_precedes_io_and_cancellation_has_priority ... ok
+test global_and_both_request_tokens_cancel_mid_and_final_publication ... ok
+test joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test malformed_regions_refuse_before_weight_io_or_provider_and_global_cancel_wins ... ok
+test joint_shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test overlap_exposure_admits_cumulative_calibration_before_io_and_cancel_wins ... ok
+test model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence ... ok
+test joint_region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test file_bank_coverage_keeps_flat_and_inverted_pixels_inconclusive ... ok
+test policy_preflight_and_proposal_count_refuse_without_partial_evidence ... ok
+test provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners ... ok
+test region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses ... ok
+test overlap_exposure_search_shares_nine_banks_and_retains_selected_metadata ... ok
+test file_bank_pixels_refuse_flat_or_inverted_even_with_consistent_provider_geometry ... ok
+test exposure_collection_preserves_primary_support_scheduling_and_owned_report_credit ... ok
+test file_bank_coverage_recovers_after_insufficient_windows_without_repeating_inference ... ok
+test exposure_recovery_last_secondary_mutation_and_both_owners_are_atomic ... ok
+test overlap_exposure_flat_and_inverted_pixels_keep_compact_miss_unconfirmed ... ok
+test overlap_exposure_last_provider_mutation_and_owner_cancel_discard_all_banks ... ok
+test file_bank_multiple_rank_contexts_do_not_confirm_flat_or_inverted_pixels ... ok
+test file_bank_pixel_contexts_share_extraction_and_report_selected_context ... ok
+test bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch ... ok
+test exposure_recovery_primary_success_still_checks_final_outer_weights_and_owners ... ok
+test exposure_collection_final_pair_mutation_of_prior_source_and_owner_discards_batch ... ok
+test bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix ... ok
+test bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs ... ok
+test extracted_bank_empty_is_explicit_and_every_cancel_checkpoint_releases_credit ... ok
+
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.18s
+
+     Running tests/model_input.rs (.dedup-work/local-sequence-target-20261021/debug/deps/model_input-9eca0b87a47b9756)
+
+running 9 tests
+test invalid_caps_and_unsupported_pixels_refuse_atomically ... ok
+test odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners ... ok
+test projected_hdr_alpha_odd_area_matches_independent_reference_and_credit ... ok
+test nonzero_odd_crop_matches_independent_continuous_area_and_keeps_full_source_cap ... ok
+test tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded ... ok
+test projected_collisions_are_rejected_by_original_rgba_warp ... ok
+test projected_preflight_every_cancellation_and_memory_refusal_release_payload ... ok
+test crop_bounds_overflow_and_every_cancellation_checkpoint_release_payload ... ok
+test every_one_shot_cancellation_checkpoint_releases_all_output_credit ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_input_file.rs (.dedup-work/local-sequence-target-20261021/debug/deps/model_input_file-8bb4a790350dedbb)
+
+running 10 tests
+test projected_file_invalid_configuration_is_refused_before_source_io ... ok
+test projected_crop_reads_original_rectangle_and_guards_mutation_outside_it ... ok
+test file_crop_retains_full_source_identity_and_original_dimensions ... ok
+test file_input_retains_only_output_and_rechecks_source_and_generation_after_inference ... ok
+test projected_hdr_file_retains_recipe_and_rejects_equal_length_mutation ... ok
+test invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors ... ok
+test final_source_verification_callback_cannot_hide_source_or_dependency_mutation ... ok
+test external_palette_is_rechecked_after_preparation_and_mutation_discards_input ... ok
+test final_preparation_callback_cannot_publish_mutated_source_or_dependency ... ok
+test every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/model_projected_compare.rs (.dedup-work/local-sequence-target-20261021/debug/deps/model_projected_compare-0d6c48c7a8f440ac)
+
+running 8 tests
+test work_and_invalid_thresholds_refuse_before_provider ... ok
+test transparent_black_collision_is_rejected_by_original_alpha ... ok
+test identity_candidate_recovers_noisy_self_geometry_without_loosening_pixel_policy ... ok
+test source_and_weights_mutation_in_provider_never_publish_evidence ... ok
+test rejected_identity_continues_fitted_proof_and_charges_both_grids_for_each_mapping ... ok
+test each_request_generation_and_tiny_memory_refusal_release_all_owners ... ok
+test hdr_original_proof_accepts_copy_and_rejects_equal_projection_collision ... ok
+test cancellation_and_final_checkpoint_mutations_discard_result ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/model_projected_tiles.rs (.dedup-work/local-sequence-target-20261021/debug/deps/model_projected_tiles-26c665c7d22bd86a)
+
+running 8 tests
+test all_seven_work_caps_and_ledger_refuse_before_missing_io_and_cancel_wins ... ok
+test hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger ... ok
+test source_weights_and_provider_failures_after_a_miss_remain_terminal_and_release ... ok
+test different_nonzero_crop_origins_map_proposals_to_full_original_coordinates ... ok
+test all_25_equal_hdr_projections_are_rejected_by_originals ... ok
+test alpha_copies_support_and_equal_black_projections_with_different_alpha_exhaust ... ok
+test last_caller_source_and_weight_mutations_cannot_publish_a_negative_ledger ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_final_checkpoints ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/model_tiles.rs (.dedup-work/local-sequence-target-20261021/debug/deps/model_tiles-90665e6669dd115c)
+
+running 21 tests
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test joint_projection_total_is_admitted_before_io_even_if_first_tile_could_support ... ok
+test joint_source_tolerance_square_overflow_and_underflow_refuse_before_io ... ok
+test joint_insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle ... ok
+test late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts ... ok
+test tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions ... ok
+test joint_whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test joint_complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test geometry_without_original_pixel_support_does_not_stop_the_tile_sequence ... ok
+test exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test joint_exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test joint_final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+test joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+     Running tests/native_anchor_recovery.rs (.dedup-work/local-sequence-target-20261021/debug/deps/native_anchor_recovery-9a416f5e1a7b9f50)
+
+running 2 tests
+test six_recipe_search_recovers_after_real_insufficient_geometry ... ok
+test three_recipe_search_recovers_after_real_insufficient_geometry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s
+
+     Running tests/native_pixel_domain.rs (.dedup-work/local-sequence-target-20261021/debug/deps/native_pixel_domain-5e1bef53f6e86266)
+
+running 3 tests
+test only_explicit_pixel_domain_errors_can_admit_an_alternate_verifier ... ok
+test rank_alpha_negative_and_hdr_refusals_preserve_invalid_and_cancelled_errors ... ok
+test gradient_opacity_is_distinct_from_coordinates_work_and_cancellation ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/opposite_native.rs (.dedup-work/local-sequence-target-20261021/debug/deps/opposite_native-177a4031ecbe863b)
+
+running 6 tests
+test opposite_preflight_swap_work_overflow_memory_and_cancel_before_io ... ok
+test joint_opposite_original_pixels_support_and_release ... ok
+test joint_opposite_preflight_and_unknown_do_not_publish_negative ... ok
+test opposite_unknown_is_preserved_and_releases ... ok
+test opposite_final_callback_mutation_cannot_publish ... ok
+test opposite_real_fixture_support_reflection_and_release ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s
+
+     Running tests/ordinal.rs (.dedup-work/local-sequence-target-20261021/debug/deps/ordinal-a5310197911027f4)
+
+running 1 test
+test monotone_neutral_transfers_preserve_features_and_indexed_correspondences ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/oriented.rs (.dedup-work/local-sequence-target-20261021/debug/deps/oriented-9d5808801f825f0a)
+
+running 4 tests
+test oriented_extraction_cancels_inside_descriptor_work_and_enforces_budgets ... ok
+test independent_arbitrary_rotations_recover_geometry_and_reject_unrelated_texture ... ok
+test independently_resized_images_estimate_non_dyadic_scale_and_rotation ... ok
+test reflected_descriptors_reach_original_geometry_and_pixel_proof ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/pages.rs (.dedup-work/local-sequence-target-20261021/debug/deps/pages-49b594de521b7711)
+
+running 11 tests
+test untagged_tiff_requires_explicit_color_transform ... ok
+test cursor_hotspot_and_invalid_resource_offsets_are_not_ignored ... ok
+test all_dcx_pages_and_changed_second_page_are_compared ... ok
+test every_icon_resource_is_compared_including_the_last ... ok
+test complete_tiff_pages_with_icc_detect_last_page_changes_and_cycles ... ok
+test selected_tiff_pages_use_their_own_profile_and_keep_complete_count ... ok
+test identical_tiff_samples_with_different_page_profiles_produce_distinct_colors ... ok
+test selected_tiff_budget_refusals_release_metadata_and_allow_retry ... ok
+test independent_tiff_precision_and_orientation_are_preserved ... ok
+test public_selected_frame_honors_tiff_page_profiles_metadata_and_explicit_limits ... ok
+test independently_encoded_tiff_endian_bigtiff_and_compression_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/pair_schedule.rs (.dedup-work/local-sequence-target-20261021/debug/deps/pair_schedule-8210ba17a68b497c)
+
+running 5 tests
+test invalid_ids_and_hints_refuse_without_retaining_memory ... ok
+test constructor_and_enumeration_cancel_at_every_checkpoint_then_retry ... ok
+test full_pair_count_and_input_limits_preflight_before_allocation ... ok
+test late_memory_refusal_releases_ids_and_owned_inputs_cannot_change_schedule ... ok
+test every_proposal_subset_keeps_all_pairs_including_descriptorless_files ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/palette_mutation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/palette_mutation-dca27ece642dc86d)
+
+running 1 test
+test same_length_png_alpha_table_rewrite_invalidates_cache_and_collection_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/palette_transparency.rs (.dedup-work/local-sequence-target-20261021/debug/deps/palette_transparency-f8f11d7b28cbd08a)
+
+running 3 tests
+test original_uniform_png_hash_collision_does_not_prove_pixel_equality ... ok
+test original_palette_alpha_tables_ignore_hidden_rgb_across_rgba_encoding ... ok
+test indexed_palette_collection_matches_exhaustive_without_uniform_false_edges ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/periodic_capture.rs (.dedup-work/local-sequence-target-20261021/debug/deps/periodic_capture-ccc6193f1d96d75d)
+
+running 1 test
+test periodic_capture_bands_keep_strict_evidence_and_reject_broad_content_changes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.17s
+
+     Running tests/photo_collages.rs (.dedup-work/local-sequence-target-20261021/debug/deps/photo_collages-2dcc03c2b539b3c9)
+
+running 3 tests
+test dark_signal_can_pass_selected_encoded_metric_with_auxiliary_linear_failure_retained ... ok
+test partial_copy_challenges_distinguish_residual_rejections_from_inconclusive_fits ... ok
+test constrained_partial_copies_reject_residuals_without_relaxing_model_bounds has been running for over 60 seconds
+test constrained_partial_copies_reject_residuals_without_relaxing_model_bounds ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 72.55s
+
+     Running tests/photo_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/photo_files-143c774c4407c954)
+
+running 27 tests
+test invalid_fitting_policy_is_rejected_before_source_access ... ok
+test recursive_filtered_reflection_keeps_frame_selection_and_factory_guards ... ok
+test recursive_ranged_reflection_keeps_frame_selection_and_factory_guards ... ok
+test reflected_brightness_1084_known_fixture_geometry_passes_unchanged_pixel_policy ... ok
+test ordinary_spatial_brightness_keeps_all_four_labelled_camera_scenes ... ok
+test filtered_file_evidence_is_discarded_on_late_cancellation_generation_or_mutation ... ok
+test reflected_filtered_invalid_policy_precedes_source_and_collection_access ... ok
+test reflected_filtered_file_guards_discard_late_results ... ok
+test filtered_natural_photo_jpegs_are_candidates_and_other_scenes_remain_rejected ... ok
+test recursive_spatial_reflected_brightness_shares_pair_and_frame_policy ... ok
+test real_camera_preview_brightness_is_a_visual_candidate_with_strict_residuals_retained ... ok
+test ordinary_spatial_brightness_collection_matches_complete_spatial_oracle ... ok
+test reflected_natural_brightness_fitting_keeps_original_pixel_evidence ... ok
+test real_photo_resize_crop_rotation_and_brightness_have_filtered_evidence ... ok
+test recursive_reflected_brightness_keeps_fitted_mode_paths_and_frame_settings ... ok
+test strict_reflected_natural_files_keep_scene_pairs_and_reject_cross_scene_negatives ... ok
+test spatial_reflected_brightness_collection_matches_complete_spatial_oracle ... ok
+test reflected_range_and_display_collection_match_all_labelled_pairs ... ok
+test indexed_natural_photo_collection_matches_exhaustive_filtered_candidates ... ok
+test reflected_filtered_jpegs_preserve_original_evidence_in_both_spaces_and_fit_modes ... ok
+test recursive_ranged_reflections_preserve_oracle_aliases_errors_and_modes ... ok
+test indexed_reflected_brightness_collection_preserves_fitted_and_strict_evidence ... ok
+test reflected_filtered_collection_matches_spatial_file_oracle_in_both_spaces_and_fit_modes ... ok
+test indexed_reflected_natural_collection_matches_complete_pair_oracle ... ok
+test indexed_natural_rotations_and_resizes_preserve_labelled_scene_pairs ... ok
+test explicit_seven_by_seven_windows_cover_all_twenty_photo_derivatives_in_both_spaces ... ok
+test recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes has been running for over 60 seconds
+test recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 64.79s
+
+     Running tests/photo_jpeg_oracle.rs (.dedup-work/local-sequence-target-20261021/debug/deps/photo_jpeg_oracle-d2493b16559c4153)
+
+running 1 test
+test native_jpeg_pixels_are_qualified_against_independent_libjpeg_readback ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/photometric.rs (.dedup-work/local-sequence-target-20261021/debug/deps/photometric-24ab5cbfdcb22f22)
+
+running 7 tests
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photos_heldout.rs (.dedup-work/local-sequence-target-20261021/debug/deps/photos_heldout-60a993b4c558a5c1)
+
+running 5 tests
+test exact_pixels_keep_related_captures_and_other_scenes_distinct ... ok
+test related_garden_views_keep_exact_pixel_evidence_separate_from_visual_candidate ... ok
+test unchanged_filter_policy_rejects_unrelated_heldout_scenes ... ok
+test unchanged_filter_policy_accepts_heldout_derivatives ... ok
+test heldout_indexed_crop_collection_matches_complete_pair_oracle ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 17.17s
+
+     Running tests/piecewise_local_rank.rs (.dedup-work/local-sequence-target-20261021/debug/deps/piecewise_local_rank-94c3c24cc9e5b9ac)
+
+running 2 tests
+test combined_piecewise_requires_mesh_consistent_regional_witnesses ... ok
+test piecewise_aggregate_work_and_every_cancel_release_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/piecewise_warp.rs (.dedup-work/local-sequence-target-20261021/debug/deps/piecewise_warp-92dfe4e1420f1f88)
+
+running 4 tests
+test inverted_degenerate_duplicate_overlapping_and_t_junction_faces_refuse ... ok
+test curved_grid_is_continuous_invertible_and_shared_credit_is_retained ... ok
+test source_only_overlap_and_input_aliases_are_rejected ... ok
+test exact_memory_and_work_admission_and_every_checkpoint_cancel_are_atomic ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pixel_search.rs (.dedup-work/local-sequence-target-20261021/debug/deps/pixel_search-c7b48c14cb18e7d3)
+
+running 20 tests
+test indexed_source_changed_before_its_decode_is_not_admitted_as_fresh ... ok
+test changed_source_discards_every_stale_decision_and_preserves_healthy_pairs ... ok
+test opaque_uniform_png_and_independently_encoded_bmp_are_discovered_as_equal ... ok
+test indexed_roots_preserve_non_utf8_diagnostics_without_losing_healthy_equality ... ok
+test indexed_changed_source_discards_stale_pairs ... ok
+test indexed_wal_palette_mutation_discards_stale_source_decisions ... ok
+test explicitly_qualified_linear_hdr_matches_endianness_without_losing_precision_or_scale ... ok
+test recursive_request_factory_preserves_explicit_hdr_color_and_discovered_paths ... ok
+test indexed_pixel_permission_error_preserves_healthy_pairs_and_recovers ... ok
+test directory_final_callback_cannot_publish_stale_pairs ... ok
+test final_callback_source_change_cannot_publish_stale_search ... ok
+test indexed_recursive_search_isolates_corruption_and_preserves_overlapping_roots ... ok
+test final_generation_change_and_transient_user_cancel_return_no_report ... ok
+test untagged_hdr_requires_color_qualification_even_with_encoded_srgb_assumption ... ok
+test recursive_pixel_search_keeps_corrupt_and_missing_sources_as_diagnostics ... ok
+test indexed_directory_final_callback_cannot_publish_stale_pairs ... ok
+test indexed_final_generation_and_transient_cancel_return_no_report ... ok
+test indexed_final_callback_source_change_cannot_publish_stale_search ... ok
+test indexed_two_key_groups_are_deterministic_across_request_orders ... ok
+test indexed_unique_collection_fits_zero_pair_budget_and_decodes_once_per_key ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/pixels.rs (.dedup-work/local-sequence-target-20261021/debug/deps/pixels-d5370d1b351d30e9)
+
+running 13 tests
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test identical_pixels_honor_each_block_and_final_cancellation_checkpoint ... ok
+test gradient_has_independently_known_difference_bits ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test informative_zero_distance_is_a_candidate_not_pixel_identity ... ok
+test identical_and_transparent_pixel_equality_observe_late_cancellation ... ok
+test validates_layout_budget_and_cancellation ... ok
+test transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection ... ok
+test opaque_solid_colours_and_crossed_dimensions_keep_exact_identity_separate ... ok
+test uniform_tiny_and_thin_images_have_no_empty_resample_cells ... ok
+test fractional_single_pixel_footprints_match_integer_overlap_oracle ... ok
+test area_fingerprint_preserves_last_row_and_column_contributions ... ok
+test all_opaque_gray_levels_collide_only_as_uninformative_candidates ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/png_alpha_channels.rs (.dedup-work/local-sequence-target-20261021/debug/deps/png_alpha_channels-5ba1e3a560cb203f)
+
+running 2 tests
+test png_gray_alpha_and_rgba_preserve_opacity_in_selected_frame_identity ... ok
+test png_trns_palette_and_color_keys_match_explicit_rgba ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/png_pinned_corpus.rs (.dedup-work/local-sequence-target-20261021/debug/deps/png_pinned_corpus-fab92bc3e06ed4f1)
+
+running 1 test
+test pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels ... ignored, requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/png_primary_policy.rs (.dedup-work/local-sequence-target-20261021/debug/deps/png_primary_policy-a2223309c13d7365)
+
+running 3 tests
+test explicit_png_policy_preserves_16_bit_color_and_alpha_precision ... ok
+test explicit_png_primaries_preserve_gamma_alpha_and_cache_policy ... ok
+test explicit_png_policy_applies_to_each_apng_selected_frame ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pnm_precision.rs (.dedup-work/local-sequence-target-20261021/debug/deps/pnm_precision-e906155bb776bfa1)
+
+running 1 test
+test pgm16_sample_order_and_low_bits_survive_selected_frame_normalization ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/portfolio_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/portfolio_collection-0fd06d261ef53996)
+
+running 41 tests
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test bank_collection_complete_work_and_all_radii_precede_iterator_consumption ... ok
+test bank_recovery_collection_checks_all_cumulative_work_before_iterator ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test consensus_collection_all_directional_and_cumulative_admission_precedes_iterator ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test joint_model_collection_projection_preflight_and_canonical_exhaustive_support ... ok
+test fatal_failure_after_unknown_still_discards_entire_outcome_collection ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test native_bank_collection_checks_all_cumulative_work_before_iterator ... ok
+test joint_model_fatal_failure_after_unknown_still_discards_entire_outcome_collection ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test bank_recovery_collection_unknown_advances_to_opposite_and_retains_managed_evidence ... ok
+test native_consensus_collection_empty_batch_never_loads_invalid_model ... ok
+test native_bank_collection_opposite_support_skips_model_and_retains_managed_evidence ... ok
+test recovery_collection_preflight_precedes_iterator_and_io ... ok
+test native_bank_collection_all_unknown_pairs_preserve_stage_trace ... ok
+test bank_recovery_collection_late_fatal_discards_earlier_unknown_and_cancel_wins ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+test scheduled_fallback_retains_inconclusive_geometry_as_unknown ... ok
+test scheduled_mismatch_refuses_before_missing_source_or_model_io ... ok
+test scheduled_late_provider_failure_discards_prior_confirmed_pairs ... ok
+test insufficient_geometry_is_retained_for_every_pair_in_both_search_orders ... ok
+test scheduled_outcome_collection_keeps_all_pairs_and_canonical_report ... ok
+test native_bank_collection_late_fatal_discards_earlier_unknown_and_cancel_wins ... ok
+test joint_model_insufficient_geometry_is_retained_for_every_pair_in_both_search_orders ... ok
+test bank_collection_unknown_is_retained_and_later_fatal_or_weight_change_discards_batch ... ok
+test recovery_collection_unknowns_late_provider_failure_and_final_weight_guard ... ok
+test joint_collection_projection_preflight_precedes_iterator_and_exhaustive_recovery ... ok
+test bank_recovery_collection_primary_support_canonical_all_pairs_both_orders_and_schedule ... ok
+test consensus_collection_unknown_runs_reverse_and_late_fatal_discards_batch ... ok
+test native_bank_collection_primary_support_canonical_all_pairs_both_orders_and_schedule ... ok
+test recovery_collection_schedule_keeps_fallback_pairs_and_canonical_publication ... ok
+test bank_collection_all_pairs_both_orders_and_scheduling_preserve_canonical_records ... ok
+test consensus_collection_both_directions_publish_canonical_scheduled_records ... ok
+test native_bank_collection_final_publication_rechecks_every_file_after_last_callback ... ok
+test consensus_collection_final_publication_rechecks_all_sources_weights_and_generation ... ok
+
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.37s
+
+     Running tests/presentation_digest.rs (.dedup-work/local-sequence-target-20261021/debug/deps/presentation_digest-d8ea42bf608ee772)
+
+running 2 tests
+test timeline_keys_preserve_cross_encoding_splits_zero_prefix_and_labelled_negatives ... ok
+test page_keys_cover_every_page_across_compression_and_byte_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/presentation_kind.rs (.dedup-work/local-sequence-target-20261021/debug/deps/presentation_kind-c2a2675005a9b1e4)
+
+running 1 test
+test content_detection_ignores_extensions_and_preserves_sensor_routing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projected_collection.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projected_collection-c0a98272fa40eddd)
+
+running 8 tests
+test cumulative_work_and_cancellation_refuse_before_iterator_consumption ... ok
+test collection_admission_never_truncates_and_empty_batch_still_guards_weights ... ok
+test source_weights_and_provider_failures_discard_prior_supported_pairs ... ok
+test all_pairs_recover_regions_in_id_order_and_keep_managed_ledgers ... ok
+test different_hdr_originals_remain_negative_in_complete_collection ... ok
+test last_collection_checkpoint_cannot_publish_mutated_inputs_or_weights ... ok
+test global_and_every_selected_owner_cancel_at_first_middle_and_final_checkpoint ... ok
+test external_palette_mutation_or_removal_discards_prior_support_and_final_collection ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/projected_portfolio.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projected_portfolio-1627cce9c49acc26)
+
+running 26 tests
+test exact_collection_scaling_latency_probe ... ignored, bounded collection I/O scaling measurement; run explicitly
+test aggregate_and_constituent_work_refuse_before_io_and_cancel_wins ... ok
+test exact_collection_admission_refuses_before_iterator_or_model_io ... ok
+test exact_first_accepts_undecodable_copies_without_weights_or_provider ... ok
+test exact_collections_empty_singleton_and_copies_need_no_decoder_weights_or_provider ... ok
+test exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint ... ok
+test exact_collection_missing_sources_never_publish_partial_duplicates ... ok
+test collection_unknown_does_not_swallow_late_source_or_provider_failure ... ok
+test exact_collection_global_and_every_owner_cancel_without_partial_report ... ok
+test native_alpha_refusal_recovers_with_projected_original_support_in_both_orders ... ok
+test exact_first_last_callback_revalidates_sources_and_visual_weights ... ok
+test exact_collection_late_provider_failure_discards_prior_exact_and_unknown_pairs ... ok
+test provider_and_source_weight_failures_after_native_inconclusive_remain_terminal ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_last_checkpoints ... ok
+test alpha_collision_exhausts_projected_and_preserves_typed_native_inconclusive ... ok
+test exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive ... ok
+test hdr_regions_recover_after_whole_miss_and_exhaust_before_native_negative ... ok
+test collection_retains_supported_and_explicit_unknown_pairs_in_both_orders ... ok
+test collection_work_admission_precedes_iterator_and_unknown_reports_keep_final_source_guards ... ok
+test final_callback_source_and_weight_mutations_precede_support_and_inconclusive ... ok
+test exact_collection_preserves_exact_visual_and_unknown_evidence_in_both_orders ... ok
+test exact_collection_final_callback_revalidates_every_file_and_started_weights ... ok
+test native_early_support_avoids_inference_and_projected_exhaustion_can_recover_natively ... ok
+test external_palette_change_discards_projected_portfolio_collection_in_both_orders ... ok
+test exact_collection_external_palette_change_discards_report_in_both_orders ... ok
+test native_anchor_inconclusive_recovers_or_stays_inconclusive_after_projected_exhaustion ... ok
+
+test result: ok. 25 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 5.12s
+
+     Running tests/projective_domains.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projective_domains-5267c0d75aff490e)
+
+running 4 tests
+test supported_horizon_model_is_excluded_from_whole_domains ... ok
+test inverse_horizon_is_rejected_even_when_forward_domain_is_valid ... ok
+test admissible_model_matches_original_and_cancellation_is_atomic ... ok
+test valid_alternative_survives_a_stronger_horizon_consensus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/projective_exhaustive_domains.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projective_exhaustive_domains-408390a5d4903bb3)
+
+running 3 tests
+test horizon_only_points_and_zero_domains_are_explicit ... ok
+test every_cancel_and_one_short_work_limit_refuse_partial_results ... ok
+test weaker_eligible_model_is_not_hidden_by_stronger_horizon_model ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projective_files-b7d0736e524e4f0d)
+
+running 28 tests
+test indexed_spatial_projective_matches_direct_pairs ... ok
+test filtered_projective_unrelated_pairs_and_lifecycle ... ok
+test real_file_projective_identity_and_terminal_refusals ... ok
+test recursive_projective_collection_preserves_aliases_errors_and_requests ... ok
+test registration_phase_cancel_and_budget_return_no_partial_file_candidate ... ok
+test registration_policy_is_validated_before_source_io ... ok
+test pyramid_collection_and_nested_roots_match_direct_pairs_and_refusals ... ok
+test anchored_projective_collection_mutation_cancel_and_limits ... ok
+test perspective_generator_geometry_diagnostic ... ok
+test indexed_projective_collection_mutation_cancel_and_limits ... ok
+test projective_photometric_collection_mutation_cancel_and_limits ... ok
+test anchored_projective_file_objective_never_bypasses_pixel_acceptance ... ok
+test spatial_projective_registration_preserves_identity_and_admission ... ok
+test sampled_projective_files_preserve_pixels_and_terminal_refusals ... ok
+test indexed_projective_collection_finds_derivative_and_rejects_other_scene ... ok
+test sampled_projective_collection_mutation_cancel_and_limits ... ok
+test registration_portfolio_collection_mutation_cancel_and_limits ... ok
+test pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry ... ok
+test registration_portfolio_files_preserve_both_residuals_and_atomic_refusals ... ok
+test projective_photometric_file_fit_keeps_strict_errors_and_refusals ... ok
+test complementary_collection_keeps_separate_matching_and_nested_source_lifecycle ... ok
+test real_preview_perspective_derivatives ... ok
+test combined_perspective_light_photos_require_all_six_positives_and_unrelated_rejection ... ok
+test anchored_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test complementary_files_preserve_both_searches_and_atomic_refusals has been running for over 60 seconds
+test indexed_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test registration_portfolio_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test indexed_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test sampled_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test anchored_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test sampled_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test registration_portfolio_collection_matches_all_pairs_on_six_source_corpus ... ok
+test complementary_files_preserve_both_searches_and_atomic_refusals ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 153.39s
+
+     Running tests/projective_geometry.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projective_geometry-01f2b557af8240ed)
+
+running 14 tests
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_mapping_and_permutations ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/projective_grid.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projective_grid-571d753254912121)
+
+running 3 tests
+test coordinates_match_independent_inverse_and_holes_retain_shared_credit ... ok
+test cancellation_and_prepaid_limits_leave_no_atlas ... ok
+test summed_rank_counts_match_direct_projective_windows ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/projective_pruning.rs (.dedup-work/local-sequence-target-20261021/debug/deps/projective_pruning-a0bf3353898be755)
+
+running 3 tests
+test cancellation_and_malformed_suffix_still_refuse_before_any_evidence ... ok
+test real_reverse_correspondences_match_complete_reference_in_both_scoring_modes ... ok
+test seeded_identity_noise_and_outliers_match_unpruned_bits_and_exercise_dominance ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/proposals.rs (.dedup-work/local-sequence-target-20261021/debug/deps/proposals-dcb2d939801a7dc5)
+
+running 6 tests
+test crop_center_offsets_use_full_domains_and_reject_points_outside_the_crop ... ok
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it ... ok
+test managed_crop_selection_cancellation_and_last_owner_keep_credit ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pyramid.rs (.dedup-work/local-sequence-target-20261021/debug/deps/pyramid-cb11c9adadbdc55a)
+
+running 5 tests
+test enlarged_quarter_turn_recovers_scale_and_rotation_together ... ok
+test scale_is_estimated_from_extracted_multiresolution_features ... ok
+test managed_oriented_pyramid_admission_cancel_retry_and_last_owner_release ... ok
+test oriented_pyramid_keeps_recipe_source_coordinates_and_admission ... ok
+test spatial_pyramid_preserves_level_coordinates_admission_and_cancellation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/rank_region.rs (.dedup-work/local-sequence-target-20261021/debug/deps/rank_region-f5f51b5047b658c8)
+
+running 7 tests
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster.rs (.dedup-work/local-sequence-target-20261021/debug/deps/raster-427f9646f083ea61)
+
+running 5 tests
+test unqualified_color_and_insufficient_budget_fail ... ok
+test storage_precision_and_frame_metadata_are_preserved ... ok
+test selected_frame_key_tracks_equality_metadata_but_excludes_container_selection ... ok
+test normalized_keys_and_direct_equality_agree_with_independent_hdr_alpha_precision_labels ... ok
+test cancellation_interrupts_each_pixel_representation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_equality.rs (.dedup-work/local-sequence-target-20261021/debug/deps/raster_equality-be722dcf16693914)
+
+running 7 tests
+test malformed_associated_alpha_refuses_releases_memory_and_retries ... ok
+test untagged_policy_is_explicit_cached_and_does_not_override_declared_linear_color ... ok
+test independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives ... ok
+test associated_tiff_alpha_matches_independent_straight_png ... ok
+test cross_encoding_batch_confirms_every_pair_and_rejects_single_pixel_edits ... ok
+test indexed_cross_encoding_collection_preserves_all_equal_pairs_and_one_pixel_negative ... ok
+test indexed_alpha_encodings_ignore_hidden_rgb_and_separate_visible_edits ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/raw_selected.rs (.dedup-work/local-sequence-target-20261021/debug/deps/raw_selected-b3d880b5c6c15c7a)
+
+running 2 tests
+test sensor_dng_development_preserves_copy_and_changed_mosaic_evidence ... ok
+test sensor_cache_revalidates_changed_mosaic_with_restored_size_and_mtime ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/region_footprint.rs (.dedup-work/local-sequence-target-20261021/debug/deps/region_footprint-754f911ac0a0b2f6)
+
+running 5 tests
+test inlier_domain_observes_mid_and_final_cancel_without_partial_result ... ok
+test inlier_domain_rejects_unbounded_indices_coordinates_and_work ... ok
+test inlier_domain_rounds_neighbors_and_stays_inside_fitting_region ... ok
+test invalid_horizon_singular_and_cancelled_refuse ... ok
+test scale_rotation_and_homography_magnitude_preserve_footprint ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_grid.rs (.dedup-work/local-sequence-target-20261021/debug/deps/region_grid-5d1655c4ef658191)
+
+running 4 tests
+test irregular_identity_grid_partitions_and_owned_credit ... ok
+test independent_translation_quarter_turn_and_small_image_domains ... ok
+test horizons_limits_and_final_cancellation_refuse_atomically ... ok
+test bidirectional_translation_covers_clipped_overlap_and_cancels_atomically ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_grid_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/region_grid_files-f1f86a13ae7f8f10)
+
+running 1 test
+test automatic_region_grid_matches_declared_regions_and_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.40s
+
+     Running tests/region_transform.rs (.dedup-work/local-sequence-target-20261021/debug/deps/region_transform-763058d8e4097e19)
+
+running 1 test
+test supplied_model_regions_require_pixels_and_cancel_atomically ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.64s
+
+     Running tests/scan.rs (.dedup-work/local-sequence-target-20261021/debug/deps/scan-520053bd701e232b)
+
+running 13 tests
+test pixel_generation_cancelled_empty_pair_batch_is_not_successful ... ok
+test visual_one_shot_cancel_during_decode_discards_batch ... ok
+test pixels_one_shot_cancel_during_decode_discards_batch ... ok
+test groups_one_shot_cancel_during_decode_discards_batch ... ok
+test visual_batch_final_publication_observes_request_generation_cancellation ... ok
+test confirmation_mutation_generation_and_memory_are_inconclusive ... ok
+test pixel_generation_final_publication_discards_equal_pair ... ok
+test pixel_group_final_checks_observe_generation_cancellation ... ok
+test group_admission_invalidates_edges_from_changed_source ... ok
+test recursive_visual_discovery_keeps_aliases_and_errors_visible ... ok
+test batch_errors_cache_and_pair_evidence_are_integrated ... ok
+test tiff_page_fingerprints_and_confirmation_share_profile_and_limits ... ok
+test nested_visual_roots_preserve_all_copy_edges_and_corrupt_file_attribution ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/scan_cancellation_checkpoints.rs (.dedup-work/local-sequence-target-20261021/debug/deps/scan_cancellation_checkpoints-cebf3ab5ffbe599d)
+
+running 3 tests
+test pixels_all_observed_one_shot_checkpoints_and_retry ... ok
+test groups_all_observed_one_shot_checkpoints_and_retry ... ok
+test visual_all_observed_one_shot_checkpoints_and_retry ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/scan_group_publication.rs (.dedup-work/local-sequence-target-20261021/debug/deps/scan_group_publication-6070b0ea7195a028)
+
+running 2 tests
+test last_confirmation_callback_mutation_cannot_publish_stale_pixel_pair ... ok
+test last_grouping_callback_mutation_cannot_publish_stale_pixel_group ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/scan_retry.rs (.dedup-work/local-sequence-target-20261021/debug/deps/scan_retry-d4d509cf01d6e4c7)
+
+running 1 test
+test same_cache_retries_repaired_sources_and_never_retains_old_pair_reports ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/search_portfolio.rs (.dedup-work/local-sequence-target-20261021/debug/deps/search_portfolio-9eb79f0faacd0cb4)
+
+running 40 tests
+test consensus_all_directional_outcomes_preserve_unknown ... ok
+test bank_portfolio_all_work_precedes_native_first_io_and_cancel_wins ... ok
+test consensus_admits_reverse_and_total_work_before_io ... ok
+test bank_joint_recovery_complete_admission_and_cancel_precede_io ... ok
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test bank_portfolio_last_provider_weight_change_discards_all_evidence ... ok
+test joint_model_cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test joint_model_projection_preflight_precedes_even_native_first_io ... ok
+test bank_joint_recovery_late_provider_failure_cannot_enter_opposite ... ok
+test joint_model_portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test native_family_first_all_stage_work_precedes_io_and_cancel_wins ... ok
+test final_source_mutation_and_cancellation_precede_portfolio_inconclusive_publication ... ok
+test automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test joint_model_automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order ... ok
+test provider_failure_after_an_inconclusive_tile_remains_terminal ... ok
+test recovery_preflight_admits_all_work_and_storage_before_io ... ok
+test bank_portfolio_empty_learned_and_native_miss_remain_typed_unknown ... ok
+test bank_joint_recovery_bank_support_stops_before_opposite_and_empty_stays_unknown ... ok
+test tiled_and_aggregate_work_refuse_before_io_even_in_native_first_order ... ok
+test recovery_negative_cannot_erase_primary_unknown_and_publication_is_guarded ... ok
+test bank_portfolio_confirms_in_both_orders_after_native_miss ... ok
+test native_family_first_model_support_or_unknown_follows_both_native_misses ... ok
+test recovery_primary_support_is_lazy_and_releases_reserved_storage ... ok
+test insufficient_model_anchor_geometry_advances_to_independently_verified_native_support ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+test bank_unknown_advances_to_native_support_and_native_first_skips_model ... ok
+test native_family_first_support_does_not_call_provider_and_has_explicit_trace ... ok
+test native_family_first_publication_checks_weights_after_early_opposite_support ... ok
+test consensus_unknown_runs_reverse_and_provider_failure_stays_error ... ok
+test traced_consensus_preserves_counters_errors_and_source_guards ... ok
+test joint_recovery_preflight_and_real_fallback_cancel_retry ... ok
+test recovery_runs_opposite_after_primary_miss_and_cancel_retry_releases ... ok
+test bank_joint_recovery_unknown_advances_to_joint_opposite_with_final_guards ... ok
+test consensus_native_support_and_final_mutation_cancel_are_guarded ... ok
+test exhausted_native_anchor_geometry_advances_to_independently_verified_model_support ... ok
+
+test result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.43s
+
+     Running tests/sequence.rs (.dedup-work/local-sequence-target-20261021/debug/deps/sequence-ef6d4d29efd89de4)
+
+running 8 tests
+test animation_requires_timing_and_compares_repetitions ... ok
+test complete_coverage_is_required ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test ordered_subsets_do_not_establish_complete_sequence_or_timeline_identity ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/spatial.rs (.dedup-work/local-sequence-target-20261021/debug/deps/spatial-1aad86ebe0a9f9b5)
+
+running 1 test
+test spatial_quotas_keep_self_geometry_and_reject_unrelated_texture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/tiny_raster.rs (.dedup-work/local-sequence-target-20261021/debug/deps/tiny_raster-bc660e55d2f6139f)
+
+running 2 tests
+test zero_axis_headers_return_errors_without_retaining_budget ... ok
+test single_axis_images_decode_fingerprint_and_confirm_pixels ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/triangulation.rs (.dedup-work/local-sequence-target-20261021/debug/deps/triangulation-4f4201ee3551ffa2)
+
+running 3 tests
+test grid_topology_is_deterministic_and_passes_source_validation ... ok
+test seeded_clouds_match_independent_hull_and_empty_circumcircle_oracles ... ok
+test invalid_budget_and_every_cancellation_release_credit ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual.rs (.dedup-work/local-sequence-target-20261021/debug/deps/visual-c36669f511ba621f)
+
+running 10 tests
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test nonfinite_fingerprint_statistics_never_claim_informative_evidence ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test sixty_tied_candidates_survive_with_inclusive_distance_boundaries ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual_publication.rs (.dedup-work/local-sequence-target-20261021/debug/deps/visual_publication-33acd0ea11c75ce9)
+
+running 2 tests
+test final_visual_callback_mutation_refuses_cold_and_warm_reports ... ok
+test flat_hash_collisions_remain_candidates_and_exact_pixel_groups_stay_separate ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/wal_dependency.rs (.dedup-work/local-sequence-target-20261021/debug/deps/wal_dependency-bbab65ebfd4f0b1c)
+
+running 4 tests
+test wal_external_palette_obeys_source_byte_limit_even_with_warm_cache ... ok
+test selected_presentation_rejects_external_palette_mutation_and_recovers ... ok
+test wal_fingerprint_one_shot_cancellation_never_admits_partial_cache_and_retries ... ok
+test presentation_groups_remove_external_palette_stale_edges_and_retry ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/warp.rs (.dedup-work/local-sequence-target-20261021/debug/deps/warp-e4290a78aacda358)
+
+running 5 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test explicit_projective_regions_retain_edits_domains_and_atomic_refusals ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/worker.rs (.dedup-work/local-sequence-target-20261021/debug/deps/worker-dd059e546740ba55)
+
+running 7 tests
+test worker_fixture ... ok
+test invalid_policy_input_and_initial_cancellation_never_spawn ... ok
+test deadline_terminates_and_reaps_a_blocking_worker ... ok
+test binary_input_and_output_survive_private_stdio_files ... ok
+test nonzero_exit_preserves_bounded_binary_diagnostics ... ok
+test stdout_and_stderr_floods_stop_without_pipe_deadlock ... ok
+test live_cancellation_terminates_and_reaps_then_a_retry_succeeds ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/worker_group.rs (.dedup-work/local-sequence-target-20261021/debug/deps/worker_group-bcaa4cdb9f039766)
+
+running 9 tests
+test group_fixture ... ok
+test group_initial_refusals_do_not_spawn ... ok
+test group_observer_detects_live_and_reaped_child ... ok
+test group_fast_empty_exit_keeps_status_and_diagnostics ... ok
+test group_callback_panic_still_stops_descendant ... ok
+test group_capture_limit_stops_descendant ... ok
+test group_cancel_stops_live_descendant_and_retry_succeeds ... ok
+test group_normal_and_failed_leader_exit_stop_descendants ... ok
+test group_deadline_stops_live_descendant ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+
