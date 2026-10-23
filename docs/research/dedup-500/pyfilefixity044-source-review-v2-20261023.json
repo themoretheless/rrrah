@@ -1,0 +1,52 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "evidence": [
+    {
+      "path": "pyFileFixity/rfigc.py",
+      "sha256": "589f5b78b8676776e8e0a384432e4504c8e84c8847fd25f88bc3d074de981efd",
+      "git_blob_sha1": "62cf96f5fac928e8d1cc5f7c5030a9e952cf4616"
+    },
+    {
+      "path": "pyFileFixity/tests/test_rfigc.py",
+      "sha256": "13f363dab0f1a5dc67adf7b795b1c82a3e1ec26e7e8629f173168e48b0b0a41b",
+      "git_blob_sha1": "2f7af2e5a6a526c6e051f3347e1f12063f874b4f"
+    }
+  ],
+  "scope": "rfigc.py selected lines 75-115,311-360,390-505,525-600; test_rfigc.py read whole. Not whole rfigc review.",
+  "findings": [
+    {
+      "id": "short-hash-scope-correction",
+      "detail": "The reviewed rfigc integrity/recovery path uses its own generate_hashes, streaming full MD5 and SHA1 in one 65536-byte pass. It does not call the shortened Hasher facade. v1 short-key collision result must not be attributed to this path."
+    },
+    {
+      "id": "digest-metadata-race",
+      "detail": "Hashes are computed through one file handle, then structure and metadata through reopened path/os.stat without a before/after identity/content stamp. A replacement can combine digests of an earlier file with metadata of a later file. No cancellation parameter or work budget."
+    },
+    {
+      "id": "duplicate-recovery-collapse",
+      "detail": "Recovery stores md5 and sha1 maps to a single row ID. Multiple original paths with identical content overwrite earlier destinations, so restoring all original names is not represented. No full-byte equality confirmation against a trusted original."
+    },
+    {
+      "id": "database-publication",
+      "detail": "Remove-update closes a .rem file, then explicitly removes old database before renaming replacement. Rename failure after deletion leaves old database unavailable. No atomic replace/fsync transaction."
+    },
+    {
+      "id": "single-file-pruning",
+      "detail": "Remove-update skips rows for nonselected paths with continue before writing them into replacement. Single-file use can therefore omit unrelated database rows; this is a source-level finding, not an executed reproduction."
+    },
+    {
+      "id": "append-semantics",
+      "detail": "Update-append skips existing paths regardless of changed content. It adds new paths rather than refreshing existing integrity observations; consumers must not treat append as revalidation."
+    },
+    {
+      "id": "test-scope",
+      "detail": "Six original test functions cover file/directory generation, tamper reporting, recovery, update and known hash vectors. partial_eq uses substring membership rather than exact row multiset equality, so extra/duplicate output rows can escape assertions. No upstream tests run."
+    }
+  ],
+  "upstream_tests_run": false,
+  "file_operations_run": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
