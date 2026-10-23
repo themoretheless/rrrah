@@ -1,0 +1,57 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/ImageScannerTests.swift",
+      "git_blob": "fd2855ae84b385360f5215d66e5e9b2f41588b44",
+      "sha256": "ed614dfa0d9c95e9ea6adfb8f226ff2fdc51f207b87240d10abb5a7b0af8c690",
+      "bytes": 7287,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 15,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 106,
+  "full_review_count": 249,
+  "test_inventory": [
+    "testDiscoversSupportedImagesRecursivelyInStableOrder",
+    "testDiscoveryIgnoresDirectoriesWithImageExtensions",
+    "testDiscoveryStopsWhenTaskIsAlreadyCancelled",
+    "testLoadsPNGDimensionsAndThumbnail",
+    "testOneUnreadableImageDoesNotAbortOtherLoads",
+    "testLargeScanThrottlesMetadataProgressUpdates"
+  ],
+  "upstream_selected_tests": {
+    "executed": 3,
+    "failed": 0,
+    "names": [
+      "testDiscoversSupportedImagesRecursivelyInStableOrder",
+      "testDiscoveryIgnoresDirectoriesWithImageExtensions",
+      "testDiscoveryStopsWhenTaskIsAlreadyCancelled"
+    ],
+    "scope": "First three unchanged original test methods plus unchanged temporary-directory helper extracted into XCTest class. Exact original supportedExtensions/discoverImageURLs source extracted into isolated Foundation target. Other three loader/progress tests read but not run. No full scanner runtime claim.",
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/discovery-tests",
+    "log_sha256": "1869b9153d22d2c91be971ee92f85afb88b9895d52c8b9197987f133d682297b"
+  },
+  "additional_control": {
+    "source": "targie061-discovery-control-20261023.swift",
+    "missing_root_returns_empty_without_error": true,
+    "scope": "Original extracted discovery function called on absent child of owned temporary directory, native Foundation. No permission manipulation or external files.",
+    "binary_sha256": "f74afefc671d7ed8c064ae971cda679ab31b440da881c8e218dc37012d785231"
+  },
+  "local_library_verification": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files missing_input_and_overlap_do_not_lose_valid_results",
+    "executed": 1,
+    "failed": 0,
+    "scope": "Existing unchanged integration test on current working tree: valid duplicate group preserved despite overlapping roots and missing input; missing path reported as Io issue and complete() false. Other37 exact-file tests not run this turn.",
+    "test_sha256": "64d467bac80614f82027ec92488d7159c06ff1462e79422123900888e8766345"
+  },
+  "findings": [
+    "Original six scanner tests cover stable recursive extension discovery/package skipping, directory rejection, already-cancelled discovery, one PNG loader, individual load-error isolation and progress throttling. No missing-root failure test.",
+    "Absent root returns empty without error in native extracted discovery control: an empty result alone does not prove successful complete traversal. Local exact-file test explicitly preserves this distinction.",
+    "Original package-skipping test passed on this macOS environment; this does not establish other platform behavior.",
+    "Remaining three loader/progress tests require thumbnail/cache/media/progress dependencies and remain unexecuted; no adapters used to claim them passing."
+  ]
+}

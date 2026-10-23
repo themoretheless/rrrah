@@ -17,6 +17,10 @@ import Foundation
  print("root=\(root.path),observed=\(paths)")
  precondition(Set(paths) == Set(["valid-name.PNG", "corrupt.jpg", "nested/inner.webp"]))
  print("discovered=\(paths)")
+ do {
+ let missing = try ImageScanner.discoverImageURLs(in: root.appendingPathComponent("does-not-exist"))
+ print("missing_root_returned_count=\(missing.count)")
+ } catch { print("missing_root_error=\(error)") }
  print("name_only_filter=true,hidden_skipped=true,unsupported_extension_skipped=true,nested_visible_included=true")
  }
 }
