@@ -1,0 +1,59 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/SimilarityGrouperTests.swift",
+      "git_blob": "d65b4c9ec89335dad83a7d349b7f70e50c1b6af7",
+      "sha256": "1887abcd02556d66558390e6a02e842b035b779910ae4e433b3fd74102c4c089",
+      "bytes": 5010,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/PrehashCandidateFinderTests.swift",
+      "git_blob": "69cca2fd6cf0eec144e2fe16dced634d8c7c4786",
+      "sha256": "50ad50505d6b1cfb90c7b9a8fb417df8dd4e7d55c8f0cd8ac44b8edd8b119a5a",
+      "bytes": 3587,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 37,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 84,
+  "full_review_count": 249,
+  "upstream_runs": [
+    {
+      "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter SimilarityGrouperTests",
+      "executed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "log_sha256": "20011c7c32311a2ae5e34cd1f39750e555814aed3d704457f00f9510e8adb083"
+    },
+    {
+      "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter PrehashCandidateFinderTests",
+      "executed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "log_sha256": "f8dcd1eb4ab0150894c726ecdef3794a42e59b5d662a4be6e7b23581bc958390"
+    }
+  ],
+  "upstream_scope": "Unchanged complete original test files with full original Swift6 executable/test package and real pinned GRDB. No authored adapters/extractions. Test methods use original authored MediaItem/prehash fixtures, not real corpus or elapsedtime benchmark.",
+  "local_library_verification": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test groups",
+    "executed": 6,
+    "failed": 0,
+    "log_sha256": "654b7e17d7c127d394bca5ada1dcf428cecf112221664e77ccd5a6d7ab881500",
+    "source_sha256": "c5c5e0c1ba00a7ee1864caa8c484ff497bb9fa1236589c6ff38a1b8d05b6af03",
+    "test_sha256": "ef314ad1441389ab947ff75a8f68cc7224773aa0da36751519c9bff4de5a1fba",
+    "scope": "Existing unchanged full grouping integration suite. Includes independent exhaustive reference over32768 six-node graphs, all64 four-node graphs with cancellation checkpoints, chain edges,60member missingedge and sparse operation budgets. Finite checks, no universal proof."
+  },
+  "findings": [
+    "Original Targie test explicitly requires transitive A-B-C relations to form one connected group; absence of A-C is intentional, not fabricated all-pairs evidence. UI grouping must not imply pairwise identity for all members. Native full package confirms previously source-derived connected-component policy.",
+    "Our complete_link_groups suite passes: emitted groups have accepted evidence for every member pair, chain retains both edges without placing all3items together. Current evidence supports this distinct safer publication contract. No new production patch required.",
+    "Targie tests200 disjoint2item components, reorder stability and already-cancelled grouping. They do not prove unknown-endpoint validation, global maximal-clique optimality or resource bounds.",
+    "Prehash original4tests pass:8fold encodedsize difference with renamedresized metadata stays candidate; neighbor buckets; normalizedsame-name fallback;1000sparseitems<5000compatibilitychecks. Synthetic operationcount bound not measured speedup or real-image recall.",
+    "Original prehash tests do not cover missingprehash namefallback skip or repeatedIDselfpair; prior v5 controls remain applicable.",
+    "No upstream code adopted and no extra whole-repository credit."
+  ]
+}
