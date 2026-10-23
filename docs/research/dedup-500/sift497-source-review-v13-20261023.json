@@ -1,0 +1,46 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "viz/sift_viz/player.py",
+      "sha256": "3af4939ec88dc9baf31871582b2c8b1ad76c80cd95f4dccd31db531378a7cad1",
+      "lines": 387,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/sift_viz/scatter.py",
+      "sha256": "cf0edbaf0bfb6b6dea8ce78864f774510e11cdccb3efed4e0e24442d5267407c",
+      "lines": 287,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/sift_viz/widgets.py",
+      "sha256": "97083fed544a4ffd5398119b4cfd575983a07133da2213e96e36a2f5a4ca8692",
+      "lines": 227,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-ui-control-20261023.py",
+  "runtime": {
+    "exit_code": 0,
+    "method_bodies_extracted_by_ast": true,
+    "gui_started": false,
+    "real_ffmpeg": false
+  },
+  "findings": [
+    "Original _read_frames method body executed with controlled split-read pipe: one byte of three-byte RGB frame is treated as EOF, remaining two bytes never read. Annotation removal only; no algorithm modification. Default buffered Popen pipe may normally fill requested reads, so this is not proof of actual ffmpeg playback failure.",
+    "Original 2D hit-test method with identity display transform selects index0 for coincident points; distant points beyond12pixels returnNone. Actual Tk/matplotlib projection/hit behavior not validated.",
+    "Playback queue bounded16, producer drops frames on two-second put timeout. Frames carry generation IDs and tick filters stale generations; preview callback lacks corresponding generation token. Source-only timing/race concerns.",
+    "Player read thread captures self._proc when scheduled rather than receiving the process as argument; stop/seek can replace shared process before worker captures it. No race executed.",
+    "Reader process pipe cleanup/wait absent in _read_frames; stop terminates without wait. Preview reader does close/wait. Actual process leak not measured.",
+    "Scatter colors cluster membership by numerical index without checking cluster.files against projection.files. Out-of-range indices skipped, but valid-range differently ordered file lists could color wrong files. Source-only caller contract concern.",
+    "Widgets whole source read: constructor helpers plus slider write trace and destroy cleanup; no GUI runtime started."
+  ],
+  "remaining": [
+    "59 other tracked blobs/assets and dependencies",
+    "Main app caller validation, assets and full upstream runtime qualification"
+  ],
+  "full_review_count": 248
+}
