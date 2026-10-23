@@ -1,0 +1,31 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/Views/MainView.axaml",
+      "sha256": "c12758ae41a868b8fce335a172304ccee53d599f668ab77ce5ed9e3983d95107",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          851,
+          1260
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Results toolbar labels size-based marking correctly as By Size / Keep Largest / Keep Smallest. This narrows the earlier v10 label finding to MarkingCriteria Description metadata used by completion messages, not the actual toolbar labels.",
+    "Results-grid Delete key invokes DelistCommand, removing list entries, rather than DeleteMarkedFilesCommand. Physical deletion is exposed separately by the explicitly labelled Delete Marked Files button.",
+    "Space passes selected item and selected items through MultiCommandParameterConverter into marking commands; Enter opens selection and double-tap opens selected item. Native/UI runtime not exercised.",
+    "Result grid disables user sorting, retaining grouping order. Deleted state adds strike-through and theme foreground; these remain presentation of cached existence state, not fresh equality evidence.",
+    "Preview toggle changes ShowPreview and pane width; selected-item binding remains active on the results grid, consistent with the previously reviewed preview-decoding path still running when the pane is hidden."
+  ],
+  "whole_files_read_total": 79,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
