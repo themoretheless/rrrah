@@ -1,0 +1,45 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "asizeof.py lines551-880 read, cumulative1-880; selected exact AST referent/length helpers exercised without full module import",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+    "lines": [
+      551,
+      880
+    ],
+    "cumulative_lines": [
+      1,
+      880
+    ],
+    "sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef"
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-sizer-referents-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "12c820e1ea7b8254ad44dd8855fb078003bb5344",
+    "source_sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef",
+    "scope": "Exact AST helpers only; authored closure and slice values; no full sizing or import",
+    "closure_tuple_omitted_from_direct_referents": true,
+    "slice_0_5_1_reported_length": 6,
+    "range_0_5_1_actual_length": 5,
+    "zero_step_slice_raises_zerodivisionerror": true
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "remaining_without_full_text_or_binary_review": 24
+  },
+  "findings": [
+    "Function refs enumerate doc/name/code plus legacy func_ attributes, not modern __closure__/__defaults__/__kwdefaults__/__dict__. Authored closure tuple omitted by exact helper; no full-size undercount measurement.",
+    "_len_slice uses inclusive-end formula: slice0,5,1 yields6 versus range length5; zero step raises ZeroDivisionError rather than returning fallback0. Reproduced helper behavior; later typedef usage remains unread.",
+    "_len_dict/_len_list/_len_set use historical allocation estimates, while _len_bytearray relies on __alloc__. Modern runtime sizing correctness requires independent ABI-aware validation.",
+    "_weak_refs returns referenced target and broadly catches all exceptions, potentially hiding reference-access failure; weak reachability and exclusive ownership differ. Static finding.",
+    "_enum_refs only returns doc; generator/frame references use selected attributes. This is selective graph traversal, not general proof all retained objects are included.",
+    "Global _claskeys cache stores wrappers with strong class references, explicitly marked XXX weakref. Potential observer retention not measured.",
+    "Original module still fails early unicode-internal initialization under Python3.15. No production code copied and no all-memory/runtime claim."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
