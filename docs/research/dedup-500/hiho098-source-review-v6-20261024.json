@@ -1,0 +1,61 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/MergeRecordCounter.java",
+      "local": "26-MergeRecordCounter.java",
+      "sha256": "6d8838238829cb540dc378dc2e22082597b9f8df6b2339ca103eaaa18e1dd88e",
+      "git_blob": "1e7a4e177b463188cc66bf68092d4ce3c6a975e9",
+      "whole_text_read": true,
+      "lines": 19
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/MergeKeyMapper.java",
+      "local": "27-MergeKeyMapper.java",
+      "sha256": "5a687a2ca02eafcd9031f240e68b495dc9a420ebd19c2e3dc4d0db8954627703",
+      "git_blob": "b598cbd96664684a8b17cb25a132c4660b6ac34b",
+      "whole_text_read": true,
+      "lines": 81
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/MergeValueMapper.java",
+      "local": "28-MergeValueMapper.java",
+      "sha256": "ebf7e159f709ae59cd3c6b59c04f0ea5986834ca27e35b13e86d9deb55880ad3",
+      "git_blob": "9515392e52b7826dedb766a1057283cd66b04534",
+      "whole_text_read": true,
+      "lines": 81
+    }
+  ],
+  "whole_files_read_total": 29,
+  "remaining_without_whole_review": 141,
+  "original_tests_cumulative": {
+    "total": 26,
+    "passed": 26,
+    "new_original_tests": 0
+  },
+  "native_controls": {
+    "report": "docs/research/dedup-500/hiho098-merge-context-controls-20261024.json",
+    "checks": 6,
+    "reducer_run_invocations": 8,
+    "cumulative_author_checks": 20,
+    "scope": "Actual unchanged MergeKeyReducer/MergeValueReducer, real Hadoop0.20.2 Reducer.Context and writable deserializers; authored serialized input and recording writer/status adapters; no HDFS/shuffle/cluster",
+    "confirmed": "Single new record wins over old in both input orders for key/value reducers; two new records choose last, so reversing order changes selected payload",
+    "rejected_hypothesis": "Hadoop wrapper reuse did not overwrite a selected new payload with subsequent old payload in these4cases; successful HihoValue.readFields creates fresh nested value. No normal object-reuse corruption claimed."
+  },
+  "source_only_findings": [
+    {
+      "paths": [
+        "src/main/java/co/nubetech/hiho/merge/MergeKeyMapper.java",
+        "src/main/java/co/nubetech/hiho/merge/MergeValueMapper.java"
+      ],
+      "finding": "setup uses splitPath.toString().contains(configured old path) before contains(new path), without component/URI boundary check; overlapping substrings may misclassify input; source-only, mapper runtime unexecuted"
+    }
+  ],
+  "own_library_relevance": "Retain deterministic selection and component-aware path identity; previously verified exact_files sibling-prefix regressions and collision safeguards remain evidence from their recorded runs, not new tests here",
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

@@ -1,0 +1,32 @@
+{
+  "scope": "Unchanged original reducers run with real Hadoop0.20.2 Reducer.Context and deserialization; authored serialized raw-input/recording-output adapters; no HDFS/shuffle/cluster",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/MergeKeyReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/MergeValueReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/MergeRecordCounter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/MergeContextControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "MergeContextControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS single-new survives both orders, valueMode=false newFirst=false result=group=new\nPASS single-new survives both orders, valueMode=false newFirst=true result=group=new\nOBSERVED two-new order dependence, valueMode=false forward=group=newB reverse=group=newA\nPASS single-new survives both orders, valueMode=true newFirst=false result=new=group\nPASS single-new survives both orders, valueMode=true newFirst=true result=new=group\nOBSERVED two-new order dependence, valueMode=true forward=newB=group reverse=newA=group\ncontext checks=6;8real reducer.run invocations;no cluster\n",
+      "stderr": ""
+    }
+  ]
+}
