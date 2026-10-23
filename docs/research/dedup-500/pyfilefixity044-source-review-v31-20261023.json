@@ -1,0 +1,44 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "header_ecc.py now read whole across v29-v31:1-44,45-216,217-510,511-630,631-end. Syntax parsed; full module integrations and ECC backends not run.",
+  "new_whole_read": {
+    "path": "pyFileFixity/header_ecc.py",
+    "bytes": 60142,
+    "sha256": "3d772b772ac50fefaa9e27a33032ef04be7367381b6694a7ea11897a2c0955a0"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 64,
+    "remaining_not_whole_reviewed": 80
+  },
+  "findings": [
+    {
+      "id": "empty-assembly-caller",
+      "detail": "Caller initializes corrupted false and iterates entry_asm without expected block-count/covered-byte assertion. Empty assembly from v29 skips all checks and leaves file uncounted as corrupt. Final success permits files_corrupted zero. Source-level caller chain; no full-backend reproduction yet."
+    },
+    {
+      "id": "partial-header-reconstruction",
+      "detail": "Output reconstruction writes only assembled header blocks then seeks original to configured header_size. If short ECC omitted some header blocks but another block triggers reconstruction, missing header bytes are not copied before tail. This can shorten output; source-level consequence requiring end-to-end qualification."
+    },
+    {
+      "id": "shared-skipped-status",
+      "detail": "Missing files, corrupted NUL paths and size mismatches increment skipped but do not force failure. Header mode shares all-skipped-success semantics with adaptive mode."
+    },
+    {
+      "id": "header-success-scope",
+      "detail": "Tail is copied verbatim without integrity check; files_repaired_completely means classified header blocks, not verified complete original file. Post-repair accepts hash_ok OR ecc_ok."
+    },
+    {
+      "id": "source-output-alias",
+      "detail": "Output wb is opened before original is reopened for tail copy. No path/physical-identity alias exclusion visible; overlap requires separate qualification, not an experiment on user files."
+    },
+    {
+      "id": "operational-boundary",
+      "detail": "Generation and index are nontransactional; correction error list uses binary csv reader and basename-only path, with Latin-1 stored file paths. These repeat reviewed adaptive limitations."
+    }
+  ],
+  "syntax_parse": "PASS",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
