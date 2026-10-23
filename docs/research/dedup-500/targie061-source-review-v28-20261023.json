@@ -1,0 +1,65 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/ImageSimilarityPipeline.swift",
+      "git_blob": "279bb933f0b8d3d13c8d5d633cf67ffe95dcfa61",
+      "sha256": "7ba2ac081df2ec36f84369c70df05a079292c4c3ca3adc32ad0497513e2e7d3a",
+      "bytes": 21341,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 75,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 46,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter ImageSimilarityPipelineTests",
+    "executed": 17,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "ImageSimilarityPipelineTests testCachedImageHashesAdvanceHashingProgress",
+      "ImageSimilarityPipelineTests testCachedPairRelationsAreLookedUpOnceForWholeComparisonPhase",
+      "ImageSimilarityPipelineTests testCachedPairRelationSkipsImageFeatureExtraction",
+      "ImageSimilarityPipelineTests testCachedPairRelationUsesBatchLookupDuringComparison",
+      "ImageSimilarityPipelineTests testCancellingImageFeatureComparisonPropagatesCancellation",
+      "ImageSimilarityPipelineTests testCancellingImageHashingPropagatesCancellation",
+      "ImageSimilarityPipelineTests testExactDuplicateImagesFormAGroup",
+      "ImageSimilarityPipelineTests testFailedRequiredImageVerificationRetriesUntilItSucceeds",
+      "ImageSimilarityPipelineTests testImageComparisonConcurrencyDropsWhenThermalStateIsHigh",
+      "ImageSimilarityPipelineTests testImageComparisonProgressReportsCandidateCacheAndUncachedPhases",
+      "ImageSimilarityPipelineTests testImageFeatureCacheCoalescesConcurrentRequestsForSameURL",
+      "ImageSimilarityPipelineTests testImageFeatureCacheRetriesAfterFailedTask",
+      "ImageSimilarityPipelineTests testPreviousImagePairRelationDoesNotSkipCurrentFeatureExtraction",
+      "ImageSimilarityPipelineTests testSuccessfullyVerifiedWeakImagePairRemainsCached",
+      "ImageSimilarityPipelineTests testUncachedImageComparisonProgressIsThrottledForLargeCandidateSets",
+      "ImageSimilarityPipelineTests testUncachedImagePairRelationsAreWrittenInBatches",
+      "ImageSimilarityPipelineTests testUnchangedImageScanUsesScanRelationIndexAndSkipsCandidateLookup"
+    ],
+    "log_sha256": "1404a221964118257bf9475d53771534c8a358447d3ab76115551ae7864a0f03",
+    "scope": "Full unchanged original class and executable package, no authored adapters. Original tests include native PNG exact duplicate and injected cache/hash/feature fixtures. Successful full class execution is not manual review of full31887byte test source."
+  },
+  "partial_reads": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/ImageSimilarityPipelineTests.swift",
+      "lines": [
+        "1-85",
+        "297-358"
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "findings": [
+    "Visual candidate gate is BKTree pHash distance<=20. SHA256 identity check only for admitted pair with positive equal encoded sizes and zero pHash distance. Hash-provider failure silently yields absent fingerprint; no unconditional exact-file fallback or per-item hash issue in this module. Source-derived completeness boundary, not new real-corpus false-negative measurement.",
+    "All candidate tuples, relation keys, misses and seenpair set accumulate before comparison;512upsert batching bounds writes, not total candidate memory. Dense colliding fingerprints can producequadratic pair materialization. No explicit pair/memory/work budget in this source.",
+    "ImageFeatureCache is created perprocess call, cancelled in deferred Task. This limits same-URL stale-cache exposure across repeated pipeline invocations, but not changes during one call. Earlier primitive cache reproduction remains valid within lifetime.",
+    "threshold argument is accepted but returned relations use fixedstoragefloor0.60. Display/grouping threshold applied later. This preserves later slider filtering; returnedrelations not evidence every score qualifies requestedthreshold.",
+    "Required visual failure yields fallbackrelation possibly<=0.85 and deliberately not cached; original test demonstrates repeatedverification retries, no group atrecommended0.88, recovery0.99thenreuse. Lower displaythreshold may expose unverified candidates; this is not exact identity guarantee.",
+    "Successfully measured weakpair stored asnegative cache result; failedverification does not persist scanindex. Positive and negative cache reuse assumes file/key identity sufficient.",
+    "Cachedindex fastpath rebuildsIDs frompaths using Dictionary(uniqueKeysWithValues); duplicatepaths/IDs caller uniqueness assumed. No malformedcallerinput crash control here.",
+    "17tests pass, not broad recall/precision or runtime memory scalability proof. No production source adoption or optimization claim."
+  ]
+}
