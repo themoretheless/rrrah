@@ -1,0 +1,50 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/network/LocalNodeService.java",
+      "sha256": "16e9e05dfeb024ad05582d16d6d06a87466e89f13b9c8bdc4df712e5754694f6",
+      "lines": 62,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/network/LocalNodeServiceImpl.java",
+      "sha256": "41da88d09a27faee6f3e375b6990a79471ddb7a3f8ccbdc8acc4beaf567e9d9a",
+      "lines": 183,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/network/NodeFactory.java",
+      "sha256": "6eff926cc2ac69fd1f73b5b20352a903e3b6df58f671955948070618fc901612",
+      "lines": 72,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/network/NodeFactoryImpl.java",
+      "sha256": "6d45cc236e574ab2346e1008610e2081690f523f55307105d29baaa399fc71e5",
+      "lines": 203,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "database_run": false,
+    "network_run": false
+  },
+  "findings": [
+    "Four local-node/factory files whole-read/Gitblobverified. Factories create issuedCertificates and collectionList arrays but do not initialize Node.subscriptions, which has no field initializer. Fresh factory output therefore retains null subscription list by source constructor analysis.",
+    "addSubscription/removeSubscription immediately newArrayList(node.getSubscriptions()); null factory state can fail before persistence. No Java/Hibernate runtime reproduction; later initialization elsewhere still requires tracing.",
+    "addSubscription unconditionally appends string without normalization/dedup; removeSubscription uses one List.remove, so repeated subscribe then single unsubscribe can retain entry. getSubscriptions(Stringtopic) ignores topic parameter and returns mutable list reference.",
+    "LocalNodeService.get returnsnull if repository empty; add/remove/getSubscriptions dereference result without local initialization error handling. get also sets online=true on returned entity; read has mutation side effect.",
+    "set publishes LocalNodeUpdatedEvent before final nodeRepository.save(self), with no explicit transaction annotation here. Listener may observe pre-save entity/state; synchronous/asynchronous behavior and transaction outcome not tested.",
+    "set only creates LocalNode wrapper when absent; replacement with differing NodeID does not update existing wrapper explicitly. Actual JPA managed association behavior unqualified.",
+    "Factory role construction source fully read; no certificates issued, keys changed or live nodes contacted during review."
+  ],
+  "remaining": [
+    "101 other tracked blobs/assets",
+    "Remaining source/resources/native binaries and full runtime qualification"
+  ],
+  "full_review_count": 249
+}
