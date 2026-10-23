@@ -1,0 +1,105 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Support/MediaThumbnailImageCache.swift",
+      "git_blob": "7e24cc436e9f8b8735380e00dff3c048152e1977",
+      "sha256": "6fa385e469ea0df9816c553144a6ed2381c4080e15a9f0b16b34a9bc6eb91807",
+      "bytes": 6584,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/MediaThumbnailImageCacheTests.swift",
+      "git_blob": "0f97423086fd2f18b90cfd674a0b0b6a918aea05",
+      "sha256": "ad8393dfa53261197dfac8fb04ef02c9ccc9243d317514b6355ed31b98e93c13",
+      "bytes": 10791,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/MediaModelTests.swift",
+      "git_blob": "6761edacf20a956a6fca1354980c3dd9ad3e70a0",
+      "sha256": "8b2a63e428a5546351861f1ba711a4816b3dc524f5783ccf6f5b4c204c110f77",
+      "bytes": 6602,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/QuickPrehasherTests.swift",
+      "git_blob": "c75d9642a25b6eb2c85874593f49ebc2fc410a44",
+      "sha256": "ed62f7b6cbb8536e8b24df9e0cd050b510f5f076984270ab44972fe30838fa40",
+      "bytes": 6610,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 89,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 32,
+  "full_review_count": 249,
+  "runs": [
+    {
+      "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter MediaThumbnailImageCacheTests",
+      "executed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "names": [
+        "MediaThumbnailImageCacheTests testCancellingOnlyThumbnailWaiterCancelsUnderlyingLoad",
+        "MediaThumbnailImageCacheTests testConcurrentRequestsForSameKeyShareOneLoad",
+        "MediaThumbnailImageCacheTests testDiskBackedThumbnailLoadsOnlyThroughAsyncPath",
+        "MediaThumbnailImageCacheTests testMissingVideoThumbnailCanBeGeneratedFromSourceFile",
+        "MediaThumbnailImageCacheTests testRemoveAllPreventsInFlightLoadFromRepopulatingCache",
+        "MediaThumbnailImageCacheTests testRepeatedThumbnailDecodeReusesImageObjectForSameMediaItem",
+        "MediaThumbnailImageCacheTests testReusedLoaderDoesNotPublishPreviousItemsImage"
+      ],
+      "log_sha256": "52e006270169752b0dc1eaf65e9b5ef866de20fa0c5945f1a59afbf48cf30786"
+    },
+    {
+      "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter MediaModelTests|QuickPrehasherTests",
+      "executed": 29,
+      "failed": 0,
+      "skipped": 0,
+      "names": [
+        "MediaModelTests testFilenameProperty",
+        "MediaModelTests testImageMediaItemHasNoDuration",
+        "MediaModelTests testLargeWorkProgressIsThrottledButAlwaysReportsEndpoints",
+        "MediaModelTests testMakeAcceptsHomogeneousImages",
+        "MediaModelTests testMakeRejectsMixedKinds",
+        "MediaModelTests testMediaKindIsCodable",
+        "MediaModelTests testMediaKindRawValues",
+        "MediaModelTests testScanModeAllCases",
+        "MediaModelTests testScanModeIdentifiableId",
+        "MediaModelTests testScanModeRawValueRoundTrip",
+        "MediaModelTests testSimilarityGroupCachesPerItemScoresEvidenceAndTotals",
+        "MediaModelTests testSimilarityGroupExposesItems",
+        "MediaModelTests testSimilarityGroupKindReflectsItems",
+        "MediaModelTests testSmallWorkProgressReportsEveryCompletion",
+        "MediaModelTests testVideoMediaItemHasDuration",
+        "QuickPrehasherTests testAspectBucketDistinguishes16x9From4x3",
+        "QuickPrehasherTests testAspectBucketsFor16x9And16x9Match",
+        "QuickPrehasherTests testCompatibleWithNearlyIdenticalPrehashes",
+        "QuickPrehasherTests testDurationBucketIsZeroForZero",
+        "QuickPrehasherTests testDurationBucketsForCloseDurationsMatch",
+        "QuickPrehasherTests testDurationBucketsForVeryDifferentDurationsDiverge",
+        "QuickPrehasherTests testEncodingSizeDifferenceDoesNotRejectMatchingContentCharacteristics",
+        "QuickPrehasherTests testNotCompatibleWithVeryDifferentAspects",
+        "QuickPrehasherTests testNotCompatibleWithVeryDifferentDurations",
+        "QuickPrehasherTests testNotCompatibleWithVeryDifferentThumbnails",
+        "QuickPrehasherTests testPrehashFromVideoItemWithoutThumbnail",
+        "QuickPrehasherTests testPrehashIsDeterministicForSameVideo",
+        "QuickPrehasherTests testSizeBucketIsZeroForZero",
+        "QuickPrehasherTests testSizeBucketsForCloseSizesMatch"
+      ],
+      "log_sha256": "74a704a6f88608e175c36966334f7f2740c594a5d6bc0a85e6b763cf7d37740f"
+    }
+  ],
+  "runtime_scope": "Full unchanged original executable/test package.7thumbnailcache tests include native generated FFmpeg video and original controlled async loaders;15model+14quickhash tests use finite synthetic metadata/arrays. All cache effects isolated under TARGIE_CACHE_ROOT or owned tempdirs; no visible UI launch.",
+  "findings": [
+    "Thumbnail image cache coalesces samekey loads, cancels underlying task when solewaiter cancelled, discards blockedload after removeAll and prevents previousitem result publication in reusedloader.7original tests pass, finite scheduling points only.",
+    "Missing video thumbnail is rebuilt from1second240x320 authored FFmpeg testsource via real AVFoundation. Original test hardcodes /opt/homebrew/bin/ffmpeg and would XCTSkip elsewhere; currentrun did not skip. Not portable decoder/recovery matrix.",
+    "NSCache countLimit2000 and costLimit128MiB use compresseddata.count as cost for NSImage, not decoded width*height*channels. Advisory cachecost limit is not a hard resident/decodedmemory bound. No RSS benchmark conducted.",
+    "In-memory image key is thumbnailURL.path or MediaItemUUID, with no fresh diskidentity validation on imagecache hits. This is separate layer from ThumbnailStore corruptrepair divergence(v27); original tests do not refute it.",
+    "15model tests cover raw/codable modes, fixtures, progress throttling, homogeneousgroup factory and cached aggregate scores. Constructing image with durationnil does not prove model rejects nonnil duration; test names/descriptions not universal validators.",
+    "14quickprehash tests verify buckets, metadata compatibility and missingthumbnail neutral128/variance0. No actualthumbnail grayscale feature extraction, real corpus recall or malformednumeric boundary qualification in these tests.",
+    "Four wholefiles actually read and pinnedverified. No source adoption, optimization gain or extra complete-repository credit."
+  ]
+}
