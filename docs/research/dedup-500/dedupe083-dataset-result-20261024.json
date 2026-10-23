@@ -1,0 +1,85 @@
+{
+  "datasets": [
+    {
+      "path": "benchmarks/benchmarks/datasets/restaurant-1.csv",
+      "sha256": "7e9d65b3a84eb5b0fc05f6d48b8473f8e24076ba7eeb1d25848f18dd217b2545",
+      "rows": 112,
+      "unique_labels": 112,
+      "label_group_sizes": {
+        "1": 112
+      },
+      "labelled_pairs": 0,
+      "blank_cells": {
+        "name": 0,
+        "address": 0,
+        "city": 0,
+        "cuisine": 0,
+        "unique_id": 0
+      },
+      "duplicate_full_rows": 0,
+      "method": "Every row parsed and structurally checked; all label groups enumerated, not manual reading of every cell."
+    },
+    {
+      "path": "benchmarks/benchmarks/datasets/restaurant-2.csv",
+      "sha256": "5a5a5853e11d85769c7af51a73ffb2f6374afd6ed17a2dc4a9dde767afa69f0b",
+      "rows": 752,
+      "unique_labels": 752,
+      "label_group_sizes": {
+        "1": 752
+      },
+      "labelled_pairs": 0,
+      "blank_cells": {
+        "name": 0,
+        "address": 0,
+        "city": 0,
+        "cuisine": 1,
+        "unique_id": 0
+      },
+      "duplicate_full_rows": 0,
+      "method": "Every row parsed and structurally checked; all label groups enumerated, not manual reading of every cell."
+    },
+    {
+      "path": "benchmarks/benchmarks/datasets/restaurant-nophone-training.csv",
+      "sha256": "19f2fcbe40494af8367374c15b2a0d2c664ffda737ecfacc951152bd7e060f4e",
+      "rows": 864,
+      "unique_labels": 752,
+      "label_group_sizes": {
+        "1": 640,
+        "2": 112
+      },
+      "labelled_pairs": 112,
+      "blank_cells": {
+        "name": 0,
+        "address": 0,
+        "city": 0,
+        "cuisine": 1,
+        "unique_id": 0
+      },
+      "duplicate_full_rows": 6,
+      "method": "Every row parsed and structurally checked; all label groups enumerated, not manual reading of every cell."
+    },
+    {
+      "path": "benchmarks/benchmarks/datasets/restaurant-nophone.csv",
+      "sha256": "ea6be5f04831e885b5d1728feaa1731d47acf36450d11c679304f46a656e43b9",
+      "rows": 864,
+      "unique_labels": 0,
+      "label_group_sizes": {},
+      "labelled_pairs": 0,
+      "blank_cells": {
+        "name": 0,
+        "address": 0,
+        "city": 0,
+        "cuisine": 1
+      },
+      "duplicate_full_rows": 6,
+      "method": "Every row parsed and structurally checked; all label groups enumerated, not manual reading of every cell."
+    }
+  ],
+  "cross_dataset_labelled_pairs": 112,
+  "training_labelled_pairs": 112,
+  "limits": [
+    "Structured whole-data inspection, not manual full-cell review or independent correctness of human labels.",
+    "Does not establish legal dataset provenance or general accuracy.",
+    "No whole repository completion asserted."
+  ]
+}
