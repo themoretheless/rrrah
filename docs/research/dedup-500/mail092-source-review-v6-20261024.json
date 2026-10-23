@@ -1,0 +1,53 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_mail.py",
+      "local": "14-tests--test_mail.py",
+      "sha256": "4acc7f9df6e4dce03f9fe586b445071018b82eb5a0981be180f02c79f45f8b54",
+      "whole_text_read": true,
+      "lines": 688
+    }
+  ],
+  "whole_text_files_read_total": 15,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 65,
+  "native_original_tests_added": {
+    "target": "tests/test_mail.py",
+    "passed": 83,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 0.05
+  },
+  "native_original_tests_cumulative": {
+    "passed": 113,
+    "failed": 0,
+    "scope": "30 cache and83 mail focused tests, not entire package"
+  },
+  "public_physical_maildir_control": {
+    "scope": "Unmodified package imported normally; original BoxFormat Maildir constructor and physical owned message replacement; no AST adapters",
+    "old_cached_size": 2,
+    "new_body_characters": 10,
+    "fresh_size": 10,
+    "old_cached_timestamp": 1577836800.0,
+    "fresh_timestamp": 1893456000.0,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-real-maildir-36obczvx"
+  },
+  "findings": [
+    "Original test_mail83passes cover header normalizations, body differences, multipart payload collection, charset fallback, source paths and stable dehydrate/hydrate roundtrip.",
+    "Body hash test says reflects any byte difference but its assertions cover spaces and changed words only; line-ending normalization remains separately demonstrated and is not exact encoded-byte equality.",
+    "Original hydrate tests retain unchanged mailbox content. They do not test source replacement between dehydrate and hydrate.",
+    "Physical owned Maildir through normally imported original package reproduces stale scalars: after replacing aa/date2020 withabcdefghij/date2030, hydrated old object has new10-character body but size2 and timestamp1577836800; fresh object size10,timestamp1893456000. No AST adapters or production edits.",
+    "test_strategy.py first110lines incidentally inspected only; not credited as complete and no strategy tests run this turn."
+  ],
+  "transfer_decision": "Metadata retention requires verified source-version binding. Continue using exact source snapshot checks; no foreign production implementation copied.",
+  "limits": [
+    "15 whole text files of80;65 remain.",
+    "113 focused tests not entire original suite, coverage threshold or platform qualification.",
+    "Physical replacement is an authored sequential scenario, not a measured concurrent CLI action.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
