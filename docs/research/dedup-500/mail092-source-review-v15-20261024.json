@@ -1,0 +1,45 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v14-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "docs/performance.md",
+      "local": "44-docs--performance.md",
+      "sha256": "5dd28447efb47ceed5ddda84a725bb92b931be8d658cd8055dddbb2b53980c76",
+      "whole_text_read": true,
+      "lines": 185
+    }
+  ],
+  "whole_text_files_read_total": 45,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 35,
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "public_read_count_control": {
+    "scope": "Normally imported CLI, two physical owned Maildir copies, raw body and warmed owned SQLite cache; read-call spies only, dry-run",
+    "content_check_disabled_reads": {
+      "selection": 2
+    },
+    "both_checks_disabled_reads": {},
+    "limits": [
+      "Two-message deterministic read count; no throughput/RSS benchmark.",
+      "No source modification, actual deletion or user cache access."
+    ]
+  },
+  "findings": [
+    "Performance doc claims raw-body warm cache plus content-threshold=-1 eliminates rereads while retaining size guard. Authored full original CLI dry-run with two physical copies and warm owned cache records0hashing reads,2selection reads; disabling both size/content checks records0reads.",
+    "Reviewed check_differences constructs raw body hash set before checking content_threshold<0 shortcut. Dehydrated cached stubs therefore rehydrate bodies even when memoized sizes suffice and content check is disabled. Source and real read-count control agree.",
+    "Upstream timing tables, resident-memory values and parallel speedup ratios are historical documentation claims, not fresh benchmark results. No rrrah speedup derived.",
+    "Docs say cache cannot take down a run and reads never block; tested startup/final-write fallback does not prove all runtime SQLite errors or lock states. No new database contention control this turn.",
+    "Pairwise work can remain quadratic for differing bodies even though identical-body test uses zero diffs; documentation claim that200identical copies cost about2is not a general complexity bound."
+  ],
+  "transfer_decision": "Avoid unnecessary content materialization when optional comparison stages are disabled; measure actual reads before claiming cache speedup. No foreign source changed/adopted.",
+  "limits": [
+    "45 whole text files of80;35 remain.",
+    "No new original test run;315 full-suite result remains prior macOS source qualification.",
+    "Two-message warm-cache scenario, not throughput/RSS/general performance proof.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

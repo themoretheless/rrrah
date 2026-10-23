@@ -1,0 +1,11 @@
+{
+  "scope": "Normally imported CLI, two physical owned Maildir copies, raw body and warmed owned SQLite cache; read-call spies only, dry-run",
+  "content_check_disabled_reads": {
+    "selection": 2
+  },
+  "both_checks_disabled_reads": {},
+  "limits": [
+    "Two-message deterministic read count; no throughput/RSS benchmark.",
+    "No source modification, actual deletion or user cache access."
+  ]
+}
