@@ -1,0 +1,37 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Whole entry_fields function lines99-137 read and exact original AST body executed in isolation with authored BytesIO. Additional combined source output truncated; no additional whole-file completion claimed.",
+  "control": "pyfilefixity044-metadata-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "declared_entry_end": 4,
+    "returned_ecc_bounds": [
+      11,
+      4
+    ],
+    "missing_delimiters_returned_metadata": true,
+    "invalid_filesize_type": "bytes"
+  },
+  "findings": [
+    {
+      "id": "metadata-entry-bound",
+      "detail": "entry_fields reads up to65535 bytes regardless of declared entry end. Can parse delimiters and metadata outside that entry and return inverted ECC bounds. Reproduced start11/end4 without exception."
+    },
+    {
+      "id": "missing-delimiters",
+      "detail": "Four find results are not checked for missing or ordered delimiters. Slices using -1 produce fields rather than typed parse refusal; integer conversion error only prints and returns raw bytes. Reproduced."
+    },
+    {
+      "id": "lstrip-semantics",
+      "detail": "entry.lstrip(field_delim) removes any leading byte from delimiter byte set, not repetitions of the complete delimiter. Offset calculation still uses original entry start. Metadata leading delimiter-valued bytes require explicit policy; source-level finding."
+    },
+    {
+      "id": "caller-qualification",
+      "detail": "These are local parser contract violations; whole repair impact and later metadata recovery/validation must be reviewed separately. Do not classify isolated parse acceptance as proven end-to-end corruption."
+    }
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false,
+  "whole_text_reviewed_count_unchanged": 61
+}
