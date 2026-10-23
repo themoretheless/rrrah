@@ -1,0 +1,32 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/DuplicateScanner.swift",
+      "sha256": "5cedcd3f33180979fb76e3f44e77c5c2d607add79f07e26e7bfa9c726cfe34ff",
+      "lines": 242,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/FileScanner.swift",
+      "sha256": "6da197d32828efb1cff21bdab536b00fb97666bd7df377e13a04cfada26dcdf3",
+      "lines": 129,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Duplicate scanner uses size then first/last 128 KiB fingerprint then full SHA256, but does not byte-compare matching full hashes. Initial registry description byte-identity should not be interpreted as verified byte confirmation.",
+    "Empty, hidden, package-descendant, symlink and unavailable cloud files are excluded. Enumerator errors return true to continue; metadata/hash failures are silently skipped. Returned group array has no coverage diagnostics.",
+    "Hash cache is unbounded and keyed by path/size/modified date, without physical file identity or recipe version. No pre/post full-hash metadata stability check is present.",
+    "Cancellation returns an empty array, discarding healthy prior groups and indistinguishable from no duplicates at this API boundary. FullHash checks cancellation between reads; currentHash cleanup does not.",
+    "trashExtras verifies keeper existence only, then freshly hashes each extra. Changed keeper content or replacement can leave no copy of the original data even when every extra still matches the scanned hash. A race also remains between extra hashing and path-based trash.",
+    "currentHash catches read failures through try? in while condition and finalizes the prefix read so far rather than explicitly rejecting I/O failure. Exact-size initial stat does not bind final bytes or identity.",
+    "FileScanner is an organization classifier, scanning top-level loose files plus marked category folders. Saved decisions use path and modified-time tolerance under one second, not file content identity; age persistence silently ignores errors."
+  ],
+  "whole_files_read_total": 2,
+  "remaining_tracked_blobs": 56,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
