@@ -1,0 +1,96 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v13-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "docs/how-it-works/Making-smart-comparisons.rst",
+      "local": "75-docs--how-it-works--Making-smart-comparisons.rst",
+      "sha256": "519513bf2f6beee6f5628e26c21a6bcce244c0652ce67c0ca070358cc7df69e1",
+      "lines": 166,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/how-it-works/Matching-records.rst",
+      "local": "76-docs--how-it-works--Matching-records.rst",
+      "sha256": "4a94b896532a1128ba1264a90db2da1a2f84392947aced25afa793d6ba07e841",
+      "lines": 135,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/Troubleshooting.rst",
+      "local": "77-docs--Troubleshooting.rst",
+      "sha256": "0429354babcc46d1ed34528d113a8db988081dcb24a29edad51628c920f69936",
+      "lines": 84,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/Examples.rst",
+      "local": "78-docs--Examples.rst",
+      "sha256": "89d6cb7f8d56bb690fc87b2abe515d6b50316837d78f759d6b8711ba135aff31",
+      "lines": 19,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/Bibliography.rst",
+      "local": "79-docs--Bibliography.rst",
+      "sha256": "916092188c0fe2ff3c85581ba9a6d71ce0244bd0096f3ea87ef2cdbc4df6dfb0",
+      "lines": 22,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/API-documentation.rst",
+      "local": "80-docs--API-documentation.rst",
+      "sha256": "50088e6de31655e1eb024f9ebb0f6dd9b646d3a131347ee063f2c899e8e3a91c",
+      "lines": 263,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 81,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 23,
+  "native_record_link_runs": {
+    "commands_exit_codes": [
+      0,
+      0
+    ],
+    "constraint_modes": [
+      "one-to-one",
+      "many-to-one"
+    ],
+    "mode_results_each_run": {
+      "true_pairs": 112,
+      "found_pairs": 103,
+      "true_positives": 102,
+      "false_positives": 1,
+      "missed_pairs": 10,
+      "precision": 0.9902912621359223,
+      "recall": 0.9107142857142857
+    },
+    "raw_logs": [
+      {
+        "path": "docs/research/dedup-500/dedupe083-link-training-20261024.log",
+        "sha256": "7424bbb14d96c6208afdd4e6dc48504989d5e504f0dd0bea6a2c853265667ec3",
+        "exit_code": 0
+      },
+      {
+        "path": "docs/research/dedup-500/dedupe083-link-static-20261024.log",
+        "sha256": "039e66032bc34521c317e43d6352462587fbe8817deeeb00692ae0a3ba2f1e8f",
+        "exit_code": 0
+      }
+    ],
+    "training_scope": "Original script first constraint trains and saves; subsequent constraint and second invocation load that settings file. Not four separate trainings."
+  },
+  "findings": [
+    "All four mode/result summaries agree on the finite restaurant fixture; full partitions not separately compared.",
+    "Documentation acknowledges speed/recall tradeoff; no exact-file equality guarantee inferred.",
+    "Documentation historical algorithm descriptions differ from current branch-and-bound source; runtime/source evidence takes precedence."
+  ],
+  "limits": [
+    "No native gazetteer run yet.",
+    "23 files remain without whole review.",
+    "No performance speedup or universal matching proof.",
+    "No production code adopted."
+  ]
+}
