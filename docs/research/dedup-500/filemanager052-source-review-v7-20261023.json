@@ -1,0 +1,24 @@
+{
+  "repository": "math2001/FileManager",
+  "commit": "40c452353384566da275ae9a4b73692385d3413f",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "source_control": "docs/research/dedup-500/filemanager052-completion-control-20261023.py",
+  "runtime": {
+    "unchanged_methods_extracted": [
+      "__get_completion_for",
+      "input_on_change"
+    ],
+    "directory_listing_and_editor_adapters": true,
+    "filesystem_or_ui_mutations": false,
+    "checks_passed": 3
+  },
+  "findings": [
+    "Original completion function accepts alphabetic and returns file.txt then folder/ with a controlled listing; positive control passed.",
+    "Original completion function raises ValueError for pick_first=None, confirming the documentation mismatch recorded in v6.",
+    "Original input_on_change raises IndexError on empty input with stored completions [a,b] and index 0, confirming the source concern in v4. Editor event ordering remains unqualified, but the method state transition itself is reproduced."
+  ],
+  "whole_files_read_total": 59,
+  "remaining_tracked_blobs": 11,
+  "full_review_count": 249
+}
