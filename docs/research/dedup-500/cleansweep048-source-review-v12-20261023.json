@@ -1,0 +1,48 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/service/DuplicateScanStateHolder.kt",
+      "sha256": "1d446aa92d9a5c7149cfbb41c0c907f94bc73c70ac184a52bb0c61c16dc2d4ac",
+      "lines": 111,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/di/AppModule.kt",
+      "sha256": "84fc3ba0598466de11541ce5af5b08467ae018670d66b79633d5a54514188907",
+      "lines": 99,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/di/RepositoryModule.kt",
+      "sha256": "eeba39e1e8642abd2ce1f488e6b6eb28d5aa67d20b89fee27991941b25ecd836",
+      "lines": 37,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/CleanSweepApp.kt",
+      "sha256": "8a2ea1efca15727db8739e50eb8d3b2e03158457255249871341338b1e3df33f",
+      "lines": 53,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/MainViewModel.kt",
+      "sha256": "c8d7a6a2c63819b2a63250210c4f987ff6bbd57252f51ba01805203f9dc0b926",
+      "lines": 113,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "State holder has explicit Idle/Scanning/Complete/Cancelled/Error but no scan-generation token. setProgress updates current state unconditionally; late producer rejection must be enforced by service caller, still unread.",
+    "setScanning clears previous results through new state. setCancelled retains current results/timestamp/scope while clearing unreadable files; actual producer sequencing determines whether retained data exists. No misleading UI state reproduced.",
+    "Application factory ImageLoader configures VideoFrameDecoder, 25% memory cache, 512 MiB disk cache and allowRgb565. DI-provided ImageLoader is a separate plain builder with none of those explicit settings, so injected preloader cannot be assumed to use the configured global loader/cache.",
+    "GIF-qualified loader adds ImageDecoderDecoder only, with no SDK fallback in this module. Minimum Android version remains to inspect; no unsupported-platform claim.",
+    "Application coroutine scope uses SupervisorJob + Default dispatcher. MainViewModel starts ghost-folder cleanup at initialization and emits resume event only if repository change detection returns true; same-size/mtime invalidation depends on repository implementation."
+  ],
+  "whole_files_read_total": 39,
+  "remaining_tracked_blobs": 91,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
