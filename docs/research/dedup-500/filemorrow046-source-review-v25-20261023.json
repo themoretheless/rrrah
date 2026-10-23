@@ -1,0 +1,36 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/FileMorrowApp.swift",
+      "sha256": "592ceef93a6c4e9625baffc1cd517daf755312c909b764ddc193e82345e4a1d8",
+      "lines": 154,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/OnboardingView.swift",
+      "sha256": "511b2c952cd5ffe523ad3aeb07c92b3de06a7e0bb605fb32332c5fca1017efb7",
+      "lines": 157,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/FolderBrandingService.swift",
+      "sha256": "034c888ba8cbb679ac9384dbc31d75b3780e001a366e9ab0b8e230478807ee57",
+      "lines": 76,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Application creates one shared AppState for window group, menu bar and settings; closing last window intentionally keeps process alive. Quit directly terminates application without awaiting active operation in this source.",
+    "Most menu scan/organization/undo actions are disabled by isWorking, refining the earlier missing raw scan admission concern for these visible entry points. Welcome/settings/quit remain available.",
+    "Onboarding explicitly states hourly automatic organization can move eligible files without asking again; toggles are initialized from preferences and completion is explicit. Smart mode can be selected even when availability says unavailable; runtime analysis handler guards model readiness.",
+    "Folder branding is invoked by ordinary scan and sets Finder icons on all enabled marked category folders each time; scan is therefore not entirely free of filesystem metadata effects. setIcon return value is ignored and no prior-icon comparison avoids repeated rendering/writes. No branding was executed.",
+    "Onboarding claims downloaded-folder contents remain untouched by organization, but duplicate workflow is separately recursive and recoverable cleanup exists. Profile path validation gaps remain relevant to that guarantee."
+  ],
+  "whole_files_read_total": 48,
+  "remaining_tracked_blobs": 10,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
