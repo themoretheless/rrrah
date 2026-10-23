@@ -1,0 +1,49 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/self_test.py",
+      "git_blob": "1baf35a4e9eb2ef696b00d96428fc65c8c84cd2f",
+      "sha256": "4232d5bde30468a0f9c4c7b0486f6a6cea2b5639427fb534a0923656c31948cb",
+      "bytes": 32851,
+      "lines": 608,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 41,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 80,
+  "control": "cleanup067-original-smoke-control-20261023.py",
+  "runtime_scope": "14 unchanged original test function bodies plus two unchanged local test helpers selected via AST. Actual unchanged original audit_core module with real temporary files/local Git fixture. Import wiring supplied, no mock dependencies; whole self_test imports/main not executed.",
+  "passed_original_test_bodies": [
+    "test_parsers",
+    "test_root_level_double_star_exclusion",
+    "test_update_coverage",
+    "test_git_origin_scope",
+    "test_general_audit",
+    "test_architecture_graph",
+    "test_cross_language_architecture_boundary",
+    "test_import_resolution",
+    "test_function_thresholds",
+    "test_dependency_hotspot_exceptions",
+    "test_file_thresholds",
+    "test_module_candidate_dimension",
+    "test_artifact_set_assertions",
+    "test_artifact_set_false_green_controls"
+  ],
+  "excluded_original_test_bodies": [
+    "test_public_sync_guard",
+    "test_sync_line_endings",
+    "test_json_contract"
+  ],
+  "findings": [
+    "Original smoke bodies cover paragraphs/version/exclusions, update coverage/statuses/Git-root scope, negative findings, static graph/import precedence, language boundaries, length/hotspot exceptions and artifact-set positive/negative cases. All14pass.",
+    "Three remaining own test functions depend on sync_public or own CLI path and were not executed here; aggregate main also delegates to revision/tokenizer/build-receipt/security self-tests. No full-suite PASS claimed.",
+    "Artifact fixtures use arbitrary bytes named.webp, testing metadata/pairing only, not actual image decode or duplicate detection.",
+    "Git fixture initializes only owned temp repository and adds authored example remote locally; no fetch/push/network or existing Git configuration changes.",
+    "Passing original fixtures do not invalidate previously reproduced dynamic-import omission, NaNmetric acceptance, snapshot scope or malformed provider shape failures."
+  ],
+  "full_review_count": 249
+}
