@@ -1,0 +1,45 @@
+{
+  "scope": "28distinct original tests in8unchanged files; Hadoop0.20.2,Junit4.5,Mockito-all1.8.1,Java21with java.lang open for legacy mocks; no Hadoop cluster/full suite",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestDedupKeyMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestDedupKeyReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestDedupValueMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestDedupValueReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestMergeKeyMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestMergeValueMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestMergeKeyReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestMergeValueReducer.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "org.junit.runner.JUnitCore",
+        "co.nubetech.hiho.dedup.TestDedupKeyMapper",
+        "co.nubetech.hiho.dedup.TestDedupKeyReducer",
+        "co.nubetech.hiho.dedup.TestDedupValueMapper",
+        "co.nubetech.hiho.dedup.TestDedupValueReducer",
+        "co.nubetech.hiho.merge.TestMergeKeyMapper",
+        "co.nubetech.hiho.merge.TestMergeValueMapper",
+        "co.nubetech.hiho.merge.TestMergeKeyReducer",
+        "co.nubetech.hiho.merge.TestMergeValueReducer"
+      ],
+      "returncode": 0,
+      "stdout": "JUnit version 4.5\n............................\nTime: 0.127\n\nOK (28 tests)\n\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v8-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/test/java/co/nubetech/hiho/merge/TestMergeJob.java",
+      "local": "36-TestMergeJob.java",
+      "sha256": "44167a0bdbbec9eeaa9a5e3cd6dfa286e8fed4efaccadeaeb931d08f30453784",
+      "git_blob": "7cd31111a632cef71de1d771822edc0b4dc0baa6",
+      "whole_text_read": true,
+      "lines": 675
+    }
+  ],
+  "whole_files_read_total": 37,
+  "remaining_without_whole_review": 133,
+  "subsystem": "All33tracked Java main/test blobs under dedup and merge packages reviewed; other133repo files remain",
+  "original_tests": {
+    "new": 28,
+    "new_passed": 28,
+    "cumulative_distinct": 54,
+    "cumulative_passed": 54,
+    "report": "docs/research/dedup-500/hiho098-mockito-original-tests-20261024.json",
+    "scope": "8additionalunchangedoriginalJUnitfiles,13originalfiles cumulatively; nativeJava21,Hadoop0.20.2,JUnit4.5,Mockito-all1.8.1; --add-opens java.base/java.lang=ALL-UNNAMED supports legacy mocking; original Java6/full dependency cohort and cluster suite unqualified"
+  },
+  "new_runtime_dependency": {
+    "url": "https://repo.maven.apache.org/maven2/org/mockito/mockito-all/1.8.1/mockito-all-1.8.1.jar",
+    "bytes": 1347247,
+    "sha256": "a4dbc2157799a822ba5542081f7be28c75a66bfb645beb78ff8840c6e9bd30f4"
+  },
+  "author_controls_cumulative": 30,
+  "source_findings": [
+    "SequenceFile merge-by-key result loops check expected-key membership and total count but do not remove seen keys or assert associated output values; may miss duplicate/missing expected keys and wrong old/new payload selection. Source coverage limitation, not claim of observed cluster output corruption.",
+    "Text output loops remove each matched expected line, providing stronger finite output membership checks.",
+    "TestMergeJob integration methods instantiate HihoTestCase/HDFS; source reviewed only, not executed."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
