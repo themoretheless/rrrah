@@ -1,0 +1,105 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/common-collection.html",
+      "sha256": "39d1a5dc051c6aca6a1563473ac6816c2aed0daee1e10ba541c2791e7e242d37",
+      "lines": 164,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "archive/src/main/resources/templates/common-footer.html",
+      "sha256": "e6d929f617fe07b9787c1e6dabb0cd5220aa8c994981a3bf363c00cd888816af",
+      "lines": 36,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "archive/src/main/resources/templates/common-login.html",
+      "sha256": "1e62767f3bf4ec30c4a57039570bccbaf100858af7e0c3e317fd75497bb13b92",
+      "lines": 74,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-collection.html",
+      "sha256": "39d1a5dc051c6aca6a1563473ac6816c2aed0daee1e10ba541c2791e7e242d37",
+      "lines": 164,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-footer.html",
+      "sha256": "e6d929f617fe07b9787c1e6dabb0cd5220aa8c994981a3bf363c00cd888816af",
+      "lines": 36,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-login.html",
+      "sha256": "1e62767f3bf4ec30c4a57039570bccbaf100858af7e0c3e317fd75497bb13b92",
+      "lines": 74,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-collection.html",
+      "sha256": "39d1a5dc051c6aca6a1563473ac6816c2aed0daee1e10ba541c2791e7e242d37",
+      "lines": 164,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-footer.html",
+      "sha256": "e6d929f617fe07b9787c1e6dabb0cd5220aa8c994981a3bf363c00cd888816af",
+      "lines": 36,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-login.html",
+      "sha256": "1e62767f3bf4ec30c4a57039570bccbaf100858af7e0c3e317fd75497bb13b92",
+      "lines": 74,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_read_or_verified_identical_blob"
+    }
+  ],
+  "identical_content_groups": [
+    [
+      "archive/src/main/resources/templates/common-collection.html",
+      "integrator/src/main/resources/templates/common-collection.html",
+      "operator/src/main/resources/templates/common-collection.html"
+    ],
+    [
+      "archive/src/main/resources/templates/common-footer.html",
+      "integrator/src/main/resources/templates/common-footer.html",
+      "operator/src/main/resources/templates/common-footer.html"
+    ],
+    [
+      "archive/src/main/resources/templates/common-login.html",
+      "integrator/src/main/resources/templates/common-login.html",
+      "operator/src/main/resources/templates/common-login.html"
+    ]
+  ],
+  "runtime": {
+    "template_render": false,
+    "browser_run": false,
+    "java_run": false
+  },
+  "findings": [
+    "Nine tracked template paths cover3unique Gitblobs. Each unique text whole-read; all9fetched paths GitSHA1verified and SHA256grouped. Exactcopiesreuse source review, not renderedUI evidence.",
+    "Collection page displays archiveID,id,name,version,description,created,enabled,topics,imageid/date/hash. No algorithm identifier, hashwidth, decoderrecipe, source freshness or confidence provenance displayed.",
+    "Collection table renders every image in template then enables clientsideDataTables; no server pagination in template. Largecollection DOM/resource behavior unmeasured.",
+    "No pixel previews or independent duplicate identity validation on collectionpage. Stored hash strings shown as text; group membership/score absent.",
+    "Login Bootstrap script uses href instead ofsrc, so this tag does not load external JS by normalHTMLsemantics. Browser/Thymeleaf rendering untested; staticresources separately distributed and not pinned in these templates.",
+    "Footerlinks legacy hashnet repository and reports build metadata; not evidence of currentbuild/runtime qualification. Root-relative CSS/JS/logo dependencies remain externalrelease resources, not silently counted reviewed."
+  ],
+  "remaining": [
+    "57 other tracked blobs/assets",
+    "Remaining controllers/templates/media/license/IDE/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
