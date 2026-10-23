@@ -1,0 +1,65 @@
+{
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "previous_audit": "docs/research/dedup-500/async086-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "test/storage-memory.test.js",
+      "local": "16-test--storage-memory.test.js",
+      "sha256": "afa03e8e4b68f791b88ed1ec1a663b864b50a96673ab4b8e0716fd5fa4c68357",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/ttl.test.js",
+      "local": "17-test--ttl.test.js",
+      "sha256": "6c06abc935beff9bc5ab04cb7f3a82a3c11d78533e0297e16c6d0f0e14d1cdba",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/storage-custom.test.js",
+      "local": "18-test--storage-custom.test.js",
+      "sha256": "c775042948a6f761cd9b4ac93152cda68dc869b34bb38f1d8816c037d374d91c",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/transformer.test.js",
+      "local": "19-test--transformer.test.js",
+      "sha256": "64b59eab0443d057d10b337a59b1af3289378edb152db8dc30382dd4d1ad78ca",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 18,
+  "tracked_blobs": 50,
+  "remaining_without_whole_review": 32,
+  "native_original_tests": {
+    "new_passed": 18,
+    "new_failed": 0,
+    "cumulative_distinct_subset_passed": 77,
+    "raw_logs": [
+      {
+        "path": "docs/research/dedup-500/async086-ttl-original-20261024.log",
+        "sha256": "6b611c3d7cd6af9208b8be235b16ae146257210d325f16f83744a6e939a05ab5",
+        "exit_code": 0,
+        "passed": 7
+      },
+      {
+        "path": "docs/research/dedup-500/async086-custom-original-20261024.log",
+        "sha256": "128b8832618cfe9acdc27bc425ee76dfa2ff81d3ffddb2a994131f4c70d8238c",
+        "exit_code": 0,
+        "passed": 11
+      }
+    ]
+  },
+  "findings": [
+    "Original memory reference-update tests cover partial/full replacement and shared references, but not exhaustive singleton-to-multiple transition counterexamples found by independent harness.",
+    "Original TTL tests include real timed expiration, retry after function rejection, per-function ttl0 override and result-dependent ttl.",
+    "Custom storage suite validates seven required methods and inherited unimplemented getter rejection.",
+    "Transformer tests create Redis client in suite hook despite using memory cache inside test bodies; unchanged suite not executed without private Redis."
+  ],
+  "limits": [
+    "77 original subset tests do not qualify full npm test, coverage threshold, browser or types.",
+    "No Redis or destructive cleanup executed.",
+    "No production code adoption or new source change."
+  ]
+}

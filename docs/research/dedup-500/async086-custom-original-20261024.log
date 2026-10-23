@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: storage custom
+    # Subtest: should get an instance with default options
+    ok 1 - should get an instance with default options
+      ---
+      duration_ms: 0.389542
+      type: 'test'
+      ...
+    # Subtest: should throw if storage not defined
+    ok 2 - should throw if storage not defined
+      ---
+      duration_ms: 0.481
+      type: 'test'
+      ...
+    # Subtest: should throw if storage is not implemented with required functions
+    ok 3 - should throw if storage is not implemented with required functions
+      ---
+      duration_ms: 0.099708
+      type: 'test'
+      ...
+    # Subtest: should throw error for missing required methods
+        # Subtest: should throw error for missing required method get
+        ok 1 - should throw error for missing required method get
+          ---
+          duration_ms: 0.135042
+          type: 'test'
+          ...
+        # Subtest: should throw error for missing required method set
+        ok 2 - should throw error for missing required method set
+          ---
+          duration_ms: 0.040541
+          type: 'test'
+          ...
+        # Subtest: should throw error for missing required method invalidate
+        ok 3 - should throw error for missing required method invalidate
+          ---
+          duration_ms: 0.03325
+          type: 'test'
+          ...
+        # Subtest: should throw error for missing required method remove
+        ok 4 - should throw error for missing required method remove
+          ---
+          duration_ms: 0.104375
+          type: 'test'
+          ...
+        # Subtest: should throw error for missing required method clear
+        ok 5 - should throw error for missing required method clear
+          ---
+          duration_ms: 0.037583
+          type: 'test'
+          ...
+        # Subtest: should throw error for missing required method getTTL
+        ok 6 - should throw error for missing required method getTTL
+          ---
+          duration_ms: 0.153875
+          type: 'test'
+          ...
+        # Subtest: should throw error for missing required method exists
+        ok 7 - should throw error for missing required method exists
+          ---
+          duration_ms: 0.236875
+          type: 'test'
+          ...
+        1..7
+    ok 4 - should throw error for missing required methods
+      ---
+      duration_ms: 0.994833
+      type: 'suite'
+      ...
+    # Subtest: should throw if get function not defined
+    ok 5 - should throw if get function not defined
+      ---
+      duration_ms: 0.62825
+      type: 'test'
+      ...
+    1..5
+ok 1 - storage custom
+  ---
+  duration_ms: 3.137666
+  type: 'suite'
+  ...
+1..1
+# tests 11
+# suites 2
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.937

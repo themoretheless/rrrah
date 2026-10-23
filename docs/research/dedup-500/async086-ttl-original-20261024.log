@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: ttl
+ok 1 - ttl
+  ---
+  duration_ms: 2506.762
+  type: 'test'
+  ...
+# Subtest: global ttl is a positive integer
+ok 2 - global ttl is a positive integer
+  ---
+  duration_ms: 1.605333
+  type: 'test'
+  ...
+# Subtest: function ttl is a positive integer
+ok 3 - function ttl is a positive integer
+  ---
+  duration_ms: 0.662292
+  type: 'test'
+  ...
+# Subtest: ttl expires
+ok 4 - ttl expires
+  ---
+  duration_ms: 4003.088625
+  type: 'test'
+  ...
+# Subtest: do not cache failures
+ok 5 - do not cache failures
+  ---
+  duration_ms: 2.783
+  type: 'test'
+  ...
+# Subtest: function ttl has precedence over global ttl
+ok 6 - function ttl has precedence over global ttl
+  ---
+  duration_ms: 0.852959
+  type: 'test'
+  ...
+# Subtest: ttl as a function
+ok 7 - ttl as a function
+  ---
+  duration_ms: 3002.990791
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9589.171708
