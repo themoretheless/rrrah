@@ -1,0 +1,33 @@
+{
+  "scope": "Original writer/naming methods;8author controls with byte buffers/owned failing stream and owned temporary sparse directories;realHadoop0.20.2; no commit, cluster, FTP or overwrite of existing user files",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/AppendSequenceFileOutputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/AppendTextOutputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/NoKeyOnlyValueOutputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/OutputBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.output.OutputBoundaryControl",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-output-c3wlje_z"
+      ],
+      "returncode": 0,
+      "stdout": "PASS Text logical length excludes stale backing bytes\nPASS UTF8 and NUL content preserved plus documented newline\nPASS output IOException propagated\nPASS close reaches underlying output\nOBSERVED null value rejected with NullPointerException\nOBSERVED missing append flag gives NullPointerException\nPASS sparse existing filenames cause append destination-name collision;sequence=false\ncandidate work path=file:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-output-c3wlje_z/text/_temporary/_attempt__0000_r_000000_0/part--00002\nPASS sparse existing filenames cause append destination-name collision;sequence=true\ncandidate work path=file:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-output-c3wlje_z/sequence/_temporary/_attempt__0000_r_000000_0/part--00002\noutput checks=8;no writer commit/cluster/FTP\n",
+      "stderr": "26/10/24 03:26:09 INFO jvm.JvmMetrics: Initializing JVM Metrics with processName=JobTracker, sessionId=\n26/10/24 03:26:09 INFO jvm.JvmMetrics: Cannot initialize JVM Metrics with processName=JobTracker, sessionId= - already initialized\n"
+    }
+  ]
+}

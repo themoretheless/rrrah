@@ -1,0 +1,69 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v14-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/output/AppendSequenceFileOutputFormat.java",
+      "local": "98-AppendSequenceFileOutputFormat.java",
+      "sha256": "523abe079dff2bd0e1a95d4dff0db0796d21481f358e10821af20ad9db12b3b4",
+      "git_blob": "a63e0ddb4f523693a46d79faaf1fdd22a170b54e",
+      "lines": 102,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/output/AppendTextOutputFormat.java",
+      "local": "99-AppendTextOutputFormat.java",
+      "sha256": "099dff1c9946590f11c5f5765dc1071d4e13b9f287a26d7c2d65ee680aee6b4e",
+      "git_blob": "9b1e91c771f03d16b44130acb4931fd866c00e0c",
+      "lines": 103,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/output/NoKeyOnlyValueOutputFormat.java",
+      "local": "100-NoKeyOnlyValueOutputFormat.java",
+      "sha256": "f230d91379944e29073b5c619aff05c8f28d5492ee4559e6361424aab8fb1aa8",
+      "git_blob": "32c45a590d507489bea67b0367e3963ee703b382",
+      "lines": 117,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/output/FTPTextOutputFormat.java",
+      "local": "101-FTPTextOutputFormat.java",
+      "sha256": "56bd70d02a355d617ab965b261d7a9bd05118ee1899f9b31bd42a082b4419fcb",
+      "git_blob": "2d9aab0de3798d9025221aab5d1f753a52911a05",
+      "lines": 152,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 96,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 102,
+  "remaining_without_whole_review": 68,
+  "original_tests_cumulative": {
+    "total": 69,
+    "passed": 69,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 8,
+    "cumulative": 53,
+    "report": "docs/research/dedup-500/hiho098-output-native-controls-20261024.json",
+    "confirmed": [
+      "NoKeyRecordWriter uses Text logical length, retaining UTF8/NUL and appending documented newline; stale backing bytes excluded.",
+      "Writer forwards IOException and closes underlying stream. Null value produces NullPointerException; null policy not inferred.",
+      "AppendTextOutputFormat.getDefaultWorkFile without append flag produces NullPointerException.",
+      "Both append formats choose basename part--00002 for task0 with existing part--00000,part--00002,_SUCCESS, because filecount3 becomes offset2. Candidate final basename already exists."
+    ],
+    "scope": "8owned controls; byte buffers and temporary local directories, realHadoop0.20.2; no output commit/full append job; actual overwrite or committed data loss NOT demonstrated"
+  },
+  "source_only_findings": [
+    "FTP output calls connect/login/change directory, ignores boolean operation results, calls appendFileStream, closes stream then disconnects without explicit completePendingCommand. No FTP runtime or success/failure behavior verified.",
+    "Both append formats treat every value other than case-insensitive false as append mode. No concurrency/race validation performed.",
+    "Append sequence output has default false flag, unlike text output getDefaultWorkFile."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
