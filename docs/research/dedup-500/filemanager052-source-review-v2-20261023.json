@@ -1,0 +1,63 @@
+{
+  "repository": "math2001/FileManager",
+  "commit": "40c452353384566da275ae9a4b73692385d3413f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "commands/fmcommand.py",
+      "sha256": "63ea7cfd51792a61fc195e8ad52a78394fbb683a623b6df3d6690254c571a948",
+      "lines": 37,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/copy.py",
+      "sha256": "45e022495b9617353b8601ec39edcd3778ce423df47caacb6c49c513a334ed77",
+      "lines": 31,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/create.py",
+      "sha256": "1709432cbd4d6632334a554582e6092a5f51bad71c8d8aa6be99f5e63dda1b34",
+      "lines": 123,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/move.py",
+      "sha256": "b179742208956146e0886f23be787901ec03988376cdbbb9daa5225906c9f26a",
+      "lines": 56,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/rename.py",
+      "sha256": "c6d7a810a19a3c77a05fc8709036cee14940a1e2f3686a40387dedbb615cab66",
+      "lines": 111,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/delete.py",
+      "sha256": "5987a858008e8df5a71c60c773b6a7abe9e057f4c5928d3dc9cb1a243bf244c1",
+      "lines": 60,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/filemanager052-copy-control-20261023.py",
+  "runtime": {
+    "original_run_method_extracted_by_ast": true,
+    "clipboard_replaced_private_list": true,
+    "sublime_or_mutations": false
+  },
+  "findings": [
+    "Sixcommandfileswhole-read/Gitblobverified. Actualcopy.run method extractedunchanged andexecutedwithcontrolledwindow/clipboardlist, noOSclipboardwrite.",
+    "Foldercontainment uses folder inpathsubstring. /tmp/project-other/a acceptedunder/tmp/project, yieldsrelative../project-other/a and pathfromroot/../project-other/a. Independent pathcomponentcontainment wouldreject.",
+    "Move loopsos.rename without destinationcollisionprompt, rollback or crossdevicefallback. Existingfilesbehaviorplatformdependent; no moveexecuted.",
+    "Deprecatedrename existingdestinationNo callbackdefinedopen_file(self) but passedunboundnocaptureargument; helpercallingconvention needs review before assertingruntimeTypeError.",
+    "Windowscaseonlyrename usesUUIDintermediate butnorollback ifsecondrenamefails. Otherplatformsamepath canenter overwriteprompt; no samefile/inodeguard. Source-only.",
+    "Delete marksallopenviewsscratch thenclosesbeforetrashattempt; dirtybufferunsavedchanges canbe discarded andtrashfailuredoesnotrestoreviews. No delete/trash operation run.",
+    "Create usescheckthenopenw ratherthanexclusivecreate; racecantruncatefilecreatedbetweencheck/write. No raceexperiment. Folderindexinput notrangechecked inon_change."
+  ],
+  "remaining": [
+    "57 other tracked blobs/assets",
+    "Othercommands/inputcompletion/docs/vendorbackends/media and runtime qualification"
+  ],
+  "full_review_count": 249
+}
