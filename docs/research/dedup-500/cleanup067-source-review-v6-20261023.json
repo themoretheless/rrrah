@@ -1,0 +1,83 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "tracked_blobs": 121,
+  "whole_files_read": [
+    {
+      "path": ".gitattributes",
+      "git_blob": "a2c0508729bf2e81dfcfa4382fa0ebb7c3e5c100",
+      "sha256": "9f3a14b6a5ce085455d1326d61798daf5e1a6ad76f0bbabac4b2717ea6306233",
+      "bytes": 85,
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "9f241e0ed42a3cbc1dc06d1af2d081199f023e1a",
+      "sha256": "1027d3ad3b107cdc20e3daacd82f3d6e60cddb83ecd5483906cc2ab88816c632",
+      "bytes": 217,
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "83f982b90b7c6425a0f85fcb4bc1d51d25fe44bf",
+      "sha256": "0c06c0405b3d6f289800831dd68b329cb283c544cc1ee454d9b19e0e54b1e6d9",
+      "bytes": 1077,
+      "whole_text_read": true
+    },
+    {
+      "path": "audit.config.json",
+      "git_blob": "07aee4eb9164d7dbce49a67432419411b4b8de13",
+      "sha256": "df4a66e281f27eba415c4e75c846a835049c9a596625284c5821f173d0e181a0",
+      "bytes": 359,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/agents/openai.yaml",
+      "git_blob": "ac756ad1135ab8c043179b41dcfea8c6651268e8",
+      "sha256": "962144589ff3650c2c7e8ebad45ef15dfd7b4620ef31398571efc03f62831990",
+      "bytes": 280,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/audit.config.example.json",
+      "git_blob": "023066b0cb592d5f5f79d8837013c73272c3bc46",
+      "sha256": "1486b20e0fbad1f38162f0ad50bfa4a86c991c8c32c5a058bf9e32442e25e1fa",
+      "bytes": 1120,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/audit.config.json",
+      "git_blob": "c3c3341f655541f2863ea69f3992e46550046925",
+      "sha256": "47ec8ba797f62ec12ac585ec680dfb6a844181af13b0694b099e1fc2feb977f8",
+      "bytes": 211,
+      "whole_text_read": true
+    },
+    {
+      "path": "requirements.txt",
+      "git_blob": "9c547922b2a8aa1868a1b4c0e17c4c4db0aa5be8",
+      "sha256": "4b4e3d15f12fb38b25e5693f7a313c1dde51356d763561777a384cdf1f6a63aa",
+      "bytes": 104,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/agents/openai.yaml",
+      "git_blob": "e16e784170346d75b66c33b3de398894a1a84596",
+      "sha256": "f09adc28df36ee12d954c9cee28231e9897408437c884c6193323fd757033c9e",
+      "bytes": 333,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 12,
+  "remaining_without_whole_text_review": 109,
+  "findings": [
+    "Complete root MIT license read; no foreign source copied into library. No dependency license or distribution compatibility claim.",
+    "requirements pins tiktoken0.11.0 for fullvalidation, basic audit describes standardlibraryonly. Tokenizer runtime not installed/tested here.",
+    "Root exclude list contains only .git/__pycache__/pyc; original deep_merge replaces lists, so default node_modules/venv/build/dist exclusions do not survive this root override. This is configuration scope, not evidence such folders were present or scanned.",
+    "Example privacy tokens and canonical origin are placeholders, not real account credentials or verified sources. Agent YAML prompts/implicit-invocation policy are source material, not instructions authorizing this agent to invoke skills.",
+    "Root and helper configs exempt audit_core.py length warnings, disable sync target, and provide differing privacy/exclusion policy. Metadata alone does not demonstrate audit/release/security/upgrade outcomes.",
+    "gitattributes disables text newline conversion for allfiles to preserve exact topic index bytes; gitignore omits local reports/caches/.rd/venv. No cleanup or config changes applied."
+  ],
+  "runtime_tests_added_or_run": false,
+  "full_review_count": 249
+}
