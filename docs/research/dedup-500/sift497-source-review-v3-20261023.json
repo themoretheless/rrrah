@@ -1,0 +1,38 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/io/io.hpp",
+      "sha256": "3f6a8dc19c9454f343c55368d51e6d54d4e55a51c9bdfe201cf46e126385cb64",
+      "lines": 56,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/io/json_parse.cpp",
+      "sha256": "36a24fd105686561fdc7c00cadf6f8711053c19a7c82d60a84f383e9f05257ce",
+      "lines": 422,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/sift497-parser-control-20261023.cpp"
+  ],
+  "runtime": {
+    "exit_code": 0,
+    "scope": "Actual original json_parse.cpp compiled unchanged with actual headers; safe small inputs only, no sanitizers/full CLI"
+  },
+  "findings": [
+    "Original hash parser accepts declared hash_size8/hash_bits64 with1-byte and empty hex entries, no shape/length validation. Combined downstream Hamming behavior needs caller validation review before end-to-end false-match claim.",
+    "Actual projection files string a\\u0020b becomes au0020b, not a space b. Original hash-object filename parser preserves doubled backslashes instead of JSON unescaping. Valid JSON path round-trip therefore not general.",
+    "hex_to_hash odd-length loop writes beyond floor(hexsize/2) allocation; scanf conversion return ignored, invalid text may use uninitializedbyte. Source-only observations; neither case executed.",
+    "parse_str_arr non-string/non-comma/non-closing token may leave pos unchanged; potential nonprogress on malformed input, source-only no hang test. Double/int arrays skip unknownchars and lack generalJSONgrammarvalidation.",
+    "Public parsed cluster/projection fields accepted without visible cardinality/index/matrix symmetry checks in parser; CLI validation remains unread. No file mutation/removal commands executed."
+  ],
+  "remaining": [
+    "Other87 tracked blobs/assets",
+    "CLI validation, writer round-trip, fullruntime/dependencies/tests"
+  ],
+  "full_review_count": 248
+}
