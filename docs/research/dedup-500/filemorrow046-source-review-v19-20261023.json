@@ -1,0 +1,36 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/FileMorrowTests/InstallerScannerTests.swift",
+      "sha256": "72932950ab264e8de93dc99238bf50e71e3d24177e115f7d0302cad3b2d028f4",
+      "lines": 356,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suite": "InstallerScannerTests",
+    "tests_passed": 20,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "exit_code": 0,
+    "build_seconds": 1.47,
+    "test_seconds": 0.152,
+    "original_source_and_tests_unchanged": true,
+    "installer_execution": false,
+    "package_installation": false,
+    "system_trash_invoked": false,
+    "fixtures": "UUID temporary app-shaped bundles and zero-filled DMG-named files; pkgbuild creates a temporary genuine package and pkgutil queries its never-installed identifier"
+  },
+  "findings": [
+    "Twenty original installer tests pass including matching/version heuristics, managed folders, ordering, parsing, missing metadata, injected cleanup and a real generated package with no receipt. Total distinct original tests passed across focused runs is 79.",
+    "DMG fixtures are zero-filled files named as disk images; successful matching demonstrates filename heuristic behavior, not disk-image content verification. Fake app bundles are temporary directories with authored Info.plist.",
+    "Generated package is built but never installed or executed. Tests do not cover source replacement after scan, app removal before cleanup, metadata beyond the eighth entry or subprocess timeouts."
+  ],
+  "whole_files_read_total": 30,
+  "remaining_tracked_blobs": 28,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
