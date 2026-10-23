@@ -1,0 +1,55 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Legacy visual memory_profiler.py whole read and pinned blob verified; selected original AST functions tested with in-memory dependencies, no real sampling or hooks",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/memory_profiler.py",
+    "sha256": "baa0164856646c1428b1b5a8c974625b99dd3ec16ebb37e1111eb1b88e7e2a8e"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 111,
+    "remaining_not_whole_reviewed": 33
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-legacy-memory-report-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "630c101f0e1372b139eae9818c250bfd9085d5b8",
+    "source_sha256": "baa0164856646c1428b1b5a8c974625b99dd3ec16ebb37e1111eb1b88e7e2a8e",
+    "scope": "Exact AST functions, source text and file existence seams; no actual files, sampling, process or tracing",
+    "report_samples_before": {
+      "2": [
+        10.0,
+        20.0
+      ],
+      "3": [
+        30.0,
+        40.0,
+        50.0
+      ]
+    },
+    "report_samples_after": {
+      "2": [
+        10.0,
+        -1.0
+      ],
+      "3": [
+        30.0,
+        40.0,
+        -1.0
+      ]
+    },
+    "numeric_pid_timeout_error": "'float' object cannot be interpreted as an integer"
+  },
+  "findings": [
+    "show_results aliases original sample lists into lines_normalized then overwrites elements with -1. Reporting mutates stored measurements; reproduced with exact function, two lines and unequal repeat counts.",
+    "memory_usage numeric PID timeout computes timeout/interval then passes float to range on Python3. Reproduced TypeError before any sample.",
+    "Callable branch runs target in a child process by default or worker thread in run_in_place mode, not same-thread caller execution. Return value and child exception are not propagated; join after sampling has no timeout. Static finding; no target launched.",
+    "trace_memory_usage retains every line-event sample in lists with no sample cap; unlike newer0.31 maxima-only storage this creates observer growth proportional to events. No growth benchmark.",
+    "magic_memit parses repeat but calls memory_usage once and only interpolates repeat in printed label. Static finding; no IPython magic executed.",
+    "LineProfiler.disable clears tracing with sys.settrace(None), not previous handler restoration. No hooks changed in control.",
+    "psutil path requires deprecated get_memory_info only; access denied becomes -1 and can enter reports. Fallback samples RSS divided by1024, psutil uses2**20, despite docstring claiming KB. Static finding.",
+    "CLI uses caller/global namespaces and injected builtins.profile with no restoration; magic still uses Python2 StringIO/__builtin__. Full import/runtime compatibility not qualified."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
