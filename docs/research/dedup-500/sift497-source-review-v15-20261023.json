@@ -1,0 +1,97 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".gitignore",
+      "sha256": "a10f37ea299a7158a524c73fd0c33dac0cabd90456591a2da8abb9e233130566",
+      "lines": 27,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Makefile",
+      "sha256": "0c632983f2a182bf8970ab1faebf45598a001d20455f461afce2cebfda47da5e",
+      "lines": 29,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/.python-version",
+      "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398",
+      "lines": 1,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/pyproject.toml",
+      "sha256": "537dc32d068d4b23a9c7dd81a2546ae122d308c150d781c636ced1819f482fc1",
+      "lines": 20,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/run.sh",
+      "sha256": "de36d8361b60a67796a17145b50597d9092693a1a0029053ca156b5edfe9ec48",
+      "lines": 96,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/stb_impl.cpp",
+      "sha256": "f97ddd883512855c82ff8dc930e3ae3b45713bdb8509e3a127b709a34c57bca2",
+      "lines": 8,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/scripts/cluster_utils.py",
+      "sha256": "9366d4e5e081b5338dfe4bdb3d86ab838246f83c5d57f736a4b42a332922c151",
+      "lines": 32,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/scripts/hash_algorithms.py",
+      "sha256": "3c5415ba395f7e4c062fa2a7855dc6a96fa841daa8302796187841071dc1628f",
+      "lines": 35,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/scripts/hash_utils.py",
+      "sha256": "7e6639c2153003d5804ed70f8f10886d69e263e5c2f465da314b9df5b85313d8",
+      "lines": 57,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/scripts/io_utils.py",
+      "sha256": "d7d5fb42bf8d511ed77b8a2a5f557e2f7efaba1f63a8a476a2ef67a0735d7914",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "POC/scripts/mediahash.py",
+      "sha256": "b3a0133b17c93269a7a01fe35aee02a13fa0feb93df6811d828d9717284fb05a",
+      "lines": 145,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-poc-control-20261023.py",
+  "runtime": {
+    "initial_attempt": "ModuleNotFoundError: scipy",
+    "adapted_control_exit_code": 0,
+    "scipy_distance_adapter": true,
+    "original_clustering_and_io": true,
+    "full_poc_run": false
+  },
+  "findings": [
+    "Original POC clustering compiled/imported unchanged with explicit NumPy normalized-Hamming pdist/squareform adapter because SciPy unavailable. Chain00,01,11 threshold1 groups A,B under A-first ordering versus B,A,C under B-first. Confirms greedy anchor order-dependence and possible group diameter2>threshold1; not SciPy qualification.",
+    "Empty hash list raises IndexError; sampling2frames8times collapses repeated indices to{0,1}; confirmed.",
+    "save_groups dry_run preserves source but creates output/group directories; confirmed only in test-owned TemporaryDirectory. No user file move/reset/trash executed.",
+    "POC main unconditionally calls restore_input_folder before dry_run flag reaches save_groups. Thus dry-run CLI can move previous output files before grouping; source-only, not executed. Restore flattens names, has no collision policy/rollback.",
+    "POC similarity_threshold or default replaces explicit threshold0 with default. workers/chunk coefficient lack positive validation; zero can divide by zero; source only.",
+    "POC multiprocessing compute function initialized only in parent via module-global setter, potentially absent in spawned children; source-only, no multiprocessing run.",
+    "POC video frame-count fallback consumes decode iterator to count frames then decodes same container without seek/reopen; possible no remaining frames, source-only.",
+    "POC dHash right>left differs from C++left>right; resize OpenCV area differs from C++stb recipe. No crossimplementation compatibility assumed.",
+    "Makefile/build wrappers and stb implementation translation unit fully read, no tests configured here. Make clean/reset not executed."
+  ],
+  "remaining": [
+    "47 other tracked blobs/assets and dependencies",
+    "Large third-party headers, two lockfiles, docs and images"
+  ],
+  "full_review_count": 248
+}
