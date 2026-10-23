@@ -1,0 +1,64 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Views/GroupDetailView.swift",
+      "git_blob": "9c882aabda58997e047893bb97cda45c480eae91",
+      "sha256": "e937abc64c7f0ba70bc60451ef9f583262ca1ee9e56bf6d4357d55bc2def4b9b",
+      "bytes": 11141,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/SidebarView.swift",
+      "git_blob": "5d6a517b4070eae331ebae2b4f03a9a32c7eeca7",
+      "sha256": "90f0639fd30b0652403bfe858ed6c1165a3fc78839da36275a721c5c60060b23",
+      "bytes": 15419,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 98,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 23,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter 'ScanViewModelTests.testGroupSort'",
+    "executed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "ScanViewModelTests testGroupSortByDurationDescending",
+      "ScanViewModelTests testGroupSortByFileSizeAscending",
+      "ScanViewModelTests testGroupSortByFileSizeDescending",
+      "ScanViewModelTests testGroupSortByNameAscending",
+      "ScanViewModelTests testGroupSortByResolutionHeightDescending",
+      "ScanViewModelTests testGroupSortByResolutionWidthDescending",
+      "ScanViewModelTests testGroupSortDefaultIsSimilarityDescending",
+      "ScanViewModelTests testGroupSortPersistsAfterDeletionDissolvesGroup",
+      "ScanViewModelTests testGroupSortRefreshesAfterSelectionOrRebuild",
+      "ScanViewModelTests testGroupSortToggleFlipsDirection"
+    ],
+    "log_sha256": "f5e83f4cd22d66cde848b14ad9529f5ddff1ce7d9c5c4b25eba06247c77227a1",
+    "scope": "Full original package,10 selected unchanged original model tests. Metadata/relation fixtures and FakeDeletionService; no real deletion, renderedcard/window/hitbox test. Task cache root isolated. Remaining largeScanViewModelTests source not whole-read."
+  },
+  "partial_reads": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/ScanViewModelTests.swift",
+      "lines": [
+        "1124-1235",
+        "1326-1398"
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "findings": [
+    "GroupDetailView renders groupmaximumScore and peritemmaxincident score/evidence. With connectedcomponent grouping these are not all-pairs groupminimum or each displayedpair confidence. UI help can explain score but no user-comprehension result established.",
+    "Group cardcontext selection intersects displayed items via MediaContextSelection; plain/command/shift taps route to distinct modelmethods. Bulkbutton disabled whilebusy, no automaticdeletion performed. Actual gestures/model deletion races not qualified by sorting tests.",
+    "Ten model tests cover sixsortdimensions/default/toggle, switchingselectedgroup and preserving sortafter fake-deletion dissolves group. TestRefreshesAfterSelectionOrRebuild comments mentionboth but body changesselectedgroup only; broaderrebuild claim not inferred.",
+    "Sidebar shows issues only when nonempty; missing-root scans v26 returnemptyissues, so this view has no independent missing-root completeness warning. Source-derived composition, normal UIrootvalidation remainsunreviewed.",
+    "DisplayThresholdControl uses manual parser and slider helper, commits onsubmit/focusloss/outsideclick. Earlier percentparser cases remainreachable through intendedmanualedit primitive; nativeUItyping not tested.",
+    "Groupgrid computes adaptivecolumncount and previewheight fromgeometry; no visual validation of extreme sizes/nonfinite geometry or pointerinteraction.",
+    "Twofiles fully read and pinnedverified. No extra whole-repository, performance or all-case coverage credit."
+  ]
+}
