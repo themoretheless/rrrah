@@ -1,0 +1,30 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "run-benchmark-driven-rd/scripts/score_gate.py",
+      "git_blob": "8247615a0d46846ed5a3aa142afe5bf36ded4c63",
+      "sha256": "2687ce8c50fbb1bcde7858973b380d895304edfc1f7cc3a806ef019e57e78c34",
+      "bytes": 5775,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 27,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 94,
+  "control": "cleanup067-score-control-20261023.py",
+  "runtime_scope": "Whole unchanged score helper and original CLI--self-test; eight authored aggregate-metadata controls, no real benchmark/data/model/tool performance campaign.",
+  "original_self_test_passed": true,
+  "additional_controls_passed": 8,
+  "findings": [
+    "Ordinary latency regression rejected. CandidateNaNmetric passes because comparisons are unordered and no finite-value validation exists. Float(\"nan\") supplied at function boundary; no meaningful measurement inferred.",
+    "minRunsPerScenario validated for candidate only. Baseline runs1versuscandidate30passes despite minimum30. Candidate blinded flag checked; baseline blindedFalsepasses.",
+    "Both missing datasetIDs compare equal and pass when hashes otherwisevalid; IDpresence not required.",
+    "Empty gates list accepts candidate with worse latency since no metric threshold applies. This is aggregate config behavior, not proof all wrappers permit empty promotion criteria.",
+    "Malformed numeric metric raises raw ValueError. No structured failure or provenance/rawruns/confidence validation in this helper.",
+    "Do not adopt as full optimization acceptance oracle; finite independent correctness and paired raw evidence remain required. No production library changes in this pass."
+  ],
+  "full_review_count": 249
+}
