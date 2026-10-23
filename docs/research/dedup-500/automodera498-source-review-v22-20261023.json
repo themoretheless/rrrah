@@ -1,0 +1,49 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/web/gui/DisabledWebGUIController.java",
+      "sha256": "35b41690075d4f34a3ce4fe0a1e08fa63d372671a447cd07e8f1999edc8c1c77",
+      "lines": 41,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/web/gui/GUIRedirectController.java",
+      "sha256": "e135b662cf53d6a5b4eedd7891dc006c22edf8d437d98ea62fb2ba44a224957c",
+      "lines": 37,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/web/gui/LoginController.java",
+      "sha256": "11bcddc65e144b4c1af22728165ab27eebcb15e01787dbaadc3ba1e6c25e8585",
+      "lines": 39,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/web/gui/WebSecurityConfiguration.java",
+      "sha256": "222166dcadffc07171218fd200b65420b01c31ef4cbb34d0b0a966fffb3ceb2f",
+      "lines": 114,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_server_run": false,
+    "http_requests": false,
+    "configuration_changes": false
+  },
+  "findings": [
+    "FourcommonGUIclasseswhole-read/Gitblobverified. No login, network request, configuration edit or application launch performed.",
+    "DisabledWebGUIController conditional checks webgui.enabled, whereas shipped properties and WebSecurityConfiguration use webgui.enable. Disabled-page bean and routing decision therefore use different property names; runtime response unverified.",
+    "GUIRedirectController redirects rootto/admin unconditionally; LoginController returnscommon-login. Neither validates collection/hash provenance; data concerns remain in prior service reviews.",
+    "WebSecurityConfiguration reads envproperty then.equals without missingproperty handling. Custom config lacking webgui.enable can fail initialization; source-only.",
+    "Static resource routes correspond separately distributed Bootstrap/icons/DataTables/jquery assets; these are referenced dependencies, not trackedsource coverage or renderedUI proof.",
+    "Full access-control runtime qualification remains outside this source increment; no exploit or bypass test attempted."
+  ],
+  "remaining": [
+    "53 other tracked blobs/assets",
+    "Module GUI/REST/controllers/templates/media/license/IDE/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
