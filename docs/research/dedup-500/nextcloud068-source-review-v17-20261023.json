@@ -1,0 +1,49 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/bats/outputs/1_find-all.bats_1.out",
+      "local": "155-1_find-all.bats_1.out",
+      "git_blob": "71b6ee44d5cb1faba578dba112d42d01bc02bc05",
+      "sha256": "ec748a91f1a3454f443e3d61fe3c040c5a804ef4dc24b8bf357e99ce49ae4fab",
+      "bytes": 26712,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 155,
+  "whole_binary_files_read_total": 1,
+  "whole_visual_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 157,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 8,
+  "full_review_count": 249,
+  "read_coverage": [
+    "1-250",
+    "251-500",
+    "501-729"
+  ],
+  "snapshot_oracle": {
+    "command": "python3 docs/research/dedup-500/nextcloud068-full-scan-snapshot-control-20261023.py docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/155-1_find-all.bats_1.out docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/154-2_list.bats_1.out",
+    "exit_code": 0,
+    "result": {
+      "snapshot_sha256": "ec748a91f1a3454f443e3d61fe3c040c5a804ef4dc24b8bf357e99ce49ae4fab",
+      "scanned_paths": 351,
+      "groups": 25,
+      "group_members": 350,
+      "content_and_membership_mismatches": 0,
+      "list_snapshot_byte_equal": true,
+      "sorted_text_hash_matches_original_scenario": true,
+      "scope": "Pinned saved outputs only; no original BATS or Nextcloud execution."
+    },
+    "harness_sha256": "31082f60243470183692e1ffbaf2ef28319f6626e9754dc1ef29c897edce4d54"
+  },
+  "findings": [
+    "Entire729line original snapshot read in3boundedchunks. Complete traversal set exactly351uniqueadminfixturepaths forfamilies0..25 andcopies0..i. No missing/extra/repeated scannedpaths inthissnapshot.",
+    "Independent SHA256(i newline) and explicitpathset oracle confirms25groups and350members, family0singleton excluded. Full outputgroupsection byteequalspreviouslywhole-read original2_list.bats_1.out; sortedwholetext hash matches originalfind-all expectedconstant.",
+    "Snapshot boundary includesoneuseronly, no abort/error/completenessstatus, no mutatedbytes orfreshfileobservations. Byteagreement between savedfiles cannot prove backendcurrentlyworks, actualBATSrun, propertyallcases orphysicalaliascorrectness.",
+    "Currentrrrah nestedpartition/missingroot/bothAPI tests remainasvalidatedinpriorsteps. No sourcechange ornewrrrah rerun needed for historicalsnapshotreview.",
+    "Oneadditionalwholetextfile gives155text+1binary+1visual=157/165. Eightremaining:4largeCLIoutputs,settingsbundle,2maps,package-lock. Repositoryfullreviewstillfalse."
+  ]
+}
