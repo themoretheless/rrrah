@@ -1,0 +1,48 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "run-benchmark-driven-rd/scripts/init_rd.py",
+      "git_blob": "37426507dc219b212c65518de24e186e0b0e0df5",
+      "sha256": "0a75caf5c248895ff1b731cd93f50a00ebea52feb95073d9b55c98395c665435",
+      "bytes": 2507,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/scripts/self_test.py",
+      "git_blob": "10a4f661e9804a1be68c67b9392439bec037ed38",
+      "sha256": "583fd3bb7d2a6c3febe5eed434450484a12f9b2b495723f6cfc208501185886a",
+      "bytes": 2866,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/scripts/completion_closure_gate.py",
+      "git_blob": "5afe15375ca90145899bbb56fd7c63052c172171",
+      "sha256": "27487c0f07aeb37829d33a87cf393d245da036b600f0bd5220bab0dd7f0e2de6",
+      "bytes": 3290,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/scripts/external_change_fixture.py",
+      "git_blob": "bd1ae84d9c8f49a5bfc5f57a93382a03983b5d28",
+      "sha256": "6a614aa64c9ce23d5f1a7992a52ca9849b9b349854e0efda8e7da57b07305e7e",
+      "bytes": 2047,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 26,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 95,
+  "control": "cleanup067-init-control-20261023.py",
+  "runtime_scope": "Four original init_rd CLI processes on disposable owned directories; no installed skill/project or outside resource modified. Other three modules read only.",
+  "findings": [
+    "Initializer dry-run does not create missing project; regular run writes8template files; rerun skips8and preserves authored unique charter.",
+    "Owned dangling .rd/CHARTER.md symlink is treated missing by exists() then write_text follows it, creating target outside requested project within own temporary parent. Template initializer does not guarantee root confinement for this fixture.",
+    "self_test.py delegates to many other helper test modules, topic index and router migration; presence of aggregate runner not proof they execute/pass. Full aggregate suite not run.",
+    "completion_closure_gate CLI delegates evaluation and private helpers via imports/wildcards. Reads bounded-contract helper then writes temp and replaces output; no direct file/directory fsync shown in wrapper. Full helpers/runtime not yet reviewed, no completion assurance inferred.",
+    "external_change_fixture returns authored authorization/namespace/postcondition declarations. These synthetic booleans are not user authorization or live external evidence for this session; no external gate action invoked."
+  ],
+  "full_review_count": 249
+}
