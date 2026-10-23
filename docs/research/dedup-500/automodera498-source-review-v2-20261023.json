@@ -1,0 +1,73 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/pom.xml",
+      "sha256": "e647060bcfbdaf65ac6b1e9bd2ddc9148bd9684ed09036cbcfdb7423cfc72465",
+      "lines": 161,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/collection/Collection.java",
+      "sha256": "46417c463c13c9a327e68061add1fd226f15399a986aab1b0562a0f275a2d760",
+      "lines": 113,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/collection/CollectionInfo.java",
+      "sha256": "2cc59b793a1d5c4b723df5774b4e65e3bc40bb20104d66c6951a1c17e2d25cc1",
+      "lines": 46,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/collection/Image.java",
+      "sha256": "3536415d0e3e7e4bfc7d4a165564287ea19a8d16c9e81d6becdbb29b2c1849b4",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/collection/SubscriptionListStringConverter.java",
+      "sha256": "903904747e9d447f3aada076d4f4f87802cf989885ef60f7bbd026800ebdb0a3",
+      "lines": 45,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/collection/TopicListStringConverter.java",
+      "sha256": "6f0996348883a322c93048681e4d48144f1411e8d4abf9e441ef39e3b5eda899",
+      "lines": 45,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/repository/HashCollectionRepository.java",
+      "sha256": "76b859ea07a7d9e4a1ab8963671b651ac4883d5d7c5d0eb75d88e69e88e53e69",
+      "lines": 40,
+      "git_blob_verified": true
+    },
+    {
+      "path": "pom.xml",
+      "sha256": "bb3466fa79900133b44eecbfdbac4ae24772e08e20acb90834d1d8476f6d357a",
+      "lines": 177,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "upstream_java_run": false,
+    "database_run": false
+  },
+  "findings": [
+    "Root/common Maven descriptors whole-read: four modules, Java17, JImageHash1.0.0 declared alongside native hash service. Dependency declaration alone does not prove active Java fallback. No Maven/JDK execution.",
+    "No native phash build/download integration found within these two pom files; distribution scripts remain to inspect. This is scoped source observation, not assertion of absent native packaging project-wide.",
+    "Image entity stores String hash with no algorithm identifier, version, bit length, pixel interpretation or sampling recipe fields. Collection.version is update counter, not hash recipe version.",
+    "Both string-list converters join using semicolon and split without escape mechanism. Lists[a;b] and[a,b] serialize identically to a;b, demonstrated as string-algebra witness only, not Java execution. Null/empty/trailing-empty roundtrip behavior requires Java tests.",
+    "Collection.getSizeInBytes returns-1 TODO; no resource accounting provided by this method.",
+    "HashCollectionRepository offers enabled projections and nonempty image lists over JpaRepository; no metric search/index implementation in this interface.",
+    "Collection image list cascadeALL and eager archive association require caller lifecycle review; no database persistence behavior established."
+  ],
+  "remaining": [
+    "150 other tracked blobs/assets",
+    "Distribution scripts, service/caller behavior and native library provenance"
+  ],
+  "full_review_count": 249
+}
