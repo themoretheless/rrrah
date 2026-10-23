@@ -1,0 +1,32 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/FileMorrowTests/DuplicateScannerTests.swift",
+      "sha256": "02cf25a089e1bc19383a66d5bcce4d609fc616e0616eb66ecb62052c913d1e58",
+      "lines": 193,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/ExtractedArchiveScanner.swift",
+      "sha256": "f7176dac56cfa2a5185c9bd06861e502ecfaf74ce8282ab3e4b87eeda518c901",
+      "lines": 222,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "DuplicateScannerTests defines eight tests covering basic equality/negative, nested folders, injected recoverable move, progress stage presence, keeper depth and override, changed extra and missing keeper. It does not test keeper content replacement, same-size restored-time cache edits, hardlink aliases, traversal limits or cancellation diagnostics. Tests were source-read, not executed.",
+    "ExtractedArchiveScanner verifies each archive entry using relative path and uncompressed size only, without CRC or byte/hash comparison. Equal-size different extracted contents can be classified as already extracted; trash recheck repeats the same weak predicate.",
+    "ZIP listing parses textual unzip -l -qq output and trims whitespace, skipping unparseable lines and metadata entries. This is not a complete ZIP central-directory parser and can alter whitespace-bearing names.",
+    "run accepts nonempty output even when process exits unsuccessfully, including data truncated at 4 MB or deadline break. Partial listings can therefore be treated as sufficient entries without a completeness flag.",
+    "Process deadline is checked only after blocking read returns, and waitUntilExit after terminate has no independent bound. A silent or termination-resistant child is not reliably constrained by the nominal 20-second timeout.",
+    "Entry paths reject absolute and dot-dot components, but verification does not resolve physical containment or explicitly reject symlink ancestors. Source-only observation; no crafted archive or deletion was executed.",
+    "ZIP discovery is limited to top-level and managed category roots and 20000 parsed entries; those omissions are returned without a diagnostic report."
+  ],
+  "whole_files_read_total": 4,
+  "remaining_tracked_blobs": 54,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
