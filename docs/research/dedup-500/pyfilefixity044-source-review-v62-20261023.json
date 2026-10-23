@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "profilehooks.py whole read: lines1-440 v61,441-734 here. Original selected classes executed with backend/report/clock seams, no hooks or atexit registration",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/profilehooks.py",
+    "sha256": "3efb070ef5e27ecb4476722403237131bdc365bc18e9db3ddcc276405b9ee04f"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 115,
+    "remaining_not_whole_reviewed": 29
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-profile-wrapper-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "6dacda5b96b5245d11200aa35a9ea69d8aa8c453",
+    "source_sha256": "3efb070ef5e27ecb4476722403237131bdc365bc18e9db3ddcc276405b9ee04f",
+    "scope": "Exact AST classes with authored backend/report and backward clock; atexit registration replaced, no actual profiler or timer",
+    "exception_masking": {
+      "raised": "report failure",
+      "original_context": "ValueError"
+    },
+    "shared_flag_cleared_after_failure": true,
+    "return_value_preserved": 42,
+    "accepted_negative_duration": -1.0
+  },
+  "findings": [
+    "FuncProfile finally stats.add failure supersedes target ValueError with RuntimeError, leaving original as exception context. Exact class control reproduced; shared flag cleared correctly.",
+    "FuncTimer preserves returned42 but accepts negative duration from backward clock. Default timecall timer is time.time; no actual system clock changed.",
+    "FuncTimer immediate output occurs in finally and can similarly replace target outcome with stream failure; if first timer call raises, start is unset and finally references it. Static finding.",
+    "TraceFuncCoverage shares tracer and tracing flag across instances, no thread-local accounting; nested bypass is intentional but concurrent coverage remains unqualified.",
+    "FuncSource uses removed trace.find_strings/find_lines_from_code APIs and sys.maxint. Current Python compatibility not proved by syntax parsing.",
+    "HotShot coverage calls runcall(fn,args,kw) rather than expanding args/kwargs, unlike other wrappers; legacy backend behavior unqualified.",
+    "Coverage reports describe executable line counts, not branch/input/property coverage or proof of all duplicate-search cases. No coverage instrumentation run.",
+    "Reported source is fetched via inspect at report time, not frozen with measurements; atexit callbacks retain wrappers until process termination. No implementation copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
