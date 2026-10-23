@@ -1,0 +1,48 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Whole majority_vote_byte_scan function lines 117-252 and imports lines 42-60 read; remaining module and fetched original tests not yet fully reviewed. Original function executed unchanged through namespace-package import.",
+  "source_sha256": "c4b7747bedefa7b3c2a39ec94bc2eae95f1f3ed66ec849aa34daea4bd14bb5b8",
+  "control": "pyfilefixity044-vote-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "two_two_tie": {
+      "inputs": [
+        "A",
+        "A",
+        "B",
+        "B"
+      ],
+      "return": 0,
+      "message": null,
+      "output": "A"
+    },
+    "later_file_tail": {
+      "inputs": [
+        "ab",
+        "ab",
+        "abTAIL"
+      ],
+      "blocksize": 2,
+      "return": 0,
+      "message": null,
+      "output": "ab"
+    },
+    "single_file_stream_output": {
+      "exception": "UnboundLocalError",
+      "variable": "outpathfull"
+    }
+  },
+  "findings": [
+    "Tie with top counts greater than one picks first histogram key without adding an ambiguity error; return is success despite no unique winner.",
+    "When only one file still has data, final_entry is always entries[0], even when a different file is the nonempty entry; its remaining tail is silently discarded.",
+    "For fewer than three copies and writable output stream, fallback branch references outpathfull initialized only for path output.",
+    "Input streams supplied by caller are closed unconditionally at function end; output stream is preserved. No ownership flag documents distinction.",
+    "Exceptions during opens/read/write have no enclosing finally to close all already opened handles. No cancellation or operation-wide byte budget."
+  ],
+  "initial_control_attempt": "Top-level module import failed due to relative import; harness corrected to package import, with upstream sources unchanged.",
+  "upstream_tests_run": false,
+  "fixture_scope": "In-memory byte streams only; no user file or repair output modified.",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
