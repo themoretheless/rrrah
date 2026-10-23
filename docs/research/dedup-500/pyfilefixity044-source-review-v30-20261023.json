@@ -1,0 +1,35 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "header_ecc.py217-510 read fully. Static command parameter/precomputation/generation-start review; rest of module not yet whole reviewed.",
+  "findings": [
+    {
+      "id": "empty-total-refinement",
+      "detail": "Unlike adaptive module, header generation estimates percentage with max(1,sizetotal), avoiding zero-total division in that specific calculation. Do not transfer adaptive defect wholesale to header implementation."
+    },
+    {
+      "id": "caller-parameter-guards",
+      "detail": "Rejects resilience rates<=0, block size outside2..255 and header_size<1. Nonfinite and arbitrarily high rates have no explicit rejection here; compute_ecc_params may yield unusable message sizes."
+    },
+    {
+      "id": "header-allocation-bound",
+      "detail": "Header size is user-controlled positive integer with no upper bound or memory budget; entry_assemble reads whole header and builds list of all blocks. Streaming codec granularity does not bound header allocation."
+    },
+    {
+      "id": "two-pass-discovery",
+      "detail": "Precomputation traverses filesystem separately from generation. Files can change between size estimate, metadata and content reads; no stable source snapshot or omission completeness report visible in reviewed path."
+    },
+    {
+      "id": "db-placement",
+      "detail": "Generation output DB/index paths are not excluded from recursive input roots in this path; placing generated files inside input needs dedicated qualification. No such experiment performed."
+    },
+    {
+      "id": "mode-selection",
+      "detail": "generate/correct are independent boolean flags rather than mutually exclusive required mode; selecting neither still reaches precomputation and may return None later. Full end-of-module behavior not yet inspected."
+    }
+  ],
+  "upstream_tests_run_this_review": false,
+  "whole_text_reviewed_count_unchanged": 63,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
