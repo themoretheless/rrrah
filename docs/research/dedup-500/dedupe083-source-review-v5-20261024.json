@@ -1,0 +1,69 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "dedupe/convenience.py",
+      "local": "13-convenience.py",
+      "sha256": "d81166f71a8235f7d1f26672c4671d223829ac6cef939e36237d41b5083320b3",
+      "lines": 365,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/backport.py",
+      "local": "14-backport.py",
+      "sha256": "cadce8d3e82daaa87a50eee0a075df41f06e2fac6d43e3bc6c4434264a697539",
+      "lines": 21,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/canonical.py",
+      "local": "15-canonical.py",
+      "sha256": "8f36c675673c737643f6563e453afbb48553bc0273fa5eb1c82a93a5a74a504c",
+      "lines": 79,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_serializer.py",
+      "local": "16-test_serializer.py",
+      "sha256": "52ced107077fcb07bb78f7d7498bd5db6d88063739cb20747bc5cbc4ee4af796",
+      "lines": 67,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 17,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 87,
+  "native_controls": {
+    "finite_cases_passed": 892,
+    "square_record_counts": [
+      0,
+      128
+    ],
+    "rectangular_dimensions": [
+      1,
+      16
+    ],
+    "random_seed": 83,
+    "scope": "Original sampling functions with NumPy and bounded independent combinations/product oracles. No huge integers, fallback replacement statistics or full training package qualification."
+  },
+  "findings": [
+    "Finite square and rectangular pair samplers match independent combinations/product oracles; sampled subset checks include uniqueness and bounds.",
+    "Canonical representative selects each field independently and resolves centroid ties using first minimum; representative need not be an existing whole record.",
+    "Training helper treats same common_key as matching, all other sampled pairs as distinct; labels inherit this input assumption.",
+    "Original serializer test read but not executed; full package dependencies still unavailable in selected runtime."
+  ],
+  "rrrah_followup": {
+    "existing_tests": [
+      "crates/rrrah-dedup/tests/exact_files.rs: lossy_equal_non_utf8_names_preserve_distinct_copy_partitions",
+      "crates/rrrah-dedup/tests/exact_files.rs: non_utf8_paths_preserve_exact_identity_and_duplicates"
+    ],
+    "scope": "Name search confirms related existing regressions; not proof of long common-prefix path coverage. Dedicated public API check remains pending."
+  },
+  "limits": [
+    "No production changes or adoption.",
+    "No upstream tests, full learner training or huge-corpus performance qualification."
+  ]
+}
