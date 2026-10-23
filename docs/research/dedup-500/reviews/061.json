@@ -6,7 +6,7 @@
   "decision": "shortlist-reference",
   "finding": "Swift BK-tree, SHA256 cache and bounded image loads with retrieval tests; GPL reference for policies and cancellation.",
   "license_metadata": "GPL-3.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Pinned root LICENSE fully read and Git-blob verified in v43; no implementation copying or legal compatibility determination.",
   "tests_detected": 42,
   "upstream_tests_run": true,
   "available_source_evidence": [
@@ -263,7 +263,15 @@
     {
       "audit": "docs/research/dedup-500/targie061-source-review-v42-20261023.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/targie061-source-review-v43-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/targie061-source-review-v44-20261023.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "Full original package:6ImageScanner(v16),8VisionRegression+13configuration/media(v17),5SimilarityGrouper+4PrehashCandidateFinder(v18),52HashCache+3CachePaths(v19),17browse/selection/layout(v21),11sidebar/layout/smoke(v22), all pass without skips. Prior isolated tests scoped separately; full entire suite/broad corpus not run."
+  "upstream_tests_scope": "Entire pinned original package XCTest suite v44:414 executed,0 unexpected failures,0 skips;1 expected assertion failure for unimplemented added-file incremental index reuse. Native macOS finite fixtures only; no broad corpus, GUI or release qualification."
 }

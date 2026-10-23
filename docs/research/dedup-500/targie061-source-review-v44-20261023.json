@@ -1,0 +1,63 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Support/Localization.swift",
+      "git_blob": "a03d2f675faf500dc94d45bc72f4db403c5621a0",
+      "sha256": "2e41b796f1a90fd50218680d34d7c226a70107ad5bb31d1ff1b16e9d6362c0cd",
+      "bytes": 46330,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/SimilarityPipelineResilienceTests.swift",
+      "git_blob": "263dc2454c09c395ac39c5f5523c497f61ab8dce",
+      "sha256": "45528eed250ff9a013cd3ae5dab804343deba53f5fc652e3fe39db5ffc2de255",
+      "bytes": 48253,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 113,
+  "whole_visual_files_read_total": 4,
+  "whole_tracked_blobs_reviewed_total": 117,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 4,
+  "full_review_count": 249,
+  "read_coverage": {
+    "Localization.swift": [
+      "1-150",
+      "151-235",
+      "236-325",
+      "326-410"
+    ],
+    "SimilarityPipelineResilienceTests.swift": [
+      "1-165",
+      "166-350",
+      "351-535",
+      "536-725",
+      "726-915",
+      "916-EOF"
+    ]
+  },
+  "full_original_suite": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package",
+    "exit_code": 0,
+    "executed": 414,
+    "unexpected_failures": 0,
+    "expected_assertion_failures": 1,
+    "skipped": 0,
+    "log_sha256": "d402a5c38869956cde6ad06af6b4acf1716e5117cc6a3601b2245de4b5600aad",
+    "verified_original_swift_files": 97,
+    "scope": "Entire original XCTest suite on this macOS host with native Vision/AVFoundation/GRDB; no authored controls in test package. Expected failure is not a satisfied optimization requirement. No GUI/release/broad-corpus qualification."
+  },
+  "findings": [
+    "Incremental added-file reuse test intentionally expects failure: original fixture requests 3 pair lookups versus desired2. This explicitly leaves old-old scan-index reuse future work.",
+    "Resilience tests mostly seed hashes for nonexistent video paths. Complete frame fixtures use a single real synthetic Vision observation repeated at5 positions, not5 decoded video frames. Partial-set test does use real measured Vision similarity but not actual video decoding.",
+    "Real SQLite scan-index test uses real database with authored metadata and seeded pHash for nonexistent video files. Validates persistence, not scanning/file identity freshness.",
+    "Pair batch write test has1pair;30-item progress test435pairs stays below512. No512/513 partition or resident-memory bound established. Recording hash cache accepts modified times within1second, unlike production identity rounding; no cache backend equivalence claim.",
+    "Localization has seven explicit language branches and correctly warns similarity score is not duplicate probability. No plural-form selection for counts; English1 folders/files/items remain plural. No linguistic or layout quality qualification.",
+    "Comparison totals/completed clamp nonnegative, but checkingPairCache formats raw cacheTotal; a negative authored total could produce hits0 of-1. No normal pipeline occurrence demonstrated; no new regression claimed.",
+    "No upstream implementation copied, no production change or measured speedup. Four tracked files remain without whole manual review: HashCache.swift, ScanViewModel.swift, HashCacheTests.swift, ScanViewModelTests.swift."
+  ]
+}
