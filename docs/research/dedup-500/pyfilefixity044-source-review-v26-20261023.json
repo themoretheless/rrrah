@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Adaptive ECC lines530-715 now read fully; full module still incomplete due earlier truncated ranges. Static generation/metadata-caller review, no ECC backend execution.",
+  "findings": [
+    {
+      "id": "skipped-success",
+      "detail": "Missing files, NUL-containing paths and mismatched sizes increment files_skipped then continue before files_corrupted increments. Final return accepts files_corrupted==0, so an all-skipped corpus can report success. Source-level finding; final result does not mean complete verification."
+    },
+    {
+      "id": "error-csv-binary",
+      "detail": "errors_file is opened rb and passed directly to csv.DictReader. Python 3 csv expects text iterator; nonempty supplied error list needs runtime qualification and likely raises before repair."
+    },
+    {
+      "id": "unicode-path-boundary",
+      "detail": "Generation passes relfilepath str through compatibility b() using Latin-1; non-Latin-1 paths cannot be represented. Correction decodes stored path as Latin-1. Do not generalize text fixture success to arbitrary Unicode filenames."
+    },
+    {
+      "id": "invalid-size-conversion",
+      "detail": "entry_fields leaves malformed filesize as bytes; caller applies str to it before intra-ECC. That yields Python bytes repr rather than original byte sequence, changing the data offered to repair."
+    },
+    {
+      "id": "generation-transaction",
+      "detail": "Database and .idx are opened wb before file loop and written separately. No atomic paired publish, rollback, source identity revalidation, per-file failure isolation or cancellation budget visible in this path."
+    },
+    {
+      "id": "metadata-repair-status",
+      "detail": "Caller logs uncorrected path/size metadata but does not immediately reject based on fpcorrected/fscorrected; later int/path/size checks determine behavior. Local parser failure is not always isolated as an entry diagnostic."
+    },
+    {
+      "id": "parameters-external",
+      "detail": "Generation comments explicitly state stored command parameters are not automatically reloaded. User-supplied decoding parameters must match; file existence/version marker is not codec-compatibility proof."
+    }
+  ],
+  "upstream_tests_run_this_review": false,
+  "whole_text_reviewed_count_unchanged": 61,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
