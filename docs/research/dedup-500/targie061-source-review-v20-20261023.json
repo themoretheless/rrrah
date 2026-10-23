@@ -1,0 +1,48 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/ScanActivityManager.swift",
+      "git_blob": "ca2509b9eb18070813bda7f2d1d1d36659b4cbe2",
+      "sha256": "24cdc186f9eedd23355a11fdcf3da348944227bf275dd9440daec2c3df3e4d6d",
+      "bytes": 1460,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 40,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 81,
+  "full_review_count": 249,
+  "authored_control": {
+    "source": "targie061-cache-storage-control-20261023.swift",
+    "executed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Authored XCTest methods temporarily added to full original package tests. Real HashCache/GRDB SQLite initializer, no mocks/adapters. All paths owned temporary directories cleaned after tests; injected test source removed after run. Original98capturedfiles Git-blob reverified.",
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter CacheStorageFailureControl",
+    "log_sha256": "e352a623887332e62450e9333a6c6e4e579ed526771be048075ebce5ed496c16",
+    "outcomes": [
+      "Parent regular file prevents database creation; error thrown, exact parent marker bytes preserved.",
+      "Directory at database URL rejected; nested marker bytes preserved.",
+      "4096bytes of0xA5 database rejected; exact corrupt database bytes preserved."
+    ]
+  },
+  "partial_reads": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/HashCache.swift",
+      "lines": [
+        "1329-1460"
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "findings": [
+    "Initializer propagates errors for three concrete invalid-storage configurations instead of silently replacing existing data. Does not prove later write errors, disk full, read-only permissions, process crash or recovery policy.",
+    "Source migration list v1-v10 creates hashes, metadata/SHA, image/frame features, pair relations and scan indexes, then versions image/frame feature payloads. Read migration section only, no whole HashCache manual credit.",
+    "No destructive automatic database repair seen in inspected initializer/migration block. Caller-level app handling of thrown initialization error not tested.",
+    "ScanActivityManager wraps ProcessInfo activity begin/end with userInitiated/automaticTerminationDisabled/suddenTerminationDisabled. Read only; balanced lifecycle under cancellation/closed windows not qualified.",
+    "Three authored controls are separate from upstream52HashCacheTests and not reported as original upstream tests. No production source changed."
+  ]
+}
