@@ -1,0 +1,33 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/SwiperViewModel.kt",
+      "sha256": "f2f79bdf7ebbc416d5ea8832c35cbe99450cdff240d73404fd9c60c48e995b8d",
+      "ranges": [
+        [
+          1,
+          779
+        ]
+      ],
+      "total_lines": 1545
+    }
+  ],
+  "findings": [
+    "PendingChange timestamp defaults to System.currentTimeMillis, confirming timestamp is not a guaranteed unique action identifier. Previously reviewed revertChange removes all actions with the same timestamp.",
+    "processSummaryLists places ScreenshotAndDelete in both delete and convert sections. In grid/compact mode both categories use the same unprefixed joined item-ID row key, yielding a concrete duplicate-key case for a singleton screenshot-and-delete plan. No Compose runtime was executed.",
+    "initializeMedia returns early for unchanged buckets and a nonempty loaded list, including when called from resume validation. Existing list metadata and removed files need not be refreshed by this path.",
+    "Initial media selection excludes processed and skipped IDs but not restored pendingChanges IDs; saved pending work can be presented again as the current item.",
+    "initializeMedia retains no collection Job or generation guard, allowing multiple loading calls to publish batches into common state. It correctly appends disjoint repository batches rather than replacing each batch.",
+    "processAndAdvance receives a captured change but reads currentItem later in a launched coroutine without verifying IDs match. Rapid queued actions may append an old item action while advancing the newer current item.",
+    "Pending state is restored from Parcelable metadata without file identity/content verification. Resume filtering checks existence, not replacement/content identity.",
+    "External deletion event handling removes deleted IDs from pending state and saved state, and adjusts current index for earlier removed items. This handles delivered deletion events, not arbitrary external replacement or metadata edits."
+  ],
+  "whole_files_read_total": 74,
+  "remaining_tracked_blobs": 56,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
