@@ -1,0 +1,45 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "meliaeloader.py lines1-571 whole read and pinned blob verified; exact helper excerpts controlled on authored reference lists, no full module/dump/runtime",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/runsnakerun/meliaeloader.py",
+    "sha256": "68499f84b40215f2b233122873ac5aa958bad1cf9133aa988c3f99daa414facb",
+    "python3_parse": {
+      "result": "SyntaxError",
+      "line": 401,
+      "message": "Missing parentheses in call to 'print'. Did you mean print(...)?"
+    }
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 110,
+    "remaining_not_whole_reviewed": 34
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-reference-rewrite-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "96be15c2a80cdd1611a346d310d5dc949112b9ee",
+    "source_sha256": "68499f84b40215f2b233122873ac5aa958bad1cf9133aa988c3f99daa414facb",
+    "scope": "Exact as_id and rewrite_references excerpts; authored integer reference lists only",
+    "old_before_existing_new": [
+      2,
+      2
+    ],
+    "existing_new_before_old": [
+      2
+    ],
+    "single_ref_result_depends_on_input_order": true
+  },
+  "findings": [
+    "rewrite_references(single_ref=True) yields [new,new] for [old,new], but [new] for [new,old]. Exact helper control confirms order-dependent duplicate retention.",
+    "group_children sets parent refs[:] = [group_address] for each qualifying type, replacing unrelated children and previous type groups. Static finding: final branches do not restore discarded references. No grouping execution.",
+    "load overwrites duplicate input addresses in index while accumulating parent lists and raw_total from every line; no duplicate-address rejection or consistency reconciliation. Static finding.",
+    "children silently drops missing referenced addresses. This may be intentional for compression but also hides incomplete input without a completeness flag. Static finding.",
+    "Traversal recursively processes graph with visited sets but no explicit record/depth/size budget; deeply nested input remains unqualified. No stress recursion run.",
+    "recurse_module divides total child cost among recorded parents and caches totsize in mutable records. Values describe heuristic retained-cost attribution, not independent OS RSS or exact exclusive ownership.",
+    "Ref stores strong target references despite weakref import. Root/index dictionaries retain wrapper objects pointing back to themselves; loader object graph affects observed memory.",
+    "Python2 except and print syntax prevents original module import in Python3. No port, GUI or original Meliae dump loaded."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
