@@ -1,0 +1,89 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "copyparty/up2k.py",
+      "sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "lines": 5931,
+      "method": "Complete source read across v1-v10 disjoint recorded ranges; no omitted interval."
+    }
+  ],
+  "whole_text_files_read_total": 12,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 474,
+  "partial_source_files_read": [
+    {
+      "path": "copyparty/up2k.py",
+      "local": "08-up2k.py",
+      "sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "git_blob": "39da8b8ed2b9c1fa72a75253f5efff4124063449",
+      "whole_text_read": true,
+      "new_ranges_read": [
+        "2771-3170",
+        "3751-3758",
+        "4176-5343",
+        "5386-5697"
+      ],
+      "cumulative_ranges": [
+        [
+          1,
+          5931
+        ]
+      ],
+      "cumulative_source_lines_read": 5931,
+      "total_source_lines": 5931,
+      "remaining_ranges": []
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/copyparty082-source-review-v9-20261024.json",
+  "native_controls": {
+    "controls": [
+      {
+        "case": "create-reopen",
+        "no_expr_idx": false,
+        "passed": true
+      },
+      {
+        "case": "create-reopen",
+        "no_expr_idx": true,
+        "passed": true
+      },
+      {
+        "case": "v4-to-v6",
+        "backup_versions": [
+          4,
+          5
+        ],
+        "passed": true
+      },
+      {
+        "case": "future-version-refusal",
+        "bytes_preserved": true,
+        "passed": true
+      }
+    ],
+    "scope": "Original methods on bounded owned temporary SQLite files; synthetic v4 schema. No disk failure, concurrency, old SQLite engine, power-loss or server qualification."
+  },
+  "observations": [
+    {
+      "scope": "native bounded database controls",
+      "finding": "Both expression-index configurations create/reopen and retain a record; synthetic v4 upgrades to v6 preserving data with readable v4 and v5 backups; version999 refuses with original database bytes preserved."
+    },
+    {
+      "scope": "source only",
+      "finding": "Copy/move update database state before the subsequent filesystem action and commit cursors in finally; failure-path consistency requires dedicated injection before adoption."
+    },
+    {
+      "scope": "source only",
+      "finding": "Snapshot skips publication when entry-count/newest timestamp etag matches; this is not proof that all upload state changes alter the etag."
+    }
+  ],
+  "limits": [
+    "12/486 whole text files read; repository incomplete.",
+    "Whole module source reading is not whole runtime qualification.",
+    "No foreign production code adopted.",
+    "Native pHash/ASAN remains skipped."
+  ]
+}
