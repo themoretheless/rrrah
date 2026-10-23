@@ -1,0 +1,31 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Configuration/default-profile.json",
+      "sha256": "dc8f96413fc2e578fbb8385fbc0694d1e63fd45b5506945552292c930585ecd8",
+      "lines": 306,
+      "git_blob_verified": true
+    }
+  ],
+  "checks": {
+    "categories": 20,
+    "duplicate_ids": [],
+    "duplicate_folder_names": [],
+    "unsafe_folder_names": [],
+    "extension_conflicts": {},
+    "extension_count": 109,
+    "confidence_out_of_range": []
+  },
+  "findings": [
+    "Built-in profile has 20 categories, all enabled, with unique IDs/folder names and no unsafe folder components or confidence-range violations. This validates the bundled data only, not imported or edited profiles.",
+    "Extension mappings are classification policy, not decoder support. Includes env/.env and sqlite-wal rules, but FileScanner skips hidden files, so .env classification example is not proof actual hidden-file discovery.",
+    "Default profile has fewer than the AI 51-category cap; custom profiles may exceed it. Keyword overlap/substrings can still affect subject classification despite unique extension mappings."
+  ],
+  "whole_files_read_total": 53,
+  "remaining_tracked_blobs": 5,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
