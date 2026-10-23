@@ -1,0 +1,296 @@
+{
+  "repository": "OpSafari/hypoarena",
+  "commit": "09b8dd0b93f8cef273bb412e288f942dad1de03e",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/hypoarena/dedup.py",
+      "local": "02-dedup.py",
+      "sha256": "f0e2f4465264a8a579a3c414f2480066c398032bed6d298ff3ee5c27c10b91cc",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hypoarena/__init__.py",
+      "local": "03-__init__.py",
+      "sha256": "95a737c0bba55c74433f7996ae29c1fd6b5b1d56cc8dd6d9a22fa4281a2db642",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hypoarena/__main__.py",
+      "local": "04-__main__.py",
+      "sha256": "5eccb99a252e8c60f32ff50b8c5b2f02393ef4bbfa5dc1ceeda9b58679a79008",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_dedup_clustering.py",
+      "local": "05-test_dedup_clustering.py",
+      "sha256": "53312e2dfc71a261b2ffd74fedb559cd32857b72c1f17bb1bb8c6a64c0f8b7e2",
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "10d2f290d4a01dd7eb2cb1a99b9ed9494e4db828652d96ee7a200221dfa85f3e",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "c4b5ca3f91dc5d56035ba03d6c78d6d809010149c8bb378fd3fd376a8b5dc007",
+      "whole_text_read": true
+    },
+    {
+      "path": "pyproject.toml",
+      "local": "07-pyproject.toml",
+      "sha256": "0acf56a88f82d1553f24f4f39a9c7bebf0e2e81c6ddbfad5a5a727714e75163a",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hypoarena/text.py",
+      "local": "08-text.py",
+      "sha256": "ed7b81e0ed5baad08d9453d1f21e075909f2a2fcd75541e124137ba789cff7ad",
+      "whole_text_read": true,
+      "lines": 379
+    },
+    {
+      "path": "src/hypoarena/ids.py",
+      "local": "09-ids.py",
+      "sha256": "0ef88597984e00bfb93cc08cdfde89c39d9ef44e333f4896781d4c2c357cb299",
+      "whole_text_read": true,
+      "lines": 92
+    },
+    {
+      "path": "src/hypoarena/errors.py",
+      "local": "10-errors.py",
+      "sha256": "f9af7331c99baadf50c124c12856fe011b3cd00d3db095c305023d11788a8bce",
+      "whole_text_read": true,
+      "lines": 166
+    },
+    {
+      "path": "src/hypoarena/_version.py",
+      "local": "11-_version.py",
+      "sha256": "d389d6c1ed90aa06980737dbfbbba51e67348c734636f24023cabf8e0ca6e23b",
+      "whole_text_read": true,
+      "lines": 5
+    },
+    {
+      "path": "tests/test_ids.py",
+      "local": "12-test_ids.py",
+      "sha256": "1ef39422d80dc974d3cbf7e34dd52cd6d67681c5cd404fa80c93628108d4c847",
+      "whole_text_read": true,
+      "lines": 139
+    },
+    {
+      "path": "tests/test_text.py",
+      "local": "13-test_text.py",
+      "sha256": "0cd0f409d801a13c8744cdee9a21a4ebe80a916e34f98ad9bd781f40460e8b43",
+      "whole_text_read": true,
+      "lines": 238
+    }
+  ],
+  "whole_text_files_read_total": 13,
+  "tracked_blobs": 311,
+  "remaining_without_whole_review": 298,
+  "native_original_tests": {
+    "passed": 89,
+    "failed": 0,
+    "exit_code": 0,
+    "files": [
+      "tests/test_dedup_clustering.py",
+      "tests/test_text.py",
+      "tests/test_ids.py"
+    ],
+    "new_text_ids_passed": 78
+  },
+  "pure_controls": {
+    "zero_pair_cosine": 1.0,
+    "zero_matrix_entries": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "chain_edges_group_all_three": true,
+    "orthogonal_pair_cosine": 0.0,
+    "scope": "Original pure function definitions with NumPy, no full package imports or upstream tests. Group connectivity is not proof of all-pairs similarity."
+  },
+  "whole_api_chain_control": {
+    "cluster": {
+      "representative": "a",
+      "method": "jaccard",
+      "size": 3,
+      "members": [
+        "a",
+        "b",
+        "c"
+      ],
+      "similarities": [
+        {
+          "left": "a",
+          "right": "b",
+          "score": 0.666667
+        },
+        {
+          "left": "b",
+          "right": "c",
+          "score": 0.666667
+        }
+      ]
+    },
+    "a_c_similarity": 0.3333333333333333,
+    "threshold": 0.6,
+    "scope": "Full original DuplicateFinder finite word-Jaccard chain; connectivity does not establish all member pairs meet threshold."
+  },
+  "findings": [
+    "Exact normalized matching groups on content_hash digest alone; it does not byte-confirm normalized content equality in exact_duplicates.",
+    "MinHash candidate pairs are verified using MinHash estimate, not exact Jaccard, per implementation.",
+    "Union-find clusters can include pairs below configured threshold; verified edge list is preserved separately.",
+    "Module header reverses false-positive/negative labels in explanatory parentheticals; implementation/formula govern behavior.",
+    "Word tokenizer accepts ASCII letters and digits only: distinct Cyrillic-only and CJK-only strings become empty token sets and cluster with Jaccard 1.0 in the recorded public API controls. This English-oriented text method must not establish file equality.",
+    "content_only removes negation tokens: inserting not alone in the recorded sentence produces Jaccard 1.0; changed bind/binds control remains distinct.",
+    "Default content_hash is 16 hexadecimal digits (64 bits); make_id defaults to 12 hexadecimal digits (48 bits). Digest equality alone is not a proof of equal file bytes."
+  ],
+  "limits": [
+    "13 of 311 tracked files reviewed completely; 298 remain.",
+    "89 original tests in three files, not the full upstream suite.",
+    "Finite text controls do not measure throughput or prove universal matching behavior.",
+    "No foreign implementation copied into rrrah. Native pHash.org/ASAN remains skipped."
+  ],
+  "acquisition_note": "Initial clone did not include pinned commit; explicit fetch by commit succeeded before native test run.",
+  "text_public_api_control": {
+    "scope": "Unmodified pinned package public API; four finite text cases, no file matching claim",
+    "cases": [
+      {
+        "left": "кошка",
+        "right": "собака",
+        "content_only": false,
+        "left_tokens": [],
+        "right_tokens": [],
+        "left_content": [],
+        "right_content": [],
+        "clusters": [
+          {
+            "representative": "a",
+            "method": "jaccard",
+            "size": 2,
+            "members": [
+              "a",
+              "b"
+            ],
+            "similarities": [
+              {
+                "left": "a",
+                "right": "b",
+                "score": 1.0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "left": "猫",
+        "right": "犬",
+        "content_only": false,
+        "left_tokens": [],
+        "right_tokens": [],
+        "left_content": [],
+        "right_content": [],
+        "clusters": [
+          {
+            "representative": "a",
+            "method": "jaccard",
+            "size": 2,
+            "members": [
+              "a",
+              "b"
+            ],
+            "similarities": [
+              {
+                "left": "a",
+                "right": "b",
+                "score": 1.0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "left": "protein binds receptor",
+        "right": "protein does not bind receptor",
+        "content_only": true,
+        "left_tokens": [
+          "protein",
+          "binds",
+          "receptor"
+        ],
+        "right_tokens": [
+          "protein",
+          "does",
+          "not",
+          "bind",
+          "receptor"
+        ],
+        "left_content": [
+          "protein",
+          "binds",
+          "receptor"
+        ],
+        "right_content": [
+          "protein",
+          "bind",
+          "receptor"
+        ],
+        "clusters": []
+      },
+      {
+        "left": "protein binds receptor",
+        "right": "protein not binds receptor",
+        "content_only": true,
+        "left_tokens": [
+          "protein",
+          "binds",
+          "receptor"
+        ],
+        "right_tokens": [
+          "protein",
+          "not",
+          "binds",
+          "receptor"
+        ],
+        "left_content": [
+          "protein",
+          "binds",
+          "receptor"
+        ],
+        "right_content": [
+          "protein",
+          "binds",
+          "receptor"
+        ],
+        "clusters": [
+          {
+            "representative": "a",
+            "method": "jaccard",
+            "size": 2,
+            "members": [
+              "a",
+              "b"
+            ],
+            "similarities": [
+              {
+                "left": "a",
+                "right": "b",
+                "score": 1.0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "harness_note": "Initial owned control used nonexistent to_dict; corrected to original as_dict before successful four-case execution. No upstream source changes."
+}

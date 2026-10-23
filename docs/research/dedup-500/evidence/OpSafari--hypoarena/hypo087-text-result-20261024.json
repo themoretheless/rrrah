@@ -1,0 +1,131 @@
+{
+  "scope": "Unmodified pinned package public API; four finite text cases, no file matching claim",
+  "cases": [
+    {
+      "left": "кошка",
+      "right": "собака",
+      "content_only": false,
+      "left_tokens": [],
+      "right_tokens": [],
+      "left_content": [],
+      "right_content": [],
+      "clusters": [
+        {
+          "representative": "a",
+          "method": "jaccard",
+          "size": 2,
+          "members": [
+            "a",
+            "b"
+          ],
+          "similarities": [
+            {
+              "left": "a",
+              "right": "b",
+              "score": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "left": "猫",
+      "right": "犬",
+      "content_only": false,
+      "left_tokens": [],
+      "right_tokens": [],
+      "left_content": [],
+      "right_content": [],
+      "clusters": [
+        {
+          "representative": "a",
+          "method": "jaccard",
+          "size": 2,
+          "members": [
+            "a",
+            "b"
+          ],
+          "similarities": [
+            {
+              "left": "a",
+              "right": "b",
+              "score": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "left": "protein binds receptor",
+      "right": "protein does not bind receptor",
+      "content_only": true,
+      "left_tokens": [
+        "protein",
+        "binds",
+        "receptor"
+      ],
+      "right_tokens": [
+        "protein",
+        "does",
+        "not",
+        "bind",
+        "receptor"
+      ],
+      "left_content": [
+        "protein",
+        "binds",
+        "receptor"
+      ],
+      "right_content": [
+        "protein",
+        "bind",
+        "receptor"
+      ],
+      "clusters": []
+    },
+    {
+      "left": "protein binds receptor",
+      "right": "protein not binds receptor",
+      "content_only": true,
+      "left_tokens": [
+        "protein",
+        "binds",
+        "receptor"
+      ],
+      "right_tokens": [
+        "protein",
+        "not",
+        "binds",
+        "receptor"
+      ],
+      "left_content": [
+        "protein",
+        "binds",
+        "receptor"
+      ],
+      "right_content": [
+        "protein",
+        "binds",
+        "receptor"
+      ],
+      "clusters": [
+        {
+          "representative": "a",
+          "method": "jaccard",
+          "size": 2,
+          "members": [
+            "a",
+            "b"
+          ],
+          "similarities": [
+            {
+              "left": "a",
+              "right": "b",
+              "score": 1.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

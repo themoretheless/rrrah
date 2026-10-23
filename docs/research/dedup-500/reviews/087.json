@@ -2,13 +2,13 @@
   "index": 87,
   "repository": "OpSafari/hypoarena",
   "commit": "09b8dd0b93f8cef273bb412e288f942dad1de03e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "13 complete pinned files of 311; 89 original tests passed; four public API text controls; partial repository review",
   "decision": "reference",
   "finding": "MinHash candidate stage followed by metric confirmation and transitive-cluster tests; preserve distinction between graph and pairwise evidence.",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 234,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "src/hypoarena/dedup.py",
@@ -89,6 +89,11 @@
     {
       "audit": "docs/research/dedup-500/hypo087-source-review-v1-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/hypo087-source-review-v2-20261024.json",
+      "whole_repo_complete": false
     }
-  ]
+  ],
+  "upstream_tests_scope": "Three test files only, 89 passed; full suite not run"
 }
