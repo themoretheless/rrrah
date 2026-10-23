@@ -1,0 +1,28 @@
+{
+  "repository": "Cornerback24/Blender-NLA-Midi-Copier",
+  "commit": "957c779f29e574190b11bf4611f4934cfd6fd2f9",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "46e9a305b89b730759e5ab3ff5b099b72bdd456a909e4a3e756f4f17cf52122e",
+      "bytes": 28257,
+      "whole_text_read": true,
+      "read_ranges": [
+        "1-200",
+        "201-400",
+        "401-EOF"
+      ]
+    }
+  ],
+  "whole_text_files_read_total": 19,
+  "tracked_blobs": 60,
+  "remaining_without_whole_review": 41,
+  "findings": [
+    "README describes MIDI-driven NLA action copying, object duplication, pitch/time/velocity filters, keyframe generation and Blender installation. No file/image duplicate detection algorithm described.",
+    "Documented options include skip/blend/duplicate for overlapping animation strips; these are animation semantics, not evidence for exact-file or visual clustering policy.",
+    "Markdown image references were read as text only; 17 PNG assets have not been visually reviewed. No Blender runtime or installation performed."
+  ],
+  "decision": "reject-domain"
+}
