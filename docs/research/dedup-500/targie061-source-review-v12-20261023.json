@@ -1,0 +1,64 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/ImageFeatureExtractor.swift",
+      "git_blob": "0ac8ab0b21ac593d7b5c4287f1458df6b305a2a7",
+      "sha256": "a1c8233e1700405695aec197ca6f804f85764f0f780aca501c9a1efb9140a1ed",
+      "bytes": 10647,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Services/CancellableVisionRequest.swift",
+      "git_blob": "7666d4c9e76549a294b69bc809ed0b648f6717f1",
+      "sha256": "bd631367c73441d16eee3f8d576f8711241cb6981ac61e0f91a13224f18873cd",
+      "bytes": 690,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Services/VisionFeatureSimilarity.swift",
+      "git_blob": "6f078b86e66066e2b089ac50a56d2ca3c71cdb68",
+      "sha256": "3d1368d2714670c08b94df8da2a112a0cedf3da1b46038a9ad46b3bdf5ddf01f",
+      "bytes": 2296,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/ImageFeatureExtractorTests.swift",
+      "git_blob": "cca577cd8ce98d7db85a441e5cffa0484922af1b",
+      "sha256": "eb1934ece1dfaa36a82f5d32e5d7f9a578c045ead8c116e8e21a11327662d969",
+      "bytes": 4305,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 22,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 99,
+  "full_review_count": 249,
+  "runtime_scope": "Whole unchanged original ImageFeatureExtractor, CancellableVisionRequest, VisionFeatureSimilarity and original full ImageFeatureExtractorTests in isolated macOS14 SwiftPM target. Real ImageIO/Vision inference. Authored two-method HashCaching interface only; persistentCache:nil, no database backend. No inference stub.",
+  "upstream_tests": {
+    "executed": 3,
+    "failed": 0,
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/feature-tests",
+    "log_sha256": "93170bcd19d48f466397161fa50ef35a3a4ba2de3d69fd31d66fbf356f86d41a"
+  },
+  "authored_control": {
+    "source": "targie061-feature-rewrite-control-20261023.swift",
+    "executed": 1,
+    "failed": 0,
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/feature-tests --filter FeatureRewriteControl",
+    "log_sha256": "31e399abe8fd7a60d1fe5e78e18cd237d825a060c026f19e2cc422d6a1a3a439",
+    "results": "Rewrite native PNG at same URL from64x64 to128x64 with different colour and verified different encoded bytes. Same cache returns exact same observation object. cancelAll then new request returns different observation object."
+  },
+  "adapter": "targie061-feature-test-interface-20261023.swift",
+  "findings": [
+    "ImageFeatureCache completed task entries remain keyed solely by URL, even after last waiter finishes. File rewrite between sequential calls does not trigger re-extraction in this native control. This proves primitive cache invalidation gap; normal pipeline lifetime across user edits not established.",
+    "cancelAll clears in-memory task map and allows new extraction in control; caller must enforce lifecycle. No new identity validation in this source.",
+    "Persistent feature load keyed by path/size/mtime has no after-await identity check; persist reads metadata after extraction rather than validating same before/after identity. These race concerns read statically, not reproduced against real persistent backend.",
+    "Vision revision2 score maps distance through clamp(1-d^2/2,0,1), rejects nonfinite/negative distance and mismatched revisions. It is a visual score, not duplicate probability or exact identity. No score-calibration corpus run.",
+    "Limiter releases on both success/failure; original test demonstrates max2 for eight concurrent synthetic failing requests. Queued cancellation and successful heavy-load behavior untested here.",
+    "Three original tests establish orientation/downscale bound1536, real feature extraction acceptance and mocked-extractor concurrency limit. Not full app or universal format coverage.",
+    "No upstream code adopted into production; GPL notices preserved."
+  ]
+}
