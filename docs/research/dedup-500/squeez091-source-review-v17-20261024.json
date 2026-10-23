@@ -1,0 +1,89 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v16-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/economy/agent_tracker.rs",
+      "local": "70-src--economy--agent_tracker.rs",
+      "sha256": "f9ecd89cc5c3f95b416f056a4e7a0226d8aeb4b7461fa25d690bab80d87022c2",
+      "whole_text_read": true,
+      "lines": 199
+    },
+    {
+      "path": "src/economy/mod.rs",
+      "local": "71-src--economy--mod.rs",
+      "sha256": "d9a4b9c39df1cce9bc693dc7176cde0896269172eee5502b6120e12e7bfcbab0",
+      "whole_text_read": true,
+      "lines": 9
+    },
+    {
+      "path": "tests/test_agent_burst.rs",
+      "local": "72-tests--test_agent_burst.rs",
+      "sha256": "8d83ed5532bef29d50c9868f43adbc9b976f32193e5daef2c34a56b67afdccf2",
+      "whole_text_read": true,
+      "lines": 95
+    },
+    {
+      "path": "tests/test_agent_measurement.rs",
+      "local": "73-tests--test_agent_measurement.rs",
+      "sha256": "49e18debeb1c98129220627bf6c95b10ab30ebb384c7dc36e3705db53aec5700",
+      "whole_text_read": true,
+      "lines": 110
+    },
+    {
+      "path": "src/context/transcript.rs",
+      "local": "74-src--context--transcript.rs",
+      "sha256": "32136066ace2ec5eb292cdc7ecfe0a2280344c8f5f41f72d53e292606080d18b",
+      "whole_text_read": true,
+      "lines": 498
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 73,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 74,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 253,
+  "native_original_tests_added": {
+    "passed": 38,
+    "failed": 0,
+    "ignored": 0,
+    "groups": {
+      "agent_tracker_lib": 6,
+      "transcript_lib": 18,
+      "test_agent_burst": 6,
+      "test_agent_measurement": 8
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 439,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "compact_usage": 10,
+    "spaced_equivalent_usage": null,
+    "spaced_sidechain_not_skipped": true,
+    "nonassistant_usage_counted": 77,
+    "repeated_records_total": 20,
+    "large_record_in_memory_usage": 10,
+    "large_record_file_usage": null,
+    "middle_switch_to_standard_returns_old_window": 1000000,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-transcript-kfb309xw"
+  },
+  "findings": [
+    "Exact substring scanning accepts compact assistant record but ignores JSON-equivalent spacing after type colon. isSidechain colon spacing causes sidechain record to be counted as main record. These are valid synthetic JSON records; actual host serialization variations not established.",
+    "measure_agent_usage_in does not restrict record type and counts a valid synthetic user usage block. Repeated identical records are summed twice; whether actual host repeats billable records is unqualified.",
+    "A valid600000-character-content assistant record with usage near beginning gives10 tokens through in-memory scan butNone through512KiB-tail file scan. Size assumption is not a guaranteed parser boundary.",
+    "detect_window misses a newer identity record in the unscanned middle of an owned1.2MiB transcript and returns old1M head identity after switch to standard. Valid file records independently parsed using Python JSON.",
+    "Agent spawn and future reread costs remain estimates; source uses max(observed context,cache read)*4 floor and separate burst constant. No actual agents spawned or cost accuracy qualified."
+  ],
+  "transfer_decision": "Use structural JSON parsing and explicit record boundaries for persisted identity/accounting. Bounded scans must expose insufficient coverage instead of silently asserting latest state. No foreign production code copied.",
+  "limits": [
+    "253 tracked files remain without whole review.",
+    "No real user transcripts, host hooks, agents or network invoked.",
+    "439 focused tests do not qualify full package or all transcript formats.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

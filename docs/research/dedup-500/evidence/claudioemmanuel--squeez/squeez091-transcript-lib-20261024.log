@@ -1,0 +1,25 @@
+
+running 18 tests
+test context::transcript::tests::missing_file_returns_none ... ok
+test context::transcript::tests::no_assistant_usage_returns_none ... ok
+test context::transcript::tests::cache_ratio_returns_none_when_no_data ... ok
+test context::transcript::tests::window_for_model_detects_1m_and_default ... ok
+test context::transcript::tests::detect_window_skips_sidechain_and_handles_missing ... ok
+test context::transcript::tests::identity_scan_takes_the_newest_record ... ok
+test context::transcript::tests::detect_window_reads_model_from_last_assistant ... ok
+test context::transcript::tests::identity_scan_ignores_quoted_transcript_json ... ok
+test context::transcript::tests::infer_window_promotes_on_observed_ceiling ... ok
+test context::transcript::tests::identity_record_proves_1m_where_message_model_cannot ... ok
+test context::transcript::tests::window_for_model_reads_marketing_name_marker ... ok
+test context::transcript::tests::extracts_last_assistant_usage ... ok
+test context::transcript::tests::cache_ratio_skips_sidechain ... ok
+test context::transcript::tests::skips_sidechain_records ... ok
+test context::transcript::tests::input_tokens_does_not_match_cache_keys ... ok
+test context::transcript::tests::cache_ratio_extracts_cache_read_and_io ... ok
+test context::transcript::tests::window_for_model_treats_fable_family_as_native_1m ... ok
+test context::transcript::tests::reads_tail_of_real_file ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 536 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
