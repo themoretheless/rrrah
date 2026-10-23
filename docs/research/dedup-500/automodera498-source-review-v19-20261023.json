@@ -1,0 +1,49 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/cert/CertificateRequest.java",
+      "sha256": "62bd4e2f08341ef5c8b8d5726245dadf3a288e339494b9f97335028483a8b1ff",
+      "lines": 85,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/cert/NetworkRight.java",
+      "sha256": "fc95a85a233faf10be79779d0c27f034e2d96deb69548a55c9ae8a33dd93fe1a",
+      "lines": 39,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/cert/NodeCertificate.java",
+      "sha256": "643413969cef4298476a2323a663eab874b2b2c2661992ced3c809cac2e10b9f",
+      "lines": 153,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/exception/TargetNodeUnreachableException.java",
+      "sha256": "40af2d4f7cdb4170fa578ffe40596885c3ec2e02604d79b411238b241c6556c5",
+      "lines": 43,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "serialization_run": false,
+    "network_requests": false
+  },
+  "findings": [
+    "Four remaining common network-model files whole-read/Gitblobverified. All tracked common model classes now read. Review focuses data contracts; no live administrative or certificate operations performed.",
+    "NodeCertificate equals compares rights as orderedArrayList, so identical members in different order compareunequal. No canonical ordering or set semantics. Mutable host/contact/date/rights fields also participate in hashCode. Java runtime not exercised.",
+    "addressLine2 constructor acceptsnull without NonNullannotation but equals/hashCode dereference it. Noargs/JAXB incomplete state can similarly leave lists/stringsnull; actual deserializer/lifecycle not qualified.",
+    "CertificateRequest constructor storesNode reference and timestamp, status defaultsWAITING; IDcomment says sameascertificate while service generates nodeID-randomsuffix. No schema validation shown in model.",
+    "TargetNodeUnreachableException retainsresponseBody private without getter or message inclusion; ordinary getMessage onlyreports host/status, so remote detail lost to callers usingmessage. Source-only diagnostic observation.",
+    "These models introduce no fingerprint algorithm/version/width or content digest fields. No source adopted into own library."
+  ],
+  "remaining": [
+    "69 other tracked blobs/assets",
+    "Remaining web/controllers/templates/media/license and opaque native binaries/runtime qualification"
+  ],
+  "full_review_count": 249
+}
