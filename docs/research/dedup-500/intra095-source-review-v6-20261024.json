@@ -1,0 +1,76 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pArch.py",
+      "local": "19-pArch.py",
+      "sha256": "abe2a249942f9d78359f7c6c91f6ce03b6eb0cbac52f00fdfa85a5096a796c4a",
+      "whole_text_read": true,
+      "lines": 58
+    },
+    {
+      "path": "deduplicator/rwlock.py",
+      "local": "20-deduplicator--rwlock.py",
+      "sha256": "084e487f306bedcb69b974dece6f7b82d11fa2ce42ab79c4d9e963c9e37f2204",
+      "whole_text_read": true,
+      "lines": 92
+    },
+    {
+      "path": "Tests/Test_rwlock.py",
+      "local": "21-Tests--Test_rwlock.py",
+      "sha256": "4f6180e08b3053d0769aabd5037555e272597ce7c270a8be335e416b4de13914",
+      "whole_text_read": true,
+      "lines": 395
+    }
+  ],
+  "whole_text_files_read_total": 22,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 132,
+  "authored_controls": {
+    "intra095-lock-control": {
+      "result": {
+        "failed_reentrant_writer_error": "Failed to acquire no-writers lock. Was this call re-entrant and non-blocking?",
+        "nonblocking_reader_blocked_over_one_second": true,
+        "overrelease_error": "Switch released too many times!",
+        "read_switch_mutex_available_after_error": false,
+        "readers_gate_available_after_original_writer_release": false,
+        "scope": "Unchanged original RWLock module;two owned lock objects plus bounded child;private lock availability probes;not original Cython wrapper tests"
+      },
+      "exit_code": 0
+    },
+    "intra095-archive-name-control": {
+      "result": {
+        "caller_mutation_changes_next_lookup": true,
+        "duplicate_names_share_cached_info": true,
+        "physical_member_contents_distinct": true,
+        "scope": "Exact original PhashArchive/fix_mime definitions;actual owned ZIP with two same-name distinct members;Python zipfile reader adapter and fixed MIME adapter,not UniversalArchiveInterface runtime",
+        "yielded_contents": [
+          "other",
+          "other"
+        ],
+        "yielded_count": 2
+      },
+      "exit_code": 0
+    }
+  },
+  "findings": [
+    "Original RWLock reader_release on empty read_switch raises RuntimeError while holding __mutex. A subsequent nonblocking private mutex availability probe returnsFalse. Error state does not restore internal synchronization.",
+    "Original RWLock second writer_acquire(blockingFalse)while same object alreadyheld raises but increments write_switchcounter;after original writer_release,no_readers gate remainslocked (nonblocking private availabilityprobeFalse).",
+    "Original reader_acquire(blockingFalse)under activewriter does not returnwithin1second. Isolated child timeout kills/reaps child;LightSwitch.acquire invokes lock.acquire()without forwardingblocking. No live process left.",
+    "Whole original Test_rwlock.py read. Includes overrelease and nonreentrantwriter assertions but does not test usable state aftercaught errors. It targets Cython BkHammingTree wrapper;tests not executed in this turn.",
+    "PhashArchive caches by membername and yields stored mutable dict. Actual owned ZIP has same.txt twicewith distinctbytes first/other;zipfile readeradapter original iterHashes yieldsother/otherand sameinfoobject. Caller modifyinghexHashchangesnextgetHashInfo. This qualifies wrapper behavior underadapter semantics,not UniversalArchiveInterface runtime.",
+    "Earlier-reviewed HashThread.scanArchive explicitly rejectsduplicate names before beginningDBtransaction. Do not generalize PhashArchive control to every archive path.",
+    "PhashArchive retainsfullcontentbytes per cachedmember with no aggregatebudget in thismodule;source-only,noRSSbenchmark.",
+    "rwlock.py declaresMITand creditsMateuszKobos/ConnorWolf with externalrecipepointer. Externallicense/provenance not followed thisturn,no foreignproductioncodeadopted."
+  ],
+  "transfer_decision": "Require failed synchronization operations to preserve usable state;frame archive identity by member occurrence when duplicate names are allowed,or reject ambiguity explicitly. Keep caller-owned/mutable cache semantics explicit.",
+  "limits": [
+    "22of154whole files;132remain.",
+    "Original upstream tests remain17run13pass4errors from prior audit;authored controls add no originalpassingtests.",
+    "No Cython concurrencytest suite or real UniversalArchiveInterface/PostgreSQL integration.",
+    "No native pHash.org/ASAN run;user-skipped item remains skipped."
+  ]
+}
