@@ -119,7 +119,11 @@
     {
       "audit": "docs/research/dedup-500/targie061-source-review-v6-20261023.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/targie061-source-review-v7-20261023.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "10 unchanged original FileHasherTests pass with original hasher/XCTest and authored minimal interfaces/cache adapter; not real cache database or full app. See v3."
+  "upstream_tests_scope": "10 unchanged original FileHasherTests (minimal cache adapter, v3) and 3 unchanged original ImagePerceptualHasherTests (unused video decoder adapter, v7) pass; separate isolated targets, not full app/database suite."
 }

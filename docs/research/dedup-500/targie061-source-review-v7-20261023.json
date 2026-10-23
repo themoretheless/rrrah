@@ -1,0 +1,43 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/ImagePerceptualHasherTests.swift",
+      "git_blob": "a1e85e8234b942e520faffc4bf816bc19b8a2413",
+      "sha256": "8809c9df60e23496f21a189639f66279e9030d8e8e30e923ed8a64057cd5fc6f",
+      "bytes": 2315,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 12,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 109,
+  "full_review_count": 249,
+  "upstream_tests": {
+    "executed": 3,
+    "failed": 0,
+    "names": [
+      "testIdenticalPixelsProduceIdenticalHashes",
+      "testResizedPatternRemainsHighlySimilar",
+      "testDifferentPatternsDoNotLookIdentical"
+    ],
+    "scope": "Unchanged original full test file and both full original perceptual hash modules in isolated SwiftPM macOS14 target. Native CoreGraphics and XCTest. Unused video decoder adapter aborts on call. No URL image decoding, video extraction, full app, database or corpus qualification.",
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/image-tests --filter ImagePerceptualHasherTests",
+    "log_sha256": "c21251c27fdc5e807b3353d258328aa64b77d394233c1dc107015cc1734b0388"
+  },
+  "local_library_verification": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test pixels",
+    "executed": 13,
+    "failed": 0,
+    "scope": "Current working tree pixel integration suite. Includes uniform tiny/thin fields, integer overlap oracle for fractional footprints, alpha projection, exact identity/candidate distinction and cancellation. Existing tests unchanged. No universal image-format claim.",
+    "source_sha256": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "test_sha256": "c8f8f9f2421daec95af85c15e61bff5573e298169679d76c916367c6d7efbe37"
+  },
+  "findings": [
+    "Three original image tests use synthetic shapes at dimensions64,128,256; none tests sub32 dimensions or unequal hash lengths. Passing them does not contradict v6 controls.",
+    "Local implementation integrates fractional source-pixel overlap and already has independent constant-field/integer-overlap tests; no production patch justified for the Targie empty-cell issue.",
+    "External source is review evidence only; no GPL code copied into library."
+  ]
+}
