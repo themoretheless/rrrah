@@ -1,0 +1,77 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v18-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "perf-testing/build_bench.sh",
+      "local": "84-perf-testing--build_bench.sh",
+      "sha256": "6f354bd3551384f827fd9203b2f0b847ef4d3d7c83d99a7d4876400a5d9a0ed0",
+      "whole_text_read": true,
+      "lines": 4
+    },
+    {
+      "path": "perf-testing/cbench.cpp",
+      "local": "85-perf-testing--cbench.cpp",
+      "sha256": "98e3a0ca74af5830b7a38c95211c34c2480a96c291289f4f772cffcae6e4a380",
+      "whole_text_read": true,
+      "lines": 66
+    },
+    {
+      "path": "profile_bk.py",
+      "local": "86-profile_bk.py",
+      "sha256": "8f84f6912d38e6f99e8d7781505e715c126e14c35da0c1c1403e11062c0ed80d",
+      "whole_text_read": true,
+      "lines": 120
+    },
+    {
+      "path": "Tests/Test_db_BKTree_Compare.py",
+      "local": "87-Tests--Test_db_BKTree_Compare.py",
+      "sha256": "a66d3a838efe041d3a025e9df415d45397f4bf6fefe1bfa7bbf425ba57a70e81",
+      "whole_text_read": true,
+      "lines": 70
+    },
+    {
+      "path": "Tests/baseDbBkTree.py",
+      "local": "88-Tests--baseDbBkTree.py",
+      "sha256": "0807c7d1b4a88845a6634003f8a7c6240a2a64957c1cd27b93cbae271abfa5dd",
+      "whole_text_read": true,
+      "lines": 99
+    },
+    {
+      "path": "Tests/basePhashTestSetup.py",
+      "local": "89-Tests--basePhashTestSetup.py",
+      "sha256": "c653296d8cf6d0e72e2d5a295ab03c8f24c65a08982457ebcd583d834834c994",
+      "whole_text_read": true,
+      "lines": 141
+    }
+  ],
+  "whole_text_files_read_total": 89,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 95,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 59,
+  "authored_compile_control": {
+    "command": "clang++ -std=c++17 -fsyntax-only -pthread .dedup-work/intra095-benchmark-constructor-control-20261024.cpp",
+    "exit_code": 1,
+    "expected_diagnostic": "no matching constructor",
+    "scope": "Exact original benchmark constructor expression with unchanged pinned C++ header; no Hayai or benchmark workload executed."
+  },
+  "findings": [
+    "perf-testing/cbench.cpp constructs BK_Tree(0,0), but the current pinned header exposes BK_Tree(). Syntax-only native probe confirms no matching constructor. This is a narrow benchmark/header API incompatibility, not a full benchmark build result.",
+    "Benchmark fixture intends8million random entries and two1000-query runs. Tree_Search ignores lookup results and declaresint without a return. No accuracy oracle, memory bound, measured speed or platform-qualified outcome established.",
+    "build_bench.sh hardcodes /usr/include/hayai and x86 popcnt/native tuning. Shell syntax passed; script not executed and no8million-node allocation performed.",
+    "profile_bk builds1million entries with a fixed construction seed but timeit repeats reset random.seed() without a fixed value. Timings include random query generation/casting, and queries do not validate returned IDs. Source-only; no profiler started.",
+    "Test_db_BKTree_Compare.test_0 iterates an uncontrolled sample and has no nonempty-sample assertion. Empty sample can yield no distance comparisons. Its getWithinDistance_db call has no definition in current DbApi/PhashDbApi source search; full service runtime not executed.",
+    "DB-backed fixtures create/delete tables and copy/remove test directories. Whole sources read without importing or executing setup/cleanup; test credentials and configured hosts unused.",
+    "basePhashTestSetup helper comments about sync/filesystem behavior are historical assertions, not fresh runtime evidence."
+  ],
+  "transfer_decision": "Require compilable benchmark APIs, deterministic comparable workloads and independent result oracles before accepting performance claims. No foreign production code adopted.",
+  "limits": [
+    "95of154 whole tracked files:89text,6visual;59remain.",
+    "No original tests or benchmarks executed this turn; cumulative24 originaltests remains18passes,1failure,5errors.",
+    "Compile diagnostic is expected authored evidence, not a new original test-suite failure.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
