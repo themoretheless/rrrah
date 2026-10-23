@@ -1,0 +1,25 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/SummarySheet.kt",
+      "sha256": "db4ec77952665ebd68f127e72bc3b8de9d439626d252f64c665f81c4460ec47a",
+      "lines": 495,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "This component previews pending changes, not completed operation results. It receives separately supplied pending/category lists and does not check their consistency or file freshness.",
+    "isApplyingChanges disables the bottom apply button, but reset-and-dismiss, per-item revert, and view toggle remain enabled. Whether caller guards concurrent mutations is still unreviewed; no runtime race is claimed.",
+    "AlertDialog confirm invokes onConfirm without rechecking isApplyingChanges or pending list. Pending data can change while dialog is open; the dialog body contains no frozen item snapshot.",
+    "Grid/compact row keys are unescaped joinToString of item IDs without category or destination prefix. Distinct rows with delimiter-containing IDs can collide; parent uniqueness and actual IDs need caller review. List mode uses action prefixes.",
+    "Group headings show destination display names with basename fallback, not full paths; equal folder names may be ambiguous. Preview includes no per-operation failure/result UI in this component.",
+    "Lists use lazy composition; grid rows are chunked and item restore buttons have 24dp visual size. Accessibility target behavior and screen layout were not rendered."
+  ],
+  "whole_files_read_total": 74,
+  "remaining_tracked_blobs": 56,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
