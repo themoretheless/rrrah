@@ -2,11 +2,11 @@
   "index": 71,
   "repository": "Cornerback24/Blender-NLA-Midi-Copier",
   "commit": "957c779f29e574190b11bf4611f4934cfd6fd2f9",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "11/60pinnedblobs reviewed in v1:8newnonemptyfiles,2emptyfiles andidenticalpreviouslywhole-readGPLtext. Confirmsanimationdatacreation domain, notfilededup. ASTsyntaxonly,no Blender/actions/runtime;49blobsremain.",
   "decision": "reject-domain",
   "finding": "Blender MIDI/action-strip duplication creates animation data; no image deduplication.",
   "license_metadata": "GPL-3.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "RootGPLtext pinned/byteidentical topreviouslywhole-readGPLv3; manifestGPL-3.0-or-later. No implementation copied, dependencylicense or legalcompatibility determination.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -73,6 +73,12 @@
       "lines": 674,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/blender071-source-review-v1-20261023.json",
+      "whole_repo_complete": false
     }
   ]
 }
