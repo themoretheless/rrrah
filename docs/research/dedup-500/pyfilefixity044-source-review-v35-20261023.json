@@ -1,0 +1,56 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "All four pinned GitHub workflow files read whole and Git-object verified. Workflows are data; no execution, publication or current remote-run claim.",
+  "new_whole_reads": [
+    {
+      "path": ".github/workflows/ci-build-downstream.yml",
+      "sha256": "edc7b9389a68cc8e61f83662f58dab7ec562be1388035858d490cfcd0ec34e3b"
+    },
+    {
+      "path": ".github/workflows/ci-build.yml",
+      "sha256": "f030af5390789557635caeb0fd919b49771138b6942aebafe99b34429d9c91c9"
+    },
+    {
+      "path": ".github/workflows/ci-cd.yml",
+      "sha256": "df4eeedfba7441118b61196acff7ba3e4b8c691908d1b0d7cb106f2c985edc1a"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "sha256": "3c75cc7aea43f646788178c6e3988c3b4d604c739e099262c45a023ebf6f63d1"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 70,
+    "remaining_not_whole_reviewed": 74
+  },
+  "findings": [
+    {
+      "id": "modern-ci-refinement",
+      "detail": "Unlike archived Appveyor, primary GitHub CI defines Python3.8/3.10/3.11/latest/PyPy3.9 across Linux/Windows/macOS. This is a meaningful intended matrix, but no run results reviewed."
+    },
+    {
+      "id": "downstream-pin",
+      "detail": "Downstream test installs editable Git default branch without the checked-out commit/ref. Pull-request run can test another revision rather than proposed change. pytest target is fetched src/pyfilefixity checkout."
+    },
+    {
+      "id": "release-version",
+      "detail": "Release workflow installs from TestPyPI/PyPI by unpinned package name without asserting version/hash equality to built artifact. Successful install does not prove just-published release was selected."
+    },
+    {
+      "id": "editable-vs-built-tests",
+      "detail": "Release test step runs against editable checkout before building wheel/sdist. Post-publication checks install only; no package import/CLI/test assertions shown after install. Wheel runtime parity remains separate gate."
+    },
+    {
+      "id": "artifact-provenance",
+      "detail": "Three OS jobs upload dist under shared default artifact name, consumer downloads artifact name without explicit per-platform/hash manifest. Artifact-action version compatibility and actual merge semantics require runtime evidence; not assumed."
+    },
+    {
+      "id": "static-analysis-boundary",
+      "detail": "CodeQL workflow existence is analysis configuration, not successful finding-free execution or correctness coverage. No external reports sent."
+    }
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
