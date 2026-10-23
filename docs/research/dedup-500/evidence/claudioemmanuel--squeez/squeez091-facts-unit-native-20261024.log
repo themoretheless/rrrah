@@ -1,0 +1,22 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 15 tests
+test context::factsheet::tests::rejects_small_numbers_and_plain_words ... ok
+test context::factsheet::tests::hex_requires_a_digit ... ok
+test context::factsheet::tests::dedups_exact_duplicates ... ok
+test context::factsheet::tests::extracts_uuid ... ok
+test context::factsheet::tests::empty_input_empty_vec ... ok
+test context::factsheet::tests::extracts_git_sha ... ok
+test context::factsheet::tests::extracts_version_and_ticket_and_large_int ... ok
+test context::factsheet::tests::all_digit_token_is_large_int_not_hex ... ok
+test context::factsheet::tests::trims_surrounding_punctuation ... ok
+test context::factsheet::tests::substring_collapse_keeps_most_specific ... ok
+test context::factsheet::tests::caps_at_max_facts ... ok
+test context::factsheet::tests::bulk_versions_are_noise_but_opaque_ids_survive ... ok
+test context::factsheet::tests::caps_joined_length ... ok
+test context::factsheet::tests::deterministic_across_runs ... ok
+test context::factsheet::tests::scan_capped_at_256kib ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 539 filtered out; finished in 0.02s
+

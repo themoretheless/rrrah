@@ -1,0 +1,89 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v8-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/context/factsheet.rs",
+      "local": "46-src--context--factsheet.rs",
+      "sha256": "6f8ec81e1a94e199126d07579df785fa6ca181015453f4fb77d0eeef4c361168",
+      "whole_text_read": true,
+      "lines": 355
+    },
+    {
+      "path": "tests/test_factsheet.rs",
+      "local": "47-tests--test_factsheet.rs",
+      "sha256": "fe2ccec398a543741f91f252561a83cfd9f128463822d72dce23a2d8d300f4d3",
+      "whole_text_read": true,
+      "lines": 102
+    },
+    {
+      "path": "src/context/summarize.rs",
+      "local": "48-src--context--summarize.rs",
+      "sha256": "12681cd3f3e6250ebf5534fde43f1824883b49d57d890fa591dd39ef3645c034",
+      "whole_text_read": true,
+      "lines": 471
+    },
+    {
+      "path": "tests/test_summarize.rs",
+      "local": "49-tests--test_summarize.rs",
+      "sha256": "ef3920f181b30b0d86c52e9db3ad85ceae4a2c2f1a32c87b760fd0bea71784fc",
+      "whole_text_read": true,
+      "lines": 83
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 48,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 279,
+  "native_original_tests_added": {
+    "passed": 48,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "context::factsheet::tests": 15,
+      "test_factsheet": 8,
+      "context::summarize::tests": 16,
+      "test_summarize": 9
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 285,
+    "failed": 0,
+    "scope": "Focused original groups; full upstream suite not run."
+  },
+  "public_facts_summary_controls": {
+    "scope": "Original public factsheet and summary APIs, finite synthetic strings; no complete wrapper or filesystem identity claim",
+    "signed_integer_facts": [
+      "1234567"
+    ],
+    "both_summary_formats_erase_sign_difference": true,
+    "late_sha_after_512_candidates": [],
+    "early_sha_before_512_candidates": [
+      "a1347daf9"
+    ],
+    "long_line": {
+      "input_bytes": 60014,
+      "byte_trigger": true,
+      "summary_bytes": 60085,
+      "input_preserved_verbatim_as_tail": true,
+      "byte_reduction": false
+    }
+  },
+  "findings": [
+    "Factsheet punctuation trimming removes both minus and plus from large integers. Inputs delta -1234567 and delta +1234567 yield the same1234567 fact and identical Prose/Structured summaries in the finite authored histories.",
+    "Factsheet stops collecting at512 candidates before discarding high-cardinality versions/large integers. A SHA placed after512 versions is omitted even within the256KiB scan window; placing it first retains it. This is a bounded selection trade-off, not exhaustive identifier preservation.",
+    "The single-line60014-byte valid JSON-shaped input crosses the default byte summarization trigger, but Prose preserves the entire input as its tail and returns60085 bytes. A line-count output bound is not a byte reduction or peak-memory bound.",
+    "This direct summary result does not establish that full wrap emits the expanded text: net-win and other wrapper branches are separate and were not exercised by this control.",
+    "Summary extraction joins the full input and dropped prefix and scans distinctive terms across that prefix; factsheet output limits do not by themselves bound all summary allocation. No new allocator or throughput measurement in this turn."
+  ],
+  "transfer_decision": "Do not use bounded text summaries or extracted identifiers as exact file identity. No production source adopted.",
+  "limits": [
+    "48/327 whole-file reviews;279 remain.",
+    "285 focused original tests do not qualify the full repository, all wrapper configurations or universal information preservation.",
+    "Finite controls distinguish output shape, selected content, byte size and equality; none is a universal duplicate-search proof.",
+    "No rrrah production/test changes this turn. Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Original Cargo logs retain trailing blank lines."
+}

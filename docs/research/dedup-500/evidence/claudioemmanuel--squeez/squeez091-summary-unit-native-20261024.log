@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 16 tests
+test context::summarize::tests::byte_trigger_eager_for_non_benign_blob ... ok
+test context::summarize::tests::benign_detection_recognizes_common_markers ... ok
+test context::summarize::tests::should_apply_under_threshold_false ... ok
+test context::summarize::tests::quota_limit_output_is_not_benign ... ok
+test context::summarize::tests::should_apply_relaxed_for_benign_output ... ok
+test context::summarize::tests::should_apply_eager_for_error_output ... ok
+test context::summarize::tests::byte_trigger_ignores_small_multiline_output ... ok
+test context::summarize::tests::byte_trigger_disabled_when_zero ... ok
+test context::summarize::tests::summary_extracts_errors ... ok
+test context::summarize::tests::byte_trigger_fires_on_single_line_json_blob ... ok
+test context::summarize::tests::summary_extracts_files ... ok
+test context::summarize::tests::summary_preserves_last_20_lines ... ok
+test context::summarize::tests::summary_includes_total_count ... ok
+test context::summarize::tests::summary_carries_ids_from_dropped_head ... ok
+test context::summarize::tests::summarize_vocab_line_present_and_capped ... ok
+test context::summarize::tests::summary_is_bounded ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 538 filtered out; finished in 0.02s
+

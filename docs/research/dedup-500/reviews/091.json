@@ -2,7 +2,7 @@
   "index": 91,
   "repository": "claudioemmanuel/squeez",
   "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
-  "review_scope": "44 complete pinned files of327;237 original Rust tests;41 inline examples plus actual CLI boundary controls; partial repository review",
+  "review_scope": "48 complete pinned files of327;285 original Rust tests plus finite factsheet/summary/CLI controls; partial repository review",
   "decision": "reference",
   "finding": "Rust text shingle MinHash/Jaccard and cross-agent cache dedup; useful versioned-fingerprint concepts only.",
   "license_metadata": "Apache-2.0",
@@ -75,7 +75,7 @@
       "test": false
     }
   ],
-  "upstream_tests_scope": "237 focused original tests passed;41 inline examples separately reported without double counting; full suite unrun",
+  "upstream_tests_scope": "285 focused original tests passed; full package suite not run",
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/squeez091-source-review-v1-20261024.json",
@@ -107,6 +107,10 @@
     },
     {
       "audit": "docs/research/dedup-500/squeez091-source-review-v8-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/squeez091-source-review-v9-20261024.json",
       "whole_repo_complete": false
     }
   ]
