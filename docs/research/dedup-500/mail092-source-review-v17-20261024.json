@@ -1,0 +1,108 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v16-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": ".github/workflows/release.yaml",
+      "local": "51-.github--workflows--release.yaml",
+      "sha256": "508c2cbbd38b0713b69aec326ccb214fa8df306601bbccb9c724cd762204cc07",
+      "whole_text_read": true,
+      "lines": 98
+    },
+    {
+      "path": ".github/actions/publish-pypi/action.yaml",
+      "local": "52-.github--actions--publish-pypi--action.yaml",
+      "sha256": "0fee935486a03e62811202eed8ff54a4b17083a949170833017390d2e10d6ffa",
+      "whole_text_read": true,
+      "lines": 89
+    },
+    {
+      "path": ".github/workflows/autofix.yaml",
+      "local": "53-.github--workflows--autofix.yaml",
+      "sha256": "66cbd8a96a9547718f7b88fae6a156043a09ba09c5f096fd55113349fbf11fad",
+      "whole_text_read": true,
+      "lines": 19
+    },
+    {
+      "path": ".github/workflows/autolock.yaml",
+      "local": "54-.github--workflows--autolock.yaml",
+      "sha256": "6e8f70d1622972cd7af99924c8d3bd8a7422c0945a3d1d1ed3ee198641c31ca1",
+      "whole_text_read": true,
+      "lines": 11
+    },
+    {
+      "path": ".github/workflows/cancel-runs.yaml",
+      "local": "55-.github--workflows--cancel-runs.yaml",
+      "sha256": "b5113afbb5c0ac3d6c1697721c48747efedb9e0dd0fa135cab7662b544d7f948",
+      "whole_text_read": true,
+      "lines": 11
+    },
+    {
+      "path": ".github/workflows/changelog.yaml",
+      "local": "56-.github--workflows--changelog.yaml",
+      "sha256": "84c22907dc1cba09cb17c29d488f166e559a4035f8ae43e185e0d10cfc20c617",
+      "whole_text_read": true,
+      "lines": 30
+    },
+    {
+      "path": ".github/workflows/docs.yaml",
+      "local": "57-.github--workflows--docs.yaml",
+      "sha256": "dd9a9ae96382859d0c7f5e0f7134028ffe36763c979e70b253dbf241d3983dc5",
+      "whole_text_read": true,
+      "lines": 26
+    },
+    {
+      "path": ".github/workflows/labels.yaml",
+      "local": "58-.github--workflows--labels.yaml",
+      "sha256": "f8cc798127271a1db659bb20a102dafacefc81ee62bb7163104106a4b262a80f",
+      "whole_text_read": true,
+      "lines": 22
+    },
+    {
+      "path": ".github/workflows/lint.yaml",
+      "local": "59-.github--workflows--lint.yaml",
+      "sha256": "b467632fcc2976ae4d69807a6d3fa46d6e5e69a3fced069e16af9e82da4f39b5",
+      "whole_text_read": true,
+      "lines": 29
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug-report.yml",
+      "local": "60-.github--ISSUE_TEMPLATE--bug-report.yml",
+      "sha256": "4a3cbe10c9f29ada18c1e369ed9f095c5dfc8404e3c5bdd41c57567d28941a33",
+      "whole_text_read": true,
+      "lines": 54
+    },
+    {
+      "path": ".github/workflows/tests.yaml",
+      "local": "61-.github--workflows--tests.yaml",
+      "sha256": "be81bce416410425c4e76c10a31967199efa33c2e6ae4d732f37146c8cf4503e",
+      "whole_text_read": true,
+      "lines": 313
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 56,
+  "cumulative_original_visual_files_reviewed": 6,
+  "cumulative_whole_reviewed_files": 62,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 18,
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "shell_syntax_control": "docs/research/dedup-500/mail092-workflow-shell-syntax-20261024.json",
+  "findings": [
+    "All original workflow definitions and local publish composite action read; shared repomatic workflows/actions referenced at pinned commit are external dependencies and not reviewed through local references.",
+    "Release PyPI lane condition uses always plus package_built/release matrix, explicitly allowing publication despite unrelated build-lane failures. This is upstream policy; no action invoked or production publishing judgment derived.",
+    "Tests workflow defines frozen dependency sync, OS/Python matrix, coverage ratchet and console/python-module self-tests; our315 local tests ran resolved dependencies with default coverage/xdist cleared and do not reproduce CI matrix.",
+    "Package-install workflow exercises released PyPI/Git builds, not necessarily current pinned checkout. Local source wheel verification is separately recorded.",
+    "Eleven literal shell run blocks pass bash -n via stdin; this validates shell parse only, not YAML/GitHub expression semantics, referenced actions, credentials, package publication or network outcomes.",
+    "Issue-template commands and workflow run scripts treated as source content, not instructions to execute."
+  ],
+  "transfer_decision": "Keep source correctness, installed-package testing, binary testing and release checks separate. No foreign production code copied.",
+  "limits": [
+    "56text plus6original PNGs:62of80;18remain.",
+    "No workflow dispatch, publication, secrets access or external messages.",
+    "315 original tests remains previous macOS source qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

@@ -1,0 +1,313 @@
+---
+name: 🔬 Tests
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - mail_deduplicate/**
+      - tests/**
+      - pyproject.toml
+      - uv.lock
+      - .github/workflows/tests.yaml
+  pull_request:
+    branches-ignore:
+      # This filter matches the PR's *base* branch (always `main`), not its
+      # head, so it does not actually exclude these PRs: see
+      # https://github.com/actions/runner/issues/1591. Kept here as
+      # documentation of intent, since the skip only becomes real through a
+      # `github.head_ref` check on a job's `if:`, propagated through `needs:`.
+      # Named no more precisely than that because `repomatic init
+      # workflows/tests.yaml` copies this header into downstream repos, which
+      # own their jobs and carry no `metadata` job for it to point at.
+      - major-version-increment
+      - minor-version-increment
+      - prepare-release
+    paths:
+      - mail_deduplicate/**
+      - tests/**
+      - pyproject.toml
+      - uv.lock
+      - .github/workflows/tests.yaml
+  schedule:
+    # Run tests monthly to catch regressions from dependency or environment changes.
+    - cron: "17 9 1 * *"
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.event.head_commit.message, '[changelog] Release') }}
+
+# Supply-chain cooldown: no package published within the window can be resolved by
+# any command in this workflow. Set here, not per command, so it also covers the
+# `metadata` bootstrap and any step added later; a workflow-level `env:` cannot
+# reference `needs`, so the window is a literal kept equal to `[tool.repomatic]
+# minimum-release-age`. repomatic's own test suite enforces that upstream; a
+# synced copy is kept in step by hand. Deliberate bypasses are per-package CLI
+# flags (`--exclude-newer-package`, `--min-release-age-exclude`).
+# See claude.md for the rationale.
+env:
+  NPM_CONFIG_MIN_RELEASE_AGE: 7
+  UV_EXCLUDE_NEWER: "1 week"
+
+jobs:
+
+  metadata:
+    name: 🧬 Project metadata
+    # Real version-bump skip: the trigger's `branches-ignore` matches the PR's
+    # base branch (always `main`), not its head, so version-bump PRs slip
+    # through it. Skipping `metadata` propagates to every `needs: metadata` job
+    # below. The branch and commit-prefix lists mirror repomatic's
+    # `VERSION_BUMP_BRANCHES` and `MANUAL_VERSION_BUMP_COMMIT_PREFIXES`. The
+    # `[changelog] Post-release bump ` prefix is intentionally excluded: that
+    # push also carries the release commit, our only post-merge test of the
+    # release-frozen tree.
+    if: >
+      !contains(fromJSON('["major-version-increment","minor-version-increment","prepare-release"]'),
+      github.head_ref)
+      && !startsWith(github.event.head_commit.message || '', '[changelog] Bump major version to ')
+      && !startsWith(github.event.head_commit.message || '', '[changelog] Bump minor version to ')
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    outputs:
+      metadata: ${{ steps.metadata.outputs.metadata }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.12.13"
+      - name: Run repomatic show-metadata
+        id: metadata
+        run: >
+          uvx --no-progress --exclude-newer-package repomatic=P0D 'repomatic==7.16.2' show-metadata
+          --format github-json --output "$GITHUB_OUTPUT"
+          cli_scripts package_name
+          test_matrix test_matrix_pr
+
+  tests:
+    needs:
+      - metadata
+    strategy:
+      # We delegate the failure decision to each job, by the way of the "continue-on-error" flag.
+      fail-fast: false
+      # Matrix is pre-computed by repomatic show-metadata. PRs get a reduced matrix
+      # (fewer OS variants and Python versions) to save CI minutes.
+      matrix: >-
+        ${{ github.event_name != 'pull_request'
+        && fromJSON(needs.metadata.outputs.metadata).test_matrix
+        || fromJSON(needs.metadata.outputs.metadata).test_matrix_pr }}
+    # `python-label` is set by repomatic show-metadata only where the plain version
+    # would hide why a cell is continue-on-error (a prerelease reads `3.15-dev`);
+    # every other cell falls back to the version itself.
+    name: >-
+      ${{ matrix.state == 'stable' && '✅' || '⁉️' }} ${{ matrix.os }} /
+      py${{ matrix.python-label || matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    # We keep going when a job flagged as not stable fails.
+    continue-on-error: ${{ matrix.state == 'unstable' }}
+    # Wider than the default: this job provisions a toolchain, so its runtime tracks how much it has to install.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-tags: true
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.12.13"
+      - name: Force native ARM64 Python on Windows ARM64
+        # Workaround for https://github.com/astral-sh/uv/issues/12906: uv defaults to x86_64 Python on ARM64 Windows,
+        # relying on transparent emulation, so the windows-11-arm cell would silently test emulated x86_64 Python
+        # instead of native ARM64. Setting UV_PYTHON to an architecture-qualified specifier forces uv (and uvx) to use
+        # native ARM64 Python for all steps.
+        if: runner.os == 'Windows' && runner.arch == 'ARM64'
+        shell: bash
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
+        run: echo "UV_PYTHON=cpython-${PYTHON_VERSION}-aarch64" >> "$GITHUB_ENV"
+      - name: Install Python ${{ matrix.python-version }}
+        # If UV cannot find the requested Python version, it exits with code 2, which let the job pass unnoticed on
+        # Windows. So we force the shell to bash, even on Windows, and "set -e" to ensure any error in the install
+        # process is caught and fails the job. It works because Windows runners too Git Bash available).
+        shell: bash
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
+        run: |
+          set -e
+          uv --no-progress venv --python "${UV_PYTHON:-${PYTHON_VERSION}}"
+      - name: Force UTF-8 encoding on Windows
+        # Workaround for https://github.com/pallets/click/issues/2121: Windows GitHub Actions runners
+        # redirect command output to files, which sets the encoding to the system default (cp1252).
+        # Python CLI frameworks like Click then raise UnicodeEncodeError on non-ASCII output.
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "PYTHONIOENCODING=utf8" >> "$GITHUB_ENV"
+      - name: Install project
+        run: uv --no-progress sync --frozen --all-extras --group test
+
+      - name: Unittests
+        # `once`-marked tests are excluded from every matrix cell: the dedicated
+        # `once-tests` job below runs them on a single runner instead.
+        #
+        # The coverage floor is `[tool.coverage] report.fail_under`, which this
+        # full-matrix slice is the one job expected to clear. Nothing is passed
+        # here: a `--cov-fail-under` flag would outrank that config and shadow
+        # the knob pyproject.toml already carries.
+        run: >
+          uv --no-progress run --frozen -- pytest
+          -m "not once"
+
+      - name: Self-tests against test suite via console script
+        # click-extra owns the test-suite engine and CLI; it reads the suite from
+        # ./tests/cli-test-suite.toml (the click-extra 8.1 default, parsed with the
+        # built-in tomllib so no extra is needed). `--jobs max` runs cases across every
+        # logical core. The outer `uv run` provides the environment, avoiding per-case
+        # uv lock contention between parallel workers. The target is this repo's own
+        # console script (from repomatic show-metadata), so the self-test stays correct when
+        # this workflow is synced to downstream repos.
+        # Skipped for repos that ship no console script (nothing to self-test).
+        # `!cancelled()` keeps this running after a failed pytest step: the two
+        # check different things, and letting a unit-test failure skip the
+        # self-test hides CLI drift until the next green run. Wrapped in
+        # `${{ }}` because a bare leading `!` is a YAML tag.
+        if: ${{ !cancelled() && fromJSON(needs.metadata.outputs.metadata).cli_scripts[0] }}
+        env:
+          CLI_SCRIPT: ${{ fromJSON(needs.metadata.outputs.metadata).cli_scripts[0] }}
+        run: >
+          uv run --frozen --no-progress --
+          click-extra test-suite --command "${CLI_SCRIPT}" --jobs max
+      - name: Self-tests against test suite via python -m
+        # Same suite as above, driven through the interpreter's `-m` entry
+        # point so `__main__` stays exercised against the checkout on every
+        # cell (the package-install job only covers it for released builds).
+        # `!cancelled()` for the same reason as the step above.
+        if: ${{ !cancelled() && fromJSON(needs.metadata.outputs.metadata).cli_scripts[0] }}
+        env:
+          PACKAGE: ${{ fromJSON(needs.metadata.outputs.metadata).package_name }}
+        shell: bash
+        run: |
+          module=$(echo "$PACKAGE" | tr '-' '_')
+          uv run --frozen --no-progress -- click-extra test-suite --command "python -m ${module}" --jobs max
+
+  once-tests:
+    name: 1️⃣ Run-once tests
+    needs:
+      - metadata
+    runs-on: ubuntu-26.04
+    # Wider than the default: this job provisions a toolchain, so its runtime tracks how much it has to install.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-tags: true
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.12.13"
+      - name: Install Python
+        run: uv --no-progress venv --python 3.14
+      - name: Install project
+        run: uv --no-progress sync --frozen --all-extras --group test
+      - name: Run-once unittests
+        # `once`-marked tests (CLI invocability, plugin registration, metadata
+        # checks) behave identically on every OS and Python, so the matrix
+        # `tests` job excludes them and this single runner is their only
+        # executor. `--cov-fail-under=0` opts this slice out of the
+        # `[tool.coverage] report.fail_under` ratchet: it covers a fraction of
+        # the package on its own by design, and the matrix job above is what
+        # holds the floor.
+        run: uv --no-progress run --frozen -- pytest -m once --cov-fail-under=0
+
+  test-package-install:
+    name: 📦 Package install
+    needs:
+      - metadata
+    # Installs from PyPI/GitHub (released version), not the PR code.
+    if: >-
+      github.event_name != 'pull_request'
+      && fromJSON(needs.metadata.outputs.metadata).cli_scripts
+    runs-on: ubuntu-26.04
+    # Wider than the default: this job provisions a toolchain, so its runtime tracks how much it has to install.
+    timeout-minutes: 30
+    env:
+      CLI_SCRIPTS: ${{ fromJSON(needs.metadata.outputs.metadata).cli_scripts }}
+      GIT_URL: git+https://github.com/${{ github.repository }}
+      PACKAGE: ${{ fromJSON(needs.metadata.outputs.metadata).package_name }}
+      # The one job that opts out of the workflow-wide supply-chain cooldown, by
+      # setting a zero-length window. Its subject IS the freshly published
+      # artifact: it answers "does the release that shipped minutes ago install
+      # and run?", which a cooldown makes unanswerable, since neither the new
+      # release nor a dependency floor raised to a recent version can resolve
+      # until the window elapses. Scoped to this job and safe to scope here: it
+      # inherits `permissions: {}`, takes no secrets, and only runs `--version`
+      # on a throwaway runner. See claude.md § Cooldown on every install.
+      UV_EXCLUDE_NEWER: P0D
+    steps:
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.12.13"
+      - name: Install Python
+        run: uv --no-progress venv --python 3.14
+      - name: Run stable CLI
+        run: |
+          for script in $CLI_SCRIPTS; do
+            # A bare `uvx <script>` resolves the script name as a PyPI package,
+            # which only exists when the package is named after its script (like
+            # repomatic); skip it when the two differ (mail-deduplicate's mdedup).
+            if [ "$script" = "$PACKAGE" ]; then
+              uvx "$script" --version
+            fi
+            uvx --from "$PACKAGE" -- "$script" --version
+            uv run --with "$PACKAGE" -- "$script" --version
+          done
+          module=$(echo "$PACKAGE" | tr '-' '_')
+          uv run --with "$PACKAGE" -m "$module" --version
+          uv run --with "$PACKAGE" python -m "$module" --version
+      - name: Run dev CLI
+        run: |
+          for script in $CLI_SCRIPTS; do
+            uvx --from "$GIT_URL" -- "$script" --version
+          done
+          module=$(echo "$PACKAGE" | tr '-' '_')
+          uvx --from "$GIT_URL" -- python -m "$module" --version
+      - name: Run stable CLI via uv tool
+        run: |
+          uv --no-progress tool install "$PACKAGE"
+          for script in $CLI_SCRIPTS; do
+            "$script" --version
+          done
+          uv --no-progress tool uninstall "$PACKAGE"
+      - name: Run dev CLI via uv tool
+        run: |
+          uv --no-progress tool install "$GIT_URL"
+          for script in $CLI_SCRIPTS; do
+            "$script" --version
+          done
+          uv --no-progress tool uninstall "$PACKAGE"
+      - name: Run stable CLI via pip
+        run: |
+          uv --no-progress pip install "$PACKAGE"
+          for script in $CLI_SCRIPTS; do
+            .venv/bin/"$script" --version
+          done
+          uv --no-progress pip uninstall "$PACKAGE"
+      - name: Run dev CLI via pip
+        run: |
+          uv --no-progress pip install "$GIT_URL"
+          for script in $CLI_SCRIPTS; do
+            .venv/bin/"$script" --version
+          done
+          uv --no-progress pip uninstall "$PACKAGE"
+      - name: Run CLI via pipx
+        run: |
+          uv --no-progress tool install pipx
+          for script in $CLI_SCRIPTS; do
+            # `pipx run <script>` resolves the script name as a PyPI package, just
+            # like a bare `uvx <script>` above; skip it when the two differ.
+            if [ "$script" = "$PACKAGE" ]; then
+              pipx run "$script" --version
+            fi
+            pipx run --spec "$PACKAGE" "$script" --version
+            pipx run --spec "$GIT_URL" "$script" --version
+          done
+          uv --no-progress tool uninstall pipx

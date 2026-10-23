@@ -1,0 +1,22 @@
+---
+name: 🏷️ Labels
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches-ignore:
+      - major-version-increment
+      - minor-version-increment
+      - prepare-release
+    types:
+      - opened
+  issues:
+    types:
+      - opened
+
+jobs:
+
+  labels:
+    uses: kdeldycke/repomatic/.github/workflows/labels.yaml@35cc8a45d65954faebaf8b4bb9960b525d446554 # v7.16.2
