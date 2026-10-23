@@ -1,0 +1,18 @@
+
+running 11 tests
+test economy::enterprise::tests::empty_env_means_no_enterprise ... ok
+test economy::enterprise::tests::pricing_math_matches_published_rates ... ok
+test economy::enterprise::tests::header_tag_empty_when_not_enterprise ... ok
+test economy::enterprise::tests::init_banner_changes_with_prior_savings ... ok
+test economy::enterprise::tests::detects_vertex_via_project_id ... ok
+test economy::enterprise::tests::detects_bedrock_via_region_var ... ok
+test economy::enterprise::tests::detects_otel_via_endpoint ... ok
+test economy::enterprise::tests::detects_vertex_via_use_flag ... ok
+test economy::enterprise::tests::falsy_use_flag_is_not_enterprise ... ok
+test economy::enterprise::tests::bedrock_beats_otel_when_both_set ... ok
+test economy::enterprise::tests::detects_bedrock_via_use_flag ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 543 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)

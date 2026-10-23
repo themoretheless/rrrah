@@ -1,0 +1,83 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v17-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/economy/enterprise.rs",
+      "local": "75-src--economy--enterprise.rs",
+      "sha256": "9d5faf7cdd5da7e831a4d74bad16f338dc2fd1087c6e6519b4acca2359504ea0",
+      "whole_text_read": true,
+      "lines": 238
+    },
+    {
+      "path": "src/economy/nudge.rs",
+      "local": "76-src--economy--nudge.rs",
+      "sha256": "608e804eee63bf2835f6494b55214ad8c4fe95c84c279fe76a7ba39e0f50d1ba",
+      "whole_text_read": true,
+      "lines": 377
+    },
+    {
+      "path": "tests/test_nudge.rs",
+      "local": "77-tests--test_nudge.rs",
+      "sha256": "25223ebe2e88dcaed2aa3e168bf012299c4cdc6039a0b0f3a358ededa3d3a928",
+      "whole_text_read": true,
+      "lines": 157
+    },
+    {
+      "path": "tests/test_loop_nudges.rs",
+      "local": "78-tests--test_loop_nudges.rs",
+      "sha256": "cb8d1564f905af263e114b84c528b17532fb968495408749b45e656881a64261",
+      "whole_text_read": true,
+      "lines": 124
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 77,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 78,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 249,
+  "native_original_tests_added": {
+    "passed": 36,
+    "failed": 0,
+    "ignored": 0,
+    "groups": {
+      "enterprise_lib": 11,
+      "nudge_lib": 11,
+      "test_nudge": 7,
+      "test_loop_nudges": 7
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 475,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "filename_substring_false_polling_hint": true,
+    "direct_command_hint_count": 1,
+    "env_wrapped_same_command_hint_count": 0,
+    "duplicate_paths_one_call_count_as_five_writes": true,
+    "empty_otel_endpoint_selects_otel": true,
+    "vertex_project_precedes_bedrock_region": true
+  },
+  "findings": [
+    "Pure evaluate called twice with cat sleeping_notes.txt emits POLLING DETECTED because raw command contains sleep, without parsing executable or arguments. No commands executed.",
+    "Four cargo test strings trigger one repeat hint; four env cargo test strings trigger none because only first token is recognized. Advisory heuristic only, no duplicate scanner behavior claim.",
+    "One evaluate call with same file repeated five times produces modified x5 hint. This verifies public API counts list occurrences, not distinct file writes; actual callers may deduplicate inputs separately.",
+    "Pure detect_from treats empty OTEL endpoint as enabled. Vertex project presence precedes Bedrock region presence despite general Bedrock-first documentation. No actual environment or service contacted.",
+    "Enterprise price values are pinned source constants only. Their current external correctness, contracts and monetary savings were not verified and are not adopted.",
+    "test_loop_nudges no_loop_warning_below_2x_threshold collects first-context hints but never asserts their contents, then asserts eventual detection on another context; passing name is not proof of below-threshold silence."
+  ],
+  "harness_notes": [
+    "Initial owned control failed compilation due JSON output string escaping; corrected harness only, then all runtime assertions passed. This was not an upstream source/test failure."
+  ],
+  "transfer_decision": "Substring-based command classification and list-occurrence advisory counters are not duplicate correctness evidence. No foreign production code copied.",
+  "limits": [
+    "249 tracked files remain without whole review.",
+    "All economy subtree source now read, but repository and original full suite remain incomplete.",
+    "475 focused original tests do not qualify all command syntax, telemetry deployment or pricing.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
