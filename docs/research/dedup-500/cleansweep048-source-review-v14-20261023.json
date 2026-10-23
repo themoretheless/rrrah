@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/util/FileManager.kt",
+      "sha256": "06eff99bf8720c6b777f318e8b26dcf37d48baf4d2898c68c70f3a4a7745ef5e",
+      "lines": 165,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/util/FileOperationsHelper.kt",
+      "sha256": "a446aa80522db09566c09717c6d86c5afa70e165aba13a08d4c0a35307d88264",
+      "lines": 273,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "FileManager.moveFile directly renameTo destination basename with no collision/physical-identity check, rollback or cross-device copy fallback. Actual overwrite behavior depends on platform and was not executed.",
+    "moveFolderContents accepts source/destination without equality or descendant checks, treats listFiles null as empty, and attempts source deletion even in that case. Delete result ignored; returns success counts. pathsToScan is collected but never submitted in this method.",
+    "convertVideoToImage opens sibling basename.jpg with FileOutputStream, overwriting any existing image without collision handling. It ignores Bitmap.compress boolean result and has no temporary-file/atomic replacement or rollback. No conversion or file overwrite executed.",
+    "MediaMetadataRetriever.release is not in finally in convertVideoToImage, and extracted bitmap is not explicitly recycled. Failure paths can bypass release; Android resource effects unmeasured.",
+    "scanPaths waits only for calling MediaScannerConnection.scanFile on Main, not its completion callbacks. createMediaItemFromFile immediately queries MediaStore and may fall back to file URI; this is not guaranteed finished indexing.",
+    "Tree URI conversion splits document IDs on every colon and takes only element one, potentially dropping later colon-containing path content. Nonprimary storage is explicitly unsupported by this helper."
+  ],
+  "whole_files_read_total": 42,
+  "remaining_tracked_blobs": 88,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
