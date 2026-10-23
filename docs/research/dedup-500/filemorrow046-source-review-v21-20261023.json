@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "sha256": "f3923eb3de2cb0ae6df41f8b11b7772e6e6f174e389768c73eb56f9690f30357",
+      "lines": 361,
+      "git_blob_verified": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "e36817712c7afe81ae92b3a1ea796524d6fe263edf7e062aee5c63a2c97ffa7f",
+      "lines": 21,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "README accurately describes ZIP matching by paths and uncompressed sizes, but additionally claims a single edited file disqualifies an archive. The independently reproduced equal-size edit contradicts that broader statement.",
+    "README promises every organization batch can be undone and every move is recorded; reviewed persistence-after-effects and path-only undo impose material limits not stated in that guarantee.",
+    "README distinguishes recoverable Trash from automatic organization and states manual confirmation for cleanup. Caller UI enforcement remains to be reviewed; no production cleanup was executed.",
+    "README explicitly says hashes group duplicates, matching source design; it does not provide full byte comparison, physical-identity alias handling or metadata-restored cache protection.",
+    "Root license is MIT with 2026 contributor notice. No upstream implementation was copied into production code; isolated verification uses pinned source."
+  ],
+  "whole_files_read_total": 36,
+  "remaining_tracked_blobs": 22,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
