@@ -1,0 +1,31 @@
+{
+  "upstream_audit": "docs/research/dedup-500/squeez091-source-review-v3-20261024.json",
+  "regression": {
+    "path": "crates/rrrah-dedup/tests/cache.rs",
+    "test": "file_size_limit_during_temp_write_preserves_previous_cache_and_retry",
+    "source_sha256": "b1590c1cb9c43f0960facefaf987189a918d5453b3c952883bfc462f5be679f3",
+    "platform": "macOS; cfg(unix), Windows untested",
+    "mechanism": "Owned child test process launched through /bin/sh with ignored SIGXFSZ and ulimit -f1; parent process limits untouched. Shell limit units vary by platform; fixture exceeds512 and1024bytes.",
+    "assertions": [
+      "Actual save_atomic returns Io with EFBIG in child",
+      "previous destination bytes unchanged",
+      "previous cache remains valid and belongs to writer0",
+      "failed temporary removed, directory has only destination",
+      "parent can retry and publish valid writer1 cache"
+    ]
+  },
+  "tests": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test cache",
+    "passed": 18,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "scope": "Full cache integration target; includes publication child helper test."
+  },
+  "implementation": "Regression test only; production cache already returns write failure before atomic replacement.",
+  "initial_build": "Direct unsafe rlimit setup rejected by workspace unsafe-code deny lint. Replaced with per-child POSIX shell resource limit, without unsafe code or dependency changes; rejected log retained.",
+  "limits": [
+    "Finite EFBIG control does not prove disk-full, power-loss, all-filesystem or all-feature behavior.",
+    "Other workspace changes preserved. Native pHash.org/ASAN remains skipped."
+  ]
+}

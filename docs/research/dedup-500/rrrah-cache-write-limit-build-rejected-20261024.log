@@ -1,0 +1,13 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: usage of an `unsafe` block
+   --> crates/rrrah-dedup/tests/cache.rs:377:9
+    |
+377 | /         unsafe {
+378 | |             assert_ne!(libc::signal(libc::SIGXFSZ, libc::SIG_IGN), libc::SIG_ERR);
+379 | |             assert_eq!(libc::setrlimit(libc::RLIMIT_FSIZE, &limit), 0);
+380 | |         }
+    | |_________^
+    |
+    = note: requested on the command line with `-D unsafe-code`
+
+error: could not compile `rrrah-dedup` (test "cache") due to 1 previous error

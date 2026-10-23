@@ -367,6 +367,16 @@ fn cache_publication_child() {
         .parse::<u8>()
         .unwrap();
     let cache = process_fixture(writer);
+    #[cfg(unix)]
+    if std::env::var_os("RRRAH_CACHE_PROCESS_FSIZE_LIMIT").is_some() {
+        // The parent's shell applies the file limit only to this child.
+        assert!(matches!(
+            cache.save_atomic(path, || false),
+            Err(rrrah_dedup::cache::CacheError::Io(error))
+                if error.raw_os_error() == Some(libc::EFBIG)
+        ));
+        return;
+    }
     if let Ok(crash_at) = std::env::var("RRRAH_CACHE_PROCESS_CRASH") {
         let crash_at = crash_at.parse::<usize>().unwrap();
         let calls = std::cell::Cell::new(0);
@@ -464,6 +474,42 @@ fn process_exit_during_temp_write_preserves_previous_publication_and_retry() {
             2
         );
     }
+}
+
+#[cfg(unix)]
+#[test]
+fn file_size_limit_during_temp_write_preserves_previous_cache_and_retry() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("cache.bin");
+    process_fixture(0).save_atomic(&path, || false).unwrap();
+    let previous = std::fs::read(&path).unwrap();
+    assert!(previous.len() > 512);
+    let status = std::process::Command::new("/bin/sh")
+        .args([
+            "-c",
+            "trap '' XFSZ; ulimit -f 1 || exit 91; exec \"$@\"",
+            "rrrah-cache-limit",
+        ])
+        .arg(std::env::current_exe().unwrap())
+        .args(["--exact", "cache_publication_child", "--nocapture"])
+        .env("RRRAH_CACHE_PROCESS_PATH", &path)
+        .env("RRRAH_CACHE_PROCESS_WRITER", "1")
+        .env("RRRAH_CACHE_PROCESS_FSIZE_LIMIT", "1")
+        .stdout(std::process::Stdio::null())
+        .status()
+        .unwrap();
+    assert!(status.success());
+    assert_eq!(std::fs::read(&path).unwrap(), previous);
+    assert_eq!(
+        published_writer(&FingerprintCache::load_file(&path, 64, || false).unwrap()),
+        0
+    );
+    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
+    process_fixture(1).save_atomic(&path, || false).unwrap();
+    assert_eq!(
+        published_writer(&FingerprintCache::load_file(&path, 64, || false).unwrap()),
+        1
+    );
 }
 
 #[cfg(unix)]

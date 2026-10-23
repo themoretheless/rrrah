@@ -1,0 +1,28 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running tests/test_cache_stability.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_cache_stability-ddde6b1c92e30b5e)
+
+running 7 tests
+test persona_text_is_identity_stable ... ok
+test strip_id_helper_works ... ok
+test protocol_payload_constants_are_compile_time_stable ... ok
+test protocol_payload_is_byte_stable_across_calls ... ok
+test mcp_initialize_payload_is_stable_modulo_id ... ok
+test mcp_tools_list_payload_is_stable_modulo_id ... ok
+test mcp_protocol_tool_payload_is_stable_across_calls ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_context_cache.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_context_cache-1ffb0ab0e845662a)
+
+running 7 tests
+test raw_read_hint_for_seen_file ... ok
+test raw_read_hint_skips_unseen_file ... ok
+test raw_read_hint_skips_non_read_commands ... ok
+test ring_buffer_drops_oldest_at_overflow ... ok
+test note_files_caps_at_max ... ok
+test load_missing_returns_empty ... ok
+test save_load_round_trip ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

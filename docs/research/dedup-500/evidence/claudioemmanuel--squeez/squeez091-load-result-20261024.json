@@ -1,0 +1,29 @@
+{
+  "scope": "Original public from_json, four finite synthetic inputs; parser acceptance is not JSON/schema validation",
+  "cases": [
+    {
+      "case": "empty_object",
+      "call_counter": 0,
+      "call_log_entries": 0,
+      "shingle_entries": 0
+    },
+    {
+      "case": "legacy_no_shingles",
+      "call_counter": 7,
+      "call_log_entries": 1,
+      "shingle_entries": 0
+    },
+    {
+      "case": "mismatched_arrays",
+      "call_counter": 0,
+      "call_log_entries": 1,
+      "shingle_entries": 0
+    },
+    {
+      "case": "truncated_object",
+      "call_counter": 7,
+      "call_log_entries": 0,
+      "shingle_entries": 0
+    }
+  ]
+}

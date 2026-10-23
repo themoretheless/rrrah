@@ -1,0 +1,108 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_context_cache.rs",
+      "local": "17-tests--test_context_cache.rs",
+      "sha256": "13df592046b3a00b107c521fa5c64de5c79dd8b1286001c200541b858f462f2f",
+      "whole_text_read": true,
+      "lines": 99
+    },
+    {
+      "path": "tests/test_cache_stability.rs",
+      "local": "18-tests--test_cache_stability.rs",
+      "sha256": "5f8b5bacf1f70718af86863caf7b61f8f9fc0a73ab3b1126e8a9620237879b20",
+      "whole_text_read": true,
+      "lines": 163
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 17,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 310,
+  "new_partial_cache_read_ranges": [
+    [
+      1,
+      180
+    ],
+    [
+      350,
+      535
+    ],
+    [
+      1422,
+      1510
+    ]
+  ],
+  "native_original_tests_added": {
+    "passed": 14,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "test_context_cache": 7,
+      "test_cache_stability": 7
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 73,
+    "failed": 0,
+    "scope": "Ten focused groups; entire upstream suite not run."
+  },
+  "public_save_failure_control": {
+    "scope": "Unmodified pinned SessionContext.save public API in a subprocess; per-child file size limit512 bytes, SIGXFSZ ignored; owned directory only",
+    "child_exit_code": 0,
+    "child_stderr": "",
+    "previous_bytes": 1472,
+    "published_bytes": 512,
+    "previous_sha256": "36d0e5a98ec6c4955e2a85bd7f5017c6d32d3b5978fcb1d7039a27b430173d96",
+    "published_sha256": "a24c7712582a411c373149819327407b98539e2784131988fc8e871d85ea7ac4",
+    "previous_preserved": false,
+    "published_json_valid": false,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-save-state-_alaee50"
+  },
+  "public_load_controls": {
+    "scope": "Original public from_json, four finite synthetic inputs; parser acceptance is not JSON/schema validation",
+    "cases": [
+      {
+        "case": "empty_object",
+        "call_counter": 0,
+        "call_log_entries": 0,
+        "shingle_entries": 0
+      },
+      {
+        "case": "legacy_no_shingles",
+        "call_counter": 7,
+        "call_log_entries": 1,
+        "shingle_entries": 0
+      },
+      {
+        "case": "mismatched_arrays",
+        "call_counter": 0,
+        "call_log_entries": 1,
+        "shingle_entries": 0
+      },
+      {
+        "case": "truncated_object",
+        "call_counter": 7,
+        "call_log_entries": 0,
+        "shingle_entries": 0
+      }
+    ]
+  },
+  "findings": [
+    "SessionContext.save ignores write_all failure and then renames the temporary file. With a per-child RLIMIT_FSIZE512-byte limit and ignored SIGXFSZ, a previous1472-byte valid JSON is replaced by512-byte invalid JSON; the unmodified public API returns normally and child exits0.",
+    "Public from_json accepts a truncated object containing call_counter7 and returns that counter. It is tolerant field extraction, not a strict whole-document JSON validity gate.",
+    "Legacy calls without sketches survive loading; mismatched parallel arrays are truncated to the shortest complete set. These are four finite controls, not exhaustive schema/fuzz qualification.",
+    "SessionContext.update explicitly fails open after250ms lock wait; save temp names are per-process rather than per-call. No concurrent timeout/thread race reproduced this turn."
+  ],
+  "transfer": "No source adopted. Added rrrah regression proving pre-publication write failure preserves previous cache and retry.",
+  "limits": [
+    "17/327 complete manual file reviews; cache.rs remains partial.",
+    "File-size error control is in an owned child/directory only; no disk-full, power-loss or all-filesystem proof.",
+    "No host/plugin installation or actual MCP transport execution.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
