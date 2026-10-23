@@ -1,0 +1,57 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Original test_resiliency_tester.py read whole and Git blob verified; six fixture-independent original functions called unchanged. No setup_module, no scenario command execution, no altered fixture substitution.",
+  "source_sha256": "dca4cbccc02e343fed2fc6183c896ea6f71d2ba242fce1f8dc922f660dce849c",
+  "result": {
+    "exit_code": 0,
+    "tests": [
+      {
+        "test": "test_parse_configfile",
+        "result": "PASS"
+      },
+      {
+        "test": "test_get_filename_no_ext",
+        "result": "PASS"
+      },
+      {
+        "test": "test_interpolate_dict",
+        "result": "PASS"
+      },
+      {
+        "test": "test_get_dbfile",
+        "result": "PASS"
+      },
+      {
+        "test": "test_compute_repair_power",
+        "result": "PASS"
+      },
+      {
+        "test": "test_stats_running_average",
+        "result": "PASS"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "missing-length-regressions",
+      "detail": "Original file-diff tests copy same-length image content and change three byte positions; they do not test unequal lengths, zero-byte input or short stream reads. Passing tests do not refute v16 reproduced suffix/EOF defects."
+    },
+    {
+      "id": "directory-comparison-scope",
+      "detail": "Directory tests cover identical trees, modified bytes and missing outputs, but no extra output files. Asymmetric traversal therefore escapes those cases."
+    },
+    {
+      "id": "average-test-shape",
+      "detail": "Average test uses matching stage names, metric keys, vector lengths and corpus size. No schema mismatch or failed-earlier/successful-last multi-run assertion."
+    },
+    {
+      "id": "full-scenario-limit",
+      "detail": "test_main checks numeric returns for stochastic easy/hard configs; it has a TODO to inspect final stats. This test not run; its presence is not complete runtime qualification."
+    }
+  ],
+  "original_test_function_count": 12,
+  "total_distinct_original_tests_passed_so_far": 14,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
