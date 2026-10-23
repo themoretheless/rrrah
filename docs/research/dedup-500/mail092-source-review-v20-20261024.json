@@ -1,0 +1,115 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v19-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "docs/install.md",
+      "local": "71-docs--install.md",
+      "sha256": "e55989860b59cfe65e7a3571fc78787adffd5628aff9080c4b664bf236a00a2c",
+      "whole_text_read": true,
+      "lines": 275
+    },
+    {
+      "path": "docs/tutorial.md",
+      "local": "72-docs--tutorial.md",
+      "sha256": "b0e823342153651b77ecbd7b474d63fce7a78a95154a3b4cb3d4ff1c71ff841b",
+      "whole_text_read": true,
+      "lines": 376
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 65,
+  "cumulative_original_visual_files_reviewed": 8,
+  "cumulative_whole_reviewed_files": 73,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 7,
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "public_tutorial_control": {
+    "scope": "Original Python click:source/run tutorial blocks executed in order with CliRunner adapter adding no-config; own scratch tempdir; not Sphinx build or shell snippets",
+    "blocks_executed": 16,
+    "calls": [
+      {
+        "args": [
+          "--export",
+          "merged.mbox",
+          "archive-2024.mbox",
+          "archive-2025.mbox"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "--strategy",
+          "select-one",
+          "--export",
+          "merged.mbox",
+          "archive-2024.mbox",
+          "archive-2025.mbox"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "--strategy",
+          "select-matching-path",
+          "--regexp",
+          "2025",
+          "--action",
+          "delete-discarded",
+          "--dry-run",
+          "archive-2024.mbox",
+          "archive-2025.mbox"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "--strategy",
+          "select-matching-path",
+          "--regexp",
+          "2025",
+          "--action",
+          "delete-discarded",
+          "archive-2024.mbox",
+          "archive-2025.mbox"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "--strategy",
+          "select-matching-path",
+          "--regexp",
+          "account-a",
+          "--action",
+          "hardlink-discarded",
+          "account-a",
+          "account-b"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "source_sha256": "b0e823342153651b77ecbd7b474d63fce7a78a95154a3b4cb3d4ff1c71ff841b",
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-tutorial-owned-kzf_re0b",
+    "working_directory_restored": true,
+    "limits": [
+      "Synthetic stable tutorial corpus only.",
+      "No global installation, shell profile changes or real user mailbox touched."
+    ]
+  },
+  "findings": [
+    "All16 original tutorial Python directive blocks execute in sequence with assertions passing. Five actual CLI calls exit0; synthetic mbox merge yields5distinct mails from7, dry-run preserves archives, path-selected deletion keeps unique messages, hardlink census changes7physical inodes to5while retaining7logical messages.",
+    "Control substitutes CliRunner invoke adapter adding --no-config and routes tempfile defaults into owned work directory; original directive bodies unchanged. Shell snippets and Sphinx rendering not executed.",
+    "Tutorial intentionally shows incomplete export without strategy: duplicates are skipped and unique-only output retained. Policy success is not completeness of a deduplicated union.",
+    "Install doc includes global package installation, shell-completion profile edits and historical platform/version tables; these are read only. Current availability/compatibility of advertised downloads not verified."
+  ],
+  "transfer_decision": "Use preserved synthetic source/copy outcomes to qualify behavior, distinct from general recall/platform claims. No foreign production code copied.",
+  "limits": [
+    "65text plus8visual assets:73of80;7remain.",
+    "315 upstream tests plus16tutorial blocks; do not count blocks as extra upstream tests.",
+    "No global install/profile edit or real mailbox touched.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

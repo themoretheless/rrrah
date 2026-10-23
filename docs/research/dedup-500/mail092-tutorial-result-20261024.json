@@ -1,0 +1,73 @@
+{
+  "scope": "Original Python click:source/run tutorial blocks executed in order with CliRunner adapter adding no-config; own scratch tempdir; not Sphinx build or shell snippets",
+  "blocks_executed": 16,
+  "calls": [
+    {
+      "args": [
+        "--export",
+        "merged.mbox",
+        "archive-2024.mbox",
+        "archive-2025.mbox"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "--strategy",
+        "select-one",
+        "--export",
+        "merged.mbox",
+        "archive-2024.mbox",
+        "archive-2025.mbox"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "--strategy",
+        "select-matching-path",
+        "--regexp",
+        "2025",
+        "--action",
+        "delete-discarded",
+        "--dry-run",
+        "archive-2024.mbox",
+        "archive-2025.mbox"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "--strategy",
+        "select-matching-path",
+        "--regexp",
+        "2025",
+        "--action",
+        "delete-discarded",
+        "archive-2024.mbox",
+        "archive-2025.mbox"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "--strategy",
+        "select-matching-path",
+        "--regexp",
+        "account-a",
+        "--action",
+        "hardlink-discarded",
+        "account-a",
+        "account-b"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "source_sha256": "b0e823342153651b77ecbd7b474d63fce7a78a95154a3b4cb3d4ff1c71ff841b",
+  "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-tutorial-owned-kzf_re0b",
+  "working_directory_restored": true,
+  "limits": [
+    "Synthetic stable tutorial corpus only.",
+    "No global installation, shell profile changes or real user mailbox touched."
+  ]
+}
