@@ -1,0 +1,30 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running tests/test_session.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_session-6d8536b1d618ccf4)
+
+running 9 tests
+test test_home_dir_returns_nonempty ... ok
+test test_unix_to_date ... ok
+test test_new_session_filename_format ... ok
+test test_unix_to_date_leap_year ... ok
+test test_unix_to_date_epoch_zero ... ok
+test test_current_session_missing_returns_none ... ok
+test test_current_session_malformed_json_returns_defaults ... ok
+test test_append_event_creates_and_appends ... ok
+test test_current_session_roundtrip ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_session_stats.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_session_stats-56fa84db33c4ef04)
+
+running 7 tests
+test fuzzy_dedup_hit_increments_counter ... ok
+test exact_dedup_hit_increments_counter ... ok
+test intensity_ultra_increments_counter ... ok
+test legacy_json_without_stat_fields_loads_with_zero ... ok
+test stat_counters_saturate_not_overflow ... ok
+test stat_counters_survive_json_round_trip ... ok
+test summarize_trigger_increments_counter ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

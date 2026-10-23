@@ -1,0 +1,105 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v10-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/session.rs",
+      "local": "57-src--session.rs",
+      "sha256": "a2fcad0d5c032b8b3f36b756dd2abc2a8a91e3398a7808d516984499c8c18094",
+      "whole_text_read": true,
+      "lines": 247
+    },
+    {
+      "path": "tests/test_session.rs",
+      "local": "58-tests--test_session.rs",
+      "sha256": "7462704f151f0a9c6f11c8ee9a1c677ba2ac5921a43bf7680699655163666f0e",
+      "whole_text_read": true,
+      "lines": 112
+    },
+    {
+      "path": "tests/test_session_stats.rs",
+      "local": "59-tests--test_session_stats.rs",
+      "sha256": "fa290fb2103e4057ce353753f966a012fd5be55de5499df08ba4ef3daecedbfb",
+      "whole_text_read": true,
+      "lines": 81
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 58,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 59,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 268,
+  "native_original_tests_added": {
+    "passed": 16,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "test_session": 9,
+      "test_session_stats": 7
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 311,
+    "failed": 0,
+    "scope": "Focused original groups, not entire suite."
+  },
+  "public_session_controls": {
+    "scope": "Original public APIs, owned directory; file-size limit affects only replacement child, not parent",
+    "key_control": {
+      "scope": "Original public advisory API, owned directory and distinct synthetic keys",
+      "distinct_punctuation_keys_collide": true,
+      "repeat_refused": true,
+      "reset_releases_claim": true
+    },
+    "current_save_failure": {
+      "child_exit_code": 0,
+      "previous_bytes": 167,
+      "published_bytes": 512,
+      "previous_preserved": false,
+      "published_json_valid": false,
+      "previous_sha256": "59577de7c343e1d657cff5173162baa3f2efda7e15184740bee262c5d9451f29",
+      "published_sha256": "a24c7712582a411c373149819327407b98539e2784131988fc8e871d85ea7ac4"
+    },
+    "owned_root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-session-state-411zptoe"
+  },
+  "public_concurrent_save_control": {
+    "scope": "Unmodified CurrentSession.save; four owned processes,100 saves each; independent Python JSON reader, one finite schedule only",
+    "worker_exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "valid_reads": 748,
+    "invalid_reads": 169,
+    "missing_reads": 0,
+    "first_invalid": {
+      "bytes": 8202,
+      "sha256": "3c5009333df5664cd930bbdefd1d07a52159fc90d7638eb2a9551cb34267637b",
+      "parse_error": "Extra data: line 1 column 5203 (char 5202)"
+    },
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-session-concurrency-d7r0vwyp"
+  },
+  "findings": [
+    "claim_nudge replaces every non-ASCII-alphanumeric character with underscore. Distinct synthetic event:a and event/a keys therefore collide; repeated-key refusal and reset controls pass. This does not prove actual fixed internal advisory names collide.",
+    "CurrentSession.save ignores write_all failure and renames its temporary file anyway. A child-only512-byte file limit replaces a valid167-byte state with invalid512-byte JSON while child exits0. This is a second original state-save API, separate from SessionContext.save.",
+    "CurrentSession uses one shared current.json.tmp pathname. Four original-API worker processes each perform100 saves: independent reader observes748 valid and169 invalid JSON snapshots, no missing destination, all workers exit0. One finite schedule; counts are not a general error-rate estimate.",
+    "Existing rrrah cache publication source uses uniquely owned temporary files, checks write/flush/sync errors and publishes after successful completion. Earlier regression evidence remains separate; no rrrah production changes this turn.",
+    "Session filenames are hour-granularity UTC buckets, not unique operation identifiers. Event append limit is checked before append and errors are ignored; these are source observations without new event-log controls."
+  ],
+  "harness_notes": [
+    "Initial concurrency harness timed out after5 seconds during initialization before workers started. No corresponding live helper remained; retried with30-second initialization/deadline allowance, completing successfully. Timeout cause unqualified, not attributed to original logic.",
+    "The final concurrency schedule was run once after initialization allowance adjustment; no all-schedules, crash-durability or filesystem-wide guarantee."
+  ],
+  "transfer_decision": "Do not adopt lossy key normalization or shared temporary-file publication. Preserve key identity and verified complete publication. No foreign implementation copied into rrrah.",
+  "limits": [
+    "58 text files and one original image reviewed;268 tracked files remain.",
+    "311 focused original tests do not establish universal serialization, advisory, concurrency, timing or host correctness.",
+    "Owned directory and child-only limits; no user state, real host hooks or external service modified.",
+    "Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Cargo raw logs retain trailing blank lines."
+}
