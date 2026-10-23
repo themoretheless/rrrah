@@ -1,0 +1,32 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Two vendored memory modules read whole/pin verified/syntax parsed. Neither imported: process module performs runtime probes at import; no probes/GC capture executed.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/process.py",
+      "sha256": "3b2fb1d7f1c8213410e8a903c2197068fb83d9d765bf8f44e3bec921cb7c1488",
+      "syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/tracker.py",
+      "sha256": "b641c3c7e23f8a6888058c06d2cf62ec2299050938029273df812bbacac1a7ff",
+      "syntax": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 92,
+    "remaining_not_whole_reviewed": 52
+  },
+  "findings": [
+    "Process fallback explicitly returns zero metrics when unavailable; availability must accompany numbers to distinguish unsupported from zero memory. resource fallback measures peakRSS while ps/proc measure currentRSS, so values are not temporally interchangeable.",
+    "Linux proc parser whitespace-splits entire stat record, although parenthesized comm may contain spaces; fixed field indices can shift. os_specific appends on each update without clearing, duplicating retained status entries. Static findings.",
+    "ps collector has no timeout and trusts last two tokens if at least two exist; malformed/header-only output can raise numeric conversion error.",
+    "ObjectTracker deliberately retains strong references to all captured objects, preventing their collection. Apparent retention under this tool is not neutral evidence of application leak.",
+    "Tracker ignore_self relies on exact gc.get_referrers counts, and object capture is not atomic across active threads. Caller-supplied ignore lists are mutated and cleared.",
+    "SummaryTracker.diff advances baseline even when explicit summary1 provided and summary2 absent; consumers need documented lifecycle when comparing multiple phases."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
