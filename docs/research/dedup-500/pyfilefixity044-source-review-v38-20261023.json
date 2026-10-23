@@ -1,0 +1,51 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Five additional vendored text files read whole and Git-object verified. Syntax parsing only; no threads, subprocesses, registry access, web server or GUI launched.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/kthread.py",
+      "sha256": "aa0a6609b187fb6bd709f91f736c10df908e13beff4b50075ac611453bd8a15f",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/macshim.py",
+      "sha256": "70cc458075b44951844eb223e55077ff1a3bcfdc1bfb1968517fa21593eb787a",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/homedirectory.py",
+      "sha256": "011af56fbaa34afd605cb0e43482ca7cf46ec0d5ed91ff7bff8bd269e8a808cc",
+      "python3_syntax": {
+        "result": "SyntaxError",
+        "line": 69,
+        "message": "Missing parentheses in call to 'print'. Did you mean print(...)?"
+      }
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/compat.py",
+      "sha256": "bf0f835cab127c8f7f904c8b8b82578b7621351996fab36d2286019fee26b72a",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/util/stringutils.py",
+      "sha256": "80b8bddaaf5ccd9aaad64854cf57ed86b11f8b51bde8b0e2f88ca62b05cd962b",
+      "python3_syntax": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 78,
+    "remaining_not_whole_reviewed": 66
+  },
+  "findings": [
+    "kthread header carries LGPL2.1-or-later, unlike root MIT. No code copied; preserve per-file license provenance.",
+    "KThread kill flag is checked on Python line tracing; blocking native calls are not bounded cancellation. __run cleanup lacks finally if target raises. Demo uses undefined xrange on Python3.",
+    "macshim launches argv0 with32 suffix and an environment containing only one variable; child return code is not propagated. Read only.",
+    "homedirectory has Python2 print syntax, rejected by Python3 parser; Windows fallback imports _winreg rather than winreg.",
+    "String size formatter has finite unit list and no upper-bound guard; formatting helpers do not establish memory accounting correctness.",
+    "Vendored compat imports top-level pympler bottle modules; actual module resolution can differ from repository location."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
