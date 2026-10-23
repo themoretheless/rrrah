@@ -1,0 +1,51 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v29-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/ExportToOracleDb.java",
+      "local": "162-ExportToOracleDb.java",
+      "git_blob": "f66f8c79d32cb7647b0d616ea6e58011d2a55d46",
+      "sha256": "36afe28ba56f35a10631f94bd6205b89cba3a3777cc98248b6776038aeb1e64b",
+      "lines": 318,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/TestExportToOracleDb.java",
+      "local": "163-TestExportToOracleDb.java",
+      "git_blob": "2ed91f6e6bb037b62ac8efeb594fff44ec0b99d3",
+      "sha256": "ff89e4e53c8c4ddb15ccdc2f731d15fc4d9e92048552e29d43eb0a0e818ca4f4",
+      "lines": 309,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 157,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 164,
+  "remaining_without_whole_review": 6,
+  "original_tests_cumulative": {
+    "total": 108,
+    "passed": 105,
+    "failed": 3,
+    "new_original_tests": 18,
+    "report": "docs/research/dedup-500/hiho098-oracle-job-original-tests-20261024.json"
+  },
+  "author_controls": {
+    "new": 0,
+    "cumulative": 118,
+    "scope": "Source review only this increment; no new executed controls."
+  },
+  "source_only_findings": [
+    "ExportToOracleDb catches initial create-table HIHOException and continues job submission; executes alter-location step even after waitForCompletion false or caught exception. No Oracle/Hadoop execution in this increment.",
+    "waitForCompletion exception leaves initial ret=0; alter-location HIHOException also does not affect ret. Source-only, not a newly observed failed job.",
+    "getAlterTableDML uses every listStatus entry basename, without isDir filtering or escaping apostrophes; empty nonnull listing emits LOCATION (). Existing original test only uses two ordinary names.",
+    "getTableName tokenizes only parentheses and ASCII spaces and overwrites match for each TABLE token; getExternalDir splits only ASCII spaces. No general SQL parser or quoted-identifier contract established.",
+    "runQuery calls executeQuery for supplied DML and closes statement/connection only on normal path; exceptions bypass explicit closes. Real Oracle JDBC behavior unqualified."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
