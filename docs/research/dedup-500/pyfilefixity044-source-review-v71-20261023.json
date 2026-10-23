@@ -1,0 +1,48 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "asizeof.py lines241-550 read, cumulative1-550. Exact AST helpers controlled with small dependency seams; no full original sizing execution",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+    "lines": [
+      241,
+      550
+    ],
+    "cumulative_lines": [
+      1,
+      550
+    ],
+    "sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef"
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-sizer-slot-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "12c820e1ea7b8254ad44dd8855fb078003bb5344",
+    "source_sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef",
+    "scope": "Exact AST helpers, _Slots and _items dependency seams; no full module import or sizing",
+    "string_slot_payload_omitted": true,
+    "returned_slot_entries": [
+      [
+        "__slots__",
+        {}
+      ]
+    ],
+    "safe_repr_valueerror": "authored repr failure"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "remaining_without_full_text_or_binary_review": 24
+  },
+  "findings": [
+    "Slot enumeration iterates __slots__ directly, failing to normalize valid single-string declaration. Authored payload slot omitted by original _dir2 with _Slots representation seam. Full sizing undercount not measured because module import still fails.",
+    "_repr catches TypeError only, so authored ValueError from __repr__ propagates. Reproduced exact helper behavior.",
+    "Attribute enumeration uses dir/hasattr/getattr and may invoke descriptors repeatedly; sizing is not observer-neutral for arbitrary objects. No application descriptor executed.",
+    "_infer_dict requires has_key even in items/keys/values interface branch; modern mapping-like objects without has_key may not be inferred. Static finding.",
+    "all=True builds roots from sys.modules, module globals and selected stack frames; this is not enumeration of every process allocation. Later recursion/GC treatment remains unread.",
+    "The source version/ABI assumptions and import failure recorded in v70 remain unresolved; no compatibility patch or production code transfer."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
