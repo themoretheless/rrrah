@@ -1,0 +1,40 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "asizeof.py now whole read1-2631 acrossv70-v75. Original module import failed earlier; selected exact Asizer.set methods controlled without sizing or initialization",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+    "sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 120,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 121,
+    "remaining_without_full_text_or_binary_review": 23
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-sizer-options-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "12c820e1ea7b8254ad44dd8855fb078003bb5344",
+    "source_sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef",
+    "scope": "Exact Asizer class, __new__ bypass and original set only; no object sizing or module import",
+    "code_disabled_but_label": " (incl. code)",
+    "rejected_alignment_left_state": {
+      "align": 3,
+      "mask": 2
+    }
+  },
+  "findings": [
+    "Asizer.set(code=False) leaves incl-code report suffix after prior code=True; reproduced exact setter. Calculation flag changes but label remains stale.",
+    "Asizer.set(align=3) changes alignment and mask before rejecting invalid non-power-of-two input, leaving invalid state after ValueError. Reproduced.",
+    "Public asized/asizeof/asizesof reuse global singleton, then clear it after sizing and report printing without finally. Exceptions can leave per-call state retained; resets on next normal invocation limit but do not remove exception-time retention. Static finding.",
+    "test_flatsize disables global _getsizeof then restores only on normal completion, not finally; failing helper/report can leave it disabled. No test routine executed.",
+    "test_flatsize explicitly tolerates sequence-size differences and says comparisons do not prove fallback accuracy. Demonstration code prints examples; not a universal allocation-validation gate.",
+    "named_refs drops unnamed referents by design. Graph helpers using it must not assume all referents are labeled/present.",
+    "Embedded ProphICy license has BSD-style three conditions including non-endorsement. Root MIT metadata is not the complete license basis; no source copied.",
+    "Whole source reading completed, but original complete runtime sizing still fails unicode-internal import under Python3.15. Prior excerpt controls remain finite helper evidence, not end-to-end memory qualification."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
