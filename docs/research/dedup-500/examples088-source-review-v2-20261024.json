@@ -1,0 +1,115 @@
+{
+  "repository": "dedupeio/dedupe-examples",
+  "commit": "48916bf09205756a2948a30ec0275ac2e394288d",
+  "previous_audit": "docs/research/dedup-500/examples088-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "record_linkage_example/record_linkage_example.py",
+      "local": "20-record_linkage_example--record_linkage_example.py",
+      "sha256": "36627e2209cc348aaedc9211d979e71b2b5a199f9a0c8e74f029493df4884972",
+      "whole_text_read": true,
+      "lines": 211
+    },
+    {
+      "path": "gazetteer_example/gazetteer_example.py",
+      "local": "21-gazetteer_example--gazetteer_example.py",
+      "sha256": "d1e40814dd6136e06ef73925c7fba961ca9d299357a0032dfc4a85e5eeb0f322",
+      "whole_text_read": true,
+      "lines": 204
+    },
+    {
+      "path": "gazetteer_example/README.md",
+      "local": "22-gazetteer_example--README.md",
+      "sha256": "d4b3765dd8170fca0a4486cb27bde07e2ec234006c1be741514d0752b1dc2c8a",
+      "whole_text_read": true,
+      "lines": 67
+    },
+    {
+      "path": "patent_example/README.md",
+      "local": "23-patent_example--README.md",
+      "sha256": "32e92e6ed346119fe77a8993c9d321922932286ab15324ae13874bfcbffda1dd",
+      "whole_text_read": true,
+      "lines": 52
+    },
+    {
+      "path": "pgsql_big_dedupe_example/README.md",
+      "local": "24-pgsql_big_dedupe_example--README.md",
+      "sha256": "0cb6a397d73995c0c9312e605d8321f5b1d379db7c0bd9175652825a1b628edc",
+      "whole_text_read": true,
+      "lines": 21
+    },
+    {
+      "path": "mysql_example/README.md",
+      "local": "25-mysql_example--README.md",
+      "sha256": "db96e776ba16ff03dc8f08abb1824784b4369632e45eb897d77f9cae1e0a6713",
+      "whole_text_read": true,
+      "lines": 23
+    },
+    {
+      "path": "patent_example/patent_example.py",
+      "local": "26-patent_example--patent_example.py",
+      "sha256": "e74856b87f8822f0839ce4f2740f1b6d8cba1248d49475980255b3513a9640d1",
+      "whole_text_read": true,
+      "lines": 188
+    },
+    {
+      "path": "extended-variables/officers.py",
+      "local": "27-extended-variables--officers.py",
+      "sha256": "dce3b15671652242d3cfd16c427acacca889f27708f27df2f0e4a3edc8747f9f",
+      "whole_text_read": true,
+      "lines": 193
+    },
+    {
+      "path": "gazetteer_example/gazetteer_postgres_example.py",
+      "local": "28-gazetteer_example--gazetteer_postgres_example.py",
+      "sha256": "5d9786d94e5c82ccb465b72eb574743175d7355e5a1b5129e8b65bf239147304",
+      "whole_text_read": true,
+      "lines": 349
+    },
+    {
+      "path": "pgsql_big_dedupe_example/pgsql_big_dedupe_example.py",
+      "local": "29-pgsql_big_dedupe_example--pgsql_big_dedupe_example.py",
+      "sha256": "57c6dd0f695a0ba253dc6d6b030b68a0d3b6970b8cc00758e5cacf659246413e",
+      "whole_text_read": true,
+      "lines": 392
+    },
+    {
+      "path": "pgsql_big_dedupe_example/pgsql_big_dedupe_example_init_db.py",
+      "local": "30-pgsql_big_dedupe_example--pgsql_big_dedupe_example_init_db.py",
+      "sha256": "30d3d775a2331c55f4172678d8c2d73398b3906cfccf2537603c07c99a6de83c",
+      "whole_text_read": true,
+      "lines": 271
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 26,
+  "tracked_blobs": 42,
+  "remaining_without_whole_review": 16,
+  "partial_read_not_credited": {
+    "mysql_example/mysql_example.py": "lines 1-190 only"
+  },
+  "runtime_control_artifacts": [
+    "examples088-data-control-20261024.py",
+    "examples088-data-result-20261024.json",
+    "examples088-install-20261024.log"
+  ],
+  "runtime": "Existing isolated dedupe083 Python runtime plus separate --target examples088-deps-20261024 containing upstream root-pinned Unidecode 0.4.16. Existing dependency runtime untouched.",
+  "findings": [
+    "Original Gazetteer result-to-membership statements overwrite repeated canonical IDs: two messy records matching one canonical record lose the first exported edge in owned fixture.",
+    "With two matches for one messy record, inner cluster_id increment and next outer enumerate value collide: owned fixture exports an extra edge m1-c1 that was not among search results. This qualifies export statements only, not learned-search quality.",
+    "Both original product readers parse currency by removing the first normalized character: bare 12.50 becomes 2.5, negative -$12.50 becomes positive 12.5, euro-prefixed value raises ValueError with the pinned Unidecode version. Currency-specific fixture assumptions are not general numeric parsing.",
+    "Original CSV reader silently overwrites a duplicate integer ID: two input rows retain only the second.",
+    "Original four product reader invocations returned 1081/1092/1081/1092 records; patent reader returned 2379. No training or scoring was performed.",
+    "Postgres Gazetteer module opens a database connection at import and its main path drops/recreates tables; it was read without importing.",
+    "Large PostgreSQL training path materializes donor records in temp_d before training despite streaming pair scoring; no bounded total-memory claim.",
+    "Postgres COPY Readable.read(size) interprets size as row count rather than byte bound, per source. No client/server protocol control run."
+  ],
+  "harness_note": "Initial owned membership fixture assertion expected a lost edge; actual result instead exposed an added edge. Corrected to two separate fixtures and asserted both outcomes against independently enumerated edges. Original source unchanged.",
+  "scope_limits": [
+    "26/42 complete manual file reviews; nine CSV structural parses retain separate evidence and receive no manual-whole-file credit.",
+    "No full example pipeline, active labeling, database connection, model precision/recall or performance measurement.",
+    "No foreign production implementation adopted into rrrah.",
+    "Native pHash.org/ASAN remains skipped."
+  ],
+  "whitespace_check": "git diff --cached --check reports only original whitespace in three byte-exact upstream README copies (patent, PostgreSQL, MySQL). Preserved to keep source hashes exact; owned JSON/control files have no reported whitespace errors."
+}

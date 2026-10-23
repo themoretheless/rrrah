@@ -1,0 +1,181 @@
+{
+  "csv_duplicate_ids": {
+    "input_rows": 2,
+    "retained_rows": 1,
+    "retained_name": "second"
+  },
+  "price_cases": [
+    {
+      "module": "record_linkage_example.py",
+      "input": "$12.50",
+      "value": 12.5
+    },
+    {
+      "module": "record_linkage_example.py",
+      "input": "12.50",
+      "value": 2.5
+    },
+    {
+      "module": "record_linkage_example.py",
+      "input": "-$12.50",
+      "value": 12.5
+    },
+    {
+      "module": "record_linkage_example.py",
+      "input": "€12.50",
+      "error": "ValueError"
+    },
+    {
+      "module": "record_linkage_example.py",
+      "input": "",
+      "value": null
+    },
+    {
+      "module": "gazetteer_example.py",
+      "input": "$12.50",
+      "value": 12.5
+    },
+    {
+      "module": "gazetteer_example.py",
+      "input": "12.50",
+      "value": 2.5
+    },
+    {
+      "module": "gazetteer_example.py",
+      "input": "-$12.50",
+      "value": 12.5
+    },
+    {
+      "module": "gazetteer_example.py",
+      "input": "€12.50",
+      "error": "ValueError"
+    },
+    {
+      "module": "gazetteer_example.py",
+      "input": "",
+      "value": null
+    }
+  ],
+  "original_product_readers": [
+    {
+      "path": "record_linkage_example/AbtBuy_Abt.csv",
+      "records": 1081
+    },
+    {
+      "path": "record_linkage_example/AbtBuy_Buy.csv",
+      "records": 1092
+    },
+    {
+      "path": "gazetteer_example/data/AbtBuy_Abt.csv",
+      "records": 1081
+    },
+    {
+      "path": "gazetteer_example/data/AbtBuy_Buy.csv",
+      "records": 1092
+    }
+  ],
+  "original_patent_reader": {
+    "records": 2379
+  },
+  "gazetteer_output": [
+    {
+      "input_edges": [
+        [
+          "m0",
+          "c0"
+        ],
+        [
+          "m1",
+          "c0"
+        ]
+      ],
+      "serialized_membership": {
+        "m0": {
+          "Cluster ID": 0,
+          "Link Score": 0.9
+        },
+        "c0": {
+          "Cluster ID": 1,
+          "Link Score": 0.95
+        },
+        "m1": {
+          "Cluster ID": 1,
+          "Link Score": 0.95
+        }
+      },
+      "reconstructed_edges": [
+        [
+          "m1",
+          "c0"
+        ]
+      ],
+      "lost_edges": [
+        [
+          "m0",
+          "c0"
+        ]
+      ],
+      "invented_edges": []
+    },
+    {
+      "input_edges": [
+        [
+          "m0",
+          "c0"
+        ],
+        [
+          "m0",
+          "c1"
+        ],
+        [
+          "m1",
+          "c0"
+        ]
+      ],
+      "serialized_membership": {
+        "m0": {
+          "Cluster ID": 1,
+          "Link Score": 0.8
+        },
+        "c0": {
+          "Cluster ID": 1,
+          "Link Score": 0.95
+        },
+        "c1": {
+          "Cluster ID": 1,
+          "Link Score": 0.8
+        },
+        "m1": {
+          "Cluster ID": 1,
+          "Link Score": 0.95
+        }
+      },
+      "reconstructed_edges": [
+        [
+          "m0",
+          "c0"
+        ],
+        [
+          "m0",
+          "c1"
+        ],
+        [
+          "m1",
+          "c0"
+        ],
+        [
+          "m1",
+          "c1"
+        ]
+      ],
+      "lost_edges": [],
+      "invented_edges": [
+        [
+          "m1",
+          "c1"
+        ]
+      ]
+    }
+  ],
+  "scope": "Original guarded modules imported unchanged for readers; original membership AST statements with synthetic results. No learned matching quality, database, or full example execution."
+}
