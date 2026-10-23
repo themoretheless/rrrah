@@ -1,0 +1,30 @@
+{
+  "scope": "Original OutputStrategyEnum.value; English and Turkish default locale only inside owned child JVM, restored in finally;4authorchecks, not original tests",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/OutputStrategyEnum.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/StrategyLocaleControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "StrategyLocaleControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS English lowercase strategy\nOBSERVED Turkish lowercase strategy rejected: No enum constant co.nubetech.hiho.common.OutputStrategyEnum.DEL\u0130M\u0130TED\nPASS Turkish uppercase strategy\nPASS null strategy remains null;checks=4\n",
+      "stderr": ""
+    }
+  ]
+}

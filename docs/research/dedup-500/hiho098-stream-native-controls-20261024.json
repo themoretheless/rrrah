@@ -1,0 +1,53 @@
+{
+  "scope": "Original reader methods, actual local Hadoop filesystem and owned temporary files;3payload/EOF positive controls+1basename-key observation; no cluster/original test invocation",
+  "author_setup_correction": "Initial harness used unsupported Hadoop0.20 Path(URI) constructor and did not compile. Changed own harness to Path(uri.toString()); original source unchanged.",
+  "initial_attempt": {
+    "scope": "Original reader methods, actual local Hadoop filesystem and owned temporary files;3payload/EOF positive controls+1basename-key observation; no cluster/original test invocation",
+    "commands": [
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "-d",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/FileStreamInputFormat.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/FileStreamRecordReader.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/StreamBoundaryControl.java"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/StreamBoundaryControl.java:11: error: incompatible types: URI cannot be converted to String\n  FileSplit split=new FileSplit(new Path(source.toUri()),0,expected.length,new String[0]);\n                                                     ^\nNote: Some messages have been simplified; recompile with -Xdiags:verbose to get full output\n1 error\n"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/FileStreamInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/FileStreamRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/StreamBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "StreamBoundaryControl",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-stream-zsb_dl6o"
+      ],
+      "returncode": 0,
+      "stdout": "READ key=same.bin bytes=3 progressAfterEOF=0.0\nREAD key=same.bin bytes=3 progressAfterEOF=0.0\nOBSERVED distinct full paths/different payloads emit same basename key\nREAD key=empty.bin bytes=0 progressAfterEOF=0.0\nstream checks=4;3complete payload+EOF checks,1basename identity observation\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v13-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/input/FileStreamInputFormat.java",
+      "local": "91-FileStreamInputFormat.java",
+      "sha256": "15cfe006e4f8348d267c462fb761fa91c6c337a6c3c6dbdcdf28334a76811653",
+      "git_blob": "1b683a2601e42c89e3391493e8d3ce8027be90eb",
+      "lines": 53,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/input/FileStreamRecordReader.java",
+      "local": "92-FileStreamRecordReader.java",
+      "sha256": "96fc45adb868d8fe5bb5636b2f9c56f6619c3fca323ff49f3dd0d33bb2a2b913",
+      "git_blob": "cc8bca5e75510eb2ee263751ec732d077fbc1da5",
+      "lines": 94,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/lib/input/TestFileStreamInputFormat.java",
+      "local": "93-TestFileStreamInputFormat.java",
+      "sha256": "5ec0a36a3d8978ea76324c8622e380069ba0e4c8362a881f61cd067eb3a8593d",
+      "git_blob": "45c83bf6118174eb8013836e58d9872e8e7a31ca",
+      "lines": 45,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/common/OutputStrategyEnum.java",
+      "local": "94-OutputStrategyEnum.java",
+      "sha256": "66b10d7152da468c68ef96ba93a9567ba437ba87bcd5974c517a8c5b56cb3480",
+      "git_blob": "25e364bd01ccddc79ed6914d7466de811dddd155",
+      "lines": 27,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/uuid/UuidJob.java",
+      "local": "95-UuidJob.java",
+      "sha256": "65836adbc52eb1f271bb5f08b3d8454d54e3f941cdfa443273e68f37f95e4415",
+      "git_blob": "cf6bb4e870156faf930b4b3b80ea1f3bfb5d9525",
+      "lines": 61,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/uuid/UuidMapper.java",
+      "local": "96-UuidMapper.java",
+      "sha256": "6669b775b6313bcdb65a4f96be3d86c4cc83cce61b59d6277b3570997deaafdc",
+      "git_blob": "cd6ccc54b497dff31b4d6a52ab40987ec25941b2",
+      "lines": 41,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/testdata/NGramLogic.java",
+      "local": "97-NGramLogic.java",
+      "sha256": "f281ac4066adbb972401589357e87b2a1d50091aebfe24169585af5df166bba4",
+      "git_blob": "5702ca730166f7ff9d8a013b82826b8e9ab0ae40",
+      "lines": 39,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 92,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 98,
+  "remaining_without_whole_review": 72,
+  "original_tests_cumulative": {
+    "total": 69,
+    "passed": 69,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 8,
+    "cumulative": 45,
+    "stream_report": "docs/research/dedup-500/hiho098-stream-native-controls-20261024.json",
+    "locale_report": "docs/research/dedup-500/hiho098-locale-native-controls-20261024.json",
+    "confirmed": [
+      "Original reader returns full bytes for2small different files+empty file, one record thenEOF each.",
+      "Distinct full paths left/same.bin and right/same.bin return identical basename keys; matches stated filename-key policy, incompatible with using key alone as full physical identity.",
+      "Progress afterEOF remains0 per explicit dummy implementation.",
+      "Original strategy parser accepts lowercase delimited in English but rejects it in Turkish due default-locale uppercasing; uppercaseDELIMITED andnull positive controls pass."
+    ],
+    "scope": "Owned local files/real Hadoopfilesystem and childJVM locales; no cluster or configuredDB",
+    "author_setup_correction": "Initial stream harness used Path(URI), unsupported by Hadoop0.20.2. Own harness corrected to Path(uri.toString()); original sources unchanged, compile error preserved separately."
+  },
+  "source_findings": [
+    "FileStreamInputFormat.isSplitable returnsFalse; reader ignores split offsets. Nonzero split behavior was not tested and is not claimed to occur in normal framework use.",
+    "TestFileStreamInputFormat.testNumInputs starts4node MiniDFSCluster, defines names/count, but creates no files, invokes no input format, has no assertions and no shutdown. Source-only, not executed.",
+    "UuidMapper intentionally emits random identifiers based on task attempt hash and random least bits; not content-derived IDs. No uniqueness/entropy guarantee measured.",
+    "UuidJob uses args[0] without upfront check and same catch/return0 pattern as otherjobs; source-only."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
