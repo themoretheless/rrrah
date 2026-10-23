@@ -1,0 +1,35 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "header_ecc.py lines45-216 read; exact original entry_assemble AST body run in isolation with standard zip/range compatibility aliases. No ECC codec/backend or whole module executed.",
+  "source_sha256": "3d772b772ac50fefaa9e27a33032ef04be7367381b6694a7ea11897a2c0955a0",
+  "control": "pyfilefixity044-header-assembly-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "source_header_bytes": 10,
+    "empty_track_blocks": 0,
+    "one_block_track_source_bytes_covered": 5,
+    "remaining_unreported_source_bytes": 5
+  },
+  "findings": [
+    {
+      "id": "zip-truncation",
+      "detail": "entry_assemble zips message-block offsets and ECC-block offsets, stopping at shorter iterable. Empty track produces no blocks, one-block track silently leaves second message block unrepresented. Reproduced without modifying original function."
+    },
+    {
+      "id": "metadata-correction-dependency",
+      "detail": "ecc_correct_intra reuses the same assembler and starts fcorrected true. Missing/short metadata ECC can omit source field bytes before correction accounting; caller impact needs further qualification."
+    },
+    {
+      "id": "shared-field-parser",
+      "detail": "Header entry_fields also uses unchecked delimiter find results and lstrip byte-set semantics; raw-entry input avoids adaptive parser unbounded file read but malformed field handling remains permissive."
+    },
+    {
+      "id": "header-scope",
+      "detail": "Only configured header is read by entry_assemble when fileheader absent. Successful header verification cannot establish whole-file exact equality or preservation of tail."
+    }
+  ],
+  "whole_text_reviewed_count_unchanged": 63,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
