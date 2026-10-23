@@ -1,0 +1,60 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "visual_assets_reviewed": [
+    {
+      "path": "docs/images/onboarding.png",
+      "git_blob": "e3cd4596928f24b829b1dc2389269b8da80ac5e6",
+      "dimensions": [
+        1392,
+        1344
+      ],
+      "review": "entire static image visibly inspected in browser at pinned URL",
+      "observation": "Format mode selected; automatic organization and login toggles checked; compatibility ready text."
+    },
+    {
+      "path": "docs/images/menu-bar.png",
+      "git_blob": "197bd9f5657ca62e67b92ec533b16c2743511d4c",
+      "dimensions": [
+        734,
+        542
+      ],
+      "review": "entire static image visibly inspected in browser at pinned URL",
+      "observation": "Menu shows scan, organization, duplicates, welcome/settings/quit and automatic-on status."
+    },
+    {
+      "path": "docs/images/finder-folders.png",
+      "git_blob": "f52d861a772e2223b4eb3aebcb124bcc04742e6f",
+      "dimensions": [
+        480,
+        532
+      ],
+      "review": "entire static image visibly inspected in browser at pinned URL",
+      "observation": "Twelve colored category folders with badges."
+    },
+    {
+      "path": "Assets/FileMorrowIconTransparent.png",
+      "git_blob": "0b06e9ed8232803916becb10afa1f54e29b6e535",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "review": "entire static image visibly inspected in browser at pinned URL",
+      "observation": "Purple rounded-square download tray and clock/sun emblem."
+    }
+  ],
+  "findings": [
+    "Four PNGs fully viewed as static images. Onboarding/menu screenshots omit newer explanatory text and archive/installer menu items present in pinned current source, so screenshots are not proof of current runtime behavior.",
+    "Visible checked automatic/login toggles match documented defaults but do not prove actual registration or scheduler execution. Folder/icon pictures do not qualify matching accuracy or filesystem operations.",
+    "Assets/FileMorrow.icns remains visually unreviewed; no full-repository promotion until its representations are handled."
+  ],
+  "whole_files_read_total": 53,
+  "visual_assets_reviewed_total": 4,
+  "remaining_without_text_or_visual_review": [
+    "Assets/FileMorrow.icns"
+  ],
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
