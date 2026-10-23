@@ -1,0 +1,40 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Three vendored visual-profiler modules read whole, Git pin verified and Python3 syntax parsed. No GUI, target code, child thread or file output launched.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/debug.py",
+      "sha256": "d4b824c0689b94b49b5dd1a0e4b52c625fde6b6c27bf1c26b2078cd9dea52ab2",
+      "python3_syntax": {
+        "result": "SyntaxError",
+        "line": 41,
+        "message": "Missing parentheses in call to 'print'. Did you mean print(...)?"
+      }
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/functionprofiler.py",
+      "sha256": "84ca25c1d25093e97b2db8803dd4ed00c353336edd698444957d6c276dc2e22d",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/profilebrowser.py",
+      "sha256": "ef7556682db17a1f7e10b198d2422631e7f569842cb9ad5f0b95793198863326",
+      "python3_syntax": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 85,
+    "remaining_not_whole_reviewed": 59
+  },
+  "findings": [
+    "debug.py Python2 print statement and profilebrowser.py Python2 except syntax prevent Python3 import. functionprofiler transitively imports profilebrowser.",
+    "Timed runprofile requests KThread.kill without join, then prints done and returns true. Target thread may still run or report may not yet exist, especially blocked native work.",
+    "memorytrack/showprofile/callgraph decorators discard wrapped return values and lack finally handling for error cleanup/reporting. Instrumented behavior differs from plain call.",
+    "runprofilerandshow constructs executable Python expression by direct string concatenation with argv. Quotes/backslashes in ordinary arguments are not preserved as structured arguments; no expression executed in audit.",
+    "Calibration changes global profile.Profile.bias; no prior-state restoration. Fixed default profile.log can be overwritten by repeated/concurrent runs."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
