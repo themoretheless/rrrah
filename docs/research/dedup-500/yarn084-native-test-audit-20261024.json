@@ -1,0 +1,49 @@
+{
+  "repository": "scinos/yarn-deduplicate",
+  "commit": "8a3cfc168cbd43eb09261f05a9ce514ced52b4c0",
+  "build_exit_code": 0,
+  "tests_exit_code": 0,
+  "node": "22.23.4",
+  "npm": "10.9.9",
+  "totals": {
+    "passed": 33,
+    "failed": 0,
+    "suites": 2
+  },
+  "tracked_files_unchanged_after_tests": 24,
+  "resolved_versions": {
+    "typescript": "5.9.3",
+    "jest": "29.7.0",
+    "semver": "7.8.5",
+    "commander": "10.0.1",
+    "@yarnpkg/lockfile": "1.1.0"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/dedup-500/yarn084-install-20261024.log",
+      "sha256": "b27e6265583a69d5075758057b0633f7c24fa7a47c1ec65c2d295ec79db9c0ec"
+    },
+    {
+      "path": "docs/research/dedup-500/yarn084-public-install-20261024.log",
+      "sha256": "a33cb494b2d29dc0e93e0f8eb1d67afd6c8b6963369433dd8b69bc082275cc57"
+    },
+    {
+      "path": "docs/research/dedup-500/yarn084-build-20261024.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/dedup-500/yarn084-tests-20261024.log",
+      "sha256": "5e8704856a738f8be995558023d06e08f3a07f58aec9b0cb3bea85105da814e4"
+    },
+    {
+      "path": "docs/research/dedup-500/yarn084-tests-20261024.json",
+      "sha256": "fc82da4b3539e3ade2a86408f70d175487a7787b412c6f1754a36f929ffdb3e7"
+    }
+  ],
+  "limits": [
+    "Not Node14/16/18 CI matrix or locked Yarn dependency replay.",
+    "Some CLI test close callbacks not explicitly awaited; passing original suite does not prove those process-exit assertions were observed.",
+    "No root project dependencies/lockfiles changed; package domain remains unrelated to file/image content duplicate search.",
+    "Large root yarn.lock not fully reviewed; no whole-repository completion flag."
+  ]
+}

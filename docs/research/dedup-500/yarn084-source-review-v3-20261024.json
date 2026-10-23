@@ -1,0 +1,58 @@
+{
+  "repository": "scinos/yarn-deduplicate",
+  "commit": "8a3cfc168cbd43eb09261f05a9ce514ced52b4c0",
+  "previous_audit": "docs/research/dedup-500/yarn084-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/index.ts",
+      "local": "19-tests--index.ts",
+      "sha256": "0f7b783786a5b500567a98666ce33dfdccc8d6185bdff4970c9f480d374447bb",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/yarn.lock",
+      "local": "20-tests--fixtures--yarn.lock",
+      "sha256": "db52a0b8dbae47dd30b3bae47bba51b68c49f87854c1c91b63f9caf66f120679",
+      "whole_text_read": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "local": "21-CHANGELOG.md",
+      "sha256": "bdf4442888290935d4e5c5cf153b76e6717398530789bd69b94d3165dadf5ac2",
+      "whole_text_read": true
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "local": "22-CODE_OF_CONDUCT.md",
+      "sha256": "8afa46bbb88aa19c5ffa3b14d775fdf76fff20ba7d940a9f511a439ee487cd13",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "23-LICENSE.md",
+      "sha256": "378b8fab2173c99bc10feb12923f5cad00445e3ebad40565373502928ca7fc53",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 23,
+  "tracked_blobs": 24,
+  "remaining_without_whole_review": 1,
+  "findings": [
+    "Complete library tests and bundled CLI lock fixture read; exercise strategy/scopes/exclusions/prerelease/integrity serialization.",
+    "Root Apache2 license read; package file list incorrectly names LICENSE.txt while tracked file LICENSE.md. No package publishing invoked."
+  ],
+  "runtime": {
+    "first_install_exit_code": 1,
+    "first_install_reason": "Default npm registry GitHub Packages returned404 for Babel",
+    "public_registry_install_exit_code": 0,
+    "build_command": "node_modules/.bin/tsc --build",
+    "build_exit_code": 0,
+    "test_status": "jest launched with --runInBand and JSON report"
+  },
+  "limits": [
+    "Dependencies semver-resolved using npm, not pinned Yarn lock replay.",
+    "Remaining root yarn.lock not fully read.",
+    "No production code adopted."
+  ]
+}
