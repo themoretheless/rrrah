@@ -1,0 +1,89 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Support/BrowseSplitLayout.swift",
+      "git_blob": "736a8824a4ce710813fa34ac2ac0941e10deb581",
+      "sha256": "f26f80cc95171d19f8ba8e7d59838dca8b28f2bed9e63c1adad2bb6dd32bd38f",
+      "bytes": 3055,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/BrowseSplitLayoutTests.swift",
+      "git_blob": "c4e6dcdc890aefd96a5bb98b15b996396f0505a8",
+      "sha256": "fb4712e97923e4c014ef1e83e9cc6eec86b4f38adcfde5f54441ef8a6aa9021d",
+      "bytes": 1775,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/SidebarControlPlacement.swift",
+      "git_blob": "bd82fdc8a3304b3687a7657870d8e31700a1eab0",
+      "sha256": "e00c4c8d1ddb2466a5518594eea87b47c3728fb7a10d02c937b11c0e1444188b",
+      "bytes": 1948,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/SidebarControlPlacementTests.swift",
+      "git_blob": "001b2b3a33530f961c6e153fc355a8bd07d9555b",
+      "sha256": "a7e4a5b014847a5fb44f56dc415edf2b9fbfca011cdb2f0c2a42ac98753b7191",
+      "bytes": 2601,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/SkippedFilesPopoverLayout.swift",
+      "git_blob": "eb25f410194588fc2e74ef1ac4b069714fe14c0e",
+      "sha256": "e381371cff577adbad96620b5a4ec42da44d7d6b074ad535c2222ab7bd9bdc89",
+      "bytes": 1407,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/Formatters.swift",
+      "git_blob": "9a48f7bb58d6047d9d45f75cc6bd27c9911ecf2e",
+      "sha256": "4eed107d8b8774ae08bff21bef8879662ae18a5fbaeaa2069a40e4cb50dfd7ab",
+      "bytes": 1696,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/AppSmokeTests.swift",
+      "git_blob": "cbc6f74f9c602ad4841d2029c2ea0dc09821eee6",
+      "sha256": "79f2ef5dc8847bc13c29e5dc3b5e49856724ae8a621821120ed49fa26155d1f4",
+      "bytes": 1174,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 59,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 62,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter BrowseSplitLayoutTests|SidebarControlPlacementTests|AppSmokeTests",
+    "executed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "AppSmokeTests testAppCanInitializeBeforeApplicationLifecycleStarts",
+      "AppSmokeTests testPackageLoads",
+      "BrowseSplitLayoutTests testDefaultLeftFractionKeepsPreviewVisible",
+      "BrowseSplitLayoutTests testDragUpdateReturnsPersistableFraction",
+      "BrowseSplitLayoutTests testStoredFractionIsClampedToKeepPreviewVisible",
+      "SidebarControlPlacementTests testClearFolderSelectionCopyDoesNotSoundLikeDiskDeletion",
+      "SidebarControlPlacementTests testDynamicListsStayBelowPrimaryControls",
+      "SidebarControlPlacementTests testFolderStatusStaysOnOneLineBelowThreshold",
+      "SidebarControlPlacementTests testPrimaryControlsStayInStableTopOrder",
+      "SidebarControlPlacementTests testSkippedFilesScrollViewReachesPopoverEdge",
+      "SidebarControlPlacementTests testTopActionButtonsShareShapeAndSizeConfiguration"
+    ],
+    "log_sha256": "5e6e3dc674541bf61544b6e93d0f1f950f58ad84bcc1afb8e487f7f977a8bbef",
+    "scope": "Full unchanged original package, native XCTest.3layout,6sidebarpolicy,2smoke tests; object app initialization only, no app lifecycle/window launch, no screenshots or interactive resize proof."
+  },
+  "findings": [
+    "BrowseSplitLayout normalizes nonfinite fraction to0.65 and clamps finite fraction0..1; nonpositive/nonfinite total width returns0 or normalized initial fraction. Three original tests cover1000/500width/default/ordinarydrag only. Minwidth sum greater than available space cannot guarantee both minima; caller/window constraints not qualified.",
+    "Sidebar tests verify static control ordering/style flags, two localized clear-selection labels and popover inset constants. These are source/model assertions, not actual rendered control arrangement or clipping tests.",
+    "SkippedFilesPopoverLayout caps height400 but does not reject negative issueCount; actual caller passing negative count not demonstrated. Read only, no extra malformedinput runtime credit.",
+    "DisplayFormatters.duration guards negative/nonfinite seconds, then converts rounded Double to Int without representability bound; percent converts without nonfinite/range guard. Potential malformed numeric trap is source-derived, not reproduced or shown reachable in normal scan. No formatter tests found by source search.",
+    "Two smoke tests check displayName and creation of SimilarVideoFinderApp before app lifecycle; no delivery/signing/window/real scan qualification.",
+    "All seven files read whole and Git verified. No production patch, source adoption, speedup or new complete repository credited."
+  ]
+}
