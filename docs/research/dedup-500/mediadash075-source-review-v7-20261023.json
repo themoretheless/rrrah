@@ -1,0 +1,57 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Fixers/LibraryGuard.cs",
+      "local": "15-LibraryGuard.cs",
+      "git_blob": "83ed62c2683fb6953cdb8bdb05e3aa3f09507c68",
+      "sha256": "a64aa18925dd16663133cbe2a6230cbd82f56219e8ca26e2b4c3b247b0cee6e8",
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/LibraryGuardTests.cs",
+      "local": "16-LibraryGuardTests.cs",
+      "git_blob": "817a96b000150315d84ed158772656f52947e829",
+      "sha256": "7f2031c848697269d202675f811670e3a5d5756fb7e6662381e613bcf0071a6f",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 16,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 567,
+  "original_tests_reported_passed_total": 104,
+  "additional_owned_tests_passed_total": 5,
+  "native_report": {
+    "path": "docs/research/dedup-500/evidence/crackruckles--MediaDash/native-library-guard-original-20261023.trx",
+    "sha256": "b6d5e16b4fabd0616de8cd12be77b0db454b2a613f0ea8eb779c7ede91dc290b",
+    "counters": {
+      "total": "6",
+      "executed": "6",
+      "passed": "6",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "command": "dotnet test Jellyfin.Plugin.MediaDash.Tests/Jellyfin.Plugin.MediaDash.Tests.csproj --no-build --no-restore --filter FullyQualifiedName~LibraryGuardTests",
+    "exit_code": 0
+  },
+  "findings": [
+    "Whole guard and six tests read. All six reported passed on macOS, but WindowsDriveRootMatchesAnySubpath returns immediately on non-Windows. Thus five lexical-check test bodies executed, not Windows drive-root qualification.",
+    "IsUnder uses normalized root, OS-specific case comparison and separator boundary. IsInsideLibrary additionally inspects existing path ancestry for reparse points. No new mutation, symlink or disposal runtime qualification here.",
+    "SweepOrphanSidecars walks configured roots with reparse skipping and inaccessible-directory tolerance, and rechecks each path before deletion. Deferred enumeration exceptions may arise outside the initial try; source-only observation, sweep not invoked.",
+    "DuplicateFixer checks both library membership paths before disposal but does not compare fresh content there. No fixer or sweep invoked, no files in user media touched.",
+    "Review remains partial16/583; 104original tests reported passed includes one platform early return. Five added actual-plugin controls remain distinct. Native scanner/server/fixer/platform completion unproven."
+  ]
+}

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4d9e1f83-8f3f-4320-ae8d-8dab0426647e" name="@tmtl-macbook-pro-m4 2026-10-23 21:51:18" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-23T21:51:18.5553390+04:00" queuing="2026-10-23T21:51:18.5553390+04:00" start="2026-10-23T21:51:18.2625250+04:00" finish="2026-10-23T21:51:18.5574840+04:00" />
+  <TestSettings name="default" id="db349542-3072-40f5-b386-828a00510cc8">
+    <Deployment runDeploymentRoot="_tmtl-macbook-pro-m4_2026-10-23_21_51_18" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="cac84a48-7eb3-4e9d-8db7-7851ecc99854" testId="30e554f8-e96f-e1b7-d681-6b3d676cfd91" testName="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.SiblingFolderWithSamePrefixIsRejected" computerName="tmtl-macbook-pro-m4" duration="00:00:00.0000292" startTime="2026-10-23T21:51:18.5189330+04:00" endTime="2026-10-23T21:51:18.5189330+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cac84a48-7eb3-4e9d-8db7-7851ecc99854" />
+    <UnitTestResult executionId="403a85aa-1616-476e-ac6e-0fd7925796b3" testId="a9cec028-056e-65ea-7680-90fb74acd0df" testName="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.CompletelyOutsidePathIsRejected" computerName="tmtl-macbook-pro-m4" duration="00:00:00.0000406" startTime="2026-10-23T21:51:18.5188070+04:00" endTime="2026-10-23T21:51:18.5188070+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="403a85aa-1616-476e-ac6e-0fd7925796b3" />
+    <UnitTestResult executionId="3fd42ac2-f9e4-4504-a4e4-83c6f38b088a" testId="1c380ab5-2504-1920-e8cf-c762fdd94722" testName="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.PathTraversalAttemptIsRejected" computerName="tmtl-macbook-pro-m4" duration="00:00:00.0025851" startTime="2026-10-23T21:51:18.5176250+04:00" endTime="2026-10-23T21:51:18.5176350+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3fd42ac2-f9e4-4504-a4e4-83c6f38b088a" />
+    <UnitTestResult executionId="768ca7fc-4c30-467d-8c6f-e4993bd78260" testId="8a02560f-a659-e1f6-3a57-4462dcf20b9d" testName="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.FileInsideLibraryIsAllowed" computerName="tmtl-macbook-pro-m4" duration="00:00:00.0000796" startTime="2026-10-23T21:51:18.5189140+04:00" endTime="2026-10-23T21:51:18.5189140+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="768ca7fc-4c30-467d-8c6f-e4993bd78260" />
+    <UnitTestResult executionId="237a6ad9-aada-4093-aab1-5109d8ad6257" testId="75abbe4a-49df-a910-0c85-b6859f8e884e" testName="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.WindowsDriveRootMatchesAnySubpath" computerName="tmtl-macbook-pro-m4" duration="00:00:00.0000314" startTime="2026-10-23T21:51:18.5189670+04:00" endTime="2026-10-23T21:51:18.5189670+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="237a6ad9-aada-4093-aab1-5109d8ad6257" />
+    <UnitTestResult executionId="bc66c86c-307f-4369-80f4-fe622fdc8f55" testId="5d8d4036-e9c3-9bd6-17ac-02a9248f2f57" testName="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.TrailingSeparatorOnRootIsHandled" computerName="tmtl-macbook-pro-m4" duration="00:00:00.0000466" startTime="2026-10-23T21:51:18.5189510+04:00" endTime="2026-10-23T21:51:18.5189510+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc66c86c-307f-4369-80f4-fe622fdc8f55" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.TrailingSeparatorOnRootIsHandled" storage="/users/themoretheless/documents/sources/rrrah/.dedup-work/mediadash075-20261023/upstream/jellyfin.plugin.mediadash.tests/bin/debug/net9.0/jellyfin.plugin.mediadash.tests.dll" id="5d8d4036-e9c3-9bd6-17ac-02a9248f2f57">
+      <Execution id="bc66c86c-307f-4369-80f4-fe622fdc8f55" />
+      <TestMethod codeBase="/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadash075-20261023/upstream/Jellyfin.Plugin.MediaDash.Tests/bin/Debug/net9.0/Jellyfin.Plugin.MediaDash.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests" name="TrailingSeparatorOnRootIsHandled" />
+    </UnitTest>
+    <UnitTest name="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.SiblingFolderWithSamePrefixIsRejected" storage="/users/themoretheless/documents/sources/rrrah/.dedup-work/mediadash075-20261023/upstream/jellyfin.plugin.mediadash.tests/bin/debug/net9.0/jellyfin.plugin.mediadash.tests.dll" id="30e554f8-e96f-e1b7-d681-6b3d676cfd91">
+      <Execution id="cac84a48-7eb3-4e9d-8db7-7851ecc99854" />
+      <TestMethod codeBase="/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadash075-20261023/upstream/Jellyfin.Plugin.MediaDash.Tests/bin/Debug/net9.0/Jellyfin.Plugin.MediaDash.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests" name="SiblingFolderWithSamePrefixIsRejected" />
+    </UnitTest>
+    <UnitTest name="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.WindowsDriveRootMatchesAnySubpath" storage="/users/themoretheless/documents/sources/rrrah/.dedup-work/mediadash075-20261023/upstream/jellyfin.plugin.mediadash.tests/bin/debug/net9.0/jellyfin.plugin.mediadash.tests.dll" id="75abbe4a-49df-a910-0c85-b6859f8e884e">
+      <Execution id="237a6ad9-aada-4093-aab1-5109d8ad6257" />
+      <TestMethod codeBase="/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadash075-20261023/upstream/Jellyfin.Plugin.MediaDash.Tests/bin/Debug/net9.0/Jellyfin.Plugin.MediaDash.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests" name="WindowsDriveRootMatchesAnySubpath" />
+    </UnitTest>
+    <UnitTest name="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.FileInsideLibraryIsAllowed" storage="/users/themoretheless/documents/sources/rrrah/.dedup-work/mediadash075-20261023/upstream/jellyfin.plugin.mediadash.tests/bin/debug/net9.0/jellyfin.plugin.mediadash.tests.dll" id="8a02560f-a659-e1f6-3a57-4462dcf20b9d">
+      <Execution id="768ca7fc-4c30-467d-8c6f-e4993bd78260" />
+      <TestMethod codeBase="/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadash075-20261023/upstream/Jellyfin.Plugin.MediaDash.Tests/bin/Debug/net9.0/Jellyfin.Plugin.MediaDash.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests" name="FileInsideLibraryIsAllowed" />
+    </UnitTest>
+    <UnitTest name="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.PathTraversalAttemptIsRejected" storage="/users/themoretheless/documents/sources/rrrah/.dedup-work/mediadash075-20261023/upstream/jellyfin.plugin.mediadash.tests/bin/debug/net9.0/jellyfin.plugin.mediadash.tests.dll" id="1c380ab5-2504-1920-e8cf-c762fdd94722">
+      <Execution id="3fd42ac2-f9e4-4504-a4e4-83c6f38b088a" />
+      <TestMethod codeBase="/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadash075-20261023/upstream/Jellyfin.Plugin.MediaDash.Tests/bin/Debug/net9.0/Jellyfin.Plugin.MediaDash.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests" name="PathTraversalAttemptIsRejected" />
+    </UnitTest>
+    <UnitTest name="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests.CompletelyOutsidePathIsRejected" storage="/users/themoretheless/documents/sources/rrrah/.dedup-work/mediadash075-20261023/upstream/jellyfin.plugin.mediadash.tests/bin/debug/net9.0/jellyfin.plugin.mediadash.tests.dll" id="a9cec028-056e-65ea-7680-90fb74acd0df">
+      <Execution id="403a85aa-1616-476e-ac6e-0fd7925796b3" />
+      <TestMethod codeBase="/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mediadash075-20261023/upstream/Jellyfin.Plugin.MediaDash.Tests/bin/Debug/net9.0/Jellyfin.Plugin.MediaDash.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Jellyfin.Plugin.MediaDash.Tests.LibraryGuardTests" name="CompletelyOutsidePathIsRejected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="30e554f8-e96f-e1b7-d681-6b3d676cfd91" executionId="cac84a48-7eb3-4e9d-8db7-7851ecc99854" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9cec028-056e-65ea-7680-90fb74acd0df" executionId="403a85aa-1616-476e-ac6e-0fd7925796b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c380ab5-2504-1920-e8cf-c762fdd94722" executionId="3fd42ac2-f9e4-4504-a4e4-83c6f38b088a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a02560f-a659-e1f6-3a57-4462dcf20b9d" executionId="768ca7fc-4c30-467d-8c6f-e4993bd78260" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="75abbe4a-49df-a910-0c85-b6859f8e884e" executionId="237a6ad9-aada-4093-aab1-5109d8ad6257" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5d8d4036-e9c3-9bd6-17ac-02a9248f2f57" executionId="bc66c86c-307f-4369-80f4-fe622fdc8f55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 9.0.21)
+[xUnit.net 00:00:00.02]   Discovering: Jellyfin.Plugin.MediaDash.Tests
+[xUnit.net 00:00:00.07]   Discovered:  Jellyfin.Plugin.MediaDash.Tests
+[xUnit.net 00:00:00.07]   Starting:    Jellyfin.Plugin.MediaDash.Tests
+[xUnit.net 00:00:00.09]   Finished:    Jellyfin.Plugin.MediaDash.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
