@@ -1,0 +1,89 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 22,
+  "upstream_tests_run": true,
+  "environment": {
+    "node": "v22.23.4",
+    "jest": "25.1.0",
+    "mock-fs": "4.11.0",
+    "direct_runtime_dependencies": {
+      "app-root-path": "3.0.0",
+      "enhanced-resolve": "5.7.0",
+      "fast-glob": "3.2.2",
+      "find-package-json": "1.2.0",
+      "lodash": "4.17.19",
+      "mkdirp": "1.0.3"
+    },
+    "transitive_versions": "Current allowed versions installed, not complete historical lock reproduction.",
+    "test_sources": "All three unchanged test files matched pinned Git blobs.",
+    "jest_config": {
+      "rootDir": "isolated runtime directory",
+      "testMatch": [
+        "<rootDir>/__tests__/*.test.js"
+      ],
+      "runInBand": true,
+      "noCache": true,
+      "transform": "Jest default (hoisting enabled)",
+      "environment": "Jest default"
+    }
+  },
+  "original_test_result": {
+    "passed": 6,
+    "failed": 4,
+    "total": 10,
+    "tests": [
+      {
+        "name": "deduplicate transitive dependenices plugin should find duplicated packages",
+        "status": "passed"
+      },
+      {
+        "name": "deduplicate transitive dependenices plugin should use cached result if deps have not changed",
+        "status": "failed"
+      },
+      {
+        "name": "deduplicate transitive dependenices plugin should invalidate cache if yarn.lock changes",
+        "status": "failed"
+      },
+      {
+        "name": "deduplicate transitive dependenices plugin should invalidate cache if patches list changes",
+        "status": "failed"
+      },
+      {
+        "name": "deduplicate transitive dependenices plugin should exclude patches",
+        "status": "failed"
+      },
+      {
+        "name": "deduplicate transitive dependenices plugin should extract correct names from patches",
+        "status": "passed"
+      },
+      {
+        "name": "duplicate-transitive-replacement duplicate transitive dependencies replacement - matching duplicates should return replaced request",
+        "status": "passed"
+      },
+      {
+        "name": "duplicate-transitive-replacement should not deduplicate when package name is partial match",
+        "status": "passed"
+      },
+      {
+        "name": "duplicate-transitive-replacement duplicate transitive dependencies replacement - non-matching duplicates should not modify result",
+        "status": "passed"
+      },
+      {
+        "name": "resolver resolves things",
+        "status": "passed"
+      }
+    ]
+  },
+  "findings": [
+    "With standard Jest transform, all three index tests and one resolver test pass; utils discovery and patch-name extraction pass.",
+    "Three utils cache cases fail ENOENT writing /cache/duplicates-...json; patch-exclusion case returns package-a unexpectedly. Native real-filesystem controls still pass. Failures are preserved without attributing confirmed root cause to product or mock-fs.",
+    "First attempted run disabled transformations and used Node environment; it lost jest.mock hoisting and yielded5/10. Excluded as harness configuration error; correct/default run yielded6/10.",
+    "Source .babelrc not copied into runtime, so this is unchanged test bodies under standard Jest transformation, not complete original Babel/CI/Node12 environment.",
+    "Original tests do not cover reproduced cross-root cache, different-content redirection, ambiguous memo keys or stale negative results.",
+    "No Webpack compiler/package build or universal coverage claimed; both lockfiles still need full text review."
+  ],
+  "full_review_count": 249
+}
