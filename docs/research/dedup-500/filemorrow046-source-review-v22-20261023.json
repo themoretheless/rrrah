@@ -1,0 +1,31 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "Sources/FileMorrow/AppState.swift",
+      "sha256": "e64060f308e064ee950b2a375237c19b1d3dee0025a8bccb0093699a4c5cd031",
+      "ranges": [
+        [
+          1,
+          320
+        ]
+      ],
+      "total_lines": 873
+    }
+  ],
+  "findings": [
+    "AppState initialization creates stores/scanner, starts automatic scheduler and may register launch-at-login after onboarding; it was not instantiated in verification controls.",
+    "Automatic organization checks onboarding, user preference and isWorking, scans then analyzes when model is ready. After organizeApproved returns, status unconditionally reports the precomputed candidate count as automatically organized; actual partial/error handling remains in unread method.",
+    "totalReclaimableSize adds duplicate, archive and installer totals without deduplicating source paths across workflows, potentially counting an archive/installer also present in duplicate groups twice.",
+    "scan itself has no entry isWorking guard and awaits multiple actors while holding a Boolean busy flag; direct overlapping callers can replace shared files/status. Some surrounding entry points do guard, so reachability requires remaining caller review.",
+    "Excerpt passed to local evidence is produced by reviewed 4000-character extractor. Analysis identifies files by path IDs rather than array index, avoiding rescan index drift, but content identity still is not bound.",
+    "minimumConfidence and archiveDays apply lower bounds only; persisted unusually large values are not upper-bounded here. Profile is reloaded during scans; failure diagnostics depend on previously reviewed store behavior."
+  ],
+  "whole_files_read_total": 36,
+  "remaining_tracked_blobs": 22,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
