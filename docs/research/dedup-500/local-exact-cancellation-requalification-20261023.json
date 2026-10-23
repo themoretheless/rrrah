@@ -1,0 +1,28 @@
+{
+  "scope": "Current rrrah-dedup exact-file integration suite; finite authored filesystem fixtures, not universal file/image coverage. Requalification after upstream validation-order and cancellation audit.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "64d467bac80614f82027ec92488d7159c06ff1462e79422123900888e8766345"
+  },
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files",
+  "result": {
+    "exit_code": 0,
+    "passed": 38,
+    "failed": 0,
+    "ignored": 0,
+    "build_seconds": 18.66,
+    "test_seconds": 1.12
+  },
+  "reviewed_contracts": [
+    "Report.complete is false on cancellation, IO, source mutation or resource-limit issues. SymlinkSkipped and NotRegular exclusions do not by themselves indicate an incomplete scan under configured policy.",
+    "Existing verified-scan regression injects one-shot cancellation at every observed checkpoint, requires empty groups and incomplete status, then checks healthy retry.",
+    "Existing nested-root regression checks partition preservation under limits and cancellation.",
+    "Existing late-source-failure regression covers healthy groups surviving other source failures."
+  ],
+  "production_change_required_for_reviewed_cases": false,
+  "limitations": [
+    "Ordinary scan may retain healthy partial results; callers must inspect complete and issues.",
+    "Stable observations are not an atomic filesystem snapshot.",
+    "This run does not validate all visual similarity paths, platforms, formats, or all 500 upstream repositories."
+  ]
+}
