@@ -1,0 +1,81 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupJob.java",
+      "local": "05-TestDedupJob.java",
+      "sha256": "846b95a6078bfd33f09f057fface44eac21e4faf96f62c76932c2e364adb8902",
+      "git_blob": "b755fd2cf919e3af8be6f8b8f3d7ba063e9c62ea",
+      "whole_text_read": true,
+      "lines": 537
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DelimitedLineRecordReader.java",
+      "local": "14-DelimitedLineRecordReader.java",
+      "sha256": "d34e52e0de0f34f16cf26de50e1178ab4d1b7ad797531b2c46997f3823fa4bde",
+      "git_blob": "437d155e4da7f6c7ceac3491db775312252a19e8",
+      "whole_text_read": true,
+      "lines": 184
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DelimitedTextInputFormat.java",
+      "local": "15-DelimitedTextInputFormat.java",
+      "sha256": "f75ebab9cceca492c8e49edddc3ad4b86df5aee5d4b143d7466589efbffa5315",
+      "git_blob": "08d41f44fd8b0e59c0c57d96422a06a396820a15",
+      "whole_text_read": true,
+      "lines": 58
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDelimitedLineRecordReader.java",
+      "local": "16-TestDelimitedLineRecordReader.java",
+      "sha256": "fc5454e7f7d9f7b8dbf33eaac52789638d9376efac2d1773815d36d8522b1c0c",
+      "git_blob": "0d9ee157772888bcc517ce286be1ee25fd3faa44",
+      "whole_text_read": true,
+      "lines": 122
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDelimitedTextInputFormat.java",
+      "local": "17-TestDelimitedTextInputFormat.java",
+      "sha256": "ca0f84647cdb08e099cdfddc9217bdb4f90c9b3829afe786f8827ef698b9d31e",
+      "git_blob": "26f66824c705c166c9a550bde63b4f2e71237bfb",
+      "whole_text_read": true,
+      "lines": 39
+    }
+  ],
+  "whole_files_read_total": 16,
+  "remaining_without_whole_review": 154,
+  "findings": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DelimitedLineRecordReader.java",
+      "finding": "getColumn uses find result without checking -1; last field lacking trailing delimiter gives negative length to Text.set. column<=0 also yields invalid start, without upfront validation.",
+      "qualification": "Source-derived; no native Java/Hadoop execution"
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DelimitedLineRecordReader.java",
+      "finding": "getColumn combines Text byte offsets with Java String.length UTF16 delimiter size; multibyte UTF8 delimiter may advance into delimiter bytes.",
+      "qualification": "Source-derived; real Hadoop Text behavior still needs execution"
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDelimitedLineRecordReader.java",
+      "finding": "10tests cover columns before a later delimiter and ASCII delimiters; no last field, absent field, invalid column, multibyte delimiter or quoted delimiter test. Quotes case has no delimiter inside quotes."
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupJob.java",
+      "finding": "Delimited job example passes misspelled -delimeter, while populateConfiguration accepts -delimiter; comma default masks this typo. Sequence-file result checks do not remove seen expected values, so repeated expected keys could satisfy count+membership without proving complete expected coverage.",
+      "qualification": "Source-derived test coverage limitations; tests not run"
+    }
+  ],
+  "upstream_tests_run": false,
+  "runtime_attempt": {
+    "local_java_home": "No Java Runtime found",
+    "jdk_metadata_endpoint": "https://api.adoptium.net/v3/assets/latest/21/hotspot?architecture=aarch64&image_type=jdk&os=mac&vendor=eclipse",
+    "result": "HTTP403; no JDK downloaded or installed",
+    "scope": "Setup failure only, not upstream test failure"
+  },
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
