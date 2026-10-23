@@ -1,0 +1,55 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/build.gradle.kts",
+      "sha256": "4b49965746e89aa6c5c31375830b7bf9961ccc10f5eef79af15a96065f977e62",
+      "lines": 186,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/AndroidManifest.xml",
+      "sha256": "6457e9ecfea4c24010a67dd98d2b51e038da8cf36c262ee0a081c80e04b4e510",
+      "lines": 133,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/util/PermissionManager.kt",
+      "sha256": "05e57b1c1034f98a3e4eb473b2c9ddd319b97916abc5d5fbed35a7272cf9ccce",
+      "lines": 87,
+      "git_blob_verified": true
+    },
+    {
+      "path": "build.gradle.kts",
+      "sha256": "44428e59bc9a6282f3950dca51a46fc79f5b366a5c81e9bb93787cdf9e2440ae",
+      "lines": 12,
+      "git_blob_verified": true
+    },
+    {
+      "path": "settings.gradle.kts",
+      "sha256": "dccc831c8b027d85bafac8f5d21d9afec0a4499acccac189cd96b600f593addb",
+      "lines": 22,
+      "git_blob_verified": true
+    },
+    {
+      "path": "gradle.properties",
+      "sha256": "773ebbad4dcb4ec436e86cc2145e4c0be4764d8a1ccc8ac464b4de899ebc6d10",
+      "lines": 30,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "minSdk 29 resolves prior GIF ImageDecoder SDK concern: the configured minimum already exceeds its basic introduction; no broader decoder compatibility proved. compile/target SDK36 and JVM17 configured.",
+    "Release signing configuration eagerly casts absent CLEANSWEEP_RELEASE_STORE_FILE and KEY_ALIAS properties; tracked gradle.properties defines neither. Fresh builds need external properties even before release signing. Actual Gradle configuration not executed.",
+    "Hilt plugin is 2.57.1 while app Hilt library/compiler dependencies are 2.59; Kotlin plugin2.2.20 and KSP2.2.0-2.0.2 differ. No compatibility failure inferred without build.",
+    "PermissionManager returns true below Android11 without checking legacy storage grant. Its comment assumes legacy permission handling elsewhere; activity/onboarding callers still unread.",
+    "Manifest declares nonexported dataSync scanner service, wake lock and notification permissions, and primary-storage access declarations. These do not prove exhaustive discovery, especially given reviewed path/extension exclusions. No permission prompt shown or settings changed.",
+    "Build declares unit/instrumentation dependencies but pinned tree inventory has no test source paths. Full Android package/runtime qualification remains missing."
+  ],
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 81,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
