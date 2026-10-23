@@ -1,0 +1,109 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 475,
+  "partial_source_files_read": [
+    {
+      "path": "copyparty/httpcli.py",
+      "local": "16-httpcli.py",
+      "git_blob": "24da16a978742fbc842f7950ffb1d0ec780bd042",
+      "sha256": "8396a45c7c371d4d67553d03141e4593ddb6896da8607936f827e1cb7165b1f5",
+      "whole_text_read": false,
+      "ranges": [
+        "3042-3119",
+        "3280-3578"
+      ],
+      "complete_functions_read": [
+        "HttpCli.bakflip",
+        "HttpCli.handle_search",
+        "HttpCli.handle_post_binary"
+      ]
+    },
+    {
+      "path": "copyparty/util.py",
+      "local": "15-util.py",
+      "whole_text_read": false,
+      "additional_ranges": [
+        "3453-3530"
+      ],
+      "complete_function_read": "hashcopy"
+    }
+  ],
+  "native_chunk_retry": {
+    "harness": "docs/research/dedup-500/copyparty082-chunk-retry-control-20261023.py",
+    "harness_sha256": "42c0cdd85ce141b5cb729436adb7b78b3c2e69ff131862e1a13e84c7fee34286",
+    "artifact": "docs/research/dedup-500/copyparty082-chunk-retry-result-20261023.json",
+    "artifact_sha256": "988f842b256c727b5e0c1b64f0bd95e19139f2a69de0b28fdebddd680343cc59",
+    "result": {
+      "rows": [
+        {
+          "bad_payload": "two",
+          "bad_status": "HTTP/1.1 400 Bad Request",
+          "bad_chunk_stays_needed_and_unlocked": true,
+          "temporary_after_bad_chunk": "two",
+          "retry_handshake_requests_chunk": true,
+          "retry_status": "HTTP/1.1 200 OK",
+          "final_file": "one",
+          "final_size": 3,
+          "declared_size": 3,
+          "matches_requested_bytes": true,
+          "matches_declared_chunk_hash": true
+        },
+        {
+          "bad_payload": "ones",
+          "bad_status": "HTTP/1.1 400 Bad Request",
+          "bad_chunk_stays_needed_and_unlocked": true,
+          "temporary_after_bad_chunk": "ones",
+          "retry_handshake_requests_chunk": true,
+          "retry_status": "HTTP/1.1 200 OK",
+          "final_file": "ones",
+          "final_size": 4,
+          "declared_size": 3,
+          "matches_requested_bytes": false,
+          "matches_declared_chunk_hash": false
+        }
+      ],
+      "scope": "Original HttpCli/up2k/SQLite/file handling with original virtual HTTP fixtures, owned tempfile allocator and safededup50. Debug corrupt-byte backup disabled. Two bounded input/retry sequences only; not real network server or all upload/race/platform behavior."
+    },
+    "exit_code": 0,
+    "command": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/bin/python docs/research/dedup-500/copyparty082-chunk-retry-control-20261023.py .dedup-work/copyparty082-20261023 .dedup-work/copyparty082-chunk-retry-20261023"
+  },
+  "rrrah_native_cache_counterpart": {
+    "harness": "docs/research/dedup-500/rrrah-cache-shrink-control-20261023.rs",
+    "harness_sha256": "b81064366895607869ac7e94328c5f4032c06297bdfee524b59f2bdabee3ba61",
+    "library": ".dedup-work/local-sequence-target-20261021/debug/deps/librrrah_dedup-2b35dfcefd220434.rlib",
+    "compile_exit_code": 0,
+    "run_exit_code": 0,
+    "result": {
+      "old_records": 64,
+      "old_bytes": 23088,
+      "empty_cases": 3,
+      "one_record_cases": 4,
+      "seven_record_cases": 10,
+      "final_lengths": [
+        48,
+        408,
+        2568
+      ]
+    },
+    "prepublication_cancellation_and_retry_cases": 17,
+    "scope": "Actual public save_atomic/write/load/get API from current decode-feature library;64records to0/1/7records, cancellation at allobservedcallback checkpoints. No production source change or Cargo testcount increment; not diskfailure/powerloss/platform/all concurrent writers qualification.",
+    "library_sha256": "8e4858e6a763b7cca0022b1c2a9d4717fa2838689f9dd4e1aa88932cf556f2a3",
+    "compiler": "rustc+1.98.1",
+    "run_command": ".dedup-work/rrrah-cache-shrink-control-20261023 .dedup-work/rrrah-cache-shrink-owned-20261023",
+    "selected_inputs_checked_unchanged": 457,
+    "selected_input_manifest": "docs/research/dedup-500/joint-library-selected-inputs-20261023.json"
+  },
+  "findings": [
+    "Original virtualHTTP/up2k/SQLite onownedfiles: wrong3bytepayload(two) fordeclaredone rejected400, chunkremainsneeded/unlocked, correctretryone returns200 andfileisone. Normalinvalidcontentrecovery baselineconfirmed.",
+    "Wrong4bytepayload(ones) fordeclared3byteone rejected400, butcorrect3byteretryone returns200/thank whilefinalfile remains4byteones. Exactfullfilehash mismatchesdeclaredchunkhash; originalGETconfirmsactualstoredbytes. This finite stale-tail-after-retry counterexample reproduced without realnetworkserver/userdata.",
+    "handle_post_binary checks chunkdigest afterwriting, thenonerrorfinallyunlockswritten/locked; no failed-writefiletruncation beforecorrectedretry observed inthisfinitecase. Debug bad-chunk backup explicitlydisabled soallIOstaysowned.",
+    "No issue/PR/message sent upstream and no foreign production file changed. Original testfixtures reused withprivate allocator/configpath; source pins preserved.",
+    "Own public atomiccachewrites: all17prepublication callbackcancellations leaveprevious23088bytecacheexact andonepublishedfile, thenfreshretryreplacewith0/1/7records exactfreshserializedbytes48/408/2568; everykeycheckedafterload, no leftovertail/orphanfiles. Not same APIasupload but directlyqualifies atomicpersistence/shrink/retry boundary.",
+    "Wholefile review credit remains11/486; HTTP/utilmodulespartial,475wholeblobsremain. FullLoFTRintegration gate continues separately, universalgoalnotcomplete."
+  ]
+}

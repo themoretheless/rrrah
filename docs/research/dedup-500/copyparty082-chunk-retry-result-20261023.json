@@ -1,0 +1,31 @@
+{
+  "rows": [
+    {
+      "bad_payload": "two",
+      "bad_status": "HTTP/1.1 400 Bad Request",
+      "bad_chunk_stays_needed_and_unlocked": true,
+      "temporary_after_bad_chunk": "two",
+      "retry_handshake_requests_chunk": true,
+      "retry_status": "HTTP/1.1 200 OK",
+      "final_file": "one",
+      "final_size": 3,
+      "declared_size": 3,
+      "matches_requested_bytes": true,
+      "matches_declared_chunk_hash": true
+    },
+    {
+      "bad_payload": "ones",
+      "bad_status": "HTTP/1.1 400 Bad Request",
+      "bad_chunk_stays_needed_and_unlocked": true,
+      "temporary_after_bad_chunk": "ones",
+      "retry_handshake_requests_chunk": true,
+      "retry_status": "HTTP/1.1 200 OK",
+      "final_file": "ones",
+      "final_size": 4,
+      "declared_size": 3,
+      "matches_requested_bytes": false,
+      "matches_declared_chunk_hash": false
+    }
+  ],
+  "scope": "Original HttpCli/up2k/SQLite/file handling with original virtual HTTP fixtures, owned tempfile allocator and safededup50. Debug corrupt-byte backup disabled. Two bounded input/retry sequences only; not real network server or all upload/race/platform behavior."
+}
