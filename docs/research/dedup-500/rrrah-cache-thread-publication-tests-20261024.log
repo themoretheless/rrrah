@@ -1,0 +1,27 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.55s
+     Running tests/cache.rs (.dedup-work/local-sequence-target-20261021/debug/deps/cache-a7da2044742e95e0)
+
+running 19 tests
+test cache_publication_child ... ok
+test every_cache_truncation_is_unexpected_eof_and_complete_stream_retries ... ok
+test checksummed_wire_rejects_invalid_statistics_and_duplicate_keys ... ok
+test cancellation_during_repeated_interruption_is_observed_at_every_cache_byte ... ok
+test repeated_interruption_at_cache_end_remains_cancellable ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test zero_budget_and_owned_values_preserve_previous_entry ... ok
+test interrupted_reads_at_every_wire_boundary_retry_without_accepting_trailing_bytes ... ok
+test every_content_recipe_and_frame_key_bit_survives_persistence ... ok
+test every_serialized_bit_corruption_is_rejected ... ok
+test interrupted_writes_retry_or_cancel_at_every_wire_byte ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test cache_preserves_every_bit_of_all_transform_hash_channels ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test file_size_limit_during_temp_write_preserves_previous_cache_and_retry ... ok
+test unwritable_parent_refuses_before_publication_and_preserves_retry ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+test concurrent_threads_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.48s
+

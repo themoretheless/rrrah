@@ -1,0 +1,47 @@
+{
+  "reference_finding": "Pinned squeez091 CurrentSession shared temporary publication permits corrupted snapshots; see prior external review.",
+  "reference_audit": "docs/research/dedup-500/squeez091-source-review-v11-20261024.json",
+  "own_regression": {
+    "path": "crates/rrrah-dedup/tests/cache.rs",
+    "test": "concurrent_threads_publish_only_complete_single_writer_caches",
+    "source_sha256": "a54d4c31cc27ea6dac88ef953a2784f368fbb259ef04ad8a70370d9d0886c5a2",
+    "writer_threads": 4,
+    "writes_per_thread": 100,
+    "total_successful_publications": 400,
+    "records_per_publication": 64,
+    "initial_writer": 0,
+    "writer_ids": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "reader": "Concurrent parent thread repeatedly loads and validates published destination until all workers finish.",
+    "oracle": [
+      "Published file decodes and validates wire checksum/format",
+      "Exactly one writer recipe present",
+      "All64 expected keys and32 transform hash channels per record agree with that writer",
+      "No key belonging to another writer is present",
+      "Final publication belongs to a nonbaseline writer",
+      "Only destination remains in directory after all scoped workers join"
+    ],
+    "coordination": "Five-party starting barrier; scoped threads join before directory cleanup;30-second deadline also supplied through writer cancellation checkpoints.",
+    "scope_note": "One finite observed schedule. Reader validates each snapshot it reads, not every intermediate version and not all possible interleavings."
+  },
+  "validation": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test cache",
+    "passed": 19,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "raw_log": "docs/research/dedup-500/rrrah-cache-thread-publication-tests-20261024.log",
+    "platform": "macOS; Windows/Linux not exercised in this run",
+    "scope": "Entire cache integration target, including publication child helper; not all features or all dedup targets"
+  },
+  "implementation": "Added permanent regression test; production cache already uses independent temporary files and checked publication. No foreign implementation copied.",
+  "limits": [
+    "No universal scheduler, power-loss, disk-full, network-filesystem or all-filesystem guarantee.",
+    "No new upstream repository files credited this turn; current091 review remains incomplete.",
+    "Unrelated workspace changes preserved. Native pHash.org/ASAN remains skipped."
+  ]
+}

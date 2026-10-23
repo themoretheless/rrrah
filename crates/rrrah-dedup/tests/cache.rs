@@ -443,6 +443,50 @@ fn concurrent_process_writers_publish_only_complete_single_writer_caches() {
 }
 
 #[test]
+fn concurrent_threads_publish_only_complete_single_writer_caches() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("cache.bin");
+    process_fixture(0).save_atomic(&path, || false).unwrap();
+    let start = std::sync::Barrier::new(5);
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
+    std::thread::scope(|scope| {
+        let writers = (1..=4)
+            .map(|writer| {
+                let path = &path;
+                let start = &start;
+                scope.spawn(move || {
+                    let cache = process_fixture(writer);
+                    start.wait();
+                    for _ in 0..100 {
+                        cache
+                            .save_atomic(path, || std::time::Instant::now() >= deadline)
+                            .unwrap();
+                    }
+                })
+            })
+            .collect::<Vec<_>>();
+        start.wait();
+        let mut reads = 0;
+        loop {
+            let cache = FingerprintCache::load_file(&path, 64, || false).unwrap();
+            published_writer(&cache);
+            reads += 1;
+            if writers.iter().all(std::thread::ScopedJoinHandle::is_finished) {
+                break;
+            }
+            assert!(std::time::Instant::now() < deadline, "cache threads timed out");
+            std::thread::yield_now();
+        }
+        for writer in writers {
+            writer.join().unwrap();
+        }
+        assert!(reads > 0);
+    });
+    assert!(published_writer(&FingerprintCache::load_file(&path, 64, || false).unwrap()) > 0);
+    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
+}
+
+#[test]
 fn process_exit_during_temp_write_preserves_previous_publication_and_retry() {
     // 8: partial records; 67: synchronized complete file, before replacement.
     for crash_at in [8, 67] {
