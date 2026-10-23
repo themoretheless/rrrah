@@ -148,7 +148,7 @@ impl FingerprintCache {
         let count = u64::try_from(self.entries.len()).map_err(|_| CacheError::Budget)?;
         let mut hash = blake3::Hasher::new();
         for header in [MAGIC.as_slice(), count.to_le_bytes().as_slice()] {
-            output.write_all(header)?;
+            write_all_cancellable(&mut output, header, &cancel)?;
             hash.update(header);
         }
         for (key, fp) in &self.entries {
@@ -172,13 +172,13 @@ impl FingerprintCache {
             for value in fp.mean_linear_rgb.into_iter().chain([fp.luminance_stddev]) {
                 append(&value.to_bits().to_le_bytes());
             }
-            output.write_all(&record)?;
+            write_all_cancellable(&mut output, &record, &cancel)?;
             hash.update(&record);
         }
         if cancel() {
             return Err(CacheError::Cancelled);
         }
-        output.write_all(hash.finalize().as_bytes())?;
+        write_all_cancellable(&mut output, hash.finalize().as_bytes(), &cancel)?;
         Ok(())
     }
 
@@ -265,6 +265,28 @@ impl FingerprintCache {
         }
         Ok(cache)
     }
+}
+
+// Preserve the normal write checkpoints while observing cancellation if an
+// Interrupted error would otherwise keep write_all retrying indefinitely.
+fn write_all_cancellable(
+    output: &mut impl Write,
+    mut bytes: &[u8],
+    cancel: &impl Fn() -> bool,
+) -> Result<(), CacheError> {
+    while !bytes.is_empty() {
+        match output.write(bytes) {
+            Ok(0) => return Err(CacheError::Io(std::io::ErrorKind::WriteZero.into())),
+            Ok(count) => bytes = &bytes[count..],
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => {
+                if cancel() {
+                    return Err(CacheError::Cancelled);
+                }
+            }
+            Err(error) => return Err(CacheError::Io(error)),
+        }
+    }
+    Ok(())
 }
 
 // read_exact retries Interrupted internally without calling the cancellation

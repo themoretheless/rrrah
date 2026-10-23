@@ -1,0 +1,20 @@
+{
+  "scope": "rrrah-dedup cache stream write interruption and cancellation",
+  "before_fix": "Bounded reproducer failed at byte0 with Io(Other): standard write_all retried interruptions without cancellation.",
+  "fix": "Internal write loop retries Interrupted and checks cancellation after each interruption, preserving existing ordinary write checkpoints. Other errors propagate and zero write reports WriteZero.",
+  "verification": {
+    "wire_positions_tested": 408,
+    "single_interruption_exact_output_each_position": true,
+    "repeated_interruptions_cancel_after_two_each_position": true,
+    "partial_stream_equals_expected_prefix": true,
+    "cache_integration_tests_passed": 15,
+    "cache_unit_tests_passed": 2,
+    "atomic_publication_process_exit_and_retry_tests_passed": true
+  },
+  "limits": [
+    "Synthetic Write control, no real OS signal injection.",
+    "A blocking Write implementation still requires its own timeout or interruption.",
+    "Partial stream is permitted on write failure; atomic save remains required for destination preservation.",
+    "Full all-case objective and remaining repository reviews not complete."
+  ]
+}

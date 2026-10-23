@@ -655,3 +655,81 @@ fn cancellation_during_repeated_interruption_is_observed_at_every_cache_byte() {
         assert_eq!(interruptions.get(), 2, "position {at}");
     }
 }
+
+#[test]
+fn interrupted_writes_retry_or_cancel_at_every_wire_byte() {
+    use std::{
+        cell::Cell,
+        io::{self, Write},
+    };
+    struct Writer<'a> {
+        bytes: Vec<u8>,
+        at: usize,
+        attempts: &'a Cell<usize>,
+        repeat: bool,
+    }
+    impl Write for Writer<'_> {
+        fn write(&mut self, input: &[u8]) -> io::Result<usize> {
+            if self.bytes.len() == self.at && (self.repeat || self.attempts.get() == 0) {
+                self.attempts.set(self.attempts.get() + 1);
+                // Bound the old write_all reproducer instead of spinning indefinitely.
+                return Err(if self.attempts.get() <= 3 {
+                    io::ErrorKind::Interrupted
+                } else {
+                    io::ErrorKind::Other
+                }
+                .into());
+            }
+            let count = input.len().min(1);
+            self.bytes.extend_from_slice(&input[..count]);
+            Ok(count)
+        }
+        fn flush(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+    }
+    let key = CacheKey {
+        content: [0; 32],
+        recipe: [1; 32],
+        frame_index: 0,
+    };
+    let mut cache = FingerprintCache::default();
+    cache
+        .insert(
+            key,
+            Fingerprint {
+                variants: [[0; 4]; 8],
+                mean_linear_rgb: [0.; 3],
+                luminance_stddev: 0.,
+            },
+            1,
+        )
+        .unwrap();
+    let mut expected = Vec::new();
+    cache.write(&mut expected, || false).unwrap();
+    for at in 0..expected.len() {
+        let attempts = Cell::new(0);
+        let mut writer = Writer {
+            bytes: Vec::new(),
+            at,
+            attempts: &attempts,
+            repeat: false,
+        };
+        cache.write(&mut writer, || false).unwrap();
+        assert_eq!(writer.bytes, expected, "retry at {at}");
+        attempts.set(0);
+        let mut writer = Writer {
+            bytes: Vec::new(),
+            at,
+            attempts: &attempts,
+            repeat: true,
+        };
+        let result = cache.write(&mut writer, || attempts.get() >= 2);
+        assert!(
+            matches!(result, Err(rrrah_dedup::cache::CacheError::Cancelled)),
+            "cancel at {at}: {result:?}"
+        );
+        assert_eq!(attempts.get(), 2, "cancel at {at}");
+        assert_eq!(writer.bytes, expected[..at], "partial stream at {at}");
+    }
+}
