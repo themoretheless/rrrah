@@ -8,7 +8,7 @@
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 12,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "pyFileFixity/lib/hasher.py",
@@ -97,6 +97,8 @@
   ],
   "detailed_review_evidence": [
     "pyfilefixity044-source-review-v1-20261023.json",
-    "pyfilefixity044-source-review-v2-20261023.json"
-  ]
+    "pyfilefixity044-source-review-v2-20261023.json",
+    "pyfilefixity044-source-review-v3-20261023.json"
+  ],
+  "upstream_tests_scope": "One original unittest method: TestHasher.test_hasher only; integrity/recovery/ECC tests not run."
 }

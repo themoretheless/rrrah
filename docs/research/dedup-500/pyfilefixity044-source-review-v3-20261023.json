@@ -1,0 +1,23 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Original test_hasher.py executed unchanged with original hasher.py, _compat.py and aux_tests.py in isolated cache namespace package. setup_module is not invoked by unittest; test_hasher itself uses no fixture directory or file mutation.",
+  "result": {
+    "command": "python3 -m unittest pyFileFixity.tests.test_hasher -v",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_hasher (pyFileFixity.tests.test_hasher.TestHasher.test_hasher)\nhasher: test hashes ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
+  },
+  "passed_test_methods": 1,
+  "assertion_scope": "Known vectors and lengths for six hash modes, constructor rejection of unknown algorithm, hash-call rejection after invalid algo mutation. Does not prove collision resistance or exact file equality.",
+  "source_sha256": {
+    "pyFileFixity/lib/hasher.py": "32c68f08c2a89f8441c661d92bbd5169d5e3070ea70a706e5b14df9bcc6a39ee",
+    "pyFileFixity/lib/_compat.py": "5d9de3026eb20d45f27582f679767c1b6f2ff4b355b1cfbf0b15e45779ec533a",
+    "pyFileFixity/tests/test_hasher.py": "e15710c251797d068d63329c77eb6e3d47497c651711c0b36f644410cfd631a3",
+    "pyFileFixity/tests/aux_tests.py": "2b61cf4966126585c7995c1b4db4beec168eb784c36256a7c9a4e0f0cdd51fcc"
+  },
+  "integrity_tests_run": false,
+  "integrity_test_dependencies": "Current system Python lacks tqdm, PIL, pytest; bundled Python has PIL but lacks tqdm and pytest. No dependency installation performed.",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
