@@ -1,0 +1,108 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v16-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "graphApi.py",
+      "local": "74-graphApi.py",
+      "sha256": "adc1d541ebe4cca19aa98718ab16ad5db2763c7180da2fea39c7200eaba4e43e",
+      "whole_text_read": true,
+      "lines": 131
+    },
+    {
+      "path": "invertDb.py",
+      "local": "75-invertDb.py",
+      "sha256": "50c8e99237aa02c4a3a6c9f2a2952b10a7ed8a8ff83b20d4a58fe02bc9964651",
+      "whole_text_read": true,
+      "lines": 110
+    },
+    {
+      "path": "loader.py",
+      "local": "76-loader.py",
+      "sha256": "89778fe623bb778119d30cb34e4e6cf8e673a3e3bdcab610b9ebb0bdfbbb414f",
+      "whole_text_read": true,
+      "lines": 145
+    },
+    {
+      "path": "scanner/uiFrontend.py",
+      "local": "77-scanner--uiFrontend.py",
+      "sha256": "0406379acebcb7a9cf017efc2220ce5c03788dd34e8cca144ff032164243e2fa",
+      "whole_text_read": true,
+      "lines": 87
+    }
+  ],
+  "whole_text_files_read_total": 77,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 83,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 71,
+  "authored_controls": {
+    "intra095-loader-control": {
+      "result": {
+        "cases": [
+          {
+            "entries": 3,
+            "expected_edges": 3,
+            "missing_edges": 3,
+            "saved_edges": 0,
+            "search_calls_completed": 3,
+            "unexpected_edges": 0
+          },
+          {
+            "entries": 51,
+            "expected_edges": 1275,
+            "missing_edges": 0,
+            "saved_edges": 1275,
+            "search_calls_completed": 51,
+            "unexpected_edges": 0
+          },
+          {
+            "entries": 53,
+            "expected_edges": 1378,
+            "missing_edges": 1,
+            "saved_edges": 1377,
+            "search_calls_completed": 53,
+            "unexpected_edges": 0
+          }
+        ],
+        "scope": "Exact original do_search/extract_edges bodies with real ThreadPoolExecutor;owned constant fingerprint entries,complete tree-query and recording DB/progress adapters;no actual tree/database/graph services"
+      },
+      "exit_code": 0
+    },
+    "intra095-graph-control": {
+      "result": {
+        "batch_parameters": [
+          {
+            "from_fspath": "owned-a",
+            "from_intpath": "page-a",
+            "from_rid": 1,
+            "to_fspath": "owned-b",
+            "to_intpath": "page-b",
+            "to_rid": 2
+          }
+        ],
+        "batch_queries": 1,
+        "scope": "Exact original graph functions and methods;callback/session/transaction adapters,no Neo4j driver or network",
+        "single_link_error": "add_phash4_link() missing 2 required positional arguments: 'from_intpath' and 'to_intpath'"
+      },
+      "exit_code": 0
+    }
+  },
+  "findings": [
+    "Original Importer.extract_edges consumes futures only when active exceeds50. End-of-loop pending futures are waited for by ThreadPoolExecutor shutdown but their results are never merged or persisted. Native original bodies with real executor and recording DB adapter confirm3entries save0of3edges,51save1275of1275,53save1377of1378. All search calls completed.",
+    "The51-entry positive control demonstrates the drain threshold;53-entry residual pair is lost despite completed workers. This is result collection failure, not worker failure or actual database durability evidence.",
+    "Original GraphApi.insert_link unpacks2-tuples and omits from_intpath/to_intpath required by add_phash4_link. Native callback adapter raisesTypeError before any query. insert_link_batch using3-tuples preserves both member paths and emits one query in positive control.",
+    "Source-only: loader excludes falsy pHash0 in loading and tree construction. Earlier modules intentionally classify some common hashes as uninformative; this policy must not be conflated with exact byte identity.",
+    "Source-only: TreeInverter.process_item cross-links whenever status is nonempty, while ProcessArchive may return nonempty error statuses with bestMatchNone. No cross-link or destructive processing was executed.",
+    "Source-only: UiReadout maintains progress from queue counts and exits on run flag; no progress total or queue-empty state establishes completed hashing or full corpus coverage. No worker or UI threads were started."
+  ],
+  "transfer_decision": "Drain and observe every submitted task result before final publication; qualify small workloads and incomplete final batches. Preserve archive member paths in graph edges. No foreign production code adopted.",
+  "limits": [
+    "83of154 whole tracked files:77text,6visual;71remain.",
+    "Authored executor/query controls are not original upstream tests. Prior24 original tests remain18passes,1failure,5errors.",
+    "No PostgreSQL/Neo4j services,graph publication,processDownload invocation or filesystem mutations.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
