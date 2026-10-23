@@ -1,0 +1,36 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "classtracker.py whole read and pinned blob verified; original selected classes exercised without starting background thread or constructor injection",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/classtracker.py",
+    "sha256": "38866bdc24ebbdb1db5cdcfe7a191156a7091229279f3dbfe55af2653ccc6e92"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 113,
+    "remaining_not_whole_reviewed": 31
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-class-monitor-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "9d6a0a971bb211f2b4cdd95d2f49e6dd79b0a785",
+    "source_sha256": "38866bdc24ebbdb1db5cdcfe7a191156a7091229279f3dbfe55af2653ccc6e92",
+    "scope": "Exact AST classes, direct run with bounded callback and no-op sleep; actual Thread constructed but never started",
+    "snapshots_despite_prior_stop": 1,
+    "modern_thread_stop_error": "'PeriodicThread' object has no attribute 'isAlive'",
+    "snapshot_lock_shared_by_trackers": true,
+    "snapshot_total_uses_vsz": 100
+  },
+  "findings": [
+    "PeriodicThread.run resets stop=False on entry, discarding a preexisting stop request. Direct bounded run reproduces a snapshot despite prior stop, without live thread scheduling.",
+    "stop_periodic_snapshots uses deprecated isAlive; modern Thread class raises AttributeError. Reproduced on constructed but never-started original PeriodicThread.",
+    "Snapshot.total selects ProcessMemoryInfo.vsz when available, then asizeof_total, then tracked_total. These are distinct measurement domains; reproduced vsz100 selected over rss20.",
+    "snapshot_lock is class-level and shared across ClassTracker instances. Verified identity; this serializes snapshot calls but does not lock track_object/detach mutations or freeze application objects.",
+    "create_snapshot sorts tracked objects by birth for deterministic shared-reference attribution; source acknowledges shared-data ownership and asynchronous inconsistency limitations. No exact ownership or atomic snapshot proof.",
+    "History retains TrackedObject records and snapshots after object death, and keep=True intentionally retains strong object references. No history/sample cap; observer growth unbenchmarked.",
+    "track_object verifies weak reference before skipping an existing id, explicitly handling id reuse. Positive static property, not a file-content identity mechanism.",
+    "track_class injects constructor before original initialization completes; failed constructors can still leave lifetime tracking records. Detach restores saved constructor, without coordinating other trackers/instrumentation. No injection performed."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
