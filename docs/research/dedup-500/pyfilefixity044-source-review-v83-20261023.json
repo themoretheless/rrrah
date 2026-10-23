@@ -1,0 +1,175 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Independent full adaptive hash/parity track reconstruction for available original text/ZIP fixtures. Reuses independent bitwise encoder control, not upstream ECC package.",
+  "control": "docs/research/dedup-500/pyfilefixity044-adaptive-parity-control-20261023.py",
+  "control_result": {
+    "scope": "Independent exact MD5+ECC reconstruction of adaptive tracks for available original fixtures, source-defined defaults and explicit complete track consumption; no imported decoder or repair",
+    "records": [
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/testaa.txt",
+        "bytes_covered": 8,
+        "track_bytes_covered": 128,
+        "verified_blocks": 1,
+        "message_sizes": [
+          159
+        ]
+      },
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+        "bytes_covered": 6,
+        "track_bytes_covered": 128,
+        "verified_blocks": 1,
+        "message_sizes": [
+          159
+        ]
+      },
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+        "bytes_covered": 2048,
+        "track_bytes_covered": 1355,
+        "verified_blocks": 12,
+        "message_sizes": [
+          159,
+          159,
+          159,
+          159,
+          159,
+          159,
+          159,
+          184,
+          189,
+          195,
+          201,
+          207
+        ]
+      },
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+        "bytes_covered": 253,
+        "track_bytes_covered": 256,
+        "verified_blocks": 2,
+        "message_sizes": [
+          159,
+          159
+        ]
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/testaa.txt",
+        "bytes_covered": 8,
+        "track_bytes_covered": 128,
+        "verified_blocks": 1,
+        "message_sizes": [
+          159
+        ]
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+        "bytes_covered": 6,
+        "track_bytes_covered": 128,
+        "verified_blocks": 1,
+        "message_sizes": [
+          159
+        ]
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+        "bytes_covered": 2048,
+        "track_bytes_covered": 1355,
+        "verified_blocks": 12,
+        "message_sizes": [
+          159,
+          159,
+          159,
+          159,
+          159,
+          159,
+          159,
+          184,
+          189,
+          195,
+          201,
+          207
+        ]
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+        "bytes_covered": 253,
+        "track_bytes_covered": 256,
+        "verified_blocks": 2,
+        "message_sizes": [
+          159,
+          159
+        ]
+      }
+    ],
+    "verified_blocks": 32,
+    "single_byte_parity_negative_controls": 32,
+    "skipped_missing_local_fixtures": [
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/alice.pdf"
+      },
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/tux.jpg"
+      },
+      {
+        "database": "test_repair_ecc_sa_check.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_algo.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/alice.pdf"
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/tux.jpg"
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_one_file.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_structural_adaptive_ecc_test_one_file_tamper.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      }
+    ],
+    "result": "PASS"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 128,
+    "remaining_without_full_text_binary_or_visual_review": 16
+  },
+  "findings": [
+    "32 MD5+parity block comparisons passed for8 records in2 identical databases, corresponding to16 unique source blocks. All stored track bytes consumed exactly, no trailing or truncated field accepted in this control.",
+    "ZIP2048 bytes uses7 initial message159 blocks, then variable k184,189,195,201,207. Last message shortened via left-zero-padding; complete track1355 bytes independently matches stored field.",
+    "Every checked message single-byte mutation changes parity. Finite negative controls, not correction/error-bound proof.",
+    "Three small text fixtures verified over entire file; ZIP crosses stage1 threshold. No broad rate/length boundary matrix or all-fields parameter campaign claimed.",
+    "Missing JPEG/PDF payloads remain explicit skips. All metadata parity already checked in v82, but full10database track validation remains incomplete.",
+    "Independent encoding agreement does not establish decoder repair, consumed-source stability, atomic output or corrected-output identity. No full repository promotion."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
