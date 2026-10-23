@@ -1,0 +1,49 @@
+{
+  "rows": [
+    {
+      "mode": "same_size_restored_mtime",
+      "effective_safe_dedup": 50,
+      "http_status": "HTTP/1.1 200 OK",
+      "handshake": {
+        "name": "f2",
+        "purl": "/d/",
+        "size": 3,
+        "lmod": 1234567890,
+        "sprs": true,
+        "hash": [
+          "BfcDQQeKz2oG1CPSFyD5ZD1flTYm2IoCY23DqeeVgq6w"
+        ],
+        "dwrk": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc",
+        "wark": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc"
+      },
+      "appends_during_read": 0,
+      "source_after": "two",
+      "destination_at_handshake": "",
+      "source_sha256": "3fc4ccfe745870e2c0d99f71f30ff0656c8dedd41cc1d7d3d376b0dbe685e2f3",
+      "published_without_chunks": false,
+      "published_bytes_match_requested": false
+    },
+    {
+      "mode": "growth_during_rehash",
+      "effective_safe_dedup": 50,
+      "http_status": "HTTP/1.1 200 OK",
+      "handshake": {
+        "name": "f2",
+        "purl": "/d/",
+        "size": 3,
+        "lmod": 1234567890,
+        "sprs": true,
+        "hash": [],
+        "dwrk": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc",
+        "wark": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc"
+      },
+      "appends_during_read": 1,
+      "source_after": "one-appended",
+      "destination_at_handshake": "one-appended",
+      "source_sha256": "cc67cb1de04f1a26639d2c40b0aac48230dafe6c0d468d357c8070fb9ab4c9c3",
+      "published_without_chunks": true,
+      "published_bytes_match_requested": false
+    }
+  ],
+  "scope": "Actual original up2k/SQLite/filesystem through original virtual-HTTP fixture; explicit safededup50, owned tempfile allocator. One deterministic append at native read boundary. No real network server, multi-thread hasher, user media or universal race proof."
+}

@@ -1,0 +1,115 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 5,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 481,
+  "additional_partial_source_read": {
+    "path": "copyparty/up2k.py",
+    "local": "08-up2k.py",
+    "ranges": [
+      "3759-3874"
+    ],
+    "whole_text_read": false,
+    "complete_function": "Up2k._symlink"
+  },
+  "native_dedup_controls": {
+    "source_sha256": {
+      "copyparty/up2k.py": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "tests/test_dedup.py": "1109fefdf44e7573bbcf990bd2c5f8d2eeede56737f6e9defe20b2bd3da6d736",
+      "tests/util.py": "d451bb6195bb040db9d5432d42238ac790d95ac3266bbc53a6aa046ab90cbb0b",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result": {
+      "rows": [
+        {
+          "mode": "same_size_restored_mtime",
+          "effective_safe_dedup": 50,
+          "http_status": "HTTP/1.1 200 OK",
+          "handshake": {
+            "name": "f2",
+            "purl": "/d/",
+            "size": 3,
+            "lmod": 1234567890,
+            "sprs": true,
+            "hash": [
+              "BfcDQQeKz2oG1CPSFyD5ZD1flTYm2IoCY23DqeeVgq6w"
+            ],
+            "dwrk": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc",
+            "wark": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc"
+          },
+          "appends_during_read": 0,
+          "source_after": "two",
+          "destination_at_handshake": "",
+          "source_sha256": "3fc4ccfe745870e2c0d99f71f30ff0656c8dedd41cc1d7d3d376b0dbe685e2f3",
+          "published_without_chunks": false,
+          "published_bytes_match_requested": false
+        },
+        {
+          "mode": "growth_during_rehash",
+          "effective_safe_dedup": 50,
+          "http_status": "HTTP/1.1 200 OK",
+          "handshake": {
+            "name": "f2",
+            "purl": "/d/",
+            "size": 3,
+            "lmod": 1234567890,
+            "sprs": true,
+            "hash": [],
+            "dwrk": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc",
+            "wark": "XMbpLRqVdtGmgggqjUI6uSoNMTqZVX4K6zr74XA1BRKc"
+          },
+          "appends_during_read": 1,
+          "source_after": "one-appended",
+          "destination_at_handshake": "one-appended",
+          "source_sha256": "cc67cb1de04f1a26639d2c40b0aac48230dafe6c0d468d357c8070fb9ab4c9c3",
+          "published_without_chunks": true,
+          "published_bytes_match_requested": false
+        }
+      ],
+      "scope": "Actual original up2k/SQLite/filesystem through original virtual-HTTP fixture; explicit safededup50, owned tempfile allocator. One deterministic append at native read boundary. No real network server, multi-thread hasher, user media or universal race proof."
+    },
+    "artifact": "docs/research/dedup-500/copyparty082-dedup-mutation-result-20261023.json",
+    "artifact_sha256": "0a7751248f3d181f5c1201ce057f0bf35bc2ace095ade44deae88c42250999c5",
+    "harness": "docs/research/dedup-500/copyparty082-dedup-mutation-control-20261023.py",
+    "harness_sha256": "df64166150267bf30ae93db8a49dae466a5867662688aaf2df28abc4179dd616",
+    "exit_code": 0,
+    "command": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/bin/python docs/research/dedup-500/copyparty082-dedup-mutation-control-20261023.py .dedup-work/copyparty082-20261023 .dedup-work/copyparty082-dedup-mutation-20261023"
+  },
+  "rrrah_native_counterpart": {
+    "harness": "docs/research/dedup-500/rrrah-growth-snapshot-control-20261023.rs",
+    "harness_sha256": "2f14be124d58e5a3b13c13b8aca9cf4b063feb59e3db48f5445cdab8790fead8",
+    "library": ".dedup-work/local-sequence-target-20261021/debug/deps/librrrah_dedup-2b35dfcefd220434.rlib",
+    "library_sha256": "8e4858e6a763b7cca0022b1c2a9d4717fa2838689f9dd4e1aa88932cf556f2a3",
+    "features": [
+      "decode",
+      "default",
+      "raster"
+    ],
+    "compiler": "rustc +1.98.1",
+    "compile_command": "rustc +1.98.1 --edition=2024 docs/research/dedup-500/rrrah-growth-snapshot-control-20261023.rs --extern rrrah_dedup=.dedup-work/local-sequence-target-20261021/debug/deps/librrrah_dedup-2b35dfcefd220434.rlib -L dependency=.dedup-work/local-sequence-target-20261021/debug/deps -L native=/opt/homebrew/opt/libheif/lib -L native=/opt/homebrew/opt/dav1d/lib -o .dedup-work/rrrah-growth-snapshot-control-20261023",
+    "run_command": ".dedup-work/rrrah-growth-snapshot-control-20261023 .dedup-work/rrrah-growth-snapshot-owned-20261023",
+    "compile_exit_code": 0,
+    "run_exit_code": 0,
+    "result": {
+      "baseline_checkpoints": 7,
+      "growth_refusals": 6,
+      "fresh_retries_verified": 6
+    },
+    "selected_input_manifest": "docs/research/dedup-500/joint-library-selected-inputs-20261023.json",
+    "selected_input_manifest_sha256": "1c041a3c4edf4aa2c7f55939a20adccc70f1d3ea096a70bab7a6abcf0f7378e5",
+    "selected_inputs_checked_unchanged": 457,
+    "source_drift": [],
+    "scope": "Actual public ContentSnapshot from current decode-feature library; growth at all6callback checkpoints after initial observation and6fresh verified retries. No production source change, no full suite/platform/filesystem atomicity or all race guarantee."
+  },
+  "findings": [
+    "Original high-level virtualHTTP/up2k/SQLite pipeline at explicit safededup50 catches pre-existing same-size edit with restoredmtime: needs original chunk again and successful upload then preserves f1=two,f2=one. Empty temporary destination before upload is not a published success.",
+    "At same explicit safededup50, deterministic append during candidate rehash grows sourceone->one-appended. Original handshake reports size3/hash[]/200OK and destination resolves12byteone-appended. This finite high-level reuse counterexample is now reproduced, not merely helper inference. No real network service or user data used.",
+    "Original existing tests use global safe_dedup1 fixture configuration; new controls explicitly use50 and reporteffectiveflag50. Original2passes are not qualification of rehash race handling.",
+    "Our actual public ContentSnapshot rejects growth at all6post-observation baseline callback checkpoints withChanged, thenfresh read/verify succeeds eachtime withsize12. Initial pre-observation checkpoint excluded because growth then defines a new valid initial source. This is a bounded callback mutation test, not mutation within arbitrary kernel I/O timing.",
+    "Root source/input hashes unchanged, broad decode suite ongoing. Native counterpart does not replace final gate or universal exact/visual/format/platform/500repo completion evidence.",
+    "Wholefile review credit still5/486; full203KBup2kmodule and481wholeblobs remain pending. No fullrepo increment or foreign productioncode copied."
+  ]
+}
