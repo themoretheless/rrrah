@@ -1,0 +1,86 @@
+{
+  "repository": "abonander/img-dup",
+  "commit": "5941416362ee20bbe51d434707b30bb6b2bf7085",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/ui/dialogs.rs",
+      "local": "15-ui-dialogs.rs",
+      "git_blob": "ae80eb67606e0d8f506799d6e000eb90fd3b0cb7",
+      "sha256": "b29d2667ee0af5aeb6ee3ce51b3ab7ed8f96494805b437ff6547767ceb28f384",
+      "bytes": 1404,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/ui/mod.rs",
+      "local": "16-ui-mod.rs",
+      "git_blob": "93834a37f8ad78f26fa98031f2d936fb393c0c62",
+      "sha256": "b0e50aa226edee65edae50906bc75ed40d68067ac92e29a94317effd6d52dc75",
+      "bytes": 2155,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/ui/util.rs",
+      "local": "17-ui-util.rs",
+      "git_blob": "8d0fef1e680254b2de9feb37a9061d09e3eabbb1",
+      "sha256": "6faaa6be6bced2b74de338933b26a984d3934bfc47d96e56279f3abf37733bbb",
+      "bytes": 2554,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/ui/results.rs",
+      "local": "18-ui-results.rs",
+      "git_blob": "ff8e42ae46b9f09483a349c9188b39ce7ef15ef9",
+      "sha256": "36ed98b610c58151484fde8d4a77e529b924a6b6e4333013c4018561ff456776",
+      "bytes": 14071,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/ui/errors.rs",
+      "local": "19-ui-errors.rs",
+      "git_blob": "13615e8c03360545e11e3051a34cf0de2430c803",
+      "sha256": "2a74666ee333b535739bfd817662223773428d03d885d1053f0908869fe246f5",
+      "bytes": 4426,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/ui/running.rs",
+      "local": "20-ui-running.rs",
+      "git_blob": "fffab7b3e3c2d3c1c7d3f956be2f1175e19233ca",
+      "sha256": "f8ed6b55768b29b512f7d741d592619951a225de5ac3abf63ed61ea4fd90d229",
+      "bytes": 7364,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/ui/setup.rs",
+      "local": "21-ui-setup.rs",
+      "git_blob": "b9c359fddfa00a4f0e4dba4da4433a9957719ff7",
+      "sha256": "ac2afb30f51062e76d28ef5a7d764e72afb47b8d9aa8964e12e04f290fb4f4a3",
+      "bytes": 7231,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 21,
+  "tracked_blobs": 34,
+  "remaining_without_whole_review": 13,
+  "module_boundary": "All7src/ui blobs whole-read; GUI not built/launched.",
+  "read_ranges": {
+    "src/ui/results.rs": [
+      "1-230",
+      "231-520",
+      "521-EOF"
+    ]
+  },
+  "upstream_package_tests_run": false,
+  "findings": [
+    "Whole UI running receiver: count starts0 and increments only on successful decode/hash; error branch only pushes errors; then everyiteration computes total_load/count,total_hash/count. Firsterror-before-success therefore reaches zero denominator in source. No actual old UI execution or panic reproduced.",
+    "Results delete logs unlink failure then unconditionally removes compare entry. Symlink action chains unlink then link and removes entry even on either error. No replacement transaction/rollback or fresh content comparison observed there; no deletion/symlink operation executed.",
+    "Promote swaps representative and recomputes member distances in img.rs, but results buffers only swap current/selected textures while other cached percent labels persist. Source-only possible stale displayed distance; no GUI reproduction.",
+    "ImgLoader get_result busy-loops rollup_results without blocking/yield, and may queue again when ready contains a result but waiting no longer contains path. No benchmark or duplicated actual decode measured.",
+    "Error text lines helper advances start+=end rather than assigning end; source suggests skipped middle text on long errors. Byte-index slicing also has UTF8boundary concerns. Neither native original GUI helper executed in this review.",
+    "Results thumbnail overview hardcodes5x5slots with no pagination source in draw_results_ui. Full actual usability and >25member handling not executed.",
+    "GUI Stop breaks receiving at next image result; worker sender detects closed receiver only after in-flight load/hash. No worker-interruption/stop-latency measurement. Window-close path returnsNone without setting stop; source-only lifecycle concern.",
+    "Configuration spinner enforcesminimum1 for increments but typed setters accept parsedzero; GUIthresholdrange1%-10% differs broaderCLIpositive<100% parser. Source state only.",
+    "Sourcefont path is working-directory-relative assets/FreeSerif.otf; font creation unwraps. Font bytes/rendering/license remains pending. No root rrrah source copied or changed."
+  ]
+}
