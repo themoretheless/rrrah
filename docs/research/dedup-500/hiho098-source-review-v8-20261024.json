@@ -1,0 +1,79 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v7-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/MergeJob.java",
+      "local": "30-MergeJob.java",
+      "sha256": "73d2ed6812041df93ab5602dc28ae2fdb8d7ae2ecaa4567b41a34358818ce6a7",
+      "git_blob": "b6b9e25d93d85efcf3c96ba65825bff4db833c11",
+      "whole_text_read": true,
+      "lines": 245
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/merge/TestMergeKeyMapper.java",
+      "local": "31-TestMergeKeyMapper.java",
+      "sha256": "e9dfffd221e70d22543e23ecf359a769ebc6a2e554b6f26d02496815fdf46a10",
+      "git_blob": "55387d499b72b7560074e6a6aca35f2a46b1a251",
+      "whole_text_read": true,
+      "lines": 82
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/merge/TestMergeValueMapper.java",
+      "local": "32-TestMergeValueMapper.java",
+      "sha256": "0e581e8843d84336d7651d39f7b055fbc2837b0d89191b1ed6cfcaa905b8e0f8",
+      "git_blob": "856e773acbcdac83386aa9079eef8bae53988580",
+      "whole_text_read": true,
+      "lines": 70
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/common/HIHOException.java",
+      "local": "33-HIHOException.java",
+      "sha256": "4f07a498ec930bf80a865ba9bbd106f0f48a65a794fe11dc0e4766df86627637",
+      "git_blob": "0f52d8c8fede6c9442050854626cfa4f3adb0ba1",
+      "whole_text_read": true,
+      "lines": 33
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/merge/TestMergeKeyReducer.java",
+      "local": "34-TestMergeKeyReducer.java",
+      "sha256": "1824c6228b935964da757592b8a11696d5768c18b16b4382a58f54ff69129500",
+      "git_blob": "237bd3660d3101826af7e84ab5084be051fc317e",
+      "whole_text_read": true,
+      "lines": 185
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/merge/TestMergeValueReducer.java",
+      "local": "35-TestMergeValueReducer.java",
+      "sha256": "335eea1d3b3b3e05419fb5eeb4de7f3ff7df9b3cce579565b148f4b22c3ccf3d",
+      "git_blob": "39dd040485e9ff542e2f87b432955d4424929da6",
+      "whole_text_read": true,
+      "lines": 176
+    }
+  ],
+  "whole_files_read_total": 36,
+  "remaining_without_whole_review": 134,
+  "original_tests_cumulative": {
+    "total": 26,
+    "passed": 26,
+    "new_original_tests": 0
+  },
+  "native_controls": {
+    "new_checks": 2,
+    "cumulative_author_checks": 30,
+    "report": "docs/research/dedup-500/hiho098-job-failure-controls-20261024.json",
+    "confirmed": "Original DedupJob.run and MergeJob.run return0 after owned output format constructor throws. Both constructor markers observed. Failure occurs inside original catch(Exception) before waitForCompletion.",
+    "scope": "Real Hadoop0.20.2 Job configuration, original unchanged methods; no submission/HDFS/user data IO. Not proof of actual failed-cluster-job behavior, which remains source-only."
+  },
+  "test_source_findings": [
+    "2mappertests per file manually set isOld=false; null key case exits before isOld; setup/pathclassification not tested. KeyMapper testSetUp exists only inside a block comment.",
+    "5reducertests per file cover1old+1new in fixed order or empty list. Their NullValues name refers to nonnull empty list, not null Iterable. Two-new ordering untested.",
+    "HIHOException directly extends Throwable, not Exception; callers explicitly catch it. No new failure inferred solely from this design."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}

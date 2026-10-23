@@ -1,0 +1,36 @@
+{
+  "scope": "Actual unchanged original DedupJob/MergeJob and Hadoop0.20.2 Job config; author OutputFormat constructor deliberately fails before waitForCompletion/submission; no file data or cluster operation",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DedupJob.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DedupKeyReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HihoHashPartitioner.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DedupValueMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DedupValueReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/MergeJob.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HIHOException.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/JobFailureControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "JobFailureControl"
+      ],
+      "returncode": 0,
+      "stdout": "OBSERVED DedupJob returns0 after output-format construction failure\nOBSERVED MergeJob returns0 after output-format construction failure\nchecks=2; no job submitted; no file input/output\n",
+      "stderr": "26/10/24 03:14:37 INFO jvm.JvmMetrics: Initializing JVM Metrics with processName=JobTracker, sessionId=\njava.lang.RuntimeException: java.lang.reflect.InvocationTargetException\n\tat org.apache.hadoop.util.ReflectionUtils.newInstance(ReflectionUtils.java:115)\n\tat co.nubetech.hiho.dedup.DedupJob.run(DedupJob.java:203)\n\tat JobFailureControl.main(JobFailureControl.java:17)\nCaused by: java.lang.reflect.InvocationTargetException\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:74)\n\tat java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)\n\tat org.apache.hadoop.util.ReflectionUtils.newInstance(ReflectionUtils.java:113)\n\t... 2 more\nCaused by: java.lang.IllegalStateException: owned output-format construction failure before job submission\n\tat JobFailureControl$FailingFormat.<init>(JobFailureControl.java:10)\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)\n\t... 5 more\n26/10/24 03:14:37 INFO jvm.JvmMetrics: Cannot initialize JVM Metrics with processName=JobTracker, sessionId= - already initialized\njava.lang.RuntimeException: java.lang.reflect.InvocationTargetException\n\tat org.apache.hadoop.util.ReflectionUtils.newInstance(ReflectionUtils.java:115)\n\tat co.nubetech.hiho.merge.MergeJob.run(MergeJob.java:213)\n\tat JobFailureControl.main(JobFailureControl.java:20)\nCaused by: java.lang.reflect.InvocationTargetException\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:74)\n\tat java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)\n\tat org.apache.hadoop.util.ReflectionUtils.newInstance(ReflectionUtils.java:113)\n\t... 2 more\nCaused by: java.lang.IllegalStateException: owned output-format construction failure before job submission\n\tat JobFailureControl$FailingFormat.<init>(JobFailureControl.java:10)\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)\n\t... 5 more\n"
+    }
+  ]
+}
