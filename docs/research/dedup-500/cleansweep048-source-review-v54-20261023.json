@@ -1,0 +1,100 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "structured_schema_reviews": [
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/1.json",
+      "sha256": "107733a22ea1611d3cebe5a386abd1bf4973f4e41c9784622496fd9e05cbca7b",
+      "bytes": 11382,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "full_text_review_claimed": false,
+      "version": 1,
+      "tables": [
+        "file_signature_cache",
+        "folder_details_cache",
+        "phash_cache",
+        "similar_group_cache",
+        "scan_result_groups",
+        "media_item_refs",
+        "unreadable_file_cache"
+      ]
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/2.json",
+      "sha256": "dd71de17e598366456a9173b7e93f4e98c3372dbd5034aef6b9fd4ffe0ed04cd",
+      "bytes": 11624,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "full_text_review_claimed": false,
+      "version": 2,
+      "tables": [
+        "file_signature_cache",
+        "folder_details_cache",
+        "phash_cache",
+        "similar_group_cache",
+        "scan_result_groups",
+        "media_item_refs",
+        "unreadable_file_cache"
+      ]
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/3.json",
+      "sha256": "9870699a9163d9b74a18e8d596e4d3409faeaf879f88524828451ba8a39caa1f",
+      "bytes": 11165,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "full_text_review_claimed": false,
+      "version": 3,
+      "tables": [
+        "file_signature_cache",
+        "folder_details_cache",
+        "phash_cache",
+        "scan_result_groups",
+        "media_item_refs",
+        "unreadable_file_cache",
+        "similarity_denials"
+      ]
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/5.json",
+      "sha256": "56aeca87f7d9c5b6a9408388a18e011fe27b436b1aa738f0a9c58eca62ea7e87",
+      "bytes": 6288,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "full_text_review_claimed": false,
+      "version": 5,
+      "tables": [
+        "file_hash_cache",
+        "phash_cache",
+        "unreadable_file_cache",
+        "folder_details_cache",
+        "similar_group_cache"
+      ]
+    }
+  ],
+  "control": "cleansweep048-schema-migration-control-20261023.py",
+  "control_result": {
+    "sqlite_version": "3.54.1",
+    "all_six_inputs_git_verified": true,
+    "expected_v2_and_v3_table_definitions_match": true,
+    "signature_and_scan_group_retained": true,
+    "scope_default": "FULL",
+    "extra_table_after_v3": [
+      "similar_group_cache"
+    ],
+    "stale_group_row_retained": true,
+    "foreign_key_violations": 0
+  },
+  "findings": [
+    "Executed exact three SQL statements extracted from pinned Kotlin against in-memory SQLite created from pinned v1 schema. Expected v2/v3 table columns, foreign keys and index lists match fresh schemas; seeded file signature and scan result survive.",
+    "MIGRATION_2_3 drops similar_groups, while v1/v2 actual table is similar_group_cache. Seeded obsolete group row and table survive, contradicting source comment about reclaiming that space. No Android Room migration failure inferred from extra table alone.",
+    "Pinned source declares version 3 and provider registers only 1→2 and 2→3. Exported version 5 schema contains file_hash_cache and old similar_group_cache; its presence alone does not prove a deployed v5 app or supported downgrade path.",
+    "SQL/schema control does not validate Android Room identity hash handling, generated schema validation, device SQLite or complete app update. No upstream code modified or copied into production."
+  ],
+  "whole_files_read_total": 101,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
