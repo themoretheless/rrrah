@@ -1,0 +1,105 @@
+{
+  "repository": "scinos/yarn-deduplicate",
+  "commit": "8a3cfc168cbd43eb09261f05a9ce514ced52b4c0",
+  "previous_audit": "docs/research/dedup-500/yarn084-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "package.json",
+      "local": "06-package.json",
+      "sha256": "81a1288b203c84127846cf0d8a0750e9230b171e2233eb03a8b21dd13bc6af1b",
+      "whole_text_read": true
+    },
+    {
+      "path": "tsconfig.json",
+      "local": "07-tsconfig.json",
+      "sha256": "22ff151686e4eeb1c5ebef675c58d6d61066c32f17c40a81ad1fe95ae462ef7f",
+      "whole_text_read": true
+    },
+    {
+      "path": "babel.config.js",
+      "local": "08-babel.config.js",
+      "sha256": "a180dc9d675cea8ce4014bde1006c5bf7edfc9d40c60ff197649aa36e88b2ee4",
+      "whole_text_read": true
+    },
+    {
+      "path": ".yarnrc.yml",
+      "local": "09-.yarnrc.yml",
+      "sha256": "473e6def86fc03638120e0c01d0c8bbab095677256460fa4ea763e5d4697f270",
+      "whole_text_read": true
+    },
+    {
+      "path": ".nvmrc",
+      "local": "10-.nvmrc",
+      "sha256": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61",
+      "whole_text_read": true
+    },
+    {
+      "path": ".eslintignore",
+      "local": "11-.eslintignore",
+      "sha256": "bcae0416621b3db43d8cba1e4454a792c7af9e4b7287e51056efc5a215d95839",
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "12-.gitignore",
+      "sha256": "24227301e0f7cec795f3cb19a667d1238e5fe04ea1e725af9c8c63e8e1437ed4",
+      "whole_text_read": true
+    },
+    {
+      "path": ".prettierrc.js",
+      "local": "13-.prettierrc.js",
+      "sha256": "c2232f78b3fab9da123e9e0ab49771e2f3a4f61fe6ab09f4ea8f2a91f2940d16",
+      "whole_text_read": true
+    },
+    {
+      "path": ".release-it.js",
+      "local": "14-.release-it.js",
+      "sha256": "42b8c0cafa6c6f1ebd2de355d28f480f52fe4cfb108ab2fb2be39efb3aaf1eab",
+      "whole_text_read": true
+    },
+    {
+      "path": "renovate.json",
+      "local": "15-renovate.json",
+      "sha256": "d93f2e67d77c6e9380969633fe65f273c1515c9a35a2de281b3fdffead184315",
+      "whole_text_read": true
+    },
+    {
+      "path": "AUTHORS.md",
+      "local": "16-AUTHORS.md",
+      "sha256": "56b3346b2777f0f8009d754307377ab7dc8eb700caac2ef7422f36b970453665",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/tsconfig.json",
+      "local": "17-tests--tsconfig.json",
+      "sha256": "b5916d86f6f0bde870c69f07499c784e85f368326d49c8cb95d6712862da0244",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/node.js.yml",
+      "local": "18-.github--workflows--node.js.yml",
+      "sha256": "c607211c49e6177fccaaafcc2f54ee8ae6e45e4031cf1d68151378ff7dc584a7",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 18,
+  "tracked_blobs": 24,
+  "remaining_without_whole_review": 6,
+  "findings": [
+    "Package engines declare Yarn1 while packageManager pins Yarn3.5.1; input lockfile domain remains Yarn1.",
+    "Original build/test scripts invoke Yarn, CI uses Corepack and Node14/16/18. Local Node22 differs; no platform/version equivalence claim.",
+    "Release config enables push/publish/release; read as data only, no release action executed."
+  ],
+  "runtime_preparation": {
+    "install": "npm install --ignore-scripts --package-lock=false --no-audit --no-fund",
+    "scope": "Owned pinned clone only, semver-resolved dependencies rather than Yarn lock replay",
+    "status": "launched",
+    "log": ".dedup-work/yarn084-install-20261024.log"
+  },
+  "limits": [
+    "No native tests/build result yet.",
+    "Root repository manifests and lockfiles untouched.",
+    "No production code adopted."
+  ]
+}
