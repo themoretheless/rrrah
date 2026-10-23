@@ -1,0 +1,87 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/common-network.html",
+      "sha256": "88955811c24f630dde5b843f937f9a76d2f826929b19facf3cc2e089e3e00a37",
+      "lines": 151,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "archive/src/main/resources/templates/common-setup.html",
+      "sha256": "e035558d2f3946a8e177566633f1dbd1db0ba895bd2eb8ec706b608efaf4df4c",
+      "lines": 166,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "archive/src/main/resources/templates/common-topic.html",
+      "sha256": "95b17ab25f2b0366a8e2ee7d6646c7dbb427e54581375117ba23eab1013bea18",
+      "lines": 108,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-network.html",
+      "sha256": "88955811c24f630dde5b843f937f9a76d2f826929b19facf3cc2e089e3e00a37",
+      "lines": 151,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-setup.html",
+      "sha256": "e035558d2f3946a8e177566633f1dbd1db0ba895bd2eb8ec706b608efaf4df4c",
+      "lines": 166,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-topic.html",
+      "sha256": "95b17ab25f2b0366a8e2ee7d6646c7dbb427e54581375117ba23eab1013bea18",
+      "lines": 108,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-network.html",
+      "sha256": "88955811c24f630dde5b843f937f9a76d2f826929b19facf3cc2e089e3e00a37",
+      "lines": 151,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-setup.html",
+      "sha256": "e035558d2f3946a8e177566633f1dbd1db0ba895bd2eb8ec706b608efaf4df4c",
+      "lines": 166,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-topic.html",
+      "sha256": "097a0e827eb73f0d0fad4542ed9aab87762e5633a2bbd0dd7f7f47af6b1e375c",
+      "lines": 109,
+      "git_blob_verified": true,
+      "review_mode": "whole_text_or_byte_verified_copy_with_entire_diff_read"
+    }
+  ],
+  "runtime": {
+    "browser_render": false,
+    "thymeleaf_run": false,
+    "forms_submitted": false
+  },
+  "findings": [
+    "Nine template paths assessed: network/setup exactcopies across3modules, topic exactarchive/integrator and operator addsoneblankline. All bytepins verified and entireuniquecontent/diff read. No renderedUI claim.",
+    "Setup form requires allidentity/contact fields including addressLine2, whereas CLI permitsdefaultN/A and modelconstructor allowsnull. Inputconstraints differ byentrypoint; no server-side behavior inferred.",
+    "Setup JS triple-titleclick fills fixedtestvalues and fixed127.0.0.1:9000 for everymodule. It changesformvalues only, doesnotautosubmit. No click/form submission executed.",
+    "Network view shows status without age/freshness or partialrefresh indicator; source stale-cache behavior fromv18 remains invisibleinthis template. Hostlinks hardcodehttp while prodtransport useshttps.",
+    "Topic template links archiveID/collectionID and displays metadata only; no fingerprintrecipe, enabledstate or versioncolumn here. Allrows renderedserver-side beforeclientsideDataTables; largecollection pagination/resource behavior unmeasured."
+  ],
+  "remaining": [
+    "44 other tracked blobs/assets",
+    "Remaining controllers/templates/media/license/IDE/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
