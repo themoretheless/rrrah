@@ -1,0 +1,167 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 475,
+  "partial_source_files_read": [
+    {
+      "path": "copyparty/up2k.py",
+      "local": "08-up2k.py",
+      "sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "git_blob": "39da8b8ed2b9c1fa72a75253f5efff4124063449",
+      "whole_text_read": false,
+      "new_ranges_read": [
+        "1828-2770"
+      ],
+      "cumulative_ranges": [
+        [
+          1,
+          2770
+        ],
+        [
+          3171,
+          3750
+        ],
+        [
+          3759,
+          4175
+        ],
+        [
+          5344,
+          5385
+        ],
+        [
+          5698,
+          5931
+        ]
+      ],
+      "cumulative_source_lines_read": 4043,
+      "total_source_lines": 5931,
+      "remaining_ranges": [
+        [
+          2771,
+          3170
+        ],
+        [
+          3751,
+          3758
+        ],
+        [
+          4176,
+          5343
+        ],
+        [
+          5386,
+          5697
+        ]
+      ],
+      "complete_Up2k_methods_by_read_coverage": [
+        "__init__",
+        "init_vols",
+        "unpp",
+        "reload",
+        "_reload_thr",
+        "_reload",
+        "deferred_init",
+        "log",
+        "_gen_fk",
+        "_block",
+        "_unblock",
+        "is_busy",
+        "get_state",
+        "_active_uploads",
+        "find_job_by_ap",
+        "get_unfinished_by_user",
+        "get_unfinished",
+        "get_volsize",
+        "get_volsizes",
+        "_get_volsize",
+        "rescan",
+        "_rescan",
+        "_sched_rescan",
+        "_check_forget_ip",
+        "_check_lifetimes",
+        "_check_shares",
+        "_check_xiu",
+        "_run_xius",
+        "_run_xiu",
+        "_vis_job_progress",
+        "_vis_reg_progress",
+        "_expr_idx_filter",
+        "init_indexes",
+        "register_vpath",
+        "_verify_db_cache",
+        "_build_file_index",
+        "_fika",
+        "_build_dir",
+        "_drop_lost",
+        "_verify_integrity",
+        "_redup",
+        "_build_tags_index",
+        "_drop_caches",
+        "_set_tagscan",
+        "_build_tags_index_2",
+        "_e2ts_q",
+        "_spool_warks",
+        "_unspool",
+        "_flush_mpool",
+        "_run_all_mtp",
+        "_run_one_mtp",
+        "_get_parsers",
+        "_start_mpool",
+        "_stop_mpool",
+        "handle_json",
+        "_handle_json",
+        "_symlink",
+        "handle_chunks",
+        "fast_confirm_chunks",
+        "confirm_chunks",
+        "_confirm_chunks",
+        "finish_upload",
+        "_finish_upload",
+        "regdrop",
+        "idx_wark",
+        "_hashlist_from_file",
+        "_hasher",
+        "_hash_t",
+        "hash_file",
+        "do_fx_backlog",
+        "hook_fx",
+        "shutdown"
+      ]
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/copyparty082-source-review-v8-20261023.json",
+  "native_controls": {
+    "source_sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+    "controls": 3,
+    "newline_roundtrip": true,
+    "pending_marker_filter": true,
+    "prelatched_cancel_count": -1,
+    "cancelled_handle_registered": false,
+    "cancelled_handle_explicitly_closed": true,
+    "scope": "Original methods, in-memory SQLite, two rows; no background lifecycle, disk rollover, server or performance qualification."
+  },
+  "observations": [
+    {
+      "scope": "source only",
+      "finding": "_redup stage 2 rehashes candidates and temporary replacement before unlink/rename; stage 1 checks replacement size/type. No destructive redup operation executed."
+    },
+    {
+      "scope": "native finite helper control",
+      "finding": "Two-row SQLite spool preserves newline-bearing path fields, filters tagged entries while retaining pending-only marker, and returns -1 with an open unregistered handle on prelatched cancellation. Harness explicitly closes it; no whole-server leak claim."
+    },
+    {
+      "scope": "source only",
+      "finding": "_verify_integrity has distinct report, update (e2vu), and terminate (e2vp) policies; this read is not a runtime verification of these policies."
+    }
+  ],
+  "limits": [
+    "No whole-repository completion increment.",
+    "No upstream production code copied into rrrah.",
+    "All-features Cargo PID15846 verified live; final suite result not yet observed."
+  ]
+}
