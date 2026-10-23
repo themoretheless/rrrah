@@ -1,0 +1,71 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/pom.xml",
+      "sha256": "855a36d69c0f8a4b6a0aa05c04917e0533d50b458b25d7bc8d9ada2d130b05af",
+      "lines": 141,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/pom.xml",
+      "sha256": "61c536b6ca17412fb1ae22dcfa168d4e3fc502ecbedd1378eaaf021fcb1b3c37",
+      "lines": 141,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/pom.xml",
+      "sha256": "b1ab3f1bce921367b084070b7863eac20cdd005a6f70e1232532b84e30ac658d",
+      "lines": 134,
+      "git_blob_verified": true
+    }
+  ],
+  "resource_path_inventory": [
+    {
+      "module": "archive",
+      "directory": "lib",
+      "includes": [
+        "libphash.dylib",
+        "phash.dll"
+      ],
+      "tracked_matches": []
+    },
+    {
+      "module": "integrator",
+      "directory": "lib",
+      "includes": [
+        "libphash.dylib",
+        "phash.dll"
+      ],
+      "tracked_matches": []
+    },
+    {
+      "module": "operator",
+      "directory": "lib",
+      "includes": [
+        "libphash.dylib",
+        "phash.dll"
+      ],
+      "tracked_matches": []
+    }
+  ],
+  "runtime": {
+    "xml_parse": true,
+    "maven_build": false,
+    "jar_inspection": false
+  },
+  "findings": [
+    "All3modulePOMswhole-read and XMLparsed. All5trackedPOMs now reviewed acrossv2/v13. Module resource lib paths resolve module-relative, but pinned binaries onlyrootlib; tree inventory confirms zero tracked archive/lib,integrator/lib,operator/lib matching entries. Maven effective-POM/resource execution not run.",
+    "All3modules include SpringBoot repackage with skipfalse, forktrue, jvmArguments-Djava.library.path=lib. Runtime external filesystem search differs from classpath resource packaging; neither native extraction nor reproducible native build declared here.",
+    "Each module lists resources twice: unfiltered whole resources and filtered application property subset. Actual overwrite/property substitution order requires Maven package inspection.",
+    "SQLite JDBC3.36.0.3 pinned in modules differs from local PythonSQLite3.54.1 SQL-shape controls v8; those controls do not qualify pinned JDBC or Hibernate.",
+    "No module tests or native build steps added here; both SpringShell1.2 and2.0dependencies present. Dependency resolution/runtime interaction unverified."
+  ],
+  "remaining": [
+    "86 other tracked blobs/assets",
+    "Remaining authored Java/templates/assets, opaque native binaries and runtime qualification"
+  ],
+  "full_review_count": 249
+}
