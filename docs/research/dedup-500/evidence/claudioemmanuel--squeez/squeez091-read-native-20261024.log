@@ -1,0 +1,23 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running tests/test_read_dedup.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_read_dedup-866ddb38bc4c7933)
+
+running 15 tests
+test store_is_capped_and_evicts_oldest ... ok
+test floor_blocks_windowed_and_skill_lookups ... ok
+test floor_blocks_read_store_lookups ... ok
+test legacy_context_json_loads_without_a_floor ... ok
+test floor_and_store_survive_the_json_round_trip ... ok
+test marker_names_the_file_it_matched ... ok
+test nudge_claim_survives_a_stale_context_write ... ok
+test a_nudge_can_be_claimed_exactly_once ... ok
+test config_switch_disables_the_store ... ok
+test reread_collapses_far_past_the_recent_window ... ok
+test same_content_at_a_different_path_does_not_collapse ... ok
+test changed_content_at_same_path_does_not_collapse ... ok
+test write_to_the_path_invalidates_the_entry ... ok
+test session_start_raises_the_floor_and_stamps_the_session ... ok
+test precompact_raises_the_floor ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+

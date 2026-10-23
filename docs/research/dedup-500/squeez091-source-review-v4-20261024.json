@@ -1,0 +1,149 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/context/cache.rs",
+      "local": "19-src--context--cache.rs",
+      "sha256": "d8211d8f30d401aecbf0d23652598fecddd6d91f16354075430af66dd254bb39",
+      "whole_text_read": true,
+      "lines": 2033
+    },
+    {
+      "path": "tests/test_read_dedup.rs",
+      "local": "20-tests--test_read_dedup.rs",
+      "sha256": "c63ecb2fdab12b2a71075f45360b59e71f115d904f9c67359911a0d61e1d5349",
+      "whole_text_read": true,
+      "lines": 312
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 19,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 308,
+  "cache_module_read_completion": {
+    "lines": 2033,
+    "scope": "Entire implementation and all embedded tests now read; supersedes prior partial cache scope.",
+    "range_union": [
+      [
+        1,
+        180
+      ],
+      [
+        181,
+        350
+      ],
+      [
+        350,
+        535
+      ],
+      [
+        536,
+        629
+      ],
+      [
+        630,
+        740
+      ],
+      [
+        741,
+        895
+      ],
+      [
+        896,
+        1024
+      ],
+      [
+        1025,
+        1120
+      ],
+      [
+        1121,
+        1253
+      ],
+      [
+        1254,
+        1421
+      ],
+      [
+        1422,
+        1510
+      ],
+      [
+        1511,
+        1760
+      ],
+      [
+        1761,
+        2025
+      ],
+      [
+        2026,
+        2033
+      ]
+    ]
+  },
+  "additional_partial_source_read_not_credited": {
+    "src/commands/init.rs": [
+      [
+        195,
+        219
+      ]
+    ],
+    "src/commands/track.rs": [
+      [
+        46,
+        75
+      ]
+    ]
+  },
+  "native_original_tests_added": {
+    "passed": 42,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "context::cache::tests": 27,
+      "test_read_dedup": 15
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 115,
+    "failed": 0,
+    "scope": "Twelve focused groups, not full upstream suite."
+  },
+  "floor_public_api_control": {
+    "scope": "Unmodified public SessionContext methods, finite in-memory histories; no hook execution",
+    "old_call": 1,
+    "new_call": 2,
+    "floor": 1,
+    "skill_fresh_entry_missed": true,
+    "image_fresh_entry_missed": true,
+    "read_fresh_entry_missed": true,
+    "skill_miss_survives_json_roundtrip": true,
+    "windowed_lookup_finds_fresh_control": true
+  },
+  "floor_pipeline_control": {
+    "scope": "Unchanged compute_rewrite pipeline in owned directories, synthetic Read payloads, manual floor transition matching cache field change; no real host hook",
+    "noise_calls": 25,
+    "baseline_session_long_reread_collapsed": true,
+    "post_floor_reissued_reread_collapsed": false,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-floor-pipeline-1pxx2wm3"
+  },
+  "findings": [
+    "Session-long skill/image/read lookups find the first matching fingerprint/path, then apply the dedup floor. After old call1 is fenced and same content is recorded at call2, old call1 shadows call2 and lookup still returnsNone.",
+    "Skill miss survives actual JSON roundtrip. Windowed lookup control instead finds matching eligible call2, distinguishing this defect from intentional floor refusal.",
+    "Original compute_rewrite pipeline control: first Read, manual floor transition, fresh Read,25 distinct noise reads, repeat target => no dedup marker; equivalent no-floor control emits a marker. No real host hook was invoked.",
+    "Original floor tests assert refusal of old entries and persistence of the floor but do not test a fresh identical entry shadowed by an older fenced one.",
+    "Cache record counts are capped on mutation, while loaded arrays and several session-long stores are not generally entry/byte-budgeted. No total-memory or adversarial-load qualification added."
+  ],
+  "transfer_decision": "Do not copy first-match-then-filter lookup semantics. Only eligible entries can establish a reusable match. rrrah uses content/recipe/frame keys and does not implement this host-context floor model.",
+  "limits": [
+    "19/327 whole-file reviews; repository remains partial.",
+    "Native115 focused tests do not qualify all host/plugin behavior or full package suite.",
+    "Owned finite pipeline inputs demonstrate missed reuse, not incorrect file equality or all compaction scenarios.",
+    "No rrrah production source changes this turn; native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Original Cargo logs keep their trailing blank lines."
+}

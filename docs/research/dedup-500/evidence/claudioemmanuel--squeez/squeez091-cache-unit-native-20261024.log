@@ -1,0 +1,34 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 27 tests
+test context::cache::tests::dedup_header_tag_empty_value_never_emitted ... ok
+test context::cache::tests::dedup_header_tag_refreshes_after_interval ... ok
+test context::cache::tests::dedup_header_tag_suppresses_unchanged_value ... ok
+test context::cache::tests::file_was_seen_returns_call_n ... ok
+test context::cache::tests::lookup_recent_only_within_window ... ok
+test context::cache::tests::normalize_replaces_digits_paths_hex ... ok
+test context::cache::tests::normalize_url_path_strips_scheme_query_and_www ... ok
+test context::cache::tests::quota_error_detection ... ok
+test context::cache::tests::raw_read_hint_ignores_unknown_program ... ok
+test context::cache::tests::raw_read_hint_detects_seen_file ... ok
+test context::cache::tests::old_context_json_without_shot_fields_loads_clean ... ok
+test context::cache::tests::record_screenshot_silent_outside_window_and_when_disabled ... ok
+test context::cache::tests::reset_header_tag_memo_clears_state ... ok
+test context::cache::tests::real_ctx_tokens_survives_roundtrip ... ok
+test context::cache::tests::record_call_drops_oldest_at_33rd ... ok
+test context::cache::tests::skill_dedup_lookup_and_record ... ok
+test context::cache::tests::record_screenshot_warns_once_within_window ... ok
+test context::cache::tests::from_json_roundtrip_extract_all ... ok
+test context::cache::tests::image_dedup_lookup_and_roundtrip ... ok
+test context::cache::tests::header_tag_memo_survives_json_roundtrip ... ok
+test context::cache::tests::queue_warning_sanitizes_dedups_and_drains ... ok
+test context::cache::tests::note_files_dedup_and_caps ... ok
+test context::cache::tests::json_round_trip ... ok
+test context::cache::tests::skill_dedup_survives_json_roundtrip ... ok
+test context::cache::tests::corrupted_backslash_runs_heal_on_load ... ok
+test context::cache::tests::save_load_round_trip_via_disk ... ok
+test context::cache::tests::windows_paths_survive_repeated_round_trips_unchanged ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 527 filtered out; finished in 0.00s
+
