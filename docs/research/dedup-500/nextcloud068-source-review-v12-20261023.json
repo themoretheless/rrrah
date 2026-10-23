@@ -1,0 +1,104 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 151,
+  "whole_binary_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 152,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 13,
+  "full_review_count": 249,
+  "partial_files": [
+    {
+      "path": "js/script.js.map",
+      "sha256": "8564056fc64ef7e1ce9e0265bed9091d5cbc56fe49315fe19d6cd4fb0caf5ad1",
+      "bytes": 20502,
+      "whole_file_credit": false
+    },
+    {
+      "path": "js/settings.js.map",
+      "sha256": "24aaeeabb5099c7b1f0fcf7eb1455e13873f3e5565ed27237e3ffa6b01845e24",
+      "bytes": 1895404,
+      "whole_file_credit": false
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "7d5e979beff7c6171b2c4ceffaa53ed985b03112ef75f6f7788c1afdfdd3ab1f",
+      "bytes": 576182,
+      "whole_file_credit": false
+    }
+  ],
+  "native_control": {
+    "command": "node docs/research/dedup-500/nextcloud068-source-map-control-20261023.cjs docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/37-settingsSagas.js .dedup-work/nextcloud068-20261023/js/settings.js.map",
+    "exit_code": 0,
+    "result": {
+      "map_sha256": "24aaeeabb5099c7b1f0fcf7eb1455e13873f3e5565ed27237e3ffa6b01845e24",
+      "source_index": 20,
+      "current": {
+        "source_sha256": "22bf163372f56b8dc9e90799e36690bdec21eea8d9786f58571958bf2fbcfd7f",
+        "request_body": {
+          "newConfig": {
+            "ignore_mounted_files": true
+          }
+        },
+        "ambient_app_id": null
+      },
+      "embedded": {
+        "source_sha256": "fc6eb8e9624ba2561b9488c8c645060ac26743e7e2533d27969eb8082b2e9f6b",
+        "request_body": {
+          "config": {
+            "ignore_mounted_files": true
+          }
+        },
+        "ambient_app_id": "duplicatefinder"
+      },
+      "controls": 2,
+      "passed": 2,
+      "scope": "Complete original current and map-embedded saga module bodies with effect/import adapters. Request payload and first generator step only; no fetch, server, JSX, Redux scheduler or compiled bundle execution."
+    },
+    "harness_sha256": "8dd22d8c95bb78c6801ce8f84571a581a797ee5df11fbe0309683cdc7d14acd8"
+  },
+  "structural_inventory": {
+    "script_map_sources": 1,
+    "settings_map_sources": 125,
+    "lock_packages": 713,
+    "legacy_dependency_records": 620,
+    "package_record_field_counts": {
+      "name": 1,
+      "version": 713,
+      "license": 3,
+      "dependencies": 418,
+      "devDependencies": 2,
+      "extraneous": 1,
+      "peerDependencies": 109,
+      "resolved": 711,
+      "integrity": 710,
+      "engines": 342,
+      "peer": 59,
+      "funding": 81,
+      "dev": 574,
+      "bin": 37,
+      "peerDependenciesMeta": 8,
+      "hasInstallScript": 7,
+      "optional": 4,
+      "optionalDependencies": 4,
+      "deprecated": 3
+    },
+    "resolved_protocol_counts": {
+      "none": 2,
+      "https": 710,
+      "git+ssh": 1
+    },
+    "scope": "All top-level package records traversed for field/protocol inventory; not manual full lock dependency review or package-install/build qualification. No full source-map mappings/125embeddedmodule review."
+  },
+  "findings": [
+    "Main script source map embeds source byte-identical to whole-read js-src/main/index.js. Mapmappings/names are structurally inventoried, not completely decoded/reviewed; map receives no wholefilecredit.",
+    "Settings map embeds5appsource sections among125sources. config/store equal current bytes; App.js differs from currentAppProivder with oldswappedintervalhints; settingsindex importsApp ratherthanAppProivder; saga4506bytes differs from current4451. Embeddedsource not proof that mapping accurately describes every emitted instruction.",
+    "Native whole current and mapembedded saga bodies with import/effect adapters confirm different patchpayloads:newConfig versusconfig. Embedded loadSettings setswindow.appID; current doesnot. Controller save parameterconfig matches embeddedname atsourcelevel; no external APIwirebinding/HTTP/server successfailure demonstrated.",
+    "Prior4native saga controls apply current source. They are not bythemselves compiledartifact or rebuildqualification. Existingrollbackcode appears unchanged inembeddedsection, but notrerun here. Two differentialcontrols passed; no productionfix.",
+    "Lock root dependencies/devDependencies exactlyequal pinned package.json;713package records and620legacy dependency records. Lock pins nextcloud-react customSSHgit commit9efd93621558eea497ac27a419e123d0da6a2754. No sourcefetch/install attempted.",
+    "Lock includes webpack5.60.0,webpack-merge5.8.0,regenerator-runtime0.13.9,React/ReactDOM17.0.2. No top-level node_modules/html-loader orfile-loader entries. Configreferences do not prove an ordinary build failure because selectedmodule types maynottriggerloaderresolution; no buildrun. Lock runtimepresence also doesnotprove it is loaded into pageglobal.",
+    "No whole-filecount increase:152/165 remains. Three large structured artifacts fetched/pinverified and partially analyzed, not promoted to fullreview. This step establishes a real source/embedded-build distinction affecting next runtimevalidation."
+  ]
+}
