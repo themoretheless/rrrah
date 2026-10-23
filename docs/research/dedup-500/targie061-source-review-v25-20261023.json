@@ -1,0 +1,54 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/FrameFeatureExtractor.swift",
+      "git_blob": "224a4d83e337387324ed4f70a5baf391299c8e55",
+      "sha256": "a8c6c637cba94df564fa93369883ae93a57b646d373152f2fbd1e7725898a3d2",
+      "bytes": 11658,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/FrameFeatureExtractorTests.swift",
+      "git_blob": "53c16ceb0307c5aebe7facfe6a264ffcff1568f4",
+      "sha256": "472f876d7dcfede96c498198506b76d0e0ed6420ea99215cd0550e23f256e026",
+      "bytes": 16081,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 70,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 51,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter FrameFeatureExtractorTests",
+    "executed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "FrameFeatureExtractorTests testAggregationRequiresTwoSamplesAndIgnoresMissingValues",
+      "FrameFeatureExtractorTests testCancellingOnlyFeatureWaiterCancelsWorkAndAllowsRetry",
+      "FrameFeatureExtractorTests testFeatureCacheCoalescesConcurrentRequestsForSameVideo",
+      "FrameFeatureExtractorTests testFeatureCacheExtractsEachVideoOnlyOnce",
+      "FrameFeatureExtractorTests testFeatureCachePersistsFeaturesAcrossCacheInstances",
+      "FrameFeatureExtractorTests testFeatureCacheRetriesAfterFailedTask",
+      "FrameFeatureExtractorTests testIncompleteExtractionIsSharedWithinScanButRetriedOnNextScan",
+      "FrameFeatureExtractorTests testIncompletePersistentFeaturesAreReextractedBeforeReuse",
+      "FrameFeatureExtractorTests testLegacyObservationsUnderCurrentCacheVersionAreReextracted",
+      "FrameFeatureExtractorTests testPreviousFrameFeatureVersionIsReextractedAndThenReused"
+    ],
+    "log_sha256": "88ba147dffe5384af5aade0f603bfc17c18f9c3ca1fd2573bfd6ffac2dbf5d47",
+    "scope": "Full unchanged original package and full original test file. Native Vision creates observations from authored CGImage; original CountingFrameFeatureExtractor injects extraction results for cache behavior. One real SQLite persistence test; other version/completeness tests use original InMemoryHashCache. Four-byte .mp4 placeholders are identity fixtures, not decoded videos."
+  },
+  "findings": [
+    "FrameFeatureExtractor samples five relative positions8/28/50/72/92%, maximum256pixel inputs, revision2 Vision. Decode errors create nil slots; cancellation propagates; Vision failure throws. Similarity averages corresponding nonmissing slots, requires at least2validcomparisons. This policy does not cover unsampled content or arbitrary temporal edits.",
+    "FrameFeatures.isCompleteForPersistence requires exactly5 nonnil observations, expectedrevision and positiveelementCount. Ten passing tests establish seeded incomplete/legacy cache payloads are retried and complete success reused; no universal damaged-video recovery proof.",
+    "Six concurrent requests for same URL coalesce to one injected extraction; failedtask removed for retry; cancelling sole waiter cancels injected work and allows second extraction. These tests use cooperative Task.sleep, not real AVFoundation cancellation latency.",
+    "Completed in-memory task map keyed solely URL persists within cache lifetime. Source shares analogous same-path rewrite risk as ImageFeatureCache(v12); frame-specific physical rewrite not reproduced here. Caller scan lifecycle matters.",
+    "Real SQLite test persists serialized native observations across two FrameFeatureCache instances over same backend. It verifies similarity1; it does not decode placeholder video. Real-video extraction remains scoped to v17 generated FFmpeg fixtures.",
+    "Aggregator drops nil only and has no explicit finite/range guard; normal Vision score validates distances, so malformed score concern is primitive assumption not demonstrated natural pipeline failure.",
+    "No upstream source adopted. All original source notices preserved. Two files actually whole-read, no extra whole repository credit."
+  ]
+}
