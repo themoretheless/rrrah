@@ -1,0 +1,41 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/io/writer.cpp",
+      "lines": 1,
+      "sha256": "6a9bdd8181195a7fdefb7dd1b1a816bc23f7d2663867d9647a5d1c931b861ec3",
+      "git_blob_verified": true
+    }
+  ],
+  "partial_files_read": [
+    {
+      "path": "src/main.cpp",
+      "lines_read": [
+        1,
+        380
+      ],
+      "total_lines": 1254,
+      "sha256": "f938cb0a8ff3b6300df9c65728b248b5acaf41ffe11ec1eb57d2f4db396131b8",
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/sift497-writer-result-20261023.json"
+  ],
+  "source_control": "docs/research/dedup-500/sift497-writer-control-20261023.cpp",
+  "findings": [
+    "writer.cpp is placeholder; actual JSON emission inmain. Allhash/group/matrix/stats/cluster writer functions and hash argument validation read in first380lines. Remainingmain notreadyet.",
+    "Extracted original write_hash_json andto_hex compiled unchanged: simple filename roundtrips standardPythonJSON; paths withquote,newline or backslash-q produce invalidJSON. Noescaping at actualwriter. No files modified.",
+    "cmd_hash explicitlybounds hash_size2..1024 and normalizesthreads/frames>=1, validates media andalgorithm. This narrows previoussourceonly zero/one size concerns for thisCLI path; directAPI/import/find paths stillneedreview.",
+    "write_cluster_json collects below-filter group members into ungrouped thenwrite_stats_json alsoadds same below-filter groups, suggesting doublecount total_ungrouped; source-only notexecuted.",
+    "Allpath emission seen is raw strings; clusterstats andparameter semantics remain partialcallgraph qualification."
+  ],
+  "remaining": [
+    "Other86 tracked blobs (main onlypartlyread)",
+    "Mainremaininglines381..1254, callers/importvalidation and fullruntime"
+  ],
+  "full_review_count": 248
+}

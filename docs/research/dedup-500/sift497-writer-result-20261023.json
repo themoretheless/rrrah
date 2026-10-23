@@ -1,0 +1,25 @@
+{
+  "rows": [
+    {
+      "path": "simple.png",
+      "valid_json": true,
+      "path_roundtrip": true
+    },
+    {
+      "path": "quote\".png",
+      "valid_json": false,
+      "path_roundtrip": false
+    },
+    {
+      "path": "line\nfeed.png",
+      "valid_json": false,
+      "path_roundtrip": false
+    },
+    {
+      "path": "back\\q.png",
+      "valid_json": false,
+      "path_roundtrip": false
+    }
+  ],
+  "scope": "Extracted original write_hash_json and to_hex unchanged; standard Python JSON parser oracle; no fullCLI or file mutation"
+}
