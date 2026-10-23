@@ -1,0 +1,61 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/bats/outputs/1_find-all.bats_3.out",
+      "local": "156-1_find-all.bats_3.out",
+      "git_blob": "a6d9c83e4545a7f42452146f11d21561ec4dda41",
+      "sha256": "ce9413b403b2e9d81517096d580af38c282d89373bec3a7c06aecaecab83f7b8",
+      "bytes": 27420,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 156,
+  "whole_binary_files_read_total": 1,
+  "whole_visual_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 158,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 7,
+  "full_review_count": 249,
+  "read_coverage": [
+    "1-250",
+    "251-500",
+    "501-729"
+  ],
+  "snapshot_oracle": {
+    "command": "python3 docs/research/dedup-500/nextcloud068-full-scan-snapshot-control-20261023.py docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/156-1_find-all.bats_3.out docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/154-2_list.bats_1.out /tuser/files/tests2 32af17b6db3a8496229b740562938355d83edad67162dfb5f3843e50f4600a56",
+    "exit_code": 0,
+    "result": {
+      "snapshot_sha256": "ce9413b403b2e9d81517096d580af38c282d89373bec3a7c06aecaecab83f7b8",
+      "scanned_paths": 351,
+      "groups": 25,
+      "group_members": 350,
+      "content_and_membership_mismatches": 0,
+      "list_snapshot_equal_after_explicit_scope_substitution": true,
+      "scope_prefix": "/tuser/files/tests2",
+      "sorted_text_hash_matches_original_scenario": true,
+      "scope": "Pinned saved outputs only; no original BATS or Nextcloud execution."
+    },
+    "prior_admin_control_rerun": {
+      "snapshot_sha256": "ec748a91f1a3454f443e3d61fe3c040c5a804ef4dc24b8bf357e99ce49ae4fab",
+      "scanned_paths": 351,
+      "groups": 25,
+      "group_members": 350,
+      "content_and_membership_mismatches": 0,
+      "list_snapshot_equal_after_explicit_scope_substitution": true,
+      "scope_prefix": "/admin/files/tests",
+      "sorted_text_hash_matches_original_scenario": true,
+      "scope": "Pinned saved outputs only; no original BATS or Nextcloud execution."
+    },
+    "harness_sha256": "305a8407155889c4db332e5d3e9be908427b3978a7005c021002320864dcffae"
+  },
+  "findings": [
+    "Whole729line snapshot read in3boundedchunks. Scoped tuser/tests2 traversal equalsall351expectedpaths withoutduplicates,missing or extraentries. Result25groups350members exactlymatchSHA256(i newline) andcopymembership0..i forfamilies1..25.",
+    "Full resultsection matchesoriginaladminlist fixture afterexplicit userheading andpathprefix substitution. This verifies normalizedsavedfixtureparity, not crossuser accesscontrol or filesystemauthorization onliveNextcloud. Noadminpath or siblingtests path appears inexpected/result membership.",
+    "SortedtextSHA256matches exactoriginal1_find-all user/path scenario expectedconstant. Generic oracle gained explicitprefix/expectedhasharguments; originaladmincontrol rerunpassesafterharnesschange. Neither commandcallsPHP,BATS,HTTPorserver.",
+    "Snapshot again excludeszero-family singleton despiteincluding it intraversal. No malformedinput,concurrentchanges,remoteprovidererrors or cancelledserverbehavior tested.",
+    "Oneadditionalwholetextfile gives156text+1binary+1visual=158/165. Sevenpending:3largeCLIoutputs,settingsbundle,2maps,package-lock. LocalRustproduction/testsunchanged thisstep; no fullrepocredit."
+  ]
+}
