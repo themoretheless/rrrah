@@ -1,0 +1,850 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "All10 pinned result databases structurally inventoried using exact markers/delimiters from reviewed source. Preambles read, every record metadata inspected, all payload fields byte-counted and hashed. ECC payload semantics not decoded or fully qualified.",
+  "structured_inventory": [
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_algo.db",
+      "sha256": "2cb0c8d96b8a4d995989d56612c4d4968bc7a8016db5d770d6758c5e9d45ee06",
+      "git_blob_sha1": "d26e40b4d7870ed304a1f314f67f749bcaac7ccf",
+      "bytes": 1614,
+      "preamble": "**PYHEADERECCv222...000...000...bbb111**\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 418,
+          "bytes": 1186,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "58a9b0ce4b5f53fee953db4b290ac5369083cb2977b80c37a476b356c5c9cbcb"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_dir.db",
+      "sha256": "ccbf7d6eb50326895eda8f8d1f97e6362f489a7b283f9705cd6f2fc7d2813ef5",
+      "git_blob_sha1": "e23970dd536f5ab28fbcc9facb3e027b9a76cdc9",
+      "bytes": 6473,
+      "preamble": "**PYHEADERECCv222...000...000...bbb111**\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 283,
+          "bytes": 1184,
+          "fields_found": 5,
+          "path": "alice.pdf",
+          "size_text": "67254",
+          "field_lengths": [
+            9,
+            5,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ff9b3a089ea2bd39eec9b727d6c38ba317b6d60e7026fe8e6bbdf625611b5d54",
+            "4eed374bc85ce9aee0e210edadb58089e5b94a3d6de763c962ad53db8387fc6d",
+            "ffb1c405301ab781a2d1a91ed01f3af6f1be11c9f4c84d0276e1ced52ac8c7d4",
+            "de8844af0f4ad4f78ac8c79ff69e30c5f74365345e722ab7e2b9d8a67c4e093e",
+            "e1d1cdf54f21c6e6ea72dcd08840200c9b5e9520464d08cee8d1f74723435e12"
+          ]
+        },
+        {
+          "offset": 1477,
+          "bytes": 413,
+          "fields_found": 5,
+          "path": "testaa.txt",
+          "size_text": "8",
+          "field_lengths": [
+            10,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "1a06cab47741f572420d228f76f6eb13a141718fe5887d1838f25bedd232e6fd",
+            "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+            "584abd9b392f0d4957ea6aed7832ecffaa2fdfaa70a2d39c938aab168894fa33",
+            "9efd3e4749dc05e1b20f691ecb9d35e79aece0be688d556de357a941cf0546db",
+            "c57fe00efdd7bc40b456be58ba605944319622af56bf9f1642b7765f55e69cda"
+          ]
+        },
+        {
+          "offset": 1900,
+          "bytes": 1182,
+          "fields_found": 5,
+          "path": "tux.jpg",
+          "size_text": "19719",
+          "field_lengths": [
+            7,
+            5,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "5f558e81d72a4ce64c441c1f2a9dcfd0c3c645862180be4a8647fd0ba4d47647",
+            "5f4b75634381196faf857ccc46a291a90b75e7406c66a5345ca1537663f6907f",
+            "0cd7b353c7bee307d4e936b905d6072c8fc5752c6d64870450b27a8a49f3c5b4",
+            "d5b19a96ec0156fd2969c7ea03422bac97ab632505082812dcf74637bf4a3768",
+            "c3be949feda15527975f601c8c759e7433a8a55884ca85a0808ac97808f6c570"
+          ]
+        },
+        {
+          "offset": 3092,
+          "bytes": 1186,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "58a9b0ce4b5f53fee953db4b290ac5369083cb2977b80c37a476b356c5c9cbcb"
+          ]
+        },
+        {
+          "offset": 4288,
+          "bytes": 420,
+          "fields_found": 5,
+          "path": "Sub2/testsub2.txt",
+          "size_text": "6",
+          "field_lengths": [
+            17,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "b72d503991d6c348a7d2ecc3f910a57cec7cb53ce3c13a2012a47649ed606034",
+            "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+            "23deef71f4418bc53bd508894082f9dd7c676c32eaaca214771276057dddc7a2",
+            "6105d6bc6dfe463973239a2a3242a3d298ba6514e3b306bc069158ee69e01953",
+            "12c824be3b32f31282239a4011f444481c84d470e644041e37ce6008814cce03"
+          ]
+        },
+        {
+          "offset": 4718,
+          "bytes": 1187,
+          "fields_found": 5,
+          "path": "sub/Snark.zip",
+          "size_text": "2048",
+          "field_lengths": [
+            13,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "f8e2d4b20651ee60799b3aa875b3b247f85c32b94f7a47a8bc2352c4fe2c8306",
+            "bfa0ec8bdf2946547879d50a68687ea32e2fa628db187357415858b633d194d9",
+            "063e45c1d21f531d6bc0cb5c06f4808ded1f404016bdbbe94bff605a4e895499",
+            "5ad77c0d60557ab70f6b7089ceb212a7a14abf71db89fef2c554dd9838335f8f",
+            "20a9484aa688d5e640b6aaff4e3907be947fbecfadade17c1c6b94572a3362ae"
+          ]
+        },
+        {
+          "offset": 5915,
+          "bytes": 548,
+          "fields_found": 5,
+          "path": "sub/testsub.txt",
+          "size_text": "253",
+          "field_lengths": [
+            15,
+            3,
+            127,
+            127,
+            256
+          ],
+          "field_sha256": [
+            "5081f937d2e20aad08aa722abf681611c6126804d8868f9647ac088cfe1c1c0d",
+            "e7866fdc6672f827c76f6124ca3eeaff44aff8b7caf4ee1469b2ab887e7e7875",
+            "176621332ee91a48aecb6890352f644a45eb5e89d18dc0da095834d73c97d57f",
+            "034d67da1376c6e6023909b235d76fb30da912d227e6077a377763d2d8e7313a",
+            "0c085e7af1bd79f2a2aa03233ddb5ebc4bef7de8c82ce1f2c4217773e25eb30b"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_one_file.db",
+      "sha256": "2cb0c8d96b8a4d995989d56612c4d4968bc7a8016db5d770d6758c5e9d45ee06",
+      "git_blob_sha1": "d26e40b4d7870ed304a1f314f67f749bcaac7ccf",
+      "bytes": 1614,
+      "preamble": "**PYHEADERECCv222...000...000...bbb111**\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 418,
+          "bytes": 1186,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "58a9b0ce4b5f53fee953db4b290ac5369083cb2977b80c37a476b356c5c9cbcb"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_header_ecc_test_one_file_tamper.db",
+      "sha256": "2cb0c8d96b8a4d995989d56612c4d4968bc7a8016db5d770d6758c5e9d45ee06",
+      "git_blob_sha1": "d26e40b4d7870ed304a1f314f67f749bcaac7ccf",
+      "bytes": 1614,
+      "preamble": "**PYHEADERECCv222...000...000...bbb111**\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 418,
+          "bytes": 1186,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "58a9b0ce4b5f53fee953db4b290ac5369083cb2977b80c37a476b356c5c9cbcb"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_repair_ecc_check.db",
+      "sha256": "ccbf7d6eb50326895eda8f8d1f97e6362f489a7b283f9705cd6f2fc7d2813ef5",
+      "git_blob_sha1": "e23970dd536f5ab28fbcc9facb3e027b9a76cdc9",
+      "bytes": 6473,
+      "preamble": "**PYHEADERECCv222...000...000...bbb111**\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 283,
+          "bytes": 1184,
+          "fields_found": 5,
+          "path": "alice.pdf",
+          "size_text": "67254",
+          "field_lengths": [
+            9,
+            5,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ff9b3a089ea2bd39eec9b727d6c38ba317b6d60e7026fe8e6bbdf625611b5d54",
+            "4eed374bc85ce9aee0e210edadb58089e5b94a3d6de763c962ad53db8387fc6d",
+            "ffb1c405301ab781a2d1a91ed01f3af6f1be11c9f4c84d0276e1ced52ac8c7d4",
+            "de8844af0f4ad4f78ac8c79ff69e30c5f74365345e722ab7e2b9d8a67c4e093e",
+            "e1d1cdf54f21c6e6ea72dcd08840200c9b5e9520464d08cee8d1f74723435e12"
+          ]
+        },
+        {
+          "offset": 1477,
+          "bytes": 413,
+          "fields_found": 5,
+          "path": "testaa.txt",
+          "size_text": "8",
+          "field_lengths": [
+            10,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "1a06cab47741f572420d228f76f6eb13a141718fe5887d1838f25bedd232e6fd",
+            "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+            "584abd9b392f0d4957ea6aed7832ecffaa2fdfaa70a2d39c938aab168894fa33",
+            "9efd3e4749dc05e1b20f691ecb9d35e79aece0be688d556de357a941cf0546db",
+            "c57fe00efdd7bc40b456be58ba605944319622af56bf9f1642b7765f55e69cda"
+          ]
+        },
+        {
+          "offset": 1900,
+          "bytes": 1182,
+          "fields_found": 5,
+          "path": "tux.jpg",
+          "size_text": "19719",
+          "field_lengths": [
+            7,
+            5,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "5f558e81d72a4ce64c441c1f2a9dcfd0c3c645862180be4a8647fd0ba4d47647",
+            "5f4b75634381196faf857ccc46a291a90b75e7406c66a5345ca1537663f6907f",
+            "0cd7b353c7bee307d4e936b905d6072c8fc5752c6d64870450b27a8a49f3c5b4",
+            "d5b19a96ec0156fd2969c7ea03422bac97ab632505082812dcf74637bf4a3768",
+            "c3be949feda15527975f601c8c759e7433a8a55884ca85a0808ac97808f6c570"
+          ]
+        },
+        {
+          "offset": 3092,
+          "bytes": 1186,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "58a9b0ce4b5f53fee953db4b290ac5369083cb2977b80c37a476b356c5c9cbcb"
+          ]
+        },
+        {
+          "offset": 4288,
+          "bytes": 420,
+          "fields_found": 5,
+          "path": "Sub2/testsub2.txt",
+          "size_text": "6",
+          "field_lengths": [
+            17,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "b72d503991d6c348a7d2ecc3f910a57cec7cb53ce3c13a2012a47649ed606034",
+            "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+            "23deef71f4418bc53bd508894082f9dd7c676c32eaaca214771276057dddc7a2",
+            "6105d6bc6dfe463973239a2a3242a3d298ba6514e3b306bc069158ee69e01953",
+            "12c824be3b32f31282239a4011f444481c84d470e644041e37ce6008814cce03"
+          ]
+        },
+        {
+          "offset": 4718,
+          "bytes": 1187,
+          "fields_found": 5,
+          "path": "sub/Snark.zip",
+          "size_text": "2048",
+          "field_lengths": [
+            13,
+            4,
+            127,
+            127,
+            896
+          ],
+          "field_sha256": [
+            "f8e2d4b20651ee60799b3aa875b3b247f85c32b94f7a47a8bc2352c4fe2c8306",
+            "bfa0ec8bdf2946547879d50a68687ea32e2fa628db187357415858b633d194d9",
+            "063e45c1d21f531d6bc0cb5c06f4808ded1f404016bdbbe94bff605a4e895499",
+            "5ad77c0d60557ab70f6b7089ceb212a7a14abf71db89fef2c554dd9838335f8f",
+            "20a9484aa688d5e640b6aaff4e3907be947fbecfadade17c1c6b94572a3362ae"
+          ]
+        },
+        {
+          "offset": 5915,
+          "bytes": 548,
+          "fields_found": 5,
+          "path": "sub/testsub.txt",
+          "size_text": "253",
+          "field_lengths": [
+            15,
+            3,
+            127,
+            127,
+            256
+          ],
+          "field_sha256": [
+            "5081f937d2e20aad08aa722abf681611c6126804d8868f9647ac088cfe1c1c0d",
+            "e7866fdc6672f827c76f6124ca3eeaff44aff8b7caf4ee1469b2ab887e7e7875",
+            "176621332ee91a48aecb6890352f644a45eb5e89d18dc0da095834d73c97d57f",
+            "034d67da1376c6e6023909b235d76fb30da912d227e6077a377763d2d8e7313a",
+            "0c085e7af1bd79f2a2aa03233ddb5ebc4bef7de8c82ce1f2c4217773e25eb30b"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_repair_ecc_sa_check.db",
+      "sha256": "04527f4e1abe52484c4c966efc5770c1f5ca58045926462b3425ebdeda8a12b4",
+      "git_blob_sha1": "a97d1ccc66d44b392207d9f29410457d3de74d3c",
+      "bytes": 47542,
+      "preamble": "**PYSTRUCTADAPTECCv222...000...000...bbb111**\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 288,
+          "bytes": 31887,
+          "fields_found": 5,
+          "path": "alice.pdf",
+          "size_text": "67254",
+          "field_lengths": [
+            9,
+            5,
+            127,
+            127,
+            31599
+          ],
+          "field_sha256": [
+            "ff9b3a089ea2bd39eec9b727d6c38ba317b6d60e7026fe8e6bbdf625611b5d54",
+            "4eed374bc85ce9aee0e210edadb58089e5b94a3d6de763c962ad53db8387fc6d",
+            "ffb1c405301ab781a2d1a91ed01f3af6f1be11c9f4c84d0276e1ced52ac8c7d4",
+            "de8844af0f4ad4f78ac8c79ff69e30c5f74365345e722ab7e2b9d8a67c4e093e",
+            "6c9e3d8fccf7467c50498d2bfdfd0bc15c7f80ef7fe3ee8401a55c72dbd2d533"
+          ]
+        },
+        {
+          "offset": 32185,
+          "bytes": 413,
+          "fields_found": 5,
+          "path": "testaa.txt",
+          "size_text": "8",
+          "field_lengths": [
+            10,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "1a06cab47741f572420d228f76f6eb13a141718fe5887d1838f25bedd232e6fd",
+            "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+            "584abd9b392f0d4957ea6aed7832ecffaa2fdfaa70a2d39c938aab168894fa33",
+            "9efd3e4749dc05e1b20f691ecb9d35e79aece0be688d556de357a941cf0546db",
+            "c57fe00efdd7bc40b456be58ba605944319622af56bf9f1642b7765f55e69cda"
+          ]
+        },
+        {
+          "offset": 32608,
+          "bytes": 9820,
+          "fields_found": 5,
+          "path": "tux.jpg",
+          "size_text": "19719",
+          "field_lengths": [
+            7,
+            5,
+            127,
+            127,
+            9534
+          ],
+          "field_sha256": [
+            "5f558e81d72a4ce64c441c1f2a9dcfd0c3c645862180be4a8647fd0ba4d47647",
+            "5f4b75634381196faf857ccc46a291a90b75e7406c66a5345ca1537663f6907f",
+            "0cd7b353c7bee307d4e936b905d6072c8fc5752c6d64870450b27a8a49f3c5b4",
+            "d5b19a96ec0156fd2969c7ea03422bac97ab632505082812dcf74637bf4a3768",
+            "8dfa2cc9e254a1787c890e2ee027358a5dff4c9aafaa30ce129cf480c2e52a86"
+          ]
+        },
+        {
+          "offset": 42438,
+          "bytes": 2450,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            2160
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "977e7bfb7126fbb18213d16dd3df6392296fc419c3afc2b8108ebe276543e22a"
+          ]
+        },
+        {
+          "offset": 44898,
+          "bytes": 420,
+          "fields_found": 5,
+          "path": "Sub2/testsub2.txt",
+          "size_text": "6",
+          "field_lengths": [
+            17,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "b72d503991d6c348a7d2ecc3f910a57cec7cb53ce3c13a2012a47649ed606034",
+            "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+            "23deef71f4418bc53bd508894082f9dd7c676c32eaaca214771276057dddc7a2",
+            "6105d6bc6dfe463973239a2a3242a3d298ba6514e3b306bc069158ee69e01953",
+            "12c824be3b32f31282239a4011f444481c84d470e644041e37ce6008814cce03"
+          ]
+        },
+        {
+          "offset": 45328,
+          "bytes": 1646,
+          "fields_found": 5,
+          "path": "sub/Snark.zip",
+          "size_text": "2048",
+          "field_lengths": [
+            13,
+            4,
+            127,
+            127,
+            1355
+          ],
+          "field_sha256": [
+            "f8e2d4b20651ee60799b3aa875b3b247f85c32b94f7a47a8bc2352c4fe2c8306",
+            "bfa0ec8bdf2946547879d50a68687ea32e2fa628db187357415858b633d194d9",
+            "063e45c1d21f531d6bc0cb5c06f4808ded1f404016bdbbe94bff605a4e895499",
+            "5ad77c0d60557ab70f6b7089ceb212a7a14abf71db89fef2c554dd9838335f8f",
+            "410d21db879c068c4bef210b074c57685b50b87fa756a1043ef28f1efc72d521"
+          ]
+        },
+        {
+          "offset": 46984,
+          "bytes": 548,
+          "fields_found": 5,
+          "path": "sub/testsub.txt",
+          "size_text": "253",
+          "field_lengths": [
+            15,
+            3,
+            127,
+            127,
+            256
+          ],
+          "field_sha256": [
+            "5081f937d2e20aad08aa722abf681611c6126804d8868f9647ac088cfe1c1c0d",
+            "e7866fdc6672f827c76f6124ca3eeaff44aff8b7caf4ee1469b2ab887e7e7875",
+            "176621332ee91a48aecb6890352f644a45eb5e89d18dc0da095834d73c97d57f",
+            "034d67da1376c6e6023909b235d76fb30da912d227e6077a377763d2d8e7313a",
+            "0c085e7af1bd79f2a2aa03233ddb5ebc4bef7de8c82ce1f2c4217773e25eb30b"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_algo.db",
+      "sha256": "fb0fa2d1857e7a4ec799cd9d2efcca34893af7f22f7335615278626225260d0f",
+      "git_blob_sha1": "2bb81b2893286f62b409e687754066abe7a911a0",
+      "bytes": 2883,
+      "preamble": "**PYSTRUCTADAPTECCv222...000...000...bbb111**\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 423,
+          "bytes": 2450,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            2160
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "977e7bfb7126fbb18213d16dd3df6392296fc419c3afc2b8108ebe276543e22a"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_dir.db",
+      "sha256": "04527f4e1abe52484c4c966efc5770c1f5ca58045926462b3425ebdeda8a12b4",
+      "git_blob_sha1": "a97d1ccc66d44b392207d9f29410457d3de74d3c",
+      "bytes": 47542,
+      "preamble": "**PYSTRUCTADAPTECCv222...000...000...bbb111**\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Parameters: tests/ -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 288,
+          "bytes": 31887,
+          "fields_found": 5,
+          "path": "alice.pdf",
+          "size_text": "67254",
+          "field_lengths": [
+            9,
+            5,
+            127,
+            127,
+            31599
+          ],
+          "field_sha256": [
+            "ff9b3a089ea2bd39eec9b727d6c38ba317b6d60e7026fe8e6bbdf625611b5d54",
+            "4eed374bc85ce9aee0e210edadb58089e5b94a3d6de763c962ad53db8387fc6d",
+            "ffb1c405301ab781a2d1a91ed01f3af6f1be11c9f4c84d0276e1ced52ac8c7d4",
+            "de8844af0f4ad4f78ac8c79ff69e30c5f74365345e722ab7e2b9d8a67c4e093e",
+            "6c9e3d8fccf7467c50498d2bfdfd0bc15c7f80ef7fe3ee8401a55c72dbd2d533"
+          ]
+        },
+        {
+          "offset": 32185,
+          "bytes": 413,
+          "fields_found": 5,
+          "path": "testaa.txt",
+          "size_text": "8",
+          "field_lengths": [
+            10,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "1a06cab47741f572420d228f76f6eb13a141718fe5887d1838f25bedd232e6fd",
+            "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+            "584abd9b392f0d4957ea6aed7832ecffaa2fdfaa70a2d39c938aab168894fa33",
+            "9efd3e4749dc05e1b20f691ecb9d35e79aece0be688d556de357a941cf0546db",
+            "c57fe00efdd7bc40b456be58ba605944319622af56bf9f1642b7765f55e69cda"
+          ]
+        },
+        {
+          "offset": 32608,
+          "bytes": 9820,
+          "fields_found": 5,
+          "path": "tux.jpg",
+          "size_text": "19719",
+          "field_lengths": [
+            7,
+            5,
+            127,
+            127,
+            9534
+          ],
+          "field_sha256": [
+            "5f558e81d72a4ce64c441c1f2a9dcfd0c3c645862180be4a8647fd0ba4d47647",
+            "5f4b75634381196faf857ccc46a291a90b75e7406c66a5345ca1537663f6907f",
+            "0cd7b353c7bee307d4e936b905d6072c8fc5752c6d64870450b27a8a49f3c5b4",
+            "d5b19a96ec0156fd2969c7ea03422bac97ab632505082812dcf74637bf4a3768",
+            "8dfa2cc9e254a1787c890e2ee027358a5dff4c9aafaa30ce129cf480c2e52a86"
+          ]
+        },
+        {
+          "offset": 42438,
+          "bytes": 2450,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            2160
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "977e7bfb7126fbb18213d16dd3df6392296fc419c3afc2b8108ebe276543e22a"
+          ]
+        },
+        {
+          "offset": 44898,
+          "bytes": 420,
+          "fields_found": 5,
+          "path": "Sub2/testsub2.txt",
+          "size_text": "6",
+          "field_lengths": [
+            17,
+            1,
+            127,
+            127,
+            128
+          ],
+          "field_sha256": [
+            "b72d503991d6c348a7d2ecc3f910a57cec7cb53ce3c13a2012a47649ed606034",
+            "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+            "23deef71f4418bc53bd508894082f9dd7c676c32eaaca214771276057dddc7a2",
+            "6105d6bc6dfe463973239a2a3242a3d298ba6514e3b306bc069158ee69e01953",
+            "12c824be3b32f31282239a4011f444481c84d470e644041e37ce6008814cce03"
+          ]
+        },
+        {
+          "offset": 45328,
+          "bytes": 1646,
+          "fields_found": 5,
+          "path": "sub/Snark.zip",
+          "size_text": "2048",
+          "field_lengths": [
+            13,
+            4,
+            127,
+            127,
+            1355
+          ],
+          "field_sha256": [
+            "f8e2d4b20651ee60799b3aa875b3b247f85c32b94f7a47a8bc2352c4fe2c8306",
+            "bfa0ec8bdf2946547879d50a68687ea32e2fa628db187357415858b633d194d9",
+            "063e45c1d21f531d6bc0cb5c06f4808ded1f404016bdbbe94bff605a4e895499",
+            "5ad77c0d60557ab70f6b7089ceb212a7a14abf71db89fef2c554dd9838335f8f",
+            "410d21db879c068c4bef210b074c57685b50b87fa756a1043ef28f1efc72d521"
+          ]
+        },
+        {
+          "offset": 46984,
+          "bytes": 548,
+          "fields_found": 5,
+          "path": "sub/testsub.txt",
+          "size_text": "253",
+          "field_lengths": [
+            15,
+            3,
+            127,
+            127,
+            256
+          ],
+          "field_sha256": [
+            "5081f937d2e20aad08aa722abf681611c6126804d8868f9647ac088cfe1c1c0d",
+            "e7866fdc6672f827c76f6124ca3eeaff44aff8b7caf4ee1469b2ab887e7e7875",
+            "176621332ee91a48aecb6890352f644a45eb5e89d18dc0da095834d73c97d57f",
+            "034d67da1376c6e6023909b235d76fb30da912d227e6077a377763d2d8e7313a",
+            "0c085e7af1bd79f2a2aa03233ddb5ebc4bef7de8c82ce1f2c4217773e25eb30b"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_one_file.db",
+      "sha256": "fb0fa2d1857e7a4ec799cd9d2efcca34893af7f22f7335615278626225260d0f",
+      "git_blob_sha1": "2bb81b2893286f62b409e687754066abe7a911a0",
+      "bytes": 2883,
+      "preamble": "**PYSTRUCTADAPTECCv222...000...000...bbb111**\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 423,
+          "bytes": 2450,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            2160
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "977e7bfb7126fbb18213d16dd3df6392296fc419c3afc2b8108ebe276543e22a"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_one_file_tamper.db",
+      "sha256": "fb0fa2d1857e7a4ec799cd9d2efcca34893af7f22f7335615278626225260d0f",
+      "git_blob_sha1": "2bb81b2893286f62b409e687754066abe7a911a0",
+      "bytes": 2883,
+      "preamble": "**PYSTRUCTADAPTECCv222...000...000...bbb111**\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Parameters: tests/ --with-coverage --cover-package=pyFileFixity -d -v\n** Generated under Reed-Solomon with polynomials in Galois field of characteristic 255 (2^8) with generator=3, prime poly=0x11b and first consecutive root=1.\n",
+      "records": [
+        {
+          "offset": 423,
+          "bytes": 2450,
+          "fields_found": 5,
+          "path": "tuxsmall.jpg",
+          "size_text": "3667",
+          "field_lengths": [
+            12,
+            4,
+            127,
+            127,
+            2160
+          ],
+          "field_sha256": [
+            "ee46bdbb31d9c49b5056ccff241c7cacd7753550b2e39e6e9958f322bb5f39c1",
+            "fc0acc74b0ae025e2e0e1ff42d3d56d838073996715b84d3b900b6a3f011fccf",
+            "558311c1ecbae716934b07bc83f1984d9e065ed8f0dea482b1f92adabdf450b8",
+            "4d48a00b3f9dd5b52a86b410d9864d90fd42374b6b88099aa29841b8dc5c5ce9",
+            "977e7bfb7126fbb18213d16dd3df6392296fc419c3afc2b8108ebe276543e22a"
+          ]
+        }
+      ]
+    }
+  ],
+  "unique_database_groups": [
+    [
+      "pyFileFixity/tests/results/test_header_ecc_test_algo.db",
+      "pyFileFixity/tests/results/test_header_ecc_test_one_file.db",
+      "pyFileFixity/tests/results/test_header_ecc_test_one_file_tamper.db"
+    ],
+    [
+      "pyFileFixity/tests/results/test_header_ecc_test_dir.db",
+      "pyFileFixity/tests/results/test_repair_ecc_check.db"
+    ],
+    [
+      "pyFileFixity/tests/results/test_repair_ecc_sa_check.db",
+      "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_dir.db"
+    ],
+    [
+      "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_algo.db",
+      "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_one_file.db",
+      "pyFileFixity/tests/results/test_structural_adaptive_ecc_test_one_file_tamper.db"
+    ]
+  ],
+  "database_files": 10,
+  "record_count": 34,
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "remaining_without_full_text_or_binary_review": 24
+  },
+  "findings": [
+    "10 filenames represent4 distinct full byte strings, confirmed by full-byte SHA256 groups; duplicated baseline files do not establish10 independent recovery scenarios.",
+    "34 entry candidates, each splits into5 fields: filepath, decimal filesize,127-byte path ECC,127-byte size ECC, and hash/ECC track. Header and adaptive tracks have different lengths, retained per field. Marker-based parsing is an inventory, not a proof that arbitrary opaque payloads cannot contain markers.",
+    "Single-file references all cover tuxsmall.jpg3667 bytes; directory references cover7 fixtures including ZIP2048 bytes. Original corpus is finite and does not represent all archive/image/file mutation cases.",
+    "Preambles repeat test-run arguments rather than complete creation settings. Codec polynomial text exists, but automatic replay of all parameters is not proven.",
+    "Files with tamper in name are byte-identical to corresponding algorithm/one-file expected-result baselines. Names describe test roles, not evidence these saved databases contain tampering.",
+    "All fetched Git blobs match pinned tree. ECC algebra, syndrome/checksum correctness, repair outcome and original integration suite remain unrun. No full review promotion based solely on this structural inventory."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
