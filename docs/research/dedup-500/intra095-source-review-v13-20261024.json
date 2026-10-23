@@ -1,0 +1,181 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v12-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_phashArch.py",
+      "local": "50-Tests--Test_phashArch.py",
+      "sha256": "98a9b206ebe3cb84e6ca0c443ea15dda6b2adaa50d66cf72d2f58437c7acdebf",
+      "whole_text_read": true,
+      "lines": 224
+    },
+    {
+      "path": "Tests/Test_PhashDbApi_Basic.py",
+      "local": "51-Tests--Test_PhashDbApi_Basic.py",
+      "sha256": "11859bae3899db912099cad06a59905284c0fe343081d9238c8e98eb1404093d",
+      "whole_text_read": true,
+      "lines": 81
+    },
+    {
+      "path": "bootstrap.sh",
+      "local": "52-bootstrap.sh",
+      "sha256": "92c4f46edc0cb8f0c52867d5e173d635cac9d2318f11e5c37deefb1cce21d150",
+      "whole_text_read": true,
+      "lines": 221
+    },
+    {
+      "path": "Vagrantfile",
+      "local": "53-Vagrantfile",
+      "sha256": "ab517681a21837caa62f0a7c8b90b1d5ff28ac6e8a1d972e058ff805e62bc04f",
+      "whole_text_read": true,
+      "lines": 70
+    }
+  ],
+  "whole_text_files_read_total": 53,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 59,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 95,
+  "external_dependency": {
+    "repository": "fake-name/UniversalArchiveInterface",
+    "commit": "48ca9fa4c118b98a00c07f0974f32a610312b327",
+    "whole_files_read": [
+      {
+        "path": "setup.py",
+        "sha256": "ae6b8812b72b20bb5508db138278842a426c00c556f9cf11c1f6122e869feb11",
+        "lines": 34,
+        "whole_text_read": true
+      },
+      {
+        "path": "LICENSE.md",
+        "sha256": "95aa627256bf8c9af545904b35805c61d3c56623eb0142b33bb8bdf460b43480",
+        "lines": 1,
+        "whole_text_read": true
+      },
+      {
+        "path": "UniversalArchiveInterface/__init__.py",
+        "sha256": "16df0d7c3db577cebdfab66fb1794f9a81e19ba1d818dc0799549141df97826b",
+        "lines": 341,
+        "whole_text_read": true
+      }
+    ],
+    "scope": "Externaldependencyreviewnotnewcompletioncreditamong500repositories;notwholedependencyreview",
+    "license": "LICENSE.md contains only BSD;fulllicense/provenance notestablished;no productionadoption"
+  },
+  "original_archive_test_attempt": {
+    "module_names": [
+      "Tests.Test_phashArch",
+      "Tests.Test_validateTestArches"
+    ],
+    "loader_placeholders": 2,
+    "original_test_methods_executed": 0,
+    "exit_code": 1,
+    "error": "ImportError failed to find libmagic",
+    "counted_as_original_test_results": false
+  },
+  "authored_native_backend_control": {
+    "result": {
+      "duplicate_name_case": {
+        "physical_members": 2,
+        "scanner_name_uniqueness_check_passes": true,
+        "visible_contents": [
+          "other"
+        ],
+        "visible_names": [
+          "same.txt"
+        ]
+      },
+      "scope": "Real pylzma/py7zlib backend and original hashFile on original7z;exact AST-selected dependency ZIP listing method on owned ZIP;full UniversalArchiveInterface import still lacks native libmagic",
+      "sevenz_members": [
+        {
+          "bytes": 32472,
+          "hash_info": {
+            "hexHash": "d9ceeb6b43c2d7d096532eabfa6cf482",
+            "imX": 493,
+            "imY": 389,
+            "pHash": -4992890192511777340
+          },
+          "name": "Lolcat_this_is_mah_job.jpg",
+          "sha256": "09de99364b0f052033869dc87da529c10f90abec390bd8712c3d2b83cd4e6ba3"
+        },
+        {
+          "bytes": 254050,
+          "hash_info": {
+            "hexHash": "1268e704908cc39299d73d6caafc23a0",
+            "imX": 493,
+            "imY": 389,
+            "pHash": -4992890192511777340
+          },
+          "name": "Lolcat_this_is_mah_job.png",
+          "sha256": "631aede1de6fe10cce0bbe41796d6258d98a6a9ceabbcb921f56865cbb770e93"
+        },
+        {
+          "bytes": 10727,
+          "hash_info": {
+            "hexHash": "40d39c436e14282dcda06e8aff367307",
+            "imX": 300,
+            "imY": 237,
+            "pHash": -4992890192511777340
+          },
+          "name": "Lolcat_this_is_mah_job_small.jpg",
+          "sha256": "e98ab73bcf418d9cfb7cc139c4fe8380f9bdbeafba431a3b10b8403e7a3c8768"
+        },
+        {
+          "bytes": 11226,
+          "hash_info": {
+            "hexHash": "dcd6097eeac911efed3124374f44085b",
+            "imX": 325,
+            "imY": 307,
+            "pHash": -7813072021139921681
+          },
+          "name": "dangerous-to-go-alone.jpg",
+          "sha256": "75f650dacc5bd4c5bff2e0da4f072c2ec91ec9c8889f5d95979a37e9a59d6563"
+        },
+        {
+          "bytes": 45337,
+          "hash_info": {
+            "hexHash": "6d0a977694630ac9d1d33a7f068e10f8",
+            "imX": 500,
+            "imY": 363,
+            "pHash": -7472365462264617431
+          },
+          "name": "lolcat-crocs.jpg",
+          "sha256": "27cbbe132dc59f4f53c88c903506f03c79d3b68c9ad7a7e65dfb026a6274f9e4"
+        },
+        {
+          "bytes": 46151,
+          "hash_info": {
+            "hexHash": "7227289a017988b6bdcf61fd4761f6b9",
+            "imX": 501,
+            "imY": 356,
+            "pHash": -3164295607292040329
+          },
+          "name": "lolcat-oregon-trail.jpg",
+          "sha256": "0a17b0af7a2bdc6452b0f528ebc8509a616a1d215d84c176c4191d816176e72a"
+        }
+      ],
+      "sevenzip_payloads_equal_zip": true
+    },
+    "exit_code": 0,
+    "sevenz_sha256": "cd1d81ce83fe3ccf0f911d197f1ea49184b6c8cf836cfb75db5f61f89659cf4b",
+    "whole_archive_credit": false
+  },
+  "bootstrap_syntax_exit_code": 0,
+  "findings": [
+    "UniversalArchiveInterface notavailablefromconfiguredpackageindex;bootstrap.sh identifiesGitdependency. ClonedexactdependencyHEADandreadsetup,license,module;installedpythonmagic0.4.27,rarfile4.5,pylzma0.6.1onlyinownedvenv.",
+    "Full originalarchive testloadfailsbecausepythonmagic cannotfindnativelibmagic;two unittestloaderplaceholdersareNOTtwooriginaltestmethods. Prior19originaltests14pass5errorsremainunchanged.",
+    "Realpy7zlibreadsoriginal7z6membersandcheckcrcpasses;all6SHA256match ZIPmemberspreviouslyviewed. OriginalgetHashDictcomputesexpectedhash/dimensionsonrealdecodedbytes;notfullPhashArchiveruntime.",
+    "Correction:dependency _getZipFileListconvertsnamesintoset,droppingduplicateoccurrencesbeforeHashThread.scanArchivecanchecknameuniqueness. ExactoriginaldependencymethodonownedZIPtwosame.txt(first/other)returnsonevisibleentryother;scannerduplicatecheckthenpasses. Earlier explicitscannercheck alone doesnotguarantee rejectionthroughthisbackend.",
+    "Original Test_phashArch fourtestmethodsread;Test_PhashDbApi_Basic requiresDBfixtureandcanDROPtesttable;readonly,noconnection/import/execution.",
+    "Bootstrap/Vagrantfilesdescribeglobalsystem/DBprovisioningforlegacyVMs. Onlyreadandbash-ncheckedbootstrap;nosudo,VM,globalpackages,systemPythonreplacementorDBactions."
+  ],
+  "transfer_decision": "Preserve memberoccurrences before duplicate-namevalidation;backendnormalizationcaninvalidate downstreamchecks. Keep dependency/runtimegates separatefromsuccessfulstandalonedecoderchecks.",
+  "limits": [
+    "53wholetextplus6visual=59of154;95remain.",
+    "Externaldependency3filesdo notincrementmainrepo49/53sourcecountsor500completioncount.",
+    "7zstructural/nativepayloadreviewnotwholecontainer/manualbinarycredit.",
+    "Missinglibmagiclimitsfulloriginalarchiveintegration;otherreviewworkcancontinue.NativepHash.org/ASAN staysskipped."
+  ]
+}
