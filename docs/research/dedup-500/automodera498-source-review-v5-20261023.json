@@ -1,0 +1,67 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/service/IntegratorServiceFacade.java",
+      "sha256": "1a27b5e906e704d11229b5368b46f7646f5313a8d34546d976ac5ace36d56fa5",
+      "lines": 137,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/service/IntegratorServiceFacadeImpl.java",
+      "sha256": "eb1e9e7398ea32a2f33d430ab888b781861923f66bf2f53ed304bbe76bf2dbe6",
+      "lines": 518,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/service/ReportService.java",
+      "sha256": "aa94bb021a6d6027892d0e8892934b767e61e833f4ba5e93a80157c0bfb0baea",
+      "lines": 34,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/service/ReportServiceImpl.java",
+      "sha256": "31280957877a9d160c2ddd2d7d99d3c3115e41bf3bd9da3573740505546d9239",
+      "lines": 49,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "upstream_java_run": false,
+    "native_run": false,
+    "database_run": false
+  },
+  "source_reasoning_controls": [
+    {
+      "scores": [
+        0.9,
+        0.4
+      ],
+      "selected_index": 1,
+      "reported_score": 0.4
+    },
+    {
+      "scores": [
+        0.9
+      ],
+      "selected_index": 0,
+      "reported_score": 0
+    }
+  ],
+  "findings": [
+    "Four integrator service files whole-read and Gitblobverified. checkImage first candidate sets highestMatch without setting highestMatchScore. Python transcription of branch confirms scores0.9,0.4 selectsecond0.4; singleton0.9 reports0. No Java/native runtime claim.",
+    "checkImage calculates hashInput through pHash once but leaves it unused. Each candidate invokes getSimilarityToFileWithHash on original file path, potentially redecoding/re-hashing per candidate; actual native implementation cost unknown.",
+    "Matching iterates collectionService.findAll(), no enabled/subscription filtering in this method. No threshold applied here; report always stores a candidate when any exist. Downstream reporting decision still requires review.",
+    "No equal-width, algorithm recipe, finite-score validation or per-candidate error isolation within checkImage. One input hash IOException aborts before matching; later native errors not handled locally.",
+    "Previously reviewed broken simScore rotation path is commented out here; active matching uses native file-vs-hash path. Thus v1 transpose finding is not demonstrated as active checkImage rotation defect.",
+    "Collection update processing uses version comparison and empty-image retry, but does not compare recipe/content digest. Unknown archive Optional.get failure caught and logged without preserving exception detail.",
+    "ReportService simply delegates save/findAll to repository; no score or provenance validation added in these four files."
+  ],
+  "remaining": [
+    "137 other tracked blobs/assets",
+    "Report model/downstream decision, native binaries provenance and runtime qualification"
+  ],
+  "full_review_count": 249
+}
