@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "controls": {
+    "source": "docs/research/dedup-500/filemorrow046-cache-control-20261023.swift",
+    "compiler": "Apple Swift 6.4 arm64-apple-macosx26.0",
+    "original_scanner_unchanged": true,
+    "original_model_declarations_unchanged": true,
+    "compile_exit_code": 0,
+    "run_exit_code": 0,
+    "fixture_size_bytes": 1048576,
+    "changed_offset": 300000,
+    "mtime_restored": true,
+    "cached_scanner_group_count": 1,
+    "fresh_scanner_group_count": 0,
+    "actual_contents_differ": true,
+    "trash_executed": false,
+    "fixtures": "UUID temporary directory, deferred cleanup"
+  },
+  "findings": [
+    "Actual original scanner reproduces a stale false-positive exact group after a same-size middle-byte edit with restored mtime. First/last fingerprint bytes remain equal; fullHash reuses path-size-mtime cache. A new scanner hashes the changed content and returns no group.",
+    "This is a scanning false-positive control, not proof cleanup would delete the modified extra: the separately reviewed cleanup freshly hashes extras. Keeper changes remain a separate confirmed gap."
+  ],
+  "whole_files_read_total": 5,
+  "remaining_tracked_blobs": 53,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
