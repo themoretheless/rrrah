@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "app/src/main/java/com/cleansweep/data/repository/PreferencesRepository.kt",
+      "sha256": "cf49ab8e6f977106454bcc031696304439d3febd925a19bd5501665d733d4227",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          351,
+          700
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Writers confirm comma joining without escaping for processed paths, selected buckets and favorites. Reader/writer pair therefore cannot roundtrip comma-containing paths; prior concern is now supported on both sides.",
+    "Include/exclude scope readers also split comma-separated strings and invalid scope enum falls back to ALL_FILES. Combined with service validation, malformed saved scope can broaden discovery; writers remain later in file.",
+    "Path updates use DataStore.edit transactions, avoiding the simple separate-read lost-update pattern identified in SharedPreferences hidden-group handling. Serialization ambiguity remains independent of transaction safety.",
+    "removeProcessedMediaPathsInFolder compares exact parent strings, removing direct children only; it does not remove descendants recursively. Whether UI promises recursive forgetting remains unread.",
+    "Similarity defaults BALANCED; screenshot conversion defaults JPEG90 and delete-original false. Default video speed reads arbitrary float without finite/positive bounds here; downstream validation remains unread."
+  ],
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 81,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
