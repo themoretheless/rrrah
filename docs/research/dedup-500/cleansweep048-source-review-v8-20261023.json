@@ -1,0 +1,54 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/di/DatabaseModule.kt",
+      "sha256": "6bf55fee8851dacf1a91e81e91d8c9351b91d6ca9651e8c146a5a8b7a0e2b3e6",
+      "lines": 88,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/converter/Converters.kt",
+      "sha256": "a8940ea980909d13d9bd4e5faf1d4e7105ac5a2ef7a9e2709d6612c9e8d72bd1",
+      "lines": 46,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/entity/UnreadableFileCache.kt",
+      "sha256": "54680da97bc84d4abfed31aba3d57122c43d3c0c69595a8b183849b722c78561",
+      "lines": 29,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/dao/UnreadableFileCacheDao.kt",
+      "sha256": "c6888e7730122af0bff88dceb4f6c25d16f29c8ff7a32dfe47e6c23f1a8baac9",
+      "lines": 35,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/entity/FolderDetailsCache.kt",
+      "sha256": "4506aad7c2744b7b5a88c88b4db74055016813e75cc0002373cc98c02a82d849",
+      "lines": 40,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/dao/FolderDetailsDao.kt",
+      "sha256": "16423656922e3784e117daf01976cca8304507afd82f0d56ecdcd0c25aa0974d",
+      "lines": 52,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Database builder installs the reviewed 1->2 and 2->3 migrations with no destructive-fallback option. Schema files and actual Room validation still need qualification; no database upgrade executed.",
+    "String-list converter joins with unescaped |||---|||. An element containing that sequence becomes multiple entries on read; empty list and single empty-string list both encode as empty string and decode to empty list. Source-only serialization noninjectivity.",
+    "UnreadableFileCache stores only path, lastModified and size, with no error class, retry time or decode/recipe version. DAO supports upsert/get-all/clear; invalidation policy is left to callers.",
+    "FolderDetailsCache stores aggregate counts/bytes without timestamp or source identity. Freshness therefore depends on repository/event logic, still unread.",
+    "FolderDetailsDao.replaceAll is transactional clear+upsert; its query returns an unsorted Flow. No stale-order or data-loss claim without caller context."
+  ],
+  "whole_files_read_total": 23,
+  "remaining_tracked_blobs": 107,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
