@@ -1,0 +1,38 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/Models.swift",
+      "sha256": "cbe1992828f800541084c675098720df4ef51065a8843c69cc7276a1463d2e80",
+      "lines": 345,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/AppSupportPaths.swift",
+      "sha256": "1f9c2cc33dde3bd7b53ee2ebcac74bb31eb916ea2b5d324c6633fdcbe1382db2",
+      "lines": 36,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/DownloadsFolders.swift",
+      "sha256": "246395dfabc81593901e26cdf9686353981d878f84f36e85b687064ac879871f",
+      "lines": 35,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "DuplicateGroup permits an empty files array through its memberwise initializer; keeper indexes files even when empty. Nonempty group is an external invariant. wastedSize multiplies without overflow checking.",
+    "Duplicate group/member models contain URLs and size but no physical file identity or verified content snapshot. MoveOperation persistence records only original/destination path, without content identity or per-operation status.",
+    "ExtractedArchive model documentation describes full contents verified, although reviewed implementation checks path and size only. Do not treat its type name/comment as equality evidence.",
+    "Progress fractions clamp maximum to one but not minimum to zero; byte totals are estimates, and models contain no diagnostic completeness flag.",
+    "Managed marker checks accept any existing path at the marker name, without validating marker contents, file type or owner. Managed scan roots use profile folderName directly; profile validation remains to be reviewed.",
+    "DownloadsFolders silently turns directory enumeration failures into empty lists and does not deduplicate overlapping roots or files. Results are extension-filtered, hidden files excluded and locally sorted.",
+    "AppSupportPaths attempts legacy-directory migration and falls back to legacy on failure; directory creation errors are suppressed. No migration or user state modification was executed."
+  ],
+  "whole_files_read_total": 8,
+  "remaining_tracked_blobs": 50,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
