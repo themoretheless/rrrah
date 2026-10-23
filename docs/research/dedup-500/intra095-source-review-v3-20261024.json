@@ -1,0 +1,111 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "scanner/fileHasher.py",
+      "local": "06-fileHasher.py",
+      "sha256": "b9fb161a8ed872b16e7e88fcaecca858c8e641450c2c2a4726f67feb5c603afc",
+      "whole_text_read": true,
+      "lines": 455
+    },
+    {
+      "path": "scanner/hashFile.py",
+      "local": "09-hashFile.py",
+      "sha256": "13d05b42e03cc3d1b60ecca231330c8418524acb86f0428f247c655735399594",
+      "whole_text_read": true,
+      "lines": 176
+    }
+  ],
+  "whole_text_files_read_total": 10,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 144,
+  "authored_controls": {
+    "result": {
+      "archive_cases": [
+        {
+          "cancel_after_first": false,
+          "closed": true,
+          "error": null,
+          "events": [
+            "begin",
+            "commit"
+          ],
+          "second_read_fails": false,
+          "stored_members": [
+            "a.txt",
+            "b.txt"
+          ]
+        },
+        {
+          "cancel_after_first": true,
+          "closed": true,
+          "error": null,
+          "events": [
+            "begin",
+            "commit"
+          ],
+          "second_read_fails": false,
+          "stored_members": [
+            "a.txt"
+          ]
+        },
+        {
+          "cancel_after_first": false,
+          "closed": true,
+          "error": "owned simulated read failure",
+          "events": [
+            "begin",
+            "rollback"
+          ],
+          "second_read_fails": true,
+          "stored_members": []
+        }
+      ],
+      "existing_bare_file": {
+        "bytes_changed": true,
+        "current_digest": "65ba841e01d6db7733e90a5b7f9e6f80",
+        "events": [
+          "skipped"
+        ],
+        "old_digest": "74b87337454200d4d33f80c4663dc5e5"
+      },
+      "scope": "Exact AST-selected original scanArchive/processFile/hashFile bodies; repeatable archive and transactional DB adapters; real owned bare file;no PostgreSQL/archive decoder/image decoder/worker pool"
+    },
+    "exit_code": 0
+  },
+  "rrrah_focused_tests": {
+    "cancel": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0,
+      "log": "docs/research/dedup-500/rrrah-intra095-cancel-tests-20261024.log"
+    },
+    "rewrite": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0,
+      "log": "docs/research/dedup-500/rrrah-intra095-rewrite-tests-20261024.log"
+    }
+  },
+  "findings": [
+    "Original scanArchive checks shared run flag only after inserting member; cancel after first member breaks loop then commits prefix of archive. Native original Python method bodies executed with reiterable archive and transactional DB adapters;not actual PostgreSQL durability.",
+    "Positive controls: two-member complete run commits both; second-member read OSError rolls back all staged members and closes iterator.",
+    "Original processFile skips existing bare file when database row has nonempty itemhash and no pHash dimensions to inspect; no source metadata/bytes/freshness gate on this path. Owned file rewritten aaaa->bbbb still emitted skipped; original method does not rehash.",
+    "Source-only: processArchive publishes archive envelope digest before scanArchive member transaction on initial scan; broad exception logs inner scan failure. Persistence consequences require actual DB runtime, not claimed here.",
+    "Source-only: pHash flag received by HashEngine.__init__ is not stored or forwarded into worker args; hashBareFile doPhash arg unused; actual optional phash computation path needs full dependency runtime qualification.",
+    "hashFile computes MD5 of encoded bytes and optional grayscale-resized DCT perceptual hash; no exact byte confirmation in these reviewed modules. MD5 is digest grouping, perceptual hash similarity is not exact identity. No generated collision or image corpus test in this control.",
+    "rrrah verified cancellation regression sweeps every measured cancellation checkpoint, requires canceled/incomplete and empty groups, then successful retry. Current focused test passed.",
+    "rrrah repeated exact scan regression rewrites same-size bytes, restores old mtime, then grows file; ordinary and verified scans reject stale equality. Current focused test passed."
+  ],
+  "license_scope": "hashFile.py contains its own permissive two-condition notice crediting Johannes Buchner and Connor Wolf; notice preserved in source evidence. No code adopted.",
+  "limits": [
+    "10of154whole files;144remain.",
+    "No upstream original tests executed this turn;2rrrah focused tests and authored AST controls only.",
+    "No PostgreSQL/archive decoder/process-pool integration or native pHash.org/ASAN run."
+  ]
+}
