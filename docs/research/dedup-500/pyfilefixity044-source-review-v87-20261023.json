@@ -1,0 +1,55 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "All7 rendered pages of saved encoder-optimization discussion fully visually read, including code, timings, comments and reference list. Source Git pin verified previously. No embedded code or external references executed.",
+  "new_full_pdf_review": {
+    "path": "pyFileFixity/lib/docs/python - Optimizing a reed-solomon encoder (polynomial division) - Stack Overflow.pdf",
+    "sha256": "1f18df8fc2389a70e2636d8b046086247dfd81fef20eb2b5a900cf9c266bf3f1",
+    "bytes": 293347,
+    "pages": 7,
+    "encrypted": false,
+    "metadata": {},
+    "text_characters_by_page": [
+      4940,
+      3701,
+      3576,
+      3348,
+      4653,
+      4334,
+      2209
+    ]
+  },
+  "rendering": {
+    "tool": "Poppler pdftoppm",
+    "dpi": 110,
+    "pages_visually_reviewed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "pdf_fully_reviewed": 3,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 131,
+    "remaining_without_full_text_binary_visual_or_pdf_review": 13
+  },
+  "findings": [
+    "Historical StackOverflow discussion compares nested polynomial loops, precomputed arithmetic, NumPy and Cython approaches. Saved code/timing text is research material, not a qualified optimization in this checkout.",
+    "Sample harness flags some variants output incorrect then still times them. Performance claims require correctness gate before accepted timing; these values cannot be treated as validated gains.",
+    "Random benchmark messages are generated as hexadecimal text, without a recorded seed; message/codeword parameters and runtime versions affect comparison. No modern paired benchmark or full-byte corpus supplied here.",
+    "Answers include Cython memoryviews/copies, local typed data and CFFI suggestions; portability caveats appear in comments. No code copied or compiler/runtime qualification claimed.",
+    "Later reference list includes alternate matrix/erasure-oriented code and claimed GB/s rates; those are external claims, not equivalent measurements of current polynomial encoder or duplicate-search workload. Linked repos are not counted reviewed.",
+    "Useful adopted review principle: preserve correctness failures as exclusions and distinguish algorithm, parameters, input distribution and runtime when evaluating optimization. No production implementation change in this pass."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
