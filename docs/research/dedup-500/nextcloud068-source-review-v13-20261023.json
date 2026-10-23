@@ -1,0 +1,52 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 151,
+  "whole_binary_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 152,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 13,
+  "full_review_count": 249,
+  "native_control": {
+    "command": "python3 docs/research/dedup-500/nextcloud068-map-layout-control-20261023.py .dedup-work/nextcloud068-20261023/js/script.js.map docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/152-script.js .dedup-work/nextcloud068-20261023/js/settings.js.map .dedup-work/nextcloud068-20261023/settings.bundle.js",
+    "exit_code": 0,
+    "result": {
+      "decoder_primitive_controls": 5,
+      "maps": [
+        {
+          "file": "js/script.js",
+          "sha256": "8564056fc64ef7e1ce9e0265bed9091d5cbc56fe49315fe19d6cd4fb0caf5ad1",
+          "generated_sha256": "74771a32cac16958a19116d58e972b3bf17ba4a45e04ba00dd5f72137f5f5d29",
+          "segments": 1688,
+          "mapped": 1687,
+          "named": 632,
+          "sources": 1,
+          "mapping_lines": 286,
+          "errors": []
+        },
+        {
+          "file": "js/settings.js",
+          "sha256": "24aaeeabb5099c7b1f0fcf7eb1455e13873f3e5565ed27237e3ffa6b01845e24",
+          "generated_sha256": "f419112d1f95f502ff2315ebec90fffac19460268db5a6480d9fda956bffc8a0",
+          "segments": 47993,
+          "mapped": 47992,
+          "named": 425,
+          "sources": 125,
+          "mapping_lines": 44123,
+          "errors": []
+        }
+      ],
+      "scope": "All VLQ mapping segments decoded and source/name bounds checked. Generated UTF16 bounds also checked against pinned emitted files. Semantic emitted-code equivalence and manual full-file review are not established."
+    },
+    "harness_sha256": "cf57b4230ba937c82f281ad212c31c4c4afad3d4b9a00d5230eb81cc389b3ca1"
+  },
+  "findings": [
+    "All49681VLQsegments decoded acrossbothmaps. Segmentfieldcounts1/4/5,sourceindex,line,column,nameindex andgeneratedline/UTF16columnbounds checked,0errors. Fiveprimitivecontrols coverzero/negative/multidigitpositive/negative/unterminatedencoding. Authoreddecoder is not independently qualified for arbitrarysource maps.",
+    "Bothmaps andbothgeneratedfiles reverifiedagainstpinnedGitblobs before recording. OriginalUTF16sourcecolumnlimits includeastralcharacters viaexplicitUTF16encoding, ratherthanPythoncharacterlength.",
+    "Boundsconsistency doesnot prove semanticinstruction-to-sourceequivalence, reconstruction, accuratefunctionnames, dependencylicensecoverage, or current-source rebuildparity. No manualwholemap/bundle/lockcredit.",
+    "Previous current-versus-mapembedded settingsdrift remains. Fullcompiledsettingsmodule execution, actualHTTPbinding, rebuiltartifact andNextcloudruntime stillunqualified.",
+    "This step produces structural evidence for every mapping ratherthan onlytop-levelJSONcounts. Counts remain152/165,13pending; no complete-repoorallcases claim."
+  ]
+}
