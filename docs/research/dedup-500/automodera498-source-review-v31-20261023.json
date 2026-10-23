@@ -1,0 +1,68 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/archive.iml",
+      "sha256": "2e66e7f74b8f0e1b3335c46f000b781b43d780fa6c9be1de0fecf09ca7ad3593",
+      "lines": 148,
+      "git_blob_verified": true,
+      "review_mode": "full_XML_structural_traversal_not_whole_text_read"
+    },
+    {
+      "path": "automodera.iml",
+      "sha256": "dec9fea1bd13a08cfcd147d6d010acb135723da903c513c96455a042e9f1ab47",
+      "lines": 57,
+      "git_blob_verified": true,
+      "review_mode": "full_XML_structural_traversal_not_whole_text_read"
+    },
+    {
+      "path": "common/common.iml",
+      "sha256": "774338776db55dc5ffe03fffc79c705af4fd89ffa26b507de2a3b8823c9ec67d",
+      "lines": 149,
+      "git_blob_verified": true,
+      "review_mode": "full_XML_structural_traversal_not_whole_text_read"
+    },
+    {
+      "path": "integrator/integrator.iml",
+      "sha256": "4e8f7c1394800e76312398ce61e703ef9615791a043f8a04356ef4adffb506c3",
+      "lines": 148,
+      "git_blob_verified": true,
+      "review_mode": "full_XML_structural_traversal_not_whole_text_read"
+    },
+    {
+      "path": "operator/operator.iml",
+      "sha256": "7492266726292004bcecdfcbcca82f56358a9b6c8033e5f40c9ef34c04de1fcf",
+      "lines": 150,
+      "git_blob_verified": true,
+      "review_mode": "full_XML_structural_traversal_not_whole_text_read"
+    },
+    {
+      "path": "parent.iml",
+      "sha256": "dec9fea1bd13a08cfcd147d6d010acb135723da903c513c96455a042e9f1ab47",
+      "lines": 57,
+      "git_blob_verified": true,
+      "review_mode": "full_XML_structural_traversal_not_whole_text_read"
+    }
+  ],
+  "structured_review": "docs/research/dedup-500/automodera498-ide-traversal-20261023.json",
+  "runtime": {
+    "ide_run": false,
+    "maven_run": false
+  },
+  "findings": [
+    "SixIDE.imlfiles fetched/Gitblobverified and XML parsed/traversed in full; assessed as structured metadata, not line-by-line authoredsource reading. Dependency/sourcefolder/rootmanager inventory retained; consolefullinventorytruncated, compactperfile summaryinspected.",
+    "659 XMLnodes acrosssixfiles, 560 orderentries including130unique librarynames. Librarynames are not downloads, binaryverification or dependency sourceaudit.",
+    "IDE records staleversions versus Maven: Hibernate5.6.1.Final vs commonpom5.6.7.Final, SpringBoot2.5.x vs2.6.5. Maven authoritativeforbuild, IDEsnapshot not lockfile.",
+    "Archive/integratorresourcefolders point module-local lib, absent in pinned tree aspreviouslyverified; IDEmetadata doesnotfix nativepackaging pathgap.",
+    "CommonIDEtestsource/testresource roots declared but actualactive tests only2datecontrols aspreviouslysourceverified. Rootmoduleautomodera.iml andparent.iml byteequality checked separately by hashes ifneeded, no IDEimport executed."
+  ],
+  "remaining": [
+    "16 other tracked blobs/assets",
+    "Remainingtemplates/license/media/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249,
+  "xml_nodes": 659,
+  "order_entries": 560
+}
