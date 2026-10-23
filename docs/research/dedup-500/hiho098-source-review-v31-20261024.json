@@ -1,0 +1,55 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v30-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/hive/HiveUtility.java",
+      "local": "164-HiveUtility.java",
+      "git_blob": "52c3132fea61fea33899d88b418adfd43a74d178",
+      "sha256": "b1b2837ac59ff78645bf4365d1deee23b70274c9c33b4a0882b93539ecb684be",
+      "lines": 605,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/hive/TestHiveUtility.java",
+      "local": "165-TestHiveUtility.java",
+      "git_blob": "9d66c96396a56e9fc9dd2d82a1df8c4cc771a1f7",
+      "sha256": "cea778ff7a6231adf5490b620608beaa5049428862b838b0d49fbed62ec97135",
+      "lines": 288,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 159,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 166,
+  "remaining_without_whole_review": 4,
+  "original_tests_cumulative": {
+    "total": 108,
+    "passed": 105,
+    "failed": 3,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 4,
+    "cumulative": 122,
+    "report": "docs/research/dedup-500/hiho098-hive-native-controls-20261024.json",
+    "confirmed": [
+      "jobCounter0 uses directory/path join; jobCounter1 directly concatenates directory and filename, producing different files without trailing slash. Owned temporary files only; cleaned afterward.",
+      "Missing owned driver name prints ClassNotFoundException and returns normally from static runQuery. No JDBC connection attempted.",
+      "Multiple semicolon-separated dynamic columns return only the last name.",
+      "Insert helper splits on comma while other partition helpers use semicolon: a:string:x;b:string:y produces a=quoted x;b and omits b=quoted y. String output only, no SQL execution."
+    ]
+  },
+  "source_only_findings": [
+    "Both runQuery overloads catch ClassNotFoundException/SQLException and print rather than propagate. Dynamic overload unconditionally drops main table even when createTable=false; no database execution this pass.",
+    "createTable closes script writer only on normal path; SQL helper swallowed failures can still permit normal return. No real Hive driver qualification.",
+    "TestHiveUtility has one unannotated testGetColumnType method, and its getSelectQuery test depends on not-yet-reviewed DBQueryInputJob; entire test file read but no upstream method executed in this increment.",
+    "Hive type mappings and generated query strings not validated against a real Hive parser/engine."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
