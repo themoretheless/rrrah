@@ -1,0 +1,31 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/Views/MainView.axaml",
+      "sha256": "c12758ae41a868b8fce335a172304ccee53d599f668ab77ce5ed9e3983d95107",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          431,
+          850
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Contiguous filter/exclusion markup read. Minimum size is labelled KB and displayed as an integer while conversion uses 1024; overflow behavior was separately reproduced in v19.",
+    "Both date filters use CalendarDatePicker values passed directly to DateTime bounds. No explicit end-of-day expansion appears in markup or reviewed call site, so a date-only upper bound can exclude later times on that day for the creation filter; actual picker time semantics remain untested.",
+    "Modification To label declares Grid.Row=2 in a grid with no RowDefinitions, while adjacent pickers use default row. Rendered layout clamping has not been qualified.",
+    "System/hidden exclusions and include-subfolders controls disable while busy; folder lists remain enabled with AllowDrop. Exclusion templates bind path text and native folder icons but no file mutation action.",
+    "Start/Add/Remove buttons use command availability. Results-tab toolbar begins after these filters; rest of results markup remains unread."
+  ],
+  "whole_files_read_total": 79,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
