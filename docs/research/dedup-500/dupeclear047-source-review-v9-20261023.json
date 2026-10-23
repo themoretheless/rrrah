@@ -1,0 +1,36 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/ViewModels/MainViewModel.cs",
+      "sha256": "34c43f021c1b2ea3334c49a5b0fb4770e47ceec2acc3efc029b0f5cfd7952722",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          876,
+          1229
+        ],
+        [
+          1431,
+          1605
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Search completion dialog explicitly labels cancellation Search Interrupted using the command token, qualifying the earlier FinderResult concern: the service lacks a cancelled field but this UI caller retains cancellation state. Partial matching results are still added and automatically marked before the interrupted dialog.",
+    "SearchAsync starts progress and ETA tasks that loop on IsBusy; references are not awaited in the reviewed method, and SetBusy(false) is not in a finally covering the search and automatic marking. A non-cancellation exception can leave busy state and reporter loops active; source-only.",
+    "CollectionChanged handlers subscribe on Add and unsubscribe on Remove but do not detach items on Reset/Clear. This is not by itself proof of retained objects because event ownership/lifetimes matter; stale objects retained elsewhere can still invoke callbacks.",
+    "Completed-search duplicate count uses DuplicateCount, but displayed byte size sums every returned group member including the retained representative; it is total grouped bytes rather than reclaimable duplicate bytes.",
+    "Directory add/remove/reorder commands use IsBusy guards; exclusion-directory selection is invoked inside Task.Run before busy is set. Full picker/UI threading qualification remains unread."
+  ],
+  "upstream_runtime_run": false,
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 43,
+  "full_review_count": 249,
+  "scope": "Additional MainViewModel ranges; cumulative ranges are in v7-v9, whole file remains unread."
+}
