@@ -1,0 +1,102 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v28-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/pig/PigUtility.java",
+      "local": "154-PigUtility.java",
+      "git_blob": "e6a5164a343fa9d4e4fdacbdf5613512ba359ed1",
+      "sha256": "8c6dc840e4660293a63cb96e763bb4882f054324171668dbf9613871d75724ae",
+      "lines": 119,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/pig/TestPigUtility.java",
+      "local": "155-TestPigUtility.java",
+      "git_blob": "7c08c5f385f2aa6cbc94b0e5debf2a1b53c64d53",
+      "sha256": "37bd2d200203addb92717133f456906461fa6eda8e40345c72f1c3fb6208ee45",
+      "lines": 73,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/sf/ExportSalesforceJob.java",
+      "local": "156-ExportSalesforceJob.java",
+      "git_blob": "89a31d84e304f5d1f8555081e4911b436a2b8a85",
+      "sha256": "60e0494f90364997d7fbd327d0318bef615d92a48cdae1adeb6120e3c1239037",
+      "lines": 122,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/sf/ExportSalesforceMapper.java",
+      "local": "157-ExportSalesforceMapper.java",
+      "git_blob": "04513203edd6fa2924a4153fc3c73a589f86fb2c",
+      "sha256": "18f1dc95357fcbd5d1dd769a146536291b04dc7eeaa672f3032254938599406a",
+      "lines": 151,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/sf/ExportSalesforceReducer.java",
+      "local": "158-ExportSalesforceReducer.java",
+      "git_blob": "16df97a931dbbcb4b9f308d3e8e0199d0649b37a",
+      "sha256": "e1c4cebbd4cf8ea4363912227d996221da3fa1511c7647ed9a1cbd046602fa8a",
+      "lines": 103,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/common/sf/SFHandler.java",
+      "local": "159-SFHandler.java",
+      "git_blob": "159a01aaf2475c5f2f5c09ab0c677a28325178b5",
+      "sha256": "540293c2c7bdd48925fbf4e7c9a67caded2b0982b06fb88059bb3b5786b8519d",
+      "lines": 201,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/sf/TestExportSalesForceJob.java",
+      "local": "160-TestExportSalesForceJob.java",
+      "git_blob": "8fe20707e269736b7b53a2e1af136631496c188a",
+      "sha256": "37f8ea6c029be3f60d55966cb1cc635d76843a61ae76377527eefc2ba32ca9be",
+      "lines": 117,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/sf/TestExportSalesforceMapper.java",
+      "local": "161-TestExportSalesforceMapper.java",
+      "git_blob": "248afdb6601197b65e8c020a3482909a013708ba",
+      "sha256": "7d842c52718127d669a5cfcc4b1c646dbba5fc3d23cfa27a6c563ea27a5c8373",
+      "lines": 112,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 155,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 162,
+  "remaining_without_whole_review": 8,
+  "original_tests_cumulative": {
+    "total": 90,
+    "passed": 87,
+    "failed": 3,
+    "new_original_tests": 3,
+    "report": "docs/research/dedup-500/hiho098-pig-original-tests-20261024.json"
+  },
+  "author_controls": {
+    "new": 0,
+    "cumulative": 118,
+    "scope": "Source review only this increment; no new executed controls."
+  },
+  "source_only_findings": [
+    "PigUtility emits fixed comma PigStorage schema and concatenates paths/column names without quoting normalization; decimal/numeric types map to double. No Pig parser or lossless decimal roundtrip executed.",
+    "TestPigUtility unsupported-DATALINK branch catches expected exception but has no fail if nothing is thrown; all three original methods actually passed.",
+    "Salesforce job sets zero reducers despite configuring ExportSalesforceReducer; mapper outputs are discarded by NullOutputFormat, so reducer batch-result checks do not run in this configured path.",
+    "Salesforce mapper static SFHandler is uninitialized by default and production job has no setter call; tests explicitly inject a mock handler. Reducer calls handler before assigning new SFHandler. Source-only, not an executed Salesforce job.",
+    "SFHandler.createBatch closes input in finally, including upload exceptions; mapper cleanup swallows closeJob exceptions. No native qualification this pass.",
+    "SFHandler awaitCompletion treats Completed and Failed as terminal, ignores thread interruption, and has no timeout; checkResults prints per-row failure without throwing. Neither helper is invoked by reviewed mapper/reducer path.",
+    "TestExportSalesForceJob still expects sfHeaders population/mandatory checking that production job comments out; tests source-only and not counted as observed failures.",
+    "Salesforce original mock tests reviewed but unexecuted; no external account, login, upload or network service used."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}

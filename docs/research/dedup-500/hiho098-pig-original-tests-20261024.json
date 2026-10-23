@@ -1,0 +1,19 @@
+{
+  "dependency": {
+    "url": "https://repo.maven.apache.org/maven2/org/apache/pig/pig/0.8.0/pig-0.8.0.jar",
+    "sha256": "703b3598df270f22b669d925b36083c83c9f4c1614043628e1b85877bc0bcee5",
+    "bytes": 2236245
+  },
+  "scope": "Unchanged original PigUtility, TestPigUtility, HIHOException with original DB classes; no Pig engine or cluster run.",
+  "setup_correction": "First compile omitted original HIHOException from isolated classpath and failed; added unchanged original source, not an upstream failure.",
+  "compile": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "tests": {
+    "exit_code": 0,
+    "stdout": "JUnit version 4.5\n...\nTime: 0.043\n\nOK (3 tests)\n\n",
+    "stderr": "26/10/24 03:54:19 INFO pig.PigUtility: pig load script : A = LOAD '/home/sgoyal/output' USING PigStorage(',') AS (intColumn:int,stringColumn:chararray);\n"
+  }
+}

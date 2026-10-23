@@ -2,7 +2,7 @@
   "index": 98,
   "repository": "sonalgoyal/hiho",
   "commit": "77dd5af9b4b19167f062112945433dd588d10640",
-  "review_scope": "154/170 whole pinned files (147 text,7 decoded binary fixtures);87 original JUnit methods:84 pass,3 comparison-oracle failures;118 author controls;16 files and real DB/cluster integration incomplete",
+  "review_scope": "162/170 whole pinned files (155 text,7 decoded binary fixtures);90 original JUnit methods:87 pass,3 comparison-oracle failures;118 author controls;8 files and service integration incomplete",
   "decision": "reject-domain",
   "finding": "Hadoop database/key MapReduce integration; not image/file equality.",
   "license_metadata": "Apache-2.0",
@@ -188,7 +188,11 @@
     {
       "audit": "docs/research/dedup-500/hiho098-source-review-v28-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/hiho098-source-review-v29-20261024.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "87originalJUnitmethods in26files,3partial:84passed,3failed; no fullcluster/configuredDBsuite;118author controls separate"
+  "upstream_tests_scope": "90 original JUnit methods in27 files,3 partial:87 passed,3 failed; no full cluster/configured DB/Salesforce suite;118 author controls separate"
 }
