@@ -1,0 +1,65 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/event/LocalNodeUpdatedEvent.java",
+      "sha256": "a83388873a407e2d739a82243afcbfb5908628ac3354c68916f200060d36b2ad",
+      "lines": 41,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/event/NetworkConfigurationUpdatedEvent.java",
+      "sha256": "2a51d6edbda4fd0c20f824652709b9983cbb502ac3f0d62afb3af7fe08eb78d9",
+      "lines": 42,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/repository/CertificateRequestRepository.java",
+      "sha256": "73110eae7559059629ddc4ab189c705814b7d9b07141b9b32f7886acec135bdb",
+      "lines": 30,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/repository/ImageRepository.java",
+      "sha256": "bf03122868886f1e51ff54b974321ebec1130c7ac7bd30b12ae2657b94c8b96d",
+      "lines": 30,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/repository/LocalNodeRepository.java",
+      "sha256": "01832e5f4cce48ea43f51ae2a141cee959816a807a75328ad95d91cf58d040c9",
+      "lines": 37,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/repository/NetworkConfigurationRepository.java",
+      "sha256": "aedc808b4b1e07e9f8c03a9979e4706089c158407a44563c53a364b3da29cfe7",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/repository/NodeRepository.java",
+      "sha256": "113f83eeaa2d0b84d11d03f4c989d4db14ab3fcc1df164ac437dff9792ea00af",
+      "lines": 36,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "database_run": false
+  },
+  "findings": [
+    "Seven event/repository files whole-read/Gitblobverified. All common repository interfaces now inspected, plus report repository earlier. They declare JPA persistence only, no hash metric search/index or fingerprint recipe compatibility check.",
+    "LocalNodeRepository.get and NetworkConfigurationRepository.get query ID0 explicitly; rows with other IDs ignored by singleton access. Database uniqueness of single logical config beyond primaryID convention not demonstrated.",
+    "LocalNodeUpdatedEvent stores same mutable Node reference, NetworkConfigurationUpdatedEvent stores same config reference; no defensive snapshot and no subscription initialization in event constructors. Listener implementations still need inspection.",
+    "ImageRepository is JpaRepository<Image,String>; no composite collection/archive identity introduced here, consistent with previously reviewed basenameID concern.",
+    "NodeRepository filters NodeType, not online/active state; caller filtering remains separate. No database or event dispatch runtime qualification."
+  ],
+  "remaining": [
+    "94 other tracked blobs/assets",
+    "Event listeners in startup/web services, remaining authored resources/native binaries and runtime qualification"
+  ],
+  "full_review_count": 249
+}
