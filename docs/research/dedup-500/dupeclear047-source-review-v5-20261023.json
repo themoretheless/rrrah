@@ -1,0 +1,80 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear.Native.Windows/WindowService.cs",
+      "sha256": "d3d1478650d26c98af05f0b63d41de568b836dfd3681c3b2e03cc95b4b604a0d",
+      "lines": 41,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native/IWindowService.cs",
+      "sha256": "1c61afb324119d1e6f81e706cd3d470fd47ebd9740b6db6f004398c4a41e9fa1",
+      "lines": 12,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/ImageService/IconProvider.cs",
+      "sha256": "93315d36cbb06a27776f439bb42684f6576f62c43dd6d68e438cb73143eec149",
+      "lines": 73,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/ImageService/PreviewProvider.cs",
+      "sha256": "e9e8b614cfdacda499bc92e16471770827bbccdc5fd0ce0715d87a1c184fdff2",
+      "lines": 193,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/ImageService/PreviewOption.cs",
+      "sha256": "83f5da0a2d20f202960de81021d71d16ce155439c40dc117756162749929b660",
+      "lines": 19,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/ImageService/ImageExtensions.cs",
+      "sha256": "42382002d48bcf016233cf5c1fe499bd931bb647cf48a1a6d50e7cba6f9b5684",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/Libraries/Gdi32.cs",
+      "sha256": "9d5ba1ba825bd4a570b9676e39e781f3092491353693099efeed7d2ac343fac8",
+      "lines": 12,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/Libraries/User32.cs",
+      "sha256": "e723387687feddeee23c1563a579a2b8d823fb9b90524ac3c15b8709ccde9a02",
+      "lines": 51,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/Libraries/Msvcrt.cs",
+      "sha256": "25e2b6773a61f8868dea9953dd212c85ee15e6a5f39d740b0aa7e01297ec6587",
+      "lines": 11,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/Libraries/Shell32.cs",
+      "sha256": "fad0fc05b12514be70859e29841026e06c2902a675fc1771511ac8ca7f6ff7e0",
+      "lines": 101,
+      "git_blob_verified": true
+    }
+  ],
+  "upstream_runtime_run": false,
+  "findings": [
+    "IconProvider handles a missing requested file by File.Create at the system temporary directory plus the original basename. This can truncate an existing same-named temporary file, then delete it after icon extraction. No temporary file creation or Windows API was executed.",
+    "IconProvider does not check SHGetFileInfo return status before Icon.FromHandle. DestroyIcon and temporary-file deletion are not protected by finally, so extraction failures can skip cleanup.",
+    "ImageExtensions copies a System.Drawing.Bitmap and disposes the copy after conversion, but not its input; reviewed FileService callers do not dispose those returned provider bitmaps. Exception paths between LockBits and UnlockBits/Dispose have no finally here.",
+    "PreviewProvider does release HBITMAP through finally after conversion and uses finally to unlock both pixel buffers during copying. However destination LockBits requests ReadOnly while memcpy writes to it; no Windows runtime behavior claimed.",
+    "GetHBitmap releases the COM shell object after GetImage, without finally around cast/call. A thrown call can bypass release. Pixel copy assumes four source bytes per pixel for all formats at least 32 bits; actual shell formats and alpha semantics remain unqualified.",
+    "WindowService forwards window-style/context-menu requests through user32 without checking native return values. All reviewed P/Invoke declarations remain source-only; no native desktop integration run."
+  ],
+  "whole_files_read_total": 27,
+  "remaining_tracked_blobs": 65,
+  "full_review_count": 249,
+  "adoption": "No upstream code adopted; resource ownership and bounded preview decoding remain relevant review criteria."
+}
