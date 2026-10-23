@@ -1,0 +1,51 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/common-certreq.html",
+      "sha256": "5153d8456e3bc1a80204409a91a1607f341253c4fb0d6ea756771a821e76f523",
+      "lines": 203,
+      "git_blob_verified": true,
+      "review_mode": "wholetext_or_entirediff_from_readbaseline"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-certreq.html",
+      "sha256": "57ae2780fbe25a76c74abcd7868d7e3cfea1f12d5b1eec1dff0143bc3fdfab2c",
+      "lines": 203,
+      "git_blob_verified": true,
+      "review_mode": "wholetext_or_entirediff_from_readbaseline"
+    },
+    {
+      "path": "operator/src/main/resources/templates/certreq.html",
+      "sha256": "3d7cc26f02477c07503f49b3a75fa8d8ede7ecd60f4443a31c93d0bbce9ff5b2",
+      "lines": 218,
+      "git_blob_verified": true,
+      "review_mode": "wholetext_or_entirediff_from_readbaseline"
+    },
+    {
+      "path": "operator/src/main/resources/templates/certreqs.html",
+      "sha256": "119a97b66b1d542fe841342f12a28505643432fe558211c7833233ce9a0b4977",
+      "lines": 119,
+      "git_blob_verified": true,
+      "review_mode": "wholetext_or_entirediff_from_readbaseline"
+    }
+  ],
+  "runtime": {
+    "java_or_browser_run": false,
+    "administrative_actions": false
+  },
+  "findings": [
+    "Last4templatepathsreviewed:archivecommoncertreqwhole,integratorentirediff,operatorcertreq/certreqswhole. EverytrackedHTMLtemplate/demo nowhas sourcereviewreference. No render/formaction performed.",
+    "Integratorcommoncertreqlinks omit/admin prefix, unlike archivebaseline; source route mismatch repeated.",
+    "Operatorcertreq decisionform outside certreq!=nullguard includescertreq.id, so notfoundpagecanstilldereferencemissingmodel. ActualThymeleafbehaviorunqualified.",
+    "Detail/listtemplates assume nestednode/certificate existence; onlyouterrequest/listguard. No nullablemodel regressionexecution.",
+    "Dates/status shownasstoredvalues, no independentworkflowcompletion/freshness indication. No fingerprintalgorithm/recipe/calibration layer introduced byremainingtemplates."
+  ],
+  "remaining": [
+    "4 tracked artifacts: LICENSE, READMEcoverJPEG, libphash.dylib, phash.dll",
+    "Opaque nativeimplementation and Java/runtime qualification remain incomplete"
+  ],
+  "full_review_count": 249
+}
