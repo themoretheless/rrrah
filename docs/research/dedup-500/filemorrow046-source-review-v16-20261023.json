@@ -1,0 +1,31 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/FileMorrowTests/ContentExtractorTests.swift",
+      "sha256": "c31208267ed3e1eeaa803dac17bd25015e0a882e5374ea795d6add13a997df68",
+      "lines": 61,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suite": "ContentExtractorTests",
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "build_seconds": 3.39,
+    "test_seconds": 0.031,
+    "original_source_and_tests_unchanged": true,
+    "fixtures": "plain text and ZIP-backed large Office XML in UUID temporary folders"
+  },
+  "findings": [
+    "Three original tests pass: filename/content extraction, final 4000-character limit and large Office XML output truncation without blocking for that fixture. Total distinct original tests passed across focused runs is 55.",
+    "No PDF, image OCR, handler-error continuation, silent child timeout, encrypted archive, malformed encoding or decompression-memory test is included in this suite. Its large-XML success does not prove universal timeout or memory bounds."
+  ],
+  "whole_files_read_total": 26,
+  "remaining_tracked_blobs": 32,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
