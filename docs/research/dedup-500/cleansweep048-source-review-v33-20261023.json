@@ -1,0 +1,27 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/settings/SettingsViewModel.kt",
+      "sha256": "766677e8ca9b1d9d71990d7715f4f1a326088201cf95c271972c34b02f605008",
+      "lines": 1098,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "exportTargetFavorites uses nullable openFileDescriptor(uri,w)?.use then unconditionally reports success. A null descriptor writes nothing but still produces the exported-count toast. No ContentResolver execution was performed.",
+    "Favorite import reads the entire stream with readText and parses JSONArray without byte/item limits. optString coerces entries instead of enforcing string-only schema; paths have no version/schema or canonicalization check here. Existing paths are merged, not replacing all favorites.",
+    "Export existence filtering omits missing favorites; import passes through existing path checks and stores paths via previously reviewed comma-separated preferences, so JSON escaping does not fix comma-containing path persistence.",
+    "resetProcessedMediaIds returns early when processedMediaPaths is empty even if permanentlySortedFolders is nonempty; the reset implementation would clear both, so this guard can make permanent-only history unreachable through this action.",
+    "Similarity threshold change clears persisted results before saving preference but does not cancel an active scan or clear the DuplicatesViewModel in-memory validatedCache. Old scan results can be republished; scheduling remains untested.",
+    "Scan include/exclude edits read StateFlow.value, mutate a copy and replace the full preference set. Concurrent calls before flow propagation can lose additions/removals. Scope changes do not clear prior results here.",
+    "Index status refresh and full scan set busy flags without try/finally or overlapping-job guards. Exceptions can leave flags true; status and unindexed paths are sampled separately.",
+    "App resume dismisses default-path/history search dialogs but not the scope-folder search dialog. FolderSearchManager is shared within this ViewModel, retaining the previously reviewed preparation/reset race."
+  ],
+  "whole_files_read_total": 72,
+  "remaining_tracked_blobs": 58,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
