@@ -1,0 +1,36 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "viz/sift_viz/app.py",
+      "sha256": "57a4da95a588971afcc3edba60a5567d96afd9e641792fc16f61e902ab39e48c",
+      "lines": 1408,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-app-control-20261023.py",
+  "runtime": {
+    "exit_code": 0,
+    "original_app_methods_extracted_by_ast": true,
+    "gui_started": false,
+    "cache_dependency_controlled": true,
+    "user_files_modified": false
+  },
+  "findings": [
+    "All1408lines of app.py read. Original _save_cache and _load_cache method bodies executed using controlled cache dependency and UI values, removing annotations only. No GUI or actual cache filesystem writes.",
+    "_save_cache takes settings from current UI, not the completed hash/projection job. Control confirms old.png results passed with current phash settings. No recipe/job generation contract checked here.",
+    "_load_cache ignores false copy_hashes_to return and returnsTrue after restoring results; controlled failure confirms successful return. This can leave no hashes or stale work-directory hashes for later hot-swap.",
+    "Queue handling does not reject stale job generation; malformed cluster payload validation becomes an empty ClusterResult and then proceeds through ordinary _on_cluster_done/save. Source-only, no event-loop run.",
+    "Reprojection launch checks full pipeline _running but not _proj_running; cluster launch does not serialize _cluster_running. Shared outputs/late events remain caller-level concerns, no concurrent race executed.",
+    "Browse clears displayed data without cancelling ongoing pipeline. Close removes temporary directory without cancelling/waiting pipeline child processes. Source-only lifecycle findings.",
+    "Preview display callback checks current path before applying image, preventing ordinary late previews of a different selected file; useful source-level guard.",
+    "File trash action occurs before in-memory/hash updates. Hash remove subprocess failure merely logged, then cache saved; partial-update concern source-only. No trash, delete or remove action executed."
+  ],
+  "remaining": [
+    "58 other tracked blobs/assets and dependencies",
+    "Whole pinned dependency headers, build/package files, stored assets and upstream end-to-end runtime"
+  ],
+  "full_review_count": 248
+}
