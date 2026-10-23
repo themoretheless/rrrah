@@ -1,0 +1,201 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v23-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "wat/Test_ImLoad.py",
+      "local": "100-wat--Test_ImLoad.py",
+      "sha256": "f73dcdc171e3b3fa4327b171216f3a73c40a832aadc8a9eca35cdd2b5bf54fbb",
+      "whole_text_read": true,
+      "lines": 97
+    },
+    {
+      "path": "valgrind-python.supp",
+      "local": "101-valgrind-python.supp",
+      "sha256": "fa0755cac6a41b79247ed82ed8e6e76e7a3d32e0cff35925846e7b6df6a53936",
+      "whole_text_read": true,
+      "lines": 391
+    },
+    {
+      "path": "wat/testimages/Lolcat_this_is_mah_job.jpg",
+      "sha256": "09de99364b0f052033869dc87da529c10f90abec390bd8712c3d2b83cd4e6ba3",
+      "whole_visual_read": true,
+      "size": [
+        493,
+        389
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/Lolcat_this_is_mah_job.png",
+      "sha256": "631aede1de6fe10cce0bbe41796d6258d98a6a9ceabbcb921f56865cbb770e93",
+      "whole_visual_read": true,
+      "size": [
+        493,
+        389
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/Lolcat_this_is_mah_job_small.jpg",
+      "sha256": "e98ab73bcf418d9cfb7cc139c4fe8380f9bdbeafba431a3b10b8403e7a3c8768",
+      "whole_visual_read": true,
+      "size": [
+        300,
+        237
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/Lolcat_this_is_mah_job_small.png",
+      "sha256": "2d3d5b1713ecf896600c7f6ac331216d7098113fd5d4b12e877ef19a0e7bf0b3",
+      "whole_visual_read": true,
+      "size": [
+        300,
+        237
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/dangerous-to-go-alone.jpg",
+      "sha256": "75f650dacc5bd4c5bff2e0da4f072c2ec91ec9c8889f5d95979a37e9a59d6563",
+      "whole_visual_read": true,
+      "size": [
+        325,
+        307
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/dangerous-to-go-alone.png",
+      "sha256": "be0b13825b7491bb4b83ebbc6fcf5c4a5bb6dc8463090b78757790e4226e5353",
+      "whole_visual_read": true,
+      "size": [
+        325,
+        307
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/lolcat-crocs.jpg",
+      "sha256": "27cbbe132dc59f4f53c88c903506f03c79d3b68c9ad7a7e65dfb026a6274f9e4",
+      "whole_visual_read": true,
+      "size": [
+        500,
+        363
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/lolcat-crocs.png",
+      "sha256": "0980b98748263341475714a0690e8830cd5bd9040f6fc2e07d756b48dd2b86c0",
+      "whole_visual_read": true,
+      "size": [
+        500,
+        363
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/lolcat-oregon-trail.jpg",
+      "sha256": "0a17b0af7a2bdc6452b0f528ebc8509a616a1d215d84c176c4191d816176e72a",
+      "whole_visual_read": true,
+      "size": [
+        501,
+        356
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    },
+    {
+      "path": "wat/testimages/lolcat-oregon-trail.png",
+      "sha256": "acd9e8ee8753d1c2c68b6a61698afd2bf1645eb623f5502e0a4037077f86326e",
+      "whole_visual_read": true,
+      "size": [
+        501,
+        356
+      ],
+      "scope": "Displayed on full labelled contact sheet at scaled resolution; native decoded RGB metadata retained."
+    }
+  ],
+  "whole_text_files_read_total": 101,
+  "whole_visual_files_read_total": 16,
+  "whole_files_read_total": 117,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 37,
+  "new_original_tests": {
+    "module": "wat/Test_ImLoad.py",
+    "run": 1,
+    "passed": 0,
+    "failures": 0,
+    "errors": 1,
+    "exit_code": 1,
+    "source_modified": false,
+    "error": "numpy.float alias unavailable"
+  },
+  "original_tests_cumulative": {
+    "run": 25,
+    "passed": 18,
+    "failures": 1,
+    "errors": 6,
+    "scope": "Eight focused original modules; loader placeholders and adapted diagnostics excluded."
+  },
+  "native_image_pair_controls": [
+    {
+      "jpeg": "Lolcat_this_is_mah_job.jpg",
+      "png": "Lolcat_this_is_mah_job.png",
+      "encoded_equal": false,
+      "decoded_rgb_equal": true,
+      "comparison": "Direct encoded bytes and direct decoded RGB bytes, not digest-only comparison"
+    },
+    {
+      "jpeg": "Lolcat_this_is_mah_job_small.jpg",
+      "png": "Lolcat_this_is_mah_job_small.png",
+      "encoded_equal": false,
+      "decoded_rgb_equal": true,
+      "comparison": "Direct encoded bytes and direct decoded RGB bytes, not digest-only comparison"
+    },
+    {
+      "jpeg": "dangerous-to-go-alone.jpg",
+      "png": "dangerous-to-go-alone.png",
+      "encoded_equal": false,
+      "decoded_rgb_equal": true,
+      "comparison": "Direct encoded bytes and direct decoded RGB bytes, not digest-only comparison"
+    },
+    {
+      "jpeg": "lolcat-crocs.jpg",
+      "png": "lolcat-crocs.png",
+      "encoded_equal": false,
+      "decoded_rgb_equal": true,
+      "comparison": "Direct encoded bytes and direct decoded RGB bytes, not digest-only comparison"
+    },
+    {
+      "jpeg": "lolcat-oregon-trail.jpg",
+      "png": "lolcat-oregon-trail.png",
+      "encoded_equal": false,
+      "decoded_rgb_equal": true,
+      "comparison": "Direct encoded bytes and direct decoded RGB bytes, not digest-only comparison"
+    }
+  ],
+  "contact_sheet": {
+    "local_path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-visual-20261024/wat-ten-contact.png",
+    "sha256": "cc56b910ab11650c0d6e938101e4e605b55a7a5ad682606338b7bcc1139c7d98",
+    "viewed": true
+  },
+  "findings": [
+    "All10tracked wat/testimages images pinned-SHA verified,decoded and visually reviewed on a labelled contact sheet. These are10tracked paths,not10new unique visual subjects.",
+    "Five JPEG/PNG pairs have different encoded bytes but identical decoded RGB bytes and dimensions under Pillow13. Equality checked directly byte-for-byte,not just via digests. This supports separate encoded and decoded identity scopes,not a color-managed or metadata-equivalence claim.",
+    "Original wat image-loading test executes unchanged and errors on numpy.float during first image. No fixture assertion pass is credited; no compatibility alias inserted.",
+    "Source-only: grayscale MISMATCH display condition compares srcimage to grayscale reference instead of greyimage. Later assertion uses the proper grayscale variable; console marker alone is unreliable.",
+    "Whole391line valgrind suppression file reviewed. It contains allocator/TLS/platform-library suppressions and old Linux library paths; this is configuration evidence only,not proof of no leaks or sanitizer success.",
+    "No Valgrind or ASAN executed and no suppression copied into rrrah runtime. Contact sheet remains in owned local work area; compact provenance JSON is committed."
+  ],
+  "transfer_decision": "Keep encoded-byte and decoded-pixel equality explicit,and distinguish diagnostic configuration from measured memory safety. No foreign production code adopted.",
+  "limits": [
+    "117of154 whole tracked files:101text,16visual;37remain.",
+    "25originalfocusedtests have18passes,1failure,6errors;not a clean full upstream suite.",
+    "Visual review at contact-sheet resolution; native direct RGB comparison doesnotqualify ICC,color-managed rendering,allmetadata or allanimationframes.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
