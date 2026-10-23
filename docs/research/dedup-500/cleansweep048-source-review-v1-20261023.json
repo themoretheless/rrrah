@@ -1,0 +1,38 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/usecase/DuplicateFinderUseCase.kt",
+      "sha256": "d46a989d366c3be4152874a51166da1ee687935eccba8837dcf713a1dd37345a",
+      "lines": 201,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/usecase/DuplicateGroup.kt",
+      "sha256": "8469958d5e76a54172b0753a9e0ed592e7f52e92cb87711b8aa2337ea3f1950d",
+      "lines": 33,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/util/PHashUtil.kt",
+      "sha256": "32443d3a9882cb7159b7ed71476e311028693b781a85920f8bfbb1eb17955915",
+      "lines": 104,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Exact-labelled scan groups positive-size candidates by encoded size, then images by 256-pixel system-thumbnail pixel-buffer SHA256 and videos by only the first 256 KiB SHA256. Neither path performs full encoded-byte confirmation, so this is not exact-file equality.",
+    "Video openInputStream returning null becomes nonempty signature video-partial- rather than failure, allowing same-size unreadable videos to group. This is source-derived, not Android runtime reproduction.",
+    "Signature cache validation uses path/id, modification time and encoded size, with no explicit algorithm/version/color recipe key. Database entity/DAO implementation remains unread.",
+    "Cache cleanup deletes entries outside allScannedPaths, but that set contains only same-size candidates in this invocation. Unique-size or out-of-scope paths can lose cached signatures; this may be deliberate cache pruning but is not evidence of deleted files.",
+    "Cancellation checks exist, but broad Exception catches in hashing catch cancellation too; final cancellation propagation and cache-write behavior require coroutine runtime inspection.",
+    "PHashUtil is horizontal 9x8 dHash with BT601-style RGB luminance and strict greater-than bits. Alpha ignored; system scaling/color semantics unspecified. Hamming validates length and BigInteger parsing but does not explicitly reject signed 16-character values.",
+    "DuplicateFinderUseCase imports domain.model.DuplicateGroup, while the separately read usecase/DuplicateGroup is a different hash-named model. Actual imported model remains unread; no compile failure inferred."
+  ],
+  "whole_files_read_total": 3,
+  "remaining_tracked_blobs": 127,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
