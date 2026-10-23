@@ -1,0 +1,35 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/sync_public.py",
+      "git_blob": "55414b60012d3de3bd0b67a35598017eb2aa9df5",
+      "sha256": "e11c6a2f4e82fd750b88f9707f2068eaf1946b4817becc6b36eec2714297a87c",
+      "bytes": 5307,
+      "lines": 137,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 42,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 79,
+  "control": "cleanup067-sync-tests-control-20261023.py",
+  "runtime_scope": "Whole sync_public/core modules and three unchanged remaining original test bodies (selected AST). Original audit CLI subprocess on authored tempfixture. No sync_public --write invocation or outside project copies.",
+  "original_test_bodies_passed": [
+    "test_public_sync_guard",
+    "test_sync_line_endings",
+    "test_json_contract"
+  ],
+  "cumulative_original_own_smoke_bodies_passed": 17,
+  "aggregate_main_run": false,
+  "findings": [
+    "Original privacy/path/manifest roundtrip, normalized/byte newline comparisons and machine JSON CLI contract pass. Combined with prior14covers all17own test functions, not delegated aggregate revision/tokenizer/receipt/security suites.",
+    "Unlike audit_core text synchronization, equivalent_files falls back to byte equality on invalidUTF8. Distinct invalidpayloads correctly differ in native helper control.",
+    "privacy_violations skips an entire file on UnicodeDecodeError. Authored ASCII privacy marker with trailinginvalidbyte returns no violation in this helper; no actual sensitive data or external publication tested.",
+    "safe_destination resolves destination aliases and rejects outside target, but source enumeration includes symlinked regular files without shown source-root check. Static observation only, no source symlink CLI run.",
+    "Write mode copies sequentially and then unlinks stale formerly-managed paths; no whole-operation rollback/source-stability shown. Individual manifest uses replace but no fsync. This behavior was read, no deletion/mutation of any existing project performed."
+  ],
+  "full_review_count": 249
+}
