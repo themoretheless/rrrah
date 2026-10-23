@@ -1,0 +1,46 @@
+{
+  "scope": "Original decimal/date methods; real Java/Hadoop/Mockito types, previous isolated recording hosts;4regular assertions+1heap-bounded child;noSQL/DB/import or cluster",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/BigDecimalSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/DateSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/OracleDateSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/DecimalDateControl.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/DecimalGrowthControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/BigDecimalSplitter.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.DecimalDateControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS decimal halves cover0..1\nOBSERVED integer-scale1/3 rounds to0, triggering MIN_INCREMENT fallback\nPASS null timestamp split\nPASS submillisecond endpoints preserved: col >= '1970-01-01 04:00:00.000000001' AND col <= '1970-01-01 04:00:00.000999999'\ndecimal/date regular checks=4\n",
+      "stderr": "26/10/24 03:29:21 WARN apache.DateSplitter: Encountered a NULL date in the split column. Splits may be poorly balanced.\n26/10/24 03:29:21 WARN apache.DateSplitter: Encountered a NULL date in the split column. Splits may be poorly balanced.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-Xmx32m",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.DecimalGrowthControl"
+      ],
+      "returncode": 0,
+      "stdout": "BEGIN decimal0..1 over3splits with32MiB heap\nOBSERVED integer-scale decimal range grows until bounded child heap exhausted\n",
+      "stderr": "26/10/24 03:29:22 WARN apache.BigDecimalSplitter: Set BigDecimal splitSize to MIN_INCREMENT\n"
+    }
+  ]
+}

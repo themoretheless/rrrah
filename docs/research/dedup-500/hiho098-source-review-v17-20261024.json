@@ -1,0 +1,70 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v16-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/BigDecimalSplitter.java",
+      "local": "108-BigDecimalSplitter.java",
+      "sha256": "69be1932cd24d95772533a9c3c2f942fe023bca0da429bd79a5411b412d6b044",
+      "git_blob": "0a6b8a4ed1b7569f3b9177246cc3521dfb77ee42",
+      "lines": 146,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DateSplitter.java",
+      "local": "109-DateSplitter.java",
+      "sha256": "cf3b1616654ee0f8476d432d1d6b1e78356aa8ca6581dbe30e659c206f5c6213",
+      "git_blob": "bd05cfb1d2a96d1857158c1b24f10c901c2b6184",
+      "lines": 176,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/OracleDateSplitter.java",
+      "local": "110-OracleDateSplitter.java",
+      "sha256": "3913c5c3b2257814d99ee5743e8785fa30352f14297f8b0f84111d3a34a036b2",
+      "git_blob": "dcf50d0df378d41011fb62794b3943d16d47fadd",
+      "lines": 39,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/TextSplitter.java",
+      "local": "111-TextSplitter.java",
+      "sha256": "1d7fbdf4279c4f03b34ee62ed83b934bbefd26cd796bebbe153eea438146fc7c",
+      "git_blob": "4b9433cd88562dbaa8ab68d27c16d23c000026fe",
+      "lines": 219,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 106,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 112,
+  "remaining_without_whole_review": 58,
+  "original_tests_cumulative": {
+    "total": 69,
+    "passed": 69,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 9,
+    "cumulative": 69,
+    "decimal_date_report": "docs/research/dedup-500/hiho098-decimal-date-native-controls-20261024.json",
+    "text_report": "docs/research/dedup-500/hiho098-text-split-native-controls-20261024.json",
+    "confirmed": [
+      "BigDecimal helper exact halves0..1/2 return expected3points. Integer-scale1/3 fallback rounds to0, then original split helper uses MIN_INCREMENT; range0..1/3exhausts separate-Xmx32m child heap.",
+      "DateSplitter null timestamps produce nullsplit; submillisecond endpoint nanos1and999999 retained in generatedclauses.",
+      "Text conversion ASCII roundtrip passes; supplementary Unicode input UTF16length3 becomes4; embeddedNUL truncates converted suffix.",
+      "Ordinary O'Neil boundary is emitted without literal escaping as col >= 'O'Neil'. No SQL executed."
+    ],
+    "scope": "Original methods compiled against same isolated recording dependencyhosts asv16; actual Java/Hadoop/Mockito types. No full DataDrivenDBInputFormat, actual database or cluster execution; text conversion differences alone do not prove import omission because original endpoints are reinserted."
+  },
+  "source_only_findings": [
+    "OracleDateSplitter only changes date clause formatting; native Oracle SQL/date semantics unqualified.",
+    "DateSplitter inherits IntegerSplitter arithmetic, but no additional extreme-date OOM run counted here."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}

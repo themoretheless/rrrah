@@ -1,0 +1,31 @@
+{
+  "scope": "Original TextSplitter conversion and clause generation with actual Hadooptypes/Mockito and previous recording dependencyhosts;4authorchecks; no database/SQL execution or full import; helper roundtrip differences alone do not prove missing output ranges because endpoints are reinserted",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/TextSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/TextSplitControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.TextSplitControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS ASCII text conversion roundtrip\nOBSERVED supplementary text roundtrip differs: UTF16length=3 -> 4\nOBSERVED embedded NUL terminates converted suffix\nOBSERVED ordinary apostrophe name emitted without SQL-literal escaping: col >= 'O'Neil'\ntext split checks=4\n",
+      "stderr": "26/10/24 03:30:03 WARN apache.TextSplitter: Generating splits for a textual index column.\n26/10/24 03:30:03 WARN apache.TextSplitter: If your database sorts in a case-insensitive order, this may result in a partial import or duplicate records.\n26/10/24 03:30:03 WARN apache.TextSplitter: You are strongly encouraged to choose an integral split column.\n26/10/24 03:30:03 WARN apache.BigDecimalSplitter: Set BigDecimal splitSize to MIN_INCREMENT\n"
+    }
+  ]
+}
