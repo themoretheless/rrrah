@@ -1,0 +1,66 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "previous_audit": "docs/research/dedup-500/distill094-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pkg/contextlab/broker.go",
+      "local": "14-pkg--contextlab--broker.go",
+      "sha256": "1606115f7d1576c242a164f4811633fc4ecbfe4f8d7dc9075bc6ab08bb50cc03",
+      "whole_text_read": true,
+      "lines": 301
+    },
+    {
+      "path": "pkg/contextlab/bench_test.go",
+      "local": "15-pkg--contextlab--bench_test.go",
+      "sha256": "274fe2c00cf25bb981e124e7c19a791bd188021dffccb7731e34a2013a5c06b5",
+      "whole_text_read": true,
+      "lines": 100
+    }
+  ],
+  "whole_text_files_read_total": 13,
+  "tracked_blobs": 455,
+  "remaining_without_whole_review": 442,
+  "original_unit_tests_run": false,
+  "original_benchmark_body_smoke": {
+    "names": [
+      "BenchmarkCluster_10Chunks-16",
+      "BenchmarkCluster_50Chunks-16",
+      "BenchmarkCluster_100Chunks-16",
+      "BenchmarkCluster_500Chunks-16",
+      "BenchmarkMMR_10Chunks-16",
+      "BenchmarkMMR_50Chunks-16",
+      "BenchmarkSelector_10Clusters-16",
+      "BenchmarkSelector_50Clusters-16"
+    ],
+    "iterations_each": 1,
+    "exit_code": 0,
+    "scope": "Unchanged original benchmark bodies in minimal isolated original-package composition; not full project/optimization measurement"
+  },
+  "authored_native_control": {
+    "result": {
+      "caller_topk_after": 50,
+      "constructor_negative_target_defaults_to": 8,
+      "postretrieval_cancel_returns_items": 2,
+      "postretrieval_cancel_returns_nil_error": true,
+      "same_config_setter_panics": true
+    },
+    "exit_code": 0,
+    "scope": "Original broker and local components; synthetic retriever returns owned chunks and cancels context; no service/network"
+  },
+  "findings": [
+    "NewBroker normalizes negative TargetK to8; SetConfig stores same negative value without normalization, and ProcessChunks withMMRdisabled panics via negative SelectTopK. Native constructor/setter controls confirm.",
+    "Synthetic retriever cancels context before returning valid chunks; original Broker.Retrieve continues clustering/selection and returns2chunks,nilerror whilectx canceled. This demonstrates absent post-retrieval cancellation gate, not actual provider behavior or latency.",
+    "Retrieve overwrites caller req.TopK1 with configured OverFetchK50 and forces embeddings. Intentional broker overfetch policy, not declared strict caller cap; caller object mutation confirmed.",
+    "Broker constructs SelectorConfig with strategy only, leaving hybrid weights0 and therefore falling back to score. Source observation; no separate full hybrid broker control.",
+    "All eight original benchmark functions execute once and exit0 without original source edits. No correctness assertions in these benchmark bodies, no speedup claim."
+  ],
+  "transfer_decision": "Normalize configuration consistently and make cancellation, request-mutation and resource-admission contracts explicit. No foreign production implementation copied.",
+  "limits": [
+    "13of455whole files;442remain.",
+    "No original unit suite/full dependencies/services/platform/race validation.",
+    "Eight one-iteration benchmark bodies are smoke checks only.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

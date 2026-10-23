@@ -1,0 +1,14 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/Siddhant-K-code/distill/pkg/contextlab
+cpu: Apple M4 Max
+BenchmarkCluster_10Chunks-16       	       1	     12958 ns/op
+BenchmarkCluster_50Chunks-16       	       1	    205625 ns/op
+BenchmarkCluster_100Chunks-16      	       1	    604000 ns/op
+BenchmarkCluster_500Chunks-16      	       1	  12046333 ns/op
+BenchmarkMMR_10Chunks-16           	       1	      8083 ns/op
+BenchmarkMMR_50Chunks-16           	       1	    104792 ns/op
+BenchmarkSelector_10Clusters-16    	       1	       500.0 ns/op
+BenchmarkSelector_50Clusters-16    	       1	       833.0 ns/op
+PASS
+ok  	github.com/Siddhant-K-code/distill/pkg/contextlab	0.360s
