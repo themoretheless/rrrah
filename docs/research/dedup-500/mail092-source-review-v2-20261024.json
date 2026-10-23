@@ -1,0 +1,48 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "mail_deduplicate/deduplicate.py",
+      "local": "03-deduplicate.py",
+      "sha256": "a9fbd6a414b1796213756227ba006bd4eec1640a09ab85b3dba9e7eaf0d890ce",
+      "whole_text_read": true,
+      "lines": 1429
+    }
+  ],
+  "whole_text_files_read_total": 5,
+  "upstream_tests_run": false,
+  "control": {
+    "scope": "Exact original classes via AST with synthetic mail objects; no package CLI or mailbox actions",
+    "synthetic_equal_hash_shortcuts_different_bytes": true,
+    "distinct_hash_zero_threshold_rejected": true,
+    "diff_direction_control": {
+      "a": "d\nc\na\nd\nb\na\nc\na\na\na\nb\nb\n",
+      "b": "b\nd\nd\nb\na\nb\nd\na\nd\nc\nd\na\n",
+      "forward": 126,
+      "reverse": 115
+    },
+    "limits": [
+      "Injected body-hash equality is not an observed real hash collision.",
+      "Diff direction result alone does not prove a full CLI false selection.",
+      "No upstream test suite run."
+    ]
+  },
+  "findings": [
+    "DuplicateSet.diff measures length of formatted unified_diff text, not changed byte count. Original function produces126 and115 for reversed synthetic pair. Threshold120 would distinguish orientations; no full CLI outcome established.",
+    "check_differences shortcuts content comparison when all hash_raw_body values equal. Injecting same synthetic hash with unequal bodies admits pair; distinct-hash zero-content-threshold control rejects. This establishes absence of byte confirmation in this path, not a real hash collision.",
+    "Offending pairs form a graph and high-degree vertices are greedily evicted until remaining pairs satisfy thresholds. This avoids transitive grouping of all near neighbors, but is not a maximum-cardinality subset proof.",
+    "Both negative thresholds bypass checks. Otherwise raw body hashes are materialized even with content threshold disabled. Source observation only, no memory benchmark.",
+    "Worker hashing reopens file and returns scalar metadata; selection reopens mails with prior memoized timestamp/size. No content snapshot verified across stages in this source. Physical mutation runtime remains unqualified.",
+    "Source registration resolves explicit source path and rejects exact duplicate explicit key, but recursively returned subboxes overwrite self.sources entries while incrementing MAIL_FOUND each time. Requires separately reviewed open_box callers for actual overlapping-box reproduction."
+  ],
+  "transfer_decision": "Retain symmetric byte-confirmed exact-file equality; do not use formatted text diff or body digest alone as proof. No foreign implementation copied.",
+  "limits": [
+    "5 complete cached pinned text files; full tree and full upstream suite incomplete.",
+    "AST-isolated original classes with synthetic mail objects, no real mailbox or action invoked.",
+    "Root GPL text still not fully reviewed; no production adoption.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
