@@ -1,0 +1,36 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/duplicates/DuplicatesViewModel.kt",
+      "sha256": "183bf72e23bedda0c9e6ab434a9fae838741b8ec807d2adefa00942fc6d0b9d6",
+      "git_blob_verified": true,
+      "lines": 756,
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          350
+        ],
+        [
+          351,
+          756
+        ]
+      ]
+    }
+  ],
+  "findings": [
+    "DuplicatesViewModel now whole-read. validatedCache is never cleared or replaced after fresh scan, delete, hide or flag operations, so later load can restore stale in-memory groups without fresh repository validation.",
+    "Delete validates only path existence before invoking repository; it does not rehash, compare content or check physical identity. Delete-all-exact therefore relies on earlier thumbnail/partial-video signatures as if exact. No deletion executed.",
+    "On aggregate deletion failure, UI only clears isDeleting and reports error: successful partial deletions are not reconciled and no events/cache updates are sent. This confirms consequence of repository bool-only outcome.",
+    "Success publishes events and folder deltas before saving cache. Missing stale metadata or a persistence exception can leave UI stale after files were already removed; no encompassing finally resets deletion state on unexpected exception.",
+    "Reclaimable byte calculation deduplicates by item.id across overlapping groups, avoiding simple overlap double-counting. It does not account for physical aliases or refreshed size.",
+    "hideGroup and flagAsIncorrect remove visible groups but retain selections/reclaimable amount and do not rewrite persisted groups. Delete path later filters missing IDs against current item map, but display can remain stale.",
+    "Start clears selection and sends service action after marking state Scanning, with no catch around startService. Service-start exception recovery not shown here."
+  ],
+  "whole_files_read_total": 51,
+  "remaining_tracked_blobs": 79,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
