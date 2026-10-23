@@ -1,0 +1,37 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/repository/DuplicatesRepository.kt",
+      "sha256": "1a776eb7206d191d2ce8dd71d344c13c46b83d1323818efbded99e683b4e3414",
+      "lines": 226,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/entity/SimilarityDenial.kt",
+      "sha256": "ec3bf1eb396846f025adb02ed4b56999d92215614a07cfcceae47fe075fcb1ca",
+      "lines": 39,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/dao/SimilarityDenialDao.kt",
+      "sha256": "feda4995450f389f48aaed8460c3480d700bba6f13c2f1d061e96426ff9a1e1f",
+      "lines": 33,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Cached-result validation checks File(item.id).exists, length and modification time truncated to whole seconds. Same-size edits within one second or restored timestamps can retain old groups; there is no content or physical identity validation.",
+    "Loading retains unscannableFiles unchanged without existence/metadata validation. It filters groups to two surviving members but does not recompute signatures or similarity.",
+    "Similarity denial keys join sorted paths with unescaped | and use this as primary key. Distinct path pairs can collide before storage if IDs permit the delimiter; separate pathA/pathB columns do not disambiguate replacement.",
+    "Denials are tied to path strings rather than content identity or recipe, so changed/replaced files at the same paths remain denied. DAO offers insertion and getAll only; no invalidation shown.",
+    "addSimilarityDenials eagerly constructs every unordered pair, quadratic in group size, with no visible group limit or cancellation checkpoint. Actual large-group memory use unmeasured.",
+    "hideGroupId performs read-modify-write on a SharedPreferences set without repository-level synchronization. Concurrent additions can overwrite each other; no concurrency runtime control yet."
+  ],
+  "whole_files_read_total": 13,
+  "remaining_tracked_blobs": 117,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
