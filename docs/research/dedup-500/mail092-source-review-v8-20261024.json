@@ -1,0 +1,62 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v7-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "mail_deduplicate/mail_box.py",
+      "local": "16-mail_deduplicate--mail_box.py",
+      "sha256": "dc1c50a86b245476bdd1a3160374b2fe68950bb4711f2b98b87d240b40116373",
+      "whole_text_read": true,
+      "lines": 511
+    },
+    {
+      "path": "tests/test_mail_box.py",
+      "local": "17-tests--test_mail_box.py",
+      "sha256": "5da42060e862d39baeb43238d6ec65b672608f8a66a18d732c306a9c7f856c78",
+      "whole_text_read": true,
+      "lines": 396
+    }
+  ],
+  "whole_text_files_read_total": 18,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 62,
+  "native_original_tests_added": {
+    "target": "tests/test_mail_box.py",
+    "passed": 40,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 0.18
+  },
+  "native_original_tests_cumulative": {
+    "passed": 229,
+    "failed": 0,
+    "scope": "Focused cache/mail/strategy/mail_box tests, not entire suite"
+  },
+  "public_overlap_control": {
+    "scope": "Normally imported original Deduplicate.add_source; physical owned parent/child Maildirs; no hashing or mail action",
+    "child_then_parent_found_count": 3,
+    "child_then_parent_current_messages": 2,
+    "parent_then_child_refused": true,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-overlap-r0vwr54l",
+    "limits": [
+      "Registration/accounting only, not full CLI final-state reproduction.",
+      "No production changes or real mailbox touched."
+    ]
+  },
+  "findings": [
+    "Physical original add_source registration child-first then parent overwrites recursively opened child entry while incrementing MAIL_FOUND again:3 counted versus2 current physical messages. Parent-first then child explicitly rejects child path. Order-dependent registration confirmed without invoking actions.",
+    "Original mailbox tests exercise every format construction, empty/roundtrip, duplicate removal, nonexistent sources, nested Maildir conventions, EML autodetection/export, hidden-file filtering and stale-lock recovery using owned fixtures.",
+    "EML listing ignores hidden names and non-eml extensions, sorts nested entries, and does not follow directory symlinks through os.walk default. Its file paths remain logical source paths rather than physical alias groups.",
+    "Maildir recursive discovery uses directory walking and path keys; no canonical physical-directory visited set appears in reviewed module. Symlink cycles not runtime qualified.",
+    "File-based containers resolve every logical message to shared box path, with message ID retained separately; that is mail identity, not separate physical-file storage."
+  ],
+  "transfer_decision": "Keep overlapping roots idempotent and physical aliases separate in exact-file APIs; existing own regressions remain separate evidence. No foreign production code copied.",
+  "limits": [
+    "18 whole text files of80;62 remain.",
+    "Original focused tests only, not full suite/platform/export-race qualification.",
+    "Overlap control proves registration/accounting, not full CLI end state.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
