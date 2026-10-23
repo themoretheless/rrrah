@@ -1,0 +1,37 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/cluster/thresh.cpp",
+      "sha256": "79932abba466d99468cc975d98d6c73a61ba9b5230d9cc120ad31c44db304de0",
+      "lines": 59,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-threshold-control-20261023.cpp",
+  "runtime": {
+    "exit_code": 0,
+    "oracle_cases": 200,
+    "threads": [
+      1,
+      4
+    ],
+    "matrix_sizes": "0..16",
+    "thresholds": "-1..8",
+    "chain_threshold": 1,
+    "chain_max_internal_distance": 2
+  },
+  "findings": [
+    "Original threshold_cluster,build_groups,distance helpers and realparallel/threadpool compiled, not translated/mockclusterimplementation. Independent BFS oracle checks exact connected-component membership.",
+    "200 deterministic smallmatrix cases pass membership,maxinternal andaverage distance oracles; empty/singleton,negative andall-covering thresholds included, threads1/4 yield samecontent. No timing/race proof.",
+    "Explicit3-nodechain distances1,1,2 producesonegroup atthreshold1 withmaxinternal2. This implements single-link connectivity, not pairwisebound; exposed maxinternalstat makes limitation observable.",
+    "No exact-file/pixel equality proof in thisalgorithm. Preserve distinction between candidategraphgroups and verifiedduplicategroups in ownlibrary."
+  ],
+  "remaining": [
+    "Other84 tracked blobs/assets anddependencies",
+    "Hierarchical/HDBSCAN,fullCLI andlarge-input/runtime qualification"
+  ],
+  "full_review_count": 248
+}
