@@ -1,0 +1,61 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/FileHasher.swift",
+      "git_blob": "bc1ae1a9076c4c1158d39bee11c21640d87a97d6",
+      "sha256": "170143532b659bf1faca260ad474f0bf81e8623f2eeb007c4c1cdb37e2f438fa",
+      "bytes": 5723,
+      "whole_text_read": true
+    }
+  ],
+  "partial_source_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/HashCache.swift",
+      "ranges": [
+        [
+          334,
+          360
+        ],
+        [
+          865,
+          915
+        ]
+      ],
+      "scope": "protocolandSHAlookup excerpts only, large cache module not fully read"
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Models/MediaModels.swift",
+      "range": [
+        27,
+        38
+      ],
+      "scope": "MediaKind plus startScanMode only"
+    }
+  ],
+  "whole_text_files_read_total": 3,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 118,
+  "control": "targie061-file-hash-control-20261023.swift",
+  "compiler": "Apple Swift6.4 (swiftlang-6.4.0.34.1), arm64-apple-macosx26.0",
+  "runtime_scope": "Whole unchanged original FileHasher.swift compiled with Foundation/CryptoKit and authored compile-only MediaKind/two-method HashCaching interfaces. cache:nil, no actual backend or app pipeline. Real owned64byte files and original afterReadingChunk async test hook.",
+  "results": {
+    "same_size_restored_mtime_atomic_replacement_returns_old_hash": true,
+    "fresh_hash_of_current_path_differs": true,
+    "live_path_bytes_match_new_payload": true,
+    "size_change_identity_rejected": true
+  },
+  "findings": [
+    "LiveIdentity records only fileSize/modifiedAt; no descriptor/path inode or ctime. Original readStableSHA256 validates path metadata around reading but old descriptor can survive replacement with matching metadata.",
+    "After first64byte chunk, authored callback atomically replaces path with64differentbytes and restores exact fixedDate. Returnedhash equals originalhash, freshno-hookhash differs, no Changed error. This is realpath replacement control, not a cached-result adapter.",
+    "SHAbackend excerpts likewise key primary lookup bypath,size,mtime/mediaKind; backend execution notqualified. Original FileHasherTests fetched and Gitverified but not yet read/run.",
+    "Actual readtask cancellation propagates through handler to detachedworker in source; no cancellation test executed in this pass.",
+    "Initial authored harness put throwingDataread inside precondition autoclosure; compile error fixed by separate read, original upstream source untouched. No failed binary run counted.",
+    "No upstream code adopted or current rrrah production change. Existing local exact identity protections require independent scope-qualified evidence."
+  ],
+  "binary_sha256": "8aca55e0421f8c408a0782e67e2f40c4e39a05a3c3695cd0547d01242c8b9be6",
+  "full_review_count": 249,
+  "upstream_tests_run": false
+}
