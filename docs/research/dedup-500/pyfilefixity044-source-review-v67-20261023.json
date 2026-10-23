@@ -1,0 +1,25 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "TODO.md now whole read:1-105 v66,106-135/136-175/176-225/226-278/279-328 here. Initial106-155 truncated output reread in bounded chunks. Linked papers/repos not opened or counted as reviewed.",
+  "new_whole_read": {
+    "path": "TODO.md",
+    "sha256": "dce46bbf779397522c7aa0989deaec79bfa3252cba1d04b8aec1745959d323f0"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "remaining_not_whole_reviewed": 25
+  },
+  "findings": [
+    "Remaining document proposes list decoding, interleaving/product codes, alternate field sizes, cross-block metadata and multiple codec backends. No runtime, algebraic bound or integration proof follows from proposal text.",
+    "CONTINUE LATER section says work was already attempted, but its entries still include experiments and remaining tasks. Heading alone cannot promote a feature to complete.",
+    "Historical PyPy2.5/Core i7M640 throughput notes include parameters and hardware but no reproducible raw corpus or paired controls here; not transferred to current-machine performance claims.",
+    "2017 SIMD/broadcast/matrix/double-buffering suggestions require equal codec parameters and independent validation. No such optimization implemented or benchmarked this pass.",
+    "Notes include tentative or broad claims about checksums, hashing, correction bounds and decoder equivalence. They remain author research notes, not verified technical recommendations; cited sources not evaluated in this pass.",
+    "Adaptive DB update proposal explicitly separates source and output paths, useful as a preservation principle; current mutation paths were separately qualified earlier, not made transactional by this note.",
+    "External references in this document are not additional reviewed repositories. Global full-review count unchanged. No production implementation copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
