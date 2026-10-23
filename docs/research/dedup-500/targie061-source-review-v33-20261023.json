@@ -1,0 +1,79 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/SimilarityScoringTests.swift",
+      "git_blob": "02ff69e63be5afe4958a3466ee3bd66aedfeb2c6",
+      "sha256": "5fb94e47d3e1b60d902fe3311555e3ca1646fff7b4ffce50b3d72407c9023df0",
+      "bytes": 11629,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/MainToolbarPlacementTests.swift",
+      "git_blob": "3c8ef8053bad44424e73b60656e3175f997c736a",
+      "sha256": "1801a549a10c21270193f31b8fd71e21fa124156ef641c57b1e944d2b81e251c",
+      "bytes": 4879,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/SettingsPopover.swift",
+      "git_blob": "16d82bbfd50e833590560a8ca592fa197042fac6",
+      "sha256": "db3af4c268b68afee2c00531682de5e0939e69a3e71fdc163dcd720e30790240",
+      "bytes": 6680,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/ContentView.swift",
+      "git_blob": "de8d72b5fc03dec88d5569de3ec7063815108856",
+      "sha256": "f74f262b5a5e4cf447216b1113188972eddb4619acea7eecbb9779869e7abf71",
+      "bytes": 9766,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 93,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 28,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter SimilarityScoringTests|MainToolbarPlacementTests",
+    "executed": 19,
+    "failed": 0,
+    "skipped": 0,
+    "scoring_tests": 15,
+    "toolbar_source_tests": 4,
+    "names": [
+      "MainToolbarPlacementTests testBrowseToolbarDoesNotOwnClearCacheAction",
+      "MainToolbarPlacementTests testDeepVerificationPreferenceFeedsScanViewModel",
+      "MainToolbarPlacementTests testExcludeSubfoldersPreferenceBindingFeedsScanAndBrowseControls",
+      "MainToolbarPlacementTests testMainToolbarIsScanModeBrowseThenSettings",
+      "SimilarityScoringTests testAvailableRequiredVisionReceivesTheFullContentScore",
+      "SimilarityScoringTests testExactHashProducesCertainMatch",
+      "SimilarityScoringTests testExactSHAStillOverridesContradictoryVisualAndMetadataEvidence",
+      "SimilarityScoringTests testIdenticalContentHashStillBeatsAllOtherSignals",
+      "SimilarityScoringTests testMetadataAloneCannotClaimHighVisualMatch",
+      "SimilarityScoringTests testMetadataCanRaiseAnyEvidenceCombinationByAtMostFivePercentagePoints",
+      "SimilarityScoringTests testPerceptualHashAddsEvidenceWhenStrong",
+      "SimilarityScoringTests testPerceptualHashWithoutFrameStillScoresHigh",
+      "SimilarityScoringTests testRenamingResizingAndRecompressingDoNotHideStrongVisualMatches",
+      "SimilarityScoringTests testStripsCopyAndExportNoise",
+      "SimilarityScoringTests testStrongPerceptualHashAndMatchingMetadataCannotOverrideWeakVision",
+      "SimilarityScoringTests testStrongVisionCanRecommendPairWithoutPerceptualHashOrMatchingMetadata",
+      "SimilarityScoringTests testThreeLayerScoreCombinesWeights",
+      "SimilarityScoringTests testUnavailableRequiredVisionDoesNotReceiveTheFastModeScore",
+      "SimilarityScoringTests testWeakPerceptualHashKeepsScoreLow"
+    ],
+    "log_sha256": "f39fbaed74b6476270f67e2d80eb29b8ad379db4d10f292ca8aa81b780b0c1d4",
+    "scope": "Full unchanged original package. Scoring tests inject scalar evidence/metadata; toolbar tests inspect source strings. No actual hashing/feature extraction, toolbar rendering, user preference editing or deletion/cache clearing performed."
+  },
+  "findings": [
+    "Score tests establish exacthashboolean gives1/identityevidence, metadata-only<=.05, metadata increments<=.05, weakVision cannot be overridden bypHash, missingrequiredVision capped.85 while intentionalfastmode can exceedrecommended.88. These are scalar rules, not measured false-positive probabilities.",
+    "TestExactSHAStillOverridesContradictoryVisualAndMetadataEvidence supplies hashesMatch:true directly for authoreditems; no file bytes verified there. Calling it exactSHA does not make this integration proof.",
+    "StrongVision withoutpHash can scorehigh at scorer primitive; ImageSimilarityPipeline candidate gate still requirespHash. Scorer capability does not prove end-to-end hashfailure recall.",
+    "MainToolbarPlacement source-string checks prove literals/wiring presence/order only. Comment says onlyBrowse/Settings buttons, but currentContentView also includesDetails button; passingchecks do not validate that stronger comment. No renderedtoolbar claim.",
+    "ContentView persists preferences, initializes modelsettings onappear and forwards changes; default deepverificationfalse. Cacheclear has confirmationalert andbusy guard afterstatload; actual execution/lifecycle not tested here.",
+    "Settings disables deep/intensity/cacheclear whilebusy and keepslanguage available. ContentView uses modelownsresults acrossscan/browse; snapshot/refresh correctness needs model tests, not literalbinding checks.",
+    "Fourfiles fully read and Gitverified; no sourceadoption, qualitygain or fullrepository completion."
+  ]
+}
