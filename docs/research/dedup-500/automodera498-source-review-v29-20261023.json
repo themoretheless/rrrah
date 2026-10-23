@@ -1,0 +1,54 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/collections.html",
+      "sha256": "2ba518e3cf46ff70f69d1f115b5a18e80a3e5b4ea68a911d4de0d4a895ffe2a5",
+      "lines": 180,
+      "git_blob_verified": true
+    },
+    {
+      "path": "archive/src/main/resources/templates/nav.html",
+      "sha256": "e4efdc8577c38ab5505d602e0caf2a30a16331fbc4f74d6eb4048cd1ed7861b4",
+      "lines": 82,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/templates/collections.html",
+      "sha256": "1356e6300f88cbe4775e659024f4c1207cfcb49e3a005cb18429c676a7623f31",
+      "lines": 114,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/templates/nav.html",
+      "sha256": "1b9fa73b2ce37e991213c8e03647a447cfc04c470a6a96b0a84e5e3f7f7ed028",
+      "lines": 82,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/resources/templates/nav.html",
+      "sha256": "5d889fa0db2366b9bcc5584af483be38c11ce50136a4b03f81c3eeeaeff0aae5",
+      "lines": 75,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_render": false,
+    "browser_navigation": false
+  },
+  "findings": [
+    "Fiveunique template fileswhole-read/Gitblobverified:three nav andtwo collectionlists. No render/browser/formaction run.",
+    "Integrator collectionlist uses/admin/collection?nodeId=...&collectionId=... and/admin/topic?topic=..., while reviewedcontroller onlydeclares collection/{arch}/{coll} andtopic/{topic}. Source route mismatch confirmed; HTTPstatus nottested.",
+    "Archivecollectionlist emits/admin//collection/ID and/admin//topic/topic withdoubleslash; normalization depends deployment/framework andwasnotassumed.",
+    "Archivecollection edit submits selectedcheckbox list to mandatoryRequestParamList; noselection case unqualified. Allchanges still handled sequentially with no partialresultUI in reviewedcontroller.",
+    "Archive/operator nav activeclass compares servletpath without/admin prefix, unlike integrator; activehighlight can mismatch actualroutes. Thymeleafconditional precedence untested.",
+    "Lists showcreationdate but no updaterecipe/freshness/hashalgorithm or syncfailurestate. ClientDataTables paginatesafterallrowsrendered; no memory/performance result."
+  ],
+  "remaining": [
+    "25 other tracked blobs/assets",
+    "Remainingtemplates/demos/license/IDE/media/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
