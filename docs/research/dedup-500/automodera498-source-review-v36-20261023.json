@@ -1,0 +1,51 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "lines": 674,
+      "git_blob_verified": true,
+      "review_mode": "exactbyteequality_to_prior_wholeGPLv3review",
+      "prior_review": "docs/research/dedup-500/photodna396-complete-source-review-20261021.json"
+    }
+  ],
+  "binary_metadata_only": [
+    {
+      "path": "lib/libphash.dylib",
+      "sha256": "e8e8ecac8de583ee36cd321cfe0f0ef86c732c07472d3ba71b29a3ac73beeed6",
+      "bytes": 3298811,
+      "git_blob_verified": true,
+      "format": "Mach-O64arm64",
+      "implementation_review_complete": false,
+      "executed": false
+    },
+    {
+      "path": "lib/phash.dll",
+      "sha256": "dda927563baa23d86e8492c44b24384a8a6c06461b3a11957347396d90368ba5",
+      "bytes": 3485184,
+      "git_blob_verified": true,
+      "format": "PE32+DLLx86-64",
+      "implementation_review_complete": false,
+      "executed": false
+    }
+  ],
+  "runtime": {
+    "native_binaries_executed": false,
+    "java_run": false
+  },
+  "findings": [
+    "RootLICENSE exactbyteequal to previouslyreviewed photo-dna396 GPLv3license,35149bytes. No productioncopy/adoption. Bundlednativebinarysourceandlicenses notestablishedbyrootlicensealone.",
+    "Nativeblobs fetchedfrompinnedcommit andGitSHA1verified. file reportsarm64Mach-Odylib andx86-64WindowsDLL. Metadata inspection only; no load/execution/disassemblyoralgorithmverification.",
+    "macOS nm exportsall3JNIentrypoints matchingRustPHash declarations. Exportpresence doesnotqualify signaturesemantics, bitrecipe, failurehandling or thread safety.",
+    "otool dependencylist includes libiconv/libSystem/libresolv and developerabsoluteinstallname endingrust/hello_world/target/release/deps/libphash.dylib. No native sourcepackage/buildrecipe foundinpinnedtree.",
+    "Bothnativeimplementationsremainopaque; bytepin/header review cannotcountaswholenativeimplementationreview. Continueotherreposafterremainingimageassessment, retainingexplicitpartialboundary."
+  ],
+  "remaining": [
+    "READMEcoverJPEG visualreview",
+    "Bothnativebinaries implementation/provenance unreviewed; originalJava/runtimequalification unavailable"
+  ],
+  "full_review_count": 249
+}
