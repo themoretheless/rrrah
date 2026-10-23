@@ -1,0 +1,38 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "asizeof.py lines1-240 read and pinned blob verified; full original syntax parse and isolated import attempted, execution failed during reviewed initialization; remaining source not yet read",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+    "lines": [
+      1,
+      240
+    ],
+    "sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef"
+  },
+  "original_runtime_control": {
+    "python": "3.15.0",
+    "syntax": "PASS",
+    "original_import": {
+      "error": "LookupError",
+      "message": "unknown encoding: unicode-internal"
+    }
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "remaining_without_full_text_or_binary_review": 24
+  },
+  "findings": [
+    "Original asizeof5.10 Dec2008 syntax parses but import fails LookupError unknown encoding unicode-internal under Python3.15. No object sizing or compatibility port executed.",
+    "Initialization line near220 encodes a NUL using unicode-internal to infer character width; this prerequisite prevents current runtime qualification before later sizing methods are reached.",
+    "Docstring explicitly defines approximate recursive object graph sizes, with duplicates/shared referents counted once. This is object identity accounting, not file duplicate content matching.",
+    "Documented defaults ignore builtins/classes, function globals and module referents, with generators not expanded. Default reachable-object totals do not represent every allocation or OS RSS.",
+    "Fallback layout estimates are based on historical CPython C structs and old platform tests; accurate modern ABI sizes cannot be presumed. Native sys.getsizeof preference is documented but later implementation remains unread.",
+    "Docstring marks functions/classes not thread-safe and recursive depth limited. No all-thread or all-object completeness claim justified by this tool."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
