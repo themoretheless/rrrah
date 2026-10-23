@@ -1,0 +1,59 @@
+TAP version 13
+# Subtest: stale
+ok 1 - stale
+  ---
+  duration_ms: 3006.251417
+  type: 'test'
+  ...
+# Subtest: global stale is a positive integer
+ok 2 - global stale is a positive integer
+  ---
+  duration_ms: 1.072125
+  type: 'test'
+  ...
+# Subtest: stale as parameter
+ok 3 - stale as parameter
+  ---
+  duration_ms: 3005.642292
+  type: 'test'
+  ...
+# Subtest: stale as a function
+ok 4 - stale as a function
+  ---
+  duration_ms: 3004.075291
+  type: 'test'
+  ...
+# Subtest: stale as a function parameter
+ok 5 - stale as a function parameter
+  ---
+  duration_ms: 3006.077958
+  type: 'test'
+  ...
+# Subtest: storage
+    # Subtest: should get an instance with default options
+    ok 1 - should get an instance with default options
+      ---
+      duration_ms: 0.434833
+      type: 'test'
+      ...
+    # Subtest: should get an error implementing storage interfaces without get method
+    ok 2 - should get an error implementing storage interfaces without get method
+      ---
+      duration_ms: 0.23875
+      type: 'test'
+      ...
+    1..2
+ok 6 - storage
+  ---
+  duration_ms: 1.381625
+  type: 'suite'
+  ...
+1..6
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12096.548375

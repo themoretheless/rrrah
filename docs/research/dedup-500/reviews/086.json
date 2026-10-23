@@ -2,7 +2,7 @@
   "index": 86,
   "repository": "mcollina/async-cache-dedupe",
   "commit": "b303aba7affd22875b3f598c575cb17e55913859",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All50 pinned tracked text blobs read and byte-verified;105 original memory/util/cache/TTL/custom subset tests pass. Redis/browser/types/lint/coverage not qualified.",
   "decision": "reference",
   "finding": "Async query cache wrappers can inspire in-flight work deduplication; no image/file matching algorithm.",
   "license_metadata": "MIT",
@@ -103,6 +103,13 @@
     {
       "audit": "docs/research/dedup-500/async086-source-review-v7-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/async086-complete-source-review-20261024.json",
+      "whole_repo_complete": true,
+      "scope": "source reading only"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/async086-complete-source-review-20261024.json"
 }
