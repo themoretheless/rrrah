@@ -1,0 +1,82 @@
+Setting up loggers.... done
+Logger already initialized
+Logger already initialized
+Logger already initialized
+test_binConversions (Tests.Test_BinaryConverter.TestSequenceFunctions.test_binConversions) ... ok
+test_binConversions2 (Tests.Test_BinaryConverter.TestSequenceFunctions.test_binConversions2) ... ok
+test_binConversions3 (Tests.Test_BinaryConverter.TestSequenceFunctions.test_binConversions3) ... ok
+test_numpyConversions (Tests.Test_BinaryConverter.TestSequenceFunctions.test_numpyConversions) ... ok
+test_hashFile (Tests.Test_HashFile.TestSequenceFunctions.test_hashFile) ... ok
+test_hashImage1 (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage1) ... ok
+test_hashImage2 (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage2) ... ok
+test_hashImage2_b (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage2_b) ... ok
+test_hashImage2_c (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage2_c) ... ok
+test_hashImage3 (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage3) ... ok
+test_hashImage4 (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage4) ... ok
+test_hashImage5 (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage5) ... ok
+test_hashImage6 (Tests.Test_HashFile.TestSequenceFunctions.test_hashImage6) ... ok
+test_DCT_size_4 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_4) ... ERROR
+test_DCT_size_5 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_5) ... ERROR
+test_DCT_size_6 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_6) ... ERROR
+test_hashImage1 (Tests.Test_Hashing.TestSequenceFunctions.test_hashImage1) ... ERROR
+
+======================================================================
+ERROR: test_DCT_size_4 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 158, in test_DCT_size_4
+    pixels = numpy.identity(hash_size, dtype=numpy.float)
+                                             ^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-runtime-20261024/lib/python3.12/site-packages/numpy/__init__.py", line 760, in __getattr__
+    raise AttributeError(__former_attrs__[attr], name=None)
+AttributeError: module 'numpy' has no attribute 'float'.
+`np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+
+======================================================================
+ERROR: test_DCT_size_5 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 165, in test_DCT_size_5
+    pixels = numpy.identity(hash_size, dtype=numpy.float)
+                                             ^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-runtime-20261024/lib/python3.12/site-packages/numpy/__init__.py", line 760, in __getattr__
+    raise AttributeError(__former_attrs__[attr], name=None)
+AttributeError: module 'numpy' has no attribute 'float'.
+`np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+
+======================================================================
+ERROR: test_DCT_size_6 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 172, in test_DCT_size_6
+    pixels = numpy.identity(hash_size, dtype=numpy.float)
+                                             ^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-runtime-20261024/lib/python3.12/site-packages/numpy/__init__.py", line 760, in __getattr__
+    raise AttributeError(__former_attrs__[attr], name=None)
+AttributeError: module 'numpy' has no attribute 'float'.
+`np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+
+======================================================================
+ERROR: test_hashImage1 (Tests.Test_Hashing.TestSequenceFunctions.test_hashImage1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 201, in test_hashImage1
+    pixels = numpy.array(image.getdata(), dtype=numpy.float).reshape((HASH_SIZE+1, HASH_SIZE))
+                                                ^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-runtime-20261024/lib/python3.12/site-packages/numpy/__init__.py", line 760, in __getattr__
+    raise AttributeError(__former_attrs__[attr], name=None)
+AttributeError: module 'numpy' has no attribute 'float'.
+`np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.030s
+
+FAILED (errors=4)

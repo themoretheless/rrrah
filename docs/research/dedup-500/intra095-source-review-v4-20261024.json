@@ -1,0 +1,106 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "scanner/unitConverters.py",
+      "local": "10-scanner--unitConverters.py",
+      "sha256": "0b640c6147a9848c0e9f26e46b67315353eb224c88202e9def9d5043a05a48cf",
+      "whole_text_read": true,
+      "lines": 34
+    },
+    {
+      "path": "Tests/Test_BinaryConverter.py",
+      "local": "11-Tests--Test_BinaryConverter.py",
+      "sha256": "047ca0798af50782007edef277fb9f211a317cafcba45d70fe70a95c7781cbc0",
+      "whole_text_read": true,
+      "lines": 146
+    },
+    {
+      "path": "Tests/Test_HashFile.py",
+      "local": "12-Tests--Test_HashFile.py",
+      "sha256": "91b2eb49932d78d3d7f2cfea4f080622e41b0f825efbb69f66a394700aecc8d1",
+      "whole_text_read": true,
+      "lines": 173
+    },
+    {
+      "path": "Tests/Test_Hashing.py",
+      "local": "13-Tests--Test_Hashing.py",
+      "sha256": "d50588ea72fbcf130159421adac7efdd3bdadfca5a913e132c8f0e27c3dbc2ff",
+      "whole_text_read": true,
+      "lines": 229
+    },
+    {
+      "path": "scanner/logSetup.py",
+      "local": "14-scanner--logSetup.py",
+      "sha256": "06e31e4114ad0b57e851ddb44940acd24d214bfc2cddd0ab32c95dcc5ef73336",
+      "whole_text_read": true,
+      "lines": 168
+    },
+    {
+      "path": "Tests/Test_HashingDuplicates.py",
+      "local": "15-Tests--Test_HashingDuplicates.py",
+      "sha256": "01001bbaf243597b4de1dd5df0ce99596bfb4ebc5071b4e50877380171dc9b95",
+      "whole_text_read": true,
+      "lines": 129
+    },
+    {
+      "path": "Tests/__init__.py",
+      "local": "16-Tests--__init__.py",
+      "sha256": "065ef0c4ba10081e2aaebfa572cdaf7a9ec09db5e30494d5948cb7e5860f1552",
+      "whole_text_read": true,
+      "lines": 1
+    },
+    {
+      "path": "scanner/__init__.py",
+      "local": "17-scanner--__init__.py",
+      "sha256": "bf6ee4b3349ad818f936984565276a787f0e89ce31e790fc532b949f98c794e6",
+      "whole_text_read": true,
+      "lines": 1
+    }
+  ],
+  "whole_text_files_read_total": 18,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 136,
+  "original_tests": {
+    "modules": [
+      "Tests.Test_BinaryConverter",
+      "Tests.Test_HashFile",
+      "Tests.Test_Hashing"
+    ],
+    "run": 17,
+    "passed": 13,
+    "failures": 0,
+    "errors": 4,
+    "exit_code": 1,
+    "source_modified": false,
+    "scope": "Original full modules and production hashFile/unitConverters/logSetup imported from pinned checkout;real dependencies;owned cwd/logs;no Cython/PostgreSQL/server"
+  },
+  "compatibility_diagnostic": {
+    "adaptation": "numpy.float=float in runner process only;original sources and assertions unchanged",
+    "run": 4,
+    "passed": 0,
+    "failures": 4,
+    "errors": 0,
+    "exit_code": 1,
+    "original_run": false
+  },
+  "findings": [
+    "Four original converter tests and nine original hashFile tests pass. Includes signed64zero/allones/min/max mappings,1000random64bitstrings,original boolean arrays,encoded MD5 and pHash/dimensions for original images,format/size invariance fixtures,disabledphash and extension-dependent behavior.",
+    "Four original Test_Hashing tests error before assertions because current NumPy2.5.4has no numpy.float alias. This is test/runtime compatibility failure,not a passing original suite.",
+    "Process-local alias diagnostic reaches assertions but allfourfail: three exact DCT constant comparisons differ at most2.22e-16,3.33e-16,6.66e-16;fourth resized grayscale pixel array differs from stored expected pixels. No tolerance patched into original tests.",
+    "Test_HashingDuplicates fully read but not executed: imports PostgreSQL-backed fixtures,Cython and archive processor; eight test functions are not counted as executed.",
+    "unitConverters.binStrToInt validates length64only, treats any non1character aszero. Source-only input-domain gap;no extra native invalid-character control here.",
+    "Image fixtures were consumed by tests and hash-verified against pinned inventory;not visually reviewed or credited whole images.",
+    "Runtime installed only inside owned newvenv. Original clone source bytes verified;logging output redirected into owned test cwd."
+  ],
+  "runtime_diagnostic": "docs/research/dedup-500/intra095-runtime-and-dct-diagnostic-20261024.json",
+  "transfer_decision": "Keep encoded identity and perceptual invariance separate;qualify dependency-version drift and use a defined numerical contract for DCT. No foreign production code adopted.",
+  "limits": [
+    "18of154whole textfiles;136remain.",
+    "17original tests are partial upstream scope;4errors remain. Diagnostic4runs are repetitions,not4newpassingtests.",
+    "No PostgreSQL/Cython/archive suite or native pHash.org/ASAN run."
+  ]
+}

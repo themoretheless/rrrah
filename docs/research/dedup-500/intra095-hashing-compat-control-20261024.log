@@ -1,0 +1,66 @@
+test_DCT_size_4 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_4) ... FAIL
+test_DCT_size_5 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_5) ... FAIL
+test_DCT_size_6 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_6) ... FAIL
+test_hashImage1 (Tests.Test_Hashing.TestSequenceFunctions.test_hashImage1) ... FAIL
+
+======================================================================
+FAIL: test_DCT_size_4 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 161, in test_DCT_size_4
+    self.assertEqual(expect_4, dct)
+AssertionError: Lists differ: [2.0, 1.8477590650225735, 1.41421356237309[219 chars]1797] != [np.float64(2.0), np.float64(1.84775906502[407 chars]797)]
+
+First differing element 2:
+1.4142135623730951
+np.float64(1.414213562373095)
+
+Diff is 1218 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_DCT_size_5 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 168, in test_DCT_size_5
+    self.assertEqual(expect_5, dct)
+AssertionError: Lists differ: [2.0, 1.9021130325903073, 1.61803398874989[340 chars]8947] != [np.float64(2.0), np.float64(1.90211303259[641 chars]948)]
+
+First differing element 1:
+1.9021130325903073
+np.float64(1.902113032590307)
+
+Diff is 1578 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_DCT_size_6 (Tests.Test_Hashing.TestSequenceFunctions.test_DCT_size_6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 175, in test_DCT_size_6
+    self.assertEqual(expect_6, dct)
+AssertionError: Lists differ: [2.0, 1.9318516525781368, 1.73205080756887[504 chars]5042] != [np.float64(2.0), np.float64(1.93185165257[968 chars]414)]
+
+First differing element 1:
+1.9318516525781368
+np.float64(1.9318516525781364)
+
+Diff is 2230 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_hashImage1 (Tests.Test_Hashing.TestSequenceFunctions.test_hashImage1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_Hashing.py", line 215, in test_hashImage1
+    self.assertEqual(expect_pixels, pixList)
+AssertionError: Lists differ: [0.0, 41.0, 5.0, 35.0, 0.0, 0.0, 172.0, 0.[372 chars] 0.0] != [np.float64(0.0), np.float64(42.0), np.flo[1237 chars]0.0)]
+
+First differing element 1:
+41.0
+np.float64(42.0)
+
+Diff is 2135 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.012s
+
+FAILED (failures=4)
+dangerous-to-go-alone.jpg c76299a026408b8df534a65fd6707389 6a71a7a94945c900469aedbfddade31b
