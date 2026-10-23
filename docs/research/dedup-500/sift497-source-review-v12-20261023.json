@@ -1,0 +1,42 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "viz/sift_viz/pipeline.py",
+      "sha256": "5ce6a2a26ee47f954d67c59dd193833f410e3b36e99e0955d9f6e851660069c9",
+      "lines": 335,
+      "git_blob_verified": true
+    },
+    {
+      "path": "viz/sift_viz/media.py",
+      "sha256": "220805c9f6da3e6e1e500a43d93fb7ab0e1752d7c7b33676d8f9236d2d6acd0a",
+      "lines": 241,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-pipeline-control-20261023.py",
+  "runtime": {
+    "exit_code": 0,
+    "real_subprocesses": true,
+    "upstream_cli": false,
+    "media_logger_stubbed": true,
+    "temporary_directory_only": true
+  },
+  "findings": [
+    "Original PipelineRunner invokes actual controlled zero-exit/no-output subprocess executable in a private temporary directory. Media logging import replaced by no-op to avoid GUI dependencies; upstream CLI and media decoding not executed.",
+    "Full pipeline emits pipeline_done containing preexisting stale projection JSON despite missing hashes.json when subprocess returns0 without writing outputs. No output freshness/schema validation before event publication.",
+    "After cancel() sets flag, direct original projection and cluster thread targets still execute controlled subprocesses and emit done events. Those targets do not inspect cancellation and do not register their processes in _current_proc. Real-time cancellation of an active child was not tested.",
+    "All jobs share hashes/projection/cluster output paths; events lack generation/job IDs. Parallel job overwrites are a source-level concern, no race executed.",
+    "Progress parser accepts9/0 without range validation; confirmed.",
+    "Media uses argument-vector ffmpeg/ffprobe with timeouts10/8seconds; image previews convert toRGB, do not explicitly transpose EXIF or composite transparency. No runtime pixel oracle in this review.",
+    "probe_video_info clamps parsed fps to1..120 and catches all malformed metadata errors as zeroed VideoInfo. Playback timing requires separate verification.",
+    "Media log_stderr suppresses both libpng warnings and errors; source-only observation."
+  ],
+  "remaining": [
+    "62 other tracked blobs/assets and dependencies",
+    "App caller cache decisions and job lifecycle, real CLI/UI/media runtime qualification"
+  ],
+  "full_review_count": 248
+}
