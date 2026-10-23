@@ -1,0 +1,41 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 33,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 88,
+  "full_review_count": 249,
+  "closes_pending_runtime_from": [
+    "v14",
+    "v15"
+  ],
+  "runtime": {
+    "session_id": 91684,
+    "status": "completed",
+    "exit_code": 0,
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter ImageScannerTests",
+    "executed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "testDiscoversSupportedImagesRecursivelyInStableOrder",
+      "testDiscoveryIgnoresDirectoriesWithImageExtensions",
+      "testDiscoveryStopsWhenTaskIsAlreadyCancelled",
+      "testLargeScanThrottlesMetadataProgressUpdates",
+      "testLoadsPNGDimensionsAndThumbnail",
+      "testOneUnreadableImageDoesNotAbortOtherLoads"
+    ],
+    "log_sha256": "7b5d51fadab4d7faf9f2d939df54d27cd0f4687444b0e28497ffb9b39a18e55b",
+    "grdb_revision": "b83108d10f42680d78f23fe4d4d80fc88dab3212",
+    "postrun_original_files_git_blob_verified": 98,
+    "scope": "Full unchanged original executable/test targets compile with real pinned GRDB, AppKit/ImageIO and all original source files. Six scanner tests run, no minimal adapters/extractions. App UI not launched, app bundle not built/signed, other test classes not executed."
+  },
+  "findings": [
+    "Replaces adapter-only discovery evidence for the six ImageScannerTests with full original package results. Three discovery tests are reruns and three loader/progress tests newly executed.",
+    "Original PNG test verifies40x20 dimensions, image kind, nil duration and disk-backed thumbnail. Original injected loader isolates one unreadable item.250file injected-loader test checks throttled metadata progress at most102updates and lastfraction1.",
+    "This run does not exercise actual persistent-cache hit/miss/database migration, full ImageSimilarityPipeline or video decoding. Dependency compiled is not backend integration proof.",
+    "Downloaded98files remain capture-only except individually listed whole-file reviews. No extra manual review credit from successful full compilation."
+  ]
+}
