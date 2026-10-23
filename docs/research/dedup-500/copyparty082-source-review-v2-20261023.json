@@ -1,0 +1,122 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 5,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 481,
+  "partial_source_files_read": [
+    {
+      "path": "copyparty/up2k.py",
+      "local": "08-up2k.py",
+      "git_blob": "39da8b8ed2b9c1fa72a75253f5efff4124063449",
+      "sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "bytes": 203473,
+      "lines": 5931,
+      "whole_text_read": false,
+      "ranges_read": [
+        "1768-1827",
+        "3171-3750",
+        "3875-4175",
+        "5344-5385",
+        "5698-EOF"
+      ]
+    }
+  ],
+  "complete_functions_read": [
+    "Up2k.handle_json",
+    "Up2k._handle_json",
+    "Up2k.handle_chunks",
+    "Up2k.fast_confirm_chunks",
+    "Up2k.confirm_chunks",
+    "Up2k._confirm_chunks",
+    "Up2k.finish_upload",
+    "Up2k._finish_upload",
+    "Up2k._hashlist_from_file",
+    "Up2k._hasher",
+    "Up2k._hash_t",
+    "Up2k.hash_file",
+    "Up2k.do_fx_backlog",
+    "Up2k.hook_fx",
+    "Up2k.shutdown",
+    "up2k_chunksize",
+    "up2k_hashlist_from_file",
+    "up2k_wark_from_hashlist",
+    "up2k_wark_from_metadata"
+  ],
+  "native_control": {
+    "harness": "docs/research/dedup-500/copyparty082-hash-control-20261023.py",
+    "harness_sha256": "a5cdbd3fdf7c139039a5e671282beabf6df0ed1e35153c538213f66b6e701724",
+    "artifact": "docs/research/dedup-500/copyparty082-hash-result-20261023.json",
+    "artifact_sha256": "8f051628e49dcb6f634f315f6cac9577dace8d09cdbb1ca6498da1ae9894871d",
+    "result": {
+      "source_sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "controls": 11,
+      "passed": 11,
+      "baseline_hash": [
+        "BfcDQQeKz2oG1CPSFyD5ZD1flTYm2IoCY23DqeeVgq6w"
+      ],
+      "growth_returns_original_prefix_digest": true,
+      "growth_returned_size": 3,
+      "growth_actual_size": 12,
+      "stopped_hashes": [],
+      "stopped_stat_size": 12,
+      "chunk_bounds": [
+        {
+          "bytes": 0,
+          "chunk_size": 1048576,
+          "chunks": 0
+        },
+        {
+          "bytes": 1,
+          "chunk_size": 1048576,
+          "chunks": 1
+        },
+        {
+          "bytes": 1048576,
+          "chunk_size": 1048576,
+          "chunks": 1
+        },
+        {
+          "bytes": 268435456,
+          "chunk_size": 1048576,
+          "chunks": 256
+        },
+        {
+          "bytes": 268435457,
+          "chunk_size": 1572864,
+          "chunks": 171
+        },
+        {
+          "bytes": 1073741824,
+          "chunk_size": 4194304,
+          "chunks": 256
+        },
+        {
+          "bytes": 1099511627776,
+          "chunk_size": 268435456,
+          "chunks": 4096
+        },
+        {
+          "bytes": 9223372036854775807,
+          "chunk_size": 2251799813685248,
+          "chunks": 4096
+        }
+      ],
+      "scope": "Original Up2k._hashlist_from_file body on actual owned files with constructor-free single-thread config; read wrapper deterministically appends after first native read. Original pure chunk-size function. Not high-level dedup acceptance, multithread hasher, upload, all races or server qualification."
+    },
+    "command": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/bin/python docs/research/dedup-500/copyparty082-hash-control-20261023.py .dedup-work/copyparty082-20261023 .dedup-work/copyparty082-hash-20261023",
+    "exit_code": 0
+  },
+  "findings": [
+    "Native original single-thread hash method returns initial3byteprefixdigest andinitialstat.size3 afterownedfilegrewto12bytes during firstnative read. No finalstat inside method. Deterministic stream wrapper used; no complete upload/dedup publication failure claimed.",
+    "Prelatchedstop returns emptyhashlist withstat. Complete _hash_t caller checks nothashes and returnsFalse; _hasher exits only ifstop. Thus emptycancelresult is not treated as proven successful empty-file identity by this read caller.",
+    "Chunk-size purefunction passes8finiteintegerbounds including0,256MiBboundary,1TiB and2^63-1:chunkcount<=256 or>=32MiBchunk/count<=4096. These are pureinteger calculations, not largefilephysicalIO/RSS/platform qualification.",
+    "Hashcontentidentifier uses SHA512truncated33bytes perchunk and saltedsize+orderedhashlist digest. Separate metadataidentifier includes size/mtime/path andprefix#; not interchangeable exact-content proof.",
+    "_handle_json atdefault safededup50 rehashes crosspathcandidate content unlessconfigured bypass/noforget; sameincomingpath bypasses this content assertion. Actual production flags/defaults outsidethisfunction and race behavior remain unqualified.",
+    "Uploadcompletion rejects remainingneedchunks then calls atomic_move helper and indexesfinishedjob, later symlinks scheduled duplicates. atomic_move/_symlink internals not yet read here, no full filesystem transaction guarantee claimed.",
+    "Only relevant complete functions and partial scan caller read in203KBmodule; remaining module code not read. Wholeblobcredit stays5/486, no fullrepo increment. Native original2tests fromv1 remain distinct from11authoredmethod/math controls.",
+    "No rrrah production change or performance claim. Existing source-snapshot mutation guards remain relevant; broad current decode suite still active."
+  ]
+}
