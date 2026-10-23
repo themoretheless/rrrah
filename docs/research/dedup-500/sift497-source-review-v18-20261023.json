@@ -1,0 +1,104 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "visual_review": {
+    "tracked_image_paths": 41,
+    "unique_git_blobs": 20,
+    "all_visually_viewed": true,
+    "method": "Five static localhost gallery pages; browser loads pinned raw GitHub media URLs directly; screenshots of all four images per page inspected.",
+    "images_by_git_blob": {
+      "3961855334f60001fce4655e80efec0b68ffb269": [
+        "POC/input/E1.jpg",
+        "input/E1.jpg"
+      ],
+      "a8a86ee68e6f7ce9f338b75bbca2648a8c3ac5f6": [
+        "POC/input/E2.jpg",
+        "input/E2.jpg"
+      ],
+      "a2980a3ab3e2ef7daacd8926b51f6a004c038ab3": [
+        "POC/output/group_1/A1.jpg",
+        "input/A1.jpg"
+      ],
+      "78977d867fb1ec538540a6b95b1f19b818510904": [
+        "POC/output/group_1/A2.jpg",
+        "input/A2.jpg"
+      ],
+      "415bd96666d63007e2ecabceea74a1c7c9ccf4c7": [
+        "POC/output/group_2/B1.jpg",
+        "input/B1.jpg"
+      ],
+      "0721ec22927fe47e124f41064afca41e816d3458": [
+        "POC/output/group_2/B2.jpg",
+        "input/B2.jpg"
+      ],
+      "db0a973d3aac9a62dc982af4182ec7a2f251d757": [
+        "POC/output/group_3/C1.jpg",
+        "input/C1.jpg"
+      ],
+      "2dfbbc780210bdfbe20843168163e3a4308c56e3": [
+        "POC/output/group_3/C2.jpg",
+        "input/C2.jpg"
+      ],
+      "289115617a20919ec3ac4affcf8acc2498bb5243": [
+        "POC/output/group_4/D1.jpg",
+        "input/D1.jpg"
+      ],
+      "9db10304b2c4ead7b5bb8548260f1ceb31a202f7": [
+        "POC/output/group_4/D2.jpg",
+        "input/D2.jpg"
+      ],
+      "fce3414b5b9436d1bfcebc392b6381786f850ca5": [
+        "POC/output/group_5/F1.jpg",
+        "input/F1.jpg"
+      ],
+      "53767beb159b10c9dea63111b884ca8d4f42738b": [
+        "POC/output/group_5/F2.jpg",
+        "input/F2.jpg"
+      ],
+      "494c47021b419eb11b88213e3fc7e768a2c96213": [
+        "POC/output/group_6/G1.jpg",
+        "input/G1.jpg"
+      ],
+      "92a5386e672dede8a6e4d0a11a322081cfa0edaa": [
+        "POC/output/group_6/G2.jpg",
+        "input/G2.jpg"
+      ],
+      "2aa02be1733148ee48ee93a80610d73f5bd1b9d4": [
+        "POC/output/group_7/H1.jpg",
+        "input/H1.jpg"
+      ],
+      "03f2b268440b7ba862edba87c75d0862abb20a0a": [
+        "POC/output/group_7/H2.jpg",
+        "input/H2.jpg"
+      ],
+      "a5a0b003ec8f7e660366dd84a4eaa5cf62398b27": [
+        "POC/output/group_8/I1.jpg",
+        "input/I1.jpg"
+      ],
+      "29037aa9b3c4803854f6663b00526d684e7a3363": [
+        "POC/output/group_8/I2.jpg",
+        "input/I2.jpg"
+      ],
+      "4446e334c78cccb20773d3fa67dc03419582bfdd": [
+        "POC/output/group_9/J1.jpg",
+        "POC/output/group_9/J2.jpg",
+        "input/J1.jpg",
+        "input/J2.jpg"
+      ],
+      "f474838e1caa7878857832408515efb4c3fa5c07": [
+        "docs/viz_gui.png"
+      ]
+    },
+    "media_bytes_independently_downloaded_and_verified": false
+  },
+  "findings": [
+    "All unique media visually inspected: ten dog-photo pairs with text, line/rectangle/ellipse overlays, occlusion, crop/white-border differences; J1/J2 exact same Gitblob. Labels and group folder placement are not measured accuracy.",
+    "docs/viz_gui.png shows historical 3D scatter and annotated-dog preview; this is stored screenshot review, not current live GUI qualification.",
+    "41tracked image paths map20unique GitblobIDs; identical tree IDs justify reuse of one visual inspection across paths. Browser display is pinned-URL evidence, not independent byte-digest verification."
+  ],
+  "remaining": [
+    "No unread tracked blobs in pinned SIFT tree; broader runtime/quality/platform qualification incomplete"
+  ],
+  "full_review_count": 249
+}
