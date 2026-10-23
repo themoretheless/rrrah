@@ -1,0 +1,81 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/SimilarityPipeline.swift",
+      "git_blob": "05b64735dd2c633786407f6bd149b34baeeaf901",
+      "sha256": "6685b24de313d9daf312ad0aa32913ab06c44cd420ff7be870f41504f6e974c2",
+      "bytes": 34891,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 76,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 45,
+  "full_review_count": 249,
+  "upstream_run": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter SimilarityPipelineResilienceTests",
+    "executed": 27,
+    "failed": 0,
+    "skipped": 0,
+    "names": [
+      "SimilarityPipelineResilienceTests testCachedPairRelationsAreLookedUpOnceForWholeComparisonPhase",
+      "SimilarityPipelineResilienceTests testCachedPairRelationSkipsFrameVerification",
+      "SimilarityPipelineResilienceTests testCachedPairRelationUsesBatchLookupDuringComparison",
+      "SimilarityPipelineResilienceTests testCachedVideoHashesAdvanceHashingProgress",
+      "SimilarityPipelineResilienceTests testCancellingFrameVerificationPropagatesCancellation",
+      "SimilarityPipelineResilienceTests testCompletedVideoScanPersistsScanRelationIndexInSQLiteCache",
+      "SimilarityPipelineResilienceTests testCurrentAlgorithmVersions",
+      "SimilarityPipelineResilienceTests testDefaultPipelineDoesNotRunVisionForPerceptualCandidates",
+      "SimilarityPipelineResilienceTests testFailedRequiredFrameVerificationRetriesUntilItSucceeds",
+      "SimilarityPipelineResilienceTests testFastVideoComparisonRemainsCacheableWithoutVision",
+      "SimilarityPipelineResilienceTests testFinitePartialFrameComparisonRetriesUntilAllSamplesRecover",
+      "SimilarityPipelineResilienceTests testHashConcurrencyIsCappedForLargeProcessorCounts",
+      "SimilarityPipelineResilienceTests testIncrementalScanIndexReuseForAddedFileIsFutureWork",
+      "SimilarityPipelineResilienceTests testMalformedCurrentFingerprintIsRecomputedAndThenCached",
+      "SimilarityPipelineResilienceTests testMissingSameSizeFilesDoNotAbortComparison",
+      "SimilarityPipelineResilienceTests testScanRelationSignatureChangesWhenFileIdentityChanges",
+      "SimilarityPipelineResilienceTests testScanRelationSignatureChangesWhenFingerprintChanges",
+      "SimilarityPipelineResilienceTests testScanRelationSignatureChangesWhenModifiedDateChanges",
+      "SimilarityPipelineResilienceTests testScanRelationSignatureToleratesSubmillisecondModifiedDateNoise",
+      "SimilarityPipelineResilienceTests testSuccessfullyVerifiedWeakVideoPairRemainsCached",
+      "SimilarityPipelineResilienceTests testUncachedPairComparisonProgressDoesNotRepeatStaleRelationCacheStats",
+      "SimilarityPipelineResilienceTests testUncachedVideoComparisonProgressIsThrottledForLargeCandidateSets",
+      "SimilarityPipelineResilienceTests testUncachedVideoPairRelationsAreWrittenInBatches",
+      "SimilarityPipelineResilienceTests testUnchangedVideoScanUsesScanRelationIndexAndSkipsCandidateLookup",
+      "SimilarityPipelineResilienceTests testV1ScanRelationIndexDoesNotSkipCurrentCandidateLookup",
+      "SimilarityPipelineResilienceTests testVideoComparisonConcurrencyDropsWhenThermalStateIsHigh",
+      "SimilarityPipelineResilienceTests testVideoComparisonProgressReportsCandidateCacheAndUncachedPhases"
+    ],
+    "log_sha256": "443838a1a4e309b5792913bb4465de302a6400e10ed9786a5989b241978053a7",
+    "scope": "Full unchanged original class/package, tests use original injected caches/extractors/hash providers. Only first74lines manually read this step; whole resilience test source not credited."
+  },
+  "authored_control": {
+    "source": "targie061-corrupt-video-control-20261023.swift",
+    "executed": 1,
+    "failed": 0,
+    "log_sha256": "adf1ff72e5598126a95ebd510499431b89d9220d27f1671d296f1c4212745097",
+    "result": "Two distinct owned4byte .mp4 files with same bytes both return equal native FileHasher digests; MediaItem fixtures have matching duration/dimensions and positive equal size. Original default SimilarityPipeline throws noncancellation error before returning grouping result.",
+    "scope": "Real AVFoundation/pHash and CryptoKit path, no injected hasher/extractor/cache. Metadata authored manually, not normal VideoScanner output. Demonstrates primitive pipeline boundary, not normal UI admission of corrupt videos. Authored test removed afterward."
+  },
+  "partial_reads": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/SimilarityPipelineResilienceTests.swift",
+      "lines": [
+        "1-74"
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "findings": [
+    "Quickprehash candidate gate precedes all perceptual/exact work. Hashes computed only for candidate-member videos. Equalpositive-size prehashpairs can reach SHA even if pHash returnsnil, but thrown pHash error propagates from throwingtaskgroup before exactphase; native control proves this contradicts broad sourcecomment about corrupt-file independence.",
+    "Visual BKTree compares all hashed candidate-member videos withdistance<=24, not necessarily only originalprehashpairs. Exact fallback remains bounded by originalprehashpairs; this asymmetry matters when reasoning about recall.",
+    "Default usesFrameVerification=false; separate algorithmversions forperceptual/deep caches. Deepmode verifies nonexact candidates regardless highpHash score; cacheable only withcompletefiniteframefeatures or exacthash.",
+    "All candidate lists, processedpairs and miss lists materialize without explicit resource budget;512writebatch not totalmemorybound. BKTree O(nlogn) comment not worst-case guarantee (see v1 identicalhash chain).",
+    "Signature hashes path/size/roundedmtime/perceptualhash for candidate-member subset; threshold excluded, storagefloor0.60. Cacheindex reuse is not exact-content proof and depends on current identity assumptions.",
+    "Initial attempted filter SimilarityPipelineTests matched imageclass only17tests and reran v28; retained full-similarity-pipeline-tests.log, not counted as new video coverage. Correct resiliencefilter27tests reported here.",
+    "No upstream source adopted or performance gain inferred. Full objective and all500review remain incomplete."
+  ]
+}
