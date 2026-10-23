@@ -1,0 +1,34 @@
+{
+  "repository": "n24q02m/modhash",
+  "commit": "3968350080e87dec1ea04ca87ca6cf54629a6e34",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "modhash-fastcdc/src/buzhash.rs",
+      "sha256": "9e4b3c0757db95d175c912df21fcb492496b911a89fa68a7cdc5a1c4804be20e",
+      "lines": 115,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/modhash496-buzhash-control-20261023.rs"
+  ],
+  "runtime": {
+    "rust": "1.98.1",
+    "exit_code": 0,
+    "per_byte_window_oracles": 4096,
+    "split_clone_reset_variants": 12,
+    "gear_table": "synthetic deterministic256-entry table; upstream table not available in captured excerpts"
+  },
+  "findings": [
+    "Whole original buzhash64 module read and compiled unchanged with synthetic GEAR dependency. Recurrence checked against independent last64-byte sum of explicitly rotated table entries after every byte, including warm-up and repeated ring wrap.",
+    "Final hash invariant across12 input chunk sizes1..4096; clone continuation matches, reset clears len/full/empty/fingerprint and replay restores final hash.",
+    "is_empty documentation says true while fewer than64 bytes, but implementation is len==0; actual one-byte stream correctly reports nonempty. Comment discrepancy, not recurrence error.",
+    "This is buzhash rolling state, explicitly distinct from Gear chunk-boundary algorithm. No FastCDC boundary correctness or upstream golden hash compatibility claim; real GEAR constants not qualified."
+  ],
+  "remaining": [
+    "Other660 tracked blobs and assets",
+    "Original GEAR table, actual chunker and full runtime/recipe validation"
+  ],
+  "full_review_count": 247
+}
