@@ -1,0 +1,53 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 22,
+  "upstream_tests_run": true,
+  "test_harness_adapter": "webpack070-node22-mockfs-compat-20261023.cjs",
+  "environment": {
+    "node": "v22.23.4",
+    "jest": "25.1.0",
+    "mock-fs": "4.11.0",
+    "direct_runtime_dependencies": {
+      "app-root-path": "3.0.0",
+      "enhanced-resolve": "5.7.0",
+      "fast-glob": "3.2.2",
+      "find-package-json": "1.2.0",
+      "lodash": "4.17.19",
+      "mkdirp": "1.0.3"
+    },
+    "transitive_versions": "Current allowed versions installed, not complete historical lock reproduction.",
+    "test_sources": "All three unchanged test files matched pinned Git blobs.",
+    "jest_config": {
+      "rootDir": "isolated runtime directory",
+      "testMatch": [
+        "<rootDir>/__tests__/*.test.js"
+      ],
+      "runInBand": true,
+      "noCache": true,
+      "transform": "Jest default (hoisting enabled)",
+      "environment": "Jest default"
+    }
+  },
+  "results": [
+    {
+      "passed": 10,
+      "failed": 0,
+      "suites_passed": 3
+    },
+    {
+      "passed": 10,
+      "failed": 0,
+      "suites_passed": 3
+    }
+  ],
+  "findings": [
+    "Native minimal control with mock-fs4.11 on Node22: fs.existsSync(patches) false while fs.statSync(patches).isDirectory true and readdir shows fixture. Confirms inconsistent filesystem interception in host test environment.",
+    "Test-only adapter routes existsSync through statSync and UTF8 read/write through Buffer paths. It changes fs behavior in Jest environment, not product or original test bodies; cannot be counted as unadapted upstream CI.",
+    "All10 original test bodies pass twice under this explicit adapter; raw6passed4failed remains preserved in v7. No historical Node12 or full Babel environment claim.",
+    "Unadapted real-filesystem product controls rerun after Jest passes: cross-root cache, different-byte redirection, key ambiguity, stale negative and corrupt-cache errors still reproduce. Green original tests do not cover these cases."
+  ],
+  "full_review_count": 249
+}
