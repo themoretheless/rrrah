@@ -1,0 +1,56 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "replication_repair.py all 624 lines and test_replication_repair.py all 290 lines now read. Four unmodified original test functions directly called in isolated namespace package under bundled Python. No pytest collection or setup_module invoked.",
+  "result": {
+    "exit_code": 0,
+    "original_tests": [
+      {
+        "test": "test_relpath_posix",
+        "result": "PASS"
+      },
+      {
+        "test": "test_sort_dict_of_paths",
+        "result": "PASS"
+      },
+      {
+        "test": "test_sort_group",
+        "result": "PASS"
+      },
+      {
+        "test": "test_majority_vote_byte_scan",
+        "result": "PASS"
+      }
+    ]
+  },
+  "not_run": "test_synchronize_files depends on original image/text fixtures; not executed. No substitute fixtures presented as original test success.",
+  "findings": [
+    {
+      "id": "coverage-gap",
+      "detail": "Original majority test covers unanimous/repaired bytes, all-distinct ambiguity, null/custom fallback and partial shorter replicas, but no 2:2 tie and no later-only tail crossing a read block boundary. Thus four passing tests coexist with v7 reproduced failures."
+    },
+    {
+      "id": "cli-report-path",
+      "detail": "main converts requested report path to basename, dropping the requested parent directory. Original integration test expects full specified path after main call; this is a source-level contradiction, not an executed integration failure."
+    },
+    {
+      "id": "cli-minimum-not-distinctness",
+      "detail": "main checks at least three input path arguments but does not deduplicate physical paths or file identities. Repeating one source can give it multiple votes; nominal copy count does not establish independent redundancy."
+    },
+    {
+      "id": "cli-length-claim",
+      "detail": "CLI description promises continuation to longest copy; v7 actual later-only-tail control contradicts that guarantee."
+    },
+    {
+      "id": "precomputation-memory",
+      "detail": "main retains visited relative names in a dict and traverses sources again for synchronization. Streaming synchronization does not make the entire command memory independent of file count."
+    }
+  ],
+  "source_sha256": {
+    "pyFileFixity/replication_repair.py": "c4b7747bedefa7b3c2a39ec94bc2eae95f1f3ed66ec849aa34daea4bd14bb5b8",
+    "pyFileFixity/tests/test_replication_repair.py": "5111671f54bb7d755e35f7aae7e1f8474ff677936995d27f6fe009f8c44f0b8e"
+  },
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
