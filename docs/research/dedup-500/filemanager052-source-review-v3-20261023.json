@@ -1,0 +1,57 @@
+{
+  "repository": "math2001/FileManager",
+  "commit": "40c452353384566da275ae9a4b73692385d3413f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "libs/sublimefunctions.py",
+      "sha256": "502f5eabcb7547b4b3b685f3e63f53bdc6f5bb392f1bce2939d9f185db77b852",
+      "lines": 137,
+      "git_blob_verified": true
+    },
+    {
+      "path": "FileManager.py",
+      "sha256": "6e01a83f891b808bf6e2174fdde7711f52df475e01d74afc948ff89d934e6bae",
+      "lines": 109,
+      "git_blob_verified": true
+    },
+    {
+      "path": "prevent_default.py",
+      "sha256": "119663324d3c721eea8131b7997acb76d5315456378f9ab40e9919a59ad0b016",
+      "lines": 68,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/editto.py",
+      "sha256": "33bd961de579f8ce4e1a1f09ae3721801b95c8141977cabb905ee88f9cbc4f12",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/find_in_files.py",
+      "sha256": "72d7470bbed286ea83431a3e8dde9ca2fb0dad740cec69527ab6ad9d14a3e4ef",
+      "lines": 18,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/filemanager052-panel-control-20261023.py",
+  "runtime": {
+    "original_panel_body_extracted": true,
+    "window_controlled": true,
+    "ui_or_files_mutated": false
+  },
+  "findings": [
+    "Fivepinnedfileswhole-read/Gitblobverified. Actualyes_no_cancel_panelbodyexecuted withcontrolledwindow callbackcapture; noUI/APIaction.",
+    "Defaultstringlabels treatedaslists and.append calledduringpadding: controlledcallraisesAttributeError. Actualcommands oftenpasslists, so defaultAPIdefectnotassertedforallcallers.",
+    "PanelNo invokescallbackwithzeroargs bydefault. Signatureequivalent tooriginalrenameopen_file(self) raisesTypeError; this confirms v2callbackconcern through actualpanelbody, not fullSublimeruntime.",
+    "find_in_files defaultpath references self.windows instead ofself.window; ifpathsprovidedfalsepathavoids typo, otherwiseattributeerrorlikely. Even correctedexpressionreturnsstringiteratedcharacterwise; source-only.",
+    "transform_aliases caps100expansionloops but has_unescaped_dollar checks string[index-1] whenindex0, readinglastcharacter asescapecontext. Endbackslashcouldcauseleadingdollarmisclassification; untested.",
+    "get_template reads matchingextensiontemplate withdefaulttextencoding andunsortedlisting; filecreationcallbacktiming andsnippetsettingownership needSublimeruntime.",
+    "Plugin reload clears packagechildmodulesfromsys.modules, defaultcommandoverrideclasses hide/disable builtins. NoSublimeinstallation or commandregistration changed."
+  ],
+  "remaining": [
+    "52 other tracked blobs/assets",
+    "Inputcompletion/remainingcommands/settings/docs/vendortrash/media and runtime qualification"
+  ],
+  "full_review_count": 249
+}
