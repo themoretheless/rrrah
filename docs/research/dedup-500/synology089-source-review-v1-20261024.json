@@ -1,0 +1,79 @@
+{
+  "repository": "007revad/Synology_enable_Deduplication",
+  "commit": "1932176c421bd1743125c2adf3ce04607b83ac52",
+  "tracked_blobs": 27,
+  "whole_repo_complete": false,
+  "whole_text_files_read_total": 2,
+  "source_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "6fcdf462119fef947ae3b4ad9099eb743356eb85c4f4879d653ed5352c70e32e",
+      "git_blob": "823781ce228ee65d43448faf085cdc37e861cf8f",
+      "whole_text_read": true,
+      "lines": 234
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "9491ca7d8ff110e034d2007f9a189cac5d6552db701421ef225ccc2c0a08d453",
+      "git_blob": "9c3fcdd90ec2e707065a3f084ed1b2ef5ebb0a41",
+      "whole_text_read": true,
+      "lines": 21
+    },
+    {
+      "path": "syno_enable_dedupe.sh",
+      "local": "02-syno_enable_dedupe.sh",
+      "sha256": "0881f47b7c9261ba010abf971d05b73897f68240aeac76a14166ad31a5e9ffd3",
+      "git_blob": "fe08293c58af451fe7335a253d6b1329a33f7f67",
+      "whole_text_read": false,
+      "lines": 1252
+    }
+  ],
+  "partial_source_read": {
+    "syno_enable_dedupe.sh": {
+      "lines_read": [
+        1,
+        220
+      ],
+      "total_lines": 1252,
+      "whole_file_credit": false
+    }
+  },
+  "syntax_check": {
+    "command": [
+      "/bin/bash",
+      "-n",
+      "docs/research/dedup-500/evidence/007revad--Synology_enable_Deduplication/02-syno_enable_dedupe.sh"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "bash_version": "GNU bash, version 3.2.57(1)-release (arm64-apple-darwin25)",
+    "scope": "Parse-only syntax check of full script; no script statements executed and no NAS configuration changed."
+  },
+  "findings": [
+    "Pinned README describes enabling existing Synology Btrfs deduplication support on selected hardware, rather than implementing a duplicate-file search engine.",
+    "Reviewed script prefix requires Synology uname and root before reading DSM configuration; parse-only check does not qualify runtime on DSM.",
+    "README compatibility and memory tables are upstream claims from the pinned snapshot, not independently verified hardware tests."
+  ],
+  "unreviewed_inventory": {
+    "png_images": 19,
+    "remaining_text_paths": [
+      ".gitattributes",
+      ".github/FUNDING.yml",
+      "CHANGES.txt",
+      "how_to_schedule.md",
+      "my-other-scripts.md",
+      "syno_enable_dedupe.sh"
+    ],
+    "images_visual_reviewed": 0
+  },
+  "decision": "reject-domain",
+  "transfer": "No duplicate matching algorithm adopted; continue remaining source and image inspection to honor repository review scope.",
+  "limits": [
+    "Only two whole files read; script prefix only. Full script syntax parses but runtime is untested.",
+    "No actual NAS, root configuration writes, updates or schedule changes performed.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

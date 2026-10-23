@@ -2,7 +2,7 @@
   "index": 89,
   "repository": "007revad/Synology_enable_Deduplication",
   "commit": "1932176c421bd1743125c2adf3ce04607b83ac52",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "README and LICENSE completely read; script lines 1-220 of 1252 read; full script parse-only syntax check; no DSM runtime or image review",
   "decision": "reject-domain",
   "finding": "Synology hardware support configuration patcher; enables NAS feature rather than implements duplicate search.",
   "license_metadata": "MIT",
@@ -43,6 +43,12 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/synology089-source-review-v1-20261024.json",
+      "whole_repo_complete": false
     }
   ]
 }

@@ -1,0 +1,154 @@
+{
+  "repository": "dedupeio/dedupe-examples",
+  "commit": "48916bf09205756a2948a30ec0275ac2e394288d",
+  "prior_audits": [
+    "docs/research/dedup-500/examples088-source-review-v1-20261024.json",
+    "docs/research/dedup-500/examples088-source-review-v2-20261024.json"
+  ],
+  "new_whole_files_read": [
+    {
+      "path": "mysql_example/mysql_example.py",
+      "local": "31-mysql_example--mysql_example.py",
+      "sha256": "1c65b9d5932b79e21c85f87a3e409e489c5bbce8a6afbc834bdb8d28912d9e9e",
+      "whole_text_read": true,
+      "lines": 364
+    },
+    {
+      "path": "mysql_example/mysql_init_db.py",
+      "local": "32-mysql_example--mysql_init_db.py",
+      "sha256": "c503b5d01bd0e07e6d168aded9bd177a79cd1b68d382132611c210be0ba400b0",
+      "whole_text_read": true,
+      "lines": 261
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "local": "33-CODE_OF_CONDUCT.md",
+      "sha256": "ac773151423ec5eb717e3c1c9c50f995a71390602bb88dcd89bf8a3cf93e8ea8",
+      "whole_text_read": true,
+      "lines": 46
+    },
+    {
+      "path": "extended-variables/requirements.txt",
+      "local": "34-extended-variables--requirements.txt",
+      "sha256": "0f8d62cae9096c5e15e9cc90d18ccf93233c418f400df46b129a524aa54007c8",
+      "whole_text_read": true,
+      "lines": 2
+    },
+    {
+      "path": "mysql_example/requirements.txt",
+      "local": "35-mysql_example--requirements.txt",
+      "sha256": "158f8e8ca47b84e05355d16d629c8935faa922406ff83362d3e1eaebc0218737",
+      "whole_text_read": true,
+      "lines": 1
+    },
+    {
+      "path": "pgsql_big_dedupe_example/requirements.txt",
+      "local": "36-pgsql_big_dedupe_example--requirements.txt",
+      "sha256": "89486cc7b2642463cfab430c449169e2f42a1483f1eb99df24917fc169b0a3eb",
+      "whole_text_read": true,
+      "lines": 4
+    },
+    {
+      "path": "mysql_example/mysql.cnf_LOCAL",
+      "local": "37-mysql_example--mysql.cnf_LOCAL",
+      "sha256": "57a2c2f92a0c3a3e6fe0531914270034fca80c0ec800778dfc70e6cab8b914d6",
+      "whole_text_read": true,
+      "lines": 4
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 33,
+  "tracked_blobs": 42,
+  "remaining_without_whole_review": 9,
+  "remaining_files": [
+    "csv_example/csv_example_input_with_true_ids.csv",
+    "csv_example/csv_example_messy_input.csv",
+    "extended-variables/officers.csv",
+    "gazetteer_example/data/AbtBuy_Abt.csv",
+    "gazetteer_example/data/AbtBuy_Buy.csv",
+    "patent_example/patstat_input.csv",
+    "patent_example/patstat_reference.csv",
+    "record_linkage_example/AbtBuy_Abt.csv",
+    "record_linkage_example/AbtBuy_Buy.csv"
+  ],
+  "remaining_review_scope": "All nine CSV datasets have full structural parse evidence, not manual row-by-row semantic review.",
+  "whole_repo_complete": false,
+  "all_non_csv_files_whole_text_read": true,
+  "coverage_reconciliation": "Disjoint union of 33 manually reviewed text paths and nine structurally parsed CSV paths equals all 42 tracked blobs.",
+  "original_upstream_tests_run": false,
+  "stream_controls": {
+    "scope": "Original pure class/functions parsed unchanged from pinned source; no database imports or client/server COPY protocol exercised.",
+    "readable_roundtrip": [
+      {
+        "requested_size": 1,
+        "chunks": 6,
+        "max_returned_characters": 100004,
+        "roundtrip_rows": 6
+      },
+      {
+        "requested_size": 2,
+        "chunks": 3,
+        "max_returned_characters": 100008,
+        "roundtrip_rows": 6
+      },
+      {
+        "requested_size": 3,
+        "chunks": 2,
+        "max_returned_characters": 100021,
+        "roundtrip_rows": 6
+      },
+      {
+        "requested_size": 10000,
+        "chunks": 1,
+        "max_returned_characters": 100065,
+        "roundtrip_rows": 6
+      }
+    ],
+    "record_pair_adapter": [
+      [
+        [
+          7,
+          {
+            "name": "a"
+          }
+        ],
+        [
+          9,
+          {
+            "name": "b"
+          }
+        ]
+      ]
+    ],
+    "cluster_id_adapter": [
+      [
+        7,
+        7,
+        0.9
+      ],
+      [
+        9,
+        7,
+        0.8
+      ],
+      [
+        12,
+        12,
+        0.7
+      ]
+    ],
+    "conclusion": "read(size) limits rows, not characters or bytes; a single admitted row exceeds the nominal size by over 100000 characters. CSV escaping and row roundtrip passed four chunk sizes."
+  },
+  "findings": [
+    "All executable scripts have now been read. They demonstrate structured entity resolution and database blocking, not file byte/image comparison.",
+    "Postgres Readable CSV serialization round-trips six rows including Unicode, embedded newlines, quotes and a 100000-character field at four chunk sizes. read(1) can return 100004 characters because size means rows. This does not establish bounded bytes or total RSS.",
+    "Original record_pairs and cluster_ids pure adapters pass finite valid fixtures. No psycopg2 COPY protocol or database transaction was exercised.",
+    "Both database initializer scripts download campaign data and drop/recreate tables at top level. They were read only; no service or download invoked.",
+    "MySQL import uses case-insensitive utf8_unicode_ci collation and trims donor fields; PostgreSQL import explicitly lowercases trimmed fields. These are domain normalization policies, not binary file equality."
+  ],
+  "limits": [
+    "No full learned pipeline, original test suite, database execution, throughput result or general deduplication guarantee.",
+    "Nine CSVs remain without manual whole-file review; do not count this repository as fully manually reviewed.",
+    "No rrrah production source changes. pHash.org/ASAN remains skipped."
+  ],
+  "whitespace_note": "Byte-exact original mysql_init_db.py docstring contains upstream trailing spaces; preserve source hashes."
+}

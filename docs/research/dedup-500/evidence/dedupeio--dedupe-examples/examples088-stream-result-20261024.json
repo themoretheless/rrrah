@@ -1,0 +1,63 @@
+{
+  "scope": "Original pure class/functions parsed unchanged from pinned source; no database imports or client/server COPY protocol exercised.",
+  "readable_roundtrip": [
+    {
+      "requested_size": 1,
+      "chunks": 6,
+      "max_returned_characters": 100004,
+      "roundtrip_rows": 6
+    },
+    {
+      "requested_size": 2,
+      "chunks": 3,
+      "max_returned_characters": 100008,
+      "roundtrip_rows": 6
+    },
+    {
+      "requested_size": 3,
+      "chunks": 2,
+      "max_returned_characters": 100021,
+      "roundtrip_rows": 6
+    },
+    {
+      "requested_size": 10000,
+      "chunks": 1,
+      "max_returned_characters": 100065,
+      "roundtrip_rows": 6
+    }
+  ],
+  "record_pair_adapter": [
+    [
+      [
+        7,
+        {
+          "name": "a"
+        }
+      ],
+      [
+        9,
+        {
+          "name": "b"
+        }
+      ]
+    ]
+  ],
+  "cluster_id_adapter": [
+    [
+      7,
+      7,
+      0.9
+    ],
+    [
+      9,
+      7,
+      0.8
+    ],
+    [
+      12,
+      12,
+      0.7
+    ]
+  ],
+  "conclusion": "read(size) limits rows, not characters or bytes; a single admitted row exceeds the nominal size by over 100000 characters. CSV escaping and row roundtrip passed four chunk sizes."
+}
