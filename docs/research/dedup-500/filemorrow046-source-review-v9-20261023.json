@@ -1,0 +1,27 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "controls": {
+    "kind": "unchanged upstream DuplicateScannerTests in isolated library package",
+    "suite": "DuplicateScannerTests",
+    "tests_passed": 8,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "build_seconds": 1.53,
+    "test_seconds": 0.029,
+    "toolchain_override": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer",
+    "original_source_and_tests_unchanged": true,
+    "system_trash_invoked": false,
+    "fixtures": "upstream UUID temporary directories and injected recovery folder"
+  },
+  "findings": [
+    "All eight original duplicate-scanner tests pass. Together with the prior 16 tests, 24 distinct original tests have passed in focused runs; this is not the complete upstream suite or application qualification.",
+    "Passing tests coexist with separately reproduced changed-keeper acceptance and stale mtime cache false positive. Their fixtures do not cover those cases, so passing is not evidence that those defects are absent."
+  ],
+  "whole_files_read_total": 16,
+  "remaining_tracked_blobs": 42,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
