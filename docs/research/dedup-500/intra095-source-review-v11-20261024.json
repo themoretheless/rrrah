@@ -1,0 +1,76 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v10-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_validateTestArches.py",
+      "local": "47-Tests--Test_validateTestArches.py",
+      "sha256": "0fbfa760aa016afbebcc14fee7b4c584f4d8a950d9e3a558e9adb2528837672a",
+      "whole_text_read": true,
+      "lines": 410
+    },
+    {
+      "path": "Tests/Test_ImLoad.py",
+      "local": "48-Tests--Test_ImLoad.py",
+      "sha256": "bf66cedb4163b442c19a51e7f2a39994f0b5430ff8393dad9b40b5144651a977",
+      "whole_text_read": true,
+      "lines": 69
+    },
+    {
+      "path": "Tests/Test_Pillow_Resizing.py",
+      "local": "49-Tests--Test_Pillow_Resizing.py",
+      "sha256": "ce83721f58b63fe5a0d92bc9e83c0a524c7db6f77e3e68dc21c9797e970f319d",
+      "whole_text_read": true,
+      "lines": 76
+    }
+  ],
+  "whole_text_files_read_total": 49,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 105,
+  "authored_zip_control": {
+    "zip_archives": 21,
+    "members": 132,
+    "matched_expected_archives": 13,
+    "expected_member_comparisons": 56,
+    "exit_code": 0,
+    "archive_details": "docs/research/dedup-500/intra095-zip-fixture-control-20261024.json",
+    "whole_archive_review_credited": false,
+    "scope": "Every tracked ZIP CRC/full member-byte reads and SHA256;13original expectation dictionaries replayed via Python zipfile,original getHashDict and macOS file MIME;not original PhashArchive or upstream test invocation;no extraction/visual review/7z decode"
+  },
+  "new_original_tests": {
+    "modules": [
+      "Tests.Test_ImLoad",
+      "Tests.Test_Pillow_Resizing"
+    ],
+    "run": 2,
+    "passed": 1,
+    "failures": 0,
+    "errors": 1,
+    "exit_code": 1,
+    "source_modified": false
+  },
+  "original_tests_cumulative": {
+    "run": 19,
+    "passed": 14,
+    "failures": 0,
+    "errors": 5,
+    "scope": "Five focused converter/imagehash/image-loading/resizing modules;prior four adapted diagnostic repetitions excluded"
+  },
+  "findings": [
+    "Every tracked ZIP verifiedagainstpinSHA256andtestzipCRC;all132memberbytesreadwithout extraction. Member occurrence/name/SHA256 recorded. No duplicate names amongthese originalfixtures.",
+    "13original Test_validateTestArches expectations reproducedexactly throughzipfile,originalgetHashDict,andmacOSfile MIME. Comparison covers56memberrecords includingimageMD5,pHash,dimensionsandjunkMIME. This is authoredadapterreplay,not originalPhashArchive unittest execution.",
+    "Original nearest-neighbor20x20to10x10Pillowresizetest passedunchanged.",
+    "Original Test_ImLoad errorsatnumpy.floatbeforeitsresizedpixelhashassertion. CurrentruntimeNumPy2.5.4;noaliaspatchthisturn.",
+    "Whole Test_validateTestArches read,including expecteddataandtestbody;not executedasoriginaltest becausepArchimportsunqualifiedUniversalArchiveInterface/magic.",
+    "ZIP CRC/contenthashverificationisstructural,notmanualvisualreviewofallmembercontent.21archiveblobsnotaddedtowholereadtotal;7zfixtureunqualified."
+  ],
+  "transfer_decision": "Preserve original archive/metadata expectations as a differential corpus while keeping transport adapters and decoder versions explicit. No foreignproductioncodeadopted.",
+  "limits": [
+    "49of154whole textfiles;105remain.",
+    "Originalupstream19testsrun14pass5errors;notfullsuite.",
+    "13authoredexpectationreplaysand21CRCchecksarenotadditionaloriginaltests or wholearchivevisualcredit.",
+    "No archive extraction,PostgreSQL/server operations or nativepHash.org/ASAN run."
+  ]
+}

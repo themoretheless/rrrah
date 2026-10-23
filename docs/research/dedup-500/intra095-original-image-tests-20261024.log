@@ -1,0 +1,21 @@
+test_hashImage1 (Tests.Test_ImLoad.TestSequenceFunctions.test_hashImage1) ... ERROR
+test_image_rescale_1 (Tests.Test_Pillow_Resizing.TestSequenceFunctions.test_image_rescale_1) ... ok
+
+======================================================================
+ERROR: test_hashImage1 (Tests.Test_ImLoad.TestSequenceFunctions.test_hashImage1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-20261024/Tests/Test_ImLoad.py", line 56, in test_hashImage1
+    pixels = numpy.array(image.getdata(), dtype=numpy.float).reshape((HASH_SIZE, HASH_SIZE))
+                                                ^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-runtime-20261024/lib/python3.12/site-packages/numpy/__init__.py", line 760, in __getattr__
+    raise AttributeError(__former_attrs__[attr], name=None)
+AttributeError: module 'numpy' has no attribute 'float'.
+`np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.008s
+
+FAILED (errors=1)
