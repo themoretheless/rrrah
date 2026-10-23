@@ -1,0 +1,55 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "git_blob": "bd28e9eb21c8b4ee901dc7f19f5863ab8404a699",
+      "sha256": "2dc015d767012a4342c7a54869d942cc9dbd5625797b4de3691171e94418af18",
+      "bytes": 1299,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/index.js",
+      "git_blob": "65a8bd211a6458b021ea71c2699e664dea8c2ff3",
+      "sha256": "bcf63ea53ba7b28f958e01ec6d6946758bbd301488e02b843972bf53ee8bc249",
+      "bytes": 3172,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/resolver.js",
+      "git_blob": "270d65134bb1033521b3c515d0c0ed0c78a11d5e",
+      "sha256": "73f00f579d5fb5510e3c4a303f3d945df551edb3dbcfb1f7648201fb0710369c",
+      "bytes": 2933,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/utils.js",
+      "git_blob": "036ebd8b3a9e389c598a61fc910703a52d87a695",
+      "sha256": "43df805047cf6683b405526e5d1b1537321bea531f4ddc1dca016a5a2fdbc666",
+      "bytes": 4744,
+      "whole_text_read": true
+    }
+  ],
+  "tracked_blobs": 24,
+  "whole_text_files_read_total": 4,
+  "control": "webpack070-cache-control-20261023.cjs",
+  "runtime_scope": "Original getCacheKey helper exposed from unchanged pinned utils module in Node VM. Native crypto/fs/path; inert unused-dependency adapters. No dependency installation or Webpack build.",
+  "control_result": {
+    "node": "v22.23.4",
+    "different_roots_same_key": true,
+    "installed_bytes_change_same_key": true,
+    "changed_lock_changes_key": true
+  },
+  "findings": [
+    "Cache key hashes only yarn.lock bytes and comma-joined patched package names, omitting root identity and installed package content. With a shared cacheDir, equal lockfiles map to the same saved absolute-path duplicate list. Helper key behavior reproduced; full build redirection not executed.",
+    "extractProperDuplicates compares package.json objects, not package source bytes. This is package consolidation policy and does not establish file identity.",
+    "Packages without dependencies property and root-level package.json are excluded, limiting duplicate enumeration. Filtered group can contain only its first package.",
+    "Resolver memoization key concatenates request and context with an unescaped delimiter and retains results without invalidation. Potential delimiter ambiguity noted statically, not executed.",
+    "Resolver temporarily changes global Error stack capture settings and restores in finally. Claimed historical speedup is not a measurement here.",
+    "README external banner and linked pages not counted reviewed."
+  ],
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}

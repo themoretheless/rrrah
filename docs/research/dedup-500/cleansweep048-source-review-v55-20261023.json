@@ -1,0 +1,85 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/1.json",
+      "sha256": "107733a22ea1611d3cebe5a386abd1bf4973f4e41c9784622496fd9e05cbca7b",
+      "bytes": 11382,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "version": 1,
+      "tables": [
+        "file_signature_cache",
+        "folder_details_cache",
+        "phash_cache",
+        "similar_group_cache",
+        "scan_result_groups",
+        "media_item_refs",
+        "unreadable_file_cache"
+      ],
+      "whole_text_read": true
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/2.json",
+      "sha256": "dd71de17e598366456a9173b7e93f4e98c3372dbd5034aef6b9fd4ffe0ed04cd",
+      "bytes": 11624,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "version": 2,
+      "tables": [
+        "file_signature_cache",
+        "folder_details_cache",
+        "phash_cache",
+        "similar_group_cache",
+        "scan_result_groups",
+        "media_item_refs",
+        "unreadable_file_cache"
+      ],
+      "whole_text_read": true
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/3.json",
+      "sha256": "9870699a9163d9b74a18e8d596e4d3409faeaf879f88524828451ba8a39caa1f",
+      "bytes": 11165,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "version": 3,
+      "tables": [
+        "file_signature_cache",
+        "folder_details_cache",
+        "phash_cache",
+        "scan_result_groups",
+        "media_item_refs",
+        "unreadable_file_cache",
+        "similarity_denials"
+      ],
+      "whole_text_read": true
+    },
+    {
+      "path": "app/schemas/com.cleansweep.data.db.CleanSweepDatabase/5.json",
+      "sha256": "56aeca87f7d9c5b6a9408388a18e011fe27b436b1aa738f0a9c58eca62ea7e87",
+      "bytes": 6288,
+      "git_blob_verified": true,
+      "structured_review": true,
+      "version": 5,
+      "tables": [
+        "file_hash_cache",
+        "phash_cache",
+        "unreadable_file_cache",
+        "folder_details_cache",
+        "similar_group_cache"
+      ],
+      "whole_text_read": true
+    }
+  ],
+  "review_method": "Full canonical JSON content visually read for all entities, fields, keys, indexes, foreign keys and setup queries, followed by all remaining root/database scalar properties. Original pinned bytes verified by v54 control. No omitted property or truncated output counted.",
+  "whole_files_read_total": 105,
+  "findings": [
+    "Four saved schemas fully read; no new executable code. Their migration discrepancy and runtime limits are recorded in v54.",
+    "Version 1/2 contain obsolete similar_group_cache; v3 substitutes similarity_denials and adds scopeType inherited from v2. Version5 is a different saved schema, not authoritative proof of current app version."
+  ],
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
