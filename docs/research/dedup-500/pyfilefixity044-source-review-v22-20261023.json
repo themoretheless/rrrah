@@ -1,0 +1,59 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Three pinned original ECC integration test modules read whole and syntax parsed; no execution or fixture substitution.",
+  "evidence": [
+    {
+      "path": "pyFileFixity/tests/test_header_ecc.py",
+      "sha256": "52b7d4c602afa82210d39d6e16949ed72f3d703834eb418318fd29a06208f974",
+      "top_level_test_functions": 7,
+      "whole_text_read": true
+    },
+    {
+      "path": "pyFileFixity/tests/test_repair_ecc.py",
+      "sha256": "fe778915c06d6ad89c1ce21f9fd3ea65bc25dfb8a4d4c47587768860aab02ae2",
+      "top_level_test_functions": 5,
+      "whole_text_read": true
+    },
+    {
+      "path": "pyFileFixity/tests/test_structural_adaptive_ecc.py",
+      "sha256": "07c85b939c3ec3e7c265518e5ec443d408b1ca8adadbbb58affba0902b42f865",
+      "top_level_test_functions": 7,
+      "whole_text_read": true
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 61,
+    "remaining_not_whole_reviewed": 83
+  },
+  "findings": [
+    {
+      "id": "positive-byte-assertions",
+      "detail": "Header/adaptive tamper tests compare repaired files byte-for-byte through check_eq_files, stronger than numeric success alone. ECC recovery tests also compare full output DB to backup."
+    },
+    {
+      "id": "header-vs-whole",
+      "detail": "Header repair injects five bytes at offset four in a single JPEG. Adaptive repair additionally injects offset1100 and last-five-byte changes. These finite cases do not establish all formats, boundary lengths, insertion/deletion or interrupted-source behavior."
+    },
+    {
+      "id": "assembly-gap",
+      "detail": "Both header entry_assemble and adaptive stream_entry_assemble tests explicitly TODO multiple-block assembly; each expected assembly list has a single result."
+    },
+    {
+      "id": "cross-entry-read-expectation",
+      "detail": "Adaptive stream_entry_assemble expected ECC bytes include next entry marker and file2 metadata from dummy database. Test therefore does not enforce entry-local read containment. Actual production parser needs separate review before classifying exploitability or runtime corruption."
+    },
+    {
+      "id": "index-boundary",
+      "detail": "repair test_check explicitly omits index equality assertion because changing comments shifts offsets. Other repair tests validate selected index/marker corruption against known backup but not arbitrary index/body inconsistency."
+    },
+    {
+      "id": "setup-dependency",
+      "detail": "repair tests rely on module setup generating header/adaptive DBs and backups from original fixture corpus. Importing or individually calling selected methods without setup would not be valid integration qualification."
+    }
+  ],
+  "upstream_tests_run_this_review": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
