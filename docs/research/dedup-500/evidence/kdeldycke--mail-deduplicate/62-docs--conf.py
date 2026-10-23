@@ -1,0 +1,237 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+# The docs build runs only on Python >= 3.14 (uv's dependency-groups.docs floor), where
+# tomllib is stdlib; mypy analyzes at the 3.10 project floor, where it is absent.
+import tomllib  # type: ignore[import-not-found]
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
+
+project_path = Path(__file__).parent.parent.resolve()
+
+# Fetch general information about the project from pyproject.toml.
+toml_path = project_path / "pyproject.toml"
+toml_config = tomllib.loads(toml_path.read_text(encoding="utf-8"))
+
+# Redistribute pyproject.toml config to Sphinx.
+project_id = toml_config["project"]["name"]
+version = release = toml_config["project"]["version"]
+url = toml_config["project"]["urls"]["Homepage"]
+author = ", ".join(author["name"] for author in toml_config["project"]["authors"])
+
+# Canonical origin of the published site. The trailing slash is mandatory:
+# sphinx-sitemap concatenates it with each page link, and sphinxext-opengraph
+# resolves each page with `urljoin`, which drops a last path segment that has no
+# trailing slash.
+docs_site_url = toml_config["project"]["urls"]["Documentation"].rstrip("/") + "/"
+
+# Title-case each word of the project ID.
+project = " ".join(word.title() for word in project_id.split("-"))
+htmlhelp_basename = project_id
+
+# Addons.
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.todo",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
+    # Adds a copy button to code blocks.
+    "sphinx_copybutton",
+    "sphinx_design",
+    # Emits sitemap.xml from html_baseurl, so crawlers get every page as a list
+    # instead of having to discover it by following links.
+    "sphinx_sitemap",
+    "sphinxext.opengraph",
+    "myst_parser",
+    "sphinx.ext.autosectionlabel",
+    # Docstrings are authored in MyST; this extension converts them to reST at
+    # build time. It hooks autodoc-process-docstring at priority 400 (vs the
+    # default 500) so it always runs before sphinx_autodoc_typehints. Listing it
+    # first makes the intent explicit; the extension enforces the order at load
+    # time and raises ExtensionError if it is placed after.
+    "click_extra.sphinx.myst_docstrings",
+    "sphinx_autodoc_typehints",
+    "click_extra.sphinx",
+    "sphinxcontrib.mermaid",
+]
+
+# https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
+myst_enable_extensions = [
+    # Render GitHub-style alerts (`> [!NOTE]`, `> [!IMPORTANT]`, ...) as
+    # admonitions.
+    "alert",
+    "attrs_block",
+    "attrs_inline",
+    "deflist",
+    "replacements",
+    "smartquotes",
+    "strikethrough",
+    "tasklist",
+]
+# XXX Allow ```mermaid``` directive to be used without curly braces (```{mermaid}```), see:
+# https://github.com/mgaitan/sphinxcontrib-mermaid/issues/99#issuecomment-2339587001
+myst_fence_as_directive = ["mermaid"]
+
+# Generate implicit anchors for headings (down to H6) so same-page `#slug` links in
+# included Markdown resolve in the build (like readme.md's `#executables`), matching
+# GitHub. Drop to 3 if deeper headings ever collide into duplicate-anchor warnings.
+myst_heading_anchors = 6
+
+mermaid_d3_zoom = True
+
+# Emit a roff man page (man/mdedup.1, plus an .html sibling when mandoc or groff is
+# on PATH) into the HTML build via click-extra's generator, giving packagers a .1
+# artifact to install. Uses the same generator as `mdedup --help-format man`.
+click_extra_manpages = [
+    {
+        "script": "mail_deduplicate.cli:mdedup",
+        "prog_name": "mdedup",
+    },
+]
+
+# The click:run directives (and their python: siblings) execute build-time Python,
+# so click-extra gates them behind this opt-in (default off). Pages under docs/
+# use {click:run} to render live CLI output, so it must be turned on here.
+click_extra_enable_exec_directives = True
+
+exclude_patterns = ["_build", "_linkcheck", "Thumbs.db", ".DS_Store"]
+
+nitpicky = True
+
+# Only categories with no actionable source fix belong here. Re-audit on every
+# Sphinx or extension upgrade: build with each entry removed and drop the ones
+# whose warning no longer fires (see the sphinx-docs agent § suppress_warnings
+# governance).
+suppress_warnings = [
+    # `index.md` includes `readme.md`, which starts at `## ` because GitHub
+    # supplies the H1 from the repo name. The readme must render correctly on
+    # GitHub, so its top heading stays H2 by design.
+    "myst.header",
+    # `sphinx_autodoc_typehints` cannot resolve click's own forward reference
+    # `Context` when it documents the inherited `BadParameter` signature: the
+    # name is only defined under `TYPE_CHECKING` in `click.exceptions`. Third-
+    # party and cosmetic; our own annotations resolve.
+    "sphinx_autodoc_typehints.forward_reference",
+]
+
+# Concatenates the docstrings of the class and the __init__ method.
+autoclass_content = "both"
+# Keep the same ordering as in original source code.
+autodoc_member_order = "bysource"
+
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = True
+
+github_user = "kdeldycke"
+
+intersphinx_mapping = {
+    "click_extra": ("https://kdeldycke.github.io/click-extra", None),
+    "python": ("https://docs.python.org/3", None),
+}
+
+# Prefix document path to section labels, to use:
+# `path/to/file:heading` instead of just `heading`
+autosectionlabel_prefix_document = True
+
+# Linkcheck configuration, mirroring the reference one from repomatic.
+# GitHub renders issue comments, readme tab anchors and blob line anchors with
+# JavaScript, so the linkcheck builder cannot find them in the static HTML.
+linkcheck_anchors_ignore = [
+    r"issuecomment-\d+",
+    r"readme",
+    r"L\d+",
+]
+
+linkcheck_anchors_ignore_for_url = [
+    r"https://github\.com/",
+]
+
+# Some links time out the linkcheck bot intermittently; retry before reporting
+# them as broken.
+linkcheck_retries = 3
+
+linkcheck_ignore = [
+    # These sites return 403 to bots but are valid.
+    r"https://claude\.ai/code",
+    r"https://isync\.sourceforge\.io",
+]
+
+# Sphinx emits a `<link rel="canonical">` on every page from this base, and
+# sphinx-sitemap builds sitemap.xml from it.
+html_baseurl = docs_site_url
+# sphinx-sitemap defaults to a `{lang}{version}{link}` layout, for sites that publish
+# translations or versions side by side. This site publishes one tree, so anything
+# but the bare link yields sitemap entries that 404.
+sitemap_url_scheme = "{link}"
+
+# Absolute base of the OpenGraph tags. It reads the same constant as html_baseurl,
+# so og:url and the canonical link always name the same page.
+ogp_site_url = docs_site_url
+
+# Theme config.
+html_theme = "furo"
+html_title = project
+html_logo = "assets/mail-deduplicate-logo-square.png"
+html_theme_options = {
+    "sidebar_hide_name": True,
+    # Activates edit links.
+    "source_repository": f"https://github.com/{github_user}/{project_id}",
+    "source_branch": "main",
+    "source_directory": "docs/",
+    "announcement": (
+        f"{project} works fine, but is <em>maintained by only one person</em> "
+        "😶‍🌫️.<br/>You can help if you "
+        "<strong><a class='reference external' "
+        f"href='https://github.com/sponsors/{github_user}'>"
+        "purchase business support 🤝</a></strong> or "
+        "<strong><a class='reference external' "
+        f"href='https://github.com/sponsors/{github_user}'>"
+        "sponsor the project 🫶</a></strong>."
+    ),
+}
+
+# Footer content.
+html_last_updated_fmt = "%Y-%m-%d"
+copyright = f"{author} and contributors"
+html_show_sphinx = False
+
+# Do not publish a copy of every source document under `_sources/`: no page links
+# to it, and the sources are in the repository. `html_copy_source` gates the files
+# and `html_show_sourcelink` the link, so a theme that reads only the second does
+# not offer a link to files that are no longer there.
+html_copy_source = False
+html_show_sourcelink = False
+
+# Copied verbatim to the root of the build, where GitHub Pages looks for a custom
+# `404.html`. html_static_path would put it under `_static/` instead.
+html_extra_path = ["404.html"]
+
+
+def prune_build_artifacts(app: Sphinx, exception: Exception | None) -> None:
+    """Delete the files Sphinx leaves in the output tree that are not content.
+
+    `.buildinfo` records the configuration hash that an incremental build compares
+    against, and `.buildinfo.bak` is the copy Sphinx keeps when that comparison
+    fails. No setting suppresses them: the HTML builder always writes `.buildinfo`
+    when the build finishes.
+
+    Sphinx also creates `_sources/` whatever `html_copy_source` says, so switching
+    that setting off leaves an empty directory. This hook deletes the directory
+    only while it is empty.
+    """
+    if exception:
+        return
+    outdir = Path(app.outdir)
+    for marker in (".buildinfo", ".buildinfo.bak"):
+        (outdir / marker).unlink(missing_ok=True)
+    sources = outdir / "_sources"
+    if sources.is_dir() and not any(sources.iterdir()):
+        sources.rmdir()
+
+
+def setup(app: Sphinx) -> None:
+    """Prune the non-content files once the build finishes."""
+    app.connect("build-finished", prune_build_artifacts)

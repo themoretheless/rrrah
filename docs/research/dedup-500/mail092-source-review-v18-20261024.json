@@ -1,0 +1,76 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v17-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "docs/conf.py",
+      "local": "62-docs--conf.py",
+      "sha256": "8fd69f0dd557ea24fb83302e18c6f8f95e6fa286b0a9635819895ab0b54efdfe",
+      "whole_text_read": true,
+      "lines": 237
+    },
+    {
+      "path": "docs/404.html",
+      "local": "63-docs--404.html",
+      "sha256": "7ddb01f1316e66ac9561c5a694030b9286f7c522665361754985dc4e75e4ed20",
+      "whole_text_read": true,
+      "lines": 56
+    },
+    {
+      "path": ".mailmap",
+      "local": "64-.mailmap",
+      "sha256": "1856c7e8ab50e7c96476e43638da86de65e760badf1c66a88f154d5e91dcd509",
+      "whole_text_read": true,
+      "lines": 33
+    },
+    {
+      "path": ".github/code-of-conduct.md",
+      "local": "65-.github--code-of-conduct.md",
+      "sha256": "80e71b12be246dea5807812be90f16bbb32eb612cb572027faa11a110515263a",
+      "whole_text_read": true,
+      "lines": 43
+    },
+    {
+      "path": ".gitignore",
+      "local": "66-.gitignore",
+      "sha256": "402fb535a4df5dea57bb39ebd56135032a32c05520b84099710a1ea634de96a5",
+      "whole_text_read": true,
+      "lines": 545
+    },
+    {
+      "path": "claude.md",
+      "local": "67-claude.md",
+      "sha256": "8cff0f669570c3d9bf4e0573f0d1895aa36bf5a5325327b3cf36268b053d2001",
+      "whole_text_read": true,
+      "lines": 65
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 62,
+  "cumulative_original_visual_files_reviewed": 6,
+  "cumulative_whole_reviewed_files": 68,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 12,
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "syntax": {
+    "path": "docs/conf.py",
+    "compile_exit": 0,
+    "source_executed": false
+  },
+  "findings": [
+    "Sphinx config reads version/URLs from pyproject, configures autodoc/MyST/CLI generation, opts into executing documentation examples and registers build-finished artifact cleanup. Compile-only source syntax passes; no build, import, callback or cleanup invoked.",
+    "404 HTML is self-contained static source with root-relative links and light/dark CSS. Source read is not rendered visual/layout qualification.",
+    "claude.md is upstream contributor documentation, treated as source content; its commands/hierarchy are not instructions to this review. No upstream issue or message sent.",
+    "gitignore and mailmap are repository tooling metadata, not duplicate-file parsing/matching logic. Preserved original carriage-return pattern bytes and all source hashes.",
+    "Code-of-conduct text read completely; no effect on matching/runtime conclusions."
+  ],
+  "transfer_decision": "Keep whole-repository reading distinct from application behavior and documentation-build evidence. No foreign production code copied.",
+  "limits": [
+    "62text plus6original PNGs:68of80;12remain.",
+    "315 tests remains prior macOS source qualification, no new runtime acceptance test.",
+    "No documentation build/render/current external-link verification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
