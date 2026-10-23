@@ -1,0 +1,48 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "run-benchmark-driven-rd/scripts/evidence_identity.py",
+      "git_blob": "b8e100f587264fb4899ed24b162e69f775e96e42",
+      "sha256": "627977b96969c1764e8071a97f8e4c6e613db41c7eb98e751bb600db799bcfdf",
+      "bytes": 521,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/scripts/cleanup_gate_paths.py",
+      "git_blob": "9b58d709a397ae3d71960168ede0741730c72c84",
+      "sha256": "658f040d6a85615ecb59826cbf30c693978af174447590533afc6f2fb09bfc02",
+      "bytes": 667,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/scripts/cleanup_gate_update_coverage.py",
+      "git_blob": "d2b08434148ce696ceb7a328295cc3e2b3b0112e",
+      "sha256": "7b8e023e5f2e8523c20e91bf44f502c398a07112f51b9007d8283de11e470aa0",
+      "bytes": 3032,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/scripts/cleanup_gate_command.py",
+      "git_blob": "08405aebc899a38fdba3b8350f42b63e81e6e775",
+      "sha256": "47cbaddf6b0fe41bcefaad243126a3842f5cb8a664b95f7504c2ca30cb9dc467",
+      "bytes": 4245,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 21,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 100,
+  "control": "cleanup067-evidence-helpers-control-20261023.py",
+  "runtime_scope": "Three whole original pure helper modules loaded with pinned Git identities; authored metadata and own paths only. Command orchestration read but not executed; no promotion/write to existing project.",
+  "findings": [
+    "valid_identity rejects bool/zero bytecounts and malformedSHA256; positive identity accepted. It validates shape only, not file existence/content.",
+    "Schema1.2 helper validates record field presence/classification/listtypes/deepvalidationboolean and exactly1matchingD11finding. Nested evidence list containing a plain string passes this helper; deeper validation required elsewhere.",
+    "Unknownschema returns empty helper-errors; outer supported-provider-schema gate must refuse it. No full pipeline bypass inferred from helper alone.",
+    "Relativeoutput helper separates inside target from outside path; inventory match casefolds but does not normalize ./ prefix. Real owned path controls pass.",
+    "Command orchestration captures provider/adapter revisions before/after, blocks self-inventory output, reruns provider for in-target stabilization and compares snapshots. These calls depend on API implementation not reviewed here; static orchestration is not end-to-end evidence freshness proof."
+  ],
+  "full_review_count": 249
+}
