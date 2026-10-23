@@ -1,0 +1,48 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/util/ThumbnailPrewarmer.kt",
+      "sha256": "951ce5363d43ba282a5c273f13caf5f4cf08418310fb9f0360f4badf33427573",
+      "lines": 90,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/util/CoilPreloader.kt",
+      "sha256": "adf429f94215b0dc3414bfbbd8c62d909787dc17803e2a798b5f73dcb4533c60",
+      "lines": 62,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/util/HiddenFileFilter.kt",
+      "sha256": "dd5f1ee7a26ede0ea93e20e3663669c58212fb8e1d4878442041df6abaa287cc",
+      "lines": 77,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/repository/MediaRepository.kt",
+      "sha256": "20d55a742e08404eead6630976c294a314501c5dc9eb9d56a4eb24015aa846db",
+      "lines": 62,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/model/FolderDetails.kt",
+      "sha256": "d866e3e523e5e7daad81f3e1dd74bf66f794ceed6eceafd2c7641c3eb8c9e7a1",
+      "lines": 38,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "ThumbnailPrewarmer does await scanPathsAndWait and subsequent thumbnail load calls. However scan=false, no refreshed items, and per-item thumbnail errors only log and return Unit. ProactiveIndexingWorker can therefore report Result.success even when prewarm failed, narrowing prior v10 completion uncertainty.",
+    "Prewarmer discards returned thumbnail Bitmap objects without explicit recycle or retained ownership; temporary memory relies on runtime collection. No measured leak or Android allocation profile claimed.",
+    "CoilPreloader enqueues every item with no explicit target, size, priority or cancellation handle retained. Source low-priority/thumbnail comments are not configured request guarantees; ImageLoader defaults remain unread.",
+    "HiddenFileFilter scan exclusion rejects any path component starting dot or underscore. UI helper combines this with final-name hyphen prefix, but filterHiddenFiles applies only final hyphen rule. These policies differ and can include/exclude different sets; callers remain to inspect.",
+    "FolderDetails describes unprocessed counts and adds isPrimarySystemFolder, while persistent FolderDetailsCache lacks that field. Mapping may recompute it; actual repository implementation remains unread."
+  ],
+  "whole_files_read_total": 34,
+  "remaining_tracked_blobs": 96,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
