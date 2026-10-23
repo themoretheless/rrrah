@@ -1,0 +1,55 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/model/ScanResultGroup.kt",
+      "sha256": "0ca4598a5fa3490243d85b890170506d9ab0759c56b84057ca735c9aee05ece8",
+      "lines": 80,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/model/MediaItem.kt",
+      "sha256": "4d0708d3091682c3818ddbe216171f28eff5c3324314581044cf07901fd11f9c",
+      "lines": 51,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/entity/PHashCache.kt",
+      "sha256": "a085512123b8f2b290c4bf3beebe8ada6a4d3b9df87a70278e5ee3d48cfd9389",
+      "lines": 47,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/entity/FileSignatureCache.kt",
+      "sha256": "32ebc704fb7ada2c395baf51145349fc28e743c62363db2567f0f742e9c4610f",
+      "lines": 39,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/dao/FileSignatureDao.kt",
+      "sha256": "15f17048b94c8beb79618bbaccf3188bd3eadd74087bc77f295013f377d62ea0",
+      "lines": 35,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/data/db/dao/PHashDao.kt",
+      "sha256": "91cfe9a417e7eb673bb50c1defddd2964beadd77d883392302059c91d64e1320",
+      "lines": 35,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "FileSignatureCache documentation explicitly says signatures need not be full byte-for-byte hashes, while actual domain.model.DuplicateGroup documentation calls members byte-for-byte identical. This confirms a semantic contract mismatch between cache recipe and result model.",
+    "FileSignatureCache and PHashCache have no algorithm/decoder/color-policy version fields. Both DAOs load all rows, upsert lists and delete path sets without scope/version predicates. Transaction boundaries and schema migrations remain unread.",
+    "compositionId hashes sorted item IDs joined with unescaped |. Distinct ID sets such as [a|b,c] and [a,b|c] encode identically before MD5. Whether these characters occur in actual IDs depends on repository construction, still unread.",
+    "MediaItem.filePath supports file URI only; content URI yields empty path and file accessor falls back to File(\"\"). Callers must handle URI-based access rather than assuming this File names the item. No file operation executed.",
+    "DuplicateGroup.uniqueId is signature only; SimilarGroup.uniqueId is pHash. withUpdatedItems changes members without recalculating signature or sizePerFile, so upstream validation must establish remaining membership validity.",
+    "Result model stores sizePerFile rather than computing reclaimable bytes. Actual UI accounting remains unread; no reclaimable-size defect asserted."
+  ],
+  "whole_files_read_total": 9,
+  "remaining_tracked_blobs": 121,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
