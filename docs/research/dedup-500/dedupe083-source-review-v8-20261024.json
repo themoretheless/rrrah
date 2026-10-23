@@ -1,0 +1,65 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v7-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "dedupe/branch_and_bound.py",
+      "local": "35-dedupe--branch_and_bound.py",
+      "sha256": "57bcac692d9b9947cd39d9c7bcc53558013085bc66b8ef3ff968d94f7ea4c395",
+      "lines": 90,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/training.py",
+      "local": "36-dedupe--training.py",
+      "sha256": "b3f05f41ee104c80ee4f3970862eda65a7a5c08a1868e3462278dc1631ace4ec",
+      "lines": 359,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/labeler.py",
+      "local": "37-dedupe--labeler.py",
+      "sha256": "e7ce6600125895d8d5fb99821591927c77191d8943b531da0bbe03ad47d3e2e8",
+      "lines": 496,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_training.py",
+      "local": "38-tests--test_training.py",
+      "sha256": "1bb749f0cbf9dade1bb548b952e5bececb42fa10d88ddf9c7a5872af4c8170d7",
+      "lines": 81,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_labeler.py",
+      "local": "39-tests--test_labeler.py",
+      "sha256": "818436f61aa773fda944a21a926c0f5346b4873e999409df797a3a3caa59be25",
+      "lines": 61,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 40,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 64,
+  "native_controls": {
+    "finite_cases_passed": 870,
+    "predicates_per_case": 5,
+    "universe_size": 6,
+    "seed": 83,
+    "call_budget": 10000,
+    "scope": "Unchanged original search/helper definitions with synthetic predicate costs and exhaustive subset oracle. Does not qualify default2500 budget or learned predicate coverage."
+  },
+  "findings": [
+    "Branch-and-bound finite5-predicate search agrees with exhaustive subset minimum-cost oracle when given10000 calls; default2500 search and scale remain unqualified.",
+    "Training lowers target coverage to coverable training pairs when requested recall is unreachable; requested training recall is not a guarantee of dataset-wide completeness.",
+    "Learner samples up to50000 indexed records and10000 candidate pairs with hardcoded defaults in this version.",
+    "Active-learning bootstrap marks repeated self-pair positive and random pair negative; no dataset truth validation inferred."
+  ],
+  "limits": [
+    "Original upstream training/labeler tests read but not run.",
+    "No learned-model, large-data performance or full-package gate.",
+    "No foreign production code adopted."
+  ]
+}
