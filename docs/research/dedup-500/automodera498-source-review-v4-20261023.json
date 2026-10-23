@@ -1,0 +1,59 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/image/HashCollectionService.java",
+      "sha256": "3878f3363815f3a064109645a74121a62478d0fd10147950372cca75340d0e57",
+      "lines": 59,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/image/HashCollectionServiceImpl.java",
+      "sha256": "bdb0beacf299ee81193ba3195c2cca7ec639e3030af39f3ed4cd09796506b86f",
+      "lines": 222,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/test/java/uk/ac/uws/danielszabo/automodera/common/service/image/CollectionServiceImplTest.java",
+      "sha256": "407c5cfde4bed0fc37e50f50d1759007480b6900ec782f853db36a9a34a600d5",
+      "lines": 100,
+      "git_blob_verified": true
+    }
+  ],
+  "source_reasoning_control": {
+    "original": [
+      "notes.txt",
+      "a.jpg"
+    ],
+    "filtered": [
+      "a.jpg"
+    ],
+    "existing_ids": [
+      "a.jpg"
+    ],
+    "checked_name": "notes.txt",
+    "hashed_name": "a.jpg",
+    "method": "source index reasoning only; not Java execution"
+  },
+  "runtime": {
+    "upstream_java_run": false,
+    "database_run": false
+  },
+  "findings": [
+    "HashCollectionService interface, implementation and corresponding test whole-read/Gitblob verified. Test setup/assertions all commented out; zero active test methods in this class.",
+    "generateHashCollection checks existing image ID against unfiltered imageFileNames[finalI], but hashes filteredFileNames[i]. Explicit index witness notes.txt,a.jpg with existing a.jpg checks notes.txt and appends a.jpg again. Actual filesystem enumeration order unsorted; no Java runtime reproduction.",
+    "forceRecalc appends fresh Image objects without clearing/replacing existing entries. Repeated IDs can coexist in in-memory list; final JPA persistence outcome not established.",
+    "Allowed suffixes jpg/jpeg/png use endsWith without dot or regular-file test; directories or arbitrary names endingpng pass initial filter. No recursive traversal.",
+    "Hashed file uses path normalized with slash, stored Image.file uses directoryPath+filename with no separator insertion. If caller passes directory without trailing slash, stored path differs from hashed path. Source-only.",
+    "Image entity primary ID uses basename alone rather than collection/archive-qualified identifier claimed by model comment; cross-collection same-name collision possible at persistence boundary, not runtime verified.",
+    "Existing files not rehashed on content/mtime/recipe changes unless forceRecalc, and removed files not pruned. Collection metadata/version not refreshed in this method.",
+    "findAllEnabledNoImages reconstruction omits source version through required-args constructor, potentially resets version to default1. Source-level constructor analysis only."
+  ],
+  "remaining": [
+    "141 other tracked blobs/assets",
+    "Integrator matching caller, native implementation provenance and Java/database qualification"
+  ],
+  "full_review_count": 249
+}
