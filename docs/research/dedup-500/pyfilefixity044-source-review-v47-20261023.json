@@ -1,0 +1,37 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "refbrowser.py whole read, blob verified, exact AST selected classes controlled with substituted gc.get_referrers; GUI and real heap traversal not run",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/refbrowser.py",
+    "sha256": "2f9706e0aa24d90916075a6aaed4ee9c8e2cd99916949f7a7b8be1c668cabe48"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 97,
+    "remaining_not_whole_reviewed": 47
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-refbrowser-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "64900c473474b8d51b6b85fd9d347263cab4dbf0",
+    "source_sha256": "2f9706e0aa24d90916075a6aaed4ee9c8e2cd99916949f7a7b8be1c668cabe48",
+    "scope": "Exact AST classes; get_referrers substituted, no full module import or Tk",
+    "legitimate_dictionary_referrer_hidden": true,
+    "user_equality_exception": "referrer equality invoked",
+    "ignore_lengths_after_repeated_calls": [
+      3,
+      5
+    ],
+    "default_print_tree_output": "ROOT\n"
+  },
+  "findings": [
+    "Dictionary filtering compares key list with a sample _Node dictionary; a legitimate referrer with those same keys disappears. Reproduced with deterministic get_referrers seam.",
+    "Ignore-list membership uses equality, not identity; a user-defined __eq__ can raise and interrupt traversal. Reproduced.",
+    "Repeated get_tree retains additional frame references in ignore and does not reset already_included. Observed ignore length 3 then 5 even at depth zero; no long-run memory measurement.",
+    "StreamBrowser.print_tree without an explicit tree prints the raw root rather than calling get_tree. Reproduced single ROOT line.",
+    "Depth guard tests equality to zero and does not validate negative depth; breadth has no explicit budget. Static finding, no unbounded traversal executed.",
+    "Legacy Tkinter and TreeWidget imports gate GUI; no GUI support qualification. No code transferred to production library."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
