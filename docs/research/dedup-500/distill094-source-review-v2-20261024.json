@@ -1,0 +1,44 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "previous_audit": "docs/research/dedup-500/distill094-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pkg/contextlab/cluster.go",
+      "local": "11-pkg--contextlab--cluster.go",
+      "sha256": "5dc07ec16481a6e5dae82d1b838f9eab478f6135322595a4298042d6141f85af",
+      "whole_text_read": true,
+      "lines": 349
+    }
+  ],
+  "whole_text_files_read_total": 9,
+  "tracked_blobs": 455,
+  "remaining_without_whole_review": 446,
+  "upstream_tests_run": false,
+  "authored_native_control": {
+    "result": {
+      "complete_linkage_chain_clusters": 2,
+      "default_opposites_clusters": 2,
+      "mixed_dimension_merge_panics": true,
+      "nan_threshold_opposites_panics": true,
+      "single_linkage_chain_clusters": 1,
+      "threshold_two_opposites_panics": true
+    },
+    "exit_code": 0,
+    "scope": "Exact original cluster/math/types source in isolated minimal Go module, synthetic caller, no external services"
+  },
+  "findings": [
+    "All-opposite pair has distance2.0. At threshold2 closest-pair search leaves indices-1 because comparison is strictlyless than initialized2, but stopping comparison is2>2false, leading to index panic. Default threshold positive control returns2clusters.",
+    "NaN threshold with opposite pair also bypasses stop and panics. Mixed-dimensional [1,0]/[1] compares distance0then merge centroid indexing panics. Native authored controls recover each panic and assert observed behavior.",
+    "Three unit vectors at angles0,20,40degrees and threshold0.1 produce one single-linkage cluster but two complete-linkage clusters; endpoints exceed threshold. Single linkage is intentionally transitive, not all-pair equality.",
+    "Source allocates full n-by-n distance matrix despite upper-triangular comment. No resource benchmark performed.",
+    "No direct references to core Deduplicate/CosineDistance found in original *_test.go search; indirect coverage not ruled out and no upstream suite run."
+  ],
+  "transfer_decision": "Validate finite thresholds/dimensions, handle no eligible merge pair explicitly, and keep linkage-defined clusters separate from exact duplicate equivalence. No foreign production code copied.",
+  "limits": [
+    "9of455whole text files;446remain.",
+    "Only authored controls, not original tests/full dependencies or external-service qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
