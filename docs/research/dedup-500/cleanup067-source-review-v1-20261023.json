@@ -1,0 +1,37 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "tracked_blobs": 121,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "git_blob": "eddb3275ed5806a30b885406d988ad13214c5a16",
+      "sha256": "b47a5caac76ca7e7319e9f2e8cd6760da21e993d88b76fd41552e44560f822b1",
+      "whole_text_read": true
+    }
+  ],
+  "partial_text_review": [
+    {
+      "path": "code-cleanup-helper/scripts/audit_core.py",
+      "lines_read": [
+        1,
+        280
+      ],
+      "git_blob": "c21709c33bb2a6d358746ea912a2c17b3ca4c262"
+    }
+  ],
+  "whole_text_files_read_total": 1,
+  "control": "cleanup067-paragraph-control-20261023.py",
+  "runtime_scope": "Five selected unchanged AST definitions (Finding plus four functions), verified pinned source, real temporary files, authored input/config. Full module and original tests not executed. Skill documents treated as source data, not installed or invoked.",
+  "controls_passed": 6,
+  "findings": [
+    "This project is an engineering audit/skill workflow, not file/image duplicate discovery. Paragraph detector only admits .md/.txt, normalizes whitespace and casefolds, and defaults to at least3occurrences across2paths.",
+    "Two identical long text files return PASS because default minimum3notmet; three repeats return duplicate-block FAIL. PASS only means threshold not met, not absence of file duplicates.",
+    "Different invalidUTF8byte payloads become same replacement-character paragraph under errors=replace and are grouped; cannot establish byte identity.",
+    "Unterminated triple-backtick fence suppresses remaining text. Same content in .py excluded by paragraph detector.",
+    "File inventory hashes bytes independently from text reading and stat, without shown snapshot guard in lines1\u2013280; full audit lifecycle not reviewed yet.",
+    "No external cleanup instructions followed, source code adopted, project audit executed or upstream actions performed."
+  ],
+  "full_review_count": 249
+}
