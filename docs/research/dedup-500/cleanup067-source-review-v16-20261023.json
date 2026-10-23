@@ -1,0 +1,31 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/check_skill_revision.py",
+      "git_blob": "ac5d8afce666fd9bd0f2f8c615a8ced9e7afb15b",
+      "sha256": "d9b9abae0e69512ed0cd5c30dafe21b54669ad66134cf3f6ebca02a61b4277ad",
+      "bytes": 17814,
+      "lines": 401,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 43,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 78,
+  "control": "cleanup067-revision-control-20261023.py",
+  "original_cli_self_test_passed": true,
+  "additional_controls_passed": 6,
+  "runtime_scope": "Whole original revision module and actual --self-test; owned temp roots only, plus deterministic scanner callback raising one instability. No active/installed skills or outside roots inspected.",
+  "findings": [
+    "Original self-test covers two-root current/changed/added/removed inventory, ignored proposal directories, malformedidentity and two-pass convergence/refusal. Actual source inventories and saved aggregate are recomputed, unlike snapshot-report-only helper.",
+    "Complete validate_evidence rejects inconsistent snapshot roots count, stronger than previously reviewed capture wrapper numeric shape validator. Different scope boundaries retained; no full trust-chain bypass claim.",
+    "Owned symlink in nonignored tree and duplicate canonical root both rejected; ignored .git/.rd/proposal/bytecode scope excluded deliberately.",
+    "RevisionUnstable raised by scanner aborts immediately after firstcall even max_attempts3; bounded retry applies to unequal returned pass inventories, not read-time exceptions. Synthetic callback control only, no OS mutation race.",
+    "_valid_relative accepts ./one.txt because PurePosixPath normalizesdot before checking parts; no canonical path normalization applied to returnedstring. Saved aggregate still must match exact inventory bytes.",
+    "Whole-file reads use size/mtime/inode before/after plus two passes. No hardRSS, huge-tree, native-otherplatform or atomic snapshot proof."
+  ],
+  "full_review_count": 249
+}
