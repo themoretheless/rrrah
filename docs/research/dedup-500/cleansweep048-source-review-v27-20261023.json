@@ -1,0 +1,24 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/onboarding/OnboardingScreen.kt",
+      "sha256": "972a5d1104d9f8ec0fd4e98d63125745cfc32c96df916cac5abe56400d36e6ee",
+      "git_blob_verified": true,
+      "lines": 503
+    }
+  ],
+  "findings": [
+    "Onboarding has no legacy READ/WRITE runtime permission request despite importing Manifest. It relies entirely on PermissionManager.hasAllFilesAccess, which returns true on Android10. This confirms missing legacy grant handling in the reviewed onboarding path, not actual device denial behavior.",
+    "Activity-result launcher is registered in remember during composition via registerForActivityResult, rather than a Compose launcher helper. Registration exceptions are caught and launcher falls back to null; lifecycle timing effects remain runtime-unqualified.",
+    "Onboarding completion launches DataStore write asynchronously in ViewModel then immediately navigates. Persisted completion can lag navigation; crash/recreation timing not tested.",
+    "Permission screen uses fillMaxHeight within the same Column as page indicators and bottom buttons without the pager weight modifier, potentially pushing controls below viewport. Rendered layout not inspected.",
+    "Lifecycle observer correctly rechecks permission on resume and unregisters on disposal. No permission was requested or granted during this source review."
+  ],
+  "whole_files_read_total": 58,
+  "remaining_tracked_blobs": 72,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
