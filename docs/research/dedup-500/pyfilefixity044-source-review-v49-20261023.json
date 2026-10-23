@@ -1,0 +1,37 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Two complete text reads with pinned Git blob verification. MD5 implementation statically reviewed; original runtime unavailable, no altered port used as proof.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/md5py.py",
+      "sha256": "49f320501f765266ca81eb14f02589c96171d6f23b837612fcb34d8944144ff2",
+      "python3_parse": {
+        "result": "SyntaxError",
+        "line": 58,
+        "message": "invalid hexadecimal literal"
+      }
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/README.md",
+      "sha256": "7e9ea2e20a832be5833a9d7a09fd91566bda9c6e4b9c614e45e200de2f6b5d7b"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 103,
+    "remaining_not_whole_reviewed": 41
+  },
+  "findings": [
+    "md5py explicitly describes an educational implementation, warns against production use, and states Python License. Root MIT screening is insufficient for copying it.",
+    "Python3 parsing fails at a long integer literal; additional old-style inequality, long/map(None)/string.join and division semantics need a port. Python2 executable was not available; independent digest vectors not run.",
+    "MD5.init resets state words, input and length but not count; reusing init after update retains the old length counter. Static finding, no Python2 execution.",
+    "update does not mask the low bit counter to 32 bits. Its overflow comparison is unsuitable for Python unbounded integers; large-input length qualification missing. Static finding, no multi-GiB input processed.",
+    "Original Hasher and rfigc source use hashlib rather than this educational module; these findings are not attributed to the active hashing path.",
+    "pyinstrument README distinguishes main-thread signal sampling from setprofile overhead and documents interference with sleeps/system calls. These historical statements and old Django timings were read, not verified on current Python/hardware.",
+    "README overhead table lists 5.33 seconds versus 1.46 seconds as 365 percent overhead: that is about 365 percent total time, about 265 percent additional time. Documentation numbers cannot be reused as measured optimization results.",
+    "README linked screenshot not present in pinned tracked tree; link destination not visually reviewed in this text pass."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
