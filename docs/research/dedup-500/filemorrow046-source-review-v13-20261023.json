@@ -1,0 +1,48 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/FileMorrowTests/DownloadsFoldersTests.swift",
+      "sha256": "75cf6100fbc54c5669bc605cab6f79f708e3448840206cdc89f6f6379d160d7d",
+      "lines": 61,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/FileScannerTests.swift",
+      "sha256": "78a704cf7b9ad01e80c0e7ead3d8463d38bebf35aa196f9c9073822b15bc556a",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/ArchiveEligibilityTests.swift",
+      "sha256": "77225b65e3a6aba9834f7dfe32ed373d3339ff445f250f97ba96d55cc522da2b",
+      "lines": 39,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suites": {
+      "DownloadsFoldersTests": 3,
+      "FileScannerTests": 2,
+      "ArchiveEligibilityTests": 2
+    },
+    "tests_passed": 7,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "build_seconds": 2.51,
+    "test_seconds": 0.013,
+    "original_source_and_tests_unchanged": true,
+    "FileScanner_instance_created": false
+  },
+  "findings": [
+    "Seven original tests pass: managed/legacy markers, extension filtering and order, live-path alias bookkeeping, strict age cutoff and already-organized exclusion. Total distinct original tests passed across focused runs is 52.",
+    "FileScanner tests invoke static livePaths only; they do not exercise actual scanning, age persistence, modified-time decision reuse or application-support initialization. Passing them is not end-to-end FileScanner qualification.",
+    "All test filesystem writes use authored temporary roots; fictional /Users/test/Downloads values are path arithmetic only."
+  ],
+  "whole_files_read_total": 22,
+  "remaining_tracked_blobs": 36,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
