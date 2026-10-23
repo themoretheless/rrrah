@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "easy_profiler.py and ecc_speedtest.py read whole. Standard Python 3 syntax parsing only; no profiler or ECC speed benchmark executed.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/easy_profiler.py",
+      "sha256": "198f283635a34b75e5dbcc44b5cab32b65e15e146204e0122d8ae13b48e7e06c"
+    },
+    {
+      "path": "pyFileFixity/ecc_speedtest.py",
+      "sha256": "3b0d82ec01452a1a959b48f1d99d2403023e7b5f1f1dbb9057704d4eba8a0869"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 58,
+    "remaining_not_whole_reviewed": 86
+  },
+  "syntax_control": {
+    "easy_profiler.py": {
+      "result": "SyntaxError",
+      "line": 116,
+      "message": "Missing parentheses in call to 'print'. Did you mean print(...)?"
+    },
+    "ecc_speedtest.py": "PASS"
+  },
+  "findings": [
+    "easy_profiler contains Python 2 print syntax; standard Python 3 parser rejects the module before any profiling branch.",
+    "Profiler branches join argument list using spaces and pass a string; quoting/argument boundaries can be lost. Stack branch instead passes list. Arbitrary script path is fed to __import__ after extension removal, not loaded by file path.",
+    "ECC benchmark uses process CPU time around codec only, excluding data generation and corruption. It reports msg_nb*max_block_size while generated payload length is message_size, so rates concern nominal codeword bytes, not input payload throughput.",
+    "ECC decoder benchmark accepts codeword check but does not compare recovered message to original. It prints decode failure warnings and still returns zero without failure counts.",
+    "Erasure mode zeroes positions but does not pass enable_erasures or positions into decode; benchmark help claims positions are provided, contradicting call.",
+    "Subchunk encoding uses undefined xrange under Python 3; string argv path uses shlex without importing shlex. Static branch failures, not executed benchmark results.",
+    "Random data consists of hexadecimal ASCII without a fixed seed. No paired before/after controls, dispersion, backend identity capture or end-to-end file-I/O measurement."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
