@@ -1,0 +1,37 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/ViewModels/MainViewModel.cs",
+      "sha256": "34c43f021c1b2ea3334c49a5b0fb4770e47ceec2acc3efc029b0f5cfd7952722",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1606,
+          1849
+        ],
+        [
+          2861,
+          3120
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "AutoMarkAsync keeps the first nondeleted file unmarked after stable LINQ sorting and marks remaining nondeleted files in each considered group. Equal sort keys retain input order, so representative selection depends on enumeration/import order.",
+    "Lock policy skips any group containing a locked member unless every input file is locked; if all supplied files are locked, automatic marking may change them. This is explicitly documented in the source rather than an unconditional lock guarantee.",
+    "MarkingCriteria labels LargestLength and SmallestLength as keeping longest/shortest named files, but implementations order by file byte Length. In default same-size duplicate groups these criteria tie and retain input order. This is a concrete label/implementation mismatch, not yet a live UI reproduction.",
+    "AutoMarkAsync comment says deleted files must be unmarked, but the body only visits nondeleted files. DuplicateFile.Refresh unmarks when existence transitions to deleted; unusual imported deleted/marked states require caller-specific review.",
+    "BuildExtensionList removes every space and strips the first character from each semicolon token after checking only minimum length. It does not verify the expected *. prefix; actual error messaging promises valid formats.",
+    "UnmarkOrphanedFiles clears marks on existing members of groups with at most one existing member. UnlockDeletedGroups clears locks for any group containing a deleted member. No file mutation or deletion executed."
+  ],
+  "upstream_runtime_run": false,
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 43,
+  "full_review_count": 249,
+  "scope": "Additional MainViewModel ranges covering automatic marking and helpers; whole file still partial."
+}
