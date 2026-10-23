@@ -1,0 +1,48 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/ThumbnailStore.swift",
+      "git_blob": "7302f67b8223570bc536535d245eb896eee4b584",
+      "sha256": "707e6d83ddd99362b673517028577dacbcd5309b4db0a859d182b4b3f2353e45",
+      "bytes": 18811,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/ThumbnailStoreTests.swift",
+      "git_blob": "704dec577904abbbb84ee365f35f7bfa9e0552f1",
+      "sha256": "c5704a1484f22f1e15689d396355955f7cd3073f6e0d20f57dcd0d95c28b5c08",
+      "bytes": 6617,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 74,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 47,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter ThumbnailStoreTests|ThumbnailRepairControl",
+    "upstream_tests": 5,
+    "authored_controls": 1,
+    "executed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "97f01fb4046fd893442d67558241bfd95ef584859b955202d6c5cb3308264a5c",
+    "scope": "Full original package and5 unchanged original tests, plus separately authored regression reproduction. Real PNG/JPEG ImageIO/CoreGraphics for repair; all paths temporary and owned. Original cleanup methods operate only these fixture thumbnail directories. Authored test removed from package after execution."
+  },
+  "authored_control": {
+    "source": "targie061-thumbnail-repair-control-20261023.swift",
+    "result": "Seed corruptnot-a-jpeg bytes via persist; instance imageThumbnailData detects corruption, generates decodableJPEG and returns it, memory load returns repairedJPEG, directdiskread remains exact originalcorruptbytes.",
+    "meaning": "A passing control confirms memory/disk divergence, not correct repair."
+  },
+  "findings": [
+    "persist only writes if destination does not already exist, then unconditionally inserts newdata in ThumbnailDataCache. Instance imageThumbnailData repair calls samepersist under identicalkey; native reproduction proves repaired image is not persisted over corrupt file. Static imageThumbnailData(sourceURL:modifiedAt:thumbnailURL:) has different explicit overwrite path; not conflated.",
+    "Original tests cover absent thumbnail repair, diskload/missing file, explicit stale pruning, size/clear and single directoryindex load. None covers corrupt-existing instance repair.",
+    "Thumbnail key hashes standardized sourcepath plus exact modificationtime string; no content digest or size in key. standardizedFileURL is lexical path normalization, not guaranteed physical symlinkcanonicalization despite comment. No restored-mtime/symlinkcollisions control here.",
+    "Index locks are per ThumbnailStore instance; directory loaded once, caches can differ across independent instances/external edits. Memory cache generation prevents pre-clear load from repopulating after clearAll. These source mechanisms are not exhaustive concurrency proof.",
+    "Video repair tries six positions with unbounded frame tolerance, versus initial scanner single35% position. No real-video repair matrix run in this step.",
+    "No upstream source adopted. Native reproduction is research evidence; local library not patched for unrelated UIthumbnail implementation. Whole repository remains incomplete."
+  ]
+}
