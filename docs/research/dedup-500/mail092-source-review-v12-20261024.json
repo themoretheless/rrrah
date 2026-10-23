@@ -1,0 +1,63 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v11-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "mail_deduplicate/cli.py",
+      "local": "21-mail_deduplicate--cli.py",
+      "sha256": "2fe34533571a09a9b9af7047f73d464171ffb628775e146bef464107e095b7b2",
+      "whole_text_read": true,
+      "lines": 689
+    },
+    {
+      "path": "tests/test_config.py",
+      "local": "22-tests--test_config.py",
+      "sha256": "2335236e7f0f108a345b926d38db67f0c9e2aa71a1f1c7405d4d46fb3f0c8f70",
+      "whole_text_read": true,
+      "lines": 217
+    }
+  ],
+  "whole_text_files_read_total": 23,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 57,
+  "native_original_tests_added": {
+    "target": "tests/test_config.py",
+    "passed": 9,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "native_original_tests_cumulative": {
+    "passed": 294,
+    "failed": 0,
+    "scope": "Focused original targets, not entire package"
+  },
+  "public_header_control": {
+    "scope": "Normally imported original callback and CLI; no mailbox arguments or actions",
+    "empty_header_cli_exit": 1,
+    "empty_header_exception": "ValueError",
+    "ordinary_invalid_header_cli_exit": 2,
+    "normal_header_dedup_lowercase": true,
+    "limits": [
+      "Input validation only, not mail grouping or recall proof."
+    ]
+  },
+  "findings": [
+    "Original9 config tests pass: explicit config values, kebab-case keys, unknown-key refusal, source-key refusal, option constraints, command-line precedence, cwd pyproject discovery and TOML export roundtrip.",
+    "Original normalize_headers calls min/max on empty set for empty header string. Actual normally imported CLI with --hash-header= --hash-only and no mailbox exits1 ValueError, whereas contains-space header exits2 regular parameter error. Lowercase/dedup positive control passes.",
+    "All primary mail_deduplicate Python modules now read completely; docs/assets/remaining tests/lock/workflows still prevent whole-repository completion.",
+    "CLI release/close path is explicit normal completion/hash-only branch rather than enclosing try/finally. Error-path resource cleanup remains source observation, not new leak runtime proof.",
+    "cache_path forces cache even if cache boolean false; this is explicit source policy, not inferred option precedence bug."
+  ],
+  "transfer_decision": "Keep invalid configuration visible and separate normalized-domain settings from exact equality policy. No foreign production code copied.",
+  "harness_notes": [
+    "One initial test command used incorrect relative interpreter path from root and exited127 before pytest; corrected working directory, original tests then all pass."
+  ],
+  "limits": [
+    "23 whole text files of80;57 remain.",
+    "294 original focused tests, not full suite/platform/release qualification.",
+    "No actual user config or mailbox supplied to authored callback/CLI control.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
