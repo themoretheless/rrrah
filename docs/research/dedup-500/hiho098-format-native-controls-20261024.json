@@ -1,0 +1,51 @@
+{
+  "scope": "21unchanged original classes compiled together, no replacement DBInputFormat/DataDrivenDBInputFormat/split hosts;7authorcontrols with owned in-process JDBC DriverManager driver returning Mockito JDBC records; Oracle-specific method provided by mock extra interface. No external DB/network/SQLexecution or actual Oracle engine/cluster.",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/BigDecimalSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/BooleanSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBConfiguration.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBWritable.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DataDrivenDBInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DataDrivenDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DateSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/FloatSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/FormatBoundaryControl.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/IntegerSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/InterfaceAudience.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/InterfaceStability.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MRJobConfig.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MySQLDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MySQLDataDrivenDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/OracleDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/OracleDataDrivenDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/OracleDateSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TextSplitter.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/BigDecimalSplitter.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.FormatBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS actual DataDriven single-map bypass, no bounds query\nOBSERVED actual DataDriven FloatSplitter dispatch leaves5..9missing;lastlower=col >= 10.0\nPASS actual ordinary DBInputFormat count10/chunks3 covers[0,3),[3,6),[6,10)\nOBSERVED zero chunks ArithmeticException;finally closes connection\nOBSERVED Oracle firstsplit query has no rownum bounds: SELECT val FROM records\nOBSERVED Oracle later query includes lowerstart with >=: SELECT * FROM (SELECT a.*,ROWNUM dbif_rno FROM ( SELECT val FROM records ) a WHERE rownum <= 5 + 5 ) WHERE dbif_rno >= 5\nOBSERVED actual DataDriven commit failure skips connectionclose;format checks=7\n",
+      "stderr": "26/10/24 03:35:31 WARN apache.FloatSplitter: Generating splits for a floating-point index column. Due to the\n26/10/24 03:35:31 WARN apache.FloatSplitter: imprecise representation of floating-point values in Java, this\n26/10/24 03:35:31 WARN apache.FloatSplitter: may result in an incomplete import.\n26/10/24 03:35:31 WARN apache.FloatSplitter: You are strongly encouraged to choose an integral split column.\n26/10/24 03:35:31 INFO apache.OracleDBRecordReader: Time zone has been set to GMT\n26/10/24 03:35:31 INFO apache.OracleDBRecordReader: Time zone has been set to GMT\n26/10/24 03:35:31 WARN apache.FloatSplitter: Generating splits for a floating-point index column. Due to the\n26/10/24 03:35:31 WARN apache.FloatSplitter: imprecise representation of floating-point values in Java, this\n26/10/24 03:35:31 WARN apache.FloatSplitter: may result in an incomplete import.\n26/10/24 03:35:31 WARN apache.FloatSplitter: You are strongly encouraged to choose an integral split column.\n"
+    }
+  ]
+}

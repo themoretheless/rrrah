@@ -1,0 +1,51 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v19-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/OracleDBRecordReader.java",
+      "local": "120-OracleDBRecordReader.java",
+      "sha256": "ebf59a1b1ef50dc11d05a6063c07ac250aca7324434ae3431fed768e3ba8b6dd",
+      "git_blob": "122533fd85d1bd2f7b3607c69a2627e34a26940b",
+      "lines": 144,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBInputFormat.java",
+      "local": "121-DBInputFormat.java",
+      "sha256": "8809d674f342e4013e8b9920897b6b9d66e69351f461f51a519fddf6fcabf00a",
+      "git_blob": "384ff77a3cf22d6c26158581e5e10d6272966476",
+      "lines": 357,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 116,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 122,
+  "remaining_without_whole_review": 48,
+  "original_tests_cumulative": {
+    "total": 70,
+    "passed": 70,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 7,
+    "cumulative": 82,
+    "report": "docs/research/dedup-500/hiho098-format-native-controls-20261024.json",
+    "scope": "21unchanged original classes compiled together in isolated classesdir. No replacement DBInputFormat/DataDrivenDBInputFormat/split hosts. Owned in-process registered JDBC driver returns Mockito Connection/Statement/ResultSet; Oracle timezone method supplied through recording mock interface. DriverManager dispatch exercised, no external JDBC connection/network or SQLengine/cluster.",
+    "confirmed": [
+      "Actual DataDriven getSplits with1task returns1=1without boundingquery; ordinary cleanup explicitly called by owned control.",
+      "Actual DataDriven dispatches DOUBLE to FloatSplitter with2tasks and emits lastlower col>=10.0 for0..10; previously isolated gap5..9 reproduced through fulloriginalformat.",
+      "Ordinary DBInputFormat count10/tasks3 yields[0,3),[3,6),[6,10), and closes connection.",
+      "Zero chunks causes ArithmeticException while finally still closes connection; invalidconfiguration behavior, not claim of default-input failure.",
+      "Oracle firstsplit start0/end5 generates SELECT val FROM records without rownum guard. Later5..10 emits rownum<=5+5 and inclusive dbif_rno>=5. Querystrings observed, no actual Oracle result/overlap measured.",
+      "Actual DataDriven getSplits commitSQLException skips closeConnection and still returns splits."
+    ]
+  },
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
