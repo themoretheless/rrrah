@@ -2,7 +2,7 @@
   "index": 92,
   "repository": "kdeldycke/mail-deduplicate",
   "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
-  "review_scope": "10 complete pinned text files of80; exact original cache/group/comparison AST controls; partial repository review",
+  "review_scope": "12 complete pinned text files of80; exact original AST cache/group/normalization controls; partial repository review",
   "decision": "reject-domain",
   "finding": "Mailbox header/body/actions equivalence; mail-specific domain and GPL, not image processing.",
   "license_metadata": "GPL-2.0",
@@ -116,6 +116,10 @@
     },
     {
       "audit": "docs/research/dedup-500/mail092-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mail092-source-review-v4-20261024.json",
       "whole_repo_complete": false
     }
   ],

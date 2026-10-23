@@ -1,0 +1,59 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "mail_deduplicate/mail.py",
+      "local": "10-mail.py",
+      "sha256": "6904e5cfefc64310d9a9c6e20afc11341d5963e1a259c1586bd147ff89248013",
+      "whole_text_read": true,
+      "lines": 629
+    },
+    {
+      "path": "mail_deduplicate/strategy.py",
+      "local": "11-strategy.py",
+      "sha256": "1c04023467c633566e0cc9bb3abaabbcb3439ee12611e0eb697b5a82535bbd88",
+      "whole_text_read": true,
+      "lines": 300
+    }
+  ],
+  "whole_text_files_read_total": 12,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 68,
+  "upstream_tests_run": false,
+  "control": {
+    "scope": "Original full mail/strategy modules via AST, optional presentation imports omitted; real stdlib Message parser, synthetic in-memory box only",
+    "header_equivalence_despite_different_body_date_hour_subject_prefix": true,
+    "normalized_whitespace_boundary_collision": true,
+    "raw_body_line_ending_equivalence": true,
+    "unicode_size_characters": 2,
+    "unicode_body_utf8_bytes": 4,
+    "rehydrated_body_characters": 10,
+    "retained_cached_size": 2,
+    "retained_cached_date_after_rehydrate": true,
+    "strategy_members_resolve": 24,
+    "limits": [
+      "These normalizations are mail-domain policy, not cryptographic collisions.",
+      "Synthetic source replacement between hydrate stages, not a measured live mailbox race.",
+      "No full upstream test suite or CLI run."
+    ]
+  },
+  "findings": [
+    "Header digest deliberately ignores body unless separate body hasher selected. Same normalized subject/date-day/addresses/content-type yields same header digest for unequal bodies; raw-body control distinguishes them.",
+    "Normalized body removes all whitespace and line boundaries; ab c and a bc share normalized digest. Raw body still normalizes line endings and trailing newline through splitlines/join. Domain equivalence is not exact encoded-file identity.",
+    "Canonical size counts Python decoded characters without line separators, not encoded bytes: two Cyrillic characters size2 versus UTF8 payload4.",
+    "dehydrate memoizes scalar size and timestamp; hydrate copies parsed message attributes from source without invalidating those scalars. Synthetic in-memory replacement aa->abcdefghij with changed date yields new10-character body with old size2 and old timestamp. No actual mailbox race qualification.",
+    "All24 strategy enum members resolve to callable implementation; time/size/path criteria may select multiple tied copies. Random strategies are explicitly nondeterministic. Resolution control is not an original test suite run."
+  ],
+  "harness_notes": [
+    "Initial Unicode fixture passed Python str and failed the expected decoded-character assertion. Corrected harness to feed UTF8 bytes through normal Message decoding; original source unchanged and final assertions pass."
+  ],
+  "transfer_decision": "Keep exact encoded-byte equality separate from mail normalization; bind content-derived metadata to the same verified observation. No foreign production code copied.",
+  "limits": [
+    "12 whole text files of80;68 remain without whole review.",
+    "Only original AST modules with presentation imports omitted and synthetic in-memory box; full package/runtime tests not run.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

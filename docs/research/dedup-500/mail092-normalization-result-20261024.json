@@ -1,0 +1,17 @@
+{
+  "scope": "Original full mail/strategy modules via AST, optional presentation imports omitted; real stdlib Message parser, synthetic in-memory box only",
+  "header_equivalence_despite_different_body_date_hour_subject_prefix": true,
+  "normalized_whitespace_boundary_collision": true,
+  "raw_body_line_ending_equivalence": true,
+  "unicode_size_characters": 2,
+  "unicode_body_utf8_bytes": 4,
+  "rehydrated_body_characters": 10,
+  "retained_cached_size": 2,
+  "retained_cached_date_after_rehydrate": true,
+  "strategy_members_resolve": 24,
+  "limits": [
+    "These normalizations are mail-domain policy, not cryptographic collisions.",
+    "Synthetic source replacement between hydrate stages, not a measured live mailbox race.",
+    "No full upstream test suite or CLI run."
+  ]
+}

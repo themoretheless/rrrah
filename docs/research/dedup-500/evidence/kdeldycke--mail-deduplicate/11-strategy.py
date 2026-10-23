@@ -1,0 +1,300 @@
+# Copyright Kevin Deldycke <kevin@deldycke.com> and contributors.
+#
+# This program is Free Software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+"""Strategy definitions."""
+
+from __future__ import annotations
+
+import enum
+import logging
+import random
+import re
+from functools import wraps
+
+from click_extra import get_current_theme
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import TypeAlias
+
+    from .deduplicate import DuplicateSet
+    from .mail import DedupMailMixin
+
+    SelectionFunc: TypeAlias = Callable[[DuplicateSet], set[DedupMailMixin]]
+
+
+def log_selection(message_template: str):
+    """Decorator to log selection criteria."""
+
+    def decorator(func: SelectionFunc) -> SelectionFunc:
+        @wraps(func)
+        def wrapper(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+            # Debug, not info: this fires once per duplicate set, and a corpus has
+            # as many of those as it has distinct mails.
+            if logging.getLogger().isEnabledFor(logging.DEBUG):
+                logging.debug(message_template.format(d=duplicates))
+            return func(duplicates)
+
+        return wrapper
+
+    return decorator
+
+
+@log_selection(
+    "Select all mails strictly older than the {d.newest_timestamp} timestamp..."
+)
+def select_older(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all older duplicates.
+
+    Discards the newests, i.e. the subset sharing the most recent timestamp.
+    """
+    # No mail here is undated: resolving `newest_timestamp` raised otherwise.
+    return {
+        mail
+        for mail in duplicates.pool
+        if mail.timestamp < duplicates.newest_timestamp  # type: ignore[operator]
+    }
+
+
+@log_selection("Select all mails sharing the oldest {d.oldest_timestamp} timestamp...")
+def select_oldest(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all the oldest duplicates.
+
+    Discards the newers, i.e. all mail of the duplicate set but those sharing the oldest
+    timestamp.
+    """
+    return {
+        mail
+        for mail in duplicates.pool
+        if mail.timestamp == duplicates.oldest_timestamp
+    }
+
+
+@log_selection(
+    "Select all mails strictly newer than the {d.oldest_timestamp} timestamp..."
+)
+def select_newer(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all newer duplicates.
+
+    Discards the oldest, i.e. the subset sharing the most ancient timestamp.
+    """
+    # No mail here is undated: resolving `oldest_timestamp` raised otherwise.
+    return {
+        mail
+        for mail in duplicates.pool
+        if mail.timestamp > duplicates.oldest_timestamp  # type: ignore[operator]
+    }
+
+
+@log_selection("Select all mails sharing the newest {d.newest_timestamp} timestamp...")
+def select_newest(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all the newest duplicates.
+
+    Discards the olders, i.e. all mail of the duplicate set but those sharing the newest
+    timestamp.
+    """
+    return {
+        mail
+        for mail in duplicates.pool
+        if mail.timestamp == duplicates.newest_timestamp
+    }
+
+
+@log_selection("Select all mails strictly smaller than {d.biggest_size} bytes...")
+def select_smaller(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all smaller duplicates.
+
+    Discards the biggests, i.e. the subset sharing the biggest size.
+    """
+    return {mail for mail in duplicates.pool if mail.size < duplicates.biggest_size}
+
+
+@log_selection(
+    "Select all mails sharing the smallest size of {d.smallest_size} bytes..."
+)
+def select_smallest(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all the smallest duplicates.
+
+    Discards the biggers. i.e. all mail of the duplicate set but those sharing the
+    smallest size.
+    """
+    return {mail for mail in duplicates.pool if mail.size == duplicates.smallest_size}
+
+
+@log_selection("Select all mails strictly bigger than {d.smallest_size} bytes...")
+def select_bigger(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all bigger duplicates.
+
+    Discards the smallests, i.e. the subset sharing the smallest size.
+    """
+    return {mail for mail in duplicates.pool if mail.size > duplicates.smallest_size}
+
+
+@log_selection("Select all mails sharing the biggest size of {d.biggest_size} bytes...")
+def select_biggest(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all the biggest duplicates.
+
+    Discards the smallers, i.e. all mail of the duplicate set but those sharing the
+    biggest size.
+    """
+    return {mail for mail in duplicates.pool if mail.size == duplicates.biggest_size}
+
+
+@log_selection(
+    "Select all mails with file path matching the {d.conf[regexp].pattern} regexp..."
+)
+def select_matching_path(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all duplicates whose file path match the regular expression provided via
+    the --regexp parameter."""
+    assert duplicates.conf["regexp"] is not None
+    return {
+        mail
+        for mail in duplicates.pool
+        if re.search(duplicates.conf["regexp"], mail.path)
+    }
+
+
+@log_selection(
+    "Select all mails with file path not matching the {d.conf[regexp].pattern} regexp..."
+)
+def select_non_matching_path(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Select all duplicates whose file path doesn't match the regular expression
+    provided via the --regexp parameter."""
+    assert duplicates.conf["regexp"] is not None
+    return {
+        mail
+        for mail in duplicates.pool
+        if not re.search(duplicates.conf["regexp"], mail.path)
+    }
+
+
+@log_selection("Randomly select one duplicate...")
+def select_one(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Randomly select one duplicate, and discards all others."""
+    return {random.choice(tuple(duplicates.pool))}
+
+
+@log_selection("Randomly select all but one duplicate...")
+def select_all_but_one(duplicates: DuplicateSet) -> set[DedupMailMixin]:
+    """Randomly discard one duplicate, and select all others."""
+    return set(random.sample(tuple(duplicates.pool), k=len(duplicates.pool) - 1))
+
+
+@enum.unique
+class Strategy(enum.Enum):
+    """Selection strategies to apply on a set of duplicate mails.
+
+    Each strategy in the `Enum` points to the function implementing the selection
+    logic, by way of the `function` property.
+
+    Strategies whose member value is a string are simply aliases to other strategies,
+    pointing to the name of the function implementing the logic. The other members
+    have integer values, to indicate their function ID is to be derived from the
+    member name. This arrangement lets each member exist on its own instead of being
+    hidden by the aliasing mechanism of `Enum`.
+
+    Aliases are great usability features to represent inverse operations. They help
+    users reason about the selection operators in whichever direction matches their
+    mental model.
+
+    ```{note}
+    True `Enum` aliases (`DISCARD_NEWEST = SELECT_OLDER`) were considered and turned
+    down. An alias is then the very same object as its canonical member, so it cannot
+    be told apart at runtime, and three properties go away:
+
+    1. `str()` stops round-tripping the spelling the user typed: a run started with
+       `--strategy=discard-newest` would report `select-older` in its logs.
+    2. `PATH_STRATEGIES` in `cli.py` collapses from four members to two, so the
+       `--regexp` help line and the `AnyValueIn` error message would name only half
+       the strategies that require it.
+    3. `tests/test_strategy.py` feeds `f"--strategy={strategy_id}"`, so pairs like
+       `[SELECT_OLDER, DISCARD_NEWEST]` would stringify identically and the alias
+       spellings would no longer be exercised end to end.
+    ```
+
+    ```{todo}
+    Revisit the aliasing arrangement on a Python floor bump: `Enum._add_alias_()`
+    (3.13+) accepts non-identifier names, so
+    `SELECT_OLDER._add_alias_("discard-newest")` puts the CLI spelling straight into
+    `__members__`, where
+    `EnumChoice(Strategy, choice_source="name", show_aliases=True)` picks it up.
+    `EnumChoice` also grew a `transform` argument (click-extra 8.9.0) to kebab-case
+    the raw identifiers that `show_aliases` otherwise yields. Neither addresses the
+    three losses listed in the note above, which is why the current arrangement
+    stands.
+    ```
+    """
+
+    # Time-based strategies.
+    SELECT_OLDER = 1
+    SELECT_OLDEST = 2
+    SELECT_NEWER = 3
+    SELECT_NEWEST = 4
+    DISCARD_NEWEST = "select_older"
+    DISCARD_NEWER = "select_oldest"
+    DISCARD_OLDEST = "select_newer"
+    DISCARD_OLDER = "select_newest"
+
+    # Size-based strategies.
+    SELECT_SMALLER = 5
+    SELECT_SMALLEST = 6
+    SELECT_BIGGER = 7
+    SELECT_BIGGEST = 8
+    DISCARD_BIGGEST = "select_smaller"
+    DISCARD_BIGGER = "select_smallest"
+    DISCARD_SMALLEST = "select_bigger"
+    DISCARD_SMALLER = "select_biggest"
+
+    # Location-based strategies.
+    SELECT_MATCHING_PATH = 9
+    SELECT_NON_MATCHING_PATH = 10
+    DISCARD_NON_MATCHING_PATH = "select_matching_path"
+    DISCARD_MATCHING_PATH = "select_non_matching_path"
+
+    # Quantity-based strategies.
+    SELECT_ONE = 11
+    SELECT_ALL_BUT_ONE = 12
+    DISCARD_ALL_BUT_ONE = "select_one"
+    DISCARD_ONE = "select_all_but_one"
+
+    def __str__(self):
+        """Get the string to be used in CLI for the strategy."""
+        return self.name.lower().replace("_", "-")
+
+    @property
+    def function(self) -> SelectionFunc:
+        """The selection function this member stands for.
+
+        Alias members carry the function's name as their value; canonical members
+        derive it from their own name.
+        """
+        if isinstance(self.value, str):
+            func_id = self.value
+        else:
+            func_id = self.name.lower()
+        return globals()[func_id]  # type: ignore[no-any-return]
+
+    def apply(self, duplicates: DuplicateSet) -> set[DedupMailMixin]:
+        """Perform the selection strategy on the provided duplicate set.
+
+        Returns the set of selected mail objects.
+        """
+        # Debug, not info: applied once per duplicate set, and which strategies are
+        # in play is already announced once when the selection step opens. Styling
+        # the name is not free either, so it waits until it is going to be said.
+        if logging.getLogger().isEnabledFor(logging.DEBUG):
+            logging.debug(f"Apply {get_current_theme().choice(str(self))} strategy...")
+        return set(self.function(duplicates))
