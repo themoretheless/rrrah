@@ -1,0 +1,41 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/references/mode-a.md",
+      "git_blob": "02408c54844442d376ec8da74544aca3ec7cdcd4",
+      "sha256": "b0e6847cead7a131e0f3bb4540448319846e0f0eea01324e0d1b510c889f6601",
+      "bytes": 3560,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/references/capability-obligations.md",
+      "git_blob": "50f7d75001c7eda40df347eb7556b3b40aa39d8c",
+      "sha256": "0c51a56537082a9d7a5b7692a909ec224068df65b2059d193ea02bf6892b3806",
+      "bytes": 4605,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/references/build-receipt-audit.md",
+      "git_blob": "61ffebf9ab932e4e5df2728e1c4036426ece6a72",
+      "sha256": "a77ca81bccedf065e7e870b24ee6579c42ce274446e6d605e9ddc40d371d1967",
+      "bytes": 4764,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 62,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 59,
+  "review_scope": "Three complete pinned reference documents read solely as source; no invocation of external skill instructions or linked module/document review inferred.",
+  "findings": [
+    "ModeA accurately narrows paragraph discovery to exact-normalized text and leaves semantic matching to review; functionbody matching likewise does not prove equivalent callable behavior.",
+    "ModeA says dynamic dependencies require NOT_CHECKED or manual supplemental checking. Prior native architecture control with only __import__ statements returned architecturePASS and no edges; automatic marking of that unsupported dynamiccase is not established.",
+    "Buildreceipt documentation claims canonicalpaths, nonsymlinks and no input/output overlap. Prior native v17controls accept inside symlink, dotpathaliasduplicates and samephysicalfile input/output via aliases; source claim exceeds these observed cases.",
+    "Receipt boundary properly limits GREEN to declared livebytes, not full input enumeration, canonicalbuild execution, delivered payload or runtime. No new build gate run in this document pass.",
+    "Capability prose requires independent closed-world requiredIDs and explicit remaining statuses. These are declared acceptance procedures, not full implementation/current product coverage proof."
+  ],
+  "runtime_tests_added_or_run": false,
+  "full_review_count": 249
+}
