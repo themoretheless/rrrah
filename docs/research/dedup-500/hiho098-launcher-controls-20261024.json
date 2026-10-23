@@ -1,0 +1,45 @@
+{
+  "scope": "Original launcher executed via bash with owned recording stub replacing Hadoop executable; no Java/Hadoop job, no external service;3authorcontrols; -inputPath value with spaces survives quoted \"$@\"",
+  "checks": 3,
+  "results": [
+    {
+      "case": "automatic-home",
+      "returncode": 0,
+      "stdout": "$HIHO_HOME is set to  /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/working\n",
+      "stderr": "",
+      "captured": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/working",
+        "jar",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/working/deploy/hiho.jar",
+        "co.nubetech.hiho.dedup.DedupJob",
+        "dedup",
+        "-inputPath",
+        "name with spaces"
+      ]
+    },
+    {
+      "case": "space-in-hiho-home",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "captured": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/release with spaces",
+        "jar",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/release",
+        "with",
+        "spaces/deploy/hiho*.jar",
+        "co.nubetech.hiho.dedup.DedupJob",
+        "dedup",
+        "-inputPath",
+        "name with spaces"
+      ]
+    },
+    {
+      "case": "space-in-hadoop-home",
+      "returncode": 126,
+      "stdout": "",
+      "stderr": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/43-scripts--hiho: line 48: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/hadoop: is a directory\n/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/43-scripts--hiho: line 48: exec: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-launcher-ktbkuozb/hadoop: cannot execute: Undefined error: 0\n",
+      "captured": []
+    }
+  ]
+}

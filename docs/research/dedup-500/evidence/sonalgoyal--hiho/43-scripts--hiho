@@ -1,0 +1,48 @@
+#!/bin/bash
+
+dir=`dirname "$0"`
+dir=`cd "$bin"; pwd`
+
+if [ -z "$HIHO_HOME" ]; then
+	export HIHO_HOME=${dir}
+	echo '$HIHO_HOME is set to ' $HIHO_HOME   
+fi
+
+if [ -z "${HADOOP_HOME}" ]; then
+	HADOOP_HOME=/usr/lib/hadoop
+fi
+  
+if [ ! -d "${HADOOP_HOME}" ]; then
+	echo "Error: $HADOOP_HOME does not exist!"
+        echo 'Please set $HADOOP_HOME to the root of your Hadoop installation.'
+  	exit 1
+fi
+
+COMMAND=$1
+if [ "$COMMAND" = "dedup" ] ; then
+  	CLASS='co.nubetech.hiho.dedup.DedupJob'
+ 	# HADOOP_OPTS="$HADOOP_OPTS $HADOOP_NAMENODE_OPTS"
+fi
+if [ "$COMMAND" = "merge" ] ; then
+	CLASS='co.nubetech.hiho.merge.MergeJob'
+ fi
+if [ "$COMMAND" = "import" ] ; then
+        CLASS='co.nubetech.hiho.job.DBQueryInputJob'
+fi
+if [ "$COMMAND" = "export" ] ; then
+EXPORTTO=$2
+	if [ "$EXPORTTO" = "mysql" ] ; then
+ 	 CLASS='co.nubetech.hiho.job.ExportToMySQLDB'
+	fi
+	if [ "$EXPORTTO" = "ftp" ] ; then
+ 	 CLASS='co.nubetech.hiho.job.ExportToFTPServer'
+	fi
+	if [ "$EXPORTTO" = "oracle" ] ; then
+ 	 CLASS='co.nubetech.hiho.job.ExportToOracleDb'
+	fi
+	if [ "$EXPORTTO" = "saleforce" ] ; then
+ 	 CLASS='co.nubetech.hiho.job.sf.ExportSalesforceJob'
+	fi
+fi
+
+exec ${HADOOP_HOME}/bin/hadoop jar ${HIHO_HOME}/deploy/hiho*.jar $CLASS "$@"
