@@ -1,0 +1,39 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 1,
+  "partial_text_review": [
+    {
+      "path": "code-cleanup-helper/scripts/audit_core.py",
+      "new_lines_read": [
+        [
+          575,
+          662
+        ],
+        [
+          773,
+          981
+        ]
+      ],
+      "cumulative_complete_ranges": [
+        [
+          1,
+          981
+        ]
+      ]
+    }
+  ],
+  "control": "cleanup067-architecture-control-20261023.py",
+  "controls_passed": 5,
+  "runtime_scope": "18 unchanged selected original AST class/function definitions and language-map constant, pinned Git verified. Real temporary authored files. Full module/CLI/original tests not executed.",
+  "findings": [
+    "Architecture pipeline correctly emits FAIL for invalid Python syntax and NOT_CHECKED for Rust-only source; these two missing-coverage states are explicit.",
+    "Original full selected architecture pipeline reports duplicate-function-body on two9line functions with enoughASTnodes and differentdefaults. Previous primitive observation now reproduced under ordinary8line/24node thresholds. This is body similarity, not behavior identity.",
+    "Static import cycle reported; two files using literal __import__ calls produce no graph edges and architecture PASS. Scope is static Import/ImportFrom AST, not all runtime dependencies.",
+    "Artifact-set checker pairs filename-derived keys/counts and minimum sizes, rejects duplicatekeys/symlinks/forbidden/overlap. It does not establish source\u2194generated semantic equivalence or production execution freshness.",
+    "Local Markdown link matcher and assertions read; no external referenced documents followed. Full source after981 remains unread; no whole-file/source500 promotion."
+  ],
+  "full_review_count": 249
+}
