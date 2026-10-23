@@ -1,0 +1,74 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".github/workflows/google-java-format.yml",
+      "sha256": "bafc71c123a246e00d3ac5d537134f0398ea9942235acd43dfa9ae0ebf4f346b",
+      "lines": 24,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".github/workflows/maven.yml",
+      "sha256": "9e063df229288d961856f1f2531cd40e87a87abd12ee6c9c3c821e1782e60eff",
+      "lines": 29,
+      "git_blob_verified": true
+    },
+    {
+      "path": "archive/src/main/resources/application.properties",
+      "sha256": "309820c9b06c966aa0f5bbbc7d8b86b7397463ff6bda97f5bdfbed2fd91646a3",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/util/SQLDateAdapter.java",
+      "sha256": "7e7fd3c86251990dd52274c5469c80768e51620b377fe1dc61d78902873761a4",
+      "lines": 40,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/test/java/uk/ac/uws/danielszabo/automodera/common/util/SQLDateAdapterTest.java",
+      "sha256": "450ad25553e32ef6c17475d1d3dd6e98215f460866a89a9c0dc2489527734eca",
+      "lines": 53,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/web/WebMvcConfig.java",
+      "sha256": "b54d6cb41fe1b42a054fc0d15ecff4527c4ceb51975dbfc1279ad56763049aea",
+      "lines": 43,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/application.properties",
+      "sha256": "da61d9ac8f4819933ddfd067d30fe0f624a55b9f598b66e06a0a5f2a1ed3a57f",
+      "lines": 77,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/resources/application.properties",
+      "sha256": "be1384eba25bbe9edbce1647c60de65b88f4f6038c6785f9c7d8c906fdd36e93",
+      "lines": 63,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "upstream_java_run": false,
+    "ci_run": false,
+    "live_server": false
+  },
+  "findings": [
+    "All8new files whole-read/Gitblobverified:2workflows,3applicationproperties,WebMvcConfig,SQLDateAdapter and its test. No runtime configuration changed.",
+    "All3tracked Java test classes now inspected: hashing and collection tests commented out; only2active SQLDateAdapter @Test methods remain. Filename heuristic tests_detected4 also counted HTML test page. This is source inventory, not executed-test count.",
+    "SQLDateAdapter marshals epochmilliseconds to decimaltext and parsesLong to java.sql.Date. Active tests cover one epoch value and NaN parse rejection; test names reverse marshal/unmarshal behaviors. No timezone/date-boundary/null coverage established.",
+    "Maven workflow runs package with JDK17; coverage upload paths include nonexistent api module instead of integrator. No workflow history/status queried; cannot infer current green checks or coverage.",
+    "WebMvc interceptor registered at REST_BASE_PATH+/api only; matching child /api/check behavior requires framework/runtime validation. Previous constructor counter finding does not establish endpoint execution/reachability.",
+    "Integrator configuration requests600checks/60seconds and25MBuploadlimit, but no measured throughput/resource admission or pixel/decode limit established. SQLite maxpool10; database concurrency qualification absent.",
+    "Three application property files reference prod profile and SQLiteDialect. Profile overlays and dialect still need review."
+  ],
+  "remaining": [
+    "124 other tracked blobs/assets",
+    "Profile overlays, persistence/native dependencies, remaining authored files/assets and runtime qualification"
+  ],
+  "full_review_count": 249
+}
