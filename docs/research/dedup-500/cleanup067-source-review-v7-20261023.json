@@ -1,0 +1,56 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/.code-cleanup-managed.json",
+      "git_blob": "c0376c58f2a5e9427d38102406facc942eb35f6e",
+      "sha256": "225a0666f4b8481bce6c3d5b3e9beddecfa3d7a6b25d0ff4855fb04ae807be20",
+      "bytes": 1980,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/scripts/audit.py",
+      "git_blob": "7e8b9e3fc3a72d32bcb8dbc3518c007c4cff7a1d",
+      "sha256": "f19dfbbc45c5e606f3171497d94c25b60cfb59d9bd4f128aa7c0bda91135446f",
+      "bytes": 1368,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/scripts/check_drift.py",
+      "git_blob": "4048e199335e559c49c96fe184059a5e94df8af9",
+      "sha256": "e26ad54d7c7b4e097310264932302b1f700c60f3d834b08be668b41ab56064af",
+      "bytes": 1002,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/scripts/check_links.py",
+      "git_blob": "f00451ff0c559e17d4af8c793d3fcf08c08f9ad0",
+      "sha256": "52d0c07fe4da4542f3c7e07aa3ed18eddd4a8086ec33e14604edca4ce47815a9",
+      "bytes": 832,
+      "whole_text_read": true
+    },
+    {
+      "path": "code-cleanup-helper/scripts/check_sync.py",
+      "git_blob": "4aab03811951deef27b3ce5b7724181ce76c94d3",
+      "sha256": "a7fbb4ac1cf03d41910435c2385e112e827ea876795351d44cce7975841cca37",
+      "bytes": 865,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 17,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 104,
+  "control": "cleanup067-cli-control-20261023.py",
+  "native_original_cli_processes_run": 8,
+  "runtime_scope": "Five unchanged Git-verified modules copied into disposable directory, eight original CLI subprocess invocations with real authored files/config/defaults; no outside project audits or skill invocation.",
+  "findings": [
+    "Full audit missing target exits2; FAIL report exits0 by default and1with--strict. This is documented CLI design, not proof that exit0means all acceptance criteria met.",
+    "Strict mode still exits0with NOT_CHECKED summary entries; complete coverage requires inspecting report state.",
+    "Standalone check_sync exits3when unconfigured. check_links/check_drift return0on missing target, unlike main CLI missing-root rejection.",
+    "R1/R3 headings plus declaredR1-R3 pass drift checker: it compares maximum IDs, not contiguous coverage. Not a complete numbered requirement audit.",
+    "Managed-path manifest lists scope only; no per-file content identity or runtime verification. Manifest existence is not package freshness proof."
+  ],
+  "full_review_count": 249
+}
