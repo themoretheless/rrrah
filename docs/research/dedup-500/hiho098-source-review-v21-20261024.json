@@ -1,0 +1,88 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v20-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBOutputFormat.java",
+      "local": "122-DBOutputFormat.java",
+      "sha256": "a51bf1b3f7de0a1caf0669d1c34ce1cf9bc91b5dc0d38346f340f2be00c6a995",
+      "git_blob": "762e1a4ef378cf0053e54e8c8fd4e1affc80b596",
+      "lines": 237,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/GenericDBOutputFormat.java",
+      "local": "123-GenericDBOutputFormat.java",
+      "sha256": "933b4dd37090f78268ed8e5733a4558782096550bb7feeac94266ff92b829c35",
+      "git_blob": "575ca65831b4b1457761c3933794d8a1d3a30df6",
+      "lines": 100,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/lib/db/TestGenericDBOutputFormat.java",
+      "local": "124-TestGenericDBOutputFormat.java",
+      "sha256": "257a46f94b38d5c1e7d0c6ba6f390ac0604d83b2d9daea0ab559f969fd7e56d3",
+      "git_blob": "d27f30367ef929d30a6cbd7cd8f14b2d1bc26f0d",
+      "lines": 86,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/GenericDBLoadDataMapper.java",
+      "local": "125-GenericDBLoadDataMapper.java",
+      "sha256": "3699278a5d48cbf9ad656bc21ef7e542830dd485abee42b605fcd97b0d50d814",
+      "git_blob": "392a011a9ec015ba74927793ea63ffdb07119d5d",
+      "lines": 126,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 120,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 126,
+  "remaining_without_whole_review": 44,
+  "original_tests": {
+    "new": 1,
+    "new_passed": 1,
+    "cumulative_distinct": 71,
+    "cumulative_passed": 71,
+    "report": "docs/research/dedup-500/hiho098-generic-output-native-controls-20261024.json",
+    "scope": "Only TestGenericDBOutputFormat.testSetColumnInfo selected; DB-dependent method notrun;20testfiles cumulatively,2partiallyexecuted. Repeated metadata test after author harness fix counted once."
+  },
+  "author_controls": {
+    "new": 10,
+    "cumulative": 92,
+    "writer_report": "docs/research/dedup-500/hiho098-db-writer-native-controls-20261024.json",
+    "mapper_report": "docs/research/dedup-500/hiho098-generic-output-native-controls-20261024.json",
+    "confirmed": [
+      "DBRecordWriter.write swallows binding/addBatch SQLException instead of propagating; original unchanged method returns normally.",
+      "Normal batching/commit/cleanup passes; executeBatch andcommit failures rollback+close when cleanup succeeds.",
+      "Statementclose SQLException masks primary batchfailure and skipsconnectionclose.",
+      "GenericDBLoadDataMapper passes ordinary3stringcolumns and whitespace-as-null; empty middlefield rejected because StringTokenizer removes empty tokens.",
+      "DECIMALtyped middlefield silently omitted, leaving3metadata columns but2values. No actual SQL execution or persisted corruption measured."
+    ],
+    "scope": "6writer+4mapper authorchecks with Mockito JDBC/recordingcontexts, realHadoop andJackson1.4.0; no configured DB/SQL/network orcluster",
+    "author_setup_correction": "Initial authored mapper verification used eq(null), unsupported by Mockito1.8.1; replaced with isNull. Original sources unchanged; initial attempt preserved, not upstream failure."
+  },
+  "new_runtime_dependencies": [
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/jackson/jackson-core-asl/1.4.0/jackson-core-asl-1.4.0.jar",
+      "sha256": "4f83ead0a5c5948dcb3e3cbc1cf8afbfdcd30dd9c67fb43ead2170cf7cc2c181",
+      "bytes": 150249
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/jackson/jackson-mapper-asl/1.4.0/jackson-mapper-asl-1.4.0.jar",
+      "sha256": "841275d818f5f3a77d968c621cb5661c25c4df3b9a04130b3fe72ec44a0cdbe7",
+      "bytes": 386237
+    }
+  ],
+  "dependency_scope": "Jackson1.4.0 matches pinnedpom property; fullresolvedcohort/licenses notqualified; no production codeadoption",
+  "source_only_findings": [
+    "GenericDBOutputFormat.setOutput only closes metadata statement/connection on success, with no finallycleanup; failure path not executed.",
+    "TestGenericDBOutputFormat.testPopulateColumnInfo calls GenericDBWritable.populateColumnInfo and connects to configured local MySQL; intentionally notrun.",
+    "DBOutputFormat.getRecordWriter opensconnection then preparesstatement; setupfailure path has no explicit connection cleanup; source-only, not newly executed."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

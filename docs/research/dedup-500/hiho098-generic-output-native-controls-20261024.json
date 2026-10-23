@@ -1,0 +1,97 @@
+{
+  "author_setup_correction": "Old Mockito1.8 eq(null) matcher threw in authored control; replaced with isNull. Original sources unchanged; repeated original metadata test counted once.",
+  "initial_attempt": {
+    "scope": "Exactly1original JSON metadata test selected; DB-dependent testPopulateColumnInfo not run.4authorcontrols execute original mapper with configured metadata and recording contexts. Jackson1.4.0 matches pinnedpom property, not whole resolved dependency cohort; no external DB/SQL/network.",
+    "commands": [
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "-d",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HIHOConf.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/ColumnInfo.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericDBWritable.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericDBOutputFormat.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestGenericDBOutputFormat.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericDBLoadDataMapper.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/SelectedOutputTest.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericMapperControl.java"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "Note: Some input files use or override a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+      },
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "SelectedOutputTest"
+        ],
+        "returncode": 0,
+        "stdout": "result: [{\"name\":\"id\",\"type\":-5,\"index\":0},{\"name\":\"name\",\"type\":12,\"index\":1}]ORIGINAL run=1 failures=0\n",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+          "--add-opens=java.base/java.lang=ALL-UNNAMED",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "GenericMapperControl"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "Exception in thread \"main\" java.lang.NullPointerException: Cannot invoke \"Object.getClass()\" because \"value\" is null\n\tat org.mockito.Matchers.eq(Matchers.java:479)\n\tat GenericMapperControl.output(GenericMapperControl.java:4)\n\tat GenericMapperControl.main(GenericMapperControl.java:6)\n"
+      }
+    ]
+  },
+  "scope": "Exactly1original JSON metadata test selected; DB-dependent testPopulateColumnInfo not run.4authorcontrols execute original mapper with configured metadata and recording contexts. Jackson1.4.0 matches pinnedpom property, not whole resolved dependency cohort; no external DB/SQL/network.",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HIHOConf.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/ColumnInfo.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericDBWritable.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericDBOutputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestGenericDBOutputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericDBLoadDataMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/SelectedOutputTest.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/GenericMapperControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: Some input files use or override a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "SelectedOutputTest"
+      ],
+      "returncode": 0,
+      "stdout": "result: [{\"name\":\"id\",\"type\":-5,\"index\":0},{\"name\":\"name\",\"type\":12,\"index\":1}]ORIGINAL run=1 failures=0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "GenericMapperControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS ordinary3column row\nOBSERVED empty middle field rejected by token count\nPASS whitespace field retained as null\nOBSERVED DECIMAL field silently omitted:metadata3,values2;mapper checks=4\n",
+      "stderr": ""
+    }
+  ]
+}

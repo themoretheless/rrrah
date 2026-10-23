@@ -1,0 +1,31 @@
+{
+  "scope": "6authorcontrols of unchanged original DBOutputFormat.DBRecordWriter with Mockito Connection/PreparedStatement/DBWritable, actual Java/Hadoop classes. No JDBCdriver connection, actual SQL/write, external DB orcluster.",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBOutputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/WriterBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBOutputFormat.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.WriterBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS healthy bind,batch,commit,close\nOBSERVED binding SQLException swallowed by write\nOBSERVED addBatch SQLException swallowed by write\nPASS executeBatch failure propagates with rollback+close\nOBSERVED cleanup exception masks batch failure and skips connectionclose\nPASS commit failure triggers rollback and closes resources;writer checks=6\n",
+      "stderr": "java.sql.SQLException: owned bind failure\n\tat co.nubetech.hiho.mapreduce.lib.db.apache.DBOutputFormat$DBRecordWriter.write(DBOutputFormat.java:118)\n\tat co.nubetech.hiho.mapreduce.lib.db.apache.WriterBoundaryControl.main(WriterBoundaryControl.java:7)\njava.sql.SQLException: owned addBatch failure\n\tat co.nubetech.hiho.mapreduce.lib.db.apache.DBOutputFormat$DBRecordWriter.write(DBOutputFormat.java:119)\n\tat co.nubetech.hiho.mapreduce.lib.db.apache.WriterBoundaryControl.main(WriterBoundaryControl.java:8)\n"
+    }
+  ]
+}
