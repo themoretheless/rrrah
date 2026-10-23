@@ -1,0 +1,44 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "demos/demo1/index.html",
+      "sha256": "f6ab30919af09bf53db5e8ea6570e89d843f468b0c86cb5ae1be28b3612a6c50",
+      "lines": 135,
+      "git_blob_verified": true
+    },
+    {
+      "path": "demos/demo2/index.html",
+      "sha256": "686e8043943fcc6f0432e911d980ac309a7d9e562a90f40741b3eda640ffd97e",
+      "lines": 167,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/templates/test.html",
+      "sha256": "ca83b873b6afe8856dde3e51ac21d55fc05530549c42081bd717eadd18b047a5",
+      "lines": 111,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "javascript_run": false,
+    "browser_run": false,
+    "upload_requests": false
+  },
+  "findings": [
+    "Three demo/testHTMLfileswhole-read/Gitblobverified. No scriptsserved/executed, formsuploaded or remotetesthost contacted.",
+    "Demo1 buttononclick registersnewsubmit handler everyclick; repeatedclicks canaccumulatehandlers andduplicateAJAXrequests. Registrationinsideclick ratherthanonce; runtimeeventflow nottested.",
+    "Demo2 immediatelydisablesuploadbutton andrestoresonlysuccessbranch.500/502 handlers change resulttextbutnotbuttonstate; othererrors lackhandler. Source-only recoverygap.",
+    "Demo2 decision checks topicList XMLexistence then substringcategories, not score/probability/schema validity. MalformedXMLwithnotopicList appearsThankyou by branch logic; no actualDOMParsercontrol executed. No duplicateidentity/probability guarantee.",
+    "Demo2 onclick refers undefinedsendImage while separate jQueryclickhandler exists; exactbrowser eventorder/errorimpact unqualified.",
+    "Integrator testtemplate displaysrawhighestscore andfixedcategoryProbability without calibrationcontext. Previous firstcandidatebug notcorrected; BootstrapJS taguseshrefinsteadofsrc.",
+    "Demos referencepublicCDNdependencies andhardcodedHTTPtesthosts. Thoseexternalassets notdownloaded/reviewed and no network interactionperformed."
+  ],
+  "remaining": [
+    "22 other tracked blobs/assets",
+    "Remainingtemplates/license/IDE/media/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
