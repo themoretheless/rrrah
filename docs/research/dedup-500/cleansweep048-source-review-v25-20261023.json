@@ -1,0 +1,48 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/BaseActivity.kt",
+      "sha256": "06db767318b31517b3c973df7c3e12001258ffa1a6ff7153f1c8d2d36f3cc00b",
+      "lines": 35,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/MainActivity.kt",
+      "sha256": "1d544a773e0cb0aa865a482922a1aa450dfb09925452ba7c7773d607dc864c6b",
+      "lines": 144,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/onboarding/OnboardingViewModel.kt",
+      "sha256": "4c96dabb5cd0c6d383f7fe0ca7a7c39301ea5f5bd0eba22f381cba47324efcc7",
+      "lines": 37,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/util/NavigationUtils.kt",
+      "sha256": "77c8f3714e4933424f2c40c24036577f62b980f0bbcd52058e3599a05a04617d",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/MainApp.kt",
+      "sha256": "29d9177943f4c63c3dba0db63274b4b135c9e743e14fa99383cdc7fe4ec706bb",
+      "lines": 212,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "MainApp rechecks all-files permission on resume, removes lifecycle observer on disposal and gates normal navigation after onboarding. Android10 helper still returns true without grant validation; onboarding legacy handling remains unread.",
+    "MainActivity schedules proactive indexing on every creation before MainApp permission gating. WorkManager KEEP prevents simultaneous unique jobs, but the worker can start before permission has been granted and return failure as previously reviewed.",
+    "Splash waits for preference isReady; readiness requires three preference flows to emit. No timeout/error presentation in this activity, so DataStore failures can leave readiness false; actual failure mode untested.",
+    "OnboardingViewModel merely records completion; permission enforcement must reside in onboarding screen or callers. Permission-required UI catches settings-launch failure and offers closing. No permission or settings action invoked.",
+    "Navigation-mode helper uses bottom inset less than 40dp heuristic. It is presentation logic, not a reliable OS navigation-mode contract; no UI testing claimed."
+  ],
+  "whole_files_read_total": 56,
+  "remaining_tracked_blobs": 74,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
