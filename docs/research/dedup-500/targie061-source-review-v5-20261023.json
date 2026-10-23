@@ -1,0 +1,45 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/QuickPrehasher.swift",
+      "git_blob": "da61e3393d3c01da5a9ce80369e933327c36b0ad",
+      "sha256": "7055feb8e9c0bd02ce7ec30c896c32e7149cc74b82be5111c854e33a6857a062",
+      "bytes": 5568,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Services/PrehashCandidateFinder.swift",
+      "git_blob": "264b74b4e8901760251fde2232f04b99ed1ce6e6",
+      "sha256": "c624317140340eda2ecf2067cbdd2254517ba59dcd801a89e8d3ce6f060c3cb2",
+      "bytes": 2642,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 9,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 112,
+  "control": "targie061-prehash-control-20261023.swift",
+  "runtime_scope": "Whole original QuickPrehasher/PrehashCandidateFinder/MediaModels/SimilarityScoring compiled with AppKit/Foundation. Authored model fixtures and explicitunused thumbnail/localization/downsampler adapters; no image decoding or real thumbnail quality qualification.",
+  "results": {
+    "authored_items": 64,
+    "full_pair_denominator": 2016,
+    "same_candidates_as_independent_bucket_predicate": 85,
+    "indexed_compatibility_checks": 273,
+    "name_fallback_ignores_incompatible_metadata": true,
+    "missing_prehash_skips_name_fallback": true,
+    "duplicate_id_can_generate_self_pair": true
+  },
+  "findings": [
+    "Bucket index agrees with exhaustive authored duration/aspect/mean predicate on64items, preserving unique candidatepairs. Operationcount difference not elapsedtime or corpus recall gain.",
+    "Normalized same-name fallback deliberately rescues pairs despite incompatible duration/aspect/brightness. Candidates still require later content comparison; name is not identity evidence.",
+    "Missingprehash guard skipsitembefore filenamefallback; repeatedsameMediaItem ID canproduce selfpair. Caller uniqueness/completeness assumptions are not validated in primitive; no normal scanner production of these inputs shown.",
+    "Quickprehash uses logarithmic durationbucket, aspectbucket and thumbnailmean; filesize/variance retained but not rejectionrules. Missing/undecodable thumbnail defaultsmean128.",
+    "Claims of not dropping true visual matches require heldout corpus; authoredbucket controls do not verify crops, grading, duration edits, decodefailures or actualvideo recall.",
+    "No cancellation/worklimit in candidatefinder; pathologicalbucket occupancy can remainquadratic. No upstream source adopted."
+  ],
+  "binary_sha256": "0c5370373fa31ee9c8640e46b3ef6b761a6c910044fa2779974f55beb70e3945",
+  "full_review_count": 249
+}
