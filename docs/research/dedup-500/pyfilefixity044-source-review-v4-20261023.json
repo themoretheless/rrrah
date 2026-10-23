@@ -1,0 +1,44 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Custom end-to-end reproduction through original unchanged rfigc.main, with two identical authored .bin files, one scraped copy, generated CSV database and temporary output. Not an upstream test-suite run.",
+  "control": "pyfilefixity044-recovery-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "generation_return": 0,
+    "recovery_return": 0,
+    "expected_original_names": [
+      "first.bin",
+      "second.bin"
+    ],
+    "actual_recovered_names": [
+      "second.bin"
+    ],
+    "single_file_remove_update_return": 0,
+    "actual_remaining_database_names": [
+      "first.bin"
+    ],
+    "unrelated_original_still_exists": true
+  },
+  "conclusion": "Both source-level findings in v2 now reproduced: identical-content original destinations collapse to last row during recovery; single-file remove-update drops unrelated existing-file database rows. Passing custom assertions mean defects reproduced, not correctness certified.",
+  "dependencies_installed_only_in_local_cache": {
+    "tqdm": "4.67.1",
+    "pathlib2": "2.3.7.post1",
+    "sortedcontainers": "2.4.0"
+  },
+  "initial_attempt": {
+    "exit_code": 1,
+    "reason": "Missing sortedcontainers on import; installed pinned dependency locally before successful retry."
+  },
+  "source_sha256": {
+    "pyFileFixity/rfigc.py": "589f5b78b8676776e8e0a384432e4504c8e84c8847fd25f88bc3d074de981efd",
+    "pyFileFixity/lib/aux_funcs.py": "8f19e0f8bb9a76e8544c46983f6f1230245a0168bcbefe3f95181c7b6e20eb3a",
+    "pyFileFixity/lib/tee.py": "9d16d40c2d23063f551611a2cc91f28fc3a95ec5789ed5c4d11e998d8f8cf0ca",
+    "pyFileFixity/lib/_compat.py": "5d9de3026eb20d45f27582f679767c1b6f2ff4b355b1cfbf0b15e45779ec533a"
+  },
+  "user_files_changed": false,
+  "upstream_source_modified": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
