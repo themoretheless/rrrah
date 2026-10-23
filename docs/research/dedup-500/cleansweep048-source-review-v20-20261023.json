@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "app/src/main/java/com/cleansweep/data/repository/PreferencesRepository.kt",
+      "sha256": "cf49ab8e6f977106454bcc031696304439d3febd925a19bd5501665d733d4227",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1,
+          350
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Processed paths, permanent-sorted folders and favorite-folder readers split comma-separated strings without escaping. Paths containing commas cannot roundtrip under that encoding; actual writers remain to inspect.",
+    "Previously selected buckets similarly split commas; if IDs are raw folder paths as used in repository methods, delimiter ambiguity applies. No runtime DataStore control performed.",
+    "folderSelectionModeFlow catches every upstream exception, emits REMEMBER once and ends that collection rather than recovering the live stream. Theme/locale enum parsing has narrower invalid-value fallback. DataStore I/O recovery policy is inconsistent across these readers.",
+    "Remember-processed defaults true; filename hiding defaults false; duplicate-scan keys include scope/include/exclude, similarity level and one-time scan flag. Actual defaults for those later readers still unread.",
+    "Settings refer to paths rather than content/physical identity, so processed-history semantics naturally follow path strings; replacement/rename migration behavior requires remaining methods and callers."
+  ],
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 81,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
