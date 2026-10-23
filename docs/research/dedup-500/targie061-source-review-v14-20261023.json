@@ -1,0 +1,75 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Package.swift",
+      "git_blob": "3e4b35ba650fbb9ad04b4b5eb81f1f34d71de3f6",
+      "sha256": "88b0e14cebdd9bc8a54807acc195d6183e679beebd8c9e321c888206b687cba5",
+      "bytes": 747,
+      "whole_text_read": true
+    },
+    {
+      "path": "Package.resolved",
+      "git_blob": "f3cd81a5f6f54ff3a1db04f32b8e134db2a1b6cf",
+      "sha256": "6ad200330aa76c04b52deffb0f5c315dfcffb649f7dec9b18ee0db686fe2f651",
+      "bytes": 384,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "git_blob": "6b446f8db0ced63d4ae3a71071893eeae037f43b",
+      "sha256": "f46637812161ca9bd4c616bab21327a9fd94a0caaf60e8cfc5af5f65a55590f7",
+      "bytes": 1140,
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "1897164e83389bb747a9de1fd4668f4e7ba01298",
+      "sha256": "c01a0b0808760f5f2a938bac8e1f7446c17a9e4061551325f0eeeb2e549ce3fa",
+      "bytes": 84,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/TestMediaTools.swift",
+      "git_blob": "c796b887f2a345e6be1d31566921c5878d6c4415",
+      "sha256": "829f6f2130cba19e6fbb92b58b1878374d510db02e8b13d60feeb2d5d24ab57e",
+      "bytes": 1813,
+      "whole_text_read": true
+    },
+    {
+      "path": "script/build_app.sh",
+      "git_blob": "a03478774433a0ac67fb623a5491850b1f4b3205",
+      "sha256": "d19f9c79da6ddf4a9953957877b8513dc3c69ed9a5f01a75bcda7edab76fcb7c",
+      "bytes": 4269,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 30,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 91,
+  "full_review_count": 249,
+  "full_package_capture": {
+    "files": 98,
+    "bytes": 999596,
+    "scope": "All original Sources/Tests Swift files plus Package.swift/Package.resolved, individually Git-blob verified. Capture is not manual review. No assets downloaded, no app launch."
+  },
+  "pending_runtime": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter ImageScannerTests",
+    "session_id": 91684,
+    "status": "running-fetching-GRDB",
+    "latest_log": "Fetching https://github.com/groue/GRDB.swift; [1/114085] Fetching grdb.swift",
+    "result_not_yet_available": true,
+    "log": ".dedup-work/targie061-20261023/full-scanner-tests.log",
+    "resume": "Poll existing session91684; do not restart solely because output unchanged. Full original package, no minimal interface adapters."
+  },
+  "findings": [
+    "Swift tools6.0, macOS14 minimum, executable target and tests depend on real GRDB. Lock pins GRDB7.11.1 commitb83108d10f42680d78f23fe4d4d80fc88dab3212; version constraint alone is from7.0.0.",
+    "CI runs only main pushes in captured workflow, macos-latest,30minute timeout. It ensures FFmpeg then runs swift test and app build/signature verification. Workflow source is not evidence of successful hosted run.",
+    "TestMediaTools searches PATH/Homebrew locations; missing FFmpeg fails when CI=true, otherwise XCTSkip. Future test summaries must distinguish skips.",
+    "Build script supports host/universal release builds, procedural icon, plist and ad-hoc signature verification; read only, not executed. Shell script modifies its HOME locally and removes app output; these are source observations, not instructions adopted.",
+    "Full scanner tests are now launched against full pinned original package to remove prior adapter limitations. Live fetch is not passing test evidence. Existing narrower results remain scoped.",
+    "No production library change or optimization measurement in this step."
+  ]
+}
