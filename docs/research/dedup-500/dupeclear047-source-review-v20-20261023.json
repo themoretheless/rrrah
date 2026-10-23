@@ -1,0 +1,31 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/Views/MainView.axaml",
+      "sha256": "c12758ae41a868b8fce335a172304ccee53d599f668ab77ce5ed9e3983d95107",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1,
+          430
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "Ctrl+F5 invokes SearchCommand; directory-list Space toggles inclusion and Delete removes roots through previously reviewed busy-guarded commands. Drag/drop remains separate unguarded input.",
+    "SameContents checkbox is enabled only when not busy and SameSize is checked, confirming intended UI coupling. Filename-pattern editor likewise requires SameFileName and not busy.",
+    "Directory template reads FolderIcon in visibility bindings and image source separately. Since the getter can invoke native icon lookup, repeated binding evaluation can call the service multiple times; Windows service cache mitigates it, Linux returns null. No performance measurement claimed.",
+    "Design.DataContext instantiates the full MainViewModel, whose reviewed constructor reads preferences and may start update checking. Actual designer construction/external activity was not run.",
+    "Theme, close and update commands are exposed in title menus. No menu invoked and no system setting changed."
+  ],
+  "whole_files_read_total": 79,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
