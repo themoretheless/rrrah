@@ -1,0 +1,25 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "source_control": "docs/research/dedup-500/dupeclear047-jpeg-control-20261023.cs",
+  "runtime": {
+    "command": "dotnet run --project .dedup-work/dupeclear047-20261023/jpeg-control/Control.csproj --configuration Release",
+    "target_framework": "net8.0",
+    "exit_code": 0,
+    "checks_passed": 5,
+    "original_JpegPatcher_sha256": "3896e439cb69594490f006cc3f400a2e66401d582b7bd4d10dd11fcf16a66614",
+    "upstream_source_unchanged": true,
+    "full_application_run": false,
+    "decoded_jpeg_images": false
+  },
+  "findings": [
+    "Original C# JpegPatcher executed with synthetic marker streams. Distinct leading APP2 payloads collapse to identical output; leading APP2 and APP14 are removed completely.",
+    "APP2 after a COM segment is retained, confirming ordering-dependent normalization. No-APP SOI/EOI control remains unchanged.",
+    "These tests qualify byte-stream transformation behavior only. They do not establish decoder acceptance, color-managed pixel effects, application UI defaults or end-to-end duplicate results."
+  ],
+  "whole_files_read_total": 10,
+  "remaining_tracked_blobs": 82,
+  "full_review_count": 249
+}
