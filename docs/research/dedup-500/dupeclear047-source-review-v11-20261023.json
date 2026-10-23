@@ -1,0 +1,72 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/ViewModels/MainViewModel.cs",
+      "sha256": "34c43f021c1b2ea3334c49a5b0fb4770e47ceec2acc3efc029b0f5cfd7952722",
+      "lines": 3350,
+      "git_blob_verified": true,
+      "cumulative_read_line_ranges": [
+        [
+          1230,
+          1430
+        ],
+        [
+          1850,
+          2025
+        ],
+        [
+          2745,
+          2860
+        ],
+        [
+          3274,
+          3355
+        ],
+        [
+          1,
+          875
+        ],
+        [
+          876,
+          1229
+        ],
+        [
+          1431,
+          1605
+        ],
+        [
+          1606,
+          1849
+        ],
+        [
+          2861,
+          3120
+        ],
+        [
+          2026,
+          2744
+        ],
+        [
+          3121,
+          3273
+        ]
+      ]
+    }
+  ],
+  "findings": [
+    "MainViewModel now whole-read cumulatively: all 3350 lines covered across v7-v11.",
+    "OpenAsync accepts a selection when any member is not deleted, then launches every selected member without filtering deleted members again. No application launch executed.",
+    "DelistAsync removes selected result records and renumbers groups but does not call UnmarkOrphanedFiles; directory delisting does call it. Removing an unmarked keeper can therefore leave only marked existing members in a remaining group until refresh or another cleanup; deletion confirmation still warns for fully marked groups.",
+    "RefreshAsync does invoke both UnmarkOrphanedFiles and UnlockDeletedGroups, correcting orphan marks after an explicit refresh; it still does not recompare content.",
+    "CloseAsync requests cancellation but does not await the running operation before saving preferences and raising Closed. Process-shutdown and worker completion behavior remains unqualified.",
+    "FindWithinSearchResults has finally-based busy reset, unlike several previously reviewed commands. Its token is checked while publishing results, not during initial name filtering.",
+    "Update download path uses finally to clear busy state. Its external AppUpdater implementation remains opaque; no update request, download or installer execution performed."
+  ],
+  "whole_files_read_total": 50,
+  "remaining_tracked_blobs": 42,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
