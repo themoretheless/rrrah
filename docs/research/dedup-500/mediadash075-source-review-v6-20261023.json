@@ -1,0 +1,394 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/DuplicateConfidenceTests.cs",
+      "local": "13-DuplicateConfidenceTests.cs",
+      "git_blob": "118610d18c9d3e6cb92c8e3eada3dbaaa9f080d6",
+      "sha256": "6931fd2eca5c4200674da0163c126ac44d20d3904191a2c49fc359a4207b8f4b",
+      "bytes": 6633,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/DuplicateRankingTests.cs",
+      "local": "14-DuplicateRankingTests.cs",
+      "git_blob": "1c019ba53a4e17bf21c96fb4ed56089ef10ab405",
+      "sha256": "90652a1d54be789de3eb8e165069d4a1e2133340a9ecb22ba64d94c8f72593ae",
+      "bytes": 15295,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 14,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 569,
+  "original_tests_passed_total": 98,
+  "new_original_tests_passed": 71,
+  "additional_owned_tests_passed_total": 5,
+  "additional_owned_tests_passed_here": 3,
+  "reports": [
+    {
+      "report": "docs/research/dedup-500/evidence/crackruckles--MediaDash/native-confidence-ranking-original-20261023.trx",
+      "sha256": "cd35ab7458acd9138803c2be94fc9a96029f57b9658e3326418b3d2d2bb83a53",
+      "original_authored_tests": true,
+      "counters": {
+        "total": "71",
+        "executed": "71",
+        "passed": "71",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "tests": [
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.SmallerFileWinsFinalTiebreak",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFolders_ReturnTrue(path: \"/mnt/media/tv/Series/theme-music/opening.mp3\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie.2020.-.Behind.The.Scenes.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Book_UsesIsbn_WhenPresent",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateConfidenceTests.IdentifiedTier_SimilarFilenames_ScoresBaseNinety",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.HigherBitrateBreaksCodecTie",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"folder.jpg\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie-trailer.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Book_DifferentFilesWithSameTitleDoNotGroup",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"logo.png\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFolders_ReturnTrue(path: \"/mnt/media/movies/Show/deleted scenes/dropped.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"theme-1.mp3\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Audio_ReturnsNullWhenTitleMissing",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"theme-2.mp3\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"theme.mp3\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.PreferredCodecBreaksResolutionTie",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_RegularLibraryFiles_ReturnFalse(path: \"C:\\\\media\\\\Movie.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.SameNameYearAndNormalizedFilenameGroupTogether",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"Movie -Directors Cut.mkv\", b: \"Movie -Extended.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFolders_ReturnTrue(path: \"/mnt/media/movies/Show/trailers/final.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_RegularLibraryFiles_ReturnFalse(path: \"/mnt/media/movies/Movie (2020).mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"Show S01E01 - Pilot.mkv\", b: \"Show S01E01 - Pilot [PROPER].mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_EssentiallyIdenticalFilenames_YieldSameKey(a: \"Movie.mkv\", b: \"Movie.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.CustomPolicyOrderIsRespected",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GenericNamesWithoutYearOrProviderIdsNeverGroup",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"backdrop.jpg\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"poster.jpg\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"Movie.2020.2160p.BluRay.x265.HDR.mkv\", b: \"Movie.2020.1080p.WEB-DL.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie_-_Behind_The_Scenes.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.SameProviderIdGroupsRegardlessOfName",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie - Interview.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.UnknownCodecRanksLast",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"banner.png\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Audio_ReturnsNullWhenRuntimeMissing",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Audio_FallsBackToArtistAlbumTitleDurationAndFilename",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie-behindthescenes.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie-featurette.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_EssentiallyIdenticalFilenames_YieldSameKey(a: \"Movie.mkv\", b: \"Movie.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateConfidenceTests.ByteIdentical_ScoresOneAndOverridesEverything",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Crank High Voltage (2009) - Behind the scenes.m2ts\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateConfidenceTests.RuntimeVeto_LargeDelta_VetoesPair",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_ExplicitEditionMarkerWinsAndIsPrefixed",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Audio_UsesMusicBrainzTrackId_WhenPresent",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_RegularLibraryFiles_ReturnFalse(path: \"/mnt/media/tv/Show/Season 01/Show S01E01.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.HigherResolutionWins",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateConfidenceTests.FuturamaSpecials_DifferentTitles_AreVetoedAtHeuristicTier",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"themevideo.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.DifferentFilenamesUnderSameFolderDerivedNameDoNotGroup",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"Movie -1080p.mkv\", b: \"Movie -4K.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_EssentiallyIdenticalFilenames_YieldSameKey(a: \"Movie.mkv\", b: \"movie.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie - Featurette.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie (2020) - Deleted Scenes.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFolders_ReturnTrue(path: \"/mnt/media/movies/Show/behind the scenes/making of\"\u00b7\u00b7\u00b7)",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateConfidenceTests.HeuristicTier_SameDirDistinctStems_AppliesMinusPointTwentyFive",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_WindowsPathOnWindows_HandlesSeparator",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Book_FallbackIncludesFilename",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"Movie -DDP5.1.mkv\", b: \"Movie -AAC.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.LosersAreEveryoneButTheKeeper",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Audio_DifferentFilenamesDoNotGroup",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFolders_ReturnTrue(path: \"/mnt/media/movies/Show/extras/short.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"Movie -finalcut.mkv\", b: \"Movie.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie - Deleted Scene.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateConfidenceTests.HeuristicTier_HighJaccard_AddsFifteenBoost",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_DifferentFilenames_YieldDifferentKeys(a: \"StarWarsCloneWars2003 - Connecting the Dots.mkv\", b: \"StarWarsCloneWars2003 - Bridging the Saga.mkv\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetGroupKey_Book_ReturnsNullWhenNameMissing",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Theme.MP3\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"Movie - Trailer.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFolders_ReturnTrue(path: \"/mnt/media/movies/Show/featurettes/commentary.mp4\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"clearart.png\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.IsSidecarPath_KnownSidecarFilenames_ReturnTrue(filename: \"theme.flac\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateRankingTests.GetEdition_EssentiallyIdenticalFilenames_YieldSameKey(a: \"Movie (2020).mkv\", b: \"Movie.2020.mkv\")",
+          "outcome": "Passed"
+        }
+      ]
+    },
+    {
+      "report": "docs/research/dedup-500/evidence/crackruckles--MediaDash/native-scoring-controls-20261023.trx",
+      "sha256": "57bc29e30fa81efaf14f72f7e8c928cb67e5a87eeec66c833e4f6dd9991f1397",
+      "original_authored_tests": false,
+      "counters": {
+        "total": "3",
+        "executed": "3",
+        "passed": "3",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "tests": [
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.RrrahDuplicateScoringControls.ActualMovieRuntimeReachesTheScorePairVeto",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.RrrahDuplicateScoringControls.CyrillicOnlyNamesLeaveTitleSignalUnavailable",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.RrrahDuplicateScoringControls.DifferentReleaseGroupsCanVetoTheSameTitle",
+          "outcome": "Passed"
+        }
+      ]
+    }
+  ],
+  "environment": "Original net9.0 test project, SDK11 preview as v5; actual original assembly/Jellyfin Movie objects, no scorer stubs. No Jellyfin server or full asynchronous scanner/fixer execution.",
+  "harness": {
+    "path": "docs/research/dedup-500/mediadash075-scoring-controls-20261023.cs",
+    "sha256": "36148a9c997c7252316a4df86de14b0743200dad378a366dd4fa1e8c92e13e74"
+  },
+  "original_tracked_integrity_after_tests": {
+    "blobs": 583,
+    "mismatches": 0
+  },
+  "findings": [
+    "Whole DuplicateConfidenceTests and DuplicateRankingTests read. 71 original cases pass, cumulative98distinctoriginal targeted cases, no failures/skips. Original bodies unchanged.",
+    "Original RuntimeVeto_LargeDelta_VetoesPair checks primitive delta then ScorePair with Item=null, so it does not execute runtime-veto branch. Added actual Movie objects with6000/10000ticks confirm original ScorePair veto reason runtimeDeltaExceedsThreshold. This closes a review evidence gap, not an upstream bug fix.",
+    "Added native same-title/different release-group score control confirms 1/3 Jaccard triggers title veto under explicitly supplied0.40 policy even at Identified tier. Not all-same-title failure claim and not an end-to-end scanner test.",
+    "Added native Cyrillic-only filename control confirms unavailable/null title signal and Identified base0.90 with no runtime evidence. This is pure helper behavior for supplied tier, not a proof that complete scanner admits the pair.",
+    "No title/provider confidence thresholds copied into rrrah. Exact byte equality and pixel analysis stay independent of filename meaning. Current broad rrrah decode gate still compiling; no new library pass claimed."
+  ]
+}

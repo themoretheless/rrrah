@@ -2,7 +2,7 @@
   "index": 75,
   "repository": "crackruckles/MediaDash",
   "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
-  "review_scope": "12/583 pinned blobs whole text through v5. 27 distinct original net9 test cases passed; 2 added real SQLite counterexample tests passed. SDK11 preview, no Jellyfin server/UI/full suite or whole-repo qualification.",
+  "review_scope": "14/583 pinned blobs whole text through v6. 98 original targeted net9 cases passed; 5 owned actual-plugin/SQLite/scorer controls passed. SDK11 preview; whole repository, asynchronous scanner, server/UI and fixer runtime remain unqualified.",
   "decision": "reference",
   "finding": "Metadata-gated duplicate scanner. Original actual FileHasher plus SQLite reproduces restored-metadata stale digest and cancelled warm-cache return; 27 original targeted cases passed.",
   "license_metadata": "GPL-3.0",
@@ -104,6 +104,10 @@
     },
     {
       "audit": "docs/research/dedup-500/mediadash075-source-review-v5-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediadash075-source-review-v6-20261023.json",
       "whole_repo_complete": false
     }
   ]
