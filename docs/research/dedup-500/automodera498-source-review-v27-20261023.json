@@ -1,0 +1,33 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/web/gui/ArchiveWebController.java",
+      "sha256": "edc2d52c050833428343341a5294327a14be3df9ea445245548568e1864d5829",
+      "lines": 460,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "browser_run": false,
+    "filesystem_walk": false,
+    "publish_actions": false
+  },
+  "findings": [
+    "ArchiveGUIcontrollerwhole-read/Gitblobverified. postPublish setsforceRecalc=true, collectionID=localNodeID+path; prior collectionservice appends newImage ratherthanreplace. Repeatpublish path therefore reaches knownappendconcern, no runtime/JPA resultclaimed.",
+    "getPublish walks recursiveinput tree and groups files bycurrentdirectory variable ratherthan eachfileparent, so nestedwalkorder can misattribute fileswhen traversal returnsfromchild. Preview counts allregularfiles, while actualhashservice scans onelevel andacceptsonlyjpg/jpeg/pngsuffix. UIinventory and processedfiles differ.",
+    "Size counter uses eachfile.length/1000000 integerbefore summation, losing subMBfiles, but recordfield namedsizekB whilelabelsMB. No byteaccurate accounting.",
+    "Files.walk collects entirepathlist before loop; unbounded sourcefolderinventorymemory not benchmarked. Emptyinput may addDir withnulldirectory.",
+    "Collectionbulk edit sequentially enables/disables/deletes separately, thenredirects; no all-or-nothing/partialstatus in controller. No actioninvoked.",
+    "Collection route usesarchive/collection concatenatedID, consistentwith publishID for slash-prefixedpath but inconsistent with simpleIDlinks in commonnode. Nestedpaths containingmultiple slashsegments need routeencodingqualification.",
+    "Network test branch again overwritesfailedconfigurationstatus withTestconnection. Setupreturnredirectemptystring resolution untested."
+  ],
+  "remaining": [
+    "31 other tracked blobs/assets",
+    "OperatorGUIcontroller, remainingtemplates/demos/license/IDE/media/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
