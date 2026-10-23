@@ -1,0 +1,91 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v27-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/ExportDelimitedToDB.java",
+      "local": "147-ExportDelimitedToDB.java",
+      "git_blob": "107b7edcfd7df95dc9cdbe2008a592c5aa8b30fa",
+      "sha256": "ebae72f2abd5c1050b0636ae760dd30a273c954a36bf26e32d9d90f2c75e2bd9",
+      "lines": 66,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/ExportToDB.java",
+      "local": "148-ExportToDB.java",
+      "git_blob": "2c862c3bb2c79cbb0cb0c4669a72c26e4c19d09b",
+      "sha256": "0ca0cc37211c3eb288de0d879ac2c1a91942cdc83ed9cd0c792f7d2c34b98ece",
+      "lines": 139,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/ExportToFTPServer.java",
+      "local": "149-ExportToFTPServer.java",
+      "git_blob": "e3c9d9e943f973c080df5989ad7ceb83ad13163d",
+      "sha256": "ce4e23fb971e6f89f5d2e48133de2db3d4aed265dfa7793384a5a45f91484e0f",
+      "lines": 135,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/ExportToMySQLDB.java",
+      "local": "150-ExportToMySQLDB.java",
+      "git_blob": "a3c40e7ccf1bfb29e1d4a94270b3d7d9d2224f97",
+      "sha256": "44e02e80f419f9b06f01c4d5726c9597a9b372e20e8cf98c2f83d0a94e6215a0",
+      "lines": 130,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/TestExportToDB.java",
+      "local": "151-TestExportToDB.java",
+      "git_blob": "af9232d9cb1847250e6edbaeae93cc632fc9a51f",
+      "sha256": "c43d4c01d81b2550c22fa8e9fe9aabaa0acce79c3863f1c47ee17da28ad0d913",
+      "lines": 331,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/TestExportToFTPServer.java",
+      "local": "152-TestExportToFTPServer.java",
+      "git_blob": "a955a42661a7177dcde3ba24349ba42fd525f07e",
+      "sha256": "4659fe5afa593d1874c5a866e0008cd1389544f27c8ee85730d8441eec60db96",
+      "lines": 157,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/TestExportToMySQLDB.java",
+      "local": "153-TestExportToMySQLDB.java",
+      "git_blob": "54306f74b830c39e96181273a5021c4c0718137f",
+      "sha256": "690d514df3bd2765ee158fc31d1726874847cbb0ba98e3c796eb22ace47e7aec",
+      "lines": 194,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 147,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 154,
+  "remaining_without_whole_review": 16,
+  "original_tests_cumulative": {
+    "total": 87,
+    "passed": 84,
+    "failed": 3,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 0,
+    "cumulative": 118,
+    "scope": "Source review only this increment; no new executed controls."
+  },
+  "source_only_findings": [
+    "All four export run methods initialize ret=0 and catch/print waitForCompletion exceptions without changing ret; source-only risk, no failed export job executed.",
+    "ExportToDB calls GenericDBOutputFormat.setOutput before job wait; this setup can open JDBC. Configuration methods alone do not prove an export.",
+    "FTP job uses TokenCounterMapper and IntSumReducer, exporting computed word counts; not an identity-preserving file copy contract.",
+    "All three test classes inherit cluster-backed HihoTestCase; no methods executed this increment. FTP integration method is commented out.",
+    "TestExportToDB valid-value and null-entry integration methods catch Exception around database verification and cleanup; JDBC exceptions can bypass those checks. AssertionError is not caught by Exception.",
+    "MySQL integration tests require a pre-existing employee table, read its rows without ORDER BY, and delete rows afterward; no external service contacted."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
