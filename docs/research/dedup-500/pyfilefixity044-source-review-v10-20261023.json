@@ -1,0 +1,37 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "filetamper.py whole file read, pinned Git blob verified. Original main invoked for one temporary authored file with probability zero; fails before any byte change.",
+  "source_sha256": "200213041806e6509071ad7a528fd310f1d6b9e22bf1b0c6e940f5012e228b4e",
+  "result": {
+    "exception": "TypeError",
+    "message": "tamper_file() got an unexpected keyword argument 'silent'",
+    "fixture_unchanged": true
+  },
+  "findings": [
+    {
+      "id": "single-file-cli-signature",
+      "detail": "main passes silent keyword to tamper_file, whose signature has no such parameter. Original single-file CLI fails with TypeError before changing the fixture. Directory wrapper removes silent before calling tamper_file, so this finding is specific to single-file CLI."
+    },
+    {
+      "id": "zero-block-probability",
+      "detail": "not block_proba treats explicit 0 as disabled block filtering, equivalent to processing all blocks instead of selecting none. Static finding, no mutation reproduction run."
+    },
+    {
+      "id": "mutation-count-not-difference",
+      "detail": "tamper_count counts selected positions, not bytes actually changed. Erasing existing zeros and random noise equal to original count as tampering; reported rate is selection rate, not measured corruption rate."
+    },
+    {
+      "id": "boundary-validation",
+      "detail": "proba>=1 normalizes by total file size, causing division by zero on empty files; CLI accepts unbounded floats and arbitrary mode strings. Burst remaining resets per block, truncating bursts at block boundaries. These are source-level findings."
+    },
+    {
+      "id": "default-string-type",
+      "detail": "tamper_file_at defaults replacement to Python str null, then writes to binary handle. TypeError is not caught by its IOError handler. Not executed."
+    }
+  ],
+  "relation_to_goal": "Useful for designing corruption fixtures and interpreting test metrics; not a duplicate-detection algorithm. No production code copied.",
+  "upstream_test_suite_run": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
