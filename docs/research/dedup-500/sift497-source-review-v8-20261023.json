@@ -1,0 +1,65 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/cluster/hdbscan.cpp",
+      "sha256": "836318a340e57ccc0999faa20e6cb7cfff8ec1e6c49bcd207f083939b1131764",
+      "lines": 479,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/io/scanner.cpp",
+      "sha256": "b036b0e20f837e4131137f54749b03c88b161c57d38ebf944520d0d19996b686",
+      "lines": 49,
+      "git_blob_verified": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "ed1c4bea3da116023efd71a17a99529cc1ffed6ec3b9349c0aa4a1ec815c3d22",
+      "lines": 226,
+      "git_blob_verified": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "ab0fe91f844ef5b0b7b7acde97cd7be41c197a5fad7a6266c3548f8d1e02ae65",
+      "lines": 21,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-hdbscan-control-20261023.cpp",
+  "runtime": {
+    "exit_code": 0,
+    "thread_parity_cases": 120,
+    "threads": [
+      1,
+      4
+    ],
+    "matrix_sizes": [
+      8,
+      32
+    ],
+    "minimum_cluster_sizes": [
+      2,
+      3,
+      5
+    ],
+    "finite_bounded_confidence": true,
+    "all_identical_n8_group_count": 0
+  },
+  "findings": [
+    "Original HDBSCAN module compiled unchanged with original distance/group/thread helpers. Forty deterministic Hamming matrices including identical hashes and separated equal-hash populations times three minimum sizes: 120 thread parity checks. This is not an independent HDBSCAN correctness oracle.",
+    "All-identical eight-point population yields no selected group because the root is excluded. Density-cluster noise does not imply absence of duplicates.",
+    "Empty matrix reaches min_edge[0]; singleton core-distance row indexes -1. Source-only findings; invalid-memory scenarios not executed. Caller guards must be considered before claiming CLI reachability.",
+    "Full mutual-reachability matrix and explicit hierarchy member lists incur quadratic storage; core distances sort every row. No large-scale memory benchmark performed.",
+    "Zero distances use maximum finite double for lambda; stability sums can overflow. Tested membership confidence finite; internal stability finiteness is not established.",
+    "Scanner accepts six image and nine video extensions, lowercases suffixes, uses throwing recursive_directory_iterator without local error handling; no content sniffing or traversal sorting here.",
+    "README threshold language does not explain transitive components; size range 2-32 differs from CLI guard 2-1024 already inspected. Performance and quality claims are not benchmarks. MIT root license read; dependency licenses remain separate."
+  ],
+  "remaining": [
+    "79 other tracked blobs/assets and dependencies",
+    "Full CLI, projection, video and independent clustering oracle qualification"
+  ],
+  "full_review_count": 248
+}
