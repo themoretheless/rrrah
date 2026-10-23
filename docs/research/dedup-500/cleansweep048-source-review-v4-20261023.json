@@ -1,0 +1,56 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "source_control": "docs/research/dedup-500/cleansweep048-bucket-control-20261023.py",
+  "control_scope": "Independent Python mathematical oracle for the source rule, not original Kotlin execution. No kotlinc found in current PATH; Android runtime not run.",
+  "result": {
+    "counterexample": {
+      "hash_a": "0000000000000000",
+      "hash_b": "8000000000000000",
+      "occupied_prefixes": [
+        "00",
+        "01",
+        "02",
+        "80"
+      ],
+      "hamming_distance": 1,
+      "bucket_index_gap": 3
+    },
+    "all_prefix_pairs": {
+      "2": {
+        "qualifying_pairs": 4608,
+        "omitted_by_neighbor_rule": 4416
+      },
+      "3": {
+        "qualifying_pairs": 11776,
+        "omitted_by_neighbor_rule": 11552
+      },
+      "4": {
+        "qualifying_pairs": 20736,
+        "omitted_by_neighbor_rule": 20496
+      },
+      "5": {
+        "qualifying_pairs": 27904,
+        "omitted_by_neighbor_rule": 27656
+      },
+      "7": {
+        "qualifying_pairs": 32512,
+        "omitted_by_neighbor_rule": 32258
+      },
+      "8": {
+        "qualifying_pairs": 32640,
+        "omitted_by_neighbor_rule": 32385
+      }
+    }
+  },
+  "findings": [
+    "The one-bit pair 0000000000000000 / 8000000000000000 is not compared when prefixes 00,01,02,80 are occupied: positions differ by three and search considers only adjacent occupied positions. This proves candidate-rule incompleteness independently of image decoding.",
+    "Exhaustive unordered pairs of all 256 occupied first-byte buckets, with remaining 56 bits identical, show omitted eligible pairs at every configured image/video threshold. These counts concern synthetic hash pairs, not measured real-world image recall.",
+    "A candidate pair omitted by this rule could still share a final group through another anchor or group-ID merging; the counterexample proves missing direct comparisons, not universal final-group separation."
+  ],
+  "whole_files_read_total": 10,
+  "remaining_tracked_blobs": 120,
+  "full_review_count": 249
+}
