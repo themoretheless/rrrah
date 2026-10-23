@@ -1,0 +1,65 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/Models/UserData.cs",
+      "sha256": "d9a986a6410d859d58ae1191b58b092909ae669e538a905425b23402028838da",
+      "lines": 69,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Serializable/SerializableDuplicateFile.cs",
+      "sha256": "9ec6358c8377ff49e6622a58007e3ea91334a8e49cfdf94cdee461a8f41d9f31",
+      "lines": 28,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Serializable/SerializableDuplicateFileList.cs",
+      "sha256": "bd9e8b1ec2bba48e1a4c89a693c6b51d508d903c0f985db51fb495377aa5add9",
+      "lines": 12,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Serializable/SerializableSearchDirectory.cs",
+      "sha256": "4bad3ad60ae82cf7dc8ce547d6849d4436d77120f54e96011950d13546663b0a",
+      "lines": 10,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native/IFileService.cs",
+      "sha256": "85d21055715f850edddc2c9cfa81af7a7618d13d99e0e60b29552082085c5053",
+      "lines": 32,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Linux/FileService.cs",
+      "sha256": "2eba2e6dd88de9d669dd9b46cdb0476353027f7aebbb1865c66b9439f080be29",
+      "lines": 129,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/FileService.cs",
+      "sha256": "b6fbb6639e179cafb611544799c24288893641b2a147c0bc07be3c1d72ca6d38",
+      "lines": 170,
+      "git_blob_verified": true
+    }
+  ],
+  "upstream_runtime_run": false,
+  "findings": [
+    "UserData defaults SameContents and SameSize to true, across-directories true, hidden/system exclusion true. Thus JPEG transformation is paired by default with original encoded-size equality, narrowing which differing metadata files can match; equal-length differing leading APP payloads still satisfy this size gate. UI mapping remains unread.",
+    "Serialized duplicate-file records contain path, group, marks, locks and metadata but no content digest, physical identity, recipe version or observation stamp. Actual save/load mapping and validation remain unread.",
+    "IFileService.MoveToRecycleBin returns bool, but reviewed FinderService.DeleteFilesAsync ignores it. Both platform implementations here return true after a nonthrowing call; Windows requests UICancelOption.DoNothing, so cancellation outcome needs runtime verification.",
+    "Linux trash uses hardcoded ~/.local/share/Trash, ignoring XDG_DATA_HOME and external-volume trash selection. Collision checks examine only files, not existing .trashinfo; WriteAllText can overwrite orphan metadata. Metadata is written before File.Move, with no cleanup if the move fails. No trash operation executed.",
+    "Windows icon cache keys executable files by basename rather than full path, so two different executables with the same name can reuse an icon. Folder/extension caches have no bound or explicit invalidation/disposal in this class.",
+    "Linux previews decode a bitmap directly from file, without a size limit visible here. Windows previews use a fixed 256-pixel request but underlying extraction and image disposal remain to inspect."
+  ],
+  "whole_files_read_total": 17,
+  "remaining_tracked_blobs": 75,
+  "full_review_count": 249,
+  "limitations": [
+    "Source review only for platform operations; no launch, trash, desktop integration or preview executed",
+    "No code adopted"
+  ]
+}
