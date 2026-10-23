@@ -1,0 +1,41 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Three additional vendored modules read whole/pin verified/syntax parsed. Only _meliaejson imported directly; no GUI/coldshot dependencies loaded.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/_meliaejson.py",
+      "sha256": "74b0d871201ec71fdb1ae5402894f61967f6b4d06bbeeeeb73c9c0ab96aa5035",
+      "syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/pstatsadapter.py",
+      "sha256": "9fb0c1e8295c3bf498a0f7e9aedcae573ea93dd8418d40af1fb8981df773b3d7",
+      "syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/coldshotadapter.py",
+      "sha256": "9d9c4cb8d85e78d5bfc14066e495386e5e366ea3ac898383127fb7690fd47963",
+      "syntax": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 88,
+    "remaining_not_whole_reviewed": 56
+  },
+  "import_control": {
+    "import": "FAIL",
+    "exception": "AssertionError",
+    "python3": true
+  },
+  "findings": [
+    "_meliaejson fails during Python3 module import with AssertionError. Later string handling also uses str.decode/unichr, requiring Python2 semantics.",
+    "Custom meliae parser documents restricted flat format; regex finditer does not enforce complete consumption between/after attributes. It must not be used as a general strict JSON validator. No parse calls executed because import failed.",
+    "PStats adapter reports cumulative time/parent shares, not wall-clock frame timing. Parent/child attribution comes from loader semantics yet to review.",
+    "Coldshot FunctionLineWrapper.key reuses function key for every source line, so distinct lines can collide in consumers keyed by node identity. Static finding.",
+    "ModuleAdapter defines label twice, second overrides first; earlier group-specific formatting is unreachable. Syntax success does not establish displayed report behavior."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
