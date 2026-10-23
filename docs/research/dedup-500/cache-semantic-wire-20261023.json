@@ -1,0 +1,31 @@
+{
+  "scope": "Fingerprint-cache wire semantic validation independent of checksum failure",
+  "production_change": false,
+  "tests_added": [
+    "checksummed_wire_rejects_invalid_statistics_and_duplicate_keys",
+    "every_cache_truncation_is_unexpected_eof_and_complete_stream_retries"
+  ],
+  "verification": {
+    "cargo_command": "cargo +1.98.1 test -p rrrah-dedup --test cache",
+    "passed": 17,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 0,
+    "invalid_nonfinite_statistic_cases": 20,
+    "negative_stddev_cases": 2,
+    "duplicate_keys_with_valid_checksum_rejected": true,
+    "finite_signed_hdr_extreme_values_preserved": true,
+    "truncated_prefixes_rejected_as_unexpected_eof": 408,
+    "healthy_full_stream_preserved": true
+  },
+  "method": "Mutate known v1 little-endian wire offsets and recompute BLAKE3 checksum, so invalid statistics and duplicate keys cannot be rejected merely for checksum mismatch. Also cover every proper prefix of valid408byte cache.",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/cache.rs": "44323b1ea2e55f4a7b16074248aa8e3a23b984bf437ab9e6e0aa81c08247ad9d",
+    "crates/rrrah-dedup/src/cache.rs": "aa9e54f0dfe6a6f62ec7374f391f0d1c6516c5da430d257592ecffb222ecf601"
+  },
+  "limits": [
+    "Finite authored cache cases, not every serialization/platform or universal goal proof.",
+    "No optimization gain or new production fix claimed; existing validation behavior confirmed.",
+    "Full500source reviews and broader correctness/quality requirements remain open."
+  ]
+}

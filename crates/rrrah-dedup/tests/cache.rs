@@ -733,3 +733,123 @@ fn interrupted_writes_retry_or_cancel_at_every_wire_byte() {
         assert_eq!(writer.bytes, expected[..at], "partial stream at {at}");
     }
 }
+
+#[test]
+fn checksummed_wire_rejects_invalid_statistics_and_duplicate_keys() {
+    use rrrah_dedup::cache::CacheError;
+    let key = CacheKey {
+        content: [1; 32],
+        recipe: [2; 32],
+        frame_index: 3,
+    };
+    let fp = Fingerprint {
+        variants: [[7; 4]; 8],
+        mean_linear_rgb: [0.; 3],
+        luminance_stddev: 0.,
+    };
+    let mut cache = FingerprintCache::default();
+    cache.insert(key, fp.clone(), 1).unwrap();
+    let mut encoded = Vec::new();
+    cache.write(&mut encoded, || false).unwrap();
+    // v1 wire contract: 16-byte header, 72-byte key, 256 hash bytes,
+    // four little-endian f64 statistics, then 32-byte BLAKE3 checksum.
+    assert_eq!(encoded.len(), 408);
+    fn reseal(bytes: &mut [u8]) {
+        let end = bytes.len() - 32;
+        let checksum = blake3::hash(&bytes[..end]);
+        bytes[end..].copy_from_slice(checksum.as_bytes());
+    }
+    for channel in 0..4 {
+        for bits in [
+            0x7ff0_0000_0000_0000_u64, // +infinity
+            0xfff0_0000_0000_0000,     // -infinity
+            0x7ff8_0000_0000_0001,     // quiet NaN with payload
+            0x7ff0_0000_0000_0001,     // signaling NaN
+            0xfff8_0000_0000_0001,     // negative NaN
+        ] {
+            let mut bytes = encoded.clone();
+            let offset = 344 + channel * 8;
+            bytes[offset..offset + 8].copy_from_slice(&bits.to_le_bytes());
+            reseal(&mut bytes);
+            assert!(
+                matches!(
+                    FingerprintCache::read(bytes.as_slice(), 1, || false),
+                    Err(CacheError::Invalid)
+                ),
+                "channel {channel}, bits {bits:x}"
+            );
+        }
+    }
+    for value in [-1.0_f64, -f64::from_bits(1)] {
+        let mut bytes = encoded.clone();
+        bytes[368..376].copy_from_slice(&value.to_bits().to_le_bytes());
+        reseal(&mut bytes);
+        assert!(matches!(
+            FingerprintCache::read(bytes.as_slice(), 1, || false),
+            Err(CacheError::Invalid)
+        ));
+    }
+    // Finite signed/HDR channel values remain valid: rejecting all negative or
+    // out-of-display-range means would silently narrow the fingerprint contract.
+    let mut finite = encoded.clone();
+    for (channel, value) in [-f64::MAX, f64::MAX, -f64::from_bits(1), f64::MAX]
+        .into_iter()
+        .enumerate()
+    {
+        let offset = 344 + channel * 8;
+        finite[offset..offset + 8].copy_from_slice(&value.to_bits().to_le_bytes());
+    }
+    reseal(&mut finite);
+    let restored = FingerprintCache::read(finite.as_slice(), 1, || false).unwrap();
+    assert_eq!(
+        restored.get(&key).unwrap().mean_linear_rgb,
+        [-f64::MAX, f64::MAX, -f64::from_bits(1)]
+    );
+    let mut duplicate = encoded[..16].to_vec();
+    duplicate[8..16].copy_from_slice(&2_u64.to_le_bytes());
+    duplicate.extend_from_slice(&encoded[16..376]);
+    duplicate.extend_from_slice(&encoded[16..376]);
+    duplicate.extend_from_slice(&[0; 32]);
+    reseal(&mut duplicate);
+    assert!(matches!(
+        FingerprintCache::read(duplicate.as_slice(), 2, || false),
+        Err(CacheError::Invalid)
+    ));
+    assert_eq!(
+        FingerprintCache::read(encoded.as_slice(), 1, || false)
+            .unwrap()
+            .get(&key),
+        Some(&fp)
+    );
+}
+
+#[test]
+fn every_cache_truncation_is_unexpected_eof_and_complete_stream_retries() {
+    use rrrah_dedup::cache::CacheError;
+    let mut cache = FingerprintCache::default();
+    let key = CacheKey {
+        content: [1; 32],
+        recipe: [2; 32],
+        frame_index: 3,
+    };
+    let fp = Fingerprint {
+        variants: [[0; 4]; 8],
+        mean_linear_rgb: [0.; 3],
+        luminance_stddev: 0.,
+    };
+    cache.insert(key, fp.clone(), 1).unwrap();
+    let mut bytes = Vec::new();
+    cache.write(&mut bytes, || false).unwrap();
+    for end in 0..bytes.len() {
+        assert!(
+            matches!(FingerprintCache::read(&bytes[..end], 1, || false), Err(CacheError::Io(error)) if error.kind() == std::io::ErrorKind::UnexpectedEof),
+            "truncation at {end}"
+        );
+    }
+    assert_eq!(
+        FingerprintCache::read(bytes.as_slice(), 1, || false)
+            .unwrap()
+            .get(&key),
+        Some(&fp)
+    );
+}
