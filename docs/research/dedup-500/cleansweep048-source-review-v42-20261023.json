@@ -1,0 +1,31 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/duplicates/DuplicatesScreen.kt",
+      "sha256": "59b2d611c8518c3546e40105d9c7a6d259ff4ba3983661810830fd9153fffc17",
+      "ranges": [
+        [
+          1,
+          650
+        ]
+      ],
+      "total_lines": 1891
+    }
+  ],
+  "findings": [
+    "On Android 13+ the UI refuses to start a scan when POST_NOTIFICATIONS is denied, coupling notification consent to scan availability. Platform execution was not tested.",
+    "Deletion confirmation callbacks consult current ViewModel selection at confirmation rather than a frozen displayed item set. Dialog bodies in these ranges contain no per-file list or snapshot identity.",
+    "Top-bar delete-all-exact and reset-to-idle controls depend on Complete state, not isDeleting. Whether ViewModel serializes duplicate deletes or reset is already a separate reviewed concern; no UI execution claimed.",
+    "Detail screen null group shows an indefinite loading spinner without a missing-group/error branch. Group removal or stale navigation can therefore remain indistinguishable from loading here.",
+    "Detail screen Done navigates back and does not execute deletion; selections are shared across the parent ViewModel and the bottom count includes global selection, not only this group.",
+    "Exact and similar group UI shares actions, while exact classification relies on previously reviewed thumbnail/partial-video signatures. This UI does not strengthen the equality evidence before offering delete-all-exact."
+  ],
+  "whole_files_read_total": 97,
+  "remaining_tracked_blobs": 33,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
