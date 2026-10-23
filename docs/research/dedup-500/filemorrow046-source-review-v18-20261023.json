@@ -1,0 +1,26 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/InstallerScanner.swift",
+      "sha256": "9eb0cfe53612ba77d9b26008a168ec782624288bfd37503232be1f0ae8ace1d0",
+      "lines": 359,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "DMG matching is normalized name equality or contained application name of at least four characters, not bundle/signature/content identity. Unknown filename version can still produce a redundant-installer result.",
+    "trash checks only installer-path existence and does not revalidate receipt, installed application, version, source identity or contents. No installer or cleanup method was run.",
+    "Package matching examines only first eight listed Distribution/PackageInfo entries, then checks discovered identifiers against receipts. Incomplete metadata discovery can omit additional package components despite comments saying every identifier is checked.",
+    "Metadata parsing uses regex double-quoted attributes and identifier contains-dot heuristic, not full XML validation. Deduplication chooses first seen identifier across files rather than strongest required version.",
+    "Installed app inventory reads Applications and one nested level, accepts app-shaped entries with fallback names even if plist absent; read failures silently become empty inventory.",
+    "Subprocess deadline and output cap are checked after blocking reads; terminate followed by waitUntilExit is not an independent timeout bound. Metadata entries are passed to xar extraction without local canonical containment validation in this source.",
+    "Version comparison uses Foundation numeric string comparison, not explicit semantic-version policy. This workflow identifies installation redundancy, not file duplicates."
+  ],
+  "whole_files_read_total": 29,
+  "remaining_tracked_blobs": 29,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
