@@ -1,0 +1,141 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Stores/BrowseSessionCoordinator.swift",
+      "git_blob": "200c43765351286b5e847d59e007e2849d340eb3",
+      "sha256": "d5decde8cef62bbe2a87c1f8b0d862557ce3691aa7870d67adeed65c31d33625",
+      "bytes": 870,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/BrowseSessionCoordinatorTests.swift",
+      "git_blob": "52559365684c81aff771688fa783785b843d3260",
+      "sha256": "2b5f9f4be5eb5a57c0b06c3ca036f04680dbb9b8e6211db78b618ec0c0b3925d",
+      "bytes": 1566,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/MediaContextSelection.swift",
+      "git_blob": "11be3e00712f64fea509bab9a299073f93fb0aae",
+      "sha256": "a1e276137785ac7e7ed96fdcc9458a8beefd77dd707ff5e26dcce72908bb4610",
+      "bytes": 1568,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/MediaContextSelectionTests.swift",
+      "git_blob": "fc0459cec4b1cc8dc99b23e8b338e86c382cc147",
+      "sha256": "5861b87d663af612d5e6bf90930c40361b79e4f98d7194c3cabb39f39c96a3ad",
+      "bytes": 2990,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/BrowseRowSelectionIntent.swift",
+      "git_blob": "d84104f17534cecbc99a964d32a82cfd514886b9",
+      "sha256": "0cec3a968f40f4b10ba4dd641215e6a7861c226b10a109602dbd2bf495070109",
+      "bytes": 397,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/BrowseRowSelectionIntentTests.swift",
+      "git_blob": "7910147c185de487fb2c26517e0215b7d9789f2b",
+      "sha256": "ba85994beea65bb3a084250cf03a4b43f6d2fba41b1bf9630d58eb23d149f46c",
+      "bytes": 696,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/SplitColumnConfiguration.swift",
+      "git_blob": "618a9a8bd3da1e04083234a5c3be3e868a3ad3fc",
+      "sha256": "2c4fa891b5139648754068b71760be644f9ce2cf9f6ce07f9aff80ab5134437f",
+      "bytes": 1304,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/SplitColumnConfigurationTests.swift",
+      "git_blob": "0347dd411b01c91f2dc6cf5c736f3498f8cba324",
+      "sha256": "46abec64acdbac7867d7bd4da80c685daa22ea84787e18f58dde582a22f06779",
+      "bytes": 1303,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/GroupDetailHeaderArrangement.swift",
+      "git_blob": "b7a5ef4c46a7057797512e0e3802a36c13ff2b9c",
+      "sha256": "3ff236b53e0b5940ea89d0f8d2fb5a923e5f8aa774dc01f2b4eb1f0b8c2ca2f8",
+      "bytes": 1120,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/GroupDetailHeaderArrangementTests.swift",
+      "git_blob": "5e4b047e7243e8c3f9af2a0070259b833b8e6dec",
+      "sha256": "81184bff58d58809358ef31a8f5644efd48ae4d32d4921841319dae70399705c",
+      "bytes": 1206,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Support/PreviewActionArrangement.swift",
+      "git_blob": "95b36318aa7c3063cb29a292b0b079f8f965e631",
+      "sha256": "4d360620b2b52734b29dda0b6bd68bae921b2f0cb2471d3d98baae0b33b8e84b",
+      "bytes": 1483,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/PreviewActionArrangementTests.swift",
+      "git_blob": "07829cdaac30017afd3363a0ab51c2e859e29806",
+      "sha256": "fb76340c2409dd7117dbdd5f488fdcac5103126ed2b8cdbed4b4ff0d4c34a4eb",
+      "bytes": 1699,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 52,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 69,
+  "full_review_count": 249,
+  "runs": [
+    {
+      "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter BrowseSessionCoordinatorTests|MediaContextSelectionTests|BrowseRowSelectionIntentTests",
+      "executed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "names": [
+        "BrowseRowSelectionIntentTests testCommandClickTogglesSelection",
+        "BrowseRowSelectionIntentTests testPlainClickReplacesSelection",
+        "BrowseRowSelectionIntentTests testShiftClickExtendsSelectionEvenWhenCommandIsAlsoPressed",
+        "BrowseSessionCoordinatorTests testBrowseModelSurvivesLeavingBrowseMode",
+        "BrowseSessionCoordinatorTests testPreparedBrowseModelIsReusedWhenEnteringBrowseMode",
+        "MediaContextSelectionTests testBackgroundMenuUsesCurrentBatchSelection",
+        "MediaContextSelectionTests testHiddenSelectedFileCannotBecomeDeletionTarget",
+        "MediaContextSelectionTests testRemovedClickedFileCannotDeleteTheRemainingSelection",
+        "MediaContextSelectionTests testRightClickInsideSelectionKeepsAllSelectedFiles",
+        "MediaContextSelectionTests testRightClickOutsideSelectionTargetsOnlyClickedFile",
+        "MediaContextSelectionTests testSinglePreviewIsFallbackWithoutCheckedFiles"
+      ],
+      "log_sha256": "51b615ac0a5642c99cfc6ea19befe5cd907765c5c15577b2dc35be589fc69c78"
+    },
+    {
+      "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter SplitColumnConfigurationTests|GroupDetailHeaderArrangementTests|PreviewActionArrangementTests",
+      "executed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "names": [
+        "GroupDetailHeaderArrangementTests testCheckedSelectionDoesNotAddDeleteActionToGroupHeader",
+        "PreviewActionArrangementTests testMultipleSelectionActionsPlaceDeleteImmediatelyAfterFinder",
+        "PreviewActionArrangementTests testSingleImageActionsPlaceDeleteImmediatelyAfterFinder",
+        "PreviewActionArrangementTests testSingleVideoActionsPlaceDeleteImmediatelyAfterFinder",
+        "SplitColumnConfigurationTests testComparisonAndPreviewColumnsDoNotHaveMaximumWidths",
+        "SplitColumnConfigurationTests testSidebarKeepsCompactMaximumWidth"
+      ],
+      "log_sha256": "57b4bdbbedb94b726bea70a1b58c2298358795e36844ffc186cd7a801fc2c328"
+    }
+  ],
+  "runtime_scope": "Full unchanged original package, XCTest state/configuration helpers with original ScanViewModel/BrowseViewModel. No app window launch, no actual Finder/default-player/deletion actions. Task-isolated cache environment override.",
+  "findings": [
+    "BrowseSessionCoordinator reuses BrowseViewModel only for identical ScanViewModel instance and retains it when leaving browse mode. Two tests prove retained object identity, not bounded memory or automatic stale-data refresh.",
+    "MediaContextSelection intersects selectedIDs with displayed items; hidden selection yields empty actions target, missing clickedID returns empty rather than operating on remaining selection. Six finite tests pass without operating on files.",
+    "Row intent chooses shift extend before command toggle, plain replace. Three tests cover plain,command and combinedmodifier; standalone shift not separately asserted.",
+    "Layout tests assert constant policies only: comparison/preview widths have no maximum, sidebar cap320; group header omits delete; preview action ordering differs for singlefile/batch. Six tests pass but do not validate actual rendered window geometry, hitboxes or confirmation behavior.",
+    "These17tests concern result interaction policy, not hashing, corpus recall, duplicate precision or all-format coverage. No new library optimization inferred.",
+    "Twelve additional files were actually read whole and Git-blob verified; unique cumulative count52 reconciled with prior40. Whole repository remains incomplete."
+  ]
+}
