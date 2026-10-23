@@ -1,0 +1,46 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "third_party/stb_image.h",
+      "sha256": "594c2fe35d49488b4382dbfaec8f98366defca819d916ac95becf3e75f4200b3",
+      "lines": 7988,
+      "git_blob_verified": true,
+      "review_mode": "reuse_verified_prior_whole_review"
+    },
+    {
+      "path": "third_party/stb_image_resize2.h",
+      "sha256": "d2ccb3d281410b63392cc6583672d6f667004afcb4157a8e80324c46ef95c650",
+      "lines": 10679,
+      "git_blob_verified": true,
+      "review_mode": "reuse_verified_prior_whole_review"
+    }
+  ],
+  "prior_review_references": [
+    "docs/research/dedup-500/zigimage422-complete-source-review-20261021.json",
+    "docs/research/dedup-500/libphash454-source-review-v19-20261021.json"
+  ],
+  "findings": [
+    "stb_image exact byte equality with previously whole-reviewed7988line Zigimage422 header confirmed. Reused source review only, not all prior runtime claims.",
+    "stb_image_resize2 differs from whole-reviewed libphash45410679line vendor copy solely missing final newline; byte equality after appending exactly one newline confirmed. No implementation difference.",
+    "All pinned src blobs fetched into cache and Git SHA1 verified before full build. First configure failed because cached source files missing, then completed after fetching original files; this was local evidence-layout failure, not upstream build defect.",
+    "Original CMake Release build passed on AppleClang21 ARM macOS with4build jobs, original executable unmodified.",
+    "Actual CLI3hash runs dhash/phash/whash size8 over3synthetic16x16grayBMPs (two identical, one reversed gradient), then9cluster runs across threshold/hierarchical/hdbscan: all exit0 and validJSON. Each hash output contains3files. Threshold/hierarchical emit1group peralgo, HDBSCAN0. No quality oracle, fullformat, video or UI qualification inferred."
+  ],
+  "runtime": {
+    "cmake_configure_exit_code": 0,
+    "build_exit_code": 0,
+    "hash_runs": 3,
+    "cluster_runs": 9,
+    "binary_sha256": "d519bfd1d6a7421ad43b6ae6fa405e2d0ee68873b92f3c202b98f55dc04c052d",
+    "fixture_scope": "synthetic BMP only",
+    "upstream_tests_run": false
+  },
+  "remaining": [
+    "41 tracked image entries, possible identical blobs can share visual evidence",
+    "Broader upstream runtime, packaging and quality qualification"
+  ],
+  "full_review_count": 248
+}
