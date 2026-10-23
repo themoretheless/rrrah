@@ -1,0 +1,29 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/check_audit_snapshot.py",
+      "git_blob": "b9a7f249a6650f6da43f7b3273abba3b4ddb0e99",
+      "sha256": "7610ea1f861f1861ce03dd1a89179176b477041b5368e6fc59cdefd61b4663ba",
+      "bytes": 6945,
+      "lines": 171,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 3,
+  "control": "cleanup067-snapshot-control-20261023.py",
+  "runtime_scope": "Whole unchanged original checker imported; original run_self_test executed with own temporary report and six authored report controls. No outside project, existing snapshots or real corpus inspected.",
+  "original_self_test_passed": true,
+  "additional_controls_passed": 6,
+  "findings": [
+    "Original self-test confirms same/changed/added/removed inventory handling, invalidhash rejection and report load roundtrip.",
+    "compare_reports ignores target, config, mode and findings. Two authored project targets with same inventory yield FRESH; different failing summary/config/mode also ignored. This is inventory equality, not complete audit equivalence.",
+    "inventory_map accepts boolean lines/bytes because bool is an int inPython; malformedcountschema not fully strict.",
+    "one.txt and ./one.txt accepted as distinct inventory keys; casefold-identical paths rejected. Canonical filesystem aliases are not normalized.",
+    "Checker reads supplied report JSON only, no source filesystem refresh or report authenticity verification. A fresh rerun of source audit remains necessary.",
+    "No code adopted; repository review still partial."
+  ],
+  "full_review_count": 249
+}
