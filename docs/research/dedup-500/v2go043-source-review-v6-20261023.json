@@ -1,0 +1,54 @@
+{
+  "repository": "Danialsamadi/v2go",
+  "commit": "fcf4e1f1143ef32ddb4673aa176c8ab0a54c4c9e",
+  "scope": "README.md read whole. index.html lines 1-117 and 119-254 read whole; long embedded JSON line 118 parsed structurally, not reviewed entry by entry. No rendered/browser execution.",
+  "evidence": [
+    {
+      "path": "README.md",
+      "sha256": "1469dd2adfbd211f1a104047b755041d1eed32ed7e0b5f2273627917a0ae2873"
+    },
+    {
+      "path": "index.html",
+      "sha256": "abbfff3d73c8f025ad3b6653562cb5002102f78d611d53764ec33d8ba099d216"
+    }
+  ],
+  "dashboard_data": {
+    "entries": 100,
+    "delay_values": [
+      0,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ]
+  },
+  "findings": [
+    {
+      "id": "documentation-identity",
+      "detail": "README describes protocol/credentials/host/port deduplication; implementation uses VLESS UUID alone and other protocols host/port without credentials. Documented equality is not implemented."
+    },
+    {
+      "id": "documentation-checkpoint",
+      "detail": "README promises every verified configuration survives interruption in working-live.txt. Ignored writes, absent fsync and zero-delay streaming exclusion prevent that guarantee, as main/tester review records."
+    },
+    {
+      "id": "dashboard-missing-targets",
+      "detail": "Pinned tree has no manifest.json, sw.js or Fastest_Premium.txt despite dashboard references. Current remote main may differ; this finding concerns pinned repository only."
+    },
+    {
+      "id": "dashboard-static-values",
+      "detail": "Dashboard hardcodes 5698 live nodes, 0ms elite speed and generation time 0.00 seconds, while captured update summary reports 566 configs and 119.26 seconds. Embedded data is static; source does not fetch current results."
+    },
+    {
+      "id": "dashboard-output-handling",
+      "detail": "renderElite interpolates raw embedded link strings into innerHTML and an inline quoted onclick attribute without escaping. copyRaw immediately reports success without awaiting clipboard completion. No exploit or browser reproduction attempted."
+    }
+  ],
+  "upstream_tests_run": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false,
+  "remaining_scope": "License full reading, dependency checksum inventory, generated subscription datasets and GeoIP binary review remain; index embedded entries received structural rather than individual review. Not eligible for full-source/assets promotion."
+}
