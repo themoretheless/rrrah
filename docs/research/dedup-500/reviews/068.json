@@ -2,7 +2,7 @@
   "index": 68,
   "repository": "PaulLereverend/NextcloudDuplicateFinder",
   "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
-  "review_scope": "108/165 pinned blobs whole-read through v8, including all PHP test bodies and11BATS scenario files. Native isolated helper control reproduces SAVE_OUTPUTS=0 write; no actual PHPunit/BATS/Nextcloud/CI execution.",
+  "review_scope": "127/165 pinned text blobs whole-read through v9. Packaging/config/localization source inspected; MO decoded catalog onlypartial. No make/install/formatter/archive/Cypress/Nextcloud runtime qualification.",
   "decision": "reference",
   "finding": "Nextcloud background/CLI duplicate jobs and controller tests; server integration not directly reusable in native rrrah.",
   "license_metadata": "AGPL-3.0",
@@ -106,6 +106,10 @@
     },
     {
       "audit": "docs/research/dedup-500/nextcloud068-source-review-v8-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/nextcloud068-source-review-v9-20261023.json",
       "whole_repo_complete": false
     }
   ]

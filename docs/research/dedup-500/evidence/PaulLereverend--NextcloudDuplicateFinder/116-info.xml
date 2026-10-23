@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+  <id>duplicatefinder</id>
+  <name>Duplicate Finder</name>
+  <summary>Save some space by finding your duplicate files</summary>
+  <summary lang="de">Gewinne Speicherplatz, indem du doppelte Dateien findest.</summary>
+  <description>Duplicate Finder is an app that allows you to find files that are the same.
+
+
+  The detection works on the fly and asynchronously via cron jobs.
+  For more details visit the [GitHub repo](https://github.com/PaulLereverend/NextcloudDuplicateFinder).
+  </description>
+  <description lang="de">Duplicate Finder ist eine App, die es ermöglicht doppelte Dateien zu finden.
+
+
+  Die Erkennung funktioniert direkt nach dem Upload oder asynchron mittels CronJobs.
+  Für mehr Informationen besuche das [GitHub Repository](https://github.com/PaulLereverend/NextcloudDuplicateFinder).
+  </description>
+  <version>0.0.15</version>
+  <licence>agpl</licence>
+  <author mail="paulereverend@gmail.com" >Paul Lereverend</author>
+  <namespace>DuplicateFinder</namespace>
+  <category>files</category>
+  <category>tools</category>
+  <website>https://github.com/PaulLereverend/NextcloudDuplicateFinder</website>
+  <bugs>https://github.com/PaulLereverend/NextcloudDuplicateFinder</bugs>
+  <screenshot>https://raw.githubusercontent.com/PaulLereverend/NextcloudDuplicateFinder/master/img/preview.png</screenshot>
+  <dependencies>
+    <nextcloud min-version="20" max-version="24"/>
+  </dependencies>
+  <background-jobs>
+    <job>OCA\DuplicateFinder\BackgroundJob\FindDuplicates</job>
+    <job>OCA\DuplicateFinder\BackgroundJob\CleanUpDB</job>
+  </background-jobs>
+  <repair-steps>
+      <post-migration>
+          <step>OCA\DuplicateFinder\Migration\RepairFileInfos</step>
+      </post-migration>
+  </repair-steps>
+  <commands>
+	  <command>OCA\DuplicateFinder\Command\FindDuplicates</command>
+	  <command>OCA\DuplicateFinder\Command\ListDuplicates</command>
+	  <command>OCA\DuplicateFinder\Command\ClearDuplicates</command>
+	</commands>
+	<settings>
+		<admin>OCA\DuplicateFinder\Settings\Admin</admin>
+		<admin-section>OCA\DuplicateFinder\Settings\Section</admin-section>
+	</settings>
+  <navigations>
+    <navigation>
+      <name>Duplicate Finder</name>
+      <route>duplicatefinder.page.index</route>
+    </navigation>
+  </navigations>
+</info>
