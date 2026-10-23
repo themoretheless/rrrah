@@ -1,0 +1,128 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v22-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_DbApi.py",
+      "local": "98-Tests--Test_DbApi.py",
+      "sha256": "8d167df9ba0f2ed96fc77c417f1af1f7ade8aaa2ea2a3747f1a6362fcacfffde",
+      "whole_text_read": true,
+      "lines": 521
+    },
+    {
+      "path": "Tests/Test_DuplicateArchiveDetector.py",
+      "local": "99-Tests--Test_DuplicateArchiveDetector.py",
+      "sha256": "e9ead0047d06c7b354cdf8f20c03432125d48e98bb356eafc4489e947a093012",
+      "whole_text_read": true,
+      "lines": 707
+    }
+  ],
+  "whole_text_files_read_total": 99,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 105,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 49,
+  "static_test_inventory": {
+    "Tests/Test_DbApi.py": {
+      "test_methods": 40,
+      "names": [
+        "test_getItemsSimple",
+        "test_getItems2",
+        "test_getItems3",
+        "test_getItems4",
+        "test_getItem1",
+        "test_getItem2",
+        "test_getItem3",
+        "test_itemInDB",
+        "test_basePathInDB",
+        "test_numHashInDB",
+        "test_getByHash",
+        "test_getOtherHashes",
+        "test_deleteBasePath",
+        "test_getDuplicateImages",
+        "test_getDuplicateBaseFiles",
+        "test_getInternalItemsOnBasePath",
+        "test_getLikeBasePath",
+        "test_moveItem",
+        "test_getPhashLikeBasePath",
+        "test_getPHashes",
+        "test_getFileDictLikeBasePath",
+        "test_getHashes",
+        "test_getItemsOnBasePath",
+        "test_getItemsOnBasePathInternalPath",
+        "test_getItemNumberOnBasePath",
+        "test_getNumberOfPhashes",
+        "test_getUniqueOnBasePath",
+        "test_getAllItems",
+        "test_getItemNum",
+        "test_updateItem1",
+        "test_updateItem2",
+        "test_updateItem3",
+        "test_insertItem",
+        "test_transactionCalls",
+        "test_colmapExceptions",
+        "test_getExtents",
+        "test_getRandom",
+        "test_getById",
+        "test_deleteRows1",
+        "test_getStreamingCursor"
+      ],
+      "streaming_placeholder": {
+        "line": 518,
+        "assertion_calls": 0,
+        "direct_assert_statements": 0,
+        "calls": [
+          "print"
+        ]
+      }
+    },
+    "Tests/Test_DuplicateArchiveDetector.py": {
+      "test_methods": 23,
+      "names": [
+        "test_getItemsSimple",
+        "test_skipSolid",
+        "test_isBinaryUnique",
+        "test_isPhashUnique",
+        "test_getBestMatch_1",
+        "test_getBestMatch_2",
+        "test_getAllMatches_1",
+        "test_getAllMatches_2",
+        "test_getAllMatches_3",
+        "test_getAllMatches_4",
+        "test_noMatch",
+        "test_itemRemoved",
+        "test_junkFileFiltering",
+        "test_addArchive",
+        "test_deleteArchive_1",
+        "test_deleteArchive_2",
+        "test_deleteArchive_3",
+        "test_isArchive",
+        "test_addArchive_1",
+        "test_addArchive_2",
+        "test_addArchive_3",
+        "test_addArchive_4",
+        "test_missingResolutionData"
+      ]
+    }
+  },
+  "findings": [
+    "Whole original DB API and archive detector test modules read in bounded complete ranges. They use configured PostgreSQL fixtures and archive copy/removal setup;none imported or executed.",
+    "Original Test_DuplicateArchiveDetector.test_getBestMatch_2 explicitly documents and asserts100percent coverage across multiple partially overlapping archives. A returned best path is a representative of that coverage,not necessarily one complete replacement archive. Earlier split-coverage native control is intended upstream semantics,not by itself an upstream bug.",
+    "Original test_skipSolid explicitly expects the solid-color image to be skipped by perceptual matching while common text generates matches. Earlier zero/bad-hash omission is deliberate policy;this does not establish exact full-presentation equality.",
+    "Original Test_DbApi.test_getStreamingCursor only prints IMPLEMENT ME and calls no DBAPI or assertions. AST static evidence records its line and zero assertion count. No passing streaming-cursor qualification exists in that method.",
+    "DB tests assert normal insert/update/path filtering and a programming-error transaction case. The previously reproduced failedBEGIN state and single-pass retry behavior are not qualified by these normal-path assertions.",
+    "Source-only: test_addArchive_2 embeds historical absolute paths in expected results,while most other paths use cwd. This limits portability of that expectation;no runtime failure claimed without executing it.",
+    "Archive tests include delete/move/incomplete-resolution/error-status scenarios. Source review doesnotreplace executed file/DB integration evidence;their mutation-heavy setup was not run against configured hosts or existing source fixtures."
+  ],
+  "corrections": [
+    "Classify union-of-archives coverage and ignored solid-color perceptual members as explicit upstream policies. Preserve their incompatibility with a claim of exact equality to one retained archive."
+  ],
+  "transfer_decision": "Expose exact equality,perceptual similarity,and collective content coverage as distinct contracts. Do not accept placeholder tests as evidence. No foreign production code adopted.",
+  "limits": [
+    "105of154 whole tracked files:99text,6visual;49remain.",
+    "Static inventories are detected source methods,not executed or passing tests. Cumulative24 original focused tests remains18passes,1failure,5errors.",
+    "No PostgreSQL integration,archive deletion/move,or native pHash.org/ASAN run."
+  ]
+}
