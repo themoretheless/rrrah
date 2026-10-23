@@ -1,0 +1,65 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "squaremap.py whole read and pinned blob verified; exact pure layout helper controls only, no wx import, UI or filesystem traversal",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/runsnakerun/squaremap/squaremap.py",
+    "sha256": "1bfaf18ab7e8343dfae6443a677b420de24222b883c5ccc35e40ac1d8caea51a"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 116,
+    "remaining_not_whole_reviewed": 28
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-square-layout-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "c0c728aba42911686f8ee16ed44c1c339858fcaf",
+    "source_sha256": "1bfaf18ab7e8343dfae6443a677b420de24222b883c5ccc35e40ac1d8caea51a",
+    "scope": "Exact pure helper excerpts, authored geometry only; no original wx import or rendered UI",
+    "valid_split": [
+      [
+        0,
+        0,
+        25,
+        50
+      ],
+      [
+        25,
+        0,
+        75,
+        50
+      ]
+    ],
+    "subpixel_split_hides_both": [
+      null,
+      null
+    ],
+    "out_of_range_fraction_negative_tail": [
+      [
+        0,
+        0,
+        120,
+        50
+      ],
+      [
+        120,
+        0,
+        -20,
+        50
+      ]
+    ],
+    "note": "Out-of-range input demonstrates missing validation, not proof a production adapter supplies it"
+  },
+  "findings": [
+    "Layout omits nodes based on max_depth, pixel rounding, margin/padding and remaining rectangle dimensions. Treemap rendering is not a completeness audit of source records.",
+    "split_box integer rounding can return None,None for a nonzero subpixel fraction, hiding both returned boxes; reproduced. Normal largest-first layout may constrain when this arises.",
+    "split_box lacks range/finite validation; authored fraction1.2 returns negative-width tail. Reproduced helper behavior only; no claim real adapter supplies this input.",
+    "DrawBox max_depth uses truthiness, so zero does not enforce depth0. Layout passes depth+1 from DrawBox and again into DrawBox, making displayed depth differ from tree-edge count. Static finding.",
+    "HotMapNavigator.findNode compares equality, rather than object identity, selecting first equal node; repeated/equal-value nodes are ambiguous. NodeToIndex in listviews used identity instead. Static finding.",
+    "SetSelected accepts propagate but always posts event for truthy node, while SetHighlight honors propagate. Falsey node values suppress activation/highlight. Static finding.",
+    "DefaultAdapter.overall sums child values rather than using node.size, so empty share is always zero for default adapter. This is adapter semantics, not measured CPU/memory ownership.",
+    "TestApp filesystem walker skips symlinks but has no traversal error reporting, snapshot stability or recursion budget. No demo walk or UI launched. Python2 syntax/wx legacy APIs remain runtime-unqualified."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
