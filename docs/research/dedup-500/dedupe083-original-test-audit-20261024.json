@@ -1,0 +1,81 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "python": "3.12 macOS arm64",
+  "package_python_files_hash_matched": 30,
+  "original_test_exit_code": 1,
+  "totals": {
+    "passed": 68,
+    "failed": 9,
+    "skipped": 0,
+    "total": 77
+  },
+  "failures": [
+    {
+      "name": "test_unconstrained_inverted_index",
+      "classname": "tests.test_blocking.TfidfTest",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_doubled_index",
+      "classname": "tests.test_blocking.TfIndexUnindex",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_index",
+      "classname": "tests.test_blocking.TfIndexUnindex",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_unindex",
+      "classname": "tests.test_blocking.TfIndexUnindex",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_AL",
+      "classname": "tests.test_labeler.ActiveLearningTest",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_keywords",
+      "classname": "tests.test_tfidf.ParsingTest",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_keywords_title",
+      "classname": "tests.test_tfidf.ParsingTest",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_wildcards",
+      "classname": "tests.test_tfidf.ParsingTest",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    },
+    {
+      "name": "test_dedupe_coverage",
+      "classname": "tests.test_training.TrainingTest",
+      "message": "AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'"
+    }
+  ],
+  "cause": "All nine failed test cases reach CanopyIndex.apply and missing BTrees.IFBTree.IFBucket.byValue in resolved BTrees6.5 environment. Dependency compatibility failure; not rrrah assertion failure.",
+  "dependency_freeze": "docs/research/dedup-500/dedupe083-runtime-freeze-20261024.txt",
+  "artifacts": [
+    {
+      "path": "docs/research/dedup-500/dedupe083-install-20261024.log",
+      "sha256": "aaae8eb4fe542df50acb117d82a435c98f308566d7ca43f2769c4d22a34b0699"
+    },
+    {
+      "path": "docs/research/dedup-500/dedupe083-original-tests-20261024.log",
+      "sha256": "b53fb740c46ae4b0f1fce0632a49a499fab93bec221b3f3d18b89be2b0a73e5c"
+    },
+    {
+      "path": "docs/research/dedup-500/dedupe083-original-tests-20261024.xml",
+      "sha256": "a8d11eb5cc0a9fcc31bc373b76d6ff318a2f248eef7fe6c22118363943f16805"
+    }
+  ],
+  "limits": [
+    "Not all500 review or full inference/performance proof.",
+    "No dependency pin changed or upstream production workaround applied yet.",
+    "Canonical benchmark integration not run."
+  ]
+}

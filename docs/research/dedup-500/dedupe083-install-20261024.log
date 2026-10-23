@@ -1,0 +1,131 @@
+Processing ./.dedup-work/dedupe083-20261024
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting scipy
+  Using cached scipy-1.18.1-cp312-cp312-macosx_14_0_arm64.whl.metadata (62 kB)
+Collecting pytest
+  Using cached pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting pytest-cov
+  Downloading pytest_cov-7.1.0-py3-none-any.whl.metadata (32 kB)
+Collecting scikit-learn (from dedupe==3.0.3)
+  Downloading scikit_learn-1.9.1-cp312-cp312-macosx_12_0_arm64.whl.metadata (9.3 kB)
+Collecting affinegap>=1.3 (from dedupe==3.0.3)
+  Downloading affinegap-1.12.tar.gz (33 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting categorical-distance>=1.9 (from dedupe==3.0.3)
+  Downloading categorical_distance-1.9-py3-none-any.whl.metadata (939 bytes)
+Collecting numpy>=1.20 (from dedupe==3.0.3)
+  Using cached numpy-2.5.4-cp312-cp312-macosx_14_0_arm64.whl.metadata (6.6 kB)
+Collecting doublemetaphone (from dedupe==3.0.3)
+  Downloading doublemetaphone-1.2-cp312-cp312-macosx_11_0_arm64.whl.metadata (637 bytes)
+Collecting highered>=0.2.0 (from dedupe==3.0.3)
+  Downloading highered-0.2.1-py2.py3-none-any.whl.metadata (977 bytes)
+Collecting simplecosine>=1.2 (from dedupe==3.0.3)
+  Downloading simplecosine-1.2-py2.py3-none-any.whl.metadata (912 bytes)
+Collecting haversine>=0.4.1 (from dedupe==3.0.3)
+  Downloading haversine-2.9.0-py2.py3-none-any.whl.metadata (5.8 kB)
+Collecting BTrees>=4.1.4 (from dedupe==3.0.3)
+  Downloading btrees-6.5-cp312-cp312-macosx_11_0_arm64.whl.metadata (22 kB)
+Collecting zope.index (from dedupe==3.0.3)
+  Downloading zope_index-8.2-cp312-cp312-macosx_11_0_arm64.whl.metadata (11 kB)
+Collecting dedupe_Levenshtein_search (from dedupe==3.0.3)
+  Downloading dedupe_Levenshtein_search-1.4.5.tar.gz (8.8 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting iniconfig>=1.0.1 (from pytest)
+  Using cached iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+Collecting packaging>=22 (from pytest)
+  Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting pluggy<2,>=1.5 (from pytest)
+  Using cached pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+Collecting pygments>=2.7.2 (from pytest)
+  Using cached pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting coverage>=7.10.6 (from coverage[toml]>=7.10.6->pytest-cov)
+  Downloading coverage-7.17.0-cp312-cp312-macosx_11_0_arm64.whl.metadata (8.1 kB)
+Collecting persistent (from BTrees>=4.1.4->dedupe==3.0.3)
+  Downloading persistent-6.8-cp312-cp312-macosx_11_0_arm64.whl.metadata (23 kB)
+Collecting zope.interface (from BTrees>=4.1.4->dedupe==3.0.3)
+  Downloading zope_interface-8.7-cp312-cp312-macosx_11_0_arm64.whl.metadata (48 kB)
+Collecting pyhacrf-datamade>=0.2.0 (from highered>=0.2.0->dedupe==3.0.3)
+  Downloading pyhacrf_datamade-0.2.8-cp312-cp312-macosx_11_0_arm64.whl.metadata (3.9 kB)
+Collecting joblib>=1.4.0 (from scikit-learn->dedupe==3.0.3)
+  Using cached joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting narwhals>=2.0.1 (from scikit-learn->dedupe==3.0.3)
+  Downloading narwhals-2.27.1-py3-none-any.whl.metadata (15 kB)
+Collecting threadpoolctl>=3.5.0 (from scikit-learn->dedupe==3.0.3)
+  Using cached threadpoolctl-3.7.0-py3-none-any.whl.metadata (24 kB)
+Collecting cloudpickle>=3.0 (from joblib>=1.4.0->scikit-learn->dedupe==3.0.3)
+  Using cached cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+Collecting PyLBFGS>=0.1.3 (from pyhacrf-datamade>=0.2.0->highered>=0.2.0->dedupe==3.0.3)
+  Downloading PyLBFGS-0.2.0.16-cp312-cp312-macosx_11_0_arm64.whl.metadata (1.9 kB)
+Collecting zope.deferredimport (from persistent->BTrees>=4.1.4->dedupe==3.0.3)
+  Downloading zope_deferredimport-6.1.1-py3-none-any.whl.metadata (5.9 kB)
+Collecting cffi (from persistent->BTrees>=4.1.4->dedupe==3.0.3)
+  Using cached cffi-2.1.1-cp312-cp312-macosx_11_0_arm64.whl.metadata (2.5 kB)
+Collecting pycparser (from cffi->persistent->BTrees>=4.1.4->dedupe==3.0.3)
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting zope.proxy (from zope.deferredimport->persistent->BTrees>=4.1.4->dedupe==3.0.3)
+  Downloading zope_proxy-7.3-cp312-cp312-macosx_11_0_arm64.whl.metadata (12 kB)
+Using cached scipy-1.18.1-cp312-cp312-macosx_14_0_arm64.whl (20.5 MB)
+Using cached pytest-9.1.1-py3-none-any.whl (386 kB)
+Downloading pytest_cov-7.1.0-py3-none-any.whl (22 kB)
+Downloading btrees-6.5-cp312-cp312-macosx_11_0_arm64.whl (955 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 955.7/955.7 kB 5.4 MB/s eta 0:00:00
+Downloading categorical_distance-1.9-py3-none-any.whl (3.3 kB)
+Downloading coverage-7.17.0-cp312-cp312-macosx_11_0_arm64.whl (226 kB)
+Downloading haversine-2.9.0-py2.py3-none-any.whl (7.7 kB)
+Downloading highered-0.2.1-py2.py3-none-any.whl (3.3 kB)
+Using cached iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+Using cached numpy-2.5.4-cp312-cp312-macosx_14_0_arm64.whl (5.5 MB)
+Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Using cached pluggy-1.7.0-py3-none-any.whl (27 kB)
+Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+Downloading simplecosine-1.2-py2.py3-none-any.whl (3.2 kB)
+Downloading doublemetaphone-1.2-cp312-cp312-macosx_11_0_arm64.whl (30 kB)
+Downloading scikit_learn-1.9.1-cp312-cp312-macosx_12_0_arm64.whl (8.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.3/8.3 MB 21.8 MB/s eta 0:00:00
+Downloading zope_index-8.2-cp312-cp312-macosx_11_0_arm64.whl (91 kB)
+Using cached joblib-1.6.0-py3-none-any.whl (306 kB)
+Downloading narwhals-2.27.1-py3-none-any.whl (483 kB)
+Downloading pyhacrf_datamade-0.2.8-cp312-cp312-macosx_11_0_arm64.whl (202 kB)
+Using cached threadpoolctl-3.7.0-py3-none-any.whl (26 kB)
+Downloading persistent-6.8-cp312-cp312-macosx_11_0_arm64.whl (151 kB)
+Downloading zope_interface-8.7-cp312-cp312-macosx_11_0_arm64.whl (219 kB)
+Using cached cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+Downloading PyLBFGS-0.2.0.16-cp312-cp312-macosx_11_0_arm64.whl (61 kB)
+Using cached cffi-2.1.1-cp312-cp312-macosx_11_0_arm64.whl (184 kB)
+Downloading zope_deferredimport-6.1.1-py3-none-any.whl (9.6 kB)
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+Downloading zope_proxy-7.3-cp312-cp312-macosx_11_0_arm64.whl (38 kB)
+Building wheels for collected packages: dedupe, affinegap, dedupe_Levenshtein_search
+  Building wheel for dedupe (pyproject.toml): started
+  Building wheel for dedupe (pyproject.toml): finished with status 'done'
+  Created wheel for dedupe: filename=dedupe-3.0.3-cp312-cp312-macosx_11_0_arm64.whl size=143802 sha256=9e003aaf5558a4b4a8acb6df42dc5950a2b2889aa6e2fe75c507eb12e76f9582
+  Stored in directory: /Users/themoretheless/Library/Caches/pip/wheels/69/dc/0f/19a880220e572bea1edb23b3d76f5fba11af5923009d023ded
+  Building wheel for affinegap (pyproject.toml): started
+  Building wheel for affinegap (pyproject.toml): finished with status 'done'
+  Created wheel for affinegap: filename=affinegap-1.12-cp312-cp312-macosx_11_0_arm64.whl size=24765 sha256=2efd54b1b1bf6aef53c4558693e810cad503090d3728e0cc59b60f2aa96e40e2
+  Stored in directory: /Users/themoretheless/Library/Caches/pip/wheels/59/8f/53/de134fa15de738053628838099fe4f6e213547f82d647e8d11
+  Building wheel for dedupe_Levenshtein_search (pyproject.toml): started
+  Building wheel for dedupe_Levenshtein_search (pyproject.toml): finished with status 'done'
+  Created wheel for dedupe_Levenshtein_search: filename=dedupe_levenshtein_search-1.4.5-cp312-cp312-macosx_11_0_arm64.whl size=10291 sha256=d6fc951a2792e567b637d33920adc566ce194e735bb47178f3f42970209f5c7d
+  Stored in directory: /Users/themoretheless/Library/Caches/pip/wheels/79/9f/38/be45c7ad440ad30ecb5fad316c0a1895eb7b774dbc2f39d0dc
+Successfully built dedupe affinegap dedupe_Levenshtein_search
+Installing collected packages: doublemetaphone, dedupe_Levenshtein_search, affinegap, zope.interface, threadpoolctl, pygments, pycparser, pluggy, packaging, numpy, narwhals, iniconfig, haversine, coverage, cloudpickle, zope.proxy, simplecosine, scipy, pytest, PyLBFGS, joblib, cffi, categorical-distance, zope.deferredimport, scikit-learn, pytest-cov, pyhacrf-datamade, persistent, highered, BTrees, zope.index, dedupe
+Successfully installed BTrees-6.5 PyLBFGS-0.2.0.16 affinegap-1.12 categorical-distance-1.9 cffi-2.1.1 cloudpickle-3.1.2 coverage-7.17.0 dedupe-3.0.3 dedupe_Levenshtein_search-1.4.5 doublemetaphone-1.2 haversine-2.9.0 highered-0.2.1 iniconfig-2.3.1 joblib-1.6.0 narwhals-2.27.1 numpy-2.5.4 packaging-26.3 persistent-6.8 pluggy-1.7.0 pycparser-3.12 pygments-2.21.0 pyhacrf-datamade-0.2.8 pytest-9.1.1 pytest-cov-7.1.0 scikit-learn-1.9.1 scipy-1.18.1 simplecosine-1.2 threadpoolctl-3.7.0 zope.deferredimport-6.1.1 zope.index-8.2 zope.interface-8.7 zope.proxy-7.3
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.2
+[notice] To update, run: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedupe083-runtime-20261024/bin/python -m pip install --upgrade pip

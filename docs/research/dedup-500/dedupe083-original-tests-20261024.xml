@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="77" time="36.028" timestamp="2026-10-24T00:28:41.402594+04:00" hostname="tmtl-macbook-pro-m4.local"><testcase classname="tests.test_api.ActiveMatch" name="test_check_record" time="0.001" /><testcase classname="tests.test_api.ActiveMatch" name="test_initialize_fields" time="0.000" /><testcase classname="tests.test_api.ActiveMatch" name="test_markPair" time="0.000" /><testcase classname="tests.test_blocking.TfidfTest" name="test_unconstrained_inverted_index" time="0.001"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_blocking.TfidfTest testMethod=test_unconstrained_inverted_index&gt;
+
+    def test_unconstrained_inverted_index(self):
+        blocker = dedupe.blocking.Fingerprinter(
+            [dedupe.predicates.TfidfTextSearchPredicate(0.0, "name")]
+        )
+    
+        blocker.index({record["name"] for record in self.data_d.values()}, "name")
+    
+        blocks = defaultdict(set)
+    
+&gt;       for block_key, record_id in blocker(self.data_d.items()):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_blocking.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/blocking.py:107: in __call__
+    block_keys = predicate(instance, target=target)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:268: in __call__
+    centers = self.index.search(doc, self.threshold)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110cf8050&gt;
+query_list = ('Bob',), threshold = 0.0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_blocking.TfIndexUnindex" name="test_doubled_index" time="0.000"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_blocking.TfIndexUnindex testMethod=test_doubled_index&gt;
+
+    def test_doubled_index(self):
+        self.blocker.index(self.fields_2.values(), "name")
+        self.blocker.index(self.fields_2.values(), "name")
+    
+        blocks = defaultdict(set)
+    
+&gt;       for block_key, record_id in self.blocker(self.records_1.items()):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_blocking.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/blocking.py:107: in __call__
+    block_keys = predicate(instance, target=target)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:268: in __call__
+    centers = self.index.search(doc, self.threshold)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110cfa740&gt;
+query_list = ('Bob',), threshold = 0.0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_blocking.TfIndexUnindex" name="test_index" time="0.000"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_blocking.TfIndexUnindex testMethod=test_index&gt;
+
+    def test_index(self):
+        self.blocker.index(set(self.fields_2.values()), "name")
+    
+        blocks = defaultdict(set)
+    
+&gt;       for block_key, record_id in self.blocker(self.records_1.items()):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_blocking.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/blocking.py:107: in __call__
+    block_keys = predicate(instance, target=target)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:268: in __call__
+    centers = self.index.search(doc, self.threshold)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x111294d00&gt;
+query_list = ('Bob',), threshold = 0.0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_blocking.TfIndexUnindex" name="test_unindex" time="0.000"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_blocking.TfIndexUnindex testMethod=test_unindex&gt;
+
+    def test_unindex(self):
+        self.blocker.index(self.fields_2.values(), "name")
+        self.blocker.unindex(self.fields_2.values(), "name")
+    
+        blocks = defaultdict(set)
+    
+&gt;       for block_key, record_id in self.blocker(self.records_1.items()):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_blocking.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/blocking.py:107: in __call__
+    block_keys = predicate(instance, target=target)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:268: in __call__
+    centers = self.index.search(doc, self.threshold)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110cfa740&gt;
+query_list = ('Bob',), threshold = 0.0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_canonical.CanonicalizationTest" name="test_get_canonical_rep" time="0.000" /><testcase classname="tests.test_canonical.CanonicalizationTest" name="test_get_centroid" time="0.001" /><testcase classname="tests.test_core.ScoreDuplicates" name="test_score_duplicates" time="0.717" /><testcase classname="tests.test_core.ScoreDuplicates" name="test_score_duplicates_with_zeros" time="0.692" /><testcase classname="tests.test_core.FieldDistances" name="test_comparator" time="0.001" /><testcase classname="tests.test_core.FieldDistances" name="test_comparator_interaction" time="0.000" /><testcase classname="tests.test_core.FieldDistances" name="test_exact_comparator" time="0.000" /><testcase classname="tests.test_core.Unique" name="test_unique" time="0.000" /><testcase classname="tests.test_cpredicates.TestCPredicates" name="test_initials" time="0.000" /><testcase classname="tests.test_cpredicates.TestCPredicates" name="test_ngrams" time="0.000" /><testcase classname="tests.test_cpredicates.TestCPredicates" name="test_unique_ngrams" time="0.000" /><testcase classname="tests.test_dedupe.DataModelTest" name="test_data_model" time="0.001" /><testcase classname="tests.test_dedupe.ConnectedComponentsTest" name="test_components" time="0.007" /><testcase classname="tests.test_dedupe.ClusteringTest" name="test_gazette_matching" time="0.000" /><testcase classname="tests.test_dedupe.ClusteringTest" name="test_greedy_matching" time="0.000" /><testcase classname="tests.test_dedupe.ClusteringTest" name="test_hierarchical" time="0.038" /><testcase classname="tests.test_exists.TestExists" name="test_comparator" time="0.000" /><testcase classname="tests.test_exists.TestExists" name="test_len_higher_vars" time="0.000" /><testcase classname="tests.test_labeler.ActiveLearningTest" name="test_AL" time="0.001"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_labeler.ActiveLearningTest testMethod=test_AL&gt;
+
+    def test_AL(self):
+        random.seed(1111111111110)
+        # Even with random seed, the order of the following seem to be random,
+        # so we shouldn't test for exact order.
+        EXPECTED_CANDIDATES = [
+            ({"name": "Willy", "age": "35"}, {"name": "William", "age": "35"}),
+            ({"name": "Jimmy", "age": "20"}, {"name": "Jimbo", "age": "21"}),
+            ({"name": "Willy", "age": "35"}, {"name": "Jimmy", "age": "20"}),
+            ({"name": "William", "age": "35"}, {"name": "Jimmy", "age": "20"}),
+            ({"name": "Meredith", "age": "40"}, {"name": "Sue", "age": "10"}),
+            ({"name": "Meredith", "age": "40"}, {"name": "Jimmy", "age": "20"}),
+            ({"name": "Sue", "age": "10"}, {"name": "Jimmy", "age": "20"}),
+            ({"name": "Willy", "age": "35"}, {"name": "Jimbo", "age": "21"}),
+            ({"name": "William", "age": "35"}, {"name": "Jimbo", "age": "21"}),
+        ]
+        EXPECTED_CANDIDATES = {freeze_record_pair(pair) for pair in EXPECTED_CANDIDATES}
+&gt;       active_learner = labeler.DedupeDisagreementLearner(
+            self.data_model.predicates, self.data_model.distances, SAMPLE, []
+        )
+
+.dedup-work/dedupe083-20261024/tests/test_labeler.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/labeler.py:444: in __init__
+    self.blocker = DedupeBlockLearner(candidate_predicates, data, index_include)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/labeler.py:236: in __init__
+    self.block_learner = training.DedupeBlockLearner(
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/training.py:142: in __init__
+    self.comparison_cover = self.coveredPairs(self.blocker, sampled_records)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/training.py:166: in coveredPairs
+    blocks = predicate(record)
+             ^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:207: in __call__
+    canopy_members = self.index.search(doc, self.threshold)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x111250c90&gt;
+query_list = ('Meredith',), threshold = 0.4, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_alpha_numeric_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_common_four_gram" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_common_integer_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_common_six_gram" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_common_three_tokens" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_common_two_tokens" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_double_metaphone" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_fingerprint" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_first_integer_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_first_token_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_hundred_integers_odd_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_hundred_integers_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_lat_long_grid_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_magnitude_of_cardinality" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_metaphone_token" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_near_integers_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_one_gram_fingerprint" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_predicates_correctness" time="0.001" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_same_five_char_start_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_same_seven_char_start_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_same_three_char_start_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_sorted_acronym" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_suffix_array" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_token_field_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_two_gram_fingerprint" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_two_tokens_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_whole_field_predicate" time="0.000" /><testcase classname="tests.test_predicate_functions.TestPredicateFunctions" name="test_whole_set_predicate" time="0.000" /><testcase classname="tests.test_predicates.TestPuncStrip" name="test_set" time="0.000" /><testcase classname="tests.test_predicates.TestPuncStrip" name="test_sevenchar" time="0.000" /><testcase classname="tests.test_predicates.TestMetaphone" name="test_metaphone_token" time="0.000" /><testcase classname="tests.test_predicates.TestWholeSet" name="test_full_set" time="0.000" /><testcase classname="tests.test_predicates.TestSetElement" name="test_empty_set" time="0.000" /><testcase classname="tests.test_predicates.TestSetElement" name="test_first_last" time="0.000" /><testcase classname="tests.test_predicates.TestSetElement" name="test_long_set" time="0.000" /><testcase classname="tests.test_predicates.TestSetElement" name="test_magnitude" time="0.000" /><testcase classname="tests.test_predicates.TestLatLongGrid" name="test_precise_latlong" time="0.000" /><testcase classname="tests.test_predicates.TestAlpaNumeric" name="test_alphanumeric" time="0.000" /><testcase classname="tests.test_predicates.TestNumericPredicates" name="test_order_of_magnitude" time="0.000" /><testcase classname="tests.test_predicates.TestNumericPredicates" name="test_round_to_1" time="0.000" /><testcase classname="tests.test_predicates.TestCompoundPredicate" name="test_escapes_colon" time="0.000" /><testcase classname="tests.test_predicates.TestCompoundPredicate" name="test_escapes_escaped_colon" time="0.000" /><testcase classname="tests.test_price.TestPrice" name="test_comparator" time="0.000" /><testcase classname="tests.test_serializer.SerializerTest" name="test_writeTraining" time="0.001" /><testcase classname="tests.test_tfidf.ParsingTest" name="test_empty_search" time="0.000" /><testcase classname="tests.test_tfidf.ParsingTest" name="test_keywords" time="0.000"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_tfidf.ParsingTest testMethod=test_keywords&gt;
+
+    def test_keywords(self):
+        self.index.index(("AND", "OR", "EOF", "NOT"))
+        self.index._index.initSearch()
+&gt;       assert self.index.search(("AND", "OR", "EOF", "NOT"))[0] == 1
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_tfidf.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110ee0ad0&gt;
+query_list = ('AND', 'OR', 'EOF', 'NOT'), threshold = 0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_tfidf.ParsingTest" name="test_keywords_title" time="0.000"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_tfidf.ParsingTest testMethod=test_keywords_title&gt;
+
+    def test_keywords_title(self):
+        self.index.index(("And", "Or", "Eof", "Not"))
+        self.index._index.initSearch()
+&gt;       assert self.index.search(("And", "Or", "Eof", "Not"))[0] == 1
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_tfidf.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110ee11d0&gt;
+query_list = ('And', 'Or', 'Eof', 'Not'), threshold = 0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_tfidf.ParsingTest" name="test_wildcards" time="0.000"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;test_tfidf.ParsingTest testMethod=test_wildcards&gt;
+
+    def test_wildcards(self):
+        self.index.index((r"f\o",))
+        self.index.index(("f*",))
+        self.index._index.initSearch()
+&gt;       assert len(self.index.search(("f*",))) == 1
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_tfidf.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110ee1b70&gt;
+query_list = ('f*',), threshold = 0, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_training.TrainingTest" name="test_covered_pairs" time="0.001" /><testcase classname="tests.test_training.TrainingTest" name="test_dedupe_coverage" time="0.001"><failure message="AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'">self = &lt;class 'dedupe.training.BlockLearner'&gt;
+pairs = [({'name': 'Bob', 'age': '50'}, {'name': 'Bob', 'age': '75'}), ({'name': 'Meredith', 'age': '40'}, {'name': 'Sue', 'ag... 'age': '35'}, {'name': 'William', 'age': '35'}), ({'name': 'William', 'age': '36'}, {'name': 'William', 'age': '35'})]
+index_predicates = True
+
+    def cover(self, pairs: TrainingExamples, index_predicates: bool = True) -&gt; Cover:
+        predicate_cover = {}
+        if index_predicates:
+            predicates = self.blocker.predicates
+        else:
+            predicates = [
+                pred for pred in self.blocker.predicates if not hasattr(pred, "index")
+            ]
+    
+        for predicate in predicates:
+            try:
+&gt;               coverage = frozenset(
+                    i
+                    for i, (record_1, record_2) in enumerate(pairs)
+                    if not predicate(record_1).isdisjoint(
+                        predicate(record_2, target=True)
+                    )
+                )
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/training.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/training.py:109: in &lt;genexpr&gt;
+    if not predicate(record_1).isdisjoint(
+           ^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:207: in __call__
+    canopy_members = self.index.search(doc, self.threshold)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110ee24a0&gt;
+query_list = ('Bob',), threshold = 0.4, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_training.TrainingTest testMethod=test_dedupe_coverage&gt;
+
+    def test_dedupe_coverage(self):
+&gt;       coverage = self.block_learner.cover(self.block_learner, self.training)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.dedup-work/dedupe083-20261024/tests/test_training.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/training.py:119: in cover
+    coverage = frozenset(
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/training.py:122: in &lt;genexpr&gt;
+    if not frozenset(predicate(record_1)).isdisjoint(
+                     ^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/predicates.py:207: in __call__
+    canopy_members = self.index.search(doc, self.threshold)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/tfidf.py:38: in search
+    center for score, center in self._index.apply(query_list, threshold)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;dedupe.canopy_index.CanopyIndex object at 0x110ee24a0&gt;
+query_list = ('Bob',), threshold = 0.4, start = 0, count = None
+
+    def apply(
+        self,
+        query_list: Iterable[str],
+        threshold: float,
+        start: int = 0,
+        count: int | None = None,
+    ) -&gt; list[tuple[float, int]]:
+        _wids_dict = self._wids_dict
+        _wordinfo = self.index._wordinfo
+        l_pow = float.__pow__
+    
+        L = []
+        qw = 0.0
+    
+        for term in query_list:
+            wid, weight = _wids_dict.get(term, (None, None))
+            if wid is None:
+                continue
+            docs = _wordinfo[wid]
+            L.append((docs, weight))
+            qw += l_pow(weight, 2)
+    
+        results = mass_weightedUnion(L)
+    
+        qw = math.sqrt(qw)
+&gt;       filtered_results: list[tuple[float, int]] = results.byValue(qw * threshold)
+                                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'BTrees.IFBTree.IFBucket' object has no attribute 'byValue'
+
+.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages/dedupe/canopy_index.py:76: AttributeError</failure></testcase><testcase classname="tests.test_training.TrainingTest" name="test_uncovered_by" time="0.001" /></testsuite></testsuites>

@@ -1,0 +1,63 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v9-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/test_canonical.py",
+      "local": "46-tests--test_canonical.py",
+      "sha256": "8caa2ae607ec69354a42409e2bb296da8af57b43084ec9caaab5de6606e5dee3",
+      "lines": 58,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_exists.py",
+      "local": "47-tests--test_exists.py",
+      "sha256": "566e9da75990bbd51e337adabedaac575bc274fab06e601a121bde3dde63af07",
+      "lines": 20,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_price.py",
+      "local": "48-tests--test_price.py",
+      "sha256": "ea25bbc82ddd1dadff84a2e57f676c0d80ae5356fa205eb6719a9c29df5a91de",
+      "lines": 9,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_tfidf.py",
+      "local": "49-tests--test_tfidf.py",
+      "sha256": "b56a5d68dad48fea29c455688c729ce3e4e0324340981cc7dfe890556a6748ce",
+      "lines": 32,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_predicates.py",
+      "local": "50-tests--test_predicates.py",
+      "sha256": "e8024b37b48b86d144f317d4f679fd7d8ce5dca0c9b5204e038277110f7a13fb",
+      "lines": 140,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 51,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 53,
+  "findings": [
+    "Original tests explicitly assert origin(0,0) creates no geographic key and zero/None existence semantics.",
+    "Compound predicate tests exercise colon and escaped-colon examples; no universal injective encoding proof inferred.",
+    "Original TF-IDF tests cover reserved uppercase words, empty queries and wildcard literals."
+  ],
+  "runtime": {
+    "installation_exit_code": 0,
+    "venv": ".dedup-work/dedupe083-runtime-20261024",
+    "original_tests_session": 44900,
+    "original_tests_log": ".dedup-work/dedupe083-original-tests-20261024.log",
+    "original_tests_xml": ".dedup-work/dedupe083-original-tests-20261024.xml",
+    "status": "test_run_launched"
+  },
+  "limits": [
+    "No final upstream test result in this source-read audit.",
+    "No production code adopted."
+  ]
+}
