@@ -1,0 +1,66 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/common-node.html",
+      "sha256": "5d1f99969e2657b97c23c7b816fc584da2ea92602f9a1241d97c16d4196407e3",
+      "lines": 283,
+      "git_blob_verified": true,
+      "review_mode": "whole_unique_text_and_all_differences_read; exactcopiesbyteverified"
+    },
+    {
+      "path": "archive/src/main/resources/templates/error.html",
+      "sha256": "02c3d6d60cff5587a1b19840990e88015f1b946507c6e65b873cc136eeb35aca",
+      "lines": 93,
+      "git_blob_verified": true,
+      "review_mode": "whole_unique_text_and_all_differences_read; exactcopiesbyteverified"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/common-node.html",
+      "sha256": "5d1f99969e2657b97c23c7b816fc584da2ea92602f9a1241d97c16d4196407e3",
+      "lines": 283,
+      "git_blob_verified": true,
+      "review_mode": "whole_unique_text_and_all_differences_read; exactcopiesbyteverified"
+    },
+    {
+      "path": "integrator/src/main/resources/templates/error.html",
+      "sha256": "02c3d6d60cff5587a1b19840990e88015f1b946507c6e65b873cc136eeb35aca",
+      "lines": 93,
+      "git_blob_verified": true,
+      "review_mode": "whole_unique_text_and_all_differences_read; exactcopiesbyteverified"
+    },
+    {
+      "path": "operator/src/main/resources/templates/common-node.html",
+      "sha256": "5d1f99969e2657b97c23c7b816fc584da2ea92602f9a1241d97c16d4196407e3",
+      "lines": 283,
+      "git_blob_verified": true,
+      "review_mode": "whole_unique_text_and_all_differences_read; exactcopiesbyteverified"
+    },
+    {
+      "path": "operator/src/main/resources/templates/error.html",
+      "sha256": "6464489088102697d929e2380f208f0cd5b20900772bd52a8fcbbef3cf571de3",
+      "lines": 93,
+      "git_blob_verified": true,
+      "review_mode": "whole_unique_text_and_all_differences_read; exactcopiesbyteverified"
+    }
+  ],
+  "runtime": {
+    "thymeleaf_render": false,
+    "browser_run": false
+  },
+  "findings": [
+    "Sixtrackedtemplatesassessed:common-node exact3copies,error archive/integrator exact and operator differs only overflowauto vs scroll. Everyunique text and complete diff read/Gitblobverified.",
+    "Node page guards node existence but then dereferences certificate fields without separate certificate guard; issued/expiration/issuer individually guarded. No incompleteentity rendering test performed.",
+    "Publishedcollection links use/admin/collection/ID while previouslyreviewedtopiclinks use/admin/collection/archiveID/ID. Controller route coverage must be checked before asserting brokennavigation.",
+    "Error page combines exception-message and status/error fallback, uses th:text escaping. Several rowconditions written literal timestamp!=null rather than ${timestamp!=null}; expression evaluation not runtimeverified.",
+    "Node status has no observationage/partialrefresh indicator, consistent with previous stale-status display limitation.",
+    "Static JS/CSS externalrelease assets still not source-pinned by template; source reading doesnotprove rendering or responsive behavior."
+  ],
+  "remaining": [
+    "38 other tracked blobs/assets",
+    "Remaining controllers/templates/media/license/IDE/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
