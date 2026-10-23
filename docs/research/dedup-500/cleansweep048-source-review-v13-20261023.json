@@ -1,0 +1,26 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/service/DuplicateScanService.kt",
+      "sha256": "da661ef180d2e72b728adcd2589cb3ed38c8e7ca57e390032f6502feedc42164",
+      "lines": 549,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Service rejects START while scanJob.isActive, which narrows earlier state-holder generation concern: normal simultaneous starts are guarded. Cancel requests job cancellation; finally stops foreground, notifies, releases wake lock and stops service. Android lifecycle race behavior remains untested.",
+    "Scope include/exclude uses raw startsWith without a path-component boundary. /photos-other/file matches /photos. Missing scope paths are removed from preferences, and an empty valid rule set broadens the request to FULL, including an emptied include list.",
+    "Unreadable cache skips files matching path/mtime/size without retrying decode. Once retained, failure can persist after permissions/decoder availability recover without file metadata change.",
+    "State Complete is published before saveScanResults. A later persistence exception replaces state with Error, so observers can briefly receive completed data that was not durably saved.",
+    "Exact/similar duplicate suppression removes only identical membership sets, allowing overlapping groups to remain. This is source behavior; no duplicate deletion accounting inferred.",
+    "Cancellation is checked between major stages, but final state publication follows several side effects without a final explicit ensureActive immediately before setComplete. Subsequent suspend save can catch cancellation and switch to Cancelled while retaining results as defined in holder.",
+    "Cleanup operations in finally are sequential without nested try/finally. A notification exception could prevent wake-lock release until timeout/onDestroy; native failure paths not executed."
+  ],
+  "whole_files_read_total": 40,
+  "remaining_tracked_blobs": 90,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
