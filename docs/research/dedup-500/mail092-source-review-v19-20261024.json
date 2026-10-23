@@ -1,0 +1,174 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v18-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "docs/binaries.md",
+      "local": "68-docs--binaries.md",
+      "sha256": "1c46ed4a01d24c027eeabb4945ca67c83dffbc1782a38e9ba9d7356b49faa27b",
+      "whole_text_read": true,
+      "lines": 90
+    }
+  ],
+  "new_original_visual_files_reviewed": [
+    {
+      "path": "docs/assets/icon.ico",
+      "local": "69-icon.ico",
+      "sha256": "df545b649bab966993a155b4f17197cd526dcbe47cb2aa8682c0abd6064dff33",
+      "all_decoded_variants": [
+        {
+          "size": [
+            16,
+            16
+          ],
+          "decoded_size": [
+            16,
+            16
+          ],
+          "pixel_sha256": "488368e02b3676ac948ca925b8926564fab214227d07859c2be2a86fc14cdb88"
+        },
+        {
+          "size": [
+            32,
+            32
+          ],
+          "decoded_size": [
+            32,
+            32
+          ],
+          "pixel_sha256": "e430f13617fef6bd0ba791fcd0d8682c25d0391319eb2a33c48aca6ef6def6c3"
+        },
+        {
+          "size": [
+            48,
+            48
+          ],
+          "decoded_size": [
+            48,
+            48
+          ],
+          "pixel_sha256": "5eb7ee069ad7fd77ef74cda9a043238c778854d373b6439db36f05f0bd96a76a"
+        },
+        {
+          "size": [
+            64,
+            64
+          ],
+          "decoded_size": [
+            64,
+            64
+          ],
+          "pixel_sha256": "5ee6bfc978aa7a685a8c6b4ff2acafd6960c8c5c8c1975ce33892f118ed8fe3d"
+        },
+        {
+          "size": [
+            128,
+            128
+          ],
+          "decoded_size": [
+            128,
+            128
+          ],
+          "pixel_sha256": "aaad246dac75b34bf5bd42cb71c277f4a7cde39937ccb46c89b0e7fb0f24480b"
+        },
+        {
+          "size": [
+            256,
+            256
+          ],
+          "decoded_size": [
+            256,
+            256
+          ],
+          "pixel_sha256": "39335451b55e555ae16c71cbe7d8b04b8c4e00f6eefa3c305ebf11f7cecc4def"
+        }
+      ],
+      "contact_sheet": "inspection-icon.ico-all.png",
+      "visual_reviewed": true,
+      "scope": "All variants decoded; bounded contact-sheet visual inspection, not pixel-equivalence claim"
+    },
+    {
+      "path": "docs/assets/icon.icns",
+      "local": "70-icon.icns",
+      "sha256": "59d4f718de28be6389b1f2a199ee4970df79224de65890cb0be7b7746a9ed483",
+      "all_decoded_variants": [
+        {
+          "size": [
+            16,
+            16,
+            2
+          ],
+          "decoded_size": [
+            32,
+            32
+          ],
+          "pixel_sha256": "7faca01d0049ba077184f10e4c0e1bfb2798589f951c74d6d1ce1c569a48cd08"
+        },
+        {
+          "size": [
+            32,
+            32,
+            2
+          ],
+          "decoded_size": [
+            64,
+            64
+          ],
+          "pixel_sha256": "7b2a7c0fb5daea43ab5f17e407c7e8f89db59ebd80a7beade0006c5a04373074"
+        },
+        {
+          "size": [
+            128,
+            128,
+            1
+          ],
+          "decoded_size": [
+            128,
+            128
+          ],
+          "pixel_sha256": "8231f2575d829c3dba17c12513d0bc19ce8afb306c574868103087f5d5941295"
+        },
+        {
+          "size": [
+            128,
+            128,
+            2
+          ],
+          "decoded_size": [
+            256,
+            256
+          ],
+          "pixel_sha256": "b9449631db7b7f1f15a783da6907d706e3b446f4284cd1b0a9fa7f575ea79e3e"
+        }
+      ],
+      "contact_sheet": "inspection-icon.icns-all.png",
+      "visual_reviewed": true,
+      "scope": "All variants decoded; bounded contact-sheet visual inspection, not pixel-equivalence claim"
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 63,
+  "cumulative_original_visual_files_reviewed": 8,
+  "cumulative_whole_reviewed_files": 71,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 9,
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "inspection_runtime": {
+    "pillow": "13.0.0",
+    "scope": "Installed binary wheel in owned runtime for icon inspection only; prior test-runtime manifest remains historical"
+  },
+  "findings": [
+    "All six ICO and four ICNS exposed resolution/scale variants decode; RGBA hashes recorded. Contact sheets visually show same robot-and-paper mark at each variant; no byte/pixel equality inferred.",
+    "Both XCF files fail Pillow identification; no GIMP/XCF decoder found. They remain unreviewed multilayer sources, not counted through earlier exported PNG views.",
+    "Binaries documentation embeds historical antivirus percentages and release links plus Chart.js rendering. These are source statements only; no malware/safety/current-release judgment, binary download, submission or publication performed."
+  ],
+  "transfer_decision": "Keep container-variant inspection separate from matching correctness and preserve unsupported-source status explicitly. No foreign assets adopted.",
+  "limits": [
+    "63text plus8visual assets:71of80;9remain.",
+    "XCF2files explicitly pending; source-layer completeness unproven.",
+    "No fresh tests, binary/runtime security or installed-platform icon integration qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
