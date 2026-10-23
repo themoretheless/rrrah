@@ -1,0 +1,83 @@
+{
+  "scope": "Unchanged public strategies with synthetic JSON and diagnostic lines; no full wrapper or TOON decoder qualification",
+  "encoding_collisions": [
+    {
+      "input_json": [
+        "[{\"repeated_value_field_for_qualification\":\"true\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"true\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"true\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+        "[{\"repeated_value_field_for_qualification\":true,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":true,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":true,\"repeated_label_field_for_qualification\":\"stable\"}]"
+      ],
+      "encoded_output": [
+        "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  true,stable\n  true,stable\n  true,stable\n"
+      ],
+      "outputs_equal": true,
+      "independent_python_json": "Both inputs valid and semantically distinct."
+    },
+    {
+      "input_json": [
+        "[{\"repeated_value_field_for_qualification\":\"42\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"42\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"42\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+        "[{\"repeated_value_field_for_qualification\":42,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":42,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":42,\"repeated_label_field_for_qualification\":\"stable\"}]"
+      ],
+      "encoded_output": [
+        "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  42,stable\n  42,stable\n  42,stable\n"
+      ],
+      "outputs_equal": true,
+      "independent_python_json": "Both inputs valid and semantically distinct."
+    },
+    {
+      "input_json": [
+        "[{\"repeated_value_field_for_qualification\":\"null\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"null\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"null\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+        "[{\"repeated_value_field_for_qualification\":null,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":null,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":null,\"repeated_label_field_for_qualification\":\"stable\"}]"
+      ],
+      "encoded_output": [
+        "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  null,stable\n  null,stable\n  null,stable\n"
+      ],
+      "outputs_equal": true,
+      "independent_python_json": "Both inputs valid and semantically distinct."
+    },
+    {
+      "input_json": [
+        "[{\"repeated_value_field_for_qualification\":\"[1,2]\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"[1,2]\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"[1,2]\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+        "[{\"repeated_value_field_for_qualification\":[1,2],\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":[1,2],\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":[1,2],\"repeated_label_field_for_qualification\":\"stable\"}]"
+      ],
+      "encoded_output": [
+        "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  \"[1,2]\",stable\n  \"[1,2]\",stable\n  \"[1,2]\",stable\n"
+      ],
+      "outputs_equal": true,
+      "independent_python_json": "Both inputs valid and semantically distinct."
+    },
+    {
+      "input_json": [
+        "[{\"repeated_value_field_for_qualification\":\"a\\bb\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"a\\bb\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"a\\bb\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+        "[{\"repeated_value_field_for_qualification\":\"ab\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"ab\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"ab\",\"repeated_label_field_for_qualification\":\"stable\"}]"
+      ],
+      "encoded_output": [
+        "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  ab,stable\n  ab,stable\n  ab,stable\n"
+      ],
+      "outputs_equal": true,
+      "independent_python_json": "Both inputs valid and semantically distinct."
+    },
+    {
+      "input_json": [
+        "[{\"repeated_value_field_for_qualification\":\"\\uD83D\\uDE00\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\\uD83D\\uDE00\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\\uD83D\\uDE00\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+        "[{\"repeated_value_field_for_qualification\":\"\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\",\"repeated_label_field_for_qualification\":\"stable\"}]"
+      ],
+      "encoded_output": [
+        "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  \"\",stable\n  \"\",stable\n  \"\",stable\n"
+      ],
+      "outputs_equal": true,
+      "independent_python_json": "Both inputs valid and semantically distinct."
+    }
+  ],
+  "diagnostic_filter": {
+    "inputs": [
+      "ERROR: unsuccessful tests 0%",
+      "[assert] x => error",
+      "ERROR: cannot open input"
+    ],
+    "output_lengths": [
+      0,
+      0,
+      1
+    ]
+  }
+}

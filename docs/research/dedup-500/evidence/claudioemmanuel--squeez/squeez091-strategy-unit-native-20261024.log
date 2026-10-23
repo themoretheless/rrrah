@@ -1,0 +1,38 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 31 tests
+test strategies::log_template::tests::num_unit_recognizes_common_shapes ... ok
+test strategies::log_template::tests::below_threshold_is_untouched ... ok
+test strategies::success_collapse::tests::deny_list_overrides_allow_list ... ok
+test strategies::success_collapse::tests::eligible_prefixes_match ... ok
+test strategies::success_collapse::tests::empty_deny_entries_are_ignored ... ok
+test strategies::toon::tests::decodes_json_string_escapes ... ok
+test strategies::success_collapse::tests::collapse_falls_back_to_bare_ok_with_no_facts ... ok
+test strategies::success_collapse::tests::collapse_git_push_includes_branch_and_hash ... ok
+test strategies::log_template::tests::leaves_byte_identical_recurrence_to_dedup ... ok
+test strategies::toon::tests::encodes_objects_with_nested_values ... ok
+test strategies::toon::tests::encodes_kubectl_pods_shape ... ok
+test strategies::toon::tests::encodes_uniform_gh_pr_list ... ok
+test strategies::success_collapse::tests::collapse_docker_build_includes_image_tag_facts ... ok
+test strategies::log_template::tests::preserves_unique_lines_and_versions ... ok
+test strategies::log_template::tests::key_value_pairs_template_on_the_value ... ok
+test strategies::log_template::tests::collapses_lines_differing_by_number_unit ... ok
+test strategies::log_template::tests::collapses_lines_differing_only_by_variables ... ok
+test strategies::toon::tests::handles_nulls_and_booleans_and_floats ... ok
+test strategies::toon::tests::minify_preserves_string_contents ... ok
+test strategies::toon::tests::nested_arrays_are_preserved_in_cells ... ok
+test strategies::toon::tests::quotes_values_with_commas ... ok
+test strategies::toon::tests::rejects_empty_array ... ok
+test strategies::toon::tests::rejects_heterogeneous_keys ... ok
+test strategies::toon::tests::rejects_keys_in_different_order ... ok
+test strategies::toon::tests::rejects_non_array_root ... ok
+test strategies::toon::tests::rejects_when_toon_not_smaller ... ok
+test strategies::toon::tests::single_trivial_nested_row_is_not_worth_encoding ... ok
+test strategies::truncation::tests::relevant_is_identity_below_limit ... ok
+test strategies::truncation::tests::relevant_keeps_command_query_terms ... ok
+test strategies::truncation::tests::relevant_keeps_error_lines_over_filler ... ok
+test strategies::truncation::tests::relevant_preserves_original_order ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 523 filtered out; finished in 0.00s
+

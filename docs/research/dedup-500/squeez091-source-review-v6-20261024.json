@@ -1,0 +1,209 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/strategies/grouping.rs",
+      "local": "23-src--strategies--grouping.rs",
+      "sha256": "c6903e4d7ee9dde9daee0a796d66dd880062e628fc975c187173451341a3be59",
+      "whole_text_read": true,
+      "lines": 50
+    },
+    {
+      "path": "src/strategies/smart_filter.rs",
+      "local": "24-src--strategies--smart_filter.rs",
+      "sha256": "1dcdd6dfd98af297ddf6fc673b2db18d4f4d172d1fbc359326e40f188cdfe02d",
+      "whole_text_read": true,
+      "lines": 89
+    },
+    {
+      "path": "src/strategies/success_collapse.rs",
+      "local": "25-src--strategies--success_collapse.rs",
+      "sha256": "3e9e6bd7191d3a994df2a530f2685d5483d3f203d9a5afce34cb70dc5fb01d1d",
+      "whole_text_read": true,
+      "lines": 135
+    },
+    {
+      "path": "src/strategies/truncation.rs",
+      "local": "26-src--strategies--truncation.rs",
+      "sha256": "0bd455de40cf71c2ac16fbce23a840776f3e49ca59efca9d6c99922faa32fbfc",
+      "whole_text_read": true,
+      "lines": 161
+    },
+    {
+      "path": "src/strategies/mod.rs",
+      "local": "27-src--strategies--mod.rs",
+      "sha256": "1ffdebf29343b91918447451cf03ef36226595976595d1af0b08355161cc4c66",
+      "whole_text_read": true,
+      "lines": 7
+    },
+    {
+      "path": "src/strategies/log_template.rs",
+      "local": "28-src--strategies--log_template.rs",
+      "sha256": "4ee18a649839e31af9d2ea1d7b51ee1716b36a38d780cc3a7bd7f8c0eeebb795",
+      "whole_text_read": true,
+      "lines": 240
+    },
+    {
+      "path": "src/strategies/toon.rs",
+      "local": "29-src--strategies--toon.rs",
+      "sha256": "00efd7cd10b6c8f1b12bea34c4d89f5aecc8847a85d275487685d43bf7232ee3",
+      "whole_text_read": true,
+      "lines": 657
+    },
+    {
+      "path": "tests/test_grouping.rs",
+      "local": "30-tests--test_grouping.rs",
+      "sha256": "61e054256aa55d91e2ca82da3679a3f948b211c06782175d45758eed169d205f",
+      "whole_text_read": true,
+      "lines": 31
+    },
+    {
+      "path": "tests/test_smart_filter.rs",
+      "local": "31-tests--test_smart_filter.rs",
+      "sha256": "074bfac8c63902ff8691505b5130b01e87ee5813f5bac1169b6adf6ad3d5bc57",
+      "whole_text_read": true,
+      "lines": 101
+    },
+    {
+      "path": "tests/test_truncation.rs",
+      "local": "32-tests--test_truncation.rs",
+      "sha256": "b041460048f83517bb346625659c65eef1b81d82d30dd9c50054ce73e0713ca7",
+      "whole_text_read": true,
+      "lines": 25
+    },
+    {
+      "path": "tests/test_success_collapse.rs",
+      "local": "33-tests--test_success_collapse.rs",
+      "sha256": "4eca4ff8f6f80f4f452fc06daa2d900f9dae68a5cee18014216d8d6b192eecb9",
+      "whole_text_read": true,
+      "lines": 142
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 32,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 295,
+  "strategy_subtree_complete": {
+    "tracked_files": 8,
+    "all_whole_text_read": true,
+    "scope": "src/strategies only; not entire repository."
+  },
+  "native_original_tests_added": {
+    "passed": 52,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "strategies::": 31,
+      "test_grouping": 3,
+      "test_smart_filter": 11,
+      "test_truncation": 3,
+      "test_success_collapse": 4
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 196,
+    "failed": 0,
+    "scope": "Focused groups; full upstream suite not run."
+  },
+  "public_strategy_controls": {
+    "scope": "Unchanged public strategies with synthetic JSON and diagnostic lines; no full wrapper or TOON decoder qualification",
+    "encoding_collisions": [
+      {
+        "input_json": [
+          "[{\"repeated_value_field_for_qualification\":\"true\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"true\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"true\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+          "[{\"repeated_value_field_for_qualification\":true,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":true,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":true,\"repeated_label_field_for_qualification\":\"stable\"}]"
+        ],
+        "encoded_output": [
+          "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  true,stable\n  true,stable\n  true,stable\n"
+        ],
+        "outputs_equal": true,
+        "independent_python_json": "Both inputs valid and semantically distinct."
+      },
+      {
+        "input_json": [
+          "[{\"repeated_value_field_for_qualification\":\"42\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"42\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"42\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+          "[{\"repeated_value_field_for_qualification\":42,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":42,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":42,\"repeated_label_field_for_qualification\":\"stable\"}]"
+        ],
+        "encoded_output": [
+          "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  42,stable\n  42,stable\n  42,stable\n"
+        ],
+        "outputs_equal": true,
+        "independent_python_json": "Both inputs valid and semantically distinct."
+      },
+      {
+        "input_json": [
+          "[{\"repeated_value_field_for_qualification\":\"null\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"null\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"null\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+          "[{\"repeated_value_field_for_qualification\":null,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":null,\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":null,\"repeated_label_field_for_qualification\":\"stable\"}]"
+        ],
+        "encoded_output": [
+          "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  null,stable\n  null,stable\n  null,stable\n"
+        ],
+        "outputs_equal": true,
+        "independent_python_json": "Both inputs valid and semantically distinct."
+      },
+      {
+        "input_json": [
+          "[{\"repeated_value_field_for_qualification\":\"[1,2]\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"[1,2]\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"[1,2]\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+          "[{\"repeated_value_field_for_qualification\":[1,2],\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":[1,2],\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":[1,2],\"repeated_label_field_for_qualification\":\"stable\"}]"
+        ],
+        "encoded_output": [
+          "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  \"[1,2]\",stable\n  \"[1,2]\",stable\n  \"[1,2]\",stable\n"
+        ],
+        "outputs_equal": true,
+        "independent_python_json": "Both inputs valid and semantically distinct."
+      },
+      {
+        "input_json": [
+          "[{\"repeated_value_field_for_qualification\":\"a\\bb\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"a\\bb\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"a\\bb\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+          "[{\"repeated_value_field_for_qualification\":\"ab\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"ab\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"ab\",\"repeated_label_field_for_qualification\":\"stable\"}]"
+        ],
+        "encoded_output": [
+          "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  ab,stable\n  ab,stable\n  ab,stable\n"
+        ],
+        "outputs_equal": true,
+        "independent_python_json": "Both inputs valid and semantically distinct."
+      },
+      {
+        "input_json": [
+          "[{\"repeated_value_field_for_qualification\":\"\\uD83D\\uDE00\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\\uD83D\\uDE00\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\\uD83D\\uDE00\",\"repeated_label_field_for_qualification\":\"stable\"}]",
+          "[{\"repeated_value_field_for_qualification\":\"\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\",\"repeated_label_field_for_qualification\":\"stable\"},{\"repeated_value_field_for_qualification\":\"\",\"repeated_label_field_for_qualification\":\"stable\"}]"
+        ],
+        "encoded_output": [
+          "items[3]{repeated_value_field_for_qualification,repeated_label_field_for_qualification}:\n  \"\",stable\n  \"\",stable\n  \"\",stable\n"
+        ],
+        "outputs_equal": true,
+        "independent_python_json": "Both inputs valid and semantically distinct."
+      }
+    ],
+    "diagnostic_filter": {
+      "inputs": [
+        "ERROR: unsuccessful tests 0%",
+        "[assert] x => error",
+        "ERROR: cannot open input"
+      ],
+      "output_lengths": [
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "findings": [
+    "The complete strategies subtree compresses output, groups directory entries, removes heuristic noise and truncates content. It is not a file-equality implementation.",
+    "TOON encoder produces identical bytes for six pairs of valid semantically different JSON inputs: string/bool true, string/number42, string/null, JSON-looking string/nested array, backspace-containing string/plain string, escaped supplementary character/empty string. All input pairs were independently parsed and distinguished by Python json.",
+    "This is a counterexample to this implementation lossless-or-reject description, not an assessment of the external TOON specification or a full decoder qualification.",
+    "smart_filter directly drops ERROR: unsuccessful tests0% and [assert] x => error as progress-like lines, while ordinary ERROR: cannot open input survives. Full wrapper may have other guards; no full-wrapper loss claim follows from this direct filter control.",
+    "success_collapse integration exercises the actual binary in throwaway Git repositories using git add --dry-run, includes explicit config disable/deny and nonzero-exit checks. No push, commit, deploy or network operation executed.",
+    "Template grouping deliberately abstracts numeric/unit/identifier changes; relevance truncation retains selected lines and an elision marker. Neither preserves all raw distinctions for identity proofs."
+  ],
+  "transfer_decision": "No production source adopted. Keep lossy presentation and candidate simplification separate from byte/pixel equality and lossless persistence.",
+  "limits": [
+    "32/327 whole-file reviews;295 remain.",
+    "196 original focused tests and finite controls do not establish full wrapper, host, decoder, throughput or universal matching behavior.",
+    "No rrrah code or test changes this turn. Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Original Cargo logs retain trailing blank lines."
+}

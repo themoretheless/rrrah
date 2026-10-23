@@ -1,0 +1,47 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running tests/test_grouping.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_grouping-6d8f8473b52773c9)
+
+running 3 tests
+test keeps_files_below_threshold ... ok
+test mixes_grouped_and_ungrouped ... ok
+test groups_many_files_in_same_dir ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_smart_filter.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_smart_filter-d288408387206e40)
+
+running 11 tests
+test removes_blank_lines ... ok
+test removes_git_hints ... ok
+test removes_next_lint_deprecation ... ok
+test passthrough_normal_lines ... ok
+test removes_ansi_codes ... ok
+test removes_npm_deprecation ... ok
+test removes_progress_bars ... ok
+test removes_node_modules_stack_frames ... ok
+test removes_spinner_frames ... ok
+test strips_log_timestamps ... ok
+test removes_vite_tsconfig_paths_warning_block ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_success_collapse.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_success_collapse-eaac0a52d51c8507)
+
+running 4 tests
+test config_disable_restores_full_output ... ok
+test deny_list_excludes_matching_prefix ... ok
+test eligible_success_collapses_to_ok_line ... ok
+test nonzero_exit_never_collapses ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s
+
+     Running tests/test_truncation.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_truncation-b962893baffe63b2)
+
+running 3 tests
+test no_truncation_under_limit ... ok
+test truncates_tail ... ok
+test truncates_head ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
