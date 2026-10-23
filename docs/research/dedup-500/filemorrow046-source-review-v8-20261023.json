@@ -1,0 +1,55 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "5c88aa0e72eca90ea43c65fe648b13c243b4057b75c5316820395c474b8c8c90",
+      "lines": 33,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/OrganizerServiceTests.swift",
+      "sha256": "d6b2151bc5d8ecf20cb67542a7c705924fd254a7b8480d85dbccab136e3d6ed5",
+      "lines": 140,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/PersistenceStoreTests.swift",
+      "sha256": "278039560b96e404718f18388912b6817be034959a360c888f6ae38cf4ffc3e9",
+      "lines": 101,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/TestProfiles.swift",
+      "sha256": "e50643e819305f0577e9a2fa00c5f2a0d98b362144ab03b680d61854d6b99430",
+      "lines": 14,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "kind": "unchanged upstream source/tests in isolated library package; application target excluded",
+    "test_suites": {
+      "OrganizerServiceTests": 4,
+      "PersistenceStoreTests": 5,
+      "ProfileStoreTests": 7
+    },
+    "tests_passed": 16,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "test_seconds": 0.078,
+    "toolchain_override": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer",
+    "initial_attempt": "CommandLineTools failed before tests because XCTest unavailable; retry with installed Xcode succeeded",
+    "fixtures": "original default-profile.json Git-blob verified; upstream test UUID temporary directories"
+  },
+  "findings": [
+    "Sixteen original tests pass, covering suffix collision/undo, partial and total move failures, confidence gates, decision batch save/update/prune, history cap and profile migration/import basics. This does not test the separately reproduced keeper/cache defects.",
+    "CI declares macos-26 tests, release build, app packaging/signature verification and clean-profile launch. Only the isolated three-suite test subset was executed here; release/package/UI gates remain unrun.",
+    "TestProfiles loads original configuration relative to source file path; the verified fixture was placed in that expected layout."
+  ],
+  "whole_files_read_total": 16,
+  "remaining_tracked_blobs": 42,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
