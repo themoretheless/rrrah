@@ -1,0 +1,82 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "deduplicator/ProcessArchive.py",
+      "local": "18-deduplicator--ProcessArchive.py",
+      "sha256": "0b0edece7cd021f2687d76266e8b9ac26998822edabe23a92e97bc73594a41f2",
+      "whole_text_read": true,
+      "lines": 870
+    }
+  ],
+  "whole_text_files_read_total": 19,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 135,
+  "authored_matching_controls": {
+    "result": {
+      "phash_cases": [
+        {
+          "case": "unique_member",
+          "matched_source_members": {}
+        },
+        {
+          "case": "dense_unresolved_member",
+          "matched_source_members": {
+            "owned-candidate.zip": [
+              [
+                "first",
+                "first"
+              ]
+            ]
+          }
+        },
+        {
+          "case": "ignored_zero_member",
+          "matched_source_members": {
+            "owned-candidate.zip": [
+              [
+                "first",
+                "first"
+              ]
+            ]
+          }
+        }
+      ],
+      "scope": "Exact AST-selected original matching methods;owned synthetic metadata,query/row adapters and temporary candidate files;no actual archive decoder,PostgreSQL,move or delete calls",
+      "split_binary_coverage": {
+        "best_match_returned": true,
+        "candidate_count": 2,
+        "max_source_members_per_candidate": 1,
+        "source_members": 2
+      }
+    },
+    "exit_code": 0
+  },
+  "rrrah_regression": {
+    "path": "crates/rrrah-dedup/tests/visual.rs",
+    "sha256": "c8c448522f36aec8e243d3626ff30b47e3c405d9f5492ff4d9d2f0d540066a67",
+    "name": "dense_zero_fingerprints_are_not_silently_discarded",
+    "scope": "257zero fingerprints plus one allbits fingerprint;radius0,1,64;full results retain all IDs;cap100 returns Budget;retry full results unchanged",
+    "whole_target_passed": 11,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0
+  },
+  "findings": [
+    "getPhashMatchingArchives skips members lacking pMatches when lookup is omitted due to more than100candidates. Two source members, first matches onecandidate,second101unresolved returnscandidate withonlyfirstmember instead of unknown/empty. Control withsecond0matchesreturns empty. Exact original methods with DB metadata/rowadapters,not real database/provider.",
+    "Known badhash0causes _doHashSearches to omit both perceptual and binary rowlookup. Matching stage then ignores thatmember and can returncandidate matchedonlyonothermember. Zero suppression is explicit source policy; it cannot prove entirearchiveidentity.",
+    "getMatchingArchives requires each source member occur somewhere but merges matches acrossdifferentarchives. Two source members eachmatchdifferentcandidate yields2candidates containingonlyoneeach;_getBestMatchingArchive stillchoosesone. This is global coverage,not onecomplete replacementarchive.",
+    "Source processDownload can invoke deleteArch after getBestBinaryMatch or getBestPhashMatch. These actions were not executed;controls only matching with owned candidatefiles.",
+    "Source getMatchingArchives is digest lookup over storedMD5with existence checks,not current byteforbyte revalidation despite isBinaryUnique docstring. No actual MD5collision or destructivefalsepositive produced.",
+    "New permanent rrrah regression requires densezero bucket to return257IDs or explicitBudget,never silently skip. Complete visual testtarget11passed. Production algorithm unchanged."
+  ],
+  "transfer_decision": "Preserve unresolved state under candidate pressure and distinguish archive coverage acrossmanysources from equalitytoonecandidate. Add permanent densezero/resultlimit regression;no foreign code adopted.",
+  "limits": [
+    "19of154whole files;135remain.",
+    "Prior17original upstream tests remain13pass4errors;newmatching controls not originaltests.",
+    "No actual archive/database integration,move,delete,concurrentmutation or native pHash.org/ASAN run."
+  ]
+}

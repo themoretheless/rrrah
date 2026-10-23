@@ -379,3 +379,31 @@ fn nonfinite_fingerprint_statistics_never_claim_informative_evidence() {
         }
     }
 }
+
+#[test]
+fn dense_zero_fingerprints_are_not_silently_discarded() {
+    use rrrah_dedup::{Candidate, HammingIndex, IndexError};
+    let mut index = HammingIndex::new();
+    for id in 0..257 {
+        index.insert(id, 0);
+    }
+    index.insert(257, u64::MAX);
+    for radius in [0, 1, 64] {
+        let mut expected: Vec<_> = (0..257).map(|id| Candidate { id, distance: 0 }).collect();
+        if radius == 64 {
+            expected.push(Candidate { id: 257, distance: 64 });
+        }
+        assert_eq!(index.search(0, radius), expected);
+        assert_eq!(
+            index.try_search_with_cancel(0, radius, 100, || false),
+            Err(IndexError::Budget)
+        );
+        assert_eq!(
+            index.try_search_with_cancel(0, radius, expected.len(), || false).unwrap(),
+            expected
+        );
+        // A limited lookup must not remove dense buckets from subsequent searches.
+        assert_eq!(index.search(0, radius), expected);
+    }
+    assert_eq!(index.search(u64::MAX, 0), vec![Candidate { id: 257, distance: 0 }]);
+}

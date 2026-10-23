@@ -1,0 +1,19 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.75s
+     Running tests/visual.rs (.dedup-work/local-sequence-target-20261021/debug/deps/visual-2466368b884c5bf7)
+
+running 11 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test dense_zero_fingerprints_are_not_silently_discarded ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test nonfinite_fingerprint_statistics_never_claim_informative_evidence ... ok
+test sixty_tied_candidates_survive_with_inclusive_distance_boundaries ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
