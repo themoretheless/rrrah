@@ -1,0 +1,32 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Whole aux_funcs.py (427 lines) and tee.py read; direct calls to unchanged original auxiliary functions under bundled Python 3.",
+  "source_sha256": {
+    "aux_funcs.py": "8f19e0f8bb9a76e8544c46983f6f1230245a0168bcbefe3f95181c7b6e20eb3a",
+    "tee.py": "9d16d40c2d23063f551611a2cc91f28fc3a95ec5789ed5c4d11e998d8f8cf0ca"
+  },
+  "control": "pyfilefixity044-aux-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "regular_marker_payload": "abcdef",
+    "short_reader_marker_payload": "ab",
+    "python3_errors": {
+      "group_files_by_size": "NameError: xrange",
+      "group_files_by_size_fast": "AttributeError: dict.iteritems",
+      "group_files_by_size_simple": "AttributeError: dict.iteritems",
+      "gen_rand_fileslist": "NameError: xrange"
+    }
+  },
+  "findings": [
+    "get_next_entry assumes len(read(blocksize)) < blocksize means EOF. A seekable BytesIO-derived reader limited to four bytes per read truncates a six-byte entry to two bytes. This is a general stream-contract counterexample, not evidence that regular disk reads always truncate.",
+    "Experimental size-grouping helpers retain Python 2 xrange/iteritems; direct ordinary Python 3 calls fail as recorded. Current production reachability outside reviewed rfigc is not established.",
+    "recwalk supplies no onerror callback to os.walk/scandir.walk and exposes only discovered files, without explicit omission diagnostics or traversal budgets.",
+    "copy_any removes destination before checking whether source exists when only_missing is false. Not executed: no destructive helper called.",
+    "Tee.close suppresses flush exceptions; log durability is not confirmed by successful close. Not an application database write guarantee."
+  ],
+  "upstream_suite_run": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
