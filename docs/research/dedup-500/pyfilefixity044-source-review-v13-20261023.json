@@ -1,0 +1,76 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Nine pinned build/config files read whole and Git blob verified; .coveragerc parsed. No build, CI, cleanup, publication or installation command executed.",
+  "evidence": [
+    {
+      "path": "Makefile",
+      "sha256": "22bbdade615e7adf2932cb6bdec380bd090085468c3ce975b71b1cf29548f7a9"
+    },
+    {
+      "path": ".coveragerc",
+      "sha256": "3c3a36e8f93b5e681d4953c24d8dec47c9722503a981cc9198e7c1618daf7934"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "88d4b62e9b7b446064c1f4e4481baf27b65b0dc3ddd8f16c1d066672041f3d78"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "4f705f0e94d4028ed546f6024bb4b8c216f8ab71b29a7c9719f8dc968b1b8e14"
+    },
+    {
+      "path": "MANIFEST.in",
+      "sha256": "f7329cff2447d450df2aa92b6d385890eec33d29e348d08d3ffd46067a4d3954"
+    },
+    {
+      "path": "appveyor.yml",
+      "sha256": "804a97694cdcc1d5a532c92171ddbda52530d99fbd9b283057d21c9ad2645ee2"
+    },
+    {
+      "path": "codecov.yml",
+      "sha256": "f6e91769f779cded34cb15d8e7aefab009cdecd340aeca64a30fdf45b7d0d03d"
+    },
+    {
+      "path": "setup.py",
+      "sha256": "ff6946ee3032e346dab5eb9abd99ee4ac71ef191eb0e95cbb5b5183b2acb14c9"
+    },
+    {
+      "path": "setup.py.bak",
+      "sha256": "04f6e8789249e0e1aa75f66526eea2f38b6646d42c99616281fb460708938b82"
+    }
+  ],
+  "findings": [
+    {
+      "id": "missing-testsetup-target",
+      "detail": "Makefile alltests invokes testsetup, but no testsetup target is defined. testsetuppost is a different target used by build. Actual py3make execution not performed."
+    },
+    {
+      "id": "legacy-ci-missing-files",
+      "detail": "Captured appveyor.yml references compiler/bootstrap helpers absent from pinned tree. Its matrix is Python 2.7/PyPy 2.7, while current metadata requires >=3.7 and setup backup explicitly says Python 2 support dropped.",
+      "missing_paths": [
+        "ci/appveyor-with-compiler.cmd",
+        "ci/appveyor-bootstrap.py"
+      ]
+    },
+    {
+      "id": "coverage-config-real-boundary",
+      "detail": "Tracked .coveragerc duplicates the restricted include list and excludes filetamper/ecc_speedtest/profilers. Thus pyproject review limitation is corroborated by standalone coverage config, not resolved by it."
+    },
+    {
+      "id": "manifest-vs-installed-package",
+      "detail": "MANIFEST.in includes test fixtures/results and excludes profiler subtree for source distribution. This is packaging intent; no wheel/sdist built or inspected, so installed test completeness remains unverified."
+    },
+    {
+      "id": "coverage-threshold",
+      "detail": "Codecov uses automatic baseline target and one-percent tolerance, not a universal correctness threshold. No current CI result was inspected."
+    },
+    {
+      "id": "working-tree-hygiene",
+      "detail": "gitignore excludes /tests/out while current tests live under pyFileFixity/tests. Exact generated test output path is determined by aux_tests, so ignore coverage must be checked against that implementation before running fixture-generating suite."
+    }
+  ],
+  "config_parse": "PASS",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
