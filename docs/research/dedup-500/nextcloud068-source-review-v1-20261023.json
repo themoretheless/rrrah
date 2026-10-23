@@ -1,0 +1,92 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "ddc45105a2c480245118e8284eab38e2eda394c4",
+      "sha256": "13be404a823d5cf54627790020c589fbcb57aada9c1539ad0213715e1b013f4b",
+      "bytes": 4101,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/BackgroundJob/FindDuplicates.php",
+      "local": "02-FindDuplicates.php",
+      "git_blob": "fee26b8931e79274ead00544a168c34c739bffab",
+      "sha256": "2325f6c48de4141cd8c96973395d707a87ad1bf39c387c5d708c0235d1d82a4b",
+      "bytes": 1666,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Command/ClearDuplicates.php",
+      "local": "03-ClearDuplicates.php",
+      "git_blob": "b520ccffdfbf101c80e7f20f949c4411e742c345",
+      "sha256": "412063abe52b6654d88aca5849c01d6a3d5fd62dfcd45a12fcd30ddd8cf89173",
+      "bytes": 2213,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Command/FindDuplicates.php",
+      "local": "04-FindDuplicates.php",
+      "git_blob": "c2e0086a71e312b3463d7e9ae954ff5ad0ed8eaa",
+      "sha256": "eb5b49bbc645c2e3d2bf073c1ce167ff984d04b4e905f9daac3325e179d509de",
+      "bytes": 5262,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Controller/DuplicateApiControllerTest.php",
+      "local": "05-DuplicateApiControllerTest.php",
+      "git_blob": "46f527f980965822d8ebe87ff432d41f04eec827",
+      "sha256": "7e9bd736314926dada9ab69f7d518c9d6d7820c62246b656867c8e7f30eba6a2",
+      "bytes": 3711,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Service/FileInfoService.php",
+      "local": "06-FileInfoService.php",
+      "git_blob": "900bd353bf885e1810f9798bb0dfeeb6fb887c7a",
+      "sha256": "49b042e1d2b6224117e20b132189285d26a4b2c6e2b261c2e963c9ea5b1664f0",
+      "bytes": 9578,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Service/FileDuplicateService.php",
+      "local": "07-FileDuplicateService.php",
+      "git_blob": "38521b3cc73383f26777fece707d65ef0f534e04",
+      "sha256": "9d9d236a96bbb21cbc8a0e4b3cc0161646701504d548fbe58f96de331488810b",
+      "bytes": 4805,
+      "whole_text_read": true
+    },
+    {
+      "path": "composer.json",
+      "local": "08-composer.json",
+      "git_blob": "e27a1d3e536690d73afe2393747ea5acb484e6c0",
+      "sha256": "26f06f05944c5d26099d93a5c5efb098bd3a1282003861f4fe7a510758e7292e",
+      "bytes": 771,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 8,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 157,
+  "full_review_count": 249,
+  "runtime": {
+    "upstream_tests_run": false,
+    "php_available_on_PATH": false,
+    "scope": "Source review only. No Nextcloud installation, command invocation, data clearing or upstream instructions executed."
+  },
+  "findings": [
+    "README combines event-driven updates, periodic background reconciliation and explicit scan. Its prose says5days while its configuration table find interval172800seconds is2days; actual ConfigService not yet reviewed.",
+    "Background job delegates each user to scanFiles without local per-user exception handling; scanner behavior beyond FileInfoService boundary remains unread. No whole-instance resilience guarantee.",
+    "Missing requested relative path returns void early with verbosity-verbose notice. FindDuplicates command initializes result0 and does not receive completion/error status from scanFiles; source path can report success without scanning requested scope. No native Nextcloud reproduction yet.",
+    "Explicit-user NotFoundException catch logs and prints but does not set result1. Unknown user sets1 then breaks, leaving later users unvisited. Boolean path warning does not return; Symfony VALUE_IS_ARRAY normal parsing is not proven to admit that value.",
+    "save catches any Exception spanning lookup, update and event dispatch, then attempts new insertion. Thus a dispatch/update failure can be interpreted as missing record; no transactional recovery or actual DB failure reproduction established.",
+    "Hash recalculation uses cached emptyhash/strictly newer mtime or uploadtime, with mounted node OR outside the filetype conjunction. SHA256 is requested from storage; no bytewise equality confirmation or before/after identity validation in this reviewed service method. Storage/event/mapper semantics remain incomplete.",
+    "Clear command clears duplicate records then file info sequentially; no transaction shown in command. Its help explicitly concerns database records rather than filesystem contents. Not executed.",
+    "Four controller tests use mocked services and assert response success/failure for logged-in/out/anonymous/error. Do not establish actual scan, storage, pagination or access filtering behavior.",
+    "Screening license metadata AGPL-3.0 differs from composer GPL-3.0-only. Root COPYING has not been whole-read in this pass; no license compatibility conclusion or upstream implementation adoption.",
+    "findAll loops full mapper pages after filtering, carrying entity id as next offset; mapper ordering/cursor contract not yet reviewed, so no pagination correctness or bug claim."
+  ]
+}
