@@ -1,0 +1,72 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v26-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/DBQueryInputFormat.java",
+      "local": "143-DBQueryInputFormat.java",
+      "sha256": "fa154f76d7b451a2a8d78f490368cd3f91ffd0723505cc8764eba7e9c9a79eb4",
+      "git_blob": "ec512ebfd660a9ce0b4d6fd3319f77c1a935f59a",
+      "lines": 126,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/DBQueryRecordReader.java",
+      "local": "144-DBQueryRecordReader.java",
+      "sha256": "a514bc07b646340557a8dc8840e29d6b3072f4909e435f74d7bccc66b985119e",
+      "git_blob": "696bcd75ff26d2d711ccfc79a5c83f77379bddcf",
+      "lines": 120,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/MySQLQueryRecordReader.java",
+      "local": "145-MySQLQueryRecordReader.java",
+      "sha256": "9cfdeebafb4f9fc8e7f5d1b1046b48efa16b43b580ea6b431239b8006ebfca5c",
+      "git_blob": "7e6396a730e69213d002d4ef55a3da839bb6468f",
+      "lines": 57,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/OracleDataDrivenDBInputFormat.java",
+      "local": "146-OracleDataDrivenDBInputFormat.java",
+      "sha256": "f5aed8a6eb163c75ce466c75b58196d84ee54b5cb87cfdfdb9620232781fefb4",
+      "git_blob": "e11cddf9d5bb33735829a9b89403be1a04cd475d",
+      "lines": 91,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 140,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 147,
+  "remaining_without_whole_review": 23,
+  "original_tests_cumulative": {
+    "total": 87,
+    "passed": 84,
+    "failed": 3,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 5,
+    "cumulative": 118,
+    "report": "docs/research/dedup-500/hiho098-query-native-controls-20261024.json",
+    "confirmed": [
+      "DBQueryRecordReader2rows yieldkeys0/1 andvaluesx/y; bothconfigured JDBCparameters bound correctly;EOF positive.",
+      "After2rows inherited getProgress isNaN and deprecatedgetPos remains0 because subclassprivate counters shadowbase and DataDriven split length0.",
+      "Subclass ResultSet not explicitly closed by inherited close, while statement/connection close andcommit invoked; real driver implicitResultSet cleanup NOT tested, no resourceleak claimed solelyfromabsence of explicitclose.",
+      "MySQLQueryRecordReader does not set streaming fetchsize during observedquery; realMySQL driver buffering/memory behavior unmeasured.",
+      "MetadataSQLException after query assignment preserves partialreaderstate; retry skipsmetadata setup andthrowsNullPointerException onnullcolumns. No promised retry/recoverycontract inferred."
+    ],
+    "scope": "5authorcontrols execute unchanged original queryreaders with fulloriginal formatclasses, actualHadooptypes andMockito JDBC records; no replacementdependencyhosts/actualSQL/driverconnection/network/cluster. Final owned query fixture has2placeholders for2parameters; repeated assertions counted once."
+  },
+  "source_only_findings": [
+    "DBQueryInputFormat chooses MySQLQueryRecordReader onlyforMYSQL productnames, generic DBQueryRecordReader otherwise; realvendor dispatch notexecuted.",
+    "OracleDataDrivenDBInputFormat selects OracleDateSplitter for date/time types and Oracle-specific recordreader; source-only, no actualOracleengine qualification.",
+    "DefaultStringifier parameter encode/decode depends on configured serializers; format setup/integration serialization path notexecuted inthispass."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
