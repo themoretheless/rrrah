@@ -1,0 +1,48 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/FastScrollbar.kt",
+      "sha256": "c50d3a09f992b9a14029234fbe183f30c0de30b00547c98850b17423c8ef5aeb",
+      "lines": 180,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/osslicenses/OpenSourceLicensesScreen.kt",
+      "sha256": "dc5dd71e60f416deea7736aa8531c88bdc0f05ef01ef061148b060ae1fce447c",
+      "lines": 150,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/theme/AccentColors.kt",
+      "sha256": "778077c8f76f80b4e37f2525860d18c9932052c385ebc8577c9199be74306861",
+      "lines": 89,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/theme/Theme.kt",
+      "sha256": "346adf42df857b1b603ac56911b79eeac60bfbbde9903038eee3c07144e62761",
+      "lines": 254,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/theme/Typography.kt",
+      "sha256": "7f5aae6a5d009fde335e97d4f24fbbaf729c1178b6ada9b60d87ada0ccc806c3",
+      "lines": 63,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Both scrollbar overloads remember derived state without a state key, so replacement of the supplied LazyListState/LazyGridState can retain the old captured state. Recomposition behavior was not executed.",
+    "Scrollbar position uses first item index divided by total minus visible count, ignoring pixel offsets and variable item dimensions. Thumb size is clamped 40/totalItemsCount rather than viewport/content ratio. This is an approximate visual indicator, with no drag handler.",
+    "License dialog displays only library.licenses.firstOrNull licenseContent; additional license texts are omitted. Null and empty libraries both show an indefinite spinner with no empty/error branch.",
+    "Manual accent selection changes primary only, retaining the base onPrimary and container colors. Contrast across accents is not measured. Dynamic special themes overwrite secondaryContainer, so AMOLED does not preserve all container colors as pure black.",
+    "Theme assumes view.context is Activity through a direct cast outside preview; wrapper-context behavior remains untested. Typography defines five overrides and otherwise uses Material defaults. No matching algorithm changes in these files."
+  ],
+  "whole_files_read_total": 69,
+  "remaining_tracked_blobs": 61,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
