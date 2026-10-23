@@ -1,0 +1,48 @@
+{
+  "repository": "n24q02m/modhash",
+  "commit": "3968350080e87dec1ea04ca87ca6cf54629a6e34",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "modhash/tests/phash_vectors.rs",
+      "sha256": "d695408180f04e451b97fbee2ac1ea084798fb6e024d35c881cd076480e2497e",
+      "lines": 21,
+      "git_blob_verified": true
+    },
+    {
+      "path": "modhash-video/src/phash.rs",
+      "sha256": "cf1fe2d6b7ac82a712486d34ce6a45797cc8fc858b13302edc07a8598c8dc359",
+      "lines": 178,
+      "git_blob_verified": true
+    },
+    {
+      "path": "modhash/src/phash.rs",
+      "sha256": "725fb2d2b33c088eac4144cbc8095931edb5f74181c072cc4d2c2df59d9f9c37",
+      "lines": 125,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/modhash496-dct-control-20261023.rs"
+  ],
+  "runtime": {
+    "exit_code": 0,
+    "scope": "Extracted original video DCT/median helper bodies unchanged; no raster/decoder functions or original package tests executed",
+    "independent_low_block_coefficients": 256,
+    "maximum_absolute_error": 3.5238790831311325e-12,
+    "flat128_hash": "9729609740939797",
+    "flat128_set_bits": 30
+  },
+  "findings": [
+    "Read whole nine-row generated pHash vector file, video pHash module/tests and image pHash pipeline. Recipe:32x32 box average, orthonormal DCT rows/columns, median63 excludingDC, strict>,DC still packed into output.",
+    "Original helper coefficients for zero,constant128,impulse and deterministic pattern checked against independent direct2D sum for8x8 low block;256 comparisons pass1e-8 tolerance. Helper extraction only, not full image/video pipeline.",
+    "Flat-plane test comment claims DC-only behavior but asserts only repeatability. Original helper on exact constant128 block yields30 set bits due tiny nonDC roundoff relative to median. No portability/quality conclusion from one host; low-information guard remains necessary for candidate matching.",
+    "Image pipeline intentionally drops low byte ofu16 and ignoresRGBA alpha beforeBT601. This differs from own exact-pixel/color/alpha semantics; do not adopt as exact-duplicate proof.",
+    "Video frame API accepts overlong plane by slicing prefix despite introductory exact-length wording; rejectszero/short. Golden rows reference PNG assets and independent Python oracle not yet retrieved/qualified."
+  ],
+  "remaining": [
+    "Other657 tracked blobs/assets and dependencies",
+    "Original full pipeline, golden fixtures/oracle, cross-platform/runtime qualification"
+  ],
+  "full_review_count": 248
+}
