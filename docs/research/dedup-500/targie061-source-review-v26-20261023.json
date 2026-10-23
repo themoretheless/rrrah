@@ -1,0 +1,50 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/VideoScanner.swift",
+      "git_blob": "54e2dca5005ceae609600a0379bd762ae7e84ccd",
+      "sha256": "d40ce5a69b21fd3567611927e1f91892671bad49c70eef57bf8bd43ba2191728",
+      "bytes": 16408,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/VideoScannerTests.swift",
+      "git_blob": "16298f09a64e96d6d7be4802568661042d9ff026",
+      "sha256": "80718e200d7acd92c90b8ea88353564189ede9028b75f17e07bf1d8c81bc7351",
+      "bytes": 8332,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 72,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 49,
+  "full_review_count": 249,
+  "upstream_run": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter VideoScannerTests",
+    "executed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "271ca4cf71fc84790e5fad4801e5661267b081f9b7c9d8c281626e9e611b9a96",
+    "scope": "Full unchanged original test class and package. Discovery uses fixture bytes, parallel/progress tests inject original loader and metadata cache. No general nine-format AVFoundation support established."
+  },
+  "authored_control": {
+    "source": "targie061-missing-root-scan-control-20261023.swift",
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter MissingRootScanControl",
+    "executed": 1,
+    "failed": 0,
+    "log_sha256": "4c4ac8d852735f6ffd10ce894cdd3e001ba7324be650a7342c7f9084696a30e9",
+    "scope": "Both full original ImageScanner.scan and VideoScanner.scan, default loaders, nil metadata cache, isolated thumbnail directory. No extracted discovery wrapper. Authored test added temporarily then removed; original98files reverified.",
+    "result": "Nonexistent root yields empty images/videos and empty issues for both scanners without throwing. No directory created at missing path."
+  },
+  "findings": [
+    "Video discovery whitelists9extensions, skips hidden/package paths and continues enumeration errors without issue collection; full scan control confirms missing-root false-empty-success concern from earlier image-only extracted control. Caller root prevalidation may prevent normal UI reachability; not established here.",
+    "Native original test verifies injected concurrent metadata loads max3, greaterthan1, then stable output order.250item progress test caps updates102andendsfraction1. These are finite scheduling/notification checks, not throughput optimization.",
+    "Metadata cache hit avoids AVFoundation metadata load; thumbnail hit can return without fresh post-await file identity check. Same-path/same-size/mtime races remain source concerns, not reproduced for VideoScanner here.",
+    "Real loader selects first video track, loads preferred transform, rounds absolute transformed dimensions, samples thumbnail at35%duration withmax720x405. Decode thumbnail failure returnsnil while retaining item; cancellation propagates. No finite/range checks around duration/dimension Int conversion beyond platform loader guarantees.",
+    "Our missing-input incomplete-report behavior has separate earlier v10 local test evidence. No local test rerun or new production source change this step.",
+    "Two files fully read, pinned verified. Neither repository nor all500review declared complete."
+  ]
+}
