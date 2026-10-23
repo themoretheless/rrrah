@@ -1,0 +1,56 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v12-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/economy/burn_rate.rs",
+      "local": "62-src--economy--burn_rate.rs",
+      "sha256": "5ee8f3f652d74ccedccee716f2214ab7d0503bff74a4d97a522a1d72757f964f",
+      "whole_text_read": true,
+      "lines": 206
+    },
+    {
+      "path": "tests/test_amplification.rs",
+      "local": "63-tests--test_amplification.rs",
+      "sha256": "1768760078887195de8125505d79beb459c74fd6adda9fe7241054260d0ea636",
+      "whole_text_read": true,
+      "lines": 171
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 62,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 63,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 264,
+  "native_original_tests_added": {
+    "passed": 21,
+    "failed": 0,
+    "ignored": 0,
+    "groups": {
+      "burn_rate_lib": 11,
+      "test_amplification": 10
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 360,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "measured_context_control_remaining": 160,
+    "unused_counter_sum_panics_in_debug": true
+  },
+  "findings": [
+    "Median uses upper middle element for even window; fewer than3 samples or zero median returnsNone. Estimates are heuristics, not measured future calls.",
+    "calls_remaining computes all four cumulative counters before choosing authoritative real_ctx_tokens. Synthetic u64::MAX+1 counter state panics in original debug-built library even when measured context is present. Normal measured40000 and cumulative1000000 control returns160 calls.",
+    "Amplification tests validate fixed synthetic histories and tier composition, not accuracy of future reread forecasts or preservation of deduplication recall."
+  ],
+  "transfer_decision": "Do not use budget estimates as content equality evidence. Preserve measured-context precedence without unnecessary overflow-prone sums. No foreign production implementation adopted.",
+  "limits": [
+    "Extreme synthetic overflow only; release behavior and ordinary-session occurrence not qualified.",
+    "264 tracked files remain without whole review.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

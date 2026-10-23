@@ -1,0 +1,18 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 11 tests
+test economy::burn_rate::tests::returns_none_with_few_entries ... ok
+test economy::burn_rate::tests::format_header ... ok
+test economy::burn_rate::tests::accounts_for_used_tokens ... ok
+test economy::burn_rate::tests::real_context_overrides_squeez_counters ... ok
+test economy::burn_rate::tests::returns_zero_when_budget_exhausted ... ok
+test economy::burn_rate::tests::median_is_stable_against_outliers ... ok
+test economy::burn_rate::tests::no_warning_when_plenty_of_budget ... ok
+test economy::burn_rate::tests::grep_tokens_count_toward_used ... ok
+test economy::burn_rate::tests::all_zero_window_returns_none ... ok
+test economy::burn_rate::tests::predicts_with_three_entries ... ok
+test economy::burn_rate::tests::pressure_warning_when_low ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 543 filtered out; finished in 0.00s
+
