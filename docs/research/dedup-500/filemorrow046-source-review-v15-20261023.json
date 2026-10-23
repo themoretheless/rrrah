@@ -1,0 +1,25 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/ContentExtractor.swift",
+      "sha256": "72c3f353ee38540d9d4162b5ea0f6d88fb5e91232fe2b4253f23cb2e479faa3f",
+      "lines": 115,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Extractor limits final evidence to 4000 characters, text reads to 24000 bytes, PDF traversal to four pages, office extraction to five listed XML entries, subprocess stdout to 64000 bytes, OCR thumbnail to 1600 pixels and OCR result to 2000 characters. This refines the prior AI-boundary concern for excerpts produced by this extractor; caller route still needs review.",
+    "PDF page.string and pieces.joined build content before final truncation, so final output bounds do not guarantee bounded PDF parsing/intermediate allocation. No document-byte or decompression budget is explicit.",
+    "Subprocess nominal 20-second deadline is tested around blocking pipe reads, not an independent timer. waitUntilExit after terminate has no escalation bound; nonempty output accepted regardless of exit status.",
+    "OCR uses checked continuation resumed by recognition callback, but handler errors are suppressed with try? and no catch resumes continuation. If perform throws before callback, continuation can remain unresolved; actual Vision error behavior untested.",
+    "Extraction errors and unsupported encodings/types collapse to filename-only or empty sections, without structured failure/completeness diagnostics. XML uses regex tag stripping and limited entity replacements rather than a full document parser.",
+    "Archive listings truncate to 3000 characters before office entry selection, so relevant entries later in a large archive can be missed. No media or model runtime execution occurred in this batch."
+  ],
+  "whole_files_read_total": 25,
+  "remaining_tracked_blobs": 33,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
