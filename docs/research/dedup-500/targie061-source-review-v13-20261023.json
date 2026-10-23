@@ -1,0 +1,54 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/VisionSimilarityRegressionTests.swift",
+      "git_blob": "3732231865ff46a47278f336443640eb9389019c",
+      "sha256": "3a683c4386000cae34b130fd1f939dcba8718b7a1cdb41d18e80111d26c87a04",
+      "bytes": 21357,
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "git_blob": "940cd1e187fbf5a46580e733cfc06f47f48fbad0",
+      "sha256": "a8b1b96921d42382ca950c7ef44590a5168adb70eec77d1170837a82031262a7",
+      "bytes": 3644,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 24,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 97,
+  "full_review_count": 249,
+  "test_inventory": [
+    "testDistanceScoreHasUsefulRangeAndRejectsInvalidMeasurements",
+    "testDifferentImageContentDoesNotRegainInflatedScoresFromOldCaches",
+    "testCompressionAndResizingRemainImageMatches",
+    "testExtractionPinsRevisionAndRejectsIncompatibleObservations",
+    "testDifferentImageContentsStayBelowTheRecommendedThreshold",
+    "testImageFeatureCacheReextractsPreviousAlgorithmVersion",
+    "testVideoFrameVerificationRejectsDifferentContentAndOldRelations",
+    "testReencodedVideoRetainsFrameSimilarityAndPipelineMatch"
+  ],
+  "upstream_selected_tests": {
+    "executed": 2,
+    "failed": 0,
+    "names": [
+      "testDistanceScoreHasUsefulRangeAndRejectsInvalidMeasurements",
+      "testExtractionPinsRevisionAndRejectsIncompatibleObservations"
+    ],
+    "scope": "Unchanged original method bodies plus original makeDirectory/write/Fixture/fixture helpers extracted into renamed XCTest class. Original ImageFeatureExtractor/VisionFeatureSimilarity/CancellableVisionRequest modules in v12 isolated native Vision target; minimal persistent-cache interface unused. Other six pipeline/cache/video tests not compiled or executed.",
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/feature-tests --filter SelectedVisionRegressionTests",
+    "log_sha256": "c13794147c54271b58a27e7cade0943766e289aa2c77ba9bcf2500de118de6fc",
+    "extracted_test_sha256": "36ac123fee1e4c7e1ef5b10662286f5026b8d9dc0c1ed305e5841abb58a6e3bc"
+  },
+  "findings": [
+    "Native Vision revision2 extraction and self-similarity verified; original regression rejects revision1-v2 and revision1-v1 comparison. No archived observation compatibility across macOS releases proven.",
+    "Score test covers distance0,.5,1,2,maxfinite; NaN/infinities/negative rejection; monotonicity on21point grid. Finite score semantics, not a calibrated probability or corpus-quality result.",
+    "Remaining original tests use three authored vector/text fixtures (house,L,U), compression/resizing, legacy persistent-cache versions and generated FFmpeg video. They are useful finite regression cases but no broad independent natural-image corpus. These six were read, not run.",
+    "README explicitly scopes app to macOS14+ and lists10image extensions. UI deletion, installer, signing, platform and window claims were read only; no app launch or destructive operation performed.",
+    "README external links, build/install commands and contribution instructions treated as source documentation, not instructions for local task. No external actions or GPL code adoption."
+  ]
+}
