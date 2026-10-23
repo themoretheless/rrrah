@@ -1,0 +1,51 @@
+{
+  "scope": "Unchanged original6source classes; real Hadooptypes/Mockito JDBC ResultSet doubles, authored recording DataDrivenDBInputSplit and MRJobConfig hosts in separate classesdir; no DB/cluster.6normal JVM controls plus1bounded heap child. No full DataDrivenDBInputFormat runtime qualification.",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/BooleanSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/DBSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/DataDrivenDBInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/FloatSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/IntegerOverflowControl.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/IntegerSplitter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/InterfaceAudience.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/InterfaceStability.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/MRJobConfig.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/src/SplitBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.SplitBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "OBSERVED FloatSplitter range=0..10 maps=1 missing=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\ncol >= 10.0 AND col <= 10.0\nOBSERVED FloatSplitter range=0..10 maps=2 missing=[5, 6, 7, 8, 9]\ncol >= 0.0 AND col < 5.0\ncol >= 10.0 AND col <= 10.0\nOBSERVED FloatSplitter range=0..0 maps=1 missing=[0]\ncol >= 4.9407E-320 AND col <= 0.0\nPASS integer ordinary boundary points\nPASS boolean ordinary and null controls;checks=6\n",
+      "stderr": "26/10/24 03:28:01 WARN apache.FloatSplitter: Generating splits for a floating-point index column. Due to the\n26/10/24 03:28:01 WARN apache.FloatSplitter: imprecise representation of floating-point values in Java, this\n26/10/24 03:28:01 WARN apache.FloatSplitter: may result in an incomplete import.\n26/10/24 03:28:01 WARN apache.FloatSplitter: You are strongly encouraged to choose an integral split column.\n26/10/24 03:28:01 WARN apache.FloatSplitter: Generating splits for a floating-point index column. Due to the\n26/10/24 03:28:01 WARN apache.FloatSplitter: imprecise representation of floating-point values in Java, this\n26/10/24 03:28:01 WARN apache.FloatSplitter: may result in an incomplete import.\n26/10/24 03:28:01 WARN apache.FloatSplitter: You are strongly encouraged to choose an integral split column.\n26/10/24 03:28:01 WARN apache.FloatSplitter: Generating splits for a floating-point index column. Due to the\n26/10/24 03:28:01 WARN apache.FloatSplitter: imprecise representation of floating-point values in Java, this\n26/10/24 03:28:01 WARN apache.FloatSplitter: may result in an incomplete import.\n26/10/24 03:28:01 WARN apache.FloatSplitter: You are strongly encouraged to choose an integral split column.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-Xmx32m",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-split-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.IntegerOverflowControl"
+      ],
+      "returncode": 0,
+      "stdout": "BEGIN singleton Long.MAX_VALUE with heap32MiB\nOBSERVED integer singleton range expands until bounded child heap exhausted\n",
+      "stderr": ""
+    }
+  ]
+}

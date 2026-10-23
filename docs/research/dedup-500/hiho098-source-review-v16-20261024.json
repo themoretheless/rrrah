@@ -1,0 +1,97 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v15-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/InterfaceAudience.java",
+      "local": "102-InterfaceAudience.java",
+      "sha256": "b362658724b26e9a3836318a97dd9721adfb03f904517cc2392d60018146ef85",
+      "git_blob": "30a2446877b3cbdd480d9b7c6251fde2db666201",
+      "lines": 47,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/InterfaceStability.java",
+      "local": "103-InterfaceStability.java",
+      "sha256": "8df12cd90a8f7ba04ad619477cffd554e67e00edb9205b47c775243a9dfdcae3",
+      "git_blob": "a7b7cfe55c78c5c4512277a492da5926453ee90f",
+      "lines": 48,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBSplitter.java",
+      "local": "104-DBSplitter.java",
+      "sha256": "7387437d7ee5a7391d0e4f18729b00df24f768d4a2b5f65126a4c4e15c41ff77",
+      "git_blob": "97188bdae14bcbba5337f82d6bcc281cb8cd80f8",
+      "lines": 46,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/BooleanSplitter.java",
+      "local": "105-BooleanSplitter.java",
+      "sha256": "56b170135381d75b33e37df94f4189095a19bbb744a5cd39ee9b5b5cd9691712",
+      "git_blob": "dadb28845f04362d0be1e6edd0c7d302a24662fa",
+      "lines": 70,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/IntegerSplitter.java",
+      "local": "106-IntegerSplitter.java",
+      "sha256": "58ba226341ec9514b2dbb444ac16254c776715b5adeb1622f3764a832551a750",
+      "git_blob": "b3669c2794b0231915de1b73d6d1e7b82e7872e3",
+      "lines": 130,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/FloatSplitter.java",
+      "local": "107-FloatSplitter.java",
+      "sha256": "1e853536aabce2255fbd2ecb1b3afc8757798709d2fa22af7ff6240cdc7ac52e",
+      "git_blob": "84bafcffeff34f7c9a98bab8ada926af542ff74e",
+      "lines": 102,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 102,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 108,
+  "remaining_without_whole_review": 62,
+  "original_tests_cumulative": {
+    "total": 69,
+    "passed": 69,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 7,
+    "cumulative": 60,
+    "report": "docs/research/dedup-500/hiho098-split-native-controls-20261024.json",
+    "confirmed": [
+      "FloatSplitter0..10 with1map only covers10; integer oracle finds0..9missing.",
+      "FloatSplitter0..10 with2maps covers[0,5)and[10,10], missing5..9. This case uses exactly representable boundaries.",
+      "FloatSplitter0..0 with1map emits lower4.9407E-320,upper0, missing0.",
+      "Integer ordinary helper returns[0,5,10] for2splits over0..10; Boolean ordinary and null range counts pass.",
+      "Integer helper singletonLong.MAX_VALUE grows until OutOfMemoryError in separate child with-Xmx32m; child catches error and terminates successfully."
+    ],
+    "scope": "Unchanged original6classes compiled; realHadooptypes and mocked ResultSet. Authored recording DataDrivenDBInputSplit/MRJobConfig hosts replace dependency classes in separate isolated classesdir; no SQL, database, full DBInputFormat, or cluster qualification."
+  },
+  "partial_dependency_reads": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DataDrivenDBInputFormat.java",
+      "sha256": "4a80eb59b31e30194d088533a32e754ba86cfebcfd47ff209aefe17c67c9b213",
+      "git_blob": "2e9c1663eea03200188704734558a3f90899d110",
+      "whole_review": false
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/MRJobConfig.java",
+      "sha256": "fe95a694f8c3bab2fc9be044133c05b26c23216203f98284964774a90c4f6980",
+      "git_blob": "80ebb80956616b8af7e88e8fccb68a3f13b7c688",
+      "whole_review": false
+    }
+  ],
+  "dependency_scope": "Only DataDrivenDBInputSplit constructor/getters and MRJobConfig.NUM_MAPS declaration read to bind recording-host semantics. Neither dependency file gets whole-review credit.",
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
