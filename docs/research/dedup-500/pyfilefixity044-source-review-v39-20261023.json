@@ -1,0 +1,41 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Four vendored Pympler files read whole, pin verified and syntax parsed. No matplotlib import, GC collection/debug changes, graph generation or profiling execution.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/__init__.py",
+      "sha256": "a0bd14bb8de53dfaa3747342fa091b51f113af86aac3b7042acffd6b08dbb41a",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/metadata.py",
+      "sha256": "509b6d5122c6eb33709e32a81f4d92d5c5c75418d5670c6efda953bde555d656",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/charts.py",
+      "sha256": "cffef5cc959b7da66c49ee96aabde4384723e484d51c57a345b66877b6936f28",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/garbagegraph.py",
+      "sha256": "91b9adcd4b85a742c28beb8f878a3b83df9b86e9d7ed9d1b731de9e92c8080b8",
+      "python3_syntax": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 82,
+    "remaining_not_whole_reviewed": 62
+  },
+  "findings": [
+    "Pympler metadata identifies0.2.1 and Apache2.0; do not attribute root MIT license or current external Pympler capabilities to this vendored snapshot.",
+    "charts catches ImportError and defines tracker_timespace no-op returning None. Missing plotting dependency can silently produce no artifact. Empty snapshots call max on empty sequence when classes exist.",
+    "Chart labels virtual memory while series use asizeof_total/tracked_total object estimates. These series alone do not establish process virtual-memory or RSS measurements.",
+    "GarbageGraph changes global GC debug mode and invokes collection; helpers toggle GC enable state without saving previous configuration. Instrumentation changes memory retention and cannot be treated as neutral baseline.",
+    "DATA_PATH initialization computes realpath relative to __file__/../.., while external resource layout needs separate packaging verification. Metadata cross-platform test claims concern historical Python2.4-3.2, not current runtime qualification."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
