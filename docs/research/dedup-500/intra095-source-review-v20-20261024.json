@@ -1,0 +1,123 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v19-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_BKTree_Concurrency_Mem.py",
+      "local": "90-Tests--Test_BKTree_Concurrency_Mem.py",
+      "sha256": "cdc11807e29ec8293052160d7a7130cd118f5a2a086a4ca7463c0ed64436971f",
+      "whole_text_read": true,
+      "lines": 257
+    },
+    {
+      "path": "Tests/Test_db_BKTree_Concurrency_Mem.py",
+      "local": "91-Tests--Test_db_BKTree_Concurrency_Mem.py",
+      "sha256": "75b94e2feba24952419a307ac2eb0df5ad068f6e42b6178503bb41638bda362a",
+      "whole_text_read": true,
+      "lines": 258,
+      "read_method": "Previously fully read baseline plus complete nontruncated unified diff",
+      "baseline": "Tests/Test_BKTree_Concurrency_Mem.py"
+    },
+    {
+      "path": "Tests/Test_db_BKTree.py",
+      "local": "92-Tests--Test_db_BKTree.py",
+      "sha256": "08c772e18503953b1316341e8570f37fab8c09abf9e49a466034f9c727a62cbf",
+      "whole_text_read": true,
+      "lines": 187,
+      "read_method": "Previously fully read baseline plus complete nontruncated unified diff",
+      "baseline": "Tests/Test_BKTree.py"
+    },
+    {
+      "path": "Tests/Test_db_BKTree_Issue_2.py",
+      "local": "93-Tests--Test_db_BKTree_Issue_2.py",
+      "sha256": "ebb0bb1f34205c72b6924fd6e173eee86cf2505d6aa2b12324f220c05b8604a3",
+      "whole_text_read": true,
+      "lines": 100,
+      "read_method": "Previously fully read baseline plus complete nontruncated unified diff",
+      "baseline": "Tests/Test_BKTree_Issue_2.py"
+    }
+  ],
+  "whole_text_files_read_total": 93,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 99,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 55,
+  "authored_control": {
+    "result": {
+      "actual_lookup_calls": 0,
+      "completed_tasks": 12,
+      "resident_on_current_macos": 0.0,
+      "scope": "Exact original selected test/helper bodies with real ThreadPoolExecutor subclass recording futures;no original unittest setup,Cython tree or DB;native macOS procfs fallback",
+      "test_method_returned_normally": true,
+      "worker_errors": [
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        },
+        {
+          "message": "lookup_call() missing 1 required positional argument: 'offset'",
+          "type": "TypeError"
+        }
+      ]
+    },
+    "exit_code": 0
+  },
+  "findings": [
+    "Original test_concurrent_reads submits lookup_call without required offset. All12 real executor futures complete withTypeError before any tree lookup, while the selected test method returns normally. Recording executor subclass observes discarded exceptions; no Cython tree or original unittest setup used.",
+    "The concurrent test methods discard returned futures and never callresult, so assertion failures in workers are not propagated by executor context exit. This is a test-evidence gap, not a demonstrated race in the tree.",
+    "Original resident helper returns0 on currentmacOS because /proc/<pid>/status is absent. The unchanged memory-leak assertion can compare zeros without measuring process RSS. No large tree allocation or original leak test run.",
+    "Source-only: Linux _VmB returns the numeric procfs value without converting its kB unit despite docstring claimingbytes. Threshold commentary mixes pages/MB; no Linux memory qualification.",
+    "Source-only: test_read_and_delete first reader uses offset equal to tree_size, so its first queried ID lies outside initial IDs0..tree_size-1. Those worker assertions are also unobserved. insert_call advances random sequence by offset but restarts nodeIDs at0.",
+    "DB concurrency file differs only by adding Tests.baseDbBkTree import; the actual tree remains hamDb.BkHammingTree. Its filename alone does not establish database-concurrency coverage.",
+    "Remaining two DB tests were read as full known baselines plus every changed line in complete diffs. Their setup uses database fixtures and teardown; not executed."
+  ],
+  "transfer_decision": "Always observe asynchronous task errors; use platform-valid memory measurements and explicit identity ranges. Preserve separation between authored test-body controls and a full concurrency qualification. No foreign production code adopted.",
+  "limits": [
+    "99of154 whole tracked files:93text,6visual;55remain.",
+    "No new original unittest results; prior24 original tests remain18passes,1failure,5errors.",
+    "The selected original test body returning normally is evidence of a weak test, not a passing upstream concurrency suite.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
