@@ -1,0 +1,31 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/check_build_receipt.py",
+      "git_blob": "5ee3463c3c3836066c83916924617fc85c33a6d2",
+      "sha256": "2022106dc690bfcbb42b09a4bf9c8369f20b304633a60c570a77517f03040893",
+      "bytes": 7799,
+      "lines": 175,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 44,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 77,
+  "control": "cleanup067-build-receipt-control-20261023.py",
+  "original_self_test_passed": true,
+  "additional_controls_passed": 7,
+  "runtime_scope": "Whole original receipt checker and original run_self_test; owned authored one-byte input/output and local aliases only. No real build, installer, current project or external package evaluated.",
+  "findings": [
+    "Declared live file hash/size changes rejected by originalselftest and added wrongsize control. Outside-root destination symlink rejected after resolution.",
+    "Inside-root symlink is accepted despite regular-nonsymlink requirement message, because _safe_path resolves before candidate.is_symlink.",
+    "Input/output overlap compares rawcasefoldpathstrings, not resolvedpathidentity. Same underlying file via src/input.txt versus src/alias.txt receives GREEN.",
+    "Adding ./src/input.txt to existing src/input.txt is not duplicate-entry: PurePosixPath removesdot for safetycheck while rawvalue remains key.",
+    "schemaVersionTrue equals1and expectedbytesTrue equals actual1; both accepted in same syntheticreceipt. Not strict integer schema.",
+    "Receipt only proves declaredbytes match atchecktime; no build command execution, completeness of inputs, cryptographic provenance/signing or output behavior is established. No foreign code adopted."
+  ],
+  "full_review_count": 249
+}
