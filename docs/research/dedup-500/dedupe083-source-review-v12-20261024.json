@@ -1,0 +1,149 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v11-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/test_predicate_functions.py",
+      "local": "53-tests--test_predicate_functions.py",
+      "sha256": "5371a6e6d6966f1f27e2b6c53f501a89bf7d0e184bd6e2ba644f4780070ab327",
+      "lines": 317,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": ".flake8",
+      "local": "54-.flake8",
+      "sha256": "13622ae44f0f4a8df9057ab96bf95940ee78a705726b32b73ac737a4aa6bb5f9",
+      "lines": 3,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": ".git-blame-ignore-revs",
+      "local": "55-.git-blame-ignore-revs",
+      "sha256": "126e4ddc42539344d55460668511a66a0f23e865e9d482f7d8d1af032bbca54c",
+      "lines": 5,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": ".gitignore",
+      "local": "56-.gitignore",
+      "sha256": "24c448a1e9f7add4f09939dbedb0f367eaf2eadf8def66bbcddeeca023d29902",
+      "lines": 39,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "local": "57-.pre-commit-config.yaml",
+      "sha256": "3c16a9a7067a6388f9be8affeacfde2fff39a31688d1d8cd13ef4739364c0d2f",
+      "lines": 15,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": ".readthedocs.yml",
+      "local": "58-.readthedocs.yml",
+      "sha256": "d13222f03899d0422f5cfb5fa3d1b4f64b1d441e87fabe50b8a6a5603120b963",
+      "lines": 28,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "CITATION.cff",
+      "local": "59-CITATION.cff",
+      "sha256": "f209cab07cb4b4551961f02eb418116da9de99de87670ccebf7f39ab95498dbc",
+      "lines": 11,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "local": "60-CONTRIBUTING.md",
+      "sha256": "1adf79457f832f043579260f6276d5fcdf0f6e2211402bd463ee28cf8f0b0309",
+      "lines": 7,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "CONTRIBUTORS.md",
+      "local": "61-CONTRIBUTORS.md",
+      "sha256": "ade91b78dc77f8a173c1e6b1ba1662dbe37d758906da7211420b97d4f29c705a",
+      "lines": 4,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "MANIFEST.in",
+      "local": "62-MANIFEST.in",
+      "sha256": "b2122991e6d105d7228ed191a3e968f502f2bead66d183953f5ff2ce38815940",
+      "lines": 1,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "THANKS.md",
+      "local": "63-THANKS.md",
+      "sha256": "db0c70201b741ed3a55246e31b889f500862409a2bbc55dbcbfebc5acdeb33d9",
+      "lines": 6,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "docs/requirements.txt",
+      "local": "64-docs--requirements.txt",
+      "sha256": "67e6eacf305e92201f3ac5e18bfd08f76c572323213f0dd5be31208a60472f23",
+      "lines": 6,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "benchmarks/setup.py",
+      "local": "65-benchmarks--setup.py",
+      "sha256": "69cc84b08017290fc11694aee8778fe12a71b6df8f6ef51366e9d8650164d643",
+      "lines": 14,
+      "whole_text_read": true,
+      "method": "whole text read"
+    },
+    {
+      "path": "dedupe/py.typed",
+      "local": "66-dedupe--py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "whole_text_read": true,
+      "method": "empty blob verified"
+    },
+    {
+      "path": "benchmarks/benchmarks/__init__.py",
+      "local": "67-benchmarks--benchmarks--__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "whole_text_read": true,
+      "method": "empty blob verified"
+    }
+  ],
+  "whole_text_files_read_total": 68,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 36,
+  "native_controls": {
+    "full_cluster_threshold_cases_passed": 3,
+    "all_cluster_members_and_scores_checked": true,
+    "original_helper_accepts_corrupted_second_cluster": true,
+    "empty_cluster_input_error": "generator raised StopIteration",
+    "scope": "Installed pinned source, original finite fixture, full NumPy/SciPy implementation; not universal clustering or performance proof."
+  },
+  "findings": [
+    "Full installed clustering validates every original fixture cluster membership and score at thresholds0,.5,1 using independent complete assertions.",
+    "Original clusterEquals helper accepts deliberately corrupted second cluster in native control.",
+    "Actual cluster(empty) raises RuntimeError generator raised StopIteration. Finite empty input counterexample, not fixed upstream.",
+    "Several original oneGram/twoGram compatibility assertions use assert expression,message instead of equality; passing tests do not compare those expected values."
+  ],
+  "limits": [
+    "No universal clustering, recall or performance qualification.",
+    "Source comments/configuration not executed as instructions.",
+    "No production code adopted into rrrah."
+  ]
+}
