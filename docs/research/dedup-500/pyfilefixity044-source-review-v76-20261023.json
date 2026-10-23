@@ -1,0 +1,84 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "All5 tracked raster files fully visually reviewed through pinned browser URLs, no downloads to bypass media restrictions. Native browser rendering, no library decode/ECC test.",
+  "new_visual_reviews": [
+    {
+      "path": "pyFileFixity/tests/files/tuxsmall.jpg",
+      "git_blob_sha1": "dd5d021a34ae95b6f27081dcf540259a1c125f22",
+      "bytes": 3667,
+      "dimensions": [
+        64,
+        74
+      ],
+      "url": "https://raw.githubusercontent.com/lrq3000/pyFileFixity/496b0518ebd51cdcd594fcd63a85066a13d1921c/pyFileFixity/tests/files/tuxsmall.jpg",
+      "review": "Full static image displayed in browser screenshot at pinned URL",
+      "observation": "Small Tux on blue/cyan gradient, full static image viewed."
+    },
+    {
+      "path": "pyFileFixity/tests/files/tux.jpg",
+      "git_blob_sha1": "46206629324d05d279656ec0a06b73d726c71679",
+      "bytes": 19719,
+      "dimensions": [
+        256,
+        297
+      ],
+      "url": "https://raw.githubusercontent.com/lrq3000/pyFileFixity/496b0518ebd51cdcd594fcd63a85066a13d1921c/pyFileFixity/tests/files/tux.jpg",
+      "review": "Full static image displayed in browser screenshot at pinned URL",
+      "observation": "Tux penguin on gradient blue/cyan background, full static image viewed."
+    },
+    {
+      "path": "tux-example.jpg",
+      "git_blob_sha1": "2a2eb59b20bb2c3b3cecb9eb3b688c2a2f6b9fcf",
+      "bytes": 78034,
+      "dimensions": [
+        819,
+        356
+      ],
+      "url": "https://raw.githubusercontent.com/lrq3000/pyFileFixity/496b0518ebd51cdcd594fcd63a85066a13d1921c/tux-example.jpg",
+      "review": "Full static image displayed in browser screenshot at pinned URL",
+      "observation": "Three panels Original, Corrupted(3 symbols in header,2 in rest), Repaired(header only). Middle has strong green/cyan block corruption; repaired looks similar but not byte-equality proof."
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/triangle_hide.png",
+      "git_blob_sha1": "29b0215eb8d19b3c7ab1486637a6bc33cd4cd7b2",
+      "bytes": 232,
+      "dimensions": [
+        11,
+        12
+      ],
+      "url": "https://raw.githubusercontent.com/lrq3000/pyFileFixity/496b0518ebd51cdcd594fcd63a85066a13d1921c/pyFileFixity/lib/profilers/pyinstrument/resources/triangle_hide.png",
+      "review": "Full static image displayed in browser screenshot at pinned URL",
+      "observation": "Small right-pointing grey triangle icon viewed at native size."
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/triangle_show.png",
+      "git_blob_sha1": "92bf0049222248a899dc43c6119ebb1233a90fe6",
+      "bytes": 240,
+      "dimensions": [
+        12,
+        11
+      ],
+      "url": "https://raw.githubusercontent.com/lrq3000/pyFileFixity/496b0518ebd51cdcd594fcd63a85066a13d1921c/pyFileFixity/lib/profilers/pyinstrument/resources/triangle_show.png",
+      "review": "Full static image displayed in browser screenshot at pinned URL",
+      "observation": "Small downward-pointing grey triangle icon viewed at native size."
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 120,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 126,
+    "remaining_without_full_text_binary_or_visual_review": 18
+  },
+  "findings": [
+    "Both JPEG fixtures depict same general subject at different resolutions. Visual resemblance does not prove exact duplicate equality.",
+    "Root example expressly illustrates header-only repair; middle corruption and right visual restoration do not prove remaining body damage repaired or exact original byte recovery.",
+    "Two PNGs are tiny collapse/expand UI icons, not independent content/format stress cases.",
+    "All tracked JPEG/PNG assets now visually reviewed. PDF references, opaque database semantics and remaining code must not be promoted by this visual pass. No production code changed."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
