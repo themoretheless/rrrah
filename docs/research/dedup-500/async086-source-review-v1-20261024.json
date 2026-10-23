@@ -1,0 +1,120 @@
+{
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/cache.js",
+      "local": "02-cache.js",
+      "sha256": "c9d9805320ffc636dd140e85a7383e64314c1dc109f53663db760f3c39972ffb",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/symbol.js",
+      "local": "03-symbol.js",
+      "sha256": "4da325646f7337cc99316313ba5e9de04043e029f9266e5b5f994947b459a636",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/util.js",
+      "local": "04-util.js",
+      "sha256": "d6dab9171c5631fa312fbe5af810bfbc03bd1a09cd13dd6cf1a0b5e11f79904b",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "47404ffc18f1267832bc0623857871de5a3a93ebb19693f5e1b963af91fab54b",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 4,
+  "tracked_blobs": 50,
+  "remaining_without_whole_review": 46,
+  "native_controls": {
+    "binary_search_cases_passed": 512,
+    "matching_index_cases_passed": 4096,
+    "set_difference_cases": 4096,
+    "set_difference_mismatches": 2894,
+    "first_counterexamples": [
+      {
+        "a": [],
+        "b": [
+          0
+        ],
+        "actual": [],
+        "expected": [
+          0
+        ]
+      },
+      {
+        "a": [],
+        "b": [
+          1
+        ],
+        "actual": [],
+        "expected": [
+          1
+        ]
+      },
+      {
+        "a": [],
+        "b": [
+          0,
+          1
+        ],
+        "actual": [],
+        "expected": [
+          0,
+          1
+        ]
+      },
+      {
+        "a": [],
+        "b": [
+          2
+        ],
+        "actual": [],
+        "expected": [
+          2
+        ]
+      },
+      {
+        "a": [],
+        "b": [
+          0,
+          2
+        ],
+        "actual": [],
+        "expected": [
+          0,
+          2
+        ]
+      }
+    ],
+    "scope": "Whole original stdlib-only util module. Sorted unique integer arrays, six-element finite universe; no cache/server/Redis or performance qualification."
+  },
+  "findings": [
+    {
+      "scope": "native finite helper controls",
+      "finding": "findNotMatching differs from documented set difference in2894/4096 sorted-unique finite array pairs. Production call sites and effects remain to inspect."
+    },
+    {
+      "scope": "source only",
+      "finding": "In-flight map entries share promises and are removed on resolution/rejection; clear can remove running entry while work continues. Generation/republication behavior requires native lifecycle controls."
+    },
+    {
+      "scope": "source only",
+      "finding": "Wrapper.clear uses truthiness for value; falsey keys choose whole function clear. No native high-level counterexample yet."
+    },
+    {
+      "scope": "source only",
+      "finding": "String args used directly while other args stable-stringified; candidate cache key identity is domain serialization, not file content evidence."
+    }
+  ],
+  "limits": [
+    "No full cache package import, upstream tests or Redis executed.",
+    "No production code adopted into rrrah.",
+    "No whole repository completion increment."
+  ]
+}
