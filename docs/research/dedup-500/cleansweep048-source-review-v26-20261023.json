@@ -1,0 +1,24 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/navigation/AppNavigation.kt",
+      "sha256": "ac3d9e916ef7dc3a7dc0d17bbdc302c0a02e6003a0fd0c7f8739fd643e44e912",
+      "git_blob_verified": true,
+      "lines": 230
+    }
+  ],
+  "findings": [
+    "Swiper route encodes each UTF-8 path with URL-safe Base64 before joining with |, then URL-encodes the joined string. Unlike preference comma serialization, the separator cannot occur in those Base64 tokens. Navigation-framework percent-decoding behavior still needs runtime qualification.",
+    "Malformed swiper route decoding is caught and yields an empty list, without an explicit diagnostic to this screen. Group-detail URLDecoder call has no equivalent catch; normal internally generated hash IDs are simple strings.",
+    "Duplicates overview and details share one parent-graph-scoped ViewModel, explaining why validatedCache and selections can survive transitions between these screens. Graph exit lifecycle disposal remains framework-managed and untested.",
+    "Notification deep link targets duplicates_graph overview. Session reset uses a savedStateHandle boolean and invokes handler on true; whether handler clears it requires SessionSetupViewModel review.",
+    "Onboarding onComplete navigates to forced-refresh session setup and removes onboarding from back stack. Permission checks inside OnboardingScreen remain unread; no screen navigation executed."
+  ],
+  "whole_files_read_total": 57,
+  "remaining_tracked_blobs": 73,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
