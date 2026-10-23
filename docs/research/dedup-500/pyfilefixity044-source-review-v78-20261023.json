@@ -1,0 +1,48 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "bottle3.py lines431-1060 read, cumulative1-1060; original Request.body getter controlled on BytesIO only. No HTTP/server activity.",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/util/bottle3.py",
+    "lines": [
+      431,
+      1060
+    ],
+    "cumulative_lines": [
+      1,
+      1060
+    ],
+    "sha256": "b43ce02c370dc2c051d3256d2e9ccbbfc853afd6df0ded75c37500ad5cf75481"
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-bottle-body-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "104839baf8c9596f61cd5d3981964fea29abdaf0",
+    "source_sha256": "b43ce02c370dc2c051d3256d2e9ccbbfc853afd6df0ded75c37500ad5cf75481",
+    "scope": "Exact AST getter with property decorator stripped, BytesIO and authored lengths; no HTTP/listener/files",
+    "declared_length": 5,
+    "returned_short_body_length": 2,
+    "short_body_rejected": false,
+    "unknown_length_returned_bytes": 0
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 120,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 126,
+    "remaining_without_full_text_binary_or_visual_review": 18
+  },
+  "findings": [
+    "Request.body silently accepts EOF before declared content length: length5 streamab returns2 bytes. Unknown length-1 yields empty buffer without consuming original stream. Exact getter control reproduced, not real request behavior qualification.",
+    "MEMFILE_MAX chooses memory versus temporary file buffering but does not impose an overall body size limit. Large-body behavior and temporary file cleanup not executed.",
+    "_cast peeks first nonempty iterable item to choose encoding and returns lazy chain/map; later type/iteration errors can surface after start_response. Mixed output modes remain unqualified.",
+    "Response copy duplicates headers but does not copy cookie container state; request copy reuses shallow environment entries. Static behavior, not a snapshot isolation guarantee.",
+    "MultiDict stores repeated values while ordinary mapping access returns last; Request.params copies POST through dict, collapsing repeated values during merge. Static finding.",
+    "Static-file handling separates metadata stat and subsequent open; source consistency across those operations is not verified. No filesystem serving performed.",
+    "yieldroutes uses removed inspect.getargspec; full modern Python compatibility remains unqualified. Legacy stdlib imports from v77 remain unresolved.",
+    "Remaining server/template helpers unread. No production duplicate finder change or global full-review promotion."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
