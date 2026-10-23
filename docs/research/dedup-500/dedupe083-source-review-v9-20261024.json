@@ -1,0 +1,69 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v8-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/test_api.py",
+      "local": "40-tests--test_api.py",
+      "sha256": "84fdc0cdb125d2e66d04a8b7ca0a17c750ac715fdd9bfda59356bdc3c6723e74",
+      "lines": 118,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_blocking.py",
+      "local": "41-tests--test_blocking.py",
+      "sha256": "5e20f79556b2c1bea8cfa292d7988ed0d98a2cff03ba7afa4a3303326d007e33",
+      "lines": 134,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_core.py",
+      "local": "42-tests--test_core.py",
+      "sha256": "248d36234626b849173fe4611d31a487a24e6e330464f1108cbaa1b7fb1cb823",
+      "lines": 162,
+      "whole_text_read": true
+    },
+    {
+      "path": "requirements.txt",
+      "local": "43-requirements.txt",
+      "sha256": "8a43a24643736c4432e8e9a495e2468f95a06c5ee740fb1f32a05d97ae2b2b47",
+      "lines": 12,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/pythonpackage.yml",
+      "local": "44-.github--workflows--pythonpackage.yml",
+      "sha256": "8216ef59c7fdb2da2d8e6535cf7acc73690b62f5bdc70f54546cb8f61a670d95",
+      "lines": 120,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_memory.sh",
+      "local": "45-tests--test_memory.sh",
+      "sha256": "6c42bfd1cf4496b2cc7c36f519aba46e0b5176ccefcb845c313168488b78d990",
+      "lines": 2,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 46,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 58,
+  "findings": [
+    "Original core test long-string fixture remains below256 characters; no long-common-prefix identifier regression seen in this file.",
+    "BlockingTest setUp uses old dictionary field definitions but this class has no test methods; source presence does not establish executed setup coverage.",
+    "Original CI describes unit and canonical training/static integration across multiple OS/Python versions; CI declaration does not qualify this local run.",
+    "Memory shell script targets Python2.6 and an absent test_affine_memory.py path; not executed."
+  ],
+  "runtime_preparation": {
+    "venv": ".dedup-work/dedupe083-runtime-20261024",
+    "installation_log": ".dedup-work/dedupe083-install-20261024.log",
+    "session_id": 97851,
+    "status": "launched_not_yet_qualified"
+  },
+  "limits": [
+    "No upstream test result yet.",
+    "No production code adopted."
+  ]
+}
