@@ -1,0 +1,69 @@
+{
+  "scope": "Actual unchanged pinned public APIs; disjoint single-word texts at three configured minimum frequencies. No universal equivalence contract assumed.",
+  "results": [
+    {
+      "min_document_frequency": 1,
+      "finder_clusters": [],
+      "guard_beta": {
+        "is_novel": true,
+        "nearest": "a",
+        "similarity": 0.0,
+        "method": "tfidf"
+      }
+    },
+    {
+      "min_document_frequency": 2,
+      "finder_clusters": [
+        {
+          "representative": "a",
+          "method": "tfidf",
+          "size": 2,
+          "members": [
+            "a",
+            "b"
+          ],
+          "similarities": [
+            {
+              "left": "a",
+              "right": "b",
+              "score": 1.0
+            }
+          ]
+        }
+      ],
+      "guard_beta": {
+        "is_novel": true,
+        "nearest": "a",
+        "similarity": 0.0,
+        "method": "tfidf"
+      }
+    },
+    {
+      "min_document_frequency": 3,
+      "finder_clusters": [
+        {
+          "representative": "a",
+          "method": "tfidf",
+          "size": 2,
+          "members": [
+            "a",
+            "b"
+          ],
+          "similarities": [
+            {
+              "left": "a",
+              "right": "b",
+              "score": 1.0
+            }
+          ]
+        }
+      ],
+      "guard_beta": {
+        "is_novel": true,
+        "nearest": "a",
+        "similarity": 0.0,
+        "method": "tfidf"
+      }
+    }
+  ]
+}
