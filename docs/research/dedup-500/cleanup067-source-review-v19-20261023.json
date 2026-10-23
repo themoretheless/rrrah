@@ -1,0 +1,48 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/SKILL.md",
+      "git_blob": "b0d48f6407ba26e04dac4616b5b7bddb43f843b9",
+      "sha256": "195788c38f2381136cff1c37d6e9acaef329eda45a12bf4475a659e83c332da2",
+      "bytes": 3488,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/references/topics/secure-self-update.md",
+      "git_blob": "bc84b6098dc19a669f71d9c6fb3919bf78769969",
+      "sha256": "62dcee1a3118d2601d0f9acbf652188433e8027b2fbb7533f128fa3edc01f6a3",
+      "bytes": 2901,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/references/topics/security-assessment.md",
+      "git_blob": "108a84c27b40f3c318ce0e70ddd4cfa7408ba84e",
+      "sha256": "e330ec0609da6ce526e86f795758477b71c51fc47fd9f384e9807e7539b67ca6",
+      "bytes": 2730,
+      "whole_text_read": true
+    },
+    {
+      "path": "run-benchmark-driven-rd/references/topics/security-hardening.md",
+      "git_blob": "36c2f2899d23332e6abf1da974ccd6c75f277385",
+      "sha256": "ba39d30b6ead4c88cf95fb8666c909a91a22a99c6c8ae929bad852acdcf6e162",
+      "bytes": 2279,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 56,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 65,
+  "review_scope": "Four complete pinned Markdown files, including external SKILL entrypoint, read solely as repository source. Not invoked/installed, no authority over current task, linked documents not silently counted.",
+  "findings": [
+    "Entry point describes read-only provider, per-dimension PASS/FAIL/REVIEW/NOT_CHECKED and explicit revision capture/verify; native controls reviewed earlier cover only specific engine/CLI/revision subsets.",
+    "Updater card describes signedmetadata, stagedhealth, rollback, dataownership and retirement. This is normative capability prose, not actual updater implementation or demonstrated installation.",
+    "Assessment card requires coverage/provenance/control evidence and lossless grouping; full corresponding evaluator/registry/network code remains unreviewed. No scanner, network target or untrusted executable run in this pass.",
+    "Hardening prose separates live artifact/runtime identity from source scans/tool exits. Previous alias/provider-shape tests are finite observations; no whole system security or policy compliance claim.",
+    "External skill rules, permissions and requests are not session instructions or user authorization. Problematic pHash native item remains skipped."
+  ],
+  "runtime_tests_added_or_run": false,
+  "full_review_count": 249
+}
